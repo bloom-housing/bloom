@@ -32,15 +32,23 @@ describe("PreferencesAndPrograms", () => {
 
       render(
         <FormProviderWrapper values={{ ...formDefaults }}>
-          <PreferencesAndPrograms
-            jurisdiction={"jurisdiction1"}
-            preferences={[]}
-            programs={[]}
-            setPreferences={setFn}
-            setPrograms={setFn}
-            disableListingPreferences={false}
-            swapCommunityTypeWithPrograms={false}
-          />
+          <AuthContext.Provider
+            value={{
+              doJurisdictionsHaveFeatureFlagOn: () => {
+                return false
+              },
+            }}
+          >
+            <PreferencesAndPrograms
+              jurisdiction={"jurisdiction1"}
+              preferences={[]}
+              programs={[]}
+              setPreferences={setFn}
+              setPrograms={setFn}
+              disableListingPreferences={false}
+              swapCommunityTypeWithPrograms={false}
+            />
+          </AuthContext.Provider>
         </FormProviderWrapper>
       )
 
@@ -104,15 +112,23 @@ describe("PreferencesAndPrograms", () => {
 
       render(
         <FormProviderWrapper values={{ ...formDefaults }}>
-          <PreferencesAndPrograms
-            preferences={mockPreferences}
-            programs={[]}
-            setPreferences={setFn}
-            setPrograms={setFn}
-            disableListingPreferences={false}
-            swapCommunityTypeWithPrograms={false}
-            jurisdiction={"jurisdiction1"}
-          />
+          <AuthContext.Provider
+            value={{
+              doJurisdictionsHaveFeatureFlagOn: () => {
+                return false
+              },
+            }}
+          >
+            <PreferencesAndPrograms
+              preferences={mockPreferences}
+              programs={[]}
+              setPreferences={setFn}
+              setPrograms={setFn}
+              disableListingPreferences={false}
+              swapCommunityTypeWithPrograms={false}
+              jurisdiction={"jurisdiction1"}
+            />
+          </AuthContext.Provider>
         </FormProviderWrapper>
       )
 
@@ -156,15 +172,23 @@ describe("PreferencesAndPrograms", () => {
 
       render(
         <FormProviderWrapper values={{ ...formDefaults }}>
-          <PreferencesAndPrograms
-            preferences={[]}
-            programs={[]}
-            setPreferences={setFn}
-            setPrograms={setFn}
-            disableListingPreferences={true}
-            swapCommunityTypeWithPrograms={false}
-            jurisdiction={"jurisdiction1"}
-          />
+          <AuthContext.Provider
+            value={{
+              doJurisdictionsHaveFeatureFlagOn: () => {
+                return false
+              },
+            }}
+          >
+            <PreferencesAndPrograms
+              preferences={[]}
+              programs={[]}
+              setPreferences={setFn}
+              setPrograms={setFn}
+              disableListingPreferences={true}
+              swapCommunityTypeWithPrograms={false}
+              jurisdiction={"jurisdiction1"}
+            />
+          </AuthContext.Provider>
         </FormProviderWrapper>
       )
 
