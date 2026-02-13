@@ -238,10 +238,12 @@ describe("PaperListingForm", () => {
 
       // units
       expect(
-        screen.getByRole("row", { name: "Unit # Unit type AMI Rent SQ FT ADA Actions" })
+        screen.getByRole("row", {
+          name: "Unit # Unit type AMI Rent SQ FT Accessibility priority type Actions",
+        })
       ).toBeInTheDocument()
       expect(
-        screen.getAllByRole("row", { name: "Studio 45.0 1104.0 285 Edit Delete" }).length
+        screen.getAllByRole("row", { name: "Studio 45.0 1104.0 285 n/a Edit Delete" }).length
       ).toBeGreaterThan(0)
       expect(screen.getByRole("button", { name: "Add unit" })).toBeInTheDocument()
     })
