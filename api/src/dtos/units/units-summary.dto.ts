@@ -9,6 +9,7 @@ import {
 } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { UnitAccessibilityPriorityTypeEnum } from '../../enums/units/accessibility-priority-type-enum';
 import { IdDTO } from '../shared/id.dto';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidateUnitGroupRent } from '../../decorators/validate-unit-groups-rent.decorator';
@@ -90,10 +91,14 @@ class UnitsSummary {
   sqFeetMax?: string;
 
   @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDTO)
-  @ApiPropertyOptional({ type: IdDTO })
-  unitAccessibilityPriorityTypes?: IdDTO;
+  @IsEnum(UnitAccessibilityPriorityTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional({
+    enum: UnitAccessibilityPriorityTypeEnum,
+    enumName: 'UnitAccessibilityPriorityTypeEnum',
+  })
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })

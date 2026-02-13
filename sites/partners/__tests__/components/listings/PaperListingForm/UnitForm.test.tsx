@@ -1,5 +1,4 @@
 import React from "react"
-import { randomUUID } from "crypto"
 import { rest } from "msw"
 import { setupServer } from "msw/lib/node"
 import userEvent from "@testing-library/user-event"
@@ -9,6 +8,7 @@ import {
   unit,
   unitTypes,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { UnitAccessibilityPriorityTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter, render, screen, within } from "../../../testUtils"
 import UnitForm from "../../../../src/components/listings/PaperListingForm/UnitForm"
 import { TempUnit } from "../../../../src/lib/listings/formTypes"
@@ -29,13 +29,16 @@ describe("UnitForm", () => {
     rest.get("http://localhost:3100/unitTypes", (_req, res, ctx) => {
       return res(ctx.json(unitTypes))
     }),
-    rest.get("http://localhost:3100/unitAccessibilityPriorityTypes", (_req, res, ctx) => {
+    rest.get("http://localhost:3100/jurisdictions/123", (req, res, ctx) => {
       return res(
-        ctx.json([
-          { id: randomUUID(), name: "Mobility" },
-          { id: randomUUID(), name: "Hearing" },
-          { id: randomUUID(), name: "Mobility and Hearing" },
-        ])
+        ctx.json({
+          id: req.params.id,
+          visibleAccessibilityPriorityTypes: [
+            UnitAccessibilityPriorityTypeEnum.mobility,
+            UnitAccessibilityPriorityTypeEnum.hearing,
+            UnitAccessibilityPriorityTypeEnum.mobilityAndHearing,
+          ],
+        })
       )
     }),
     rest.get("http://localhost:3100/amiCharts", (_req, res, ctx) => {
@@ -51,7 +54,7 @@ describe("UnitForm", () => {
   it("should render the unit form without any selection", async () => {
     render(
       <UnitForm
-        jurisdiction={randomUUID()}
+        jurisdiction="123"
         onClose={jest.fn()}
         onSubmit={jest.fn()}
         draft={true}
@@ -92,9 +95,6 @@ describe("UnitForm", () => {
     const bathroomSelector = screen.getByRole("combobox", { name: "Number of bathrooms" })
     expect(bathroomSelector).toBeInTheDocument()
     expect(within(bathroomSelector).getAllByRole("option")).toHaveLength(7)
-    expect(
-      within(bathroomSelector).getByRole("option", { name: "Number of bathrooms" })
-    ).toBeInTheDocument()
     expect(within(bathroomSelector).getByRole("option", { name: "Shared" })).toBeInTheDocument()
     expect(within(bathroomSelector).getByRole("option", { name: "1" })).toBeInTheDocument()
     expect(within(bathroomSelector).getByRole("option", { name: "2" })).toBeInTheDocument()
@@ -106,7 +106,6 @@ describe("UnitForm", () => {
     const floorSelector = screen.getByRole("combobox", { name: "Unit floor" })
     expect(floorSelector).toBeInTheDocument()
     expect(within(floorSelector).getAllByRole("option")).toHaveLength(11)
-    expect(within(floorSelector).getByRole("option", { name: "Unit floor" })).toBeInTheDocument()
     expect(within(floorSelector).getByRole("option", { name: "1" })).toBeInTheDocument()
     expect(within(floorSelector).getByRole("option", { name: "2" })).toBeInTheDocument()
     expect(within(floorSelector).getByRole("option", { name: "3" })).toBeInTheDocument()
@@ -124,9 +123,6 @@ describe("UnitForm", () => {
     const minOccupancySelector = screen.getByRole("combobox", { name: "Minimum occupancy" })
     expect(minOccupancySelector).toBeInTheDocument()
     expect(within(minOccupancySelector).getAllByRole("option")).toHaveLength(12)
-    expect(
-      within(minOccupancySelector).getByRole("option", { name: "Minimum occupancy" })
-    ).toBeInTheDocument()
     expect(within(minOccupancySelector).getByRole("option", { name: "1" })).toBeInTheDocument()
     expect(within(minOccupancySelector).getByRole("option", { name: "2" })).toBeInTheDocument()
     expect(within(minOccupancySelector).getByRole("option", { name: "3" })).toBeInTheDocument()
@@ -143,9 +139,6 @@ describe("UnitForm", () => {
     const maxOccupancySelector = screen.getByRole("combobox", { name: "Max occupancy" })
     expect(maxOccupancySelector).toBeInTheDocument()
     expect(within(maxOccupancySelector).getAllByRole("option")).toHaveLength(12)
-    expect(
-      within(maxOccupancySelector).getByRole("option", { name: "Max occupancy" })
-    ).toBeInTheDocument()
     expect(within(maxOccupancySelector).getByRole("option", { name: "1" })).toBeInTheDocument()
     expect(within(maxOccupancySelector).getByRole("option", { name: "2" })).toBeInTheDocument()
     expect(within(maxOccupancySelector).getByRole("option", { name: "3" })).toBeInTheDocument()
@@ -202,16 +195,13 @@ describe("UnitForm", () => {
     expect(priorityTypeSelector).toBeInTheDocument()
     expect(within(priorityTypeSelector).getAllByRole("option")).toHaveLength(4)
     expect(
-      within(priorityTypeSelector).getByRole("option", { name: "Accessibility priority type" })
-    ).toBeInTheDocument()
-    expect(
       within(priorityTypeSelector).getByRole("option", { name: "Mobility" })
     ).toBeInTheDocument()
     expect(
       within(priorityTypeSelector).getByRole("option", { name: "Hearing" })
     ).toBeInTheDocument()
     expect(
-      within(priorityTypeSelector).getByRole("option", { name: "Mobility and Hearing" })
+      within(priorityTypeSelector).getByRole("option", { name: "Mobility and hearing" })
     ).toBeInTheDocument()
 
     // Action buttons
@@ -224,7 +214,7 @@ describe("UnitForm", () => {
   it("should render the AMI chart options after AMI chart selection", async () => {
     render(
       <UnitForm
-        jurisdiction={randomUUID()}
+        jurisdiction={"123"}
         onClose={jest.fn()}
         onSubmit={jest.fn()}
         draft={true}

@@ -5,7 +5,6 @@ import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import { stagingSeed } from './seed-staging';
 import { devSeeding } from './seed-dev';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
-import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 
 const options: { [name: string]: { type: 'string' | 'boolean' } } = {
@@ -30,7 +29,6 @@ async function main() {
         }),
       });
       await unitTypeFactoryAll(prisma);
-      await unitAccessibilityPriorityTypeFactoryAll(prisma);
       await reservedCommunityTypeFactoryAll(jurisdictionId.id, prisma);
       break;
     case 'staging':

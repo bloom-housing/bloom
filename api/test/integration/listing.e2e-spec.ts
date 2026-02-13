@@ -41,10 +41,6 @@ import {
   unitTypeFactorySingle,
 } from '../../prisma/seed-helpers/unit-type-factory';
 import { amiChartFactory } from '../../prisma/seed-helpers/ami-chart-factory';
-import {
-  unitAccessibilityPriorityTypeFactoryAll,
-  unitAccessibilityPriorityTypeFactorySingle,
-} from '../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 import { unitRentTypeFactory } from '../../prisma/seed-helpers/unit-rent-type-factory';
 import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
 import {
@@ -56,6 +52,7 @@ import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
 import { EmailService } from '../../src/services/email.service';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { unitFactorySingle } from '../../prisma/seed-helpers/unit-factory';
+import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessibility-priority-type-enum';
 import { FilterAvailabilityEnum } from '../../src/enums/listings/filter-availability-enum';
 import { unitGroupFactorySingle } from '../../prisma/seed-helpers/unit-group-factory';
 import { randomName } from '../../prisma/seed-helpers/word-generator';
@@ -140,7 +137,6 @@ describe('Listing Controller Tests', () => {
     });
     jurisdictionAId = jurisdiction.id;
     await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
-    await unitAccessibilityPriorityTypeFactoryAll(prisma);
     const adminUser = await prisma.userAccounts.create({
       data: await userFactory({
         roles: {
@@ -217,8 +213,6 @@ describe('Listing Controller Tests', () => {
     const amiChart = await prisma.amiChart.create({
       data: amiChartFactory(10, jurisdictionA.id),
     });
-    const unitAccessibilityPriorityType =
-      await unitAccessibilityPriorityTypeFactorySingle(prisma);
 
     const rentType = await prisma.unitRentTypes.create({
       data: unitRentTypeFactory(),
@@ -322,9 +316,8 @@ describe('Listing Controller Tests', () => {
                 amiChart: {
                   id: amiChart.id,
                 },
-                unitAccessibilityPriorityTypes: {
-                  id: unitAccessibilityPriorityType.id,
-                },
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.mobility,
                 unitRentTypes: {
                   id: rentType.id,
                 },
@@ -347,9 +340,8 @@ describe('Listing Controller Tests', () => {
                 floorMax: 10,
                 sqFeetMin: '11',
                 sqFeetMax: '12',
-                unitAccessibilityPriorityTypes: {
-                  id: unitAccessibilityPriorityType.id,
-                },
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.mobility,
                 totalCount: 13,
                 totalAvailable: 14,
               },

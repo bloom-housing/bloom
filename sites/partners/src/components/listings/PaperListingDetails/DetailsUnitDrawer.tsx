@@ -157,9 +157,13 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
               <Grid.Row columns={4}>
                 <Grid.Cell>
                   <FieldValue
-                    id="unit.unitAccessibilityPriorityTypes"
+                    id="unit.accessibilityPriorityType"
                     label={t("listings.unit.accessibilityPriorityType")}
-                    children={unit?.unitAccessibilityPriorityTypes?.name || t("t.n/a")}
+                    children={
+                      unit?.accessibilityPriorityType
+                        ? t(`listings.unit.accessibilityType.${unit.accessibilityPriorityType}`)
+                        : t("t.n/a")
+                    }
                   />
                 </Grid.Cell>
               </Grid.Row>
