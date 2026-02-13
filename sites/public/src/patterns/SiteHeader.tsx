@@ -174,7 +174,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
               }
             }
           }}
-          data-testid={`${props.link.label}`}
+          data-testid={props.link.label}
         >
           <span className={styles["link-label"]}>
             {props.link.icon && (
@@ -389,7 +389,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
       index={props.links?.length}
       lastItem={true}
       link={{
-        label: props.languages.filter((language) => language.active)[0]?.label || t("t.language"),
+        label: props.languages.filter((language) => language.active)[0]?.label || "",
         icon: <Language />,
         submenuLinks: props.languages
           .filter((language) => !language.active)
@@ -506,6 +506,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
           <div
             className={`${styles["submenu-container"]} ${styles["mobile-submenu-container"]}`}
             ref={mobileRef}
+            data-testid={"mobile-submenu-container"}
           >
             <ul>
               {props.links?.map((link, index) => {
@@ -542,6 +543,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
           className={`${styles["language-dropdown-button"]} ${
             mobileLanguageOpen ? styles["language-dropdown-button-open"] : ""
           }`}
+          data-testid={"mobile-language-dropdown-button"}
         >
           <div className={`${styles["language-container-mobile"]}`}>
             <Icon size={"md"} className={styles["link-icon"]}>
