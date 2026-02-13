@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react"
+import React, { useContext, useState, useEffect, useMemo, useCallback } from "react"
 import { t, MinimalTable, Field, StandardTableData } from "@bloom-housing/ui-components"
 import {
+  FeatureFlagEnum,
   MultiselectOption,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
-  PaginatedMultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Card, Drawer, Grid, Tag, Icon } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
@@ -14,6 +14,7 @@ import LinkComponent from "../../../../components/core/LinkComponent"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 import { useJurisdictionalMultiselectQuestionList } from "../../../../lib/hooks"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 type SelectAndOrderProps = {
   formKey: string
@@ -48,11 +49,18 @@ const SelectAndOrder = ({
   subtitle,
   title,
 }: SelectAndOrderProps) => {
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const [tableDrawer, setTableDrawer] = useState<boolean | null>(null)
   const [selectDrawer, setSelectDrawer] = useState<boolean | null>(null)
   const [draftListingData, setDraftListingData] = useState<MultiselectQuestion[]>(listingData)
   const [dragOrder, setDragOrder] = useState([])
   const [openPreviews, setOpenPreviews] = useState<number[]>([])
+
+  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableV2MSQ,
+    jurisdiction,
+    true
+  )
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -174,7 +182,14 @@ const SelectAndOrder = ({
   const { data } = useJurisdictionalMultiselectQuestionList(
     jurisdiction,
     applicationSection as unknown as MultiselectQuestionsApplicationSectionEnum,
-    [MultiselectQuestionsStatusEnum.active] // TODO: this should be a feature flag
+    enableV2MSQ
+      ? [
+          MultiselectQuestionsStatusEnum.visible,
+          MultiselectQuestionsStatusEnum.active,
+          MultiselectQuestionsStatusEnum.toRetire,
+          MultiselectQuestionsStatusEnum.retired,
+        ]
+      : undefined
   )
   const fetchedData = data?.items ?? []
 
@@ -242,10 +257,18 @@ const SelectAndOrder = ({
         </div>
       )
     }
+    const statusVariant = item.status === MultiselectQuestionsStatusEnum.active ? "success" : null
+    const statusText = `${item.status.charAt(0).toUpperCase()}${item.status.slice(1)}`
+    const showAdditionalTag = item.options?.some(
+      (option) => option.shouldCollectAddress || option.collectAddress
+    )
     return (
       <div className="ml-8 -mt-6 mb-4 text-sm">
-        {item.options?.some((option) => option.shouldCollectAddress || option.collectAddress) && (
-          <div className="mt-6 mb-2">{additionalFieldsTag()}</div>
+        {(enableV2MSQ || showAdditionalTag) && (
+          <div className="mt-6 mb-2 flex gap-2">
+            {enableV2MSQ && <Tag variant={statusVariant}>{statusText}</Tag>}
+            {showAdditionalTag && additionalFieldsTag()}
+          </div>
         )}
         <div>
           <button
@@ -371,20 +394,22 @@ const SelectAndOrder = ({
             <Card.Section>
               {fetchedData.map((item, index) => {
                 const previewShown = openPreviews.some((preview) => preview === index)
-                let variant = null
-                switch (item.status) {
-                  case MultiselectQuestionsStatusEnum.active:
-                    variant = "success"
-                    break
-                  case MultiselectQuestionsStatusEnum.toRetire:
-                  case MultiselectQuestionsStatusEnum.retired:
-                    variant = "highlight-warm"
-                    break
-                }
-                const statusText = `${item.status.charAt(0).toUpperCase()}${item.status.slice(1)}`
+                const alreadySelected = draftListingData.some(
+                  (existingItem) => existingItem.id === item.id
+                )
 
                 return (
-                  <Grid key={index}>
+                  <Grid
+                    key={index}
+                    className={`${
+                      enableV2MSQ &&
+                      !alreadySelected &&
+                      (item.status === MultiselectQuestionsStatusEnum.toRetire ||
+                        item.status === MultiselectQuestionsStatusEnum.retired)
+                        ? "hidden"
+                        : ""
+                    }`}
+                  >
                     <Grid.Row>
                       <Grid.Cell>
                         <Field
@@ -392,16 +417,10 @@ const SelectAndOrder = ({
                           id={`${formKey}.${item.id}`}
                           name={`${formKey}.${item.id}`}
                           type="checkbox"
-                          label={
-                            <>
-                              <span>{item.name || item.text}</span> <Tag variant={variant}>{statusText}</Tag>
-                            </>
-                          }
+                          label={item.name || item.text}
                           register={register}
                           inputProps={{
-                            defaultChecked: draftListingData.some(
-                              (existingItem) => existingItem.id === item.id
-                            ),
+                            defaultChecked: alreadySelected,
                           }}
                         />
                         {getPreviewSection(previewShown, index, item)}
