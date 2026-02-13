@@ -13,6 +13,7 @@ import {
   EnumPropertyFilterParamsComparison,
   ListingViews,
   MultiselectQuestionFilterParams,
+  MultiselectQuestionOrderByKeys,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   OrderByEnum,
@@ -406,22 +407,66 @@ export function useMultiselectQuestionList() {
   }
 }
 
+interface MSQTableSettings {
+  sort?: ColumnOrder[]
+  search?: string
+  page?: number
+  limit?: number
+}
+
 export function useJurisdictionalMultiselectQuestionList(
   jurisdictionId: string,
   applicationSection?: MultiselectQuestionsApplicationSectionEnum,
-  statuses?: MultiselectQuestionsStatusEnum[]
+  statuses?: MultiselectQuestionsStatusEnum[],
+  tableSettings?: MSQTableSettings
 ) {
   const { multiselectQuestionsService } = useContext(AuthContext)
 
   const params: {
     filter: MultiselectQuestionFilterParams[]
+    orderBy: MultiselectQuestionOrderByKeys[]
+    orderDir: OrderByEnum[]
+    search?: string
+    limit?: number
+    page?: number
   } = {
     filter: [],
+    orderBy: [],
+    orderDir: [],
+    search: undefined,
+    limit: undefined,
+    page: undefined,
   }
   params.filter.push({
     $comparison: EnumMultiselectQuestionFilterParamsComparison["IN"],
     jurisdiction: jurisdictionId && jurisdictionId !== "" ? jurisdictionId : undefined,
   })
+  tableSettings?.sort?.forEach((sortItem) => {
+    switch (sortItem.orderBy) {
+      case "name":
+        params.orderBy.push(MultiselectQuestionOrderByKeys.name)
+        break
+      case "status":
+        params.orderBy.push(MultiselectQuestionOrderByKeys.status)
+        break
+      case "jurisdiction":
+        params.orderBy.push(MultiselectQuestionOrderByKeys.jurisdiction)
+        break
+      case "updatedAt":
+        params.orderBy.push(MultiselectQuestionOrderByKeys.updatedAt)
+        break
+    }
+    params.orderDir.push(sortItem.orderDir as OrderByEnum)
+  })
+  if (tableSettings?.search) {
+    params.search = tableSettings.search
+  }
+  if (tableSettings?.limit) {
+    params.limit = tableSettings.limit
+  }
+  if (tableSettings?.page) {
+    params.page = tableSettings.page
+  }
   if (applicationSection) {
     params.filter.push({
       $comparison: EnumMultiselectQuestionFilterParamsComparison["="],
