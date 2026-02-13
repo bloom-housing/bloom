@@ -73,8 +73,8 @@ type ContextProps = {
   forgotPassword: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
   createUser: (user: UserCreate, listingIdRedirect?: string) => Promise<User | undefined>
   resendConfirmation: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
-  initialStateLoaded: boolean | undefined
-  loading: boolean | undefined
+  initialStateLoaded?: boolean
+  loading?: boolean
   profile?: User
   requestMfaCode: (
     email: string,
