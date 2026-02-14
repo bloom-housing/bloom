@@ -774,28 +774,29 @@ model Jurisdictions {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 
-  allowSingleUseCodeLogin             Boolean                     @default(false) @map("allow_single_use_code_login")
-  duplicateListingPermissions         UserRoleEnum[]              @map("duplicate_listing_permissions")
-  emailFromAddress                    String?                     @map("email_from_address")
-  enableGeocodingPreferences          Boolean                     @default(false) @map("enable_geocoding_preferences")
-  enableGeocodingRadiusMethod         Boolean                     @default(false) @map("enable_geocoding_radius_method")
-  enablePartnerDemographics           Boolean                     @default(false) @map("enable_partner_demographics")
-  enablePartnerSettings               Boolean                     @default(false) @map("enable_partner_settings")
-  languages                           LanguagesEnum[]             @default([en])
-  listingApprovalPermissions          UserRoleEnum[]              @map("listing_approval_permission")
-  listingFeaturesConfiguration        Json?                       @map("listing_features_configuration")
-  minimumListingPublishImagesRequired Int?                        @default(1) @map("minimum_listing_publish_images_required")
-  name                                String                      @unique()
-  notificationsSignUpUrl              String?                     @map("notifications_sign_up_url")
-  partnerTerms                        String?                     @map("partner_terms")
-  publicUrl                           String                      @default("") @map("public_url")
-  regions                             String[]                    @default([]) @map("regions")
-  rentalAssistanceDefault             String                      @map("rental_assistance_default")
-  requiredListingFields               String[]                    @default([]) @map("required_listing_fields")
-  visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[] @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
-  whatToExpect                        String                      @default("Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.") @map("what_to_expect")
-  whatToExpectAdditionalText          String                      @default("") @map("what_to_expect_additional_text")
-  whatToExpectUnderConstruction       String                      @default("") @map("what_to_expect_under_construction")
+  allowSingleUseCodeLogin             Boolean                             @default(false) @map("allow_single_use_code_login")
+  duplicateListingPermissions         UserRoleEnum[]                      @map("duplicate_listing_permissions")
+  emailFromAddress                    String?                             @map("email_from_address")
+  enableGeocodingPreferences          Boolean                             @default(false) @map("enable_geocoding_preferences")
+  enableGeocodingRadiusMethod         Boolean                             @default(false) @map("enable_geocoding_radius_method")
+  enablePartnerDemographics           Boolean                             @default(false) @map("enable_partner_demographics")
+  enablePartnerSettings               Boolean                             @default(false) @map("enable_partner_settings")
+  languages                           LanguagesEnum[]                     @default([en])
+  listingApprovalPermissions          UserRoleEnum[]                      @map("listing_approval_permission")
+  listingFeaturesConfiguration        Json?                               @map("listing_features_configuration")
+  minimumListingPublishImagesRequired Int?                                @default(1) @map("minimum_listing_publish_images_required")
+  name                                String                              @unique()
+  notificationsSignUpUrl              String?                             @map("notifications_sign_up_url")
+  partnerTerms                        String?                             @map("partner_terms")
+  publicUrl                           String                              @default("") @map("public_url")
+  regions                             String[]                            @default([]) @map("regions")
+  rentalAssistanceDefault             String                              @map("rental_assistance_default")
+  requiredListingFields               String[]                            @default([]) @map("required_listing_fields")
+  visibleAccessibilityPriorityTypes   UnitAccessibilityPriorityTypeEnum[] @default([mobility, hearing, vision, hearingAndVision, mobilityAndHearing, mobilityAndVision, mobilityHearingAndVision]) @map("visible_accessibility_priority_types")
+  visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[]         @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
+  whatToExpect                        String                              @default("Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.") @map("what_to_expect")
+  whatToExpectAdditionalText          String                              @default("") @map("what_to_expect_additional_text")
+  whatToExpectUnderConstruction       String                              @default("") @map("what_to_expect_under_construction")
 
   agency                 Agency[]
   amiCharts              AmiChart[]
@@ -1709,24 +1710,6 @@ model Translations {
   @@map("translations")
 }
 
-// UnitAccessibilityPriorityType Section
-model UnitAccessibilityPriorityTypes {
-  id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
-
-  name String
-
-  unitGroups            UnitGroup[]
-  units                 Units[]
-  unitsSummary          UnitsSummary[]
-  unitGroupSnapshots    UnitGroupSnapshot[]
-  unitSnapshots         UnitSnapshot[]
-  unitsSummarySnapshots UnitsSummarySnapshot[]
-
-  @@map("unit_accessibility_priority_types")
-}
-
 // UnitAmiChartOverride Section
 model UnitAmiChartOverrides {
   id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
@@ -1761,28 +1744,27 @@ model UnitGroup {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 
-  bathroomMax       Decimal?      @map("bathroom_max") @db.Decimal
-  bathroomMin       Decimal?      @map("bathroom_min") @db.Decimal
-  flatRentValueFrom Decimal?      @map("flat_rent_value_from") @db.Decimal
-  flatRentValueTo   Decimal?      @map("flat_rent_value_to") @db.Decimal
-  floorMax          Int?          @map("floor_max")
-  floorMin          Int?          @map("floor_min")
-  listingId         String?       @map("listing_id") @db.Uuid
-  maxOccupancy      Int?          @map("max_occupancy")
-  minOccupancy      Int?          @map("min_occupancy")
-  monthlyRent       Decimal?      @map("monthly_rent") @db.Decimal
-  openWaitlist      Boolean       @default(true) @map("open_waitlist")
-  priorityTypeId    String?       @map("priority_type_id") @db.Uuid
-  rentType          RentTypeEnum? @map("rent_type")
-  sqFeetMax         Decimal?      @map("sq_feet_max") @db.Decimal
-  sqFeetMin         Decimal?      @map("sq_feet_min") @db.Decimal
-  totalAvailable    Int?          @map("total_available")
-  totalCount        Int?          @map("total_count")
+  bathroomMax               Decimal?                           @map("bathroom_max") @db.Decimal
+  bathroomMin               Decimal?                           @map("bathroom_min") @db.Decimal
+  flatRentValueFrom         Decimal?                           @map("flat_rent_value_from") @db.Decimal
+  flatRentValueTo           Decimal?                           @map("flat_rent_value_to") @db.Decimal
+  floorMax                  Int?                               @map("floor_max")
+  floorMin                  Int?                               @map("floor_min")
+  listingId                 String?                            @map("listing_id") @db.Uuid
+  maxOccupancy              Int?                               @map("max_occupancy")
+  minOccupancy              Int?                               @map("min_occupancy")
+  monthlyRent               Decimal?                           @map("monthly_rent") @db.Decimal
+  openWaitlist              Boolean                            @default(true) @map("open_waitlist")
+  accessibilityPriorityType UnitAccessibilityPriorityTypeEnum? @map("accessibility_priority_type")
+  rentType                  RentTypeEnum?                      @map("rent_type")
+  sqFeetMax                 Decimal?                           @map("sq_feet_max") @db.Decimal
+  sqFeetMin                 Decimal?                           @map("sq_feet_min") @db.Decimal
+  totalAvailable            Int?                               @map("total_available")
+  totalCount                Int?                               @map("total_count")
 
-  listings                       Listings?                       @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  unitAccessibilityPriorityTypes UnitAccessibilityPriorityTypes? @relation(fields: [priorityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  unitGroupAmiLevels             UnitGroupAmiLevels[]
-  unitTypes                      UnitTypes[]
+  listings           Listings?            @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  unitGroupAmiLevels UnitGroupAmiLevels[]
+  unitTypes          UnitTypes[]
 
   @@map("unit_group")
 }
@@ -1795,28 +1777,27 @@ model UnitGroupSnapshot {
   originalCreatedAt DateTime @map("original_created_at") @db.Timestamp(6)
   updatedAt         DateTime @map("updated_at") @db.Timestamp(6)
 
-  bathroomMax       Decimal?      @map("bathroom_max") @db.Decimal
-  bathroomMin       Decimal?      @map("bathroom_min") @db.Decimal
-  flatRentValueFrom Decimal?      @map("flat_rent_value_from") @db.Decimal
-  flatRentValueTo   Decimal?      @map("flat_rent_value_to") @db.Decimal
-  floorMax          Int?          @map("floor_max")
-  floorMin          Int?          @map("floor_min")
-  listingSnapshotId String?       @map("listing_snapshot_id") @db.Uuid
-  maxOccupancy      Int?          @map("max_occupancy")
-  minOccupancy      Int?          @map("min_occupancy")
-  monthlyRent       Decimal?      @map("monthly_rent") @db.Decimal
-  openWaitlist      Boolean       @default(true) @map("open_waitlist")
-  priorityTypeId    String?       @map("priority_type_id") @db.Uuid
-  rentType          RentTypeEnum? @map("rent_type")
-  sqFeetMax         Decimal?      @map("sq_feet_max") @db.Decimal
-  sqFeetMin         Decimal?      @map("sq_feet_min") @db.Decimal
-  totalAvailable    Int?          @map("total_available")
-  totalCount        Int?          @map("total_count")
+  bathroomMax               Decimal?                           @map("bathroom_max") @db.Decimal
+  bathroomMin               Decimal?                           @map("bathroom_min") @db.Decimal
+  flatRentValueFrom         Decimal?                           @map("flat_rent_value_from") @db.Decimal
+  flatRentValueTo           Decimal?                           @map("flat_rent_value_to") @db.Decimal
+  floorMax                  Int?                               @map("floor_max")
+  floorMin                  Int?                               @map("floor_min")
+  listingSnapshotId         String?                            @map("listing_snapshot_id") @db.Uuid
+  maxOccupancy              Int?                               @map("max_occupancy")
+  minOccupancy              Int?                               @map("min_occupancy")
+  monthlyRent               Decimal?                           @map("monthly_rent") @db.Decimal
+  openWaitlist              Boolean                            @default(true) @map("open_waitlist")
+  accessibilityPriorityType UnitAccessibilityPriorityTypeEnum? @map("accessibility_priority_type")
+  rentType                  RentTypeEnum?                      @map("rent_type")
+  sqFeetMax                 Decimal?                           @map("sq_feet_max") @db.Decimal
+  sqFeetMin                 Decimal?                           @map("sq_feet_min") @db.Decimal
+  totalAvailable            Int?                               @map("total_available")
+  totalCount                Int?                               @map("total_count")
 
-  listing                       ListingSnapshot?                @relation(fields: [listingSnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  unitAccessibilityPriorityType UnitAccessibilityPriorityTypes? @relation(fields: [priorityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  unitGroupAmiLevel             UnitGroupAmiLevelSnapshot[]
-  unitType                      UnitTypes[]
+  listing           ListingSnapshot?            @relation(fields: [listingSnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  unitGroupAmiLevel UnitGroupAmiLevelSnapshot[]
+  unitType          UnitTypes[]
 
   @@map("unit_group_snapshot")
 }
@@ -1881,34 +1862,33 @@ model Units {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 
-  amiChartId                   String?  @map("ami_chart_id") @db.Uuid
-  amiChartOverrideId           String?  @unique() @map("ami_chart_override_id") @db.Uuid
-  amiPercentage                String?  @map("ami_percentage")
-  annualIncomeMax              String?  @map("annual_income_max")
-  annualIncomeMin              String?  @map("annual_income_min")
-  bmrProgramChart              Boolean? @map("bmr_program_chart")
+  amiChartId                   String?                            @map("ami_chart_id") @db.Uuid
+  amiChartOverrideId           String?                            @unique() @map("ami_chart_override_id") @db.Uuid
+  amiPercentage                String?                            @map("ami_percentage")
+  annualIncomeMax              String?                            @map("annual_income_max")
+  annualIncomeMin              String?                            @map("annual_income_min")
+  bmrProgramChart              Boolean?                           @map("bmr_program_chart")
   floor                        Int?
-  listingId                    String?  @map("listing_id") @db.Uuid
-  maxOccupancy                 Int?     @map("max_occupancy")
-  minOccupancy                 Int?     @map("min_occupancy")
-  monthlyIncomeMin             String?  @map("monthly_income_min")
-  monthlyRent                  String?  @map("monthly_rent")
-  monthlyRentAsPercentOfIncome Decimal? @map("monthly_rent_as_percent_of_income") @db.Decimal(8, 2)
-  numBathrooms                 Int?     @map("num_bathrooms")
-  numBedrooms                  Int?     @map("num_bedrooms")
+  listingId                    String?                            @map("listing_id") @db.Uuid
+  maxOccupancy                 Int?                               @map("max_occupancy")
+  minOccupancy                 Int?                               @map("min_occupancy")
+  monthlyIncomeMin             String?                            @map("monthly_income_min")
+  monthlyRent                  String?                            @map("monthly_rent")
+  monthlyRentAsPercentOfIncome Decimal?                           @map("monthly_rent_as_percent_of_income") @db.Decimal(8, 2)
+  numBathrooms                 Int?                               @map("num_bathrooms")
+  numBedrooms                  Int?                               @map("num_bedrooms")
   number                       String?
-  priorityTypeId               String?  @map("priority_type_id") @db.Uuid
-  sqFeet                       Decimal? @map("sq_feet") @db.Decimal(8, 2)
-  unitRentTypeId               String?  @map("unit_rent_type_id") @db.Uuid
-  unitTypeId                   String?  @map("unit_type_id") @db.Uuid
+  accessibilityPriorityType    UnitAccessibilityPriorityTypeEnum? @map("accessibility_priority_type")
+  sqFeet                       Decimal?                           @map("sq_feet") @db.Decimal(8, 2)
+  unitRentTypeId               String?                            @map("unit_rent_type_id") @db.Uuid
+  unitTypeId                   String?                            @map("unit_type_id") @db.Uuid
 
-  amiChart                       AmiChart?                       @relation(fields: [amiChartId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings                       Listings?                       @relation(fields: [listingId], references: [id], onDelete: Cascade)
-  status                         UnitsStatusEnum                 @default(unknown)
-  unitAccessibilityPriorityTypes UnitAccessibilityPriorityTypes? @relation(fields: [priorityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  unitAmiChartOverrides          UnitAmiChartOverrides?          @relation(fields: [amiChartOverrideId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  unitRentTypes                  UnitRentTypes?                  @relation(fields: [unitRentTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  unitTypes                      UnitTypes?                      @relation(fields: [unitTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  amiChart              AmiChart?              @relation(fields: [amiChartId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings              Listings?              @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  status                UnitsStatusEnum        @default(unknown)
+  unitAmiChartOverrides UnitAmiChartOverrides? @relation(fields: [amiChartOverrideId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  unitRentTypes         UnitRentTypes?         @relation(fields: [unitRentTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  unitTypes             UnitTypes?             @relation(fields: [unitTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("units")
 }
@@ -1921,34 +1901,33 @@ model UnitSnapshot {
   originalCreatedAt DateTime @map("original_created_at") @db.Timestamp(6)
   updatedAt         DateTime @map("updated_at") @db.Timestamp(6)
 
-  amiChartId                   String?         @map("ami_chart_id") @db.Uuid
-  amiChartOverrideSnapshotId   String?         @unique() @map("ami_chart_override_snapshot_id") @db.Uuid
-  amiPercentage                String?         @map("ami_percentage")
-  annualIncomeMax              String?         @map("annual_income_max")
-  annualIncomeMin              String?         @map("annual_income_min")
-  bmrProgramChart              Boolean?        @map("bmr_program_chart")
+  amiChartId                   String?                            @map("ami_chart_id") @db.Uuid
+  amiChartOverrideSnapshotId   String?                            @unique() @map("ami_chart_override_snapshot_id") @db.Uuid
+  amiPercentage                String?                            @map("ami_percentage")
+  annualIncomeMax              String?                            @map("annual_income_max")
+  annualIncomeMin              String?                            @map("annual_income_min")
+  bmrProgramChart              Boolean?                           @map("bmr_program_chart")
   floor                        Int?
-  listingSnapshotId            String?         @map("listing_snapshot_id") @db.Uuid
-  maxOccupancy                 Int?            @map("max_occupancy")
-  minOccupancy                 Int?            @map("min_occupancy")
-  monthlyIncomeMin             String?         @map("monthly_income_min")
-  monthlyRent                  String?         @map("monthly_rent")
-  monthlyRentAsPercentOfIncome Decimal?        @map("monthly_rent_as_percent_of_income") @db.Decimal(8, 2)
-  numBathrooms                 Int?            @map("num_bathrooms")
-  numBedrooms                  Int?            @map("num_bedrooms")
+  listingSnapshotId            String?                            @map("listing_snapshot_id") @db.Uuid
+  maxOccupancy                 Int?                               @map("max_occupancy")
+  minOccupancy                 Int?                               @map("min_occupancy")
+  monthlyIncomeMin             String?                            @map("monthly_income_min")
+  monthlyRent                  String?                            @map("monthly_rent")
+  monthlyRentAsPercentOfIncome Decimal?                           @map("monthly_rent_as_percent_of_income") @db.Decimal(8, 2)
+  numBathrooms                 Int?                               @map("num_bathrooms")
+  numBedrooms                  Int?                               @map("num_bedrooms")
   number                       String?
-  priorityTypeId               String?         @map("priority_type_id") @db.Uuid
-  sqFeet                       Decimal?        @map("sq_feet") @db.Decimal(8, 2)
-  status                       UnitsStatusEnum @default(unknown)
-  unitRentTypeId               String?         @map("unit_rent_type_id") @db.Uuid
-  unitTypeId                   String?         @map("unit_type_id") @db.Uuid
+  accessibilityPriorityType    UnitAccessibilityPriorityTypeEnum? @map("accessibility_priority_type")
+  sqFeet                       Decimal?                           @map("sq_feet") @db.Decimal(8, 2)
+  status                       UnitsStatusEnum                    @default(unknown)
+  unitRentTypeId               String?                            @map("unit_rent_type_id") @db.Uuid
+  unitTypeId                   String?                            @map("unit_type_id") @db.Uuid
 
-  amiChart                      AmiChart?                       @relation(fields: [amiChartId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listing                       ListingSnapshot?                @relation(fields: [listingSnapshotId], references: [id], onDelete: Cascade)
-  unitAccessibilityPriorityType UnitAccessibilityPriorityTypes? @relation(fields: [priorityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  unitAmiChartOverride          UnitAmiChartOverrideSnapshot?   @relation(fields: [amiChartOverrideSnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  unitRentType                  UnitRentTypes?                  @relation(fields: [unitRentTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  unitType                      UnitTypes?                      @relation(fields: [unitTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  amiChart             AmiChart?                     @relation(fields: [amiChartId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listing              ListingSnapshot?              @relation(fields: [listingSnapshotId], references: [id], onDelete: Cascade)
+  unitAmiChartOverride UnitAmiChartOverrideSnapshot? @relation(fields: [amiChartOverrideSnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  unitRentType         UnitRentTypes?                @relation(fields: [unitRentTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  unitType             UnitTypes?                    @relation(fields: [unitTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("unit_snapshot")
 }
@@ -1957,27 +1936,26 @@ model UnitSnapshot {
 model UnitsSummary {
   id String @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
 
-  amiPercentage                Int?     @map("ami_percentage")
-  floorMax                     Int?     @map("floor_max")
-  floorMin                     Int?     @map("floor_min")
-  listingId                    String?  @map("listing_id") @db.Uuid
-  maxOccupancy                 Int?     @map("max_occupancy")
-  minimumIncomeMax             String?  @map("minimum_income_max")
-  minimumIncomeMin             String?  @map("minimum_income_min")
-  minOccupancy                 Int?     @map("min_occupancy")
-  monthlyRentAsPercentOfIncome Decimal? @map("monthly_rent_as_percent_of_income") @db.Decimal(8, 2)
-  monthlyRentMax               Int?     @map("monthly_rent_max")
-  monthlyRentMin               Int?     @map("monthly_rent_min")
-  priorityTypeId               String?  @map("priority_type_id") @db.Uuid
-  sqFeetMax                    Decimal? @map("sq_feet_max") @db.Decimal(8, 2)
-  sqFeetMin                    Decimal? @map("sq_feet_min") @db.Decimal(8, 2)
-  totalAvailable               Int?     @map("total_available")
-  totalCount                   Int?     @map("total_count")
-  unitTypeId                   String?  @map("unit_type_id") @db.Uuid
+  amiPercentage                Int?                               @map("ami_percentage")
+  floorMax                     Int?                               @map("floor_max")
+  floorMin                     Int?                               @map("floor_min")
+  listingId                    String?                            @map("listing_id") @db.Uuid
+  maxOccupancy                 Int?                               @map("max_occupancy")
+  minimumIncomeMax             String?                            @map("minimum_income_max")
+  minimumIncomeMin             String?                            @map("minimum_income_min")
+  minOccupancy                 Int?                               @map("min_occupancy")
+  monthlyRentAsPercentOfIncome Decimal?                           @map("monthly_rent_as_percent_of_income") @db.Decimal(8, 2)
+  monthlyRentMax               Int?                               @map("monthly_rent_max")
+  monthlyRentMin               Int?                               @map("monthly_rent_min")
+  accessibilityPriorityType    UnitAccessibilityPriorityTypeEnum? @map("accessibility_priority_type")
+  sqFeetMax                    Decimal?                           @map("sq_feet_max") @db.Decimal(8, 2)
+  sqFeetMin                    Decimal?                           @map("sq_feet_min") @db.Decimal(8, 2)
+  totalAvailable               Int?                               @map("total_available")
+  totalCount                   Int?                               @map("total_count")
+  unitTypeId                   String?                            @map("unit_type_id") @db.Uuid
 
-  listings                       Listings?                       @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  unitAccessibilityPriorityTypes UnitAccessibilityPriorityTypes? @relation(fields: [priorityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  unitTypes                      UnitTypes?                      @relation(fields: [unitTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings  Listings?  @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  unitTypes UnitTypes? @relation(fields: [unitTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("units_summary")
 }
@@ -1986,27 +1964,26 @@ model UnitsSummarySnapshot {
   id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
 
-  amiPercentage                Int?     @map("ami_percentage")
-  floorMax                     Int?     @map("floor_max")
-  floorMin                     Int?     @map("floor_min")
-  listingSnapshotId            String?  @map("listing_snapshot_id") @db.Uuid
-  maxOccupancy                 Int?     @map("max_occupancy")
-  minimumIncomeMax             String?  @map("minimum_income_max")
-  minimumIncomeMin             String?  @map("minimum_income_min")
-  minOccupancy                 Int?     @map("min_occupancy")
-  monthlyRentAsPercentOfIncome Decimal? @map("monthly_rent_as_percent_of_income") @db.Decimal(8, 2)
-  monthlyRentMax               Int?     @map("monthly_rent_max")
-  monthlyRentMin               Int?     @map("monthly_rent_min")
-  priorityTypeId               String?  @map("priority_type_id") @db.Uuid
-  sqFeetMax                    Decimal? @map("sq_feet_max") @db.Decimal(8, 2)
-  sqFeetMin                    Decimal? @map("sq_feet_min") @db.Decimal(8, 2)
-  totalAvailable               Int?     @map("total_available")
-  totalCount                   Int?     @map("total_count")
-  unitTypeId                   String?  @map("unit_type_id") @db.Uuid
+  amiPercentage                Int?                               @map("ami_percentage")
+  floorMax                     Int?                               @map("floor_max")
+  floorMin                     Int?                               @map("floor_min")
+  listingSnapshotId            String?                            @map("listing_snapshot_id") @db.Uuid
+  maxOccupancy                 Int?                               @map("max_occupancy")
+  minimumIncomeMax             String?                            @map("minimum_income_max")
+  minimumIncomeMin             String?                            @map("minimum_income_min")
+  minOccupancy                 Int?                               @map("min_occupancy")
+  monthlyRentAsPercentOfIncome Decimal?                           @map("monthly_rent_as_percent_of_income") @db.Decimal(8, 2)
+  monthlyRentMax               Int?                               @map("monthly_rent_max")
+  monthlyRentMin               Int?                               @map("monthly_rent_min")
+  accessibilityPriorityType    UnitAccessibilityPriorityTypeEnum? @map("accessibility_priority_type")
+  sqFeetMax                    Decimal?                           @map("sq_feet_max") @db.Decimal(8, 2)
+  sqFeetMin                    Decimal?                           @map("sq_feet_min") @db.Decimal(8, 2)
+  totalAvailable               Int?                               @map("total_available")
+  totalCount                   Int?                               @map("total_count")
+  unitTypeId                   String?                            @map("unit_type_id") @db.Uuid
 
-  listing                       ListingSnapshot?                @relation(fields: [listingSnapshotId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  unitAccessibilityPriorityType UnitAccessibilityPriorityTypes? @relation(fields: [priorityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  unitType                      UnitTypes?                      @relation(fields: [unitTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listing  ListingSnapshot? @relation(fields: [listingSnapshotId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  unitType UnitTypes?       @relation(fields: [unitTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("units_summary_snapshot")
 }
@@ -2398,6 +2375,18 @@ enum NeighborhoodAmenitiesEnum {
   busStops
 
   @@map("neighborhood_amenities_enum")
+}
+
+enum UnitAccessibilityPriorityTypeEnum {
+  mobility
+  hearing
+  vision
+  hearingAndVision
+  mobilityAndHearing
+  mobilityAndVision
+  mobilityHearingAndVision
+
+  @@map("unit_accessibility_priority_type_enum")
 }
 
 enum RegionEnum {

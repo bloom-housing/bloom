@@ -20,9 +20,9 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   ReviewOrderTypeEnum,
+  UnitAccessibilityPriorityTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import DetailAdditionalFees from "../../../../src/components/listings/PaperListingDetails/sections/DetailAdditionalFees"
-import DetailBuildingFeatures from "../../../../src/components/listings/PaperListingDetails/sections/DetailBuildingFeatures"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { rest } from "msw"
 import DetailAdditionalEligibility from "../../../../src/components/listings/PaperListingDetails/sections/DetailAdditionalEligibility"
@@ -546,12 +546,7 @@ describe("listing data", () => {
               units: listing.units.map((entry, idx) => ({
                 ...entry,
                 number: `#${idx + 1}`,
-                unitAccessibilityPriorityTypes: {
-                  id: `ada_${idx}`,
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  name: `Test ADA_${idx}`,
-                },
+                accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.mobility,
               })),
               section8Acceptance: true,
             }}
@@ -573,14 +568,14 @@ describe("listing data", () => {
       expect(screen.getByText("AMI")).toBeInTheDocument()
       expect(screen.getByText("Rent")).toBeInTheDocument()
       expect(screen.getByText("SQ FT")).toBeInTheDocument()
-      expect(screen.getByText("ADA")).toBeInTheDocument()
+      expect(screen.getByText("Accessibility priority type")).toBeInTheDocument()
 
       expect(screen.getAllByText(/#[1-9]/i)).toHaveLength(6)
       expect(screen.getAllByText("Studio")).toHaveLength(6)
       expect(screen.getAllByText("45.0")).toHaveLength(6)
       expect(screen.getAllByText("1104.0")).toHaveLength(6)
       expect(screen.getAllByText("285")).toHaveLength(6)
-      expect(screen.getAllByText(/Test ADA_\d{1}/)).toHaveLength(6)
+      expect(screen.getAllByText("Mobility")).toHaveLength(6)
       expect(screen.getAllByText("View")).toHaveLength(6)
 
       expect(
@@ -2028,12 +2023,7 @@ describe("listing data", () => {
                 ...result.props.listing.units[0],
                 number: `#1`,
                 numBathrooms: 1,
-                unitAccessibilityPriorityTypes: {
-                  id: `ada_1`,
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  name: `Test ADA_1`,
-                },
+                accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.mobility,
               },
             ],
           }}
@@ -2096,7 +2086,7 @@ describe("listing data", () => {
     expect(
       within(accessibilitySection).getByText("Accessibility priority type")
     ).toBeInTheDocument()
-    expect(within(accessibilitySection).getByText("Test ADA_1")).toBeInTheDocument()
+    expect(within(accessibilitySection).getByText("Mobility")).toBeInTheDocument()
 
     // Should close on done
     const doneButton = within(unitDrawer).getByText("Done", {

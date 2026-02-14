@@ -14,7 +14,6 @@ import { useForm, useWatch } from "react-hook-form"
 import { DrawerHeader } from "@bloom-housing/ui-seeds/src/overlays/Drawer"
 import {
   useAmiChartList,
-  useUnitPriorityList,
   useUnitTypeList,
   useWatchOnFormNumberFieldsChange,
 } from "../../../lib/hooks"
@@ -22,7 +21,6 @@ import {
   AmiChart,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   RentTypeEnum,
-  UnitAccessibilityPriorityType,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { arrayToFormOptions, fieldHasError } from "../../../lib/helpers"
@@ -50,7 +48,6 @@ const UnitGroupForm = ({
   isNonRegulated,
 }: UnitGroupFormProps) => {
   const [amiChartsOptions, setAmiChartsOptions] = useState([])
-  const [unitPrioritiesOptions, setUnitPrioritiesOptions] = useState([])
   const [unitTypesOptions, setUnitTypesOptions] = useState([])
   const [amiDeleteModal, setAmiDeleteModal] = useState<number | null>(null)
   const [amiLevels, setAmiLevels] = useState<TempAmiLevel[]>([])
@@ -69,7 +66,6 @@ const UnitGroupForm = ({
     register,
     formState: { errors },
     trigger,
-    setValue,
     control,
     getValues,
     reset,
@@ -81,7 +77,6 @@ const UnitGroupForm = ({
    * fetch form options
    */
   const { data: amiCharts = [] } = useAmiChartList(jurisdiction)
-  const { data: unitPriorities = [] } = useUnitPriorityList()
   const { data: unitTypes = [] } = useUnitTypeList()
 
   // Controls for validating occupancy
@@ -150,14 +145,6 @@ const UnitGroupForm = ({
     if (amiCharts.length === 0 || amiChartsOptions.length) return
     setAmiChartsOptions(arrayToFormOptions<AmiChart>(amiCharts, "name", "id"))
   }, [amiCharts, amiChartsOptions])
-
-  // sets the options for the unit priorities
-  useEffect(() => {
-    if (unitPriorities.length === 0 || unitPrioritiesOptions.length) return
-    setUnitPrioritiesOptions(
-      arrayToFormOptions<UnitAccessibilityPriorityType>(unitPriorities, "name", "id")
-    )
-  }, [unitPrioritiesOptions, unitPriorities, setValue])
 
   // sets the options for the unit types
   useEffect(() => {
