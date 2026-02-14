@@ -2,7 +2,9 @@ import React from "react"
 import { setupServer } from "msw/node"
 import { render, screen, within } from "@testing-library/react"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import userEvent from "@testing-library/user-event"
 import {
+  FeatureFlagEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
@@ -161,7 +163,109 @@ describe("PreferencesAndPrograms", () => {
       expect(within(secondRowCells[3]).getByRole("button", { name: /delete/i })).toBeInTheDocument()
     })
 
-    it.todo("should open drawer and add a preference")
+    it("should open drawer and add a preference", async () => {
+      const mockPreferences: MultiselectQuestion[] = [
+        {
+          id: "preference_id_1",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          name: "City Employees",
+          text: "",
+          jurisdictions: [],
+          hideFromListing: false,
+          applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+          status: MultiselectQuestionsStatusEnum.active,
+        },
+        {
+          id: "preference_id_2",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          name: "Work in the city",
+          text: "",
+          jurisdictions: [],
+          options: [
+            {
+              name: "At least one member of my household works in the city",
+              text: "",
+              ordinal: 1,
+              collectAddress: true,
+              validationMethod: ValidationMethodEnum.map,
+              collectName: true,
+              collectRelationship: true,
+              mapLayerId: "c1586f71-345d-4986-83a2-b83ebfa84af5",
+              id: "1",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+            {
+              name: "All members of the household work in the city",
+              text: "",
+              ordinal: 2,
+              collectAddress: true,
+              collectName: false,
+              collectRelationship: false,
+              id: "2",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          ],
+          hideFromListing: false,
+          applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+          status: MultiselectQuestionsStatusEnum.active,
+        },
+      ]
+      const setFn = jest.fn()
+
+      render(
+        <FormProviderWrapper values={{ ...formDefaults }}>
+          <AuthContext.Provider
+            value={{
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                featureFlag === FeatureFlagEnum.enableV2MSQ,
+            }}
+          >
+            <PreferencesAndPrograms
+              preferences={mockPreferences}
+              programs={[]}
+              setPreferences={setFn}
+              setPrograms={setFn}
+              disableListingPreferences={false}
+              swapCommunityTypeWithPrograms={false}
+              jurisdiction={"jurisdiction1"}
+            />
+          </AuthContext.Provider>
+        </FormProviderWrapper>
+      )
+      const table = screen.getByRole("table")
+      expect(table).toBeInTheDocument()
+
+      const headAndBody = within(table).getAllByRole("rowgroup")
+      const [_, body] = headAndBody
+
+      const tableRows = within(body).getAllByRole("row")
+      const secondRowCells = within(tableRows[1]).getAllByRole("cell")
+      expect(secondRowCells[0]).toHaveTextContent("2")
+      expect(secondRowCells[1]).toHaveTextContent(/work in the city/i)
+      
+      const editButton = screen.getByRole("button", { name: "Edit preferences" })
+      expect(editButton).toBeInTheDocument()
+
+      await userEvent.click(editButton)
+
+      const dialogDrawer = await screen.findByRole("dialog", { name: "Add preferences" })
+      expect(dialogDrawer).toBeInTheDocument()
+
+      expect(
+        within(dialogDrawer).getByRole("heading", { level: 1, name: "Add preferences" })
+      ).toBeInTheDocument()
+      
+      expect(within(dialogDrawer).getByText(/city employees/i)).toBeInTheDocument()
+      
+      const selectButton = within(dialogDrawer).getByRole("button", { name: "Select preferences" })
+      await userEvent.click(selectButton)
+      // const nestedDialogDrawer = await screen.findByRole("dialog", { name: "Select preferences" })
+      // expect(within(nestedDialogDrawer).getByText(/city employees/i)).toBeInTheDocument()
+    })
 
     it.todo("should delete a preference")
 
