@@ -6684,6 +6684,9 @@ export interface Demographic {
 
   /**  */
   race: string[]
+
+  /**  */
+  spokenLanguage?: string
 }
 
 export interface Applicant {
@@ -7595,6 +7598,9 @@ export interface JurisdictionCreate {
   visibleAccessibilityPriorityTypes: UnitAccessibilityPriorityTypeEnum[]
 
   /**  */
+  visibleSpokenLanguages: SpokenLanguageEnum[]
+
+  /**  */
   regions: []
 
   /**  */
@@ -7670,6 +7676,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   visibleAccessibilityPriorityTypes: UnitAccessibilityPriorityTypeEnum[]
+
+  /**  */
+  visibleSpokenLanguages: SpokenLanguageEnum[]
 
   /**  */
   regions: []
@@ -7782,6 +7791,9 @@ export interface Jurisdiction {
 
   /**  */
   visibleAccessibilityPriorityTypes: UnitAccessibilityPriorityTypeEnum[]
+
+  /**  */
+  visibleSpokenLanguages: SpokenLanguageEnum[]
 
   /**  */
   regions: []
@@ -8123,6 +8135,9 @@ export interface DemographicCreate {
 
   /**  */
   race: string[]
+
+  /**  */
+  spokenLanguage?: string
 }
 
 export interface HouseholdMemberCreate {
@@ -8424,6 +8439,9 @@ export interface DemographicUpdate {
 
   /**  */
   race: string[]
+
+  /**  */
+  spokenLanguage?: string
 
   /**  */
   id?: string
@@ -9591,6 +9609,20 @@ export enum NeighborhoodAmenitiesEnum {
   "busStops" = "busStops",
 }
 
+export enum SpokenLanguageEnum {
+  "chineseCantonese" = "chineseCantonese",
+  "chineseMandarin" = "chineseMandarin",
+  "english" = "english",
+  "filipino" = "filipino",
+  "korean" = "korean",
+  "russian" = "russian",
+  "spanish" = "spanish",
+  "vietnamese" = "vietnamese",
+  "farsi" = "farsi",
+  "afghani" = "afghani",
+  "notListed" = "notListed",
+}
+
 export enum FeatureFlagEnum {
   "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
   "disableCommonApplication" = "disableCommonApplication",
@@ -9638,6 +9670,7 @@ export enum FeatureFlagEnum {
   "enableSection8Question" = "enableSection8Question",
   "enableSingleUseCode" = "enableSingleUseCode",
   "enableSmokingPolicyRadio" = "enableSmokingPolicyRadio",
+  "enableSpokenLanguage" = "enableSpokenLanguage",
   "enableSupportAdmin" = "enableSupportAdmin",
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitGroups" = "enableUnitGroups",

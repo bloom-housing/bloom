@@ -247,6 +247,7 @@ export const mockCreateApplicationData = (
       sexualOrientation: 'example sexual orientation',
       howDidYouHear: ['example how did you hear'],
       race: ['example race'],
+      spokenLanguage: 'example spoken language',
     },
     householdExpectingChanges: false,
     householdMember: [
@@ -324,6 +325,188 @@ export const mockCreateApplicationData = (
     submissionDate: submissionDate,
     submissionType: ApplicationSubmissionTypeEnum.electronical,
   } as ApplicationCreate;
+};
+
+const buildExpectedApplicationData = ({
+  exampleAddress,
+  dto,
+  submissionDate,
+  preferredUnitTypesMode = 'connect',
+  includeApplicationSelections = false,
+}: {
+  exampleAddress: AddressCreate;
+  dto: { listings: { id: string } };
+  submissionDate: any;
+  preferredUnitTypesMode?: 'connect' | 'set';
+  includeApplicationSelections?: boolean;
+}) => {
+  const preferredUnitTypes =
+    preferredUnitTypesMode === 'set'
+      ? { set: [{ id: expect.anything() }] }
+      : { connect: [{ id: expect.anything() }] };
+
+  return {
+    contactPreferences: ['example contact preference'],
+    status: ApplicationStatusEnum.submitted,
+    submissionType: ApplicationSubmissionTypeEnum.electronical,
+    appUrl: 'http://www.example.com',
+    additionalPhone: true,
+    additionalPhoneNumber: '111-111-1111',
+    additionalPhoneNumberType: 'example additional phone number type',
+    householdSize: 2,
+    housingStatus: 'example housing status',
+    sendMailToMailingAddress: true,
+    householdExpectingChanges: false,
+    householdStudent: false,
+    incomeVouchers: false,
+    income: '36000',
+    incomePeriod: IncomePeriodEnum.perYear,
+    language: LanguagesEnum.en,
+    acceptedTerms: true,
+    submissionDate: submissionDate,
+    reviewStatus: ApplicationReviewStatusEnum.valid,
+    applicant: {
+      create: {
+        firstName: 'applicant first name',
+        middleName: 'applicant middle name',
+        lastName: 'applicant last name',
+        birthMonth: 12,
+        birthDay: 17,
+        birthYear: 1993,
+        emailAddress: 'example@email.com',
+        noEmail: false,
+        phoneNumber: '111-111-1111',
+        phoneNumberType: 'Cell',
+        noPhone: false,
+        workInRegion: YesNoEnum.yes,
+        applicantAddress: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+        applicantWorkAddress: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+      },
+    },
+    accessibility: {
+      create: {
+        mobility: false,
+        vision: false,
+        hearing: false,
+        other: false,
+      },
+    },
+    alternateContact: {
+      create: {
+        type: AlternateContactRelationship.other,
+        otherType: 'example other type',
+        firstName: 'example first name',
+        lastName: 'example last name',
+        agency: 'example agency',
+        phoneNumber: '111-111-1111',
+        emailAddress: 'example@email.com',
+        address: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+      },
+    },
+    ...(includeApplicationSelections ? { applicationSelections: {} } : {}),
+    applicationsAlternateAddress: {
+      create: {
+        ...exampleAddress,
+      },
+    },
+    applicationsMailingAddress: {
+      create: {
+        ...exampleAddress,
+      },
+    },
+    listings: {
+      connect: {
+        id: dto.listings.id,
+      },
+    },
+    demographics: {
+      create: {
+        ethnicity: 'example ethnicity',
+        gender: 'example gender',
+        sexualOrientation: 'example sexual orientation',
+        howDidYouHear: ['example how did you hear'],
+        race: ['example race'],
+        spokenLanguage: 'example spoken language',
+      },
+    },
+    preferredUnitTypes: preferredUnitTypes,
+    householdMember: {
+      create: [
+        {
+          orderId: 0,
+          firstName: 'example first name',
+          middleName: 'example middle name',
+          lastName: 'example last name',
+          birthMonth: 12,
+          birthDay: 17,
+          birthYear: 1993,
+          sameAddress: YesNoEnum.yes,
+          relationship: HouseholdMemberRelationship.other,
+          workInRegion: YesNoEnum.yes,
+          householdMemberAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          householdMemberWorkAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+        },
+      ],
+    },
+    programs: [
+      {
+        key: 'example key',
+        claimed: true,
+        options: [
+          {
+            key: 'example key',
+            checked: true,
+            extraData: [
+              {
+                type: InputType.boolean,
+                key: 'example key',
+                value: true,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    preferences: [
+      {
+        key: 'example key',
+        claimed: true,
+        options: [
+          {
+            key: 'example key',
+            checked: true,
+            extraData: [
+              {
+                type: InputType.boolean,
+                key: 'example key',
+                value: true,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
 };
 
 const detailView = {
@@ -470,6 +653,7 @@ const detailView = {
       sexualOrientation: true,
       howDidYouHear: true,
       race: true,
+      spokenLanguage: true,
     },
   },
   preferredUnitTypes: {
@@ -690,6 +874,7 @@ const baseView = {
       sexualOrientation: true,
       howDidYouHear: true,
       race: true,
+      spokenLanguage: true,
     },
   },
   preferredUnitTypes: {
@@ -1812,172 +1997,12 @@ describe('Testing application service', () => {
         include: { ...detailView },
         data: {
           isNewest: true,
-          contactPreferences: ['example contact preference'],
-          status: ApplicationStatusEnum.submitted,
-          submissionType: ApplicationSubmissionTypeEnum.electronical,
-          appUrl: 'http://www.example.com',
-          additionalPhone: true,
-          additionalPhoneNumber: '111-111-1111',
-          additionalPhoneNumberType: 'example additional phone number type',
-          householdSize: 2,
-          housingStatus: 'example housing status',
-          sendMailToMailingAddress: true,
-          householdExpectingChanges: false,
-          householdStudent: false,
-          incomeVouchers: false,
-          income: '36000',
-          incomePeriod: IncomePeriodEnum.perYear,
-          language: LanguagesEnum.en,
-          acceptedTerms: true,
-          // Submission date is the moment it was created
-          submissionDate: expect.any(Date),
-          reviewStatus: ApplicationReviewStatusEnum.valid,
           confirmationCode: expect.anything(),
-          applicant: {
-            create: {
-              firstName: 'applicant first name',
-              middleName: 'applicant middle name',
-              lastName: 'applicant last name',
-              birthMonth: 12,
-              birthDay: 17,
-              birthYear: 1993,
-              emailAddress: 'example@email.com',
-              noEmail: false,
-              phoneNumber: '111-111-1111',
-              phoneNumberType: 'Cell',
-              noPhone: false,
-              workInRegion: YesNoEnum.yes,
-              applicantAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-              applicantWorkAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          accessibility: {
-            create: {
-              mobility: false,
-              vision: false,
-              hearing: false,
-              other: false,
-            },
-          },
-          alternateContact: {
-            create: {
-              type: AlternateContactRelationship.other,
-              otherType: 'example other type',
-              firstName: 'example first name',
-              lastName: 'example last name',
-              agency: 'example agency',
-              phoneNumber: '111-111-1111',
-              emailAddress: 'example@email.com',
-              address: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          applicationsAlternateAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          applicationsMailingAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          listings: {
-            connect: {
-              id: dto.listings.id,
-            },
-          },
-          demographics: {
-            create: {
-              ethnicity: 'example ethnicity',
-              gender: 'example gender',
-              sexualOrientation: 'example sexual orientation',
-              howDidYouHear: ['example how did you hear'],
-              race: ['example race'],
-            },
-          },
-          preferredUnitTypes: {
-            connect: [
-              {
-                id: expect.anything(),
-              },
-            ],
-          },
-          householdMember: {
-            create: [
-              {
-                orderId: 0,
-                firstName: 'example first name',
-                middleName: 'example middle name',
-                lastName: 'example last name',
-                birthMonth: 12,
-                birthDay: 17,
-                birthYear: 1993,
-                sameAddress: YesNoEnum.yes,
-                relationship: HouseholdMemberRelationship.other,
-                workInRegion: YesNoEnum.yes,
-                householdMemberAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-              },
-            ],
-          },
-          programs: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          preferences: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          ...buildExpectedApplicationData({
+            exampleAddress,
+            dto,
+            submissionDate: expect.any(Date),
+          }),
           userAccounts: {
             connect: {
               id: 'requestingUser id',
@@ -2038,172 +2063,12 @@ describe('Testing application service', () => {
         include: { ...detailView },
         data: {
           isNewest: false,
-          contactPreferences: ['example contact preference'],
-          status: ApplicationStatusEnum.submitted,
-          submissionType: ApplicationSubmissionTypeEnum.electronical,
-          appUrl: 'http://www.example.com',
-          additionalPhone: true,
-          additionalPhoneNumber: '111-111-1111',
-          additionalPhoneNumberType: 'example additional phone number type',
-          householdSize: 2,
-          housingStatus: 'example housing status',
-          sendMailToMailingAddress: true,
-          householdExpectingChanges: false,
-          householdStudent: false,
-          incomeVouchers: false,
-          income: '36000',
-          incomePeriod: IncomePeriodEnum.perYear,
-          language: LanguagesEnum.en,
-          acceptedTerms: true,
-          // Submission date is the moment it was created
-          submissionDate: expect.any(Date),
-          reviewStatus: ApplicationReviewStatusEnum.valid,
           confirmationCode: expect.anything(),
-          applicant: {
-            create: {
-              firstName: 'applicant first name',
-              middleName: 'applicant middle name',
-              lastName: 'applicant last name',
-              birthMonth: 12,
-              birthDay: 17,
-              birthYear: 1993,
-              emailAddress: 'example@email.com',
-              noEmail: false,
-              phoneNumber: '111-111-1111',
-              phoneNumberType: 'Cell',
-              noPhone: false,
-              workInRegion: YesNoEnum.yes,
-              applicantAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-              applicantWorkAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          accessibility: {
-            create: {
-              mobility: false,
-              vision: false,
-              hearing: false,
-              other: false,
-            },
-          },
-          alternateContact: {
-            create: {
-              type: AlternateContactRelationship.other,
-              otherType: 'example other type',
-              firstName: 'example first name',
-              lastName: 'example last name',
-              agency: 'example agency',
-              phoneNumber: '111-111-1111',
-              emailAddress: 'example@email.com',
-              address: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          applicationsAlternateAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          applicationsMailingAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          listings: {
-            connect: {
-              id: dto.listings.id,
-            },
-          },
-          demographics: {
-            create: {
-              ethnicity: 'example ethnicity',
-              gender: 'example gender',
-              sexualOrientation: 'example sexual orientation',
-              howDidYouHear: ['example how did you hear'],
-              race: ['example race'],
-            },
-          },
-          preferredUnitTypes: {
-            connect: [
-              {
-                id: expect.anything(),
-              },
-            ],
-          },
-          householdMember: {
-            create: [
-              {
-                orderId: 0,
-                firstName: 'example first name',
-                middleName: 'example middle name',
-                lastName: 'example last name',
-                birthMonth: 12,
-                birthDay: 17,
-                birthYear: 1993,
-                sameAddress: YesNoEnum.yes,
-                relationship: HouseholdMemberRelationship.other,
-                workInRegion: YesNoEnum.yes,
-                householdMemberAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-              },
-            ],
-          },
-          programs: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          preferences: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          ...buildExpectedApplicationData({
+            exampleAddress,
+            dto,
+            submissionDate: expect.any(Date),
+          }),
           userAccounts: undefined,
         },
       });
@@ -2294,172 +2159,12 @@ describe('Testing application service', () => {
         include: { ...detailView },
         data: {
           isNewest: true,
-          contactPreferences: ['example contact preference'],
-          status: ApplicationStatusEnum.submitted,
-          submissionType: ApplicationSubmissionTypeEnum.electronical,
-          appUrl: 'http://www.example.com',
-          additionalPhone: true,
-          additionalPhoneNumber: '111-111-1111',
-          additionalPhoneNumberType: 'example additional phone number type',
-          householdSize: 2,
-          housingStatus: 'example housing status',
-          sendMailToMailingAddress: true,
-          householdExpectingChanges: false,
-          householdStudent: false,
-          incomeVouchers: false,
-          income: '36000',
-          incomePeriod: IncomePeriodEnum.perYear,
-          language: LanguagesEnum.en,
-          acceptedTerms: true,
-          // Submission date is the moment it was created
-          submissionDate: expect.any(Date),
-          reviewStatus: ApplicationReviewStatusEnum.valid,
           confirmationCode: expect.anything(),
-          applicant: {
-            create: {
-              firstName: 'applicant first name',
-              middleName: 'applicant middle name',
-              lastName: 'applicant last name',
-              birthMonth: 12,
-              birthDay: 17,
-              birthYear: 1993,
-              emailAddress: 'example@email.com',
-              noEmail: false,
-              phoneNumber: '111-111-1111',
-              phoneNumberType: 'Cell',
-              noPhone: false,
-              workInRegion: YesNoEnum.yes,
-              applicantAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-              applicantWorkAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          accessibility: {
-            create: {
-              mobility: false,
-              vision: false,
-              hearing: false,
-              other: false,
-            },
-          },
-          alternateContact: {
-            create: {
-              type: AlternateContactRelationship.other,
-              otherType: 'example other type',
-              firstName: 'example first name',
-              lastName: 'example last name',
-              agency: 'example agency',
-              phoneNumber: '111-111-1111',
-              emailAddress: 'example@email.com',
-              address: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          applicationsAlternateAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          applicationsMailingAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          listings: {
-            connect: {
-              id: dto.listings.id,
-            },
-          },
-          demographics: {
-            create: {
-              ethnicity: 'example ethnicity',
-              gender: 'example gender',
-              sexualOrientation: 'example sexual orientation',
-              howDidYouHear: ['example how did you hear'],
-              race: ['example race'],
-            },
-          },
-          preferredUnitTypes: {
-            connect: [
-              {
-                id: expect.anything(),
-              },
-            ],
-          },
-          householdMember: {
-            create: [
-              {
-                orderId: 0,
-                firstName: 'example first name',
-                middleName: 'example middle name',
-                lastName: 'example last name',
-                birthMonth: 12,
-                birthDay: 17,
-                birthYear: 1993,
-                sameAddress: YesNoEnum.yes,
-                relationship: HouseholdMemberRelationship.other,
-                workInRegion: YesNoEnum.yes,
-                householdMemberAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-              },
-            ],
-          },
-          programs: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          preferences: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          ...buildExpectedApplicationData({
+            exampleAddress,
+            dto,
+            submissionDate: expect.any(Date),
+          }),
           userAccounts: {
             connect: {
               id: requestingUser.id,
@@ -2671,171 +2376,12 @@ describe('Testing application service', () => {
         },
         data: {
           isNewest: false,
-          contactPreferences: ['example contact preference'],
-          status: ApplicationStatusEnum.submitted,
-          submissionType: ApplicationSubmissionTypeEnum.electronical,
-          appUrl: 'http://www.example.com',
-          additionalPhone: true,
-          additionalPhoneNumber: '111-111-1111',
-          additionalPhoneNumberType: 'example additional phone number type',
-          householdSize: 2,
-          housingStatus: 'example housing status',
-          sendMailToMailingAddress: true,
-          householdExpectingChanges: false,
-          householdStudent: false,
-          incomeVouchers: false,
-          income: '36000',
-          incomePeriod: IncomePeriodEnum.perYear,
-          language: LanguagesEnum.en,
-          acceptedTerms: true,
-          submissionDate: expect.anything(),
-          reviewStatus: ApplicationReviewStatusEnum.valid,
           confirmationCode: expect.anything(),
-          applicant: {
-            create: {
-              firstName: 'applicant first name',
-              middleName: 'applicant middle name',
-              lastName: 'applicant last name',
-              birthMonth: 12,
-              birthDay: 17,
-              birthYear: 1993,
-              emailAddress: 'example@email.com',
-              noEmail: false,
-              phoneNumber: '111-111-1111',
-              phoneNumberType: 'Cell',
-              noPhone: false,
-              workInRegion: YesNoEnum.yes,
-              applicantAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-              applicantWorkAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          accessibility: {
-            create: {
-              mobility: false,
-              vision: false,
-              hearing: false,
-              other: false,
-            },
-          },
-          alternateContact: {
-            create: {
-              type: AlternateContactRelationship.other,
-              otherType: 'example other type',
-              firstName: 'example first name',
-              lastName: 'example last name',
-              agency: 'example agency',
-              phoneNumber: '111-111-1111',
-              emailAddress: 'example@email.com',
-              address: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          applicationsAlternateAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          applicationsMailingAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          listings: {
-            connect: {
-              id: dto.listings.id,
-            },
-          },
-          demographics: {
-            create: {
-              ethnicity: 'example ethnicity',
-              gender: 'example gender',
-              sexualOrientation: 'example sexual orientation',
-              howDidYouHear: ['example how did you hear'],
-              race: ['example race'],
-            },
-          },
-          preferredUnitTypes: {
-            connect: [
-              {
-                id: expect.anything(),
-              },
-            ],
-          },
-          householdMember: {
-            create: [
-              {
-                orderId: 0,
-                firstName: 'example first name',
-                middleName: 'example middle name',
-                lastName: 'example last name',
-                birthMonth: 12,
-                birthDay: 17,
-                birthYear: 1993,
-                sameAddress: YesNoEnum.yes,
-                relationship: HouseholdMemberRelationship.other,
-                workInRegion: YesNoEnum.yes,
-                householdMemberAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-              },
-            ],
-          },
-          programs: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          preferences: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          ...buildExpectedApplicationData({
+            exampleAddress,
+            dto,
+            submissionDate: expect.anything(),
+          }),
           userAccounts: {
             connect: {
               id: 'requestingUser id',
@@ -2904,171 +2450,12 @@ describe('Testing application service', () => {
         data: {
           isNewest: false,
           expireAfter: new Date('2024-06-27T08:00:00.000Z'),
-          contactPreferences: ['example contact preference'],
-          status: ApplicationStatusEnum.submitted,
-          submissionType: ApplicationSubmissionTypeEnum.electronical,
-          appUrl: 'http://www.example.com',
-          additionalPhone: true,
-          additionalPhoneNumber: '111-111-1111',
-          additionalPhoneNumberType: 'example additional phone number type',
-          householdSize: 2,
-          housingStatus: 'example housing status',
-          sendMailToMailingAddress: true,
-          householdExpectingChanges: false,
-          householdStudent: false,
-          incomeVouchers: false,
-          income: '36000',
-          incomePeriod: IncomePeriodEnum.perYear,
-          language: LanguagesEnum.en,
-          acceptedTerms: true,
-          submissionDate: expect.anything(),
-          reviewStatus: ApplicationReviewStatusEnum.valid,
           confirmationCode: expect.anything(),
-          applicant: {
-            create: {
-              firstName: 'applicant first name',
-              middleName: 'applicant middle name',
-              lastName: 'applicant last name',
-              birthMonth: 12,
-              birthDay: 17,
-              birthYear: 1993,
-              emailAddress: 'example@email.com',
-              noEmail: false,
-              phoneNumber: '111-111-1111',
-              phoneNumberType: 'Cell',
-              noPhone: false,
-              workInRegion: YesNoEnum.yes,
-              applicantAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-              applicantWorkAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          accessibility: {
-            create: {
-              mobility: false,
-              vision: false,
-              hearing: false,
-              other: false,
-            },
-          },
-          alternateContact: {
-            create: {
-              type: AlternateContactRelationship.other,
-              otherType: 'example other type',
-              firstName: 'example first name',
-              lastName: 'example last name',
-              agency: 'example agency',
-              phoneNumber: '111-111-1111',
-              emailAddress: 'example@email.com',
-              address: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          applicationsAlternateAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          applicationsMailingAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          listings: {
-            connect: {
-              id: dto.listings.id,
-            },
-          },
-          demographics: {
-            create: {
-              ethnicity: 'example ethnicity',
-              gender: 'example gender',
-              sexualOrientation: 'example sexual orientation',
-              howDidYouHear: ['example how did you hear'],
-              race: ['example race'],
-            },
-          },
-          preferredUnitTypes: {
-            connect: [
-              {
-                id: expect.anything(),
-              },
-            ],
-          },
-          householdMember: {
-            create: [
-              {
-                orderId: 0,
-                firstName: 'example first name',
-                middleName: 'example middle name',
-                lastName: 'example last name',
-                birthMonth: 12,
-                birthDay: 17,
-                birthYear: 1993,
-                sameAddress: YesNoEnum.yes,
-                relationship: HouseholdMemberRelationship.other,
-                workInRegion: YesNoEnum.yes,
-                householdMemberAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-              },
-            ],
-          },
-          programs: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          preferences: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          ...buildExpectedApplicationData({
+            exampleAddress,
+            dto,
+            submissionDate: expect.anything(),
+          }),
           userAccounts: {
             connect: {
               id: 'requestingUser id',
@@ -3150,167 +2537,13 @@ describe('Testing application service', () => {
           ...detailView,
         },
         data: {
-          contactPreferences: ['example contact preference'],
-          status: ApplicationStatusEnum.submitted,
-          submissionType: ApplicationSubmissionTypeEnum.electronical,
-          appUrl: 'http://www.example.com',
-          additionalPhone: true,
-          additionalPhoneNumber: '111-111-1111',
-          additionalPhoneNumberType: 'example additional phone number type',
-          householdSize: 2,
-          housingStatus: 'example housing status',
-          sendMailToMailingAddress: true,
-          householdExpectingChanges: false,
-          householdStudent: false,
-          incomeVouchers: false,
-          income: '36000',
-          incomePeriod: IncomePeriodEnum.perYear,
-          language: LanguagesEnum.en,
-          acceptedTerms: true,
-          submissionDate: submissionDate,
-          reviewStatus: ApplicationReviewStatusEnum.valid,
-          applicant: {
-            create: {
-              firstName: 'applicant first name',
-              middleName: 'applicant middle name',
-              lastName: 'applicant last name',
-              birthMonth: 12,
-              birthDay: 17,
-              birthYear: 1993,
-              emailAddress: 'example@email.com',
-              noEmail: false,
-              phoneNumber: '111-111-1111',
-              phoneNumberType: 'Cell',
-              noPhone: false,
-              workInRegion: YesNoEnum.yes,
-              applicantAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-              applicantWorkAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          accessibility: {
-            create: {
-              mobility: false,
-              vision: false,
-              hearing: false,
-              other: false,
-            },
-          },
-          alternateContact: {
-            create: {
-              type: AlternateContactRelationship.other,
-              otherType: 'example other type',
-              firstName: 'example first name',
-              lastName: 'example last name',
-              agency: 'example agency',
-              phoneNumber: '111-111-1111',
-              emailAddress: 'example@email.com',
-              address: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          applicationSelections: {},
-          applicationsAlternateAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          applicationsMailingAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          listings: {
-            connect: {
-              id: dto.listings.id,
-            },
-          },
-          demographics: {
-            create: {
-              ethnicity: 'example ethnicity',
-              gender: 'example gender',
-              sexualOrientation: 'example sexual orientation',
-              howDidYouHear: ['example how did you hear'],
-              race: ['example race'],
-            },
-          },
-          preferredUnitTypes: {
-            set: [{ id: expect.anything() }],
-          },
-          householdMember: {
-            create: [
-              {
-                orderId: 0,
-                firstName: 'example first name',
-                middleName: 'example middle name',
-                lastName: 'example last name',
-                birthMonth: 12,
-                birthDay: 17,
-                birthYear: 1993,
-                sameAddress: YesNoEnum.yes,
-                relationship: HouseholdMemberRelationship.other,
-                workInRegion: YesNoEnum.yes,
-                householdMemberAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-              },
-            ],
-          },
-          programs: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          preferences: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          ...buildExpectedApplicationData({
+            exampleAddress,
+            dto,
+            submissionDate,
+            preferredUnitTypesMode: 'set',
+            includeApplicationSelections: true,
+          }),
         },
         where: {
           id: expect.anything(),
@@ -3439,167 +2672,13 @@ describe('Testing application service', () => {
           ...detailView,
         },
         data: {
-          contactPreferences: ['example contact preference'],
-          status: ApplicationStatusEnum.submitted,
-          submissionType: ApplicationSubmissionTypeEnum.electronical,
-          appUrl: 'http://www.example.com',
-          additionalPhone: true,
-          additionalPhoneNumber: '111-111-1111',
-          additionalPhoneNumberType: 'example additional phone number type',
-          householdSize: 2,
-          housingStatus: 'example housing status',
-          sendMailToMailingAddress: true,
-          householdExpectingChanges: false,
-          householdStudent: false,
-          incomeVouchers: false,
-          income: '36000',
-          incomePeriod: IncomePeriodEnum.perYear,
-          language: LanguagesEnum.en,
-          acceptedTerms: true,
-          submissionDate: submissionDate,
-          reviewStatus: ApplicationReviewStatusEnum.valid,
-          applicant: {
-            create: {
-              firstName: 'applicant first name',
-              middleName: 'applicant middle name',
-              lastName: 'applicant last name',
-              birthMonth: 12,
-              birthDay: 17,
-              birthYear: 1993,
-              emailAddress: 'example@email.com',
-              noEmail: false,
-              phoneNumber: '111-111-1111',
-              phoneNumberType: 'Cell',
-              noPhone: false,
-              workInRegion: YesNoEnum.yes,
-              applicantAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-              applicantWorkAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          accessibility: {
-            create: {
-              mobility: false,
-              vision: false,
-              hearing: false,
-              other: false,
-            },
-          },
-          alternateContact: {
-            create: {
-              type: AlternateContactRelationship.other,
-              otherType: 'example other type',
-              firstName: 'example first name',
-              lastName: 'example last name',
-              agency: 'example agency',
-              phoneNumber: '111-111-1111',
-              emailAddress: 'example@email.com',
-              address: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          applicationSelections: {},
-          applicationsAlternateAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          applicationsMailingAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          listings: {
-            connect: {
-              id: dto.listings.id,
-            },
-          },
-          demographics: {
-            create: {
-              ethnicity: 'example ethnicity',
-              gender: 'example gender',
-              sexualOrientation: 'example sexual orientation',
-              howDidYouHear: ['example how did you hear'],
-              race: ['example race'],
-            },
-          },
-          preferredUnitTypes: {
-            set: [{ id: expect.anything() }],
-          },
-          householdMember: {
-            create: [
-              {
-                orderId: 0,
-                firstName: 'example first name',
-                middleName: 'example middle name',
-                lastName: 'example last name',
-                birthMonth: 12,
-                birthDay: 17,
-                birthYear: 1993,
-                sameAddress: YesNoEnum.yes,
-                relationship: HouseholdMemberRelationship.other,
-                workInRegion: YesNoEnum.yes,
-                householdMemberAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-              },
-            ],
-          },
-          programs: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          preferences: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          ...buildExpectedApplicationData({
+            exampleAddress,
+            dto,
+            submissionDate,
+            preferredUnitTypesMode: 'set',
+            includeApplicationSelections: true,
+          }),
         },
         where: {
           id: applicationId,
@@ -3716,167 +2795,13 @@ describe('Testing application service', () => {
           ...detailView,
         },
         data: {
-          contactPreferences: ['example contact preference'],
-          status: ApplicationStatusEnum.submitted,
-          submissionType: ApplicationSubmissionTypeEnum.electronical,
-          appUrl: 'http://www.example.com',
-          additionalPhone: true,
-          additionalPhoneNumber: '111-111-1111',
-          additionalPhoneNumberType: 'example additional phone number type',
-          householdSize: 2,
-          housingStatus: 'example housing status',
-          sendMailToMailingAddress: true,
-          householdExpectingChanges: false,
-          householdStudent: false,
-          incomeVouchers: false,
-          income: '36000',
-          incomePeriod: IncomePeriodEnum.perYear,
-          language: LanguagesEnum.en,
-          acceptedTerms: true,
-          submissionDate: submissionDate,
-          reviewStatus: ApplicationReviewStatusEnum.valid,
-          applicant: {
-            create: {
-              firstName: 'applicant first name',
-              middleName: 'applicant middle name',
-              lastName: 'applicant last name',
-              birthMonth: 12,
-              birthDay: 17,
-              birthYear: 1993,
-              emailAddress: 'example@email.com',
-              noEmail: false,
-              phoneNumber: '111-111-1111',
-              phoneNumberType: 'Cell',
-              noPhone: false,
-              workInRegion: YesNoEnum.yes,
-              applicantAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-              applicantWorkAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          accessibility: {
-            create: {
-              mobility: false,
-              vision: false,
-              hearing: false,
-              other: false,
-            },
-          },
-          alternateContact: {
-            create: {
-              type: AlternateContactRelationship.other,
-              otherType: 'example other type',
-              firstName: 'example first name',
-              lastName: 'example last name',
-              agency: 'example agency',
-              phoneNumber: '111-111-1111',
-              emailAddress: 'example@email.com',
-              address: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          applicationSelections: {},
-          applicationsAlternateAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          applicationsMailingAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          listings: {
-            connect: {
-              id: dto.listings.id,
-            },
-          },
-          demographics: {
-            create: {
-              ethnicity: 'example ethnicity',
-              gender: 'example gender',
-              sexualOrientation: 'example sexual orientation',
-              howDidYouHear: ['example how did you hear'],
-              race: ['example race'],
-            },
-          },
-          preferredUnitTypes: {
-            set: [{ id: expect.anything() }],
-          },
-          householdMember: {
-            create: [
-              {
-                orderId: 0,
-                firstName: 'example first name',
-                middleName: 'example middle name',
-                lastName: 'example last name',
-                birthMonth: 12,
-                birthDay: 17,
-                birthYear: 1993,
-                sameAddress: YesNoEnum.yes,
-                relationship: HouseholdMemberRelationship.other,
-                workInRegion: YesNoEnum.yes,
-                householdMemberAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-              },
-            ],
-          },
-          programs: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          preferences: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          ...buildExpectedApplicationData({
+            exampleAddress,
+            dto,
+            submissionDate,
+            preferredUnitTypesMode: 'set',
+            includeApplicationSelections: true,
+          }),
         },
         where: {
           id: applicationId,
@@ -4003,167 +2928,13 @@ describe('Testing application service', () => {
           ...detailView,
         },
         data: {
-          contactPreferences: ['example contact preference'],
-          status: ApplicationStatusEnum.submitted,
-          submissionType: ApplicationSubmissionTypeEnum.electronical,
-          appUrl: 'http://www.example.com',
-          additionalPhone: true,
-          additionalPhoneNumber: '111-111-1111',
-          additionalPhoneNumberType: 'example additional phone number type',
-          householdSize: 2,
-          housingStatus: 'example housing status',
-          sendMailToMailingAddress: true,
-          householdExpectingChanges: false,
-          householdStudent: false,
-          incomeVouchers: false,
-          income: '36000',
-          incomePeriod: IncomePeriodEnum.perYear,
-          language: LanguagesEnum.en,
-          acceptedTerms: true,
-          submissionDate: submissionDate,
-          reviewStatus: ApplicationReviewStatusEnum.valid,
-          applicant: {
-            create: {
-              firstName: 'applicant first name',
-              middleName: 'applicant middle name',
-              lastName: 'applicant last name',
-              birthMonth: 12,
-              birthDay: 17,
-              birthYear: 1993,
-              emailAddress: 'example@email.com',
-              noEmail: false,
-              phoneNumber: '111-111-1111',
-              phoneNumberType: 'Cell',
-              noPhone: false,
-              workInRegion: YesNoEnum.yes,
-              applicantAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-              applicantWorkAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          accessibility: {
-            create: {
-              mobility: false,
-              vision: false,
-              hearing: false,
-              other: false,
-            },
-          },
-          alternateContact: {
-            create: {
-              type: AlternateContactRelationship.other,
-              otherType: 'example other type',
-              firstName: 'example first name',
-              lastName: 'example last name',
-              agency: 'example agency',
-              phoneNumber: '111-111-1111',
-              emailAddress: 'example@email.com',
-              address: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          applicationSelections: {},
-          applicationsAlternateAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          applicationsMailingAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          listings: {
-            connect: {
-              id: dto.listings.id,
-            },
-          },
-          demographics: {
-            create: {
-              ethnicity: 'example ethnicity',
-              gender: 'example gender',
-              sexualOrientation: 'example sexual orientation',
-              howDidYouHear: ['example how did you hear'],
-              race: ['example race'],
-            },
-          },
-          preferredUnitTypes: {
-            set: [{ id: expect.anything() }],
-          },
-          householdMember: {
-            create: [
-              {
-                orderId: 0,
-                firstName: 'example first name',
-                middleName: 'example middle name',
-                lastName: 'example last name',
-                birthMonth: 12,
-                birthDay: 17,
-                birthYear: 1993,
-                sameAddress: YesNoEnum.yes,
-                relationship: HouseholdMemberRelationship.other,
-                workInRegion: YesNoEnum.yes,
-                householdMemberAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-              },
-            ],
-          },
-          programs: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          preferences: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          ...buildExpectedApplicationData({
+            exampleAddress,
+            dto,
+            submissionDate,
+            preferredUnitTypesMode: 'set',
+            includeApplicationSelections: true,
+          }),
         },
         where: {
           id: applicationId,

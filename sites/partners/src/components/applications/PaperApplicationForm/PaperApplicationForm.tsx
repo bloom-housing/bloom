@@ -11,6 +11,7 @@ import {
   ApplicationUpdate,
   FeatureFlagEnum,
   HouseholdMember,
+  Jurisdiction,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mapFormToApi, mapApiToForm } from "../../../lib/applications/formatApplicationData"
@@ -43,7 +44,8 @@ type AlertErrorType = "api" | "form"
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
   const { data: jurisdictionData } = useJurisdiction(listingDto?.jurisdictions?.id)
-  const { doJurisdictionsHaveFeatureFlagOn, applicationsService } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn, applicationsService, jurisdictionsService } =
+    useContext(AuthContext)
 
   const preferences = listingSectionQuestions(
     listingDto,
@@ -91,6 +93,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
+  const enableSpokenLanguage = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSpokenLanguage,
+    listingDto?.jurisdictions.id
+  )
+
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
@@ -122,6 +129,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
+  const [jurisdictionDto, setJurisdictionDto] = useState<Jurisdiction | null>(null)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [confirmSections, setConfirmSections] = useState<AppStatusConfirmSections>({
     changes: [],
@@ -144,6 +152,24 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       setHouseholdMembers(orderedHouseholdMembers)
     }
   }, [application, setHouseholdMembers])
+
+  useEffect(() => {
+    const fetchJurisdiction = async () => {
+      if (listingDto?.jurisdictions?.id && jurisdictionsService) {
+        try {
+          const jurisdictionResponse = await jurisdictionsService.retrieve({
+            jurisdictionId: listingDto.jurisdictions.id,
+          })
+          setJurisdictionDto(jurisdictionResponse)
+        } catch (err) {
+          console.error("Error fetching jurisdiction:", err)
+          setJurisdictionDto(null)
+        }
+      }
+    }
+
+    void fetchJurisdiction()
+  }, [listingDto?.jurisdictions?.id, jurisdictionsService])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, trigger, clearErrors, reset } = formMethods
@@ -215,6 +241,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       programs: programs.map((item) => item?.multiselectQuestions),
       preferences: preferences.map((item) => item?.multiselectQuestions),
     })
+
+    console.log({ body })
 
     try {
       const result = editMode
@@ -370,6 +398,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       enableLimitedHowDidYouHear={enableLimitedHowDidYouHear}
                       disableEthnicityQuestion={disableEthnicityQuestion}
                       raceEthnicityConfiguration={jurisdictionData?.raceEthnicityConfiguration}
+                      enableSpokenLanguage={enableSpokenLanguage}
+                      visibleSpokenLanguages={jurisdictionDto?.visibleSpokenLanguages}
                     />
 
                     <FormTerms />

@@ -1,6 +1,6 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Select, FieldGroup } from "@bloom-housing/ui-components"
+import { t, Select, FieldGroup, Field } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import {
   ethnicityKeys,
@@ -21,6 +21,8 @@ type FormDemographicsProps = {
   enableLimitedHowDidYouHear: boolean
   disableEthnicityQuestion: boolean
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
+  enableSpokenLanguage?: boolean
+  visibleSpokenLanguages?: string[]
 }
 
 const FormDemographics = ({
@@ -28,11 +30,13 @@ const FormDemographics = ({
   enableLimitedHowDidYouHear,
   disableEthnicityQuestion,
   raceEthnicityConfiguration,
+  enableSpokenLanguage,
+  visibleSpokenLanguages,
 }: FormDemographicsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register } = formMethods
+  const { register, watch, setValue } = formMethods
 
   const howDidYouHearOptions = useMemo(() => {
     return (enableLimitedHowDidYouHear ? limitedHowDidYouHear : howDidYouHear)?.map((item) => ({
@@ -42,6 +46,34 @@ const FormDemographics = ({
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [register])
+
+  const spokenLanguageValue: string = watch("application.demographics.spokenLanguage")
+
+  const getSpokenLanguageOptions = () => {
+    const availableLanguages =
+      visibleSpokenLanguages && visibleSpokenLanguages.length > 0 ? visibleSpokenLanguages : []
+    return availableLanguages
+  }
+
+  useEffect(() => {
+    if (visibleSpokenLanguages?.length > 0) {
+      const selectedOption = formValues.spokenLanguage?.includes("notListed")
+        ? "notListed"
+        : formValues.spokenLanguage || ""
+      setValue("application.demographics.spokenLanguage", selectedOption)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibleSpokenLanguages])
+
+  useEffect(() => {
+    if (spokenLanguageValue !== "notListed") {
+      setValue("application.demographics.spokenLanguageNotListed", "")
+    } else {
+      const currentNotListedValue = formValues.spokenLanguage?.split(":")[1] || ""
+      setValue("application.demographics.spokenLanguageNotListed", currentNotListedValue)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [spokenLanguageValue])
 
   const raceOptions = useMemo(() => {
     const raceKeys = getRaceEthnicityOptions(raceEthnicityConfiguration)
@@ -111,6 +143,34 @@ const FormDemographics = ({
             />
           </Grid.Cell>
         </Grid.Row>
+        {enableSpokenLanguage && visibleSpokenLanguages?.length > 0 && (
+          <Grid.Row columns={2}>
+            <Grid.Cell>
+              <Select
+                id="application.demographics.spokenLanguage"
+                name="application.demographics.spokenLanguage"
+                label={t("application.review.demographics.spokenLanguageLabel")}
+                register={register}
+                controlClassName="control"
+                options={["", ...getSpokenLanguageOptions()]}
+                keyPrefix="application.review.demographics.spokenLanguageOptions"
+                defaultValue={
+                  formValues.spokenLanguage?.includes("notListed")
+                    ? "notListed"
+                    : formValues.spokenLanguage
+                }
+              />
+              {spokenLanguageValue === "notListed" && (
+                <Field
+                  id="application.demographics.spokenLanguageNotListed"
+                  name="application.demographics.spokenLanguageNotListed"
+                  label={t("application.review.demographics.spokenLanguageSpecify")}
+                  register={register}
+                />
+              )}
+            </Grid.Cell>
+          </Grid.Row>
+        )}
       </SectionWithGrid>
     </>
   )

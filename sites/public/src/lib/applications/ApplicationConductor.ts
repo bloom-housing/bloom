@@ -145,6 +145,7 @@ export default class ApplicationConductor {
     featureFlags: [],
     isAdvocate: false,
     raceEthnicityConfiguration: null,
+    visibleSpokenLanguages: [],
   }
   private _listing: Listing
 
