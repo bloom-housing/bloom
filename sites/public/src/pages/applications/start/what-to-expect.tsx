@@ -128,7 +128,7 @@ const ApplicationWhatToExpect = () => {
             </Markdown>
           </div>
         </CardSection>
-        <CardSection className={`${styles["application-form-action-footer"]}`}>
+        <CardSection className={styles["application-form-action-footer"]}>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Button
               type="submit"
