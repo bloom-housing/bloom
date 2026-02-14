@@ -238,6 +238,16 @@ export const stagingSeed = async (
         NeighborhoodAmenitiesEnum.playgrounds,
         NeighborhoodAmenitiesEnum.busStops,
       ],
+      languages: [
+        LanguagesEnum.en,
+        LanguagesEnum.es,
+        LanguagesEnum.ko,
+        LanguagesEnum.hy,
+        LanguagesEnum.zh,
+        LanguagesEnum.tl,
+        LanguagesEnum.fa,
+        LanguagesEnum.vi,
+      ],
       regions: [
         'Metro Area',
         'South Bay',
