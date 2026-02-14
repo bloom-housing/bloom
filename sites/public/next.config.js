@@ -57,7 +57,7 @@ module.exports = withBundleAnalyzer({
     siteMessageWindow: process.env.SITE_MESSAGE_WINDOW,
     reCaptchaKey: process.env.RECAPTCHA_KEY,
     maxBrowseListings: process.env.MAX_BROWSE_LISTINGS,
-    rtlLanguages: process.env.RTL_LANGUAGES || "ar",
+    rtlLanguages: "ar,fa",
   },
   i18n: {
     locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

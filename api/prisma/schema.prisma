@@ -2260,6 +2260,9 @@ enum LanguagesEnum {
   tl
   bn
   ar
+  ko
+  hy
+  fa
 
   @@map("languages_enum")
 }
