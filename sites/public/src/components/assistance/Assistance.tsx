@@ -1,6 +1,6 @@
 import Link from "next/link"
-import { Card, t } from "@bloom-housing/ui-components"
-import { Heading } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { Heading, Card } from "@bloom-housing/ui-seeds"
 import { BloomCard } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
