@@ -1790,27 +1790,18 @@ describe('Testing user service', () => {
           id,
         },
       });
-      expect(prisma.userAccounts.update).toHaveBeenCalledTimes(4);
-      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-        data: {
-          listings: {
-            disconnect: [
-              {
-                id: listingB,
-              },
-            ],
-          },
-        },
-        where: {
-          id,
-        },
-      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledTimes(3);
       expect(prisma.userAccounts.update).toHaveBeenCalledWith({
         data: {
           listings: {
             connect: [
               {
                 id: listingC,
+              },
+            ],
+            disconnect: [
+              {
+                id: listingB,
               },
             ],
           },

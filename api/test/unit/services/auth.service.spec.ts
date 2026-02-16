@@ -1191,12 +1191,5 @@ describe('Testing auth service', () => {
       'True',
       ACCESS_TOKEN_AVAILABLE_OPTIONS,
     );
-
-    expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
-      data: {
-        originalId: id,
-        confirmationToken: expect.anything(),
-      },
-    });
   });
 });

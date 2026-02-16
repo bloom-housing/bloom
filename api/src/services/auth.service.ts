@@ -262,11 +262,11 @@ export class AuthService {
       );
     }
 
-    let phoneNumberBeingAdded = false;
+    let isPhoneNumberBeingAdded = false;
     if (dto.mfaType === MfaType.sms) {
       if (dto.phoneNumber) {
         if (!user.phoneNumberVerified) {
-          phoneNumberBeingAdded = true;
+          isPhoneNumberBeingAdded = true;
           user.phoneNumber = dto.phoneNumber;
         } else {
           throw new UnauthorizedException(
@@ -288,7 +288,7 @@ export class AuthService {
       Number(process.env.MFA_CODE_VALID),
     );
 
-    if (phoneNumberBeingAdded) {
+    if (isPhoneNumberBeingAdded) {
       await this.snapshotCreateService.createUserSnapshot(user.id);
     }
     await this.prisma.userAccounts.update({
@@ -385,7 +385,6 @@ export class AuthService {
 
     if (token.email) {
       data.email = token.email;
-      await this.snapshotCreateService.createUserSnapshot(foundUser.id);
     }
 
     const updatedUser = await this.prisma.userAccounts.update({

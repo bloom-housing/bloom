@@ -54,6 +54,7 @@ import { ModificationEnum } from '../enums/shared/modification-enum';
 import { CronJobService } from './cron-job.service';
 import { ApplicationService } from './application.service';
 import { SnapshotCreateService } from './snapshot-create.service';
+import { toAddHelper, toRemoveHelper } from '../utilities/snapshot-helpers';
 
 /*
   this is the service for users
@@ -285,37 +286,11 @@ export class UserService {
     // handle listings
     if (dto.listings?.length || storedUser.listings?.length) {
       // if the listing is stored in the db but not on the incoming dto, mark as to be removed
-      const toRemove = storedUser.listings?.reduce((acc, curr) => {
-        if (!dto.listings?.some((elem) => elem.id === curr.id)) {
-          acc.push(curr.id);
-        }
-        return acc;
-      }, []);
-      if (toRemove?.length) {
-        transactions.push(async (transaction: PrismaClient) => {
-          return transaction.userAccounts.update({
-            where: {
-              id: dto.id,
-            },
-            data: {
-              listings: {
-                disconnect: toRemove.map((elem) => ({
-                  id: elem,
-                })),
-              },
-            },
-          });
-        });
-      }
-
+      const toRemove = toRemoveHelper(storedUser.listings, dto.listings);
       // if listing is on dto but not in db, we need to store it
-      const toAdd = dto.listings?.reduce((acc, curr) => {
-        if (!storedUser.listings?.some((elem) => elem.id === curr.id)) {
-          acc.push(curr.id);
-        }
-        return acc;
-      }, []);
-      if (toAdd?.length) {
+      const toAdd = toAddHelper(storedUser.listings, dto.listings);
+
+      if (toAdd?.length || toRemove?.length) {
         transactions.push(async (transaction: PrismaClient) => {
           return transaction.userAccounts.update({
             where: {
@@ -323,9 +298,8 @@ export class UserService {
             },
             data: {
               listings: {
-                connect: toAdd.map((elem) => ({
-                  id: elem,
-                })),
+                disconnect: toRemove?.length ? toRemove : undefined,
+                connect: toAdd?.length ? toAdd : undefined,
               },
             },
           });
@@ -336,37 +310,14 @@ export class UserService {
     // handle jurisdictions
     if (dto.jurisdictions?.length || storedUser.jurisdictions?.length) {
       // if the jurisdiction is stored in the db but not on the incoming dto, mark as to be removed
-      const toRemove = storedUser.jurisdictions?.reduce((acc, curr) => {
-        if (!dto.jurisdictions?.some((elem) => elem.id === curr.id)) {
-          acc.push(curr.id);
-        }
-        return acc;
-      }, []);
-      if (toRemove?.length) {
-        transactions.push(async (transaction: PrismaClient) => {
-          return transaction.userAccounts.update({
-            where: {
-              id: dto.id,
-            },
-            data: {
-              jurisdictions: {
-                disconnect: toRemove.map((elem) => ({
-                  id: elem,
-                })),
-              },
-            },
-          });
-        });
-      }
-
+      const toRemove = toRemoveHelper(
+        storedUser.jurisdictions,
+        dto.jurisdictions,
+      );
       // if jurisdiction is on dto but not in db, we need to store it
-      const toAdd = dto.jurisdictions?.reduce((acc, curr) => {
-        if (!storedUser.jurisdictions?.some((elem) => elem.id === curr.id)) {
-          acc.push(curr.id);
-        }
-        return acc;
-      }, []);
-      if (toAdd?.length) {
+      const toAdd = toAddHelper(storedUser.jurisdictions, dto.jurisdictions);
+
+      if (toAdd?.length || toRemove?.length) {
         transactions.push(async (transaction: PrismaClient) => {
           return transaction.userAccounts.update({
             where: {
@@ -374,9 +325,8 @@ export class UserService {
             },
             data: {
               jurisdictions: {
-                connect: toAdd.map((elem) => ({
-                  id: elem,
-                })),
+                connect: toAdd,
+                disconnect: toRemove,
               },
             },
           });
