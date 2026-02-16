@@ -1479,7 +1479,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .expect(200);
     });
 
-    it('should error as forbidden for create endpoint', async () => {
+    it('should succeed for create endpoint', async () => {
       const propertyData = {
         name: 'New Test Property',
         jurisdictions: {
@@ -1492,7 +1492,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .send(propertyData)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(201);
     });
 
     it('should succeed for filterable list endpoint', async () => {
