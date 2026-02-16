@@ -4,6 +4,7 @@
 export enum FeatureFlagEnum {
   disableBuildingSelectionCriteria = 'disableBuildingSelectionCriteria',
   disableCommonApplication = 'disableCommonApplication',
+  disableEthnicityQuestion = 'disableEthnicityQuestion',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
   disableWorkInRegion = 'disableWorkInRegion',
@@ -77,6 +78,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.disableCommonApplication,
     description:
       'When true, the digital common application is not an option for listings',
+  },
+  {
+    name: FeatureFlagEnum.disableEthnicityQuestion,
+    description:
+      'When true, the ethnicity question is hidden in the application demographics section',
   },
   {
     name: FeatureFlagEnum.disableJurisdictionalAdmin,

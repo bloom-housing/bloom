@@ -369,6 +369,7 @@
   "application.review.demographics.howDidYouHearOptions.propertyWebsite": "Հյուրանոցի կայք",
   "application.review.demographics.howDidYouHearOptions.radioAd": "Ռադիո գովազդ",
   "application.review.demographics.raceLabel": "Ո՞րն է լավագույնս նկարագրում ձեր ռասան/էթնիկ պատկանելությունը։ Խնդրում ենք ընտրել բոլոր համապատասխանող տարբերակները։",
+  "application.review.demographics.raceLabelNoEthnicity": "Ո՞րն է լավագույնս նկարագրում ձեր ռասան։ Խնդրում ենք ընտրել բոլոր համապատասխանող տարբերակները։",
   "application.review.demographics.raceOptions.americanIndianAlaskanNative": "Ամերիկյան հնդիկ / Ալյասկայի բնիկ",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndBlackAfricanAmerican": "Ամերիկյան հնդկացի / Ալյասկայի բնիկ և սևամորթ / աֆրոամերիկացի",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndWhite": "Ամերիկյան հնդկացի / Ալյասկայի բնիկ և սպիտակամորթ",

@@ -369,6 +369,7 @@
   "application.review.demographics.howDidYouHearOptions.propertyWebsite": "Property website",
   "application.review.demographics.howDidYouHearOptions.radioAd": "Radio ad",
   "application.review.demographics.raceLabel": "Which best describes your race/ethnicity? Please select all that apply:",
+  "application.review.demographics.raceLabelNoEthnicity": "Which best describes your race? Please select all that apply:",
   "application.review.demographics.raceOptions.americanIndianAlaskanNative": "American Indian / Alaskan Native",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndBlackAfricanAmerican": "American Indian / Alaskan Native and Black/African American",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndWhite": "American Indian / Alaskan Native and White",

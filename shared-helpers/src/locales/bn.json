@@ -370,6 +370,7 @@
   "application.review.demographics.howDidYouHearOptions.propertyWebsite": "সম্পত্তি ওয়েবসাইট",
   "application.review.demographics.howDidYouHearOptions.radioAd": "রেডিও বিজ্ঞাপন",
   "application.review.demographics.raceLabel": "কোনটি আপনার জাতি সম্পর্কে সেরা বর্ণনা করে?",
+  "application.review.demographics.raceLabelNoEthnicity": "আপনার জাতিকে কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে? অনুগ্রহ করে প্রযোজ্য সবগুলি নির্বাচন করুন:",
   "application.review.demographics.raceOptions.americanIndianAlaskanNative": "আমেরিকান ইন্ডিয়ান / আলাস্কান নেটিভ",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndBlackAfricanAmerican": "আমেরিকান ভারতীয় / আলাস্কান নেটিভ এবং কালো / আফ্রিকান আমেরিকান",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndWhite": "আমেরিকান ইন্ডিয়ান / আলাস্কান নেটিভ এবং হোয়াইট",

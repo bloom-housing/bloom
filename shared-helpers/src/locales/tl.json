@@ -370,6 +370,7 @@
   "application.review.demographics.howDidYouHearOptions.propertyWebsite": "Website ng ari-arian",
   "application.review.demographics.howDidYouHearOptions.radioAd": "Patalastas sa radyo",
   "application.review.demographics.raceLabel": "Alin ang pinakanaglalarawan sa iyong lahi?",
+  "application.review.demographics.raceLabelNoEthnicity": "Alin ang pinakamahusay na naglalarawan sa iyong lahi? Pakipili ang lahat ng naaangkop:",
   "application.review.demographics.raceOptions.americanIndianAlaskanNative": "Amerikano Indiano / Katutubong Taga-Alaska",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndBlackAfricanAmerican": "Amerikano Indiano / Katutubong Taga-Alaska at Itim/Aprikano Amerikano",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndWhite": "Amerikano Indiano / Katutubong Taga-Alaska at Puti",

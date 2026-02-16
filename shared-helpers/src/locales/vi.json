@@ -370,6 +370,7 @@
   "application.review.demographics.howDidYouHearOptions.propertyWebsite": "Trang web bất động sản",
   "application.review.demographics.howDidYouHearOptions.radioAd": "Quảng cáo trên radio",
   "application.review.demographics.raceLabel": "Điều nào dưới đây mô tả đúng nhất về chủng tộc của quý vị?",
+  "application.review.demographics.raceLabelNoEthnicity": "Điều nào mô tả đúng nhất chủng tộc của bạn? Vui lòng chọn tất cả các đáp án phù hợp:",
   "application.review.demographics.raceOptions.americanIndianAlaskanNative": "Thổ dân Mỹ / Bản địa Alaska",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndBlackAfricanAmerican": "Thổ dân Mỹ/Bản địa Alaska và Người Da đen hoặc Mỹ gốc Phi",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndWhite": "Thổ dân Mỹ/Bản địa Alaska và Người Da Trắng",

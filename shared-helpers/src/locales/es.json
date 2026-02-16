@@ -370,6 +370,7 @@
   "application.review.demographics.howDidYouHearOptions.propertyWebsite": "Sitio web de inmuebles",
   "application.review.demographics.howDidYouHearOptions.radioAd": "Comercial de radio",
   "application.review.demographics.raceLabel": "¿Cuál de las siguientes opciones describe mejor su raza?",
+  "application.review.demographics.raceLabelNoEthnicity": "¿Cuál describe mejor tu raza? Selecciona todas las opciones que correspondan:",
   "application.review.demographics.raceOptions.americanIndianAlaskanNative": "Indígena norteamericano o nativo de Alaska",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndBlackAfricanAmerican": "Indígena norteamericano o nativo de Alaska y negro o afroamericano",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndWhite": "Indígena norteamericano o nativo de Alaska y blanco",
