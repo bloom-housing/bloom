@@ -24,6 +24,7 @@ import { SendGridService } from '../../../src/services/sendgrid.service';
 import { TranslationService } from '../../../src/services/translation.service';
 import { UserService } from '../../../src/services/user.service';
 import { passwordToHash } from '../../../src/utilities/password-helpers';
+import { PublicUserUpdate } from 'src/dtos/users/public-user-update.dto';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -1328,9 +1329,9 @@ describe('Testing user service', () => {
           id,
           firstName: 'first name',
           lastName: 'last name',
-          jurisdictions: [{ id: jurisId }],
+          jurisdictions: [{ id: jurisId } as any],
           agreedToTermsOfService: true,
-        },
+        } as PublicUserUpdate,
         {
           id: 'requestingUser id',
           userRoles: { isAdmin: true },
@@ -1409,11 +1410,11 @@ describe('Testing user service', () => {
           id,
           firstName: 'first name',
           lastName: 'last name',
-          jurisdictions: [{ id: jurisId }],
+          jurisdictions: [{ id: jurisId } as any],
           password: 'new password',
           currentPassword: 'current password',
           agreedToTermsOfService: true,
-        },
+        } as PublicUserUpdate,
         {
           id: 'requestingUser id',
           userRoles: { isAdmin: true },
@@ -1496,10 +1497,10 @@ describe('Testing user service', () => {
               id,
               firstName: 'first name',
               lastName: 'last name',
-              jurisdictions: [{ id: jurisId }],
+              jurisdictions: [{ id: jurisId } as any],
               password: 'new password',
               agreedToTermsOfService: true,
-            },
+            } as PublicUserUpdate,
             {
               id: 'requestingUser id',
               userRoles: { isAdmin: true },
@@ -1558,11 +1559,11 @@ describe('Testing user service', () => {
               id,
               firstName: 'first name',
               lastName: 'last name',
-              jurisdictions: [{ id: jurisId }],
+              jurisdictions: [{ id: jurisId } as any],
               password: 'new password',
               currentPassword: 'new password',
               agreedToTermsOfService: true,
-            },
+            } as PublicUserUpdate,
             {
               id: 'requestingUser id',
               userRoles: { isAdmin: true },
@@ -1620,11 +1621,11 @@ describe('Testing user service', () => {
           id,
           firstName: 'first name',
           lastName: 'last name',
-          jurisdictions: [{ id: jurisId }],
+          jurisdictions: [{ id: jurisId } as any],
           newEmail: 'new@email.com',
           appUrl: 'https://www.example.com',
           agreedToTermsOfService: true,
-        },
+        } as PublicUserUpdate,
         {
           id: 'requestingUser id',
           userRoles: { isAdmin: true },
@@ -1707,10 +1708,10 @@ describe('Testing user service', () => {
           id,
           firstName: 'first name',
           lastName: 'last name',
-          jurisdictions: [{ id: jurisId }],
+          jurisdictions: [{ id: jurisId } as any],
           agreedToTermsOfService: true,
           listings: [{ id: listingA }, { id: listingC }],
-        },
+        } as PublicUserUpdate,
         {
           id: 'requestingUser id',
           userRoles: { isAdmin: true },
@@ -1812,9 +1813,9 @@ describe('Testing user service', () => {
               id,
               firstName: 'first name',
               lastName: 'last name',
-              jurisdictions: [{ id: randomUUID() }],
+              jurisdictions: [{ id: randomUUID() } as any],
               agreedToTermsOfService: true,
-            },
+            } as PublicUserUpdate,
             {
               id: 'requestingUser id',
               userRoles: { isAdmin: true },
@@ -1857,7 +1858,7 @@ describe('Testing user service', () => {
         id,
       });
       emailService.invitePartnerUser = jest.fn();
-      await service.create(
+      await service.createPartnerUser(
         {
           firstName: 'Partner User firstName',
           lastName: 'Partner User lastName',
@@ -1868,9 +1869,6 @@ describe('Testing user service', () => {
             isAdmin: true,
           },
         },
-        true,
-        undefined,
-
         {
           headers: { jurisdictionname: 'juris 1' },
           user: {
@@ -1937,7 +1935,7 @@ describe('Testing user service', () => {
       prisma.userAccounts.update = jest.fn().mockResolvedValue({
         id,
       });
-      await service.create(
+      await service.createPartnerUser(
         {
           firstName: 'Partner User firstName',
           lastName: 'Partner User lastName',
@@ -1949,8 +1947,6 @@ describe('Testing user service', () => {
           },
           listings: [{ id: 'listing id' }],
         },
-        true,
-        undefined,
         {
           headers: { jurisdictionname: 'juris 1' },
           user: {
@@ -2032,7 +2028,7 @@ describe('Testing user service', () => {
       prisma.userAccounts.create = jest.fn().mockResolvedValue(null);
       await expect(
         async () =>
-          await service.create(
+          await service.createPartnerUser(
             {
               firstName: 'Partner User firstName',
               lastName: 'Partner User lastName',
@@ -2044,8 +2040,6 @@ describe('Testing user service', () => {
               },
               listings: [{ id: 'listing id' }],
             },
-            true,
-            undefined,
             {
               headers: { jurisdictionname: 'juris 1' },
               user: {
@@ -2106,16 +2100,18 @@ describe('Testing user service', () => {
         id,
         email: 'publicUser@email.com',
       });
-      await service.create(
+      await service.createPublicUser(
         {
           firstName: 'public User firstName',
           lastName: 'public User lastName',
           password: 'Abcdef12345!',
+          passwordConfirmation: 'Abcdef12345!',
+          agreedToTermsOfService: true,
+          dob: new Date('2000-01-01'),
           email: 'publicUser@email.com',
-          jurisdictions: [{ id: jurisId }],
+          jurisdictions: [{ id: jurisId } as any],
         },
         false,
-        undefined,
         {
           headers: { jurisdictionname: 'juris 1' },
           user: {
@@ -2142,19 +2138,15 @@ describe('Testing user service', () => {
       });
       expect(prisma.userAccounts.create).toHaveBeenCalledWith({
         data: {
-          dob: undefined,
+          dob: expect.anything(),
           passwordHash: expect.anything(),
-          phoneNumber: undefined,
-          userRoles: undefined,
           email: 'publicUser@email.com',
           firstName: 'public User firstName',
           lastName: 'public User lastName',
-          language: undefined,
           listings: undefined,
           middleName: undefined,
-          mfaEnabled: false,
           jurisdictions: {
-            connect: { name: 'juris 1' },
+            connect: [{ id: expect.anything() }],
           },
         },
       });

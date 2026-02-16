@@ -9,22 +9,22 @@ import { PrismaService } from '../../src/services/prisma.service';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import cookieParser from 'cookie-parser';
 import { UserQueryParams } from '../../src/dtos/users/user-query-param.dto';
-import { UserUpdate } from '../../src/dtos/users/user-update.dto';
 import { IdDTO } from '../../src/dtos/shared/id.dto';
 import { EmailAndAppUrl } from '../../src/dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../../src/dtos/users/confirmation-request.dto';
 import { UserService } from '../../src/services/user.service';
-import { UserCreate } from '../../src/dtos/users/user-create.dto';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { listingFactory } from '../../prisma/seed-helpers/listing-factory';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
 import { randomName } from '../../prisma/seed-helpers/word-generator';
-import { UserInvite } from '../../src/dtos/users/user-invite.dto';
+import { UserInvite } from '../../src/dtos/users/partner-user-invite.dto';
 import { EmailService } from '../../src/services/email.service';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { RequestMfaCode } from '../../src/dtos/mfa/request-mfa-code.dto';
 import { ModificationEnum } from '../../src/enums/shared/modification-enum';
 import dayjs from 'dayjs';
+import { PublicUserUpdate } from 'src/dtos/users/public-user-update.dto';
+import { PublicUserCreate } from 'src/dtos/users/public-user-create.dto';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -197,13 +197,13 @@ describe('User Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .put(`/user/${userA.id}`)
+        .put(`/user/public/${userA.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,
           firstName: 'New User First Name',
           lastName: 'New User Last Name',
-        } as UserUpdate)
+        } as PublicUserUpdate)
         .set('Cookie', cookies)
         .expect(200);
 
@@ -218,13 +218,13 @@ describe('User Controller Tests', () => {
       });
       const randomId = randomUUID();
       const res = await request(app.getHttpServer())
-        .put(`/user/${randomId}`)
+        .put(`/user/public/${randomId}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: randomId,
           firstName: 'New User First Name',
           lastName: 'New User Last Name',
-        } as UserUpdate)
+        } as PublicUserUpdate)
         .set('Cookie', cookies)
         .expect(404);
 
@@ -735,15 +735,15 @@ describe('User Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .post(`/user/`)
+        .post(`/user/public/`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          firstName: 'Public User firstName',
-          lastName: 'Public User lastName',
+          firstName: 'Public First Name',
+          lastName: 'Public Last Name',
           password: 'Abcdef12345!',
           email: 'publicUser@email.com',
           jurisdictions: [{ id: juris.id }],
-        } as UserCreate)
+        } as PublicUserCreate)
         .set('Cookie', cookies)
         .expect(201);
 

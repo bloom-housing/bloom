@@ -42,7 +42,6 @@ import { UnitAccessibilityPriorityTypeUpdate } from '../../../src/dtos/unit-acce
 import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
 import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
 import { multiselectQuestionFactory } from '../../../prisma/seed-helpers/multiselect-question-factory';
-import { UserUpdate } from '../../../src/dtos/users/user-update.dto';
 import { EmailAndAppUrl } from '../../../src/dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../../../src/dtos/users/confirmation-request.dto';
 import { UserService } from '../../../src/services/user.service';
@@ -69,6 +68,7 @@ import {
   createListing,
   createComplexApplication,
 } from './helpers';
+import { PublicUserUpdate } from 'src/dtos/users/public-user-update.dto';
 
 const testEmailService = {
   confirmation: jest.fn(),
@@ -904,26 +904,26 @@ describe('Testing Permissioning of endpoints as public user', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/user/${userA.id}`)
+        .put(`/user/public/${userA.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,
           firstName: 'New User First Name',
           lastName: 'New User Last Name',
-        } as UserUpdate)
+        } as PublicUserUpdate)
         .set('Cookie', cookies)
         .expect(403);
     });
 
     it('should succeed for update endpoint targeting self', async () => {
       await request(app.getHttpServer())
-        .put(`/user/${storedUserId}`)
+        .put(`/user/public/${storedUserId}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: storedUserId,
           firstName: 'New User First Name',
           lastName: 'New User Last Name',
-        } as UserUpdate)
+        } as PublicUserUpdate)
         .set('Cookie', cookies)
         .expect(200);
     });
@@ -1029,7 +1029,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
       });
 
       await request(app.getHttpServer())
-        .post(`/user/`)
+        .post(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildUserCreateMock(juris, 'publicUser+public@email.com'))
         .set('Cookie', cookies)

@@ -47,10 +47,10 @@ import { ListingCreate } from '../../../src/dtos/listings/listing-create.dto';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
 import { MultiselectQuestionCreate } from '../../../src/dtos/multiselect-questions/multiselect-question-create.dto';
 import { MultiselectQuestionUpdate } from '../../../src/dtos/multiselect-questions/multiselect-question-update.dto';
-import { UserCreate } from '../../../src/dtos/users/user-create.dto';
-import { UserInvite } from '../../../src/dtos/users/user-invite.dto';
+import { UserInvite } from '../../../src/dtos/users/partner-user-invite.dto';
 import { AlternateContactRelationship } from '../../../src/enums/applications/alternate-contact-relationship-enum';
 import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
+import { PublicUserCreate } from 'src/dtos/users/public-user-create.dto';
 
 export const generateJurisdiction = async (
   prisma: PrismaService,
@@ -234,14 +234,14 @@ export const buildMultiselectQuestionUpdateMock = (
 export const buildUserCreateMock = (
   jurisId: string,
   email: string,
-): UserCreate => {
+): PublicUserCreate => {
   return {
     firstName: 'Public User firstName',
     lastName: 'Public User lastName',
     password: 'Abcdef12345!',
     email,
     jurisdictions: [{ id: jurisId }],
-  } as unknown as UserCreate;
+  } as PublicUserCreate;
 };
 
 export const buildUserInviteMock = (
