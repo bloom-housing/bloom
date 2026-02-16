@@ -57,9 +57,9 @@ const FormDemographics = ({
 
   useEffect(() => {
     if (visibleSpokenLanguages?.length > 0) {
-      const selectedOption = formValues.spokenLanguage?.includes("notListed")
+      const selectedOption = formValues?.spokenLanguage?.includes("notListed")
         ? "notListed"
-        : formValues.spokenLanguage || ""
+        : formValues?.spokenLanguage || ""
       setValue("application.demographics.spokenLanguage", selectedOption)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,7 +69,7 @@ const FormDemographics = ({
     if (spokenLanguageValue !== "notListed") {
       setValue("application.demographics.spokenLanguageNotListed", "")
     } else {
-      const currentNotListedValue = formValues.spokenLanguage?.split(":")[1] || ""
+      const currentNotListedValue = formValues?.spokenLanguage?.split(":")[1] || ""
       setValue("application.demographics.spokenLanguageNotListed", currentNotListedValue)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
