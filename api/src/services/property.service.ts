@@ -128,7 +128,7 @@ export class PropertyService {
 
     await this.permissionService.canOrThrow(
       requestingUser,
-      'multiselectQuestion',
+      'properties',
       permissionActions.create,
       {
         jurisdictionId: rawJurisdiction.id,
@@ -184,7 +184,7 @@ export class PropertyService {
 
     await this.permissionService.canOrThrow(
       requestingUser,
-      'multiselectQuestion',
+      'properties',
       permissionActions.update,
       {
         jurisdictionId: rawJurisdiction.id,
@@ -253,7 +253,7 @@ export class PropertyService {
 
     await this.permissionService.canOrThrow(
       requestingUser,
-      'multiselectQuestion',
+      'properties',
       permissionActions.delete,
       {
         jurisdictionId: rawJurisdiction.id,
