@@ -1,22 +1,32 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
+import { t, Field, FieldGroup, Select, SelectOption } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import {
   EnumListingListingType,
+  Property,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { defaultFieldProps, fieldHasError, fieldMessage } from "../../../../lib/helpers"
+import {
+  defaultFieldProps,
+  fieldHasError,
+  fieldIsRequired,
+  fieldMessage,
+  getLabel,
+} from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 interface ListingIntroProps {
   enableHousingDeveloperOwner?: boolean
   enableListingFileNumber?: boolean
   enableNonRegulatedListings?: boolean
+  enableProperties?: boolean
   jurisdictionName: string
+  jurisdictionId?: string
   listingId: string
   listingType?: EnumListingListingType
   requiredFields: string[]
+  properties: Property[]
 }
 
 const getDeveloperLabel = (
@@ -38,6 +48,19 @@ const ListingIntro = (props: ListingIntroProps) => {
   const { register, clearErrors, errors, getValues } = formMethods
 
   const listing = getValues()
+
+  const showPropertiesDropDown = props.properties?.length > 0 && props.enableProperties
+
+  const propertyOptions: SelectOption[] =
+    props.properties && props.properties?.length !== 0
+      ? [
+          { label: "", value: "" },
+          ...props.properties.map((property) => ({
+            label: property.name,
+            value: property.id,
+          })),
+        ]
+      : []
 
   return (
     <>
@@ -132,6 +155,29 @@ const ListingIntro = (props: ListingIntroProps) => {
               </Grid.Cell>
             </Grid.Row>
           )}
+        {showPropertiesDropDown && (
+          <Grid.Row columns={3}>
+            <Grid.Cell>
+              <Select
+                id={"property.id"}
+                name={"property.id"}
+                label={getLabel("property", props.requiredFields, t("properties.drawer.nameLabel"))}
+                register={register}
+                controlClassName="control"
+                errorMessage={t("errors.requiredFieldError")}
+                options={propertyOptions.sort((a, b) =>
+                  a.label.toLowerCase() < b.label.toLowerCase() ? -1 : 1
+                )}
+                error={fieldHasError(errors ? errors.property : null)}
+                inputProps={{
+                  onChange: () =>
+                    fieldHasError(errors ? errors["property"] : null) && clearErrors("property"),
+                  "aria-required": fieldIsRequired("property", props.requiredFields),
+                }}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
       </SectionWithGrid>
     </>
   )

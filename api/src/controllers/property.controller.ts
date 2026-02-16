@@ -24,7 +24,7 @@ import { PropertyQueryParams } from '../dtos/properties/property-query-params.dt
 import { PropertyService } from '../services/property.service';
 import PropertyCreate from '../dtos/properties/property-create.dto';
 import { PropertyUpdate } from '../dtos/properties/property-update.dto';
-import Property from '../dtos/properties/property.dto';
+import { Property } from '../dtos/properties/property.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';

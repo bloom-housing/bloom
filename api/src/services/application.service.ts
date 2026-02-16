@@ -27,6 +27,7 @@ import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
 import { ApplicationSelectionCreate } from '../dtos/applications/application-selection-create.dto';
 import { ApplicationUpdate } from '../dtos/applications/application-update.dto';
+import { ApplicationUpdateEmailDto } from '../dtos/applications/application-update-email.dto';
 import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
 import { PaginatedApplicationDto } from '../dtos/applications/paginated-application.dto';
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
@@ -46,6 +47,7 @@ import { buildPaginationInfo } from '../utilities/build-pagination-meta';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { mapTo } from '../utilities/mapTo';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
+import { buildApplicationStatusChanges } from '../utilities/applicationStatusChanges';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -422,6 +424,62 @@ export class ApplicationService {
       throw new ForbiddenException();
     }
     const whereClause = this.buildWhereClause(params);
+
+    const buildCountWhereClause = (filterType: ApplicationsFilterEnum) =>
+      this.buildPublicAppsViewWhereClause(
+        {
+          ...params,
+          filterType,
+        },
+        whereClause,
+      );
+
+    const [openCount, closedCount, lotteryCount] = await Promise.all([
+      this.prisma.applications.count({
+        where: buildCountWhereClause(ApplicationsFilterEnum.open),
+      }),
+      this.prisma.applications.count({
+        where: buildCountWhereClause(ApplicationsFilterEnum.closed),
+      }),
+      params.includeLotteryApps
+        ? this.prisma.applications.count({
+            where: buildCountWhereClause(ApplicationsFilterEnum.lottery),
+          })
+        : Promise.resolve(0),
+    ]);
+
+    const totalCount = openCount + closedCount + lotteryCount;
+
+    const displayWhereClause = this.buildPublicAppsViewWhereClause(
+      params,
+      whereClause,
+    );
+
+    let displayCount = totalCount;
+    switch (params.filterType) {
+      case ApplicationsFilterEnum.open:
+        displayCount = openCount;
+        break;
+      case ApplicationsFilterEnum.closed:
+        displayCount = closedCount;
+        break;
+      case ApplicationsFilterEnum.lottery:
+        displayCount = lotteryCount;
+        break;
+      default:
+        displayCount = totalCount;
+        break;
+    }
+
+    const limit = params.limit ?? 10;
+    let page = params.page ?? 1;
+
+    if (displayCount && limit && page > 1) {
+      if (Math.ceil(displayCount / limit) < page) {
+        page = 1;
+      }
+    }
+
     const rawApps = await this.prisma.applications.findMany({
       select: {
         id: true,
@@ -454,7 +512,12 @@ export class ApplicationService {
           },
         },
       },
-      where: whereClause,
+      where: displayWhereClause,
+      skip: calculateSkip(limit, page),
+      take: calculateTake(limit),
+      orderBy: {
+        updatedAt: 'desc',
+      },
     });
 
     await Promise.all(
@@ -468,39 +531,82 @@ export class ApplicationService {
       }),
     );
 
-    //filter for display applications and status counts
-    let displayApplications = [];
-    const total = rawApps.length ?? 0;
-    let lottery = 0,
-      closed = 0,
-      open = 0;
-    rawApps.forEach((app) => {
-      if (app.listings.status === ListingsStatusEnum.active) {
-        open++;
-        if (params.filterType === ApplicationsFilterEnum.open)
-          displayApplications.push(app);
-      } else if (
-        app.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic &&
-        params.includeLotteryApps
-      ) {
-        lottery++;
-        if (params.filterType === ApplicationsFilterEnum.lottery) {
-          displayApplications.push(app);
-        }
-      } else {
-        closed++;
-        if (params.filterType === ApplicationsFilterEnum.closed)
-          displayApplications.push(app);
-      }
-    });
-
-    if (params.filterType === ApplicationsFilterEnum.all)
-      displayApplications = rawApps;
-
     return mapTo(PublicAppsViewResponse, {
-      displayApplications,
-      applicationsCount: { total, lottery, closed, open },
+      items: rawApps,
+      meta: buildPaginationInfo(limit, page, displayCount, rawApps.length),
+      applicationsCount: {
+        total: totalCount,
+        lottery: lotteryCount,
+        closed: closedCount,
+        open: openCount,
+      },
     });
+  }
+
+  buildPublicAppsViewWhereClause(
+    params: PublicAppsViewQueryParams,
+    baseWhereClause: Prisma.ApplicationsWhereInput,
+  ): Prisma.ApplicationsWhereInput {
+    const conditions: Prisma.ApplicationsWhereInput[] = Array.isArray(
+      baseWhereClause.AND,
+    )
+      ? baseWhereClause.AND.flatMap((condition) =>
+          Array.isArray(condition.AND) ? condition.AND : [condition],
+        )
+      : [baseWhereClause];
+
+    if (params.filterType === ApplicationsFilterEnum.open) {
+      conditions.push({
+        listings: {
+          is: {
+            status: ListingsStatusEnum.active,
+          },
+        },
+      });
+    }
+
+    if (params.filterType === ApplicationsFilterEnum.lottery) {
+      conditions.push({
+        listings: {
+          is: {
+            status: { not: ListingsStatusEnum.active },
+            lotteryStatus: LotteryStatusEnum.publishedToPublic,
+          },
+        },
+      });
+    }
+
+    if (params.filterType === ApplicationsFilterEnum.closed) {
+      if (params.includeLotteryApps) {
+        conditions.push({
+          listings: {
+            is: {
+              status: { not: ListingsStatusEnum.active },
+              OR: [
+                {
+                  lotteryStatus: { not: LotteryStatusEnum.publishedToPublic },
+                },
+                {
+                  lotteryStatus: null,
+                },
+              ],
+            },
+          },
+        });
+      } else {
+        conditions.push({
+          listings: {
+            is: {
+              status: { not: ListingsStatusEnum.active },
+            },
+          },
+        });
+      }
+    }
+
+    return {
+      AND: conditions,
+    };
   }
 
   /*
@@ -1069,16 +1175,19 @@ export class ApplicationService {
             ? {
                 create: dto.householdMember.map((member) => ({
                   ...member,
+                  id: undefined,
                   sameAddress: member.sameAddress || YesNoEnum.no,
                   workInRegion: member.workInRegion || YesNoEnum.no,
                   householdMemberAddress: {
                     create: {
                       ...member.householdMemberAddress,
+                      id: undefined,
                     },
                   },
                   householdMemberWorkAddress: {
                     create: {
                       ...member.householdMemberWorkAddress,
+                      id: undefined,
                     },
                   },
                   firstName: member.firstName?.trim(),
@@ -1146,6 +1255,69 @@ export class ApplicationService {
 
     await this.updateListingApplicationEditTimestamp(rawApplication.listingId);
     return application;
+  }
+
+  async sendApplicationUpdateEmail(
+    applicationId: string,
+    dto: ApplicationUpdateEmailDto,
+    requestingUser: User,
+  ): Promise<SuccessDTO> {
+    const rawApplication = await this.findOrThrow(
+      applicationId,
+      ApplicationViews.base,
+    );
+
+    await this.authorizeAction(
+      requestingUser,
+      rawApplication.listingId,
+      permissionActions.update,
+    );
+
+    const application = mapTo(Application, rawApplication);
+    if (!application?.applicant?.emailAddress) {
+      return { success: false };
+    }
+
+    const listing = await this.prisma.listings.findUnique({
+      where: { id: rawApplication.listingId },
+      include: {
+        jurisdictions: true,
+      },
+    });
+
+    if (!listing) {
+      throw new NotFoundException('listing not found');
+    }
+
+    const changes = buildApplicationStatusChanges({
+      initialStatus: dto.previousStatus,
+      nextStatus: application.status,
+      initialAccessibleUnitWaitlistNumber:
+        dto.previousAccessibleUnitWaitlistNumber,
+      nextAccessibleUnitWaitlistNumber:
+        application.accessibleUnitWaitlistNumber,
+      initialConventionalUnitWaitlistNumber:
+        dto.previousConventionalUnitWaitlistNumber,
+      nextConventionalUnitWaitlistNumber:
+        application.conventionalUnitWaitlistNumber,
+    });
+
+    if (changes.length === 0) {
+      return { success: false };
+    }
+
+    const mappedListing = mapTo(Listing, listing);
+    const contactEmail = listing.leasingAgentEmail;
+
+    await this.emailService.applicationUpdateEmail(
+      mappedListing,
+      application,
+      changes,
+      listing.jurisdictions?.publicUrl,
+      contactEmail,
+    );
+
+    return { success: true };
   }
 
   /*

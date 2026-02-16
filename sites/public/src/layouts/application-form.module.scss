@@ -100,6 +100,26 @@
   --field-value-content-spacer: var(--seeds-s3);
 }
 
+.application-form-image-card-section {
+  figure,
+  .image-container {
+    height: 340px;
+    background-color: var(--seeds-bg-color-canvas);
+  }
+  img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+  }
+
+  @media (max-width: theme("screens.md")) {
+    figure,
+    .image-container {
+      height: 240px;
+    }
+  }
+}
+
 /* overrides for Seeds Message & Alert */
 .message-inside-card {
   --common-message-max-width: auto;

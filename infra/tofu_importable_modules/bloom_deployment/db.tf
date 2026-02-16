@@ -40,3 +40,7 @@ resource "aws_db_instance" "bloom" {
   final_snapshot_identifier = "bloom-db-finalsnapshot"
   skip_final_snapshot       = !local.is_prod
 }
+output "db_dns_name" {
+  value       = aws_db_instance.bloom.address
+  description = "DNS name of the database."
+}

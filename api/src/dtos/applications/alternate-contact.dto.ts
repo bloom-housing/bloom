@@ -1,4 +1,9 @@
+import { Address } from '../addresses/address.dto';
+import { AlternateContactRelationship } from '../../enums/applications/alternate-contact-relationship-enum';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { Expose, Type } from 'class-transformer';
+import { IdOnlyDTO } from '../shared/id-only.dto';
 import {
   IsDefined,
   IsEmail,
@@ -7,14 +12,9 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { AbstractDTO } from '../shared/abstract.dto';
-import { Address } from '../addresses/address.dto';
-import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
-import { AlternateContactRelationship } from '../../enums/applications/alternate-contact-relationship-enum';
 
-export class AlternateContact extends AbstractDTO {
+export class AlternateContact extends IdOnlyDTO {
   @Expose()
   @IsEnum(AlternateContactRelationship, {
     groups: [ValidationsGroupsEnum.default],

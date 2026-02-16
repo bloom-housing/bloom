@@ -24,6 +24,7 @@ import { ValidateListingImages } from '../../decorators/validate-listing-images.
 import { ValidateListingPublish } from '../../decorators/validate-listing-publish.decorator';
 import { ValidateListingFeatures } from '../../decorators/validate-listing-features.decorator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { ListingParkingTypeUpdate } from './listing-parking-type-update.dto';
 
 export class ListingUpdate extends OmitType(Listing, [
   // fields get their type changed
@@ -44,10 +45,12 @@ export class ListingUpdate extends OmitType(Listing, [
   'listingsMarketingFlyerFile',
   'listingsResult',
   'listingUtilities',
+  'parkType',
   'requestedChangesUser',
   'unitGroups',
   'units',
   'unitsSummary',
+  'property',
 
   // fields removed entirely
   'afsLastRunAt',
@@ -247,6 +250,15 @@ export class ListingUpdate extends OmitType(Listing, [
   listingUtilities?: ListingUtilitiesUpdate;
 
   @Expose()
+  @ValidateListingPublish('parkType', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingParkingTypeUpdate)
+  @ApiPropertyOptional({ type: ListingParkingTypeUpdate })
+  parkType?: ListingParkingTypeUpdate;
+
+  @Expose()
   @ApiPropertyOptional()
   @ValidateListingPublish('requestedChangesUser', {
     groups: [ValidationsGroupsEnum.default],
@@ -263,4 +275,13 @@ export class ListingUpdate extends OmitType(Listing, [
   @Type(() => ListingNeighborhoodAmenitiesUpdate)
   @ApiPropertyOptional({ type: ListingNeighborhoodAmenitiesUpdate })
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenitiesUpdate;
+
+  @Expose()
+  @ValidateListingPublish('property', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDTO)
+  @ApiPropertyOptional({ type: IdDTO })
+  property?: IdDTO;
 }

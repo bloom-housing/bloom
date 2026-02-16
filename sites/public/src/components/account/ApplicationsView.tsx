@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Fragment, useContext } from "react"
 import { useRouter } from "next/router"
 import { t } from "@bloom-housing/ui-components"
-import { Button, Card, LoadingState, Heading, Tabs } from "@bloom-housing/ui-seeds"
+import { Button, Card, LoadingState, Heading, Tabs, Link } from "@bloom-housing/ui-seeds"
 import {
   PageView,
   pushGtmEvent,
@@ -10,7 +10,10 @@ import {
   BloomCard,
 } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
-import { ApplicationsFilterEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ApplicationsFilterEnum,
+  PaginationMeta,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
 import { UserStatus } from "../../lib/constants"
 
@@ -38,14 +41,18 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
   const { applicationsService, profile } = useContext(AuthContext)
   const [applications, setApplications] = useState<AppWithListing[]>()
   const [applicationsCount, setApplicationsCount] = useState<ApplicationsCount>()
+  const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
   const router = useRouter()
   const showPublicLottery = process.env.showPublicLottery
   const filterTypeString = ApplicationsIndexEnum[props.filterType]
+  const page = Number(router.query.page) || 1
 
   useEffect(() => {
-    if (profile && loading) {
+    if (profile) {
+      setLoading(true)
+      setError(undefined)
       pushGtmEvent<PageView>({
         event: "pageView",
         pageTitle: `My Applications - ${filterTypeString}`,
@@ -56,10 +63,13 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
           userId: profile.id,
           filterType: ApplicationsFilterEnum[filterTypeString],
           includeLotteryApps: !!showPublicLottery,
+          page: page,
+          limit: 10,
         })
         .then((res) => {
-          setApplications(res.displayApplications)
+          setApplications(res.items)
           setApplicationsCount(res.applicationsCount)
+          setPaginationMeta(res.meta)
         })
         .catch((err) => {
           console.error(`Error fetching applications: ${err}`)
@@ -67,7 +77,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
         })
         .finally(() => setLoading(false))
     }
-  }, [profile, applicationsService, filterTypeString, loading, showPublicLottery])
+  }, [profile, applicationsService, filterTypeString, showPublicLottery, page])
 
   const selectionHandler = (index: number) => {
     const baseUrl = "/account/applications"
@@ -167,44 +177,53 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
       <Layout pageTitle={t("account.myApplications")}>
         <section className={styles["applications-section-background"]}>
           <div className={styles["applications-section-container"]}>
-            <Tabs
-              verticalSidebar
-              onSelect={(index) => selectionHandler(index)}
-              selectedIndex={props.filterType}
-            >
-              <Tabs.TabList>
-                <Tabs.Tab
-                  className={styles["application-count-tab"]}
-                  data-testid="total-applications-tab"
-                >
-                  <span>{t("account.allMyApplications")}</span>
-                  <span>{applicationsCount?.total}</span>
-                </Tabs.Tab>
-                <Tabs.Tab
-                  className={`${styles["application-count-tab"]} ${
-                    !showPublicLottery ? styles["application-hide-tab"] : ""
-                  }`}
-                  data-testid="lottery-runs-tab"
-                >
-                  <span>{t("account.lotteryRun")}</span>
-                  <span>{applicationsCount?.lottery}</span>
-                </Tabs.Tab>
-                <Tabs.Tab
-                  className={styles["application-count-tab"]}
-                  data-testid="closed-applications-tab"
-                >
-                  <span>{t("account.closedApplications")}</span>
-                  <span>{applicationsCount?.closed}</span>
-                </Tabs.Tab>
-                <Tabs.Tab
-                  className={styles["application-count-tab"]}
-                  data-testid="open-applications-tab"
-                >
-                  <span>{t("account.openApplications")}</span>
-                  <span>{applicationsCount?.open}</span>
-                </Tabs.Tab>
-              </Tabs.TabList>
-            </Tabs>
+            <div>
+              <Tabs
+                verticalSidebar
+                onSelect={(index) => selectionHandler(index)}
+                selectedIndex={props.filterType}
+              >
+                <Tabs.TabList>
+                  <Tabs.Tab
+                    className={styles["application-count-tab"]}
+                    data-testid="total-applications-tab"
+                  >
+                    <span>{t("account.allMyApplications")}</span>
+                    <span>{applicationsCount?.total}</span>
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    className={`${styles["application-count-tab"]} ${
+                      !showPublicLottery ? styles["application-hide-tab"] : ""
+                    }`}
+                    data-testid="lottery-runs-tab"
+                  >
+                    <span>{t("account.lotteryRun")}</span>
+                    <span>{applicationsCount?.lottery}</span>
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    className={styles["application-count-tab"]}
+                    data-testid="closed-applications-tab"
+                  >
+                    <span>{t("account.closedApplications")}</span>
+                    <span>{applicationsCount?.closed}</span>
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    className={styles["application-count-tab"]}
+                    data-testid="open-applications-tab"
+                  >
+                    <span>{t("account.openApplications")}</span>
+                    <span>{applicationsCount?.open}</span>
+                  </Tabs.Tab>
+                </Tabs.TabList>
+              </Tabs>
+              {props.enableApplicationStatus && (
+                <div className={styles["application-faq-link"]}>
+                  <Link href={"/faq"} className={"seeds-m-bs-4"}>
+                    {t("application.details.applicationStatusFaqLink")}
+                  </Link>
+                </div>
+              )}
+            </div>
             <BloomCard
               iconSymbol="listBullet"
               iconClass={"card-icon"}
@@ -213,18 +232,66 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
               subtitle={subtitle}
               headingPriority={1}
             >
-              <LoadingState loading={loading}>
-                {applications?.map((application, index) => {
-                  return (
-                    <StatusItemWrapper
-                      key={index}
-                      application={application}
-                      enableApplicationStatus={props.enableApplicationStatus}
-                    />
-                  )
-                })}
-                {!applications?.length && !loading && noApplicationsSection()}
-              </LoadingState>
+              <>
+                <LoadingState loading={loading}>
+                  {applications?.map((application, index) => {
+                    return (
+                      <StatusItemWrapper
+                        key={index}
+                        application={application}
+                        enableApplicationStatus={props.enableApplicationStatus}
+                      />
+                    )
+                  })}
+                  {!applications?.length && !loading && noApplicationsSection()}
+                </LoadingState>
+                {applications?.length > 0 && (
+                  <div className={styles["pagination-section"]}>
+                    <div className={styles["pagination-content-wrapper"]}>
+                      <div className={styles["previous-button"]}>
+                        {paginationMeta?.currentPage > 1 && (
+                          <Button
+                            onClick={() => {
+                              void router.push({
+                                pathname: router.pathname,
+                                query: `page=${(paginationMeta?.currentPage - 1).toString()}`,
+                              })
+                            }}
+                            variant="primary-outlined"
+                            size="sm"
+                          >
+                            {t("t.previous")}
+                          </Button>
+                        )}
+                      </div>
+                      <div className={styles["page-info"]}>
+                        {paginationMeta?.currentPage !== undefined &&
+                          paginationMeta?.totalPages !== undefined &&
+                          t("listings.browseListings.pageInfo", {
+                            currentPage: paginationMeta?.currentPage,
+                            totalPages: paginationMeta?.totalPages,
+                          })}
+                      </div>
+                      <div className={styles["next-button"]}>
+                        {paginationMeta?.currentPage < paginationMeta?.totalPages && (
+                          <Button
+                            onClick={() => {
+                              void router.push({
+                                pathname: router.pathname,
+                                query: `page=${(paginationMeta?.currentPage + 1).toString()}`,
+                              })
+                            }}
+                            variant="primary-outlined"
+                            size="sm"
+                          >
+                            {t("t.next")}
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
             </BloomCard>
           </div>
         </section>

@@ -56,39 +56,50 @@ function getApplications(
   lotteryCount = 0,
   filterType = ApplicationsIndexEnum.all
 ): PublicAppsViewResponse {
+  const items = [
+    ...(openCount &&
+    (filterType === ApplicationsIndexEnum.all || filterType === ApplicationsIndexEnum.open)
+      ? Array.from({ length: openCount }).map(() => ({
+          ...application,
+          listings: { ...listing, status: ListingsStatusEnum.active },
+        }))
+      : []),
+    ...(closedCount &&
+    (filterType === ApplicationsIndexEnum.all || filterType === ApplicationsIndexEnum.closed)
+      ? Array.from({ length: closedCount }).map(() => ({
+          ...application,
+          listings: {
+            ...listing,
+            status: ListingsStatusEnum.pending,
+            lotteryStatus: LotteryStatusEnum.publishedToPublic,
+          },
+        }))
+      : []),
+    ...(lotteryCount &&
+    (filterType === ApplicationsIndexEnum.all || filterType === ApplicationsIndexEnum.lottery)
+      ? Array.from({ length: lotteryCount }).map(() => ({
+          ...application,
+          listings: { ...listing, status: ListingsStatusEnum.closed },
+        }))
+      : []),
+  ]
+  const itemCount = items.length
+  const itemsPerPage = 10
+  const totalPages = itemCount ? Math.ceil(itemCount / itemsPerPage) : 0
   return {
-    displayApplications: [
-      ...(openCount &&
-      (filterType === ApplicationsIndexEnum.all || filterType === ApplicationsIndexEnum.open)
-        ? Array.from({ length: openCount }).map(() => ({
-            ...application,
-            listings: { ...listing, status: ListingsStatusEnum.active },
-          }))
-        : []),
-      ...(closedCount &&
-      (filterType === ApplicationsIndexEnum.all || filterType === ApplicationsIndexEnum.closed)
-        ? Array.from({ length: closedCount }).map(() => ({
-            ...application,
-            listings: {
-              ...listing,
-              status: ListingsStatusEnum.pending,
-              lotteryStatus: LotteryStatusEnum.publishedToPublic,
-            },
-          }))
-        : []),
-      ...(lotteryCount &&
-      (filterType === ApplicationsIndexEnum.all || filterType === ApplicationsIndexEnum.lottery)
-        ? Array.from({ length: lotteryCount }).map(() => ({
-            ...application,
-            listings: { ...listing, status: ListingsStatusEnum.closed },
-          }))
-        : []),
-    ],
+    items,
     applicationsCount: {
       total: openCount + closedCount + lotteryCount,
       lottery: lotteryCount,
       closed: closedCount,
       open: openCount,
+    },
+    meta: {
+      currentPage: 1,
+      itemCount,
+      itemsPerPage,
+      totalItems: itemCount,
+      totalPages,
     },
   }
 }
@@ -321,6 +332,29 @@ describe("<ApplicationsView>", () => {
     expect(within(lotteryTab).getByText("3")).toBeInTheDocument()
   })
 
+  it("should show pagination controls and navigate between pages", async () => {
+    const { pushMock } = mockNextRouter({ page: "1" })
+    server.use(
+      rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+        return res(ctx.json(getApplications(12, 0, 0)))
+      })
+    )
+
+    renderApplicationsView(ApplicationsIndexEnum.all)
+
+    expect(await screen.findByText(/Page 1 of 2/i)).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: /previous/i })).not.toBeInTheDocument()
+
+    const nextButton = screen.getByRole("button", { name: /next/i })
+    await userEvent.click(nextButton)
+    await waitFor(() => {
+      expect(pushMock).toHaveBeenCalledWith({
+        pathname: "/",
+        query: "page=2",
+      })
+    })
+  })
+
   describe("should navigate to filtered views on tab click", () => {
     beforeEach(() => {
       server.use(
@@ -409,7 +443,7 @@ describe("<ApplicationsView>", () => {
         // Create an application for each status we want to test
         const mockApps = getApplications(countArgs[0], countArgs[1], countArgs[2], filter)
         // We will modify the first N applications to have our test statuses
-        mockApps.displayApplications.forEach((app, index) => {
+        mockApps.items.forEach((app, index) => {
           if (index === statusTestCases.length) {
             app.markedAsDuplicate = true
           } else {
@@ -435,7 +469,7 @@ describe("<ApplicationsView>", () => {
 
     it("should not display application status when feature flag is disabled", async () => {
       const mockApps = getApplications(1, 0, 0)
-      mockApps.displayApplications[0].status = ApplicationStatusEnum.submitted
+      mockApps.items[0].status = ApplicationStatusEnum.submitted
 
       server.use(
         rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
@@ -452,7 +486,7 @@ describe("<ApplicationsView>", () => {
 
     it("should not display duplicate status when feature flag is disabled", async () => {
       const mockApps = getApplications(1, 0, 0)
-      mockApps.displayApplications[0].markedAsDuplicate = true
+      mockApps.items[0].markedAsDuplicate = true
 
       server.use(
         rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
@@ -471,10 +505,10 @@ describe("<ApplicationsView>", () => {
   describe("Waitlist numbers", () => {
     it("should display accessible waitlist number when all numbers are present", async () => {
       const mockApps = getApplications(1, 0, 0)
-      mockApps.displayApplications[0].status = ApplicationStatusEnum.waitlist
-      mockApps.displayApplications[0].accessibleUnitWaitlistNumber = 10101
-      mockApps.displayApplications[0].conventionalUnitWaitlistNumber = 20202
-      mockApps.displayApplications[0].confirmationCode = "CONF-33333"
+      mockApps.items[0].status = ApplicationStatusEnum.waitlist
+      mockApps.items[0].accessibleUnitWaitlistNumber = 10101
+      mockApps.items[0].conventionalUnitWaitlistNumber = 20202
+      mockApps.items[0].confirmationCode = "CONF-33333"
 
       server.use(
         rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
@@ -492,10 +526,10 @@ describe("<ApplicationsView>", () => {
 
     it("should display conventional waitlist number when accessible is missing", async () => {
       const mockApps = getApplications(1, 0, 0)
-      mockApps.displayApplications[0].status = ApplicationStatusEnum.waitlistDeclined
-      mockApps.displayApplications[0].accessibleUnitWaitlistNumber = null
-      mockApps.displayApplications[0].conventionalUnitWaitlistNumber = 90909
-      mockApps.displayApplications[0].confirmationCode = "CONF-44444"
+      mockApps.items[0].status = ApplicationStatusEnum.waitlistDeclined
+      mockApps.items[0].accessibleUnitWaitlistNumber = null
+      mockApps.items[0].conventionalUnitWaitlistNumber = 90909
+      mockApps.items[0].confirmationCode = "CONF-44444"
 
       server.use(
         rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {

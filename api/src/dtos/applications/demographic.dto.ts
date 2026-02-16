@@ -1,10 +1,10 @@
-import { Expose } from 'class-transformer';
-import { ArrayMaxSize, IsDefined, IsString, MaxLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ArrayMaxSize, IsDefined, IsString, MaxLength } from 'class-validator';
+import { Expose } from 'class-transformer';
+import { IdOnlyDTO } from '../shared/id-only.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { AbstractDTO } from '../shared/abstract.dto';
 
-export class Demographic extends AbstractDTO {
+export class Demographic extends IdOnlyDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })

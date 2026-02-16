@@ -141,6 +141,7 @@ export default class ApplicationConductor {
     languages: [],
     steps: [],
     featureFlags: [],
+    isAdvocate: false,
   }
   private _listing: Listing
 

@@ -6,7 +6,6 @@ import { PrismaModule } from './prisma.module';
 import { AmiChartModule } from './ami-chart.module';
 import { ListingModule } from './listing.module';
 import { ReservedCommunityTypeModule } from './reserved-community-type.module';
-import { UnitAccessibilityPriorityTypeServiceModule } from './unit-accessibility-priority-type.module';
 import { UnitTypeModule } from './unit-type.module';
 import { UnitRentTypeModule } from './unit-rent-type.module';
 import { JurisdictionModule } from './jurisdiction.module';
@@ -33,7 +32,6 @@ import { AgencyModule } from './agency.module';
     AmiChartModule,
     ReservedCommunityTypeModule,
     UnitTypeModule,
-    UnitAccessibilityPriorityTypeServiceModule,
     UnitRentTypeModule,
     JurisdictionModule,
     MultiselectQuestionModule,
@@ -74,7 +72,6 @@ import { AgencyModule } from './agency.module';
     AmiChartModule,
     ReservedCommunityTypeModule,
     UnitTypeModule,
-    UnitAccessibilityPriorityTypeServiceModule,
     UnitRentTypeModule,
     JurisdictionModule,
     MultiselectQuestionModule,

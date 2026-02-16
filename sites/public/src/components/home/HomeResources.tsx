@@ -18,6 +18,8 @@ export const HomeResources = (props: HomeResourcesProps) => {
     FeatureFlagEnum.enableAdditionalResources
   )
 
+  const enableResources = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableResources)
+
   return (
     <Grid spacing="lg">
       <Grid.Row columns={enableAdditionalResources ? 3 : 2}>
@@ -44,27 +46,29 @@ export const HomeResources = (props: HomeResourcesProps) => {
             </BloomCard>
           </Grid.Cell>
         )}
-        <Grid.Cell>
-          <BloomCard
-            iconSymbol="house"
-            title={t("welcome.seeMoreOpportunitiesTruncated")}
-            variant={"block"}
-            headingPriority={3}
-            className={styles["resource"]}
-            iconClass={"card-icon"}
-          >
-            <Card.Section>
-              <Button
-                key={"additional-resources"}
-                href="/additional-resources"
-                variant="primary-outlined"
-                size={"sm"}
-              >
-                {t("welcome.viewAdditionalHousingTruncated")}
-              </Button>
-            </Card.Section>
-          </BloomCard>
-        </Grid.Cell>
+        {enableResources && (
+          <Grid.Cell>
+            <BloomCard
+              iconSymbol="house"
+              title={t("welcome.seeMoreOpportunitiesTruncated")}
+              variant={"block"}
+              headingPriority={3}
+              className={styles["resource"]}
+              iconClass={"card-icon"}
+            >
+              <Card.Section>
+                <Button
+                  key={"additional-resources"}
+                  href="/additional-resources"
+                  variant="primary-outlined"
+                  size={"sm"}
+                >
+                  {t("welcome.viewAdditionalHousingTruncated")}
+                </Button>
+              </Card.Section>
+            </BloomCard>
+          </Grid.Cell>
+        )}
         {enableAdditionalResources && (
           <Grid.Cell>
             <BloomCard

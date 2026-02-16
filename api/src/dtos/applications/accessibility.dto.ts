@@ -1,10 +1,10 @@
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { IdOnlyDTO } from '../shared/id-only.dto';
 import { IsBoolean } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { AbstractDTO } from '../shared/abstract.dto';
-import { ApiPropertyOptional } from '@nestjs/swagger';
 
-export class Accessibility extends AbstractDTO {
+export class Accessibility extends IdOnlyDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()

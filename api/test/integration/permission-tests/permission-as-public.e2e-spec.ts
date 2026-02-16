@@ -33,12 +33,6 @@ import {
 import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
 import { UnitRentTypeCreate } from '../../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
 import { UnitRentTypeUpdate } from '../../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
-import {
-  unitAccessibilityPriorityTypeFactoryAll,
-  unitAccessibilityPriorityTypeFactorySingle,
-} from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
-import { UnitAccessibilityPriorityTypeCreate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
-import { UnitAccessibilityPriorityTypeUpdate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
 import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
 import { multiselectQuestionFactory } from '../../../prisma/seed-helpers/multiselect-question-factory';
@@ -125,7 +119,6 @@ describe('Testing Permissioning of endpoints as public user', () => {
       .expect(201);
     storedUserId = storedUser.id;
     cookies = resLogIn.headers['set-cookie'];
-    await unitAccessibilityPriorityTypeFactoryAll(prisma);
   });
 
   afterAll(async () => {
@@ -623,69 +616,6 @@ describe('Testing Permissioning of endpoints as public user', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: unitRentTypeA.id,
-        } as IdDTO)
-        .set('Cookie', cookies)
-        .expect(403);
-    });
-  });
-
-  describe('Testing unit accessibility priority types endpoints', () => {
-    it('should error as forbidden for list endpoint', async () => {
-      await request(app.getHttpServer())
-        .get(`/unitAccessibilityPriorityTypes?`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(403);
-    });
-
-    it('should error as forbidden for retrieve endpoint', async () => {
-      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-        prisma,
-      );
-
-      await request(app.getHttpServer())
-        .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(403);
-    });
-
-    it('should error as forbidden for create endpoint', async () => {
-      await request(app.getHttpServer())
-        .post('/unitAccessibilityPriorityTypes')
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          name: 'Visual',
-        } as UnitAccessibilityPriorityTypeCreate)
-        .set('Cookie', cookies)
-        .expect(403);
-    });
-
-    it('should error as forbidden for update endpoint', async () => {
-      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-        prisma,
-      );
-      await request(app.getHttpServer())
-        .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          id: unitTypeA.id,
-          name: 'Mobility',
-        } as UnitAccessibilityPriorityTypeUpdate)
-        .set('Cookie', cookies)
-        .expect(403);
-    });
-
-    it('should error as forbidden for delete endpoint', async () => {
-      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-        prisma,
-      );
-
-      await request(app.getHttpServer())
-        .delete(`/unitAccessibilityPriorityTypes`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          id: unitTypeA.id,
         } as IdDTO)
         .set('Cookie', cookies)
         .expect(403);
@@ -1450,15 +1380,15 @@ describe('Testing Permissioning of endpoints as public user', () => {
       }
     });
 
-    it('should error as forbidden for list endpoint', async () => {
+    it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/properties?`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
-    it('should error as forbidden for retrieve endpoint', async () => {
+    it('should succeed for retrieve endpoint', async () => {
       if (!propertyId) {
         throw new Error('Property ID not set up for test');
       }
@@ -1467,7 +1397,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         .get(`/properties/${propertyId}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
     it('should error as forbidden for create endpoint', async () => {
@@ -1486,13 +1416,13 @@ describe('Testing Permissioning of endpoints as public user', () => {
         .expect(403);
     });
 
-    it('should error as forbidden for filterable list endpoint', async () => {
+    it('should succeed for filterable list endpoint', async () => {
       await request(app.getHttpServer())
         .post(`/properties/list`)
         .send({})
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(201);
     });
 
     it('should error as forbidden for update endpoint', async () => {

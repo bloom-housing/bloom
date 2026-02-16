@@ -7,11 +7,11 @@ import { MinMaxCurrency } from '../dtos/shared/min-max-currency.dto';
 import { MinMax } from '../dtos/shared/min-max.dto';
 import { UnitsSummarized } from '../dtos/units/unit-summarized.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
-import { UnitAccessibilityPriorityType } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
 import { AmiChartItem } from '../dtos/units/ami-chart-item.dto';
 import { UnitAmiChartOverride } from '../dtos/units/ami-chart-override.dto';
 import { isEmpty } from 'class-validator';
 import UnitGroupAmiLevel from '../dtos/unit-groups/unit-group-ami-level.dto';
+import { UnitAccessibilityPriorityTypeEnum } from '../enums/units/accessibility-priority-type-enum';
 
 type AnyDict = { [key: string]: unknown };
 type UnitMap = {
@@ -527,11 +527,11 @@ export const summarizeUnits = (
   }
   data.unitTypes = getUnitTypes(units);
 
-  const priorityTypes = new Map<string, UnitAccessibilityPriorityType>();
+  const priorityTypes = new Set<UnitAccessibilityPriorityTypeEnum>();
   for (const priorityType of units
-    .map((unit) => unit.unitAccessibilityPriorityTypes)
+    .map((unit) => unit.accessibilityPriorityType)
     .filter((item) => item != null)) {
-    priorityTypes.set(priorityType.id, priorityType);
+    priorityTypes.add(priorityType);
   }
   data.priorityTypes = Array.from(priorityTypes.values());
 

@@ -1,6 +1,7 @@
 import React from "react"
+import Markdown from "markdown-to-jsx"
 import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers"
-import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
+import { Button, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { t, ProgressNav, StepHeader } from "@bloom-housing/ui-components"
 import ApplicationConductor from "../lib/applications/ApplicationConductor"
@@ -23,6 +24,7 @@ interface ApplicationFormLayoutProps {
   }
   conductor?: ApplicationConductor
   hideBorder?: boolean
+  overrideIsAdvocate?: boolean
 }
 
 const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
@@ -41,6 +43,8 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
   }
 
   if (!props.progressNavProps.mounted) return
+
+  const isAdvocate = props.overrideIsAdvocate ?? props.conductor?.config?.isAdvocate
 
   return (
     <>
@@ -72,11 +76,16 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
         subtitle={props.subheading}
         headerLink={props.backLink && getBackLink(props.backLink.url, props.backLink.onClickFxn)}
         className={`${styles["application-form-body"]} ${
-          props.hideBorder && styles["application-form-header-no-border"]
+          (props.hideBorder || isAdvocate) && styles["application-form-header-no-border"]
         }`}
         headingClass={"seeds-large-heading"}
       >
         <>
+          {isAdvocate && (
+            <Message fullwidth variant="warn">
+              <Markdown>{t("application.form.general.advocateWarning")}</Markdown>
+            </Message>
+          )}
           {props.children}
           {props.conductor && (
             <CardSection className={styles["application-form-action-footer"]}>

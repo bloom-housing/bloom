@@ -1,15 +1,14 @@
 import React from "react"
+import type { UseFormMethods } from "react-hook-form"
 import {
   Form,
-  FormCard,
   t,
   PhoneField,
   FormSignInErrorBox,
   NetworkStatus,
 } from "@bloom-housing/ui-components"
-import { Button, Icon } from "@bloom-housing/ui-seeds"
-import type { UseFormMethods } from "react-hook-form"
-import { CustomIconMap } from "@bloom-housing/shared-helpers"
+import { Button, Card } from "@bloom-housing/ui-seeds"
+import { BloomCard } from "@bloom-housing/shared-helpers"
 
 export type FormSignInAddPhoneProps = {
   control: FormSignInAddPhoneControl
@@ -39,20 +38,26 @@ const FormSignInAddPhone = ({
   }
   const { errors, handleSubmit } = control
   return (
-    <FormCard>
-      <div className="form-card__lead text-center">
-        <Icon size="2xl">{CustomIconMap.profile}</Icon>
-        <h2 className="form-card__title is-borderless">{t("nav.signInMFA.addNumber")}</h2>
-        <p className="form-card__sub-title">{t("nav.signInMFA.addNumberSecondaryTitle")}</p>
-      </div>
-      <FormSignInErrorBox
-        errors={errors}
-        networkStatus={networkError}
-        errorMessageId={"add-phone"}
-      />
-
-      <div className="form-card__group pt-0">
-        <Form id="sign-in-mfa" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
+    <BloomCard
+      iconSymbol="userCircle"
+      title={t("nav.signInMFA.addNumber")}
+      headingPriority={1}
+      iconClass={"card-icon"}
+      iconOutlined={true}
+      headingClass="seeds-large-heading"
+      subtitle={t("nav.signInMFA.addNumberSecondaryTitle")}
+    >
+      <Form id="sign-in-mfa" onSubmit={handleSubmit(onSubmit, onError)}>
+        <Card.Section>
+          {networkError?.content?.error && (
+            <div className={"seeds-m-be-6"}>
+              <FormSignInErrorBox
+                errors={errors}
+                networkStatus={networkError}
+                errorMessageId={"add-phone"}
+              />
+            </div>
+          )}
           <PhoneField
             label={t("nav.signInMFA.phoneNumber")}
             caps={true}
@@ -66,15 +71,14 @@ const FormSignInAddPhone = ({
             dataTestId={"sign-in-phone-number-field"}
             defaultValue={phoneNumber}
           />
-
-          <div className="text-center mt-10">
-            <Button type="submit" variant="primary" id="request-mfa-code-and-add-phone">
-              {t("nav.signInMFA.addPhoneNumber")}
-            </Button>
-          </div>
-        </Form>
-      </div>
-    </FormCard>
+        </Card.Section>
+        <Card.Section className={"primary-bg seeds-m-bs-section"}>
+          <Button type="submit" variant="primary" id="request-mfa-code-and-add-phone">
+            {t("t.addPhoneNumber")}
+          </Button>
+        </Card.Section>
+      </Form>
+    </BloomCard>
   )
 }
 

@@ -1,9 +1,10 @@
 locals {
   site_partners_default_env_vars = {
-    NODE_ENV         = "production"
-    NEXTJS_PORT      = "3001"
-    BACKEND_API_BASE = "http://bloom-api:3100"
-    LISTINGS_QUERY   = "/listings"
+    NODE_ENV               = "production"
+    DISABLE_NEXT_TYPECHECK = "TRUE"
+    NEXTJS_PORT            = "3001"
+    BACKEND_API_BASE       = "http://bloom-api:3100"
+    LISTINGS_QUERY         = "/listings"
   }
 }
 resource "aws_ecs_task_definition" "bloom_site_partners" {
@@ -19,8 +20,8 @@ resource "aws_ecs_task_definition" "bloom_site_partners" {
   execution_role_arn = aws_iam_role.bloom_ecs["site-partners"].arn
   task_role_arn      = aws_iam_role.bloom_container["site-partners"].arn
 
-  # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size
-  cpu    = 2048     # 2 vCPU
+  # Keep in sync with docker-compose.yml
+  cpu    = 2 * 1024 # 2 vCPU
   memory = 4 * 1024 # 4 GiB in MiB
 
   container_definitions = jsonencode([
@@ -53,6 +54,7 @@ resource "aws_ecs_service" "bloom_site_partners" {
   depends_on = [
     aws_ecs_service.bloom_api,
     aws_route_table_association.private_subnet,
+    null_resource.bloom_dbseed_run,
   ]
   region                = var.aws_region
   cluster               = aws_ecs_cluster.bloom.arn

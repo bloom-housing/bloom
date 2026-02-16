@@ -1,0 +1,19 @@
+.account-type-option {
+  &:not(:last-of-type) {
+    margin-right: var(--seeds-s4);
+    @media (--sm-only) {
+      margin-right: 0;
+      margin-block-end: var(--seeds-spacer-header);
+    }
+  }
+  .account-type-field {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    [class*="control"] {
+      @media (--md-and-up) {
+        min-height: var(--seeds-s12);
+      }
+    }
+  }
+}
