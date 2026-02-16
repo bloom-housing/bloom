@@ -147,7 +147,11 @@ const FormSummaryDetails = ({
           <Heading priority={3} size="xl">
             {header}
           </Heading>
-          {editMode && !validationError && <Link href={appLink}>{t("t.edit")}</Link>}
+          {editMode && !validationError && (
+            <Link href={appLink} ariaLabel={`${t("t.edit")} ${header}`}>
+              {t("t.edit")}
+            </Link>
+          )}
         </Card.Header>
 
         <Card.Section
@@ -191,7 +195,11 @@ const FormSummaryDetails = ({
         <Heading priority={3} size="xl">
           {t("t.you")}
         </Heading>
-        {editMode && <Link href="/applications/contact/name">{t("t.edit")}</Link>}
+        {editMode && (
+          <Link href="/applications/contact/name" ariaLabel={`${t("t.edit")} ${t("t.you")}`}>
+            {t("t.edit")}
+          </Link>
+        )}
       </Card.Header>
 
       <Card.Section className={styles["summary-section"]}>
@@ -311,7 +319,12 @@ const FormSummaryDetails = ({
               {t("application.alternateContact.type.label")}
             </Heading>
             {editMode && !validationError && (
-              <Link href="/applications/contact/alternate-contact-type">{t("t.edit")}</Link>
+              <Link
+                href="/applications/contact/alternate-contact-type"
+                ariaLabel={`${t("t.edit")} ${t("application.alternateContact.type.label")}`}
+              >
+                {t("t.edit")}
+              </Link>
             )}
           </Card.Header>
 
@@ -372,7 +385,12 @@ const FormSummaryDetails = ({
               {t("application.household.householdMembers")}
             </Heading>
             {editMode && !validationError && (
-              <Link href="/applications/household/add-members">{t("t.edit")}</Link>
+              <Link
+                href="/applications/household/add-members"
+                ariaLabel={`${t("t.edit")} ${t("application.household.householdMembers")}`}
+              >
+                {t("t.edit")}
+              </Link>
             )}
           </Card.Header>
 
@@ -435,7 +453,12 @@ const FormSummaryDetails = ({
             {t("application.review.householdDetails")}
           </Heading>
           {editMode && !validationError && (
-            <Link href="/applications/household/preferred-units">{t("t.edit")}</Link>
+            <Link
+              href="/applications/household/preferred-units"
+              ariaLabel={`${t("t.edit")} ${t("application.review.householdDetails")}`}
+            >
+              {t("t.edit")}
+            </Link>
           )}
         </Card.Header>
 
@@ -506,7 +529,12 @@ const FormSummaryDetails = ({
             {t("t.income")}
           </Heading>
           {editMode && !validationError && (
-            <Link href="/applications/financial/vouchers">{t("t.edit")}</Link>
+            <Link
+              href="/applications/financial/vouchers"
+              ariaLabel={`${t("t.edit")} ${t("t.income")}`}
+            >
+              {t("t.edit")}
+            </Link>
           )}
         </Card.Header>
 

@@ -4,6 +4,10 @@
     --card-content-padding-inline: var(--seeds-s4);
     --card-content-padding-block: var(--seeds-s6);
   }
+
+  a {
+    text-decoration: underline;
+  }
 }
 
 .account-settings-label {

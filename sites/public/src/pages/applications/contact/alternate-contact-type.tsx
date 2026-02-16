@@ -104,28 +104,33 @@ const ApplicationAlternateContactType = () => {
                       inputProps={{
                         value: option,
                         defaultChecked: application.alternateContact.type === option,
+                        "aria-controls": option === "other" ? "other-type" : undefined,
                       }}
                       dataTestId={"app-alternate-type"}
                     />
+                    <div id="other-type">
+                      {option === "other" && type === "other" && (
+                        <Field
+                          className={"seeds-p-be-4"}
+                          id="otherType"
+                          name="otherType"
+                          label={t("application.alternateContact.type.otherTypeFormPlaceholder")}
+                          defaultValue={application.alternateContact.otherType}
+                          validation={{ required: true, maxLength: 64 }}
+                          error={errors.otherType}
+                          errorMessage={
+                            errors.otherType?.type === "maxLength"
+                              ? t("errors.maxLength", { length: 64 })
+                              : t(
+                                  "application.alternateContact.type.otherTypeValidationErrorMessage"
+                                )
+                          }
+                          register={register}
+                          dataTestId={"app-alternate-other-type"}
+                        />
+                      )}
+                    </div>
 
-                    {option === "other" && type === "other" && (
-                      <Field
-                        controlClassName="mt-4"
-                        id="otherType"
-                        name="otherType"
-                        label={t("application.alternateContact.type.otherTypeFormPlaceholder")}
-                        defaultValue={application.alternateContact.otherType}
-                        validation={{ required: true, maxLength: 64 }}
-                        error={errors.otherType}
-                        errorMessage={
-                          errors.otherType?.type === "maxLength"
-                            ? t("errors.maxLength", { length: 64 })
-                            : t("application.alternateContact.type.otherTypeValidationErrorMessage")
-                        }
-                        register={register}
-                        dataTestId={"app-alternate-other-type"}
-                      />
-                    )}
                     {i === altContactRelationshipKeys.length - 1 && (
                       <>
                         {errors.type && (

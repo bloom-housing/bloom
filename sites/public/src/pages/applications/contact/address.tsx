@@ -177,7 +177,7 @@ const ApplicationAddress = () => {
               {t("errors.errorsToResolve")}
             </Alert>
           )}
-          <div style={{ display: verifyAddress ? "none" : "block" }}>
+          <div style={{ display: verifyAddress ? "none" : "block" }} aria-hidden={verifyAddress}>
             <CardSection divider={"inset"}>
               <fieldset>
                 <legend className={"text__caps-spaced"}>
@@ -253,41 +253,46 @@ const ApplicationAddress = () => {
                         setValue("additionalPhoneNumberType", "")
                       }
                     },
+                    ["aria-expanded"]: additionalPhone,
+                    ["aria-controls"]: "additional-phone-fields",
                   }}
                   dataTestId={"app-primary-additional-phone"}
+                  className={"mb-0"}
                 />
 
-                {additionalPhone && (
-                  <>
-                    <PhoneField
-                      id="additionalPhoneNumber"
-                      name="additionalPhoneNumber"
-                      label={t("application.contact.secondNumber")}
-                      required={true}
-                      error={errors.additionalPhoneNumber}
-                      errorMessage={t("errors.phoneNumberError")}
-                      control={control}
-                      defaultValue={application.additionalPhoneNumber}
-                      controlClassName="control"
-                      dataTestId={"app-primary-additional-phone-number"}
-                      subNote={t("application.contact.number.subNote")}
-                    />
-                    <Select
-                      id="additionalPhoneNumberType"
-                      name="additionalPhoneNumberType"
-                      defaultValue={application.additionalPhoneNumberType}
-                      validation={{ required: true }}
-                      error={errors?.additionalPhoneNumberType}
-                      errorMessage={t("errors.phoneNumberTypeError")}
-                      register={register}
-                      controlClassName="control"
-                      label={t("application.contact.phoneNumberTypes.prompt")}
-                      options={phoneNumberKeys}
-                      keyPrefix="application.contact.phoneNumberTypes"
-                      dataTestId={"app-primary-additional-phone-number-type"}
-                    />
-                  </>
-                )}
+                <div id={"additional-phone-fields"}>
+                  {additionalPhone && (
+                    <div className={"seeds-m-bs-4"}>
+                      <PhoneField
+                        id="additionalPhoneNumber"
+                        name="additionalPhoneNumber"
+                        label={t("application.contact.secondNumber")}
+                        required={true}
+                        error={errors.additionalPhoneNumber}
+                        errorMessage={t("errors.phoneNumberError")}
+                        control={control}
+                        defaultValue={application.additionalPhoneNumber}
+                        controlClassName="control"
+                        dataTestId={"app-primary-additional-phone-number"}
+                        subNote={t("application.contact.number.subNote")}
+                      />
+                      <Select
+                        id="additionalPhoneNumberType"
+                        name="additionalPhoneNumberType"
+                        defaultValue={application.additionalPhoneNumberType}
+                        validation={{ required: true }}
+                        error={errors?.additionalPhoneNumberType}
+                        errorMessage={t("errors.phoneNumberTypeError")}
+                        register={register}
+                        controlClassName="control"
+                        label={t("application.contact.phoneNumberTypes.prompt")}
+                        options={phoneNumberKeys}
+                        keyPrefix="application.contact.phoneNumberTypes"
+                        dataTestId={"app-primary-additional-phone-number-type"}
+                      />
+                    </div>
+                  )}
+                </div>
               </fieldset>
             </CardSection>
             <CardSection divider={"inset"}>
@@ -389,106 +394,111 @@ const ApplicationAddress = () => {
                   register={register}
                   inputProps={{
                     defaultChecked: application.sendMailToMailingAddress,
+                    "aria-controls": "additional-mailing-address-fields",
+                    "aria-expanded": sendMailToMailingAddress,
                   }}
                   dataTestId={"app-primary-send-to-mailing"}
                 />
               </fieldset>
             </CardSection>
 
-            {clientLoaded && (sendMailToMailingAddress || application.sendMailToMailingAddress) && (
-              <CardSection divider={"inset"}>
-                <fieldset>
-                  <legend className="text__caps-spaced">
-                    {t("application.contact.mailingAddress")}
-                  </legend>
+            <div id="additional-mailing-address-fields">
+              {clientLoaded &&
+                (sendMailToMailingAddress || application.sendMailToMailingAddress) && (
+                  <CardSection divider={"inset"}>
+                    <fieldset>
+                      <legend className="text__caps-spaced">
+                        {t("application.contact.mailingAddress")}
+                      </legend>
 
-                  <p className="field-note mb-4">
-                    {t("application.contact.provideAMailingAddress")}
-                  </p>
+                      <p className="field-note mb-4">
+                        {t("application.contact.provideAMailingAddress")}
+                      </p>
 
-                  <Field
-                    id="mailingAddressStreet"
-                    name="applicationsMailingAddress.street"
-                    defaultValue={application.applicationsMailingAddress.street}
-                    label={t("application.contact.streetAddress")}
-                    validation={{ required: true, maxLength: 64 }}
-                    error={errors.applicationsMailingAddress?.street}
-                    errorMessage={
-                      errors.applicationsMailingAddress?.street?.type === "maxLength"
-                        ? t("errors.maxLength", { length: 64 })
-                        : t("errors.streetError")
-                    }
-                    register={register}
-                    dataTestId={"app-primary-mailing-address-street"}
-                  />
+                      <Field
+                        id="mailingAddressStreet"
+                        name="applicationsMailingAddress.street"
+                        defaultValue={application.applicationsMailingAddress.street}
+                        label={t("application.contact.streetAddress")}
+                        validation={{ required: true, maxLength: 64 }}
+                        error={errors.applicationsMailingAddress?.street}
+                        errorMessage={
+                          errors.applicationsMailingAddress?.street?.type === "maxLength"
+                            ? t("errors.maxLength", { length: 64 })
+                            : t("errors.streetError")
+                        }
+                        register={register}
+                        dataTestId={"app-primary-mailing-address-street"}
+                      />
 
-                  <Field
-                    id="mailingAddressStreet2"
-                    name="applicationsMailingAddress.street2"
-                    label={t("application.contact.apt")}
-                    defaultValue={application.applicationsMailingAddress.street2}
-                    register={register}
-                    dataTestId={"app-primary-mailing-address-street2"}
-                    validation={{ maxLength: 64 }}
-                    error={errors.applicationsMailingAddress?.street2}
-                    errorMessage={t("errors.maxLength", { length: 64 })}
-                  />
+                      <Field
+                        id="mailingAddressStreet2"
+                        name="applicationsMailingAddress.street2"
+                        label={t("application.contact.apt")}
+                        defaultValue={application.applicationsMailingAddress.street2}
+                        register={register}
+                        dataTestId={"app-primary-mailing-address-street2"}
+                        validation={{ maxLength: 64 }}
+                        error={errors.applicationsMailingAddress?.street2}
+                        errorMessage={t("errors.maxLength", { length: 64 })}
+                      />
 
-                  <div className="flex max-w-2xl">
-                    <Field
-                      id="mailingAddressCity"
-                      name="applicationsMailingAddress.city"
-                      label={t("application.contact.city")}
-                      defaultValue={application.applicationsMailingAddress.city}
-                      validation={{ required: true, maxLength: 64 }}
-                      error={errors.applicationsMailingAddress?.city}
-                      errorMessage={
-                        errors.applicationsMailingAddress?.city?.type === "maxLength"
-                          ? t("errors.maxLength", { length: 64 })
-                          : t("errors.cityError")
-                      }
-                      register={register}
-                      dataTestId={"app-primary-mailing-address-city"}
-                    />
+                      <div className="flex max-w-2xl">
+                        <Field
+                          id="mailingAddressCity"
+                          name="applicationsMailingAddress.city"
+                          label={t("application.contact.city")}
+                          defaultValue={application.applicationsMailingAddress.city}
+                          validation={{ required: true, maxLength: 64 }}
+                          error={errors.applicationsMailingAddress?.city}
+                          errorMessage={
+                            errors.applicationsMailingAddress?.city?.type === "maxLength"
+                              ? t("errors.maxLength", { length: 64 })
+                              : t("errors.cityError")
+                          }
+                          register={register}
+                          dataTestId={"app-primary-mailing-address-city"}
+                        />
 
-                    <Select
-                      id="mailingAddressState"
-                      name="applicationsMailingAddress.state"
-                      label={t("application.contact.state")}
-                      defaultValue={application.applicationsMailingAddress.state}
-                      validation={{ required: true, maxLength: 64 }}
-                      errorMessage={
-                        errors.applicationsMailingAddress?.state?.type === "maxLength"
-                          ? t("errors.maxLength", { length: 64 })
-                          : t("errors.stateError")
-                      }
-                      error={errors.applicationsMailingAddress?.state}
-                      register={register}
-                      controlClassName="control"
-                      options={stateKeys}
-                      keyPrefix="states"
-                      dataTestId={"app-primary-mailing-address-state"}
-                    />
-                  </div>
+                        <Select
+                          id="mailingAddressState"
+                          name="applicationsMailingAddress.state"
+                          label={t("application.contact.state")}
+                          defaultValue={application.applicationsMailingAddress.state}
+                          validation={{ required: true, maxLength: 64 }}
+                          errorMessage={
+                            errors.applicationsMailingAddress?.state?.type === "maxLength"
+                              ? t("errors.maxLength", { length: 64 })
+                              : t("errors.stateError")
+                          }
+                          error={errors.applicationsMailingAddress?.state}
+                          register={register}
+                          controlClassName="control"
+                          options={stateKeys}
+                          keyPrefix="states"
+                          dataTestId={"app-primary-mailing-address-state"}
+                        />
+                      </div>
 
-                  <Field
-                    id="mailingAddressZipCode"
-                    name="applicationsMailingAddress.zipCode"
-                    label={t("application.contact.zip")}
-                    defaultValue={application.applicationsMailingAddress.zipCode}
-                    validation={{ required: true, maxLength: 10 }}
-                    error={errors.applicationsMailingAddress?.zipCode}
-                    errorMessage={
-                      errors.applicationsMailingAddress?.zipCode?.type === "maxLength"
-                        ? t("errors.maxLength", { length: 10 })
-                        : t("errors.zipCodeError")
-                    }
-                    register={register}
-                    dataTestId={"app-primary-mailing-address-zip"}
-                  />
-                </fieldset>
-              </CardSection>
-            )}
+                      <Field
+                        id="mailingAddressZipCode"
+                        name="applicationsMailingAddress.zipCode"
+                        label={t("application.contact.zip")}
+                        defaultValue={application.applicationsMailingAddress.zipCode}
+                        validation={{ required: true, maxLength: 10 }}
+                        error={errors.applicationsMailingAddress?.zipCode}
+                        errorMessage={
+                          errors.applicationsMailingAddress?.zipCode?.type === "maxLength"
+                            ? t("errors.maxLength", { length: 10 })
+                            : t("errors.zipCodeError")
+                        }
+                        register={register}
+                        dataTestId={"app-primary-mailing-address-zip"}
+                      />
+                    </fieldset>
+                  </CardSection>
+                )}
+            </div>
 
             <CardSection divider={"inset"}>
               <fieldset>
@@ -543,6 +553,7 @@ const ApplicationAddress = () => {
                     inputProps={{
                       value: "yes",
                       defaultChecked: application.applicant.workInRegion == "yes",
+                      ["aria-controls"]: "work-in-region",
                     }}
                     dataTestId={"app-primary-work-in-region-yes"}
                   />
@@ -559,6 +570,7 @@ const ApplicationAddress = () => {
                     inputProps={{
                       value: "no",
                       defaultChecked: application.applicant.workInRegion == "no",
+                      ["aria-controls"]: "work-in-region",
                     }}
                     dataTestId={"app-primary-work-in-region-no"}
                   />
@@ -569,97 +581,103 @@ const ApplicationAddress = () => {
                   )}
                 </fieldset>
 
-                {(workInRegion == "yes" ||
-                  (!workInRegion && application.applicant.workInRegion == "yes")) && (
-                  <div className="form-card__group mx-0 px-0 mt-2">
-                    <fieldset>
-                      <legend className="text__caps-spaced">
-                        {t("application.contact.workAddress")}
-                      </legend>
+                <div id={"work-in-region"}>
+                  {(workInRegion == "yes" ||
+                    (!workInRegion && application.applicant.workInRegion == "yes")) && (
+                    <div className="form-card__group mx-0 px-0 mt-2">
+                      <fieldset>
+                        <legend className="text__caps-spaced">
+                          {t("application.contact.workAddress")}
+                        </legend>
 
-                      <Field
-                        id="applicantWorkAddressStreet"
-                        name="applicant.applicantWorkAddress.street"
-                        defaultValue={application.applicant.applicantWorkAddress.street}
-                        validation={{ required: true, maxLength: 64 }}
-                        error={errors.applicant?.applicantWorkAddress?.street}
-                        errorMessage={
-                          errors.applicant?.applicantWorkAddress?.street?.type === "maxLength"
-                            ? t("errors.maxLength", { length: 64 })
-                            : t("errors.streetError")
-                        }
-                        register={register}
-                        dataTestId={"app-primary-work-address-street"}
-                        label={t("application.contact.streetAddress")}
-                      />
-
-                      <Field
-                        id="applicantWorkAddressStreet2"
-                        name="applicant.applicantWorkAddress.street2"
-                        label={t("application.contact.apt")}
-                        defaultValue={application.applicant.applicantWorkAddress.street2}
-                        register={register}
-                        error={errors.applicant?.applicantWorkAddress?.street2}
-                        validation={{ maxLength: 64 }}
-                        errorMessage={"errors.maxLength"}
-                        dataTestId={"app-primary-work-address-street2"}
-                      />
-
-                      <div className="flex max-w-2xl">
                         <Field
-                          id="applicantWorkAddressCity"
-                          name="applicant.applicantWorkAddress.city"
-                          label={t("application.contact.city")}
-                          defaultValue={application.applicant.applicantWorkAddress.city}
+                          id="applicantWorkAddressStreet"
+                          name="applicant.applicantWorkAddress.street"
+                          defaultValue={application.applicant.applicantWorkAddress.street}
                           validation={{ required: true, maxLength: 64 }}
-                          error={errors.applicant?.applicantWorkAddress?.city}
+                          error={errors.applicant?.applicantWorkAddress?.street}
                           errorMessage={
-                            errors.applicant?.applicantWorkAddress?.city?.type === "maxLength"
+                            errors.applicant?.applicantWorkAddress?.street?.type === "maxLength"
                               ? t("errors.maxLength", { length: 64 })
-                              : t("errors.cityError")
+                              : t("errors.streetError")
                           }
                           register={register}
-                          dataTestId={"app-primary-work-address-city"}
+                          dataTestId={"app-primary-work-address-street"}
+                          label={t("application.contact.streetAddress")}
                         />
 
-                        <Select
-                          id="applicantWorkAddressState"
-                          name="applicant.applicantWorkAddress.state"
-                          label={t("application.contact.state")}
-                          defaultValue={application.applicant.applicantWorkAddress.state}
-                          validation={{ required: true, maxLength: 64 }}
-                          error={errors.applicant?.applicantWorkAddress?.state}
+                        <Field
+                          id="applicantWorkAddressStreet2"
+                          name="applicant.applicantWorkAddress.street2"
+                          label={t("application.contact.apt")}
+                          defaultValue={application.applicant.applicantWorkAddress.street2}
+                          register={register}
+                          error={errors.applicant?.applicantWorkAddress?.street2}
+                          validation={{ maxLength: 64 }}
                           errorMessage={
-                            errors.applicant?.applicantWorkAddress?.state?.type === "maxLength"
+                            errors.applicant?.applicantWorkAddress?.street?.type === "maxLength"
                               ? t("errors.maxLength", { length: 64 })
-                              : t("errors.stateError")
+                              : t("errors.streetError")
+                          }
+                          dataTestId={"app-primary-work-address-street2"}
+                        />
+
+                        <div className="flex max-w-2xl">
+                          <Field
+                            id="applicantWorkAddressCity"
+                            name="applicant.applicantWorkAddress.city"
+                            label={t("application.contact.city")}
+                            defaultValue={application.applicant.applicantWorkAddress.city}
+                            validation={{ required: true, maxLength: 64 }}
+                            error={errors.applicant?.applicantWorkAddress?.city}
+                            errorMessage={
+                              errors.applicant?.applicantWorkAddress?.city?.type === "maxLength"
+                                ? t("errors.maxLength", { length: 64 })
+                                : t("errors.cityError")
+                            }
+                            register={register}
+                            dataTestId={"app-primary-work-address-city"}
+                          />
+
+                          <Select
+                            id="applicantWorkAddressState"
+                            name="applicant.applicantWorkAddress.state"
+                            label={t("application.contact.state")}
+                            defaultValue={application.applicant.applicantWorkAddress.state}
+                            validation={{ required: true, maxLength: 64 }}
+                            error={errors.applicant?.applicantWorkAddress?.state}
+                            errorMessage={
+                              errors.applicant?.applicantWorkAddress?.state?.type === "maxLength"
+                                ? t("errors.maxLength", { length: 64 })
+                                : t("errors.stateError")
+                            }
+                            register={register}
+                            controlClassName="control"
+                            options={stateKeys}
+                            keyPrefix="states"
+                            dataTestId={"app-primary-work-address-state"}
+                          />
+                        </div>
+
+                        <Field
+                          id="applicantWorkAddressZipCode"
+                          name="applicant.applicantWorkAddress.zipCode"
+                          label={t("application.contact.zip")}
+                          defaultValue={application.applicant.applicantWorkAddress.zipCode}
+                          validation={{ required: true, maxLength: 10 }}
+                          error={errors.applicant?.applicantWorkAddress?.zipCode}
+                          errorMessage={
+                            errors.applicant?.applicantWorkAddress?.zipCode?.type === "maxLength"
+                              ? t("errors.maxLength", { length: 10 })
+                              : t("errors.zipCodeError")
                           }
                           register={register}
-                          controlClassName="control"
-                          options={stateKeys}
-                          keyPrefix="states"
-                          dataTestId={"app-primary-work-address-state"}
+                          dataTestId={"app-primary-work-address-zip"}
                         />
-                      </div>
-
-                      <Field
-                        id="applicantWorkAddressZipCode"
-                        name="applicant.applicantWorkAddress.zipCode"
-                        label={t("application.contact.zip")}
-                        defaultValue={application.applicant.applicantWorkAddress.zipCode}
-                        validation={{ required: true, maxLength: 10 }}
-                        error={errors.applicant?.applicantWorkAddress?.zipCode}
-                        errorMessage={
-                          errors.applicant?.applicantWorkAddress?.zipCode?.type === "maxLength"
-                            ? t("errors.maxLength", { length: 10 })
-                            : t("errors.zipCodeError")
-                        }
-                        register={register}
-                        dataTestId={"app-primary-work-address-zip"}
-                      />
-                    </fieldset>
-                  </div>
-                )}
+                      </fieldset>
+                    </div>
+                  )}
+                </div>
               </CardSection>
             )}
             {enableFullTimeStudentQuestion && (

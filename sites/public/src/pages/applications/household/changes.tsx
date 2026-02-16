@@ -91,6 +91,9 @@ const ApplicationHouseholdChanges = () => {
 
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
+              <legend className="sr-only">
+                {t("application.household.expectingChanges.question")}
+              </legend>
               <FieldGroup
                 fieldGroupClassName="grid grid-cols-1"
                 fieldClassName="ml-0"

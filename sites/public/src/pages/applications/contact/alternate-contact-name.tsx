@@ -109,22 +109,26 @@ const ApplicationAlternateContactName = () => {
               />
               {application.alternateContact.type === "caseManager" && (
                 <div className="mt-6">
-                  <p className="text__caps-spaced">
-                    {t("application.alternateContact.name.caseManagerAgencyFormLabel")}
-                  </p>
-                  <Field
-                    id="agency"
-                    name="agency"
-                    label={t("application.alternateContact.name.caseManagerAgencyFormPlaceHolder")}
-                    defaultValue={application.alternateContact.agency}
-                    validation={{ required: true }}
-                    error={errors.agency}
-                    errorMessage={t(
-                      "application.alternateContact.name.caseManagerAgencyValidationErrorMessage"
-                    )}
-                    register={register}
-                    dataTestId={"app-alternate-type"}
-                  />
+                  <fieldset>
+                    <legend className="text__caps-spaced">
+                      {t("application.alternateContact.name.caseManagerAgencyFormLabel")}
+                    </legend>
+                    <Field
+                      id="agency"
+                      name="agency"
+                      label={t(
+                        "application.alternateContact.name.caseManagerAgencyFormPlaceHolder"
+                      )}
+                      defaultValue={application.alternateContact.agency}
+                      validation={{ required: true }}
+                      error={errors.agency}
+                      errorMessage={t(
+                        "application.alternateContact.name.caseManagerAgencyValidationErrorMessage"
+                      )}
+                      register={register}
+                      dataTestId={"app-alternate-type"}
+                    />
+                  </fieldset>
                 </div>
               )}
             </fieldset>

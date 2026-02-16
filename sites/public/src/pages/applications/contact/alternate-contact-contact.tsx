@@ -106,14 +106,11 @@ const ApplicationAlternateContactContact = () => {
             />
           </CardSection>
           <CardSection divider={"inset"}>
-            <h3 className="text__caps-spaced">
-              {t("application.alternateContact.contact.emailAddressFormLabel")}
-            </h3>
             <Field
               id="emailAddress"
+              labelClassName={"text__caps-spaced"}
               name="emailAddress"
               label={t("application.alternateContact.contact.emailAddressFormLabel")}
-              readerOnly={true}
               defaultValue={application.alternateContact.emailAddress || null}
               register={register}
               type="email"

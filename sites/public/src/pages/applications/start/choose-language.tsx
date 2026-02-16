@@ -196,7 +196,7 @@ const ApplicationChooseLanguage = () => {
             {listing?.applicationConfig?.languages?.length && (
               <CardSection divider={"flush"}>
                 <>
-                  <Heading priority={2} size={"lg"} className={"pb-4"}>
+                  <Heading priority={3} size={"lg"} className={"pb-4"}>
                     {t("application.chooseLanguage.chooseYourLanguage")}
                   </Heading>
                   {listing.applicationConfig.languages.map((lang, index) => (
@@ -207,7 +207,7 @@ const ApplicationChooseLanguage = () => {
                         onLanguageSelect(lang)
                       }}
                       key={index}
-                      id={"app-choose-language-button"}
+                      id={`app-choose-language-button-${lang}`}
                     >
                       {t(`languages.${lang}`)}
                     </Button>
@@ -219,7 +219,7 @@ const ApplicationChooseLanguage = () => {
             {initialStateLoaded && !profile && (
               <>
                 <CardSection divider={"flush"} className={styles["application-form-action-footer"]}>
-                  <Heading priority={2} size={"2xl"} className={"seeds-medium-heading pb-4"}>
+                  <Heading priority={3} size={"2xl"} className={"seeds-medium-heading pb-4"}>
                     {t("account.haveAnAccount")}
                   </Heading>
                   <p className={"pb-4"}>{t("application.chooseLanguage.signInSaveTime")}</p>
@@ -233,7 +233,7 @@ const ApplicationChooseLanguage = () => {
                   </Button>
                 </CardSection>
                 <CardSection divider={"flush"} className={styles["application-form-action-footer"]}>
-                  <Heading priority={2} size={"2xl"} className={"seeds-medium-heading pb-4"}>
+                  <Heading priority={3} size={"2xl"} className={"seeds-medium-heading pb-4"}>
                     {t("authentication.createAccount.noAccount")}
                   </Heading>
                   <Button

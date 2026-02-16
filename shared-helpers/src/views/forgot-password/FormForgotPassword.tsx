@@ -85,7 +85,7 @@ const FormForgotPassword = ({
             </Button>
 
             <div className={"mt-4"}>
-              <Button onClick={() => router.back()} variant="text">
+              <Button type="button" onClick={() => router.back()} variant="text">
                 {t("t.cancel")}
               </Button>
             </div>

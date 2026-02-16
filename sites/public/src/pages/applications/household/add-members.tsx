@@ -52,14 +52,16 @@ const ApplicationAddMembers = () => {
   const membersSection = application.householdMember.map((member, index) => {
     return (
       <CardSection divider="inset" key={index}>
-        <HouseholdMemberForm
-          editMember={editMember}
-          key={index}
-          memberFirstName={member.firstName}
-          memberId={index}
-          memberLastName={member.lastName}
-          subtitle={t("application.household.householdMember")}
-        />
+        <li>
+          <HouseholdMemberForm
+            editMember={editMember}
+            key={index}
+            memberFirstName={member.firstName}
+            memberId={index}
+            memberLastName={member.lastName}
+            subtitle={t("application.household.householdMember")}
+          />
+        </li>
       </CardSection>
     )
   })
@@ -106,16 +108,21 @@ const ApplicationAddMembers = () => {
             register={register}
             validate={true}
           />
-          <CardSection divider="inset">
-            <HouseholdMemberForm
-              editMember={editMember}
-              editMode={!application.autofilled}
-              memberFirstName={applicant.firstName}
-              memberLastName={applicant.lastName}
-              subtitle={t("application.household.primaryApplicant")}
-            />
-          </CardSection>
-          {membersSection}
+          <ul>
+            <CardSection divider="inset">
+              <li>
+                <HouseholdMemberForm
+                  editMember={editMember}
+                  editMode={!application.autofilled}
+                  memberFirstName={applicant.firstName}
+                  memberLastName={applicant.lastName}
+                  subtitle={t("application.household.primaryApplicant")}
+                />
+              </li>
+            </CardSection>
+            {membersSection}
+          </ul>
+
           <CardSection divider={"flush"} className={"border-none"}>
             <Button
               onClick={onAddMember}

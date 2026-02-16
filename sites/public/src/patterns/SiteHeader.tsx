@@ -11,7 +11,7 @@ import styles from "./SiteHeader.module.scss"
 
 /** Sets focus on the first submenu link */
 const setFocusToFirstElement = () => {
-  document.getElementById(`submenu-link-${0}`).focus()
+  document.getElementById(`submenu-link-${0}`)?.focus()
   return
 }
 
