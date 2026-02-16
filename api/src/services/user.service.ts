@@ -103,7 +103,6 @@ export class UserService {
     private readonly configService: ConfigService,
     private permissionService: PermissionService,
     private applicationService: ApplicationService,
-    private agencyService: AgencyService,
     @Inject(Logger)
     private logger = new Logger(UserService.name),
     private cronJobService: CronJobService,
