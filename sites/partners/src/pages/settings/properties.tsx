@@ -40,7 +40,12 @@ const SettingsProperties = () => {
   )
   const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
 
-  if (profile?.userRoles?.isPartner || profile?.userRoles?.isSupportAdmin || !enableProperties) {
+  if (
+    !enableProperties ||
+    profile?.userRoles?.isPartner ||
+    profile?.userRoles?.isSupportAdmin ||
+    profile?.userRoles?.isLimitedJurisdictionalAdmin
+  ) {
     void router.push("/unauthorized")
   }
 
