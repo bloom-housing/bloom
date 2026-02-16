@@ -154,11 +154,6 @@ const FormDemographics = ({
                 controlClassName="control"
                 options={["", ...getSpokenLanguageOptions()]}
                 keyPrefix="application.review.demographics.spokenLanguageOptions"
-                defaultValue={
-                  formValues.spokenLanguage?.includes("notListed")
-                    ? "notListed"
-                    : formValues.spokenLanguage
-                }
               />
               {spokenLanguageValue === "notListed" && (
                 <Field

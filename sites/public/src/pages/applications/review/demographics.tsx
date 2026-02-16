@@ -84,7 +84,6 @@ const ApplicationDemographics = () => {
   )
 
   const getSpokenLanguageOptions = () => {
-    // Use jurisdiction-specific config if available, otherwise fall back to all keys
     const availableLanguages =
       conductor.config.visibleSpokenLanguages && conductor.config.visibleSpokenLanguages.length > 0
         ? conductor.config.visibleSpokenLanguages
@@ -195,7 +194,7 @@ const ApplicationDemographics = () => {
               </div>
             )}
             {enableSpokenLanguage && conductor.config?.visibleSpokenLanguages?.length > 0 && (
-              <div className={"pt-8"}>
+              <div className={"seeds-p-bs-8"}>
                 <Select
                   id="spokenLanguage"
                   name="spokenLanguage"

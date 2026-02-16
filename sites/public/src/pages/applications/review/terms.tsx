@@ -72,15 +72,6 @@ const ApplicationTerms = () => {
         untranslateMultiselectQuestion(application.preferences, listing)
       }
 
-      if (application.demographics.spokenLanguage === "notListed") {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        application.demographics.spokenLanguage = `${application.demographics.spokenLanguage}:${application.demographics.spokenLanguageNotListed}`
-      }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      delete application.demographics.spokenLanguageNotListed
-
       applicationsService
         .submit({
           body: {

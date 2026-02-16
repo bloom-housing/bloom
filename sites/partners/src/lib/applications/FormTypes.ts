@@ -36,6 +36,7 @@ export type ApplicationTypes = {
     sexualOrientation?: string
     howDidYouHear: string[]
     spokenLanguage?: string
+    spokenLanguageNotListed?: string
   }
   alternateContact: {
     firstName?: string
