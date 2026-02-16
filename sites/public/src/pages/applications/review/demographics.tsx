@@ -9,7 +9,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   ethnicityKeys,
-  raceKeys,
   isKeyIncluded,
   getCustomValue,
   howDidYouHear,
@@ -20,6 +19,7 @@ import {
   AuthContext,
   listingSectionQuestions,
   limitedHowDidYouHear,
+  getRaceEthnicityOptions,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { isFeatureFlagOn } from "../../../lib/helpers"
@@ -79,6 +79,8 @@ const ApplicationDemographics = () => {
   }
 
   const raceOptions = useMemo(() => {
+    const raceKeys = getRaceEthnicityOptions(conductor.config.raceEthnicityConfiguration)
+    if (!raceKeys) return []
     return Object.keys(raceKeys).map((rootKey) => ({
       id: rootKey,
       label: t(`application.review.demographics.raceOptions.${rootKey}`),
@@ -97,6 +99,7 @@ const ApplicationDemographics = () => {
       })),
       dataTestId: rootKey,
     }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [register])
 
   useEffect(() => {
@@ -106,6 +109,8 @@ const ApplicationDemographics = () => {
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])
+
+  const showRaceQuestion = raceOptions.length > 0
 
   return (
     <FormsLayout
@@ -130,24 +135,28 @@ const ApplicationDemographics = () => {
           conductor={conductor}
         >
           <CardSection divider={"inset"}>
-            <fieldset>
-              <legend className="text__caps-spaced">
-                {!disableEthnicityQuestion
-                  ? t("application.review.demographics.raceLabelNoEthnicity")
-                  : t("application.review.demographics.raceLabel")}
-              </legend>
-              <FieldGroup
-                name="race"
-                fields={raceOptions}
-                type="checkbox"
-                register={register}
-                strings={{
-                  description: "",
-                }}
-              />
-            </fieldset>
+            {showRaceQuestion && (
+              <fieldset>
+                <legend className="text__caps-spaced">
+                  {!disableEthnicityQuestion
+                    ? t("application.review.demographics.raceLabelNoEthnicity")
+                    : t("application.review.demographics.raceLabel")}
+                </legend>
+
+                <FieldGroup
+                  name="race"
+                  fields={raceOptions}
+                  type="checkbox"
+                  register={register}
+                  strings={{
+                    description: "",
+                  }}
+                  dataTestId={"app-demographics-race"}
+                />
+              </fieldset>
+            )}
             {!disableEthnicityQuestion && (
-              <div className={"pt-4"}>
+              <div className={`${showRaceQuestion ? "pt-4" : ""}`}>
                 <Select
                   id="ethnicity"
                   name="ethnicity"

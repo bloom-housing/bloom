@@ -7,6 +7,7 @@ import {
 import { randomName } from './word-generator';
 import { ListingFeaturesConfiguration } from '../../src/dtos/jurisdictions/listing-features-config.dto';
 import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessibility-priority-type-enum';
+import { RaceEthnicityConfiguration } from '../../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
 
 export const jurisdictionFactory = (
   jurisdictionName = randomName(),
@@ -22,6 +23,7 @@ export const jurisdictionFactory = (
     minimumListingPublishImagesRequired?: number;
     publicSiteBaseURL?: string;
     listingFeaturesConfiguration?: ListingFeaturesConfiguration;
+    raceEthnicityConfiguration?: RaceEthnicityConfiguration;
   },
 ): Prisma.JurisdictionsCreateInput => ({
   name: jurisdictionName,
@@ -68,5 +70,8 @@ export const jurisdictionFactory = (
     optionalFields?.minimumListingPublishImagesRequired,
   listingFeaturesConfiguration: optionalFields?.listingFeaturesConfiguration
     ? (optionalFields.listingFeaturesConfiguration as unknown as Prisma.JsonArray)
+    : undefined,
+  raceEthnicityConfiguration: optionalFields?.raceEthnicityConfiguration
+    ? (optionalFields.raceEthnicityConfiguration as unknown as Prisma.JsonArray)
     : undefined,
 });

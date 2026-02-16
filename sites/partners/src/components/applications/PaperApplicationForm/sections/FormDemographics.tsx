@@ -4,25 +4,30 @@ import { t, Select, FieldGroup } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import {
   ethnicityKeys,
-  raceKeys,
   isKeyIncluded,
   getCustomValue,
   howDidYouHear,
   limitedHowDidYouHear,
+  getRaceEthnicityOptions,
 } from "@bloom-housing/shared-helpers"
-import { Demographic } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Demographic,
+  RaceEthnicityConfiguration,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type FormDemographicsProps = {
   formValues: Demographic
   enableLimitedHowDidYouHear: boolean
   disableEthnicityQuestion: boolean
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration
 }
 
 const FormDemographics = ({
   formValues,
   enableLimitedHowDidYouHear,
   disableEthnicityQuestion,
+  raceEthnicityConfiguration,
 }: FormDemographicsProps) => {
   const formMethods = useFormContext()
 
@@ -35,9 +40,12 @@ const FormDemographics = ({
       label: t(`application.review.demographics.howDidYouHearOptions.${item.id}`),
       register,
     }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [register])
 
   const raceOptions = useMemo(() => {
+    const raceKeys = getRaceEthnicityOptions(raceEthnicityConfiguration)
+    if (!raceKeys) return []
     return Object.keys(raceKeys).map((rootKey) => ({
       id: rootKey,
       label: t(`application.review.demographics.raceOptions.${rootKey}`),
@@ -54,25 +62,28 @@ const FormDemographics = ({
         defaultText: getCustomValue(subKey, formValues?.race),
       })),
     }))
-  }, [register])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [register, raceEthnicityConfiguration])
 
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
       <SectionWithGrid heading={t("application.add.demographicsInformation")}>
-        <Grid.Row>
-          <Grid.Cell>
-            <FieldGroup
-              name="race"
-              fields={raceOptions}
-              type="checkbox"
-              register={register}
-              groupLabel={t("application.add.race")}
-              strings={{
-                description: "",
-              }}
-            />
-          </Grid.Cell>
+        <Grid.Row columns={2}>
+          {raceOptions.length > 0 && (
+            <Grid.Cell>
+              <FieldGroup
+                name="race"
+                fields={raceOptions}
+                type="checkbox"
+                register={register}
+                groupLabel={t("application.add.race")}
+                strings={{
+                  description: "",
+                }}
+              />
+            </Grid.Cell>
+          )}
           {!disableEthnicityQuestion && (
             <Grid.Cell>
               <Select

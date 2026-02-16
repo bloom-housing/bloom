@@ -2,6 +2,32 @@ import { FormDemographics } from "../../../../../src/components/applications/Pap
 import { mockNextRouter, render, screen, FormProviderWrapper } from "../../../../testUtils"
 import React from "react"
 import userEvent from "@testing-library/user-event"
+import { RaceEthnicityConfiguration } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { defaultRaceEthnicityConfiguration } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+
+const customConfig: RaceEthnicityConfiguration = {
+  options: [
+    {
+      id: "blackAfricanAmerican",
+      hasSubOptions: false,
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: "white",
+      hasSubOptions: false,
+      subOptions: [],
+      allowOtherText: false,
+    },
+
+    {
+      id: "otherMultiracial",
+      hasSubOptions: false,
+      subOptions: [],
+      allowOtherText: true,
+    },
+  ],
+}
 
 beforeAll(() => {
   mockNextRouter()
@@ -17,6 +43,7 @@ describe("<FormDemographics>", () => {
             race: [],
             howDidYouHear: [],
           }}
+          raceEthnicityConfiguration={defaultRaceEthnicityConfiguration}
           enableLimitedHowDidYouHear={false}
           disableEthnicityQuestion={false}
         />
@@ -69,6 +96,7 @@ describe("<FormDemographics>", () => {
             race: [],
             howDidYouHear: [],
           }}
+          raceEthnicityConfiguration={customConfig}
           enableLimitedHowDidYouHear={true}
           disableEthnicityQuestion={false}
         />
@@ -76,25 +104,6 @@ describe("<FormDemographics>", () => {
     )
 
     expect(screen.getByText(/race/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/american indian \/ alaskan native/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/asian/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/black \/ african american/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/native hawaiian \/ other pacific islander/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/white/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/other \/ multiracial/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/decline to respond/i)).toBeInTheDocument()
-
-    expect(screen.queryByLabelText(/Asian Indian/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/Chinese/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/Filipino/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/Japanese/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/Korean/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/Vietnamese/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/Other Asian/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/^Native Hawaiian$/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/Guamanian or Chamorro/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/Samoan/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/^Other Pacific Islander$/i)).not.toBeInTheDocument()
 
     expect(screen.getByLabelText(/ethnicity/i)).toBeInTheDocument()
 
@@ -123,6 +132,7 @@ describe("<FormDemographics>", () => {
           }}
           enableLimitedHowDidYouHear={false}
           disableEthnicityQuestion={false}
+          raceEthnicityConfiguration={defaultRaceEthnicityConfiguration}
         />
       </FormProviderWrapper>
     )
@@ -184,5 +194,115 @@ describe("<FormDemographics>", () => {
 
     expect(screen.getByLabelText("Ethnicity")).toBeInTheDocument()
     expect(screen.getByText("Race", { selector: "legend" })).toBeInTheDocument()
+  })
+  it("should render race options with custom configuration", () => {
+    render(
+      <FormProviderWrapper>
+        <FormDemographics
+          formValues={{
+            id: "id",
+            race: [],
+            howDidYouHear: [],
+          }}
+          enableLimitedHowDidYouHear={false}
+          disableEthnicityQuestion={false}
+          raceEthnicityConfiguration={customConfig}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.getByText("Race")).toBeInTheDocument()
+    expect(screen.getByLabelText("White")).toBeInTheDocument()
+    expect(screen.getByLabelText("Black / African American")).toBeInTheDocument()
+    expect(screen.getByLabelText("Other / Multiracial")).toBeInTheDocument()
+
+    // Should not show options not in the custom config
+    expect(screen.queryByLabelText("American Indian / Alaskan Native")).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("Asian")).not.toBeInTheDocument()
+    expect(
+      screen.queryByLabelText("Native Hawaiian / Other Pacific Islander")
+    ).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("Decline to Respond")).not.toBeInTheDocument()
+  })
+
+  it("should render custom configuration with suboptions", async () => {
+    const customConfig: RaceEthnicityConfiguration = {
+      options: [
+        {
+          id: "asian",
+          hasSubOptions: true,
+          subOptions: [
+            { id: "chinese", allowOtherText: false },
+            { id: "vietnamese", allowOtherText: false },
+          ],
+          allowOtherText: false,
+        },
+        {
+          id: "otherMultiracial",
+          hasSubOptions: false,
+          subOptions: [],
+          allowOtherText: true,
+        },
+      ],
+    }
+
+    render(
+      <FormProviderWrapper>
+        <FormDemographics
+          formValues={{
+            id: "id",
+            race: [],
+            howDidYouHear: [],
+          }}
+          enableLimitedHowDidYouHear={false}
+          disableEthnicityQuestion={false}
+          raceEthnicityConfiguration={customConfig}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.getByText("Race")).toBeInTheDocument()
+
+    // Suboptions should not be visible until parent is clicked
+    expect(screen.queryByLabelText("Chinese")).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("Vietnamese")).not.toBeInTheDocument()
+
+    const asianCheckbox = screen.getByLabelText("Asian")
+    await userEvent.click(asianCheckbox)
+
+    expect(screen.getByLabelText("Chinese")).toBeInTheDocument()
+    expect(screen.getByLabelText("Vietnamese")).toBeInTheDocument()
+
+    // Should not show other Asian suboptions not in the custom config
+    expect(screen.queryByLabelText("Japanese")).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("Filipino")).not.toBeInTheDocument()
+  })
+
+  it("should handle empty race options configuration", () => {
+    const emptyConfig: RaceEthnicityConfiguration = {
+      options: [],
+    }
+
+    render(
+      <FormProviderWrapper>
+        <FormDemographics
+          formValues={{
+            id: "id",
+            race: [],
+            howDidYouHear: [],
+          }}
+          enableLimitedHowDidYouHear={false}
+          disableEthnicityQuestion={false}
+          raceEthnicityConfiguration={emptyConfig}
+        />
+      </FormProviderWrapper>
+    )
+
+    // Race section should not render if no options
+    expect(screen.queryByText("Race")).not.toBeInTheDocument()
+
+    // But ethnicity and how did you hear should still render
+    expect(screen.getByLabelText("Ethnicity")).toBeInTheDocument()
+    expect(screen.getByText("How did you hear about us?")).toBeInTheDocument()
   })
 })

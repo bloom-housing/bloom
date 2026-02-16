@@ -22,6 +22,7 @@ import { IdDTO } from '../shared/id.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { UnitAccessibilityPriorityTypeEnum } from '../../enums/units/accessibility-priority-type-enum';
 import { ListingFeaturesConfiguration } from './listing-features-config.dto';
+import { RaceEthnicityConfiguration } from './race-ethnicity-configuration.dto';
 
 export class Jurisdiction extends AbstractDTO {
   @Expose()
@@ -212,4 +213,10 @@ export class Jurisdiction extends AbstractDTO {
   @Type(() => ListingFeaturesConfiguration)
   @ApiPropertyOptional({ type: ListingFeaturesConfiguration })
   listingFeaturesConfiguration?: ListingFeaturesConfiguration;
+
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => RaceEthnicityConfiguration)
+  @ApiPropertyOptional({ type: RaceEthnicityConfiguration })
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration;
 }

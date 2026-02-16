@@ -662,6 +662,7 @@ export const convertDemographicRaceToReadable = (type: string): string => {
       'Native Hawaiian / Other Pacific Islander[Guamanian or Chamorro]',
     'asian-japanese': 'Asian[Japanese]',
     'asian-korean': 'Asian[Korean]',
+    middleEasternNorthAfrican: 'Middle Eastern / North African (MENA)',
     'nativeHawaiianOtherPacificIslander-nativeHawaiian':
       'Native Hawaiian / Other Pacific Islander[Native Hawaiian]',
     nativeHawaiianOtherPacificIslander:
