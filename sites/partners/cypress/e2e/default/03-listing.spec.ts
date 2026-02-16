@@ -5,7 +5,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { bloomingtonListing } from "../../fixtures/bloomingtonListing"
-import { CypressListing } from "../../fixtures/cypressListingHelpers"
+import { CypressListing, CypressUnit } from "../../fixtures/cypressListingHelpers"
 import { angelopolisListing } from "../../fixtures/angelopolisListing"
 
 describe("Listing Management Tests", () => {
@@ -378,12 +378,7 @@ describe("Listing Management Tests", () => {
       fillIfDataExists(cy, "minOccupancy", unit.minOccupancy?.toString(), "select")
       fillIfDataExists(cy, "maxOccupancy", unit.maxOccupancy?.toString(), "select")
 
-      fillIfDataExists(
-        cy,
-        "unitAccessibilityPriorityTypes.id",
-        unit?.unitAccessibilityPriorityTypes?.id,
-        "select"
-      )
+      fillIfDataExists(cy, "accessibilityPriorityType", unit?.accessibilityPriorityType, "select")
 
       if (unit.monthlyRentAsPercentOfIncome) {
         cy.getByID("percentage").check({ force: true })
@@ -533,7 +528,7 @@ describe("Listing Management Tests", () => {
             `listingNeighborhoodAmenities.${amenity}`,
             listing.listingNeighborhoodAmenities?.[
               amenity as keyof typeof listing.listingNeighborhoodAmenities
-            ] as string,
+            ],
             "select"
           )
         })
@@ -544,7 +539,7 @@ describe("Listing Management Tests", () => {
             `listingNeighborhoodAmenities.${amenity}`,
             listing.listingNeighborhoodAmenities?.[
               amenity as keyof typeof listing.listingNeighborhoodAmenities
-            ] as string,
+            ],
             "type"
           )
         })
@@ -998,11 +993,11 @@ describe("Listing Management Tests", () => {
         : "Open waitlist"
     )
 
-    listing.units?.forEach((unit) => {
+    listing.units?.forEach((unit: CypressUnit) => {
       verifyDetailDataIfExists(cy, "unitTable", unit.number)
       verifyDetailDataIfExists(cy, "unitTable", unit.sqFeet)
       verifyDetailDataIfExists(cy, "unitTable", unit.monthlyRent)
-      verifyDetailDataIfExists(cy, "unitTable", unit.unitAccessibilityPriorityTypes?.id)
+      verifyDetailDataIfExists(cy, "unitTable", unit.accessibilityPriorityTypeLabel)
     })
 
     // ----------
@@ -1116,7 +1111,7 @@ describe("Listing Management Tests", () => {
           `neighborhoodAmenities.${amenity}`,
           listing.listingNeighborhoodAmenities?.[
             amenity as keyof typeof listing.listingNeighborhoodAmenities
-          ] as string
+          ]
         )
       })
     }
@@ -1604,7 +1599,7 @@ describe("Listing Management Tests", () => {
             `listingNeighborhoodAmenities.${amenity}`,
             listing.listingNeighborhoodAmenities?.[
               amenity as keyof typeof listing.listingNeighborhoodAmenities
-            ] as string,
+            ],
             "select"
           )
         })
@@ -1615,7 +1610,7 @@ describe("Listing Management Tests", () => {
             `listingNeighborhoodAmenities.${amenity}`,
             listing.listingNeighborhoodAmenities?.[
               amenity as keyof typeof listing.listingNeighborhoodAmenities
-            ] as string,
+            ],
             "type"
           )
         })

@@ -107,11 +107,6 @@ p, jurisdictionAdmin, unitRentType, true, read
 p, limitedJurisdictionAdmin, unitRentType, true, read
 p, partner, unitRentType, true, read
 
-p, admin, unitAccessibilityPriorityType, true, .*
-p, supportAdmin, unitAccessibilityPriorityType, true, read
-p, jurisdictionAdmin, unitAccessibilityPriorityType, true, read
-p, limitedJurisdictionAdmin, unitAccessibilityPriorityType, true, read
-p, partner, unitAccessibilityPriorityType, true, read
 
 p, admin, applicationMethod, true, .*
 p, supportAdmin, applicationMethod, true, .*

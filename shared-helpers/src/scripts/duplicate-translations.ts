@@ -6,6 +6,11 @@ const spanishTranslations = require("../locales/es.json")
 const chineseTranslations = require("../locales/zh.json")
 const vietnameseTranslations = require("../locales/vi.json")
 const tagalogTranslations = require("../locales/tl.json")
+const bengaliTranslations = require("../locales/bn.json")
+const arabicTranslations = require("../locales/ar.json")
+const koreanTranslations = require("../locales/ko.json")
+const armenianTranslations = require("../locales/hy.json")
+const farsiTranslations = require("../locales/fa.json")
 
 function main() {
   type TranslationsType = {
@@ -18,6 +23,11 @@ function main() {
     { translationKeys: chineseTranslations, language: "Chinese" },
     { translationKeys: vietnameseTranslations, language: "Vietnamese" },
     { translationKeys: tagalogTranslations, language: "Tagalog" },
+    { translationKeys: bengaliTranslations, language: "Bengali" },
+    { translationKeys: arabicTranslations, language: "Arabic" },
+    { translationKeys: koreanTranslations, language: "Korean" },
+    { translationKeys: armenianTranslations, language: "Armenian" },
+    { translationKeys: farsiTranslations, language: "Farsi" },
   ]
 
   const getDuplicateStrings = (translations: TranslationsType) => {

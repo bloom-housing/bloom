@@ -113,8 +113,7 @@ describe("DetailUnits", () => {
     expect(ami).toHaveTextContent(unit.amiPercentage || "")
     expect(rent).toHaveTextContent(unit.monthlyRent || "")
     expect(sqft).toHaveTextContent(unit.sqFeet || "")
-    expect(ada).toBeEmptyDOMElement()
-
+    expect(ada).toHaveTextContent("n/a")
     fireEvent.click(within(action).getByRole("button", { name: /view/i }))
     expect(callUnitDrawer).toBeCalledWith(unit)
   })

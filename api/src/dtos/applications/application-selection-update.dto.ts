@@ -7,8 +7,6 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 
 export class ApplicationSelectionUpdate extends OmitType(ApplicationSelection, [
   'id',
-  'createdAt',
-  'updatedAt',
   'selections',
 ]) {
   @Expose()

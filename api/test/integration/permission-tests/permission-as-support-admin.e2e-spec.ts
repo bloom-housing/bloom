@@ -33,12 +33,6 @@ import {
 import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
 import { UnitRentTypeCreate } from '../../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
 import { UnitRentTypeUpdate } from '../../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
-import {
-  unitAccessibilityPriorityTypeFactoryAll,
-  unitAccessibilityPriorityTypeFactorySingle,
-} from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
-import { UnitAccessibilityPriorityTypeCreate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
-import { UnitAccessibilityPriorityTypeUpdate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
 import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
 import { multiselectQuestionFactory } from '../../../prisma/seed-helpers/multiselect-question-factory';
@@ -69,7 +63,6 @@ import {
   buildJurisdictionCreateMock,
   buildJurisdictionUpdateMock,
 } from './helpers';
-import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { featureFlagFactory } from '../../../prisma/seed-helpers/feature-flag-factory';
 import { PublicUserUpdate } from 'src/dtos/users/public-user-update.dto';
 
@@ -88,7 +81,6 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
-  let applicationFlaggedSetService: ApplicationFlaggedSetService;
   let cookies = '';
   let jurisdictionId = '';
 
@@ -100,10 +92,6 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       .useValue(testEmailService)
       .compile();
 
-    applicationFlaggedSetService =
-      moduleFixture.get<ApplicationFlaggedSetService>(
-        ApplicationFlaggedSetService,
-      );
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
@@ -133,7 +121,6 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       .expect(201);
 
     cookies = resLogIn.headers['set-cookie'];
-    await unitAccessibilityPriorityTypeFactoryAll(prisma);
   });
 
   afterAll(async () => {
@@ -670,71 +657,6 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
     });
   });
 
-  describe('Testing unit accessibility priority types endpoints', () => {
-    it('should succeed for list endpoint', async () => {
-      await request(app.getHttpServer())
-        .get(`/unitAccessibilityPriorityTypes?`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(200);
-    });
-
-    it('should succeed for retrieve endpoint', async () => {
-      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-        prisma,
-      );
-
-      await request(app.getHttpServer())
-        .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(200);
-    });
-
-    it('should error as forbiddens for create endpoint', async () => {
-      await request(app.getHttpServer())
-        .post('/unitAccessibilityPriorityTypes')
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          name: 'hearing And Visual',
-        } as UnitAccessibilityPriorityTypeCreate)
-        .set('Cookie', cookies)
-        .expect(403);
-    });
-
-    it('should error as forbiddens for update endpoint', async () => {
-      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-        prisma,
-      );
-      await request(app.getHttpServer())
-        .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          id: unitTypeA.id,
-          name: 'hearing And Visual',
-        } as UnitAccessibilityPriorityTypeUpdate)
-        .set('Cookie', cookies)
-        .expect(403);
-    });
-
-    it('should error as forbiddens for delete endpoint', async () => {
-      await unitAccessibilityPriorityTypeFactoryAll(prisma);
-      const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-        data: {
-          name: 'unit type A',
-        },
-      });
-
-      await request(app.getHttpServer())
-        .delete(`/unitAccessibilityPriorityTypes`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          id: unitTypeA.id,
-        } as IdDTO)
-        .set('Cookie', cookies)
-        .expect(403);
-    });
-  });
   describe('Testing unit types endpoints', () => {
     it('should succeed forbiddens for list endpoint', async () => {
       await request(app.getHttpServer())
@@ -1347,21 +1269,6 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .send({
           id: afs.id,
         } as IdDTO)
-        .set('Cookie', cookies)
-        .expect(200);
-    });
-
-    it('should succeed for process endpoint', async () => {
-      /*
-        Because so many different iterations of the process endpoint were firing we were running into collisions. 
-        Since this is just testing the permissioning aspect I'm switching to mocking the process function
-      */
-      const mockProcess = jest.fn();
-      applicationFlaggedSetService.process = mockProcess;
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
     });

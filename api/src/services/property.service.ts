@@ -11,7 +11,7 @@ import {
   calculateTake,
 } from '../utilities/pagination-helpers';
 import { mapTo } from '../utilities/mapTo';
-import Property from '../dtos/properties/property.dto';
+import { Property } from '../dtos/properties/property.dto';
 import { PaginatedPropertyDto } from '../dtos/properties/paginated-property.dto';
 import PropertyCreate from '../dtos/properties/property-create.dto';
 import { PropertyUpdate } from '../dtos/properties/property-update.dto';

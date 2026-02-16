@@ -1,15 +1,16 @@
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { IdDTO } from '../shared/id.dto';
-import { IsString, IsUUID, ValidateNested } from 'class-validator';
+import { IsEnum, IsString, IsUUID, ValidateNested } from 'class-validator';
 import { UnitGroupAmiLevelUpdate } from './unit-group-ami-level-update.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { UnitAccessibilityPriorityTypeEnum } from '../../enums/units/accessibility-priority-type-enum';
 import UnitGroup from './unit-group.dto';
 
 export class UnitGroupUpdate extends OmitType(UnitGroup, [
   'createdAt',
   'id',
-  'unitAccessibilityPriorityTypes',
+  'accessibilityPriorityType',
   'unitGroupAmiLevels',
   'unitTypes',
   'updatedAt',
@@ -21,10 +22,14 @@ export class UnitGroupUpdate extends OmitType(UnitGroup, [
   id?: string;
 
   @Expose()
-  @Type(() => IdDTO)
-  @ApiPropertyOptional({ type: IdDTO })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  unitAccessibilityPriorityTypes?: IdDTO;
+  @IsEnum(UnitAccessibilityPriorityTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional({
+    enum: UnitAccessibilityPriorityTypeEnum,
+    enumName: 'UnitAccessibilityPriorityTypeEnum',
+  })
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum;
 
   @Expose()
   @Type(() => IdDTO)

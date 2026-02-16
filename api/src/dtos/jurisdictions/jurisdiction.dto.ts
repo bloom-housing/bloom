@@ -20,6 +20,7 @@ import { FeatureFlag } from '../feature-flags/feature-flag.dto';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { IdDTO } from '../shared/id.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { UnitAccessibilityPriorityTypeEnum } from '../../enums/units/accessibility-priority-type-enum';
 import { ListingFeaturesConfiguration } from './listing-features-config.dto';
 
 export class Jurisdiction extends AbstractDTO {
@@ -185,6 +186,20 @@ export class Jurisdiction extends AbstractDTO {
     isArray: true,
   })
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[];
+
+  @Expose()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(UnitAccessibilityPriorityTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+    each: true,
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: UnitAccessibilityPriorityTypeEnum,
+    enumName: 'UnitAccessibilityPriorityTypeEnum',
+    isArray: true,
+  })
+  visibleAccessibilityPriorityTypes: UnitAccessibilityPriorityTypeEnum[];
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })

@@ -295,49 +295,50 @@ export class MultiselectQuestionService {
       );
     }
 
-    const rawMultiselectQuestion =
-      await this.prisma.multiselectQuestions.create({
-        data: {
-          ...createData,
-          jurisdiction: {
-            connect: { id: rawJurisdiction.id },
-          },
-          links: links
-            ? (links as unknown as Prisma.InputJsonArray)
-            : undefined,
+    const finalCreateData = {
+      data: {
+        ...createData,
+        jurisdiction: {
+          connect: { id: rawJurisdiction.id },
+        },
+        links: links ? (links as unknown as Prisma.InputJsonArray) : undefined,
 
-          // TODO: Can be removed after MSQ refactor
-          options: options
+        // TODO: Can be removed after MSQ refactor
+        options:
+          !enableV2MSQ && options
             ? (options as unknown as Prisma.InputJsonArray)
             : undefined,
 
-          // TODO: Use of the feature flag is temporary until after MSQ refactor
-          isExclusive: enableV2MSQ ? isExclusive : false,
-          name: enableV2MSQ ? name : createData.text,
-          status: enableV2MSQ ? status : MultiselectQuestionsStatusEnum.draft,
+        // TODO: Use of the feature flag is temporary until after MSQ refactor
+        isExclusive: enableV2MSQ ? isExclusive : false,
+        name: enableV2MSQ ? name : createData.text,
+        status: enableV2MSQ ? status : MultiselectQuestionsStatusEnum.draft,
 
-          multiselectOptions: enableV2MSQ
-            ? {
-                createMany: {
-                  data: multiselectOptions?.map((option) => {
-                    // TODO: Can be removed after MSQ refactor
-                    delete option['collectAddress'];
-                    delete option['collectName'];
-                    delete option['collectRelationship'];
-                    delete option['exclusive'];
-                    delete option['text'];
-                    return {
-                      ...option,
-                      links: option.links as unknown as Prisma.InputJsonArray,
-                      name: option.name,
-                    };
-                  }),
-                },
-              }
-            : undefined,
-        },
-        include: includeViews.fundamentals,
-      });
+        multiselectOptions: enableV2MSQ
+          ? {
+              createMany: {
+                data: multiselectOptions?.map((option) => {
+                  // TODO: Can be removed after MSQ refactor
+                  delete option['collectAddress'];
+                  delete option['collectName'];
+                  delete option['collectRelationship'];
+                  delete option['exclusive'];
+                  delete option['text'];
+                  return {
+                    ...option,
+                    links: option.links as unknown as Prisma.InputJsonArray,
+                    name: option.name,
+                  };
+                }),
+              },
+            }
+          : undefined,
+      },
+      include: includeViews.fundamentals,
+    };
+
+    const rawMultiselectQuestion =
+      await this.prisma.multiselectQuestions.create(finalCreateData);
 
     // TODO: Can be removed after MSQ refactor
     rawMultiselectQuestion['jurisdictions'] = [

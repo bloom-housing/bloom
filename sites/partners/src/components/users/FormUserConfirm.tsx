@@ -1,12 +1,16 @@
 import React, { useRef, useContext, useEffect, useState } from "react"
-import { useRouter } from "next/router"
-import { t, FormCard, Form, Field, useMutate, AlertBox } from "@bloom-housing/ui-components"
-import { Button, Dialog, Icon } from "@bloom-housing/ui-seeds"
-import { AuthContext, MessageContext, passwordRegex } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
+import { Button, Dialog, Card } from "@bloom-housing/ui-seeds"
+import {
+  AuthContext,
+  BloomCard,
+  MessageContext,
+  passwordRegex,
+} from "@bloom-housing/shared-helpers"
+import { t, Form, Field, useMutate, AlertBox } from "@bloom-housing/ui-components"
 import { ReRequestConfirmation } from "./ReRequestConfirmation"
 import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import Cog8ToothIcon from "@heroicons/react/24/solid/Cog8ToothIcon"
 
 type FormUserConfirmFields = {
   password: string
@@ -81,44 +85,46 @@ const FormUserConfirm = () => {
 
   if (!token) {
     return (
-      <FormCard>
-        <div className="form-card__group is-borderless">
-          {t(`authentication.createAccount.errors.tokenMissing`)}
-        </div>
-      </FormCard>
+      <BloomCard
+        title={t("t.error")}
+        iconSymbol={"lockClosed"}
+        iconClass="text-alert"
+        headingClass="seeds-large-heading"
+      >
+        <Card.Section>{t(`authentication.createAccount.errors.tokenMissing`)}</Card.Section>
+      </BloomCard>
     )
   }
 
   return (
     <>
-      <FormCard>
-        <div className="form-card__lead text-center border-b mx-0 px-5">
-          <Icon size="2xl">
-            <Cog8ToothIcon />
-          </Icon>
-          <h2 className="form-card__title">{t("users.addPassword")}</h2>
-          <p className="mt-4 field-note">{t("users.needUniquePassword")}</p>
-
-          {isError && (
-            <AlertBox className="mt-5" type="alert" closeable>
-              {t(`errors.alert.badRequest`)}
-            </AlertBox>
-          )}
-
-          {newConfirmationRequested && (
-            <AlertBox className="mt-5" type="success" closeable>
-              {t(`users.confirmationSent`)}
-            </AlertBox>
-          )}
-        </div>
-
+      <BloomCard
+        iconSymbol="cog"
+        title={t("users.addPassword")}
+        headingPriority={1}
+        iconClass={"card-icon"}
+        iconOutlined={true}
+        headingClass="seeds-large-heading"
+        subtitle={t("users.needUniquePassword")}
+      >
         <Form id="update-password" onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__group is-borderless">
+          <Card.Section>
+            {isError && (
+              <AlertBox className="mb-5" type="alert" closeable>
+                {t(`errors.alert.badRequest`)}
+              </AlertBox>
+            )}
+
+            {newConfirmationRequested && (
+              <AlertBox className="mb-5" type="success" closeable>
+                {t(`users.confirmationSent`)}
+              </AlertBox>
+            )}
             <fieldset>
-              <legend className="text__caps-spaced">
+              <legend className="text__caps-spaced sr-only">
                 {t("authentication.createAccount.password")}
               </legend>
-              <p className="field-note mb-4">{t("users.makeNote")}</p>
+              <p className="field-note">{t("users.makeNote")}</p>
 
               <div className="mt-5">
                 <Field
@@ -162,24 +168,18 @@ const FormUserConfirm = () => {
                 />
               </div>
             </fieldset>
-          </div>
-
-          <div className="form-card__pager mt-8">
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                variant="primary"
-                className={"items-center"}
-                loadingMessage={
-                  (isConfirmLoading || loading || isSubmitting) && t("t.formSubmitted")
-                }
-              >
-                {t("users.confirmAccount")}
-              </Button>
-            </div>
-          </div>
+          </Card.Section>
+          <Card.Section className={"primary-bg seeds-m-bs-section"}>
+            <Button
+              type="submit"
+              variant="primary"
+              loadingMessage={(isConfirmLoading || loading || isSubmitting) && t("t.formSubmitted")}
+            >
+              {t("users.confirmAccount")}
+            </Button>
+          </Card.Section>
         </Form>
-      </FormCard>
+      </BloomCard>
 
       <Dialog
         isOpen={rerequestModalOpen}

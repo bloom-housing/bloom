@@ -16,6 +16,9 @@ async function main() {
     "tl" = "tl",
     "ar" = "ar",
     "bn" = "bn",
+    "ko" = "ko",
+    "hy" = "hy",
+    "fa" = "fa",
   }
 
   const GOOGLE_API_EMAIL = process.env.GOOGLE_API_EMAIL || ``
@@ -67,6 +70,9 @@ async function main() {
   const tagalogTranslations = require("../locales/tl.json")
   const arabicTranslations = require("../locales/ar.json")
   const bengaliTranslations = require("../locales/bn.json")
+  const koreanTranslations = require("../locales/ko.json")
+  const armenianTranslations = require("../locales/hy.json")
+  const farsiTranslations = require("../locales/fa.json")
 
   const allTranslations = [
     { translationKeys: spanishTranslations, language: "Spanish", code: LanguagesEnum.es },
@@ -75,6 +81,9 @@ async function main() {
     { translationKeys: tagalogTranslations, language: "Tagalog", code: LanguagesEnum.tl },
     { translationKeys: arabicTranslations, language: "Arabic", code: LanguagesEnum.ar },
     { translationKeys: bengaliTranslations, language: "Bengali", code: LanguagesEnum.bn },
+    { translationKeys: koreanTranslations, language: "Korean", code: LanguagesEnum.ko },
+    { translationKeys: armenianTranslations, language: "Armenian", code: LanguagesEnum.hy },
+    { translationKeys: farsiTranslations, language: "Farsi", code: LanguagesEnum.fa },
   ]
 
   console.log(
