@@ -6,6 +6,7 @@ import {
 } from '@prisma/client';
 import { randomName } from './word-generator';
 import { ListingFeaturesConfiguration } from '../../src/dtos/jurisdictions/listing-features-config.dto';
+import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessibility-priority-type-enum';
 
 export const jurisdictionFactory = (
   jurisdictionName = randomName(),
@@ -16,6 +17,7 @@ export const jurisdictionFactory = (
     requiredListingFields?: string[];
     languages?: LanguagesEnum[];
     visibleNeighborhoodAmenities?: NeighborhoodAmenitiesEnum[];
+    visibleAccessibilityPriorityTypes?: UnitAccessibilityPriorityTypeEnum[];
     regions?: string[];
     minimumListingPublishImagesRequired?: number;
     publicSiteBaseURL?: string;
@@ -25,7 +27,8 @@ export const jurisdictionFactory = (
   name: jurisdictionName,
   notificationsSignUpUrl: 'https://www.exygy.com',
   languages: optionalFields?.languages || [LanguagesEnum.en, LanguagesEnum.es],
-  partnerTerms: 'Example Terms',
+  partnerTerms:
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel condimentum nunc. Donec cursus risus mi, nec euismod libero scelerisque vitae. Nam hendrerit, nisi sed ornare dapibus, tellus ante fermentum nulla, sit amet tincidunt ante erat at ligula. Aenean pharetra, mi et viverra dignissim, lectus turpis congue purus, sed auctor enim felis non nisi. Quisque ultricies porta semper. Praesent quis sapien nisi. Aenean nec vehicula nulla. Curabitur sit amet bibendum nibh. Quisque tristique ex mollis, interdum odio eu, cursus mi. Proin varius nulla a faucibus dapibus. Quisque a turpis nisl. Proin tellus ligula, elementum nec velit sed, sollicitudin cursus neque. Ut sodales luctus porttitor. Nunc sollicitudin odio vitae nibh feugiat ornare. Pellentesque nec eros justo. Aenean sit amet iaculis dolor. Aliquam porta tincidunt lectus, non egestas ipsum consectetur blandit. Vivamus nec neque ut risus interdum vehicula. Aenean ultrices posuere ante sit amet lacinia. Etiam tincidunt orci non purus consequat tincidunt. Aliquam diam arcu, placerat et venenatis ac, tristique a ex. Proin at molestie tortor, et gravida dui. In hac habitasse platea dictumst.',
   publicUrl: optionalFields?.publicSiteBaseURL
     ? optionalFields.publicSiteBaseURL
     : 'http://localhost:3000',
@@ -57,6 +60,9 @@ export const jurisdictionFactory = (
     : undefined,
   requiredListingFields: optionalFields?.requiredListingFields || [],
   visibleNeighborhoodAmenities: optionalFields?.visibleNeighborhoodAmenities,
+  visibleAccessibilityPriorityTypes:
+    optionalFields?.visibleAccessibilityPriorityTypes ||
+    Object.values(UnitAccessibilityPriorityTypeEnum),
   regions: optionalFields?.regions,
   minimumListingPublishImagesRequired:
     optionalFields?.minimumListingPublishImagesRequired,

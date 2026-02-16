@@ -61,8 +61,8 @@ services:
       - "3000:3000"
       - "3001:3001"
     configs:
-    - source: nginx
-      target: /etc/nginx/nginx.conf
+      - source: nginx
+        target: /etc/nginx/nginx.conf
     command:
       - /bin/bash
       - -c
@@ -88,7 +88,11 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres_pw"
     healthcheck:
-      test: ["CMD-SHELL", "PGPASSWORD=postgres_pw psql --host=127.0.0.1 --port=5432 --username=postgres --command='SELECT 1;'"]
+      test:
+        [
+          "CMD-SHELL",
+          "PGPASSWORD=postgres_pw psql --host=127.0.0.1 --port=5432 --username=postgres --command='SELECT 1;'",
+        ]
       interval: "2s"
       timeout: "1s"
       retries: 20
@@ -99,6 +103,12 @@ services:
       context: ./api/dbinit
       dockerfile: Dockerfile
     restart: no
+    deploy:
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_dbinit_task.tf
+        limits:
+          cpus: "0.25"
+          memory: "512mb"
     environment:
       PGPASSWORD: "postgres_pw"
     entrypoint: "psql"
@@ -144,11 +154,17 @@ services:
       context: ./api
       dockerfile: Dockerfile.dbseed
     restart: no
+    deploy:
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_dbseed_task.tf
+        limits:
+          cpus: "1"
+          memory: "4096mb"
     environment:
       DATABASE_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
     command:
-    - "yarn"
-    - "db:seed:staging"
+      - "yarn"
+      - "db:seed:staging"
     depends_on:
       api: # Need the API to start first so it can create the bloom_prisma table and apply migrations.
         condition: service_healthy
@@ -157,8 +173,8 @@ services:
     profiles: ["pgadmin"]
     image: docker.io/dpage/pgadmin4:9.11.0@sha256:50700ac17936d0227f9e3e4bb086a91efb67064debc4b4737c35545bf1564088
     configs:
-    - source: pgadmin
-      target: /pgadmin4/servers.json
+      - source: pgadmin
+        target: /pgadmin4/servers.json
     restart: no
     ports:
       - "3200:3200"
@@ -181,6 +197,11 @@ services:
       endpoint_mode: "dnsrr"
       mode: replicated
       replicas: ${API_REPLICAS:-1}
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_api_service.tf
+        limits:
+          cpus: "1"
+          memory: "2048mb"
     environment:
       PORT: 3100
       NODE_ENV: "production"
@@ -209,8 +230,14 @@ services:
       endpoint_mode: "dnsrr"
       mode: replicated
       replicas: ${PARTNERS_REPLICAS:-1}
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_partners_service.tf
+        limits:
+          cpus: "2"
+          memory: "4096mb"
     environment:
       NODE_ENV: "production"
+      DISABLE_NEXT_TYPECHECK: "TRUE"
       NEXTJS_PORT: 3001
       BACKEND_API_BASE: "http://lb:3100"
       LISTINGS_QUERY: "/listings"
@@ -239,8 +266,14 @@ services:
       endpoint_mode: "dnsrr"
       mode: replicated
       replicas: ${PUBLIC_REPLICAS:-1}
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_public_service.tf
+        limits:
+          cpus: "2"
+          memory: "6144mb"
     environment:
       NODE_ENV: "production"
+      DISABLE_NEXT_TYPECHECK: "TRUE"
       NEXTJS_PORT: 3000
       BACKEND_API_BASE: "http://lb:3100"
       BACKEND_API_BASE_NEW: "http://lb:3100"
@@ -252,9 +285,8 @@ services:
       CLOUDINARY_CLOUD_NAME: "exygy"
 
       LANGUAGES: "en,es,zh,vi,tl"
-      RTL_LANGUAGES: "ar"
 
-      IDLE_TIMEMOUT: 5     # seconds
+      IDLE_TIMEMOUT: 5 # seconds
       CACHE_REVALIDATE: 30 # seconds
 
       SHOW_PUBLIC_LOTTERY: "TRUE"

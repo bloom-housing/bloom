@@ -1,3 +1,11 @@
-Dockerfile
-.dockerignore
+.git
+
 **/node_modules
+
+**/.jest
+**/__mocks__
+**/__tests__
+**/.cypress
+**/.next
+
+**/.terraform

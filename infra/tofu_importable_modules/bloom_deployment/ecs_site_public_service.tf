@@ -1,6 +1,7 @@
 locals {
   site_public_default_env_vars = {
     NODE_ENV                      = "production"
+    DISABLE_NEXT_TYPECHECK        = "TRUE"
     NEXTJS_PORT                   = "3000"
     BACKEND_API_BASE              = "http://bloom-api:3100"
     BACKEND_API_BASE_NEW          = "http://bloom-api:3100"
@@ -28,8 +29,8 @@ resource "aws_ecs_task_definition" "bloom_site_public" {
   execution_role_arn = aws_iam_role.bloom_ecs["site-public"].arn
   task_role_arn      = aws_iam_role.bloom_container["site-public"].arn
 
-  # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size
-  cpu    = 2048     # 2 vCPU
+  # Keep in sync with docker-compose.yml
+  cpu    = 2 * 1024 # 2 vCPU
   memory = 6 * 1024 # 6 GiB in MiB
 
   container_definitions = jsonencode([
@@ -62,6 +63,7 @@ resource "aws_ecs_service" "bloom_site_public" {
   depends_on = [
     aws_ecs_service.bloom_api,
     aws_route_table_association.private_subnet,
+    null_resource.bloom_dbseed_run,
   ]
   region                = var.aws_region
   cluster               = aws_ecs_cluster.bloom.arn

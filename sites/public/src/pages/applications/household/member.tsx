@@ -210,6 +210,7 @@ const ApplicationMember = () => {
             labels: conductor.config.sections.map((label) => t(`t.${label}`)),
             mounted: OnClientSide(),
           }}
+          overrideIsAdvocate={conductor.config.isAdvocate}
         >
           {Object.entries(errors).length > 0 && (
             <Alert

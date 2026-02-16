@@ -31,6 +31,7 @@ import { PaginatedApplicationDto } from '../dtos/applications/paginated-applicat
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { ApplicationUpdate } from '../dtos/applications/application-update.dto';
+import { ApplicationUpdateEmailDto } from '../dtos/applications/application-update-email.dto';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import {
   AddressInput,
@@ -285,6 +286,24 @@ export class ApplicationController {
     @Request() req: ExpressRequest,
   ): Promise<Application> {
     return await this.applicationService.update(dto, mapTo(User, req['user']));
+  }
+
+  @Post(':id/notify-update')
+  @ApiOperation({
+    summary: 'Send application update email by id',
+    operationId: 'notifyUpdate',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async notifyUpdate(
+    @Param('id') applicationId: string,
+    @Body() dto: ApplicationUpdateEmailDto,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.applicationService.sendApplicationUpdateEmail(
+      applicationId,
+      dto,
+      mapTo(User, req['user']),
+    );
   }
 
   @Delete()
