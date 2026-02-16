@@ -350,19 +350,6 @@ export function useSingleAmiChart(amiChartId: string) {
   }
 }
 
-export function useUnitPriorityList() {
-  const { unitPriorityService } = useContext(AuthContext)
-  const fetcher = () => unitPriorityService.list()
-
-  const { data, error } = useSWR(`/api/adapter/unitAccessibilityPriorityTypes`, fetcher)
-
-  return {
-    data,
-    loading: !error && !data,
-    error,
-  }
-}
-
 export function useUnitTypeList() {
   const { unitTypesService } = useContext(AuthContext)
   const fetcher = () => unitTypesService.list()

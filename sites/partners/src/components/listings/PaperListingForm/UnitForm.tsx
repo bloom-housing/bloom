@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react"
+import React, { useEffect, useState, useContext, useMemo } from "react"
 import { t, Field, Select, FieldGroup, Form, numberOptions } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -7,12 +7,11 @@ import { TempUnit } from "../../../lib/listings/formTypes"
 import {
   AmiChart,
   AmiChartItem,
-  UnitAccessibilityPriorityType,
   UnitType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   useAmiChartList,
-  useUnitPriorityList,
+  useJurisdiction,
   useUnitTypeList,
   useWatchOnFormNumberFieldsChange,
 } from "../../../lib/hooks"
@@ -40,7 +39,6 @@ const UnitForm = ({
   const { amiChartsService } = useContext(AuthContext)
 
   const [amiChartsOptions, setAmiChartsOptions] = useState([])
-  const [unitPrioritiesOptions, setUnitPrioritiesOptions] = useState([])
   const [unitTypesOptions, setUnitTypesOptions] = useState([])
   const [isAmiPercentageDirty, setIsAmiPercentageDirty] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -65,8 +63,17 @@ const UnitForm = ({
    * fetch form options
    */
   const { data: amiCharts = [] } = useAmiChartList(jurisdiction)
-  const { data: unitPriorities = [] } = useUnitPriorityList()
   const { data: unitTypes = [] } = useUnitTypeList()
+  const { data: jurisdictionData } = useJurisdiction(jurisdiction)
+
+  const unitPrioritiesOptions = useMemo(() => {
+    const visibleTypes = jurisdictionData?.visibleAccessibilityPriorityTypes || []
+    return visibleTypes.map((type) => ({
+      value: type,
+      id: type,
+      label: t(`listings.unit.accessibilityType.${type}`),
+    }))
+  }, [jurisdictionData?.visibleAccessibilityPriorityTypes])
 
   const numberOccupancyOptions = 11
 
@@ -245,13 +252,8 @@ const UnitForm = ({
       delete data.monthlyRent
     }
 
-    if (data.unitAccessibilityPriorityTypes?.id) {
-      const priority = unitPriorities.find(
-        (priority) => priority.id === data.unitAccessibilityPriorityTypes.id
-      )
-      data.unitAccessibilityPriorityTypes = priority
-    } else {
-      delete data.unitAccessibilityPriorityTypes
+    if (!data.accessibilityPriorityType) {
+      delete data.accessibilityPriorityType
     }
 
     if (data.unitTypes?.id) {
@@ -385,14 +387,6 @@ const UnitForm = ({
     setAmiChartsOptions(arrayToFormOptions<AmiChart>(amiCharts, "name", "id"))
   }, [amiCharts, amiChartsOptions])
 
-  // sets the options for the unit priorities
-  useEffect(() => {
-    if (unitPriorities.length === 0 || unitPrioritiesOptions.length) return
-    setUnitPrioritiesOptions(
-      arrayToFormOptions<UnitAccessibilityPriorityType>(unitPriorities, "name", "id")
-    )
-  }, [unitPrioritiesOptions, unitPriorities, defaultUnit, setValue])
-
   // sets the options for the unit types
   useEffect(() => {
     if (unitTypes.length === 0 || unitTypesOptions.length) return
@@ -442,10 +436,10 @@ const UnitForm = ({
                       id="numBathrooms"
                       name="numBathrooms"
                       label={t("listings.unit.numBathrooms")}
-                      placeholder={t("listings.unit.numBathrooms")}
                       register={register}
                       controlClassName="control"
                       options={[
+                        { value: "", label: t("t.selectOne") },
                         { label: t("listings.unit.sharedBathroom"), value: "0" },
                         ...numberOptions(5),
                       ]}
@@ -456,10 +450,9 @@ const UnitForm = ({
                       id="floor"
                       name="floor"
                       label={t("listings.unit.floor")}
-                      placeholder={t("listings.unit.floor")}
                       register={register}
                       controlClassName="control"
-                      options={numberOptions(10)}
+                      options={[{ value: "", label: t("t.selectOne") }, ...numberOptions(10)]}
                     />
                   </Grid.Cell>
                   <Grid.Cell>
@@ -477,10 +470,12 @@ const UnitForm = ({
                       id="minOccupancy"
                       name="minOccupancy"
                       label={t("listings.unit.minOccupancy")}
-                      placeholder={t("listings.unit.minOccupancy")}
                       register={register}
                       controlClassName="control"
-                      options={numberOptions(numberOccupancyOptions)}
+                      options={[
+                        { value: "", label: t("t.selectOne") },
+                        ...numberOptions(numberOccupancyOptions),
+                      ]}
                       error={fieldHasError(errors?.minOccupancy)}
                       errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
                       validation={{ max: maxOccupancy || numberOccupancyOptions }}
@@ -491,10 +486,12 @@ const UnitForm = ({
                       id="maxOccupancy"
                       name="maxOccupancy"
                       label={t("listings.unit.maxOccupancy")}
-                      placeholder={t("listings.unit.maxOccupancy")}
                       register={register}
                       controlClassName="control"
-                      options={numberOptions(numberOccupancyOptions)}
+                      options={[
+                        { value: "", label: t("t.selectOne") },
+                        ...numberOptions(numberOccupancyOptions),
+                      ]}
                       error={fieldHasError(errors?.maxOccupancy)}
                       errorMessage={t("errors.maxLessThanMinOccupancyError")}
                       validation={{ min: minOccupancy }}
@@ -632,13 +629,12 @@ const UnitForm = ({
                 <Grid.Row columns={4}>
                   <Grid.Cell>
                     <Select
-                      id="unitAccessibilityPriorityTypes.id"
-                      name="unitAccessibilityPriorityTypes.id"
+                      id="accessibilityPriorityType"
+                      name="accessibilityPriorityType"
                       label={t("listings.unit.accessibilityPriorityType")}
-                      placeholder={t("listings.unit.accessibilityPriorityType")}
                       register={register}
                       controlClassName="control"
-                      options={unitPrioritiesOptions}
+                      options={[{ value: "", label: t("t.selectOne") }, ...unitPrioritiesOptions]}
                     />
                   </Grid.Cell>
                 </Grid.Row>
