@@ -242,8 +242,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       preferences: preferences.map((item) => item?.multiselectQuestions),
     })
 
-    console.log({ body })
-
     try {
       const result = editMode
         ? await applicationsService.update({

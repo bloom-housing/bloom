@@ -177,8 +177,6 @@ export const mapFormToApi = ({
   // @ts-ignore
   delete demographics.spokenLanguageNotListed
 
-  console.log(demographics.spokenLanguage)
-
   const sendMailToMailingAddress = data.application.sendMailToMailingAddress
 
   const applicationsMailingAddress = getAddress(sendMailToMailingAddress, mailingAddressData)

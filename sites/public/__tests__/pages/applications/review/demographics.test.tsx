@@ -1,6 +1,6 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { fireEvent, screen } from "@testing-library/react"
+import { fireEvent, screen, within } from "@testing-library/react"
 import { blankApplication } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlag,
@@ -27,7 +27,7 @@ afterEach(() => server.resetHandlers())
 
 afterAll(() => server.close())
 
-describe("applications pages", () => {
+describe("Demographics", () => {
   afterAll(() => {
     jest.clearAllMocks()
   })
@@ -434,5 +434,174 @@ describe("applications pages", () => {
       expect(screen.queryByTestId("asian")).not.toBeInTheDocument()
       expect(screen.queryByTestId("white")).not.toBeInTheDocument()
     })
+  })
+
+  it("should render spoken language select when enabled and configured", () => {
+    const conductor = new ApplicationConductor({}, {})
+    conductor.config.featureFlags = [
+      { name: FeatureFlagEnum.enableLimitedHowDidYouHear, active: true } as FeatureFlag,
+      { name: FeatureFlagEnum.enableSpokenLanguage, active: true } as FeatureFlag,
+    ]
+    ;(conductor.config.visibleSpokenLanguages = ["spanish", "english"]),
+      render(
+        <AppSubmissionContext.Provider
+          value={{
+            conductor: conductor,
+            application: JSON.parse(JSON.stringify(blankApplication)),
+            listing: {} as unknown as Listing,
+            syncApplication: () => {
+              return
+            },
+            syncListing: () => {
+              return
+            },
+          }}
+        >
+          <ApplicationDemographics />
+        </AppSubmissionContext.Provider>
+      )
+
+    const select = screen.getByLabelText("Which language is most commonly spoken in your home?")
+    expect(select).toBeInTheDocument()
+
+    expect(within(select).getByRole("option", { name: "English" })).toBeInTheDocument()
+    expect(within(select).getByRole("option", { name: "Spanish" })).toBeInTheDocument()
+  })
+
+  it("should hide spoken language select when feature flag is off", () => {
+    const conductor = new ApplicationConductor({}, {})
+    conductor.config.featureFlags = [
+      { name: FeatureFlagEnum.enableLimitedHowDidYouHear, active: true } as FeatureFlag,
+      { name: FeatureFlagEnum.enableSpokenLanguage, active: false } as FeatureFlag,
+    ]
+    ;(conductor.config.visibleSpokenLanguages = ["spanish", "english"]),
+      render(
+        <AppSubmissionContext.Provider
+          value={{
+            conductor: conductor,
+            application: JSON.parse(JSON.stringify(blankApplication)),
+            listing: {} as unknown as Listing,
+            syncApplication: () => {
+              return
+            },
+            syncListing: () => {
+              return
+            },
+          }}
+        >
+          <ApplicationDemographics />
+        </AppSubmissionContext.Provider>
+      )
+
+    expect(screen.queryByTestId("app-demographics-spoken-language")).not.toBeInTheDocument()
+  })
+
+  it("should hide spoken language select when no options are configured", () => {
+    const conductor = new ApplicationConductor({}, {})
+    conductor.config.featureFlags = [
+      { name: FeatureFlagEnum.enableLimitedHowDidYouHear, active: true } as FeatureFlag,
+      { name: FeatureFlagEnum.enableSpokenLanguage, active: true } as FeatureFlag,
+    ]
+    ;(conductor.config.visibleSpokenLanguages = []),
+      render(
+        <AppSubmissionContext.Provider
+          value={{
+            conductor: conductor,
+            application: JSON.parse(JSON.stringify(blankApplication)),
+            listing: {} as unknown as Listing,
+            syncApplication: () => {
+              return
+            },
+            syncListing: () => {
+              return
+            },
+          }}
+        >
+          <ApplicationDemographics />
+        </AppSubmissionContext.Provider>
+      )
+
+    expect(screen.queryByTestId("app-demographics-spoken-language")).not.toBeInTheDocument()
+  })
+
+  it("should show not listed input when selecting not listed", () => {
+    const conductor = new ApplicationConductor({}, {})
+    conductor.config.featureFlags = [
+      { name: FeatureFlagEnum.enableLimitedHowDidYouHear, active: true } as FeatureFlag,
+      { name: FeatureFlagEnum.enableSpokenLanguage, active: true } as FeatureFlag,
+    ]
+    ;(conductor.config.visibleSpokenLanguages = ["english", "notListed"]),
+      render(
+        <AppSubmissionContext.Provider
+          value={{
+            conductor: conductor,
+            application: JSON.parse(JSON.stringify(blankApplication)),
+            listing: {} as unknown as Listing,
+            syncApplication: () => {
+              return
+            },
+            syncListing: () => {
+              return
+            },
+          }}
+        >
+          <ApplicationDemographics />
+        </AppSubmissionContext.Provider>
+      )
+
+    const select = screen.getByLabelText("Which language is most commonly spoken in your home?")
+    fireEvent.change(select, { target: { value: "notListed" } })
+
+    expect(screen.getByRole("textbox", { name: "Please specify:" })).toBeInTheDocument()
+  })
+
+  it("should show full list of how did you hear fields", () => {
+    render(<ApplicationDemographics />)
+    expect(screen.getByText("How did you hear about this listing?")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Alameda County HCD Website" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Developer website" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Flyer" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Email alert" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Housing counselor" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Radio ad" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Bus ad" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Other" })).toBeInTheDocument()
+  })
+
+  it("should show limited list of how did you hear fields when enableLimitedHowDidYouHear is on", () => {
+    const conductor = new ApplicationConductor({}, {})
+    conductor.config.featureFlags = [
+      { name: FeatureFlagEnum.enableLimitedHowDidYouHear, active: true } as FeatureFlag,
+    ]
+    render(
+      <AppSubmissionContext.Provider
+        value={{
+          conductor: conductor,
+          application: JSON.parse(JSON.stringify(blankApplication)),
+          listing: {} as unknown as Listing,
+          syncApplication: () => {
+            return
+          },
+          syncListing: () => {
+            return
+          },
+        }}
+      >
+        <ApplicationDemographics />
+      </AppSubmissionContext.Provider>
+    )
+    expect(screen.getByText("How did you hear about this listing?")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Alameda County HCD Website" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Developer website" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Flyer" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Email alert" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Housing counselor" })).toBeInTheDocument()
+    expect(screen.queryByRole("checkbox", { name: "Radio ad" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("checkbox", { name: "Bus ad" })).not.toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Other" })).toBeInTheDocument()
   })
 })
