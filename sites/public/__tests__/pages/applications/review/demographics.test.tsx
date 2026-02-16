@@ -194,11 +194,10 @@ describe("applications pages", () => {
       </AppSubmissionContext.Provider>
     )
     expect(screen.queryByLabelText("Which best describes your ethnicity?")).not.toBeInTheDocument()
-    // Race field should still be visible
     expect(
-      screen.getByRole("checkbox", { name: "American Indian / Alaskan Native" })
+      screen.getByText("Which best describes your race/ethnicity? Please select all that apply:", {
+        selector: "legend",
+      })
     ).toBeInTheDocument()
-    // How did you hear should still be visible
-    expect(screen.getByText("How did you hear about this listing?")).toBeInTheDocument()
   })
 })

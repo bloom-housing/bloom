@@ -164,7 +164,7 @@ describe("<FormDemographics>", () => {
     )
 
     expect(screen.queryByLabelText("Ethnicity")).not.toBeInTheDocument()
-    expect(screen.getByText("Race")).toBeInTheDocument()
+    expect(screen.getByText("Race", { selector: "legend" })).toBeInTheDocument()
   })
 
   it("should show ethnicity field when disableEthnicityQuestion flag is disabled", () => {
@@ -183,6 +183,6 @@ describe("<FormDemographics>", () => {
     )
 
     expect(screen.getByLabelText("Ethnicity")).toBeInTheDocument()
-    expect(screen.getByText("Race")).toBeInTheDocument()
+    expect(screen.getByText("Race", { selector: "legend" })).toBeInTheDocument()
   })
 })
