@@ -1504,7 +1504,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .expect(201);
     });
 
-    it('should error as forbidden for update endpoint', async () => {
+    it('should succeed for update endpoint', async () => {
       if (!propertyId) {
         throw new Error('Property ID not set up for test');
       }
@@ -1522,10 +1522,10 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .send(propertyUpdateData)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
-    it('should error as forbidden for delete endpoint', async () => {
+    it('should succeed for delete endpoint', async () => {
       const propertyData = {
         name: 'Property to Delete',
         jurisdictions: {
@@ -1553,7 +1553,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         } as IdDTO)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
   });
 

@@ -11,6 +11,7 @@ import {
   ValidationPipe,
   Delete,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import {
   ApiExtraModels,
@@ -18,6 +19,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { Request as ExpressRequest } from 'express';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { PaginatedPropertyDto } from '../dtos/properties/paginated-property.dto';
 import { PropertyQueryParams } from '../dtos/properties/property-query-params.dto';
@@ -35,6 +37,8 @@ import { PermissionAction } from '../decorators/permission-action.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PropertyFilterParams } from '../dtos/properties/property-filter-params.dto';
+import { mapTo } from '../utilities/mapTo';
+import { User } from '../../src/dtos/users/user.dto';
 
 @Controller('properties')
 @ApiTags('properties')
@@ -100,8 +104,12 @@ export class PropertyController {
   @ApiOkResponse({ type: Property })
   public async addProperty(
     @Body() propertyDto: PropertyCreate,
+    @Request() req: ExpressRequest,
   ): Promise<Property> {
-    return await this.propertyService.create(propertyDto);
+    return await this.propertyService.create(
+      propertyDto,
+      mapTo(User, req['user']),
+    );
   }
 
   @Put()
@@ -113,8 +121,12 @@ export class PropertyController {
   @ApiOkResponse({ type: Property })
   public async updateProperty(
     @Body() propertyDto: PropertyUpdate,
+    @Request() req: ExpressRequest,
   ): Promise<Property> {
-    return await this.propertyService.update(propertyDto);
+    return await this.propertyService.update(
+      propertyDto,
+      mapTo(User, req['user']),
+    );
   }
 
   @Delete()
@@ -124,7 +136,13 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: SuccessDTO })
-  public async deleteById(@Body() idDto: IdDTO): Promise<SuccessDTO> {
-    return await this.propertyService.deleteOne(idDto.id);
+  public async deleteById(
+    @Body() idDto: IdDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.propertyService.deleteOne(
+      idDto.id,
+      mapTo(User, req['user']),
+    );
   }
 }
