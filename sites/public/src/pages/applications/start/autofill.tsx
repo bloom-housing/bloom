@@ -19,7 +19,7 @@ import {
   Application,
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import ApplicationFormLayout from "../../../layouts/application-form"
+import { ApplicationFormLayout } from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { Button } from "@bloom-housing/ui-seeds"

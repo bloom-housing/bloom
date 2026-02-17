@@ -25,7 +25,7 @@ import FormsLayout from "../../../layouts/forms"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
+import { ApplicationFormLayout } from "../../../layouts/application-form"
 
 const ApplicationDemographics = () => {
   const { profile } = useContext(AuthContext)

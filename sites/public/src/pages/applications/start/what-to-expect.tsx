@@ -10,7 +10,7 @@ import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
+import { ApplicationFormLayout } from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 import { isUnitGroupAppBase, isUnitGroupAppWaitlist } from "../../../lib/helpers"
 

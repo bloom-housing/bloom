@@ -19,7 +19,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading, Button, LoadingState } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import ApplicationFormLayout from "../../../layouts/application-form"
+import { ApplicationFormLayout } from "../../../layouts/application-form"
 import FormsLayout from "../../../layouts/forms"
 import {
   AppSubmissionContext,

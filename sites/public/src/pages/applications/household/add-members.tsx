@@ -10,7 +10,7 @@ import { HouseholdSizeField } from "../../../components/applications/HouseholdSi
 import { HouseholdMemberForm } from "../../../components/applications/HouseholdMemberForm"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
+import { ApplicationFormLayout } from "../../../layouts/application-form"
 
 const ApplicationAddMembers = () => {
   const { profile } = useContext(AuthContext)

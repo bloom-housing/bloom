@@ -2,7 +2,7 @@ import { AuthContext, OnClientSide, PageView, pushGtmEvent } from "@bloom-housin
 import { Form, t } from "@bloom-housing/ui-components"
 import React, { useContext, useEffect } from "react"
 
-import ApplicationFormLayout from "../../../layouts/application-form"
+import { ApplicationFormLayout } from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 import { Button } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
