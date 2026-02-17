@@ -35,6 +35,7 @@ import {
   hashPassword,
   passwordToHash,
 } from '../../../src/utilities/password-helpers';
+import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 
 jest.mock('@google-cloud/recaptcha-enterprise');
 const mockedRecaptcha =
@@ -79,6 +80,7 @@ describe('Testing auth service', () => {
         MailService,
         GoogleTranslateService,
         PermissionService,
+        SnapshotCreateService,
       ],
     }).compile();
 
@@ -967,6 +969,8 @@ describe('Testing auth service', () => {
     };
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
     prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({ id });
+    prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({ id });
+    prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({ id });
 
     await authService.updatePassword(
       {
@@ -1013,6 +1017,12 @@ describe('Testing auth service', () => {
       'True',
       ACCESS_TOKEN_AVAILABLE_OPTIONS,
     );
+
+    expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
+      data: {
+        originalId: id,
+      },
+    });
   });
 
   it('should error when trying to update password, but there is an id mismatch', async () => {
@@ -1130,6 +1140,8 @@ describe('Testing auth service', () => {
       .mockResolvedValue({ id, confirmationToken: token });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+
+    prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({ id });
 
     const response = {
       cookie: jest.fn(),
