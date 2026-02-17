@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import {
+  IsArray,
   IsDate,
   IsEmail,
   IsNotEmpty,
@@ -13,6 +14,7 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 import { User } from './user.dto';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { passwordRegex } from '../../utilities/password-regex';
+import { IdDTO } from '../shared/id.dto';
 
 export class PublicUserUpdate extends OmitType(User, [
   'createdAt',
@@ -21,7 +23,7 @@ export class PublicUserUpdate extends OmitType(User, [
   'passwordUpdatedAt',
   'passwordValidForDays',
   'passwordUpdatedAt',
-  ,
+  'jurisdictions',
 ] as const) {
   /* Fields inherited from BaseUser:
    * - firstName (inherited as required from BaseUser)
@@ -62,4 +64,10 @@ export class PublicUserUpdate extends OmitType(User, [
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   appUrl?: string;
+
+  @Expose()
+  @Type(() => IdDTO)
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({ type: IdDTO, isArray: true })
+  jurisdictions?: IdDTO[];
 }

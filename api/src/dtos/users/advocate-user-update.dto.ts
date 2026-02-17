@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import {
+  IsArray,
   IsEmail,
   IsNotEmpty,
   IsPhoneNumber,
@@ -16,6 +17,7 @@ import { User } from './user.dto';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { passwordRegex } from '../../utilities/password-regex';
 import { AddressUpdate } from '../addresses/address-update.dto';
+import { IdDTO } from '../shared/id.dto';
 
 export class AdvocateUserUpdate extends OmitType(User, [
   'createdAt',
@@ -26,6 +28,7 @@ export class AdvocateUserUpdate extends OmitType(User, [
   'passwordUpdatedAt',
   'passwordValidForDays',
   'passwordUpdatedAt',
+  'jurisdictions',
 ] as const) {
   /* Fields inherited from BaseUser:
    * - firstName (inherited as required from BaseUser)
@@ -87,4 +90,10 @@ export class AdvocateUserUpdate extends OmitType(User, [
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   appUrl?: string;
+
+  @Expose()
+  @Type(() => IdDTO)
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({ type: IdDTO, isArray: true })
+  jurisdictions?: IdDTO[];
 }

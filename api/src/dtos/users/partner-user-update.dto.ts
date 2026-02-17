@@ -4,6 +4,7 @@ import { Expose, Type } from 'class-transformer';
 import { UserRole } from './user-role.dto';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import {
+  IsArray,
   IsEmail,
   IsNotEmpty,
   IsString,
@@ -13,6 +14,7 @@ import {
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { passwordRegex } from '../../utilities/password-regex';
+import { IdDTO } from '../shared/id.dto';
 
 export class PartnerUserUpdate extends OmitType(User, [
   'createdAt',
@@ -21,6 +23,7 @@ export class PartnerUserUpdate extends OmitType(User, [
   'passwordUpdatedAt',
   'passwordValidForDays',
   'passwordUpdatedAt',
+  'jurisdictions',
 ] as const) {
   /* Fields inherited from User:
    * - firstName (inherited as required from User)
@@ -59,4 +62,10 @@ export class PartnerUserUpdate extends OmitType(User, [
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   appUrl?: string;
+
+  @Expose()
+  @Type(() => IdDTO)
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({ type: IdDTO, isArray: true })
+  jurisdictions?: IdDTO[];
 }

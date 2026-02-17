@@ -99,8 +99,8 @@ export class User extends AbstractDTO {
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiPropertyOptional({ type: Jurisdiction, isArray: true })
-  jurisdictions?: Jurisdiction[];
+  @ApiProperty({ type: Jurisdiction, isArray: true })
+  jurisdictions: Jurisdiction[];
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
