@@ -693,7 +693,7 @@ export const stagingSeed = async (
         multiselectQuestion: {
           text: 'Mobility accessibility needs',
           description:
-            'Some units require at least one resident to have a mobility accessibility need?',
+            'Some units require at least one resident to have a mobility accessibility need',
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
           isExclusive: true,
@@ -708,22 +708,28 @@ export const stagingSeed = async (
         },
       }),
     });
-   const mobilityAccessibilityNeedsProgramQuestion =
+  const hearingVisionAccessibilityNeedsProgramQuestion =
     await prismaClient.multiselectQuestions.create({
       data: multiselectQuestionFactory(angelopolisJurisdiction.id, {
         multiselectQuestion: {
-          text: 'Mobility accessibility needs',
+          text: 'Hearing/vision accessibility needs',
           description:
-            'Some units require at least one resident to have a mobility accessibility need?',
+            'Some units require at least one resident to have a hearing / vision accessibility need',
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
           isExclusive: true,
           optOutText: 'Prefer not to say',
           options: [
-            { text: 'Wheelchair', ordinal: 0 },
-            { text: 'Walker', ordinal: 1 },
-            { text: 'Power chair', ordinal: 2 },
-            { text: 'Other mobility device', ordinal: 3 },
+            { text: 'Audible and visual doorbells', ordinal: 0 },
+            {
+              text: 'Fire and smoke alarms with hard wired strobes',
+              ordinal: 1,
+            },
+            {
+              text: 'Documents in screen-reader accessible format',
+              ordinal: 2,
+            },
+            { text: 'Documents in large text or braille', ordinal: 3 },
             { text: 'None of the above', ordinal: 4 },
           ],
         },
@@ -850,6 +856,7 @@ export const stagingSeed = async (
           workInCityQuestion,
           multiselectQuestionPrograms,
           mobilityAccessibilityNeedsProgramQuestion,
+          hearingVisionAccessibilityNeedsProgramQuestion,
         ],
         applications: [await applicationFactory(), await applicationFactory()],
         userAccounts: [{ id: partnerUser.id }],
