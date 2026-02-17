@@ -25,11 +25,13 @@ export const listingSectionQuestions = (
   listing: Listing,
   applicationSection: MultiselectQuestionsApplicationSectionEnum
 ) => {
-  const selectQuestions = listing?.listingMultiselectQuestions?.filter(
-    (question) =>
-      question?.multiselectQuestions?.applicationSection ===
-      MultiselectQuestionsApplicationSectionEnum[applicationSection]
-  )
+  const selectQuestions = listing?.listingMultiselectQuestions
+    ?.filter(
+      (question) =>
+        question?.multiselectQuestions?.applicationSection ===
+        MultiselectQuestionsApplicationSectionEnum[applicationSection]
+    )
+    ?.sort((a, b) => (a.ordinal || 0) - (b.ordinal || 0))
   return selectQuestions
 }
 
