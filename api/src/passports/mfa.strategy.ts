@@ -21,10 +21,14 @@ import {
   singleUseCodePresent,
   singleUseCodeInvalid,
 } from '../utilities/passport-validator-utilities';
+import { SnapshotCreateService } from '../services/snapshot-create.service';
 
 @Injectable()
 export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
-  constructor(private prisma: PrismaService) {
+  constructor(
+    private prisma: PrismaService,
+    private snapshotCreateService: SnapshotCreateService,
+  ) {
     super({
       usernameField: 'email',
       passReqToCallback: true,
@@ -77,6 +81,9 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       );
     } else if (!(await isPasswordValid(rawUser.passwordHash, dto.password))) {
       // if incoming password does not match
+      if (rawUser.wasWarnedOfDeletion) {
+        await this.snapshotCreateService.createUserSnapshot(rawUser.id);
+      }
       await this.updateFailedLoginCount(
         rawUser.failedLoginAttemptsCount + 1,
         rawUser.id,
@@ -107,6 +114,9 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
         rawUser.singleUseCodeUpdatedAt,
       )
     ) {
+      if (rawUser.wasWarnedOfDeletion) {
+        await this.snapshotCreateService.createUserSnapshot(rawUser.id);
+      }
       // if an mfaCode was not sent, and a singleUseCode wasn't stored in the db for the user
       // signal to the front end to request an mfa code
       await this.updateFailedLoginCount(0, rawUser.id);
@@ -153,6 +163,7 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       // if the phone number was not verfied, but this mfa login was done through sms
       // then we should consider the phone number verified
       rawUser.phoneNumberVerified = true;
+      await this.snapshotCreateService.createUserSnapshot(rawUser.id);
     }
 
     await this.updateStoredUser(

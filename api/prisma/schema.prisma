@@ -1298,6 +1298,7 @@ model Listings {
   userAccountFavorites                  UserAccounts[]                @relation("favorite_listings")
   userAccounts                          UserAccounts[]
   userPreferences                       UserPreferences[]
+  userAccountSnapshot                   UserAccountSnapshot[]
 
   @@index([jurisdictionId])
   @@map("listings")
@@ -1473,7 +1474,6 @@ model ListingSnapshot {
   unitGroup                             UnitGroupSnapshot[]
   unit                                  UnitSnapshot[]
   unitsSummary                          UnitsSummarySnapshot[]
-  userAccount                           UserAccountSnapshot[]
 
   @@index([jurisdictionId])
   @@map("listing_snapshot")
@@ -2085,7 +2085,7 @@ model UserAccountSnapshot {
   confirmationToken         String?        @map("confirmation_token") @db.VarChar
   confirmedAt               DateTime?      @map("confirmed_at") @db.Timestamptz(6)
   dob                       DateTime?      @db.Timestamp(6)
-  email                     String         @unique() @db.VarChar
+  email                     String         @db.VarChar
   failedLoginAttemptsCount  Int            @default(0) @map("failed_login_attempts_count")
   firstName                 String         @map("first_name") @db.VarChar
   hitConfirmationUrl        DateTime?      @map("hit_confirmation_url") @db.Timestamptz(6)
@@ -2112,7 +2112,7 @@ model UserAccountSnapshot {
   address      AddressSnapshot?  @relation(fields: [addressSnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   agency       Agency?           @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   jurisdiction Jurisdictions[]
-  listing      ListingSnapshot[]
+  listing      Listings[]
   userRole     UserRoleSnapshot?
 
   @@map("user_account_snapshot")
