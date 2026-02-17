@@ -1274,9 +1274,6 @@ export class ApplicationService {
     );
 
     const application = mapTo(Application, rawApplication);
-    if (!application?.applicant?.emailAddress) {
-      return { success: false };
-    }
 
     const listing = await this.prisma.listings.findUnique({
       where: { id: rawApplication.listingId },
@@ -1306,7 +1303,25 @@ export class ApplicationService {
       return { success: false };
     }
 
+    //TODO (Advocate): Update this to something like application?.alternateContact?.isAdvocate
+    const isAdvocate = false;
+    const applicantEmail = application?.applicant?.emailAddress;
+
+    if (
+      !isAdvocate &&
+      !applicantEmail &&
+      !application?.alternateContact?.emailAddress
+    ) {
+      return { success: false };
+    }
+
     const mappedListing = mapTo(Listing, listing);
+    const advocateName = [
+      application?.alternateContact?.firstName,
+      application?.alternateContact?.lastName,
+    ]
+      .filter(Boolean)
+      .join(' ');
     const contactEmail = listing.leasingAgentEmail;
 
     await this.emailService.applicationUpdateEmail(
@@ -1315,6 +1330,11 @@ export class ApplicationService {
       changes,
       listing.jurisdictions?.publicUrl,
       contactEmail,
+      {
+        isAdvocate,
+        email: application?.alternateContact?.emailAddress,
+        name: advocateName,
+      },
     );
 
     return { success: true };

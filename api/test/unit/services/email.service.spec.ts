@@ -575,7 +575,7 @@ describe('Testing email service', () => {
   });
 
   describe('application update', () => {
-    it('should send application update email', async () => {
+    it('should send application update email for applicant', async () => {
       const listing = {
         id: 'listingId',
         name: 'Example Listing',
@@ -583,6 +583,52 @@ describe('Testing email service', () => {
       } as Listing;
       const application = {
         language: LanguagesEnum.en,
+        applicant: {
+          firstName: 'First',
+          lastName: 'Last',
+          emailAddress: 'applicant.email@example.com',
+        },
+      } as Application;
+      const changes = [
+        {
+          type: 'status',
+          from: ApplicationStatusEnum.submitted,
+          to: ApplicationStatusEnum.waitlist,
+        },
+      ] as ApplicationStatusChangeItem[];
+
+      await service.applicationUpdateEmail(
+        listing,
+        application,
+        changes,
+        'http://localhost:3000',
+        'contact@example.com',
+      );
+
+      expect(sendMock).toHaveBeenCalledTimes(1);
+
+      const applicantEmailMock = sendMock.mock.calls[0][0];
+      expect(applicantEmailMock.to).toEqual('applicant.email@example.com');
+      expect(applicantEmailMock.subject).toEqual(
+        'Application update for Example Listing',
+      );
+      expect(applicantEmailMock.html).toContain(
+        'To view your application, please click the link below:',
+      );
+      expect(applicantEmailMock.html).toContain('View my application');
+      expect(applicantEmailMock.html).toMatch('http://localhost:3000/sign-in');
+      expect(applicantEmailMock.html).toContain(
+        'No further action is required at this time. If you have questions regarding this update, please reach out at',
+      );
+    });
+    it('should send advocate and applicant application update emails', async () => {
+      const listing = {
+        id: 'listingId',
+        name: 'Example Listing',
+        jurisdictions: { name: 'Jurisdiction 1', id: 'jurisdictionId' },
+      } as Listing;
+      const application = {
+        language: LanguagesEnum.es,
         applicant: {
           firstName: 'First',
           lastName: 'Last',
@@ -605,28 +651,50 @@ describe('Testing email service', () => {
         changes,
         'http://localhost:3000',
         'contact@example.com',
+        {
+          isAdvocate: true,
+          advocateEmail: 'advocate.email@example.com',
+          advocateName: 'Housing Advocate',
+        },
       );
 
-      expect(sendMock).toHaveBeenCalled();
-      const emailMock = sendMock.mock.calls[0][0];
-      expect(emailMock.to).toEqual('applicant.email@example.com');
-      expect(emailMock.subject).toEqual(
+      expect(sendMock).toHaveBeenCalledTimes(2);
+
+      const advocateEmailMock = sendMock.mock.calls[0][0];
+      expect(advocateEmailMock.to).toEqual('advocate.email@example.com');
+      expect(advocateEmailMock.subject).toEqual(
         'Application update for Example Listing',
       );
-      expect(emailMock.html).toContain(
+      expect(advocateEmailMock.html).toContain(
         'Your application has been updated for Example Listing',
       );
-      expect(emailMock.html).toContain(
+      expect(advocateEmailMock.html).toContain(
         'Your application status has changed from <strong>Submitted</strong> to <strong>Wait list</strong>',
       );
-      expect(emailMock.html).toContain(
+      expect(advocateEmailMock.html).toContain(
         'Your Accessible wait list number is <strong>2</strong>',
       );
-      expect(emailMock.html).toContain(
+      expect(advocateEmailMock.html).toContain(
         'Your Conventional wait list number is <strong>5</strong>',
       );
-      expect(emailMock.html).toContain('contact@example.com');
-      expect(emailMock.html).toMatch('http://localhost:3000/sign-in');
+      expect(advocateEmailMock.html).toContain('contact@example.com');
+      expect(advocateEmailMock.html).toMatch('http://localhost:3000/sign-in');
+
+      const applicantEmailMock = sendMock.mock.calls[1][0];
+      expect(applicantEmailMock.to).toEqual('applicant.email@example.com');
+      expect(applicantEmailMock.subject).toEqual(
+        'Application update for Example Listing',
+      );
+      expect(applicantEmailMock.html).toContain(
+        'Your application has been updated for Example Listing',
+      );
+      expect(applicantEmailMock.html).toContain(
+        'If you have questions regarding this update, please reach out at',
+      );
+      expect(applicantEmailMock.html).toContain('contact@example.com');
+      expect(applicantEmailMock.html).not.toMatch(
+        'http://localhost:3000/sign-in',
+      );
     });
   });
 

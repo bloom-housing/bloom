@@ -38,6 +38,12 @@ type listingInfo = {
   juris: string;
 };
 
+type AdvocateContact = {
+  isAdvocate: boolean;
+  email?: string;
+  name?: string;
+};
+
 @Injectable()
 export class EmailService {
   polyglot: Polyglot;
@@ -462,62 +468,113 @@ export class EmailService {
     changes: ApplicationStatusChangeItem[],
     appUrl: string,
     contactEmail?: string,
+    advocateContact?: AdvocateContact,
   ) {
     const jurisdiction = await this.getJurisdiction([listing.jurisdictions]);
-    void (await this.loadTranslations(jurisdiction, application.language));
-
-    const summaryItems = changes.map((change) => {
-      if (change.type === 'status') {
-        const fromLabel = this.polyglot.t(
-          `applicationUpdate.applicationStatus.${change.from}`,
-        );
-        const toLabel = this.polyglot.t(
-          `applicationUpdate.applicationStatus.${change.to}`,
-        );
+    const buildSummaryItems = () =>
+      changes.map((change) => {
+        if (change.type === 'status') {
+          const fromLabel = this.polyglot.t(
+            `applicationUpdate.applicationStatus.${change.from}`,
+          );
+          const toLabel = this.polyglot.t(
+            `applicationUpdate.applicationStatus.${change.to}`,
+          );
+          return new Handlebars.SafeString(
+            this.polyglot.t('applicationUpdate.statusChange', {
+              from: `<strong>${fromLabel}</strong>`,
+              to: `<strong>${toLabel}</strong>`,
+            }),
+          );
+        }
+        if (change.type === 'accessibleWaitlist') {
+          return new Handlebars.SafeString(
+            this.polyglot.t('applicationUpdate.accessibleWaitListChange', {
+              value: `<strong>${change.value}</strong>`,
+            }),
+          );
+        }
         return new Handlebars.SafeString(
-          this.polyglot.t('applicationUpdate.statusChange', {
-            from: `<strong>${fromLabel}</strong>`,
-            to: `<strong>${toLabel}</strong>`,
-          }),
-        );
-      }
-      if (change.type === 'accessibleWaitlist') {
-        return new Handlebars.SafeString(
-          this.polyglot.t('applicationUpdate.accessibleWaitListChange', {
+          this.polyglot.t('applicationUpdate.conventionalWaitListChange', {
             value: `<strong>${change.value}</strong>`,
           }),
         );
-      }
-      return new Handlebars.SafeString(
-        this.polyglot.t('applicationUpdate.conventionalWaitListChange', {
-          value: `<strong>${change.value}</strong>`,
-        }),
-      );
-    });
+      });
 
-    const applicantName = [
-      application.applicant.firstName,
-      application.applicant.lastName,
+    const subjectForCurrentLanguage = () =>
+      this.polyglot.t('applicationUpdate.subject', {
+        listingName: listing.name,
+      });
+    const loginUrl = appUrl ? `${appUrl}/sign-in` : '';
+    const housingApplicantName = [
+      application?.applicant?.firstName,
+      application?.applicant?.lastName,
     ]
       .filter(Boolean)
       .join(' ');
-    const subject = this.polyglot.t('applicationUpdate.subject', {
-      listingName: listing.name,
-    });
-    const loginUrl = appUrl ? `${appUrl}/sign-in` : '';
 
-    await this.send(
-      application.applicant.emailAddress,
-      jurisdiction.emailFromAddress,
-      subject,
-      this.template('application-update')({
-        appOptions: { listingName: listing.name },
-        applicantName,
-        summaryItems,
-        loginUrl,
-        contactEmail: contactEmail,
-      }),
-    );
+    if (advocateContact?.isAdvocate && advocateContact.email) {
+      void (await this.loadTranslations(jurisdiction, application.language));
+      await this.send(
+        advocateContact.email,
+        jurisdiction.emailFromAddress,
+        subjectForCurrentLanguage(),
+        this.template('application-update')({
+          appOptions: { listingName: listing.name },
+          recipientName: advocateContact.name,
+          summaryItems: buildSummaryItems(),
+          loginUrl,
+          contactEmail,
+          updateNoticeText: this.polyglot.t(
+            'applicationUpdate.advocateUpdateNotice',
+            {
+              applicantName: housingApplicantName,
+              listingName: listing.name,
+            },
+          ),
+          contactNoticeText: this.polyglot.t('applicationUpdate.contactNotice'),
+          viewPromptText: this.polyglot.t(
+            'applicationUpdate.advocateViewPrompt',
+          ),
+          viewLinkText: this.polyglot.t('applicationUpdate.advocateViewLink'),
+          showViewSection: true,
+        }),
+      );
+    }
+
+    if (application?.applicant?.emailAddress) {
+      void (await this.loadTranslations(
+        jurisdiction,
+        advocateContact?.isAdvocate ? LanguagesEnum.en : application.language,
+      ));
+      const applicantName = [
+        application.applicant.firstName,
+        application.applicant.lastName,
+      ]
+        .filter(Boolean)
+        .join(' ');
+      await this.send(
+        application.applicant.emailAddress,
+        jurisdiction.emailFromAddress,
+        subjectForCurrentLanguage(),
+        this.template('application-update')({
+          appOptions: { listingName: listing.name },
+          recipientName: applicantName,
+          summaryItems: buildSummaryItems(),
+          contactEmail,
+          updateNoticeText: this.polyglot.t('applicationUpdate.updateNotice', {
+            listingName: listing.name,
+          }),
+          contactNoticeText: advocateContact?.isAdvocate
+            ? this.polyglot.t('applicationUpdate.applicantContactNotice')
+            : this.polyglot.t('applicationUpdate.contactNotice'),
+          loginUrl,
+          viewPromptText: this.polyglot.t('applicationUpdate.viewPrompt'),
+          viewLinkText: this.polyglot.t('applicationUpdate.viewLink'),
+          showViewSection: !advocateContact?.isAdvocate,
+        }),
+      );
+    }
   }
 
   public async requestApproval(
