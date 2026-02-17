@@ -126,3 +126,8 @@
   --common-message-padding: var(--seeds-s4) var(--card-content-padding-inline);
   --common-message-border-radius: 0;
 }
+
+.lock-icon {
+  margin-inline-end: var(--seeds-s2);
+  color: var(--seeds-color-primary);
+}

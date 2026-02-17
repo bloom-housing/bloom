@@ -122,6 +122,9 @@ includeViews.base = {
     },
   },
   listingMultiselectQuestions: {
+    orderBy: {
+      ordinal: 'asc',
+    },
     include: {
       multiselectQuestions: true,
     },
