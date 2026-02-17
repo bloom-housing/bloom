@@ -371,6 +371,7 @@
   "application.review.demographics.howDidYouHearOptions.propertyWebsite": "부동산 웹사이트",
   "application.review.demographics.howDidYouHearOptions.radioAd": "라디오 광고",
   "application.review.demographics.raceLabel": "본인의 인종/민족을 가장 잘 나타내는 항목을 모두 선택해 주세요.",
+  "application.review.demographics.raceLabelNoEthnicity": "다음 중 귀하의 인종을 가장 잘 설명하는 것은 무엇입니까? 해당하는 모든 항목을 선택하십시오.",
   "application.review.demographics.raceOptions.americanIndianAlaskanNative": "미국 원주민 / 알래스카 원주민",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndBlackAfricanAmerican": "미국 원주민/알래스카 원주민 및 흑인/아프리카계 미국인",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndWhite": "미국 원주민/알래스카 원주민과 백인",
