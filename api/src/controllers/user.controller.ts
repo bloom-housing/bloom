@@ -324,12 +324,7 @@ export class UserController {
     @Request() req: ExpressRequest,
     @Body() dto: PublicUserUpdate,
   ): Promise<User> {
-    const jurisdictionName = req.headers['jurisdictionname'] || '';
-    return await this.userService.update(
-      dto,
-      mapTo(User, req['user']),
-      jurisdictionName as string,
-    );
+    return await this.userService.update(dto, mapTo(User, req['user']), req);
   }
 
   @Put('/partner/:id')
@@ -341,12 +336,7 @@ export class UserController {
     @Request() req: ExpressRequest,
     @Body() dto: PartnerUserUpdate,
   ): Promise<User> {
-    const jurisdictionName = req.headers['jurisdictionname'] || '';
-    return await this.userService.update(
-      dto,
-      mapTo(User, req['user']),
-      jurisdictionName as string,
-    );
+    return await this.userService.update(dto, mapTo(User, req['user']), req);
   }
 
   @Put('/advocate/:id')
@@ -358,12 +348,7 @@ export class UserController {
     @Request() req: ExpressRequest,
     @Body() dto: AdvocateUserUpdate,
   ): Promise<User> {
-    const jurisdictionName = req.headers['jurisdictionname'] || '';
-    return await this.userService.update(
-      dto,
-      mapTo(User, req['user']),
-      jurisdictionName as string,
-    );
+    return await this.userService.update(dto, mapTo(User, req['user']), req);
   }
 
   @Get(`:id`)

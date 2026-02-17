@@ -57,7 +57,6 @@ import { AdvocateUserUpdate } from '../dtos/users/advocate-user-update.dto';
 import { PublicUserCreate } from '../dtos/users/public-user-create.dto';
 import { PartnerUserCreate } from '../dtos/users/partner-user-create.dto';
 import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
-import { AgencyService } from './agency.service';
 
 /*
   this is the service for users
@@ -180,8 +179,10 @@ export class UserService {
   async update(
     dto: PublicUserUpdate | PartnerUserUpdate | AdvocateUserUpdate,
     requestingUser: User,
-    jurisdictionName: string,
+    req: Request,
   ): Promise<User> {
+    const jurisdictionName = (req.headers['jurisdictionname'] as string) || '';
+
     const storedUser = await this.findUserOrError(
       { userId: dto.id },
       UserViews.full,
