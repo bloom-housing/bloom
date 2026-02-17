@@ -841,6 +841,18 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
+        if (filter[ListingFilterKeys.parkingType]) {
+          if (Array.isArray(filter[ListingFilterKeys.parkingType])) {
+            const parkingTypes = filter[ListingFilterKeys.parkingType];
+            filters.push({
+              OR: parkingTypes.map((type) => ({
+                parkType: {
+                  [type]: true,
+                },
+              })),
+            });
+          }
+        }
         if (filter[ListingFilterKeys.ids]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
