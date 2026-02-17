@@ -6,12 +6,13 @@ import { MailDataRequired, MailService, ResponseError } from '@sendgrid/mail';
 @Injectable()
 export class SendGridService extends EmailProvider {
   maxRetries: number;
+  mailService: MailService;
 
   constructor(
-    private readonly mailService: MailService,
     private readonly configService: ConfigService,
   ) {
     super();
+    this.mailService = new MailService();
     this.mailService.setApiKey(configService.get<string>('EMAIL_API_KEY'));
     this.maxRetries = configService.get<number>('EMAIL_MAX_RETRIES', 3);
   }
