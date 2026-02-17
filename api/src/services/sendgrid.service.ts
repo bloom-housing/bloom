@@ -8,9 +8,7 @@ export class SendGridService extends EmailProvider {
   maxRetries: number;
   mailService: MailService;
 
-  constructor(
-    private readonly configService: ConfigService,
-  ) {
+  constructor(private readonly configService: ConfigService) {
     super();
     this.mailService = new MailService();
     this.mailService.setApiKey(configService.get<string>('EMAIL_API_KEY'));
