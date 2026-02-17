@@ -1333,10 +1333,12 @@ describe('Testing user service', () => {
           agreedToTermsOfService: true,
         } as PublicUserUpdate,
         {
-          id: 'requestingUser id',
-          userRoles: { isAdmin: true },
-        } as unknown as User,
-        'jurisdictionName',
+          headers: { jurisdictionname: 'juris 1' },
+          user: {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        } as unknown as Request,
       );
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
@@ -1416,10 +1418,12 @@ describe('Testing user service', () => {
           agreedToTermsOfService: true,
         } as PublicUserUpdate,
         {
-          id: 'requestingUser id',
-          userRoles: { isAdmin: true },
-        } as unknown as User,
-        'jurisdictionName',
+          headers: { jurisdictionname: 'juris 1' },
+          user: {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        } as unknown as Request,
       );
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
@@ -1502,10 +1506,12 @@ describe('Testing user service', () => {
               agreedToTermsOfService: true,
             } as PublicUserUpdate,
             {
-              id: 'requestingUser id',
-              userRoles: { isAdmin: true },
-            } as unknown as User,
-            'jurisdictionName',
+              headers: { jurisdictionname: 'juris 1' },
+              user: {
+                id: 'requestingUser id',
+                userRoles: { isAdmin: true },
+              } as unknown as User,
+            } as unknown as Request,
           ),
       ).rejects.toThrowError(`userID ${id}: request missing currentPassword`);
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
@@ -1565,10 +1571,12 @@ describe('Testing user service', () => {
               agreedToTermsOfService: true,
             } as PublicUserUpdate,
             {
-              id: 'requestingUser id',
-              userRoles: { isAdmin: true },
-            } as unknown as User,
-            'jurisdictionName',
+              headers: { jurisdictionname: 'juris 1' },
+              user: {
+                id: 'requestingUser id',
+                userRoles: { isAdmin: true },
+              } as unknown as User,
+            } as unknown as Request,
           ),
       ).rejects.toThrowError(
         `userID ${id}: incoming password doesn't match stored password`,
@@ -1627,10 +1635,12 @@ describe('Testing user service', () => {
           agreedToTermsOfService: true,
         } as PublicUserUpdate,
         {
-          id: 'requestingUser id',
-          userRoles: { isAdmin: true },
-        } as unknown as User,
-        'jurisdictionName',
+          headers: { jurisdictionname: 'juris 1' },
+          user: {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        } as unknown as Request,
       );
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
@@ -1713,10 +1723,12 @@ describe('Testing user service', () => {
           listings: [{ id: listingA }, { id: listingC }],
         } as PublicUserUpdate,
         {
-          id: 'requestingUser id',
-          userRoles: { isAdmin: true },
-        } as unknown as User,
-        'jurisdictionName',
+          headers: { jurisdictionname: 'juris 1' },
+          user: {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        } as unknown as Request,
       );
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
@@ -1817,10 +1829,12 @@ describe('Testing user service', () => {
               agreedToTermsOfService: true,
             } as PublicUserUpdate,
             {
-              id: 'requestingUser id',
-              userRoles: { isAdmin: true },
-            } as unknown as User,
-            'jurisdictionName',
+              headers: { jurisdictionname: 'juris 1' },
+              user: {
+                id: 'requestingUser id',
+                userRoles: { isAdmin: true },
+              } as unknown as User,
+            } as unknown as Request,
           ),
       ).rejects.toThrowError(`user id: ${id} was requested but not found`);
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
