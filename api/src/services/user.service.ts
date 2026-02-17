@@ -178,10 +178,10 @@ export class UserService {
   */
   async update(
     dto: PublicUserUpdate | PartnerUserUpdate | AdvocateUserUpdate,
-    requestingUser: User,
     req: Request,
   ): Promise<User> {
     const jurisdictionName = (req.headers['jurisdictionname'] as string) || '';
+    const requestingUser = mapTo(User, req['user']);
 
     const storedUser = await this.findUserOrError(
       { userId: dto.id },

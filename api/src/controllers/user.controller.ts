@@ -324,7 +324,7 @@ export class UserController {
     @Request() req: ExpressRequest,
     @Body() dto: PublicUserUpdate,
   ): Promise<User> {
-    return await this.userService.update(dto, mapTo(User, req['user']), req);
+    return await this.userService.update(dto, req);
   }
 
   @Put('/partner')
@@ -336,7 +336,7 @@ export class UserController {
     @Request() req: ExpressRequest,
     @Body() dto: PartnerUserUpdate,
   ): Promise<User> {
-    return await this.userService.update(dto, mapTo(User, req['user']), req);
+    return await this.userService.update(dto, req);
   }
 
   @Put('/advocate')
@@ -348,7 +348,7 @@ export class UserController {
     @Request() req: ExpressRequest,
     @Body() dto: AdvocateUserUpdate,
   ): Promise<User> {
-    return await this.userService.update(dto, mapTo(User, req['user']), req);
+    return await this.userService.update(dto, req);
   }
 
   @Get(`:id`)
