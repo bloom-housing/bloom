@@ -142,7 +142,7 @@ export class UserController {
   @Post('/public')
   @ApiOperation({
     summary: 'Creates a public only user',
-    operationId: 'create',
+    operationId: 'createPublic',
   })
   @UseGuards(OptionalAuthGuard, PermissionGuard)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
@@ -162,7 +162,7 @@ export class UserController {
   @Post('/partner')
   @ApiOperation({
     summary: 'Creates a partner only user',
-    operationId: 'create',
+    operationId: 'createPartner',
   })
   @ApiOkResponse({ type: User })
   @UseGuards(OptionalAuthGuard, PermissionGuard)
@@ -176,7 +176,7 @@ export class UserController {
   @Post('/advocate')
   @ApiOperation({
     summary: 'Creates a advocate only user',
-    operationId: 'create',
+    operationId: 'createAdvocate',
   })
   @ApiOkResponse({ type: User })
   @UseGuards(OptionalAuthGuard, PermissionGuard)
@@ -315,8 +315,8 @@ export class UserController {
     return await this.userService.deleteAfterInactivity();
   }
 
-  @Put('/public/:id')
-  @ApiOperation({ summary: 'Update user', operationId: 'update' })
+  @Put('/public')
+  @ApiOperation({ summary: 'Update user', operationId: 'updatePublic' })
   @ApiOkResponse({ type: User })
   @UseGuards(JwtAuthGuard, PermissionGuard)
   @UseInterceptors(ActivityLogInterceptor)
@@ -327,8 +327,8 @@ export class UserController {
     return await this.userService.update(dto, mapTo(User, req['user']), req);
   }
 
-  @Put('/partner/:id')
-  @ApiOperation({ summary: 'Update user', operationId: 'update' })
+  @Put('/partner')
+  @ApiOperation({ summary: 'Update user', operationId: 'updatePartner' })
   @ApiOkResponse({ type: User })
   @UseGuards(JwtAuthGuard, PermissionGuard)
   @UseInterceptors(ActivityLogInterceptor)
@@ -339,8 +339,8 @@ export class UserController {
     return await this.userService.update(dto, mapTo(User, req['user']), req);
   }
 
-  @Put('/advocate/:id')
-  @ApiOperation({ summary: 'Update user', operationId: 'update' })
+  @Put('/advocate')
+  @ApiOperation({ summary: 'Update user', operationId: 'updateAdvocate' })
   @ApiOkResponse({ type: User })
   @UseGuards(JwtAuthGuard, PermissionGuard)
   @UseInterceptors(ActivityLogInterceptor)

@@ -1882,7 +1882,7 @@ export class UserService {
   /**
    * Creates a public only user
    */
-  create(
+  createPublic(
     params: {
       /**  */
       noWelcomeEmail?: boolean
@@ -1905,9 +1905,31 @@ export class UserService {
     })
   }
   /**
+   * Update user
+   */
+  updatePublic(
+    params: {
+      /** requestBody */
+      body?: PublicUserUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/public"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Creates a partner only user
    */
-  create1(
+  createPartner(
     params: {
       /** requestBody */
       body?: PartnerUserCreate
@@ -1927,9 +1949,31 @@ export class UserService {
     })
   }
   /**
+   * Update user
+   */
+  updatePartner(
+    params: {
+      /** requestBody */
+      body?: PartnerUserUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/partner"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Creates a advocate only user
    */
-  create2(
+  createAdvocate(
     params: {
       /**  */
       noWelcomeEmail?: boolean
@@ -1943,6 +1987,28 @@ export class UserService {
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
       configs.params = { noWelcomeEmail: params["noWelcomeEmail"] }
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update user
+   */
+  updateAdvocate(
+    params: {
+      /** requestBody */
+      body?: AdvocateUserUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = params.body
 
@@ -2131,72 +2197,6 @@ export class UserService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update user
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: PublicUserUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/public/{id}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update user
-   */
-  update1(
-    params: {
-      /** requestBody */
-      body?: PartnerUserUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/partner/{id}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update user
-   */
-  update2(
-    params: {
-      /** requestBody */
-      body?: AdvocateUserUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/advocate/{id}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
 
       configs.data = data
 
@@ -8705,9 +8705,6 @@ export interface PublicUserCreate {
   language?: LanguagesEnum
 
   /**  */
-  jurisdictions?: Jurisdiction[]
-
-  /**  */
   mfaEnabled?: boolean
 
   /**  */
@@ -8763,6 +8760,9 @@ export interface PublicUserCreate {
 
   /**  */
   appUrl?: string
+
+  /**  */
+  jurisdictions?: IdDTO[]
 
   /**  */
   password: string
@@ -8803,9 +8803,6 @@ export interface PartnerUserCreate {
   language?: LanguagesEnum
 
   /**  */
-  jurisdictions?: Jurisdiction[]
-
-  /**  */
   mfaEnabled?: boolean
 
   /**  */
@@ -8863,6 +8860,9 @@ export interface PartnerUserCreate {
   appUrl?: string
 
   /**  */
+  jurisdictions?: IdDTO[]
+
+  /**  */
   password: string
 
   /**  */
@@ -8901,9 +8901,6 @@ export interface AdvocateUserCreate {
   language?: LanguagesEnum
 
   /**  */
-  jurisdictions?: Jurisdiction[]
-
-  /**  */
   mfaEnabled?: boolean
 
   /**  */
@@ -8938,6 +8935,9 @@ export interface AdvocateUserCreate {
 
   /**  */
   appUrl?: string
+
+  /**  */
+  jurisdictions?: IdDTO[]
 }
 
 export interface PublicUserUpdate {
@@ -8970,9 +8970,6 @@ export interface PublicUserUpdate {
 
   /**  */
   language?: LanguagesEnum
-
-  /**  */
-  jurisdictions?: Jurisdiction[]
 
   /**  */
   mfaEnabled?: boolean
@@ -9039,6 +9036,9 @@ export interface PublicUserUpdate {
 
   /**  */
   appUrl?: string
+
+  /**  */
+  jurisdictions?: IdDTO[]
 }
 
 export interface PartnerUserUpdate {
@@ -9071,9 +9071,6 @@ export interface PartnerUserUpdate {
 
   /**  */
   language?: LanguagesEnum
-
-  /**  */
-  jurisdictions?: Jurisdiction[]
 
   /**  */
   mfaEnabled?: boolean
@@ -9140,6 +9137,9 @@ export interface PartnerUserUpdate {
 
   /**  */
   appUrl?: string
+
+  /**  */
+  jurisdictions?: IdDTO[]
 }
 
 export interface AdvocateUserUpdate {
@@ -9172,9 +9172,6 @@ export interface AdvocateUserUpdate {
 
   /**  */
   language?: LanguagesEnum
-
-  /**  */
-  jurisdictions?: Jurisdiction[]
 
   /**  */
   mfaEnabled?: boolean
@@ -9241,6 +9238,9 @@ export interface AdvocateUserUpdate {
 
   /**  */
   appUrl?: string
+
+  /**  */
+  jurisdictions?: IdDTO[]
 }
 
 export interface PartnerUserInvite {
@@ -9379,7 +9379,7 @@ export interface User {
   language?: LanguagesEnum
 
   /**  */
-  jurisdictions?: Jurisdiction[]
+  jurisdictions: Jurisdiction[]
 
   /**  */
   mfaEnabled?: boolean
