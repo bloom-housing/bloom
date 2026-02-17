@@ -1316,12 +1316,6 @@ export class ApplicationService {
     }
 
     const mappedListing = mapTo(Listing, listing);
-    const advocateName = [
-      application?.alternateContact?.firstName,
-      application?.alternateContact?.lastName,
-    ]
-      .filter(Boolean)
-      .join(' ');
     const contactEmail = listing.leasingAgentEmail;
 
     await this.emailService.applicationUpdateEmail(
@@ -1330,11 +1324,7 @@ export class ApplicationService {
       changes,
       listing.jurisdictions?.publicUrl,
       contactEmail,
-      {
-        isAdvocate,
-        email: application?.alternateContact?.emailAddress,
-        name: advocateName,
-      },
+      isAdvocate,
     );
 
     return { success: true };

@@ -634,6 +634,11 @@ describe('Testing email service', () => {
           lastName: 'Last',
           emailAddress: 'applicant.email@example.com',
         },
+        alternateContact: {
+          firstName: 'Housing',
+          lastName: 'Advocate',
+          emailAddress: 'advocate.email@example.com',
+        },
       } as Application;
       const changes = [
         {
@@ -651,11 +656,7 @@ describe('Testing email service', () => {
         changes,
         'http://localhost:3000',
         'contact@example.com',
-        {
-          isAdvocate: true,
-          advocateEmail: 'advocate.email@example.com',
-          advocateName: 'Housing Advocate',
-        },
+        true,
       );
 
       expect(sendMock).toHaveBeenCalledTimes(2);

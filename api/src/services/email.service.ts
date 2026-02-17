@@ -38,12 +38,6 @@ type listingInfo = {
   juris: string;
 };
 
-type AdvocateContact = {
-  isAdvocate: boolean;
-  email?: string;
-  name?: string;
-};
-
 @Injectable()
 export class EmailService {
   polyglot: Polyglot;
@@ -468,7 +462,7 @@ export class EmailService {
     changes: ApplicationStatusChangeItem[],
     appUrl: string,
     contactEmail?: string,
-    advocateContact?: AdvocateContact,
+    isAdvocate = false,
   ) {
     const jurisdiction = await this.getJurisdiction([listing.jurisdictions]);
     const buildSummaryItems = () =>
@@ -512,16 +506,23 @@ export class EmailService {
     ]
       .filter(Boolean)
       .join(' ');
+    const advocateEmail = application?.alternateContact?.emailAddress;
+    const advocateName = [
+      application?.alternateContact?.firstName,
+      application?.alternateContact?.lastName,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
-    if (advocateContact?.isAdvocate && advocateContact.email) {
+    if (isAdvocate && advocateEmail) {
       void (await this.loadTranslations(jurisdiction, application.language));
       await this.send(
-        advocateContact.email,
+        advocateEmail,
         jurisdiction.emailFromAddress,
         subjectForCurrentLanguage(),
         this.template('application-update')({
           appOptions: { listingName: listing.name },
-          recipientName: advocateContact.name,
+          recipientName: advocateName,
           summaryItems: buildSummaryItems(),
           loginUrl,
           contactEmail,
@@ -545,7 +546,7 @@ export class EmailService {
     if (application?.applicant?.emailAddress) {
       void (await this.loadTranslations(
         jurisdiction,
-        advocateContact?.isAdvocate ? LanguagesEnum.en : application.language,
+        isAdvocate ? LanguagesEnum.en : application.language,
       ));
       const applicantName = [
         application.applicant.firstName,
@@ -565,13 +566,13 @@ export class EmailService {
           updateNoticeText: this.polyglot.t('applicationUpdate.updateNotice', {
             listingName: listing.name,
           }),
-          contactNoticeText: advocateContact?.isAdvocate
+          contactNoticeText: isAdvocate
             ? this.polyglot.t('applicationUpdate.applicantContactNotice')
             : this.polyglot.t('applicationUpdate.contactNotice'),
           loginUrl,
           viewPromptText: this.polyglot.t('applicationUpdate.viewPrompt'),
           viewLinkText: this.polyglot.t('applicationUpdate.viewLink'),
-          showViewSection: !advocateContact?.isAdvocate,
+          showViewSection: !isAdvocate,
         }),
       );
     }
