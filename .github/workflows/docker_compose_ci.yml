@@ -60,6 +60,21 @@ jobs:
             exit 1
           fi
 
+      - name: api-smoke-test
+        shell: bash
+        run: |
+          if ! docker compose up --wait api
+          then
+            echo 'ERROR: api did not start successfully. Logs:'
+            docker compose logs api
+            exit 1
+          fi
+
+          if ! docker compose down; then
+            echo 'ERROR: docker compose down failed'
+            exit 1
+          fi
+
       - name: dbreadonlycheck
         shell: bash
         run: |
