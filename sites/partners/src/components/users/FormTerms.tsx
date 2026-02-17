@@ -1,9 +1,9 @@
 import React from "react"
-import { Field, Form, FormCard, MarkdownSection, t } from "@bloom-housing/ui-components"
-import { Button, Icon } from "@bloom-housing/ui-seeds"
-import Cog8ToothIcon from "@heroicons/react/24/solid/Cog8ToothIcon"
 import Markdown from "markdown-to-jsx"
 import { useForm } from "react-hook-form"
+import { Field, Form, MarkdownSection, t } from "@bloom-housing/ui-components"
+import { Button, Card, LoadingState } from "@bloom-housing/ui-seeds"
+import { BloomCard } from "@bloom-housing/shared-helpers"
 
 type FormTermsInValues = {
   agree: boolean
@@ -16,55 +16,54 @@ export type FormTermsProps = {
 
 const FormTerms = (props: FormTermsProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, register, errors } = useForm<FormTermsInValues>()
+  const { handleSubmit, register, errors, clearErrors } = useForm<FormTermsInValues>()
 
   return (
-    <Form id="terms" className="mt-10" onSubmit={handleSubmit(props.onSubmit)}>
-      <FormCard>
-        <div className="form-card__lead text-center">
-          <Icon size="2xl">
-            <Cog8ToothIcon />
-          </Icon>
-          <h2 className="form-card__title">{t(`authentication.terms.reviewToc`)}</h2>
-          <p className="field-note mt-4 text-center">
-            {t(`authentication.terms.youMustAcceptToc`)}
-          </p>
+    <BloomCard
+      iconSymbol="cog"
+      title={t(`authentication.terms.reviewToc`)}
+      headingPriority={1}
+      iconClass={"card-icon"}
+      iconOutlined={true}
+      headingClass="seeds-large-heading"
+      subtitle={t(`authentication.terms.youMustAcceptToc`)}
+    >
+      <Form id="terms" onSubmit={handleSubmit(props.onSubmit)}>
+        <Card.Section>
+          <LoadingState loading={!props.terms}>
+            <div className="overflow-y-auto max-h-96 text-left">
+              {props.terms && (
+                <MarkdownSection padding={false} fullwidth={true}>
+                  <Markdown options={{ disableParsingRawHTML: false }}>{props.terms}</Markdown>
+                </MarkdownSection>
+              )}
+            </div>
+          </LoadingState>
 
-          <div className="overflow-y-auto max-h-96 mt-5 pr-4 text-left">
-            {props.terms && (
-              <MarkdownSection padding={false} fullwidth={true}>
-                <Markdown options={{ disableParsingRawHTML: false }}>{props.terms}</Markdown>
-              </MarkdownSection>
-            )}
-          </div>
-        </div>
-
-        <div className="form-card__group pt-0">
           <Field
             id="agree"
             name="agree"
             type="checkbox"
-            className="flex flex-col justify-center items-center"
+            className="seeds-m-bs-content"
             label={t(`authentication.terms.acceptToc`)}
             register={register}
             validation={{ required: true }}
             error={!!errors.agree}
             errorMessage={t("errors.agreeError")}
             dataTestId="agree"
+            inputProps={{
+              onChange: () => clearErrors("agree"),
+            }}
           />
-        </div>
+        </Card.Section>
 
-        <div className="border-b" />
-
-        <div className="form-card__pager">
-          <div className="form-card__pager-row primary">
-            <Button type="submit" variant="primary" id="form-submit">
-              {t("t.submit")}
-            </Button>
-          </div>
-        </div>
-      </FormCard>
-    </Form>
+        <Card.Section className={"primary-bg seeds-m-bs-section"}>
+          <Button type="submit" variant="primary" id="form-submit">
+            {t("t.submit")}
+          </Button>
+        </Card.Section>
+      </Form>
+    </BloomCard>
   )
 }
 

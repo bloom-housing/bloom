@@ -15,7 +15,6 @@ import { listingFactory } from './seed-helpers/listing-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { userFactory } from './seed-helpers/user-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
-import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
@@ -27,6 +26,7 @@ import {
   simplifiedDCMap,
 } from './seed-helpers/map-layer-factory';
 import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
+import { UnitAccessibilityPriorityTypeEnum } from '../src/enums/units/accessibility-priority-type-enum';
 import { ListingFeaturesConfiguration } from '../src/dtos/jurisdictions/listing-features-config.dto';
 import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
 import { createAllFeatureFlags } from './seed-helpers/feature-flag-factory';
@@ -237,6 +237,21 @@ export const stagingSeed = async (
         NeighborhoodAmenitiesEnum.recreationalFacilities,
         NeighborhoodAmenitiesEnum.playgrounds,
         NeighborhoodAmenitiesEnum.busStops,
+      ],
+      languages: [
+        LanguagesEnum.en,
+        LanguagesEnum.es,
+        LanguagesEnum.ko,
+        LanguagesEnum.hy,
+        LanguagesEnum.zh,
+        LanguagesEnum.tl,
+        LanguagesEnum.fa,
+        LanguagesEnum.vi,
+      ],
+      visibleAccessibilityPriorityTypes: [
+        UnitAccessibilityPriorityTypeEnum.mobility,
+        UnitAccessibilityPriorityTypeEnum.hearingAndVision,
+        UnitAccessibilityPriorityTypeEnum.mobilityHearingAndVision,
       ],
       regions: [
         'Metro Area',
@@ -741,7 +756,6 @@ export const stagingSeed = async (
 
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
-  await unitAccessibilityPriorityTypeFactoryAll(prismaClient);
   await reservedCommunityTypeFactoryAll(mainJurisdiction.id, prismaClient);
   // list of predefined listings WARNING: images only work if image setup is cloudinary on exygy account
   const listingsToCreate: Parameters<typeof listingFactory>[] = [

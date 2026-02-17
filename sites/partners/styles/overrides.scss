@@ -55,6 +55,10 @@
       font-size: var(--seeds-font-size-lg);
     }
   }
+
+  .primary-bg {
+    background-color: var(--seeds-color-primary-lighter);
+  }
 }
 
 .section-with-grid hgroup p {

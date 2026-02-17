@@ -213,9 +213,9 @@ export const MainDetails = ({
         {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && (
           <PropertyDetailsCard
             heading={t("listings.propertyCardTitle")}
-            linkText={property.urlTitle}
-            linkUrl={property.url}
-            propertyDescription={property.description}
+            linkText={property?.urlTitle}
+            linkUrl={property?.url}
+            propertyDescription={property?.description}
           />
         )}
         <Availability listing={listing} jurisdiction={jurisdiction} />

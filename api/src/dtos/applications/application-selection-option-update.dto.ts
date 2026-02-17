@@ -8,13 +8,7 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 
 export class ApplicationSelectionOptionUpdate extends OmitType(
   ApplicationSelectionOption,
-  [
-    'id',
-    'createdAt',
-    'updatedAt',
-    'addressHolderAddress',
-    'applicationSelection',
-  ],
+  ['id', 'addressHolderAddress', 'applicationSelection'],
 ) {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

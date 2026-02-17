@@ -153,7 +153,7 @@ const FormUnits = ({
         amiPercentage: "t.ami",
         monthlyRent: "listings.unit.rent",
         sqFeet: "listings.unit.sqft",
-        unitAccessibilityPriorityTypes: "listings.unit.priorityType",
+        accessibilityPriorityType: "listings.unit.accessibilityPriorityType",
         action: "",
       }
 
@@ -333,7 +333,11 @@ const FormUnits = ({
         amiPercentage: { content: unit.amiPercentage },
         monthlyRent: { content: unit.monthlyRent },
         sqFeet: { content: unit.sqFeet },
-        unitAccessibilityPriorityTypes: { content: unit.unitAccessibilityPriorityTypes?.name },
+        accessibilityPriorityType: {
+          content: unit.accessibilityPriorityType
+            ? t(`listings.unit.accessibilityType.${unit.accessibilityPriorityType}`)
+            : t("t.n/a"),
+        },
         action: {
           content: getTableActionItems({
             onEdit: () => editUnit(unit.tempId),

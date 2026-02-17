@@ -225,14 +225,16 @@ export const ListingView = (props: ListingProps) => {
     } else {
       multiselectQuestionSet = listingPreferences
     }
-    return multiselectQuestionSet.map((listingMultiselectQuestion, index) => {
-      return {
-        ordinal: index + 1,
-        links: listingMultiselectQuestion?.multiselectQuestions?.links,
-        title: listingMultiselectQuestion?.multiselectQuestions?.text,
-        description: listingMultiselectQuestion?.multiselectQuestions?.description,
-      }
-    })
+    return multiselectQuestionSet
+      .sort((a, b) => a.ordinal - b.ordinal)
+      .map((listingMultiselectQuestion, index) => {
+        return {
+          ordinal: listingMultiselectQuestion.ordinal || index + 1,
+          links: listingMultiselectQuestion?.multiselectQuestions?.links,
+          title: listingMultiselectQuestion?.multiselectQuestions?.text,
+          description: listingMultiselectQuestion?.multiselectQuestions?.description,
+        }
+      })
   }
 
   if (listingPrograms && listingPrograms?.length > 0) {

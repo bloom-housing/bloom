@@ -24,7 +24,7 @@ describe("reset-password", () => {
     mockNextRouter()
     const { getByText, getByLabelText } = render(<ResetPassword />)
 
-    expect(getByText("Change password", { selector: "h2" })).toBeInTheDocument()
+    expect(getByText("Change password", { selector: "h1" })).toBeInTheDocument()
     expect(getByLabelText("Password")).toBeInTheDocument()
     const passwordInput = getByLabelText("Password confirmation")
     expect(passwordInput).toBeInTheDocument()

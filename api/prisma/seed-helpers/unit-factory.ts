@@ -6,11 +6,15 @@ import {
   UnitTypes,
 } from '@prisma/client';
 import { unitTypeFactorySingle } from './unit-type-factory';
-import { unitAccessibilityPriorityTypeFactorySingle } from './unit-accessibility-priority-type-factory';
 import { unitRentTypeFactory } from './unit-rent-type-factory';
 import { randomInt } from 'crypto';
+import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessibility-priority-type-enum';
 
 const unitTypes = Object.values(UnitTypeEnum);
+
+const unitAccessibilityPriorityTypeValues = Object.values(
+  UnitAccessibilityPriorityTypeEnum,
+);
 
 export const unitFactorySingle = (
   unitType: UnitTypes,
@@ -18,6 +22,7 @@ export const unitFactorySingle = (
     amiChart?: AmiChart;
     unitRentTypeId?: string;
     otherFields?: Prisma.UnitsCreateWithoutListingsInput;
+    accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum;
   },
 ): Prisma.UnitsCreateWithoutListingsInput => {
   const bedrooms = unitType.numBedrooms || randomInt(6);
@@ -55,7 +60,7 @@ export const unitFactoryMany = async (
   optionalParams?: {
     randomizePriorityType?: boolean;
     amiChart?: AmiChart;
-    unitAccessibilityPriorityTypeId?: string;
+    accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum;
   },
 ): Promise<Prisma.UnitsCreateWithoutListingsInput[]> => {
   const createArray: Promise<Prisma.UnitsCreateWithoutListingsInput>[] = [
@@ -67,21 +72,17 @@ export const unitFactoryMany = async (
     );
 
     // create a random priority type with roughly half being null
-    const unitAccessibilityPriorityTypes =
+    const accessibilityPriorityType =
       optionalParams?.randomizePriorityType && Math.random() > 0.5
-        ? await unitAccessibilityPriorityTypeFactorySingle(prismaClient)
+        ? unitAccessibilityPriorityTypeValues[
+            randomInt(unitAccessibilityPriorityTypeValues.length)
+          ]
         : undefined;
 
     return unitFactorySingle(unitType, {
       ...optionalParams,
       otherFields: {
-        unitAccessibilityPriorityTypes: unitAccessibilityPriorityTypes
-          ? {
-              connect: {
-                id: unitAccessibilityPriorityTypes.id,
-              },
-            }
-          : undefined,
+        accessibilityPriorityType,
         numBathrooms: index,
       },
     });
