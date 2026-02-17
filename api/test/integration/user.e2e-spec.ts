@@ -22,9 +22,9 @@ import { Login } from '../../src/dtos/auth/login.dto';
 import { RequestMfaCode } from '../../src/dtos/mfa/request-mfa-code.dto';
 import { ModificationEnum } from '../../src/enums/shared/modification-enum';
 import dayjs from 'dayjs';
-import { PublicUserUpdate } from 'src/dtos/users/public-user-update.dto';
-import { PublicUserCreate } from 'src/dtos/users/public-user-create.dto';
-import { PartnerUserInvite } from 'src/dtos/users/partner-user-invite.dto';
+import { PublicUserUpdate } from '../../src/dtos/users/public-user-update.dto';
+import { PublicUserCreate } from '../../src/dtos/users/public-user-create.dto';
+import { PartnerUserCreate } from '../../src/dtos/users/partner-user-create.dto';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -777,7 +777,7 @@ describe('User Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .post(`/user/invite`)
+        .post(`/user/partner`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           firstName: 'Partner User firstName',
@@ -789,7 +789,7 @@ describe('User Controller Tests', () => {
           userRoles: {
             isAdmin: true,
           },
-        } as PartnerUserInvite)
+        } as PartnerUserCreate)
         .set('Cookie', cookies)
         .expect(201);
 

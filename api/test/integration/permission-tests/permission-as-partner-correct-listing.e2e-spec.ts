@@ -1009,7 +1009,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
       );
 
       await request(app.getHttpServer())
-        .post(`/user/invite`)
+        .post(`/user/partner`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildUserInviteMock(juris, 'partnerUser+partnerCorrect@email.com'),

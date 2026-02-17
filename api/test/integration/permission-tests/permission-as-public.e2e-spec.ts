@@ -973,7 +973,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
       );
 
       await request(app.getHttpServer())
-        .post(`/user/invite`)
+        .post(`/user/partner`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildUserInviteMock(juris, 'partnerUser+public@email.com'))
         .set('Cookie', cookies)

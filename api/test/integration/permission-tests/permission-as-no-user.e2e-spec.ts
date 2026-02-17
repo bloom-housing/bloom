@@ -900,7 +900,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
     it('should error as unauthorized for partner create endpoint', async () => {
       await request(app.getHttpServer())
-        .post(`/user/invite`)
+        .post(`/user/partner`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildUserInviteMock(jurisdictionId, 'partnerUser+noUser@email.com'),

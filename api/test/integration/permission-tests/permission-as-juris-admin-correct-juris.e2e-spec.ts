@@ -1004,7 +1004,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
 
     it('should error as forbidden for partner create endpoint', async () => {
       await request(app.getHttpServer())
-        .post(`/user/invite`)
+        .post(`/user/partner`)
         .send(
           // builds an invite for an admin
           buildUserInviteMock(

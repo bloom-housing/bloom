@@ -2018,28 +2018,6 @@ export class UserService {
     })
   }
   /**
-   * Invite partner user
-   */
-  invite(
-    params: {
-      /** requestBody */
-      body?: PartnerUserInvite
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/invite"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * Request single use code
    */
   requestSingleUseCode(
@@ -8860,16 +8838,7 @@ export interface PartnerUserCreate {
   appUrl?: string
 
   /**  */
-  jurisdictions?: IdDTO[]
-
-  /**  */
-  password: string
-
-  /**  */
-  passwordConfirmation: string
-
-  /**  */
-  emailConfirmation?: string
+  jurisdictions: IdDTO[]
 }
 
 export interface AdvocateUserCreate {
@@ -9241,95 +9210,6 @@ export interface AdvocateUserUpdate {
 
   /**  */
   jurisdictions?: IdDTO[]
-}
-
-export interface PartnerUserInvite {
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  email: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  listings: IdDTO[]
-
-  /**  */
-  language?: LanguagesEnum
-
-  /**  */
-  mfaEnabled?: boolean
-
-  /**  */
-  lastLoginAt?: Date
-
-  /**  */
-  failedLoginAttemptsCount?: number
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-
-  /**  */
-  activeAccessToken?: string
-
-  /**  */
-  activeRefreshToken?: string
-
-  /**  */
-  favoriteListings?: IdDTO[]
-
-  /**  */
-  title?: string
-
-  /**  */
-  agency?: Agency
-
-  /**  */
-  address?: Address
-
-  /**  */
-  phoneType?: string
-
-  /**  */
-  phoneExtension?: string
-
-  /**  */
-  additionalPhoneNumber?: string
-
-  /**  */
-  additionalPhoneNumberType?: string
-
-  /**  */
-  additionalPhoneExtension?: string
-
-  /**  */
-  userRoles: UserRole
-
-  /**  */
-  newEmail?: string
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  jurisdictions: IdDTO[]
 }
 
 export interface User {

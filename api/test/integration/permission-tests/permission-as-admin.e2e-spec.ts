@@ -1009,7 +1009,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
 
     it('should succeed for partner create endpoint & create an activity log entry', async () => {
       const res = await request(app.getHttpServer())
-        .post(`/user/invite`)
+        .post(`/user/partner`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildUserInviteMock(jurisdictionId, 'partnerUser+admin@email.com'),

@@ -962,7 +962,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
       );
 
       await request(app.getHttpServer())
-        .post(`/user/invite`)
+        .post(`/user/partner`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildUserInviteMock(jurisdiction, 'partnerUser+jurisWrong@email.com'),

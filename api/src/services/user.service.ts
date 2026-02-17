@@ -37,7 +37,6 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { EmailAndAppUrl } from '../dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../dtos/users/confirmation-request.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
-import { PartnerUserInvite } from '../dtos/users/partner-user-invite.dto';
 import { EmailService } from './email.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
@@ -580,11 +579,7 @@ export class UserService {
     Checks if creation should update an existing user to a new role instead of creating a new entry
   */
   async handleExistingUser(
-    dto:
-      | PublicUserCreate
-      | PartnerUserCreate
-      | AdvocateUserCreate
-      | PartnerUserInvite,
+    dto: PublicUserCreate | PartnerUserCreate | AdvocateUserCreate,
   ): Promise<User | null> {
     const existingUser = await this.prisma.userAccounts.findUnique({
       include: views.full,
@@ -765,10 +760,7 @@ export class UserService {
   /* 
     creates a partner user
   */
-  async createPartnerUser(
-    dto: PartnerUserCreate | PartnerUserInvite,
-    req: Request,
-  ) {
+  async createPartnerUser(dto: PartnerUserCreate, req: Request) {
     const requestingUser = mapTo(User, req['user']);
 
     if (

@@ -56,7 +56,6 @@ import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
 import { PublicUserUpdate } from '../dtos/users/public-user-update.dto';
 import { PartnerUserUpdate } from '../dtos/users/partner-user-update.dto';
 import { AdvocateUserUpdate } from '../dtos/users/advocate-user-update.dto';
-import { PartnerUserInvite } from '../dtos/users/partner-user-invite.dto';
 
 @Controller('user')
 @ApiTags('user')
@@ -71,7 +70,6 @@ import { PartnerUserInvite } from '../dtos/users/partner-user-invite.dto';
   PublicUserUpdate,
   PartnerUserUpdate,
   AdvocateUserUpdate,
-  PartnerUserInvite,
 )
 @UseGuards(ApiKeyGuard)
 export class UserController {
@@ -206,18 +204,6 @@ export class UserController {
       mapTo(User, req['user']),
       dto.shouldRemoveApplication,
     );
-  }
-
-  @Post('/invite')
-  @ApiOperation({ summary: 'Invite partner user', operationId: 'invite' })
-  @ApiOkResponse({ type: User })
-  @UseGuards(PermissionGuard, JwtAuthGuard)
-  @UseInterceptors(ActivityLogInterceptor)
-  async invite(
-    @Body() dto: PartnerUserInvite,
-    @Request() req: ExpressRequest,
-  ): Promise<User> {
-    return await this.userService.createPartnerUser(dto, req);
   }
 
   @Post('request-single-use-code')

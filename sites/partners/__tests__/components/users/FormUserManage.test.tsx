@@ -70,7 +70,7 @@ describe("<FormUserManage>", () => {
             rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
               return res(ctx.json(adminUserWithJurisdictions))
             }),
-            rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+            rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
               return res(ctx.json({ success: true }))
             })
           )
@@ -142,7 +142,7 @@ describe("<FormUserManage>", () => {
             rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
               return res(ctx.json(adminUserWithJurisdictions))
             }),
-            rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+            rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
               return res(ctx.json({ success: true }))
             })
           )
@@ -220,7 +220,7 @@ describe("<FormUserManage>", () => {
             rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
               return res(ctx.json(adminUserWithJurisdictions))
             }),
-            rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+            rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
               return res(ctx.json({ success: true }))
             })
           )
@@ -305,7 +305,7 @@ describe("<FormUserManage>", () => {
             rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
               return res(ctx.json(jurisAdminUserWithJurisdictions))
             }),
-            rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+            rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
               return res(ctx.json({ success: true }))
             })
           )
@@ -348,7 +348,7 @@ describe("<FormUserManage>", () => {
           rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
             return res(ctx.json(adminUserWithJurisdictionsAndOneDisabled))
           }),
-          rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+          rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
             return res(ctx.json({ success: true }))
           })
         )
@@ -408,7 +408,7 @@ describe("<FormUserManage>", () => {
           rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
             return res(ctx.json(adminUserWithJurisdictionsAndAllDisabled))
           }),
-          rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+          rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
             return res(ctx.json({ success: true }))
           })
         )
@@ -459,7 +459,7 @@ describe("<FormUserManage>", () => {
           rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
             return res(ctx.json(adminUserWithJurisdictionsAndAllDisabled))
           }),
-          rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+          rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
             return res(ctx.json({ success: true }))
           })
         )
@@ -507,7 +507,7 @@ describe("<FormUserManage>", () => {
           rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
             return res(ctx.json(adminUserWithJurisdictionsAndOneEnabled))
           }),
-          rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+          rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
             return res(ctx.json({ success: true }))
           })
         )
