@@ -2,7 +2,7 @@ import React from "react"
 import { render, fireEvent, waitFor, act, screen } from "@testing-library/react"
 import { useRouter } from "next/router"
 import { MessageContext, AuthContext } from "@bloom-housing/shared-helpers"
-import { jurisdiction, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   FeatureFlagEnum,
   User,
