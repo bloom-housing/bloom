@@ -31,8 +31,9 @@ jobs:
       - name: build
         shell: bash
         run: |
-          if ! docker compose build; then
+          if ! docker compose build --no-cache; then
             echo 'ERROR: docker compose build failed'
+            exit 1
           fi
 
       - name: dbinitcheck
@@ -56,6 +57,7 @@ jobs:
 
           if ! docker compose down; then
             echo 'ERROR: docker compose down failed'
+            exit 1
           fi
 
       - name: dbreadonlycheck
@@ -71,6 +73,7 @@ jobs:
 
           if ! docker compose down; then
             echo 'ERROR: docker compose down failed'
+            exit 1
           fi
 
       - name: sites-smoke-test
