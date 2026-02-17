@@ -165,7 +165,7 @@ export class UserController {
     operationId: 'createPartner',
   })
   @ApiOkResponse({ type: User })
-  @UseGuards(OptionalAuthGuard, PermissionGuard)
+  @UseGuards(PermissionGuard, JwtAuthGuard)
   async createPartnerUser(
     @Request() req: ExpressRequest,
     @Body() dto: PartnerUserCreate,
@@ -211,7 +211,7 @@ export class UserController {
   @Post('/invite')
   @ApiOperation({ summary: 'Invite partner user', operationId: 'invite' })
   @ApiOkResponse({ type: User })
-  @UseGuards(OptionalAuthGuard)
+  @UseGuards(PermissionGuard, JwtAuthGuard)
   @UseInterceptors(ActivityLogInterceptor)
   async invite(
     @Body() dto: PartnerUserInvite,
