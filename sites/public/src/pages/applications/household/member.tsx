@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useRef } from "react"
 import { useRouter } from "next/router"
-import { Alert, Button, FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { Button, FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
   DOBField,
   Field,
@@ -30,7 +30,11 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
+import {
+  ApplicationAlertBox,
+  ApplicationFormLayout,
+  onFormError,
+} from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 
@@ -87,6 +91,8 @@ const ApplicationMember = () => {
   const router = useRouter()
   const currentPageSection = 2
 
+  const alertRef = useRef<HTMLDivElement>(null)
+
   const enableFullTimeStudentQuestion = isFeatureFlagOn(
     conductor.config,
     FeatureFlagEnum.enableFullTimeStudentQuestion
@@ -119,7 +125,7 @@ const ApplicationMember = () => {
     void router.push("/applications/household/add-members")
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError("application-alert-box-wrapper")
   }
   const deleteMember = () => {
     if (member.orderId != undefined) {
@@ -224,16 +230,7 @@ const ApplicationMember = () => {
           }}
           overrideIsAdvocate={conductor.config.isAdvocate}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
 
           <CardSection divider={"inset"}>
             <fieldset>

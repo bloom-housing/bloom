@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState, useMemo } from "react"
+import React, { useContext, useEffect, useState, useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
-import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { Field, FieldGroup, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -24,14 +24,19 @@ import {
   AddressValidationSelection,
 } from "../../../components/applications/ValidateAddress"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import {
+  ApplicationAlertBox,
+  ApplicationFormLayout,
+  onFormError,
+} from "../../../layouts/application-form"
 
 const ApplicationAddress = () => {
   const { profile } = useContext(AuthContext)
   const [verifyAddress, setVerifyAddress] = useState(false)
   const [foundAddress, setFoundAddress] = useState<FoundAddress>({})
   const [newAddressSelected, setNewAddressSelected] = useState(true)
+
+  const alertRef = useRef<HTMLDivElement>(null)
 
   const { conductor, application, listing } = useFormConductor("primaryApplicantAddress")
   const currentPageSection = 1
@@ -103,7 +108,7 @@ const ApplicationAddress = () => {
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError("application-alert-box-wrapper")
   }
 
   const noPhone: boolean = watch("applicant.noPhone")
@@ -167,16 +172,7 @@ const ApplicationAddress = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
           <div style={{ display: verifyAddress ? "none" : "block" }} aria-hidden={verifyAddress}>
             <CardSection divider={"inset"}>
               <fieldset>

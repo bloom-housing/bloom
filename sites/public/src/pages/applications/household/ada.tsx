@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
-import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { Form, t, FieldGroup, FieldSingle } from "@bloom-housing/ui-components"
 import {
   OnClientSide,
@@ -14,8 +14,11 @@ import FormsLayout from "../../../layouts/forms"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import {
+  ApplicationFormLayout,
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const ApplicationAda = () => {
@@ -26,6 +29,8 @@ const ApplicationAda = () => {
     FeatureFlagEnum.enableAdaOtherOption
   )
   const currentPageSection = 2
+
+  const alertRef = useRef<HTMLDivElement>(null)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, setValue, errors, getValues, clearErrors, trigger } = useForm<
@@ -57,7 +62,7 @@ const ApplicationAda = () => {
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError("application-alert-box-wrapper")
   }
 
   useEffect(() => {
@@ -140,17 +145,7 @@ const ApplicationAda = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length === Object.keys(getValues()).length &&
-            Object.keys(getValues()).length > 0 && (
-              <Alert
-                className={styles["message-inside-card"]}
-                variant="alert"
-                fullwidth
-                id={"application-alert-box"}
-              >
-                {t("errors.errorsToResolve")}
-              </Alert>
-            )}
+          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
 
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>

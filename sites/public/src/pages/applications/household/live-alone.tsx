@@ -1,20 +1,23 @@
-import React, { ChangeEvent, useContext, useEffect, useState } from "react"
+import React, { ChangeEvent, useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { FieldGroup, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert } from "@bloom-housing/ui-seeds"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import {
+  ApplicationAlertBox,
+  ApplicationFormLayout,
+  onFormError,
+} from "../../../layouts/application-form"
 
 const ApplicationLiveAlone = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("liveAlone")
   const [validateHousehold, setValidateHousehold] = useState(true)
+  const alertRef = useRef<HTMLDivElement>(null)
   const currentPageSection = 2
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -25,6 +28,10 @@ const ApplicationLiveAlone = () => {
     if (!validation) return
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
+  }
+
+  const onError = () => {
+    onFormError("application-alert-box-wrapper")
   }
 
   useEffect(() => {
@@ -56,7 +63,7 @@ const ApplicationLiveAlone = () => {
         listing?.name
       }`}
     >
-      <Form className="mb-4" onSubmit={handleSubmit(onSubmit)}>
+      <Form className="mb-4" onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.household.liveAlone.title")}
@@ -71,16 +78,7 @@ const ApplicationLiveAlone = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
           <div>
             <HouseholdSizeField
               assistanceUrl={t("application.household.assistanceUrl")}

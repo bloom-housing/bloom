@@ -1,16 +1,18 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { FieldGroup, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert } from "@bloom-housing/ui-seeds"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import { isFeatureFlagOn } from "../../../lib/helpers"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import {
+  ApplicationAlertBox,
+  ApplicationFormLayout,
+  onFormError,
+} from "../../../layouts/application-form"
 
 const ApplicationHouseholdStudent = () => {
   const { profile } = useContext(AuthContext)
@@ -20,6 +22,7 @@ const ApplicationHouseholdStudent = () => {
     conductor.config,
     FeatureFlagEnum.enableFullTimeStudentQuestion
   )
+  const alertRef = useRef<HTMLDivElement>(null)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues, trigger } = useForm<Record<string, any>>({
@@ -39,7 +42,7 @@ const ApplicationHouseholdStudent = () => {
   }
 
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError("application-alert-box-wrapper")
   }
 
   const householdStudentValues = [
@@ -89,16 +92,7 @@ const ApplicationHouseholdStudent = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="sr-only">{questionText}</legend>

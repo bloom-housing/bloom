@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { DOBField, Field, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert, Icon } from "@bloom-housing/ui-seeds"
+import { Icon } from "@bloom-housing/ui-seeds"
 import {
   OnClientSide,
   PageView,
@@ -14,14 +14,19 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import {
+  ApplicationFormLayout,
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
 
 const ApplicationName = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("primaryApplicantName")
   const [autofilled, setAutofilled] = useState(false)
   const isAdvocate = conductor?.config?.isAdvocate
+
+  const alertRef = useRef<HTMLDivElement>(null)
 
   const currentPageSection = 1
 
@@ -44,8 +49,9 @@ const ApplicationName = () => {
     }
     conductor.routeToNextOrReturnUrl()
   }
+
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError("application-alert-box-wrapper")
   }
 
   const emailPresent: string = watch("applicant.emailAddress")
@@ -96,16 +102,7 @@ const ApplicationName = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
           <CardSection divider={"inset"}>
             <div id={"application-initial-page"}>
               <fieldset>
@@ -184,7 +181,7 @@ const ApplicationName = () => {
                   <LockIcon />
                 </>
               }
-              aria-describedby={"dob-helper"}
+              ariaDescribedBy="dob-helper"
             />
             <p id="dob-helper" className={"field-sub-note"}>
               {t("application.name.dobHelper")}

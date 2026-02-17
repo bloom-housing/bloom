@@ -1,7 +1,7 @@
 import React from "react"
 import Markdown from "markdown-to-jsx"
 import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers"
-import { Button, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
+import { Alert, Button, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { t, ProgressNav, StepHeader } from "@bloom-housing/ui-components"
 import ApplicationConductor from "../lib/applications/ApplicationConductor"
@@ -27,7 +27,34 @@ interface ApplicationFormLayoutProps {
   overrideIsAdvocate?: boolean
 }
 
-const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
+interface ApplicationAlertBoxProps {
+  errors: Record<string, any>
+  alertRef: React.RefObject<HTMLDivElement>
+}
+
+export const onFormError = (errorBoxId: string) => {
+  window.scrollTo(0, 0)
+  document.getElementById(errorBoxId)?.focus()
+}
+
+export const ApplicationAlertBox = (props: ApplicationAlertBoxProps) => {
+  return (
+    <div id="application-alert-box-wrapper" ref={props.alertRef} tabIndex={-1}>
+      {Object.entries(props.errors).length > 0 && (
+        <Alert
+          className={styles["message-inside-card"]}
+          variant="alert"
+          fullwidth
+          id={"application-alert-box"}
+        >
+          {t("errors.errorsToResolve")}
+        </Alert>
+      )}
+    </div>
+  )
+}
+
+export const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
   const getBackLink = (url?: string, onClickFxn?: () => void) => {
     return (
       <div className={styles["application-form-back-link"]}>

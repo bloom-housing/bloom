@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { AlertBox, Form, t } from "@bloom-housing/ui-components"
+import { Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   AuthContext,
@@ -25,7 +25,11 @@ import FormsLayout from "../../layouts/forms"
 import { useFormConductor } from "../../lib/hooks"
 import { UserStatus } from "../../lib/constants"
 import { AddressValidationSelection, findValidatedAddress, FoundAddress } from "./ValidateAddress"
-import ApplicationFormLayout from "../../layouts/application-form"
+import {
+  ApplicationFormLayout,
+  ApplicationAlertBox,
+  onFormError,
+} from "../../layouts/application-form"
 
 export interface ApplicationMultiselectQuestionStepProps {
   applicationSection: MultiselectQuestionsApplicationSectionEnum
@@ -74,6 +78,8 @@ const ApplicationMultiselectQuestionStep = ({
   const question = getPageQuestion(questions, page)
 
   const questionSetInputType = getInputType(question?.options)
+
+  const alertRef = useRef<HTMLDivElement>(null)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, handleSubmit, errors, getValues, reset, trigger } = useForm({
@@ -168,6 +174,10 @@ const ApplicationMultiselectQuestionStep = ({
     conductor.routeToNextOrReturnUrl()
   }
 
+  const onError = () => {
+    onFormError("application-alert-box-wrapper")
+  }
+
   const watchQuestions = watch(allOptionNames)
 
   if (!clientLoaded || !allOptionNames) {
@@ -237,7 +247,7 @@ const ApplicationMultiselectQuestionStep = ({
         swapCommunityTypeWithPrograms
       )} - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
     >
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={
@@ -271,11 +281,7 @@ const ApplicationMultiselectQuestionStep = ({
           }
           conductor={conductor}
         >
-          {!!Object.keys(errors).length && (
-            <AlertBox type="alert" inverted closeable>
-              {t("errors.errorsToResolve")}
-            </AlertBox>
-          )}
+          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
 
           <div style={{ display: verifyAddress ? "none" : "block" }} key={question?.id}>
             <CardSection>

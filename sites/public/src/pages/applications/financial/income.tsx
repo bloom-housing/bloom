@@ -1,9 +1,13 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState, useRef } from "react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { AlertBox, AlertNotice, Field, FieldGroup, Form, t } from "@bloom-housing/ui-components"
-import { Alert } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import {
+  ApplicationAlertBox,
+  onFormError,
+  ApplicationFormLayout,
+} from "../../../layouts/application-form"
 import {
   OnClientSide,
   PageView,
@@ -18,8 +22,6 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
 
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"
@@ -60,6 +62,8 @@ const ApplicationIncome = () => {
     ? 4
     : 3
 
+  const alertRef = useRef<HTMLDivElement>(null)
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues, setValue, trigger } = useForm({
     defaultValues: {
@@ -91,7 +95,7 @@ const ApplicationIncome = () => {
     }
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError("application-alert-box-wrapper")
   }
 
   const incomePeriodValues = [
@@ -140,16 +144,7 @@ const ApplicationIncome = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
 
           {incomeError && (
             <CardSection>
