@@ -6,6 +6,7 @@ import {
   ListingFeaturesConfiguration,
   ListingFilterKeys,
   ListingFilterParams,
+  ParkingTypeEnum,
   RegionEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -40,6 +41,7 @@ export interface FilterData {
   reservedCommunityTypes?: { [K in ReservedCommunityTypes]?: BooleanOrBooleanString }
   multiselectQuestions?: Record<string, BooleanOrBooleanString>
   name?: string
+  parkingType?: { [K in ParkingTypeEnum]?: BooleanOrBooleanString }
 }
 
 export interface FilterField {
@@ -80,6 +82,7 @@ const arrayFilters: ListingFilterKeys[] = [
   ListingFilterKeys.reservedCommunityTypes,
   ListingFilterKeys.availabilities,
   ListingFilterKeys.multiselectQuestions,
+  ListingFilterKeys.parkingType,
 ]
 
 const booleanFilters: ListingFilterKeys[] = [
