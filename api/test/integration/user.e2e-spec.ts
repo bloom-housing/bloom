@@ -17,7 +17,6 @@ import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-fact
 import { listingFactory } from '../../prisma/seed-helpers/listing-factory';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
 import { randomName } from '../../prisma/seed-helpers/word-generator';
-import { UserInvite } from '../../src/dtos/users/partner-user-invite.dto';
 import { EmailService } from '../../src/services/email.service';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { RequestMfaCode } from '../../src/dtos/mfa/request-mfa-code.dto';
@@ -25,6 +24,7 @@ import { ModificationEnum } from '../../src/enums/shared/modification-enum';
 import dayjs from 'dayjs';
 import { PublicUserUpdate } from 'src/dtos/users/public-user-update.dto';
 import { PublicUserCreate } from 'src/dtos/users/public-user-create.dto';
+import { PartnerUserInvite } from 'src/dtos/users/partner-user-invite.dto';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -741,13 +741,16 @@ describe('User Controller Tests', () => {
           firstName: 'Public First Name',
           lastName: 'Public Last Name',
           password: 'Abcdef12345!',
+          passwordConfirmation: 'Abcdef12345!',
           email: 'publicUser@email.com',
+          emailConfirmation: 'publicUser@email.com',
+          dob: new Date(),
           jurisdictions: [{ id: juris.id }],
         } as PublicUserCreate)
         .set('Cookie', cookies)
         .expect(201);
 
-      expect(res.body.firstName).toEqual('Public User firstName');
+      expect(res.body.firstName).toEqual('Public First Name');
       expect(res.body.jurisdictions).toEqual([
         expect.objectContaining({ id: juris.id, name: juris.name }),
       ]);
@@ -786,7 +789,7 @@ describe('User Controller Tests', () => {
           userRoles: {
             isAdmin: true,
           },
-        } as UserInvite)
+        } as PartnerUserInvite)
         .set('Cookie', cookies)
         .expect(201);
 
