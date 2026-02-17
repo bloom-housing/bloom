@@ -687,6 +687,49 @@ export const stagingSeed = async (
       }),
     },
   );
+  const mobilityAccessibilityNeedsProgramQuestion =
+    await prismaClient.multiselectQuestions.create({
+      data: multiselectQuestionFactory(angelopolisJurisdiction.id, {
+        multiselectQuestion: {
+          text: 'Mobility accessibility needs',
+          description:
+            'Some units require at least one resident to have a mobility accessibility need?',
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          isExclusive: true,
+          optOutText: 'Prefer not to say',
+          options: [
+            { text: 'Wheelchair', ordinal: 0 },
+            { text: 'Walker', ordinal: 1 },
+            { text: 'Power chair', ordinal: 2 },
+            { text: 'Other mobility device', ordinal: 3 },
+            { text: 'None of the above', ordinal: 4 },
+          ],
+        },
+      }),
+    });
+   const mobilityAccessibilityNeedsProgramQuestion =
+    await prismaClient.multiselectQuestions.create({
+      data: multiselectQuestionFactory(angelopolisJurisdiction.id, {
+        multiselectQuestion: {
+          text: 'Mobility accessibility needs',
+          description:
+            'Some units require at least one resident to have a mobility accessibility need?',
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          isExclusive: true,
+          optOutText: 'Prefer not to say',
+          options: [
+            { text: 'Wheelchair', ordinal: 0 },
+            { text: 'Walker', ordinal: 1 },
+            { text: 'Power chair', ordinal: 2 },
+            { text: 'Other mobility device', ordinal: 3 },
+            { text: 'None of the above', ordinal: 4 },
+          ],
+        },
+      }),
+    });
+
   const multiselectQuestionPrograms =
     await prismaClient.multiselectQuestions.create({
       data: multiselectQuestionFactory(mainJurisdiction.id, {
@@ -806,6 +849,7 @@ export const stagingSeed = async (
           cityEmployeeQuestion,
           workInCityQuestion,
           multiselectQuestionPrograms,
+          mobilityAccessibilityNeedsProgramQuestion,
         ],
         applications: [await applicationFactory(), await applicationFactory()],
         userAccounts: [{ id: partnerUser.id }],
