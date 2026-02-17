@@ -296,7 +296,7 @@ const FormUserManage = ({
 
     void updateUser(() =>
       userService
-        .update({
+        .updatePartner({
           body: body,
         })
         .then(() => {

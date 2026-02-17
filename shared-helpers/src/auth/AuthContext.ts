@@ -27,7 +27,6 @@ import {
   ReservedCommunityTypesService,
   UnitTypesService,
   User,
-  UserCreate,
   UserService,
   serviceOptions,
   SuccessDTO,
@@ -35,6 +34,9 @@ import {
   LanguagesEnum,
   FeatureFlagsService,
   PropertiesService,
+  PublicUserCreate,
+  AdvocateUserCreate,
+  PartnerUserCreate,
 } from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
 import { useRouter } from "next/router"
@@ -71,7 +73,18 @@ type ContextProps = {
   signOut: () => Promise<void>
   confirmAccount: (token: string) => Promise<User | undefined>
   forgotPassword: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
-  createUser: (user: UserCreate, listingIdRedirect?: string) => Promise<User | undefined>
+  createPublicUser: (
+    user: PublicUserCreate,
+    listingIdRedirect?: string
+  ) => Promise<User | undefined>
+  createAdvocateUser: (
+    user: AdvocateUserCreate,
+    listingIdRedirect?: string
+  ) => Promise<User | undefined>
+  createPartnerUser: (
+    user: PartnerUserCreate,
+    listingIdRedirect?: string
+  ) => Promise<User | undefined>
   resendConfirmation: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
   initialStateLoaded?: boolean
   loading?: boolean
@@ -335,11 +348,35 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
         dispatch(stopLoading())
       }
     },
-    createUser: async (user: UserCreate, listingIdRedirect) => {
+    createPublicUser: async (user: PublicUserCreate, listingIdRedirect) => {
       dispatch(startLoading())
       const appUrl = getListingRedirectUrl(listingIdRedirect)
       try {
-        const response = await userService?.create({
+        const response = await userService?.createPublic({
+          body: { ...user, appUrl },
+        })
+        return response
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    createPartnerUser: async (user: PartnerUserCreate, listingIdRedirect) => {
+      dispatch(startLoading())
+      const appUrl = getListingRedirectUrl(listingIdRedirect)
+      try {
+        const response = await userService?.createPartner({
+          body: { ...user, appUrl },
+        })
+        return response
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    createAdvocateUser: async (user: AdvocateUserCreate, listingIdRedirect) => {
+      dispatch(startLoading())
+      const appUrl = getListingRedirectUrl(listingIdRedirect)
+      try {
+        const response = await userService?.createAdvocate({
           body: { ...user, appUrl },
         })
         return response
