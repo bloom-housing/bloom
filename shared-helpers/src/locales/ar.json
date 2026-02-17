@@ -372,6 +372,7 @@
   "application.review.demographics.howDidYouHearOptions.propertyWebsite": "موقع العقارات",
   "application.review.demographics.howDidYouHearOptions.radioAd": "إعلان راديو",
   "application.review.demographics.raceLabel": "ما أفضل وصف لعرقك؟",
+  "application.review.demographics.raceLabelNoEthnicity": "ما هو الوصف الأنسب لعرقك؟ يرجى تحديد جميع الخيارات التي تنطبق عليك:",
   "application.review.demographics.raceOptions.americanIndianAlaskanNative": "الهنود الحمر / سكان ألاسكا الأصليين",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndBlackAfricanAmerican": "الهنود الأمريكيون / سكان ألاسكا الأصليين والأسود / الأمريكيون من أصل أفريقي",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndWhite": "الهنود الحمر / سكان ألاسكا الأصليين والأبيض",
