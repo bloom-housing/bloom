@@ -558,7 +558,7 @@ describe("<FormUserManage>", () => {
         rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
           return res(ctx.json(adminUserWithJurisdictions))
         }),
-        rest.put("http://localhost/api/adapter/user/%7Bid%7D", (_req, res, ctx) => {
+        rest.put("http://localhost/api/adapter/user", (_req, res, ctx) => {
           return res(ctx.json({ success: true }))
         })
       )

@@ -834,7 +834,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/user/public/${userA.id}`)
+        .put(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,
@@ -847,7 +847,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
 
     it('should succeed for update endpoint targeting self', async () => {
       await request(app.getHttpServer())
-        .put(`/user/public/${storedUserId}`)
+        .put(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: storedUserId,

@@ -879,7 +879,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
       });
 
       await request(app.getHttpServer())
-        .put(`/user/public/${userA.id}`)
+        .put(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,

@@ -197,7 +197,7 @@ describe('User Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .put(`/user/public/${userA.id}`)
+        .put(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,
@@ -218,7 +218,7 @@ describe('User Controller Tests', () => {
       });
       const randomId = randomUUID();
       const res = await request(app.getHttpServer())
-        .put(`/user/public/${randomId}`)
+        .put(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: randomId,
@@ -241,7 +241,7 @@ describe('User Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .delete(`/user/`)
+        .delete(`/user`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,
@@ -258,7 +258,7 @@ describe('User Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .delete(`/user/`)
+        .delete(`/user`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,
@@ -272,7 +272,7 @@ describe('User Controller Tests', () => {
     it("should error when deleting user that doesn't exist", async () => {
       const randomId = randomUUID();
       const res = await request(app.getHttpServer())
-        .delete(`/user/`)
+        .delete(`/user`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: randomId,
