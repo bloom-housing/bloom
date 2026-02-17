@@ -29,7 +29,9 @@ export const PropertyDetailsCard = ({
         {propertyDescription && <div className="seeds-m-bs-2">{propertyDescription}</div>}
         {hasLink && (
           <p className="seeds-m-bs-text">
-            <Link href={linkUrl}>{linkText}</Link>
+            <Link href={linkUrl} hideExternalLinkIcon={true}>
+              {linkText}
+            </Link>
           </p>
         )}
       </Card.Section>
