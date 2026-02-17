@@ -26,7 +26,7 @@ beforeEach(() => {
     rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
       return res(ctx.json(""))
     }),
-    rest.put("http://localhost/api/adapter/user", (_req, res, ctx) => {
+    rest.put("http://localhost/api/adapter/user/public", (_req, res, ctx) => {
       return res(ctx.json(""))
     })
   )

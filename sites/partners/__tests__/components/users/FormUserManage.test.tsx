@@ -550,7 +550,7 @@ describe("<FormUserManage>", () => {
       // Watch the update call to make sure it's called
       const requestSpy = jest.fn()
       server.events.on("request:start", (request) => {
-        if (request.method === "PUT" && request.url.href.includes("user/%7Bid%7D")) {
+        if (request.method === "PUT" && request.url.href.includes("user")) {
           requestSpy(request.body)
         }
       })
@@ -558,7 +558,7 @@ describe("<FormUserManage>", () => {
         rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
           return res(ctx.json(adminUserWithJurisdictions))
         }),
-        rest.put("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        rest.put("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
           return res(ctx.json({ success: true }))
         })
       )
