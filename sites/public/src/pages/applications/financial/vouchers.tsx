@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { Form, t, FieldGroup } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -34,8 +34,6 @@ const ApplicationVouchers = () => {
     defaultValues: { incomeVouchers: application.incomeVouchers?.toString() },
     shouldFocusError: false,
   })
-
-  const alertRef = useRef<HTMLDivElement>(null)
 
   const onSubmit = async (data) => {
     const validation = await trigger()
@@ -109,7 +107,7 @@ const ApplicationVouchers = () => {
           }}
           conductor={conductor}
         >
-          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
+          <ApplicationAlertBox errors={errors} />
 
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>

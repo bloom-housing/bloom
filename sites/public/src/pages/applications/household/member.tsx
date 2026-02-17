@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react"
+import React, { useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import { Button, FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
@@ -90,8 +90,6 @@ const ApplicationMember = () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const router = useRouter()
   const currentPageSection = 2
-
-  const alertRef = useRef<HTMLDivElement>(null)
 
   const enableFullTimeStudentQuestion = isFeatureFlagOn(
     conductor.config,
@@ -230,7 +228,7 @@ const ApplicationMember = () => {
           }}
           overrideIsAdvocate={conductor.config.isAdvocate}
         >
-          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
+          <ApplicationAlertBox errors={errors} />
 
           <CardSection divider={"inset"}>
             <fieldset>

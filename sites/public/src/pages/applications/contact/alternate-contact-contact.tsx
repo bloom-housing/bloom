@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { Field, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -23,8 +23,6 @@ const ApplicationAlternateContactContact = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("alternateContactInfo")
   const currentPageSection = 1
-
-  const alertRef = useRef<HTMLDivElement>(null)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { control, register, handleSubmit, errors, trigger } = useForm<Record<string, any>>({
@@ -79,7 +77,7 @@ const ApplicationAlternateContactContact = () => {
           }}
           conductor={conductor}
         >
-          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
+          <ApplicationAlertBox errors={errors} />
 
           <CardSection divider={"inset"}>
             <label className="text__caps-spaced" htmlFor="phoneNumber">

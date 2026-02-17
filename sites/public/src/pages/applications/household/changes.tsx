@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { FieldGroup, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -16,8 +16,6 @@ const ApplicationHouseholdChanges = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("householdChanges")
   const currentPageSection = 2
-
-  const alertRef = useRef<HTMLDivElement>(null)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues, trigger } = useForm<Record<string, any>>({
@@ -82,7 +80,7 @@ const ApplicationHouseholdChanges = () => {
           }}
           conductor={conductor}
         >
-          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="sr-only">

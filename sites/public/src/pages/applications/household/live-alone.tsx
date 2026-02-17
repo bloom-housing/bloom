@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useContext, useEffect, useRef, useState } from "react"
+import React, { ChangeEvent, useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { FieldGroup, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -17,7 +17,6 @@ const ApplicationLiveAlone = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("liveAlone")
   const [validateHousehold, setValidateHousehold] = useState(true)
-  const alertRef = useRef<HTMLDivElement>(null)
   const currentPageSection = 2
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -78,7 +77,7 @@ const ApplicationLiveAlone = () => {
           }}
           conductor={conductor}
         >
-          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
+          <ApplicationAlertBox errors={errors} />
           <div>
             <HouseholdSizeField
               assistanceUrl={t("application.household.assistanceUrl")}

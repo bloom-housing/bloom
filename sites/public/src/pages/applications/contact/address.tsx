@@ -36,8 +36,6 @@ const ApplicationAddress = () => {
   const [foundAddress, setFoundAddress] = useState<FoundAddress>({})
   const [newAddressSelected, setNewAddressSelected] = useState(true)
 
-  const alertRef = useRef<HTMLDivElement>(null)
-
   const { conductor, application, listing } = useFormConductor("primaryApplicantAddress")
   const currentPageSection = 1
 
@@ -172,7 +170,7 @@ const ApplicationAddress = () => {
           }}
           conductor={conductor}
         >
-          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
+          <ApplicationAlertBox errors={errors} />
           <div style={{ display: verifyAddress ? "none" : "block" }} aria-hidden={verifyAddress}>
             <CardSection divider={"inset"}>
               <fieldset>

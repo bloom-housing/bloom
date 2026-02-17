@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { AlertBox, AlertNotice, Field, FieldGroup, Form, t } from "@bloom-housing/ui-components"
@@ -61,8 +61,6 @@ const ApplicationIncome = () => {
   )?.length
     ? 4
     : 3
-
-  const alertRef = useRef<HTMLDivElement>(null)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues, setValue, trigger } = useForm({
@@ -144,7 +142,7 @@ const ApplicationIncome = () => {
           }}
           conductor={conductor}
         >
-          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
+          <ApplicationAlertBox errors={errors} />
 
           {incomeError && (
             <CardSection>

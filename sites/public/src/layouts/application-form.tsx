@@ -6,6 +6,7 @@ import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { t, ProgressNav, StepHeader } from "@bloom-housing/ui-components"
 import ApplicationConductor from "../lib/applications/ApplicationConductor"
 import styles from "./application-form.module.scss"
+import { UseFormMethods } from "react-hook-form"
 
 interface ApplicationFormLayoutProps {
   listingName: string
@@ -28,8 +29,7 @@ interface ApplicationFormLayoutProps {
 }
 
 interface ApplicationAlertBoxProps {
-  errors: Record<string, any>
-  alertRef: React.RefObject<HTMLDivElement>
+  errors: UseFormMethods["errors"]
 }
 
 export const onFormError = (errorBoxId: string) => {
@@ -39,7 +39,7 @@ export const onFormError = (errorBoxId: string) => {
 
 export const ApplicationAlertBox = (props: ApplicationAlertBoxProps) => {
   return (
-    <div id="application-alert-box-wrapper" ref={props.alertRef} tabIndex={-1}>
+    <div id="application-alert-box-wrapper" tabIndex={-1}>
       {Object.entries(props.errors).length > 0 && (
         <Alert
           className={styles["message-inside-card"]}

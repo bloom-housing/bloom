@@ -79,8 +79,6 @@ const ApplicationMultiselectQuestionStep = ({
 
   const questionSetInputType = getInputType(question?.options)
 
-  const alertRef = useRef<HTMLDivElement>(null)
-
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, handleSubmit, errors, getValues, reset, trigger } = useForm({
     defaultValues: mapApiToMultiselectForm(applicationQuestions, questions, applicationSection),
@@ -281,7 +279,7 @@ const ApplicationMultiselectQuestionStep = ({
           }
           conductor={conductor}
         >
-          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
+          <ApplicationAlertBox errors={errors} />
 
           <div style={{ display: verifyAddress ? "none" : "block" }} key={question?.id}>
             <CardSection>

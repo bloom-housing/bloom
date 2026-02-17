@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { DOBField, Field, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -25,8 +25,6 @@ const ApplicationName = () => {
   const { conductor, application, listing } = useFormConductor("primaryApplicantName")
   const [autofilled, setAutofilled] = useState(false)
   const isAdvocate = conductor?.config?.isAdvocate
-
-  const alertRef = useRef<HTMLDivElement>(null)
 
   const currentPageSection = 1
 
@@ -102,7 +100,7 @@ const ApplicationName = () => {
           }}
           conductor={conductor}
         >
-          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"inset"}>
             <div id={"application-initial-page"}>
               <fieldset>

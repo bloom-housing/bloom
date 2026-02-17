@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { Form, t } from "@bloom-housing/ui-components"
@@ -17,8 +17,6 @@ const ApplicationMembersInfo = () => {
   const { conductor, application, listing } = useFormConductor("householdMemberInfo")
   const router = useRouter()
   const currentPageSection = 2
-
-  const alertRef = useRef<HTMLDivElement>(null)
 
   const { handleSubmit, errors } = useForm({
     shouldFocusError: false,
@@ -61,7 +59,7 @@ const ApplicationMembersInfo = () => {
           }}
           hideBorder={true}
         >
-          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
+          <ApplicationAlertBox errors={errors} />
         </ApplicationFormLayout>
       </Form>
     </FormsLayout>

@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useRef } from "react"
+import React, { Fragment, useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -24,7 +24,6 @@ const ApplicationAlternateContactType = () => {
   const { conductor, application, listing } = useFormConductor("alternateContactType")
   const currentPageSection = 1
 
-  const alertRef = useRef<HTMLDivElement>(null)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch, trigger } = useForm<Record<string, any>>({
     shouldFocusError: false,
@@ -76,7 +75,7 @@ const ApplicationAlternateContactType = () => {
           }}
           conductor={conductor}
         >
-          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className={`text__caps-spaced ${errors?.type ? "text-alert" : ""}`}>

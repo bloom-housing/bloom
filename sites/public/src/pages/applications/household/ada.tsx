@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { Form, t, FieldGroup, FieldSingle } from "@bloom-housing/ui-components"
@@ -29,8 +29,6 @@ const ApplicationAda = () => {
     FeatureFlagEnum.enableAdaOtherOption
   )
   const currentPageSection = 2
-
-  const alertRef = useRef<HTMLDivElement>(null)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, setValue, errors, getValues, clearErrors, trigger } = useForm<
@@ -145,7 +143,7 @@ const ApplicationAda = () => {
           }}
           conductor={conductor}
         >
-          <ApplicationAlertBox errors={errors} alertRef={alertRef} />
+          <ApplicationAlertBox errors={errors} />
 
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
