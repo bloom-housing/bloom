@@ -54,6 +54,10 @@ const ApplicationsList = () => {
     FeatureFlagEnum.enableApplicationStatus,
     listingDto?.jurisdictions.id
   )
+  const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableHousingAdvocate,
+    listingDto?.jurisdictions.id
+  )
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
   const { onExport, exportLoading } = useZipExport(
@@ -124,7 +128,8 @@ const ApplicationsList = () => {
       enableFullTimeStudentQuestion,
       disableWorkInRegion,
       enableApplicationStatus,
-      listingDto?.reviewOrderType
+      listingDto?.reviewOrderType,
+      enableHousingAdvocate
     )
   }, [
     maxHouseholdSize,
@@ -132,6 +137,7 @@ const ApplicationsList = () => {
     disableWorkInRegion,
     enableApplicationStatus,
     listingDto?.reviewOrderType,
+    enableHousingAdvocate,
   ])
 
   const gridComponents = {

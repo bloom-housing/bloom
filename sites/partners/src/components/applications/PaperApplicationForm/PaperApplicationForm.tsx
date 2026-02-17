@@ -89,6 +89,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
   )
+  const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableHousingAdvocate,
+    listingDto?.jurisdictions.id
+  )
 
   const units = listingDto?.units
 
@@ -318,7 +322,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       disableWorkInRegion={disableWorkInRegion}
                     />
 
-                    <FormAlternateContact />
+                    <FormAlternateContact enableHousingAdvocate={enableHousingAdvocate} />
 
                     <FormHouseholdMembers
                       householdMembers={householdMembers}
