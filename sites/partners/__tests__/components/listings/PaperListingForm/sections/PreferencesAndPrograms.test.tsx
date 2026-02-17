@@ -1,6 +1,5 @@
 import React from "react"
-import { setupServer } from "msw/node"
-import { render, screen, within } from "@testing-library/react"
+import { setupServer } from "msw/lib/node"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import userEvent from "@testing-library/user-event"
 import {
@@ -12,12 +11,13 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import PreferencesAndPrograms from "../../../../../src/components/listings/PaperListingForm/sections/PreferencesAndPrograms"
 import { formDefaults } from "../../../../../src/lib/listings/formTypes"
-import { FormProviderWrapper } from "../../../../testUtils"
+import { render, screen, within, mockNextRouter, FormProviderWrapper } from "../../../../testUtils"
 
 const server = setupServer()
 
 // Enable API mocking before tests.
 beforeAll(() => {
+  mockNextRouter()
   server.listen()
 })
 
@@ -246,7 +246,7 @@ describe("PreferencesAndPrograms", () => {
       const secondRowCells = within(tableRows[1]).getAllByRole("cell")
       expect(secondRowCells[0]).toHaveTextContent("2")
       expect(secondRowCells[1]).toHaveTextContent(/work in the city/i)
-      
+
       const editButton = screen.getByRole("button", { name: "Edit preferences" })
       expect(editButton).toBeInTheDocument()
 
@@ -258,13 +258,16 @@ describe("PreferencesAndPrograms", () => {
       expect(
         within(dialogDrawer).getByRole("heading", { level: 1, name: "Add preferences" })
       ).toBeInTheDocument()
-      
+
       expect(within(dialogDrawer).getByText(/city employees/i)).toBeInTheDocument()
-      
+
       const selectButton = within(dialogDrawer).getByRole("button", { name: "Select preferences" })
       await userEvent.click(selectButton)
-      // const nestedDialogDrawer = await screen.findByRole("dialog", { name: "Select preferences" })
-      // expect(within(nestedDialogDrawer).getByText(/city employees/i)).toBeInTheDocument()
+      const nestedDialogDrawer = await screen.findByRole("dialog", { name: "Select preferences" })
+      // TODO: this next line is failing because the nested drawer's contents are empty.
+      // For some reason, the hook `useJurisdictionalMultiselectQuestionList` isn't kicking off any
+      // calls to the backend API.
+      expect(within(nestedDialogDrawer).getByText(/city employees/i)).toBeInTheDocument()
     })
 
     it.todo("should delete a preference")
