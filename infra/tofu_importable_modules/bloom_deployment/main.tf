@@ -73,6 +73,10 @@ variable "vpc_peering_settings" {
     error_message = "CIDR range in peered VPC must be in the RFC 1918 private IP space."
   }
 }
+variable "ses_domains" {
+  type = list(string)
+  description = "Domains to create SES email identities for. If SES in this Bloom deployment will not be taken out of sandbox mode, both sender and receiver email address domains must be verified. For example, if email will be sent from 'bloom-no-reply@exygy.dev', input 'exygy.dev'."
+}
 variable "high_availability" {
   type        = bool
   description = "Deploy the Bloom services in a highly-available manner. If true, a minimum of 2 instances will be running for each Bloom service."
