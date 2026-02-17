@@ -372,6 +372,7 @@
   "application.review.demographics.howDidYouHearOptions.propertyWebsite": "房地产网站",
   "application.review.demographics.howDidYouHearOptions.radioAd": "广播广告",
   "application.review.demographics.raceLabel": "哪項最能形容您的種族？",
+  "application.review.demographics.raceLabelNoEthnicity": "以下哪项最能描述您的种族？请选择所有适用项：",
   "application.review.demographics.raceOptions.americanIndianAlaskanNative": "美洲印第安人／阿拉斯加原住民",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndBlackAfricanAmerican": "美國印第安人／阿拉斯加原住民和黑人／非裔美國人",
   "application.review.demographics.raceOptions.americanIndianAlaskanNativeAndWhite": "美國印第安人／阿拉斯加原住民和白人",

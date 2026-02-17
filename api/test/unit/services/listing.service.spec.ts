@@ -52,6 +52,7 @@ import { FilterAvailabilityEnum } from '../../../src/enums/listings/filter-avail
 import { CronJobService } from '../../../src/services/cron-job.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/accessibility-priority-type-enum';
+import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -298,6 +299,7 @@ describe('Testing listing service', () => {
         Logger,
         SchedulerRegistry,
         CronJobService,
+        SnapshotCreateService,
       ],
       imports: [HttpModule],
     }).compile();

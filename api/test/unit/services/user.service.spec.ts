@@ -24,6 +24,7 @@ import { SendGridService } from '../../../src/services/sendgrid.service';
 import { TranslationService } from '../../../src/services/translation.service';
 import { UserService } from '../../../src/services/user.service';
 import { passwordToHash } from '../../../src/utilities/password-helpers';
+import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 import { PublicUserUpdate } from 'src/dtos/users/public-user-update.dto';
 
 describe('Testing user service', () => {
@@ -101,6 +102,7 @@ describe('Testing user service', () => {
         GeocodingService,
         SchedulerRegistry,
         CronJobService,
+        SnapshotCreateService,
         {
           provide: SendGridService,
           useValue: SendGridServiceMock,
@@ -1323,6 +1325,10 @@ describe('Testing user service', () => {
       prisma.userAccounts.update = jest.fn().mockResolvedValue({
         id,
       });
+      prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({ id });
+      prisma.$transaction = jest
+        .fn()
+        .mockImplementation((callBack) => callBack(prisma));
 
       await service.update(
         {
@@ -1358,11 +1364,18 @@ describe('Testing user service', () => {
       });
       expect(prisma.userAccounts.update).toHaveBeenCalledWith({
         data: {
-          firstName: 'first name',
-          lastName: 'last name',
           jurisdictions: {
             connect: [{ id: jurisId }],
           },
+        },
+        where: {
+          id,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          firstName: 'first name',
+          lastName: 'last name',
           agreedToTermsOfService: true,
         },
         include: {
@@ -1392,6 +1405,11 @@ describe('Testing user service', () => {
           jurisdictionId: jurisId,
         },
       );
+      expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
+        data: {
+          originalId: id,
+        },
+      });
     });
 
     it('should update user and update password', async () => {
@@ -1406,6 +1424,10 @@ describe('Testing user service', () => {
       prisma.userAccounts.update = jest.fn().mockResolvedValue({
         id,
       });
+      prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({ id });
+      prisma.$transaction = jest
+        .fn()
+        .mockImplementation((callBack) => callBack(prisma));
 
       await service.update(
         {
@@ -1443,11 +1465,18 @@ describe('Testing user service', () => {
       });
       expect(prisma.userAccounts.update).toHaveBeenCalledWith({
         data: {
-          firstName: 'first name',
-          lastName: 'last name',
           jurisdictions: {
             connect: [{ id: jurisId }],
           },
+        },
+        where: {
+          id,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          firstName: 'first name',
+          lastName: 'last name',
           passwordHash: expect.anything(),
           passwordUpdatedAt: expect.anything(),
           agreedToTermsOfService: true,
@@ -1479,6 +1508,12 @@ describe('Testing user service', () => {
           jurisdictionId: jurisId,
         },
       );
+      expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
+        data: {
+          originalId: id,
+          passwordHash: expect.anything(),
+        },
+      });
     });
 
     it('should throw missing currentPassword error', async () => {
@@ -1623,6 +1658,11 @@ describe('Testing user service', () => {
         id,
       });
       emailService.changeEmail = jest.fn();
+      prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({ id });
+
+      prisma.$transaction = jest
+        .fn()
+        .mockImplementation((callBack) => callBack(prisma));
 
       await service.update(
         {
@@ -1660,11 +1700,18 @@ describe('Testing user service', () => {
       });
       expect(prisma.userAccounts.update).toHaveBeenCalledWith({
         data: {
-          firstName: 'first name',
-          lastName: 'last name',
           jurisdictions: {
             connect: [{ id: jurisId }],
           },
+        },
+        where: {
+          id,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          firstName: 'first name',
+          lastName: 'last name',
           confirmationToken: expect.anything(),
           agreedToTermsOfService: true,
         },
@@ -1696,6 +1743,11 @@ describe('Testing user service', () => {
           jurisdictionId: jurisId,
         },
       );
+      expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
+        data: {
+          originalId: id,
+        },
+      });
     });
 
     it('should update connected listings to a user', async () => {
@@ -1712,6 +1764,11 @@ describe('Testing user service', () => {
       prisma.userAccounts.update = jest.fn().mockResolvedValue({
         id,
       });
+      prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({ id });
+
+      prisma.$transaction = jest
+        .fn()
+        .mockImplementation((callBack) => callBack(prisma));
 
       await service.update(
         {
@@ -1746,14 +1803,16 @@ describe('Testing user service', () => {
           id,
         },
       });
-      expect(prisma.userAccounts.update).toHaveBeenCalledTimes(2);
+      expect(prisma.userAccounts.update).toHaveBeenCalledTimes(3);
       expect(prisma.userAccounts.update).toHaveBeenCalledWith({
         data: {
           listings: {
-            disconnect: [
+            connect: [
               {
-                id: listingA,
+                id: listingC,
               },
+            ],
+            disconnect: [
               {
                 id: listingB,
               },
@@ -1766,21 +1825,22 @@ describe('Testing user service', () => {
       });
       expect(prisma.userAccounts.update).toHaveBeenCalledWith({
         data: {
-          firstName: 'first name',
-          lastName: 'last name',
           jurisdictions: {
-            connect: [{ id: jurisId }],
-          },
-          listings: {
             connect: [
               {
-                id: listingA,
-              },
-              {
-                id: listingC,
+                id: jurisId,
               },
             ],
           },
+        },
+        where: {
+          id,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          firstName: 'first name',
+          lastName: 'last name',
           agreedToTermsOfService: true,
         },
         include: {
@@ -1810,6 +1870,14 @@ describe('Testing user service', () => {
           jurisdictionId: jurisId,
         },
       );
+      expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
+        data: {
+          originalId: id,
+          listing: {
+            connect: [{ id: listingA }, { id: listingB }],
+          },
+        },
+      });
     });
 
     it('should error when trying to update nonexistent user', async () => {
@@ -1876,7 +1944,7 @@ describe('Testing user service', () => {
         {
           firstName: 'Partner User firstName',
           lastName: 'Partner User lastName',
-          password: 'Abcdef12345!',
+          agreedToTermsOfService: true,
           email: 'partnerUser@email.com',
           jurisdictions: [{ id: jurisId }],
           userRoles: {
@@ -1949,11 +2017,13 @@ describe('Testing user service', () => {
       prisma.userAccounts.update = jest.fn().mockResolvedValue({
         id,
       });
+      prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({ id });
+
       await service.createPartnerUser(
         {
           firstName: 'Partner User firstName',
           lastName: 'Partner User lastName',
-          password: 'Abcdef12345!',
+          agreedToTermsOfService: true,
           email: 'partnerUser@email.com',
           jurisdictions: [{ id: jurisId }],
           userRoles: {
@@ -2024,6 +2094,12 @@ describe('Testing user service', () => {
           id: undefined,
         },
       );
+      expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
+        data: {
+          originalId: id,
+          confirmationToken: expect.anything(),
+        },
+      });
     });
 
     it('should error create a partner user with existing partner user present', async () => {
@@ -2046,7 +2122,7 @@ describe('Testing user service', () => {
             {
               firstName: 'Partner User firstName',
               lastName: 'Partner User lastName',
-              password: 'Abcdef12345!',
+              agreedToTermsOfService: true,
               email: 'partnerUser@email.com',
               jurisdictions: [{ id: jurisId }],
               userRoles: {
@@ -2829,6 +2905,13 @@ describe('Testing user service', () => {
       prisma.cronJob.create = jest.fn().mockResolvedValue({});
       prisma.cronJob.update = jest.fn().mockResolvedValue({});
       emailService.warnOfAccountRemoval = jest.fn();
+      prisma.userAccounts.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: 'id1' });
+      prisma.userAccountSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'id1' });
+
       const response = await service.warnUserOfDeletionCronJob();
       expect(prisma.userAccounts.findMany).toBeCalledWith({
         include: {
@@ -2856,6 +2939,12 @@ describe('Testing user service', () => {
           id: 'id2',
         },
       });
+      expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
+        data: {
+          originalId: 'id1',
+        },
+      });
+      expect(prisma.userAccountSnapshot.create).toHaveBeenCalledTimes(2);
       expect(emailService.warnOfAccountRemoval).toBeCalledWith({ id: 'id1' });
       expect(emailService.warnOfAccountRemoval).toBeCalledWith({ id: 'id2' });
       expect(response).toEqual({ success: true });
@@ -2875,6 +2964,13 @@ describe('Testing user service', () => {
         .fn()
         .mockResolvedValueOnce({})
         .mockRejectedValue('error sending email');
+      prisma.userAccounts.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: 'id1' });
+      prisma.userAccountSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'id1' });
+
       const response = await service.warnUserOfDeletionCronJob();
       expect(prisma.userAccounts.findMany).toBeCalledWith({
         include: {
@@ -2899,6 +2995,12 @@ describe('Testing user service', () => {
       expect(LoggerServiceMock.error).toBeCalledWith(
         'warnUserOfDeletion email failed for user id2',
       );
+      expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
+        data: {
+          originalId: 'id1',
+        },
+      });
+      expect(prisma.userAccountSnapshot.create).toHaveBeenCalledTimes(1);
       expect(response).toEqual({ success: true });
     });
   });

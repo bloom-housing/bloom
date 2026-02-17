@@ -9,7 +9,7 @@ import {
   Inject,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Prisma } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import crypto from 'crypto';
@@ -56,6 +56,8 @@ import { AdvocateUserUpdate } from '../dtos/users/advocate-user-update.dto';
 import { PublicUserCreate } from '../dtos/users/public-user-create.dto';
 import { PartnerUserCreate } from '../dtos/users/partner-user-create.dto';
 import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
+import { SnapshotCreateService } from './snapshot-create.service';
+import { toAddHelper, toRemoveHelper } from '../utilities/snapshot-helpers';
 
 /*
   this is the service for users
@@ -104,6 +106,7 @@ export class UserService {
     @Inject(Logger)
     private logger = new Logger(UserService.name),
     private cronJobService: CronJobService,
+    private snapshotCreateService: SnapshotCreateService,
   ) {
     dayjs.extend(advancedFormat);
   }
@@ -258,6 +261,9 @@ export class UserService {
       );
     }
 
+    const transactions = [];
+    await this.snapshotCreateService.createUserSnapshot(dto.id);
+
     // only update userRoles if something has changed
     if (dto?.userRoles && storedUser.userRoles) {
       if (
@@ -269,13 +275,15 @@ export class UserService {
           dto.userRoles.isPartner === storedUser.userRoles.isPartner
         )
       ) {
-        await this.prisma.userRoles.update({
-          data: {
-            ...dto.userRoles,
-          },
-          where: {
-            userId: storedUser.id,
-          },
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.userRoles.update({
+            data: {
+              ...dto.userRoles,
+            },
+            where: {
+              userId: storedUser.id,
+            },
+          });
         });
       }
     }
@@ -302,89 +310,97 @@ export class UserService {
       }
     }
 
-    // disconnect existing connected listings/jurisdictions
-    if (storedUser.listings?.length) {
-      await this.prisma.userAccounts.update({
-        data: {
-          listings: {
-            disconnect: storedUser.listings.map((listing) => ({
-              id: listing.id,
-            })),
-          },
-        },
-        where: {
-          id: dto.id,
-        },
-      });
-    }
-    if (storedUser.jurisdictions?.length) {
-      await this.prisma.userAccounts.update({
-        data: {
-          jurisdictions: {
-            disconnect: storedUser.jurisdictions.map((jurisdiction) => ({
-              id: jurisdiction.id,
-            })),
-          },
-        },
-        where: {
-          id: dto.id,
-        },
-      });
+    // handle jurisdictions
+    if (dto.jurisdictions?.length || storedUser.jurisdictions?.length) {
+      // if the jurisdiction is stored in the db but not on the incoming dto, mark as to be removed
+      const toRemove = toRemoveHelper(
+        storedUser.jurisdictions,
+        dto.jurisdictions,
+      );
+      // if jurisdiction is on dto but not in db, we need to store it
+      const toAdd = toAddHelper(storedUser.jurisdictions, dto.jurisdictions);
+
+      if (toAdd?.length || toRemove?.length) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.userAccounts.update({
+            where: {
+              id: dto.id,
+            },
+            data: {
+              jurisdictions: {
+                connect: toAdd,
+                disconnect: toRemove,
+              },
+            },
+          });
+        });
+      }
     }
 
-    const res = await this.prisma.userAccounts.update({
-      include: views.full,
-      data: {
-        email: dto.email,
-        agreedToTermsOfService: dto.agreedToTermsOfService,
-        passwordHash: passwordHash ?? undefined,
-        passwordUpdatedAt: passwordUpdatedAt ?? undefined,
-        confirmationToken: confirmationToken ?? undefined,
-        firstName: dto.firstName,
-        middleName: dto.middleName,
-        lastName: dto.lastName,
-        dob: dto.dob,
-        phoneNumber: dto.phoneNumber,
-        title: dto.title,
-        phoneType: dto.phoneType,
-        phoneExtension: dto.phoneExtension,
-        additionalPhoneNumber: dto.additionalPhoneNumber,
-        additionalPhoneNumberType: dto.additionalPhoneNumberType,
-        additionalPhoneExtension: dto.additionalPhoneExtension,
-        language: dto.language,
-        agency: dto?.agency?.id
-          ? {
-              connect: {
-                id: dto.agency.id,
-              },
-            }
-          : undefined,
-        address: newAddressId
-          ? {
-              connect: {
-                id: newAddressId,
-              },
-            }
-          : undefined,
-        listings: dto.listings
-          ? {
-              connect: dto.listings.map((listing) => ({ id: listing.id })),
-            }
-          : undefined,
-        jurisdictions: dto.jurisdictions
-          ? {
-              connect: dto.jurisdictions.map((jurisdiction) => ({
-                id: jurisdiction.id,
-              })),
-            }
-          : undefined,
-      },
-      where: {
-        id: dto.id,
-      },
+    transactions.push(async (transaction: PrismaClient) => {
+      return transaction.userAccounts.update({
+        include: views.full,
+        data: {
+          email: dto.email,
+          agreedToTermsOfService: dto.agreedToTermsOfService,
+          passwordHash: passwordHash ?? undefined,
+          passwordUpdatedAt: passwordUpdatedAt ?? undefined,
+          confirmationToken: confirmationToken ?? undefined,
+          firstName: dto.firstName,
+          middleName: dto.middleName,
+          lastName: dto.lastName,
+          dob: dto.dob,
+          phoneNumber: dto.phoneNumber,
+          title: dto.title,
+          phoneType: dto.phoneType,
+          phoneExtension: dto.phoneExtension,
+          additionalPhoneNumber: dto.additionalPhoneNumber,
+          additionalPhoneNumberType: dto.additionalPhoneNumberType,
+          additionalPhoneExtension: dto.additionalPhoneExtension,
+          language: dto.language,
+          agency: dto?.agency?.id
+            ? {
+                connect: {
+                  id: dto.agency.id,
+                },
+              }
+            : undefined,
+          address: newAddressId
+            ? {
+                connect: {
+                  id: newAddressId,
+                },
+              }
+            : undefined,
+          listings: dto.listings
+            ? {
+                connect: dto.listings.map((listing) => ({ id: listing.id })),
+              }
+            : undefined,
+          jurisdictions: dto.jurisdictions
+            ? {
+                connect: dto.jurisdictions.map((jurisdiction) => ({
+                  id: jurisdiction.id,
+                })),
+              }
+            : undefined,
+        },
+        where: {
+          id: dto.id,
+        },
+      });
     });
 
-    return mapTo(User, res);
+    const prismaTransactions = await this.prisma.$transaction(
+      async (transaction) =>
+        await Promise.all(
+          transactions.map((asyncCall) => asyncCall(transaction)),
+        ),
+    );
+
+    const rawUser = prismaTransactions[prismaTransactions.length - 1];
+
+    return mapTo(User, rawUser);
   }
 
   /*
