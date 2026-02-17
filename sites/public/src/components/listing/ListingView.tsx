@@ -63,7 +63,7 @@ import {
   ListingEvent,
   ListingEventCreate,
   ListingEventsTypeEnum,
-  ListingMultiselectQuestion,
+  ListingtiselectQuestion,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   ReviewOrderTypeEnum,
@@ -231,7 +231,7 @@ export const ListingView = (props: ListingProps) => {
         return {
           ordinal: listingMultiselectQuestion.ordinal || index + 1,
           links: listingMultiselectQuestion?.multiselectQuestions?.links,
-          title: listingMultiselectQuestion?.multiselectQuestions?.text,
+          title: listingMultiselectQuestion?.multiselectQuestions?.name,
           description: listingMultiselectQuestion?.multiselectQuestions?.description,
         }
       })
