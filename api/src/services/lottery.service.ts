@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+import { Request as ExpressRequest, Response } from 'express';
 import {
   BadRequestException,
   ForbiddenException,
@@ -17,28 +19,30 @@ import {
   ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
-import dayjs from 'dayjs';
-import { Request as ExpressRequest, Response } from 'express';
-import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
-import { Application } from '../dtos/applications/application.dto';
-import Listing from '../dtos/listings/listing.dto';
-import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
-import { SuccessDTO } from '../dtos/shared/success.dto';
-import { User } from '../dtos/users/user.dto';
-import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { OrderByEnum } from '../enums/shared/order-by-enum';
+import { CronJobService } from './cron-job.service';
+import { EmailService } from './email.service';
 import { ListingService } from './listing.service';
 import { MultiselectQuestionService } from './multiselect-question.service';
 import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
-import { mapTo } from '../utilities/mapTo';
+import { Application } from '../dtos/applications/application.dto';
+import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
+import Listing from '../dtos/listings/listing.dto';
+import { ListingLotteryStatus } from '../dtos/listings/listing-lottery-status.dto';
 import { LotteryActivityLogItem } from '../dtos/lottery/lottery-activity-log-item.dto';
-import { ListingLotteryStatus } from '../../src/dtos/listings/listing-lottery-status.dto';
-import { ListingViews } from '../../src/enums/listings/view-enum';
-import { EmailService } from './email.service';
-import { PublicLotteryResult } from '../../src/dtos/lottery/lottery-public-result.dto';
-import { PublicLotteryTotal } from '../../src/dtos/lottery/lottery-public-total.dto';
-import { CronJobService } from './cron-job.service';
+import { PublicLotteryResult } from '../dtos/lottery/lottery-public-result.dto';
+import { PublicLotteryTotal } from '../dtos/lottery/lottery-public-total.dto';
+import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+import { User } from '../dtos/users/user.dto';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { ListingViews } from '../enums/listings/view-enum';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { OrderByEnum } from '../enums/shared/order-by-enum';
+import { mapTo } from '../utilities/mapTo';
+
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 
 const LOTTERY_CRON_JOB_NAME = 'LOTTERY_CRON_JOB';
 const LOTTERY_PUBLISH_CRON_JOB_NAME = 'LOTTERY_PUBLISH_CRON_JOB';
@@ -96,6 +100,7 @@ export class LotteryService {
     const listing = await this.prisma.listings.findUnique({
       select: {
         id: true,
+        jurisdictions: { select: { featureFlags: true } },
         lotteryStatus: true,
       },
       where: {
@@ -117,15 +122,14 @@ export class LotteryService {
     }
 
     try {
+      const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+        listing.jurisdictions as unknown as Jurisdiction,
+        FeatureFlagEnum.enableV2MSQ,
+      );
+
       const applications = await this.prisma.applications.findMany({
         select: {
           id: true,
-          preferences: true,
-          householdMember: {
-            select: {
-              id: true,
-            },
-          },
           applicationLotteryPositions: {
             select: {
               ordinal: true,
@@ -138,6 +142,16 @@ export class LotteryService {
               ordinal: OrderByEnum.DESC,
             },
           },
+          applicationSelections: {
+            include: { multiselectQuestion: true },
+          },
+          householdMember: {
+            select: {
+              id: true,
+            },
+          },
+          // TODO: remove after MSQ refactor
+          preferences: true,
         },
         where: {
           listingId,
@@ -158,6 +172,7 @@ export class LotteryService {
             multiselectQuestion.applicationSection ===
             MultiselectQuestionsApplicationSectionEnum.preferences,
         ),
+        enableV2MSQ,
       );
 
       await this.lotteryStatus(
@@ -185,14 +200,15 @@ export class LotteryService {
    * @param listingId listing id we are going to randomize
    * @param applications set of applications to generate lottery ranks for
    * @param preferencesOnListing the set of preferences on the listing
+   * @param enableV2MSQ when true, the new multiselectQuestion logic will be used
    * @description creates a random rank for the applications on this lottery as well as the preference specific ranks
    */
   async lotteryRandomizer(
     listingId: string,
     applications: Application[],
     preferencesOnListing: MultiselectQuestion[],
+    enableV2MSQ?: boolean,
   ): Promise<void> {
-    // remove duplicates
     let filteredApplications = applications;
     // prep our supporting array
     const ordinalArray = this.lotteryRandomizerHelper(filteredApplications);
@@ -236,7 +252,7 @@ export class LotteryService {
 
     // loop over each preference on the listing and store the relative position of the applications
     for (const preferenceOnListing of preferencesOnListing) {
-      const { id, text, optOutText } = preferenceOnListing;
+      const { id } = preferenceOnListing;
 
       const applicationsWithThisPreference: Application[] = [];
       const ordinalArrayWithThisPreference: number[] = [];
@@ -244,21 +260,39 @@ export class LotteryService {
       // filter down to only the applications that have this particular preference
       let preferenceOrdinal = 1;
       for (const filteredApplication of filteredApplications) {
-        const foundPreference = filteredApplication.preferences.find(
-          (preference) => preference.key === text && preference.claimed,
-        );
-        if (
-          foundPreference?.claimed &&
-          // if at least one option is checked it should not be the same as the opt out text
-          (!foundPreference.options?.length ||
-            foundPreference.options.some(
-              (preference) =>
-                preference.checked === true && preference.key !== optOutText,
-            ))
-        ) {
-          applicationsWithThisPreference.push(filteredApplication);
-          ordinalArrayWithThisPreference.push(preferenceOrdinal);
-          preferenceOrdinal++;
+        if (enableV2MSQ) {
+          const claimedPreference =
+            filteredApplication.applicationSelections?.find(
+              (selection) =>
+                selection.multiselectQuestion.id === id &&
+                !selection.hasOptedOut,
+            );
+          if (claimedPreference) {
+            applicationsWithThisPreference.push(filteredApplication);
+            ordinalArrayWithThisPreference.push(preferenceOrdinal);
+            preferenceOrdinal++;
+          }
+        }
+        // TODO: remove after MSQ refactor
+        else {
+          const foundPreference = filteredApplication.preferences.find(
+            (preference) =>
+              preference.key === preferenceOnListing.text && preference.claimed,
+          );
+          if (
+            foundPreference?.claimed &&
+            // if at least one option is checked it should not be the same as the opt out text
+            (!foundPreference.options?.length ||
+              foundPreference.options.some(
+                (preference) =>
+                  preference.checked === true &&
+                  preference.key !== preferenceOnListing.optOutText,
+              ))
+          ) {
+            applicationsWithThisPreference.push(filteredApplication);
+            ordinalArrayWithThisPreference.push(preferenceOrdinal);
+            preferenceOrdinal++;
+          }
         }
       }
 

@@ -679,10 +679,7 @@ export const stagingSeed = async (
             MultiselectQuestionsApplicationSectionEnum.programs,
           isExclusive: true,
           optOutText: 'Prefer not to say',
-          options: [
-            { text: 'Yes', exclusive: true, ordinal: 1 },
-            { text: 'No', exclusive: true, ordinal: 2 },
-          ],
+          options: [{ text: 'Yes', exclusive: true, ordinal: 1 }],
         },
       }),
     },

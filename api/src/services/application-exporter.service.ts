@@ -1,31 +1,31 @@
+import dayjs from 'dayjs';
+import Excel, { Column } from 'exceljs';
+import { Request as ExpressRequest } from 'express';
+import fs, { createReadStream, ReadStream } from 'fs';
+import { join } from 'path';
+import { ForbiddenException, Injectable, StreamableFile } from '@nestjs/common';
+import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
+import { view } from './application.service';
+import { ListingService } from './listing.service';
+import { MultiselectQuestionService } from './multiselect-question.service';
+import { PermissionService } from './permission.service';
+import { PrismaService } from './prisma.service';
 import { Application } from '../dtos/applications/application.dto';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
-import { CsvHeader } from '../types/CsvExportInterface';
-import dayjs from 'dayjs';
-import Excel, { Column } from 'exceljs';
-import fs, { createReadStream, ReadStream } from 'fs';
-import { generatePresignedGetURL, uploadToS3 } from '../utilities/s3-helpers';
-import { getExportHeaders } from '../utilities/application-export-helpers';
-import { IdDTO } from '../dtos/shared/id.dto';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
-import { ForbiddenException, Injectable, StreamableFile } from '@nestjs/common';
-import { join } from 'path';
-import { ListingService } from './listing.service';
-import { mapTo } from '../utilities/mapTo';
 import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
-import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
-import { MultiselectQuestionService } from './multiselect-question.service';
-import { OrderByEnum } from '../enums/shared/order-by-enum';
-import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { PermissionService } from './permission.service';
-import { PrismaService } from './prisma.service';
-import { Request as ExpressRequest } from 'express';
+import { IdDTO } from '../dtos/shared/id.dto';
 import { User } from '../dtos/users/user.dto';
-import { view } from './application.service';
-import { zipExport, zipExportSecure } from '../utilities/zip-export';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { OrderByEnum } from '../enums/shared/order-by-enum';
+import { CsvHeader } from '../types/CsvExportInterface';
+import { getExportHeaders } from '../utilities/application-export-helpers';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
+import { mapTo } from '../utilities/mapTo';
+import { generatePresignedGetURL, uploadToS3 } from '../utilities/s3-helpers';
+import { zipExport, zipExportSecure } from '../utilities/zip-export';
 
 view.csv = {
   ...view.details,
@@ -40,7 +40,6 @@ const NUMBER_TO_PAGINATE_BY = 500;
 
 @Injectable()
 export class ApplicationExporterService {
-  readonly dateFormat: string = 'MM-DD-YYYY hh:mm:ssA z';
   constructor(
     private prisma: PrismaService,
     private multiselectQuestionService: MultiselectQuestionService,
@@ -174,7 +173,7 @@ export class ApplicationExporterService {
       }-${new Date().getTime()}.csv`,
     );
 
-    await this.createCsv(filename, queryParams, user);
+    await this.createCsv(filename, queryParams);
     return createReadStream(filename);
   }
 
@@ -187,7 +186,6 @@ export class ApplicationExporterService {
   async createCsv<QueryParams extends ApplicationCsvQueryParams>(
     filename: string,
     queryParams: QueryParams,
-    user: User,
   ): Promise<void> {
     const applications = await this.prisma.applications.findMany({
       select: {
@@ -217,6 +215,26 @@ export class ApplicationExporterService {
       },
     });
 
+    const disableWorkInRegion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.disableWorkInRegion,
+    );
+    const enableAdaOtherOption = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableAdaOtherOption,
+    );
+    const enableApplicationStatus = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableApplicationStatus,
+    );
+    const enableFullTimeStudentQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableFullTimeStudentQuestion,
+    );
+    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableV2MSQ,
+    );
     const swapCommunityTypeWithPrograms = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.swapCommunityTypeWithPrograms,
@@ -238,11 +256,15 @@ export class ApplicationExporterService {
       maxHouseholdMembers,
       multiSelectQuestions,
       queryParams.timeZone,
-      user,
-      queryParams.includeDemographics,
-      false,
-      this.dateFormat,
-      swapCommunityTypeWithPrograms,
+      {
+        disableWorkInRegion,
+        enableAdaOtherOption,
+        enableApplicationStatus,
+        enableFullTimeStudentQuestion,
+        enableV2MSQ,
+        includeDemographics: queryParams.includeDemographics,
+        swapCommunityTypeWithPrograms,
+      },
     );
 
     return this.csvExportHelper(
@@ -345,7 +367,7 @@ export class ApplicationExporterService {
                   const { stringData } = this.populateDataForEachHeader(
                     csvHeaders,
                     app,
-                    data,
+                    { stringData: data },
                   );
                   data = stringData + '\n';
                 });
@@ -369,104 +391,6 @@ export class ApplicationExporterService {
           writableStream.end();
         });
     });
-  }
-
-  /**
-   *
-   * @param csvHeaders the headers and renderers of the csv
-   * @param application the application to get data from
-   * @param stringData The existing string data for the output. used for CSV
-   * @param objectData The existing object data for the output. used for spreadsheet
-   * @returns
-   */
-  populateDataForEachHeader(
-    csvHeaders: CsvHeader[],
-    application,
-    stringData?: string,
-    objectData?,
-  ): { stringData: string; objectData: any } {
-    let preferences: ApplicationMultiselectQuestion[];
-    let programs: ApplicationMultiselectQuestion[];
-    csvHeaders.forEach((header, index) => {
-      let multiselectQuestionValue = false;
-      let parsePreference = false;
-      let parseProgram = false;
-      let value = header.path.split('.').reduce((acc, curr) => {
-        // return preference/program as value for the format function to accept
-        if (multiselectQuestionValue) {
-          return acc;
-        }
-
-        if (parsePreference) {
-          // curr should equal the preference id we're pulling from
-          if (!preferences) {
-            preferences =
-              (application.preferences as unknown as ApplicationMultiselectQuestion[]) ||
-              [];
-          }
-          parsePreference = false;
-          // there aren't typically many preferences, but if there, then a object map should be created and used
-          const preference = preferences.find(
-            (preference) => preference.multiselectQuestionId === curr,
-          );
-          multiselectQuestionValue = true;
-          return preference;
-        } else if (parseProgram) {
-          // curr should equal the preference id we're pulling from
-          if (!programs) {
-            programs =
-              (application.programs as unknown as ApplicationMultiselectQuestion[]) ||
-              [];
-          }
-          parseProgram = false;
-          // there aren't typically many programs, but if there, then a object map should be created and used
-          const program = programs.find(
-            (prog) => prog.multiselectQuestionId === curr,
-          );
-          multiselectQuestionValue = true;
-          return program;
-        }
-
-        // sets parsePreference to true, for the next iteration
-        if (curr === 'preferences') {
-          parsePreference = true;
-        } else if (curr === 'programs') {
-          parseProgram = true;
-        }
-
-        if (acc === null || acc === undefined) {
-          return '';
-        }
-
-        // handles working with arrays, e.g. householdMember.0.firstName
-        if (!isNaN(Number(curr))) {
-          const index = Number(curr);
-          return acc[index];
-        }
-
-        return acc[curr];
-      }, application);
-      if (value === undefined) {
-        value = '';
-      } else if (value === null) {
-        value = '';
-      }
-
-      if (header.format) {
-        value = header.format(value);
-      }
-
-      if (stringData !== undefined) {
-        stringData += value ? `"${value.toString().replace(/"/g, `""`)}"` : '';
-        if (index < csvHeaders.length - 1) {
-          stringData += ',';
-        }
-      }
-      if (objectData !== undefined) {
-        objectData[`${header.path}`] = value ? value.toString() : '';
-      }
-    });
-    return { stringData, objectData };
   }
 
   // spreadsheet export functions
@@ -499,7 +423,6 @@ export class ApplicationExporterService {
       {
         ...queryParams,
       },
-      user,
       forLottery,
     );
 
@@ -517,32 +440,33 @@ export class ApplicationExporterService {
   async createSpreadsheets<QueryParams extends ApplicationCsvQueryParams>(
     workbook: Excel.stream.xlsx.WorkbookWriter,
     queryParams: QueryParams,
-    user: User,
     forLottery = false,
   ): Promise<void> {
     let applications = await this.prisma.applications.findMany({
       select: {
         id: true,
-        preferences: true,
+        applicationLotteryPositions: {
+          select: {
+            ordinal: true,
+            multiselectQuestionId: true,
+          },
+          where: {
+            multiselectQuestionId: null,
+          },
+          orderBy: {
+            ordinal: OrderByEnum.DESC,
+          },
+        },
+        applicationSelections: {
+          select: { hasOptedOut: true, multiselectQuestion: true },
+        },
         householdMember: {
           select: {
             id: true,
           },
         },
-        applicationLotteryPositions: forLottery
-          ? {
-              select: {
-                ordinal: true,
-                multiselectQuestionId: true,
-              },
-              where: {
-                multiselectQuestionId: null,
-              },
-              orderBy: {
-                ordinal: OrderByEnum.DESC,
-              },
-            }
-          : undefined,
+        // TODO: remove after MSQ refactor
+        preferences: true,
       },
       where: {
         listingId: queryParams.id,
@@ -564,6 +488,26 @@ export class ApplicationExporterService {
       },
     });
 
+    const disableWorkInRegion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.disableWorkInRegion,
+    );
+    const enableAdaOtherOption = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableAdaOtherOption,
+    );
+    const enableApplicationStatus = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableApplicationStatus,
+    );
+    const enableFullTimeStudentQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableFullTimeStudentQuestion,
+    );
+    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableV2MSQ,
+    );
     const swapCommunityTypeWithPrograms = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.swapCommunityTypeWithPrograms,
@@ -585,11 +529,16 @@ export class ApplicationExporterService {
       maxHouseholdMembers,
       multiSelectQuestions,
       queryParams.timeZone,
-      user,
-      queryParams.includeDemographics,
-      forLottery,
-      undefined,
-      swapCommunityTypeWithPrograms,
+      {
+        disableWorkInRegion,
+        enableAdaOtherOption,
+        enableApplicationStatus,
+        enableFullTimeStudentQuestion,
+        enableV2MSQ,
+        forLottery,
+        includeDemographics: queryParams.includeDemographics,
+        swapCommunityTypeWithPrograms,
+      },
     );
 
     if (forLottery) {
@@ -610,7 +559,7 @@ export class ApplicationExporterService {
       mappedApps,
       columns,
       queryParams,
-      forLottery,
+      { enableV2MSQ, forLottery },
     );
 
     if (forLottery) {
@@ -625,10 +574,13 @@ export class ApplicationExporterService {
           mappedApps,
           columns,
           queryParams,
-          true,
           {
-            id: preference.id,
-            name: preference.text,
+            enableV2MSQ,
+            forLottery,
+            preference: {
+              id: preference.id,
+              name: preference.name,
+            },
           },
         );
       }
@@ -650,9 +602,13 @@ export class ApplicationExporterService {
     applications: Application[],
     csvHeaders: CsvHeader[],
     queryParams: ApplicationCsvQueryParams,
-    forLottery = false,
-    preference?: IdDTO,
+    optionalParams: {
+      enableV2MSQ?: boolean;
+      forLottery?: boolean;
+      preference?: IdDTO;
+    },
   ): Promise<void> {
+    const { enableV2MSQ, forLottery, preference } = optionalParams;
     // create a spreadsheet. If the preference is passed in use that as a title otherwise 'raw'
     const spreadsheet = this.createNewWorksheet(
       workbook,
@@ -662,14 +618,20 @@ export class ApplicationExporterService {
     spreadsheet.columns = this.buildExportColumns(csvHeaders, preference);
 
     const filteredApplications = preference
-      ? applications.filter((app) =>
-          app.preferences.some(
-            (pref) =>
-              (pref.multiselectQuestionId === preference.id ||
-                pref.key === preference.name) &&
-              pref.claimed,
-          ),
-        )
+      ? applications.filter((app) => {
+          if (enableV2MSQ) {
+            return app.applicationSelections.some(
+              (selection) => selection.multiselectQuestion.id === preference.id,
+            );
+          } else {
+            return app.preferences.some(
+              (pref) =>
+                (pref.multiselectQuestionId === preference.id ||
+                  pref.key === preference.name) &&
+                pref.claimed,
+            );
+          }
+        })
       : applications;
 
     for (
@@ -742,12 +704,9 @@ export class ApplicationExporterService {
           ).applicationLotteryPositions[0].ordinal;
         }
 
-        const { objectData } = this.populateDataForEachHeader(
-          csvHeaders,
-          app,
-          undefined,
-          data,
-        );
+        const { objectData } = this.populateDataForEachHeader(csvHeaders, app, {
+          objectData: data,
+        });
         spreadsheet.addRow(objectData).commit();
       });
     }
@@ -871,5 +830,120 @@ export class ApplicationExporterService {
         jurisdictionId,
       },
     );
+  }
+
+  /**
+   *
+   * @param csvHeaders the headers and renderers of the csv
+   * @param application the application to get data from
+   * @param stringData The existing string data for the output. used for CSV
+   * @param objectData The existing object data for the output. used for spreadsheet
+   * @returns
+   */
+  populateDataForEachHeader(
+    csvHeaders: CsvHeader[],
+    application,
+    optionalParams?: {
+      objectData?;
+      stringData?: string;
+    },
+  ): { stringData: string; objectData: any } {
+    let stringData = optionalParams.stringData;
+    const objectData = optionalParams.objectData;
+
+    // TODO: remove after MSQ refactor
+    const preferences: ApplicationMultiselectQuestion[] =
+      (application.preferences as unknown as ApplicationMultiselectQuestion[]) ||
+      [];
+    const programs: ApplicationMultiselectQuestion[] =
+      (application.programs as unknown as ApplicationMultiselectQuestion[]) ||
+      [];
+
+    csvHeaders.forEach((header, index) => {
+      let multiselectQuestionValue = false;
+      let parseMultiselectQuestion = false;
+      let parsePreference = false;
+      let parseProgram = false;
+      let value;
+      value = header.path.split('.').reduce((acc, curr) => {
+        // return preference/program as value for the format function to accept
+        if (multiselectQuestionValue) {
+          return acc;
+        }
+
+        // TODO: remove after MSQ refactor. Remove all but the else if (parseMultiselectQuestion) block
+        if (parsePreference) {
+          parsePreference = false;
+          // curr should equal the preference id we're pulling from
+          // there aren't typically many preferences, but if there are, then the correct object should be used
+          const preference = preferences.find(
+            (preference) => preference.multiselectQuestionId === curr,
+          );
+          multiselectQuestionValue = true;
+          return preference;
+        } else if (parseProgram) {
+          parseProgram = false;
+          // curr should equal the program id we're pulling from
+          // there aren't typically many programs, but if there are, then the correct object should be used
+          const program = programs.find(
+            (prog) => prog.multiselectQuestionId === curr,
+          );
+          multiselectQuestionValue = true;
+          return program;
+        } else if (parseMultiselectQuestion) {
+          const applicationSelection = application.applicationSelections.find(
+            (applicationSelection) =>
+              applicationSelection.multiselectQuestionId === curr,
+          );
+          multiselectQuestionValue = true;
+          return applicationSelection;
+        }
+
+        // TODO: remove after MSQ refactor. Remove all but the parseMultiselectQuestion block
+        // sets parsePreference to true, for the next iteration
+        if (curr === MultiselectQuestionsApplicationSectionEnum.preferences) {
+          parsePreference = true;
+        } else if (
+          curr === MultiselectQuestionsApplicationSectionEnum.programs
+        ) {
+          parseProgram = true;
+        } else if (curr === 'multiselectQuestion') {
+          parseMultiselectQuestion = true;
+        }
+
+        if (acc === null || acc === undefined) {
+          return '';
+        }
+
+        // handles working with arrays, e.g. householdMember.0.firstName
+        if (!isNaN(Number(curr))) {
+          const index = Number(curr);
+          return acc[index];
+        }
+
+        return acc[curr];
+      }, application);
+
+      if (value === undefined) {
+        value = '';
+      } else if (value === null) {
+        value = '';
+      }
+
+      if (header.format) {
+        value = header.format(value);
+      }
+
+      if (stringData !== undefined) {
+        stringData += value ? `"${value.toString().replace(/"/g, `""`)}"` : '';
+        if (index < csvHeaders.length - 1) {
+          stringData += ',';
+        }
+      }
+      if (objectData !== undefined) {
+        objectData[`${header.path}`] = value ? value.toString() : '';
+      }
+    });
+    return { stringData, objectData };
   }
 }
