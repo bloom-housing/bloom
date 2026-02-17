@@ -41,6 +41,59 @@ import { elmVillage } from './seed-helpers/listing-data/elm-village';
 import { lakeviewVilla } from './seed-helpers/listing-data/lakeview-villa';
 import { sunshineFlats } from './seed-helpers/listing-data/sunshine-flats';
 
+export const defaultRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
+  options: [
+    {
+      id: 'americanIndianAlaskanNative',
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: 'asian',
+      subOptions: [
+        { id: 'asianIndian', allowOtherText: false },
+        { id: 'chinese', allowOtherText: false },
+        { id: 'filipino', allowOtherText: false },
+        { id: 'japanese', allowOtherText: false },
+        { id: 'korean', allowOtherText: false },
+        { id: 'vietnamese', allowOtherText: false },
+        { id: 'otherAsian', allowOtherText: true },
+      ],
+      allowOtherText: false,
+    },
+    {
+      id: 'blackAfricanAmerican',
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: 'nativeHawaiianOtherPacificIslander',
+      subOptions: [
+        { id: 'nativeHawaiian', allowOtherText: false },
+        { id: 'guamanianOrChamorro', allowOtherText: false },
+        { id: 'samoan', allowOtherText: false },
+        { id: 'otherPacificIslander', allowOtherText: true },
+      ],
+      allowOtherText: false,
+    },
+    {
+      id: 'white',
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: 'otherMultiracial',
+      subOptions: [],
+      allowOtherText: true,
+    },
+    {
+      id: 'declineToRespond',
+      subOptions: [],
+      allowOtherText: false,
+    },
+  ],
+};
+
 export const stagingSeed = async (
   prismaClient: PrismaClient,
   jurisdictionName: string,
@@ -74,7 +127,8 @@ export const stagingSeed = async (
       { id: 'loweredCabinets' },
     ],
   };
-  const defaultRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
+
+  const angelopolisRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
     options: [
       {
         id: 'americanIndianAlaskanNative',
@@ -83,16 +137,8 @@ export const stagingSeed = async (
       },
       {
         id: 'asian',
-        subOptions: [
-          { id: 'asianIndian', allowOtherText: false },
-          { id: 'chinese', allowOtherText: false },
-          { id: 'filipino', allowOtherText: false },
-          { id: 'japanese', allowOtherText: false },
-          { id: 'korean', allowOtherText: false },
-          { id: 'vietnamese', allowOtherText: false },
-          { id: 'otherAsian', allowOtherText: true },
-        ],
-        allowOtherText: false,
+        subOptions: [],
+        allowOtherText: true,
       },
       {
         id: 'blackAfricanAmerican',
@@ -100,13 +146,18 @@ export const stagingSeed = async (
         allowOtherText: false,
       },
       {
+        id: 'hispanicLatino',
+        subOptions: [],
+        allowOtherText: false,
+      },
+      {
+        id: 'middleEasternNorthAfrican',
+        subOptions: [],
+        allowOtherText: false,
+      },
+      {
         id: 'nativeHawaiianOtherPacificIslander',
-        subOptions: [
-          { id: 'nativeHawaiian', allowOtherText: false },
-          { id: 'guamanianOrChamorro', allowOtherText: false },
-          { id: 'samoan', allowOtherText: false },
-          { id: 'otherPacificIslander', allowOtherText: true },
-        ],
+        subOptions: [],
         allowOtherText: false,
       },
       {
@@ -118,11 +169,6 @@ export const stagingSeed = async (
         id: 'otherMultiracial',
         subOptions: [],
         allowOtherText: true,
-      },
-      {
-        id: 'declineToRespond',
-        subOptions: [],
-        allowOtherText: false,
       },
     ],
   };
@@ -406,50 +452,7 @@ export const stagingSeed = async (
           },
         ],
       },
-      raceEthnicityConfiguration: {
-        options: [
-          {
-            id: 'americanIndianAlaskanNative',
-            subOptions: [],
-            allowOtherText: false,
-          },
-          {
-            id: 'asian',
-            subOptions: [],
-            allowOtherText: true,
-          },
-          {
-            id: 'blackAfricanAmerican',
-            subOptions: [],
-            allowOtherText: false,
-          },
-          {
-            id: 'hispanicLatino',
-            subOptions: [],
-            allowOtherText: false,
-          },
-          {
-            id: 'middleEasternNorthAfrican',
-            subOptions: [],
-            allowOtherText: false,
-          },
-          {
-            id: 'nativeHawaiianOtherPacificIslander',
-            subOptions: [],
-            allowOtherText: false,
-          },
-          {
-            id: 'white',
-            subOptions: [],
-            allowOtherText: false,
-          },
-          {
-            id: 'otherMultiracial',
-            subOptions: [],
-            allowOtherText: true,
-          },
-        ],
-      },
+      raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
     }),
   });
   // create super admin user
@@ -908,7 +911,14 @@ export const stagingSeed = async (
           workInCityQuestion,
           multiselectQuestionPrograms,
         ],
-        applications: [await applicationFactory(), await applicationFactory()],
+        applications: [
+          await applicationFactory({
+            raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
+          }),
+          await applicationFactory({
+            raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
+          }),
+        ],
         userAccounts: [{ id: partnerUser.id }],
         optionalFeatures: { carpetInUnit: true },
       },
