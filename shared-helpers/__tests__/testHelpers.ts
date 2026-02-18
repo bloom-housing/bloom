@@ -26,6 +26,7 @@ import {
   User,
   MultiselectQuestionsStatusEnum,
   ListingFeaturesConfiguration,
+  RaceEthnicityConfiguration,
 } from "../src/types/backend-swagger"
 
 export const multiselectQuestionPreference: MultiselectQuestion = {
@@ -1353,6 +1354,59 @@ export const expandedListingFeaturesConfiguration: ListingFeaturesConfiguration 
         { id: "smokeDetectorWithStrobe" },
         { id: "ttyAmplifiedPhone" },
       ],
+    },
+  ],
+}
+
+export const defaultRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
+  options: [
+    {
+      id: "americanIndianAlaskanNative",
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: "asian",
+      subOptions: [
+        { id: "asianIndian", allowOtherText: false },
+        { id: "chinese", allowOtherText: false },
+        { id: "filipino", allowOtherText: false },
+        { id: "japanese", allowOtherText: false },
+        { id: "korean", allowOtherText: false },
+        { id: "vietnamese", allowOtherText: false },
+        { id: "otherAsian", allowOtherText: true },
+      ],
+      allowOtherText: false,
+    },
+    {
+      id: "blackAfricanAmerican",
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: "nativeHawaiianOtherPacificIslander",
+      subOptions: [
+        { id: "nativeHawaiian", allowOtherText: false },
+        { id: "guamanianOrChamorro", allowOtherText: false },
+        { id: "samoan", allowOtherText: false },
+        { id: "otherPacificIslander", allowOtherText: true },
+      ],
+      allowOtherText: false,
+    },
+    {
+      id: "white",
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: "otherMultiracial",
+      subOptions: [],
+      allowOtherText: true,
+    },
+    {
+      id: "declineToRespond",
+      subOptions: [],
+      allowOtherText: false,
     },
   ],
 }
