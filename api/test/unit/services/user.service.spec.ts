@@ -1330,22 +1330,24 @@ describe('Testing user service', () => {
         .fn()
         .mockImplementation((callBack) => callBack(prisma));
 
-      await service.update(
-        {
-          id,
-          firstName: 'first name',
-          lastName: 'last name',
-          jurisdictions: [{ id: jurisId } as any],
-          agreedToTermsOfService: true,
-        } as PublicUserUpdate,
-        {
-          headers: { jurisdictionname: 'juris 1' },
-          user: {
-            id: 'requestingUser id',
-            userRoles: { isAdmin: true },
-          } as unknown as User,
-        } as unknown as Request,
-      );
+      const mockUserUpdate: PublicUserUpdate = {
+        id,
+        firstName: 'first name',
+        middleName: 'middle name',
+        lastName: 'last name',
+        dob: new Date(),
+        email: 'test@email.com',
+        jurisdictions: [{ id: jurisId }],
+        agreedToTermsOfService: true,
+      };
+
+      await service.update(mockUserUpdate, {
+        headers: { jurisdictionname: 'juris 1' },
+        user: {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User,
+      } as unknown as Request);
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdictions: true,
@@ -1362,22 +1364,17 @@ describe('Testing user service', () => {
           id,
         },
       });
+
       expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-        data: {
-          jurisdictions: {
-            connect: [{ id: jurisId }],
-          },
-        },
-        where: {
-          id,
-        },
-      });
-      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-        data: {
-          firstName: 'first name',
-          lastName: 'last name',
+        data: expect.objectContaining({
+          firstName: mockUserUpdate.firstName,
+          middleName: mockUserUpdate.middleName,
+          lastName: mockUserUpdate.lastName,
+          email: mockUserUpdate.email,
+          dob: mockUserUpdate.dob,
           agreedToTermsOfService: true,
-        },
+          jurisdictions: { connect: [{ id: jurisId }] },
+        }),
         include: {
           jurisdictions: true,
           listings: true,
@@ -1429,24 +1426,26 @@ describe('Testing user service', () => {
         .fn()
         .mockImplementation((callBack) => callBack(prisma));
 
-      await service.update(
-        {
-          id,
-          firstName: 'first name',
-          lastName: 'last name',
-          jurisdictions: [{ id: jurisId } as any],
-          password: 'new password',
-          currentPassword: 'current password',
-          agreedToTermsOfService: true,
-        } as PublicUserUpdate,
-        {
-          headers: { jurisdictionname: 'juris 1' },
-          user: {
-            id: 'requestingUser id',
-            userRoles: { isAdmin: true },
-          } as unknown as User,
-        } as unknown as Request,
-      );
+      const mockPublicUserUpdate: PublicUserUpdate = {
+        id,
+        firstName: 'first name',
+        lastName: 'last name',
+        dob: new Date(),
+        email: 'updated@email.com',
+        jurisdictions: [{ id: jurisId } as any],
+        password: 'new password',
+        currentPassword: 'current password',
+        agreedToTermsOfService: true,
+      };
+
+      await service.update(mockPublicUserUpdate, {
+        headers: { jurisdictionname: 'juris 1' },
+        user: {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User,
+      } as unknown as Request);
+
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdictions: true,
@@ -1463,24 +1462,22 @@ describe('Testing user service', () => {
           id,
         },
       });
+
       expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-        data: {
-          jurisdictions: {
-            connect: [{ id: jurisId }],
-          },
-        },
-        where: {
-          id,
-        },
-      });
-      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-        data: {
-          firstName: 'first name',
-          lastName: 'last name',
+        data: expect.objectContaining({
+          firstName: mockPublicUserUpdate.firstName,
+          lastName: mockPublicUserUpdate.lastName,
           passwordHash: expect.anything(),
           passwordUpdatedAt: expect.anything(),
           agreedToTermsOfService: true,
-        },
+          jurisdictions: {
+            connect: [
+              {
+                id: jurisId,
+              },
+            ],
+          },
+        }),
         include: {
           jurisdictions: true,
           listings: true,
@@ -1664,24 +1661,25 @@ describe('Testing user service', () => {
         .fn()
         .mockImplementation((callBack) => callBack(prisma));
 
-      await service.update(
-        {
-          id,
-          firstName: 'first name',
-          lastName: 'last name',
-          jurisdictions: [{ id: jurisId } as any],
-          newEmail: 'new@email.com',
-          appUrl: 'https://www.example.com',
-          agreedToTermsOfService: true,
-        } as PublicUserUpdate,
-        {
-          headers: { jurisdictionname: 'juris 1' },
-          user: {
-            id: 'requestingUser id',
-            userRoles: { isAdmin: true },
-          } as unknown as User,
-        } as unknown as Request,
-      );
+      const mockUserUpdate: PublicUserUpdate = {
+        id,
+        firstName: 'first name',
+        lastName: 'last name',
+        dob: new Date(),
+        email: 'updated@email.com',
+        jurisdictions: [{ id: jurisId } as any],
+        newEmail: 'new@email.com',
+        appUrl: 'https://www.example.com',
+        agreedToTermsOfService: true,
+      };
+
+      await service.update(mockUserUpdate, {
+        headers: { jurisdictionname: 'juris 1' },
+        user: {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User,
+      } as unknown as Request);
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdictions: true,
@@ -1698,23 +1696,17 @@ describe('Testing user service', () => {
           id,
         },
       });
+
       expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-        data: {
+        data: expect.objectContaining({
+          firstName: mockUserUpdate.firstName,
+          lastName: mockUserUpdate.lastName,
+          confirmationToken: expect.anything(),
+          agreedToTermsOfService: true,
           jurisdictions: {
             connect: [{ id: jurisId }],
           },
-        },
-        where: {
-          id,
-        },
-      });
-      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-        data: {
-          firstName: 'first name',
-          lastName: 'last name',
-          confirmationToken: expect.anything(),
-          agreedToTermsOfService: true,
-        },
+        }),
         include: {
           jurisdictions: true,
           listings: true,
@@ -1838,11 +1830,11 @@ describe('Testing user service', () => {
         },
       });
       expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-        data: {
+        data: expect.objectContaining({
           firstName: 'first name',
           lastName: 'last name',
           agreedToTermsOfService: true,
-        },
+        }),
         include: {
           jurisdictions: true,
           listings: true,
