@@ -25,7 +25,7 @@ p, anonymous, multiselectQuestion, true, read
 
 p, admin, properties, true, .*
 p, supportAdmin, properties, true, read
-p, jurisdictionAdmin, properties, true, .*
+p, jurisdictionAdmin, properties, true, read
 p, limitedJurisdictionAdmin, properties, true, read
 p, partner, properties, true, read
 

@@ -167,6 +167,8 @@ export class PropertyService {
       throw new BadRequestException('A jurisdiction must be provided');
     }
 
+    await this.findOrThrow(propertyDto.id);
+
     const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
       select: {
         id: true,
