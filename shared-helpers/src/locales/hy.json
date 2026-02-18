@@ -719,6 +719,8 @@
   "leasingAgent.officeHours": "Գրասենյակի ժամեր",
   "listingFilters.clear": "Մաքրել",
   "listingFilters.program.Families": "Ընտանիքներ",
+  "listingFilters.program.hearingVisionAccessibilityNeeds": "Լսողության/տեսողության հասանելիություն",
+  "listingFilters.program.mobilityAccessibilityNeeds": "Շարժունակության մատչելիության կարիքները",
   "listingFilters.program.Residents with Disabilities": "Հաշմանդամություն ունեցող բնակիչներ",
   "listingFilters.program.Seniors 55+": "55+ տարեկան տարեցներ",
   "listingFilters.program.Seniors 62+": "Ավագներ 62+",

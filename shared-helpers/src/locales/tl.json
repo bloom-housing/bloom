@@ -723,6 +723,8 @@
   "leasingAgent.officeHours": "Oras ng opisina",
   "listingFilters.clear": "Maaliwalas",
   "listingFilters.program.Families": "Mga pamilya",
+  "listingFilters.program.hearingVisionAccessibilityNeeds": "Accessibility sa pandinig/pangitain",
+  "listingFilters.program.mobilityAccessibilityNeeds": "Mga pangangailangan sa kadaliang mapakilos",
   "listingFilters.program.Residents with Disabilities": "Mga residenteng may kapansanan",
   "listingFilters.program.Seniors 55+": "Mga nakatatanda 55+",
   "listingFilters.program.Seniors 62+": "Mga nakatatanda 62+",

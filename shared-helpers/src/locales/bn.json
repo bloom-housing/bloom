@@ -723,6 +723,8 @@
   "leasingAgent.officeHours": "অফিস সময়সূচী",
   "listingFilters.clear": "পরিষ্কার",
   "listingFilters.program.Families": "পরিবার",
+  "listingFilters.program.hearingVisionAccessibilityNeeds": "শ্রবণ/দৃষ্টি অ্যাক্সেসযোগ্যতা",
+  "listingFilters.program.mobilityAccessibilityNeeds": "গতিশীলতা অ্যাক্সেসিবিলিটি প্রয়োজন",
   "listingFilters.program.Residents with Disabilities": "প্রতিবন্ধী বাসিন্দারা",
   "listingFilters.program.Seniors 55+": "প্রবীণ 55+",
   "listingFilters.program.Seniors 62+": "প্রবীণ 62+",

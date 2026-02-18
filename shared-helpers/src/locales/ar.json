@@ -723,6 +723,8 @@
   "leasingAgent.officeHours": "ساعات العمل",
   "listingFilters.clear": "مسح",
   "listingFilters.program.Families": "الأُسر",
+  "listingFilters.program.hearingVisionAccessibilityNeeds": "إمكانية الوصول إلى السمع / الرؤية",
+  "listingFilters.program.mobilityAccessibilityNeeds": "احتياجات إمكانية الوصول إلى التنقل",
   "listingFilters.program.Residents with Disabilities": "السكان ذوي الإعاقة",
   "listingFilters.program.Seniors 55+": "لكبار السن فوق 55 سنة",
   "listingFilters.program.Seniors 62+": "لكبار السن فوق 62 سنة",

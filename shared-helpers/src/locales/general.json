@@ -719,6 +719,8 @@
   "leasingAgent.officeHours": "Office hours",
   "listingFilters.clear": "Clear",
   "listingFilters.program.Families": "Families",
+  "listingFilters.program.hearingVisionAccessibilityNeeds": "Hearing/vision accessibility",
+  "listingFilters.program.mobilityAccessibilityNeeds": "Mobility accessibility needs",
   "listingFilters.program.Residents with Disabilities": "Residents with disabilities",
   "listingFilters.program.Seniors 55+": "Seniors 55+",
   "listingFilters.program.Seniors 62+": "Seniors 62+",

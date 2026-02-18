@@ -723,6 +723,8 @@
   "leasingAgent.officeHours": "Horario de oficina",
   "listingFilters.clear": "Borrar",
   "listingFilters.program.Families": "Familias",
+  "listingFilters.program.hearingVisionAccessibilityNeeds": "Accesibilidad auditiva/visual",
+  "listingFilters.program.mobilityAccessibilityNeeds": "Necesidades de accesibilidad a la movilidad",
   "listingFilters.program.Residents with Disabilities": "Residentes con discapacidades",
   "listingFilters.program.Seniors 55+": "Adultos mayores de 55 años",
   "listingFilters.program.Seniors 62+": "Adultos mayores de 62 años",
