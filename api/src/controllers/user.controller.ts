@@ -164,6 +164,7 @@ export class UserController {
   })
   @ApiOkResponse({ type: User })
   @UseGuards(PermissionGuard, JwtAuthGuard)
+  @UseInterceptors(ActivityLogInterceptor)
   async createPartnerUser(
     @Request() req: ExpressRequest,
     @Body() dto: PartnerUserCreate,
