@@ -288,6 +288,29 @@ export class UserService {
       }
     }
 
+    if (dto.listings?.length || storedUser.listings?.length) {
+      // if the listing is stored in the db but not on the incoming dto, mark as to be removed
+      const toRemove = toRemoveHelper(storedUser.listings, dto.listings);
+      // if listing is on dto but not in db, we need to store it
+      const toAdd = toAddHelper(storedUser.listings, dto.listings);
+
+      if (toAdd?.length || toRemove?.length) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.userAccounts.update({
+            where: {
+              id: dto.id,
+            },
+            data: {
+              listings: {
+                disconnect: toRemove?.length ? toRemove : undefined,
+                connect: toAdd?.length ? toAdd : undefined,
+              },
+            },
+          });
+        });
+      }
+    }
+
     //handle address for advocated users
     let newAddressId: string | undefined;
     if (dto?.address) {
@@ -608,6 +631,7 @@ export class UserService {
       // if attempting to recreate an existing user
       if (!existingUser.userRoles && 'userRoles' in dto) {
         // existing user && public user && user will get roles -> trying to grant partner access to a public user
+        await this.snapshotCreateService.createUserSnapshot(existingUser.id);
         const res = await this.prisma.userAccounts.update({
           include: views.full,
           data: {
@@ -644,6 +668,7 @@ export class UserService {
           .map((juris) => ({ id: juris.id }))
           .concat(dto.listings);
 
+        await this.snapshotCreateService.createUserSnapshot(existingUser.id);
         const res = await this.prisma.userAccounts.update({
           include: views.full,
           data: {
@@ -1408,6 +1433,7 @@ export class UserService {
       for (const user of users) {
         try {
           await this.emailService.warnOfAccountRemoval(mapTo(User, user));
+          await this.snapshotCreateService.createUserSnapshot(user.id);
           await this.prisma.userAccounts.update({
             data: { wasWarnedOfDeletion: true },
             where: { id: user.id },
