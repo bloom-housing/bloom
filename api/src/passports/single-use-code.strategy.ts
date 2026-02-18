@@ -18,13 +18,17 @@ import {
   singleUseCodePresent,
   singleUseCodeInvalid,
 } from '../utilities/passport-validator-utilities';
+import { SnapshotCreateService } from '../services/snapshot-create.service';
 
 @Injectable()
 export class SingleUseCodeStrategy extends PassportStrategy(
   Strategy,
   'single-use-code',
 ) {
-  constructor(private prisma: PrismaService) {
+  constructor(
+    private prisma: PrismaService,
+    private snapshotCreateService: SnapshotCreateService,
+  ) {
     super({
       usernameField: 'email',
       passwordField: 'singleUseCode',
@@ -101,8 +105,12 @@ export class SingleUseCodeStrategy extends PassportStrategy(
         rawUser.singleUseCodeUpdatedAt,
       )
     ) {
+      if (rawUser.wasWarnedOfDeletion) {
+        // only create a snapshot if user was previously warned of deletion
+        await this.snapshotCreateService.createUserSnapshot(rawUser.id);
+      }
       // if a singleUseCode was not sent, or a singleUseCode wasn't stored in the db for the user
-      // signal to the front end to request an single use code
+      // signal to the front end to request an single use code+
       await this.updateFailedLoginCount(0, rawUser.id);
       throw new UnauthorizedException({
         name: 'singleUseCodeIsMissing',

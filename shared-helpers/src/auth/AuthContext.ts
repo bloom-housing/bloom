@@ -403,8 +403,11 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       }
       // Return true only if all jurisdictions have the flag turned on
       if (onlyIfAllJurisdictionsHaveItEnabled) {
-        return jurisdictions.every(
-          (j) => j.featureFlags?.find((flag) => flag.name === featureFlag)?.active || false
+        return (
+          !!jurisdictions.length &&
+          jurisdictions.every(
+            (j) => j.featureFlags?.find((flag) => flag.name === featureFlag)?.active || false
+          )
         )
       }
       // Otherwise return true if at least one jurisdiction has the flag turned on

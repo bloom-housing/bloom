@@ -59,7 +59,8 @@ const loadListing = async (
     ...applicationConfig,
     languages: jurisdictionResponse.languages,
     featureFlags: jurisdictionResponse.featureFlags,
-    isAdvocate,
+    isAdvocate:
+      isFeatureFlagOn(jurisdictionResponse, FeatureFlagEnum.enableHousingAdvocate) && isAdvocate,
   }
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)
@@ -102,7 +103,7 @@ const ApplicationChooseLanguage = () => {
         "en",
         listingsService,
         jurisdictionsService,
-        // TODO: switch below to sth like profile?.isAdvocate ?? false when available
+        // TODO (Advocate): switch below to sth like profile?.isAdvocate ?? false when available
         false
       )
     } else {
@@ -153,7 +154,7 @@ const ApplicationChooseLanguage = () => {
         language,
         listingsService,
         jurisdictionsService,
-        // TODO: switch below to sth like profile?.isAdvocate ?? false when available
+        // TODO (Advocate): switch below to sth like profile?.isAdvocate ?? false when available
         false
       ).then(() => {
         void router.push(conductor.determineNextUrl(), null, { locale: language })

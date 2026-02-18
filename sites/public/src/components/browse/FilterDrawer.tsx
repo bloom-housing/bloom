@@ -8,6 +8,7 @@ import {
   MultiselectQuestion,
   FeatureFlagEnum,
   ListingFeaturesConfiguration,
+  ParkingTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
 import {
@@ -24,7 +25,6 @@ import {
   unitTypeUnitGroupsMapping,
 } from "./FilterDrawerHelpers"
 import { isTrue } from "../../lib/helpers"
-
 export interface FilterDrawerProps {
   activeFeatureFlags?: FeatureFlagEnum[]
   filterState: FilterData
@@ -64,6 +64,10 @@ const FilterDrawer = (props: FilterDrawerProps) => {
 
   const enableAccessibilityFeatures = props.activeFeatureFlags?.some(
     (entry) => entry === FeatureFlagEnum.enableAccessibilityFeatures
+  )
+
+  const enableParkingType = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableParkingType
   )
 
   const availabilityLabels = getAvailabilityValues(enableUnitGroups).map((key) =>
@@ -113,6 +117,19 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             )}
             register={register}
           />
+          {enableParkingType && (
+            <CheckboxGroup
+              groupLabel={t("t.parkingTypes")}
+              fields={buildDefaultFilterFields(
+                ListingFilterKeys.parkingType,
+                "listings.parkingTypeOptions",
+                Object.keys(ParkingTypeEnum),
+                props.filterState
+              )}
+              register={register}
+            />
+          )}
+
           <CheckboxGroup
             groupLabel={t("listings.unitTypes.bedroomSize")}
             fields={buildDefaultFilterFields(

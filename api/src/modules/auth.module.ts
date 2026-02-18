@@ -11,6 +11,7 @@ import { MfaStrategy } from '../passports/mfa.strategy';
 import { JwtStrategy } from '../passports/jwt.strategy';
 import { EmailModule } from './email.module';
 import { SingleUseCodeStrategy } from '../passports/single-use-code.strategy';
+import { SnapshotCreateModule } from './snapshot-create.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SingleUseCodeStrategy } from '../passports/single-use-code.strategy';
       secret: process.env.APP_SECRET,
     }),
     EmailModule,
+    SnapshotCreateModule,
   ],
   controllers: [AuthController],
   providers: [

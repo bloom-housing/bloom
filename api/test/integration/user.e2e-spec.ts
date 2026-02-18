@@ -210,6 +210,14 @@ describe('User Controller Tests', () => {
       expect(res.body.id).toEqual(userA.id);
       expect(res.body.firstName).toEqual('New User First Name');
       expect(res.body.lastName).toEqual('New User Last Name');
+
+      const userASnapshot = await prisma.userAccountSnapshot.findFirst({
+        where: {
+          originalId: userA.id,
+        },
+      });
+      expect(!!userASnapshot.id).toBe(true);
+      expect(userASnapshot.firstName).toEqual(userA.firstName);
     });
 
     it("should error when updating user that doesn't exist", async () => {

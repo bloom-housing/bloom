@@ -801,6 +801,31 @@ export class MultiselectQuestionsService {
   }
 }
 
+export class SnapshotService {
+  /**
+   * Create User Snapshot
+   */
+  createUserSnapshot(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/snapshot/createUserSnapshot"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class AmiChartsService {
   /**
    * List amiCharts
@@ -3284,6 +3309,9 @@ export interface ListingFilterParams {
 
   /**  */
   listingType?: ListingTypeEnum
+
+  /**  */
+  parkingType?: ParkingTypeEnum
 }
 
 export interface ListingsQueryBody {
@@ -9175,6 +9203,13 @@ export enum ListingTypeEnum {
   "regulated" = "regulated",
   "nonRegulated" = "nonRegulated",
 }
+
+export enum ParkingTypeEnum {
+  "onStreet" = "onStreet",
+  "offStreet" = "offStreet",
+  "garage" = "garage",
+  "carport" = "carport",
+}
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
@@ -9231,6 +9266,7 @@ export enum ListingFilterKeys {
   "multiselectQuestions" = "multiselectQuestions",
   "name" = "name",
   "neighborhood" = "neighborhood",
+  "parkingType" = "parkingType",
   "regions" = "regions",
   "configurableRegions" = "configurableRegions",
   "reservedCommunityTypes" = "reservedCommunityTypes",
@@ -9522,6 +9558,7 @@ export enum NeighborhoodAmenitiesEnum {
 export enum FeatureFlagEnum {
   "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
   "disableCommonApplication" = "disableCommonApplication",
+  "disableEthnicityQuestion" = "disableEthnicityQuestion",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
   "disableWorkInRegion" = "disableWorkInRegion",

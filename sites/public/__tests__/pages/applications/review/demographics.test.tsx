@@ -32,76 +32,92 @@ describe("applications pages", () => {
 
   describe("demographics step", () => {
     it("should render form fields", () => {
-      const { getByText, getByTestId, getAllByTestId } = render(<ApplicationDemographics />)
+      render(<ApplicationDemographics />)
 
       expect(
-        getByText("Help us ensure we are meeting our goal to serve all people")
+        screen.getByText("Help us ensure we are meeting our goal to serve all people")
       ).toBeInTheDocument()
-      expect(getByTestId("americanIndianAlaskanNative")).toBeInTheDocument()
-      expect(getByTestId("asian")).toBeInTheDocument()
-      expect(getByTestId("blackAfricanAmerican")).toBeInTheDocument()
-      expect(getByTestId("nativeHawaiianOtherPacificIslander")).toBeInTheDocument()
-      expect(getByTestId("white")).toBeInTheDocument()
-      expect(getByTestId("otherMultiracial")).toBeInTheDocument()
-      expect(getByTestId("declineToRespond")).toBeInTheDocument()
-      expect(getByTestId("app-demographics-ethnicity")).toBeInTheDocument()
-      expect(getAllByTestId("app-demographics-how-did-you-hear")).toHaveLength(9)
+      expect(
+        screen.getByText("Which best describes your race? Please select all that apply:", {
+          selector: "legend",
+        })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole("checkbox", { name: "American Indian / Alaskan Native" })
+      ).toBeInTheDocument()
+      expect(screen.getByRole("checkbox", { name: "Asian" })).toBeInTheDocument()
+      expect(screen.getByRole("checkbox", { name: "Black / African American" })).toBeInTheDocument()
+      expect(
+        screen.getByRole("checkbox", { name: "Native Hawaiian / Other Pacific Islander" })
+      ).toBeInTheDocument()
+      expect(screen.getByRole("checkbox", { name: "White" })).toBeInTheDocument()
+      expect(screen.getByRole("checkbox", { name: "Other / Multiracial" })).toBeInTheDocument()
+      expect(screen.getByRole("checkbox", { name: "Decline to respond" })).toBeInTheDocument()
+      expect(screen.getByLabelText("Which best describes your ethnicity?")).toBeInTheDocument()
+      expect(
+        screen.getAllByRole("checkbox", {
+          name: /Alameda County HCD Website|Developer website|Flyer|Email alert|Friend|Housing counselor|Radio ad|Bus ad|Other/,
+        })
+      ).toHaveLength(11)
     })
 
     it("should render sub demographics fields when parent is checked", () => {
-      const { getByText, queryByText } = render(<ApplicationDemographics />)
+      render(<ApplicationDemographics />)
 
-      expect(queryByText("Asian Indian")).not.toBeInTheDocument()
-      expect(queryByText("Chinese")).not.toBeInTheDocument()
-      expect(queryByText("Filipino")).not.toBeInTheDocument()
-      expect(queryByText("Japanese")).not.toBeInTheDocument()
-      expect(queryByText("Korean")).not.toBeInTheDocument()
-      expect(queryByText("Vietnamese")).not.toBeInTheDocument()
-      expect(queryByText("Other Asian")).not.toBeInTheDocument()
+      expect(screen.queryByText("Asian Indian")).not.toBeInTheDocument()
+      expect(screen.queryByText("Chinese")).not.toBeInTheDocument()
+      expect(screen.queryByText("Filipino")).not.toBeInTheDocument()
+      expect(screen.queryByText("Japanese")).not.toBeInTheDocument()
+      expect(screen.queryByText("Korean")).not.toBeInTheDocument()
+      expect(screen.queryByText("Vietnamese")).not.toBeInTheDocument()
+      expect(screen.queryByText("Other Asian")).not.toBeInTheDocument()
 
-      fireEvent.click(getByText("Asian"))
+      fireEvent.click(screen.getByRole("checkbox", { name: "Asian" }))
 
-      expect(getByText("Asian Indian")).toBeInTheDocument()
-      expect(getByText("Chinese")).toBeInTheDocument()
-      expect(getByText("Filipino")).toBeInTheDocument()
-      expect(getByText("Japanese")).toBeInTheDocument()
-      expect(getByText("Korean")).toBeInTheDocument()
-      expect(getByText("Vietnamese")).toBeInTheDocument()
-      expect(getByText("Other Asian")).toBeInTheDocument()
+      expect(screen.getByText("Asian Indian")).toBeInTheDocument()
+      expect(screen.getByText("Chinese")).toBeInTheDocument()
+      expect(screen.getByText("Filipino")).toBeInTheDocument()
+      expect(screen.getByText("Japanese")).toBeInTheDocument()
+      expect(screen.getByText("Korean")).toBeInTheDocument()
+      expect(screen.getByText("Vietnamese")).toBeInTheDocument()
+      expect(screen.getByText("Other Asian")).toBeInTheDocument()
 
-      expect(queryByText("Native Hawaiian")).not.toBeInTheDocument()
-      expect(queryByText("Guamanian or Chamorro")).not.toBeInTheDocument()
-      expect(queryByText("Samoan")).not.toBeInTheDocument()
-      expect(queryByText("Other Pacific Islander")).not.toBeInTheDocument()
+      expect(screen.queryByText("Native Hawaiian")).not.toBeInTheDocument()
+      expect(screen.queryByText("Guamanian or Chamorro")).not.toBeInTheDocument()
+      expect(screen.queryByText("Samoan")).not.toBeInTheDocument()
+      expect(screen.queryByText("Other Pacific Islander")).not.toBeInTheDocument()
 
-      fireEvent.click(getByText("Native Hawaiian / Other Pacific Islander"))
+      fireEvent.click(
+        screen.getByRole("checkbox", { name: "Native Hawaiian / Other Pacific Islander" })
+      )
 
-      expect(getByText("Native Hawaiian")).toBeInTheDocument()
-      expect(getByText("Guamanian or Chamorro")).toBeInTheDocument()
-      expect(getByText("Samoan")).toBeInTheDocument()
-      expect(getByText("Other Pacific Islander")).toBeInTheDocument()
+      expect(screen.getByText("Native Hawaiian")).toBeInTheDocument()
+      expect(screen.getByText("Guamanian or Chamorro")).toBeInTheDocument()
+      expect(screen.getByText("Samoan")).toBeInTheDocument()
+      expect(screen.getByText("Other Pacific Islander")).toBeInTheDocument()
     })
 
     it("should show other text fields when other options are checked", async () => {
-      const { getByText, queryByTestId, findAllByTestId } = render(<ApplicationDemographics />)
+      render(<ApplicationDemographics />)
 
-      expect(queryByTestId("asian-otherAsian")).not.toBeInTheDocument()
-      fireEvent.click(getByText("Asian"))
-      fireEvent.click(getByText("Other Asian"))
-      expect(await findAllByTestId("asian-otherAsian")).toHaveLength(2)
+      expect(screen.queryByText("Please specify:")).not.toBeInTheDocument()
+      fireEvent.click(screen.getByRole("checkbox", { name: "Asian" }))
+      fireEvent.click(screen.getByRole("checkbox", { name: "Other Asian" }))
 
       expect(
-        queryByTestId("nativeHawaiianOtherPacificIslander-otherPacificIslander")
+        screen.queryByTestId("nativeHawaiianOtherPacificIslander-otherPacificIslander")
       ).not.toBeInTheDocument()
-      fireEvent.click(getByText("Native Hawaiian / Other Pacific Islander"))
-      fireEvent.click(getByText("Other Pacific Islander"))
+      fireEvent.click(
+        screen.getByRole("checkbox", { name: "Native Hawaiian / Other Pacific Islander" })
+      )
+      fireEvent.click(screen.getByRole("checkbox", { name: "Other Pacific Islander" }))
       expect(
-        await findAllByTestId("nativeHawaiianOtherPacificIslander-otherPacificIslander")
+        await screen.findAllByTestId("nativeHawaiianOtherPacificIslander-otherPacificIslander")
       ).toHaveLength(2)
 
-      expect(await findAllByTestId("otherMultiracial")).toHaveLength(1)
-      fireEvent.click(getByText("Other / Multiracial"))
-      expect(await findAllByTestId("otherMultiracial")).toHaveLength(2)
+      expect(await screen.findAllByTestId("otherMultiracial")).toHaveLength(1)
+      fireEvent.click(screen.getByRole("checkbox", { name: "Other / Multiracial" }))
+      expect(await screen.findAllByTestId("otherMultiracial")).toHaveLength(2)
     })
   })
 
@@ -153,5 +169,35 @@ describe("applications pages", () => {
     expect(screen.queryByRole("checkbox", { name: "Radio ad" })).not.toBeInTheDocument()
     expect(screen.queryByRole("checkbox", { name: "Bus ad" })).not.toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Other" })).toBeInTheDocument()
+  })
+
+  it("should hide ethnicity field when disabledEthnicityQuestion flag is on", () => {
+    const conductor = new ApplicationConductor({}, {})
+    conductor.config.featureFlags = [
+      { name: FeatureFlagEnum.disableEthnicityQuestion, active: true } as FeatureFlag,
+    ]
+    render(
+      <AppSubmissionContext.Provider
+        value={{
+          conductor: conductor,
+          application: JSON.parse(JSON.stringify(blankApplication)),
+          listing: {} as unknown as Listing,
+          syncApplication: () => {
+            return
+          },
+          syncListing: () => {
+            return
+          },
+        }}
+      >
+        <ApplicationDemographics />
+      </AppSubmissionContext.Provider>
+    )
+    expect(screen.queryByLabelText("Which best describes your ethnicity?")).not.toBeInTheDocument()
+    expect(
+      screen.getByText("Which best describes your race/ethnicity? Please select all that apply:", {
+        selector: "legend",
+      })
+    ).toBeInTheDocument()
   })
 })
