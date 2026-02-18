@@ -62,7 +62,7 @@ describe("<FormUserManage>", () => {
           // Watch the invite call to make sure it's called
           const requestSpy = jest.fn()
           server.events.on("request:start", (request) => {
-            if (request.method === "POST" && request.url.href.includes("invite")) {
+            if (request.method === "POST" && request.url.href.includes("partner")) {
               requestSpy(request.body)
             }
           })
@@ -134,7 +134,7 @@ describe("<FormUserManage>", () => {
           // Watch the invite call to make sure it's called
           const requestSpy = jest.fn()
           server.events.on("request:start", (request) => {
-            if (request.method === "POST" && request.url.href.includes("invite")) {
+            if (request.method === "POST" && request.url.href.includes("partner")) {
               requestSpy(request.body)
             }
           })
@@ -212,7 +212,7 @@ describe("<FormUserManage>", () => {
           // Watch the invite call to make sure it's called
           const requestSpy = jest.fn()
           server.events.on("request:start", (request) => {
-            if (request.method === "POST" && request.url.href.includes("invite")) {
+            if (request.method === "POST" && request.url.href.includes("partner")) {
               requestSpy(request.body)
             }
           })
