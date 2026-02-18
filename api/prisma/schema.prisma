@@ -775,6 +775,7 @@ model Jurisdictions {
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 
   allowSingleUseCodeLogin             Boolean                             @default(false) @map("allow_single_use_code_login")
+  raceEthnicityConfiguration          Json?                               @map("race_ethnicity_configuration")
   duplicateListingPermissions         UserRoleEnum[]                      @map("duplicate_listing_permissions")
   emailFromAddress                    String?                             @map("email_from_address")
   enableGeocodingPreferences          Boolean                             @default(false) @map("enable_geocoding_preferences")

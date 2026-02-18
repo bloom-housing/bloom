@@ -7572,6 +7572,33 @@ export interface ListingFeaturesConfiguration {
   fields?: ListingFeatureField[]
 }
 
+export interface RaceEthnicitySubOption {
+  /** The unique identifier for this suboption */
+  id: string
+
+  /** Whether this suboption allows free text input for "other" selection */
+  allowOtherText?: boolean
+}
+
+export interface RaceEthnicityOption {
+  /** The unique identifier for this option */
+  id: string
+
+  /** Whether this option has suboptions (like Asian with specific ethnicities) */
+  hasSubOptions?: boolean
+
+  /** The list of suboptions if this option has them */
+  subOptions?: RaceEthnicitySubOption[]
+
+  /** Whether this option allows free text input */
+  allowOtherText?: boolean
+}
+
+export interface RaceEthnicityConfiguration {
+  /** List of race\/ethnicity options available for this jurisdiction */
+  options: RaceEthnicityOption[]
+}
+
 export interface JurisdictionCreate {
   /**  */
   name: string
@@ -7641,6 +7668,9 @@ export interface JurisdictionCreate {
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
+
+  /**  */
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration
 }
 
 export interface JurisdictionUpdate {
@@ -7715,6 +7745,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
+
+  /**  */
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration
 }
 
 export interface FeatureFlag {
@@ -7824,6 +7857,9 @@ export interface Jurisdiction {
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
+
+  /**  */
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration
 }
 
 export interface AddressInput {

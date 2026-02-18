@@ -144,6 +144,7 @@ export default class ApplicationConductor {
     steps: [],
     featureFlags: [],
     isAdvocate: false,
+    raceEthnicityConfiguration: null,
   }
   private _listing: Listing
 
