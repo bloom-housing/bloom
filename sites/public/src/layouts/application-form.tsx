@@ -27,6 +27,16 @@ interface ApplicationFormLayoutProps {
   overrideIsAdvocate?: boolean
 }
 
+export const LockIcon = ({ locked }: { locked: boolean }) => {
+  return (
+    locked && (
+      <Icon className={styles["lock-icon"]} size="md">
+        {CustomIconMap.lockClosed}
+      </Icon>
+    )
+  )
+}
+
 const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
   const getBackLink = (url?: string, onClickFxn?: () => void) => {
     return (

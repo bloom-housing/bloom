@@ -4,16 +4,23 @@ import { Form, Field, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { Alert } from "@bloom-housing/ui-seeds"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
+import ApplicationFormLayout, { LockIcon } from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationAlternateContactName = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("alternateContactName")
   const currentPageSection = 1
+  const isAdvocate = !!conductor.config?.isAdvocate
+  const enableHousingAdvocate = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableHousingAdvocate
+  )
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, trigger } = useForm<Record<string, any>>({
@@ -23,15 +30,26 @@ const ApplicationAlternateContactName = () => {
     const validation = await trigger()
     if (!validation) return
 
-    application.alternateContact.firstName = data.firstName
-    application.alternateContact.lastName = data.lastName
-    application.alternateContact.agency = data.agency
+    if (!isAdvocate) {
+      application.alternateContact.firstName = data.firstName
+      application.alternateContact.lastName = data.lastName
+      application.alternateContact.agency = data.agency
+    }
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     window.scrollTo(0, 0)
   }
+
+  useEffect(() => {
+    if (!isAdvocate || !profile) return
+    application.alternateContact.firstName = profile.firstName || ""
+    application.alternateContact.lastName = profile.lastName || ""
+    // TODO (Advocate): replace this with the profile agency when available
+    application.alternateContact.agency = "agency"
+    conductor.sync()
+  }, [isAdvocate, profile, application, conductor])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -75,6 +93,7 @@ const ApplicationAlternateContactName = () => {
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="text__caps-spaced">
+                <LockIcon locked={isAdvocate} />
                 {t("application.alternateContact.name.alternateContactFormLabel")}
               </legend>
               <Field
@@ -82,7 +101,8 @@ const ApplicationAlternateContactName = () => {
                 name="firstName"
                 label={t("application.contact.givenName")}
                 defaultValue={application.alternateContact.firstName}
-                validation={{ required: true, maxLength: 64 }}
+                disabled={isAdvocate}
+                validation={isAdvocate ? undefined : { required: true, maxLength: 64 }}
                 errorMessage={
                   errors.firstName?.type === "maxLength"
                     ? t("errors.maxLength", { length: 64 })
@@ -97,7 +117,8 @@ const ApplicationAlternateContactName = () => {
                 name="lastName"
                 label={t("application.contact.familyName")}
                 defaultValue={application.alternateContact.lastName}
-                validation={{ required: true, maxLength: 64 }}
+                disabled={isAdvocate}
+                validation={isAdvocate ? undefined : { required: true, maxLength: 64 }}
                 error={errors.lastName}
                 errorMessage={
                   errors.lastName?.type === "maxLength"
@@ -110,14 +131,18 @@ const ApplicationAlternateContactName = () => {
               {application.alternateContact.type === "caseManager" && (
                 <div className="mt-6">
                   <p className="text__caps-spaced">
-                    {t("application.alternateContact.name.caseManagerAgencyFormLabel")}
+                    <LockIcon locked={isAdvocate} />
+                    {enableHousingAdvocate
+                      ? t("application.alternateContact.name.caseManagerAgencyFormLabelAdvocate")
+                      : t("application.alternateContact.name.caseManagerAgencyFormLabel")}
                   </p>
                   <Field
                     id="agency"
                     name="agency"
                     label={t("application.alternateContact.name.caseManagerAgencyFormPlaceHolder")}
                     defaultValue={application.alternateContact.agency}
-                    validation={{ required: true }}
+                    disabled={isAdvocate}
+                    validation={isAdvocate ? undefined : { required: true }}
                     error={errors.agency}
                     errorMessage={t(
                       "application.alternateContact.name.caseManagerAgencyValidationErrorMessage"

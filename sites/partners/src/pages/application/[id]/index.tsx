@@ -54,6 +54,10 @@ const ApplicationsList = () => {
     FeatureFlagEnum.enableApplicationStatus,
     listingDto?.jurisdictions.id
   )
+  const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableHousingAdvocate,
+    listingDto?.jurisdictions.id
+  )
 
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
@@ -138,7 +142,7 @@ const ApplicationsList = () => {
                   disableWorkInRegion={disableWorkInRegion}
                 />
 
-                <DetailsAlternateContact />
+                <DetailsAlternateContact enableHousingAdvocate={enableHousingAdvocate} />
 
                 <DetailsHouseholdMembers
                   setMembersDrawer={setMembersDrawer}

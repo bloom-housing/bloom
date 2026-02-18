@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires, import/no-unresolved */
 // Finds missing translations and automatically translates them using Google Translate API
-// Prints out translations in the JSON translation file format: "key": "translated string"
+// Prints out translations in the JSON translation file format: "key": "translated string" and updates the translation files with the new translations, keeping all keys sorted alphabetically
 // You will need to add the environment variables for Google Translate API access from the api env file into this env file
-// Example: `ts-node get-machine-translations.ts > any-filename-here.json`
+// Example: `ts-node get-machine-translations.ts`
 import { Translate } from "@google-cloud/translate/build/src/v2"
 import dotenv from "dotenv"
+import fs from "fs"
+import path from "path"
 dotenv.config({ quiet: true })
 
 async function main() {
@@ -62,36 +64,99 @@ async function main() {
     return missingKeys
   }
 
+  const readJsonFile = (filePath: string): TranslationsType => {
+    const raw = fs.readFileSync(filePath, "utf8")
+    return JSON.parse(raw) as TranslationsType
+  }
+
+  const writeSortedJsonFile = (filePath: string, translations: TranslationsType) => {
+    const collator = new Intl.Collator(undefined)
+    const toLine = (key: string, value: string) =>
+      `  ${JSON.stringify(key)}: ${JSON.stringify(value)}`
+    // This sorting function sorts keys alphabetically, but also ensures that keys with the same prefix are grouped together (e.g. "application.add" will be grouped with "application.add.demographics" rather than being sorted separately based on the first letter after the dot)
+    const sorted = Object.fromEntries(
+      Object.keys(translations)
+        .sort((a, b) => collator.compare(toLine(a, translations[a]), toLine(b, translations[b])))
+        .map((key) => [key, translations[key]])
+    )
+    const payload = `${JSON.stringify(sorted, null, 2)}\n`
+    fs.writeFileSync(filePath, payload, "utf8")
+  }
+
   // Load translations
-  const englishTranslations = require("../locales/general.json")
-  const spanishTranslations = require("../locales/es.json")
-  const chineseTranslations = require("../locales/zh.json")
-  const vietnameseTranslations = require("../locales/vi.json")
-  const tagalogTranslations = require("../locales/tl.json")
-  const arabicTranslations = require("../locales/ar.json")
-  const bengaliTranslations = require("../locales/bn.json")
-  const koreanTranslations = require("../locales/ko.json")
-  const armenianTranslations = require("../locales/hy.json")
-  const farsiTranslations = require("../locales/fa.json")
+  const localesDir = path.join(__dirname, "..", "locales")
+  const englishTranslations = readJsonFile(path.join(localesDir, "general.json"))
+  const spanishTranslations = readJsonFile(path.join(localesDir, "es.json"))
+  const chineseTranslations = readJsonFile(path.join(localesDir, "zh.json"))
+  const vietnameseTranslations = readJsonFile(path.join(localesDir, "vi.json"))
+  const tagalogTranslations = readJsonFile(path.join(localesDir, "tl.json"))
+  const arabicTranslations = readJsonFile(path.join(localesDir, "ar.json"))
+  const bengaliTranslations = readJsonFile(path.join(localesDir, "bn.json"))
+  const koreanTranslations = readJsonFile(path.join(localesDir, "ko.json"))
+  const armenianTranslations = readJsonFile(path.join(localesDir, "hy.json"))
+  const farsiTranslations = readJsonFile(path.join(localesDir, "fa.json"))
 
   const allTranslations = [
-    { translationKeys: spanishTranslations, language: "Spanish", code: LanguagesEnum.es },
-    { translationKeys: chineseTranslations, language: "Chinese", code: LanguagesEnum.zh },
-    { translationKeys: vietnameseTranslations, language: "Vietnamese", code: LanguagesEnum.vi },
-    { translationKeys: tagalogTranslations, language: "Tagalog", code: LanguagesEnum.tl },
-    { translationKeys: arabicTranslations, language: "Arabic", code: LanguagesEnum.ar },
-    { translationKeys: bengaliTranslations, language: "Bengali", code: LanguagesEnum.bn },
-    { translationKeys: koreanTranslations, language: "Korean", code: LanguagesEnum.ko },
-    { translationKeys: armenianTranslations, language: "Armenian", code: LanguagesEnum.hy },
-    { translationKeys: farsiTranslations, language: "Farsi", code: LanguagesEnum.fa },
+    {
+      translationKeys: spanishTranslations,
+      language: "Spanish",
+      code: LanguagesEnum.es,
+      filePath: path.join(localesDir, "es.json"),
+    },
+    {
+      translationKeys: chineseTranslations,
+      language: "Chinese",
+      code: LanguagesEnum.zh,
+      filePath: path.join(localesDir, "zh.json"),
+    },
+    {
+      translationKeys: vietnameseTranslations,
+      language: "Vietnamese",
+      code: LanguagesEnum.vi,
+      filePath: path.join(localesDir, "vi.json"),
+    },
+    {
+      translationKeys: tagalogTranslations,
+      language: "Tagalog",
+      code: LanguagesEnum.tl,
+      filePath: path.join(localesDir, "tl.json"),
+    },
+    {
+      translationKeys: arabicTranslations,
+      language: "Arabic",
+      code: LanguagesEnum.ar,
+      filePath: path.join(localesDir, "ar.json"),
+    },
+    {
+      translationKeys: bengaliTranslations,
+      language: "Bengali",
+      code: LanguagesEnum.bn,
+      filePath: path.join(localesDir, "bn.json"),
+    },
+    {
+      translationKeys: koreanTranslations,
+      language: "Korean",
+      code: LanguagesEnum.ko,
+      filePath: path.join(localesDir, "ko.json"),
+    },
+    {
+      translationKeys: armenianTranslations,
+      language: "Armenian",
+      code: LanguagesEnum.hy,
+      filePath: path.join(localesDir, "hy.json"),
+    },
+    {
+      translationKeys: farsiTranslations,
+      language: "Farsi",
+      code: LanguagesEnum.fa,
+      filePath: path.join(localesDir, "fa.json"),
+    },
   ]
 
   console.log(
     "Note that Google Translate does not preserve markdown well, and you may need to adjust some translations manually to add back in new lines and other missing formatting if there is any markdown.\n"
   )
-  console.log(
-    "You can paste these lines directly into each translation file, and then be sure to sort ascending! In VSCode, you can Command + Shift + P --> Sort Ascending.\n"
-  )
+  console.log("This script will insert missing translations and keep keys sorted.\n")
 
   // Process each language
   for (const foreignTranslations of allTranslations) {
@@ -111,8 +176,12 @@ async function main() {
 
     missingKeys.forEach((key, index) => {
       const translatedString = translatedValues[0][index]
-      console.log(`"${key}": "${translatedString}",`)
+      foreignTranslations.translationKeys[key] = translatedString
+      console.log(`Added ${key}`)
     })
+
+    writeSortedJsonFile(foreignTranslations.filePath, foreignTranslations.translationKeys)
+    console.log(`Updated ${foreignTranslations.filePath}`)
   }
 }
 

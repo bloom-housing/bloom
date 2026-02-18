@@ -5,12 +5,31 @@ import { Grid } from "@bloom-housing/ui-seeds"
 import { altContactRelationshipKeys, stateKeys, emailRegex } from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
-const FormAlternateContact = () => {
+type FormAlternateContactProps = {
+  enableHousingAdvocate?: boolean
+}
+
+const FormAlternateContact = ({ enableHousingAdvocate = false }: FormAlternateContactProps) => {
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { watch, setValue, clearErrors, register, errors, control } = formMethods
 
-  const altContactRelationshipOptions = ["", ...altContactRelationshipKeys]
+  const altContactRelationshipOptions = [
+    "",
+    ...altContactRelationshipKeys.map((option) => {
+      if (option === "caseManager" && enableHousingAdvocate) {
+        return {
+          value: option,
+          label: t("application.alternateContact.type.options.caseManagerAdvocate"),
+        }
+      }
+
+      return {
+        value: option,
+        label: t(`application.alternateContact.type.options.${option}`),
+      }
+    }),
+  ]
   const alternateContactType: string = watch("application.alternateContact.type")
   const alternatePhoneValue: string = watch("application.alternateContact.phoneNumber")
 
@@ -95,7 +114,6 @@ const FormAlternateContact = () => {
               register={register}
               controlClassName="control"
               options={altContactRelationshipOptions}
-              keyPrefix="application.alternateContact.type.options"
             />
           </Grid.Cell>
         </Grid.Row>

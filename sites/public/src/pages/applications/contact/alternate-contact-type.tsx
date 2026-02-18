@@ -10,7 +10,9 @@ import {
   PageView,
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
@@ -20,6 +22,10 @@ const ApplicationAlternateContactType = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("alternateContactType")
   const currentPageSection = 1
+  const enableHousingAdvocate = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableHousingAdvocate
+  )
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch, trigger } = useForm<Record<string, any>>({
@@ -41,6 +47,12 @@ const ApplicationAlternateContactType = () => {
     window.scrollTo(0, 0)
   }
   const type = watch("type", application.alternateContact.type)
+  const getOptionLabel = (option: string) => {
+    if (option === "caseManager" && enableHousingAdvocate) {
+      return t("application.alternateContact.type.options.caseManagerAdvocate")
+    }
+    return t("application.alternateContact.type.options." + option)
+  }
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -97,7 +109,7 @@ const ApplicationAlternateContactType = () => {
                       type="radio"
                       id={"type-" + option}
                       name="type"
-                      label={t("application.alternateContact.type.options." + option)}
+                      label={getOptionLabel(option)}
                       register={register}
                       validation={{ required: true }}
                       error={errors.type}

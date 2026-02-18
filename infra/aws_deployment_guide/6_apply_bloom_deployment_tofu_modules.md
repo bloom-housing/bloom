@@ -85,7 +85,7 @@ graph TB
   class LEGEND legendStyle
 
   %% Apply terraform style (green)
-  class CREATED,DEV,VPC_DEV,RDS_DEV,ELB_DEV,ECS_DEV,PROD,VPC_PROD,RDS_PROD,ELB_PROD,ECS_PROD tofu
+  class CREATED,VPC_DEV,RDS_DEV,ELB_DEV,ECS_DEV,VPC_PROD,RDS_PROD,ELB_PROD,ECS_PROD tofu
 ```
 
 ## Required permissions
