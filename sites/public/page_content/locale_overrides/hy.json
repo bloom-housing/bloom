@@ -1,0 +1,15 @@
+{
+  "application.referralApplication.instructions": "Մշտական աջակցող բնակարանային միավորները ուղղակիորեն ուղղորդվում են Բլումինգտոնի համակարգված մուտքի համակարգի միջոցով: Անօթևան ընտանիքները կարող են զանգահարել 123-456-7890 հեռախոսահամարով՝ միանալու մուտքի կետին, համակարգված մուտքի համակարգի մասին ավելին իմանալու և բնակարանային ռեսուրսներին ու տեղեկատվությանը մուտք գործելու համար:",
+  "application.referralApplication.phoneNumber": "211",
+  "application.review.demographics.howDidYouHearOptions.jurisdictionWebsite": "Իրավասության կայք",
+  "faq.stillHaveQuestionsContent": "Եթե չեք կարողանում գտնել ձեզ անհրաժեշտ պատասխանը, խնդրում ենք կապվել մեր աջակցության թիմի հետ <a className='lined' href='mailto:support@bloomingtonhousing.gov'>support@bloomingtonhousing.gov</a> հասցեով կամ այցելել մեր Ռեսուրսների էջը։",
+  "footer.content.programQuestions": "Ծրագրի վերաբերյալ ընդհանուր հարցումների համար կարող եք զանգահարել Bloomington Housing-ին՝ 123-456-7890 հեռախոսահամարով։",
+  "footer.copyright": "© Բլումինգտոն քաղաք և շրջան",
+  "footer.forGeneralQuestions": "Ծրագրի վերաբերյալ ընդհանուր հարցերի համար կարող եք զանգահարել մեզ 000-000-0000 հեռախոսահամարով։",
+  "pageDescription.faq": "Գտեք Բլումինգտոնում մատչելի բնակարանների վերաբերյալ հաճախակի տրվող հարցերի պատասխանները։",
+  "region.name": "Բլումինգտոն",
+  "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua:",
+  "resources.contactEmail": "bloomington@housing.org",
+  "resources.contactInfo": "Բլումինգտոնի բնակարանային և համայնքային զարգացման վարչություն",
+  "resources.housingProgramsTitle": "Բլումինգտոնի բնակարանային և համայնքային զարգացման բնակարանային ծրագրեր"
+}

@@ -1,0 +1,15 @@
+{
+  "application.referralApplication.instructions": "واحدهای مسکونی حمایتی دائمی مستقیماً از طریق سیستم ورود هماهنگ بلومینگتون معرفی می‌شوند. خانوارهایی که بی‌خانمان هستند می‌توانند با شماره 123-456-7890 تماس بگیرند تا به یک نقطه دسترسی متصل شوند و اطلاعات بیشتری در مورد سیستم ورود هماهنگ کسب کنند و به منابع و اطلاعات مربوط به مسکن دسترسی پیدا کنند.",
+  "application.referralApplication.phoneNumber": "۲۱۱",
+  "application.review.demographics.howDidYouHearOptions.jurisdictionWebsite": "وب‌سایت حوزه قضایی",
+  "faq.stillHaveQuestionsContent": "اگر نتوانستید پاسخ مورد نظر خود را پیدا کنید، لطفاً با تیم پشتیبانی ما از طریق <a className='lined' href='mailto:support@bloomingtonhousing.gov'>support@bloomingtonhousing.gov</a> تماس بگیرید یا به صفحه منابع ما مراجعه کنید.",
+  "footer.content.programQuestions": "برای سوالات عمومی در مورد برنامه، می‌توانید با شماره 123-456-7890 با شرکت مسکن بلومینگتون تماس بگیرید.",
+  "footer.copyright": "© شهر و شهرستان بلومینگتون",
+  "footer.forGeneralQuestions": "برای سوالات عمومی در مورد برنامه، می‌توانید با شماره ۰۰۰-۰۰۰-۰۰۰۰ با ما تماس بگیرید.",
+  "pageDescription.faq": "پاسخ سوالات متداول در مورد مسکن مقرون به صرفه در بلومینگتون را بیابید.",
+  "region.name": "بلومینگتون",
+  "resources.contactDescription": "Lorem ipsum dolor sit amet، consectetur adipiscing elit، sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "resources.contactEmail": "bloomington@housing.org",
+  "resources.contactInfo": "اداره مسکن و توسعه اجتماعی بلومینگتون",
+  "resources.housingProgramsTitle": "برنامه‌های مسکن و توسعه اجتماعی بلومینگتون"
+}

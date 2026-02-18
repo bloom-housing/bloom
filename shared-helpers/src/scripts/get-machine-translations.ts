@@ -177,7 +177,7 @@ async function main() {
     missingKeys.forEach((key, index) => {
       const translatedString = translatedValues[0][index]
       foreignTranslations.translationKeys[key] = translatedString
-      console.log(`Added ${key}`)
+      console.log(`"${key}": "${translatedString}",`)
     })
 
     writeSortedJsonFile(foreignTranslations.filePath, foreignTranslations.translationKeys)

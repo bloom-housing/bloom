@@ -1,0 +1,15 @@
+{
+  "application.referralApplication.instructions": "স্থায়ী সহায়ক আবাসন ইউনিটগুলিকে সরাসরি ব্লুমিংটনের সমন্বিত প্রবেশ ব্যবস্থার মাধ্যমে রেফার করা হয়। গৃহহীনতার সম্মুখীন পরিবারগুলি 123-456-7890 নম্বরে কল করে একটি অ্যাক্সেস পয়েন্টের সাথে সংযুক্ত হতে পারে যাতে তারা সমন্বিত প্রবেশ ব্যবস্থা সম্পর্কে আরও জানতে এবং আবাসন-সম্পর্কিত সংস্থান এবং তথ্য অ্যাক্সেস করতে পারে।",
+  "application.referralApplication.phoneNumber": "২১১",
+  "application.review.demographics.howDidYouHearOptions.jurisdictionWebsite": "এখতিয়ার ওয়েবসাইট",
+  "faq.stillHaveQuestionsContent": "আপনি যদি আপনার কাঙ্ক্ষিত উত্তরটি খুঁজে না পান, তাহলে অনুগ্রহ করে <a className='lined' href='mailto:support@bloomingtonhousing.gov'>support@bloomingtonhousing.gov</a> ঠিকানায় আমাদের সহায়তা দলের সাথে যোগাযোগ করুন অথবা আমাদের রিসোর্স পৃষ্ঠাটি দেখুন।",
+  "footer.content.programQuestions": "সাধারণ প্রোগ্রামের অনুসন্ধানের জন্য, আপনি ব্লুমিংটন হাউজিং-এ 123-456-7890 নম্বরে কল করতে পারেন।",
+  "footer.copyright": "© ব্লুমিংটন শহর ও কাউন্টি",
+  "footer.forGeneralQuestions": "সাধারণ প্রোগ্রাম সংক্রান্ত অনুসন্ধানের জন্য, আপনি আমাদের 000-000-0000 নম্বরে কল করতে পারেন।",
+  "pageDescription.faq": "ব্লুমিংটনে সাশ্রয়ী মূল্যের আবাসন সম্পর্কে সাধারণ প্রশ্নের উত্তর খুঁজুন।",
+  "region.name": "ব্লুমিংটন",
+  "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "resources.contactEmail": "bloomington@housing.org সম্পর্কে",
+  "resources.contactInfo": "ব্লুমিংটনের আবাসন ও সম্প্রদায় উন্নয়ন বিভাগ",
+  "resources.housingProgramsTitle": "ব্লুমিংটনের আবাসন ও সম্প্রদায় উন্নয়ন আবাসন কর্মসূচি"
+}

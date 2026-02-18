@@ -1,0 +1,16 @@
+{
+  "application.referralApplication.instructions": "تُحال وحدات السكن الدائم المدعوم مباشرةً عبر نظام الدخول المنسق في بلومنجتون. يمكن للأسر التي تعاني من التشرد الاتصال بالرقم 123-456-7890 للتواصل مع مركز خدمة العملاء لمعرفة المزيد عن نظام الدخول المنسق والوصول إلى الموارد والمعلومات المتعلقة بالسكن.",
+  "application.referralApplication.phoneNumber": "211",
+  "application.review.demographics.howDidYouHearOptions.jurisdictionWebsite": "موقع الاختصاص القضائي",
+  "faq.stillHaveQuestionsContent": "إذا لم تتمكن من العثور على الإجابة التي تبحث عنها، فيرجى التواصل مع فريق الدعم لدينا على <a className='lined' href='mailto:support@bloomingtonhousing.gov'>support@bloomingtonhousing.gov</a> أو الاطلاع على صفحة الموارد الخاصة بنا.",
+  "footer.content.programQuestions": "للاستفسارات العامة عن البرنامج، يمكنك الاتصال بـ Bloomington Housing على الرقم 123-456-7890.",
+  "footer.content.projectOf": "بوابة بلومنجتون للإسكان هي مشروع تابع لـ",
+  "footer.copyright": "© مدينة ومقاطعة بلومنجتون",
+  "footer.forGeneralQuestions": "للاستفسارات العامة عن البرنامج، يمكنك الاتصال بنا على الرقم 000-000-0000.",
+  "pageDescription.faq": "ابحث عن إجابات للأسئلة الشائعة حول السكن الميسور التكلفة في بلومنجتون.",
+  "region.name": "بلومنجتون",
+  "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut Labore et dolore magna aliqua.",
+  "resources.contactEmail": "bloomington@housing.org",
+  "resources.contactInfo": "إدارة الإسكان والتنمية المجتمعية في بلومنجتون",
+  "resources.housingProgramsTitle": "برامج الإسكان التابعة لإدارة الإسكان والتنمية المجتمعية في بلومنجتون"
+}
