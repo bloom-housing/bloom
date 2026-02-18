@@ -63,7 +63,7 @@ import {
   ListingEvent,
   ListingEventCreate,
   ListingEventsTypeEnum,
-  ListingtiselectQuestion,
+  ListingMultiselectQuestion,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   ReviewOrderTypeEnum,
