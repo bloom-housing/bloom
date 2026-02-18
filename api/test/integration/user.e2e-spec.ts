@@ -785,8 +785,19 @@ describe('User Controller Tests', () => {
         data: jurisdictionFactory(),
       });
 
+      const agencyData = await prisma.agency.create({
+        data: {
+          name: 'Test Agency',
+          jurisdictions: {
+            connect: {
+              id: juris.id,
+            },
+          },
+        },
+      });
+
       const data = await applicationFactory();
-      data.applicant.create.emailAddress = 'publicuser@email.com';
+      data.applicant.create.emailAddress = 'advocateuser@email.com';
       const application = await prisma.applications.create({
         data,
       });
@@ -795,15 +806,11 @@ describe('User Controller Tests', () => {
         firstName: 'Advocate First Name',
         lastName: 'Advocate Last Name',
         email: 'advocateUser@email.com',
-        dob: new Date(),
         agreedToTermsOfService: true,
         agency: {
-          id: 'test_agency_id',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          name: 'Test Agency',
+          ...agencyData,
           jurisdictions: {
-            id: juris.id,
+            id: agencyData.jurisdictionsId,
           },
         },
         address: addressFactory() as AddressUpdate,
@@ -811,7 +818,7 @@ describe('User Controller Tests', () => {
       };
 
       const res = await request(app.getHttpServer())
-        .post(`/user/advocate/`)
+        .post(`/user/advocate`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(advocateUserData)
         .set('Cookie', cookies)
@@ -821,7 +828,7 @@ describe('User Controller Tests', () => {
       expect(res.body.jurisdictions).toEqual([
         expect.objectContaining({ id: juris.id, name: juris.name }),
       ]);
-      expect(res.body.email).toEqual('advocateUser@email.com');
+      expect(res.body.email).toEqual('advocateuser@email.com');
 
       const applicationsOnUser = await prisma.userAccounts.findUnique({
         include: {
