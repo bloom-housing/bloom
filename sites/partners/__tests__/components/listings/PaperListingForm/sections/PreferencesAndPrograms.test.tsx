@@ -3,7 +3,6 @@ import { setupServer } from "msw/lib/node"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import userEvent from "@testing-library/user-event"
 import {
-  FeatureFlagEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
@@ -12,6 +11,7 @@ import {
 import PreferencesAndPrograms from "../../../../../src/components/listings/PaperListingForm/sections/PreferencesAndPrograms"
 import { formDefaults } from "../../../../../src/lib/listings/formTypes"
 import { render, screen, within, mockNextRouter, FormProviderWrapper } from "../../../../testUtils"
+import { rest } from "msw"
 
 const server = setupServer()
 
@@ -27,30 +27,84 @@ afterEach(() => server.resetHandlers())
 // Disable API mocking after the tests are done.
 afterAll(() => server.close())
 
+const preference1 = {
+  id: "preference_id_1",
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  name: "City Employees",
+  text: "",
+  jurisdictions: [],
+  hideFromListing: false,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+  status: MultiselectQuestionsStatusEnum.active,
+}
+const mockPreferences: MultiselectQuestion[] = [
+  preference1,
+  {
+    id: "preference_id_2",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: "Work in the city",
+    text: "",
+    jurisdictions: [],
+    options: [
+      {
+        name: "At least one member of my household works in the city",
+        text: "",
+        ordinal: 1,
+        collectAddress: true,
+        validationMethod: ValidationMethodEnum.map,
+        collectName: true,
+        collectRelationship: true,
+        mapLayerId: "c1586f71-345d-4986-83a2-b83ebfa84af5",
+        id: "1",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        name: "All members of the household work in the city",
+        text: "",
+        ordinal: 2,
+        collectAddress: true,
+        collectName: false,
+        collectRelationship: false,
+        id: "2",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ],
+    hideFromListing: false,
+    applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+    status: MultiselectQuestionsStatusEnum.active,
+  },
+]
+
 describe("PreferencesAndPrograms", () => {
   describe("Preferences", () => {
+    beforeEach(() => {
+      server.use(
+        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json({ items: mockPreferences }))
+        }),
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json({ items: mockPreferences }))
+        })
+      )
+    })
     it("should render the preference section when no preferences have been added", () => {
       const setFn = jest.fn()
 
       render(
         <FormProviderWrapper values={{ ...formDefaults }}>
-          <AuthContext.Provider
-            value={{
-              doJurisdictionsHaveFeatureFlagOn: () => {
-                return false
-              },
-            }}
-          >
-            <PreferencesAndPrograms
-              jurisdiction={"jurisdiction1"}
-              preferences={[]}
-              programs={[]}
-              setPreferences={setFn}
-              setPrograms={setFn}
-              disableListingPreferences={false}
-              swapCommunityTypeWithPrograms={false}
-            />
-          </AuthContext.Provider>
+          <PreferencesAndPrograms
+            jurisdiction={"jurisdiction1"}
+            preferences={[]}
+            programs={[]}
+            setPreferences={setFn}
+            setPrograms={setFn}
+            disableListingPreferences={false}
+            swapCommunityTypeWithPrograms={false}
+          />
         </FormProviderWrapper>
       )
 
@@ -164,76 +218,19 @@ describe("PreferencesAndPrograms", () => {
     })
 
     it("should open drawer and add a preference", async () => {
-      const mockPreferences: MultiselectQuestion[] = [
-        {
-          id: "preference_id_1",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          name: "City Employees",
-          text: "",
-          jurisdictions: [],
-          hideFromListing: false,
-          applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
-          status: MultiselectQuestionsStatusEnum.active,
-        },
-        {
-          id: "preference_id_2",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          name: "Work in the city",
-          text: "",
-          jurisdictions: [],
-          options: [
-            {
-              name: "At least one member of my household works in the city",
-              text: "",
-              ordinal: 1,
-              collectAddress: true,
-              validationMethod: ValidationMethodEnum.map,
-              collectName: true,
-              collectRelationship: true,
-              mapLayerId: "c1586f71-345d-4986-83a2-b83ebfa84af5",
-              id: "1",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-            {
-              name: "All members of the household work in the city",
-              text: "",
-              ordinal: 2,
-              collectAddress: true,
-              collectName: false,
-              collectRelationship: false,
-              id: "2",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-          ],
-          hideFromListing: false,
-          applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
-          status: MultiselectQuestionsStatusEnum.active,
-        },
-      ]
       const setFn = jest.fn()
 
       render(
         <FormProviderWrapper values={{ ...formDefaults }}>
-          <AuthContext.Provider
-            value={{
-              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-                featureFlag === FeatureFlagEnum.enableV2MSQ,
-            }}
-          >
-            <PreferencesAndPrograms
-              preferences={mockPreferences}
-              programs={[]}
-              setPreferences={setFn}
-              setPrograms={setFn}
-              disableListingPreferences={false}
-              swapCommunityTypeWithPrograms={false}
-              jurisdiction={"jurisdiction1"}
-            />
-          </AuthContext.Provider>
+          <PreferencesAndPrograms
+            preferences={[preference1]}
+            programs={[]}
+            setPreferences={setFn}
+            setPrograms={setFn}
+            disableListingPreferences={false}
+            swapCommunityTypeWithPrograms={false}
+            jurisdiction={"jurisdiction1"}
+          />
         </FormProviderWrapper>
       )
       const table = screen.getByRole("table")
@@ -243,9 +240,10 @@ describe("PreferencesAndPrograms", () => {
       const [_, body] = headAndBody
 
       const tableRows = within(body).getAllByRole("row")
-      const secondRowCells = within(tableRows[1]).getAllByRole("cell")
-      expect(secondRowCells[0]).toHaveTextContent("2")
-      expect(secondRowCells[1]).toHaveTextContent(/work in the city/i)
+      expect(tableRows).toHaveLength(1)
+      const firstRow = within(tableRows[0]).getAllByRole("cell")
+      expect(firstRow[0]).toHaveTextContent("1")
+      expect(firstRow[1]).toHaveTextContent(/city employees/i)
 
       const editButton = screen.getByRole("button", { name: "Edit preferences" })
       expect(editButton).toBeInTheDocument()
@@ -264,10 +262,12 @@ describe("PreferencesAndPrograms", () => {
       const selectButton = within(dialogDrawer).getByRole("button", { name: "Select preferences" })
       await userEvent.click(selectButton)
       const nestedDialogDrawer = await screen.findByRole("dialog", { name: "Select preferences" })
-      // TODO: this next line is failing because the nested drawer's contents are empty.
-      // For some reason, the hook `useJurisdictionalMultiselectQuestionList` isn't kicking off any
-      // calls to the backend API.
-      expect(within(nestedDialogDrawer).getByText(/city employees/i)).toBeInTheDocument()
+      expect(
+        within(nestedDialogDrawer).getByRole("checkbox", { name: /city employees/i })
+      ).toBeInTheDocument()
+      expect(
+        within(nestedDialogDrawer).getByRole("checkbox", { name: /work in the city/i })
+      ).toBeInTheDocument()
     })
 
     it.todo("should delete a preference")
