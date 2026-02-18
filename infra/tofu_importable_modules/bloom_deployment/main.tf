@@ -75,7 +75,7 @@ variable "vpc_peering_settings" {
 }
 variable "ses_identities" {
   type        = list(string)
-  description = "SES email identities to create. Can either be individual email addresses or domains. If SES in this Bloom deployment will not be taken out of sandbox mode, identities for both sender and receiver email address must be in the and validated for email to be succefully delivered."
+  description = "SES email identities to create. Can either be individual email addresses or domains. If SES in this Bloom deployment will not be taken out of sandbox mode, identities for both sender and receiver email address must be validated for email to be succefully delivered."
 }
 variable "high_availability" {
   type        = bool
