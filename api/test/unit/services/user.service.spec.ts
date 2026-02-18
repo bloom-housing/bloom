@@ -25,7 +25,9 @@ import { TranslationService } from '../../../src/services/translation.service';
 import { UserService } from '../../../src/services/user.service';
 import { passwordToHash } from '../../../src/utilities/password-helpers';
 import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
-import { PublicUserUpdate } from 'src/dtos/users/public-user-update.dto';
+import { PublicUserUpdate } from '../../../src/dtos/users/public-user-update.dto';
+import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
+import { AddressUpdate } from '../../../src/dtos/addresses/address-update.dto';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -2255,6 +2257,146 @@ describe('Testing user service', () => {
         where: {
           applicant: {
             emailAddress: 'publicUser@email.com',
+          },
+          userAccounts: null,
+        },
+      });
+      expect(prisma.applications.update).toHaveBeenNthCalledWith(1, {
+        data: {
+          userAccounts: {
+            connect: {
+              id,
+            },
+          },
+        },
+        where: {
+          id: 'application id 1',
+        },
+      });
+      expect(prisma.applications.update).toHaveBeenNthCalledWith(2, {
+        data: {
+          userAccounts: {
+            connect: {
+              id,
+            },
+          },
+        },
+        where: {
+          id: 'application id 2',
+        },
+      });
+      expect(canOrThrowMock).not.toHaveBeenCalled();
+    });
+
+    it('should create an advocate user', async () => {
+      const jurisId = randomUUID();
+      const id = randomUUID();
+
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.applications.findMany = jest
+        .fn()
+        .mockResolvedValue([
+          { id: 'application id 1' },
+          { id: 'application id 2' },
+        ]);
+      prisma.applications.update = jest.fn().mockResolvedValue(null);
+      prisma.userAccounts.create = jest.fn().mockResolvedValue({
+        id,
+        email: 'advocateUser@email.com',
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+        email: 'advocateUser@email.com',
+      });
+
+      const mockAdress = addressFactory();
+
+      await service.createAdvocateUser(
+        {
+          firstName: 'advocate User firstName',
+          lastName: 'advocate User lastName',
+          agreedToTermsOfService: true,
+          dob: new Date('2000-01-01'),
+          email: 'advocateUser@email.com',
+          jurisdictions: [{ id: jurisId } as any],
+          address: mockAdress as AddressUpdate,
+          agency: {
+            id: 'test_agency_id',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: 'Test Agency',
+            jurisdictions: {
+              id: jurisId,
+            },
+          },
+        },
+        false,
+        {
+          headers: { jurisdictionname: 'juris 1' },
+          user: {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        } as unknown as Request,
+      );
+      expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+        include: {
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+          favoriteListings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        where: {
+          email: 'advocateUser@email.com',
+        },
+      });
+      expect(prisma.userAccounts.create).toHaveBeenCalledWith({
+        data: {
+          passwordHash: expect.anything(),
+          email: 'advocateUser@email.com',
+          firstName: 'advocate User firstName',
+          lastName: 'advocate User lastName',
+          listings: undefined,
+          middleName: undefined,
+          isAdvocate: true,
+          agency: {
+            connect: {
+              id: 'test_agency_id',
+            },
+          },
+          jurisdictions: {
+            connect: [{ id: expect.anything() }],
+          },
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        include: {
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+          favoriteListings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        data: {
+          confirmationToken: expect.anything(),
+        },
+        where: {
+          id: id,
+        },
+      });
+      expect(prisma.applications.findMany).toHaveBeenCalledWith({
+        where: {
+          applicant: {
+            emailAddress: 'advocateUser@email.com',
           },
           userAccounts: null,
         },
