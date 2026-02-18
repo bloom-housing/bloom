@@ -3378,6 +3378,9 @@ export interface ListingFilterParams {
 
   /**  */
   listingType?: ListingTypeEnum
+
+  /**  */
+  parkingType?: ParkingTypeEnum
 }
 
 export interface ListingsQueryBody {
@@ -9707,6 +9710,13 @@ export enum ListingTypeEnum {
   "regulated" = "regulated",
   "nonRegulated" = "nonRegulated",
 }
+
+export enum ParkingTypeEnum {
+  "onStreet" = "onStreet",
+  "offStreet" = "offStreet",
+  "garage" = "garage",
+  "carport" = "carport",
+}
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
@@ -9763,6 +9773,7 @@ export enum ListingFilterKeys {
   "multiselectQuestions" = "multiselectQuestions",
   "name" = "name",
   "neighborhood" = "neighborhood",
+  "parkingType" = "parkingType",
   "regions" = "regions",
   "configurableRegions" = "configurableRegions",
   "reservedCommunityTypes" = "reservedCommunityTypes",
