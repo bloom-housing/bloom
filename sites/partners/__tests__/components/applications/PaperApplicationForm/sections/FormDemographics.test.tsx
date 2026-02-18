@@ -82,7 +82,7 @@ describe("<FormDemographics>", () => {
     expect(screen.getByLabelText(/housing counselor/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/^other$/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/radio ad/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/alameda county hcd website/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/jurisdiction website/i)).toBeInTheDocument()
     expect(screen.queryByLabelText(/government website/i)).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/property website/i)).not.toBeInTheDocument()
   })
@@ -116,7 +116,7 @@ describe("<FormDemographics>", () => {
     expect(screen.getByLabelText(/housing counselor/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/^other$/i)).toBeInTheDocument()
     expect(screen.queryByLabelText(/radio ad/i)).not.toBeInTheDocument()
-    expect(screen.getByLabelText(/alameda county hcd website/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/jurisdiction website/i)).toBeInTheDocument()
     expect(screen.queryByLabelText(/government website/i)).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/property website/i)).not.toBeInTheDocument()
   })
@@ -169,6 +169,7 @@ describe("<FormDemographics>", () => {
           }}
           enableLimitedHowDidYouHear={false}
           disableEthnicityQuestion={true}
+          raceEthnicityConfiguration={defaultRaceEthnicityConfiguration}
         />
       </FormProviderWrapper>
     )
@@ -188,6 +189,7 @@ describe("<FormDemographics>", () => {
           }}
           enableLimitedHowDidYouHear={false}
           disableEthnicityQuestion={false}
+          raceEthnicityConfiguration={defaultRaceEthnicityConfiguration}
         />
       </FormProviderWrapper>
     )
