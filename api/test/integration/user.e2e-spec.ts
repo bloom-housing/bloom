@@ -25,6 +25,9 @@ import dayjs from 'dayjs';
 import { PublicUserUpdate } from '../../src/dtos/users/public-user-update.dto';
 import { PublicUserCreate } from '../../src/dtos/users/public-user-create.dto';
 import { PartnerUserCreate } from '../../src/dtos/users/partner-user-create.dto';
+import { AdvocateUserCreate } from '../../src/dtos/users/advocate-user-create.dto';
+import { addressFactory } from '../../prisma/seed-helpers/address-factory';
+import { AddressUpdate } from '../../src/dtos/addresses/address-update.dto';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -763,6 +766,62 @@ describe('User Controller Tests', () => {
         expect.objectContaining({ id: juris.id, name: juris.name }),
       ]);
       expect(res.body.email).toEqual('publicuser@email.com');
+
+      const applicationsOnUser = await prisma.userAccounts.findUnique({
+        include: {
+          applications: true,
+        },
+        where: {
+          id: res.body.id,
+        },
+      });
+      expect(applicationsOnUser.applications.map((app) => app.id)).toContain(
+        application.id,
+      );
+    });
+
+    it('should create an advocate user', async () => {
+      const juris = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      const data = await applicationFactory();
+      data.applicant.create.emailAddress = 'publicuser@email.com';
+      const application = await prisma.applications.create({
+        data,
+      });
+
+      const advocateUserData: AdvocateUserCreate = {
+        firstName: 'Advocate First Name',
+        lastName: 'Advocate Last Name',
+        email: 'advocateUser@email.com',
+        dob: new Date(),
+        agreedToTermsOfService: true,
+        agency: {
+          id: 'test_agency_id',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          name: 'Test Agency',
+          jurisdictions: {
+            id: juris.id,
+          },
+        },
+        address: addressFactory() as AddressUpdate,
+        jurisdictions: [{ id: juris.id }],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/user/advocate/`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(advocateUserData)
+        .set('Cookie', cookies)
+        .expect(201);
+
+      expect(res.body.firstName).toEqual('Advocate First Name');
+      expect(res.body.jurisdictions).toEqual([
+        expect.objectContaining({ id: juris.id, name: juris.name }),
+      ]);
+      expect(res.body.email).toEqual('advocateUser@email.com');
 
       const applicationsOnUser = await prisma.userAccounts.findUnique({
         include: {
