@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { EmailProvider, SendEmailInput } from './email-provider.service';
 import { MailService } from '@sendgrid/mail';
 import { MailDataRequired } from '@sendgrid/helpers/classes/mail';
-import { ResponseError } from '@sendgrid/helpers/classes';
 
 @Injectable()
 export class SendGridService extends EmailProvider {
@@ -46,18 +45,14 @@ export class SendGridService extends EmailProvider {
     }
 
     const handleError = (error) => {
-      if (error instanceof ResponseError) {
-        const { response } = error;
-        const { body: errBody } = response;
-        console.error(
-          `Error sending email to: ${
-            isMultipleRecipients ? to.toString() : to
-          }! Error body:`,
-          errBody,
-        );
-        if (retries > 0) {
-          void this.send_inner(input, retries - 1);
-        }
+      console.error(
+        `Error sending email to: ${
+          isMultipleRecipients ? to.toString() : to
+        }! Error body:`,
+        error?.response?.body || error,
+      );
+      if (retries > 0) {
+        void this.send_inner(input, retries - 1);
       }
     };
 
