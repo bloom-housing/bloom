@@ -52,7 +52,7 @@ import { User } from '../../src/dtos/users/user.dto';
   IdDTO,
 )
 @PermissionTypeDecorator('properties')
-@UseGuards(ApiKeyGuard, JwtAuthGuard, PermissionGuard)
+@UseGuards(ApiKeyGuard, JwtAuthGuard)
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
 
