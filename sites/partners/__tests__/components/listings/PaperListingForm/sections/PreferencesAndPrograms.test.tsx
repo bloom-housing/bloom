@@ -268,6 +268,15 @@ describe("PreferencesAndPrograms", () => {
       expect(
         within(nestedDialogDrawer).getByRole("checkbox", { name: /work in the city/i })
       ).toBeInTheDocument()
+      expect(within(nestedDialogDrawer).getAllByText("Active").length).toStrictEqual(2)
+
+      await userEvent.click(within(nestedDialogDrawer).getByRole("checkbox", { name: /work in the city/i }))
+      await userEvent.click(within(nestedDialogDrawer).getByRole("button", { name: "Save" }))
+      await userEvent.click(within(dialogDrawer).getByRole("button", { name: "Save" }))
+
+      const savedPrefs = setFn.mock.calls[0][0]
+      expect(savedPrefs).toHaveLength(2)
+      expect(savedPrefs[1].name).toStrictEqual("Work in the city")
     })
 
     it.todo("should delete a preference")
