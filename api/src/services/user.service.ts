@@ -366,6 +366,41 @@ export class UserService {
       }
     }
 
+    // handle agency
+    if (!dto?.agency && storedUser.agency) {
+      transactions.push(async (transaction: PrismaClient) => {
+        return transaction.userAccounts.update({
+          where: {
+            id: dto.id,
+          },
+          data: {
+            agency: {
+              disconnect: {
+                id: storedUser.agencyId,
+              },
+            },
+          },
+        });
+      });
+    } else {
+      transactions.push(async (transaction: PrismaClient) => {
+        return transaction.userAccounts.update({
+          where: {
+            id: dto.id,
+          },
+          data: {
+            agency: dto?.agency?.id
+              ? {
+                  connect: {
+                    id: dto.agency.id,
+                  },
+                }
+              : undefined,
+          },
+        });
+      });
+    }
+
     transactions.push(async (transaction: PrismaClient) => {
       return transaction.userAccounts.update({
         include: views.full,
@@ -387,13 +422,6 @@ export class UserService {
           additionalPhoneNumberType: dto.additionalPhoneNumberType,
           additionalPhoneExtension: dto.additionalPhoneExtension,
           language: dto.language,
-          agency: dto?.agency?.id
-            ? {
-                connect: {
-                  id: dto.agency.id,
-                },
-              }
-            : undefined,
           address: newAddressId
             ? {
                 connect: {
