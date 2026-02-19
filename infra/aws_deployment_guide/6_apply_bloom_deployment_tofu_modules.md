@@ -314,7 +314,9 @@ graph TB
 
    SES starts in sandbox mode in new AWS accounts:
    https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html. Follow the AWS
-   instructions to take SES out of sandbox mode.
+   instructions to take SES out of sandbox mode. Follow the quota request instructions at
+   https://docs.aws.amazon.com/ses/latest/dg/manage-sending-quotas-request-increase.html to request
+   a sending quota and sending rate required by your Bloom deployment.
 
    Individual emails are validated by clicking an email validation link AWS sends in an email with
    subject like 'Amazon Web Services - Email Address Verification Request in region...'. If using
