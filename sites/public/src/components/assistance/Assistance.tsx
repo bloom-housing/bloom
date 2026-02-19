@@ -65,7 +65,7 @@ const Assistance = (props: AssistanceProps) => {
             <Card className={styles["contact-card"]}>
               <div className={styles["contact-card-subsection"]}>
                 <Heading size="xl" priority={2}>
-                  {t("resources.contactTitle")}
+                  {t("footer.contact")}
                 </Heading>
                 <p className={styles["contact-card-description"]}>
                   {t("resources.contactDescription")}
