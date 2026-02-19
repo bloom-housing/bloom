@@ -67,7 +67,6 @@ data "aws_iam_policy_document" "deployer" {
       "logs:StartQuery",
       "logs:StopQuery",
       "logs:TestMetricFilter",
-      "rds-db:connect",
       "rds:Describe*",
       "rds:Get*",
       "rds:List*",
@@ -92,6 +91,7 @@ data "aws_iam_policy_document" "deployer" {
       "ec2:CreateNetworkInterfacePermission",
       "ec2:CreateTags",
       "ec2:DeleteNetworkInterface",
+      "rds-db:connect",
     ]
     resources = ["*"]
     # TODO: condition that the correct security group and subnet is used
