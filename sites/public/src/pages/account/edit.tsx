@@ -237,54 +237,56 @@ const Edit = () => {
                 </AlertBox>
               )}
               <Form id="update-name" onSubmit={nameHandleSubmit(onNameSubmit)}>
-                <label className={styles["account-settings-label"]} htmlFor="firstName">
-                  {t("application.name.yourName")}
-                </label>
-                <Field
-                  label={t("application.contact.givenName")}
-                  className="my-3"
-                  controlClassName="mt-2"
-                  name="firstName"
-                  error={nameErrors.firstName}
-                  validation={{ maxLength: 64 }}
-                  errorMessage={
-                    nameErrors.firstName?.type === "maxLength"
-                      ? t("errors.maxLength", { length: 64 })
-                      : t("errors.firstNameError")
-                  }
-                  register={nameRegister}
-                  defaultValue={user ? user.firstName : null}
-                  dataTestId={"account-first-name"}
-                />
+                <fieldset>
+                  <legend className={styles["account-settings-label"]}>
+                    {t("application.name.yourName")}
+                  </legend>
+                  <Field
+                    label={t("application.contact.givenName")}
+                    className="my-3"
+                    controlClassName="mt-2"
+                    name="firstName"
+                    error={nameErrors.firstName}
+                    validation={{ maxLength: 64 }}
+                    errorMessage={
+                      nameErrors.firstName?.type === "maxLength"
+                        ? t("errors.maxLength", { length: 64 })
+                        : t("errors.firstNameError")
+                    }
+                    register={nameRegister}
+                    defaultValue={user ? user.firstName : null}
+                    dataTestId={"account-first-name"}
+                  />
 
-                <Field
-                  name="middleName"
-                  className="mb-3"
-                  register={nameRegister}
-                  defaultValue={user ? user?.middleName : null}
-                  label={t("application.name.middleNameOptional")}
-                  error={nameErrors.middleName}
-                  validation={{ maxLength: 64 }}
-                  errorMessage={t("errors.maxLength", { length: 64 })}
-                  dataTestId={"account-middle-name"}
-                />
+                  <Field
+                    name="middleName"
+                    className="mb-3"
+                    register={nameRegister}
+                    defaultValue={user ? user?.middleName : null}
+                    label={t("application.name.middleNameOptional")}
+                    error={nameErrors.middleName}
+                    validation={{ maxLength: 64 }}
+                    errorMessage={t("errors.maxLength", { length: 64 })}
+                    dataTestId={"account-middle-name"}
+                  />
 
-                <Field
-                  name="lastName"
-                  placeholder={t("application.name.lastName")}
-                  className="mb-6"
-                  error={nameErrors.lastName}
-                  register={nameRegister}
-                  defaultValue={user ? user.lastName : null}
-                  label={t("application.contact.familyName")}
-                  validation={{ maxLength: 64 }}
-                  errorMessage={
-                    nameErrors.lastName?.type === "maxLength"
-                      ? t("errors.maxLength", { length: 64 })
-                      : t("errors.lastNameError")
-                  }
-                  dataTestId={"account-last-name"}
-                />
+                  <Field
+                    name="lastName"
+                    placeholder={t("application.name.lastName")}
+                    className="mb-6"
+                    error={nameErrors.lastName}
+                    register={nameRegister}
+                    defaultValue={user ? user.lastName : null}
+                    label={t("application.contact.familyName")}
+                    validation={{ maxLength: 64 }}
+                    errorMessage={
+                      nameErrors.lastName?.type === "maxLength"
+                        ? t("errors.maxLength", { length: 64 })
+                        : t("errors.lastNameError")
+                    }
+                    dataTestId={"account-last-name"}
+                  />
+                </fieldset>
                 <Button
                   type="submit"
                   size="sm"

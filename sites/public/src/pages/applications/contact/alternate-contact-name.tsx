@@ -130,12 +130,12 @@ const ApplicationAlternateContactName = () => {
               />
               {application.alternateContact.type === "caseManager" && (
                 <div className="mt-6">
-                  <p className="text__caps-spaced">
+                  <label className="text__caps-spaced" htmlFor={"agency"}>
                     <LockIcon locked={isAdvocate} />
                     {enableHousingAdvocate
                       ? t("application.alternateContact.name.caseManagerAgencyFormLabelAdvocate")
                       : t("application.alternateContact.name.caseManagerAgencyFormLabel")}
-                  </p>
+                  </label>
                   <Field
                     id="agency"
                     name="agency"
