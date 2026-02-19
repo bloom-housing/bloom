@@ -11,11 +11,11 @@ import { Prisma } from '@prisma/client';
 import { Compare } from '../../../src/dtos/shared/base-filter.dto';
 import { User } from '../../../src/dtos/users/user.dto';
 
-const user = new User();
-
 describe('Testing property service', () => {
   let service: PropertyService;
   let prisma: PrismaService;
+
+  const user = new User();
 
   const mockProperty = (
     position: number,
