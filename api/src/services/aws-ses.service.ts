@@ -7,6 +7,8 @@ import {
   SendEmailCommand,
   SendEmailRequest,
   SESv2ServiceException,
+  SendBulkEmailRequest,
+  SendBulkEmailCommand,
 } from '@aws-sdk/client-sesv2';
 
 @Injectable()
@@ -37,37 +39,80 @@ export class AwsSesService extends EmailProvider {
       ];
     }
 
-    const commandInput: SendEmailRequest = {
-      FromEmailAddress: from,
-      Destination: {
-        ToAddresses: isMultipleRecipients ? to : [to],
-      },
-      Content: {
-        Simple: {
-          Subject: {
-            Data: subject,
-            Charset: 'UTF-8',
-          },
-          Body: {
-            Html: {
-              Data: body,
-              Charset: 'UTF-8',
+    if (isMultipleRecipients) {
+      const MAX_EMAIL_TO_SEND_IN_BULK = 50;
+
+      const emailsChunked = to.reduce((accum, curr, i) => {
+        const chunk = Math.floor(i / MAX_EMAIL_TO_SEND_IN_BULK);
+        accum[chunk] = [].concat(accum[chunk] || [], curr);
+        return accum;
+      }, []);
+      for (const emailList of emailsChunked) {
+        const commandInput: SendBulkEmailRequest = {
+          FromEmailAddress: from,
+          BulkEmailEntries: emailList.map((email) => {
+            return {
+              Destination: {
+                ToAddresses: [email],
+              },
+            };
+          }),
+          DefaultContent: {
+            Template: {
+              TemplateContent: {
+                Subject: subject,
+                Html: body,
+              },
+              TemplateData: '{}', // We need to send template data even if there are no variables,
+              Attachments: attachments,
             },
           },
-          Attachments: attachments,
+        };
+        const command = new SendBulkEmailCommand(commandInput);
+        return this.sesClient
+          .send(command)
+          .catch(function (err: SESv2ServiceException) {
+            console.error(
+              `Error sending email to: ${
+                isMultipleRecipients ? to.toString() : to
+              }! Error body:`,
+              err.toString(),
+            );
+          });
+      }
+    } else {
+      const commandInput: SendEmailRequest = {
+        FromEmailAddress: from,
+        Destination: {
+          ToAddresses: [to],
         },
-      },
-    };
-    const command = new SendEmailCommand(commandInput);
-    return this.sesClient
-      .send(command)
-      .catch(function (err: SESv2ServiceException) {
-        console.error(
-          `Error sending email to: ${
-            isMultipleRecipients ? to.toString() : to
-          }! Error body:`,
-          err.toString(),
-        );
-      });
+        Content: {
+          Simple: {
+            Subject: {
+              Data: subject,
+              Charset: 'UTF-8',
+            },
+            Body: {
+              Html: {
+                Data: body,
+                Charset: 'UTF-8',
+              },
+            },
+            Attachments: attachments,
+          },
+        },
+      };
+      const command = new SendEmailCommand(commandInput);
+      return this.sesClient
+        .send(command)
+        .catch(function (err: SESv2ServiceException) {
+          console.error(
+            `Error sending email to: ${
+              isMultipleRecipients ? to.toString() : to
+            }! Error body:`,
+            err.toString(),
+          );
+        });
+    }
   }
 }
