@@ -270,7 +270,9 @@ describe("PreferencesAndPrograms", () => {
       ).toBeInTheDocument()
       expect(within(nestedDialogDrawer).getAllByText("Active").length).toStrictEqual(2)
 
-      await userEvent.click(within(nestedDialogDrawer).getByRole("checkbox", { name: /work in the city/i }))
+      await userEvent.click(
+        within(nestedDialogDrawer).getByRole("checkbox", { name: /work in the city/i })
+      )
       await userEvent.click(within(nestedDialogDrawer).getByRole("button", { name: "Save" }))
       await userEvent.click(within(dialogDrawer).getByRole("button", { name: "Save" }))
 
