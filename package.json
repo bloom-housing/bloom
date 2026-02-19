@@ -74,8 +74,8 @@
     "jest": "^26.5.3",
     "lint-staged": "^10.4.0",
     "prettier": "^2.8.8",
-    "react": "19.2.3",
-    "react-test-renderer": "19.2.3",
+    "react": "19.2.4",
+    "react-test-renderer": "19.2.4",
     "ts-jest": "^26.4.1",
     "ts-node": "^10.0.0",
     "typescript": "4.9.5",
@@ -96,7 +96,7 @@
   },
   "dependencies": {},
   "resolutions": {
-    "react": "19.2.3",
+    "react": "19.2.4",
     "react-dom": "19.2.3",
     "@fortawesome/react-fontawesome": "3.1.0"
   }
