@@ -10,6 +10,7 @@ import { FormListing } from "../../../../lib/listings/formTypes"
 type ProgramsAndPreferencesProps = {
   disableListingPreferences?: boolean
   swapCommunityTypeWithPrograms?: boolean
+  enableV2MSQ?: boolean
   listing?: FormListing
   jurisdiction: string
   preferences: MultiselectQuestion[]
@@ -21,6 +22,7 @@ type ProgramsAndPreferencesProps = {
 const ProgramsAndPreferences = ({
   disableListingPreferences,
   swapCommunityTypeWithPrograms,
+  enableV2MSQ,
   listing,
   jurisdiction,
   preferences,
@@ -30,6 +32,7 @@ const ProgramsAndPreferences = ({
 }: ProgramsAndPreferencesProps) => {
   const programComponent = !swapCommunityTypeWithPrograms ? (
     <SelectAndOrder
+      enableV2MSQ={enableV2MSQ}
       addText={t("listings.addProgram")}
       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
       drawerButtonText={t("listings.selectPrograms")}
@@ -45,6 +48,7 @@ const ProgramsAndPreferences = ({
     />
   ) : (
     <SelectAndOrder
+      enableV2MSQ={enableV2MSQ}
       addText={t("listings.addCommunityTypes")}
       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
       drawerButtonText={t("listings.selectCommunityTypes")}
@@ -65,6 +69,7 @@ const ProgramsAndPreferences = ({
     <>
       {!disableListingPreferences && (
         <SelectAndOrder
+          enableV2MSQ={enableV2MSQ}
           addText={t("listings.addPreference")}
           applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
           drawerButtonText={t("listings.selectPreferences")}

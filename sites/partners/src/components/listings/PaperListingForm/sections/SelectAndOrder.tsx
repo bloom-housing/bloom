@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect, useMemo, useCallback } from "react"
 import { t, MinimalTable, Field, StandardTableData } from "@bloom-housing/ui-components"
 import {
-  FeatureFlagEnum,
   MultiselectOption,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
@@ -17,6 +16,7 @@ import { useJurisdictionalMultiselectQuestionList } from "../../../../lib/hooks"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 
 type SelectAndOrderProps = {
+  enableV2MSQ: boolean
   formKey: string
   addText: string
   applicationSection: MultiselectQuestionsApplicationSectionEnum
@@ -34,6 +34,7 @@ type SelectAndOrderProps = {
 }
 
 const SelectAndOrder = ({
+  enableV2MSQ,
   addText,
   applicationSection,
   drawerButtonText,
@@ -49,18 +50,11 @@ const SelectAndOrder = ({
   subtitle,
   title,
 }: SelectAndOrderProps) => {
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const [tableDrawer, setTableDrawer] = useState<boolean | null>(null)
   const [selectDrawer, setSelectDrawer] = useState<boolean | null>(null)
   const [draftListingData, setDraftListingData] = useState<MultiselectQuestion[]>(listingData)
   const [dragOrder, setDragOrder] = useState([])
   const [openPreviews, setOpenPreviews] = useState<number[]>([])
-
-  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableV2MSQ,
-    jurisdiction,
-    true
-  )
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method

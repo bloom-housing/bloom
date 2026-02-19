@@ -168,23 +168,15 @@ describe("PreferencesAndPrograms", () => {
 
       render(
         <FormProviderWrapper values={{ ...formDefaults }}>
-          <AuthContext.Provider
-            value={{
-              doJurisdictionsHaveFeatureFlagOn: () => {
-                return false
-              },
-            }}
-          >
-            <PreferencesAndPrograms
-              preferences={mockPreferences}
-              programs={[]}
-              setPreferences={setFn}
-              setPrograms={setFn}
-              disableListingPreferences={false}
-              swapCommunityTypeWithPrograms={false}
-              jurisdiction={"jurisdiction1"}
-            />
-          </AuthContext.Provider>
+          <PreferencesAndPrograms
+            preferences={mockPreferences}
+            programs={[]}
+            setPreferences={setFn}
+            setPrograms={setFn}
+            disableListingPreferences={false}
+            swapCommunityTypeWithPrograms={false}
+            jurisdiction={"jurisdiction1"}
+          />
         </FormProviderWrapper>
       )
 
@@ -218,6 +210,7 @@ describe("PreferencesAndPrograms", () => {
     })
 
     it("should open drawer and add a preference", async () => {
+      console.log("test 3")
       const setFn = jest.fn()
 
       render(
@@ -230,6 +223,7 @@ describe("PreferencesAndPrograms", () => {
             disableListingPreferences={false}
             swapCommunityTypeWithPrograms={false}
             jurisdiction={"jurisdiction1"}
+            enableV2MSQ={true}
           />
         </FormProviderWrapper>
       )
