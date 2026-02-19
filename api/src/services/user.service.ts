@@ -319,6 +319,7 @@ export class UserService {
           return transactions.address.update({
             data: {
               ...dto.address,
+              id: undefined,
             },
             where: {
               id: dto.address.id,
