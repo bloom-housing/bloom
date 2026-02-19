@@ -28,6 +28,7 @@ import { SnapshotCreateService } from '../../../src/services/snapshot-create.ser
 import { PublicUserUpdate } from '../../../src/dtos/users/public-user-update.dto';
 import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { AddressUpdate } from '../../../src/dtos/addresses/address-update.dto';
+import { AdvocateUserUpdate } from 'src/dtos/users/advocate-user-update.dto';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -1869,6 +1870,244 @@ describe('Testing user service', () => {
           },
         },
       });
+    });
+
+    it('should connect agency to a user', async () => {
+      const id = randomUUID();
+      const jurisId = randomUUID();
+      const listingA = randomUUID();
+      const agencyId = randomUUID();
+
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id,
+        listings: [{ id: listingA }],
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+      });
+      prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({ id });
+
+      prisma.$transaction = jest
+        .fn()
+        .mockImplementation((callBack) => callBack(prisma));
+
+      await service.update(
+        {
+          id,
+          firstName: 'first name',
+          lastName: 'last name',
+          jurisdictions: [{ id: jurisId } as any],
+          agreedToTermsOfService: true,
+          listings: [{ id: listingA }],
+          agency: { id: agencyId },
+        } as AdvocateUserUpdate,
+        {
+          headers: { jurisdictionname: 'juris 1' },
+          user: {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        } as unknown as Request,
+      );
+      expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+        include: {
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+          favoriteListings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        where: {
+          id,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledTimes(3);
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          jurisdictions: {
+            connect: [
+              {
+                id: jurisId,
+              },
+            ],
+          },
+        },
+        where: {
+          id,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          agency: {
+            connect: {
+              id: agencyId,
+            },
+          },
+        },
+        where: {
+          id,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          firstName: 'first name',
+          lastName: 'last name',
+          agreedToTermsOfService: true,
+        }),
+        include: {
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+          favoriteListings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        where: {
+          id,
+        },
+      });
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User,
+        'user',
+        permissionActions.update,
+        {
+          id,
+          jurisdictionId: jurisId,
+        },
+      );
+      expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
+        data: {
+          originalId: id,
+          listing: {
+            connect: [{ id: listingA }],
+          },
+        },
+      });
+    });
+
+    it('should disconnect agency from and user', async () => {
+      const id = randomUUID();
+      const jurisId = randomUUID();
+      const listingA = randomUUID();
+      const agencyId = randomUUID();
+
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id,
+        listings: [{ id: listingA }],
+        agency: { id: agencyId },
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+      });
+      prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({ id });
+
+      prisma.$transaction = jest
+        .fn()
+        .mockImplementation((callBack) => callBack(prisma));
+
+      await service.update(
+        {
+          id,
+          firstName: 'first name',
+          lastName: 'last name',
+          jurisdictions: [{ id: jurisId } as any],
+          agreedToTermsOfService: true,
+          listings: [{ id: listingA }],
+        } as AdvocateUserUpdate,
+        {
+          headers: { jurisdictionname: 'juris 1' },
+          user: {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        } as unknown as Request,
+      );
+      expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+        include: {
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+          favoriteListings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        where: {
+          id,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledTimes(3);
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          jurisdictions: {
+            connect: [
+              {
+                id: jurisId,
+              },
+            ],
+          },
+        },
+        where: {
+          id,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          agency: {
+            disconnect: {
+              id: agencyId,
+            },
+          },
+        },
+        where: {
+          id,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          firstName: 'first name',
+          lastName: 'last name',
+          agreedToTermsOfService: true,
+        }),
+        include: {
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+          favoriteListings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        where: {
+          id,
+        },
+      });
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User,
+        'user',
+        permissionActions.update,
+        {
+          id,
+          jurisdictionId: jurisId,
+        },
+      );
     });
 
     it('should error when trying to update nonexistent user', async () => {
