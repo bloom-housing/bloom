@@ -376,7 +376,7 @@ export class UserService {
           data: {
             agency: {
               disconnect: {
-                id: storedUser.agencyId,
+                id: storedUser.agency.id,
               },
             },
           },
