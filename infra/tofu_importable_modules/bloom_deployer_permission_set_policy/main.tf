@@ -50,6 +50,36 @@ data "aws_iam_policy_document" "deployer" {
     sid = "HumanConsoleUser"
     actions = [
       "application-autoscaling:DescribeScalableTargets",
+      "cloudwatch:Describe*",
+      "cloudwatch:Get*",
+      "cloudwatch:List*",
+      "dms:ListDataProviders",
+      "ec2:Describe*",
+      "ecs:List*",
+      "elasticloadbalancing:Describe*",
+      "events:Describe*",
+      "events:Get*",
+      "events:List*",
+      "logs:Describe*",
+      "logs:FilterLogEvents",
+      "logs:Get*",
+      "logs:List*",
+      "logs:StartQuery",
+      "logs:StopQuery",
+      "logs:TestMetricFilter",
+      "rds-db:connect",
+      "rds:Describe*",
+      "rds:Get*",
+      "rds:List*",
+      "servicediscovery:DiscoverInstances",
+      "servicediscovery:Get*",
+      "servicediscovery:List*",
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid = "HumanCloudshellUser"
+    actions = [
       "cloudshell:CreateEnvironment",
       "cloudshell:CreateSession",
       "cloudshell:DeleteEnvironment",
@@ -58,50 +88,14 @@ data "aws_iam_policy_document" "deployer" {
       "cloudshell:PutCredentials",
       "cloudshell:StartEnvironment",
       "cloudshell:StopEnvironment",
-      "cloudwatch:GetMetricData",
       "ec2:CreateNetworkInterface",
       "ec2:CreateNetworkInterfacePermission",
       "ec2:CreateTags",
       "ec2:DeleteNetworkInterface",
-      "ec2:DescribeDhcpOptions",
-      "ec2:DescribeVpcEndpointServices",
-      "ecs:DescribeServiceDeployments",
-      "ecs:DescribeServiceRevisions",
-      "ecs:ListClusters",
-      "ecs:ListServiceDeployments",
-      "ecs:ListServices",
-      "ecs:ListServicesByNamespace",
-      "ecs:ListTaskDefinitionFamilies",
-      "ecs:ListTasks",
-      "elasticloadbalancing:DescribeTargetHealth",
-      "events:DescribeRule",
-      "events:ListTargetsByRule",
-      "logs:DescribeLogGroups",
-      "logs:DescribeLogStreams",
-      "logs:DescribeMetricFilters",
-      "logs:DescribeQueries",
-      "logs:DescribeQueryDefinitions",
-      "logs:FilterLogEvents",
-      "logs:GetLogEvents",
-      "logs:GetLogGroupFields",
-      "logs:GetLogObject",
-      "logs:GetLogRecord",
-      "logs:GetQueryResults",
-      "logs:StartQuery",
-      "logs:StopQuery",
-      "rds-db:connect",
-      "rds:DescribeDBClusters",
-      "rds:DescribeGlobalClusters",
-      "servicediscovery:DiscoverInstances",
-      "servicediscovery:GetInstance",
-      "servicediscovery:GetService",
-      "servicediscovery:GetServiceAttributes",
-      "servicediscovery:ListInstances",
-      "servicediscovery:ListServices",
     ]
     resources = ["*"]
+    # TODO: condition that the correct security group and subnet is used
   }
-  # TODO: cloudshell creator
   statement {
     sid = "TofuStateBucket"
     actions = [

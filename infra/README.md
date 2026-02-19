@@ -2,7 +2,7 @@
 
 This directory contains infrastructure-as-code configuration for the Bloom Core AWS deployments. It
 uses OpenTofu: https://opentofu.org/, a drop-in replacement for Terraform that is maintained by the
-Cloud Native Computing Foundation.
+Cloud Native Computing Foundation. The codebase should be compatible with both terraform and tofu.
 
 - For instructions on deploying Bloom to an AWS organization, see
   [./aws_deployment_guide/0_README.md](./aws_deployment_guide/0_README.md).
