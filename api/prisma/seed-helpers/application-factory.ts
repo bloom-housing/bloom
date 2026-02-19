@@ -19,6 +19,7 @@ import { preferenceFactory } from './application-preference-factory';
 import { demographicsFactory } from './demographic-factory';
 import { alternateContactFactory } from './alternate-contact-factory';
 import { randomBoolean } from './boolean-generator';
+import { RaceEthnicityConfiguration } from '../../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
 
 export const applicationFactory = async (optionalParams?: {
   createdAt?: Date;
@@ -34,6 +35,7 @@ export const applicationFactory = async (optionalParams?: {
   expireAfter?: Date;
   wasPIICleared?: boolean;
   additionalPhone?: string;
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration;
 }): Promise<Prisma.ApplicationsCreateInput> => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
@@ -45,7 +47,9 @@ export const applicationFactory = async (optionalParams?: {
       ],
     };
   }
-  const demographics = await demographicsFactory();
+  const demographics = await demographicsFactory(
+    optionalParams?.raceEthnicityConfiguration,
+  );
   const includeAdditionalPhone =
     !!optionalParams?.additionalPhone || randomBoolean();
   let householdSize = 1;

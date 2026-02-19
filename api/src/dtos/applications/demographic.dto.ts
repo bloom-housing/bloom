@@ -39,4 +39,11 @@ export class Demographic extends IdOnlyDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
   @ApiProperty()
   race?: string[];
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
+  spokenLanguage?: string;
 }

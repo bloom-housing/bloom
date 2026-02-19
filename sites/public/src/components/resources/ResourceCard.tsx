@@ -3,16 +3,20 @@ import styles from "./ResourceCard.module.scss"
 
 export interface ResourceCardProps {
   title: string
-  href: string
-  content: string
+  href?: string
+  content: React.ReactNode | string
 }
 
 const ResourceCard = ({ title, href, content }: ResourceCardProps) => {
   return (
     <Card className={styles["resource-card"]}>
-      <Link href={href} className={styles["resource-card-title"]}>
-        {title}
-      </Link>
+      {href ? (
+        <Link href={href} className={styles["resource-card-title"]}>
+          {title}
+        </Link>
+      ) : (
+        <div className={styles["resource-card-title"]}>{title}</div>
+      )}
       <div className={styles["resource-card-content"]}>{content}</div>
     </Card>
   )

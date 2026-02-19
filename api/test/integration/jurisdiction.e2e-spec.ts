@@ -141,6 +141,7 @@ describe('Jurisdiction Controller Tests', () => {
       ],
       regions: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleSpokenLanguages: [],
     };
     const res = await request(app.getHttpServer())
       .post('/jurisdictions')
@@ -177,6 +178,7 @@ describe('Jurisdiction Controller Tests', () => {
       ],
       regions: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleSpokenLanguages: [],
     };
     const res = await request(app.getHttpServer())
       .put(`/jurisdictions/${id}`)
@@ -217,6 +219,7 @@ describe('Jurisdiction Controller Tests', () => {
       ],
       regions: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleSpokenLanguages: [],
     };
 
     const res = await request(app.getHttpServer())

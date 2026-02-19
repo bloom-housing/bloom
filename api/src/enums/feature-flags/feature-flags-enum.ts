@@ -48,6 +48,7 @@ export enum FeatureFlagEnum {
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
   enableSmokingPolicyRadio = 'enableSmokingPolicyRadio',
+  enableSpokenLanguage = 'enableSpokenLanguage',
   enableSupportAdmin = 'enableSupportAdmin',
   enableUnderConstructionHome = 'enableUnderConstructionHome',
   enableUnitGroups = 'enableUnitGroups',
@@ -286,6 +287,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableSmokingPolicyRadio,
     description:
       "When true, the listing 'Smoking policy' field is a radio group",
+  },
+  {
+    name: FeatureFlagEnum.enableSpokenLanguage,
+    description:
+      'When true, the application demographics section displays a spoken language question with options configured on the jurisdiction',
   },
   {
     name: FeatureFlagEnum.enableSupportAdmin,
