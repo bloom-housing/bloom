@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EmailProvider, SendEmailInput } from './email-provider.service';
-import { MailDataRequired, MailService, ResponseError } from '@sendgrid/mail';
+import { MailService } from '@sendgrid/mail';
+import { MailDataRequired } from '@sendgrid/helpers/classes/mail';
+import { ResponseError } from '@sendgrid/helpers/classes';
 
 @Injectable()
 export class SendGridService extends EmailProvider {
