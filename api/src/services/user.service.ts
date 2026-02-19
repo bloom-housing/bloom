@@ -315,21 +315,26 @@ export class UserService {
     let newAddressId: string | undefined;
     if (dto?.address) {
       if (dto.address?.id) {
-        await this.prisma.address.update({
-          data: {
-            ...dto.address,
-          },
-          where: {
-            id: dto.address.id,
-          },
+        transactions.push(async (transactions: PrismaClient) => {
+          return transactions.address.update({
+            data: {
+              ...dto.address,
+            },
+            where: {
+              id: dto.address.id,
+            },
+          });
         });
       } else {
-        const newAddress = await this.prisma.address.create({
-          data: {
-            ...dto.address,
-          },
+        transactions.push(async (transactions: PrismaClient) => {
+          const newAddress = await transactions.address.create({
+            data: {
+              ...dto.address,
+            },
+          });
+          newAddressId = newAddress.id;
+          return newAddress;
         });
-        newAddressId = newAddress.id;
       }
     }
 
