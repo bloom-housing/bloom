@@ -499,7 +499,7 @@ export class EmailService {
       this.polyglot.t('applicationUpdate.subject', {
         listingName: listing.name,
       });
-    const loginUrl = appUrl ? `${appUrl}/sign-in` : '';
+    const actionUrl = appUrl ? `${appUrl}/account/applications` : '';
     const housingApplicantName = [
       application?.applicant?.firstName,
       application?.applicant?.lastName,
@@ -524,7 +524,7 @@ export class EmailService {
           appOptions: { listingName: listing.name },
           recipientName: advocateName,
           summaryItems: buildSummaryItems(),
-          loginUrl,
+          actionUrl,
           contactEmail,
           updateNoticeText: this.polyglot.t(
             'applicationUpdate.advocateUpdateNotice',
@@ -569,7 +569,7 @@ export class EmailService {
           contactNoticeText: isAdvocate
             ? this.polyglot.t('applicationUpdate.applicantContactNotice')
             : this.polyglot.t('applicationUpdate.contactNotice'),
-          loginUrl,
+          actionUrl,
           viewPromptText: this.polyglot.t('applicationUpdate.viewPrompt'),
           viewLinkText: this.polyglot.t('applicationUpdate.viewLink'),
           showViewSection: !isAdvocate,
