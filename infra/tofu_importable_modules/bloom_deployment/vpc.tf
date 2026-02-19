@@ -197,168 +197,178 @@ resource "aws_route" "vpc_peer" {
   vpc_peering_connection_id = aws_vpc_peering_connection.to_existing_vpc[0].id
 }
 
-# Create PrivateLink endpoints for AWS services to be accessed via. This keeps the traffic internal
-# to AWS's network and avoids going through the NAT gateway over the internet.
-resource "aws_vpc_endpoint" "secrets_manager" {
+locals {
+  # List of AWS services that PrivateLink endpoints will be created for. This keeps traffic from
+  # Bloom services to the AWS services internal to the VPC instead of going over the public
+  # internet.
+  aws_privatelink_services = ["secretsmanager", "rds", "data-servicediscovery"]
+  aws_privatelink_users = flatten([
+    for sg, config in local.bloom_security_groups : [
+      for aws_service in config.egress == null ? [] : config.egress.privatelink_services : {
+        aws_service = aws_service
+        bloom_sg    = sg
+      }
+    ]
+  ])
+
+  # List of security groups to create for the Bloom services.
+  bloom_security_groups = merge({
+    "db" : {
+      ingress = {
+        internet    = false
+        vpc_peering = var.vpc_peering_settings != null
+        port        = 5432
+      }
+      egress = null
+    }
+    "dbinit" : {
+      ingress = null
+      egress = {
+        privatelink_services = ["secretsmanager"] # to read DB master user secret.
+        nat                  = true               # to download container image from GitHub.
+        security_groups      = ["db"]
+      }
+    }
+    "lb" : {
+      ingress = {
+        internet    = true
+        vpc_peering = false
+      }
+      egress = {
+        privatelink_services = []
+        nat                  = false
+        security_groups      = ["site-partners", "site-public"]
+      }
+    }
+    "api" : {
+      ingress = {
+        internet    = false
+        vpc_peering = false
+        port        = 3100
+      }
+      egress = {
+        privatelink_services = [
+          "secretsmanager", # to read JWT signing key.
+          "rds",            # to generate an auth token for bloom_api DB user.
+        ]
+        nat             = true # to download container image from GitHub.
+        security_groups = ["db"]
+      }
+    }
+    "site-partners" : {
+      ingress = {
+        internet    = false
+        vpc_peering = false
+        port        = 3001
+      }
+      egress = {
+        privatelink_services = []
+        nat                  = true # to download container image from GitHub.
+        security_groups      = ["api"]
+      }
+    }
+    "site-public" : {
+      ingress = {
+        internet    = false
+        vpc_peering = false
+        port        = 3000
+      }
+      egress = {
+        privatelink_services = []
+        nat                  = true # to download container image from GitHub.
+        security_groups      = ["api"]
+      }
+    }
+    "cloudshell" : {
+      ingress = null
+      egress = {
+        privatelink_services = ["rds", "data-servicediscovery"] # see infra/aws_deployment_guide/7_operations_playbook.md for the APIs used.
+        nat                  = false
+        security_groups      = ["api", "db"]
+      }
+    }
+    }, var.bloom_dbseed_image == "" ? {} : {
+    "dbseed" : {
+      ingress = null
+      egress = {
+        privatelink_services = ["rds"] # to generate an auth token for bloom_api DB user.
+        nat                  = true    # to download container image from GitHub.
+        security_groups      = ["db"]
+      }
+    }
+  })
+  bloom_users = flatten([
+    for sg, config in local.bloom_security_groups : [
+      for to_sg in config.egress == null ? [] : config.egress.security_groups : {
+        from = sg
+        to   = to_sg
+      }
+    ]
+  ])
+}
+
+# Create PrivateLink endpoints for all required AWS services.
+resource "aws_vpc_endpoint" "aws_services" {
+  for_each            = toset(local.aws_privatelink_services)
   region              = var.aws_region
   vpc_id              = aws_vpc.bloom.id
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true # required for the AWS SDKs to use this network path by default instead of through the public internet.
-  service_name        = "com.amazonaws.${var.aws_region}.secretsmanager"
+  service_name        = "com.amazonaws.${var.aws_region}.${each.key}"
   subnet_ids          = [for s in aws_subnet.private : s.id]
-  security_group_ids  = [aws_security_group.secrets_manager_endpoint.id]
+  security_group_ids  = [aws_security_group.aws_privatelink_services[each.key].id]
   tags = {
-    Name = "bloom-secretsmanager"
+    Name = "bloom-${each.key}"
   }
 }
-resource "aws_security_group" "secrets_manager_endpoint" {
+resource "aws_security_group" "aws_privatelink_services" {
+  for_each    = toset(local.aws_privatelink_services)
   region      = var.aws_region
   vpc_id      = aws_vpc.bloom.id
-  name        = "secrets-manager-endpoint"
-  description = "Rules for secrets manager vpc endpoint"
+  name        = "${each.key}-privatelink-endpoint"
+  description = "Rules for ${each.key} vpc PrivateLink endpoint"
 }
-resource "aws_vpc_security_group_ingress_rule" "bloom_service_tasks" {
+resource "aws_vpc_security_group_ingress_rule" "aws_privatelink" {
   for_each = {
-    "api"    = aws_security_group.api.id
-    "dbinit" = aws_security_group.dbinit.id
-
-    # If/when the sites need secrets:
-    # "site-partners" = aws_security_group.site_partners.id
-    # "site-public"   = aws_security_group.site_public.id
+    for u in local.aws_privatelink_users : "${u.bloom_sg}_to_${u.aws_service}" => u
   }
   region                       = var.aws_region
-  security_group_id            = aws_security_group.secrets_manager_endpoint.id
-  referenced_security_group_id = each.value
+  security_group_id            = aws_security_group.aws_privatelink_services[each.value.aws_service].id
+  referenced_security_group_id = aws_security_group.bloom[each.value.bloom_sg].id
   ip_protocol                  = "tcp"
   from_port                    = 443
   to_port                      = 443
   tags = {
-    Name = "${each.key}-allow"
+    Name = "${each.value.bloom_sg}-allow"
   }
 }
-
-# Create security group for database.
-resource "aws_security_group" "db" {
-  region      = var.aws_region
-  vpc_id      = aws_vpc.bloom.id
-  name        = "bloom-db"
-  description = "Rules for Bloom database."
-}
-resource "aws_vpc_security_group_ingress_rule" "db" {
-  for_each = merge({
-    "api"    = aws_security_group.api.id
-    "dbinit" = aws_security_group.dbinit.id
-    }, var.bloom_dbseed_image == "" ? {} : {
-    "dbseed" = aws_security_group.dbseed[0].id
-  })
-  region                       = var.aws_region
-  security_group_id            = aws_security_group.db.id
-  referenced_security_group_id = each.value
-  ip_protocol                  = "tcp"
-  from_port                    = 5432
-  to_port                      = 5432
-  tags = {
-    Name = "${each.key}-allow"
+resource "aws_vpc_security_group_egress_rule" "aws_privatelink" {
+  for_each = {
+    for u in local.aws_privatelink_users : "${u.bloom_sg}_to_${u.aws_service}" => u
   }
-}
-resource "aws_vpc_security_group_ingress_rule" "vpc_peering_to_db" {
-  count                        = var.vpc_peering_settings == null ? 0 : 1
-  depends_on                   = [data.aws_vpc_peering_connection.to_existing_vpc[0]]
   region                       = var.aws_region
-  security_group_id            = aws_security_group.db.id
-  referenced_security_group_id = "${var.vpc_peering_settings.aws_account_number}/${var.vpc_peering_settings.allowed_security_group_id}"
-  ip_protocol                  = "tcp"
-  from_port                    = 5432
-  to_port                      = 5432
-  tags = {
-    Name = "vpc-peering-allow"
-  }
-}
-
-# Create security group for dbinit ECS task.
-resource "aws_security_group" "dbinit" {
-  region      = var.aws_region
-  vpc_id      = aws_vpc.bloom.id
-  name        = "bloom-dbinit"
-  description = "Rules for Bloom DB init tasks."
-}
-resource "aws_vpc_security_group_egress_rule" "dbinit_to_db" {
-  region                       = var.aws_region
-  security_group_id            = aws_security_group.dbinit.id
-  referenced_security_group_id = aws_security_group.db.id
-  ip_protocol                  = "tcp"
-  from_port                    = 5432
-  to_port                      = 5432
-  tags = {
-    Name = "allow-db"
-  }
-}
-resource "aws_vpc_security_group_egress_rule" "dbinit_to_secretsmanager" {
-  region                       = var.aws_region
-  security_group_id            = aws_security_group.dbinit.id
-  referenced_security_group_id = aws_security_group.secrets_manager_endpoint.id
+  security_group_id            = aws_security_group.bloom[each.value.bloom_sg].id
+  referenced_security_group_id = aws_security_group.aws_privatelink_services[each.value.aws_service].id
   ip_protocol                  = "tcp"
   from_port                    = 443
   to_port                      = 443
   tags = {
-    Name = "allow-secretsmanager"
-  }
-}
-resource "aws_vpc_security_group_egress_rule" "dbinit_to_nat" {
-  region            = var.aws_region
-  security_group_id = aws_security_group.dbinit.id
-  cidr_ipv4         = "0.0.0.0/0"
-  ip_protocol       = "tcp"
-  from_port         = 443
-  to_port           = 443
-  tags = {
-    Name = "allow-nat-https"
+    Name = "${each.value.aws_service}-allow"
   }
 }
 
-# Create security group for dbseed ECS task.
-resource "aws_security_group" "dbseed" {
-  count       = var.bloom_dbseed_image == "" ? 0 : 1
+# Create security groups and rules for the Bloom services.
+resource "aws_security_group" "bloom" {
+  for_each    = local.bloom_security_groups
   region      = var.aws_region
   vpc_id      = aws_vpc.bloom.id
-  name        = "bloom-dbseed"
-  description = "Rules for Bloom DB seed tasks."
+  name        = "bloom-${each.key}"
+  description = "Rules for Bloom ${each.key}."
 }
-resource "aws_vpc_security_group_egress_rule" "dbseed_to_db" {
-  count                        = var.bloom_dbseed_image == "" ? 0 : 1
-  region                       = var.aws_region
-  security_group_id            = aws_security_group.dbseed[0].id
-  referenced_security_group_id = aws_security_group.db.id
-  ip_protocol                  = "tcp"
-  from_port                    = 5432
-  to_port                      = 5432
-  tags = {
-    Name = "allow-db"
-  }
-}
-resource "aws_vpc_security_group_egress_rule" "dbseed_to_nat" {
-  count             = var.bloom_dbseed_image == "" ? 0 : 1
+resource "aws_vpc_security_group_ingress_rule" "from_internet" {
+  for_each          = toset([for sg, config in local.bloom_security_groups : sg if config.ingress != null && config.ingress.internet])
   region            = var.aws_region
-  security_group_id = aws_security_group.dbseed[0].id
-  cidr_ipv4         = "0.0.0.0/0"
-  ip_protocol       = "tcp"
-  from_port         = 443
-  to_port           = 443
-  tags = {
-    Name = "allow-nat-https"
-  }
-}
-
-# Create security group for LB.
-resource "aws_security_group" "lb" {
-  region      = var.aws_region
-  vpc_id      = aws_vpc.bloom.id
-  name        = "bloom-lb"
-  description = "Rules for Bloom load balancer."
-}
-resource "aws_vpc_security_group_ingress_rule" "lb" {
-  region            = var.aws_region
-  security_group_id = aws_security_group.lb.id
+  security_group_id = aws_security_group.bloom[each.key].id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "tcp"
   from_port         = 443
@@ -367,187 +377,55 @@ resource "aws_vpc_security_group_ingress_rule" "lb" {
     Name = "internet-allow"
   }
 }
-resource "aws_vpc_security_group_egress_rule" "lb_to_partners_site" {
+resource "aws_vpc_security_group_ingress_rule" "from_vpc_peering" {
+  for_each                     = { for sg, config in local.bloom_security_groups : sg => config if config.ingress != null && config.ingress.vpc_peering }
   region                       = var.aws_region
-  security_group_id            = aws_security_group.lb.id
-  referenced_security_group_id = aws_security_group.site_partners.id
+  security_group_id            = aws_security_group.bloom[each.key].id
+  referenced_security_group_id = "${var.vpc_peering_settings.aws_account_number}/${var.vpc_peering_settings.allowed_security_group_id}"
   ip_protocol                  = "tcp"
-  from_port                    = 3001
-  to_port                      = 3001
+  from_port                    = each.value.ingress.port
+  to_port                      = each.value.ingress.port
   tags = {
-    Name = "site-partners-allow"
+    Name = "vpc-peering-allow"
   }
 }
-resource "aws_vpc_security_group_egress_rule" "lb_to_public_site" {
-  region                       = var.aws_region
-  security_group_id            = aws_security_group.lb.id
-  referenced_security_group_id = aws_security_group.site_public.id
-  ip_protocol                  = "tcp"
-  from_port                    = 3000
-  to_port                      = 3000
-  tags = {
-    Name = "site-public-allow"
-  }
-}
-
-# Create security group for api ECS tasks.
-resource "aws_security_group" "api" {
-  region      = var.aws_region
-  vpc_id      = aws_vpc.bloom.id
-  name        = "bloom-api"
-  description = "Rules for Bloom API tasks."
-}
-resource "aws_vpc_security_group_ingress_rule" "api" {
+resource "aws_vpc_security_group_ingress_rule" "bloom" {
   for_each = {
-    "site-partners" = aws_security_group.site_partners.id
-    "site-public"   = aws_security_group.site_public.id
+    for u in local.bloom_users : "${u.from}_to_${u.to}" => u
   }
   region                       = var.aws_region
-  security_group_id            = aws_security_group.api.id
-  referenced_security_group_id = each.value
+  security_group_id            = aws_security_group.bloom[each.value.to].id
+  referenced_security_group_id = aws_security_group.bloom[each.value.from].id
   ip_protocol                  = "tcp"
-  from_port                    = 3100
-  to_port                      = 3100
+  from_port                    = local.bloom_security_groups[each.value.to].ingress.port
+  to_port                      = local.bloom_security_groups[each.value.to].ingress.port
   tags = {
-    Name = "${each.key}-allow"
+    Name = "${each.value.from}-allow"
   }
 }
-resource "aws_vpc_security_group_egress_rule" "api_to_db" {
+resource "aws_vpc_security_group_egress_rule" "bloom" {
+  for_each = {
+    for u in local.bloom_users : "${u.from}_to_${u.to}" => u
+  }
   region                       = var.aws_region
-  security_group_id            = aws_security_group.api.id
-  referenced_security_group_id = aws_security_group.db.id
+  security_group_id            = aws_security_group.bloom[each.value.from].id
+  referenced_security_group_id = aws_security_group.bloom[each.value.to].id
   ip_protocol                  = "tcp"
-  from_port                    = 5432
-  to_port                      = 5432
+  from_port                    = local.bloom_security_groups[each.value.to].ingress.port
+  to_port                      = local.bloom_security_groups[each.value.to].ingress.port
   tags = {
-    Name = "allow-db"
+    Name = "${each.value.to}-allow"
   }
 }
-resource "aws_vpc_security_group_egress_rule" "api_to_secretsmanager" {
-  region                       = var.aws_region
-  security_group_id            = aws_security_group.api.id
-  referenced_security_group_id = aws_security_group.secrets_manager_endpoint.id
-  ip_protocol                  = "tcp"
-  from_port                    = 443
-  to_port                      = 443
-  tags = {
-    Name = "allow-secretsmanager"
-  }
-}
-resource "aws_vpc_security_group_egress_rule" "api_to_nat" {
+resource "aws_vpc_security_group_egress_rule" "to_nat" {
+  for_each          = toset([for sg, config in local.bloom_security_groups : sg if config.egress != null && config.egress.nat])
   region            = var.aws_region
-  security_group_id = aws_security_group.api.id
+  security_group_id = aws_security_group.bloom[each.key].id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "tcp"
   from_port         = 443
   to_port           = 443
   tags = {
-    Name = "allow-nat-https"
-  }
-}
-
-# Create security group for partners site ECS tasks.
-resource "aws_security_group" "site_partners" {
-  region      = var.aws_region
-  vpc_id      = aws_vpc.bloom.id
-  name        = "bloom-site-partners"
-  description = "Rules for Bloom partners site tasks."
-}
-resource "aws_vpc_security_group_ingress_rule" "lb_to_site_partners" {
-  region                       = var.aws_region
-  security_group_id            = aws_security_group.site_partners.id
-  referenced_security_group_id = aws_security_group.lb.id
-  ip_protocol                  = "tcp"
-  from_port                    = 3001
-  to_port                      = 3001
-  tags = {
-    Name = "allow-lb"
-  }
-}
-resource "aws_vpc_security_group_egress_rule" "site_partners_to_api" {
-  region                       = var.aws_region
-  security_group_id            = aws_security_group.site_partners.id
-  referenced_security_group_id = aws_security_group.api.id
-  ip_protocol                  = "tcp"
-  from_port                    = 3100
-  to_port                      = 3100
-  tags = {
-    Name = "allow-api"
-  }
-}
-# If/when access to secrets manager is needed:
-#resource "aws_vpc_security_group_egress_rule" "site_partners_to_secretsmanager" {
-#  region                       = var.aws_region
-#  security_group_id            = aws_security_group.site_partners.id
-#  referenced_security_group_id = aws_security_group.secrets_manager_endpoint.id
-#  ip_protocol                  = "tcp"
-#  from_port                    = 443
-#  to_port                      = 443
-#  tags = {
-#    Name = "allow-secretsmanager"
-#  }
-#}
-resource "aws_vpc_security_group_egress_rule" "site_partners_to_nat" {
-  region            = var.aws_region
-  security_group_id = aws_security_group.site_partners.id
-  cidr_ipv4         = "0.0.0.0/0"
-  ip_protocol       = "tcp"
-  from_port         = 443
-  to_port           = 443
-  tags = {
-    Name = "allow-nat-https"
-  }
-}
-
-# Create security group for public site ECS tasks.
-resource "aws_security_group" "site_public" {
-  region      = var.aws_region
-  vpc_id      = aws_vpc.bloom.id
-  name        = "bloom-site-public"
-  description = "Rules for Bloom public site tasks."
-}
-resource "aws_vpc_security_group_ingress_rule" "lb_to_site_public" {
-  region                       = var.aws_region
-  security_group_id            = aws_security_group.site_public.id
-  referenced_security_group_id = aws_security_group.lb.id
-  ip_protocol                  = "tcp"
-  from_port                    = 3000
-  to_port                      = 3000
-  tags = {
-    Name = "allow-lb"
-  }
-}
-resource "aws_vpc_security_group_egress_rule" "site_public_to_api" {
-  region                       = var.aws_region
-  security_group_id            = aws_security_group.site_public.id
-  referenced_security_group_id = aws_security_group.api.id
-  ip_protocol                  = "tcp"
-  from_port                    = 3100
-  to_port                      = 3100
-  tags = {
-    Name = "allow-api"
-  }
-}
-# If/when access to secrets manager is needed:
-#resource "aws_vpc_security_group_egress_rule" "site_public_to_secretsmanager" {
-#  region                       = var.aws_region
-#  security_group_id            = aws_security_group.site_public.id
-#  referenced_security_group_id = aws_security_group.secrets_manager_endpoint.id
-#  ip_protocol                  = "tcp"
-#  from_port                    = 443
-#  to_port                      = 443
-#  tags = {
-#    Name = "allow-secretsmanager"
-#  }
-#}
-resource "aws_vpc_security_group_egress_rule" "site_public_to_nat" {
-  region            = var.aws_region
-  security_group_id = aws_security_group.site_public.id
-  cidr_ipv4         = "0.0.0.0/0"
-  ip_protocol       = "tcp"
-  from_port         = 443
-  to_port           = 443
-  tags = {
-    Name = "allow-nat-https"
+    Name = "nat-allow"
   }
 }

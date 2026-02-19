@@ -9,6 +9,7 @@ organization. The guide is broken down into a series of files that should be fol
 4. [Fork the Bloom Repo](./4_fork_bloom_repo.md)
 5. [Apply Deployer Permission Set Tofu Modules](./5_apply_deployer_permission_set_tofu_modules.md)
 6. [Apply Bloom Deployment Tofu Modules](./6_apply_bloom_deployment_tofu_modules.md)
+7. [Operations Playbook](./7_operations_playbook.md)
 
 The steps in this file create the following resources:
 

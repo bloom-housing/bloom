@@ -43,6 +43,65 @@ resource "aws_ssoadmin_permission_set_inline_policy" "deployer" {
   inline_policy      = data.aws_iam_policy_document.deployer.json
 }
 data "aws_iam_policy_document" "deployer" {
+  # TODO: we should have a separate permission set for humans debugging / looking at stuff through
+  # the AWS web console. For now, just collect the added permissions for the web console that are
+  # not required when running tofu apply.
+  statement {
+    sid = "HumanConsoleUser"
+    actions = [
+      "application-autoscaling:DescribeScalableTargets",
+      "cloudshell:CreateEnvironment",
+      "cloudshell:CreateSession",
+      "cloudshell:DeleteEnvironment",
+      "cloudshell:DescribeEnvironments",
+      "cloudshell:GetEnvironmentStatus",
+      "cloudshell:PutCredentials",
+      "cloudshell:StartEnvironment",
+      "cloudshell:StopEnvironment",
+      "cloudwatch:GetMetricData",
+      "ec2:CreateNetworkInterface",
+      "ec2:CreateNetworkInterfacePermission",
+      "ec2:CreateTags",
+      "ec2:DeleteNetworkInterface",
+      "ec2:DescribeDhcpOptions",
+      "ec2:DescribeVpcEndpointServices",
+      "ecs:DescribeServiceDeployments",
+      "ecs:DescribeServiceRevisions",
+      "ecs:ListClusters",
+      "ecs:ListServiceDeployments",
+      "ecs:ListServices",
+      "ecs:ListServicesByNamespace",
+      "ecs:ListTaskDefinitionFamilies",
+      "ecs:ListTasks",
+      "elasticloadbalancing:DescribeTargetHealth",
+      "events:DescribeRule",
+      "events:ListTargetsByRule",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+      "logs:DescribeMetricFilters",
+      "logs:DescribeQueries",
+      "logs:DescribeQueryDefinitions",
+      "logs:FilterLogEvents",
+      "logs:GetLogEvents",
+      "logs:GetLogGroupFields",
+      "logs:GetLogObject",
+      "logs:GetLogRecord",
+      "logs:GetQueryResults",
+      "logs:StartQuery",
+      "logs:StopQuery",
+      "rds-db:connect",
+      "rds:DescribeDBClusters",
+      "rds:DescribeGlobalClusters",
+      "servicediscovery:DiscoverInstances",
+      "servicediscovery:GetInstance",
+      "servicediscovery:GetService",
+      "servicediscovery:GetServiceAttributes",
+      "servicediscovery:ListInstances",
+      "servicediscovery:ListServices",
+    ]
+    resources = ["*"]
+  }
+  # TODO: cloudshell creator
   statement {
     sid = "TofuStateBucket"
     actions = [
@@ -161,6 +220,7 @@ data "aws_iam_policy_document" "deployer" {
       "ec2:DetachInternetGateway",
       "ec2:DisassociateRouteTable",
       "ec2:DisassociateVpcCidrBlock",
+      "ec2:ModifySecurityGroupRules",
       "ec2:ModifySubnetAttribute",
       "ec2:ModifyVpcAttribute",
       "ec2:ModifyVpcEndpoint",
@@ -304,23 +364,18 @@ data "aws_iam_policy_document" "deployer" {
       "servicediscovery:GetOperation",
       "servicediscovery:ListTagsForResource",
     ]
-    resources = concat(
-      [
-        "arn:aws:ecs:${local.region_account}:cluster/bloom",
-        "arn:aws:ecs:${local.region_account}:task/bloom/*",
-        "arn:aws:logs:${local.region_account}:log-group::log-stream:",
-        "arn:aws:servicediscovery:${local.region_account}:*/*"
-      ],
-      flatten(
-        [for name in ["dbinit", "dbseed", "api", "site-partners", "site-public"] : [
-          "arn:aws:ecs:${local.region_account}:service-deployment/bloom/bloom-${name}/*",
-          "arn:aws:ecs:${local.region_account}:service/bloom/bloom-${name}",
-          "arn:aws:ecs:${local.region_account}:task-definition/bloom-${name}:*",
-          "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/bloom-${name}-container",
-          "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/bloom-${name}-ecs",
-          "arn:aws:logs:${local.region_account}:log-group:bloom-${name}*",
-        ]]
-    ))
+    resources = [
+      "arn:aws:ecs:${local.region_account}:cluster/bloom",
+      "arn:aws:ecs:${local.region_account}:service-deployment/bloom/bloom-*",
+      "arn:aws:ecs:${local.region_account}:service/bloom/bloom-*",
+      "arn:aws:ecs:${local.region_account}:task-definition/bloom-*",
+      "arn:aws:ecs:${local.region_account}:task/bloom/*",
+      "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/bloom-*",
+      "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/bloom-*",
+      "arn:aws:logs:${local.region_account}:log-group::log-stream:",
+      "arn:aws:logs:${local.region_account}:log-group:bloom-*",
+      "arn:aws:servicediscovery:${local.region_account}:*/*",
+    ]
   }
   statement {
     sid = "RunECSTask"
