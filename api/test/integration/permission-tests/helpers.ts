@@ -49,8 +49,8 @@ import { MultiselectQuestionUpdate } from '../../../src/dtos/multiselect-questio
 import { AlternateContactRelationship } from '../../../src/enums/applications/alternate-contact-relationship-enum';
 import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
 import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/accessibility-priority-type-enum';
-import { PublicUserCreate } from 'src/dtos/users/public-user-create.dto';
-import { PartnerUserCreate } from 'src/dtos/users/partner-user-create.dto';
+import { PublicUserCreate } from '../../../src/dtos/users/public-user-create.dto';
+import { PartnerUserCreate } from '../../../src/dtos/users/partner-user-create.dto';
 
 export const generateJurisdiction = async (
   prisma: PrismaService,

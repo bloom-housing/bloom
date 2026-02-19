@@ -61,7 +61,7 @@ import {
   createSimpleApplication,
 } from './helpers';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
-import { PublicUserUpdate } from 'src/dtos/users/public-user-update.dto';
+import { PublicUserUpdate } from '../../../src/dtos/users/public-user-update.dto';
 
 const testEmailService = {
   confirmation: jest.fn(),

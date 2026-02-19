@@ -59,7 +59,7 @@ import {
   createSimpleApplication,
   createSimpleListing,
 } from './helpers';
-import { PublicUserUpdate } from 'src/dtos/users/public-user-update.dto';
+import { PublicUserUpdate } from '../../../src/dtos/users/public-user-update.dto';
 
 const testEmailService = {
   confirmation: jest.fn(),

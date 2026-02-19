@@ -62,7 +62,7 @@ import {
   createSimpleListing,
 } from './helpers';
 import { featureFlagFactory } from '../../../prisma/seed-helpers/feature-flag-factory';
-import { PublicUserUpdate } from 'src/dtos/users/public-user-update.dto';
+import { PublicUserUpdate } from '../../../src/dtos/users/public-user-update.dto';
 
 const testEmailService = {
   confirmation: jest.fn(),
