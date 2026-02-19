@@ -112,7 +112,7 @@ const Users = () => {
       {
         headerName: t("listings.details.createdDate"),
         field: "createdAt",
-        valueFormatter: ({ value }) => dayjs(value).format("MM/DD/YYYY"),
+        valueFormatter: ({ value }) => dayjs(value).format("MM/DD/YY"),
       },
       {
         headerName: t("listings.unit.status"),
