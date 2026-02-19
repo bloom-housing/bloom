@@ -1375,7 +1375,6 @@ describe('Testing user service', () => {
           email: mockUserUpdate.email,
           dob: mockUserUpdate.dob,
           agreedToTermsOfService: true,
-          jurisdictions: { connect: [{ id: jurisId }] },
         }),
         include: {
           jurisdictions: true,
@@ -1472,13 +1471,6 @@ describe('Testing user service', () => {
           passwordHash: expect.anything(),
           passwordUpdatedAt: expect.anything(),
           agreedToTermsOfService: true,
-          jurisdictions: {
-            connect: [
-              {
-                id: jurisId,
-              },
-            ],
-          },
         }),
         include: {
           jurisdictions: true,
@@ -1705,9 +1697,6 @@ describe('Testing user service', () => {
           lastName: mockUserUpdate.lastName,
           confirmationToken: expect.anything(),
           agreedToTermsOfService: true,
-          jurisdictions: {
-            connect: [{ id: jurisId }],
-          },
         }),
         include: {
           jurisdictions: true,
@@ -1797,7 +1786,7 @@ describe('Testing user service', () => {
           id,
         },
       });
-      expect(prisma.userAccounts.update).toHaveBeenCalledTimes(3);
+      expect(prisma.userAccounts.update).toHaveBeenCalledTimes(4);
       expect(prisma.userAccounts.update).toHaveBeenCalledWith({
         data: {
           listings: {
@@ -1826,6 +1815,14 @@ describe('Testing user service', () => {
               },
             ],
           },
+        },
+        where: {
+          id,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          agency: undefined,
         },
         where: {
           id,
