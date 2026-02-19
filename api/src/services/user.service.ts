@@ -745,20 +745,6 @@ export class UserService {
 
     const passwordHash = await passwordToHash(dto.password);
 
-    const jurisdictions:
-      | {
-          jurisdictions: Prisma.JurisdictionsCreateNestedManyWithoutUser_accountsInput;
-        }
-      | Record<string, never> = dto.jurisdictions
-      ? {
-          jurisdictions: {
-            connect: dto.jurisdictions.map((juris) => ({
-              id: juris.id,
-            })),
-          },
-        }
-      : {};
-
     let newUser = await this.prisma.userAccounts.create({
       data: {
         passwordHash: passwordHash,
@@ -767,7 +753,13 @@ export class UserService {
         middleName: dto.middleName,
         lastName: dto.lastName,
         dob: dto.dob,
-        ...jurisdictions,
+        jurisdictions: dto.jurisdictions
+          ? {
+              connect: dto.jurisdictions.map((juris) => ({
+                id: juris.id,
+              })),
+            }
+          : undefined,
         listings: dto.listings
           ? {
               connect: dto.listings.map((listing) => ({
@@ -850,20 +842,6 @@ export class UserService {
       crypto.randomBytes(8).toString('hex'),
     );
 
-    const jurisdictions:
-      | {
-          jurisdictions: Prisma.JurisdictionsCreateNestedManyWithoutUser_accountsInput;
-        }
-      | Record<string, never> = dto.jurisdictions
-      ? {
-          jurisdictions: {
-            connect: dto.jurisdictions.map((juris) => ({
-              id: juris.id,
-            })),
-          },
-        }
-      : {};
-
     let newUser = await this.prisma.userAccounts.create({
       data: {
         passwordHash: passwordHash,
@@ -871,12 +849,18 @@ export class UserService {
         firstName: dto.firstName,
         lastName: dto.lastName,
         mfaEnabled: true,
-        ...jurisdictions,
         userRoles: {
           create: {
             ...dto.userRoles,
           },
         },
+        jurisdictions: dto.jurisdictions
+          ? {
+              connect: dto.jurisdictions.map((juris) => ({
+                id: juris.id,
+              })),
+            }
+          : undefined,
         listings: dto.listings
           ? {
               connect: dto.listings.map((listing) => ({
@@ -947,20 +931,6 @@ export class UserService {
       crypto.randomBytes(8).toString('hex'),
     );
 
-    const jurisdictions:
-      | {
-          jurisdictions: Prisma.JurisdictionsCreateNestedManyWithoutUser_accountsInput;
-        }
-      | Record<string, never> = dto.jurisdictions
-      ? {
-          jurisdictions: {
-            connect: dto.jurisdictions.map((juris) => ({
-              id: juris.id,
-            })),
-          },
-        }
-      : {};
-
     let newUser = await this.prisma.userAccounts.create({
       data: {
         passwordHash: passwordHash,
@@ -974,7 +944,13 @@ export class UserService {
           },
         },
         isAdvocate: true,
-        ...jurisdictions,
+        jurisdictions: dto.jurisdictions
+          ? {
+              connect: dto.jurisdictions.map((juris) => ({
+                id: juris.id,
+              })),
+            }
+          : undefined,
         listings: dto.listings
           ? {
               connect: dto.listings.map((listing) => ({
