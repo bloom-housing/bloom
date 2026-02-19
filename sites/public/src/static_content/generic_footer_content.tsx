@@ -2,9 +2,7 @@ import { Link } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 
 export type FooterContent = {
-  textSections: {
-    content: React.ReactNode | string
-  }[]
+  textSections: React.ReactNode[]
   logo?: {
     logoSrc: string
     logoAltText?: string
@@ -23,22 +21,14 @@ export type FooterLinks = {
 export const getGenericFooterTextContent = (): FooterContent => {
   return {
     textSections: [
-      {
-        content: (
-          <>
-            <span>{t("footer.content.projectOf")}</span>{" "}
-            <Link href={"/"}>Mayor's Office of Housing Development</Link>{" "}
-          </>
-        ),
-      },
-      {
-        content: (
-          <>
-            <p>{t("footer.content.applicationQuestions")}</p>
-            <p>{t("footer.content.programQuestions")}</p>
-          </>
-        ),
-      },
+      <>
+        <span>{t("footer.content.projectOf")}</span>{" "}
+        <Link href={"/"}>Mayor's Office of Housing Development</Link>{" "}
+      </>,
+      <>
+        <p>{t("footer.content.applicationQuestions")}</p>
+        <p>{t("footer.content.programQuestions")}</p>
+      </>,
     ],
     logo: {
       logoSrc: "/images/default-housing-logo.svg",

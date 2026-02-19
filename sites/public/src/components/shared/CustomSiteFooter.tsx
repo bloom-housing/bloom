@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "@bloom-housing/ui-seeds"
 import MaxWidthLayout from "../../layouts/max-width"
 import {
   FooterContent,
@@ -6,12 +7,11 @@ import {
   getGenericFooterLinksContent,
   getGenericFooterTextContent,
 } from "../../static_content/generic_footer_content"
-import styles from "./CustomSiteFooter.module.scss"
 import {
   getJurisdictionFooterLinksContent,
   getJurisdictionFooterTextContent,
 } from "../../static_content/jurisdiction_footer_content"
-import { Link } from "@bloom-housing/ui-seeds"
+import styles from "./CustomSiteFooter.module.scss"
 
 const CustomSiteFooter = () => {
   const textContent: FooterContent | null =
@@ -42,7 +42,7 @@ const CustomSiteFooter = () => {
               )}
               {textContent.textSections.map((section, index) => (
                 <div key={index} className={styles["text-container"]}>
-                  {section.content}
+                  {section}
                 </div>
               ))}
             </div>
