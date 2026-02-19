@@ -616,7 +616,9 @@ describe('Testing email service', () => {
         'To view your application, please click the link below:',
       );
       expect(applicantEmailMock.html).toContain('View my application');
-      expect(applicantEmailMock.html).toMatch('http://localhost:3000/sign-in');
+      expect(applicantEmailMock.html).toMatch(
+        'http://localhost:3000/account/applications',
+      );
       expect(applicantEmailMock.html).toContain(
         'No further action is required at this time. If you have questions regarding this update, please reach out at',
       );
@@ -679,7 +681,9 @@ describe('Testing email service', () => {
         'Your Conventional wait list number is <strong>5</strong>',
       );
       expect(advocateEmailMock.html).toContain('contact@example.com');
-      expect(advocateEmailMock.html).toMatch('http://localhost:3000/sign-in');
+      expect(advocateEmailMock.html).toMatch(
+        'http://localhost:3000/account/applications',
+      );
 
       const applicantEmailMock = sendMock.mock.calls[1][0];
       expect(applicantEmailMock.to).toEqual('applicant.email@example.com');
@@ -694,7 +698,7 @@ describe('Testing email service', () => {
       );
       expect(applicantEmailMock.html).toContain('contact@example.com');
       expect(applicantEmailMock.html).not.toMatch(
-        'http://localhost:3000/sign-in',
+        'http://localhost:3000/account/applications',
       );
     });
   });
