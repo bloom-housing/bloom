@@ -81,10 +81,7 @@ type ContextProps = {
     user: AdvocateUserCreate,
     listingIdRedirect?: string
   ) => Promise<User | undefined>
-  createPartnerUser: (
-    user: PartnerUserCreate,
-    listingIdRedirect?: string
-  ) => Promise<User | undefined>
+  createPartnerUser: (user: PartnerUserCreate) => Promise<User | undefined>
   resendConfirmation: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
   initialStateLoaded?: boolean
   loading?: boolean
@@ -360,12 +357,11 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
         dispatch(stopLoading())
       }
     },
-    createPartnerUser: async (user: PartnerUserCreate, listingIdRedirect) => {
+    createPartnerUser: async (user: PartnerUserCreate) => {
       dispatch(startLoading())
-      const appUrl = getListingRedirectUrl(listingIdRedirect)
       try {
         const response = await userService?.createPartner({
-          body: { ...user, appUrl },
+          body: user,
         })
         return response
       } finally {
