@@ -167,8 +167,6 @@ export class PropertyService {
       throw new BadRequestException('A jurisdiction must be provided');
     }
 
-    await this.findOrThrow(propertyDto.id);
-
     const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
       select: {
         id: true,
@@ -183,6 +181,8 @@ export class PropertyService {
         `Entry for the linked jurisdiction with id: ${propertyDto.jurisdictions.id} was not found`,
       );
     }
+
+    await this.findOrThrow(propertyDto.id);
 
     await this.permissionService.canOrThrow(
       requestingUser,
@@ -278,7 +278,7 @@ export class PropertyService {
    *
    * @param propertyId - The ID of the property to look up.
    * @returns The raw property entity including its jurisdictions.
-   * @throws {BadRequestException} If no property is found for the given ID.
+   * @throws {NotFoundException} If no property is found for the given ID.
    */
   async findOrThrow(propertyId: string): Promise<Property> {
     const property = await this.prisma.properties.findFirst({
@@ -291,7 +291,7 @@ export class PropertyService {
     });
 
     if (!property) {
-      throw new BadRequestException(
+      throw new NotFoundException(
         `Property with id ${propertyId} was not found`,
       );
     }

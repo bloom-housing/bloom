@@ -32,7 +32,6 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { PaginationMeta } from '../dtos/shared/pagination.dto';
 import { JwtAuthGuard } from '../guards/jwt.guard';
-import { PermissionGuard } from '../guards/permission.guard';
 import { PermissionAction } from '../decorators/permission-action.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { ApiKeyGuard } from '../guards/api-key.guard';
