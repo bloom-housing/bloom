@@ -1316,7 +1316,8 @@ export class ApplicationService {
     }
 
     const mappedListing = mapTo(Listing, listing);
-    const contactEmail = listing.leasingAgentEmail;
+    //TODO: This contact email is a placeholder and must be updated per jurisdiction
+    const contactEmail = 'https://www.exygy.com';
 
     await this.emailService.applicationUpdateEmail(
       mappedListing,
