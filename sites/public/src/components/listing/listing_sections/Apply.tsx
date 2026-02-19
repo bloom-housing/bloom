@@ -124,8 +124,7 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
       applicationPickUpAddress ||
       applicationDropOffAddress) &&
     !applicationsClosed &&
-    validOnlineApplication &&
-    validPaperApplication &&
+    (validOnlineApplication || validPaperApplication) &&
     listing.status !== ListingsStatusEnum.closed
 
   const showSecondarySection =

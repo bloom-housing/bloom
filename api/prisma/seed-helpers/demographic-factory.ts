@@ -1,36 +1,28 @@
 import { Prisma } from '@prisma/client';
 import { randomAdjective, randomName } from './word-generator';
 import { randomInt } from 'crypto';
+import { RaceEthnicityConfiguration } from '../../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
+import { defaultRaceEthnicityConfiguration } from '../../prisma/seed-staging';
 
-const race = [
-  'americanIndianAlaskanNative',
-  'asian',
-  'asian-asianIndian',
-  'asian-otherAsian',
-  'blackAfricanAmerican',
-  'asian-chinese',
-  'declineToRespond',
-  'asian-filipino',
-  'nativeHawaiianOtherPacificIslander-guamanianOrChamorro',
-  'asian-japanese',
-  'asian-korean',
-  'nativeHawaiianOtherPacificIslander-nativeHawaiian',
-  'nativeHawaiianOtherPacificIslander',
-  'nativeHawaiianOtherPacificIslander:Fijian',
-  'otherMultiracial: Black African American and white',
-  'nativeHawaiianOtherPacificIslander-otherPacificIslander',
-  'nativeHawaiianOtherPacificIslander-samoan',
-  'asian-vietnamese',
-  'white',
-];
+export const demographicsFactory = async (
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration,
+): Promise<Prisma.DemographicsCreateWithoutApplicationsInput> => {
+  const config =
+    raceEthnicityConfiguration || defaultRaceEthnicityConfiguration;
 
-const randomRace = () => {
-  return race[randomInt(race.length - 1)];
-};
+  // Take just root keys without other options from the config
+  const races: string[] =
+    config.options
+      .filter((option) => !option.id.includes('other'))
+      .map((option) => option.id) || [];
 
-export const demographicsFactory =
-  async (): Promise<Prisma.DemographicsCreateWithoutApplicationsInput> => ({
+  const randomRace = () => {
+    return races[randomInt(races.length - 1)];
+  };
+
+  return {
     ethnicity: randomAdjective(),
     howDidYouHear: [randomName()],
     race: [randomRace()],
-  });
+  };
+};

@@ -801,6 +801,31 @@ export class MultiselectQuestionsService {
   }
 }
 
+export class SnapshotService {
+  /**
+   * Create User Snapshot
+   */
+  createUserSnapshot(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/snapshot/createUserSnapshot"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class AmiChartsService {
   /**
    * List amiCharts
@@ -3284,6 +3309,9 @@ export interface ListingFilterParams {
 
   /**  */
   listingType?: ListingTypeEnum
+
+  /**  */
+  parkingType?: ParkingTypeEnum
 }
 
 export interface ListingsQueryBody {
@@ -6656,6 +6684,9 @@ export interface Demographic {
 
   /**  */
   race: string[]
+
+  /**  */
+  spokenLanguage?: string
 }
 
 export interface Applicant {
@@ -7475,6 +7506,33 @@ export interface ListingFeaturesConfiguration {
   fields?: ListingFeatureField[]
 }
 
+export interface RaceEthnicitySubOption {
+  /** The unique identifier for this suboption */
+  id: string
+
+  /** Whether this suboption allows free text input for "other" selection */
+  allowOtherText?: boolean
+}
+
+export interface RaceEthnicityOption {
+  /** The unique identifier for this option */
+  id: string
+
+  /** Whether this option has suboptions (like Asian with specific ethnicities) */
+  hasSubOptions?: boolean
+
+  /** The list of suboptions if this option has them */
+  subOptions?: RaceEthnicitySubOption[]
+
+  /** Whether this option allows free text input */
+  allowOtherText?: boolean
+}
+
+export interface RaceEthnicityConfiguration {
+  /** List of race\/ethnicity options available for this jurisdiction */
+  options: RaceEthnicityOption[]
+}
+
 export interface JurisdictionCreate {
   /**  */
   name: string
@@ -7540,10 +7598,16 @@ export interface JurisdictionCreate {
   visibleAccessibilityPriorityTypes: UnitAccessibilityPriorityTypeEnum[]
 
   /**  */
+  visibleSpokenLanguages: SpokenLanguageEnum[]
+
+  /**  */
   regions: []
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
+
+  /**  */
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration
 }
 
 export interface JurisdictionUpdate {
@@ -7614,10 +7678,16 @@ export interface JurisdictionUpdate {
   visibleAccessibilityPriorityTypes: UnitAccessibilityPriorityTypeEnum[]
 
   /**  */
+  visibleSpokenLanguages: SpokenLanguageEnum[]
+
+  /**  */
   regions: []
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
+
+  /**  */
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration
 }
 
 export interface FeatureFlag {
@@ -7723,10 +7793,16 @@ export interface Jurisdiction {
   visibleAccessibilityPriorityTypes: UnitAccessibilityPriorityTypeEnum[]
 
   /**  */
+  visibleSpokenLanguages: SpokenLanguageEnum[]
+
+  /**  */
   regions: []
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
+
+  /**  */
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration
 }
 
 export interface AddressInput {
@@ -8059,6 +8135,9 @@ export interface DemographicCreate {
 
   /**  */
   race: string[]
+
+  /**  */
+  spokenLanguage?: string
 }
 
 export interface HouseholdMemberCreate {
@@ -8360,6 +8439,9 @@ export interface DemographicUpdate {
 
   /**  */
   race: string[]
+
+  /**  */
+  spokenLanguage?: string
 
   /**  */
   id?: string
@@ -9175,6 +9257,13 @@ export enum ListingTypeEnum {
   "regulated" = "regulated",
   "nonRegulated" = "nonRegulated",
 }
+
+export enum ParkingTypeEnum {
+  "onStreet" = "onStreet",
+  "offStreet" = "offStreet",
+  "garage" = "garage",
+  "carport" = "carport",
+}
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
@@ -9231,6 +9320,7 @@ export enum ListingFilterKeys {
   "multiselectQuestions" = "multiselectQuestions",
   "name" = "name",
   "neighborhood" = "neighborhood",
+  "parkingType" = "parkingType",
   "regions" = "regions",
   "configurableRegions" = "configurableRegions",
   "reservedCommunityTypes" = "reservedCommunityTypes",
@@ -9519,9 +9609,24 @@ export enum NeighborhoodAmenitiesEnum {
   "busStops" = "busStops",
 }
 
+export enum SpokenLanguageEnum {
+  "chineseCantonese" = "chineseCantonese",
+  "chineseMandarin" = "chineseMandarin",
+  "english" = "english",
+  "filipino" = "filipino",
+  "korean" = "korean",
+  "russian" = "russian",
+  "spanish" = "spanish",
+  "vietnamese" = "vietnamese",
+  "farsi" = "farsi",
+  "afghani" = "afghani",
+  "notListed" = "notListed",
+}
+
 export enum FeatureFlagEnum {
   "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
   "disableCommonApplication" = "disableCommonApplication",
+  "disableEthnicityQuestion" = "disableEthnicityQuestion",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
   "disableWorkInRegion" = "disableWorkInRegion",
@@ -9565,6 +9670,7 @@ export enum FeatureFlagEnum {
   "enableSection8Question" = "enableSection8Question",
   "enableSingleUseCode" = "enableSingleUseCode",
   "enableSmokingPolicyRadio" = "enableSmokingPolicyRadio",
+  "enableSpokenLanguage" = "enableSpokenLanguage",
   "enableSupportAdmin" = "enableSupportAdmin",
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitGroups" = "enableUnitGroups",

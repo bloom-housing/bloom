@@ -52,6 +52,7 @@ import { FilterAvailabilityEnum } from '../../../src/enums/listings/filter-avail
 import { CronJobService } from '../../../src/services/cron-job.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/accessibility-priority-type-enum';
+import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -298,6 +299,7 @@ describe('Testing listing service', () => {
         Logger,
         SchedulerRegistry,
         CronJobService,
+        SnapshotCreateService,
       ],
       imports: [HttpModule],
     }).compile();
@@ -1912,6 +1914,61 @@ describe('Testing listing service', () => {
               {
                 homeType: {
                   in: homeTypes,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter parkingType', () => {
+      const parkingTypes = ['garage', 'offStreet'];
+      const filter = [
+        {
+          $comparison: '=',
+          parkingType: parkingTypes,
+        } as unknown as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                parkType: {
+                  garage: true,
+                },
+              },
+              {
+                parkType: {
+                  offStreet: true,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter parkingType single value', () => {
+      const parkingTypes = ['carport'];
+      const filter = [
+        {
+          $comparison: '=',
+          parkingType: parkingTypes,
+        } as unknown as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                parkType: {
+                  carport: true,
                 },
               },
             ],

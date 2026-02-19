@@ -64,6 +64,7 @@ import { fillModelStringFields } from '../utilities/model-fields';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
+import { SnapshotCreateService } from './snapshot-create.service';
 
 export type getListingsArgs = {
   skip: number;
@@ -217,6 +218,7 @@ export class ListingService implements OnModuleInit {
     private permissionService: PermissionService,
     private prisma: PrismaService,
     private translationService: TranslationService,
+    private snapshotCreateService: SnapshotCreateService,
   ) {}
 
   onModuleInit() {
@@ -838,6 +840,18 @@ export class ListingService implements OnModuleInit {
               homeType: filt,
             })),
           });
+        }
+        if (filter[ListingFilterKeys.parkingType]) {
+          if (Array.isArray(filter[ListingFilterKeys.parkingType])) {
+            const parkingTypes = filter[ListingFilterKeys.parkingType];
+            filters.push({
+              OR: parkingTypes.map((type) => ({
+                parkType: {
+                  [type]: true,
+                },
+              })),
+            });
+          }
         }
         if (filter[ListingFilterKeys.ids]) {
           const builtFilter = buildFilter({
@@ -1887,6 +1901,7 @@ export class ListingService implements OnModuleInit {
       requestingUser?.userRoles?.isPartner &&
       duplicateListingPermissions?.includes(UserRoleEnum.partner)
     ) {
+      await this.snapshotCreateService.createUserSnapshot(requestingUser.id);
       await this.prisma.userAccounts.update({
         data: {
           listings: {
