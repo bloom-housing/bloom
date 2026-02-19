@@ -5,12 +5,12 @@
   "faq.stillHaveQuestionsContent": "원하시는 답변을 찾지 못하셨다면 <a className='lined' href='mailto:support@bloomingtonhousing.gov'>support@bloomingtonhousing.gov</a> 로 저희 지원팀에 문의하시거나 자료 페이지를 참조해 주세요.",
   "footer.content.programQuestions": "프로그램 관련 일반 문의는 블루밍턴 주택공사(123-456-7890)로 전화해 주십시오.",
   "footer.content.projectOf": "블루밍턴 주택 포털은 다음의 프로젝트입니다.",
-
   "footer.copyright": "© 블루밍턴 시 및 카운티",
   "footer.forGeneralQuestions": "프로그램 관련 일반 문의는 000-000-0000으로 전화 주시기 바랍니다.",
   "pageDescription.faq": "블루밍턴의 저렴한 주택에 대한 일반적인 질문에 대한 답변을 찾아보세요.",
   "region.name": "블루밍턴",
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut Labore et dolore magna aliqua.",
   "resources.contactEmail": "bloomington@housing.org",
-  "resources.contactInfo": "블루밍턴 시 주택 및 지역사회 개발부"
+  "resources.contactInfo": "블루밍턴 시 주택 및 지역사회 개발부",
+  "resources.housingProgramsTitle": "블루밍턴 주택 및 지역사회 개발부의 주택 프로그램"
 }
