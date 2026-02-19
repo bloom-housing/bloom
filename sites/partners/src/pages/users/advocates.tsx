@@ -43,7 +43,7 @@ const Advocates = () => {
       {
         headerName: t("listings.details.createdDate"),
         field: "createdAt",
-        valueFormatter: ({ value }) => dayjs(value).format("MM/DD/YY"),
+        valueFormatter: ({ value }) => dayjs(value).format("MM/DD/YYYY"),
       },
       {
         headerName: t("users.status"),
