@@ -38,6 +38,7 @@ import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PropertyFilterParams } from '../dtos/properties/property-filter-params.dto';
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../../src/dtos/users/user.dto';
+import { PermissionGuard } from '../../src/guards/permission.guard';
 
 @Controller('properties')
 @ApiTags('properties')
@@ -62,6 +63,7 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: PaginatedPropertyDto })
+  @UseGuards(PermissionGuard)
   public async getPaginatedSet(
     @Query() queryParams: PropertyQueryParams,
   ): Promise<PaginatedPropertyDto> {
@@ -74,6 +76,7 @@ export class PropertyController {
     operationId: 'getById',
   })
   @ApiOkResponse({ type: Property })
+  @UseGuards(PermissionGuard)
   public async getPropertyById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) propertyId: string,
   ): Promise<Property> {
@@ -88,6 +91,7 @@ export class PropertyController {
   @PermissionAction(permissionActions.read)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: PaginatedPropertyDto })
+  @UseGuards(PermissionGuard)
   public async getFiltrablePaginatedSet(
     @Body() queryParams: PropertyQueryParams,
   ): Promise<PaginatedPropertyDto> {
