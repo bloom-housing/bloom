@@ -401,18 +401,6 @@ export class UserService {
                 },
               }
             : undefined,
-          listings: dto.listings
-            ? {
-                connect: dto.listings.map((listing) => ({ id: listing.id })),
-              }
-            : undefined,
-          jurisdictions: dto.jurisdictions
-            ? {
-                connect: dto.jurisdictions.map((jurisdiction) => ({
-                  id: jurisdiction.id,
-                })),
-              }
-            : undefined,
         },
         where: {
           id: dto.id,
