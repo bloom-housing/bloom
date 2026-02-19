@@ -24,8 +24,11 @@ import {
 import FormsLayout from "../../layouts/forms"
 import { useFormConductor } from "../../lib/hooks"
 import { UserStatus } from "../../lib/constants"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../layouts/application-form"
 import { AddressValidationSelection, findValidatedAddress, FoundAddress } from "./ValidateAddress"
-import ApplicationFormLayout from "../../layouts/application-form"
 
 export interface ApplicationMultiselectQuestionStepProps {
   applicationSection: MultiselectQuestionsApplicationSectionEnum
@@ -168,6 +171,10 @@ const ApplicationMultiselectQuestionStep = ({
     conductor.routeToNextOrReturnUrl()
   }
 
+  const onError = () => {
+    onFormError("application-alert-box-wrapper")
+  }
+
   const watchQuestions = watch(allOptionNames)
 
   if (!clientLoaded || !allOptionNames) {
@@ -237,7 +244,7 @@ const ApplicationMultiselectQuestionStep = ({
         swapCommunityTypeWithPrograms
       )} - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
     >
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={
@@ -271,11 +278,7 @@ const ApplicationMultiselectQuestionStep = ({
           }
           conductor={conductor}
         >
-          {!!Object.keys(errors).length && (
-            <AlertBox type="alert" inverted closeable>
-              {t("errors.errorsToResolve")}
-            </AlertBox>
-          )}
+          <ApplicationAlertBox errors={errors} />
 
           <div style={{ display: verifyAddress ? "none" : "block" }} key={question?.id}>
             <CardSection>
