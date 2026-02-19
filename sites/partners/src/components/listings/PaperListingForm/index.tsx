@@ -272,10 +272,7 @@ const ListingForm = ({
     jurisdictionId
   )
 
-  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableV2MSQ,
-    jurisdictionId
-  )
+  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ, jurisdictionId)
 
   useEffect(() => {
     if (enableNonRegulatedListings && !listing?.listingType) {
