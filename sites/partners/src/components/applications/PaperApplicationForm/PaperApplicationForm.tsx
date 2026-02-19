@@ -91,6 +91,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
+  const enableSpokenLanguage = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSpokenLanguage,
+    listingDto?.jurisdictions.id
+  )
+
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
@@ -370,6 +375,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       enableLimitedHowDidYouHear={enableLimitedHowDidYouHear}
                       disableEthnicityQuestion={disableEthnicityQuestion}
                       raceEthnicityConfiguration={jurisdictionData?.raceEthnicityConfiguration}
+                      enableSpokenLanguage={enableSpokenLanguage}
+                      visibleSpokenLanguages={jurisdictionData?.visibleSpokenLanguages}
                     />
 
                     <FormTerms />

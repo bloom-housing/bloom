@@ -1,0 +1,16 @@
+{
+  "application.referralApplication.instructions": "Các đơn vị nhà ở hỗ trợ lâu dài được giới thiệu trực tiếp thông qua Hệ thống Tiếp cận Phối hợp của Bloomington. Các hộ gia đình đang gặp tình trạng vô gia cư có thể gọi số 123-456-7890 để được kết nối với Điểm Tiếp cận nhằm tìm hiểu thêm về hệ thống tiếp cận phối hợp và tiếp cận các nguồn lực và thông tin liên quan đến nhà ở.",
+  "application.referralApplication.phoneNumber": "211",
+  "application.review.demographics.howDidYouHearOptions.jurisdictionWebsite": "Trang web của cơ quan quản lý",
+  "faq.stillHaveQuestionsContent": "Nếu bạn không tìm thấy câu trả lời mình cần, vui lòng liên hệ với nhóm hỗ trợ của chúng tôi qua địa chỉ <a className='lined' href='mailto:support@bloomingtonhousing.gov'>support@bloomingtonhousing.gov</a> hoặc xem trang Tài nguyên của chúng tôi.",
+  "footer.content.programQuestions": "Để biết thêm thông tin chung về chương trình, vui lòng gọi cho Bloomington Housing theo số 123-456-7890.",
+  "footer.content.projectOf": "Cổng thông tin nhà ở Bloomington là một dự án của",
+  "footer.copyright": "© Thành phố và Quận Bloomington",
+  "footer.forGeneralQuestions": "Để được giải đáp các thắc mắc chung về chương trình, vui lòng gọi cho chúng tôi theo số 000-000-0000.",
+  "pageDescription.faq": "Tìm câu trả lời cho những câu hỏi thường gặp về nhà ở giá rẻ tại Bloomington.",
+  "region.name": "Bloomington",
+  "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labe et dolore magna aliqua.",
+  "resources.contactEmail": "bloomington@housing.org",
+  "resources.contactInfo": "Sở Phát triển Nhà ở và Cộng đồng của Bloomington",
+  "resources.housingProgramsTitle": "Các chương trình nhà ở của Sở Nhà ở và Phát triển Cộng đồng Bloomington"
+}

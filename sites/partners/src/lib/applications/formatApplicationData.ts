@@ -168,6 +168,12 @@ export const mapFormToApi = ({
     race: fieldGroupObjectToArray(data, "race"),
   }
 
+  if (demographics.spokenLanguage === "notListed") {
+    demographics.spokenLanguage = `${demographics.spokenLanguage}:${demographics.spokenLanguageNotListed}`
+  }
+
+  delete demographics.spokenLanguageNotListed
+
   const sendMailToMailingAddress = data.application.sendMailToMailingAddress
 
   const applicationsMailingAddress = getAddress(sendMailToMailingAddress, mailingAddressData)

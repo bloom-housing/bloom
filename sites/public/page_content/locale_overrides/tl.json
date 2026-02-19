@@ -1,0 +1,16 @@
+{
+  "application.referralApplication.instructions": "Ang mga permanenteng supportive housing unit ay direktang inire-refer sa pamamagitan ng Bloomington&#39;s Coordinated Entry System. Ang mga sambahayang nakararanas ng kawalan ng tirahan ay maaaring tumawag sa 123-456-7890 upang makakonekta sa isang Access Point upang matuto nang higit pa tungkol sa coordinated entry system at ma-access ang mga mapagkukunan at impormasyon na may kaugnayan sa pabahay.",
+  "application.referralApplication.phoneNumber": "211",
+  "application.review.demographics.howDidYouHearOptions.jurisdictionWebsite": "Website ng hurisdiksyon",
+  "faq.stillHaveQuestionsContent": "Kung hindi mo mahanap ang sagot na iyong hinahanap, mangyaring makipag-ugnayan sa aming support team sa <a className='lined' href='mailto:support@bloomingtonhousing.gov'>support@bloomingtonhousing.gov</a> o tingnan ang aming pahina ng Mapagkukunan.",
+  "footer.content.programQuestions": "Para sa mga pangkalahatang katanungan tungkol sa programa, maaari ninyong tawagan ang Bloomington Housing sa 123-456-7890.",
+  "footer.content.projectOf": "Ang Bloomington Housing Portal ay isang proyekto ng",
+  "footer.copyright": "© Lungsod at Kondado ng Bloomington",
+  "footer.forGeneralQuestions": "Para sa mga pangkalahatang katanungan tungkol sa programa, maaari ninyo kaming tawagan sa 000-000-0000.",
+  "pageDescription.faq": "Maghanap ng mga sagot sa mga karaniwang tanong tungkol sa abot-kayang pabahay sa Bloomington.",
+  "region.name": "Bloomington",
+  "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "resources.contactEmail": "bloomington@housing.org",
+  "resources.contactInfo": "Kagawaran ng Pabahay at Pagpapaunlad ng Komunidad ng Bloomington",
+  "resources.housingProgramsTitle": "Mga programa sa pabahay ng Bloomington para sa Pabahay at Pagpapaunlad ng Komunidad"
+}

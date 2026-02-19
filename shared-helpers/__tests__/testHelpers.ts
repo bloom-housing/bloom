@@ -82,6 +82,7 @@ export const multiselectQuestionPreferenceV2: MultiselectQuestion = {
   createdAt: new Date("2022-09-14T22:53:09.982Z"),
   updatedAt: new Date("2022-09-15T22:53:09.982Z"),
   description: "At least one household member lives or works in County",
+  text: "Example text",
   links: [
     {
       title: "Live/Work in County Link Title",
@@ -101,8 +102,20 @@ export const multiselectQuestionPreferenceV2: MultiselectQuestion = {
         },
       ],
       collectAddress: false,
+      text: "Example text",
+      id: "id",
+      createdAt: new Date(),
+      updatedAt: new Date(),
     },
-    { name: "Work in County", ordinal: 1, collectAddress: false },
+    {
+      name: "Work in County",
+      ordinal: 1,
+      collectAddress: false,
+      text: "Example text",
+      id: "id",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
   ],
   applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
 }
@@ -194,8 +207,6 @@ export const application: Application = {
   reviewStatus: ApplicationReviewStatusEnum.pending,
   applicationsMailingAddress: {
     id: "applications_mail_address_id",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     placeName: "Rocky Mountain National Park",
     city: "Estes Park",
     state: "CO",
@@ -205,8 +216,6 @@ export const application: Application = {
     longitude: -105.5709864,
   },
   applicationsAlternateAddress: {
-    createdAt: new Date(),
-    updatedAt: new Date(),
     id: "c9b065d6-6683-44da-a270-f30ca9346b19",
     city: "",
     state: "",
@@ -215,8 +224,6 @@ export const application: Application = {
     zipCode: "",
   },
   accessibility: {
-    createdAt: new Date(),
-    updatedAt: new Date(),
     id: "accessibility_id",
     mobility: false,
     vision: true,
@@ -224,13 +231,12 @@ export const application: Application = {
   },
   demographics: {
     id: "demographics_id_1",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     ethnicity: "notHispanicLatino",
     gender: "",
     sexualOrientation: "",
     howDidYouHear: ["flyer", "emailAlert", "friend"],
     race: ["white"],
+    spokenLanguage: "English",
   },
   preferredUnitTypes: [
     {
@@ -250,8 +256,6 @@ export const application: Application = {
   ],
   applicant: {
     id: "applicant_id",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     firstName: "Applicant First",
     middleName: "Applicant Middle",
     lastName: "Applicant Last",
@@ -267,8 +271,6 @@ export const application: Application = {
     fullTimeStudent: YesNoEnum.no,
     applicantWorkAddress: {
       id: "applicant_work_address_id",
-      createdAt: new Date(),
-      updatedAt: new Date(),
       placeName: "Yosemite National Park",
       city: "Yosemite Valley",
       state: "CA",
@@ -279,8 +281,6 @@ export const application: Application = {
     },
     applicantAddress: {
       id: "applicant_address_id",
-      createdAt: new Date(),
-      updatedAt: new Date(),
       city: "Yellowstone National Park",
       county: "",
       state: "WY",
@@ -292,8 +292,6 @@ export const application: Application = {
   applicationLotteryPositions: [],
   alternateContact: {
     id: "application_1",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     type: AlternateContactRelationship.familyMember,
     firstName: "Alternate First",
     lastName: "Alternate Last",
@@ -302,8 +300,6 @@ export const application: Application = {
     emailAddress: "alternate@email.com",
     address: {
       id: "alternate_work_address_id",
-      createdAt: new Date(),
-      updatedAt: new Date(),
       placeName: "Acadia National Park",
       city: "Bay Harbor",
       state: "ME",
@@ -749,6 +745,7 @@ export const jurisdiction: Jurisdiction = {
   visibleNeighborhoodAmenities: [],
   visibleAccessibilityPriorityTypes: [],
   regions: [],
+  visibleSpokenLanguages: [],
 }
 
 export const listing: Listing = {
@@ -896,8 +893,6 @@ export const listing: Listing = {
     "A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
   listingsLeasingAgentAddress: {
     id: "id",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     city: "San Jose",
     street: "98 Archer Street",
     zipCode: "95112",
@@ -912,8 +907,6 @@ export const listing: Listing = {
   leasingAgentTitle: "",
   listingFeatures: {
     id: "id",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     elevator: true,
     wheelchairRamp: true,
     serviceAnimalsAllowed: true,
@@ -926,8 +919,6 @@ export const listing: Listing = {
   servicesOffered: "Services offered description",
   listingUtilities: {
     id: "id",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     water: true,
     gas: true,
     electricity: true,
@@ -1065,8 +1056,6 @@ export const listing: Listing = {
   buildingTotalUnits: 35,
   listingsBuildingAddress: {
     id: "buildingId",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     city: "San Jose",
     street: "98 Archer Street",
     zipCode: "95112",
@@ -1246,6 +1235,7 @@ export const mockBaseJurisdiction: Jurisdiction = {
   visibleNeighborhoodAmenities: [],
   visibleAccessibilityPriorityTypes: [],
   regions: [],
+  visibleSpokenLanguages: [],
 }
 
 export const mockUser: User = {

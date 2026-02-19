@@ -8,6 +8,7 @@ import { randomName } from './word-generator';
 import { ListingFeaturesConfiguration } from '../../src/dtos/jurisdictions/listing-features-config.dto';
 import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessibility-priority-type-enum';
 import { RaceEthnicityConfiguration } from '../../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
+import { SpokenLanguageEnum } from '../../src/enums/applications/spoken-language-enum';
 
 export const jurisdictionFactory = (
   jurisdictionName = randomName(),
@@ -24,6 +25,7 @@ export const jurisdictionFactory = (
     publicSiteBaseURL?: string;
     listingFeaturesConfiguration?: ListingFeaturesConfiguration;
     raceEthnicityConfiguration?: RaceEthnicityConfiguration;
+    visibleSpokenLanguages?: SpokenLanguageEnum[];
   },
 ): Prisma.JurisdictionsCreateInput => ({
   name: jurisdictionName,
@@ -74,4 +76,6 @@ export const jurisdictionFactory = (
   raceEthnicityConfiguration: optionalFields?.raceEthnicityConfiguration
     ? (optionalFields.raceEthnicityConfiguration as unknown as Prisma.JsonArray)
     : undefined,
+  visibleSpokenLanguages:
+    optionalFields?.visibleSpokenLanguages || Object.values(SpokenLanguageEnum),
 });

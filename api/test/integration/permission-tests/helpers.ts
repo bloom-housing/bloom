@@ -118,6 +118,7 @@ export const buildJurisdictionCreateMock = (
     visibleNeighborhoodAmenities: [],
     regions: [],
     visibleAccessibilityPriorityTypes: [],
+    visibleSpokenLanguages: [],
   };
 };
 
@@ -145,6 +146,7 @@ export const buildJurisdictionUpdateMock = (
     visibleNeighborhoodAmenities: [],
     regions: [],
     visibleAccessibilityPriorityTypes: [],
+    visibleSpokenLanguages: [],
   };
 };
 
@@ -318,6 +320,7 @@ export const buildApplicationCreateMock = (
       sexualOrientation: 'example sexual orientation',
       howDidYouHear: ['example how did you hear'],
       race: ['example race'],
+      spokenLanguage: 'example spoken language',
     },
     preferredUnitTypes: [
       {
@@ -415,6 +418,7 @@ export const buildApplicationUpdateMock = (
       sexualOrientation: 'example sexual orientation',
       howDidYouHear: ['example how did you hear'],
       race: ['example race'],
+      spokenLanguage: 'example spoken language',
     },
     preferredUnitTypes: [
       {

@@ -47,6 +47,11 @@ export const getExportHeaders = (
     FeatureFlagEnum.enableApplicationStatus,
   );
 
+  const enableSpokenLanguage = doAnyJurisdictionHaveFeatureFlagSet(
+    user.jurisdictions,
+    FeatureFlagEnum.enableSpokenLanguage,
+  );
+
   const headers: CsvHeader[] = [
     {
       path: 'id',
@@ -403,6 +408,14 @@ export const getExportHeaders = (
         label: 'How did you Hear?',
       },
     );
+    if (enableSpokenLanguage) {
+      headers.push({
+        path: 'demographics.spokenLanguage',
+        label: 'Spoken Language',
+        format: (val: string): string =>
+          convertDemographicLanguageToReadable(val),
+      });
+    }
   }
   return headers;
 };
@@ -708,6 +721,32 @@ export const convertDemographicRaceToReadable = (type: string): string => {
     white: 'White',
     'white-european': 'White[European]',
     'white-otherWhite': `White[Other White${customValueFormatted}]`,
+  };
+  return typeMap[rootKey] ?? rootKey;
+};
+
+/**
+ *
+ * @param type takes in the demographic string
+ * @returns outputs the readable version of the string
+ */
+export const convertDemographicLanguageToReadable = (type: string): string => {
+  // Not Listed is saved as "notListed:<custom text here>"
+  const [rootKey, customValue = ''] = type.split(':');
+  let notListedString = 'Not Listed';
+  if (customValue) notListedString = notListedString + `:${customValue}`;
+  const typeMap = {
+    chineseCantonese: 'Chinese - Cantonese',
+    chineseMandarin: 'Chinese - Mandarin',
+    english: 'English',
+    filipino: 'Filipino',
+    korean: 'Korean',
+    russian: 'Russian',
+    spanish: 'Spanish',
+    vietnamese: 'Vietnamese',
+    farsi: 'Farsi',
+    afghani: 'Afghani (Dari)',
+    notListed: notListedString,
   };
   return typeMap[rootKey] ?? rootKey;
 };
