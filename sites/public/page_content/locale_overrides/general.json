@@ -7,13 +7,11 @@
   "footer.content.projectOf": "Bloomington Housing Portal is a project of the",
   "footer.copyright": "© City & County of Bloomington",
   "footer.forGeneralQuestions": "For general program inquiries, you may call us at 000-000-0000.",
+  "listings.showAll": "Show all listings",
   "pageDescription.faq": "Find answers to common questions about affordable housing in Bloomington.",
   "region.name": "Bloomington",
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "resources.contactEmail": "bloomington@housing.org",
   "resources.contactInfo": "Bloomington's Housing & Community Development Department",
-  "resources.housingProgramsTitle": "Bloomington's Housing & Community Development housing programs",
-  "resources.mockCardDescription": "Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  "listings.showAll": "Show all listings",
-  "resources.mockCardTitle": "Lorem Ipsum"
+  "resources.housingProgramsTitle": "Bloomington's Housing & Community Development housing programs"
 }

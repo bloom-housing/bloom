@@ -3,19 +3,11 @@ import ResourceCard from "../components/resources/ResourceCard"
 import { ResourceCards } from "../components/resources/Resources"
 
 export const getGenericResourcesContent = (): ResourceCards => {
-  const mockCard = (
-    <ResourceCard
-      title={t("resources.mockCardTitle")}
-      href="/"
-      content={t("resources.mockCardDescription")}
-    />
-  )
-  const mockCardNoLink = (
-    <ResourceCard
-      title={t("resources.mockCardTitle")}
-      content={t("resources.mockCardDescription")}
-    />
-  )
+  const mockTitle = "Lorem Ipsum"
+  const mockDescription =
+    "Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  const mockCard = <ResourceCard title={mockTitle} href="/" content={mockDescription} />
+  const mockCardNoLink = <ResourceCard title={mockTitle} content={mockDescription} />
   return {
     contactCard: {
       description: t("resources.contactDescription"),
