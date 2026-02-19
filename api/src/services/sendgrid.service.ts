@@ -44,22 +44,20 @@ export class SendGridService extends EmailProvider {
       ];
     }
 
-    const handleError = (error) => {
-      console.error(
-        `Error sending email to: ${
-          isMultipleRecipients ? to.toString() : to
-        }! Error body:`,
-        error?.response?.body || error,
-      );
-      if (retries > 0) {
-        void this.send_inner(input, retries - 1);
+    const callBack = (error) => {
+      if (error) {
+        console.error(
+          `Error sending email to: ${
+            isMultipleRecipients ? to.toString() : to
+          }! Error body:`,
+          error?.response?.body || error,
+        );
+        if (retries > 0) {
+          void this.send_inner(input, retries - 1);
+        }
       }
     };
 
-    return this.mailService.send(
-      emailParams,
-      isMultipleRecipients,
-      handleError,
-    );
+    return this.mailService.send(emailParams, isMultipleRecipients, callBack);
   }
 }
