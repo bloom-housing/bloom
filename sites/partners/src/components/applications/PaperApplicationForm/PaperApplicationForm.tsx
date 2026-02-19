@@ -14,7 +14,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mapFormToApi, mapApiToForm } from "../../../lib/applications/formatApplicationData"
-import { useSingleListingData } from "../../../lib/hooks"
+import { useJurisdiction, useSingleListingData } from "../../../lib/hooks"
 import { FormApplicationData } from "./sections/FormApplicationData"
 import { FormPrimaryApplicant } from "./sections/FormPrimaryApplicant"
 import { FormAlternateContact } from "./sections/FormAlternateContact"
@@ -42,6 +42,7 @@ type AlertErrorType = "api" | "form"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
+  const { data: jurisdictionData } = useJurisdiction(listingDto?.jurisdictions?.id)
   const { doJurisdictionsHaveFeatureFlagOn, applicationsService } = useContext(AuthContext)
 
   const preferences = listingSectionQuestions(
@@ -87,6 +88,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const disableEthnicityQuestion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableEthnicityQuestion,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableSpokenLanguage = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSpokenLanguage,
     listingDto?.jurisdictions.id
   )
 
@@ -368,6 +374,9 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       formValues={application?.demographics}
                       enableLimitedHowDidYouHear={enableLimitedHowDidYouHear}
                       disableEthnicityQuestion={disableEthnicityQuestion}
+                      raceEthnicityConfiguration={jurisdictionData?.raceEthnicityConfiguration}
+                      enableSpokenLanguage={enableSpokenLanguage}
+                      visibleSpokenLanguages={jurisdictionData?.visibleSpokenLanguages}
                     />
 
                     <FormTerms />

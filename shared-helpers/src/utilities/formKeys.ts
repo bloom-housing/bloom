@@ -82,33 +82,6 @@ export const altContactRelationshipKeys = Object.values(AlternateContactRelation
 
 export const ethnicityKeys = ["hispanicLatino", "notHispanicLatino"]
 
-export const rootRaceKeys = [
-  "americanIndianAlaskanNative",
-  "asian",
-  "blackAfricanAmerican",
-  "nativeHawaiianOtherPacificIslander",
-  "white",
-  "otherMultiracial",
-  "declineToRespond",
-]
-
-export const asianKeys = [
-  "asianIndian",
-  "chinese",
-  "filipino",
-  "japanese",
-  "korean",
-  "vietnamese",
-  "otherAsian",
-]
-
-export const nativeHawaiianOtherPacificIslanderKeys = [
-  "nativeHawaiian",
-  "guamanianOrChamorro",
-  "samoan",
-  "otherPacificIslander",
-]
-
 export const genderKeys = [
   "female",
   "male",
@@ -128,10 +101,6 @@ export const sexualOrientation = [
 
 export const prependRoot = (root: string, subKeys: string[]) => {
   return subKeys.map((key) => `${root}-${key}`)
-}
-
-interface subCheckboxes {
-  [key: string]: string[]
 }
 
 // Transform an object with keys that may be prepended with a string to an array of only the values with the string
@@ -164,19 +133,6 @@ export const fieldGroupObjectToArray = (
       }
     })
   return modifiedArray
-}
-
-export const raceKeys: subCheckboxes = {
-  americanIndianAlaskanNative: [],
-  asian: prependRoot("asian", asianKeys),
-  blackAfricanAmerican: [],
-  nativeHawaiianOtherPacificIslander: prependRoot(
-    "nativeHawaiianOtherPacificIslander",
-    nativeHawaiianOtherPacificIslanderKeys
-  ),
-  white: [],
-  otherMultiracial: [],
-  declineToRespond: [],
 }
 
 export const isKeyIncluded = (
