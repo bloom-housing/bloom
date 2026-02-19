@@ -22,7 +22,7 @@
 # ...
 #
 #
-# Requesting a VPC peering to an existing VPC is supported. This is used in scenerios where an
+# Requesting a VPC peering to an existing VPC is supported. This is used in scenarios where an
 # existing database exists and will be used to import to the Bloom database. If this functionality
 # is used, Bloom must be deployed into the same region as the existing VPC due to limitations of
 # referencing security groups defined in the peered VPC [2].
@@ -233,6 +233,7 @@ locals {
       ingress = {
         internet    = true
         vpc_peering = false
+        port        = 443
       }
       egress = {
         privatelink_services = []
@@ -366,13 +367,13 @@ resource "aws_security_group" "bloom" {
   description = "Rules for Bloom ${each.key}."
 }
 resource "aws_vpc_security_group_ingress_rule" "from_internet" {
-  for_each          = toset([for sg, config in local.bloom_security_groups : sg if config.ingress != null && config.ingress.internet])
+  for_each          = { for sg, config in local.bloom_security_groups : sg => config if config.ingress != null && config.ingress.internet }
   region            = var.aws_region
   security_group_id = aws_security_group.bloom[each.key].id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "tcp"
-  from_port         = 443
-  to_port           = 443
+  from_port         = each.value.ingress.port
+  to_port           = each.value.ingress.port
   tags = {
     Name = "internet-allow"
   }

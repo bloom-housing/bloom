@@ -16,12 +16,18 @@ deployment.
 
 ## Creating a Cloudshell
 
+After logging into an AWS account with Bloom deployed, users of the AWS web console can create
+a cloudshell environment that has access to the Bloom VPC.
+
+ b
+
 ## Manually accessing the Bloom database
+
+Follow [#Creating a Cloudshell]
 
 ```
 PGHOST=
 PGPASSWORD=$(aws rds generate-db-auth-token --hostname "$PGHOST" --port 5432 --username bloom_api) psql --username bloom_api --dbname bloom_prisma
 ```
-
 
 ## Manually accessing the Bloom API

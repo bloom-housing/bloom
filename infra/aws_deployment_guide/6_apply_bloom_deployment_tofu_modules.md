@@ -133,7 +133,7 @@ graph TB
        "eligible" = "ELIGIBLE"
        "status" = tolist([])
      }
-     "validation_dns_recods" = toset([
+     "validation_dns_records" = toset([
        {
          "domain_name" = "core-dev.bloomhousing.dev"
          "resource_record_name" = "_4b8c99d969da11b1e35c36786a74b6fe.core-dev.bloomhousing.dev."
@@ -267,7 +267,7 @@ graph TB
        "eligible" = "ELIGIBLE"
        "status" = tolist([])
      }
-     "validation_dns_recods" = toset([
+     "validation_dns_records" = toset([
        {
          "domain_name" = "core-prod.bloomhousing.dev"
          "resource_record_name" = "_BLAH.core-prod.bloomhousing.dev."
