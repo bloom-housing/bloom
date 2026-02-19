@@ -5,13 +5,16 @@ import {
   getGenericFooterTextContent,
 } from "../../static_content/generic_footer_content"
 import styles from "./CustomSiteFooter.module.scss"
-import { getJurisdictionFooterTextContent } from "../../static_content/jurisdiction_footer_content"
+import {
+  getJurisdictionFooterLinksContent,
+  getJurisdictionFooterTextContent,
+} from "../../static_content/jurisdiction_footer_content"
 
 const CustomSiteFooter = () => {
   const textContent: React.ReactNode | null =
     getJurisdictionFooterTextContent() || getGenericFooterTextContent()
   const footerLinksContent: React.ReactNode | null =
-    getJurisdictionFooterTextContent() || getGenericFooterLinksContent()
+    getJurisdictionFooterLinksContent() || getGenericFooterLinksContent()
 
   return (
     <footer>
