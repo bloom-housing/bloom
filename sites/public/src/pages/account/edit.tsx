@@ -291,6 +291,7 @@ const Edit = () => {
                   variant="primary-outlined"
                   loadingMessage={nameLoading ? t("t.loading") : undefined}
                   id={"account-submit-name"}
+                  ariaLabel={`${t("account.settings.update")} ${t("application.name.yourName")}`}
                 >
                   {t("account.settings.update")}
                 </Button>
@@ -334,6 +335,9 @@ const Edit = () => {
                   className="mt-6"
                   loadingMessage={birthdateLoading ? t("t.loading") : undefined}
                   id={"account-submit-dob"}
+                  ariaLabel={`${t("account.settings.update")} ${t(
+                    "application.name.yourDateOfBirth"
+                  )}`}
                 >
                   {t("account.settings.update")}
                 </Button>
@@ -375,6 +379,9 @@ const Edit = () => {
                   variant="primary-outlined"
                   loadingMessage={emailLoading ? t("t.loading") : undefined}
                   id={"account-submit-email"}
+                  ariaLabel={`${t("account.settings.update")} ${t(
+                    "application.name.yourEmailAddress"
+                  )}`}
                 >
                   {t("account.settings.update")}
                 </Button>
@@ -455,6 +462,9 @@ const Edit = () => {
                     variant="primary-outlined"
                     loadingMessage={passwordLoading ? t("t.loading") : undefined}
                     id={"account-submit-password"}
+                    ariaLabel={`${t("account.settings.update")} ${t(
+                      "authentication.createAccount.password"
+                    )}`}
                   >
                     {t("account.settings.update")}
                   </Button>
