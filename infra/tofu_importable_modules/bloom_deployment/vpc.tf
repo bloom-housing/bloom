@@ -365,6 +365,9 @@ resource "aws_security_group" "bloom" {
   vpc_id      = aws_vpc.bloom.id
   name        = "bloom-${each.key}"
   description = "Rules for Bloom ${each.key}."
+  tags = {
+    Name = "bloom-${each.key}"
+  }
 }
 resource "aws_vpc_security_group_ingress_rule" "from_internet" {
   for_each          = { for sg, config in local.bloom_security_groups : sg => config if config.ingress != null && config.ingress.internet }

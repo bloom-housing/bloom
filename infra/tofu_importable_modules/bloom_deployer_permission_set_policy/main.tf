@@ -43,11 +43,11 @@ resource "aws_ssoadmin_permission_set_inline_policy" "deployer" {
   inline_policy      = data.aws_iam_policy_document.deployer.json
 }
 data "aws_iam_policy_document" "deployer" {
-  # TODO: we should have a separate permission set for humans debugging / looking at stuff through
-  # the AWS web console. For now, just collect the added permissions for the web console that are
-  # not required when running tofu apply.
+  # TODO: we could have a separate permission set for humans debugging / looking at stuff through
+  # the AWS web console. For now, just collect the added permissions for using the web console that
+  # are not required when running tofu apply.
   statement {
-    sid = "HumanConsoleUser"
+    sid = "WebConsoleUser"
     actions = [
       "application-autoscaling:DescribeScalableTargets",
       "cloudwatch:Describe*",
@@ -77,24 +77,83 @@ data "aws_iam_policy_document" "deployer" {
     resources = ["*"]
   }
   statement {
-    sid = "HumanCloudshellUser"
+    sid = "CS"
     actions = [
-      "cloudshell:CreateEnvironment",
-      "cloudshell:CreateSession",
-      "cloudshell:DeleteEnvironment",
-      "cloudshell:DescribeEnvironments",
-      "cloudshell:GetEnvironmentStatus",
-      "cloudshell:PutCredentials",
-      "cloudshell:StartEnvironment",
-      "cloudshell:StopEnvironment",
-      "ec2:CreateNetworkInterface",
-      "ec2:CreateNetworkInterfacePermission",
-      "ec2:CreateTags",
-      "ec2:DeleteNetworkInterface",
-      "rds-db:connect",
+      "cloudshell:*"
     ]
     resources = ["*"]
-    # TODO: condition that the correct security group and subnet is used
+  }
+  statement {
+    sid = "CSNetworkInterface"
+    actions = [
+      "ec2:CreateNetworkInterface",
+    ]
+    resources = [
+      "arn:aws:ec2:${local.region_account}:network-interface/*",
+    ]
+    condition {
+      test     = "ForAnyValue:StringEquals"
+      variable = "aws:TagKeys"
+      values   = ["ManagedByCloudShell"]
+    }
+  }
+  statement {
+    sid = "CSNetworkInterfaceSubnet"
+    actions = [
+      "ec2:CreateNetworkInterface",
+    ]
+    resources = [
+      "arn:aws:ec2:${local.region_account}:subnet/*",
+    ]
+    condition {
+      test     = "StringLike"
+      variable = "aws:ResourceTag/Name"
+      values   = ["bloom-private-*"]
+    }
+  }
+  statement {
+    sid = "CSCreateNetworkInterfaceSG"
+    actions = [
+      "ec2:CreateNetworkInterface",
+    ]
+    resources = [
+      "arn:aws:ec2:${local.region_account}:security-group/*",
+    ]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:ResourceTag/Name"
+      values   = ["bloom-cloudshell"]
+    }
+  }
+  statement {
+    sid = "CSTagNetworkInterface"
+    actions = [
+      "ec2:CreateTags",
+    ]
+    resources = ["arn:aws:ec2:${local.region_account}:network-interface/*"]
+    condition {
+      test     = "ForAnyValue:StringEquals"
+      variable = "aws:TagKeys"
+      values   = ["ManagedByCloudShell"]
+    }
+  }
+  statement {
+    sid = "CSConfigNetworkInterface"
+    actions = [
+      "ec2:CreateNetworkInterfacePermission",
+      "ec2:DeleteNetworkInterface",
+    ]
+    resources = ["arn:aws:ec2:${local.region_account}:network-interface/*"]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:ResourceTag/ManagedByCloudShell"
+      values   = [""]
+    }
+  }
+  statement {
+    sid       = "CSDBAuthToken"
+    actions   = ["rds-db:connect"]
+    resources = ["arn:aws:rds-db:${local.region_account}:dbuser:*/bloom_readonly"]
   }
   statement {
     sid = "TofuStateBucket"
