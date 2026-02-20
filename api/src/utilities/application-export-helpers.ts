@@ -27,7 +27,7 @@ export const getExportHeaders = (
   user: User,
   includeDemographics = false,
   forLottery = false,
-  dateFormat = 'MM-DD-YYYY hh:mm:ssA z',
+  dateFormat = 'YYYY-MM-DD hh:mm:ss A',
   swapCommunityTypeWithPrograms?: boolean,
 ): CsvHeader[] => {
   const enableAdaOtherOption = doAnyJurisdictionHaveFeatureFlagSet(
