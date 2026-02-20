@@ -172,7 +172,7 @@ const ApplicationMultiselectQuestionStep = ({
   }
 
   const onError = () => {
-    onFormError("application-alert-box-wrapper")
+    onFormError()
   }
 
   const watchQuestions = watch(allOptionNames)
