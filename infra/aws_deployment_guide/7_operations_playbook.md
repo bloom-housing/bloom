@@ -24,9 +24,8 @@ deployment.
 1. Complete the steps in [Apply Bloom Deployment Tofu
    Modules](./6_apply_bloom_deployment_tofu_modules.md).
 2. Complete the steps in [Creating a Cloudshell
-   Environment](#creating-a-cloudshell-environment). All bash code blocks in
-   this file are expected to exceed when run in a configured Cloudshell
-   environment.
+   Environment](#creating-a-cloudshell-environment). All bash code blocks in this file are expected
+   to succeed when run in a configured Cloudshell environment.
 
 ## Creating a Cloudshell Environment
 

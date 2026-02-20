@@ -133,8 +133,8 @@ graph TB
    to manage the prod Bloom deployment.
 
 Optionally, create a `bloom-dev-iam-admins` if the group of people who should have access to manage
-the `bloom-dev-deployer` permission set policy is different from the group of people should should
-have the `bloom-dev-deployer` permissions.
+the `bloom-dev-deployer` permission set policy is different from the group of people should have the
+`bloom-dev-deployer` permissions.
 
 ### 2. Create IAM Identity Center Permission Sets
 

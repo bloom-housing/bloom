@@ -321,7 +321,7 @@ graph TB
 
    Individual emails are validated by clicking an email validation link AWS sends in an email with
    subject like 'Amazon Web Services - Email Address Verification Request in region...'. If using
-   a no-reply email address that does not receive email, you must either give in an inbox first then
+   a no-reply email address that does not receive email, you must either give it an inbox first then
    validate in AWS or use domain validation.
 
    Domains are validated by publishing a set of DNS records. Add the required CNAME records in your
