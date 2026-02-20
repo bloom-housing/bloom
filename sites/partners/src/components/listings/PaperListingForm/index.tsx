@@ -272,6 +272,8 @@ const ListingForm = ({
     jurisdictionId
   )
 
+  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ, jurisdictionId)
+
   useEffect(() => {
     if (enableNonRegulatedListings && !listing?.listingType) {
       setValue(
@@ -639,6 +641,7 @@ const ListingForm = ({
                             setPreferences={setPreferences}
                             setPrograms={setPrograms}
                             swapCommunityTypeWithPrograms={swapCommunityTypeWithPrograms}
+                            enableV2MSQ={enableV2MSQ}
                           />
                           <AdditionalFees
                             enableCreditScreeningFee={doJurisdictionsHaveFeatureFlagOn(
