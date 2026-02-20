@@ -10,8 +10,8 @@ const TermsPage = () => {
   const onSubmit = useCallback(async () => {
     if (!profile) return
 
-    await userService?.update({
-      body: { ...profile, agreedToTermsOfService: true },
+    await userService?.updatePublic({
+      body: { ...profile, dob: profile.dob, agreedToTermsOfService: true },
     })
 
     loadProfile?.("/")
