@@ -28,6 +28,7 @@ import {
 import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
 import { UnitAccessibilityPriorityTypeEnum } from '../src/enums/units/accessibility-priority-type-enum';
 import { ListingFeaturesConfiguration } from '../src/dtos/jurisdictions/listing-features-config.dto';
+import { RaceEthnicityConfiguration } from '../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
 import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
 import { createAllFeatureFlags } from './seed-helpers/feature-flag-factory';
 import { FeatureFlagEnum } from '../src/enums/feature-flags/feature-flags-enum';
@@ -39,6 +40,59 @@ import { littleVillageApartments } from './seed-helpers/listing-data/little-vill
 import { elmVillage } from './seed-helpers/listing-data/elm-village';
 import { lakeviewVilla } from './seed-helpers/listing-data/lakeview-villa';
 import { sunshineFlats } from './seed-helpers/listing-data/sunshine-flats';
+
+export const defaultRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
+  options: [
+    {
+      id: 'americanIndianAlaskanNative',
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: 'asian',
+      subOptions: [
+        { id: 'asianIndian', allowOtherText: false },
+        { id: 'chinese', allowOtherText: false },
+        { id: 'filipino', allowOtherText: false },
+        { id: 'japanese', allowOtherText: false },
+        { id: 'korean', allowOtherText: false },
+        { id: 'vietnamese', allowOtherText: false },
+        { id: 'otherAsian', allowOtherText: true },
+      ],
+      allowOtherText: false,
+    },
+    {
+      id: 'blackAfricanAmerican',
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: 'nativeHawaiianOtherPacificIslander',
+      subOptions: [
+        { id: 'nativeHawaiian', allowOtherText: false },
+        { id: 'guamanianOrChamorro', allowOtherText: false },
+        { id: 'samoan', allowOtherText: false },
+        { id: 'otherPacificIslander', allowOtherText: true },
+      ],
+      allowOtherText: false,
+    },
+    {
+      id: 'white',
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: 'otherMultiracial',
+      subOptions: [],
+      allowOtherText: true,
+    },
+    {
+      id: 'declineToRespond',
+      subOptions: [],
+      allowOtherText: false,
+    },
+  ],
+};
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -71,6 +125,51 @@ export const stagingSeed = async (
       { id: 'barrierFreeBathroom' },
       { id: 'wideDoorways' },
       { id: 'loweredCabinets' },
+    ],
+  };
+
+  const angelopolisRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
+    options: [
+      {
+        id: 'americanIndianAlaskanNative',
+        subOptions: [],
+        allowOtherText: false,
+      },
+      {
+        id: 'asian',
+        subOptions: [],
+        allowOtherText: true,
+      },
+      {
+        id: 'blackAfricanAmerican',
+        subOptions: [],
+        allowOtherText: false,
+      },
+      {
+        id: 'hispanicLatino',
+        subOptions: [],
+        allowOtherText: false,
+      },
+      {
+        id: 'middleEasternNorthAfrican',
+        subOptions: [],
+        allowOtherText: false,
+      },
+      {
+        id: 'nativeHawaiianOtherPacificIslander',
+        subOptions: [],
+        allowOtherText: false,
+      },
+      {
+        id: 'white',
+        subOptions: [],
+        allowOtherText: false,
+      },
+      {
+        id: 'otherMultiracial',
+        subOptions: [],
+        allowOtherText: true,
+      },
     ],
   };
   // create main jurisdiction with as many feature flags turned on as possible
@@ -120,6 +219,7 @@ export const stagingSeed = async (
         'units',
       ],
       listingFeaturesConfiguration: defaultListingFeatureConfiguration,
+      raceEthnicityConfiguration: defaultRaceEthnicityConfiguration,
     }),
   });
 
@@ -171,6 +271,7 @@ export const stagingSeed = async (
         LanguagesEnum.bn,
       ],
       listingFeaturesConfiguration: defaultListingFeatureConfiguration,
+      raceEthnicityConfiguration: defaultRaceEthnicityConfiguration,
     }),
   });
   // Basic configuration jurisdiction
@@ -189,6 +290,7 @@ export const stagingSeed = async (
       ],
       languages: [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
       listingFeaturesConfiguration: defaultListingFeatureConfiguration,
+      raceEthnicityConfiguration: defaultRaceEthnicityConfiguration,
     }),
   });
   // Jurisdiction with no feature flags enabled
@@ -228,6 +330,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableResources,
         FeatureFlagEnum.enableSmokingPolicyRadio,
         FeatureFlagEnum.enableParkingType,
+        FeatureFlagEnum.enableSpokenLanguage,
       ],
       visibleNeighborhoodAmenities: [
         NeighborhoodAmenitiesEnum.groceryStores,
@@ -350,6 +453,7 @@ export const stagingSeed = async (
           },
         ],
       },
+      raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
     }),
   });
   // create super admin user
@@ -859,7 +963,14 @@ export const stagingSeed = async (
           mobilityAccessibilityNeedsProgramQuestion,
           hearingVisionAccessibilityNeedsProgramQuestion,
         ],
-        applications: [await applicationFactory(), await applicationFactory()],
+        applications: [
+          await applicationFactory({
+            raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
+          }),
+          await applicationFactory({
+            raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
+          }),
+        ],
         userAccounts: [{ id: partnerUser.id }],
         optionalFeatures: { carpetInUnit: true },
       },

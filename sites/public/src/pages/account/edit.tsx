@@ -110,7 +110,7 @@ const Edit = () => {
     const { firstName, middleName, lastName } = data
     setNameAlert(null)
     try {
-      const newUser = await userService.update({
+      const newUser = await userService.updatePublic({
         body: { ...user, firstName, middleName, lastName },
       })
       setUser(newUser)
@@ -128,7 +128,7 @@ const Edit = () => {
     const { dateOfBirth } = data
     setDobAlert(null)
     try {
-      const newUser = await userService.update({
+      const newUser = await userService.updatePublic({
         body: {
           ...user,
           dob: dayjs(
@@ -151,7 +151,7 @@ const Edit = () => {
     const { email } = data
     setEmailAlert(null)
     try {
-      const newUser = await userService.update({
+      const newUser = await userService.updatePublic({
         body: {
           ...user,
           appUrl: window.location.origin,
@@ -188,7 +188,7 @@ const Edit = () => {
       return
     }
     try {
-      const newUser = await userService.update({
+      const newUser = await userService.updatePublic({
         body: { ...user, password, currentPassword },
       })
       setUser(newUser)
