@@ -24,7 +24,7 @@ import SignUpBenefits from "../components/account/SignUpBenefits"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
 
 const CreateAccount = () => {
-  const { createUser, resendConfirmation } = useContext(AuthContext)
+  const { createPublicUser, resendConfirmation } = useContext(AuthContext)
   const [confirmationResent, setConfirmationResent] = useState<boolean>(false)
   const signUpCopy = process.env.showMandatedAccounts
   /* Form Handler */
@@ -55,7 +55,7 @@ const CreateAccount = () => {
       const { dob, ...rest } = data
       const listingIdRedirect =
         process.env.showMandatedAccounts && listingId ? listingId : undefined
-      await createUser(
+      await createPublicUser(
         {
           ...rest,
           dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
