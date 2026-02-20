@@ -107,7 +107,7 @@ const ApplicationLiveAlone = () => {
                 }
               }}
             >
-              <legend className={`text__caps-spaced ${errors?.type ? "text-alert" : ""}`}>
+              <legend className={`text__caps-spaced ${errors?.householdSize ? "text-alert" : ""}`}>
                 {t("application.household.householdMembers")}
               </legend>
               <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>

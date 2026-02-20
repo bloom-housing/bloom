@@ -223,54 +223,58 @@ const CreateAccount = () => {
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  <Field
-                    labelClassName={"text__caps-spaced"}
-                    type={"password"}
-                    name="password"
-                    note={t("authentication.createAccount.passwordInfo")}
-                    label={t("authentication.createAccount.password")}
-                    validation={{
-                      required: true,
-                      minLength: 8,
-                      pattern: passwordRegex,
-                    }}
-                    error={errors.password}
-                    errorMessage={t("authentication.signIn.passwordError")}
-                    register={register}
-                    controlClassName={styles["create-account-input"]}
-                  />
-                  <label className={styles["create-account-field"]} htmlFor="passwordConfirmation">
-                    {t("authentication.createAccount.reEnterPassword")}
-                  </label>
-                  <Field
-                    type="password"
-                    name="passwordConfirmation"
-                    validation={{
-                      validate: (value) =>
-                        value === password.current ||
-                        t("authentication.createAccount.errors.passwordMismatch"),
-                    }}
-                    onPaste={(e) => {
-                      e.preventDefault()
-                      e.nativeEvent.stopImmediatePropagation()
-                      return false
-                    }}
-                    onDrop={(e) => {
-                      e.preventDefault()
-                      e.nativeEvent.stopImmediatePropagation()
-                      return false
-                    }}
-                    error={errors.passwordConfirmation}
-                    errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
-                    register={register}
-                    controlClassName={styles["create-account-input"]}
-                    label={t("authentication.createAccount.reEnterPassword")}
-                    readerOnly
-                  />
+                  <fieldset className={"seeds-p-be-6"}>
+                    <legend className={"text__caps-spaced seeds-m-be-0"}>
+                      {t("authentication.createAccount.password")}
+                    </legend>
+                    <Field
+                      labelClassName={"sr-only"}
+                      type={"password"}
+                      name="password"
+                      note={t("authentication.createAccount.passwordInfo")}
+                      label={t("authentication.createAccount.password")}
+                      validation={{
+                        required: true,
+                        minLength: 8,
+                        pattern: passwordRegex,
+                      }}
+                      error={errors.password}
+                      errorMessage={t("authentication.signIn.passwordError")}
+                      register={register}
+                      controlClassName={styles["create-account-input"]}
+                    />
+                    <Field
+                      type="password"
+                      id="passwordConfirmation"
+                      name="passwordConfirmation"
+                      validation={{
+                        validate: (value) =>
+                          value === password.current ||
+                          t("authentication.createAccount.errors.passwordMismatch"),
+                      }}
+                      onPaste={(e) => {
+                        e.preventDefault()
+                        e.nativeEvent.stopImmediatePropagation()
+                        return false
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault()
+                        e.nativeEvent.stopImmediatePropagation()
+                        return false
+                      }}
+                      error={errors.passwordConfirmation}
+                      errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
+                      register={register}
+                      controlClassName={styles["create-account-input"]}
+                      label={t("authentication.createAccount.reEnterPassword")}
+                      className={`${styles["create-account-field"]} seeds-m-bs-0`}
+                    />
+                  </fieldset>
                   <Button
                     type="submit"
                     variant="primary"
                     loadingMessage={loading ? t("t.loading") : undefined}
+                    className={"seeds-p-bs-4"}
                   >
                     {t("account.createAccount")}
                   </Button>

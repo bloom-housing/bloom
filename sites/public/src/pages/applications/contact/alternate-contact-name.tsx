@@ -128,14 +128,16 @@ const ApplicationAlternateContactName = () => {
                 register={register}
                 dataTestId={"app-alternate-last-name"}
               />
-              {application.alternateContact.type === "caseManager" && (
-                <div className="mt-6">
-                  <p className="text__caps-spaced">
+            </fieldset>
+            {application.alternateContact.type === "caseManager" && (
+              <div className="mt-6">
+                <fieldset>
+                  <legend className="text__caps-spaced">
                     <LockIcon locked={isAdvocate} />
                     {enableHousingAdvocate
                       ? t("application.alternateContact.name.caseManagerAgencyFormLabelAdvocate")
                       : t("application.alternateContact.name.caseManagerAgencyFormLabel")}
-                  </p>
+                  </legend>
                   <Field
                     id="agency"
                     name="agency"
@@ -150,9 +152,9 @@ const ApplicationAlternateContactName = () => {
                     register={register}
                     dataTestId={"app-alternate-type"}
                   />
-                </div>
-              )}
-            </fieldset>
+                </fieldset>
+              </div>
+            )}
           </CardSection>
         </ApplicationFormLayout>
       </Form>
