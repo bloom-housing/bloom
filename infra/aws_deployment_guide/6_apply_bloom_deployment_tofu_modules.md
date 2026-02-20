@@ -428,9 +428,9 @@ the existing VPC. To create the VPC peering:
 ## After these steps
 
 1. Your dev Bloom deployment should be accessible:
-   - public site: `https://<YOUR_DEV_DOMAIN>
-   - partners site: `https://partners.<YOUR_DEV_DOMAIN>
+   - public site: `https://<YOUR_DEV_DOMAIN>`
+   - partners site: `https://partners.<YOUR_DEV_DOMAIN>`
 
 2. Your prod Bloom deployment should be accessible:
-   - public site: `https://<YOUR_PROD_DOMAIN>
-   - partners site: `https://partners.<YOUR_PROD_DOMAIN>
+   - public site: `https://<YOUR_PROD_DOMAIN>`
+   - partners site: `https://partners.<YOUR_PROD_DOMAIN>`

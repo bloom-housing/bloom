@@ -8,7 +8,7 @@ locals {
     LISTINGS_QUERY                = "/listings"
     MAX_BROWSE_LISTINGS           = "10"
     HOUSING_COUNSELOR_SERVICE_URL = "/get-assistance"
-    IDLE_TIMEMOUT                 = "5"  # seconds
+    IDLE_TIMEOUT                  = "5"  # seconds
     CACHE_REVALIDATE              = "30" # seconds
     SHOW_PUBLIC_LOTTERY           = "TRUE"
     SHOW_MANDATED_ACCOUNTS        = "FALSE"
