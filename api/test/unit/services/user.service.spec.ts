@@ -28,7 +28,7 @@ import { SnapshotCreateService } from '../../../src/services/snapshot-create.ser
 import { PublicUserUpdate } from '../../../src/dtos/users/public-user-update.dto';
 import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { AddressUpdate } from '../../../src/dtos/addresses/address-update.dto';
-import { AdvocateUserUpdate } from 'src/dtos/users/advocate-user-update.dto';
+import { AdvocateUserUpdate } from '../../../src/dtos/users/advocate-user-update.dto';
 
 describe('Testing user service', () => {
   let service: UserService;
