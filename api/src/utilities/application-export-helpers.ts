@@ -47,6 +47,11 @@ export const getExportHeaders = (
     FeatureFlagEnum.enableApplicationStatus,
   );
 
+  const enableSpokenLanguage = doAnyJurisdictionHaveFeatureFlagSet(
+    user.jurisdictions,
+    FeatureFlagEnum.enableSpokenLanguage,
+  );
+
   const headers: CsvHeader[] = [
     {
       path: 'id',
@@ -403,6 +408,14 @@ export const getExportHeaders = (
         label: 'How did you Hear?',
       },
     );
+    if (enableSpokenLanguage) {
+      headers.push({
+        path: 'demographics.spokenLanguage',
+        label: 'Spoken Language',
+        format: (val: string): string =>
+          convertDemographicLanguageToReadable(val),
+      });
+    }
   }
   return headers;
 };
@@ -653,25 +666,87 @@ export const convertDemographicRaceToReadable = (type: string): string => {
     americanIndianAlaskanNative: 'American Indian / Alaskan Native',
     asian: 'Asian',
     'asian-asianIndian': 'Asian[Asian Indian]',
-    'asian-otherAsian': `Asian[Other Asian${customValueFormatted}]`,
-    blackAfricanAmerican: 'Black / African American',
+    'asian-centralAsian': 'Asian[Central Asian]',
     'asian-chinese': 'Asian[Chinese]',
-    declineToRespond: 'Decline to Respond',
     'asian-filipino': 'Asian[Filipino]',
-    'nativeHawaiianOtherPacificIslander-guamanianOrChamorro':
-      'Native Hawaiian / Other Pacific Islander[Guamanian or Chamorro]',
     'asian-japanese': 'Asian[Japanese]',
     'asian-korean': 'Asian[Korean]',
-    'nativeHawaiianOtherPacificIslander-nativeHawaiian':
-      'Native Hawaiian / Other Pacific Islander[Native Hawaiian]',
+    'asian-mongolian': 'Asian[Mongolian]',
+    'asian-otherAsian': `Asian[Other Asian${customValueFormatted}]`,
+    'asian-southAsian': 'Asian[South Asian]',
+    'asian-southeastAsian': 'Asian[Southeast Asian]',
+    'asian-vietnamese': 'Asian[Vietnamese]',
+    black: 'Black',
+    'black-african': 'Black[African]',
+    'black-africanAmerican': 'Black[African American]',
+    'black-caribbeanCentralSouthAmericanMexican':
+      'Black[Caribbean, Central American, South American or Mexican]',
+    'black-otherBlack': `Black[Other Black${customValueFormatted}]`,
+    blackAfricanAmerican: 'Black / African American',
+    declineToRespond: 'Decline to Respond',
+    indigenous: 'Indigenous',
+    'indigenous-alaskanNative': 'Indigenous[Alaskan Native]',
+    'indigenous-indigenousFromMexicoCaribbeanCentralSouthAmerica':
+      'Indigenous[Indigenous from Mexico, the Caribbean, Central America, or South America]',
+    'indigenous-nativeAmerican': 'Indigenous[American Indian/Native American]',
+    'indigenous-otherIndigenous': `Indigenous[Other Indigenous${customValueFormatted}]`,
+    latino: 'Latino',
+    'latino-caribbean': 'Latino[Caribbean]',
+    'latino-centralAmerican': 'Latino[Central American]',
+    'latino-mexican': 'Latino[Mexican]',
+    'latino-otherLatino': `Latino[Other Latino${customValueFormatted}]`,
+    'latino-southAmerican': 'Latino[South American]',
+    middleEasternNorthAfrican: 'Middle Eastern / North African (MENA)',
+    middleEasternOrAfrican: 'Middle Eastern, West African or North African',
+    'middleEasternOrAfrican-northAfrican':
+      'Middle Eastern, West African or North African[North African]',
+    'middleEasternOrAfrican-otherMiddleEasternNorthAfrican': `Middle Eastern, West African or North African[Other Middle Eastern or North African${customValueFormatted}]`,
+    'middleEasternOrAfrican-westAsian':
+      'Middle Eastern, West African or North African[West Asian]',
     nativeHawaiianOtherPacificIslander:
       'Native Hawaiian / Other Pacific Islander',
-    otherMultiracial: `Other / Multiracial${customValueFormatted}`,
+    'nativeHawaiianOtherPacificIslander-guamanianOrChamorro':
+      'Native Hawaiian / Other Pacific Islander[Guamanian or Chamorro]',
+    'nativeHawaiianOtherPacificIslander-nativeHawaiian':
+      'Native Hawaiian / Other Pacific Islander[Native Hawaiian]',
     'nativeHawaiianOtherPacificIslander-otherPacificIslander': `Native Hawaiian / Other Pacific Islander[Other Pacific Islander${customValueFormatted}]`,
     'nativeHawaiianOtherPacificIslander-samoan':
       'Native Hawaiian / Other Pacific Islander[Samoan]',
-    'asian-vietnamese': 'Asian[Vietnamese]',
+    otherMultiracial: `Other / Multiracial${customValueFormatted}`,
+    pacificIslander: 'Pacific Islander',
+    'pacificIslander-chamorro': 'Pacific Islander[Chamorro]',
+    'pacificIslander-nativeHawaiian': 'Pacific Islander[Native Hawaiian]',
+    'pacificIslander-otherPacificIslander': `Pacific Islander[Other Pacific Islander${customValueFormatted}]`,
+    'pacificIslander-samoan': 'Pacific Islander[Samoan]',
     white: 'White',
+    'white-european': 'White[European]',
+    'white-otherWhite': `White[Other White${customValueFormatted}]`,
+  };
+  return typeMap[rootKey] ?? rootKey;
+};
+
+/**
+ *
+ * @param type takes in the demographic string
+ * @returns outputs the readable version of the string
+ */
+export const convertDemographicLanguageToReadable = (type: string): string => {
+  // Not Listed is saved as "notListed:<custom text here>"
+  const [rootKey, customValue = ''] = type.split(':');
+  let notListedString = 'Not Listed';
+  if (customValue) notListedString = notListedString + `:${customValue}`;
+  const typeMap = {
+    chineseCantonese: 'Chinese - Cantonese',
+    chineseMandarin: 'Chinese - Mandarin',
+    english: 'English',
+    filipino: 'Filipino',
+    korean: 'Korean',
+    russian: 'Russian',
+    spanish: 'Spanish',
+    vietnamese: 'Vietnamese',
+    farsi: 'Farsi',
+    afghani: 'Afghani (Dari)',
+    notListed: notListedString,
   };
   return typeMap[rootKey] ?? rootKey;
 };
