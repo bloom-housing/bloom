@@ -173,8 +173,11 @@ const ApplicationName = () => {
                   {t("application.name.yourDateOfBirth")}
                 </>
               }
+              ariaDescribedBy="dob-helper"
             />
-            <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
+            <p id="dob-helper" className={"field-sub-note"}>
+              {t("application.name.dobHelper")}
+            </p>
           </CardSection>
           <CardSection divider={"flush"} className={"border-none"}>
             <legend
