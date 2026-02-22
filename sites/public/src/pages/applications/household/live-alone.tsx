@@ -2,14 +2,15 @@ import React, { ChangeEvent, useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { FieldGroup, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert } from "@bloom-housing/ui-seeds"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
 
 const ApplicationLiveAlone = () => {
   const { profile } = useContext(AuthContext)
@@ -25,6 +26,10 @@ const ApplicationLiveAlone = () => {
     if (!validation) return
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
+  }
+
+  const onError = () => {
+    onFormError()
   }
 
   useEffect(() => {
@@ -56,7 +61,7 @@ const ApplicationLiveAlone = () => {
         listing?.name
       }`}
     >
-      <Form className="mb-4" onSubmit={handleSubmit(onSubmit)}>
+      <Form className="mb-4" onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.household.liveAlone.title")}
@@ -71,16 +76,7 @@ const ApplicationLiveAlone = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} />
           <div>
             <HouseholdSizeField
               assistanceUrl={t("application.household.assistanceUrl")}
@@ -107,7 +103,7 @@ const ApplicationLiveAlone = () => {
                 }
               }}
             >
-              <legend className={`text__caps-spaced ${errors?.type ? "text-alert" : ""}`}>
+              <legend className={`text__caps-spaced ${errors?.householdSize ? "text-alert" : ""}`}>
                 {t("application.household.householdMembers")}
               </legend>
               <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>
