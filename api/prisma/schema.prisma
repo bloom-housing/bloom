@@ -653,6 +653,7 @@ model Demographics {
   howDidYouHear     String[] @map("how_did_you_hear")
   race              String[]
   sexualOrientation String?  @map("sexual_orientation")
+  spokenLanguage    String?  @map("spoken_language")
 
   applications Applications?
 
@@ -672,6 +673,7 @@ model DemographicSnapshot {
   howDidYouHear     String[] @map("how_did_you_hear")
   race              String[]
   sexualOrientation String?  @map("sexual_orientation")
+  spokenLanguage    String?  @map("spoken_language")
 
   application ApplicationSnapshot?
 
@@ -795,6 +797,7 @@ model Jurisdictions {
   requiredListingFields               String[]                            @default([]) @map("required_listing_fields")
   visibleAccessibilityPriorityTypes   UnitAccessibilityPriorityTypeEnum[] @default([mobility, hearing, vision, hearingAndVision, mobilityAndHearing, mobilityAndVision, mobilityHearingAndVision]) @map("visible_accessibility_priority_types")
   visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[]         @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
+  visibleSpokenLanguages              SpokenLanguageEnum[]                @default([chineseCantonese, chineseMandarin, english, filipino, korean, russian, spanish, vietnamese, farsi, afghani, notListed]) @map("visible_spoken_languages")
   whatToExpect                        String                              @default("Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.") @map("what_to_expect")
   whatToExpectAdditionalText          String                              @default("") @map("what_to_expect_additional_text")
   whatToExpectUnderConstruction       String                              @default("") @map("what_to_expect_under_construction")
@@ -2388,6 +2391,22 @@ enum UnitAccessibilityPriorityTypeEnum {
   mobilityHearingAndVision
 
   @@map("unit_accessibility_priority_type_enum")
+}
+
+enum SpokenLanguageEnum {
+  chineseCantonese
+  chineseMandarin
+  english
+  filipino
+  korean
+  russian
+  spanish
+  vietnamese
+  farsi
+  afghani
+  notListed
+
+  @@map("spoken_language_enum")
 }
 
 enum RegionEnum {

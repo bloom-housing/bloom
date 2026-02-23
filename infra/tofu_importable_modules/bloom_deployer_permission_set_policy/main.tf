@@ -345,4 +345,14 @@ data "aws_iam_policy_document" "deployer" {
     ]
     resources = ["arn:aws:secretsmanager:${local.region_account}:secret:bloom-api-jwt-signing-key*"]
   }
+  statement {
+    sid = "SES"
+    actions = [
+      "ses:CreateEmailIdentity",
+      "ses:DeleteEmailIdentity",
+      "ses:GetEmailIdentity",
+      "ses:ListTagsForResource",
+    ]
+    resources = ["arn:aws:ses:${local.region_account}:identity/*"]
+  }
 }

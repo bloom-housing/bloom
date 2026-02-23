@@ -61,6 +61,7 @@ const loadListing = async (
     featureFlags: jurisdictionResponse.featureFlags,
     isAdvocate:
       isFeatureFlagOn(jurisdictionResponse, FeatureFlagEnum.enableHousingAdvocate) && isAdvocate,
+    visibleSpokenLanguages: jurisdictionResponse.visibleSpokenLanguages,
     raceEthnicityConfiguration: jurisdictionResponse.raceEthnicityConfiguration,
   }
   stateFunction(conductor.listing)
@@ -209,7 +210,7 @@ const ApplicationChooseLanguage = () => {
                         onLanguageSelect(lang)
                       }}
                       key={index}
-                      id={"app-choose-language-button"}
+                      id={`app-choose-language-button-${lang}`}
                     >
                       {t(`languages.${lang}`)}
                     </Button>
