@@ -1850,6 +1850,10 @@ export class UserService {
       filter?: UserFilterParams[]
       /**  */
       search?: string
+      /**  */
+      orderBy?: UserOrderByKeys[]
+      /**  */
+      orderDir?: OrderByEnum[]
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedUser> {
@@ -1862,6 +1866,8 @@ export class UserService {
         limit: params["limit"],
         filter: params["filter"],
         search: params["search"],
+        orderBy: params["orderBy"],
+        orderDir: params["orderDir"],
       }
 
       /** 适配ios13，get请求不允许带body */
@@ -7576,19 +7582,16 @@ export interface ListingFeaturesConfiguration {
 }
 
 export interface RaceEthnicitySubOption {
-  /** The unique identifier for this suboption */
+  /**  */
   id: string
 
-  /** Whether this suboption allows free text input for "other" selection */
+  /**  */
   allowOtherText?: boolean
 }
 
 export interface RaceEthnicityOption {
-  /** The unique identifier for this option */
+  /**  */
   id: string
-
-  /** Whether this option has suboptions (like Asian with specific ethnicities) */
-  hasSubOptions?: boolean
 
   /** The list of suboptions if this option has them */
   subOptions?: RaceEthnicitySubOption[]
@@ -8816,6 +8819,9 @@ export interface PublicUserCreate {
   additionalPhoneExtension?: string
 
   /**  */
+  isApproved?: boolean
+
+  /**  */
   dob: Date
 
   /**  */
@@ -8914,6 +8920,9 @@ export interface PartnerUserCreate {
   additionalPhoneExtension?: string
 
   /**  */
+  isApproved?: boolean
+
+  /**  */
   userRoles: UserRole
 
   /**  */
@@ -8977,6 +8986,9 @@ export interface AdvocateUserCreate {
 
   /**  */
   favoriteListings?: IdDTO[]
+
+  /**  */
+  isApproved?: boolean
 
   /**  */
   agency: Agency
@@ -9072,6 +9084,9 @@ export interface PublicUserUpdate {
 
   /**  */
   additionalPhoneExtension?: string
+
+  /**  */
+  isApproved?: boolean
 
   /**  */
   dob: Date
@@ -9175,6 +9190,9 @@ export interface PartnerUserUpdate {
   additionalPhoneExtension?: string
 
   /**  */
+  isApproved?: boolean
+
+  /**  */
   userRoles: UserRole
 
   /**  */
@@ -9268,6 +9286,9 @@ export interface AdvocateUserUpdate {
 
   /**  */
   additionalPhoneExtension?: string
+
+  /**  */
+  isApproved?: boolean
 
   /**  */
   agency: Agency
@@ -9393,11 +9414,17 @@ export interface User {
 
   /**  */
   additionalPhoneExtension?: string
+
+  /**  */
+  isApproved?: boolean
 }
 
 export interface UserFilterParams {
   /**  */
   isPortalUser?: boolean
+
+  /**  */
+  isAdvocateUser?: boolean
 }
 
 export interface PaginatedUser {
@@ -10211,6 +10238,10 @@ export enum ApplicationsFilterEnum {
   "lottery" = "lottery",
   "closed" = "closed",
   "open" = "open",
+}
+
+export enum UserOrderByKeys {
+  "isApproved" = "isApproved",
 }
 
 export enum ModificationEnum {
