@@ -31,10 +31,18 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { PaginatedAgencyDto } from '../dtos/agency/paginated-agency.dto';
 import { AgencyQueryParams } from '../dtos/agency/agency-query-params.dto';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import { AgencyFilterParams } from '../dtos/agency/agency-filter-params.dto';
 
 @Controller('agency')
 @ApiTags('agency')
-@ApiExtraModels(AgencyCreate, Agency, AgencyUpdate, IdDTO)
+@ApiExtraModels(
+  AgencyCreate,
+  Agency,
+  AgencyUpdate,
+  AgencyQueryParams,
+  AgencyFilterParams,
+  IdDTO,
+)
 @PermissionTypeDecorator('agency')
 @UseGuards(ApiKeyGuard, OptionalAuthGuard)
 export class AgencyController {

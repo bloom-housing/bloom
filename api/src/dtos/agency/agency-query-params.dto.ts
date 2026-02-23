@@ -1,13 +1,22 @@
+import { Expose, Type } from 'class-transformer';
+import { ApiPropertyOptional, getSchemaPath } from '@nestjs/swagger';
+import { ArrayMaxSize, IsArray, ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../../src/enums/shared/validation-groups-enum';
-import { Expose } from 'class-transformer';
 import { PaginationAllowsAllQueryParams } from '../shared/pagination.dto';
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsUUID } from 'class-validator';
+import { AgencyFilterParams } from './agency-filter-params.dto';
 
 export class AgencyQueryParams extends PaginationAllowsAllQueryParams {
   @Expose()
-  @ApiPropertyOptional()
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  jurisdictionId?: string;
+  @ApiPropertyOptional({
+    type: [String],
+    items: {
+      $ref: getSchemaPath(AgencyFilterParams),
+    },
+    example: { $comparison: '=', applicationSection: 'programs' },
+  })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AgencyFilterParams)
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  filter?: AgencyFilterParams[];
 }

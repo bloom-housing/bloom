@@ -3196,7 +3196,7 @@ export class AgencyService {
       /**  */
       limit?: number | "all"
       /**  */
-      jurisdictionId?: string
+      filter?: AgencyFilterParams[]
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedAgency> {
@@ -3204,11 +3204,7 @@ export class AgencyService {
       let url = basePath + "/agency"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        page: params["page"],
-        limit: params["limit"],
-        jurisdictionId: params["jurisdictionId"],
-      }
+      configs.params = { page: params["page"], limit: params["limit"], filter: params["filter"] }
 
       /** 适配ios13，get请求不允许带body */
 
@@ -8982,7 +8978,7 @@ export interface AdvocateUserCreate {
   favoriteListings?: IdDTO[]
 
   /**  */
-  agency: Agency
+  agency: IdDTO
 
   /**  */
   address: AddressUpdate
@@ -9273,7 +9269,7 @@ export interface AdvocateUserUpdate {
   additionalPhoneExtension?: string
 
   /**  */
-  agency: Agency
+  agency: IdDTO
 
   /**  */
   address: AddressUpdate
@@ -9723,6 +9719,25 @@ export interface AgencyUpdate {
 
   /**  */
   jurisdictions: IdDTO
+}
+
+export interface AgencyQueryParams {
+  /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
+  filter?: string[]
+}
+
+export interface AgencyFilterParams {
+  /**  */
+  $comparison: EnumAgencyFilterParamsComparison
+
+  /**  */
+  jurisdiction?: string
 }
 
 export interface PaginatedAgency {
@@ -10226,6 +10241,15 @@ export enum MfaType {
   "email" = "email",
 }
 export enum EnumPropertyFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "LIKE" = "LIKE",
+  "NA" = "NA",
+}
+export enum EnumAgencyFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
   "IN" = "IN",
