@@ -246,7 +246,7 @@ const FormUserManage = ({
 
     void sendInvite(() =>
       userService
-        .invite({
+        .createPartner({
           body: body,
         })
         .then(() => {
@@ -296,7 +296,7 @@ const FormUserManage = ({
 
     void updateUser(() =>
       userService
-        .update({
+        .updatePartner({
           body: body,
         })
         .then(() => {

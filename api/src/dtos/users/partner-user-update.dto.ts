@@ -1,5 +1,8 @@
-import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
+import { OmitType, ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { User } from './user.dto';
 import { Expose, Type } from 'class-transformer';
+import { UserRole } from './user-role.dto';
+import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import {
   IsArray,
   IsEmail,
@@ -9,35 +12,29 @@ import {
   MaxLength,
   ValidateIf,
 } from 'class-validator';
-import { User } from './user.dto';
-
-import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { passwordRegex } from '../../utilities/password-regex';
 import { IdDTO } from '../shared/id.dto';
 
-export class UserUpdate extends OmitType(User, [
+export class PartnerUserUpdate extends OmitType(User, [
   'createdAt',
   'updatedAt',
-  'email',
-  'mfaEnabled',
+  'userRoles',
   'passwordUpdatedAt',
   'passwordValidForDays',
-  'lastLoginAt',
-  'failedLoginAttemptsCount',
-  'confirmedAt',
-  'lastLoginAt',
-  'phoneNumberVerified',
-  'hitConfirmationURL',
-  'activeAccessToken',
-  'activeRefreshToken',
+  'passwordUpdatedAt',
   'jurisdictions',
-]) {
+] as const) {
+  /* Fields inherited from User:
+   * - firstName (inherited as required from User)
+   * - lastName (inherited as required from User)
+   * - email (inherited as required from User)
+   **/
+
   @Expose()
-  @ApiPropertyOptional()
-  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
-  @EnforceLowerCase()
-  email?: string;
+  @Type(() => UserRole)
+  @ApiProperty({ type: UserRole })
+  userRoles: UserRole;
 
   @Expose()
   @ApiPropertyOptional()
@@ -70,5 +67,5 @@ export class UserUpdate extends OmitType(User, [
   @Type(() => IdDTO)
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: IdDTO, isArray: true })
-  jurisdictions: IdDTO[];
+  jurisdictions?: IdDTO[];
 }

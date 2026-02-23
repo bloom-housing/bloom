@@ -7,6 +7,7 @@ locals {
     DB_USER             = "bloom_api"
     DB_DATABASE         = "bloom_prisma"
     DB_USE_RDS_IAM_AUTH = "1"
+    USE_AWS_SES         = "1"
   }
 }
 resource "aws_ecs_task_definition" "bloom_api" {

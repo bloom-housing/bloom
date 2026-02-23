@@ -73,7 +73,7 @@ export const littleVillageApartments: Prisma.ListingsCreateInput = {
   waitlistOpenSpots: 6,
   customMapPin: false,
   contentUpdatedAt: new Date(),
-  publishedAt: new Date(),
+  publishedAt: dayjs(new Date()).subtract(19, 'seconds').toDate(),
   listingsApplicationPickUpAddress: undefined,
   listingsApplicationDropOffAddress: undefined,
   listingsApplicationMailingAddress: undefined,
