@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { DOBField, Field, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert } from "@bloom-housing/ui-seeds"
 import {
   OnClientSide,
   PageView,
@@ -13,8 +12,11 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout, { LockIcon } from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  LockIcon,
+  onFormError,
+} from "../../../layouts/application-form"
 
 const ApplicationName = () => {
   const { profile } = useContext(AuthContext)
@@ -43,8 +45,9 @@ const ApplicationName = () => {
     }
     conductor.routeToNextOrReturnUrl()
   }
+
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
 
   const emailPresent: string = watch("applicant.emailAddress")
@@ -85,16 +88,7 @@ const ApplicationName = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"inset"}>
             <div id={"application-initial-page"}>
               <fieldset>

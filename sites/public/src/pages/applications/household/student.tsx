@@ -2,15 +2,16 @@ import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { FieldGroup, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert } from "@bloom-housing/ui-seeds"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import { isFeatureFlagOn } from "../../../lib/helpers"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
 
 const ApplicationHouseholdStudent = () => {
   const { profile } = useContext(AuthContext)
@@ -39,7 +40,7 @@ const ApplicationHouseholdStudent = () => {
   }
 
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
 
   const householdStudentValues = [
@@ -89,16 +90,7 @@ const ApplicationHouseholdStudent = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <FieldGroup
