@@ -2,6 +2,7 @@
   "application.referralApplication.instructions": "تُحال وحدات السكن الدائم المدعوم مباشرةً عبر نظام الدخول المنسق في بلومنجتون. يمكن للأسر التي تعاني من التشرد الاتصال بالرقم 123-456-7890 للتواصل مع مركز خدمة العملاء لمعرفة المزيد عن نظام الدخول المنسق والوصول إلى الموارد والمعلومات المتعلقة بالسكن.",
   "application.referralApplication.phoneNumber": "211",
   "application.review.demographics.howDidYouHearOptions.jurisdictionWebsite": "موقع الاختصاص القضائي",
+  "authentication.requestAdvocateAccount.confirmation": "سيتم الآن التحقق من حسابك من قِبل أحد المسؤولين. يُرجى توقع أن تستغرق هذه العملية 24 ساعة على الأقل. إذا كانت لديك أي استفسارات خلال هذه الفترة، يُرجى التواصل عبر البريد الإلكتروني example@email.com.",
   "faq.stillHaveQuestionsContent": "إذا لم تتمكن من العثور على الإجابة التي تبحث عنها، فيرجى التواصل مع فريق الدعم لدينا على <a className='lined' href='mailto:support@bloomingtonhousing.gov'>support@bloomingtonhousing.gov</a> أو الاطلاع على صفحة الموارد الخاصة بنا.",
   "footer.content.programQuestions": "للاستفسارات العامة عن البرنامج، يمكنك الاتصال بـ Bloomington Housing على الرقم 123-456-7890.",
   "footer.content.projectOf": "بوابة بلومنجتون للإسكان هي مشروع تابع لـ",

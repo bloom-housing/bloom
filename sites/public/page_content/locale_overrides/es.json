@@ -2,6 +2,7 @@
   "application.referralApplication.instructions": "Las unidades de vivienda permanente con apoyo se derivan directamente a través del Sistema de Entrada Coordinada de Bloomington. Las familias sin hogar pueden llamar al 123-456-7890 para conectarse con un Punto de Acceso y obtener más información sobre el sistema de entrada coordinada y acceder a recursos e información sobre vivienda.",
   "application.referralApplication.phoneNumber": "211",
   "application.review.demographics.howDidYouHearOptions.jurisdictionWebsite": "Sitio web de jurisdicción",
+  "authentication.requestAdvocateAccount.confirmation": "Tu cuenta deberá ser verificada por un administrador. Este proceso puede tardar al menos 24 horas. Si tienes alguna pregunta, escribe a example@email.com.",
   "faq.stillHaveQuestionsContent": "Si no pudo encontrar la respuesta que buscaba, comuníquese con nuestro equipo de soporte en <a className='lined' href='mailto:support@bloomingtonhousing.gov'>support@bloomingtonhousing.gov</a> o visite nuestra página de Recursos.",
   "footer.content.programQuestions": "Para consultas generales sobre el programa, puede llamar a Bloomington Housing al 123-456-7890.",
   "footer.content.projectOf": "Bloomington Housing Portal es un proyecto de la",

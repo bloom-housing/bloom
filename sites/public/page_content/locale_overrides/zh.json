@@ -2,6 +2,7 @@
   "application.referralApplication.instructions": "永久性支持住房单元由布卢明顿的协调准入系统直接推荐。无家可归的家庭可以拨打 123-456-7890 联系服务点，了解更多关于协调准入系统的信息，并获取与住房相关的资源和信息。",
   "application.referralApplication.phoneNumber": "211",
   "application.review.demographics.howDidYouHearOptions.jurisdictionWebsite": "管辖权网站",
+  "authentication.requestAdvocateAccount.confirmation": "您的账户现在需要由管理员进行验证。请预计此过程至少需要 24 小时。在此期间如有任何疑问，请联系 example@email.com。",
   "faq.stillHaveQuestionsContent": "如果您找不到想要的答案，请联系我们的支持团队<a className='lined' href='mailto:support@bloomingtonhousing.gov'>support@bloomingtonhousing.gov</a>或查看我们的资源页面。",
   "footer.content.programQuestions": "如需咨询一般项目相关事宜，请致电布卢明顿住房部门，电话号码为 123-456-7890。",
   "footer.content.projectOf": "布卢明顿住房门户网站是一个项目",

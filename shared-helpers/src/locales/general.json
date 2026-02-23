@@ -529,7 +529,6 @@
   "authentication.forgotPassword.sendEmailButton": "Send email",
   "authentication.forgotPassword.sendEmailNotes": "Please enter your email address so we can send you a password reset link. If you don’t receive an email, you may not have an account.",
   "authentication.requestAdvocateAccount.agencyError": "Error fetching agencies. Please try again. \n\nContact your housing department if you're still experiencing issues.",
-  "authentication.requestAdvocateAccount.confirmation": "Your account will now need to be verified by an administrator. Please expect this to take at least 24 hours. If you have any questions in the meantime, please reach out to example@email.com.",
   "authentication.requestAdvocateAccount.confirmationPageTitle": "Advocate request successful",
   "authentication.requestAdvocateAccount.confirmationTitle": "You have successfully requested an advocate account",
   "authentication.requestAdvocateAccount.unapprovedError": "This email is still awaiting account approval. Contact us for more information.",

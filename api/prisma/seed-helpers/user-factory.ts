@@ -80,8 +80,8 @@ export const userFactory = async (optionalParams?: {
         },
       }
     : undefined,
-  isAdvocate: optionalParams?.isAdvocate || false,
-  isApproved: optionalParams?.isAdvocate ? true : undefined,
+  isAdvocate: optionalParams?.isAdvocate,
+  isApproved: optionalParams?.isAdvocate,
   agency: optionalParams?.agencyId
     ? {
         connect: {
