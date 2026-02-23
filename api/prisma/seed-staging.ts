@@ -457,6 +457,12 @@ export const stagingSeed = async (
       raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
     }),
   });
+  await agencyFactory(
+    angelopolisJurisdiction.id,
+    prismaClient,
+    5,
+    'Angelopolis',
+  );
   // create super admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
@@ -582,6 +588,20 @@ export const stagingSeed = async (
         angelopolisJurisdiction.id,
       ],
       acceptedTerms: true,
+    }),
+  });
+  const agency = await prismaClient.agency.findFirst({
+    where: {
+      jurisdictionsId: angelopolisJurisdiction.id,
+    },
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      email: 'advocate@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [angelopolisJurisdiction.id],
+      isAdvocate: true,
+      agencyId: agency.id,
     }),
   });
   // add jurisdiction specific translations and default ones
@@ -863,12 +883,7 @@ export const stagingSeed = async (
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await reservedCommunityTypeFactoryAll(mainJurisdiction.id, prismaClient);
-  await agencyFactory(
-    angelopolisJurisdiction.id,
-    prismaClient,
-    5,
-    'Angelopolis',
-  );
+
   // list of predefined listings WARNING: images only work if image setup is cloudinary on exygy account
   const listingsToCreate: Parameters<typeof listingFactory>[] = [
     [

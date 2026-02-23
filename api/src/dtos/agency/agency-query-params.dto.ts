@@ -12,7 +12,6 @@ export class AgencyQueryParams extends PaginationAllowsAllQueryParams {
     items: {
       $ref: getSchemaPath(AgencyFilterParams),
     },
-    example: { $comparison: '=', applicationSection: 'programs' },
   })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })

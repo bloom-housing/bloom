@@ -21,6 +21,8 @@ export const userFactory = async (optionalParams?: {
   lastLoginAt?: Date;
   wasWarnedOfDeletion?: boolean;
   language?: LanguagesEnum;
+  isAdvocate?: boolean;
+  agencyId?: string;
 }): Promise<Prisma.UserAccountsCreateInput> => ({
   agreedToTermsOfService: optionalParams?.acceptedTerms || false,
   confirmedAt: optionalParams?.confirmedAt || null,
@@ -75,6 +77,15 @@ export const userFactory = async (optionalParams?: {
           isPartner: optionalParams?.roles?.isPartner || false,
           isSuperAdmin: optionalParams?.roles?.isSuperAdmin || false,
           isSupportAdmin: optionalParams?.roles?.isSupportAdmin || false,
+        },
+      }
+    : undefined,
+  isAdvocate: optionalParams?.isAdvocate || false,
+  isApproved: optionalParams?.isAdvocate ? true : undefined,
+  agency: optionalParams?.agencyId
+    ? {
+        connect: {
+          id: optionalParams.agencyId,
         },
       }
     : undefined,

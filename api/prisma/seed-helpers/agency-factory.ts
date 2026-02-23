@@ -9,7 +9,6 @@ export const agencyFactory = async (
 ) => {
   await prismaClient.agency.createMany({
     data: [...Array(numberToCreate)].map(() => {
-      console.log('item');
       return {
         name: `${randomName()}${
           jurisdictionName ? ` - ${jurisdictionName}` : ''
