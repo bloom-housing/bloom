@@ -3195,6 +3195,8 @@ export class AgencyService {
       page?: number
       /**  */
       limit?: number | "all"
+      /**  */
+      jurisdictionId?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedAgency> {
@@ -3202,7 +3204,11 @@ export class AgencyService {
       let url = basePath + "/agency"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { page: params["page"], limit: params["limit"] }
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        jurisdictionId: params["jurisdictionId"],
+      }
 
       /** 适配ios13，get请求不允许带body */
 
@@ -3232,7 +3238,7 @@ export class AgencyService {
     })
   }
   /**
-   * Updates an exiting agency entry in the database
+   * Updates an existing agency entry in the database
    */
   update(
     params: {
@@ -3256,7 +3262,7 @@ export class AgencyService {
   /**
    * Deletes an agency entry from the database by its ID
    */
-  deletes(
+  delete(
     params: {
       /** requestBody */
       body?: IdDTO
@@ -7576,19 +7582,16 @@ export interface ListingFeaturesConfiguration {
 }
 
 export interface RaceEthnicitySubOption {
-  /** The unique identifier for this suboption */
+  /**  */
   id: string
 
-  /** Whether this suboption allows free text input for "other" selection */
+  /**  */
   allowOtherText?: boolean
 }
 
 export interface RaceEthnicityOption {
-  /** The unique identifier for this option */
+  /**  */
   id: string
-
-  /** Whether this option has suboptions (like Asian with specific ethnicities) */
-  hasSubOptions?: boolean
 
   /** The list of suboptions if this option has them */
   subOptions?: RaceEthnicitySubOption[]

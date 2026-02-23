@@ -40,6 +40,7 @@ import { littleVillageApartments } from './seed-helpers/listing-data/little-vill
 import { elmVillage } from './seed-helpers/listing-data/elm-village';
 import { lakeviewVilla } from './seed-helpers/listing-data/lakeview-villa';
 import { sunshineFlats } from './seed-helpers/listing-data/sunshine-flats';
+import { agencyFactory } from './seed-helpers/agency-factory';
 
 export const defaultRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
   options: [
@@ -862,6 +863,12 @@ export const stagingSeed = async (
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await reservedCommunityTypeFactoryAll(mainJurisdiction.id, prismaClient);
+  await agencyFactory(
+    angelopolisJurisdiction.id,
+    prismaClient,
+    5,
+    'Angelopolis',
+  );
   // list of predefined listings WARNING: images only work if image setup is cloudinary on exygy account
   const listingsToCreate: Parameters<typeof listingFactory>[] = [
     [
