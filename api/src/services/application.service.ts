@@ -1304,15 +1304,18 @@ export class ApplicationService {
       return { success: false };
     }
 
-    //TODO (Advocate): Update this to something like application?.alternateContact?.isAdvocate
-    const isAdvocate = false;
+    const alternateContactEmail = application.alternateContact?.emailAddress;
+    const advocateUserAccount = alternateContactEmail
+      ? await this.prisma.userAccounts.findUnique({
+          select: { isAdvocate: true },
+          where: { email: alternateContactEmail },
+        })
+      : null;
+
+    const isAdvocate = advocateUserAccount?.isAdvocate ?? false;
     const applicantEmail = application?.applicant?.emailAddress;
 
-    if (
-      !isAdvocate &&
-      !applicantEmail &&
-      !application?.alternateContact?.emailAddress
-    ) {
+    if (!isAdvocate && !applicantEmail && !alternateContactEmail) {
       return { success: false };
     }
 

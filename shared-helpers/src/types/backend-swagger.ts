@@ -7576,19 +7576,16 @@ export interface ListingFeaturesConfiguration {
 }
 
 export interface RaceEthnicitySubOption {
-  /** The unique identifier for this suboption */
+  /**  */
   id: string
 
-  /** Whether this suboption allows free text input for "other" selection */
+  /**  */
   allowOtherText?: boolean
 }
 
 export interface RaceEthnicityOption {
-  /** The unique identifier for this option */
+  /**  */
   id: string
-
-  /** Whether this option has suboptions (like Asian with specific ethnicities) */
-  hasSubOptions?: boolean
 
   /** The list of suboptions if this option has them */
   subOptions?: RaceEthnicitySubOption[]
@@ -9393,6 +9390,9 @@ export interface User {
 
   /**  */
   additionalPhoneExtension?: string
+
+  /**  */
+  isAdvocate?: boolean
 }
 
 export interface UserFilterParams {
