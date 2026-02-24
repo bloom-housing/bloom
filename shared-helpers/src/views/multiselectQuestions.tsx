@@ -317,7 +317,11 @@ export const getCheckboxOption = (
   trigger?: UseFormMethods["trigger"],
   exclusiveKeys?: string[]
 ) => {
-  const optionFieldName = fieldName(question.text, applicationSection, option.text)
+  const optionFieldName = fieldName(
+    question.name || question.text,
+    applicationSection,
+    option.name || options.text
+  )
   const checkboxField = getCheckboxField(
     option,
     question,
@@ -358,7 +362,11 @@ export const getRadioOption = (
   errors?: UseFormMethods["errors"],
   trigger?: UseFormMethods["trigger"]
 ) => {
-  const optionFieldName = fieldName(question.text, applicationSection, option.text)
+  const optionFieldName = fieldName(
+    question.name || question.text,
+    applicationSection,
+    option.name || option.text
+  )
   const radioField = getRadioField(
     option,
     register,

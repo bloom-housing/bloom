@@ -39,6 +39,7 @@ export interface ApplicationMultiselectQuestionStepProps {
     subTitle?: string
   }
   swapCommunityTypeWithPrograms: boolean
+  enableV2MSQ: boolean
 }
 
 export const getMultiselectStepTitle = (
@@ -61,6 +62,7 @@ const ApplicationMultiselectQuestionStep = ({
   applicationSectionNumber,
   strings,
   swapCommunityTypeWithPrograms,
+  enableV2MSQ
 }: ApplicationMultiselectQuestionStepProps) => {
   const [verifyAddress, setVerifyAddress] = useState(false)
   const [verifyAddressStep, setVerifyAddressStep] = useState(0)
@@ -78,6 +80,7 @@ const ApplicationMultiselectQuestionStep = ({
   )
   const question = getPageQuestion(questions, page)
 
+  // TODO: this needs to be hoisted to question level for MSQV2
   const questionSetInputType = getInputType(question?.options)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -294,7 +297,7 @@ const ApplicationMultiselectQuestionStep = ({
                 <legend className="text__caps-spaced mb-4 sr-only">{question?.text}</legend>
                 {applicationSection === MultiselectQuestionsApplicationSectionEnum.preferences && (
                   <div className="mb-6">
-                    <p className="text__caps-spaced m-0">{question?.text}</p>
+                    <p className="text__caps-spaced m-0">{question?.name || question?.text}</p>
                     {question?.description && (
                       <p className="field-note mt-3">{question?.description}</p>
                     )}
