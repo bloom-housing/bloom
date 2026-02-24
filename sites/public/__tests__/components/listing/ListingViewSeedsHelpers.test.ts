@@ -642,9 +642,7 @@ describe("ListingViewSeedsHelpers", () => {
 
       const result = getMarketingFlyers(mockListing, mockJurisdiction)
       expect(result).toHaveLength(1)
-      expect(result[0].url).toBe(
-        "https://res.cloudinary.com/undefined/image/upload/test-file-id.pdf"
-      )
+      expect(result[0].url).toBe("https://res.cloudinary.com/exygy/image/upload/test-file-id.pdf")
     })
 
     it("should return empty array when no flyers exist", () => {
@@ -791,7 +789,7 @@ describe("ListingViewSeedsHelpers", () => {
       const result = getBuildingSelectionCriteria(mockListing)
 
       expect(result.props.children.props.href).toEqual(
-        "https://res.cloudinary.com/undefined/image/upload/test-file-id.pdf"
+        "https://res.cloudinary.com/exygy/image/upload/test-file-id.pdf"
       )
     })
 

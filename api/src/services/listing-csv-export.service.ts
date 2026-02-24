@@ -97,8 +97,16 @@ export const formatCommunityType = {
   schoolEmployee: 'School Employee',
 };
 
+const cloudinaryCloudName = (): string | undefined => {
+  return process.env.CLOUDINARY_CLOUD_NAME || process.env.cloudinaryCloudName;
+};
+
 export const formatCloudinaryPdfUrl = (fileId: string): string => {
-  return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${fileId}.pdf`;
+  const configuredCloudName = cloudinaryCloudName();
+  if (!configuredCloudName) {
+    return fileId;
+  }
+  return `https://res.cloudinary.com/${configuredCloudName}/image/upload/${fileId}.pdf`;
 };
 
 @Injectable()
