@@ -110,7 +110,7 @@ const Edit = () => {
     const { firstName, middleName, lastName } = data
     setNameAlert(null)
     try {
-      const newUser = await userService.update({
+      const newUser = await userService.updatePublic({
         body: { ...user, firstName, middleName, lastName },
       })
       setUser(newUser)
@@ -128,7 +128,7 @@ const Edit = () => {
     const { dateOfBirth } = data
     setDobAlert(null)
     try {
-      const newUser = await userService.update({
+      const newUser = await userService.updatePublic({
         body: {
           ...user,
           dob: dayjs(
@@ -151,7 +151,7 @@ const Edit = () => {
     const { email } = data
     setEmailAlert(null)
     try {
-      const newUser = await userService.update({
+      const newUser = await userService.updatePublic({
         body: {
           ...user,
           appUrl: window.location.origin,
@@ -188,7 +188,7 @@ const Edit = () => {
       return
     }
     try {
-      const newUser = await userService.update({
+      const newUser = await userService.updatePublic({
         body: { ...user, password, currentPassword },
       })
       setUser(newUser)
@@ -237,60 +237,63 @@ const Edit = () => {
                 </AlertBox>
               )}
               <Form id="update-name" onSubmit={nameHandleSubmit(onNameSubmit)}>
-                <label className={styles["account-settings-label"]} htmlFor="firstName">
-                  {t("application.name.yourName")}
-                </label>
-                <Field
-                  label={t("application.contact.givenName")}
-                  className="my-3"
-                  controlClassName="mt-2"
-                  name="firstName"
-                  error={nameErrors.firstName}
-                  validation={{ maxLength: 64 }}
-                  errorMessage={
-                    nameErrors.firstName?.type === "maxLength"
-                      ? t("errors.maxLength", { length: 64 })
-                      : t("errors.firstNameError")
-                  }
-                  register={nameRegister}
-                  defaultValue={user ? user.firstName : null}
-                  dataTestId={"account-first-name"}
-                />
+                <fieldset>
+                  <legend className={styles["account-settings-label"]}>
+                    {t("application.name.yourName")}
+                  </legend>
+                  <Field
+                    label={t("application.contact.givenName")}
+                    className="my-3"
+                    controlClassName="mt-2"
+                    name="firstName"
+                    error={nameErrors.firstName}
+                    validation={{ maxLength: 64 }}
+                    errorMessage={
+                      nameErrors.firstName?.type === "maxLength"
+                        ? t("errors.maxLength", { length: 64 })
+                        : t("errors.firstNameError")
+                    }
+                    register={nameRegister}
+                    defaultValue={user ? user.firstName : null}
+                    dataTestId={"account-first-name"}
+                  />
 
-                <Field
-                  name="middleName"
-                  className="mb-3"
-                  register={nameRegister}
-                  defaultValue={user ? user?.middleName : null}
-                  label={t("application.name.middleNameOptional")}
-                  error={nameErrors.middleName}
-                  validation={{ maxLength: 64 }}
-                  errorMessage={t("errors.maxLength", { length: 64 })}
-                  dataTestId={"account-middle-name"}
-                />
+                  <Field
+                    name="middleName"
+                    className="mb-3"
+                    register={nameRegister}
+                    defaultValue={user ? user?.middleName : null}
+                    label={t("application.name.middleNameOptional")}
+                    error={nameErrors.middleName}
+                    validation={{ maxLength: 64 }}
+                    errorMessage={t("errors.maxLength", { length: 64 })}
+                    dataTestId={"account-middle-name"}
+                  />
 
-                <Field
-                  name="lastName"
-                  placeholder={t("application.name.lastName")}
-                  className="mb-6"
-                  error={nameErrors.lastName}
-                  register={nameRegister}
-                  defaultValue={user ? user.lastName : null}
-                  label={t("application.contact.familyName")}
-                  validation={{ maxLength: 64 }}
-                  errorMessage={
-                    nameErrors.lastName?.type === "maxLength"
-                      ? t("errors.maxLength", { length: 64 })
-                      : t("errors.lastNameError")
-                  }
-                  dataTestId={"account-last-name"}
-                />
+                  <Field
+                    name="lastName"
+                    placeholder={t("application.name.lastName")}
+                    className="mb-6"
+                    error={nameErrors.lastName}
+                    register={nameRegister}
+                    defaultValue={user ? user.lastName : null}
+                    label={t("application.contact.familyName")}
+                    validation={{ maxLength: 64 }}
+                    errorMessage={
+                      nameErrors.lastName?.type === "maxLength"
+                        ? t("errors.maxLength", { length: 64 })
+                        : t("errors.lastNameError")
+                    }
+                    dataTestId={"account-last-name"}
+                  />
+                </fieldset>
                 <Button
                   type="submit"
                   size="sm"
                   variant="primary-outlined"
                   loadingMessage={nameLoading ? t("t.loading") : undefined}
                   id={"account-submit-name"}
+                  ariaLabel={`${t("account.settings.update")} ${t("application.name.yourName")}`}
                 >
                   {t("account.settings.update")}
                 </Button>
@@ -334,6 +337,9 @@ const Edit = () => {
                   className="mt-6"
                   loadingMessage={birthdateLoading ? t("t.loading") : undefined}
                   id={"account-submit-dob"}
+                  ariaLabel={`${t("account.settings.update")} ${t(
+                    "application.name.yourDateOfBirth"
+                  )}`}
                 >
                   {t("account.settings.update")}
                 </Button>
@@ -375,6 +381,9 @@ const Edit = () => {
                   variant="primary-outlined"
                   loadingMessage={emailLoading ? t("t.loading") : undefined}
                   id={"account-submit-email"}
+                  ariaLabel={`${t("account.settings.update")} ${t(
+                    "application.name.yourEmailAddress"
+                  )}`}
                 >
                   {t("account.settings.update")}
                 </Button>
@@ -455,6 +464,9 @@ const Edit = () => {
                     variant="primary-outlined"
                     loadingMessage={passwordLoading ? t("t.loading") : undefined}
                     id={"account-submit-password"}
+                    ariaLabel={`${t("account.settings.update")} ${t(
+                      "authentication.createAccount.password"
+                    )}`}
                   >
                     {t("account.settings.update")}
                   </Button>

@@ -9,6 +9,7 @@ organization. The guide is broken down into a series of files that should be fol
 4. [Fork the Bloom Repo](./4_fork_bloom_repo.md)
 5. [Apply Deployer Permission Set Tofu Modules](./5_apply_deployer_permission_set_tofu_modules.md)
 6. [Apply Bloom Deployment Tofu Modules](./6_apply_bloom_deployment_tofu_modules.md) (you are here)
+7. [Operations Playbook](./7_operations_playbook.md)
 
 The steps in this file create the following resources (the OpenTofu files in
 [bloom_deployment](../tofu_importable_modules/bloom_deployment) fully describe all resources that
@@ -132,7 +133,7 @@ graph TB
        "eligible" = "ELIGIBLE"
        "status" = tolist([])
      }
-     "validation_dns_recods" = toset([
+     "validation_dns_records" = toset([
        {
          "domain_name" = "core-dev.bloomhousing.dev"
          "resource_record_name" = "_4b8c99d969da11b1e35c36786a74b6fe.core-dev.bloomhousing.dev."
@@ -155,9 +156,11 @@ graph TB
    docker run --rm -it ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra:gitsha-SOMESHA bloom_dev apply
    ```
 
-   The output will include a `aws_lb_dns_name`. DNS CNAME records
-   need to be added that point to the load balancer DNS name. For example, the following records
-   need to be added for the following output:
+4. Add DNS records for the public and partner site URLs:
+
+   The `tofu apply` command from step 3 will output a `aws_lb_dns_name`. DNS CNAME records need to
+   be added that point to the load balancer DNS name. For example, the following records need to be
+   added for the following output:
 
    Type | Name | Content
    ---|---|---
@@ -168,6 +171,68 @@ graph TB
    Outputs:
 
    aws_lb_dns_name = "bloom-1787634238.us-west-2.elb.amazonaws.com"
+   ```
+
+5. Validate the AWS SES identities:
+
+   The `tofu apply` command from step 3 will output the validation instructions for each email
+   address or domain configured in the `ses_identities` parameter in the `module
+   "bloom_deployment"`.
+
+   SES starts in sandbox mode in new AWS accounts:
+   https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html. For the Bloom dev
+   environment, this is not necessarily an issue that prevents basic email testing. Mail can be sent
+   to any validated SES identities (either individual email accounts or entire domains).
+
+   Individual emails are validated by clicking an email validation link AWS sends in an email with
+   subject like 'Amazon Web Services - Email Address Verification Request in region...'.
+
+   Domains are validated by publishing a set of DNS records. Add the required CNAME records in your
+   DNS provider then wait for AWS to validate the identity (can take a few minutes).
+
+   For example, the following records need to be added for the following output:
+
+   Type | Name | Content
+   ---|---|---
+   CNAME | ozqvewxzofhgs6diy4cl264nl32y4tyh._domainkey.exygy.dev | ozqvewxzofhgs6diy4cl264nl32y4tyh.dkim.amazonses.com
+   CNAME | 634camib7loz4rj2iqxynvvnhqyldflc._domainkey.exygy.dev | 634camib7loz4rj2iqxynvvnhqyldflc.dkim.amazonses.com
+   CNAME | exnsjhrdx7tfmjqoguid3uaew3o4pj5v._domainkey.exygy.dev | exnsjhrdx7tfmjqoguid3uaew3o4pj5v.dkim.amazonses.com
+
+   ```
+   Outputs:
+
+   ses_details = [
+     {
+       "identity" = "avritt.rohwer@exygy.com"
+       "validation_dns_records" = null /* tuple */
+       "verification_instructions" = "Use email verification (click link in email to this address with subject 'Amazon Web Services - Email Address Verification Request in region...')"
+       "verification_status" = "SUCCESS"
+       "verified_for_sending_status" = true
+     },
+     {
+       "identity" = "exygy.dev"
+       "validation_dns_records" = [
+         {
+           "record_name" = "ozqvewxzofhgs6diy4cl264nl32y4tyh._domainkey.exygy.dev"
+           "record_type" = "CNAME"
+           "record_value" = "ozqvewxzofhgs6diy4cl264nl32y4tyh.dkim.amazonses.com"
+         },
+         {
+           "record_name" = "634camib7loz4rj2iqxynvvnhqyldflc._domainkey.exygy.dev"
+           "record_type" = "CNAME"
+           "record_value" = "634camib7loz4rj2iqxynvvnhqyldflc.dkim.amazonses.com"
+         },
+         {
+           "record_name" = "exnsjhrdx7tfmjqoguid3uaew3o4pj5v._domainkey.exygy.dev"
+           "record_type" = "CNAME"
+           "record_value" = "exnsjhrdx7tfmjqoguid3uaew3o4pj5v.dkim.amazonses.com"
+         },
+       ]
+       "verification_instructions" = "Add the validation_dns_records in your DNS provider settings."
+       "verification_status" = "SUCCESS"
+       "verified_for_sending_status" = true
+     },
+   ]
    ```
 
 ### 2. Deploy prod
@@ -202,7 +267,7 @@ graph TB
        "eligible" = "ELIGIBLE"
        "status" = tolist([])
      }
-     "validation_dns_recods" = toset([
+     "validation_dns_records" = toset([
        {
          "domain_name" = "core-prod.bloomhousing.dev"
          "resource_record_name" = "_BLAH.core-prod.bloomhousing.dev."
@@ -225,9 +290,11 @@ graph TB
    docker run --rm -it ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra:gitsha-SOMESHA bloom_prod apply
    ```
 
-   The output will include a `aws_lb_dns_name`. DNS CNAME records
-   need to be added that point to the load balancer DNS name. For example, the following records
-   need to be added for the following output:
+4. Add DNS records for the public and partner site URLs:
+
+   The `tofu apply` command from step 3 will output a `aws_lb_dns_name`. DNS CNAME records need to be
+   added that point to the load balancer DNS name. For example, the following records need to be
+   added for the following output:
 
    Type | Name | Content
    ---|---|---
@@ -238,6 +305,64 @@ graph TB
    Outputs:
 
    aws_lb_dns_name = "bloom-1787634238.us-west-2.elb.amazonaws.com"
+   ```
+
+5. Validate the AWS SES identities:
+
+   The `tofu apply` command from step 3 will output the validation instructions for each email
+   address or domain configured in the `ses_identities` parameter in the `module
+   "bloom_deployment"`.
+
+   SES starts in sandbox mode in new AWS accounts:
+   https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html. Follow the AWS
+   instructions to take SES out of sandbox mode. Follow the quota request instructions at
+   https://docs.aws.amazon.com/ses/latest/dg/manage-sending-quotas-request-increase.html to request
+   a sending quota and sending rate required by your Bloom deployment.
+
+   Individual emails are validated by clicking an email validation link AWS sends in an email with
+   subject like 'Amazon Web Services - Email Address Verification Request in region...'. If using
+   a no-reply email address that does not receive email, you must either give it an inbox first then
+   validate in AWS or use domain validation.
+
+   Domains are validated by publishing a set of DNS records. Add the required CNAME records in your
+   DNS provider then wait for AWS to validate the identity (can take a few minutes).
+
+   For example, the following records need to be added for the following output:
+
+   Type | Name | Content
+   ---|---|---
+   CNAME | ozqvewxzofhgs6diy4cl264nl32y4tyh._domainkey.exygy.dev | ozqvewxzofhgs6diy4cl264nl32y4tyh.dkim.amazonses.com
+   CNAME | 634camib7loz4rj2iqxynvvnhqyldflc._domainkey.exygy.dev | 634camib7loz4rj2iqxynvvnhqyldflc.dkim.amazonses.com
+   CNAME | exnsjhrdx7tfmjqoguid3uaew3o4pj5v._domainkey.exygy.dev | exnsjhrdx7tfmjqoguid3uaew3o4pj5v.dkim.amazonses.com
+
+   ```
+   Outputs:
+
+   ses_details = [
+     {
+       "identity" = "exygy.dev"
+       "validation_dns_records" = [
+         {
+           "record_name" = "ozqvewxzofhgs6diy4cl264nl32y4tyh._domainkey.exygy.dev"
+           "record_type" = "CNAME"
+           "record_value" = "ozqvewxzofhgs6diy4cl264nl32y4tyh.dkim.amazonses.com"
+         },
+         {
+           "record_name" = "634camib7loz4rj2iqxynvvnhqyldflc._domainkey.exygy.dev"
+           "record_type" = "CNAME"
+           "record_value" = "634camib7loz4rj2iqxynvvnhqyldflc.dkim.amazonses.com"
+         },
+         {
+           "record_name" = "exnsjhrdx7tfmjqoguid3uaew3o4pj5v._domainkey.exygy.dev"
+           "record_type" = "CNAME"
+           "record_value" = "exnsjhrdx7tfmjqoguid3uaew3o4pj5v.dkim.amazonses.com"
+         },
+       ]
+       "verification_instructions" = "Add the validation_dns_records in your DNS provider settings."
+       "verification_status" = "SUCCESS"
+       "verified_for_sending_status" = true
+     },
+   ]
    ```
 
 ### 3. (Optional) Create a VPC peering connection to an existing VPC
@@ -303,5 +428,9 @@ the existing VPC. To create the VPC peering:
 ## After these steps
 
 1. Your dev Bloom deployment should be accessible:
-   - public site: `https://<YOUR_DOMAIN>
-   - partners site: `https://partners.<YOUR_DOMAIN>
+   - public site: `https://<YOUR_DEV_DOMAIN>`
+   - partners site: `https://partners.<YOUR_DEV_DOMAIN>`
+
+2. Your prod Bloom deployment should be accessible:
+   - public site: `https://<YOUR_PROD_DOMAIN>`
+   - partners site: `https://partners.<YOUR_PROD_DOMAIN>`

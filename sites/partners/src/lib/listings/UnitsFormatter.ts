@@ -60,6 +60,14 @@ export default class UnitsFormatter extends Formatter {
 
       delete unit.tempId
 
+      // remove unnecessary ami chart fields for listing editing
+      if (unit.amiChart) {
+        delete unit.amiChart.items
+        delete unit.amiChart.jurisdictions
+        delete unit.createdAt
+        delete unit.updatedAt
+      }
+
       return unit
     })
   }

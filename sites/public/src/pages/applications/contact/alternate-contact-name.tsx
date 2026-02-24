@@ -9,7 +9,11 @@ import FormsLayout from "../../../layouts/forms"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout, { LockIcon } from "../../../layouts/application-form"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  LockIcon,
+  onFormError,
+} from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationAlternateContactName = () => {
@@ -39,7 +43,7 @@ const ApplicationAlternateContactName = () => {
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
 
   useEffect(() => {
@@ -80,16 +84,7 @@ const ApplicationAlternateContactName = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="text__caps-spaced">
@@ -128,14 +123,16 @@ const ApplicationAlternateContactName = () => {
                 register={register}
                 dataTestId={"app-alternate-last-name"}
               />
-              {application.alternateContact.type === "caseManager" && (
-                <div className="mt-6">
-                  <p className="text__caps-spaced">
+            </fieldset>
+            {application.alternateContact.type === "caseManager" && (
+              <div className="mt-6">
+                <fieldset>
+                  <legend className="text__caps-spaced">
                     <LockIcon locked={isAdvocate} />
                     {enableHousingAdvocate
                       ? t("application.alternateContact.name.caseManagerAgencyFormLabelAdvocate")
                       : t("application.alternateContact.name.caseManagerAgencyFormLabel")}
-                  </p>
+                  </legend>
                   <Field
                     id="agency"
                     name="agency"
@@ -150,9 +147,9 @@ const ApplicationAlternateContactName = () => {
                     register={register}
                     dataTestId={"app-alternate-type"}
                   />
-                </div>
-              )}
-            </fieldset>
+                </fieldset>
+              </div>
+            )}
           </CardSection>
         </ApplicationFormLayout>
       </Form>

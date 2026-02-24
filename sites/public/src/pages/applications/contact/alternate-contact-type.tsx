@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { Field, Form, t } from "@bloom-housing/ui-components"
 import {
@@ -15,8 +15,10 @@ import FormsLayout from "../../../layouts/forms"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
 
 const ApplicationAlternateContactType = () => {
   const { profile } = useContext(AuthContext)
@@ -44,7 +46,7 @@ const ApplicationAlternateContactType = () => {
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
   const type = watch("type", application.alternateContact.type)
   const getOptionLabel = (option: string) => {
@@ -84,16 +86,7 @@ const ApplicationAlternateContactType = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className={`text__caps-spaced ${errors?.type ? "text-alert" : ""}`}>

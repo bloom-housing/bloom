@@ -36,7 +36,6 @@ import { UnitRentTypeUpdate } from '../../../src/dtos/unit-rent-types/unit-rent-
 import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
 import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
 import { multiselectQuestionFactory } from '../../../prisma/seed-helpers/multiselect-question-factory';
-import { UserUpdate } from '../../../src/dtos/users/user-update.dto';
 import { EmailAndAppUrl } from '../../../src/dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../../../src/dtos/users/confirmation-request.dto';
 import { UserService } from '../../../src/services/user.service';
@@ -63,6 +62,7 @@ import {
   createSimpleListing,
 } from './helpers';
 import { featureFlagFactory } from '../../../prisma/seed-helpers/feature-flag-factory';
+import { PublicUserUpdate } from '../../../src/dtos/users/public-user-update.dto';
 
 const testEmailService = {
   confirmation: jest.fn(),
@@ -873,13 +873,13 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/user/${userA.id}`)
+        .put(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,
           firstName: 'New User First Name',
           lastName: 'New User Last Name',
-        } as UserUpdate)
+        } as PublicUserUpdate)
         .set('Cookie', cookies)
         .expect(200);
 
@@ -1000,7 +1000,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
       });
 
       await request(app.getHttpServer())
-        .post(`/user/`)
+        .post(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildUserCreateMock(jurisdictionId, 'publicUser+admin@email.com'))
         .set('Cookie', cookies)
@@ -1009,7 +1009,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
 
     it('should succeed for partner create endpoint & create an activity log entry', async () => {
       const res = await request(app.getHttpServer())
-        .post(`/user/invite`)
+        .post(`/user/partner`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildUserInviteMock(jurisdictionId, 'partnerUser+admin@email.com'),

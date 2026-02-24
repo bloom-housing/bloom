@@ -1,23 +1,37 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { Field, Form, t, AlertBox, Select } from "@bloom-housing/ui-components"
+import { Agency } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import dayjs from "dayjs"
-import customParseFormat from "dayjs/plugin/customParseFormat"
-dayjs.extend(customParseFormat)
-import { PageView, pushGtmEvent, BloomCard, emailRegex } from "@bloom-housing/shared-helpers"
+import {
+  PageView,
+  pushGtmEvent,
+  BloomCard,
+  emailRegex,
+  AuthContext,
+} from "@bloom-housing/shared-helpers"
+import { fetchAgencies, fetchJurisdictionByName } from "../lib/hooks"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 import accountCardStyles from "./account/account.module.scss"
 import styles from "../../styles/create-account.module.scss"
 
-const CreateAdvocateAccount = () => {
+interface CreateAdvocateAccountProps {
+  agencies: Agency[]
+}
+
+const CreateAdvocateAccount = ({ agencies }: CreateAdvocateAccountProps) => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const [requestError, setRequestError] = useState<string>()
-  const [loading] = useState(false)
+  const [submitLoading, setSubmitLoading] = useState(false)
+
+  const { createAdvocateUser } = useContext(AuthContext)
+  const router = useRouter()
+
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
@@ -26,9 +40,31 @@ const CreateAdvocateAccount = () => {
     })
   }, [])
 
-  const onSubmit = (data) => {
-    console.log(data)
-    // TODO
+  const onSubmit = async (data) => {
+    setSubmitLoading(true)
+    try {
+      await createAdvocateUser({
+        ...data,
+        agency: { id: data.agency },
+      })
+      await router.push("create-advocate-account-confirmation")
+    } catch (err) {
+      setSubmitLoading(false)
+      const { status, data } = err.response || {}
+      console.error(err)
+      if (status === 400) {
+        setRequestError(`${t(`authentication.createAccount.errors.${data.message}`)}`)
+      } else if (status === 409) {
+        if (err.response?.data?.message === "advocateNeedsApproval") {
+          setRequestError(`${t("authentication.requestAdvocateAccount.unapprovedError")}`)
+        } else {
+          setRequestError(`${t("authentication.createAccount.errors.emailInUse")}`)
+        }
+      } else {
+        setRequestError(`${t("authentication.createAccount.errors.generic")}`)
+      }
+      window.scrollTo(0, 0)
+    }
   }
 
   return (
@@ -107,7 +143,6 @@ const CreateAdvocateAccount = () => {
               <Select
                 id="agency"
                 name="agency"
-                defaultValue={"test1"}
                 validation={{ required: true }}
                 error={errors?.agency}
                 errorMessage={t("errors.requiredFieldError")}
@@ -116,9 +151,13 @@ const CreateAdvocateAccount = () => {
                 labelClassName={styles["create-account-field"]}
                 label={t("advocateAccount.agencyLabel")}
                 options={[
-                  { label: "Test 1", value: "test1" },
-                  { label: "Test 2", value: "test2" },
-                  { label: "Test 3", value: "test3" },
+                  { value: "", label: "" },
+                  ...agencies.map((agency) => ({
+                    id: agency.id,
+                    label: agency.name,
+                    value: agency.id,
+                    dataTestId: agency.name,
+                  })),
                 ]}
                 dataTestId={"agency"}
                 subNote={t("advocateAccount.agencyNotListed")}
@@ -146,9 +185,9 @@ const CreateAdvocateAccount = () => {
               <Button
                 type="submit"
                 variant="primary"
-                loadingMessage={loading ? t("t.loading") : undefined}
+                loadingMessage={submitLoading ? t("t.loading") : undefined}
               >
-                {t("account.createAccount")}
+                {t("advocateAccount.requestAccountTitle")}
               </Button>
             </CardSection>
             <CardSection
@@ -170,3 +209,13 @@ const CreateAdvocateAccount = () => {
 }
 
 export default CreateAdvocateAccount
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getServerSideProps(context: { req: any; query: any }) {
+  const jurisdiction = await fetchJurisdictionByName(context.req)
+  const agencies = await fetchAgencies(context.req, jurisdiction?.id)
+
+  return {
+    props: { jurisdiction, agencies: agencies.items || [] },
+  }
+}

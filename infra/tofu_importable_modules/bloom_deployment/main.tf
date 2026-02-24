@@ -73,6 +73,10 @@ variable "vpc_peering_settings" {
     error_message = "CIDR range in peered VPC must be in the RFC 1918 private IP space."
   }
 }
+variable "ses_identities" {
+  type        = list(string)
+  description = "SES email identities to create. Can either be individual email addresses or domains. If SES in this Bloom deployment will not be taken out of sandbox mode, identities for both sender and receiver email address must be validated for email to be succefully delivered."
+}
 variable "high_availability" {
   type        = bool
   description = "Deploy the Bloom services in a highly-available manner. If true, a minimum of 2 instances will be running for each Bloom service."
@@ -144,7 +148,7 @@ variable "bloom_dbinit_image" {
 }
 variable "bloom_dbinit_run_number" {
   type        = number
-  description = "The run number is used to trigger additional runs of the dbinit procoess. The dbinit process will not be re-triggered unless the run number is changed."
+  description = "The run number is used to trigger additional runs of the dbinit process. The dbinit process will not be re-triggered unless the run number is changed."
   default     = 1
 }
 
@@ -155,7 +159,7 @@ variable "bloom_dbseed_image" {
 }
 variable "bloom_dbseed_run_number" {
   type        = number
-  description = "The run number is used to trigger additional runs of the dbseed procoess. The dbseed process will not be re-triggered unless the run number is changed."
+  description = "The run number is used to trigger additional runs of the dbseed process. The dbseed process will not be re-triggered unless the run number is changed."
   default     = 1
 }
 

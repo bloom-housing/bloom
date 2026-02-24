@@ -32,7 +32,6 @@ import {
 import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
 import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
 import { multiselectQuestionFactory } from '../../../prisma/seed-helpers/multiselect-question-factory';
-import { UserUpdate } from '../../../src/dtos/users/user-update.dto';
 import { EmailAndAppUrl } from '../../../src/dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../../../src/dtos/users/confirmation-request.dto';
 import { UserService } from '../../../src/services/user.service';
@@ -62,6 +61,7 @@ import {
   createListing,
   createComplexApplication,
 } from './helpers';
+import { PublicUserUpdate } from '../../../src/dtos/users/public-user-update.dto';
 
 const testEmailService = {
   confirmation: jest.fn(),
@@ -782,13 +782,13 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/user/${userA.id}`)
+        .put(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,
           firstName: 'New User First Name',
           lastName: 'New User Last Name',
-        } as UserUpdate)
+        } as PublicUserUpdate)
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -889,7 +889,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       });
 
       await request(app.getHttpServer())
-        .post(`/user/`)
+        .post(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildUserCreateMock(jurisdictionId, 'publicUser+noUser@email.com'),
@@ -900,7 +900,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
     it('should error as unauthorized for partner create endpoint', async () => {
       await request(app.getHttpServer())
-        .post(`/user/invite`)
+        .post(`/user/partner`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildUserInviteMock(jurisdictionId, 'partnerUser+noUser@email.com'),
@@ -1434,15 +1434,15 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       }
     });
 
-    it('should error as unauthorized  for list endpoint', async () => {
+    it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/agency`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(401);
+        .expect(200);
     });
 
-    it('should error as unauthorized for retrieve endpoint', async () => {
+    it('should succeed for retrieve endpoint', async () => {
       if (!agencyId) {
         throw new Error('Agency ID not set up for test');
       }
@@ -1451,7 +1451,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         .get(`/agency/${agencyId}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(401);
+        .expect(200);
     });
 
     it('should error as unauthorized for create endpoint', async () => {
@@ -1467,7 +1467,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         .send(agencyData)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(401);
+        .expect(403);
     });
 
     it('should error as unauthorized for update endpoint', async () => {
@@ -1488,7 +1488,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         .send(agencyUpdateData)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(401);
+        .expect(403);
     });
 
     it('should error as unauthorized for delete endpoint', async () => {
@@ -1518,7 +1518,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         } as IdDTO)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(401);
+        .expect(403);
     });
   });
 });

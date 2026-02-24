@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { DOBField, Field, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert } from "@bloom-housing/ui-seeds"
 import {
   OnClientSide,
   PageView,
@@ -13,8 +12,11 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout, { LockIcon } from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  LockIcon,
+  onFormError,
+} from "../../../layouts/application-form"
 
 const ApplicationName = () => {
   const { profile } = useContext(AuthContext)
@@ -43,8 +45,9 @@ const ApplicationName = () => {
     }
     conductor.routeToNextOrReturnUrl()
   }
+
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
 
   const emailPresent: string = watch("applicant.emailAddress")
@@ -85,16 +88,7 @@ const ApplicationName = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"inset"}>
             <div id={"application-initial-page"}>
               <fieldset>
@@ -177,56 +171,60 @@ const ApplicationName = () => {
             <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
           </CardSection>
           <CardSection divider={"flush"} className={"border-none"}>
-            <legend
-              className={`text__caps-spaced ${errors.applicant?.emailAddress ? "text-alert" : ""}`}
-            >
-              <LockIcon locked={autofilled} />
-              {t("application.name.yourEmailAddress")}
-            </legend>
+            <fieldset>
+              <legend
+                className={`text__caps-spaced ${
+                  errors.applicant?.emailAddress ? "text-alert" : ""
+                }`}
+              >
+                <LockIcon locked={autofilled} />
+                {t("application.name.yourEmailAddress")}
+              </legend>
 
-            <p className="field-note mb-4">{t("application.name.emailPrivacy")}</p>
+              <p className="field-note mb-4">{t("application.name.emailPrivacy")}</p>
 
-            <Field
-              type="email"
-              name="applicant.emailAddress"
-              label={t("application.name.yourEmailAddress")}
-              readerOnly={true}
-              defaultValue={application.applicant.emailAddress}
-              validation={{
-                required: !noEmail,
-                pattern: emailRegex,
-                validate: {
-                  advocateEmail: (value: string) => {
-                    if (!isAdvocate || !value || !profile?.email) return true
-                    return value.trim().toLowerCase() !== profile.email.trim().toLowerCase()
+              <Field
+                type="email"
+                name="applicant.emailAddress"
+                label={t("application.name.yourEmailAddress")}
+                readerOnly={true}
+                defaultValue={application.applicant.emailAddress}
+                validation={{
+                  required: !noEmail,
+                  pattern: emailRegex,
+                  validate: {
+                    advocateEmail: (value: string) => {
+                      if (!isAdvocate || !value || !profile?.email) return true
+                      return value.trim().toLowerCase() !== profile.email.trim().toLowerCase()
+                    },
                   },
-                },
-              }}
-              error={errors.applicant?.emailAddress}
-              errorMessage={emailErrorMessage}
-              register={register}
-              onChange={() => clearErrors("applicant.emailAddress")}
-              disabled={clientLoaded && (noEmail || autofilled)}
-              dataTestId={"app-primary-email"}
-              subNote={"example@mail.com"}
-            />
+                }}
+                error={errors.applicant?.emailAddress}
+                errorMessage={emailErrorMessage}
+                register={register}
+                onChange={() => clearErrors("applicant.emailAddress")}
+                disabled={clientLoaded && (noEmail || autofilled)}
+                dataTestId={"app-primary-email"}
+                subNote={"example@mail.com"}
+              />
 
-            <Field
-              type="checkbox"
-              id="noEmail"
-              name="applicant.noEmail"
-              label={t("application.name.noEmailAddress")}
-              primary={true}
-              register={register}
-              disabled={clientLoaded && (emailPresent?.length > 0 || autofilled)}
-              onChange={(e) => {
-                if (e.target.checked) clearErrors("applicant.emailAddress")
-              }}
-              inputProps={{
-                defaultChecked: clientLoaded && noEmail,
-              }}
-              dataTestId={"app-primary-no-email"}
-            />
+              <Field
+                type="checkbox"
+                id="noEmail"
+                name="applicant.noEmail"
+                label={t("application.name.noEmailAddress")}
+                primary={true}
+                register={register}
+                disabled={clientLoaded && (emailPresent?.length > 0 || autofilled)}
+                onChange={(e) => {
+                  if (e.target.checked) clearErrors("applicant.emailAddress")
+                }}
+                inputProps={{
+                  defaultChecked: clientLoaded && noEmail,
+                }}
+                dataTestId={"app-primary-no-email"}
+              />
+            </fieldset>
           </CardSection>
         </ApplicationFormLayout>
       </Form>
