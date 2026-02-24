@@ -801,13 +801,12 @@ export const stagingSeed = async (
             'Some units require at least one resident to have a mobility accessibility need',
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
-          optOutText: 'Prefer not to say',
+          optOutText: 'None of the above',
           options: [
             { text: 'Wheelchair', ordinal: 0 },
             { text: 'Walker', ordinal: 1 },
             { text: 'Power chair', ordinal: 2 },
             { text: 'Other mobility device', ordinal: 3 },
-            { text: 'None of the above', ordinal: 4 },
           ],
         },
       }),
@@ -821,7 +820,7 @@ export const stagingSeed = async (
             'Some units require at least one resident to have a hearing / vision accessibility need',
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
-          optOutText: 'Prefer not to say',
+          optOutText: 'None of the above',
           options: [
             { text: 'Audible and visual doorbells', ordinal: 0 },
             {
@@ -833,7 +832,6 @@ export const stagingSeed = async (
               ordinal: 2,
             },
             { text: 'Documents in large text or braille', ordinal: 3 },
-            { text: 'None of the above', ordinal: 4 },
           ],
         },
       }),
