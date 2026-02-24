@@ -166,25 +166,24 @@ const ApplicationIncome = () => {
           )}
 
           <CardSection divider={"flush"} className={"border-none"}>
-            <Field
-              id="income"
-              name="income"
-              type="currency"
-              label={t("application.financial.income.prompt")}
-              labelClassName={"text__caps-spaced"}
-              validation={{ required: true, min: 0.01 }}
-              error={errors.income}
-              register={register}
-              errorMessage={t("errors.numberError")}
-              setValue={setValue}
-              getValues={getValues}
-              prepend={"$"}
-              dataTestId={"app-income"}
-              subNote={t("application.financial.income.placeholder")}
-            />
-
             <fieldset>
-              <legend className="sr-only">{t("application.financial.income.legend")}</legend>
+              <legend className="sr-only">{t("t.income")}</legend>
+              <Field
+                id="income"
+                name="income"
+                type="currency"
+                label={t("application.financial.income.prompt")}
+                labelClassName={"text__caps-spaced"}
+                validation={{ required: true, min: 0.01 }}
+                error={errors.income}
+                register={register}
+                errorMessage={t("errors.numberError")}
+                setValue={setValue}
+                getValues={getValues}
+                prepend={"$"}
+                dataTestId={"app-income"}
+                subNote={t("application.financial.income.placeholder")}
+              />
               <FieldGroup
                 type="radio"
                 name="incomePeriod"
@@ -196,6 +195,7 @@ const ApplicationIncome = () => {
                 dataTestId={"app-income-period"}
                 fieldGroupClassName="grid grid-cols-1"
                 fieldClassName="ml-0"
+                groupLabel={t("application.financial.income.legend")}
               />
             </fieldset>
           </CardSection>
