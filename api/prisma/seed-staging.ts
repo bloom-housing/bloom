@@ -40,6 +40,7 @@ import { littleVillageApartments } from './seed-helpers/listing-data/little-vill
 import { elmVillage } from './seed-helpers/listing-data/elm-village';
 import { lakeviewVilla } from './seed-helpers/listing-data/lakeview-villa';
 import { sunshineFlats } from './seed-helpers/listing-data/sunshine-flats';
+import { agencyFactory } from './seed-helpers/agency-factory';
 
 export const defaultRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
   options: [
@@ -456,6 +457,12 @@ export const stagingSeed = async (
       raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
     }),
   });
+  await agencyFactory(
+    angelopolisJurisdiction.id,
+    prismaClient,
+    5,
+    'Angelopolis',
+  );
   // create super admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
@@ -581,6 +588,20 @@ export const stagingSeed = async (
         angelopolisJurisdiction.id,
       ],
       acceptedTerms: true,
+    }),
+  });
+  const agency = await prismaClient.agency.findFirst({
+    where: {
+      jurisdictionsId: angelopolisJurisdiction.id,
+    },
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      email: 'advocate@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [angelopolisJurisdiction.id],
+      isAdvocate: true,
+      agencyId: agency.id,
     }),
   });
   // add jurisdiction specific translations and default ones

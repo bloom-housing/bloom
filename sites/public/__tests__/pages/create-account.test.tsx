@@ -368,7 +368,7 @@ describe("Create Account Page", () => {
       jest.spyOn(console, "error").mockImplementation()
       const { message, value, status } = response
       server.use(
-        rest.post("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        rest.post("http://localhost/api/adapter/user/public", (_req, res, ctx) => {
           if (message) {
             return res(
               ctx.status(status),
@@ -418,7 +418,7 @@ describe("Create Account Page", () => {
     process.env.showPwdless = "TRUE"
     const { pushMock } = mockNextRouter()
     server.use(
-      rest.post("http://localhost/api/adapter/user", (_req, res, ctx) => {
+      rest.post("http://localhost/api/adapter/user/public", (_req, res, ctx) => {
         return res(ctx.json(user))
       })
     )

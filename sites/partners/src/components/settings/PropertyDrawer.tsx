@@ -41,16 +41,9 @@ export const PropertyDrawer = ({
   const { profile } = useContext(AuthContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, clearErrors, trigger, getValues } = useForm<PropertyFormTypes>()
-  const propretyHasListing = listings?.find(
+  const propertyHasListing = listings?.find(
     (listing) => listing.property?.id === editedProperty?.id
   )
-
-  const handleSave = useCallback(async () => {
-    const validated = await trigger()
-    if (!validated) return
-
-    saveQuestion(getValues())
-  }, [trigger, getValues, saveQuestion])
 
   const jurisdictionOptions: SelectOption[] =
     profile.jurisdictions.length !== 0
@@ -66,11 +59,22 @@ export const PropertyDrawer = ({
   const defaultJurisdiction = editedProperty?.jurisdictions
     ? editedProperty.jurisdictions.id
     : jurisdictionOptions.length !== 0
-    ? jurisdictionOptions[0].value
+    ? jurisdictionOptions[1].value
     : null
 
+  const handleSave = useCallback(async () => {
+    const validated = await trigger()
+    if (!validated) return
+    const values = getValues()
+    if (!values.jurisdictions?.id && defaultJurisdiction) {
+      values.jurisdictions = { id: defaultJurisdiction }
+    }
+
+    saveQuestion(values)
+  }, [trigger, getValues, defaultJurisdiction, saveQuestion])
+
   return (
-    <Drawer isOpen={drawerOpen && !propretyHasListing} onClose={onDrawerClose}>
+    <Drawer isOpen={drawerOpen && !propertyHasListing} onClose={onDrawerClose}>
       <Drawer.Header>
         {t(editedProperty ? "properties.drawer.editTitle" : "properties.drawer.addTitle")}
       </Drawer.Header>

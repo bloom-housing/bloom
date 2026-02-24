@@ -77,7 +77,7 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
   waitlistOpenSpots: null,
   customMapPin: false,
   contentUpdatedAt: new Date(),
-  publishedAt: new Date(),
+  publishedAt: dayjs(new Date()).subtract(22, 'minutes').toDate(),
   listingsBuildingAddress: {
     create: yellowstoneAddress,
   },

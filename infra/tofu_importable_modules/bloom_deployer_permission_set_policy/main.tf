@@ -43,6 +43,118 @@ resource "aws_ssoadmin_permission_set_inline_policy" "deployer" {
   inline_policy      = data.aws_iam_policy_document.deployer.json
 }
 data "aws_iam_policy_document" "deployer" {
+  # TODO: we could have a separate permission set for humans debugging / looking at stuff through
+  # the AWS web console. For now, just collect the added permissions for using the web console that
+  # are not required when running tofu apply.
+  statement {
+    sid = "WebConsoleUser"
+    actions = [
+      "application-autoscaling:DescribeScalableTargets",
+      "cloudwatch:Describe*",
+      "cloudwatch:Get*",
+      "cloudwatch:List*",
+      "dms:ListDataProviders",
+      "ec2:Describe*",
+      "ecs:List*",
+      "elasticloadbalancing:Describe*",
+      "events:Describe*",
+      "events:Get*",
+      "events:List*",
+      "logs:Describe*",
+      "logs:FilterLogEvents",
+      "logs:Get*",
+      "logs:List*",
+      "logs:StartQuery",
+      "logs:StopQuery",
+      "logs:TestMetricFilter",
+      "rds:Describe*",
+      "rds:Get*",
+      "rds:List*",
+      "servicediscovery:DiscoverInstances",
+      "servicediscovery:Get*",
+      "servicediscovery:List*",
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid = "CS"
+    actions = [
+      "cloudshell:*"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid = "CSNetworkInterface"
+    actions = [
+      "ec2:CreateNetworkInterface",
+    ]
+    resources = [
+      "arn:aws:ec2:${local.region_account}:network-interface/*",
+    ]
+    condition {
+      test     = "ForAnyValue:StringEquals"
+      variable = "aws:TagKeys"
+      values   = ["ManagedByCloudShell"]
+    }
+  }
+  statement {
+    sid = "CSNetworkInterfaceSubnet"
+    actions = [
+      "ec2:CreateNetworkInterface",
+    ]
+    resources = [
+      "arn:aws:ec2:${local.region_account}:subnet/*",
+    ]
+    condition {
+      test     = "StringLike"
+      variable = "aws:ResourceTag/Name"
+      values   = ["bloom-private-*"]
+    }
+  }
+  statement {
+    sid = "CSCreateNetworkInterfaceSG"
+    actions = [
+      "ec2:CreateNetworkInterface",
+    ]
+    resources = [
+      "arn:aws:ec2:${local.region_account}:security-group/*",
+    ]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:ResourceTag/Name"
+      values   = ["bloom-cloudshell"]
+    }
+  }
+  statement {
+    sid = "CSTagNetworkInterface"
+    actions = [
+      "ec2:CreateTags",
+    ]
+    resources = ["arn:aws:ec2:${local.region_account}:network-interface/*"]
+    condition {
+      test     = "ForAnyValue:StringEquals"
+      variable = "aws:TagKeys"
+      values   = ["ManagedByCloudShell"]
+    }
+  }
+  statement {
+    sid = "CSConfigNetworkInterface"
+    actions = [
+      "ec2:CreateNetworkInterfacePermission",
+      "ec2:DeleteNetworkInterface",
+    ]
+    resources = ["arn:aws:ec2:${local.region_account}:network-interface/*"]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:ResourceTag/ManagedByCloudShell"
+      values   = [""]
+    }
+  }
+  statement {
+    sid       = "CSDBAuthToken"
+    actions   = ["rds-db:connect"]
+    resources = ["arn:aws:rds-db:${local.region_account}:dbuser:*/bloom_readonly"]
+  }
   statement {
     sid = "TofuStateBucket"
     actions = [
@@ -161,6 +273,7 @@ data "aws_iam_policy_document" "deployer" {
       "ec2:DetachInternetGateway",
       "ec2:DisassociateRouteTable",
       "ec2:DisassociateVpcCidrBlock",
+      "ec2:ModifySecurityGroupRules",
       "ec2:ModifySubnetAttribute",
       "ec2:ModifyVpcAttribute",
       "ec2:ModifyVpcEndpoint",
@@ -304,23 +417,18 @@ data "aws_iam_policy_document" "deployer" {
       "servicediscovery:GetOperation",
       "servicediscovery:ListTagsForResource",
     ]
-    resources = concat(
-      [
-        "arn:aws:ecs:${local.region_account}:cluster/bloom",
-        "arn:aws:ecs:${local.region_account}:task/bloom/*",
-        "arn:aws:logs:${local.region_account}:log-group::log-stream:",
-        "arn:aws:servicediscovery:${local.region_account}:*/*"
-      ],
-      flatten(
-        [for name in ["dbinit", "dbseed", "api", "site-partners", "site-public"] : [
-          "arn:aws:ecs:${local.region_account}:service-deployment/bloom/bloom-${name}/*",
-          "arn:aws:ecs:${local.region_account}:service/bloom/bloom-${name}",
-          "arn:aws:ecs:${local.region_account}:task-definition/bloom-${name}:*",
-          "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/bloom-${name}-container",
-          "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/bloom-${name}-ecs",
-          "arn:aws:logs:${local.region_account}:log-group:bloom-${name}*",
-        ]]
-    ))
+    resources = [
+      "arn:aws:ecs:${local.region_account}:cluster/bloom",
+      "arn:aws:ecs:${local.region_account}:service-deployment/bloom/bloom-*",
+      "arn:aws:ecs:${local.region_account}:service/bloom/bloom-*",
+      "arn:aws:ecs:${local.region_account}:task-definition/bloom-*",
+      "arn:aws:ecs:${local.region_account}:task/bloom/*",
+      "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/bloom-*",
+      "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/bloom-*",
+      "arn:aws:logs:${local.region_account}:log-group::log-stream:",
+      "arn:aws:logs:${local.region_account}:log-group:bloom-*",
+      "arn:aws:servicediscovery:${local.region_account}:*/*",
+    ]
   }
   statement {
     sid = "RunECSTask"
@@ -344,5 +452,15 @@ data "aws_iam_policy_document" "deployer" {
       "secretsmanager:TagResource",
     ]
     resources = ["arn:aws:secretsmanager:${local.region_account}:secret:bloom-api-jwt-signing-key*"]
+  }
+  statement {
+    sid = "SES"
+    actions = [
+      "ses:CreateEmailIdentity",
+      "ses:DeleteEmailIdentity",
+      "ses:GetEmailIdentity",
+      "ses:ListTagsForResource",
+    ]
+    resources = ["arn:aws:ses:${local.region_account}:identity/*"]
   }
 }

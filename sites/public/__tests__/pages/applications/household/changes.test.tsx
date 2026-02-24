@@ -1,6 +1,6 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { fireEvent } from "@testing-library/react"
+import { fireEvent, screen } from "@testing-library/react"
 import { mockNextRouter, render } from "../../../testUtils"
 import ApplicationHouseholdChanges from "../../../../src/pages/applications/household/changes"
 
@@ -24,24 +24,24 @@ describe("applications pages", () => {
 
   describe("changes step", () => {
     it("should render form fields", () => {
-      const { getByText, getAllByTestId } = render(<ApplicationHouseholdChanges />)
+      render(<ApplicationHouseholdChanges />)
 
       expect(
-        getByText(
+        screen.getAllByText(
           "Do you anticipate any changes in your household in the next 12 months, such as the number of people?"
         )
-      ).toBeInTheDocument()
-      expect(getAllByTestId("app-expecting-changes")).toHaveLength(2)
+      ).toHaveLength(2)
+      expect(screen.getAllByTestId("app-expecting-changes")).toHaveLength(2)
     })
 
     it("should require form input", async () => {
-      const { getByText, findByText } = render(<ApplicationHouseholdChanges />)
+      render(<ApplicationHouseholdChanges />)
 
-      fireEvent.click(getByText("Next"))
+      fireEvent.click(screen.getByText("Next"))
       expect(
-        await findByText("There are errors you'll need to resolve before moving on.")
+        await screen.findByText("There are errors you'll need to resolve before moving on.")
       ).toBeInTheDocument()
-      expect(getByText("Please select an option.")).toBeInTheDocument()
+      expect(screen.getByText("Please select an option.")).toBeInTheDocument()
     })
   })
 })

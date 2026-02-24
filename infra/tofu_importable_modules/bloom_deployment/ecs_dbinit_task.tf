@@ -72,7 +72,7 @@ resource "null_resource" "bloom_dbinit_run" {
   }
 
   depends_on = [
-    aws_vpc_endpoint.secrets_manager,
+    aws_vpc_endpoint.aws_services["secretsmanager"],
     aws_route_table_association.private_subnet,
     time_sleep.on_dbinit_container_role_creation,
   ]
@@ -91,7 +91,7 @@ resource "null_resource" "bloom_dbinit_run" {
           --cluster ${aws_ecs_cluster.bloom.arn} \
           --launch-type FARGATE \
           --task-definition ${aws_ecs_task_definition.bloom_dbinit.arn} \
-          --network-configuration "awsvpcConfiguration={subnets=[${join(",", [for s in aws_subnet.private : s.id])}],securityGroups=[${aws_security_group.dbinit.id}],assignPublicIp=DISABLED}" \
+          --network-configuration "awsvpcConfiguration={subnets=[${join(",", [for s in aws_subnet.private : s.id])}],securityGroups=[${aws_security_group.bloom["dbinit"].id}],assignPublicIp=DISABLED}" \
           --query 'tasks[0].taskArn' \
           --output text
       )"

@@ -75,7 +75,7 @@ export const sunshineFlats: Prisma.ListingsCreateInput = {
   waitlistOpenSpots: null,
   customMapPin: false,
   contentUpdatedAt: new Date(),
-  publishedAt: new Date(),
+  publishedAt: dayjs(new Date()).subtract(12, 'hours').toDate(),
   listingsBuildingAddress: {
     create: glacierAddress,
   },

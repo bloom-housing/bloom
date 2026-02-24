@@ -220,15 +220,15 @@ const lotteryPublishedApplicantMock = jest.fn();
 
 const canOrThrowMock = jest.fn();
 
-const user = new User();
-user.firstName = 'Test';
-user.lastName = 'User';
-user.email = 'test@example.com';
-
 describe('Testing listing service', () => {
   let service: ListingService;
   let prisma: PrismaService;
   let config: ConfigService;
+
+  const user = new User();
+  user.firstName = 'Test';
+  user.lastName = 'User';
+  user.email = 'test@example.com';
 
   const googleTranslateServiceMock = {
     isConfigured: () => true,

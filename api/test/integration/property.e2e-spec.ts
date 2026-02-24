@@ -385,7 +385,7 @@ describe('Properties Controller Tests', () => {
       expect(res.body.message[0]).toEqual('id should not be null or undefined');
     });
 
-    it('should throw error when an given ID does not exist', async () => {
+    it('should throw error when a given ID does not exist', async () => {
       const randId = randomUUID();
       const res = await request(app.getHttpServer())
         .put('/properties')
@@ -396,7 +396,7 @@ describe('Properties Controller Tests', () => {
         })
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(400);
+        .expect(404);
 
       expect(res.body.message).toEqual(
         `Property with id ${randId} was not found`,
@@ -453,7 +453,7 @@ describe('Properties Controller Tests', () => {
       expect(res.body.message[0]).toBe('id should not be null or undefined');
     });
 
-    it('should throw error when an given ID does not exist', async () => {
+    it('should throw error when a given ID does not exist', async () => {
       const randId = randomUUID();
       const res = await request(app.getHttpServer())
         .delete('/properties')
@@ -462,7 +462,7 @@ describe('Properties Controller Tests', () => {
         })
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(400);
+        .expect(404);
 
       expect(res.body.message).toBe(`Property with id ${randId} was not found`);
     });

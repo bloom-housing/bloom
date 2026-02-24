@@ -15,13 +15,19 @@ import { Property } from '../dtos/properties/property.dto';
 import { PaginatedPropertyDto } from '../dtos/properties/paginated-property.dto';
 import PropertyCreate from '../dtos/properties/property-create.dto';
 import { PropertyUpdate } from '../dtos/properties/property-update.dto';
+import { User } from '../dtos/users/user.dto';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { Prisma } from '@prisma/client';
 import { buildFilter } from '../utilities/build-filter';
+import { PermissionService } from './permission.service';
 
 @Injectable()
 export class PropertyService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private permissionService: PermissionService,
+  ) {}
 
   /**
    * Returns a paginated list of properties matching the provided query parameters.
@@ -99,7 +105,7 @@ export class PropertyService {
    * @throws {BadRequestException} If a jurisdiction is not provided.
    * @throws {NotFoundException} If the linked jurisdiction cannot be found.
    */
-  async create(propertyDto: PropertyCreate) {
+  async create(propertyDto: PropertyCreate, requestingUser: User) {
     if (!propertyDto.jurisdictions) {
       throw new BadRequestException('A jurisdiction must be provided');
     }
@@ -119,6 +125,15 @@ export class PropertyService {
         `Entry for the linked jurisdiction with id: ${propertyDto.jurisdictions.id} was not found`,
       );
     }
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'properties',
+      permissionActions.create,
+      {
+        jurisdictionId: rawJurisdiction.id,
+      },
+    );
 
     const rawProperty = await this.prisma.properties.create({
       data: {
@@ -147,7 +162,7 @@ export class PropertyService {
    * @throws {BadRequestException} If a jurisdiction is not provided.
    * @throws {NotFoundException} If the linked jurisdiction cannot be found.
    */
-  async update(propertyDto: PropertyUpdate) {
+  async update(propertyDto: PropertyUpdate, requestingUser: User) {
     if (!propertyDto.jurisdictions) {
       throw new BadRequestException('A jurisdiction must be provided');
     }
@@ -166,6 +181,17 @@ export class PropertyService {
         `Entry for the linked jurisdiction with id: ${propertyDto.jurisdictions.id} was not found`,
       );
     }
+
+    await this.findOrThrow(propertyDto.id);
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'properties',
+      permissionActions.update,
+      {
+        jurisdictionId: rawJurisdiction.id,
+      },
+    );
 
     await this.findOrThrow(propertyDto.id);
 
@@ -199,7 +225,7 @@ export class PropertyService {
    * @throws {BadRequestException} If no property ID is provided.
    * @throws {NotFoundException} If the property or its linked jurisdiction is not found.
    */
-  async deleteOne(propertyId: string) {
+  async deleteOne(propertyId: string, requestingUser: User) {
     if (!propertyId) {
       throw new BadRequestException('a property ID must be provided');
     }
@@ -227,6 +253,15 @@ export class PropertyService {
       );
     }
 
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'properties',
+      permissionActions.delete,
+      {
+        jurisdictionId: rawJurisdiction.id,
+      },
+    );
+
     await this.prisma.properties.delete({
       where: {
         id: propertyId,
@@ -243,7 +278,7 @@ export class PropertyService {
    *
    * @param propertyId - The ID of the property to look up.
    * @returns The raw property entity including its jurisdictions.
-   * @throws {BadRequestException} If no property is found for the given ID.
+   * @throws {NotFoundException} If no property is found for the given ID.
    */
   async findOrThrow(propertyId: string): Promise<Property> {
     const property = await this.prisma.properties.findFirst({
@@ -256,7 +291,7 @@ export class PropertyService {
     });
 
     if (!property) {
-      throw new BadRequestException(
+      throw new NotFoundException(
         `Property with id ${propertyId} was not found`,
       );
     }

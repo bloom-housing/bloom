@@ -2,13 +2,14 @@ import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { Form, t } from "@bloom-housing/ui-components"
-import { Alert } from "@bloom-housing/ui-seeds"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
 
 const ApplicationMembersInfo = () => {
   const { profile } = useContext(AuthContext)
@@ -24,7 +25,7 @@ const ApplicationMembersInfo = () => {
   }
 
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
 
   useEffect(() => {
@@ -57,16 +58,7 @@ const ApplicationMembersInfo = () => {
           }}
           hideBorder={true}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} />
         </ApplicationFormLayout>
       </Form>
     </FormsLayout>
