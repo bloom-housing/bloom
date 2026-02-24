@@ -555,6 +555,15 @@ describe("ListingViewSeedsHelpers", () => {
   })
 
   describe("getMarketingFlyers", () => {
+    const oldEnv = process.env
+
+    beforeEach(() => {
+      process.env = { ...oldEnv }
+    })
+
+    afterAll(() => {
+      process.env = oldEnv
+    })
     it("should return empty array when feature flag is disabled", () => {
       const mockJurisdiction = {
         ...jurisdiction,
@@ -622,6 +631,7 @@ describe("ListingViewSeedsHelpers", () => {
     })
 
     it("should use cloudinary URL when file asset exists", () => {
+      process.env.CLOUDINARY_CLOUD_NAME = "exygy"
       const mockJurisdiction = {
         ...jurisdiction,
         featureFlags: [
@@ -777,7 +787,17 @@ describe("ListingViewSeedsHelpers", () => {
   })
 
   describe("getBuildingSelectionCriteria", () => {
+    const oldEnv = process.env
+
+    beforeEach(() => {
+      process.env = { ...oldEnv }
+    })
+
+    afterAll(() => {
+      process.env = oldEnv
+    })
     it("should return link when listingsBuildingSelectionCriteriaFile exists", () => {
+      process.env.CLOUDINARY_CLOUD_NAME = "exygy"
       const mockListing: Listing = {
         ...listing,
         listingsBuildingSelectionCriteriaFile: {
