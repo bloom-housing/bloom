@@ -3,15 +3,13 @@ import { Asset, Listing } from "../types/backend-swagger"
 export const CLOUDINARY_BUILDING_LABEL = "cloudinaryBuilding"
 export const IMAGE_FALLBACK_URL = "/images/listing-fallback.png"
 
-const cloudinaryCloudName = () =>
-  process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME
-
 export const cloudinaryUrlFromId = (publicId: string, size = 400) => {
-  const cloudName = cloudinaryCloudName()
-  if (!cloudName) {
+  const cloudinaryCloudName: string | undefined =
+    process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME
+  if (!cloudinaryCloudName) {
     return publicId
   }
-  return `https://res.cloudinary.com/${cloudName}/image/upload/w_${size},c_limit,q_65/${publicId}.jpg`
+  return `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/w_${size},c_limit,q_65/${publicId}.jpg`
 }
 
 export const getUrlForListingImage = (image: Asset, size = 400) => {
