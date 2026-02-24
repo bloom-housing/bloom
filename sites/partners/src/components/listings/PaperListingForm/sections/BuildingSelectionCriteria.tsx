@@ -192,7 +192,12 @@ const BuildingSelectionCriteria = () => {
     Pass the file for the dropzone callback along to the uploader
   */
   const pdfUploader = async (file: File) => {
-    void (await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue }))
+    if (process.env.cloudinaryCloudName) {
+      void (await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue }))
+    } else {
+      // TODO: Upload to AWS
+      alert("Cloudinary environment variables not set, must configure AWS")
+    }
   }
 
   return (
