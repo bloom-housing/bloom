@@ -47,7 +47,7 @@ const mockPreferences: MultiselectQuestion[] = [
     name: "Work in the city",
     text: "",
     jurisdictions: [],
-    options: [
+    multiselectOptions: [
       {
         name: "At least one member of my household works in the city",
         text: "",
@@ -135,7 +135,7 @@ describe("PreferencesAndPrograms", () => {
           updatedAt: new Date(),
           text: "Work in the city",
           jurisdictions: [],
-          options: [
+          multiselectOptions: [
             {
               text: "At least one member of my household works in the city",
               ordinal: 0,
@@ -210,7 +210,6 @@ describe("PreferencesAndPrograms", () => {
     })
 
     it("should open drawer and add a preference", async () => {
-      console.log("test 3")
       const setFn = jest.fn()
 
       render(
@@ -231,7 +230,7 @@ describe("PreferencesAndPrograms", () => {
       expect(table).toBeInTheDocument()
 
       const headAndBody = within(table).getAllByRole("rowgroup")
-      const [_, body] = headAndBody
+      const body = headAndBody[1]
 
       const tableRows = within(body).getAllByRole("row")
       expect(tableRows).toHaveLength(1)
