@@ -1,14 +1,14 @@
 # Company Website - enableCompanyWebsite
 
-### Name
+## Name
 
 `enableCompanyWebsite`
 
-### Description
+## Description
 
 When true, allows partners to add company website information.
 
-### Images
+## Images
 
 Public ("Website" link)
 
