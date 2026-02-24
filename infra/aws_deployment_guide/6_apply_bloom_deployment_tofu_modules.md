@@ -9,6 +9,7 @@ organization. The guide is broken down into a series of files that should be fol
 4. [Fork the Bloom Repo](./4_fork_bloom_repo.md)
 5. [Apply Deployer Permission Set Tofu Modules](./5_apply_deployer_permission_set_tofu_modules.md)
 6. [Apply Bloom Deployment Tofu Modules](./6_apply_bloom_deployment_tofu_modules.md) (you are here)
+7. [Operations Playbook](./7_operations_playbook.md)
 
 The steps in this file create the following resources (the OpenTofu files in
 [bloom_deployment](../tofu_importable_modules/bloom_deployment) fully describe all resources that
@@ -132,7 +133,7 @@ graph TB
        "eligible" = "ELIGIBLE"
        "status" = tolist([])
      }
-     "validation_dns_recods" = toset([
+     "validation_dns_records" = toset([
        {
          "domain_name" = "core-dev.bloomhousing.dev"
          "resource_record_name" = "_4b8c99d969da11b1e35c36786a74b6fe.core-dev.bloomhousing.dev."
@@ -266,7 +267,7 @@ graph TB
        "eligible" = "ELIGIBLE"
        "status" = tolist([])
      }
-     "validation_dns_recods" = toset([
+     "validation_dns_records" = toset([
        {
          "domain_name" = "core-prod.bloomhousing.dev"
          "resource_record_name" = "_BLAH.core-prod.bloomhousing.dev."
@@ -320,7 +321,7 @@ graph TB
 
    Individual emails are validated by clicking an email validation link AWS sends in an email with
    subject like 'Amazon Web Services - Email Address Verification Request in region...'. If using
-   a no-reply email address that does not receive email, you must either give in an inbox first then
+   a no-reply email address that does not receive email, you must either give it an inbox first then
    validate in AWS or use domain validation.
 
    Domains are validated by publishing a set of DNS records. Add the required CNAME records in your
@@ -427,9 +428,9 @@ the existing VPC. To create the VPC peering:
 ## After these steps
 
 1. Your dev Bloom deployment should be accessible:
-   - public site: `https://<YOUR_DEV_DOMAIN>
-   - partners site: `https://partners.<YOUR_DEV_DOMAIN>
+   - public site: `https://<YOUR_DEV_DOMAIN>`
+   - partners site: `https://partners.<YOUR_DEV_DOMAIN>`
 
 2. Your prod Bloom deployment should be accessible:
-   - public site: `https://<YOUR_PROD_DOMAIN>
-   - partners site: `https://partners.<YOUR_PROD_DOMAIN>
+   - public site: `https://<YOUR_PROD_DOMAIN>`
+   - partners site: `https://partners.<YOUR_PROD_DOMAIN>`

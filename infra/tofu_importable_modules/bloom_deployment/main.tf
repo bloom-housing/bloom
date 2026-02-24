@@ -148,7 +148,7 @@ variable "bloom_dbinit_image" {
 }
 variable "bloom_dbinit_run_number" {
   type        = number
-  description = "The run number is used to trigger additional runs of the dbinit procoess. The dbinit process will not be re-triggered unless the run number is changed."
+  description = "The run number is used to trigger additional runs of the dbinit process. The dbinit process will not be re-triggered unless the run number is changed."
   default     = 1
 }
 
@@ -159,7 +159,7 @@ variable "bloom_dbseed_image" {
 }
 variable "bloom_dbseed_run_number" {
   type        = number
-  description = "The run number is used to trigger additional runs of the dbseed procoess. The dbseed process will not be re-triggered unless the run number is changed."
+  description = "The run number is used to trigger additional runs of the dbseed process. The dbseed process will not be re-triggered unless the run number is changed."
   default     = 1
 }
 
