@@ -798,10 +798,9 @@ export const stagingSeed = async (
         multiselectQuestion: {
           text: 'Mobility accessibility needs',
           description:
-            'Some units require at least one resident to have a mobility accessibility need?',
+            'Some units require at least one resident to have a mobility accessibility need',
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
-          isExclusive: true,
           optOutText: 'Prefer not to say',
           options: [
             { text: 'Wheelchair', ordinal: 0 },
@@ -819,10 +818,9 @@ export const stagingSeed = async (
         multiselectQuestion: {
           text: 'Hearing/vision accessibility needs',
           description:
-            'Some units require at least one resident to have a hearing / vision accessibility need?',
+            'Some units require at least one resident to have a hearing / vision accessibility need',
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
-          isExclusive: true,
           optOutText: 'Prefer not to say',
           options: [
             { text: 'Audible and visual doorbells', ordinal: 0 },
