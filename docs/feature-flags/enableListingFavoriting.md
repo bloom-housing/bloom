@@ -1,18 +1,18 @@
 # Listing Favoriting - enableListingFavoriting
 
-### Name
+## Name
 
 `enableListingFavoriting`
 
-### Description
+## Description
 
 When true, a Favorite button is shown for public listings and users can view their favorited listings.
 
-### Additional Information
+## Additional Information
 
 You have to be logged in to see the favoriting functionality on the listing.
 
-### Images
+## Images
 
 Public - Listing Browse card
 

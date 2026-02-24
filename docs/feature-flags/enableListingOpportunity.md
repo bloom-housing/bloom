@@ -10,4 +10,6 @@ When true, any newly published listing will send a gov delivery email to everyon
 
 ## Additional Information
 
+This is not configured in the Bloom core codebase as of now
+
 ## Images
