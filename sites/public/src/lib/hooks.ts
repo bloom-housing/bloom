@@ -16,6 +16,9 @@ import {
   MultiselectQuestionFilterParams,
   OrderByEnum,
   PaginatedListing,
+  AgencyQueryParams,
+  EnumAgencyFilterParamsComparison,
+  AgencyFilterParams,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
@@ -352,6 +355,41 @@ export async function fetchMultiselectProgramData(req: any, jurisdictionId: stri
       }
     )
     return multiselectDataResponse?.data
+  } catch (error) {
+    console.log("error = ", error)
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchAgencies(req: any, jurisdictionId: string) {
+  try {
+    const headers = {
+      passkey: process.env.API_PASS_KEY,
+    }
+    if (req) {
+      headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
+    }
+
+    const params: {
+      filter: AgencyFilterParams[]
+    } = {
+      filter: [
+        {
+          $comparison: EnumAgencyFilterParamsComparison["IN"],
+          jurisdiction: jurisdictionId && jurisdictionId !== "" ? jurisdictionId : undefined,
+        },
+      ],
+    }
+
+    const paramsString = qs.stringify(params)
+
+    const agencyDataResponse = await axios.get(
+      `${process.env.backendApiBase}/agency?${paramsString}`,
+      {
+        headers,
+      }
+    )
+    return agencyDataResponse?.data
   } catch (error) {
     console.log("error = ", error)
   }

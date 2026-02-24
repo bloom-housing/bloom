@@ -35,6 +35,7 @@ p, jurisdictionAdmin, agency, true, read
 p, limitedJurisdictionAdmin, agency, true, read
 p, partner, agency, true, read
 p, user, agency, true, read,
+p, anonymous, agency, true, read
 
 p, admin, applicationMethod, true, .*
 p, supportAdmin, applicationMethod, true, .*

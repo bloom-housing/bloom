@@ -23,7 +23,7 @@ import { AgencyUpdate } from '../dtos/agency/agency-update.dto';
 import Agency from '../dtos/agency/agency.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { ApiKeyGuard } from '../guards/api-key.guard';
-import { JwtAuthGuard } from '../guards/jwt.guard';
+import { OptionalAuthGuard } from '../../src/guards/optional.guard';
 import { PermissionGuard } from '../guards/permission.guard';
 import { AgencyService } from '../services/agency.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
@@ -31,12 +31,20 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { PaginatedAgencyDto } from '../dtos/agency/paginated-agency.dto';
 import { AgencyQueryParams } from '../dtos/agency/agency-query-params.dto';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import { AgencyFilterParams } from '../dtos/agency/agency-filter-params.dto';
 
 @Controller('agency')
 @ApiTags('agency')
-@ApiExtraModels(AgencyCreate, Agency, AgencyUpdate, IdDTO)
+@ApiExtraModels(
+  AgencyCreate,
+  Agency,
+  AgencyUpdate,
+  AgencyQueryParams,
+  AgencyFilterParams,
+  IdDTO,
+)
 @PermissionTypeDecorator('agency')
-@UseGuards(ApiKeyGuard, JwtAuthGuard, PermissionGuard)
+@UseGuards(ApiKeyGuard, OptionalAuthGuard)
 export class AgencyController {
   constructor(private agencyService: AgencyService) {}
 
@@ -59,6 +67,7 @@ export class AgencyController {
     operationId: 'getById',
   })
   @ApiOkResponse({ type: Agency })
+  @UseGuards(PermissionGuard)
   public async getById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) agencyId: string,
   ): Promise<Agency> {
@@ -72,17 +81,19 @@ export class AgencyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Agency })
+  @UseGuards(PermissionGuard)
   public async createAgency(@Body() agencyDto: AgencyCreate): Promise<Agency> {
     return await this.agencyService.create(agencyDto);
   }
 
   @Put()
   @ApiOperation({
-    summary: 'Updates an exiting agency entry in the database',
+    summary: 'Updates an existing agency entry in the database',
     operationId: 'update',
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Agency })
+  @UseGuards(PermissionGuard)
   public async update(@Body() agencyDto: AgencyUpdate): Promise<Agency> {
     return await this.agencyService.update(agencyDto);
   }
@@ -90,8 +101,9 @@ export class AgencyController {
   @Delete()
   @ApiOperation({
     summary: 'Deletes an agency entry from the database by its ID',
-    operationId: 'deletes',
+    operationId: 'delete',
   })
+  @UseGuards(PermissionGuard)
   @ApiOkResponse({ type: SuccessDTO })
   public async delete(@Body() idDto: IdDTO): Promise<SuccessDTO> {
     return await this.agencyService.deleteOne(idDto);
