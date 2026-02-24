@@ -38,16 +38,16 @@ const lotteryReleasedMock = jest.fn();
 const lotteryPublishedAdminMock = jest.fn();
 const lotteryPublishedApplicantMock = jest.fn();
 
-const user = new User();
-user.firstName = 'Test';
-user.lastName = 'User';
-user.email = 'test@example.com';
-
 describe('Testing lottery service', () => {
   let service: LotteryService;
   let prisma: PrismaService;
   let listingService: ListingService;
   let config: ConfigService;
+
+  const user = new User();
+  user.firstName = 'Test';
+  user.lastName = 'User';
+  user.email = 'test@example.com';
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({

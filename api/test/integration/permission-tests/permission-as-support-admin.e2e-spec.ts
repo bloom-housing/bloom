@@ -36,7 +36,6 @@ import { UnitRentTypeUpdate } from '../../../src/dtos/unit-rent-types/unit-rent-
 import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
 import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
 import { multiselectQuestionFactory } from '../../../prisma/seed-helpers/multiselect-question-factory';
-import { UserUpdate } from '../../../src/dtos/users/user-update.dto';
 import { EmailAndAppUrl } from '../../../src/dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../../../src/dtos/users/confirmation-request.dto';
 import { UserService } from '../../../src/services/user.service';
@@ -65,6 +64,7 @@ import {
   buildJurisdictionUpdateMock,
 } from './helpers';
 import { featureFlagFactory } from '../../../prisma/seed-helpers/feature-flag-factory';
+import { PublicUserUpdate } from '../../../src/dtos/users/public-user-update.dto';
 
 const testEmailService = {
   confirmation: jest.fn(),
@@ -871,14 +871,14 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/user/${userA.id}`)
+        .put(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,
           firstName: 'New User First Name',
           lastName: 'New User Last Name',
           jurisdictions: [{ id: jurisdictionId } as IdDTO],
-        } as UserUpdate)
+        } as PublicUserUpdate)
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -973,7 +973,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
 
     it('should error as forbidden for partner create endpoint', async () => {
       await request(app.getHttpServer())
-        .post(`/user/invite`)
+        .post(`/user/partner`)
         .send(
           // builds an invite for an admin
           buildUserInviteMock(

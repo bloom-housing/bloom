@@ -1,6 +1,4 @@
 import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
-import { ResponseError } from '@sendgrid/helpers/classes';
-import { MailDataRequired } from '@sendgrid/helpers/classes/mail';
 import fs from 'fs';
 import Handlebars from 'handlebars';
 import Polyglot from 'node-polyglot';
@@ -11,7 +9,11 @@ import tz from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import { LanguagesEnum, ReviewOrderTypeEnum } from '@prisma/client';
 import { JurisdictionService } from './jurisdiction.service';
-import { SendGridService } from './sendgrid.service';
+import {
+  EmailProvider,
+  SendEmailInput,
+  EmailAttachmentData,
+} from './email-provider.service';
 import { TranslationService } from './translation.service';
 import { Application } from '../dtos/applications/application.dto';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
@@ -26,12 +28,6 @@ dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
 
-type EmailAttachmentData = {
-  data: string;
-  name: string;
-  type: string;
-};
-
 type listingInfo = {
   id: string;
   name: string;
@@ -43,7 +39,7 @@ export class EmailService {
   polyglot: Polyglot;
 
   constructor(
-    private readonly sendGrid: SendGridService,
+    private readonly emailProvider: EmailProvider,
     private readonly translationService: TranslationService,
     private readonly jurisdictionService: JurisdictionService,
     @Inject(Logger)
@@ -111,43 +107,24 @@ export class EmailService {
     from: string,
     subject: string,
     body: string,
-    retry = 3,
     attachment?: EmailAttachmentData,
   ) {
     const isMultipleRecipients = Array.isArray(to);
-    if (isMultipleRecipients && to.length === 0) return;
-    const emailParams: MailDataRequired = {
+    if (isMultipleRecipients && to.length === 0) {
+      console.warn(
+        'Got email send request with empty array for the "to" field. Doing nothing.',
+      );
+      return;
+    }
+
+    const emailParams: SendEmailInput = {
       to,
       from,
       subject,
-      html: body,
+      body,
+      attachment,
     };
-    if (attachment) {
-      emailParams.attachments = [
-        {
-          content: Buffer.from(attachment.data).toString('base64'),
-          filename: attachment.name,
-          type: attachment.type,
-          disposition: 'attachment',
-        },
-      ];
-    }
-    const handleError = (error) => {
-      if (error instanceof ResponseError) {
-        const { response } = error;
-        const { body: errBody } = response;
-        console.error(
-          `Error sending email to: ${
-            isMultipleRecipients ? to.toString() : to
-          }! Error body:`,
-          errBody,
-        );
-        if (retry > 0) {
-          void this.send(to, from, subject, body, retry - 1);
-        }
-      }
-    };
-    await this.sendGrid.send(emailParams, isMultipleRecipients, handleError);
+    await this.emailProvider.send(emailParams);
   }
 
   // TODO: update this to be memoized based on jurisdiction and language
@@ -663,7 +640,6 @@ export class EmailService {
           appUrl: process.env.PARTNERS_PORTAL_URL,
         },
       }),
-      undefined,
       {
         data: csvData,
         name: `users-${this.formatLocalDate(

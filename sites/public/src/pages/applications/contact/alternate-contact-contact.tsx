@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { Field, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert } from "@bloom-housing/ui-seeds"
 import {
   OnClientSide,
   PageView,
@@ -13,9 +12,12 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout, { LockIcon } from "../../../layouts/application-form"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  LockIcon,
+  onFormError,
+} from "../../../layouts/application-form"
 import FormsLayout from "../../../layouts/forms"
-import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationAlternateContactContact = () => {
   const { profile } = useContext(AuthContext)
@@ -45,7 +47,7 @@ const ApplicationAlternateContactContact = () => {
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
 
   useEffect(() => {
@@ -106,17 +108,7 @@ const ApplicationAlternateContactContact = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
-
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"inset"}>
             <label className="text__caps-spaced" htmlFor="phoneNumber">
               <LockIcon locked={isAdvocate} />

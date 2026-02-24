@@ -7,9 +7,13 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 
 const mockUserService = {
   retrieve: jest.fn(),
-  update: jest.fn(),
+  updatePublic: jest.fn(),
+  updatePartner: jest.fn(),
+  updateAdvocate: jest.fn(),
   delete: jest.fn(),
-  create: jest.fn(),
+  createPublic: jest.fn(),
+  createPartner: jest.fn(),
+  createAdvocate: jest.fn(),
   list: jest.fn(),
   listAsCsv: jest.fn(),
   forgotPassword: jest.fn(),
@@ -63,7 +67,7 @@ describe("<Edit>", () => {
         listings: [],
         jurisdictions: [],
       }
-      mockUserService.update.mockResolvedValue(updatedUser)
+      mockUserService.updatePublic.mockResolvedValue(updatedUser)
 
       renderEditPage()
 
@@ -82,14 +86,14 @@ describe("<Edit>", () => {
       await userEvent.click(updateButtons[0])
 
       await waitFor(() => {
-        expect(mockUserService.update).toHaveBeenCalledWith({ body: updatedUser })
+        expect(mockUserService.updatePublic).toHaveBeenCalledWith({ body: updatedUser })
       })
     })
 
     it("should handle name update errors", async () => {
       // Hide the console.warn statement to not flood the testing logs
       jest.spyOn(console, "warn").mockImplementation()
-      mockUserService.update.mockRejectedValue(new Error("Server error"))
+      mockUserService.updatePublic.mockRejectedValue(new Error("Server error"))
 
       renderEditPage()
 
@@ -117,7 +121,7 @@ describe("<Edit>", () => {
         listings: [],
         jurisdictions: [],
       }
-      mockUserService.update.mockResolvedValue(updatedUser)
+      mockUserService.updatePublic.mockResolvedValue(updatedUser)
 
       renderEditPage()
 
@@ -140,7 +144,7 @@ describe("<Edit>", () => {
       await userEvent.click(updateButtons[1])
 
       await waitFor(() => {
-        expect(mockUserService.update).toHaveBeenCalledWith({
+        expect(mockUserService.updatePublic).toHaveBeenCalledWith({
           body: expect.objectContaining({
             dob: new Date("1990-05-15"),
           }),
@@ -149,7 +153,7 @@ describe("<Edit>", () => {
     })
 
     it("should handle date of birth update errors", async () => {
-      mockUserService.update.mockRejectedValue(new Error("Server error"))
+      mockUserService.updatePublic.mockRejectedValue(new Error("Server error"))
 
       renderEditPage()
 
@@ -220,7 +224,7 @@ describe("<Edit>", () => {
         listings: [],
         jurisdictions: [],
       }
-      mockUserService.update.mockResolvedValue(updatedUser)
+      mockUserService.updatePublic.mockResolvedValue(updatedUser)
 
       renderEditPage()
 
@@ -237,7 +241,7 @@ describe("<Edit>", () => {
       await userEvent.click(updateButtons[2])
 
       await waitFor(() => {
-        expect(mockUserService.update).toHaveBeenCalledWith({ body: updatedUser })
+        expect(mockUserService.updatePublic).toHaveBeenCalledWith({ body: updatedUser })
       })
     })
 
@@ -265,7 +269,7 @@ describe("<Edit>", () => {
   describe("Password form", () => {
     it("should update password successfully", async () => {
       const updatedUser = { ...user, listings: [], jurisdictions: [] }
-      mockUserService.update.mockResolvedValue(updatedUser)
+      mockUserService.updatePublic.mockResolvedValue(updatedUser)
 
       renderEditPage()
 
@@ -287,7 +291,7 @@ describe("<Edit>", () => {
       await userEvent.type(confirmPasswordField, "newPassword123!")
       await userEvent.click(updateButtons[3])
 
-      expect(mockUserService.update).toHaveBeenCalled()
+      expect(mockUserService.updatePublic).toHaveBeenCalled()
     })
 
     it("should show error when passwords don't match", async () => {
@@ -335,7 +339,7 @@ describe("<Edit>", () => {
     })
 
     it("should show error when current password is incorrect", async () => {
-      mockUserService.update.mockRejectedValue({
+      mockUserService.updatePublic.mockRejectedValue({
         response: { status: 401 },
       })
 

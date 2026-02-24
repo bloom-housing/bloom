@@ -111,11 +111,18 @@ locals {
       ]
       container_policy = jsonencode({
         Version = "2012-10-17"
-        Statement = [{
-          Action   = "rds-db:connect"
-          Effect   = "Allow"
-          Resource = "arn:aws:rds-db:${var.aws_region}:${var.aws_account_number}:dbuser:${aws_db_instance.bloom.id}/bloom_api"
-        }]
+        Statement = [
+          {
+            Action   = "rds-db:connect"
+            Effect   = "Allow"
+            Resource = "arn:aws:rds-db:${var.aws_region}:${var.aws_account_number}:dbuser:${aws_db_instance.bloom.id}/bloom_api"
+          },
+          {
+            Action   = "ses:SendEmail"
+            Effect   = "Allow"
+            Resource = "arn:aws:ses:${var.aws_region}:${var.aws_account_number}:identity/*"
+          },
+        ]
       })
     }
     "site-partners" = {

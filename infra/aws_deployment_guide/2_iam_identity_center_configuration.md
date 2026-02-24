@@ -9,6 +9,7 @@ organization. The guide is broken down into a series of files that should be fol
 4. [Fork the Bloom Repo](./4_fork_bloom_repo.md)
 5. [Apply Deployer Permission Set Tofu Modules](./5_apply_deployer_permission_set_tofu_modules.md)
 6. [Apply Bloom Deployment Tofu Modules](./6_apply_bloom_deployment_tofu_modules.md)
+7. [Operations Playbook](./7_operations_playbook.md)
 
 The steps in this file create the following resources:
 
@@ -132,8 +133,8 @@ graph TB
    to manage the prod Bloom deployment.
 
 Optionally, create a `bloom-dev-iam-admins` if the group of people who should have access to manage
-the `bloom-dev-deployer` permission set policy is different from the group of people should should
-have the `bloom-dev-deployer` permissions.
+the `bloom-dev-deployer` permission set policy is different from the group of people should have the
+`bloom-dev-deployer` permissions.
 
 ### 2. Create IAM Identity Center Permission Sets
 

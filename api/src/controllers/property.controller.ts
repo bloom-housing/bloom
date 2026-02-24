@@ -11,6 +11,7 @@ import {
   ValidationPipe,
   Delete,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import {
   ApiExtraModels,
@@ -18,6 +19,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { Request as ExpressRequest } from 'express';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { PaginatedPropertyDto } from '../dtos/properties/paginated-property.dto';
 import { PropertyQueryParams } from '../dtos/properties/property-query-params.dto';
@@ -30,11 +32,13 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { PaginationMeta } from '../dtos/shared/pagination.dto';
 import { JwtAuthGuard } from '../guards/jwt.guard';
-import { PermissionGuard } from '../guards/permission.guard';
 import { PermissionAction } from '../decorators/permission-action.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PropertyFilterParams } from '../dtos/properties/property-filter-params.dto';
+import { mapTo } from '../utilities/mapTo';
+import { User } from '../../src/dtos/users/user.dto';
+import { PermissionGuard } from '../../src/guards/permission.guard';
 
 @Controller('properties')
 @ApiTags('properties')
@@ -48,7 +52,7 @@ import { PropertyFilterParams } from '../dtos/properties/property-filter-params.
   IdDTO,
 )
 @PermissionTypeDecorator('properties')
-@UseGuards(ApiKeyGuard, JwtAuthGuard, PermissionGuard)
+@UseGuards(ApiKeyGuard, JwtAuthGuard)
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
 
@@ -59,6 +63,7 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: PaginatedPropertyDto })
+  @UseGuards(PermissionGuard)
   public async getPaginatedSet(
     @Query() queryParams: PropertyQueryParams,
   ): Promise<PaginatedPropertyDto> {
@@ -71,6 +76,7 @@ export class PropertyController {
     operationId: 'getById',
   })
   @ApiOkResponse({ type: Property })
+  @UseGuards(PermissionGuard)
   public async getPropertyById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) propertyId: string,
   ): Promise<Property> {
@@ -85,6 +91,7 @@ export class PropertyController {
   @PermissionAction(permissionActions.read)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: PaginatedPropertyDto })
+  @UseGuards(PermissionGuard)
   public async getFiltrablePaginatedSet(
     @Body() queryParams: PropertyQueryParams,
   ): Promise<PaginatedPropertyDto> {
@@ -100,8 +107,12 @@ export class PropertyController {
   @ApiOkResponse({ type: Property })
   public async addProperty(
     @Body() propertyDto: PropertyCreate,
+    @Request() req: ExpressRequest,
   ): Promise<Property> {
-    return await this.propertyService.create(propertyDto);
+    return await this.propertyService.create(
+      propertyDto,
+      mapTo(User, req['user']),
+    );
   }
 
   @Put()
@@ -113,8 +124,12 @@ export class PropertyController {
   @ApiOkResponse({ type: Property })
   public async updateProperty(
     @Body() propertyDto: PropertyUpdate,
+    @Request() req: ExpressRequest,
   ): Promise<Property> {
-    return await this.propertyService.update(propertyDto);
+    return await this.propertyService.update(
+      propertyDto,
+      mapTo(User, req['user']),
+    );
   }
 
   @Delete()
@@ -124,7 +139,13 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: SuccessDTO })
-  public async deleteById(@Body() idDto: IdDTO): Promise<SuccessDTO> {
-    return await this.propertyService.deleteOne(idDto.id);
+  public async deleteById(
+    @Body() idDto: IdDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.propertyService.deleteOne(
+      idDto.id,
+      mapTo(User, req['user']),
+    );
   }
 }

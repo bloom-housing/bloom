@@ -27,7 +27,6 @@ import {
   ReservedCommunityTypesService,
   UnitTypesService,
   User,
-  UserCreate,
   UserService,
   serviceOptions,
   SuccessDTO,
@@ -35,6 +34,10 @@ import {
   LanguagesEnum,
   FeatureFlagsService,
   PropertiesService,
+  PublicUserCreate,
+  AdvocateUserCreate,
+  PartnerUserCreate,
+  AgencyService,
 } from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
 import { useRouter } from "next/router"
@@ -54,6 +57,7 @@ type ContextProps = {
   reservedCommunityTypeService: ReservedCommunityTypesService
   mapLayersService: MapLayersService
   lotteryService: LotteryService
+  agencyService: AgencyService
   loadProfile: (redirect?: string) => void
   login: (
     email: string,
@@ -71,7 +75,15 @@ type ContextProps = {
   signOut: () => Promise<void>
   confirmAccount: (token: string) => Promise<User | undefined>
   forgotPassword: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
-  createUser: (user: UserCreate, listingIdRedirect?: string) => Promise<User | undefined>
+  createPublicUser: (
+    user: PublicUserCreate,
+    listingIdRedirect?: string
+  ) => Promise<User | undefined>
+  createAdvocateUser: (
+    user: AdvocateUserCreate,
+    listingIdRedirect?: string
+  ) => Promise<User | undefined>
+  createPartnerUser: (user: PartnerUserCreate) => Promise<User | undefined>
   resendConfirmation: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
   initialStateLoaded?: boolean
   loading?: boolean
@@ -233,6 +245,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     reservedCommunityTypeService: new ReservedCommunityTypesService(),
     unitTypesService: new UnitTypesService(),
     featureFlagService: new FeatureFlagsService(),
+    agencyService: new AgencyService(),
     loading: state?.loading,
     initialStateLoaded: state?.initialStateLoaded,
     profile: state?.profile,
@@ -335,11 +348,34 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
         dispatch(stopLoading())
       }
     },
-    createUser: async (user: UserCreate, listingIdRedirect) => {
+    createPublicUser: async (user: PublicUserCreate, listingIdRedirect) => {
       dispatch(startLoading())
       const appUrl = getListingRedirectUrl(listingIdRedirect)
       try {
-        const response = await userService?.create({
+        const response = await userService?.createPublic({
+          body: { ...user, appUrl },
+        })
+        return response
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    createPartnerUser: async (user: PartnerUserCreate) => {
+      dispatch(startLoading())
+      try {
+        const response = await userService?.createPartner({
+          body: user,
+        })
+        return response
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    createAdvocateUser: async (user: AdvocateUserCreate, listingIdRedirect) => {
+      dispatch(startLoading())
+      const appUrl = getListingRedirectUrl(listingIdRedirect)
+      try {
+        const response = await userService?.createAdvocate({
           body: { ...user, appUrl },
         })
         return response

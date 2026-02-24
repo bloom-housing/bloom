@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Form, t, FieldGroup, FieldSingle } from "@bloom-housing/ui-components"
 import {
   OnClientSide,
@@ -14,9 +15,10 @@ import FormsLayout from "../../../layouts/forms"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
 
 const ApplicationAda = () => {
   const { profile } = useContext(AuthContext)
@@ -57,7 +59,7 @@ const ApplicationAda = () => {
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
 
   useEffect(() => {
@@ -140,18 +142,7 @@ const ApplicationAda = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length === Object.keys(getValues()).length &&
-            Object.keys(getValues()).length > 0 && (
-              <Alert
-                className={styles["message-inside-card"]}
-                variant="alert"
-                fullwidth
-                id={"application-alert-box"}
-              >
-                {t("errors.errorsToResolve")}
-              </Alert>
-            )}
-
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="sr-only">{t("application.details.adaPriorities")}</legend>

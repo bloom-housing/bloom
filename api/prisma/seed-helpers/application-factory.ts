@@ -7,6 +7,8 @@ import {
   YesNoEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from '@prisma/client';
+import dayjs from 'dayjs';
+import { randomInt } from 'crypto';
 import { generateConfirmationCode } from '../../src/utilities/applications-utilities';
 import { addressFactory } from './address-factory';
 import { randomNoun } from './word-generator';
@@ -56,8 +58,12 @@ export const applicationFactory = async (optionalParams?: {
   if (optionalParams?.householdMember) {
     householdSize = optionalParams.householdMember.length + 1;
   }
+  const createdAtDate =
+    optionalParams?.createdAt ||
+    // Created at date sometime in the last 2 months
+    dayjs(new Date()).subtract(randomInt(87_600), 'minutes').toDate();
   return {
-    createdAt: optionalParams?.createdAt || new Date(),
+    createdAt: createdAtDate,
     confirmationCode: generateConfirmationCode(),
     applicant: { create: applicantFactory(optionalParams?.applicant) },
     appUrl: '',
@@ -65,7 +71,10 @@ export const applicationFactory = async (optionalParams?: {
     submissionType:
       optionalParams?.submissionType ??
       ApplicationSubmissionTypeEnum.electronical,
-    submissionDate: new Date(),
+    submissionDate:
+      optionalParams?.submissionType !== ApplicationSubmissionTypeEnum.paper
+        ? createdAtDate
+        : dayjs(createdAtDate).add(2, 'days').toDate(),
     householdSize: householdSize,
     income: '40000',
     incomePeriod: randomBoolean()

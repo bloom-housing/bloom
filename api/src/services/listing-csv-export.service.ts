@@ -103,7 +103,7 @@ export const formatCloudinaryPdfUrl = (fileId: string): string => {
 
 @Injectable()
 export class ListingCsvExporterService implements CsvExporterServiceInterface {
-  readonly dateFormat: string = 'MM-DD-YYYY hh:mm:ssA z';
+  readonly dateFormat: string = 'YYYY-MM-DD hh:mm:ss A';
   timeZone = process.env.TIME_ZONE;
   constructor(
     private prisma: PrismaService,

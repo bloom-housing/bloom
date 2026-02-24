@@ -28,7 +28,6 @@ p, supportAdmin, properties, true, read
 p, jurisdictionAdmin, properties, true, read
 p, limitedJurisdictionAdmin, properties, true, read
 p, partner, properties, true, read
-p, anonymous, properties, true, read
 
 p, admin, agency, true, .*
 p, supportAdmin, agency, true, read
@@ -36,6 +35,7 @@ p, jurisdictionAdmin, agency, true, read
 p, limitedJurisdictionAdmin, agency, true, read
 p, partner, agency, true, read
 p, user, agency, true, read,
+p, anonymous, agency, true, read
 
 p, admin, applicationMethod, true, .*
 p, supportAdmin, applicationMethod, true, .*
@@ -53,18 +53,6 @@ p, supportAdmin, listingEvent, true, .*
 p, jurisdictionAdmin, listingEvent, true, .*
 p, limitedJurisdictionAdmin, listingEvent, true, .*
 p, partner, listingEvent, true, read
-
-p, admin, property, true, .*
-p, supportAdmin, property, true, .*
-p, jurisdictionAdmin, property, true, .*
-p, limitedJurisdictionAdmin, property, true, .*
-p, partner, property, true, read
-
-p, admin, propertyGroup, true, .*
-p, supportAdmin, propertyGroup, true, .*
-p, jurisdictionAdmin, propertyGroup, true, .*
-p, limitedJurisdictionAdmin, propertyGroup, true, .*
-p, partner, propertyGroup, true, read
 
 p, admin, amiChart, true, .*
 p, supportAdmin, amiChart, true, .*

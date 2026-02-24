@@ -1,29 +1,26 @@
 import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
-import {
-  IsArray,
-  IsEmail,
-  IsString,
-  Matches,
-  MaxLength,
-  ValidateNested,
-} from 'class-validator';
-import { UserUpdate } from './user-update.dto';
-
-import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
+import { PublicUserUpdate } from './public-user-update.dto';
+import { Expose } from 'class-transformer';
+import { IsEmail, IsString, Matches, MaxLength } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { passwordRegex } from '../../utilities/password-regex';
 import { Match } from '../../decorators/match-decorator';
-import { IdDTO } from '../shared/id.dto';
+import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 
-export class UserCreate extends OmitType(UserUpdate, [
+export class PublicUserCreate extends OmitType(PublicUserUpdate, [
   'id',
-  'userRoles',
+  'newEmail',
   'password',
   'currentPassword',
-  'email',
-  'jurisdictions',
-]) {
+] as const) {
+  /* Fields inherited from PublicUserUpdate:
+   * - firstName (inherited as required from PublicUserUpdate)
+   * - middleName (inherited as optional from PublicUserUpdate)
+   * - lastName (inherited as required from PublicUserUpdate)
+   * - email (inherited as required from PublicUserUpdate)
+   * - dob (inherited as required from PublicUserUpdate)
+   **/
+
   @Expose()
   @ApiProperty()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -41,22 +38,9 @@ export class UserCreate extends OmitType(UserUpdate, [
   passwordConfirmation: string;
 
   @Expose()
-  @ApiProperty()
-  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
-  @EnforceLowerCase()
-  email: string;
-
-  @Expose()
   @ApiPropertyOptional()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @Match('email', { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
   emailConfirmation?: string;
-
-  @Expose()
-  @Type(() => IdDTO)
-  @IsArray({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiPropertyOptional({ type: IdDTO, isArray: true })
-  jurisdictions?: IdDTO[];
 }
