@@ -449,52 +449,56 @@ export const phoneFields = (
               setPhoneValue("additionalPhoneExtension", "")
             }
           },
+          "aria-expanded": hasAdditionalPhone,
+          "aria-controls": "additional-phone-fields",
         }}
         dataTestId={"account-additional-phone-toggle"}
         className="mb-2"
       />
-      {hasAdditionalPhone && (
-        <>
-          <PhoneField
-            id="additionalPhoneNumber"
-            name="additionalPhoneNumber"
-            label={t("application.contact.secondNumber")}
-            required={true}
-            error={phoneErrors?.additionalPhoneNumber}
-            errorMessage={t("errors.phoneNumberError")}
-            control={phoneControl}
-            defaultValue={user?.additionalPhoneNumber || ""}
-            controlClassName="control"
-            dataTestId={"account-additional-phone-number"}
-            subNote={t("application.contact.number.subNote")}
-          />
-          <Field
-            id="additionalPhoneExtension"
-            name="additionalPhoneExtension"
-            label={t("t.phoneExtensionOptional")}
-            defaultValue={user?.additionalPhoneExtension || ""}
-            validation={{ maxLength: 10 }}
-            error={phoneErrors?.additionalPhoneExtension}
-            errorMessage={t("errors.maxLength", { length: 10 })}
-            register={phoneRegister}
-            dataTestId={"account-additional-phone-extension"}
-          />
-          <Select
-            id="additionalPhoneNumberType"
-            name="additionalPhoneNumberType"
-            defaultValue={user?.additionalPhoneNumberType || ""}
-            validation={{ required: true }}
-            error={phoneErrors?.additionalPhoneNumberType}
-            errorMessage={t("errors.phoneNumberTypeError")}
-            register={phoneRegister}
-            controlClassName="control"
-            label={t("application.contact.phoneNumberTypes.prompt")}
-            options={phoneNumberKeys}
-            keyPrefix="application.contact.phoneNumberTypes"
-            dataTestId={"account-additional-phone-type"}
-          />
-        </>
-      )}
+      <div id="additional-phone-fields">
+        {hasAdditionalPhone && (
+          <>
+            <PhoneField
+              id="additionalPhoneNumber"
+              name="additionalPhoneNumber"
+              label={t("application.contact.secondNumber")}
+              required={true}
+              error={phoneErrors?.additionalPhoneNumber}
+              errorMessage={t("errors.phoneNumberError")}
+              control={phoneControl}
+              defaultValue={user?.additionalPhoneNumber || ""}
+              controlClassName="control"
+              dataTestId={"account-additional-phone-number"}
+              subNote={t("application.contact.number.subNote")}
+            />
+            <Field
+              id="additionalPhoneExtension"
+              name="additionalPhoneExtension"
+              label={t("t.phoneExtensionOptional")}
+              defaultValue={user?.additionalPhoneExtension || ""}
+              validation={{ maxLength: 10 }}
+              error={phoneErrors?.additionalPhoneExtension}
+              errorMessage={t("errors.maxLength", { length: 10 })}
+              register={phoneRegister}
+              dataTestId={"account-additional-phone-extension"}
+            />
+            <Select
+              id="additionalPhoneNumberType"
+              name="additionalPhoneNumberType"
+              defaultValue={user?.additionalPhoneNumberType || ""}
+              validation={{ required: true }}
+              error={phoneErrors?.additionalPhoneNumberType}
+              errorMessage={t("errors.phoneNumberTypeError")}
+              register={phoneRegister}
+              controlClassName="control"
+              label={t("application.contact.phoneNumberTypes.prompt")}
+              options={phoneNumberKeys}
+              keyPrefix="application.contact.phoneNumberTypes"
+              dataTestId={"account-additional-phone-type"}
+            />
+          </>
+        )}
+      </div>
     </fieldset>
   )
 }
@@ -520,13 +524,7 @@ export const AccountSection = ({
 }) => (
   <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
     {alert && (
-      <AlertBox
-        type={alert.type}
-        onClose={() => setAlert(null)}
-        className="mb-4"
-        inverted
-        closeable
-      >
+      <AlertBox type={alert.type} onClose={() => setAlert(null)} className="mb-4" closeable>
         {alert.message}
       </AlertBox>
     )}
