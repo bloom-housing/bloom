@@ -13,5 +13,6 @@
   "region.name": "블루밍턴",
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut Labore et dolore magna aliqua.",
   "resources.contactEmail": "bloomington@housing.org",
-  "resources.contactInfo": "블루밍턴 시 주택 및 지역사회 개발부"
+  "resources.contactInfo": "블루밍턴 시 주택 및 지역사회 개발부",
+  "resources.housingProgramsTitle": "블루밍턴 주택 및 지역사회 개발부의 주택 프로그램"
 }

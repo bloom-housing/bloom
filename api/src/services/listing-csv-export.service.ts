@@ -98,7 +98,12 @@ export const formatCommunityType = {
 };
 
 export const formatCloudinaryPdfUrl = (fileId: string): string => {
-  return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${fileId}.pdf`;
+  const cloudinaryCloudName: string | undefined =
+    process.env.CLOUDINARY_CLOUD_NAME || process.env.cloudinaryCloudName;
+  if (!cloudinaryCloudName) {
+    return fileId;
+  }
+  return `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/${fileId}.pdf`;
 };
 
 @Injectable()

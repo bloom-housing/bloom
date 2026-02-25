@@ -259,15 +259,25 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
   ].filter(Boolean)
 
   const pdfUploader = async (file: File) => {
-    await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue })
+    if (process.env.cloudinaryCloudName) {
+      await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue })
+    } else {
+      // TODO: Upload to AWS
+      alert("Cloudinary environment variables not set, must configure AWS")
+    }
   }
 
   const accessiblePdfUploader = async (file: File) => {
-    await cloudinaryFileUploader({
-      file,
-      setCloudinaryData: setAccessibleCloudinaryData,
-      setProgressValue: setAccessibleProgressValue,
-    })
+    if (process.env.cloudinaryCloudName) {
+      await cloudinaryFileUploader({
+        file,
+        setCloudinaryData: setAccessibleCloudinaryData,
+        setProgressValue: setAccessibleProgressValue,
+      })
+    } else {
+      // TODO: Upload to AWS
+      alert("Cloudinary environment variables not set, must configure AWS")
+    }
   }
 
   const buildPreviewTableRow = (data: CloudinaryData, onDelete: () => void): StandardTableData => {

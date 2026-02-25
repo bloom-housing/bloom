@@ -13,6 +13,7 @@ const reservedCommunityTypeOptions = [
   'schoolEmployee',
   'farmworkerHousing',
   'housingVoucher',
+  'referralOnly',
 ];
 
 export const reservedCommunityTypeFactory = (
