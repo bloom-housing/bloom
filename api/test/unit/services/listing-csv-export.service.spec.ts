@@ -10,7 +10,10 @@ import {
 import dayjs from 'dayjs';
 import { randomUUID } from 'crypto';
 import fs from 'fs';
-import { ListingCsvExporterService } from '../../../src/services/listing-csv-export.service';
+import {
+  formatCloudinaryPdfUrl,
+  ListingCsvExporterService,
+} from '../../../src/services/listing-csv-export.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import Listing from '../../../src/dtos/listings/listing.dto';
 import { User } from '../../../src/dtos/users/user.dto';
@@ -66,6 +69,7 @@ describe('Testing listing csv export service', () => {
     visibleNeighborhoodAmenities: [],
     regions: [],
     visibleAccessibilityPriorityTypes: [],
+    visibleSpokenLanguages: [],
   };
 
   const mockBaseUnit: Unit = {
@@ -206,6 +210,35 @@ describe('Testing listing csv export service', () => {
       label: 'Building Selection Criteria Label',
     },
   };
+
+  describe('formatCloudinaryPdfUrl', () => {
+    const oldEnv = process.env;
+
+    beforeEach(() => {
+      process.env = { ...oldEnv };
+    });
+
+    afterAll(() => {
+      process.env = oldEnv;
+    });
+
+    it('should return original url when cloudinary env is not configured', () => {
+      delete process.env.CLOUDINARY_CLOUD_NAME;
+      delete process.env.cloudinaryCloudName;
+
+      expect(formatCloudinaryPdfUrl('https://aws.example.com/file.pdf')).toBe(
+        'https://aws.example.com/file.pdf',
+      );
+    });
+
+    it('should return cloudinary url when cloudinary env is configured', () => {
+      process.env.CLOUDINARY_CLOUD_NAME = 'exygy';
+
+      expect(formatCloudinaryPdfUrl('buildingSelectionCriteriaFileId')).toBe(
+        'https://res.cloudinary.com/exygy/image/upload/buildingSelectionCriteriaFileId.pdf',
+      );
+    });
+  });
 
   describe('createCsv', () => {
     it('should create the listing csv with no feature flags', async () => {

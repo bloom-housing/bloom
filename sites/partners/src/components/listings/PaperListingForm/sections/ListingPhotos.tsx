@@ -354,11 +354,16 @@ const ListingPhotos = (props: ListingPhotosProps) => {
    Pass the file for the dropzone callback along to the uploader
    */
   const photoUploader = async (file: File) => {
-    void (await cloudinaryFileUploader({
-      file,
-      setCloudinaryData: setLatestUpload,
-      setProgressValue,
-    }))
+    if (process.env.cloudinaryCloudName) {
+      void (await cloudinaryFileUploader({
+        file,
+        setCloudinaryData: setLatestUpload,
+        setProgressValue,
+      }))
+    } else {
+      // TODO: Upload to AWS
+      alert("Cloudinary environment variables not set, must configure AWS")
+    }
   }
 
   const saveEditedPhoto = (newDescription: string) => {
