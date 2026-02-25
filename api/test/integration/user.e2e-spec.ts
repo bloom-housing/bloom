@@ -167,7 +167,7 @@ describe('User Controller Tests', () => {
     });
 
     it('should get advocate users from list() when filter params are sent', async () => {
-      const userA = await prisma.userAccounts.create({
+      await prisma.userAccounts.create({
         data: await userFactory({}),
       });
       const userB = await prisma.userAccounts.create({
