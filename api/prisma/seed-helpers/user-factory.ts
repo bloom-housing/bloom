@@ -83,7 +83,6 @@ export const userFactory = async (optionalParams?: {
         },
       }
     : undefined,
-  isApproved: optionalParams?.isAdvocate,
   agency: optionalParams?.agencyId
     ? {
         connect: {

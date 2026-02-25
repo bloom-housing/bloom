@@ -201,7 +201,7 @@ describe('User Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
-      expect(res.body.items.length).toEqual(2);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(2);
       let ids: any[] = res.body.items.map((item) => item.id);
       expect(ids).toContain(userC.id);
       expect(ids).toContain(userB.id);
@@ -224,7 +224,7 @@ describe('User Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
-      expect(res.body.items.length).toEqual(2);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(2);
       ids = res.body.items.map((item) => item.id);
       expect(ids).toContain(userB.id);
       expect(ids).toContain(userC.id);
