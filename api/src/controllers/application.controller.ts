@@ -52,6 +52,7 @@ import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
+import { PaginationDTO } from '../dtos/script-runner/pagination.dto';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -274,8 +275,8 @@ export class ApplicationController {
     operationId: 'removePIICronJob',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async removePIICronJob(): Promise<SuccessDTO> {
-    return await this.applicationService.removePIICronJob();
+  async removePIICronJob(@Body() dto: PaginationDTO): Promise<SuccessDTO> {
+    return await this.applicationService.removePIICronJob(dto?.pageSize);
   }
 
   @Put(`:applicationId`)

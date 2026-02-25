@@ -1212,7 +1212,8 @@ export class ApplicationService {
             birthDay: null,
             birthMonth: null,
             birthYear: null,
-            emailAddress: null,
+            // Doorway wants to keep the email addresses despite being PII
+            // emailAddress: null,
             firstName: null,
             lastName: null,
             middleName: null,
@@ -1289,7 +1290,7 @@ export class ApplicationService {
     await this.prisma.$transaction(transactions);
   }
 
-  async removePIICronJob(): Promise<SuccessDTO> {
+  async removePIICronJob(limit?: number): Promise<SuccessDTO> {
     if (process.env.APPLICATION_DAYS_TILL_EXPIRY) {
       this.logger.warn('removePIICron job running');
       await this.cronJobService.markCronJobAsStarted(
@@ -1304,6 +1305,7 @@ export class ApplicationService {
           isNewest: false,
           wasPIICleared: false,
         },
+        take: limit || 10_000,
       });
       this.logger.warn(
         `removing PII information for ${applications.length} applications`,
@@ -1311,6 +1313,9 @@ export class ApplicationService {
       for (const application of applications) {
         await this.removePII(application.id);
       }
+      this.logger.warn(
+        `completed PII information removal for ${applications.length} applications`,
+      );
     } else {
       this.logger.warn(
         'APPLICATION_DAYS_TILL_EXPIRY variable not set so the cron job will not run',
