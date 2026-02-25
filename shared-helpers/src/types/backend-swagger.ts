@@ -3201,6 +3201,8 @@ export class AgencyService {
       page?: number
       /**  */
       limit?: number | "all"
+      /**  */
+      filter?: AgencyFilterParams[]
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedAgency> {
@@ -3208,7 +3210,7 @@ export class AgencyService {
       let url = basePath + "/agency"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { page: params["page"], limit: params["limit"] }
+      configs.params = { page: params["page"], limit: params["limit"], filter: params["filter"] }
 
       /** 适配ios13，get请求不允许带body */
 
@@ -3238,7 +3240,7 @@ export class AgencyService {
     })
   }
   /**
-   * Updates an exiting agency entry in the database
+   * Updates an existing agency entry in the database
    */
   update(
     params: {
@@ -3262,7 +3264,7 @@ export class AgencyService {
   /**
    * Deletes an agency entry from the database by its ID
    */
-  deletes(
+  delete(
     params: {
       /** requestBody */
       body?: IdDTO
@@ -8991,7 +8993,7 @@ export interface AdvocateUserCreate {
   isApproved?: boolean
 
   /**  */
-  agency: Agency
+  agency: IdDTO
 
   /**  */
   address: AddressUpdate
@@ -9291,7 +9293,7 @@ export interface AdvocateUserUpdate {
   isApproved?: boolean
 
   /**  */
-  agency: Agency
+  agency: IdDTO
 
   /**  */
   address: AddressUpdate
@@ -9747,6 +9749,25 @@ export interface AgencyUpdate {
 
   /**  */
   jurisdictions: IdDTO
+}
+
+export interface AgencyQueryParams {
+  /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
+  filter?: string[]
+}
+
+export interface AgencyFilterParams {
+  /**  */
+  $comparison: EnumAgencyFilterParamsComparison
+
+  /**  */
+  jurisdiction?: string
 }
 
 export interface PaginatedAgency {
@@ -10254,6 +10275,15 @@ export enum MfaType {
   "email" = "email",
 }
 export enum EnumPropertyFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "LIKE" = "LIKE",
+  "NA" = "NA",
+}
+export enum EnumAgencyFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
   "IN" = "IN",

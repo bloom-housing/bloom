@@ -4,7 +4,7 @@
     --card-content-padding-inline: var(--seeds-s4);
     --card-content-padding-block: var(--seeds-s6);
   }
-  a {
+  a:not(:global(.seeds-button)) {
     text-decoration: underline;
   }
 }

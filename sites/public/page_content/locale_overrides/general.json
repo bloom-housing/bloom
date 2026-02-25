@@ -1,7 +1,9 @@
 {
+  "advocateAccount.agencyNotListed": "Contact support if your agency is not listed",
   "application.referralApplication.instructions": "The permanent supportive housing units are referred directly through Bloomington's Coordinated Entry System. Households experiencing homelessness can call 123-456-7890 in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information.",
   "application.referralApplication.phoneNumber": "211",
   "application.review.demographics.howDidYouHearOptions.jurisdictionWebsite": "Jurisdiction website",
+  "authentication.requestAdvocateAccount.confirmation": "Your account will now need to be verified by an administrator. Please expect this to take at least 24 hours. If you have any questions in the meantime, please reach out to example@email.com.",
   "faq.stillHaveQuestionsContent": "If you couldn't find the answer you were looking for, please reach out to our support team at <a className='lined' href='mailto:support@bloomingtonhousing.gov'>support@bloomingtonhousing.gov</a> or view our Resource page.",
   "footer.content.programQuestions": "For general program inquiries, you may call Bloomington Housing at 123-456-7890.",
   "footer.content.projectOf": "Bloomington Housing Portal is a project of the",
@@ -12,9 +14,5 @@
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "resources.contactEmail": "bloomington@housing.org",
   "resources.contactInfo": "Bloomington's Housing & Community Development Department",
-  "resources.housingProgramsTitle": "Bloomington's Housing & Community Development housing programs",
-  "resources.mockCardDescription": "Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  "listings.showAll": "Show all listings",
-  "resources.mockCardTitle": "Lorem Ipsum",
-  "t.formSubmitted": "Submitting form, wait"
+  "resources.housingProgramsTitle": "Bloomington's Housing & Community Development housing programs"
 }
