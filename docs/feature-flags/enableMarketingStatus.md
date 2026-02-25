@@ -1,14 +1,14 @@
 # Marketing Status - enableMarketingStatus
 
-### Name
+## Name
 
 `enableMarketingStatus`
 
-### Description
+## Description
 
 When true, the 'marketing status' sub-section is displayed in listing creation/edit and the public listing view.
 
-### Images
+## Images
 
 Partners
 
