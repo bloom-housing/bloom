@@ -20,7 +20,6 @@ import { LanguagesEnum } from '@prisma/client';
 import { IdDTO } from '../shared/id.dto';
 import { UserRole } from './user-role.dto';
 import { Jurisdiction } from '../jurisdictions/jurisdiction.dto';
-import Agency from '../agency/agency.dto';
 import { Address } from '../addresses/address.dto';
 
 export class User extends AbstractDTO {
