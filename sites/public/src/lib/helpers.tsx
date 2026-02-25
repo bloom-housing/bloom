@@ -1,4 +1,4 @@
-import React from "react"
+import React, { ReactElement } from "react"
 import dayjs from "dayjs"
 import { useRouter } from "next/router"
 import InfoIcon from "@heroicons/react/20/solid/InformationCircleIcon"
@@ -522,7 +522,7 @@ export const fetchFavoriteListingIds = async (userId: string, userService: UserS
 }
 
 // RenderIf component to render content based on language (used in markdown components)
-export const RenderIf = (props: { language: string; children: React.ReactNode }) => {
+export const RenderIf = (props: { language: string; children: ReactElement }) => {
   const router = useRouter()
 
   if (
