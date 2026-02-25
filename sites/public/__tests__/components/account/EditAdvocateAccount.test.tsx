@@ -61,8 +61,11 @@ const renderEditAdvocateAccount = (userOverrides = {}) => {
 }
 
 describe("EditAdvocateAccount", () => {
+  let consoleWarnSpy: jest.SpyInstance
+
   beforeEach(() => {
     jest.clearAllMocks()
+    consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => undefined)
     ;(useRouter as jest.Mock).mockReturnValue({
       pathname: "/",
       query: {},
@@ -184,5 +187,25 @@ describe("EditAdvocateAccount", () => {
         }),
       })
     })
+  })
+
+  it("should show an error alert when advocate update fails", async () => {
+    mockUserService.updateAdvocate.mockRejectedValue(new Error("Server error"))
+
+    renderEditAdvocateAccount()
+
+    await waitFor(() => {
+      expect(screen.getByRole("textbox", { name: "Given name" })).toBeInTheDocument()
+    })
+
+    await userEvent.click(screen.getByRole("button", { name: "Update Agency" }))
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("There was an error. Please try again, or contact support for help.")
+      ).toBeInTheDocument()
+    })
+
+    expect(consoleWarnSpy).toHaveBeenCalled()
   })
 })

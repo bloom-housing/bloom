@@ -9,6 +9,7 @@ import {
   Field,
   t,
   DOBField,
+  DOBFieldValues,
   Select,
   PhoneField,
   AlertBox,
@@ -37,59 +38,55 @@ export const accountNameFields = (
   clearErrors: (name?: string | string[]) => void
 ) => {
   return (
-    <>
-      <fieldset>
-        <legend className={styles["account-settings-label"]}>
-          {t("application.name.yourName")}
-        </legend>
-        <Field
-          label={t("application.contact.givenName")}
-          className="my-3"
-          controlClassName="mt-2"
-          name="firstName"
-          error={nameErrors.firstName}
-          validation={{ required: true, maxLength: 64 }}
-          errorMessage={
-            nameErrors.firstName?.type === "maxLength"
-              ? t("errors.maxLength", { length: 64 })
-              : t("errors.firstNameError")
-          }
-          inputProps={{ onChange: () => nameErrors.firstName && clearErrors("firstName") }}
-          register={nameRegister}
-          defaultValue={user ? user.firstName : null}
-          dataTestId={"account-first-name"}
-        />
+    <fieldset>
+      <legend className={styles["account-settings-label"]}>{t("application.name.yourName")}</legend>
+      <Field
+        label={t("application.contact.givenName")}
+        className="my-3"
+        controlClassName="mt-2"
+        name="firstName"
+        error={nameErrors.firstName}
+        validation={{ required: true, maxLength: 64 }}
+        errorMessage={
+          nameErrors.firstName?.type === "maxLength"
+            ? t("errors.maxLength", { length: 64 })
+            : t("errors.firstNameError")
+        }
+        inputProps={{ onChange: () => nameErrors.firstName && clearErrors("firstName") }}
+        register={nameRegister}
+        defaultValue={user ? user.firstName : null}
+        dataTestId={"account-first-name"}
+      />
 
-        <Field
-          name="middleName"
-          className="mb-3"
-          register={nameRegister}
-          defaultValue={user ? user?.middleName : null}
-          label={t("application.name.middleNameOptional")}
-          error={nameErrors.middleName}
-          validation={{ maxLength: 64 }}
-          errorMessage={t("errors.maxLength", { length: 64 })}
-          dataTestId={"account-middle-name"}
-        />
+      <Field
+        name="middleName"
+        className="mb-3"
+        register={nameRegister}
+        defaultValue={user ? user?.middleName : null}
+        label={t("application.name.middleNameOptional")}
+        error={nameErrors.middleName}
+        validation={{ maxLength: 64 }}
+        errorMessage={t("errors.maxLength", { length: 64 })}
+        dataTestId={"account-middle-name"}
+      />
 
-        <Field
-          name="lastName"
-          className="mb-6"
-          error={nameErrors.lastName}
-          register={nameRegister}
-          defaultValue={user ? user.lastName : null}
-          label={t("application.contact.familyName")}
-          validation={{ maxLength: 64, required: true }}
-          errorMessage={
-            nameErrors.lastName?.type === "maxLength"
-              ? t("errors.maxLength", { length: 64 })
-              : t("errors.lastNameError")
-          }
-          inputProps={{ onChange: () => nameErrors.lastName && clearErrors("lastName") }}
-          dataTestId={"account-last-name"}
-        />
-      </fieldset>
-    </>
+      <Field
+        name="lastName"
+        className="mb-6"
+        error={nameErrors.lastName}
+        register={nameRegister}
+        defaultValue={user ? user.lastName : null}
+        label={t("application.contact.familyName")}
+        validation={{ maxLength: 64, required: true }}
+        errorMessage={
+          nameErrors.lastName?.type === "maxLength"
+            ? t("errors.maxLength", { length: 64 })
+            : t("errors.lastNameError")
+        }
+        inputProps={{ onChange: () => nameErrors.lastName && clearErrors("lastName") }}
+        dataTestId={"account-last-name"}
+      />
+    </fieldset>
   )
 }
 
@@ -157,61 +154,58 @@ export const passwordFields = (
   minLength: number
 ) => {
   return (
-    <>
-      <fieldset>
-        <legend className={styles["account-settings-label"]}>
-          {t("authentication.createAccount.password")}
-        </legend>
-        <p className="field-note mt-2 mb-3">{t("account.settings.passwordRemember")}</p>
-        <div className={"flex flex-col"}>
-          <Field
-            type="password"
-            name="currentPassword"
-            label={t("account.settings.currentPassword")}
-            error={pwdErrors.currentPassword}
-            register={pwdRegister}
-            className={"mb-1"}
-            dataTestId={"account-current-password"}
-          />
-          <span className="float-left text-sm font-semibold mt-2">
-            <Link href="/forgot-password">{t("authentication.signIn.forgotPassword")}</Link>
-          </span>
-        </div>
-
+    <fieldset>
+      <legend className={styles["account-settings-label"]}>
+        {t("authentication.createAccount.password")}
+      </legend>
+      <p className="field-note mt-2 mb-3">{t("account.settings.passwordRemember")}</p>
+      <div className={"flex flex-col"}>
         <Field
           type="password"
-          name="password"
-          label={t("account.settings.newPassword")}
-          labelClassName="mt-4"
-          className="mt-4"
-          note={t("authentication.createAccount.passwordInfo")}
-          validation={{
-            minLength: minLength,
-            pattern: passwordRegex,
-          }}
-          error={pwdErrors.password}
-          errorMessage={t("authentication.signIn.passwordError")}
+          name="currentPassword"
+          label={t("account.settings.currentPassword")}
+          error={pwdErrors.currentPassword}
           register={pwdRegister}
-          dataTestId={"account-password"}
+          className={"mb-1"}
+          dataTestId={"account-current-password"}
         />
+        <span className="float-left text-sm font-semibold mt-2">
+          <Link href="/forgot-password">{t("authentication.signIn.forgotPassword")}</Link>
+        </span>
+      </div>
 
-        <Field
-          type="password"
-          name="passwordConfirmation"
-          label={t("account.settings.confirmNewPassword")}
-          className="mt-4 mb-6"
-          validation={{
-            validate: (value) =>
-              value === password.current ||
-              t("authentication.createAccount.errors.passwordMismatch"),
-          }}
-          error={pwdErrors.passwordConfirmation}
-          errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
-          register={pwdRegister}
-          dataTestId={"account-password-confirmation"}
-        />
-      </fieldset>
-    </>
+      <Field
+        type="password"
+        name="password"
+        label={t("account.settings.newPassword")}
+        labelClassName="mt-4"
+        className="mt-4"
+        note={t("authentication.createAccount.passwordInfo")}
+        validation={{
+          minLength: minLength,
+          pattern: passwordRegex,
+        }}
+        error={pwdErrors.password}
+        errorMessage={t("authentication.signIn.passwordError")}
+        register={pwdRegister}
+        dataTestId={"account-password"}
+      />
+
+      <Field
+        type="password"
+        name="passwordConfirmation"
+        label={t("account.settings.confirmNewPassword")}
+        className="mt-4 mb-6"
+        validation={{
+          validate: (value) =>
+            value === password.current || t("authentication.createAccount.errors.passwordMismatch"),
+        }}
+        error={pwdErrors.passwordConfirmation}
+        errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
+        register={pwdRegister}
+        dataTestId={"account-password-confirmation"}
+      />
+    </fieldset>
   )
 }
 
@@ -661,6 +655,135 @@ export const createPasswordSubmitHandler = (
       } else {
         setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
       }
+      console.warn(err)
+    }
+  }
+}
+
+// Submit handler factory for date-of-birth submission
+export const createDobSubmitHandler = (
+  userService: UserService,
+  updateFn: "updatePublic" | "updateAdvocate",
+  setAlert: (alert: AlertMessage | null) => void,
+  setLoading: (loading: boolean) => void,
+  setUser: React.Dispatch<React.SetStateAction<User>>,
+  user: any // eslint-disable-line @typescript-eslint/no-explicit-any
+) => {
+  return async (data: { dateOfBirth: DOBFieldValues }) => {
+    setLoading(true)
+    const { dateOfBirth } = data
+    setAlert(null)
+    try {
+      const newUser = await userService[updateFn]({
+        body: {
+          ...user,
+          dob: dayjs(
+            `${dateOfBirth.birthYear}-${dateOfBirth.birthMonth}-${dateOfBirth.birthDay}`
+          ).toDate(),
+        },
+      })
+      setUser(newUser)
+      setAlert({ type: "success", message: `${t("account.settings.alerts.dobSuccess")}` })
+      setLoading(false)
+    } catch (err) {
+      setLoading(false)
+      setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      console.warn(err)
+    }
+  }
+}
+
+// Submit handler factory for address submission
+export const createAddressSubmitHandler = (
+  userService: UserService,
+  updateFn: "updatePublic" | "updateAdvocate",
+  setAlert: (alert: AlertMessage | null) => void,
+  setLoading: (loading: boolean) => void,
+  setUser: React.Dispatch<React.SetStateAction<User>>,
+  user: any // eslint-disable-line @typescript-eslint/no-explicit-any
+) => {
+  return async (data: {
+    isPOBox: "yes" | "no"
+    poBox?: string
+    street?: string
+    street2?: string
+    city: string
+    state: string
+    zipCode: string
+  }) => {
+    setLoading(true)
+    setAlert(null)
+    const poBoxValue = (data.poBox || "").replace(/^po box\s*/i, "").trim()
+    const streetValue = data.isPOBox === "yes" ? `PO Box ${poBoxValue}` : data.street || ""
+
+    try {
+      const newUser = await userService[updateFn]({
+        body: {
+          ...user,
+          address: {
+            ...(user?.address || {}),
+            street: streetValue,
+            street2: data.isPOBox === "yes" ? "" : data.street2,
+            city: data.city,
+            state: data.state,
+            zipCode: data.zipCode,
+          },
+        },
+      })
+      setUser(newUser)
+      setAlert({ type: "success", message: `${t("users.userUpdated")}` })
+      setLoading(false)
+    } catch (err) {
+      setLoading(false)
+      setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      console.warn(err)
+    }
+  }
+}
+
+// Submit handler factory for phone submission
+export const createPhoneSubmitHandler = (
+  userService: UserService,
+  updateFn: "updatePublic" | "updateAdvocate",
+  setAlert: (alert: AlertMessage | null) => void,
+  setLoading: (loading: boolean) => void,
+  setUser: React.Dispatch<React.SetStateAction<User>>,
+  user: any // eslint-disable-line @typescript-eslint/no-explicit-any
+) => {
+  return async (data: {
+    phoneNumber: string
+    phoneType: string
+    phoneExtension: string
+    hasAdditionalPhone: boolean
+    additionalPhoneNumber: string
+    additionalPhoneNumberType: string
+    additionalPhoneExtension: string
+  }) => {
+    setLoading(true)
+    setAlert(null)
+    try {
+      const hasAdditionalPhone = !!data.hasAdditionalPhone
+      const newUser = await userService[updateFn]({
+        body: {
+          ...user,
+          phoneNumber: data.phoneNumber,
+          phoneType: data.phoneType,
+          phoneExtension: data.phoneExtension || undefined,
+          additionalPhoneNumber: hasAdditionalPhone ? data.additionalPhoneNumber : undefined,
+          additionalPhoneNumberType: hasAdditionalPhone
+            ? data.additionalPhoneNumberType
+            : undefined,
+          additionalPhoneExtension: hasAdditionalPhone
+            ? data.additionalPhoneExtension || undefined
+            : undefined,
+        },
+      })
+      setUser(newUser)
+      setAlert({ type: "success", message: `${t("users.userUpdated")}` })
+      setLoading(false)
+    } catch (err) {
+      setLoading(false)
+      setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
       console.warn(err)
     }
   }

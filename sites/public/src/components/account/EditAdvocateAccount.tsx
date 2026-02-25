@@ -22,6 +22,8 @@ import {
   AccountSection,
   createNameSubmitHandler,
   createEmailSubmitHandler,
+  createAddressSubmitHandler,
+  createPhoneSubmitHandler,
   createPasswordSubmitHandler,
   AlertMessage,
 } from "./EditAccountHelpers"
@@ -157,92 +159,23 @@ export const EditAdvocateAccount = (props: EditAdvocateAccountProps) => {
     }
   }
 
-  const onAddressSubmit = async (data: {
-    isPOBox: "yes" | "no"
-    poBox?: string
-    street?: string
-    street2?: string
-    city: string
-    state: string
-    zipCode: string
-  }) => {
-    setAddressLoading(true)
-    setAddressAlert(null)
-    const poBoxValue = (data.poBox || "").replace(/^po box\s*/i, "").trim()
-    const streetValue = data.isPOBox === "yes" ? `PO Box ${poBoxValue}` : data.street || ""
-    console.log({ data, poBoxValue, streetValue })
-    console.log({
-      ...user,
-      address: {
-        ...(user?.address || {}),
-        street: streetValue,
-        street2: data.isPOBox === "yes" ? "" : data.street2,
-        city: data.city,
-        state: data.state,
-        zipCode: data.zipCode,
-      },
-    })
-    try {
-      const newUser = await userService.updateAdvocate({
-        body: {
-          ...user,
-          address: {
-            ...(user?.address || {}),
-            street: streetValue,
-            street2: data.isPOBox === "yes" ? "" : data.street2,
-            city: data.city,
-            state: data.state,
-            zipCode: data.zipCode,
-          },
-        },
-      })
-      setUser(newUser)
-      setAddressAlert({ type: "success", message: `${t("users.userUpdated")}` })
-      setAddressLoading(false)
-    } catch (err) {
-      setAddressLoading(false)
-      setAddressAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
-      console.warn(err)
-    }
-  }
+  const onAddressSubmit = createAddressSubmitHandler(
+    userService,
+    "updateAdvocate",
+    setAddressAlert,
+    setAddressLoading,
+    setUser,
+    user
+  )
 
-  const onPhoneSubmit = async (data: {
-    phoneNumber: string
-    phoneType: string
-    phoneExtension: string
-    hasAdditionalPhone: boolean
-    additionalPhoneNumber: string
-    additionalPhoneNumberType: string
-    additionalPhoneExtension: string
-  }) => {
-    setPhoneLoading(true)
-    setPhoneAlert(null)
-    try {
-      const hasAdditionalPhone = !!data.hasAdditionalPhone
-      const newUser = await userService.updateAdvocate({
-        body: {
-          ...user,
-          phoneNumber: data.phoneNumber,
-          phoneType: data.phoneType,
-          phoneExtension: data.phoneExtension || undefined,
-          additionalPhoneNumber: hasAdditionalPhone ? data.additionalPhoneNumber : undefined,
-          additionalPhoneNumberType: hasAdditionalPhone
-            ? data.additionalPhoneNumberType
-            : undefined,
-          additionalPhoneExtension: hasAdditionalPhone
-            ? data.additionalPhoneExtension || undefined
-            : undefined,
-        },
-      })
-      setUser(newUser)
-      setPhoneAlert({ type: "success", message: `${t("users.userUpdated")}` })
-      setPhoneLoading(false)
-    } catch (err) {
-      setPhoneLoading(false)
-      setPhoneAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
-      console.warn(err)
-    }
-  }
+  const onPhoneSubmit = createPhoneSubmitHandler(
+    userService,
+    "updateAdvocate",
+    setPhoneAlert,
+    setPhoneLoading,
+    setUser,
+    user
+  )
 
   const onPasswordSubmit = createPasswordSubmitHandler(
     userService,

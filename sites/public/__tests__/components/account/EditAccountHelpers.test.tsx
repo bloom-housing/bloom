@@ -3,9 +3,12 @@ import { render, screen } from "@testing-library/react"
 import { t } from "@bloom-housing/ui-components"
 import {
   addressFields,
+  createAddressSubmitHandler,
+  createDobSubmitHandler,
   createEmailSubmitHandler,
   createNameSubmitHandler,
   createPasswordSubmitHandler,
+  createPhoneSubmitHandler,
 } from "../../../src/components/account/EditAccountHelpers"
 
 describe("EditAccountHelpers", () => {
@@ -25,9 +28,11 @@ describe("EditAccountHelpers", () => {
   let setAlert: jest.Mock
   let setLoading: jest.Mock
   let setUser: jest.Mock
+  let consoleWarnSpy: jest.SpyInstance
 
   beforeEach(() => {
     jest.clearAllMocks()
+    consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => undefined)
     userService = {
       updatePublic: jest.fn(),
       updateAdvocate: jest.fn(),
@@ -35,6 +40,10 @@ describe("EditAccountHelpers", () => {
     setAlert = jest.fn()
     setLoading = jest.fn()
     setUser = jest.fn()
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
   })
 
   describe("createNameSubmitHandler", () => {
@@ -74,7 +83,6 @@ describe("EditAccountHelpers", () => {
     })
 
     it("sets generic error alert when update fails", async () => {
-      jest.spyOn(console, "warn").mockImplementation(() => undefined)
       userService.updatePublic.mockRejectedValue(new Error("name update failed"))
 
       const handler = createNameSubmitHandler(
@@ -93,6 +101,7 @@ describe("EditAccountHelpers", () => {
         type: "alert",
         message: t("account.settings.alerts.genericError"),
       })
+      expect(consoleWarnSpy).toHaveBeenCalled()
     })
   })
 
@@ -130,8 +139,7 @@ describe("EditAccountHelpers", () => {
     })
 
     it("sets generic error alert when email update fails", async () => {
-      jest.spyOn(console, "log").mockImplementation(() => undefined)
-      jest.spyOn(console, "warn").mockImplementation(() => undefined)
+      const consoleLogSpy = jest.spyOn(console, "log").mockImplementation(() => undefined)
       userService.updatePublic.mockRejectedValue(new Error("email update failed"))
 
       const handler = createEmailSubmitHandler(
@@ -150,6 +158,276 @@ describe("EditAccountHelpers", () => {
         type: "alert",
         message: t("account.settings.alerts.genericError"),
       })
+      expect(consoleLogSpy).toHaveBeenCalled()
+      expect(consoleWarnSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe("createDobSubmitHandler", () => {
+    it("updates dob and sets success alert", async () => {
+      const updatedUser = {
+        ...baseUser,
+        dob: new Date("1990-05-12"),
+      }
+      userService.updatePublic.mockResolvedValue(updatedUser)
+
+      const handler = createDobSubmitHandler(
+        userService as any,
+        "updatePublic",
+        setAlert,
+        setLoading,
+        setUser,
+        baseUser
+      )
+
+      await handler({
+        dateOfBirth: {
+          birthDay: "12",
+          birthMonth: "05",
+          birthYear: "1990",
+        },
+      })
+
+      expect(userService.updatePublic).toHaveBeenCalledWith({
+        body: {
+          ...baseUser,
+          dob: expect.any(Date),
+        },
+      })
+      expect(setUser).toHaveBeenCalledWith(updatedUser)
+      expect(setAlert).toHaveBeenCalledWith({
+        type: "success",
+        message: t("account.settings.alerts.dobSuccess"),
+      })
+    })
+
+    it("sets generic error alert when dob update fails", async () => {
+      userService.updatePublic.mockRejectedValue(new Error("dob update failed"))
+
+      const handler = createDobSubmitHandler(
+        userService as any,
+        "updatePublic",
+        setAlert,
+        setLoading,
+        setUser,
+        baseUser
+      )
+
+      await handler({
+        dateOfBirth: {
+          birthDay: "12",
+          birthMonth: "05",
+          birthYear: "1990",
+        },
+      })
+
+      expect(setUser).not.toHaveBeenCalled()
+      expect(setAlert).toHaveBeenCalledWith({
+        type: "alert",
+        message: t("account.settings.alerts.genericError"),
+      })
+      expect(consoleWarnSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe("createAddressSubmitHandler", () => {
+    it("updates address using PO Box format and sets success alert", async () => {
+      const userWithAddress = {
+        ...baseUser,
+        address: {
+          street: "100 Main St",
+          street2: "Unit 2",
+          city: "Oakland",
+          state: "CA",
+          zipCode: "94612",
+        },
+      }
+      const updatedUser = {
+        ...userWithAddress,
+        address: {
+          ...userWithAddress.address,
+          street: "PO Box 1234",
+          street2: "",
+        },
+      }
+      userService.updateAdvocate.mockResolvedValue(updatedUser)
+
+      const handler = createAddressSubmitHandler(
+        userService as any,
+        "updateAdvocate",
+        setAlert,
+        setLoading,
+        setUser,
+        userWithAddress
+      )
+
+      await handler({
+        isPOBox: "yes",
+        poBox: "po box 1234",
+        city: "Oakland",
+        state: "CA",
+        zipCode: "94612",
+      })
+
+      expect(userService.updateAdvocate).toHaveBeenCalledWith({
+        body: {
+          ...userWithAddress,
+          address: {
+            ...userWithAddress.address,
+            street: "PO Box 1234",
+            street2: "",
+            city: "Oakland",
+            state: "CA",
+            zipCode: "94612",
+          },
+        },
+      })
+      expect(setUser).toHaveBeenCalledWith(updatedUser)
+      expect(setAlert).toHaveBeenCalledWith({
+        type: "success",
+        message: t("users.userUpdated"),
+      })
+    })
+
+    it("sets generic error alert when address update fails", async () => {
+      userService.updateAdvocate.mockRejectedValue(new Error("address update failed"))
+
+      const handler = createAddressSubmitHandler(
+        userService as any,
+        "updateAdvocate",
+        setAlert,
+        setLoading,
+        setUser,
+        baseUser
+      )
+
+      await handler({
+        isPOBox: "no",
+        street: "100 Main St",
+        street2: "Unit 2",
+        city: "Oakland",
+        state: "CA",
+        zipCode: "94612",
+      })
+
+      expect(setUser).not.toHaveBeenCalled()
+      expect(setAlert).toHaveBeenCalledWith({
+        type: "alert",
+        message: t("account.settings.alerts.genericError"),
+      })
+      expect(consoleWarnSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe("createPhoneSubmitHandler", () => {
+    it("updates primary and additional phone fields and sets success alert", async () => {
+      const updatedUser = {
+        ...baseUser,
+        phoneNumber: "4155551212",
+        phoneType: "cell",
+      }
+      userService.updateAdvocate.mockResolvedValue(updatedUser)
+
+      const handler = createPhoneSubmitHandler(
+        userService as any,
+        "updateAdvocate",
+        setAlert,
+        setLoading,
+        setUser,
+        baseUser
+      )
+
+      await handler({
+        phoneNumber: "4155551212",
+        phoneType: "cell",
+        phoneExtension: "77",
+        hasAdditionalPhone: true,
+        additionalPhoneNumber: "5105553434",
+        additionalPhoneNumberType: "work",
+        additionalPhoneExtension: "99",
+      })
+
+      expect(userService.updateAdvocate).toHaveBeenCalledWith({
+        body: {
+          ...baseUser,
+          phoneNumber: "4155551212",
+          phoneType: "cell",
+          phoneExtension: "77",
+          additionalPhoneNumber: "5105553434",
+          additionalPhoneNumberType: "work",
+          additionalPhoneExtension: "99",
+        },
+      })
+      expect(setUser).toHaveBeenCalledWith(updatedUser)
+      expect(setAlert).toHaveBeenCalledWith({
+        type: "success",
+        message: t("users.userUpdated"),
+      })
+    })
+
+    it("clears additional phone fields when toggle is false", async () => {
+      userService.updateAdvocate.mockResolvedValue(baseUser)
+
+      const handler = createPhoneSubmitHandler(
+        userService as any,
+        "updateAdvocate",
+        setAlert,
+        setLoading,
+        setUser,
+        baseUser
+      )
+
+      await handler({
+        phoneNumber: "4155551212",
+        phoneType: "home",
+        phoneExtension: "",
+        hasAdditionalPhone: false,
+        additionalPhoneNumber: "5105553434",
+        additionalPhoneNumberType: "work",
+        additionalPhoneExtension: "99",
+      })
+
+      expect(userService.updateAdvocate).toHaveBeenCalledWith({
+        body: {
+          ...baseUser,
+          phoneNumber: "4155551212",
+          phoneType: "home",
+          phoneExtension: undefined,
+          additionalPhoneNumber: undefined,
+          additionalPhoneNumberType: undefined,
+          additionalPhoneExtension: undefined,
+        },
+      })
+    })
+
+    it("sets generic error alert when phone update fails", async () => {
+      userService.updateAdvocate.mockRejectedValue(new Error("phone update failed"))
+
+      const handler = createPhoneSubmitHandler(
+        userService as any,
+        "updateAdvocate",
+        setAlert,
+        setLoading,
+        setUser,
+        baseUser
+      )
+
+      await handler({
+        phoneNumber: "4155551212",
+        phoneType: "home",
+        phoneExtension: "",
+        hasAdditionalPhone: false,
+        additionalPhoneNumber: "",
+        additionalPhoneNumberType: "",
+        additionalPhoneExtension: "",
+      })
+
+      expect(setUser).not.toHaveBeenCalled()
+      expect(setAlert).toHaveBeenCalledWith({
+        type: "alert",
+        message: t("account.settings.alerts.genericError"),
+      })
+      expect(consoleWarnSpy).toHaveBeenCalled()
     })
   })
 
@@ -238,7 +516,6 @@ describe("EditAccountHelpers", () => {
     })
 
     it("shows current password alert on 401", async () => {
-      jest.spyOn(console, "warn").mockImplementation(() => undefined)
       userService.updatePublic.mockRejectedValue({ response: { status: 401 } })
 
       const handler = createPasswordSubmitHandler(
@@ -261,10 +538,10 @@ describe("EditAccountHelpers", () => {
         type: "alert",
         message: t("account.settings.alerts.currentPassword"),
       })
+      expect(consoleWarnSpy).toHaveBeenCalled()
     })
 
     it("shows generic error alert on non-401 failures", async () => {
-      jest.spyOn(console, "warn").mockImplementation(() => undefined)
       userService.updatePublic.mockRejectedValue({ response: { status: 500 } })
 
       const handler = createPasswordSubmitHandler(
@@ -287,6 +564,7 @@ describe("EditAccountHelpers", () => {
         type: "alert",
         message: t("account.settings.alerts.genericError"),
       })
+      expect(consoleWarnSpy).toHaveBeenCalled()
     })
   })
 

@@ -45,8 +45,11 @@ const renderEditPage = (userOverrides = {}) => {
 }
 
 describe("EditPublicAccount", () => {
+  let consoleWarnSpy: jest.SpyInstance
+
   beforeEach(() => {
     jest.clearAllMocks()
+    consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => undefined)
     ;(useRouter as jest.Mock).mockReturnValue({
       pathname: "/",
       query: {},
@@ -126,6 +129,8 @@ describe("EditPublicAccount", () => {
           screen.getByText("There was an error. Please try again, or contact support for help.")
         ).toBeInTheDocument()
       })
+
+      expect(consoleWarnSpy).toHaveBeenCalled()
     })
   })
 
@@ -195,6 +200,8 @@ describe("EditPublicAccount", () => {
           screen.getByText("There was an error. Please try again, or contact support for help.")
         ).toBeInTheDocument()
       })
+
+      expect(consoleWarnSpy).toHaveBeenCalled()
     })
 
     it("should show validation error for invalid date of birth (under 18)", async () => {
@@ -385,6 +392,8 @@ describe("EditPublicAccount", () => {
       await waitFor(() => {
         expect(screen.getByText(/Invalid current password. Please try again./i)).toBeInTheDocument()
       })
+
+      expect(consoleWarnSpy).toHaveBeenCalled()
     })
   })
 })

@@ -1,11 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from "react"
-import dayjs from "dayjs"
-import utc from "dayjs/plugin/utc"
-dayjs.extend(utc)
-import customParseFormat from "dayjs/plugin/customParseFormat"
-dayjs.extend(customParseFormat)
 import { useForm } from "react-hook-form"
-import { t, DOBFieldValues } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import { LoadingState } from "@bloom-housing/ui-seeds"
 import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
@@ -24,6 +19,7 @@ import {
   passwordFields,
   AccountSection,
   createNameSubmitHandler,
+  createDobSubmitHandler,
   createEmailSubmitHandler,
   createPasswordSubmitHandler,
   AlertMessage,
@@ -106,28 +102,14 @@ export const EditPublicAccount = () => {
     user
   )
 
-  const onBirthdateSubmit = async (data: { dateOfBirth: DOBFieldValues }) => {
-    setBirthdateLoading(true)
-    const { dateOfBirth } = data
-    setDobAlert(null)
-    try {
-      const newUser = await userService.updatePublic({
-        body: {
-          ...user,
-          dob: dayjs(
-            `${dateOfBirth.birthYear}-${dateOfBirth.birthMonth}-${dateOfBirth.birthDay}`
-          ).toDate(),
-        },
-      })
-      setUser(newUser)
-      setDobAlert({ type: "success", message: `${t("account.settings.alerts.dobSuccess")}` })
-      setBirthdateLoading(false)
-    } catch (err) {
-      setBirthdateLoading(false)
-      setDobAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
-      console.warn(err)
-    }
-  }
+  const onBirthdateSubmit = createDobSubmitHandler(
+    userService,
+    "updatePublic",
+    setDobAlert,
+    setBirthdateLoading,
+    setUser,
+    user
+  )
 
   const onEmailSubmit = createEmailSubmitHandler(
     userService,
