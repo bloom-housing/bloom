@@ -8724,23 +8724,6 @@ export interface UserRole {
   isSupportAdmin?: boolean
 }
 
-export interface Agency {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  jurisdictions: IdDTO
-}
-
 export interface PublicUserCreate {
   /**  */
   confirmedAt?: Date
@@ -8800,7 +8783,7 @@ export interface PublicUserCreate {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -8901,7 +8884,7 @@ export interface PartnerUserCreate {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -9067,7 +9050,7 @@ export interface PublicUserUpdate {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -9171,7 +9154,7 @@ export interface PartnerUserUpdate {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -9397,7 +9380,7 @@ export interface User {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -9733,6 +9716,23 @@ export interface PaginatedProperty {
 }
 
 export interface AgencyCreate {
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface Agency {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
   /**  */
   name: string
 

@@ -24,13 +24,19 @@ import {
   createPasswordSubmitHandler,
   AlertMessage,
 } from "./EditAccountHelpers"
+import { Agency, User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-export const EditAdvocateAccount = () => {
+interface EditAdvocateAccountProps {
+  agencies: Agency[]
+}
+
+export const EditAdvocateAccount = (props: EditAdvocateAccountProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const {
     register: nameRegister,
     formState: { errors: nameErrors },
     handleSubmit: nameHandleSubmit,
+    clearErrors: nameClearErrors,
   } = useForm()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -38,6 +44,7 @@ export const EditAdvocateAccount = () => {
     register: emailRegister,
     formState: { errors: emailErrors },
     handleSubmit: emailHandleSubmit,
+    clearErrors: emailClearErrors,
   } = useForm()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -163,7 +170,18 @@ export const EditAdvocateAccount = () => {
     setAddressAlert(null)
     const poBoxValue = (data.poBox || "").replace(/^po box\s*/i, "").trim()
     const streetValue = data.isPOBox === "yes" ? `PO Box ${poBoxValue}` : data.street || ""
-
+    console.log({ data, poBoxValue, streetValue })
+    console.log({
+      ...user,
+      address: {
+        ...(user?.address || {}),
+        street: streetValue,
+        street2: data.isPOBox === "yes" ? "" : data.street2,
+        city: data.city,
+        state: data.state,
+        zipCode: data.zipCode,
+      },
+    })
     try {
       const newUser = await userService.updateAdvocate({
         body: {
@@ -240,7 +258,11 @@ export const EditAdvocateAccount = () => {
       "isPOBox",
       user?.address?.street?.toLowerCase().startsWith("po box") ? "yes" : "no"
     ) === "yes"
+
+  console.log({ isPOBoxSelected })
   const hasAdditionalPhone = phoneWatch("hasAdditionalPhone", !!user?.additionalPhoneNumber)
+
+  console.log({ user })
 
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
@@ -263,7 +285,7 @@ export const EditAdvocateAccount = () => {
               buttonId="account-submit-name"
               buttonAriaLabel={`${t("account.settings.update")} ${t("application.name.yourName")}`}
             >
-              {accountNameFields(nameErrors, nameRegister, user)}
+              {accountNameFields(nameErrors, nameRegister, user, nameClearErrors)}
             </AccountSection>
 
             <AccountSection
@@ -277,7 +299,15 @@ export const EditAdvocateAccount = () => {
                 "advocateAccount.agencyLabel"
               )}`}
             >
-              {agencyFields(agencyErrors, agencyRegister, user)}
+              {agencyFields(agencyErrors, agencyRegister, user, [
+                { value: "", label: "" },
+                ...(props.agencies?.map((agency) => ({
+                  id: agency.id,
+                  label: agency.name,
+                  value: agency.id,
+                  dataTestId: agency.name,
+                })) || []),
+              ])}
             </AccountSection>
 
             <AccountSection
@@ -291,7 +321,13 @@ export const EditAdvocateAccount = () => {
                 "application.contact.address"
               )}`}
             >
-              {addressFields(addressErrors, addressRegister, user, isPOBoxSelected)}
+              {addressFields(
+                addressErrors,
+                addressRegister,
+                user,
+                isPOBoxSelected,
+                user?.address?.street?.toLowerCase().startsWith("po box")
+              )}
             </AccountSection>
 
             <AccountSection
@@ -326,7 +362,7 @@ export const EditAdvocateAccount = () => {
                 "application.name.yourEmailAddress"
               )}`}
             >
-              {emailFields(emailErrors, emailRegister, user)}
+              {emailFields(emailErrors, emailRegister, user, emailClearErrors)}
             </AccountSection>
 
             <AccountSection

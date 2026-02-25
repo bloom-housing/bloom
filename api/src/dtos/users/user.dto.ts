@@ -159,9 +159,9 @@ export class User extends AbstractDTO {
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Agency)
-  @ApiPropertyOptional({ type: Agency })
-  agency?: Agency;
+  @Type(() => IdDTO)
+  @ApiPropertyOptional({ type: IdDTO })
+  agency?: IdDTO;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

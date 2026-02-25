@@ -33,7 +33,8 @@ export type AlertMessage = {
 export const accountNameFields = (
   nameErrors: DeepMap<FieldValues, FieldError>,
   nameRegister: UseFormMethods["register"],
-  user: User
+  user: User,
+  clearErrors: (name?: string | string[]) => void
 ) => {
   return (
     <>
@@ -47,12 +48,13 @@ export const accountNameFields = (
           controlClassName="mt-2"
           name="firstName"
           error={nameErrors.firstName}
-          validation={{ maxLength: 64 }}
+          validation={{ required: true, maxLength: 64 }}
           errorMessage={
             nameErrors.firstName?.type === "maxLength"
               ? t("errors.maxLength", { length: 64 })
               : t("errors.firstNameError")
           }
+          inputProps={{ onChange: () => nameErrors.firstName && clearErrors("firstName") }}
           register={nameRegister}
           defaultValue={user ? user.firstName : null}
           dataTestId={"account-first-name"}
@@ -72,18 +74,18 @@ export const accountNameFields = (
 
         <Field
           name="lastName"
-          placeholder={t("application.name.lastName")}
           className="mb-6"
           error={nameErrors.lastName}
           register={nameRegister}
           defaultValue={user ? user.lastName : null}
           label={t("application.contact.familyName")}
-          validation={{ maxLength: 64 }}
+          validation={{ maxLength: 64, required: true }}
           errorMessage={
             nameErrors.lastName?.type === "maxLength"
               ? t("errors.maxLength", { length: 64 })
               : t("errors.lastNameError")
           }
+          inputProps={{ onChange: () => nameErrors.lastName && clearErrors("lastName") }}
           dataTestId={"account-last-name"}
         />
       </fieldset>
@@ -123,7 +125,8 @@ export const dobFields = (
 export const emailFields = (
   emailErrors: DeepMap<FieldValues, FieldError>,
   emailRegister: UseFormMethods["register"],
-  user: User
+  user: User,
+  clearErrors: (name?: string | string[]) => void
 ) => {
   return (
     <>
@@ -134,14 +137,15 @@ export const emailFields = (
         type="email"
         name="email"
         label={`${t("t.email")}`}
-        placeholder="example@web.com"
         className="mt-3 mb-6"
-        validation={{ pattern: emailRegex }}
+        validation={{ pattern: emailRegex, required: true }}
         error={emailErrors.email}
         errorMessage={`${t("errors.emailAddressError")}`}
         register={emailRegister}
         defaultValue={user ? user.email : null}
         dataTestId={"account-email"}
+        inputProps={{ onChange: () => emailErrors.email && clearErrors("email") }}
+        subNote={t("advocateAccount.emailSubNote")}
       />
     </>
   )
@@ -214,7 +218,8 @@ export const passwordFields = (
 export const agencyFields = (
   agencyErrors: DeepMap<FieldValues, FieldError>,
   agencyRegister: UseFormMethods["register"],
-  user: User
+  user: User,
+  agencyOptions: { label: string; value: string }[]
 ) => {
   return (
     <>
@@ -225,11 +230,7 @@ export const agencyFields = (
         label={t("advocateAccount.agencyLabel")}
         register={agencyRegister}
         controlClassName={"control"}
-        options={[
-          { label: "Test 1", value: "test1" },
-          { label: "Test 2", value: "test2" },
-          { label: "Test 3", value: "test3" },
-        ]}
+        options={agencyOptions}
         defaultValue={user?.agency?.id || ""}
         validation={{ required: true }}
         error={agencyErrors?.agencyId}
@@ -245,7 +246,8 @@ export const addressFields = (
   addressErrors: DeepMap<FieldValues, FieldError>,
   addressRegister: UseFormMethods["register"],
   user: User,
-  isPOBoxSelected: boolean
+  isPOBoxSelected: boolean,
+  defaultPoBoxValue: boolean
 ) => {
   return (
     <fieldset>
@@ -263,7 +265,7 @@ export const addressFields = (
           name="isPOBox"
           label={t("t.yes")}
           register={addressRegister}
-          inputProps={{ value: "yes", defaultChecked: !isPOBoxSelected }}
+          inputProps={{ value: "yes", defaultChecked: defaultPoBoxValue }}
           dataTestId={"account-address-po-box-yes"}
         />
         <Field
@@ -273,7 +275,7 @@ export const addressFields = (
           name="isPOBox"
           label={t("t.no")}
           register={addressRegister}
-          inputProps={{ value: "no", defaultChecked: !isPOBoxSelected }}
+          inputProps={{ value: "no", defaultChecked: !defaultPoBoxValue }}
           dataTestId={"account-address-po-box-no"}
         />
       </fieldset>
@@ -321,7 +323,7 @@ export const addressFields = (
           <Field
             id="street2"
             name="street2"
-            label={t("application.contact.apt")}
+            label={t("application.contact.aptOptional")}
             defaultValue={user?.address?.street2 || ""}
             validation={{ maxLength: 64 }}
             error={addressErrors?.street2}
@@ -395,7 +397,7 @@ export const phoneFields = (
 ) => {
   return (
     <fieldset className={hasAdditionalPhone ? "seeds-p-be-6" : "seeds-p-be-2"}>
-      <legend className={styles["account-settings-label"]}>
+      <legend className={`${styles["account-settings-label"]} seeds-m-be-3`}>
         {t("application.contact.yourPhoneNumber")}
       </legend>
       <PhoneField
@@ -414,7 +416,7 @@ export const phoneFields = (
       <Field
         id="phoneExtension"
         name="phoneExtension"
-        label={t("t.phoneExtension")}
+        label={t("t.phoneExtensionOptional")}
         defaultValue={user?.phoneExtension || ""}
         validation={{ maxLength: 10 }}
         error={phoneErrors?.phoneExtension}
@@ -475,7 +477,7 @@ export const phoneFields = (
           <Field
             id="additionalPhoneExtension"
             name="additionalPhoneExtension"
-            label={t("t.phoneExtension")}
+            label={t("t.phoneExtensionOptional")}
             defaultValue={user?.additionalPhoneExtension || ""}
             validation={{ maxLength: 10 }}
             error={phoneErrors?.additionalPhoneExtension}
