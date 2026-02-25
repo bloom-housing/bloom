@@ -180,6 +180,7 @@ const mockListing = (
               },
             ],
           },
+          accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.mobility,
           amiChart: {
             id: `AMI${i}`,
             items: [],
@@ -1245,6 +1246,7 @@ describe('Testing listing service', () => {
             totalAvailable: 1,
           },
         ],
+        priorityTypes: [UnitAccessibilityPriorityTypeEnum.mobility],
       });
 
       expect(res.meta).toEqual({
