@@ -90,3 +90,9 @@ SET translations = jsonb_set(
     }'::jsonb
 )
 WHERE language = 'bn';
+
+-- CreateIndex
+CREATE INDEX "user_account_snapshot_email_idx" ON "user_account_snapshot"("email");
+
+-- CreateIndex
+CREATE INDEX "user_accounts_email_idx" ON "user_accounts"("email");

@@ -2067,6 +2067,7 @@ model UserAccounts {
   userPreferences           UserPreferences?
   userRoles                 UserRoles?
 
+  @@index([email])
   @@map("user_accounts")
 }
 
@@ -2119,6 +2120,7 @@ model UserAccountSnapshot {
   listing      Listings[]
   userRole     UserRoleSnapshot?
 
+  @@index([email])
   @@map("user_account_snapshot")
 }
 
