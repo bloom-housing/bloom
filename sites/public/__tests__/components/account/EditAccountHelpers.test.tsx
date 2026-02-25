@@ -10,6 +10,7 @@ import {
   createPasswordSubmitHandler,
   createPhoneSubmitHandler,
 } from "../../../src/components/account/EditAccountHelpers"
+import { UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 describe("EditAccountHelpers", () => {
   const baseUser = {
@@ -57,7 +58,7 @@ describe("EditAccountHelpers", () => {
       userService.updatePublic.mockResolvedValue(updatedUser)
 
       const handler = createNameSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updatePublic",
         setAlert,
         setLoading,
@@ -86,7 +87,7 @@ describe("EditAccountHelpers", () => {
       userService.updatePublic.mockRejectedValue(new Error("name update failed"))
 
       const handler = createNameSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updatePublic",
         setAlert,
         setLoading,
@@ -114,7 +115,7 @@ describe("EditAccountHelpers", () => {
       userService.updatePublic.mockResolvedValue(updatedUser)
 
       const handler = createEmailSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updatePublic",
         setAlert,
         setLoading,
@@ -143,7 +144,7 @@ describe("EditAccountHelpers", () => {
       userService.updatePublic.mockRejectedValue(new Error("email update failed"))
 
       const handler = createEmailSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updatePublic",
         setAlert,
         setLoading,
@@ -172,7 +173,7 @@ describe("EditAccountHelpers", () => {
       userService.updatePublic.mockResolvedValue(updatedUser)
 
       const handler = createDobSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updatePublic",
         setAlert,
         setLoading,
@@ -205,7 +206,7 @@ describe("EditAccountHelpers", () => {
       userService.updatePublic.mockRejectedValue(new Error("dob update failed"))
 
       const handler = createDobSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updatePublic",
         setAlert,
         setLoading,
@@ -253,7 +254,7 @@ describe("EditAccountHelpers", () => {
       userService.updateAdvocate.mockResolvedValue(updatedUser)
 
       const handler = createAddressSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updateAdvocate",
         setAlert,
         setLoading,
@@ -293,7 +294,7 @@ describe("EditAccountHelpers", () => {
       userService.updateAdvocate.mockRejectedValue(new Error("address update failed"))
 
       const handler = createAddressSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updateAdvocate",
         setAlert,
         setLoading,
@@ -329,7 +330,7 @@ describe("EditAccountHelpers", () => {
       userService.updateAdvocate.mockResolvedValue(updatedUser)
 
       const handler = createPhoneSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updateAdvocate",
         setAlert,
         setLoading,
@@ -369,7 +370,7 @@ describe("EditAccountHelpers", () => {
       userService.updateAdvocate.mockResolvedValue(baseUser)
 
       const handler = createPhoneSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updateAdvocate",
         setAlert,
         setLoading,
@@ -404,7 +405,7 @@ describe("EditAccountHelpers", () => {
       userService.updateAdvocate.mockRejectedValue(new Error("phone update failed"))
 
       const handler = createPhoneSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updateAdvocate",
         setAlert,
         setLoading,
@@ -434,7 +435,7 @@ describe("EditAccountHelpers", () => {
   describe("createPasswordSubmitHandler", () => {
     it("shows empty password alert when password fields are empty", async () => {
       const handler = createPasswordSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updatePublic",
         setAlert,
         setLoading,
@@ -458,7 +459,7 @@ describe("EditAccountHelpers", () => {
 
     it("shows mismatch alert when password and confirmation differ", async () => {
       const handler = createPasswordSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updatePublic",
         setAlert,
         setLoading,
@@ -487,7 +488,7 @@ describe("EditAccountHelpers", () => {
       userService.updatePublic.mockResolvedValue(updatedUser)
 
       const handler = createPasswordSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updatePublic",
         setAlert,
         setLoading,
@@ -519,7 +520,7 @@ describe("EditAccountHelpers", () => {
       userService.updatePublic.mockRejectedValue({ response: { status: 401 } })
 
       const handler = createPasswordSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updatePublic",
         setAlert,
         setLoading,
@@ -545,7 +546,7 @@ describe("EditAccountHelpers", () => {
       userService.updatePublic.mockRejectedValue({ response: { status: 500 } })
 
       const handler = createPasswordSubmitHandler(
-        userService as any,
+        userService as unknown as UserService,
         "updatePublic",
         setAlert,
         setLoading,
@@ -581,6 +582,7 @@ describe("EditAccountHelpers", () => {
         },
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       render(<>{addressFields({} as any, jest.fn() as any, userWithPoBox as any, true, true)}</>)
 
       expect(screen.getByTestId("account-address-po-box")).toHaveValue("1234")

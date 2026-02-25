@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import userEvent from "@testing-library/user-event"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { User, UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Agency, User, UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { EditAdvocateAccount } from "../../../src/components/account/EditAdvocateAccount"
 import { render, screen, waitFor } from "../../testUtils"
 
@@ -55,7 +55,7 @@ const renderEditAdvocateAccount = (userOverrides = {}) => {
         userService: mockUserService as unknown as UserService,
       }}
     >
-      <EditAdvocateAccount agencies={agencies as any} />
+      <EditAdvocateAccount agencies={agencies as Agency[]} />
     </AuthContext.Provider>
   )
 }
