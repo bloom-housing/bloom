@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useMemo, useCallback } from "react"
+import React, { useState, useEffect, useMemo, useCallback } from "react"
 import { t, MinimalTable, Field, StandardTableData } from "@bloom-housing/ui-components"
 import {
   MultiselectOption,
@@ -13,7 +13,6 @@ import LinkComponent from "../../../../components/core/LinkComponent"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 import { useJurisdictionalMultiselectQuestionList } from "../../../../lib/hooks"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 
 type SelectAndOrderProps = {
   enableV2MSQ: boolean
