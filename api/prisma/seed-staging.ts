@@ -463,6 +463,7 @@ export const stagingSeed = async (
     5,
     'Angelopolis',
   );
+  await agencyFactory(mainJurisdiction.id, prismaClient, 5, 'Bloomington');
   // create super admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
