@@ -81,6 +81,9 @@ const SelectAndOrder = ({
     [draftListingData]
   )
 
+  const determineOptionsForQuestion = (question: MultiselectQuestion) =>
+    question?.multiselectOptions?.length > 0 ? question.multiselectOptions : question.options || []
+
   const additionalFieldsTag = () => (
     <Tag variant="primary">
       <Icon>
@@ -97,8 +100,8 @@ const SelectAndOrder = ({
         additionalFields: {
           content: (
             <>
-              {item?.multiselectOptions?.some(
-                (item) => item.shouldCollectAddress || item.collectAddress
+              {determineOptionsForQuestion(item).some(
+                (option) => option.shouldCollectAddress || option.collectAddress
               ) && additionalFieldsTag()}
             </>
           ),
@@ -132,8 +135,8 @@ const SelectAndOrder = ({
         additionalFields: {
           content: (
             <>
-              {item?.multiselectOptions?.some(
-                (item) => item.shouldCollectAddress || item.collectAddress
+              {determineOptionsForQuestion(item).some(
+                (option) => option.shouldCollectAddress || option.collectAddress
               ) && additionalFieldsTag()}
             </>
           ),
@@ -212,7 +215,7 @@ const SelectAndOrder = ({
     item: MultiselectQuestion
   ) => {
     const getInfoSection = (option: MultiselectQuestion | MultiselectOption, index: number) => {
-      const isNotLastItem = index < item.multiselectOptions?.length - 1
+      const isNotLastItem = index < determineOptionsForQuestion(item).length - 1
       return (
         <div key={index} className={isNotLastItem ? "mb-5" : "mb-1"}>
           <div className={"font-semibold mb-1 text-gray-800"}>
@@ -255,7 +258,7 @@ const SelectAndOrder = ({
     }
     const statusVariant = item.status === MultiselectQuestionsStatusEnum.active ? "success" : null
     const statusText = `${item.status.charAt(0).toUpperCase()}${item.status.slice(1)}`
-    const showAdditionalTag = item.multiselectOptions?.some(
+    const showAdditionalTag = determineOptionsForQuestion(item).some(
       (option) => option.shouldCollectAddress || option.collectAddress
     )
     return (
@@ -282,7 +285,7 @@ const SelectAndOrder = ({
           {previewShown && (
             <div className={"bg-blue-100 mt-2 p-4"}>
               {getInfoSection(item, -1)}
-              {item.multiselectOptions?.map((option, index) => {
+              {determineOptionsForQuestion(item).map((option, index) => {
                 return getInfoSection(option, index)
               })}
             </div>
