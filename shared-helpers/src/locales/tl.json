@@ -670,6 +670,7 @@
   "errors.stateError": "Pakilagay ang state",
   "errors.streetError": "Pakilagay ang address",
   "errors.timeError": "Pakilagay ang tamang oras",
+  "errors.validPhoneNumber": "Mangyaring maglagay ng wastong numero ng telepono",
   "errors.zipCodeError": "Pakilagay ang zipcode",
   "faq.genericHeading": "Pamagat para sa isang kategorya ng mga madalas itanong",
   "faq.howDoesThisFunction": "Paano ito karaniwang gumagana sa pagsasagawa, at ano ang karaniwang kasama sa pangkalahatang karanasan?",

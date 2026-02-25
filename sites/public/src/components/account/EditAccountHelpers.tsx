@@ -783,7 +783,11 @@ export const createPhoneSubmitHandler = (
       setLoading(false)
     } catch (err) {
       setLoading(false)
-      setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      if (err?.response?.data?.message[0].includes("must be a valid phone number")) {
+        setAlert({ type: "alert", message: `${t("errors.validPhoneNumber")}` })
+      } else {
+        setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      }
       console.warn(err)
     }
   }

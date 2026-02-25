@@ -670,6 +670,7 @@
   "errors.stateError": "الرجاء إدخال الدولة",
   "errors.streetError": "يرجى إدخال عنوان",
   "errors.timeError": "الرجاء إدخال وقت صالح",
+  "errors.validPhoneNumber": "يرجى إدخال رقم هاتف صحيح",
   "errors.zipCodeError": "الرجاء إدخال الرمز البريدي",
   "faq.genericHeading": "عنوان لفئة الأسئلة المتكررة",
   "faq.howDoesThisFunction": "كيف يتم ذلك عادةً في الممارسة العملية، وماذا تتضمن التجربة الشاملة عادةً؟",

@@ -666,6 +666,7 @@
   "errors.stateError": "주를 입력해 주세요.",
   "errors.streetError": "주소를 입력해 주세요",
   "errors.timeError": "유효한 시간을 입력해 주세요.",
+  "errors.validPhoneNumber": "유효한 전화번호를 입력해 주세요.",
   "errors.zipCodeError": "우편번호를 입력해 주세요.",
   "faq.genericHeading": "자주 묻는 질문 카테고리의 제목",
   "faq.howDoesThisFunction": "실제로 이러한 기능은 어떻게 작동하며, 전반적인 경험은 일반적으로 무엇을 포함합니까?",

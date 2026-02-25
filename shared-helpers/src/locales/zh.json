@@ -670,6 +670,7 @@
   "errors.stateError": "請輸入州名",
   "errors.streetError": "請輸入地址",
   "errors.timeError": "請輸入有效的時間",
+  "errors.validPhoneNumber": "请输入有效的电话号码",
   "errors.zipCodeError": "請輸入郵遞區號",
   "faq.genericHeading": "常见问题类别的标题",
   "faq.howDoesThisFunction": "这种情况在实践中通常是如何运作的？整个过程通常包含哪些内容？",

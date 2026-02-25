@@ -670,6 +670,7 @@
   "errors.stateError": "Vui lòng nhập tiểu bang",
   "errors.streetError": "Vui lòng nhập địa chỉ",
   "errors.timeError": "Vui lòng nhập thời gian hợp lệ",
+  "errors.validPhoneNumber": "Vui lòng nhập số điện thoại hợp lệ.",
   "errors.zipCodeError": "Vui lòng nhập số zipcode",
   "faq.genericHeading": "Tiêu đề cho một chuyên mục câu hỏi thường gặp",
   "faq.howDoesThisFunction": "Trên thực tế, điều này thường vận hành như thế nào và trải nghiệm tổng thể thường bao gồm những gì?",

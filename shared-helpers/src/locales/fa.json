@@ -666,6 +666,7 @@
   "errors.stateError": "لطفا ایالت را وارد کنید",
   "errors.streetError": "لطفا آدرس را وارد کنید",
   "errors.timeError": "لطفا زمان معتبری وارد کنید",
+  "errors.validPhoneNumber": "لطفا یک شماره تلفن معتبر وارد کنید",
   "errors.zipCodeError": "لطفا کد پستی را وارد کنید",
   "faq.genericHeading": "عنوان برای دسته بندی سوالات متداول",
   "faq.howDoesThisFunction": "این معمولاً در عمل چگونه عمل می‌کند و تجربه کلی معمولاً شامل چه چیزهایی می‌شود؟",

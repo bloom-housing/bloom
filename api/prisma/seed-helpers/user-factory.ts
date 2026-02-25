@@ -39,7 +39,9 @@ export const userFactory = async (optionalParams?: {
   passwordHash: optionalParams?.password
     ? await passwordToHash(optionalParams?.password)
     : await passwordToHash('Abcdef12345!'),
-  phoneNumber: optionalParams?.phoneNumber || null,
+  phoneNumber:
+    optionalParams?.phoneNumber ||
+    (optionalParams?.isAdvocate ? '(415) 555-1212' : undefined),
   phoneNumberVerified: optionalParams?.phoneNumberVerified || null,
   singleUseCode: optionalParams?.singleUseCode || null,
   singleUseCodeUpdatedAt: optionalParams?.mfaEnabled ? new Date() : undefined,
@@ -87,6 +89,16 @@ export const userFactory = async (optionalParams?: {
     ? {
         connect: {
           id: optionalParams.agencyId,
+        },
+      }
+    : undefined,
+  address: optionalParams?.isAdvocate
+    ? {
+        create: {
+          street: '123 Main St',
+          city: 'Oakland',
+          state: 'CA',
+          zipCode: '94612',
         },
       }
     : undefined,

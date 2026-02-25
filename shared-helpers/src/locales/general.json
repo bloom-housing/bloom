@@ -665,6 +665,7 @@
   "errors.stateError": "Please enter a state",
   "errors.streetError": "Please enter an address",
   "errors.timeError": "Please enter a valid time",
+  "errors.validPhoneNumber": "Please enter a valid phone number",
   "errors.zipCodeError": "Please enter a zip code",
   "faq.genericHeading": "Title for a category of frequently asked questions",
   "faq.howDoesThisFunction": "How does this typically function in practice, and what does the overall experience usually involve?",
