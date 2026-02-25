@@ -86,7 +86,7 @@ describe("<MainDetails>", () => {
             priorityTypes: [
               UnitAccessibilityPriorityTypeEnum.mobility,
               UnitAccessibilityPriorityTypeEnum.hearingAndVision,
-              UnitAccessibilityPriorityTypeEnum.mobilityAndHearing,
+              UnitAccessibilityPriorityTypeEnum.mobilityHearingAndVision,
             ],
           },
         }}
@@ -123,7 +123,7 @@ describe("<MainDetails>", () => {
             priorityTypes: [
               UnitAccessibilityPriorityTypeEnum.mobility,
               UnitAccessibilityPriorityTypeEnum.hearingAndVision,
-              UnitAccessibilityPriorityTypeEnum.mobilityAndHearing,
+              UnitAccessibilityPriorityTypeEnum.mobilityHearingAndVision,
             ],
           },
         }}
