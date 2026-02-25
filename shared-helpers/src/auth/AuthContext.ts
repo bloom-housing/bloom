@@ -37,6 +37,7 @@ import {
   PublicUserCreate,
   AdvocateUserCreate,
   PartnerUserCreate,
+  AgencyService,
 } from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
 import { useRouter } from "next/router"
@@ -56,6 +57,7 @@ type ContextProps = {
   reservedCommunityTypeService: ReservedCommunityTypesService
   mapLayersService: MapLayersService
   lotteryService: LotteryService
+  agencyService: AgencyService
   loadProfile: (redirect?: string) => void
   login: (
     email: string,
@@ -243,6 +245,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     reservedCommunityTypeService: new ReservedCommunityTypesService(),
     unitTypesService: new UnitTypesService(),
     featureFlagService: new FeatureFlagsService(),
+    agencyService: new AgencyService(),
     loading: state?.loading,
     initialStateLoaded: state?.initialStateLoaded,
     profile: state?.profile,

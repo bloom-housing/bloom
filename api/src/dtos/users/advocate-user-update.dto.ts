@@ -45,9 +45,9 @@ export class AdvocateUserUpdate extends OmitType(User, [
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Agency)
-  @ApiProperty({ type: Agency })
-  agency: Agency;
+  @Type(() => IdDTO)
+  @ApiProperty({ type: IdDTO })
+  agency: IdDTO;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

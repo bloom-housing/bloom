@@ -171,56 +171,60 @@ const ApplicationName = () => {
             <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
           </CardSection>
           <CardSection divider={"flush"} className={"border-none"}>
-            <legend
-              className={`text__caps-spaced ${errors.applicant?.emailAddress ? "text-alert" : ""}`}
-            >
-              <LockIcon locked={autofilled} />
-              {t("application.name.yourEmailAddress")}
-            </legend>
+            <fieldset>
+              <legend
+                className={`text__caps-spaced ${
+                  errors.applicant?.emailAddress ? "text-alert" : ""
+                }`}
+              >
+                <LockIcon locked={autofilled} />
+                {t("application.name.yourEmailAddress")}
+              </legend>
 
-            <p className="field-note mb-4">{t("application.name.emailPrivacy")}</p>
+              <p className="field-note mb-4">{t("application.name.emailPrivacy")}</p>
 
-            <Field
-              type="email"
-              name="applicant.emailAddress"
-              label={t("application.name.yourEmailAddress")}
-              readerOnly={true}
-              defaultValue={application.applicant.emailAddress}
-              validation={{
-                required: !noEmail,
-                pattern: emailRegex,
-                validate: {
-                  advocateEmail: (value: string) => {
-                    if (!isAdvocate || !value || !profile?.email) return true
-                    return value.trim().toLowerCase() !== profile.email.trim().toLowerCase()
+              <Field
+                type="email"
+                name="applicant.emailAddress"
+                label={t("application.name.yourEmailAddress")}
+                readerOnly={true}
+                defaultValue={application.applicant.emailAddress}
+                validation={{
+                  required: !noEmail,
+                  pattern: emailRegex,
+                  validate: {
+                    advocateEmail: (value: string) => {
+                      if (!isAdvocate || !value || !profile?.email) return true
+                      return value.trim().toLowerCase() !== profile.email.trim().toLowerCase()
+                    },
                   },
-                },
-              }}
-              error={errors.applicant?.emailAddress}
-              errorMessage={emailErrorMessage}
-              register={register}
-              onChange={() => clearErrors("applicant.emailAddress")}
-              disabled={clientLoaded && (noEmail || autofilled)}
-              dataTestId={"app-primary-email"}
-              subNote={"example@mail.com"}
-            />
+                }}
+                error={errors.applicant?.emailAddress}
+                errorMessage={emailErrorMessage}
+                register={register}
+                onChange={() => clearErrors("applicant.emailAddress")}
+                disabled={clientLoaded && (noEmail || autofilled)}
+                dataTestId={"app-primary-email"}
+                subNote={"example@mail.com"}
+              />
 
-            <Field
-              type="checkbox"
-              id="noEmail"
-              name="applicant.noEmail"
-              label={t("application.name.noEmailAddress")}
-              primary={true}
-              register={register}
-              disabled={clientLoaded && (emailPresent?.length > 0 || autofilled)}
-              onChange={(e) => {
-                if (e.target.checked) clearErrors("applicant.emailAddress")
-              }}
-              inputProps={{
-                defaultChecked: clientLoaded && noEmail,
-              }}
-              dataTestId={"app-primary-no-email"}
-            />
+              <Field
+                type="checkbox"
+                id="noEmail"
+                name="applicant.noEmail"
+                label={t("application.name.noEmailAddress")}
+                primary={true}
+                register={register}
+                disabled={clientLoaded && (emailPresent?.length > 0 || autofilled)}
+                onChange={(e) => {
+                  if (e.target.checked) clearErrors("applicant.emailAddress")
+                }}
+                inputProps={{
+                  defaultChecked: clientLoaded && noEmail,
+                }}
+                dataTestId={"app-primary-no-email"}
+              />
+            </fieldset>
           </CardSection>
         </ApplicationFormLayout>
       </Form>

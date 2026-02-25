@@ -64,7 +64,7 @@ resource "aws_ecs_service" "bloom_site_partners" {
   wait_for_steady_state = true
 
   network_configuration {
-    security_groups  = [aws_security_group.site_partners.id]
+    security_groups  = [aws_security_group.bloom["site-partners"].id]
     subnets          = [for s in aws_subnet.private : s.id]
     assign_public_ip = false
   }

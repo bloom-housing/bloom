@@ -64,6 +64,10 @@ const ApplicationHouseholdStudent = () => {
     })
   }, [profile])
 
+  const questionText = enableFullTimeStudentQuestion
+    ? t("application.household.householdStudentAll.question")
+    : t("application.household.householdStudent.question")
+
   return (
     <FormsLayout
       pageTitle={`${t("pageTitle.householdStudent")} - ${t("listings.apply.applyOnline")} - ${
@@ -73,11 +77,7 @@ const ApplicationHouseholdStudent = () => {
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}
-          heading={
-            enableFullTimeStudentQuestion
-              ? t("application.household.householdStudentAll.question")
-              : t("application.household.householdStudent.question")
-          }
+          heading={questionText}
           subheading={t("application.household.genericSubtitle")}
           progressNavProps={{
             currentPageSection: currentPageSection,
@@ -93,6 +93,7 @@ const ApplicationHouseholdStudent = () => {
           <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
+              <legend className="sr-only">{questionText}</legend>
               <FieldGroup
                 fieldGroupClassName="grid grid-cols-1"
                 fieldClassName="ml-0"

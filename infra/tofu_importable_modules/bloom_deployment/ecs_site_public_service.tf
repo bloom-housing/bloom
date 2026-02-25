@@ -8,7 +8,7 @@ locals {
     LISTINGS_QUERY                = "/listings"
     MAX_BROWSE_LISTINGS           = "10"
     HOUSING_COUNSELOR_SERVICE_URL = "/get-assistance"
-    IDLE_TIMEMOUT                 = "5"  # seconds
+    IDLE_TIMEOUT                  = "5"  # seconds
     CACHE_REVALIDATE              = "30" # seconds
     SHOW_PUBLIC_LOTTERY           = "TRUE"
     SHOW_MANDATED_ACCOUNTS        = "FALSE"
@@ -73,7 +73,7 @@ resource "aws_ecs_service" "bloom_site_public" {
   wait_for_steady_state = true
 
   network_configuration {
-    security_groups  = [aws_security_group.site_public.id]
+    security_groups  = [aws_security_group.bloom["site-public"].id]
     subnets          = [for s in aws_subnet.private : s.id]
     assign_public_ip = false
   }
