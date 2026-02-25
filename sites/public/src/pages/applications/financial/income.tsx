@@ -11,6 +11,7 @@ import {
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import {
+  FeatureFlagEnum,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -61,6 +62,10 @@ const ApplicationIncome = () => {
     ? 4
     : 3
 
+  const enableVerifyIncome = conductor.config.featureFlags.some(
+    (flag) => flag.name === FeatureFlagEnum.enableVerifyIncome && flag.active
+  )
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues, setValue, trigger } = useForm({
     defaultValues: {
@@ -78,7 +83,7 @@ const ApplicationIncome = () => {
     const incomeValue = income.replaceAll(",", "")
     // Skip validation of total income if no units or the applicant has income vouchers.
     const validationError =
-      !listing.units?.length || application.incomeVouchers
+      !listing.units?.length || application.incomeVouchers || !enableVerifyIncome
         ? null
         : verifyIncome(listing, incomeValue, incomePeriod)
     setIncomeError(validationError)
