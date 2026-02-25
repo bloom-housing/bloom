@@ -653,23 +653,42 @@ export const stagingSeed = async (
   const workInCityQuestion = await prismaClient.multiselectQuestions.create({
     data: workInCityMsqData,
   });
+  let veteranProgramMsqData: Prisma.MultiselectQuestionsCreateInput;
+  if (msqV2) {
+    veteranProgramMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
+      multiselectQuestion: {
+        status: MultiselectQuestionsStatusEnum.active,
+        name: 'Veteran',
+        description:
+          'Have you or anyone in your household served in the US military?',
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        isExclusive: true,
+        optOutText: 'Prefer not to say',
+        options: [
+          { name: 'Yes', ordinal: 1 },
+          { name: 'No', ordinal: 2 },
+        ],
+      },
+    });
+  } else {
+    veteranProgramMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
+      multiselectQuestion: {
+        text: 'Veteran',
+        description:
+          'Have you or anyone in your household served in the US military?',
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        isExclusive: true,
+        optOutText: 'Prefer not to say',
+        options: [
+          { text: 'Yes', exclusive: true, ordinal: 1 },
+          { text: 'No', exclusive: true, ordinal: 2 },
+        ],
+      },
+    });
+  }
   const veteranProgramQuestion = await prismaClient.multiselectQuestions.create(
     {
-      data: multiselectQuestionFactory(mainJurisdiction.id, {
-        multiselectQuestion: {
-          text: 'Veteran',
-          description:
-            'Have you or anyone in your household served in the US military?',
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.programs,
-          isExclusive: true,
-          optOutText: 'Prefer not to say',
-          options: [
-            { text: 'Yes', exclusive: true, ordinal: 1 },
-            { text: 'No', exclusive: true, ordinal: 2 },
-          ],
-        },
-      }),
+      data: veteranProgramMsqData,
     },
   );
   const multiselectQuestionPrograms =
