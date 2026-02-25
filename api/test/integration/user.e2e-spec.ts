@@ -202,9 +202,10 @@ describe('User Controller Tests', () => {
         .set('Cookie', cookies)
         .expect(200);
       expect(res.body.items.length).toEqual(2);
-      let ids = res.body.items.map((item) => item.id);
-      expect(ids[0]).toEqual(userC.id);
-      expect(ids[1]).toEqual(userB.id);
+      let ids: any[] = res.body.items.map((item) => item.id);
+      expect(ids).toContain(userC.id);
+      expect(ids).toContain(userB.id);
+      expect(ids.indexOf(userC.id)).toBeLessThan(ids.indexOf(userB.id));
 
       queryParams = {
         page: 1,
@@ -225,8 +226,9 @@ describe('User Controller Tests', () => {
         .expect(200);
       expect(res.body.items.length).toEqual(2);
       ids = res.body.items.map((item) => item.id);
-      expect(ids[0]).toEqual(userB.id);
-      expect(ids[1]).toEqual(userC.id);
+      expect(ids).toContain(userB.id);
+      expect(ids).toContain(userC.id);
+      expect(ids.indexOf(userB.id)).toBeLessThan(ids.indexOf(userC.id));
     });
   });
 
