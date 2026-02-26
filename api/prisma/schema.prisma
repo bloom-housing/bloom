@@ -2120,7 +2120,6 @@ model UserAccountSnapshot {
   listing      Listings[]
   userRole     UserRoleSnapshot?
 
-  @@index([email])
   @@map("user_account_snapshot")
 }
 
