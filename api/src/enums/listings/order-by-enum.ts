@@ -12,3 +12,7 @@ export enum ListingOrderByKeys {
   marketingSeason = 'marketingSeason',
   listingType = 'listingType',
 }
+
+export enum UserOrderByKeys {
+  isApproved = 'isApproved',
+}
