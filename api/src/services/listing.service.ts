@@ -59,6 +59,7 @@ import {
 import {
   summarizeUnitsByTypeAndRent,
   summarizeUnits,
+  summarizeByPriorityType,
 } from '../utilities/unit-utilities';
 import { fillModelStringFields } from '../utilities/model-fields';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
@@ -286,6 +287,7 @@ export class ListingService implements OnModuleInit {
             listing.units,
             listing,
           ),
+          priorityTypes: summarizeByPriorityType(listing),
         };
       }
     });

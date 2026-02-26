@@ -498,6 +498,18 @@ export const summarizeByAmi = (listing: Listing, amiPercentages: string[]) => {
   });
 };
 
+export const summarizeByPriorityType = (
+  listing: Listing,
+): UnitAccessibilityPriorityTypeEnum[] => {
+  const priorityTypes = new Set<UnitAccessibilityPriorityTypeEnum>();
+  for (const priorityType of listing.units
+    .map((unit) => unit.accessibilityPriorityType)
+    .filter((item) => item != null)) {
+    priorityTypes.add(priorityType);
+  }
+  return Array.from(priorityTypes.values());
+};
+
 export const getUnitTypes = (units: Unit[]): UnitType[] => {
   const unitTypes = new Map<string, UnitType>();
   for (const unitType of units
@@ -527,13 +539,7 @@ export const summarizeUnits = (
   }
   data.unitTypes = getUnitTypes(units);
 
-  const priorityTypes = new Set<UnitAccessibilityPriorityTypeEnum>();
-  for (const priorityType of units
-    .map((unit) => unit.accessibilityPriorityType)
-    .filter((item) => item != null)) {
-    priorityTypes.add(priorityType);
-  }
-  data.priorityTypes = Array.from(priorityTypes.values());
+  data.priorityTypes = summarizeByPriorityType(listing);
 
   data.amiPercentages = Array.from(
     new Set(
