@@ -417,6 +417,9 @@ describe('Testing lottery service', () => {
         lotteryStatus: null,
       });
       prisma.userAccounts.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
 
       await service.lotteryGenerate(
         { user: requestingUser } as unknown as ExpressRequest,
@@ -475,6 +478,7 @@ describe('Testing lottery service', () => {
           id: listingId,
         },
       });
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
 
     it('should generate lottery results when previous results exist', async () => {
@@ -535,6 +539,9 @@ describe('Testing lottery service', () => {
         lotteryStatus: null,
       });
       prisma.userAccounts.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
 
       await service.lotteryGenerate(
         { user: requestingUser } as unknown as ExpressRequest,
@@ -564,6 +571,8 @@ describe('Testing lottery service', () => {
       expect(prisma.applicationLotteryTotal.create).toHaveBeenCalled();
 
       expect(prisma.listings.update).toHaveBeenCalled();
+
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
   });
 
@@ -686,6 +695,9 @@ describe('Testing lottery service', () => {
       jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
         en: ['applicant@email.com'],
       });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
 
       await service.lotteryStatus(
         {
@@ -724,6 +736,7 @@ describe('Testing lottery service', () => {
         ['admin@email.com', 'partner@email.com'],
         config.get('PARTNERS_PORTAL_URL'),
       );
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
 
     it('should not update status to releasedToPartners if user is not an admin', async () => {
@@ -783,6 +796,9 @@ describe('Testing lottery service', () => {
       jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
         en: ['applicant@email.com'],
       });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
 
       await service.lotteryStatus(
         {
@@ -809,6 +825,7 @@ describe('Testing lottery service', () => {
           id: expect.anything(),
         },
       });
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
 
     it('should not update status to publishedToPublic when status is not releasedToPartners', async () => {
@@ -897,6 +914,9 @@ describe('Testing lottery service', () => {
       jest.spyOn(listingService, 'getUserEmailInfo').mockResolvedValueOnce({
         emails: ['admin@email.com', 'partner@email.com'],
       });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
 
       await service.lotteryStatus(
         {
@@ -923,6 +943,7 @@ describe('Testing lottery service', () => {
           id: expect.anything(),
         },
       });
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
   });
 

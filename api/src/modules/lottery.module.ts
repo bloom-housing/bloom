@@ -9,6 +9,7 @@ import { MultiselectQuestionModule } from './multiselect-question.module';
 import { PermissionModule } from './permission.module';
 import { PrismaModule } from './prisma.module';
 import { CronJobModule } from './cron-job.module';
+import { SnapshotCreateModule } from './snapshot-create.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CronJobModule } from './cron-job.module';
     MultiselectQuestionModule,
     PermissionModule,
     CronJobModule,
+    SnapshotCreateModule,
   ],
   controllers: [LotteryController],
   providers: [LotteryService, Logger, ConfigService],
