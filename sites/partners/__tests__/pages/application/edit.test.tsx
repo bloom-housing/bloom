@@ -25,8 +25,8 @@ describe("application edit page", () => {
         application: {
           ...application,
           status: ApplicationStatusEnum.waitlist,
-          accessibleUnitWaitlistNumber: 3,
-          conventionalUnitWaitlistNumber: 8,
+          accessibleUnitWaitlistNumber: "3",
+          conventionalUnitWaitlistNumber: "8",
         },
       })
 
@@ -71,8 +71,8 @@ describe("application edit page", () => {
         application: {
           ...application,
           status: ApplicationStatusEnum.waitlist,
-          accessibleUnitWaitlistNumber: 3,
-          conventionalUnitWaitlistNumber: 8,
+          accessibleUnitWaitlistNumber: "3",
+          conventionalUnitWaitlistNumber: "8",
         },
       })
 
@@ -164,8 +164,8 @@ describe("application edit page", () => {
         application: {
           ...application,
           status: ApplicationStatusEnum.waitlist,
-          accessibleUnitWaitlistNumber: 2,
-          conventionalUnitWaitlistNumber: 4,
+          accessibleUnitWaitlistNumber: "2",
+          conventionalUnitWaitlistNumber: "4",
         },
       })
 

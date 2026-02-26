@@ -1872,8 +1872,8 @@ describe('Application Controller Tests', () => {
         where: { id: application.id },
         data: {
           status: ApplicationStatusEnum.waitlist,
-          accessibleUnitWaitlistNumber: 2,
-          conventionalUnitWaitlistNumber: 5,
+          accessibleUnitWaitlistNumber: '2',
+          conventionalUnitWaitlistNumber: '5',
         },
       });
 
@@ -1882,8 +1882,8 @@ describe('Application Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           previousStatus: ApplicationStatusEnum.submitted,
-          previousAccessibleUnitWaitlistNumber: 1,
-          previousConventionalUnitWaitlistNumber: 3,
+          previousAccessibleUnitWaitlistNumber: '1',
+          previousConventionalUnitWaitlistNumber: '3',
         })
         .set('Cookie', adminCookies)
         .expect(201);

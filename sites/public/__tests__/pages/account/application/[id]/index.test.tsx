@@ -346,8 +346,8 @@ describe("Account Listing View", () => {
           ctx.json({
             ...application,
             status: ApplicationStatusEnum.waitlist,
-            accessibleUnitWaitlistNumber: 123,
-            conventionalUnitWaitlistNumber: 456,
+            accessibleUnitWaitlistNumber: "123",
+            conventionalUnitWaitlistNumber: "456",
           })
         )
       }),
