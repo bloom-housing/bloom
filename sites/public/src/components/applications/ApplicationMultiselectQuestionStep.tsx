@@ -62,7 +62,7 @@ const ApplicationMultiselectQuestionStep = ({
   applicationSectionNumber,
   strings,
   swapCommunityTypeWithPrograms,
-  enableV2MSQ
+  enableV2MSQ,
 }: ApplicationMultiselectQuestionStepProps) => {
   const [verifyAddress, setVerifyAddress] = useState(false)
   const [verifyAddressStep, setVerifyAddressStep] = useState(0)
@@ -77,9 +77,13 @@ const ApplicationMultiselectQuestionStep = ({
   const [page, setPage] = useState(conductor.navigatedThroughBack ? questions.length : 1)
   const [applicationQuestions, setApplicationQuestions] = useState(application[applicationSection])
   const question = getPageQuestion(questions, page)
+  const questionOptions = (enableV2MSQ ? question?.multiselectOptions : question?.options) || []
 
-  // TODO: this needs to be hoisted to question level for MSQV2
-  const questionSetInputType = getInputType(question?.options)
+  const questionSetInputType = enableV2MSQ
+    ? question.isExclusive
+      ? "radio"
+      : "checkbox"
+    : getInputType(question?.options)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, handleSubmit, errors, getValues, reset, trigger } = useForm({
@@ -98,7 +102,7 @@ const ApplicationMultiselectQuestionStep = ({
 
   // Required to keep the form up to date before submitting this section if you're moving between pages
   useEffect(() => {
-    reset(mapApiToMultiselectForm(applicationQuestions, questions, applicationSection))
+    reset(mapApiToMultiselectForm(applicationQuestions, questions, applicationSection, enableV2MSQ))
     setExclusiveKeys(getExclusiveKeys(question, applicationSection))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, applicationQuestions, reset])
@@ -215,7 +219,7 @@ const ApplicationMultiselectQuestionStep = ({
     )
   }
 
-  const allOptions = question?.options ? [...question.options] : []
+  const allOptions = [...questionOptions]
   if (question?.optOutText) {
     allOptions.push({
       text: question?.optOutText,

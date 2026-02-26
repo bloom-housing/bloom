@@ -14,11 +14,8 @@ const ApplicationPrograms = () => {
     conductor.config,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
-  
-  const enableV2MSQ = isFeatureFlagOn(
-    conductor.config,
-    FeatureFlagEnum.enableV2MSQ
-  )
+
+  const enableV2MSQ = isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableV2MSQ)
 
   return (
     <ApplicationMultiselectQuestionStep

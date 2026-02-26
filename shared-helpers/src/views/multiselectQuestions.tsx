@@ -223,9 +223,13 @@ export const multiselectOptionWrapper = (
   },
   errors?: UseFormMethods["errors"]
 ) => {
-  const optionFieldName = fieldName(question.text, applicationSection, option.text)
+  const optionFieldName = fieldName(
+    question.name || question.text,
+    applicationSection,
+    option.name || option.text
+  )
   return (
-    <div className="mb-3" key={option.text}>
+    <div className="mb-3" key={option.name || option.text}>
       <div className={`mb-3 field ${resolveObject(optionFieldName, errors) ? "error" : ""}`}>
         {field}
       </div>
@@ -320,7 +324,7 @@ export const getCheckboxOption = (
   const optionFieldName = fieldName(
     question.name || question.text,
     applicationSection,
-    option.name || options.text
+    option.name || option.text
   )
   const checkboxField = getCheckboxField(
     option,
@@ -416,10 +420,13 @@ export const mapCheckboxesToApi = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData: { [name: string]: any },
   question: MultiselectQuestion,
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
+  enableV2MSQ?: boolean
 ): ApplicationMultiselectQuestion => {
   const rawData =
-    formData["application"][applicationSection][cleanMultiselectString(question.text) || ""]
+    formData["application"][applicationSection][
+      cleanMultiselectString(question.name || question.text) || ""
+    ]
 
   const data = cleanRadioObject(rawData) // removes nulls and converts "true" to true for radio fields
 
@@ -458,9 +465,11 @@ export const mapCheckboxesToApi = (
       }
 
       const getFinalKey = () => {
-        const optionKey = question?.options?.find(
-          (elem) => cleanMultiselectString(elem.text) === key
-        )?.text
+        const options = enableV2MSQ ? question?.multiselectOptions : question?.options
+        const foundOption = options?.find(
+          (elem) => cleanMultiselectString(elem.name || elem.text) === key
+        )
+        const optionKey = foundOption?.name || foundOption?.text
         const cleanOptOutKey = cleanMultiselectString(question?.optOutText)
         if (cleanOptOutKey === key) return question?.optOutText || key
         return optionKey || key
@@ -476,7 +485,7 @@ export const mapCheckboxesToApi = (
 
   return {
     multiselectQuestionId: question.id,
-    key: question.text ?? "",
+    key: (question.name || question.text) ?? "",
     claimed,
     options: questionOptions,
   }
@@ -485,9 +494,11 @@ export const mapCheckboxesToApi = (
 export const mapApiToMultiselectForm = (
   applicationQuestions: ApplicationMultiselectQuestion[],
   listingQuestions: ListingMultiselectQuestion[],
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
+  enableV2MSQ?: boolean
 ) => {
   const questionsFormData = { application: { [applicationSection]: Object.create(null) } }
+  const optionsKey = enableV2MSQ ? "multiselectOptions" : "options"
 
   const applicationQuestionsWithTypes: {
     question: ApplicationMultiselectQuestion
@@ -496,9 +507,12 @@ export const mapApiToMultiselectForm = (
     return {
       question,
       inputType: getInputType(
-        listingQuestions?.filter(
-          (listingQuestion) => listingQuestion?.multiselectQuestions?.text === question.key
-        )[0]?.multiselectQuestions?.options ?? []
+        listingQuestions?.filter((listingQuestion) => {
+          const questionName = enableV2MSQ
+            ? listingQuestion?.multiselectQuestions?.name
+            : listingQuestion?.multiselectQuestions?.text
+          return questionName === question.key
+        })[0]?.multiselectQuestions?.[optionsKey] ?? []
       ),
     }
   })
