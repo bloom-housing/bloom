@@ -743,6 +743,8 @@
   "listing.tags.accessible": "Maa-access",
   "listingFilters.clear": "Maaliwalas",
   "listingFilters.program.Families": "Mga pamilya",
+  "listingFilters.program.hearingVisionAccessibilityNeeds": "Mga pangangailangan sa accessibility sa pandinig/pangitain",
+  "listingFilters.program.mobilityAccessibilityNeeds":"Mga pangangailangan sa kadaliang mapakilos",
   "listingFilters.program.Referral only": "Referral lamang",
   "listingFilters.program.Residents with Disabilities": "Mga residenteng may kapansanan",
   "listingFilters.program.Seniors 55+": "Mga nakatatanda 55+",

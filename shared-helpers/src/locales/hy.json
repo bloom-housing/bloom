@@ -739,6 +739,8 @@
   "listing.tags.accessible": "Հասանելի է",
   "listingFilters.clear": "Մաքրել",
   "listingFilters.program.Families": "Ընտանիքներ",
+  "listingFilters.program.hearingVisionAccessibilityNeeds": "Լսողության/տեսողության հասանելիության կարիքները",
+  "listingFilters.program.mobilityAccessibilityNeeds":"Շարժունակության մատչելիության կարիքները",
   "listingFilters.program.Referral only": "Միայն ուղղորդում",
   "listingFilters.program.Residents with Disabilities": "Հաշմանդամություն ունեցող բնակիչներ",
   "listingFilters.program.Seniors 55+": "55+ տարեկան տարեցներ",

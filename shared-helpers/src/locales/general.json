@@ -738,6 +738,8 @@
   "listing.tags.accessible": "Accessible",
   "listingFilters.clear": "Clear",
   "listingFilters.program.Families": "Families",
+  "listingFilters.program.hearingVisionAccessibilityNeeds": "Hearing/vision accessibility needs",
+  "listingFilters.program.mobilityAccessibilityNeeds": "Mobility accessibility needs",
   "listingFilters.program.Referral only": "Referral only",
   "listingFilters.program.Residents with Disabilities": "Residents with disabilities",
   "listingFilters.program.Seniors 55+": "Seniors 55+",

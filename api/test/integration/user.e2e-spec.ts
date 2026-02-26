@@ -28,6 +28,8 @@ import { PartnerUserCreate } from '../../src/dtos/users/partner-user-create.dto'
 import { AdvocateUserCreate } from '../../src/dtos/users/advocate-user-create.dto';
 import { addressFactory } from '../../prisma/seed-helpers/address-factory';
 import { AddressUpdate } from '../../src/dtos/addresses/address-update.dto';
+import { UserOrderByKeys } from '../../src/enums/listings/order-by-enum';
+import { OrderByEnum } from '../../src/enums/shared/order-by-enum';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -162,6 +164,71 @@ describe('User Controller Tests', () => {
       const ids = res.body.items.map((item) => item.id);
       expect(ids).toContain(userA.id);
       expect(ids).toContain(userB.id);
+    });
+
+    it('should get advocate users from list() when filter params are sent', async () => {
+      await prisma.userAccounts.create({
+        data: await userFactory({}),
+      });
+      const userB = await prisma.userAccounts.create({
+        data: await userFactory({
+          isAdvocate: true,
+          isApproved: true,
+        }),
+      });
+
+      const userC = await prisma.userAccounts.create({
+        data: await userFactory({
+          isAdvocate: true,
+          isApproved: false,
+        }),
+      });
+
+      let queryParams: UserQueryParams = {
+        page: 1,
+        filter: [
+          {
+            isAdvocateUser: true,
+          },
+        ],
+        orderBy: [UserOrderByKeys.isApproved],
+        orderDir: [OrderByEnum.ASC],
+      };
+      let query = stringify(queryParams as any);
+
+      let res = await request(app.getHttpServer())
+        .get(`/user/list?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(2);
+      let ids: any[] = res.body.items.map((item) => item.id);
+      expect(ids).toContain(userC.id);
+      expect(ids).toContain(userB.id);
+      expect(ids.indexOf(userC.id)).toBeLessThan(ids.indexOf(userB.id));
+
+      queryParams = {
+        page: 1,
+        filter: [
+          {
+            isAdvocateUser: true,
+          },
+        ],
+        orderBy: [UserOrderByKeys.isApproved],
+        orderDir: [OrderByEnum.DESC],
+      };
+      query = stringify(queryParams as any);
+
+      res = await request(app.getHttpServer())
+        .get(`/user/list?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(2);
+      ids = res.body.items.map((item) => item.id);
+      expect(ids).toContain(userB.id);
+      expect(ids).toContain(userC.id);
+      expect(ids.indexOf(userB.id)).toBeLessThan(ids.indexOf(userC.id));
     });
   });
 
