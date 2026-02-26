@@ -138,4 +138,54 @@ describe("Paper Application Tests", () => {
       cy.verifyTerms(application)
     })
   })
+
+  it("saves and reopens AUWL, CUWL, and manual lottery position numbers", () => {
+    const accessibleWaitlistNumber = "101"
+    const conventionalWaitlistNumber = "202"
+    const manualLotteryPositionNumber = "303"
+
+    cy.visit("/")
+    cy.getByTestId("listing-status-cell-Hollywood Hills Heights").click()
+    cy.getByID("addApplicationButton").contains("Add application").click()
+
+    cy.fixture("applicantOnlyData").then((application) => {
+      cy.fillPrimaryApplicant(application, [
+        "application.additionalPhoneNumber",
+        "application.additionalPhoneNumberType",
+        "application.applicant.address.street2",
+      ])
+
+      cy.getByID("application.status").select("waitlist")
+      cy.getByID("application.accessibleUnitWaitlistNumber").clear().type(accessibleWaitlistNumber)
+      cy.getByID("application.conventionalUnitWaitlistNumber")
+        .clear()
+        .type(conventionalWaitlistNumber)
+      cy.getByID("application.manualLotteryPositionNumber")
+        .clear()
+        .type(manualLotteryPositionNumber)
+
+      cy.fillTerms(application, true)
+    })
+
+    cy.location("pathname")
+      .should("match", /^\/application\/[^/]+$/)
+      .then((path) => {
+        const applicationId = path.split("/").pop()
+        expect(applicationId, "application id").to.exist
+        cy.visit(`/application/${applicationId}/edit`)
+      })
+
+    cy.getByID("application.accessibleUnitWaitlistNumber").should(
+      "have.value",
+      accessibleWaitlistNumber
+    )
+    cy.getByID("application.conventionalUnitWaitlistNumber").should(
+      "have.value",
+      conventionalWaitlistNumber
+    )
+    cy.getByID("application.manualLotteryPositionNumber").should(
+      "have.value",
+      manualLotteryPositionNumber
+    )
+  })
 })
