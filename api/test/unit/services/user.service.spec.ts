@@ -449,6 +449,8 @@ describe('Testing user service', () => {
           jurisdictions: true,
           listings: true,
           userRoles: true,
+          address: true,
+          agency: true,
           favoriteListings: {
             select: {
               id: true,
@@ -510,6 +512,8 @@ describe('Testing user service', () => {
           jurisdictions: true,
           listings: true,
           userRoles: true,
+          address: true,
+          agency: true,
           favoriteListings: {
             select: {
               id: true,
@@ -568,6 +572,8 @@ describe('Testing user service', () => {
           jurisdictions: true,
           listings: true,
           userRoles: true,
+          address: true,
+          agency: true,
           favoriteListings: {
             select: {
               id: true,
