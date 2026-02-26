@@ -555,6 +555,15 @@ describe("ListingViewSeedsHelpers", () => {
   })
 
   describe("getMarketingFlyers", () => {
+    const oldEnv = process.env
+
+    beforeEach(() => {
+      process.env = { ...oldEnv }
+    })
+
+    afterAll(() => {
+      process.env = oldEnv
+    })
     it("should return empty array when feature flag is disabled", () => {
       const mockJurisdiction = {
         ...jurisdiction,
@@ -622,6 +631,7 @@ describe("ListingViewSeedsHelpers", () => {
     })
 
     it("should use cloudinary URL when file asset exists", () => {
+      process.env.CLOUDINARY_CLOUD_NAME = "exygy"
       const mockJurisdiction = {
         ...jurisdiction,
         featureFlags: [
@@ -642,9 +652,7 @@ describe("ListingViewSeedsHelpers", () => {
 
       const result = getMarketingFlyers(mockListing, mockJurisdiction)
       expect(result).toHaveLength(1)
-      expect(result[0].url).toBe(
-        "https://res.cloudinary.com/undefined/image/upload/test-file-id.pdf"
-      )
+      expect(result[0].url).toBe("https://res.cloudinary.com/exygy/image/upload/test-file-id.pdf")
     })
 
     it("should return empty array when no flyers exist", () => {
@@ -779,7 +787,17 @@ describe("ListingViewSeedsHelpers", () => {
   })
 
   describe("getBuildingSelectionCriteria", () => {
+    const oldEnv = process.env
+
+    beforeEach(() => {
+      process.env = { ...oldEnv }
+    })
+
+    afterAll(() => {
+      process.env = oldEnv
+    })
     it("should return link when listingsBuildingSelectionCriteriaFile exists", () => {
+      process.env.CLOUDINARY_CLOUD_NAME = "exygy"
       const mockListing: Listing = {
         ...listing,
         listingsBuildingSelectionCriteriaFile: {
@@ -791,7 +809,7 @@ describe("ListingViewSeedsHelpers", () => {
       const result = getBuildingSelectionCriteria(mockListing)
 
       expect(result.props.children.props.href).toEqual(
-        "https://res.cloudinary.com/undefined/image/upload/test-file-id.pdf"
+        "https://res.cloudinary.com/exygy/image/upload/test-file-id.pdf"
       )
     })
 

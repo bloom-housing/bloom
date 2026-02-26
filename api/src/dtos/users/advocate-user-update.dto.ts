@@ -12,7 +12,6 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import Agency from '../agency/agency.dto';
 import { User } from './user.dto';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { passwordRegex } from '../../utilities/password-regex';
