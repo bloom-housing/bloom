@@ -809,7 +809,6 @@ model Jurisdictions {
   listingSnapshots       ListingSnapshot[]
   multiselectQuestions   MultiselectQuestions[]
   properties             Properties[]
-  propertySnapshots      PropertySnapshot[]
   reservedCommunityTypes ReservedCommunityTypes[]
   translations           Translations[]
   user_accounts          UserAccounts[]
@@ -1134,6 +1133,40 @@ model ListingNeighborhoodAmenitySnapshot {
   @@map("listing_neighborhood_amenity_snapshot")
 }
 
+// ListingParkingType Section
+model ListingParkingType {
+  id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  onStreet  Boolean? @map("on_street")
+  offStreet Boolean? @map("off_street")
+  garage    Boolean? @map("garage")
+  carport   Boolean? @map("carport")
+
+  listing Listings?
+
+  @@map("listing_parking_type")
+}
+
+model ListingParkingTypeSnapshot {
+  id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+
+  originalId        String   @map("original_id") @db.Uuid
+  originalCreatedAt DateTime @map("original_created_at") @db.Timestamp(6)
+  updatedAt         DateTime @map("updated_at") @db.Timestamp(6)
+
+  onStreet  Boolean? @map("on_street")
+  offStreet Boolean? @map("off_street")
+  garage    Boolean? @map("garage")
+  carport   Boolean? @map("carport")
+
+  listing ListingSnapshot?
+
+  @@map("listing_parking_type_snapshot")
+}
+
 // Listing Section
 model Listings {
   id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
@@ -1308,19 +1341,6 @@ model Listings {
   @@map("listings")
 }
 
-model ListingParkingType {
-  id        String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
-  onStreet  Boolean?  @map("on_street")
-  offStreet Boolean?  @map("off_street")
-  garage    Boolean?  @map("garage")
-  carport   Boolean?  @map("carport")
-  listing   Listings?
-
-  @@map("listing_parking_type")
-}
-
 model ListingSnapshot {
   id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
@@ -1417,11 +1437,12 @@ model ListingSnapshot {
   ownerCompany                            String?                     @map("owner_company")
   paperApplication                        Boolean?                    @map("paper_application")
   parkingFee                              String?                     @map("parking_fee")
+  parkingTypeSnapshotId                   String?                     @unique @map("parking_type_snapshot_id") @db.Uuid
   petPolicy                               String?                     @map("pet_policy")
   phoneNumber                             String?                     @map("phone_number")
   postmarkedApplicationsReceivedByDate    DateTime?                   @map("postmarked_applications_received_by_date") @db.Timestamptz(6)
   programRules                            String?                     @map("program_rules")
-  propertySnapshotId                      String?                     @map("property_snapshot_id") @db.Uuid
+  propertyId                              String?                     @map("property_id") @db.Uuid
   publishedAt                             DateTime?                   @map("published_at") @db.Timestamptz(6)
   referralOpportunity                     Boolean?                    @map("referral_opportunity")
   region                                  RegionEnum?
@@ -1472,7 +1493,8 @@ model ListingSnapshot {
   listingsMarketingFlyerFile            AssetSnapshot?                       @relation("marketing_flyer_file_snapshot", fields: [marketingFlyerFileSnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   listingsResult                        AssetSnapshot?                       @relation("listings_result_snapshot", fields: [resultSnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   listingUtility                        ListingUtilitySnapshot?              @relation(fields: [utilitySnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  property                              PropertySnapshot?                    @relation(fields: [propertySnapshotId], references: [id])
+  property                              Properties?                          @relation(fields: [propertyId], references: [id])
+  parkType                              ListingParkingTypeSnapshot?          @relation(fields: [parkingTypeSnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   requiredDocumentsList                 ListingDocumentSnapshot?             @relation(fields: [documentSnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   reservedCommunityType                 ReservedCommunityTypes?              @relation(fields: [reservedCommunityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   unitGroup                             UnitGroupSnapshot[]
@@ -1614,7 +1636,10 @@ model PaperApplications {
 model PaperApplicationSnapshot {
   id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt DateTime @map("updated_at") @db.Timestamp(6)
+
+  originalId        String   @map("original_id") @db.Uuid
+  originalCreatedAt DateTime @map("original_created_at") @db.Timestamp(6)
+  updatedAt         DateTime @map("updated_at") @db.Timestamp(6)
 
   applicationMethodSnapshotId String?       @map("application_method_snapshot_id") @db.Uuid
   fileSnapshotId              String?       @map("file_snapshot_id") @db.Uuid
@@ -1638,34 +1663,13 @@ model Properties {
   url            String?
   urlTitle       String? @map("url_title")
 
-  jurisdictions Jurisdictions? @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings      Listings[]
+  jurisdictions    Jurisdictions?    @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings         Listings[]
+  listingSnapshots ListingSnapshot[]
 
   @@index(id)
   @@index(name)
   @@map("properties")
-}
-
-model PropertySnapshot {
-  id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
-
-  originalId        String   @map("original_id") @db.Uuid
-  originalCreatedAt DateTime @map("original_created_at") @db.Timestamp(6)
-  updatedAt         DateTime @map("updated_at") @db.Timestamp(6)
-
-  description    String?
-  jurisdictionId String? @map("jurisdiction_id") @db.Uuid
-  name           String
-  url            String?
-  urlTitle       String? @map("url_title")
-
-  jurisdiction Jurisdictions?    @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listing      ListingSnapshot[]
-
-  @@index(id)
-  @@index(name)
-  @@map("property_snapshot")
 }
 
 // ReservedCommunityType Section

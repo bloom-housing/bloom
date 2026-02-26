@@ -5029,6 +5029,10 @@ describe('Testing listing service', () => {
         .fn()
         .mockResolvedValue({ id: 'example id', name: 'example name' });
 
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
+
       prisma.$transaction = jest
         .fn()
         .mockResolvedValue([
@@ -5164,6 +5168,7 @@ describe('Testing listing service', () => {
           id: 'example id',
         },
       );
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
   });
 
@@ -5338,6 +5343,9 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
       prisma.$transaction = jest
         .fn()
         .mockResolvedValue([{ id: 'example id', name: 'example name' }]);
@@ -5529,6 +5537,7 @@ describe('Testing listing service', () => {
           id: 'example id',
         },
       );
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
 
     it('should update a listing with unit groups when enableUnitGroups is true', async () => {
@@ -5564,6 +5573,9 @@ describe('Testing listing service', () => {
           },
         ],
       });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
 
       const unitTypes = [
         {
@@ -5746,6 +5758,7 @@ describe('Testing listing service', () => {
           id: 'example id',
         },
       );
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
 
     it('should process duplicates and expire applications on listing close', async () => {
@@ -6535,12 +6548,18 @@ describe('Testing listing service', () => {
           id: 'example id2',
         },
       ]);
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id1',
+      });
       prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 2 });
       prisma.activityLog.createMany = jest.fn().mockResolvedValue({ count: 2 });
       prisma.cronJob.findFirst = jest
         .fn()
         .mockResolvedValue({ id: randomUUID() });
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
 
       process.env.PROXY_URL = 'https://www.google.com';
       await service.closeListings();
@@ -6600,6 +6619,7 @@ describe('Testing listing service', () => {
       expect(
         multiselectQuestionServiceMock.retireMultiselectQuestions,
       ).toHaveBeenCalled();
+      expect(prisma.listingSnapshot.create).toHaveBeenCalledTimes(2);
     });
 
     it('should not call the purge if no listings needed to get processed', async () => {
@@ -6638,6 +6658,9 @@ describe('Testing listing service', () => {
         },
       ]);
       prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 2 });
+      prisma.listings.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: 'example id1' });
       prisma.activityLog.createMany = jest.fn().mockResolvedValue({ count: 2 });
       prisma.cronJob.findFirst = jest
         .fn()
@@ -6646,6 +6669,9 @@ describe('Testing listing service', () => {
       prisma.applications.updateMany = jest
         .fn()
         .mockResolvedValue({ count: 2 });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
 
       process.env.APPLICATION_DAYS_TILL_EXPIRY = '90';
       await service.closeListings();
@@ -6667,6 +6693,7 @@ describe('Testing listing service', () => {
           listingId: 'example id2',
         },
       });
+      expect(prisma.listingSnapshot.create).toHaveBeenCalledTimes(2);
       process.env.APPLICATION_DAYS_TILL_EXPIRY = null;
     });
   });
