@@ -1203,6 +1203,9 @@ describe('Testing user service', () => {
       prisma.userRoles.delete = jest.fn().mockResolvedValue({
         id,
       });
+      prisma.userAccountSnapshot.deleteMany = jest.fn().mockResolvedValue({
+        id,
+      });
 
       await service.delete(id, {
         id: 'requestingUser id',
@@ -1223,6 +1226,7 @@ describe('Testing user service', () => {
         },
       });
       expect(prisma.userRoles.delete).toHaveBeenCalledTimes(0);
+      expect(prisma.userAccountSnapshot.deleteMany).toHaveBeenCalled();
 
       expect(canOrThrowMock).toHaveBeenCalledWith(
         {
@@ -1250,6 +1254,9 @@ describe('Testing user service', () => {
       prisma.userRoles.delete = jest.fn().mockResolvedValue({
         id,
       });
+      prisma.userAccountSnapshot.deleteMany = jest.fn().mockResolvedValue({
+        id,
+      });
 
       await service.delete(id, {
         id: 'requestingUser id',
@@ -1274,6 +1281,7 @@ describe('Testing user service', () => {
           userId: id,
         },
       });
+      expect(prisma.userAccountSnapshot.deleteMany).toHaveBeenCalled();
 
       expect(canOrThrowMock).toHaveBeenCalledWith(
         {
@@ -3223,6 +3231,9 @@ describe('Testing user service', () => {
           { id: 'application3' },
           { id: 'application4' },
         ]);
+      prisma.userAccountSnapshot.deleteMany = jest
+        .fn()
+        .mockResolvedValue({ id: 'userId1' });
 
       prisma.userRoles.delete = jest.fn().mockResolvedValue({});
       prisma.userAccounts.delete = jest.fn().mockResolvedValue({});
@@ -3243,6 +3254,7 @@ describe('Testing user service', () => {
       expect(prisma.userAccounts.delete).toBeCalledWith({
         where: { id: 'userId4' },
       });
+      expect(prisma.userAccountSnapshot.deleteMany).toHaveBeenCalled();
     });
   });
 
