@@ -29,6 +29,7 @@ import { PublicUserUpdate } from '../../../src/dtos/users/public-user-update.dto
 import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { AddressUpdate } from '../../../src/dtos/addresses/address-update.dto';
 import { AdvocateUserUpdate } from '../../../src/dtos/users/advocate-user-update.dto';
+import { UserOrderByKeys } from '../../../src/enums/listings/order-by-enum';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -36,7 +37,7 @@ describe('Testing user service', () => {
   let emailService: EmailService;
   let applicationService: ApplicationService;
 
-  const mockUser = (position: number, date: Date) => {
+  const mockUser = (position: number, date: Date): User => {
     return {
       id: randomUUID(),
       createdAt: date,
@@ -401,6 +402,188 @@ describe('Testing user service', () => {
         take: 5,
         where: {
           AND: [],
+        },
+      });
+    });
+
+    it('should filter for advocate users only', async () => {
+      const date = new Date();
+      const mockedValue = mockUserSet(3, date);
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue(mockedValue);
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(3);
+
+      expect(
+        await service.list(
+          {
+            page: 2,
+            limit: 5,
+            filter: [
+              {
+                isAdvocateUser: true,
+              },
+            ],
+          },
+          null,
+        ),
+      ).toEqual({
+        items: mockedValue,
+        meta: {
+          currentPage: 2,
+          itemCount: 3,
+          itemsPerPage: 5,
+          totalItems: 3,
+          totalPages: 1,
+        },
+      });
+
+      expect(prisma.userAccounts.findMany).toHaveBeenCalledWith({
+        include: {
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+          favoriteListings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
+        skip: 0,
+        take: 5,
+        where: {
+          AND: [
+            {
+              AND: [
+                {
+                  isAdvocate: true,
+                },
+              ],
+            },
+          ],
+        },
+      });
+    });
+
+    it('should handle query param ordering for isApproved field', async () => {
+      const date = new Date();
+      const mockedValue = mockUserSet(3, date);
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue(mockedValue);
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(3);
+
+      expect(
+        await service.list(
+          {
+            page: 2,
+            limit: 5,
+            filter: [
+              {
+                isAdvocateUser: true,
+              },
+            ],
+            orderBy: [UserOrderByKeys.isApproved],
+            orderDir: [OrderByEnum.ASC],
+          },
+          null,
+        ),
+      ).toEqual({
+        items: mockedValue,
+        meta: {
+          currentPage: 2,
+          itemCount: 3,
+          itemsPerPage: 5,
+          totalItems: 3,
+          totalPages: 1,
+        },
+      });
+
+      expect(prisma.userAccounts.findMany).toHaveBeenCalledWith({
+        include: {
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+          favoriteListings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        orderBy: [
+          { firstName: 'asc' },
+          { lastName: 'asc' },
+          { isApproved: 'asc' },
+        ],
+        skip: 0,
+        take: 5,
+        where: {
+          AND: [
+            {
+              AND: [
+                {
+                  isAdvocate: true,
+                },
+              ],
+            },
+          ],
+        },
+      });
+
+      expect(
+        await service.list(
+          {
+            page: 2,
+            limit: 5,
+            filter: [
+              {
+                isAdvocateUser: true,
+              },
+            ],
+            orderBy: [UserOrderByKeys.isApproved],
+            orderDir: [OrderByEnum.DESC],
+          },
+          null,
+        ),
+      ).toEqual({
+        items: mockedValue,
+        meta: {
+          currentPage: 2,
+          itemCount: 3,
+          itemsPerPage: 5,
+          totalItems: 3,
+          totalPages: 1,
+        },
+      });
+
+      expect(prisma.userAccounts.findMany).toHaveBeenCalledWith({
+        include: {
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+          favoriteListings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        orderBy: [
+          { firstName: 'asc' },
+          { lastName: 'asc' },
+          { isApproved: 'desc' },
+        ],
+        skip: 0,
+        take: 5,
+        where: {
+          AND: [
+            {
+              AND: [
+                {
+                  isAdvocate: true,
+                },
+              ],
+            },
+          ],
         },
       });
     });

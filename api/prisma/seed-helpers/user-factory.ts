@@ -14,6 +14,7 @@ export const userFactory = async (optionalParams?: {
   mfaEnabled?: boolean;
   middleName?: string;
   password?: string;
+  isApproved?: boolean;
   phoneNumber?: string;
   phoneNumberVerified?: boolean;
   roles?: Prisma.UserRolesUncheckedCreateWithoutUserAccountsInput;
@@ -43,6 +44,8 @@ export const userFactory = async (optionalParams?: {
   singleUseCode: optionalParams?.singleUseCode || null,
   singleUseCodeUpdatedAt: optionalParams?.mfaEnabled ? new Date() : undefined,
   language: optionalParams?.language || undefined,
+  isAdvocate: optionalParams?.isAdvocate || undefined,
+  isApproved: optionalParams?.isApproved || undefined,
   favoriteListings: optionalParams?.favoriteListings
     ? {
         connect: optionalParams.favoriteListings.map((listing) => {
@@ -80,8 +83,6 @@ export const userFactory = async (optionalParams?: {
         },
       }
     : undefined,
-  isAdvocate: optionalParams?.isAdvocate,
-  isApproved: optionalParams?.isAdvocate,
   agency: optionalParams?.agencyId
     ? {
         connect: {
