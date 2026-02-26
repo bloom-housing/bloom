@@ -87,6 +87,7 @@
     "nyc": "^15.1.0",
     "postcss": "^8.5.3",
     "postcss-custom-media": "^10.0.0",
+    "resize-observer-polyfill": "^1.5.1",
     "sass": "^1.93.3",
     "sass-loader": "^16.0.6",
     "typescript": "4.9.5",
