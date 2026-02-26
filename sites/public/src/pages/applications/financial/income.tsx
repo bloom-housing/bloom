@@ -62,7 +62,7 @@ const ApplicationIncome = () => {
     ? 4
     : 3
 
-  const enableVerifyIncome = conductor.config.featureFlags.some(
+  const enableVerifyIncome = conductor.config.featureFlags?.some(
     (flag) => flag.name === FeatureFlagEnum.enableVerifyIncome && flag.active
   )
 
