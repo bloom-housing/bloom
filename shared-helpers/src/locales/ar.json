@@ -743,6 +743,8 @@
   "listing.tags.accessible": "متاح للجميع",
   "listingFilters.clear": "مسح",
   "listingFilters.program.Families": "الأُسر",
+  "listingFilters.program.hearingVisionAccessibilityNeeds": "احتياجات الوصول إلى السمع / الرؤية",
+  "listingFilters.program.mobilityAccessibilityNeeds": "احتياجات إمكانية الوصول إلى التنقل",
   "listingFilters.program.Referral only": "الإحالة فقط",
   "listingFilters.program.Residents with Disabilities": "السكان ذوي الإعاقة",
   "listingFilters.program.Seniors 55+": "لكبار السن فوق 55 سنة",

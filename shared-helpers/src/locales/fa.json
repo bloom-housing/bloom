@@ -739,6 +739,8 @@
   "listing.tags.accessible": "قابل دسترس",
   "listingFilters.clear": "پاک کردن",
   "listingFilters.program.Families": "خانواده‌ها",
+  "listingFilters.program.hearingVisionAccessibilityNeeds": "نیازهای دسترسی به شنوایی/بینایی",
+  "listingFilters.program.mobilityAccessibilityNeeds":"نیازهای دسترسی به تحرک",
   "listingFilters.program.Referral only": "فقط ارجاع",
   "listingFilters.program.Residents with Disabilities": "ساکنان دارای معلولیت",
   "listingFilters.program.Seniors 55+": "سالمندان ۵۵ سال به بالا",

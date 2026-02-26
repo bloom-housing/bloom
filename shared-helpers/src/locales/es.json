@@ -743,6 +743,8 @@
   "listing.tags.accessible": "Accesible",
   "listingFilters.clear": "Borrar",
   "listingFilters.program.Families": "Familias",
+ "listingFilters.program.hearingVisionAccessibilityNeeds": "Necesidades de accesibilidad auditiva/visual",
+  "listingFilters.program.mobilityAccessibilityNeeds":"Necesidades de accesibilidad a la movilidad",
   "listingFilters.program.Referral only": "Sólo por referencia",
   "listingFilters.program.Residents with Disabilities": "Residentes con discapacidades",
   "listingFilters.program.Seniors 55+": "Adultos mayores de 55 años",

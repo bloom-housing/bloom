@@ -744,6 +744,8 @@
   "listing.tags.accessible": "Có thể truy cập",
   "listingFilters.clear": "Xóa",
   "listingFilters.program.Families": "Gia đình",
+  "listingFilters.program.hearingVisionAccessibilityNeeds": "Nhu cầu tiếp cận thính giác/thị giác",
+  "listingFilters.program.mobilityAccessibilityNeeds":"Nhu cầu tiếp cận di động",
   "listingFilters.program.Referral only": "Chỉ giới thiệu",
   "listingFilters.program.Residents with Disabilities": "Người dân khuyết tật",
   "listingFilters.program.Seniors 55+": "Người cao tuổi từ 55 tuổi trở lên",

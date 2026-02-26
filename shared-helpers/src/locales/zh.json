@@ -743,6 +743,8 @@
   "listing.tags.accessible": "无障碍",
   "listingFilters.clear": "清除",
   "listingFilters.program.Families": "家庭",
+  "listingFilters.program.hearingVisionAccessibilityNeeds": "聽力/視力無障礙需求",
+  "listingFilters.program.mobilityAccessibilityNeeds":"流動性無障礙需求",
   "listingFilters.program.Referral only": "仅限推荐人",
   "listingFilters.program.Residents with Disabilities": "残疾居民",
   "listingFilters.program.Seniors 55+": "55岁以上的老年人",
