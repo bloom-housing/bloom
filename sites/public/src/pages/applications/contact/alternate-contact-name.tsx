@@ -14,7 +14,6 @@ import ApplicationFormLayout, {
   LockIcon,
   onFormError,
 } from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationAlternateContactName = () => {
   const { profile } = useContext(AuthContext)
@@ -25,7 +24,6 @@ const ApplicationAlternateContactName = () => {
     conductor.config,
     FeatureFlagEnum.enableHousingAdvocate
   )
-
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, trigger } = useForm<Record<string, any>>({
     shouldFocusError: false,
@@ -50,8 +48,7 @@ const ApplicationAlternateContactName = () => {
     if (!isAdvocate || !profile) return
     application.alternateContact.firstName = profile.firstName || ""
     application.alternateContact.lastName = profile.lastName || ""
-    // TODO (Advocate): replace this with the profile agency when available
-    application.alternateContact.agency = "agency"
+    application.alternateContact.agency = profile?.agency?.name || ""
     conductor.sync()
   }, [isAdvocate, profile, application, conductor])
 

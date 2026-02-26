@@ -55,25 +55,16 @@ const ApplicationAlternateContactContact = () => {
     application.alternateContact.phoneNumber = profile.phoneNumber || ""
     application.alternateContact.emailAddress = profile.email || null
 
-    // TODO (Advocate): replace this with the profile address when available
-    application.alternateContact.address = {
-      ...application.alternateContact.address,
-      street: "street",
-      street2: "street2",
-      city: "Angelopolis",
-      state: "CA",
-      zipCode: "90210",
+    if (profile.address) {
+      application.alternateContact.address = {
+        ...application.alternateContact.address,
+        street: profile.address.street || "",
+        street2: profile.address.street2 || "",
+        city: profile.address.city || "",
+        state: profile.address.state || "",
+        zipCode: profile.address.zipCode || "",
+      }
     }
-    // if (profile.address) {
-    //   application.alternateContact.address = {
-    //     ...application.alternateContact.address,
-    //     street: profile.address.street || "",
-    //     street2: profile.address.street2 || "",
-    //     city: profile.address.city || "",
-    //     state: profile.address.state || "",
-    //     zipCode: profile.address.zipCode || "",
-    //   }
-    // }
 
     conductor.sync()
   }, [isAdvocate, profile, application, conductor])
