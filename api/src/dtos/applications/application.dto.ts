@@ -133,21 +133,21 @@ export class Application extends AbstractDTO {
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  accessibleUnitWaitlistNumber?: number;
+  accessibleUnitWaitlistNumber?: string;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  conventionalUnitWaitlistNumber?: number;
+  conventionalUnitWaitlistNumber?: string;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  manualLotteryPositionNumber?: number;
+  manualLotteryPositionNumber?: string;
 
   @Expose()
   @IsEnum(LanguagesEnum, { groups: [ValidationsGroupsEnum.default] })
