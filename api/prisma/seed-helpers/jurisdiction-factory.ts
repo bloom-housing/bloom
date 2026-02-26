@@ -11,7 +11,9 @@ import { RaceEthnicityConfiguration } from '../../src/dtos/jurisdictions/race-et
 import { SpokenLanguageEnum } from '../../src/enums/applications/spoken-language-enum';
 
 export const jurisdictionFactory = (
-  jurisdictionName = randomName(),
+  jurisdictionName = `${randomName()} ${Math.random()
+    .toString(16)
+    .substring(2, 8)}`,
   optionalFields?: {
     listingApprovalPermissions?: UserRoleEnum[];
     duplicateListingPermissions?: UserRoleEnum[];
