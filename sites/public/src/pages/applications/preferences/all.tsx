@@ -1,6 +1,9 @@
 import React from "react"
 import { t } from "@bloom-housing/ui-components"
-import { FeatureFlagEnum, MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import ApplicationMultiselectQuestionStep from "../../../components/applications/ApplicationMultiselectQuestionStep"
 import { isFeatureFlagOn } from "../../../lib/helpers"
@@ -9,10 +12,7 @@ import { useFormConductor } from "../../../lib/hooks"
 const ApplicationPreferencesAll = () => {
   const { conductor, listing } = useFormConductor("preferences")
 
-  const enableV2MSQ = isFeatureFlagOn(
-    conductor.config,
-    FeatureFlagEnum.enableV2MSQ
-  )
+  const enableV2MSQ = isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableV2MSQ)
 
   return (
     <ApplicationMultiselectQuestionStep
