@@ -104,7 +104,7 @@ describe("applications pages", () => {
 
       fireEvent.click(screen.getByRole("button", { name: "Next" }))
 
-      expect(await screen.findByRole("link", { name: "Get Assistance" })).toBeInTheDocument()
+      expect(await screen.findByRole("link", { name: "Get assistance" })).toBeInTheDocument()
       expect(routeToNextOrReturnUrlSpy).not.toHaveBeenCalled()
     })
 
@@ -114,7 +114,7 @@ describe("applications pages", () => {
       fireEvent.click(screen.getByRole("button", { name: "Next" }))
 
       await waitFor(() => expect(routeToNextOrReturnUrlSpy).toHaveBeenCalled())
-      expect(screen.queryByRole("link", { name: "Get Assistance" })).not.toBeInTheDocument()
+      expect(screen.queryByRole("link", { name: "Get assistance" })).not.toBeInTheDocument()
     })
   })
 })
