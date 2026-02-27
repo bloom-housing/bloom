@@ -2067,6 +2067,7 @@ model UserAccounts {
   userPreferences           UserPreferences?
   userRoles                 UserRoles?
 
+  @@index([email])
   @@map("user_accounts")
 }
 
