@@ -1,10 +1,10 @@
-import { FormDemographics } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormDemographics"
-import { mockNextRouter, render, screen, FormProviderWrapper, within } from "../../../../testUtils"
 import React from "react"
 import userEvent from "@testing-library/user-event"
 import { RaceEthnicityConfiguration } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { defaultRaceEthnicityConfiguration } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { t } from "@bloom-housing/ui-components"
+import { FormDemographics } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormDemographics"
+import { mockNextRouter, render, screen, FormProviderWrapper, within } from "../../../../testUtils"
 
 const customConfig: RaceEthnicityConfiguration = {
   options: [
