@@ -20,7 +20,6 @@ import { LanguagesEnum } from '@prisma/client';
 import { IdDTO } from '../shared/id.dto';
 import { UserRole } from './user-role.dto';
 import { Jurisdiction } from '../jurisdictions/jurisdiction.dto';
-import Agency from '../agency/agency.dto';
 import { Address } from '../addresses/address.dto';
 
 export class User extends AbstractDTO {
@@ -159,9 +158,9 @@ export class User extends AbstractDTO {
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Agency)
-  @ApiPropertyOptional({ type: Agency })
-  agency?: Agency;
+  @Type(() => IdDTO)
+  @ApiPropertyOptional({ type: IdDTO })
+  agency?: IdDTO;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -203,4 +202,9 @@ export class User extends AbstractDTO {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   isApproved?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  isAdvocate?: boolean;
 }

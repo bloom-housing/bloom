@@ -84,6 +84,8 @@ views.full = {
   ...views.base,
   ...views.favorites,
   listings: true,
+  agency: true,
+  address: true,
 };
 
 type findByOptions = {
