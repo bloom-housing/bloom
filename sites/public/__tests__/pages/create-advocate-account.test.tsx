@@ -83,7 +83,6 @@ describe("Create advocate page", () => {
 
     expect(screen.getByText("Your email address", { selector: "legend" })).toBeInTheDocument()
     expect(screen.getByRole("textbox", { name: "Email" })).toBeInTheDocument()
-    expect(screen.getByRole("textbox", { name: "Email" })).toBeInTheDocument()
     expect(screen.getByText("Register with your work email address")).toBeInTheDocument()
     expect(screen.getByText("For example: example@mail.com")).toBeInTheDocument()
 

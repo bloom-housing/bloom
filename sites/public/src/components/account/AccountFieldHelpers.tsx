@@ -115,7 +115,7 @@ export const dobFields = (
         label={t("application.name.yourDateOfBirth")}
       />
 
-      <p className={"field-sub-note "}>{t("application.name.dobHelper")}</p>
+      <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
       {show18SubNote && (
         <p className={"field-sub-note seeds-m-bs-4"}>{t("application.name.dobHelper2")}</p>
       )}
@@ -222,7 +222,7 @@ export const createAccountPasswordFields = (
   fieldClassName?: string
 ) => {
   return (
-    <fieldset className={"seeds-p-be-6"}>
+    <fieldset>
       <legend className={"text__caps-spaced seeds-m-be-0"}>
         {t("authentication.createAccount.password")}
       </legend>
