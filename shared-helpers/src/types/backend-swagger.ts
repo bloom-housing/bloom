@@ -8807,6 +8807,9 @@ export interface PublicUserCreate {
   isApproved?: boolean
 
   /**  */
+  isAdvocate?: boolean
+
+  /**  */
   dob: Date
 
   /**  */
@@ -8906,6 +8909,9 @@ export interface PartnerUserCreate {
 
   /**  */
   isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
 
   /**  */
   userRoles: UserRole
@@ -9074,6 +9080,9 @@ export interface PublicUserUpdate {
   isApproved?: boolean
 
   /**  */
+  isAdvocate?: boolean
+
+  /**  */
   dob: Date
 
   /**  */
@@ -9176,6 +9185,9 @@ export interface PartnerUserUpdate {
 
   /**  */
   isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
 
   /**  */
   userRoles: UserRole

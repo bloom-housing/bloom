@@ -24,7 +24,6 @@ export class PartnerUserUpdate extends OmitType(User, [
   'passwordValidForDays',
   'passwordUpdatedAt',
   'jurisdictions',
-  'isAdvocate',
 ] as const) {
   /* Fields inherited from User:
    * - firstName (inherited as required from User)
