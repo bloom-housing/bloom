@@ -9,10 +9,10 @@ import {
   createNameSubmitHandler,
   createPasswordSubmitHandler,
   createPhoneSubmitHandler,
-} from "../../../src/components/account/EditAccountHelpers"
+} from "../../../src/components/account/AccountFieldHelpers"
 import { UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-describe("EditAccountHelpers", () => {
+describe("AccountFieldHelpers", () => {
   const baseUser = {
     id: "user-id",
     firstName: "First",
@@ -182,7 +182,7 @@ describe("EditAccountHelpers", () => {
       )
 
       await handler({
-        dateOfBirth: {
+        dob: {
           birthDay: "12",
           birthMonth: "05",
           birthYear: "1990",
@@ -215,7 +215,7 @@ describe("EditAccountHelpers", () => {
       )
 
       await handler({
-        dateOfBirth: {
+        dob: {
           birthDay: "12",
           birthMonth: "05",
           birthYear: "1990",

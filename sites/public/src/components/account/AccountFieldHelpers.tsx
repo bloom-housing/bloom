@@ -24,7 +24,7 @@ import {
   phoneNumberKeys,
 } from "@bloom-housing/shared-helpers"
 import styles from "../../pages/account/account.module.scss"
-import { User, UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Agency, User, UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export type AlertMessage = {
   type: AlertTypes
@@ -41,7 +41,7 @@ export const accountNameFields = (
     <fieldset>
       <legend className={styles["account-settings-label"]}>{t("application.name.yourName")}</legend>
       <Field
-        label={t("application.contact.givenName")}
+        label={t("application.name.firstOrGivenName")}
         className="my-3"
         controlClassName="mt-2"
         name="firstName"
@@ -76,7 +76,7 @@ export const accountNameFields = (
         error={nameErrors.lastName}
         register={nameRegister}
         defaultValue={user ? user.lastName : null}
-        label={t("application.contact.familyName")}
+        label={t("application.name.lastOrFamilyName")}
         validation={{ maxLength: 64, required: true }}
         errorMessage={
           nameErrors.lastName?.type === "maxLength"
@@ -94,15 +94,16 @@ export const dobFields = (
   dobErrors: DeepMap<FieldValues, FieldError>,
   dobRegister: UseFormMethods["register"],
   dobWatch: UseFormMethods["watch"],
-  user: User
+  user: User,
+  show18SubNote?: boolean
 ) => {
   return (
     <>
       <DOBField
-        id="dateOfBirth"
-        name="dateOfBirth"
+        id="dob"
+        name="dob"
         register={dobRegister}
-        error={dobErrors?.dateOfBirth}
+        error={dobErrors?.dob}
         watch={dobWatch}
         validateAge18={true}
         required={true}
@@ -114,7 +115,9 @@ export const dobFields = (
         }}
         label={t("application.name.yourDateOfBirth")}
       />
+
       <p className={"field-sub-note seeds-m-be-4"}>{t("application.name.dobHelper")}</p>
+      {show18SubNote && <p className={"field-sub-note"}>{t("application.name.dobHelper2")}</p>}
     </>
   )
 }
@@ -123,7 +126,8 @@ export const emailFields = (
   emailErrors: DeepMap<FieldValues, FieldError>,
   emailRegister: UseFormMethods["register"],
   user: User,
-  clearErrors: (name?: string | string[]) => void
+  clearErrors: (name?: string | string[]) => void,
+  note?: string
 ) => {
   return (
     <>
@@ -133,15 +137,15 @@ export const emailFields = (
       <Field
         type="email"
         name="email"
-        label={`${t("t.email")}`}
-        className="mt-3 mb-6"
+        className="mt-3"
         validation={{ pattern: emailRegex, required: true }}
         error={emailErrors.email}
-        errorMessage={`${t("errors.emailAddressError")}`}
+        errorMessage={t("authentication.signIn.loginError")}
         register={emailRegister}
         defaultValue={user ? user.email : null}
         dataTestId={"account-email"}
         inputProps={{ onChange: () => emailErrors.email && clearErrors("email") }}
+        note={note}
         subNote={t("advocateAccount.emailSubNote")}
       />
     </>
@@ -209,22 +213,87 @@ export const passwordFields = (
   )
 }
 
+export const createAccountPasswordFields = (
+  pwdErrors: DeepMap<FieldValues, FieldError>,
+  pwdRegister: UseFormMethods["register"],
+  password: React.RefObject<unknown>,
+  controlClassName?: string,
+  fieldClassName?: string
+) => {
+  return (
+    <fieldset className={"seeds-p-be-6"}>
+      <legend className={"text__caps-spaced seeds-m-be-0"}>
+        {t("authentication.createAccount.password")}
+      </legend>
+      <Field
+        labelClassName={"sr-only"}
+        type={"password"}
+        name="password"
+        note={t("authentication.createAccount.passwordInfo")}
+        label={t("authentication.createAccount.password")}
+        validation={{
+          required: true,
+          minLength: 8,
+          pattern: passwordRegex,
+        }}
+        error={pwdErrors.password}
+        errorMessage={t("authentication.signIn.passwordError")}
+        register={pwdRegister}
+        controlClassName={controlClassName}
+      />
+      <Field
+        type="password"
+        id="passwordConfirmation"
+        name="passwordConfirmation"
+        validation={{
+          validate: (value) =>
+            value === password.current || t("authentication.createAccount.errors.passwordMismatch"),
+        }}
+        onPaste={(e) => {
+          e.preventDefault()
+          e.nativeEvent.stopImmediatePropagation()
+          return false
+        }}
+        onDrop={(e) => {
+          e.preventDefault()
+          e.nativeEvent.stopImmediatePropagation()
+          return false
+        }}
+        error={pwdErrors.passwordConfirmation}
+        errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
+        register={pwdRegister}
+        controlClassName={controlClassName}
+        label={t("authentication.createAccount.reEnterPassword")}
+        className={fieldClassName ? `${fieldClassName} seeds-m-bs-0` : "seeds-m-bs-0"}
+      />
+    </fieldset>
+  )
+}
+
 export const agencyFields = (
   agencyErrors: DeepMap<FieldValues, FieldError>,
   agencyRegister: UseFormMethods["register"],
   user: User,
-  agencyOptions: { label: string; value: string }[]
+  agencies: Agency[]
 ) => {
   return (
     <>
       <p className={"text__caps-spaced"}>{t("advocateAccount.organizationHeading")}</p>
       <Select
-        id="agencyId"
-        name="agencyId"
+        id={"agencyId"}
+        name={"agencyId"}
         label={t("advocateAccount.agencyLabel")}
         register={agencyRegister}
         controlClassName={"control"}
-        options={agencyOptions}
+        options={[
+          { value: "", label: "" },
+          ...(agencies?.map((agency) => ({
+            id: agency.id,
+            label: agency.name,
+            value: agency.id,
+            dataTestId: agency.name,
+          })) || []),
+        ]}
         defaultValue={user?.agency?.id || ""}
         validation={{ required: true }}
         error={agencyErrors?.agencyId}
@@ -667,17 +736,15 @@ export const createDobSubmitHandler = (
   setUser: React.Dispatch<React.SetStateAction<User>>,
   user: any // eslint-disable-line @typescript-eslint/no-explicit-any
 ) => {
-  return async (data: { dateOfBirth: DOBFieldValues }) => {
+  return async (data: { dob: DOBFieldValues }) => {
     setLoading(true)
-    const { dateOfBirth } = data
+    const { dob } = data
     setAlert(null)
     try {
       const newUser = await userService[updateFn]({
         body: {
           ...user,
-          dob: dayjs(
-            `${dateOfBirth.birthYear}-${dateOfBirth.birthMonth}-${dateOfBirth.birthDay}`
-          ).toDate(),
+          dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`).toDate(),
         },
       })
       setUser(newUser)

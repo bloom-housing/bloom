@@ -104,7 +104,7 @@ describe("EditAdvocateAccount", () => {
     renderEditAdvocateAccount()
 
     await waitFor(() => {
-      expect(screen.getByRole("textbox", { name: "Given name" })).toBeInTheDocument()
+      expect(screen.getByRole("textbox", { name: "First or given name" })).toBeInTheDocument()
     })
 
     await userEvent.selectOptions(screen.getByRole("combobox", { name: "Agency" }), "agency-2")
@@ -195,7 +195,7 @@ describe("EditAdvocateAccount", () => {
     renderEditAdvocateAccount()
 
     await waitFor(() => {
-      expect(screen.getByRole("textbox", { name: "Given name" })).toBeInTheDocument()
+      expect(screen.getByRole("textbox", { name: "First or given name" })).toBeInTheDocument()
     })
 
     await userEvent.click(screen.getByRole("button", { name: "Update Agency" }))

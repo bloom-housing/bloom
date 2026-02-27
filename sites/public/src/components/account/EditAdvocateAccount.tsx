@@ -26,7 +26,7 @@ import {
   createPhoneSubmitHandler,
   createPasswordSubmitHandler,
   AlertMessage,
-} from "./EditAccountHelpers"
+} from "./AccountFieldHelpers"
 
 interface EditAdvocateAccountProps {
   agencies: Agency[]
@@ -233,15 +233,7 @@ export const EditAdvocateAccount = (props: EditAdvocateAccountProps) => {
                   "advocateAccount.agencyLabel"
                 )}`}
               >
-                {agencyFields(agencyErrors, agencyRegister, user, [
-                  { value: "", label: "" },
-                  ...(props.agencies?.map((agency) => ({
-                    id: agency.id,
-                    label: agency.name,
-                    value: agency.id,
-                    dataTestId: agency.name,
-                  })) || []),
-                ])}
+                {agencyFields(agencyErrors, agencyRegister, user, props.agencies)}
               </AccountSection>
 
               <AccountSection

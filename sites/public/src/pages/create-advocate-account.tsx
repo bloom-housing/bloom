@@ -1,22 +1,20 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
-import { Field, Form, t, AlertBox, Select } from "@bloom-housing/ui-components"
+import { Form, t, AlertBox } from "@bloom-housing/ui-components"
 import { Agency } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import {
-  PageView,
-  pushGtmEvent,
-  BloomCard,
-  emailRegex,
-  AuthContext,
-} from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, BloomCard, AuthContext } from "@bloom-housing/shared-helpers"
 import { fetchAgencies, fetchJurisdictionByName } from "../lib/hooks"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
+import {
+  accountNameFields,
+  agencyFields,
+  emailFields,
+} from "../components/account/AccountFieldHelpers"
 import accountCardStyles from "./account/account.module.scss"
-import styles from "../../styles/create-account.module.scss"
 
 interface CreateAdvocateAccountProps {
   agencies: Agency[]
@@ -25,7 +23,7 @@ interface CreateAdvocateAccountProps {
 const CreateAdvocateAccount = ({ agencies }: CreateAdvocateAccountProps) => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors, clearErrors } = useForm()
   const [requestError, setRequestError] = useState<string>()
   const [submitLoading, setSubmitLoading] = useState(false)
 
@@ -45,7 +43,7 @@ const CreateAdvocateAccount = ({ agencies }: CreateAdvocateAccountProps) => {
     try {
       await createAdvocateUser({
         ...data,
-        agency: { id: data.agency },
+        agency: { id: data.agencyId },
       })
       await router.push("create-advocate-account-confirmation")
     } catch (err) {
@@ -88,100 +86,20 @@ const CreateAdvocateAccount = ({ agencies }: CreateAdvocateAccountProps) => {
               divider={"inset"}
               className={accountCardStyles["account-card-settings-section"]}
             >
-              <fieldset id="userName">
-                <legend className={"text__caps-spaced"}>{t("application.name.yourName")}</legend>
-                <label className={styles["create-account-field"]} htmlFor="firstName">
-                  {t("application.name.firstOrGivenName")}
-                </label>
-                <Field
-                  controlClassName={styles["create-account-input"]}
-                  name="firstName"
-                  validation={{ required: true, maxLength: 64 }}
-                  error={errors.firstName}
-                  errorMessage={
-                    errors.firstName?.type === "maxLength"
-                      ? t("errors.maxLength", { length: 64 })
-                      : t("errors.firstNameError")
-                  }
-                  register={register}
-                />
-                <label className={styles["create-account-field"]} htmlFor="middleName">
-                  {t("application.name.middleNameOptional")}
-                </label>
-                <Field
-                  name="middleName"
-                  register={register}
-                  error={errors.middleName}
-                  validation={{ maxLength: 64 }}
-                  errorMessage={t("errors.maxLength", { length: 64 })}
-                  controlClassName={styles["create-account-input"]}
-                />
-
-                <label className={styles["create-account-field"]} htmlFor="lastName">
-                  {t("application.name.lastOrFamilyName")}
-                </label>
-                <Field
-                  name="lastName"
-                  validation={{ required: true, maxLength: 64 }}
-                  error={errors.lastName}
-                  register={register}
-                  errorMessage={
-                    errors.lastName?.type === "maxLength"
-                      ? t("errors.maxLength", { length: 64 })
-                      : t("errors.lastNameError")
-                  }
-                  controlClassName={styles["create-account-input"]}
-                />
-              </fieldset>
+              {accountNameFields(errors, register, null, clearErrors)}
             </CardSection>
 
             <CardSection
               divider={"inset"}
               className={accountCardStyles["account-card-settings-section"]}
             >
-              <p className={"text__caps-spaced"}>{t("advocateAccount.organizationHeading")}</p>
-              <Select
-                id="agency"
-                name="agency"
-                validation={{ required: true }}
-                error={errors?.agency}
-                errorMessage={t("errors.requiredFieldError")}
-                register={register}
-                controlClassName={"control"}
-                labelClassName={styles["create-account-field"]}
-                label={t("advocateAccount.agencyLabel")}
-                options={[
-                  { value: "", label: "" },
-                  ...agencies.map((agency) => ({
-                    id: agency.id,
-                    label: agency.name,
-                    value: agency.id,
-                    dataTestId: agency.name,
-                  })),
-                ]}
-                dataTestId={"agency"}
-                subNote={t("advocateAccount.agencyNotListed")}
-              />
+              {agencyFields(errors, register, null, agencies)}
             </CardSection>
             <CardSection
               divider={"inset"}
               className={accountCardStyles["account-card-settings-section"]}
             >
-              <label className={"text__caps-spaced"} htmlFor="email">
-                {t("application.name.yourEmailAddress")}
-              </label>
-              <Field
-                type="email"
-                name="email"
-                validation={{ required: true, pattern: emailRegex }}
-                error={errors.email}
-                errorMessage={t("authentication.signIn.loginError")}
-                register={register}
-                controlClassName={styles["create-account-input"]}
-                labelClassName={"text__caps-spaced sr-only"}
-                note={t("advocateAccount.emailNote")}
-                subNote={t("advocateAccount.emailSubNote")}
-              />
+              {emailFields(errors, register, null, clearErrors, t("advocateAccount.emailNote"))}
               <Button
                 type="submit"
                 variant="primary"
