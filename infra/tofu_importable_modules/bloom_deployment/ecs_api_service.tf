@@ -8,6 +8,8 @@ locals {
     DB_DATABASE         = "bloom_prisma"
     DB_USE_RDS_IAM_AUTH = "1"
     USE_AWS_SES         = "1"
+    GOOGLE_API_ID       = var.google_translate_settings.project_id
+    GOOGLE_API_EMAIL    = var.google_translate_settings.iam_user
   }
 }
 resource "aws_ecs_task_definition" "bloom_api" {
@@ -43,6 +45,10 @@ resource "aws_ecs_task_definition" "bloom_api" {
         {
           name      = "APP_SECRET",
           valueFrom = aws_secretsmanager_secret.api_jwt_signing_key.arn
+        },
+        {
+          name      = "GOOGLE_API_KEY",
+          valueFrom = aws_secretsmanager_secret.google_translate_api_key.arn
         }
       ]
       portMappings = [
