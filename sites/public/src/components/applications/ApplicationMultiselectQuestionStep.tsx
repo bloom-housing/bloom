@@ -92,7 +92,7 @@ const ApplicationMultiselectQuestionStep = ({
     defaultValues: mapApiToMultiselectForm(applicationQuestions, questions, applicationSection),
   })
 
-  const [exclusiveKeys, setExclusiveKeys] = useState(getExclusiveKeys(question, applicationSection))
+  const [exclusiveKeys, setExclusiveKeys] = useState(getExclusiveKeys(question, applicationSection, enableV2MSQ))
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -200,6 +200,7 @@ const ApplicationMultiselectQuestionStep = ({
       getValues,
       allOptionNames,
       watchQuestions,
+      enableV2MSQ,
       errors,
       trigger,
       exclusiveKeys

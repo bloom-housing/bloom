@@ -128,7 +128,11 @@ includeViews.base = {
       ordinal: 'asc',
     },
     include: {
-      multiselectQuestions: true,
+      multiselectQuestions: {
+        include: {
+          multiselectOptions: true,
+        },
+      },
     },
   },
   listingFeatures: true,
