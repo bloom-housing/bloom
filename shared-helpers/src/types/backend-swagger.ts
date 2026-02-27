@@ -8807,9 +8807,6 @@ export interface PublicUserCreate {
   isApproved?: boolean
 
   /**  */
-  isAdvocate?: boolean
-
-  /**  */
   dob: Date
 
   /**  */
@@ -8911,9 +8908,6 @@ export interface PartnerUserCreate {
   isApproved?: boolean
 
   /**  */
-  isAdvocate?: boolean
-
-  /**  */
   userRoles: UserRole
 
   /**  */
@@ -8980,9 +8974,6 @@ export interface AdvocateUserCreate {
 
   /**  */
   isApproved?: boolean
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   agency: IdDTO
@@ -9081,9 +9072,6 @@ export interface PublicUserUpdate {
 
   /**  */
   isApproved?: boolean
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   dob: Date
@@ -9190,9 +9178,6 @@ export interface PartnerUserUpdate {
   isApproved?: boolean
 
   /**  */
-  isAdvocate?: boolean
-
-  /**  */
   userRoles: UserRole
 
   /**  */
@@ -9289,9 +9274,6 @@ export interface AdvocateUserUpdate {
 
   /**  */
   isApproved?: boolean
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   agency: IdDTO
@@ -9417,9 +9399,6 @@ export interface User {
 
   /**  */
   additionalPhoneExtension?: string
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   isApproved?: boolean
