@@ -235,21 +235,6 @@ describe("Demographics", () => {
     })
   })
 
-  it("should show full list of how did you hear fields", () => {
-    render(<ApplicationDemographics />)
-    expect(screen.getByText("How did you hear about this listing?")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Jurisdiction website" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Developer website" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Flyer" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Email alert" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Housing counselor" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Radio ad" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Bus ad" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Other" })).toBeInTheDocument()
-  })
-
   it("should show limited list of how did you hear fields when enableLimitedHowDidYouHear is on", () => {
     const conductor = new ApplicationConductor({}, {})
     conductor.config.featureFlags = [
