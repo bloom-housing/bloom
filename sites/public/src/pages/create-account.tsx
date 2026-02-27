@@ -151,18 +151,19 @@ const CreateAccount = () => {
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  {createAccountPasswordFields(
-                    errors,
-                    register,
-                    password,
-                    styles["create-account-input"],
-                    styles["create-account-field"]
-                  )}
+                  <div className={"seeds-m-be-6"}>
+                    {createAccountPasswordFields(
+                      errors,
+                      register,
+                      password,
+                      styles["create-account-input"],
+                      styles["create-account-field"]
+                    )}
+                  </div>
                   <Button
                     type="submit"
                     variant="primary"
                     loadingMessage={loading ? t("t.loading") : undefined}
-                    className={"seeds-p-bs-4"}
                   >
                     {t("account.createAccount")}
                   </Button>

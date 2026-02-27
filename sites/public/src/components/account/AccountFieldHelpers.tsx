@@ -72,7 +72,6 @@ export const accountNameFields = (
 
       <Field
         name="lastName"
-        className="mb-6"
         error={nameErrors.lastName}
         register={nameRegister}
         defaultValue={user ? user.lastName : null}
@@ -116,8 +115,10 @@ export const dobFields = (
         label={t("application.name.yourDateOfBirth")}
       />
 
-      <p className={"field-sub-note seeds-m-be-4"}>{t("application.name.dobHelper")}</p>
-      {show18SubNote && <p className={"field-sub-note"}>{t("application.name.dobHelper2")}</p>}
+      <p className={"field-sub-note "}>{t("application.name.dobHelper")}</p>
+      {show18SubNote && (
+        <p className={"field-sub-note seeds-m-bs-4"}>{t("application.name.dobHelper2")}</p>
+      )}
     </>
   )
 }
@@ -130,14 +131,14 @@ export const emailFields = (
   note?: string
 ) => {
   return (
-    <>
-      <label className={styles["account-settings-label"]} htmlFor="email">
+    <fieldset>
+      <legend className={`${styles["account-settings-label"]} seeds-m-be-3`}>
         {t("application.name.yourEmailAddress")}
-      </label>
+      </legend>
       <Field
         type="email"
         name="email"
-        className="mt-3"
+        label={t("t.email")}
         validation={{ pattern: emailRegex, required: true }}
         error={emailErrors.email}
         errorMessage={t("authentication.signIn.loginError")}
@@ -148,7 +149,7 @@ export const emailFields = (
         note={note}
         subNote={t("advocateAccount.emailSubNote")}
       />
-    </>
+    </fieldset>
   )
 }
 export const passwordFields = (
@@ -199,7 +200,7 @@ export const passwordFields = (
         type="password"
         name="passwordConfirmation"
         label={t("account.settings.confirmNewPassword")}
-        className="mt-4 mb-6"
+        className="mt-4"
         validation={{
           validate: (value) =>
             value === password.current || t("authentication.createAccount.errors.passwordMismatch"),
@@ -598,7 +599,7 @@ export const AccountSection = ({
       </AlertBox>
     )}
     <form id={formId} onSubmit={onSubmit} style={{ display: "contents" }}>
-      {children}
+      <div className={"seeds-m-be-6"}>{children}</div>
       <Button
         type="submit"
         size="sm"

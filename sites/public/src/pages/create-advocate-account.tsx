@@ -99,7 +99,9 @@ const CreateAdvocateAccount = ({ agencies }: CreateAdvocateAccountProps) => {
               divider={"inset"}
               className={accountCardStyles["account-card-settings-section"]}
             >
-              {emailFields(errors, register, null, clearErrors, t("advocateAccount.emailNote"))}
+              <div className={"seeds-m-be-6"}>
+                {emailFields(errors, register, null, clearErrors, t("advocateAccount.emailNote"))}
+              </div>
               <Button
                 type="submit"
                 variant="primary"
