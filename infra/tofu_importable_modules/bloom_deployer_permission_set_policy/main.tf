@@ -335,10 +335,14 @@ data "aws_iam_policy_document" "deployer" {
     }
   }
   statement {
-    sid = "DBMasterUserPassword"
+    sid = "Secrets"
     actions = [
       "kms:DescribeKey",
       "secretsmanager:CreateSecret",
+      "secretsmanager:ListSecrets",
+      "secretsmanager:DeleteSecret",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:GetResourcePolicy",
       "secretsmanager:TagResource",
     ]
     resources = ["*"]

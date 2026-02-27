@@ -29,6 +29,12 @@ resource "aws_ecs_task_definition" "bloom_site_partners" {
       Name        = "bloom-site-partners"
       image       = var.bloom_site_partners_image
       environment = [for k, v in merge(local.site_partners_default_env_vars, var.bloom_site_partners_env_vars) : { name = k, value = v }]
+      secrets = [
+        {
+          name      = "MAPBOX_TOKEN",
+          valueFrom = aws_secretsmanager_secret.mapbox_api_key.arn
+        }
+      ]
       portMappings = [
         {
           containerPort = 3001
