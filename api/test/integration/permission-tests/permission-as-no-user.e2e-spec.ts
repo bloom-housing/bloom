@@ -36,6 +36,7 @@ import { EmailAndAppUrl } from '../../../src/dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../../../src/dtos/users/confirmation-request.dto';
 import { UserService } from '../../../src/services/user.service';
 import { EmailService } from '../../../src/services/email.service';
+import { CronJobService } from '../../../src/services/cron-job.service';
 import { AfsResolve } from '../../../src/dtos/application-flagged-sets/afs-resolve.dto';
 import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
 import { UnitRentTypeCreate } from '../../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
@@ -74,6 +75,11 @@ const testEmailService = {
   applicationConfirmation: jest.fn(),
 };
 
+const testCronJobService = {
+  startCronJob: jest.fn().mockResolvedValue(undefined),
+  markCronJobAsStarted: jest.fn().mockResolvedValue(undefined),
+};
+
 describe('Testing Permissioning of endpoints as logged out user', () => {
   let app: INestApplication;
   let prisma: PrismaService;
@@ -87,6 +93,8 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
+      .overrideProvider(CronJobService)
+      .useValue(testCronJobService)
       .compile();
 
     app = moduleFixture.createNestApplication();
