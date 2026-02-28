@@ -554,3 +554,34 @@ export const isUnitGroupAppBase = (listing: Listing, config: ApplicationFormConf
     !listing.unitGroups.some((group) => group.totalAvailable > 0)
   )
 }
+
+// Related to our google maps implementation, this function calculates based on a set of bounds (boundaries of a set of markers), what the zoom level would be that would allow all markers to be in view (sadly this is not built in without also automatically changing the bounds - which results in an instant and very harsh transition). This allows us to zoom in slowly.
+// https://stackoverflow.com/questions/6048975/google-maps-v3-how-to-calculate-the-zoom-level-for-a-given-bounds
+export const getBoundsZoomLevel = (bounds: google.maps.LatLngBounds) => {
+  const mapElement = document.getElementById("listings-map")
+  const WORLD_DIM = { height: 256, width: 256 }
+  const ZOOM_MAX = 21
+
+  function latRad(lat) {
+    const sin = Math.sin((lat * Math.PI) / 180)
+    const radX2 = Math.log((1 + sin) / (1 - sin)) / 2
+    return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2
+  }
+
+  function zoom(mapPx, worldPx, fraction) {
+    return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2)
+  }
+
+  const ne = bounds.getNorthEast()
+  const sw = bounds.getSouthWest()
+
+  const latFraction = (latRad(ne.lat()) - latRad(sw.lat())) / Math.PI
+
+  const lngDiff = ne.lng() - sw.lng()
+  const lngFraction = (lngDiff < 0 ? lngDiff + 360 : lngDiff) / 360
+
+  const latZoom = zoom(mapElement.clientHeight, WORLD_DIM.height, latFraction)
+  const lngZoom = zoom(mapElement.clientWidth, WORLD_DIM.width, lngFraction)
+
+  return Math.min(latZoom, lngZoom, ZOOM_MAX)
+}

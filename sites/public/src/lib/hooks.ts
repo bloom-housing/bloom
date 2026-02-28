@@ -18,6 +18,9 @@ import {
   PaginatedListing,
   EnumAgencyFilterParamsComparison,
   AgencyFilterParams,
+  ListingMapMarker,
+  ListingsService,
+  ListingViews,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
@@ -29,6 +32,8 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import { fetchFavoriteListingIds } from "./helpers"
+
+import { ListingQueryBuilder } from "./listings/listing-query-builder"
 
 /**
  * This ensures a listing is present in memory and no application has yet been submitted
@@ -391,5 +396,57 @@ export async function fetchAgencies(req: any, jurisdictionId: string) {
     return agencyDataResponse?.data
   } catch (error) {
     console.log("error = ", error)
+  }
+}
+
+// Map TODO: Actually search
+export const searchListings = async (
+  qb: ListingQueryBuilder,
+  limit: number | "all" = "all",
+  page = 1,
+  listingsService: ListingsService
+): Promise<PaginatedListing> => {
+  let results: PaginatedListing = {
+    items: [],
+    meta: {
+      currentPage: 0,
+      itemCount: 0,
+      itemsPerPage: 0,
+      totalItems: 0,
+      totalPages: 0,
+    },
+  }
+
+  const params: Parameters<ListingsService["list"]>[0] = {
+    view: ListingViews.base,
+    limit: limit || "all",
+    page: page,
+    filter: qb.getFilterParams(),
+    orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+    orderDir: [OrderByEnum.desc],
+  }
+
+  try {
+    const response = await listingsService.filterableList({
+      body: { ...params },
+    })
+    results = response
+  } catch (e) {
+    console.log("ListingService.searchListings error: ", e)
+  }
+
+  return results
+}
+
+// Map TODO: Actually search
+export const searchMapMarkers = async (
+  qb: ListingQueryBuilder,
+  listingsService: ListingsService
+): Promise<ListingMapMarker[]> => {
+  try {
+    const response = await listingsService.mapMarkers()
+    return response
+  } catch (e) {
+    console.log("ListingService.searchMapMarkers error: ", e)
   }
 }

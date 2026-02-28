@@ -19,6 +19,7 @@ import {
   fetchMultiselectProgramData,
   fetchOpenListings,
 } from "../lib/hooks"
+import { ListingMap } from "../components/browse/map/ListingMap"
 
 export interface ListingsProps {
   openListings: Listing[]
@@ -36,17 +37,28 @@ export interface ListingsProps {
 }
 
 export default function ListingsPage(props: ListingsProps) {
+  const enableMap = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingMap)
   return (
     <>
       {process.env.showNewSeedsDesigns ? (
-        <ListingBrowse
-          listings={props.openListings}
-          tab={TabsIndexEnum.open}
-          jurisdiction={props.jurisdiction}
-          multiselectData={props.multiselectData}
-          paginationData={props.paginationData}
-          areFiltersActive={props.areFiltersActive}
-        />
+        enableMap ? (
+          <ListingMap
+            listings={props.openListings}
+            jurisdiction={props.jurisdiction}
+            multiselectData={props.multiselectData}
+            paginationData={props.paginationData}
+            areFiltersActive={props.areFiltersActive}
+          />
+        ) : (
+          <ListingBrowse
+            listings={props.openListings}
+            tab={TabsIndexEnum.open}
+            jurisdiction={props.jurisdiction}
+            multiselectData={props.multiselectData}
+            paginationData={props.paginationData}
+            areFiltersActive={props.areFiltersActive}
+          />
+        )
       ) : (
         <ListingBrowseDeprecated
           openListings={props.openListings}
