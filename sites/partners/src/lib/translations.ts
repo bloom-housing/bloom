@@ -9,7 +9,8 @@ import koreanTranslations from "@bloom-housing/shared-helpers/src/locales/ko.jso
 import armenianTranslations from "@bloom-housing/shared-helpers/src/locales/hy.json"
 import farsiTranslations from "@bloom-housing/shared-helpers/src/locales/fa.json"
 
-import additionalGeneralTranslations from "../../page_content/locale_overrides/general.json"
+import additionalGeneralTranslations from "../../page_content/locales/general.json"
+import localeOverrides from "../../page_content/locale_overrides/general.json"
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const translations = {
@@ -26,6 +27,6 @@ export const translations = {
 } as Record<string, any>
 
 export const overrideTranslations = {
-  en: additionalGeneralTranslations,
+  en: { ...additionalGeneralTranslations, ...localeOverrides },
 } as Record<string, any>
 /* eslint-enable @typescript-eslint/no-explicit-any */
