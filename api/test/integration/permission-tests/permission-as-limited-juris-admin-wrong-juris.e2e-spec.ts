@@ -39,6 +39,7 @@ import { EmailAndAppUrl } from '../../../src/dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../../../src/dtos/users/confirmation-request.dto';
 import { UserService } from '../../../src/services/user.service';
 import { EmailService } from '../../../src/services/email.service';
+import { CronJobService } from '../../../src/services/cron-job.service';
 import { AfsResolve } from '../../../src/dtos/application-flagged-sets/afs-resolve.dto';
 import {
   generateJurisdiction,
@@ -72,6 +73,11 @@ const testEmailService = {
   applicationConfirmation: jest.fn(),
 };
 
+const testCronJobService = {
+  startCronJob: jest.fn().mockResolvedValue(undefined),
+  markCronJobAsStarted: jest.fn().mockResolvedValue(undefined),
+};
+
 describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in the wrong jurisdiction', () => {
   let app: INestApplication;
   let prisma: PrismaService;
@@ -85,6 +91,8 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
+      .overrideProvider(CronJobService)
+      .useValue(testCronJobService)
       .compile();
 
     app = moduleFixture.createNestApplication();

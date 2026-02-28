@@ -320,13 +320,15 @@ describe('Application Controller Tests', () => {
 
       expect(res.body.items.length).toBeGreaterThanOrEqual(2);
       const resApplicationA = res.body.items.find(
-        (item) => item.applicant.firstName === applicationA.applicant.firstName,
+        (item) =>
+          item.applicant?.firstName === applicationA.applicant.firstName,
       );
       expect(resApplicationA).not.toBeNull();
-      res.body.items.find(
-        (item) => item.applicant.firstName === applicationB.applicant.firstName,
+      const resApplicationB = res.body.items.find(
+        (item) =>
+          item.applicant?.firstName === applicationB.applicant.firstName,
       );
-      expect(resApplicationA).not.toBeNull();
+      expect(resApplicationB).not.toBeNull();
     });
 
     it('should get stored applications when no params sent', async () => {
@@ -359,13 +361,15 @@ describe('Application Controller Tests', () => {
 
       expect(res.body.items.length).toBeGreaterThanOrEqual(2);
       const resApplicationA = res.body.items.find(
-        (item) => item.applicant.firstName === applicationA.applicant.firstName,
+        (item) =>
+          item.applicant?.firstName === applicationA.applicant.firstName,
       );
       expect(resApplicationA).not.toBeNull();
-      res.body.items.find(
-        (item) => item.applicant.firstName === applicationB.applicant.firstName,
+      const resApplicationB = res.body.items.find(
+        (item) =>
+          item.applicant?.firstName === applicationB.applicant.firstName,
       );
-      expect(resApplicationA).not.toBeNull();
+      expect(resApplicationB).not.toBeNull();
     });
   });
 
@@ -2078,14 +2082,32 @@ describe('Application Controller Tests', () => {
   });
 
   describe('publicAppsView endpoint', () => {
+    const createAndLoginUser = async () => {
+      const user = await prisma.userAccounts.create({
+        data: await userFactory({
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+
+      const resLogIn = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: user.email,
+          password: 'Abcdef12345!',
+        } as Login)
+        .expect(201);
+
+      return { user, cookies: resLogIn.headers['set-cookie'] };
+    };
+
     it('should retrieve applications and counts when they exist', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
       );
-      const user = await prisma.userAccounts.create({
-        data: await userFactory(),
-      });
+      const { user, cookies } = await createAndLoginUser();
       const juris = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
       });
@@ -2152,7 +2174,7 @@ describe('Application Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .get(`/applications/publicAppsView?${query}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminCookies)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.applicationsCount.total).toEqual(3);
@@ -2168,12 +2190,10 @@ describe('Application Controller Tests', () => {
     });
 
     it('should not retrieve applications nor error when none exist', async () => {
-      const userA = await prisma.userAccounts.create({
-        data: await userFactory(),
-      });
+      const { user, cookies } = await createAndLoginUser();
 
       const queryParams: PublicAppsViewQueryParams = {
-        userId: userA.id,
+        userId: user.id,
         filterType: ApplicationsFilterEnum.all,
         includeLotteryApps: true,
         page: 1,
@@ -2184,7 +2204,7 @@ describe('Application Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .get(`/applications/publicAppsView?${query}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminCookies)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.applicationsCount.total).toEqual(0);

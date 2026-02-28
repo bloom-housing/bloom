@@ -71,10 +71,12 @@ describe("EditPublicAccount", () => {
     })
 
     // These are the IDs of the form sections we expect to appear
-    expect(document.getElementById("update-name")).toBeInTheDocument()
-    expect(document.getElementById("update-birthdate")).toBeInTheDocument()
-    expect(document.getElementById("update-email")).toBeInTheDocument()
-    expect(document.getElementById("update-password")).toBeInTheDocument()
+    await waitFor(() => {
+      expect(document.getElementById("update-name")).toBeInTheDocument()
+      expect(document.getElementById("update-birthdate")).toBeInTheDocument()
+      expect(document.getElementById("update-email")).toBeInTheDocument()
+      expect(document.getElementById("update-password")).toBeInTheDocument()
+    })
   })
 
   describe("Name form", () => {

@@ -1,11 +1,12 @@
-import React, { useEffect, useState, Fragment, useContext } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import { useRouter } from "next/router"
 import { t } from "@bloom-housing/ui-components"
-import { Button, Card, LoadingState, Heading, Tabs, Link } from "@bloom-housing/ui-seeds"
+import { Button, Card, LoadingState, Heading, Tabs } from "@bloom-housing/ui-seeds"
 import {
   PageView,
   pushGtmEvent,
   AuthContext,
+  useToastyRef,
   RequireLogin,
   BloomCard,
 } from "@bloom-housing/shared-helpers"
@@ -16,7 +17,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
 import { UserStatus } from "../../lib/constants"
-
 import styles from "./ApplicationsView.module.scss"
 
 export enum ApplicationsIndexEnum {
@@ -25,6 +25,7 @@ export enum ApplicationsIndexEnum {
   closed,
   open,
 }
+
 interface ApplicationsCount {
   total: number
   lottery: number
@@ -39,15 +40,37 @@ interface ApplicationsViewProps {
 
 const ApplicationsView = (props: ApplicationsViewProps) => {
   const { applicationsService, profile } = useContext(AuthContext)
+  const toastyRef = useToastyRef()
   const [applications, setApplications] = useState<AppWithListing[]>()
   const [applicationsCount, setApplicationsCount] = useState<ApplicationsCount>()
   const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>()
+  const [searchInput, setSearchInput] = useState("")
+  const [debouncedSearch, setDebouncedSearch] = useState("")
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
   const router = useRouter()
   const showPublicLottery = process.env.showPublicLottery
   const filterTypeString = ApplicationsIndexEnum[props.filterType]
   const page = Number(router.query.page) || 1
+  const isAdvocate = !!profile?.isAdvocate
+  const minimumSearchCharacters = 3
+  const searchDebounceMs = 500
+
+  useEffect(() => {
+    if (!isAdvocate) {
+      setDebouncedSearch("")
+      return
+    }
+
+    const trimmedSearch = searchInput.trim()
+
+    const timeoutId = setTimeout(() => {
+      setDebouncedSearch(trimmedSearch.length >= minimumSearchCharacters ? trimmedSearch : "")
+    }, searchDebounceMs)
+
+    return () => clearTimeout(timeoutId)
+  }, [searchInput, isAdvocate])
 
   useEffect(() => {
     if (profile) {
@@ -65,6 +88,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
           includeLotteryApps: !!showPublicLottery,
           page: page,
           limit: 10,
+          applicantNameSearch: isAdvocate && debouncedSearch ? debouncedSearch : undefined,
         })
         .then((res) => {
           setApplications(res.items)
@@ -73,11 +97,24 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
         })
         .catch((err) => {
           console.error(`Error fetching applications: ${err}`)
+          toastyRef.current.addToast(t("account.errorFetchingApplications"), { variant: "alert" })
           setError(err)
         })
-        .finally(() => setLoading(false))
+        .finally(() => {
+          setLoading(false)
+          setHasLoadedOnce(true)
+        })
     }
-  }, [profile, applicationsService, filterTypeString, showPublicLottery, page])
+  }, [
+    profile,
+    applicationsService,
+    filterTypeString,
+    showPublicLottery,
+    page,
+    debouncedSearch,
+    isAdvocate,
+    toastyRef,
+  ])
 
   const selectionHandler = (index: number) => {
     const baseUrl = "/account/applications"
@@ -130,8 +167,10 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
   const { title, subtitle } = getPageHeader()
 
   const noApplicationsSection = () => {
-    let headerText = t("account.noApplications")
-    let buttonText = t("listings.browseListings")
+    let headerText = debouncedSearch
+      ? t("application.details.searchNoResults")
+      : t("account.noApplications")
+    let buttonText = debouncedSearch ? null : t("listings.browseListings")
     let buttonHref = "/listings"
     // only show custom message and redirect to "All my applications" if they have applied before
     if (applicationsCount?.total > 0) {
@@ -159,18 +198,24 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
             <Heading priority={2} size="xl">{`${t("account.errorFetchingApplications")}`}</Heading>
           ) : (
             <>
-              <Heading priority={2} className={styles["application-no-results-text"]} size="xl">
+              <Heading priority={2} size="xl">
                 {headerText}
               </Heading>
-              <Button size="sm" variant="primary-outlined" href={buttonHref}>
-                {buttonText}
-              </Button>
+              {buttonText && (
+                <div className={"seeds-m-bs-6"}>
+                  <Button size="sm" variant="primary-outlined" href={buttonHref}>
+                    {buttonText}
+                  </Button>
+                </div>
+              )}
             </>
           )}
         </div>
       </Card.Section>
     )
   }
+
+  const noUnfilteredResults = !loading && paginationMeta?.totalItems === 0 && !debouncedSearch
 
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
@@ -216,13 +261,14 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                   </Tabs.Tab>
                 </Tabs.TabList>
               </Tabs>
-              {props.enableApplicationStatus && (
+              {/* // TODO: When application status copy is available and on the FAQ page, we can re-enable this */}
+              {/* {props.enableApplicationStatus && (
                 <div className={styles["application-faq-link"]}>
                   <Link href={"/faq"} className={"seeds-m-bs-4"}>
                     {t("application.details.applicationStatusFaqLink")}
                   </Link>
                 </div>
-              )}
+              )} */}
             </div>
             <BloomCard
               iconSymbol="listBullet"
@@ -233,6 +279,29 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
               headingPriority={1}
             >
               <>
+                {hasLoadedOnce && isAdvocate && !noUnfilteredResults && (
+                  <div className={styles["application-search-container"]}>
+                    <label
+                      htmlFor="applicant-name-search"
+                      className={"field-label seeds-p-be-2 sr-only"}
+                    >
+                      {t("application.details.searchApplicants")}
+                    </label>
+                    <input
+                      id="applicant-name-search"
+                      type="search"
+                      className={styles["application-search-input"]}
+                      placeholder={t("application.details.searchApplicantsPlaceholder")}
+                      value={searchInput}
+                      onChange={(event) => setSearchInput(event.target.value)}
+                      data-testid="applicant-name-search"
+                      aria-describedby="search-sub-note"
+                    />
+                    <p className={"field-sub-note seeds-m-be-2"} id="search-sub-note">
+                      {t("application.details.enterAtLeast3CharactersToSearch")}
+                    </p>
+                  </div>
+                )}
                 <LoadingState loading={loading}>
                   {applications?.map((application, index) => {
                     return (
@@ -240,6 +309,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                         key={index}
                         application={application}
                         enableApplicationStatus={props.enableApplicationStatus}
+                        showApplicantName={isAdvocate}
                       />
                     )
                   })}
