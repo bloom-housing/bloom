@@ -54,6 +54,22 @@
   display: none;
 }
 
+.application-search-container {
+  padding: var(--seeds-s4) var(--seeds-s12) 0;
+  @media (max-width: theme("screens.sm")) {
+    padding: var(--seeds-s2) var(--seeds-s4) 0;
+  }
+}
+
+.application-search-input {
+  width: 100%;
+  border: 1px solid var(--seeds-border-color);
+  border-radius: var(--seeds-rounded);
+  padding: var(--seeds-s2) var(--seeds-s3);
+  background-color: var(--seeds-input-bg-color);
+  margin-top: var(--seeds-s2);
+}
+
 .pagination-section {
   padding: var(--seeds-s4) var(--seeds-s12);
   background-color: var(--seeds-bg-color-canvas);

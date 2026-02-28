@@ -424,12 +424,48 @@ export class ApplicationService {
     if (!user) {
       throw new ForbiddenException();
     }
-    const whereClause = this.buildWhereClause(params);
+    const normalizedParams = {
+      ...params,
+      userId: user.isAdvocate ? user.id : params.userId,
+    };
+    const whereClause = this.buildWhereClause(normalizedParams);
+
+    if (user.isAdvocate && normalizedParams.applicantNameSearch) {
+      const searchTerms = normalizedParams.applicantNameSearch
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+      if (Array.isArray(whereClause.AND) && searchTerms.length > 0) {
+        whereClause.AND.push({
+          AND: searchTerms.map((term) => ({
+            OR: [
+              {
+                applicant: {
+                  firstName: {
+                    contains: term,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+              {
+                applicant: {
+                  lastName: {
+                    contains: term,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            ],
+          })),
+        });
+      }
+    }
 
     const buildCountWhereClause = (filterType: ApplicationsFilterEnum) =>
       this.buildPublicAppsViewWhereClause(
         {
-          ...params,
+          ...normalizedParams,
           filterType,
         },
         whereClause,
@@ -452,12 +488,12 @@ export class ApplicationService {
     const totalCount = openCount + closedCount + lotteryCount;
 
     const displayWhereClause = this.buildPublicAppsViewWhereClause(
-      params,
+      normalizedParams,
       whereClause,
     );
 
     let displayCount = totalCount;
-    switch (params.filterType) {
+    switch (normalizedParams.filterType) {
       case ApplicationsFilterEnum.open:
         displayCount = openCount;
         break;
@@ -472,8 +508,8 @@ export class ApplicationService {
         break;
     }
 
-    const limit = params.limit ?? 10;
-    let page = params.page ?? 1;
+    const limit = normalizedParams.limit ?? 10;
+    let page = normalizedParams.page ?? 1;
 
     if (displayCount && limit && page > 1) {
       if (Math.ceil(displayCount / limit) < page) {
@@ -491,6 +527,12 @@ export class ApplicationService {
         updatedAt: true,
         status: true,
         markedAsDuplicate: true,
+        applicant: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
         listings: {
           select: {
             id: true,

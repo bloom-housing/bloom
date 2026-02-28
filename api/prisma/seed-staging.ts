@@ -95,6 +95,17 @@ export const defaultRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
   ],
 };
 
+const applicationFactoryMany = async (
+  count: number,
+  optionalParams?: Parameters<typeof applicationFactory>[0],
+): Promise<Prisma.ApplicationsCreateInput[]> => {
+  return Promise.all(
+    Array.from({ length: count }, async () =>
+      applicationFactory(optionalParams),
+    ),
+  );
+};
+
 export const stagingSeed = async (
   prismaClient: PrismaClient,
   jurisdictionName: string,
@@ -596,7 +607,7 @@ export const stagingSeed = async (
       jurisdictionsId: angelopolisJurisdiction.id,
     },
   });
-  await prismaClient.userAccounts.create({
+  const advocate = await prismaClient.userAccounts.create({
     data: await userFactory({
       email: 'advocate@example.com',
       confirmedAt: new Date(),
@@ -605,6 +616,7 @@ export const stagingSeed = async (
       agencyId: agency.id,
     }),
   });
+
   // add jurisdiction specific translations and default ones
   await prismaClient.translations.create({
     data: translationFactory({
@@ -929,7 +941,11 @@ export const stagingSeed = async (
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await reservedCommunityTypeFactoryAll(mainJurisdiction.id, prismaClient);
+  const expiredApplicationDate = process.env.APPLICATION_DAYS_TILL_EXPIRY
+    ? dayjs(new Date()).subtract(10, 'days').toDate()
+    : undefined;
   // list of predefined listings WARNING: images only work if image setup is cloudinary on exygy account
+
   const listingsToCreate: Parameters<typeof listingFactory>[] = [
     [
       angelopolisJurisdiction.id,
@@ -982,12 +998,13 @@ export const stagingSeed = async (
           hearingVisionAccessibilityNeedsProgramQuestion,
         ],
         applications: [
-          await applicationFactory({
+          ...(await applicationFactoryMany(2, {
             raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
-          }),
-          await applicationFactory({
+          })),
+          ...(await applicationFactoryMany(20, {
             raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
-          }),
+            userId: advocate.id,
+          })),
         ],
         userAccounts: [{ id: partnerUser.id }],
         optionalFeatures: { carpetInUnit: true },
@@ -1056,8 +1073,7 @@ export const stagingSeed = async (
         multiselectQuestions: [cityEmployeeQuestion],
         // has applications that are the same email and also same name/dob
         applications: [
-          await applicationFactory(),
-          await applicationFactory(),
+          ...(await applicationFactoryMany(2)),
           await applicationFactory({
             submissionType: ApplicationSubmissionTypeEnum.paper,
           }),
@@ -1101,12 +1117,9 @@ export const stagingSeed = async (
               birthYear: 1970,
             },
           }),
-          await applicationFactory({
+          ...(await applicationFactoryMany(2, {
             applicant: { emailAddress: 'user2@example.com' },
-          }),
-          await applicationFactory({
-            applicant: { emailAddress: 'user2@example.com' },
-          }),
+          })),
           await applicationFactory({
             applicant: {
               emailAddress: 'user3@example.com',
@@ -1220,28 +1233,16 @@ export const stagingSeed = async (
         applications: [
           await applicationFactory({
             isNewest: true,
-            expireAfter: process.env.APPLICATION_DAYS_TILL_EXPIRY
-              ? dayjs(new Date()).subtract(10, 'days').toDate()
-              : undefined,
+            expireAfter: expiredApplicationDate,
           }),
           // applications below should have their PII removed via the cron job
+          ...(await applicationFactoryMany(2, {
+            isNewest: false,
+            expireAfter: expiredApplicationDate,
+          })),
           await applicationFactory({
             isNewest: false,
-            expireAfter: process.env.APPLICATION_DAYS_TILL_EXPIRY
-              ? dayjs(new Date()).subtract(10, 'days').toDate()
-              : undefined,
-          }),
-          await applicationFactory({
-            isNewest: false,
-            expireAfter: process.env.APPLICATION_DAYS_TILL_EXPIRY
-              ? dayjs(new Date()).subtract(10, 'days').toDate()
-              : undefined,
-          }),
-          await applicationFactory({
-            isNewest: false,
-            expireAfter: process.env.APPLICATION_DAYS_TILL_EXPIRY
-              ? dayjs(new Date()).subtract(10, 'days').toDate()
-              : undefined,
+            expireAfter: expiredApplicationDate,
             householdMember: [
               householdMemberFactorySingle(1, {}),
               householdMemberFactorySingle(2, {}),
@@ -1280,12 +1281,9 @@ export const stagingSeed = async (
           await applicationFactory({
             multiselectQuestions: [workInCityQuestion, cityEmployeeQuestion],
           }),
-          await applicationFactory({
+          ...(await applicationFactoryMany(2, {
             multiselectQuestions: [workInCityQuestion],
-          }),
-          await applicationFactory({
-            multiselectQuestions: [workInCityQuestion],
-          }),
+          })),
           await applicationFactory(),
         ],
         multiselectQuestions: [
