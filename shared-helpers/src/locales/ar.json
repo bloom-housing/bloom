@@ -197,6 +197,7 @@
   "application.details.enterAtLeast3CharactersToSearch": "أدخل 3 أحرف على الأقل",
   "application.details.searchApplicants": "البحث عن المتقدمين",
   "application.details.searchApplicantsPlaceholder": "ابحث باستخدام الاسم الأول واسم العائلة",
+  "application.details.searchNoResults": "لم يتم العثور على نتائج",
   "application.edited": "تم تحريره",
   "application.financial.income.instruction1": "اجمع إجمالي دخل الأسرة (قبل الضريبة) من الأجور والمزايا والمصادر الأخرى من جميع أفراد الأسرة.",
   "application.financial.income.instruction2": "ما عليك سوى تقديم إجمالي تقديري الآن. سيتم احتساب الإجمالي الفعلي إذا تم اختيارك.",

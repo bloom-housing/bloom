@@ -196,6 +196,7 @@
   "application.details.enterAtLeast3CharactersToSearch": "حداقل ۳ کاراکتر وارد کنید",
   "application.details.searchApplicants": "جستجوی متقاضیان",
   "application.details.searchApplicantsPlaceholder": "جستجو بر اساس نام و نام خانوادگی",
+  "application.details.searchNoResults": "هیچ نتیجه‌ای یافت نشد",
   "application.edited": "ویرایش شده",
   "application.financial.income.instruction1": "کل درآمد ناخالص خانوار (قبل از کسر مالیات) خود را که از دستمزد، مزایا و سایر منابع از همه اعضای خانوار دریافت می‌کنید، جمع کنید.",
   "application.financial.income.instruction2": "شما فقط باید در حال حاضر یک جمع تخمینی ارائه دهید. در صورت انتخاب شدن، جمع واقعی محاسبه خواهد شد.",

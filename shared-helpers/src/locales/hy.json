@@ -196,6 +196,7 @@
   "application.details.enterAtLeast3CharactersToSearch": "Մուտքագրեք առնվազն 3 նիշ",
   "application.details.searchApplicants": "Դիմորդների որոնում",
   "application.details.searchApplicantsPlaceholder": "Որոնել անունով և ազգանունով",
+  "application.details.searchNoResults": "Արդյունքներ չեն գտնվել",
   "application.edited": "Խմբագրված է",
   "application.financial.income.instruction1": "Գումարեք ձեր տնային տնտեսության ընդհանուր համախառն (հարկումից առաջ) եկամուտը՝ ստացված աշխատավարձից, նպաստներից և տնային տնտեսության բոլոր անդամների այլ աղբյուրներից։",
   "application.financial.income.instruction2": "Դուք պետք է տրամադրեք միայն մոտավոր ընդհանուր գումարը հենց հիմա։ Եթե ընտրվեք, կհաշվարկվի իրական ընդհանուր գումարը։",

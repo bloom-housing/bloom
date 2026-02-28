@@ -197,6 +197,7 @@
   "application.details.enterAtLeast3CharactersToSearch": "请输入至少 3 个字符",
   "application.details.searchApplicants": "搜索申请人",
   "application.details.searchApplicantsPlaceholder": "按名字和姓氏搜索",
+  "application.details.searchNoResults": "未找到结果",
   "application.edited": "已修改",
   "application.financial.income.instruction1": "請將所有家庭成員的工資、福利和其他收入來源相加，得出您的家庭總收入（稅前）。",
   "application.financial.income.instruction2": "您現在只需要提供估計的總額。如果您被選中，您將需計算實際總數。",

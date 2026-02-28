@@ -197,6 +197,7 @@
   "application.details.enterAtLeast3CharactersToSearch": "কমপক্ষে ৩টি অক্ষর লিখুন",
   "application.details.searchApplicants": "আবেদনকারীদের অনুসন্ধান করুন",
   "application.details.searchApplicantsPlaceholder": "প্রথম এবং শেষ নাম অনুসারে অনুসন্ধান করুন",
+  "application.details.searchNoResults": "কোন ফলাফল পাওয়া যায়নি",
   "application.edited": "সম্পাদিত",
   "application.financial.income.instruction1": "পরিবারের মোট সদস্যদের মজুরি, সুবিধা এবং অন্যান্য উৎস থেকে আপনার মোট মোট (কর-পূর্ব) পরিবারের আয় যোগ করুন।",
   "application.financial.income.instruction2": "আপনাকে এখনই একটি আনুমানিক মোট প্রদান করতে হবে। আপনি নির্বাচিত হলে প্রকৃত মোট গণনা করা হবে।",

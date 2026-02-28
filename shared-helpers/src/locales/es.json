@@ -197,6 +197,7 @@
   "application.details.enterAtLeast3CharactersToSearch": "Introduzca al menos 3 caracteres",
   "application.details.searchApplicants": "Buscar solicitantes",
   "application.details.searchApplicantsPlaceholder": "Buscar por nombre y apellido",
+  "application.details.searchNoResults": "No se encontraron resultados",
   "application.edited": "Editada",
   "application.financial.income.instruction1": "Sume los ingresos brutos totales (antes de impuestos) provenientes de salarios, beneficios y otras fuentes de todos los miembros del hogar.",
   "application.financial.income.instruction2": "En este momento solo tiene que proporcionar un total aproximado. El total real será calculado si usted es seleccionado(a).",

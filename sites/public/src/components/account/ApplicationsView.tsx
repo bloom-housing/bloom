@@ -167,8 +167,10 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
   const { title, subtitle } = getPageHeader()
 
   const noApplicationsSection = () => {
-    let headerText = t("account.noApplications")
-    let buttonText = t("listings.browseListings")
+    let headerText = debouncedSearch
+      ? t("application.details.searchNoResults")
+      : t("account.noApplications")
+    let buttonText = debouncedSearch ? null : t("listings.browseListings")
     let buttonHref = "/listings"
     // only show custom message and redirect to "All my applications" if they have applied before
     if (applicationsCount?.total > 0) {
@@ -196,12 +198,16 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
             <Heading priority={2} size="xl">{`${t("account.errorFetchingApplications")}`}</Heading>
           ) : (
             <>
-              <Heading priority={2} className={styles["application-no-results-text"]} size="xl">
+              <Heading priority={2} size="xl">
                 {headerText}
               </Heading>
-              <Button size="sm" variant="primary-outlined" href={buttonHref}>
-                {buttonText}
-              </Button>
+              {buttonText && (
+                <div className={"seeds-m-bs-6"}>
+                  <Button size="sm" variant="primary-outlined" href={buttonHref}>
+                    {buttonText}
+                  </Button>
+                </div>
+              )}
             </>
           )}
         </div>
