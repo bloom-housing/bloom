@@ -10220,6 +10220,7 @@ export enum FeatureFlagEnum {
   "enableListingFiltering" = "enableListingFiltering",
   "enableLeasingAgentAltText" = "enableLeasingAgentAltText",
   "enableListingImageAltText" = "enableListingImageAltText",
+  "enableListingMap" = "enableListingMap",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
   "enableListingUpdatedAt" = "enableListingUpdatedAt",
