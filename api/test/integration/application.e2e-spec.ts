@@ -2078,14 +2078,32 @@ describe('Application Controller Tests', () => {
   });
 
   describe('publicAppsView endpoint', () => {
+    const createAndLoginUser = async () => {
+      const user = await prisma.userAccounts.create({
+        data: await userFactory({
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+
+      const resLogIn = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: user.email,
+          password: 'Abcdef12345!',
+        } as Login)
+        .expect(201);
+
+      return { user, cookies: resLogIn.headers['set-cookie'] };
+    };
+
     it('should retrieve applications and counts when they exist', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
       );
-      const user = await prisma.userAccounts.create({
-        data: await userFactory(),
-      });
+      const { user, cookies } = await createAndLoginUser();
       const juris = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
       });
@@ -2152,7 +2170,7 @@ describe('Application Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .get(`/applications/publicAppsView?${query}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminCookies)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.applicationsCount.total).toEqual(3);
@@ -2168,12 +2186,10 @@ describe('Application Controller Tests', () => {
     });
 
     it('should not retrieve applications nor error when none exist', async () => {
-      const userA = await prisma.userAccounts.create({
-        data: await userFactory(),
-      });
+      const { user, cookies } = await createAndLoginUser();
 
       const queryParams: PublicAppsViewQueryParams = {
-        userId: userA.id,
+        userId: user.id,
         filterType: ApplicationsFilterEnum.all,
         includeLotteryApps: true,
         page: 1,
@@ -2184,13 +2200,66 @@ describe('Application Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .get(`/applications/publicAppsView?${query}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminCookies)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.applicationsCount.total).toEqual(0);
       expect(res.body.items.length).toEqual(0);
       expect(res.body.meta.currentPage).toEqual(1);
       expect(res.body.meta.totalItems).toEqual(0);
+    });
+
+    it('should ignore query userId and scope results to the authenticated user', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const { user: authenticatedUser, cookies } = await createAndLoginUser();
+      const otherUser = await prisma.userAccounts.create({
+        data: await userFactory(),
+      });
+      const juris = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(juris.id, prisma);
+      const listingOpen = await listingFactory(juris.id, prisma, {
+        status: ListingsStatusEnum.active,
+      });
+      const listingOpenCreated = await prisma.listings.create({
+        data: listingOpen,
+      });
+
+      const app = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        userId: authenticatedUser.id,
+        listingId: listingOpenCreated.id,
+      });
+
+      await prisma.applications.create({
+        data: app,
+        include: {
+          applicant: true,
+        },
+      });
+
+      const queryParams: PublicAppsViewQueryParams = {
+        userId: otherUser.id,
+        filterType: ApplicationsFilterEnum.all,
+        includeLotteryApps: true,
+        page: 1,
+        limit: 10,
+      };
+      const query = stringify(queryParams as any);
+
+      const res = await request(app.getHttpServer())
+        .get(`/applications/publicAppsView?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.applicationsCount.total).toEqual(1);
+      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items[0].userId).toEqual(authenticatedUser.id);
     });
   });
 

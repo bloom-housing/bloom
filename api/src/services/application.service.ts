@@ -426,7 +426,7 @@ export class ApplicationService {
     }
     const normalizedParams = {
       ...params,
-      userId: user.isAdvocate ? user.id : params.userId,
+      userId: user.id,
     };
     const whereClause = this.buildWhereClause(normalizedParams);
 

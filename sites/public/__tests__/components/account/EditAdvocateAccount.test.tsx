@@ -87,12 +87,14 @@ describe("EditAdvocateAccount", () => {
     })
 
     // These are the IDs of the form sections we expect to appear
-    expect(document.getElementById("update-name")).toBeInTheDocument()
-    expect(document.getElementById("update-agency")).toBeInTheDocument()
-    expect(document.getElementById("update-address")).toBeInTheDocument()
-    expect(document.getElementById("update-phone-number")).toBeInTheDocument()
-    expect(document.getElementById("update-email")).toBeInTheDocument()
-    expect(document.getElementById("update-password")).toBeInTheDocument()
+    await waitFor(() => {
+      expect(document.getElementById("update-name")).toBeInTheDocument()
+      expect(document.getElementById("update-agency")).toBeInTheDocument()
+      expect(document.getElementById("update-address")).toBeInTheDocument()
+      expect(document.getElementById("update-phone-number")).toBeInTheDocument()
+      expect(document.getElementById("update-email")).toBeInTheDocument()
+      expect(document.getElementById("update-password")).toBeInTheDocument()
+    })
   })
 
   it("should submit agency updates through updateAdvocate", async () => {
