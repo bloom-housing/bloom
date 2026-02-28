@@ -10668,6 +10668,7 @@ export enum FeatureFlagEnum {
   "enableListingFileNumber" = "enableListingFileNumber",
   "enableListingFiltering" = "enableListingFiltering",
   "enableListingImageAltText" = "enableListingImageAltText",
+  "enableListingMap" = "enableListingMap",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
   "enableListingUpdatedAt" = "enableListingUpdatedAt",

@@ -1,0 +1,118 @@
+.listings-vars {
+  // This is a not-ideal way to do "fill window minus header and filter modal" however
+  // I can't find another way to do this.
+  // TODO: update header + filter modal to a not-magic number
+  --desktop-header-offset: 169px;
+  --mobile-header-offset: 126px;
+  --listings-component-height: calc(100dvh - var(--desktop-header-offset));
+  --listings-component-height-mobile: calc(100dvh - var(--mobile-header-offset));
+
+  --listings-component-half-height: calc(var(--listings-component-height) / 2);
+  --listings-list-width: 600px;
+  --listings-list-overscroll: calc(var(--seeds-s14) + var(--seeds-s1));
+  --swipe-area-height: var(--seeds-s14);
+  --background-color: var(--seeds-bg-color-surface);
+  --line-color: var(--seeds-color-gray-650);
+
+  position: absolute;
+
+  @media (max-width: $screen-md) {
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+  }
+}
+
+.search-filter-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+  right: 0px;
+  z-index: calc(var(--seeds-z-index-overlay) - 1);
+  background: white;
+  padding-inline: var(--seeds-s4);
+  padding-block: var(--seeds-s1);
+  gap: var(--seeds-s6);
+  color: var(--seeds-text-color);
+  border-block-end: 1px solid var(--seeds-border-color);
+
+  @media (max-width: $screen-md) {
+    position: static;
+    width: 100%;
+    font-size: var(--seeds-font-size-sm);
+    padding-inline: var(--seeds-s4);
+    padding-block: var(--seeds-s2);
+  }
+
+  strong {
+    font-weight: var(--seeds-font-weight-semibold);
+  }
+}
+
+.search-switch-container {
+  padding-block: 0;
+  @media (max-width: $screen-md) {
+    padding-block: var(--seeds-s1);
+    border-block-start: 1px solid var(--seeds-border-color);
+    justify-content: flex-end;
+    border-block-end: none;
+    border-bottom: 1px solid var(--seeds-border-color);
+  }
+}
+
+.search-total-results {
+  font-size: var(--seeds-font-size-xl);
+  margin-right: var(--seeds-s6);
+
+  @media (max-width: $screen-md) {
+    font-size: var(--seeds-font-size-sm);
+  }
+}
+
+.hide-total-results {
+  display: none;
+}
+
+.filter-desktop {
+  --button-font-family: inherit;
+  --button-font-weight: var(--seeds-font-weight-regular);
+  --button-interior-gap: var(--seeds-s1_5);
+  line-height: var(--seeds-line-height-4);
+  display: none;
+  @media (max-width: $screen-md) {
+    display: block;
+  }
+}
+
+.filter-mobile {
+  --button-font-family: inherit;
+  --button-font-weight: var(--seeds-font-weight-regular);
+  --button-interior-gap: var(--seeds-s1_5);
+  line-height: var(--seeds-line-height-4);
+  display: block;
+  @media (max-width: $screen-md) {
+    display: none;
+  }
+}
+
+.total-results {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  @media (max-width: $screen-md) {
+    padding-block-end: 0;
+  }
+}
+
+.switch-view-button {
+  display: none;
+
+  @media (max-width: $screen-md) {
+    svg {
+      margin-right: var(--seeds-s1);
+      margin-left: 0;
+    }
+    display: block;
+  }
+}
