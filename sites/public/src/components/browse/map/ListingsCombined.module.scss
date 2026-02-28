@@ -1,0 +1,142 @@
+.listings-combined {
+  width: 100vw;
+  // Map TODO: Figure out how to make this dynamic based on the viewport height and the height of the search bar and pagination components
+  height: var(--listings-component-height);
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: $screen-md) {
+    height: 100%;
+  }
+
+  .listings-map {
+    flex: 1;
+    position: relative;
+    display: flex;
+    @media (max-width: $screen-md) {
+      position: absolute;
+      z-index: 0;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  .listings-map-list-container {
+    display: flex;
+    height: 100%;
+    @media (max-width: $screen-md) {
+      position: relative;
+      display: block;
+    }
+  }
+
+  .listings-map-skip-link {
+    @apply sr-only;
+
+    &:focus {
+      @apply not-sr-only;
+      position: absolute;
+      z-index: 20;
+      padding: var(--bloom-s2) var(--bloom-s4);
+      text-decoration: underline;
+      font-size: var(--bloom-font-size-base);
+      color: var(--bloom-color-primary);
+      background-color: var(--bloom-color-white);
+    }
+  }
+
+  .listings-map-expanded {
+    background-color: var(--seeds-color-white);
+    display: none;
+
+    @media (max-width: $screen-md) {
+      position: relative;
+      display: block;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .listings-list {
+    overflow-y: auto;
+    width: 100%;
+    display: block;
+
+    @media (max-width: $screen-md) {
+      display: block;
+      padding-top: 0;
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      width: 100%;
+      overflow-y: auto;
+      background-color: var(--background-color);
+    }
+  }
+
+  .listings-list-expanded {
+    display: none;
+
+    @media (max-width: $screen-md) {
+      display: block;
+      position: static;
+      z-index: 1;
+      overflow-y: auto;
+      background-color: var(--background-color);
+    }
+  }
+
+  .listings-outer-container {
+    background-color: var(--seeds-color-white);
+    overflow-y: auto;
+    width: var(--listings-list-width);
+    @media (max-width: $screen-lg) {
+      width: 55%;
+    }
+  }
+}
+
+.listings-list-wrapper {
+  --padding: var(--seeds-s10);
+  border-left: 1px solid var(--seeds-color-gray-450);
+
+  /* These attribute selectors are strange, but that's because we want to short-circuit the
+     CSS module renaming and use these exact class names */
+  [class*="loading-overlay"] {
+    padding: 0;
+    min-height: var(--seeds-s40);
+    margin-bottom: var(--seeds-s4);
+    z-index: 1;
+  }
+
+  [class*="loading-overlay__spinner"] {
+    top: var(--seeds-s20);
+    color: var(--seeds-color-primary);
+  }
+}
+
+.cluster-icon {
+  font-weight: var(--seeds-font-weight-semibold);
+  font-family: var(--seeds-font-sans);
+  font-size: var(--seeds-font-size-base);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #205493;
+  color: white;
+  width: var(--seeds-s8);
+  height: var(--seeds-s8);
+  @media (max-width: $screen-md) {
+    width: var(--seeds-s8);
+    height: var(--seeds-s8);
+  }
+  border-radius: 50%;
+  border: 1px solid white;
+  box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.listings-list-container {
+  border-bottom: 1px solid var(--seeds-color-gray-450);
+  margin-bottom: var(--seeds-s4);
+}

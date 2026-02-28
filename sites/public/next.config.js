@@ -58,6 +58,8 @@ module.exports = withBundleAnalyzer({
     reCaptchaKey: process.env.RECAPTCHA_KEY,
     maxBrowseListings: process.env.MAX_BROWSE_LISTINGS,
     rtlLanguages: "ar,fa",
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    googleMapsMapId: process.env.GOOGLE_MAPS_MAP_ID,
   },
   i18n: {
     locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
