@@ -6,6 +6,7 @@ import {
   PageView,
   pushGtmEvent,
   AuthContext,
+  useToastyRef,
   RequireLogin,
   BloomCard,
 } from "@bloom-housing/shared-helpers"
@@ -39,11 +40,13 @@ interface ApplicationsViewProps {
 
 const ApplicationsView = (props: ApplicationsViewProps) => {
   const { applicationsService, profile } = useContext(AuthContext)
+  const toastyRef = useToastyRef()
   const [applications, setApplications] = useState<AppWithListing[]>()
   const [applicationsCount, setApplicationsCount] = useState<ApplicationsCount>()
   const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>()
   const [searchInput, setSearchInput] = useState("")
   const [debouncedSearch, setDebouncedSearch] = useState("")
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
   const router = useRouter()
@@ -94,9 +97,13 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
         })
         .catch((err) => {
           console.error(`Error fetching applications: ${err}`)
+          toastyRef.current.addToast(t("account.errorFetchingApplications"), { variant: "alert" })
           setError(err)
         })
-        .finally(() => setLoading(false))
+        .finally(() => {
+          setLoading(false)
+          setHasLoadedOnce(true)
+        })
     }
   }, [
     profile,
@@ -106,6 +113,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
     page,
     debouncedSearch,
     isAdvocate,
+    toastyRef,
   ])
 
   const selectionHandler = (index: number) => {
@@ -263,7 +271,8 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
               headingPriority={1}
             >
               <>
-                {isAdvocate &&
+                {hasLoadedOnce &&
+                  isAdvocate &&
                   !(!loading && paginationMeta?.totalItems === 0 && !debouncedSearch) && (
                     <div className={styles["application-search-container"]}>
                       <label
