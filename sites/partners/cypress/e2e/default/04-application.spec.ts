@@ -10,14 +10,14 @@ describe("Application Management Tests", () => {
   })
 
   it("Application grid should display correct number of results", () => {
-    cy.getByID("lbTotalPages").contains("2")
+    cy.getByID("lbTotalPages").contains("22")
     cy.get(".applications-table")
       .first()
       .find(".ag-center-cols-container")
       .first()
       .find(".ag-row")
       .should((elems) => {
-        expect(elems).to.have.length(2)
+        expect(elems).to.have.length(8)
       })
   })
 
