@@ -209,6 +209,8 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
     )
   }
 
+  const noUnfilteredResults = !loading && paginationMeta?.totalItems === 0 && !debouncedSearch
+
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
       <Layout pageTitle={t("account.myApplications")}>
@@ -271,31 +273,29 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
               headingPriority={1}
             >
               <>
-                {hasLoadedOnce &&
-                  isAdvocate &&
-                  !(!loading && paginationMeta?.totalItems === 0 && !debouncedSearch) && (
-                    <div className={styles["application-search-container"]}>
-                      <label
-                        htmlFor="applicant-name-search"
-                        className={"field-label seeds-p-be-2 sr-only"}
-                      >
-                        {t("application.details.searchApplicants")}
-                      </label>
-                      <input
-                        id="applicant-name-search"
-                        type="search"
-                        className={styles["application-search-input"]}
-                        placeholder={t("application.details.searchApplicantsPlaceholder")}
-                        value={searchInput}
-                        onChange={(event) => setSearchInput(event.target.value)}
-                        data-testid="applicant-name-search"
-                        aria-describedby="search-sub-note"
-                      />
-                      <p className={"field-sub-note seeds-m-be-2"} id="search-sub-note">
-                        {t("application.details.enterAtLeast3CharactersToSearch")}
-                      </p>
-                    </div>
-                  )}
+                {hasLoadedOnce && isAdvocate && !noUnfilteredResults && (
+                  <div className={styles["application-search-container"]}>
+                    <label
+                      htmlFor="applicant-name-search"
+                      className={"field-label seeds-p-be-2 sr-only"}
+                    >
+                      {t("application.details.searchApplicants")}
+                    </label>
+                    <input
+                      id="applicant-name-search"
+                      type="search"
+                      className={styles["application-search-input"]}
+                      placeholder={t("application.details.searchApplicantsPlaceholder")}
+                      value={searchInput}
+                      onChange={(event) => setSearchInput(event.target.value)}
+                      data-testid="applicant-name-search"
+                      aria-describedby="search-sub-note"
+                    />
+                    <p className={"field-sub-note seeds-m-be-2"} id="search-sub-note">
+                      {t("application.details.enterAtLeast3CharactersToSearch")}
+                    </p>
+                  </div>
+                )}
                 <LoadingState loading={loading}>
                   {applications?.map((application, index) => {
                     return (
@@ -303,7 +303,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                         key={index}
                         application={application}
                         enableApplicationStatus={props.enableApplicationStatus}
-                        showApplicantName={profile?.isAdvocate}
+                        showApplicantName={isAdvocate}
                       />
                     )
                   })}
