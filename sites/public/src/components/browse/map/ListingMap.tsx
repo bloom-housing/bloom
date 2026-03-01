@@ -6,6 +6,7 @@ import {
   Jurisdiction,
   Listing,
   FeatureFlagEnum,
+  ListingFeaturesConfiguration,
   MultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
@@ -92,6 +93,12 @@ export const ListingMap = (props: ListingBrowseProps) => {
           jurisdictionIds={props.jurisdiction?.id ? [props.jurisdiction.id] : []}
           bedrooms={[]}
           bathrooms={[]}
+          activeFeatureFlags={props.jurisdiction?.featureFlags
+            ?.filter((featureFlag) => featureFlag.active)
+            ?.map((entry) => entry.name)}
+          multiselectData={props.multiselectData}
+          regions={props.jurisdiction?.regions}
+          listingFeaturesConfiguration={props.jurisdiction?.listingFeaturesConfiguration}
           // Map TODO: Dynamic jurisdictions
           jurisdictions={[{ label: props.jurisdiction.name, value: props.jurisdiction.id }]}
         />

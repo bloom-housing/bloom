@@ -7,7 +7,7 @@ import styles from "./ListingsSearch.module.scss"
 
 export interface ListingsSearchMetadataProps {
   loading: boolean
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setFilterDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
   filterCount: number
   searchResults: {
     listings: Listing[]
@@ -20,7 +20,7 @@ export interface ListingsSearchMetadataProps {
 }
 
 export const ListingsSearchMetadata = ({
-  setModalOpen,
+  setFilterDrawerOpen,
   filterCount,
   searchResults,
   setListView,
@@ -54,7 +54,7 @@ export const ListingsSearchMetadata = ({
             size="sm"
             className={`results-bar-button ${styles["switch-view-button"]} ${styles["filter-desktop"]}`}
             onClick={() => {
-              setModalOpen(true)
+              setFilterDrawerOpen(true)
             }}
             leadIcon={
               <Icon>
@@ -87,7 +87,7 @@ export const ListingsSearchMetadata = ({
           size="sm"
           className={`results-bar-button ${styles["filter-mobile"]}`}
           onClick={() => {
-            setModalOpen(true)
+            setFilterDrawerOpen(true)
           }}
           id={"listings-map-filter-button"}
         >

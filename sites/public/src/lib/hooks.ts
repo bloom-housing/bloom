@@ -405,8 +405,10 @@ export const searchListings = async (
   page = 1,
   listingsService: ListingsService,
   view: ListingViews = ListingViews.base,
-  jurisdictionIds: string[] = []
+  jurisdictionIds: string[] = [],
+  additionalFilters: ListingFilterParams[] = []
 ): Promise<PaginatedListing> => {
+  console.log("SEARCHING LISTINGS")
   let results: PaginatedListing = {
     items: [],
     meta: {
@@ -418,7 +420,7 @@ export const searchListings = async (
     },
   }
 
-  const filter = qb.getFilterParams()
+  const filter = qb.getFilterParams().concat(additionalFilters)
 
   if (jurisdictionIds.length > 0) {
     filter.push({
@@ -452,10 +454,12 @@ export const searchListings = async (
 export const searchMapMarkers = async (
   qb: ListingQueryBuilder,
   listingsService: ListingsService,
-  jurisdictionIds: string[] = []
+  jurisdictionIds: string[] = [],
+  additionalFilters: ListingFilterParams[] = []
 ): Promise<ListingMapMarker[]> => {
-  const filter = qb.getFilterParams()
+  const filter = qb.getFilterParams().concat(additionalFilters)
 
+  console.log("SEARCHING MARKERS")
   if (jurisdictionIds.length > 0) {
     filter.push({
       $comparison: EnumListingFilterParamsComparison.IN,
