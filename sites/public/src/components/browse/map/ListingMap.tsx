@@ -68,8 +68,8 @@ export const ListingMap = (props: ListingBrowseProps) => {
 
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
 
-  let searchString =
-    "counties:Alameda,Contra Costa,Marin,Napa,San Francisco,San Mateo,Santa Clara,Solano,Sonoma"
+  // Map TODO: Dynamic jurisdictions
+  let searchString = `jurisdictions:${props.jurisdiction.name}`
   const searchParam = Array.isArray(router.query.search)
     ? router.query.search[0]
     : router.query.search
@@ -89,9 +89,11 @@ export const ListingMap = (props: ListingBrowseProps) => {
           googleMapsApiKey={process.env.googleMapsApiKey}
           googleMapsMapId={process.env.googleMapsMapId}
           searchString={searchString}
+          jurisdictionIds={props.jurisdiction?.id ? [props.jurisdiction.id] : []}
           bedrooms={[]}
           bathrooms={[]}
-          counties={[]}
+          // Map TODO: Dynamic jurisdictions
+          jurisdictions={[{ label: props.jurisdiction.name, value: props.jurisdiction.id }]}
         />
       </APIProvider>
     </Layout>

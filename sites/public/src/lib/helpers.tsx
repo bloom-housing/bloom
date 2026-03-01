@@ -5,7 +5,7 @@ import InfoIcon from "@heroicons/react/20/solid/InformationCircleIcon"
 import LockClosedIcon from "@heroicons/react/20/solid/LockClosedIcon"
 import {
   t,
-  ListingCard,
+  ListingCard as UICListingCard,
   ApplicationStatusType,
   StatusBarType,
   AppearanceStyleType,
@@ -40,6 +40,7 @@ import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/
 import { Icon, Message } from "@bloom-housing/ui-seeds"
 import styles from "./helpers.module.scss"
 import { ApplicationFormConfig } from "./applications/configInterfaces"
+import { MapListingCard } from "../components/browse/map/MapListingCard"
 
 export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
@@ -375,7 +376,7 @@ export const getListings = (listings) => {
   }
   return listings.map((listing: Listing, index) => {
     return (
-      <ListingCard
+      <UICListingCard
         key={index}
         imageCardProps={{
           imageUrl: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0],
@@ -414,6 +415,23 @@ export const getListings = (listings) => {
       />
     )
   })
+}
+
+export const getMapListings = (listings: Listing[]) => {
+  return (
+    <ul>
+      {listings.map((listing, index) => {
+        console.log({ listing })
+        return (
+          <MapListingCard
+            listing={listing}
+            key={index}
+            jurisdiction={listing.jurisdictions as Jurisdiction}
+          />
+        )
+      })}
+    </ul>
+  )
 }
 
 export const untranslateMultiselectQuestion = (

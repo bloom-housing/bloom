@@ -403,7 +403,9 @@ export const searchListings = async (
   qb: ListingQueryBuilder,
   limit: number | "all" = "all",
   page = 1,
-  listingsService: ListingsService
+  listingsService: ListingsService,
+  view: ListingViews = ListingViews.base,
+  jurisdictionIds: string[] = []
 ): Promise<PaginatedListing> => {
   let results: PaginatedListing = {
     items: [],
@@ -416,11 +418,20 @@ export const searchListings = async (
     },
   }
 
+  const filter = qb.getFilterParams()
+
+  if (jurisdictionIds.length > 0) {
+    filter.push({
+      $comparison: EnumListingFilterParamsComparison.IN,
+      jurisdiction: jurisdictionIds.join(","),
+    })
+  }
+
   const params: Parameters<ListingsService["list"]>[0] = {
-    view: ListingViews.base,
+    view,
     limit: limit || "all",
     page: page,
-    filter: qb.getFilterParams(),
+    filter,
     orderBy: [ListingOrderByKeys.mostRecentlyPublished],
     orderDir: [OrderByEnum.desc],
   }
@@ -440,10 +451,25 @@ export const searchListings = async (
 // Map TODO: Actually search
 export const searchMapMarkers = async (
   qb: ListingQueryBuilder,
-  listingsService: ListingsService
+  listingsService: ListingsService,
+  jurisdictionIds: string[] = []
 ): Promise<ListingMapMarker[]> => {
+  const filter = qb.getFilterParams()
+
+  if (jurisdictionIds.length > 0) {
+    filter.push({
+      $comparison: EnumListingFilterParamsComparison.IN,
+      jurisdiction: jurisdictionIds.join(","),
+    })
+  }
+
+  const params = {
+    limit: "all" as number | "all",
+    filter,
+  }
+
   try {
-    const response = await listingsService.mapMarkers()
+    const response = await listingsService.mapMarkers({ body: { ...params } })
     return response
   } catch (e) {
     console.log("ListingService.searchMapMarkers error: ", e)

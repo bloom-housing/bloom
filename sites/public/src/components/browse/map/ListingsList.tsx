@@ -1,9 +1,13 @@
 import * as React from "react"
-import { Listing, ListingMapMarker } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Jurisdiction,
+  Listing,
+  ListingMapMarker,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
 // import { ZeroListingsItem } from "@bloom-housing/doorway-ui-components"
 import { LoadingOverlay, t, InfoCard } from "@bloom-housing/ui-components"
-import { getListings } from "../../../lib/helpers"
+import { getMapListings } from "../../../lib/helpers"
 import { Pagination } from "./Pagination"
 import styles from "./ListingsCombined.module.scss"
 
@@ -18,7 +22,6 @@ type ListingsListProps = {
 
 const ListingsList = (props: ListingsListProps) => {
   const moreMarkersOnMap = props.mapMarkers.length > 0
-  console.log("listings list props", props)
 
   const listingsDiv = (
     <div id="listingsList">
@@ -26,7 +29,7 @@ const ListingsList = (props: ListingsListProps) => {
         {t("t.listingsList")}
       </Heading>
       {props.listings.length > 0 || props.loading ? (
-        <div className={styles["listings-list-container"]}>{getListings(props.listings)}</div>
+        <div className={styles["listings-list-container"]}>{getMapListings(props.listings)}</div>
       ) : (
         // Map TODO: Create zero listings component
         // <ZeroListingsItem
@@ -56,7 +59,7 @@ const ListingsList = (props: ListingsListProps) => {
         </InfoCard>
       )}
       {/* // Map TODO: Create actual info cards */}
-      {/* <InfoCard
+      <InfoCard
         title={t("t.needHelp")}
         subtitle={t("t.emergencyShelter")}
         className="is-normal-secondary-lighter"
@@ -65,22 +68,10 @@ const ListingsList = (props: ListingsListProps) => {
           {t("t.helpCenter")}
         </Button>
       </InfoCard>
-      <InfoCard
-        title={t("t.housingInSanFrancisco")}
-        subtitle={t("t.seeSanFranciscoListings")}
-        className="is-normal-secondary-lighter"
-      >
-        <Button
-          href="https://housing.sfgov.org/"
-          className="capitalize"
-          variant="secondary"
-          hideExternalLinkIcon={true}
-        >
-          {t("t.seeListings")}
-        </Button>
-      </InfoCard> */}
     </div>
   )
+
+  console.log({ props })
 
   const pagination =
     props.lastPage !== 0 ? (
