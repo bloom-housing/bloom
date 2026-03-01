@@ -7,6 +7,7 @@
 
   @media (max-width: $screen-md) {
     height: 100%;
+    min-height: 0;
   }
 
   .listings-map {
@@ -23,7 +24,8 @@
 
   .listings-map-list-container {
     display: flex;
-    height: 100%;
+    flex: 1;
+    min-height: 0;
     @media (max-width: $screen-md) {
       position: relative;
       display: block;
@@ -54,7 +56,9 @@
       display: block;
       z-index: 0;
       width: 100%;
-      height: 100%;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
     }
   }
 
@@ -62,6 +66,7 @@
     overflow-y: auto;
     width: 100%;
     display: block;
+    min-height: 0;
 
     @media (max-width: $screen-md) {
       display: block;
@@ -82,14 +87,28 @@
       display: block;
       position: static;
       z-index: 1;
-      overflow-y: auto;
+      flex: none;
+      min-height: auto;
+      overflow-y: visible;
       background-color: var(--background-color);
+    }
+  }
+
+  .listings-map-list-container-list-only {
+    @media (max-width: $screen-md) {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
   }
 
   .listings-outer-container {
     background-color: var(--seeds-color-white);
     overflow-y: auto;
+    min-height: 0;
     width: var(--listings-list-width);
     @media (max-width: $screen-lg) {
       width: 55%;
