@@ -142,6 +142,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
         (isDesktop || listView) &&
         !(visibleMarkers?.length === 0 && changingFilter))
     ) {
+      console.log("pre search loading true")
       setIsLoading(true)
       const result = await searchListings(
         isDesktop ? listingIdsOnlyQb : genericQb,
@@ -255,6 +256,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
 
   // Re-search when the map's visible markers are changed
   useEffect(() => {
+    console.log("visible markers changed use effect")
     async function searchListings() {
       await search(1)
     }
@@ -268,9 +270,11 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
 
     // Only re-search if the visible markers are not the same
     if (oldMarkers !== newMarkers && isDesktop) {
+      console.log("old not equal to new")
       setCurrentMarkers(visibleMarkers)
       void searchListings()
     } else {
+      console.log("set loading, to false they are the same")
       setIsLoading(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
