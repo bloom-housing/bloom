@@ -51,7 +51,7 @@ const fillAdvocateForm = async (
 ) => {
   const firstNameField = screen.getByRole("textbox", { name: "First or given name" })
   const lastNameField = screen.getByRole("textbox", { name: "Last or family name" })
-  const emailField = screen.getByRole("textbox", { name: "Your email address" })
+  const emailField = screen.getByRole("textbox", { name: "Email" })
   const agencySelect = screen.getByRole("combobox", { name: "Agency" })
   const submitButton = screen.getByRole("button", { name: "Request an account" })
 
@@ -81,7 +81,8 @@ describe("Create advocate page", () => {
     expect(screen.getByRole("combobox", { name: "Agency" })).toBeInTheDocument()
     expect(screen.getByText("Contact support if your agency is not listed")).toBeInTheDocument()
 
-    expect(screen.getByRole("textbox", { name: "Your email address" })).toBeInTheDocument()
+    expect(screen.getByText("Your email address", { selector: "legend" })).toBeInTheDocument()
+    expect(screen.getByRole("textbox", { name: "Email" })).toBeInTheDocument()
     expect(screen.getByText("Register with your work email address")).toBeInTheDocument()
     expect(screen.getByText("For example: example@mail.com")).toBeInTheDocument()
 
@@ -113,7 +114,7 @@ describe("Create advocate page", () => {
       expect(screen.getByRole("textbox", { name: "Last or family name" })).toBeInvalid()
       expect(screen.getByText("Please enter a last name")).toBeInTheDocument()
 
-      expect(screen.getByRole("textbox", { name: "Your email address" })).toBeInvalid()
+      expect(screen.getByRole("textbox", { name: "Email" })).toBeInvalid()
       expect(screen.getByText("Please enter a valid email address")).toBeInTheDocument()
 
       expect(screen.getByRole("combobox", { name: "Agency" })).toBeInvalid()
@@ -143,7 +144,7 @@ describe("Create advocate page", () => {
     it("should show email validation error for invalid email format", async () => {
       renderCreateAdvocateAccountPage()
 
-      const emailField = screen.getByRole("textbox", { name: "Your email address" })
+      const emailField = screen.getByRole("textbox", { name: "Email" })
       const submitButton = screen.getByRole("button", { name: "Request an account" })
 
       await userEvent.type(emailField, "invalid-email")
