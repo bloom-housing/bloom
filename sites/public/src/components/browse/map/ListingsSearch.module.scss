@@ -15,9 +15,12 @@
   --line-color: var(--seeds-color-gray-650);
 
   position: absolute;
+  width: 100%;
+  height: var(--listings-component-height);
+  overflow: hidden;
 
   @media (max-width: $screen-md) {
-    height: 100%;
+    height: var(--listings-component-height-mobile);
     display: flex;
     flex-flow: column;
   }

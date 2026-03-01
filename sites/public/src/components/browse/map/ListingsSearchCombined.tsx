@@ -56,6 +56,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [isFirstBoundsLoad, setIsFirstBoundsLoad] = useState<boolean>(true)
   const hasCompletedInitialListingsCallRef = useRef(false)
+  const listingsVarsRef = useRef<HTMLDivElement>(null)
 
   const [searchFilter] = useState(
     parseSearchString(props.searchString, {
@@ -93,6 +94,37 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   const pageSize = 25
 
   const map = useMap()
+
+  useEffect(() => {
+    const listingsVarsElement = listingsVarsRef.current
+    if (!listingsVarsElement) return
+
+    const mainNavigation = document.querySelector('nav[aria-label="Main"]')
+    const siteHeader = mainNavigation?.closest("header")
+
+    const updateHeaderOffsets = () => {
+      const topOffset = Math.max(0, Math.round(listingsVarsElement.getBoundingClientRect().top))
+      const cssOffsetValue = `${topOffset}px`
+
+      listingsVarsElement.style.setProperty("--desktop-header-offset", cssOffsetValue)
+      listingsVarsElement.style.setProperty("--mobile-header-offset", cssOffsetValue)
+    }
+
+    updateHeaderOffsets()
+    window.addEventListener("resize", updateHeaderOffsets)
+
+    const resizeObserver = new ResizeObserver(updateHeaderOffsets)
+    resizeObserver.observe(listingsVarsElement)
+
+    if (siteHeader) {
+      resizeObserver.observe(siteHeader)
+    }
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener("resize", updateHeaderOffsets)
+    }
+  }, [])
 
   const search = async (page: number, changingFilter?: boolean) => {
     // If a user pans over empty space, reset the listings to empty instead of refetching
@@ -326,7 +358,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   }
 
   return (
-    <div className={styles["listings-vars"]}>
+    <div className={styles["listings-vars"]} ref={listingsVarsRef}>
       <FilterDrawer
         isOpen={isFilterDrawerOpen}
         onClose={onDrawerClose}
