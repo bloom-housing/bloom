@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState, useContext } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState, useContext } from "react"
 import { InfoWindow, useMap } from "@vis.gl/react-google-maps"
 import { MarkerClusterer, SuperClusterAlgorithm } from "@googlemaps/markerclusterer"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import debounce from "lodash/debounce"
 import { MapMarkerData } from "./ListingsMap"
 import { MapMarker } from "./MapMarker"
 import styles from "./ListingsCombined.module.scss"
@@ -84,12 +85,11 @@ const sortMarkers = (unsortedMarkers: MapMarkerData[]) => {
   )
 }
 
-let delayTimer
-
 export const MapClusterer = ({
   mapMarkers,
   infoWindowIndex,
   setInfoWindowIndex,
+  visibleMarkers,
   setVisibleMarkers,
   setIsLoading,
   isFirstBoundsLoad,
@@ -105,29 +105,113 @@ export const MapClusterer = ({
 
   const map = useMap()
 
-  const resetVisibleMarkers = () => {
-    const bounds = map.getBounds()
-    const newVisibleMarkers = mapMarkers?.filter((marker) => bounds?.contains(marker.coordinate))
-    // Wait to refetch again until the map has finished fitting bounds
-    if (isFirstBoundsLoad && isDesktop) return mapMarkers
+  // 1) Read latest marker state from refs inside callbacks to avoid stale values
+  // 2) On map idle, only trigger search when visible marker IDs actually change
+  // 3) Debounce interactions after initial load to reduce re-search while panning/zooming
+  // 4) Skip marker re-search during the first desktop cycle
+
+  // Keep mutable references to the latest values so debounced callbacks don't use stale values
+  const mapRef = useRef(map)
+  const mapMarkersRef = useRef(mapMarkers)
+  const visibleMarkersRef = useRef(visibleMarkers)
+  const isFirstBoundsLoadRef = useRef(isFirstBoundsLoad)
+  const isDesktopRef = useRef(isDesktop)
+
+  useEffect(() => {
+    mapRef.current = map
+    mapMarkersRef.current = mapMarkers
+    visibleMarkersRef.current = visibleMarkers
+    isFirstBoundsLoadRef.current = isFirstBoundsLoad
+    isDesktopRef.current = isDesktop
+  }, [isDesktop, isFirstBoundsLoad, map, mapMarkers, visibleMarkers])
+
+  // Compare only marker ids to determine whether the visible result set changed - sorting keeps comparison stable
+  const markerSetSignature = useCallback((markers: MapMarkerData[] | null | undefined) => {
+    return JSON.stringify((markers ?? []).map((marker) => marker.id).sort())
+  }, [])
+
+  // Compute markers currently inside map bounds using the latest map + markers refs
+  const getVisibleMarkersInBounds = useCallback(() => {
+    const currentMap = mapRef.current
+    if (!currentMap) return []
+
+    const bounds = currentMap.getBounds()
+    const currentMapMarkers = mapMarkersRef.current
+    return currentMapMarkers?.filter((marker) => bounds?.contains(marker.coordinate)) ?? []
+  }, [])
+
+  // If the visible marker set is unchanged, skip updates.
+  const hasVisibleMarkerChange = useCallback(() => {
+    const nextVisibleMarkers = getVisibleMarkersInBounds()
+    const nextSignature = markerSetSignature(nextVisibleMarkers)
+    const currentSignature = markerSetSignature(visibleMarkersRef.current)
+
+    return nextSignature !== currentSignature
+  }, [getVisibleMarkersInBounds, markerSetSignature])
+
+  const resetVisibleMarkers = useCallback(() => {
+    const newVisibleMarkers = getVisibleMarkersInBounds()
+    // During first desktop cycle, avoid triggering marker-driven search
+    if (isFirstBoundsLoadRef.current && isDesktopRef.current) return
+
+    // When the computed visible set is identical, do not retrigger loading
+    const nextSignature = markerSetSignature(newVisibleMarkers)
+    const currentSignature = markerSetSignature(visibleMarkersRef.current)
+    if (nextSignature === currentSignature) return
 
     setVisibleMarkers(newVisibleMarkers)
-  }
+  }, [getVisibleMarkersInBounds, markerSetSignature, setVisibleMarkers])
 
-  // Whenever the user's map navigation finishes, on a 1 second delay, reset the currently visible markers on the map to re-search the list
-  map.addListener("idle", () => {
-    setIsLoading(true)
-    clearTimeout(delayTimer)
-    delayTimer = setTimeout(resetVisibleMarkers, isFirstBoundsLoad ? 0 : 800)
-  })
+  const debouncedResetVisibleMarkers = useMemo(
+    () => debounce(resetVisibleMarkers, 800),
+    [resetVisibleMarkers]
+  )
 
-  map.addListener("click", () => {
-    setInfoWindowIndex(null)
-  })
+  useEffect(() => {
+    if (!map) return
 
-  map.addListener("drag", () => {
-    setInfoWindowIndex(null)
-  })
+    // After pan/zoom settles, refresh visible markers
+    // First load runs immediately, then later interactions are debounced
+    const idleListener = map.addListener("idle", () => {
+      console.log("idle listener")
+      if (isFirstBoundsLoad) {
+        resetVisibleMarkers()
+        return
+      }
+
+      // Don't flash loading state for unchanged marker sets
+      if (!hasVisibleMarkerChange()) {
+        return
+      }
+
+      setIsLoading(true)
+      debouncedResetVisibleMarkers()
+    })
+
+    const clickListener = map.addListener("click", () => {
+      setInfoWindowIndex(null)
+    })
+
+    const dragListener = map.addListener("drag", () => {
+      setInfoWindowIndex(null)
+    })
+
+    return () => {
+      idleListener.remove()
+      clickListener.remove()
+      dragListener.remove()
+      // Clear pending debounced work when dependencies change or component unmounts
+      debouncedResetVisibleMarkers.cancel()
+    }
+  }, [
+    debouncedResetVisibleMarkers,
+    hasVisibleMarkerChange,
+    isFirstBoundsLoad,
+    map,
+    resetVisibleMarkers,
+    setInfoWindowIndex,
+    setIsLoading,
+  ])
 
   useEffect(() => {
     const oldMarkers = sortMarkers(currentMapMarkers)
@@ -221,7 +305,8 @@ export const MapClusterer = ({
         if (marker) {
           return { ...markers, [key]: marker }
         } else {
-          const { [key]: _, ...newMarkers } = markers
+          const newMarkers = { ...markers }
+          delete newMarkers[key]
 
           return newMarkers
         }
