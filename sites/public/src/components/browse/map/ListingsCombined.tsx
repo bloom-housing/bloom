@@ -13,7 +13,7 @@ type ListingsCombinedProps = {
   onPageChange: (page: number) => void
   googleMapsApiKey: string
   googleMapsMapId: string
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setFilterDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
   filterCount: number
   searchResults: {
     listings: Listing[]
@@ -50,7 +50,7 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
       <div className={styles["listings-combined"]}>
         <ListingsSearchMetadata
           loading={props.loading}
-          setModalOpen={props.setModalOpen}
+          setFilterDrawerOpen={props.setFilterDrawerOpen}
           filterCount={props.filterCount}
           searchResults={props.searchResults}
           setListView={props.setListView}
@@ -82,7 +82,7 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
       <div className={styles["listings-combined"]}>
         <ListingsSearchMetadata
           loading={props.loading}
-          setModalOpen={props.setModalOpen}
+          setFilterDrawerOpen={props.setFilterDrawerOpen}
           filterCount={props.filterCount}
           searchResults={props.searchResults}
           setListView={props.setListView}
@@ -113,7 +113,7 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
       <div className={styles["listings-combined"]}>
         <ListingsSearchMetadata
           loading={props.loading}
-          setModalOpen={props.setModalOpen}
+          setFilterDrawerOpen={props.setFilterDrawerOpen}
           filterCount={props.filterCount}
           searchResults={props.searchResults}
           setListView={props.setListView}

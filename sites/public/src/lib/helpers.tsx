@@ -415,7 +415,6 @@ export const getMapListings = (listings: Listing[]) => {
   return (
     <ul>
       {listings.map((listing, index) => {
-        console.log({ listing })
         return (
           <MapListingCard
             listing={listing}

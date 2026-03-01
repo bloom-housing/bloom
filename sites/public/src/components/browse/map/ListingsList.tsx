@@ -59,7 +59,7 @@ const ListingsList = (props: ListingsListProps) => {
         </InfoCard>
       )}
       {/* // Map TODO: Create actual info cards */}
-      <InfoCard
+      {/* <InfoCard
         title={t("t.needHelp")}
         subtitle={t("t.emergencyShelter")}
         className="is-normal-secondary-lighter"
@@ -67,11 +67,9 @@ const ListingsList = (props: ListingsListProps) => {
         <Button href="/help/housing-help" className="capitalize" variant="secondary">
           {t("t.helpCenter")}
         </Button>
-      </InfoCard>
+      </InfoCard> */}
     </div>
   )
-
-  console.log({ props })
 
   const pagination =
     props.lastPage !== 0 ? (

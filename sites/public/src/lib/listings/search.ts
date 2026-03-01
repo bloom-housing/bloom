@@ -1,6 +1,13 @@
-import { FormOption } from "../../components/browse/map/ListingsSearchModal"
 import { ListingQueryBuilder } from "./listing-query-builder"
 import { FilterAvailabilityEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+
+export type FormOption = {
+  label: string
+  value: string
+  isDisabled?: boolean
+  labelNoteHTML?: string
+  doubleColumn?: boolean
+}
 
 export type ListingSearchParams = {
   bedrooms: string
@@ -129,7 +136,6 @@ export function generateSearchQuery(params: ListingSearchParams) {
   if (params.propertyName && params.propertyName != "") {
     qb.whereLike("name", params.propertyName)
   }
-  console.log({ params })
 
   if (
     params.jurisdictions &&

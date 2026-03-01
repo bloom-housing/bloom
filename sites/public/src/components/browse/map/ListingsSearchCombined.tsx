@@ -3,6 +3,7 @@ import { useMap } from "@vis.gl/react-google-maps"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import {
+  FormOption,
   ListingSearchParams,
   generateSearchQuery,
   parseSearchString,
@@ -10,10 +11,16 @@ import {
 import { UserStatus } from "../../../lib/constants"
 import styles from "./ListingsSearch.module.scss"
 import { ListingsCombined } from "./ListingsCombined"
-import { FormOption, ListingsSearchModal } from "./ListingsSearchModal"
 import { MapMarkerData } from "./ListingsMap"
 import { searchListings, searchMapMarkers } from "../../../lib/hooks"
-import { ListingViews } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  ListingFeaturesConfiguration,
+  ListingViews,
+  MultiselectQuestion,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { FilterDrawer } from "../FilterDrawer"
+import { encodeFilterDataToBackendFilters, FilterData } from "../FilterDrawerHelpers"
 
 type ListingsSearchCombinedProps = {
   searchString?: string
@@ -23,6 +30,10 @@ type ListingsSearchCombinedProps = {
   bedrooms: FormOption[]
   bathrooms: FormOption[]
   jurisdictions: FormOption[]
+  activeFeatureFlags?: FeatureFlagEnum[]
+  multiselectData: MultiselectQuestion[]
+  regions?: string[]
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration
 }
 
 /**
@@ -34,8 +45,10 @@ type ListingsSearchCombinedProps = {
  */
 function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   const { profile, listingsService } = useContext(AuthContext)
-  const [modalOpen, setModalOpen] = useState(false)
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false)
   const [filterCount, setFilterCount] = useState(0)
+  const [drawerFilters, setDrawerFilters] = useState([])
+  const [filterState, setFilterState] = useState<FilterData>({})
   const [listView, setListView] = useState<boolean>(true)
   const [visibleMarkers, setVisibleMarkers] = useState<MapMarkerData[]>(null)
   const [currentMarkers, setCurrentMarkers] = useState<MapMarkerData[]>(null)
@@ -43,7 +56,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [isFirstBoundsLoad, setIsFirstBoundsLoad] = useState<boolean>(true)
 
-  const [searchFilter, setSearchFilter] = useState(
+  const [searchFilter] = useState(
     parseSearchString(props.searchString, {
       bedrooms: null,
       bathrooms: null,
@@ -81,7 +94,6 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   const map = useMap()
 
   const search = async (page: number, changingFilter?: boolean) => {
-    console.log("in search!!!")
     // If a user pans over empty space, reset the listings to empty instead of refetching
     if (isDesktop === undefined) return
     const oldMarkersSearch = JSON.stringify(
@@ -137,7 +149,8 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
         page,
         listingsService,
         ListingViews.map,
-        props.jurisdictionIds
+        props.jurisdictionIds,
+        drawerFilters
       )
       newListings = result.items
       newMeta = result.meta
@@ -147,7 +160,12 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     // Only search the markers if the filter is changing
     // Don't search markers again if the first fetch of markers is still loading inside the map (race condition)
     if (changingFilter && !(isFirstBoundsLoad && isDesktop && searchResults.markers.length)) {
-      newMarkers = await searchMapMarkers(genericQb, listingsService, props.jurisdictionIds)
+      newMarkers = await searchMapMarkers(
+        genericQb,
+        listingsService,
+        props.jurisdictionIds,
+        drawerFilters
+      )
       // If the filter from the homepage has zero results, don't fetch the listings
       if (isFirstBoundsLoad && newMarkers.length === 0) {
         newListings = []
@@ -220,6 +238,16 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDesktop])
 
+  // Map TODO - This was added, make sure it doesn't have side effects
+  useEffect(() => {
+    async function searchListings() {
+      await search(1, true)
+    }
+
+    void searchListings()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [drawerFilters])
+
   // Re-set the view when entering the map on mobile to fit bounds
   useEffect(() => {
     if (!listView) setIsFirstBoundsLoad(true)
@@ -261,36 +289,42 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFirstBoundsLoad])
 
-  const onFormSubmit = (params: ListingSearchParams) => {
-    // If the search filter did not change, don't re-search listings
-    if (JSON.stringify(params) === JSON.stringify(searchFilter)) return
-    setIsLoading(true)
-    setSearchFilter(params)
-  }
-
   const onPageChange = async (page: number) => {
     await search(page)
   }
 
-  const onModalClose = () => {
-    setModalOpen(false)
+  const onDrawerClose = () => {
+    setIsFilterDrawerOpen(false)
   }
 
-  const updateFilterCount = (count: number) => {
-    setFilterCount(count)
+  const onDrawerSubmit = (data: FilterData) => {
+    const backendFilters = encodeFilterDataToBackendFilters(data)
+    setFilterState(data)
+    setDrawerFilters(backendFilters)
+    setFilterCount(backendFilters.length)
+    setIsFilterDrawerOpen(false)
+  }
+
+  const onDrawerClear = (resetFilters: (data: FilterData) => void) => {
+    resetFilters({ name: "", monthlyRent: { minRent: "", maxRent: "" } })
+    setFilterState({})
+    setDrawerFilters([])
+    setFilterCount(0)
+    setIsFilterDrawerOpen(false)
   }
 
   return (
     <div className={styles["listings-vars"]}>
-      <ListingsSearchModal
-        open={modalOpen}
-        searchString={props.searchString}
-        bedrooms={props.bedrooms}
-        bathrooms={props.bathrooms}
-        jurisdictions={props.jurisdictions}
-        onSubmit={onFormSubmit}
-        onClose={onModalClose}
-        onFilterChange={updateFilterCount}
+      <FilterDrawer
+        isOpen={isFilterDrawerOpen}
+        onClose={onDrawerClose}
+        onSubmit={onDrawerSubmit}
+        onClear={onDrawerClear}
+        filterState={filterState}
+        multiselectData={props.multiselectData}
+        activeFeatureFlags={props.activeFeatureFlags}
+        regions={props.regions}
+        listingFeaturesConfiguration={props.listingFeaturesConfiguration}
       />
 
       <ListingsCombined
@@ -299,7 +333,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
         googleMapsMapId={props.googleMapsMapId}
         onPageChange={onPageChange}
         listView={listView}
-        setModalOpen={setModalOpen}
+        setFilterDrawerOpen={setIsFilterDrawerOpen}
         filterCount={filterCount}
         searchResults={searchResults}
         setListView={setListView}
