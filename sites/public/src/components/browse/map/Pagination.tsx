@@ -73,10 +73,6 @@ export function Pagination(props: PaginationProps) {
     props.onPageChange(page)
   }
 
-  // border={{borderRadius: "var(--bloom-rounded-full)"}}
-  // className={styles["pagination"]}
-  // size={AppearanceSizeType.small}
-
   if (props.lastPage === 1) return <></>
 
   let buttonColumns = []
@@ -113,8 +109,12 @@ export function Pagination(props: PaginationProps) {
     )
   }
 
+  console.log("end pagination")
+
   return (
     <section aria-label={"Listings list pagination"}>
+      {/* Map TODO: Rewrite pagination */}
+      Pagination goes here
       {/* <ButtonGroup
         spacing={ButtonGroupSpacing.even}
         pagination={true}

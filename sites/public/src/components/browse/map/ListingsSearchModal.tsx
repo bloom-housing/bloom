@@ -68,7 +68,7 @@ type ListingsSearchModalProps = {
   searchString?: string
   bedrooms: FormOption[]
   bathrooms: FormOption[]
-  counties: FormOption[]
+  jurisdictions: FormOption[]
   onSubmit: (params: ListingSearchParams) => void
   onClose: () => void
   onFilterChange: (count: number) => void
@@ -79,12 +79,12 @@ type ListingsSearchModalProps = {
 export function ListingsSearchModal(props: ListingsSearchModalProps) {
   const searchString = props.searchString || ""
 
-  // We hold a map of county label to county FormOption
-  const countyLabelMap = {}
-  const countyLabels = []
-  props.counties.forEach((county) => {
-    countyLabelMap[county.label] = county
-    countyLabels.push(county.label)
+  // We hold a map of jurisdiction label to jurisdiction FormOption
+  const jurisdictionLabelMap = {}
+  const jurisdictionLabels = []
+  props.jurisdictions.forEach((jurisdiction) => {
+    jurisdictionLabelMap[jurisdiction.label] = jurisdiction
+    jurisdictionLabels.push(jurisdiction.label)
   })
 
   const nullState: ListingSearchParams = {
@@ -93,7 +93,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     minRent: "",
     monthlyRent: "",
     propertyName: "",
-    counties: countyLabels,
+    jurisdictions: jurisdictionLabels,
     availability: null,
     ids: undefined,
   }
@@ -105,7 +105,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     // For each of our search params, count the number that aren't empty
     Object.values(params).forEach((value) => {
       if (value == null || value == "") return
-      if (Array.isArray(value) && value.length == props.counties.length) return
+      if (Array.isArray(value) && value.length == props.jurisdictions.length) return
       count++
     })
     return count
@@ -155,32 +155,32 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     // console.log(`${name} has been set to ${value}`) // uncomment to debug
   }
 
-  const translatedBedroomOptions: FormOption[] = [
-    {
-      label: t("listings.unitTypes.any"),
-      value: null,
-    },
-    {
-      label: t("listings.unitTypes.studio"),
-      value: "0",
-    },
-  ]
+  // const translatedBedroomOptions: FormOption[] = [
+  //   {
+  //     label: t("listings.unitTypes.any"),
+  //     value: null,
+  //   },
+  //   {
+  //     label: t("listings.unitTypes.studio"),
+  //     value: "0",
+  //   },
+  // ]
 
-  const translatedBathroomOptions: FormOption[] = [
-    {
-      label: t("listings.unitTypes.any"),
-      value: null,
-    },
-  ]
+  // const translatedBathroomOptions: FormOption[] = [
+  //   {
+  //     label: t("listings.unitTypes.any"),
+  //     value: null,
+  //   },
+  // ]
 
-  const bedroomOptions: FormOption[] = [
-    ...translatedBedroomOptions,
-    ...numericSearchFieldGenerator(1, 4),
-  ]
-  const bathroomOptions: FormOption[] = [
-    ...translatedBathroomOptions,
-    ...numericSearchFieldGenerator(1, 4),
-  ]
+  // const bedroomOptions: FormOption[] = [
+  //   ...translatedBedroomOptions,
+  //   ...numericSearchFieldGenerator(1, 4),
+  // ]
+  // const bathroomOptions: FormOption[] = [
+  //   ...translatedBathroomOptions,
+  //   ...numericSearchFieldGenerator(1, 4),
+  // ]
   // const mkCountyFields = (counties: FormOption[]): FieldSingle[] => {
   //   const countyFields: FieldSingle[] = [] as FieldSingle[]
 
@@ -252,6 +252,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     >
       <Dialog.Header id="search-filters-header">{t("search.filters")}</Dialog.Header>
       <Dialog.Content>
+        Content
         {/* <div style={inputSectionStyle}>
           <div style={sectionTitle}>{t("t.opportunityType")}</div>
           <ButtonGroup
@@ -285,7 +286,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
             spacing={ButtonGroupSpacing.left}
           />
         </div> */}
-        <div style={inputSectionStyle}>
+        {/* <div style={inputSectionStyle}>
           <div style={sectionTitleTopBorder}>{t("t.monthlyRent")}</div>
           <div style={rentStyle}>
             <Field
@@ -318,8 +319,8 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
               labelClassName="input-label"
             ></Field>
           </div>
-        </div>
-        <div style={inputSectionStyle}>
+        </div> */}
+        {/* <div style={inputSectionStyle}>
           <div style={{ ...sectionTitle, ...propertySearchTitle }}>
             {t("listings.propertyName")}
           </div>
@@ -335,8 +336,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
             // inputClassName="typed-input"
             labelClassName="input-label"
           />
-        </div>
-
+        </div> */}
         {/* <div style={inputSectionStyle}>
           <div style={sectionTitleTopBorder}>{t("t.counties")}</div>
           <FieldGroup
@@ -348,7 +348,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
             fieldLabelClassName="text-primary-dark font-medium tracking-wider text-2xs uppercase"
           />
         </div> */}
-        <img src={"/images/county-map.png"} alt={t("welcome.bayAreaCountyMap")} />
+        {/* <img src={"/images/county-map.png"} alt={t("welcome.bayAreaCountyMap")} /> */}
       </Dialog.Content>
       <Dialog.Footer>
         <Button
