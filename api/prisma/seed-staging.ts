@@ -8,6 +8,7 @@ import {
   UserRoleEnum,
   MultiselectQuestionsStatusEnum,
   Prisma,
+  ListingsStatusEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
@@ -41,6 +42,8 @@ import { elmVillage } from './seed-helpers/listing-data/elm-village';
 import { lakeviewVilla } from './seed-helpers/listing-data/lakeview-villa';
 import { sunshineFlats } from './seed-helpers/listing-data/sunshine-flats';
 import { agencyFactory } from './seed-helpers/agency-factory';
+import { stagingRealisticAddresses } from './seed-helpers/address-factory';
+import { randomInt } from 'crypto';
 
 export const defaultRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
   options: [
@@ -100,6 +103,7 @@ export const stagingSeed = async (
   jurisdictionName: string,
   publicSiteBaseURL: string,
   msqV2: boolean,
+  large?: boolean,
 ) => {
   // Seed feature flags
   await createAllFeatureFlags(prismaClient);
@@ -457,6 +461,13 @@ export const stagingSeed = async (
       raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
     }),
   });
+  const jurisdictionIds = [
+    mainJurisdiction.id,
+    angelopolisJurisdiction.id,
+    nadaHill.id,
+    lakeviewJurisdiction.id,
+    bridgeBayJurisdiction.id,
+  ];
   await agencyFactory(
     angelopolisJurisdiction.id,
     prismaClient,
@@ -1504,40 +1515,62 @@ export const stagingSeed = async (
     ],
   ];
 
-  listingsToCreate.map(async (params, index) => {
-    console.log(`Adding listing - ${params[2].listing?.name}`);
-    const listingParams = params[2];
-    const listing = await listingFactory(params[0], params[1], {
-      amiChart: amiChart,
-      numberOfUnits: (!listingParams.unitGroups && index) || 0,
-      listing: listingParams.listing,
-      units: listingParams.units,
-      unitGroups: listingParams.unitGroups,
-      multiselectQuestions: listingParams.multiselectQuestions,
-      applications: listingParams.applications,
-      afsLastRunSetInPast: true,
-      userAccounts: listingParams.userAccounts,
-      optionalFeatures: listingParams.optionalFeatures,
-      propertyId: listingParams.propertyId,
-    });
-    const savedListing = await prismaClient.listings.create({
-      data: listing,
-    });
-    await prismaClient.userAccounts.create({
-      data: await userFactory({
-        roles: {
-          isAdmin: false,
-          isPartner: true,
-          isJurisdictionalAdmin: false,
+  if (large) {
+    Object.values(stagingRealisticAddresses).forEach(async (addr, index) => {
+      const listing = await listingFactory(
+        jurisdictionIds[index % jurisdictionIds.length],
+        prismaClient,
+        {
+          amiChart: amiChart,
+          // most listings are under 10 units but there are some that get up to 175. This simulates that spread
+          numberOfUnits:
+            Math.random() < 0.9 ? randomInt(1, 10) : randomInt(10, 200),
+          digitalApp: !!(index % 2),
+          status: ListingsStatusEnum.active,
+          address: addr,
+          publishedAt: dayjs(new Date()).subtract(5, 'days').toDate(),
         },
-        email: `partner-user-${savedListing.name
-          .toLowerCase()
-          .replaceAll(' ', '-')}@example.com`,
-        confirmedAt: new Date(),
-        jurisdictionIds: [savedListing.jurisdictionId],
-        acceptedTerms: true,
-        listings: [savedListing.id],
-      }),
+      );
+      await prismaClient.listings.create({
+        data: listing,
+      });
     });
-  });
+  } else {
+    listingsToCreate.map(async (params, index) => {
+      console.log(`Adding listing - ${params[2].listing?.name}`);
+      const listingParams = params[2];
+      const listing = await listingFactory(params[0], params[1], {
+        amiChart: amiChart,
+        numberOfUnits: (!listingParams.unitGroups && index) || 0,
+        listing: listingParams.listing,
+        units: listingParams.units,
+        unitGroups: listingParams.unitGroups,
+        multiselectQuestions: listingParams.multiselectQuestions,
+        applications: listingParams.applications,
+        afsLastRunSetInPast: true,
+        userAccounts: listingParams.userAccounts,
+        optionalFeatures: listingParams.optionalFeatures,
+        propertyId: listingParams.propertyId,
+      });
+      const savedListing = await prismaClient.listings.create({
+        data: listing,
+      });
+      await prismaClient.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isAdmin: false,
+            isPartner: true,
+            isJurisdictionalAdmin: false,
+          },
+          email: `partner-user-${savedListing.name
+            .toLowerCase()
+            .replaceAll(' ', '-')}@example.com`,
+          confirmedAt: new Date(),
+          jurisdictionIds: [savedListing.jurisdictionId],
+          acceptedTerms: true,
+          listings: [savedListing.id],
+        }),
+      });
+    });
+  }
 };

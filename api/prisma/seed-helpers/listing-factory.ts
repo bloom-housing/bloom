@@ -33,6 +33,7 @@ export const listingFactory = async (
   jurisdictionId: string,
   prismaClient: PrismaClient,
   optionalParams?: {
+    address?: Prisma.AddressCreateInput;
     afsLastRunSetInPast?: boolean;
     amiChart?: AmiChart;
     applications?: Prisma.ApplicationsCreateInput[];
@@ -51,6 +52,7 @@ export const listingFactory = async (
     numberOfUnits?: number;
     optionalFeatures?: Prisma.ListingFeaturesCreateInput;
     optionalUtilities?: Prisma.ListingUtilitiesCreateInput;
+    publishedAt?: Date;
     propertyId?: string;
     reviewOrderType?: ReviewOrderTypeEnum;
     status?: ListingsStatusEnum;
@@ -154,7 +156,7 @@ export const listingFactory = async (
       create: addressFactory(),
     },
     listingsBuildingAddress: {
-      create: addressFactory(),
+      create: optionalParams?.address || addressFactory(),
     },
     listingEvents: optionalParams?.listingEvents
       ? {
@@ -177,6 +179,13 @@ export const listingFactory = async (
     listingsLeasingAgentAddress: {
       create: addressFactory(),
     },
+    publishedAt:
+      optionalParams?.publishedAt ||
+      (!!optionalParams?.status &&
+      optionalParams.status !== ListingsStatusEnum.active &&
+      optionalParams.status !== ListingsStatusEnum.closed
+        ? null
+        : new Date()),
     listingMultiselectQuestions: optionalParams?.multiselectQuestions
       ? {
           create: [
