@@ -1,28 +1,26 @@
-import { FormDemographics } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormDemographics"
-import { mockNextRouter, render, screen, FormProviderWrapper } from "../../../../testUtils"
 import React from "react"
 import userEvent from "@testing-library/user-event"
 import { RaceEthnicityConfiguration } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { defaultRaceEthnicityConfiguration } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { t } from "@bloom-housing/ui-components"
+import { FormDemographics } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormDemographics"
+import { mockNextRouter, render, screen, FormProviderWrapper, within } from "../../../../testUtils"
 
 const customConfig: RaceEthnicityConfiguration = {
   options: [
     {
       id: "blackAfricanAmerican",
-      hasSubOptions: false,
       subOptions: [],
       allowOtherText: false,
     },
     {
       id: "white",
-      hasSubOptions: false,
       subOptions: [],
       allowOtherText: false,
     },
 
     {
       id: "otherMultiracial",
-      hasSubOptions: false,
       subOptions: [],
       allowOtherText: true,
     },
@@ -73,18 +71,55 @@ describe("<FormDemographics>", () => {
 
     expect(screen.getByLabelText(/ethnicity/i)).toBeInTheDocument()
 
-    expect(screen.getByText(/how did you hear about us/i))
-    expect(screen.getByLabelText(/bus ad/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/developer website/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/email alert/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/flyer/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/friend/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/housing counselor/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/^other$/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/radio ad/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/jurisdiction website/i)).toBeInTheDocument()
-    expect(screen.queryByLabelText(/government website/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/property website/i)).not.toBeInTheDocument()
+    const howDidYouHearGroup = screen.getByRole("group", {
+      name: "How did you hear about us?",
+    })
+    expect(within(howDidYouHearGroup).getAllByRole("checkbox")).toHaveLength(9)
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.flyer"),
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.emailAlert"),
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.friend"),
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.housingCounselor"),
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.developerWebsite"),
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.jurisdictionWebsite"),
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.busAd"),
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.radioAd"),
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.other"),
+      })
+    ).toBeInTheDocument()
   })
 
   it("renders the form with limited how did you hear options when flag is enabled", () => {
@@ -107,18 +142,55 @@ describe("<FormDemographics>", () => {
 
     expect(screen.getByLabelText(/ethnicity/i)).toBeInTheDocument()
 
-    expect(screen.getByText(/how did you hear about us/i))
-    expect(screen.queryByLabelText(/bus ad/i)).not.toBeInTheDocument()
-    expect(screen.getByLabelText(/developer website/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/email alert/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/flyer/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/friend/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/housing counselor/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/^other$/i)).toBeInTheDocument()
-    expect(screen.queryByLabelText(/radio ad/i)).not.toBeInTheDocument()
-    expect(screen.getByLabelText(/jurisdiction website/i)).toBeInTheDocument()
-    expect(screen.queryByLabelText(/government website/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/property website/i)).not.toBeInTheDocument()
+    const howDidYouHearGroup = screen.getByRole("group", {
+      name: "How did you hear about us?",
+    })
+    expect(within(howDidYouHearGroup).getAllByRole("checkbox")).toHaveLength(7)
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.flyer"),
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.emailAlert"),
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.friend"),
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.housingCounselor"),
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.developerWebsite"),
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.jurisdictionWebsite"),
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).queryByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.busAd"),
+      })
+    ).not.toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).queryByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.radioAd"),
+      })
+    ).not.toBeInTheDocument()
+    expect(
+      within(howDidYouHearGroup).getByRole("checkbox", {
+        name: t("application.review.demographics.howDidYouHearOptions.other"),
+      })
+    ).toBeInTheDocument()
   })
 
   it("should expand suboptions when main key is checked", async () => {
@@ -233,7 +305,6 @@ describe("<FormDemographics>", () => {
       options: [
         {
           id: "asian",
-          hasSubOptions: true,
           subOptions: [
             { id: "chinese", allowOtherText: false },
             { id: "vietnamese", allowOtherText: false },
@@ -242,7 +313,6 @@ describe("<FormDemographics>", () => {
         },
         {
           id: "otherMultiracial",
-          hasSubOptions: false,
           subOptions: [],
           allowOtherText: true,
         },
