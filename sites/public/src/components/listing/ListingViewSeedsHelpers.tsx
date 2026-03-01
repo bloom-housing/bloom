@@ -596,7 +596,7 @@ export const getEligibilitySections = (
         <OrderedCardList
           cardContent={sortedPreferences.map((question) => {
             return {
-              heading: question.multiselectQuestions.text,
+              heading: question.multiselectQuestions.name || question.multiselectQuestions.text,
               description: question.multiselectQuestions.description,
             }
           })}
@@ -622,7 +622,8 @@ export const getEligibilitySections = (
               <CardList
                 cardContent={sortedPrograms.map((question) => {
                   return {
-                    heading: question.multiselectQuestions.text,
+                    heading:
+                      question.multiselectQuestions.name || question.multiselectQuestions.text,
                     description: question.multiselectQuestions.description,
                   }
                 })}
