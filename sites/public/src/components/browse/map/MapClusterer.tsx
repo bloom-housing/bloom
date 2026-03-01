@@ -114,6 +114,7 @@ export const MapClusterer = ({
   const mapRef = useRef(map)
   const mapMarkersRef = useRef(mapMarkers)
   const visibleMarkersRef = useRef(visibleMarkers)
+  const hasSeenNonEmptyVisibleMarkersRef = useRef(false)
   const isFirstBoundsLoadRef = useRef(isFirstBoundsLoad)
   const isDesktopRef = useRef(isDesktop)
 
@@ -133,10 +134,26 @@ export const MapClusterer = ({
   // Compute markers currently inside map bounds using the latest map + markers refs
   const getVisibleMarkersInBounds = useCallback(() => {
     const currentMap = mapRef.current
-    if (!currentMap) return []
+    if (!currentMap) return visibleMarkersRef.current ?? []
 
     const bounds = currentMap.getBounds()
     const currentMapMarkers = mapMarkersRef.current
+
+    // On slower connections/renders, bounds can be temporarily undefined while markers already exist
+    // During initial load (or before we've ever set visible markers), treat all fetched
+    // markers as visible until bounds are ready to avoid showing "no results" state prematurely
+    if (!bounds) {
+      if (
+        (isFirstBoundsLoadRef.current || (visibleMarkersRef.current?.length ?? 0) === 0) &&
+        (currentMapMarkers?.length ?? 0) > 0
+      ) {
+        return currentMapMarkers
+      }
+      return visibleMarkersRef.current ?? []
+    }
+
+    if (!currentMapMarkers) return visibleMarkersRef.current ?? []
+
     return currentMapMarkers?.filter((marker) => bounds?.contains(marker.coordinate)) ?? []
   }, [])
 
@@ -151,16 +168,38 @@ export const MapClusterer = ({
 
   const resetVisibleMarkers = useCallback(() => {
     const newVisibleMarkers = getVisibleMarkersInBounds()
+    const currentMapMarkers = mapMarkersRef.current ?? []
+
+    if (newVisibleMarkers.length > 0) {
+      hasSeenNonEmptyVisibleMarkersRef.current = true
+    }
+
     // During first desktop cycle, avoid triggering marker-driven search
     if (isFirstBoundsLoadRef.current && isDesktopRef.current) return
+
+    // On slow first load, fitBounds can complete before map bounds fully settle
+    // If markers exist but the very first computed visible set is empty, skip this
+    // state to avoid false "no visible listings"
+    if (
+      isDesktopRef.current &&
+      !hasSeenNonEmptyVisibleMarkersRef.current &&
+      currentMapMarkers.length > 0 &&
+      newVisibleMarkers.length === 0
+    ) {
+      setIsLoading(false)
+      return
+    }
 
     // When the computed visible set is identical, do not retrigger loading
     const nextSignature = markerSetSignature(newVisibleMarkers)
     const currentSignature = markerSetSignature(visibleMarkersRef.current)
-    if (nextSignature === currentSignature) return
+    if (nextSignature === currentSignature) {
+      setIsLoading(false)
+      return
+    }
 
     setVisibleMarkers(newVisibleMarkers)
-  }, [getVisibleMarkersInBounds, markerSetSignature, setVisibleMarkers])
+  }, [getVisibleMarkersInBounds, markerSetSignature, setIsLoading, setVisibleMarkers])
 
   const debouncedResetVisibleMarkers = useMemo(
     () => debounce(resetVisibleMarkers, 800),
@@ -173,7 +212,6 @@ export const MapClusterer = ({
     // After pan/zoom settles, refresh visible markers
     // First load runs immediately, then later interactions are debounced
     const idleListener = map.addListener("idle", () => {
-      console.log("idle listener")
       if (isFirstBoundsLoad) {
         resetVisibleMarkers()
         return
@@ -223,6 +261,14 @@ export const MapClusterer = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapMarkers, map])
+
+  // Once first fitBounds cycle completes, trigger one reset so desktop listings can
+  // search immediately without requiring an additional drag
+  useEffect(() => {
+    if (!map) return
+    if (isFirstBoundsLoad) return
+    resetVisibleMarkers()
+  }, [isFirstBoundsLoad, map, resetVisibleMarkers])
 
   const fetchInfoWindow = async (listingId: string) => {
     try {
