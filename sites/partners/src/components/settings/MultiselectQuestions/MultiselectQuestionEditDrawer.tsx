@@ -133,6 +133,7 @@ const MultiselectQuestionEditDrawer = ({
       questionData?.multiselectOptions
         ?.sort((a, b) => (a.ordinal < b.ordinal ? -1 : 1))
         .map((item) => ({
+          id: { content: item.name },
           name: { content: item.name },
           description: { content: item.description },
           action: {
