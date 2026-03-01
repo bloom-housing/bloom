@@ -20,12 +20,15 @@ export interface ListingsSearchMetadataProps {
 }
 
 export const ListingsSearchMetadata = ({
+  loading,
   setFilterDrawerOpen,
   filterCount,
   searchResults,
   setListView,
   listView,
 }: ListingsSearchMetadataProps) => {
+  const isInitialLoad = loading && searchResults.currentPage === 0
+
   return (
     <section role="contentinfo" aria-label="Listing filter bar">
       <div className={`${styles["search-filter-bar"]} ${styles["search-switch-container"]}`}>
@@ -69,7 +72,11 @@ export const ListingsSearchMetadata = ({
       <div className={`${styles["search-filter-bar"]}`}>
         <div className={`${styles["total-results"]}`}>
           <span className={`${styles["search-total-results"]}`} data-testid={"map-total-results"}>
-            <strong>{t("search.totalResults")}</strong> {searchResults.totalItems}
+            {!isInitialLoad && (
+              <>
+                <strong>{t("search.totalResults")}</strong> {searchResults.totalItems}
+              </>
+            )}
           </span>
           {searchResults.lastPage > 0 && (
             <span data-testid={"map-pagination"}>
