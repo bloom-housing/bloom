@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect, useContext, useRef } from "react"
 import { useMap } from "@vis.gl/react-google-maps"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
@@ -55,6 +55,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   const [isDesktop, setIsDesktop] = useState(undefined)
   const [isLoading, setIsLoading] = useState(true)
   const [isFirstBoundsLoad, setIsFirstBoundsLoad] = useState<boolean>(true)
+  const hasCompletedInitialListingsCallRef = useRef(false)
 
   const [searchFilter] = useState(
     parseSearchString(props.searchString, {
@@ -104,6 +105,10 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     )
 
     if (visibleMarkers?.length === 0 && !changingFilter) {
+      if (!hasCompletedInitialListingsCallRef.current) {
+        return
+      }
+
       setSearchResults({
         listings: [],
         markers: searchResults.markers,
@@ -153,6 +158,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
         props.jurisdictionIds,
         drawerFilters
       )
+      hasCompletedInitialListingsCallRef.current = true
       newListings = result.items
       newMeta = result.meta
     }
@@ -256,7 +262,6 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
 
   // Re-search when the map's visible markers are changed
   useEffect(() => {
-    console.log("visible markers changed use effect")
     async function searchListings() {
       await search(1)
     }
@@ -274,8 +279,9 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
       setCurrentMarkers(visibleMarkers)
       void searchListings()
     } else {
-      console.log("set loading, to false they are the same")
-      setIsLoading(false)
+      if (hasCompletedInitialListingsCallRef.current) {
+        setIsLoading(false)
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibleMarkers])
@@ -302,7 +308,9 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   }
 
   const onDrawerSubmit = (data: FilterData) => {
-    const backendFilters = encodeFilterDataToBackendFilters(data)
+    const backendFilters = encodeFilterDataToBackendFilters(data).filter(
+      (filter) => filter.name !== ""
+    )
     setFilterState(data)
     setDrawerFilters(backendFilters)
     setFilterCount(backendFilters.length)

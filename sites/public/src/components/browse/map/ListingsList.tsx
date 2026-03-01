@@ -1,11 +1,6 @@
 import * as React from "react"
-import {
-  Jurisdiction,
-  Listing,
-  ListingMapMarker,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Listing, ListingMapMarker } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
-// import { ZeroListingsItem } from "@bloom-housing/doorway-ui-components"
 import { LoadingOverlay, t, InfoCard } from "@bloom-housing/ui-components"
 import { getMapListings } from "../../../lib/helpers"
 import { Pagination } from "./Pagination"
@@ -28,20 +23,35 @@ const ListingsList = (props: ListingsListProps) => {
       <Heading className={"sr-only"} priority={2}>
         {t("t.listingsList")}
       </Heading>
-      {props.listings.length > 0 || props.loading ? (
-        <div className={styles["listings-list-container"]}>{getMapListings(props.listings)}</div>
-      ) : (
-        // Map TODO: Create zero listings component
-        // <ZeroListingsItem
-        //   title={moreMarkersOnMap ? t("t.noVisibleListings") : t("t.noMatchingListings")}
-        //   description={moreMarkersOnMap ? t("t.tryChangingArea") : t("t.tryRemovingFilters")}
-        // />
-        <>{moreMarkersOnMap ? t("t.noVisibleListings") : t("t.noMatchingListings")}</>
-      )}
+      <div
+        className={`${styles["listings-list-container"]} ${
+          props.listings.length === 0 && styles["listings-list-container-empty"]
+        }`}
+      >
+        {props.listings.length > 0 || props.loading ? (
+          getMapListings(props.listings)
+        ) : (
+          <>
+            {moreMarkersOnMap ? (
+              <>
+                <Heading priority={2} size={"xl"}>
+                  {t("t.noVisibleListings")}
+                </Heading>
+                <div>{t("t.tryChangingArea")}</div>
+              </>
+            ) : (
+              <>
+                <Heading priority={2} size={"xl"}>
+                  {t("t.noMatchingListings")}
+                </Heading>
+                <div>{t("t.tryRemovingFilters")}</div>
+              </>
+            )}
+          </>
+        )}
+      </div>
     </div>
   )
-
-  console.log(props.loading)
 
   const infoCards = (
     <div className={styles["info-cards-container"]}>
