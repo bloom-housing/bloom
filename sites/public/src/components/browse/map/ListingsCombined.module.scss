@@ -105,13 +105,12 @@
      CSS module renaming and use these exact class names */
   [class*="loading-overlay"] {
     padding: 0;
-    min-height: var(--seeds-s40);
-    margin-bottom: var(--seeds-s4);
+    min-height: var(--seeds-s32);
     z-index: 1;
   }
 
   [class*="loading-overlay__spinner"] {
-    top: var(--seeds-s20);
+    top: var(--seeds-s16);
     color: var(--seeds-color-primary);
   }
 }
@@ -138,6 +137,10 @@
 
 .listings-list-container {
   border-bottom: 1px solid var(--seeds-color-gray-450);
-  margin-bottom: var(--seeds-s4);
   padding: var(--seeds-s4);
+}
+
+.listings-list-container-empty {
+  border-bottom: 0;
+  min-height: var(--seeds-s32);
 }
