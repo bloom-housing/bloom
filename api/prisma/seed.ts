@@ -47,6 +47,11 @@ async function main() {
       // be partially randomized so we cover all bases
       devSeeding(prisma, jurisdictionName as string);
       break;
+    case 'staging-large':
+      // Staging setup should have a large amount of realistic looking data
+      // along with all of the required tables (ami, users, etc)
+      stagingSeed(prisma, jurisdictionName as string, undefined, false, true);
+      break;
   }
 }
 main()

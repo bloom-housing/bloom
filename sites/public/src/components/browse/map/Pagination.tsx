@@ -1,14 +1,7 @@
 import React from "react"
-// import {
-//   AppearanceSizeType,
-//   Button,
-//   ButtonGroup,
-//   ButtonGroupSpacing,
-// } from "@bloom-housing/doorway-ui-components"
-import { t, AppearanceStyleType, Button, AppearanceSizeType } from "@bloom-housing/ui-components"
-import { Icon } from "@bloom-housing/ui-seeds"
-import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
-import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
+import { t } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
+import styles from "./Pagination.module.scss"
 
 type PaginationProps = {
   currentPage: number
@@ -17,60 +10,89 @@ type PaginationProps = {
 }
 
 export function Pagination(props: PaginationProps) {
-  // Max number of numbered page buttons to show
-  const maxPageCount = 4
-  // The number of pages we're actually going to show based on the number available
-  const pagesToShow = Math.min(maxPageCount, props.lastPage)
-
-  // Find the midpoint
-  const middle = Math.floor(pagesToShow / 2)
-
-  const pagesBefore = Math.max(
-    // See how close we are to the beginning
-    Math.min(
-      // Are we closer to the first page?
-      props.currentPage - 1,
-      // Or the middle?
-      middle
-    ),
-    // Now see how close we are to the end
-    props.currentPage - props.lastPage + pagesToShow - 1,
-
-    // No negative values
-    0
-  )
-
-  // Whatever isn't on the left is on the right, except for the current page
-  const pagesAfter = pagesToShow - pagesBefore - 1
-
-  const firstPageToShow = props.currentPage - pagesBefore
-  const lastPageToShow = props.currentPage + pagesAfter
-
   const canNavBackward = props.currentPage > 1
   const canNavForward = props.currentPage < props.lastPage
   const pageButtons = []
 
-  for (let i = firstPageToShow; i <= lastPageToShow; i++) {
-    const isCurrent = i == props.currentPage
+  const siblingCount = 1
 
-    // only set an onclick handler if not the current page
-    const onClick = isCurrent ? null : () => setPage(i)
-    const styleType = isCurrent ? AppearanceStyleType.primary : null
+  // Keep pagination focus in the listings pane by scrolling the list containers,
+  // with a window fallback for layouts where those containers are not present
+  const scrollListingsToTop = () => {
+    const scrollTargets = [
+      document.getElementById("listings-list-expanded"),
+      document.getElementById("listings-list"),
+      document.getElementById("listings-outer-container"),
+    ]
 
-    pageButtons.push(
+    let didScroll = false
+    scrollTargets.forEach((target) => {
+      if (!target) return
+      target.scrollTo({ top: 0 })
+      didScroll = true
+    })
+
+    if (!didScroll) {
+      window.scrollTo({ top: 0 })
+    }
+  }
+
+  const setPage = (page: number) => {
+    scrollListingsToTop()
+    props.onPageChange(page)
+  }
+
+  const renderPageButton = (pageNumber: number) => {
+    const isCurrent = pageNumber === props.currentPage
+    return (
       <Button
-        styleType={styleType}
-        onClick={onClick}
-        size={AppearanceSizeType.small}
-        id={`pagination-${i}`}
+        key={`pagination-${pageNumber}`}
+        variant={isCurrent ? "primary" : "primary-outlined"}
+        onClick={isCurrent ? undefined : () => setPage(pageNumber)}
+        id={`pagination-${pageNumber}`}
+        size={"sm"}
+        className={styles["circle-button"]}
+        aria-current={isCurrent ? "page" : undefined}
+        ariaLabel={isCurrent ? `Current page, ${pageNumber}` : `Go to page ${pageNumber}`}
       >
-        {i}
+        {pageNumber}
       </Button>
     )
   }
 
-  const setPage = (page: number) => {
-    props.onPageChange(page)
+  const shouldShowSimplePagination = props.lastPage <= 7
+
+  if (shouldShowSimplePagination) {
+    for (let page = 1; page <= props.lastPage; page++) {
+      pageButtons.push(renderPageButton(page))
+    }
+  } else {
+    const windowStart = Math.max(2, props.currentPage - siblingCount)
+    const windowEnd = Math.min(props.lastPage - 1, props.currentPage + siblingCount)
+
+    pageButtons.push(renderPageButton(1))
+
+    if (windowStart > 2) {
+      pageButtons.push(
+        <span key="pagination-ellipsis-left" aria-hidden="true" className="px-1">
+          ...
+        </span>
+      )
+    }
+
+    for (let page = windowStart; page <= windowEnd; page++) {
+      pageButtons.push(renderPageButton(page))
+    }
+
+    if (windowEnd < props.lastPage - 1) {
+      pageButtons.push(
+        <span key="pagination-ellipsis-right" aria-hidden="true" className="px-1">
+          ...
+        </span>
+      )
+    }
+
+    pageButtons.push(renderPageButton(props.lastPage))
   }
 
   if (props.lastPage === 1) return <></>
@@ -80,14 +102,15 @@ export function Pagination(props: PaginationProps) {
   if (canNavBackward) {
     buttonColumns.push(
       <Button
+        key="pagination-prev"
         disabled={!canNavBackward}
         onClick={() => setPage(props.currentPage - 1)}
         ariaLabel={t("t.previous")}
-        size={AppearanceSizeType.small}
+        size={"sm"}
+        className={styles["circle-button"]}
+        variant={"primary-outlined"}
       >
-        <Icon size="md" className="-m-1">
-          <ChevronLeftIcon />
-        </Icon>
+        {"<"}
       </Button>
     )
   }
@@ -97,31 +120,22 @@ export function Pagination(props: PaginationProps) {
   if (canNavForward) {
     buttonColumns.push(
       <Button
+        key="pagination-next"
         disabled={!canNavForward}
         onClick={() => setPage(props.currentPage + 1)}
         ariaLabel={t("t.next")}
-        size={AppearanceSizeType.small}
+        size={"sm"}
+        variant={"primary-outlined"}
+        className={styles["circle-button"]}
       >
-        <Icon size="md" className="-m-1">
-          <ChevronRightIcon />
-        </Icon>
+        {">"}
       </Button>
     )
   }
 
-  console.log("end pagination")
-
   return (
-    <section aria-label={"Listings list pagination"}>
-      {/* Map TODO: Rewrite pagination */}
-      Pagination goes here
-      {/* <ButtonGroup
-        spacing={ButtonGroupSpacing.even}
-        pagination={true}
-        columns={buttonColumns}
-        className={"pagination-button-group"}
-      /> */}
-      <></>
-    </section>
+    <nav aria-label={"Listings list pagination"} className={styles["pagination-container"]}>
+      {buttonColumns}
+    </nav>
   )
 }
