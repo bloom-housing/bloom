@@ -2181,6 +2181,16 @@ view ApplicationFlaggedSetPossibilities {
   @@map("application_flagged_set_possibilities")
 }
 
+view MapMarkers {
+  id         String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  status     String
+  latitude   String?
+  longitude  String?
+  isExternal Boolean? @map("is_external")
+
+  @@map("map_marker")
+}
+
 // --- Enum Section --- //
 enum ApplicationAddressTypeEnum {
   leasingAgent

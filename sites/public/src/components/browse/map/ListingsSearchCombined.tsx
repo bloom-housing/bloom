@@ -13,14 +13,16 @@ import { ListingsCombined } from "./ListingsCombined"
 import { FormOption, ListingsSearchModal } from "./ListingsSearchModal"
 import { MapMarkerData } from "./ListingsMap"
 import { searchListings, searchMapMarkers } from "../../../lib/hooks"
+import { ListingViews } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type ListingsSearchCombinedProps = {
   searchString?: string
+  jurisdictionIds?: string[]
   googleMapsApiKey: string
   googleMapsMapId: string
   bedrooms: FormOption[]
   bathrooms: FormOption[]
-  counties: FormOption[]
+  jurisdictions: FormOption[]
 }
 
 /**
@@ -48,7 +50,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
       minRent: "",
       monthlyRent: "",
       propertyName: "",
-      counties: props.counties.map((county) => county.label),
+      jurisdictions: props.jurisdictions.map((county) => county.label),
       availability: null,
       ids: undefined,
     })
@@ -79,6 +81,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   const map = useMap()
 
   const search = async (page: number, changingFilter?: boolean) => {
+    console.log("in search!!!")
     // If a user pans over empty space, reset the listings to empty instead of refetching
     if (isDesktop === undefined) return
     const oldMarkersSearch = JSON.stringify(
@@ -132,7 +135,9 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
         isDesktop ? listingIdsOnlyQb : genericQb,
         pageSize,
         page,
-        listingsService
+        listingsService,
+        ListingViews.map,
+        props.jurisdictionIds
       )
       newListings = result.items
       newMeta = result.meta
@@ -142,7 +147,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     // Only search the markers if the filter is changing
     // Don't search markers again if the first fetch of markers is still loading inside the map (race condition)
     if (changingFilter && !(isFirstBoundsLoad && isDesktop && searchResults.markers.length)) {
-      newMarkers = await searchMapMarkers(genericQb, listingsService)
+      newMarkers = await searchMapMarkers(genericQb, listingsService, props.jurisdictionIds)
       // If the filter from the homepage has zero results, don't fetch the listings
       if (isFirstBoundsLoad && newMarkers.length === 0) {
         newListings = []
@@ -282,7 +287,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
         searchString={props.searchString}
         bedrooms={props.bedrooms}
         bathrooms={props.bathrooms}
-        counties={props.counties}
+        jurisdictions={props.jurisdictions}
         onSubmit={onFormSubmit}
         onClose={onModalClose}
         onFilterChange={updateFilterCount}
