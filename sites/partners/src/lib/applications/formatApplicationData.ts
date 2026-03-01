@@ -261,13 +261,13 @@ export const mapFormToApi = ({
     householdMember: householdMembers,
     householdSize,
     accessibleUnitWaitlistNumber: accessibleUnitWaitlistNumber
-      ? Number(accessibleUnitWaitlistNumber)
+      ? accessibleUnitWaitlistNumber.toString()
       : null,
     conventionalUnitWaitlistNumber: conventionalUnitWaitlistNumber
-      ? Number(conventionalUnitWaitlistNumber)
+      ? conventionalUnitWaitlistNumber.toString()
       : null,
     manualLotteryPositionNumber: manualLotteryPositionNumber
-      ? Number(manualLotteryPositionNumber)
+      ? manualLotteryPositionNumber.toString()
       : null,
   }
 

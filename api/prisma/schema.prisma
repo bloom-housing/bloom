@@ -376,7 +376,7 @@ model Applications {
 
   acceptedTerms                  Boolean?                      @map("accepted_terms")
   accessibilityId                String?                       @unique() @map("accessibility_id") @db.Uuid
-  accessibleUnitWaitlistNumber   Int?                          @map("accessible_unit_waitlist_number")
+  accessibleUnitWaitlistNumber   String?                       @map("accessible_unit_waitlist_number")
   additionalPhone                Boolean?                      @map("additional_phone")
   additionalPhoneNumber          String?                       @map("additional_phone_number")
   additionalPhoneNumberType      String?                       @map("additional_phone_number_type")
@@ -386,7 +386,7 @@ model Applications {
   appUrl                         String?                       @map("app_url")
   confirmationCode               String                        @map("confirmation_code")
   contactPreferences             String[]                      @map("contact_preferences")
-  conventionalUnitWaitlistNumber Int?                          @map("conventional_unit_waitlist_number")
+  conventionalUnitWaitlistNumber String?                       @map("conventional_unit_waitlist_number")
   deletedAt                      DateTime?                     @map("deleted_at") @db.Timestamp(6)
   demographicsId                 String?                       @unique() @map("demographics_id") @db.Uuid
   // Signifies when PII data should be cleared
@@ -403,7 +403,7 @@ model Applications {
   language                       LanguagesEnum?
   listingId                      String?                       @map("listing_id") @db.Uuid
   mailingAddressId               String?                       @unique() @map("mailing_address_id") @db.Uuid
-  manualLotteryPositionNumber    Int?                          @map("manual_lottery_position_number")
+  manualLotteryPositionNumber    String?                       @map("manual_lottery_position_number")
   // if this field is true then the application is a confirmed duplicate 
   // meaning that the record in the application flagged set table has a status of duplicate
   markedAsDuplicate              Boolean                       @default(false) @map("marked_as_duplicate")
