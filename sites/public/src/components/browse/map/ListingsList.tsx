@@ -41,6 +41,8 @@ const ListingsList = (props: ListingsListProps) => {
     </div>
   )
 
+  console.log(props.loading)
+
   const infoCards = (
     <div className={styles["info-cards-container"]}>
       {process.env.notificationsSignUpUrl && (
