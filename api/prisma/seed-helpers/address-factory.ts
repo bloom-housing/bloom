@@ -1913,7 +1913,7 @@ export const stagingRealisticAddresses = [
     county: 'San Mateo',
   },
   {
-    street: '1927 BRIDGEPOINTE CIRCLE',
+    street: '1927 Bridgepointe Circle',
     city: 'San Mateo',
     state: 'CA',
     zipCode: '94404',

@@ -255,7 +255,6 @@ export class ListingService implements OnModuleInit {
     };
   }> {
     const whereClause = this.buildWhereClause(params.filter, params.search);
-    console.log('whereClause', whereClause);
     const count = await this.prisma.listings.count({
       where: whereClause,
     });
@@ -292,8 +291,6 @@ export class ListingService implements OnModuleInit {
       params.view === ListingViews.map
         ? (listingsRaw as unknown as Listing[])
         : mapTo(Listing, listingsRaw);
-
-    console.log({ listings });
 
     listings.forEach((listing) => {
       if (Array.isArray(listing.units) && listing.units.length > 0) {

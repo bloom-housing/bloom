@@ -65,7 +65,9 @@ export const ListingsSearchMetadata = ({
               </Icon>
             }
           >
-            <strong>{t("search.filters")}</strong> {filterCount}
+            <strong>
+              {t("search.filters")} {filterCount}
+            </strong>
           </Button>
         </>
       </div>
@@ -98,7 +100,8 @@ export const ListingsSearchMetadata = ({
           }}
           id={"listings-map-filter-button"}
         >
-          <strong>{t("search.filters")}</strong> {filterCount}
+          <strong>{t("search.filters")}</strong>{" "}
+          <span className={styles["filter-count"]}>{filterCount}</span>
         </Button>
       </div>
     </section>

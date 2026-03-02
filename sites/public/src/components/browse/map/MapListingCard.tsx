@@ -19,11 +19,21 @@ import styles from "./MapListingCard.module.scss"
 
 export interface MapListingCardProps {
   listing: Listing
+  index: number
   jurisdiction: Jurisdiction
   showHomeType?: boolean
+  forceMobileView?: boolean
+  onClose?: () => void
 }
 
-export const MapListingCard = ({ listing, jurisdiction, showHomeType }: MapListingCardProps) => {
+export const MapListingCard = ({
+  listing,
+  jurisdiction,
+  showHomeType,
+  index,
+  forceMobileView,
+  onClose,
+}: MapListingCardProps) => {
   const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
 
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
@@ -47,6 +57,7 @@ export const MapListingCard = ({ listing, jurisdiction, showHomeType }: MapListi
     if (enableUnitGroups && listing.unitGroups?.length > 0) {
       return (
         <StackedTable
+          className={forceMobileView ? "force-mobile-responsive" : undefined}
           headers={{
             unitType: "t.unitType",
             rent: "t.rent",
@@ -62,9 +73,9 @@ export const MapListingCard = ({ listing, jurisdiction, showHomeType }: MapListi
     } else {
       return (
         <StackedTable
+          className={forceMobileView ? "force-mobile-responsive" : undefined}
           headers={{
             unitType: "t.unitType",
-            minimumIncome: "t.minimumIncome",
             rent: "t.rent",
           }}
           stackedData={getListingStackedTableData(listing.unitsSummarized)}
@@ -79,10 +90,14 @@ export const MapListingCard = ({ listing, jurisdiction, showHomeType }: MapListi
     listing.unitGroupsSummarized,
     listing.unitsSummarized,
     enableUnitGroups,
+    forceMobileView,
   ])
 
   return (
-    <li className={styles["list-item"]}>
+    <li
+      className={`${styles["list-item"]} ${forceMobileView ? styles["force-mobile-view"] : ""}`}
+      key={index}
+    >
       <ClickableCard className={styles["listing-card-container"]}>
         <Card.Section>
           <div className={styles["listing-card-content"]}>
@@ -114,11 +129,6 @@ export const MapListingCard = ({ listing, jurisdiction, showHomeType }: MapListi
                   })}
                 </div>
               )}
-              {/* {!!status?.content && (
-                <div className={"seeds-m-bs-3"}>
-                  {getListingStatusMessage(listing, jurisdiction, null, true)}
-                </div>
-              )} */}
               <div className={`${styles["unit-table"]} styled-stacked-table`}>
                 {unitsPreviewTable}
               </div>
@@ -127,6 +137,20 @@ export const MapListingCard = ({ listing, jurisdiction, showHomeType }: MapListi
               )}
             </div>
             <div className={styles["image"]}>
+              {forceMobileView && onClose && (
+                <button
+                  type="button"
+                  className={styles["close-button"]}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    event.stopPropagation()
+                    onClose()
+                  }}
+                  aria-label={t("t.close")}
+                >
+                  ×
+                </button>
+              )}
               <div
                 className={styles["image-background"]}
                 style={{ backgroundImage: `url(${imageUrl})` }}
