@@ -1,6 +1,5 @@
 .listings-combined {
   width: 100vw;
-  // Map TODO: Figure out how to make this dynamic based on the viewport height and the height of the search bar and pagination components
   height: var(--listings-component-height);
   display: flex;
   flex-direction: column;

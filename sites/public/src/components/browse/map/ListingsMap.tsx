@@ -1,13 +1,13 @@
-import React, { CSSProperties, useState } from "react"
+import React, { useState } from "react"
 import { Map } from "@vis.gl/react-google-maps"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
+import { ListingMapMarker } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ListingSearchParams } from "../../../lib/listings/search"
 import { MapControl } from "./MapControl"
 import { MapClusterer } from "./MapClusterer"
-import styles from "./ListingsCombined.module.scss"
-import { ListingSearchParams } from "../../../lib/listings/search"
 import { MapRecenter } from "./MapRecenter"
-import { ListingMapMarker } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import styles from "./ListingsCombined.module.scss"
 
 const defaultCenter = {
   lat: 37.579795,
