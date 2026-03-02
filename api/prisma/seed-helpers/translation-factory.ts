@@ -241,6 +241,22 @@ const translations = (
           'This is a courtesy email to let you know that because your Bloom Housing Portal account has been inactive for 3 years, your account will be deleted in 30 days per our Terms of Use and Privacy Policy. If you’d like to keep your account, please log in sometime in the next month and we’ll consider your account active again.',
         signIn: 'Sign in to Bloom Housing',
       },
+      advocateApproved: {
+        hello: 'Hello',
+        approvalMessage: 'Your account at %{appUrl} has been approved.',
+        approvalInfo:
+          'It will now be easier for you to start, save, and submit online applications on behalf of housing applicants for listings that appear on the site.',
+        completeMessage:
+          'To complete your account creation, please click the link below:',
+        createAccount: 'Create my account',
+      },
+      advocateRejected: {
+        hello: 'Hello',
+        rejectionMessage: 'Your account at %{appUrl} has been rejected.',
+        rejectionInfo:
+          'Please contact administration for further information',
+        completeMessage: 'To complete your rejection please go cry about it',
+      },
     };
   } else if (language === LanguagesEnum.es) {
     return {
