@@ -11,6 +11,7 @@ import {
   ListingsStatusEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
+import { randomInt } from 'crypto';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import { listingFactory } from './seed-helpers/listing-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
@@ -43,7 +44,6 @@ import { lakeviewVilla } from './seed-helpers/listing-data/lakeview-villa';
 import { sunshineFlats } from './seed-helpers/listing-data/sunshine-flats';
 import { agencyFactory } from './seed-helpers/agency-factory';
 import { stagingRealisticAddresses } from './seed-helpers/address-factory';
-import { randomInt } from 'crypto';
 
 export const defaultRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
   options: [
@@ -1522,7 +1522,7 @@ export const stagingSeed = async (
         prismaClient,
         {
           amiChart: amiChart,
-          // most listings are under 10 units but there are some that get up to 175. This simulates that spread
+          // simulates a wide spread of listing sizes, but with a bias towards smaller listings since those are more common in real life
           numberOfUnits:
             Math.random() < 0.9 ? randomInt(1, 10) : randomInt(10, 200),
           digitalApp: !!(index % 2),
