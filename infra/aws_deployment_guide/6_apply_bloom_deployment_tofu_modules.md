@@ -235,6 +235,39 @@ graph TB
    ]
    ```
 
+6. Set the API key secret values:
+
+   The `tofu apply` command from step 3 will output `api_key_secret_arns` containing the ARNs of
+   the API key secrets that were created in AWS Secrets Manager. The secret values must be manually
+   set via the AWS console.
+
+   ```
+   Outputs:
+
+   api_key_secret_arns = {
+     "google_translate" = "arn:aws:secretsmanager:us-west-2:123456789012:secret:bloom_google_translate_api_key-AbCdEf"
+     "mapbox" = "arn:aws:secretsmanager:us-west-2:123456789012:secret:bloom_mapbox_api_key-AbCdEf"
+   }
+   ```
+
+   For each secret:
+
+   1. Log in to the bloom-dev AWS account and go to the 'Secrets Manager > Secrets' page.
+   2. Click on the secret name (e.g. `bloom_mapbox_api_key-AbCdEf`).
+   3. In the 'Secret value' section, click 'Retrieve secret value' then 'Set secret value'.
+   4. Select 'Plaintext' and enter the API key value.
+   5. Click 'Save'.
+
+   The following secrets need to be set:
+
+   - **Mapbox** (`bloom_mapbox_api_key`): A Mapbox access token. Used by the public and partners
+     sites to render maps. Obtain a token from https://account.mapbox.com/access-tokens/.
+   - **Google Translate** (`bloom_google_translate_api_key`): A Google Cloud API key for the
+     Google Translate API. Used by the API service. Obtain a key from the Google Cloud console
+     under 'APIs & Services > Credentials'.
+
+   The ECS tasks will read the secret values on next deployment or task restart.
+
 ### 2. Deploy prod
 
 1. Create the AWS managed certificate for your domain:
@@ -364,6 +397,39 @@ graph TB
      },
    ]
    ```
+
+6. Set the API key secret values:
+
+   The `tofu apply` command from step 3 will output `api_key_secret_arns` containing the ARNs of
+   the API key secrets that were created in AWS Secrets Manager. The secret values must be manually
+   set via the AWS console.
+
+   ```
+   Outputs:
+
+   api_key_secret_arns = {
+     "google_translate" = "arn:aws:secretsmanager:us-west-2:123456789012:secret:bloom_google_translate_api_key-AbCdEf"
+     "mapbox" = "arn:aws:secretsmanager:us-west-2:123456789012:secret:bloom_mapbox_api_key-AbCdEf"
+   }
+   ```
+
+   For each secret:
+
+   1. Log in to the bloom-prod AWS account and go to the 'Secrets Manager > Secrets' page.
+   2. Click on the secret name (e.g. `bloom_mapbox_api_key-AbCdEf`).
+   3. In the 'Secret value' section, click 'Retrieve secret value' then 'Set secret value'.
+   4. Select 'Plaintext' and enter the API key value.
+   5. Click 'Save'.
+
+   The following secrets need to be set:
+
+   - **Mapbox** (`bloom_mapbox_api_key`): A Mapbox access token. Used by the public and partners
+     sites to render maps. Obtain a token from https://account.mapbox.com/access-tokens/.
+   - **Google Translate** (`bloom_google_translate_api_key`): A Google Cloud API key for the
+     Google Translate API. Used by the API service. Obtain a key from the Google Cloud console
+     under 'APIs & Services > Credentials'.
+
+   The ECS tasks will read the secret values on next deployment or task restart.
 
 ### 3. (Optional) Create a VPC peering connection to an existing VPC
 
