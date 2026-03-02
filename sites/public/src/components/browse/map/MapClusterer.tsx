@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, useContext } from "react"
+import debounce from "lodash/debounce"
 import { InfoWindow, useMap } from "@vis.gl/react-google-maps"
 import { MarkerClusterer, SuperClusterAlgorithm } from "@googlemaps/markerclusterer"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import debounce from "lodash/debounce"
-import { MapMarkerData } from "./ListingsMap"
-import { MapMarker } from "./MapMarker"
-import styles from "./ListingsCombined.module.scss"
 import { Jurisdiction, ListingViews } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { getBoundsZoomLevel } from "../../../lib/helpers"
 import { ListingSearchParams } from "../../../lib/listings/search"
+import { MapMarkerData } from "./ListingsMap"
+import { MapMarker } from "./MapMarker"
 import { MapListingCard } from "./MapListingCard"
+import styles from "./ListingsCombined.module.scss"
 
 export type ListingsMapMarkersProps = {
   mapMarkers: MapMarkerData[] | null

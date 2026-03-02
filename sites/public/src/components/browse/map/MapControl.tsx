@@ -3,8 +3,8 @@ import { useMap } from "@vis.gl/react-google-maps"
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon"
 import MinusIcon from "@heroicons/react/24/solid/MinusIcon"
 import { Icon } from "@bloom-housing/ui-seeds"
-import styles from "./MapControl.module.scss"
 import { t } from "@bloom-housing/ui-components"
+import styles from "./MapControl.module.scss"
 
 type MapControlProps = {
   setInfoWindowIndex?: React.Dispatch<React.SetStateAction<number>>

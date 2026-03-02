@@ -2,11 +2,11 @@ import React from "react"
 import { useJsApiLoader } from "@react-google-maps/api"
 import { Listing, ListingMapMarker } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import CustomSiteFooter from "../../shared/CustomSiteFooter"
+import { ListingSearchParams } from "../../../lib/listings/search"
+import { ListingsSearchMetadata } from "./ListingsSearchMetadata"
 import { ListingsMap, MapMarkerData } from "./ListingsMap"
 import { ListingsList } from "./ListingsList"
 import styles from "./ListingsCombined.module.scss"
-import { ListingsSearchMetadata } from "./ListingsSearchMetadata"
-import { ListingSearchParams } from "../../../lib/listings/search"
 
 type ListingsCombinedProps = {
   markers: ListingMapMarker[] | null
