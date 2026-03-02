@@ -7,6 +7,11 @@ export class SnapshotCreateService {
   constructor(private prisma: PrismaService) {}
 
   async createUserSnapshot(userId: string): Promise<SuccessDTO> {
+    if (!!process.env.SKIP_SNAPSHOTS) {
+      return {
+        success: true,
+      };
+    }
     // grab current user account data
     const currData = await this.prisma.userAccounts.findUnique({
       where: {
@@ -158,6 +163,12 @@ export class SnapshotCreateService {
   }
 
   async createListingSnapshot(listingId: string): Promise<SuccessDTO> {
+    if (!!process.env.SKIP_SNAPSHOTS) {
+      return {
+        success: true,
+      };
+    }
+
     // grab current listing data
     const currData = await this.prisma.listings.findUnique({
       where: {
