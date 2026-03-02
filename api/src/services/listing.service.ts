@@ -325,8 +325,6 @@ export class ListingService implements OnModuleInit {
         ? (listingsRaw as unknown as Listing[])
         : mapTo(Listing, listingsRaw);
 
-    console.log({ listings });
-
     listings.forEach((listing) => {
       if (Array.isArray(listing.units) && listing.units.length > 0) {
         listing.unitsSummarized = {

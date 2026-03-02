@@ -69,6 +69,39 @@
       th {
         font-size: var(--seeds-type-caption-size);
       }
+
+      &.force-mobile-responsive {
+        thead {
+          display: none;
+        }
+
+        tr {
+          display: block;
+          margin-bottom: 0;
+        }
+
+        td {
+          border: 0;
+          display: flex;
+          text-align: right;
+          padding: var(--seeds-s2);
+        }
+
+        td::before {
+          content: attr(data-label);
+          text-align: left;
+          width: 100%;
+          text-transform: uppercase;
+          font-weight: var(--seeds-font-weight-semibold);
+        }
+
+        .stacked-table-cell-container {
+          text-align: right;
+          padding-left: var(--seeds-s2);
+          padding-right: 0;
+          width: 100%;
+        }
+      }
     }
   }
 
@@ -299,4 +332,31 @@
       font-size: var(--seeds-font-size-lg);
     }
   }
+}
+
+// Until we are able to write our own InfoWindow component, we need to override the default Google Maps styles to get the result we want and maximize screen space in the dialog. These overrides are based on the styles that Google Maps applies by default.
+.gm-style .gm-style-iw-c {
+  padding: 0 !important;
+}
+
+.gm-style .gm-style-iw-d {
+  padding: 0 !important;
+  overflow: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.gm-style .gm-style-iw-d::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.gm-style .gm-style-iw-d > div {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.gm-style .gm-ui-hover-effect {
+  top: 0 !important;
+  right: 0 !important;
 }

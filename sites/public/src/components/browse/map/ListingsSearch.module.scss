@@ -1,14 +1,12 @@
 .listings-vars {
-  // This is a not-ideal way to do "fill window minus header and filter modal" however
-  // I can't find another way to do this.
-  // TODO: update header + filter modal to a not-magic number
+  // These are re-calcuated dynamically in ListingsSearch.tsx and used in ListingsCombined, but defining them here allows us to use them in our media queries and give a default value before the component mounts
   --desktop-header-offset: 169px;
   --mobile-header-offset: 126px;
   --listings-component-height: calc(100dvh - var(--desktop-header-offset));
   --listings-component-height-mobile: calc(100dvh - var(--mobile-header-offset));
 
   --listings-component-half-height: calc(var(--listings-component-height) / 2);
-  --listings-list-width: 680px;
+  --listings-list-width: 600px;
   --listings-list-overscroll: calc(var(--seeds-s14) + var(--seeds-s1));
   --swipe-area-height: var(--seeds-s14);
   --background-color: var(--seeds-bg-color-surface);
@@ -118,4 +116,8 @@
     }
     display: block;
   }
+}
+
+.filter-count {
+  font-weight: var(--seeds-font-weight-semibold);
 }

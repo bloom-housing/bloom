@@ -34,14 +34,14 @@ const ListingsList = (props: ListingsListProps) => {
           <>
             {moreMarkersOnMap ? (
               <>
-                <Heading priority={2} size={"xl"}>
+                <Heading priority={2} size={"xl"} className={"seeds-m-be-header"}>
                   {t("t.noVisibleListings")}
                 </Heading>
                 <div>{t("t.tryChangingArea")}</div>
               </>
             ) : (
               <>
-                <Heading priority={2} size={"xl"}>
+                <Heading priority={2} size={"xl"} className={"seeds-m-be-header"}>
                   {t("t.noMatchingListings")}
                 </Heading>
                 <div>{t("t.tryRemovingFilters")}</div>
