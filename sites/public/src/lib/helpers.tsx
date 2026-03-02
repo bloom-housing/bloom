@@ -38,9 +38,9 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import { Icon, Message } from "@bloom-housing/ui-seeds"
-import styles from "./helpers.module.scss"
 import { ApplicationFormConfig } from "./applications/configInterfaces"
 import { MapListingCard } from "../components/browse/map/MapListingCard"
+import styles from "./helpers.module.scss"
 
 export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
@@ -424,7 +424,7 @@ export const getMapListings = (listings: Listing[]) => {
         return (
           <MapListingCard
             listing={listing}
-            key={index}
+            index={index}
             jurisdiction={listing.jurisdictions as Jurisdiction}
           />
         )
