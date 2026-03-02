@@ -52,7 +52,6 @@ export const ListingMap = (props: ListingBrowseProps) => {
     ? router.query.search[0]
     : router.query.search
 
-  // override the search value if present in url
   if (searchParam) {
     searchString = searchParam
   }
@@ -70,6 +69,7 @@ export const ListingMap = (props: ListingBrowseProps) => {
     multiselectData: props.multiselectData,
     regions: props.jurisdiction?.regions,
     listingFeaturesConfiguration: props.jurisdiction?.listingFeaturesConfiguration,
+    // Map TODO: Dynamic jurisdictions
     jurisdictions: [{ label: props.jurisdiction.name, value: props.jurisdiction.id }],
   }
 
