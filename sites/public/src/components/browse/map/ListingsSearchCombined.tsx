@@ -3,7 +3,6 @@ import { useMap } from "@vis.gl/react-google-maps"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import {
-  FormOption,
   ListingSearchParams,
   generateSearchQuery,
   parseSearchString,
