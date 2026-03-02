@@ -3,10 +3,10 @@ import { Map } from "@vis.gl/react-google-maps"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import { ListingMapMarker } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { ListingSearchParams } from "../../../lib/listings/search"
 import { MapControl } from "./MapControl"
 import { MapClusterer } from "./MapClusterer"
 import { MapRecenter } from "./MapRecenter"
+import { useListingsMapContext } from "./ListingsMapContext"
 import styles from "./ListingsCombined.module.scss"
 
 const defaultCenter = {
@@ -16,19 +16,7 @@ const defaultCenter = {
 const defaultZoom = 5
 
 type ListingsMapProps = {
-  listings?: ListingMapMarker[] | null
-  googleMapsApiKey: string
-  googleMapsMapId: string
   desktopMinWidth?: number
-  isMapExpanded: boolean
-  setVisibleMarkers: React.Dispatch<React.SetStateAction<MapMarkerData[]>>
-  visibleMarkers: MapMarkerData[]
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
-  searchFilter: ListingSearchParams
-  isFirstBoundsLoad: boolean
-  setIsFirstBoundsLoad: React.Dispatch<React.SetStateAction<boolean>>
-  isDesktop: boolean
-  isLoading: boolean
 }
 
 export type MapMarkerData = {
@@ -60,10 +48,23 @@ const getMarkers = (listings: ListingMapMarker[]) => {
   return markers
 }
 
-const ListingsMap = (props: ListingsMapProps) => {
+const ListingsMap = (_props: ListingsMapProps) => {
+  const {
+    searchResults,
+    googleMapsMapId,
+    visibleMarkers,
+    setVisibleMarkers,
+    setIsLoading,
+    searchFilter,
+    isFirstBoundsLoad,
+    setIsFirstBoundsLoad,
+    isDesktop,
+    isLoading,
+  } = useListingsMapContext()
+
   const [infoWindowIndex, setInfoWindowIndex] = useState<number>(null)
 
-  const markers: MapMarkerData[] | null = getMarkers(props.listings)
+  const markers: MapMarkerData[] | null = getMarkers(searchResults.markers)
 
   return (
     <div id={"listings-map"} className={styles["listings-map"]}>
@@ -74,7 +75,7 @@ const ListingsMap = (props: ListingsMapProps) => {
         {t("t.listingsMap")}
       </Heading>
       <Map
-        mapId={props.googleMapsMapId}
+        mapId={googleMapsMapId}
         // style={containerStyle}
         gestureHandling={"greedy"}
         disableDefaultUI={true}
@@ -85,21 +86,21 @@ const ListingsMap = (props: ListingsMapProps) => {
         <MapControl setInfoWindowIndex={setInfoWindowIndex} />
 
         <MapRecenter
-          mapMarkers={props.listings}
-          visibleMapMarkers={props.visibleMarkers?.length}
-          isLoading={props.isLoading}
+          mapMarkers={searchResults.markers}
+          visibleMapMarkers={visibleMarkers?.length}
+          isLoading={isLoading}
         />
         <MapClusterer
           mapMarkers={markers}
           infoWindowIndex={infoWindowIndex}
           setInfoWindowIndex={setInfoWindowIndex}
-          setVisibleMarkers={props.setVisibleMarkers}
-          visibleMarkers={props.visibleMarkers}
-          setIsLoading={props.setIsLoading}
-          searchFilter={props.searchFilter}
-          isFirstBoundsLoad={props.isFirstBoundsLoad}
-          setIsFirstBoundsLoad={props.setIsFirstBoundsLoad}
-          isDesktop={props.isDesktop}
+          setVisibleMarkers={setVisibleMarkers}
+          visibleMarkers={visibleMarkers}
+          setIsLoading={setIsLoading}
+          searchFilter={searchFilter}
+          isFirstBoundsLoad={isFirstBoundsLoad}
+          setIsFirstBoundsLoad={setIsFirstBoundsLoad}
+          isDesktop={isDesktop}
         />
       </Map>
     </div>
