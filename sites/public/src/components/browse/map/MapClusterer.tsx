@@ -6,9 +6,10 @@ import debounce from "lodash/debounce"
 import { MapMarkerData } from "./ListingsMap"
 import { MapMarker } from "./MapMarker"
 import styles from "./ListingsCombined.module.scss"
-import { ListingViews } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Jurisdiction, ListingViews } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { getBoundsZoomLevel } from "../../../lib/helpers"
 import { ListingSearchParams } from "../../../lib/listings/search"
+import { MapListingCard } from "./MapListingCard"
 
 export type ListingsMapMarkersProps = {
   mapMarkers: MapMarkerData[] | null
@@ -279,7 +280,16 @@ export const MapClusterer = ({
       setInfoWindowContent(
         <div data-testid={"listings-map-info-window"}>
           {/* {getListingCard(response, infoWindowIndex)} */}
-          Listing card goes here for listing with name: {response.name}
+          <MapListingCard
+            listing={response}
+            index={infoWindowIndex}
+            jurisdiction={response.jurisdictions as Jurisdiction}
+            forceMobileView={true}
+            onClose={() => {
+              setInfoWindowContent(null)
+              setInfoWindowIndex(null)
+            }}
+          />
         </div>
       )
     } catch (e) {
@@ -382,13 +392,14 @@ export const MapClusterer = ({
       {infoWindowIndex !== null && (
         <InfoWindow
           anchor={markers[infoWindowIndex]}
+          headerDisabled={true}
           onCloseClick={() => {
             setInfoWindowContent(null)
             setInfoWindowIndex(null)
           }}
           className={"info-window"}
           minWidth={250}
-          maxWidth={500}
+          maxWidth={460}
           disableAutoPan={false}
         >
           {infoWindowContent}

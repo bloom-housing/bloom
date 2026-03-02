@@ -72,7 +72,7 @@ export const unitFactoryMany = async (
     );
 
     const accessibilityPriorityType =
-      optionalParams?.randomizePriorityType && Math.random() > 0.75
+      optionalParams?.randomizePriorityType && Math.random() > 0.9
         ? unitAccessibilityPriorityTypeValues[
             randomInt(unitAccessibilityPriorityTypeValues.length)
           ]
