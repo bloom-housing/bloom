@@ -3202,7 +3202,7 @@ export class ListingService implements OnModuleInit {
 
   async mapMarkers(params: ListingsQueryParams): Promise<ListingMapMarker[]> {
     const filters: ListingFilterParams[] = [
-      ...(params.filter || []),
+      ...(params?.filter || []),
       {
         $comparison: Compare['='],
         status: ListingsStatusEnum.active,
@@ -3220,7 +3220,7 @@ export class ListingService implements OnModuleInit {
         },
       },
       where: {
-        ...this.buildWhereClause(filters, params.search),
+        ...this.buildWhereClause(filters, params?.search),
         buildingAddressId: {
           not: null,
         },
