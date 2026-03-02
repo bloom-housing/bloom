@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState, useContext } 
 import debounce from "lodash/debounce"
 import { InfoWindow, useMap } from "@vis.gl/react-google-maps"
 import { MarkerClusterer, SuperClusterAlgorithm } from "@googlemaps/markerclusterer"
+import { useRouter } from "next/router"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { Jurisdiction, ListingViews } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { getBoundsZoomLevel } from "../../../lib/helpers"
@@ -98,6 +99,7 @@ export const MapClusterer = ({
   isDesktop,
 }: ListingsMapMarkersProps) => {
   const { listingsService } = useContext(AuthContext)
+  const { locale } = useRouter()
   const [markers, setMarkers] = useState<{
     [key: string]: google.maps.marker.AdvancedMarkerElement
   }>({})
@@ -271,31 +273,56 @@ export const MapClusterer = ({
     resetVisibleMarkers()
   }, [isFirstBoundsLoad, map, resetVisibleMarkers])
 
-  const fetchInfoWindow = async (listingId: string) => {
-    try {
-      const response = await listingsService.retrieve({
-        id: listingId,
-        view: ListingViews.base,
-      })
-      setInfoWindowContent(
-        <div data-testid={"listings-map-info-window"}>
-          {/* {getListingCard(response, infoWindowIndex)} */}
-          <MapListingCard
-            listing={response}
-            index={infoWindowIndex}
-            jurisdiction={response.jurisdictions as Jurisdiction}
-            forceMobileView={true}
-            onClose={() => {
-              setInfoWindowContent(null)
-              setInfoWindowIndex(null)
-            }}
-          />
-        </div>
-      )
-    } catch (e) {
-      console.log("listingsService.retrieve error: ", e)
-    }
-  }
+  const fetchInfoWindow = useCallback(
+    async (listingId: string, markerKey: number) => {
+      const retrieveListing = async (language?: string) => {
+        const options = language ? { headers: { language } } : undefined
+        return listingsService.retrieve(
+          {
+            id: listingId,
+            view: ListingViews.base,
+          },
+          options
+        )
+      }
+
+      try {
+        let response
+        try {
+          response = await retrieveListing(locale)
+        } catch (localizedError) {
+          // Some locales can fail for listing detail retrieval; fall back to English
+          // so the InfoWindow still renders content instead of an empty shell.
+          if (locale && locale !== "en") {
+            response = await retrieveListing("en")
+          } else {
+            throw localizedError
+          }
+        }
+
+        setInfoWindowContent(
+          <div data-testid={"listings-map-info-window"}>
+            <MapListingCard
+              listing={response}
+              index={markerKey}
+              jurisdiction={response.jurisdictions as Jurisdiction}
+              forceMobileView={true}
+              onClose={() => {
+                setInfoWindowContent(null)
+                setInfoWindowIndex(null)
+              }}
+            />
+          </div>
+        )
+        return true
+      } catch (e) {
+        console.log("listingsService.retrieve error: ", e)
+        setInfoWindowContent(null)
+        return false
+      }
+    },
+    [listingsService, locale, setInfoWindowIndex]
+  )
 
   const clusterer: MarkerClusterer = useMemo(() => {
     if (!map) return null
@@ -372,11 +399,15 @@ export const MapClusterer = ({
     []
   )
 
-  const handleMarkerClick = useCallback(async (marker: MapMarkerData) => {
-    await fetchInfoWindow(marker.id)
-    setInfoWindowIndex(marker.key)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const handleMarkerClick = useCallback(
+    async (marker: MapMarkerData) => {
+      const didLoadContent = await fetchInfoWindow(marker.id, marker.key)
+      // Open the window only when content is ready to avoid rendering an empty container
+      setInfoWindowIndex(didLoadContent ? marker.key : null)
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [fetchInfoWindow, setInfoWindowIndex]
+  )
 
   return (
     <>

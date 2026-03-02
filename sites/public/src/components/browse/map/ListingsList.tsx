@@ -67,16 +67,7 @@ const ListingsList = (props: ListingsListProps) => {
           </Button>
         </InfoCard>
       )}
-      {/* // Map TODO: Create actual info cards */}
-      {/* <InfoCard
-        title={t("t.needHelp")}
-        subtitle={t("t.emergencyShelter")}
-        className="is-normal-secondary-lighter"
-      >
-        <Button href="/help/housing-help" className="capitalize" variant="secondary">
-          {t("t.helpCenter")}
-        </Button>
-      </InfoCard> */}
+      {/* // Map TODO: Create customizable info cards */}
     </div>
   )
 
