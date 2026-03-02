@@ -1269,7 +1269,7 @@
   "t.order": "Đặt hàng",
   "t.orUpTo": "hoặc lên đến",
   "t.other": "Khác",
-  "t.pageXofY": "Trang %{hiện tại} trên %{tổng}",
+  "t.pageXofY": "Trang %{current} trên %{total}",
   "t.parkingFee": "Phí đỗ xe",
   "t.parkingTypes": "Các loại bãi đỗ xe",
   "t.people": "người",

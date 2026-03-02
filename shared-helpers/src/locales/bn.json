@@ -1268,7 +1268,7 @@
   "t.order": "আদেশ",
   "t.orUpTo": "বা পর্যন্ত",
   "t.other": "অন্যান্য",
-  "t.pageXofY": "%{মোট} পৃষ্ঠার %{বর্তমান}",
+  "t.pageXofY": "%{total} পৃষ্ঠার %{current}",
   "t.parkingFee": "পার্কিং ফি",
   "t.parkingTypes": "পার্কিং প্রকার",
   "t.people": "মানুষ",

@@ -1271,7 +1271,7 @@
   "t.order": "Պատվիրել",
   "t.orUpTo": "կամ մինչև",
   "t.other": "Այլ",
-  "t.pageXofY": "Էջ %{ընթացիկ}՝ %{ընդհանուր}-ից",
+  "t.pageXofY": "Էջ %{current}՝ %{total}-ից",
   "t.parkingFee": "Կայանման վճար",
   "t.parkingTypes": "Կայանատեղիի տեսակները",
   "t.people": "մարդիկ",

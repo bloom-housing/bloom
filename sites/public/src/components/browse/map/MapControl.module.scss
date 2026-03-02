@@ -7,8 +7,8 @@
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: var(--seeds-s4);
-  left: var(--seeds-s4);
+  inset-block-start: var(--seeds-s4);
+  inset-inline-start: var(--seeds-s4);
 
   .control-style {
     background-color: rgba(255, 255, 255, 0.85);
@@ -33,6 +33,7 @@
     border-radius: 0px 0px var(--control-border-radius) var(--control-border-radius);
   }
 }
+
 :export {
   controlBorderColor: var(--control-border-color);
 }

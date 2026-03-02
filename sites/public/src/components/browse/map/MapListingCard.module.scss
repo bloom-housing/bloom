@@ -135,8 +135,8 @@
 
       .close-button {
         position: absolute;
-        top: var(--seeds-s2);
-        right: var(--seeds-s2);
+        inset-block-start: var(--seeds-s2);
+        inset-inline-end: var(--seeds-s2);
         z-index: 3;
         width: var(--seeds-s8);
         height: var(--seeds-s8);
