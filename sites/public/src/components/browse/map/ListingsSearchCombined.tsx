@@ -13,28 +13,11 @@ import styles from "./ListingsSearch.module.scss"
 import { ListingsCombined } from "./ListingsCombined"
 import { MapMarkerData } from "./ListingsMap"
 import { searchListings, searchMapMarkers } from "../../../lib/hooks"
-import {
-  FeatureFlagEnum,
-  ListingFeaturesConfiguration,
-  ListingViews,
-  MultiselectQuestion,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ListingViews } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FilterDrawer } from "../FilterDrawer"
 import { encodeFilterDataToBackendFilters, FilterData } from "../FilterDrawerHelpers"
-
-type ListingsSearchCombinedProps = {
-  searchString?: string
-  jurisdictionIds?: string[]
-  googleMapsApiKey: string
-  googleMapsMapId: string
-  bedrooms: FormOption[]
-  bathrooms: FormOption[]
-  jurisdictions: FormOption[]
-  activeFeatureFlags?: FeatureFlagEnum[]
-  multiselectData: MultiselectQuestion[]
-  regions?: string[]
-  listingFeaturesConfiguration?: ListingFeaturesConfiguration
-}
+import { ListingsMapContext } from "./ListingsMapContext"
+import { useListingsSearchConfigContext } from "./ListingsSearchConfigContext"
 
 /**
  * This combines the search form with the listings map/list. Listings are updated
@@ -43,7 +26,8 @@ type ListingsSearchCombinedProps = {
  * @param props
  * @returns
  */
-function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
+function ListingsSearchCombined() {
+  const props = useListingsSearchConfigContext()
   const { profile, listingsService } = useContext(AuthContext)
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false)
   const [filterCount, setFilterCount] = useState(0)
@@ -357,6 +341,34 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     setIsFilterDrawerOpen(false)
   }
 
+  const mapContextValue = {
+    searchString: props.searchString,
+    jurisdictionIds: props.jurisdictionIds,
+    googleMapsApiKey: props.googleMapsApiKey,
+    googleMapsMapId: props.googleMapsMapId,
+    bedrooms: props.bedrooms,
+    bathrooms: props.bathrooms,
+    jurisdictions: props.jurisdictions,
+    activeFeatureFlags: props.activeFeatureFlags,
+    multiselectData: props.multiselectData,
+    regions: props.regions,
+    listingFeaturesConfiguration: props.listingFeaturesConfiguration,
+    searchFilter,
+    searchResults,
+    listView,
+    setListView,
+    isDesktop,
+    isLoading,
+    setIsLoading,
+    visibleMarkers,
+    setVisibleMarkers,
+    isFirstBoundsLoad,
+    setIsFirstBoundsLoad,
+    setFilterDrawerOpen: setIsFilterDrawerOpen,
+    filterCount,
+    onPageChange,
+  }
+
   return (
     <div className={styles["listings-vars"]} ref={listingsVarsRef}>
       <FilterDrawer
@@ -371,25 +383,9 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
         listingFeaturesConfiguration={props.listingFeaturesConfiguration}
       />
 
-      <ListingsCombined
-        markers={searchResults.markers}
-        googleMapsApiKey={props.googleMapsApiKey}
-        googleMapsMapId={props.googleMapsMapId}
-        onPageChange={onPageChange}
-        listView={listView}
-        setFilterDrawerOpen={setIsFilterDrawerOpen}
-        filterCount={filterCount}
-        searchResults={searchResults}
-        setListView={setListView}
-        setVisibleMarkers={setVisibleMarkers}
-        visibleMarkers={visibleMarkers}
-        isDesktop={isDesktop}
-        loading={isLoading}
-        setIsLoading={setIsLoading}
-        searchFilter={searchFilter}
-        isFirstBoundsLoad={isFirstBoundsLoad}
-        setIsFirstBoundsLoad={setIsFirstBoundsLoad}
-      />
+      <ListingsMapContext.Provider value={mapContextValue}>
+        <ListingsCombined />
+      </ListingsMapContext.Provider>
     </div>
   )
 }

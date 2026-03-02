@@ -1,33 +1,15 @@
 import React from "react"
 import { MapIcon, ListBulletIcon, FunnelIcon } from "@heroicons/react/24/solid"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Icon } from "@bloom-housing/ui-seeds"
+import { useListingsMapContext } from "./ListingsMapContext"
 import styles from "./ListingsSearch.module.scss"
 
-export interface ListingsSearchMetadataProps {
-  loading: boolean
-  setFilterDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
-  filterCount: number
-  searchResults: {
-    listings: Listing[]
-    currentPage: number
-    lastPage: number
-    totalItems: number
-  }
-  setListView: React.Dispatch<React.SetStateAction<boolean>>
-  listView: boolean
-}
+export const ListingsSearchMetadata = () => {
+  const { isLoading, setFilterDrawerOpen, filterCount, searchResults, setListView, listView } =
+    useListingsMapContext()
 
-export const ListingsSearchMetadata = ({
-  loading,
-  setFilterDrawerOpen,
-  filterCount,
-  searchResults,
-  setListView,
-  listView,
-}: ListingsSearchMetadataProps) => {
-  const isInitialLoad = loading && searchResults.currentPage === 0
+  const isInitialLoad = isLoading && searchResults.currentPage === 0
 
   return (
     <section role="contentinfo" aria-label="Listing filter bar">
