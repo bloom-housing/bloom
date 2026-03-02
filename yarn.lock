@@ -1006,10 +1006,10 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/ui-components@13.0.7":
-  version "13.0.7"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-13.0.7.tgz#13ce1706d2a5df67980533c689b4131dddac5b4a"
-  integrity sha512-heWy9bjYrOndjPC1e1vM99hUIiHhdQZ0LjHvACwV/HR91XCGnQ7AXcBJxFji+F/084VSBrf5wo6MJJCug8xJYQ==
+"@bloom-housing/ui-components@13.0.8":
+  version "13.0.8"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-13.0.8.tgz#a905589360227359b09942341178b55ea9a632e6"
+  integrity sha512-JinW1zDi6+etvE7bPSVqY53yeCCE90wjBa6wc4sGhwu7ajobORmeoaC1gBERlM2jyWrcnKdix6j/ODxk5wA6yg==
   dependencies:
     "@dnd-kit/react" "^0.3.2"
     "@fortawesome/fontawesome-svg-core" "^6.1.1"
@@ -1039,10 +1039,10 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@3.3.1":
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-3.3.1.tgz#8e4b1caa156160bfbe3e0ab97f7b5750753e1ad3"
-  integrity sha512-Eila6LIKSeEkFiFpAru9/9+XNeJNWFoHOqvVPp3onZ1YIrLxlknVnXFgFopFnm2pkr1L22LZr4EmeCBwhvTbJQ==
+"@bloom-housing/ui-seeds@3.3.2":
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-3.3.2.tgz#449be7a70aa7a0b5d8b2b0b259f6516e8006b895"
+  integrity sha512-wkQJ8Ir+ssRMRe6LWCo+UccQb3DHxWOtLDIF63MY2rm9bp6nI0FXIEHt17Go/nZBFKoQUJ6+ALx3Xtuf8anJdQ==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
     "@fortawesome/react-fontawesome" "^3.1.0"
