@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React from "react"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
@@ -47,7 +47,7 @@ export const MapListingCard = ({
   )
   const actions = []
 
-  const unitsPreviewTable = useMemo(() => {
+  const unitsPreviewTable = (() => {
     const hasData = listing.unitGroups.length || listing.units.length
 
     if (!hasData) {
@@ -82,16 +82,7 @@ export const MapListingCard = ({
         />
       )
     }
-  }, [
-    listing.units,
-    listing.unitGroups,
-    listing.marketingType,
-    listing.listingType,
-    listing.unitGroupsSummarized,
-    listing.unitsSummarized,
-    enableUnitGroups,
-    forceMobileView,
-  ])
+  })()
 
   return (
     <li

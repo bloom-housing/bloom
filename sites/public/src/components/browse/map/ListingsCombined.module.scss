@@ -64,7 +64,9 @@
   .listings-list {
     overflow-y: auto;
     width: 100%;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    height: -webkit-fill-available;
     min-height: 0;
 
     @media (--md-down) {
@@ -118,6 +120,7 @@
 .listings-list-wrapper {
   --padding: var(--seeds-s10);
   border-inline-start: 1px solid var(--seeds-color-gray-450);
+  flex-grow: 1;
 
   [class*="loading-overlay"] {
     padding: 0;

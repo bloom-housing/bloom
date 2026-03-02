@@ -9,10 +9,12 @@ import { MapRecenter } from "./MapRecenter"
 import { useListingsMapContext } from "./ListingsMapContext"
 import styles from "./ListingsCombined.module.scss"
 
+// Map TODO: Make this configurable
 const defaultCenter = {
   lat: 37.579795,
   lng: -122.374118,
 }
+
 const defaultZoom = 5
 
 type ListingsMapProps = {
@@ -24,13 +26,6 @@ export type MapMarkerData = {
   key: number
   coordinate: google.maps.LatLngLiteral
 }
-
-// const containerStyle = {
-//   width: "100%",
-//   height: "100%",
-//   position: "relative",
-//   display: "block",
-// }
 
 const getMarkers = (listings: ListingMapMarker[]) => {
   const markers: MapMarkerData[] | null = []
@@ -76,7 +71,6 @@ const ListingsMap = (_props: ListingsMapProps) => {
       </Heading>
       <Map
         mapId={googleMapsMapId}
-        // style={containerStyle}
         gestureHandling={"greedy"}
         disableDefaultUI={true}
         defaultZoom={defaultZoom}
