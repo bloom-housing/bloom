@@ -22,9 +22,6 @@ import { useListingsSearchConfigContext } from "./ListingsSearchConfigContext"
 /**
  * This combines the search form with the listings map/list. Listings are updated
  * in both when the search form is submitted.
- *
- * @param props
- * @returns
  */
 function ListingsSearchCombined() {
   const props = useListingsSearchConfigContext()
@@ -73,9 +70,7 @@ function ListingsSearchCombined() {
     })
   }, [profile, searchResults])
 
-  // The search function expects a string
-  // This can be changed later if needed
-  const pageSize = 25
+  const pageSize = 4
 
   const map = useMap()
 
@@ -163,7 +158,6 @@ function ListingsSearchCombined() {
         (isDesktop || listView) &&
         !(visibleMarkers?.length === 0 && changingFilter))
     ) {
-      console.log("pre search loading true")
       setIsLoading(true)
       const result = await searchListings(
         isDesktop ? listingIdsOnlyQb : genericQb,
@@ -261,7 +255,6 @@ function ListingsSearchCombined() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDesktop])
 
-  // Map TODO - This was added, make sure it doesn't have side effects
   useEffect(() => {
     async function searchListings() {
       await search(1, true)
@@ -291,7 +284,6 @@ function ListingsSearchCombined() {
 
     // Only re-search if the visible markers are not the same
     if (oldMarkers !== newMarkers && isDesktop) {
-      console.log("old not equal to new")
       setCurrentMarkers(visibleMarkers)
       void searchListings()
     } else {
@@ -390,45 +382,4 @@ function ListingsSearchCombined() {
   )
 }
 
-const locations: FormOption[] = [
-  {
-    label: "Alameda",
-    value: "Alameda",
-  },
-  {
-    label: "Contra Costa",
-    value: "Contra Costa",
-  },
-  {
-    label: "Marin",
-    value: "Marin",
-  },
-  {
-    label: "Napa",
-    value: "Napa",
-  },
-  {
-    label: "San Mateo",
-    value: "San Mateo",
-  },
-  {
-    label: "Santa Clara",
-    value: "Santa Clara",
-  },
-  {
-    label: "Solano",
-    value: "Solano",
-  },
-  {
-    label: "Sonoma",
-    value: "Sonoma",
-  },
-  {
-    label: "San Francisco",
-    value: "San Francisco",
-    isDisabled: true,
-    doubleColumn: true,
-  },
-]
-
-export { ListingsSearchCombined as default, locations }
+export { ListingsSearchCombined as default }

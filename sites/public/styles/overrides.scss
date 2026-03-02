@@ -360,3 +360,13 @@
   top: 0 !important;
   right: 0 !important;
 }
+
+// Keep Google Maps overlay positioning stable in RTL layouts, while allowing
+// InfoWindow content itself to render with RTL text flow.
+[dir="rtl"] .gm-style {
+  direction: ltr;
+}
+
+[dir="rtl"] .gm-style .gm-style-iw-d > div {
+  direction: rtl;
+}

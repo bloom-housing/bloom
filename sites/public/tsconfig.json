@@ -8,5 +8,5 @@
     "incremental": true
   },
   "exclude": ["node_modules", "cypress", "cypress-file-upload"],
-  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx"]
+  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "__tests__/components/browse/map/Pagination.test.tsx"]
 }
