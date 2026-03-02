@@ -1,73 +1,36 @@
 import React from "react"
 import { useJsApiLoader } from "@react-google-maps/api"
-import { Listing, ListingMapMarker } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import CustomSiteFooter from "../../shared/CustomSiteFooter"
-import { ListingSearchParams } from "../../../lib/listings/search"
 import { ListingsSearchMetadata } from "./ListingsSearchMetadata"
-import { ListingsMap, MapMarkerData } from "./ListingsMap"
+import { ListingsMap } from "./ListingsMap"
 import { ListingsList } from "./ListingsList"
+import { useListingsMapContext } from "./ListingsMapContext"
 import styles from "./ListingsCombined.module.scss"
 
-type ListingsCombinedProps = {
-  markers: ListingMapMarker[] | null
-  onPageChange: (page: number) => void
-  googleMapsApiKey: string
-  googleMapsMapId: string
-  setFilterDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
-  filterCount: number
-  searchResults: {
-    listings: Listing[]
-    currentPage: number
-    lastPage: number
-    totalItems: number
-  }
-  listView: boolean
-  setListView: React.Dispatch<React.SetStateAction<boolean>>
-  setVisibleMarkers: React.Dispatch<React.SetStateAction<MapMarkerData[]>>
-  visibleMarkers: MapMarkerData[]
-  isDesktop: boolean
-  loading: boolean
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
-  searchFilter: ListingSearchParams
-  isFirstBoundsLoad: boolean
-  setIsFirstBoundsLoad: React.Dispatch<React.SetStateAction<boolean>>
-}
+const ListingsCombined = () => {
+  const { googleMapsApiKey, googleMapsMapId, listView, isDesktop, isLoading, isFirstBoundsLoad } =
+    useListingsMapContext()
 
-const ListingsCombined = (props: ListingsCombinedProps) => {
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: props.googleMapsApiKey,
+    googleMapsApiKey,
   })
 
   if (!isLoaded) return <></>
 
   const getListLoading = () => {
-    if (!props.googleMapsApiKey || !props.googleMapsMapId || !props.loading) return false
+    if (!googleMapsApiKey || !googleMapsMapId || !isLoading) return false
     return true
   }
 
   const getListingsList = () => {
     return (
       <div className={styles["listings-combined"]}>
-        <ListingsSearchMetadata
-          loading={props.loading}
-          setFilterDrawerOpen={props.setFilterDrawerOpen}
-          filterCount={props.filterCount}
-          searchResults={props.searchResults}
-          setListView={props.setListView}
-          listView={props.listView}
-        />
+        <ListingsSearchMetadata />
         <div
           className={`${styles["listings-map-list-container"]} ${styles["listings-map-list-container-list-only"]}`}
         >
           <div id="listings-list-expanded" className={styles["listings-list-expanded"]}>
-            <ListingsList
-              listings={props.searchResults.listings}
-              currentPage={props.searchResults.currentPage}
-              lastPage={props.searchResults.lastPage}
-              onPageChange={props.onPageChange}
-              loading={getListLoading() || (props.isFirstBoundsLoad && props.isDesktop)}
-              mapMarkers={props.markers}
-            />
+            <ListingsList loading={getListLoading() || (isFirstBoundsLoad && isDesktop)} />
           </div>
           <div>
             <CustomSiteFooter />
@@ -80,29 +43,9 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
   const getListingsMap = () => {
     return (
       <div className={styles["listings-combined"]}>
-        <ListingsSearchMetadata
-          loading={props.loading}
-          setFilterDrawerOpen={props.setFilterDrawerOpen}
-          filterCount={props.filterCount}
-          searchResults={props.searchResults}
-          setListView={props.setListView}
-          listView={props.listView}
-        />
+        <ListingsSearchMetadata />
         <div className={styles["listings-map-expanded"]}>
-          <ListingsMap
-            listings={props.markers}
-            googleMapsApiKey={props.googleMapsApiKey}
-            googleMapsMapId={props.googleMapsMapId}
-            isMapExpanded={true}
-            setVisibleMarkers={props.setVisibleMarkers}
-            visibleMarkers={props.visibleMarkers}
-            setIsLoading={props.setIsLoading}
-            searchFilter={props.searchFilter}
-            isFirstBoundsLoad={props.isFirstBoundsLoad}
-            setIsFirstBoundsLoad={props.setIsFirstBoundsLoad}
-            isDesktop={props.isDesktop}
-            isLoading={props.loading}
-          />
+          <ListingsMap />
         </div>
       </div>
     )
@@ -111,41 +54,14 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
   const getListingsCombined = () => {
     return (
       <div className={styles["listings-combined"]}>
-        <ListingsSearchMetadata
-          loading={props.loading}
-          setFilterDrawerOpen={props.setFilterDrawerOpen}
-          filterCount={props.filterCount}
-          searchResults={props.searchResults}
-          setListView={props.setListView}
-          listView={props.listView}
-        />
+        <ListingsSearchMetadata />
         <div className={styles["listings-map-list-container"]}>
           <div className={styles["listings-map"]}>
-            <ListingsMap
-              listings={props.markers}
-              googleMapsApiKey={props.googleMapsApiKey}
-              googleMapsMapId={props.googleMapsMapId}
-              isMapExpanded={false}
-              setVisibleMarkers={props.setVisibleMarkers}
-              visibleMarkers={props.visibleMarkers}
-              setIsLoading={props.setIsLoading}
-              searchFilter={props.searchFilter}
-              isFirstBoundsLoad={props.isFirstBoundsLoad}
-              setIsFirstBoundsLoad={props.setIsFirstBoundsLoad}
-              isDesktop={props.isDesktop}
-              isLoading={props.loading}
-            />
+            <ListingsMap />
           </div>
           <div id="listings-outer-container" className={styles["listings-outer-container"]}>
             <div id="listings-list" className={styles["listings-list"]}>
-              <ListingsList
-                listings={props.searchResults.listings}
-                currentPage={props.searchResults.currentPage}
-                lastPage={props.searchResults.lastPage}
-                loading={getListLoading() || (props.isFirstBoundsLoad && props.isDesktop)}
-                onPageChange={props.onPageChange}
-                mapMarkers={props.markers}
-              />
+              <ListingsList loading={getListLoading() || (isFirstBoundsLoad && isDesktop)} />
               <CustomSiteFooter />
             </div>
           </div>
@@ -156,11 +72,11 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
 
   let div: React.JSX.Element
 
-  if (!props.isDesktop && props.listView) {
+  if (!isDesktop && listView) {
     div = getListingsList()
-  } else if (!props.isDesktop && !props.listView) {
+  } else if (!isDesktop && !listView) {
     div = getListingsMap()
-  } else if (props.isDesktop) {
+  } else if (isDesktop) {
     div = getListingsCombined()
   }
 
