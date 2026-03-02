@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@bloom-housing/shared-helpers": "^7.7.1",
-    "@bloom-housing/ui-components": "13.0.7",
+    "@bloom-housing/ui-components": "13.0.9",
     "@bloom-housing/ui-seeds": "3.4.1",
     "@googlemaps/markerclusterer": "^2.5.3",
     "@heroicons/react": "^2.1.1",
