@@ -53,6 +53,7 @@ export enum FeatureFlagEnum {
   enableUnderConstructionHome = 'enableUnderConstructionHome',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
+  enableVerifyIncome = 'enableVerifyIncome',
   enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
   enableWaitlistLottery = 'enableWaitlistLottery',
   enableWhatToExpectAdditionalField = 'enableWhatToExpectAdditionalField',
@@ -310,6 +311,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableUtilitiesIncluded,
     description:
       "When true, the 'utilities included' section is displayed in listing creation/edit and the public listing view",
+  },
+  {
+    name: FeatureFlagEnum.enableVerifyIncome,
+    description:
+      'When true, the income question on the application will be validated against the income limits for the listing and an error message will be shown if income is outside limits',
   },
   {
     name: FeatureFlagEnum.enableWaitlistAdditionalFields,

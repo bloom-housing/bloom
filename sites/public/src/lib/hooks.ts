@@ -16,7 +16,6 @@ import {
   MultiselectQuestionFilterParams,
   OrderByEnum,
   PaginatedListing,
-  AgencyQueryParams,
   EnumAgencyFilterParamsComparison,
   AgencyFilterParams,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"

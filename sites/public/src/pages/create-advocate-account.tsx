@@ -216,6 +216,6 @@ export async function getServerSideProps(context: { req: any; query: any }) {
   const agencies = await fetchAgencies(context.req, jurisdiction?.id)
 
   return {
-    props: { jurisdiction, agencies: agencies.items || [] },
+    props: { jurisdiction, agencies: agencies?.items || [] },
   }
 }

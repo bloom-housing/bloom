@@ -8724,23 +8724,6 @@ export interface UserRole {
   isSupportAdmin?: boolean
 }
 
-export interface Agency {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  jurisdictions: IdDTO
-}
-
 export interface PublicUserCreate {
   /**  */
   confirmedAt?: Date
@@ -8800,7 +8783,7 @@ export interface PublicUserCreate {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -8825,6 +8808,9 @@ export interface PublicUserCreate {
 
   /**  */
   isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
 
   /**  */
   dob: Date
@@ -8904,7 +8890,7 @@ export interface PartnerUserCreate {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -8929,6 +8915,9 @@ export interface PartnerUserCreate {
 
   /**  */
   isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
 
   /**  */
   userRoles: UserRole
@@ -9076,7 +9065,7 @@ export interface PublicUserUpdate {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -9101,6 +9090,9 @@ export interface PublicUserUpdate {
 
   /**  */
   isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
 
   /**  */
   dob: Date
@@ -9183,7 +9175,7 @@ export interface PartnerUserUpdate {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -9208,6 +9200,9 @@ export interface PartnerUserUpdate {
 
   /**  */
   isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
 
   /**  */
   userRoles: UserRole
@@ -9415,7 +9410,7 @@ export interface User {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -9440,6 +9435,9 @@ export interface User {
 
   /**  */
   isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
 }
 
 export interface UserFilterParams {
@@ -9754,6 +9752,23 @@ export interface PaginatedProperty {
 }
 
 export interface AgencyCreate {
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface Agency {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
   /**  */
   name: string
 
@@ -10251,6 +10266,7 @@ export enum FeatureFlagEnum {
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "enableVerifyIncome" = "enableVerifyIncome",
   "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
   "enableWaitlistLottery" = "enableWaitlistLottery",
   "enableWhatToExpectAdditionalField" = "enableWhatToExpectAdditionalField",
