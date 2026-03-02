@@ -58,6 +58,7 @@ import { PartnerUserCreate } from '../dtos/users/partner-user-create.dto';
 import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
 import { SnapshotCreateService } from './snapshot-create.service';
 import { toAddHelper, toRemoveHelper } from '../utilities/snapshot-helpers';
+import { AdvocateUserAccept } from 'src/dtos/users/advocate-user-accept.dto';
 
 /*
   this is the service for users
@@ -1005,6 +1006,60 @@ export class UserService {
     await this.connectUserWithExistingApplications(newUser.email, newUser.id);
 
     return mapTo(User, newUser);
+  }
+
+  async acceptAdovateuser(
+    dto: AdvocateUserAccept,
+    req: Request,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    const targetUser = await this.prisma.userAccounts.findFirst({
+      where: {
+        id: dto.advocateId.id,
+      },
+    });
+
+    if (!targetUser) {
+      throw new NotFoundException(
+        `User with id: ${dto.advocateId.id} was not found`,
+      );
+    }
+
+    // Make sure that the found user is and advocate
+    if (!targetUser.isAdvocate) {
+      throw new BadRequestException(
+        `The user with id ${dto.advocateId.id} is not an advocate`,
+      );
+    }
+
+    this.authorizeAction(
+      requestingUser,
+      mapTo(User, targetUser),
+      permissionActions.update,
+    );
+
+    this.prisma.userAccounts.update({
+      data: {
+        isApproved: dto.isAccepted,
+      },
+      where: {
+        id: targetUser.id,
+      },
+    });
+
+    if (!dto.isAccepted) {
+      this.emailService.advocateAccepted(
+        mapTo(User, targetUser),
+        'test.com',
+        'test.com',
+      );
+    } else {
+      this.emailService.advocateRejected(mapTo(User, targetUser), 'test.com');
+    }
+
+    return {
+      success: true,
+    };
   }
 
   /*

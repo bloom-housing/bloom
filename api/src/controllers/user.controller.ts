@@ -56,6 +56,7 @@ import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
 import { PublicUserUpdate } from '../dtos/users/public-user-update.dto';
 import { PartnerUserUpdate } from '../dtos/users/partner-user-update.dto';
 import { AdvocateUserUpdate } from '../dtos/users/advocate-user-update.dto';
+import { AdvocateUserAccept } from 'src/dtos/users/advocate-user-accept.dto';
 
 @Controller('user')
 @ApiTags('user')
@@ -189,6 +190,20 @@ export class UserController {
       queryParams.noWelcomeEmail !== true,
       req,
     );
+  }
+
+  @Post('/advocate/approve')
+  @ApiOperation({
+    summary: 'Accept or decline advocate user request',
+    operationId: 'approveAdvocate',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @UseGuards(PermissionGuard, JwtAuthGuard)
+  async approveAdvocateUser(
+    @Request() req: ExpressRequest,
+    @Body() dto: AdvocateUserAccept,
+  ): Promise<SuccessDTO> {
+    return await this.userService.acceptAdovateuser(dto, req);
   }
 
   @Delete()
