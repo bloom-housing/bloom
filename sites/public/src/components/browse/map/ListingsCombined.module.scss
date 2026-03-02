@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
 
-  @media (max-width: $screen-md) {
+  @media (--md-down) {
     height: 100%;
     min-height: 0;
   }
@@ -13,7 +13,7 @@
     flex: 1;
     position: relative;
     display: flex;
-    @media (max-width: $screen-md) {
+    @media (--md-down) {
       position: absolute;
       z-index: 0;
       height: 100%;
@@ -25,7 +25,7 @@
     display: flex;
     flex: 1;
     min-height: 0;
-    @media (max-width: $screen-md) {
+    @media (--md-down) {
       position: relative;
       display: block;
     }
@@ -50,7 +50,7 @@
     background-color: var(--seeds-color-white);
     display: none;
 
-    @media (max-width: $screen-md) {
+    @media (--md-down) {
       position: relative;
       display: block;
       z-index: 0;
@@ -67,7 +67,7 @@
     display: block;
     min-height: 0;
 
-    @media (max-width: $screen-md) {
+    @media (--md-down) {
       display: block;
       padding-top: 0;
       position: absolute;
@@ -82,7 +82,7 @@
   .listings-list-expanded {
     display: none;
 
-    @media (max-width: $screen-md) {
+    @media (--md-down) {
       display: block;
       position: static;
       z-index: 1;
@@ -94,7 +94,7 @@
   }
 
   .listings-map-list-container-list-only {
-    @media (max-width: $screen-md) {
+    @media (--md-down) {
       display: flex;
       flex-direction: column;
       flex: 1;
@@ -109,7 +109,7 @@
     overflow-y: auto;
     min-height: 0;
     width: var(--listings-list-width);
-    @media (max-width: $screen-lg) {
+    @media (--lg-down) {
       width: 55%;
     }
   }
@@ -117,10 +117,8 @@
 
 .listings-list-wrapper {
   --padding: var(--seeds-s10);
-  border-left: 1px solid var(--seeds-color-gray-450);
+  border-inline-start: 1px solid var(--seeds-color-gray-450);
 
-  /* These attribute selectors are strange, but that's because we want to short-circuit the
-     CSS module renaming and use these exact class names */
   [class*="loading-overlay"] {
     padding: 0;
     min-height: var(--seeds-s32);
@@ -140,11 +138,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #205493;
+  background-color: var(--seeds-color-primary-darker);
   color: white;
   width: var(--seeds-s8);
   height: var(--seeds-s8);
-  @media (max-width: $screen-md) {
+  @media (--md-down) {
     width: var(--seeds-s8);
     height: var(--seeds-s8);
   }

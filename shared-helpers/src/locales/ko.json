@@ -1277,7 +1277,7 @@
   "t.order": "주문하다",
   "t.orUpTo": "또는 최대",
   "t.other": "다른",
-  "t.pageXofY": "페이지 %{현재}/%{총}",
+  "t.pageXofY": "페이지 %{current}/%{total}",
   "t.parkingFee": "주차 요금",
   "t.parkingTypes": "주차 유형",
   "t.people": "사람들",
