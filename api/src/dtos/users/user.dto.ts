@@ -196,11 +196,6 @@ export class User extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  isAdvocate?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
   isApproved?: boolean;
 
   @Expose()
