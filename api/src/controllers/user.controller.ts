@@ -56,7 +56,7 @@ import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
 import { PublicUserUpdate } from '../dtos/users/public-user-update.dto';
 import { PartnerUserUpdate } from '../dtos/users/partner-user-update.dto';
 import { AdvocateUserUpdate } from '../dtos/users/advocate-user-update.dto';
-import { AdvocateUserAccept } from 'src/dtos/users/advocate-user-accept.dto';
+import { AdvocateUserAccept } from '../dtos/users/advocate-user-accept.dto';
 
 @Controller('user')
 @ApiTags('user')
