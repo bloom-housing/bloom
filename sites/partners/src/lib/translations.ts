@@ -10,7 +10,7 @@ import armenianTranslations from "@bloom-housing/shared-helpers/src/locales/hy.j
 import farsiTranslations from "@bloom-housing/shared-helpers/src/locales/fa.json"
 
 import additionalGeneralTranslations from "../../page_content/locales/general.json"
-import localeOverrides from "../../page_content/locale_overrides/general.json"
+import localeOverrides from "../../page_content/overrides/general.json"
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const translations = {
