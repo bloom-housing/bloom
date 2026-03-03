@@ -1008,7 +1008,7 @@ export class UserService {
     return mapTo(User, newUser);
   }
 
-  async acceptAdovateuser(
+  async acceptAdvocateUser(
     dto: AdvocateUserAccept,
     req: Request,
   ): Promise<SuccessDTO> {

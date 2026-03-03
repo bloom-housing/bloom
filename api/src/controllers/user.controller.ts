@@ -203,7 +203,7 @@ export class UserController {
     @Request() req: ExpressRequest,
     @Body() dto: AdvocateUserAccept,
   ): Promise<SuccessDTO> {
-    return await this.userService.acceptAdovateuser(dto, req);
+    return await this.userService.acceptAdvocateUser(dto, req);
   }
 
   @Delete()
