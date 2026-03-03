@@ -164,7 +164,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                 verticalSidebar
                 selectedIndex={props.filterType}
                 navigation={true}
-                navigationLabel={"Application status"}
+                navigationLabel={t("application.navLabel")}
               >
                 <Tabs.TabList>
                   <Tabs.Tab

@@ -13,7 +13,7 @@ export const getUsersTabs = (selectedIndex: UsersIndexEnum) => {
       verticalSidebar
       selectedIndex={selectedIndex}
       navigation={true}
-      navigationLabel={"Users pages"}
+      navigationLabel={t("users.navLabel")}
     >
       <Tabs.TabList>
         <Tabs.Tab

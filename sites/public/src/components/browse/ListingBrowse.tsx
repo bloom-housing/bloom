@@ -154,7 +154,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         className={styles["tabs"]}
         selectedIndex={props.tab}
         navigation={true}
-        navigationLabel={"Listing status"}
+        navigationLabel={t("listings.navLabel")}
       >
         <Tabs.TabList>
           <Tabs.Tab href={"/listings"} active={props.tab === TabsIndexEnum.open}>
