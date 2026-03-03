@@ -1017,6 +1017,9 @@ export class UserService {
       where: {
         id: dto.advocateId.id,
       },
+      include: {
+        jurisdictions: true,
+      },
     });
 
     if (!targetUser) {
@@ -1038,7 +1041,7 @@ export class UserService {
       permissionActions.update,
     );
 
-    this.prisma.userAccounts.update({
+    await this.prisma.userAccounts.update({
       data: {
         isApproved: dto.isAccepted,
       },
@@ -1047,7 +1050,7 @@ export class UserService {
       },
     });
 
-    if (!dto.isAccepted) {
+    if (dto.isAccepted) {
       this.emailService.advocateAccepted(
         mapTo(User, targetUser),
         'test.com',
