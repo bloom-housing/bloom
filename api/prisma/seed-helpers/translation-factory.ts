@@ -67,6 +67,8 @@ const translations = (
         greeting: 'Hello',
         updateNotice:
           'An update has been made to your housing application for %{listingName}.',
+        advocateUpdateNotice:
+          'An update has been made to the housing application you submitted on behalf of %{applicantName} for %{listingName}.',
         summaryTitle: 'Summary of changes:',
         statusChange:
           'Your application status has changed from %{from} to %{to}',
@@ -77,8 +79,13 @@ const translations = (
         statusLabel: 'Application status',
         contactNotice:
           'No further action is required at this time. If you have questions regarding this update, please reach out at',
+        applicantContactNotice:
+          'If you have questions regarding this update, please reach out at',
         viewPrompt: 'To view your application, please click the link below:',
         viewLink: 'View my application',
+        advocateViewPrompt:
+          "To view your client's application, please click the link below:",
+        advocateViewLink: 'View application',
         applicationStatus: {
           submitted: 'Submitted',
           declined: 'Declined',
@@ -313,6 +320,8 @@ const translations = (
         greeting: 'Hola',
         updateNotice:
           'Se ha realizado una actualización en su solicitud de vivienda para %{listingName}.',
+        advocateUpdateNotice:
+          'Se ha realizado una actualización a la solicitud de vivienda que envió en nombre de %{applicantName} para %{listingName}.',
         summaryTitle: 'Resumen de cambios:',
         statusChange:
           'El estado de su solicitud ha cambiado de %{from} a %{to}',
@@ -323,8 +332,13 @@ const translations = (
         statusLabel: 'Estado de la solicitud',
         contactNotice:
           'No se requiere ninguna acción adicional en este momento. Si tiene alguna pregunta sobre esta actualización, comuníquese con nosotros en',
+        applicantContactNotice:
+          'Si tiene preguntas sobre esta actualización, comuníquese con nosotros en',
         viewPrompt: 'Para ver su solicitud, haga clic en el siguiente enlace:',
         viewLink: 'Ver mi solicitud',
+        advocateViewPrompt:
+          'Para ver la solicitud de su cliente, haga clic en el siguiente enlace:',
+        advocateViewLink: 'Ver aplicación',
         applicationStatus: {
           submitted: 'Enviada',
           declined: 'Rechazada',

@@ -463,6 +463,7 @@ export const stagingSeed = async (
     5,
     'Angelopolis',
   );
+  await agencyFactory(mainJurisdiction.id, prismaClient, 5, 'Bloomington');
   // create super admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
@@ -990,6 +991,7 @@ export const stagingSeed = async (
         ],
         userAccounts: [{ id: partnerUser.id }],
         optionalFeatures: { carpetInUnit: true },
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1181,6 +1183,7 @@ export const stagingSeed = async (
           }),
         ],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1209,6 +1212,7 @@ export const stagingSeed = async (
           },
         ],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1249,6 +1253,7 @@ export const stagingSeed = async (
           }),
         ],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1258,6 +1263,7 @@ export const stagingSeed = async (
         listing: littleVillageApartments,
         multiselectQuestions: [workInCityQuestion],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1403,6 +1409,7 @@ export const stagingSeed = async (
           },
         ],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1438,6 +1445,7 @@ export const stagingSeed = async (
             },
           },
         ],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1499,6 +1507,7 @@ export const stagingSeed = async (
             },
           },
         ],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
   ];

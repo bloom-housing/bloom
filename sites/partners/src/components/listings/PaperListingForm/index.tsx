@@ -395,14 +395,23 @@ const ListingForm = ({
             formData.listingType = undefined
           }
 
-          if (formData.configurableAccessibilityFeatures) {
-            setAccessibilityFeatures(
-              Object.values(formData.configurableAccessibilityFeatures).flat() as string[]
+          if (
+            doJurisdictionsHaveFeatureFlagOn(
+              FeatureFlagEnum.enableAccessibilityFeatures,
+              jurisdictionId
             )
-          }
+          ) {
+            if (formData.configurableAccessibilityFeatures) {
+              setAccessibilityFeatures(
+                Object.values(formData.configurableAccessibilityFeatures).flat() as string[]
+              )
+            }
 
-          if (!formData.configurableAccessibilityFeatures) {
-            formData.configurableAccessibilityFeatures = accessibilityFeatures
+            if (!formData.configurableAccessibilityFeatures) {
+              formData.configurableAccessibilityFeatures = accessibilityFeatures
+            }
+          } else {
+            delete formData.configurableAccessibilityFeatures
           }
 
           if (successful) {

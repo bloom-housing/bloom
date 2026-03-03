@@ -1,22 +1,21 @@
 import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { Field, Form, t, DOBField, AlertBox } from "@bloom-housing/ui-components"
+import { Form, t, AlertBox } from "@bloom-housing/ui-components"
 import { Button, Dialog, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
 import { useRouter } from "next/router"
-import {
-  PageView,
-  pushGtmEvent,
-  AuthContext,
-  BloomCard,
-  passwordRegex,
-  emailRegex,
-} from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
+import {
+  accountNameFields,
+  createAccountPasswordFields,
+  dobFields,
+  emailFields,
+} from "../components/account/AccountFieldHelpers"
 import accountCardStyles from "./account/account.module.scss"
 import styles from "../../styles/create-account.module.scss"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
@@ -29,7 +28,7 @@ const CreateAccount = () => {
   const signUpCopy = process.env.showMandatedAccounts
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch } = useForm()
+  const { register, handleSubmit, errors, watch, clearErrors } = useForm()
   const [requestError, setRequestError] = useState<string>()
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [loading, setLoading] = useState(false)
@@ -125,156 +124,46 @@ const CreateAccount = () => {
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  <fieldset id="userName">
-                    <legend className={"text__caps-spaced"}>
-                      {t("application.name.yourName")}
-                    </legend>
-
-                    <label className={styles["create-account-field"]} htmlFor="firstName">
-                      {t("application.name.firstOrGivenName")}
-                    </label>
-                    <Field
-                      controlClassName={styles["create-account-input"]}
-                      name="firstName"
-                      validation={{ required: true, maxLength: 64 }}
-                      error={errors.firstName}
-                      errorMessage={
-                        errors.firstName?.type === "maxLength"
-                          ? t("errors.maxLength", { length: 64 })
-                          : t("errors.firstNameError")
-                      }
-                      register={register}
-                    />
-
-                    <label className={styles["create-account-field"]} htmlFor="middleName">
-                      {t("application.name.middleNameOptional")}
-                    </label>
-                    <Field
-                      name="middleName"
-                      register={register}
-                      error={errors.middleName}
-                      validation={{ maxLength: 64 }}
-                      errorMessage={t("errors.maxLength", { length: 64 })}
-                      controlClassName={styles["create-account-input"]}
-                    />
-
-                    <label className={styles["create-account-field"]} htmlFor="lastName">
-                      {t("application.name.lastOrFamilyName")}
-                    </label>
-                    <Field
-                      name="lastName"
-                      validation={{ required: true, maxLength: 64 }}
-                      error={errors.lastName}
-                      register={register}
-                      errorMessage={
-                        errors.lastName?.type === "maxLength"
-                          ? t("errors.maxLength", { length: 64 })
-                          : t("errors.lastNameError")
-                      }
-                      controlClassName={styles["create-account-input"]}
-                    />
-                  </fieldset>
+                  {accountNameFields(errors, register, null, clearErrors)}
                 </CardSection>
                 <CardSection
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  <DOBField
-                    register={register}
-                    required={true}
-                    error={errors.dob}
-                    name="dob"
-                    id="dob"
-                    watch={watch}
-                    validateAge18={true}
-                    errorMessage={t("errors.dateOfBirthErrorAge")}
-                    label={t("application.name.yourDateOfBirth")}
-                  />
-                  <p className={`field-note ${styles["create-account-dob-age-helper"]}`}>
-                    {t("application.name.dobHelper2")}
-                  </p>
-                  <p className={`field-note ${styles["create-account-dob-example"]}`}>
-                    {t("application.name.dobHelper")}
-                  </p>
+                  {dobFields(errors, register, watch, null, true)}
                 </CardSection>
 
                 <CardSection
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  <Field
-                    type="email"
-                    name="email"
-                    label={t("application.name.yourEmailAddress")}
-                    validation={{ required: true, pattern: emailRegex }}
-                    error={errors.email}
-                    errorMessage={t("authentication.signIn.loginError")}
-                    register={register}
-                    controlClassName={styles["create-account-input"]}
-                    labelClassName={"text__caps-spaced"}
-                    note={
-                      process.env.showPwdless
-                        ? t("application.name.yourEmailAddressPwdlessHelper")
-                        : null
-                    }
-                  />
+                  {emailFields(
+                    errors,
+                    register,
+                    null,
+                    clearErrors,
+                    process.env.showPwdless
+                      ? t("application.name.yourEmailAddressPwdlessHelper")
+                      : null
+                  )}
                 </CardSection>
                 <CardSection
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  <fieldset className={"seeds-p-be-6"}>
-                    <legend className={"text__caps-spaced seeds-m-be-0"}>
-                      {t("authentication.createAccount.password")}
-                    </legend>
-                    <Field
-                      labelClassName={"sr-only"}
-                      type={"password"}
-                      name="password"
-                      note={t("authentication.createAccount.passwordInfo")}
-                      label={t("authentication.createAccount.password")}
-                      validation={{
-                        required: true,
-                        minLength: 8,
-                        pattern: passwordRegex,
-                      }}
-                      error={errors.password}
-                      errorMessage={t("authentication.signIn.passwordError")}
-                      register={register}
-                      controlClassName={styles["create-account-input"]}
-                    />
-                    <Field
-                      type="password"
-                      id="passwordConfirmation"
-                      name="passwordConfirmation"
-                      validation={{
-                        validate: (value) =>
-                          value === password.current ||
-                          t("authentication.createAccount.errors.passwordMismatch"),
-                      }}
-                      onPaste={(e) => {
-                        e.preventDefault()
-                        e.nativeEvent.stopImmediatePropagation()
-                        return false
-                      }}
-                      onDrop={(e) => {
-                        e.preventDefault()
-                        e.nativeEvent.stopImmediatePropagation()
-                        return false
-                      }}
-                      error={errors.passwordConfirmation}
-                      errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
-                      register={register}
-                      controlClassName={styles["create-account-input"]}
-                      label={t("authentication.createAccount.reEnterPassword")}
-                      className={`${styles["create-account-field"]} seeds-m-bs-0`}
-                    />
-                  </fieldset>
+                  <div className={"seeds-m-be-6"}>
+                    {createAccountPasswordFields(
+                      errors,
+                      register,
+                      password,
+                      styles["create-account-input"],
+                      styles["create-account-field"]
+                    )}
+                  </div>
                   <Button
                     type="submit"
                     variant="primary"
                     loadingMessage={loading ? t("t.loading") : undefined}
-                    className={"seeds-p-bs-4"}
                   >
                     {t("account.createAccount")}
                   </Button>
