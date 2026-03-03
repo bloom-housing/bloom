@@ -61,7 +61,7 @@ export const getExclusiveKeys = (
   enableV2MSQ: boolean
 ): string[] => {
   const exclusive: string[] = []
-  if (typeof question === "undefined") return exclusive
+  if (!question) return exclusive
 
   getMSQOptions(question, enableV2MSQ).forEach((option) => {
     if (option.exclusive)
@@ -126,7 +126,7 @@ export const getAllOptions = (
   applicationSection: MultiselectQuestionsApplicationSectionEnum,
   enableV2MSQ: boolean
 ) => {
-  if (typeof question === "undefined") return []
+  if (!question) return []
 
   const optionPaths = getMSQOptions(question, enableV2MSQ).map((option) =>
     fieldName(question.text, applicationSection, option.text)
@@ -203,11 +203,19 @@ const getCheckboxField = (
           if (e.target.checked && trigger) {
             void trigger()
           }
-          const allOptions = getMSQOptions(question, enableV2MSQ).map((option) =>
-              fieldName(question.name || question.text, applicationSection, option.name || option.text)
-            ) ?? []
+          const allOptions = question
+            ? getMSQOptions(question, enableV2MSQ).map((option) =>
+                fieldName(
+                  question.name || question.text,
+                  applicationSection,
+                  option.name || option.text
+                )
+              )
+            : []
           if (question.optOutText) {
-            allOptions.push(fieldName(question.name || question.text, applicationSection, question.optOutText))
+            allOptions.push(
+              fieldName(question.name || question.text, applicationSection, question.optOutText)
+            )
           }
           if (option.exclusive && e.target.checked && exclusiveKeys) {
             setExclusive(true, setValue, exclusiveKeys, optionFieldName, allOptions)

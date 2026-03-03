@@ -90,7 +90,9 @@ const ApplicationMultiselectQuestionStep = ({
     defaultValues: mapApiToMultiselectForm(applicationQuestions, questions, applicationSection),
   })
 
-  const [exclusiveKeys, setExclusiveKeys] = useState(getExclusiveKeys(question, applicationSection, enableV2MSQ))
+  const [exclusiveKeys, setExclusiveKeys] = useState(
+    getExclusiveKeys(question, applicationSection, enableV2MSQ)
+  )
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -103,13 +105,13 @@ const ApplicationMultiselectQuestionStep = ({
   // Required to keep the form up to date before submitting this section if you're moving between pages
   useEffect(() => {
     reset(mapApiToMultiselectForm(applicationQuestions, questions, applicationSection, enableV2MSQ))
-    setExclusiveKeys(getExclusiveKeys(question, applicationSection))
+    setExclusiveKeys(getExclusiveKeys(question, applicationSection, enableV2MSQ))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, applicationQuestions, reset])
 
   const allOptionNames = useMemo(() => {
-    return getAllOptions(question, applicationSection)
-  }, [question])
+    return getAllOptions(question, applicationSection, enableV2MSQ)
+  }, [applicationSection, enableV2MSQ, question])
 
   const body = useRef(null)
 
