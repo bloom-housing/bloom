@@ -1,4 +1,4 @@
--- Adds advocate-submission confirmation copy and client-safe confirmation copy.
+-- Adds advocate and applicant specific confirmation copy.
 
 UPDATE translations
 SET translations = jsonb_set(

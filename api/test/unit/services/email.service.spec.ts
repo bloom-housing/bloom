@@ -451,7 +451,7 @@ describe('Testing email service', () => {
       expect(emailHtml).not.toContain('<h3>Office Hours:</h3>');
     });
 
-    it('sends advocate language copy and english client copy when submitted by advocate', async () => {
+    it('sends email for advocate and applicant when submitted by advocate', async () => {
       await service.applicationConfirmation(
         listing,
         {
