@@ -71,6 +71,7 @@ import { AdvocateUserAccept } from '../dtos/users/advocate-user-accept.dto';
   PublicUserUpdate,
   PartnerUserUpdate,
   AdvocateUserUpdate,
+  AdvocateUserAccept,
 )
 @UseGuards(ApiKeyGuard)
 export class UserController {
