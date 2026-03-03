@@ -10,7 +10,6 @@ global.ResizeObserver = jest.fn(() => ({
   disconnect: jest.fn(),
 }))
 import { addTranslation } from "@bloom-housing/ui-components"
-addTranslation({ ...generalTranslations, ...general })
 import general from "../page_content/locales/general.json"
 import generalOverrides from "../page_content/overrides/general.json"
 addTranslation({ ...generalTranslations, ...general, ...generalOverrides })
