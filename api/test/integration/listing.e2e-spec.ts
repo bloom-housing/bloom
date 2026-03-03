@@ -685,6 +685,7 @@ describe('Listing Controller Tests', () => {
         }),
       });
       const listing1Input = await listingFactory(jurisdictionB.id, prisma, {
+        enableListingFeaturesAndUtilities: true,
         listing: {
           homeType: HomeTypeEnum.apartment,
           isVerified: true,
@@ -718,6 +719,7 @@ describe('Listing Controller Tests', () => {
       });
 
       const listing2Input = await listingFactory(jurisdictionB.id, prisma, {
+        enableListingFeaturesAndUtilities: true,
         includeReservedCommunityTypes: true,
         listing: {
           homeType: HomeTypeEnum.duplex,

@@ -991,6 +991,7 @@ export const stagingSeed = async (
         ],
         userAccounts: [{ id: partnerUser.id }],
         optionalFeatures: { carpetInUnit: true },
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1182,6 +1183,7 @@ export const stagingSeed = async (
           }),
         ],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1210,6 +1212,7 @@ export const stagingSeed = async (
           },
         ],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1250,6 +1253,7 @@ export const stagingSeed = async (
           }),
         ],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1259,6 +1263,7 @@ export const stagingSeed = async (
         listing: littleVillageApartments,
         multiselectQuestions: [workInCityQuestion],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1404,6 +1409,7 @@ export const stagingSeed = async (
           },
         ],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1439,6 +1445,7 @@ export const stagingSeed = async (
             },
           },
         ],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1500,6 +1507,7 @@ export const stagingSeed = async (
             },
           },
         ],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
   ];
