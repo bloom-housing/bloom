@@ -215,11 +215,13 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                 <Tabs.TabList>
                   <Tabs.Tab
                     className={styles["application-count-tab"]}
-                    data-testid="total-applications-tab"
                     active={props.filterType === ApplicationsIndexEnum.all}
                     href={"/account/applications"}
                   >
-                    <div className={styles["application-count-tab-content"]}>
+                    <div
+                      className={styles["application-count-tab-content"]}
+                      data-testid="total-applications-tab"
+                    >
                       <span>{t("account.allMyApplications")}</span>
                       <span>{applicationsCount?.total}</span>
                     </div>
@@ -228,33 +230,39 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                     className={`${styles["application-count-tab"]} ${
                       !showPublicLottery ? styles["application-hide-tab"] : ""
                     }`}
-                    data-testid="lottery-runs-tab"
                     active={props.filterType === ApplicationsIndexEnum.lottery}
                     href={"/account/applications/lottery"}
                   >
-                    <div className={styles["application-count-tab-content"]}>
+                    <div
+                      className={styles["application-count-tab-content"]}
+                      data-testid="lottery-runs-tab"
+                    >
                       <span>{t("account.lotteryRun")}</span>
                       <span>{applicationsCount?.lottery}</span>
                     </div>
                   </Tabs.Tab>
                   <Tabs.Tab
                     className={styles["application-count-tab"]}
-                    data-testid="closed-applications-tab"
                     active={props.filterType === ApplicationsIndexEnum.closed}
                     href={"/account/applications/closed"}
                   >
-                    <div className={styles["application-count-tab-content"]}>
+                    <div
+                      className={styles["application-count-tab-content"]}
+                      data-testid="closed-applications-tab"
+                    >
                       <span>{t("account.closedApplications")}</span>
                       <span>{applicationsCount?.closed}</span>
                     </div>
                   </Tabs.Tab>
                   <Tabs.Tab
                     className={styles["application-count-tab"]}
-                    data-testid="open-applications-tab"
                     active={props.filterType === ApplicationsIndexEnum.open}
                     href={"/account/applications/open"}
                   >
-                    <div className={styles["application-count-tab-content"]}>
+                    <div
+                      className={styles["application-count-tab-content"]}
+                      data-testid="open-applications-tab"
+                    >
                       <span>{t("account.openApplications")}</span>
                       <span>{applicationsCount?.open}</span>
                     </div>

@@ -121,7 +121,7 @@ describe("settings", () => {
 
       render(<SettingsPreferences />)
       expect(screen.getByText("Settings")).toBeInTheDocument()
-      expect(await screen.findByRole("tablist")).toBeInTheDocument()
+      expect(await screen.findByLabelText("Settings pages")).toBeInTheDocument()
       expect(screen.getByRole("heading", { level: 2, name: "Preferences" })).toBeInTheDocument()
       expect(screen.getByText("Properties")).toBeInTheDocument()
     })
