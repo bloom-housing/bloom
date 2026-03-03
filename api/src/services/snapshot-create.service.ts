@@ -7,7 +7,7 @@ export class SnapshotCreateService {
   constructor(private prisma: PrismaService) {}
 
   async createUserSnapshot(userId: string): Promise<SuccessDTO> {
-    if (!!process.env.SKIP_SNAPSHOTS) {
+    if (process.env.SKIP_SNAPSHOTS && process.env.SKIP_SNAPSHOTS === 'TRUE') {
       return {
         success: true,
       };
@@ -163,7 +163,7 @@ export class SnapshotCreateService {
   }
 
   async createListingSnapshot(listingId: string): Promise<SuccessDTO> {
-    if (!!process.env.SKIP_SNAPSHOTS) {
+    if (process.env.SKIP_SNAPSHOTS && process.env.SKIP_SNAPSHOTS === 'TRUE') {
       return {
         success: true,
       };
