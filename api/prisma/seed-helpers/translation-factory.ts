@@ -127,6 +127,7 @@ const translations = (
         shouldBeChosen:
           'Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.',
         whatHappensNext: 'What happens next?',
+        questions: 'Questions?',
         whatToExpectNext: 'What to expect next:',
         needToMakeUpdates: 'Need to make updates?',
         applicationsClosed: 'Application <br />closed',
@@ -148,12 +149,16 @@ const translations = (
         contactedForAnInterview:
           'If you are contacted for an interview, you will need to fill out a more detailed application and provide supporting documents.',
         gotYourConfirmationNumber: 'We got your application for',
+        gotYourConfirmationNumberOnYourBehalf:
+          'We received an application on your behalf for',
       },
       leasingAgent: {
         officeHours: 'Office Hours:',
         propertyManager: 'Property Manager',
         contactAgentToUpdateInfo:
           'If you need to update information on your application, do not apply again. Instead, contact the agent for this listing.',
+        contactAgentForQuestions:
+          'If you have questions regarding this application, please contact the agent for this listing.',
       },
       mfaCodeEmail: {
         message: 'Access code for your account has been requested.',
@@ -271,18 +276,23 @@ const translations = (
         interview:
           'Si se comunican con usted para una entrevista, se le pedirá que complete una solicitud más detallada y presente documentos de respaldo.',
         whatHappensNext: '¿Qué sucede luego?',
+        questions: '¿Preguntas?',
         needToMakeUpdates: '¿Necesita hacer modificaciones?',
         applicationsClosed: 'Solicitud <br />cerrada',
         applicationsRanked: 'Solicitud <br />clasificada',
         applicationReceived: 'Aplicación <br />recibida',
         yourConfirmationNumber: 'Su número de confirmación',
         gotYourConfirmationNumber: 'Recibimos tu solicitud para:',
+        gotYourConfirmationNumberOnYourBehalf:
+          'Recibimos una solicitud en su nombre para',
       },
       leasingAgent: {
         officeHours: 'Horario de atención',
         propertyManager: 'Administrador de propiedades',
         contactAgentToUpdateInfo:
           'Si necesita modificar información en su solicitud, no haga una solicitud nueva. Comuníquese con el agente de este listado.',
+        contactAgentForQuestions:
+          'Si tiene preguntas sobre esta aplicación, comuníquese con el agente de este listado.',
       },
       lotteryAvailable: {
         header: 'Nuevos resultados de la lotería de vivienda disponibles',
