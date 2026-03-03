@@ -14,7 +14,7 @@ export const getSettingsTabs = (selectedIndex: SettingsIndexEnum, enableV2MSQ: b
     <Tabs
       verticalSidebar
       navigation={true}
-      navigationLabel={"Settings pages"}
+      navigationLabel={t("settings.navLabel")}
       selectedIndex={selectedIndex}
     >
       <Tabs.TabList>
