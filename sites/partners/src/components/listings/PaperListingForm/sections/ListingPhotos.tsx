@@ -291,6 +291,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
       )
 
       return {
+        id: { content: image.fileId },
         ordinal: {
           content: ordinalContent,
         },

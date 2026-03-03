@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { AlertBox, Form, t } from "@bloom-housing/ui-components"
+import { Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   AuthContext,
