@@ -1,14 +1,14 @@
 import React from "react"
 import "@testing-library/jest-dom"
 import { FormProvider, useForm } from "react-hook-form"
-import { render, screen, within } from "@testing-library/react"
+import { fireEvent, render, screen, within } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { jurisdiction, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { setupServer } from "msw/lib/node"
 import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import ListingPhotos from "../../../../../src/components/listings/PaperListingForm/sections/ListingPhotos"
 import { mockNextRouter } from "../../../../testUtils"
-import userEvent from "@testing-library/user-event"
 import * as helpers from "../../../../../src/lib/helpers"
 import * as assets from "../../../../../src/lib/assets"
 import { rest } from "msw"
@@ -369,7 +369,9 @@ describe("<ListingPhotos>", () => {
       const editButtons = within(drawer).getAllByRole("button", { name: "Edit" })
       expect(editButtons).toHaveLength(2)
 
-      await userEvent.click(editButtons[0])
+      // The userEvent.click triggers additional aspects of the dom that we don't have mocked
+      // and the drag and drop functionality within this drawer depends on those aspects. Using fireEvent.click to avoid that.
+      fireEvent.click(editButtons[0])
 
       const altTextDrawer = await screen.findByRole("dialog", { name: "Add image description" })
       expect(
@@ -417,7 +419,7 @@ describe("<ListingPhotos>", () => {
       await userEvent.click(editPhotosButton)
 
       const drawer = await screen.findByRole("dialog", { name: "Edit photos" })
-      await userEvent.click(within(drawer).getByRole("button", { name: "Edit" }))
+      fireEvent.click(within(drawer).getByRole("button", { name: "Edit" }))
 
       const altTextDrawer = await screen.findByRole("dialog", { name: "Add image description" })
       const altTextInput = within(altTextDrawer).getByLabelText(/Image description \(alt text\)/i, {

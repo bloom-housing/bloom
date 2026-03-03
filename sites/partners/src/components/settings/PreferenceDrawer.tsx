@@ -142,6 +142,7 @@ const PreferenceDrawer = ({
       questionData?.options
         ?.sort((a, b) => (a.ordinal < b.ordinal ? -1 : 1))
         .map((item) => ({
+          id: { content: item.text },
           name: { content: item.text },
           description: { content: item.description },
           action: {

@@ -96,6 +96,7 @@ const SelectAndOrder = ({
   const draggableTableData: StandardTableData = useMemo(
     () =>
       draftListingData.map((item) => ({
+        id: { content: item.id },
         name: { content: item.text },
         additionalFields: {
           content: (
