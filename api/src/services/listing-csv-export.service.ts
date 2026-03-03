@@ -98,12 +98,17 @@ export const formatCommunityType = {
 };
 
 export const formatCloudinaryPdfUrl = (fileId: string): string => {
-  return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${fileId}.pdf`;
+  const cloudinaryCloudName: string | undefined =
+    process.env.CLOUDINARY_CLOUD_NAME || process.env.cloudinaryCloudName;
+  if (!cloudinaryCloudName) {
+    return fileId;
+  }
+  return `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/${fileId}.pdf`;
 };
 
 @Injectable()
 export class ListingCsvExporterService implements CsvExporterServiceInterface {
-  readonly dateFormat: string = 'MM-DD-YYYY hh:mm:ssA z';
+  readonly dateFormat: string = 'YYYY-MM-DD hh:mm:ss A';
   timeZone = process.env.TIME_ZONE;
   constructor(
     private prisma: PrismaService,
@@ -1458,6 +1463,10 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
             : !isEmpty(val.monthlyRent)
             ? 'Fixed amount'
             : '',
+      },
+      {
+        path: 'unit.accessibilityPriorityType',
+        label: 'Accessibility Priority Type',
       },
     ];
   }

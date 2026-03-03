@@ -24,6 +24,7 @@ import { mapTo } from '../utilities/mapTo';
 import { Confirm } from '../dtos/auth/confirm.dto';
 import { SmsService } from './sms.service';
 import { EmailService } from './email.service';
+import { SnapshotCreateService } from './snapshot-create.service';
 
 // since our local env doesn't have an https cert we can't be secure. Hosted envs should be secure
 const secure = process.env.NODE_ENV !== 'development';
@@ -60,6 +61,7 @@ export class AuthService {
     private userService: UserService,
     private smsService: SmsService,
     private emailsService: EmailService,
+    private snapshotCreateService: SnapshotCreateService,
   ) {}
 
   /*
@@ -260,9 +262,11 @@ export class AuthService {
       );
     }
 
+    let isPhoneNumberBeingAdded = false;
     if (dto.mfaType === MfaType.sms) {
       if (dto.phoneNumber) {
         if (!user.phoneNumberVerified) {
+          isPhoneNumberBeingAdded = true;
           user.phoneNumber = dto.phoneNumber;
         } else {
           throw new UnauthorizedException(
@@ -284,6 +288,9 @@ export class AuthService {
       Number(process.env.MFA_CODE_VALID),
     );
 
+    if (isPhoneNumberBeingAdded) {
+      await this.snapshotCreateService.createUserSnapshot(user.id);
+    }
     await this.prisma.userAccounts.update({
       data: {
         singleUseCode,
@@ -333,7 +340,7 @@ export class AuthService {
         `resetToken ${dto.token} does not match user ${user.id}'s reset token (${user.resetToken})`,
       );
     }
-
+    await this.snapshotCreateService.createUserSnapshot(user.id);
     await this.prisma.userAccounts.update({
       data: {
         passwordHash: await passwordToHash(dto.password),

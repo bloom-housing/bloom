@@ -16,6 +16,7 @@ export enum ListingFilterKeys {
   multiselectQuestions = 'multiselectQuestions',
   name = 'name',
   neighborhood = 'neighborhood',
+  parkingType = 'parkingType',
   regions = 'regions',
   configurableRegions = 'configurableRegions',
   reservedCommunityTypes = 'reservedCommunityTypes',

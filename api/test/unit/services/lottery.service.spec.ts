@@ -31,22 +31,23 @@ import { LotteryService } from '../../../src/services/lottery.service';
 import { ListingLotteryStatus } from '../../../src/dtos/listings/listing-lottery-status.dto';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 import { CronJobService } from '../../../src/services/cron-job.service';
+import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 
 const canOrThrowMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
 const lotteryPublishedAdminMock = jest.fn();
 const lotteryPublishedApplicantMock = jest.fn();
 
-const user = new User();
-user.firstName = 'Test';
-user.lastName = 'User';
-user.email = 'test@example.com';
-
 describe('Testing lottery service', () => {
   let service: LotteryService;
   let prisma: PrismaService;
   let listingService: ListingService;
   let config: ConfigService;
+
+  const user = new User();
+  user.firstName = 'Test';
+  user.lastName = 'User';
+  user.email = 'test@example.com';
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -81,6 +82,7 @@ describe('Testing lottery service', () => {
         SchedulerRegistry,
         GoogleTranslateService,
         CronJobService,
+        SnapshotCreateService,
       ],
       imports: [HttpModule],
     }).compile();

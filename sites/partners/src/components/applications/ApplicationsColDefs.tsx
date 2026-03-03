@@ -44,7 +44,8 @@ export function getColDefs(
   enableFullTimeStudentQuestion?: boolean,
   disableWorkInRegion?: boolean,
   enableApplicationStatus?: boolean,
-  reviewOrderType?: ReviewOrderTypeEnum
+  reviewOrderType?: ReviewOrderTypeEnum,
+  enableHousingAdvocate?: boolean
 ): ColDef[] {
   const defs: ColDef[] = [
     {
@@ -506,6 +507,10 @@ export function getColDefs(
       minWidth: 50,
       valueFormatter: ({ data, value }: { data: Application; value: string }) => {
         if (!value) return ""
+
+        if (value === "caseManager" && enableHousingAdvocate) {
+          return t("application.alternateContact.type.options.caseManagerAdvocate")
+        }
 
         return value == "other"
           ? data.alternateContact.otherType

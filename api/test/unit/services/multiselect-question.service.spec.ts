@@ -23,9 +23,6 @@ import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { CronJobService } from '../../../src/services/cron-job.service';
 
-const user = new User();
-const canOrThrowMock = jest.fn();
-
 export const mockMultiselectQuestion = (
   position: number,
   date: Date,
@@ -63,6 +60,8 @@ export const mockMultiselectQuestion = (
 describe('Testing multiselect question service', () => {
   let service: MultiselectQuestionService;
   let prisma: PrismaService;
+  const user = new User();
+  const canOrThrowMock = jest.fn();
 
   const mockMultiselectQuestionSet = (numberToCreate: number, date: Date) => {
     const toReturn = [];

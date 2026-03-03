@@ -1,6 +1,6 @@
 import Link from "next/link"
-import { Card, t } from "@bloom-housing/ui-components"
-import { Heading } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { Heading, Card } from "@bloom-housing/ui-seeds"
 import { BloomCard } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
@@ -65,7 +65,7 @@ const Assistance = (props: AssistanceProps) => {
             <Card className={styles["contact-card"]}>
               <div className={styles["contact-card-subsection"]}>
                 <Heading size="xl" priority={2}>
-                  {t("resources.contactTitle")}
+                  {t("footer.contact")}
                 </Heading>
                 <p className={styles["contact-card-description"]}>
                   {t("resources.contactDescription")}

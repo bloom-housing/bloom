@@ -32,14 +32,11 @@ import { mapTo } from '../utilities/mapTo';
 import { PaginatedUserDto } from '../dtos/users/paginated-user.dto';
 import { UserQueryParams } from '../dtos/users/user-query-param.dto';
 import { Request as ExpressRequest, Response } from 'express';
-import { UserUpdate } from '../dtos/users/user-update.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
-import { UserCreate } from '../dtos/users/user-create.dto';
 import { UserCreateParams } from '../dtos/users/user-create-params.dto';
 import { UserFavoriteListing } from '../dtos/users/user-favorite-listing.dto';
 import { EmailAndAppUrl } from '../dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../dtos/users/confirmation-request.dto';
-import { UserInvite } from '../dtos/users/user-invite.dto';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { UserProfilePermissionGuard } from '../guards/user-profile-permission-guard';
 import { OptionalAuthGuard } from '../guards/optional.guard';
@@ -53,12 +50,27 @@ import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use-code.dto';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { UserDeleteDTO } from '../dtos/users/user-delete.dto';
+import { PublicUserCreate } from '../dtos/users/public-user-create.dto';
+import { PartnerUserCreate } from '../dtos/users/partner-user-create.dto';
+import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
+import { PublicUserUpdate } from '../dtos/users/public-user-update.dto';
+import { PartnerUserUpdate } from '../dtos/users/partner-user-update.dto';
+import { AdvocateUserUpdate } from '../dtos/users/advocate-user-update.dto';
 
 @Controller('user')
 @ApiTags('user')
 @PermissionTypeDecorator('user')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-@ApiExtraModels(IdDTO, EmailAndAppUrl)
+@ApiExtraModels(
+  IdDTO,
+  EmailAndAppUrl,
+  PublicUserCreate,
+  PartnerUserCreate,
+  AdvocateUserCreate,
+  PublicUserUpdate,
+  PartnerUserUpdate,
+  AdvocateUserUpdate,
+)
 @UseGuards(ApiKeyGuard)
 export class UserController {
   constructor(
@@ -125,21 +137,55 @@ export class UserController {
     return await this.userService.favoriteListings(userId);
   }
 
-  @Post()
+  @Post('/public')
   @ApiOperation({
     summary: 'Creates a public only user',
-    operationId: 'create',
+    operationId: 'createPublic',
+  })
+  @UseGuards(OptionalAuthGuard, PermissionGuard)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @ApiOkResponse({ type: User })
+  async createPublicUser(
+    @Request() req: ExpressRequest,
+    @Body() dto: PublicUserCreate,
+    @Query() queryParams: UserCreateParams,
+  ): Promise<User> {
+    return await this.userService.createPublicUser(
+      dto,
+      queryParams.noWelcomeEmail !== true,
+      req,
+    );
+  }
+
+  @Post('/partner')
+  @ApiOperation({
+    summary: 'Creates a partner only user',
+    operationId: 'createPartner',
+  })
+  @ApiOkResponse({ type: User })
+  @UseGuards(PermissionGuard, JwtAuthGuard)
+  @UseInterceptors(ActivityLogInterceptor)
+  async createPartnerUser(
+    @Request() req: ExpressRequest,
+    @Body() dto: PartnerUserCreate,
+  ): Promise<User> {
+    return await this.userService.createPartnerUser(dto, req);
+  }
+
+  @Post('/advocate')
+  @ApiOperation({
+    summary: 'Creates a advocate only user',
+    operationId: 'createAdvocate',
   })
   @ApiOkResponse({ type: User })
   @UseGuards(OptionalAuthGuard, PermissionGuard)
-  async create(
+  async createAdvocateUser(
     @Request() req: ExpressRequest,
-    @Body() dto: UserCreate,
+    @Body() dto: AdvocateUserCreate,
     @Query() queryParams: UserCreateParams,
   ): Promise<User> {
-    return await this.userService.create(
+    return await this.userService.createAdvocateUser(
       dto,
-      false,
       queryParams.noWelcomeEmail !== true,
       req,
     );
@@ -159,18 +205,6 @@ export class UserController {
       mapTo(User, req['user']),
       dto.shouldRemoveApplication,
     );
-  }
-
-  @Post('/invite')
-  @ApiOperation({ summary: 'Invite partner user', operationId: 'invite' })
-  @ApiOkResponse({ type: User })
-  @UseGuards(OptionalAuthGuard)
-  @UseInterceptors(ActivityLogInterceptor)
-  async invite(
-    @Body() dto: UserInvite,
-    @Request() req: ExpressRequest,
-  ): Promise<User> {
-    return await this.userService.create(dto, true, undefined, req);
   }
 
   @Post('request-single-use-code')
@@ -268,21 +302,40 @@ export class UserController {
     return await this.userService.deleteAfterInactivity();
   }
 
-  @Put(':id')
-  @ApiOperation({ summary: 'Update user', operationId: 'update' })
+  @Put('/public')
+  @ApiOperation({ summary: 'Update user', operationId: 'updatePublic' })
   @ApiOkResponse({ type: User })
   @UseGuards(JwtAuthGuard, PermissionGuard)
   @UseInterceptors(ActivityLogInterceptor)
-  async update(
+  async updatePublicUser(
     @Request() req: ExpressRequest,
-    @Body() dto: UserUpdate,
+    @Body() dto: PublicUserUpdate,
   ): Promise<User> {
-    const jurisdictionName = req.headers['jurisdictionname'] || '';
-    return await this.userService.update(
-      dto,
-      mapTo(User, req['user']),
-      jurisdictionName as string,
-    );
+    return await this.userService.update(dto, req);
+  }
+
+  @Put('/partner')
+  @ApiOperation({ summary: 'Update user', operationId: 'updatePartner' })
+  @ApiOkResponse({ type: User })
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  @UseInterceptors(ActivityLogInterceptor)
+  async updatePartnerUser(
+    @Request() req: ExpressRequest,
+    @Body() dto: PartnerUserUpdate,
+  ): Promise<User> {
+    return await this.userService.update(dto, req);
+  }
+
+  @Put('/advocate')
+  @ApiOperation({ summary: 'Update user', operationId: 'updateAdvocate' })
+  @ApiOkResponse({ type: User })
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  @UseInterceptors(ActivityLogInterceptor)
+  async updateAdvocateUser(
+    @Request() req: ExpressRequest,
+    @Body() dto: AdvocateUserUpdate,
+  ): Promise<User> {
+    return await this.userService.update(dto, req);
   }
 
   @Get(`:id`)

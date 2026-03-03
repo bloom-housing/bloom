@@ -147,6 +147,10 @@ describe('Testing jurisdiction service', () => {
       allowSingleUseCodeLogin: false,
       listingApprovalPermissions: [],
       duplicateListingPermissions: [],
+      regions: [],
+      requiredListingFields: [],
+      visibleAccessibilityPriorityTypes: [],
+      visibleNeighborhoodAmenities: [],
     };
 
     expect(await service.create(params)).toEqual(mockedValue);
@@ -167,6 +171,11 @@ describe('Testing jurisdiction service', () => {
         allowSingleUseCodeLogin: false,
         listingApprovalPermissions: [],
         duplicateListingPermissions: [],
+        listingFeaturesConfiguration: undefined,
+        regions: [],
+        requiredListingFields: [],
+        visibleAccessibilityPriorityTypes: [],
+        visibleNeighborhoodAmenities: [],
       },
       include: {
         featureFlags: true,
@@ -204,6 +213,10 @@ describe('Testing jurisdiction service', () => {
       allowSingleUseCodeLogin: false,
       listingApprovalPermissions: [],
       duplicateListingPermissions: [],
+      regions: [],
+      requiredListingFields: [],
+      visibleAccessibilityPriorityTypes: [],
+      visibleNeighborhoodAmenities: [],
     };
 
     expect(await service.update(params)).toEqual({
@@ -245,6 +258,11 @@ describe('Testing jurisdiction service', () => {
         allowSingleUseCodeLogin: false,
         listingApprovalPermissions: [],
         duplicateListingPermissions: [],
+        listingFeaturesConfiguration: undefined,
+        regions: [],
+        requiredListingFields: [],
+        visibleAccessibilityPriorityTypes: [],
+        visibleNeighborhoodAmenities: [],
       },
       where: {
         id: mockedJurisdiction.id,
@@ -276,6 +294,10 @@ describe('Testing jurisdiction service', () => {
       allowSingleUseCodeLogin: false,
       listingApprovalPermissions: [],
       duplicateListingPermissions: [],
+      regions: [],
+      requiredListingFields: [],
+      visibleAccessibilityPriorityTypes: [],
+      visibleNeighborhoodAmenities: [],
     };
 
     await expect(async () => await service.update(params)).rejects.toThrowError(

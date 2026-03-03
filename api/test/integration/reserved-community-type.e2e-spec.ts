@@ -121,7 +121,7 @@ describe('ReservedCommunityType Controller Tests', () => {
       .set('Cookie', cookies)
       .expect(200);
 
-    expect(res.body.length).toEqual(11);
+    expect(res.body.length).toEqual(12);
     expect(res.body.map((body) => body.name)).toContain(
       reservedCommunityTypeA.name,
     );

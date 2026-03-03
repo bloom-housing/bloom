@@ -59,7 +59,10 @@ const loadListing = async (
     ...applicationConfig,
     languages: jurisdictionResponse.languages,
     featureFlags: jurisdictionResponse.featureFlags,
-    isAdvocate,
+    isAdvocate:
+      isFeatureFlagOn(jurisdictionResponse, FeatureFlagEnum.enableHousingAdvocate) && isAdvocate,
+    visibleSpokenLanguages: jurisdictionResponse.visibleSpokenLanguages,
+    raceEthnicityConfiguration: jurisdictionResponse.raceEthnicityConfiguration,
   }
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)
@@ -102,8 +105,7 @@ const ApplicationChooseLanguage = () => {
         "en",
         listingsService,
         jurisdictionsService,
-        // TODO: switch below to sth like profile?.isAdvocate ?? false when available
-        false
+        profile?.isAdvocate ?? false
       )
     } else {
       conductor.listing = context.listing
@@ -153,13 +155,20 @@ const ApplicationChooseLanguage = () => {
         language,
         listingsService,
         jurisdictionsService,
-        // TODO: switch below to sth like profile?.isAdvocate ?? false when available
-        false
+        profile?.isAdvocate ?? false
       ).then(() => {
         void router.push(conductor.determineNextUrl(), null, { locale: language })
       })
     },
-    [conductor, context, listingId, listingsService, jurisdictionsService, router]
+    [
+      conductor,
+      context,
+      listingId,
+      listingsService,
+      jurisdictionsService,
+      router,
+      profile?.isAdvocate,
+    ]
   )
 
   return (
@@ -196,7 +205,7 @@ const ApplicationChooseLanguage = () => {
             {listing?.applicationConfig?.languages?.length && (
               <CardSection divider={"flush"}>
                 <>
-                  <Heading priority={2} size={"lg"} className={"pb-4"}>
+                  <Heading priority={3} size={"lg"} className={"pb-4"}>
                     {t("application.chooseLanguage.chooseYourLanguage")}
                   </Heading>
                   {listing.applicationConfig.languages.map((lang, index) => (
@@ -207,7 +216,7 @@ const ApplicationChooseLanguage = () => {
                         onLanguageSelect(lang)
                       }}
                       key={index}
-                      id={"app-choose-language-button"}
+                      id={`app-choose-language-button-${lang}`}
                     >
                       {t(`languages.${lang}`)}
                     </Button>
@@ -219,7 +228,7 @@ const ApplicationChooseLanguage = () => {
             {initialStateLoaded && !profile && (
               <>
                 <CardSection divider={"flush"} className={styles["application-form-action-footer"]}>
-                  <Heading priority={2} size={"2xl"} className={"pb-4"}>
+                  <Heading priority={3} size={"2xl"} className={"seeds-medium-heading pb-4"}>
                     {t("account.haveAnAccount")}
                   </Heading>
                   <p className={"pb-4"}>{t("application.chooseLanguage.signInSaveTime")}</p>
@@ -233,7 +242,7 @@ const ApplicationChooseLanguage = () => {
                   </Button>
                 </CardSection>
                 <CardSection divider={"flush"} className={styles["application-form-action-footer"]}>
-                  <Heading priority={2} size={"2xl"} className={"pb-4"}>
+                  <Heading priority={3} size={"2xl"} className={"seeds-medium-heading pb-4"}>
                     {t("authentication.createAccount.noAccount")}
                   </Heading>
                   <Button

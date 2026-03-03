@@ -7,6 +7,7 @@ locals {
     DB_USER             = "bloom_api"
     DB_DATABASE         = "bloom_prisma"
     DB_USE_RDS_IAM_AUTH = "1"
+    USE_AWS_SES         = "1"
   }
 }
 resource "aws_ecs_task_definition" "bloom_api" {
@@ -79,7 +80,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
 resource "aws_ecs_service" "bloom_api" {
   depends_on = [
     aws_db_instance.bloom,
-    aws_vpc_endpoint.secrets_manager,
+    aws_vpc_endpoint.aws_services["secretsmanager"],
     aws_route_table_association.private_subnet,
     null_resource.bloom_dbinit_run,
   ]
@@ -106,7 +107,7 @@ resource "aws_ecs_service" "bloom_api" {
   deployment_maximum_percent = 200 # allow surge of up to twice desired task count.
 
   network_configuration {
-    security_groups  = [aws_security_group.api.id]
+    security_groups  = [aws_security_group.bloom["api"].id]
     subnets          = [for s in aws_subnet.private : s.id]
     assign_public_ip = false
   }

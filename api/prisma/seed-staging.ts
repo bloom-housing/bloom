@@ -15,7 +15,6 @@ import { listingFactory } from './seed-helpers/listing-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { userFactory } from './seed-helpers/user-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
-import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
@@ -27,7 +26,9 @@ import {
   simplifiedDCMap,
 } from './seed-helpers/map-layer-factory';
 import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
+import { UnitAccessibilityPriorityTypeEnum } from '../src/enums/units/accessibility-priority-type-enum';
 import { ListingFeaturesConfiguration } from '../src/dtos/jurisdictions/listing-features-config.dto';
+import { RaceEthnicityConfiguration } from '../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
 import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
 import { createAllFeatureFlags } from './seed-helpers/feature-flag-factory';
 import { FeatureFlagEnum } from '../src/enums/feature-flags/feature-flags-enum';
@@ -39,6 +40,60 @@ import { littleVillageApartments } from './seed-helpers/listing-data/little-vill
 import { elmVillage } from './seed-helpers/listing-data/elm-village';
 import { lakeviewVilla } from './seed-helpers/listing-data/lakeview-villa';
 import { sunshineFlats } from './seed-helpers/listing-data/sunshine-flats';
+import { agencyFactory } from './seed-helpers/agency-factory';
+
+export const defaultRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
+  options: [
+    {
+      id: 'americanIndianAlaskanNative',
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: 'asian',
+      subOptions: [
+        { id: 'asianIndian', allowOtherText: false },
+        { id: 'chinese', allowOtherText: false },
+        { id: 'filipino', allowOtherText: false },
+        { id: 'japanese', allowOtherText: false },
+        { id: 'korean', allowOtherText: false },
+        { id: 'vietnamese', allowOtherText: false },
+        { id: 'otherAsian', allowOtherText: true },
+      ],
+      allowOtherText: false,
+    },
+    {
+      id: 'blackAfricanAmerican',
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: 'nativeHawaiianOtherPacificIslander',
+      subOptions: [
+        { id: 'nativeHawaiian', allowOtherText: false },
+        { id: 'guamanianOrChamorro', allowOtherText: false },
+        { id: 'samoan', allowOtherText: false },
+        { id: 'otherPacificIslander', allowOtherText: true },
+      ],
+      allowOtherText: false,
+    },
+    {
+      id: 'white',
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: 'otherMultiracial',
+      subOptions: [],
+      allowOtherText: true,
+    },
+    {
+      id: 'declineToRespond',
+      subOptions: [],
+      allowOtherText: false,
+    },
+  ],
+};
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -71,6 +126,51 @@ export const stagingSeed = async (
       { id: 'barrierFreeBathroom' },
       { id: 'wideDoorways' },
       { id: 'loweredCabinets' },
+    ],
+  };
+
+  const angelopolisRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
+    options: [
+      {
+        id: 'americanIndianAlaskanNative',
+        subOptions: [],
+        allowOtherText: false,
+      },
+      {
+        id: 'asian',
+        subOptions: [],
+        allowOtherText: true,
+      },
+      {
+        id: 'blackAfricanAmerican',
+        subOptions: [],
+        allowOtherText: false,
+      },
+      {
+        id: 'hispanicLatino',
+        subOptions: [],
+        allowOtherText: false,
+      },
+      {
+        id: 'middleEasternNorthAfrican',
+        subOptions: [],
+        allowOtherText: false,
+      },
+      {
+        id: 'nativeHawaiianOtherPacificIslander',
+        subOptions: [],
+        allowOtherText: false,
+      },
+      {
+        id: 'white',
+        subOptions: [],
+        allowOtherText: false,
+      },
+      {
+        id: 'otherMultiracial',
+        subOptions: [],
+        allowOtherText: true,
+      },
     ],
   };
   // create main jurisdiction with as many feature flags turned on as possible
@@ -120,6 +220,7 @@ export const stagingSeed = async (
         'units',
       ],
       listingFeaturesConfiguration: defaultListingFeatureConfiguration,
+      raceEthnicityConfiguration: defaultRaceEthnicityConfiguration,
     }),
   });
 
@@ -171,6 +272,7 @@ export const stagingSeed = async (
         LanguagesEnum.bn,
       ],
       listingFeaturesConfiguration: defaultListingFeatureConfiguration,
+      raceEthnicityConfiguration: defaultRaceEthnicityConfiguration,
     }),
   });
   // Basic configuration jurisdiction
@@ -189,6 +291,7 @@ export const stagingSeed = async (
       ],
       languages: [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
       listingFeaturesConfiguration: defaultListingFeatureConfiguration,
+      raceEthnicityConfiguration: defaultRaceEthnicityConfiguration,
     }),
   });
   // Jurisdiction with no feature flags enabled
@@ -204,6 +307,7 @@ export const stagingSeed = async (
       publicSiteBaseURL: publicSiteBaseURL,
       featureFlags: [
         FeatureFlagEnum.disableBuildingSelectionCriteria,
+        FeatureFlagEnum.disableEthnicityQuestion,
         FeatureFlagEnum.disableListingPreferences,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableApplicationStatus,
@@ -227,6 +331,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableResources,
         FeatureFlagEnum.enableSmokingPolicyRadio,
         FeatureFlagEnum.enableParkingType,
+        FeatureFlagEnum.enableSpokenLanguage,
       ],
       visibleNeighborhoodAmenities: [
         NeighborhoodAmenitiesEnum.groceryStores,
@@ -237,6 +342,21 @@ export const stagingSeed = async (
         NeighborhoodAmenitiesEnum.recreationalFacilities,
         NeighborhoodAmenitiesEnum.playgrounds,
         NeighborhoodAmenitiesEnum.busStops,
+      ],
+      languages: [
+        LanguagesEnum.en,
+        LanguagesEnum.es,
+        LanguagesEnum.ko,
+        LanguagesEnum.hy,
+        LanguagesEnum.zh,
+        LanguagesEnum.tl,
+        LanguagesEnum.fa,
+        LanguagesEnum.vi,
+      ],
+      visibleAccessibilityPriorityTypes: [
+        UnitAccessibilityPriorityTypeEnum.mobility,
+        UnitAccessibilityPriorityTypeEnum.hearingAndVision,
+        UnitAccessibilityPriorityTypeEnum.mobilityHearingAndVision,
       ],
       regions: [
         'Metro Area',
@@ -334,8 +454,16 @@ export const stagingSeed = async (
           },
         ],
       },
+      raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
     }),
   });
+  await agencyFactory(
+    angelopolisJurisdiction.id,
+    prismaClient,
+    5,
+    'Angelopolis',
+  );
+  await agencyFactory(mainJurisdiction.id, prismaClient, 5, 'Bloomington');
   // create super admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
@@ -461,6 +589,20 @@ export const stagingSeed = async (
         angelopolisJurisdiction.id,
       ],
       acceptedTerms: true,
+    }),
+  });
+  const agency = await prismaClient.agency.findFirst({
+    where: {
+      jurisdictionsId: angelopolisJurisdiction.id,
+    },
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      email: 'advocate@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [angelopolisJurisdiction.id],
+      isAdvocate: true,
+      agencyId: agency.id,
     }),
   });
   // add jurisdiction specific translations and default ones
@@ -691,6 +833,51 @@ export const stagingSeed = async (
       data: veteranProgramMsqData,
     },
   );
+  const mobilityAccessibilityNeedsProgramQuestion =
+    await prismaClient.multiselectQuestions.create({
+      data: multiselectQuestionFactory(angelopolisJurisdiction.id, {
+        multiselectQuestion: {
+          text: 'Mobility accessibility needs',
+          description:
+            'Some units require at least one resident to have a mobility accessibility need',
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          optOutText: 'None of the above',
+          options: [
+            { text: 'Wheelchair', ordinal: 0 },
+            { text: 'Walker', ordinal: 1 },
+            { text: 'Power chair', ordinal: 2 },
+            { text: 'Other mobility device', ordinal: 3 },
+          ],
+        },
+      }),
+    });
+  const hearingVisionAccessibilityNeedsProgramQuestion =
+    await prismaClient.multiselectQuestions.create({
+      data: multiselectQuestionFactory(angelopolisJurisdiction.id, {
+        multiselectQuestion: {
+          text: 'Hearing/vision accessibility needs',
+          description:
+            'Some units require at least one resident to have a hearing / vision accessibility need',
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          optOutText: 'None of the above',
+          options: [
+            { text: 'Audible and visual doorbells', ordinal: 0 },
+            {
+              text: 'Fire and smoke alarms with hard wired strobes',
+              ordinal: 1,
+            },
+            {
+              text: 'Documents in screen-reader accessible format',
+              ordinal: 2,
+            },
+            { text: 'Documents in large text or braille', ordinal: 3 },
+          ],
+        },
+      }),
+    });
+
   const multiselectQuestionPrograms =
     await prismaClient.multiselectQuestions.create({
       data: multiselectQuestionFactory(mainJurisdiction.id, {
@@ -760,7 +947,6 @@ export const stagingSeed = async (
 
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
-  await unitAccessibilityPriorityTypeFactoryAll(prismaClient);
   await reservedCommunityTypeFactoryAll(mainJurisdiction.id, prismaClient);
   // list of predefined listings WARNING: images only work if image setup is cloudinary on exygy account
   const listingsToCreate: Parameters<typeof listingFactory>[] = [
@@ -811,8 +997,17 @@ export const stagingSeed = async (
           cityEmployeeQuestion,
           workInCityQuestion,
           multiselectQuestionPrograms,
+          mobilityAccessibilityNeedsProgramQuestion,
+          hearingVisionAccessibilityNeedsProgramQuestion,
         ],
-        applications: [await applicationFactory(), await applicationFactory()],
+        applications: [
+          await applicationFactory({
+            raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
+          }),
+          await applicationFactory({
+            raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
+          }),
+        ],
         userAccounts: [{ id: partnerUser.id }],
         optionalFeatures: { carpetInUnit: true },
       },

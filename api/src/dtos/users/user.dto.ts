@@ -20,6 +20,7 @@ import { LanguagesEnum } from '@prisma/client';
 import { IdDTO } from '../shared/id.dto';
 import { UserRole } from './user-role.dto';
 import { Jurisdiction } from '../jurisdictions/jurisdiction.dto';
+import { Address } from '../addresses/address.dto';
 
 export class User extends AbstractDTO {
   @Expose()
@@ -149,4 +150,56 @@ export class User extends AbstractDTO {
   @Type(() => IdDTO)
   @ApiPropertyOptional({ type: IdDTO, isArray: true })
   favoriteListings?: IdDTO[];
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  title?: string;
+
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDTO)
+  @ApiPropertyOptional({ type: IdDTO })
+  agency?: IdDTO;
+
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Address)
+  @ApiPropertyOptional({ type: Address })
+  address?: Address;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  phoneType?: string;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  phoneExtension?: string;
+
+  @Expose()
+  @IsPhoneNumber('US', { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  additionalPhoneNumber?: string;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  additionalPhoneNumberType?: string;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  additionalPhoneExtension?: string;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  isApproved?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  isAdvocate?: boolean;
 }

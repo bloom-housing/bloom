@@ -527,8 +527,6 @@ describe("<Apply>", () => {
           ],
           listingsApplicationPickUpAddress: {
             id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             city: "Pick up address city",
             street: "Pick up address street",
             street2: "Pick up address unit",
@@ -539,8 +537,6 @@ describe("<Apply>", () => {
           },
           listingsApplicationMailingAddress: {
             id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             city: "Mailing address city",
             street: "Mailing address street",
             street2: "Mailing address unit",
@@ -551,8 +547,6 @@ describe("<Apply>", () => {
           },
           listingsApplicationDropOffAddress: {
             id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             city: "Drop off address city",
             street: "Drop off address street",
             street2: "Drop off address unit",
@@ -623,8 +617,6 @@ describe("<Apply>", () => {
           ],
           listingsApplicationMailingAddress: {
             id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             city: "Mailing address city",
             street: "Mailing address street",
             street2: "Mailing address unit",
@@ -685,8 +677,6 @@ describe("<Apply>", () => {
           ],
           listingsApplicationMailingAddress: {
             id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             city: "Mailing address city",
             street: "Mailing address street",
             street2: "Mailing address unit",
@@ -736,8 +726,6 @@ describe("<Apply>", () => {
           ],
           listingsApplicationMailingAddress: {
             id: "mailing_adress_id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             city: addressCity,
             state: addressState,
             street: addressStreet,
@@ -754,5 +742,272 @@ describe("<Apply>", () => {
     expect(screen.getByText(addressState, { exact: false })).toBeInTheDocument()
     expect(screen.getByText(addressStreet, { exact: false })).toBeInTheDocument()
     expect(screen.getByText(addressZipCode, { exact: false })).toBeInTheDocument()
+  })
+
+  it("shows apply online button when online app exists and paperApplication is selected but no files uploaded", () => {
+    render(
+      <Apply
+        listing={{
+          ...listing,
+          digitalApplication: true,
+          paperApplication: true, // Marked as having paper applications
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          applicationMethods: [
+            {
+              id: "internal-id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              type: ApplicationMethodsTypeEnum.Internal,
+              acceptsPostmarkedApplications: null,
+              externalReference: null,
+              paperApplications: [],
+              phoneNumber: null,
+            },
+            {
+              id: "file-download-id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              type: ApplicationMethodsTypeEnum.FileDownload,
+              acceptsPostmarkedApplications: null,
+              externalReference: null,
+              paperApplications: [], // No paper applications uploaded
+              phoneNumber: null,
+            },
+          ],
+        }}
+        preview={false}
+        setShowDownloadModal={() => null}
+      />
+    )
+    // Should still show the section with apply online button
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByText("Apply online")).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Apply online" })).toHaveAttribute(
+      "href",
+      `/applications/start/choose-language?listingId=${listing.id}`
+    )
+    // Should not show download button since no files were uploaded
+    expect(screen.queryByText("Download application")).not.toBeInTheDocument()
+  })
+
+  it("does not show section when only FileDownload method exists with no paper apps and no addresses", () => {
+    render(
+      <Apply
+        listing={{
+          ...listing,
+          digitalApplication: false,
+          paperApplication: true,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          applicationMethods: [
+            {
+              id: "file-download-id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              type: ApplicationMethodsTypeEnum.FileDownload,
+              acceptsPostmarkedApplications: null,
+              externalReference: null,
+              paperApplications: [], // No paper applications uploaded
+              phoneNumber: null,
+            },
+          ],
+        }}
+        preview={false}
+        setShowDownloadModal={() => null}
+      />
+    )
+    expect(screen.queryByText("How to apply")).not.toBeInTheDocument()
+  })
+
+  it("shows section when FileDownload method has no paper apps but mailing address exists", () => {
+    render(
+      <Apply
+        listing={{
+          ...listing,
+          digitalApplication: false,
+          paperApplication: true,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          applicationMethods: [
+            {
+              id: "file-download-id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              type: ApplicationMethodsTypeEnum.FileDownload,
+              acceptsPostmarkedApplications: null,
+              externalReference: null,
+              paperApplications: [],
+              phoneNumber: null,
+            },
+          ],
+          listingsApplicationMailingAddress: {
+            id: "mailing_address_id",
+            city: "Test City",
+            state: "CA",
+            street: "123 Test Street",
+            zipCode: "12345",
+          },
+        }}
+        preview={false}
+        setShowDownloadModal={() => null}
+      />
+    )
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByText("Send application by US Mail")).toBeInTheDocument()
+  })
+
+  it("shows apply online button when digitalApplication is true and commonDigitalApplication is true", () => {
+    render(
+      <Apply
+        listing={{
+          ...listing,
+          digitalApplication: true,
+          commonDigitalApplication: true,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          applicationMethods: [
+            {
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              type: ApplicationMethodsTypeEnum.Internal,
+              acceptsPostmarkedApplications: null,
+              externalReference: null,
+              paperApplications: [],
+              phoneNumber: null,
+            },
+          ],
+        }}
+        preview={false}
+        setShowDownloadModal={() => null}
+      />
+    )
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByText("Apply online")).toBeInTheDocument()
+  })
+
+  it("does not show section when digitalApplication is true but no Internal or ExternalLink method exists", () => {
+    render(
+      <Apply
+        listing={{
+          ...listing,
+          digitalApplication: true,
+          commonDigitalApplication: false,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          applicationMethods: [
+            {
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              type: ApplicationMethodsTypeEnum.FileDownload,
+              acceptsPostmarkedApplications: null,
+              externalReference: null,
+              paperApplications: [],
+              phoneNumber: null,
+            },
+          ],
+        }}
+        preview={false}
+        setShowDownloadModal={() => null}
+      />
+    )
+    // Should not render because there's no valid online application method
+    expect(screen.queryByText("How to apply")).not.toBeInTheDocument()
+  })
+
+  it("shows apply online button when ExternalLink method has external reference", () => {
+    render(
+      <Apply
+        listing={{
+          ...listing,
+          digitalApplication: true,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          applicationMethods: [
+            {
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              type: ApplicationMethodsTypeEnum.ExternalLink,
+              acceptsPostmarkedApplications: null,
+              externalReference: "https://example.com/apply",
+              paperApplications: [],
+              phoneNumber: null,
+            },
+          ],
+        }}
+        preview={false}
+        setShowDownloadModal={() => null}
+      />
+    )
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByText("Apply online")).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Apply online" })).toHaveAttribute(
+      "href",
+      "https://example.com/apply"
+    )
+  })
+
+  it("does not show section when ExternalLink method exists but has no external reference", () => {
+    render(
+      <Apply
+        listing={{
+          ...listing,
+          digitalApplication: true,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          applicationMethods: [
+            {
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              type: ApplicationMethodsTypeEnum.ExternalLink,
+              acceptsPostmarkedApplications: null,
+              externalReference: null,
+              paperApplications: [],
+              phoneNumber: null,
+            },
+          ],
+        }}
+        preview={false}
+        setShowDownloadModal={() => null}
+      />
+    )
+    // Should not render because ExternalLink has no URL
+    expect(screen.queryByText("How to apply")).not.toBeInTheDocument()
+  })
+
+  it("enables apply button when listing status is pending but in preview mode", () => {
+    render(
+      <Apply
+        listing={{
+          ...listing,
+          status: ListingsStatusEnum.pending,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          applicationMethods: [
+            {
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              type: ApplicationMethodsTypeEnum.Internal,
+              acceptsPostmarkedApplications: null,
+              externalReference: null,
+              paperApplications: [],
+              phoneNumber: null,
+            },
+          ],
+        }}
+        preview={true}
+        setShowDownloadModal={() => null}
+      />
+    )
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    // In preview mode, button should not be disabled
+    const applyButton = screen.getByText("Apply online")
+    expect(applyButton).toBeInTheDocument()
+
+    // Should have a valid href when enabled
+    const linkElement = applyButton.closest("a")
+    if (linkElement) {
+      expect(linkElement).toHaveAttribute(
+        "href",
+        expect.stringContaining(`/applications/start/choose-language`)
+      )
+    }
   })
 })

@@ -33,16 +33,9 @@ import {
 import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
 import { UnitRentTypeCreate } from '../../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
 import { UnitRentTypeUpdate } from '../../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
-import {
-  unitAccessibilityPriorityTypeFactoryAll,
-  unitAccessibilityPriorityTypeFactorySingle,
-} from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
-import { UnitAccessibilityPriorityTypeCreate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
-import { UnitAccessibilityPriorityTypeUpdate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
 import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
 import { multiselectQuestionFactory } from '../../../prisma/seed-helpers/multiselect-question-factory';
-import { UserUpdate } from '../../../src/dtos/users/user-update.dto';
 import { EmailAndAppUrl } from '../../../src/dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../../../src/dtos/users/confirmation-request.dto';
 import { UserService } from '../../../src/services/user.service';
@@ -66,6 +59,7 @@ import {
   constructFullListingData,
   createSimpleApplication,
 } from './helpers';
+import { PublicUserUpdate } from '../../../src/dtos/users/public-user-update.dto';
 
 const testEmailService = {
   confirmation: jest.fn(),
@@ -109,7 +103,6 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
       'wrong partner permission juris',
     );
     await reservedCommunityTypeFactoryAll(jurisdictionId, prisma);
-    await unitAccessibilityPriorityTypeFactoryAll(prisma);
 
     const msq = await prisma.multiselectQuestions.create({
       data: multiselectQuestionFactory(jurisdictionId, {
@@ -644,69 +637,6 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
     });
   });
 
-  describe('Testing unit accessibility priority types endpoints', () => {
-    it('should succeed for list endpoint', async () => {
-      await request(app.getHttpServer())
-        .get(`/unitAccessibilityPriorityTypes?`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(200);
-    });
-
-    it('should succeed for retrieve endpoint', async () => {
-      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-        prisma,
-      );
-
-      await request(app.getHttpServer())
-        .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(200);
-    });
-
-    it('should error as forbidden for create endpoint', async () => {
-      await request(app.getHttpServer())
-        .post('/unitAccessibilityPriorityTypes')
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          name: 'hearing',
-        } as UnitAccessibilityPriorityTypeCreate)
-        .set('Cookie', cookies)
-        .expect(403);
-    });
-
-    it('should error as forbidden for update endpoint', async () => {
-      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-        prisma,
-      );
-      await request(app.getHttpServer())
-        .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          id: unitTypeA.id,
-          name: 'hearing',
-        } as UnitAccessibilityPriorityTypeUpdate)
-        .set('Cookie', cookies)
-        .expect(403);
-    });
-
-    it('should error as forbidden for delete endpoint', async () => {
-      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-        prisma,
-      );
-
-      await request(app.getHttpServer())
-        .delete(`/unitAccessibilityPriorityTypes`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          id: unitTypeA.id,
-        } as IdDTO)
-        .set('Cookie', cookies)
-        .expect(403);
-    });
-  });
-
   describe('Testing unit types endpoints', () => {
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
@@ -919,13 +849,13 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
       });
 
       await request(app.getHttpServer())
-        .put(`/user/${userA.id}`)
+        .put(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,
           firstName: 'New User First Name',
           lastName: 'New User Last Name',
-        } as UserUpdate)
+        } as PublicUserUpdate)
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -1031,7 +961,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
       });
 
       await request(app.getHttpServer())
-        .post(`/user/`)
+        .post(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildUserCreateMock(juris, 'publicUser+partnerWrong@email.com'))
         .set('Cookie', cookies)
@@ -1045,7 +975,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
       );
 
       await request(app.getHttpServer())
-        .post(`/user/invite`)
+        .post(`/user/partner`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildUserInviteMock(juris, 'partnerUser+partnerWrong@email.com'))
         .set('Cookie', cookies)

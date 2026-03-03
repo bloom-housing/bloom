@@ -1,7 +1,6 @@
 import {
   UnitType,
-  UnitAccessibilityPriorityType,
-  Unit,
+  UnitAccessibilityPriorityTypeEnum,
   ListingEventsTypeEnum,
   ListingFeatures,
   ApplicationMethodsTypeEnum,
@@ -14,7 +13,7 @@ import {
   FeatureFlag,
   ListingFeaturesConfiguration,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { CypressAddress, CypressListing } from "./cypressListingHelpers"
+import { CypressAddress, CypressListing, CypressUnit } from "./cypressListingHelpers"
 
 const listingFeaturesConfiguration: ListingFeaturesConfiguration = {
   categories: [
@@ -151,8 +150,9 @@ export const angelopolisListing: CypressListing = {
       maxOccupancy: 2,
       monthlyIncomeMin: "900",
       monthlyRent: "1000",
-      unitAccessibilityPriorityTypes: { id: "Visual" } as UnitAccessibilityPriorityType,
-    } as Unit,
+      accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.mobilityHearingAndVision,
+      accessibilityPriorityTypeLabel: "Mobility, hearing and vision",
+    } as CypressUnit,
   ],
   applicationFee: "4",
   depositMin: "2",
