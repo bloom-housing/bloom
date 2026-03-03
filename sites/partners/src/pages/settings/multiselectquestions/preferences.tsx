@@ -162,7 +162,7 @@ const MultiselectQuestionsPreferences = () => {
         <NavigationHeader className="relative" title={t("settings.preferences")} />
         <TabView
           hideTabs={!enableProperties}
-          tabs={getSettingsTabs(SettingsIndexEnum.preferences, router, true)}
+          tabs={getSettingsTabs(SettingsIndexEnum.preferences, true)}
         >
           <section className={styles["preferences-section"]}>
             <div className={styles["table-wrapper"]}>

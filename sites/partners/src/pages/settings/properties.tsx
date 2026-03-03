@@ -184,7 +184,7 @@ const SettingsProperties = () => {
         <NavigationHeader className="relative" title={t("t.settings")} />
         <TabView
           hideTabs={!(atLeastOneJurisdictionEnablesPreferences && enableProperties)}
-          tabs={getSettingsTabs(SettingsIndexEnum.properties, router, v2Preferences)}
+          tabs={getSettingsTabs(SettingsIndexEnum.properties, v2Preferences)}
         >
           <AgTable
             id="properties-table"
