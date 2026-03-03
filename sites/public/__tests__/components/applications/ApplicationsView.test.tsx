@@ -364,60 +364,52 @@ describe("<ApplicationsView>", () => {
       )
     })
 
-    it("should navigate to all applications view", async () => {
-      const { pushMock } = mockNextRouter()
+    it("should render all applications tab link", async () => {
       renderApplicationsView()
 
       expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(3)
       expect(await screen.findAllByRole("link", { name: /see listing/i })).toHaveLength(3)
 
-      const allAplicationsTab = screen.getByTestId("total-applications-tab")
-      await userEvent.click(allAplicationsTab)
-      await waitFor(() => {
-        expect(pushMock).toHaveBeenCalledWith("/account/applications")
-      })
+      const allApplicationsTab = screen.getByTestId("total-applications-tab")
+      const allApplicationsLink = allApplicationsTab.closest("a")
+      expect(allApplicationsLink).toBeInTheDocument()
+      expect(allApplicationsLink).toHaveAttribute("href", "/account/applications")
     })
 
-    it("should navigate to open application only view", async () => {
-      const { pushMock } = mockNextRouter()
+    it("should render open applications tab link", async () => {
       renderApplicationsView()
 
       expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(3)
       expect(await screen.findAllByRole("link", { name: /see listing/i })).toHaveLength(3)
 
       const openApplicationsTab = screen.getByTestId("open-applications-tab")
-      await userEvent.click(openApplicationsTab)
-      await waitFor(() => {
-        expect(pushMock).toHaveBeenCalledWith("/account/applications/open")
-      })
+      const openApplicationsLink = openApplicationsTab.closest("a")
+      expect(openApplicationsLink).toBeInTheDocument()
+      expect(openApplicationsLink).toHaveAttribute("href", "/account/applications/open")
     })
 
-    it("should navigate to closed application only view", async () => {
-      const { pushMock } = mockNextRouter()
+    it("should render closed applications tab link", async () => {
       renderApplicationsView()
 
       expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(3)
       expect(await screen.findAllByRole("link", { name: /see listing/i })).toHaveLength(3)
 
       const closedApplicationsTab = screen.getByTestId("closed-applications-tab")
-      await userEvent.click(closedApplicationsTab)
-      await waitFor(() => {
-        expect(pushMock).toHaveBeenCalledWith("/account/applications/closed")
-      })
+      const closedApplicationsLink = closedApplicationsTab.closest("a")
+      expect(closedApplicationsLink).toBeInTheDocument()
+      expect(closedApplicationsLink).toHaveAttribute("href", "/account/applications/closed")
     })
 
-    it("should navigate to lottery runs only view", async () => {
-      const { pushMock } = mockNextRouter()
+    it("should render lottery runs tab link", async () => {
       renderApplicationsView()
 
       expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(3)
       expect(await screen.findAllByRole("link", { name: /see listing/i })).toHaveLength(3)
 
       const lotteryTab = screen.getByTestId("lottery-runs-tab")
-      await userEvent.click(lotteryTab)
-      await waitFor(() => {
-        expect(pushMock).toHaveBeenCalledWith("/account/applications/lottery")
-      })
+      const lotteryTabLink = lotteryTab.closest("a")
+      expect(lotteryTabLink).toBeInTheDocument()
+      expect(lotteryTabLink).toHaveAttribute("href", "/account/applications/lottery")
     })
   })
 
