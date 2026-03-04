@@ -1007,20 +1007,11 @@ export class ApplicationService {
 
     const mappedApplication = mapTo(Application, rawApplication);
     const mappedListing = mapTo(Listing, listing);
-    const alternateContactEmail = dto.alternateContact?.emailAddress;
-    const advocateUserAccount = alternateContactEmail
-      ? await this.prisma.userAccounts.findUnique({
-          select: { isAdvocate: true },
-          where: { email: alternateContactEmail },
-        })
-      : null;
-
-    const isAdvocate = advocateUserAccount?.isAdvocate ?? false;
-    const shouldSendConfirmationEmail =
+    const isAdvocate = requestingUser?.isAdvocate ?? false;
+    if (
       forPublic &&
-      (dto.applicant.emailAddress || (isAdvocate && alternateContactEmail));
-
-    if (shouldSendConfirmationEmail) {
+      (dto.applicant.emailAddress || (isAdvocate && requestingUser?.email))
+    ) {
       this.emailService.applicationConfirmation(
         mappedListing,
         mappedApplication,
