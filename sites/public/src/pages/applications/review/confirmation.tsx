@@ -31,12 +31,14 @@ const ApplicationConfirmation = () => {
     conductor.config,
     FeatureFlagEnum.disableListingPreferences
   )
+  const isAdvocate = conductor?.config?.isAdvocate
 
   const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
 
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
 
   const content = useMemo(() => {
+    const advocatePrefix = isAdvocate ? ".advocate" : ""
     switch (listing?.reviewOrderType) {
       case ReviewOrderTypeEnum.firstComeFirstServe:
         if (isUnitGroupAppWaitlist(listing, conductor.config)) {
@@ -44,7 +46,7 @@ const ApplicationConfirmation = () => {
             text: t(
               `application.review.confirmation.whatHappensNext${
                 disableListingPreferences ? ".noPref" : ""
-              }.waitlist`
+              }${advocatePrefix}.waitlist`
             ),
           }
         }
@@ -53,7 +55,7 @@ const ApplicationConfirmation = () => {
             text: t(
               `application.review.confirmation.whatHappensNext${
                 disableListingPreferences ? ".noPref" : ""
-              }.base`
+              }${advocatePrefix}.base`
             ),
           }
         }
@@ -61,7 +63,7 @@ const ApplicationConfirmation = () => {
           text: t(
             `application.review.confirmation.whatHappensNext${
               disableListingPreferences ? ".noPref" : ""
-            }.fcfs`
+            }${advocatePrefix}.fcfs`
           ),
         }
       case ReviewOrderTypeEnum.lottery:
@@ -71,13 +73,13 @@ const ApplicationConfirmation = () => {
           text: t(
             `application.review.confirmation.whatHappensNext${
               disableListingPreferences ? ".noPref" : ""
-            }.${listing.reviewOrderType}`
+            }${advocatePrefix}.${listing.reviewOrderType}`
           ),
         }
       default:
         return { text: "" }
     }
-  }, [listing, conductor.config])
+  }, [listing, conductor.config, isAdvocate])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -135,12 +137,17 @@ const ApplicationConfirmation = () => {
             <CardSection divider={"inset"}>
               <div className="markdown markdown-informational">
                 <Markdown options={{ disableParsingRawHTML: true }}>
-                  {t("application.review.confirmation.needToMakeUpdates", {
-                    agentName: listing?.leasingAgentName || "",
-                    agentPhone: listing?.leasingAgentPhone || "",
-                    agentEmail: listing?.leasingAgentEmail || "",
-                    agentOfficeHours: listing?.leasingAgentOfficeHours || "",
-                  })}
+                  {t(
+                    `application.review.confirmation.needToMakeUpdates${
+                      isAdvocate ? ".advocate" : ""
+                    }`,
+                    {
+                      agentName: listing?.leasingAgentName || "",
+                      agentPhone: listing?.leasingAgentPhone || "",
+                      agentEmail: listing?.leasingAgentEmail || "",
+                      agentOfficeHours: listing?.leasingAgentOfficeHours || "",
+                    }
+                  )}
                 </Markdown>
               </div>
             </CardSection>
