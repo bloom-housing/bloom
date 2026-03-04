@@ -785,7 +785,7 @@ export class EmailService {
     await this.send(
       user.email,
       emailFromAddress,
-      this.polyglot.t('accountRemoval.subject'),
+      this.polyglot.t('advocateApproved.subject'),
       this.template('advocate-approved')({
         user: user,
         formUrl,
@@ -804,8 +804,8 @@ export class EmailService {
     await this.send(
       user.email,
       emailFromAddress,
-      this.polyglot.t('accountRemoval.subject'),
-      this.template('advocate-approved')({
+      this.polyglot.t('advocateRejected.subject'),
+      this.template('advocate-rejected')({
         user: user,
         appOptions: { appUrl },
       }),
