@@ -39,6 +39,7 @@ export const listingFactory = async (
     applicationDueDate?: Date;
     closedAt?: Date;
     digitalApp?: boolean;
+    enableListingFeaturesAndUtilities?: boolean;
     includeBuildingFeatures?: boolean;
     includeEligibilityRules?: boolean;
     includeReservedCommunityTypes?: boolean;
@@ -230,10 +231,12 @@ export const listingFactory = async (
       : {},
     ...additionalEligibilityRules(optionalParams?.includeEligibilityRules),
     ...buildingFeatures(optionalParams?.includeBuildingFeatures),
-    ...featuresAndUtilites(
-      optionalParams?.optionalFeatures,
-      optionalParams?.optionalUtilities,
-    ),
+    ...(optionalParams?.enableListingFeaturesAndUtilities
+      ? featuresAndUtilites(
+          optionalParams?.optionalFeatures,
+          optionalParams?.optionalUtilities,
+        )
+      : {}),
     ...(optionalParams?.listing?.listingType === ListingTypeEnum.nonRegulated
       ? listingsRequiredDocuments(optionalParams?.requiredDocumentsList)
       : {}),

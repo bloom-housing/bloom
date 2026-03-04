@@ -272,6 +272,8 @@ const ListingForm = ({
     jurisdictionId
   )
 
+  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ, jurisdictionId)
+
   useEffect(() => {
     if (enableNonRegulatedListings && !listing?.listingType) {
       setValue(
@@ -395,14 +397,23 @@ const ListingForm = ({
             formData.listingType = undefined
           }
 
-          if (formData.configurableAccessibilityFeatures) {
-            setAccessibilityFeatures(
-              Object.values(formData.configurableAccessibilityFeatures).flat() as string[]
+          if (
+            doJurisdictionsHaveFeatureFlagOn(
+              FeatureFlagEnum.enableAccessibilityFeatures,
+              jurisdictionId
             )
-          }
+          ) {
+            if (formData.configurableAccessibilityFeatures) {
+              setAccessibilityFeatures(
+                Object.values(formData.configurableAccessibilityFeatures).flat() as string[]
+              )
+            }
 
-          if (!formData.configurableAccessibilityFeatures) {
-            formData.configurableAccessibilityFeatures = accessibilityFeatures
+            if (!formData.configurableAccessibilityFeatures) {
+              formData.configurableAccessibilityFeatures = accessibilityFeatures
+            }
+          } else {
+            delete formData.configurableAccessibilityFeatures
           }
 
           if (successful) {
@@ -639,6 +650,7 @@ const ListingForm = ({
                             setPreferences={setPreferences}
                             setPrograms={setPrograms}
                             swapCommunityTypeWithPrograms={swapCommunityTypeWithPrograms}
+                            enableV2MSQ={enableV2MSQ}
                           />
                           <AdditionalFees
                             enableCreditScreeningFee={doJurisdictionsHaveFeatureFlagOn(
