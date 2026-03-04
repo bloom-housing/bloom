@@ -137,17 +137,12 @@ const ApplicationConfirmation = () => {
             <CardSection divider={"inset"}>
               <div className="markdown markdown-informational">
                 <Markdown options={{ disableParsingRawHTML: true }}>
-                  {t(
-                    `application.review.confirmation.needToMakeUpdates${
-                      isAdvocate ? ".advocate" : ""
-                    }`,
-                    {
-                      agentName: listing?.leasingAgentName || "",
-                      agentPhone: listing?.leasingAgentPhone || "",
-                      agentEmail: listing?.leasingAgentEmail || "",
-                      agentOfficeHours: listing?.leasingAgentOfficeHours || "",
-                    }
-                  )}
+                  {t("application.review.confirmation.needToMakeUpdates", {
+                    agentName: listing?.leasingAgentName || "",
+                    agentPhone: listing?.leasingAgentPhone || "",
+                    agentEmail: listing?.leasingAgentEmail || "",
+                    agentOfficeHours: listing?.leasingAgentOfficeHours || "",
+                  })}
                 </Markdown>
               </div>
             </CardSection>
