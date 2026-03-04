@@ -54,10 +54,10 @@ const FormSummaryDetails = ({
 
   const accessibilityLabels = () => {
     const labels = []
-    if (application.accessibility.mobility) labels.push(t("application.ada.mobility"))
-    if (application.accessibility.vision) labels.push(t("application.ada.vision"))
-    if (application.accessibility.hearing) labels.push(t("application.ada.hearing"))
-    if (application.accessibility.other && enableAdaOtherOption)
+    if (application.accessibility?.mobility) labels.push(t("application.ada.mobility"))
+    if (application.accessibility?.vision) labels.push(t("application.ada.vision"))
+    if (application.accessibility?.hearing) labels.push(t("application.ada.hearing"))
+    if (application.accessibility?.other && enableAdaOtherOption)
       labels.push(t("application.ada.other"))
     if (labels.length === 0) labels.push(t("t.no"))
 
