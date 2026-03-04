@@ -483,14 +483,29 @@ export class UserService {
       });
 
       if (forPublic) {
+        let jurisdictionNameForEmail =
+          storedUser.jurisdictions && storedUser.jurisdictions.length
+            ? storedUser.jurisdictions[0].name
+            : null;
+
+        if (!jurisdictionNameForEmail) {
+          const jurisdiction = await this.prisma.jurisdictions.findFirst({
+            select: {
+              name: true,
+            },
+            where: {
+              publicUrl: dto.appUrl,
+            },
+          });
+          jurisdictionNameForEmail = jurisdiction?.name;
+        }
+
         const confirmationUrl = this.getPublicConfirmationUrl(
           dto.appUrl,
           confirmationToken,
         );
         await this.emailService.welcome(
-          storedUser.jurisdictions && storedUser.jurisdictions.length
-            ? storedUser.jurisdictions[0].name
-            : null,
+          jurisdictionNameForEmail,
           storedUser as unknown as User,
           dto.appUrl,
           confirmationUrl,
