@@ -959,7 +959,7 @@ describe("filter drawer helpers", () => {
     it("should render fallback accessibility checkbox group when categories are absent", () => {
       render(<FlatAccessibilitySection />)
 
-      expect(screen.getAllByRole("group", { name: "Accessibility features" })).toHaveLength(2)
+      expect(screen.getAllByRole("group", { name: "Accessibility features" })).toHaveLength(1)
       expect(screen.queryByRole("group", { name: "Mobility" })).not.toBeInTheDocument()
       expect(screen.getByRole("checkbox", { name: "Wheelchair ramp" })).toBeChecked()
     })

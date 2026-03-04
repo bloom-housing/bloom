@@ -320,12 +320,12 @@ export const RentSection = (props: RentSectionProps) => {
 export const AccessibilitySection = (props: AccessibilitySectionProps) => {
   const accessibilityCategories = props.listingFeaturesConfiguration?.categories
 
-  return (
-    <fieldset className={styles["filter-section"]}>
-      <legend className={`${styles["filter-section-label"]} ${styles["parent-label"]}`}>
-        {t("listings.sections.accessibilityFeatures")}
-      </legend>
-      {accessibilityCategories?.length > 0 ? (
+  if (accessibilityCategories?.length > 0) {
+    return (
+      <fieldset className={styles["filter-section"]}>
+        <legend className={`${styles["filter-section-label"]} ${styles["parent-label"]}`}>
+          {t("listings.sections.accessibilityFeatures")}
+        </legend>
         <div className={styles["accessibility-category-groups"]}>
           {accessibilityCategories.map((category) => {
             const categoryFeatureKeys = category.fields
@@ -355,19 +355,21 @@ export const AccessibilitySection = (props: AccessibilitySectionProps) => {
             )
           })}
         </div>
-      ) : (
-        <CheckboxGroup
-          groupLabel={t("eligibility.accessibility.title")}
-          fields={buildDefaultFilterFields(
-            ListingFilterKeys.listingFeatures,
-            "eligibility.accessibility",
-            getAccessibilityFeatureKeys(props.listingFeaturesConfiguration),
-            props.filterState
-          )}
-          register={props.register}
-        />
+      </fieldset>
+    )
+  }
+
+  return (
+    <CheckboxGroup
+      groupLabel={t("eligibility.accessibility.title")}
+      fields={buildDefaultFilterFields(
+        ListingFilterKeys.listingFeatures,
+        "eligibility.accessibility",
+        getAccessibilityFeatureKeys(props.listingFeaturesConfiguration),
+        props.filterState
       )}
-    </fieldset>
+      register={props.register}
+    />
   )
 }
 
