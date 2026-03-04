@@ -326,9 +326,9 @@ export class EmailService {
     listing: Listing,
     application: Application,
     appUrl: string,
+    isAdvocate = false,
   ) {
     const jurisdiction = await this.getJurisdiction([listing.jurisdictions]);
-    void (await this.loadTranslations(jurisdiction, application.language));
     const enableUnitGroups = doJurisdictionHaveFeatureFlagSet(
       jurisdiction,
       FeatureFlagEnum.enableUnitGroups,
@@ -336,101 +336,156 @@ export class EmailService {
     const listingUrl = `${appUrl}/listing/${listing.id}`;
     const compiledTemplate = this.template('confirmation');
 
-    let eligibleText: string = null;
-    let preferenceText: string = null;
-    let contactText: string = null;
-    if (enableUnitGroups) {
-      const hasUnitGroups = listing.unitGroups?.length > 0;
-      const unitsAvailable =
-        listing.unitGroups?.length > 0
-          ? listing.unitGroups.reduce(
-              (acc, curr) => acc + curr.totalAvailable,
-              0,
-            )
-          : listing.unitsAvailable;
+    const buildEligibilityCopy = () => {
+      let eligibleText: string = null;
+      let preferenceText: string = null;
+      let contactText: string = null;
 
-      if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
-        eligibleText = this.polyglot.t('confirmation.eligible.lottery');
-        preferenceText = this.polyglot.t(
-          'confirmation.eligible.lotteryPreference',
-        );
-      } else if (unitsAvailable) {
-        eligibleText = this.polyglot.t('confirmation.eligible.fcfs');
-        preferenceText = this.polyglot.t(
-          'confirmation.eligible.fcfsPreference',
-        );
-      } else if (hasUnitGroups) {
+      if (enableUnitGroups) {
+        const hasUnitGroups = listing.unitGroups?.length > 0;
+        const unitsAvailable =
+          listing.unitGroups?.length > 0
+            ? listing.unitGroups.reduce(
+                (acc, curr) => acc + curr.totalAvailable,
+                0,
+              )
+            : listing.unitsAvailable;
+
+        if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
+          eligibleText = this.polyglot.t('confirmation.eligible.lottery');
+          preferenceText = this.polyglot.t(
+            'confirmation.eligible.lotteryPreference',
+          );
+        } else if (unitsAvailable) {
+          eligibleText = this.polyglot.t('confirmation.eligible.fcfs');
+          preferenceText = this.polyglot.t(
+            'confirmation.eligible.fcfsPreference',
+          );
+        } else if (hasUnitGroups) {
+          if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery) {
+            eligibleText = this.polyglot.t(
+              'confirmation.eligible.waitlistLottery',
+            );
+          } else {
+            eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
+          }
+          contactText = this.polyglot.t(
+            'confirmation.eligible.waitlistContact',
+          );
+          preferenceText = this.polyglot.t(
+            'confirmation.eligible.waitlistPreference',
+          );
+        }
+      } else {
+        if (
+          listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe
+        ) {
+          eligibleText = this.polyglot.t('confirmation.eligible.fcfs');
+          preferenceText = this.polyglot.t(
+            'confirmation.eligible.fcfsPreference',
+          );
+        }
+        if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
+          eligibleText = this.polyglot.t('confirmation.eligible.lottery');
+          preferenceText = this.polyglot.t(
+            'confirmation.eligible.lotteryPreference',
+          );
+        }
+        if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
+          eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
+          contactText = this.polyglot.t(
+            'confirmation.eligible.waitlistContact',
+          );
+          preferenceText = this.polyglot.t(
+            'confirmation.eligible.waitlistPreference',
+          );
+        }
         if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery) {
           eligibleText = this.polyglot.t(
             'confirmation.eligible.waitlistLottery',
           );
-        } else {
-          eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
+          contactText = this.polyglot.t(
+            'confirmation.eligible.waitlistContact',
+          );
+          preferenceText = this.polyglot.t(
+            'confirmation.eligible.waitlistPreference',
+          );
         }
-        contactText = this.polyglot.t('confirmation.eligible.waitlistContact');
-        preferenceText = this.polyglot.t(
-          'confirmation.eligible.waitlistPreference',
-        );
       }
-    } else {
-      if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
-        eligibleText = this.polyglot.t('confirmation.eligible.fcfs');
-        preferenceText = this.polyglot.t(
-          'confirmation.eligible.fcfsPreference',
-        );
-      }
-      if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
-        eligibleText = this.polyglot.t('confirmation.eligible.lottery');
-        preferenceText = this.polyglot.t(
-          'confirmation.eligible.lotteryPreference',
-        );
-      }
-      if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
-        eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
-        contactText = this.polyglot.t('confirmation.eligible.waitlistContact');
-        preferenceText = this.polyglot.t(
-          'confirmation.eligible.waitlistPreference',
-        );
-      }
-      if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery) {
-        eligibleText = this.polyglot.t('confirmation.eligible.waitlistLottery');
-        contactText = this.polyglot.t('confirmation.eligible.waitlistContact');
-        preferenceText = this.polyglot.t(
-          'confirmation.eligible.waitlistPreference',
-        );
-      }
-    }
+
+      return {
+        eligibleText,
+        preferenceText,
+        contactText,
+      };
+    };
 
     const user = {
       firstName: application.applicant.firstName,
       middleName: application.applicant.middleName,
       lastName: application.applicant.lastName,
     };
+    const sendConfirmationEmail = async (
+      recipientEmail: string,
+      language?: LanguagesEnum,
+      isAdvocateClient = false,
+    ) => {
+      await this.loadTranslations(jurisdiction, language);
+      const { eligibleText, preferenceText, contactText } =
+        buildEligibilityCopy();
+      const nextStepsUrl = this.polyglot.t('confirmation.nextStepsUrl');
 
-    const nextStepsUrl = this.polyglot.t('confirmation.nextStepsUrl');
+      await this.send(
+        recipientEmail,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t('confirmation.subject'),
+        compiledTemplate({
+          subject: this.polyglot.t('confirmation.subject'),
+          header: {
+            logoTitle: this.polyglot.t('header.logoTitle'),
+            logoUrl: this.polyglot.t('header.logoUrl'),
+          },
+          listing,
+          listingUrl,
+          application,
+          preferenceText,
+          interviewText: this.polyglot.t('confirmation.interview'),
+          eligibleText,
+          contactText,
+          nextStepsUrl:
+            nextStepsUrl != 'confirmation.nextStepsUrl' ? nextStepsUrl : null,
+          contactSectionHeader: this.polyglot.t(
+            isAdvocateClient
+              ? 'confirmation.questions'
+              : 'confirmation.needToMakeUpdates',
+          ),
+          contactSectionBody: this.polyglot.t(
+            isAdvocateClient
+              ? 'leasingAgent.contactAgentForQuestions'
+              : 'leasingAgent.contactAgentToUpdateInfo',
+          ),
+          introText: this.polyglot.t(
+            isAdvocateClient
+              ? 'confirmation.gotYourConfirmationNumberOnYourBehalf'
+              : 'confirmation.gotYourConfirmationNumber',
+          ),
+          user,
+        }),
+      );
+    };
 
-    await this.send(
-      application.applicant.emailAddress,
-      jurisdiction.emailFromAddress,
-      this.polyglot.t('confirmation.subject'),
-      compiledTemplate({
-        subject: this.polyglot.t('confirmation.subject'),
-        header: {
-          logoTitle: this.polyglot.t('header.logoTitle'),
-          logoUrl: this.polyglot.t('header.logoUrl'),
-        },
-        listing,
-        listingUrl,
-        application,
-        preferenceText,
-        interviewText: this.polyglot.t('confirmation.interview'),
-        eligibleText,
-        contactText,
-        nextStepsUrl:
-          nextStepsUrl != 'confirmation.nextStepsUrl' ? nextStepsUrl : null,
-        user,
-      }),
-    );
+    const applicantEmail = application?.applicant?.emailAddress;
+
+    if (isAdvocate) {
+      const advocateEmail = application?.alternateContact?.emailAddress;
+      await sendConfirmationEmail(advocateEmail, application.language, false);
+      if (applicantEmail) {
+        await sendConfirmationEmail(applicantEmail, LanguagesEnum.en, true);
+      }
+      return;
+    }
+
+    await sendConfirmationEmail(applicantEmail, application.language, false);
   }
 
   public async applicationUpdateEmail(

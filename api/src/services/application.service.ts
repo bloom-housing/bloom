@@ -1007,11 +1007,16 @@ export class ApplicationService {
 
     const mappedApplication = mapTo(Application, rawApplication);
     const mappedListing = mapTo(Listing, listing);
-    if (dto.applicant.emailAddress && forPublic) {
+    const isAdvocate = requestingUser?.isAdvocate ?? false;
+    if (
+      forPublic &&
+      (dto.applicant.emailAddress || (isAdvocate && requestingUser?.email))
+    ) {
       this.emailService.applicationConfirmation(
         mappedListing,
         mappedApplication,
         listing.jurisdictions?.publicUrl,
+        isAdvocate,
       );
     }
     // Update the lastApplicationUpdateAt to now after every submission
