@@ -523,6 +523,8 @@ export class UserService {
       UserViews.full,
     );
 
+    let matchedPublicJurisdictionId: string | undefined;
+
     const isPartnerPortalUser =
       storedUser.userRoles?.isAdmin ||
       storedUser.userRoles?.isJurisdictionalAdmin ||
@@ -542,6 +544,7 @@ export class UserService {
             publicUrl: dto.appUrl,
           },
         });
+        matchedPublicJurisdictionId = juris?.id;
         return !!juris;
       }
     };
@@ -561,8 +564,16 @@ export class UserService {
         id: storedUser.id,
       },
     });
+
+    const jurisdictionsForEmail =
+      storedUser.jurisdictions?.length && storedUser.jurisdictions.length > 0
+        ? storedUser.jurisdictions
+        : matchedPublicJurisdictionId
+        ? [{ id: matchedPublicJurisdictionId }]
+        : [];
+
     await this.emailService.forgotPassword(
-      storedUser.jurisdictions,
+      jurisdictionsForEmail,
       mapTo(User, storedUser),
       dto.appUrl,
       resetToken,
@@ -736,6 +747,22 @@ export class UserService {
   ): Promise<User> {
     const jurisdictionName = (req.headers['jurisdictionname'] as string) || '';
 
+    let jurisdictionsToConnect = dto.jurisdictions;
+    if (!jurisdictionsToConnect?.length && jurisdictionName) {
+      const jurisdiction = await this.prisma.jurisdictions.findFirst({
+        select: {
+          id: true,
+        },
+        where: {
+          name: jurisdictionName,
+        },
+      });
+
+      if (jurisdiction) {
+        jurisdictionsToConnect = [{ id: jurisdiction.id }];
+      }
+    }
+
     if (
       this.containsInvalidCharacters(dto.firstName) ||
       (dto.middleName && this.containsInvalidCharacters(dto.middleName)) ||
@@ -763,9 +790,9 @@ export class UserService {
         middleName: dto.middleName,
         lastName: dto.lastName,
         dob: dto.dob,
-        jurisdictions: dto.jurisdictions
+        jurisdictions: jurisdictionsToConnect
           ? {
-              connect: dto.jurisdictions.map((juris) => ({
+              connect: jurisdictionsToConnect.map((juris) => ({
                 id: juris.id,
               })),
             }
@@ -920,6 +947,22 @@ export class UserService {
   ) {
     const jurisdictionName = (req.headers['jurisdictionname'] as string) || '';
 
+    let jurisdictionsToConnect = dto.jurisdictions;
+    if (!jurisdictionsToConnect?.length && jurisdictionName) {
+      const jurisdiction = await this.prisma.jurisdictions.findFirst({
+        select: {
+          id: true,
+        },
+        where: {
+          name: jurisdictionName,
+        },
+      });
+
+      if (jurisdiction) {
+        jurisdictionsToConnect = [{ id: jurisdiction.id }];
+      }
+    }
+
     if (
       this.containsInvalidCharacters(dto.firstName) ||
       (dto.middleName && this.containsInvalidCharacters(dto.middleName)) ||
@@ -954,9 +997,9 @@ export class UserService {
           },
         },
         isAdvocate: true,
-        jurisdictions: dto.jurisdictions
+        jurisdictions: jurisdictionsToConnect
           ? {
-              connect: dto.jurisdictions.map((juris) => ({
+              connect: jurisdictionsToConnect.map((juris) => ({
                 id: juris.id,
               })),
             }
