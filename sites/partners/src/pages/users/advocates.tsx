@@ -79,10 +79,7 @@ const Advocates = () => {
         <title>{`Users - ${t("users.tabAdvocatesPublic")} - ${t("nav.siteTitlePartners")}`}</title>
       </Head>
       <NavigationHeader className="relative" title={t("nav.users")} />
-      <TabView
-        hideTabs={!enableHousingAdvocate}
-        tabs={getUsersTabs(UsersIndexEnum.advocates, router)}
-      >
+      <TabView hideTabs={!enableHousingAdvocate} tabs={getUsersTabs(UsersIndexEnum.advocates)}>
         <section>
           <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
             <AgTable
