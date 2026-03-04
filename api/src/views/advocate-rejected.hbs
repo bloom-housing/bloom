@@ -13,11 +13,9 @@
         <tr>
             <td align="left">
             <p>
-                <strong></strong>{{t "advocateRejected.approvalMessage" appOptions}}
+                {{t "advocateRejected.rejectionMessageStart" appOptions}} <strong>{{t "advocateRejected.rejectionMessageEnd"}}</strong>
                 <br/><br/>
-                {{t "advocateRejected.approvalInfo"}}
-                <br/><br/>
-                <strong>{{t "advocateRejected.completeMessage"}}</strong>
+                {{t "advocateRejected.rejectionInfoStart"}} <a href="mailto:{{contactEmail}}">{{contactEmail}}</a> {{"advocateRejected.rejectionInfoEnd"}}
             </p>
             </td>
         </tr>

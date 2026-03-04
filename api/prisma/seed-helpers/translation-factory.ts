@@ -242,20 +242,25 @@ const translations = (
         signIn: 'Sign in to Bloom Housing',
       },
       advocateApproved: {
+        subject: 'Your account has been approved',
         hello: 'Hello',
         approvalMessage: 'Your account at %{appUrl} has been approved.',
         approvalInfo:
-          'It will now be easier for you to start, save, and submit online applications on behalf of housing applicants for listings that appear on the site.',
+          'It will now be easier for you to start, save, and submit online applications <strong>on behalf of housing applicants</strong> for listings that appear on the site.',
         completeMessage:
           'To complete your account creation, please click the link below:',
         createAccount: 'Create my account',
       },
       advocateRejected: {
+        subject: 'Update about your account request',
         hello: 'Hello',
-        rejectionMessage: 'Your account at %{appUrl} has been rejected.',
-        rejectionInfo:
-          'Please contact administration for further information',
-        completeMessage: 'To complete your rejection please go cry about it',
+        rejectionMessageStart:
+          'Thank you for your interest in creating an account on %{appUrl}',
+        rejectionMessageEnd:
+          'We are not able to approve your account at this time',
+        rejectionInfoStart:
+          'If you believe this decision was made in error or have questions about eligibility, please contact us at',
+        rejectionInfoEnd: 'for more information.',
       },
     };
   } else if (language === LanguagesEnum.es) {
