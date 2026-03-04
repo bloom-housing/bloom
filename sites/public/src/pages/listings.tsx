@@ -62,6 +62,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
   let openListings
   let closedListings
   let areFiltersActive = false
+  const isUsingNewSeedsDesign = Boolean(process.env.showNewSeedsDesigns)
 
   if (isFiltered(context.query)) {
     const filterData = decodeQueryToFilterData(context.query)
@@ -70,7 +71,9 @@ export async function getServerSideProps(context: { req: any; query: any }) {
     areFiltersActive = true
   } else {
     openListings = await fetchOpenListings(context.req, Number(context.query.page) || 1)
-    closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
+    if (!isUsingNewSeedsDesign) {
+      closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
+    }
   }
   const jurisdiction = await fetchJurisdictionByName(context.req)
   const multiselectData = isFeatureFlagOn(
