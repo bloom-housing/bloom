@@ -275,21 +275,19 @@ const Layout = (props: LayoutProps) => {
             isMessageActive(process.env.maintenanceWindow)
           )
         )}
-        <div
+        <main
           id="main-content"
           tabIndex={-1}
           aria-label={"Main content"}
           className="md:overflow-x-hidden main-container"
         >
-          <main>
-            {toastMessagesRef.current?.map((toastMessage) => (
-              <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
-                {toastMessage.message}
-              </Toast>
-            ))}
-            {props.children}
-          </main>
-        </div>
+          {toastMessagesRef.current?.map((toastMessage) => (
+            <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
+              {toastMessage.message}
+            </Toast>
+          ))}
+          {props.children}
+        </main>
       </div>
 
       <CustomSiteFooter />

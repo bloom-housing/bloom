@@ -49,11 +49,9 @@ const FormSignInDefault = ({
         register={register}
         dataTestId="sign-in-email-field"
       />
-      <aside>
-        <LinkComponent href={forgetPasswordURL} className={styles["forgot-password"]}>
-          {t("authentication.signIn.forgotPassword")}
-        </LinkComponent>
-      </aside>
+      <LinkComponent href={forgetPasswordURL} className={styles["forgot-password"]}>
+        {t("authentication.signIn.forgotPassword")}
+      </LinkComponent>
       <Field
         className={styles["sign-in-password-input"]}
         name="password"
