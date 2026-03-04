@@ -16,7 +16,10 @@ import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { userFactory } from './seed-helpers/user-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
-import { applicationFactory } from './seed-helpers/application-factory';
+import {
+  applicationFactory,
+  applicationFactoryMany,
+} from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
 import { propertyFactory } from './seed-helpers/property-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
@@ -93,17 +96,6 @@ export const defaultRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
       allowOtherText: false,
     },
   ],
-};
-
-const applicationFactoryMany = async (
-  count: number,
-  optionalParams?: Parameters<typeof applicationFactory>[0],
-): Promise<Prisma.ApplicationsCreateInput[]> => {
-  return Promise.all(
-    Array.from({ length: count }, async () =>
-      applicationFactory(optionalParams),
-    ),
-  );
 };
 
 export const stagingSeed = async (
@@ -1120,7 +1112,7 @@ export const stagingSeed = async (
           ...(await applicationFactoryMany(2, {
             applicant: { emailAddress: 'user2@example.com' },
           })),
-          await applicationFactory({
+          ...(await applicationFactoryMany(2, {
             applicant: {
               emailAddress: 'user3@example.com',
               firstName: 'first3',
@@ -1145,33 +1137,7 @@ export const stagingSeed = async (
                 birthYear: 1980,
               }),
             ],
-          }),
-          await applicationFactory({
-            applicant: {
-              emailAddress: 'user3@example.com',
-              firstName: 'first3',
-              lastName: 'last3',
-              birthDay: 1,
-              birthMonth: 1,
-              birthYear: 1970,
-            },
-            householdMember: [
-              householdMemberFactorySingle(1, {
-                firstName: 'householdFirst1',
-                lastName: 'householdLast1',
-                birthDay: 5,
-                birthMonth: 5,
-                birthYear: 1950,
-              }),
-              householdMemberFactorySingle(2, {
-                firstName: 'householdFirst2',
-                lastName: 'householdLast2',
-                birthDay: 8,
-                birthMonth: 8,
-                birthYear: 1980,
-              }),
-            ],
-          }),
+          })),
           await applicationFactory({
             applicant: {
               emailAddress: 'user4@example.com',

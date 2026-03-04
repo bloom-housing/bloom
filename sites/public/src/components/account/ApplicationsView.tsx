@@ -19,6 +19,9 @@ import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
 import { UserStatus } from "../../lib/constants"
 import styles from "./ApplicationsView.module.scss"
 
+const MINIMUM_SEARCH_CHARACTERS = 3
+const SEARCH_DEBOUNCE_MS = 500
+
 export enum ApplicationsIndexEnum {
   all = 0,
   lottery,
@@ -54,8 +57,6 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
   const filterTypeString = ApplicationsIndexEnum[props.filterType]
   const page = Number(router.query.page) || 1
   const isAdvocate = !!profile?.isAdvocate
-  const minimumSearchCharacters = 3
-  const searchDebounceMs = 500
 
   useEffect(() => {
     if (!isAdvocate) {
@@ -66,8 +67,8 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
     const trimmedSearch = searchInput.trim()
 
     const timeoutId = setTimeout(() => {
-      setDebouncedSearch(trimmedSearch.length >= minimumSearchCharacters ? trimmedSearch : "")
-    }, searchDebounceMs)
+      setDebouncedSearch(trimmedSearch.length >= MINIMUM_SEARCH_CHARACTERS ? trimmedSearch : "")
+    }, SEARCH_DEBOUNCE_MS)
 
     return () => clearTimeout(timeoutId)
   }, [searchInput, isAdvocate])
@@ -261,7 +262,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                   </Tabs.Tab>
                 </Tabs.TabList>
               </Tabs>
-              {/* // TODO: When application status copy is available and on the FAQ page, we can re-enable this */}
+              {/* // TODO: When application status copy is available and on the FAQ page, we can re-enable this under ticket https://github.com/bloom-housing/bloom/issues/6000 */}
               {/* {props.enableApplicationStatus && (
                 <div className={styles["application-faq-link"]}>
                   <Link href={"/faq"} className={"seeds-m-bs-4"}>
