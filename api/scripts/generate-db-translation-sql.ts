@@ -52,7 +52,7 @@ const DEFAULT_LANGUAGES: LanguageCode[] = [
 ];
 const ALLOWED_LANGUAGES = new Set<LanguageCode>(DEFAULT_LANGUAGES);
 
-const parseArgs = (): CliOptions => {
+export const parseArgs = (): CliOptions => {
   const args = process.argv.slice(2);
   const options: CliOptions = {
     input: '',
@@ -103,7 +103,7 @@ const parseArgs = (): CliOptions => {
   return options;
 };
 
-const resolveOutputPath = (outputArg: string): string => {
+export const resolveOutputPath = (outputArg: string): string => {
   const normalized = outputArg.trim();
   if (!normalized) {
     throw new Error('Output path/name cannot be empty.');
@@ -124,7 +124,7 @@ const resolveOutputPath = (outputArg: string): string => {
   return normalized;
 };
 
-const ensureLanguages = (languages: string[]): LanguageCode[] => {
+export const ensureLanguages = (languages: string[]): LanguageCode[] => {
   const normalized = languages.map((language) => language.toLowerCase());
 
   normalized.forEach((language) => {
@@ -136,7 +136,7 @@ const ensureLanguages = (languages: string[]): LanguageCode[] => {
   return normalized as LanguageCode[];
 };
 
-const readInput = (filePath: string): InputPayload => {
+export const readInput = (filePath: string): InputPayload => {
   const payload = JSON.parse(fs.readFileSync(filePath, 'utf8')) as unknown;
 
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
@@ -148,7 +148,7 @@ const readInput = (filePath: string): InputPayload => {
   return payload as InputPayload;
 };
 
-const flattenTranslationTree = (
+export const flattenTranslationTree = (
   tree: TranslationTree,
   parentPath: string[] = [],
 ): FlattenedTranslation[] => {
@@ -266,7 +266,7 @@ const setNestedValue = (
   });
 };
 
-const buildLanguagePatchMap = async (
+export const buildLanguagePatchMap = async (
   entries: FlattenedTranslation[],
   languages: LanguageCode[],
   machineTranslate: boolean,
@@ -324,7 +324,7 @@ const buildLanguagePatchMap = async (
   return result;
 };
 
-const buildSql = (
+export const buildSql = (
   languagePatchMap: Record<
     LanguageCode,
     Array<{ path: string[]; value: string }>
@@ -357,7 +357,7 @@ const buildSql = (
   return [...statements, ''].join('\n');
 };
 
-async function main() {
+export async function main() {
   const options = parseArgs();
   const inputPath = path.resolve(process.cwd(), options.input);
   const payload = readInput(inputPath);
@@ -395,4 +395,6 @@ async function main() {
   process.stdout.write(sql);
 }
 
-void main();
+if (require.main === module) {
+  void main();
+}
