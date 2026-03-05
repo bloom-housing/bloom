@@ -483,10 +483,10 @@ export class UserService {
       });
 
       if (forPublic) {
-        let jurisdictionNameForEmail =
-          storedUser.jurisdictions && storedUser.jurisdictions.length
-            ? storedUser.jurisdictions[0].name
-            : null;
+        let jurisdictionNameForEmail: string | null = null;
+        if (storedUser?.jurisdictions?.length) {
+          jurisdictionNameForEmail = storedUser.jurisdictions[0].name;
+        }
 
         if (!jurisdictionNameForEmail) {
           const jurisdiction = await this.prisma.jurisdictions.findFirst({
@@ -580,12 +580,15 @@ export class UserService {
       },
     });
 
-    const jurisdictionsForEmail =
-      storedUser.jurisdictions?.length && storedUser.jurisdictions.length > 0
-        ? storedUser.jurisdictions
-        : matchedPublicJurisdictionId
-        ? [{ id: matchedPublicJurisdictionId }]
-        : [];
+    let jurisdictionsForEmail = storedUser.jurisdictions?.map((juris) => ({
+      id: juris.id,
+    })) as IdDTO[];
+    if (!jurisdictionsForEmail?.length && matchedPublicJurisdictionId) {
+      jurisdictionsForEmail = [{ id: matchedPublicJurisdictionId }] as IdDTO[];
+    }
+    if (!jurisdictionsForEmail?.length) {
+      jurisdictionsForEmail = [];
+    }
 
     await this.emailService.forgotPassword(
       jurisdictionsForEmail,
@@ -1014,9 +1017,7 @@ export class UserService {
         isAdvocate: true,
         jurisdictions: jurisdictionsToConnect
           ? {
-              connect: jurisdictionsToConnect.map((juris) => ({
-                id: juris.id,
-              })),
+              connect: jurisdictionsToConnect,
             }
           : undefined,
         listings: dto.listings
