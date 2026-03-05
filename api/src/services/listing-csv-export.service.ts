@@ -701,8 +701,8 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     ) {
       headers.push({
         path: 'listingFeatures',
-        label: 'Property Amenities',
         format: this.buildSelectList,
+        label: 'Listing Accessibility Features',
       });
     }
 
