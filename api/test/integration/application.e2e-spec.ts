@@ -320,13 +320,15 @@ describe('Application Controller Tests', () => {
 
       expect(res.body.items.length).toBeGreaterThanOrEqual(2);
       const resApplicationA = res.body.items.find(
-        (item) => item.applicant.firstName === applicationA.applicant.firstName,
+        (item) =>
+          item.applicant?.firstName === applicationA.applicant.firstName,
       );
       expect(resApplicationA).not.toBeNull();
-      res.body.items.find(
-        (item) => item.applicant.firstName === applicationB.applicant.firstName,
+      const resApplicationB = res.body.items.find(
+        (item) =>
+          item.applicant?.firstName === applicationB.applicant.firstName,
       );
-      expect(resApplicationA).not.toBeNull();
+      expect(resApplicationB).not.toBeNull();
     });
 
     it('should get stored applications when no params sent', async () => {
@@ -359,13 +361,15 @@ describe('Application Controller Tests', () => {
 
       expect(res.body.items.length).toBeGreaterThanOrEqual(2);
       const resApplicationA = res.body.items.find(
-        (item) => item.applicant.firstName === applicationA.applicant.firstName,
+        (item) =>
+          item.applicant?.firstName === applicationA.applicant.firstName,
       );
       expect(resApplicationA).not.toBeNull();
-      res.body.items.find(
-        (item) => item.applicant.firstName === applicationB.applicant.firstName,
+      const resApplicationB = res.body.items.find(
+        (item) =>
+          item.applicant?.firstName === applicationB.applicant.firstName,
       );
-      expect(resApplicationA).not.toBeNull();
+      expect(resApplicationB).not.toBeNull();
     });
   });
 
@@ -2078,14 +2082,32 @@ describe('Application Controller Tests', () => {
   });
 
   describe('publicAppsView endpoint', () => {
+    const createAndLoginUser = async () => {
+      const user = await prisma.userAccounts.create({
+        data: await userFactory({
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+
+      const resLogIn = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: user.email,
+          password: 'Abcdef12345!',
+        } as Login)
+        .expect(201);
+
+      return { user, cookies: resLogIn.headers['set-cookie'] };
+    };
+
     it('should retrieve applications and counts when they exist', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
       );
-      const user = await prisma.userAccounts.create({
-        data: await userFactory(),
-      });
+      const { user, cookies } = await createAndLoginUser();
       const juris = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
       });
@@ -2152,7 +2174,7 @@ describe('Application Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .get(`/applications/publicAppsView?${query}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminCookies)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.applicationsCount.total).toEqual(3);
@@ -2167,13 +2189,69 @@ describe('Application Controller Tests', () => {
       expect(res.body.meta.totalPages).toEqual(1);
     });
 
-    it('should not retrieve applications nor error when none exist', async () => {
-      const userA = await prisma.userAccounts.create({
-        data: await userFactory(),
+    it('should filter applications by applicantNameSearch for advocate users', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const advocateUser = await prisma.userAccounts.create({
+        data: await userFactory({
+          isAdvocate: true,
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+
+      const resLogIn = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: advocateUser.email,
+          password: 'Abcdef12345!',
+        } as Login)
+        .expect(201);
+      const cookies = resLogIn.headers['set-cookie'];
+
+      const juris = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(juris.id, prisma);
+
+      const listingOpen = await prisma.listings.create({
+        data: await listingFactory(juris.id, prisma, {
+          status: ListingsStatusEnum.active,
+        }),
+      });
+
+      await prisma.applications.create({
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          userId: advocateUser.id,
+          listingId: listingOpen.id,
+          applicant: {
+            firstName: 'Taylor',
+            lastName: 'Match',
+            emailAddress: 'taylor.match@example.com',
+          },
+        }),
+      });
+
+      await prisma.applications.create({
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          userId: advocateUser.id,
+          listingId: listingOpen.id,
+          applicant: {
+            firstName: 'Jordan',
+            lastName: 'Other',
+            emailAddress: 'jordan.other@example.com',
+          },
+        }),
       });
 
       const queryParams: PublicAppsViewQueryParams = {
-        userId: userA.id,
+        userId: advocateUser.id,
+        applicantNameSearch: 'Taylor Match',
         filterType: ApplicationsFilterEnum.all,
         includeLotteryApps: true,
         page: 1,
@@ -2184,7 +2262,100 @@ describe('Application Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .get(`/applications/publicAppsView?${query}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminCookies)
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.applicationsCount.total).toEqual(1);
+      expect(res.body.applicationsCount.open).toEqual(1);
+      expect(res.body.applicationsCount.closed).toEqual(0);
+      expect(res.body.applicationsCount.lottery).toEqual(0);
+      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items[0].applicant.firstName).toEqual('Taylor');
+      expect(res.body.items[0].applicant.lastName).toEqual('Match');
+    });
+
+    it('should ignore applicantNameSearch for non-advocate users', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const { user, cookies } = await createAndLoginUser();
+      const juris = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(juris.id, prisma);
+
+      const listingOpen = await prisma.listings.create({
+        data: await listingFactory(juris.id, prisma, {
+          status: ListingsStatusEnum.active,
+        }),
+      });
+
+      await prisma.applications.create({
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          userId: user.id,
+          listingId: listingOpen.id,
+          applicant: {
+            firstName: 'Casey',
+            lastName: 'Visible',
+            emailAddress: 'casey.visible@example.com',
+          },
+        }),
+      });
+
+      await prisma.applications.create({
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          userId: user.id,
+          listingId: listingOpen.id,
+          applicant: {
+            firstName: 'Lisa',
+            lastName: 'AlsoVisible',
+            emailAddress: 'lisa.alsovisible@example.com',
+          },
+        }),
+      });
+
+      const queryParams: PublicAppsViewQueryParams = {
+        userId: user.id,
+        applicantNameSearch: 'Casey',
+        filterType: ApplicationsFilterEnum.all,
+        includeLotteryApps: true,
+        page: 1,
+        limit: 10,
+      };
+      const query = stringify(queryParams as any);
+
+      const res = await request(app.getHttpServer())
+        .get(`/applications/publicAppsView?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.applicationsCount.total).toEqual(2);
+      expect(res.body.applicationsCount.open).toEqual(2);
+      expect(res.body.applicationsCount.closed).toEqual(0);
+      expect(res.body.applicationsCount.lottery).toEqual(0);
+      expect(res.body.items.length).toEqual(2);
+    });
+
+    it('should not retrieve applications nor error when none exist', async () => {
+      const { user, cookies } = await createAndLoginUser();
+
+      const queryParams: PublicAppsViewQueryParams = {
+        userId: user.id,
+        filterType: ApplicationsFilterEnum.all,
+        includeLotteryApps: true,
+        page: 1,
+        limit: 10,
+      };
+      const query = stringify(queryParams as any);
+
+      const res = await request(app.getHttpServer())
+        .get(`/applications/publicAppsView?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.applicationsCount.total).toEqual(0);
