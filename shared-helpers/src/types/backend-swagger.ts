@@ -1801,6 +1801,22 @@ export class AssetsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Create a S3 file upload URL
+   */
+  createS3UploadUrl(options: IRequestOptions = {}): Promise<CreateS3UploadUrl> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/assets/s3-upload-url"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class UserService {
@@ -8711,6 +8727,17 @@ export interface CreatePresignedUploadMetadata {
 export interface CreatePresignedUploadMetadataResponse {
   /**  */
   signature: string
+}
+
+export interface CreateS3UploadUrl {
+  /**  */
+  fileId: string
+
+  /**  */
+  uploadUrl: string
+
+  /**  */
+  publicUrl: string
 }
 
 export interface EmailAndAppUrl {
