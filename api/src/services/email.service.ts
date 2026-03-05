@@ -807,6 +807,7 @@ export class EmailService {
       this.polyglot.t('advocateRejected.subject'),
       this.template('advocate-rejected')({
         user: user,
+        contactEmail: 'email@example.com',
         appOptions: { appUrl },
       }),
     );

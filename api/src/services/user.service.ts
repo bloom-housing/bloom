@@ -1050,14 +1050,19 @@ export class UserService {
       },
     });
 
+    const appUrl =
+      targetUser.jurisdictions && targetUser.jurisdictions.length
+        ? targetUser.jurisdictions[0].publicUrl
+        : null;
+
     if (dto.isAccepted) {
       this.emailService.advocateAccepted(
         mapTo(User, targetUser),
-        'test.com',
-        'test.com',
+        appUrl,
+        appUrl, // TODO: Update this path for the advocate creation followup form when ready
       );
     } else {
-      this.emailService.advocateRejected(mapTo(User, targetUser), 'test.com');
+      this.emailService.advocateRejected(mapTo(User, targetUser), appUrl);
     }
 
     return {
