@@ -78,7 +78,7 @@ export class S3Service {
       Key: key,
     });
     return getSignedUrl(this.s3Client, command, {
-      expiresIn: 1000 * 60 * 5, // expires 5 minutes after generation
+      expiresIn: 60 * 5, // seconds. Expires 5 minutes after generation
     });
   }
 
