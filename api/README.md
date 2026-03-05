@@ -58,7 +58,9 @@ The script accepts a JSON file with:
 
 Helpful flags:
 
-- `--output <path>` writes SQL to a file instead of stdout
+- `--output <name-or-path>` writes SQL to a file instead of stdout
+  - `--output 52_test` creates `prisma/migrations/52_test/migration.sql`
+  - `--output prisma/migrations/52_test/migration.sql` writes to that exact file
 - `--languages en,es,tl` limits generated languages
 - `--no-machine-translate` disables Google Translate
 

@@ -1,6 +1,6 @@
 {
   "t": {
-    "hello": "Hello",
+    "hello": "What's up",
     "seeListing": "See Listing",
     "partnersPortal": "Partners Portal"
   },
@@ -8,10 +8,10 @@
     "line1": "Bloom",
     "line2": "",
     "thankYou": "Thank you",
-    "footer": "Bloom Housing"
+    "footer": "New footer"
   },
   "confirmation": {
-    "subject": "Your Application Confirmation",
+    "subject": "Your Application Confirmation Updated",
     "eligible": {
       "fcfs": "Eligible applicants will be contacted on a first come first serve basis until vacancies are filled.",
       "lottery": "Once the application period closes, eligible applicants will be placed in order based on lottery rank order."
