@@ -1801,6 +1801,22 @@ export class AssetsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Create a S3 file upload URL
+   */
+  createS3UploadUrl(options: IRequestOptions = {}): Promise<CreateS3UploadUrl> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/assets/s3-upload-url"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class UserService {
@@ -8699,6 +8715,17 @@ export interface CreatePresignedUploadMetadataResponse {
   signature: string
 }
 
+export interface CreateS3UploadUrl {
+  /**  */
+  fileId: string
+
+  /**  */
+  uploadUrl: string
+
+  /**  */
+  publicUrl: string
+}
+
 export interface EmailAndAppUrl {
   /**  */
   email: string
@@ -8807,9 +8834,6 @@ export interface PublicUserCreate {
   additionalPhoneExtension?: string
 
   /**  */
-  isAdvocate?: boolean
-
-  /**  */
   isApproved?: boolean
 
   /**  */
@@ -8914,9 +8938,6 @@ export interface PartnerUserCreate {
   additionalPhoneExtension?: string
 
   /**  */
-  isAdvocate?: boolean
-
-  /**  */
   isApproved?: boolean
 
   /**  */
@@ -8986,9 +9007,6 @@ export interface AdvocateUserCreate {
 
   /**  */
   favoriteListings?: IdDTO[]
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   isApproved?: boolean
@@ -9087,9 +9105,6 @@ export interface PublicUserUpdate {
 
   /**  */
   additionalPhoneExtension?: string
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   isApproved?: boolean
@@ -9199,9 +9214,6 @@ export interface PartnerUserUpdate {
   additionalPhoneExtension?: string
 
   /**  */
-  isAdvocate?: boolean
-
-  /**  */
   isApproved?: boolean
 
   /**  */
@@ -9301,9 +9313,6 @@ export interface AdvocateUserUpdate {
 
   /**  */
   additionalPhoneExtension?: string
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   isApproved?: boolean
@@ -9432,9 +9441,6 @@ export interface User {
 
   /**  */
   additionalPhoneExtension?: string
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   isApproved?: boolean
