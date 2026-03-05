@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IdDTO } from '../shared/id.dto';
 import { Expose, Type } from 'class-transformer';
 import { IsBoolean, ValidateNested } from 'class-validator';
-import { ValidationsGroupsEnum } from 'src/enums/shared/validation-groups-enum';
+import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class AdvocateUserAccept {
   @Expose()
