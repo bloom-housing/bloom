@@ -17,6 +17,7 @@ import { addressFactory } from './address-factory';
 import { reservedCommunityTypesFindOrCreate } from './reserved-community-type-factory';
 import { unitFactoryMany } from './unit-factory';
 import { randomBoolean } from './boolean-generator';
+import { assetFileId } from './asset-file-id-helper';
 
 const cloudinaryIds = [
   'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
@@ -169,7 +170,9 @@ export const listingFactory = async (
             assets: {
               create: {
                 label: 'cloudinaryBuilding',
-                fileId: cloudinaryIds[randomInt(cloudinaryIds.length)],
+                fileId: assetFileId(
+                  cloudinaryIds[randomInt(cloudinaryIds.length)],
+                ),
               },
             },
           },

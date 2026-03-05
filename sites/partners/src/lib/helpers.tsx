@@ -185,7 +185,7 @@ export const fileUploader = async ({
 
   if (process.env.useS3FileStorage === "TRUE") {
     const resp = await assetsService.createS3UploadUrl()
-    const { fileId, uploadUrl, publicUrl } = resp
+    const { uploadUrl, publicUrl } = resp
     setProgressValue(3)
 
     void S3Upload({

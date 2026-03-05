@@ -6,6 +6,7 @@ import {
 } from '@prisma/client';
 import { yellowstoneAddress } from '../address-factory';
 import dayjs from 'dayjs';
+import { assetFileId } from '../asset-file-id-helper';
 
 export const hollywoodHillsHeights: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
@@ -96,7 +97,7 @@ export const hollywoodHillsHeights: Prisma.ListingsCreateInput = {
         assets: {
           create: {
             label: 'cloudinaryBuilding',
-            fileId: 'dev/apartment_building_2_b7ujdd',
+            fileId: assetFileId('dev/apartment_building_2_b7ujdd'),
           },
         },
       },
@@ -106,7 +107,9 @@ export const hollywoodHillsHeights: Prisma.ListingsCreateInput = {
         assets: {
           create: {
             label: 'cloudinaryBuilding',
-            fileId: 'dev/krzysztof-hepner-V7Q0Oh3Az-c-unsplash_xoj7sr',
+            fileId: assetFileId(
+              'dev/krzysztof-hepner-V7Q0Oh3Az-c-unsplash_xoj7sr',
+            ),
           },
         },
       },
@@ -116,7 +119,9 @@ export const hollywoodHillsHeights: Prisma.ListingsCreateInput = {
         assets: {
           create: {
             label: 'cloudinaryBuilding',
-            fileId: 'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
+            fileId: assetFileId(
+              'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
+            ),
           },
         },
       },

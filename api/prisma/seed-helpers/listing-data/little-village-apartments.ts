@@ -5,6 +5,7 @@ import {
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
+import { assetFileId } from '../asset-file-id-helper';
 
 export const littleVillageApartments: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
@@ -84,7 +85,7 @@ export const littleVillageApartments: Prisma.ListingsCreateInput = {
         assets: {
           create: {
             label: 'cloudinaryBuilding',
-            fileId: 'dev/dillon-kydd-2keCPb73aQY-unsplash_lm7krp',
+            fileId: assetFileId('dev/dillon-kydd-2keCPb73aQY-unsplash_lm7krp'),
           },
         },
       },
