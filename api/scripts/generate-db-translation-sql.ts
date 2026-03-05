@@ -1,4 +1,4 @@
-// Example: yarn translations:sql --input db-translation-input.example.json --output prisma/migrations/52_db_translation_update/migration.sql
+// Example: yarn translations:sql --input scripts/db-translation-input.example.json --output 53_test
 
 /* eslint-disable no-console */
 import { Translate } from '@google-cloud/translate/build/src/v2';
