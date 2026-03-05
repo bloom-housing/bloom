@@ -5,6 +5,7 @@ locals {
     NEXTJS_PORT            = "3001"
     BACKEND_API_BASE       = "http://bloom-api:3100"
     LISTINGS_QUERY         = "/listings"
+    USE_S3_FILE_STORAGE    = "TRUE"
   }
 }
 resource "aws_ecs_task_definition" "bloom_site_partners" {
