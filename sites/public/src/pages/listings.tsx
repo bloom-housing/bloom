@@ -19,6 +19,7 @@ import {
   fetchMultiselectProgramData,
   fetchOpenListings,
 } from "../lib/hooks"
+import { ListingMap } from "../components/browse/map/ListingMap"
 
 export interface ListingsProps {
   openListings: Listing[]
@@ -36,17 +37,28 @@ export interface ListingsProps {
 }
 
 export default function ListingsPage(props: ListingsProps) {
+  const enableMap = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingMap)
   return (
     <>
       {process.env.showNewSeedsDesigns ? (
-        <ListingBrowse
-          listings={props.openListings}
-          tab={TabsIndexEnum.open}
-          jurisdiction={props.jurisdiction}
-          multiselectData={props.multiselectData}
-          paginationData={props.paginationData}
-          areFiltersActive={props.areFiltersActive}
-        />
+        enableMap ? (
+          <ListingMap
+            listings={props.openListings}
+            jurisdiction={props.jurisdiction}
+            multiselectData={props.multiselectData}
+            paginationData={props.paginationData}
+            areFiltersActive={props.areFiltersActive}
+          />
+        ) : (
+          <ListingBrowse
+            listings={props.openListings}
+            tab={TabsIndexEnum.open}
+            jurisdiction={props.jurisdiction}
+            multiselectData={props.multiselectData}
+            paginationData={props.paginationData}
+            areFiltersActive={props.areFiltersActive}
+          />
+        )
       ) : (
         <ListingBrowseDeprecated
           openListings={props.openListings}
@@ -64,6 +76,30 @@ export async function getServerSideProps(context: { req: any; query: any }) {
   let areFiltersActive = false
   const isUsingNewSeedsDesign = Boolean(process.env.showNewSeedsDesigns)
 
+  const jurisdiction = await fetchJurisdictionByName(context.req)
+  const enableMap = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableListingMap)
+
+  // Map mode fetches listings client-side, so we keep SSR props minimal to avoid large page-data payloads
+  if (process.env.showNewSeedsDesigns && enableMap) {
+    const multiselectData = isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.swapCommunityTypeWithPrograms
+    )
+      ? await fetchMultiselectProgramData(context.req, jurisdiction?.id)
+      : null
+
+    return {
+      props: {
+        openListings: [],
+        closedListings: [],
+        paginationData: null,
+        jurisdiction: jurisdiction,
+        multiselectData: multiselectData,
+        areFiltersActive,
+      },
+    }
+  }
+
   if (isFiltered(context.query)) {
     const filterData = decodeQueryToFilterData(context.query)
     const filters = encodeFilterDataToBackendFilters(filterData)
@@ -75,7 +111,6 @@ export async function getServerSideProps(context: { req: any; query: any }) {
       closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
     }
   }
-  const jurisdiction = await fetchJurisdictionByName(context.req)
   const multiselectData = isFeatureFlagOn(
     jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms

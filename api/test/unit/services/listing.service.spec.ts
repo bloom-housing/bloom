@@ -6803,15 +6803,39 @@ describe('Testing listing service', () => {
         },
       ]);
 
-      await service.mapMarkers();
+      await service.mapMarkers({});
 
       expect(prisma.listings.findMany).toHaveBeenCalledWith({
         select: {
           id: true,
-          listingsBuildingAddress: true,
+          listingsBuildingAddress: {
+            select: {
+              latitude: true,
+              longitude: true,
+            },
+          },
         },
         where: {
-          status: ListingsStatusEnum.active,
+          AND: [
+            {
+              OR: [
+                {
+                  status: { equals: ListingsStatusEnum.active },
+                },
+              ],
+            },
+          ],
+          buildingAddressId: {
+            not: null,
+          },
+          listingsBuildingAddress: {
+            latitude: {
+              not: null,
+            },
+            longitude: {
+              not: null,
+            },
+          },
         },
       });
     });
