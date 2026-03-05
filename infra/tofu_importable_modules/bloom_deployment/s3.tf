@@ -42,6 +42,16 @@ resource "aws_s3_bucket" "public" {
   force_destroy = var.env_type == "dev"
 
 }
+resource "aws_s3_bucket_cors_configuration" "public" {
+  region = var.aws_region
+  bucket = aws_s3_bucket.public.id
+  cors_rule {
+    allowed_methods = ["PUT"]
+    allowed_origins = [
+      "https://partners.${var.domain_name}",
+    ]
+  }
+}
 resource "aws_s3_bucket_public_access_block" "public" {
   region = var.aws_region
   bucket = aws_s3_bucket.public.id
@@ -77,7 +87,7 @@ data "aws_iam_policy_document" "public_bucket" {
     actions = ["s3:PutObject"]
     principals {
       type        = "AWS"
-      identifiers = [aws_iam_role.bloom_ecs["api"].arn]
+      identifiers = [aws_iam_role.bloom_container["api"].arn]
     }
   }
 }

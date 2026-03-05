@@ -195,7 +195,7 @@ export const fileUploader = async ({
     }).then((_) => {
       setProgressValue(100)
       setFileUploadData({
-        id: fileId,
+        id: publicUrl,
         url: publicUrl,
       })
     })

@@ -42,6 +42,9 @@ resource "aws_ssoadmin_permission_set_inline_policy" "deployer" {
   permission_set_arn = var.permission_set_arn
   inline_policy      = data.aws_iam_policy_document.deployer.json
 }
+# TODO: I keep running into errors about this policy being over the limit. So far I have resolved by
+# shortening sid names. We need to figure out a better long-term plan for addressing this
+# restriction.
 data "aws_iam_policy_document" "deployer" {
   # TODO: we could have a separate permission set for humans debugging / looking at stuff through
   # the AWS web console. For now, just collect the added permissions for using the web console that
@@ -470,7 +473,8 @@ data "aws_iam_policy_document" "deployer" {
       "s3:DeleteBucket",
       "s3:Get*",
       "s3:ListBucket",
-      "s3:PutBUcketPublicAccessBlock",
+      "s3:PutBucketPublicAccessBlock",
+      "s3:PutBucketCORS",
       "s3:PutBucketPolicy",
       "s3:PutLifecycleConfiguration",
     ]
