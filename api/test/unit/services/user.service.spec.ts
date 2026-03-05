@@ -2665,6 +2665,202 @@ describe('Testing user service', () => {
     });
   });
 
+  describe('acceptAdvocateUser', () => {
+    it('should throw error when accepting user is not an admin', async () => {
+      const advocateId = randomUUID();
+
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+        id: advocateId,
+        isAdvocate: false,
+      });
+
+      await expect(
+        async () =>
+          await service.acceptAdvocateUser(
+            {
+              advocateId: { id: advocateId },
+              isAccepted: true,
+            },
+            {
+              user: {
+                id: 'requestingUser id',
+                userRoles: {
+                  isAdmin: false,
+                  isJurisdictionalAdmin: true,
+                  isLimitedJurisdictionalAdmin: true,
+                  isPartner: true,
+                  isSuperAdmin: false,
+                  isSupportAdmin: true,
+                },
+              } as unknown as User,
+            } as unknown as Request,
+          ),
+      ).rejects.toThrowError(
+        `Accepting advocates is only allowed for admin users`,
+      );
+    });
+
+    it('should throw error when a user with given ID is not found', async () => {
+      const advocateId = randomUUID();
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue(null);
+
+      await expect(
+        async () =>
+          await service.acceptAdvocateUser(
+            {
+              advocateId: { id: advocateId },
+              isAccepted: true,
+            },
+            {
+              user: {
+                id: 'requestingUser id',
+                userRoles: { isAdmin: true },
+              } as unknown as User,
+            } as unknown as Request,
+          ),
+      ).rejects.toThrowError(`User with id: ${advocateId} was not found`);
+
+      expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: advocateId,
+        },
+        include: {
+          jurisdictions: true,
+        },
+      });
+    });
+
+    it('should throw error when requested user is not an advocate', async () => {
+      const advocateId = randomUUID();
+
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+        id: advocateId,
+        isAdvocate: false,
+      });
+
+      await expect(
+        async () =>
+          await service.acceptAdvocateUser(
+            {
+              advocateId: { id: advocateId },
+              isAccepted: true,
+            },
+            {
+              user: {
+                id: 'requestingUser id',
+                userRoles: { isAdmin: true },
+              } as unknown as User,
+            } as unknown as Request,
+          ),
+      ).rejects.toThrowError(
+        `The user with id ${advocateId} is not an advocate`,
+      );
+
+      expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: advocateId,
+        },
+        include: {
+          jurisdictions: true,
+        },
+      });
+    });
+
+    it('should update advocate users isApproved value when accepted', async () => {
+      const advocateId = randomUUID();
+      const jurisId = randomUUID();
+
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+        id: advocateId,
+        isAdvocate: true,
+        jurisdictions: [{ id: jurisId, publicUrl: 'https://example_url.com' }],
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id: advocateId,
+        isApproved: true,
+      });
+      emailService.advocateAccepted = jest.fn();
+
+      await service.acceptAdvocateUser(
+        {
+          advocateId: { id: advocateId },
+          isAccepted: true,
+        },
+        {
+          user: {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        } as unknown as Request,
+      );
+
+      expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: advocateId,
+        },
+        include: {
+          jurisdictions: true,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          isApproved: true,
+        },
+        where: {
+          id: advocateId,
+        },
+      });
+      expect(emailService.advocateAccepted).toHaveBeenCalled();
+    });
+
+    it('should update advocate users isApproved value when rejected', async () => {
+      const advocateId = randomUUID();
+      const jurisId = randomUUID();
+
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+        id: advocateId,
+        isAdvocate: true,
+        jurisdictions: [{ id: jurisId, publicUrl: 'https://example_url.com' }],
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id: advocateId,
+        isApproved: false,
+      });
+      emailService.advocateRejected = jest.fn();
+
+      await service.acceptAdvocateUser(
+        {
+          advocateId: { id: advocateId },
+          isAccepted: false,
+        },
+        {
+          user: {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        } as unknown as Request,
+      );
+
+      expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: advocateId,
+        },
+        include: {
+          jurisdictions: true,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          isApproved: false,
+        },
+        where: {
+          id: advocateId,
+        },
+      });
+      expect(emailService.advocateRejected).toHaveBeenCalled();
+    });
+  });
+
   describe('isUserRoleChangeAllowed', () => {
     it('should allow admin to promote to admin', () => {
       const res = service.isUserRoleChangeAllowed(
