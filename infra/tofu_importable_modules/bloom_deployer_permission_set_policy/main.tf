@@ -47,13 +47,13 @@ data "aws_iam_policy_document" "deployer" {
   # the AWS web console. For now, just collect the added permissions for using the web console that
   # are not required when running tofu apply.
   statement {
-    sid = "WebConsoleUser"
+    sid = "WebUser"
     actions = [
-      "application-autoscaling:DescribeScalableTargets",
+      "application-autoscaling:Describe*",
       "cloudwatch:Describe*",
       "cloudwatch:Get*",
       "cloudwatch:List*",
-      "dms:ListDataProviders",
+      "dms:List*",
       "ec2:Describe*",
       "ecs:List*",
       "elasticloadbalancing:Describe*",
@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "deployer" {
       "events:Get*",
       "events:List*",
       "logs:Describe*",
-      "logs:FilterLogEvents",
+      "logs:Filter*",
       "logs:Get*",
       "logs:List*",
       "logs:StartQuery",
@@ -70,7 +70,10 @@ data "aws_iam_policy_document" "deployer" {
       "rds:Describe*",
       "rds:Get*",
       "rds:List*",
-      "servicediscovery:DiscoverInstances",
+      "s3:Describe*",
+      "s3:Get*",
+      "s3:List*",
+      "servicediscovery:Discover*",
       "servicediscovery:Get*",
       "servicediscovery:List*",
     ]
@@ -84,7 +87,7 @@ data "aws_iam_policy_document" "deployer" {
     resources = ["*"]
   }
   statement {
-    sid = "CSNetworkInterface"
+    sid = "CSNet"
     actions = [
       "ec2:CreateNetworkInterface",
     ]
@@ -98,7 +101,7 @@ data "aws_iam_policy_document" "deployer" {
     }
   }
   statement {
-    sid = "CSNetworkInterfaceSubnet"
+    sid = "CSNSubnet"
     actions = [
       "ec2:CreateNetworkInterface",
     ]
@@ -112,7 +115,7 @@ data "aws_iam_policy_document" "deployer" {
     }
   }
   statement {
-    sid = "CSCreateNetworkInterfaceSG"
+    sid = "CSSG"
     actions = [
       "ec2:CreateNetworkInterface",
     ]
@@ -126,7 +129,7 @@ data "aws_iam_policy_document" "deployer" {
     }
   }
   statement {
-    sid = "CSTagNetworkInterface"
+    sid = "CSTag"
     actions = [
       "ec2:CreateTags",
     ]
@@ -138,7 +141,7 @@ data "aws_iam_policy_document" "deployer" {
     }
   }
   statement {
-    sid = "CSConfigNetworkInterface"
+    sid = "CSConfigNet"
     actions = [
       "ec2:CreateNetworkInterfacePermission",
       "ec2:DeleteNetworkInterface",
@@ -151,28 +154,21 @@ data "aws_iam_policy_document" "deployer" {
     }
   }
   statement {
-    sid       = "CSDBAuthToken"
+    sid       = "CSDB"
     actions   = ["rds-db:connect"]
     resources = ["arn:aws:rds-db:${local.region_account}:dbuser:*/bloom_readonly"]
   }
   statement {
-    sid = "TofuStateBucket"
-    actions = [
-      "s3:ListBucket",
-    ]
-    resources = [
-      "arn:aws:s3:::${var.bloom_deployment_tofu_state_bucket_name}",
-    ]
-  }
-  statement {
-    sid = "TofuStateFiles"
+    sid = "TofuState"
     actions = [
       "s3:DeleteObject",
       "s3:GetObject",
+      "s3:ListBucket",
       "s3:PutObject",
       "s3:PutObjectAcl",
     ]
     resources = [
+      "arn:aws:s3:::${var.bloom_deployment_tofu_state_bucket_name}",
       "arn:aws:s3:::${var.bloom_deployment_tofu_state_bucket_name}/${var.bloom_deployment_tofu_state_file_prefix}/state",
       "arn:aws:s3:::${var.bloom_deployment_tofu_state_bucket_name}/${var.bloom_deployment_tofu_state_file_prefix}/state.tflock",
     ]
@@ -190,7 +186,7 @@ data "aws_iam_policy_document" "deployer" {
     ]
   }
   statement {
-    sid = "ServiceLinkedRole"
+    sid = "LinkedRole"
     actions = [
       "iam:CreateServiceLinkedRole",
       "iam:DeleteServiceLinkedRole",
@@ -235,7 +231,7 @@ data "aws_iam_policy_document" "deployer" {
     resources = ["*"]
   }
   statement {
-    sid = "ConfigureVPC"
+    sid = "VPC"
     actions = [
       "acm:DeleteCertificate",
       "acm:DescribeCertificate",
@@ -321,7 +317,7 @@ data "aws_iam_policy_document" "deployer" {
   }
   statement {
     # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAM.ServiceLinkedRoles.html
-    sid = "DBServiceLinkedRole"
+    sid = "DBLinkedRole"
     actions = [
       "iam:CreateServiceLinkedRole",
     ]
@@ -339,10 +335,10 @@ data "aws_iam_policy_document" "deployer" {
     actions = [
       "kms:DescribeKey",
       "secretsmanager:CreateSecret",
-      "secretsmanager:ListSecrets",
       "secretsmanager:DeleteSecret",
       "secretsmanager:DescribeSecret",
       "secretsmanager:GetResourcePolicy",
+      "secretsmanager:ListSecrets",
       "secretsmanager:TagResource",
     ]
     resources = ["*"]
@@ -354,7 +350,7 @@ data "aws_iam_policy_document" "deployer" {
   }
   statement {
     # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/security_iam_id-based-policy-examples-create-and-modify-examples.html
-    sid = "ConfigureDB"
+    sid = "DB"
     actions = [
       "rds:CreateDBInstance",
       "rds:CreateDBSnapshot",
@@ -377,7 +373,7 @@ data "aws_iam_policy_document" "deployer" {
   statement {
     # For some reason the task APIs operate on the * resouce and don't support targeting the
     # resource directly in the IAM policy.
-    sid = "ECSTaskDefinition"
+    sid = "ECSTaskDef"
     actions = [
       "ecs:DeregisterTaskDefinition",
       "ecs:DescribeTaskDefinition",
@@ -385,7 +381,7 @@ data "aws_iam_policy_document" "deployer" {
     resources = ["*"]
   }
   statement {
-    sid = "ConfigureECS"
+    sid = "ECS"
     actions = [
       "ecs:CreateCluster",
       "ecs:CreateService",
@@ -435,7 +431,7 @@ data "aws_iam_policy_document" "deployer" {
     ]
   }
   statement {
-    sid = "RunECSTask"
+    sid = "RunECS"
     actions = [
       "ecs:RunTask",
     ]
@@ -466,5 +462,18 @@ data "aws_iam_policy_document" "deployer" {
       "ses:ListTagsForResource",
     ]
     resources = ["arn:aws:ses:${local.region_account}:identity/*"]
+  }
+  statement {
+    sid = "S3"
+    actions = [
+      "s3:CreateBucket",
+      "s3:DeleteBucket",
+      "s3:Get*",
+      "s3:ListBucket",
+      "s3:PutBUcketPublicAccessBlock",
+      "s3:PutBucketPolicy",
+      "s3:PutLifecycleConfiguration",
+    ]
+    resources = ["arn:aws:s3:::bloom-*"]
   }
 }
