@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Markdown from "markdown-to-jsx"
 import { t, ApplicationTimeline } from "@bloom-housing/ui-components"
@@ -37,49 +37,40 @@ const ApplicationConfirmation = () => {
 
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
 
-  const content = useMemo(() => {
-    const advocatePrefix = isAdvocate ? ".advocate" : ""
-    switch (listing?.reviewOrderType) {
-      case ReviewOrderTypeEnum.firstComeFirstServe:
-        if (isUnitGroupAppWaitlist(listing, conductor.config)) {
-          return {
-            text: t(
-              `application.review.confirmation.whatHappensNext${
-                disableListingPreferences ? ".noPref" : ""
-              }${advocatePrefix}.waitlist`
-            ),
-          }
-        }
-        if (isUnitGroupAppBase(listing, conductor.config)) {
-          return {
-            text: t(
-              `application.review.confirmation.whatHappensNext${
-                disableListingPreferences ? ".noPref" : ""
-              }${advocatePrefix}.base`
-            ),
-          }
-        }
-        return {
-          text: t(
-            `application.review.confirmation.whatHappensNext${
-              disableListingPreferences ? ".noPref" : ""
-            }${advocatePrefix}.fcfs`
-          ),
-        }
-      case ReviewOrderTypeEnum.lottery:
-      case ReviewOrderTypeEnum.waitlist:
-      case ReviewOrderTypeEnum.waitlistLottery:
-        return {
-          text: t(
-            `application.review.confirmation.whatHappensNext${
-              disableListingPreferences ? ".noPref" : ""
-            }${advocatePrefix}.${listing.reviewOrderType}`
-          ),
-        }
-      default:
-        return { text: "" }
-    }
-  }, [listing, conductor.config, isAdvocate])
+  const advocatePrefix = isAdvocate ? ".advocate" : ""
+  let contentText = ""
+  switch (listing?.reviewOrderType) {
+    case ReviewOrderTypeEnum.firstComeFirstServe:
+      if (isUnitGroupAppWaitlist(listing, conductor.config)) {
+        contentText = t(
+          `application.review.confirmation.whatHappensNext${
+            disableListingPreferences ? ".noPref" : ""
+          }${advocatePrefix}.waitlist`
+        )
+      } else if (isUnitGroupAppBase(listing, conductor.config)) {
+        contentText = t(
+          `application.review.confirmation.whatHappensNext${
+            disableListingPreferences ? ".noPref" : ""
+          }${advocatePrefix}.base`
+        )
+      } else {
+        contentText = t(
+          `application.review.confirmation.whatHappensNext${
+            disableListingPreferences ? ".noPref" : ""
+          }${advocatePrefix}.fcfs`
+        )
+      }
+      break
+    case ReviewOrderTypeEnum.lottery:
+    case ReviewOrderTypeEnum.waitlist:
+    case ReviewOrderTypeEnum.waitlistLottery:
+      contentText = t(
+        `application.review.confirmation.whatHappensNext${
+          disableListingPreferences ? ".noPref" : ""
+        }${advocatePrefix}.${listing.reviewOrderType}`
+      )
+      break
+  }
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -130,19 +121,24 @@ const ApplicationConfirmation = () => {
               <div className="markdown markdown-informational">
                 <ApplicationTimeline />
 
-                <Markdown options={{ disableParsingRawHTML: true }}>{content.text}</Markdown>
+                <Markdown options={{ disableParsingRawHTML: true }}>{contentText}</Markdown>
               </div>
             </CardSection>
 
             <CardSection divider={"inset"}>
               <div className="markdown markdown-informational">
                 <Markdown options={{ disableParsingRawHTML: true }}>
-                  {t("application.review.confirmation.needToMakeUpdates", {
-                    agentName: listing?.leasingAgentName || "",
-                    agentPhone: listing?.leasingAgentPhone || "",
-                    agentEmail: listing?.leasingAgentEmail || "",
-                    agentOfficeHours: listing?.leasingAgentOfficeHours || "",
-                  })}
+                  {t(
+                    `application.review.confirmation.needToMakeUpdates${
+                      isAdvocate ? ".advocate" : ""
+                    }`,
+                    {
+                      agentName: listing?.leasingAgentName || "",
+                      agentPhone: listing?.leasingAgentPhone || "",
+                      agentEmail: listing?.leasingAgentEmail || "",
+                      agentOfficeHours: listing?.leasingAgentOfficeHours || "",
+                    }
+                  )}
                 </Markdown>
               </div>
             </CardSection>
