@@ -22,6 +22,7 @@ export const userFactory = async (optionalParams?: {
   wasWarnedOfDeletion?: boolean;
   language?: LanguagesEnum;
   isAdvocate?: boolean;
+  isApproved?: boolean;
   agencyId?: string;
 }): Promise<Prisma.UserAccountsCreateInput> => ({
   agreedToTermsOfService: optionalParams?.acceptedTerms || false,
@@ -81,7 +82,7 @@ export const userFactory = async (optionalParams?: {
       }
     : undefined,
   isAdvocate: optionalParams?.isAdvocate,
-  isApproved: optionalParams?.isAdvocate,
+  isApproved: optionalParams?.isApproved,
   agency: optionalParams?.agencyId
     ? {
         connect: {
