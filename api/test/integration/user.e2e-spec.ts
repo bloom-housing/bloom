@@ -30,7 +30,7 @@ import { addressFactory } from '../../prisma/seed-helpers/address-factory';
 import { AddressUpdate } from '../../src/dtos/addresses/address-update.dto';
 import { UserOrderByKeys } from '../../src/enums/listings/order-by-enum';
 import { OrderByEnum } from '../../src/enums/shared/order-by-enum';
-import { AdvocateUserAccept } from 'src/dtos/users/advocate-user-accept.dto';
+import { AdvocateUserAccept } from '../../src/dtos/users/advocate-user-accept.dto';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
