@@ -65,4 +65,40 @@ describe('generate-db-translation-sql helpers', () => {
     expect(sql).toContain("'{footer,thankYou}'");
     expect(sql).toContain("'{applicationUpdate,applicationStatus,submitted}'");
   });
+
+  it('targets default generic translations with null jurisdiction', () => {
+    const sql = buildSql(
+      {
+        en: [{ path: ['footer', 'line1'], value: 'Bloom' }],
+      } as any,
+      ['en'],
+    );
+
+    expect(sql).toContain("WHERE language = 'en' AND jurisdiction_id IS NULL");
+    expect(sql).toContain(
+      'INSERT INTO translations ("language", "translations", "jurisdiction_id", "created_at", "updated_at")',
+    );
+    expect(sql).toContain('\n  NULL,\n');
+  });
+
+  it('targets jurisdiction-specific translations when jurisdiction is provided', () => {
+    const sql = buildSql(
+      {
+        en: [{ path: ['footer', 'line1'], value: 'Bloom' }],
+      } as any,
+      ['en'],
+      'Bloomington',
+    );
+
+    expect(sql).toContain('DO $$');
+    expect(sql).toContain(
+      "IF NOT EXISTS (SELECT 1 FROM jurisdictions WHERE name = 'Bloomington') THEN",
+    );
+    expect(sql).toContain(
+      "WHERE language = 'en' AND jurisdiction_id = (SELECT id FROM jurisdictions WHERE name = 'Bloomington' LIMIT 1)",
+    );
+    expect(sql).toContain(
+      "(SELECT id FROM jurisdictions WHERE name = 'Bloomington' LIMIT 1)",
+    );
+  });
 });

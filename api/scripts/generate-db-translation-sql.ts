@@ -1,6 +1,5 @@
 // Example: yarn translations:sql --input scripts/db-translation-input.example.json --output 53_test
 
-/* eslint-disable no-console */
 import { Translate } from '@google-cloud/translate/build/src/v2';
 import dotenv from 'dotenv';
 import fs from 'fs';
@@ -35,6 +34,7 @@ type CliOptions = {
   input: string;
   output?: string;
   languages?: LanguageCode[];
+  jurisdiction?: string;
   machineTranslate: boolean;
 };
 
@@ -86,6 +86,18 @@ export const parseArgs = (): CliOptions => {
         .split(',')
         .map((language) => language.trim())
         .filter(Boolean) as LanguageCode[];
+      index++;
+      continue;
+    }
+
+    if (arg === '--jurisdiction') {
+      const jurisdiction = args[index + 1];
+      if (!jurisdiction || jurisdiction.startsWith('--')) {
+        throw new Error(
+          'Missing value for --jurisdiction. Example: --jurisdiction "Bloomington"',
+        );
+      }
+      options.jurisdiction = jurisdiction;
       index++;
       continue;
     }
@@ -330,7 +342,22 @@ export const buildSql = (
     Array<{ path: string[]; value: string }>
   >,
   languages: LanguageCode[],
+  jurisdiction?: string,
 ): string => {
+  const escapedJurisdiction = jurisdiction
+    ? escapeSqlLiteral(jurisdiction)
+    : undefined;
+  const jurisdictionIdExpression = escapedJurisdiction
+    ? `(SELECT id FROM jurisdictions WHERE name = '${escapedJurisdiction}' LIMIT 1)`
+    : 'NULL';
+
+  const preludeStatements: string[] = [];
+  if (escapedJurisdiction) {
+    preludeStatements.push(
+      `DO $$\nBEGIN\n  IF NOT EXISTS (SELECT 1 FROM jurisdictions WHERE name = '${escapedJurisdiction}') THEN\n    RAISE EXCEPTION 'Jurisdiction % not found', '${escapedJurisdiction}';\n  END IF;\nEND $$;`,
+    );
+  }
+
   const statements = languages.map((language) => {
     const patch = languagePatchMap[language];
 
@@ -350,11 +377,14 @@ export const buildSql = (
     });
 
     const insertPayloadLiteral = toJsonbLiteral(insertPayload);
+    const updateWhereClause = escapedJurisdiction
+      ? `language = '${language}' AND jurisdiction_id = ${jurisdictionIdExpression}`
+      : `language = '${language}' AND jurisdiction_id IS NULL`;
 
-    return `-- ${language}\nWITH updated AS (\n  UPDATE translations\n  SET translations = ${updateExpression}\n  WHERE language = '${language}'\n  RETURNING 1\n)\nINSERT INTO translations ("language", "translations", "created_at", "updated_at")\nSELECT\n  '${language}',\n  ${insertPayloadLiteral},\n  CURRENT_TIMESTAMP,\n  CURRENT_TIMESTAMP\nWHERE NOT EXISTS (SELECT 1 FROM updated);`;
+    return `-- ${language}\nWITH updated AS (\n  UPDATE translations\n  SET translations = ${updateExpression}\n  WHERE ${updateWhereClause}\n  RETURNING 1\n)\nINSERT INTO translations ("language", "translations", "jurisdiction_id", "created_at", "updated_at")\nSELECT\n  '${language}',\n  ${insertPayloadLiteral},\n  ${jurisdictionIdExpression},\n  CURRENT_TIMESTAMP,\n  CURRENT_TIMESTAMP\nWHERE NOT EXISTS (SELECT 1 FROM updated);`;
   });
 
-  return [...statements, ''].join('\n');
+  return [...preludeStatements, ...statements, ''].join('\n');
 };
 
 export async function main() {
@@ -378,7 +408,7 @@ export async function main() {
     options.machineTranslate,
   );
 
-  const sql = buildSql(languagePatchMap, languages);
+  const sql = buildSql(languagePatchMap, languages, options.jurisdiction);
 
   if (options.output) {
     const outputPath = path.resolve(
@@ -388,7 +418,6 @@ export async function main() {
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 
     fs.writeFileSync(outputPath, sql, 'utf8');
-    console.log(`SQL written to ${outputPath}`);
     return;
   }
 

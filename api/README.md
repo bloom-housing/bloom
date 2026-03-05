@@ -52,6 +52,14 @@ To start the application run: `yarn dev`.
 
 Use `yarn translations:sql --input scripts/db-translation-input.example.json` to generate SQL for translation updates/inserts in the `translations` table.
 
+By default, updates target generic translation rows where `jurisdiction_id IS NULL` for each language.
+
+If a target row does not exist, the generated SQL creates it with:
+
+- `language` set to the target language
+- `jurisdiction_id` set to `NULL` (default mode), or to the matching jurisdiction id when `--jurisdiction` is used
+- `translations` set to the generated translation object
+
 The script accepts a JSON file with:
 
 - a nested translation object in the same shape as `translation-factory` output (for example keys like `t`, `footer`, `confirmation`, `applicationUpdate`, etc.)
@@ -62,7 +70,13 @@ Helpful flags:
 - `--output 52_test` creates `prisma/migrations/52_test/migration.sql`
 - `--output prisma/migrations/52_test/migration.sql` writes to that exact file
 - `--languages en,es,tl` limits generated languages
+- `--jurisdiction "Bloomington"` targets jurisdiction-specific rows by jurisdiction name instead of generic (`jurisdiction_id IS NULL`)
 - `--no-machine-translate` disables Google Translate
+
+Examples:
+
+- Generic/default rows: `yarn translations:sql --input scripts/db-translation-input.example.json --output 54_generic_translation_update`
+- Jurisdiction-specific rows: `yarn translations:sql --input scripts/db-translation-input.example.json --jurisdiction "Bloomington" --output 55_bloomington_translation_update`
 
 By default the script generates for `en, es, tl, vi, zh, ar, bn, ko, hy, fa` and machine-translates missing non-English values using the same Google env vars used by other translation scripts.
 
