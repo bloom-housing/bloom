@@ -8,10 +8,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "private" {
   region = var.aws_region
   bucket = aws_s3_bucket.private.id
   rule {
-    id     = "delete-after-2-days"
+    id     = "delete-after-1-day"
     status = "Enabled"
     expiration {
-      days = 2
+      days = 1
     }
   }
 }
@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "private_bucket" {
     actions = ["s3:GetObject", "s3:PutObject"]
     principals {
       type        = "AWS"
-      identifiers = [aws_iam_role.bloom_ecs["api"].arn]
+      identifiers = [aws_iam_role.bloom_container["api"].arn]
     }
   }
 }

@@ -1,11 +1,12 @@
 locals {
   site_partners_default_env_vars = {
-    NODE_ENV               = "production"
-    DISABLE_NEXT_TYPECHECK = "TRUE"
-    NEXTJS_PORT            = "3001"
-    BACKEND_API_BASE       = "http://bloom-api:3100"
-    LISTINGS_QUERY         = "/listings"
-    USE_S3_FILE_STORAGE    = "TRUE"
+    NODE_ENV                    = "production"
+    DISABLE_NEXT_TYPECHECK      = "TRUE"
+    NEXTJS_PORT                 = "3001"
+    BACKEND_API_BASE            = "http://bloom-api:3100"
+    LISTINGS_QUERY              = "/listings"
+    USE_SECURE_DOWNLOAD_PATHWAY = "TRUE"
+    USE_S3_FILE_STORAGE         = "TRUE"
   }
 }
 resource "aws_ecs_task_definition" "bloom_site_partners" {
