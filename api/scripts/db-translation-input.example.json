@@ -1,0 +1,28 @@
+{
+  "t": {
+    "hello": "Hello",
+    "seeListing": "See Listing",
+    "partnersPortal": "Partners Portal"
+  },
+  "footer": {
+    "line1": "Bloom",
+    "line2": "",
+    "thankYou": "Thank you",
+    "footer": "Bloom Housing"
+  },
+  "confirmation": {
+    "subject": "Your Application Confirmation",
+    "eligible": {
+      "fcfs": "Eligible applicants will be contacted on a first come first serve basis until vacancies are filled.",
+      "lottery": "Once the application period closes, eligible applicants will be placed in order based on lottery rank order."
+    }
+  },
+  "applicationUpdate": {
+    "title": "Your application has been updated for %{listingName}",
+    "advocateViewLink": "View application",
+    "applicationStatus": {
+      "submitted": "Submitted",
+      "waitlist": "Wait list"
+    }
+  }
+}

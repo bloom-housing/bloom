@@ -34,7 +34,8 @@
     "setup": "yarn install && yarn prisma generate && yarn build && yarn db:setup:staging",
     "setup:large": "yarn install && yarn prisma generate && yarn build && yarn db:setup:staging-large",
     "db:migration:skip": "yarn prisma migrate resolve --applied ",
-    "setup:dev": "yarn install && yarn prisma generate && yarn build && yarn db:setup"
+    "setup:dev": "yarn install && yarn prisma generate && yarn build && yarn db:setup",
+    "translations:sql": "ts-node scripts/generate-db-translation-sql.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.758.0",

@@ -48,6 +48,22 @@ If you're using VSCode, you can install [the Postgres explorer extension](https:
 
 To start the application run: `yarn dev`.
 
+## Translation migration helper
+
+Use `yarn translations:sql --input scripts/db-translation-input.example.json` to generate SQL for translation updates/inserts in the `translations` table.
+
+The script accepts a JSON file with:
+
+- a nested translation object in the same shape as `translation-factory` output (for example keys like `t`, `footer`, `confirmation`, `applicationUpdate`, etc.)
+
+Helpful flags:
+
+- `--output <path>` writes SQL to a file instead of stdout
+- `--languages en,es,tl` limits generated languages
+- `--no-machine-translate` disables Google Translate
+
+By default the script generates for `en, es, tl, vi, zh, ar, bn, ko, hy, fa` and machine-translates missing non-English values using the same Google env vars used by other translation scripts.
+
 ## Modifying the Schema
 
 If you're using VSCode, you can install the [Prisma extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) to add syntax highlighting and formatting to Prisma schema files.
