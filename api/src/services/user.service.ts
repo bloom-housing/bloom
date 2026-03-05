@@ -1141,7 +1141,7 @@ export class UserService {
   ): Promise<void> {
     if (!requestingUser) {
       throw new UnauthorizedException(
-        `User attempted ${action} wihtout being signed in`,
+        `User attempted ${action} without being signed in`,
       );
     }
 
