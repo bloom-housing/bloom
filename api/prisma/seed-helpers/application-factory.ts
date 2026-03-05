@@ -165,3 +165,24 @@ export const applicantFactory = (
     ...overrides,
   };
 };
+
+export const applicationFactoryMany = async (
+  count: number,
+  optionalParams?:
+    | Parameters<typeof applicationFactory>[0]
+    | ((
+        index: number,
+      ) =>
+        | Parameters<typeof applicationFactory>[0]
+        | Promise<Parameters<typeof applicationFactory>[0]>),
+): Promise<Prisma.ApplicationsCreateInput[]> => {
+  return Promise.all(
+    Array.from({ length: count }, async (_, index) =>
+      applicationFactory(
+        typeof optionalParams === 'function'
+          ? await optionalParams(index)
+          : optionalParams,
+      ),
+    ),
+  );
+};

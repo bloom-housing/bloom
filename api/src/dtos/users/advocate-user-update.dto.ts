@@ -12,7 +12,6 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import Agency from '../agency/agency.dto';
 import { User } from './user.dto';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { passwordRegex } from '../../utilities/password-regex';
@@ -29,6 +28,7 @@ export class AdvocateUserUpdate extends OmitType(User, [
   'passwordValidForDays',
   'passwordUpdatedAt',
   'jurisdictions',
+  'isAdvocate',
 ] as const) {
   /* Fields inherited from BaseUser:
    * - firstName (inherited as required from BaseUser)

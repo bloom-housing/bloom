@@ -6,6 +6,7 @@ import { AgencyService } from '../../../src/services/agency.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { Compare } from '../../../src/dtos/shared/base-filter.dto';
 
 describe('Testing agency service', () => {
   let service: AgencyService;
@@ -110,6 +111,9 @@ describe('Testing agency service', () => {
         include: {
           jurisdictions: true,
         },
+        where: {
+          AND: [],
+        },
       });
     });
 
@@ -143,6 +147,9 @@ describe('Testing agency service', () => {
         take: 5,
         include: {
           jurisdictions: true,
+        },
+        where: {
+          AND: [],
         },
       });
     });
@@ -178,6 +185,9 @@ describe('Testing agency service', () => {
         include: {
           jurisdictions: true,
         },
+        where: {
+          AND: [],
+        },
       });
     });
 
@@ -202,6 +212,82 @@ describe('Testing agency service', () => {
         include: {
           jurisdictions: true,
         },
+        where: {
+          AND: [],
+        },
+      });
+    });
+
+    it('should apply jurisdiction filter when provided', async () => {
+      const date = new Date();
+      const jurisdictionId = randomUUID();
+      const mockedValue = mockAgencySet(2, date, jurisdictionId);
+      prisma.agency.findMany = jest.fn().mockResolvedValue(mockedValue);
+      prisma.agency.count = jest.fn().mockResolvedValue(2);
+
+      const params: AgencyQueryParams = {
+        filter: [
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionId,
+          },
+        ],
+      };
+
+      await service.list(params);
+
+      expect(prisma.agency.findMany).toHaveBeenCalledWith({
+        skip: 0,
+        take: undefined,
+        include: {
+          jurisdictions: true,
+        },
+        where: {
+          AND: [
+            {
+              jurisdictions: {
+                is: {
+                  id: jurisdictionId,
+                },
+              },
+            },
+          ],
+        },
+      });
+    });
+  });
+
+  describe('buildWhereClause', () => {
+    it('should return empty where when jurisdiction filter is not provided', () => {
+      const where = service.buildWhereClause({});
+
+      expect(where).toEqual({
+        AND: [],
+      });
+    });
+
+    it('should build jurisdiction where clause from filter array', () => {
+      const jurisdictionId = randomUUID();
+
+      const where = service.buildWhereClause({
+        filter: [
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionId,
+          },
+        ],
+      });
+
+      expect(where).toEqual({
+        AND: [
+          {
+            jurisdictions: {
+              is: {
+                id: jurisdictionId,
+              },
+            },
+          },
+        ],
       });
     });
   });

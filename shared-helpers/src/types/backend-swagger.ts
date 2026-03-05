@@ -1506,6 +1506,8 @@ export class ApplicationsService {
       filterType?: ApplicationsFilterEnum
       /**  */
       includeLotteryApps?: boolean
+      /**  */
+      applicantNameSearch?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PublicAppsViewResponse> {
@@ -1519,6 +1521,7 @@ export class ApplicationsService {
         userId: params["userId"],
         filterType: params["filterType"],
         includeLotteryApps: params["includeLotteryApps"],
+        applicantNameSearch: params["applicantNameSearch"],
       }
 
       /** 适配ios13，get请求不允许带body */
@@ -1850,6 +1853,10 @@ export class UserService {
       filter?: UserFilterParams[]
       /**  */
       search?: string
+      /**  */
+      orderBy?: UserOrderByKeys[]
+      /**  */
+      orderDir?: OrderByEnum[]
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedUser> {
@@ -1862,6 +1869,8 @@ export class UserService {
         limit: params["limit"],
         filter: params["filter"],
         search: params["search"],
+        orderBy: params["orderBy"],
+        orderDir: params["orderDir"],
       }
 
       /** 适配ios13，get请求不允许带body */
@@ -8740,23 +8749,6 @@ export interface UserRole {
   isSupportAdmin?: boolean
 }
 
-export interface Agency {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  jurisdictions: IdDTO
-}
-
 export interface PublicUserCreate {
   /**  */
   confirmedAt?: Date
@@ -8816,7 +8808,7 @@ export interface PublicUserCreate {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -8835,6 +8827,15 @@ export interface PublicUserCreate {
 
   /**  */
   additionalPhoneExtension?: string
+
+  /**  */
+  isAdvocate?: boolean
+
+  /**  */
+  isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
 
   /**  */
   dob: Date
@@ -8914,7 +8915,7 @@ export interface PartnerUserCreate {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -8933,6 +8934,15 @@ export interface PartnerUserCreate {
 
   /**  */
   additionalPhoneExtension?: string
+
+  /**  */
+  isAdvocate?: boolean
+
+  /**  */
+  isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
 
   /**  */
   userRoles: UserRole
@@ -8998,6 +9008,12 @@ export interface AdvocateUserCreate {
 
   /**  */
   favoriteListings?: IdDTO[]
+
+  /**  */
+  isAdvocate?: boolean
+
+  /**  */
+  isApproved?: boolean
 
   /**  */
   agency: IdDTO
@@ -9074,7 +9090,7 @@ export interface PublicUserUpdate {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -9093,6 +9109,15 @@ export interface PublicUserUpdate {
 
   /**  */
   additionalPhoneExtension?: string
+
+  /**  */
+  isAdvocate?: boolean
+
+  /**  */
+  isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
 
   /**  */
   dob: Date
@@ -9175,7 +9200,7 @@ export interface PartnerUserUpdate {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -9194,6 +9219,15 @@ export interface PartnerUserUpdate {
 
   /**  */
   additionalPhoneExtension?: string
+
+  /**  */
+  isAdvocate?: boolean
+
+  /**  */
+  isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
 
   /**  */
   userRoles: UserRole
@@ -9289,6 +9323,12 @@ export interface AdvocateUserUpdate {
 
   /**  */
   additionalPhoneExtension?: string
+
+  /**  */
+  isAdvocate?: boolean
+
+  /**  */
+  isApproved?: boolean
 
   /**  */
   agency: IdDTO
@@ -9403,7 +9443,7 @@ export interface User {
   title?: string
 
   /**  */
-  agency?: Agency
+  agency?: IdDTO
 
   /**  */
   address?: Address
@@ -9422,11 +9462,23 @@ export interface User {
 
   /**  */
   additionalPhoneExtension?: string
+
+  /**  */
+  isAdvocate?: boolean
+
+  /**  */
+  isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
 }
 
 export interface UserFilterParams {
   /**  */
   isPortalUser?: boolean
+
+  /**  */
+  isAdvocateUser?: boolean
 }
 
 export interface PaginatedUser {
@@ -9733,6 +9785,23 @@ export interface PaginatedProperty {
 }
 
 export interface AgencyCreate {
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface Agency {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
   /**  */
   name: string
 
@@ -10230,6 +10299,7 @@ export enum FeatureFlagEnum {
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "enableVerifyIncome" = "enableVerifyIncome",
   "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
   "enableWaitlistLottery" = "enableWaitlistLottery",
   "enableWhatToExpectAdditionalField" = "enableWhatToExpectAdditionalField",
@@ -10259,6 +10329,10 @@ export enum ApplicationsFilterEnum {
   "lottery" = "lottery",
   "closed" = "closed",
   "open" = "open",
+}
+
+export enum UserOrderByKeys {
+  "isApproved" = "isApproved",
 }
 
 export enum ModificationEnum {

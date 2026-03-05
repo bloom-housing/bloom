@@ -6,6 +6,7 @@ import { oneLineAddress } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   ReviewOrderTypeEnum,
+  UnitAccessibilityPriorityTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 afterEach(cleanup)
@@ -73,5 +74,64 @@ describe("<MainDetails>", () => {
       />
     )
     expect(view.queryByText("Veteran")).toBeNull()
+  })
+
+  it("shows accessibility priority type tags when feature flag is enabled", () => {
+    render(
+      <MainDetails
+        listing={{
+          ...listing,
+          unitsSummarized: {
+            ...listing.unitsSummarized,
+            priorityTypes: [
+              UnitAccessibilityPriorityTypeEnum.mobility,
+              UnitAccessibilityPriorityTypeEnum.hearingAndVision,
+              UnitAccessibilityPriorityTypeEnum.mobilityHearingAndVision,
+            ],
+          },
+        }}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            ...jurisdiction.featureFlags,
+            {
+              name: FeatureFlagEnum.enableAccessibilityFeatures,
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
+    )
+
+    expect(screen.getByText("Mobility units")).toBeInTheDocument()
+    expect(screen.getByText("Hearing and vision units")).toBeInTheDocument()
+    expect(screen.getByText("Mobility, hearing and vision units")).toBeInTheDocument()
+  })
+
+  it("hides accessibility priority type tags when feature flag is disabled", () => {
+    render(
+      <MainDetails
+        listing={{
+          ...listing,
+          unitsSummarized: {
+            ...listing.unitsSummarized,
+            priorityTypes: [
+              UnitAccessibilityPriorityTypeEnum.mobility,
+              UnitAccessibilityPriorityTypeEnum.hearingAndVision,
+              UnitAccessibilityPriorityTypeEnum.mobilityHearingAndVision,
+            ],
+          },
+        }}
+        jurisdiction={jurisdiction}
+      />
+    )
+    expect(screen.queryByText("Mobility units")).toBeNull()
+    expect(screen.queryByText("Hearing and vision units")).toBeNull()
+    expect(screen.queryByText("Mobility, hearing and vision units")).toBeNull()
   })
 })

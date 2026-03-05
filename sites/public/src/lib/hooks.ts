@@ -16,7 +16,6 @@ import {
   MultiselectQuestionFilterParams,
   OrderByEnum,
   PaginatedListing,
-  AgencyQueryParams,
   EnumAgencyFilterParamsComparison,
   AgencyFilterParams,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -375,7 +374,7 @@ export async function fetchAgencies(req: any, jurisdictionId: string) {
     } = {
       filter: [
         {
-          $comparison: EnumAgencyFilterParamsComparison["IN"],
+          $comparison: EnumAgencyFilterParamsComparison["="],
           jurisdiction: jurisdictionId && jurisdictionId !== "" ? jurisdictionId : undefined,
         },
       ],

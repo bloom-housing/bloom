@@ -85,6 +85,8 @@ views.full = {
   ...views.base,
   ...views.favorites,
   listings: true,
+  agency: true,
+  address: true,
 };
 
 type findByOptions = {
@@ -148,8 +150,12 @@ export class UserService {
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       orderBy: buildOrderBy(
-        ['firstName', 'lastName'],
-        [OrderByEnum.ASC, OrderByEnum.ASC],
+        ['firstName', 'lastName', ...(params.orderBy ? params.orderBy : [])],
+        [
+          OrderByEnum.ASC,
+          OrderByEnum.ASC,
+          ...(params.orderDir ? params.orderDir : []),
+        ],
       ),
       include: views.full,
       where: whereClause,

@@ -16,7 +16,10 @@ import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { userFactory } from './seed-helpers/user-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
-import { applicationFactory } from './seed-helpers/application-factory';
+import {
+  applicationFactory,
+  applicationFactoryMany,
+} from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
 import { propertyFactory } from './seed-helpers/property-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
@@ -463,6 +466,7 @@ export const stagingSeed = async (
     5,
     'Angelopolis',
   );
+  await agencyFactory(mainJurisdiction.id, prismaClient, 5, 'Bloomington');
   // create super admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
@@ -595,7 +599,7 @@ export const stagingSeed = async (
       jurisdictionsId: angelopolisJurisdiction.id,
     },
   });
-  await prismaClient.userAccounts.create({
+  const advocate = await prismaClient.userAccounts.create({
     data: await userFactory({
       email: 'advocate@example.com',
       confirmedAt: new Date(),
@@ -604,6 +608,7 @@ export const stagingSeed = async (
       agencyId: agency.id,
     }),
   });
+
   // add jurisdiction specific translations and default ones
   await prismaClient.translations.create({
     data: translationFactory({
@@ -794,25 +799,89 @@ export const stagingSeed = async (
   const workInCityQuestion = await prismaClient.multiselectQuestions.create({
     data: workInCityMsqData,
   });
+  let veteranProgramMsqData: Prisma.MultiselectQuestionsCreateInput;
+  if (msqV2) {
+    veteranProgramMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
+      multiselectQuestion: {
+        status: MultiselectQuestionsStatusEnum.active,
+        name: 'Veteran',
+        description:
+          'Have you or anyone in your household served in the US military?',
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        isExclusive: true,
+        optOutText: 'Prefer not to say',
+        options: [
+          { name: 'Yes', ordinal: 1 },
+          { name: 'No', ordinal: 2 },
+        ],
+      },
+    });
+  } else {
+    veteranProgramMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
+      multiselectQuestion: {
+        text: 'Veteran',
+        description:
+          'Have you or anyone in your household served in the US military?',
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        isExclusive: true,
+        optOutText: 'Prefer not to say',
+        options: [
+          { text: 'Yes', exclusive: true, ordinal: 1 },
+          { text: 'No', exclusive: true, ordinal: 2 },
+        ],
+      },
+    });
+  }
   const veteranProgramQuestion = await prismaClient.multiselectQuestions.create(
     {
-      data: multiselectQuestionFactory(mainJurisdiction.id, {
+      data: veteranProgramMsqData,
+    },
+  );
+  const mobilityAccessibilityNeedsProgramQuestion =
+    await prismaClient.multiselectQuestions.create({
+      data: multiselectQuestionFactory(angelopolisJurisdiction.id, {
         multiselectQuestion: {
-          text: 'Veteran',
+          text: 'Mobility accessibility needs',
           description:
-            'Have you or anyone in your household served in the US military?',
+            'Some units require at least one resident to have a mobility accessibility need',
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
-          isExclusive: true,
-          optOutText: 'Prefer not to say',
+          optOutText: 'None of the above',
           options: [
-            { text: 'Yes', exclusive: true, ordinal: 1 },
-            { text: 'No', exclusive: true, ordinal: 2 },
+            { text: 'Wheelchair', ordinal: 0 },
+            { text: 'Walker', ordinal: 1 },
+            { text: 'Power chair', ordinal: 2 },
+            { text: 'Other mobility device', ordinal: 3 },
           ],
         },
       }),
-    },
-  );
+    });
+  const hearingVisionAccessibilityNeedsProgramQuestion =
+    await prismaClient.multiselectQuestions.create({
+      data: multiselectQuestionFactory(angelopolisJurisdiction.id, {
+        multiselectQuestion: {
+          text: 'Hearing/vision accessibility needs',
+          description:
+            'Some units require at least one resident to have a hearing / vision accessibility need',
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          optOutText: 'None of the above',
+          options: [
+            { text: 'Audible and visual doorbells', ordinal: 0 },
+            {
+              text: 'Fire and smoke alarms with hard wired strobes',
+              ordinal: 1,
+            },
+            {
+              text: 'Documents in screen-reader accessible format',
+              ordinal: 2,
+            },
+            { text: 'Documents in large text or braille', ordinal: 3 },
+          ],
+        },
+      }),
+    });
+
   const multiselectQuestionPrograms =
     await prismaClient.multiselectQuestions.create({
       data: multiselectQuestionFactory(mainJurisdiction.id, {
@@ -883,7 +952,11 @@ export const stagingSeed = async (
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await reservedCommunityTypeFactoryAll(mainJurisdiction.id, prismaClient);
+  const expiredApplicationDate = process.env.APPLICATION_DAYS_TILL_EXPIRY
+    ? dayjs(new Date()).subtract(10, 'days').toDate()
+    : undefined;
   // list of predefined listings WARNING: images only work if image setup is cloudinary on exygy account
+
   const listingsToCreate: Parameters<typeof listingFactory>[] = [
     [
       angelopolisJurisdiction.id,
@@ -932,17 +1005,21 @@ export const stagingSeed = async (
           cityEmployeeQuestion,
           workInCityQuestion,
           multiselectQuestionPrograms,
+          mobilityAccessibilityNeedsProgramQuestion,
+          hearingVisionAccessibilityNeedsProgramQuestion,
         ],
         applications: [
-          await applicationFactory({
+          ...(await applicationFactoryMany(2, {
             raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
-          }),
-          await applicationFactory({
+          })),
+          ...(await applicationFactoryMany(20, {
             raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
-          }),
+            userId: advocate.id,
+          })),
         ],
         userAccounts: [{ id: partnerUser.id }],
         optionalFeatures: { carpetInUnit: true },
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1008,8 +1085,7 @@ export const stagingSeed = async (
         multiselectQuestions: [cityEmployeeQuestion],
         // has applications that are the same email and also same name/dob
         applications: [
-          await applicationFactory(),
-          await applicationFactory(),
+          ...(await applicationFactoryMany(2)),
           await applicationFactory({
             submissionType: ApplicationSubmissionTypeEnum.paper,
           }),
@@ -1053,13 +1129,10 @@ export const stagingSeed = async (
               birthYear: 1970,
             },
           }),
-          await applicationFactory({
+          ...(await applicationFactoryMany(2, {
             applicant: { emailAddress: 'user2@example.com' },
-          }),
-          await applicationFactory({
-            applicant: { emailAddress: 'user2@example.com' },
-          }),
-          await applicationFactory({
+          })),
+          ...(await applicationFactoryMany(2, {
             applicant: {
               emailAddress: 'user3@example.com',
               firstName: 'first3',
@@ -1084,33 +1157,7 @@ export const stagingSeed = async (
                 birthYear: 1980,
               }),
             ],
-          }),
-          await applicationFactory({
-            applicant: {
-              emailAddress: 'user3@example.com',
-              firstName: 'first3',
-              lastName: 'last3',
-              birthDay: 1,
-              birthMonth: 1,
-              birthYear: 1970,
-            },
-            householdMember: [
-              householdMemberFactorySingle(1, {
-                firstName: 'householdFirst1',
-                lastName: 'householdLast1',
-                birthDay: 5,
-                birthMonth: 5,
-                birthYear: 1950,
-              }),
-              householdMemberFactorySingle(2, {
-                firstName: 'householdFirst2',
-                lastName: 'householdLast2',
-                birthDay: 8,
-                birthMonth: 8,
-                birthYear: 1980,
-              }),
-            ],
-          }),
+          })),
           await applicationFactory({
             applicant: {
               emailAddress: 'user4@example.com',
@@ -1134,6 +1181,7 @@ export const stagingSeed = async (
           }),
         ],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1162,6 +1210,7 @@ export const stagingSeed = async (
           },
         ],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1172,28 +1221,16 @@ export const stagingSeed = async (
         applications: [
           await applicationFactory({
             isNewest: true,
-            expireAfter: process.env.APPLICATION_DAYS_TILL_EXPIRY
-              ? dayjs(new Date()).subtract(10, 'days').toDate()
-              : undefined,
+            expireAfter: expiredApplicationDate,
           }),
           // applications below should have their PII removed via the cron job
+          ...(await applicationFactoryMany(2, {
+            isNewest: false,
+            expireAfter: expiredApplicationDate,
+          })),
           await applicationFactory({
             isNewest: false,
-            expireAfter: process.env.APPLICATION_DAYS_TILL_EXPIRY
-              ? dayjs(new Date()).subtract(10, 'days').toDate()
-              : undefined,
-          }),
-          await applicationFactory({
-            isNewest: false,
-            expireAfter: process.env.APPLICATION_DAYS_TILL_EXPIRY
-              ? dayjs(new Date()).subtract(10, 'days').toDate()
-              : undefined,
-          }),
-          await applicationFactory({
-            isNewest: false,
-            expireAfter: process.env.APPLICATION_DAYS_TILL_EXPIRY
-              ? dayjs(new Date()).subtract(10, 'days').toDate()
-              : undefined,
+            expireAfter: expiredApplicationDate,
             householdMember: [
               householdMemberFactorySingle(1, {}),
               householdMemberFactorySingle(2, {}),
@@ -1202,6 +1239,7 @@ export const stagingSeed = async (
           }),
         ],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1211,6 +1249,7 @@ export const stagingSeed = async (
         listing: littleVillageApartments,
         multiselectQuestions: [workInCityQuestion],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1232,12 +1271,9 @@ export const stagingSeed = async (
           await applicationFactory({
             multiselectQuestions: [workInCityQuestion, cityEmployeeQuestion],
           }),
-          await applicationFactory({
+          ...(await applicationFactoryMany(2, {
             multiselectQuestions: [workInCityQuestion],
-          }),
-          await applicationFactory({
-            multiselectQuestions: [workInCityQuestion],
-          }),
+          })),
           await applicationFactory(),
         ],
         multiselectQuestions: [
@@ -1356,6 +1392,7 @@ export const stagingSeed = async (
           },
         ],
         userAccounts: [{ id: partnerUser.id }],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1391,6 +1428,7 @@ export const stagingSeed = async (
             },
           },
         ],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1452,6 +1490,7 @@ export const stagingSeed = async (
             },
           },
         ],
+        enableListingFeaturesAndUtilities: true,
       },
     ],
   ];

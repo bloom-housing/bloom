@@ -108,14 +108,25 @@ export const getListingTags = (
     }
   }
 
-  if (!hideAccessibilityTag && listing.listingFeatures) {
-    if (Object.values(listing.listingFeatures).some((feature) => feature)) {
+  if (!hideAccessibilityTag) {
+    listing?.unitsSummarized?.priorityTypes?.forEach((priorityType) => {
       listingTags.push({
-        title: t("listing.tags.accessible"),
-        variant: "warn",
-        icon: <HandRaisedIcon />,
+        title: `${t(`listings.unit.accessibilityType.${priorityType}`)} ${t("t.units")}`,
+        variant: "secondary",
       })
-    }
+    })
+  }
+
+  if (
+    !hideAccessibilityTag &&
+    listing.listingFeatures &&
+    Object.values(listing.listingFeatures).some((feature) => feature)
+  ) {
+    listingTags.push({
+      title: t("listings.sections.accessibilityFeatures"),
+      variant: "warn",
+      icon: <HandRaisedIcon />,
+    })
   }
 
   return listingTags

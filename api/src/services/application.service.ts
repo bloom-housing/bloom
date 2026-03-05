@@ -424,12 +424,48 @@ export class ApplicationService {
     if (!user) {
       throw new ForbiddenException();
     }
-    const whereClause = this.buildWhereClause(params);
+    const normalizedParams = {
+      ...params,
+      userId: user.id,
+    };
+    const whereClause = this.buildWhereClause(normalizedParams);
+
+    if (user.isAdvocate && normalizedParams.applicantNameSearch) {
+      const searchTerms = normalizedParams.applicantNameSearch
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+      if (Array.isArray(whereClause.AND) && searchTerms.length > 0) {
+        whereClause.AND.push({
+          AND: searchTerms.map((term) => ({
+            OR: [
+              {
+                applicant: {
+                  firstName: {
+                    contains: term,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+              {
+                applicant: {
+                  lastName: {
+                    contains: term,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            ],
+          })),
+        });
+      }
+    }
 
     const buildCountWhereClause = (filterType: ApplicationsFilterEnum) =>
       this.buildPublicAppsViewWhereClause(
         {
-          ...params,
+          ...normalizedParams,
           filterType,
         },
         whereClause,
@@ -452,12 +488,12 @@ export class ApplicationService {
     const totalCount = openCount + closedCount + lotteryCount;
 
     const displayWhereClause = this.buildPublicAppsViewWhereClause(
-      params,
+      normalizedParams,
       whereClause,
     );
 
     let displayCount = totalCount;
-    switch (params.filterType) {
+    switch (normalizedParams.filterType) {
       case ApplicationsFilterEnum.open:
         displayCount = openCount;
         break;
@@ -472,8 +508,8 @@ export class ApplicationService {
         break;
     }
 
-    const limit = params.limit ?? 10;
-    let page = params.page ?? 1;
+    const limit = normalizedParams.limit ?? 10;
+    let page = normalizedParams.page ?? 1;
 
     if (displayCount && limit && page > 1) {
       if (Math.ceil(displayCount / limit) < page) {
@@ -491,6 +527,12 @@ export class ApplicationService {
         updatedAt: true,
         status: true,
         markedAsDuplicate: true,
+        applicant: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
         listings: {
           select: {
             id: true,
@@ -1275,9 +1317,6 @@ export class ApplicationService {
     );
 
     const application = mapTo(Application, rawApplication);
-    if (!application?.applicant?.emailAddress) {
-      return { success: false };
-    }
 
     const listing = await this.prisma.listings.findUnique({
       where: { id: rawApplication.listingId },
@@ -1307,8 +1346,24 @@ export class ApplicationService {
       return { success: false };
     }
 
+    const alternateContactEmail = application.alternateContact?.emailAddress;
+    const advocateUserAccount = alternateContactEmail
+      ? await this.prisma.userAccounts.findUnique({
+          select: { isAdvocate: true },
+          where: { email: alternateContactEmail },
+        })
+      : null;
+
+    const isAdvocate = advocateUserAccount?.isAdvocate ?? false;
+    const applicantEmail = application?.applicant?.emailAddress;
+
+    if (!isAdvocate && !applicantEmail && !alternateContactEmail) {
+      return { success: false };
+    }
+
     const mappedListing = mapTo(Listing, listing);
-    const contactEmail = listing.leasingAgentEmail;
+    //TODO: This contact email is a placeholder and must be updated per jurisdiction
+    const contactEmail = 'https://www.exygy.com';
 
     await this.emailService.applicationUpdateEmail(
       mappedListing,
@@ -1316,6 +1371,7 @@ export class ApplicationService {
       changes,
       listing.jurisdictions?.publicUrl,
       contactEmail,
+      isAdvocate,
     );
 
     return { success: true };
