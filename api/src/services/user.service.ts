@@ -1013,6 +1013,19 @@ export class UserService {
     req: Request,
   ): Promise<SuccessDTO> {
     const requestingUser = mapTo(User, req['user']);
+
+    if (
+      !requestingUser?.userRoles ||
+      !(
+        requestingUser.userRoles?.isAdmin ||
+        requestingUser.userRoles?.isSuperAdmin
+      )
+    ) {
+      throw new ForbiddenException(
+        'Accepting advocates is only allowed for admin users',
+      );
+    }
+
     const targetUser = await this.prisma.userAccounts.findFirst({
       where: {
         id: dto.advocateId.id,
@@ -1034,12 +1047,6 @@ export class UserService {
         `The user with id ${dto.advocateId.id} is not an advocate`,
       );
     }
-
-    this.authorizeAction(
-      requestingUser,
-      mapTo(User, targetUser),
-      permissionActions.update,
-    );
 
     await this.prisma.userAccounts.update({
       data: {
