@@ -14,7 +14,6 @@ export const userFactory = async (optionalParams?: {
   mfaEnabled?: boolean;
   middleName?: string;
   password?: string;
-  isApproved?: boolean;
   phoneNumber?: string;
   phoneNumberVerified?: boolean;
   roles?: Prisma.UserRolesUncheckedCreateWithoutUserAccountsInput;
