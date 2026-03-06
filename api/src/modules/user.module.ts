@@ -9,6 +9,7 @@ import { EmailModule } from './email.module';
 import { PermissionModule } from './permission.module';
 import { PrismaModule } from './prisma.module';
 import { SnapshotCreateModule } from './snapshot-create.module';
+import { AdvocateUserCsvExporterService } from '../services/advocate-user-csv-export.service';
 
 @Module({
   imports: [
@@ -20,7 +21,13 @@ import { SnapshotCreateModule } from './snapshot-create.module';
     SnapshotCreateModule,
   ],
   controllers: [UserController],
-  providers: [Logger, UserService, ConfigService, UserCsvExporterService],
+  providers: [
+    Logger,
+    UserService,
+    ConfigService,
+    UserCsvExporterService,
+    AdvocateUserCsvExporterService,
+  ],
   exports: [UserService],
 })
 export class UserModule {}

@@ -654,6 +654,15 @@ export const useUsersExport = () => {
   )
 }
 
+export const useAdvocateUserExport = () => {
+  const { userService } = useContext(AuthContext)
+
+  return useCsvExport(
+    () => userService.listAdvocatesAsCsv(),
+    `advocate-users-${createDateStringFromNow("YYYY-MM-DD_HH:mm")}.csv`
+  )
+}
+
 const useCsvExport = (
   endpoint: () => Promise<string>,
   fileName: string,
