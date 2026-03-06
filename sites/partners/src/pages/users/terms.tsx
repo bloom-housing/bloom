@@ -3,6 +3,7 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { FormTerms } from "../../components/users/FormTerms"
+import { PartnerUserUpdate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const TermsPage = () => {
   const { profile, userService, loadProfile } = useContext(AuthContext)
@@ -10,8 +11,8 @@ const TermsPage = () => {
   const onSubmit = useCallback(async () => {
     if (!profile) return
 
-    await userService?.updatePublic({
-      body: { ...profile, dob: profile.dob, agreedToTermsOfService: true },
+    await userService?.updatePartner({
+      body: { ...profile, dob: profile.dob, agreedToTermsOfService: true } as PartnerUserUpdate,
     })
 
     loadProfile?.("/")
