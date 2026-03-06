@@ -202,6 +202,7 @@ interface LayoutProps {
   children: React.ReactNode
   metaDescription?: string
   metaImage?: string
+  noIndex?: boolean
   pageTitle?: string
 }
 
@@ -231,6 +232,7 @@ const Layout = (props: LayoutProps) => {
           <title>
             {props.pageTitle ? `${props.pageTitle} - ${t("nav.siteTitle")}` : t("nav.siteTitle")}
           </title>
+          {props.noIndex && <meta name="robots" content="noindex, follow" />}
           {props.pageTitle && (
             <MetaTags
               title={props.pageTitle}
