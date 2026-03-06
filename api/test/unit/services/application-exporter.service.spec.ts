@@ -8,6 +8,7 @@ import { ApplicationCsvQueryParams } from '../../../src/dtos/applications/applic
 import { User } from '../../../src/dtos/users/user.dto';
 import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
 import { ApplicationExporterService } from '../../../src/services/application-exporter.service';
+import { S3Service } from '../../../src/services/s3.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 import {
   mockApplication,
@@ -41,6 +42,7 @@ describe('Testing application export service', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ApplicationExporterService,
+        S3Service,
         PrismaService,
         MultiselectQuestionService,
         ListingService,

@@ -5,7 +5,7 @@ import { CsvHeader } from '../types/CsvExportInterface';
 import dayjs from 'dayjs';
 import Excel, { Column } from 'exceljs';
 import fs, { createReadStream, ReadStream } from 'fs';
-import { generatePresignedGetURL, uploadToS3 } from '../utilities/s3-helpers';
+import { S3Service } from './s3.service';
 import { getExportHeaders } from '../utilities/application-export-helpers';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
@@ -46,6 +46,7 @@ export class ApplicationExporterService {
     private multiselectQuestionService: MultiselectQuestionService,
     private listingService: ListingService,
     private permissionService: PermissionService,
+    private s3Service: S3Service,
   ) {}
 
   /**
@@ -137,23 +138,11 @@ export class ApplicationExporterService {
       filename,
       isSpreadsheet,
     );
-
-    await uploadToS3(
-      process.env.S3_ACCESS_TOKEN,
-      process.env.S3_BUCKET,
-      `${isLottery ? 'lottery' : 'applications'}_export_${now.getTime()}.zip`,
-      path,
-      process.env.S3_REGION,
-      process.env.S3_SECRET_TOKEN,
-    );
-
-    return await generatePresignedGetURL(
-      process.env.S3_ACCESS_TOKEN,
-      process.env.S3_BUCKET,
-      `${isLottery ? 'lottery' : 'applications'}_export_${now.getTime()}.zip`,
-      process.env.S3_REGION,
-      process.env.S3_SECRET_TOKEN,
-    );
+    const s3Key = `${
+      isLottery ? 'lottery' : 'applications'
+    }_export_${now.getTime()}.zip`;
+    await this.s3Service.uploadToPrivate(s3Key, path);
+    return await this.s3Service.urlForPrivate(s3Key);
   }
 
   // csv export functions
