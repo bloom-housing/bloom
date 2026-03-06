@@ -5,12 +5,12 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import SelectAndOrder from "./SelectAndOrder"
-import { useJurisdictionalMultiselectQuestionList } from "../../../../lib/hooks"
 import { FormListing } from "../../../../lib/listings/formTypes"
 
 type ProgramsAndPreferencesProps = {
   disableListingPreferences?: boolean
   swapCommunityTypeWithPrograms?: boolean
+  enableV2MSQ?: boolean
   listing?: FormListing
   jurisdiction: string
   preferences: MultiselectQuestion[]
@@ -22,6 +22,7 @@ type ProgramsAndPreferencesProps = {
 const ProgramsAndPreferences = ({
   disableListingPreferences,
   swapCommunityTypeWithPrograms,
+  enableV2MSQ,
   listing,
   jurisdiction,
   preferences,
@@ -31,9 +32,9 @@ const ProgramsAndPreferences = ({
 }: ProgramsAndPreferencesProps) => {
   const programComponent = !swapCommunityTypeWithPrograms ? (
     <SelectAndOrder
+      enableV2MSQ={enableV2MSQ}
       addText={t("listings.addProgram")}
       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
-      dataFetcher={useJurisdictionalMultiselectQuestionList}
       drawerButtonText={t("listings.selectPrograms")}
       drawerButtonId="select-programs-button"
       drawerTitle={t("listings.addPrograms")}
@@ -47,9 +48,9 @@ const ProgramsAndPreferences = ({
     />
   ) : (
     <SelectAndOrder
+      enableV2MSQ={enableV2MSQ}
       addText={t("listings.addCommunityTypes")}
       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
-      dataFetcher={useJurisdictionalMultiselectQuestionList}
       drawerButtonText={t("listings.selectCommunityTypes")}
       drawerButtonId="select-community-types-button"
       drawerTitle={t("listings.addCommunityTypes")}
@@ -68,9 +69,9 @@ const ProgramsAndPreferences = ({
     <>
       {!disableListingPreferences && (
         <SelectAndOrder
+          enableV2MSQ={enableV2MSQ}
           addText={t("listings.addPreference")}
           applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
-          dataFetcher={useJurisdictionalMultiselectQuestionList}
           drawerButtonText={t("listings.selectPreferences")}
           drawerButtonId="select-preferences-button"
           drawerSubtitle={

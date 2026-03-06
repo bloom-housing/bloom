@@ -35,4 +35,10 @@ export class PublicAppsViewQueryParams extends PaginationQueryParams {
     { toClassOnly: true },
   )
   includeLotteryApps?: boolean;
+
+  @Expose()
+  @ApiPropertyOptional()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  applicantNameSearch?: string;
 }

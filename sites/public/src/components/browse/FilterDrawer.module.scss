@@ -21,4 +21,15 @@
     font-weight: 400;
     padding-bottom: 0;
   }
+
+  .accessibility-category-groups {
+    .filter-section {
+      border-block-end-width: 0;
+      padding-block-end: 0;
+    }
+  }
+
+  .parent-label {
+    font-size: var(--seeds-type-heading-size-md);
+  }
 }

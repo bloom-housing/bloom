@@ -12,7 +12,7 @@ import { listingFactory } from './seed-helpers/listing-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { randomName } from './seed-helpers/word-generator';
 import { randomInt } from 'node:crypto';
-import { applicationFactory } from './seed-helpers/application-factory';
+import { applicationFactoryMany } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
@@ -156,18 +156,19 @@ export const devSeeding = async (
   for (let index = 0; index < LISTINGS_TO_SEED; index++) {
     const applications = [];
 
-    for (let j = 0; j < APPLICATIONS_PER_LISTINGS; j++) {
-      const householdSize = randomInt(1, 6);
-      const householdMembers = await householdMemberFactoryMany(
-        householdSize - 1,
-      );
-      const app = await applicationFactory({
-        unitTypeId: unitTypes[randomInt(0, 5)].id,
-        householdMember: householdMembers,
-        multiselectQuestions,
-      });
-      applications.push(app);
-    }
+    applications.push(
+      ...(await applicationFactoryMany(APPLICATIONS_PER_LISTINGS, async () => {
+        const householdSize = randomInt(1, 6);
+        const householdMembers = await householdMemberFactoryMany(
+          householdSize - 1,
+        );
+        return {
+          unitTypeId: unitTypes[randomInt(0, 5)].id,
+          householdMember: householdMembers,
+          multiselectQuestions,
+        };
+      })),
+    );
 
     const listing = await listingFactory(jurisdiction.id, prismaClient, {
       amiChart: amiChart,
