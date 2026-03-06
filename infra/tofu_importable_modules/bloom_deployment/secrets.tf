@@ -1,12 +1,12 @@
 resource "aws_secretsmanager_secret" "mapbox_api_key" {
   region      = var.aws_region
-  name_prefix = "bloom_mapbox_api_key"
+  name_prefix = "bloom-mapbox-api-key-"
   description = "API key for Mapbox. Value must be manually set via the AWS console."
 }
 
 resource "aws_secretsmanager_secret" "google_translate_api_key" {
   region      = var.aws_region
-  name_prefix = "bloom_google_translate_api_key"
+  name_prefix = "bloom-google-translate-api-key-"
   description = "API key for Google Translate. Value must be manually set via the AWS console."
 }
 
