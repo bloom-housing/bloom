@@ -2,18 +2,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { featureFlagMap } from '../src/enums/feature-flags/feature-flags-enum';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 interface FeatureFlag {
   name: string;
   description: string;
 }
 
-// ─── Config ───────────────────────────────────────────────────────────────────
-
 const OUTPUT_DIR = path.join(__dirname, '../../docs/feature-flags');
-
-// ─── Template ─────────────────────────────────────────────────────────────────
 
 function toMarkdown(flag: FeatureFlag): string {
   const lines: string[] = [];
@@ -37,8 +31,6 @@ function toMarkdown(flag: FeatureFlag): string {
 
   return lines.join('\n');
 }
-
-// ─── Main ─────────────────────────────────────────────────────────────────────
 
 function main() {
   const flags: FeatureFlag[] = featureFlagMap;

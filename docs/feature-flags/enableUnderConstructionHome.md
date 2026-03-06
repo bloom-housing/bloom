@@ -1,9 +1,9 @@
 # Under Construction on Home Page - enableUnderConstructionHome
 
-### Name
+## Name
 
 `enableUnderConstructionHome`
 
-### Description
+## Description
 
 When true, the 'under construction' section is displayed on the home page.
