@@ -83,6 +83,7 @@ type ContextProps = {
     user: AdvocateUserCreate,
     listingIdRedirect?: string
   ) => Promise<User | undefined>
+  approveAdvocateUser: (userId: string, isAccpeted: boolean) => Promise<boolean | undefined>
   createPartnerUser: (user: PartnerUserCreate) => Promise<User | undefined>
   resendConfirmation: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
   initialStateLoaded?: boolean
@@ -379,6 +380,17 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
           body: { ...user, appUrl },
         })
         return response
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    approveAdvocateUser: async (userId: string, isAccepted: boolean) => {
+      dispatch(startLoading())
+      try {
+        const response = await userService?.approveAdvocate({
+          body: { advocateId: { id: userId }, isAccepted },
+        })
+        return response.success
       } finally {
         dispatch(stopLoading())
       }

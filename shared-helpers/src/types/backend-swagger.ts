@@ -2052,6 +2052,28 @@ export class UserService {
     })
   }
   /**
+   * Accept or decline advocate user request
+   */
+  approveAdvocate(
+    params: {
+      /** requestBody */
+      body?: AdvocateUserAccept
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate/approve"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Request single use code
    */
   requestSingleUseCode(
@@ -9331,6 +9353,14 @@ export interface AdvocateUserUpdate {
 
   /**  */
   jurisdictions?: IdDTO[]
+}
+
+export interface AdvocateUserAccept {
+  /**  */
+  advocateId: IdDTO
+
+  /**  */
+  isAccepted: boolean
 }
 
 export interface User {
