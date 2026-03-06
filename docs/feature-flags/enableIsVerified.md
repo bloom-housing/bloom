@@ -16,7 +16,7 @@ The original intention of this verification process is so that listings can go l
 
 Partners
 
-[](https://lh7-rt.googleusercontent.com/docsz/AD_4nXfOIOGBkkuiuQyYVpAL9SvExOTMI18-ZnP5aSjM4eyKguqa9xp5yEHp2zT8tiDXw9D97BQWXkQKP7mBI8kr0VJgLheQcMpH8JBNiAcQfKB_I1nWv8iVERMHsgeQSxjFE6YAtUWd1g?key=oE7G7iSmUimzfYMPX_E1DLrk)
+![image.png](./images/image%2050.png)
 
 Public - listing details
 

@@ -1,4 +1,4 @@
-# hideCloseListingButton
+# Disable "Close" Listing Button - hideCloseListingButton
 
 ## Name
 
