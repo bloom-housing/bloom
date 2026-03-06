@@ -121,6 +121,7 @@ const ApplicationMultiselectQuestionStep = ({
     }
 
     // Verify address on preferences
+    // TODO: to do!
     if (question?.options.some((item) => item?.collectAddress)) {
       const step: number = body.current.options.findIndex(
         (option, index) =>
