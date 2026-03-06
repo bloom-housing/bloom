@@ -414,14 +414,14 @@ export function useJurisdictionalMultiselectQuestionList(
     orderBy: MultiselectQuestionOrderByKeys[]
     orderDir: OrderByEnum[]
     search?: string
-    limit?: number
+    limit?: number | "all"
     page?: number
   } = {
     filter: [],
     orderBy: [],
     orderDir: [],
     search: undefined,
-    limit: undefined,
+    limit: "all",
     page: undefined,
   }
   params.filter.push({
