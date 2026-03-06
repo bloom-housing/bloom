@@ -65,7 +65,7 @@
     "casbin": "^5.27.1",
     "class-transformer": "~0.5.1",
     "class-validator": "~0.14.0",
-    "cloudinary": "^1.37.3",
+    "cloudinary": "^2.7.0",
     "compression": "^1.7.4",
     "cookie-parser": "~1.4.6",
     "cron": "^3.1.7",
