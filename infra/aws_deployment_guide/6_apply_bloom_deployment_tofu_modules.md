@@ -253,16 +253,18 @@ graph TB
    For each secret:
 
    1. Log in to the bloom-dev AWS account and go to the 'Secrets Manager > Secrets' page.
-   2. Click on the secret name (e.g. `bloom_mapbox_api_key-AbCdEf`).
+   2. Click on the secret name (e.g. `bloom-mapbox-api-key-AbCdEf`).
    3. In the 'Secret value' section, click 'Retrieve secret value' then 'Set secret value'.
    4. Select 'Plaintext' and enter the API key value.
    5. Click 'Save'.
 
    The following secrets need to be set:
 
-   - **Mapbox** (`bloom_mapbox_api_key`): A Mapbox access token. Used by the public and partners
-     sites to render maps. Obtain a token from https://account.mapbox.com/access-tokens/.
-   - **Google Translate** (`bloom_google_translate_api_key`): A Google Cloud API key for the
+   - **Mapbox** (`bloom-mapbox-api-key`): A Mapbox access token. Used by the public and partners
+     sites to render maps. Obtain a token from https://account.mapbox.com/access-tokens/. Make sure
+     to add your public and partners sites to the list of allowed URLs in the Mapbox access token
+     screen.
+   - **Google Translate** (`bloom-google-translate-api-key`): A Google Cloud API key for the
      Google Translate API. Used by the API service. Obtain a key from the Google Cloud console
      under 'APIs & Services > Credentials'.
 
@@ -415,17 +417,19 @@ graph TB
 
    For each secret:
 
-   1. Log in to the bloom-prod AWS account and go to the 'Secrets Manager > Secrets' page.
-   2. Click on the secret name (e.g. `bloom_mapbox_api_key-AbCdEf`).
+   1. Log in to the bloom-dev AWS account and go to the 'Secrets Manager > Secrets' page.
+   2. Click on the secret name (e.g. `bloom-mapbox-api-key-AbCdEf`).
    3. In the 'Secret value' section, click 'Retrieve secret value' then 'Set secret value'.
    4. Select 'Plaintext' and enter the API key value.
    5. Click 'Save'.
 
    The following secrets need to be set:
 
-   - **Mapbox** (`bloom_mapbox_api_key`): A Mapbox access token. Used by the public and partners
-     sites to render maps. Obtain a token from https://account.mapbox.com/access-tokens/.
-   - **Google Translate** (`bloom_google_translate_api_key`): A Google Cloud API key for the
+   - **Mapbox** (`bloom-mapbox-api-key`): A Mapbox access token. Used by the public and partners
+     sites to render maps. Obtain a token from https://account.mapbox.com/access-tokens/. Make sure
+     to add your public and partners sites to the list of allowed URLs in the Mapbox access token
+     screen.
+   - **Google Translate** (`bloom-google-translate-api-key`): A Google Cloud API key for the
      Google Translate API. Used by the API service. Obtain a key from the Google Cloud console
      under 'APIs & Services > Credentials'.
 

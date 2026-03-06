@@ -42,15 +42,17 @@ resource "aws_ssoadmin_permission_set_inline_policy" "deployer" {
   permission_set_arn = var.permission_set_arn
   inline_policy      = data.aws_iam_policy_document.deployer.json
 }
-# TODO: I keep running into errors about this policy being over the limit. So far I have resolved by
-# shortening sid names. We need to figure out a better long-term plan for addressing this
-# restriction.
+# TODO: I kept running into errors about this policy size: 'ValidationException: Current size of the
+# non-whitespace characters present in the InlinePolicy Document is 10245 bytes which has exceeded
+# the maximum limit of 10240 bytes'
+#
+# So far I have resolved by removing sid names and adding as comments. We need to figure out
+# a better long-term plan for addressing this restriction.
 data "aws_iam_policy_document" "deployer" {
   # TODO: we could have a separate permission set for humans debugging / looking at stuff through
   # the AWS web console. For now, just collect the added permissions for using the web console that
   # are not required when running tofu apply.
   statement {
-    sid = "WebUser"
     actions = [
       "application-autoscaling:Describe*",
       "cloudwatch:Describe*",
@@ -83,14 +85,14 @@ data "aws_iam_policy_document" "deployer" {
     resources = ["*"]
   }
   statement {
-    sid = "CS"
+    # Allow any cloudshell action.
     actions = [
       "cloudshell:*"
     ]
     resources = ["*"]
   }
   statement {
-    sid = "CSNet"
+    # Allow creating cloudshell instances attached to a VPC.
     actions = [
       "ec2:CreateNetworkInterface",
     ]
@@ -104,7 +106,7 @@ data "aws_iam_policy_document" "deployer" {
     }
   }
   statement {
-    sid = "CSNSubnet"
+    # Allow creating a cloudshell instance attached to one of the bloom-private subnets.
     actions = [
       "ec2:CreateNetworkInterface",
     ]
@@ -118,7 +120,7 @@ data "aws_iam_policy_document" "deployer" {
     }
   }
   statement {
-    sid = "CSSG"
+    # Allow creating a cloudshell instance with the bloom-cloudshell security group.
     actions = [
       "ec2:CreateNetworkInterface",
     ]
@@ -132,7 +134,7 @@ data "aws_iam_policy_document" "deployer" {
     }
   }
   statement {
-    sid = "CSTag"
+    # Allow cloudshell to tag the network interfaces it creates.
     actions = [
       "ec2:CreateTags",
     ]
@@ -144,7 +146,7 @@ data "aws_iam_policy_document" "deployer" {
     }
   }
   statement {
-    sid = "CSConfigNet"
+    # Allow cloudshell to configure and delete the network interfaces it creates.
     actions = [
       "ec2:CreateNetworkInterfacePermission",
       "ec2:DeleteNetworkInterface",
@@ -157,12 +159,12 @@ data "aws_iam_policy_document" "deployer" {
     }
   }
   statement {
-    sid       = "CSDB"
+    # Allow cloudshell to connect to the Bloom DB as the bloom_readonly DB user.
     actions   = ["rds-db:connect"]
     resources = ["arn:aws:rds-db:${local.region_account}:dbuser:*/bloom_readonly"]
   }
   statement {
-    sid = "TofuState"
+    # Allow operations on the Tofu State files.
     actions = [
       "s3:DeleteObject",
       "s3:GetObject",
@@ -177,7 +179,7 @@ data "aws_iam_policy_document" "deployer" {
     ]
   }
   statement {
-    sid = "CloudTrail"
+    # Allow creating cloudtrail logs.
     actions = [
       "cloudtrail:CreateEventDataStore",
       "cloudtrail:DeleteEventDataStore",
@@ -189,7 +191,7 @@ data "aws_iam_policy_document" "deployer" {
     ]
   }
   statement {
-    sid = "LinkedRole"
+    # Allow creating ServiceLinkedRole for ECS and ELB.
     actions = [
       "iam:CreateServiceLinkedRole",
       "iam:DeleteServiceLinkedRole",
@@ -202,8 +204,7 @@ data "aws_iam_policy_document" "deployer" {
     ]
   }
   statement {
-    # These calls are not scoped to a specific resource.
-    sid = "DescribeVPC"
+    # Describe calls are not scoped to a specific resource.
     actions = [
       "acm:ListCertificates",
       "ec2:DescribeAccountAttributes",
@@ -234,7 +235,7 @@ data "aws_iam_policy_document" "deployer" {
     resources = ["*"]
   }
   statement {
-    sid = "VPC"
+    # Configure the Bloom VPC.
     actions = [
       "acm:DeleteCertificate",
       "acm:DescribeCertificate",
@@ -313,14 +314,12 @@ data "aws_iam_policy_document" "deployer" {
     ]
   }
   statement {
-    sid     = "DisassociateAddress"
     actions = ["ec2:DisassociateAddress"]
     # For some reason the DisassociateAdress calls use this resource pattern.
     resources = ["arn:aws:ec2:${local.region_account}:*/*"]
   }
   statement {
     # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAM.ServiceLinkedRoles.html
-    sid = "DBLinkedRole"
     actions = [
       "iam:CreateServiceLinkedRole",
     ]
@@ -334,26 +333,38 @@ data "aws_iam_policy_document" "deployer" {
     }
   }
   statement {
-    sid = "Secrets"
+    # Allow listing all secrets and allow RDS to create a KMS key secret when the DB instance is
+    # created.
     actions = [
       "kms:DescribeKey",
       "secretsmanager:CreateSecret",
-      "secretsmanager:DeleteSecret",
-      "secretsmanager:DescribeSecret",
-      "secretsmanager:GetResourcePolicy",
       "secretsmanager:ListSecrets",
-      "secretsmanager:TagResource",
     ]
     resources = ["*"]
   }
   statement {
-    sid       = "DescribeDB"
+    # Allow management of Bloom secrets.
+    actions = [
+      "secretsmanager:DeleteSecret",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:GetResourcePolicy",
+      "secretsmanager:PutResourcePolicy",
+      "secretsmanager:PutSecretValue",
+      "secretsmanager:TagResource",
+    ]
+    resources = [
+      "arn:aws:secretsmanager:${local.region_account}:secret:bloom-api-jwt-signing-key*",
+      "arn:aws:secretsmanager:${local.region_account}:secret:bloom-google-translate-api-key*",
+      "arn:aws:secretsmanager:${local.region_account}:secret:bloom-mapbox-api-key*",
+    ]
+  }
+  statement {
+    # Allow describing the Bloom DB.
     actions   = ["rds:DescribeDBInstances"]
     resources = ["arn:aws:rds:${local.region_account}:db:*"]
   }
   statement {
     # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/security_iam_id-based-policy-examples-create-and-modify-examples.html
-    sid = "DB"
     actions = [
       "rds:CreateDBInstance",
       "rds:CreateDBSnapshot",
@@ -376,7 +387,6 @@ data "aws_iam_policy_document" "deployer" {
   statement {
     # For some reason the task APIs operate on the * resouce and don't support targeting the
     # resource directly in the IAM policy.
-    sid = "ECSTaskDef"
     actions = [
       "ecs:DeregisterTaskDefinition",
       "ecs:DescribeTaskDefinition",
@@ -384,7 +394,7 @@ data "aws_iam_policy_document" "deployer" {
     resources = ["*"]
   }
   statement {
-    sid = "ECS"
+    # Configure the Bloom ECS cluster.
     actions = [
       "ecs:CreateCluster",
       "ecs:CreateService",
@@ -434,7 +444,7 @@ data "aws_iam_policy_document" "deployer" {
     ]
   }
   statement {
-    sid = "RunECS"
+    # Only allow triggering one-off runs of the dbinit and dbseed tasks.
     actions = [
       "ecs:RunTask",
     ]
@@ -444,20 +454,7 @@ data "aws_iam_policy_document" "deployer" {
     ]
   }
   statement {
-    sid = "APIJWTKeySecret"
-    actions = [
-      "secretsmanager:CreateSecret",
-      "secretsmanager:DeleteSecret",
-      "secretsmanager:DescribeSecret",
-      "secretsmanager:GetResourcePolicy",
-      "secretsmanager:PutResourcePolicy",
-      "secretsmanager:PutSecretValue",
-      "secretsmanager:TagResource",
-    ]
-    resources = ["arn:aws:secretsmanager:${local.region_account}:secret:bloom-api-jwt-signing-key*"]
-  }
-  statement {
-    sid = "SES"
+    # Allow creating SES identities.
     actions = [
       "ses:CreateEmailIdentity",
       "ses:DeleteEmailIdentity",
@@ -467,15 +464,18 @@ data "aws_iam_policy_document" "deployer" {
     resources = ["arn:aws:ses:${local.region_account}:identity/*"]
   }
   statement {
-    sid = "S3"
+    # Allow creating S3 buckets for Bloom file storage.
     actions = [
       "s3:CreateBucket",
       "s3:DeleteBucket",
+      "s3:DeleteBucketPolicy",
+      "s3:DeleteObject",
+      "s3:DeleteObjectVersion",
       "s3:Get*",
       "s3:ListBucket",
-      "s3:PutBucketPublicAccessBlock",
       "s3:PutBucketCORS",
       "s3:PutBucketPolicy",
+      "s3:PutBucketPublicAccessBlock",
       "s3:PutLifecycleConfiguration",
     ]
     resources = ["arn:aws:s3:::bloom-*"]
