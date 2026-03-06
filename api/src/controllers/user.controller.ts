@@ -56,7 +56,7 @@ import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
 import { PublicUserUpdate } from '../dtos/users/public-user-update.dto';
 import { PartnerUserUpdate } from '../dtos/users/partner-user-update.dto';
 import { AdvocateUserUpdate } from '../dtos/users/advocate-user-update.dto';
-import { AdvocateUserCsvExporterService } from 'src/services/advocate-user-csv-export.service';
+import { AdvocateUserCsvExporterService } from '../services/advocate-user-csv-export.service';
 
 @Controller('user')
 @ApiTags('user')
