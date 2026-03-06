@@ -142,7 +142,7 @@ const Admin = () => {
         <Head>
           <title>{`Admin Panel - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
-        <NavigationHeader className="relative" title={t("t.administration")} />
+        <NavigationHeader className="relative" title={t("admin.featureFlagManagement")} />
         <section>
           <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
             <Tabs
@@ -177,6 +177,15 @@ const Admin = () => {
                   <Heading size="2xl" priority={2}>
                     {t("t.featureFlag")}
                   </Heading>
+                  <p>
+                    {t("admin.featureFlagManagementDescription")}
+                    <Button
+                      variant="text"
+                      href="https://github.com/bloom-housing/bloom/blob/main/docs/feature-flags.md"
+                    >
+                      Link
+                    </Button>
+                  </p>
                 </Card.Header>
                 <Card.Section>
                   {viewBy === TabsIndexEnum.featureFlag && (
@@ -202,6 +211,15 @@ const Admin = () => {
       <Drawer isOpen={!!selectedJurisdiction} onClose={() => setSelectedJurisdiction("")}>
         <Drawer.Header>{selectedJurisdictionName}</Drawer.Header>
         <Drawer.Content>
+          <p>
+            {t("admin.featureFlagManagementDescription")}
+            <Button
+              variant="text"
+              href="https://github.com/bloom-housing/bloom/blob/main/docs/feature-flags.md"
+            >
+              Link
+            </Button>
+          </p>
           <div>
             {featureFlags.map((flag) => (
               <div key={flag.id} className={"seeds-m-be-content"}>
