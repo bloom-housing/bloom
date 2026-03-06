@@ -129,10 +129,10 @@ export const getAllOptions = (
   if (!question) return []
 
   const optionPaths = getMSQOptions(question, enableV2MSQ).map((option) =>
-    fieldName(question.text, applicationSection, option.text)
+    fieldName(question.name || question.text, applicationSection, option.name || option.text)
   )
   if (question.optOutText) {
-    optionPaths.push(fieldName(question.text, applicationSection, question.optOutText))
+    optionPaths.push(fieldName(question.name || question.text, applicationSection, question.optOutText))
   }
   return optionPaths
 }
@@ -401,6 +401,7 @@ export const getRadioOption = (
     applicationSection,
     option.name || option.text
   )
+  console.log(optionFieldName)
   const radioField = getRadioField(
     option,
     register,
