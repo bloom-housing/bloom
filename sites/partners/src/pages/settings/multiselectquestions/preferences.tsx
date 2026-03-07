@@ -6,7 +6,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AgTable, t, useAgTable } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import { Button, Tag } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import Head from "next/head"
@@ -18,6 +18,8 @@ import {
   getSettingsTabs,
   SettingsIndexEnum,
 } from "../../../components/settings/SettingsViewHelpers"
+import LazyAgTable from "../../../components/core/LazyAgTable"
+import { useAgTable } from "../../../lib/useAgTable"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import Layout from "../../../layouts"
 import TabView from "../../../layouts/TabView"
@@ -166,7 +168,7 @@ const MultiselectQuestionsPreferences = () => {
         >
           <section className={styles["preferences-section"]}>
             <div className={styles["table-wrapper"]}>
-              <AgTable
+              <LazyAgTable
                 id="preferences-table"
                 pagination={{
                   perPage: tableOptions.pagination.itemsPerPage,

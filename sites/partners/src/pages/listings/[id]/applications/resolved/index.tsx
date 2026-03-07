@@ -1,7 +1,7 @@
 import React from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { AgTable, t, useAgTable, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import {
   Application,
   ApplicationReviewStatusEnum,
@@ -11,6 +11,8 @@ import { useSingleListingData, useFlaggedApplicationsList } from "../../../../..
 import { ListingStatusBar } from "../../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../components/applications/ApplicationsSideNav"
+import LazyAgTable from "../../../../../components/core/LazyAgTable"
+import { useAgTable } from "../../../../../lib/useAgTable"
 import { getLinkCellFormatter } from "../../../../../components/applications/helpers"
 import { NavigationHeader } from "../../../../../components/shared/NavigationHeader"
 
@@ -126,7 +128,7 @@ const ApplicationsList = () => {
             <ApplicationsSideNav className="w-full md:w-72" listingId={listingId} />
 
             <div className="w-full">
-              <AgTable
+              <LazyAgTable
                 id="applications-table"
                 className="w-full"
                 pagination={{

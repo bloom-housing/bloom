@@ -1,7 +1,7 @@
 import * as React from "react"
 import { t } from "@bloom-housing/ui-components"
 import { HeadingGroup, Link } from "@bloom-housing/ui-seeds"
-import { oneLineAddress, Map } from "@bloom-housing/shared-helpers"
+import { oneLineAddress } from "@bloom-housing/shared-helpers"
 import {
   Address,
   FeatureFlagEnum,
@@ -11,6 +11,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { getGenericAddress, isFeatureFlagOn } from "../../../lib/helpers"
 import { CollapsibleSection } from "../../../patterns/CollapsibleSection"
+import LazyMap from "../../core/LazyMap"
 import styles from "../ListingViewSeeds.module.scss"
 
 type NeighborhoodProps = {
@@ -63,7 +64,7 @@ export const Neighborhood = ({
       <div className={`${styles["mobile-inline-collapse-padding"]} seeds-m-bs-section`}>
         {address && (
           <>
-            <Map address={getGenericAddress(address)} listingName={name} />
+            <LazyMap address={getGenericAddress(address)} listingName={name} />
             <Link href={googleMapsHref} newWindowTarget={true} className={"seeds-m-bs-4"}>
               {t("t.getDirections")}
             </Link>

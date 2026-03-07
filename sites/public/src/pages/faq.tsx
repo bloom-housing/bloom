@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from "react"
-import Markdown from "markdown-to-jsx"
 import { t } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { Button, Card, Heading } from "@bloom-housing/ui-seeds"
@@ -17,6 +16,7 @@ import styles from "../patterns/PageHeaderLayout.module.scss"
 import { fetchJurisdictionByName } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
 import { getJurisdictionFaqContent } from "../static_content/jurisdiction_faq_content"
+import LazyMarkdown from "../components/core/LazyMarkdown"
 
 const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
   const { profile } = useContext(AuthContext)
@@ -52,7 +52,7 @@ const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
           </Card.Header>
           <Card.Section>
             <div className={"seeds-m-be-6"}>
-              <Markdown>{t("faq.stillHaveQuestionsContent")}</Markdown>
+              <LazyMarkdown>{t("faq.stillHaveQuestionsContent")}</LazyMarkdown>
             </div>
             {enableResources && (
               <Button href={"/additional-resources"}>{t("faq.viewResourcePage")}</Button>

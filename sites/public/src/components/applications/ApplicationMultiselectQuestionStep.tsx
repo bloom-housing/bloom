@@ -130,7 +130,7 @@ const ApplicationMultiselectQuestionStep = ({
         if (body.current.options[step].extraData[0]?.value) {
           setFoundAddress({})
           setVerifyAddress(true)
-          findValidatedAddress(
+          void findValidatedAddress(
             body.current.options[step].extraData[0]?.value,
             setFoundAddress,
             setNewAddressSelected

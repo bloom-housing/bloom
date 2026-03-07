@@ -3,9 +3,9 @@ import Head from "next/head"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
 import { useRouter } from "next/router"
-import { GridApi } from "ag-grid-community"
+import type { GridApi } from "ag-grid-community"
 import { useForm } from "react-hook-form"
-import { t, AlertBox, AgTable, useAgTable, Field } from "@bloom-housing/ui-components"
+import { t, AlertBox, Field } from "@bloom-housing/ui-components"
 import { Button, Dialog, Icon, Tag } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import {
@@ -18,6 +18,8 @@ import {
 import { AuthContext, useMutate } from "@bloom-housing/shared-helpers"
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
 import Layout from "../../../layouts"
+import LazyAgTable from "../../../components/core/LazyAgTable"
+import { useAgTable } from "../../../lib/useAgTable"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import { getCols } from "../../../lib/applications/applicationsCols"
 import { StatusBar } from "../../../components/shared/StatusBar"
@@ -171,7 +173,7 @@ const Flag = () => {
                 </AlertBox>
               )}
               <p className={"text-lg font-semibold mb-5"}>{t("flags.selectValidApplications")}</p>
-              <AgTable
+              <LazyAgTable
                 id="applications-table"
                 className="w-full m-h-0"
                 config={{

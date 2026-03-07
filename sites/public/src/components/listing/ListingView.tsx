@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
 import ReactDOMServer from "react-dom/server"
-import Markdown from "markdown-to-jsx"
+import LazyMarkdown from "../core/LazyMarkdown"
 import {
   AdditionalFees,
   ApplicationStatus,
@@ -40,7 +40,6 @@ import {
   IMAGE_FALLBACK_URL,
   pdfUrlFromListingEvents,
   AuthContext,
-  Map,
 } from "@bloom-housing/shared-helpers"
 import { Card, Heading as SeedsHeading } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
@@ -51,6 +50,7 @@ import {
   openInFuture,
   isFeatureFlagOn,
 } from "../../lib/helpers"
+import LazyMap from "../core/LazyMap"
 import { GetApplication } from "./GetApplication"
 import { SubmitApplication } from "./SubmitApplication"
 import {
@@ -547,7 +547,7 @@ export const ListingView = (props: ListingProps) => {
       <div className="info-card">
         <h3 className="text-serif-xl">{cardTitle}</h3>
         <p className="text-xs text-gray-700 break-words">
-          <Markdown children={cardData} options={{ disableParsingRawHTML: true }} />
+          <LazyMarkdown children={cardData} options={{ disableParsingRawHTML: true }} />
         </p>
       </div>
     )
@@ -707,9 +707,9 @@ export const ListingView = (props: ListingProps) => {
           )}
           {listing.section8Acceptance && (
             <div className="my-2">
-              <Markdown className="custom-counter__subtitle">
+              <LazyMarkdown className="custom-counter__subtitle">
                 {t("listings.section8VoucherInfo")}
-              </Markdown>
+              </LazyMarkdown>
             </div>
           )}
         </div>
@@ -780,7 +780,7 @@ export const ListingView = (props: ListingProps) => {
                     <>
                       <br />
                       <br />
-                      <Markdown>{t("listings.section8VoucherInfo")}</Markdown>
+                      <LazyMarkdown>{t("listings.section8VoucherInfo")}</LazyMarkdown>
                     </>
                   )}
                 </div>
@@ -935,16 +935,18 @@ export const ListingView = (props: ListingProps) => {
             {lotterySection}
             {listing.whatToExpect && (
               <ExpandableSection
-                content={<Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>}
+                content={
+                  <LazyMarkdown className={"bloom-markdown"}>{listing.whatToExpect}</LazyMarkdown>
+                }
                 expandableContent={
                   listing.whatToExpectAdditionalText &&
                   isFeatureFlagOn(
                     jurisdiction,
                     FeatureFlagEnum.enableWhatToExpectAdditionalField
                   ) ? (
-                    <Markdown className={"bloom-markdown"}>
+                    <LazyMarkdown className={"bloom-markdown"}>
                       {listing.whatToExpectAdditionalText}
-                    </Markdown>
+                    </LazyMarkdown>
                   ) : undefined
                 }
                 strings={{
@@ -1064,7 +1066,7 @@ export const ListingView = (props: ListingProps) => {
           desktopClass="bg-primary-lighter"
         >
           <div className="listing-detail-panel">
-            <Map
+            <LazyMap
               address={getGenericAddress(listing.listingsBuildingAddress)}
               listingName={listing.name}
             />

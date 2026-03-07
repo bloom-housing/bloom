@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
-import Markdown from "markdown-to-jsx"
+import LazyMarkdown from "../../../components/core/LazyMarkdown"
 import { t, ApplicationTimeline } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -128,29 +128,31 @@ const ApplicationConfirmation = () => {
               <div className="markdown markdown-informational">
                 <ApplicationTimeline />
 
-                <Markdown options={{ disableParsingRawHTML: true }}>{content.text}</Markdown>
+                <LazyMarkdown options={{ disableParsingRawHTML: true }}>
+                  {content.text}
+                </LazyMarkdown>
               </div>
             </CardSection>
 
             <CardSection divider={"inset"}>
               <div className="markdown markdown-informational">
-                <Markdown options={{ disableParsingRawHTML: true }}>
+                <LazyMarkdown options={{ disableParsingRawHTML: true }}>
                   {t("application.review.confirmation.needToMakeUpdates", {
                     agentName: listing?.leasingAgentName || "",
                     agentPhone: listing?.leasingAgentPhone || "",
                     agentEmail: listing?.leasingAgentEmail || "",
                     agentOfficeHours: listing?.leasingAgentOfficeHours || "",
                   })}
-                </Markdown>
+                </LazyMarkdown>
               </div>
             </CardSection>
 
             {initialStateLoaded && !profile && (
               <CardSection divider={"flush"} className={"border-none"}>
                 <div className="markdown markdown-informational">
-                  <Markdown options={{ disableParsingRawHTML: true }}>
+                  <LazyMarkdown options={{ disableParsingRawHTML: true }}>
                     {t("application.review.confirmation.createAccount")}
-                  </Markdown>
+                  </LazyMarkdown>
                 </div>
               </CardSection>
             )}

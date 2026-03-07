@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import Markdown from "markdown-to-jsx"
+import LazyMarkdown from "../core/LazyMarkdown"
 import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   Address,
@@ -145,7 +145,7 @@ const GetApplication = (props: ApplicationsProps) => {
                 {props.strings?.officeHoursHeading ?? t("leasingAgent.officeHours")}
               </Heading>
               <p className="text-gray-800 text-sm markdown">
-                <Markdown
+                <LazyMarkdown
                   children={props.applicationPickUpAddressOfficeHours}
                   options={{ disableParsingRawHTML: true }}
                 />

@@ -3,7 +3,7 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
-import { AgTable, useAgTable, t, AlertBox } from "@bloom-housing/ui-components"
+import { t, AlertBox } from "@bloom-housing/ui-components"
 import {
   FeatureFlagEnum,
   ListingViews,
@@ -13,6 +13,8 @@ import { Button, Icon } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts"
 import { useUserList, useListingsData, useUsersExport } from "../../lib/hooks"
+import LazyAgTable from "../../components/core/LazyAgTable"
+import { useAgTable } from "../../lib/useAgTable"
 import { FormUserManage } from "../../components/users/FormUserManage"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
@@ -167,7 +169,7 @@ const Users = () => {
                 {t("account.settings.alerts.genericError")}
               </AlertBox>
             )}
-            <AgTable
+            <LazyAgTable
               id="users-table"
               pagination={{
                 perPage: tableOptions.pagination.itemsPerPage,

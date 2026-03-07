@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react"
 import { PageHeader, MarkdownSection, t } from "@bloom-housing/ui-components"
-import Markdown from "markdown-to-jsx"
+import LazyMarkdown from "../core/LazyMarkdown"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
@@ -23,7 +23,7 @@ const PrivacyDeprecated = () => {
     <Layout pageTitle={t("pageTitle.privacy")}>
       <PageHeader inverse={true} title={pageTitle} />
       <MarkdownSection>
-        <Markdown>{pageContent.toString()}</Markdown>
+        <LazyMarkdown>{pageContent.toString()}</LazyMarkdown>
       </MarkdownSection>
     </Layout>
   )

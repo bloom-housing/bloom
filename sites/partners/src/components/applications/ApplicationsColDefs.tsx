@@ -1,4 +1,4 @@
-import { ColDef } from "ag-grid-community"
+import type { ColDef } from "ag-grid-community"
 import { t, formatYesNoLabel } from "@bloom-housing/ui-components"
 import { convertDataToLocal, formatIncome } from "../../lib/helpers"
 import dayjs from "dayjs"

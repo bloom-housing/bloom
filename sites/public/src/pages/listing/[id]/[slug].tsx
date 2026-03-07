@@ -10,12 +10,14 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 import Layout from "../../../layouts/application"
-import { ListingView } from "../../../components/listing/ListingView"
 import { ErrorPage } from "../../_error"
 import dayjs from "dayjs"
 import { fetchJurisdictionByName } from "../../../lib/hooks"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { ListingViewSeeds } from "../../../components/listing/ListingViewSeeds"
+
+const ListingPageView = process.env.showNewSeedsDesigns
+  ? require("../../../components/listing/ListingViewSeeds").ListingViewSeeds
+  : require("../../../components/listing/ListingView").ListingView
 
 interface ListingProps {
   listing: Listing
@@ -65,11 +67,7 @@ export default function ListingPage(props: ListingProps) {
 
   return (
     <Layout pageTitle={listing.name} metaImage={metaImage} metaDescription={metaDescription}>
-      {process.env.showNewSeedsDesigns ? (
-        <ListingViewSeeds listing={listing} profile={profile} jurisdiction={props.jurisdiction} />
-      ) : (
-        <ListingView listing={listing} jurisdiction={props.jurisdiction} />
-      )}
+      <ListingPageView listing={listing} profile={profile} jurisdiction={props.jurisdiction} />
     </Layout>
   )
 }

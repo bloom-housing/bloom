@@ -39,7 +39,7 @@ import {
 import ListingDataPipeline from "../../../lib/listings/ListingDataPipeline"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { usePropertiesList } from "../../../lib/hooks"
-import { EditorExtensions } from "../../shared/TextEditor"
+import { EditorExtensions } from "../../shared/TextEditorExtensions"
 import ListingFormActions, { ListingFormActionsType } from "../ListingFormActions"
 import { cleanRichText, getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
 import { getListingStatusTag } from "../helpers"

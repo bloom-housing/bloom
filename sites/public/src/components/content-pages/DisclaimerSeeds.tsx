@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
-import Markdown from "markdown-to-jsx"
+import LazyMarkdown from "../core/LazyMarkdown"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
@@ -26,7 +26,7 @@ const DisclaimerSeeds = () => {
         subheading="A design approach is a general philosophy that may or may not include a guide for specific methods."
         inverse
       >
-        <Markdown className={styles["markdown"]}>{pageContent.toString()}</Markdown>
+        <LazyMarkdown className={styles["markdown"]}>{pageContent.toString()}</LazyMarkdown>
       </PageHeaderLayout>
     </Layout>
   )

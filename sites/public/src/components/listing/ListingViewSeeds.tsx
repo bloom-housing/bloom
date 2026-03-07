@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import Markdown from "markdown-to-jsx"
+import LazyMarkdown from "../core/LazyMarkdown"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
@@ -159,7 +159,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
       {listing.whatToExpect && (
         <InfoCard heading={t("whatToExpect.label")}>
           <div className={"bloom-markdown"}>
-            <Markdown>{listing.whatToExpect}</Markdown>
+            <LazyMarkdown>{listing.whatToExpect}</LazyMarkdown>
           </div>
           {listing.whatToExpectAdditionalText &&
             isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableWhatToExpectAdditionalField) && (

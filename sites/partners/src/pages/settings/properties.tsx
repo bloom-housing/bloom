@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { AgTable, t, useAgTable, useMutate } from "@bloom-housing/ui-components"
+import { t, useMutate } from "@bloom-housing/ui-components"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
@@ -16,7 +16,9 @@ import { Button } from "@bloom-housing/ui-seeds"
 import { usePropertiesList } from "../../lib/hooks"
 import dayjs from "dayjs"
 import ManageIconSection from "../../components/settings/ManageIconSection"
-import { ColDef, ColGroupDef } from "ag-grid-community"
+import type { ColDef, ColGroupDef } from "ag-grid-community"
+import LazyAgTable from "../../components/core/LazyAgTable"
+import { useAgTable } from "../../lib/useAgTable"
 import { PropertyDrawer } from "../../components/settings/PropertyDrawer"
 import { useSWRConfig } from "swr"
 import { PropertyDeleteModal } from "../../components/settings/PropertyDeleteModal"
@@ -186,7 +188,7 @@ const SettingsProperties = () => {
           hideTabs={!(atLeastOneJurisdictionEnablesPreferences && enableProperties)}
           tabs={getSettingsTabs(SettingsIndexEnum.properties, router, v2Preferences)}
         >
-          <AgTable
+          <LazyAgTable
             id="properties-table"
             pagination={{
               perPage: tableOptions.pagination.itemsPerPage,

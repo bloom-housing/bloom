@@ -69,7 +69,11 @@ const ApplicationAddress = () => {
     if (!verifyAddress) {
       setFoundAddress({})
       setVerifyAddress(true)
-      findValidatedAddress(data.applicant.applicantAddress, setFoundAddress, setNewAddressSelected)
+      void findValidatedAddress(
+        data.applicant.applicantAddress,
+        setFoundAddress,
+        setNewAddressSelected
+      )
       window.scrollTo({ top: 0 })
 
       return // Skip rest of the submit process

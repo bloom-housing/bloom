@@ -1,10 +1,10 @@
 import React from "react"
-import Markdown from "markdown-to-jsx"
 import { UseFormMethods } from "react-hook-form"
 import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers"
 import { Alert, Button, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { t, ProgressNav, StepHeader } from "@bloom-housing/ui-components"
+import LazyMarkdown from "../components/core/LazyMarkdown"
 import ApplicationConductor from "../lib/applications/ApplicationConductor"
 import styles from "./application-form.module.scss"
 
@@ -120,7 +120,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
         <>
           {isAdvocate && (
             <Message fullwidth variant="warn">
-              <Markdown>{t("application.form.general.advocateWarning")}</Markdown>
+              <LazyMarkdown>{t("application.form.general.advocateWarning")}</LazyMarkdown>
             </Message>
           )}
           {props.children}

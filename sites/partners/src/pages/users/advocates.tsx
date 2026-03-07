@@ -1,13 +1,15 @@
 import React, { useContext, useMemo } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { AgTable, t, useAgTable } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Icon } from "@bloom-housing/ui-seeds"
 import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
 import dayjs from "dayjs"
 import Layout from "../../layouts"
+import LazyAgTable from "../../components/core/LazyAgTable"
+import { useAgTable } from "../../lib/useAgTable"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import TabView from "../../layouts/TabView"
 import { getUsersTabs, UsersIndexEnum } from "../../components/users/UsersViewHelpers"
@@ -85,7 +87,7 @@ const Advocates = () => {
       >
         <section>
           <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-            <AgTable
+            <LazyAgTable
               id="advocate-users-table"
               pagination={{
                 perPage: tableOptions.pagination.itemsPerPage,

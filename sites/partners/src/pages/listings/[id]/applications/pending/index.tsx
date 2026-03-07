@@ -5,14 +5,7 @@ import Head from "next/head"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
-import {
-  AgTable,
-  t,
-  useAgTable,
-  Breadcrumbs,
-  BreadcrumbLink,
-  AlertBox,
-} from "@bloom-housing/ui-components"
+import { t, Breadcrumbs, BreadcrumbLink, AlertBox } from "@bloom-housing/ui-components"
 import {
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
@@ -22,6 +15,8 @@ import { useSingleListingData, useFlaggedApplicationsList } from "../../../../..
 import { ListingStatusBar } from "../../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../components/applications/ApplicationsSideNav"
+import LazyAgTable from "../../../../../components/core/LazyAgTable"
+import { useAgTable } from "../../../../../lib/useAgTable"
 import { NavigationHeader } from "../../../../../components/shared/NavigationHeader"
 import { mergeApplicationNames } from "../../../../../lib/helpers"
 import ListingGuard from "../../../../../components/shared/ListingGuard"
@@ -196,7 +191,7 @@ const ApplicationsList = () => {
                         : t("applications.duplicatesAlert")}
                     </AlertBox>
                   )}
-                  <AgTable
+                  <LazyAgTable
                     id="applications-table"
                     pagination={{
                       perPage: tableOptions.pagination.itemsPerPage,

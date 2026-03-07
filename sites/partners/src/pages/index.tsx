@@ -4,17 +4,9 @@ import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIc
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import dayjs from "dayjs"
-import { ColDef, ColGroupDef } from "ag-grid-community"
+import type { ColDef, ColGroupDef } from "ag-grid-community"
 import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
-import {
-  t,
-  AgTable,
-  useAgTable,
-  Select,
-  Form,
-  SelectOption,
-  Field,
-} from "@bloom-housing/ui-components"
+import { t, Select, Form, SelectOption, Field } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
@@ -23,6 +15,8 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useListingExport, useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
+import LazyAgTable from "../components/core/LazyAgTable"
+import { useAgTable } from "../lib/useAgTable"
 import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
 
@@ -345,7 +339,7 @@ export default function ListingsList() {
       <NavigationHeader title={t("nav.listings")}></NavigationHeader>
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          <AgTable
+          <LazyAgTable
             id="listings-table"
             pagination={{
               perPage: tableOptions.pagination.itemsPerPage,

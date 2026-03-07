@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { AgTable, t, useAgTable, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
@@ -22,6 +22,8 @@ import { ListingStatusBar } from "../../../../components/listings/ListingStatusB
 import Layout from "../../../../layouts"
 import { getColDefs } from "../../../../components/applications/ApplicationsColDefs"
 import { ApplicationsSideNav } from "../../../../components/applications/ApplicationsSideNav"
+import LazyAgTable from "../../../../components/core/LazyAgTable"
+import { useAgTable } from "../../../../lib/useAgTable"
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
 import ListingGuard from "../../../../components/shared/ListingGuard"
 
@@ -193,7 +195,7 @@ const ApplicationsList = () => {
                   listingOpen={isListingOpen}
                 />
 
-                <AgTable
+                <LazyAgTable
                   className="w-full"
                   id="applications-table"
                   pagination={{
