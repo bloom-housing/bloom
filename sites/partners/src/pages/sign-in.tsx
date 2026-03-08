@@ -1,4 +1,5 @@
 import React, { useContext, useState, useRef, useEffect, useCallback } from "react"
+import Head from "next/head"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { GoogleReCaptcha } from "react-google-recaptcha-v3"
@@ -247,6 +248,25 @@ const SignIn = () => {
 
   return (
     <>
+      <Head>
+        <title>{`Sign in - ${t("nav.siteTitlePartners")}`}</title>
+        <meta
+          name="description"
+          content={`Sign in to ${t("nav.siteTitlePartners")} to manage listings and applications.`}
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={t("nav.siteTitlePartners")} />
+        <meta
+          property="og:description"
+          content={`Sign in to ${t("nav.siteTitlePartners")} to manage listings and applications.`}
+        />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:title" content={t("nav.siteTitlePartners")} />
+        <meta
+          property="twitter:description"
+          content={`Sign in to ${t("nav.siteTitlePartners")} to manage listings and applications.`}
+        />
+      </Head>
       <ResendConfirmationModal
         isOpen={confirmationStatusModal}
         onClose={() => {

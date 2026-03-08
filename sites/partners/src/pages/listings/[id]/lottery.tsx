@@ -21,7 +21,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Layout from "../../../layouts"
 import { ListingContext } from "../../../components/listings/ListingContext"
-import { MetaTags } from "../../../components/shared/MetaTags"
 import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
@@ -31,9 +30,6 @@ dayjs.extend(advancedFormat)
 import styles from "../../../../styles/lottery.module.scss"
 
 const Lottery = (props: { listing: Listing | undefined }) => {
-  const metaDescription = ""
-  const metaImage = ""
-
   const { listing } = props
 
   const { addToast } = useContext(MessageContext)
@@ -343,12 +339,6 @@ const Lottery = (props: { listing: Listing | undefined }) => {
             <Head>
               <title>{`Lottery - ${t("nav.siteTitlePartners")}`}</title>
             </Head>
-
-            <MetaTags
-              title={t("nav.siteTitlePartners")}
-              image={metaImage}
-              description={metaDescription}
-            />
 
             <NavigationHeader
               title={listing.name}
