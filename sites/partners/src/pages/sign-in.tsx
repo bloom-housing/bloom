@@ -246,26 +246,20 @@ const SignIn = () => {
     )
   }
 
+  const siteTitle = t("nav.siteTitlePartners")
+  const metaDescription = `Sign in to ${siteTitle} to manage listings and applications.`
+
   return (
     <>
       <Head>
-        <title>{`Sign in - ${t("nav.siteTitlePartners")}`}</title>
-        <meta
-          name="description"
-          content={`Sign in to ${t("nav.siteTitlePartners")} to manage listings and applications.`}
-        />
+        <title>{`Sign in - ${siteTitle}`}</title>
+        <meta name="description" content={metaDescription} />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content={t("nav.siteTitlePartners")} />
-        <meta
-          property="og:description"
-          content={`Sign in to ${t("nav.siteTitlePartners")} to manage listings and applications.`}
-        />
+        <meta property="og:title" content={siteTitle} />
+        <meta property="og:description" content={metaDescription} />
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:title" content={t("nav.siteTitlePartners")} />
-        <meta
-          property="twitter:description"
-          content={`Sign in to ${t("nav.siteTitlePartners")} to manage listings and applications.`}
-        />
+        <meta property="twitter:title" content={siteTitle} />
+        <meta property="twitter:description" content={metaDescription} />
       </Head>
       <ResendConfirmationModal
         isOpen={confirmationStatusModal}
@@ -278,7 +272,7 @@ const SignIn = () => {
         onSubmit={(email) => onResendConfirmationSubmit(email)}
         loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
       />
-      <FormsLayout title={`Sign in - ${t("nav.siteTitlePartners")}`}>{formToRender}</FormsLayout>
+      <FormsLayout title={`Sign in - ${siteTitle}`}>{formToRender}</FormsLayout>
     </>
   )
 }
