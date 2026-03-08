@@ -7,6 +7,7 @@ interface FormLayoutProps {
   children?: React.ReactNode
   className?: string
   pageTitle?: string
+  metaDescription?: string
 }
 const FormLayout = (props: FormLayoutProps) => {
   const classNames = [styles["form-layout"]]
@@ -14,7 +15,7 @@ const FormLayout = (props: FormLayoutProps) => {
   return (
     <>
       <ApplicationTimeout />
-      <Layout pageTitle={props.pageTitle}>
+      <Layout pageTitle={props.pageTitle} metaDescription={props.metaDescription}>
         <section className={styles["form-layout-container"]}>
           <div className={classNames.join(" ")}>{props.children}</div>
         </section>

@@ -19,7 +19,10 @@ const Assistance = (props: AssistanceProps) => {
   const enableResources = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableResources)
 
   return (
-    <Layout pageTitle={t("pageTitle.getAssistance")}>
+    <Layout
+      pageTitle={t("pageTitle.getAssistance")}
+      metaDescription={t("pageDescription.getAssistance")}
+    >
       <PageHeaderLayout
         heading={t("pageTitle.getAssistance")}
         inverse
