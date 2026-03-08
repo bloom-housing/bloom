@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form"
-import { FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { FormErrorMessage, LoadingState } from "@bloom-housing/ui-seeds"
 import { Field, FieldGroup, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -32,6 +32,7 @@ import ApplicationFormLayout, {
 const ApplicationAddress = () => {
   const { profile } = useContext(AuthContext)
   const [verifyAddress, setVerifyAddress] = useState(false)
+  const [addressValidationLoading, setAddressValidationLoading] = useState(false)
   const [foundAddress, setFoundAddress] = useState<FoundAddress>({})
   const [newAddressSelected, setNewAddressSelected] = useState(true)
 
@@ -69,11 +70,12 @@ const ApplicationAddress = () => {
     if (!verifyAddress) {
       setFoundAddress({})
       setVerifyAddress(true)
+      setAddressValidationLoading(true)
       void findValidatedAddress(
         data.applicant.applicantAddress,
         setFoundAddress,
         setNewAddressSelected
-      )
+      ).finally(() => setAddressValidationLoading(false))
       window.scrollTo({ top: 0 })
 
       return // Skip rest of the submit process
@@ -712,9 +714,11 @@ const ApplicationAddress = () => {
           </div>
           <CardSection>
             {verifyAddress && (
-              <AddressValidationSelection
-                {...{ foundAddress, newAddressSelected, setNewAddressSelected, setVerifyAddress }}
-              />
+              <LoadingState loading={addressValidationLoading} className={"seeds-p-be-8"}>
+                <AddressValidationSelection
+                  {...{ foundAddress, newAddressSelected, setNewAddressSelected, setVerifyAddress }}
+                />
+              </LoadingState>
             )}
           </CardSection>
         </ApplicationFormLayout>

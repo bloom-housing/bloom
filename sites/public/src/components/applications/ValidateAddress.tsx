@@ -11,8 +11,8 @@ export const findValidatedAddress = (
   address: Address,
   setFoundAddress: React.Dispatch<React.SetStateAction<FoundAddress>>,
   setNewAddressSelected: React.Dispatch<React.SetStateAction<boolean>>
-) => {
-  void import("@mapbox/mapbox-sdk/services/geocoding")
+): Promise<void> => {
+  return import("@mapbox/mapbox-sdk/services/geocoding")
     .then(({ default: GeocodeService }) => {
       const geocodingClient = GeocodeService({
         accessToken: process.env.mapBoxToken || process.env.MAPBOX_TOKEN,
