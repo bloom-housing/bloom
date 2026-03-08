@@ -1,6 +1,6 @@
 import * as React from "react"
-import Markdown from "markdown-to-jsx"
 import { Address, Heading, OrDivider, ContactAddress } from "@bloom-housing/ui-components"
+import LazyMarkdown from "../core/LazyMarkdown"
 
 export interface ApplicationAddressesProps {
   /** The dropoff address for paper applications */
@@ -58,10 +58,9 @@ const SubmitApplication = ({
                   {strings.officeHoursHeader}
                 </Heading>
                 <p className="mt-4 text-sm text-gray-750">
-                  <Markdown
-                    children={applicationDropOffAddressOfficeHours}
-                    options={{ disableParsingRawHTML: true }}
-                  />
+                  <LazyMarkdown options={{ disableParsingRawHTML: true }}>
+                    {applicationDropOffAddressOfficeHours}
+                  </LazyMarkdown>
                 </p>
               </>
             )}

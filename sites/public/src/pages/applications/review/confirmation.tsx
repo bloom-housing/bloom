@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import Markdown from "markdown-to-jsx"
 import { t, ApplicationTimeline } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -21,6 +20,7 @@ import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionCon
 import { UserStatus } from "../../../lib/constants"
 import { isFeatureFlagOn, isUnitGroupAppBase, isUnitGroupAppWaitlist } from "../../../lib/helpers"
 import { AccountTypeDialog } from "../../../components/account/AccountTypeDialog"
+import LazyMarkdown from "../../../components/core/LazyMarkdown"
 
 const ApplicationConfirmation = () => {
   const { application, listing, conductor } = useContext(AppSubmissionContext)
@@ -121,13 +121,13 @@ const ApplicationConfirmation = () => {
               <div className="markdown markdown-informational">
                 <ApplicationTimeline />
 
-                <Markdown options={{ disableParsingRawHTML: true }}>{contentText}</Markdown>
+                <LazyMarkdown options={{ disableParsingRawHTML: true }}>{contentText}</LazyMarkdown>
               </div>
             </CardSection>
 
             <CardSection divider={"inset"}>
               <div className="markdown markdown-informational">
-                <Markdown options={{ disableParsingRawHTML: true }}>
+                <LazyMarkdown options={{ disableParsingRawHTML: true }}>
                   {t(
                     `application.review.confirmation.needToMakeUpdates${
                       isAdvocate ? ".advocate" : ""
@@ -139,16 +139,16 @@ const ApplicationConfirmation = () => {
                       agentOfficeHours: listing?.leasingAgentOfficeHours || "",
                     }
                   )}
-                </Markdown>
+                </LazyMarkdown>
               </div>
             </CardSection>
 
             {initialStateLoaded && !profile && (
               <CardSection divider={"flush"} className={"border-none"}>
                 <div className="markdown markdown-informational">
-                  <Markdown options={{ disableParsingRawHTML: true }}>
+                  <LazyMarkdown options={{ disableParsingRawHTML: true }}>
                     {t("application.review.confirmation.createAccount")}
-                  </Markdown>
+                  </LazyMarkdown>
                 </div>
               </CardSection>
             )}

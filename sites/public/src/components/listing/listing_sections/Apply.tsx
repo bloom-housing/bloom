@@ -1,6 +1,5 @@
 import React, { useContext } from "react"
 import dayjs from "dayjs"
-import Markdown from "markdown-to-jsx"
 import { Address, AuthContext, getPostmarkString } from "@bloom-housing/shared-helpers"
 import { Button, Card, Heading } from "@bloom-housing/ui-seeds"
 import {
@@ -20,6 +19,7 @@ import {
 } from "../ListingViewSeedsHelpers"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./Apply.module.scss"
+import LazyMarkdown from "../../core/LazyMarkdown"
 
 type ApplyProps = {
   listing: Listing
@@ -177,7 +177,7 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
                   <Heading size={"md"} priority={4} className={"seeds-m-be-header"}>
                     {t("leasingAgent.officeHours")}
                   </Heading>
-                  <Markdown children={listing.applicationPickUpAddressOfficeHours} />
+                  <LazyMarkdown>{listing.applicationPickUpAddressOfficeHours}</LazyMarkdown>
                 </div>
               )}
             </div>
@@ -205,7 +205,7 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
                   <Heading size={"md"} priority={4} className={"seeds-m-be-header"}>
                     {t("leasingAgent.officeHours")}
                   </Heading>
-                  <Markdown children={listing.applicationDropOffAddressOfficeHours} />
+                  <LazyMarkdown>{listing.applicationDropOffAddressOfficeHours}</LazyMarkdown>
                 </div>
               )}
             </div>
