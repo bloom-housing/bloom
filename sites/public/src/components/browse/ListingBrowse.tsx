@@ -120,17 +120,6 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     props.paginationData && props.paginationData.currentPage < props.paginationData.totalPages
   const isPreviousPageAvailable = props.paginationData && props.paginationData.currentPage > 1
 
-  const selectionHandler = (index: number) => {
-    switch (index) {
-      case TabsIndexEnum.open:
-        void router.push("/listings")
-        break
-      case TabsIndexEnum.closed:
-        void router.push("/listings-closed")
-        break
-    }
-  }
-
   const onFilterSubmit = (data: FilterData) => {
     const updatedFilterQuery = encodeFilterDataToQuery(data)
     setIsFilterDrawerOpen(false)
@@ -161,10 +150,19 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
 
   const ListingTabs = (
     <MaxWidthLayout>
-      <Tabs className={styles["tabs"]} onSelect={selectionHandler} selectedIndex={props.tab}>
+      <Tabs
+        className={styles["tabs"]}
+        selectedIndex={props.tab}
+        navigation={true}
+        navigationLabel={t("listings.navLabel")}
+      >
         <Tabs.TabList>
-          <Tabs.Tab>{t("t.open")}</Tabs.Tab>
-          <Tabs.Tab>{t("listings.closed")}</Tabs.Tab>
+          <Tabs.Tab href={"/listings"} active={props.tab === TabsIndexEnum.open}>
+            {t("t.open")}
+          </Tabs.Tab>
+          <Tabs.Tab href={"/listings-closed"} active={props.tab === TabsIndexEnum.closed}>
+            {t("listings.closed")}
+          </Tabs.Tab>
         </Tabs.TabList>
       </Tabs>
     </MaxWidthLayout>

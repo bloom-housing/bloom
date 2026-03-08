@@ -41,9 +41,19 @@
   }
 }
 
-.application-count-tab {
+.application-no-results-text {
+  padding-bottom: var(--seeds-s6);
+}
+
+.application-count-tab-content {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
+  width: 100%;
+
+  span:last-child {
+    padding-inline-start: var(--seeds-s2);
+  }
 }
 
 .application-hide-tab {
