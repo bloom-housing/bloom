@@ -2,11 +2,11 @@ import crypto from 'crypto';
 import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
 import {
-  ApplicationSelections,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
   Prisma,
+  PrismaClient,
   YesNoEnum,
 } from '@prisma/client';
 import {
@@ -683,6 +683,7 @@ export class ApplicationService {
         },
       );
       if (
+        dto.applicationSelections &&
         !dto.applicationSelections.every(({ multiselectQuestion }) => {
           return listingMultiselectIds.includes(multiselectQuestion.id);
         })
@@ -875,7 +876,7 @@ export class ApplicationService {
     }
 
     const rawSelections = [];
-    if (enableV2MSQ) {
+    if (enableV2MSQ && dto.applicationSelections) {
       // Nested CreateManys are not supported by Prisma,
       // thus we must create the subobjects after creating the application
       try {
@@ -988,6 +989,7 @@ export class ApplicationService {
         },
       );
       if (
+        dto.applicationSelections &&
         !dto.applicationSelections.every(({ multiselectQuestion }) => {
           return listingMultiselectIds.includes(multiselectQuestion.id);
         })
@@ -1002,16 +1004,16 @@ export class ApplicationService {
 
     // All connected household members should be deleted so they can be recreated in the update below.
     // This solves for all cases of deleted members, updated members, and new members
-    transactions.push(
-      this.prisma.householdMember.deleteMany({
+    transactions.push(async (transaction: PrismaClient) => {
+      return transaction.householdMember.deleteMany({
         where: {
           applicationId: dto.id,
         },
-      }),
-    );
+      });
+    });
 
-    transactions.push(
-      this.prisma.applications.update({
+    transactions.push(async (transaction: PrismaClient) => {
+      return transaction.applications.update({
         where: {
           id: dto.id,
         },
@@ -1139,10 +1141,11 @@ export class ApplicationService {
           preferences: dto.preferences as unknown as Prisma.JsonArray,
           programs: dto.programs as unknown as Prisma.JsonArray,
         },
-      }),
-    );
+      });
+    });
 
-    if (enableV2MSQ) {
+    if (enableV2MSQ && dto.applicationSelections) {
+      console.log('I AM HERE');
       const applicationSelections = dto.applicationSelections;
       const applicationSelectionIds = applicationSelections.map(
         (selection) => selection.id,
@@ -1171,18 +1174,20 @@ export class ApplicationService {
         }
       }
 
+      console.log('to delete:', removedSelectionIds);
       // Remove selections that are no longer included
-      transactions.push(
-        this.prisma.applicationSelections.deleteMany({
+      transactions.push(async (transaction: PrismaClient) => {
+        return transaction.applicationSelections.deleteMany({
           where: { id: { in: removedSelectionIds } },
-        }),
-      );
-      // Add new selections
-      transactions.push(async () => {
-        for (const selection of newSelections) {
-          await this.prisma.applicationSelections.create(selection);
-        }
+        });
       });
+      console.log('to add:', newSelections.length);
+      // Add new selections
+      for (const selection of newSelections) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.applicationSelections.create(selection);
+        });
+      }
 
       const newSelectionOptions = [];
       const updatedSelectionOptions = [];
@@ -1296,28 +1301,37 @@ export class ApplicationService {
       }
 
       // update ApplicationSelections
-      transactions.push(async () => {
-        for (const selection of updatedSelectionBodies) {
-          await this.prisma.applicationSelections.update(selection);
-        }
-      });
+      for (const selection of updatedSelectionBodies) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.applicationSelections.update(selection);
+        });
+      }
       // add new ApplicationSelectionOptions
-      transactions.push(async () => {
-        for (const selectionOption of newSelectionOptions) {
-          await this.prisma.applicationSelectionOptions.create(selectionOption);
-        }
-      });
+      for (const selectionOption of newSelectionOptions) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.applicationSelectionOptions.create(
+            selectionOption,
+          );
+        });
+      }
       // update ApplicationSelectionOptions
-      transactions.push(async () => {
-        for (const selectionOption of updatedSelectionOptions) {
-          await this.prisma.applicationSelectionOptions.update(selectionOption);
-        }
-      });
+      for (const selectionOption of updatedSelectionOptions) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.applicationSelectionOptions.update(
+            selectionOption,
+          );
+        });
+      }
     }
 
-    const prismaTransactions = await this.prisma.$transaction(transactions);
+    const prismaTransactions = await this.prisma.$transaction(
+      async (transaction) =>
+        await Promise.all(
+          transactions.map((asyncCall) => asyncCall(transaction)),
+        ),
+    );
     const rawApplication = prismaTransactions[prismaTransactions.length - 1];
-
+    console.log('1328:', rawApplication);
     if (!rawApplication) {
       throw new HttpException(
         `Application ${rawExistingApplication.id} failed to update`,
@@ -1346,7 +1360,9 @@ export class ApplicationService {
       }
     }
 
-    await this.updateListingApplicationEditTimestamp(rawApplication.listingId);
+    await this.updateListingApplicationEditTimestamp(
+      rawUpdatedApplication.listingId,
+    );
     return application;
   }
 
