@@ -4,6 +4,7 @@ import { AssetService } from '../../../src/services/asset.service';
 import { CloudinaryService } from '../../../src/services/cloudinary.service';
 import { S3Service } from '../../../src/services/s3.service';
 import { randomUUID } from 'crypto';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 describe('Testing asset service', () => {
@@ -53,6 +54,7 @@ describe('Testing asset service', () => {
 
   it('should call the createS3UploadUrl() properly', async () => {
     randomUUID = jest.fn().mockReturnValue('fake-uuid');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     getSignedUrl = jest.fn().mockResolvedValue('fake-upload-url');
 
     expect(await service.createS3UploadUrl()).toEqual({
