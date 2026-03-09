@@ -20,6 +20,10 @@ import { FeatureFlag } from '../feature-flags/feature-flag.dto';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { IdDTO } from '../shared/id.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { UnitAccessibilityPriorityTypeEnum } from '../../enums/units/accessibility-priority-type-enum';
+import { SpokenLanguageEnum } from '../../enums/applications/spoken-language-enum';
+import { ListingFeaturesConfiguration } from './listing-features-config.dto';
+import { RaceEthnicityConfiguration } from './race-ethnicity-configuration.dto';
 
 export class Jurisdiction extends AbstractDTO {
   @Expose()
@@ -184,4 +188,50 @@ export class Jurisdiction extends AbstractDTO {
     isArray: true,
   })
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[];
+
+  @Expose()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(UnitAccessibilityPriorityTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+    each: true,
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: UnitAccessibilityPriorityTypeEnum,
+    enumName: 'UnitAccessibilityPriorityTypeEnum',
+    isArray: true,
+  })
+  visibleAccessibilityPriorityTypes: UnitAccessibilityPriorityTypeEnum[];
+
+  @Expose()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(SpokenLanguageEnum, {
+    groups: [ValidationsGroupsEnum.default],
+    each: true,
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: SpokenLanguageEnum,
+    enumName: 'SpokenLanguageEnum',
+    isArray: true,
+  })
+  visibleSpokenLanguages: SpokenLanguageEnum[];
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ isArray: true })
+  regions: string[];
+
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => ListingFeaturesConfiguration)
+  @ApiPropertyOptional({ type: ListingFeaturesConfiguration })
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration;
+
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => RaceEthnicityConfiguration)
+  @ApiPropertyOptional({ type: RaceEthnicityConfiguration })
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration;
 }

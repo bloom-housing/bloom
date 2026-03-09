@@ -7,6 +7,8 @@ import { rest } from "msw"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationsService,
+  ApplicationStatusEnum,
+  FeatureFlagEnum,
   ListingsService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
@@ -26,7 +28,7 @@ afterAll(() => {
   server.close()
 })
 
-const renderApplicationView = () =>
+const renderApplicationView = (enableApplicationStatus = false) =>
   render(
     <AuthContext.Provider
       value={{
@@ -37,7 +39,8 @@ const renderApplicationView = () =>
         },
         applicationsService: new ApplicationsService(),
         listingsService: new ListingsService(),
-        doJurisdictionsHaveFeatureFlagOn: () => false,
+        doJurisdictionsHaveFeatureFlagOn: (flag) =>
+          flag === FeatureFlagEnum.enableApplicationStatus ? enableApplicationStatus : false,
       }}
     >
       <ApplicationView />
@@ -98,10 +101,14 @@ describe("Account Listing View", () => {
               vision: true,
               hearing: true,
             },
+            listings: {
+              id: "123",
+              name: "Archer Studios",
+            },
           })
         )
       }),
-      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
+      rest.get("http://localhost/api/adapter/listings/123", (_req, res, ctx) => {
         return res(ctx.json(listing))
       })
     )
@@ -125,6 +132,8 @@ describe("Account Listing View", () => {
     expect(screen.getByText(/december 2, 2021/i)).toBeInTheDocument()
     expect(screen.getByText(/your confirmation number is:/i)).toBeInTheDocument()
     expect(screen.getByText("ABCD1234")).toBeInTheDocument()
+    expect(screen.queryByText("Your accessible wait list number is:")).not.toBeInTheDocument()
+    expect(screen.queryByText("Your conventional wait list number is:")).not.toBeInTheDocument()
 
     // --------------------------- Applicant Section ------------------------------------
     expect(await screen.findByRole("heading", { level: 3, name: /you/i })).toBeInTheDocument()
@@ -328,6 +337,33 @@ describe("Account Listing View", () => {
     expect(
       screen.getByRole("button", { name: /print a copy for your records/i })
     ).toBeInTheDocument()
+  })
+
+  it("should display waitlist numbers when feature flag is on", async () => {
+    server.use(
+      rest.get("http://localhost:3100/applications/application_1", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            ...application,
+            status: ApplicationStatusEnum.waitlist,
+            accessibleUnitWaitlistNumber: 123,
+            conventionalUnitWaitlistNumber: 456,
+          })
+        )
+      }),
+      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
+        return res(ctx.json(listing))
+      })
+    )
+
+    renderApplicationView(true)
+
+    expect(await screen.findByText("Your accessible wait list number is:")).toBeInTheDocument()
+    expect(screen.getByText("123")).toBeInTheDocument()
+    expect(screen.getByText("Your conventional wait list number is:")).toBeInTheDocument()
+    expect(screen.getByText("456")).toBeInTheDocument()
+    expect(screen.getByText("Your confirmation number is:")).toBeInTheDocument()
+    expect(screen.getByText("ABCD1234")).toBeInTheDocument()
   })
 
   it("should run window print on button click", async () => {

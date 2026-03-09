@@ -160,8 +160,8 @@ describe("<FormApplicationData>", () => {
       const statusSelect = screen.getByLabelText(/status/i)
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.waitlist)
 
-      const auwlInput = screen.getByLabelText(/accessible unit waitlist \(AUWL\)/i)
-      const cuwlInput = screen.getByLabelText(/conventional unit waitlist \(CUWL\)/i)
+      const auwlInput = screen.getByLabelText(/accessible unit wait list \(AUWL\)/i)
+      const cuwlInput = screen.getByLabelText(/conventional unit wait list \(CUWL\)/i)
       expect(auwlInput).toBeInTheDocument()
       expect(cuwlInput).toBeInTheDocument()
       expect(auwlInput.closest(".hidden")).not.toBeInTheDocument()
@@ -179,8 +179,8 @@ describe("<FormApplicationData>", () => {
       const statusSelect = screen.getByLabelText(/status/i)
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.waitlistDeclined)
 
-      const auwlInput = screen.getByLabelText(/accessible unit waitlist \(AUWL\)/i)
-      const cuwlInput = screen.getByLabelText(/conventional unit waitlist \(CUWL\)/i)
+      const auwlInput = screen.getByLabelText(/accessible unit wait list \(AUWL\)/i)
+      const cuwlInput = screen.getByLabelText(/conventional unit wait list \(CUWL\)/i)
       expect(auwlInput).toBeInTheDocument()
       expect(cuwlInput).toBeInTheDocument()
       expect(auwlInput.closest(".hidden")).not.toBeInTheDocument()
@@ -197,8 +197,8 @@ describe("<FormApplicationData>", () => {
       const statusSelect = screen.getByLabelText(/status/i)
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.submitted)
 
-      const auwlInput = screen.getByLabelText(/accessible unit waitlist/i)
-      const cuwlInput = screen.getByLabelText(/conventional unit waitlist/i)
+      const auwlInput = screen.getByLabelText(/accessible unit wait list/i)
+      const cuwlInput = screen.getByLabelText(/conventional unit wait list/i)
 
       // Check if the closest Grid.Cell has the hidden class
       expect(auwlInput.closest(".hidden")).toBeInTheDocument()
@@ -216,6 +216,42 @@ describe("<FormApplicationData>", () => {
       )
 
       expect(screen.getByLabelText(/lottery number/i)).toBeInTheDocument()
+    })
+
+    it("shows disabled display fields when status controls are disabled", () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            enableApplicationStatus={true}
+            disableApplicationStatusControls={true}
+            reviewOrderType={ReviewOrderTypeEnum.lottery}
+          />
+        </FormProviderWrapper>
+      )
+
+      const activeStatusSelect = screen.getByTestId("applicationStatusSelect")
+      const displayStatusSelect = screen.getByTestId("applicationStatusSelectDisplay")
+      expect(activeStatusSelect.closest(".hidden")).toBeInTheDocument()
+      expect(displayStatusSelect).toBeDisabled()
+
+      const activeAuwlInput = screen.getByTestId("applicationAccessibleUnitWaitlistNumber")
+      const displayAuwlInput = screen.getByTestId("applicationAccessibleUnitWaitlistNumberDisplay")
+      expect(activeAuwlInput.closest(".hidden")).toBeInTheDocument()
+      expect(displayAuwlInput).toBeDisabled()
+
+      const activeCuwlInput = screen.getByTestId("applicationConventionalUnitWaitlistNumber")
+      const displayCuwlInput = screen.getByTestId(
+        "applicationConventionalUnitWaitlistNumberDisplay"
+      )
+      expect(activeCuwlInput.closest(".hidden")).toBeInTheDocument()
+      expect(displayCuwlInput).toBeDisabled()
+
+      const activeLotteryInput = screen.getByTestId("applicationManualLotteryPositionNumber")
+      const displayLotteryInput = screen.getByTestId(
+        "applicationManualLotteryPositionNumberDisplay"
+      )
+      expect(activeLotteryInput.closest(".hidden")).toBeInTheDocument()
+      expect(displayLotteryInput).toBeDisabled()
     })
   })
 })

@@ -1,4 +1,4 @@
-import { LatitudeLongitude } from "@bloom-housing/ui-components"
+import { LatitudeLongitude } from "@bloom-housing/shared-helpers"
 import AdditionalMetadataFormatter from "../../../src/lib/listings/AdditionalMetadataFormatter"
 import { FormMetadata } from "../../../src/lib/listings/formTypes"
 

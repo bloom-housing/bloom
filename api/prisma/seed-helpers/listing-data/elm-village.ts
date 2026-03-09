@@ -2,12 +2,13 @@ import {
   ApplicationMethodsTypeEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
+  Prisma,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { featuresAndUtilites } from '../listing-factory';
 
-export const elmVillage = {
+export const elmVillage: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
   digitalApplication: true,
   listingEvents: {
@@ -56,8 +57,7 @@ export const elmVillage = {
   criminalBackground: null,
   depositMin: '0',
   depositMax: '0',
-  depositHelperText:
-    "or one month's rent may be higher for lower credit scores",
+  depositHelperText: "Deposit will not exceed one month's rent",
   disableUnitsAccordion: true,
   leasingAgentEmail: 'jenny@gold.com',
   leasingAgentName: 'Jenny Gold',
@@ -87,7 +87,11 @@ export const elmVillage = {
   waitlistOpenSpots: null,
   customMapPin: false,
   contentUpdatedAt: new Date(),
-  publishedAt: new Date(),
+  publishedAt: dayjs(new Date())
+    .subtract(1, 'months')
+    .subtract(3, 'days')
+    .subtract(12, 'minutes')
+    .toDate(),
   listingsApplicationPickUpAddress: undefined,
   listingsApplicationDropOffAddress: undefined,
   reservedCommunityTypes: undefined,

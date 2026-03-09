@@ -2,9 +2,9 @@ import React from "react"
 import "@testing-library/jest-dom"
 import { setupServer } from "msw/node"
 import { screen } from "@testing-library/react"
-import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
-import ListingIntro from "../../../../../src/components/listings/PaperListingForm/sections/ListingIntro"
 import { EnumListingListingType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import ListingIntro from "../../../../../src/components/listings/PaperListingForm/sections/ListingIntro"
+import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 
 const server = setupServer()
 
@@ -152,7 +152,7 @@ describe("ListingIntro", () => {
 
   it("should render the ListingIntro section with non-regulated fields when feature flag is on and listing is non-regulated", () => {
     render(
-      <FormProviderWrapper values={{ listingType: EnumListingListingType.nonRegulated }}>
+      <FormProviderWrapper>
         <ListingIntro
           requiredFields={[]}
           enableNonRegulatedListings={true}
@@ -160,6 +160,7 @@ describe("ListingIntro", () => {
           enableListingFileNumber={false}
           jurisdictionName={"JurisdictionA"}
           listingId={"1234"}
+          listingType={EnumListingListingType.nonRegulated}
         />
       </FormProviderWrapper>
     )

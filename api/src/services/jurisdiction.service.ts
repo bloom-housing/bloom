@@ -92,6 +92,10 @@ export class JurisdictionService {
     const rawResult = await this.prisma.jurisdictions.create({
       data: {
         ...incomingData,
+        listingFeaturesConfiguration:
+          incomingData.listingFeaturesConfiguration as unknown as Prisma.JsonArray,
+        raceEthnicityConfiguration:
+          incomingData.raceEthnicityConfiguration as unknown as Prisma.JsonArray,
       },
       include: view,
     });
@@ -110,6 +114,10 @@ export class JurisdictionService {
       data: {
         ...incomingData,
         id: undefined,
+        listingFeaturesConfiguration:
+          incomingData.listingFeaturesConfiguration as unknown as Prisma.JsonArray,
+        raceEthnicityConfiguration:
+          incomingData.raceEthnicityConfiguration as unknown as Prisma.JsonArray,
       },
       where: {
         id: incomingData.id,

@@ -1,3 +1,9 @@
+// ui-components uses ResizeObserver for drag-and-drop, so we need to mock it here before importing anything from ui-components
+global.ResizeObserver = jest.fn(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}))
 import { addTranslation } from "@bloom-housing/ui-components"
 import generalTranslations from "@bloom-housing/shared-helpers/src/locales/general.json"
 import "@testing-library/jest-dom"

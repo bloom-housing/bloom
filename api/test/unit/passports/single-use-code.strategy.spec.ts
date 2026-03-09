@@ -6,6 +6,7 @@ import { passwordToHash } from '../../../src/utilities/password-helpers';
 import { SingleUseCodeStrategy } from '../../../src/passports/single-use-code.strategy';
 import { LoginViaSingleUseCode } from '../../../src/dtos/auth/login-single-use-code.dto';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
+import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 
 describe('Testing single-use-code strategy', () => {
   let strategy: SingleUseCodeStrategy;
@@ -15,7 +16,7 @@ describe('Testing single-use-code strategy', () => {
     process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS = '5';
     process.env.AUTH_LOCK_LOGIN_COOLDOWN = '1800000';
     const module: TestingModule = await Test.createTestingModule({
-      providers: [SingleUseCodeStrategy, PrismaService],
+      providers: [SingleUseCodeStrategy, PrismaService, SnapshotCreateService],
     }).compile();
 
     strategy = module.get<SingleUseCodeStrategy>(SingleUseCodeStrategy);

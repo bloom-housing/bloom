@@ -1,5 +1,6 @@
 # Create an application load balancer that the partners and public sites can be accessed through.
 resource "aws_lb" "bloom" {
+  depends_on                 = [data.aws_acm_certificate.bloom]
   region                     = var.aws_region
   name                       = "bloom"
   enable_deletion_protection = local.is_prod
@@ -9,7 +10,7 @@ resource "aws_lb" "bloom" {
   subnets            = [for s in aws_subnet.public : s.id]
 
   idle_timeout               = 60 # seconds
-  security_groups            = [aws_security_group.lb.id]
+  security_groups            = [aws_security_group.bloom["lb"].id]
   enable_zonal_shift         = true
   desync_mitigation_mode     = "strictest"
   drop_invalid_header_fields = true
@@ -21,8 +22,17 @@ output "lb_dns_name" {
 data "aws_acm_certificate" "bloom" {
   domain      = var.domain_name
   most_recent = true
+  # By default the filter is ISSUED. Allow for certs with any status to be returned.
+  statuses = [
+    "PENDING_VALIDATION",
+    "ISSUED",
+    "INACTIVE",
+    "EXPIRED",
+    "VALIDATION_TIMED_OUT",
+    "REVOKED",
+    "FAILED"
+  ]
 
-  # TODO: validate this stops creation of all other resources
   lifecycle {
     postcondition {
       condition     = self.status == "ISSUED"

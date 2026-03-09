@@ -132,6 +132,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedTransformedValue = {
         ...value,
+        listingFeaturesConfiguration: null,
         minimumImagesRequired: 0,
         units: [],
         unitGroups: [],
@@ -144,6 +145,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
       expect(mockPrisma.jurisdictions.findFirst).toHaveBeenCalledWith({
         where: { id: jurisdictionId },
         select: {
+          listingFeaturesConfiguration: true,
           requiredListingFields: true,
           minimumListingPublishImagesRequired: true,
         },
@@ -187,6 +189,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
         minimumImagesRequired: 0,
         units: [],
         unitGroups: [],
+        listingFeaturesConfiguration: null,
         requiredFields: expectedDefaultFields,
       };
       mockSuperTransform.mockResolvedValue(expectedTransformedValue);
@@ -228,6 +231,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedTransformedValue = {
         ...value,
+        listingFeaturesConfiguration: null,
         minimumImagesRequired: 0,
         units: [],
         unitGroups: [],
@@ -270,6 +274,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedTransformedValue = {
         ...value,
+        listingFeaturesConfiguration: null,
         minimumImagesRequired: 0,
         units: [],
         unitGroups: [],
@@ -308,6 +313,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedTransformedValue = {
         ...value,
+        listingFeaturesConfiguration: null,
         minimumImagesRequired: 0,
         units: [],
         unitGroups: [],
@@ -376,6 +382,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedTransformedValue = {
         ...value,
+        listingFeaturesConfiguration: null,
         minimumImagesRequired: 0,
         units: [{ id: 'id1' }],
         unitGroups: [],
@@ -413,6 +420,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
         ...value,
         units: [],
         unitGroups: [{ id: 'id1' }],
+        listingFeaturesConfiguration: null,
         minimumImagesRequired: 0,
         requiredFields: ['name'],
       };

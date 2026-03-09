@@ -56,14 +56,14 @@ docker container run --rm -it \
 -v ./infra:/infra:z \
 -v "${HOME}/.aws/cli":/home/.aws/cli:z \
 -v "${HOME}/.aws/sso/cache":/home/.aws/sso/cache:z \
-ghcr.io/bloom-housing/bloom/infra-dev:gitbranch-main-latest \
+ghcr.io/bloom-housing/bloom/infra-dev \
 [[--skip-sso] | [--skip-init]] <ROOT_MODULE_NAME> <OPEN_TOFU_ARGS>
 ```
 
 You may find it convenient to add an alias. From the root of the Bloom repo:
 
 ```bash
-alias bloomtofu="docker container run --rm -it --user $(id -u):$(id -g) -v ${PWD}/infra:/infra:z -v ${HOME}/.aws/cli:/home/.aws/cli:z -v ${HOME}/.aws/sso/cache:/home/.aws/sso/cache:z ghcr.io/bloom-housing/bloom/infra-dev:gitbranch-main-latest"
+alias bloomtofu="docker container run --rm -it --user $(id -u):$(id -g) -v ${PWD}/infra:/infra:z -v ${HOME}/.aws/cli:/home/.aws/cli:z -v ${HOME}/.aws/sso/cache:/home/.aws/sso/cache:z ghcr.io/bloom-housing/bloom/infra-dev"
 
 bloomtofu -ss -si bloom_dev apply
 ```

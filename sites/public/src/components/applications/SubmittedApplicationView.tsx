@@ -4,6 +4,7 @@ import FormSummaryDetails from "../shared/FormSummaryDetails"
 import { CustomIconMap, listingSectionQuestions, AuthContext } from "@bloom-housing/shared-helpers"
 import {
   Application,
+  ApplicationStatusEnum,
   FeatureFlagEnum,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
@@ -28,10 +29,39 @@ const SubmittedApplicationView = ({
   const confirmationDate = useMemo(() => {
     return dayjs(application.submissionDate).format(DATE_FORMAT)
   }, [application.submissionDate])
+  const confirmationNumber = application?.confirmationCode || application?.id
+  const accessibleUnitWaitlistNumber = application?.accessibleUnitWaitlistNumber
+  const conventionalUnitWaitlistNumber = application?.conventionalUnitWaitlistNumber
+  const isWaitlistStatus =
+    application?.status === ApplicationStatusEnum.waitlist ||
+    application?.status === ApplicationStatusEnum.waitlistDeclined
+
+  const displayNumbers: { label: string; value: string | number }[] = []
+  if (isWaitlistStatus && accessibleUnitWaitlistNumber != undefined) {
+    displayNumbers.push({
+      label: t("application.yourAccessibleWaitlistNumber"),
+      value: accessibleUnitWaitlistNumber,
+    })
+  }
+  if (isWaitlistStatus && conventionalUnitWaitlistNumber != undefined) {
+    displayNumbers.push({
+      label: t("application.yourConventionalWaitlistNumber"),
+      value: conventionalUnitWaitlistNumber,
+    })
+  }
+  if (confirmationNumber) {
+    displayNumbers.push({
+      label: t("application.yourLotteryNumber"),
+      value: confirmationNumber,
+    })
+  }
 
   return (
     <>
-      <ApplicationListingCard listingName={listing?.name} listingId={listing?.id} />
+      <ApplicationListingCard
+        listingName={application.listings?.name || listing?.name}
+        listingId={application.listings?.id || listing?.id}
+      />
       <Card spacing={"lg"} className={"mb-6"}>
         <Card.Section divider={"inset"}>
           <Button
@@ -42,7 +72,7 @@ const SubmittedApplicationView = ({
           >
             {t("t.back")}
           </Button>
-          <Heading priority={2} size={"2xl"} className="mt-6">
+          <Heading priority={2} size={"2xl"} className="mt-6 seeds-large-heading">
             {t("application.confirmation.informationSubmittedTitle")}
           </Heading>
           <p className="field-note mt-4">
@@ -51,10 +81,15 @@ const SubmittedApplicationView = ({
           </p>
         </Card.Section>
         <Card.Section divider={"inset"} className={"border-none"}>
-          <p>{`${t("application.yourLotteryNumber")}:`}</p>
-          <p className="font-semibold text-lg mt-3">
-            {application?.confirmationCode || application?.id}
-          </p>
+          {displayNumbers.map((item, index) => (
+            <div
+              key={item.label}
+              className={index === displayNumbers.length - 1 ? "" : "seeds-p-be-content"}
+            >
+              <p>{`${item.label}:`}</p>
+              <p className="font-semibold text-lg mt-3">{item.value}</p>
+            </div>
+          ))}
         </Card.Section>
         <FormSummaryDetails
           listing={listing}
@@ -68,15 +103,21 @@ const SubmittedApplicationView = ({
               ?.length === 0
           }
           editMode={false}
-          enableUnitGroups={doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableUnitGroups)}
+          enableUnitGroups={doJurisdictionsHaveFeatureFlagOn(
+            FeatureFlagEnum.enableUnitGroups,
+            listing?.jurisdictions.id
+          )}
           enableFullTimeStudentQuestion={doJurisdictionsHaveFeatureFlagOn(
-            FeatureFlagEnum.enableFullTimeStudentQuestion
+            FeatureFlagEnum.enableFullTimeStudentQuestion,
+            listing?.jurisdictions.id
           )}
           enableAdaOtherOption={doJurisdictionsHaveFeatureFlagOn(
-            FeatureFlagEnum.enableAdaOtherOption
+            FeatureFlagEnum.enableAdaOtherOption,
+            listing?.jurisdictions.id
           )}
           swapCommunityTypeWithPrograms={doJurisdictionsHaveFeatureFlagOn(
-            FeatureFlagEnum.swapCommunityTypeWithPrograms
+            FeatureFlagEnum.swapCommunityTypeWithPrograms,
+            listing?.jurisdictions.id
           )}
         />
         <Card.Section>

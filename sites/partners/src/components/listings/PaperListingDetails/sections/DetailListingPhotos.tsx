@@ -31,14 +31,22 @@ const DetailListingPhotos = () => {
       preview: {
         content: (
           <TableThumbnail>
-            <img src={getUrlForListingImage(image)} alt={t("listings.sections.photoTitle")} />
+            <img
+              src={getUrlForListingImage(image)}
+              alt={t("listings.sections.photoTitle")}
+              id={`listing-detail-image-${index}`}
+            />
           </TableThumbnail>
         ),
       },
       ...(enableListingImageAltText
         ? {
             description: {
-              content: listing.listingImages[index].description || "",
+              content: (
+                <div id={`listing-alt-text-${index}`}>
+                  {listing.listingImages[index].description || ""}
+                </div>
+              ),
             },
           }
         : {}),

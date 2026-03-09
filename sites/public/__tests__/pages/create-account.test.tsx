@@ -50,7 +50,7 @@ describe("Create Account Page", () => {
     ).toBeInTheDocument()
     expect(screen.getByText("For example: 01 19 2000", { selector: "p" })).toBeInTheDocument()
 
-    verifyInitialInput(screen.getByRole("textbox", { name: /your email address/i }))
+    verifyInitialInput(screen.getByRole("textbox", { name: /email/i }))
 
     const passwordInput = screen.getByLabelText(/^password/i, { selector: "input" })
     verifyInitialInput(passwordInput)
@@ -114,7 +114,7 @@ describe("Create Account Page", () => {
         screen.getByText("Please enter a valid date of birth, must be 18 or older")
       ).toBeInTheDocument()
 
-      expect(screen.getByRole("textbox", { name: /your email address/i })).toBeInvalid()
+      expect(screen.getByRole("textbox", { name: /email/i })).toBeInvalid()
       expect(screen.getByText("Please enter a valid email address")).toBeInTheDocument()
 
       expect(screen.getByLabelText(/^password/i, { selector: "input" })).toBeInvalid()
@@ -368,7 +368,7 @@ describe("Create Account Page", () => {
       jest.spyOn(console, "error").mockImplementation()
       const { message, value, status } = response
       server.use(
-        rest.post("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        rest.post("http://localhost/api/adapter/user/public", (_req, res, ctx) => {
           if (message) {
             return res(
               ctx.status(status),
@@ -391,10 +391,7 @@ describe("Create Account Page", () => {
       await userEvent.type(screen.getByRole("textbox", { name: /month/i }), "2")
       await userEvent.type(screen.getByRole("textbox", { name: /day/i }), "4")
       await userEvent.type(screen.getByRole("textbox", { name: /year/i }), "2000")
-      await userEvent.type(
-        screen.getByRole("textbox", { name: /your email address/i }),
-        "johndoe@example.com"
-      )
+      await userEvent.type(screen.getByRole("textbox", { name: /email/i }), "johndoe@example.com")
       await userEvent.type(
         screen.getByLabelText(/^password/i, { selector: "input" }),
         "P@ssw0rd#123"
@@ -418,7 +415,7 @@ describe("Create Account Page", () => {
     process.env.showPwdless = "TRUE"
     const { pushMock } = mockNextRouter()
     server.use(
-      rest.post("http://localhost/api/adapter/user", (_req, res, ctx) => {
+      rest.post("http://localhost/api/adapter/user/public", (_req, res, ctx) => {
         return res(ctx.json(user))
       })
     )
@@ -432,10 +429,7 @@ describe("Create Account Page", () => {
     await userEvent.type(screen.getByRole("textbox", { name: /month/i }), "2")
     await userEvent.type(screen.getByRole("textbox", { name: /day/i }), "4")
     await userEvent.type(screen.getByRole("textbox", { name: /year/i }), "2000")
-    await userEvent.type(
-      screen.getByRole("textbox", { name: /your email address/i }),
-      "johndoe@example.com"
-    )
+    await userEvent.type(screen.getByRole("textbox", { name: /email/i }), "johndoe@example.com")
     await userEvent.type(screen.getByLabelText(/^password/i, { selector: "input" }), "P@ssw0rd#123")
     await userEvent.type(
       screen.getByLabelText(/re-enter your password/i, {

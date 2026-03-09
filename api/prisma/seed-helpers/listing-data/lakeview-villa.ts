@@ -48,8 +48,7 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
   criminalBackground: null,
   depositMin: '0',
   depositMax: '0',
-  depositHelperText:
-    "or one month's rent may be higher for lower credit scores",
+  depositHelperText: "Deposit will not exceed one month's rent",
   disableUnitsAccordion: false,
   leasingAgentEmail: 'bloom@exygy.com',
   leasingAgentName: 'Bloom Bloomington',
@@ -78,7 +77,7 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
   waitlistOpenSpots: null,
   customMapPin: false,
   contentUpdatedAt: new Date(),
-  publishedAt: new Date(),
+  publishedAt: dayjs(new Date()).subtract(22, 'minutes').toDate(),
   listingsBuildingAddress: {
     create: yellowstoneAddress,
   },

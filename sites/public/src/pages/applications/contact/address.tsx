@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form"
-import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { Field, FieldGroup, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -24,8 +24,10 @@ import {
   AddressValidationSelection,
 } from "../../../components/applications/ValidateAddress"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
 
 const ApplicationAddress = () => {
   const { profile } = useContext(AuthContext)
@@ -103,7 +105,7 @@ const ApplicationAddress = () => {
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
 
   const noPhone: boolean = watch("applicant.noPhone")
@@ -167,16 +169,7 @@ const ApplicationAddress = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} />
           <div style={{ display: verifyAddress ? "none" : "block" }}>
             <CardSection divider={"inset"}>
               <fieldset>

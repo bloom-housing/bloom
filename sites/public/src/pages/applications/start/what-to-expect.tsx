@@ -25,6 +25,12 @@ const ApplicationWhatToExpect = () => {
   }
 
   const content = useMemo(() => {
+    if (conductor.config.isAdvocate) {
+      return {
+        steps: t("application.start.whatToExpect.advocate.steps"),
+        finePrint: t("application.start.whatToExpect.advocate.finePrint"),
+      }
+    }
     switch (listing?.reviewOrderType) {
       case ReviewOrderTypeEnum.firstComeFirstServe:
         if (isUnitGroupAppWaitlist(listing, conductor.config)) {

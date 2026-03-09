@@ -11,6 +11,7 @@ interface BloomCardProps {
   clickable?: boolean
   headerLink?: React.ReactNode
   headingPriority?: 1 | 2 | 3 | 4 | 5 | 6
+  headingClass?: string
   iconClass?: string
   iconOutlined?: boolean
   iconSymbol?: CustomIconType
@@ -39,6 +40,7 @@ const BloomCard = (props: BloomCardProps) => {
               priority: props.headingPriority || 1,
               size: "2xl",
               tabIndex: props.titleTabIndex,
+              className: props.headingClass ? props.headingClass : "",
             }}
             heading={props.title}
             subheading={props.subtitle}
@@ -50,7 +52,9 @@ const BloomCard = (props: BloomCardProps) => {
         <Heading
           size="2xl"
           priority={props.headingPriority || 1}
-          className={props.altHeading ? styles["card-alt-heading-font"] : undefined}
+          className={`${props.altHeading ? styles["card-alt-heading-font"] : ""} ${
+            props.headingClass ? props.headingClass : ""
+          }`}
           id={props.titleId}
           tabIndex={props.titleTabIndex}
         >

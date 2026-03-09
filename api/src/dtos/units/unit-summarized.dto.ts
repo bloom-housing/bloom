@@ -1,12 +1,12 @@
 import { Expose, Type } from 'class-transformer';
 import { IsString, ValidateNested } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { UnitAccessibilityPriorityTypeEnum } from '../../enums/units/accessibility-priority-type-enum';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { UnitSummary } from './unit-summary.dto';
 import { UnitSummaryByAMI } from './unit-summary-by-ami.dto';
 import { HMI } from './hmi.dto';
-import { ApiProperty } from '@nestjs/swagger';
 import { UnitType } from '../unit-types/unit-type.dto';
-import { UnitAccessibilityPriorityType } from '../unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
 
 export class UnitsSummarized {
   @Expose()
@@ -16,8 +16,12 @@ export class UnitsSummarized {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiProperty({ type: [UnitAccessibilityPriorityType] })
-  priorityTypes?: UnitAccessibilityPriorityType[];
+  @ApiProperty({
+    enum: UnitAccessibilityPriorityTypeEnum,
+    enumName: 'UnitAccessibilityPriorityTypeEnum',
+    isArray: true,
+  })
+  priorityTypes?: UnitAccessibilityPriorityTypeEnum[];
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })

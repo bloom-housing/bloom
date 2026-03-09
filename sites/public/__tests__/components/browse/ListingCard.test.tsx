@@ -7,6 +7,7 @@ import {
   FeatureFlagEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import dayjs from "dayjs"
 
@@ -93,6 +94,7 @@ describe("<ListingCard>", () => {
                 text: "Seniors 62+",
                 jurisdictions: [],
                 applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                status: MultiselectQuestionsStatusEnum.active,
               },
             },
             {
@@ -104,6 +106,7 @@ describe("<ListingCard>", () => {
                 text: "Supportive Housing for the Homeless",
                 jurisdictions: [],
                 applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                status: MultiselectQuestionsStatusEnum.active,
               },
             },
           ],

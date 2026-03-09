@@ -131,7 +131,7 @@ const LotteryResults = () => {
                     >
                       {t("t.back")}
                     </Button>
-                    <Heading priority={2} size={"2xl"} className="mt-6">
+                    <Heading priority={2} size={"2xl"} className="mt-6 seeds-heading-large">
                       {lotteryResultHeaderText}
                     </Heading>
                     <p className="mt-4">

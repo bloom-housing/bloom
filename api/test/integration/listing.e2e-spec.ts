@@ -11,6 +11,7 @@ import {
   ListingTypeEnum,
   MarketingTypeEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   Prisma,
   RegionEnum,
   RentTypeEnum,
@@ -40,10 +41,6 @@ import {
   unitTypeFactorySingle,
 } from '../../prisma/seed-helpers/unit-type-factory';
 import { amiChartFactory } from '../../prisma/seed-helpers/ami-chart-factory';
-import {
-  unitAccessibilityPriorityTypeFactoryAll,
-  unitAccessibilityPriorityTypeFactorySingle,
-} from '../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 import { unitRentTypeFactory } from '../../prisma/seed-helpers/unit-rent-type-factory';
 import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
 import {
@@ -55,6 +52,7 @@ import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
 import { EmailService } from '../../src/services/email.service';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { unitFactorySingle } from '../../prisma/seed-helpers/unit-factory';
+import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessibility-priority-type-enum';
 import { FilterAvailabilityEnum } from '../../src/enums/listings/filter-availability-enum';
 import { unitGroupFactorySingle } from '../../prisma/seed-helpers/unit-group-factory';
 import { randomName } from '../../prisma/seed-helpers/word-generator';
@@ -139,7 +137,6 @@ describe('Listing Controller Tests', () => {
     });
     jurisdictionAId = jurisdiction.id;
     await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
-    await unitAccessibilityPriorityTypeFactoryAll(prisma);
     const adminUser = await prisma.userAccounts.create({
       data: await userFactory({
         roles: {
@@ -175,22 +172,35 @@ describe('Listing Controller Tests', () => {
     'jurisdictions',
   ];
 
-  const constructFullListingData = async (
-    listingId?: string,
-    jurisdictionId?: string,
-    jurisdictionName?: string,
-    useUnitGroups?: boolean,
-  ): Promise<ListingCreate | ListingUpdate> => {
+  const constructFullListingData = async (options: {
+    listingId?: string;
+    jurisdictionId?: string;
+    jurisdictionName?: string;
+    useUnitGroups?: boolean;
+    enableV2MSQ?: boolean;
+  }): Promise<ListingCreate | ListingUpdate> => {
+    const {
+      listingId,
+      jurisdictionId,
+      jurisdictionName,
+      useUnitGroups,
+      enableV2MSQ,
+    } = options;
     let jurisdictionA: IdDTO = { id: '' };
 
     if (jurisdictionId) {
       jurisdictionA.id = jurisdictionId;
     } else {
+      const featureFlags = [];
+      if (useUnitGroups) {
+        featureFlags.push(FeatureFlagEnum.enableUnitGroups);
+      }
+      if (enableV2MSQ) {
+        featureFlags.push(FeatureFlagEnum.enableV2MSQ);
+      }
       jurisdictionA = await prisma.jurisdictions.create({
         data: jurisdictionFactory(jurisdictionName || randomName(), {
-          featureFlags: [
-            ...(useUnitGroups ? [FeatureFlagEnum.enableUnitGroups] : []),
-          ],
+          featureFlags: featureFlags,
           requiredListingFields: [
             ...defaultRequiredFields,
             ...(useUnitGroups ? ['unitGroups'] : ['units']),
@@ -203,14 +213,12 @@ describe('Listing Controller Tests', () => {
     const amiChart = await prisma.amiChart.create({
       data: amiChartFactory(10, jurisdictionA.id),
     });
-    const unitAccessibilityPriorityType =
-      await unitAccessibilityPriorityTypeFactorySingle(prisma);
 
     const rentType = await prisma.unitRentTypes.create({
       data: unitRentTypeFactory(),
     });
     const multiselectQuestion = await prisma.multiselectQuestions.create({
-      data: multiselectQuestionFactory(jurisdictionA.id),
+      data: multiselectQuestionFactory(jurisdictionA.id, {}, enableV2MSQ),
     });
     await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
     const reservedCommunityType = await reservedCommunityTypeFactoryGet(
@@ -244,7 +252,7 @@ describe('Listing Controller Tests', () => {
       leasingAgentEmail: 'leasingAgent@exygy.com',
       leasingAgentName: 'Leasing Agent',
       leasingAgentPhone: '520-750-8811',
-      name: 'example listing',
+      name: `example listing ${randomName()}`,
       paperApplication: false,
       referralOpportunity: false,
       rentalAssistance: 'rental assistance',
@@ -308,9 +316,8 @@ describe('Listing Controller Tests', () => {
                 amiChart: {
                   id: amiChart.id,
                 },
-                unitAccessibilityPriorityTypes: {
-                  id: unitAccessibilityPriorityType.id,
-                },
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.mobility,
                 unitRentTypes: {
                   id: rentType.id,
                 },
@@ -333,9 +340,8 @@ describe('Listing Controller Tests', () => {
                 floorMax: 10,
                 sqFeetMin: '11',
                 sqFeetMax: '12',
-                unitAccessibilityPriorityTypes: {
-                  id: unitAccessibilityPriorityType.id,
-                },
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.mobility,
                 totalCount: 13,
                 totalAvailable: 14,
               },
@@ -631,21 +637,45 @@ describe('Listing Controller Tests', () => {
     let jurisdictionB;
     let jurisdictionC;
     let jurisdictionDWithUnitGroups;
-    let multiselectQuestionPreference;
+    let multiselectQuestionPreference1;
+    let multiselectQuestionPreference2;
+    let multiselectQuestionPreference3;
     let multiselectQuestionProgram;
 
     beforeAll(async () => {
       jurisdictionB = await prisma.jurisdictions.create({
         data: jurisdictionFactory(`filterableList B ${randomName()}`),
       });
-      multiselectQuestionPreference = await prisma.multiselectQuestions.create({
-        data: multiselectQuestionFactory(jurisdictionB.id, {
-          multiselectQuestion: {
-            applicationSection:
-              MultiselectQuestionsApplicationSectionEnum.preferences,
-          },
-        }),
-      });
+      multiselectQuestionPreference1 = await prisma.multiselectQuestions.create(
+        {
+          data: multiselectQuestionFactory(jurisdictionB.id, {
+            multiselectQuestion: {
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.preferences,
+            },
+          }),
+        },
+      );
+      multiselectQuestionPreference3 = await prisma.multiselectQuestions.create(
+        {
+          data: multiselectQuestionFactory(jurisdictionB.id, {
+            multiselectQuestion: {
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.preferences,
+            },
+          }),
+        },
+      );
+      multiselectQuestionPreference2 = await prisma.multiselectQuestions.create(
+        {
+          data: multiselectQuestionFactory(jurisdictionB.id, {
+            multiselectQuestion: {
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.preferences,
+            },
+          }),
+        },
+      );
       multiselectQuestionProgram = await prisma.multiselectQuestions.create({
         data: multiselectQuestionFactory(jurisdictionB.id, {
           multiselectQuestion: {
@@ -655,6 +685,7 @@ describe('Listing Controller Tests', () => {
         }),
       });
       const listing1Input = await listingFactory(jurisdictionB.id, prisma, {
+        enableListingFeaturesAndUtilities: true,
         listing: {
           homeType: HomeTypeEnum.apartment,
           isVerified: true,
@@ -662,7 +693,11 @@ describe('Listing Controller Tests', () => {
           region: RegionEnum.Eastside,
           section8Acceptance: false,
         } as Prisma.ListingsCreateInput,
-        multiselectQuestions: [multiselectQuestionPreference],
+        multiselectQuestions: [
+          multiselectQuestionPreference1,
+          multiselectQuestionPreference2,
+          multiselectQuestionPreference3,
+        ],
         optionalFeatures: {
           acInUnit: true,
         },
@@ -684,6 +719,7 @@ describe('Listing Controller Tests', () => {
       });
 
       const listing2Input = await listingFactory(jurisdictionB.id, prisma, {
+        enableListingFeaturesAndUtilities: true,
         includeReservedCommunityTypes: true,
         listing: {
           homeType: HomeTypeEnum.duplex,
@@ -1603,7 +1639,7 @@ describe('Listing Controller Tests', () => {
         filter: [
           {
             $comparison: Compare.IN,
-            multiselectQuestions: [multiselectQuestionPreference.id],
+            multiselectQuestions: [multiselectQuestionPreference1.id],
           },
           {
             $comparison: Compare['='],
@@ -1963,6 +1999,7 @@ describe('Listing Controller Tests', () => {
           id: jurisdictionB.id,
           name: jurisdictionB.name,
         },
+        property: null,
         showWaitlist: false,
         urlSlug: expect.anything(),
         whatToExpect: null,
@@ -2066,6 +2103,22 @@ describe('Listing Controller Tests', () => {
       expect(res.body.items[0].listingFeatures).not.toBeUndefined();
       expect(res.body.items[0].units).not.toBeUndefined();
       expect(res.body.items[0].listingsLeasingAgentAddress).not.toBeUndefined();
+      // Validate that the preferences are returned in the correct ordinal order
+      const multiselectQuestions =
+        res.body.items[0].listingMultiselectQuestions;
+      expect(multiselectQuestions).toHaveLength(3);
+      expect(multiselectQuestions[0].multiselectQuestions.id).toEqual(
+        multiselectQuestionPreference1.id,
+      );
+      expect(multiselectQuestions[0].ordinal).toEqual(1);
+      expect(multiselectQuestions[1].multiselectQuestions.id).toEqual(
+        multiselectQuestionPreference2.id,
+      );
+      expect(multiselectQuestions[1].ordinal).toEqual(2);
+      expect(multiselectQuestions[2].multiselectQuestions.id).toEqual(
+        multiselectQuestionPreference3.id,
+      );
+      expect(multiselectQuestions[2].ordinal).toEqual(3);
     });
   });
 
@@ -2187,9 +2240,21 @@ describe('Listing Controller Tests', () => {
       const listingData = await listingFactory(jurisdictionA.id, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
+        select: {
+          id: true,
+          name: true,
+          units: {
+            select: {
+              id: true,
+            },
+          },
+        },
       });
 
-      const val = await constructFullListingData(listing.id, jurisdictionA.id);
+      const val = await constructFullListingData({
+        listingId: listing.id,
+        jurisdictionId: jurisdictionA.id,
+      });
       val.listingsApplicationMailingAddress = undefined;
 
       const res = await request(app.getHttpServer())
@@ -2200,16 +2265,66 @@ describe('Listing Controller Tests', () => {
         .expect(200);
       expect(res.body.id).toEqual(listing.id);
       expect(res.body.name).toEqual(val.name);
+
+      const snapshot = await prisma.listingSnapshot.findFirst({
+        where: {
+          originalId: listing.id,
+        },
+        select: {
+          id: true,
+          originalId: true,
+          name: true,
+          unit: {
+            select: {
+              id: true,
+              originalId: true,
+            },
+          },
+        },
+      });
+
+      expect(snapshot.originalId).toEqual(listing.id);
+      expect(snapshot.name).toEqual(listing.name);
+      expect(snapshot.unit.length).toEqual(listing.units.length);
+    });
+
+    it('should update listing with enableV2MSQ as true', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(`update ${randomName()}`, {
+          featureFlags: [FeatureFlagEnum.enableV2MSQ],
+        }),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma);
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      const val = await constructFullListingData({
+        listingId: listing.id,
+        jurisdictionId: jurisdictionA.id,
+        enableV2MSQ: true,
+      });
+      val.listingsApplicationMailingAddress = undefined;
+
+      const res = await request(app.getHttpServer())
+        .put(`/listings/${listing.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(val)
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+
+      expect(res.body.id).toEqual(listing.id);
+      expect(res.body.name).toEqual(val.name);
+      expect(res.body.listingMultiselectQuestions.length).toEqual(1);
     });
   });
 
   describe('create endpoint', () => {
     it('should create listing', async () => {
-      const val = await constructFullListingData(
-        undefined,
-        undefined,
-        `create listing ${randomName()}`,
-      );
+      const val = await constructFullListingData({
+        jurisdictionName: `create listing ${randomName()}`,
+      });
 
       const res = await request(app.getHttpServer())
         .post('/listings')
@@ -2231,13 +2346,47 @@ describe('Listing Controller Tests', () => {
       expect(newDBValues[0].listingUtilities).toMatchObject(listingUtilities);
     });
 
+    it('should create listing with enableV2MSQ as true', async () => {
+      const val = await constructFullListingData({
+        jurisdictionName: `create listing ${randomName()}`,
+        enableV2MSQ: true,
+      });
+
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(val)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+      expect(res.body.name).toEqual(val.name);
+
+      const newDBValues = await prisma.listings.findMany({
+        include: {
+          listingMultiselectQuestions: true,
+        },
+        where: { name: val.name },
+      });
+      expect(newDBValues.length).toBeGreaterThanOrEqual(1);
+      const activatedMSQ = await prisma.multiselectQuestions.findFirst({
+        select: {
+          id: true,
+          status: true,
+        },
+        where: {
+          id: newDBValues[0]?.listingMultiselectQuestions[0]
+            .multiselectQuestionId,
+        },
+      });
+      expect(activatedMSQ.status).toEqual(
+        MultiselectQuestionsStatusEnum.active,
+      );
+    });
+
     describe('listing deposit type validation', () => {
       it("should create listing when deposit is 'fixedDeposit', and 'depositMin' and 'depositMax' are missing", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2267,11 +2416,9 @@ describe('Listing Controller Tests', () => {
       });
 
       it("should fail when deposit is 'fixedDeposit' but 'depositMin' and 'depositMax' are set", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2293,11 +2440,9 @@ describe('Listing Controller Tests', () => {
       });
 
       it("should create listing when deposit is 'rangeDeposit', and 'depositValue' is missing", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2327,11 +2472,9 @@ describe('Listing Controller Tests', () => {
       });
 
       it("should fail when deposit is 'rangeDeposit' but 'depositValue' is set", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2355,12 +2498,10 @@ describe('Listing Controller Tests', () => {
 
     describe('listing unit group rent type validation', () => {
       it("should create listing when unit group rent type is 'fixedRent' and the 'flatRentValueFrom' and 'flatRentValueFrom' are missing", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-          true,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+          useUnitGroups: true,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2394,12 +2535,10 @@ describe('Listing Controller Tests', () => {
       });
 
       it("should create listing when unit group rent type is 'rentRange' and the 'flatRentValueFrom' and 'flatRentValueFrom' are set", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-          true,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+          useUnitGroups: true,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2435,12 +2574,10 @@ describe('Listing Controller Tests', () => {
       });
 
       it("should fail to create listing when unit group rent type is 'fixedRent' but the 'flatRentValueFrom' and 'flatRentValueFrom' are set", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-          true,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+          useUnitGroups: true,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2463,12 +2600,10 @@ describe('Listing Controller Tests', () => {
       });
 
       it("should fail to create listing when unit group rent type is 'rentRange' but the 'flatRentValueFrom' and 'flatRentValueFrom' are missing", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-          true,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+          useUnitGroups: true,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2862,7 +2997,10 @@ describe('Listing Controller Tests', () => {
       const partnerAccessToken = res.header?.['set-cookie'].find((cookie) =>
         cookie.startsWith('access-token='),
       );
-      const val = await constructFullListingData(listing.id, jurisdictionA.id);
+      const val = await constructFullListingData({
+        listingId: listing.id,
+        jurisdictionId: jurisdictionA.id,
+      });
       val.status = ListingsStatusEnum.pendingReview;
       const putPendingApprovalResponse = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
@@ -2899,7 +3037,10 @@ describe('Listing Controller Tests', () => {
     });
 
     it('update status to listing approved and notify appropriate users', async () => {
-      const val = await constructFullListingData(listing.id, jurisdictionA.id);
+      const val = await constructFullListingData({
+        listingId: listing.id,
+        jurisdictionId: jurisdictionA.id,
+      });
       val.status = ListingsStatusEnum.active;
       const putApprovedResponse = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
@@ -2927,7 +3068,10 @@ describe('Listing Controller Tests', () => {
     });
 
     it('update status to changes requested and notify appropriate users', async () => {
-      const val = await constructFullListingData(listing.id, jurisdictionA.id);
+      const val = await constructFullListingData({
+        listingId: listing.id,
+        jurisdictionId: jurisdictionA.id,
+      });
       val.status = ListingsStatusEnum.changesRequested;
       const putChangesRequestedResponse = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)

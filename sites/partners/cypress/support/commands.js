@@ -418,7 +418,7 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByID("developer").type(listing["developer"])
     cy.getByID("add-photos-button").contains("Add photo").click()
     cy.getByTestId("dropzone-input").attachFile(
-      "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
+      "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpg",
       {
         subjectType: "drag-n-drop",
       }

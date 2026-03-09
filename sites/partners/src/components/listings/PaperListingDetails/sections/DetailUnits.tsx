@@ -62,7 +62,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
         amiPercentage: "t.ami",
         monthlyRent: "listings.unit.rent",
         sqFeet: "listings.unit.sqft",
-        unitAccessibilityPriorityTypes: "listings.unit.priorityType",
+        accessibilityPriorityType: "listings.unit.accessibilityPriorityType",
         action: "",
       }
 
@@ -137,7 +137,11 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
         amiPercentage: { content: unit.amiPercentage },
         monthlyRent: { content: unit.monthlyRent },
         sqFeet: { content: unit.sqFeet },
-        unitAccessibilityPriorityTypes: { content: unit.unitAccessibilityPriorityTypes?.name },
+        accessibilityPriorityType: {
+          content: unit.accessibilityPriorityType
+            ? t(`listings.unit.accessibilityType.${unit.accessibilityPriorityType}`)
+            : t("t.n/a"),
+        },
         action: {
           content: (
             <Button
@@ -184,7 +188,6 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
           <Grid.Cell>
             <FieldValue
               id="unitTypesOrIndividual"
-              testId={"unit-types-or-individual"}
               label={t("listings.unitTypesOrIndividual")}
               children={
                 listing.disableUnitsAccordion
@@ -196,7 +199,6 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
           <Grid.Cell>
             <FieldValue
               id="listings.listingAvailabilityQuestion"
-              testId={"listing-availability-question"}
               label={t("listings.listingAvailabilityQuestion")}
               children={listingAvailabilityText}
             />

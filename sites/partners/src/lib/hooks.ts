@@ -10,9 +10,12 @@ import {
   ApplicationOrderByKeys,
   EnumListingFilterParamsComparison,
   EnumMultiselectQuestionFilterParamsComparison,
+  EnumPropertyFilterParamsComparison,
   ListingViews,
   MultiselectQuestionFilterParams,
+  MultiselectQuestionOrderByKeys,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   OrderByEnum,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -51,6 +54,11 @@ type UseListingsDataProps = PaginationProps & {
   roles?: UserRole
   userJurisidctionIds?: string[]
   view?: ListingViews
+}
+
+type UsePropertiesListProps = PaginationProps & {
+  search?: string
+  jurisdictions?: string
 }
 
 export function useSingleListingData(listingId: string) {
@@ -342,19 +350,6 @@ export function useSingleAmiChart(amiChartId: string) {
   }
 }
 
-export function useUnitPriorityList() {
-  const { unitPriorityService } = useContext(AuthContext)
-  const fetcher = () => unitPriorityService.list()
-
-  const { data, error } = useSWR(`/api/adapter/unitAccessibilityPriorityTypes`, fetcher)
-
-  return {
-    data,
-    loading: !error && !data,
-    error,
-  }
-}
-
 export function useUnitTypeList() {
   const { unitTypesService } = useContext(AuthContext)
   const fetcher = () => unitTypesService.list()
@@ -399,25 +394,76 @@ export function useMultiselectQuestionList() {
   }
 }
 
+interface MSQTableSettings {
+  sort?: ColumnOrder[]
+  search?: string
+  page?: number
+  limit?: number
+}
+
 export function useJurisdictionalMultiselectQuestionList(
   jurisdictionId: string,
-  applicationSection?: MultiselectQuestionsApplicationSectionEnum
+  applicationSection?: MultiselectQuestionsApplicationSectionEnum,
+  statuses?: MultiselectQuestionsStatusEnum[],
+  tableSettings?: MSQTableSettings
 ) {
   const { multiselectQuestionsService } = useContext(AuthContext)
 
   const params: {
     filter: MultiselectQuestionFilterParams[]
+    orderBy: MultiselectQuestionOrderByKeys[]
+    orderDir: OrderByEnum[]
+    search?: string
+    limit?: number | "all"
+    page?: number
   } = {
     filter: [],
+    orderBy: [],
+    orderDir: [],
+    search: undefined,
+    limit: "all",
+    page: undefined,
   }
   params.filter.push({
     $comparison: EnumMultiselectQuestionFilterParamsComparison["IN"],
     jurisdiction: jurisdictionId && jurisdictionId !== "" ? jurisdictionId : undefined,
   })
+  tableSettings?.sort?.forEach((sortItem) => {
+    switch (sortItem.orderBy) {
+      case "name":
+        params.orderBy.push(MultiselectQuestionOrderByKeys.name)
+        break
+      case "status":
+        params.orderBy.push(MultiselectQuestionOrderByKeys.status)
+        break
+      case "jurisdiction":
+        params.orderBy.push(MultiselectQuestionOrderByKeys.jurisdiction)
+        break
+      case "updatedAt":
+        params.orderBy.push(MultiselectQuestionOrderByKeys.updatedAt)
+        break
+    }
+    params.orderDir.push(sortItem.orderDir as OrderByEnum)
+  })
+  if (tableSettings?.search) {
+    params.search = tableSettings.search
+  }
+  if (tableSettings?.limit) {
+    params.limit = tableSettings.limit
+  }
+  if (tableSettings?.page) {
+    params.page = tableSettings.page
+  }
   if (applicationSection) {
     params.filter.push({
       $comparison: EnumMultiselectQuestionFilterParamsComparison["="],
       applicationSection,
+    })
+  }
+  if (statuses) {
+    params.filter.push({
+      $comparison: EnumMultiselectQuestionFilterParamsComparison["IN"],
+      status: statuses.join(",") as MultiselectQuestionsStatusEnum,
     })
   }
 
@@ -446,7 +492,7 @@ export function useListingsMultiselectQuestionList(multiselectQuestionId: string
     })
 
   const { data, error } = useSWR(
-    `/api/adapter/muliselectQuestions/listings/${multiselectQuestionId}`,
+    `/api/adapter/multiselectQuestions/listings/${multiselectQuestionId}`,
     fetcher
   )
 
@@ -608,6 +654,15 @@ export const useUsersExport = () => {
   )
 }
 
+export const useAdvocateUserExport = () => {
+  const { userService } = useContext(AuthContext)
+
+  return useCsvExport(
+    () => userService.listAdvocatesAsCsv(),
+    `advocate-users-${createDateStringFromNow("YYYY-MM-DD_HH:mm")}.csv`
+  )
+}
+
 const useCsvExport = (
   endpoint: () => Promise<string>,
   fileName: string,
@@ -694,4 +749,41 @@ export function useWatchOnFormNumberFieldsChange(
     return () => clearTimeout(timeoutId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldToTriggerWatch.join(","), fieldValuesToWatch.join(","), trigger])
+}
+
+export function usePropertiesList({ page, limit, search, jurisdictions }: UsePropertiesListProps) {
+  const params = {
+    page,
+    limit,
+    search,
+    filter: [],
+  }
+
+  if (search?.length < 3) {
+    delete params.search
+  } else {
+    Object.assign(params, { search })
+  }
+
+  params.filter.push({
+    $comparison: EnumPropertyFilterParamsComparison.IN,
+    jurisdiction: jurisdictions && jurisdictions !== "" ? jurisdictions : undefined,
+  })
+
+  const paramsString = qs.stringify(params)
+
+  const { propertiesService } = useContext(AuthContext)
+
+  const fetcher = () => propertiesService.list(params)
+
+  const cacheKey = `/api/adapter/properties?${paramsString}`
+
+  const { data, error } = useSWR(cacheKey, fetcher)
+
+  return {
+    cacheKey,
+    data,
+    loading: !error && !data,
+    error,
+  }
 }

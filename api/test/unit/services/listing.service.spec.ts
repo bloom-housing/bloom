@@ -8,6 +8,7 @@ import {
   ListingsStatusEnum,
   MarketingTypeEnum,
   MonthlyRentDeterminationTypeEnum,
+  MultiselectQuestionsStatusEnum,
   RegionEnum,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
@@ -49,6 +50,9 @@ import { ApplicationService } from '../../../src/services/application.service';
 import { GeocodingService } from '../../../src/services/geocoding.service';
 import { FilterAvailabilityEnum } from '../../../src/enums/listings/filter-availability-enum';
 import { CronJobService } from '../../../src/services/cron-job.service';
+import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
+import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/accessibility-priority-type-enum';
+import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -176,6 +180,7 @@ const mockListing = (
               },
             ],
           },
+          accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.mobility,
           amiChart: {
             id: `AMI${i}`,
             items: [],
@@ -216,15 +221,15 @@ const lotteryPublishedApplicantMock = jest.fn();
 
 const canOrThrowMock = jest.fn();
 
-const user = new User();
-user.firstName = 'Test';
-user.lastName = 'User';
-user.email = 'test@example.com';
-
 describe('Testing listing service', () => {
   let service: ListingService;
   let prisma: PrismaService;
   let config: ConfigService;
+
+  const user = new User();
+  user.firstName = 'Test';
+  user.lastName = 'User';
+  user.email = 'test@example.com';
 
   const googleTranslateServiceMock = {
     isConfigured: () => true,
@@ -243,6 +248,11 @@ describe('Testing listing service', () => {
   const afsMock = {
     process: jest.fn().mockResolvedValue(true),
     processDuplicates: jest.fn().mockResolvedValue(true),
+  };
+
+  const multiselectQuestionServiceMock = {
+    activateMany: jest.fn(),
+    retireMultiselectQuestions: jest.fn(),
   };
 
   beforeAll(async () => {
@@ -282,10 +292,15 @@ describe('Testing listing service', () => {
             canOrThrow: canOrThrowMock,
           },
         },
+        {
+          provide: MultiselectQuestionService,
+          useValue: multiselectQuestionServiceMock,
+        },
         ConfigService,
         Logger,
         SchedulerRegistry,
         CronJobService,
+        SnapshotCreateService,
       ],
       imports: [HttpModule],
     }).compile();
@@ -367,9 +382,8 @@ describe('Testing listing service', () => {
               amiChart: {
                 id: randomUUID(),
               },
-              unitAccessibilityPriorityTypes: {
-                id: randomUUID(),
-              },
+              accessibilityPriorityType:
+                UnitAccessibilityPriorityTypeEnum.mobility,
               unitRentTypes: {
                 id: randomUUID(),
               },
@@ -457,9 +471,8 @@ describe('Testing listing service', () => {
               floorMax: 10,
               sqFeetMin: '11',
               sqFeetMax: '12',
-              unitAccessibilityPriorityTypes: {
-                id: randomUUID(),
-              },
+              accessibilityPriorityType:
+                UnitAccessibilityPriorityTypeEnum.mobility,
               totalCount: 13,
               totalAvailable: 14,
             },
@@ -562,6 +575,12 @@ describe('Testing listing service', () => {
         wideDoorways: true,
         loweredCabinets: false,
       },
+      parkType: {
+        onStreet: false,
+        offStreet: false,
+        garage: false,
+        carport: false,
+      },
       listingUtilities: {
         water: false,
         gas: true,
@@ -622,8 +641,12 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+          property: true,
           lastUpdatedByUser: true,
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -653,12 +676,12 @@ describe('Testing listing service', () => {
           listingsApplicationPickUpAddress: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationMailingAddress: true,
+          parkType: true,
           units: {
             include: {
               unitAmiChartOverrides: true,
               unitTypes: true,
               unitRentTypes: true,
-              unitAccessibilityPriorityTypes: true,
               amiChart: {
                 include: {
                   jurisdictions: true,
@@ -787,6 +810,9 @@ describe('Testing listing service', () => {
           },
 
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -908,6 +934,9 @@ describe('Testing listing service', () => {
             },
           },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -1217,6 +1246,7 @@ describe('Testing listing service', () => {
             totalAvailable: 1,
           },
         ],
+        priorityTypes: [UnitAccessibilityPriorityTypeEnum.mobility],
       });
 
       expect(res.meta).toEqual({
@@ -1288,6 +1318,9 @@ describe('Testing listing service', () => {
             },
           },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -1891,6 +1924,61 @@ describe('Testing listing service', () => {
       });
     });
 
+    it('should return a where clause for filter parkingType', () => {
+      const parkingTypes = ['garage', 'offStreet'];
+      const filter = [
+        {
+          $comparison: '=',
+          parkingType: parkingTypes,
+        } as unknown as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                parkType: {
+                  garage: true,
+                },
+              },
+              {
+                parkType: {
+                  offStreet: true,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter parkingType single value', () => {
+      const parkingTypes = ['carport'];
+      const filter = [
+        {
+          $comparison: '=',
+          parkingType: parkingTypes,
+        } as unknown as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                parkType: {
+                  carport: true,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
     it('should return a where clause for filter ids', () => {
       const uuids = [randomUUID(), randomUUID()];
       const filter = [
@@ -2309,6 +2397,9 @@ describe('Testing listing service', () => {
             },
           },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -2352,6 +2443,7 @@ describe('Testing listing service', () => {
         select: {
           id: true,
           name: true,
+          property: true,
           jurisdictions: {
             select: {
               id: true,
@@ -2391,6 +2483,9 @@ describe('Testing listing service', () => {
             },
           },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -2416,16 +2511,17 @@ describe('Testing listing service', () => {
             },
           },
           listingsResult: true,
+          property: true,
           listingsLeasingAgentAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationMailingAddress: true,
+          parkType: true,
           units: {
             include: {
               unitAmiChartOverrides: true,
               unitTypes: true,
               unitRentTypes: true,
-              unitAccessibilityPriorityTypes: true,
               amiChart: {
                 include: {
                   jurisdictions: true,
@@ -2791,6 +2887,9 @@ describe('Testing listing service', () => {
             },
           },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -2910,6 +3009,9 @@ describe('Testing listing service', () => {
             },
           },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -2935,16 +3037,17 @@ describe('Testing listing service', () => {
             },
           },
           listingsResult: true,
+          property: true,
           listingsLeasingAgentAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationMailingAddress: true,
+          parkType: true,
           units: {
             include: {
               unitAmiChartOverrides: true,
               unitTypes: true,
               unitRentTypes: true,
-              unitAccessibilityPriorityTypes: true,
               amiChart: {
                 include: {
                   jurisdictions: true,
@@ -3074,6 +3177,9 @@ describe('Testing listing service', () => {
           reservedCommunityTypes: true,
           listingImages: { include: { assets: true } },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: { multiselectQuestions: true },
           },
           listingNeighborhoodAmenities: true,
@@ -3143,7 +3249,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
         id: 'jurisdiction-id',
       });
 
@@ -3194,6 +3300,9 @@ describe('Testing listing service', () => {
             },
           },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -3209,9 +3318,11 @@ describe('Testing listing service', () => {
           listingsAccessibleMarketingFlyerFile: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
+          property: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -3220,7 +3331,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -3290,7 +3400,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
         id: 'jurisdiction-id',
       });
       const val = constructFullListingData();
@@ -3322,6 +3432,9 @@ describe('Testing listing service', () => {
             },
           },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -3337,9 +3450,11 @@ describe('Testing listing service', () => {
           listingsAccessibleMarketingFlyerFile: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
+          property: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -3348,7 +3463,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -3480,6 +3594,14 @@ describe('Testing listing service', () => {
               internet: true,
             },
           },
+          parkType: {
+            create: {
+              carport: false,
+              garage: false,
+              offStreet: false,
+              onStreet: false,
+            },
+          },
           listingsApplicationMailingAddress: {
             create: {
               ...exampleAddress,
@@ -3583,11 +3705,8 @@ describe('Testing listing service', () => {
                     ],
                   },
                 },
-                unitAccessibilityPriorityTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.mobility,
                 unitRentTypes: {
                   connect: {
                     id: expect.anything(),
@@ -3622,11 +3741,8 @@ describe('Testing listing service', () => {
                     id: expect.anything(),
                   },
                 },
-                unitAccessibilityPriorityTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.mobility,
               },
             ],
           },
@@ -3702,6 +3818,9 @@ describe('Testing listing service', () => {
             },
           },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -3717,9 +3836,11 @@ describe('Testing listing service', () => {
           listingsAccessibleMarketingFlyerFile: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
+          property: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -3728,7 +3849,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -3799,7 +3919,7 @@ describe('Testing listing service', () => {
     });
 
     it('should create a listing with unit groups when enableUnitGroups is true', async () => {
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
         id: 'jurisdiction-id',
         featureFlags: [
           {
@@ -3843,6 +3963,9 @@ describe('Testing listing service', () => {
             },
           },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -3859,9 +3982,11 @@ describe('Testing listing service', () => {
           listingsAccessibleMarketingFlyerFile: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
+          property: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -3870,7 +3995,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -3998,6 +4122,14 @@ describe('Testing listing service', () => {
               cable: true,
               phone: false,
               internet: true,
+            },
+          },
+          parkType: {
+            create: {
+              carport: false,
+              garage: false,
+              offStreet: false,
+              onStreet: false,
             },
           },
           listingsApplicationMailingAddress: {
@@ -4128,6 +4260,403 @@ describe('Testing listing service', () => {
         },
       );
     });
+
+    it('should create a listing with an active multiselectQuestion when enableV2MSQ is true', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableV2MSQ,
+            active: true,
+          },
+        ],
+      });
+
+      prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([]);
+
+      prisma.listings.create = jest.fn().mockResolvedValue({
+        id: 'example id',
+        listingMultiselectQuestions: [
+          {
+            id: randomUUID(),
+            multiselectQuestions: {
+              id: randomUUID(),
+              status: MultiselectQuestionsStatusEnum.active,
+            },
+            ordinal: 1,
+          },
+        ],
+        name: 'example name',
+        status: ListingsStatusEnum.active,
+      });
+
+      const val = constructFullListingData();
+
+      await service.create(val as ListingCreate, user);
+
+      expect(prisma.listings.create).toHaveBeenCalledWith({
+        include: {
+          applicationMethods: {
+            include: {
+              paperApplications: {
+                include: {
+                  assets: true,
+                },
+              },
+            },
+          },
+          lastUpdatedByUser: true,
+          jurisdictions: true,
+          listingEvents: {
+            include: {
+              assets: true,
+            },
+          },
+          listingFeatures: true,
+          listingImages: {
+            include: {
+              assets: true,
+            },
+          },
+          listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
+            include: {
+              multiselectQuestions: true,
+            },
+          },
+          listingUtilities: true,
+          listingNeighborhoodAmenities: true,
+          listingsApplicationDropOffAddress: true,
+          listingsApplicationPickUpAddress: true,
+          listingsApplicationMailingAddress: true,
+          listingsBuildingAddress: true,
+          listingsBuildingSelectionCriteriaFile: true,
+          listingsMarketingFlyerFile: true,
+          listingsAccessibleMarketingFlyerFile: true,
+          listingsLeasingAgentAddress: true,
+          listingsResult: true,
+          property: true,
+          requestedChangesUser: true,
+          reservedCommunityTypes: true,
+          requiredDocumentsList: true,
+          parkType: true,
+          units: {
+            include: {
+              amiChart: {
+                include: {
+                  jurisdictions: true,
+                  unitGroupAmiLevels: true,
+                },
+              },
+              unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        data: {
+          ...val,
+          isVerified: true,
+          contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
+          publishedAt: expect.anything(),
+          assets: {
+            create: [exampleAsset],
+          },
+          applicationMethods: {
+            create: [
+              {
+                type: ApplicationMethodsTypeEnum.Internal,
+                label: 'example label',
+                externalReference: 'example reference',
+                acceptsPostmarkedApplications: false,
+                phoneNumber: '520-750-8811',
+                paperApplications: {
+                  create: [
+                    {
+                      language: LanguagesEnum.en,
+                      assets: {
+                        create: {
+                          ...exampleAsset,
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+          listingEvents: {
+            create: [
+              {
+                type: ListingEventsTypeEnum.openHouse,
+                startDate: expect.anything(),
+                startTime: expect.anything(),
+                endTime: expect.anything(),
+                url: 'https://www.google.com',
+                note: 'example note',
+                label: 'example label',
+                assets: {
+                  create: {
+                    ...exampleAsset,
+                  },
+                },
+              },
+            ],
+          },
+          listingImages: {
+            create: [
+              {
+                assets: {
+                  create: {
+                    ...exampleAsset,
+                  },
+                },
+                ordinal: 0,
+              },
+            ],
+          },
+          listingMultiselectQuestions: {
+            create: [
+              {
+                ordinal: 0,
+                multiselectQuestions: {
+                  connect: {
+                    id: expect.anything(),
+                  },
+                },
+              },
+            ],
+          },
+          listingsApplicationDropOffAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          reservedCommunityTypes: {
+            connect: {
+              id: expect.anything(),
+            },
+          },
+          listingsBuildingSelectionCriteriaFile: {
+            create: {
+              ...exampleAsset,
+            },
+          },
+          listingsMarketingFlyerFile: undefined,
+          listingsAccessibleMarketingFlyerFile: {
+            create: {
+              ...exampleAsset,
+            },
+          },
+          listingUtilities: {
+            create: {
+              water: false,
+              gas: true,
+              trash: false,
+              sewer: true,
+              electricity: false,
+              cable: true,
+              phone: false,
+              internet: true,
+            },
+          },
+          parkType: {
+            create: {
+              carport: false,
+              garage: false,
+              offStreet: false,
+              onStreet: false,
+            },
+          },
+          listingsApplicationMailingAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          listingsLeasingAgentAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          listingFeatures: {
+            create: {
+              elevator: true,
+              wheelchairRamp: false,
+              serviceAnimalsAllowed: true,
+              accessibleParking: false,
+              parkingOnSite: true,
+              inUnitWasherDryer: false,
+              laundryInBuilding: true,
+              barrierFreeEntrance: false,
+              rollInShower: true,
+              grabBars: false,
+              heatingInUnit: true,
+              acInUnit: false,
+              hearing: true,
+              visual: false,
+              mobility: true,
+              barrierFreeUnitEntrance: false,
+              loweredLightSwitch: true,
+              barrierFreeBathroom: false,
+              wideDoorways: true,
+              loweredCabinets: false,
+            },
+          },
+          listingNeighborhoodAmenities: {
+            create: {
+              groceryStores: 'stores',
+              pharmacies: 'pharmacies',
+              healthCareResources: 'health care',
+              parksAndCommunityCenters: 'parks',
+              schools: 'schools',
+              publicTransportation: 'public transportation',
+              busStops: 'bus stops',
+              hospitals: 'hospitals',
+              playgrounds: 'playgrounds',
+              recreationalFacilities: 'recreational facilities',
+              seniorCenters: 'senior centers',
+              shoppingVenues: 'shopping venues',
+            },
+          },
+          jurisdictions: {
+            connect: {
+              id: expect.anything(),
+            },
+          },
+          listingsApplicationPickUpAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          listingsBuildingAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          units: {
+            create: [
+              {
+                amiPercentage: '1',
+                annualIncomeMin: '2',
+                monthlyIncomeMin: '3',
+                floor: 4,
+                annualIncomeMax: '5',
+                maxOccupancy: 6,
+                minOccupancy: 7,
+                monthlyRent: '8',
+                numBathrooms: 9,
+                numBedrooms: 10,
+                number: '11',
+                sqFeet: '12',
+                monthlyRentAsPercentOfIncome: '13',
+                bmrProgramChart: true,
+                unitTypes: {
+                  connect: {
+                    id: expect.anything(),
+                  },
+                },
+                amiChart: {
+                  connect: {
+                    id: expect.anything(),
+                  },
+                },
+                unitAmiChartOverrides: {
+                  create: {
+                    items: [
+                      {
+                        percentOfAmi: 10,
+                        householdSize: 20,
+                        income: 30,
+                      },
+                    ],
+                  },
+                },
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.mobility,
+                unitRentTypes: {
+                  connect: {
+                    id: expect.anything(),
+                  },
+                },
+              },
+            ],
+          },
+          unitGroups: {
+            create: [],
+          },
+          section8Acceptance: true,
+          unitsSummary: {
+            create: [
+              {
+                monthlyRentMin: 1,
+                monthlyRentMax: 2,
+                monthlyRentAsPercentOfIncome: '3',
+                amiPercentage: 4,
+                minimumIncomeMin: '5',
+                minimumIncomeMax: '6',
+                maxOccupancy: 7,
+                minOccupancy: 8,
+                floorMin: 9,
+                floorMax: 10,
+                sqFeetMin: '11',
+                sqFeetMax: '12',
+                totalCount: 13,
+                totalAvailable: 14,
+                unitTypes: {
+                  connect: {
+                    id: expect.anything(),
+                  },
+                },
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.mobility,
+              },
+            ],
+          },
+          listingsResult: {
+            create: {
+              ...exampleAsset,
+            },
+          },
+        },
+      });
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        user,
+        'listing',
+        permissionActions.create,
+        {
+          jurisdictionId: val.jurisdictions.id,
+        },
+      );
+
+      expect(multiselectQuestionServiceMock.activateMany).toHaveBeenCalledWith([
+        {
+          id: expect.anything(),
+          status: MultiselectQuestionsStatusEnum.active,
+        },
+      ]);
+    });
   });
 
   describe('Test duplicate endpoint', () => {
@@ -4135,6 +4664,10 @@ describe('Testing listing service', () => {
       const listing = mockListing(1, { numberToMake: 2, date: new Date() });
 
       const newName = 'duplicate name';
+
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+      });
 
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         ...listing,
@@ -4191,6 +4724,9 @@ describe('Testing listing service', () => {
             },
           },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -4206,9 +4742,11 @@ describe('Testing listing service', () => {
           listingsApplicationMailingAddress: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
+          property: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -4217,7 +4755,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -4245,6 +4782,10 @@ describe('Testing listing service', () => {
       const listing = mockListing(1, { numberToMake: 2, date: new Date() });
 
       const newName = 'duplicate name';
+
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+      });
 
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         ...listing,
@@ -4302,6 +4843,9 @@ describe('Testing listing service', () => {
             },
           },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -4317,9 +4861,11 @@ describe('Testing listing service', () => {
           listingsApplicationMailingAddress: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
+          property: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -4328,7 +4874,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -4404,6 +4949,9 @@ describe('Testing listing service', () => {
             },
           },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -4419,9 +4967,11 @@ describe('Testing listing service', () => {
           listingsApplicationMailingAddress: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
+          property: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -4430,7 +4980,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -4455,6 +5004,9 @@ describe('Testing listing service', () => {
     });
 
     it('should do a complete listing update', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+      });
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: 'example id',
         name: 'example name',
@@ -4478,6 +5030,10 @@ describe('Testing listing service', () => {
       const updateMock = jest
         .fn()
         .mockResolvedValue({ id: 'example id', name: 'example name' });
+
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
 
       prisma.$transaction = jest
         .fn()
@@ -4614,6 +5170,7 @@ describe('Testing listing service', () => {
           id: 'example id',
         },
       );
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
   });
 
@@ -4768,6 +5325,9 @@ describe('Testing listing service', () => {
 
   describe('Test update endpoint', () => {
     it('should update a simple listing', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+      });
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: 'example id',
         name: 'example name',
@@ -4785,10 +5345,12 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
       prisma.$transaction = jest
         .fn()
         .mockResolvedValue([{ id: 'example id', name: 'example name' }]);
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
 
       await service.update(
         {
@@ -4838,6 +5400,9 @@ describe('Testing listing service', () => {
             },
           },
           listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
             include: {
               multiselectQuestions: true,
             },
@@ -4853,9 +5418,11 @@ describe('Testing listing service', () => {
           listingsApplicationMailingAddress: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
+          property: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -4864,7 +5431,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -4973,6 +5539,7 @@ describe('Testing listing service', () => {
           id: 'example id',
         },
       );
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
 
     it('should update a listing with unit groups when enableUnitGroups is true', async () => {
@@ -4999,7 +5566,7 @@ describe('Testing listing service', () => {
       prisma.$transaction = jest
         .fn()
         .mockResolvedValue([{ id: 'example id', name: 'example name' }]);
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
         id: 'jurisdiction-id',
         featureFlags: [
           {
@@ -5008,6 +5575,9 @@ describe('Testing listing service', () => {
           },
         ],
       });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
 
       const unitTypes = [
         {
@@ -5190,12 +5760,12 @@ describe('Testing listing service', () => {
           id: 'example id',
         },
       );
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
 
     it('should process duplicates and expire applications on listing close', async () => {
       jest.useFakeTimers().setSystemTime(new Date('2025-11-22T12:25:00.000Z'));
       process.env.APPLICATION_DAYS_TILL_EXPIRY = '90';
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listingId = randomUUID();
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: listingId,
@@ -5205,6 +5775,7 @@ describe('Testing listing service', () => {
       prisma.listings.update = jest.fn().mockResolvedValue({
         id: listingId,
         name: 'example name',
+        status: ListingsStatusEnum.closed,
       });
       prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
       prisma.listingEvents.update = jest.fn().mockResolvedValue({
@@ -5215,10 +5786,16 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-      prisma.$transaction = jest
-        .fn()
-        .mockResolvedValue([{ id: listingId, name: 'example name' }]);
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        {
+          id: listingId,
+          name: 'example name',
+          status: ListingsStatusEnum.closed,
+        },
+      ]);
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+      });
 
       prisma.applications.updateMany = jest
         .fn()
@@ -5257,6 +5834,560 @@ describe('Testing listing service', () => {
         },
       });
       process.env.APPLICATION_DAYS_TILL_EXPIRY = null;
+    });
+
+    it('should update a simple listing with an active multiselectQuestion when enableV2MSQ is true', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableV2MSQ,
+            active: true,
+          },
+        ],
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        listingMultiselectQuestions: [
+          {
+            id: randomUUID(),
+            multiselectQuestions: {
+              id: randomUUID(),
+              status: MultiselectQuestionsStatusEnum.active,
+            },
+            ordinal: 1,
+          },
+        ],
+        name: 'example name',
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        listingMultiselectQuestions: [
+          {
+            id: randomUUID(),
+            multiselectQuestions: {
+              id: randomUUID(),
+              status: MultiselectQuestionsStatusEnum.active,
+            },
+            ordinal: 1,
+          },
+        ],
+        name: 'example name',
+        status: ListingsStatusEnum.active,
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingEvents.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([]);
+      prisma.assets.delete = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        {
+          id: 'example id',
+          listingMultiselectQuestions: [
+            {
+              id: randomUUID(),
+              multiselectQuestions: {
+                id: randomUUID(),
+                status: MultiselectQuestionsStatusEnum.active,
+              },
+              ordinal: 1,
+            },
+          ],
+          name: 'example name',
+          status: ListingsStatusEnum.active,
+        },
+      ]);
+
+      await service.update(
+        {
+          id: randomUUID(),
+          name: 'example listing name',
+          depositMin: '5',
+          assets: [
+            {
+              fileId: randomUUID(),
+              label: 'example asset',
+            },
+          ],
+          jurisdictions: {
+            id: randomUUID(),
+          },
+          listingMultiselectQuestions: [
+            {
+              id: randomUUID(),
+              ordinal: 1,
+            },
+          ],
+          status: ListingsStatusEnum.active,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+          lastUpdatedByUser: user,
+        } as ListingUpdate,
+        user,
+      );
+
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        include: {
+          applicationMethods: {
+            include: {
+              paperApplications: {
+                include: {
+                  assets: true,
+                },
+              },
+            },
+          },
+          jurisdictions: true,
+          listingEvents: {
+            include: {
+              assets: true,
+            },
+          },
+          lastUpdatedByUser: true,
+          listingFeatures: true,
+          listingImages: {
+            include: {
+              assets: true,
+            },
+          },
+          listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
+            include: {
+              multiselectQuestions: true,
+            },
+          },
+          listingUtilities: true,
+          listingNeighborhoodAmenities: true,
+          listingsApplicationDropOffAddress: true,
+          listingsApplicationPickUpAddress: true,
+          listingsBuildingAddress: true,
+          listingsBuildingSelectionCriteriaFile: true,
+          listingsMarketingFlyerFile: true,
+          listingsAccessibleMarketingFlyerFile: true,
+          listingsApplicationMailingAddress: true,
+          listingsLeasingAgentAddress: true,
+          listingsResult: true,
+          property: true,
+          requestedChangesUser: true,
+          reservedCommunityTypes: true,
+          requiredDocumentsList: true,
+          parkType: true,
+          units: {
+            include: {
+              amiChart: {
+                include: {
+                  jurisdictions: true,
+                  unitGroupAmiLevels: true,
+                },
+              },
+              unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        data: {
+          name: 'example listing name',
+          contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
+          depositMin: '5',
+          assets: [
+            {
+              fileId: expect.anything(),
+              label: 'example asset',
+            },
+          ],
+
+          jurisdictions: {
+            connect: {
+              id: expect.anything(),
+            },
+          },
+          status: ListingsStatusEnum.active,
+          displayWaitlistSize: false,
+          unitsSummary: undefined,
+          listingEvents: {
+            create: [],
+          },
+          listingMultiselectQuestions: {
+            create: [
+              {
+                multiselectQuestionId: expect.anything(),
+                ordinal: 1,
+              },
+            ],
+          },
+          listingsBuildingSelectionCriteriaFile: {
+            disconnect: true,
+          },
+          listingsMarketingFlyerFile: {
+            disconnect: true,
+          },
+          listingsAccessibleMarketingFlyerFile: {
+            disconnect: true,
+          },
+          listingNeighborhoodAmenities: {
+            upsert: {
+              create: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+                busStops: null,
+                hospitals: null,
+                playgrounds: null,
+                recreationalFacilities: null,
+                seniorCenters: null,
+                shoppingVenues: null,
+              },
+              update: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+                busStops: null,
+                hospitals: null,
+                playgrounds: null,
+                recreationalFacilities: null,
+                seniorCenters: null,
+                shoppingVenues: null,
+              },
+              where: {
+                id: undefined,
+              },
+            },
+          },
+          publishedAt: expect.anything(),
+          section8Acceptance: false,
+          unitsAvailable: 0,
+          isVerified: false,
+        },
+        where: {
+          id: expect.anything(),
+        },
+      });
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        user,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+      );
+
+      expect(multiselectQuestionServiceMock.activateMany).toHaveBeenCalledWith([
+        {
+          id: expect.anything(),
+          status: MultiselectQuestionsStatusEnum.active,
+        },
+      ]);
+    });
+
+    it('should update a simple listing to closed with a toRetire multiselectQuestion when enableV2MSQ is true', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableV2MSQ,
+            active: true,
+          },
+        ],
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        listingMultiselectQuestions: [
+          {
+            id: randomUUID(),
+            multiselectQuestions: {
+              id: randomUUID(),
+              status: MultiselectQuestionsStatusEnum.active,
+            },
+            ordinal: 1,
+          },
+        ],
+        name: 'example name',
+        status: ListingsStatusEnum.active,
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        listingMultiselectQuestions: [
+          {
+            id: randomUUID(),
+            multiselectQuestions: {
+              id: randomUUID(),
+              status: MultiselectQuestionsStatusEnum.toRetire,
+            },
+            ordinal: 1,
+          },
+        ],
+        name: 'example name',
+        status: ListingsStatusEnum.closed,
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingEvents.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([]);
+      prisma.assets.delete = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        {
+          id: 'example id',
+          listingMultiselectQuestions: [
+            {
+              id: randomUUID(),
+              multiselectQuestions: {
+                id: randomUUID(),
+                status: MultiselectQuestionsStatusEnum.active,
+              },
+              ordinal: 1,
+            },
+          ],
+          name: 'example name',
+          status: ListingsStatusEnum.closed,
+        },
+      ]);
+
+      await service.update(
+        {
+          id: randomUUID(),
+          name: 'example listing name',
+          depositMin: '5',
+          assets: [
+            {
+              fileId: randomUUID(),
+              label: 'example asset',
+            },
+          ],
+          jurisdictions: {
+            id: randomUUID(),
+          },
+          listingMultiselectQuestions: [
+            {
+              id: randomUUID(),
+              ordinal: 1,
+            },
+          ],
+          status: ListingsStatusEnum.closed,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+          lastUpdatedByUser: user,
+        } as ListingUpdate,
+        user,
+      );
+
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        include: {
+          applicationMethods: {
+            include: {
+              paperApplications: {
+                include: {
+                  assets: true,
+                },
+              },
+            },
+          },
+          jurisdictions: true,
+          listingEvents: {
+            include: {
+              assets: true,
+            },
+          },
+          lastUpdatedByUser: true,
+          listingFeatures: true,
+          listingImages: {
+            include: {
+              assets: true,
+            },
+          },
+          listingMultiselectQuestions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
+            include: {
+              multiselectQuestions: true,
+            },
+          },
+          listingUtilities: true,
+          listingNeighborhoodAmenities: true,
+          listingsApplicationDropOffAddress: true,
+          listingsApplicationPickUpAddress: true,
+          listingsBuildingAddress: true,
+          listingsBuildingSelectionCriteriaFile: true,
+          listingsMarketingFlyerFile: true,
+          listingsAccessibleMarketingFlyerFile: true,
+          listingsApplicationMailingAddress: true,
+          listingsLeasingAgentAddress: true,
+          listingsResult: true,
+          property: true,
+          requestedChangesUser: true,
+          reservedCommunityTypes: true,
+          requiredDocumentsList: true,
+          parkType: true,
+          units: {
+            include: {
+              amiChart: {
+                include: {
+                  jurisdictions: true,
+                  unitGroupAmiLevels: true,
+                },
+              },
+              unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        data: {
+          name: 'example listing name',
+          contentUpdatedAt: expect.anything(),
+          closedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
+          depositMin: '5',
+          assets: [
+            {
+              fileId: expect.anything(),
+              label: 'example asset',
+            },
+          ],
+
+          jurisdictions: {
+            connect: {
+              id: expect.anything(),
+            },
+          },
+          status: ListingsStatusEnum.closed,
+          displayWaitlistSize: false,
+          unitsSummary: undefined,
+          listingEvents: {
+            create: [],
+          },
+          listingMultiselectQuestions: {
+            create: [
+              {
+                multiselectQuestionId: expect.anything(),
+                ordinal: 1,
+              },
+            ],
+          },
+          listingsBuildingSelectionCriteriaFile: {
+            disconnect: true,
+          },
+          listingsMarketingFlyerFile: {
+            disconnect: true,
+          },
+          listingsAccessibleMarketingFlyerFile: {
+            disconnect: true,
+          },
+          listingNeighborhoodAmenities: {
+            upsert: {
+              create: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+                busStops: null,
+                hospitals: null,
+                playgrounds: null,
+                recreationalFacilities: null,
+                seniorCenters: null,
+                shoppingVenues: null,
+              },
+              update: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+                busStops: null,
+                hospitals: null,
+                playgrounds: null,
+                recreationalFacilities: null,
+                seniorCenters: null,
+                shoppingVenues: null,
+              },
+              where: {
+                id: undefined,
+              },
+            },
+          },
+          section8Acceptance: false,
+          unitsAvailable: 0,
+          isVerified: false,
+        },
+        where: {
+          id: expect.anything(),
+        },
+      });
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        user,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+      );
+
+      expect(
+        multiselectQuestionServiceMock.retireMultiselectQuestions,
+      ).toHaveBeenCalled();
     });
   });
 
@@ -5312,7 +6443,7 @@ describe('Testing listing service', () => {
     });
 
     it('listingApprovalNotify listing approved email', async () => {
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
         id: randomUUID(),
         publicUrl: 'public.housing.gov',
       });
@@ -5410,7 +6541,7 @@ describe('Testing listing service', () => {
   });
 
   describe('Test closeListings endpoint', () => {
-    it('should call the purge if listings needed to get processed', async () => {
+    it('should call the purge and retireMultiselectQuestions if listings needed to get processed', async () => {
       prisma.listings.findMany = jest.fn().mockResolvedValue([
         {
           id: 'example id1',
@@ -5419,12 +6550,18 @@ describe('Testing listing service', () => {
           id: 'example id2',
         },
       ]);
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id1',
+      });
       prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 2 });
       prisma.activityLog.createMany = jest.fn().mockResolvedValue({ count: 2 });
       prisma.cronJob.findFirst = jest
         .fn()
         .mockResolvedValue({ id: randomUUID() });
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
 
       process.env.PROXY_URL = 'https://www.google.com';
       await service.closeListings();
@@ -5481,6 +6618,10 @@ describe('Testing listing service', () => {
       expect(prisma.cronJob.findFirst).toHaveBeenCalled();
       expect(prisma.cronJob.update).toHaveBeenCalled();
       process.env.PROXY_URL = undefined;
+      expect(
+        multiselectQuestionServiceMock.retireMultiselectQuestions,
+      ).toHaveBeenCalled();
+      expect(prisma.listingSnapshot.create).toHaveBeenCalledTimes(2);
     });
 
     it('should not call the purge if no listings needed to get processed', async () => {
@@ -5519,6 +6660,9 @@ describe('Testing listing service', () => {
         },
       ]);
       prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 2 });
+      prisma.listings.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: 'example id1' });
       prisma.activityLog.createMany = jest.fn().mockResolvedValue({ count: 2 });
       prisma.cronJob.findFirst = jest
         .fn()
@@ -5527,6 +6671,9 @@ describe('Testing listing service', () => {
       prisma.applications.updateMany = jest
         .fn()
         .mockResolvedValue({ count: 2 });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
 
       process.env.APPLICATION_DAYS_TILL_EXPIRY = '90';
       await service.closeListings();
@@ -5548,6 +6695,7 @@ describe('Testing listing service', () => {
           listingId: 'example id2',
         },
       });
+      expect(prisma.listingSnapshot.create).toHaveBeenCalledTimes(2);
       process.env.APPLICATION_DAYS_TILL_EXPIRY = null;
     });
   });
@@ -5692,6 +6840,123 @@ describe('Testing listing service', () => {
         where: {
           status: ListingsStatusEnum.active,
         },
+      });
+    });
+  });
+
+  describe('Test validateMultiselectQuestions helper', () => {
+    it('should pass with visible/active multiselectQuestions and no previous multiselectQuestions', async () => {
+      prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([
+        {
+          status: MultiselectQuestionsStatusEnum.active,
+        },
+        {
+          status: MultiselectQuestionsStatusEnum.visible,
+        },
+      ]);
+
+      const multiselectQuestionIds = [randomUUID(), randomUUID()];
+
+      await service.validateMultiselectQuestions(multiselectQuestionIds);
+
+      expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
+        select: { id: true, name: true, status: true },
+        where: { id: { in: multiselectQuestionIds } },
+      });
+    });
+
+    it('should pass with a toRetire multiselectQuestion that was previously attached', async () => {
+      const id = randomUUID();
+      prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([
+        {
+          id: id,
+          name: 'toRetire MSQ',
+          status: MultiselectQuestionsStatusEnum.toRetire,
+        },
+      ]);
+
+      const multiselectQuestionIds = [id];
+
+      await service.validateMultiselectQuestions(
+        multiselectQuestionIds,
+        multiselectQuestionIds,
+      );
+
+      expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
+        select: { id: true, name: true, status: true },
+        where: { id: { in: multiselectQuestionIds } },
+      });
+    });
+
+    it('should error with a toRetire multiselectQuestion that was not previously attached', async () => {
+      const id = randomUUID();
+      prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([
+        {
+          id: id,
+          name: 'toRetire MSQ',
+          status: MultiselectQuestionsStatusEnum.toRetire,
+        },
+      ]);
+
+      const multiselectQuestionIds = [id];
+
+      await expect(
+        async () =>
+          await service.validateMultiselectQuestions(multiselectQuestionIds, [
+            randomUUID(),
+          ]),
+      ).rejects.toThrowError(
+        `The following multiselectQuestions provided are not in a valid state to be associated to this listing: toRetire MSQ`,
+      );
+
+      expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
+        select: { id: true, name: true, status: true },
+        where: { id: { in: multiselectQuestionIds } },
+      });
+    });
+
+    it('should error with draft/toRetire/retired multiselectQuestions and no previous multiselectQuestions', async () => {
+      prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([
+        {
+          name: 'active MSQ',
+          status: MultiselectQuestionsStatusEnum.active,
+        },
+        {
+          name: 'draft MSQ',
+          status: MultiselectQuestionsStatusEnum.draft,
+        },
+        {
+          name: 'retired MSQ',
+          status: MultiselectQuestionsStatusEnum.retired,
+        },
+        {
+          name: 'toRetire MSQ',
+          status: MultiselectQuestionsStatusEnum.toRetire,
+        },
+        {
+          name: 'visible MSQ',
+          status: MultiselectQuestionsStatusEnum.visible,
+        },
+      ]);
+
+      const multiselectQuestionIds = [
+        randomUUID(),
+        randomUUID(),
+        randomUUID(),
+        randomUUID(),
+        randomUUID(),
+      ];
+
+      await expect(
+        async () =>
+          await service.validateMultiselectQuestions(multiselectQuestionIds),
+      ).rejects.toThrowError(
+        `The following multiselectQuestions provided are not in a valid state to be associated to this listing: draft MSQ, retired MSQ, toRetire MSQ`,
+      );
+
+      expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
+        select: { id: true, name: true, status: true },
+        where: { id: { in: multiselectQuestionIds } },
       });
     });
   });

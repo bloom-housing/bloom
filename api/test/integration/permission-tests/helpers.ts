@@ -41,16 +41,16 @@ import {
 import { ReservedCommunityTypeCreate } from '../../../src/dtos/reserved-community-types/reserved-community-type-create.dto';
 import { ReservedCommunityTypeUpdate } from '../../../src/dtos/reserved-community-types/reserved-community-type-update.dto';
 import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
-import { unitAccessibilityPriorityTypeFactorySingle } from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 import { multiselectQuestionFactory } from '../../../prisma/seed-helpers/multiselect-question-factory';
 import { ListingCreate } from '../../../src/dtos/listings/listing-create.dto';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
 import { MultiselectQuestionCreate } from '../../../src/dtos/multiselect-questions/multiselect-question-create.dto';
 import { MultiselectQuestionUpdate } from '../../../src/dtos/multiselect-questions/multiselect-question-update.dto';
-import { UserCreate } from '../../../src/dtos/users/user-create.dto';
-import { UserInvite } from '../../../src/dtos/users/user-invite.dto';
 import { AlternateContactRelationship } from '../../../src/enums/applications/alternate-contact-relationship-enum';
 import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
+import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/accessibility-priority-type-enum';
+import { PublicUserCreate } from '../../../src/dtos/users/public-user-create.dto';
+import { PartnerUserCreate } from '../../../src/dtos/users/partner-user-create.dto';
 
 export const generateJurisdiction = async (
   prisma: PrismaService,
@@ -116,6 +116,9 @@ export const buildJurisdictionCreateMock = (
     duplicateListingPermissions: [],
     requiredListingFields: [],
     visibleNeighborhoodAmenities: [],
+    regions: [],
+    visibleAccessibilityPriorityTypes: [],
+    visibleSpokenLanguages: [],
   };
 };
 
@@ -141,6 +144,9 @@ export const buildJurisdictionUpdateMock = (
     duplicateListingPermissions: [],
     requiredListingFields: [],
     visibleNeighborhoodAmenities: [],
+    regions: [],
+    visibleAccessibilityPriorityTypes: [],
+    visibleSpokenLanguages: [],
   };
 };
 
@@ -232,31 +238,33 @@ export const buildMultiselectQuestionUpdateMock = (
 export const buildUserCreateMock = (
   jurisId: string,
   email: string,
-): UserCreate => {
+): PublicUserCreate => {
   return {
     firstName: 'Public User firstName',
     lastName: 'Public User lastName',
     password: 'Abcdef12345!',
+    passwordConfirmation: 'Abcdef12345!',
+    dob: new Date(),
+    agreedToTermsOfService: true,
     email,
     jurisdictions: [{ id: jurisId }],
-  } as unknown as UserCreate;
+  };
 };
 
 export const buildUserInviteMock = (
   jurisId: string,
   email: string,
-): UserInvite => {
+): PartnerUserCreate => {
   return {
     firstName: 'Partner User firstName',
     lastName: 'Partner User lastName',
-    password: 'Abcdef12345!',
     email,
     jurisdictions: [{ id: jurisId }],
     agreedToTermsOfService: true,
     userRoles: {
       isAdmin: true,
     },
-  } as unknown as UserInvite;
+  };
 };
 
 export const buildApplicationCreateMock = (
@@ -312,6 +320,7 @@ export const buildApplicationCreateMock = (
       sexualOrientation: 'example sexual orientation',
       howDidYouHear: ['example how did you hear'],
       race: ['example race'],
+      spokenLanguage: 'example spoken language',
     },
     preferredUnitTypes: [
       {
@@ -409,6 +418,7 @@ export const buildApplicationUpdateMock = (
       sexualOrientation: 'example sexual orientation',
       howDidYouHear: ['example how did you hear'],
       race: ['example race'],
+      spokenLanguage: 'example spoken language',
     },
     preferredUnitTypes: [
       {
@@ -473,7 +483,7 @@ export const constructFullListingData = async (
     data: amiChartFactory(10, jurisdictionA.id),
   });
   const unitAccessibilityPriorityType =
-    await unitAccessibilityPriorityTypeFactorySingle(prisma);
+    UnitAccessibilityPriorityTypeEnum.mobility;
   const rentType = await prisma.unitRentTypes.create({
     data: unitRentTypeFactory(),
   });
@@ -536,9 +546,7 @@ export const constructFullListingData = async (
         amiChart: {
           id: amiChart.id,
         },
-        unitAccessibilityPriorityTypes: {
-          id: unitAccessibilityPriorityType.id,
-        },
+        accessibilityPriorityType: unitAccessibilityPriorityType,
         unitRentTypes: {
           id: rentType.id,
         },
@@ -583,9 +591,7 @@ export const constructFullListingData = async (
         floorMax: 10,
         sqFeetMin: '11',
         sqFeetMax: '12',
-        unitAccessibilityPriorityTypes: {
-          id: unitAccessibilityPriorityType.id,
-        },
+        accessibilityPriorityType: unitAccessibilityPriorityType,
         totalCount: 13,
         totalAvailable: 14,
       },

@@ -3,7 +3,6 @@
 # IMPORTANT: keep the 'run' layer below in sync.
 FROM node:22@sha256:23c24e85395992be118734a39903e08c8f7d1abc73978c46b6bda90060091a49 AS build
 
-
 # Create a non-root user to build (principle of least privilege).
 WORKDIR /build
 RUN groupadd --gid 2002 build && useradd --gid 2002 --uid 2002 --home /build build
@@ -33,7 +32,7 @@ RUN yarn build
 #
 # IMPORTANT: keep the 'build' layer above in sync.
 FROM node:22@sha256:23c24e85395992be118734a39903e08c8f7d1abc73978c46b6bda90060091a49 AS run
-WORKDIR /run
+WORKDIR /bloom_api
 
 # Copy over build artifacts.
 COPY --from=build /build/runtime_dependencies/ .
@@ -47,9 +46,9 @@ COPY --from=build /build/prisma/migrations ./prisma/migrations
 COPY --from=build /build/node_modules/.prisma ./node_modules/.prisma
 
 # Create a non-root user to run (principle of least privilege).
-WORKDIR /run
-RUN groupadd --gid 2002 run && useradd --gid 2002 --uid 2002 --home /run run
-RUN chown --recursive 2002:2002 /run
+WORKDIR /bloom_api
+RUN groupadd --gid 2002 bloom_api && useradd --gid 2002 --uid 2002 --home /bloom_api bloom_api
+RUN chown --recursive 2002:2002 /bloom_api
 USER 2002:2002
 
 # Run any DB migrations then start the server.

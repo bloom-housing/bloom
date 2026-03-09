@@ -1,11 +1,12 @@
 import React from "react"
+import { render } from "@testing-library/react"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ListingMultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { render } from "@testing-library/react"
 import { ListingContext } from "../../../../../src/components/listings/ListingContext"
 import DetailPrograms from "../../../../../src/components/listings/PaperListingDetails/sections/DetailPrograms"
 
@@ -22,6 +23,7 @@ describe("DetailPrograms", () => {
             text: "Families",
             applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
             jurisdictions: undefined,
+            status: MultiselectQuestionsStatusEnum.active,
           },
           ordinal: 1,
         },
@@ -63,6 +65,7 @@ describe("DetailPrograms", () => {
             text: "Community 1",
             applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
             jurisdictions: undefined,
+            status: MultiselectQuestionsStatusEnum.active,
           },
           ordinal: 1,
         },

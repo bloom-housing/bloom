@@ -1,6 +1,11 @@
 import { cleanup } from "@testing-library/react"
 import { renderToString } from "react-dom/server"
-import { UnitSummary, UnitTypeEnum, UnitGroupSummary } from "../../src/types/backend-swagger"
+import {
+  UnitSummary,
+  UnitTypeEnum,
+  UnitGroupSummary,
+  UnitAccessibilityPriorityTypeEnum,
+} from "../../src/types/backend-swagger"
 import {
   mergeSummaryRows,
   stackedUnitSummariesTable,
@@ -800,12 +805,7 @@ describe("getAvailabilityText", () => {
             sqFeet: "550",
             number: "101",
             numBathrooms: 1,
-            unitAccessibilityPriorityTypes: {
-              id: "a",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              name: "Mobility",
-            },
+            accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.mobility,
             unitTypes: { ...defaultUnitType, name: UnitTypeEnum.oneBdrm, numBedrooms: 1 },
           },
         ],
@@ -844,12 +844,7 @@ describe("getAvailabilityText", () => {
             sqFeet: "550",
             number: "101",
             numBathrooms: 1,
-            unitAccessibilityPriorityTypes: {
-              id: "a",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              name: "Mobility",
-            },
+            accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.mobility,
             unitTypes: { ...defaultUnitType, name: UnitTypeEnum.oneBdrm, numBedrooms: 1 },
           },
         ],
@@ -880,12 +875,7 @@ describe("getAvailabilityText", () => {
             sqFeet: "550",
             floor: 1,
             numBathrooms: 1,
-            unitAccessibilityPriorityTypes: {
-              id: "a",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              name: "Mobility",
-            },
+            accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.mobility,
             unitTypes: { ...defaultUnitType, name: UnitTypeEnum.oneBdrm, numBedrooms: 1 },
           },
         ],
@@ -916,12 +906,7 @@ describe("getAvailabilityText", () => {
             number: "101",
             floor: 1,
             numBathrooms: 1,
-            unitAccessibilityPriorityTypes: {
-              id: "a",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              name: "Mobility",
-            },
+            accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.mobility,
             unitTypes: { ...defaultUnitType, name: UnitTypeEnum.oneBdrm, numBedrooms: 1 },
           },
         ],
