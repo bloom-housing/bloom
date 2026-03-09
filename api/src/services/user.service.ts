@@ -1079,13 +1079,7 @@ export class UserService {
   ): Promise<SuccessDTO> {
     const requestingUser = mapTo(User, req['user']);
 
-    if (
-      !requestingUser?.userRoles ||
-      !(
-        requestingUser.userRoles?.isAdmin ||
-        requestingUser.userRoles?.isSuperAdmin
-      )
-    ) {
+    if (!requestingUser?.userRoles || !requestingUser.userRoles?.isAdmin) {
       throw new ForbiddenException(
         'Accepting advocates is only allowed for admin users',
       );
