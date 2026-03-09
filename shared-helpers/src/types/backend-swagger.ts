@@ -1893,6 +1893,20 @@ export class UserService {
     })
   }
   /**
+   * List advocate users in CSV
+   */
+  listAdvocatesAsCsv(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate/csv"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get the ids of the user favorites
    */
   favoriteListings(
@@ -8807,9 +8821,6 @@ export interface PublicUserCreate {
   additionalPhoneExtension?: string
 
   /**  */
-  isAdvocate?: boolean
-
-  /**  */
   isApproved?: boolean
 
   /**  */
@@ -8914,9 +8925,6 @@ export interface PartnerUserCreate {
   additionalPhoneExtension?: string
 
   /**  */
-  isAdvocate?: boolean
-
-  /**  */
   isApproved?: boolean
 
   /**  */
@@ -8986,9 +8994,6 @@ export interface AdvocateUserCreate {
 
   /**  */
   favoriteListings?: IdDTO[]
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   isApproved?: boolean
@@ -9087,9 +9092,6 @@ export interface PublicUserUpdate {
 
   /**  */
   additionalPhoneExtension?: string
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   isApproved?: boolean
@@ -9199,9 +9201,6 @@ export interface PartnerUserUpdate {
   additionalPhoneExtension?: string
 
   /**  */
-  isAdvocate?: boolean
-
-  /**  */
   isApproved?: boolean
 
   /**  */
@@ -9301,9 +9300,6 @@ export interface AdvocateUserUpdate {
 
   /**  */
   additionalPhoneExtension?: string
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   isApproved?: boolean
@@ -9432,9 +9428,6 @@ export interface User {
 
   /**  */
   additionalPhoneExtension?: string
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   isApproved?: boolean

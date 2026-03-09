@@ -11,7 +11,7 @@ import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import TabView from "../../layouts/TabView"
 import { getUsersTabs, UsersIndexEnum } from "../../components/users/UsersViewHelpers"
-import { useUserList, useUsersExport } from "../../lib/hooks"
+import { useAdvocateUserExport, useUserList } from "../../lib/hooks"
 
 const Advocates = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -22,9 +22,7 @@ const Advocates = () => {
   )
 
   const tableOptions = useAgTable()
-
-  //TODO (Advocate): Update this to use the new export function
-  const { onExport, csvExportLoading } = useUsersExport()
+  const { onExport, csvExportLoading } = useAdvocateUserExport()
 
   const columns = useMemo(() => {
     return [
