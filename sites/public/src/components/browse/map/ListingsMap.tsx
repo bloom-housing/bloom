@@ -50,7 +50,6 @@ const ListingsMap = (_props: ListingsMapProps) => {
     visibleMarkers,
     setVisibleMarkers,
     setIsLoading,
-    searchFilter,
     isFirstBoundsLoad,
     setIsFirstBoundsLoad,
     isDesktop,
@@ -63,7 +62,7 @@ const ListingsMap = (_props: ListingsMapProps) => {
 
   return (
     <div id={"listings-map"} className={styles["listings-map"]}>
-      <a className={styles["listings-map-skip-link"]} href={`#listingsList`}>
+      <a className={styles["listings-map-skip-link"]} href={"#listingsList"}>
         {t("t.skipMapOfListings")}
       </a>
       <Heading className={"sr-only"} priority={2}>
@@ -91,7 +90,6 @@ const ListingsMap = (_props: ListingsMapProps) => {
           setVisibleMarkers={setVisibleMarkers}
           visibleMarkers={visibleMarkers}
           setIsLoading={setIsLoading}
-          searchFilter={searchFilter}
           isFirstBoundsLoad={isFirstBoundsLoad}
           setIsFirstBoundsLoad={setIsFirstBoundsLoad}
           isDesktop={isDesktop}

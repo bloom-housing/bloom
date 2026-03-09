@@ -29,12 +29,7 @@ const ListingsCombined = () => {
 
   const getListingsList = () => {
     return (
-      <div
-        className={styles["listings-combined"]}
-        // onClick={() => setInfoWindowIndex(null)}
-        // onKeyDown={(e) => e.key === "Escape" && setInfoWindowIndex(null)}
-        // role="presentation"
-      >
+      <div className={styles["listings-combined"]}>
         <ListingsSearchMetadata />
         <div
           className={`${styles["listings-map-list-container"]} ${styles["listings-map-list-container-list-only"]}`}

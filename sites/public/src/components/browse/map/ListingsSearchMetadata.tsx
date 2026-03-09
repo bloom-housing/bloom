@@ -19,7 +19,7 @@ export const ListingsSearchMetadata = () => {
   const isInitialLoad = isLoading && searchResults.currentPage === 0
 
   return (
-    <section role="contentinfo" aria-label="Listing filter bar">
+    <section role="search" aria-label={t("search.filterBarLabel")}>
       <div className={`${styles["search-filter-bar"]} ${styles["search-switch-container"]}`}>
         <>
           <Button

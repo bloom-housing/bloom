@@ -7,7 +7,6 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import { Jurisdiction, ListingViews } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import { getBoundsZoomLevel } from "../../../lib/helpers"
-import { ListingSearchParams } from "../../../lib/listings/search"
 import { MapMarkerData } from "./ListingsMap"
 import { MapMarker } from "./MapMarker"
 import { MapListingCard } from "./MapListingCard"
@@ -20,7 +19,6 @@ export type ListingsMapMarkersProps = {
   visibleMarkers: MapMarkerData[]
   setVisibleMarkers: React.Dispatch<React.SetStateAction<MapMarkerData[]>>
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
-  searchFilter: ListingSearchParams
   isFirstBoundsLoad: boolean
   setIsFirstBoundsLoad: React.Dispatch<React.SetStateAction<boolean>>
   isDesktop: boolean
@@ -42,9 +40,8 @@ export const fitBounds = (
     })
   })
 
-  const visibleMarkers = mapMarkers?.filter((marker) =>
-    map.getBounds()?.contains(marker.coordinate)
-  )
+  const visibleMarkers =
+    mapMarkers?.filter((marker) => map.getBounds()?.contains(marker.coordinate)) ?? []
 
   if (!continueIfEmpty && visibleMarkers.length === 0) {
     return
