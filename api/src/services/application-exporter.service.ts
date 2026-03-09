@@ -231,6 +231,10 @@ export class ApplicationExporterService {
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableFullTimeStudentQuestion,
     );
+    const enableSpokenLanguage = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableSpokenLanguage,
+    );
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
@@ -261,6 +265,7 @@ export class ApplicationExporterService {
         enableAdaOtherOption,
         enableApplicationStatus,
         enableFullTimeStudentQuestion,
+        enableSpokenLanguage,
         enableV2MSQ,
         includeDemographics: queryParams.includeDemographics,
         swapCommunityTypeWithPrograms,
