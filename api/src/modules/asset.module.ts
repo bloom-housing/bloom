@@ -4,12 +4,12 @@ import { AssetController } from '../controllers/asset.controller';
 import { AssetService } from '../services/asset.service';
 import { CloudinaryService } from '../services/cloudinary.service';
 import { PermissionModule } from './permission.module';
-import { S3Service } from '../services/s3.service';
+import { S3Module } from './s3.module';
 
 @Module({
-  imports: [PermissionModule],
+  imports: [PermissionModule, S3Module],
   controllers: [AssetController],
-  providers: [AssetService, CloudinaryService, S3Service, ConfigService],
+  providers: [AssetService, CloudinaryService, ConfigService],
   exports: [AssetService],
 })
 export class AssetModule {}

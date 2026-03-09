@@ -4,7 +4,7 @@ import { ListingModule } from './listing.module';
 import { MultiselectQuestionModule } from './multiselect-question.module';
 import { PermissionModule } from './permission.module';
 import { PrismaModule } from './prisma.module';
-import { S3Service } from '../services/s3.service';
+import { S3Module } from './s3.module';
 
 @Global()
 @Module({
@@ -14,8 +14,9 @@ import { S3Service } from '../services/s3.service';
     ListingModule,
     MultiselectQuestionModule,
     PermissionModule,
+    S3Module,
   ],
-  providers: [ApplicationExporterService, S3Service],
+  providers: [ApplicationExporterService],
   exports: [ApplicationExporterService],
 })
 export class ApplicationExporterModule {}
