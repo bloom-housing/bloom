@@ -13,9 +13,12 @@ describe("ListingsSearchMetadata", () => {
   const setListView = jest.fn()
   const setFilterDrawerOpen = jest.fn()
 
+  const setInfoWindowIndex = jest.fn()
+
   const buildContext = (overrides = {}) => ({
     isLoading: false,
     setFilterDrawerOpen,
+    setInfoWindowIndex,
     filterCount: 3,
     searchResults: {
       listings: [],
@@ -63,7 +66,7 @@ describe("ListingsSearchMetadata", () => {
     expect(setListView).toHaveBeenCalledWith(true)
   })
 
-  it("opens filter drawer from desktop and mobile filter buttons", async () => {
+  it("opens filter drawer and closes info window from desktop and mobile filter buttons", async () => {
     render(<ListingsSearchMetadata />)
 
     const filterButtons = screen.getAllByRole("button", {
@@ -75,6 +78,8 @@ describe("ListingsSearchMetadata", () => {
 
     expect(setFilterDrawerOpen).toHaveBeenNthCalledWith(1, true)
     expect(setFilterDrawerOpen).toHaveBeenNthCalledWith(2, true)
+    expect(setInfoWindowIndex).toHaveBeenNthCalledWith(1, null)
+    expect(setInfoWindowIndex).toHaveBeenNthCalledWith(2, null)
   })
 
   it("renders total results and page metadata when not initial load", () => {

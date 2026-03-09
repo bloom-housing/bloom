@@ -15,8 +15,8 @@ import styles from "./ListingsCombined.module.scss"
 
 export type ListingsMapMarkersProps = {
   mapMarkers: MapMarkerData[] | null
-  infoWindowIndex: number
-  setInfoWindowIndex: React.Dispatch<React.SetStateAction<number>>
+  infoWindowIndex: number | null
+  setInfoWindowIndex: React.Dispatch<React.SetStateAction<number | null>>
   visibleMarkers: MapMarkerData[]
   setVisibleMarkers: React.Dispatch<React.SetStateAction<MapMarkerData[]>>
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>

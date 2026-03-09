@@ -8,8 +8,15 @@ import { useListingsMapContext } from "./ListingsMapContext"
 import styles from "./ListingsCombined.module.scss"
 
 const ListingsCombined = () => {
-  const { googleMapsApiKey, googleMapsMapId, listView, isDesktop, isLoading, isFirstBoundsLoad } =
-    useListingsMapContext()
+  const {
+    googleMapsApiKey,
+    googleMapsMapId,
+    listView,
+    isDesktop,
+    isLoading,
+    isFirstBoundsLoad,
+    setInfoWindowIndex,
+  } = useListingsMapContext()
 
   const apiIsLoaded = useApiIsLoaded()
 
@@ -22,7 +29,12 @@ const ListingsCombined = () => {
 
   const getListingsList = () => {
     return (
-      <div className={styles["listings-combined"]}>
+      <div
+        className={styles["listings-combined"]}
+        // onClick={() => setInfoWindowIndex(null)}
+        // onKeyDown={(e) => e.key === "Escape" && setInfoWindowIndex(null)}
+        // role="presentation"
+      >
         <ListingsSearchMetadata />
         <div
           className={`${styles["listings-map-list-container"]} ${styles["listings-map-list-container-list-only"]}`}
@@ -40,7 +52,12 @@ const ListingsCombined = () => {
 
   const getListingsMap = () => {
     return (
-      <div className={styles["listings-combined"]}>
+      <div
+        className={styles["listings-combined"]}
+        onClick={() => setInfoWindowIndex(null)}
+        onKeyDown={(e) => e.key === "Escape" && setInfoWindowIndex(null)}
+        role="presentation"
+      >
         <ListingsSearchMetadata />
         <div className={styles["listings-map-expanded"]}>
           <ListingsMap />
@@ -51,7 +68,12 @@ const ListingsCombined = () => {
 
   const getListingsCombined = () => {
     return (
-      <div className={styles["listings-combined"]}>
+      <div
+        className={styles["listings-combined"]}
+        onClick={() => setInfoWindowIndex(null)}
+        onKeyDown={(e) => e.key === "Escape" && setInfoWindowIndex(null)}
+        role="presentation"
+      >
         <ListingsSearchMetadata />
         <div className={styles["listings-map-list-container"]}>
           <div className={styles["listings-map"]}>

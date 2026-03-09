@@ -31,6 +31,8 @@ jest.mock("../../../../src/components/browse/map/ListingsList", () => ({
 }))
 
 describe("ListingsCombined", () => {
+  const setInfoWindowIndex = jest.fn()
+
   const buildContext = (overrides = {}) => ({
     googleMapsApiKey: "test-key",
     googleMapsMapId: "test-map-id",
@@ -38,6 +40,7 @@ describe("ListingsCombined", () => {
     isDesktop: false,
     isLoading: false,
     isFirstBoundsLoad: false,
+    setInfoWindowIndex,
     ...overrides,
   })
 

@@ -7,7 +7,7 @@ import { t } from "@bloom-housing/ui-components"
 import styles from "./MapControl.module.scss"
 
 type MapControlProps = {
-  setInfoWindowIndex?: React.Dispatch<React.SetStateAction<number>>
+  setInfoWindowIndex?: React.Dispatch<React.SetStateAction<number | null>>
 }
 
 const MapControl = (props: MapControlProps) => {
