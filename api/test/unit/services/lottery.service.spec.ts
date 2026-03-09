@@ -12,12 +12,6 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
-import { HttpModule } from '@nestjs/axios';
-import { Request as ExpressRequest, Response } from 'express';
-import { PrismaService } from '../../../src/services/prisma.service';
-import { ApplicationExporterService } from '../../../src/services/application-exporter.service';
-import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
-import { User } from '../../../src/dtos/users/user.dto';
 import { S3Service } from '../../../src/services/s3.service';
 import { mockApplicationSet } from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';

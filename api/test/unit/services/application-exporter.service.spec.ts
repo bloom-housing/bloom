@@ -6,8 +6,6 @@ import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
-import { ApplicationExporterService } from '../../../src/services/application-exporter.service';
-import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 import { S3Service } from '../../../src/services/s3.service';
 import {
   mockApplication,
