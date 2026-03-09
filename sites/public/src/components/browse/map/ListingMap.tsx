@@ -34,17 +34,17 @@ export const ListingMap = (props: ListingBrowseProps) => {
   const router = useRouter()
   const { profile, userService } = useContext(AuthContext)
 
+  const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
+
   useEffect(() => {
     pushGtmEvent<ListingList>({
       event: "pageView",
-      pageTitle: "Rent Affordable Housing - Housing Portal",
+      pageTitle: pageTitle,
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
       numberOfListings: props.listings?.length,
       listingIds: props.listings?.map((listing) => listing.id),
     })
-  }, [profile, props.listings, userService])
-
-  const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
+  }, [pageTitle, profile, props.listings, userService])
 
   // Map TODO: Dynamic jurisdictions
   let searchString = `jurisdictions:${props.jurisdiction.name}`

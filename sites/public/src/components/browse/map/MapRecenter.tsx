@@ -18,6 +18,7 @@ const MapRecenter = (props: MapRecenterProps) => {
   if (
     !map ||
     props.visibleMapMarkers === undefined ||
+    !props.mapMarkers ||
     props.visibleMapMarkers === props.mapMarkers.length ||
     props.isLoading
   )

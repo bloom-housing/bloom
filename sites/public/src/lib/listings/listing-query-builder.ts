@@ -10,10 +10,12 @@ type OrderBy = {
   direction: OrderByEnum
 }
 
-type OrderByParams = {
-  fields: ListingOrderByKeys[]
-  direction: OrderByEnum[]
-}
+type OrderByParams =
+  | {
+      fields: ListingOrderByKeys[]
+      direction: OrderByEnum[]
+    }
+  | undefined
 
 export class ListingQueryBuilder {
   filters: Filter[] = []
@@ -72,7 +74,7 @@ export class ListingQueryBuilder {
 
   getOrderByParams(): OrderByParams {
     if (this.orderBy.length < 1) {
-      return
+      return undefined
     }
 
     const params = {
