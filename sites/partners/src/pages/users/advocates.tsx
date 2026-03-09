@@ -1,11 +1,13 @@
 import React, { useContext, useMemo, useState } from "react"
 import { useSWRConfig } from "swr"
-import dayjs from "dayjs"
 import Head from "next/head"
+import dayjs from "dayjs"
+import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
 import CheckCircleIcon from "@heroicons/react/24/solid/CheckCircleIcon"
 import XCircleIcon from "@heroicons/react/24/solid/XCircleIcon"
-import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
-import { AgTable, t, useAgTable } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { Button, Dialog, Icon } from "@bloom-housing/ui-seeds"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { DialogFooter } from "@bloom-housing/ui-seeds/src/overlays/Dialog"
 import {
@@ -15,7 +17,6 @@ import {
   User,
   UserOrderByKeys,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Button, Dialog, Icon } from "@bloom-housing/ui-seeds"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import TabView from "../../layouts/TabView"

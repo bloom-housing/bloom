@@ -6,7 +6,8 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AgTable, t, useAgTable } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { Button, Tag } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import Head from "next/head"
