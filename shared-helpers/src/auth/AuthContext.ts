@@ -83,7 +83,7 @@ type ContextProps = {
     user: AdvocateUserCreate,
     listingIdRedirect?: string
   ) => Promise<User | undefined>
-  approveAdvocateUser: (userId: string, isAccpeted: boolean) => Promise<boolean | undefined>
+  approveAdvocateUser: (userId: string, isAccepted: boolean) => Promise<boolean | undefined>
   createPartnerUser: (user: PartnerUserCreate) => Promise<User | undefined>
   resendConfirmation: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
   initialStateLoaded?: boolean
