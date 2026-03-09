@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { Map } from "@vis.gl/react-google-maps"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
@@ -55,9 +55,9 @@ const ListingsMap = (_props: ListingsMapProps) => {
     setIsFirstBoundsLoad,
     isDesktop,
     isLoading,
+    infoWindowIndex,
+    setInfoWindowIndex,
   } = useListingsMapContext()
-
-  const [infoWindowIndex, setInfoWindowIndex] = useState<number>(null)
 
   const markers: MapMarkerData[] | null = getMarkers(searchResults.markers)
 

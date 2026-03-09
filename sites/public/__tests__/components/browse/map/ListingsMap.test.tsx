@@ -35,6 +35,8 @@ describe("ListingsMap", () => {
   const setIsLoading = jest.fn()
   const setIsFirstBoundsLoad = jest.fn()
 
+  const setInfoWindowIndex = jest.fn()
+
   const buildContext = (overrides = {}) => ({
     searchResults: {
       listings: [],
@@ -55,6 +57,8 @@ describe("ListingsMap", () => {
     setIsFirstBoundsLoad,
     isDesktop: true,
     isLoading: false,
+    infoWindowIndex: null,
+    setInfoWindowIndex,
     ...overrides,
   })
 

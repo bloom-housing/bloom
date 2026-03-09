@@ -43,6 +43,8 @@ export type ListingsMapContextValue = {
   setFilterDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
   filterCount: number
   onPageChange: (page: number) => void
+  infoWindowIndex: number | null
+  setInfoWindowIndex: React.Dispatch<React.SetStateAction<number | null>>
 }
 
 export const ListingsMapContext = createContext<ListingsMapContextValue | null>(null)

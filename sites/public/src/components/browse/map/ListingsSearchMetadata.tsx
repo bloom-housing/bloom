@@ -6,8 +6,15 @@ import { useListingsMapContext } from "./ListingsMapContext"
 import styles from "./ListingsSearch.module.scss"
 
 export const ListingsSearchMetadata = () => {
-  const { isLoading, setFilterDrawerOpen, filterCount, searchResults, setListView, listView } =
-    useListingsMapContext()
+  const {
+    isLoading,
+    setFilterDrawerOpen,
+    setInfoWindowIndex,
+    filterCount,
+    searchResults,
+    setListView,
+    listView,
+  } = useListingsMapContext()
 
   const isInitialLoad = isLoading && searchResults.currentPage === 0
 
@@ -39,6 +46,7 @@ export const ListingsSearchMetadata = () => {
             size="sm"
             className={`results-bar-button ${styles["switch-view-button"]} ${styles["filter-desktop"]}`}
             onClick={() => {
+              setInfoWindowIndex(null)
               setFilterDrawerOpen(true)
             }}
             leadIcon={
@@ -78,6 +86,7 @@ export const ListingsSearchMetadata = () => {
           size="sm"
           className={`results-bar-button ${styles["filter-mobile"]}`}
           onClick={() => {
+            setInfoWindowIndex(null)
             setFilterDrawerOpen(true)
           }}
           id={"listings-map-filter-button"}

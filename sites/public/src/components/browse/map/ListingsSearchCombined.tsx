@@ -35,6 +35,7 @@ function ListingsSearchCombined() {
   const [isDesktop, setIsDesktop] = useState(undefined)
   const [isLoading, setIsLoading] = useState(true)
   const [isFirstBoundsLoad, setIsFirstBoundsLoad] = useState<boolean>(true)
+  const [infoWindowIndex, setInfoWindowIndex] = useState<number | null>(null)
   const hasCompletedInitialListingsCallRef = useRef(false)
   const listingsVarsRef = useRef<HTMLDivElement>(null)
 
@@ -358,6 +359,8 @@ function ListingsSearchCombined() {
     setFilterDrawerOpen: setIsFilterDrawerOpen,
     filterCount,
     onPageChange,
+    infoWindowIndex,
+    setInfoWindowIndex,
   }
 
   return (
