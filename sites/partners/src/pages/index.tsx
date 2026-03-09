@@ -6,15 +6,8 @@ import { useForm } from "react-hook-form"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
 import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
-import {
-  t,
-  AgTable,
-  useAgTable,
-  Select,
-  Form,
-  SelectOption,
-  Field,
-} from "@bloom-housing/ui-components"
+import { t, Select, Form, SelectOption, Field } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,

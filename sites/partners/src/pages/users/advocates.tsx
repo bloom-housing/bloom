@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from "react"
 import Head from "next/head"
-import { useRouter } from "next/router"
-import { AgTable, t, useAgTable } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Icon } from "@bloom-housing/ui-seeds"
@@ -15,7 +15,6 @@ import { useAdvocateUserExport, useUserList } from "../../lib/hooks"
 
 const Advocates = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
-  const router = useRouter()
 
   const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableHousingAdvocate
