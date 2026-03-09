@@ -39,6 +39,7 @@ import { EmailService } from './email.service';
 import { PublicLotteryResult } from '../../src/dtos/lottery/lottery-public-result.dto';
 import { PublicLotteryTotal } from '../../src/dtos/lottery/lottery-public-total.dto';
 import { CronJobService } from './cron-job.service';
+import { SnapshotCreateService } from './snapshot-create.service';
 
 const LOTTERY_CRON_JOB_NAME = 'LOTTERY_CRON_JOB';
 const LOTTERY_PUBLISH_CRON_JOB_NAME = 'LOTTERY_PUBLISH_CRON_JOB';
@@ -62,6 +63,7 @@ export class LotteryService {
     private logger = new Logger(LotteryService.name),
     private permissionService: PermissionService,
     private cronJobService: CronJobService,
+    private snapshotCreateService: SnapshotCreateService,
   ) {}
 
   onModuleInit() {
@@ -326,7 +328,7 @@ export class LotteryService {
     } else {
       updateData = { lotteryStatus: status };
     }
-
+    await this.snapshotCreateService.createListingSnapshot(listingId);
     const res = await this.prisma.listings.update({
       data: updateData,
       where: {
@@ -743,7 +745,9 @@ export class LotteryService {
         },
       });
       const listingIds = listings.map((listing) => listing.id);
-
+      for (let i = 0; i < listingIds.length; i++) {
+        await this.snapshotCreateService.createListingSnapshot(listingIds[i]);
+      }
       const res = await this.prisma.listings.updateMany({
         data: {
           lotteryStatus: LotteryStatusEnum.expired,
