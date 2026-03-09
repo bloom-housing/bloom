@@ -12,7 +12,10 @@ import styles from "./ListingsSearch.module.scss"
 import { ListingsCombined } from "./ListingsCombined"
 import { MapMarkerData } from "./ListingsMap"
 import { searchListings, searchMapMarkers } from "../../../lib/hooks"
-import { ListingViews } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ListingFilterParams,
+  ListingViews,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FilterDrawer } from "../FilterDrawer"
 import { encodeFilterDataToBackendFilters, FilterData } from "../FilterDrawerHelpers"
 import { ListingsMapContext } from "./ListingsMapContext"
@@ -27,7 +30,7 @@ function ListingsSearchCombined() {
   const { profile, listingsService } = useContext(AuthContext)
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false)
   const [filterCount, setFilterCount] = useState(0)
-  const [drawerFilters, setDrawerFilters] = useState([])
+  const [drawerFilters, setDrawerFilters] = useState<ListingFilterParams[]>([])
   const [filterState, setFilterState] = useState<FilterData>({})
   const [listView, setListView] = useState<boolean>(true)
   const [visibleMarkers, setVisibleMarkers] = useState<MapMarkerData[]>(null)

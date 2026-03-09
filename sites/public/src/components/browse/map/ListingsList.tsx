@@ -1,6 +1,6 @@
 import * as React from "react"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
-import { LoadingOverlay, t, InfoCard } from "@bloom-housing/ui-components"
+import { Heading } from "@bloom-housing/ui-seeds"
+import { LoadingOverlay, t } from "@bloom-housing/ui-components"
 import { getMapListings } from "../../../lib/helpers"
 import { Pagination } from "./Pagination"
 import { useListingsMapContext } from "./ListingsMapContext"
@@ -50,26 +50,7 @@ const ListingsList = (props: ListingsListProps) => {
     </div>
   )
 
-  const infoCards = (
-    <div className={styles["info-cards-container"]}>
-      {process.env.notificationsSignUpUrl && (
-        <InfoCard
-          title={t("t.signUpForAlerts")}
-          subtitle={t("t.subscribeToListingAlerts")}
-          className="is-normal-primary-lighter"
-        >
-          <Button
-            href={process.env.notificationsSignUpUrl}
-            className="is-primary"
-            hideExternalLinkIcon={true}
-          >
-            {t("t.signUp")}
-          </Button>
-        </InfoCard>
-      )}
-      {/* // Map TODO: Create customizable info cards */}
-    </div>
-  )
+  const infoCards = <div>{/* // Map TODO: Create customizable info cards */}</div>
 
   const pagination =
     searchResults.lastPage !== 0 ? (

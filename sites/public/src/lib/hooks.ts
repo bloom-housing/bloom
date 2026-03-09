@@ -398,7 +398,6 @@ export async function fetchAgencies(req: any, jurisdictionId: string) {
   }
 }
 
-// Map TODO: Actually search
 export const searchListings = async (
   qb: ListingQueryBuilder,
   limit: number | "all" = "all",
