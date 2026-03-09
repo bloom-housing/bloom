@@ -1106,7 +1106,7 @@ export class UserService {
       );
     }
 
-    // Make sure that the found user is and advocate
+    // Make sure that the found user is an advocate
     if (!targetUser.isAdvocate) {
       throw new BadRequestException(
         `The user with id ${dto.advocateId.id} is not an advocate`,
