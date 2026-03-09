@@ -31,7 +31,7 @@ export type ListingSearchParams = {
  * @param search
  * @returns
  */
-export function parseSearchString<T extends object>(search: string, format: T): T {
+export function parseSearchString<T extends object>(search: string, format: T): T | undefined {
   // format: name:value;otherName:arrayVal1,arrayVal2
 
   // Fail fast on empty string

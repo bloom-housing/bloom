@@ -1,7 +1,7 @@
 .map-control {
-  --control-border-color: var(--bloom-color-primary);
-  --control-border-radius: var(--bloom-rounded-full);
-  --control-border-width: var(--bloom-border-2);
+  --control-border-color: var(--seeds-color-primary);
+  --control-border-radius: var(--seeds-rounded-full);
+  --control-border-width: var(--seeds-border-2);
 
   z-index: 1;
   display: flex;
@@ -13,7 +13,7 @@
   .control-style {
     background-color: rgba(255, 255, 255, 0.85);
     border-color: var(--control-border-color);
-    padding: var(--bloom-s1);
+    padding: var(--seeds-s1);
 
     .control-icon {
       margin: -0.125em;

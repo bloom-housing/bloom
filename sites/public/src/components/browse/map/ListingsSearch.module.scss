@@ -31,7 +31,7 @@
   position: relative;
   right: 0px;
   z-index: calc(var(--seeds-z-index-overlay) - 1);
-  background: white;
+  background: var(--seeds-bg-color-surface);
   padding-inline: var(--seeds-s4);
   padding-block: var(--seeds-s1);
   gap: var(--seeds-s6);

@@ -1,5 +1,5 @@
 import React from "react"
-import { useJsApiLoader } from "@react-google-maps/api"
+import { useApiIsLoaded } from "@vis.gl/react-google-maps"
 import CustomSiteFooter from "../../shared/CustomSiteFooter"
 import { ListingsSearchMetadata } from "./ListingsSearchMetadata"
 import { ListingsMap } from "./ListingsMap"
@@ -11,11 +11,9 @@ const ListingsCombined = () => {
   const { googleMapsApiKey, googleMapsMapId, listView, isDesktop, isLoading, isFirstBoundsLoad } =
     useListingsMapContext()
 
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey,
-  })
+  const apiIsLoaded = useApiIsLoaded()
 
-  if (!isLoaded) return <></>
+  if (!apiIsLoaded) return <></>
 
   const getListLoading = () => {
     if (!googleMapsApiKey || !googleMapsMapId || !isLoading) return false

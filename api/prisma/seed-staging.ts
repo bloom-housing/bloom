@@ -1507,25 +1507,27 @@ export const stagingSeed = async (
   ];
 
   if (large) {
-    Object.values(stagingRealisticAddresses).forEach(async (addr, index) => {
-      const listing = await listingFactory(
-        jurisdictionIds[index % jurisdictionIds.length],
-        prismaClient,
-        {
-          amiChart: amiChart,
-          // simulates a wide spread of listing sizes, but with a bias towards smaller listings since those are more common in real life
-          numberOfUnits:
-            Math.random() < 0.9 ? randomInt(1, 10) : randomInt(10, 200),
-          digitalApp: !!(index % 2),
-          status: ListingsStatusEnum.active,
-          address: addr,
-          publishedAt: dayjs(new Date()).subtract(5, 'days').toDate(),
-        },
-      );
-      await prismaClient.listings.create({
-        data: listing,
-      });
-    });
+    await Promise.all(
+      Object.values(stagingRealisticAddresses).map(async (addr, index) => {
+        const listing = await listingFactory(
+          jurisdictionIds[index % jurisdictionIds.length],
+          prismaClient,
+          {
+            amiChart: amiChart,
+            // simulates a wide spread of listing sizes, but with a bias towards smaller listings since those are more common in real life
+            numberOfUnits:
+              Math.random() < 0.9 ? randomInt(1, 10) : randomInt(10, 200),
+            digitalApp: !!(index % 2),
+            status: ListingsStatusEnum.active,
+            address: addr,
+            publishedAt: dayjs(new Date()).subtract(5, 'days').toDate(),
+          },
+        );
+        await prismaClient.listings.create({
+          data: listing,
+        });
+      }),
+    );
   } else {
     listingsToCreate.map(async (params, index) => {
       console.log(`Adding listing - ${params[2].listing?.name}`);

@@ -58,6 +58,7 @@ module.exports = withBundleAnalyzer({
     reCaptchaKey: process.env.RECAPTCHA_KEY,
     maxBrowseListings: process.env.MAX_BROWSE_LISTINGS,
     rtlLanguages: "ar,fa",
+    //  The `googleMapsApiKey` environment variable is exposed to the client-side and used directly in components (ListingMap.tsx). While Google Maps API keys for browser use are expected to be public, they MUST be restricted by HTTP referrer in the Google Cloud Console to prevent unauthorized usage and quota theft.
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     googleMapsMapId: process.env.GOOGLE_MAPS_MAP_ID,
   },

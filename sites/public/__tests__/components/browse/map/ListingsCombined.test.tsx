@@ -1,14 +1,14 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
-import { useJsApiLoader } from "@react-google-maps/api"
+import { useApiIsLoaded } from "@vis.gl/react-google-maps"
 import { ListingsCombined } from "../../../../src/components/browse/map/ListingsCombined"
 import { useListingsMapContext } from "../../../../src/components/browse/map/ListingsMapContext"
 
 const listingsListMock = jest.fn()
 
 // These mocks enable us to just test the branching logic in ListingsCombined without worrying about the internal implementation of the children, which are tested separately
-jest.mock("@react-google-maps/api", () => ({
-  useJsApiLoader: jest.fn(),
+jest.mock("@vis.gl/react-google-maps", () => ({
+  useApiIsLoaded: jest.fn(),
 }))
 
 jest.mock("../../../../src/components/browse/map/ListingsMapContext", () => ({
@@ -43,12 +43,12 @@ describe("ListingsCombined", () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useJsApiLoader as jest.Mock).mockReturnValue({ isLoaded: true })
+    ;(useApiIsLoaded as jest.Mock).mockReturnValue(true)
     ;(useListingsMapContext as jest.Mock).mockReturnValue(buildContext())
   })
 
   it("renders nothing until Google Maps API is loaded", () => {
-    ;(useJsApiLoader as jest.Mock).mockReturnValue({ isLoaded: false })
+    ;(useApiIsLoaded as jest.Mock).mockReturnValue(false)
 
     const { container } = render(<ListingsCombined />)
 

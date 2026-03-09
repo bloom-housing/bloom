@@ -5,6 +5,7 @@ import { MarkerClusterer, SuperClusterAlgorithm } from "@googlemaps/markercluste
 import { useRouter } from "next/router"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { Jurisdiction, ListingViews } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { t } from "@bloom-housing/ui-components"
 import { getBoundsZoomLevel } from "../../../lib/helpers"
 import { ListingSearchParams } from "../../../lib/listings/search"
 import { MapMarkerData } from "./ListingsMap"
@@ -66,7 +67,7 @@ const animateZoom = (
   panTo?: google.maps.LatLngLiteral
 ) => {
   const currentZoom = map.getZoom()
-  if (currentZoom >= targetZoom) return
+  if (currentZoom === null || currentZoom >= targetZoom) return
   if (currentZoom !== targetZoom) {
     google.maps.event.addListenerOnce(map, "zoom_changed", () => {
       animateZoom(map, targetZoom)
@@ -347,7 +348,7 @@ export const MapClusterer = ({
             map,
             position: cluster.position,
             content: clusterMarker,
-            title: `${cluster.count} listings in this cluster`,
+            title: t("listings.map.clusterTitle", { count: cluster.count }),
           })
         },
       },

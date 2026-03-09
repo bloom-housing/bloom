@@ -417,6 +417,7 @@ export const getMapListings = (listings: Listing[]) => {
       {listings.map((listing, index) => {
         return (
           <MapListingCard
+            key={index}
             listing={listing}
             index={index}
             jurisdiction={listing.jurisdictions as Jurisdiction}

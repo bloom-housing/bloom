@@ -94,7 +94,7 @@ export const MapListingCard = ({
           <div className={styles["listing-card-content"]}>
             <div className={styles["details"]}>
               <Link
-                id="listing-seeds-link"
+                id={`listing-seeds-link-${listing.id}`}
                 className={styles["main-link"]}
                 href={`/listing/${listing.id}/${listing.urlSlug}`}
               >
