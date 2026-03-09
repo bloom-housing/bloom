@@ -34,10 +34,11 @@
     "setup:dev": "yarn install && yarn prisma generate && yarn build && yarn db:setup"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.758.0",
-    "@aws-sdk/lib-storage": "^3.758.0",
-    "@aws-sdk/rds-signer": "^3.758.0",
-    "@aws-sdk/s3-request-presigner": "^3.750.0",
+    "@aws-sdk/client-s3": "^3.1003.0",
+    "@aws-sdk/client-sesv2": "^3.1003.0",
+    "@aws-sdk/lib-storage": "^3.1003.0",
+    "@aws-sdk/rds-signer": "^3.1003.0",
+    "@aws-sdk/s3-request-presigner": "^3.1003.0",
     "@google-cloud/recaptcha-enterprise": "^6.3.0",
     "@google-cloud/translate": "^9.2.0",
     "@nestjs/axios": "^3.0.3",

@@ -101,10 +101,14 @@ describe("Account Listing View", () => {
               vision: true,
               hearing: true,
             },
+            listings: {
+              id: "123",
+              name: "Archer Studios",
+            },
           })
         )
       }),
-      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
+      rest.get("http://localhost/api/adapter/listings/123", (_req, res, ctx) => {
         return res(ctx.json(listing))
       })
     )

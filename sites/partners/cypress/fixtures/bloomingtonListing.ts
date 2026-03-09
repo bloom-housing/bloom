@@ -1,8 +1,7 @@
 import {
   HomeTypeEnum,
   UnitType,
-  UnitAccessibilityPriorityType,
-  Unit,
+  UnitAccessibilityPriorityTypeEnum,
   ListingEventsTypeEnum,
   ListingUtilities,
   ListingFeatures,
@@ -11,9 +10,39 @@ import {
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
   ListingNeighborhoodAmenities,
+  MultiselectQuestionsApplicationSectionEnum,
+  ListingMultiselectQuestion,
+  FeatureFlagEnum,
+  FeatureFlag,
+  Jurisdiction,
+  ListingFeaturesConfiguration,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { CypressAddress, CypressListing } from "./cypressListingHelpers"
+import { CypressAddress, CypressListing, CypressUnit } from "./cypressListingHelpers"
 
+const listingFeaturesConfiguration: ListingFeaturesConfiguration = {
+  fields: [
+    { id: "wheelchairRamp" },
+    { id: "elevator" },
+    { id: "serviceAnimalsAllowed" },
+    { id: "accessibleParking" },
+    { id: "parkingOnSite" },
+    { id: "inUnitWasherDryer" },
+    { id: "laundryInBuilding" },
+    { id: "barrierFreeEntrance" },
+    { id: "rollInShower" },
+    { id: "grabBars" },
+    { id: "heatingInUnit" },
+    { id: "acInUnit" },
+    { id: "hearing" },
+    { id: "mobility" },
+    { id: "visual" },
+    { id: "barrierFreeUnitEntrance" },
+    { id: "loweredLightSwitch" },
+    { id: "barrierFreeBathroom" },
+    { id: "wideDoorways" },
+    { id: "loweredCabinets" },
+  ],
+}
 export const bloomingtonListing: CypressListing = {
   id: "1",
   createdAt: new Date(),
@@ -22,9 +51,17 @@ export const bloomingtonListing: CypressListing = {
   displayWaitlistSize: false,
   assets: [],
   applicationLotteryTotals: [],
+  jurisdiction: {
+    id: "Bloomington",
+    featureFlags: [
+      { name: FeatureFlagEnum.enableUtilitiesIncluded, active: true } as FeatureFlag,
+      { name: FeatureFlagEnum.enableNeighborhoodAmenities, active: true } as FeatureFlag,
+      { name: FeatureFlagEnum.enableHomeType, active: true } as FeatureFlag,
+    ],
+    listingFeaturesConfiguration: listingFeaturesConfiguration,
+  } as Jurisdiction,
   jurisdictions: { id: "Bloomington" },
-  "jurisdiction.id": "Bloomington",
-  name: "Basic Test Listing",
+  name: "Basic Test Listing Bloomington",
   developer: "Basic Test Developer",
   listingsBuildingAddress: {
     street: "548 Market St. #59930",
@@ -38,6 +75,22 @@ export const bloomingtonListing: CypressListing = {
   reservedCommunityTypes: {
     id: "Seniors",
   },
+  listingMultiselectQuestions: [
+    {
+      multiselectQuestions: {
+        name: "Work in the city",
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+        description: "At least one member of my household works in the city",
+      },
+    } as ListingMultiselectQuestion,
+    {
+      multiselectQuestions: {
+        name: "Veteran",
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        description: "Have you or anyone in your household served in the US military?",
+      },
+    } as ListingMultiselectQuestion,
+  ],
   reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
   disableUnitsAccordion: true,
   includeCommunityDisclaimer: true,
@@ -57,8 +110,9 @@ export const bloomingtonListing: CypressListing = {
       maxOccupancy: 2,
       monthlyIncomeMin: "900",
       monthlyRent: "1000",
-      unitAccessibilityPriorityTypes: { id: "Visual" } as UnitAccessibilityPriorityType,
-    } as Unit,
+      accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.vision,
+      accessibilityPriorityTypeLabel: "Vision",
+    } as CypressUnit,
   ],
   applicationFee: "4",
   depositMin: "2",
@@ -67,8 +121,8 @@ export const bloomingtonListing: CypressListing = {
   amenities: "Basic Amenity Info",
   accessibility: "Basic Accessibility Info",
   unitAmenities: "Basic Unit Amenity Info",
-  smokingPolicy: "No Thanks",
-  petPolicy: "Pets welcome. Please send in pictures, they aren't required, we just like pictures",
+  smokingPolicy: "No smoking allowed",
+  petPolicy: "Pets welcome",
   servicesOffered: "Basic Services",
   creditHistory: "Basic Credit History",
   rentalHistory: "Basic Rental History",
@@ -90,6 +144,7 @@ export const bloomingtonListing: CypressListing = {
     state: "California",
     abbreviatedState: "CA",
   } as CypressAddress,
+  managementWebsite: "https://www.exygy.com",
   applicationMailingAddressType: undefined,
   listingsApplicationMailingAddress: {
     street: "123 Main St.",
@@ -99,6 +154,24 @@ export const bloomingtonListing: CypressListing = {
     zipCode: "47408",
     abbreviatedState: "IN",
   } as CypressAddress,
+  listingsApplicationDropOffAddress: {
+    street: "456 Elm St.",
+    street2: "Suite 5C",
+    city: "Bloomington",
+    state: "Indiana",
+    zipCode: "47408",
+    abbreviatedState: "IN",
+  } as CypressAddress,
+  listingsApplicationPickUpAddress: {
+    street: "789 Oak St.",
+    street2: "Floor 2",
+    city: "Bloomington",
+    state: "Indiana",
+    zipCode: "47408",
+    abbreviatedState: "IN",
+  } as CypressAddress,
+  applicationPickUpAddressOfficeHours: "Pick up office hours",
+  applicationDropOffAddressOfficeHours: "Drop off office hours",
   additionalApplicationSubmissionNotes: "Basic Additional Application Submission Notes",
   events: [
     {
@@ -152,7 +225,11 @@ export const bloomingtonListing: CypressListing = {
     { key: "visual", translation: "Units for those with vision accessibility needs" },
   ],
   applicationMethods: [
-    { type: ApplicationMethodsTypeEnum.Referral, phoneNumber: "520-245-8811" } as ApplicationMethod,
+    {
+      type: ApplicationMethodsTypeEnum.Referral,
+      phoneNumber: "520-245-8811",
+      externalReference: "Referral summary description",
+    } as ApplicationMethod,
     {
       type: ApplicationMethodsTypeEnum.ExternalLink,
       externalReference: "https://www.exygy.com",

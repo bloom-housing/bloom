@@ -41,10 +41,6 @@ import {
   unitTypeFactorySingle,
 } from '../../prisma/seed-helpers/unit-type-factory';
 import { amiChartFactory } from '../../prisma/seed-helpers/ami-chart-factory';
-import {
-  unitAccessibilityPriorityTypeFactoryAll,
-  unitAccessibilityPriorityTypeFactorySingle,
-} from '../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 import { unitRentTypeFactory } from '../../prisma/seed-helpers/unit-rent-type-factory';
 import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
 import {
@@ -56,6 +52,7 @@ import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
 import { EmailService } from '../../src/services/email.service';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { unitFactorySingle } from '../../prisma/seed-helpers/unit-factory';
+import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessibility-priority-type-enum';
 import { FilterAvailabilityEnum } from '../../src/enums/listings/filter-availability-enum';
 import { unitGroupFactorySingle } from '../../prisma/seed-helpers/unit-group-factory';
 import { randomName } from '../../prisma/seed-helpers/word-generator';
@@ -140,7 +137,6 @@ describe('Listing Controller Tests', () => {
     });
     jurisdictionAId = jurisdiction.id;
     await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
-    await unitAccessibilityPriorityTypeFactoryAll(prisma);
     const adminUser = await prisma.userAccounts.create({
       data: await userFactory({
         roles: {
@@ -217,8 +213,6 @@ describe('Listing Controller Tests', () => {
     const amiChart = await prisma.amiChart.create({
       data: amiChartFactory(10, jurisdictionA.id),
     });
-    const unitAccessibilityPriorityType =
-      await unitAccessibilityPriorityTypeFactorySingle(prisma);
 
     const rentType = await prisma.unitRentTypes.create({
       data: unitRentTypeFactory(),
@@ -322,9 +316,8 @@ describe('Listing Controller Tests', () => {
                 amiChart: {
                   id: amiChart.id,
                 },
-                unitAccessibilityPriorityTypes: {
-                  id: unitAccessibilityPriorityType.id,
-                },
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.mobility,
                 unitRentTypes: {
                   id: rentType.id,
                 },
@@ -347,9 +340,8 @@ describe('Listing Controller Tests', () => {
                 floorMax: 10,
                 sqFeetMin: '11',
                 sqFeetMax: '12',
-                unitAccessibilityPriorityTypes: {
-                  id: unitAccessibilityPriorityType.id,
-                },
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.mobility,
                 totalCount: 13,
                 totalAvailable: 14,
               },
@@ -645,21 +637,45 @@ describe('Listing Controller Tests', () => {
     let jurisdictionB;
     let jurisdictionC;
     let jurisdictionDWithUnitGroups;
-    let multiselectQuestionPreference;
+    let multiselectQuestionPreference1;
+    let multiselectQuestionPreference2;
+    let multiselectQuestionPreference3;
     let multiselectQuestionProgram;
 
     beforeAll(async () => {
       jurisdictionB = await prisma.jurisdictions.create({
         data: jurisdictionFactory(`filterableList B ${randomName()}`),
       });
-      multiselectQuestionPreference = await prisma.multiselectQuestions.create({
-        data: multiselectQuestionFactory(jurisdictionB.id, {
-          multiselectQuestion: {
-            applicationSection:
-              MultiselectQuestionsApplicationSectionEnum.preferences,
-          },
-        }),
-      });
+      multiselectQuestionPreference1 = await prisma.multiselectQuestions.create(
+        {
+          data: multiselectQuestionFactory(jurisdictionB.id, {
+            multiselectQuestion: {
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.preferences,
+            },
+          }),
+        },
+      );
+      multiselectQuestionPreference3 = await prisma.multiselectQuestions.create(
+        {
+          data: multiselectQuestionFactory(jurisdictionB.id, {
+            multiselectQuestion: {
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.preferences,
+            },
+          }),
+        },
+      );
+      multiselectQuestionPreference2 = await prisma.multiselectQuestions.create(
+        {
+          data: multiselectQuestionFactory(jurisdictionB.id, {
+            multiselectQuestion: {
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.preferences,
+            },
+          }),
+        },
+      );
       multiselectQuestionProgram = await prisma.multiselectQuestions.create({
         data: multiselectQuestionFactory(jurisdictionB.id, {
           multiselectQuestion: {
@@ -669,6 +685,7 @@ describe('Listing Controller Tests', () => {
         }),
       });
       const listing1Input = await listingFactory(jurisdictionB.id, prisma, {
+        enableListingFeaturesAndUtilities: true,
         listing: {
           homeType: HomeTypeEnum.apartment,
           isVerified: true,
@@ -676,7 +693,11 @@ describe('Listing Controller Tests', () => {
           region: RegionEnum.Eastside,
           section8Acceptance: false,
         } as Prisma.ListingsCreateInput,
-        multiselectQuestions: [multiselectQuestionPreference],
+        multiselectQuestions: [
+          multiselectQuestionPreference1,
+          multiselectQuestionPreference2,
+          multiselectQuestionPreference3,
+        ],
         optionalFeatures: {
           acInUnit: true,
         },
@@ -698,6 +719,7 @@ describe('Listing Controller Tests', () => {
       });
 
       const listing2Input = await listingFactory(jurisdictionB.id, prisma, {
+        enableListingFeaturesAndUtilities: true,
         includeReservedCommunityTypes: true,
         listing: {
           homeType: HomeTypeEnum.duplex,
@@ -1617,7 +1639,7 @@ describe('Listing Controller Tests', () => {
         filter: [
           {
             $comparison: Compare.IN,
-            multiselectQuestions: [multiselectQuestionPreference.id],
+            multiselectQuestions: [multiselectQuestionPreference1.id],
           },
           {
             $comparison: Compare['='],
@@ -1977,6 +1999,7 @@ describe('Listing Controller Tests', () => {
           id: jurisdictionB.id,
           name: jurisdictionB.name,
         },
+        property: null,
         showWaitlist: false,
         urlSlug: expect.anything(),
         whatToExpect: null,
@@ -2080,6 +2103,22 @@ describe('Listing Controller Tests', () => {
       expect(res.body.items[0].listingFeatures).not.toBeUndefined();
       expect(res.body.items[0].units).not.toBeUndefined();
       expect(res.body.items[0].listingsLeasingAgentAddress).not.toBeUndefined();
+      // Validate that the preferences are returned in the correct ordinal order
+      const multiselectQuestions =
+        res.body.items[0].listingMultiselectQuestions;
+      expect(multiselectQuestions).toHaveLength(3);
+      expect(multiselectQuestions[0].multiselectQuestions.id).toEqual(
+        multiselectQuestionPreference1.id,
+      );
+      expect(multiselectQuestions[0].ordinal).toEqual(1);
+      expect(multiselectQuestions[1].multiselectQuestions.id).toEqual(
+        multiselectQuestionPreference2.id,
+      );
+      expect(multiselectQuestions[1].ordinal).toEqual(2);
+      expect(multiselectQuestions[2].multiselectQuestions.id).toEqual(
+        multiselectQuestionPreference3.id,
+      );
+      expect(multiselectQuestions[2].ordinal).toEqual(3);
     });
   });
 
@@ -2201,6 +2240,15 @@ describe('Listing Controller Tests', () => {
       const listingData = await listingFactory(jurisdictionA.id, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
+        select: {
+          id: true,
+          name: true,
+          units: {
+            select: {
+              id: true,
+            },
+          },
+        },
       });
 
       const val = await constructFullListingData({
@@ -2217,6 +2265,27 @@ describe('Listing Controller Tests', () => {
         .expect(200);
       expect(res.body.id).toEqual(listing.id);
       expect(res.body.name).toEqual(val.name);
+
+      const snapshot = await prisma.listingSnapshot.findFirst({
+        where: {
+          originalId: listing.id,
+        },
+        select: {
+          id: true,
+          originalId: true,
+          name: true,
+          unit: {
+            select: {
+              id: true,
+              originalId: true,
+            },
+          },
+        },
+      });
+
+      expect(snapshot.originalId).toEqual(listing.id);
+      expect(snapshot.name).toEqual(listing.name);
+      expect(snapshot.unit.length).toEqual(listing.units.length);
     });
 
     it('should update listing with enableV2MSQ as true', async () => {

@@ -1,6 +1,8 @@
 import React from "react"
+import Markdown from "markdown-to-jsx"
+import { UseFormMethods } from "react-hook-form"
 import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers"
-import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
+import { Alert, Button, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { t, ProgressNav, StepHeader } from "@bloom-housing/ui-components"
 import ApplicationConductor from "../lib/applications/ApplicationConductor"
@@ -23,6 +25,43 @@ interface ApplicationFormLayoutProps {
   }
   conductor?: ApplicationConductor
   hideBorder?: boolean
+  overrideIsAdvocate?: boolean
+}
+
+export const LockIcon = ({ locked }: { locked: boolean }) => {
+  return (
+    locked && (
+      <Icon className={styles["lock-icon"]} size="md">
+        {CustomIconMap.lockClosed}
+      </Icon>
+    )
+  )
+}
+
+interface ApplicationAlertBoxProps {
+  errors: UseFormMethods["errors"]
+}
+
+export const onFormError = (errorBoxId?: string) => {
+  window.scrollTo(0, 0)
+  document.getElementById(errorBoxId ?? "application-alert-box-wrapper")?.focus()
+}
+
+export const ApplicationAlertBox = (props: ApplicationAlertBoxProps) => {
+  return (
+    <div id="application-alert-box-wrapper" tabIndex={-1}>
+      {Object.entries(props.errors).length > 0 && (
+        <Alert
+          className={styles["message-inside-card"]}
+          variant="alert"
+          fullwidth
+          id={"application-alert-box"}
+        >
+          {t("errors.errorsToResolve")}
+        </Alert>
+      )}
+    </div>
+  )
 }
 
 const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
@@ -41,6 +80,8 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
   }
 
   if (!props.progressNavProps.mounted) return
+
+  const isAdvocate = props.overrideIsAdvocate ?? props.conductor?.config?.isAdvocate
 
   return (
     <>
@@ -72,10 +113,16 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
         subtitle={props.subheading}
         headerLink={props.backLink && getBackLink(props.backLink.url, props.backLink.onClickFxn)}
         className={`${styles["application-form-body"]} ${
-          props.hideBorder && styles["application-form-header-no-border"]
+          (props.hideBorder || isAdvocate) && styles["application-form-header-no-border"]
         }`}
+        headingClass={"seeds-large-heading"}
       >
         <>
+          {isAdvocate && (
+            <Message fullwidth variant="warn">
+              <Markdown>{t("application.form.general.advocateWarning")}</Markdown>
+            </Message>
+          )}
           {props.children}
           {props.conductor && (
             <CardSection className={styles["application-form-action-footer"]}>

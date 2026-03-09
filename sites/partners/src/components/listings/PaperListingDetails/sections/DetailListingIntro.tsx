@@ -28,6 +28,11 @@ const DetailListingIntro = () => {
     listing.jurisdictions.id
   )
 
+  const enableProperties = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableProperties,
+    listing.jurisdictions.id
+  )
+
   let developerFieldTitle = t("listings.developer")
   if (enableHousingDeveloperOwner) {
     developerFieldTitle = t("listings.housingDeveloperOwner")
@@ -86,6 +91,15 @@ const DetailListingIntro = () => {
             </Grid.Cell>
           </Grid.Row>
         )}
+      {enableProperties && (
+        <Grid.Row>
+          <Grid.Cell>
+            <FieldValue id="property" label={t("properties.drawer.nameLabel")}>
+              {getDetailFieldString(listing.property?.name)}
+            </FieldValue>
+          </Grid.Cell>
+        </Grid.Row>
+      )}
     </SectionWithGrid>
   )
 }

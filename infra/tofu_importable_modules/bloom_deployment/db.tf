@@ -21,7 +21,7 @@ resource "aws_db_instance" "bloom" {
   database_insights_mode                = "standard"
 
   # Networking
-  vpc_security_group_ids              = [aws_security_group.db.id]
+  vpc_security_group_ids              = [aws_security_group.bloom["db"].id]
   iam_database_authentication_enabled = true
   db_subnet_group_name                = aws_db_subnet_group.bloom.id
 
@@ -39,4 +39,8 @@ resource "aws_db_instance" "bloom" {
   backup_retention_period   = local.database_config.backup_retention_days
   final_snapshot_identifier = "bloom-db-finalsnapshot"
   skip_final_snapshot       = !local.is_prod
+}
+output "db_dns_name" {
+  value       = aws_db_instance.bloom.address
+  description = "DNS name of the database."
 }

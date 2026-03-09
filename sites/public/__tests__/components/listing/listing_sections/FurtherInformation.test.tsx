@@ -20,7 +20,7 @@ describe("<FurtherInformation>", () => {
     expect(getByText("For further information")).toBeDefined()
     expect(
       getByText(
-        "The permanent supportive housing units are referred directly through <JURISDICTION> Coordinated Entry System. Households experiencing homelessness can call <PHONE_NUMBER> in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information."
+        "The permanent supportive housing units are referred directly through Bloomington's Coordinated Entry System. Households experiencing homelessness can call 123-456-7890 in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information."
       )
     ).toBeDefined()
   })

@@ -38,6 +38,7 @@ import {
 } from "../../../lib/listings/formTypes"
 import ListingDataPipeline from "../../../lib/listings/ListingDataPipeline"
 import { StatusBar } from "../../../components/shared/StatusBar"
+import { usePropertiesList } from "../../../lib/hooks"
 import { EditorExtensions } from "../../shared/TextEditor"
 import ListingFormActions, { ListingFormActionsType } from "../ListingFormActions"
 import { cleanRichText, getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
@@ -204,6 +205,12 @@ const ListingForm = ({
     immediatelyRender: true,
   })
 
+  const { data: properties } = usePropertiesList({
+    page: null,
+    limit: null,
+    jurisdictions: jurisdictionId,
+  })
+
   useEffect(() => {
     if (profile) {
       const jurisdiction = profile?.jurisdictions?.find((juris) => jurisdictionId === juris.id)
@@ -264,6 +271,8 @@ const ListingForm = ({
     FeatureFlagEnum.enableListingImageAltText,
     jurisdictionId
   )
+
+  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ, jurisdictionId)
 
   useEffect(() => {
     if (enableNonRegulatedListings && !listing?.listingType) {
@@ -388,14 +397,23 @@ const ListingForm = ({
             formData.listingType = undefined
           }
 
-          if (formData.configurableAccessibilityFeatures) {
-            setAccessibilityFeatures(
-              Object.values(formData.configurableAccessibilityFeatures).flat() as string[]
+          if (
+            doJurisdictionsHaveFeatureFlagOn(
+              FeatureFlagEnum.enableAccessibilityFeatures,
+              jurisdictionId
             )
-          }
+          ) {
+            if (formData.configurableAccessibilityFeatures) {
+              setAccessibilityFeatures(
+                Object.values(formData.configurableAccessibilityFeatures).flat() as string[]
+              )
+            }
 
-          if (!formData.configurableAccessibilityFeatures) {
-            formData.configurableAccessibilityFeatures = accessibilityFeatures
+            if (!formData.configurableAccessibilityFeatures) {
+              formData.configurableAccessibilityFeatures = accessibilityFeatures
+            }
+          } else {
+            delete formData.configurableAccessibilityFeatures
           }
 
           if (successful) {
@@ -562,9 +580,18 @@ const ListingForm = ({
                               FeatureFlagEnum.enableListingFileNumber,
                               jurisdictionId
                             )}
+                            enableProperties={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableProperties,
+                              jurisdictionId
+                            )}
                             jurisdictionName={
                               profile?.jurisdictions?.length > 1
                                 ? selectedJurisdictionData?.name
+                                : null
+                            }
+                            jurisdictionId={
+                              profile?.jurisdictions?.length > 1
+                                ? selectedJurisdictionData?.id
                                 : null
                             }
                             listingId={listing?.id}
@@ -575,6 +602,7 @@ const ListingForm = ({
                                 EnumListingListingType.nonRegulated)
                             }
                             requiredFields={requiredFields}
+                            properties={properties?.items}
                           />
                           <ListingPhotos
                             enableListingImageAltText={enableListingImageAltText}
@@ -622,6 +650,7 @@ const ListingForm = ({
                             setPreferences={setPreferences}
                             setPrograms={setPrograms}
                             swapCommunityTypeWithPrograms={swapCommunityTypeWithPrograms}
+                            enableV2MSQ={enableV2MSQ}
                           />
                           <AdditionalFees
                             enableCreditScreeningFee={doJurisdictionsHaveFeatureFlagOn(
@@ -660,6 +689,11 @@ const ListingForm = ({
                               FeatureFlagEnum.enablePetPolicyCheckbox,
                               jurisdictionId
                             )}
+                            enableParkingType={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableParkingType,
+                              jurisdictionId
+                            )}
+                            existingParkingTypes={listing?.parkType}
                             requiredFields={requiredFields}
                           />
                           <NeighborhoodAmenities

@@ -4,6 +4,7 @@
 export enum FeatureFlagEnum {
   disableBuildingSelectionCriteria = 'disableBuildingSelectionCriteria',
   disableCommonApplication = 'disableCommonApplication',
+  disableEthnicityQuestion = 'disableEthnicityQuestion',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
   disableWorkInRegion = 'disableWorkInRegion',
@@ -18,6 +19,7 @@ export enum FeatureFlagEnum {
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
+  enableHousingAdvocate = 'enableHousingAdvocate',
   enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
   enableIsVerified = 'enableIsVerified',
   enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
@@ -42,16 +44,20 @@ export enum FeatureFlagEnum {
   enableProperties = 'enableProperties',
   enableReferralQuestionUnits = 'enableReferralQuestionUnits',
   enableRegions = 'enableRegions',
+  enableResources = 'enableResources',
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
   enableSmokingPolicyRadio = 'enableSmokingPolicyRadio',
+  enableSpokenLanguage = 'enableSpokenLanguage',
   enableSupportAdmin = 'enableSupportAdmin',
   enableUnderConstructionHome = 'enableUnderConstructionHome',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
+  enableVerifyIncome = 'enableVerifyIncome',
   enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
   enableWaitlistLottery = 'enableWaitlistLottery',
   enableWhatToExpectAdditionalField = 'enableWhatToExpectAdditionalField',
+  enableParkingType = 'enableParkingType',
   enableV2MSQ = 'enableV2MSQ',
   example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
@@ -74,6 +80,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.disableCommonApplication,
     description:
       'When true, the digital common application is not an option for listings',
+  },
+  {
+    name: FeatureFlagEnum.disableEthnicityQuestion,
+    description:
+      'When true, the ethnicity question is hidden in the application demographics section',
   },
   {
     name: FeatureFlagEnum.disableJurisdictionalAdmin,
@@ -141,6 +152,10 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableHomeType,
     description: 'When true, home type feature is turned on',
+  },
+  {
+    name: FeatureFlagEnum.enableHousingAdvocate,
+    description: 'When true, partners can view housing advocate users',
   },
   {
     name: FeatureFlagEnum.enableHousingDeveloperOwner,
@@ -256,6 +271,11 @@ export const featureFlagMap: {
       'When true, the region can be defined for the building address',
   },
   {
+    name: FeatureFlagEnum.enableResources,
+    description:
+      'When true, the public site displays links to resources on various pages',
+  },
+  {
     name: FeatureFlagEnum.enableSection8Question,
     description: 'When true, the Section 8 listing data will be visible',
   },
@@ -268,6 +288,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableSmokingPolicyRadio,
     description:
       "When true, the listing 'Smoking policy' field is a radio group",
+  },
+  {
+    name: FeatureFlagEnum.enableSpokenLanguage,
+    description:
+      'When true, the application demographics section displays a spoken language question with options configured on the jurisdiction',
   },
   {
     name: FeatureFlagEnum.enableSupportAdmin,
@@ -288,6 +313,11 @@ export const featureFlagMap: {
       "When true, the 'utilities included' section is displayed in listing creation/edit and the public listing view",
   },
   {
+    name: FeatureFlagEnum.enableVerifyIncome,
+    description:
+      'When true, the income question on the application will be validated against the income limits for the listing and an error message will be shown if income is outside limits',
+  },
+  {
     name: FeatureFlagEnum.enableWaitlistAdditionalFields,
     description:
       'When true, the waitlist additional fields are displayed in the waitlist section of the listing form',
@@ -301,6 +331,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableWhatToExpectAdditionalField,
     description:
       'When true, the what to expect additional field is displayed in listing creation/edit form on the partner site',
+  },
+  {
+    name: FeatureFlagEnum.enableParkingType,
+    description:
+      'When true, the parking type field is visible in the listing form',
   },
   {
     name: FeatureFlagEnum.enableV2MSQ,

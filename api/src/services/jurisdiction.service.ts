@@ -94,6 +94,8 @@ export class JurisdictionService {
         ...incomingData,
         listingFeaturesConfiguration:
           incomingData.listingFeaturesConfiguration as unknown as Prisma.JsonArray,
+        raceEthnicityConfiguration:
+          incomingData.raceEthnicityConfiguration as unknown as Prisma.JsonArray,
       },
       include: view,
     });
@@ -114,6 +116,8 @@ export class JurisdictionService {
         id: undefined,
         listingFeaturesConfiguration:
           incomingData.listingFeaturesConfiguration as unknown as Prisma.JsonArray,
+        raceEthnicityConfiguration:
+          incomingData.raceEthnicityConfiguration as unknown as Prisma.JsonArray,
       },
       where: {
         id: incomingData.id,

@@ -7,6 +7,8 @@ import {
   YesNoEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from '@prisma/client';
+import dayjs from 'dayjs';
+import { randomInt } from 'crypto';
 import { generateConfirmationCode } from '../../src/utilities/applications-utilities';
 import { addressFactory } from './address-factory';
 import { randomNoun } from './word-generator';
@@ -19,6 +21,7 @@ import { preferenceFactory } from './application-preference-factory';
 import { demographicsFactory } from './demographic-factory';
 import { alternateContactFactory } from './alternate-contact-factory';
 import { randomBoolean } from './boolean-generator';
+import { RaceEthnicityConfiguration } from '../../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
 
 export const applicationFactory = async (optionalParams?: {
   createdAt?: Date;
@@ -34,6 +37,7 @@ export const applicationFactory = async (optionalParams?: {
   expireAfter?: Date;
   wasPIICleared?: boolean;
   additionalPhone?: string;
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration;
 }): Promise<Prisma.ApplicationsCreateInput> => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
@@ -45,15 +49,21 @@ export const applicationFactory = async (optionalParams?: {
       ],
     };
   }
-  const demographics = await demographicsFactory();
+  const demographics = await demographicsFactory(
+    optionalParams?.raceEthnicityConfiguration,
+  );
   const includeAdditionalPhone =
     !!optionalParams?.additionalPhone || randomBoolean();
   let householdSize = 1;
   if (optionalParams?.householdMember) {
     householdSize = optionalParams.householdMember.length + 1;
   }
+  const createdAtDate =
+    optionalParams?.createdAt ||
+    // Created at date sometime in the last 2 months
+    dayjs(new Date()).subtract(randomInt(87_600), 'minutes').toDate();
   return {
-    createdAt: optionalParams?.createdAt || new Date(),
+    createdAt: createdAtDate,
     confirmationCode: generateConfirmationCode(),
     applicant: { create: applicantFactory(optionalParams?.applicant) },
     appUrl: '',
@@ -61,7 +71,10 @@ export const applicationFactory = async (optionalParams?: {
     submissionType:
       optionalParams?.submissionType ??
       ApplicationSubmissionTypeEnum.electronical,
-    submissionDate: new Date(),
+    submissionDate:
+      optionalParams?.submissionType !== ApplicationSubmissionTypeEnum.paper
+        ? createdAtDate
+        : dayjs(createdAtDate).add(2, 'days').toDate(),
     householdSize: householdSize,
     income: '40000',
     incomePeriod: randomBoolean()
@@ -151,4 +164,25 @@ export const applicantFactory = (
     },
     ...overrides,
   };
+};
+
+export const applicationFactoryMany = async (
+  count: number,
+  optionalParams?:
+    | Parameters<typeof applicationFactory>[0]
+    | ((
+        index: number,
+      ) =>
+        | Parameters<typeof applicationFactory>[0]
+        | Promise<Parameters<typeof applicationFactory>[0]>),
+): Promise<Prisma.ApplicationsCreateInput[]> => {
+  return Promise.all(
+    Array.from({ length: count }, async (_, index) =>
+      applicationFactory(
+        typeof optionalParams === 'function'
+          ? await optionalParams(index)
+          : optionalParams,
+      ),
+    ),
+  );
 };

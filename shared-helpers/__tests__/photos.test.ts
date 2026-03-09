@@ -23,6 +23,15 @@ describe("photos helper", () => {
     )
   })
 
+  it("should return original id when cloudinary env is not set", () => {
+    delete process.env.CLOUDINARY_CLOUD_NAME
+    delete process.env.cloudinaryCloudName
+
+    expect(cloudinaryUrlFromId("https://aws.example.com/image.jpg")).toBe(
+      "https://aws.example.com/image.jpg"
+    )
+  })
+
   it("should return correct cloudinary url from a listing with new image field", () => {
     process.env.CLOUDINARY_CLOUD_NAME = "exygy"
 

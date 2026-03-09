@@ -32,20 +32,14 @@ import {
 import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
 import { UnitRentTypeCreate } from '../../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
 import { UnitRentTypeUpdate } from '../../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
-import {
-  unitAccessibilityPriorityTypeFactoryAll,
-  unitAccessibilityPriorityTypeFactorySingle,
-} from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
-import { UnitAccessibilityPriorityTypeCreate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
-import { UnitAccessibilityPriorityTypeUpdate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
 import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
 import { multiselectQuestionFactory } from '../../../prisma/seed-helpers/multiselect-question-factory';
-import { UserUpdate } from '../../../src/dtos/users/user-update.dto';
 import { EmailAndAppUrl } from '../../../src/dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../../../src/dtos/users/confirmation-request.dto';
 import { UserService } from '../../../src/services/user.service';
 import { EmailService } from '../../../src/services/email.service';
+import { CronJobService } from '../../../src/services/cron-job.service';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 import { AfsResolve } from '../../../src/dtos/application-flagged-sets/afs-resolve.dto';
 import {
@@ -67,7 +61,7 @@ import {
   createSimpleApplication,
   createSimpleListing,
 } from './helpers';
-import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
+import { PublicUserUpdate } from '../../../src/dtos/users/public-user-update.dto';
 
 const testEmailService = {
   confirmation: jest.fn(),
@@ -80,11 +74,15 @@ const testEmailService = {
   applicationConfirmation: jest.fn(),
 };
 
+const testCronJobService = {
+  startCronJob: jest.fn().mockResolvedValue(undefined),
+  markCronJobAsStarted: jest.fn().mockResolvedValue(undefined),
+};
+
 describe('Testing Permissioning of endpoints as Jurisdictional Admin in the correct jurisdiction', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
-  let applicationFlaggedSetService: ApplicationFlaggedSetService;
   let cookies = '';
   let jurisdictionId = '';
   beforeAll(async () => {
@@ -93,15 +91,13 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
+      .overrideProvider(CronJobService)
+      .useValue(testCronJobService)
       .compile();
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
-    applicationFlaggedSetService =
-      moduleFixture.get<ApplicationFlaggedSetService>(
-        ApplicationFlaggedSetService,
-      );
     app.use(cookieParser());
     await app.init();
 
@@ -110,7 +106,6 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
       'correct jadmin permission juris',
     );
     await reservedCommunityTypeFactoryAll(jurisdictionId, prisma);
-    await unitAccessibilityPriorityTypeFactoryAll(prisma);
 
     const storedUser = await prisma.userAccounts.create({
       data: await userFactory({
@@ -670,69 +665,6 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     });
   });
 
-  describe('Testing unit accessibility priority types endpoints', () => {
-    it('should succeed for list endpoint', async () => {
-      await request(app.getHttpServer())
-        .get(`/unitAccessibilityPriorityTypes?`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(200);
-    });
-
-    it('should succeed for retrieve endpoint', async () => {
-      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-        prisma,
-      );
-
-      await request(app.getHttpServer())
-        .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(200);
-    });
-
-    it('should error as forbidden for create endpoint', async () => {
-      await request(app.getHttpServer())
-        .post('/unitAccessibilityPriorityTypes')
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          name: 'mobility And Hearing',
-        } as UnitAccessibilityPriorityTypeCreate)
-        .set('Cookie', cookies)
-        .expect(403);
-    });
-
-    it('should error as forbidden for update endpoint', async () => {
-      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-        prisma,
-      );
-      await request(app.getHttpServer())
-        .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          id: unitTypeA.id,
-          name: 'mobility Hearing And Visual',
-        } as UnitAccessibilityPriorityTypeUpdate)
-        .set('Cookie', cookies)
-        .expect(403);
-    });
-
-    it('should error as forbidden for delete endpoint', async () => {
-      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-        prisma,
-      );
-
-      await request(app.getHttpServer())
-        .delete(`/unitAccessibilityPriorityTypes`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          id: unitTypeA.id,
-        } as IdDTO)
-        .set('Cookie', cookies)
-        .expect(403);
-    });
-  });
-
   describe('Testing unit types endpoints', () => {
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
@@ -955,14 +887,14 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
       });
 
       await request(app.getHttpServer())
-        .put(`/user/${userA.id}`)
+        .put(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,
           firstName: 'New User First Name',
           lastName: 'New User Last Name',
           jurisdictions: [{ id: jurisdictionId } as IdDTO],
-        } as UserUpdate)
+        } as PublicUserUpdate)
         .set('Cookie', cookies)
         .expect(200);
     });
@@ -1071,7 +1003,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
       });
 
       await request(app.getHttpServer())
-        .post(`/user/`)
+        .post(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildUserCreateMock(juris, 'publicUser+jurisCorrect@email.com'))
         .set('Cookie', cookies)
@@ -1080,7 +1012,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
 
     it('should error as forbidden for partner create endpoint', async () => {
       await request(app.getHttpServer())
-        .post(`/user/invite`)
+        .post(`/user/partner`)
         .send(
           // builds an invite for an admin
           buildUserInviteMock(
@@ -1422,19 +1354,6 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .set('Cookie', cookies)
         .expect(200);
     });
-
-    it('should succeed for process endpoint', async () => {
-      /*
-        Because so many different iterations of the process endpoint were firing we were running into collisions. 
-        Since this is just testing the permissioning aspect I'm switching to mocking the process function
-      */
-      applicationFlaggedSetService.process = jest.fn();
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(200);
-    });
   });
 
   describe('Testing lottery endpoints', () => {
@@ -1568,7 +1487,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .expect(200);
     });
 
-    it('should error as forbidden for create endpoint', async () => {
+    it('should succeed for create endpoint', async () => {
       const propertyData = {
         name: 'New Test Property',
         jurisdictions: {
@@ -1581,7 +1500,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .send(propertyData)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(201);
     });
 
     it('should succeed for filterable list endpoint', async () => {
@@ -1593,7 +1512,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .expect(201);
     });
 
-    it('should error as forbidden for update endpoint', async () => {
+    it('should succeed for update endpoint', async () => {
       if (!propertyId) {
         throw new Error('Property ID not set up for test');
       }
@@ -1611,10 +1530,10 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .send(propertyUpdateData)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
-    it('should error as forbidden for delete endpoint', async () => {
+    it('should succeed for delete endpoint', async () => {
       const propertyData = {
         name: 'Property to Delete',
         jurisdictions: {
@@ -1642,7 +1561,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         } as IdDTO)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
   });
 

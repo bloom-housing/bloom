@@ -18,11 +18,22 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v6
 
+      # Blame claude if this messes with stuff
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache
+          sudo rm -rf /usr/local/share/boost
+          sudo docker image prune --all --force
+
       - name: build
         shell: bash
         run: |
-          if ! docker compose build; then
+          if ! docker compose build --no-cache; then
             echo 'ERROR: docker compose build failed'
+            exit 1
           fi
 
       - name: dbinitcheck
@@ -46,6 +57,22 @@ jobs:
 
           if ! docker compose down; then
             echo 'ERROR: docker compose down failed'
+            exit 1
+          fi
+
+      - name: api-smoke-test
+        shell: bash
+        run: |
+          if ! docker compose up --wait api
+          then
+            echo 'ERROR: api did not start successfully. Logs:'
+            docker compose logs api
+            exit 1
+          fi
+
+          if ! docker compose down; then
+            echo 'ERROR: docker compose down failed'
+            exit 1
           fi
 
       - name: dbreadonlycheck
@@ -61,6 +88,7 @@ jobs:
 
           if ! docker compose down; then
             echo 'ERROR: docker compose down failed'
+            exit 1
           fi
 
       - name: sites-smoke-test

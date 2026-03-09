@@ -25,6 +25,7 @@ import { ListingService } from './listing.service';
 import { MultiselectQuestionService } from './multiselect-question.service';
 import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
+import { SnapshotCreateService } from './snapshot-create.service';
 import { Application } from '../dtos/applications/application.dto';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
@@ -66,6 +67,7 @@ export class LotteryService {
     private logger = new Logger(LotteryService.name),
     private permissionService: PermissionService,
     private cronJobService: CronJobService,
+    private snapshotCreateService: SnapshotCreateService,
   ) {}
 
   onModuleInit() {
@@ -111,7 +113,7 @@ export class LotteryService {
     if (listing?.lotteryStatus) {
       // If a lottery has already been run we should delete all of the existing lottery values so that we start from fresh.
       // This is needed for two scenarios:
-      //     1. The lottery generation fails halfway through and the data is corrupted (some values from first run and some from re-reun) - this is very unlikely
+      //     1. The lottery generation fails halfway through and the data is corrupted (some values from first run and some from re-rerun) - this is very unlikely
       //     2. During the regeneration there are now less applications but they are still in the applicationLotteryPositions table
       await this.prisma.applicationLotteryPositions.deleteMany({
         where: { listingId: listingId },
@@ -360,7 +362,7 @@ export class LotteryService {
     } else {
       updateData = { lotteryStatus: status };
     }
-
+    await this.snapshotCreateService.createListingSnapshot(listingId);
     const res = await this.prisma.listings.update({
       data: updateData,
       where: {
@@ -777,7 +779,9 @@ export class LotteryService {
         },
       });
       const listingIds = listings.map((listing) => listing.id);
-
+      for (let i = 0; i < listingIds.length; i++) {
+        await this.snapshotCreateService.createListingSnapshot(listingIds[i]);
+      }
       const res = await this.prisma.listings.updateMany({
         data: {
           lotteryStatus: LotteryStatusEnum.expired,

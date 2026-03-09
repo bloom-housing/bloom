@@ -1,8 +1,13 @@
-import { OmitType } from '@nestjs/swagger';
 import { Accessibility } from './accessibility.dto';
+import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
+import { IsString, IsUUID } from 'class-validator';
+import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
-export class AccessibilityUpdate extends OmitType(Accessibility, [
-  'id',
-  'createdAt',
-  'updatedAt',
-]) {}
+export class AccessibilityUpdate extends OmitType(Accessibility, ['id']) {
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  id?: string;
+}

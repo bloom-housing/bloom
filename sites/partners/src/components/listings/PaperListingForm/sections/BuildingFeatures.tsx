@@ -1,16 +1,20 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { defaultFieldProps, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
+import { listingParkingTypes } from "@bloom-housing/shared-helpers"
+import { ListingParkingTypeCreate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type BuildingFeaturesProps = {
   enableAccessibilityFeatures?: boolean
   enablePetPolicyCheckbox?: boolean
   enableParkingFee?: boolean
   enableSmokingPolicyRadio?: boolean
+  enableParkingType?: boolean
+  existingParkingTypes?: ListingParkingTypeCreate
   requiredFields: string[]
 }
 
@@ -19,6 +23,17 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, clearErrors, getValues } = formMethods
+
+  const parkingFields = useMemo(() => {
+    return listingParkingTypes.map((parking) => {
+      return {
+        id: parking,
+        label: t(`listings.parkingTypeOptions.${parking}`),
+        defaultChecked: props.existingParkingTypes ? props.existingParkingTypes[parking] : false,
+        register,
+      }
+    })
+  }, [props.existingParkingTypes, register])
 
   return (
     <>
@@ -180,22 +195,35 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             )}
           </Grid.Cell>
         </Grid.Row>
-        {props.enableParkingFee && (
-          <Grid.Row columns={3}>
-            <Grid.Cell>
-              <Field
-                register={register}
-                type={"currency"}
-                prepend={"$"}
-                {...defaultFieldProps(
-                  "parkingFee",
-                  t("t.parkingFee"),
-                  props.requiredFields,
-                  errors,
-                  clearErrors
-                )}
-              />
-            </Grid.Cell>
+        {(props.enableParkingFee || props.enableParkingType) && (
+          <Grid.Row columns={2}>
+            {props.enableParkingFee && (
+              <Grid.Cell>
+                <Field
+                  register={register}
+                  type={"currency"}
+                  prepend={"$"}
+                  {...defaultFieldProps(
+                    "parkingFee",
+                    t("t.parkingFee"),
+                    props.requiredFields,
+                    errors,
+                    clearErrors
+                  )}
+                />
+              </Grid.Cell>
+            )}
+            {props.enableParkingType && (
+              <Grid.Cell>
+                <FieldGroup
+                  type="checkbox"
+                  name="parking"
+                  groupLabel={getLabel("parking", props.requiredFields, t("t.parkingTypes"))}
+                  register={register}
+                  fields={parkingFields}
+                />
+              </Grid.Cell>
+            )}
           </Grid.Row>
         )}
       </SectionWithGrid>

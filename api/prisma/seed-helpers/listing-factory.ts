@@ -39,6 +39,7 @@ export const listingFactory = async (
     applicationDueDate?: Date;
     closedAt?: Date;
     digitalApp?: boolean;
+    enableListingFeaturesAndUtilities?: boolean;
     includeBuildingFeatures?: boolean;
     includeEligibilityRules?: boolean;
     includeReservedCommunityTypes?: boolean;
@@ -51,6 +52,7 @@ export const listingFactory = async (
     numberOfUnits?: number;
     optionalFeatures?: Prisma.ListingFeaturesCreateInput;
     optionalUtilities?: Prisma.ListingUtilitiesCreateInput;
+    propertyId?: string;
     reviewOrderType?: ReviewOrderTypeEnum;
     status?: ListingsStatusEnum;
     unitGroups?: Prisma.UnitGroupCreateWithoutListingsInput[];
@@ -126,7 +128,6 @@ export const listingFactory = async (
       ReviewOrderTypeEnum.firstComeFirstServe,
     status: optionalParams?.status || ListingsStatusEnum.active,
     unitsAvailable: unitsAvailable,
-
     applicationMethods: digitalApp
       ? {
           create: {
@@ -221,13 +222,21 @@ export const listingFactory = async (
     userAccounts: optionalParams?.userAccounts
       ? { connect: optionalParams?.userAccounts }
       : undefined,
-
+    property: optionalParams?.propertyId
+      ? {
+          connect: {
+            id: optionalParams.propertyId,
+          },
+        }
+      : {},
     ...additionalEligibilityRules(optionalParams?.includeEligibilityRules),
     ...buildingFeatures(optionalParams?.includeBuildingFeatures),
-    ...featuresAndUtilites(
-      optionalParams?.optionalFeatures,
-      optionalParams?.optionalUtilities,
-    ),
+    ...(optionalParams?.enableListingFeaturesAndUtilities
+      ? featuresAndUtilites(
+          optionalParams?.optionalFeatures,
+          optionalParams?.optionalUtilities,
+        )
+      : {}),
     ...(optionalParams?.listing?.listingType === ListingTypeEnum.nonRegulated
       ? listingsRequiredDocuments(optionalParams?.requiredDocumentsList)
       : {}),

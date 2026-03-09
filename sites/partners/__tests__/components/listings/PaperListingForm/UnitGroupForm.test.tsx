@@ -33,8 +33,13 @@ beforeEach(() => {
     rest.get("http://localhost:3100/unitTypes", (_req, res, ctx) => {
       return res(ctx.json(unitTypes))
     }),
-    rest.get("http://localhost:3100/unitAccessibilityPriorityTypes", (_req, res, ctx) => {
-      return res(ctx.json([]))
+    rest.get("http://localhost/api/adapter/jurisdictions/:id", (req, res, ctx) => {
+      return res(
+        ctx.json({
+          id: req.params.id,
+          visibleAccessibilityPriorityTypes: [],
+        })
+      )
     }),
     rest.get("http://localhost:3100/amiCharts", (_req, res, ctx) => {
       return res(ctx.json(amiCharts))

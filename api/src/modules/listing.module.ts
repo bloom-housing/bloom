@@ -12,6 +12,7 @@ import { ListingService } from '../services/listing.service';
 import { ListingCsvExporterService } from '../services/listing-csv-export.service';
 import { GoogleTranslateService } from '../services/google-translate.service';
 import { TranslationService } from '../services/translation.service';
+import { SnapshotCreateModule } from './snapshot-create.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { TranslationService } from '../services/translation.service';
     MultiselectQuestionModule,
     PermissionModule,
     PrismaModule,
+    SnapshotCreateModule,
   ],
   controllers: [ListingController],
   providers: [

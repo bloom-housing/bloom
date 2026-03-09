@@ -6,6 +6,8 @@ import styles from "./Hero.module.scss"
 export interface HeroProps {
   /** A clear call to action, most typically a button */
   action: React.ReactNode
+  /** If the hero should take the full height of the viewport */
+  fullHeight?: boolean
   /** Optional text shown above the heading */
   note?: string
   /** Text shown beneath the heading */
@@ -16,7 +18,7 @@ export interface HeroProps {
 
 export const Hero = (props: HeroProps) => {
   return (
-    <MaxWidthLayout className={styles["hero-container"]}>
+    <MaxWidthLayout className={styles["hero-container"]} fullHeight={props.fullHeight}>
       <div className={styles["hero"]}>
         {props.note && <p className={styles["note"]}>{props.note}</p>}
         <Heading priority={1} className={styles["heading"]}>

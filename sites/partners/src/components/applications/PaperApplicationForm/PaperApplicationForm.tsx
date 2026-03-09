@@ -14,7 +14,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mapFormToApi, mapApiToForm } from "../../../lib/applications/formatApplicationData"
-import { useSingleListingData } from "../../../lib/hooks"
+import { useJurisdiction, useSingleListingData } from "../../../lib/hooks"
 import { FormApplicationData } from "./sections/FormApplicationData"
 import { FormPrimaryApplicant } from "./sections/FormPrimaryApplicant"
 import { FormAlternateContact } from "./sections/FormAlternateContact"
@@ -42,7 +42,8 @@ type AlertErrorType = "api" | "form"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { data: jurisdictionData } = useJurisdiction(listingDto?.jurisdictions?.id)
+  const { doJurisdictionsHaveFeatureFlagOn, applicationsService } = useContext(AuthContext)
 
   const preferences = listingSectionQuestions(
     listingDto,
@@ -85,8 +86,22 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
+  const disableEthnicityQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableEthnicityQuestion,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableSpokenLanguage = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSpokenLanguage,
+    listingDto?.jurisdictions.id
+  )
+
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
+    listingDto?.jurisdictions.id
+  )
+  const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableHousingAdvocate,
     listingDto?.jurisdictions.id
   )
 
@@ -107,7 +122,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const router = useRouter()
 
-  const { applicationsService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
 
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
@@ -172,10 +186,23 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     }
   }
 
-  /*
-    @data: form data comes from the react-hook-form
-    @redirect: open application details or reset form
-  */
+  async function notifyApplicationUpdate(applicationId: string) {
+    if (!applicationsService || !application) return
+
+    try {
+      await applicationsService.notifyUpdate({
+        id: applicationId,
+        body: {
+          previousStatus: application.status,
+          previousAccessibleUnitWaitlistNumber: application.accessibleUnitWaitlistNumber,
+          previousConventionalUnitWaitlistNumber: application.conventionalUnitWaitlistNumber,
+        },
+      })
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   const onSubmit = async (data: FormTypes, redirect: "details" | "new") => {
     setAlert(null)
     setLoading(true)
@@ -214,6 +241,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       setLoading(false)
 
       if (result) {
+        if (editMode && enableApplicationStatus) {
+          void notifyApplicationUpdate(result.id)
+        }
+
         addToast(
           editMode
             ? t("application.add.applicationUpdated")
@@ -302,7 +333,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       disableWorkInRegion={disableWorkInRegion}
                     />
 
-                    <FormAlternateContact />
+                    <FormAlternateContact enableHousingAdvocate={enableHousingAdvocate} />
 
                     <FormHouseholdMembers
                       householdMembers={householdMembers}
@@ -342,6 +373,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                     <FormDemographics
                       formValues={application?.demographics}
                       enableLimitedHowDidYouHear={enableLimitedHowDidYouHear}
+                      disableEthnicityQuestion={disableEthnicityQuestion}
+                      raceEthnicityConfiguration={jurisdictionData?.raceEthnicityConfiguration}
+                      enableSpokenLanguage={enableSpokenLanguage}
+                      visibleSpokenLanguages={jurisdictionData?.visibleSpokenLanguages}
                     />
 
                     <FormTerms />
@@ -376,9 +411,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                 <p>{t("application.confirmation.changesIntro")}</p>
                 <ul className="list-disc pl-5">
                   {confirmSections.changes.map((item) => (
-                    <li key={`${item.label}-${item.value}`}>
-                      {item.label}: {item.value}
-                    </li>
+                    <li key={`${item.label}-${item.value}`}>{`${item.label}: ${item.value}`}</li>
                   ))}
                 </ul>
               </>
@@ -390,9 +423,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                 </p>
                 <ul className="list-disc pl-5">
                   {confirmSections.removals.map((item) => (
-                    <li key={`${item.label}-${item.value}`}>
-                      {item.label}: {item.value}
-                    </li>
+                    <li key={`${item.label}-${item.value}`}>{`${item.label}: ${item.value}`}</li>
                   ))}
                 </ul>
               </>
