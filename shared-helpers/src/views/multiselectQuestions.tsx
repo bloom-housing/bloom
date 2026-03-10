@@ -64,12 +64,12 @@ export const getExclusiveKeys = (
   if (!question) return exclusive
 
   getMSQOptions(question, enableV2MSQ).forEach((option) => {
-    if (option.exclusive)
+    if ((!enableV2MSQ && option.exclusive) || (enableV2MSQ && option.isOptOut))
       exclusive.push(
         fieldName(question.name || question.text, applicationSection, option.name || option.text)
       )
   })
-  if (question.optOutText)
+  if (!enableV2MSQ && question.optOutText)
     exclusive.push(
       fieldName(question.name || question.text, applicationSection, question.optOutText)
     )
@@ -131,8 +131,10 @@ export const getAllOptions = (
   const optionPaths = getMSQOptions(question, enableV2MSQ).map((option) =>
     fieldName(question.name || question.text, applicationSection, option.name || option.text)
   )
-  if (question.optOutText) {
-    optionPaths.push(fieldName(question.name || question.text, applicationSection, question.optOutText))
+  if (!enableV2MSQ && question.optOutText) {
+    optionPaths.push(
+      fieldName(question.name || question.text, applicationSection, question.optOutText)
+    )
   }
   return optionPaths
 }
@@ -212,15 +214,17 @@ const getCheckboxField = (
                 )
               )
             : []
-          if (question.optOutText) {
+          if (!enableV2MSQ && question.optOutText) {
             allOptions.push(
               fieldName(question.name || question.text, applicationSection, question.optOutText)
             )
           }
-          if (option.exclusive && e.target.checked && exclusiveKeys) {
+          const exclusiveOption =
+            (!enableV2MSQ && option.exclusive) || (enableV2MSQ && option.isOptOut)
+          if (exclusiveOption && e.target.checked && exclusiveKeys) {
             setExclusive(true, setValue, exclusiveKeys, optionFieldName, allOptions)
           }
-          if (!option.exclusive && exclusiveKeys) {
+          if (!exclusiveOption && exclusiveKeys) {
             setExclusive(false, setValue, exclusiveKeys, optionFieldName, allOptions)
           }
         },
@@ -228,7 +232,7 @@ const getCheckboxField = (
       validation={{
         validate: {
           somethingIsChecked: (value) => {
-            if (question.optOutText && trigger) {
+            if (!enableV2MSQ && question.optOutText && trigger) {
               return value || !!allOptions.find((option) => getValues(option))
             }
           },

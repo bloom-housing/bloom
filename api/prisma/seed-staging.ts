@@ -736,7 +736,6 @@ export const stagingSeed = async (
     workInCityMsqData = multiselectQuestionFactory(
       mainJurisdiction.id,
       {
-        optOut: true,
         status: MultiselectQuestionsStatusEnum.active,
         multiselectQuestion: {
           name: 'Work in the city',
@@ -812,10 +811,10 @@ export const stagingSeed = async (
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
           isExclusive: true,
-          optOutText: 'Prefer not to say',
           options: [
             { name: 'Yes', ordinal: 1 },
             { name: 'No', ordinal: 2 },
+            { name: 'Prefer not to say', ordinal: 3, isOptOut: true },
           ],
         },
       },
