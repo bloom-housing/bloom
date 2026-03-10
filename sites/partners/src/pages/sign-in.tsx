@@ -247,7 +247,7 @@ const SignIn = () => {
   }
 
   const siteTitle = t("nav.siteTitlePartners")
-  const metaDescription = `Sign in to ${siteTitle} to manage listings and applications.`
+  const metaDescription = t("pageDescription.partnersSignIn", { siteTitle })
 
   return (
     <>

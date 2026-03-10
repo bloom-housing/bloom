@@ -223,32 +223,27 @@ const Layout = (props: LayoutProps) => {
       label: t(`languages.${item}`),
     })) || []
 
-  const showMeta = props.pageTitle || props.metaDescription !== undefined
-  const metaTitle = props.pageTitle ?? t("nav.siteTitle")
+  const metaTitle = props.pageTitle
+    ? `${props.pageTitle} - ${t("nav.siteTitle")}`
+    : t("nav.siteTitle")
   const metaDescription = props.metaDescription ?? t("pageDescription.default")
 
   return (
     <>
       <Head>
-        <title>
-          {props.pageTitle ? `${props.pageTitle} - ${t("nav.siteTitle")}` : t("nav.siteTitle")}
-        </title>
+        <title>{metaTitle}</title>
         {process.env.allowSeoIndexing !== "TRUE" && (
           <meta name="robots" content="noindex, nofollow" />
         )}
-        {showMeta && (
-          <>
-            <meta name="description" content={metaDescription} />
-            <meta property="og:type" content="website" />
-            <meta property="og:title" content={metaTitle} />
-            {props.metaImage && <meta property="og:image" content={props.metaImage} />}
-            <meta property="og:description" content={metaDescription} />
-            <meta property="twitter:card" content="summary_large_image" />
-            <meta property="twitter:title" content={metaTitle} />
-            {props.metaImage && <meta property="twitter:image" content={props.metaImage} />}
-            <meta property="twitter:description" content={metaDescription} />
-          </>
-        )}
+        <meta name="description" content={metaDescription} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={metaTitle} />
+        {props.metaImage && <meta property="og:image" content={props.metaImage} />}
+        <meta property="og:description" content={metaDescription} />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:title" content={metaTitle} />
+        {props.metaImage && <meta property="twitter:image" content={props.metaImage} />}
+        <meta property="twitter:description" content={metaDescription} />
       </Head>
       <div className="site-wrapper">
         <div className="site-content">
