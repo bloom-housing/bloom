@@ -56,6 +56,7 @@ import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
 import { PublicUserUpdate } from '../dtos/users/public-user-update.dto';
 import { PartnerUserUpdate } from '../dtos/users/partner-user-update.dto';
 import { AdvocateUserUpdate } from '../dtos/users/advocate-user-update.dto';
+import { AdvocateUserCsvExporterService } from '../services/advocate-user-csv-export.service';
 
 @Controller('user')
 @ApiTags('user')
@@ -76,6 +77,7 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly userCSVExportService: UserCsvExporterService,
+    private readonly advocateUserCSVExportService: AdvocateUserCsvExporterService,
   ) {}
 
   @Get()
@@ -122,6 +124,23 @@ export class UserController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<StreamableFile> {
     return await this.userCSVExportService.exportFile(req, res);
+  }
+
+  @Get('advocate/csv')
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({
+    summary: 'List advocate users in CSV',
+    operationId: 'listAdvocatesAsCsv',
+  })
+  @Header('Content-Type', 'text/csv')
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  @UseInterceptors(ExportLogInterceptor)
+  async listAdvocateAsCsv(
+    @Request() req: ExpressRequest,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    return await this.advocateUserCSVExportService.exportFile(req, res);
   }
 
   @Get('favoriteListings/:id')

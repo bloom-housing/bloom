@@ -1506,6 +1506,8 @@ export class ApplicationsService {
       filterType?: ApplicationsFilterEnum
       /**  */
       includeLotteryApps?: boolean
+      /**  */
+      applicantNameSearch?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PublicAppsViewResponse> {
@@ -1519,6 +1521,7 @@ export class ApplicationsService {
         userId: params["userId"],
         filterType: params["filterType"],
         includeLotteryApps: params["includeLotteryApps"],
+        applicantNameSearch: params["applicantNameSearch"],
       }
 
       /** 适配ios13，get请求不允许带body */
@@ -1881,6 +1884,20 @@ export class UserService {
   listAsCsv(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/user/csv"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * List advocate users in CSV
+   */
+  listAdvocatesAsCsv(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate/csv"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 

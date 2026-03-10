@@ -1,7 +1,8 @@
 import React from "react"
 import { cleanup } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { mockNextRouter, render, waitFor, within, screen } from "../../testUtils"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import ApplicationsView, {
   ApplicationsIndexEnum,
 } from "../../../src/components/account/ApplicationsView"
@@ -16,7 +17,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { setupServer } from "msw/lib/node"
 import { rest } from "msw"
-import userEvent from "@testing-library/user-event"
 
 const server = setupServer()
 window.scrollTo = jest.fn()
@@ -106,17 +106,30 @@ function getApplications(
 
 function renderApplicationsView(
   filterType = ApplicationsIndexEnum.all,
-  enableApplicationStatus = false
+  enableApplicationStatus = false,
+  profileOverrides = {},
+  messageContextOverrides = {}
 ) {
   return render(
-    <AuthContext.Provider
+    <MessageContext.Provider
       value={{
-        profile: { ...user, jurisdictions: [], listings: [] },
-        applicationsService: new ApplicationsService(),
+        addToast: jest.fn(),
+        toastMessagesRef: { current: [] },
+        ...messageContextOverrides,
       }}
     >
-      <ApplicationsView filterType={filterType} enableApplicationStatus={enableApplicationStatus} />
-    </AuthContext.Provider>
+      <AuthContext.Provider
+        value={{
+          profile: { ...user, jurisdictions: [], listings: [], ...profileOverrides },
+          applicationsService: new ApplicationsService(),
+        }}
+      >
+        <ApplicationsView
+          filterType={filterType}
+          enableApplicationStatus={enableApplicationStatus}
+        />
+      </AuthContext.Provider>
+    </MessageContext.Provider>
   )
 }
 
@@ -150,12 +163,14 @@ describe("<ApplicationsView>", () => {
   })
 
   it("should render the page with application fetching error", async () => {
+    const addToast = jest.fn()
+
     server.use(
       rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
         return res(ctx.status(500)) // Return status code 500 to mock an server fetching error
       })
     )
-    renderApplicationsView()
+    renderApplicationsView(ApplicationsIndexEnum.all, false, {}, { addToast })
 
     // Dashboard heading
     expect(screen.getByRole("heading", { level: 1, name: /my applications/i })).toBeInTheDocument()
@@ -163,10 +178,14 @@ describe("<ApplicationsView>", () => {
       screen.getByText("See listings for properties for which you’ve applied.")
     ).toBeInTheDocument()
 
-    // Application section (Missing fallback component)
     expect(
       await screen.findByRole("heading", { level: 2, name: /error fetching applications/i })
     ).toBeInTheDocument()
+    await waitFor(() => {
+      expect(addToast).toHaveBeenCalledWith(expect.stringMatching(/error fetching applications/i), {
+        variant: "alert",
+      })
+    })
   })
 
   describe("should render page with proper missing applications message", () => {
@@ -364,60 +383,52 @@ describe("<ApplicationsView>", () => {
       )
     })
 
-    it("should navigate to all applications view", async () => {
-      const { pushMock } = mockNextRouter()
+    it("should render all applications tab link", async () => {
       renderApplicationsView()
 
       expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(3)
       expect(await screen.findAllByRole("link", { name: /see listing/i })).toHaveLength(3)
 
-      const allAplicationsTab = screen.getByTestId("total-applications-tab")
-      await userEvent.click(allAplicationsTab)
-      await waitFor(() => {
-        expect(pushMock).toHaveBeenCalledWith("/account/applications")
-      })
+      const allApplicationsTab = screen.getByTestId("total-applications-tab")
+      const allApplicationsLink = allApplicationsTab.closest("a")
+      expect(allApplicationsLink).toBeInTheDocument()
+      expect(allApplicationsLink).toHaveAttribute("href", "/account/applications")
     })
 
-    it("should navigate to open application only view", async () => {
-      const { pushMock } = mockNextRouter()
+    it("should render open applications tab link", async () => {
       renderApplicationsView()
 
       expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(3)
       expect(await screen.findAllByRole("link", { name: /see listing/i })).toHaveLength(3)
 
       const openApplicationsTab = screen.getByTestId("open-applications-tab")
-      await userEvent.click(openApplicationsTab)
-      await waitFor(() => {
-        expect(pushMock).toHaveBeenCalledWith("/account/applications/open")
-      })
+      const openApplicationsLink = openApplicationsTab.closest("a")
+      expect(openApplicationsLink).toBeInTheDocument()
+      expect(openApplicationsLink).toHaveAttribute("href", "/account/applications/open")
     })
 
-    it("should navigate to closed application only view", async () => {
-      const { pushMock } = mockNextRouter()
+    it("should render closed applications tab link", async () => {
       renderApplicationsView()
 
       expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(3)
       expect(await screen.findAllByRole("link", { name: /see listing/i })).toHaveLength(3)
 
       const closedApplicationsTab = screen.getByTestId("closed-applications-tab")
-      await userEvent.click(closedApplicationsTab)
-      await waitFor(() => {
-        expect(pushMock).toHaveBeenCalledWith("/account/applications/closed")
-      })
+      const closedApplicationsLink = closedApplicationsTab.closest("a")
+      expect(closedApplicationsLink).toBeInTheDocument()
+      expect(closedApplicationsLink).toHaveAttribute("href", "/account/applications/closed")
     })
 
-    it("should navigate to lottery runs only view", async () => {
-      const { pushMock } = mockNextRouter()
+    it("should render lottery runs tab link", async () => {
       renderApplicationsView()
 
       expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(3)
       expect(await screen.findAllByRole("link", { name: /see listing/i })).toHaveLength(3)
 
       const lotteryTab = screen.getByTestId("lottery-runs-tab")
-      await userEvent.click(lotteryTab)
-      await waitFor(() => {
-        expect(pushMock).toHaveBeenCalledWith("/account/applications/lottery")
-      })
+      const lotteryTabLink = lotteryTab.closest("a")
+      expect(lotteryTabLink).toBeInTheDocument()
+      expect(lotteryTabLink).toHaveAttribute("href", "/account/applications/lottery")
     })
   })
 
@@ -543,6 +554,94 @@ describe("<ApplicationsView>", () => {
       expect(screen.getByText("90909")).toBeInTheDocument()
       expect(screen.queryByText("Your accessible wait list number is:")).not.toBeInTheDocument()
       expect(screen.queryByText("Your confirmation number is:")).not.toBeInTheDocument()
+    })
+  })
+
+  describe("Advocate applicant search", () => {
+    it("should not show applicant search for non-advocate users", async () => {
+      server.use(
+        rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+          return res(ctx.json(getApplications(1, 0, 0)))
+        })
+      )
+
+      renderApplicationsView(ApplicationsIndexEnum.all, false, { isAdvocate: false })
+
+      expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(1)
+      expect(screen.queryByPlaceholderText("Search by first and last name")).not.toBeInTheDocument()
+    })
+
+    it("should hide search bar for advocate only when unfiltered fetch returns zero total applications", async () => {
+      server.use(
+        rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+          return res(ctx.json(getApplications(0, 0, 0)))
+        })
+      )
+
+      renderApplicationsView(ApplicationsIndexEnum.all, false, { isAdvocate: true })
+
+      expect(
+        await screen.findByText("It looks like you haven't applied to any listings yet.")
+      ).toBeInTheDocument()
+      expect(screen.queryByPlaceholderText("Search by first and last name")).not.toBeInTheDocument()
+    })
+
+    it("should keep search bar visible for advocate when unfiltered fetch has applications", async () => {
+      server.use(
+        rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+          return res(ctx.json(getApplications(1, 0, 0)))
+        })
+      )
+
+      renderApplicationsView(ApplicationsIndexEnum.all, false, { isAdvocate: true })
+
+      expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(1)
+      expect(screen.getByPlaceholderText("Search by first and last name")).toBeInTheDocument()
+    })
+
+    it("should not show search on initial load, then show it after first fetch for advocates with applications", async () => {
+      server.use(
+        rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+          return res(ctx.delay(150), ctx.json(getApplications(1, 0, 0)))
+        })
+      )
+
+      renderApplicationsView(ApplicationsIndexEnum.all, false, { isAdvocate: true })
+
+      expect(screen.queryByPlaceholderText("Search by first and last name")).not.toBeInTheDocument()
+
+      expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(1)
+      expect(screen.getByPlaceholderText("Search by first and last name")).toBeInTheDocument()
+    })
+
+    it("should send applicantNameSearch only when debounced input has at least 3 characters", async () => {
+      const applicantNameSearchParams: string[] = []
+
+      server.use(
+        rest.get("http://localhost:3100/applications/publicAppsView", (req, res, ctx) => {
+          applicantNameSearchParams.push(req.url.searchParams.get("applicantNameSearch") || "")
+          return res(ctx.json(getApplications(1, 0, 0)))
+        }),
+        rest.get("http://localhost/api/adapter/applications/publicAppsView", (req, res, ctx) => {
+          applicantNameSearchParams.push(req.url.searchParams.get("applicantNameSearch") || "")
+          return res(ctx.json(getApplications(1, 0, 0)))
+        })
+      )
+
+      renderApplicationsView(ApplicationsIndexEnum.all, false, { isAdvocate: true })
+
+      const searchInput = await screen.findByPlaceholderText("Search by first and last name")
+      expect(applicantNameSearchParams).toEqual([""])
+
+      await userEvent.type(searchInput, "ab")
+      await new Promise((resolve) => setTimeout(resolve, 650))
+      expect(applicantNameSearchParams).toEqual([""])
+
+      await userEvent.clear(searchInput)
+      await userEvent.type(searchInput, "abc")
+      await waitFor(() => expect(applicantNameSearchParams).toEqual(["", "abc"]), {
+        timeout: 2000,
+      })
     })
   })
 })

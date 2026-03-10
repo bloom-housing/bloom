@@ -1,9 +1,8 @@
 // Future home of additional Jest config
 import "@testing-library/jest-dom"
-import generalTranslations from "@bloom-housing/shared-helpers/src/locales/general.json"
+import generalShared from "@bloom-housing/shared-helpers/src/locales/general.json"
 import { serviceOptions } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import axios from "axios"
-import general from "../page_content/locale_overrides/general.json"
 // ui-components uses ResizeObserver for drag-and-drop, so we need to mock it here before importing anything from ui-components
 global.ResizeObserver = jest.fn(() => ({
   observe: jest.fn(),
@@ -11,7 +10,9 @@ global.ResizeObserver = jest.fn(() => ({
   disconnect: jest.fn(),
 }))
 import { addTranslation } from "@bloom-housing/ui-components"
-addTranslation({ ...generalTranslations, ...general })
+import general from "../page_content/locales/general.json"
+import generalOverrides from "../page_content/overrides/general.json"
+addTranslation({ ...generalShared, ...general, ...generalOverrides })
 
 process.env.cloudinaryCloudName = "exygy"
 process.env.cloudinarySignedPreset = "test123"

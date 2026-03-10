@@ -416,14 +416,14 @@ export function useJurisdictionalMultiselectQuestionList(
     orderBy: MultiselectQuestionOrderByKeys[]
     orderDir: OrderByEnum[]
     search?: string
-    limit?: number
+    limit?: number | "all"
     page?: number
   } = {
     filter: [],
     orderBy: [],
     orderDir: [],
     search: undefined,
-    limit: undefined,
+    limit: "all",
     page: undefined,
   }
   params.filter.push({
@@ -653,6 +653,15 @@ export const useUsersExport = () => {
   return useCsvExport(
     () => userService.listAsCsv(),
     `users-${createDateStringFromNow("YYYY-MM-DD_HH:mm")}.csv`
+  )
+}
+
+export const useAdvocateUserExport = () => {
+  const { userService } = useContext(AuthContext)
+
+  return useCsvExport(
+    () => userService.listAdvocatesAsCsv(),
+    `advocate-users-${createDateStringFromNow("YYYY-MM-DD_HH:mm")}.csv`
   )
 }
 

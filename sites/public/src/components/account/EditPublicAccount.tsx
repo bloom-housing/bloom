@@ -23,7 +23,7 @@ import {
   createEmailSubmitHandler,
   createPasswordSubmitHandler,
   AlertMessage,
-} from "./EditAccountHelpers"
+} from "./AccountFieldHelpers"
 
 export const EditPublicAccount = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method

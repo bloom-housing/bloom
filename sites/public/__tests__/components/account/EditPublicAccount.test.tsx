@@ -71,10 +71,12 @@ describe("EditPublicAccount", () => {
     })
 
     // These are the IDs of the form sections we expect to appear
-    expect(document.getElementById("update-name")).toBeInTheDocument()
-    expect(document.getElementById("update-birthdate")).toBeInTheDocument()
-    expect(document.getElementById("update-email")).toBeInTheDocument()
-    expect(document.getElementById("update-password")).toBeInTheDocument()
+    await waitFor(() => {
+      expect(document.getElementById("update-name")).toBeInTheDocument()
+      expect(document.getElementById("update-birthdate")).toBeInTheDocument()
+      expect(document.getElementById("update-email")).toBeInTheDocument()
+      expect(document.getElementById("update-password")).toBeInTheDocument()
+    })
   })
 
   describe("Name form", () => {
@@ -94,8 +96,8 @@ describe("EditPublicAccount", () => {
         expect(screen.getByDisplayValue("First")).toBeInTheDocument()
       })
 
-      const firstNameField = screen.getByLabelText("Given name", { selector: "input" })
-      const lastNameField = screen.getByLabelText("Family name", { selector: "input" })
+      const firstNameField = screen.getByLabelText("First or given name", { selector: "input" })
+      const lastNameField = screen.getByLabelText("Last or family name", { selector: "input" })
       const updateButton = document.getElementById("account-submit-name")
 
       await userEvent.clear(firstNameField)
@@ -286,7 +288,7 @@ describe("EditPublicAccount", () => {
       await userEvent.click(updateButton)
 
       await waitFor(() => {
-        expect(screen.getByText(/Please enter an email address/i)).toBeInTheDocument()
+        expect(screen.getByText(/Please enter a valid email address/i)).toBeInTheDocument()
       })
     })
   })

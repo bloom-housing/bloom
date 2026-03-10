@@ -685,6 +685,7 @@ describe('Listing Controller Tests', () => {
         }),
       });
       const listing1Input = await listingFactory(jurisdictionB.id, prisma, {
+        enableListingFeaturesAndUtilities: true,
         listing: {
           homeType: HomeTypeEnum.apartment,
           isVerified: true,
@@ -718,6 +719,7 @@ describe('Listing Controller Tests', () => {
       });
 
       const listing2Input = await listingFactory(jurisdictionB.id, prisma, {
+        enableListingFeaturesAndUtilities: true,
         includeReservedCommunityTypes: true,
         listing: {
           homeType: HomeTypeEnum.duplex,
@@ -2238,6 +2240,15 @@ describe('Listing Controller Tests', () => {
       const listingData = await listingFactory(jurisdictionA.id, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
+        select: {
+          id: true,
+          name: true,
+          units: {
+            select: {
+              id: true,
+            },
+          },
+        },
       });
 
       const val = await constructFullListingData({
@@ -2254,6 +2265,27 @@ describe('Listing Controller Tests', () => {
         .expect(200);
       expect(res.body.id).toEqual(listing.id);
       expect(res.body.name).toEqual(val.name);
+
+      const snapshot = await prisma.listingSnapshot.findFirst({
+        where: {
+          originalId: listing.id,
+        },
+        select: {
+          id: true,
+          originalId: true,
+          name: true,
+          unit: {
+            select: {
+              id: true,
+              originalId: true,
+            },
+          },
+        },
+      });
+
+      expect(snapshot.originalId).toEqual(listing.id);
+      expect(snapshot.name).toEqual(listing.name);
+      expect(snapshot.unit.length).toEqual(listing.units.length);
     });
 
     it('should update listing with enableV2MSQ as true', async () => {
