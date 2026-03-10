@@ -102,7 +102,7 @@ const ApplicationMultiselectQuestionStep = ({
       pageTitle: `Application - All ${applicationSection}`,
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
-  }, [profile])
+  }, [profile, applicationSection])
 
   // Required to keep the form up to date before submitting this section if you're moving between pages
   useEffect(() => {
@@ -226,7 +226,7 @@ const ApplicationMultiselectQuestionStep = ({
   }
 
   const allOptions = [...questionOptions]
-  if (question?.optOutText) {
+  if (!enableV2MSQ && question?.optOutText) {
     allOptions.push({
       text: question?.optOutText,
       description: null,
