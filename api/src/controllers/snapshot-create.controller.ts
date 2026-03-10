@@ -22,4 +22,14 @@ export class SnapshotCreateController {
   async createUserSnapshot(@Body() idDTO: IdDTO): Promise<SuccessDTO> {
     return await this.snapshotCreateService.createUserSnapshot(idDTO.id);
   }
+
+  @Put('createListingSnapshot')
+  @ApiOperation({
+    summary: 'Create Listing Snapshot',
+    operationId: 'createListingSnapshot',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async createListingSnapshot(@Body() idDTO: IdDTO): Promise<SuccessDTO> {
+    return await this.snapshotCreateService.createListingSnapshot(idDTO.id);
+  }
 }

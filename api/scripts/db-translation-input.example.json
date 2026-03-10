@@ -1,0 +1,14 @@
+{
+  "t": {
+    "hello": "What's up"
+  },
+  "footer": {
+    "footer": "New footer"
+  },
+  "confirmation": {
+    "subject": "Your Application Confirmation Updated",
+    "eligible": {
+      "fcfs": "Updated fcfs copy"
+    }
+  }
+}

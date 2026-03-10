@@ -1023,6 +1023,46 @@ export const stagingSeed = async (
       },
     ],
     [
+      angelopolisJurisdiction.id,
+      prismaClient,
+      {
+        listing: { ...hollywoodHillsHeights, name: '200 Acre Woods' },
+        propertyId: angelopolisProperty1.id,
+        units: Array.from({ length: 200 }, (_, i) => ({
+          amiPercentage: '30',
+          monthlyIncomeMin: '2000',
+          floor: 1,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          numBathrooms: 1,
+          numBedrooms: 1,
+          number: `${i}`,
+          sqFeet: `${i}`,
+          amiChart: { connect: { id: angelopolisAmiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[1].id,
+            },
+          },
+        })),
+        multiselectQuestions: [
+          cityEmployeeQuestion,
+          workInCityQuestion,
+          multiselectQuestionPrograms,
+        ],
+        applications: [
+          await applicationFactory({
+            raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
+          }),
+          await applicationFactory({
+            raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
+          }),
+        ],
+        userAccounts: [{ id: partnerUser.id }],
+        optionalFeatures: { carpetInUnit: true },
+      },
+    ],
+    [
       mainJurisdiction.id,
       prismaClient,
       {

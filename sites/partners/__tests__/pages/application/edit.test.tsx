@@ -18,6 +18,30 @@ describe("application edit page", () => {
     })
   })
 
+  it("renders when preferences and programs are not arrays", async () => {
+    mockNextRouter({ id: "application_1" })
+    jest.spyOn(require("../../../src/lib/hooks"), "useSingleApplicationData").mockReturnValue({
+      application: {
+        ...application,
+        preferences: {},
+        programs: {},
+      },
+    })
+
+    render(
+      <AuthContext.Provider
+        value={{
+          profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
+          doJurisdictionsHaveFeatureFlagOn: () => false,
+        }}
+      >
+        <EditApplication />
+      </AuthContext.Provider>
+    )
+
+    expect(await screen.findByRole("button", { name: /save & exit/i })).toBeInTheDocument()
+  })
+
   describe("confirmation modal when application status changes and waitlist numbers are updated", () => {
     it("opens confirmation modal when application got wait list numbers and status changes to non wait list", async () => {
       mockNextRouter({ id: "application_1" })

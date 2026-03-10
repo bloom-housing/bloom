@@ -62,7 +62,7 @@ includeViews.csv = {
     include: {
       multiselectQuestions: {
         select: {
-          text: true,
+          name: true,
         },
       },
     },
@@ -95,6 +95,80 @@ export const formatCommunityType = {
   seniorVeterans: 'Senior Veteran',
   veteran: 'Veteran',
   schoolEmployee: 'School Employee',
+};
+
+export const formatListingFeature = {
+  accessibleHeightToilet: 'Accessible height toilet',
+  accessibleParking: 'Accessible parking spots',
+  acInUnit: 'AC in unit',
+  barrierFreeBathroom: 'Barrier-free bathrooms',
+  barrierFreeEntrance: 'Barrier-free (no-step) property entrance',
+  barrierFreePropertyEntrance: 'Barrier-free (no-step) property entrance',
+  barrierFreeUnitEntrance: 'Barrier-free (no-step) unit entrances',
+  bathGrabBarsOrReinforcements: 'Bath grab bars or reinforcements',
+  bathroomCounterLowered:
+    'Bathroom counter lowered with min 27 inch high knee space',
+  brailleSignageInBuilding: 'Braille signage in building',
+  carbonMonoxideDetectorWithStrobe: 'Carbon monoxide detector with strobe',
+  carpetInUnit: 'Carpet in unit',
+  elevator: 'Elevator',
+  extraAudibleCarbonMonoxideDetector:
+    'Extra audible carbon monoxide detector - min. 85 db',
+  extraAudibleSmokeDetector: 'Extra audible smoke detector - min. 85 db',
+  fireSuppressionSprinklerSystem: 'Fire suppression / sprinkler system',
+  frontControlsDishwasher: 'Front controls on dishwasher',
+  frontControlsStoveCookTop: 'Front controls on stove/cook top',
+  grabBars: 'Grab bars in bathrooms',
+  hardFlooringInUnit: 'Hard flooring in unit',
+  hearing: 'Units for those with hearing accessibility needs',
+  hearingAndVision:
+    'Units for those with hearing and/or vision accessibility needs',
+  heatingInUnit: 'Heating in unit',
+  inUnitWasherDryer: 'In-unit washer/dryer',
+  kitchenCounterLowered:
+    'Kitchen counter lowered with min 27 inch high knee space',
+  laundryInBuilding: 'Laundry in building',
+  leverHandlesOnDoors: 'Lever handles on doors',
+  leverHandlesOnFaucets: 'Lever handles on faucets',
+  loweredCabinets: 'Lowered cabinets and countertops',
+  loweredLightSwitch: 'Lowered light switches',
+  mobility: 'Units for those with mobility accessibility needs',
+  noEntryStairs: 'No entry stairs',
+  nonDigitalKitchenAppliances: 'Non-digital kitchen appliances',
+  noStairsToParkingSpots: 'No stairs to parking spots',
+  noStairsWithinUnit: 'No stairs within unit',
+  parkingOnSite: 'Parking on site',
+  refrigeratorWithBottomDoorFreezer: 'Refrigerator with bottom-door freezer',
+  rollInShower: 'Roll-in showers',
+  serviceAnimalsAllowed: 'Service animals allowed',
+  smokeDetectorWithStrobe: 'Smoke detector with strobe',
+  streetLevelEntrance: 'Street-level entrance',
+  toiletGrabBarsOrReinforcements: 'Toilet grab bars or reinforcements',
+  ttyAmplifiedPhone: 'TTY / amplified phone',
+  turningCircleInBathrooms: 'Turning circle in bathrooms',
+  visual: 'Units for those with vision accessibility needs',
+  walkInShower: 'Walk-in shower',
+  wheelchairRamp: 'Wheelchair ramp',
+  wideDoorways: 'Wide unit doorways for wheelchairs',
+};
+
+export const formatParkingType = {
+  carport: 'Carport',
+  garage: 'Garage',
+  offStreet: 'Off street',
+  onStreet: 'On street',
+};
+
+export const formatListingDocuments = {
+  birthCertificate: 'Birth Certificate (all household members 18+)',
+  currentLandlordReference: 'Current landlord reference',
+  governmentIssuedId: 'Government-issued ID (all household members 18+)',
+  previousLandlordReference: 'Previous landlord reference',
+  proofOfAssets: 'Proof of Assets (bank statements, etc.)',
+  proofOfCustody: 'Proof of Custody/Guardianship',
+  proofOfIncome: 'Proof of household income (check stubs, W-2, etc.)',
+  residencyDocuments: 'Immigration/Residency documents (green card, etc.)',
+  socialSecurityCard: 'Social Security card',
 };
 
 export const formatCloudinaryPdfUrl = (fileId: string): string => {
@@ -186,7 +260,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
 
     // Add unit groups summarized to listings
     // should be removed when unit summarized stored in db
-    await addUnitGroupsSummarized(listings as unknown as Listing[]);
+    addUnitGroupsSummarized(listings as unknown as Listing[]);
 
     await this.createCsv(listingFilePath, queryParams, {
       listings: listings as unknown as Listing[],
@@ -442,14 +516,25 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       | ListingDocuments
       | ListingFeatures
       | ListingParkingType,
+    formatter?: Record<string, string>,
   ): string {
     if (!val) return '';
-    const selectedValues = Object.entries(val).reduce((combined, entry) => {
-      if (entry[1] === true) {
-        combined.push(entry[0]);
-      }
-      return combined;
-    }, []);
+    let selectedValues;
+    if (formatter) {
+      selectedValues = Object.entries(val).reduce((combined, entry) => {
+        if (entry[1] === true) {
+          combined.push(formatter[entry[0]]);
+        }
+        return combined;
+      }, []);
+    } else {
+      selectedValues = Object.entries(val).reduce((combined, entry) => {
+        if (entry[1] === true) {
+          combined.push(entry[0]);
+        }
+        return combined;
+      }, []);
+    }
     return selectedValues.join(', ');
   }
 
@@ -619,7 +704,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
                       question.multiselectQuestions.applicationSection ===
                       'programs',
                   )
-                  .map((question) => question.multiselectQuestions.text)
+                  .map((question) => question.multiselectQuestions.name)
                   .join(',');
               },
             },
@@ -701,8 +786,8 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     ) {
       headers.push({
         path: 'listingFeatures',
-        label: 'Property Amenities',
-        format: this.buildSelectList,
+        label: 'Listing Accessibility Features',
+        format: (val) => this.buildSelectList(val, formatListingFeature),
       });
     }
 
@@ -791,7 +876,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
                   question.multiselectQuestions.applicationSection ===
                   'preferences',
               )
-              .map((question) => question.multiselectQuestions.text)
+              .map((question) => question.multiselectQuestions.name)
               .join(',');
           },
         },
@@ -810,7 +895,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
                         question.multiselectQuestions.applicationSection ===
                         'programs',
                     )
-                    .map((question) => question.multiselectQuestions.text)
+                    .map((question) => question.multiselectQuestions.name)
                     .join(',');
                 },
               },
@@ -1007,7 +1092,8 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           {
             path: 'parkType',
             label: 'Parking Types',
-            format: this.buildSelectList,
+            format: (val: ListingParkingType) =>
+              this.buildSelectList(val, formatParkingType),
           },
         ],
       );
@@ -1055,7 +1141,8 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
               {
                 path: 'requiredDocumentsList',
                 label: 'Required documents List',
-                format: this.buildSelectList,
+                format: (val: ListingDocuments) =>
+                  this.buildSelectList(val, formatListingDocuments),
               },
             ]
           : []),

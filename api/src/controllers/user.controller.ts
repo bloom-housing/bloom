@@ -56,6 +56,8 @@ import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
 import { PublicUserUpdate } from '../dtos/users/public-user-update.dto';
 import { PartnerUserUpdate } from '../dtos/users/partner-user-update.dto';
 import { AdvocateUserUpdate } from '../dtos/users/advocate-user-update.dto';
+import { AdvocateUserCsvExporterService } from '../services/advocate-user-csv-export.service';
+import { AdvocateUserAccept } from '../dtos/users/advocate-user-accept.dto';
 
 @Controller('user')
 @ApiTags('user')
@@ -70,12 +72,14 @@ import { AdvocateUserUpdate } from '../dtos/users/advocate-user-update.dto';
   PublicUserUpdate,
   PartnerUserUpdate,
   AdvocateUserUpdate,
+  AdvocateUserAccept,
 )
 @UseGuards(ApiKeyGuard)
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly userCSVExportService: UserCsvExporterService,
+    private readonly advocateUserCSVExportService: AdvocateUserCsvExporterService,
   ) {}
 
   @Get()
@@ -122,6 +126,23 @@ export class UserController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<StreamableFile> {
     return await this.userCSVExportService.exportFile(req, res);
+  }
+
+  @Get('advocate/csv')
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({
+    summary: 'List advocate users in CSV',
+    operationId: 'listAdvocatesAsCsv',
+  })
+  @Header('Content-Type', 'text/csv')
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  @UseInterceptors(ExportLogInterceptor)
+  async listAdvocateAsCsv(
+    @Request() req: ExpressRequest,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    return await this.advocateUserCSVExportService.exportFile(req, res);
   }
 
   @Get('favoriteListings/:id')
@@ -189,6 +210,20 @@ export class UserController {
       queryParams.noWelcomeEmail !== true,
       req,
     );
+  }
+
+  @Post('/advocate/approve')
+  @ApiOperation({
+    summary: 'Accept or decline advocate user request',
+    operationId: 'approveAdvocate',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @UseGuards(PermissionGuard, JwtAuthGuard)
+  async approveAdvocateUser(
+    @Request() req: ExpressRequest,
+    @Body() dto: AdvocateUserAccept,
+  ): Promise<SuccessDTO> {
+    return await this.userService.acceptAdvocateUser(dto, req);
   }
 
   @Delete()

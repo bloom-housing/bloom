@@ -1,0 +1,24 @@
+{{#> layout_default }}
+    <h1>
+        <span style="font-family: Arial, Helvetica, sans-serif; font-size: 24px">
+            {{t "advocateRejected.hello"}}
+        </span>
+        <br />
+
+        {{> user-name }}
+    </h1>
+
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td align="left">
+            <p>
+                {{t "advocateRejected.rejectionMessageStart" appOptions}} <strong>{{t "advocateRejected.rejectionMessageEnd"}}</strong>
+                <br/><br/>
+                {{t "advocateRejected.rejectionInfoStart"}} <a href="mailto:{{contactEmail}}">{{contactEmail}}</a> {{"advocateRejected.rejectionInfoEnd"}}
+            </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{{/layout_default }}
