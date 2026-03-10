@@ -352,13 +352,19 @@ export const getListings = (listings) => {
   }
 
   const generateTableSubHeader = (listing) => {
-    if (listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist) {
+    if (
+      listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&
+      listing.reviewOrderType !== ReviewOrderTypeEnum.waitlistLottery
+    ) {
       return {
         content: t("listings.availableUnits"),
         styleType: AppearanceStyleType.success,
         isPillType: true,
       }
-    } else if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
+    } else if (
+      listing.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
+      listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
+    ) {
       return {
         content: t("listings.waitlist.open"),
         styleType: AppearanceStyleType.primary,
