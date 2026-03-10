@@ -655,7 +655,13 @@ export class ApplicationService {
       }
     }
     // if closed listing and non-admin user
-    if (listing?.status === 'closed' && !requestingUser.userRoles?.isAdmin) {
+    if (
+      listing?.status === 'closed' &&
+      !(
+        requestingUser.userRoles?.isAdmin ||
+        requestingUser.userRoles?.isSupportAdmin
+      )
+    ) {
       throw new BadRequestException(
         `Non-administrators cannot submit applications to closed listings`,
       );

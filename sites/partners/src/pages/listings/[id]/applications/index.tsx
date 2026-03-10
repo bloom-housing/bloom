@@ -79,7 +79,10 @@ const ApplicationsList = () => {
 
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
-  const allowNewApps = listingDto?.status !== "closed" || profile?.userRoles?.isAdmin
+  const allowNewApps =
+    listingDto?.status !== "closed" ||
+    profile?.userRoles?.isAdmin ||
+    profile?.userRoles?.isSupportAdmin
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
     page: 1,
