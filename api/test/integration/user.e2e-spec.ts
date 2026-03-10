@@ -30,6 +30,7 @@ import { addressFactory } from '../../prisma/seed-helpers/address-factory';
 import { AddressUpdate } from '../../src/dtos/addresses/address-update.dto';
 import { UserOrderByKeys } from '../../src/enums/listings/order-by-enum';
 import { OrderByEnum } from '../../src/enums/shared/order-by-enum';
+import { AdvocateUserAccept } from '../../src/dtos/users/advocate-user-accept.dto';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -49,6 +50,8 @@ describe('User Controller Tests', () => {
     sendMfaCode: jest.fn(),
     sendCSV: jest.fn(),
     warnOfAccountRemoval: jest.fn(),
+    advocateAccepted: jest.fn(),
+    advocateRejected: jest.fn(),
   };
 
   beforeEach(() => {
@@ -1292,6 +1295,118 @@ describe('User Controller Tests', () => {
           language: LanguagesEnum.es,
         }),
       );
+    });
+  });
+
+  describe('accept advocate endpoint', () => {
+    it('should throw error when a user with given ID is not found', async () => {
+      const randomId = randomUUID();
+
+      const res = await request(app.getHttpServer())
+        .post(`/user/advocate/approve`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          advocateId: {
+            id: randomId,
+          },
+          isAccepted: true,
+        } as AdvocateUserAccept)
+        .set('Cookie', cookies)
+        .expect(404);
+
+      expect(res.body.message).toEqual(
+        `User with id: ${randomId} was not found`,
+      );
+    });
+
+    it('should throw error when requested user is not an advocate', async () => {
+      const userA = await prisma.userAccounts.create({
+        data: await userFactory({ isAdvocate: false }),
+      });
+
+      const res = await request(app.getHttpServer())
+        .post(`/user/advocate/approve`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          advocateId: {
+            id: userA.id,
+          },
+          isAccepted: true,
+        } as AdvocateUserAccept)
+        .set('Cookie', cookies)
+        .expect(400);
+
+      expect(res.body.message).toEqual(
+        `The user with id ${userA.id} is not an advocate`,
+      );
+    });
+
+    it('should update advocate users isApproved value when accepted', async () => {
+      const advocateUser = await prisma.userAccounts.create({
+        data: await userFactory({
+          isAdvocate: true,
+          isApproved: false,
+        }),
+      });
+
+      const mockAcceptedEmail = jest.spyOn(
+        testEmailService,
+        'advocateAccepted',
+      );
+      const res = await request(app.getHttpServer())
+        .post(`/user/advocate/approve`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          advocateId: {
+            id: advocateUser.id,
+          },
+          isAccepted: true,
+        } as AdvocateUserAccept)
+        .set('Cookie', cookies)
+        .expect(201);
+
+      expect(res.body.success).toEqual(true);
+
+      const updatedUser = await prisma.userAccounts.findUnique({
+        where: { id: advocateUser.id },
+      });
+
+      expect(updatedUser.isApproved).toBe(true);
+      expect(mockAcceptedEmail.mock.calls.length).toBe(1);
+    });
+
+    it('should update advocate users isApproved value when rejected', async () => {
+      const advocateUser = await prisma.userAccounts.create({
+        data: await userFactory({
+          isAdvocate: true,
+          isApproved: true,
+        }),
+      });
+
+      const mockRejectedEmail = jest.spyOn(
+        testEmailService,
+        'advocateRejected',
+      );
+      const res = await request(app.getHttpServer())
+        .post(`/user/advocate/approve`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          advocateId: {
+            id: advocateUser.id,
+          },
+          isAccepted: false,
+        } as AdvocateUserAccept)
+        .set('Cookie', cookies)
+        .expect(201);
+
+      expect(res.body.success).toEqual(true);
+
+      const updatedUser = await prisma.userAccounts.findUnique({
+        where: { id: advocateUser.id },
+      });
+
+      expect(updatedUser.isApproved).toBe(false);
+      expect(mockRejectedEmail.mock.calls.length).toBe(1);
     });
   });
 });
