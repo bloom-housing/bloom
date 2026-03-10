@@ -67,8 +67,8 @@ The script accepts a JSON file with:
 Helpful flags:
 
 - `--output <name-or-path>` writes SQL to a file instead of stdout
-- `--output 52_test` creates `prisma/migrations/52_test/migration.sql`
-- `--output prisma/migrations/52_test/migration.sql` writes to that exact file
+- `--output 52_test` creates `prisma/migrations/52_test/migration.sql` (ensure you increment the prefixed number from the lst migration)
+- `--output prisma/migrations/52_test/migration.sql` writes to that exact file (ensure you increment the prefixed number from the lst migration)
 - `--languages en,es,tl` limits generated languages
 - `--jurisdiction "Bloomington"` targets jurisdiction-specific rows by jurisdiction name instead of generic (`jurisdiction_id IS NULL`)
 - `--no-machine-translate` disables Google Translate
