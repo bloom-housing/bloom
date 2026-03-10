@@ -29,7 +29,7 @@ export const PropertyDetailsCard = ({
         {linkUrl && (
           <p className="seeds-m-bs-text">
             <Link href={linkUrl} hideExternalLinkIcon={true}>
-              {linkText ? linkText : linkUrl}
+              {linkText || linkUrl}
             </Link>
           </p>
         )}
