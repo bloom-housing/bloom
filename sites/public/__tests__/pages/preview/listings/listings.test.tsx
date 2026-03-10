@@ -6,11 +6,6 @@ import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/t
 import { mockNextRouter } from "../../../testUtils"
 import ListingPage from "../../../../src/pages/preview/listings/[id]"
 
-jest.mock("../../../../src/layouts/application", () => ({
-  __esModule: true,
-  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-}))
-
 const server = setupServer()
 
 const TOAST_MESSAGE = {
