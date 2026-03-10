@@ -44,7 +44,7 @@ describe("Admin User Mangement Tests", () => {
     )}.csv`
     const downloadFolder = Cypress.config("downloadsFolder")
     const completeZipPath = `${downloadFolder}/${csvName}`
-    cy.readFile(completeZipPath)
+    cy.readFile(completeZipPath).should("exist")
   })
 
   it("as admin user, should be able to create new admin", () => {

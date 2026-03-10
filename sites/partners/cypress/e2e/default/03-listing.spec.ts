@@ -1971,6 +1971,6 @@ describe("Listing Management Tests", () => {
     const zipName = "2026-03-10_22-07-complete-listing-data.zip"
     const completeZipPath = `${downloadFolder}/${zipName}`
 
-    cy.readFile(completeZipPath, { timeout: 120000 }).should("exist")
+    cy.readFile(completeZipPath).should("exist")
   })
 })
