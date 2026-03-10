@@ -1,10 +1,10 @@
 import React, { useEffect, useContext } from "react"
+import Markdown from "markdown-to-jsx"
 import { PageHeader, MarkdownSection, t } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import pageContent from "../../static_content/generic_content.md"
-import LazyMarkdown from "../core/LazyMarkdown"
 
 const DisclaimerDeprecated = () => {
   const { profile } = useContext(AuthContext)
@@ -23,7 +23,7 @@ const DisclaimerDeprecated = () => {
     <Layout pageTitle={t("pageTitle.disclaimer")}>
       <PageHeader inverse={true} title={pageTitle} />
       <MarkdownSection>
-        <LazyMarkdown>{pageContent.toString()}</LazyMarkdown>
+        <Markdown>{pageContent.toString()}</Markdown>
       </MarkdownSection>
     </Layout>
   )
