@@ -73,7 +73,9 @@ const ApplicationMultiselectQuestionStep = ({
 
   const questions = listingSectionQuestions(listing, applicationSection)
   const [page, setPage] = useState(conductor.navigatedThroughBack ? questions.length : 1)
-  const [applicationQuestions, setApplicationQuestions] = useState(application[applicationSection])
+  const [applicationQuestions, setApplicationQuestions] = useState(
+    Array.isArray(application[applicationSection]) ? application[applicationSection] : []
+  )
   const question = getPageQuestion(questions, page)
 
   const questionSetInputType = getInputType(question?.options)
@@ -95,7 +97,13 @@ const ApplicationMultiselectQuestionStep = ({
 
   // Required to keep the form up to date before submitting this section if you're moving between pages
   useEffect(() => {
-    reset(mapApiToMultiselectForm(applicationQuestions, questions, applicationSection))
+    reset(
+      mapApiToMultiselectForm(
+        Array.isArray(applicationQuestions) ? applicationQuestions : [],
+        questions,
+        applicationSection
+      )
+    )
     setExclusiveKeys(getExclusiveKeys(question, applicationSection))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, applicationQuestions, reset])
