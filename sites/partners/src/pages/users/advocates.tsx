@@ -20,7 +20,7 @@ import XCircleIcon from "@heroicons/react/24/solid/XCircleIcon"
 import { DialogFooter } from "@bloom-housing/ui-seeds/src/overlays/Dialog"
 
 const Advocates = () => {
-  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn, approveAdvocateUser } = useContext(AuthContext)
   const [selectedUser, setSelectedUser] = useState<User>(null)
   const [dialogConfig, setDialogConfig] = useState<"accept" | "reject">(null)
 
@@ -34,6 +34,11 @@ const Advocates = () => {
   const handleCloseDialog = () => {
     setDialogConfig(null)
     setSelectedUser(null)
+  }
+
+  const handleDialogClick = async (approved: boolean) => {
+    await approveAdvocateUser(selectedUser.id, approved)
+    setDialogConfig(null)
   }
 
   const columns = useMemo(() => {
@@ -188,7 +193,7 @@ const Advocates = () => {
               })}
             </Dialog.Content>
             <DialogFooter>
-              <Button>{t("t.approve")}</Button>
+              <Button onClick={() => handleDialogClick(true)}>{t("t.approve")}</Button>
               <Button variant="primary-outlined" onClick={handleCloseDialog}>
                 {t("t.cancel")}
               </Button>
@@ -207,7 +212,9 @@ const Advocates = () => {
               })}
             </Dialog.Content>
             <DialogFooter>
-              <Button variant="alert">{t("t.decline")}</Button>
+              <Button variant="alert" onClick={() => handleDialogClick(false)}>
+                {t("t.decline")}
+              </Button>
               <Button variant="primary-outlined" onClick={handleCloseDialog}>
                 {t("t.cancel")}
               </Button>
