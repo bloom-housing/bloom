@@ -485,13 +485,14 @@ export const getEligibilitySections = (
     MultiselectQuestionsApplicationSectionEnum.preferences
   )
   if (preferences?.length > 0 && !disableListingPreferences) {
+    const sortedPreferences = preferences.sort((a, b) => a.ordinal - b.ordinal)
     eligibilityFeatures.push({
       header: t("listings.sections.housingPreferencesTitle"),
       subheader: t("listings.sections.housingPreferencesSubtitle"),
       note: t("listings.remainingUnitsAfterPreferenceConsideration"),
       content: (
         <OrderedCardList
-          cardContent={preferences.map((question) => {
+          cardContent={sortedPreferences.map((question) => {
             return {
               heading: question.multiselectQuestions.text,
               description: question.multiselectQuestions.description,
@@ -508,6 +509,7 @@ export const getEligibilitySections = (
     MultiselectQuestionsApplicationSectionEnum.programs
   )
   if (programs?.length > 0) {
+    const sortedPrograms = programs.sort((a, b) => a.ordinal - b.ordinal)
     eligibilityFeatures.push(
       !swapCommunityTypeWithPrograms
         ? {
@@ -516,7 +518,7 @@ export const getEligibilitySections = (
             note: t("listings.remainingUnitsAfterPrograms"),
             content: (
               <CardList
-                cardContent={programs.map((question) => {
+                cardContent={sortedPrograms.map((question) => {
                   return {
                     heading: question.multiselectQuestions.text,
                     description: question.multiselectQuestions.description,
@@ -531,7 +533,7 @@ export const getEligibilitySections = (
             note: t("listings.communityTypesNote"),
             content: (
               <CardList
-                cardContent={programs.map((question) => {
+                cardContent={sortedPrograms.map((question) => {
                   return {
                     heading: t(
                       question.multiselectQuestions.untranslatedText

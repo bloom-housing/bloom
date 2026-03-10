@@ -553,7 +553,7 @@ const ListingForm = ({
                           <Units
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                             disableListingAvailability={
-                              isListingActive && !profile.userRoles.isAdmin
+                              isListingActive && !profile?.userRoles.isAdmin
                             }
                             jurisdiction={jurisdictionId}
                             requiredFields={requiredFields}
@@ -649,7 +649,7 @@ const ListingForm = ({
                             {t("listings.requiredToPublishAsterisk")}
                           </p>
                           <RankingsAndResults
-                            disableDueDates={isListingActive && !profile.userRoles.isAdmin}
+                            disableDueDates={isListingActive && !profile?.userRoles.isAdmin}
                             enableUnitGroups={enableUnitGroups}
                             enableWaitlistAdditionalFields={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableWaitlistAdditionalFields,

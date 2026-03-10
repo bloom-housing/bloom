@@ -40,7 +40,6 @@ import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view
 import { ApplicationsFilterEnum } from '../enums/applications/filter-enum';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
 import { CronJobService } from './cron-job.service';
-import { DefaultArgs } from '@prisma/client/runtime/library';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>

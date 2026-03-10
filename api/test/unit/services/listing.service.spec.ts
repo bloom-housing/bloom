@@ -627,6 +627,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingFeatures: true,
           listingUtilities: true,
@@ -803,6 +804,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingFeatures: true,
           listingUtilities: true,
@@ -933,6 +935,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingFeatures: true,
           listingUtilities: true,
@@ -1313,6 +1316,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingFeatures: true,
           listingUtilities: true,
@@ -2334,6 +2338,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingFeatures: true,
           listingUtilities: true,
@@ -2416,6 +2421,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingFeatures: true,
           listingUtilities: true,
@@ -2816,6 +2822,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingFeatures: true,
           listingUtilities: true,
@@ -2935,6 +2942,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingFeatures: true,
           listingUtilities: true,
@@ -3097,6 +3105,7 @@ describe('Testing listing service', () => {
           listingImages: { include: { assets: true } },
           listingMultiselectQuestions: {
             include: { multiselectQuestions: true },
+            orderBy: { ordinal: 'asc' },
           },
           listingNeighborhoodAmenities: true,
           listingFeatures: true,
@@ -3219,6 +3228,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingUtilities: true,
           listingNeighborhoodAmenities: true,
@@ -3347,6 +3357,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingUtilities: true,
           listingNeighborhoodAmenities: true,
@@ -3727,6 +3738,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingUtilities: true,
           listingNeighborhoodAmenities: true,
@@ -3868,6 +3880,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
 
           listingUtilities: true,
@@ -4219,6 +4232,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingUtilities: true,
           listingNeighborhoodAmenities: true,
@@ -4330,6 +4344,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingUtilities: true,
           listingNeighborhoodAmenities: true,
@@ -4432,6 +4447,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingUtilities: true,
           listingNeighborhoodAmenities: true,
@@ -4887,6 +4903,7 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: true,
             },
+            orderBy: { ordinal: 'asc' },
           },
           listingUtilities: true,
           listingNeighborhoodAmenities: true,

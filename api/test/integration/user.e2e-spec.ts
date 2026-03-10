@@ -41,17 +41,6 @@ describe('User Controller Tests', () => {
   let logger: Logger;
 
   const mockSeSClient = mockClient(SESv2Client);
-  const invitePartnerUserMock = jest.fn();
-  const testEmailService = {
-    confirmation: jest.fn(),
-    welcome: jest.fn(),
-    invitePartnerUser: invitePartnerUserMock,
-    changeEmail: jest.fn(),
-    forgotPassword: jest.fn(),
-    sendMfaCode: jest.fn(),
-    sendCSV: jest.fn(),
-    warnOfAccountRemoval: jest.fn(),
-  };
 
   beforeEach(() => {
     jest.resetAllMocks();

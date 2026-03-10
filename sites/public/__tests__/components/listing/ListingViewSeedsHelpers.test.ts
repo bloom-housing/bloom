@@ -2,17 +2,15 @@ import {
   FeatureFlagEnum,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   UnitsSummarized,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { jurisdiction, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { cleanup } from "@testing-library/react"
 import {
   getCurrencyFromArgumentString,
   getEligibilitySections,
   getStackedHmiData,
 } from "../../../src/components/listing/ListingViewSeedsHelpers"
-
-afterEach(cleanup)
 
 describe("ListingViewSeedsHelpers", () => {
   describe("getFilteredMultiselectQuestions", () => {
@@ -83,6 +81,77 @@ describe("ListingViewSeedsHelpers", () => {
 
     it.todo("tests")
 
+    it("should return properly sorted preferences", () => {
+      const eligibilitySections = getEligibilitySections(
+        {
+          ...jurisdiction,
+        },
+        {
+          ...minimalEligibilitySectionsListing,
+          listingMultiselectQuestions: [
+            {
+              ordinal: 2,
+              multiselectQuestions: {
+                id: "id",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                description: "Preference 2 description",
+                text: "Preference 2",
+                jurisdictions: [],
+                applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+                status: MultiselectQuestionsStatusEnum.active,
+              },
+            },
+            {
+              ordinal: 1,
+              multiselectQuestions: {
+                id: "id",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                description: "Preference 1 description",
+                text: "Preference 1",
+                jurisdictions: [],
+                applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+                status: MultiselectQuestionsStatusEnum.active,
+              },
+            },
+            {
+              ordinal: 3,
+              multiselectQuestions: {
+                id: "id",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                description: "Preference 3 description",
+                text: "Preference 3",
+                jurisdictions: [],
+                applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+                status: MultiselectQuestionsStatusEnum.active,
+              },
+            },
+          ],
+        }
+      )
+
+      const preferenceSection = eligibilitySections.find(
+        (section) => section.header === "Housing preferences"
+      )
+
+      expect(preferenceSection).toEqual({
+        header: "Housing preferences",
+        note: "After all preference holders have been considered, any remaining units will be available to other qualified applicants.",
+        subheader: "Preference holders will be given highest ranking.",
+        content: expect.objectContaining({
+          props: expect.objectContaining({
+            cardContent: [
+              { description: "Preference 1 description", heading: "Preference 1" },
+              { description: "Preference 2 description", heading: "Preference 2" },
+              { description: "Preference 3 description", heading: "Preference 3" },
+            ],
+          }),
+        }),
+      })
+    })
+
     it("should not return a program section in the list if there are no programs", () => {
       const eligibilitySections = getEligibilitySections(
         jurisdiction,
@@ -123,12 +192,26 @@ describe("ListingViewSeedsHelpers", () => {
           ...minimalEligibilitySectionsListing,
           listingMultiselectQuestions: [
             {
+              ordinal: 2,
+              multiselectQuestions: {
+                id: "id",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                text: "Veterans",
+                description: "Veteran program",
+                jurisdictions: [],
+                applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                status: MultiselectQuestionsStatusEnum.active,
+              },
+            },
+            {
               ordinal: 1,
               multiselectQuestions: {
                 id: "id",
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 text: "Families",
+                description: "Families program",
                 jurisdictions: [],
                 applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
               },
@@ -142,7 +225,14 @@ describe("ListingViewSeedsHelpers", () => {
         note: "One or more questions in the application will help to determine whether or not you are eligible for the housing programs listed above. After you have submitted your application, the property manager will ask you to verify your housing program eligibility by providing documentation or another form of verification.",
         subheader:
           "Some or all of the units for this property are reserved for persons who qualify for the particular housing program(s) listed below. You may need to qualify for one of these programs in order to be eligible for a unit at this property.",
-        content: expect.anything(),
+        content: expect.objectContaining({
+          props: expect.objectContaining({
+            cardContent: [
+              { description: "Families program", heading: "Families" },
+              { description: "Veteran program", heading: "Veterans" },
+            ],
+          }),
+        }),
       })
     })
 
@@ -187,6 +277,7 @@ describe("ListingViewSeedsHelpers", () => {
         content: expect.anything(),
       })
     })
+
     it("should return nothing if no data", () => {
       const eligibilitySections = getEligibilitySections(jurisdiction, {
         ...listing,
