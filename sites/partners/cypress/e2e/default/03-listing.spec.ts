@@ -1961,19 +1961,16 @@ describe("Listing Management Tests", () => {
     cy.getByTestId("page-header").should("have.text", listing["editedName"])
   }
   it("as admin user, should be able to download listings export zip", () => {
-    const convertToString = (value: number) => {
-      return value < 10 ? `0${value}` : `${value}`
-    }
+    const fixed = new Date(2026, 2, 10, 22, 7, 0)
+    cy.clock(fixed.getTime())
+
     cy.visit("/")
     cy.getByID("export-listings").click()
-    const now = new Date()
-    const dateString = `${now.getFullYear()}-${convertToString(
-      now.getMonth() + 1
-    )}-${convertToString(now.getDate())}`
-    const timeString = `${convertToString(now.getHours())}-${convertToString(now.getMinutes())}`
-    const zipName = `${dateString}_${timeString}-complete-listing-data.zip`
-    const downloadFolder = Cypress.config("downloadsFolder")
+
+    const downloadFolder: string = Cypress.config("downloadsFolder")
+    const zipName = "2026-03-10_22-07-complete-listing-data.zip"
     const completeZipPath = `${downloadFolder}/${zipName}`
-    cy.readFile(completeZipPath)
+
+    cy.readFile(completeZipPath, { timeout: 120000 }).should("exist")
   })
 })
