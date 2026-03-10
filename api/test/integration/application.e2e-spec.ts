@@ -1676,6 +1676,17 @@ describe('Application Controller Tests', () => {
 
       expect(res.body.applicant.firstName).toEqual(dto.applicant.firstName);
       expect(res.body.id).toEqual(dto.id);
+
+      const snapshot = await prisma.applicationSnapshot.findFirst({
+        where: {
+          originalId: applicationA.id,
+        },
+        select: {
+          id: true,
+          originalId: true,
+        },
+      });
+      expect(snapshot.originalId).toEqual(applicationA.id);
     });
 
     it("should throw an error when update is called with an Id that doesn't exist", async () => {
