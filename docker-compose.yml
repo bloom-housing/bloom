@@ -162,6 +162,7 @@ services:
           memory: "4096mb"
     environment:
       DATABASE_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
+      DBSEED_USE_FULL_CLOUDINARY_URL_AS_FILE_ID: "1"
     command:
       - "yarn"
       - "db:seed:staging"
@@ -282,7 +283,6 @@ services:
       HOUSING_COUNSELOR_SERVICE_URL: "/get-assistance"
 
       JURISDICTION_NAME: "Bloomington"
-      CLOUDINARY_CLOUD_NAME: "exygy"
 
       LANGUAGES: "en,es,zh,vi,tl"
 

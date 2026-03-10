@@ -1002,6 +1002,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
         .post(`/listings/list`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
+        .send({})
         .expect(201);
     });
 

@@ -18,18 +18,24 @@ Cypress.Commands.add("signOut", () => {
   // TODO: once the favorites feature is being tested, this is Sign out-4:
   if (Cypress.env("showSeedsDesign")) {
     cy.get(`[data-testid="My account"]`).trigger("click")
-    cy.get(`[data-testid="Sign out"]`).as("btn").trigger("click")
+    cy.contains("button", "Sign out", { timeout: 10000 }).click({ force: true })
   } else {
     // data-testid for SiteHeader in this path is set in ui-components
     // See https://github.com/bloom-housing/ui-components/blob/c35c094554e8199f202d67a405272035189060ec/src/headers/SiteHeader.tsx#L175
     cy.get(`[data-testid="My account-2"]`).trigger("mouseover")
-    cy.get(`[data-testid="Sign out-3"]`).as("signOutButton")
-    cy.get("@signOutButton").trigger("click")
+    cy.contains("button", "Sign out", { timeout: 10000 }).click({ force: true })
   }
 })
 
 Cypress.Commands.add("goNext", () => {
-  return cy.getByID("app-next-step-button").click()
+  // Click the current button element directly to avoid Cypress re-querying
+  // while the page is navigating and re-rendering.
+  return cy
+    .getByID("app-next-step-button")
+    .should("exist")
+    .then(($btn) => {
+      cy.wrap($btn).click({ force: true })
+    })
 })
 
 Cypress.Commands.add("getByID", (id, ...args) => {
@@ -127,7 +133,10 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application, autofill) =
       cy.getByTestId("app-primary-no-phone").check()
     } else {
       cy.getPhoneFieldByTestId("app-primary-phone-number").type(application.applicant.phoneNumber)
-      cy.getByTestId("app-primary-phone-number-type").select(application.applicant.phoneNumberType)
+      cy.getByTestId("app-primary-phone-number-type").select(
+        application.applicant.phoneNumberType,
+        { force: true }
+      )
     }
 
     if (application.additionalPhoneNumber) {
@@ -480,7 +489,9 @@ Cypress.Commands.add("step13IncomeVouchers", (application, autofill) => {
 
 Cypress.Commands.add("step14Income", (application, autofill) => {
   if (!autofill) {
-    cy.getByTestId("app-income").type(application.income, { force: true })
+    cy.getByTestId("app-income")
+      .type(application.income, { force: true })
+      .should("have.value", application.income)
     if (application.incomePeriod === "perMonth") {
       cy.getByTestId("app-income-period").eq(0).check()
     } else {
