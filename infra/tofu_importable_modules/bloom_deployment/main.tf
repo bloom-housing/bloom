@@ -77,6 +77,17 @@ variable "ses_identities" {
   type        = list(string)
   description = "SES email identities to create. Can either be individual email addresses or domains. If SES in this Bloom deployment will not be taken out of sandbox mode, identities for both sender and receiver email address must be validated for email to be succefully delivered."
 }
+variable "google_translate_settings" {
+  type = object({
+    project_id = string
+    iam_user   = string
+  })
+  description = "Google Translate API settings. project_id is the Google Cloud project ID. iam_user is the email of the service account."
+  validation {
+    condition     = var.google_translate_settings.project_id != "" && var.google_translate_settings.iam_user != ""
+    error_message = "project_id and iam_user must not be empty strings."
+  }
+}
 variable "high_availability" {
   type        = bool
   description = "Deploy the Bloom services in a highly-available manner. If true, a minimum of 2 instances will be running for each Bloom service."

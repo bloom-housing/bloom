@@ -2143,7 +2143,7 @@ export class ListingService implements OnModuleInit {
         status: 400,
       });
     }
-
+    await this.snapshotCreateService.createListingSnapshot(incomingDto.id);
     if (enableV2MSQ) {
       const multiselectQuestionIds = dto.listingMultiselectQuestions.map(
         (multiselectQuestion) => multiselectQuestion.id,
@@ -3016,6 +3016,10 @@ export class ListingService implements OnModuleInit {
       },
     });
     const listingIds = listings.map((listing) => listing.id);
+
+    for (const listingSave of listingIds) {
+      await this.snapshotCreateService.createListingSnapshot(listingSave);
+    }
 
     const res = await this.prisma.listings.updateMany({
       data: {

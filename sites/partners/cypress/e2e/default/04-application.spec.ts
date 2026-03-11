@@ -27,7 +27,9 @@ describe("Application Management Tests", () => {
     }
     // intercept api request to extract the listing id for filename
     cy.intercept("/api/adapter/applications/csv?id=*").as("getCsvId")
-    const now = new Date()
+    const fixed = new Date(2026, 2, 10, 22, 7, 0)
+    cy.clock(fixed.getTime())
+
     cy.get("button").contains("export", { matchCase: false }).click()
     cy.getByID("seeds-toast-stack").should("have.text", "File exported successfully")
 
@@ -36,14 +38,14 @@ describe("Application Management Tests", () => {
       const urlParams = new URLSearchParams(url.split("?")[1])
       const listingId = urlParams.get("id")
 
-      const dateString = `${now.getFullYear()}-${convertToString(
-        now.getMonth() + 1
-      )}-${convertToString(now.getDate())}`
+      const dateString = `${fixed.getFullYear()}-${convertToString(
+        fixed.getMonth() + 1
+      )}-${convertToString(fixed.getDate())}`
 
       // file name format: applications-{listingId}-YYYY-MM-DD_HH-mm.zip
       const csvName = `applications-${listingId}-${dateString}_${convertToString(
-        now.getHours()
-      )}-${convertToString(now.getMinutes())}.zip`
+        fixed.getHours()
+      )}-${convertToString(fixed.getMinutes())}.zip`
       const downloadFolder = Cypress.config("downloadsFolder")
       const completeZipPath = `${downloadFolder}/${csvName}`
       cy.readFile(completeZipPath).should("exist")

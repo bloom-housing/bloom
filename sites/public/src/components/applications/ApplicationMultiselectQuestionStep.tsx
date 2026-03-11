@@ -75,7 +75,9 @@ const ApplicationMultiselectQuestionStep = ({
 
   const questions = listingSectionQuestions(listing, applicationSection)
   const [page, setPage] = useState(conductor.navigatedThroughBack ? questions.length : 1)
-  const [applicationQuestions, setApplicationQuestions] = useState(application[applicationSection])
+  const [applicationQuestions, setApplicationQuestions] = useState(
+    Array.isArray(application[applicationSection]) ? application[applicationSection] : []
+  )
   const question = getPageQuestion(questions, page)
   const questionOptions = (enableV2MSQ ? question?.multiselectOptions : question?.options) || []
 

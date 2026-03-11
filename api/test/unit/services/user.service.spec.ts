@@ -1246,6 +1246,35 @@ describe('Testing user service', () => {
 
       expect(prisma.userAccounts.update).not.toHaveBeenCalled();
     });
+
+    it('should send forgot password email with appUrl jurisdiction when user jurisdictions are missing', async () => {
+      const id = randomUUID();
+      const email = 'email@example.com';
+      const appUrl = 'http://localhost:3000';
+
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id,
+        email,
+        jurisdictions: [],
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+        resetToken: 'example reset token',
+      });
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id-from-public-url',
+      });
+      emailService.forgotPassword = jest.fn();
+
+      await service.forgotPassword({ email, appUrl });
+
+      expect(emailService.forgotPassword).toHaveBeenCalledWith(
+        [{ id: 'jurisdiction-id-from-public-url' }],
+        expect.anything(),
+        appUrl,
+        expect.anything(),
+      );
+    });
   });
 
   describe('resendConfirmation', () => {
@@ -1411,6 +1440,44 @@ describe('Testing user service', () => {
 
       expect(prisma.userAccounts.update).not.toHaveBeenCalled();
     });
+
+    it('should resend public confirmation using appUrl jurisdiction when user jurisdictions are missing', async () => {
+      const id = randomUUID();
+      const email = 'email@example.com';
+      const appUrl = 'http://localhost:3000';
+
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id,
+        email,
+        jurisdictions: [],
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+        email,
+        confirmationToken: 'example confirmation token',
+      });
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        name: 'Test Jurisdiction',
+      });
+      emailService.welcome = jest.fn();
+
+      await service.resendConfirmation({ email, appUrl }, true);
+
+      expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+        select: {
+          name: true,
+        },
+        where: {
+          publicUrl: appUrl,
+        },
+      });
+      expect(emailService.welcome).toHaveBeenCalledWith(
+        'Test Jurisdiction',
+        expect.anything(),
+        appUrl,
+        expect.anything(),
+      );
+    });
   });
 
   describe('delete', () => {
@@ -1424,6 +1491,9 @@ describe('Testing user service', () => {
         id,
       });
       prisma.userRoles.delete = jest.fn().mockResolvedValue({
+        id,
+      });
+      prisma.userAccountSnapshot.deleteMany = jest.fn().mockResolvedValue({
         id,
       });
 
@@ -1446,6 +1516,7 @@ describe('Testing user service', () => {
         },
       });
       expect(prisma.userRoles.delete).toHaveBeenCalledTimes(0);
+      expect(prisma.userAccountSnapshot.deleteMany).toHaveBeenCalled();
 
       expect(canOrThrowMock).toHaveBeenCalledWith(
         {
@@ -1473,6 +1544,9 @@ describe('Testing user service', () => {
       prisma.userRoles.delete = jest.fn().mockResolvedValue({
         id,
       });
+      prisma.userAccountSnapshot.deleteMany = jest.fn().mockResolvedValue({
+        id,
+      });
 
       await service.delete(id, {
         id: 'requestingUser id',
@@ -1497,6 +1571,7 @@ describe('Testing user service', () => {
           userId: id,
         },
       });
+      expect(prisma.userAccountSnapshot.deleteMany).toHaveBeenCalled();
 
       expect(canOrThrowMock).toHaveBeenCalledWith(
         {
@@ -2789,6 +2864,49 @@ describe('Testing user service', () => {
       expect(canOrThrowMock).not.toHaveBeenCalled();
     });
 
+    it('should create a public user with jurisdiction from header when dto jurisdictions are missing', async () => {
+      const id = randomUUID();
+      const headerJurisdictionId = randomUUID();
+
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: headerJurisdictionId,
+      });
+      prisma.applications.findMany = jest.fn().mockResolvedValue([]);
+      prisma.userAccounts.create = jest.fn().mockResolvedValue({
+        id,
+        email: 'publicUser@email.com',
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+        email: 'publicUser@email.com',
+      });
+
+      await service.createPublicUser(
+        {
+          firstName: 'public User firstName',
+          lastName: 'public User lastName',
+          password: 'Abcdef12345!',
+          passwordConfirmation: 'Abcdef12345!',
+          agreedToTermsOfService: true,
+          dob: new Date('2000-01-01'),
+          email: 'publicUser@email.com',
+        } as any,
+        false,
+        {
+          headers: { jurisdictionname: 'juris 1' },
+        } as unknown as Request,
+      );
+
+      expect(prisma.userAccounts.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          jurisdictions: {
+            connect: [{ id: headerJurisdictionId }],
+          },
+        }),
+      });
+    });
+
     it('should create an advocate user', async () => {
       const jurisId = randomUUID();
       const id = randomUUID();
@@ -2931,6 +3049,252 @@ describe('Testing user service', () => {
         },
       });
       expect(canOrThrowMock).not.toHaveBeenCalled();
+    });
+
+    it('should create an advocate user with jurisdiction from header when dto jurisdictions are missing', async () => {
+      const id = randomUUID();
+      const headerJurisdictionId = randomUUID();
+
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: headerJurisdictionId,
+      });
+      prisma.applications.findMany = jest.fn().mockResolvedValue([]);
+      prisma.userAccounts.create = jest.fn().mockResolvedValue({
+        id,
+        email: 'advocateUser@email.com',
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+        email: 'advocateUser@email.com',
+      });
+
+      await service.createAdvocateUser(
+        {
+          firstName: 'advocate User firstName',
+          lastName: 'advocate User lastName',
+          agreedToTermsOfService: true,
+          dob: new Date('2000-01-01'),
+          email: 'advocateUser@email.com',
+          agency: {
+            id: 'test_agency_id',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: 'Test Agency',
+            jurisdictions: {
+              id: headerJurisdictionId,
+            },
+          },
+        } as any,
+        false,
+        {
+          headers: { jurisdictionname: 'juris 1' },
+        } as unknown as Request,
+      );
+
+      expect(prisma.userAccounts.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          jurisdictions: {
+            connect: [{ id: headerJurisdictionId }],
+          },
+        }),
+      });
+    });
+  });
+
+  describe('acceptAdvocateUser', () => {
+    it('should throw error when accepting user is not an admin', async () => {
+      const advocateId = randomUUID();
+
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+        id: advocateId,
+        isAdvocate: false,
+      });
+
+      await expect(
+        async () =>
+          await service.acceptAdvocateUser(
+            {
+              advocateId: { id: advocateId },
+              isAccepted: true,
+            },
+            {
+              user: {
+                id: 'requestingUser id',
+                userRoles: {
+                  isAdmin: false,
+                  isJurisdictionalAdmin: true,
+                  isLimitedJurisdictionalAdmin: true,
+                  isPartner: true,
+                  isSuperAdmin: false,
+                  isSupportAdmin: true,
+                },
+              } as unknown as User,
+            } as unknown as Request,
+          ),
+      ).rejects.toThrowError(
+        `Accepting advocates is only allowed for admin users`,
+      );
+    });
+
+    it('should throw error when a user with given ID is not found', async () => {
+      const advocateId = randomUUID();
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue(null);
+
+      await expect(
+        async () =>
+          await service.acceptAdvocateUser(
+            {
+              advocateId: { id: advocateId },
+              isAccepted: true,
+            },
+            {
+              user: {
+                id: 'requestingUser id',
+                userRoles: { isAdmin: true },
+              } as unknown as User,
+            } as unknown as Request,
+          ),
+      ).rejects.toThrowError(`User with id: ${advocateId} was not found`);
+
+      expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: advocateId,
+        },
+        include: {
+          jurisdictions: true,
+        },
+      });
+    });
+
+    it('should throw error when requested user is not an advocate', async () => {
+      const advocateId = randomUUID();
+
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+        id: advocateId,
+        isAdvocate: false,
+      });
+
+      await expect(
+        async () =>
+          await service.acceptAdvocateUser(
+            {
+              advocateId: { id: advocateId },
+              isAccepted: true,
+            },
+            {
+              user: {
+                id: 'requestingUser id',
+                userRoles: { isAdmin: true },
+              } as unknown as User,
+            } as unknown as Request,
+          ),
+      ).rejects.toThrowError(
+        `The user with id ${advocateId} is not an advocate`,
+      );
+
+      expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: advocateId,
+        },
+        include: {
+          jurisdictions: true,
+        },
+      });
+    });
+
+    it('should update advocate users isApproved value when accepted', async () => {
+      const advocateId = randomUUID();
+      const jurisId = randomUUID();
+
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+        id: advocateId,
+        isAdvocate: true,
+        jurisdictions: [{ id: jurisId, publicUrl: 'https://example_url.com' }],
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id: advocateId,
+        isApproved: true,
+      });
+      emailService.advocateAccepted = jest.fn();
+
+      await service.acceptAdvocateUser(
+        {
+          advocateId: { id: advocateId },
+          isAccepted: true,
+        },
+        {
+          user: {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        } as unknown as Request,
+      );
+
+      expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: advocateId,
+        },
+        include: {
+          jurisdictions: true,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          isApproved: true,
+        },
+        where: {
+          id: advocateId,
+        },
+      });
+      expect(emailService.advocateAccepted).toHaveBeenCalled();
+    });
+
+    it('should update advocate users isApproved value when rejected', async () => {
+      const advocateId = randomUUID();
+      const jurisId = randomUUID();
+
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+        id: advocateId,
+        isAdvocate: true,
+        jurisdictions: [{ id: jurisId, publicUrl: 'https://example_url.com' }],
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id: advocateId,
+        isApproved: false,
+      });
+      emailService.advocateRejected = jest.fn();
+
+      await service.acceptAdvocateUser(
+        {
+          advocateId: { id: advocateId },
+          isAccepted: false,
+        },
+        {
+          user: {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        } as unknown as Request,
+      );
+
+      expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: advocateId,
+        },
+        include: {
+          jurisdictions: true,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          isApproved: false,
+        },
+        where: {
+          id: advocateId,
+        },
+      });
+      expect(emailService.advocateRejected).toHaveBeenCalled();
     });
   });
 
@@ -3496,6 +3860,9 @@ describe('Testing user service', () => {
           { id: 'application3' },
           { id: 'application4' },
         ]);
+      prisma.userAccountSnapshot.deleteMany = jest
+        .fn()
+        .mockResolvedValue({ id: 'userId1' });
 
       prisma.userRoles.delete = jest.fn().mockResolvedValue({});
       prisma.userAccounts.delete = jest.fn().mockResolvedValue({});
@@ -3516,6 +3883,7 @@ describe('Testing user service', () => {
       expect(prisma.userAccounts.delete).toBeCalledWith({
         where: { id: 'userId4' },
       });
+      expect(prisma.userAccountSnapshot.deleteMany).toHaveBeenCalled();
     });
   });
 
