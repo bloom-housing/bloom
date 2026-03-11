@@ -106,7 +106,14 @@ const ApplicationMultiselectQuestionStep = ({
 
   // Required to keep the form up to date before submitting this section if you're moving between pages
   useEffect(() => {
-    reset(mapApiToMultiselectForm(applicationQuestions, questions, applicationSection, enableV2MSQ))
+    reset(
+      mapApiToMultiselectForm(
+        Array.isArray(applicationQuestions) ? applicationQuestions : [],
+        questions,
+        applicationSection,
+        enableV2MSQ
+      )
+    )
     setExclusiveKeys(getExclusiveKeys(question, applicationSection, enableV2MSQ))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, applicationQuestions, reset])
