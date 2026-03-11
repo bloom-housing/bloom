@@ -1,5 +1,5 @@
 describe("Language selection", function () {
-  it("should switch the page to Spanish when Spanish is selected", function () {
+  it("should switch the page to Spanish when Spanish Language is selected", function () {
     cy.visit("/listings")
 
     if (Cypress.env("showSeedsDesign")) {
