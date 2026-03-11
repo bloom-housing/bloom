@@ -63,7 +63,8 @@ const Advocates = () => {
       },
       {
         headerName: t("users.status"),
-        field: "status",
+        field: "isApproved",
+        valueFormatter: ({ value }) => (value ? t("t.approved") : t("t.requested")),
       },
       {
         headerName: t("users.action"),
