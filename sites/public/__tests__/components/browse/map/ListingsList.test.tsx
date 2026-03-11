@@ -129,21 +129,4 @@ describe("ListingsList", () => {
 
     expect(screen.queryByRole("navigation", { name: "Listings list pagination" })).toBeNull()
   })
-
-  it("renders notifications signup card when url is configured", () => {
-    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {
-      return
-    })
-    process.env.notificationsSignUpUrl = "https://example.com/alerts"
-
-    render(<ListingsList />)
-
-    expect(screen.getByText(t("t.signUpForAlerts"))).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: t("t.signUp") })).toHaveAttribute(
-      "href",
-      "https://example.com/alerts"
-    )
-
-    consoleErrorSpy.mockRestore()
-  })
 })

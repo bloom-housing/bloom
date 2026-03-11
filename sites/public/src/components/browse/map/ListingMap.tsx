@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react"
+import React from "react"
 import { useRouter } from "next/router"
 import { APIProvider } from "@vis.gl/react-google-maps"
 import { Heading } from "@bloom-housing/ui-seeds"
@@ -7,10 +7,8 @@ import {
   Listing,
   MultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext, ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import Layout from "../../../layouts/application"
-import { UserStatus } from "../../../lib/constants"
 import ListingsSearchCombined from "./ListingsSearchCombined"
 import { ListingsSearchConfigContext } from "./ListingsSearchConfigContext"
 
