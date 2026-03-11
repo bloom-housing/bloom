@@ -18,9 +18,11 @@ import { useAdvocateUserExport, useUserList } from "../../lib/hooks"
 import CheckCircleIcon from "@heroicons/react/24/solid/CheckCircleIcon"
 import XCircleIcon from "@heroicons/react/24/solid/XCircleIcon"
 import { DialogFooter } from "@bloom-housing/ui-seeds/src/overlays/Dialog"
+import { useSWRConfig } from "swr"
 
 const Advocates = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn, approveAdvocateUser } = useContext(AuthContext)
+  const { mutate } = useSWRConfig()
   const [selectedUser, setSelectedUser] = useState<User>(null)
   const [dialogConfig, setDialogConfig] = useState<"accept" | "reject">(null)
 
@@ -30,16 +32,6 @@ const Advocates = () => {
 
   const tableOptions = useAgTable()
   const { onExport, csvExportLoading } = useAdvocateUserExport()
-
-  const handleCloseDialog = () => {
-    setDialogConfig(null)
-    setSelectedUser(null)
-  }
-
-  const handleDialogClick = async (approved: boolean) => {
-    await approveAdvocateUser(selectedUser.id, approved)
-    setDialogConfig(null)
-  }
 
   const columns = useMemo(() => {
     return [
@@ -109,6 +101,7 @@ const Advocates = () => {
 
   const {
     data: advocateUserList,
+    cacheKey,
     loading,
     error,
   } = useUserList({
@@ -119,6 +112,18 @@ const Advocates = () => {
       isAdvocateUser: true,
     },
   })
+
+  const handleCloseDialog = () => {
+    setDialogConfig(null)
+    setSelectedUser(null)
+    void mutate(cacheKey)
+  }
+
+  const handleDialogClick = async (approved: boolean) => {
+    await approveAdvocateUser(selectedUser.id, approved)
+    await mutate(cacheKey)
+    setDialogConfig(null)
+  }
 
   if (error) return <div>{t("t.errorOccurred")}</div>
 
