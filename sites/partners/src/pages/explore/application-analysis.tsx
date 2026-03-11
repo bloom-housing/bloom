@@ -195,7 +195,7 @@ const ApplicationAnalysis = () => {
     try {
       const response = await dataExplorerService.generateInsight({
         body: {
-          data: defaultReport.products, // Using defaultReport data structure for AI insights
+          data: chartData,
         },
       })
 
