@@ -286,7 +286,7 @@ export const multiselectOptionWrapper = (
           </ExpandableContent>
         </div>
       )}
-      {watchFields[optionFieldName] && option.collectName && (
+      {watchFields[optionFieldName] && (option.shouldCollectName || option.collectName) && (
         <Field
           id={AddressHolder.Name}
           name={`${optionFieldName}-${AddressHolder.Name}`}
@@ -302,24 +302,25 @@ export const multiselectOptionWrapper = (
           dataTestId="addressHolder-name"
         />
       )}
-      {watchFields[optionFieldName] && option.collectRelationship && (
-        <Field
-          id={AddressHolder.Relationship}
-          name={`${optionFieldName}-${AddressHolder.Relationship}`}
-          label={t(`application.preferences.options.${AddressHolder.Relationship}`)}
-          register={register}
-          validation={{ required: true, maxLength: 64 }}
-          error={!!resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)}
-          errorMessage={
-            resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)?.type ===
-            "maxLength"
-              ? t("errors.maxLength", { length: 64 })
-              : t("errors.requiredFieldError")
-          }
-          dataTestId="addressHolder-relationship"
-        />
-      )}
-      {watchFields[optionFieldName] && option.collectAddress && (
+      {watchFields[optionFieldName] &&
+        (option.shouldCollectRelationship || option.collectRelationship) && (
+          <Field
+            id={AddressHolder.Relationship}
+            name={`${optionFieldName}-${AddressHolder.Relationship}`}
+            label={t(`application.preferences.options.${AddressHolder.Relationship}`)}
+            register={register}
+            validation={{ required: true, maxLength: 64 }}
+            error={!!resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)}
+            errorMessage={
+              resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)?.type ===
+              "maxLength"
+                ? t("errors.maxLength", { length: 64 })
+                : t("errors.requiredFieldError")
+            }
+            dataTestId="addressHolder-relationship"
+          />
+        )}
+      {watchFields[optionFieldName] && (option.shouldCollectAddress || option.collectAddress) && (
         <div className="pb-4">
           <FormAddressAlternate
             subtitle={t("application.preferences.options.qualifyingAddress")}
@@ -405,7 +406,6 @@ export const getRadioOption = (
     applicationSection,
     option.name || option.text
   )
-  console.log(optionFieldName)
   const radioField = getRadioField(
     option,
     register,

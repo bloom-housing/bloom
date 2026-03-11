@@ -80,7 +80,7 @@ const ApplicationMultiselectQuestionStep = ({
   const questionOptions = (enableV2MSQ ? question?.multiselectOptions : question?.options) || []
 
   const questionSetInputType = enableV2MSQ
-    ? question.isExclusive
+    ? question?.isExclusive
       ? "radio"
       : "checkbox"
     : getInputType(question?.options)
@@ -121,8 +121,7 @@ const ApplicationMultiselectQuestionStep = ({
     }
 
     // Verify address on preferences
-    // TODO: to do!
-    if (question?.options.some((item) => item?.collectAddress)) {
+    if (questionOptions.some((item) => item.shouldCollectAddress || item.collectAddress)) {
       const step: number = body.current.options.findIndex(
         (option, index) =>
           index >= verifyAddressStep && option.checked === true && option.extraData?.[0]?.value
