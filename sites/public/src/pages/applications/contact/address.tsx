@@ -233,7 +233,7 @@ const ApplicationAddress = () => {
                     "aria-controls": "additional-phone-fields",
                   }}
                   dataTestId={"app-primary-no-phone"}
-                  className={"mb-0"}
+                  className={"seeds-m-be-2"}
                 />
 
                 <Field
@@ -254,6 +254,7 @@ const ApplicationAddress = () => {
                     },
                   }}
                   dataTestId={"app-primary-additional-phone"}
+                  className={"seeds-m-be-0"}
                 />
 
                 <div id="additional-phone-fields">
@@ -580,7 +581,7 @@ const ApplicationAddress = () => {
                 <div id="work-in-region">
                   {(workInRegion == "yes" ||
                     (!workInRegion && application.applicant.workInRegion == "yes")) && (
-                    <div className="form-card__group mx-0 px-0 mt-2">
+                    <div className={"seeds-m-bs-6"}>
                       <fieldset>
                         <legend className="text__caps-spaced">
                           {t("application.contact.workAddress")}
@@ -723,13 +724,13 @@ const ApplicationAddress = () => {
               </CardSection>
             )}
           </div>
-          <CardSection>
-            {verifyAddress && (
+          {verifyAddress && (
+            <CardSection>
               <AddressValidationSelection
                 {...{ foundAddress, newAddressSelected, setNewAddressSelected, setVerifyAddress }}
               />
-            )}
-          </CardSection>
+            </CardSection>
+          )}
         </ApplicationFormLayout>
       </Form>
     </FormsLayout>
