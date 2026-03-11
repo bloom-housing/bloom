@@ -36,6 +36,9 @@ const ApplicationAlternateContactContact = () => {
     if (!isAdvocate) {
       application.alternateContact.phoneNumber = data.phoneNumber
       application.alternateContact.emailAddress = data.emailAddress || null
+      if (!application.alternateContact.address) {
+        application.alternateContact.address = {} as typeof application.alternateContact.address
+      }
       application.alternateContact.address.street = data.mailingAddress.street
       application.alternateContact.address.street2 = data.mailingAddress.street2
       application.alternateContact.address.state = data.mailingAddress.state
@@ -155,7 +158,7 @@ const ApplicationAlternateContactContact = () => {
                 id="mailingAddress.street"
                 name="mailingAddress.street"
                 label={t("application.contact.streetAddress")}
-                defaultValue={application.alternateContact.address.street}
+                defaultValue={application.alternateContact?.address?.street}
                 disabled={isAdvocate}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-street"}
@@ -169,7 +172,7 @@ const ApplicationAlternateContactContact = () => {
                 label={t("application.contact.apt")}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-street2"}
-                defaultValue={application.alternateContact.address.street2}
+                defaultValue={application.alternateContact?.address?.street2}
                 disabled={isAdvocate}
                 error={errors.mailingAddress?.street2}
                 validation={isAdvocate ? undefined : { maxLength: 64 }}
@@ -179,7 +182,7 @@ const ApplicationAlternateContactContact = () => {
                 <Field
                   id="mailingAddress.city"
                   name="mailingAddress.city"
-                  defaultValue={application.alternateContact.address.city}
+                  defaultValue={application.alternateContact?.address?.city}
                   label={t("application.contact.city")}
                   register={register}
                   dataTestId={"app-alternate-mailing-address-city"}
@@ -193,7 +196,7 @@ const ApplicationAlternateContactContact = () => {
                   id="mailingAddress.state"
                   name="mailingAddress.state"
                   label={t("application.contact.state")}
-                  defaultValue={application.alternateContact.address.state}
+                  defaultValue={application.alternateContact?.address?.state}
                   register={register}
                   controlClassName="control"
                   options={stateKeys}
@@ -209,7 +212,7 @@ const ApplicationAlternateContactContact = () => {
                 id="mailingAddress.zipCode"
                 name="mailingAddress.zipCode"
                 label={t("application.contact.zip")}
-                defaultValue={application.alternateContact.address.zipCode}
+                defaultValue={application.alternateContact?.address?.zipCode}
                 disabled={isAdvocate}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-zip"}
