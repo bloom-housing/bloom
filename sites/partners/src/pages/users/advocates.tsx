@@ -72,32 +72,34 @@ const Advocates = () => {
         maxWidth: 150,
         cellRendererFramework: ({ data }) => {
           return (
-            <div className="flex justify-center gap-2">
-              <button
-                className="text-success"
-                onClick={() => {
-                  setDialogConfig("accept")
-                  setSelectedUser(data)
-                }}
-                aria-label={"Accept"}
-              >
-                <Icon size="lg">
-                  <CheckCircleIcon />
-                </Icon>
-              </button>
-              <button
-                className="text-alert"
-                onClick={() => {
-                  setDialogConfig("reject")
-                  setSelectedUser(data)
-                }}
-                aria-label={"Reject"}
-              >
-                <Icon size="lg">
-                  <XCircleIcon />
-                </Icon>
-              </button>
-            </div>
+            !(data as User).isApproved && (
+              <div className="flex justify-center gap-2">
+                <button
+                  className="text-success"
+                  onClick={() => {
+                    setDialogConfig("accept")
+                    setSelectedUser(data)
+                  }}
+                  aria-label={"Accept"}
+                >
+                  <Icon size="lg">
+                    <CheckCircleIcon />
+                  </Icon>
+                </button>
+                <button
+                  className="text-alert"
+                  onClick={() => {
+                    setDialogConfig("reject")
+                    setSelectedUser(data)
+                  }}
+                  aria-label={"Reject"}
+                >
+                  <Icon size="lg">
+                    <XCircleIcon />
+                  </Icon>
+                </button>
+              </div>
+            )
           )
         },
       },
