@@ -20,9 +20,9 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   ReviewOrderTypeEnum,
+  UnitAccessibilityPriorityTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import DetailAdditionalFees from "../../../../src/components/listings/PaperListingDetails/sections/DetailAdditionalFees"
-import DetailBuildingFeatures from "../../../../src/components/listings/PaperListingDetails/sections/DetailBuildingFeatures"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { rest } from "msw"
 import DetailAdditionalEligibility from "../../../../src/components/listings/PaperListingDetails/sections/DetailAdditionalEligibility"
@@ -546,12 +546,7 @@ describe("listing data", () => {
               units: listing.units.map((entry, idx) => ({
                 ...entry,
                 number: `#${idx + 1}`,
-                unitAccessibilityPriorityTypes: {
-                  id: `ada_${idx}`,
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  name: `Test ADA_${idx}`,
-                },
+                accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.mobility,
               })),
               section8Acceptance: true,
             }}
@@ -573,14 +568,14 @@ describe("listing data", () => {
       expect(screen.getByText("AMI")).toBeInTheDocument()
       expect(screen.getByText("Rent")).toBeInTheDocument()
       expect(screen.getByText("SQ FT")).toBeInTheDocument()
-      expect(screen.getByText("ADA")).toBeInTheDocument()
+      expect(screen.getByText("Accessibility priority type")).toBeInTheDocument()
 
       expect(screen.getAllByText(/#[1-9]/i)).toHaveLength(6)
       expect(screen.getAllByText("Studio")).toHaveLength(6)
       expect(screen.getAllByText("45.0")).toHaveLength(6)
       expect(screen.getAllByText("1104.0")).toHaveLength(6)
       expect(screen.getAllByText("285")).toHaveLength(6)
-      expect(screen.getAllByText(/Test ADA_\d{1}/)).toHaveLength(6)
+      expect(screen.getAllByText("Mobility")).toHaveLength(6)
       expect(screen.getAllByText("View")).toHaveLength(6)
 
       expect(
@@ -726,131 +721,6 @@ describe("listing data", () => {
           "Resident responsible for PG&E, internet and phone. Owner pays for water, trash, and sewage."
         )
       ).toBeInTheDocument()
-    })
-
-    describe("should display Building Features section", () => {
-      it("should display data with no accessibility features", () => {
-        render(
-          <ListingContext.Provider
-            value={{
-              ...listing,
-              servicesOffered: "Professional Help",
-            }}
-          >
-            <DetailBuildingFeatures />
-          </ListingContext.Provider>
-        )
-
-        expect(screen.getByText("Building features")).toBeInTheDocument()
-        expect(screen.getByText("Property amenities")).toBeInTheDocument()
-        expect(
-          screen.getByText(
-            "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator"
-          )
-        ).toBeInTheDocument()
-        expect(screen.getByText("Unit amenities")).toBeInTheDocument()
-        expect(screen.getByText("Dishwasher")).toBeInTheDocument()
-        expect(screen.getByText("Additional accessibility")).toBeInTheDocument()
-        expect(
-          screen.getByText(
-            "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)"
-          )
-        ).toBeInTheDocument()
-        expect(screen.getByText("Smoking policy")).toBeInTheDocument()
-        expect(screen.getByText("Non-smoking building")).toBeInTheDocument()
-        expect(screen.getByText("Pets policy")).toBeInTheDocument()
-        expect(
-          screen.getByText(
-            "No pets allowed. Accommodation animals may be granted to persons with disabilities via a reasonable accommodation request."
-          )
-        ).toBeInTheDocument()
-        expect(screen.getByText("Services offered")).toBeInTheDocument()
-        expect(screen.getByText("Services offered")).toBeInTheDocument()
-        expect(screen.getByText("Professional Help")).toBeInTheDocument()
-      })
-
-      it("should display accessibility features", () => {
-        document.cookie = "access-token-available=True"
-        server.use(
-          rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-            return res(ctx.json(user))
-          })
-        )
-
-        render(
-          <AuthContext.Provider
-            value={{
-              profile: {
-                ...user,
-                jurisdictions: [],
-                listings: [],
-              },
-              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
-            }}
-          >
-            <ListingContext.Provider
-              value={{
-                ...listing,
-                listingFeatures: {
-                  elevator: true,
-                  wheelchairRamp: true,
-                  serviceAnimalsAllowed: true,
-                  accessibleParking: true,
-                  parkingOnSite: true,
-                  inUnitWasherDryer: true,
-                  laundryInBuilding: true,
-                  barrierFreeEntrance: true,
-                  rollInShower: true,
-                  grabBars: true,
-                  heatingInUnit: true,
-                  acInUnit: true,
-                  hearing: true,
-                  visual: true,
-                  mobility: true,
-                  barrierFreeUnitEntrance: true,
-                  loweredLightSwitch: true,
-                  barrierFreeBathroom: true,
-                  wideDoorways: true,
-                  loweredCabinets: true,
-                  id: "1",
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                },
-              }}
-            >
-              <DetailBuildingFeatures />
-            </ListingContext.Provider>
-          </AuthContext.Provider>
-        )
-
-        expect(screen.getByText("Elevator")).toBeInTheDocument()
-        expect(screen.getByText("Wheelchair ramp")).toBeInTheDocument()
-        expect(screen.getByText("Service animals allowed")).toBeInTheDocument()
-        expect(screen.getByText("Accessible parking spots")).toBeInTheDocument()
-        expect(screen.getByText("Parking on site")).toBeInTheDocument()
-        expect(screen.getByText("In-unit washer/dryer")).toBeInTheDocument()
-        expect(screen.getByText("Laundry in building")).toBeInTheDocument()
-        expect(screen.getByText("Barrier-free (no-step) property entrance")).toBeInTheDocument()
-        expect(screen.getByText("Roll-in showers")).toBeInTheDocument()
-        expect(screen.getByText("Grab bars in bathrooms")).toBeInTheDocument()
-        expect(screen.getByText("Heating in unit")).toBeInTheDocument()
-        expect(screen.getByText("AC in unit")).toBeInTheDocument()
-        expect(
-          screen.getByText("Units for those with hearing accessibility needs")
-        ).toBeInTheDocument()
-        expect(
-          screen.getByText("Units for those with vision accessibility needs")
-        ).toBeInTheDocument()
-        expect(
-          screen.getByText("Units for those with mobility accessibility needs")
-        ).toBeInTheDocument()
-        expect(screen.getByText("Lowered cabinets and countertops")).toBeInTheDocument()
-        expect(screen.getByText("Lowered light switches")).toBeInTheDocument()
-        expect(screen.getByText("Wide unit doorways for wheelchairs")).toBeInTheDocument()
-        expect(screen.getByText("Barrier-free bathrooms")).toBeInTheDocument()
-        expect(screen.getByText("Barrier-free (no-step) unit entrances"))
-      })
     })
 
     describe("should display Additional Eligibility Rules section", () => {
@@ -2153,12 +2023,7 @@ describe("listing data", () => {
                 ...result.props.listing.units[0],
                 number: `#1`,
                 numBathrooms: 1,
-                unitAccessibilityPriorityTypes: {
-                  id: `ada_1`,
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  name: `Test ADA_1`,
-                },
+                accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.mobility,
               },
             ],
           }}
@@ -2221,7 +2086,7 @@ describe("listing data", () => {
     expect(
       within(accessibilitySection).getByText("Accessibility priority type")
     ).toBeInTheDocument()
-    expect(within(accessibilitySection).getByText("Test ADA_1")).toBeInTheDocument()
+    expect(within(accessibilitySection).getByText("Mobility")).toBeInTheDocument()
 
     // Should close on done
     const doneButton = within(unitDrawer).getByText("Done", {

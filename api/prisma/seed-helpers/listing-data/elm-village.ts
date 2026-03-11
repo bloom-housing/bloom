@@ -7,6 +7,7 @@ import {
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { featuresAndUtilites } from '../listing-factory';
+import { assetFileId } from '../asset-file-id-helper';
 
 export const elmVillage: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
@@ -87,7 +88,11 @@ export const elmVillage: Prisma.ListingsCreateInput = {
   waitlistOpenSpots: null,
   customMapPin: false,
   contentUpdatedAt: new Date(),
-  publishedAt: new Date(),
+  publishedAt: dayjs(new Date())
+    .subtract(1, 'months')
+    .subtract(3, 'days')
+    .subtract(12, 'minutes')
+    .toDate(),
   listingsApplicationPickUpAddress: undefined,
   listingsApplicationDropOffAddress: undefined,
   reservedCommunityTypes: undefined,
@@ -99,7 +104,9 @@ export const elmVillage: Prisma.ListingsCreateInput = {
         assets: {
           create: {
             label: 'cloudinaryBuilding',
-            fileId: 'dev/krzysztof-hepner-V7Q0Oh3Az-c-unsplash_xoj7sr',
+            fileId: assetFileId(
+              'dev/krzysztof-hepner-V7Q0Oh3Az-c-unsplash_xoj7sr',
+            ),
           },
         },
       },
@@ -108,7 +115,9 @@ export const elmVillage: Prisma.ListingsCreateInput = {
         assets: {
           create: {
             label: 'cloudinaryBuilding',
-            fileId: 'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
+            fileId: assetFileId(
+              'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
+            ),
           },
         },
       },

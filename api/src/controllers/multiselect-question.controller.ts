@@ -27,6 +27,7 @@ import { MultiselectQuestionCreate } from '../dtos/multiselect-questions/multise
 import { MultiselectQuestionFilterParams } from '../dtos/multiselect-questions/multiselect-question-filter-params.dto';
 import { MultiselectQuestionUpdate } from '../dtos/multiselect-questions/multiselect-question-update.dto';
 import { MultiselectQuestionQueryParams } from '../dtos/multiselect-questions/multiselect-question-query-params.dto';
+import { PaginatedMultiselectQuestionDto } from '../dtos/multiselect-questions/paginated-multiselect-question.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { PaginationMeta } from '../dtos/shared/pagination.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
@@ -60,10 +61,10 @@ export class MultiselectQuestionController {
 
   @Get()
   @ApiOperation({ summary: 'List multiselect questions', operationId: 'list' })
-  @ApiOkResponse({ type: MultiselectQuestion, isArray: true })
+  @ApiOkResponse({ type: PaginatedMultiselectQuestionDto })
   async list(
     @Query() queryParams: MultiselectQuestionQueryParams,
-  ): Promise<MultiselectQuestion[]> {
+  ): Promise<PaginatedMultiselectQuestionDto> {
     return await this.multiselectQuestionService.list(queryParams);
   }
 

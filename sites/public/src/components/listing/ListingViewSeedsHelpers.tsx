@@ -1,7 +1,7 @@
 import React from "react"
 import { UseFormMethods } from "react-hook-form"
 import dayjs from "dayjs"
-import { Button, Dialog, Link } from "@bloom-housing/ui-seeds"
+import { Button, Dialog, Heading, Link } from "@bloom-housing/ui-seeds"
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethod,
@@ -14,6 +14,7 @@ import {
   Listing,
   ListingMultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
+  ListingFeaturesConfiguration,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   FieldGroup,
@@ -24,9 +25,11 @@ import {
   TableHeaders,
 } from "@bloom-housing/ui-components"
 import {
+  allListingFeatures,
   cloudinaryPdfFromId,
   getOccupancyDescription,
-  listingFeatures,
+  ListingFeaturesValues,
+  listingParkingTypes,
   listingUtilities,
   stackedOccupancyTable,
   stackedUnitGroupsOccupancyTable,
@@ -139,27 +142,47 @@ export const getHasNonReferralMethods = (listing: Listing) => {
   return nonReferralMethods.length
 }
 
-export const getAccessibilityFeatures = (listing: Listing) => {
+export const getAccessibilityFeatures = (
+  listing: Listing,
+  config: ListingFeaturesConfiguration
+) => {
   const enabledFeatures = Object.entries(listing?.listingFeatures ?? {})
-    .filter(([_, value]) => value)
+    .filter(([key, value]) => value && allListingFeatures?.includes(key as ListingFeaturesValues))
     .map((item) => item[0])
-    .filter((feature) => listingFeatures.includes(feature))
 
-  const COLUMN_BREAKPOINT = 6
-  if (enabledFeatures.length > 0) {
+  const getList = (list: string[], spacing: boolean) => {
     return (
-      <ul className={enabledFeatures.length > COLUMN_BREAKPOINT ? styles["two-column-list"] : ""}>
-        {enabledFeatures
-          .sort((a, b) =>
-            t(`eligibility.accessibility.${a}`).localeCompare(t(`eligibility.accessibility.${b}`))
-          )
-          .map((feature, index) => (
-            <li key={index} className={styles["list-item"]}>
-              {t(`eligibility.accessibility.${feature}`)}
-            </li>
-          ))}
+      <ul className={`${styles["two-column-list"]} ${spacing ? "seeds-m-be-text" : ""}`}>
+        {list.map((feature, index) => (
+          <li key={index} className={styles["list-item"]}>
+            {t(`eligibility.accessibility.${feature}`)}
+          </li>
+        ))}
       </ul>
     )
+  }
+
+  if (config?.categories?.length) {
+    return config.categories.map((category, index) => {
+      const categoryFeatures = enabledFeatures
+        .filter((feature) => category.fields.some((field) => field.id === feature))
+        .sort((a, b) =>
+          t(`eligibility.accessibility.${a}`).localeCompare(t(`eligibility.accessibility.${b}`))
+        )
+      if (!categoryFeatures.length) return null
+      return (
+        <div key={index}>
+          <Heading priority={4} size={"md"} className={styles["category-heading"]}>
+            {t(`eligibility.accessibility.categoryTitle.${category.id}`)}
+          </Heading>
+          {getList(categoryFeatures, index < config.categories.length - 1)}
+        </div>
+      )
+    })
+  }
+
+  if (enabledFeatures.length > 0) {
+    return getList(enabledFeatures, false)
   }
 
   return null
@@ -167,9 +190,8 @@ export const getAccessibilityFeatures = (listing: Listing) => {
 
 export const getUtilitiesIncluded = (listing: Listing) => {
   const enabledUtilities = Object.entries(listing?.listingUtilities ?? {})
-    .filter(([_, value]) => value)
+    .filter(([key, value]) => value && listingUtilities.includes(key))
     .map((item) => item[0])
-    .filter((utility) => listingUtilities.includes(utility))
 
   if (enabledUtilities.length > 0) {
     return enabledUtilities.map((utility, index) => {
@@ -194,6 +216,9 @@ export const getFeatures = (
     jurisdiction,
     FeatureFlagEnum.enablePetPolicyCheckbox
   )
+
+  const enableParkingTypes = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableParkingType)
+
   if (enablePetPolicyCheckbox && (listing.allowsDogs || listing.allowsCats)) {
     const petPolicy = []
     if (listing.allowsDogs) petPolicy.push(t("listings.allowsDogs"))
@@ -230,10 +255,14 @@ export const getFeatures = (
       subheading: `$${listing.parkingFee}`,
     })
   }
+
   if (listing.smokingPolicy) {
     features.push({ heading: t("t.smokingPolicy"), subheading: listing.smokingPolicy })
   }
-  const accessibilityFeatures = getAccessibilityFeatures(listing)
+  const accessibilityFeatures = getAccessibilityFeatures(
+    listing,
+    jurisdiction.listingFeaturesConfiguration
+  )
   const enableAccessibilityFeatures = jurisdiction?.featureFlags?.some(
     (flag) => flag.name === "enableAccessibilityFeatures" && flag.active
   )
@@ -245,6 +274,33 @@ export const getFeatures = (
   }
   if (listing.accessibility) {
     features.push({ heading: t("t.additionalAccessibility"), subheading: listing.accessibility })
+  }
+
+  if (enableParkingTypes) {
+    let parkingTypesAvailable = false
+    const parking = Object.keys(listing?.parkType ?? {})
+      .filter((feature) => listingParkingTypes.includes(feature))
+      .map((entry) => {
+        if (listing?.parkType[entry]) {
+          parkingTypesAvailable = true
+          return (
+            <li key={entry} className={styles["list-item"]}>
+              {t(`listings.parkingTypeOptions.${entry}`)}
+            </li>
+          )
+        }
+      })
+
+    if (parkingTypesAvailable) {
+      features.push({
+        heading: t("t.parkingTypes"),
+        content: (
+          <ul data-testid="parking-types-list" className={`${styles["two-column-list"]}`}>
+            {parking}
+          </ul>
+        ),
+      })
+    }
   }
 
   return features
@@ -531,15 +587,16 @@ export const getEligibilitySections = (
     MultiselectQuestionsApplicationSectionEnum.preferences
   )
   if (preferences?.length > 0 && !disableListingPreferences) {
+    const sortedPreferences = preferences.sort((a, b) => a.ordinal - b.ordinal)
     eligibilityFeatures.push({
       header: t("listings.sections.housingPreferencesTitle"),
       subheader: t("listings.sections.housingPreferencesSubtitle"),
       note: t("listings.remainingUnitsAfterPreferenceConsideration"),
       content: (
         <OrderedCardList
-          cardContent={preferences.map((question) => {
+          cardContent={sortedPreferences.map((question) => {
             return {
-              heading: question.multiselectQuestions.text,
+              heading: question.multiselectQuestions.name || question.multiselectQuestions.text,
               description: question.multiselectQuestions.description,
             }
           })}
@@ -554,6 +611,7 @@ export const getEligibilitySections = (
     MultiselectQuestionsApplicationSectionEnum.programs
   )
   if (programs?.length > 0) {
+    const sortedPrograms = programs.sort((a, b) => a.ordinal - b.ordinal)
     eligibilityFeatures.push(
       !swapCommunityTypeWithPrograms
         ? {
@@ -562,9 +620,10 @@ export const getEligibilitySections = (
             note: t("listings.remainingUnitsAfterPrograms"),
             content: (
               <CardList
-                cardContent={programs.map((question) => {
+                cardContent={sortedPrograms.map((question) => {
                   return {
-                    heading: question.multiselectQuestions.text,
+                    heading:
+                      question.multiselectQuestions.name || question.multiselectQuestions.text,
                     description: question.multiselectQuestions.description,
                   }
                 })}
@@ -577,7 +636,7 @@ export const getEligibilitySections = (
             note: t("listings.communityTypesNote"),
             content: (
               <CardList
-                cardContent={programs.map((question) => {
+                cardContent={sortedPrograms.map((question) => {
                   return {
                     heading: t(
                       question.multiselectQuestions.untranslatedText
@@ -643,9 +702,9 @@ export const getAdditionalInformation = (listing: Listing) => {
         <div>
           <ul>
             {Object.entries(listing.requiredDocumentsList).map(
-              ([key, value]) =>
+              ([key, value], index) =>
                 value && (
-                  <li className={"list-disc mx-5 mb-1 text-nowrap"}>
+                  <li className={"list-disc mx-5 mb-1 text-nowrap"} key={index}>
                     {t(`listings.requiredDocuments.${key}`)}
                   </li>
                 )

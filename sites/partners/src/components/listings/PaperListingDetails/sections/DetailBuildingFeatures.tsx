@@ -1,40 +1,24 @@
 import React, { useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { AuthContext, listingParkingTypes } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
-import { AuthContext, listingFeatures } from "@bloom-housing/shared-helpers"
-import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailBuildingFeatures = () => {
   const listing = useContext(ListingContext)
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
-  const getAccessibilityFeatures = () => {
-    let featuresExist = false
-    const features = Object.keys(listing?.listingFeatures ?? {})
-      .filter((feature) => listingFeatures.includes(feature))
-      .map((feature) => {
-        if (listing?.listingFeatures[feature]) {
-          featuresExist = true
-          return (
-            <li className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"} key={feature}>
-              {t(`eligibility.accessibility.${feature}`)}
-            </li>
-          )
-        }
-      })
-    return featuresExist ? <ul className={"flex flex-wrap"}>{features}</ul> : <>{t("t.none")}</>
-  }
-
-  const enableAccessibilityFeatures = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableAccessibilityFeatures,
-    listing.jurisdictions.id
-  )
   const enableParkingFee = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableParkingFee,
     listing?.jurisdictions?.id
+  )
+
+  const enableParkingType = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableParkingType,
+    listing.jurisdictions.id
   )
 
   const enableSmokingPolicyRadio = doJurisdictionsHaveFeatureFlagOn(
@@ -64,6 +48,30 @@ const DetailBuildingFeatures = () => {
       )
     }
     return <>{t("t.none")}</>
+  }
+
+  const getParkingTypes = () => {
+    let parkingTypesAvailable = false
+    const parking = Object.keys(listing?.parkType ?? {})
+      .filter((feature) => listingParkingTypes.includes(feature))
+      .map((entry) => {
+        if (listing?.parkType[entry]) {
+          parkingTypesAvailable = true
+          return (
+            <li key={entry} className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"}>
+              {t(`listings.parkingTypeOptions.${entry}`)}
+            </li>
+          )
+        }
+      })
+
+    return parkingTypesAvailable ? (
+      <ul className={"flex flex-wrap"} data-testid="parking-types-list">
+        {parking}
+      </ul>
+    ) : (
+      <>{t("t.none")}</>
+    )
   }
 
   return (
@@ -117,21 +125,20 @@ const DetailBuildingFeatures = () => {
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>
-
-      {!enableAccessibilityFeatures ? null : (
-        <Grid.Row>
-          <Grid.Cell>
-            <FieldValue id="accessibilityFeatures" label={"Accessibility Features"}>
-              {getAccessibilityFeatures()}
-            </FieldValue>
-          </Grid.Cell>
-        </Grid.Row>
-      )}
       {enableParkingFee && (
         <Grid.Row>
           <Grid.Cell>
             <FieldValue id="parkingFee" label={t("t.parkingFee")}>
               {getDetailFieldString(listing.parkingFee)}
+            </FieldValue>
+          </Grid.Cell>
+        </Grid.Row>
+      )}
+      {enableParkingType && (
+        <Grid.Row>
+          <Grid.Cell>
+            <FieldValue id="parkingTypes" label={t("t.parkingTypes")}>
+              {getParkingTypes()}
             </FieldValue>
           </Grid.Cell>
         </Grid.Row>

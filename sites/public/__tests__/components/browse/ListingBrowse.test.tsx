@@ -571,6 +571,14 @@ describe("<ListingBrowse>", () => {
           name: FeatureFlagEnum.enableListingFiltering,
           active: true,
         } as FeatureFlag,
+        {
+          name: FeatureFlagEnum.enableIsVerified,
+          active: true,
+        } as FeatureFlag,
+        {
+          name: FeatureFlagEnum.enableHomeType,
+          active: true,
+        } as FeatureFlag,
       ],
     }
     render(

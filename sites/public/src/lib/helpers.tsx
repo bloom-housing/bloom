@@ -1,5 +1,6 @@
-import React from "react"
+import React, { ReactElement } from "react"
 import dayjs from "dayjs"
+import { useRouter } from "next/router"
 import InfoIcon from "@heroicons/react/20/solid/InformationCircleIcon"
 import LockClosedIcon from "@heroicons/react/20/solid/LockClosedIcon"
 import {
@@ -351,13 +352,19 @@ export const getListings = (listings) => {
   }
 
   const generateTableSubHeader = (listing) => {
-    if (listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist) {
+    if (
+      listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&
+      listing.reviewOrderType !== ReviewOrderTypeEnum.waitlistLottery
+    ) {
       return {
         content: t("listings.availableUnits"),
         styleType: AppearanceStyleType.success,
         isPillType: true,
       }
-    } else if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
+    } else if (
+      listing.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
+      listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
+    ) {
       return {
         content: t("listings.waitlist.open"),
         styleType: AppearanceStyleType.primary,
@@ -518,6 +525,20 @@ export const saveListingFavorite = async (
 
 export const fetchFavoriteListingIds = async (userId: string, userService: UserService) => {
   return (await userService.favoriteListings({ id: userId })).map((item) => item.id)
+}
+
+// RenderIf component to render content based on language (used in markdown components)
+export const RenderIf = (props: { language: string; children: ReactElement }) => {
+  const router = useRouter()
+
+  if (
+    props.language == "all" ||
+    props.language == router.locale ||
+    (router.locale == "en" && props.language == "default")
+  ) {
+    return props.children
+  }
+  return null
 }
 
 export const isTrue = (value) => {

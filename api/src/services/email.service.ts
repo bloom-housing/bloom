@@ -1,6 +1,4 @@
 import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
-import { ResponseError } from '@sendgrid/helpers/classes';
-import { MailDataRequired } from '@sendgrid/helpers/classes/mail';
 import fs from 'fs';
 import Handlebars from 'handlebars';
 import Polyglot from 'node-polyglot';
@@ -11,10 +9,13 @@ import tz from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import { LanguagesEnum, ReviewOrderTypeEnum } from '@prisma/client';
 import { JurisdictionService } from './jurisdiction.service';
-import { SendGridService } from './sendgrid.service';
+import {
+  EmailProvider,
+  SendEmailInput,
+  EmailAttachmentData,
+} from './email-provider.service';
 import { TranslationService } from './translation.service';
 import { Application } from '../dtos/applications/application.dto';
-import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { Listing } from '../dtos/listings/listing.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
@@ -22,15 +23,10 @@ import { User } from '../dtos/users/user.dto';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { getPublicEmailURL } from '../utilities/get-public-email-url';
+import type { ApplicationStatusChangeItem } from '../utilities/applicationStatusChanges';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
-
-type EmailAttachmentData = {
-  data: string;
-  name: string;
-  type: string;
-};
 
 type listingInfo = {
   id: string;
@@ -43,7 +39,7 @@ export class EmailService {
   polyglot: Polyglot;
 
   constructor(
-    private readonly sendGrid: SendGridService,
+    private readonly emailProvider: EmailProvider,
     private readonly translationService: TranslationService,
     private readonly jurisdictionService: JurisdictionService,
     @Inject(Logger)
@@ -111,43 +107,24 @@ export class EmailService {
     from: string,
     subject: string,
     body: string,
-    retry = 3,
     attachment?: EmailAttachmentData,
   ) {
     const isMultipleRecipients = Array.isArray(to);
-    if (isMultipleRecipients && to.length === 0) return;
-    const emailParams: MailDataRequired = {
+    if (isMultipleRecipients && to.length === 0) {
+      console.warn(
+        'Got email send request with empty array for the "to" field. Doing nothing.',
+      );
+      return;
+    }
+
+    const emailParams: SendEmailInput = {
       to,
       from,
       subject,
-      html: body,
+      body,
+      attachment,
     };
-    if (attachment) {
-      emailParams.attachments = [
-        {
-          content: Buffer.from(attachment.data).toString('base64'),
-          filename: attachment.name,
-          type: attachment.type,
-          disposition: 'attachment',
-        },
-      ];
-    }
-    const handleError = (error) => {
-      if (error instanceof ResponseError) {
-        const { response } = error;
-        const { body: errBody } = response;
-        console.error(
-          `Error sending email to: ${
-            isMultipleRecipients ? to.toString() : to
-          }! Error body:`,
-          errBody,
-        );
-        if (retry > 0) {
-          void this.send(to, from, subject, body, retry - 1);
-        }
-      }
-    };
-    await this.sendGrid.send(emailParams, isMultipleRecipients, handleError);
+    await this.emailProvider.send(emailParams);
   }
 
   // TODO: update this to be memoized based on jurisdiction and language
@@ -456,6 +433,128 @@ export class EmailService {
     );
   }
 
+  public async applicationUpdateEmail(
+    listing: Listing,
+    application: Application,
+    changes: ApplicationStatusChangeItem[],
+    appUrl: string,
+    contactEmail?: string,
+    isAdvocate = false,
+  ) {
+    const jurisdiction = await this.getJurisdiction([listing.jurisdictions]);
+    const buildSummaryItems = () =>
+      changes.map((change) => {
+        if (change.type === 'status') {
+          const fromLabel = this.polyglot.t(
+            `applicationUpdate.applicationStatus.${change.from}`,
+          );
+          const toLabel = this.polyglot.t(
+            `applicationUpdate.applicationStatus.${change.to}`,
+          );
+          return new Handlebars.SafeString(
+            this.polyglot.t('applicationUpdate.statusChange', {
+              from: `<strong>${fromLabel}</strong>`,
+              to: `<strong>${toLabel}</strong>`,
+            }),
+          );
+        }
+        if (change.type === 'accessibleWaitlist') {
+          return new Handlebars.SafeString(
+            this.polyglot.t('applicationUpdate.accessibleWaitListChange', {
+              value: `<strong>${change.value}</strong>`,
+            }),
+          );
+        }
+        return new Handlebars.SafeString(
+          this.polyglot.t('applicationUpdate.conventionalWaitListChange', {
+            value: `<strong>${change.value}</strong>`,
+          }),
+        );
+      });
+
+    const subjectForCurrentLanguage = () =>
+      this.polyglot.t('applicationUpdate.subject', {
+        listingName: listing.name,
+      });
+    const actionUrl = appUrl ? `${appUrl}/account/applications` : '';
+    const housingApplicantName = [
+      application?.applicant?.firstName,
+      application?.applicant?.lastName,
+    ]
+      .filter(Boolean)
+      .join(' ');
+    const advocateEmail = application?.alternateContact?.emailAddress;
+    const advocateName = [
+      application?.alternateContact?.firstName,
+      application?.alternateContact?.lastName,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    if (isAdvocate && advocateEmail) {
+      void (await this.loadTranslations(jurisdiction, application.language));
+      await this.send(
+        advocateEmail,
+        jurisdiction.emailFromAddress,
+        subjectForCurrentLanguage(),
+        this.template('application-update')({
+          appOptions: { listingName: listing.name },
+          recipientName: advocateName,
+          summaryItems: buildSummaryItems(),
+          actionUrl,
+          contactEmail,
+          updateNoticeText: this.polyglot.t(
+            'applicationUpdate.advocateUpdateNotice',
+            {
+              applicantName: housingApplicantName,
+              listingName: listing.name,
+            },
+          ),
+          contactNoticeText: this.polyglot.t('applicationUpdate.contactNotice'),
+          viewPromptText: this.polyglot.t(
+            'applicationUpdate.advocateViewPrompt',
+          ),
+          viewLinkText: this.polyglot.t('applicationUpdate.advocateViewLink'),
+          showViewSection: true,
+        }),
+      );
+    }
+
+    if (application?.applicant?.emailAddress) {
+      void (await this.loadTranslations(
+        jurisdiction,
+        isAdvocate ? LanguagesEnum.en : application.language,
+      ));
+      const applicantName = [
+        application.applicant.firstName,
+        application.applicant.lastName,
+      ]
+        .filter(Boolean)
+        .join(' ');
+      await this.send(
+        application.applicant.emailAddress,
+        jurisdiction.emailFromAddress,
+        subjectForCurrentLanguage(),
+        this.template('application-update')({
+          appOptions: { listingName: listing.name },
+          recipientName: applicantName,
+          summaryItems: buildSummaryItems(),
+          contactEmail,
+          updateNoticeText: this.polyglot.t('applicationUpdate.updateNotice', {
+            listingName: listing.name,
+          }),
+          contactNoticeText: isAdvocate
+            ? this.polyglot.t('applicationUpdate.applicantContactNotice')
+            : this.polyglot.t('applicationUpdate.contactNotice'),
+          actionUrl,
+          viewPromptText: this.polyglot.t('applicationUpdate.viewPrompt'),
+          viewLinkText: this.polyglot.t('applicationUpdate.viewLink'),
+          showViewSection: !isAdvocate,
+        }),
+      );
+    }
+  }
+
   public async requestApproval(
     jurisdictionId: IdDTO,
     listingInfo: IdDTO,
@@ -599,7 +698,6 @@ export class EmailService {
           appUrl: process.env.PARTNERS_PORTAL_URL,
         },
       }),
-      undefined,
       {
         data: csvData,
         name: `users-${this.formatLocalDate(
@@ -731,6 +829,44 @@ export class EmailService {
       this.template('warn-removal')({
         user: user,
         signInUrl: signInUrl,
+      }),
+    );
+  }
+
+  public async advocateAccepted(user: User, appUrl: string, formUrl: string) {
+    const jurisdiction = await this.getJurisdiction(user.jurisdictions);
+    void (await this.loadTranslations(jurisdiction, user.language));
+    const emailFromAddress = await this.getEmailToSendFrom(
+      user.jurisdictions,
+      jurisdiction,
+    );
+    await this.send(
+      user.email,
+      emailFromAddress,
+      this.polyglot.t('advocateApproved.subject'),
+      this.template('advocate-approved')({
+        user: user,
+        formUrl,
+        appOptions: { appUrl },
+      }),
+    );
+  }
+
+  public async advocateRejected(user: User, appUrl: string) {
+    const jurisdiction = await this.getJurisdiction(user.jurisdictions);
+    void (await this.loadTranslations(jurisdiction, user.language));
+    const emailFromAddress = await this.getEmailToSendFrom(
+      user.jurisdictions,
+      jurisdiction,
+    );
+    await this.send(
+      user.email,
+      emailFromAddress,
+      this.polyglot.t('advocateRejected.subject'),
+      this.template('advocate-rejected')({
+        user: user,
+        contactEmail: process.env.ADVOCATE_CONTACT_EMAIL,
+        appOptions: { appUrl },
       }),
     );
   }

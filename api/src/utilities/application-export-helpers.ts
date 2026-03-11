@@ -1,51 +1,57 @@
-import { ApplicationSubmissionTypeEnum } from '@prisma/client';
+import {
+  ApplicationSubmissionTypeEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+  ValidationMethodEnum,
+} from '@prisma/client';
 import { Address } from '../dtos/addresses/address.dto';
 import { ApplicationFlaggedSet } from '../dtos/application-flagged-sets/application-flagged-set.dto';
 import { ApplicationLotteryPosition } from '../dtos/applications/application-lottery-position.dto';
 import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
-import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { ApplicationSelection } from '../dtos/applications/application-selection.dto';
 import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { CsvHeader } from '../types/CsvExportInterface';
 import { formatLocalDate } from '../utilities/format-local-date';
-import { User } from '../dtos/users/user.dto';
-import { doAnyJurisdictionHaveFeatureFlagSet } from './feature-flag-utilities';
+
 /**
  *
  * @param maxHouseholdMembers the max number of household members on an application
  * @param multiSelectQuestions the set of multiselect questions on the listing
  * @param timeZone the timezone to output dates in
- * @param includeDemographics whether to include demographic info or not
+ * @param enableV2MSQ when true, the new multiselectQuestion logic will be used
  * @param forLottery whether this is for lottery or not
- * @param dateFormat the format to output dates in
+ * @param includeDemographics whether to include demographic info or not
+ * @param swapCommunityTypeWithPrograms when true, the programs section on the frontend is displayed as community types
  * @returns the set of export headers
  */
 export const getExportHeaders = (
   maxHouseholdMembers: number,
   multiSelectQuestions: MultiselectQuestion[],
   timeZone: string,
-  user: User,
-  includeDemographics = false,
-  forLottery = false,
-  dateFormat = 'MM-DD-YYYY hh:mm:ssA z',
-  swapCommunityTypeWithPrograms?: boolean,
+  optionalParams?: {
+    disableWorkInRegion?: boolean;
+    enableAdaOtherOption?: boolean;
+    enableApplicationStatus?: boolean;
+    enableFullTimeStudentQuestion?: boolean;
+    enableSpokenLanguage?: boolean;
+    enableV2MSQ?: boolean;
+    forLottery?: boolean;
+    includeDemographics?: boolean;
+    swapCommunityTypeWithPrograms?: boolean;
+  },
 ): CsvHeader[] => {
-  const enableAdaOtherOption = doAnyJurisdictionHaveFeatureFlagSet(
-    user.jurisdictions,
-    FeatureFlagEnum.enableAdaOtherOption,
-  );
-  const enableFullTimeStudentQuestion = doAnyJurisdictionHaveFeatureFlagSet(
-    user.jurisdictions,
-    FeatureFlagEnum.enableFullTimeStudentQuestion,
-  );
-  const disableWorkInRegion = doAnyJurisdictionHaveFeatureFlagSet(
-    user.jurisdictions,
-    FeatureFlagEnum.disableWorkInRegion,
-  );
-  const enableApplicationStatus = doAnyJurisdictionHaveFeatureFlagSet(
-    user.jurisdictions,
-    FeatureFlagEnum.enableApplicationStatus,
-  );
+  const dateFormat = 'MM-DD-YYYY hh:mm:ssA z';
+  const {
+    disableWorkInRegion,
+    enableAdaOtherOption,
+    enableApplicationStatus,
+    enableFullTimeStudentQuestion,
+    enableSpokenLanguage,
+    enableV2MSQ,
+    forLottery,
+    includeDemographics,
+    swapCommunityTypeWithPrograms,
+  } = optionalParams;
 
   const headers: CsvHeader[] = [
     {
@@ -340,21 +346,29 @@ export const getExportHeaders = (
     ],
   );
 
-  // add preferences to csv headers
-  const preferenceHeaders = constructMultiselectQuestionHeaders(
-    'preferences',
-    'Preference',
-    multiSelectQuestions,
-  );
-  headers.push(...preferenceHeaders);
+  if (enableV2MSQ) {
+    const multiselectQuestionHeaders = constructMultiselectQuestionHeaders(
+      multiSelectQuestions,
+      swapCommunityTypeWithPrograms,
+    );
+    headers.push(...multiselectQuestionHeaders);
+  } else {
+    // add preferences to csv headers
+    const preferenceHeaders = constructSpecificMultiselectQuestionHeaders(
+      'preferences',
+      'Preference',
+      multiSelectQuestions,
+    );
+    headers.push(...preferenceHeaders);
 
-  // add programs to csv headers
-  const programHeaders = constructMultiselectQuestionHeaders(
-    'programs',
-    swapCommunityTypeWithPrograms ? 'Community Type' : 'Program',
-    multiSelectQuestions,
-  );
-  headers.push(...programHeaders);
+    // add programs to csv headers
+    const programHeaders = constructSpecificMultiselectQuestionHeaders(
+      'programs',
+      swapCommunityTypeWithPrograms ? 'Community Type' : 'Program',
+      multiSelectQuestions,
+    );
+    headers.push(...programHeaders);
+  }
 
   headers.push({
     path: 'householdSize',
@@ -364,7 +378,7 @@ export const getExportHeaders = (
   // add household member headers to csv
   if (maxHouseholdMembers) {
     headers.push(
-      ...getHouseholdCsvHeaders(
+      ...constructHouseholdHeaders(
         maxHouseholdMembers,
         enableFullTimeStudentQuestion,
         disableWorkInRegion,
@@ -403,7 +417,252 @@ export const getExportHeaders = (
         label: 'How did you Hear?',
       },
     );
+    if (enableSpokenLanguage) {
+      headers.push({
+        path: 'demographics.spokenLanguage',
+        label: 'Spoken Language',
+        format: (val: string): string =>
+          convertDemographicLanguageToReadable(val),
+      });
+    }
   }
+  return headers;
+};
+
+/**
+ *
+ * @param address the address to convert to a string
+ * @returns a string representation of the address
+ */
+export const addressToString = (address: Address): string => {
+  return `${address.street}${address.street2 ? ' ' + address.street2 : ''} ${
+    address.city
+  }, ${address.state} ${address.zipCode}`;
+};
+
+/**
+ *
+ * @param selection the application selection made
+ * @param optionId the option to consider selected
+ * @param key the field on the ApplicationSelectionOption to format
+ * @returns the string representation of the multiselect format
+ */
+export const applicationSelectionDataFormatter = (
+  selection: ApplicationSelection,
+  optionId: string,
+  key: string,
+): string => {
+  if (!selection) return '';
+  const selectedOption = selection.selections.find(
+    (selectedOption) => selectedOption.multiselectOption.id === optionId,
+  );
+  if (!selectedOption) return '';
+  const value = selectedOption[key];
+  if (key === 'addressHolderAddress') {
+    return addressToString(value);
+  }
+  if (key === 'isGeocodingVerified') {
+    return value === null ? 'Needs Manual Verification' : value.toString();
+  }
+  return value;
+};
+
+/**
+ *
+ * @param maxHouseholdMembers the maximum number of household members across all applications
+ * @param enableFullTimeStudentQuestion should the 'Full-time Student' column be included from the headers
+ * @param disableWorkInRegion should the `Work In Region` columns be excluded from the headers
+ * @returns the headers and formatters for the household member columns
+ */
+export const constructHouseholdHeaders = (
+  maxHouseholdMembers: number,
+  enableFullTimeStudentQuestion?: boolean,
+  disableWorkInRegion?: boolean,
+): CsvHeader[] => {
+  const headers = [];
+  for (let i = 0; i < maxHouseholdMembers; i++) {
+    const j = i + 1;
+    headers.push(
+      {
+        path: `householdMember.${i}.firstName`,
+        label: `Household Member (${j}) First Name`,
+      },
+      {
+        path: `householdMember.${i}.middleName`,
+        label: `Household Member (${j}) Middle Name`,
+      },
+      {
+        path: `householdMember.${i}.lastName`,
+        label: `Household Member (${j}) Last Name`,
+      },
+      {
+        path: `householdMember.${i}.birthDay`,
+        label: `Household Member (${j}) Birth Day`,
+      },
+      {
+        path: `householdMember.${i}.birthMonth`,
+        label: `Household Member (${j}) Birth Month`,
+      },
+      {
+        path: `householdMember.${i}.birthYear`,
+        label: `Household Member (${j}) Birth Year`,
+      },
+      {
+        path: `householdMember.${i}.relationship`,
+        label: `Household Member (${j}) Relationship`,
+      },
+      {
+        path: `householdMember.${i}.sameAddress`,
+        label: `Household Member (${j}) Same as Primary Applicant`,
+      },
+    );
+    if (!disableWorkInRegion) {
+      headers.push({
+        path: `householdMember.${i}.workInRegion`,
+        label: `Household Member (${j}) Work in Region`,
+      });
+    }
+    if (enableFullTimeStudentQuestion) {
+      headers.push({
+        path: `householdMember.${i}.fullTimeStudent`,
+        label: `Household Member (${j}) Full-Time Student`,
+      });
+    }
+    headers.push(
+      {
+        path: `householdMember.${i}.householdMemberAddress.street`,
+        label: `Household Member (${j}) Street`,
+      },
+      {
+        path: `householdMember.${i}.householdMemberAddress.street2`,
+        label: `Household Member (${j}) Street 2`,
+      },
+      {
+        path: `householdMember.${i}.householdMemberAddress.city`,
+        label: `Household Member (${j}) City`,
+      },
+      {
+        path: `householdMember.${i}.householdMemberAddress.state`,
+        label: `Household Member (${j}) State`,
+      },
+      {
+        path: `householdMember.${i}.householdMemberAddress.zipCode`,
+        label: `Household Member (${j}) Zip Code`,
+      },
+    );
+  }
+
+  return headers;
+};
+
+/**
+ *
+ * @param multiSelectQuestions the set of multiselect questions on the listing
+ * @param swapCommunityTypeWithPrograms when true, the programs section on the frontend is displayed as community types
+ * @returns the set of headers
+ */
+export const constructMultiselectQuestionHeaders = (
+  multiSelectQuestions: MultiselectQuestion[],
+  swapCommunityTypeWithPrograms?: boolean,
+): CsvHeader[] => {
+  const headers: CsvHeader[] = [];
+
+  multiSelectQuestions.forEach((question) => {
+    let labelString: string;
+    const applicationSection = question.applicationSection;
+    if (
+      applicationSection ===
+      MultiselectQuestionsApplicationSectionEnum.preferences
+    ) {
+      labelString = 'Preference';
+    } else if (
+      applicationSection ===
+        MultiselectQuestionsApplicationSectionEnum.programs &&
+      swapCommunityTypeWithPrograms
+    ) {
+      labelString = 'Community Type';
+    } else if (
+      applicationSection === MultiselectQuestionsApplicationSectionEnum.programs
+    ) {
+      labelString = 'Program';
+    }
+
+    headers.push({
+      path: `multiselectQuestion.${question.id}`,
+      label: `${labelString} ${question.name}`,
+      format: (val: any): string => {
+        const claimedString: string[] = [];
+        val?.selections?.forEach((selection) => {
+          // Note: the selection can be the opt out text. That is intended behavior
+          claimedString.push(selection.multiselectOption.name);
+        });
+        return claimedString.join(', ');
+      },
+    });
+    /**
+     * handle other collected data
+     */
+    question.multiselectOptions.forEach((option) => {
+      if (!option.shouldCollectAddress) {
+        return;
+      }
+      headers.push({
+        path: `multiselectQuestion.${question.id}.${option.id}.addressHolderAddress`,
+        label: `${labelString} ${question.name} - ${option.name} - Address`,
+        format: (val: ApplicationSelection): string => {
+          return applicationSelectionDataFormatter(
+            val,
+            option.id,
+            'addressHolderAddress',
+          );
+        },
+      });
+
+      if (option.shouldCollectName) {
+        headers.push({
+          path: `multiselectQuestion.${question.id}.${option.id}.addressHolderName`,
+          label: `${labelString} ${question.name} - ${option.name} - Name of Address Holder`,
+          format: (val: ApplicationSelection): string => {
+            return applicationSelectionDataFormatter(
+              val,
+              option.id,
+              'addressHolderName',
+            );
+          },
+        });
+      }
+      if (option.shouldCollectRelationship) {
+        headers.push({
+          path: `multiselectQuestion.${question.id}.${option.id}.addressHolderRelationship`,
+          label: `${labelString} ${question.name} - ${option.name} - Relationship to Address Holder`,
+          format: (val: ApplicationSelection): string => {
+            return applicationSelectionDataFormatter(
+              val,
+              option.id,
+              'addressHolderRelationship',
+            );
+          },
+        });
+      }
+      if (
+        option.validationMethod &&
+        option.validationMethod !== ValidationMethodEnum.none
+      ) {
+        headers.push({
+          path: `multiselectQuestion.${question.id}.${option.id}.isGeocodingVerified`,
+          label: `${labelString} ${question.name} - ${option.name} - Passed Address Check`,
+          format: (val: ApplicationSelection): string => {
+            return applicationSelectionDataFormatter(
+              val,
+              option.id,
+              'isGeocodingVerified',
+            );
+          },
+        });
+      }
+    });
+  });
+
   return headers;
 };
 
@@ -414,7 +673,7 @@ export const getExportHeaders = (
  * @param multiSelectQuestions the set of multiselect questions on the listing
  * @returns the set of headers
  */
-export const constructMultiselectQuestionHeaders = (
+export const constructSpecificMultiselectQuestionHeaders = (
   applicationSection: string,
   labelString: string,
   multiSelectQuestions: MultiselectQuestion[],
@@ -512,6 +771,104 @@ export const constructMultiselectQuestionHeaders = (
 
 /**
  *
+ * @param type takes in the demographic string
+ * @returns outputs the readable version of the string
+ */
+export const convertDemographicRaceToReadable = (type: string): string => {
+  const [rootKey, customValue = ''] = type.split(':');
+  //only show colon if user entered a custom value
+  const customValueFormatted = customValue ? `:${customValue}` : '';
+  const typeMap = {
+    americanIndianAlaskanNative: 'American Indian / Alaskan Native',
+    asian: 'Asian',
+    'asian-asianIndian': 'Asian[Asian Indian]',
+    'asian-centralAsian': 'Asian[Central Asian]',
+    'asian-chinese': 'Asian[Chinese]',
+    'asian-filipino': 'Asian[Filipino]',
+    'asian-japanese': 'Asian[Japanese]',
+    'asian-korean': 'Asian[Korean]',
+    'asian-mongolian': 'Asian[Mongolian]',
+    'asian-otherAsian': `Asian[Other Asian${customValueFormatted}]`,
+    'asian-southAsian': 'Asian[South Asian]',
+    'asian-southeastAsian': 'Asian[Southeast Asian]',
+    'asian-vietnamese': 'Asian[Vietnamese]',
+    black: 'Black',
+    'black-african': 'Black[African]',
+    'black-africanAmerican': 'Black[African American]',
+    'black-caribbeanCentralSouthAmericanMexican':
+      'Black[Caribbean, Central American, South American or Mexican]',
+    'black-otherBlack': `Black[Other Black${customValueFormatted}]`,
+    blackAfricanAmerican: 'Black / African American',
+    declineToRespond: 'Decline to Respond',
+    indigenous: 'Indigenous',
+    'indigenous-alaskanNative': 'Indigenous[Alaskan Native]',
+    'indigenous-indigenousFromMexicoCaribbeanCentralSouthAmerica':
+      'Indigenous[Indigenous from Mexico, the Caribbean, Central America, or South America]',
+    'indigenous-nativeAmerican': 'Indigenous[American Indian/Native American]',
+    'indigenous-otherIndigenous': `Indigenous[Other Indigenous${customValueFormatted}]`,
+    latino: 'Latino',
+    'latino-caribbean': 'Latino[Caribbean]',
+    'latino-centralAmerican': 'Latino[Central American]',
+    'latino-mexican': 'Latino[Mexican]',
+    'latino-otherLatino': `Latino[Other Latino${customValueFormatted}]`,
+    'latino-southAmerican': 'Latino[South American]',
+    middleEasternNorthAfrican: 'Middle Eastern / North African (MENA)',
+    middleEasternOrAfrican: 'Middle Eastern, West African or North African',
+    'middleEasternOrAfrican-northAfrican':
+      'Middle Eastern, West African or North African[North African]',
+    'middleEasternOrAfrican-otherMiddleEasternNorthAfrican': `Middle Eastern, West African or North African[Other Middle Eastern or North African${customValueFormatted}]`,
+    'middleEasternOrAfrican-westAsian':
+      'Middle Eastern, West African or North African[West Asian]',
+    nativeHawaiianOtherPacificIslander:
+      'Native Hawaiian / Other Pacific Islander',
+    'nativeHawaiianOtherPacificIslander-guamanianOrChamorro':
+      'Native Hawaiian / Other Pacific Islander[Guamanian or Chamorro]',
+    'nativeHawaiianOtherPacificIslander-nativeHawaiian':
+      'Native Hawaiian / Other Pacific Islander[Native Hawaiian]',
+    'nativeHawaiianOtherPacificIslander-otherPacificIslander': `Native Hawaiian / Other Pacific Islander[Other Pacific Islander${customValueFormatted}]`,
+    'nativeHawaiianOtherPacificIslander-samoan':
+      'Native Hawaiian / Other Pacific Islander[Samoan]',
+    otherMultiracial: `Other / Multiracial${customValueFormatted}`,
+    pacificIslander: 'Pacific Islander',
+    'pacificIslander-chamorro': 'Pacific Islander[Chamorro]',
+    'pacificIslander-nativeHawaiian': 'Pacific Islander[Native Hawaiian]',
+    'pacificIslander-otherPacificIslander': `Pacific Islander[Other Pacific Islander${customValueFormatted}]`,
+    'pacificIslander-samoan': 'Pacific Islander[Samoan]',
+    white: 'White',
+    'white-european': 'White[European]',
+    'white-otherWhite': `White[Other White${customValueFormatted}]`,
+  };
+  return typeMap[rootKey] ?? rootKey;
+};
+
+/**
+ *
+ * @param type takes in the demographic string
+ * @returns outputs the readable version of the string
+ */
+export const convertDemographicLanguageToReadable = (type: string): string => {
+  // Not Listed is saved as "notListed:<custom text here>"
+  const [rootKey, customValue = ''] = type.split(':');
+  let notListedString = 'Not Listed';
+  if (customValue) notListedString = notListedString + `:${customValue}`;
+  const typeMap = {
+    chineseCantonese: 'Chinese - Cantonese',
+    chineseMandarin: 'Chinese - Mandarin',
+    english: 'English',
+    filipino: 'Filipino',
+    korean: 'Korean',
+    russian: 'Russian',
+    spanish: 'Spanish',
+    vietnamese: 'Vietnamese',
+    farsi: 'Farsi',
+    afghani: 'Afghani (Dari)',
+    notListed: notListedString,
+  };
+  return typeMap[rootKey] ?? rootKey;
+};
+
+/**
+ *
  * @param question the multiselect question to format
  * @param optionText the option to consider selected
  * @param key additional formatting (address or geocodingVerified)
@@ -539,141 +896,6 @@ export const multiselectQuestionFormat = (
       : extraData.value.toString();
   }
   return extraData.value as string;
-};
-
-/**
- *
- * @param address the address to convert to a string
- * @returns a string representation of the address
- */
-export const addressToString = (address: Address): string => {
-  return `${address.street}${address.street2 ? ' ' + address.street2 : ''} ${
-    address.city
-  }, ${address.state} ${address.zipCode}`;
-};
-
-/**
- *
- * @param maxHouseholdMembers the maximum number of household members across all applications
- * @param enableFullTimeStudentQuestion should the 'Full-time Student' column be included from the headers
- * @param disableWorkInRegion should the `Work In Region` columns be excluded from the headers
- * @returns the headers and formatters for the household member columns
- */
-export const getHouseholdCsvHeaders = (
-  maxHouseholdMembers: number,
-  enableFullTimeStudentQuestion?: boolean,
-  disableWorkInRegion?: boolean,
-): CsvHeader[] => {
-  const headers = [];
-  for (let i = 0; i < maxHouseholdMembers; i++) {
-    const j = i + 1;
-    headers.push(
-      {
-        path: `householdMember.${i}.firstName`,
-        label: `Household Member (${j}) First Name`,
-      },
-      {
-        path: `householdMember.${i}.middleName`,
-        label: `Household Member (${j}) Middle Name`,
-      },
-      {
-        path: `householdMember.${i}.lastName`,
-        label: `Household Member (${j}) Last Name`,
-      },
-      {
-        path: `householdMember.${i}.birthDay`,
-        label: `Household Member (${j}) Birth Day`,
-      },
-      {
-        path: `householdMember.${i}.birthMonth`,
-        label: `Household Member (${j}) Birth Month`,
-      },
-      {
-        path: `householdMember.${i}.birthYear`,
-        label: `Household Member (${j}) Birth Year`,
-      },
-      {
-        path: `householdMember.${i}.relationship`,
-        label: `Household Member (${j}) Relationship`,
-      },
-      {
-        path: `householdMember.${i}.sameAddress`,
-        label: `Household Member (${j}) Same as Primary Applicant`,
-      },
-    );
-    if (!disableWorkInRegion) {
-      headers.push({
-        path: `householdMember.${i}.workInRegion`,
-        label: `Household Member (${j}) Work in Region`,
-      });
-    }
-    if (enableFullTimeStudentQuestion) {
-      headers.push({
-        path: `householdMember.${i}.fullTimeStudent`,
-        label: `Household Member (${j}) Full-Time Student`,
-      });
-    }
-    headers.push(
-      {
-        path: `householdMember.${i}.householdMemberAddress.street`,
-        label: `Household Member (${j}) Street`,
-      },
-      {
-        path: `householdMember.${i}.householdMemberAddress.street2`,
-        label: `Household Member (${j}) Street 2`,
-      },
-      {
-        path: `householdMember.${i}.householdMemberAddress.city`,
-        label: `Household Member (${j}) City`,
-      },
-      {
-        path: `householdMember.${i}.householdMemberAddress.state`,
-        label: `Household Member (${j}) State`,
-      },
-      {
-        path: `householdMember.${i}.householdMemberAddress.zipCode`,
-        label: `Household Member (${j}) Zip Code`,
-      },
-    );
-  }
-
-  return headers;
-};
-
-/**
- *
- * @param type takes in the demographic string
- * @returns outputs the readable version of the string
- */
-export const convertDemographicRaceToReadable = (type: string): string => {
-  const [rootKey, customValue = ''] = type.split(':');
-  //only show colon if user entered a custom value
-  const customValueFormatted = customValue ? `:${customValue}` : '';
-  const typeMap = {
-    americanIndianAlaskanNative: 'American Indian / Alaskan Native',
-    asian: 'Asian',
-    'asian-asianIndian': 'Asian[Asian Indian]',
-    'asian-otherAsian': `Asian[Other Asian${customValueFormatted}]`,
-    blackAfricanAmerican: 'Black / African American',
-    'asian-chinese': 'Asian[Chinese]',
-    declineToRespond: 'Decline to Respond',
-    'asian-filipino': 'Asian[Filipino]',
-    'nativeHawaiianOtherPacificIslander-guamanianOrChamorro':
-      'Native Hawaiian / Other Pacific Islander[Guamanian or Chamorro]',
-    'asian-japanese': 'Asian[Japanese]',
-    'asian-korean': 'Asian[Korean]',
-    'nativeHawaiianOtherPacificIslander-nativeHawaiian':
-      'Native Hawaiian / Other Pacific Islander[Native Hawaiian]',
-    nativeHawaiianOtherPacificIslander:
-      'Native Hawaiian / Other Pacific Islander',
-    otherMultiracial: `Other / Multiracial${customValueFormatted}`,
-    'nativeHawaiianOtherPacificIslander-otherPacificIslander': `Native Hawaiian / Other Pacific Islander[Other Pacific Islander${customValueFormatted}]`,
-    'nativeHawaiianOtherPacificIslander-samoan':
-      'Native Hawaiian / Other Pacific Islander[Samoan]',
-    'asian-vietnamese': 'Asian[Vietnamese]',
-    white: 'White',
-  };
-  return typeMap[rootKey] ?? rootKey;
 };
 
 export const typeMap = {

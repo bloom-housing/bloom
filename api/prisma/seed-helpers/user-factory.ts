@@ -21,6 +21,9 @@ export const userFactory = async (optionalParams?: {
   lastLoginAt?: Date;
   wasWarnedOfDeletion?: boolean;
   language?: LanguagesEnum;
+  isAdvocate?: boolean;
+  isApproved?: boolean;
+  agencyId?: string;
 }): Promise<Prisma.UserAccountsCreateInput> => ({
   agreedToTermsOfService: optionalParams?.acceptedTerms || false,
   confirmedAt: optionalParams?.confirmedAt || null,
@@ -36,11 +39,15 @@ export const userFactory = async (optionalParams?: {
   passwordHash: optionalParams?.password
     ? await passwordToHash(optionalParams?.password)
     : await passwordToHash('Abcdef12345!'),
-  phoneNumber: optionalParams?.phoneNumber || null,
+  phoneNumber:
+    optionalParams?.phoneNumber ||
+    (optionalParams?.isAdvocate ? '(415) 555-1212' : undefined),
   phoneNumberVerified: optionalParams?.phoneNumberVerified || null,
   singleUseCode: optionalParams?.singleUseCode || null,
   singleUseCodeUpdatedAt: optionalParams?.mfaEnabled ? new Date() : undefined,
   language: optionalParams?.language || undefined,
+  isAdvocate: optionalParams?.isAdvocate || undefined,
+  isApproved: optionalParams?.isApproved || undefined,
   favoriteListings: optionalParams?.favoriteListings
     ? {
         connect: optionalParams.favoriteListings.map((listing) => {
@@ -75,6 +82,23 @@ export const userFactory = async (optionalParams?: {
           isPartner: optionalParams?.roles?.isPartner || false,
           isSuperAdmin: optionalParams?.roles?.isSuperAdmin || false,
           isSupportAdmin: optionalParams?.roles?.isSupportAdmin || false,
+        },
+      }
+    : undefined,
+  agency: optionalParams?.agencyId
+    ? {
+        connect: {
+          id: optionalParams.agencyId,
+        },
+      }
+    : undefined,
+  address: optionalParams?.isAdvocate
+    ? {
+        create: {
+          street: '123 Main St',
+          city: 'Oakland',
+          state: 'CA',
+          zipCode: '94612',
         },
       }
     : undefined,

@@ -8,20 +8,21 @@ import {
   TableThumbnail,
   FieldGroup,
   StandardTableData,
+  Form,
 } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
-import { cloudinaryFileUploader } from "../../../../lib/helpers"
+import { fileUploader } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
-type CloudinaryData = {
+type FileUploadData = {
   id: string
   url: string
 }
 
 type FlyerAttachType = "upload" | "url" | null
 
-const EMPTY_CLOUDINARY_DATA: CloudinaryData = { id: "", url: "" }
+const EMPTY_FILE_UPLOAD_DATA: FileUploadData = { id: "", url: "" }
 const EMPTY_FILE = { fileId: "", label: "" }
 
 const getFlyerAttachType = (
@@ -37,17 +38,17 @@ const getFileNameFromId = (fileId?: string) => {
   return fileId ? fileId.split("/").slice(-1).join() : ""
 }
 
-const initializeCloudinaryData = (
+const initializeFileData = (
   attachType: FlyerAttachType,
   file?: { fileId: string; label: string }
-): CloudinaryData => {
+): FileUploadData => {
   if (attachType === "upload" && file?.fileId) {
     return {
       id: file.fileId,
       url: cloudinaryUrlFromId(file.fileId),
     }
   }
-  return EMPTY_CLOUDINARY_DATA
+  return EMPTY_FILE_UPLOAD_DATA
 }
 
 type MarketingFlyerFormValues = {
@@ -84,11 +85,11 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
 
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
-  const [cloudinaryData, setCloudinaryData] = useState<CloudinaryData>(EMPTY_CLOUDINARY_DATA)
+  const [fileUploadData, setFileUploadData] = useState<FileUploadData>(EMPTY_FILE_UPLOAD_DATA)
 
   const [accessibleProgressValue, setAccessibleProgressValue] = useState(0)
-  const [accessibleCloudinaryData, setAccessibleCloudinaryData] =
-    useState<CloudinaryData>(EMPTY_CLOUDINARY_DATA)
+  const [accessibleFileUploadData, setAccessibleFileUploadData] =
+    useState<FileUploadData>(EMPTY_FILE_UPLOAD_DATA)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const {
@@ -112,9 +113,9 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
 
   const resetDrawerState = () => {
     setProgressValue(0)
-    setCloudinaryData(EMPTY_CLOUDINARY_DATA)
+    setFileUploadData(EMPTY_FILE_UPLOAD_DATA)
     setAccessibleProgressValue(0)
-    setAccessibleCloudinaryData(EMPTY_CLOUDINARY_DATA)
+    setAccessibleFileUploadData(EMPTY_FILE_UPLOAD_DATA)
     reset({
       marketingFlyerAttachType: null,
       marketingFlyerURL: "",
@@ -139,9 +140,9 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
         accessibleAttachType === "url" ? accessibleMarketingFlyerValue || "" : "",
     })
 
-    setCloudinaryData(initializeCloudinaryData(marketingAttachType, marketingFlyerFile))
-    setAccessibleCloudinaryData(
-      initializeCloudinaryData(accessibleAttachType, accessibleMarketingFlyerFile)
+    setFileUploadData(initializeFileData(marketingAttachType, marketingFlyerFile))
+    setAccessibleFileUploadData(
+      initializeFileData(accessibleAttachType, accessibleMarketingFlyerFile)
     )
 
     setProgressValue(0)
@@ -258,18 +259,18 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
   ].filter(Boolean)
 
   const pdfUploader = async (file: File) => {
-    await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue })
+    await fileUploader({ file, setFileUploadData, setProgressValue })
   }
 
   const accessiblePdfUploader = async (file: File) => {
-    await cloudinaryFileUploader({
+    await fileUploader({
       file,
-      setCloudinaryData: setAccessibleCloudinaryData,
+      setFileUploadData: setAccessibleFileUploadData,
       setProgressValue: setAccessibleProgressValue,
     })
   }
 
-  const buildPreviewTableRow = (data: CloudinaryData, onDelete: () => void): StandardTableData => {
+  const buildPreviewTableRow = (data: FileUploadData, onDelete: () => void): StandardTableData => {
     if (!data.url) return []
 
     return [
@@ -299,14 +300,14 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
     ]
   }
 
-  const marketingPreviewTableRows = buildPreviewTableRow(cloudinaryData, () => {
-    setCloudinaryData(EMPTY_CLOUDINARY_DATA)
+  const marketingPreviewTableRows = buildPreviewTableRow(fileUploadData, () => {
+    setFileUploadData(EMPTY_FILE_UPLOAD_DATA)
     setProgressValue(0)
     setValue("marketingFlyerAttachType", null)
   })
 
-  const accessiblePreviewTableRows = buildPreviewTableRow(accessibleCloudinaryData, () => {
-    setAccessibleCloudinaryData(EMPTY_CLOUDINARY_DATA)
+  const accessiblePreviewTableRows = buildPreviewTableRow(accessibleFileUploadData, () => {
+    setAccessibleFileUploadData(EMPTY_FILE_UPLOAD_DATA)
     setAccessibleProgressValue(0)
     setValue("accessibleMarketingFlyerAttachType", null)
   })
@@ -320,7 +321,7 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
   const buildFlyerData = (
     attachType: FlyerAttachType,
     urlValue: string,
-    newCloudinaryData: CloudinaryData,
+    newFileUploadData: FileUploadData,
     existingFile?: { fileId: string; label: string }
   ) => {
     if (attachType === "url") {
@@ -330,8 +331,8 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
     if (attachType === "upload") {
       return {
         url: "",
-        file: newCloudinaryData.id
-          ? { fileId: newCloudinaryData.id, label: "cloudinaryPDF" }
+        file: newFileUploadData.id
+          ? { fileId: newFileUploadData.id, label: "cloudinaryPDF" }
           : existingFile || EMPTY_FILE,
       }
     }
@@ -343,14 +344,14 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
     const marketing = buildFlyerData(
       formValues.marketingFlyerAttachType,
       formValues.marketingFlyerURL,
-      cloudinaryData,
+      fileUploadData,
       marketingFlyerFile
     )
 
     const accessible = buildFlyerData(
       formValues.accessibleMarketingFlyerAttachType,
       formValues.accessibleMarketingFlyerURL,
-      accessibleCloudinaryData,
+      accessibleFileUploadData,
       accessibleMarketingFlyerFile
     )
 
@@ -402,8 +403,8 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
         <Drawer.Header id="marketing-flyer-drawer-header">
           {t("listings.marketingFlyer.add")}
         </Drawer.Header>
-        <form id="marketing-flyer-drawer-form" onSubmit={handleSubmit(onFlyerSubmit)}>
-          <Drawer.Content>
+        <Drawer.Content>
+          <Form id="marketing-flyer-drawer-form" onSubmit={handleSubmit(onFlyerSubmit)}>
             <Card className="mb-8">
               <Card.Section>
                 <FieldGroup
@@ -517,22 +518,28 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
                 )}
               </Card.Section>
             </Card>
-          </Drawer.Content>
-          <Drawer.Footer>
-            <Button id="saveMarketingFlyerButton" key={0} type="submit" variant="primary" size="sm">
-              Save
-            </Button>
-            <Button
-              key={1}
-              type="button"
-              onClick={resetDrawerState}
-              size="sm"
-              variant="primary-outlined"
-            >
-              {t("t.cancel")}
-            </Button>
-          </Drawer.Footer>
-        </form>
+          </Form>
+        </Drawer.Content>
+        <Drawer.Footer>
+          <Button
+            id="saveMarketingFlyerButton"
+            key={0}
+            variant="primary"
+            size="sm"
+            onClick={handleSubmit(onFlyerSubmit)}
+          >
+            Save
+          </Button>
+          <Button
+            key={1}
+            type="button"
+            onClick={resetDrawerState}
+            size="sm"
+            variant="primary-outlined"
+          >
+            {t("t.cancel")}
+          </Button>
+        </Drawer.Footer>
       </Drawer>
     </>
   )

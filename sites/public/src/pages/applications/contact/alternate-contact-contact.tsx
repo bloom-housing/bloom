@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { Field, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert } from "@bloom-housing/ui-seeds"
 import {
   OnClientSide,
   PageView,
@@ -13,14 +12,18 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  LockIcon,
+  onFormError,
+} from "../../../layouts/application-form"
 import FormsLayout from "../../../layouts/forms"
-import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationAlternateContactContact = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("alternateContactInfo")
   const currentPageSection = 1
+  const isAdvocate = !!conductor.config?.isAdvocate
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { control, register, handleSubmit, errors, trigger } = useForm<Record<string, any>>({
@@ -30,20 +33,44 @@ const ApplicationAlternateContactContact = () => {
     const validation = await trigger()
     if (!validation) return
 
-    application.alternateContact.phoneNumber = data.phoneNumber
-    application.alternateContact.emailAddress = data.emailAddress || null
-    application.alternateContact.address.street = data.mailingAddress.street
-    application.alternateContact.address.street2 = data.mailingAddress.street2
-    application.alternateContact.address.state = data.mailingAddress.state
-    application.alternateContact.address.zipCode = data.mailingAddress.zipCode
-    application.alternateContact.address.city = data.mailingAddress.city
+    if (!isAdvocate) {
+      application.alternateContact.phoneNumber = data.phoneNumber
+      application.alternateContact.emailAddress = data.emailAddress || null
+      if (!application.alternateContact.address) {
+        application.alternateContact.address = {} as typeof application.alternateContact.address
+      }
+      application.alternateContact.address.street = data.mailingAddress.street
+      application.alternateContact.address.street2 = data.mailingAddress.street2
+      application.alternateContact.address.state = data.mailingAddress.state
+      application.alternateContact.address.zipCode = data.mailingAddress.zipCode
+      application.alternateContact.address.city = data.mailingAddress.city
+    }
     conductor.completeSection(1)
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
+
+  useEffect(() => {
+    if (!isAdvocate || !profile) return
+    application.alternateContact.phoneNumber = profile.phoneNumber || ""
+    application.alternateContact.emailAddress = profile.email || null
+
+    if (profile.address) {
+      application.alternateContact.address = {
+        ...application.alternateContact.address,
+        street: profile.address.street || "",
+        street2: profile.address.street2 || "",
+        city: profile.address.city || "",
+        state: profile.address.state || "",
+        zipCode: profile.address.zipCode || "",
+      }
+    }
+
+    conductor.sync()
+  }, [isAdvocate, profile, application, conductor])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -75,19 +102,10 @@ const ApplicationAlternateContactContact = () => {
           }}
           conductor={conductor}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
-
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"inset"}>
             <label className="text__caps-spaced" htmlFor="phoneNumber">
+              <LockIcon locked={isAdvocate} />
               {t("application.alternateContact.contact.phoneNumberFormLabel")}
             </label>
             <PhoneField
@@ -95,29 +113,32 @@ const ApplicationAlternateContactContact = () => {
               name="phoneNumber"
               label={t("application.alternateContact.contact.phoneNumberFormLabel")}
               readerOnly={true}
-              required={true}
+              required={!isAdvocate}
               error={errors.phoneNumber}
               errorMessage={t("errors.phoneNumberError")}
               controlClassName="control"
               control={control}
               defaultValue={application.alternateContact.phoneNumber}
+              disabled={isAdvocate}
               dataTestId={"app-alternate-phone-number"}
               subNote={t("application.contact.number.subNote")}
             />
           </CardSection>
           <CardSection divider={"inset"}>
-            <h3 className="text__caps-spaced">
+            <label className="text__caps-spaced" htmlFor="emailAddress">
+              <LockIcon locked={isAdvocate} />
               {t("application.alternateContact.contact.emailAddressFormLabel")}
-            </h3>
+            </label>
             <Field
               id="emailAddress"
               name="emailAddress"
               label={t("application.alternateContact.contact.emailAddressFormLabel")}
               readerOnly={true}
               defaultValue={application.alternateContact.emailAddress || null}
+              disabled={isAdvocate}
               register={register}
               type="email"
-              validation={{ pattern: emailRegex }}
+              validation={isAdvocate ? undefined : { pattern: emailRegex }}
               error={errors.emailAddress}
               errorMessage={t("errors.emailAddressError")}
               dataTestId={"app-alternate-email"}
@@ -127,6 +148,7 @@ const ApplicationAlternateContactContact = () => {
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="text__caps-spaced">
+                <LockIcon locked={isAdvocate} />
                 {t("application.alternateContact.contact.contactMailingAddressLabel")}
               </legend>
               <p className="field-note mb-4">
@@ -136,11 +158,12 @@ const ApplicationAlternateContactContact = () => {
                 id="mailingAddress.street"
                 name="mailingAddress.street"
                 label={t("application.contact.streetAddress")}
-                defaultValue={application.alternateContact.address.street}
+                defaultValue={application.alternateContact?.address?.street}
+                disabled={isAdvocate}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-street"}
                 error={errors.mailingAddress?.street}
-                validation={{ maxLength: 64 }}
+                validation={isAdvocate ? undefined : { maxLength: 64 }}
                 errorMessage={t("errors.maxLength", { length: 64 })}
               />
               <Field
@@ -149,21 +172,23 @@ const ApplicationAlternateContactContact = () => {
                 label={t("application.contact.apt")}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-street2"}
-                defaultValue={application.alternateContact.address.street2}
+                defaultValue={application.alternateContact?.address?.street2}
+                disabled={isAdvocate}
                 error={errors.mailingAddress?.street2}
-                validation={{ maxLength: 64 }}
+                validation={isAdvocate ? undefined : { maxLength: 64 }}
                 errorMessage={t("errors.maxLength", { length: 64 })}
               />
               <div className="flex max-w-2xl">
                 <Field
                   id="mailingAddress.city"
                   name="mailingAddress.city"
-                  defaultValue={application.alternateContact.address.city}
+                  defaultValue={application.alternateContact?.address?.city}
                   label={t("application.contact.city")}
                   register={register}
                   dataTestId={"app-alternate-mailing-address-city"}
+                  disabled={isAdvocate}
                   error={errors.mailingAddress?.city}
-                  validation={{ maxLength: 64 }}
+                  validation={isAdvocate ? undefined : { maxLength: 64 }}
                   errorMessage={t("errors.maxLength", { length: 64 })}
                 />
 
@@ -171,14 +196,15 @@ const ApplicationAlternateContactContact = () => {
                   id="mailingAddress.state"
                   name="mailingAddress.state"
                   label={t("application.contact.state")}
-                  defaultValue={application.alternateContact.address.state}
+                  defaultValue={application.alternateContact?.address?.state}
                   register={register}
                   controlClassName="control"
                   options={stateKeys}
                   keyPrefix="states"
                   dataTestId={"app-alternate-mailing-address-state"}
+                  disabled={isAdvocate}
                   error={errors.mailingAddress?.state}
-                  validation={{ maxLength: 64 }}
+                  validation={isAdvocate ? undefined : { maxLength: 64 }}
                   errorMessage={t("errors.maxLength", { length: 64 })}
                 />
               </div>
@@ -186,11 +212,12 @@ const ApplicationAlternateContactContact = () => {
                 id="mailingAddress.zipCode"
                 name="mailingAddress.zipCode"
                 label={t("application.contact.zip")}
-                defaultValue={application.alternateContact.address.zipCode}
+                defaultValue={application.alternateContact?.address?.zipCode}
+                disabled={isAdvocate}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-zip"}
                 error={errors.mailingAddress?.zipCode}
-                validation={{ maxLength: 10 }}
+                validation={isAdvocate ? undefined : { maxLength: 10 }}
                 errorMessage={t("errors.maxLength", { length: 10 })}
               />
             </fieldset>

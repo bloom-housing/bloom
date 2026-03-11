@@ -9,6 +9,10 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  defaultListingFeaturesConfiguration,
+  expandedListingFeaturesConfiguration,
+} from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, render } from "../../testUtils"
 import { FilterDrawer } from "../../../src/components/browse/FilterDrawer"
 import { FilterData } from "../../../src/components/browse/FilterDrawerHelpers"
@@ -65,7 +69,15 @@ describe("FilterDrawer", () => {
         onClear={() => {}}
         filterState={{}}
         multiselectData={mockMultiselect}
-        activeFeatureFlags={[FeatureFlagEnum.enableRegions]}
+        activeFeatureFlags={[
+          FeatureFlagEnum.enableIsVerified,
+          FeatureFlagEnum.enableHomeType,
+          FeatureFlagEnum.enableSection8Question,
+          FeatureFlagEnum.enableRegions,
+          FeatureFlagEnum.enableAccessibilityFeatures,
+          FeatureFlagEnum.enableParkingType,
+        ]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
     expect(screen.getByLabelText("Close")).toBeInTheDocument()
@@ -96,6 +108,16 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "Single family house" })).not.toBeChecked()
     expect(screen.getByLabelText("Townhome")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Townhome" })).not.toBeChecked()
+
+    expect(screen.getByRole("group", { name: "Parking types" })).toBeInTheDocument()
+    expect(screen.getByLabelText("On street")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "On street" })).not.toBeChecked()
+    expect(screen.getByLabelText("Garage")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Garage" })).not.toBeChecked()
+    expect(screen.getByLabelText("Off street")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Off street" })).not.toBeChecked()
+    expect(screen.getByLabelText("Carport")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Carport" })).not.toBeChecked()
 
     expect(screen.getByRole("group", { name: "Bedroom size" })).toBeInTheDocument()
     expect(screen.getByLabelText("Studio")).toBeInTheDocument()
@@ -232,7 +254,15 @@ describe("FilterDrawer", () => {
         onClear={() => {}}
         filterState={filterState}
         multiselectData={mockMultiselect}
-        activeFeatureFlags={[FeatureFlagEnum.enableRegions]}
+        activeFeatureFlags={[
+          FeatureFlagEnum.enableIsVerified,
+          FeatureFlagEnum.enableHomeType,
+          FeatureFlagEnum.enableSection8Question,
+          FeatureFlagEnum.enableRegions,
+          FeatureFlagEnum.enableAccessibilityFeatures,
+          FeatureFlagEnum.enableParkingType,
+        ]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
     expect(screen.getByLabelText("Close")).toBeInTheDocument()
@@ -263,6 +293,16 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "Single family house" })).not.toBeChecked()
     expect(screen.getByLabelText("Townhome")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Townhome" })).not.toBeChecked()
+
+    expect(screen.getByRole("group", { name: "Parking types" })).toBeInTheDocument()
+    expect(screen.getByLabelText("On street")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "On street" })).not.toBeChecked()
+    expect(screen.getByLabelText("Garage")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Garage" })).not.toBeChecked()
+    expect(screen.getByLabelText("Off street")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Off street" })).not.toBeChecked()
+    expect(screen.getByLabelText("Carport")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Carport" })).not.toBeChecked()
 
     expect(screen.getByRole("group", { name: "Bedroom size" })).toBeInTheDocument()
     expect(screen.getByLabelText("Studio")).toBeInTheDocument()
@@ -389,6 +429,7 @@ describe("FilterDrawer", () => {
         filterState={{}}
         multiselectData={mockMultiselect}
         activeFeatureFlags={[FeatureFlagEnum.enableUnitGroups]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
 
@@ -417,6 +458,7 @@ describe("FilterDrawer", () => {
         filterState={{}}
         multiselectData={mockMultiselect}
         activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
 
@@ -433,6 +475,7 @@ describe("FilterDrawer", () => {
         filterState={{}}
         multiselectData={mockMultiselect}
         activeFeatureFlags={[FeatureFlagEnum.enableRegions]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
 
@@ -449,10 +492,125 @@ describe("FilterDrawer", () => {
         filterState={{}}
         multiselectData={mockMultiselect}
         activeFeatureFlags={[FeatureFlagEnum.enableConfigurableRegions]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
         regions={["East", "West", "North", "South"]}
       />
     )
 
     expect(screen.getByRole("group", { name: "Region" })).toBeInTheDocument()
+  })
+
+  it("should not show confirmed listings section when isVerified flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Confirmed listings" })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("checkbox", { name: "Only show listings confirmed by property" })
+    ).not.toBeInTheDocument()
+  })
+
+  it("should not show home type section when homeType flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Home type" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("checkbox", { name: "Apartment" })).not.toBeInTheDocument()
+  })
+
+  it("should not show parking types section when parkingType flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Parking types" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("checkbox", { name: "Garage" })).not.toBeInTheDocument()
+  })
+
+  it("should not show section 8 checkbox when section8 flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Rent" })).toBeInTheDocument()
+    expect(
+      screen.queryByRole("checkbox", { name: "Accepts Section 8 Housing Choice Vouchers" })
+    ).not.toBeInTheDocument()
+  })
+
+  it("should not show accessibility section when accessibility flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Accessibility features" })).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("Wheelchair ramp")).not.toBeInTheDocument()
+  })
+
+  it("should show accessibility section and category groups when accessibility flag is on", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableAccessibilityFeatures]}
+        listingFeaturesConfiguration={expandedListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Accessibility features" })).toBeInTheDocument()
+    expect(screen.getByRole("group", { name: "Mobility" })).toBeInTheDocument()
+    expect(screen.getByRole("group", { name: "Bathroom" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Wheelchair ramp")).toBeInTheDocument()
   })
 })

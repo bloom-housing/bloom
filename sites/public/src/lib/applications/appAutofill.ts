@@ -36,12 +36,15 @@ class AutofillCleaner {
     this.application.status = ApplicationStatusEnum.submitted
     this.application.preferences = []
     this.application.programs = []
+    this.application.accessibleUnitWaitlistNumber = null
+    this.application.conventionalUnitWaitlistNumber = null
+    this.application.manualLotteryPositionNumber = null
 
     return this
   }
 
   removeAdditionalKeys() {
-    const unsetIdentifiers = (obj: { id: string; createdAt: Date; updatedAt: Date }) => {
+    const unsetIdentifiers = (obj: { id: string; createdAt?: Date; updatedAt?: Date }) => {
       delete obj.id
       delete obj.createdAt
       delete obj.updatedAt

@@ -26,6 +26,8 @@ const mockUser: User = {
   passwordValidForDays: 180,
   agreedToTermsOfService: true,
   listings: [],
+  isAdvocate: false,
+  isApproved: false,
 }
 
 const adminUser: User = {
@@ -62,7 +64,7 @@ describe("<FormUserManage>", () => {
           // Watch the invite call to make sure it's called
           const requestSpy = jest.fn()
           server.events.on("request:start", (request) => {
-            if (request.method === "POST" && request.url.href.includes("invite")) {
+            if (request.method === "POST" && request.url.href.includes("partner")) {
               requestSpy(request.body)
             }
           })
@@ -70,7 +72,7 @@ describe("<FormUserManage>", () => {
             rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
               return res(ctx.json(adminUserWithJurisdictions))
             }),
-            rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+            rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
               return res(ctx.json({ success: true }))
             })
           )
@@ -115,6 +117,8 @@ describe("<FormUserManage>", () => {
               firstName: "firstName",
               lastName: "lastName",
               email: "email@example.com",
+              isAdvocate: false,
+              isApproved: false,
               userRoles: {
                 isAdmin: true,
                 isPartner: false,
@@ -134,7 +138,7 @@ describe("<FormUserManage>", () => {
           // Watch the invite call to make sure it's called
           const requestSpy = jest.fn()
           server.events.on("request:start", (request) => {
-            if (request.method === "POST" && request.url.href.includes("invite")) {
+            if (request.method === "POST" && request.url.href.includes("partner")) {
               requestSpy(request.body)
             }
           })
@@ -142,7 +146,7 @@ describe("<FormUserManage>", () => {
             rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
               return res(ctx.json(adminUserWithJurisdictions))
             }),
-            rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+            rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
               return res(ctx.json({ success: true }))
             })
           )
@@ -192,6 +196,8 @@ describe("<FormUserManage>", () => {
             expect(requestSpy).toHaveBeenCalledWith({
               firstName: "firstName",
               lastName: "lastName",
+              isAdvocate: false,
+              isApproved: false,
               email: "eamil@example.com",
               userRoles: {
                 isAdmin: false,
@@ -212,7 +218,7 @@ describe("<FormUserManage>", () => {
           // Watch the invite call to make sure it's called
           const requestSpy = jest.fn()
           server.events.on("request:start", (request) => {
-            if (request.method === "POST" && request.url.href.includes("invite")) {
+            if (request.method === "POST" && request.url.href.includes("partner")) {
               requestSpy(request.body)
             }
           })
@@ -220,7 +226,7 @@ describe("<FormUserManage>", () => {
             rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
               return res(ctx.json(adminUserWithJurisdictions))
             }),
-            rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+            rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
               return res(ctx.json({ success: true }))
             })
           )
@@ -276,6 +282,8 @@ describe("<FormUserManage>", () => {
             expect(requestSpy).toHaveBeenCalledWith({
               firstName: "firstName",
               lastName: "lastName",
+              isAdvocate: false,
+              isApproved: false,
               email: "email@example.com",
               userRoles: {
                 isAdmin: false,
@@ -305,7 +313,7 @@ describe("<FormUserManage>", () => {
             rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
               return res(ctx.json(jurisAdminUserWithJurisdictions))
             }),
-            rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+            rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
               return res(ctx.json({ success: true }))
             })
           )
@@ -348,7 +356,7 @@ describe("<FormUserManage>", () => {
           rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
             return res(ctx.json(adminUserWithJurisdictionsAndOneDisabled))
           }),
-          rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+          rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
             return res(ctx.json({ success: true }))
           })
         )
@@ -408,7 +416,7 @@ describe("<FormUserManage>", () => {
           rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
             return res(ctx.json(adminUserWithJurisdictionsAndAllDisabled))
           }),
-          rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+          rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
             return res(ctx.json({ success: true }))
           })
         )
@@ -459,7 +467,7 @@ describe("<FormUserManage>", () => {
           rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
             return res(ctx.json(adminUserWithJurisdictionsAndAllDisabled))
           }),
-          rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+          rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
             return res(ctx.json({ success: true }))
           })
         )
@@ -507,7 +515,7 @@ describe("<FormUserManage>", () => {
           rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
             return res(ctx.json(adminUserWithJurisdictionsAndOneEnabled))
           }),
-          rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+          rest.post("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
             return res(ctx.json({ success: true }))
           })
         )
@@ -550,7 +558,7 @@ describe("<FormUserManage>", () => {
       // Watch the update call to make sure it's called
       const requestSpy = jest.fn()
       server.events.on("request:start", (request) => {
-        if (request.method === "PUT" && request.url.href.includes("user/%7Bid%7D")) {
+        if (request.method === "PUT" && request.url.href.includes("user")) {
           requestSpy(request.body)
         }
       })
@@ -558,7 +566,7 @@ describe("<FormUserManage>", () => {
         rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
           return res(ctx.json(adminUserWithJurisdictions))
         }),
-        rest.put("http://localhost/api/adapter/user/%7Bid%7D", (_req, res, ctx) => {
+        rest.put("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
           return res(ctx.json({ success: true }))
         })
       )
@@ -630,6 +638,8 @@ describe("<FormUserManage>", () => {
           id: "existingUserId",
           firstName: "existingFirstName",
           lastName: "existingLastName",
+          isAdvocate: false,
+          isApproved: false,
           email: "existingEmail@email.com",
           userRoles: {
             isAdmin: false,

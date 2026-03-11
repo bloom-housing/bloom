@@ -101,10 +101,14 @@ describe("Account Listing View", () => {
               vision: true,
               hearing: true,
             },
+            listings: {
+              id: "123",
+              name: "Archer Studios",
+            },
           })
         )
       }),
-      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
+      rest.get("http://localhost/api/adapter/listings/123", (_req, res, ctx) => {
         return res(ctx.json(listing))
       })
     )
@@ -386,5 +390,42 @@ describe("Account Listing View", () => {
     await waitFor(() => {
       expect(windowSpy).toHaveBeenCalled()
     })
+  })
+
+  it("should render when alternate contact is null and multiselect responses are malformed", async () => {
+    server.use(
+      rest.get("http://localhost:3100/applications/application_1", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            ...application,
+            listings: {
+              id: "123",
+              name: "Archer Studios",
+            },
+            contactPreferences: [],
+            alternateContact: null,
+            programs: {},
+            preferences: {},
+          })
+        )
+      }),
+      rest.get("http://localhost/api/adapter/listings/123", (_req, res, ctx) => {
+        return res(ctx.json(listing))
+      })
+    )
+
+    renderApplicationView()
+
+    expect(
+      await screen.findByRole("heading", { level: 1, name: /archer studios/i })
+    ).toBeInTheDocument()
+    expect(screen.queryByTestId("app-summary-contact-preference-type")).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("heading", { level: 3, name: /alternate contact/i })
+    ).not.toBeInTheDocument()
+    expect(screen.queryByRole("heading", { level: 3, name: /programs/i })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("heading", { level: 3, name: /preferences/i })
+    ).not.toBeInTheDocument()
   })
 })

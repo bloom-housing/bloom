@@ -14,7 +14,7 @@ import {
   ListingEventsTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Card, Drawer } from "@bloom-housing/ui-seeds"
-import { cloudinaryFileUploader } from "../../../../lib/helpers"
+import { fileUploader } from "../../../../lib/helpers"
 
 interface LotteryResultsProps {
   submitCallback: (data: { listingEvents: ListingEvent[] }) => void
@@ -30,7 +30,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
 
   const { submitCallback, drawerState, showDrawer } = props
   const [progressValue, setProgressValue] = useState(0)
-  const [cloudinaryData, setCloudinaryData] = useState({
+  const [fileUploadData, setFileUploadData] = useState({
     id: "",
     url: "",
   })
@@ -42,7 +42,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
 
   useEffect(() => {
     if (uploadedPDF) {
-      setCloudinaryData({
+      setFileUploadData({
         url: cloudinaryUrlFromId(uploadedPDF.file?.fileId || uploadedPDF.assets?.fileId),
         id: uploadedPDF.id,
       })
@@ -70,12 +70,12 @@ const LotteryResults = (props: LotteryResultsProps) => {
       updatedEvents.splice(lotteryIndex, 1)
     }
 
-    if (cloudinaryData.id) {
+    if (fileUploadData.id) {
       const newEvent: ListingEventCreate = {
         type: ListingEventsTypeEnum.lotteryResults,
         startTime: new Date(),
         assets: {
-          fileId: cloudinaryData.id,
+          fileId: fileUploadData.id,
           label: "cloudinaryPDF",
         },
       }
@@ -95,23 +95,23 @@ const LotteryResults = (props: LotteryResultsProps) => {
     Show a preview of the uploaded file within the upload drawer
   */
   const previewTableRows: StandardTableData = []
-  if (cloudinaryData.url !== "") {
+  if (fileUploadData.url !== "") {
     previewTableRows.push({
       preview: {
         content: (
           <TableThumbnail>
-            <img alt="PDF preview" src={cloudinaryData.url} />
+            <img alt="PDF preview" src={fileUploadData.url} />
           </TableThumbnail>
         ),
       },
-      fileName: { content: cloudinaryData.id.split("/").slice(-1).join() },
+      fileName: { content: fileUploadData.id.split("/").slice(-1).join() },
       actions: {
         content: (
           <Button
             type="button"
             className="font-semibold text-alert"
             onClick={() => {
-              setCloudinaryData({
+              setFileUploadData({
                 id: "",
                 url: "",
               })
@@ -131,7 +131,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
     Pass the file for the dropzone callback along to the uploader
   */
   const pdfUploader = async (file: File) => {
-    void (await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue }))
+    void (await fileUploader({ file, setFileUploadData, setProgressValue }))
   }
 
   return (
@@ -152,7 +152,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
               accept="application/pdf"
               progress={progressValue}
             />
-            {cloudinaryData.url !== "" && (
+            {fileUploadData.url !== "" && (
               <MinimalTable headers={resultsTableHeaders} data={previewTableRows}></MinimalTable>
             )}
           </Card.Section>

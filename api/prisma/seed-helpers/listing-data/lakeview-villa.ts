@@ -7,6 +7,7 @@ import {
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { yellowstoneAddress } from '../address-factory';
+import { assetFileId } from '../asset-file-id-helper';
 
 export const lakeviewVilla: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
@@ -77,7 +78,7 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
   waitlistOpenSpots: null,
   customMapPin: false,
   contentUpdatedAt: new Date(),
-  publishedAt: new Date(),
+  publishedAt: dayjs(new Date()).subtract(22, 'minutes').toDate(),
   listingsBuildingAddress: {
     create: yellowstoneAddress,
   },
@@ -92,7 +93,7 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
       assets: {
         create: {
           label: 'cloudinaryBuilding',
-          fileId: 'dev/unnamed_fkxrj2',
+          fileId: assetFileId('dev/unnamed_fkxrj2'),
         },
       },
     },

@@ -6,7 +6,13 @@ import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { AlternateContactRelationship } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-const DetailsAlternateContact = () => {
+type DetailsAlternateContactProps = {
+  enableHousingAdvocate?: boolean
+}
+
+const DetailsAlternateContact = ({
+  enableHousingAdvocate = false,
+}: DetailsAlternateContactProps) => {
   const application = useContext(ApplicationContext)
 
   return (
@@ -29,6 +35,10 @@ const DetailsAlternateContact = () => {
 
               if (application.alternateContact?.otherType)
                 return application.alternateContact.otherType
+
+              if (application.alternateContact.type === "caseManager" && enableHousingAdvocate) {
+                return t("application.alternateContact.type.options.caseManagerAdvocate")
+              }
 
               return t(
                 `application.alternateContact.type.options.${application.alternateContact.type}`

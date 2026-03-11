@@ -1,6 +1,6 @@
 import React from "react"
 import { t } from "@bloom-housing/ui-components"
-import { Button, Card, Tag } from "@bloom-housing/ui-seeds"
+import { Button, Card, Heading, Tag } from "@bloom-housing/ui-seeds"
 import styles from "./StatusItem.module.scss"
 import applicationsViewStyles from "./ApplicationsView.module.scss"
 import {
@@ -10,6 +10,7 @@ import {
 import { TagVariant } from "@bloom-housing/ui-seeds/src/text/Tag"
 
 interface StatusItemProps {
+  applicantName?: string
   applicationDueDate?: string
   applicationURL: string
   confirmationNumber?: string | number
@@ -69,7 +70,13 @@ const StatusItem = (props: StatusItemProps) => {
     <Card.Section className={applicationsViewStyles["account-card-applications-section"]}>
       <article className={styles["status-item"]}>
         <header className={styles["status-item__header"]}>
-          <h3 className={styles["status-item__title"]}>{props.listingName}</h3>
+          <div>
+            <Heading priority={2} size={"lg"}>
+              {props.listingName}
+            </Heading>
+            {props.applicantName && <p className={"seeds-m-bs-2"}>{props.applicantName}</p>}
+          </div>
+
           <p className={styles["status-item__status"]}>
             <Tag variant={tagVariant}>{tagText}</Tag>
           </p>
@@ -114,7 +121,7 @@ const StatusItem = (props: StatusItemProps) => {
             </Button>
           </div>
           <div>
-            <Button href={props.listingURL} variant="primary-outlined" size="sm">
+            <Button href={props.listingURL} variant="secondary-outlined" size="sm">
               {props.strings?.seeListing ?? t("t.seeListing")}
             </Button>
           </div>

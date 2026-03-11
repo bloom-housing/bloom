@@ -22,3 +22,14 @@
     width: 100%;
   }
 }
+
+.full-height {
+  display: flex;
+  flex-grow: 1;
+  .layout-max-width-container {
+    align-items: flex-start;
+  }
+  .layout-max-width-content {
+    margin: initial;
+  }
+}

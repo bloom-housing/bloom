@@ -1,5 +1,4 @@
 import React from "react"
-import { NextRouter } from "next/router"
 import { t } from "@bloom-housing/ui-components"
 import { Tabs } from "@bloom-housing/ui-seeds"
 
@@ -8,19 +7,31 @@ export enum SettingsIndexEnum {
   properties,
 }
 
-export const getSettingsTabs = (selectedIndex: SettingsIndexEnum, router: NextRouter) => {
+export const getSettingsTabs = (selectedIndex: SettingsIndexEnum, enableV2MSQ: boolean) => {
   const baseUrl = "/settings/"
+
   return (
     <Tabs
       verticalSidebar
-      onSelect={(index) => void router.push(`${baseUrl}/${SettingsIndexEnum[index]}`)}
+      navigation={true}
+      navigationLabel={t("settings.navLabel")}
       selectedIndex={selectedIndex}
     >
       <Tabs.TabList>
-        <Tabs.Tab data-testid="preferences-tab">
+        <Tabs.Tab
+          href={`${
+            enableV2MSQ ? `${baseUrl}/multiselectquestions/preferences` : `${baseUrl}/preferences`
+          }`}
+          data-testid="preferences-tab"
+          active={selectedIndex === SettingsIndexEnum.preferences}
+        >
           <span>{t("settings.preferences")}</span>
         </Tabs.Tab>
-        <Tabs.Tab data-testid="properties-tab">
+        <Tabs.Tab
+          href={`${baseUrl}/properties`}
+          data-testid="properties-tab"
+          active={selectedIndex === SettingsIndexEnum.properties}
+        >
           <span>{t("settings.properties")}</span>
         </Tabs.Tab>
       </Tabs.TabList>

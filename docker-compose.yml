@@ -34,6 +34,24 @@ configs:
           }
         }
       }
+  pgadmin:
+    content: |
+      {
+        "Servers": {
+          "1:": {
+            "Group": "Servers",
+            "MaintenanceDB": "postgres",
+            "ConnectionParameters": {
+              "sslmode": "prefer",
+              "connect_timeout": 3
+            },
+            "Name": "bloom",
+            "Host": "db",
+            "Port": 5432,
+            "Username": "bloom_readonly"
+          }
+        }
+      }
 
 services:
   lb:
@@ -43,8 +61,8 @@ services:
       - "3000:3000"
       - "3001:3001"
     configs:
-    - source: nginx
-      target: /etc/nginx/nginx.conf
+      - source: nginx
+        target: /etc/nginx/nginx.conf
     command:
       - /bin/bash
       - -c
@@ -68,27 +86,105 @@ services:
     environment:
       PGUSER: "postgres"
       POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "example"
-      POSTGRES_DB: "bloom_prisma"
+      POSTGRES_PASSWORD: "postgres_pw"
     healthcheck:
-      test: ["CMD-SHELL", "PGPASSWORD=example psql --host=127.0.0.1 --port=5432 --username=postgres --command='SELECT 1;'"]
+      test:
+        [
+          "CMD-SHELL",
+          "PGPASSWORD=postgres_pw psql --host=127.0.0.1 --port=5432 --username=postgres --command='SELECT 1;'",
+        ]
       interval: "2s"
       timeout: "1s"
       retries: 20
       start_period: "1s"
+
+  dbinit:
+    build:
+      context: ./api/dbinit
+      dockerfile: Dockerfile
+    restart: no
+    deploy:
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_dbinit_task.tf
+        limits:
+          cpus: "0.25"
+          memory: "512mb"
+    environment:
+      PGPASSWORD: "postgres_pw"
+    entrypoint: "psql"
+    command:
+      - "--host=db"
+      - "--port=5432"
+      - "--dbname=postgres"
+      - "--username=postgres"
+      - "--echo-queries"
+      - "--echo-hidden"
+      - "--file=docker-compose.init.sql"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  dbreadonlycheck:
+    profiles: ["ci"]
+    build:
+      context: ./api/dbinit
+      dockerfile: Dockerfile
+    restart: no
+    environment:
+      PGPASSWORD: "bloom_readonly_pw"
+    entrypoint: "psql"
+    command:
+      - "--host=db"
+      - "--port=5432"
+      - "--dbname=bloom_prisma"
+      - "--username=bloom_readonly"
+      - "--echo-queries"
+      - "--echo-hidden"
+      - "--file=docker-compose.check.sql"
+    depends_on:
+      db:
+        condition: service_healthy
+      dbinit:
+        condition: service_completed_successfully
+      dbseed:
+        condition: service_completed_successfully
 
   dbseed:
     build:
       context: ./api
       dockerfile: Dockerfile.dbseed
     restart: no
+    deploy:
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_dbseed_task.tf
+        limits:
+          cpus: "1"
+          memory: "4096mb"
     environment:
-      DATABASE_URL: "postgres://postgres:example@db:5432/bloom_prisma"
+      DATABASE_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
+      DBSEED_USE_FULL_CLOUDINARY_URL_AS_FILE_ID: "1"
     command:
-    - "yarn"
-    - "db:seed:staging"
+      - "yarn"
+      - "db:seed:staging"
     depends_on:
       api: # Need the API to start first so it can create the bloom_prisma table and apply migrations.
+        condition: service_healthy
+
+  pgadmin:
+    profiles: ["pgadmin"]
+    image: docker.io/dpage/pgadmin4:9.11.0@sha256:50700ac17936d0227f9e3e4bb086a91efb67064debc4b4737c35545bf1564088
+    configs:
+      - source: pgadmin
+        target: /pgadmin4/servers.json
+    restart: no
+    ports:
+      - "3200:3200"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "abcdef"
+      PGADMIN_LISTEN_PORT: "3200"
+    depends_on:
+      db:
         condition: service_healthy
 
   api:
@@ -99,14 +195,19 @@ services:
     expose:
       - "3100"
     deploy:
-      endpoint_mode: 'dnsrr'
+      endpoint_mode: "dnsrr"
       mode: replicated
       replicas: ${API_REPLICAS:-1}
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_api_service.tf
+        limits:
+          cpus: "1"
+          memory: "2048mb"
     environment:
       PORT: 3100
       NODE_ENV: "production"
       APP_SECRET: "totally a secret"
-      DATABASE_URL: "postgres://postgres:example@db:5432/bloom_prisma"
+      DATABASE_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://127.0.0.1:3100/"]
       interval: "5s"
@@ -116,6 +217,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      dbinit:
+        condition: service_completed_successfully
 
   partners:
     build:
@@ -125,19 +228,33 @@ services:
     expose:
       - "3001"
     deploy:
-      endpoint_mode: 'dnsrr'
+      endpoint_mode: "dnsrr"
       mode: replicated
       replicas: ${PARTNERS_REPLICAS:-1}
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_partners_service.tf
+        limits:
+          cpus: "2"
+          memory: "4096mb"
     environment:
       NODE_ENV: "production"
+      DISABLE_NEXT_TYPECHECK: "TRUE"
       NEXTJS_PORT: 3001
       BACKEND_API_BASE: "http://lb:3100"
       LISTINGS_QUERY: "/listings"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://127.0.0.1:3001/"]
+      interval: "5s"
+      timeout: "2s"
+      retries: 42
+      start_period: "30s"
     depends_on:
-      dbseed: # wait for the db to have data so next build works correctly
-        condition: service_completed_successfully
       lb:
         condition: service_started
+      api:
+        condition: service_healthy
+      dbseed: # wait for the db to have data so next build works correctly
+        condition: service_completed_successfully
 
   public:
     build:
@@ -147,11 +264,17 @@ services:
     expose:
       - "3000"
     deploy:
-      endpoint_mode: 'dnsrr'
+      endpoint_mode: "dnsrr"
       mode: replicated
       replicas: ${PUBLIC_REPLICAS:-1}
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_public_service.tf
+        limits:
+          cpus: "2"
+          memory: "6144mb"
     environment:
       NODE_ENV: "production"
+      DISABLE_NEXT_TYPECHECK: "TRUE"
       NEXTJS_PORT: 3000
       BACKEND_API_BASE: "http://lb:3100"
       BACKEND_API_BASE_NEW: "http://lb:3100"
@@ -160,20 +283,26 @@ services:
       HOUSING_COUNSELOR_SERVICE_URL: "/get-assistance"
 
       JURISDICTION_NAME: "Bloomington"
-      CLOUDINARY_CLOUD_NAME: "exygy"
 
       LANGUAGES: "en,es,zh,vi,tl"
-      RTL_LANGUAGES: "ar"
 
-      IDLE_TIMEMOUT: 5     # seconds
+      IDLE_TIMEMOUT: 5 # seconds
       CACHE_REVALIDATE: 30 # seconds
 
       SHOW_PUBLIC_LOTTERY: "TRUE"
       SHOW_MANDATED_ACCOUNTS: "FALSE"
       SHOW_PWDLESS: "FALSE"
       SHOW_NEW_SEEDS_DESIGNS: "FALSE"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://127.0.0.1:3000/"]
+      interval: "5s"
+      timeout: "2s"
+      retries: 42
+      start_period: "30s"
     depends_on:
-      dbseed: # wait for the db to have data so next build works correctly
-        condition: service_completed_successfully
       lb:
         condition: service_started
+      api:
+        condition: service_healthy
+      dbseed: # wait for the db to have data so next build works correctly
+        condition: service_completed_successfully

@@ -52,6 +52,7 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
       select: {
         requiredListingFields: true,
         minimumListingPublishImagesRequired: true,
+        listingFeaturesConfiguration: true,
       },
     });
 
@@ -63,6 +64,9 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
     const minimumImagesRequired =
       jurisdiction?.minimumListingPublishImagesRequired || 0;
 
+    const listingFeaturesConfiguration =
+      jurisdiction?.listingFeaturesConfiguration || null;
+
     // Add required fields to the value being validated
     const transformedValue = {
       ...value,
@@ -70,6 +74,7 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
       unitGroups: value.unitGroups || [],
       requiredFields,
       minimumImagesRequired,
+      listingFeaturesConfiguration,
     };
 
     // Check for nested required fields

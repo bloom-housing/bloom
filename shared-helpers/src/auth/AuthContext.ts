@@ -25,10 +25,8 @@ import {
   MultiselectQuestionsService,
   RequestMfaCodeResponse,
   ReservedCommunityTypesService,
-  UnitAccessibilityPriorityTypesService,
   UnitTypesService,
   User,
-  UserCreate,
   UserService,
   serviceOptions,
   SuccessDTO,
@@ -37,6 +35,10 @@ import {
   DataExplorerService,
   FeatureFlagsService,
   PropertiesService,
+  PublicUserCreate,
+  AdvocateUserCreate,
+  PartnerUserCreate,
+  AgencyService,
 } from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
 import { useRouter } from "next/router"
@@ -55,9 +57,9 @@ type ContextProps = {
   unitTypesService: UnitTypesService
   featureFlagService: FeatureFlagsService
   reservedCommunityTypeService: ReservedCommunityTypesService
-  unitPriorityService: UnitAccessibilityPriorityTypesService
   mapLayersService: MapLayersService
   lotteryService: LotteryService
+  agencyService: AgencyService
   loadProfile: (redirect?: string) => void
   login: (
     email: string,
@@ -75,10 +77,19 @@ type ContextProps = {
   signOut: () => Promise<void>
   confirmAccount: (token: string) => Promise<User | undefined>
   forgotPassword: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
-  createUser: (user: UserCreate, listingIdRedirect?: string) => Promise<User | undefined>
+  createPublicUser: (
+    user: PublicUserCreate,
+    listingIdRedirect?: string
+  ) => Promise<User | undefined>
+  createAdvocateUser: (
+    user: AdvocateUserCreate,
+    listingIdRedirect?: string
+  ) => Promise<User | undefined>
+  approveAdvocateUser: (userId: string, isAccepted: boolean) => Promise<boolean | undefined>
+  createPartnerUser: (user: PartnerUserCreate) => Promise<User | undefined>
   resendConfirmation: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
-  initialStateLoaded: boolean
-  loading: boolean
+  initialStateLoaded?: boolean
+  loading?: boolean
   profile?: User
   requestMfaCode: (
     email: string,
@@ -217,10 +228,10 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
 
   // Load our profile as soon as we have an access token available
   useEffect(() => {
-    if (!state.profile && !state.loading && !state.initialStateLoaded) {
+    if (!state?.profile && !state?.loading && !state?.initialStateLoaded) {
       void loadProfile()
     }
-  }, [state.profile, apiUrl, userService, state.loading, loadProfile, state.initialStateLoaded])
+  }, [state?.profile, apiUrl, userService, state?.loading, loadProfile, state?.initialStateLoaded])
 
   const contextValues: ContextProps = {
     amiChartsService: new AmiChartsService(),
@@ -236,12 +247,12 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     mapLayersService: new MapLayersService(),
     lotteryService: new LotteryService(),
     reservedCommunityTypeService: new ReservedCommunityTypesService(),
-    unitPriorityService: new UnitAccessibilityPriorityTypesService(),
     unitTypesService: new UnitTypesService(),
     featureFlagService: new FeatureFlagsService(),
-    loading: state.loading,
-    initialStateLoaded: state.initialStateLoaded,
-    profile: state.profile,
+    agencyService: new AgencyService(),
+    loading: state?.loading,
+    initialStateLoaded: state?.initialStateLoaded,
+    profile: state?.profile,
     loadProfile,
     login: async (
       email,
@@ -341,14 +352,48 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
         dispatch(stopLoading())
       }
     },
-    createUser: async (user: UserCreate, listingIdRedirect) => {
+    createPublicUser: async (user: PublicUserCreate, listingIdRedirect) => {
       dispatch(startLoading())
       const appUrl = getListingRedirectUrl(listingIdRedirect)
       try {
-        const response = await userService?.create({
+        const response = await userService?.createPublic({
           body: { ...user, appUrl },
         })
         return response
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    createPartnerUser: async (user: PartnerUserCreate) => {
+      dispatch(startLoading())
+      try {
+        const response = await userService?.createPartner({
+          body: user,
+        })
+        return response
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    createAdvocateUser: async (user: AdvocateUserCreate, listingIdRedirect) => {
+      dispatch(startLoading())
+      const appUrl = getListingRedirectUrl(listingIdRedirect)
+      try {
+        const response = await userService?.createAdvocate({
+          body: { ...user, appUrl },
+        })
+        return response
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    approveAdvocateUser: async (userId: string, isAccepted: boolean) => {
+      dispatch(startLoading())
+      try {
+        const response = await userService?.approveAdvocate({
+          body: { advocateId: { id: userId }, isAccepted },
+        })
+        return response.success
       } finally {
         dispatch(stopLoading())
       }
@@ -403,14 +448,17 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       jurisdictionId?: string,
       onlyIfAllJurisdictionsHaveItEnabled?: boolean
     ) => {
-      let jurisdictions = state.profile?.jurisdictions || []
+      let jurisdictions = state?.profile?.jurisdictions || []
       if (jurisdictionId) {
         jurisdictions = jurisdictions?.filter((j) => j.id === jurisdictionId)
       }
       // Return true only if all jurisdictions have the flag turned on
       if (onlyIfAllJurisdictionsHaveItEnabled) {
-        return jurisdictions.every(
-          (j) => j.featureFlags?.find((flag) => flag.name === featureFlag)?.active || false
+        return (
+          !!jurisdictions.length &&
+          jurisdictions.every(
+            (j) => j.featureFlags?.find((flag) => flag.name === featureFlag)?.active || false
+          )
         )
       }
       // Otherwise return true if at least one jurisdiction has the flag turned on
@@ -419,7 +467,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       )
     },
     getJurisdictionLanguages: (jurisdictionId: string) => {
-      const jurisdictions = state.profile?.jurisdictions || []
+      const jurisdictions = state?.profile?.jurisdictions || []
       return jurisdictions.find((j) => j.id === jurisdictionId)?.languages || []
     },
   }

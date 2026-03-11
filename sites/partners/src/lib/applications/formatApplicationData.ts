@@ -168,6 +168,12 @@ export const mapFormToApi = ({
     race: fieldGroupObjectToArray(data, "race"),
   }
 
+  if (demographics.spokenLanguage === "notListed") {
+    demographics.spokenLanguage = `${demographics.spokenLanguage}:${demographics.spokenLanguageNotListed}`
+  }
+
+  delete demographics.spokenLanguageNotListed
+
   const sendMailToMailingAddress = data.application.sendMailToMailingAddress
 
   const applicationsMailingAddress = getAddress(sendMailToMailingAddress, mailingAddressData)
@@ -325,14 +331,14 @@ export const mapApiToForm = (applicationData: Application, listing: Listing) => 
 
   const preferences =
     mapApiToMultiselectForm(
-      applicationData.preferences,
+      Array.isArray(applicationData.preferences) ? applicationData.preferences : [],
       listing?.listingMultiselectQuestions,
       MultiselectQuestionsApplicationSectionEnum.preferences
     ).application.preferences ?? []
 
   const programs =
     mapApiToMultiselectForm(
-      applicationData.programs,
+      Array.isArray(applicationData.programs) ? applicationData.programs : [],
       listing?.listingMultiselectQuestions,
       MultiselectQuestionsApplicationSectionEnum.programs
     ).application.programs ?? []

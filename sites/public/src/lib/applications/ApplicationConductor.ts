@@ -7,6 +7,7 @@ import { blankApplication } from "@bloom-housing/shared-helpers"
 import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
 import StepDefinition from "./StepDefinition"
 import AlternateContactStep from "./AlternateContactStep"
+import AlternateContactTypeStep from "./AlternateContactTypeStep"
 import LiveAloneStep from "./LiveAloneStep"
 import HouseholdMemberStep from "./HouseholdMemberStep"
 import SelectedPreferencesStep from "./SelectedPreferencesStep"
@@ -62,6 +63,7 @@ export default class ApplicationConductor {
     },
     alternateContactType: {
       url: "/applications/contact/alternate-contact-type",
+      definition: AlternateContactTypeStep,
     },
     alternateContactName: {
       url: "/applications/contact/alternate-contact-name",
@@ -141,6 +143,9 @@ export default class ApplicationConductor {
     languages: [],
     steps: [],
     featureFlags: [],
+    isAdvocate: false,
+    raceEthnicityConfiguration: null,
+    visibleSpokenLanguages: [],
   }
   private _listing: Listing
 

@@ -6,6 +6,7 @@ import {
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { glacierAddress } from '../address-factory';
+import { assetFileId } from '../asset-file-id-helper';
 
 export const sunshineFlats: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
@@ -75,7 +76,7 @@ export const sunshineFlats: Prisma.ListingsCreateInput = {
   waitlistOpenSpots: null,
   customMapPin: false,
   contentUpdatedAt: new Date(),
-  publishedAt: new Date(),
+  publishedAt: dayjs(new Date()).subtract(12, 'hours').toDate(),
   listingsBuildingAddress: {
     create: glacierAddress,
   },
@@ -90,7 +91,7 @@ export const sunshineFlats: Prisma.ListingsCreateInput = {
       assets: {
         create: {
           label: 'cloudinaryBuilding',
-          fileId: 'dev/sunshine-flats_naated',
+          fileId: assetFileId('dev/sunshine-flats_naated'),
         },
       },
     },

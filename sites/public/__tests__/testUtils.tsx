@@ -17,7 +17,7 @@ import ApplicationConductor from "../src/lib/applications/ApplicationConductor"
 
 const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => {
   const conductor = new ApplicationConductor({}, {})
-  const applicationConfig = retrieveApplicationConfig(conductor.listing)
+  const applicationConfig = retrieveApplicationConfig(conductor.listing, [])
   conductor.config = applicationConfig
 
   const ToastProvider = (props) => {

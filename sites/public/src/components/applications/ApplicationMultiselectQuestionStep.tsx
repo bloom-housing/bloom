@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { AlertBox, Form, t } from "@bloom-housing/ui-components"
+import { Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   AuthContext,
@@ -24,8 +24,11 @@ import {
 import FormsLayout from "../../layouts/forms"
 import { useFormConductor } from "../../lib/hooks"
 import { UserStatus } from "../../lib/constants"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../layouts/application-form"
 import { AddressValidationSelection, findValidatedAddress, FoundAddress } from "./ValidateAddress"
-import ApplicationFormLayout from "../../layouts/application-form"
 
 export interface ApplicationMultiselectQuestionStepProps {
   applicationSection: MultiselectQuestionsApplicationSectionEnum
@@ -70,7 +73,9 @@ const ApplicationMultiselectQuestionStep = ({
 
   const questions = listingSectionQuestions(listing, applicationSection)
   const [page, setPage] = useState(conductor.navigatedThroughBack ? questions.length : 1)
-  const [applicationQuestions, setApplicationQuestions] = useState(application[applicationSection])
+  const [applicationQuestions, setApplicationQuestions] = useState(
+    Array.isArray(application[applicationSection]) ? application[applicationSection] : []
+  )
   const question = getPageQuestion(questions, page)
 
   const questionSetInputType = getInputType(question?.options)
@@ -92,7 +97,13 @@ const ApplicationMultiselectQuestionStep = ({
 
   // Required to keep the form up to date before submitting this section if you're moving between pages
   useEffect(() => {
-    reset(mapApiToMultiselectForm(applicationQuestions, questions, applicationSection))
+    reset(
+      mapApiToMultiselectForm(
+        Array.isArray(applicationQuestions) ? applicationQuestions : [],
+        questions,
+        applicationSection
+      )
+    )
     setExclusiveKeys(getExclusiveKeys(question, applicationSection))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, applicationQuestions, reset])
@@ -168,6 +179,10 @@ const ApplicationMultiselectQuestionStep = ({
     conductor.routeToNextOrReturnUrl()
   }
 
+  const onError = () => {
+    onFormError()
+  }
+
   const watchQuestions = watch(allOptionNames)
 
   if (!clientLoaded || !allOptionNames) {
@@ -237,7 +252,7 @@ const ApplicationMultiselectQuestionStep = ({
         swapCommunityTypeWithPrograms
       )} - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
     >
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={
@@ -271,11 +286,7 @@ const ApplicationMultiselectQuestionStep = ({
           }
           conductor={conductor}
         >
-          {!!Object.keys(errors).length && (
-            <AlertBox type="alert" inverted closeable>
-              {t("errors.errorsToResolve")}
-            </AlertBox>
-          )}
+          <ApplicationAlertBox errors={errors} />
 
           <div style={{ display: verifyAddress ? "none" : "block" }} key={question?.id}>
             <CardSection>

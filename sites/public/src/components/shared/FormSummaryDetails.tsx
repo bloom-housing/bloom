@@ -54,17 +54,18 @@ const FormSummaryDetails = ({
 
   const accessibilityLabels = () => {
     const labels = []
-    if (application.accessibility.mobility) labels.push(t("application.ada.mobility"))
-    if (application.accessibility.vision) labels.push(t("application.ada.vision"))
-    if (application.accessibility.hearing) labels.push(t("application.ada.hearing"))
-    if (application.accessibility.other && enableAdaOtherOption)
+    if (application.accessibility?.mobility) labels.push(t("application.ada.mobility"))
+    if (application.accessibility?.vision) labels.push(t("application.ada.vision"))
+    if (application.accessibility?.hearing) labels.push(t("application.ada.hearing"))
+    if (application.accessibility?.other && enableAdaOtherOption)
       labels.push(t("application.ada.other"))
     if (labels.length === 0) labels.push(t("t.no"))
 
     return labels
   }
 
-  const reformatAddress = (address: Address) => {
+  const reformatAddress = (address: Address | null | undefined): Address | null => {
+    if (!address) return null
     const { street, street2, city, state, zipCode } = address
     const newAddress = {
       placeName: street,
@@ -147,7 +148,11 @@ const FormSummaryDetails = ({
           <Heading priority={3} size="xl">
             {header}
           </Heading>
-          {editMode && !validationError && <Link href={appLink}>{t("t.edit")}</Link>}
+          {editMode && !validationError && (
+            <Link href={appLink} ariaLabel={`${t("t.edit")} ${header}`}>
+              {t("t.edit")}
+            </Link>
+          )}
         </Card.Header>
 
         <Card.Section
@@ -191,7 +196,11 @@ const FormSummaryDetails = ({
         <Heading priority={3} size="xl">
           {t("t.you")}
         </Heading>
-        {editMode && <Link href="/applications/contact/name">{t("t.edit")}</Link>}
+        {editMode && (
+          <Link href="/applications/contact/name" ariaLabel={`${t("t.edit")} ${t("t.you")}`}>
+            {t("t.edit")}
+          </Link>
+        )}
       </Card.Header>
 
       <Card.Section className={styles["summary-section"]}>
@@ -250,15 +259,17 @@ const FormSummaryDetails = ({
             {application.applicant.emailAddress}
           </FieldValue>
         )}
-        <FieldValue
-          testId={"app-summary-applicant-address"}
-          id="applicantAddress"
-          label={t("application.contact.address")}
-          className={styles["summary-value"]}
-        >
-          <MultiLineAddress address={reformatAddress(application.applicant.applicantAddress)} />
-        </FieldValue>
-        {application.sendMailToMailingAddress && (
+        {application.applicant?.applicantAddress && (
+          <FieldValue
+            testId={"app-summary-applicant-address"}
+            id="applicantAddress"
+            label={t("application.contact.address")}
+            className={styles["summary-value"]}
+          >
+            <MultiLineAddress address={reformatAddress(application.applicant.applicantAddress)} />
+          </FieldValue>
+        )}
+        {application.sendMailToMailingAddress && application.applicationsMailingAddress && (
           <FieldValue
             testId={"app-summary-applicant-mailing-address"}
             id="applicantMailingAddress"
@@ -268,19 +279,20 @@ const FormSummaryDetails = ({
             <MultiLineAddress address={reformatAddress(application.applicationsMailingAddress)} />
           </FieldValue>
         )}
-        {application.applicant.workInRegion === "yes" && (
-          <FieldValue
-            testId={"app-summary-applicant-work-address"}
-            id="applicantWorkAddress"
-            label={t("application.contact.workAddress")}
-            className={styles["summary-value"]}
-          >
-            <MultiLineAddress
-              address={reformatAddress(application.applicant.applicantWorkAddress)}
-            />
-          </FieldValue>
-        )}
-        {application.contactPreferences && (
+        {application.applicant.workInRegion === "yes" &&
+          application.applicant?.applicantWorkAddress && (
+            <FieldValue
+              testId={"app-summary-applicant-work-address"}
+              id="applicantWorkAddress"
+              label={t("application.contact.workAddress")}
+              className={styles["summary-value"]}
+            >
+              <MultiLineAddress
+                address={reformatAddress(application.applicant.applicantWorkAddress)}
+              />
+            </FieldValue>
+          )}
+        {application.contactPreferences && !!application.contactPreferences.length && (
           <FieldValue
             testId={"app-summary-contact-preference-type"}
             id="applicantPreferredContactType"
@@ -304,14 +316,19 @@ const FormSummaryDetails = ({
         )}
       </Card.Section>
 
-      {application.alternateContact.type && application.alternateContact.type !== "noContact" && (
+      {application.alternateContact?.type && application.alternateContact?.type !== "noContact" && (
         <>
           <Card.Header className={styles["summary-header"]}>
             <Heading priority={3} size="xl">
               {t("application.alternateContact.type.label")}
             </Heading>
             {editMode && !validationError && (
-              <Link href="/applications/contact/alternate-contact-type">{t("t.edit")}</Link>
+              <Link
+                href="/applications/contact/alternate-contact-type"
+                ariaLabel={`${t("t.edit")} ${t("application.alternateContact.type.label")}`}
+              >
+                {t("t.edit")}
+              </Link>
             )}
           </Card.Header>
 
@@ -351,16 +368,17 @@ const FormSummaryDetails = ({
               </FieldValue>
             )}
 
-            {Object.values(application.alternateContact.address).some((value) => value !== "") && (
-              <FieldValue
-                testId={"app-summary-alternate-mailing-address"}
-                id="alternateMailingAddress"
-                label={t("application.contact.address")}
-                className={styles["summary-value"]}
-              >
-                <MultiLineAddress address={application.alternateContact.address} />
-              </FieldValue>
-            )}
+            {application.alternateContact?.address &&
+              Object.values(application.alternateContact.address).some((value) => value !== "") && (
+                <FieldValue
+                  testId={"app-summary-alternate-mailing-address"}
+                  id="alternateMailingAddress"
+                  label={t("application.contact.address")}
+                  className={styles["summary-value"]}
+                >
+                  <MultiLineAddress address={application.alternateContact.address} />
+                </FieldValue>
+              )}
           </Card.Section>
         </>
       )}
@@ -372,7 +390,12 @@ const FormSummaryDetails = ({
               {t("application.household.householdMembers")}
             </Heading>
             {editMode && !validationError && (
-              <Link href="/applications/household/add-members">{t("t.edit")}</Link>
+              <Link
+                href="/applications/household/add-members"
+                ariaLabel={`${t("t.edit")} ${t("application.household.householdMembers")}`}
+              >
+                {t("t.edit")}
+              </Link>
             )}
           </Card.Header>
 
@@ -397,7 +420,7 @@ const FormSummaryDetails = ({
                   {member.birthMonth}/{member.birthDay}/{member.birthYear}
                 </FieldValue>
 
-                {member.sameAddress === "no" && (
+                {member.sameAddress === "no" && member.householdMemberAddress && (
                   <FieldValue
                     label={t("application.contact.address")}
                     className={"pb-4"}
@@ -435,7 +458,12 @@ const FormSummaryDetails = ({
             {t("application.review.householdDetails")}
           </Heading>
           {editMode && !validationError && (
-            <Link href="/applications/household/preferred-units">{t("t.edit")}</Link>
+            <Link
+              href="/applications/household/preferred-units"
+              ariaLabel={`${t("t.edit")} ${t("application.review.householdDetails")}`}
+            >
+              {t("t.edit")}
+            </Link>
           )}
         </Card.Header>
 
@@ -488,6 +516,8 @@ const FormSummaryDetails = ({
         </Card.Section>
 
         {!hidePrograms &&
+          Array.isArray(application.programs) &&
+          application.programs.length > 0 &&
           multiselectQuestionSection(
             MultiselectQuestionsApplicationSectionEnum.programs,
             swapCommunityTypeWithPrograms
@@ -506,7 +536,12 @@ const FormSummaryDetails = ({
             {t("t.income")}
           </Heading>
           {editMode && !validationError && (
-            <Link href="/applications/financial/vouchers">{t("t.edit")}</Link>
+            <Link
+              href="/applications/financial/vouchers"
+              ariaLabel={`${t("t.edit")} ${t("t.income")}`}
+            >
+              {t("t.edit")}
+            </Link>
           )}
         </Card.Header>
 
@@ -541,6 +576,8 @@ const FormSummaryDetails = ({
         </Card.Section>
 
         {!hidePreferences &&
+          Array.isArray(application.preferences) &&
+          application.preferences.length > 0 &&
           multiselectQuestionSection(
             MultiselectQuestionsApplicationSectionEnum.preferences,
             "/applications/preferences/all",

@@ -242,6 +242,7 @@ const Layout = (props: LayoutProps) => {
         {process.env.showNewSeedsDesigns ? (
           <SiteHeader
             title={t("nav.siteTitle")}
+            languageDropdown={true}
             languages={languages?.map((lang) => {
               return {
                 label: lang.label,

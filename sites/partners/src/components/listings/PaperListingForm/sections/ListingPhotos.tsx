@@ -16,12 +16,7 @@ import {
   ListingImage,
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import {
-  cloudinaryFileUploader,
-  fieldHasError,
-  fieldIsRequired,
-  getLabel,
-} from "../../../../lib/helpers"
+import { fileUploader, fieldHasError, fieldIsRequired, getLabel } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
@@ -133,7 +128,13 @@ const ListingPhotoEditor = ({
         </Card>
       </Drawer.Content>
       <Drawer.Footer>
-        <Button variant="primary" type="button" size="sm" onClick={handleSave}>
+        <Button
+          variant="primary"
+          type="button"
+          size="sm"
+          onClick={handleSave}
+          id="save-alt-text-button"
+        >
           {t("t.save")}
         </Button>
       </Drawer.Footer>
@@ -225,7 +226,11 @@ const ListingPhotos = (props: ListingPhotosProps) => {
       preview: {
         content: (
           <TableThumbnail>
-            <img src={getUrlForListingImage(image.assets)} alt={image.description || ""} />
+            <img
+              src={getUrlForListingImage(image.assets)}
+              alt={image.description || ""}
+              id={`listing-detail-image-${index}`}
+            />
           </TableThumbnail>
         ),
       },
@@ -281,13 +286,18 @@ const ListingPhotos = (props: ListingPhotosProps) => {
       )
 
       return {
+        id: { content: image.fileId },
         ordinal: {
           content: ordinalContent,
         },
         preview: {
           content: (
             <TableThumbnail>
-              <img src={getUrlForListingImage(image)} alt={item.description || ""} />
+              <img
+                src={getUrlForListingImage(image)}
+                alt={item.description || ""}
+                id={`listing-drawer-image-${index}`}
+              />
             </TableThumbnail>
           ),
         },
@@ -340,9 +350,9 @@ const ListingPhotos = (props: ListingPhotosProps) => {
    Pass the file for the dropzone callback along to the uploader
    */
   const photoUploader = async (file: File) => {
-    void (await cloudinaryFileUploader({
+    void (await fileUploader({
       file,
-      setCloudinaryData: setLatestUpload,
+      setFileUploadData: setLatestUpload,
       setProgressValue,
     }))
   }

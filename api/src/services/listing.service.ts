@@ -59,11 +59,13 @@ import {
 import {
   summarizeUnitsByTypeAndRent,
   summarizeUnits,
+  summarizeByPriorityType,
 } from '../utilities/unit-utilities';
 import { fillModelStringFields } from '../utilities/model-fields';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
+import { SnapshotCreateService } from './snapshot-create.service';
 
 export type getListingsArgs = {
   skip: number;
@@ -77,6 +79,7 @@ export const selectViews: Partial<Record<ListingViews, Prisma.ListingsSelect>> =
     name: {
       name: true,
       id: true,
+      property: true,
       jurisdictions: {
         select: {
           id: true,
@@ -121,6 +124,9 @@ includeViews.base = {
     },
   },
   listingMultiselectQuestions: {
+    orderBy: {
+      ordinal: 'asc',
+    },
     include: {
       multiselectQuestions: true,
     },
@@ -176,13 +182,14 @@ includeViews.full = {
   listingsApplicationDropOffAddress: true,
   listingsApplicationMailingAddress: true,
   requestedChangesUser: true,
+  property: true,
   requiredDocumentsList: true,
+  parkType: true,
   units: {
     include: {
       unitAmiChartOverrides: true,
       unitTypes: true,
       unitRentTypes: true,
-      unitAccessibilityPriorityTypes: true,
       amiChart: {
         include: {
           jurisdictions: true,
@@ -212,6 +219,7 @@ export class ListingService implements OnModuleInit {
     private permissionService: PermissionService,
     private prisma: PrismaService,
     private translationService: TranslationService,
+    private snapshotCreateService: SnapshotCreateService,
   ) {}
 
   onModuleInit() {
@@ -279,6 +287,7 @@ export class ListingService implements OnModuleInit {
             listing.units,
             listing,
           ),
+          priorityTypes: summarizeByPriorityType(listing),
         };
       }
     });
@@ -834,6 +843,18 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
+        if (filter[ListingFilterKeys.parkingType]) {
+          if (Array.isArray(filter[ListingFilterKeys.parkingType])) {
+            const parkingTypes = filter[ListingFilterKeys.parkingType];
+            filters.push({
+              OR: parkingTypes.map((type) => ({
+                parkType: {
+                  [type]: true,
+                },
+              })),
+            });
+          }
+        }
         if (filter[ListingFilterKeys.ids]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
@@ -1183,6 +1204,9 @@ export class ListingService implements OnModuleInit {
     if (listing.listingUtilities) {
       listing.utilities = listing.listingUtilities;
     }
+    if (listing.parkingType) {
+      listing.parkingType = listing.parkingType;
+    }
     if (listing.listingFeatures) {
       listing.features = listing.listingFeatures;
     }
@@ -1226,9 +1250,6 @@ export class ListingService implements OnModuleInit {
         }
         if (unit.unitRentTypes) {
           unit.unitRentType = unit.unitRentTypes;
-        }
-        if (unit.unitAccessibilityPriorityTypes) {
-          unit.priorityType = unit.unitAccessibilityPriorityTypes;
         }
         if (unit.unitAmiChartOverrides) {
           unit.amiChartOverride = unit.unitAmiChartOverrides;
@@ -1284,22 +1305,25 @@ export class ListingService implements OnModuleInit {
         jurisdictionId: dto.jurisdictions.id,
       },
     );
+
     const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        id: true,
+        featureFlags: true,
+        listingApprovalPermissions: true,
+      },
       where: {
         id: dto.jurisdictions.id,
-      },
-      include: {
-        featureFlags: true,
       },
     });
 
     const enableUnitGroups = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as Jurisdiction,
+      rawJurisdiction as unknown as Jurisdiction,
       FeatureFlagEnum.enableUnitGroups,
     );
 
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as Jurisdiction,
+      rawJurisdiction as unknown as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
 
@@ -1329,8 +1353,15 @@ export class ListingService implements OnModuleInit {
     );
 
     // Remove requiredFields and minimumImagesRequired properties before saving to database
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { requiredFields, minimumImagesRequired, ...listingData } = dto;
+    const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      requiredFields,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      minimumImagesRequired,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      listingFeaturesConfiguration,
+      ...listingData
+    } = dto;
 
     const rawListing = await this.prisma.listings.create({
       include: includeViews.full,
@@ -1462,6 +1493,13 @@ export class ListingService implements OnModuleInit {
               },
             }
           : undefined,
+        parkType: dto.parkType
+          ? {
+              create: {
+                ...dto.parkType,
+              },
+            }
+          : undefined,
         listingsApplicationMailingAddress: dto.listingsApplicationMailingAddress
           ? {
               create: {
@@ -1521,6 +1559,7 @@ export class ListingService implements OnModuleInit {
                 sqFeet: unit.sqFeet,
                 monthlyRentAsPercentOfIncome: unit.monthlyRentAsPercentOfIncome,
                 bmrProgramChart: unit.bmrProgramChart,
+                accessibilityPriorityType: unit.accessibilityPriorityType,
                 unitTypes: unit.unitTypes
                   ? {
                       connect: {
@@ -1542,14 +1581,6 @@ export class ListingService implements OnModuleInit {
                       },
                     }
                   : undefined,
-                unitAccessibilityPriorityTypes:
-                  unit.unitAccessibilityPriorityTypes
-                    ? {
-                        connect: {
-                          id: unit.unitAccessibilityPriorityTypes.id,
-                        },
-                      }
-                    : undefined,
                 unitRentTypes: unit.unitRentTypes
                   ? {
                       connect: {
@@ -1578,6 +1609,7 @@ export class ListingService implements OnModuleInit {
                 monthlyRent: group.monthlyRent,
                 totalAvailable: group.totalAvailable,
                 totalCount: group.totalCount,
+                accessibilityPriorityType: group.accessibilityPriorityType,
                 unitGroupAmiLevels: {
                   create: group.unitGroupAmiLevels?.map((level) => ({
                     amiPercentage: level.amiPercentage,
@@ -1592,14 +1624,6 @@ export class ListingService implements OnModuleInit {
                       : undefined,
                   })),
                 },
-                unitAccessibilityPriorityTypes:
-                  group.unitAccessibilityPriorityTypes
-                    ? {
-                        connect: {
-                          id: group.unitAccessibilityPriorityTypes.id,
-                        },
-                      }
-                    : undefined,
                 unitTypes: {
                   connect: group.unitTypes.map((type) => ({
                     id: type.id,
@@ -1612,6 +1636,8 @@ export class ListingService implements OnModuleInit {
           ? {
               create: dto.unitsSummary.map((unitSummary) => ({
                 ...unitSummary,
+                accessibilityPriorityType:
+                  unitSummary.accessibilityPriorityType,
                 unitTypes: unitSummary.unitTypes
                   ? {
                       connect: {
@@ -1619,14 +1645,6 @@ export class ListingService implements OnModuleInit {
                       },
                     }
                   : undefined,
-                unitAccessibilityPriorityTypes:
-                  unitSummary.unitAccessibilityPriorityTypes
-                    ? {
-                        connect: {
-                          id: unitSummary.unitAccessibilityPriorityTypes.id,
-                        },
-                      }
-                    : undefined,
               })),
             }
           : undefined,
@@ -1774,7 +1792,7 @@ export class ListingService implements OnModuleInit {
     });
 
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as Jurisdiction,
+      rawJurisdiction as unknown as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
 
@@ -1807,6 +1825,16 @@ export class ListingService implements OnModuleInit {
         ),
       }),
     );
+
+    const listingsMarketingFlyerFile = {
+      fileId: mappedListing.listingsMarketingFlyerFile?.fileId,
+      label: mappedListing.listingsMarketingFlyerFile?.label,
+    };
+
+    const listingsAccessibleMarketingFlyerFile = {
+      fileId: mappedListing.listingsAccessibleMarketingFlyerFile?.fileId,
+      label: mappedListing.listingsAccessibleMarketingFlyerFile?.label,
+    };
 
     if (!dto.includeUnits) {
       delete mappedListing['units'];
@@ -1848,6 +1876,13 @@ export class ListingService implements OnModuleInit {
         id: question.multiselectQuestionId,
         ordinal: question.ordinal,
       })),
+      listingsMarketingFlyerFile: mappedListing.listingsMarketingFlyerFile
+        ? listingsMarketingFlyerFile
+        : undefined,
+      listingsAccessibleMarketingFlyerFile:
+        mappedListing.listingsAccessibleMarketingFlyerFile
+          ? listingsAccessibleMarketingFlyerFile
+          : undefined,
       lotteryLastRunAt: undefined,
       lotteryLastPublishedAt: undefined,
       lotteryStatus: undefined,
@@ -1868,6 +1903,7 @@ export class ListingService implements OnModuleInit {
       requestingUser?.userRoles?.isPartner &&
       duplicateListingPermissions?.includes(UserRoleEnum.partner)
     ) {
+      await this.snapshotCreateService.createUserSnapshot(requestingUser.id);
       await this.prisma.userAccounts.update({
         data: {
           listings: {
@@ -2048,8 +2084,15 @@ export class ListingService implements OnModuleInit {
   */
   async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
     // Remove requiredFields and minimumImagesRequired properties before saving to database
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { requiredFields, minimumImagesRequired, ...incomingDto } = dto;
+    const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      requiredFields,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      minimumImagesRequired,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      listingFeaturesConfiguration,
+      ...incomingDto
+    } = dto;
     const storedListing = await this.findOrThrow(
       incomingDto.id,
       ListingViews.full,
@@ -2066,14 +2109,15 @@ export class ListingService implements OnModuleInit {
     );
 
     const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        featureFlags: true,
+        listingApprovalPermissions: true,
+        id: true,
+      },
       where: {
         id: incomingDto.jurisdictions.id,
       },
-      include: {
-        featureFlags: true,
-      },
     });
-
     const enableUnitGroups = doJurisdictionHaveFeatureFlagSet(
       rawJurisdiction as Jurisdiction,
       FeatureFlagEnum.enableUnitGroups,
@@ -2095,7 +2139,7 @@ export class ListingService implements OnModuleInit {
         status: 400,
       });
     }
-
+    await this.snapshotCreateService.createListingSnapshot(incomingDto.id);
     if (enableV2MSQ) {
       const multiselectQuestionIds = dto.listingMultiselectQuestions.map(
         (multiselectQuestion) => multiselectQuestion.id,
@@ -2177,6 +2221,7 @@ export class ListingService implements OnModuleInit {
 
     const previousFeaturesId = storedListing.listingFeatures?.id;
     const previousUtilitiesId = storedListing.listingUtilities?.id;
+    const previousParkingTypeId = storedListing.parkType?.id;
     const previousNeighborhoodAmenitiesId =
       storedListing.listingNeighborhoodAmenities?.id;
 
@@ -2427,6 +2472,21 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
+          parkType: incomingDto.parkType
+            ? {
+                upsert: {
+                  where: {
+                    id: previousParkingTypeId,
+                  },
+                  create: {
+                    ...incomingDto.parkType,
+                  },
+                  update: {
+                    ...incomingDto.parkType,
+                  },
+                },
+              }
+            : undefined,
           listingsApplicationMailingAddress: mailAddress
             ? {
                 connect: {
@@ -2516,14 +2576,7 @@ export class ListingService implements OnModuleInit {
                         },
                       }
                     : undefined,
-                  unitAccessibilityPriorityTypes:
-                    unit.unitAccessibilityPriorityTypes
-                      ? {
-                          connect: {
-                            id: unit.unitAccessibilityPriorityTypes.id,
-                          },
-                        }
-                      : undefined,
+                  accessibilityPriorityType: unit.accessibilityPriorityType,
                   unitRentTypes: unit.unitRentTypes
                     ? {
                         connect: {
@@ -2552,6 +2605,7 @@ export class ListingService implements OnModuleInit {
                   sqFeetMax: group.sqFeetMax,
                   totalCount: group.totalCount,
                   totalAvailable: group.totalAvailable,
+                  accessibilityPriorityType: group.accessibilityPriorityType,
                   unitTypes: group.unitTypes
                     ? {
                         connect: group.unitTypes.map((type) => ({
@@ -2576,14 +2630,6 @@ export class ListingService implements OnModuleInit {
                         })),
                       }
                     : undefined,
-                  unitAccessibilityPriorityTypes:
-                    group.unitAccessibilityPriorityTypes
-                      ? {
-                          connect: {
-                            id: group.unitAccessibilityPriorityTypes.id,
-                          },
-                        }
-                      : undefined,
                 })),
               }
             : undefined,
@@ -2591,6 +2637,8 @@ export class ListingService implements OnModuleInit {
             ? {
                 create: incomingDto.unitsSummary.map((unitSummary) => ({
                   ...unitSummary,
+                  accessibilityPriorityType:
+                    unitSummary.accessibilityPriorityType,
                   unitTypes: unitSummary.unitTypes
                     ? {
                         connect: {
@@ -2598,14 +2646,6 @@ export class ListingService implements OnModuleInit {
                         },
                       }
                     : undefined,
-                  unitAccessibilityPriorityTypes:
-                    unitSummary.unitAccessibilityPriorityTypes
-                      ? {
-                          connect: {
-                            id: unitSummary.unitAccessibilityPriorityTypes.id,
-                          },
-                        }
-                      : undefined,
                 })),
               }
             : undefined,
@@ -2658,10 +2698,16 @@ export class ListingService implements OnModuleInit {
               },
             },
           },
-          property: incomingDto?.property
+          property: incomingDto.property
             ? {
                 connect: {
                   id: incomingDto.property.id,
+                },
+              }
+            : storedListing.property
+            ? {
+                disconnect: {
+                  id: storedListing.property.id,
                 },
               }
             : undefined,
@@ -2729,15 +2775,7 @@ export class ListingService implements OnModuleInit {
       mappedListing.status === ListingsStatusEnum.closed
     ) {
       // if listing is closed for the first time the application flag set job needs to run
-      if (
-        process.env.DUPLICATES_CLOSE_DATE &&
-        dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z') <
-          dayjs(new Date())
-      ) {
-        await this.afsService.processDuplicates(mappedListing.id);
-      } else {
-        await this.afsService.process(mappedListing.id);
-      }
+      await this.afsService.processDuplicates(mappedListing.id);
 
       // if the listing is closed for the first time the expire_after value should be set on all applications
       void this.setExpireAfterValueOnApplications(mappedListing.id);
@@ -2801,10 +2839,11 @@ export class ListingService implements OnModuleInit {
   */
   addUnitsSummarized = async (listing: Listing) => {
     if (Array.isArray(listing.units) && listing.units.length > 0) {
+      const unitsWithCharts = listing.units.filter((unit) => unit.amiChart?.id);
       const amiChartsRaw = await this.prisma.amiChart.findMany({
         where: {
           id: {
-            in: listing.units.map((unit) => unit.amiChart?.id),
+            in: unitsWithCharts.map((unit) => unit.amiChart?.id),
           },
         },
       });
@@ -2973,6 +3012,10 @@ export class ListingService implements OnModuleInit {
       },
     });
     const listingIds = listings.map((listing) => listing.id);
+
+    for (const listingSave of listingIds) {
+      await this.snapshotCreateService.createListingSnapshot(listingSave);
+    }
 
     const res = await this.prisma.listings.updateMany({
       data: {
