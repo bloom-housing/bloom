@@ -31,6 +31,7 @@ Cypress.Commands.add("goNext", () => {
   return cy
     .getByID("app-next-step-button")
     .should("exist")
+    .scrollIntoView()
     .should("be.visible")
     .click({ force: true })
 })
@@ -200,6 +201,7 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application, autofill) =
     cy.getByTestId("app-primary-work-in-region-no").check()
   }
 
+  cy.getByTestId("app-primary-address-street").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -220,6 +222,7 @@ Cypress.Commands.add("step3AlternateContactType", (application, autofill) => {
     }
   }
 
+  cy.getByTestId("app-alternate-type").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -233,6 +236,7 @@ Cypress.Commands.add("step4AlternateContactName", (application, autofill) => {
     cy.getByTestId("app-alternate-first-name").should("exist")
   }
 
+  cy.getByTestId("app-alternate-first-name").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -377,7 +381,7 @@ Cypress.Commands.add("step8PreferredUnits", (application, autofill) => {
       cy.getByTestId(prefUnit.name).check()
     })
   } else {
-    cy.contains("What unit sizes are you interested in?")
+    cy.contains("What unit sizes are you interested in?").should("exist")
   }
 
   cy.goNext()
@@ -406,6 +410,7 @@ Cypress.Commands.add("step9Accessibility", (application, autofill) => {
     }
   }
 
+  cy.getByTestId("app-ada-mobility").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -426,8 +431,8 @@ Cypress.Commands.add("step10Changes", (application, autofill) => {
     }
   }
 
+  cy.getByTestId("app-expecting-changes").should("exist")
   cy.goNext()
-
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
   cy.isNextRouteValid("householdExpectingChanges")
@@ -442,8 +447,8 @@ Cypress.Commands.add("step11Student", (application, programsExist, autofill) => 
     }
   }
 
+  cy.getByTestId("app-student").should("exist")
   cy.goNext()
-
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
   cy.isNextRouteValid("householdStudent", !programsExist ? 1 : 0)
@@ -477,8 +482,8 @@ Cypress.Commands.add("step13IncomeVouchers", (application, autofill) => {
     }
   }
 
+  cy.getByTestId("app-income-vouchers").should("exist")
   cy.goNext()
-
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
   cy.isNextRouteValid("vouchersSubsidies")
@@ -496,6 +501,7 @@ Cypress.Commands.add("step14Income", (application, autofill) => {
     }
   }
 
+  cy.getByTestId("app-income").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
