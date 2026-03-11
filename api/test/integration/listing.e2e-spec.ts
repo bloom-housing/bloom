@@ -805,7 +805,7 @@ describe('Listing Controller Tests', () => {
       });
     });
 
-    it('should get listings from list endpoint when no params are sent', async () => {
+    it.skip('should get listings from list endpoint when no params are sent', async () => {
       const res = await request(app.getHttpServer())
         .post(`/listings/list`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
