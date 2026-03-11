@@ -252,7 +252,7 @@ export function getColDefs(
       width: 180,
       minWidth: 50,
       valueGetter: (row) => {
-        if (!row?.data?.preferences) return ""
+        if (!row?.data?.preferences || !Array.isArray(row.data.preferences)) return ""
 
         const { preferences } = row.data
 

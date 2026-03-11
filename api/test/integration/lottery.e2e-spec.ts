@@ -497,28 +497,26 @@ describe('Lottery Controller Tests', () => {
         },
       });
 
-      const selections = await prisma.applicationSelections.createManyAndReturn(
-        {
-          data: [
-            {
-              applicationId: applicationA.id,
-              multiselectQuestionId: preferenceAId,
-            },
-            {
-              applicationId: applicationA.id,
-              multiselectQuestionId: preferenceBId,
-            },
-            {
-              applicationId: applicationB.id,
-              multiselectQuestionId: preferenceAId,
-            },
-            {
-              applicationId: applicationC.id,
-              multiselectQuestionId: preferenceBId,
-            },
-          ],
-        },
-      );
+      await prisma.applicationSelections.createManyAndReturn({
+        data: [
+          {
+            applicationId: applicationA.id,
+            multiselectQuestionId: preferenceAId,
+          },
+          {
+            applicationId: applicationA.id,
+            multiselectQuestionId: preferenceBId,
+          },
+          {
+            applicationId: applicationB.id,
+            multiselectQuestionId: preferenceAId,
+          },
+          {
+            applicationId: applicationC.id,
+            multiselectQuestionId: preferenceBId,
+          },
+        ],
+      });
 
       await request(app.getHttpServer())
         .put(`/lottery/generateLotteryResults`)
