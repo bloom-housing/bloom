@@ -56,7 +56,7 @@ const Advocates = () => {
       {
         headerName: t("users.status"),
         field: "isApproved",
-        valueFormatter: ({ value }) => (value ? t("t.approved") : t("t.requested")),
+        valueFormatter: ({ value }) => (value ? t("advocate.approved") : t("advocate.requested")),
       },
       {
         headerName: t("users.action"),
