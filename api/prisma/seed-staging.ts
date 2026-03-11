@@ -814,7 +814,6 @@ export const stagingSeed = async (
           options: [
             { name: 'Yes', ordinal: 1 },
             { name: 'No', ordinal: 2 },
-            { name: 'Prefer not to say', ordinal: 3, isOptOut: true },
           ],
         },
       },
