@@ -31,9 +31,8 @@ Cypress.Commands.add("goNext", () => {
   return cy
     .getByID("app-next-step-button")
     .should("exist")
-    .then(($btn) => {
-      cy.wrap($btn).click({ force: true })
-    })
+    .should("be.visible")
+    .click({ force: true })
 })
 
 Cypress.Commands.add("getByID", (id, ...args) => {
@@ -231,7 +230,7 @@ Cypress.Commands.add("step4AlternateContactName", (application, autofill) => {
     cy.getByTestId("app-alternate-first-name").type(application.alternateContact.firstName)
     cy.getByTestId("app-alternate-last-name").type(application.alternateContact.lastName)
   } else {
-    cy.contains("Who is your alternate contact?")
+    cy.getByTestId("app-alternate-first-name").should("exist")
   }
 
   cy.goNext()
