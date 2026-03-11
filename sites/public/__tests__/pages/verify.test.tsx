@@ -74,7 +74,9 @@ describe("Verify Page", () => {
       renderVerifyPage("login")
 
       // The message is long and may be split across elements; use a partial match
-      expect(screen.getByText(/if there is an account made with user@example\.com/i)).toBeInTheDocument()
+      expect(
+        screen.getByText(/if there is an account made with user@example\.com/i)
+      ).toBeInTheDocument()
     })
 
     it("renders the 'Sign in with your password' button only for the login flow", () => {
@@ -145,9 +147,7 @@ describe("Verify Page", () => {
         expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
       })
 
-      expect(
-        screen.getByText(/a new code has been sent to user@example\.com/i)
-      ).toBeInTheDocument()
+      expect(screen.getByText(/a new code has been sent to user@example\.com/i)).toBeInTheDocument()
     })
   })
 
@@ -178,9 +178,7 @@ describe("Verify Page", () => {
         expect(mockLoginViaSingleUseCode).toHaveBeenCalledWith(TEST_EMAIL, "wrong-code")
       })
 
-      expect(
-        await screen.findByText("Please enter a valid email and password")
-      ).toBeInTheDocument()
+      expect(await screen.findByText("Please enter a valid email and password")).toBeInTheDocument()
     })
 
     it("redirects to the dashboard when a correct code is submitted for the login flow", async () => {
