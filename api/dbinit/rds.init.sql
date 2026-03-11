@@ -19,10 +19,10 @@ BEGIN
     IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'bloom_api') THEN
         CREATE USER bloom_api;
         GRANT rds_iam TO bloom_api;
-        GRANT CONNECT ON DATABASE bloom_prisma TO bloom_api;
-        GRANT ALL PRIVILEGES ON DATABASE bloom_prisma TO bloom_api;
-        GRANT ALL PRIVILEGES ON SCHEMA public TO bloom_api;
     END IF;
+    GRANT CONNECT ON DATABASE bloom_prisma TO bloom_api;
+    GRANT ALL PRIVILEGES ON DATABASE bloom_prisma TO bloom_api;
+    GRANT ALL PRIVILEGES ON SCHEMA public TO bloom_api;
 END
 $$;
 
@@ -33,10 +33,10 @@ BEGIN
     IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'bloom_readonly') THEN
         CREATE USER bloom_readonly;
         GRANT rds_iam TO bloom_readonly;
-        GRANT CONNECT ON DATABASE bloom_prisma TO bloom_readonly;
-        GRANT USAGE ON SCHEMA public TO bloom_readonly;
-        GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO bloom_readonly;
     END IF;
+    GRANT CONNECT ON DATABASE bloom_prisma TO bloom_readonly;
+    GRANT USAGE ON SCHEMA public TO bloom_readonly;
+    GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO bloom_readonly;
 END
 $$;
 

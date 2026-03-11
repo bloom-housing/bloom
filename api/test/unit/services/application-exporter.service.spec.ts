@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
+import { S3Service } from '../../../src/services/s3.service';
 import {
   mockApplication,
   mockApplicationSet,
@@ -42,6 +43,7 @@ describe('Testing application export service', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ApplicationExporterService,
+        S3Service,
         PrismaService,
         MultiselectQuestionService,
         ListingService,
