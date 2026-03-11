@@ -23,7 +23,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useListingExport, useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
-import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
 
 class formatLinkCell {
@@ -108,7 +107,6 @@ type CreateListingFormFields = {
 }
 
 export default function ListingsList() {
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const isAdmin =
     profile?.userRoles?.isAdmin ||
@@ -341,7 +339,6 @@ export default function ListingsList() {
       <Head>
         <title>{`Home - ${t("nav.siteTitlePartners")}`}</title>
       </Head>
-      <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
       <NavigationHeader title={t("nav.listings")}></NavigationHeader>
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">

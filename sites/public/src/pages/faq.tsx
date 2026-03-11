@@ -34,7 +34,7 @@ const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
   const enableResources = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableResources)
 
   return (
-    <Layout pageTitle={t("pageTitle.faq")}>
+    <Layout pageTitle={t("pageTitle.faq")} metaDescription={t("pageDescription.faq")}>
       <PageHeaderLayout
         heading={t("pageTitle.faq")}
         subheading={t("pageDescription.faq")}

@@ -598,6 +598,7 @@
   "neighborhoodAmenities.distance.withinOneMile": "Within one mile",
   "neighborhoodAmenities.distance.withinThreeMiles": "Within three miles",
   "neighborhoodAmenities.distance.withinTwoMiles": "Within two miles",
+  "pageDescription.partnersSignIn": "Sign in to %{siteTitle} to manage affordable housing listings and applications.",
   "properties.add": "Add property",
   "properties.alertCreated": "Property created",
   "properties.alertDeleted": "Property deleted",
