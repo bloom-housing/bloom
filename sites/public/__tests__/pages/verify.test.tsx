@@ -8,17 +8,12 @@ jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }))
 
-jest.mock("../../src/layouts/forms", () => ({
-  __esModule: true,
-  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-}))
-
 const TOAST_MESSAGE = {
   toastMessagesRef: { current: [] },
   addToast: jest.fn(),
 }
 
-const TEST_EMAIL = "user@example.com"
+const TEST_EMAIL = "admin@example.com"
 
 const renderVerifyPage = (
   flowType: "create" | "login" | "loginReCaptcha" = "login",
@@ -58,7 +53,7 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
-describe("Verify Page", () => {
+describe("Verify Page Tests", () => {
   describe("Banner, fields, and links", () => {
     it("renders the page title, code field, sub-note, resend button, and continue button", () => {
       renderVerifyPage("login")
@@ -72,10 +67,8 @@ describe("Verify Page", () => {
 
     it("renders the login flow alert message containing the email address", () => {
       renderVerifyPage("login")
-
-      // The message is long and may be split across elements; use a partial match
       expect(
-        screen.getByText(/if there is an account made with user@example\.com/i)
+        screen.getByText(/if there is an account made with admin@example\.com/i)
       ).toBeInTheDocument()
     })
 
@@ -96,14 +89,14 @@ describe("Verify Page", () => {
     it("renders the create flow alert message containing the email address", () => {
       renderVerifyPage("create")
       expect(
-        screen.getByText(/we sent a code to user@example\.com to finish signing up/i)
+        screen.getByText(/we sent a code to admin@example\.com to finish signing up/i)
       ).toBeInTheDocument()
     })
 
     it("renders the loginReCaptcha flow alert message containing the email address", () => {
       renderVerifyPage("loginReCaptcha")
       expect(
-        screen.getByText(/we sent a code to user@example\.com to finish logging in/i)
+        screen.getByText(/we sent a code to admin@example\.com to finish logging in/i)
       ).toBeInTheDocument()
     })
   })
@@ -147,7 +140,9 @@ describe("Verify Page", () => {
         expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
       })
 
-      expect(screen.getByText(/a new code has been sent to user@example\.com/i)).toBeInTheDocument()
+      expect(
+        screen.getByText(/a new code has been sent to admin@example\.com/i)
+      ).toBeInTheDocument()
     })
   })
 
