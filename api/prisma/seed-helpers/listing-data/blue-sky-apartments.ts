@@ -12,6 +12,7 @@ import {
   yellowstoneAddress,
   yosemiteAddress,
 } from '../address-factory';
+import { assetFileId } from '../asset-file-id-helper';
 
 export const blueSkyApartments: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
@@ -106,7 +107,7 @@ export const blueSkyApartments: Prisma.ListingsCreateInput = {
         assets: {
           create: {
             label: 'cloudinaryBuilding',
-            fileId: 'dev/trayan-xIOYJSVEZ8c-unsplash_f1axsg',
+            fileId: assetFileId('dev/trayan-xIOYJSVEZ8c-unsplash_f1axsg'),
           },
         },
       },
