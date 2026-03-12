@@ -472,10 +472,10 @@ describe('Testing email service', () => {
       expect(advocateEmail.to).toEqual('advocate.email@example.com');
       expect(advocateEmail.body).toContain('We got your application for');
       expect(advocateEmail.body).toContain(
-        'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents.',
+        'If your client is contacted for an interview, they will be asked to fill out a more detailed application and provide supporting documents.',
       );
       expect(advocateEmail.body).toContain(
-        'You may be contacted while on the waitlist to confirm that you wish to remain on the waitlist.',
+        'Your client may be contacted while on the waitlist to confirm that they wish to remain on the waitlist.',
       );
       expect(advocateEmail.body).toContain('Need to make updates?');
       expect(advocateEmail.body).toContain('See Listing');
@@ -490,10 +490,10 @@ describe('Testing email service', () => {
         'If you have questions regarding this application, please contact the agent for this listing.',
       );
       expect(applicantEmail.body).toContain(
-        'If your client is contacted for an interview, they will be asked to fill out a more detailed application and provide supporting documents.',
+        'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents.',
       );
       expect(applicantEmail.body).toContain(
-        'Your client may be contacted while on the waitlist to confirm that they wish to remain on the waitlist.',
+        'You may be contacted while on the waitlist to confirm that you wish to remain on the waitlist.',
       );
     });
   });

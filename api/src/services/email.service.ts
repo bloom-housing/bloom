@@ -341,8 +341,8 @@ export class EmailService {
       let preferenceText: string = null;
       let contactText: string = null;
       const waitlistContactKey = isAdvocateClient
-        ? 'confirmation.eligible.waitlistContactAdvocate'
-        : 'confirmation.eligible.waitlistContact';
+        ? 'confirmation.eligible.waitlistContact'
+        : 'confirmation.eligible.waitlistContactAdvocate';
 
       if (enableUnitGroups) {
         const hasUnitGroups = listing.unitGroups?.length > 0;
@@ -448,8 +448,8 @@ export class EmailService {
           preferenceText,
           interviewText: this.polyglot.t(
             isAdvocateClient
-              ? 'confirmation.interviewAdvocate'
-              : 'confirmation.interview',
+              ? 'confirmation.interview'
+              : 'confirmation.interviewAdvocate',
           ),
           eligibleText,
           contactText,
