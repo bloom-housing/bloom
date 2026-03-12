@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState } from "react"
 import Head from "next/head"
 import { AgTable, Order, t, useAgTable } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   Agency,
   FeatureFlagEnum,
@@ -23,6 +23,7 @@ import { DialogFooter } from "@bloom-housing/ui-seeds/src/overlays/Dialog"
 import { useSWRConfig } from "swr"
 
 const Advocates = () => {
+  const { addToast } = useContext(MessageContext)
   const { profile, doJurisdictionsHaveFeatureFlagOn, approveAdvocateUser } = useContext(AuthContext)
   const { mutate } = useSWRConfig()
   const [selectedUser, setSelectedUser] = useState<User>(null)
@@ -124,9 +125,17 @@ const Advocates = () => {
   }
 
   const handleDialogClick = async (approved: boolean) => {
+    const userName = [selectedUser.firstName, selectedUser.middleName, selectedUser.lastName].join(
+      " "
+    )
     await approveAdvocateUser(selectedUser.id, approved)
     await mutate(cacheKey)
     setDialogConfig(null)
+    if (approved) {
+      addToast(t("users.advocate.acceptToast", { userName }), { variant: "success" })
+    } else {
+      addToast(t("users.advocate.rejectToast", { userName }), { variant: "alert" })
+    }
   }
 
   if (error) return <div>{t("t.errorOccurred")}</div>
