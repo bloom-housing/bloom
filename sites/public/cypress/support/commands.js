@@ -22,7 +22,14 @@ Cypress.Commands.add("signOut", () => {
   } else {
     // data-testid for SiteHeader in this path is set in ui-components
     // See https://github.com/bloom-housing/ui-components/blob/c35c094554e8199f202d67a405272035189060ec/src/headers/SiteHeader.tsx#L175
-    cy.get(`[data-testid="My account-2"]`).trigger("mouseover")
+    // Use keypress instead of mouseover: the span's onKeyPress(Enter) sets activeMenu state
+    // and there's no keyboard-based close mechanism, keeping the dropdown open reliably.
+    cy.get(`[data-testid="My account-2"]`).trigger("keypress", {
+      key: "Enter",
+      keyCode: 13,
+      charCode: 13,
+      which: 13,
+    })
     cy.contains("button", "Sign out", { timeout: 10000 }).click({ force: true })
   }
 })
