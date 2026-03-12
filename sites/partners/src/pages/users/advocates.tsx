@@ -1,11 +1,13 @@
 import React, { useContext, useMemo, useState } from "react"
 import Head from "next/head"
-import { AgTable, t, useAgTable } from "@bloom-housing/ui-components"
+import { AgTable, Order, t, useAgTable } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   Agency,
   FeatureFlagEnum,
+  OrderByEnum,
   User,
+  UserOrderByKeys,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Dialog, Icon } from "@bloom-housing/ui-seeds"
 import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
@@ -108,6 +110,8 @@ const Advocates = () => {
     page: tableOptions.pagination.currentPage,
     limit: tableOptions.pagination.itemsPerPage,
     search: tableOptions.filter.filterValue,
+    orderBy: [UserOrderByKeys.isApproved],
+    orderDir: [OrderByEnum.asc],
     filter: {
       isAdvocateUser: true,
     },
