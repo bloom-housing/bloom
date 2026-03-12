@@ -336,13 +336,17 @@ export class EmailService {
     const listingUrl = `${appUrl}/listing/${listing.id}`;
     const compiledTemplate = this.template('confirmation');
 
-    const buildEligibilityCopy = (isAdvocateClient = false) => {
+    const buildEligibilityCopy = (
+      isAdvocate = false,
+      isAdvocateClient = false,
+    ) => {
       let eligibleText: string = null;
       let preferenceText: string = null;
       let contactText: string = null;
-      const waitlistContactKey = isAdvocateClient
-        ? 'confirmation.eligible.waitlistContact'
-        : 'confirmation.eligible.waitlistContactAdvocate';
+      const waitlistContactKey =
+        isAdvocate && !isAdvocateClient
+          ? 'confirmation.eligible.waitlistContactAdvocate'
+          : 'confirmation.eligible.waitlistContact';
 
       if (enableUnitGroups) {
         const hasUnitGroups = listing.unitGroups?.length > 0;
@@ -425,11 +429,12 @@ export class EmailService {
     const sendConfirmationEmail = async (
       recipientEmail: string,
       language?: LanguagesEnum,
+      isAdvocate = false,
       isAdvocateClient = false,
     ) => {
       await this.loadTranslations(jurisdiction, language);
       const { eligibleText, preferenceText, contactText } =
-        buildEligibilityCopy(isAdvocateClient);
+        buildEligibilityCopy(isAdvocate, isAdvocateClient);
       const nextStepsUrl = this.polyglot.t('confirmation.nextStepsUrl');
 
       await this.send(
@@ -447,9 +452,9 @@ export class EmailService {
           application,
           preferenceText,
           interviewText: this.polyglot.t(
-            isAdvocateClient
-              ? 'confirmation.interview'
-              : 'confirmation.interviewAdvocate',
+            isAdvocate && !isAdvocateClient
+              ? 'confirmation.interviewAdvocate'
+              : 'confirmation.interview',
           ),
           eligibleText,
           contactText,
@@ -479,14 +484,29 @@ export class EmailService {
 
     if (isAdvocate) {
       const advocateEmail = application?.alternateContact?.emailAddress;
-      await sendConfirmationEmail(advocateEmail, application.language, false);
+      await sendConfirmationEmail(
+        advocateEmail,
+        application.language,
+        isAdvocate,
+        false,
+      );
       if (applicantEmail) {
-        await sendConfirmationEmail(applicantEmail, LanguagesEnum.en, true);
+        await sendConfirmationEmail(
+          applicantEmail,
+          LanguagesEnum.en,
+          isAdvocate,
+          true,
+        );
       }
       return;
     }
 
-    await sendConfirmationEmail(applicantEmail, application.language, false);
+    await sendConfirmationEmail(
+      applicantEmail,
+      application.language,
+      isAdvocate,
+      false,
+    );
   }
 
   public async applicationUpdateEmail(
