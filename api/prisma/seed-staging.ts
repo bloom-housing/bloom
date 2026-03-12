@@ -243,6 +243,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
         FeatureFlagEnum.enableHomeType,
+        FeatureFlagEnum.enableHousingBasics,
         FeatureFlagEnum.enableIsVerified,
         FeatureFlagEnum.enableLimitedHowDidYouHear,
         FeatureFlagEnum.enableLeasingAgentAltText,
