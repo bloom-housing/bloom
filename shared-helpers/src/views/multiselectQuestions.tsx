@@ -324,7 +324,11 @@ export const multiselectOptionWrapper = (
         <div className="pb-4">
           <FormAddressAlternate
             subtitle={t("application.preferences.options.qualifyingAddress")}
-            dataKey={fieldName(question.text, applicationSection, `${option.text}-address`)}
+            dataKey={fieldName(
+              question.name || question.text,
+              applicationSection,
+              `${option.name || option.text}-address`
+            )}
             register={register}
             errors={errors}
             required={true}
