@@ -191,11 +191,18 @@ const Advocates = () => {
           </section>
         </TabView>
       </Layout>
-      <Dialog isOpen={!!dialogConfig} onClose={handleCloseDialog}>
+      <Dialog
+        isOpen={!!dialogConfig}
+        onClose={handleCloseDialog}
+        ariaLabelledBy="advocate-dialog-header"
+        ariaDescribedBy="advocate-dialog-content"
+      >
         {dialogConfig === "accept" ? (
           <>
-            <Dialog.Header>{t("users.advocate.acceptHeader")}</Dialog.Header>
-            <Dialog.Content>
+            <Dialog.Header id="advocate-dialog-header">
+              {t("users.advocate.acceptHeader")}
+            </Dialog.Header>
+            <Dialog.Content id="advocate-dialog-content">
               {t("users.advocate.acceptContent", {
                 user_name: [
                   selectedUser?.firstName,
@@ -213,8 +220,10 @@ const Advocates = () => {
           </>
         ) : (
           <>
-            <Dialog.Header>{t("users.advocate.rejectHeader")}</Dialog.Header>
-            <Dialog.Content>
+            <Dialog.Header id="advocate-dialog-header">
+              {t("users.advocate.rejectHeader")}
+            </Dialog.Header>
+            <Dialog.Content id="advocate-dialog-content">
               {t("users.advocate.rejectContent", {
                 user_name: [
                   selectedUser?.firstName,
