@@ -336,10 +336,13 @@ export class EmailService {
     const listingUrl = `${appUrl}/listing/${listing.id}`;
     const compiledTemplate = this.template('confirmation');
 
-    const buildEligibilityCopy = () => {
+    const buildEligibilityCopy = (isAdvocateClient = false) => {
       let eligibleText: string = null;
       let preferenceText: string = null;
       let contactText: string = null;
+      const waitlistContactKey = isAdvocateClient
+        ? 'confirmation.eligible.waitlistContactAdvocate'
+        : 'confirmation.eligible.waitlistContact';
 
       if (enableUnitGroups) {
         const hasUnitGroups = listing.unitGroups?.length > 0;
@@ -369,9 +372,7 @@ export class EmailService {
           } else {
             eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
           }
-          contactText = this.polyglot.t(
-            'confirmation.eligible.waitlistContact',
-          );
+          contactText = this.polyglot.t(waitlistContactKey);
           preferenceText = this.polyglot.t(
             'confirmation.eligible.waitlistPreference',
           );
@@ -393,9 +394,7 @@ export class EmailService {
         }
         if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
           eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
-          contactText = this.polyglot.t(
-            'confirmation.eligible.waitlistContact',
-          );
+          contactText = this.polyglot.t(waitlistContactKey);
           preferenceText = this.polyglot.t(
             'confirmation.eligible.waitlistPreference',
           );
@@ -404,9 +403,7 @@ export class EmailService {
           eligibleText = this.polyglot.t(
             'confirmation.eligible.waitlistLottery',
           );
-          contactText = this.polyglot.t(
-            'confirmation.eligible.waitlistContact',
-          );
+          contactText = this.polyglot.t(waitlistContactKey);
           preferenceText = this.polyglot.t(
             'confirmation.eligible.waitlistPreference',
           );
@@ -432,7 +429,7 @@ export class EmailService {
     ) => {
       await this.loadTranslations(jurisdiction, language);
       const { eligibleText, preferenceText, contactText } =
-        buildEligibilityCopy();
+        buildEligibilityCopy(isAdvocateClient);
       const nextStepsUrl = this.polyglot.t('confirmation.nextStepsUrl');
 
       await this.send(
@@ -449,7 +446,11 @@ export class EmailService {
           listingUrl,
           application,
           preferenceText,
-          interviewText: this.polyglot.t('confirmation.interview'),
+          interviewText: this.polyglot.t(
+            isAdvocateClient
+              ? 'confirmation.interviewAdvocate'
+              : 'confirmation.interview',
+          ),
           eligibleText,
           contactText,
           nextStepsUrl:
