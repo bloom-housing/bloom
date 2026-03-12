@@ -756,7 +756,7 @@
   "users.adminSupport": "Admin (support)",
   "users.advocate.acceptHeader": "Approve advocate account",
   "users.advocate.acceptContent": "Are you sure you want to approve an advocate account for %{user_name}? This will allow them to apply for affordable housing on behalf of their clients.",
-  "users.advocate.rejectHeader": "Declined advocate account",
+  "users.advocate.rejectHeader": "Decline advocate account",
   "users.advocate.rejectContent": "Are you sure you want to decline an advocate account for %{user_name}? This will remove their request from the data table.",
   "users.agencyName": "Agency name",
   "users.alljurisdictionalizedListings": "All %{jurisdiction} listings",
