@@ -58,7 +58,7 @@ describe("Verify Page Tests", () => {
     it("renders the page title, code field, sub-note, resend button, and continue button", () => {
       renderVerifyPage("login")
 
-      expect(screen.getByText("Verify that it's you")).toBeInTheDocument()
+      expect(screen.getByRole("heading", { name: "Verify that it's you" })).toBeInTheDocument()
       expect(screen.getByLabelText("Your code")).toBeInTheDocument()
       expect(screen.getByText("Didn't receive your code?")).toBeInTheDocument()
       expect(screen.getByRole("button", { name: /resend/i })).toBeInTheDocument()
