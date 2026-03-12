@@ -273,6 +273,7 @@ Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
     )
   }
 
+  cy.getByTestId("app-alternate-mailing-address-street").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
