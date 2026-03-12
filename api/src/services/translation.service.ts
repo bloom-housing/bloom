@@ -179,6 +179,14 @@ export class TranslationService {
         listing.communityDisclaimerDescription;
     }
 
+    if (listing.property?.description) {
+      pathsToFilter[`property.description`] = listing.property.description;
+    }
+
+    if (listing.property?.urlTitle) {
+      pathsToFilter[`property.urlTitle`] = listing.property.urlTitle;
+    }
+
     const persistedTranslationsFromDB = await this.getPersistedTranslatedValues(
       listing,
       language,
