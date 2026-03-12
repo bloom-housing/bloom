@@ -86,6 +86,7 @@ export const Home = (props: HomeProps) => {
               ? styles["muted-background"]
               : styles["surface-background"]
           }`}
+          fullHeight={true}
         >
           <HomeResources jurisdiction={props.jurisdiction} />
         </HomeSection>
