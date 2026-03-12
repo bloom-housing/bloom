@@ -44,7 +44,9 @@ export const getListingTags = (
   listing: Listing,
   hideReviewTags?: boolean,
   hideHomeTypeTag?: boolean,
-  hideAccessibilityTag?: boolean,
+  hideAccessibilityFeaturesTag?: boolean,
+  enableUnitAccessibilityTypeTags?: boolean,
+  enableAccessibilityFeatures?: boolean,
   enableIsVerified?: boolean,
   swapCommunityTypeWithPrograms?: boolean
 ): ListingTag[] => {
@@ -108,25 +110,30 @@ export const getListingTags = (
     }
   }
 
-  if (!hideAccessibilityTag) {
-    listing?.unitsSummarized?.priorityTypes?.forEach((priorityType) => {
-      listingTags.push({
-        title: `${t(`listings.unit.accessibilityType.${priorityType}`)} ${t("t.units")}`,
-        variant: "secondary",
+  if (enableAccessibilityFeatures) {
+    console.log("enableAccessibilityFeatures", enableAccessibilityFeatures)
+    console.log("hideAccessibilityFeaturesTag", hideAccessibilityFeaturesTag)
+    console.log("enableUnitAccessibilityTypeTags", enableUnitAccessibilityTypeTags)
+    if (enableUnitAccessibilityTypeTags) {
+      listing?.unitsSummarized?.priorityTypes?.forEach((priorityType) => {
+        listingTags.push({
+          title: `${t(`listings.unit.accessibilityType.${priorityType}`)} ${t("t.units")}`,
+          variant: "secondary",
+        })
       })
-    })
-  }
+    }
 
-  if (
-    !hideAccessibilityTag &&
-    listing.listingFeatures &&
-    Object.values(listing.listingFeatures).some((feature) => feature)
-  ) {
-    listingTags.push({
-      title: t("listings.sections.accessibilityFeatures"),
-      variant: "warn",
-      icon: <HandRaisedIcon />,
-    })
+    if (
+      !hideAccessibilityFeaturesTag &&
+      listing.listingFeatures &&
+      Object.values(listing.listingFeatures).some((feature) => feature)
+    ) {
+      listingTags.push({
+        title: t("listings.sections.accessibilityFeatures"),
+        variant: "warn",
+        icon: <HandRaisedIcon />,
+      })
+    }
   }
 
   return listingTags
@@ -149,7 +156,9 @@ export const MainDetails = ({
     listing,
     true,
     !showHomeType,
-    !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.disableAccessibilityFeaturesTag),
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitAccessibilityTypeTags),
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
   )
