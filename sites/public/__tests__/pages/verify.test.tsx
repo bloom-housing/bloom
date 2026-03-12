@@ -1,8 +1,9 @@
 import React from "react"
-import { render, screen, fireEvent, waitFor } from "@testing-library/react"
+import { fireEvent, waitFor } from "@testing-library/react"
 import { useRouter } from "next/router"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { Verify } from "../../src/pages/verify"
+import { render, screen, within } from "../testUtils"
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
@@ -101,9 +102,20 @@ describe("Verify Page Tests", () => {
       fireEvent.click(screen.getByRole("button", { name: /resend/i }))
 
       expect(await screen.findByRole("dialog")).toBeInTheDocument()
-      expect(screen.getByText("Resend code")).toBeInTheDocument()
-      expect(screen.getByRole("button", { name: /resend the code/i })).toBeInTheDocument()
-      expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument()
+      const dialog = await screen.findByRole("dialog")
+
+      const popupContainer = dialog.parentElement.parentElement
+
+      expect(
+        within(popupContainer).getByRole("heading", { name: "Resend code" })
+      ).toBeInTheDocument()
+      expect(
+        within(popupContainer).getByRole("heading", { name: "Resend code" })
+      ).toBeInTheDocument()
+      expect(
+        within(popupContainer).getByRole("button", { name: /resend the code/i })
+      ).toBeInTheDocument()
+      expect(within(popupContainer).getByRole("button", { name: /cancel/i })).toBeInTheDocument()
     })
 
     it("closes the dialog when clicking 'Cancel'", async () => {
