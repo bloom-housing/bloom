@@ -1,6 +1,12 @@
-import { cleanup } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import { renderToString } from "react-dom/server"
-import { UnitSummary, UnitTypeEnum, UnitGroupSummary } from "../../src/types/backend-swagger"
+import {
+  UnitSummary,
+  UnitTypeEnum,
+  UnitGroupSummary,
+  ReviewOrderTypeEnum,
+  UnitType,
+} from "../../src/types/backend-swagger"
 import {
   mergeSummaryRows,
   stackedUnitSummariesTable,
@@ -8,9 +14,9 @@ import {
   stackedUnitGroupsSummariesTable,
   getAvailabilityText,
   getStackedUnitTableData,
+  unitSummariesTable,
 } from "../../src/views/summaryTables"
-
-afterEach(cleanup)
+import { t } from "@bloom-housing/ui-components"
 
 // The backend won't accept null in the type, even though that's the data that is actually being generated, so I'm casting in order to test against realistic data
 const defaultUnitType = {
@@ -1004,6 +1010,170 @@ describe("getAvailabilityText", () => {
           },
         })
       )
+    })
+  })
+})
+
+describe("unitSummariesTable", () => {
+  const baseUnitSummary: UnitSummary = {
+    unitTypes: { name: UnitTypeEnum.oneBdrm, numBedrooms: 1 } as UnitType,
+    totalAvailable: 2,
+    minIncomeRange: { min: "$1,000", max: "$2,000" },
+    rentRange: { min: "$500", max: "$800" },
+    rentAsPercentIncomeRange: { min: null, max: null },
+  }
+  describe("unit type", () => {
+    it("renders the unit type name as a translated string", () => {
+      const rows = unitSummariesTable([baseUnitSummary], ReviewOrderTypeEnum.firstComeFirstServe)
+      render(rows[0].unitType.content)
+      expect(screen.getByText(t("listings.unitTypes.oneBdrm"))).toBeInTheDocument()
+    })
+  })
+
+  describe("minimum income", () => {
+    it("renders a single value when min and max income are equal", () => {
+      const samMinAndMax = {
+        ...baseUnitSummary,
+        minIncomeRange: { min: "$1,500", max: "$1,500" },
+      }
+      const rows = unitSummariesTable([samMinAndMax], ReviewOrderTypeEnum.firstComeFirstServe)
+      render(rows[0].minimumIncome.content)
+      expect(screen.getByText("$1,500 per month")).toBeInTheDocument()
+      expect(screen.queryByText("to")).not.toBeInTheDocument()
+    })
+
+    it("renders a range when min and max income differ", () => {
+      const rows = unitSummariesTable([baseUnitSummary], ReviewOrderTypeEnum.firstComeFirstServe)
+      const { container } = render(rows[0].minimumIncome.content)
+      expect(container.textContent).toBe("$1,000 to $2,000 per month")
+    })
+
+    it("should display n/a when min income is n/a", () => {
+      const summary = {
+        ...baseUnitSummary,
+        minIncomeRange: { min: "t.n/a", max: "t.n/a" },
+      }
+      const rows = unitSummariesTable([summary], ReviewOrderTypeEnum.firstComeFirstServe)
+      const { container } = render(rows[0].minimumIncome.content)
+      expect(container.textContent).toBe("n/a")
+    })
+  })
+
+  describe("rent", () => {
+    it("renders exact rent range when min is null", () => {
+      const rows = unitSummariesTable([baseUnitSummary], ReviewOrderTypeEnum.firstComeFirstServe)
+      const { container } = render(rows[0].rent.content)
+      expect(container.textContent).toBe("$500 to $800 per month")
+    })
+
+    it("renders single rent value when rentRange min equals max", () => {
+      const summary = {
+        ...baseUnitSummary,
+        rentRange: { min: "$600", max: "$600" },
+      }
+      const rows = unitSummariesTable([summary], ReviewOrderTypeEnum.firstComeFirstServe)
+      const { container } = render(rows[0].rent.content)
+      expect(container.textContent).toBe("$600 per month")
+    })
+
+    it("renders percent income rent when min is set", () => {
+      const summary = {
+        ...baseUnitSummary,
+        rentAsPercentIncomeRange: { min: 30, max: 50 },
+      }
+      const rows = unitSummariesTable([summary], ReviewOrderTypeEnum.firstComeFirstServe)
+      const { container } = render(rows[0].rent.content)
+      expect(container.textContent).toBe("30 to 50% Income")
+    })
+
+    it("renders single percent income value when min equals max", () => {
+      const summary = {
+        ...baseUnitSummary,
+        rentAsPercentIncomeRange: { min: 30, max: 30 },
+      }
+      const rows = unitSummariesTable([summary], ReviewOrderTypeEnum.firstComeFirstServe)
+      const { container } = render(rows[0].rent.content)
+      expect(container.textContent).toBe("30% Income")
+    })
+
+    it("should display n/a when min is 't.n/a'", () => {
+      const summary = {
+        ...baseUnitSummary,
+        rentRange: { min: "t.n/a", max: "t.n/a" },
+      }
+      const rows = unitSummariesTable([summary], ReviewOrderTypeEnum.firstComeFirstServe)
+      const { container } = render(rows[0].rent.content)
+      expect(container.textContent).toBe("n/a")
+    })
+
+    describe("availability", () => {
+      it("shows vacant unit count for firstComeFirstServe with units available", () => {
+        const rows = unitSummariesTable([baseUnitSummary], ReviewOrderTypeEnum.firstComeFirstServe)
+        const { container } = render(rows[0].availability.content)
+        expect(container.textContent).toBe("2 Vacant units")
+      })
+
+      it("uses singular 'vacantUnit' when totalAvailable is 1", () => {
+        const summary = { ...baseUnitSummary, totalAvailable: 1 }
+        const rows = unitSummariesTable([summary], ReviewOrderTypeEnum.firstComeFirstServe)
+        const { container } = render(rows[0].availability.content)
+        expect(container.textContent).toBe("1 Vacant unit")
+      })
+
+      it("shows 'waitlist open' for firstComeFirstServe when totalAvailable is 0", () => {
+        const summary = { ...baseUnitSummary, totalAvailable: 0 }
+        const rows = unitSummariesTable([summary], ReviewOrderTypeEnum.firstComeFirstServe)
+        const { container } = render(rows[0].availability.content)
+        expect(container.textContent).toBe("Open waitlist")
+      })
+
+      it("shows 'waitlist open' for waitlist review order", () => {
+        const rows = unitSummariesTable([baseUnitSummary], ReviewOrderTypeEnum.waitlist)
+        const { container } = render(rows[0].availability.content)
+        expect(container.textContent).toBe("Open waitlist")
+      })
+
+      it("shows 'waitlist open' for waitlistLottery review order", () => {
+        const rows = unitSummariesTable([baseUnitSummary], ReviewOrderTypeEnum.waitlistLottery)
+        const { container } = render(rows[0].availability.content)
+        expect(container.textContent).toBe("Open waitlist")
+      })
+
+      it("shows vacant units for lottery review order", () => {
+        const rows = unitSummariesTable([baseUnitSummary], ReviewOrderTypeEnum.lottery)
+        const { container } = render(rows[0].availability.content)
+        expect(container.textContent).toBe("2 Vacant units")
+      })
+    })
+
+    it("returns an empty array when summaries is empty", () => {
+      const rows = unitSummariesTable([], ReviewOrderTypeEnum.firstComeFirstServe)
+      expect(rows).toEqual([])
+    })
+
+    it("handles undefined summaries gracefully", () => {
+      const rows = unitSummariesTable(
+        undefined as unknown as UnitSummary[],
+        ReviewOrderTypeEnum.firstComeFirstServe
+      )
+      expect(rows).toBeUndefined()
+    })
+
+    it("maps multiple summaries and returns a row for each", () => {
+      const summaries = [
+        baseUnitSummary,
+        { ...baseUnitSummary, unitTypes: { name: UnitTypeEnum.twoBdrm } },
+      ]
+      const rows = unitSummariesTable(summaries, ReviewOrderTypeEnum.firstComeFirstServe)
+      expect(rows).toHaveLength(2)
+    })
+
+    it("each row has all four expected keys", () => {
+      const rows = unitSummariesTable([baseUnitSummary], ReviewOrderTypeEnum.firstComeFirstServe)
+      expect(rows[0]).toHaveProperty("unitType")
+      expect(rows[0]).toHaveProperty("minimumIncome")
+      expect(rows[0]).toHaveProperty("rent")
+      expect(rows[0]).toHaveProperty("availability")
     })
   })
 })
