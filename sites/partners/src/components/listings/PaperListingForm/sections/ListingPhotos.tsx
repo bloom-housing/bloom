@@ -16,12 +16,7 @@ import {
   ListingImage,
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import {
-  cloudinaryFileUploader,
-  fieldHasError,
-  fieldIsRequired,
-  getLabel,
-} from "../../../../lib/helpers"
+import { fileUploader, fieldHasError, fieldIsRequired, getLabel } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
@@ -355,16 +350,11 @@ const ListingPhotos = (props: ListingPhotosProps) => {
    Pass the file for the dropzone callback along to the uploader
    */
   const photoUploader = async (file: File) => {
-    if (process.env.cloudinaryCloudName) {
-      void (await cloudinaryFileUploader({
-        file,
-        setCloudinaryData: setLatestUpload,
-        setProgressValue,
-      }))
-    } else {
-      // TODO: Upload to AWS
-      alert("Cloudinary environment variables not set, must configure AWS")
-    }
+    void (await fileUploader({
+      file,
+      setFileUploadData: setLatestUpload,
+      setProgressValue,
+    }))
   }
 
   const saveEditedPhoto = (newDescription: string) => {

@@ -15,7 +15,7 @@ jest.mock("../../../../../src/lib/helpers", () => {
   const actual = jest.requireActual<typeof helpers>("../../../../../src/lib/helpers")
   return {
     ...actual,
-    cloudinaryFileUploader: jest.fn(),
+    fileUploader: jest.fn(),
   }
 })
 
@@ -419,14 +419,14 @@ describe("<ListingPhotos>", () => {
     })
 
     it("opens alt text drawer after uploading a new photo when enabled", async () => {
-      const mockCloudinaryUploader = helpers.cloudinaryFileUploader as jest.MockedFunction<
-        typeof helpers.cloudinaryFileUploader
+      const mockFileUploader = helpers.fileUploader as jest.MockedFunction<
+        typeof helpers.fileUploader
       >
-      mockCloudinaryUploader.mockImplementation(
+      mockFileUploader.mockImplementation(
         // eslint-disable-next-line @typescript-eslint/require-await
-        async ({ setCloudinaryData, setProgressValue }) => {
+        async ({ setFileUploadData, setProgressValue }) => {
           setProgressValue(100)
-          setCloudinaryData({ id: "new-file-id", url: "http://example.com/new-file" })
+          setFileUploadData({ id: "new-file-id", url: "http://example.com/new-file" })
         }
       )
 

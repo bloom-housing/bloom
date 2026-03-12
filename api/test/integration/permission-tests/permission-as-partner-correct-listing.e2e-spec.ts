@@ -86,6 +86,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let applicationFlaggedSetService: ApplicationFlaggedSetService;
   let cookies = '';
   let jurisdictionId = '';
@@ -108,6 +109,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     applicationFlaggedSetService =
       moduleFixture.get<ApplicationFlaggedSetService>(
         ApplicationFlaggedSetService,
