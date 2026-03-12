@@ -453,7 +453,11 @@ describe('Testing email service', () => {
 
     it('sends email for advocate and applicant when submitted by advocate', async () => {
       await service.applicationConfirmation(
-        listing,
+        {
+          ...listing,
+          reviewOrderType: ReviewOrderTypeEnum.waitlist,
+          applicationLotteryTotals: [],
+        },
         {
           ...application,
           language: LanguagesEnum.es,
@@ -467,6 +471,12 @@ describe('Testing email service', () => {
       const advocateEmail = sendMock.mock.calls[0][0];
       expect(advocateEmail.to).toEqual('advocate.email@example.com');
       expect(advocateEmail.body).toContain('We got your application for');
+      expect(advocateEmail.body).toContain(
+        'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents.',
+      );
+      expect(advocateEmail.body).toContain(
+        'You may be contacted while on the waitlist to confirm that you wish to remain on the waitlist.',
+      );
       expect(advocateEmail.body).toContain('Need to make updates?');
       expect(advocateEmail.body).toContain('See Listing');
 
@@ -478,6 +488,12 @@ describe('Testing email service', () => {
       expect(applicantEmail.body).toContain('<h2>Questions?</h2>');
       expect(applicantEmail.body).toContain(
         'If you have questions regarding this application, please contact the agent for this listing.',
+      );
+      expect(applicantEmail.body).toContain(
+        'If your client is contacted for an interview, they will be asked to fill out a more detailed application and provide supporting documents.',
+      );
+      expect(applicantEmail.body).toContain(
+        'Your client may be contacted while on the waitlist to confirm that they wish to remain on the waitlist.',
       );
     });
   });
