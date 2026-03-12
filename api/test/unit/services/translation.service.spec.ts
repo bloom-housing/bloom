@@ -85,6 +85,14 @@ const mockListing = (): Listing => {
       createdAt: new Date(),
       updatedAt: new Date(),
     },
+    property: {
+      id: 'property id 1',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      name: 'property 1',
+      description: 'untranslated property description',
+      urlTitle: 'untranslated property url title',
+    },
     listingNeighborhoodAmenities: {
       groceryStores: 'untranslated grocery stores',
       publicTransportation: 'untranslated public transportation',
@@ -153,6 +161,8 @@ const translatedStrings = [
   'translated multiselect opt out text',
   'translated community disclaimer title',
   'translated community disclaimer description',
+  'translated property description',
+  'translated property url title',
 ];
 
 describe('Testing translations service', () => {
@@ -378,6 +388,10 @@ const validateTranslatedFields = (listing: Listing) => {
   expect(listing.referralApplication.externalReference).toEqual(
     'translated external reference',
   );
+  expect(listing.property.description).toEqual(
+    'translated property description',
+  );
+  expect(listing.property.urlTitle).toEqual('translated property url title');
   expect(listing.listingNeighborhoodAmenities.groceryStores).toEqual(
     'translated grocery stores',
   );

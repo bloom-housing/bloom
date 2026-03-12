@@ -15,8 +15,7 @@ export const PropertyDetailsCard = ({
   linkUrl,
   propertyDescription,
 }: PropertyDetailsCardProps) => {
-  const hasLink = linkText && linkUrl
-  if (!hasLink && !propertyDescription) return null
+  if (!linkUrl && !propertyDescription) return null
 
   return (
     <Card
@@ -27,10 +26,10 @@ export const PropertyDetailsCard = ({
           {heading}
         </Heading>
         {propertyDescription && <div className="seeds-m-bs-2">{propertyDescription}</div>}
-        {hasLink && (
+        {linkUrl && (
           <p className="seeds-m-bs-text">
             <Link href={linkUrl} hideExternalLinkIcon={true}>
-              {linkText}
+              {linkText || linkUrl}
             </Link>
           </p>
         )}
