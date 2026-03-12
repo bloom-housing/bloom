@@ -63,22 +63,13 @@ describe("Verify Page Tests", () => {
       expect(screen.getByText("Didn't receive your code?")).toBeInTheDocument()
       expect(screen.getByRole("button", { name: /resend/i })).toBeInTheDocument()
       expect(screen.getByRole("button", { name: /continue/i })).toBeInTheDocument()
-    })
-
-    it("renders the login flow alert message containing the email address", () => {
-      renderVerifyPage("login")
       expect(
         screen.getByText(/if there is an account made with admin@example\.com/i)
       ).toBeInTheDocument()
-    })
-
-    it("renders the 'Sign in with your password' button only for the login flow", () => {
-      renderVerifyPage("login")
       expect(
         screen.getByRole("button", { name: /sign in with your password/i })
       ).toBeInTheDocument()
     })
-
     it("does not render the 'Sign in with your password' button for the create flow", () => {
       renderVerifyPage("create")
       expect(
@@ -89,7 +80,9 @@ describe("Verify Page Tests", () => {
     it("renders the create flow alert message containing the email address", () => {
       renderVerifyPage("create")
       expect(
-        screen.getByText(/we sent a code to admin@example\.com to finish signing up/i)
+        screen.getByText(
+          /we sent a code to admin@example\.com to finish signing up. Be aware, the code will expire in 10 minutes/i
+        )
       ).toBeInTheDocument()
     })
 
