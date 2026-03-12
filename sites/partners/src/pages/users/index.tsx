@@ -150,10 +150,7 @@ const Users = () => {
         <title>{`Users - ${t("nav.siteTitlePartners")}`}</title>
       </Head>
       <NavigationHeader className="relative" title={t("nav.users")} />
-      <TabView
-        hideTabs={!enableHousingAdvocate}
-        tabs={getUsersTabs(UsersIndexEnum.partners, router)}
-      >
+      <TabView hideTabs={!enableHousingAdvocate} tabs={getUsersTabs(UsersIndexEnum.partners)}>
         <section>
           <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
             {errorAlert && (

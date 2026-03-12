@@ -1506,6 +1506,8 @@ export class ApplicationsService {
       filterType?: ApplicationsFilterEnum
       /**  */
       includeLotteryApps?: boolean
+      /**  */
+      applicantNameSearch?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PublicAppsViewResponse> {
@@ -1519,6 +1521,7 @@ export class ApplicationsService {
         userId: params["userId"],
         filterType: params["filterType"],
         includeLotteryApps: params["includeLotteryApps"],
+        applicantNameSearch: params["applicantNameSearch"],
       }
 
       /** 适配ios13，get请求不允许带body */
@@ -1798,6 +1801,22 @@ export class AssetsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Create a S3 file upload URL
+   */
+  createS3UploadUrl(options: IRequestOptions = {}): Promise<CreateS3UploadUrl> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/assets/s3-upload-url"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class UserService {
@@ -1881,6 +1900,20 @@ export class UserService {
   listAsCsv(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/user/csv"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * List advocate users in CSV
+   */
+  listAdvocatesAsCsv(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate/csv"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
@@ -2040,6 +2073,28 @@ export class UserService {
       let url = basePath + "/user/advocate"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Accept or decline advocate user request
+   */
+  approveAdvocate(
+    params: {
+      /** requestBody */
+      body?: AdvocateUserAccept
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate/approve"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
       let data = params.body
 
@@ -8696,6 +8751,17 @@ export interface CreatePresignedUploadMetadataResponse {
   signature: string
 }
 
+export interface CreateS3UploadUrl {
+  /**  */
+  fileId: string
+
+  /**  */
+  uploadUrl: string
+
+  /**  */
+  publicUrl: string
+}
+
 export interface EmailAndAppUrl {
   /**  */
   email: string
@@ -8804,9 +8870,6 @@ export interface PublicUserCreate {
   additionalPhoneExtension?: string
 
   /**  */
-  isAdvocate?: boolean
-
-  /**  */
   isApproved?: boolean
 
   /**  */
@@ -8911,9 +8974,6 @@ export interface PartnerUserCreate {
   additionalPhoneExtension?: string
 
   /**  */
-  isAdvocate?: boolean
-
-  /**  */
   isApproved?: boolean
 
   /**  */
@@ -8983,9 +9043,6 @@ export interface AdvocateUserCreate {
 
   /**  */
   favoriteListings?: IdDTO[]
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   isApproved?: boolean
@@ -9084,9 +9141,6 @@ export interface PublicUserUpdate {
 
   /**  */
   additionalPhoneExtension?: string
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   isApproved?: boolean
@@ -9196,9 +9250,6 @@ export interface PartnerUserUpdate {
   additionalPhoneExtension?: string
 
   /**  */
-  isAdvocate?: boolean
-
-  /**  */
   isApproved?: boolean
 
   /**  */
@@ -9300,9 +9351,6 @@ export interface AdvocateUserUpdate {
   additionalPhoneExtension?: string
 
   /**  */
-  isAdvocate?: boolean
-
-  /**  */
   isApproved?: boolean
 
   /**  */
@@ -9328,6 +9376,14 @@ export interface AdvocateUserUpdate {
 
   /**  */
   jurisdictions?: IdDTO[]
+}
+
+export interface AdvocateUserAccept {
+  /**  */
+  advocateId: IdDTO
+
+  /**  */
+  isAccepted: boolean
 }
 
 export interface User {
@@ -9429,9 +9485,6 @@ export interface User {
 
   /**  */
   additionalPhoneExtension?: string
-
-  /**  */
-  isAdvocate?: boolean
 
   /**  */
   isApproved?: boolean

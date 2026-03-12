@@ -58,6 +58,7 @@ import { PartnerUserCreate } from '../dtos/users/partner-user-create.dto';
 import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
 import { SnapshotCreateService } from './snapshot-create.service';
 import { toAddHelper, toRemoveHelper } from '../utilities/snapshot-helpers';
+import { AdvocateUserAccept } from 'src/dtos/users/advocate-user-accept.dto';
 
 /*
   this is the service for users
@@ -483,14 +484,29 @@ export class UserService {
       });
 
       if (forPublic) {
+        let jurisdictionNameForEmail: string | null = null;
+        if (storedUser?.jurisdictions?.length) {
+          jurisdictionNameForEmail = storedUser.jurisdictions[0].name;
+        }
+
+        if (!jurisdictionNameForEmail) {
+          const jurisdiction = await this.prisma.jurisdictions.findFirst({
+            select: {
+              name: true,
+            },
+            where: {
+              publicUrl: dto.appUrl,
+            },
+          });
+          jurisdictionNameForEmail = jurisdiction?.name;
+        }
+
         const confirmationUrl = this.getPublicConfirmationUrl(
           dto.appUrl,
           confirmationToken,
         );
         await this.emailService.welcome(
-          storedUser.jurisdictions && storedUser.jurisdictions.length
-            ? storedUser.jurisdictions[0].name
-            : null,
+          jurisdictionNameForEmail,
           storedUser as unknown as User,
           dto.appUrl,
           confirmationUrl,
@@ -523,6 +539,8 @@ export class UserService {
       UserViews.full,
     );
 
+    let matchedPublicJurisdictionId: string | undefined;
+
     const isPartnerPortalUser =
       storedUser.userRoles?.isAdmin ||
       storedUser.userRoles?.isJurisdictionalAdmin ||
@@ -542,6 +560,7 @@ export class UserService {
             publicUrl: dto.appUrl,
           },
         });
+        matchedPublicJurisdictionId = juris?.id;
         return !!juris;
       }
     };
@@ -561,8 +580,19 @@ export class UserService {
         id: storedUser.id,
       },
     });
+
+    let jurisdictionsForEmail = storedUser.jurisdictions?.map((juris) => ({
+      id: juris.id,
+    })) as IdDTO[];
+    if (!jurisdictionsForEmail?.length && matchedPublicJurisdictionId) {
+      jurisdictionsForEmail = [{ id: matchedPublicJurisdictionId }] as IdDTO[];
+    }
+    if (!jurisdictionsForEmail?.length) {
+      jurisdictionsForEmail = [];
+    }
+
     await this.emailService.forgotPassword(
-      storedUser.jurisdictions,
+      jurisdictionsForEmail,
       mapTo(User, storedUser),
       dto.appUrl,
       resetToken,
@@ -736,6 +766,22 @@ export class UserService {
   ): Promise<User> {
     const jurisdictionName = (req.headers['jurisdictionname'] as string) || '';
 
+    let jurisdictionsToConnect = dto.jurisdictions;
+    if (!jurisdictionsToConnect?.length && jurisdictionName) {
+      const jurisdiction = await this.prisma.jurisdictions.findFirst({
+        select: {
+          id: true,
+        },
+        where: {
+          name: jurisdictionName,
+        },
+      });
+
+      if (jurisdiction) {
+        jurisdictionsToConnect = [{ id: jurisdiction.id }];
+      }
+    }
+
     if (
       this.containsInvalidCharacters(dto.firstName) ||
       (dto.middleName && this.containsInvalidCharacters(dto.middleName)) ||
@@ -763,9 +809,9 @@ export class UserService {
         middleName: dto.middleName,
         lastName: dto.lastName,
         dob: dto.dob,
-        jurisdictions: dto.jurisdictions
+        jurisdictions: jurisdictionsToConnect
           ? {
-              connect: dto.jurisdictions.map((juris) => ({
+              connect: jurisdictionsToConnect.map((juris) => ({
                 id: juris.id,
               })),
             }
@@ -920,6 +966,22 @@ export class UserService {
   ) {
     const jurisdictionName = (req.headers['jurisdictionname'] as string) || '';
 
+    let jurisdictionsToConnect = dto.jurisdictions;
+    if (!jurisdictionsToConnect?.length && jurisdictionName) {
+      const jurisdiction = await this.prisma.jurisdictions.findFirst({
+        select: {
+          id: true,
+        },
+        where: {
+          name: jurisdictionName,
+        },
+      });
+
+      if (jurisdiction) {
+        jurisdictionsToConnect = [{ id: jurisdiction.id }];
+      }
+    }
+
     if (
       this.containsInvalidCharacters(dto.firstName) ||
       (dto.middleName && this.containsInvalidCharacters(dto.middleName)) ||
@@ -954,11 +1016,9 @@ export class UserService {
           },
         },
         isAdvocate: true,
-        jurisdictions: dto.jurisdictions
+        jurisdictions: jurisdictionsToConnect
           ? {
-              connect: dto.jurisdictions.map((juris) => ({
-                id: juris.id,
-              })),
+              connect: jurisdictionsToConnect,
             }
           : undefined,
         listings: dto.listings
@@ -1011,6 +1071,69 @@ export class UserService {
     await this.connectUserWithExistingApplications(newUser.email, newUser.id);
 
     return mapTo(User, newUser);
+  }
+
+  async acceptAdvocateUser(
+    dto: AdvocateUserAccept,
+    req: Request,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+
+    if (!requestingUser?.userRoles || !requestingUser.userRoles?.isAdmin) {
+      throw new ForbiddenException(
+        'Accepting advocates is only allowed for admin users',
+      );
+    }
+
+    const targetUser = await this.prisma.userAccounts.findFirst({
+      where: {
+        id: dto.advocateId.id,
+      },
+      include: {
+        jurisdictions: true,
+      },
+    });
+
+    if (!targetUser) {
+      throw new NotFoundException(
+        `User with id: ${dto.advocateId.id} was not found`,
+      );
+    }
+
+    // Make sure that the found user is an advocate
+    if (!targetUser.isAdvocate) {
+      throw new BadRequestException(
+        `The user with id ${dto.advocateId.id} is not an advocate`,
+      );
+    }
+
+    await this.prisma.userAccounts.update({
+      data: {
+        isApproved: dto.isAccepted,
+      },
+      where: {
+        id: targetUser.id,
+      },
+    });
+
+    const appUrl =
+      targetUser.jurisdictions && targetUser.jurisdictions.length
+        ? targetUser.jurisdictions[0].publicUrl
+        : null;
+
+    if (dto.isAccepted) {
+      this.emailService.advocateAccepted(
+        mapTo(User, targetUser),
+        appUrl,
+        appUrl, // TODO: Update this path for the advocate creation followup form when ready
+      );
+    } else {
+      this.emailService.advocateRejected(mapTo(User, targetUser), appUrl);
+    }
+
+    return {
+      success: true,
+    };
   }
 
   /*
@@ -1084,7 +1207,7 @@ export class UserService {
   ): Promise<void> {
     if (!requestingUser) {
       throw new UnauthorizedException(
-        `User attempted ${action} wihtout being signed in`,
+        `User attempted ${action} without being signed in`,
       );
     }
 
@@ -1330,6 +1453,12 @@ export class UserService {
         await this.applicationService.removePII(application.id);
       }
     }
+
+    await this.prisma.userAccountSnapshot.deleteMany({
+      where: {
+        originalId: user.id,
+      },
+    });
 
     if (user.userRoles) {
       await this.prisma.userRoles.delete({

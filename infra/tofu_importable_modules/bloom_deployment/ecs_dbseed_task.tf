@@ -1,13 +1,14 @@
 locals {
   dbseed_env_vars = {
-    PORT                        = "3100"
-    NODE_ENV                    = "production"
-    DB_HOST                     = aws_db_instance.bloom.address
-    DB_PORT                     = "5432"
-    DB_USER                     = "bloom_api"
-    DB_DATABASE                 = "bloom_prisma"
-    DB_USE_RDS_IAM_AUTH         = "1"
-    DBSEED_PUBLIC_SITE_BASE_URL = "https://${var.domain_name}"
+    PORT                                      = "3100"
+    NODE_ENV                                  = "production"
+    DB_HOST                                   = aws_db_instance.bloom.address
+    DB_PORT                                   = "5432"
+    DB_USER                                   = "bloom_api"
+    DB_DATABASE                               = "bloom_prisma"
+    DB_USE_RDS_IAM_AUTH                       = "1"
+    DBSEED_PUBLIC_SITE_BASE_URL               = "https://${var.domain_name}"
+    DBSEED_USE_FULL_CLOUDINARY_URL_AS_FILE_ID = "1"
   }
 }
 

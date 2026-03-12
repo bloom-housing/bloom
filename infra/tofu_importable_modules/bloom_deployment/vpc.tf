@@ -249,7 +249,7 @@ locals {
       }
       egress = {
         privatelink_services = [
-          "secretsmanager", # to read JWT signing key.
+          "secretsmanager", # to read JWT signing key and Google Translate key.
           "rds",            # to generate an auth token for bloom_api DB user.
         ]
         nat             = true # to download container image from GitHub.
@@ -263,8 +263,8 @@ locals {
         port        = 3001
       }
       egress = {
-        privatelink_services = []
-        nat                  = true # to download container image from GitHub.
+        privatelink_services = ["secretsmanager"] # to read Mapbox API key.
+        nat                  = true               # to download container image from GitHub.
         security_groups      = ["api"]
       }
     }
@@ -275,8 +275,8 @@ locals {
         port        = 3000
       }
       egress = {
-        privatelink_services = []
-        nat                  = true # to download container image from GitHub.
+        privatelink_services = ["secretsmanager"] # to read Mapbox API key.
+        nat                  = true               # to download container image from GitHub.
         security_groups      = ["api"]
       }
     }

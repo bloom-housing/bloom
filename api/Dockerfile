@@ -45,6 +45,9 @@ COPY --from=build /build/prisma/schema.prisma ./prisma/schema.prisma
 COPY --from=build /build/prisma/migrations ./prisma/migrations
 COPY --from=build /build/node_modules/.prisma ./node_modules/.prisma
 
+# Make sure directory for csv exports exists.
+WORKDIR /bloom_api/src/temp
+
 # Create a non-root user to run (principle of least privilege).
 WORKDIR /bloom_api
 RUN groupadd --gid 2002 bloom_api && useradd --gid 2002 --uid 2002 --home /bloom_api bloom_api

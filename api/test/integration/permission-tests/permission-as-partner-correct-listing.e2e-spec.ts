@@ -40,6 +40,7 @@ import { EmailAndAppUrl } from '../../../src/dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../../../src/dtos/users/confirmation-request.dto';
 import { UserService } from '../../../src/services/user.service';
 import { EmailService } from '../../../src/services/email.service';
+import { CronJobService } from '../../../src/services/cron-job.service';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 import { AfsResolve } from '../../../src/dtos/application-flagged-sets/afs-resolve.dto';
 import {
@@ -76,10 +77,16 @@ const testEmailService = {
   lotteryPublishedApplicant: jest.fn(),
 };
 
+const testCronJobService = {
+  startCronJob: jest.fn().mockResolvedValue(undefined),
+  markCronJobAsStarted: jest.fn().mockResolvedValue(undefined),
+};
+
 describe('Testing Permissioning of endpoints as partner with correct listing', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let applicationFlaggedSetService: ApplicationFlaggedSetService;
   let cookies = '';
   let jurisdictionId = '';
@@ -95,11 +102,14 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
+      .overrideProvider(CronJobService)
+      .useValue(testCronJobService)
       .compile();
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     applicationFlaggedSetService =
       moduleFixture.get<ApplicationFlaggedSetService>(
         ApplicationFlaggedSetService,
