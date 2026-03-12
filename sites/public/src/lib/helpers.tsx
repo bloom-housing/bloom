@@ -168,7 +168,7 @@ export const getStatusPrefix = (
     listing.status === ListingsStatusEnum.closed ||
     (listing.applicationDueDate && dayjs() > dayjs(listing.applicationDueDate))
   ) {
-    return { label: t("listings.applicationsClosed"), variant: "secondary-inverse" }
+    return { label: t("listings.applicationsClosed"), variant: "secondary" }
   }
   if (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
     return { label: t("listings.underConstruction"), variant: "warn" }
@@ -295,7 +295,7 @@ export const getListingStatusMessage = (
       className={classNames.join(" ")}
       customIcon={
         <Icon size="md" className={styles["primary-color-icon"]}>
-          {prefix?.variant === "secondary-inverse" ? <LockClosedIcon /> : <InfoIcon />}
+          {listing.status === ListingsStatusEnum.closed ? <LockClosedIcon /> : <InfoIcon />}
         </Icon>
       }
       variant={prefix?.variant}
