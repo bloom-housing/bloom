@@ -1363,7 +1363,7 @@ export class ApplicationService {
 
     const mappedListing = mapTo(Listing, listing);
     //TODO: This contact email is a placeholder and must be updated per jurisdiction
-    const contactEmail = 'https://www.exygy.com';
+    const contactEmail = 'email@email.com';
 
     await this.emailService.applicationUpdateEmail(
       mappedListing,
