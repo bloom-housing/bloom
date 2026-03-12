@@ -298,6 +298,9 @@ Cypress.Commands.add("step6HouseholdSize", (application, autofill) => {
 })
 
 Cypress.Commands.add("step7AddHouseholdMembers", (application, autofill) => {
+  cy.contains(
+    "Before adding other people, make sure that they aren't named on any other application for this listing"
+  ).should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
