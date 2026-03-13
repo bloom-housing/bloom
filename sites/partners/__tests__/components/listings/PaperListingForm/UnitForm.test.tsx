@@ -69,10 +69,10 @@ describe("UnitForm", () => {
     expect(screen.getByRole("textbox", { name: "Unit number" })).toBeInTheDocument()
 
     // Unit type dropdown selector
-    const unitTypeSelector = screen.getByRole("combobox", { name: "Unit type" })
+    const unitTypeSelector = screen.getByRole("combobox", { name: /unit type/i })
     expect(unitTypeSelector).toBeInTheDocument()
     expect(within(unitTypeSelector).getAllByRole("option")).toHaveLength(8)
-    expect(within(unitTypeSelector).getByRole("option", { name: "Unit type" })).toBeInTheDocument()
+    expect(within(unitTypeSelector).getByRole("option", { name: /unit type/i })).toBeInTheDocument()
     expect(within(unitTypeSelector).getByRole("option", { name: "Studio" })).toBeInTheDocument()
     expect(within(unitTypeSelector).getByRole("option", { name: "SRO" })).toBeInTheDocument()
     expect(
@@ -153,15 +153,15 @@ describe("UnitForm", () => {
 
     expect(screen.getByRole("heading", { name: "Eligibility", level: 2 })).toBeInTheDocument()
 
-    const amiChartSelector = screen.getByRole("combobox", { name: "AMI chart" })
+    const amiChartSelector = screen.getByRole("combobox", { name: /ami chart/i })
     expect(amiChartSelector).toBeInTheDocument()
     expect(within(amiChartSelector).getAllByRole("option")).toHaveLength(3)
-    expect(within(amiChartSelector).getByRole("option", { name: "AMI chart" })).toBeInTheDocument()
+    expect(within(amiChartSelector).getByRole("option", { name: /ami chart/i })).toBeInTheDocument()
     // These values are populated by the amiCharts api call
     expect(within(amiChartSelector).getByRole("option", { name: "Mock AMI" })).toBeInTheDocument()
     expect(within(amiChartSelector).getByRole("option", { name: "Mock AMI 2" })).toBeInTheDocument()
 
-    const amiChartPercentageSelector = screen.getByRole("combobox", { name: "Percentage of AMI" })
+    const amiChartPercentageSelector = screen.getByRole("combobox", { name: /percentage of ami/i })
     // Selector is disabled and No options are available until a chart is selected
     expect(amiChartPercentageSelector).toBeDisabled()
     expect(within(amiChartPercentageSelector).getAllByRole("option")).toHaveLength(1)
@@ -226,15 +226,15 @@ describe("UnitForm", () => {
     // Wait for API calls to finish
     await screen.findByRole("option", { name: "Mock AMI" })
 
-    const amiChartSelector = screen.getByRole("combobox", { name: "AMI chart" })
+    const amiChartSelector = screen.getByRole("combobox", { name: /ami chart/i })
     expect(amiChartSelector).toBeInTheDocument()
     expect(within(amiChartSelector).getAllByRole("option")).toHaveLength(3)
-    expect(within(amiChartSelector).getByRole("option", { name: "AMI chart" })).toBeInTheDocument()
+    expect(within(amiChartSelector).getByRole("option", { name: /ami chart/i })).toBeInTheDocument()
     // These values are populated by the amiCharts api call
     expect(within(amiChartSelector).getByRole("option", { name: "Mock AMI" })).toBeInTheDocument()
     expect(within(amiChartSelector).getByRole("option", { name: "Mock AMI 2" })).toBeInTheDocument()
 
-    const amiChartPercentageSelector = screen.getByRole("combobox", { name: "Percentage of AMI" })
+    const amiChartPercentageSelector = screen.getByRole("combobox", { name: /percentage of ami/i })
     // Selector is disabled and No options are available until a chart is selected
     expect(amiChartPercentageSelector).toBeDisabled()
     expect(within(amiChartPercentageSelector).getAllByRole("option")).toHaveLength(1)
@@ -244,7 +244,7 @@ describe("UnitForm", () => {
     await screen.findByRole("option", { name: "30" })
 
     const newAmiChartPercentageSelector = screen.getByRole("combobox", {
-      name: "Percentage of AMI",
+      name: /percentage of ami/i,
     })
     // Selector is now enabled and has valued
     expect(newAmiChartPercentageSelector).not.toBeDisabled()
