@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import Markdown from "markdown-to-jsx"
 import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   Address,
@@ -13,6 +12,7 @@ import {
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import { downloadExternalPDF } from "../../lib/helpers"
+import LazyMarkdown from "../core/LazyMarkdown"
 export interface PaperApplication {
   fileURL: string
   languageString: string
@@ -145,10 +145,9 @@ const GetApplication = (props: ApplicationsProps) => {
                 {props.strings?.officeHoursHeading ?? t("leasingAgent.officeHours")}
               </Heading>
               <p className="text-gray-800 text-sm markdown">
-                <Markdown
-                  children={props.applicationPickUpAddressOfficeHours}
-                  options={{ disableParsingRawHTML: true }}
-                />
+                <LazyMarkdown options={{ disableParsingRawHTML: true }}>
+                  {props.applicationPickUpAddressOfficeHours}
+                </LazyMarkdown>
               </p>
             </>
           )}

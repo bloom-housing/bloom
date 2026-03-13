@@ -17,7 +17,7 @@ import {
   ApplicationListingCard,
 } from "../../../../components/account/ApplicationCards"
 import styles from "../../../../../styles/lottery-results.module.scss"
-import Markdown from "markdown-to-jsx"
+import LazyMarkdown from "../../../../components/core/LazyMarkdown"
 
 const LotteryResults = () => {
   const router = useRouter()
@@ -179,11 +179,11 @@ const LotteryResults = () => {
                       <Heading priority={3} size={"xl"} className={`${styles["section-heading"]}`}>
                         {t("account.application.lottery.preferencesHeader")}
                       </Heading>
-                      <Markdown>
+                      <LazyMarkdown>
                         {t("account.application.lottery.preferences", {
                           closedListingPageLink: `/listing/${listing?.id}`,
                         })}
-                      </Markdown>
+                      </LazyMarkdown>
                     </div>
                     <div>
                       <Button

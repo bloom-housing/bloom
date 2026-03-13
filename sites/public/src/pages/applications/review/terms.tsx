@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import Markdown from "markdown-to-jsx"
 import { t, FieldGroup, Form, AlertBox } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -29,6 +28,7 @@ import {
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 import { Button } from "@bloom-housing/ui-seeds"
+import LazyMarkdown from "../../../components/core/LazyMarkdown"
 
 const ApplicationTerms = () => {
   const router = useRouter()
@@ -180,17 +180,17 @@ const ApplicationTerms = () => {
             <div className="markdown">
               {listing?.applicationDueDate && (
                 <>
-                  <Markdown options={{ disableParsingRawHTML: true }}>
+                  <LazyMarkdown options={{ disableParsingRawHTML: true }}>
                     {t("application.review.terms.textSubmissionDate", {
                       applicationDueDate: applicationDueDate,
                     })}
-                  </Markdown>
+                  </LazyMarkdown>
                   <br />
                   <br />
                 </>
               )}
 
-              <Markdown
+              <LazyMarkdown
                 options={{
                   disableParsingRawHTML: true,
                   overrides: {
@@ -205,7 +205,7 @@ const ApplicationTerms = () => {
                 }}
               >
                 {content.text}
-              </Markdown>
+              </LazyMarkdown>
 
               <div className="mt-6">
                 <FieldGroup
