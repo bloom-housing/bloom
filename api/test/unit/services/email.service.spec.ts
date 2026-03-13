@@ -249,6 +249,11 @@ describe('Testing email service', () => {
         lastName: 'last',
         emailAddress: 'applicant.email@example.com',
       },
+      alternateContact: {
+        firstName: 'Housing',
+        lastName: 'Advocate',
+        emailAddress: 'advocate.email@example.com',
+      },
     } as Application;
     it('Test first come first serve', async () => {
       await service.applicationConfirmation(
@@ -444,6 +449,52 @@ describe('Testing email service', () => {
 
       expect(emailHtml).not.toContain('<h3>Property Manager</h3>');
       expect(emailHtml).not.toContain('<h3>Office Hours:</h3>');
+    });
+
+    it('sends email for advocate and applicant when submitted by advocate', async () => {
+      await service.applicationConfirmation(
+        {
+          ...listing,
+          reviewOrderType: ReviewOrderTypeEnum.waitlist,
+          applicationLotteryTotals: [],
+        },
+        {
+          ...application,
+          language: LanguagesEnum.es,
+        } as ApplicationCreate,
+        'http://localhost:3001',
+        true,
+      );
+
+      expect(sendMock).toHaveBeenCalledTimes(2);
+
+      const advocateEmail = sendMock.mock.calls[0][0];
+      expect(advocateEmail.to).toEqual('advocate.email@example.com');
+      expect(advocateEmail.body).toContain('We got your application for');
+      expect(advocateEmail.body).toContain(
+        'If your client is contacted for an interview, they will be asked to fill out a more detailed application and provide supporting documents.',
+      );
+      expect(advocateEmail.body).toContain(
+        'Your client may be contacted while on the waitlist to confirm that they wish to remain on the waitlist.',
+      );
+      expect(advocateEmail.body).toContain('Need to make updates?');
+      expect(advocateEmail.body).toContain('See Listing');
+
+      const applicantEmail = sendMock.mock.calls[1][0];
+      expect(applicantEmail.to).toEqual('applicant.email@example.com');
+      expect(applicantEmail.body).toContain(
+        'We received an application on your behalf for',
+      );
+      expect(applicantEmail.body).toContain('<h2>Questions?</h2>');
+      expect(applicantEmail.body).toContain(
+        'If you have questions regarding this application, please contact the agent for this listing.',
+      );
+      expect(applicantEmail.body).toContain(
+        'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents.',
+      );
+      expect(applicantEmail.body).toContain(
+        'You may be contacted while on the waitlist to confirm that you wish to remain on the waitlist.',
+      );
     });
   });
 
