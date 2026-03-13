@@ -1,6 +1,6 @@
 import React, { useContext, useMemo, useState } from "react"
 import Head from "next/head"
-import { AgTable, Order, t, useAgTable } from "@bloom-housing/ui-components"
+import { AgTable, t, useAgTable } from "@bloom-housing/ui-components"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   Agency,
@@ -72,6 +72,7 @@ const Advocates = () => {
               <div className="flex justify-center gap-2">
                 <button
                   className="text-success"
+                  data-testid="advocate-accept"
                   onClick={() => {
                     setDialogConfig("accept")
                     setSelectedUser(data)
@@ -84,6 +85,7 @@ const Advocates = () => {
                 </button>
                 <button
                   className="text-alert"
+                  data-testid="advocate-reject"
                   onClick={() => {
                     setDialogConfig("reject")
                     setSelectedUser(data)
@@ -125,9 +127,9 @@ const Advocates = () => {
   }
 
   const handleDialogClick = async (approved: boolean) => {
-    const userName = [selectedUser.firstName, selectedUser.middleName, selectedUser.lastName].join(
-      " "
-    )
+    const userName = [selectedUser.firstName, selectedUser.middleName, selectedUser.lastName]
+      .filter((entry) => entry)
+      .join(" ")
     await approveAdvocateUser(selectedUser.id, approved)
     await mutate(cacheKey)
     setDialogConfig(null)
@@ -217,7 +219,9 @@ const Advocates = () => {
                   selectedUser?.firstName,
                   selectedUser?.middleName,
                   selectedUser?.lastName,
-                ].join(" "),
+                ]
+                  .filter((entry) => entry)
+                  .join(" "),
               })}
             </Dialog.Content>
             <DialogFooter>
@@ -238,7 +242,9 @@ const Advocates = () => {
                   selectedUser?.firstName,
                   selectedUser?.middleName,
                   selectedUser?.lastName,
-                ].join(" "),
+                ]
+                  .filter((entry) => entry)
+                  .join(" "),
               })}
             </Dialog.Content>
             <DialogFooter>
