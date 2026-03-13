@@ -1,0 +1,21 @@
+.listing-status-bar {
+  border: 1px solid var(--seeds-border-color);
+  background-color: var(--seeds-bg-color-surface);
+  .status-bar-inner {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 1rem auto;
+    justify-content: flex-end;
+    padding-inline: var(--seeds-s5);
+    align-items: center;
+    margin-block: var(--seeds-s3);
+    max-width: var(--seeds-screen-xl);
+    .status-bar-content {
+      @media (--md-and-up) {
+        width: calc(3 / 12 * 100%);
+        padding-left: var(--seeds-s6);
+      }
+    }
+  }
+}

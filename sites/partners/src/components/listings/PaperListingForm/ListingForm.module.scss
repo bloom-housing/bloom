@@ -97,3 +97,10 @@
   --grid-gap: 0;
   --grid-gap-lg: 0;
 }
+
+.listing-form-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background-color: var(--seeds-bg-color-canvas);
+}
