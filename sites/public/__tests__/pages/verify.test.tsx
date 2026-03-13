@@ -104,18 +104,18 @@ describe("Verify Page Tests", () => {
       expect(await screen.findByRole("dialog")).toBeInTheDocument()
       const dialog = await screen.findByRole("dialog")
 
-      const popupContainer = dialog.parentElement.parentElement
+      const dialogContainer = dialog.parentElement
 
       expect(
-        within(popupContainer).getByRole("heading", { name: "Resend code" })
+        within(dialogContainer).getByRole("heading", { name: "Resend code" })
       ).toBeInTheDocument()
       expect(
-        within(popupContainer).getByRole("heading", { name: "Resend code" })
+        within(dialogContainer).getByRole("heading", { name: "Resend code" })
       ).toBeInTheDocument()
       expect(
-        within(popupContainer).getByRole("button", { name: /resend the code/i })
+        within(dialogContainer).getByRole("button", { name: /resend the code/i })
       ).toBeInTheDocument()
-      expect(within(popupContainer).getByRole("button", { name: /cancel/i })).toBeInTheDocument()
+      expect(within(dialogContainer).getByRole("button", { name: /cancel/i })).toBeInTheDocument()
     })
 
     it("closes the dialog when clicking 'Cancel'", async () => {
@@ -146,7 +146,9 @@ describe("Verify Page Tests", () => {
       })
 
       expect(
-        screen.getByText(/a new code has been sent to admin@example\.com/i)
+        screen.getByText(
+          /A new code has been sent to admin@example\.com. Be aware, the code will expire in 10 minutes./i
+        )
       ).toBeInTheDocument()
     })
   })
