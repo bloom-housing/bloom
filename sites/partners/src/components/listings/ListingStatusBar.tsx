@@ -1,6 +1,7 @@
 import React from "react"
 import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { getListingStatusTag } from "./helpers"
+import styles from "./ListingStatusBar.module.scss"
 
 export interface ListingStatusBarProps {
   className?: string
@@ -9,9 +10,9 @@ export interface ListingStatusBarProps {
 
 const ListingStatusBar = ({ className, status }: ListingStatusBarProps) => {
   return (
-    <section className={`border-t bg-white flex-none ${className ?? ""}`}>
-      <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-end px-5 items-center my-3">
-        <div className="status-bar__status md:pl-6 md:w-3/12">{getListingStatusTag(status)}</div>
+    <section className={`${styles["listing-status-bar"]} ${className ? className : ""}`}>
+      <div className={styles["status-bar-inner"]}>
+        <div className={styles["status-bar-content"]}>{getListingStatusTag(status)}</div>
       </div>
     </section>
   )

@@ -3,8 +3,8 @@ import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import { CharacterCount as CharacterCountExtension } from "@tiptap/extension-character-count"
 import { useEditor } from "@tiptap/react"
-import { t, Form, AlertBox, LoadingOverlay } from "@bloom-housing/ui-components"
-import { Button, Icon, Tabs } from "@bloom-housing/ui-seeds"
+import { t, Form, AlertBox } from "@bloom-housing/ui-components"
+import { Button, Icon, LoadingState, Tabs } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
 import {
@@ -205,7 +205,7 @@ const ListingForm = ({
     immediatelyRender: true,
   })
 
-  const { data: properties } = usePropertiesList({
+  const { data: properties, loading: propertiesLoading } = usePropertiesList({
     page: null,
     limit: null,
     jurisdictions: jurisdictionId,
@@ -530,14 +530,14 @@ const ListingForm = ({
       enableUnitGroups,
     ]
   )
-  return loading === true ? null : (
-    <>
-      <LoadingOverlay isLoading={loading}>
+  return (
+    <div className={styles["listing-form-container"]}>
+      <LoadingState loading={loading || propertiesLoading}>
         <>
           <StatusBar>{getListingStatusTag(listing?.status)}</StatusBar>
 
           <FormProvider {...formMethods}>
-            <section className={`bg-primary-lighter py-5 ${styles["form-overrides"]}`}>
+            <section className={`py-5 ${styles["form-overrides"]}`}>
               <div className="max-w-screen-xl px-5 mx-auto">
                 {alert && (
                   <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
@@ -860,7 +860,7 @@ const ListingForm = ({
             </section>
           </FormProvider>
         </>
-      </LoadingOverlay>
+      </LoadingState>
 
       <SaveBeforeExitDialog
         isOpen={closeSaveDialog}
@@ -900,7 +900,7 @@ const ListingForm = ({
         setModalIsOpen={setRequestChangesDialog}
         submitFormWithStatus={triggerSubmitWithStatus}
       />
-    </>
+    </div>
   )
 }
 
