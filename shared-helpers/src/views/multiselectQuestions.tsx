@@ -16,9 +16,17 @@ import { AddressHolder } from "../utilities/constants"
 import { FormAddressAlternate } from "./address/FormAddressAlternate"
 import { ReactNode } from "react"
 
-// Removes periods, commas, and apostrophes
+/** Removes periods, commas, and apostrophes */
 export const cleanMultiselectString = (name: string | undefined) => {
   return name?.replace(/\.|,|'/g, "")
+}
+
+/** Returns the right options for the right MSQ version */
+export const getMSQOptions = (
+  question: MultiselectQuestion,
+  enableV2MSQ: boolean
+): MultiselectOption[] => {
+  return (enableV2MSQ ? question.multiselectOptions : question.options) || []
 }
 
 export const listingSectionQuestions = (
@@ -35,7 +43,7 @@ export const listingSectionQuestions = (
   return selectQuestions
 }
 
-// Get a field name for an application multiselect question
+/** Get a field name for an application multiselect question */
 export const fieldName = (
   questionName: string,
   applicationSection: MultiselectQuestionsApplicationSectionEnum,
@@ -46,28 +54,36 @@ export const fieldName = (
   }`
 }
 
-// Get an array of option field name strings for all options within a single question that are exclusive
+/** Get an array of option field name strings for all options within a single question that are exclusive */
 export const getExclusiveKeys = (
   question: MultiselectQuestion,
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
+  enableV2MSQ: boolean
 ): string[] => {
   const exclusive: string[] = []
-  question?.options?.forEach((option: MultiselectOption) => {
-    if (option.exclusive) exclusive.push(fieldName(question.text, applicationSection, option.text))
+  if (!question) return exclusive
+
+  getMSQOptions(question, enableV2MSQ).forEach((option) => {
+    if ((!enableV2MSQ && option.exclusive) || (enableV2MSQ && option.isOptOut))
+      exclusive.push(
+        fieldName(question.name || question.text, applicationSection, option.name || option.text)
+      )
   })
-  if (question?.optOutText)
-    exclusive.push(fieldName(question.text, applicationSection, question.optOutText))
+  if (!enableV2MSQ && question.optOutText)
+    exclusive.push(
+      fieldName(question.name || question.text, applicationSection, question.optOutText)
+    )
   return exclusive
 }
 
-// Set the value as false for a set of option field names
+/** Set the value as false for a set of option field names */
 const uncheckOptions = (options: string[], setValue: (key: string, value: boolean) => void) => {
   options?.forEach((option) => {
     setValue(option, false)
   })
 }
 
-// Set the value of an exclusive field, adjusting other fields to follow the exclusive behavior
+/** Set the value of an exclusive field, adjusting other fields to follow the exclusive behavior */
 export const setExclusive = (
   exclusiveValue: boolean,
   setValue: (key: string, value: boolean) => void,
@@ -87,14 +103,15 @@ export const setExclusive = (
   }
 }
 
-// Get the input type for all options in a single question - if all are exclusive use a radio
+/** Get the input type for all options in a single question - if all are exclusive use a radio */
 export const getInputType = (options: MultiselectOption[]) => {
+  // TODO: this won't be necessary once everything has switched to MSQv2
   return options?.filter((option) => option.exclusive).length === options?.length
     ? "radio"
     : "checkbox"
 }
 
-// Get the question with the same ordinal as the current page if it exists
+/** Get the question with the same ordinal as the current page if it exists */
 export const getPageQuestion = (questions: ListingMultiselectQuestion[], page: number) => {
   const ordinalQuestions = questions?.filter((item) => {
     return item.ordinal === page
@@ -103,16 +120,21 @@ export const getPageQuestion = (questions: ListingMultiselectQuestion[], page: n
   return ordinalQuestions?.length ? ordinalQuestions[0]?.multiselectQuestions : null
 }
 
-// Get all option field names for a question, including the potential opt out option
+/** Get all option field names for a question, including the potential opt out option */
 export const getAllOptions = (
   question: MultiselectQuestion,
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
+  enableV2MSQ: boolean
 ) => {
-  const optionPaths =
-    question?.options?.map((option) => fieldName(question.text, applicationSection, option.text)) ??
-    []
-  if (question?.optOutText) {
-    optionPaths.push(fieldName(question?.text, applicationSection, question?.optOutText))
+  if (!question) return []
+
+  const optionPaths = getMSQOptions(question, enableV2MSQ).map((option) =>
+    fieldName(question.name || question.text, applicationSection, option.name || option.text)
+  )
+  if (!enableV2MSQ && question.optOutText) {
+    optionPaths.push(
+      fieldName(question.name || question.text, applicationSection, question.optOutText)
+    )
   }
   return optionPaths
 }
@@ -130,12 +152,12 @@ const getRadioField = (
     <>
       <Field
         type="radio"
-        id={option.text}
+        id={option.name || option.text}
         name={optionFieldName}
-        label={option.text}
+        label={option.name || option.text}
         register={register}
         inputProps={{
-          value: !!option.text,
+          value: !!(option.name || option.text),
           onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
             if (e.target?.checked && trigger) {
               void trigger()
@@ -166,15 +188,16 @@ const getCheckboxField = (
   getValues: UseFormMethods["getValues"],
   allOptions: string[],
   optionFieldName: string,
+  enableV2MSQ: boolean,
   trigger?: UseFormMethods["trigger"],
   exclusiveKeys?: string[]
 ) => {
   return (
     <Field
-      id={option.text}
+      id={option.name || option.text}
       name={optionFieldName}
       type={"checkbox"}
-      label={option.text}
+      label={option.name || option.text}
       labelClassName="font-semibold"
       register={register}
       inputProps={{
@@ -182,17 +205,26 @@ const getCheckboxField = (
           if (e.target.checked && trigger) {
             void trigger()
           }
-          const allOptions =
-            question?.options?.map((option) =>
-              fieldName(question.text, applicationSection, option.text)
-            ) ?? []
-          if (question.optOutText) {
-            allOptions.push(fieldName(question.text, applicationSection, question.optOutText))
+          const allOptions = question
+            ? getMSQOptions(question, enableV2MSQ).map((option) =>
+                fieldName(
+                  question.name || question.text,
+                  applicationSection,
+                  option.name || option.text
+                )
+              )
+            : []
+          if (!enableV2MSQ && question.optOutText) {
+            allOptions.push(
+              fieldName(question.name || question.text, applicationSection, question.optOutText)
+            )
           }
-          if (option.exclusive && e.target.checked && exclusiveKeys) {
+          const exclusiveOption =
+            (!enableV2MSQ && option.exclusive) || (enableV2MSQ && option.isOptOut)
+          if (exclusiveOption && e.target.checked && exclusiveKeys) {
             setExclusive(true, setValue, exclusiveKeys, optionFieldName, allOptions)
           }
-          if (!option.exclusive && exclusiveKeys) {
+          if (!exclusiveOption && exclusiveKeys) {
             setExclusive(false, setValue, exclusiveKeys, optionFieldName, allOptions)
           }
         },
@@ -200,7 +232,7 @@ const getCheckboxField = (
       validation={{
         validate: {
           somethingIsChecked: (value) => {
-            if (question.optOutText && trigger) {
+            if (!enableV2MSQ && question.optOutText && trigger) {
               return value || !!allOptions.find((option) => getValues(option))
             }
           },
@@ -223,9 +255,13 @@ export const multiselectOptionWrapper = (
   },
   errors?: UseFormMethods["errors"]
 ) => {
-  const optionFieldName = fieldName(question.text, applicationSection, option.text)
+  const optionFieldName = fieldName(
+    question.name || question.text,
+    applicationSection,
+    option.name || option.text
+  )
   return (
-    <div className="mb-3" key={option.text}>
+    <div className="mb-3" key={option.name || option.text}>
       <div className={`mb-3 field ${resolveObject(optionFieldName, errors) ? "error" : ""}`}>
         {field}
       </div>
@@ -250,7 +286,7 @@ export const multiselectOptionWrapper = (
           </ExpandableContent>
         </div>
       )}
-      {watchFields[optionFieldName] && option.collectName && (
+      {watchFields[optionFieldName] && (option.shouldCollectName || option.collectName) && (
         <Field
           id={AddressHolder.Name}
           name={`${optionFieldName}-${AddressHolder.Name}`}
@@ -266,28 +302,33 @@ export const multiselectOptionWrapper = (
           dataTestId="addressHolder-name"
         />
       )}
-      {watchFields[optionFieldName] && option.collectRelationship && (
-        <Field
-          id={AddressHolder.Relationship}
-          name={`${optionFieldName}-${AddressHolder.Relationship}`}
-          label={t(`application.preferences.options.${AddressHolder.Relationship}`)}
-          register={register}
-          validation={{ required: true, maxLength: 64 }}
-          error={!!resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)}
-          errorMessage={
-            resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)?.type ===
-            "maxLength"
-              ? t("errors.maxLength", { length: 64 })
-              : t("errors.requiredFieldError")
-          }
-          dataTestId="addressHolder-relationship"
-        />
-      )}
-      {watchFields[optionFieldName] && option.collectAddress && (
+      {watchFields[optionFieldName] &&
+        (option.shouldCollectRelationship || option.collectRelationship) && (
+          <Field
+            id={AddressHolder.Relationship}
+            name={`${optionFieldName}-${AddressHolder.Relationship}`}
+            label={t(`application.preferences.options.${AddressHolder.Relationship}`)}
+            register={register}
+            validation={{ required: true, maxLength: 64 }}
+            error={!!resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)}
+            errorMessage={
+              resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)?.type ===
+              "maxLength"
+                ? t("errors.maxLength", { length: 64 })
+                : t("errors.requiredFieldError")
+            }
+            dataTestId="addressHolder-relationship"
+          />
+        )}
+      {watchFields[optionFieldName] && (option.shouldCollectAddress || option.collectAddress) && (
         <div className="pb-4">
           <FormAddressAlternate
             subtitle={t("application.preferences.options.qualifyingAddress")}
-            dataKey={fieldName(question.text, applicationSection, `${option.text}-address`)}
+            dataKey={fieldName(
+              question.name || question.text,
+              applicationSection,
+              `${option.name || option.text}-address`
+            )}
             register={register}
             errors={errors}
             required={true}
@@ -300,7 +341,7 @@ export const multiselectOptionWrapper = (
   )
 }
 
-// Get an individual question option checkbox field
+/** Get an individual question option checkbox field */
 export const getCheckboxOption = (
   option: MultiselectOption,
   question: MultiselectQuestion,
@@ -313,11 +354,16 @@ export const getCheckboxOption = (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [x: string]: any
   },
+  enableV2MSQ: boolean,
   errors?: UseFormMethods["errors"],
   trigger?: UseFormMethods["trigger"],
   exclusiveKeys?: string[]
 ) => {
-  const optionFieldName = fieldName(question.text, applicationSection, option.text)
+  const optionFieldName = fieldName(
+    question.name || question.text,
+    applicationSection,
+    option.name || option.text
+  )
   const checkboxField = getCheckboxField(
     option,
     question,
@@ -327,6 +373,7 @@ export const getCheckboxOption = (
     getValues,
     allOptions,
     optionFieldName,
+    enableV2MSQ,
     trigger,
     exclusiveKeys
   )
@@ -342,7 +389,7 @@ export const getCheckboxOption = (
   )
 }
 
-// Get an individual question option radio field
+/** Get an individual question option radio field */
 export const getRadioOption = (
   option: MultiselectOption,
   question: MultiselectQuestion,
@@ -358,7 +405,11 @@ export const getRadioOption = (
   errors?: UseFormMethods["errors"],
   trigger?: UseFormMethods["trigger"]
 ) => {
-  const optionFieldName = fieldName(question.text, applicationSection, option.text)
+  const optionFieldName = fieldName(
+    question.name || question.text,
+    applicationSection,
+    option.name || option.text
+  )
   const radioField = getRadioField(
     option,
     register,
@@ -408,10 +459,13 @@ export const mapCheckboxesToApi = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData: { [name: string]: any },
   question: MultiselectQuestion,
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
+  enableV2MSQ?: boolean
 ): ApplicationMultiselectQuestion => {
   const rawData =
-    formData["application"][applicationSection][cleanMultiselectString(question.text) || ""]
+    formData["application"][applicationSection][
+      cleanMultiselectString(question.name || question.text) || ""
+    ]
 
   const data = cleanRadioObject(rawData) // removes nulls and converts "true" to true for radio fields
 
@@ -450,9 +504,11 @@ export const mapCheckboxesToApi = (
       }
 
       const getFinalKey = () => {
-        const optionKey = question?.options?.find(
-          (elem) => cleanMultiselectString(elem.text) === key
-        )?.text
+        const options = enableV2MSQ ? question?.multiselectOptions : question?.options
+        const foundOption = options?.find(
+          (elem) => cleanMultiselectString(elem.name || elem.text) === key
+        )
+        const optionKey = foundOption?.name || foundOption?.text
         const cleanOptOutKey = cleanMultiselectString(question?.optOutText)
         if (cleanOptOutKey === key) return question?.optOutText || key
         return optionKey || key
@@ -468,7 +524,7 @@ export const mapCheckboxesToApi = (
 
   return {
     multiselectQuestionId: question.id,
-    key: question.text ?? "",
+    key: (question.name || question.text) ?? "",
     claimed,
     options: questionOptions,
   }
@@ -477,9 +533,11 @@ export const mapCheckboxesToApi = (
 export const mapApiToMultiselectForm = (
   applicationQuestions: ApplicationMultiselectQuestion[],
   listingQuestions: ListingMultiselectQuestion[],
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
+  enableV2MSQ?: boolean
 ) => {
   const questionsFormData = { application: { [applicationSection]: Object.create(null) } }
+  const optionsKey = enableV2MSQ ? "multiselectOptions" : "options"
 
   const applicationQuestionsWithTypes: {
     question: ApplicationMultiselectQuestion
@@ -488,9 +546,12 @@ export const mapApiToMultiselectForm = (
     return {
       question,
       inputType: getInputType(
-        listingQuestions?.filter(
-          (listingQuestion) => listingQuestion?.multiselectQuestions?.text === question.key
-        )[0]?.multiselectQuestions?.options ?? []
+        listingQuestions?.filter((listingQuestion) => {
+          const questionName = enableV2MSQ
+            ? listingQuestion?.multiselectQuestions?.name
+            : listingQuestion?.multiselectQuestions?.text
+          return questionName === question.key
+        })[0]?.multiselectQuestions?.[optionsKey] ?? []
       ),
     }
   })

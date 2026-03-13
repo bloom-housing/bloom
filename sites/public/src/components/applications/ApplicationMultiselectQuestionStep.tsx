@@ -39,6 +39,7 @@ export interface ApplicationMultiselectQuestionStepProps {
     subTitle?: string
   }
   swapCommunityTypeWithPrograms: boolean
+  enableV2MSQ: boolean
 }
 
 export const getMultiselectStepTitle = (
@@ -61,6 +62,7 @@ const ApplicationMultiselectQuestionStep = ({
   applicationSectionNumber,
   strings,
   swapCommunityTypeWithPrograms,
+  enableV2MSQ,
 }: ApplicationMultiselectQuestionStepProps) => {
   const [verifyAddress, setVerifyAddress] = useState(false)
   const [verifyAddressStep, setVerifyAddressStep] = useState(0)
@@ -77,15 +79,22 @@ const ApplicationMultiselectQuestionStep = ({
     Array.isArray(application[applicationSection]) ? application[applicationSection] : []
   )
   const question = getPageQuestion(questions, page)
+  const questionOptions = (enableV2MSQ ? question?.multiselectOptions : question?.options) || []
 
-  const questionSetInputType = getInputType(question?.options)
+  const questionSetInputType = enableV2MSQ
+    ? question?.isExclusive
+      ? "radio"
+      : "checkbox"
+    : getInputType(question?.options)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, handleSubmit, errors, getValues, reset, trigger } = useForm({
     defaultValues: mapApiToMultiselectForm(applicationQuestions, questions, applicationSection),
   })
 
-  const [exclusiveKeys, setExclusiveKeys] = useState(getExclusiveKeys(question, applicationSection))
+  const [exclusiveKeys, setExclusiveKeys] = useState(
+    getExclusiveKeys(question, applicationSection, enableV2MSQ)
+  )
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -93,7 +102,7 @@ const ApplicationMultiselectQuestionStep = ({
       pageTitle: `Application - All ${applicationSection}`,
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
-  }, [profile])
+  }, [profile, applicationSection])
 
   // Required to keep the form up to date before submitting this section if you're moving between pages
   useEffect(() => {
@@ -101,16 +110,17 @@ const ApplicationMultiselectQuestionStep = ({
       mapApiToMultiselectForm(
         Array.isArray(applicationQuestions) ? applicationQuestions : [],
         questions,
-        applicationSection
+        applicationSection,
+        enableV2MSQ
       )
     )
-    setExclusiveKeys(getExclusiveKeys(question, applicationSection))
+    setExclusiveKeys(getExclusiveKeys(question, applicationSection, enableV2MSQ))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, applicationQuestions, reset])
 
   const allOptionNames = useMemo(() => {
-    return getAllOptions(question, applicationSection)
-  }, [question])
+    return getAllOptions(question, applicationSection, enableV2MSQ)
+  }, [applicationSection, enableV2MSQ, question])
 
   const body = useRef(null)
 
@@ -120,7 +130,7 @@ const ApplicationMultiselectQuestionStep = ({
     }
 
     // Verify address on preferences
-    if (question?.options.some((item) => item?.collectAddress)) {
+    if (questionOptions.some((item) => item.shouldCollectAddress || item.collectAddress)) {
       const step: number = body.current.options.findIndex(
         (option, index) =>
           index >= verifyAddressStep && option.checked === true && option.extraData?.[0]?.value
@@ -199,6 +209,7 @@ const ApplicationMultiselectQuestionStep = ({
       getValues,
       allOptionNames,
       watchQuestions,
+      enableV2MSQ,
       errors,
       trigger,
       exclusiveKeys
@@ -220,8 +231,8 @@ const ApplicationMultiselectQuestionStep = ({
     )
   }
 
-  const allOptions = question?.options ? [...question.options] : []
-  if (question?.optOutText) {
+  const allOptions = [...questionOptions]
+  if (!enableV2MSQ && question?.optOutText) {
     allOptions.push({
       text: question?.optOutText,
       description: null,
@@ -294,7 +305,7 @@ const ApplicationMultiselectQuestionStep = ({
                 <legend className="text__caps-spaced mb-4 sr-only">{question?.text}</legend>
                 {applicationSection === MultiselectQuestionsApplicationSectionEnum.preferences && (
                   <div className="mb-6">
-                    <p className="text__caps-spaced m-0">{question?.text}</p>
+                    <p className="text__caps-spaced m-0">{question?.name || question?.text}</p>
                     {question?.description && (
                       <p className="field-note mt-3">{question?.description}</p>
                     )}
