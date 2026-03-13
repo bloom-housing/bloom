@@ -80,7 +80,10 @@ export const unitSummariesTable = (
       : getRent(unitSummary.rentRange.min, unitSummary.rentRange.max)
 
     let availability = null
-    if (listingReviewOrder !== ReviewOrderTypeEnum.waitlist) {
+    if (
+      listingReviewOrder !== ReviewOrderTypeEnum.waitlist &&
+      listingReviewOrder !== ReviewOrderTypeEnum.waitlistLottery
+    ) {
       availability = (
         <span>
           {unitSummary.totalAvailable > 0 ? (
@@ -94,7 +97,10 @@ export const unitSummariesTable = (
           )}
         </span>
       )
-    } else if (listingReviewOrder === ReviewOrderTypeEnum.waitlist) {
+    } else if (
+      listingReviewOrder === ReviewOrderTypeEnum.waitlist ||
+      listingReviewOrder === ReviewOrderTypeEnum.waitlistLottery
+    ) {
       availability = (
         <span>
           <strong>{t("listings.waitlist.open")}</strong>
@@ -155,12 +161,18 @@ export const getStackedUnitSummaryDetailsTable = (
       : getRent(unitSummary.rentRange.min, unitSummary.rentRange.max)
 
     let availability = ""
-    if (listingReviewOrder !== ReviewOrderTypeEnum.waitlist) {
+    if (
+      listingReviewOrder !== ReviewOrderTypeEnum.waitlist &&
+      listingReviewOrder !== ReviewOrderTypeEnum.waitlistLottery
+    ) {
       availability =
         unitSummary.totalAvailable > 0
           ? `${unitSummary.totalAvailable} ${unitPluralization}`
           : t("listings.waitlist.open")
-    } else if (listingReviewOrder === ReviewOrderTypeEnum.waitlist) {
+    } else if (
+      listingReviewOrder === ReviewOrderTypeEnum.waitlist ||
+      listingReviewOrder === ReviewOrderTypeEnum.waitlistLottery
+    ) {
       availability = t("listings.waitlist.open")
     }
 

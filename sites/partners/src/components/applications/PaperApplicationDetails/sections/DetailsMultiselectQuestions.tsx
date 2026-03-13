@@ -52,7 +52,9 @@ const DetailsMultiselectQuestions = ({
     return <></>
   }
 
-  const questions = application[applicationSection]
+  const questions = Array.isArray(application[applicationSection])
+    ? application[applicationSection]
+    : []
 
   return (
     <SectionWithGrid heading={title} inset>

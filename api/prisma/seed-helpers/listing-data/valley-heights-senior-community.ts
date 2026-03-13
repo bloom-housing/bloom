@@ -5,6 +5,7 @@ import {
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
+import { assetFileId } from '../asset-file-id-helper';
 
 export const valleyHeightsSeniorCommunity: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
@@ -87,7 +88,7 @@ export const valleyHeightsSeniorCommunity: Prisma.ListingsCreateInput = {
         assets: {
           create: {
             label: 'cloudinaryBuilding',
-            fileId: 'dev/apartment_ez3yyz',
+            fileId: assetFileId('dev/apartment_ez3yyz'),
           },
         },
       },
@@ -96,7 +97,7 @@ export const valleyHeightsSeniorCommunity: Prisma.ListingsCreateInput = {
         assets: {
           create: {
             label: 'cloudinaryBuilding',
-            fileId: 'dev/interior_mc9erd',
+            fileId: assetFileId('dev/interior_mc9erd'),
           },
         },
       },
@@ -105,7 +106,7 @@ export const valleyHeightsSeniorCommunity: Prisma.ListingsCreateInput = {
         assets: {
           create: {
             label: 'cloudinaryBuilding',
-            fileId: 'dev/inside_qo9wre',
+            fileId: assetFileId('dev/inside_qo9wre'),
           },
         },
       },
