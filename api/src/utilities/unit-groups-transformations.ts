@@ -132,7 +132,8 @@ export const getMinMaxIncomeAmiChartItems = (
   }
 
   if (amiCharts.length === 1) {
-    return amiCharts[0]?.items || [];
+    const items = amiCharts[0]?.items || [];
+    return Array.isArray(items) ? items : [];
   }
 
   const allItems: MinMaxIncomeAmiChartItem[] = amiCharts.flatMap(
