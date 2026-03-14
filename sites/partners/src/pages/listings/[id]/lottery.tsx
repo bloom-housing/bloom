@@ -24,10 +24,10 @@ import { ListingContext } from "../../../components/listings/ListingContext"
 import { MetaTags } from "../../../components/shared/MetaTags"
 import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
-import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
+import { StatusBar } from "../../../components/shared/StatusBar"
+import { getListingStatusTag } from "../../../components/listings/helpers"
 import { useFlaggedApplicationsMeta, useLotteryActivityLog, useZipExport } from "../../../lib/hooks"
 dayjs.extend(advancedFormat)
-
 import styles from "../../../../styles/lottery.module.scss"
 
 const Lottery = (props: { listing: Listing | undefined }) => {
@@ -288,7 +288,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
   }
 
   const getActions = () => {
-    if (profile?.userRoles?.isAdmin) {
+    if (profile?.userRoles?.isAdmin && listing.lotteryStatus) {
       return (
         <div className={styles["actions-container"]}>
           <>
@@ -376,7 +376,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               }
             />
 
-            <ListingStatusBar status={listing?.status} />
+            <StatusBar>{getListingStatusTag(listing?.status)}</StatusBar>
             <section className={styles["lottery"]}>
               <div className={styles["parent"]}>
                 <div className={styles["container"]}>
