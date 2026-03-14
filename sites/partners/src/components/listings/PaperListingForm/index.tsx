@@ -531,7 +531,7 @@ const ListingForm = ({
     ]
   )
   return (
-    <div className={styles["listing-form-container"]}>
+    <div className={"loading-state-wrapper"}>
       <LoadingState loading={loading || propertiesLoading}>
         <>
           <StatusBar>{getListingStatusTag(listing?.status)}</StatusBar>

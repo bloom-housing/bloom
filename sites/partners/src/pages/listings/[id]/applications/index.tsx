@@ -19,13 +19,13 @@ import {
   useApplicationsData,
   useZipExport,
 } from "../../../../lib/hooks"
-import { ListingStatusBar } from "../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../layouts"
 import { getColDefs } from "../../../../components/applications/ApplicationsColDefs"
 import { ApplicationsSideNav } from "../../../../components/applications/ApplicationsSideNav"
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
 import ListingGuard from "../../../../components/shared/ListingGuard"
-import styles from "../../../../components/listings/PaperListingForm/ListingForm.module.scss"
+import { StatusBar } from "../../../../components/shared/StatusBar"
+import { getListingStatusTag } from "../../../../components/listings/helpers"
 
 const ApplicationsList = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -156,7 +156,7 @@ const ApplicationsList = () => {
         <Head>
           <title>{`Applications - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
-        <div className={styles["listing-form-container"]}>
+        <div className={"loading-state-wrapper"}>
           <LoadingState loading={applications === undefined || listingLoading} className="w-full">
             <NavigationHeader
               title={listingName}
@@ -185,7 +185,7 @@ const ApplicationsList = () => {
               }
             />
 
-            <ListingStatusBar status={listingDto?.status} />
+            <StatusBar>{getListingStatusTag(listingDto?.status)}</StatusBar>
 
             <section className={"bg-gray-200 pt-4"}>
               <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
