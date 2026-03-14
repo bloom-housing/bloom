@@ -54,7 +54,7 @@ const renderAdvocateUsersPage = () =>
   )
 
 describe("advocate users", () => {
-  it("should show th advocate users table when users exist", async () => {
+  it("should show the advocate users table when users exist", async () => {
     server.use(
       rest.get("http://localhost:3100/user/list", (req, res, ctx) => {
         return res(
@@ -63,7 +63,7 @@ describe("advocate users", () => {
               mockAdvocateUser(1, "First Agency", new Date(2025, 6, 12), false),
               mockAdvocateUser(2, "Second Agency", new Date(2025, 6, 12), true),
             ],
-            meta: { totalItems: 1, totalPages: 1 },
+            meta: { totalItems: 2, totalPages: 1 },
           })
         )
       })
@@ -154,7 +154,7 @@ describe("advocate users", () => {
     await userEvent.click(approveButton)
   })
 
-  it("should show dialog on accept action button", async () => {
+  it("should show dialog on reject action button", async () => {
     server.use(
       rest.get("http://localhost:3100/user/list", (req, res, ctx) => {
         return res(
@@ -187,10 +187,10 @@ describe("advocate users", () => {
     const tableHeaders = await screen.findAllByRole("columnheader")
     expect(tableHeaders).toHaveLength(5)
 
-    const acceptButton = await screen.findByTestId("advocate-reject")
-    expect(acceptButton).toBeInTheDocument()
+    const rejectButton = await screen.findByTestId("advocate-reject")
+    expect(rejectButton).toBeInTheDocument()
 
-    await userEvent.click(acceptButton)
+    await userEvent.click(rejectButton)
 
     const dialog = await screen.findByRole("dialog", { name: /decline advocate account/i })
     expect(dialog).toBeInTheDocument()

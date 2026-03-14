@@ -1,7 +1,13 @@
 import React, { useContext, useMemo, useState } from "react"
+import { useSWRConfig } from "swr"
+import dayjs from "dayjs"
 import Head from "next/head"
+import CheckCircleIcon from "@heroicons/react/24/solid/CheckCircleIcon"
+import XCircleIcon from "@heroicons/react/24/solid/XCircleIcon"
+import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
 import { AgTable, t, useAgTable } from "@bloom-housing/ui-components"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { DialogFooter } from "@bloom-housing/ui-seeds/src/overlays/Dialog"
 import {
   Agency,
   FeatureFlagEnum,
@@ -10,17 +16,11 @@ import {
   UserOrderByKeys,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Dialog, Icon } from "@bloom-housing/ui-seeds"
-import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
-import dayjs from "dayjs"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import TabView from "../../layouts/TabView"
 import { getUsersTabs, UsersIndexEnum } from "../../components/users/UsersViewHelpers"
 import { useAdvocateUserExport, useUserList } from "../../lib/hooks"
-import CheckCircleIcon from "@heroicons/react/24/solid/CheckCircleIcon"
-import XCircleIcon from "@heroicons/react/24/solid/XCircleIcon"
-import { DialogFooter } from "@bloom-housing/ui-seeds/src/overlays/Dialog"
-import { useSWRConfig } from "swr"
 
 const Advocates = () => {
   const { addToast } = useContext(MessageContext)
@@ -77,7 +77,7 @@ const Advocates = () => {
                     setDialogConfig("accept")
                     setSelectedUser(data)
                   }}
-                  aria-label={"Accept"}
+                  aria-label={t("t.approve")}
                 >
                   <Icon size="lg">
                     <CheckCircleIcon />
@@ -90,7 +90,7 @@ const Advocates = () => {
                     setDialogConfig("reject")
                     setSelectedUser(data)
                   }}
-                  aria-label={"Reject"}
+                  aria-label={t("t.decline")}
                 >
                   <Icon size="lg">
                     <XCircleIcon />

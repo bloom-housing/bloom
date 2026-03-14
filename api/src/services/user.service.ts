@@ -150,11 +150,11 @@ export class UserService {
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       orderBy: buildOrderBy(
-        ['firstName', 'lastName', ...(params.orderBy ? params.orderBy : [])],
+        [...(params.orderBy ? params.orderBy : []), 'firstName', 'lastName'],
         [
-          OrderByEnum.ASC,
-          OrderByEnum.ASC,
           ...(params.orderDir ? params.orderDir : []),
+          OrderByEnum.ASC,
+          OrderByEnum.ASC,
         ],
       ),
       include: views.full,
