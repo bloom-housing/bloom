@@ -8,7 +8,7 @@ export interface StatusBarProps {
 
 const StatusBar = (props: StatusBarProps) => {
   return (
-    <section
+    <div
       className={`${styles["status-bar"]} ${
         !props.children ? styles["status-bar-no-content"] : ""
       }`}
@@ -21,7 +21,7 @@ const StatusBar = (props: StatusBarProps) => {
           <div className={styles["status-bar__tag"]}>{props.children}</div>
         </div>
       )}
-    </section>
+    </div>
   )
 }
 

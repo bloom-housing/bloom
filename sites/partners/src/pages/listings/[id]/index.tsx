@@ -108,7 +108,7 @@ export default function ListingDetail(props: ListingProps) {
 
             <StatusBar>{getListingStatusTag(listing?.status)}</StatusBar>
 
-            <section className="bg-primary-lighter">
+            <section className="form-container">
               <div className="mx-auto px-5 mt-5 max-w-screen-xl">
                 {errorAlert && (
                   <AlertBox
