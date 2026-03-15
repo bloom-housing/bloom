@@ -24,7 +24,10 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserService } from '../services/user.service';
+import {
+  AdvocateConfirmationPrefillDto,
+  UserService,
+} from '../services/user.service';
 import { User } from '../dtos/users/user.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { IdDTO } from '../dtos/shared/id.dto';
@@ -300,7 +303,7 @@ export class UserController {
   @ApiOkResponse({ type: User })
   async getAdvocateFromConfirmationToken(
     @Body() dto: ConfirmationRequest,
-  ): Promise<User> {
+  ): Promise<AdvocateConfirmationPrefillDto> {
     return await this.userService.getAdvocateFromConfirmationToken(dto);
   }
 

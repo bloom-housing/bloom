@@ -95,6 +95,15 @@ type findByOptions = {
   resetToken?: string;
 };
 
+export interface AdvocateConfirmationPrefillDto {
+  id: string;
+  email: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  agency: { id: string; name: string };
+}
+
 const USER_DELETION_CRON_JOB_NAME = 'USER_DELETION_CRON_STRING';
 const USER_DELETION_WARN_CRON_JOB_NAME = 'USER_DELETION_WARN_CRON_JOB';
 
@@ -654,21 +663,42 @@ export class UserService {
   */
   async getAdvocateFromConfirmationToken(
     dto: ConfirmationRequest,
-  ): Promise<User> {
+  ): Promise<AdvocateConfirmationPrefillDto> {
     try {
       const token = verify(dto.token, process.env.APP_SECRET) as IdDTO;
       const storedUser = await this.prisma.userAccounts.findFirst({
-        include: views.full,
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          middleName: true,
+          lastName: true,
+          agency: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
         where: {
           id: token.id,
           confirmationToken: dto.token,
           isAdvocate: true,
+          isApproved: true,
+          confirmedAt: null,
         },
       });
       if (!storedUser) {
         throw new NotFoundException(`User not found for token`);
       }
-      return mapTo(User, storedUser);
+      return {
+        id: storedUser.id,
+        email: storedUser.email,
+        firstName: storedUser.firstName,
+        middleName: storedUser.middleName,
+        lastName: storedUser.lastName,
+        agency: storedUser.agency,
+      };
     } catch (_) {
       throw new NotFoundException(`User not found for token`);
     }
@@ -705,6 +735,13 @@ export class UserService {
     const appUrl = storedUser.jurisdictions?.length
       ? storedUser.jurisdictions[0].publicUrl
       : dto.appUrl;
+
+    if (!appUrl) {
+      throw new BadRequestException(
+        'Unable to determine application URL for advocate confirmation.',
+      );
+    }
+
     const formUrl = `${appUrl}/complete-advocate-account?token=${confirmationToken}`;
 
     await this.emailService.advocateAccepted(
