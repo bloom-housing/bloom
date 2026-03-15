@@ -89,7 +89,7 @@ describe("CompleteAdvocateAccount page", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByRole("heading", { name: "Complete your account", level: 1 })
+          screen.getByRole("heading", { name: "Create advocate account", level: 1 })
         ).toBeInTheDocument()
       })
       expect(
@@ -119,7 +119,7 @@ describe("CompleteAdvocateAccount page", () => {
       await waitFor(() => {
         expect(
           screen.getByText(
-            "The link you used has expired. Enter your email address below to receive a new one."
+            "The link you used has expired. Enter the email address you used when requesting your account to receive a new one."
           )
         ).toBeInTheDocument()
       })
@@ -148,9 +148,7 @@ describe("CompleteAdvocateAccount page", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText(
-            "A new link has been sent to your email address. Please check your inbox."
-          )
+          screen.getByText(/If there is an approved advocate account with that email/i)
         ).toBeInTheDocument()
       })
 
@@ -188,7 +186,7 @@ describe("CompleteAdvocateAccount page", () => {
       fireEvent.click(screen.getByRole("button", { name: "Resend link" }))
 
       await waitFor(() => {
-        expect(screen.getByText("Please enter a valid email address")).toBeInTheDocument()
+        expect(screen.getByText("Please enter an email address")).toBeInTheDocument()
       })
       expect(mockUserService.resendAdvocateConfirmation).not.toHaveBeenCalled()
     })
@@ -210,9 +208,7 @@ describe("CompleteAdvocateAccount page", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText(
-            "A new link has been sent to your email address. Please check your inbox."
-          )
+          screen.getByText(/If there is an approved advocate account with that email/i)
         ).toBeInTheDocument()
       })
     })

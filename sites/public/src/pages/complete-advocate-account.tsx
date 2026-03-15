@@ -51,8 +51,6 @@ const CreateAdvocateAccount = ({ agencies }: CreateAdvocateAccountProps) => {
   const isPOBoxSelected = watch("isPOBox", "no") === "yes"
   const hasAdditionalPhone = watch("hasAdditionalPhone", false)
 
-  console.log({ errors })
-
   useEffect(() => {
     if (!token || !initialStateLoaded || hasCheckedToken.current) return
     hasCheckedToken.current = true
