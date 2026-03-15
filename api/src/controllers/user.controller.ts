@@ -292,6 +292,30 @@ export class UserController {
     return await this.userService.isUserConfirmationTokenValid(dto);
   }
 
+  @Post('advocate-from-token')
+  @ApiOperation({
+    summary: 'Get advocate user from confirmation token',
+    operationId: 'getAdvocateFromConfirmationToken',
+  })
+  @ApiOkResponse({ type: User })
+  async getAdvocateFromConfirmationToken(
+    @Body() dto: ConfirmationRequest,
+  ): Promise<User> {
+    return await this.userService.getAdvocateFromConfirmationToken(dto);
+  }
+
+  @Post('advocate-resend-confirmation')
+  @ApiOperation({
+    summary: 'Resend advocate account creation email',
+    operationId: 'resendAdvocateConfirmation',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async resendAdvocateConfirmation(
+    @Body() dto: EmailAndAppUrl,
+  ): Promise<SuccessDTO> {
+    return await this.userService.resendAdvocateConfirmation(dto);
+  }
+
   @Put('forgot-password')
   @ApiOperation({ summary: 'Forgot Password', operationId: 'forgotPassword' })
   @ApiOkResponse({ type: SuccessDTO })
