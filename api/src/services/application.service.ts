@@ -299,6 +299,7 @@ view.details = {
       firstName: true,
       lastName: true,
       email: true,
+      isAdvocate: true,
     },
   },
 };
@@ -1312,9 +1313,8 @@ export class ApplicationService {
   ): Promise<SuccessDTO> {
     const rawApplication = await this.findOrThrow(
       applicationId,
-      ApplicationViews.base,
+      ApplicationViews.details,
     );
-
     await this.authorizeAction(
       requestingUser,
       rawApplication.listingId,
@@ -1322,18 +1322,6 @@ export class ApplicationService {
     );
 
     const application = mapTo(Application, rawApplication);
-
-    const listing = await this.prisma.listings.findUnique({
-      where: { id: rawApplication.listingId },
-      include: {
-        jurisdictions: true,
-      },
-    });
-
-    if (!listing) {
-      throw new NotFoundException('listing not found');
-    }
-
     const changes = buildApplicationStatusChanges({
       initialStatus: dto.previousStatus,
       nextStatus: application.status,
@@ -1351,32 +1339,27 @@ export class ApplicationService {
       return { success: false };
     }
 
-    const alternateContactEmail = application.alternateContact?.emailAddress;
-    const advocateUserAccount = alternateContactEmail
-      ? await this.prisma.userAccounts.findUnique({
-          select: { isAdvocate: true },
-          where: { email: alternateContactEmail },
-        })
-      : null;
-
-    const isAdvocate = advocateUserAccount?.isAdvocate ?? false;
+    const isAdvocate = rawApplication.userAccounts.isAdvocate;
+    const advocateEmail = rawApplication.userAccounts?.email;
     const applicantEmail = application?.applicant?.emailAddress;
 
-    if (!isAdvocate && !applicantEmail && !alternateContactEmail) {
+    if (!isAdvocate && !applicantEmail && !advocateEmail) {
       return { success: false };
     }
 
-    const mappedListing = mapTo(Listing, listing);
     //TODO: This contact email is a placeholder and must be updated per jurisdiction
     const contactEmail = 'https://www.exygy.com';
 
     await this.emailService.applicationUpdateEmail(
-      mappedListing,
+      rawApplication.listings.name,
+      (rawApplication.listings as unknown as { jurisdictions: IdDTO })
+        .jurisdictions,
       application,
       changes,
-      listing.jurisdictions?.publicUrl,
+      rawApplication.appUrl,
       contactEmail,
       isAdvocate,
+      advocateEmail,
     );
 
     return { success: true };

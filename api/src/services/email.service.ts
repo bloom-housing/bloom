@@ -510,14 +510,16 @@ export class EmailService {
   }
 
   public async applicationUpdateEmail(
-    listing: Listing,
+    listingName: string,
+    jurisdictionId: IdDTO,
     application: Application,
     changes: ApplicationStatusChangeItem[],
     appUrl: string,
     contactEmail?: string,
     isAdvocate = false,
+    advocateEmail?: string,
   ) {
-    const jurisdiction = await this.getJurisdiction([listing.jurisdictions]);
+    const jurisdiction = await this.getJurisdiction([jurisdictionId]);
     const buildSummaryItems = () =>
       changes.map((change) => {
         if (change.type === 'status') {
@@ -550,7 +552,7 @@ export class EmailService {
 
     const subjectForCurrentLanguage = () =>
       this.polyglot.t('applicationUpdate.subject', {
-        listingName: listing.name,
+        listingName: listingName,
       });
     const actionUrl = appUrl ? `${appUrl}/account/applications` : '';
     const housingApplicantName = [
@@ -559,7 +561,6 @@ export class EmailService {
     ]
       .filter(Boolean)
       .join(' ');
-    const advocateEmail = application?.alternateContact?.emailAddress;
     const advocateName = [
       application?.alternateContact?.firstName,
       application?.alternateContact?.lastName,
@@ -574,7 +575,7 @@ export class EmailService {
         jurisdiction.emailFromAddress,
         subjectForCurrentLanguage(),
         this.template('application-update')({
-          appOptions: { listingName: listing.name },
+          appOptions: { listingName: listingName },
           recipientName: advocateName,
           summaryItems: buildSummaryItems(),
           actionUrl,
@@ -583,7 +584,7 @@ export class EmailService {
             'applicationUpdate.advocateUpdateNotice',
             {
               applicantName: housingApplicantName,
-              listingName: listing.name,
+              listingName: listingName,
             },
           ),
           contactNoticeText: this.polyglot.t('applicationUpdate.contactNotice'),
@@ -612,12 +613,12 @@ export class EmailService {
         jurisdiction.emailFromAddress,
         subjectForCurrentLanguage(),
         this.template('application-update')({
-          appOptions: { listingName: listing.name },
+          appOptions: { listingName: listingName },
           recipientName: applicantName,
           summaryItems: buildSummaryItems(),
           contactEmail,
           updateNoticeText: this.polyglot.t('applicationUpdate.updateNotice', {
-            listingName: listing.name,
+            listingName: listingName,
           }),
           contactNoticeText: isAdvocate
             ? this.polyglot.t('applicationUpdate.applicantContactNotice')

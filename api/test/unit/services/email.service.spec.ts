@@ -644,7 +644,8 @@ describe('Testing email service', () => {
       ] as ApplicationStatusChangeItem[];
 
       await service.applicationUpdateEmail(
-        listing,
+        listing.name,
+        listing.jurisdictions,
         application,
         changes,
         'http://localhost:3000',
@@ -699,12 +700,14 @@ describe('Testing email service', () => {
       ] as ApplicationStatusChangeItem[];
 
       await service.applicationUpdateEmail(
-        listing,
+        listing.name,
+        listing.jurisdictions,
         application,
         changes,
         'http://localhost:3000',
         'contact@example.com',
         true,
+        'advocate.email@example.com',
       );
 
       expect(sendMock).toHaveBeenCalledTimes(2);
