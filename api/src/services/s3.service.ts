@@ -86,9 +86,11 @@ export class S3Service {
     const command = new PutObjectCommand({
       Bucket: this.publicBucket,
       Key: key,
-      ContentDisposition: 'attachment; filename="file name.jpg"',
+      ContentDisposition: `attachment; filename="${key}.pdf"`,
     });
-    return getSignedUrl(this.s3Client, command);
+    return getSignedUrl(this.s3Client, command, {
+      unsignableHeaders: new Set(['content-disposition']),
+    });
   }
 
   urlForPublic(key: string): string {
