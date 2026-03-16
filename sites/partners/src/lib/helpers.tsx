@@ -230,7 +230,10 @@ export const fileUploader = async ({
           url: cloudinaryUrlFromId(response.data.public_id),
         })
       })
-      .catch(() => setProgressValue(0))
+      .catch(() => {
+        alert("Invalid File Format")
+        setProgressValue(0)
+      })
   }
 }
 
@@ -271,16 +274,12 @@ export const CloudinaryUpload = async ({
     throw err
   }
 
-  try {
-    return await axios.request({
-      method: "post",
-      url: url,
-      data: data,
-      onUploadProgress: onUploadProgress,
-    })
-  } catch (error) {
-    alert("Invalid File Format")
-  }
+  return await axios.request({
+    method: "post",
+    url: url,
+    data: data,
+    onUploadProgress: onUploadProgress,
+  })
 }
 
 interface S3UploadProps {
