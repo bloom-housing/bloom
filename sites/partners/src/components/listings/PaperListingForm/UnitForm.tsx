@@ -15,7 +15,7 @@ import {
   useUnitTypeList,
   useWatchOnFormNumberFieldsChange,
 } from "../../../lib/hooks"
-import { arrayToFormOptions, getRentType, fieldHasError } from "../../../lib/helpers"
+import { arrayToFormOptions, getRentType, fieldHasError, addAsterisk } from "../../../lib/helpers"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 import styles from "./ListingForm.module.scss"
 
@@ -416,7 +416,7 @@ const UnitForm = ({
                     <Select
                       id="unitTypes.id"
                       name="unitTypes.id"
-                      label={t("listings.unit.type")}
+                      label={addAsterisk(t("listings.unit.type"))}
                       placeholder={t("listings.unit.type")}
                       register={register}
                       controlClassName="control"
@@ -507,7 +507,7 @@ const UnitForm = ({
                     <Select
                       id="amiChart.id"
                       name="amiChart.id"
-                      label={t("listings.unit.amiChart")}
+                      label={addAsterisk(t("listings.unit.amiChart"))}
                       placeholder={t("listings.unit.amiChart")}
                       register={register}
                       controlClassName="control"
@@ -535,7 +535,7 @@ const UnitForm = ({
                     <Select
                       id={"amiPercentage"}
                       name="amiPercentage"
-                      label={t("listings.unit.amiPercentage")}
+                      label={addAsterisk(t("listings.unit.amiPercentage"))}
                       placeholder={t("listings.unit.amiPercentage")}
                       register={register}
                       controlClassName="control"

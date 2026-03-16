@@ -17,6 +17,8 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   OrderByEnum,
+  UserFilterParams,
+  UserOrderByKeys,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
@@ -45,6 +47,9 @@ interface UseSingleFlaggedApplicationDataProps extends UseSingleApplicationDataP
 
 type UseUserListProps = PaginationProps & {
   search?: string
+  filter?: UserFilterParams
+  orderBy?: UserOrderByKeys[]
+  orderDir?: OrderByEnum[]
 }
 
 type UseListingsDataProps = PaginationProps & {
@@ -516,16 +521,20 @@ export function useReservedCommunityTypeList() {
   }
 }
 
-export function useUserList({ page, limit, search = "" }: UseUserListProps) {
+export function useUserList({
+  page,
+  limit,
+  filter = { isPortalUser: true },
+  orderBy = [],
+  orderDir = [],
+  search = "",
+}: UseUserListProps) {
   const params = {
     page,
     limit,
-    filter: [
-      {
-        isPortalUser: true,
-        $comparison: EnumListingFilterParamsComparison["="],
-      },
-    ],
+    filter: [filter],
+    orderBy,
+    orderDir,
     search,
   }
 
