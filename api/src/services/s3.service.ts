@@ -86,6 +86,7 @@ export class S3Service {
     const command = new PutObjectCommand({
       Bucket: this.publicBucket,
       Key: key,
+      ContentDisposition: 'attachment; filename="file name.jpg"',
     });
     return getSignedUrl(this.s3Client, command);
   }

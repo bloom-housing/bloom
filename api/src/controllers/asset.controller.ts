@@ -17,7 +17,7 @@ import { JwtAuthGuard } from '../guards/jwt.guard';
 import { PermissionGuard } from '../guards/permission.guard';
 import { CreatePresignedUploadMetadataResponse } from '../dtos/assets/create-presign-upload-meta-response.dto';
 import { CreatePresignedUploadMetadata } from '../dtos/assets/create-presigned-upload-meta.dto';
-import { CreateS3UploadUrl } from '../dtos/assets/create-s3-upload-url.dto';
+import { CreateS3UploadUrl } from '../dtos/assets/create-s3-upload-url-response.dto';
 import { AssetService } from '../services/asset.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { ApiKeyGuard } from '../guards/api-key.guard';

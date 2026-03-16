@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePresignedUploadMetadata } from '../dtos/assets/create-presigned-upload-meta.dto';
 import { CreatePresignedUploadMetadataResponse } from '../dtos/assets/create-presign-upload-meta-response.dto';
-import { CreateS3UploadUrl } from '../dtos/assets/create-s3-upload-url.dto';
+import { CreateS3UploadUrl } from '../dtos/assets/create-s3-upload-url-response.dto';
 import { CloudinaryService } from './cloudinary.service';
 import { S3Service } from './s3.service';
 import { randomUUID } from 'crypto';
