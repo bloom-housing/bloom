@@ -1065,7 +1065,7 @@ export class UserService {
   }
 
   /*
-    creates an advocate user, and sends a welcome email with a confirmation link
+    creates an advocate user request; welcome email is sent only when explicitly requested
    */
   async createAdvocateUser(
     dto: AdvocateUserCreate,

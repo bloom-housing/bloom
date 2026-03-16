@@ -210,7 +210,7 @@ export class UserController {
   ): Promise<User> {
     return await this.userService.createAdvocateUser(
       dto,
-      queryParams.noWelcomeEmail !== true,
+      queryParams.noWelcomeEmail === false,
       req,
     );
   }
