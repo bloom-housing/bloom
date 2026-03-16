@@ -89,7 +89,7 @@ export class S3Service {
       ContentDisposition: `attachment; filename="${key}.pdf"`,
     });
     return getSignedUrl(this.s3Client, command, {
-      unsignableHeaders: new Set(['content-disposition']),
+      signableHeaders: new Set(['content-disposition']),
     });
   }
 
