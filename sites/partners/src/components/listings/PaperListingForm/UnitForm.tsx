@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, useMemo } from "react"
 import { t, Field, Select, FieldGroup, Form, numberOptions } from "@bloom-housing/ui-components"
-import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, Grid, LoadingState } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useWatch, useForm } from "react-hook-form"
 import { TempUnit } from "../../../lib/listings/formTypes"
@@ -62,9 +62,9 @@ const UnitForm = ({
   /**
    * fetch form options
    */
-  const { data: amiCharts = [] } = useAmiChartList(jurisdiction)
-  const { data: unitTypes = [] } = useUnitTypeList()
-  const { data: jurisdictionData } = useJurisdiction(jurisdiction)
+  const { data: amiCharts = [], loading: amiChartsLoading } = useAmiChartList(jurisdiction)
+  const { data: unitTypes = [], loading: unitTypesLoading } = useUnitTypeList()
+  const { data: jurisdictionData, loading: jurisdictionLoading } = useJurisdiction(jurisdiction)
 
   const unitPrioritiesOptions = useMemo(() => {
     const visibleTypes = jurisdictionData?.visibleAccessibilityPriorityTypes || []
@@ -143,20 +143,35 @@ const UnitForm = ({
 
   const resetDefaultValues = async () => {
     if (defaultUnit) {
+      const values: Record<string, unknown> = { ...defaultUnit }
+
       if (defaultUnit.amiChart) {
         const chartData = await fetchAmiChart(defaultUnit.amiChart.id)
-        resetAmiTableValues(chartData, defaultUnit.amiPercentage)
+        if (chartData) {
+          const percentage = defaultUnit.amiPercentage
+          const newPercentagesByHouseHold = chartData.reduce((acc, item: AmiChartItem) => {
+            if (item.percentOfAmi === parseInt(percentage)) {
+              acc[item.householdSize] = item
+            }
+            return acc
+          }, {})
+          for (let i = 1; i < 9; i++) {
+            values[`maxIncomeHouseholdSize${i}`] = newPercentagesByHouseHold[i]
+              ? newPercentagesByHouseHold[i].income.toString()
+              : ""
+          }
+        }
+        if (defaultUnit.unitAmiChartOverrides) {
+          defaultUnit.unitAmiChartOverrides.items.forEach((override) => {
+            values[`maxIncomeHouseholdSize${override.householdSize}`] = override.income
+          })
+        }
       }
-      Object.keys(defaultUnit).forEach((key) => {
-        setValue(key, defaultUnit[key])
-      })
-      if (defaultUnit.unitAmiChartOverrides) {
-        defaultUnit.unitAmiChartOverrides.items.forEach((override) => {
-          setValue(`maxIncomeHouseholdSize${override.householdSize}`, override.income)
-        })
-      }
-      setValue("amiPercentage", parseInt(defaultUnit["amiPercentage"]))
-      setValue("rentType", getRentType(defaultUnit))
+
+      values.amiPercentage = parseInt(defaultUnit["amiPercentage"])
+      values.rentType = getRentType(defaultUnit)
+
+      reset(values)
     }
     setLoading(false)
   }
@@ -394,6 +409,14 @@ const UnitForm = ({
       arrayToFormOptions<UnitType>(unitTypes, "name", "id", "listings.unit.typeOptions")
     )
   }, [unitTypesOptions, unitTypes])
+
+  if (loading || amiChartsLoading || unitTypesLoading || jurisdictionLoading) {
+    return (
+      <LoadingState loading={true}>
+        <></>
+      </LoadingState>
+    )
+  }
 
   return (
     <>
