@@ -1518,6 +1518,11 @@ export class ApplicationService {
 
     if (!application) return;
 
+    await this.prisma.applicationSnapshot.deleteMany({
+      where: {
+        originalId: applicationId,
+      },
+    });
     const transactions = [];
 
     if (application.mailingAddressId) {

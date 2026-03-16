@@ -1098,7 +1098,7 @@ export class SnapshotCreateService {
         success: true,
       };
     }
-    // grab current user account data
+    // grab current application data
     const currData = await this.prisma.applications.findUnique({
       where: {
         id: applicationId,
