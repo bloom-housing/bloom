@@ -4055,11 +4055,13 @@ describe('Testing user service', () => {
 
       expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: {
+          where: expect.objectContaining({
             id,
             confirmationToken: token,
             isAdvocate: true,
-          },
+            isApproved: true,
+            confirmedAt: null,
+          }),
         }),
       );
       expect(result).toMatchObject({ id, email: 'advocate@example.com' });
