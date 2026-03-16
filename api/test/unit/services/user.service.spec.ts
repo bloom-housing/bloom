@@ -522,9 +522,9 @@ describe('Testing user service', () => {
           },
         },
         orderBy: [
+          { isApproved: 'asc' },
           { firstName: 'asc' },
           { lastName: 'asc' },
-          { isApproved: 'asc' },
         ],
         skip: 0,
         take: 5,
@@ -582,9 +582,9 @@ describe('Testing user service', () => {
           },
         },
         orderBy: [
+          { isApproved: 'desc' },
           { firstName: 'asc' },
           { lastName: 'asc' },
-          { isApproved: 'desc' },
         ],
         skip: 0,
         take: 5,
