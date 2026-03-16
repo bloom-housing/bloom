@@ -91,11 +91,15 @@ const Autofill = () => {
             userId: profile.id,
           })
           .then((res) => {
-            if (res && res.applicant) {
+            if (res && res.applicant && !(res.wasCreatedExternally || res.wasPIICleared)) {
               setPreviousApplication(new AutofillCleaner(res).clean())
             } else {
               onSubmit()
             }
+          })
+          .catch(() => {
+            console.error("Error fetching most recent application for user")
+            onSubmit()
           })
       } else {
         onSubmit()

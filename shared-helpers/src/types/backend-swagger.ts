@@ -1779,13 +1779,19 @@ export class ApplicationsService {
   /**
    * trigger the remove PII cron job
    */
-  removePiiCronJob(options: IRequestOptions = {}): Promise<SuccessDTO> {
+  removePiiCronJob(
+    params: {
+      /** requestBody */
+      body?: PaginationDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/applications/removePIICronJob"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
+      let data = params.body
 
       configs.data = data
 
@@ -6279,6 +6285,12 @@ export interface Application {
 
   /**  */
   isNewest?: boolean
+
+  /**  */
+  wasCreatedExternally?: boolean
+
+  /**  */
+  wasPIICleared?: boolean
 }
 
 export interface ApplicationFlaggedSet {
@@ -7133,6 +7145,12 @@ export interface PublicAppsFiltered {
   isNewest?: boolean
 
   /**  */
+  wasCreatedExternally?: boolean
+
+  /**  */
+  wasPIICleared?: boolean
+
+  /**  */
   listings: Listing
 }
 
@@ -7398,6 +7416,12 @@ export interface ApplicationCreate {
   isNewest?: boolean
 
   /**  */
+  wasCreatedExternally?: boolean
+
+  /**  */
+  wasPIICleared?: boolean
+
+  /**  */
   applicant: ApplicantUpdate
 
   /**  */
@@ -7420,6 +7444,14 @@ export interface ApplicationCreate {
 
   /**  */
   preferredUnitTypes: IdDTO[]
+}
+
+export interface PaginationDTO {
+  /**  */
+  page?: number
+
+  /**  */
+  pageSize?: number
 }
 
 export interface ApplicationUpdate {
@@ -7512,6 +7544,12 @@ export interface ApplicationUpdate {
 
   /**  */
   isNewest?: boolean
+
+  /**  */
+  wasCreatedExternally?: boolean
+
+  /**  */
+  wasPIICleared?: boolean
 
   /**  */
   applicant: ApplicantUpdate
@@ -7979,14 +8017,6 @@ export interface CommunityTypeDTO {
 
   /**  */
   description?: string
-}
-
-export interface PaginationDTO {
-  /**  */
-  page?: number
-
-  /**  */
-  pageSize?: number
 }
 
 export interface FeatureFlagAssociate {
