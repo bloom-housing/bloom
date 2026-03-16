@@ -150,11 +150,11 @@ export class UserService {
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       orderBy: buildOrderBy(
-        ['firstName', 'lastName', ...(params.orderBy ? params.orderBy : [])],
+        [...(params.orderBy ? params.orderBy : []), 'firstName', 'lastName'],
         [
-          OrderByEnum.ASC,
-          OrderByEnum.ASC,
           ...(params.orderDir ? params.orderDir : []),
+          OrderByEnum.ASC,
+          OrderByEnum.ASC,
         ],
       ),
       include: views.full,
@@ -1122,13 +1122,14 @@ export class UserService {
         : null;
 
     if (dto.isAccepted) {
-      this.emailService.advocateAccepted(
+      await this.emailService.advocateAccepted(
         mapTo(User, targetUser),
         appUrl,
         appUrl, // TODO: Update this path for the advocate creation followup form when ready
       );
     } else {
-      this.emailService.advocateRejected(mapTo(User, targetUser), appUrl);
+      await this.emailService.advocateRejected(mapTo(User, targetUser), appUrl);
+      await this.deleteUserAndRelatedInfo(mapTo(User, targetUser));
     }
 
     return {
