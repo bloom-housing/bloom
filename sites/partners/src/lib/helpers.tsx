@@ -289,6 +289,11 @@ export const S3Upload = async ({ file, uploadUrl, onUploadProgress }: S3UploadPr
     url: uploadUrl,
     data: file,
     onUploadProgress: onUploadProgress,
+    // TODO: take this in from the file info
+    headers: {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "inline",
+    },
   })
 }
 
