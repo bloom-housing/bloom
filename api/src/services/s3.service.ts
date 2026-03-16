@@ -8,6 +8,7 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Upload } from '@aws-sdk/lib-storage';
 import { createReadStream } from 'fs';
+import { CreateS3UploadMetadata } from '../dtos/assets/create-s3-upload-metadata.dto';
 
 @Injectable()
 export class S3Service {
@@ -82,12 +83,15 @@ export class S3Service {
     });
   }
 
-  async uploadURLForPublic(key: string): Promise<string> {
+  async uploadURLForPublic(
+    key: string,
+    metadata: CreateS3UploadMetadata,
+  ): Promise<string> {
     const command = new PutObjectCommand({
       Bucket: this.publicBucket,
       Key: key,
-      ContentDisposition: 'inline',
-      ContentType: 'application/pdf',
+      ContentDisposition: metadata.contentDisposition ?? undefined,
+      ContentType: metadata.contentType ?? undefined,
     });
     return getSignedUrl(this.s3Client, command);
   }

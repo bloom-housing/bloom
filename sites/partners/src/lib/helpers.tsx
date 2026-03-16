@@ -164,6 +164,8 @@ interface FileUploaderParams {
   file: File
   setFileUploadData: (data: SetStateAction<{ id: string; url: string }>) => void
   setProgressValue: (value: SetStateAction<number>) => void
+  contentType?: string
+  contentDisposition?: string
 }
 
 /**
@@ -175,6 +177,8 @@ export const fileUploader = async ({
   file,
   setFileUploadData,
   setProgressValue,
+  contentType,
+  contentDisposition,
 }: FileUploaderParams) => {
   const onUploadProgress = (p: AxiosProgressEvent) => {
     setProgressValue(parseInt(((p.loaded / p.total) * 100).toFixed(0), 10))
@@ -184,7 +188,12 @@ export const fileUploader = async ({
   setProgressValue(1)
 
   if (process.env.useS3FileStorage === "TRUE") {
-    const resp = await assetsService.createS3UploadUrl()
+    const resp = await assetsService.createS3UploadUrl({
+      body: {
+        contentType,
+        contentDisposition,
+      },
+    })
     const { uploadUrl, publicUrl } = resp
     setProgressValue(3)
 

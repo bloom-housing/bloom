@@ -824,6 +824,28 @@ export class SnapshotService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Create Listing Snapshot
+   */
+  createListingSnapshot(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/snapshot/createListingSnapshot"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class AmiChartsService {
@@ -1804,13 +1826,19 @@ export class AssetsService {
   /**
    * Create a S3 file upload URL
    */
-  createS3UploadUrl(options: IRequestOptions = {}): Promise<CreateS3UploadUrl> {
+  createS3UploadUrl(
+    params: {
+      /** requestBody */
+      body?: CreateS3UploadMetadata
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<CreateS3UploadUrl> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/assets/s3-upload-url"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = null
+      let data = params.body
 
       configs.data = data
 
@@ -8760,6 +8788,14 @@ export interface CreateS3UploadUrl {
 
   /**  */
   publicUrl: string
+}
+
+export interface CreateS3UploadMetadata {
+  /**  */
+  contentType?: string
+
+  /**  */
+  contentDisposition?: string
 }
 
 export interface EmailAndAppUrl {
