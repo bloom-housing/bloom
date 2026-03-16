@@ -230,9 +230,7 @@ export const fileUploader = async ({
           url: cloudinaryUrlFromId(response.data.public_id),
         })
       })
-      .catch(() => {
-        setProgressValue(0)
-      })
+      .catch(() => setProgressValue(0))
   }
 }
 
