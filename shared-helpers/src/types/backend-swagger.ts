@@ -281,13 +281,21 @@ export class ListingsService {
   /**
    * Get listing map markers
    */
-  mapMarkers(options: IRequestOptions = {}): Promise<ListingMapMarker[]> {
+  mapMarkers(
+    params: {
+      /** requestBody */
+      body?: ListingsQueryBody
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ListingMapMarker[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/mapMarkers"
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      let data = params.body
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -9923,6 +9931,7 @@ export enum ListingViews {
   "csv" = "csv",
   "full" = "full",
   "fundamentals" = "fundamentals",
+  "map" = "map",
   "name" = "name",
 }
 
@@ -10294,6 +10303,7 @@ export enum FeatureFlagEnum {
   "enableListingFiltering" = "enableListingFiltering",
   "enableLeasingAgentAltText" = "enableLeasingAgentAltText",
   "enableListingImageAltText" = "enableListingImageAltText",
+  "enableListingMap" = "enableListingMap",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
   "enableListingUpdatedAt" = "enableListingUpdatedAt",

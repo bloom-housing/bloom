@@ -18,6 +18,9 @@ import {
   PaginatedListing,
   EnumAgencyFilterParamsComparison,
   AgencyFilterParams,
+  ListingMapMarker,
+  ListingsService,
+  ListingViews,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
@@ -29,6 +32,8 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import { fetchFavoriteListingIds } from "./helpers"
+
+import { ListingQueryBuilder } from "./listings/listing-query-builder"
 
 /**
  * This ensures a listing is present in memory and no application has yet been submitted
@@ -391,5 +396,84 @@ export async function fetchAgencies(req: any, jurisdictionId: string) {
     return agencyDataResponse?.data
   } catch (error) {
     console.log("error = ", error)
+  }
+}
+
+export const searchListings = async (
+  qb: ListingQueryBuilder,
+  limit: number | "all" = "all",
+  page = 1,
+  listingsService: ListingsService,
+  view: ListingViews = ListingViews.base,
+  jurisdictionIds: string[] = [],
+  additionalFilters: ListingFilterParams[] = []
+): Promise<PaginatedListing> => {
+  let results: PaginatedListing = {
+    items: [],
+    meta: {
+      currentPage: 0,
+      itemCount: 0,
+      itemsPerPage: 0,
+      totalItems: 0,
+      totalPages: 0,
+    },
+  }
+
+  const filter = qb.getFilterParams().concat(additionalFilters)
+
+  if (jurisdictionIds.length > 0) {
+    filter.push({
+      $comparison: EnumListingFilterParamsComparison.IN,
+      jurisdiction: jurisdictionIds.join(","),
+    })
+  }
+
+  const params: Parameters<ListingsService["list"]>[0] = {
+    view,
+    limit: limit || "all",
+    page: page,
+    filter,
+    orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+    orderDir: [OrderByEnum.desc],
+  }
+
+  try {
+    const response = await listingsService.filterableList({
+      body: { ...params },
+    })
+    results = response
+  } catch (e) {
+    console.log("ListingService.searchListings error: ", e)
+  }
+
+  return results
+}
+
+export const searchMapMarkers = async (
+  qb: ListingQueryBuilder,
+  listingsService: ListingsService,
+  jurisdictionIds: string[] = [],
+  additionalFilters: ListingFilterParams[] = []
+): Promise<ListingMapMarker[]> => {
+  const filter = qb.getFilterParams().concat(additionalFilters)
+
+  if (jurisdictionIds.length > 0) {
+    filter.push({
+      $comparison: EnumListingFilterParamsComparison.IN,
+      jurisdiction: jurisdictionIds.join(","),
+    })
+  }
+
+  const params = {
+    limit: "all" as number | "all",
+    filter,
+  }
+
+  try {
+    const response = await listingsService.mapMarkers({ body: { ...params } })
+    return response
+  } catch (e) {
+    console.log("ListingService.searchMapMarkers error: ", e)
+    return []
   }
 }
