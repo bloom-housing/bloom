@@ -46,10 +46,11 @@ resource "aws_s3_bucket_cors_configuration" "public" {
   region = var.aws_region
   bucket = aws_s3_bucket.public.id
   cors_rule {
-    allowed_methods = ["PUT", "OPTIONS"]
+    allowed_methods = ["PUT"]
     allowed_origins = [
       "https://partners.${var.domain_name}",
     ]
+    allowed_headers = ["Content-Type", "Content-Disposition"]
   }
 }
 resource "aws_s3_bucket_public_access_block" "public" {
