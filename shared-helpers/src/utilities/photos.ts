@@ -32,12 +32,16 @@ export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
   } else if (Array.isArray(listing?.assets)) {
     imageAssets = listing.assets
   }
+  const cloudinaryCloudName: string | undefined =
+    process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME
 
-  const imageUrls = imageAssets
-    ?.filter(
+  let imageUrls = imageAssets
+  if (cloudinaryCloudName) {
+    imageUrls = imageUrls.filter(
       (asset: Asset) => asset.label === CLOUDINARY_BUILDING_LABEL || asset.label === "building"
     )
-    ?.map((asset: Asset) => getUrlForListingImage(asset, size) || "")
+  }
+  const assets = imageUrls?.map((asset: Asset) => getUrlForListingImage(asset, size) || "")
 
-  return imageUrls?.length > 0 ? imageUrls : [IMAGE_FALLBACK_URL]
+  return assets?.length > 0 ? assets : [IMAGE_FALLBACK_URL]
 }
