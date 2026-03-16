@@ -76,7 +76,7 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.disableAccessibilityFeaturesTag,
     description:
-      "When true, the listing 'accessibility features' tag is hidden on public listing cards and details when enableAccessibilityFeatures is true",
+      "When true, the listing 'accessibility features' tag is hidden on public listing cards and details",
   },
   {
     name: FeatureFlagEnum.disableBuildingSelectionCriteria,
@@ -313,7 +313,7 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableUnitAccessibilityTypeTags,
     description:
-      "When true, unit accessibility type tags (for example, 'Mobility units') are displayed on listing cards and details when enableAccessibilityFeatures is true",
+      "When true, unit accessibility type tags (for example, 'Mobility units') are displayed on listing cards and details",
   },
   {
     name: FeatureFlagEnum.enableUnitGroups,

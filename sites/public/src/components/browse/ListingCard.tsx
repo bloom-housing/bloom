@@ -45,7 +45,6 @@ export const ListingCard = ({
     !showHomeType,
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.disableAccessibilityFeaturesTag),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitAccessibilityTypeTags),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
   )

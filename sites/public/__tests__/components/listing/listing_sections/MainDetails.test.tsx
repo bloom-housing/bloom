@@ -31,9 +31,23 @@ describe("<MainDetails>", () => {
           ...listing,
           reviewOrderType: ReviewOrderTypeEnum.lottery,
           reservedCommunityTypes: null,
-          listingFeatures: { id: "1", createdAt: new Date(), updatedAt: new Date() },
+          listingFeatures: { id: "1" },
         }}
-        jurisdiction={jurisdiction}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            ...jurisdiction.featureFlags,
+            {
+              name: FeatureFlagEnum.disableAccessibilityFeaturesTag,
+              id: "id_2",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
       />
     )
     expect(screen.queryByTestId("listing-tags")).toBeNull()
@@ -95,15 +109,6 @@ describe("<MainDetails>", () => {
           featureFlags: [
             ...jurisdiction.featureFlags,
             {
-              name: FeatureFlagEnum.enableAccessibilityFeatures,
-              id: "id_0",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              active: true,
-              description: "",
-              jurisdictions: [],
-            },
-            {
               name: FeatureFlagEnum.enableUnitAccessibilityTypeTags,
               id: "id",
               createdAt: new Date(),
@@ -144,49 +149,6 @@ describe("<MainDetails>", () => {
     expect(screen.queryByText("Mobility, hearing and vision units")).toBeNull()
   })
 
-  it("hides accessibility priority type tags when enableAccessibilityFeatures is off", () => {
-    render(
-      <MainDetails
-        listing={{
-          ...listing,
-          unitsSummarized: {
-            ...listing.unitsSummarized,
-            priorityTypes: [
-              UnitAccessibilityPriorityTypeEnum.mobility,
-              UnitAccessibilityPriorityTypeEnum.hearingAndVision,
-            ],
-          },
-        }}
-        jurisdiction={{
-          ...jurisdiction,
-          featureFlags: [
-            {
-              name: FeatureFlagEnum.enableAccessibilityFeatures,
-              id: "id",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              active: false,
-              description: "",
-              jurisdictions: [],
-            },
-            {
-              name: FeatureFlagEnum.enableUnitAccessibilityTypeTags,
-              id: "id_2",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              active: true,
-              description: "",
-              jurisdictions: [],
-            },
-          ],
-        }}
-      />
-    )
-
-    expect(screen.queryByText("Mobility units")).toBeNull()
-    expect(screen.queryByText("Hearing and vision units")).toBeNull()
-  })
-
   it("hides accessibility features tag when disableAccessibilityFeaturesTag is enabled", () => {
     render(
       <MainDetails
@@ -201,15 +163,6 @@ describe("<MainDetails>", () => {
           ...jurisdiction,
           featureFlags: [
             ...jurisdiction.featureFlags,
-            {
-              name: FeatureFlagEnum.enableAccessibilityFeatures,
-              id: "id",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              active: true,
-              description: "",
-              jurisdictions: [],
-            },
             {
               name: FeatureFlagEnum.disableAccessibilityFeaturesTag,
               id: "id_2",

@@ -23,7 +23,6 @@ export const MinimalListingCard = ({ listing, jurisdiction }: MinimalListingCard
     !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableHomeType),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.disableAccessibilityFeaturesTag),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitAccessibilityTypeTags),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
   )
