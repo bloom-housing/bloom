@@ -1339,7 +1339,7 @@ export class ApplicationService {
       return { success: false };
     }
 
-    const isAdvocate = rawApplication.userAccounts.isAdvocate;
+    const isAdvocate = rawApplication.userAccounts?.isAdvocate ?? false;
     const advocateEmail = rawApplication.userAccounts?.email;
     const applicantEmail = application?.applicant?.emailAddress;
 
