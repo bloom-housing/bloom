@@ -86,6 +86,8 @@ export class S3Service {
     const command = new PutObjectCommand({
       Bucket: this.publicBucket,
       Key: key,
+      ContentDisposition: 'inline',
+      ContentType: 'application/pdf',
     });
     return getSignedUrl(this.s3Client, command);
   }
