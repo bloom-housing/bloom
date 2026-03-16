@@ -410,7 +410,7 @@ const UnitForm = ({
     )
   }, [unitTypesOptions, unitTypes])
 
-  if (loading || amiChartsLoading || unitTypesLoading || jurisdictionLoading) {
+  if (amiChartsLoading || unitTypesLoading || jurisdictionLoading) {
     return (
       <LoadingState loading={true}>
         <></>
