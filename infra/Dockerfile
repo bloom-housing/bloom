@@ -29,6 +29,7 @@ COPY --from=opentofu /usr/local/bin/tofu /usr/local/bin/tofu
 
 # Install other required binaries.
 RUN <<EOF
+set -e
 dnf update -y
 dnf install -y shadow-utils # make groupadd and useradd available.
 dnf install -y openssl
@@ -48,6 +49,7 @@ USER 2002:2002
 # directory. The AWS provider is a little under 1 GiB so sharing reduces this image size by
 # a significant amount.
 RUN <<EOF
+set -e
 mkdir /bloom/.terraform-plugin-cache
 echo 'plugin_cache_dir = "/bloom/.terraform-plugin-cache"' > /bloom/.tofurc
 EOF
@@ -61,7 +63,11 @@ COPY --chown=2002:2002 tofu_root_modules /bloom/infra/tofu_root_modules
 # state file in the S3 bucket will be read.
 WORKDIR /bloom/infra/tofu_root_modules
 RUN <<EOF
-for d in ./*/; do
+set -e
+for d in ./*; do
+    if [ ! -d "$d" ]; then
+      continue
+    fi
     echo "== Running tofu init for $d"
     cd "$d"
     tofu init -backend=false

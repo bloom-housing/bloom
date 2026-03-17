@@ -50,8 +50,8 @@ organization. The guide is broken down into a series of files that should be fol
       'ghcr.io/bloom-housing/bloom/infra-dev:gitsha-ad3fca97bd5520dba05a0907f7c907f4984e8680', the
       git SHA that it was built from is 'ad3fca97bd5520dba05a0907f7c907f4984e8680'.
 
-4. Initialize root modules using. All arguments should be present in your notes. To see all required
-   arguments, run:
+4. Initialize root modules using a helper script. All argument values should be present in your
+   notes. To see all required arguments, run:
 
    ```bash
    docker run --rm -it --entrypoint python3 --user "$(id -u):$(id -g)" -v ./infra:/bloom/infra:z ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra-dev:gitsha-SOMESHA /bloom/infra/root_module_initializer.py -h

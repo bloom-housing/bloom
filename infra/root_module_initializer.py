@@ -22,6 +22,10 @@ def main():
         allow_abbrev=True)
 
     p.add_argument(
+        "--jurisdiction_name",
+        help="Name of the Jurisdiction this Bloom deployment is for.",
+        required=True)
+    p.add_argument(
         "--iam_identity_center_region",
         help="AWS region the IAM Identity Center instance is in",
         required=True)
@@ -75,10 +79,16 @@ def main():
     p.add_argument(
         "--prod_domain_name", help="The domain name for the prod Bloom deployment.", required=True)
 
+    p.add_argument(
+        "--print_to_stdout",
+        help="Print the file contents to stdout instead of writing to the filesystem.",
+        action="store_true",
+        required=False)
+
     args = p.parse_args()
 
     write_template(
-        pathlib.Path("/bloom/infra/aws_sso_config"), AWS_SSO_TEMPLATE,
+        args.print_to_stdout, pathlib.Path("/bloom/infra/aws_sso_config"), AWS_SSO_TEMPLATE,
         AwsSSOConfigTemplateArgs(
             MANAGEMENT_AWS_ACCOUNT_NUMBER=args.organization_management_account_number,
             IAM_IDENTITY_CENTER_REGION=args.iam_identity_center_region,
@@ -88,7 +98,9 @@ def main():
         ))
 
     write_template(
-        pathlib.Path("/bloom/infra/tofu_root_modules/bloom_dev_deployer_permission_set_policy/main.tf"),
+        args.print_to_stdout,
+        pathlib.Path(
+            "/bloom/infra/tofu_root_modules/bloom_dev_deployer_permission_set_policy/main.tf"),
         BLOOM_PERMISSION_SET_TEMPLATE,
         BloomPermissionSetPolicyTemplateArgs(
             DEPLOYMENT_NAME="bloom-dev",
@@ -101,8 +113,10 @@ def main():
             BLOOM_AWS_ACCOUNT_NUMBER=args.dev_aws_account_number,
         ))
     write_template(
-        pathlib.Path("/bloom/infra/tofu_root_modules/bloom_dev/main.tf"), BLOOM_DEPLOYMENT_TEMPLATE,
+        args.print_to_stdout, pathlib.Path("/bloom/infra/tofu_root_modules/bloom_dev/main.tf"),
+        BLOOM_DEPLOYMENT_TEMPLATE,
         BloomDeploymentTemplateArgs(
+            JURISDICTION_NAME=args.jurisdiction_name,
             DEPLOYMENT_NAME="bloom-dev",
             TOFU_STATE_BUCKET_REGION=args.tofu_state_bucket_region,
             TOFU_STATE_BUCKET_NAME=args.tofu_state_bucket_name,
@@ -116,7 +130,9 @@ def main():
         ))
 
     write_template(
-        pathlib.Path("/bloom/infra/tofu_root_modules/bloom_prod_deployer_permission_set_policy/main.tf"),
+        args.print_to_stdout,
+        pathlib.Path(
+            "/bloom/infra/tofu_root_modules/bloom_prod_deployer_permission_set_policy/main.tf"),
         BLOOM_PERMISSION_SET_TEMPLATE,
         BloomPermissionSetPolicyTemplateArgs(
             DEPLOYMENT_NAME="bloom-prod",
@@ -129,8 +145,10 @@ def main():
             BLOOM_AWS_ACCOUNT_NUMBER=args.prod_aws_account_number,
         ))
     write_template(
-        pathlib.Path("/bloom/infra/tofu_root_modules/bloom_prod/main.tf"), BLOOM_DEPLOYMENT_TEMPLATE,
+        args.print_to_stdout, pathlib.Path("/bloom/infra/tofu_root_modules/bloom_prod/main.tf"),
+        BLOOM_DEPLOYMENT_TEMPLATE,
         BloomDeploymentTemplateArgs(
+            JURISDICTION_NAME=args.jurisdiction_name,
             DEPLOYMENT_NAME="bloom-prod",
             BLOOM_AWS_REGION=args.bloom_aws_region,
             TOFU_STATE_BUCKET_REGION=args.tofu_state_bucket_region,
@@ -144,28 +162,34 @@ def main():
         ))
 
 
-def write_template(path: pathlib.Path, template: string.Template, template_args):
+def write_template(
+        print_to_stdout: bool, path: pathlib.Path, template: string.Template, template_args):
     """template_args is a dataclass"""
-    print(f"== Rendering template for {path}")
+    print(f"== Writing {path}")
     try:
-        rendered = template.substitute(dataclasses.asdict(template_args))
+        rendered = template.substitute(dataclasses.asdict(template_args)).lstrip()
     except KeyError as e:
         sys.exit(f"FATAL: template references an undefined variable: {e}")
     except ValueError as e:
         match = re.search(r"line (\d+), col (\d+)", str(e))
+        if match is None:
+            sys.exit(f"FATAL: error rendering template: {e}")
+
         line = match[1]
         col = match[2]
 
         err = f"FATAL: error rendering template. Invalid substitution in template line {line}:\n"
-        err += template.template.split('\n')[int(line) - 1] + "\n"
+        err += template.template.split("\n")[int(line) - 1] + "\n"
         err += " " * (int(col) - 1) + "^\n"
         err += "Hint: for a Tofu string template reference, change to $${"
 
         sys.exit(err)
-    print(f"=== writing  {path}")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w") as file:
-        file.write(rendered)
+    if print_to_stdout:
+        print(rendered)
+    else:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with open(path, "w") as file:
+            file.write(rendered)
 
 
 @dataclasses.dataclass
@@ -273,6 +297,7 @@ module "deployer_permission_set" {
 
 @dataclasses.dataclass
 class BloomDeploymentTemplateArgs:
+    JURISDICTION_NAME: str
     DEPLOYMENT_NAME: str
     TOFU_STATE_BUCKET_REGION: str
     TOFU_STATE_BUCKET_NAME: str
@@ -370,7 +395,7 @@ module "bloom_deployment" {
   bloom_site_partners_image = "ghcr.io/${GITHUB_ORG}/bloom/partners:gitsha-${GIT_COMMIT}"
   bloom_site_public_image   = "ghcr.io/${GITHUB_ORG}/bloom/public:gitsha-${GIT_COMMIT}"
   bloom_site_public_env_vars = {
-    JURISDICTION_NAME = "Bloomington"
+    JURISDICTION_NAME = "${JURISDICTION_NAME}"
     LANGUAGES         = "en,es,zh,vi,tl,ko,hy"
     RTL_LANGUAGES     = "ar,fa"
   }
