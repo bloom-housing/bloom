@@ -29,6 +29,7 @@ export const applicationFactory = async (optionalParams?: {
   applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
   createdAt?: Date;
   demographics?: Prisma.DemographicsCreateWithoutApplicationsInput;
+  enableV2MSQ?: boolean;
   expireAfter?: Date;
   householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput[];
   isNewest?: boolean;
@@ -81,24 +82,28 @@ export const applicationFactory = async (optionalParams?: {
     incomePeriod: randomBoolean()
       ? IncomePeriodEnum.perYear
       : IncomePeriodEnum.perMonth,
-    preferences: preferenceFactory(
-      optionalParams?.multiselectQuestions
-        ? optionalParams.multiselectQuestions.filter(
-            (question) =>
-              question.applicationSection ===
-              MultiselectQuestionsApplicationSectionEnum.preferences,
-          )
-        : [],
-    ),
-    programs: preferenceFactory(
-      optionalParams?.multiselectQuestions
-        ? optionalParams.multiselectQuestions.filter(
-            (question) =>
-              question.applicationSection ===
-              MultiselectQuestionsApplicationSectionEnum.programs,
-          )
-        : [],
-    ),
+    preferences: optionalParams?.enableV2MSQ
+      ? []
+      : preferenceFactory(
+          optionalParams?.multiselectQuestions
+            ? optionalParams.multiselectQuestions.filter(
+                (question) =>
+                  question.applicationSection ===
+                  MultiselectQuestionsApplicationSectionEnum.preferences,
+              )
+            : [],
+        ),
+    programs: optionalParams?.enableV2MSQ
+      ? []
+      : preferenceFactory(
+          optionalParams?.multiselectQuestions
+            ? optionalParams.multiselectQuestions.filter(
+                (question) =>
+                  question.applicationSection ===
+                  MultiselectQuestionsApplicationSectionEnum.programs,
+              )
+            : [],
+        ),
     preferredUnitTypes,
     sendMailToMailingAddress: true,
     applicationsMailingAddress: {

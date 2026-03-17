@@ -1415,9 +1415,11 @@ export const stagingSeed = async (
         applications: [
           // TODO: Needs to handle V2MSQ
           await applicationFactory({
+            enableV2MSQ: msqV2,
             multiselectQuestions: [workInCityQuestion, cityEmployeeQuestion],
           }),
           await applicationFactory({
+            enableV2MSQ: msqV2,
             multiselectQuestions: [
               cityEmployeeQuestion,
               workInCityQuestion,
@@ -1425,9 +1427,11 @@ export const stagingSeed = async (
             ],
           }),
           await applicationFactory({
+            enableV2MSQ: msqV2,
             multiselectQuestions: [workInCityQuestion, cityEmployeeQuestion],
           }),
           ...(await applicationFactoryMany(2, {
+            enableV2MSQ: msqV2,
             multiselectQuestions: [workInCityQuestion],
           })),
           await applicationFactory(),
