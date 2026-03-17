@@ -17,6 +17,11 @@ interface AssistanceProps {
 
 const Assistance = (props: AssistanceProps) => {
   const enableResources = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableResources)
+  const enableHousingBasics = isFeatureFlagOn(
+    props.jurisdiction,
+    FeatureFlagEnum.enableHousingBasics
+  )
+  const enableFaq = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableFaq)
 
   return (
     <Layout pageTitle={t("pageTitle.getAssistance")}>
@@ -25,23 +30,42 @@ const Assistance = (props: AssistanceProps) => {
         inverse
         subheading={t("pageDescription.getAssistance")}
         className={styles["site-layout"]}
+        fullHeight={true}
       >
         <article className={styles["site-content"]}>
           <div className={styles["items-wrapper"]}>
-            <BloomCard
-              title={t("assistance.applyToHousingTitle")}
-              subtitle={t("assistance.applyToHousingDescription")}
-              headingPriority={2}
-              iconSymbol={"home"}
-              iconOutlined={true}
-              variant={"block"}
-              className={styles["item"]}
-              iconClass="card-icon"
-            >
-              <Card.Section className={styles["item-link"]}>
-                <Link href={"/housing-basics"}>{t("assistance.applyToHousingLink")}</Link>
-              </Card.Section>
-            </BloomCard>
+            {enableHousingBasics && (
+              <BloomCard
+                title={t("assistance.applyToHousingTitle")}
+                subtitle={t("assistance.applyToHousingDescription")}
+                headingPriority={2}
+                iconSymbol={"home"}
+                iconOutlined={true}
+                variant={"block"}
+                className={styles["item"]}
+                iconClass="card-icon"
+              >
+                <Card.Section className={styles["item-link"]}>
+                  <Link href={"/housing-basics"}>{t("assistance.applyToHousingLink")}</Link>
+                </Card.Section>
+              </BloomCard>
+            )}
+            {enableFaq && (
+              <BloomCard
+                title={t("pageTitle.faq")}
+                subtitle={t("faq.description")}
+                headingPriority={2}
+                iconSymbol={"questionMarkCircle"}
+                iconOutlined={true}
+                variant={"block"}
+                className={styles["item"]}
+                iconClass="card-icon"
+              >
+                <Card.Section className={styles["item-link"]}>
+                  <Link href={"/faq"}>{t("faq.linkText")}</Link>
+                </Card.Section>
+              </BloomCard>
+            )}
             {enableResources && (
               <BloomCard
                 title={t("assistance.additionalHousingTitle")}

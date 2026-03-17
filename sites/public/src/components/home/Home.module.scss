@@ -1,5 +1,8 @@
 .home-page {
   font-family: var(--seeds-font-alt-sans);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   .surface-background {
     background-color: var(--seeds-bg-color-surface);
   }
