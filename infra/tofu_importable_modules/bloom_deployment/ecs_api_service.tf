@@ -8,8 +8,8 @@ locals {
     DB_DATABASE         = "bloom_prisma"
     DB_USE_RDS_IAM_AUTH = "1"
     USE_AWS_SES         = "1"
-    GOOGLE_API_ID       = var.google_translate_settings == null ? "" || var.google_translate_settings.project_id
-    GOOGLE_API_EMAIL    = var.google_translate_settings == null ? "" || var.google_translate_settings.iam_user
+    GOOGLE_API_ID       = var.google_translate_settings == null ? "" : var.google_translate_settings.project_id
+    GOOGLE_API_EMAIL    = var.google_translate_settings == null ? "" : var.google_translate_settings.iam_user
     S3_REGION           = var.aws_region
     S3_PRIVATE_BUCKET   = aws_s3_bucket.private.id
     S3_PUBLIC_BUCKET    = aws_s3_bucket.public.id
