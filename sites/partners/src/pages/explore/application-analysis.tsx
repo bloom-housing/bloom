@@ -29,6 +29,9 @@ import { AiPermissionModal } from "../../components/explore/aiPermissionModal"
 import { AiInsightsPanel } from "../../components/explore/AIInsightsPanel"
 import { DEFAULT_API_FILTERS, formValuesToApiFilters } from "../../lib/explore/filterDefaults"
 
+// Toggle to true to show dev-only test controls (data override, AI consent override)
+const DEV_MODE = false
+
 const ApplicationAnalysis = () => {
   const router = useRouter()
   if (!process.env.enableHousingReports) {
@@ -273,61 +276,65 @@ const ApplicationAnalysis = () => {
             )}
 
             {/* Test Data Override Dropdown */}
-            <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <label
-                htmlFor="dataOverride"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                🧪 Test Data Override
-              </label>
-              <select
-                id="dataOverride"
-                value={dataOverride}
-                onChange={(e) => setDataOverride(e.target.value)}
-                className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="none">No Override (Use API/Filters)</option>
-                <option value="default">Default Report (Balanced Distribution)</option>
-                <option value="lowIncome">Low Income & Younger Skew</option>
-                <option value="highIncome">High Income & Older Skew</option>
-                <option value="veryLow">Very Low Data (~22 applications)</option>
-                <option value="insufficient">Insufficient Data (Error State)</option>
-              </select>
-              <p className="mt-2 text-xs text-gray-600">
-                Select a test dataset to override the normal data fetching behavior
-              </p>
-            </div>
+            {DEV_MODE && (
+              <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <label
+                  htmlFor="dataOverride"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  🧪 Test Data Override
+                </label>
+                <select
+                  id="dataOverride"
+                  value={dataOverride}
+                  onChange={(e) => setDataOverride(e.target.value)}
+                  className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="none">No Override (Use API/Filters)</option>
+                  <option value="default">Default Report (Balanced Distribution)</option>
+                  <option value="lowIncome">Low Income & Younger Skew</option>
+                  <option value="highIncome">High Income & Older Skew</option>
+                  <option value="veryLow">Very Low Data (~22 applications)</option>
+                  <option value="insufficient">Insufficient Data (Error State)</option>
+                </select>
+                <p className="mt-2 text-xs text-gray-600">
+                  Select a test dataset to override the normal data fetching behavior
+                </p>
+              </div>
+            )}
 
             {/* Dev AI Consent Override */}
-            <div className="mb-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
-              <p className="block text-sm font-medium text-gray-700 mb-2">
-                👨‍💻 Dev: AI Consent Override
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => setHasUserConsentedToAI(true)}
-                  className={hasUserConsentedToAI ? "opacity-50" : ""}
-                >
-                  Grant Consent
-                </Button>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => {
-                    setHasUserConsentedToAI(false)
-                    setAiInsight("")
-                  }}
-                  className={!hasUserConsentedToAI ? "opacity-50" : ""}
-                >
-                  Revoke Consent
-                </Button>
+            {DEV_MODE && (
+              <div className="mb-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                <p className="block text-sm font-medium text-gray-700 mb-2">
+                  👨‍💻 Dev: AI Consent Override
+                </p>
+                <div className="flex gap-2">
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => setHasUserConsentedToAI(true)}
+                    className={hasUserConsentedToAI ? "opacity-50" : ""}
+                  >
+                    Grant Consent
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => {
+                      setHasUserConsentedToAI(false)
+                      setAiInsight("")
+                    }}
+                    className={!hasUserConsentedToAI ? "opacity-50" : ""}
+                  >
+                    Revoke Consent
+                  </Button>
+                </div>
+                <p className="mt-2 text-xs text-gray-600">
+                  Current status: {hasUserConsentedToAI ? "✅ Consented" : "❌ Not Consented"}
+                </p>
               </div>
-              <p className="mt-2 text-xs text-gray-600">
-                Current status: {hasUserConsentedToAI ? "✅ Consented" : "❌ Not Consented"}
-              </p>
-            </div>
+            )}
 
             <div className="pb-8 ml-auto flex gap-2">
               <Button
