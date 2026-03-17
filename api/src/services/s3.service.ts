@@ -4,6 +4,7 @@ import {
   PutObjectCommand,
   GetObjectCommand,
   S3Client,
+  PutObjectCommandInput,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Upload } from '@aws-sdk/lib-storage';
@@ -87,12 +88,20 @@ export class S3Service {
     key: string,
     metadata: CreateS3UploadMetadata,
   ): Promise<string> {
-    const command = new PutObjectCommand({
+    const input: PutObjectCommandInput = {
       Bucket: this.publicBucket,
       Key: key,
-      ContentDisposition: metadata.contentDisposition ?? undefined,
-      ContentType: metadata.contentType ?? undefined,
-    });
+    };
+
+    if (metadata.contentDisposition) {
+      input.ContentDisposition = metadata.contentDisposition;
+    }
+    if (metadata.contentType) {
+      input.ContentType = metadata.contentType;
+    }
+
+    const command = new PutObjectCommand(input);
+
     return getSignedUrl(this.s3Client, command);
   }
 
