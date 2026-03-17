@@ -58,7 +58,7 @@ const ApplicationAddress = () => {
       ...(enableFullTimeStudentQuestion && {
         "applicant.fullTimeStudent": application.applicant.fullTimeStudent,
       }),
-      "applicant.applicantAddress.state": application.applicant.applicantAddress.state,
+      "applicant.applicantAddress.state": application.applicant?.applicantAddress?.state,
     },
     shouldFocusError: false,
   })
@@ -69,7 +69,11 @@ const ApplicationAddress = () => {
     if (!verifyAddress) {
       setFoundAddress({})
       setVerifyAddress(true)
-      findValidatedAddress(data.applicant.applicantAddress, setFoundAddress, setNewAddressSelected)
+      void findValidatedAddress(
+        data.applicant.applicantAddress,
+        setFoundAddress,
+        setNewAddressSelected
+      )
       window.scrollTo({ top: 0 })
 
       return // Skip rest of the submit process
@@ -299,7 +303,7 @@ const ApplicationAddress = () => {
                   id="addressStreet"
                   name="applicant.applicantAddress.street"
                   label={t("application.contact.streetAddress")}
-                  defaultValue={application.applicant.applicantAddress.street}
+                  defaultValue={application.applicant?.applicantAddress?.street}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
                     errors.applicant?.address?.street?.type === "maxLength"
@@ -315,7 +319,7 @@ const ApplicationAddress = () => {
                   id="addressStreet2"
                   name="applicant.applicantAddress.street2"
                   label={t("application.contact.apt")}
-                  defaultValue={application.applicant.applicantAddress.street2}
+                  defaultValue={application.applicant?.applicantAddress?.street2}
                   register={register}
                   dataTestId={"app-primary-address-street2"}
                   error={errors.applicant?.applicantAddress?.street2}
@@ -328,7 +332,7 @@ const ApplicationAddress = () => {
                     id="addressCity"
                     name="applicant.applicantAddress.city"
                     label={t("application.contact.cityName")}
-                    defaultValue={application.applicant.applicantAddress.city}
+                    defaultValue={application.applicant?.applicantAddress?.city}
                     validation={{ required: true, maxLength: 64 }}
                     errorMessage={
                       errors.applicant?.address?.city?.type === "maxLength"
@@ -362,7 +366,7 @@ const ApplicationAddress = () => {
                   id="addressZipCode"
                   name="applicant.applicantAddress.zipCode"
                   label={t("application.contact.zip")}
-                  defaultValue={application.applicant.applicantAddress.zipCode}
+                  defaultValue={application.applicant?.applicantAddress?.zipCode}
                   validation={{ required: true, maxLength: 10 }}
                   errorMessage={
                     errors.applicant?.applicantAddress?.zipCode?.type === "maxLength"
@@ -402,7 +406,7 @@ const ApplicationAddress = () => {
                   <Field
                     id="mailingAddressStreet"
                     name="applicationsMailingAddress.street"
-                    defaultValue={application.applicationsMailingAddress.street}
+                    defaultValue={application.applicationsMailingAddress?.street}
                     label={t("application.contact.streetAddress")}
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.applicationsMailingAddress?.street}
@@ -419,7 +423,7 @@ const ApplicationAddress = () => {
                     id="mailingAddressStreet2"
                     name="applicationsMailingAddress.street2"
                     label={t("application.contact.apt")}
-                    defaultValue={application.applicationsMailingAddress.street2}
+                    defaultValue={application.applicationsMailingAddress?.street2}
                     register={register}
                     dataTestId={"app-primary-mailing-address-street2"}
                     validation={{ maxLength: 64 }}
@@ -432,7 +436,7 @@ const ApplicationAddress = () => {
                       id="mailingAddressCity"
                       name="applicationsMailingAddress.city"
                       label={t("application.contact.city")}
-                      defaultValue={application.applicationsMailingAddress.city}
+                      defaultValue={application.applicationsMailingAddress?.city}
                       validation={{ required: true, maxLength: 64 }}
                       error={errors.applicationsMailingAddress?.city}
                       errorMessage={
@@ -448,7 +452,7 @@ const ApplicationAddress = () => {
                       id="mailingAddressState"
                       name="applicationsMailingAddress.state"
                       label={t("application.contact.state")}
-                      defaultValue={application.applicationsMailingAddress.state}
+                      defaultValue={application.applicationsMailingAddress?.state}
                       validation={{ required: true, maxLength: 64 }}
                       errorMessage={
                         errors.applicationsMailingAddress?.state?.type === "maxLength"
@@ -468,7 +472,7 @@ const ApplicationAddress = () => {
                     id="mailingAddressZipCode"
                     name="applicationsMailingAddress.zipCode"
                     label={t("application.contact.zip")}
-                    defaultValue={application.applicationsMailingAddress.zipCode}
+                    defaultValue={application.applicationsMailingAddress?.zipCode}
                     validation={{ required: true, maxLength: 10 }}
                     error={errors.applicationsMailingAddress?.zipCode}
                     errorMessage={
@@ -573,7 +577,7 @@ const ApplicationAddress = () => {
                       <Field
                         id="applicantWorkAddressStreet"
                         name="applicant.applicantWorkAddress.street"
-                        defaultValue={application.applicant.applicantWorkAddress.street}
+                        defaultValue={application.applicant?.applicantWorkAddress?.street}
                         validation={{ required: true, maxLength: 64 }}
                         error={errors.applicant?.applicantWorkAddress?.street}
                         errorMessage={
@@ -590,7 +594,7 @@ const ApplicationAddress = () => {
                         id="applicantWorkAddressStreet2"
                         name="applicant.applicantWorkAddress.street2"
                         label={t("application.contact.apt")}
-                        defaultValue={application.applicant.applicantWorkAddress.street2}
+                        defaultValue={application.applicant?.applicantWorkAddress?.street2}
                         register={register}
                         error={errors.applicant?.applicantWorkAddress?.street2}
                         validation={{ maxLength: 64 }}
@@ -603,7 +607,7 @@ const ApplicationAddress = () => {
                           id="applicantWorkAddressCity"
                           name="applicant.applicantWorkAddress.city"
                           label={t("application.contact.city")}
-                          defaultValue={application.applicant.applicantWorkAddress.city}
+                          defaultValue={application.applicant?.applicantWorkAddress?.city}
                           validation={{ required: true, maxLength: 64 }}
                           error={errors.applicant?.applicantWorkAddress?.city}
                           errorMessage={
@@ -619,7 +623,7 @@ const ApplicationAddress = () => {
                           id="applicantWorkAddressState"
                           name="applicant.applicantWorkAddress.state"
                           label={t("application.contact.state")}
-                          defaultValue={application.applicant.applicantWorkAddress.state}
+                          defaultValue={application.applicant?.applicantWorkAddress?.state}
                           validation={{ required: true, maxLength: 64 }}
                           error={errors.applicant?.applicantWorkAddress?.state}
                           errorMessage={
@@ -639,7 +643,7 @@ const ApplicationAddress = () => {
                         id="applicantWorkAddressZipCode"
                         name="applicant.applicantWorkAddress.zipCode"
                         label={t("application.contact.zip")}
-                        defaultValue={application.applicant.applicantWorkAddress.zipCode}
+                        defaultValue={application.applicant?.applicantWorkAddress?.zipCode}
                         validation={{ required: true, maxLength: 10 }}
                         error={errors.applicant?.applicantWorkAddress?.zipCode}
                         errorMessage={

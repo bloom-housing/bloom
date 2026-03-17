@@ -95,6 +95,15 @@ type findByOptions = {
   resetToken?: string;
 };
 
+export interface AdvocateConfirmationPrefillDto {
+  id: string;
+  email: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  agency: { id: string; name: string };
+}
+
 const USER_DELETION_CRON_JOB_NAME = 'USER_DELETION_CRON_STRING';
 const USER_DELETION_WARN_CRON_JOB_NAME = 'USER_DELETION_WARN_CRON_JOB';
 
@@ -150,11 +159,11 @@ export class UserService {
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       orderBy: buildOrderBy(
-        ['firstName', 'lastName', ...(params.orderBy ? params.orderBy : [])],
+        [...(params.orderBy ? params.orderBy : []), 'firstName', 'lastName'],
         [
-          OrderByEnum.ASC,
-          OrderByEnum.ASC,
           ...(params.orderDir ? params.orderDir : []),
+          OrderByEnum.ASC,
+          OrderByEnum.ASC,
         ],
       ),
       include: views.full,
@@ -444,10 +453,13 @@ export class UserService {
     });
 
     const prismaTransactions = await this.prisma.$transaction(
-      async (transaction) =>
-        await Promise.all(
-          transactions.map((asyncCall) => asyncCall(transaction)),
-        ),
+      async (transaction) => {
+        const results = [];
+        for (const asyncCall of transactions) {
+          results.push(await asyncCall(transaction));
+        }
+        return results;
+      },
     );
 
     const rawUser = prismaTransactions[prismaTransactions.length - 1];
@@ -643,6 +655,102 @@ export class UserService {
         console.error('isUserConfirmationTokenValid error = ', e);
       }
     }
+  }
+
+  /*
+    Returns an advocate user's basic info by validating their confirmation token.
+    Used to pre-populate the account completion form on the public site.
+  */
+  async getAdvocateFromConfirmationToken(
+    dto: ConfirmationRequest,
+  ): Promise<AdvocateConfirmationPrefillDto> {
+    try {
+      const token = verify(dto.token, process.env.APP_SECRET) as IdDTO;
+      const storedUser = await this.prisma.userAccounts.findFirst({
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          middleName: true,
+          lastName: true,
+          agency: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        where: {
+          id: token.id,
+          confirmationToken: dto.token,
+          isAdvocate: true,
+          isApproved: true,
+          confirmedAt: null,
+        },
+      });
+      if (!storedUser) {
+        throw new NotFoundException(`User not found for token`);
+      }
+      return {
+        id: storedUser.id,
+        email: storedUser.email,
+        firstName: storedUser.firstName,
+        middleName: storedUser.middleName,
+        lastName: storedUser.lastName,
+        agency: storedUser.agency,
+      };
+    } catch (_) {
+      throw new NotFoundException(`User not found for token`);
+    }
+  }
+
+  /*
+    Generates a fresh confirmation token and re-sends the advocate account
+    completion email.
+  */
+  async resendAdvocateConfirmation(dto: EmailAndAppUrl): Promise<SuccessDTO> {
+    const storedUser = await this.prisma.userAccounts.findFirst({
+      include: views.full,
+      where: {
+        email: dto.email,
+        isAdvocate: true,
+        isApproved: true,
+        confirmedAt: null,
+      },
+    });
+
+    if (!storedUser) {
+      return { success: true };
+    }
+
+    const confirmationToken = this.createConfirmationToken(
+      storedUser.id,
+      storedUser.email,
+    );
+    await this.prisma.userAccounts.update({
+      data: { confirmationToken },
+      where: { id: storedUser.id },
+    });
+
+    const appUrl = storedUser.jurisdictions?.length
+      ? storedUser.jurisdictions[0].publicUrl
+      : dto.appUrl;
+
+    if (!appUrl) {
+      throw new BadRequestException(
+        'Unable to determine application URL for advocate confirmation.',
+      );
+    }
+
+    const formUrl = `${appUrl}/complete-advocate-account?token=${confirmationToken}`;
+
+    await this.emailService.advocateAccepted(
+      mapTo(User, storedUser),
+      appUrl,
+      formUrl,
+    );
+
+    return { success: true };
   }
 
   /*
@@ -957,7 +1065,7 @@ export class UserService {
   }
 
   /*
-    creates an advocate user, and sends a welcome email with a confirmation link
+    creates an advocate user request; welcome email is sent only when explicitly requested
    */
   async createAdvocateUser(
     dto: AdvocateUserCreate,
@@ -1122,13 +1230,23 @@ export class UserService {
         : null;
 
     if (dto.isAccepted) {
-      this.emailService.advocateAccepted(
+      const confirmationToken = this.createConfirmationToken(
+        targetUser.id,
+        targetUser.email,
+      );
+      await this.prisma.userAccounts.update({
+        data: { confirmationToken },
+        where: { id: targetUser.id },
+      });
+      const formUrl = `${appUrl}/complete-advocate-account?token=${confirmationToken}`;
+      await this.emailService.advocateAccepted(
         mapTo(User, targetUser),
         appUrl,
-        appUrl, // TODO: Update this path for the advocate creation followup form when ready
+        formUrl,
       );
     } else {
-      this.emailService.advocateRejected(mapTo(User, targetUser), appUrl);
+      await this.emailService.advocateRejected(mapTo(User, targetUser), appUrl);
+      await this.deleteUserAndRelatedInfo(mapTo(User, targetUser));
     }
 
     return {

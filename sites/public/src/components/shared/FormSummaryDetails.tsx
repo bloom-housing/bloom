@@ -64,7 +64,8 @@ const FormSummaryDetails = ({
     return labels
   }
 
-  const reformatAddress = (address: Address) => {
+  const reformatAddress = (address: Address | null | undefined): Address | null => {
+    if (!address) return null
     const { street, street2, city, state, zipCode } = address
     const newAddress = {
       placeName: street,
@@ -258,15 +259,17 @@ const FormSummaryDetails = ({
             {application.applicant.emailAddress}
           </FieldValue>
         )}
-        <FieldValue
-          testId={"app-summary-applicant-address"}
-          id="applicantAddress"
-          label={t("application.contact.address")}
-          className={styles["summary-value"]}
-        >
-          <MultiLineAddress address={reformatAddress(application.applicant.applicantAddress)} />
-        </FieldValue>
-        {application.sendMailToMailingAddress && (
+        {application.applicant?.applicantAddress && (
+          <FieldValue
+            testId={"app-summary-applicant-address"}
+            id="applicantAddress"
+            label={t("application.contact.address")}
+            className={styles["summary-value"]}
+          >
+            <MultiLineAddress address={reformatAddress(application.applicant.applicantAddress)} />
+          </FieldValue>
+        )}
+        {application.sendMailToMailingAddress && application.applicationsMailingAddress && (
           <FieldValue
             testId={"app-summary-applicant-mailing-address"}
             id="applicantMailingAddress"
@@ -276,19 +279,20 @@ const FormSummaryDetails = ({
             <MultiLineAddress address={reformatAddress(application.applicationsMailingAddress)} />
           </FieldValue>
         )}
-        {application.applicant.workInRegion === "yes" && (
-          <FieldValue
-            testId={"app-summary-applicant-work-address"}
-            id="applicantWorkAddress"
-            label={t("application.contact.workAddress")}
-            className={styles["summary-value"]}
-          >
-            <MultiLineAddress
-              address={reformatAddress(application.applicant.applicantWorkAddress)}
-            />
-          </FieldValue>
-        )}
-        {application.contactPreferences && (
+        {application.applicant.workInRegion === "yes" &&
+          application.applicant?.applicantWorkAddress && (
+            <FieldValue
+              testId={"app-summary-applicant-work-address"}
+              id="applicantWorkAddress"
+              label={t("application.contact.workAddress")}
+              className={styles["summary-value"]}
+            >
+              <MultiLineAddress
+                address={reformatAddress(application.applicant.applicantWorkAddress)}
+              />
+            </FieldValue>
+          )}
+        {application.contactPreferences && !!application.contactPreferences.length && (
           <FieldValue
             testId={"app-summary-contact-preference-type"}
             id="applicantPreferredContactType"
@@ -312,7 +316,7 @@ const FormSummaryDetails = ({
         )}
       </Card.Section>
 
-      {application.alternateContact.type && application.alternateContact.type !== "noContact" && (
+      {application.alternateContact?.type && application.alternateContact?.type !== "noContact" && (
         <>
           <Card.Header className={styles["summary-header"]}>
             <Heading priority={3} size="xl">
@@ -364,16 +368,17 @@ const FormSummaryDetails = ({
               </FieldValue>
             )}
 
-            {Object.values(application.alternateContact.address).some((value) => value !== "") && (
-              <FieldValue
-                testId={"app-summary-alternate-mailing-address"}
-                id="alternateMailingAddress"
-                label={t("application.contact.address")}
-                className={styles["summary-value"]}
-              >
-                <MultiLineAddress address={application.alternateContact.address} />
-              </FieldValue>
-            )}
+            {application.alternateContact?.address &&
+              Object.values(application.alternateContact.address).some((value) => value !== "") && (
+                <FieldValue
+                  testId={"app-summary-alternate-mailing-address"}
+                  id="alternateMailingAddress"
+                  label={t("application.contact.address")}
+                  className={styles["summary-value"]}
+                >
+                  <MultiLineAddress address={application.alternateContact.address} />
+                </FieldValue>
+              )}
           </Card.Section>
         </>
       )}
@@ -415,7 +420,7 @@ const FormSummaryDetails = ({
                   {member.birthMonth}/{member.birthDay}/{member.birthYear}
                 </FieldValue>
 
-                {member.sameAddress === "no" && (
+                {member.sameAddress === "no" && member.householdMemberAddress && (
                   <FieldValue
                     label={t("application.contact.address")}
                     className={"pb-4"}
@@ -511,6 +516,8 @@ const FormSummaryDetails = ({
         </Card.Section>
 
         {!hidePrograms &&
+          Array.isArray(application.programs) &&
+          application.programs.length > 0 &&
           multiselectQuestionSection(
             MultiselectQuestionsApplicationSectionEnum.programs,
             swapCommunityTypeWithPrograms
@@ -569,6 +576,8 @@ const FormSummaryDetails = ({
         </Card.Section>
 
         {!hidePreferences &&
+          Array.isArray(application.preferences) &&
+          application.preferences.length > 0 &&
           multiselectQuestionSection(
             MultiselectQuestionsApplicationSectionEnum.preferences,
             "/applications/preferences/all",

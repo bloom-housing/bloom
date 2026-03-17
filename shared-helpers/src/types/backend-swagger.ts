@@ -1823,6 +1823,22 @@ export class AssetsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Create a S3 file upload URL
+   */
+  createS3UploadUrl(options: IRequestOptions = {}): Promise<CreateS3UploadUrl> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/assets/s3-upload-url"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class UserService {
@@ -2187,6 +2203,50 @@ export class UserService {
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/user/is-confirmation-token-valid"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get advocate user from confirmation token
+   */
+  getAdvocateFromConfirmationToken(
+    params: {
+      /** requestBody */
+      body?: ConfirmationRequest
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate-from-token"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Resend advocate account creation email
+   */
+  resendAdvocateConfirmation(
+    params: {
+      /** requestBody */
+      body?: EmailAndAppUrl
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate-resend-confirmation"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
@@ -8754,6 +8814,17 @@ export interface CreatePresignedUploadMetadataResponse {
   signature: string
 }
 
+export interface CreateS3UploadUrl {
+  /**  */
+  fileId: string
+
+  /**  */
+  uploadUrl: string
+
+  /**  */
+  publicUrl: string
+}
+
 export interface EmailAndAppUrl {
   /**  */
   email: string
@@ -10260,6 +10331,7 @@ export enum SpokenLanguageEnum {
 }
 
 export enum FeatureFlagEnum {
+  "disableAccessibilityFeaturesTag" = "disableAccessibilityFeaturesTag",
   "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
   "disableCommonApplication" = "disableCommonApplication",
   "disableEthnicityQuestion" = "disableEthnicityQuestion",
@@ -10273,12 +10345,14 @@ export enum FeatureFlagEnum {
   "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
+  "enableFaq" = "enableFaq",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
   "enableHousingAdvocate" = "enableHousingAdvocate",
   "enableHousingDeveloperOwner" = "enableHousingDeveloperOwner",
+  "enableHousingBasics" = "enableHousingBasics",
   "enableIsVerified" = "enableIsVerified",
   "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
   "enableListingFavoriting" = "enableListingFavoriting",
@@ -10309,6 +10383,7 @@ export enum FeatureFlagEnum {
   "enableSpokenLanguage" = "enableSpokenLanguage",
   "enableSupportAdmin" = "enableSupportAdmin",
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
+  "enableUnitAccessibilityTypeTags" = "enableUnitAccessibilityTypeTags",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
   "enableVerifyIncome" = "enableVerifyIncome",

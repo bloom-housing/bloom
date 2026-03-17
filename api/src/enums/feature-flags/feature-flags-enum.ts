@@ -2,6 +2,7 @@
 // Note, these are just used to keep backend and frontend in sync. We store feature flags as strings so this list might not include every flag.
 // Keep alphabetized for readability.
 export enum FeatureFlagEnum {
+  disableAccessibilityFeaturesTag = 'disableAccessibilityFeaturesTag',
   disableBuildingSelectionCriteria = 'disableBuildingSelectionCriteria',
   disableCommonApplication = 'disableCommonApplication',
   disableEthnicityQuestion = 'disableEthnicityQuestion',
@@ -15,12 +16,14 @@ export enum FeatureFlagEnum {
   enableCompanyWebsite = 'enableCompanyWebsite',
   enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
+  enableFaq = 'enableFaq',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
   enableHousingAdvocate = 'enableHousingAdvocate',
   enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
+  enableHousingBasics = 'enableHousingBasics',
   enableIsVerified = 'enableIsVerified',
   enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
   enableListingFavoriting = 'enableListingFavoriting',
@@ -51,6 +54,7 @@ export enum FeatureFlagEnum {
   enableSpokenLanguage = 'enableSpokenLanguage',
   enableSupportAdmin = 'enableSupportAdmin',
   enableUnderConstructionHome = 'enableUnderConstructionHome',
+  enableUnitAccessibilityTypeTags = 'enableUnitAccessibilityTypeTags',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
   enableVerifyIncome = 'enableVerifyIncome',
@@ -71,6 +75,11 @@ export const featureFlagMap: {
   name: string;
   description: string;
 }[] = [
+  {
+    name: FeatureFlagEnum.disableAccessibilityFeaturesTag,
+    description:
+      "When true, the listing 'accessibility features' tag is hidden on public listing cards and details",
+  },
   {
     name: FeatureFlagEnum.disableBuildingSelectionCriteria,
     description:
@@ -135,6 +144,11 @@ export const featureFlagMap: {
     description: 'When true, credit screening fee is enabled for listings',
   },
   {
+    name: FeatureFlagEnum.enableFaq,
+    description:
+      'When true, a link to the FAQ page is displayed on the get assistance page',
+  },
+  {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
     description:
       'When true, the full time student question is displayed in the application form',
@@ -161,6 +175,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableHousingDeveloperOwner,
     description:
       "When true, the 'Housing developer' field label becomes 'Housing developer / owner'",
+  },
+  {
+    name: FeatureFlagEnum.enableHousingBasics,
+    description:
+      'When true, a link to the housing basics page is displayed on the get assistance page',
   },
   {
     name: FeatureFlagEnum.enableIsVerified,
@@ -302,6 +321,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableUnderConstructionHome,
     description:
       "When true, the 'under construction' section is displayed on the home page",
+  },
+  {
+    name: FeatureFlagEnum.enableUnitAccessibilityTypeTags,
+    description:
+      "When true, unit accessibility type tags (for example, 'Mobility units') are displayed on listing cards and details",
   },
   {
     name: FeatureFlagEnum.enableUnitGroups,

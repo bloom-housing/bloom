@@ -18,18 +18,29 @@ Cypress.Commands.add("signOut", () => {
   // TODO: once the favorites feature is being tested, this is Sign out-4:
   if (Cypress.env("showSeedsDesign")) {
     cy.get(`[data-testid="My account"]`).trigger("click")
-    cy.get(`[data-testid="Sign out"]`).as("btn").trigger("click")
+    cy.contains("button", "Sign out", { timeout: 10000 }).click({ force: true })
   } else {
     // data-testid for SiteHeader in this path is set in ui-components
     // See https://github.com/bloom-housing/ui-components/blob/c35c094554e8199f202d67a405272035189060ec/src/headers/SiteHeader.tsx#L175
-    cy.get(`[data-testid="My account-2"]`).trigger("mouseover")
-    cy.get(`[data-testid="Sign out-3"]`).as("signOutButton")
-    cy.get("@signOutButton").trigger("click")
+    // Use keypress instead of mouseover: the span's onKeyPress(Enter) sets activeMenu state
+    // and there's no keyboard-based close mechanism, keeping the dropdown open reliably.
+    cy.get(`[data-testid="My account-2"]`).trigger("keypress", {
+      key: "Enter",
+      keyCode: 13,
+      charCode: 13,
+      which: 13,
+    })
+    cy.contains("button", "Sign out", { timeout: 10000 }).click({ force: true })
   }
 })
 
 Cypress.Commands.add("goNext", () => {
-  return cy.getByID("app-next-step-button").click()
+  return cy
+    .getByID("app-next-step-button")
+    .should("exist")
+    .scrollIntoView()
+    .should("be.visible")
+    .click({ force: true })
 })
 
 Cypress.Commands.add("getByID", (id, ...args) => {
@@ -127,7 +138,10 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application, autofill) =
       cy.getByTestId("app-primary-no-phone").check()
     } else {
       cy.getPhoneFieldByTestId("app-primary-phone-number").type(application.applicant.phoneNumber)
-      cy.getByTestId("app-primary-phone-number-type").select(application.applicant.phoneNumberType)
+      cy.getByTestId("app-primary-phone-number-type").select(
+        application.applicant.phoneNumberType,
+        { force: true }
+      )
     }
 
     if (application.additionalPhoneNumber) {
@@ -194,6 +208,7 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application, autofill) =
     cy.getByTestId("app-primary-work-in-region-no").check()
   }
 
+  cy.getByTestId("app-primary-address-street").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -214,6 +229,7 @@ Cypress.Commands.add("step3AlternateContactType", (application, autofill) => {
     }
   }
 
+  cy.getByTestId("app-alternate-type").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -224,9 +240,10 @@ Cypress.Commands.add("step4AlternateContactName", (application, autofill) => {
     cy.getByTestId("app-alternate-first-name").type(application.alternateContact.firstName)
     cy.getByTestId("app-alternate-last-name").type(application.alternateContact.lastName)
   } else {
-    cy.contains("Who is your alternate contact?")
+    cy.getByTestId("app-alternate-first-name").should("exist")
   }
 
+  cy.getByTestId("app-alternate-first-name").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -256,6 +273,7 @@ Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
     )
   }
 
+  cy.getByTestId("app-alternate-mailing-address-street").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -288,6 +306,9 @@ Cypress.Commands.add("step6HouseholdSize", (application, autofill) => {
 })
 
 Cypress.Commands.add("step7AddHouseholdMembers", (application, autofill) => {
+  cy.contains(
+    "Before adding other people, make sure that they aren't named on any other application for this listing"
+  ).should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -371,7 +392,7 @@ Cypress.Commands.add("step8PreferredUnits", (application, autofill) => {
       cy.getByTestId(prefUnit.name).check()
     })
   } else {
-    cy.contains("What unit sizes are you interested in?")
+    cy.contains("What unit sizes are you interested in?").should("exist")
   }
 
   cy.goNext()
@@ -400,6 +421,7 @@ Cypress.Commands.add("step9Accessibility", (application, autofill) => {
     }
   }
 
+  cy.getByTestId("app-ada-mobility").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -420,8 +442,8 @@ Cypress.Commands.add("step10Changes", (application, autofill) => {
     }
   }
 
+  cy.getByTestId("app-expecting-changes").should("exist")
   cy.goNext()
-
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
   cy.isNextRouteValid("householdExpectingChanges")
@@ -436,8 +458,8 @@ Cypress.Commands.add("step11Student", (application, programsExist, autofill) => 
     }
   }
 
+  cy.getByTestId("app-student").should("exist")
   cy.goNext()
-
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
   cy.isNextRouteValid("householdStudent", !programsExist ? 1 : 0)
@@ -471,8 +493,8 @@ Cypress.Commands.add("step13IncomeVouchers", (application, autofill) => {
     }
   }
 
+  cy.getByTestId("app-income-vouchers").should("exist")
   cy.goNext()
-
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
   cy.isNextRouteValid("vouchersSubsidies")
@@ -480,7 +502,9 @@ Cypress.Commands.add("step13IncomeVouchers", (application, autofill) => {
 
 Cypress.Commands.add("step14Income", (application, autofill) => {
   if (!autofill) {
-    cy.getByTestId("app-income").type(application.income, { force: true })
+    cy.getByTestId("app-income")
+      .type(application.income, { force: true })
+      .should("have.value", application.income)
     if (application.incomePeriod === "perMonth") {
       cy.getByTestId("app-income-period").eq(0).check()
     } else {
@@ -488,6 +512,7 @@ Cypress.Commands.add("step14Income", (application, autofill) => {
     }
   }
 
+  cy.getByTestId("app-income").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")

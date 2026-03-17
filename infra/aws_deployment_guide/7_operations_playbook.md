@@ -27,6 +27,12 @@ deployment.
    Environment](#creating-a-cloudshell-environment). All bash code blocks in this file are expected
    to succeed when run in a configured Cloudshell environment.
 
+## Web Console tips
+
+1. If no expected resources are shown on the web console, it might be because a different region
+   than the one Bloom is deployed to is selected. Ensure the region selected in the top bar is set
+   to the same region for the Bloom deployment you are looking at.
+
 ## Creating a Cloudshell Environment
 
 After logging into an AWS account with Bloom deployed, users of the AWS web console can create
