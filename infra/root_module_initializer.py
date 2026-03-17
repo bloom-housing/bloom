@@ -16,6 +16,8 @@ import sys
 
 
 def main():
+    us_regions = ["us-east-1", "us-east-2", "us-west-1", "us-west-2"]
+
     p = argparse.ArgumentParser(
         prog="root_module_initializer.py",
         description="CLI entrypoint for initializing Bloom OpenTofu root modules.",
@@ -28,7 +30,8 @@ def main():
     p.add_argument(
         "--iam_identity_center_region",
         help="AWS region the IAM Identity Center instance is in",
-        required=True)
+        required=True,
+        choices=us_regions)
     p.add_argument(
         "--organization_management_account_number",
         help="AWS account number for the organization management account",
@@ -50,7 +53,8 @@ def main():
     p.add_argument(
         "--tofu_state_bucket_region",
         help="AWS region the Tofu state S3 bucket is in.",
-        required=True)
+        required=True,
+        choices=us_regions)
     p.add_argument(
         "--tofu_state_bucket_name",
         help="The name of the S3 bucket used to store Tofu state files.",
@@ -64,8 +68,8 @@ def main():
     p.add_argument(
         "--bloom_aws_region",
         help="What AWS region to deploy to.",
-        choices=["us-east-1", "us-east-2", "us-west-1", "us-west-2"],
-        required=True)
+        required=True,
+        choices=us_regions)
     p.add_argument(
         "--dev_aws_account_number",
         help="The AWS account number that the dev Bloom deployment will be deployed to.",
@@ -86,6 +90,7 @@ def main():
         required=False)
 
     args = p.parse_args()
+    validate_inputs(args)
 
     write_template(
         args.print_to_stdout, pathlib.Path("/bloom/infra/aws_sso_config"), AWS_SSO_TEMPLATE,
@@ -160,6 +165,98 @@ def main():
             BLOOM_ENV_TYPE="production",
             HIGH_AVAILABILITY="true",
         ))
+
+
+def validate_inputs(args):
+    """Does some simple validations of CLI inputs and exit with a error if any are invalid."""
+    errors = []
+
+    # AWS account numbers: must be exactly 12 digits:
+    # https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-identifiers.html
+    for arg, value in [
+        ("--organization_management_account_number", args.organization_management_account_number),
+        ("--dev_aws_account_number", args.dev_aws_account_number),
+        ("--prod_aws_account_number", args.prod_aws_account_number),
+    ]:
+        if not re.fullmatch(r"\d{12}", value):
+            errors.append(f"{arg} must be exactly 12 digits, got '{value}'")
+
+    # All account numbers should be different
+    if len({args.organization_management_account_number, args.dev_aws_account_number,
+            args.prod_aws_account_number}) != 3:
+        errors.append(
+            f"--organization_management_account_number, --dev_aws_account_number, and --prod_aws_account_number must all be different"
+        )
+
+    # IAM Identity Center ARNs
+    match = re.match(r"^arn:aws:sso:::instance/ssoins-(.+)$", args.iam_identity_center_arn)
+    if match is None:
+        errors.append(
+            f"--iam_identity_center_arn must be a valid ARN (arn:aws:sso:::instance/ssoins-...), got '{args.iam_identity_center_arn}'"
+        )
+    else:
+        ssoins = match[1]
+        for arg, value in [
+            ("--dev_deployer_permission_set_arn", args.dev_deployer_permission_set_arn),
+            ("--prod_deployer_permission_set_arn", args.prod_deployer_permission_set_arn),
+        ]:
+            if re.match(f"^arn:aws:sso:::permissionSet/ssoins-{ssoins}/ps-.+$", value) is None:
+                errors.append(
+                    f"{arg} must be a valid permission set ARN in the IAM Identity Center Instance specificed in --iam_identity_center_arn (ssoins-{ssoins}), got '{value}'"
+                )
+    if args.dev_deployer_permission_set_arn == args.prod_deployer_permission_set_arn:
+        errors.append(
+            f"--dev_deployer_permission_set_arn and --prod_deployer_permission_set_arn must be different, both are '{args.dev_deployer_permission_set_arn}'"
+        )
+
+    # IAM Identity Center access portal URL
+    if not re.fullmatch(r"https://[a-zA-Z0-9._-]+\.awsapps\.com/start/?",
+                        args.iam_identity_center_access_portal_url):
+        errors.append(
+            f"--iam_identity_center_access_portal_url must be a valid AWS access portal URL (https://<id>.awsapps.com/start), got '{args.iam_identity_center_access_portal_url}'"
+        )
+
+    # S3 bucket name: 3-63 chars, lowercase alphanumeric, hyphens, dots, must start and end with
+    # letter or number:
+    # https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
+    if not re.fullmatch(r"[a-z0-9][a-z0-9.\-]{1,61}[a-z0-9]", args.tofu_state_bucket_name):
+        errors.append(
+            f"--tofu_state_bucket_name must be a valid S3 bucket name, got '{args.tofu_state_bucket_name}'"
+        )
+
+    # Domain names
+    domain_pattern = re.compile(r"^([a-zA-Z0-9_\-\.])+[a-zA-Z]{2,}$")
+    for label, value in [
+        ("--dev_domain_name", args.dev_domain_name),
+        ("--prod_domain_name", args.prod_domain_name),
+    ]:
+        if not domain_pattern.match(value):
+            errors.append(f"{label}: must be a valid domain name, got '{value}'")
+
+    if args.dev_domain_name == args.prod_domain_name:
+        errors.append(
+            f"--dev_domain_name and --prod_domain_name must be different, both are '{args.dev_domain_name}'"
+        )
+
+    # GitHub org: not the empty string
+    if not args.github_org:
+        errors.append(f"--github_org: must not be empty")
+
+    # Git commit SHA: 40-character hex string
+    if not re.fullmatch(r"[0-9a-fA-F]{40}", args.git_commit_sha):
+        errors.append(
+            f"--git_commit_sha: must be a full 40-character hex SHA, got '{args.git_commit_sha}'")
+
+    # Jurisdiction name: non-empty, printable characters
+    if not args.jurisdiction_name:
+        errors.append("--jurisdiction_name: must not be empty")
+    elif not re.fullmatch(r"[a-zA-Z0-9 .'\-]+", args.jurisdiction_name):
+        errors.append(
+            f"--jurisdiction_name: must contain only alphanumeric characters, spaces, periods, apostrophes, and hyphens, got '{args.jurisdiction_name}'"
+        )
+
+    if len(errors) > 0:
+        sys.exit("FATAL: Input validation failed:\n  " + "\n  ".join(errors))
 
 
 def write_template(
