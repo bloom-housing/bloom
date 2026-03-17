@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from "react"
+import React, { useContext, useState, useEffect, useCallback, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { Form, t } from "@bloom-housing/ui-components"
@@ -32,10 +32,9 @@ const Autofill = () => {
   const { initialStateLoaded, profile, applicationsService } = useContext(AuthContext)
   const [submitted, setSubmitted] = useState(false)
   const [previousApplication, setPreviousApplication] = useState<Application>(null)
+  const useDetailsRef = useRef(false)
 
   const currentPageSection = 1
-  let useDetails = false
-
   const mounted = OnClientSide()
   const isAdvocate = conductor.config?.isAdvocate
 
@@ -47,7 +46,7 @@ const Autofill = () => {
     if (!submitted) {
       // Necessary to avoid infinite rerenders
       setSubmitted(true)
-      if (previousApplication && useDetails) {
+      if (previousApplication && useDetailsRef.current) {
         const withUpdatedLang = {
           ...JSON.parse(JSON.stringify(previousApplication)),
           language: router.locale,
@@ -69,7 +68,7 @@ const Autofill = () => {
   }, [
     submitted,
     previousApplication,
-    useDetails,
+    useDetailsRef,
     context,
     conductor,
     router.locale,
@@ -158,7 +157,7 @@ const Autofill = () => {
             <Button
               variant={"primary"}
               onClick={() => {
-                useDetails = true
+                useDetailsRef.current = true
               }}
               id={"autofill-accept"}
               type={"submit"}
@@ -170,7 +169,7 @@ const Autofill = () => {
             <Button
               variant={"text"}
               onClick={() => {
-                useDetails = false
+                useDetailsRef.current = false
               }}
               type={"submit"}
               id={"autofill-decline"}
