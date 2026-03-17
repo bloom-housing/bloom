@@ -53,15 +53,16 @@ echo 'plugin_cache_dir = "/bloom/.terraform-plugin-cache"' > /bloom/.tofurc
 EOF
 
 # Copy in the tofu modules and initialize the provider dependencies for the root modules.
-COPY --chown=2002:2002 tofu_importable_modules /bloom/tofu_importable_modules
-COPY --chown=2002:2002 tofu_root_modules /bloom/tofu_root_modules
+COPY --chown=2002:2002 tofu_importable_modules /bloom/infra/tofu_importable_modules
+COPY --chown=2002:2002 tofu_root_modules /bloom/infra/tofu_root_modules
 
 # Initialize all the root modules with -backend=false. This only downloads the tofu provider
 # dependencies. Tofu init will still need to be called from within the container, at which point the
 # state file in the S3 bucket will be read.
-WORKDIR /bloom
+WORKDIR /bloom/infra/tofu_root_modules
 RUN <<EOF
-for d in ./tofu_root_modules/*/; do
+for d in ./*/; do
+    echo "== Running tofu init for $d"
     cd "$d"
     tofu init -backend=false
     cd ..
@@ -72,7 +73,7 @@ EOF
 COPY --chown=2002:2002 aws_sso_config /bloom/.aws/config
 
 # Copy in the python entrypoint.
-WORKDIR /bloom
-COPY --chown=2002:2002 docker-entrypoint.py /bloom/docker-entrypoint.py
+WORKDIR /bloom/infra
+COPY --chown=2002:2002 docker-entrypoint.py /bloom/infra/docker-entrypoint.py
 
 ENTRYPOINT [ "python3", "docker-entrypoint.py" ]

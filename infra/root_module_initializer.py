@@ -146,7 +146,7 @@ def main():
 
 def write_template(path: pathlib.Path, template: string.Template, template_args):
     """template_args is a dataclass"""
-    print(f"=== rendering template for {path}")
+    print(f"== Rendering template for {path}")
     try:
         rendered = template.substitute(dataclasses.asdict(template_args))
     except KeyError as e:

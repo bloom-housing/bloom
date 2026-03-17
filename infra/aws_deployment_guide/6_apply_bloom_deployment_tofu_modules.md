@@ -265,8 +265,9 @@ graph TB
      to add your public and partners sites to the list of allowed URLs in the Mapbox access token
      screen.
    - **Google Translate** (`bloom-google-translate-api-key`): A Google Cloud API key for the
-     Google Translate API. Used by the API service. Obtain a key from the Google Cloud console
-     under 'APIs & Services > Credentials'.
+     Google Translate API. Used by the API service. Obtain a key from the Google Cloud console under
+     'APIs & Services > Credentials'. Set the project_id and iam_user for in the root module
+     `google_translate_settings` parameter in the `module "bloom_deployment"`.
 
    The ECS tasks will read the secret values on next deployment or task restart.
 
@@ -430,8 +431,10 @@ graph TB
      to add your public and partners sites to the list of allowed URLs in the Mapbox access token
      screen.
    - **Google Translate** (`bloom-google-translate-api-key`): A Google Cloud API key for the
-     Google Translate API. Used by the API service. Obtain a key from the Google Cloud console
-     under 'APIs & Services > Credentials'.
+     Google Translate API. Used by the API service. Obtain a key from the Google Cloud console under
+     'APIs & Services > Credentials'. Set the project_id and iam_user for in the root module
+     `google_translate_settings` parameter in the `module "bloom_deployment"`.
+
 
    The ECS tasks will read the secret values on next deployment or task restart.
 

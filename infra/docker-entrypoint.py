@@ -69,7 +69,7 @@ def main():
     args = p.parse_args()
 
     aws_profile = mod_to_aws_profile[args.root_module_name]
-    mod_path = f"/infra/tofu_root_modules/{args.root_module_name}"
+    mod_path = f"/bloom/infra/tofu_root_modules/{args.root_module_name}"
 
     if not args.skip_sso:
         run_subprocess(["aws", "sso", "login", "--use-device-code", "--profile", aws_profile])

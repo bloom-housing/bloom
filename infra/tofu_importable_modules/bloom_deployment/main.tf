@@ -76,6 +76,7 @@ variable "vpc_peering_settings" {
 variable "ses_identities" {
   type        = list(string)
   description = "SES email identities to create. Can either be individual email addresses or domains. If SES in this Bloom deployment will not be taken out of sandbox mode, identities for both sender and receiver email address must be validated for email to be succefully delivered."
+  default     = []
 }
 variable "google_translate_settings" {
   type = object({
@@ -83,8 +84,11 @@ variable "google_translate_settings" {
     iam_user   = string
   })
   description = "Google Translate API settings. project_id is the Google Cloud project ID. iam_user is the email of the service account."
+  default     = null
   validation {
-    condition     = var.google_translate_settings.project_id != "" && var.google_translate_settings.iam_user != ""
+    condition = var.google_translate_settings == null || (
+      var.google_translate_settings.project_id != "" && var.google_translate_settings.iam_user != ""
+    )
     error_message = "project_id and iam_user must not be empty strings."
   }
 }

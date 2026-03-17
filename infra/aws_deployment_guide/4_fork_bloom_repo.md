@@ -66,7 +66,7 @@ organization. The guide is broken down into a series of files that should be fol
    - infra/tofu_root_modules/bloom_prod/main.tf
    - infra/tofu_root_modules/bloom_prod_deployer_permission_set_policy/main.tf
 
-   To see the changes, run `git diff`.
+   To see the changes, stage the files with `git add .` then diff with `git diff --staged`.
 
 5. Push the changes to your fork's main branch.
 
