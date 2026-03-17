@@ -5,6 +5,8 @@ import { stateKeys } from "../utilities/formKeys"
 import {
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
+  ApplicationSelectionCreate,
+  ApplicationSelectionOptionCreate,
   InputType,
   Listing,
   ListingMultiselectQuestion,
@@ -41,6 +43,22 @@ export const listingSectionQuestions = (
     )
     ?.sort((a, b) => (a.ordinal || 0) - (b.ordinal || 0))
   return selectQuestions
+}
+
+export const getSelectionsForApplicationSection = (
+  listingMultiselectQuestions,
+  applicationSection,
+  applicationSelections
+) => {
+  const listingPrefQuestions = listingMultiselectQuestions.filter(
+    (question) => question?.multiselectQuestions?.applicationSection === applicationSection
+  )
+  return applicationSelections?.filter((item: ApplicationSelectionCreate) =>
+    listingPrefQuestions.find(
+      (lqItem: ListingMultiselectQuestion) =>
+        lqItem.multiselectQuestions.id == item.multiselectQuestion.id
+    )
+  )
 }
 
 /** Get a field name for an application multiselect question */
@@ -431,7 +449,7 @@ export const getRadioOption = (
   )
 }
 
-function cleanRadioObject(obj: Record<string, any>) {
+function cleanRadioObject(obj: Record<string, any>): Record<string, any> {
   // Remove nulls
   let cleanedObj = Object.entries(obj).reduce((acc, [key, value]) => {
     if (value !== null) {
@@ -455,17 +473,20 @@ function cleanRadioObject(obj: Record<string, any>) {
 
   return cleanedObj
 }
-export const mapCheckboxesToApi = (
+
+/**
+ * Convert incoming React Hook Form data to the right JSON format for saving to the backend
+ * (this version is for the V1 MSQ schema)
+ * @deprecated
+ */
+export const mapCheckboxesToApiV1 = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData: { [name: string]: any },
   question: MultiselectQuestion,
-  applicationSection: MultiselectQuestionsApplicationSectionEnum,
-  enableV2MSQ?: boolean
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ): ApplicationMultiselectQuestion => {
   const rawData =
-    formData["application"][applicationSection][
-      cleanMultiselectString(question.name || question.text) || ""
-    ]
+    formData["application"][applicationSection][cleanMultiselectString(question.text) || ""]
 
   const data = cleanRadioObject(rawData) // removes nulls and converts "true" to true for radio fields
 
@@ -504,11 +525,9 @@ export const mapCheckboxesToApi = (
       }
 
       const getFinalKey = () => {
-        const options = enableV2MSQ ? question?.multiselectOptions : question?.options
-        const foundOption = options?.find(
-          (elem) => cleanMultiselectString(elem.name || elem.text) === key
-        )
-        const optionKey = foundOption?.name || foundOption?.text
+        const optionKey = question?.options?.find(
+          (elem) => cleanMultiselectString(elem.text) === key
+        )?.text
         const cleanOptOutKey = cleanMultiselectString(question?.optOutText)
         if (cleanOptOutKey === key) return question?.optOutText || key
         return optionKey || key
@@ -524,20 +543,81 @@ export const mapCheckboxesToApi = (
 
   return {
     multiselectQuestionId: question.id,
-    key: (question.name || question.text) ?? "",
+    key: question.text ?? "",
     claimed,
     options: questionOptions,
   }
 }
 
-export const mapApiToMultiselectForm = (
+/**
+ * Convert incoming React Hook Form data to the right JSON format for saving to the backend
+ */
+export const mapCheckboxesToApi = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  formData: { [name: string]: any },
+  question: MultiselectQuestion,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
+): ApplicationSelectionCreate => {
+  const rawData =
+    formData["application"][applicationSection][cleanMultiselectString(question.name) || ""]
+
+  const data = cleanRadioObject(rawData) // removes nulls and converts "true" to true for radio fields
+
+  const addressFields = Object.keys(data).filter((option) => Object.keys(data[option]))
+  let hasOptedOut = false
+  const selections: (ApplicationSelectionOptionCreate | null)[] = Object.keys(data)
+    .filter((key) => data[key] === true)
+    .map((key) => {
+      const foundOption = question.multiselectOptions?.find(
+        (elem) => cleanMultiselectString(elem.name) === key
+      )
+      // the below guard is a mere formality, because we will always find an option
+      // from what the UI has rendered
+      if (!foundOption) return null
+
+      if (foundOption.isOptOut) hasOptedOut = true
+      const selectionData: ApplicationSelectionOptionCreate = {
+        multiselectOption: { id: foundOption.id },
+      }
+      const addressData = addressFields.filter((addressField) => addressField === `${key}-address`)
+
+      if (addressData.length) {
+        const addressHolderNameData = addressFields.filter(
+          (addressField) => addressField === `${key}-${AddressHolder.Name}`
+        )
+        const addressHolderRelationshipData = addressFields.filter(
+          (addressField) => addressField === `${key}-${AddressHolder.Relationship}`
+        )
+
+        selectionData[AddressHolder.Address] = data[addressData[0]]
+        if (addressHolderNameData.length) {
+          selectionData[AddressHolder.Name] = data[addressHolderNameData[0]]
+        }
+        if (addressHolderRelationshipData.length) {
+          selectionData[AddressHolder.Relationship] = data[addressHolderRelationshipData[0]]
+        }
+      }
+      return selectionData
+    })
+  return {
+    multiselectQuestion: { id: question.id },
+    hasOptedOut,
+    // @ts-ignore
+    selections,
+  }
+}
+
+/**
+ * Convert incoming JSON data to the right format for displaying as React Hook Form fields
+ * (this version is for the V1 MSQ schema)
+ * @deprecated
+ */
+export const mapApiToMultiselectFormV1 = (
   applicationQuestions: ApplicationMultiselectQuestion[],
   listingQuestions: ListingMultiselectQuestion[],
-  applicationSection: MultiselectQuestionsApplicationSectionEnum,
-  enableV2MSQ?: boolean
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ) => {
   const questionsFormData = { application: { [applicationSection]: Object.create(null) } }
-  const optionsKey = enableV2MSQ ? "multiselectOptions" : "options"
 
   const applicationQuestionsWithTypes: {
     question: ApplicationMultiselectQuestion
@@ -546,12 +626,9 @@ export const mapApiToMultiselectForm = (
     return {
       question,
       inputType: getInputType(
-        listingQuestions?.filter((listingQuestion) => {
-          const questionName = enableV2MSQ
-            ? listingQuestion?.multiselectQuestions?.name
-            : listingQuestion?.multiselectQuestions?.text
-          return questionName === question.key
-        })[0]?.multiselectQuestions?.[optionsKey] ?? []
+        listingQuestions?.filter(
+          (listingQuestion) => listingQuestion?.multiselectQuestions?.text === question.key
+        )[0]?.multiselectQuestions?.options ?? []
       ),
     }
   })
@@ -618,4 +695,45 @@ export const mapApiToMultiselectForm = (
   })
 
   return { ...questionsFormData }
+}
+
+/**
+ * Convert incoming JSON data to the right format for displaying as React Hook Form fields
+ */
+export const mapApiToMultiselectForm = (
+  applicationSelections: ApplicationSelectionCreate[],
+  listingQuestions: ListingMultiselectQuestion[],
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
+) => {
+  const questionsFormData = { application: { [applicationSection]: {} as Record<string, any> } }
+
+  applicationSelections.forEach((selection) => {
+    const question = listingQuestions.find(
+      (item) => item.multiselectQuestions.id === selection.multiselectQuestion.id
+    )?.multiselectQuestions
+    if (!question) return
+
+    const questionFieldName = cleanMultiselectString(question.name) as string
+
+    const options: Record<string, any> = {}
+    selection.selections.forEach((optionSelection) => {
+      const option = question.multiselectOptions?.find(
+        (item) => item.id == optionSelection.multiselectOption.id
+      )
+      if (!option) return
+
+      const key = cleanMultiselectString(option.name) as string
+      // radio buttons (exclusive) needs string true, otherwise boolean
+      options[key] = question.isExclusive ? "true" : true
+
+      if (optionSelection.addressHolderAddress) {
+        options[`${key}-address`] = optionSelection.addressHolderAddress
+        if (optionSelection.addressHolderName) options[`${key}-${AddressHolder.Name}`] = optionSelection.addressHolderName
+        if (optionSelection.addressHolderRelationship) options[`${key}-${AddressHolder.Relationship}`] = optionSelection.addressHolderRelationship
+      }
+    })
+    questionsFormData.application[applicationSection][questionFieldName] = options
+  })
+
+  return questionsFormData
 }
