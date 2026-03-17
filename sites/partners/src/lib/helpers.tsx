@@ -201,6 +201,8 @@ export const fileUploader = async ({
       file,
       uploadUrl,
       onUploadProgress,
+      contentType,
+      contentDisposition,
     }).then((_) => {
       setProgressValue(100)
       setFileUploadData({
@@ -290,18 +292,25 @@ interface S3UploadProps {
   file: File
   uploadUrl: string
   onUploadProgress: (progress: AxiosProgressEvent) => void
+  contentType: string
+  contentDisposition: string
 }
 
-export const S3Upload = async ({ file, uploadUrl, onUploadProgress }: S3UploadProps) => {
+export const S3Upload = async ({
+  file,
+  uploadUrl,
+  onUploadProgress,
+  contentType,
+  contentDisposition,
+}: S3UploadProps) => {
   await axios.request({
     method: "put",
     url: uploadUrl,
     data: file,
     onUploadProgress: onUploadProgress,
-    // TODO: take this in from the file info
     headers: {
-      "Content-Type": "application/pdf",
-      "Content-Disposition": "inline",
+      "Content-Type": contentType || "",
+      "Content-Disposition": contentDisposition || "",
     },
   })
 }
