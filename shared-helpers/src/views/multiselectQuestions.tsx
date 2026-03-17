@@ -728,8 +728,11 @@ export const mapApiToMultiselectForm = (
 
       if (optionSelection.addressHolderAddress) {
         options[`${key}-address`] = optionSelection.addressHolderAddress
-        if (optionSelection.addressHolderName) options[`${key}-${AddressHolder.Name}`] = optionSelection.addressHolderName
-        if (optionSelection.addressHolderRelationship) options[`${key}-${AddressHolder.Relationship}`] = optionSelection.addressHolderRelationship
+        if (optionSelection.addressHolderName)
+          options[`${key}-${AddressHolder.Name}`] = optionSelection.addressHolderName
+        if (optionSelection.addressHolderRelationship)
+          options[`${key}-${AddressHolder.Relationship}`] =
+            optionSelection.addressHolderRelationship
       }
     })
     questionsFormData.application[applicationSection][questionFieldName] = options
