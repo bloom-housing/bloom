@@ -49,6 +49,7 @@ import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-util
 import { mapTo } from '../utilities/mapTo';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
 import { buildApplicationStatusChanges } from '../utilities/applicationStatusChanges';
+import { SnapshotCreateService } from './snapshot-create.service';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -320,6 +321,7 @@ export class ApplicationService {
     @Inject(Logger)
     private logger = new Logger(ApplicationService.name),
     private cronJobService: CronJobService,
+    private snapshotCreateService: SnapshotCreateService,
   ) {}
   onModuleInit() {
     this.cronJobService.startCronJob(
@@ -1128,11 +1130,12 @@ export class ApplicationService {
       },
     });
 
+    await this.snapshotCreateService.createApplicationSnapshot(dto.id);
+
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
       listing?.jurisdictions as unknown as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
-
     if (enableV2MSQ) {
       const listingMultiselectIds = listing.listingMultiselectQuestions.map(
         (msq) => {
@@ -1631,7 +1634,7 @@ export class ApplicationService {
       application.listingId,
       permissionActions.delete,
     );
-
+    await this.snapshotCreateService.createApplicationSnapshot(applicationId);
     await this.updateListingApplicationEditTimestamp(application.listingId);
     await this.prisma.applications.update({
       where: {
@@ -1756,6 +1759,11 @@ export class ApplicationService {
 
     if (!application) return;
 
+    await this.prisma.applicationSnapshot.deleteMany({
+      where: {
+        originalId: applicationId,
+      },
+    });
     const transactions = [];
 
     if (application.mailingAddressId) {
@@ -1851,6 +1859,13 @@ export class ApplicationService {
         },
         where: {
           id: application.id,
+        },
+      }),
+    );
+    transactions.push(
+      this.prisma.applicationSnapshot.deleteMany({
+        where: {
+          originalId: application.id,
         },
       }),
     );

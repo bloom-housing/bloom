@@ -38,6 +38,7 @@ import { EmailService } from '../../../src/services/email.service';
 import { GeocodingService } from '../../../src/services/geocoding.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
+import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 
 export const mockApplication = (options: {
   date: Date;
@@ -958,6 +959,7 @@ describe('Testing application service', () => {
         Logger,
         CronJobService,
         SchedulerRegistry,
+        SnapshotCreateService,
         {
           provide: EmailService,
           useValue: {
@@ -1876,6 +1878,10 @@ describe('Testing application service', () => {
         .fn()
         .mockResolvedValue({ id: randomUUID() });
 
+      prisma.applicationSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
       await service.delete('example Id', {
         id: 'requestingUser id',
         userRoles: { isAdmin: true },
@@ -1912,6 +1918,8 @@ describe('Testing application service', () => {
         permissionActions.delete,
         expect.anything(),
       );
+
+      expect(prisma.applicationSnapshot.create).toHaveBeenCalled();
     });
 
     it('should throw error when trying to delete application that does not exist', async () => {
@@ -2496,6 +2504,9 @@ describe('Testing application service', () => {
         id: randomUUID(),
         listingId: randomUUID(),
       });
+      prisma.applicationSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
 
       prisma.householdMember.deleteMany = jest.fn().mockResolvedValue(null);
 
@@ -2570,6 +2581,8 @@ describe('Testing application service', () => {
         permissionActions.update,
         expect.anything(),
       );
+
+      expect(prisma.applicationSnapshot.create).toHaveBeenCalled();
     });
 
     it('should add new applicationSelection to an application with MSQV2 enabled', async () => {
