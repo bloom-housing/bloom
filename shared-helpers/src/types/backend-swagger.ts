@@ -10290,6 +10290,7 @@ export enum SpokenLanguageEnum {
 }
 
 export enum FeatureFlagEnum {
+  "disableAccessibilityFeaturesTag" = "disableAccessibilityFeaturesTag",
   "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
   "disableCommonApplication" = "disableCommonApplication",
   "disableEthnicityQuestion" = "disableEthnicityQuestion",
@@ -10341,6 +10342,7 @@ export enum FeatureFlagEnum {
   "enableSpokenLanguage" = "enableSpokenLanguage",
   "enableSupportAdmin" = "enableSupportAdmin",
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
+  "enableUnitAccessibilityTypeTags" = "enableUnitAccessibilityTypeTags",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
   "enableVerifyIncome" = "enableVerifyIncome",

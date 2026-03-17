@@ -43,13 +43,13 @@ export const ListingCard = ({
   showHomeType,
 }: ListingCardProps) => {
   const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
-
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
   const listingTags = getListingTags(
     listing,
     true,
     !showHomeType,
-    !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.disableAccessibilityFeaturesTag),
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitAccessibilityTypeTags),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
   )

@@ -312,6 +312,7 @@ export const stagingSeed = async (
     data: jurisdictionFactory('Angelopolis', {
       publicSiteBaseURL: publicSiteBaseURL,
       featureFlags: [
+        FeatureFlagEnum.disableAccessibilityFeaturesTag,
         FeatureFlagEnum.disableBuildingSelectionCriteria,
         FeatureFlagEnum.disableEthnicityQuestion,
         FeatureFlagEnum.disableListingPreferences,
@@ -332,13 +333,14 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableNeighborhoodAmenities,
         FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown,
         FeatureFlagEnum.enableParkingFee,
+        FeatureFlagEnum.enableParkingType,
         FeatureFlagEnum.enablePetPolicyCheckbox,
         FeatureFlagEnum.enableProperties,
         FeatureFlagEnum.enableReferralQuestionUnits,
         FeatureFlagEnum.enableResources,
         FeatureFlagEnum.enableSmokingPolicyRadio,
-        FeatureFlagEnum.enableParkingType,
         FeatureFlagEnum.enableSpokenLanguage,
+        FeatureFlagEnum.enableUnitAccessibilityTypeTags,
       ],
       visibleNeighborhoodAmenities: [
         NeighborhoodAmenitiesEnum.groceryStores,

@@ -2,6 +2,7 @@
 // Note, these are just used to keep backend and frontend in sync. We store feature flags as strings so this list might not include every flag.
 // Keep alphabetized for readability.
 export enum FeatureFlagEnum {
+  disableAccessibilityFeaturesTag = 'disableAccessibilityFeaturesTag',
   disableBuildingSelectionCriteria = 'disableBuildingSelectionCriteria',
   disableCommonApplication = 'disableCommonApplication',
   disableEthnicityQuestion = 'disableEthnicityQuestion',
@@ -53,6 +54,7 @@ export enum FeatureFlagEnum {
   enableSpokenLanguage = 'enableSpokenLanguage',
   enableSupportAdmin = 'enableSupportAdmin',
   enableUnderConstructionHome = 'enableUnderConstructionHome',
+  enableUnitAccessibilityTypeTags = 'enableUnitAccessibilityTypeTags',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
   enableVerifyIncome = 'enableVerifyIncome',
@@ -73,6 +75,11 @@ export const featureFlagMap: {
   name: string;
   description: string;
 }[] = [
+  {
+    name: FeatureFlagEnum.disableAccessibilityFeaturesTag,
+    description:
+      "When true, the listing 'accessibility features' tag is hidden on public listing cards and details",
+  },
   {
     name: FeatureFlagEnum.disableBuildingSelectionCriteria,
     description:
@@ -314,6 +321,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableUnderConstructionHome,
     description:
       "When true, the 'under construction' section is displayed on the home page",
+  },
+  {
+    name: FeatureFlagEnum.enableUnitAccessibilityTypeTags,
+    description:
+      "When true, unit accessibility type tags (for example, 'Mobility units') are displayed on listing cards and details",
   },
   {
     name: FeatureFlagEnum.enableUnitGroups,
