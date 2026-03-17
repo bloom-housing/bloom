@@ -11,9 +11,11 @@ organization. The guide is broken down into a series of files that should be fol
 6. [Apply Bloom Deployment Tofu Modules](./6_apply_bloom_deployment_tofu_modules.md)
 7. [Operations Playbook](./7_operations_playbook.md)
 
-WARNING: these instructions are not up-to-date with the current process and will be updated soon
-TODO(https://github.com/bloom-housing/bloom/issues/5760). If you are deploying Bloom before these
-instructions are updated, please reach out to avritt.rohwer@exygy.com for details on how to proceed.
+## Required permissions
+
+1. Create a fork of the https://github.com/bloom-housing/bloom repository in your GitHub
+   organization or personal account.
+2. Clone your fork to a host that has docker (or podman) and git installed.
 
 ## Before these steps
 
@@ -26,94 +28,59 @@ instructions are updated, please reach out to avritt.rohwer@exygy.com for detail
 2. Decide where you would like to host your Bloom fork. GitHub will work out-of-the-box. If choosing
    another provider, you will need to bring your own method for building docker images from the
    repo.
-3. Pick an AWS region to deploy dev and prod Bloom to.
+3. Pick an AWS region to deploy Bloom to.
 4. Pick DNS domains for the dev and prod Bloom deployments. You must be able to add CNAME records
    for the chosen domains.
 
 ## Steps
 
-1. Fork https://github.com/bloom-housing/bloom. After forking, GitHub should
-   trigger the 'Docker Image Build' action:
+1. Fork https://github.com/bloom-housing/bloom. After forking, GitHub should trigger the 'Docker
+   Image Build' action:
    https://github.com/<YOUR_GITHUB_ORG>/bloom/actions/workflows/docker_image_build.yml. It will
-   build and push Bloom docker images to the GitHub container registry in your GitHub organization.
-2. Get the docker images for your fork's Bloom services. Go to your GitHub Organization's Packages
-   page: https://github.com/orgs/<YOUR_GITHUB_ORG>/packages.
+   build and push Bloom docker images to the GitHub container registry in your GitHub
+   organization. Wait for the action to succeed.
 
-   1. Click on the 'api' container and **note the container name**.
-   2. Click on the 'partners' container and **note the container name**.
-   3. Click on the 'public' container and **note the container name**.
+2. Clone the Bloom fork to a host that has docker or podman installed.
 
-3. Update your fork's infra/ directory:
-   1. Update the details in `infra/aws_sso_config` for your organization's IAM Identity Center and
-      account numbers.
-   2. Update `infra/tofu_root_modules/bloom_dev_deployer_permission_set_policy/main.tf` with details
-      for your dev deployment:
+3. Get the docker image for your fork's infra-dev container:
+   1. Go to your GitHub Organization's Packages page:
+      https://github.com/orgs/<YOUR_GITHUB_ORG>/packages.
+   2. Click on the 'infra-dev' container and **note the container name and the git commit it was
+      built from**. For example, if the container name is
+      'ghcr.io/bloom-housing/bloom/infra-dev:gitsha-ad3fca97bd5520dba05a0907f7c907f4984e8680', the
+      git SHA that it was built from is 'ad3fca97bd5520dba05a0907f7c907f4984e8680'.
 
-      In the `locals {` block, update variables:
-      1. `tofu_state_bucket_region`
-      2. `tofu_state_bucket_name`
-      3. `iam_identity_center_region`
-      4. `iam_identity_center_instance_arn`.
-      5. `deployer_permission_set_arn`, ensure this is the bloom-dev-deployer permission set ARN.
-      6. `bloom_deployment_aws_account_number`, ensure this is the dev account number
-      7. `bloom_deployment_aws_region`.
+4. Initialize root modules using a helper script. All arguments should be present in your notes. To see all required parameters, run:
 
-   3. Update `infra/tofu_root_modules/bloom_prod_deployer_permission_set_policy/main.tf` with
-      details for your prod deployment:
+   ```bash
+   docker run --rm -it --entrypoint python3 --user "$(id -u):$(id -g)" -v ./infra:/infra:z ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra-dev:gitsha-SOMESHA /infra/root_module_initializer.py -h
+   ```
 
-      In the `locals {` block, update variables:
-      1. `tofu_state_bucket_region`
-      2. `tofu_state_bucket_name`
-      3. `iam_identity_center_region`
-      4. `iam_identity_center_instance_arn`
-      5. `deployer_permission_set_arn`, ensure this is the bloom-prod-deployer permission set ARN.
-      6. `bloom_deployment_aws_account_number`, ensure this is the prod account number.
-      7. `bloom_deployment_aws_region`
+   If using podman instead of docker, replace `--user "$(id -u):$(id -g)"` with `--userns=keep-id`.
 
-   4. Update `infra/tofu_root_modules/bloom_dev/main.tf` with details for your dev deployment:
+   Run the command with all arguments specified. It will write files:
 
-      In the `locals {` block, update variables:
-      1. `tofu_state_bucket_region`
-      2. `tofu_state_bucket_name`
-      3. `bloom_aws_account_number`, ensure this is the dev account number.
-      4. `bloom_aws_region`
-      5. `domain_name`, ensure this is the dev domain.
+   - infra/aws_sso_config
+   - infra/tofu_root_modules/bloom_dev/main.tf
+   - infra/tofu_root_modules/bloom_dev_deployer_permission_set_policy/main.tf
+   - infra/tofu_root_modules/bloom_prod/main.tf
+   - infra/tofu_root_modules/bloom_prod_deployer_permission_set_policy/main.tf
 
-      In the `module "bloom_deployment"` block, update variables:
-      1. `bloom_api_image`
-      2. `bloom_site_partners_image`
-      3. `bloom_site_public_image`
-      4. `bloom_site_public_env_vars`
+   To see the changes, run `git diff`.
 
-   5. Update `infra/tofu_root_modules/bloom_prod/main.tf` with details for your prod deployment:
+5. Push the changes to your fork's main branch.
 
-      In the `locals {` block, update variables:
-      1. `tofu_state_bucket_region`
-      2. `tofu_state_bucket_name`
-      3. `bloom_aws_account_number`, ensure this is the prod account number.
-      4. `bloom_aws_region`
-      5. `domain_name`, ensure this is the prod domain.
-
-      In the `module "bloom_deployment"` block, update variables:
-      1. `bloom_api_image`
-      2. `bloom_site_partners_image`
-      3. `bloom_site_public_image`
-      4. `bloom_site_public_env_vars`
-
-   6. Push the changes to your fork's main branch.
-
-4. Get the docker image for your fork's infra container. After pushing the infra updates, GitHub
+6. Get the docker image for your fork's infra container. After pushing the infra updates, GitHub
    should trigger the 'Docker Image Build' action again. Go to your GitHub Organization's Packages
    page: https://github.com/orgs/<YOUR_GITHUB_ORG>/packages.
    1. Click on the 'infra' container and **note the container name that corresponds to the git
       commit SHA of your infra updates commit**. It must be the infra container version that was
-      build on or after the commit updating your forks infra/ directory. If you use an infra
-      container version that was build from a commit before your fork was updated, it will attempt
-      to deploy the Bloom Core infra/ config.
+      built on or after the commit updating your fork's infra/ directory. If you use an infra
+      container version that was built from a commit before your fork was updated, it will fail
+      because it will not have the root modules you initialized in step 4.
 
 ## After these steps
 
-1. The main branch of your Bloom fork should be updated to have the details for your AWS deployments
-   and not the Bloom Core AWS deployment.
-2. Your notes should have the infra docker container image version that was build from the commit
+1. The main branch of your Bloom fork should be updated to have the details for your AWS accounts.
+2. Your notes should have the infra docker container image version that was built from the commit
    updating your fork.

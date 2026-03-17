@@ -13,7 +13,7 @@ variable "aws_profile" {
   default     = ""
 }
 variable "aws_account_number" {
-  type        = number
+  type        = string
   description = "AWS account number that is being configured."
 }
 variable "aws_region" {
