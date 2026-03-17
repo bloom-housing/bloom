@@ -39,6 +39,7 @@ COPY --from=opentofu /usr/local/bin/tofu /usr/local/bin/tofu
 
 # Install other required binaries.
 RUN <<EOF
+set -e
 dnf update -y
 dnf install -y shadow-utils # make groupadd and useradd available.
 dnf install -y openssl
@@ -50,6 +51,7 @@ EOF
 # Setup a home directory inside the container and a directory for the git repo on the host to be
 # mounted on.
 RUN <<EOF
+set -e
 mkdir --parents /bloom/infra
 mkdir --parents /home/.aws
 ln --symbolic /bloom/infra/aws_sso_config /home/.aws/config
