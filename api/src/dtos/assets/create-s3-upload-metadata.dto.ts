@@ -3,19 +3,14 @@ import { Expose } from 'class-transformer';
 import { IsString } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
-export class CreateS3UploadUrl {
+export class CreateS3UploadMetadata {
   @Expose()
   @ApiProperty()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  fileId: string;
+  contentType: string;
 
   @Expose()
   @ApiProperty()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  uploadUrl: string;
-
-  @Expose()
-  @ApiProperty()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  publicUrl: string;
+  contentDisposition: string;
 }
