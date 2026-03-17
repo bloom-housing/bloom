@@ -38,8 +38,6 @@ const UnitForm = ({
 }: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
-  const [amiChartsOptions, setAmiChartsOptions] = useState([])
-  const [unitTypesOptions, setUnitTypesOptions] = useState([])
   const [isAmiPercentageDirty, setIsAmiPercentageDirty] = useState(false)
   const [loading, setLoading] = useState(true)
   const [currentAmiChart, setCurrentAmiChart] = useState(null)
@@ -62,9 +60,21 @@ const UnitForm = ({
   /**
    * fetch form options
    */
-  const { data: amiCharts = [], loading: amiChartsLoading } = useAmiChartList(jurisdiction)
-  const { data: unitTypes = [], loading: unitTypesLoading } = useUnitTypeList()
+  const { data: amiCharts, loading: amiChartsLoading } = useAmiChartList(jurisdiction)
+  const { data: unitTypes, loading: unitTypesLoading } = useUnitTypeList()
   const { data: jurisdictionData, loading: jurisdictionLoading } = useJurisdiction(jurisdiction)
+  const hasInitializedFormData =
+    amiCharts !== undefined && unitTypes !== undefined && jurisdictionData !== undefined
+
+  const amiChartsOptions = useMemo(() => {
+    if (!amiCharts) return []
+    return arrayToFormOptions<AmiChart>(amiCharts, "name", "id")
+  }, [amiCharts])
+
+  const unitTypesOptions = useMemo(() => {
+    if (!unitTypes) return []
+    return arrayToFormOptions<UnitType>(unitTypes, "name", "id", "listings.unit.typeOptions")
+  }, [unitTypes])
 
   const unitPrioritiesOptions = useMemo(() => {
     const visibleTypes = jurisdictionData?.visibleAccessibilityPriorityTypes || []
@@ -172,14 +182,17 @@ const UnitForm = ({
       values.rentType = getRentType(defaultUnit)
 
       reset(values)
+    } else {
+      reset({})
     }
     setLoading(false)
   }
 
   useEffect(() => {
+    setLoading(true)
     void resetDefaultValues()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [defaultUnit])
 
   const fetchAmiChart = async (defaultChartID?: string) => {
     try {
@@ -254,7 +267,7 @@ const UnitForm = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formatFormData = (data: { [x: string]: any }) => {
     if (data.amiChart?.id) {
-      const chart = amiCharts.find((chart) => chart.id === data.amiChart.id)
+      const chart = amiCharts?.find((chart) => chart.id === data.amiChart.id)
       data.amiChart = chart
     } else {
       delete data.amiChart
@@ -272,7 +285,7 @@ const UnitForm = ({
     }
 
     if (data.unitTypes?.id) {
-      const type = unitTypes.find((type) => type.id === data.unitTypes.id)
+      const type = unitTypes?.find((type) => type.id === data.unitTypes.id)
       data.unitTypes = type
     } else {
       delete data.unitTypes
@@ -377,7 +390,7 @@ const UnitForm = ({
   // sets the unit type to be the value from default
   // after the unitType options are set
   useEffect(() => {
-    if (defaultUnit && unitTypesOptions) {
+    if (defaultUnit && unitTypesOptions.length) {
       setValue("unitTypes.id", defaultUnit.unitTypes?.id)
     }
   }, [defaultUnit, unitTypesOptions, setValue])
@@ -396,21 +409,13 @@ const UnitForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rentType])
 
-  // sets the options for the ami charts
-  useEffect(() => {
-    if (amiCharts.length === 0 || amiChartsOptions.length) return
-    setAmiChartsOptions(arrayToFormOptions<AmiChart>(amiCharts, "name", "id"))
-  }, [amiCharts, amiChartsOptions])
-
-  // sets the options for the unit types
-  useEffect(() => {
-    if (unitTypes.length === 0 || unitTypesOptions.length) return
-    setUnitTypesOptions(
-      arrayToFormOptions<UnitType>(unitTypes, "name", "id", "listings.unit.typeOptions")
-    )
-  }, [unitTypesOptions, unitTypes])
-
-  if (amiChartsLoading || unitTypesLoading || jurisdictionLoading) {
+  if (
+    !hasInitializedFormData ||
+    loading ||
+    amiChartsLoading ||
+    unitTypesLoading ||
+    jurisdictionLoading
+  ) {
     return (
       <LoadingState loading={true}>
         <></>

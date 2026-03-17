@@ -9,7 +9,7 @@ import {
   unitTypes,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { UnitAccessibilityPriorityTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { mockNextRouter, render, screen, within } from "../../../testUtils"
+import { mockNextRouter, render, screen, waitFor, within } from "../../../testUtils"
 import UnitForm from "../../../../src/components/listings/PaperListingForm/UnitForm"
 import { TempUnit } from "../../../../src/lib/listings/formTypes"
 
@@ -22,6 +22,10 @@ beforeAll(() => {
 
 const tempUnit: TempUnit = {
   ...unit,
+}
+
+const waitForFormLoad = async () => {
+  await screen.findByRole("option", { name: "Studio" })
 }
 
 describe("UnitForm", () => {
@@ -117,7 +121,7 @@ describe("UnitForm", () => {
     expect(within(floorSelector).getByRole("option", { name: "9" })).toBeInTheDocument()
     expect(within(floorSelector).getByRole("option", { name: "10" })).toBeInTheDocument()
 
-    expect(screen.getByRole("spinbutton", { name: "Square footage" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Square footage")).toBeInTheDocument()
 
     // Minimum occupancy selector
     const minOccupancySelector = screen.getByRole("combobox", { name: "Minimum occupancy" })
@@ -273,11 +277,186 @@ describe("UnitForm", () => {
     expect(minIncomeInputs[7]).toHaveValue(null)
   })
 
-  it.todo("should show fixed amount fields when selecting fixed amount")
-  it.todo("should show percent of income fields when selecting % of income")
-  it.todo("should save values and close drawer on save & exit")
-  it.todo("should save values and not close drawer on save & exit")
-  it.todo("should close drawer on cancel")
-  it.todo("should prepopulate fields different buttons for editing of unit (!draft)")
-  it.todo("should make a copy")
+  it("should show fixed amount fields when selecting fixed amount", async () => {
+    render(
+      <UnitForm
+        jurisdiction="123"
+        onClose={jest.fn()}
+        onSubmit={jest.fn()}
+        draft={true}
+        nextId={1}
+        defaultUnit={undefined}
+      />
+    )
+
+    await waitForFormLoad()
+
+    await userEvent.click(screen.getByRole("radio", { name: "Fixed amount" }))
+
+    expect(
+      screen.getByLabelText(/minimum monthly income|monthly minimum income/i)
+    ).toBeInTheDocument()
+    expect(screen.getByLabelText(/monthly rent/i)).toBeInTheDocument()
+    expect(screen.queryByLabelText(/income rent/i)).not.toBeInTheDocument()
+  })
+
+  it("should show percent of income fields when selecting % of income", async () => {
+    render(
+      <UnitForm
+        jurisdiction="123"
+        onClose={jest.fn()}
+        onSubmit={jest.fn()}
+        draft={true}
+        nextId={1}
+        defaultUnit={undefined}
+      />
+    )
+
+    await waitForFormLoad()
+
+    await userEvent.click(screen.getByRole("radio", { name: "% of income" }))
+
+    expect(screen.getByLabelText(/income rent/i)).toBeInTheDocument()
+    expect(
+      screen.queryByLabelText(/minimum monthly income|monthly minimum income/i)
+    ).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/monthly rent/i)).not.toBeInTheDocument()
+  })
+
+  it("should not close drawer on save & exit when form is invalid", async () => {
+    const onClose = jest.fn()
+    const onSubmit = jest.fn()
+
+    render(
+      <UnitForm
+        jurisdiction="123"
+        onClose={onClose}
+        onSubmit={onSubmit}
+        draft={true}
+        nextId={12}
+        defaultUnit={undefined}
+      />
+    )
+
+    await waitForFormLoad()
+
+    await userEvent.click(screen.getByRole("button", { name: "Save & exit" }))
+
+    expect(onSubmit).not.toHaveBeenCalled()
+    expect(onClose).not.toHaveBeenCalled()
+  })
+
+  it("should close drawer on cancel", async () => {
+    const onClose = jest.fn()
+
+    render(
+      <UnitForm
+        jurisdiction="123"
+        onClose={onClose}
+        onSubmit={jest.fn()}
+        draft={true}
+        nextId={1}
+        defaultUnit={tempUnit}
+      />
+    )
+
+    await waitForFormLoad()
+
+    await userEvent.click(screen.getByRole("button", { name: "Cancel" }))
+
+    expect(onClose).toHaveBeenCalledWith(false, false, null)
+  })
+
+  it("should prepopulate fields and show copy button when editing non-draft unit", async () => {
+    const prepopulatedUnit = {
+      ...tempUnit,
+      number: "A-101",
+      sqFeet: "321",
+      monthlyIncomeMin: "2208.0",
+      monthlyRent: "1104.0",
+      unitTypes: unitTypes[0],
+    } as TempUnit
+
+    render(
+      <UnitForm
+        jurisdiction="123"
+        onClose={jest.fn()}
+        onSubmit={jest.fn()}
+        draft={false}
+        nextId={1}
+        defaultUnit={prepopulatedUnit}
+      />
+    )
+
+    await waitForFormLoad()
+
+    await waitFor(() => {
+      expect(screen.getByRole("textbox", { name: "Unit number" })).toHaveValue("A-101")
+      expect(screen.getByRole("combobox", { name: "Unit type" })).toHaveValue(unitTypes[0].id)
+      expect(screen.getByLabelText(/square footage/i)).toHaveValue(321)
+      expect(screen.getByLabelText(/minimum monthly income|monthly minimum income/i)).toHaveValue(
+        2208
+      )
+      expect(screen.getByLabelText(/monthly rent/i)).toHaveValue(1104)
+    })
+
+    expect(screen.getByRole("button", { name: "Make a copy" })).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Save" })).not.toBeInTheDocument()
+  })
+
+  it("should retain copied data when reopened as draft", async () => {
+    const onClose = jest.fn()
+    const onSubmit = jest.fn()
+    const prepopulatedUnit = {
+      ...tempUnit,
+      number: "B-202",
+      sqFeet: "456",
+      monthlyIncomeMin: "3200.0",
+      monthlyRent: "1600.0",
+      unitTypes: unitTypes[1],
+    } as TempUnit
+
+    const { rerender } = render(
+      <UnitForm
+        jurisdiction="123"
+        onClose={onClose}
+        onSubmit={onSubmit}
+        draft={false}
+        nextId={20}
+        defaultUnit={prepopulatedUnit}
+      />
+    )
+
+    await waitForFormLoad()
+
+    await userEvent.click(screen.getByRole("button", { name: "Make a copy" }))
+
+    const copiedUnit = onClose.mock.calls[0][2]
+
+    rerender(
+      <UnitForm
+        jurisdiction="123"
+        onClose={onClose}
+        onSubmit={onSubmit}
+        draft={true}
+        nextId={21}
+        defaultUnit={copiedUnit}
+      />
+    )
+
+    await waitForFormLoad()
+
+    await waitFor(() => {
+      expect(screen.getByRole("textbox", { name: "Unit number" })).toHaveValue("B-202")
+      expect(screen.getByRole("combobox", { name: "Unit type" })).toHaveValue(unitTypes[1].id)
+      expect(screen.getByLabelText(/square footage/i)).toHaveValue(456)
+      expect(screen.getByLabelText(/minimum monthly income|monthly minimum income/i)).toHaveValue(
+        3200
+      )
+      expect(screen.getByLabelText(/monthly rent/i)).toHaveValue(1600)
+    })
+
+    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Make a copy" })).not.toBeInTheDocument()
+  })
 })

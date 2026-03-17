@@ -554,6 +554,7 @@ const FormUnits = ({
           />
         ) : (
           <UnitForm
+            key={`${defaultUnit?.tempId ?? "new"}-${unitDrawerOpen ? "open" : "closed"}`}
             jurisdiction={jurisdiction}
             onSubmit={(unit) => {
               saveUnit(unit)
@@ -563,8 +564,9 @@ const FormUnits = ({
               if (openNextUnit) {
                 if (defaultUnit) {
                   addToast(t("listings.unit.unitCopied"), { variant: "success" })
+                } else {
+                  editUnit(nextId)
                 }
-                editUnit(nextId)
               } else if (!openCurrentUnit) {
                 setUnitDrawerOpen(false)
               } else {
