@@ -91,13 +91,15 @@ graph TB
 1. Apply the dev deployer OpenTofu root module:
 
    ```bash
-   docker run --rm -it ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra:gitsha-SOMESHA bloom_dev_deployer_permission_set_policy apply
+   INFRA_CONTAINER=<from your notes from 'Fork Bloom Repo' step 7>
+   docker run --rm -it "${INFRA_CONTAINER:?}" bloom_dev_deployer_permission_set_policy apply
    ```
 
 2. Apply the prod deployer OpenTofu root module:
 
    ```bash
-   docker run --rm -it ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra:gitsha-SOMESHA bloom_prod_deployer_permission_set_policy apply
+   INFRA_CONTAINER=<from your notes from 'Fork Bloom Repo' step 7>
+   docker run --rm -it "${INFRA_CONTAINER:?}" bloom_prod_deployer_permission_set_policy apply
    ```
 
 ## After these steps

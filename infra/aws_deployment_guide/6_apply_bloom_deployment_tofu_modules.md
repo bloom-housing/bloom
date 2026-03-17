@@ -106,7 +106,8 @@ graph TB
 1. Create the AWS managed certificate for your domain:
 
    ```bash
-   docker run --rm -it ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra:gitsha-SOMESHA bloom_dev apply -exclude=module.bloom_deployment
+   INFRA_CONTAINER=<from your notes from 'Fork Bloom Repo' step 7>
+   docker run --rm -it "${INFRA_CONTAINER:?}" bloom_dev apply -exclude=module.bloom_deployment
    ```
 
 2. Validate the AWS managed certificate:
@@ -153,7 +154,8 @@ graph TB
 3. Deploy Bloom:
 
    ```bash
-   docker run --rm -it ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra:gitsha-SOMESHA bloom_dev apply
+   INFRA_CONTAINER=<from your notes from 'Fork Bloom Repo' step 7>
+   docker run --rm -it "${INFRA_CONTAINER:?}" bloom_dev apply
    ```
 
 4. Add DNS records for the public and partner site URLs:
@@ -276,7 +278,8 @@ graph TB
 1. Create the AWS managed certificate for your domain:
 
    ```bash
-   docker run --rm -it ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra:gitsha-SOMESHA bloom_prod apply -exclude=module.bloom_deployment
+   INFRA_CONTAINER=<from your notes from 'Fork Bloom Repo' step 7>
+   docker run --rm -it "${INFRA_CONTAINER:?}" bloom_prod apply -exclude=module.bloom_deployment
    ```
 
 2. Validate the AWS managed certificate:
@@ -323,7 +326,8 @@ graph TB
 3. Deploy the Bloom services:
 
    ```bash
-   docker run --rm -it ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra:gitsha-SOMESHA bloom_prod apply
+   INFRA_CONTAINER=<from your notes from 'Fork Bloom Repo' step 7>
+   docker run --rm "${INFRA_CONTAINER:?}" bloom_prod apply
    ```
 
 4. Add DNS records for the public and partner site URLs:
@@ -456,7 +460,8 @@ the existing VPC. To create the VPC peering:
 2. Apply the Bloom deployment root module:
 
    ```bash
-   docker run --rm -it ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra:gitsha-SOMESHA <bloom_dev|bloom_prod> apply
+   INFRA_CONTAINER=<from your notes from 'Fork Bloom Repo' step 7>
+   docker run --rm "${INFRA_CONTAINER:?}" <bloom_dev|bloom_prod> apply
    ```
 
    The apply will create the peering connection then return an expected error "VPC peering not accepted. Skipping creation of dependent

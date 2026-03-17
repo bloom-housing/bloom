@@ -34,27 +34,29 @@ organization. The guide is broken down into a series of files that should be fol
 
 ## Steps
 
-1. Fork https://github.com/bloom-housing/bloom. After forking, GitHub should trigger the 'Docker
-   Image Build' action:
-   https://github.com/<YOUR_GITHUB_ORG>/bloom/actions/workflows/docker_image_build.yml. It will
-   build and push Bloom docker images to the GitHub container registry in your GitHub
-   organization. Wait for the action to succeed.
+1. Fork https://github.com/bloom-housing/bloom. Go the 'Actions' tab and click the 'I understand my
+   workflows, go ahead and enable them' button.
 
-2. Clone the Bloom fork to a host that has docker or podman installed.
+2. Click on the 'Docker Image Build' action. Select the 'Run workflow' dropdown and then click the
+   'Run workflow' button. The workflow will build and push images to GitHub container registry. Wait
+   for the action to succeed.
 
-3. Get the docker image for your fork's infra-dev container:
-   1. Go to your GitHub Organization's Packages page:
-      https://github.com/orgs/<YOUR_GITHUB_ORG>/packages.
-   2. Click on the 'infra-dev' container and **note the container name and the git commit it was
-      built from**. For example, if the container name is
-      'ghcr.io/bloom-housing/bloom/infra-dev:gitsha-ad3fca97bd5520dba05a0907f7c907f4984e8680', the
-      git SHA that it was built from is 'ad3fca97bd5520dba05a0907f7c907f4984e8680'.
+3. **Note the infra-dev docker image tag that was built in step 2**:
 
-4. Initialize root modules using a helper script. All argument values should be present in your
+   In the 'Docker Build summary' section for the 'infra-dev' container, expand the 'Build inputs'
+   section. The container image is listed in the 'tags:' section.
+
+   For example:
+   'ghcr.io/avrittrohwer/bloom/infra-dev:gitsha-a800b89442e5ac45ab73dcd8d6319378a1e44b95'.
+
+4. Clone the Bloom fork to a host that has docker or podman installed.
+
+5. Initialize root modules using a helper script. All argument values should be present in your
    notes. To see all required arguments, run:
 
    ```bash
-   docker run --rm -it --entrypoint python3 --user "$(id -u):$(id -g)" -v ./infra:/bloom/infra:z ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra-dev:gitsha-SOMESHA /bloom/infra/root_module_initializer.py -h
+   INFRA_DEV_CONTAINER=<from your notes in step 3>
+   docker run --rm -it --entrypoint python3 --user "$(id -u):$(id -g)" -v ./infra:/bloom/infra:z "${INFRA_DEV_CONTAINER:?}" /bloom/infra/root_module_initializer.py -h
    ```
 
    If using podman instead of docker, replace `--user "$(id -u):$(id -g)"` with `--userns=keep-id`.
@@ -69,19 +71,25 @@ organization. The guide is broken down into a series of files that should be fol
 
    To see the changes, stage the files with `git add .` then diff with `git diff --staged`.
 
-5. Push the changes to your fork's main branch.
+6. Push the changes to your fork's main branch.
 
-6. Get the docker image for your fork's infra container. After pushing the infra updates, GitHub
-   should trigger the 'Docker Image Build' action again. Go to your GitHub Organization's Packages
-   page: https://github.com/orgs/<YOUR_GITHUB_ORG>/packages.
-   1. Click on the 'infra' container and **note the container name that corresponds to the git
-      commit SHA of your infra updates commit**. It must be the infra container version that was
-      built on or after the commit updating your fork's infra/ directory. If you use an infra
-      container version that was built from a commit before your fork was updated, it will fail
-      because it will not have the root modules you initialized in step 4.
+7. **Note the infra docker image tag and git commit sha that was built after the push in step 6**:
+
+   1. On the 'Docker Image Build' action page for your fork
+      (https://github.com/<YOUR_GITHUB_ORG>/bloom/actions/workflows/docker_image_build.yml), click
+      on the workflow run that was triggered after the push in step 6.
+
+   2. In the 'Docker Build summary' section for the 'infra' container (make sure to not select
+      'infra-dev', 'infra' is a separate container), expand the 'Build inputs' section. The
+      container image is listed in the 'tags:' section. The git commit sha is the suffix of the
+      container image.
+
+      For example, if the container image tag is
+      'ghcr.io/avrittrohwer/bloom/infra:gitsha-a800b89442e5ac45ab73dcd8d6319378a1e44b95', the git
+      commit sha is 'a800b89442e5ac45ab73dcd8d6319378a1e44b95'.
 
 ## After these steps
 
 1. The main branch of your Bloom fork should be updated to have the details for your AWS accounts.
-2. Your notes should have the infra docker container image version that was built from the commit
-   updating your fork.
+2. Your notes should have the infra docker container image tag and git sha that was built from the
+   commit updating your fork.
