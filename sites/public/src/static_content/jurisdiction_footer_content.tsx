@@ -20,7 +20,7 @@ export const getJurisdictionFooterLinksContent = (): FooterLinks => {
   return {
     links: [
       { text: t("pageTitle.termsAndConditions"), href: "/terms" },
-      { text: t("pageTitle.accessibilityStatement"), href: "/" },
+      { text: t("pageTitle.accessibilityStatement"), href: "/accessibility-statement" },
       { text: t("pageTitle.privacy"), href: "https://housing.lacity.gov/about-us/privacy-policy" },
     ],
     cityString: t("footer.copyright"),

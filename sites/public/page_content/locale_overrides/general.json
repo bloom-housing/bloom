@@ -39,7 +39,7 @@
   "resources.contactDescription": "The Affordable and Accessible Housing Registry is a project of the City of Los Angeles Housing Department (LAHD). For listing and application questions, please contact the Leasing Agent displayed on the listing. For general program inquiries, you may visit our website at [https://lahousing.lacity.org/AAHR/](https://lahousing.lacity.org/AAHR/) or email [lahd.achp@lacity.org](mailto:lahd.achp@lacity.org). You may also call our hotline at [(213) 808-8550](tel:+12138088550).",
   "resources.contactEmail": "bloomington@housing.org",
   "resources.contactInfo": "Bloomington's Housing & Community Development Department",
-  "resources.contactCardTitle": "City of Los Angeles Housing Department",
+  "resources.contactTitleCard": "City of Los Angeles Housing Department",
   "resources.housingProgramsTitle": "Bloomington's Housing & Community Development housing programs",
   "resources.mockCardDescription": "Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "resources.mockCardTitle": "Lorem Ipsum",
