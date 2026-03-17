@@ -10334,6 +10334,7 @@ export enum SpokenLanguageEnum {
 }
 
 export enum FeatureFlagEnum {
+  "disableAccessibilityFeaturesTag" = "disableAccessibilityFeaturesTag",
   "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
   "disableCommonApplication" = "disableCommonApplication",
   "disableEthnicityQuestion" = "disableEthnicityQuestion",
@@ -10347,12 +10348,14 @@ export enum FeatureFlagEnum {
   "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
+  "enableFaq" = "enableFaq",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
   "enableHousingAdvocate" = "enableHousingAdvocate",
   "enableHousingDeveloperOwner" = "enableHousingDeveloperOwner",
+  "enableHousingBasics" = "enableHousingBasics",
   "enableIsVerified" = "enableIsVerified",
   "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
   "enableListingFavoriting" = "enableListingFavoriting",
@@ -10383,6 +10386,7 @@ export enum FeatureFlagEnum {
   "enableSpokenLanguage" = "enableSpokenLanguage",
   "enableSupportAdmin" = "enableSupportAdmin",
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
+  "enableUnitAccessibilityTypeTags" = "enableUnitAccessibilityTypeTags",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
   "enableVerifyIncome" = "enableVerifyIncome",
