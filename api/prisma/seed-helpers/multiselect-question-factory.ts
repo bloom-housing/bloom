@@ -22,10 +22,7 @@ export const multiselectQuestionFactory = (
   const previousMultiselectQuestion = optionalParams?.multiselectQuestion || {};
   const name = optionalParams?.multiselectQuestion?.name || randomName();
   const text = optionalParams?.multiselectQuestion?.text || randomName();
-  const optionsV2 =
-    (optionalParams?.multiselectQuestion
-      ?.options as Prisma.MultiselectOptionsCreateManyMultiselectQuestionInput[]) ||
-    multiselectOptionFactoryV2(randomInt(1, 3));
+
   const baseFields = {
     applicationSection:
       optionalParams?.multiselectQuestion?.applicationSection ||
@@ -45,7 +42,9 @@ export const multiselectQuestionFactory = (
     description: `description of ${text}`,
     isExclusive: false,
     name: text,
-    options: multiselectOptionFactory(randomInt(1, 3)),
+    options:
+      optionalParams?.multiselectQuestion?.options ||
+      multiselectOptionFactory(randomInt(1, 3)),
     optOutText: optionalParams?.optOut ? "I don't want this preference" : null,
     status: MultiselectQuestionsStatusEnum.draft,
     subText: `sub text for ${text}`,
@@ -54,9 +53,10 @@ export const multiselectQuestionFactory = (
   const v2Fields = {
     description: `description of ${name}`,
     isExclusive: optionalParams?.multiselectQuestion?.isExclusive ?? false,
-    multiselectOptions: {
+    multiselectOptions: optionalParams?.multiselectQuestion
+      ?.multiselectOptions ?? {
       createMany: {
-        data: optionsV2,
+        data: multiselectOptionFactoryV2(randomInt(1, 3)),
       },
     },
     name: name,
@@ -71,14 +71,14 @@ export const multiselectQuestionFactory = (
 
   if (version2) {
     return {
-      ...v2Fields,
       ...previousMultiselectQuestion,
+      ...v2Fields,
       ...baseFields,
     };
   }
   return {
-    ...v1Fields,
     ...previousMultiselectQuestion,
+    ...v1Fields,
     ...baseFields,
   };
 };

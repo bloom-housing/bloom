@@ -9,35 +9,36 @@ import {
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { randomInt } from 'crypto';
-import { generateConfirmationCode } from '../../src/utilities/applications-utilities';
 import { addressFactory } from './address-factory';
-import { randomNoun } from './word-generator';
+import { alternateContactFactory } from './alternate-contact-factory';
+import { preferenceFactory } from './application-preference-factory';
+import { randomBoolean } from './boolean-generator';
+import { demographicsFactory } from './demographic-factory';
 import {
   randomBirthDay,
   randomBirthMonth,
   randomBirthYear,
 } from './number-generator';
-import { preferenceFactory } from './application-preference-factory';
-import { demographicsFactory } from './demographic-factory';
-import { alternateContactFactory } from './alternate-contact-factory';
-import { randomBoolean } from './boolean-generator';
+import { randomNoun } from './word-generator';
+import { ApplicationSelection } from '../../src/dtos/applications/application-selection.dto';
 import { RaceEthnicityConfiguration } from '../../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
+import { generateConfirmationCode } from '../../src/utilities/applications-utilities';
 
 export const applicationFactory = async (optionalParams?: {
-  createdAt?: Date;
-  unitTypeId?: string;
-  applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
-  listingId?: string;
-  householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput[];
-  demographics?: Prisma.DemographicsCreateWithoutApplicationsInput;
-  multiselectQuestions?: Partial<MultiselectQuestions>[];
-  userId?: string;
-  submissionType?: ApplicationSubmissionTypeEnum;
-  isNewest?: boolean;
-  expireAfter?: Date;
-  wasPIICleared?: boolean;
   additionalPhone?: string;
+  applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
+  createdAt?: Date;
+  demographics?: Prisma.DemographicsCreateWithoutApplicationsInput;
+  expireAfter?: Date;
+  householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput[];
+  isNewest?: boolean;
+  listingId?: string;
+  multiselectQuestions?: Partial<MultiselectQuestions>[];
   raceEthnicityConfiguration?: RaceEthnicityConfiguration;
+  submissionType?: ApplicationSubmissionTypeEnum;
+  unitTypeId?: string;
+  userId?: string;
+  wasPIICleared?: boolean;
 }): Promise<Prisma.ApplicationsCreateInput> => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
