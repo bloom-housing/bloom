@@ -2214,6 +2214,50 @@ export class UserService {
     })
   }
   /**
+   * Get advocate user from confirmation token
+   */
+  getAdvocateFromConfirmationToken(
+    params: {
+      /** requestBody */
+      body?: ConfirmationRequest
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate-from-token"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Resend advocate account creation email
+   */
+  resendAdvocateConfirmation(
+    params: {
+      /** requestBody */
+      body?: EmailAndAppUrl
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate-resend-confirmation"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Forgot Password
    */
   forgotPassword(
