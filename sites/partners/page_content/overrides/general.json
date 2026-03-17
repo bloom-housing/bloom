@@ -1,8 +1,8 @@
 {
   "application.add.workInRegion": "Work in the region?",
   "application.details.workInRegion": "Work in region",
-  "application.review.demographics.howDidYouHearOptions.developerWebsite": "Developer website",
-  "application.review.demographics.howDidYouHearOptions.jurisdictionWebsite": "Jurisdiction website",
+  "application.review.demographics.howDidYouHearOptions.developerWebsite": "Property website",
+  "application.review.demographics.howDidYouHearOptions.jurisdictionWebsite": "Government website",
   "listings.listingIsAlreadyLive": "This listing is already live. Updates will affect the applicant experience on the housing portal.",
   "listings.lottery.noDataEmail": "partners@housingbayarea.org",
   "listings.lottery.partnerPublishTimestampPortal": "Bloom Housing Portal",
