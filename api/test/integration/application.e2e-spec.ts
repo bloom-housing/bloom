@@ -916,18 +916,18 @@ describe('Application Controller Tests', () => {
       });
       const savedPreferences = savedApplication[0].preferences;
       expect(savedPreferences).toHaveLength(1);
+
+      // Poll for geocoding to finish adding both extraData entries (address + geocodingVerified)
       let geocodingOptions = savedPreferences[0].options[0];
-      // This catches the edge case where the geocoding hasn't completed yet
-      if (geocodingOptions.extraData.length === 1) {
-        // I'm unsure why removing this console log makes this test fail. This should be looked into
-        console.log('');
+      for (let i = 0; i < 5 && geocodingOptions.extraData.length < 2; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
         savedApplication = await prisma.applications.findMany({
           where: {
             id: res.body.id,
           },
         });
+        geocodingOptions = savedApplication[0].preferences[0].options[0];
       }
-      geocodingOptions = savedApplication[0].preferences[0].options[0];
       expect(geocodingOptions.extraData).toHaveLength(2);
       expect(geocodingOptions.extraData).toContainEqual({
         key: 'geocodingVerified',
