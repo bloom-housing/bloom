@@ -104,18 +104,10 @@ describe("Verify Page Tests", () => {
       expect(await screen.findByRole("dialog")).toBeInTheDocument()
       const dialog = await screen.findByRole("dialog")
 
-      const dialogContainer = dialog.parentElement
-
-      expect(
-        within(dialogContainer).getByRole("heading", { name: "Resend code" })
-      ).toBeInTheDocument()
-      expect(
-        within(dialogContainer).getByRole("heading", { name: "Resend code" })
-      ).toBeInTheDocument()
-      expect(
-        within(dialogContainer).getByRole("button", { name: /resend the code/i })
-      ).toBeInTheDocument()
-      expect(within(dialogContainer).getByRole("button", { name: /cancel/i })).toBeInTheDocument()
+      expect(within(dialog).getByRole("heading", { name: "Resend code" })).toBeInTheDocument()
+      expect(within(dialog).getByRole("heading", { name: "Resend code" })).toBeInTheDocument()
+      expect(within(dialog).getByRole("button", { name: /resend the code/i })).toBeInTheDocument()
+      expect(within(dialog).getByRole("button", { name: /cancel/i })).toBeInTheDocument()
     })
 
     it("closes the dialog when clicking 'Cancel'", async () => {
