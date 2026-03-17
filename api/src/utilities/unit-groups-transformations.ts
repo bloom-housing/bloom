@@ -228,7 +228,7 @@ export const getHouseholdMaxIncomeSummary = (
   const hmiMap = {};
 
   // for the occupancy range, get the max income per percentage of AMI across the AMI charts
-  amiChartItems.forEach((item) => {
+  amiChartItems?.forEach((item) => {
     if (
       item.householdSize >= (occupancyRange?.min || item.householdSize) &&
       item.householdSize <= (occupancyRange?.max || item.householdSize) &&
