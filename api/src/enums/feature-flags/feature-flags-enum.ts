@@ -15,12 +15,14 @@ export enum FeatureFlagEnum {
   enableCompanyWebsite = 'enableCompanyWebsite',
   enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
+  enableFaq = 'enableFaq',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
   enableHousingAdvocate = 'enableHousingAdvocate',
   enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
+  enableHousingBasics = 'enableHousingBasics',
   enableIsVerified = 'enableIsVerified',
   enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
   enableListingFavoriting = 'enableListingFavoriting',
@@ -135,6 +137,11 @@ export const featureFlagMap: {
     description: 'When true, credit screening fee is enabled for listings',
   },
   {
+    name: FeatureFlagEnum.enableFaq,
+    description:
+      'When true, a link to the FAQ page is displayed on the get assistance page',
+  },
+  {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
     description:
       'When true, the full time student question is displayed in the application form',
@@ -161,6 +168,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableHousingDeveloperOwner,
     description:
       "When true, the 'Housing developer' field label becomes 'Housing developer / owner'",
+  },
+  {
+    name: FeatureFlagEnum.enableHousingBasics,
+    description:
+      'When true, a link to the housing basics page is displayed on the get assistance page',
   },
   {
     name: FeatureFlagEnum.enableIsVerified,
