@@ -1017,6 +1017,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .post(`/listings/list`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
+        .send({})
         .expect(201);
     });
 

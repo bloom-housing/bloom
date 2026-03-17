@@ -911,6 +911,8 @@ describe('User Controller Tests', () => {
       expect(applicationsOnUser.applications.map((app) => app.id)).toContain(
         application.id,
       );
+      expect(emailService.welcome).not.toHaveBeenCalled();
+      expect(emailService.advocateAccepted).not.toHaveBeenCalled();
     });
   });
 

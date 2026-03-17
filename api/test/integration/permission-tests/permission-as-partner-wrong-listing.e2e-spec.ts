@@ -1013,6 +1013,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
         .post(`/listings/list`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
+        .send({})
         .expect(201);
     });
 

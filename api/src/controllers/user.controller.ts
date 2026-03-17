@@ -24,7 +24,10 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserService } from '../services/user.service';
+import {
+  AdvocateConfirmationPrefillDto,
+  UserService,
+} from '../services/user.service';
 import { User } from '../dtos/users/user.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { IdDTO } from '../dtos/shared/id.dto';
@@ -207,7 +210,7 @@ export class UserController {
   ): Promise<User> {
     return await this.userService.createAdvocateUser(
       dto,
-      queryParams.noWelcomeEmail !== true,
+      queryParams.noWelcomeEmail === false,
       req,
     );
   }
@@ -290,6 +293,30 @@ export class UserController {
     @Body() dto: ConfirmationRequest,
   ): Promise<SuccessDTO> {
     return await this.userService.isUserConfirmationTokenValid(dto);
+  }
+
+  @Post('advocate-from-token')
+  @ApiOperation({
+    summary: 'Get advocate user from confirmation token',
+    operationId: 'getAdvocateFromConfirmationToken',
+  })
+  @ApiOkResponse({ type: User })
+  async getAdvocateFromConfirmationToken(
+    @Body() dto: ConfirmationRequest,
+  ): Promise<AdvocateConfirmationPrefillDto> {
+    return await this.userService.getAdvocateFromConfirmationToken(dto);
+  }
+
+  @Post('advocate-resend-confirmation')
+  @ApiOperation({
+    summary: 'Resend advocate account creation email',
+    operationId: 'resendAdvocateConfirmation',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async resendAdvocateConfirmation(
+    @Body() dto: EmailAndAppUrl,
+  ): Promise<SuccessDTO> {
+    return await this.userService.resendAdvocateConfirmation(dto);
   }
 
   @Put('forgot-password')
