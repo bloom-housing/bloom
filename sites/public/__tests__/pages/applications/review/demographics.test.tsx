@@ -59,9 +59,7 @@ describe("Demographics", () => {
         </AppSubmissionContext.Provider>
       )
 
-      expect(
-        screen.getByText("Help us ensure we are meeting our goal to serve all people")
-      ).toBeInTheDocument()
+      expect(screen.getByText("Help us better serve you.")).toBeInTheDocument()
       expect(
         screen.getByText("Which best describes your race? Please select all that apply:", {
           selector: "legend",
@@ -488,9 +486,7 @@ describe("Demographics", () => {
       )
 
       // Should still render form title and ethnicity field
-      expect(
-        screen.getByText("Help us ensure we are meeting our goal to serve all people")
-      ).toBeInTheDocument()
+      expect(screen.getByText("Help us better serve you.")).toBeInTheDocument()
       expect(screen.getByText(/ethnicity/i)).toBeInTheDocument()
 
       // But no race options should be present
