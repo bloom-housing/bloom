@@ -852,6 +852,13 @@ describe('Testing user service', () => {
         .mockReturnValue([{ id: 'app id 1' }, { id: 'app id 2' }]);
 
       prisma.applications.update = jest.fn().mockReturnValue(null);
+      prisma.applications.findUnique = jest
+        .fn()
+        .mockReturnValue({ id: 'app id 1' });
+
+      prisma.applicationSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
       await service.connectUserWithExistingApplications(email, id);
       expect(prisma.applications.findMany).toHaveBeenCalledWith({
         where: {
@@ -885,6 +892,7 @@ describe('Testing user service', () => {
           id: 'app id 2',
         },
       });
+      expect(prisma.applicationSnapshot.create).toHaveBeenCalledTimes(2);
     });
 
     it('should not connect user when no matching applications exist', async () => {
@@ -2756,6 +2764,12 @@ describe('Testing user service', () => {
         id,
         email: 'publicUser@email.com',
       });
+      prisma.applications.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: 'application id 1' });
+      prisma.applicationSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
       await service.createPublicUser(
         {
           firstName: 'public User firstName',
@@ -2862,6 +2876,7 @@ describe('Testing user service', () => {
         },
       });
       expect(canOrThrowMock).not.toHaveBeenCalled();
+      expect(prisma.applicationSnapshot.create).toHaveBeenCalledTimes(2);
     });
 
     it('should create a public user with jurisdiction from header when dto jurisdictions are missing', async () => {
@@ -2927,6 +2942,13 @@ describe('Testing user service', () => {
         id,
         email: 'advocateUser@email.com',
       });
+      prisma.applications.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: 'application id 1' });
+
+      prisma.applicationSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
 
       const mockAdress = addressFactory();
 
@@ -3049,6 +3071,7 @@ describe('Testing user service', () => {
         },
       });
       expect(canOrThrowMock).not.toHaveBeenCalled();
+      expect(prisma.applicationSnapshot.create).toHaveBeenCalledTimes(2);
     });
 
     it('should create an advocate user with jurisdiction from header when dto jurisdictions are missing', async () => {
