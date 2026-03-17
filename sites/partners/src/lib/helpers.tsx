@@ -190,8 +190,8 @@ export const fileUploader = async ({
   if (process.env.useS3FileStorage === "TRUE") {
     const resp = await assetsService.createS3UploadUrl({
       body: {
-        contentType,
-        contentDisposition,
+        contentType: contentType || "",
+        contentDisposition: contentDisposition || "",
       },
     })
     const { uploadUrl, publicUrl } = resp

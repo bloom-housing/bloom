@@ -1,12 +1,16 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { IsString } from 'class-validator';
+import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class CreateS3UploadMetadata {
   @Expose()
-  @ApiPropertyOptional()
-  contentType?: string;
+  @ApiProperty()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  contentType: string;
 
   @Expose()
-  @ApiPropertyOptional()
-  contentDisposition?: string;
+  @ApiProperty()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  contentDisposition: string;
 }

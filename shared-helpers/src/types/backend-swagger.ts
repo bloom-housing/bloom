@@ -8792,10 +8792,10 @@ export interface CreateS3UploadUrl {
 
 export interface CreateS3UploadMetadata {
   /**  */
-  contentType?: string
+  contentType: string
 
   /**  */
-  contentDisposition?: string
+  contentDisposition: string
 }
 
 export interface EmailAndAppUrl {

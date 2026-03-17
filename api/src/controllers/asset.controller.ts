@@ -30,6 +30,7 @@ import { CreateS3UploadMetadata } from '../dtos/assets/create-s3-upload-metadata
   CreatePresignedUploadMetadata,
   CreatePresignedUploadMetadataResponse,
   CreateS3UploadUrl,
+  CreateS3UploadMetadata,
 )
 @PermissionTypeDecorator('asset')
 @UseGuards(ApiKeyGuard, JwtAuthGuard, PermissionGuard)
