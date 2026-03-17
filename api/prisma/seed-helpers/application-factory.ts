@@ -20,10 +20,10 @@ import {
   randomBirthYear,
 } from './number-generator';
 import { randomNoun } from './word-generator';
-import { ApplicationSelection } from '../../src/dtos/applications/application-selection.dto';
 import { RaceEthnicityConfiguration } from '../../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
 import { generateConfirmationCode } from '../../src/utilities/applications-utilities';
 
+// TODO: Needs to handle V2MSQ
 export const applicationFactory = async (optionalParams?: {
   additionalPhone?: string;
   applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;

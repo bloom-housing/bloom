@@ -39,7 +39,9 @@ export const multiselectQuestionFactory = (
   };
 
   const v1Fields = {
-    description: `description of ${text}`,
+    description:
+      optionalParams?.multiselectQuestion?.description ??
+      `description of ${text}`,
     isExclusive: false,
     name: text,
     options:
@@ -51,7 +53,9 @@ export const multiselectQuestionFactory = (
     text: text,
   };
   const v2Fields = {
-    description: `description of ${name}`,
+    description:
+      optionalParams?.multiselectQuestion?.description ??
+      `description of ${name}`,
     isExclusive: optionalParams?.multiselectQuestion?.isExclusive ?? false,
     multiselectOptions: optionalParams?.multiselectQuestion
       ?.multiselectOptions ?? {
