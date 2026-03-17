@@ -4,8 +4,12 @@ import { INestApplication } from '@nestjs/common';
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  ApplicationReviewStatusEnum,
+  ApplicationStatusEnum,
+  ApplicationSubmissionTypeEnum,
   DepositTypeEnum,
   HomeTypeEnum,
+  IncomePeriodEnum,
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
@@ -39,6 +43,7 @@ import { unitRentTypeFactory } from '../../prisma/seed-helpers/unit-rent-type-fa
 describe('Snapshot Create Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
+  let storedUserId = '';
   let cookies = '';
 
   beforeEach(() => {
@@ -63,6 +68,7 @@ describe('Snapshot Create Controller Tests', () => {
         confirmedAt: new Date(),
       }),
     });
+    storedUserId = storedUser.id;
     const resLogIn = await request(app.getHttpServer())
       .post('/auth/login')
       .set({ passkey: process.env.API_PASS_KEY || '' })
@@ -1616,6 +1622,686 @@ describe('Snapshot Create Controller Tests', () => {
         },
       });
       expect(listingASnapshot).toEqual(null);
+    });
+  });
+
+  describe('createApplicationSnapshot endpoint', () => {
+    it('should create snapshot for application without ancilliary data', async () => {
+      const application = await prisma.applications.create({
+        data: {
+          acceptedTerms: true,
+          accessibleUnitWaitlistNumber: 31,
+          additionalPhone: true,
+          additionalPhoneNumber: 'example additionalPhoneNumber',
+          additionalPhoneNumberType: 'example additionalPhoneNumberType',
+          appUrl: 'example appUrl',
+          confirmationCode: 'example confirmationCode',
+          contactPreferences: ['example preference 1', 'example preference 2'],
+          conventionalUnitWaitlistNumber: 32,
+          deletedAt: new Date(),
+          expireAfter: new Date(),
+          householdExpectingChanges: true,
+          householdSize: 33,
+          householdStudent: true,
+          housingStatus: 'example housingStatus',
+          income: 'example income',
+          incomePeriod: IncomePeriodEnum.perMonth,
+          incomeVouchers: true,
+          isNewest: true,
+          language: LanguagesEnum.bn,
+          manualLotteryPositionNumber: 34,
+          markedAsDuplicate: true,
+          preferences: '[]',
+          programs: '[]',
+          reviewStatus: ApplicationReviewStatusEnum.valid,
+          sendMailToMailingAddress: true,
+          status: ApplicationStatusEnum.submitted,
+          submissionDate: new Date(),
+          submissionType: ApplicationSubmissionTypeEnum.electronical,
+          wasCreatedExternally: true,
+          wasPIICleared: true,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      const res = await request(app.getHttpServer())
+        .put(`/snapshot/createApplicationSnapshot`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: application.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.success).toEqual(true);
+
+      const applicationSnapshot = await prisma.applicationSnapshot.findFirst({
+        where: {
+          originalId: application.id,
+        },
+      });
+      expect(applicationSnapshot).toEqual({
+        id: expect.anything(),
+        createdAt: expect.anything(),
+
+        originalId: application.id,
+        originalCreatedAt: expect.anything(),
+        updatedAt: expect.anything(),
+
+        acceptedTerms: true,
+        accessibleUnitWaitlistNumber: 31,
+        additionalPhone: true,
+        additionalPhoneNumber: 'example additionalPhoneNumber',
+        additionalPhoneNumberType: 'example additionalPhoneNumberType',
+        appUrl: 'example appUrl',
+        confirmationCode: 'example confirmationCode',
+        contactPreferences: ['example preference 1', 'example preference 2'],
+        conventionalUnitWaitlistNumber: 32,
+        deletedAt: expect.anything(),
+        expireAfter: expect.anything(),
+        householdExpectingChanges: true,
+        householdSize: 33,
+        householdStudent: true,
+        housingStatus: 'example housingStatus',
+        income: 'example income',
+        incomePeriod: IncomePeriodEnum.perMonth,
+        incomeVouchers: true,
+        isNewest: true,
+        language: LanguagesEnum.bn,
+        manualLotteryPositionNumber: 34,
+        markedAsDuplicate: true,
+        preferences: '[]',
+        programs: '[]',
+        reviewStatus: ApplicationReviewStatusEnum.valid,
+        sendMailToMailingAddress: true,
+        status: ApplicationStatusEnum.submitted,
+        submissionDate: expect.anything(),
+        submissionType: ApplicationSubmissionTypeEnum.electronical,
+        wasCreatedExternally: true,
+        wasPIICleared: true,
+
+        accessibilitySnapshotId: null,
+        alternateAddressSnapshotId: null,
+        alternateContactSnapshotId: null,
+        applicantSnapshotId: null,
+        demographicSnapshotId: null,
+        listingId: null,
+        mailingAddressSnapshotId: null,
+        userId: null,
+      });
+    });
+
+    it('should create snapshot for application with full ancilliary data', async () => {
+      const jurisA = await prisma.jurisdictions.create({
+        data: {
+          name: 'createApplicationSnapshot juris 1',
+          rentalAssistanceDefault: 'example rentalAssistanceDefault',
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      const msq1 = await prisma.multiselectQuestions.create({
+        select: {
+          id: true,
+        },
+        data: {
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          isExclusive: false,
+          name: 'createListingSnapshot msq 1',
+          text: 'createListingSnapshot msq 1',
+          jurisdiction: {
+            connect: {
+              id: jurisA.id,
+            },
+          },
+        },
+      });
+      const msqOption1 = await prisma.multiselectOptions.create({
+        select: {
+          id: true,
+        },
+        data: {
+          name: 'createApplicationSnapshot msqOption 1',
+          ordinal: 1,
+          multiselectQuestion: {
+            connect: {
+              id: msq1.id,
+            },
+          },
+        },
+      });
+      const msqOption2 = await prisma.multiselectOptions.create({
+        select: {
+          id: true,
+        },
+        data: {
+          name: 'createApplicationSnapshot msqOption 1',
+          ordinal: 1,
+          multiselectQuestion: {
+            connect: {
+              id: msq1.id,
+            },
+          },
+        },
+      });
+
+      await unitTypeFactoryAll(prisma);
+      const unitType1 = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const unitType2 = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.twoBdrm,
+      );
+
+      const listingA = await prisma.listings.create({
+        data: {
+          name: 'createUserSnapshot listing 1',
+          assets: [],
+          displayWaitlistSize: false,
+          jurisdictions: {
+            connect: {
+              id: jurisA.id,
+            },
+          },
+          listingMultiselectQuestions: {
+            create: [
+              {
+                multiselectQuestions: {
+                  connect: {
+                    id: msq1.id,
+                  },
+                },
+                ordinal: 18,
+              },
+            ],
+          },
+          units: {
+            create: [
+              {
+                amiPercentage: 'example amiPercentage',
+                annualIncomeMax: 'example annualIncomeMax',
+                annualIncomeMin: 'example annualIncomeMin',
+                bmrProgramChart: true,
+                floor: 2,
+                maxOccupancy: 3,
+                minOccupancy: 4,
+                monthlyIncomeMin: '5',
+                monthlyRent: '6',
+                monthlyRentAsPercentOfIncome: 7.05,
+                numBathrooms: 8,
+                numBedrooms: 9,
+                number: 'example number',
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.vision,
+                sqFeet: 45.48,
+                status: UnitsStatusEnum.unknown,
+                unitTypes: {
+                  connect: {
+                    id: unitType1.id,
+                  },
+                },
+              },
+              {
+                amiPercentage: 'example amiPercentage',
+                annualIncomeMax: 'example annualIncomeMax',
+                annualIncomeMin: 'example annualIncomeMin',
+                bmrProgramChart: true,
+                floor: 12,
+                maxOccupancy: 13,
+                minOccupancy: 14,
+                monthlyIncomeMin: '15',
+                monthlyRent: '16',
+                monthlyRentAsPercentOfIncome: 17.05,
+                numBathrooms: 18,
+                numBedrooms: 19,
+                number: 'example number 2',
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.vision,
+                sqFeet: 45.48,
+                status: UnitsStatusEnum.unknown,
+                unitTypes: {
+                  connect: {
+                    id: unitType2.id,
+                  },
+                },
+              },
+            ],
+          },
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      const application = await prisma.applications.create({
+        data: {
+          acceptedTerms: true,
+          accessibleUnitWaitlistNumber: 31,
+          additionalPhone: true,
+          additionalPhoneNumber: 'example additionalPhoneNumber',
+          additionalPhoneNumberType: 'example additionalPhoneNumberType',
+          appUrl: 'example appUrl',
+          confirmationCode: 'example confirmationCode',
+          contactPreferences: ['example preference 1', 'example preference 2'],
+          conventionalUnitWaitlistNumber: 32,
+          deletedAt: new Date(),
+          expireAfter: new Date(),
+          householdExpectingChanges: true,
+          householdSize: 33,
+          householdStudent: true,
+          housingStatus: 'example housingStatus',
+          income: 'example income',
+          incomePeriod: IncomePeriodEnum.perMonth,
+          incomeVouchers: true,
+          isNewest: true,
+          language: LanguagesEnum.bn,
+          manualLotteryPositionNumber: 34,
+          markedAsDuplicate: true,
+          preferences: '[]',
+          programs: '[]',
+          reviewStatus: ApplicationReviewStatusEnum.valid,
+          sendMailToMailingAddress: true,
+          status: ApplicationStatusEnum.submitted,
+          submissionDate: new Date(),
+          submissionType: ApplicationSubmissionTypeEnum.electronical,
+          wasCreatedExternally: true,
+          wasPIICleared: true,
+
+          listings: {
+            connect: {
+              id: listingA.id,
+            },
+          },
+          userAccounts: {
+            connect: {
+              id: storedUserId,
+            },
+          },
+
+          accessibility: {
+            create: {
+              hearing: true,
+              mobility: true,
+              other: true,
+              vision: true,
+            },
+          },
+          alternateContact: {
+            create: {
+              address: {
+                create: {
+                  city: 'alternateContact address city',
+                  county: 'alternateContact address county',
+                  latitude: 12.81,
+                  longitude: 12.81,
+                  placeName: 'alternateContact address placeName',
+                  state: 'alternateContact address state',
+                  street: 'alternateContact address street',
+                  street2: 'alternateContact address street2',
+                  zipCode: 'alternateContact address zipCode',
+                },
+              },
+              agency: 'alternateContact agency',
+              emailAddress: 'alternateContact emailAddress',
+              firstName: 'alternateContact firstName',
+              lastName: 'alternateContact lastName',
+              otherType: 'alternateContact otherType',
+              phoneNumber: 'alternateContact phoneNumber',
+              type: 'alternateContact type',
+            },
+          },
+          applicant: {
+            create: {
+              applicantAddress: {
+                create: {
+                  city: 'applicantAddress address city',
+                  county: 'applicantAddress address county',
+                  latitude: 12.81,
+                  longitude: 12.81,
+                  placeName: 'applicantAddress address placeName',
+                  state: 'applicantAddress address state',
+                  street: 'applicantAddress address street',
+                  street2: 'applicantAddress address street2',
+                  zipCode: 'applicantAddress address zipCode',
+                },
+              },
+              applicantWorkAddress: {
+                create: {
+                  city: 'applicantWorkAddress address city',
+                  county: 'applicantWorkAddress address county',
+                  latitude: 12.81,
+                  longitude: 12.81,
+                  placeName: 'applicantWorkAddress address placeName',
+                  state: 'applicantWorkAddress address state',
+                  street: 'applicantWorkAddress address street',
+                  street2: 'applicantWorkAddress address street2',
+                  zipCode: 'applicantWorkAddress address zipCode',
+                },
+              },
+              birthDay: 1,
+              birthMonth: 2,
+              birthYear: 2000,
+              emailAddress: 'applicant emailAddress',
+              firstName: 'applicant firstName',
+              fullTimeStudent: 'yes',
+              lastName: 'applicant lastName',
+              middleName: 'applicant middleName',
+              noEmail: true,
+              noPhone: true,
+              phoneNumber: 'applicant phoneNumber',
+              phoneNumberType: 'applicant phoneNumberType',
+              workInRegion: 'yes',
+            },
+          },
+          applicationSelections: {
+            create: [
+              {
+                hasOptedOut: true,
+                multiselectQuestion: {
+                  connect: {
+                    id: msq1.id,
+                  },
+                },
+                selections: {
+                  create: [
+                    {
+                      addressHolderAddress: {
+                        create: {
+                          city: 'addressHolderAddress address city',
+                          county: 'addressHolderAddress address county',
+                          latitude: 12.81,
+                          longitude: 12.81,
+                          placeName: 'addressHolderAddress address placeName',
+                          state: 'addressHolderAddress address state',
+                          street: 'addressHolderAddress address street',
+                          street2: 'addressHolderAddress address street2',
+                          zipCode: 'addressHolderAddress address zipCode',
+                        },
+                      },
+                      addressHolderName: 'selections 1 addressHolderName',
+                      addressHolderRelationship:
+                        'selections 1 addressHolderRelationship',
+                      isGeocodingVerified: true,
+                      multiselectOption: {
+                        connect: {
+                          id: msqOption1.id,
+                        },
+                      },
+                    },
+                    {
+                      addressHolderAddress: {
+                        create: {
+                          city: 'addressHolderAddress address city',
+                          county: 'addressHolderAddress address county',
+                          latitude: 12.81,
+                          longitude: 12.81,
+                          placeName: 'addressHolderAddress address placeName',
+                          state: 'addressHolderAddress address state',
+                          street: 'addressHolderAddress address street',
+                          street2: 'addressHolderAddress address street2',
+                          zipCode: 'addressHolderAddress address zipCode',
+                        },
+                      },
+                      addressHolderName: 'selections 2 addressHolderName',
+                      addressHolderRelationship:
+                        'selections 2 addressHolderRelationship',
+                      isGeocodingVerified: true,
+                      multiselectOption: {
+                        connect: {
+                          id: msqOption2.id,
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+          applicationsAlternateAddress: {
+            create: {
+              city: 'applicationsAlternateAddress address city',
+              county: 'applicationsAlternateAddress address county',
+              latitude: 12.81,
+              longitude: 12.81,
+              placeName: 'applicationsAlternateAddress address placeName',
+              state: 'applicationsAlternateAddress address state',
+              street: 'applicationsAlternateAddress address street',
+              street2: 'applicationsAlternateAddress address street2',
+              zipCode: 'applicationsAlternateAddress address zipCode',
+            },
+          },
+          applicationsMailingAddress: {
+            create: {
+              city: 'applicationsMailingAddress address city',
+              county: 'applicationsMailingAddress address county',
+              latitude: 12.81,
+              longitude: 12.81,
+              placeName: 'applicationsMailingAddress address placeName',
+              state: 'applicationsMailingAddress address state',
+              street: 'applicationsMailingAddress address street',
+              street2: 'applicationsMailingAddress address street2',
+              zipCode: 'applicationsMailingAddress address zipCode',
+            },
+          },
+          demographics: {
+            create: {
+              ethnicity: 'demographics ethnicity',
+              gender: 'demographics gender',
+              howDidYouHear: ['howDidYouHear 1', 'howDidYouHear 2'],
+              race: ['race 1', 'race 2'],
+              sexualOrientation: 'demographics sexualOrientation',
+              spokenLanguage: 'demographics spokenLanguage',
+            },
+          },
+          householdMember: {
+            create: [
+              {
+                birthDay: 3,
+                birthMonth: 4,
+                birthYear: 2001,
+                firstName: 'householdMember 1 firstName',
+                fullTimeStudent: 'yes',
+                householdMemberAddress: {
+                  create: {
+                    city: 'householdMemberAddress address city',
+                    county: 'householdMemberAddress address county',
+                    latitude: 12.81,
+                    longitude: 12.81,
+                    placeName: 'householdMemberAddress address placeName',
+                    state: 'householdMemberAddress address state',
+                    street: 'householdMemberAddress address street',
+                    street2: 'householdMemberAddress address street2',
+                    zipCode: 'householdMemberAddress address zipCode',
+                  },
+                },
+                householdMemberWorkAddress: {
+                  create: {
+                    city: 'householdMemberWorkAddress address city',
+                    county: 'householdMemberWorkAddress address county',
+                    latitude: 12.81,
+                    longitude: 12.81,
+                    placeName: 'householdMemberWorkAddress address placeName',
+                    state: 'householdMemberWorkAddress address state',
+                    street: 'householdMemberWorkAddress address street',
+                    street2: 'householdMemberWorkAddress address street2',
+                    zipCode: 'householdMemberWorkAddress address zipCode',
+                  },
+                },
+                lastName: 'householdMember 1 lastName',
+                middleName: 'householdMember 1 middleName',
+                orderId: 1,
+                relationship: 'householdMember 1 relationship',
+                sameAddress: 'yes',
+                workInRegion: 'yes',
+              },
+              {
+                birthDay: 3,
+                birthMonth: 4,
+                birthYear: 2001,
+                firstName: 'householdMember 2 firstName',
+                fullTimeStudent: 'yes',
+                householdMemberAddress: {
+                  create: {
+                    city: 'householdMemberAddress address city',
+                    county: 'householdMemberAddress address county',
+                    latitude: 12.81,
+                    longitude: 12.81,
+                    placeName: 'householdMemberAddress address placeName',
+                    state: 'householdMemberAddress address state',
+                    street: 'householdMemberAddress address street',
+                    street2: 'householdMemberAddress address street2',
+                    zipCode: 'householdMemberAddress address zipCode',
+                  },
+                },
+                householdMemberWorkAddress: {
+                  create: {
+                    city: 'householdMemberWorkAddress address city',
+                    county: 'householdMemberWorkAddress address county',
+                    latitude: 12.81,
+                    longitude: 12.81,
+                    placeName: 'householdMemberWorkAddress address placeName',
+                    state: 'householdMemberWorkAddress address state',
+                    street: 'householdMemberWorkAddress address street',
+                    street2: 'householdMemberWorkAddress address street2',
+                    zipCode: 'householdMemberWorkAddress address zipCode',
+                  },
+                },
+                lastName: 'householdMember 2 lastName',
+                middleName: 'householdMember 2 middleName',
+                orderId: 2,
+                relationship: 'householdMember 2 relationship',
+                sameAddress: 'yes',
+                workInRegion: 'yes',
+              },
+            ],
+          },
+          preferredUnitTypes: {
+            connect: [
+              {
+                id: unitType1.id,
+              },
+              {
+                id: unitType2.id,
+              },
+            ],
+          },
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      const res = await request(app.getHttpServer())
+        .put(`/snapshot/createApplicationSnapshot`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: application.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.success).toEqual(true);
+
+      const applicationSnapshot = await prisma.applicationSnapshot.findFirst({
+        where: {
+          originalId: application.id,
+        },
+        include: {
+          applicationSelections: true,
+          householdMember: true,
+          preferredUnitTypes: true,
+        },
+      });
+
+      const {
+        applicationSelections,
+        householdMember,
+        preferredUnitTypes,
+        ...rest
+      } = applicationSnapshot;
+
+      expect(rest).toEqual({
+        id: expect.anything(),
+        createdAt: expect.anything(),
+
+        originalId: application.id,
+        originalCreatedAt: expect.anything(),
+        updatedAt: expect.anything(),
+
+        acceptedTerms: true,
+        accessibleUnitWaitlistNumber: 31,
+        additionalPhone: true,
+        additionalPhoneNumber: 'example additionalPhoneNumber',
+        additionalPhoneNumberType: 'example additionalPhoneNumberType',
+        appUrl: 'example appUrl',
+        confirmationCode: 'example confirmationCode',
+        contactPreferences: ['example preference 1', 'example preference 2'],
+        conventionalUnitWaitlistNumber: 32,
+        deletedAt: expect.anything(),
+        expireAfter: expect.anything(),
+        householdExpectingChanges: true,
+        householdSize: 33,
+        householdStudent: true,
+        housingStatus: 'example housingStatus',
+        income: 'example income',
+        incomePeriod: IncomePeriodEnum.perMonth,
+        incomeVouchers: true,
+        isNewest: true,
+        language: LanguagesEnum.bn,
+        manualLotteryPositionNumber: 34,
+        markedAsDuplicate: true,
+        preferences: '[]',
+        programs: '[]',
+        reviewStatus: ApplicationReviewStatusEnum.valid,
+        sendMailToMailingAddress: true,
+        status: ApplicationStatusEnum.submitted,
+        submissionDate: expect.anything(),
+        submissionType: ApplicationSubmissionTypeEnum.electronical,
+        wasCreatedExternally: true,
+        wasPIICleared: true,
+
+        accessibilitySnapshotId: expect.anything(),
+        alternateAddressSnapshotId: expect.anything(),
+        alternateContactSnapshotId: expect.anything(),
+        applicantSnapshotId: expect.anything(),
+        demographicSnapshotId: expect.anything(),
+        mailingAddressSnapshotId: expect.anything(),
+        listingId: listingA.id,
+        userId: storedUserId,
+      });
+      expect(applicationSelections.length).toEqual(1);
+      expect(householdMember.length).toEqual(2);
+      expect(preferredUnitTypes.length).toEqual(2);
+    });
+
+    it('should error if attempting to make a application snapshot against an application id that does not exist', async () => {
+      const randomId = randomUUID();
+      const res = await request(app.getHttpServer())
+        .put(`/snapshot/createApplicationSnapshot`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: randomId,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(500);
+
+      expect(res.body.message).toEqual(
+        `Snapshot was requested for application id: ${randomId}, but that id does not exist`,
+      );
+
+      const applicationSnapshot = await prisma.applicationSnapshot.findFirst({
+        where: {
+          originalId: randomId,
+        },
+      });
+      expect(applicationSnapshot).toEqual(null);
     });
   });
 });
