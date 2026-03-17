@@ -103,17 +103,17 @@ graph TB
 
 ### 1. Deploy dev
 
-1. Create the AWS managed certificate for your domain:
+1. Create the AWS managed certificate for the dev domain:
 
    ```bash
-   INFRA_CONTAINER=<from your notes from 'Fork Bloom Repo' step 7>
+   INFRA_CONTAINER=<from your 'Fork Bloom Repo' step 8 notes>
    docker run --rm -it "${INFRA_CONTAINER:?}" bloom_dev apply -exclude=module.bloom_deployment
    ```
 
 2. Validate the AWS managed certificate:
 
    The `tofu apply` command from step 1 will output the DNS records that need to be added for AWS to
-   issue the certificate. Add the two required CNAME records in your DNS provider then wait for AWS
+   issue the certificate. Add the two required CNAME records in the DNS provider then wait for AWS
    to validate the certificate (can take a few minutes).
 
    For example, the following records need to be added for the following output:
@@ -154,7 +154,7 @@ graph TB
 3. Deploy Bloom:
 
    ```bash
-   INFRA_CONTAINER=<from your notes from 'Fork Bloom Repo' step 7>
+   INFRA_CONTAINER=<from your 'Fork Bloom Repo' step 8 notes>
    docker run --rm -it "${INFRA_CONTAINER:?}" bloom_dev apply
    ```
 
@@ -189,7 +189,7 @@ graph TB
    Individual emails are validated by clicking an email validation link AWS sends in an email with
    subject like 'Amazon Web Services - Email Address Verification Request in region...'.
 
-   Domains are validated by publishing a set of DNS records. Add the required CNAME records in your
+   Domains are validated by publishing a set of DNS records. Add the required CNAME records in the
    DNS provider then wait for AWS to validate the identity (can take a few minutes).
 
    For example, the following records need to be added for the following output:
@@ -264,7 +264,7 @@ graph TB
 
    - **Mapbox** (`bloom-mapbox-api-key`): A Mapbox access token. Used by the public and partners
      sites to render maps. Obtain a token from https://account.mapbox.com/access-tokens/. Make sure
-     to add your public and partners sites to the list of allowed URLs in the Mapbox access token
+     to add the public and partners sites to the list of allowed URLs in the Mapbox access token
      screen.
    - **Google Translate** (`bloom-google-translate-api-key`): A Google Cloud API key for the Google
      Translate API. Used by the API service. Obtain a key from the Google Cloud console under 'APIs
@@ -275,17 +275,17 @@ graph TB
 
 ### 2. Deploy prod
 
-1. Create the AWS managed certificate for your domain:
+1. Create the AWS managed certificate for the prod domain:
 
    ```bash
-   INFRA_CONTAINER=<from your notes from 'Fork Bloom Repo' step 7>
+   INFRA_CONTAINER=<from your 'Fork Bloom Repo' step 8 notes>
    docker run --rm -it "${INFRA_CONTAINER:?}" bloom_prod apply -exclude=module.bloom_deployment
    ```
 
 2. Validate the AWS managed certificate:
 
    The `tofu apply` command from step 1 will output the DNS records that need to be added for AWS to
-   issue the certificate. Add the two required CNAME records in your DNS provider then wait for AWS
+   issue the certificate. Add the two required CNAME records in the DNS provider then wait for AWS
    to validate the certificate (can take a few minutes).
 
    For example, the following records need to be added for the following output:
@@ -326,7 +326,7 @@ graph TB
 3. Deploy the Bloom services:
 
    ```bash
-   INFRA_CONTAINER=<from your notes from 'Fork Bloom Repo' step 7>
+   INFRA_CONTAINER=<from your 'Fork Bloom Repo' step 8 notes>
    docker run --rm "${INFRA_CONTAINER:?}" bloom_prod apply
    ```
 
@@ -357,14 +357,14 @@ graph TB
    https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html. Follow the AWS
    instructions to take SES out of sandbox mode. Follow the quota request instructions at
    https://docs.aws.amazon.com/ses/latest/dg/manage-sending-quotas-request-increase.html to request
-   a sending quota and sending rate required by your Bloom deployment.
+   a sending quota and sending rate required by the prod Bloom deployment.
 
    Individual emails are validated by clicking an email validation link AWS sends in an email with
    subject like 'Amazon Web Services - Email Address Verification Request in region...'. If using
    a no-reply email address that does not receive email, you must either give it an inbox first then
    validate in AWS or use domain validation.
 
-   Domains are validated by publishing a set of DNS records. Add the required CNAME records in your
+   Domains are validated by publishing a set of DNS records. Add the required CNAME records in the
    DNS provider then wait for AWS to validate the identity (can take a few minutes).
 
    For example, the following records need to be added for the following output:
@@ -432,7 +432,7 @@ graph TB
 
    - **Mapbox** (`bloom-mapbox-api-key`): A Mapbox access token. Used by the public and partners
      sites to render maps. Obtain a token from https://account.mapbox.com/access-tokens/. Make sure
-     to add your public and partners sites to the list of allowed URLs in the Mapbox access token
+     to add the public and partners sites to the list of allowed URLs in the Mapbox access token
      screen.
    - **Google Translate** (`bloom-google-translate-api-key`): A Google Cloud API key for the Google
      Translate API. Used by the API service. Obtain a key from the Google Cloud console under 'APIs
@@ -460,7 +460,7 @@ the existing VPC. To create the VPC peering:
 2. Apply the Bloom deployment root module:
 
    ```bash
-   INFRA_CONTAINER=<from your notes from 'Fork Bloom Repo' step 7>
+   INFRA_CONTAINER=<from your 'Fork Bloom Repo' step 8 notes>
    docker run --rm "${INFRA_CONTAINER:?}" <bloom_dev|bloom_prod> apply
    ```
 

@@ -84,21 +84,21 @@ graph TB
 ## Before these steps
 
 1. Complete the steps in [Fork the Bloom Repo](./4_fork_bloom_repo.md). The infra container image
-   name build from your fork will be needed.
+   name built from the fork will be needed.
 
 ## Steps
 
 1. Apply the dev deployer OpenTofu root module:
 
    ```bash
-   INFRA_CONTAINER=<from your notes from 'Fork Bloom Repo' step 7>
+   INFRA_CONTAINER=<from your 'Fork Bloom Repo' step 8 notes>
    docker run --rm -it "${INFRA_CONTAINER:?}" bloom_dev_deployer_permission_set_policy apply
    ```
 
 2. Apply the prod deployer OpenTofu root module:
 
    ```bash
-   INFRA_CONTAINER=<from your notes from 'Fork Bloom Repo' step 7>
+   INFRA_CONTAINER=<from your 'Fork Bloom Repo' step 8 notes>
    docker run --rm -it "${INFRA_CONTAINER:?}" bloom_prod_deployer_permission_set_policy apply
    ```
 
