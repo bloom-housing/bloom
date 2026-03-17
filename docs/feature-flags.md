@@ -24,6 +24,7 @@ Changes to feature flag assignments take effect immediately. However, a redeploy
 The following are all of the feature flags currently available in the Bloom platform.
 | Flag | Description |
 | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [disableAccessibilityFeaturesTag](./feature-flags/disableAccessibilityFeaturesTag.md) | When true, the listing 'accessibility features' tag is hidden on public listing cards and details |
 | [disableBuildingSelectionCriteria](./feature-flags/disableBuildingSelectionCriteria.md) | When true, building selection criteria is not displayed in the listing |
 | [disableCommonApplication](./feature-flags/disableCommonApplication.md) | When true, the digital common application is not an option for listings |
 | [disableJurisdictionalAdmin](./feature-flags/disableJurisdictionalAdmin.md) | When true, jurisdictional admins cannot be created |
@@ -36,11 +37,13 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableCompanyWebsite](./feature-flags/enableCompanyWebsite.md) | When true, allows partners to add company website information |
 | [enableConfigurableRegions](./feature-flags/enableConfigurableRegions.md) | When true, allows for configurable regions per jurisdiction enabled on partners and public |
 | [enableCreditScreeningFee](./feature-flags/enableCreditScreeningFee.md) | When true, credit screening fee is enabled for listings |
+| [enableFaq](./feature-flags/enableFaq.md) | When true, a link to the FAQ page is displayed on the get assistance page |
 | [enableFullTimeStudentQuestion](./feature-flags/enableFullTimeStudentQuestion.md) | When true, the full time student question is displayed in the application form |
 | [enableGeocodingPreferences](./feature-flags/enableGeocodingPreferences.md) | When true, preferences can be created with geocoding functionality and when an application is created/updated on a listing that is geocoding then the application gets geocoded |
 | [enableGeocodingRadiusMethod](./feature-flags/enableGeocodingRadiusMethod.md) | When true, preferences can be created with geocoding functionality that verifies via a mile radius |
 | [enableHomeType](./feature-flags/enableHomeType.md) | When true, home type feature is turned on |
 | [enableHousingAdvocate](./feature-flags/enableHousingAdvocate.md) | When true, partners can view housing advocate users |
+| [enableHousingBasics](./feature-flags/enableHousingBasics.md) | When true, a link to the housing basics page is displayed on the get assistance page |
 | [enableHousingDeveloperOwner](./feature-flags/enableHousingDeveloperOwner.md) | When true, the 'Housing developer' field label becomes 'Housing developer / owner' |
 | [enableIsVerified](./feature-flags/enableIsVerified.md) | When true, the listing can have its contents manually verified by a user |
 | [enableLimitedHowDidYouHear](./feature-flags/enableLimitedHowDidYouHear.md) | When true, the Radio Ad and Bus Ad options are removed from the how did you hear section |
@@ -72,9 +75,11 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableSmokingPolicyRadio](./feature-flags/enableSmokingPolicyRadio.md) | When true, the listing 'Smoking policy' field is a radio group |
 | [enableSupportAdmin](./feature-flags/enableSupportAdmin.md) | When true, support admins can be created |
 | [enableUnderConstructionHome](./feature-flags/enableUnderConstructionHome.md) | When true, the 'under construction' section is displayed on the home page |
+| [enableUnitAccessibilityTypeTags](./feature-flags/enableUnitAccessibilityTypeTags.md) | When true, unit accessibility type tags (for example, 'Mobility units') are displayed on listing cards and details |
 | [enableUnitGroups](./feature-flags/enableUnitGroups.md) | When true, uses unit groups instead of units |
 | [enableUtilitiesIncluded](./feature-flags/enableUtilitiesIncluded.md) | When true, the 'utilities included' section is displayed in listing creation/edit and the public listing view |
 | [enableV2MSQ](./feature-flags/enableV2MSQ.md) | When true, the new multiselect question logic will be used |
+| [enableVerifyIncome](./feature-flags/enableVerifyIncome.md) | When true, the income question on the application will be validated against the income limits for the listing and an error message will be shown if income is outside limits |
 | [enableWaitlistAdditionalFields](./feature-flags/enableWaitlistAdditionalFields.md) | When true, the waitlist additional fields are displayed in the waitlist section of the listing form |
 | [enableWaitlistLottery](./feature-flags/enableWaitlistLottery.md) | When true, jurisdiction supports lotteries for waitlist opportunities |
 | [enableWhatToExpectAdditionalField](./feature-flags/enableWhatToExpectAdditionalField.md) | When true, the what to expect additional field is displayed in listing creation/edit form on the partner site |
