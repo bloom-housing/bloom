@@ -53,7 +53,7 @@ organization. The guide is broken down into a series of files that should be fol
 4. Initialize root modules using a helper script. All arguments should be present in your notes. To see all required parameters, run:
 
    ```bash
-   docker run --rm -it --entrypoint python3 --user "$(id -u):$(id -g)" -v ./infra:/infra:z ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra-dev:gitsha-SOMESHA /infra/root_module_initializer.py -h
+   docker run --rm -it --entrypoint python3 --user "$(id -u):$(id -g)" -v ./infra:/bloom/infra:z ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra-dev:gitsha-SOMESHA /bloom/infra/root_module_initializer.py -h
    ```
 
    If using podman instead of docker, replace `--user "$(id -u):$(id -g)"` with `--userns=keep-id`.

@@ -78,7 +78,7 @@ def main():
     args = p.parse_args()
 
     write_template(
-        pathlib.Path("/infra/aws_sso_config"), AWS_SSO_TEMPLATE,
+        pathlib.Path("/bloom/infra/aws_sso_config"), AWS_SSO_TEMPLATE,
         AwsSSOConfigTemplateArgs(
             MANAGEMENT_AWS_ACCOUNT_NUMBER=args.organization_management_account_number,
             IAM_IDENTITY_CENTER_REGION=args.iam_identity_center_region,
@@ -88,7 +88,7 @@ def main():
         ))
 
     write_template(
-        pathlib.Path("/infra/tofu_root_modules/bloom_dev_deployer_permission_set_policy/main.tf"),
+        pathlib.Path("/bloom/infra/tofu_root_modules/bloom_dev_deployer_permission_set_policy/main.tf"),
         BLOOM_PERMISSION_SET_TEMPLATE,
         BloomPermissionSetPolicyTemplateArgs(
             DEPLOYMENT_NAME="bloom-dev",
@@ -101,7 +101,7 @@ def main():
             BLOOM_AWS_ACCOUNT_NUMBER=args.dev_aws_account_number,
         ))
     write_template(
-        pathlib.Path("/infra/tofu_root_modules/bloom_dev/main.tf"), BLOOM_DEPLOYMENT_TEMPLATE,
+        pathlib.Path("/bloom/infra/tofu_root_modules/bloom_dev/main.tf"), BLOOM_DEPLOYMENT_TEMPLATE,
         BloomDeploymentTemplateArgs(
             DEPLOYMENT_NAME="bloom-dev",
             TOFU_STATE_BUCKET_REGION=args.tofu_state_bucket_region,
@@ -116,7 +116,7 @@ def main():
         ))
 
     write_template(
-        pathlib.Path("/infra/tofu_root_modules/bloom_prod_deployer_permission_set_policy/main.tf"),
+        pathlib.Path("/bloom/infra/tofu_root_modules/bloom_prod_deployer_permission_set_policy/main.tf"),
         BLOOM_PERMISSION_SET_TEMPLATE,
         BloomPermissionSetPolicyTemplateArgs(
             DEPLOYMENT_NAME="bloom-prod",
@@ -129,7 +129,7 @@ def main():
             BLOOM_AWS_ACCOUNT_NUMBER=args.prod_aws_account_number,
         ))
     write_template(
-        pathlib.Path("/infra/tofu_root_modules/bloom_prod/main.tf"), BLOOM_DEPLOYMENT_TEMPLATE,
+        pathlib.Path("/bloom/infra/tofu_root_modules/bloom_prod/main.tf"), BLOOM_DEPLOYMENT_TEMPLATE,
         BloomDeploymentTemplateArgs(
             DEPLOYMENT_NAME="bloom-prod",
             BLOOM_AWS_REGION=args.bloom_aws_region,
