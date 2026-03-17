@@ -1152,16 +1152,203 @@ export class ApplicationService {
     }
 
     const transactions = [];
-
     // All connected household members should be deleted so they can be recreated in the update below.
     // This solves for all cases of deleted members, updated members, and new members
     transactions.push(async (transaction: PrismaClient) => {
       return transaction.householdMember.deleteMany({
-        where: {
-          applicationId: dto.id,
-        },
+        where: { applicationId: dto.id },
       });
     });
+
+    if (enableV2MSQ && dto.applicationSelections) {
+      const applicationSelections = dto.applicationSelections;
+      const applicationSelectionIds = applicationSelections.map(
+        (selection) => selection.id,
+      );
+
+      const existingApplicationSelections =
+        rawExistingApplication?.applicationSelections || [];
+
+      const removedSelectionIds = existingApplicationSelections
+        .map((selection) => selection.id)
+        .filter((id) => !applicationSelectionIds.includes(id));
+
+      const newSelections = [];
+      const updatedSelections = [];
+      for (const selection of applicationSelections) {
+        // A new application selection body
+        // [AddressHolderAddress at ApplicationSelectionOption creation cannot be wrapped in a transaction]
+        if (!selection.id) {
+          newSelections.push(
+            await this.createApplicationSelection(selection, dto.id),
+          );
+        }
+        // An existing application selection is updated
+        else {
+          updatedSelections.push(selection);
+        }
+      }
+
+      // Remove selections that are no longer included
+      if (removedSelectionIds.length > 0) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.applicationSelections.deleteMany({
+            where: { id: { in: removedSelectionIds } },
+          });
+        });
+      }
+      // Add new selections
+      for (const selection of newSelections) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.applicationSelections.create(selection);
+        });
+      }
+
+      const newSelectionOptions = [];
+      const updatedSelectionOptions = [];
+
+      const updatedSelectionBodies = [];
+
+      // Loop through existing, updated ApplicationSelections
+      for (const selection of updatedSelections) {
+        const selectionOptions = selection.selections || [];
+        const selectionOptionsIds = selectionOptions.map(
+          (selection) => selection?.id,
+        );
+        const existingSelection = existingApplicationSelections.find(
+          (existing) => existing.id === selection.id,
+        );
+        const existingSelectionOptions = mapTo(
+          ApplicationSelection,
+          existingSelection,
+        ).selections;
+
+        // Collect ids of ApplicationSelectionOptions to be removed
+        const removalIds = existingSelectionOptions
+          .map((selection) => selection.id)
+          .filter((id) => !selectionOptionsIds.includes(id));
+
+        // Loop through ApplicationSelectionOptions to be created or updated
+        for (const option of selectionOptions) {
+          // A new ApplicationSelectionOption body
+          if (!option.id) {
+            newSelectionOptions.push({
+              data: {
+                addressHolderAddress: {
+                  create: {
+                    ...option.addressHolderAddress,
+                  },
+                },
+                addressHolderName: option.addressHolderName,
+                addressHolderRelationship: option.addressHolderRelationship,
+                applicationSelection: { connect: { id: selection.id } },
+                isGeocodingVerified: option.isGeocodingVerified,
+                multiselectOption: {
+                  connect: { id: option.multiselectOption.id },
+                },
+              },
+            });
+          }
+          // An existing ApplicationSelectionOption
+          else {
+            const existingOption = existingSelectionOptions.find(
+              (existing) => existing.id === option.id,
+            );
+            let addressHolderBody = undefined;
+
+            // A new addressHolderAddress has been added
+            if (
+              option.addressHolderAddress &&
+              !option.addressHolderAddress.id
+            ) {
+              addressHolderBody = {
+                create: {
+                  ...option.addressHolderAddress,
+                },
+              };
+            }
+            // AddressHolderAddress has been removed
+            else if (
+              !option.addressHolderAddress &&
+              existingOption.addressHolderAddress
+            ) {
+              addressHolderBody = {
+                delete: {
+                  id: existingOption.addressHolderAddress.id,
+                },
+              };
+            }
+            // AddressHolderAddress has been updated
+            else if (option.addressHolderAddress?.id) {
+              addressHolderBody = {
+                update: {
+                  data: {
+                    ...option.addressHolderAddress,
+                    id: undefined,
+                  },
+                  where: {
+                    id: option.addressHolderAddress.id,
+                  },
+                },
+              };
+            }
+            // Push update body for ApplicationSelectionOption
+            updatedSelectionOptions.push({
+              data: {
+                addressHolderAddress: addressHolderBody,
+                addressHolderName: option.addressHolderName,
+                addressHolderRelationship: option.addressHolderRelationship,
+                isGeocodingVerified: option.isGeocodingVerified,
+              },
+              where: {
+                id: option.id,
+              },
+            });
+          }
+        }
+        // Push update body for ApplicationSelection
+        updatedSelectionBodies.push({
+          data: {
+            hasOptedOut: selection.hasOptedOut,
+            selections:
+              removalIds.length > 0
+                ? {
+                    deleteMany: {
+                      id: { in: removalIds },
+                    },
+                  }
+                : undefined,
+          },
+          where: {
+            id: selection.id,
+          },
+        });
+      }
+
+      // update ApplicationSelections
+      for (const selection of updatedSelectionBodies) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.applicationSelections.update(selection);
+        });
+      }
+
+      // // add new ApplicationSelectionOptions
+      for (const selectionOption of newSelectionOptions) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.applicationSelectionOptions.create(
+            selectionOption,
+          );
+        });
+      }
+      // update ApplicationSelectionOptions
+      for (const selectionOption of updatedSelectionOptions) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.applicationSelectionOptions.update(
+            selectionOption,
+          );
+        });
+      }
+    }
 
     transactions.push(async (transaction: PrismaClient) => {
       return transaction.applications.update({
@@ -1220,7 +1407,7 @@ export class ApplicationService {
                 },
               }
             : undefined,
-          applicationSelections: dto.applicationSelections ? {} : undefined,
+          applicationSelections: undefined,
           applicationsAlternateAddress: dto.applicationsAlternateAddress
             ? {
                 create: {
@@ -1298,194 +1485,19 @@ export class ApplicationService {
       });
     });
 
-    if (enableV2MSQ && dto.applicationSelections) {
-      console.log('I AM HERE');
-      const applicationSelections = dto.applicationSelections;
-      const applicationSelectionIds = applicationSelections.map(
-        (selection) => selection.id,
-      );
-
-      const existingApplicationSelections =
-        rawExistingApplication.applicationSelections;
-
-      const removedSelectionIds = existingApplicationSelections
-        .map((selection) => selection.id)
-        .filter((id) => !applicationSelectionIds.includes(id));
-
-      const newSelections = [];
-      const updatedSelections = [];
-      for (const selection of applicationSelections) {
-        // A new application selection body
-        // [AddressHolderAddress at ApplicationSelectionOption creation cannot be wrapped in a transaction]
-        if (!selection.id) {
-          newSelections.push(
-            await this.createApplicationSelection(selection, dto.id),
-          );
-        }
-        // An existing application selection is updated
-        else {
-          updatedSelections.push(selection);
-        }
-      }
-
-      console.log('to delete:', removedSelectionIds);
-      // Remove selections that are no longer included
-      transactions.push(async (transaction: PrismaClient) => {
-        return transaction.applicationSelections.deleteMany({
-          where: { id: { in: removedSelectionIds } },
-        });
-      });
-      console.log('to add:', newSelections.length);
-      // Add new selections
-      for (const selection of newSelections) {
-        transactions.push(async (transaction: PrismaClient) => {
-          return transaction.applicationSelections.create(selection);
-        });
-      }
-
-      const newSelectionOptions = [];
-      const updatedSelectionOptions = [];
-
-      const updatedSelectionBodies = [];
-
-      // Loop through existing, updated ApplicationSelections
-      for (const selection of updatedSelections) {
-        const selectionOptions = selection.selections;
-        const existingSelection = existingApplicationSelections.find(
-          (existing) => existing.id === selection.id,
-        );
-        const existingSelectionOptions = mapTo(
-          ApplicationSelection,
-          existingSelection,
-        ).selections;
-
-        // Collect ids of ApplicationSelectionOptions to be removed
-        const removalIds = existingSelectionOptions
-          .map((selection) => selection.id)
-          .filter((id) => !selectionOptions.includes(id));
-
-        // Loop through ApplicationSelectionOptions to be created or updated
-        for (const option of selectionOptions) {
-          // A new ApplicationSelectionOption body
-          if (!option.id) {
-            newSelectionOptions.push({
-              addressHolderAddress: {
-                create: {
-                  data: {
-                    ...option.addressHolderAddress,
-                  },
-                },
-              },
-              addressHolderName: option.addressHolderName,
-              addressHolderRelationship: option.addressHolderRelationship,
-              applicationSelectionId: selection.id,
-              isGeocodingVerified: option.isGeocodingVerified,
-              multiselectOptionId: option.multiselectOption.id,
-            });
-          }
-          // An existing ApplicationSelectionOption
-          else {
-            const existingOption = existingSelectionOptions.find(
-              (existing) => existing.id === option.id,
-            );
-            let addressHolderBody = {};
-
-            // A new addressHolderAddress has been added
-            if (
-              option.addressHolderAddress &&
-              !option.addressHolderAddress.id
-            ) {
-              addressHolderBody = {
-                create: {
-                  data: {
-                    ...option.addressHolderAddress,
-                  },
-                },
-              };
-            }
-            // AddressHolderAddress has been removed
-            else if (
-              !option.addressHolderAddress &&
-              existingOption.addressHolderAddress
-            ) {
-              addressHolderBody = {
-                delete: {
-                  data: {
-                    ...option.addressHolderAddress,
-                  },
-                  where: {
-                    id: option.addressHolderAddress.id,
-                  },
-                },
-              };
-            }
-            // AddressHolderAddress has been updated
-            else {
-              addressHolderBody = {
-                update: {
-                  data: {
-                    ...option.addressHolderAddress,
-                  },
-                  where: {
-                    id: option.addressHolderAddress.id,
-                  },
-                },
-              };
-            }
-            // Push update body for ApplicationSelectionOption
-            updatedSelectionOptions.push({
-              addressHolderAddress: addressHolderBody,
-              addressHolderName: option.addressHolderName,
-              addressHolderRelationship: option.addressHolderRelationship,
-              isGeocodingVerified: option.isGeocodingVerified,
-            });
-          }
-        }
-        // Push update body for ApplicationSelection
-        updatedSelectionBodies.push({
-          data: {
-            hasOptedOut: selection.hasOptedOut,
-            selections: {
-              deleteMany: {
-                where: { id: { in: removalIds } },
-              },
-            },
-          },
-        });
-      }
-
-      // update ApplicationSelections
-      for (const selection of updatedSelectionBodies) {
-        transactions.push(async (transaction: PrismaClient) => {
-          return transaction.applicationSelections.update(selection);
-        });
-      }
-      // add new ApplicationSelectionOptions
-      for (const selectionOption of newSelectionOptions) {
-        transactions.push(async (transaction: PrismaClient) => {
-          return transaction.applicationSelectionOptions.create(
-            selectionOption,
-          );
-        });
-      }
-      // update ApplicationSelectionOptions
-      for (const selectionOption of updatedSelectionOptions) {
-        transactions.push(async (transaction: PrismaClient) => {
-          return transaction.applicationSelectionOptions.update(
-            selectionOption,
-          );
-        });
-      }
-    }
-
-    const prismaTransactions = await this.prisma.$transaction(
+    const results = [];
+    await this.prisma.$transaction(
       async (transaction) =>
-        await Promise.all(
-          transactions.map((asyncCall) => asyncCall(transaction)),
-        ),
+        await new Promise(async (resolve) => {
+          for (let i = 0; i < transactions.length; i++) {
+            results[i] = await transactions[i](transaction);
+          }
+          resolve(true);
+        }),
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
     );
-    const rawApplication = prismaTransactions[prismaTransactions.length - 1];
-    console.log('1328:', rawApplication);
+
+    const rawApplication = results[transactions.length - 1];
     if (!rawApplication) {
       throw new HttpException(
         `Application ${rawExistingApplication.id} failed to update`,
@@ -1493,20 +1505,30 @@ export class ApplicationService {
       );
     }
 
-    const rawUpdatedApplication = await this.findOrThrow(
-      dto.id,
-      ApplicationViews.details,
-    );
-
-    const application = mapTo(Application, rawUpdatedApplication);
+    const application = mapTo(Application, rawApplication);
+    const mappedListing = mapTo(Listing, listing);
 
     // Calculate geocoding preferences after save
     if (listing?.jurisdictions?.enableGeocodingPreferences) {
       try {
-        void this.geocodingService.validateGeocodingPreferences(
-          application,
-          mapTo(Listing, listing),
-        );
+        if (enableV2MSQ) {
+          const multiselectOptions =
+            mappedListing.listingMultiselectQuestions.flatMap(
+              (multiselectQuestion) =>
+                multiselectQuestion.multiselectQuestions.multiselectOptions,
+            );
+
+          void this.geocodingService.validateGeocodingPreferencesV2(
+            application.applicationSelections,
+            mappedListing.listingsBuildingAddress,
+            multiselectOptions,
+          );
+        } else {
+          void this.geocodingService.validateGeocodingPreferences(
+            application,
+            mappedListing,
+          );
+        }
       } catch (e) {
         // If the geocoding fails it should not prevent the request from completing so
         // catching all errors here
@@ -1514,9 +1536,7 @@ export class ApplicationService {
       }
     }
 
-    await this.updateListingApplicationEditTimestamp(
-      rawUpdatedApplication.listingId,
-    );
+    await this.updateListingApplicationEditTimestamp(listing.id);
     return application;
   }
 
