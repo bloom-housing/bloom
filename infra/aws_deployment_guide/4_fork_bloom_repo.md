@@ -27,10 +27,11 @@ organization. The guide is broken down into a series of files that should be fol
    4. Permission set ARNs for `bloom-dev-deployer` and `bloom-prod-deployer`.
 2. Decide where you would like to host your Bloom fork. GitHub will work out-of-the-box. If choosing
    another provider, you will need to bring your own method for building docker images from the
-   repo.
-3. Pick an AWS region to deploy Bloom to.
-4. Pick DNS domains for the dev and prod Bloom deployments. You must be able to add CNAME records
-   for the chosen domains.
+   repo. If choosing GitHub, **note the GitHub org or account name** your fork will exist in.
+3. Pick **and note a AWS region to deploy Bloom to**.
+4. Pick **and note DNS domains for the dev and prod Bloom deployments**. You must be able to add
+   CNAME records for the chosen domains.
+5. Pick **and note a Jurisdiction name** for your Bloom deployment.
 
 ## Steps
 
