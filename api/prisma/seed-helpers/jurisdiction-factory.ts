@@ -41,6 +41,8 @@ export const jurisdictionFactory = (
   emailFromAddress: 'Bloom <bloom-no-reply@exygy.dev>',
   rentalAssistanceDefault:
     'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
+  referralSummaryDefaults:
+    'Some additional units in this property are only available through a referral from a local nonprofit or agency. To learn if you qualify, please call the number listed above or reach out to the property manager.',
   whatToExpect:
     '<p>If you are interested in applying for this property, please get in touch in one of these ways:</p><ul><li><p>Phone</p></li><li><p>Email</p></li><li><p>In-person</p></li><li><p>In some instances, the property has a link directly to an application</p></li></ul><p>Once you contact a property, ask if they have any available units if you are looking to move in immediately.</p><p><strong>Waitlists</strong>:</p><p>If none are available, but you are still interested in eventually living at the property, ask how you can be placed on their waitlist.</p>',
   whatToExpectAdditionalText:
