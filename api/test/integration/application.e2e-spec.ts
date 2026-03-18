@@ -1865,6 +1865,48 @@ describe('Application Controller Tests', () => {
       expect(res.body.applicant.firstName).toEqual(dto.applicant.firstName);
       expect(res.body.id).toEqual(dto.id);
       expect(res.body.applicationSelections.length).toEqual(2);
+
+      const dto2: ApplicationUpdate = {
+        ...dto,
+        applicationSelections: [
+          {
+            hasOptedOut: !res.body.applicationSelections[0].hasOptedOut,
+            id: res.body.applicationSelections[0].id,
+            multiselectQuestion: {
+              id: multiselectQuestionPreference.id,
+              name: multiselectQuestionPreference.name,
+            },
+            selections: [
+              {
+                id: res.body.applicationSelections[0].selections[0].id,
+                addressHolderAddress: exampleAddress,
+                multiselectOption: {
+                  id: multiselectQuestionPreference.multiselectOptions[0].id,
+                  name: multiselectQuestionPreference.multiselectOptions[0]
+                    .name,
+                  ordinal: 1,
+                },
+              },
+            ],
+          },
+        ],
+      };
+
+      const res2 = await request(app.getHttpServer())
+        .put(`/applications/${applicationA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(dto2)
+        .set('Cookie', adminCookies)
+        .expect(200);
+
+      expect(res2.body.id).toEqual(dto.id);
+      expect(res2.body.applicationSelections.length).toEqual(1);
+      expect(res2.body.applicationSelections[0].id).toEqual(
+        res.body.applicationSelections[0].id,
+      );
+      expect(res2.body.applicationSelections[0].hasOptedOut).toEqual(
+        !res.body.applicationSelections[0].hasOptedOut,
+      );
     });
 
     it("should throw an error when update is called with an Id that doesn't exist", async () => {
