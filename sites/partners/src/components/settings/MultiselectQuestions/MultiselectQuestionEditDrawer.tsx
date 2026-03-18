@@ -739,7 +739,7 @@ const MultiselectQuestionEditDrawer = ({
                         name="canYouOptOut"
                         type="radio"
                         register={register}
-                        groupLabel={t("settings.preferenceOptOut")}
+                        groupLabel={t("settings.preferenceOptOutOption")}
                         fields={[
                           {
                             id: "optOutYes",

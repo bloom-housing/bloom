@@ -203,7 +203,7 @@ describe("settings/multiselectquestions/preferences", () => {
       const addOptionButton = screen.getByRole("button", { name: "Add option" })
       expect(addOptionButton).toBeInTheDocument()
       const multiselectRadio = screen.getByRole("group", {
-        name: "Is this option multi-select or exclusive?",
+        name: "Are these options multi-select or exclusive?",
       })
       expect(multiselectRadio).toBeInTheDocument()
       expect(
