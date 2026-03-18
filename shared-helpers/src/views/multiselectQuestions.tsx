@@ -5,6 +5,7 @@ import { stateKeys } from "../utilities/formKeys"
 import {
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
+  ApplicationSelection,
   ApplicationSelectionCreate,
   ApplicationSelectionOptionCreate,
   InputType,
@@ -46,18 +47,15 @@ export const listingSectionQuestions = (
 }
 
 export const getSelectionsForApplicationSection = (
-  listingMultiselectQuestions,
-  applicationSection,
-  applicationSelections
-) => {
-  const listingPrefQuestions = listingMultiselectQuestions.filter(
+  listingMultiselectQuestions: ListingMultiselectQuestion[],
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
+  applicationSelections: (ApplicationSelection | ApplicationSelectionCreate)[]
+): (ApplicationSelection | ApplicationSelectionCreate)[] => {
+  const listingMSQs = listingMultiselectQuestions.filter(
     (question) => question?.multiselectQuestions?.applicationSection === applicationSection
   )
-  return applicationSelections?.filter((item: ApplicationSelectionCreate) =>
-    listingPrefQuestions.find(
-      (lqItem: ListingMultiselectQuestion) =>
-        lqItem.multiselectQuestions.id == item.multiselectQuestion.id
-    )
+  return applicationSelections?.filter((selection) =>
+    listingMSQs.find((item) => item.multiselectQuestions.id == selection.multiselectQuestion.id)
   )
 }
 

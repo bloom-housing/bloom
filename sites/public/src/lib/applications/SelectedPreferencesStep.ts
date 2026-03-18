@@ -2,6 +2,7 @@ import { getSelectionsForApplicationSection } from "@bloom-housing/shared-helper
 import {
   ApplicationSelectionCreate,
   ListingMultiselectQuestion,
+  MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import StepDefinition from "./StepDefinition"
 
@@ -16,7 +17,7 @@ export default class SelectedPreferencesStep extends StepDefinition {
     return (
       getSelectionsForApplicationSection(
         this.conductor.listing?.listingMultiselectQuestions,
-        "preferences",
+        MultiselectQuestionsApplicationSectionEnum.preferences,
         this.application?.applicationSelections
       ).length > 0
     )
