@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useMemo } from "react"
+import React, { useEffect, useRef, useState, useContext, useMemo } from "react"
 import { t, Field, Select, FieldGroup, Form, numberOptions } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, LoadingState } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -7,39 +7,47 @@ import { TempUnit } from "../../../lib/listings/formTypes"
 import {
   AmiChart,
   AmiChartItem,
+  Jurisdiction,
   UnitType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import {
-  useAmiChartList,
-  useJurisdiction,
-  useUnitTypeList,
-  useWatchOnFormNumberFieldsChange,
-} from "../../../lib/hooks"
+import { useWatchOnFormNumberFieldsChange } from "../../../lib/hooks"
 import { arrayToFormOptions, getRentType, fieldHasError, addAsterisk } from "../../../lib/helpers"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 import styles from "./ListingForm.module.scss"
 
 type UnitFormProps = {
+  amiCharts: AmiChart[] | undefined
+  amiChartsLoading: boolean
   defaultUnit: TempUnit | undefined
   draft: boolean
-  jurisdiction: string
+  jurisdictionData: Jurisdiction | undefined
+  jurisdictionLoading: boolean
   nextId: number
   onClose: (openNextUnit: boolean, openCurrentUnit: boolean, defaultUnit: TempUnit) => void
   onSubmit: (unit: TempUnit) => void
+  unitTypes: UnitType[] | undefined
+  unitTypesLoading: boolean
 }
 
 const UnitForm = ({
+  amiCharts,
+  amiChartsLoading,
   defaultUnit,
   draft,
-  jurisdiction,
+  jurisdictionData,
+  jurisdictionLoading,
   nextId,
   onClose,
   onSubmit,
+  unitTypes,
+  unitTypesLoading,
 }: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
+  const initialLoadComplete = useRef(false)
   const [isAmiPercentageDirty, setIsAmiPercentageDirty] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [fetchingAmiChart, setFetchingAmiChart] = useState(false)
   const [currentAmiChart, setCurrentAmiChart] = useState(null)
   const [amiChartPercentageOptions, setAmiChartPercentageOptions] = useState([])
 
@@ -57,12 +65,6 @@ const UnitForm = ({
     mode: "onChange",
     shouldFocusError: false,
   })
-  /**
-   * fetch form options
-   */
-  const { data: amiCharts, loading: amiChartsLoading } = useAmiChartList(jurisdiction)
-  const { data: unitTypes, loading: unitTypesLoading } = useUnitTypeList()
-  const { data: jurisdictionData, loading: jurisdictionLoading } = useJurisdiction(jurisdiction)
   const hasInitializedFormData =
     amiCharts !== undefined && unitTypes !== undefined && jurisdictionData !== undefined
 
@@ -185,6 +187,7 @@ const UnitForm = ({
     } else {
       reset({})
     }
+    initialLoadComplete.current = true
     setLoading(false)
   }
 
@@ -195,6 +198,7 @@ const UnitForm = ({
   }, [defaultUnit])
 
   const fetchAmiChart = async (defaultChartID?: string) => {
+    setFetchingAmiChart(true)
     try {
       const thisAmiChart = await amiChartsService.retrieve({
         amiChartId: defaultChartID ?? amiChartID,
@@ -217,6 +221,8 @@ const UnitForm = ({
       return amiChartData
     } catch (e) {
       console.error(e)
+    } finally {
+      setFetchingAmiChart(false)
     }
   }
 
@@ -256,7 +262,7 @@ const UnitForm = ({
   }, [amiPercentage, amiChartPercentageOptions, isAmiPercentageDirty])
 
   useEffect(() => {
-    if (defaultUnit && !amiPercentage) {
+    if (!initialLoadComplete.current && defaultUnit && !amiPercentage) {
       setValue("amiPercentage", defaultUnit.amiPercentage)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -396,7 +402,7 @@ const UnitForm = ({
   }, [defaultUnit, unitTypesOptions, setValue])
 
   // when rent type is updated we set the rent/income data to defaultUnit data for that value
-  // e.g. rent is fixed and swithced to percentage, then switched back we readd the old fixed data
+  // e.g. rent is fixed and switched to percentage, then switched back we readd the old fixed data
   useEffect(() => {
     if (defaultUnit) {
       if (rentType === "fixed") {
@@ -551,6 +557,8 @@ const UnitForm = ({
                           ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
                             setValue(`maxIncomeHouseholdSize${index + 1}`, undefined)
                           })
+                          setAmiChartPercentageOptions([])
+                          setCurrentAmiChart(null)
                           if (value?.target?.value && !loading && amiChartsOptions) {
                             void fetchAmiChart(value.target?.value)
                             setIsAmiPercentageDirty(true)
@@ -577,7 +585,7 @@ const UnitForm = ({
                       error={fieldHasError(errors?.amiPercentage)}
                       errorMessage={t("errors.requiredFieldError")}
                       validation={{ required: !!amiChartID }}
-                      disabled={!amiChartID}
+                      disabled={!amiChartID || fetchingAmiChart}
                     />
                   </Grid.Cell>
                 </Grid.Row>
