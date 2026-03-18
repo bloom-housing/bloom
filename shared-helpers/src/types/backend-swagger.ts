@@ -7685,7 +7685,7 @@ export interface JurisdictionCreate {
   emailFromAddress: string
 
   /**  */
-  referralSummaryDefaults: string
+  referralSummaryDefault: string
 
   /**  */
   rentalAssistanceDefault: string
@@ -7768,7 +7768,7 @@ export interface JurisdictionUpdate {
   emailFromAddress: string
 
   /**  */
-  referralSummaryDefaults: string
+  referralSummaryDefault: string
 
   /**  */
   rentalAssistanceDefault: string
@@ -7883,7 +7883,7 @@ export interface Jurisdiction {
   emailFromAddress: string
 
   /**  */
-  referralSummaryDefaults: string
+  referralSummaryDefault: string
 
   /**  */
   rentalAssistanceDefault: string
