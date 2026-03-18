@@ -158,6 +158,28 @@ graph TB
    docker run --rm -it "${INFRA_CONTAINER:?}" bloom_dev apply
    ```
 
+   While the apply is running, set API key secret values. The following secrets need to be set:
+
+   - **Mapbox** (`bloom-mapbox-api-key`): A Mapbox access token. Used by the public and partners
+     sites to render maps. Obtain a token from https://account.mapbox.com/access-tokens/. Make sure
+     to add the public and partners sites to the list of allowed URLs in the Mapbox access token
+     screen.
+   - **Google Translate** (`bloom-google-translate-api-key`): A Google Cloud API key for the Google
+     Translate API. Used by the API service. Obtain a key from the Google Cloud console under 'APIs
+     & Services > Credentials'. Set the project_id and iam_user in the root module
+     `google_translate_settings` parameter in the `module "bloom_deployment"`.
+
+   If you do not have valid API keys available, it is okay to set a placeholder 'placeholder'
+   value. The secrets need values for the API ECS task to successfully start, but they does not need
+   to have valid values (the deployment will just not have functioning Mapbox and Google Translate
+   integrations until valid values are provided).
+
+   1. Log in to the bloom-dev AWS account and go to the 'Secrets Manager > Secrets' page.
+   2. Click on the secret name (e.g. `bloom-mapbox-api-key-AbCdEf`).
+   3. In the 'Secret value' section, click 'Retrieve secret value' then 'Set secret value'.
+   4. Select 'Plaintext' and enter the API key or 'placeholder' value.
+   5. Click 'Save'.
+
 4. Add DNS records for the public and partner site URLs:
 
    The `tofu apply` command from step 3 will output a `aws_lb_dns_name`. DNS CNAME records need to
@@ -237,42 +259,6 @@ graph TB
    ]
    ```
 
-6. Set the API key secret values:
-
-   The `tofu apply` command from step 3 will output `api_key_secret_arns` containing the ARNs of
-   the API key secrets that were created in AWS Secrets Manager. The secret values must be manually
-   set via the AWS console.
-
-   ```
-   Outputs:
-
-   api_key_secret_arns = {
-     "google_translate" = "arn:aws:secretsmanager:us-west-2:123456789012:secret:bloom_google_translate_api_key-AbCdEf"
-     "mapbox" = "arn:aws:secretsmanager:us-west-2:123456789012:secret:bloom_mapbox_api_key-AbCdEf"
-   }
-   ```
-
-   For each secret:
-
-   1. Log in to the bloom-dev AWS account and go to the 'Secrets Manager > Secrets' page.
-   2. Click on the secret name (e.g. `bloom-mapbox-api-key-AbCdEf`).
-   3. In the 'Secret value' section, click 'Retrieve secret value' then 'Set secret value'.
-   4. Select 'Plaintext' and enter the API key value.
-   5. Click 'Save'.
-
-   The following secrets need to be set:
-
-   - **Mapbox** (`bloom-mapbox-api-key`): A Mapbox access token. Used by the public and partners
-     sites to render maps. Obtain a token from https://account.mapbox.com/access-tokens/. Make sure
-     to add the public and partners sites to the list of allowed URLs in the Mapbox access token
-     screen.
-   - **Google Translate** (`bloom-google-translate-api-key`): A Google Cloud API key for the Google
-     Translate API. Used by the API service. Obtain a key from the Google Cloud console under 'APIs
-     & Services > Credentials'. Set the project_id and iam_user in the root module
-     `google_translate_settings` parameter in the `module "bloom_deployment"`.
-
-   The ECS tasks will read the secret values on next deployment or task restart.
-
 ### 2. Deploy prod
 
 1. Create the AWS managed certificate for the prod domain:
@@ -327,8 +313,30 @@ graph TB
 
    ```bash
    INFRA_CONTAINER=<from your 'Fork Bloom Repo' step 8 notes>
-   docker run --rm "${INFRA_CONTAINER:?}" bloom_prod apply
+   docker run --rm -it "${INFRA_CONTAINER:?}" bloom_prod apply
    ```
+
+   While the apply is running, set API key secret values. The following secrets need to be set:
+
+   - **Mapbox** (`bloom-mapbox-api-key`): A Mapbox access token. Used by the public and partners
+     sites to render maps. Obtain a token from https://account.mapbox.com/access-tokens/. Make sure
+     to add the public and partners sites to the list of allowed URLs in the Mapbox access token
+     screen.
+   - **Google Translate** (`bloom-google-translate-api-key`): A Google Cloud API key for the Google
+     Translate API. Used by the API service. Obtain a key from the Google Cloud console under 'APIs
+     & Services > Credentials'. Set the project_id and iam_user in the root module
+     `google_translate_settings` parameter in the `module "bloom_deployment"`.
+
+   If you do not have valid API keys available, it is okay to set a placeholder 'placeholder'
+   value. The secrets need values for the API ECS task to successfully start, but they does not need
+   to have valid values (the deployment will just not have functioning Mapbox and Google Translate
+   integrations until valid values are provided).
+
+   1. Log in to the bloom-dev AWS account and go to the 'Secrets Manager > Secrets' page.
+   2. Click on the secret name (e.g. `bloom-mapbox-api-key-AbCdEf`).
+   3. In the 'Secret value' section, click 'Retrieve secret value' then 'Set secret value'.
+   4. Select 'Plaintext' and enter the API key or 'placeholder' value.
+   5. Click 'Save'.
 
 4. Add DNS records for the public and partner site URLs:
 
@@ -405,43 +413,6 @@ graph TB
    ]
    ```
 
-6. Set the API key secret values:
-
-   The `tofu apply` command from step 3 will output `api_key_secret_arns` containing the ARNs of
-   the API key secrets that were created in AWS Secrets Manager. The secret values must be manually
-   set via the AWS console.
-
-   ```
-   Outputs:
-
-   api_key_secret_arns = {
-     "google_translate" = "arn:aws:secretsmanager:us-west-2:123456789012:secret:bloom_google_translate_api_key-AbCdEf"
-     "mapbox" = "arn:aws:secretsmanager:us-west-2:123456789012:secret:bloom_mapbox_api_key-AbCdEf"
-   }
-   ```
-
-   For each secret:
-
-   1. Log in to the bloom-dev AWS account and go to the 'Secrets Manager > Secrets' page.
-   2. Click on the secret name (e.g. `bloom-mapbox-api-key-AbCdEf`).
-   3. In the 'Secret value' section, click 'Retrieve secret value' then 'Set secret value'.
-   4. Select 'Plaintext' and enter the API key value.
-   5. Click 'Save'.
-
-   The following secrets need to be set:
-
-   - **Mapbox** (`bloom-mapbox-api-key`): A Mapbox access token. Used by the public and partners
-     sites to render maps. Obtain a token from https://account.mapbox.com/access-tokens/. Make sure
-     to add the public and partners sites to the list of allowed URLs in the Mapbox access token
-     screen.
-   - **Google Translate** (`bloom-google-translate-api-key`): A Google Cloud API key for the Google
-     Translate API. Used by the API service. Obtain a key from the Google Cloud console under 'APIs
-     & Services > Credentials'. Set the project_id and iam_user in the root module
-     `google_translate_settings` parameter in the `module "bloom_deployment"`.
-
-
-   The ECS tasks will read the secret values on next deployment or task restart.
-
 ### 3. (Optional) Create a VPC peering connection to an existing VPC
 
 Some users of Bloom have an existing database they will import data from. The bloom_deployment
@@ -461,7 +432,7 @@ the existing VPC. To create the VPC peering:
 
    ```bash
    INFRA_CONTAINER=<from your 'Fork Bloom Repo' step 8 notes>
-   docker run --rm "${INFRA_CONTAINER:?}" <bloom_dev|bloom_prod> apply
+   docker run --rm -it "${INFRA_CONTAINER:?}" <bloom_dev|bloom_prod> apply
    ```
 
    The apply will create the peering connection then return an expected error "VPC peering not accepted. Skipping creation of dependent
