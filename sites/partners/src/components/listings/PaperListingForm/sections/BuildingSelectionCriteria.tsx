@@ -11,7 +11,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
-import { cloudinaryFileUploader } from "../../../../lib/helpers"
+import { fileUploader } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
 const BuildingSelectionCriteria = () => {
@@ -29,13 +29,13 @@ const BuildingSelectionCriteria = () => {
   */
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
-  const [cloudinaryData, setCloudinaryData] = useState({
+  const [fileUploadData, setFileUploadData] = useState({
     id: "",
     url: "",
   })
   const resetDrawerState = () => {
     setProgressValue(0)
-    setCloudinaryData({
+    setFileUploadData({
       id: "",
       url: "",
     })
@@ -52,7 +52,7 @@ const BuildingSelectionCriteria = () => {
   }
   const savePDF = () => {
     setValue("listingsBuildingSelectionCriteriaFile", {
-      fileId: cloudinaryData.id,
+      fileId: fileUploadData.id,
       label: "cloudinaryPDF",
     })
     deleteURL()
@@ -72,23 +72,23 @@ const BuildingSelectionCriteria = () => {
     Show a preview of the uploaded file within the upload drawer
   */
   const previewTableRows: StandardTableData = []
-  if (cloudinaryData.url !== "") {
+  if (fileUploadData.url !== "") {
     previewTableRows.push({
       preview: {
         content: (
           <TableThumbnail>
-            <img alt="PDF preview" src={cloudinaryData.url} />
+            <img alt="PDF preview" src={fileUploadData.url} />
           </TableThumbnail>
         ),
       },
-      fileName: { content: cloudinaryData.id.split("/").slice(-1).join() },
+      fileName: { content: fileUploadData.id.split("/").slice(-1).join() },
       actions: {
         content: (
           <Button
             type="button"
             className="font-semibold text-alert"
             onClick={() => {
-              setCloudinaryData({
+              setFileUploadData({
                 id: "",
                 url: "",
               })
@@ -138,7 +138,7 @@ const BuildingSelectionCriteria = () => {
               type="button"
               className={"font-semibold darker-alert"}
               onClick={() => {
-                setCloudinaryData({ ...cloudinaryData, id: "" })
+                setFileUploadData({ ...fileUploadData, id: "" })
                 deletePDF()
               }}
               variant="text"
@@ -192,12 +192,13 @@ const BuildingSelectionCriteria = () => {
     Pass the file for the dropzone callback along to the uploader
   */
   const pdfUploader = async (file: File) => {
-    if (process.env.cloudinaryCloudName) {
-      void (await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue }))
-    } else {
-      // TODO: Upload to AWS
-      alert("Cloudinary environment variables not set, must configure AWS")
-    }
+    void (await fileUploader({
+      file,
+      setFileUploadData,
+      setProgressValue,
+      contentType: "application/pdf",
+      contentDisposition: "inline",
+    }))
   }
 
   return (
@@ -285,7 +286,7 @@ const BuildingSelectionCriteria = () => {
                     accept="application/pdf"
                     progress={progressValue}
                   />
-                  {cloudinaryData.url !== "" && (
+                  {fileUploadData.url !== "" && (
                     <MinimalTable
                       headers={previewCriteriaTableHeaders}
                       data={previewTableRows}

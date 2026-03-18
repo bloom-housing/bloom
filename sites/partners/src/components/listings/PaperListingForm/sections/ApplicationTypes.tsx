@@ -18,12 +18,7 @@ import {
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import {
-  cloudinaryFileUploader,
-  fieldMessage,
-  fieldHasError,
-  getLabel,
-} from "../../../../lib/helpers"
+import { fileUploader, fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
@@ -137,14 +132,14 @@ const ApplicationTypes = ({
   const [selectedLanguage, setSelectedLanguage] = useState("")
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
-  const [cloudinaryData, setCloudinaryData] = useState({
+  const [fileUploadData, setFileUploadData] = useState({
     id: "",
     url: "",
   })
   const referralPhoneRef = React.useRef("")
   const resetDrawerState = () => {
     setProgressValue(0)
-    setCloudinaryData({
+    setFileUploadData({
       id: "",
       url: "",
     })
@@ -174,7 +169,7 @@ const ApplicationTypes = ({
     const paperApplications = methods.paper?.paperApplications ?? []
     paperApplications.push({
       assets: {
-        fileId: cloudinaryData.id,
+        fileId: fileUploadData.id,
         label: selectedLanguage,
       },
       language: selectedLanguage as LanguagesEnum,
@@ -192,7 +187,13 @@ const ApplicationTypes = ({
     Pass the file for the dropzone callback along to the uploader
   */
   const pdfUploader = async (file: File) => {
-    void (await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue }))
+    void (await fileUploader({
+      file,
+      setFileUploadData,
+      setProgressValue,
+      contentType: "application/pdf",
+      contentDisposition: "inline",
+    }))
   }
 
   /*
@@ -200,9 +201,9 @@ const ApplicationTypes = ({
   */
 
   const previewPaperApplicationsTableRows: StandardTableData = []
-  if (cloudinaryData.url != "") {
+  if (fileUploadData.url != "") {
     previewPaperApplicationsTableRows.push({
-      fileName: { content: `${cloudinaryData.id.split("/").slice(-1).join()}.pdf` },
+      fileName: { content: `${fileUploadData.id.split("/").slice(-1).join()}.pdf` },
       language: { content: selectedLanguage ? t(`languages.${selectedLanguage}`) : "" },
       actions: {
         content: (
@@ -211,7 +212,7 @@ const ApplicationTypes = ({
             size="sm"
             className="font-semibold text-alert"
             onClick={() => {
-              setCloudinaryData({
+              setFileUploadData({
                 id: "",
                 url: "",
               })
@@ -633,7 +634,7 @@ const ApplicationTypes = ({
                 />
               )}
 
-              {cloudinaryData.url !== "" && (
+              {fileUploadData.url !== "" && (
                 <MinimalTable
                   headers={paperApplicationsTableHeaders}
                   data={previewPaperApplicationsTableRows}

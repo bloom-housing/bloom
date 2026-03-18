@@ -6,7 +6,7 @@ import * as helpers from "../../../../../src/lib/helpers"
 
 jest.mock("../../../../../src/lib/helpers", () => ({
   ...jest.requireActual("../../../../../src/lib/helpers"),
-  cloudinaryFileUploader: jest.fn(),
+  fileUploader: jest.fn(),
 }))
 
 beforeAll(() => {
@@ -97,13 +97,13 @@ describe("MarketingFlyer", () => {
   })
 
   it("should handle file upload and url save", async () => {
-    const mockCloudinaryUploader = helpers.cloudinaryFileUploader as jest.MockedFunction<
-      typeof helpers.cloudinaryFileUploader
+    const mockFileUploader = helpers.fileUploader as jest.MockedFunction<
+      typeof helpers.fileUploader
     >
     // eslint-disable-next-line @typescript-eslint/require-await
-    mockCloudinaryUploader.mockImplementation(async ({ setCloudinaryData, setProgressValue }) => {
+    mockFileUploader.mockImplementation(async ({ setFileUploadData, setProgressValue }) => {
       setProgressValue(100)
-      setCloudinaryData({
+      setFileUploadData({
         id: "test-cloudinary-id/test-file",
         url: "https://test.cloudinary.com/test-file.pdf",
       })
@@ -158,13 +158,13 @@ describe("MarketingFlyer", () => {
   })
 
   it("should edit existing entries by switching marketing to URL and accessible to file", async () => {
-    const mockCloudinaryUploader = helpers.cloudinaryFileUploader as jest.MockedFunction<
-      typeof helpers.cloudinaryFileUploader
+    const mockFileUploader = helpers.fileUploader as jest.MockedFunction<
+      typeof helpers.fileUploader
     >
     // eslint-disable-next-line @typescript-eslint/require-await
-    mockCloudinaryUploader.mockImplementation(async ({ setCloudinaryData, setProgressValue }) => {
+    mockFileUploader.mockImplementation(async ({ setFileUploadData, setProgressValue }) => {
       setProgressValue(100)
-      setCloudinaryData({
+      setFileUploadData({
         id: "accessible-upload-id/new-accessible-file",
         url: "https://test.cloudinary.com/new-accessible-file.pdf",
       })

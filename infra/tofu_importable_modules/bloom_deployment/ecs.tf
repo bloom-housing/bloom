@@ -107,6 +107,11 @@ locals {
           Action   = "secretsmanager:GetSecretValue"
           Effect   = "Allow"
           Resource = aws_secretsmanager_secret.api_jwt_signing_key.arn
+        },
+        {
+          Action   = "secretsmanager:GetSecretValue"
+          Effect   = "Allow"
+          Resource = aws_secretsmanager_secret.google_translate_api_key.arn
         }
       ]
       container_policy = jsonencode({
@@ -126,7 +131,13 @@ locals {
       })
     }
     "site-partners" = {
-      task_execution_policy_extra_statements = []
+      task_execution_policy_extra_statements = [
+        {
+          Action   = "secretsmanager:GetSecretValue"
+          Effect   = "Allow"
+          Resource = aws_secretsmanager_secret.mapbox_api_key.arn
+        }
+      ]
       container_policy = jsonencode({
         Version = "2012-10-17"
         Statement = [{
@@ -137,7 +148,13 @@ locals {
       })
     }
     "site-public" = {
-      task_execution_policy_extra_statements = []
+      task_execution_policy_extra_statements = [
+        {
+          Action   = "secretsmanager:GetSecretValue"
+          Effect   = "Allow"
+          Resource = aws_secretsmanager_secret.mapbox_api_key.arn
+        }
+      ]
       container_policy = jsonencode({
         Version = "2012-10-17"
         Statement = [{
