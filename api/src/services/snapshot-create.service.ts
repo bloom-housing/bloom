@@ -1091,4 +1091,539 @@ export class SnapshotCreateService {
       success: true,
     };
   }
+
+  async createApplicationSnapshot(applicationId: string): Promise<SuccessDTO> {
+    if (process.env.SKIP_SNAPSHOTS && process.env.SKIP_SNAPSHOTS === 'TRUE') {
+      return {
+        success: true,
+      };
+    }
+    // grab current application data
+    const currData = await this.prisma.applications.findUnique({
+      where: {
+        id: applicationId,
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+
+        acceptedTerms: true,
+        accessibleUnitWaitlistNumber: true,
+        additionalPhone: true,
+        additionalPhoneNumber: true,
+        additionalPhoneNumberType: true,
+        appUrl: true,
+        confirmationCode: true,
+        contactPreferences: true,
+        conventionalUnitWaitlistNumber: true,
+        deletedAt: true,
+        expireAfter: true,
+        householdExpectingChanges: true,
+        householdSize: true,
+        householdStudent: true,
+        housingStatus: true,
+        income: true,
+        incomePeriod: true,
+        incomeVouchers: true,
+        isNewest: true,
+        language: true,
+        manualLotteryPositionNumber: true,
+        markedAsDuplicate: true,
+        preferences: true,
+        programs: true,
+        reviewStatus: true,
+        sendMailToMailingAddress: true,
+        status: true,
+        submissionDate: true,
+        submissionType: true,
+        wasCreatedExternally: true,
+        wasPIICleared: true,
+
+        accessibility: {
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            hearing: true,
+            mobility: true,
+            other: true,
+            vision: true,
+          },
+        },
+        alternateContact: {
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            agency: true,
+            emailAddress: true,
+            firstName: true,
+            lastName: true,
+            otherType: true,
+            phoneNumber: true,
+            type: true,
+            address: {
+              select: {
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+                city: true,
+                county: true,
+                latitude: true,
+                longitude: true,
+                placeName: true,
+                state: true,
+                street: true,
+                street2: true,
+                zipCode: true,
+              },
+            },
+          },
+        },
+        applicant: {
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            birthDay: true,
+            birthMonth: true,
+            birthYear: true,
+            emailAddress: true,
+            firstName: true,
+            fullTimeStudent: true,
+            lastName: true,
+            middleName: true,
+            noEmail: true,
+            noPhone: true,
+            phoneNumber: true,
+            phoneNumberType: true,
+            workInRegion: true,
+            applicantAddress: {
+              select: {
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+                city: true,
+                county: true,
+                latitude: true,
+                longitude: true,
+                placeName: true,
+                state: true,
+                street: true,
+                street2: true,
+                zipCode: true,
+              },
+            },
+            applicantWorkAddress: {
+              select: {
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+                city: true,
+                county: true,
+                latitude: true,
+                longitude: true,
+                placeName: true,
+                state: true,
+                street: true,
+                street2: true,
+                zipCode: true,
+              },
+            },
+          },
+        },
+        applicationsAlternateAddress: {
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            city: true,
+            county: true,
+            latitude: true,
+            longitude: true,
+            placeName: true,
+            state: true,
+            street: true,
+            street2: true,
+            zipCode: true,
+          },
+        },
+        applicationsMailingAddress: {
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            city: true,
+            county: true,
+            latitude: true,
+            longitude: true,
+            placeName: true,
+            state: true,
+            street: true,
+            street2: true,
+            zipCode: true,
+          },
+        },
+        demographics: {
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            ethnicity: true,
+            gender: true,
+            howDidYouHear: true,
+            race: true,
+            sexualOrientation: true,
+            spokenLanguage: true,
+          },
+        },
+        listings: {
+          select: {
+            id: true,
+          },
+        },
+        userAccounts: {
+          select: {
+            id: true,
+          },
+        },
+
+        applicationSelections: {
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            hasOptedOut: true,
+            multiselectQuestion: {
+              select: {
+                id: true,
+              },
+            },
+            selections: {
+              select: {
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+                addressHolderName: true,
+                addressHolderRelationship: true,
+                isGeocodingVerified: true,
+                addressHolderAddress: {
+                  select: {
+                    id: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    city: true,
+                    county: true,
+                    latitude: true,
+                    longitude: true,
+                    placeName: true,
+                    state: true,
+                    street: true,
+                    street2: true,
+                    zipCode: true,
+                  },
+                },
+                multiselectOption: {
+                  select: {
+                    id: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        householdMember: {
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            birthDay: true,
+            birthMonth: true,
+            birthYear: true,
+            firstName: true,
+            fullTimeStudent: true,
+            lastName: true,
+            middleName: true,
+            orderId: true,
+            relationship: true,
+            sameAddress: true,
+            workInRegion: true,
+            householdMemberAddress: {
+              select: {
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+                city: true,
+                county: true,
+                latitude: true,
+                longitude: true,
+                placeName: true,
+                state: true,
+                street: true,
+                street2: true,
+                zipCode: true,
+              },
+            },
+            householdMemberWorkAddress: {
+              select: {
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+                city: true,
+                county: true,
+                latitude: true,
+                longitude: true,
+                placeName: true,
+                state: true,
+                street: true,
+                street2: true,
+                zipCode: true,
+              },
+            },
+          },
+        },
+        preferredUnitTypes: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (!currData) {
+      throw new InternalServerErrorException(
+        `Snapshot was requested for application id: ${applicationId}, but that id does not exist`,
+      );
+    }
+
+    // pull out the ancillary data, data we will ignore, and data that needs to be pulled out so it doesn't break the prisma call
+    const {
+      id,
+      createdAt,
+
+      accessibility,
+      alternateContact,
+      applicant,
+      applicationsAlternateAddress,
+      applicationsMailingAddress,
+      demographics,
+      listings,
+      userAccounts,
+
+      applicationSelections,
+      householdMember,
+      preferredUnitTypes,
+      ...rest
+    } = currData;
+
+    // create snapshot
+    await this.prisma.applicationSnapshot.create({
+      data: {
+        ...rest,
+        originalId: id,
+        originalCreatedAt: createdAt,
+
+        accessibility: accessibility
+          ? {
+              create: {
+                ...accessibility,
+                originalId: accessibility.id,
+                originalCreatedAt: accessibility.createdAt,
+                id: undefined,
+                createdAt: undefined,
+              },
+            }
+          : undefined,
+        alternateContact: alternateContact
+          ? {
+              create: {
+                ...alternateContact,
+                address: alternateContact.address
+                  ? {
+                      create: {
+                        ...alternateContact.address,
+                        originalId: alternateContact.address.id,
+                        originalCreatedAt: alternateContact.address.createdAt,
+                        id: undefined,
+                        createdAt: undefined,
+                      },
+                    }
+                  : undefined,
+                originalId: alternateContact.id,
+                originalCreatedAt: alternateContact.createdAt,
+                id: undefined,
+                createdAt: undefined,
+              },
+            }
+          : undefined,
+        applicant: applicant
+          ? {
+              create: {
+                ...applicant,
+                applicantAddress: applicant.applicantAddress
+                  ? {
+                      create: {
+                        ...applicant.applicantAddress,
+                        originalId: applicant.applicantAddress.id,
+                        originalCreatedAt: applicant.applicantAddress.createdAt,
+                        id: undefined,
+                        createdAt: undefined,
+                      },
+                    }
+                  : undefined,
+                applicantWorkAddress: applicant.applicantWorkAddress
+                  ? {
+                      create: {
+                        ...applicant.applicantWorkAddress,
+                        originalId: applicant.applicantWorkAddress.id,
+                        originalCreatedAt:
+                          applicant.applicantWorkAddress.createdAt,
+                        id: undefined,
+                        createdAt: undefined,
+                      },
+                    }
+                  : undefined,
+                originalId: applicant.id,
+                originalCreatedAt: applicant.createdAt,
+                id: undefined,
+                createdAt: undefined,
+              },
+            }
+          : undefined,
+        applicationsAlternateAddress: applicationsAlternateAddress
+          ? {
+              create: {
+                ...applicationsAlternateAddress,
+                originalId: applicationsAlternateAddress.id,
+                originalCreatedAt: applicationsAlternateAddress.createdAt,
+                id: undefined,
+                createdAt: undefined,
+              },
+            }
+          : undefined,
+        applicationsMailingAddress: applicationsMailingAddress
+          ? {
+              create: {
+                ...applicationsMailingAddress,
+                originalId: applicationsMailingAddress.id,
+                originalCreatedAt: applicationsMailingAddress.createdAt,
+                id: undefined,
+                createdAt: undefined,
+              },
+            }
+          : undefined,
+        demographic: demographics
+          ? {
+              create: {
+                ...demographics,
+                originalId: demographics.id,
+                originalCreatedAt: demographics.createdAt,
+                id: undefined,
+                createdAt: undefined,
+              },
+            }
+          : undefined,
+        listingId: listings ? listings.id : undefined,
+        userId: userAccounts ? userAccounts.id : undefined,
+
+        applicationSelections: applicationSelections
+          ? {
+              create: applicationSelections.map((appSel) => ({
+                ...appSel,
+                multiselectQuestion: appSel.multiselectQuestion
+                  ? {
+                      connect: {
+                        id: appSel.multiselectQuestion.id,
+                      },
+                    }
+                  : undefined,
+                selections: appSel.selections
+                  ? {
+                      create: appSel.selections.map((sel) => ({
+                        ...sel,
+                        addressHolderAddress: sel.addressHolderAddress
+                          ? {
+                              create: {
+                                ...sel.addressHolderAddress,
+                                originalId: sel.addressHolderAddress.id,
+                                originalCreatedAt:
+                                  sel.addressHolderAddress.createdAt,
+                                id: undefined,
+                                createdAt: undefined,
+                              },
+                            }
+                          : undefined,
+                        multiselectOption: sel.multiselectOption
+                          ? {
+                              connect: {
+                                id: sel.multiselectOption.id,
+                              },
+                            }
+                          : undefined,
+                        originalId: sel.id,
+                        originalCreatedAt: sel.createdAt,
+                        id: undefined,
+                        createdAt: undefined,
+                      })),
+                    }
+                  : undefined,
+                originalId: appSel.id,
+                originalCreatedAt: appSel.createdAt,
+                id: undefined,
+                createdAt: undefined,
+              })),
+            }
+          : undefined,
+        householdMember: householdMember
+          ? {
+              create: householdMember.map((householdMem) => ({
+                ...householdMem,
+                householdMemberAddress: householdMem.householdMemberAddress
+                  ? {
+                      create: {
+                        ...householdMem.householdMemberAddress,
+                        originalId: householdMem.householdMemberAddress.id,
+                        originalCreatedAt:
+                          householdMem.householdMemberAddress.createdAt,
+                        id: undefined,
+                        createdAt: undefined,
+                      },
+                    }
+                  : undefined,
+                householdMemberWorkAddress:
+                  householdMem.householdMemberWorkAddress
+                    ? {
+                        create: {
+                          ...householdMem.householdMemberWorkAddress,
+                          originalId:
+                            householdMem.householdMemberWorkAddress.id,
+                          originalCreatedAt:
+                            householdMem.householdMemberWorkAddress.createdAt,
+                          id: undefined,
+                          createdAt: undefined,
+                        },
+                      }
+                    : undefined,
+                originalId: householdMem.id,
+                originalCreatedAt: householdMem.createdAt,
+                id: undefined,
+                createdAt: undefined,
+              })),
+            }
+          : undefined,
+        preferredUnitTypes: preferredUnitTypes
+          ? {
+              connect: preferredUnitTypes.map((unitType) => ({
+                id: unitType.id,
+              })),
+            }
+          : undefined,
+      },
+    });
+
+    return {
+      success: true,
+    };
+  }
 }

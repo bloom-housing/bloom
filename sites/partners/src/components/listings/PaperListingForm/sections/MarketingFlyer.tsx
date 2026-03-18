@@ -259,7 +259,13 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
   ].filter(Boolean)
 
   const pdfUploader = async (file: File) => {
-    await fileUploader({ file, setFileUploadData, setProgressValue })
+    await fileUploader({
+      file,
+      setFileUploadData,
+      setProgressValue,
+      contentType: "application/pdf",
+      contentDisposition: "inline",
+    })
   }
 
   const accessiblePdfUploader = async (file: File) => {
@@ -267,6 +273,8 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
       file,
       setFileUploadData: setAccessibleFileUploadData,
       setProgressValue: setAccessibleProgressValue,
+      contentType: "application/pdf",
+      contentDisposition: "inline",
     })
   }
 

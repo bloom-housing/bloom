@@ -5,6 +5,7 @@ import { CreateS3UploadUrl } from '../dtos/assets/create-s3-upload-url.dto';
 import { CloudinaryService } from './cloudinary.service';
 import { S3Service } from './s3.service';
 import { randomUUID } from 'crypto';
+import { CreateS3UploadMetadata } from '../dtos/assets/create-s3-upload-metadata.dto';
 
 /*
   this is the service for assets
@@ -32,9 +33,11 @@ export class AssetService {
     };
   }
 
-  async createS3UploadUrl(): Promise<CreateS3UploadUrl> {
+  async createS3UploadUrl(
+    metadata: CreateS3UploadMetadata,
+  ): Promise<CreateS3UploadUrl> {
     const fileId = randomUUID();
-    const uploadUrl = await this.s3Service.uploadURLForPublic(fileId);
+    const uploadUrl = await this.s3Service.uploadURLForPublic(fileId, metadata);
     const publicUrl = this.s3Service.urlForPublic(fileId);
     return {
       fileId,
