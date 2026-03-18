@@ -242,7 +242,9 @@ export const fileUploader = async ({
         })
       })
       .catch(() => {
-        alert("Unable to upload the file. Please verify the file format is correct before retrying.")
+        alert(
+          "Unable to upload the file. Please verify the file format is correct before retrying."
+        )
         setProgressValue(0)
       })
   }
