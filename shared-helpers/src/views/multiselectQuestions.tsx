@@ -711,7 +711,8 @@ export const mapApiToMultiselectForm = (
     )?.multiselectQuestions
     if (!question) return
 
-    const questionFieldName = cleanMultiselectString(question.name) as string
+    // NOTE: there was some funky typing issues here…using "" as a guard but there's no real need
+    const questionFieldName = cleanMultiselectString(question.name) || ""
 
     const options: Record<string, any> = {}
     selection.selections.forEach((optionSelection) => {
@@ -720,7 +721,7 @@ export const mapApiToMultiselectForm = (
       )
       if (!option) return
 
-      const key = cleanMultiselectString(option.name) as string
+      const key = cleanMultiselectString(option.name) || ""
       // radio buttons (exclusive) needs string true, otherwise boolean
       options[key] = question.isExclusive ? "true" : true
 
