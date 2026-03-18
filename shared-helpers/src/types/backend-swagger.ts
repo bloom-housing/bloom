@@ -824,6 +824,28 @@ export class SnapshotService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Create Listing Snapshot
+   */
+  createListingSnapshot(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/snapshot/createListingSnapshot"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class AmiChartsService {
@@ -6981,7 +7003,7 @@ export interface ApplicationSelection {
   multiselectQuestion: IdDTO
 
   /**  */
-  selections: ApplicationSelectionOption
+  selections: ApplicationSelectionOption[]
 }
 
 export interface ApplicationMultiselectQuestionOption {

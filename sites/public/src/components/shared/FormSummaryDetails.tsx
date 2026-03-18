@@ -5,6 +5,8 @@ import {
   AddressHolder,
   cleanMultiselectString,
   getPreferredUnitTypes,
+  getSelectionsForApplicationSection,
+  oneLineAddress,
 } from "@bloom-housing/shared-helpers"
 import {
   Address,
@@ -12,11 +14,86 @@ import {
   Application,
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
+  ApplicationSelection,
+  ApplicationSelectionCreate,
   InputType,
   Listing,
+  ListingMultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FormSummaryDetails.module.scss"
+
+const multiselectQuestionSection = (
+  multiselectQuestions: ListingMultiselectQuestion[],
+  selections: (ApplicationSelection | ApplicationSelectionCreate)[],
+  editMode: boolean,
+  validationError: boolean,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
+  appLink: string,
+  header: string,
+  emptyText?: string,
+  divider?: boolean
+) => {
+  return (
+    <>
+      <Card.Header className={styles["summary-header"]}>
+        <Heading priority={3} size="xl">
+          {header}
+        </Heading>
+        {editMode && !validationError && (
+          <Link href={appLink} ariaLabel={`${t("t.edit")} ${header}`}>
+            {t("t.edit")}
+          </Link>
+        )}
+      </Card.Header>
+
+      <Card.Section
+        className={styles["summary-section"]}
+        id={applicationSection}
+        divider={divider ? "flush" : undefined}
+      >
+        {emptyText ? (
+          <p className={styles["summary-note-text"]}>{emptyText}</p>
+        ) : (
+          <>
+            {selections.map((selection: ApplicationSelection, index) => {
+              const question = multiselectQuestions.find(
+                (item) => item.multiselectQuestions.id === selection.multiselectQuestion.id
+              )?.multiselectQuestions
+              selection.selections.map((selectionOption, nestedIndex) => {
+                alert(JSON.stringify(question.multiselectOptions))
+                const option = question.multiselectOptions.find(
+                  (item) => item.id === selectionOption.id
+                )
+                const name = selectionOption.addressHolderName
+                const relationship = selectionOption.addressHolderRelationship
+                const address =
+                  selectionOption.addressHolderAddress &&
+                  oneLineAddress(selectionOption.addressHolderAddress)
+
+                const helpText = address
+                  ? `${name ? `${name}\n` : ""}${relationship ? `${relationship}\n` : ""}${address}`
+                  : undefined
+
+                return (
+                  <FieldValue
+                    label={question.name}
+                    helpText={helpText}
+                    key={`${index}-${nestedIndex}`}
+                    testId={question.name}
+                    className={"pb-6 whitespace-pre-wrap"}
+                  >
+                    <div data-testid={option.name}>{option.name}</div>
+                  </FieldValue>
+                )
+              })
+            })}
+          </>
+        )}
+      </Card.Section>
+    </>
+  )
+}
 
 type FormSummaryDetailsProps = {
   application: Application
@@ -29,6 +106,7 @@ type FormSummaryDetailsProps = {
   enableFullTimeStudentQuestion?: boolean
   enableAdaOtherOption?: boolean
   swapCommunityTypeWithPrograms?: boolean
+  enableV2MSQ?: boolean
 }
 
 const FormSummaryDetails = ({
@@ -42,6 +120,7 @@ const FormSummaryDetails = ({
   enableAdaOtherOption = false,
   enableFullTimeStudentQuestion = false,
   swapCommunityTypeWithPrograms = false,
+  enableV2MSQ = false,
 }: FormSummaryDetailsProps) => {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
@@ -94,7 +173,24 @@ const FormSummaryDetails = ({
     }
   }
 
-  const multiselectQuestionHelpText = (extraData?: AllExtraDataTypes[]) => {
+  const selectionPreferences =
+    enableV2MSQ && !hidePreferences
+      ? getSelectionsForApplicationSection(
+          listing.listingMultiselectQuestions,
+          MultiselectQuestionsApplicationSectionEnum.preferences,
+          application.applicationSelections
+        )
+      : []
+  const selectionPrograms =
+    enableV2MSQ && !hidePrograms
+      ? getSelectionsForApplicationSection(
+          listing.listingMultiselectQuestions,
+          MultiselectQuestionsApplicationSectionEnum.programs,
+          application.applicationSelections
+        )
+      : []
+
+  const multiselectQuestionHelpTextV1 = (extraData?: AllExtraDataTypes[]) => {
     if (!extraData) return
     const helperText = extraData.reduce((acc, item) => {
       if (item.type === InputType.address && typeof item.value === "object") {
@@ -113,7 +209,7 @@ const FormSummaryDetails = ({
     return `${name ? `${name}\n` : ""}${relationship ? `${relationship}\n` : ""}${helperText}`
   }
 
-  const getOptionText = (
+  const getOptionTextV1 = (
     question: ApplicationMultiselectQuestion,
     option: ApplicationMultiselectQuestionOption
   ) => {
@@ -135,7 +231,7 @@ const FormSummaryDetails = ({
     return initialOption?.text || optOutOption || option.key
   }
 
-  const multiselectQuestionSection = (
+  const multiselectQuestionSectionV1 = (
     applicationSection: MultiselectQuestionsApplicationSectionEnum,
     appLink: string,
     header: string,
@@ -172,12 +268,12 @@ const FormSummaryDetails = ({
                     .map((option: ApplicationMultiselectQuestionOption, index) => (
                       <FieldValue
                         label={question.key}
-                        helpText={multiselectQuestionHelpText(option?.extraData)}
+                        helpText={multiselectQuestionHelpTextV1(option?.extraData)}
                         key={index}
                         testId={question.key}
                         className={"pb-6 whitespace-pre-wrap"}
                       >
-                        <div data-testid={option.key}>{getOptionText(question, option)}</div>
+                        <div data-testid={option.key}>{getOptionTextV1(question, option)}</div>
                       </FieldValue>
                     ))
                 )}
@@ -515,10 +611,31 @@ const FormSummaryDetails = ({
           </FieldValue>
         </Card.Section>
 
-        {!hidePrograms &&
+        {enableV2MSQ &&
+          selectionPrograms.length > 0 &&
+          multiselectQuestionSection(
+            listing.listingMultiselectQuestions,
+            selectionPrograms,
+            editMode,
+            validationError,
+            MultiselectQuestionsApplicationSectionEnum.programs,
+            swapCommunityTypeWithPrograms
+              ? "/applications/community-types/community-types"
+              : "/applications/programs/programs",
+            swapCommunityTypeWithPrograms ? t("t.communityTypes") : t("t.programs"),
+            selectionPrograms.length === 0
+              ? `${t("application.preferences.general.title", {
+                  county: listing?.listingsBuildingAddress?.county || listing?.jurisdictions?.name,
+                })} ${t("application.preferences.general.preamble")}`
+              : null,
+            true
+          )}
+
+        {!enableV2MSQ &&
+          !hidePrograms &&
           Array.isArray(application.programs) &&
           application.programs.length > 0 &&
-          multiselectQuestionSection(
+          multiselectQuestionSectionV1(
             MultiselectQuestionsApplicationSectionEnum.programs,
             swapCommunityTypeWithPrograms
               ? "/applications/community-types/community-types"
@@ -575,10 +692,29 @@ const FormSummaryDetails = ({
           )}
         </Card.Section>
 
-        {!hidePreferences &&
+        {enableV2MSQ &&
+          selectionPreferences.length > 0 &&
+          multiselectQuestionSection(
+            listing.listingMultiselectQuestions,
+            selectionPreferences,
+            editMode,
+            validationError,
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+            "/applications/preferences/all",
+            t("t.preferences"),
+            selectionPreferences.length === 0
+              ? `${t("application.preferences.general.title", {
+                  county: listing?.listingsBuildingAddress?.county || listing?.jurisdictions?.name,
+                })} ${t("application.preferences.general.preamble")}`
+              : null,
+            true
+          )}
+
+        {!enableV2MSQ &&
+          !hidePreferences &&
           Array.isArray(application.preferences) &&
           application.preferences.length > 0 &&
-          multiselectQuestionSection(
+          multiselectQuestionSectionV1(
             MultiselectQuestionsApplicationSectionEnum.preferences,
             "/applications/preferences/all",
             t("t.preferences"),
