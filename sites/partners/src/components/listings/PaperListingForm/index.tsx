@@ -791,6 +791,7 @@ const ListingForm = ({
                             jurisdiction={jurisdictionId}
                             listing={listing}
                             requiredFields={requiredFields}
+                            defaultReferralText={selectedJurisdictionData?.referralSummaryDefaults}
                           />
                           <ApplicationAddress requiredFields={requiredFields} listing={listing} />
                           <ApplicationDates
