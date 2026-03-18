@@ -8,7 +8,12 @@ import {
   unit,
   unitTypes,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { UnitAccessibilityPriorityTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  AmiChart,
+  Jurisdiction,
+  UnitAccessibilityPriorityTypeEnum,
+  UnitType,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter, render, screen, waitFor, within } from "../../../testUtils"
 import UnitForm from "../../../../src/components/listings/PaperListingForm/UnitForm"
 import { TempUnit } from "../../../../src/lib/listings/formTypes"
@@ -24,30 +29,30 @@ const tempUnit: TempUnit = {
   ...unit,
 }
 
+const jurisdictionData = {
+  id: "123",
+  visibleAccessibilityPriorityTypes: [
+    UnitAccessibilityPriorityTypeEnum.mobility,
+    UnitAccessibilityPriorityTypeEnum.hearing,
+    UnitAccessibilityPriorityTypeEnum.mobilityAndHearing,
+  ],
+}
+
+const defaultUnitFormProps = {
+  amiCharts: amiCharts as unknown as AmiChart[],
+  amiChartsLoading: false,
+  unitTypes: unitTypes as unknown as UnitType[],
+  unitTypesLoading: false,
+  jurisdictionData: jurisdictionData as unknown as Jurisdiction,
+  jurisdictionLoading: false,
+}
+
 const waitForFormLoad = async () => {
   await screen.findByRole("option", { name: "Studio" })
 }
 
 describe("UnitForm", () => {
   server.use(
-    rest.get("http://localhost:3100/unitTypes", (_req, res, ctx) => {
-      return res(ctx.json(unitTypes))
-    }),
-    rest.get("http://localhost:3100/jurisdictions/123", (req, res, ctx) => {
-      return res(
-        ctx.json({
-          id: req.params.id,
-          visibleAccessibilityPriorityTypes: [
-            UnitAccessibilityPriorityTypeEnum.mobility,
-            UnitAccessibilityPriorityTypeEnum.hearing,
-            UnitAccessibilityPriorityTypeEnum.mobilityAndHearing,
-          ],
-        })
-      )
-    }),
-    rest.get("http://localhost:3100/amiCharts", (_req, res, ctx) => {
-      return res(ctx.json(amiCharts))
-    }),
     rest.get(
       "http://localhost/api/adapter/amiCharts/4e64914b-3169-4d6f-a8ef-d4b11b34ebcd",
       (_req, res, ctx) => {
@@ -58,7 +63,7 @@ describe("UnitForm", () => {
   it("should render the unit form without any selection", async () => {
     render(
       <UnitForm
-        jurisdiction="123"
+        {...defaultUnitFormProps}
         onClose={jest.fn()}
         onSubmit={jest.fn()}
         draft={true}
@@ -218,7 +223,7 @@ describe("UnitForm", () => {
   it("should render the AMI chart options after AMI chart selection", async () => {
     render(
       <UnitForm
-        jurisdiction={"123"}
+        {...defaultUnitFormProps}
         onClose={jest.fn()}
         onSubmit={jest.fn()}
         draft={true}
@@ -280,7 +285,7 @@ describe("UnitForm", () => {
   it("should show fixed amount fields when selecting fixed amount", async () => {
     render(
       <UnitForm
-        jurisdiction="123"
+        {...defaultUnitFormProps}
         onClose={jest.fn()}
         onSubmit={jest.fn()}
         draft={true}
@@ -303,7 +308,7 @@ describe("UnitForm", () => {
   it("should show percent of income fields when selecting % of income", async () => {
     render(
       <UnitForm
-        jurisdiction="123"
+        {...defaultUnitFormProps}
         onClose={jest.fn()}
         onSubmit={jest.fn()}
         draft={true}
@@ -329,7 +334,7 @@ describe("UnitForm", () => {
 
     render(
       <UnitForm
-        jurisdiction="123"
+        {...defaultUnitFormProps}
         onClose={onClose}
         onSubmit={onSubmit}
         draft={true}
@@ -351,7 +356,7 @@ describe("UnitForm", () => {
 
     render(
       <UnitForm
-        jurisdiction="123"
+        {...defaultUnitFormProps}
         onClose={onClose}
         onSubmit={jest.fn()}
         draft={true}
@@ -379,7 +384,7 @@ describe("UnitForm", () => {
 
     render(
       <UnitForm
-        jurisdiction="123"
+        {...defaultUnitFormProps}
         onClose={jest.fn()}
         onSubmit={jest.fn()}
         draft={false}
@@ -418,7 +423,7 @@ describe("UnitForm", () => {
 
     const { rerender } = render(
       <UnitForm
-        jurisdiction="123"
+        {...defaultUnitFormProps}
         onClose={onClose}
         onSubmit={onSubmit}
         draft={false}
@@ -435,7 +440,7 @@ describe("UnitForm", () => {
 
     rerender(
       <UnitForm
-        jurisdiction="123"
+        {...defaultUnitFormProps}
         onClose={onClose}
         onSubmit={onSubmit}
         draft={true}
