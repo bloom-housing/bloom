@@ -617,7 +617,7 @@ const PreferenceDrawer = ({
                   </Grid.Cell>
                 </Grid.Row>
                 <Grid.Row columns={3}>
-                  <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
+                  <FieldValue label={t("settings.preferenceExclusiveOption")} className="mb-1">
                     <FieldGroup
                       name="exclusiveQuestion"
                       type="radio"
