@@ -18,10 +18,12 @@ import {
   Inject,
   HttpException,
 } from '@nestjs/common';
+import { CronJobService } from './cron-job.service';
 import { EmailService } from './email.service';
 import { GeocodingService } from './geocoding.service';
 import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
+import { SnapshotCreateService } from './snapshot-create.service';
 import { Application } from '../dtos/applications/application.dto';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
@@ -39,17 +41,15 @@ import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
 import { ApplicationsFilterEnum } from '../enums/applications/filter-enum';
-import { CronJobService } from './cron-job.service';
 import { ApplicationViews } from '../enums/applications/view-enum';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { buildApplicationStatusChanges } from '../utilities/applicationStatusChanges';
 import { buildOrderByForApplications } from '../utilities/build-order-by';
 import { buildPaginationInfo } from '../utilities/build-pagination-meta';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { mapTo } from '../utilities/mapTo';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
-import { buildApplicationStatusChanges } from '../utilities/applicationStatusChanges';
-import { SnapshotCreateService } from './snapshot-create.service';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -1928,38 +1928,6 @@ export class ApplicationService {
       selectedOptions.push(selectedOptionBody);
     }
     // Create the application selection with nested createMany applicationSelectionOptions
-    // return await this.prisma.applicationSelections.create({
-    //   data: {
-    //     applicationId: applicationId,
-    //     hasOptedOut: selection.hasOptedOut ?? false,
-    //     multiselectQuestionId: selection.multiselectQuestion.id,
-    //     selections: {
-    //       create: selectedOptions,
-    //     },
-    //   },
-    //   include: {
-    //     multiselectQuestion: true,
-    //     selections: {
-    //       include: {
-    //         addressHolderAddress: {
-    //           select: {
-    //             id: true,
-    //             placeName: true,
-    //             city: true,
-    //             county: true,
-    //             state: true,
-    //             street: true,
-    //             street2: true,
-    //             zipCode: true,
-    //             latitude: true,
-    //             longitude: true,
-    //           },
-    //         },
-    //         multiselectOption: true,
-    //       },
-    //     },
-    //   },
-    // });
     return {
       data: {
         applicationId: applicationId,
