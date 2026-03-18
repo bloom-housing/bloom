@@ -60,10 +60,9 @@ const multiselectQuestionSection = (
               const question = multiselectQuestions.find(
                 (item) => item.multiselectQuestions.id === selection.multiselectQuestion.id
               )?.multiselectQuestions
-              selection.selections.map((selectionOption, nestedIndex) => {
-                alert(JSON.stringify(question.multiselectOptions))
+              return selection.selections.map((selectionOption, nestedIndex) => {
                 const option = question.multiselectOptions.find(
-                  (item) => item.id === selectionOption.id
+                  (item) => item.id === selectionOption.multiselectOption.id
                 )
                 const name = selectionOption.addressHolderName
                 const relationship = selectionOption.addressHolderRelationship
@@ -173,14 +172,6 @@ const FormSummaryDetails = ({
     }
   }
 
-  const selectionPreferences =
-    enableV2MSQ && !hidePreferences
-      ? getSelectionsForApplicationSection(
-          listing.listingMultiselectQuestions,
-          MultiselectQuestionsApplicationSectionEnum.preferences,
-          application.applicationSelections
-        )
-      : []
   const selectionPrograms =
     enableV2MSQ && !hidePrograms
       ? getSelectionsForApplicationSection(
@@ -189,7 +180,33 @@ const FormSummaryDetails = ({
           application.applicationSelections
         )
       : []
+  const selectionPreferences =
+    enableV2MSQ && !hidePreferences
+      ? getSelectionsForApplicationSection(
+          listing.listingMultiselectQuestions,
+          MultiselectQuestionsApplicationSectionEnum.preferences,
+          application.applicationSelections
+        )
+      : []
 
+  const hasPrograms =
+    enableV2MSQ &&
+    !hidePrograms &&
+    listing.listingMultiselectQuestions.some(
+      (question) =>
+        question?.multiselectQuestions?.applicationSection ===
+        MultiselectQuestionsApplicationSectionEnum.preferences
+    )
+  const hasPreferences =
+    enableV2MSQ &&
+    !hidePreferences &&
+    listing.listingMultiselectQuestions.some(
+      (question) =>
+        question?.multiselectQuestions?.applicationSection ===
+        MultiselectQuestionsApplicationSectionEnum.preferences
+    )
+
+  // TODO: we can remove this and several more functions once the V2 MSQ code is fully rolled out:
   const multiselectQuestionHelpTextV1 = (extraData?: AllExtraDataTypes[]) => {
     if (!extraData) return
     const helperText = extraData.reduce((acc, item) => {
@@ -611,8 +628,7 @@ const FormSummaryDetails = ({
           </FieldValue>
         </Card.Section>
 
-        {enableV2MSQ &&
-          selectionPrograms.length > 0 &&
+        {hasPrograms &&
           multiselectQuestionSection(
             listing.listingMultiselectQuestions,
             selectionPrograms,
@@ -692,8 +708,7 @@ const FormSummaryDetails = ({
           )}
         </Card.Section>
 
-        {enableV2MSQ &&
-          selectionPreferences.length > 0 &&
+        {hasPreferences &&
           multiselectQuestionSection(
             listing.listingMultiselectQuestions,
             selectionPreferences,

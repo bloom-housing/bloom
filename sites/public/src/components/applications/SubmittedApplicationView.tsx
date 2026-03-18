@@ -119,6 +119,10 @@ const SubmittedApplicationView = ({
             FeatureFlagEnum.swapCommunityTypeWithPrograms,
             listing?.jurisdictions.id
           )}
+          enableV2MSQ={doJurisdictionsHaveFeatureFlagOn(
+            FeatureFlagEnum.enableV2MSQ,
+            listing?.jurisdictions.id
+          )}
         />
         <Card.Section>
           <div className="hide-for-print">

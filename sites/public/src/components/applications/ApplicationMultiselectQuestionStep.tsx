@@ -106,7 +106,6 @@ const ApplicationMultiselectQuestionStep = ({
       ? mapApiToMultiselectForm(applicationQuestions, questions, applicationSection)
       : mapApiToMultiselectFormV1(applicationQuestions, questions, applicationSection),
   })
-  console.log("used form!")
 
   const [exclusiveKeys, setExclusiveKeys] = useState(
     getExclusiveKeys(question, applicationSection, enableV2MSQ)
