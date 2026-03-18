@@ -21,6 +21,7 @@ import { CreateS3UploadUrl } from '../dtos/assets/create-s3-upload-url.dto';
 import { AssetService } from '../services/asset.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { ApiKeyGuard } from '../guards/api-key.guard';
+import { CreateS3UploadMetadata } from '../dtos/assets/create-s3-upload-metadata.dto';
 
 @Controller('assets')
 @ApiTags('assets')
@@ -29,6 +30,7 @@ import { ApiKeyGuard } from '../guards/api-key.guard';
   CreatePresignedUploadMetadata,
   CreatePresignedUploadMetadataResponse,
   CreateS3UploadUrl,
+  CreateS3UploadMetadata,
 )
 @PermissionTypeDecorator('asset')
 @UseGuards(ApiKeyGuard, JwtAuthGuard, PermissionGuard)
@@ -55,7 +57,9 @@ export class AssetController {
     operationId: 'createS3UploadUrl',
   })
   @ApiOkResponse({ type: CreateS3UploadUrl })
-  async createS3UploadUrl(): Promise<CreateS3UploadUrl> {
-    return await this.assetService.createS3UploadUrl();
+  async createS3UploadUrl(
+    @Body() metadata: CreateS3UploadMetadata,
+  ): Promise<CreateS3UploadUrl> {
+    return await this.assetService.createS3UploadUrl(metadata);
   }
 }

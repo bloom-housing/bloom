@@ -26,10 +26,15 @@ const translations = (
               'Es posible que se comuniquen con usted mientras esté en la lista de espera para confirmar que desea permanecer en la lista.',
             waitlistPreference:
               'Las preferencias de vivienda, si corresponde, afectarán al orden de la lista de espera.',
+            waitlistContactAdvocate:
+              'Es posible que nos comuniquemos con su cliente mientras esté en la lista de espera para confirmar que desea permanecer en la lista de espera.',
           },
           interview:
             'Si se comunican con usted para una entrevista, se le pedirá que complete una solicitud más detallada y presente documentos de respaldo.',
+          interviewAdvocate:
+            'Si contactamos a su cliente para una entrevista, se le pedirá que complete una solicitud más detallada y proporcione documentos de respaldo.',
           whatHappensNext: '¿Qué sucede luego?',
+          questions: '¿Preguntas?',
           needToMakeUpdates: '¿Necesita hacer modificaciones?',
           applicationsClosed: 'Solicitud <br />cerrada',
           applicationsRanked: 'Solicitud <br />clasificada',
@@ -42,6 +47,8 @@ const translations = (
           propertyManager: 'Administrador de propiedades',
           contactAgentToUpdateInfo:
             'Si necesita modificar información en su solicitud, no haga una solicitud nueva. Comuníquese con el agente de este listado.',
+          contactAgentForQuestions:
+            'Si tiene preguntas sobre esta aplicación, comuníquese con el agente de este listado.',
         },
         lotteryAvailable: {
           header: 'Nuevos resultados de la lotería de vivienda disponibles',
@@ -413,6 +420,8 @@ const translations = (
               'Housing preferences, if applicable, will affect first come first serve order.',
             waitlistContact:
               'You may be contacted while on the waitlist to confirm that you wish to remain on the waitlist.',
+            waitlistContactAdvocate:
+              'Your client may be contacted while on the waitlist to confirm that they wish to remain on the waitlist.',
             lotteryPreference:
               'Housing preferences, if applicable, will affect lottery rank order.',
             waitlistPreference:
@@ -420,6 +429,8 @@ const translations = (
           },
           interview:
             'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents.',
+          interviewAdvocate:
+            'If your client is contacted for an interview, they will be asked to fill out a more detailed application and provide supporting documents.',
           whatToExpect: {
             FCFS: 'Applicants will be contacted by the property agent on a first come first serve basis until vacancies are filled.',
             lottery:
@@ -432,6 +443,7 @@ const translations = (
           shouldBeChosen:
             'Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.',
           whatHappensNext: 'What happens next?',
+          questions: 'Questions?',
           whatToExpectNext: 'What to expect next:',
           needToMakeUpdates: 'Need to make updates?',
           applicationsClosed: 'Application <br />closed',
@@ -453,12 +465,16 @@ const translations = (
           contactedForAnInterview:
             'If you are contacted for an interview, you will need to fill out a more detailed application and provide supporting documents.',
           gotYourConfirmationNumber: 'We got your application for',
+          gotYourConfirmationNumberOnYourBehalf:
+            'We received an application on your behalf for',
         },
         leasingAgent: {
           officeHours: 'Office Hours:',
           propertyManager: 'Property Manager',
           contactAgentToUpdateInfo:
             'If you need to update information on your application, do not apply again. Instead, contact the agent for this listing.',
+          contactAgentForQuestions:
+            'If you have questions regarding this application, please contact the agent for this listing.',
         },
         mfaCodeEmail: {
           message: 'Access code for your account has been requested.',

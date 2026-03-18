@@ -727,6 +727,7 @@ const detailView = {
       firstName: true,
       lastName: true,
       email: true,
+      isAdvocate: true,
     },
   },
 };
