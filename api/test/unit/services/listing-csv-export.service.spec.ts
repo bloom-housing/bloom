@@ -59,6 +59,7 @@ describe('Testing listing csv export service', () => {
     publicUrl: '',
     emailFromAddress: '',
     rentalAssistanceDefault: '',
+    referralSummaryDefault: '',
     whatToExpect: '',
     whatToExpectAdditionalText: '',
     whatToExpectUnderConstruction: '',

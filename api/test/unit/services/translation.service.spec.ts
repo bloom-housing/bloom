@@ -42,6 +42,7 @@ const mockListing = (): Listing => {
       publicUrl: '',
       emailFromAddress: '',
       rentalAssistanceDefault: '',
+      referralSummaryDefault: '',
       whatToExpect: '',
       whatToExpectAdditionalText: '',
     },

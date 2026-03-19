@@ -188,6 +188,7 @@ describe('Snapshot Create Controller Tests', () => {
         data: {
           name: 'createUserSnapshot juris 1',
           rentalAssistanceDefault: 'example rentalAssistanceDefault',
+          referralSummaryDefault: 'example referralSummaryDefault',
         },
         select: {
           id: true,
@@ -197,6 +198,7 @@ describe('Snapshot Create Controller Tests', () => {
         data: {
           name: 'createUserSnapshot juris 2',
           rentalAssistanceDefault: 'example rentalAssistanceDefault 2',
+          referralSummaryDefault: 'example referralSummaryDefault',
         },
         select: {
           id: true,
@@ -659,6 +661,7 @@ describe('Snapshot Create Controller Tests', () => {
         data: {
           name: 'createListingSnapshot juris',
           rentalAssistanceDefault: 'example rentalAssistanceDefault',
+          referralSummaryDefault: 'example referralSummaryDefault',
         },
         select: {
           id: true,
@@ -1738,6 +1741,7 @@ describe('Snapshot Create Controller Tests', () => {
         data: {
           name: 'createApplicationSnapshot juris 1',
           rentalAssistanceDefault: 'example rentalAssistanceDefault',
+          referralSummaryDefault: 'example referralSummaryDefault',
         },
         select: {
           id: true,
