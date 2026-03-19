@@ -22,6 +22,7 @@ const ApplicationView = () => {
     jurisdictionsService
       .retrieve({ jurisdictionId: listing.jurisdictions.id })
       .then((res) => setJurisdiction(res))
+      .catch((err) => console.error(`Error fetching jurisdiction: ${err}`))
   }, [listing, jurisdictionsService])
 
   useEffect(() => {
