@@ -42,6 +42,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
         keepAlive: true,
+        keepAliveInitialDelayMillis: 10000,
         ssl: process.env.DATABASE_URL?.includes('localhost')
           ? false
           : { rejectUnauthorized: false },
