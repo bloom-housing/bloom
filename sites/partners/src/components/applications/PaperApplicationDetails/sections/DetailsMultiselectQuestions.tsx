@@ -13,6 +13,7 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import {
   AddressCreate,
   ApplicationSelection,
+  ApplicationSelectionOption,
   InputType,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
@@ -59,15 +60,18 @@ const DetailsMultiselectQuestions = ({
     return <></>
   }
 
-  const questions = enableV2MSQ
-    ? getSelectionsForApplicationSection(
+  const questions =
+    (enableV2MSQ &&
+      getSelectionsForApplicationSection(
         listingQuestions || [],
         applicationSection,
         application.applicationSelections || []
-      )
-    : Array.isArray(application[applicationSection])
-    ? application[applicationSection]
-    : []
+      )) ||
+    []
+  const questionsV1 =
+    !enableV2MSQ && Array.isArray(application[applicationSection])
+      ? application[applicationSection]
+      : []
 
   return (
     <SectionWithGrid heading={title} inset>
@@ -79,75 +83,77 @@ const DetailsMultiselectQuestions = ({
             <Grid.Cell key={questionName}>
               <FieldValue key={questionName} label={questionName}>
                 {(() => {
-                  const appQuestion = questions?.find((question) =>
-                    enableV2MSQ
-                      ? question.multiselectQuestion.id === listingQuestion?.multiselectQuestions.id
-                      : question.key === listingQuestion?.multiselectQuestions.text
-                  )
-
                   if (enableV2MSQ) {
-                    if (!appQuestion) return t("t.none")
+                    const selection = questions.find(
+                      (question: ApplicationSelection) =>
+                        question.multiselectQuestion.id === listingQuestion?.multiselectQuestions.id
+                    )
+                    if (!selection) return t("t.none")
 
-                    const selection = appQuestion as ApplicationSelection
-                    return selection.selections.map((selectionOption) => {
-                      const option = selectionOption.multiselectOption
-                      const extra = []
-                      if (selectionOption.addressHolderAddress) {
-                        if (selectionOption.addressHolderName) {
+                    return selection.selections.map(
+                      (selectionOption: ApplicationSelectionOption) => {
+                        const option = selectionOption.multiselectOption
+                        const extra = []
+                        if (selectionOption.addressHolderAddress) {
+                          if (selectionOption.addressHolderName) {
+                            extra.push(
+                              <FieldValue
+                                className="my-8"
+                                key={`${selectionOption.id}.${AddressHolder.Name}`}
+                                label={t(`application.preferences.options.${AddressHolder.Name}`)}
+                              >
+                                {selectionOption.addressHolderName}
+                              </FieldValue>
+                            )
+                          }
+                          if (selectionOption.addressHolderRelationship) {
+                            extra.push(
+                              <FieldValue
+                                className="my-8"
+                                key={`${selectionOption.id}.${AddressHolder.Relationship}`}
+                                label={t(
+                                  `application.preferences.options.${AddressHolder.Relationship}`
+                                )}
+                              >
+                                {selectionOption.addressHolderRelationship}
+                              </FieldValue>
+                            )
+                          }
                           extra.push(
                             <FieldValue
-                              className="my-8"
-                              key={`${selectionOption.id}.${AddressHolder.Name}`}
-                              label={t(`application.preferences.options.${AddressHolder.Name}`)}
+                              key={`${selectionOption.id}.${AddressHolder.Address}`}
+                              className="field-label-semibold"
+                              label={t(`application.preferences.options.qualifyingAddress`, {
+                                county: listingDto?.listingsBuildingAddress.county,
+                              })}
                             >
-                              {selectionOption.addressHolderName}
+                              <Grid spacing="lg">
+                                <Grid.Row columns={3}>
+                                  <DetailsAddressColumns
+                                    type={AddressColsType.preferences}
+                                    addressObject={
+                                      selectionOption.addressHolderAddress as AddressCreate
+                                    }
+                                    small
+                                  />
+                                </Grid.Row>
+                              </Grid>
                             </FieldValue>
                           )
                         }
-                        if (selectionOption.addressHolderRelationship) {
-                          extra.push(
-                            <FieldValue
-                              className="my-8"
-                              key={`${selectionOption.id}.${AddressHolder.Relationship}`}
-                              label={t(
-                                `application.preferences.options.${AddressHolder.Relationship}`
-                              )}
-                            >
-                              {selectionOption.addressHolderRelationship}
-                            </FieldValue>
-                          )
-                        }
-                        extra.push(
-                          <FieldValue
-                            key={`${selectionOption.id}.${AddressHolder.Address}`}
-                            className="field-label-semibold"
-                            label={t(`application.preferences.options.qualifyingAddress`, {
-                              county: listingDto?.listingsBuildingAddress.county,
-                            })}
-                          >
-                            <Grid spacing="lg">
-                              <Grid.Row columns={3}>
-                                <DetailsAddressColumns
-                                  type={AddressColsType.preferences}
-                                  addressObject={
-                                    selectionOption.addressHolderAddress as AddressCreate
-                                  }
-                                  small
-                                />
-                              </Grid.Row>
-                            </Grid>
-                          </FieldValue>
+                        return (
+                          <div key={selectionOption.id}>
+                            <p>{option.name}</p>
+                            <>{extra}</>
+                          </div>
                         )
                       }
-                      return (
-                        <div key={selectionOption.id}>
-                          <p>{option.name}</p>
-                          <>{extra}</>
-                        </div>
-                      )
-                    })
+                    )
                   } else {
                     // TODO: remove this once V2 MSQ is rolled out
+                    const appQuestion = questionsV1.find(
+                      (question) => question.key === listingQuestion?.multiselectQuestions.text
+                    )
                     if (!appQuestion?.claimed) return t("t.none")
 
                     const options = appQuestion?.options?.filter((option) => option.checked)
