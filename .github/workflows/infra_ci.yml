@@ -28,7 +28,7 @@ jobs:
                -v ./infra:/infra \
                --workdir /infra \
                --entrypoint tofu \
-               ghcr.io/${{ github.repository }}/infra-dev:gitbranch-main-latest \
+               ghcr.io/${{ github.repository }}/infra-dev \
                fmt -check -diff -recursive
           then
             echo 'ERROR: not all tofu files are correctly formatted'

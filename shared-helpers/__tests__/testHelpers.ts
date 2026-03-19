@@ -109,7 +109,7 @@ export const multiselectQuestionPreferenceV2: MultiselectQuestion = {
     },
     {
       name: "Work in County",
-      ordinal: 1,
+      ordinal: 2,
       collectAddress: false,
       text: "Example text",
       id: "id",

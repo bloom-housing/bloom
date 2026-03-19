@@ -10,8 +10,12 @@ export class UserCreateParams {
     example: true,
   })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: TransformFnParams) => value?.value === 'true', {
-    toClassOnly: true,
-  })
+  @Transform(
+    (value: TransformFnParams) =>
+      value?.value === undefined ? undefined : value?.value === 'true',
+    {
+      toClassOnly: true,
+    },
+  )
   noWelcomeEmail?: boolean;
 }

@@ -164,6 +164,8 @@ interface FileUploaderParams {
   file: File
   setFileUploadData: (data: SetStateAction<{ id: string; url: string }>) => void
   setProgressValue: (value: SetStateAction<number>) => void
+  contentType?: string
+  contentDisposition?: string
 }
 
 /**
@@ -175,6 +177,8 @@ export const fileUploader = async ({
   file,
   setFileUploadData,
   setProgressValue,
+  contentType,
+  contentDisposition,
 }: FileUploaderParams) => {
   const onUploadProgress = (p: AxiosProgressEvent) => {
     setProgressValue(parseInt(((p.loaded / p.total) * 100).toFixed(0), 10))
@@ -184,7 +188,12 @@ export const fileUploader = async ({
   setProgressValue(1)
 
   if (process.env.useS3FileStorage === "TRUE") {
-    const resp = await assetsService.createS3UploadUrl()
+    const resp = await assetsService.createS3UploadUrl({
+      body: {
+        contentType: contentType || "",
+        contentDisposition: contentDisposition || "",
+      },
+    })
     const { uploadUrl, publicUrl } = resp
     setProgressValue(3)
 
@@ -192,6 +201,8 @@ export const fileUploader = async ({
       file,
       uploadUrl,
       onUploadProgress,
+      contentType,
+      contentDisposition,
     }).then((_) => {
       setProgressValue(100)
       setFileUploadData({
@@ -281,14 +292,26 @@ interface S3UploadProps {
   file: File
   uploadUrl: string
   onUploadProgress: (progress: AxiosProgressEvent) => void
+  contentType: string
+  contentDisposition: string
 }
 
-export const S3Upload = async ({ file, uploadUrl, onUploadProgress }: S3UploadProps) => {
+export const S3Upload = async ({
+  file,
+  uploadUrl,
+  onUploadProgress,
+  contentType,
+  contentDisposition,
+}: S3UploadProps) => {
   await axios.request({
     method: "put",
     url: uploadUrl,
     data: file,
     onUploadProgress: onUploadProgress,
+    headers: {
+      "Content-Type": contentType || "",
+      "Content-Disposition": contentDisposition || "",
+    },
   })
 }
 

@@ -15,7 +15,7 @@ container with `docker container run` or `podman container run`. The infra-dev c
 include the infra source code in its root filesystem - clone the Bloom repo on your host and give
 the container access through volume mounts:
 
-1. `-v ./infra:/infra:z` makes the infra directory available to the container.
+1. `-v ./infra:/bloom/infra:z` makes the infra directory available to the container.
 2. `-v "${HOME}/.aws/cli":/home/.aws/cli:z` makes the AWS cli directory available to the
    container. This is required for successful use of aws CLI calls in local-exec resource
    provisioners.
@@ -53,7 +53,7 @@ All together:
 ```bash
 docker container run --rm -it \
 --user "$(id -u):$(id -g)" \
--v ./infra:/infra:z \
+-v ./infra:/bloom/infra:z \
 -v "${HOME}/.aws/cli":/home/.aws/cli:z \
 -v "${HOME}/.aws/sso/cache":/home/.aws/sso/cache:z \
 ghcr.io/bloom-housing/bloom/infra-dev \
@@ -63,7 +63,7 @@ ghcr.io/bloom-housing/bloom/infra-dev \
 You may find it convenient to add an alias. From the root of the Bloom repo:
 
 ```bash
-alias bloomtofu="docker container run --rm -it --user $(id -u):$(id -g) -v ${PWD}/infra:/infra:z -v ${HOME}/.aws/cli:/home/.aws/cli:z -v ${HOME}/.aws/sso/cache:/home/.aws/sso/cache:z ghcr.io/bloom-housing/bloom/infra-dev"
+alias bloomtofu="docker container run --rm -it --user $(id -u):$(id -g) -v ${PWD}/infra:/bloom/infra:z -v ${HOME}/.aws/cli:/home/.aws/cli:z -v ${HOME}/.aws/sso/cache:/home/.aws/sso/cache:z ghcr.io/bloom-housing/bloom/infra-dev"
 
 bloomtofu -ss -si bloom_dev apply
 ```
