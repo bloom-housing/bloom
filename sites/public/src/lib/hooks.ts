@@ -369,15 +369,13 @@ export async function fetchAgencies(req: any, jurisdictionId: string) {
       headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
     }
 
-    const params: {
-      filter: AgencyFilterParams[]
-    } = {
+    const params = {
       filter: [
         {
-          $comparison: EnumAgencyFilterParamsComparison["="],
           jurisdiction: jurisdictionId && jurisdictionId !== "" ? jurisdictionId : undefined,
         },
       ],
+      limit: "all",
     }
 
     const paramsString = qs.stringify(params)
