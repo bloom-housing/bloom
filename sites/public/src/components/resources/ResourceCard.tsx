@@ -11,7 +11,7 @@ const ResourceCard = ({ title, href, content }: ResourceCardProps) => {
   return (
     <Card className={styles["resource-card"]}>
       {href ? (
-        <Link href={href} className={styles["resource-card-title"]}>
+        <Link href={href} className={styles["resource-card-title"]} hideExternalLinkIcon>
           {title}
         </Link>
       ) : (
