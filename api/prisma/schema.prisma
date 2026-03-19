@@ -503,10 +503,6 @@ model ApplicationSnapshot {
   householdMember              HouseholdMemberSnapshot[]
   preferredUnitTypes           UnitTypes[]
 
-  @@unique([listingId, confirmationCode])
-  @@index([listingId])
-  @@index([userId])
-  @@index([isNewest])
   @@map("application_snapshot")
 }
 

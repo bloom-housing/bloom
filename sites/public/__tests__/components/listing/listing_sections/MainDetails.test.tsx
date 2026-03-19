@@ -31,9 +31,23 @@ describe("<MainDetails>", () => {
           ...listing,
           reviewOrderType: ReviewOrderTypeEnum.lottery,
           reservedCommunityTypes: null,
-          listingFeatures: { id: "1", createdAt: new Date(), updatedAt: new Date() },
+          listingFeatures: { id: "1" },
         }}
-        jurisdiction={jurisdiction}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            ...jurisdiction.featureFlags,
+            {
+              name: FeatureFlagEnum.disableAccessibilityFeaturesTag,
+              id: "id_2",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
       />
     )
     expect(screen.queryByTestId("listing-tags")).toBeNull()
@@ -95,7 +109,7 @@ describe("<MainDetails>", () => {
           featureFlags: [
             ...jurisdiction.featureFlags,
             {
-              name: FeatureFlagEnum.enableAccessibilityFeatures,
+              name: FeatureFlagEnum.enableUnitAccessibilityTypeTags,
               id: "id",
               createdAt: new Date(),
               updatedAt: new Date(),
@@ -133,5 +147,36 @@ describe("<MainDetails>", () => {
     expect(screen.queryByText("Mobility units")).toBeNull()
     expect(screen.queryByText("Hearing and vision units")).toBeNull()
     expect(screen.queryByText("Mobility, hearing and vision units")).toBeNull()
+  })
+
+  it("hides accessibility features tag when disableAccessibilityFeaturesTag is enabled", () => {
+    render(
+      <MainDetails
+        listing={{
+          ...listing,
+          listingFeatures: {
+            ...listing.listingFeatures,
+            hearing: true,
+          },
+        }}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            ...jurisdiction.featureFlags,
+            {
+              name: FeatureFlagEnum.disableAccessibilityFeaturesTag,
+              id: "id_2",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
+    )
+
+    expect(screen.queryByText("Accessibility features")).toBeNull()
   })
 })

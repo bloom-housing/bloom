@@ -209,7 +209,7 @@ const MultiselectQuestionViewDrawer = ({
                   </Grid.Row>
                 )}
                 <Grid.Row>
-                  <FieldValue label={t("settings.preferenceOptOut")}>
+                  <FieldValue label={t("settings.preferenceOptOutOption")}>
                     {optionData?.isOptOut ? t("t.yes") : t("t.no")}
                   </FieldValue>
                   <FieldValue label={t("settings.preferenceCollectAddress")}>

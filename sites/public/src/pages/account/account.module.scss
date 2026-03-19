@@ -21,3 +21,8 @@
     padding-block: var(--seeds-spacer-container);
   }
 }
+
+.card-content {
+  color: var(--seeds-text-color);
+  font-size: var(--seeds-font-size-base);
+}

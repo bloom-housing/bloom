@@ -48,14 +48,13 @@ export const buildPaginationMetaInfo = (
     isPaginated && params.limit !== 'all' ? params.limit : recordArrayLength;
   const totalItems = isPaginated ? count : recordArrayLength;
 
+  const divisor = itemsPerPage || totalItems || 1;
   const paginationInfo = {
     currentPage: isPaginated ? params.page : 1,
     itemCount: recordArrayLength,
     itemsPerPage: itemsPerPage,
     totalItems: totalItems,
-    totalPages: Math.ceil(
-      totalItems / (itemsPerPage ? itemsPerPage : totalItems),
-    ),
+    totalPages: totalItems === 0 ? 0 : Math.ceil(totalItems / divisor),
   };
 
   return paginationInfo;

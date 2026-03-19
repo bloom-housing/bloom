@@ -911,6 +911,8 @@ describe('User Controller Tests', () => {
       expect(applicationsOnUser.applications.map((app) => app.id)).toContain(
         application.id,
       );
+      expect(emailService.welcome).not.toHaveBeenCalled();
+      expect(emailService.advocateAccepted).not.toHaveBeenCalled();
     });
   });
 
@@ -1405,7 +1407,7 @@ describe('User Controller Tests', () => {
         where: { id: advocateUser.id },
       });
 
-      expect(updatedUser.isApproved).toBe(false);
+      expect(updatedUser).toBe(null);
       expect(mockRejectedEmail.mock.calls.length).toBe(1);
     });
   });

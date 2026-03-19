@@ -2,14 +2,14 @@
 # Tofu modules. It is meant to be used for interactive development of the tofu source code. To use:
 #
 # 1. Clone the Bloom repo onto their host machine.
-# 2. Run this container, mounting the Bloom infra directory to /infra inside the container
+# 2. Run this container, mounting the Bloom infra directory to /bloom/infra inside the container
 # filesystem. For example, if your shell is in the root of the Bloom git repo on your host:
 #
 #    If using docker:
-#    `docker container run --rm -it --user "$(id -u):$(id -g)" -v ./infra:/infra:z -v "${HOME}/.aws/sso/cache":/home/.aws/sso/cache:z <this_image_name> ...`
+#    `docker container run --rm -it --user "$(id -u):$(id -g)" -v ./infra:/bloom/infra:z -v "${HOME}/.aws/sso/cache":/home/.aws/sso/cache:z <this_image_name> ...`
 #
 #    If using podman:
-#    `podman container run --rm -it --userns=keep-id -v ./infra:/infra:z -v "${HOME}/.aws/sso/cache":/home/.aws/sso/cache:z <this_image_name> ...`
+#    `podman container run --rm -it --userns=keep-id -v ./infra:/bloom/infra:z -v "${HOME}/.aws/sso/cache":/home/.aws/sso/cache:z <this_image_name> ...`
 
 # Get OpenTofu binary following https://opentofu.org/docs/intro/install/docker/#method-1-using-a-multi-stage-build
 #
@@ -39,6 +39,7 @@ COPY --from=opentofu /usr/local/bin/tofu /usr/local/bin/tofu
 
 # Install other required binaries.
 RUN <<EOF
+set -e
 dnf update -y
 dnf install -y shadow-utils # make groupadd and useradd available.
 dnf install -y openssl
@@ -50,14 +51,15 @@ EOF
 # Setup a home directory inside the container and a directory for the git repo on the host to be
 # mounted on.
 RUN <<EOF
-mkdir /infra
+set -e
+mkdir --parents /bloom/infra
 mkdir --parents /home/.aws
-ln --symbolic /infra/aws_sso_config /home/.aws/config
+ln --symbolic /bloom/infra/aws_sso_config /home/.aws/config
 EOF
 ENV HOME=/home
 
 # To help users disambiguate their shell if they run this container with `--entrypoint /bin/bash`.
 ENV PS1='bloom-infra-dev-container$ '
 
-WORKDIR /infra
-ENTRYPOINT [ "python3", "/infra/docker-entrypoint.py" ]
+WORKDIR /bloom/infra
+ENTRYPOINT [ "python3", "/bloom/infra/docker-entrypoint.py" ]

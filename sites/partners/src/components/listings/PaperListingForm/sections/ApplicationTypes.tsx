@@ -189,7 +189,13 @@ const ApplicationTypes = ({
     Pass the file for the dropzone callback along to the uploader
   */
   const pdfUploader = async (file: File) => {
-    void (await fileUploader({ file, setFileUploadData, setProgressValue }))
+    void (await fileUploader({
+      file,
+      setFileUploadData,
+      setProgressValue,
+      contentType: "application/pdf",
+      contentDisposition: "inline",
+    }))
   }
 
   /*
