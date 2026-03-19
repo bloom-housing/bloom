@@ -372,6 +372,7 @@ export async function fetchAgencies(req: any, jurisdictionId: string) {
     const params = {
       filter: [
         {
+          $comparison: EnumAgencyFilterParamsComparison["="],
           jurisdiction: jurisdictionId && jurisdictionId !== "" ? jurisdictionId : undefined,
         },
       ],
