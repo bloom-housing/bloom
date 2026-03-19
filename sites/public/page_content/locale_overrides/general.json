@@ -1,5 +1,6 @@
 {
   "advocateAccount.agencyNotListed": "Contact support if your agency is not listed",
+  "advocateAccount.resendLinkSuccess": "If there is an approved advocate account with that email, you'll receive an email with a new link to confirm your account. Be aware, the link will expire in 24 hours. If you do not receive an email, you may not have an account under that email and would need to request one. If you have any questions in the meantime, please reach out to lahd.achp@lacity.org",
   "application.financial.income.instruction2": "You only need to provide an estimated total right now. If you're selected to move forward in the selection process, you will be asked to provide proof of household income, and the property will verify your income. Please refer to the property listing or contact the property directly for more information about income documentation that will be required to determine your eligibility.",
   "application.referralApplication.instructions": "The permanent supportive housing units are referred directly through Bloomington's Coordinated Entry System. Households experiencing homelessness can call 123-456-7890 in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information.",
   "application.referralApplication.phoneNumber": "211",

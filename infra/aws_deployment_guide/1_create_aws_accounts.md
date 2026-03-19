@@ -66,7 +66,7 @@ graph TB
 ## Before these steps
 
 1. Have an AWS organization that has an IAM Identity Center instance in the organization management
-   account.
+   account. **Note the organization management account number**.
 
 ## Steps
 

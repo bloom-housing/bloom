@@ -267,12 +267,16 @@ const MultiselectQuestionEditDrawer = ({
       newStatus = MultiselectQuestionsStatusEnum.draft
     }
 
+    const selectedJurisdiction = profile.jurisdictions.find(
+      (juris) => juris.id === formValues.jurisdictionId
+    )
+
     const formattedQuestionData: MultiselectQuestionUpdate | MultiselectQuestionCreate = {
       applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
       description: formValues.description.trim(),
       hideFromListing: formValues.showOnListingQuestion === YesNoEnum.no,
       jurisdictions: [], // TODO: remove this when V2 schema is default
-      jurisdiction: profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
+      jurisdiction: { id: selectedJurisdiction?.id, name: selectedJurisdiction?.name },
       links: formValues.preferenceUrl
         ? [{ title: formValues.preferenceLinkTitle.trim(), url: formValues.preferenceUrl.trim() }]
         : [],
@@ -292,7 +296,7 @@ const MultiselectQuestionEditDrawer = ({
 
   const toggleVisibility = () => {
     void saveMultiselectQuestion(
-      !questionData || questionData?.status === MultiselectQuestionsStatusEnum.draft
+      !questionData?.status || questionData?.status === MultiselectQuestionsStatusEnum.draft
     )
   }
 
@@ -496,32 +500,31 @@ const MultiselectQuestionEditDrawer = ({
 
               <Grid>
                 <Grid.Row columns={3}>
-                  <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
-                    <FieldGroup
-                      name="exclusiveQuestion"
-                      type="radio"
-                      register={register}
-                      fields={[
-                        {
-                          id: "multiselect",
-                          label: t("settings.preferenceMultiSelect"),
-                          value: "multiselect",
-                          defaultChecked: !questionData?.isExclusive,
-                          dataTestId: "exclusive-question-multiselect",
-                        },
-                        {
-                          id: "exclusive",
-                          label: t("settings.preferenceExclusive"),
-                          value: "exclusive",
-                          defaultChecked: questionData?.isExclusive,
-                          dataTestId: "exclusive-question-exclusive",
-                        },
-                      ]}
-                      fieldClassName="m-0"
-                      fieldGroupClassName="flex h-12 items-center"
-                      dataTestId={"preference-exclusive-question"}
-                    />
-                  </FieldValue>
+                  <FieldGroup
+                    name="exclusiveQuestion"
+                    type="radio"
+                    register={register}
+                    fields={[
+                      {
+                        id: "multiselect",
+                        label: t("settings.preferenceMultiSelect"),
+                        value: "multiselect",
+                        defaultChecked: !questionData?.isExclusive,
+                        dataTestId: "exclusive-question-multiselect",
+                      },
+                      {
+                        id: "exclusive",
+                        label: t("settings.preferenceExclusive"),
+                        value: "exclusive",
+                        defaultChecked: questionData?.isExclusive,
+                        dataTestId: "exclusive-question-exclusive",
+                      },
+                    ]}
+                    fieldClassName="m-0"
+                    fieldGroupClassName="flex h-12 items-center"
+                    dataTestId={"preference-exclusive-question"}
+                    groupLabel={t("settings.preferenceExclusiveQuestion")}
+                  />
                 </Grid.Row>
                 <Grid.Row columns={3}>
                   <Grid.Cell>
@@ -602,7 +605,7 @@ const MultiselectQuestionEditDrawer = ({
             {t("t.save")}
           </Button>
           <Button type="button" variant="primary-outlined" onClick={toggleVisibility}>
-            {!questionData || questionData?.status === MultiselectQuestionsStatusEnum.draft
+            {!questionData?.status || questionData?.status === MultiselectQuestionsStatusEnum.draft
               ? t("settings.preferenceShowToPartners")
               : t("settings.preferenceHideFromPartners")}
           </Button>
@@ -736,7 +739,7 @@ const MultiselectQuestionEditDrawer = ({
                         name="canYouOptOut"
                         type="radio"
                         register={register}
-                        groupLabel={t("settings.preferenceOptOut")}
+                        groupLabel={t("settings.preferenceOptOutOption")}
                         fields={[
                           {
                             id: "optOutYes",

@@ -4,10 +4,12 @@ import {
   PutObjectCommand,
   GetObjectCommand,
   S3Client,
+  PutObjectCommandInput,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Upload } from '@aws-sdk/lib-storage';
 import { createReadStream } from 'fs';
+import { CreateS3UploadMetadata } from '../dtos/assets/create-s3-upload-metadata.dto';
 
 @Injectable()
 export class S3Service {
@@ -82,11 +84,24 @@ export class S3Service {
     });
   }
 
-  async uploadURLForPublic(key: string): Promise<string> {
-    const command = new PutObjectCommand({
+  async uploadURLForPublic(
+    key: string,
+    metadata: CreateS3UploadMetadata,
+  ): Promise<string> {
+    const input: PutObjectCommandInput = {
       Bucket: this.publicBucket,
       Key: key,
-    });
+    };
+
+    if (metadata.contentDisposition) {
+      input.ContentDisposition = metadata.contentDisposition;
+    }
+    if (metadata.contentType) {
+      input.ContentType = metadata.contentType;
+    }
+
+    const command = new PutObjectCommand(input);
+
     return getSignedUrl(this.s3Client, command);
   }
 
