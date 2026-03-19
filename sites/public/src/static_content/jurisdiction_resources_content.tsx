@@ -70,7 +70,7 @@ export const getJurisdictionResourcesContent = (): ResourceCards | null => {
               { text: "(213) 680-0600", href: "tel:+12136800600" },
               "Lorena Sanchez",
               {
-                text: "LorenaS@DowntowdddddddnWomensCenter.org",
+                text: "LorenaS@DowntownWomensCenter.org",
                 href: "mailto:LorenaS@DowntownWomensCenter.org",
               },
             ]
