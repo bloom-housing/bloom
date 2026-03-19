@@ -462,7 +462,19 @@ Cypress.Commands.add("step11Student", (application, programsExist, autofill) => 
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
-  cy.isNextRouteValid("householdStudent", !programsExist ? 1 : 0)
+  cy.isNextRouteValid("householdStudent")
+})
+
+Cypress.Commands.add("step11bReasonableAccommodations", (application, programsExist, autofill) => {
+  if (!autofill && application.reasonableAccommodations) {
+    cy.getByTestId("app-reasonable-accommodations").type(application.reasonableAccommodations)
+  }
+
+  cy.getByTestId("app-reasonable-accommodations").should("exist")
+  cy.goNext()
+  cy.checkErrorAlert("not.exist")
+  cy.checkErrorMessages("not.exist")
+  cy.isNextRouteValid("reasonableAccommodations", !programsExist ? 1 : 0)
 })
 
 Cypress.Commands.add("step12Programs", (application) => {
@@ -650,6 +662,10 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
       fieldValue: application.householdStudent ? "Yes" : "No",
     },
     {
+      id: "app-summary-reasonable-accommodations",
+      fieldValue: application.reasonableAccommodations,
+    },
+    {
       id: "app-summary-income-vouchers",
       fieldValue: application.incomeVouchers ? "Yes" : "No",
     },
@@ -812,7 +828,8 @@ Cypress.Commands.add(
       const programsExist = listingQuestionSectionExists("programs")
       const preferencesExist = listingQuestionSectionExists("preferences")
 
-      cy.step11Student(application, programsExist, autofill)
+      cy.step11Student(application, autofill)
+      cy.step11bReasonableAccommodations(application, programsExist, autofill)
 
       if (programsExist) {
         cy.step12Programs(application)

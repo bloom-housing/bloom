@@ -394,6 +394,7 @@ model Applications {
   householdExpectingChanges      Boolean?                      @map("household_expecting_changes")
   householdSize                  Int?                          @map("household_size")
   householdStudent               Boolean?                      @map("household_student")
+  reasonableAccommodations       String?                       @map("reasonable_accommodations")
   housingStatus                  String?                       @map("housing_status")
   income                         String?
   incomePeriod                   IncomePeriodEnum?             @map("income_period")
@@ -468,6 +469,7 @@ model ApplicationSnapshot {
   householdExpectingChanges      Boolean?                      @map("household_expecting_changes")
   householdSize                  Int?                          @map("household_size")
   householdStudent               Boolean?                      @map("household_student")
+  reasonableAccommodations       String?                       @map("reasonable_accommodations")
   housingStatus                  String?                       @map("housing_status")
   income                         String?
   incomePeriod                   IncomePeriodEnum?             @map("income_period")

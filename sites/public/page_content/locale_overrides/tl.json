@@ -14,5 +14,7 @@
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "resources.contactEmail": "bloomington@housing.org",
   "resources.contactInfo": "Kagawaran ng Pabahay at Pagpapaunlad ng Komunidad ng Bloomington",
-  "resources.housingProgramsTitle": "Mga programa sa pabahay ng Bloomington para sa Pabahay at Pagpapaunlad ng Komunidad"
+  "resources.housingProgramsTitle": "Mga programa sa pabahay ng Bloomington para sa Pabahay at Pagpapaunlad ng Komunidad",
+  "application.household.reasonableAccommodations.question": "Kailangan mo ba ng Makatwirang Akomodasyon? Kung oo, pakitukoy lamang.",
+  "pageTitle.reasonableAccommodations": "Makatwirang akomodasyon"
 }

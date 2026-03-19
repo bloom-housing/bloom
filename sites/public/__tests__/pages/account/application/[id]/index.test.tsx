@@ -279,6 +279,21 @@ describe("Account Listing View", () => {
     ).toBeInTheDocument()
     expect(within(householdStudentSection).getByText(/no/i)).toBeInTheDocument()
 
+    const reasonableAccommodationsSection = screen.getByTestId(
+      "app-summary-reasonable-accommodations"
+    )
+    expect(reasonableAccommodationsSection).toBeInTheDocument()
+    expect(
+      within(reasonableAccommodationsSection).getByText(
+        /do you require reasonable accommodations\? if so, please specify\./i
+      )
+    ).toBeInTheDocument()
+    expect(
+      within(reasonableAccommodationsSection).getByText(
+        /wheelchair-accessible unit entrance requested/i
+      )
+    ).toBeInTheDocument()
+
     // --------------------------- Programs ------------------------------------
 
     expect(screen.getByRole("heading", { level: 3, name: /programs/i })).toBeInTheDocument()

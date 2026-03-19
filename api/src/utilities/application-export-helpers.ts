@@ -333,6 +333,10 @@ export const getExportHeaders = (
           : 'Household Includes Student or Member Nearing 18',
       },
       {
+        path: 'reasonableAccommodations',
+        label: 'Reasonable Accommodations',
+      },
+      {
         path: 'incomeVouchers',
         label: 'Vouchers or Subsidies',
       },

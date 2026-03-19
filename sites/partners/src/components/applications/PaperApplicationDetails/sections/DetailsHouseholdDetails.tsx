@@ -88,6 +88,17 @@ const DetailsHouseholdDetails = ({
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>
+      <Grid.Row>
+        <Grid.Cell>
+          <FieldValue
+            id="reasonableAccommodations"
+            label={t("application.household.reasonableAccommodations.question")}
+            testId="reasonableAccommodations"
+          >
+            {application.reasonableAccommodations || t("t.n/a")}
+          </FieldValue>
+        </Grid.Cell>
+      </Grid.Row>
     </SectionWithGrid>
   )
 }

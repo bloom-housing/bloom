@@ -194,6 +194,7 @@ export const application: Application = {
   sendMailToMailingAddress: true,
   householdExpectingChanges: true,
   householdStudent: false,
+  reasonableAccommodations: "Wheelchair-accessible unit entrance requested",
   incomeVouchers: true,
   income: "40000.00",
   incomePeriod: IncomePeriodEnum.perYear,

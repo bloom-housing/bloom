@@ -14,5 +14,7 @@
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut Labore et dolore magna aliqua.",
   "resources.contactEmail": "bloomington@housing.org",
   "resources.contactInfo": "블루밍턴 시 주택 및 지역사회 개발부",
-  "resources.housingProgramsTitle": "블루밍턴 주택 및 지역사회 개발부의 주택 프로그램"
+  "resources.housingProgramsTitle": "블루밍턴 주택 및 지역사회 개발부의 주택 프로그램",
+  "application.household.reasonableAccommodations.question": "합리적인 편의 제공이 필요하신가요? 필요하시다면 구체적으로 명시해 주세요.",
+  "pageTitle.reasonableAccommodations": "합리적인 편의 제공"
 }

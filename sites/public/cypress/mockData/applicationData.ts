@@ -118,6 +118,7 @@ export const ElmVillageApplication: Application = {
   sendMailToMailingAddress: true,
   householdExpectingChanges: true,
   householdStudent: true,
+  reasonableAccommodations: "Need a roll-in shower.",
   applicationsMailingAddress: {
     ...idDefaults,
     street: "Mailing Street",
@@ -300,6 +301,10 @@ export const applicationStepOrder = [
   { name: "adaHouseholdMembers", route: "/applications/household/ada" },
   { name: "householdExpectingChanges", route: "/applications/household/changes" },
   { name: "householdStudent", route: "/applications/household/student" },
+  {
+    name: "reasonableAccommodations",
+    route: "/applications/household/reasonable-accommodations",
+  },
   { name: "programs", route: "/applications/programs/programs" },
   { name: "vouchersSubsidies", route: "/applications/financial/vouchers" },
   { name: "income", route: "/applications/financial/income" },

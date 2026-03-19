@@ -98,6 +98,9 @@ export default class ApplicationConductor {
     householdStudent: {
       url: "/applications/household/student",
     },
+    reasonableAccommodations: {
+      url: "/applications/household/reasonable-accommodations",
+    },
     programs: {
       url: "/applications/programs/programs",
       definition: ProgramsStep,

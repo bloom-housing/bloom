@@ -14,5 +14,7 @@
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut Labore et dolore magna aliqua.",
   "resources.contactEmail": "bloomington@housing.org",
   "resources.contactInfo": "إدارة الإسكان والتنمية المجتمعية في بلومنجتون",
-  "resources.housingProgramsTitle": "برامج الإسكان التابعة لإدارة الإسكان والتنمية المجتمعية في بلومنجتون"
+  "resources.housingProgramsTitle": "برامج الإسكان التابعة لإدارة الإسكان والتنمية المجتمعية في بلومنجتون",
+  "application.household.reasonableAccommodations.question": "هل تحتاج إلى تسهيلات معقولة؟ إذا كان الأمر كذلك، يرجى التحديد.",
+  "pageTitle.reasonableAccommodations": "التسهيلات المعقولة"
 }

@@ -14,5 +14,7 @@
   "resources.contactDescription": "Lorem ipsum dolor sit amet، consectetur adipiscing elit، sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "resources.contactEmail": "bloomington@housing.org",
   "resources.contactInfo": "اداره مسکن و توسعه اجتماعی بلومینگتون",
-  "resources.housingProgramsTitle": "برنامه‌های مسکن و توسعه اجتماعی بلومینگتون"
+  "resources.housingProgramsTitle": "برنامه‌های مسکن و توسعه اجتماعی بلومینگتون",
+  "application.household.reasonableAccommodations.question": "آیا به امکانات رفاهی معقول نیاز دارید؟ در این صورت، لطفاً مشخص کنید.",
+  "pageTitle.reasonableAccommodations": "امکانات رفاهی معقول"
 }

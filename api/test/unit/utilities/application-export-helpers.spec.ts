@@ -244,6 +244,10 @@ describe('Testing application export helpers', () => {
       label: 'Household Includes Student or Member Nearing 18',
     },
     {
+      path: 'reasonableAccommodations',
+      label: 'Reasonable Accommodations',
+    },
+    {
       path: 'incomeVouchers',
       label: 'Vouchers or Subsidies',
     },

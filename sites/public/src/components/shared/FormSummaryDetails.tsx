@@ -513,6 +513,14 @@ const FormSummaryDetails = ({
           >
             {application.householdStudent ? t("t.yes") : t("t.no")}
           </FieldValue>
+          <FieldValue
+            testId={"app-summary-reasonable-accommodations"}
+            id="reasonableAccommodations"
+            label={t("application.household.reasonableAccommodations.question")}
+            className={styles["summary-value"]}
+          >
+            {application.reasonableAccommodations || t("t.n/a")}
+          </FieldValue>
         </Card.Section>
 
         {!hidePrograms &&

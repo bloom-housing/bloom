@@ -14,5 +14,7 @@
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labe et dolore magna aliqua.",
   "resources.contactEmail": "bloomington@housing.org",
   "resources.contactInfo": "Sở Phát triển Nhà ở và Cộng đồng của Bloomington",
-  "resources.housingProgramsTitle": "Các chương trình nhà ở của Sở Nhà ở và Phát triển Cộng đồng Bloomington"
+  "resources.housingProgramsTitle": "Các chương trình nhà ở của Sở Nhà ở và Phát triển Cộng đồng Bloomington",
+  "application.household.reasonableAccommodations.question": "Bạn có cần hỗ trợ đặc biệt nào không? Nếu có, vui lòng nêu rõ.",
+  "pageTitle.reasonableAccommodations": "Sự hỗ trợ hợp lý"
 }

@@ -234,6 +234,13 @@ Cypress.Commands.add("fillHouseholdMember", (application, fieldsToSkip = []) => 
 })
 
 Cypress.Commands.add("fillHouseholdDetails", (application, fieldsToSkip = []) => {
+  const fieldsToType = [
+    {
+      id: "application.reasonableAccommodations",
+      fieldKey: "reasonableAccommodations",
+    },
+  ]
+
   const fieldsToClick = [
     {
       id: "application.householdExpectingChanges",
@@ -244,7 +251,7 @@ Cypress.Commands.add("fillHouseholdDetails", (application, fieldsToSkip = []) =>
       fieldKey: `application.householdStudent${application["householdStudent"]}`,
     },
   ]
-  fillFields(application, [], [], fieldsToClick, fieldsToSkip)
+  fillFields(application, fieldsToType, [], fieldsToClick, fieldsToSkip)
   cy.getByTestId(`preferredUnit.${application["preferredUnit"]}`).click()
 })
 
@@ -299,7 +306,9 @@ Cypress.Commands.add("fillTerms", (application, submit) => {
 })
 
 const verifyHelper = (application, listOfFields, fieldsToSkip) => {
-  const fields = listOfFields.filter(({ id }) => !fieldsToSkip.includes(id))
+  const fields = listOfFields.filter(
+    ({ id, fieldKey }) => !fieldsToSkip.includes(id) && application[fieldKey] !== undefined
+  )
   fields.forEach(({ id, fieldKey }) => {
     cy.getByTestId(id).contains(application[fieldKey]).should("have.text", application[fieldKey])
   })
@@ -387,6 +396,7 @@ Cypress.Commands.add("verifyHouseholdDetails", (application, fieldsToSkip = []) 
     { id: "adaPriorities", fieldKey: "adaPriorities" },
     { id: "expectingChanges", fieldKey: "householdExpectingChanges" },
     { id: "householdStudent", fieldKey: "householdStudent" },
+    { id: "reasonableAccommodations", fieldKey: "reasonableAccommodations" },
   ]
   verifyHelper(application, fields, fieldsToSkip)
 })
