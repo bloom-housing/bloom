@@ -80,6 +80,7 @@ jobs:
           # the 'tags' and 'labels' fields are 'newline-delimited string': https://github.com/docker/build-push-action#inputs.
           tags: |
             ${{ env.image_base }}/${{ matrix.container }}:gitsha-${{ github.sha }}
+            ${{ env.image_base }}/${{ matrix.container }}:latest
           # The org.opencontainers.image.source label Connects the image to the repository:
           # https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package.
           labels: |
