@@ -39,7 +39,14 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       super({ adapter: new PrismaPg(pool) });
     } else {
       // Maintain backwards-compatibility for non-RDS IAM deployments.
-      super();
+      const pool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+        keepAlive: true,
+        ssl: process.env.DATABASE_URL?.includes('localhost')
+          ? false
+          : { rejectUnauthorized: false },
+      });
+      super({ adapter: new PrismaPg(pool) });
     }
   }
 
