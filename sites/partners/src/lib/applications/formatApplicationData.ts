@@ -4,6 +4,8 @@ import {
   adaFeatureKeys,
   mapApiToMultiselectFormV1,
   mapCheckboxesToApiV1,
+  mapApiToMultiselectForm,
+  getSelectionsForApplicationSection,
 } from "@bloom-housing/shared-helpers"
 import { FormTypes, ApplicationTypes, Address } from "../../lib/applications/FormTypes"
 
@@ -278,7 +280,11 @@ export const mapFormToApi = ({
   Format data which comes from the API into correct react-hook-form format.
 */
 
-export const mapApiToForm = (applicationData: Application, listing: Listing) => {
+export const mapApiToForm = (
+  applicationData: Application,
+  listing: Listing,
+  enableV2MSQ: boolean
+) => {
   const submissionDate = applicationData.submissionDate
     ? dayjs(new Date(applicationData.submissionDate))
     : null
@@ -330,18 +336,38 @@ export const mapApiToForm = (applicationData: Application, listing: Listing) => 
   const phoneNumber = applicationData.applicant.phoneNumber
 
   const preferences =
-    mapApiToMultiselectFormV1(
-      Array.isArray(applicationData.preferences) ? applicationData.preferences : [],
-      listing?.listingMultiselectQuestions,
-      MultiselectQuestionsApplicationSectionEnum.preferences
-    ).application.preferences ?? []
+    (enableV2MSQ
+      ? mapApiToMultiselectForm(
+          getSelectionsForApplicationSection(
+            listing?.listingMultiselectQuestions || [],
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+            applicationData.applicationSelections
+          ) || [],
+          listing?.listingMultiselectQuestions || [],
+          MultiselectQuestionsApplicationSectionEnum.preferences
+        ).application.preferences
+      : mapApiToMultiselectFormV1(
+          Array.isArray(applicationData.preferences) ? applicationData.preferences : [],
+          listing?.listingMultiselectQuestions,
+          MultiselectQuestionsApplicationSectionEnum.preferences
+        ).application.preferences) ?? []
 
   const programs =
-    mapApiToMultiselectFormV1(
-      Array.isArray(applicationData.programs) ? applicationData.programs : [],
-      listing?.listingMultiselectQuestions,
-      MultiselectQuestionsApplicationSectionEnum.programs
-    ).application.programs ?? []
+    (enableV2MSQ
+      ? mapApiToMultiselectForm(
+          getSelectionsForApplicationSection(
+            listing?.listingMultiselectQuestions || [],
+            MultiselectQuestionsApplicationSectionEnum.programs,
+            applicationData.applicationSelections
+          ) || [],
+          listing?.listingMultiselectQuestions || [],
+          MultiselectQuestionsApplicationSectionEnum.programs
+        ).application.programs
+      : mapApiToMultiselectFormV1(
+          Array.isArray(applicationData.programs) ? applicationData.programs : [],
+          listing?.listingMultiselectQuestions,
+          MultiselectQuestionsApplicationSectionEnum.programs
+        ).application.programs) ?? []
 
   const application: ApplicationTypes = (() => {
     const {
