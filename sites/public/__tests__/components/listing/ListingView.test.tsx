@@ -1,10 +1,29 @@
 import React from "react"
 import dayjs from "dayjs"
-import { render } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import { ListingView } from "../../../src/components/listing/ListingView"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { ApplicationMethodsTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ApplicationMethodsTypeEnum,
+  ListingsStatusEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+
+const renderListingView = (listingOverrides = {}, jurisdictionOverrides = {}, authOverrides = {}) =>
+  render(
+    <AuthContext.Provider
+      value={{
+        doJurisdictionsHaveFeatureFlagOn: () => false,
+        ...authOverrides,
+      }}
+    >
+      <ListingView
+        listing={{ ...listing, ...listingOverrides }}
+        jurisdiction={{ ...jurisdiction, ...jurisdictionOverrides }}
+      />
+    </AuthContext.Provider>
+  )
 
 describe("<ListingView>", () => {
   describe("'Apply Online' button visibility", () => {
@@ -73,6 +92,201 @@ describe("<ListingView>", () => {
         </AuthContext.Provider>
       )
       expect(view.queryByText("Apply online")).toBeNull()
+    })
+  })
+
+  describe("listing header", () => {
+    it("renders the listing name as the primary heading", () => {
+      renderListingView()
+      expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(listing.name)
+    })
+
+    it("renders the developer name", () => {
+      renderListingView()
+      expect(screen.getByText(listing.developer)).toBeInTheDocument()
+    })
+
+    it("renders the building address", () => {
+      renderListingView()
+      expect(screen.getByText(/Archer Street/, { exact: false })).toBeInTheDocument()
+    })
+
+    it("renders a google maps link for the building address", () => {
+      renderListingView()
+      expect(screen.getByText("View on map")).toBeInTheDocument()
+      const mapLink = screen.getByText("View on map").closest("a")
+      expect(mapLink).toHaveAttribute("href", expect.stringContaining("google.com/maps"))
+    })
+  })
+
+  describe("reserved community types", () => {
+    it("shows a reserved community tag and warning message when reserved community type is set", () => {
+      renderListingView()
+      // listing fixture has reservedCommunityTypes: { name: "veteran" }
+      // tag renders on the image card, warning message renders in the main content
+      const veteranElements = screen.getAllByText(/veteran/i, { exact: false })
+      expect(veteranElements.length).toBeGreaterThan(0)
+      expect(screen.getByText(/Reserved for Veterans/i)).toBeInTheDocument()
+    })
+
+    it("does not show a reserved community warning when not set", () => {
+      renderListingView({ reservedCommunityTypes: null })
+      expect(screen.queryByText(/Reserved for/i)).toBeNull()
+    })
+  })
+
+  describe("application status display", () => {
+    it("shows 'Applications closed' status when application due date is in the past", () => {
+      const pastDate = dayjs().subtract(7, "day").toDate()
+      renderListingView({ applicationDueDate: pastDate })
+      expect(screen.getByText(/Applications closed/i, { exact: false })).toBeInTheDocument()
+    })
+
+    it("shows 'First come first serve' review order type in status", () => {
+      renderListingView({ reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe })
+      expect(screen.getByText(/First come first serve/i, { exact: false })).toBeInTheDocument()
+    })
+
+    it("shows 'Application due' when applications are still open", () => {
+      const futureDate = dayjs().add(7, "day").toDate()
+      renderListingView({ applicationDueDate: futureDate })
+      expect(screen.getByText(/Application due/i, { exact: false })).toBeInTheDocument()
+    })
+  })
+
+  describe("section 8 acceptance", () => {
+    it("shows section 8 voucher info in main content area when section8Acceptance is true", () => {
+      renderListingView({ section8Acceptance: true })
+      // Section 8 info renders in the md:w-2/3 content div (outside accordion)
+      expect(screen.getByText(/Section 8/i, { exact: false })).toBeInTheDocument()
+    })
+
+    it("does not show section 8 voucher info when section8Acceptance is false", () => {
+      renderListingView({ section8Acceptance: false })
+      expect(screen.queryByText(/Section 8/i, { exact: false })).toBeNull()
+    })
+  })
+
+  describe("closed listings", () => {
+    it("does not show the apply button when listing status is closed", () => {
+      const futureDate = dayjs().add(7, "day").toDate()
+      renderListingView({ status: ListingsStatusEnum.closed, applicationDueDate: futureDate })
+      expect(screen.queryByText("Apply online")).toBeNull()
+    })
+
+    it("does not show apply button when listing is closed even if applications are open", () => {
+      const futureDate = dayjs().add(7, "day").toDate()
+      renderListingView({
+        status: ListingsStatusEnum.closed,
+        applicationDueDate: futureDate,
+        applicationMethods: [
+          {
+            type: ApplicationMethodsTypeEnum.Internal,
+            label: "Label",
+            externalReference: "",
+            acceptsPostmarkedApplications: false,
+            phoneNumber: "123",
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            paperApplications: [],
+          },
+        ],
+      })
+      expect(screen.queryByText("Apply online")).toBeNull()
+    })
+  })
+
+  describe("waitlist section in mobile sidebar", () => {
+    it("shows waitlist is open section when review order is waitlist and applications are open", () => {
+      const futureDate = dayjs().add(7, "day").toDate()
+      renderListingView({
+        reviewOrderType: ReviewOrderTypeEnum.waitlist,
+        applicationDueDate: futureDate,
+        waitlistOpenSpots: 10,
+      })
+      expect(screen.getByText(/Waitlist is open/i, { exact: false })).toBeInTheDocument()
+    })
+
+    it("shows vacant units section when review order is FCFS and applications are open", () => {
+      const futureDate = dayjs().add(7, "day").toDate()
+      renderListingView({
+        reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+        applicationDueDate: futureDate,
+        unitsAvailable: 5,
+      })
+      expect(screen.getByText(/Vacant units available/i, { exact: false })).toBeInTheDocument()
+    })
+
+    it("does not show availability section when applications are closed", () => {
+      const pastDate = dayjs().subtract(7, "day").toDate()
+      renderListingView({
+        reviewOrderType: ReviewOrderTypeEnum.waitlist,
+        applicationDueDate: pastDate,
+        waitlistOpenSpots: 10,
+      })
+      expect(screen.queryByText(/Waitlist is open/i, { exact: false })).toBeNull()
+    })
+  })
+
+  describe("apply sidebar in mobile view", () => {
+    it("shows GetApplication component when applications are open with internal method", () => {
+      const futureDate = dayjs().add(7, "day").toDate()
+      renderListingView({
+        applicationDueDate: futureDate,
+        applicationMethods: [
+          {
+            type: ApplicationMethodsTypeEnum.Internal,
+            label: "Label",
+            externalReference: "",
+            acceptsPostmarkedApplications: false,
+            phoneNumber: "123",
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            paperApplications: [],
+          },
+        ],
+      })
+      expect(screen.getByText("Apply online")).toBeInTheDocument()
+    })
+
+    it("shows 'How to apply' section header when applications are open", () => {
+      const futureDate = dayjs().add(7, "day").toDate()
+      renderListingView({
+        applicationDueDate: futureDate,
+        applicationMethods: [
+          {
+            type: ApplicationMethodsTypeEnum.Internal,
+            label: "Label",
+            externalReference: "",
+            acceptsPostmarkedApplications: false,
+            phoneNumber: "123",
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            paperApplications: [],
+          },
+        ],
+      })
+      expect(screen.getByText(/How to apply/i, { exact: false })).toBeInTheDocument()
+    })
+
+    it("does not show the apply sidebar when only referral method exists", () => {
+      const futureDate = dayjs().add(7, "day").toDate()
+      renderListingView({
+        applicationDueDate: futureDate,
+        applicationMethods: [
+          {
+            type: ApplicationMethodsTypeEnum.Referral,
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        ],
+      })
+      expect(screen.queryByText("Apply online")).toBeNull()
+      expect(screen.queryByText(/Get application/i)).toBeNull()
     })
   })
 })
