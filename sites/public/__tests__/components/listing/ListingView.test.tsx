@@ -101,7 +101,6 @@ describe("<ListingView>", () => {
       expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(listing.name)
       expect(screen.getByText(listing.developer)).toBeInTheDocument()
       expect(screen.getByText(/Archer Street/, { exact: false })).toBeInTheDocument()
-      expect(screen.getByRole("link", { name: "View on map" })).toBeInTheDocument()
       const mapLink = screen.getByRole("link", { name: "View on map" }).closest("a")
       expect(mapLink).toHaveAttribute("href", expect.stringContaining("google.com/maps"))
     })
