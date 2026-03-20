@@ -10,20 +10,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 
-/**
- * Note: The ListingView component uses Desktop/Mobile responsive wrappers powered by
- * react-media. In the test environment, window.matchMedia always returns { matches: false },
- * so Desktop (defaultMatches=false) and Mobile (defaultMatches=true but overridden by mock)
- * wrappers both render nothing. As a result, content inside ListingDetailItem bodies
- * (eligibility, features, leasing agent, additional info) is not rendered.
- *
- * Visible content in tests:
- *   - Listing header (name, address, developer)
- *   - Reserved community tag and warning message
- *   - Section 8 info in main content area
- *   - Mobile sidebar (ApplicationStatus, waitlist, apply sidebar)
- */
-
 const renderListingView = (listingOverrides = {}, jurisdictionOverrides = {}, authOverrides = {}) =>
   render(
     <AuthContext.Provider
