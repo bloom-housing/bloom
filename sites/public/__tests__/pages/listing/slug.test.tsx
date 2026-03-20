@@ -3,8 +3,8 @@ import { setupServer } from "msw/lib/node"
 import { render, screen } from "@testing-library/react"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { mockNextRouter } from "../../../testUtils"
-import ListingPage from "../../../../src/pages/listing/[id]/[slug]"
+import { mockNextRouter } from "../../testUtils"
+import ListingPage from "../../../src/pages/listing/[id]/[slug]"
 import { Listing, Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
