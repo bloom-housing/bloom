@@ -559,6 +559,7 @@ export class UserService {
       storedUser.userRoles?.isLimitedJurisdictionalAdmin ||
       storedUser.userRoles?.isPartner ||
       storedUser.userRoles?.isSupportAdmin;
+
     const isUserSiteMatch = async () => {
       if (isPartnerPortalUser) {
         return dto.appUrl === process.env.PARTNERS_PORTAL_URL;
@@ -578,6 +579,10 @@ export class UserService {
     };
     // user on wrong site, return neutral message and don't send email
     if (!(await isUserSiteMatch())) return { success: true };
+
+    if (storedUser.isAdvocate && !storedUser.isApproved) {
+      return { success: false };
+    }
 
     const payload = {
       id: storedUser.id,
