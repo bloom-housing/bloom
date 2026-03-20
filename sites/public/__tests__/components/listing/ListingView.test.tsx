@@ -96,25 +96,13 @@ describe("<ListingView>", () => {
   })
 
   describe("listing header", () => {
-    it("renders the listing name as the primary heading", () => {
+    it("renders the listing name as the primary heading, developer name,  building address, google maps link for the building address", () => {
       renderListingView()
       expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(listing.name)
-    })
-
-    it("renders the developer name", () => {
-      renderListingView()
       expect(screen.getByText(listing.developer)).toBeInTheDocument()
-    })
-
-    it("renders the building address", () => {
-      renderListingView()
       expect(screen.getByText(/Archer Street/, { exact: false })).toBeInTheDocument()
-    })
-
-    it("renders a google maps link for the building address", () => {
-      renderListingView()
-      expect(screen.getByText("View on map")).toBeInTheDocument()
-      const mapLink = screen.getByText("View on map").closest("a")
+      expect(screen.getByRole("link", { name: "View on map" })).toBeInTheDocument()
+      const mapLink = screen.getByRole("link", { name: "View on map" }).closest("a")
       expect(mapLink).toHaveAttribute("href", expect.stringContaining("google.com/maps"))
     })
   })
@@ -122,8 +110,6 @@ describe("<ListingView>", () => {
   describe("reserved community types", () => {
     it("shows a reserved community tag and warning message when reserved community type is set", () => {
       renderListingView()
-      // listing fixture has reservedCommunityTypes: { name: "veteran" }
-      // tag renders on the image card, warning message renders in the main content
       const veteranElements = screen.getAllByText(/veteran/i, { exact: false })
       expect(veteranElements.length).toBeGreaterThan(0)
       expect(screen.getByText(/Reserved for Veterans/i)).toBeInTheDocument()
@@ -157,7 +143,6 @@ describe("<ListingView>", () => {
   describe("section 8 acceptance", () => {
     it("shows section 8 voucher info in main content area when section8Acceptance is true", () => {
       renderListingView({ section8Acceptance: true })
-      // Section 8 info renders in the md:w-2/3 content div (outside accordion)
       expect(screen.getByText(/Section 8/i, { exact: false })).toBeInTheDocument()
     })
 
