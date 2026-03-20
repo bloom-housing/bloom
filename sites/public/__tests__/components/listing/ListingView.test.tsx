@@ -45,7 +45,7 @@ describe("<ListingView>", () => {
         </AuthContext.Provider>
       )
       expect(view.getByText(/Applications closed/)).toBeInTheDocument()
-      expect(view.queryByText("Apply online")).toBeNull()
+      expect(view.queryByRole("link", { name: "Apply online" })).toBeNull()
     })
 
     it("shows if the due date is in the future", () => {
@@ -65,7 +65,7 @@ describe("<ListingView>", () => {
           />
         </AuthContext.Provider>
       )
-      expect(view.getByText("Apply online")).toBeInTheDocument()
+      expect(view.getByRole("link", { name: "Apply online" })).toBeInTheDocument()
     })
 
     it("does not show for paper applications even with a future due date", () => {
@@ -91,7 +91,7 @@ describe("<ListingView>", () => {
           />
         </AuthContext.Provider>
       )
-      expect(view.queryByText("Apply online")).toBeNull()
+      expect(view.queryByRole("link", { name: "Apply online" })).toBeNull()
     })
   })
 
@@ -100,7 +100,7 @@ describe("<ListingView>", () => {
       renderListingView()
       expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(listing.name)
       expect(screen.getByText(listing.developer)).toBeInTheDocument()
-      expect(screen.getByText(/Archer Street/, { exact: false })).toBeInTheDocument()
+      expect(screen.getByRole("heading", { level: 2, name: /Archer Street/i })).toBeInTheDocument()
       const mapLink = screen.getByText("View on map")
       expect(mapLink).toBeInTheDocument()
       expect(mapLink).toHaveAttribute("href", expect.stringContaining("google.com/maps"))
@@ -156,7 +156,7 @@ describe("<ListingView>", () => {
     it("does not show the apply button when listing status is closed", () => {
       const futureDate = dayjs().add(7, "day").toDate()
       renderListingView({ status: ListingsStatusEnum.closed, applicationDueDate: futureDate })
-      expect(screen.queryByText("Apply online")).toBeNull()
+      expect(screen.queryByRole("link", { name: "Apply online" })).toBeNull()
     })
 
     it("does not show apply button when listing is closed even if applications are open", () => {
@@ -178,7 +178,7 @@ describe("<ListingView>", () => {
           },
         ],
       })
-      expect(screen.queryByText("Apply online")).toBeNull()
+      expect(screen.queryByRole("link", { name: "Apply online" })).toBeNull()
     })
   })
 
@@ -190,7 +190,9 @@ describe("<ListingView>", () => {
         applicationDueDate: futureDate,
         waitlistOpenSpots: 10,
       })
-      expect(screen.getByText(/Waitlist is open/i, { exact: false })).toBeInTheDocument()
+      expect(
+        screen.getByRole("heading", { level: 4, name: /Waitlist is open/i })
+      ).toBeInTheDocument()
     })
 
     it("shows vacant units section when review order is FCFS and applications are open", () => {
@@ -200,7 +202,9 @@ describe("<ListingView>", () => {
         applicationDueDate: futureDate,
         unitsAvailable: 5,
       })
-      expect(screen.getByText(/Vacant units available/i, { exact: false })).toBeInTheDocument()
+      expect(
+        screen.getByRole("heading", { level: 4, name: /Vacant units available/i })
+      ).toBeInTheDocument()
     })
 
     it("does not show availability section when applications are closed", () => {
@@ -210,7 +214,7 @@ describe("<ListingView>", () => {
         applicationDueDate: pastDate,
         waitlistOpenSpots: 10,
       })
-      expect(screen.queryByText(/Waitlist is open/i, { exact: false })).toBeNull()
+      expect(screen.queryByRole("heading", { level: 4, name: /Waitlist is open/i })).toBeNull()
     })
   })
 
@@ -233,7 +237,7 @@ describe("<ListingView>", () => {
           },
         ],
       })
-      expect(screen.getByText("Apply online")).toBeInTheDocument()
+      expect(screen.getByRole("link", { name: "Apply online" })).toBeInTheDocument()
     })
 
     it("shows 'How to apply' section header when applications are open", () => {
@@ -254,7 +258,7 @@ describe("<ListingView>", () => {
           },
         ],
       })
-      expect(screen.getByText(/How to apply/i, { exact: false })).toBeInTheDocument()
+      expect(screen.getByRole("heading", { level: 2, name: /How to apply/i })).toBeInTheDocument()
     })
 
     it("does not show the apply sidebar when only referral method exists", () => {
@@ -270,7 +274,7 @@ describe("<ListingView>", () => {
           },
         ],
       })
-      expect(screen.queryByText("Apply online")).toBeNull()
+      expect(screen.queryByRole("link", { name: "Apply online" })).toBeNull()
       expect(screen.queryByText(/Get application/i)).toBeNull()
     })
   })
