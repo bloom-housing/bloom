@@ -1,18 +1,13 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
 import { render, screen } from "@testing-library/react"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter } from "../../../testUtils"
 import ListingPage from "../../../../src/pages/listing/[id]/[slug]"
 import { Listing, Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
-
-const TOAST_MESSAGE = {
-  toastMessagesRef: { current: [] },
-  addToast: jest.fn(),
-}
 
 beforeAll(() => {
   mockNextRouter({ id: listing.id, slug: "test-slug" })
@@ -29,15 +24,13 @@ afterAll(() => {
 
 function renderListingPage(listingProp: Listing, jurisdictionProp: Jurisdiction) {
   return render(
-    <MessageContext.Provider value={TOAST_MESSAGE}>
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => false,
-        }}
-      >
-        <ListingPage listing={listingProp} jurisdiction={jurisdictionProp} />
-      </AuthContext.Provider>
-    </MessageContext.Provider>
+    <AuthContext.Provider
+      value={{
+        doJurisdictionsHaveFeatureFlagOn: () => false,
+      }}
+    >
+      <ListingPage listing={listingProp} jurisdiction={jurisdictionProp} />
+    </AuthContext.Provider>
   )
 }
 
@@ -61,14 +54,14 @@ describe("ListingPage", () => {
     })
   })
 
-  describe("meta and layout", () => {
+  describe("Testing meta and layout", () => {
     it("should render a Layout wrapping the listing content", () => {
       renderListingPage(listing, jurisdiction)
       expect(document.title).toBeDefined()
     })
   })
 
-  describe("showNewSeedsDesigns flag", () => {
+  describe("Testing showNewSeedsDesigns flag", () => {
     it("should render ListingView when showNewSeedsDesigns is not set", () => {
       const originalEnv = process.env.showNewSeedsDesigns
       delete process.env.showNewSeedsDesigns
@@ -92,7 +85,7 @@ describe("ListingPage", () => {
     })
   })
 
-  describe("GTM event", () => {
+  describe("Testing GTM event", () => {
     it("should not throw when rendering a listing with all required fields", () => {
       expect(() => renderListingPage(listing, jurisdiction)).not.toThrow()
     })
