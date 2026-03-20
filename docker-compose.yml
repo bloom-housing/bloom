@@ -208,6 +208,7 @@ services:
       NODE_ENV: "production"
       APP_SECRET: "totally a secret"
       DATABASE_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://127.0.0.1:3100/"]
       interval: "5s"
@@ -219,6 +220,8 @@ services:
         condition: service_healthy
       dbinit:
         condition: service_completed_successfully
+      otel-collector:
+        condition: service_started
 
   partners:
     build:
@@ -306,3 +309,59 @@ services:
         condition: service_healthy
       dbseed: # wait for the db to have data so next build works correctly
         condition: service_completed_successfully
+
+  otel-collector:
+    build:
+      context: ./infra/aws-otel-collector
+      dockerfile: Dockerfile
+    restart: no
+    expose:
+      - "4317"
+    command:
+      - --config
+      - /etc/testing.yaml
+    depends_on:
+      prometheus:
+        condition: service_started
+
+  prometheus:
+    image: docker.io/prom/prometheus:v3
+    restart: no
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--web.enable-remote-write-receiver"
+
+  grafana:
+    image: docker.io/grafana/grafana:11.6.0
+    restart: no
+    ports:
+      - "3300:3300"
+    environment:
+      GF_SERVER_HTTP_PORT: "3300"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+    volumes:
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning:z
+      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      prometheus:
+        condition: service_started
+
+  grafana-dashboard-sync:
+    image: docker.io/python:3.13-alpine
+    restart: no
+    volumes:
+      - ./infra/grafana/sync-dashboards.sh:/sync-dashboards.sh:ro
+      - ./infra/grafana/dashboards:/dashboards
+    environment:
+      GRAFANA_URL: "http://grafana:3300"
+      DASHBOARDS_DIR: "/dashboards"
+      SYNC_INTERVAL: "10"
+    command: ["/bin/sh", "/sync-dashboards.sh"]
+    depends_on:
+      grafana:
+        condition: service_started
