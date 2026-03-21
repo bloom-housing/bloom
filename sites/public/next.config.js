@@ -86,14 +86,13 @@ module.exports = withBundleAnalyzer({
     ignoreDuringBuilds: true,
   },
   headers() {
-    const noindex =
-      process.env.ALLOW_SEO_INDEXING !== "TRUE"
-        ? [{ key: "X-Robots-Tag", value: "noindex, nofollow" }]
-        : []
+    if (process.env.ALLOW_SEO_INDEXING === "TRUE") {
+      return []
+    }
     return [
       {
         source: "/:path*",
-        headers: noindex,
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
     ]
   },
