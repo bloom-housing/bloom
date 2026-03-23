@@ -9,7 +9,7 @@ import {
   MultiselectQuestionsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Toast } from "@bloom-housing/ui-seeds"
-import { fireEvent, waitFor, within } from "@testing-library/react"
+import { fireEvent, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { rest } from "msw"
 import { setupServer } from "msw/lib/node"
@@ -77,7 +77,7 @@ const ToastProvider = (props: any) => {
   )
 }
 
-describe("settings", () => {
+describe("settings/multiselectquestions/preferences", () => {
   describe("preference table", () => {
     it("should render the preference table", async () => {
       window.URL.createObjectURL = jest.fn()
@@ -90,13 +90,14 @@ describe("settings", () => {
           }
         )
       )
-      const { getByText, findByText, findByRole } = render(<MultiselectQuestionsPreferences />)
+      render(<MultiselectQuestionsPreferences />)
 
-      expect(getByText("Preferences")).toBeInTheDocument()
+      expect(screen.getByRole("heading", { level: 1, name: "Preferences" })).toBeInTheDocument()
 
-      await findByText("Status")
-      await findByText("Last updated")
-      const table = await findByRole("grid")
+      await screen.findByText("Status")
+      await screen.findByText("Last updated")
+
+      const table = screen.getByRole("grid")
       const rowgroup = within(table).getAllByRole("rowgroup")
       const head = rowgroup[0]
       const rows = rowgroup[1].children
@@ -178,45 +179,76 @@ describe("settings", () => {
         })
       )
 
-      const {
-        findByText,
-        getByTestId,
-        getByText,
-        getAllByText,
-        getByLabelText,
-        getAllByLabelText,
-      } = render(
+      render(
         <ToastProvider>
           <MultiselectQuestionsPreferences />
         </ToastProvider>
       )
 
-      await findByText(`${multiselectQuestionPreferenceV2.name}`)
+      await screen.findByText(`${multiselectQuestionPreferenceV2.name}`)
 
       // Add a preference
-      fireEvent.click(getByText("Add preference"))
-      fireEvent.change(getByLabelText("Title"), { target: { value: "New Preference Item" } })
-      fireEvent.change(getByLabelText("Description"), {
+      fireEvent.click(screen.getByRole("button", { name: "Add preference" }))
+
+      // Validate the form fields and buttons are there
+      expect(screen.getByRole("heading", { level: 2, name: "Preference" })).toBeInTheDocument()
+      const title = screen.getByRole("textbox", { name: "Title" })
+      expect(title).toBeInTheDocument()
+      const description = screen.getByRole("textbox", { name: "Description" })
+      expect(description).toBeInTheDocument()
+      const url = screen.getByRole("textbox", { name: "URL" })
+      expect(url).toBeInTheDocument()
+      const urlTitle = screen.getByRole("textbox", { name: "Link title" })
+      expect(urlTitle).toBeInTheDocument()
+      const addOptionButton = screen.getByRole("button", { name: "Add option" })
+      expect(addOptionButton).toBeInTheDocument()
+      const multiselectRadio = screen.getByRole("group", {
+        name: "Are these options multi-select or exclusive?",
+      })
+      expect(multiselectRadio).toBeInTheDocument()
+      expect(
+        within(multiselectRadio).getByRole("radio", { name: "Multi-select" })
+      ).toBeInTheDocument()
+      expect(within(multiselectRadio).getByRole("radio", { name: "Exclusive" })).toBeInTheDocument()
+
+      const jurisdictionSelector = screen.getByRole("combobox", { name: "Jurisdiction" })
+      expect(jurisdictionSelector).toBeInTheDocument()
+      expect(
+        within(jurisdictionSelector).getByRole("option", { name: "Select one" })
+      ).toBeInTheDocument()
+      expect(
+        within(jurisdictionSelector).getByRole("option", { name: "Housing Jurisdiction" })
+      ).toBeInTheDocument()
+
+      expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Show to Partners" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument()
+
+      // Fill out the form
+      fireEvent.change(title, { target: { value: "New Preference Item" } })
+      fireEvent.change(description, {
         target: { value: "Preference Description" },
       })
 
       // Add a preference option
-      fireEvent.click(getByText("Add option"))
-      fireEvent.change(getAllByLabelText("Title")[1], { target: { value: "New Option Item" } })
-      fireEvent.change(getAllByLabelText("Description")[1], {
+      fireEvent.click(addOptionButton)
+      fireEvent.change(screen.getAllByRole("textbox", { name: "Title" })[1], {
+        target: { value: "New Option Item" },
+      })
+      fireEvent.change(screen.getAllByLabelText("Description")[1], {
         target: { value: "Option Description" },
       })
-      fireEvent.click(getByTestId("collect-address-no"))
-      await user.click(getAllByText("Save")[1])
+      fireEvent.click(screen.getByTestId("collect-address-no"))
+      await user.click(screen.getAllByText("Save")[1])
 
       // Check validation
-      await user.click(getByText("Save"))
-      expect(getAllByText("This field is required")).toHaveLength(1)
+      await user.click(screen.getByText("Save"))
+      expect(screen.getAllByText("This field is required")).toHaveLength(1)
 
-      await user.selectOptions(getByLabelText("Jurisdiction"), "Housing Jurisdiction")
+      await user.selectOptions(screen.getByLabelText("Jurisdiction"), "Housing Jurisdiction")
 
-      await user.click(getByText("Save"))
-      await findByText("Preference created") // Check toast notification
+      await user.click(screen.getByText("Save"))
+      await screen.findByText("Preference created") // Check toast notification
 
       // Verify the call to save the new preference
       await waitFor(() => {
@@ -241,6 +273,101 @@ describe("settings", () => {
           ],
           status: "draft",
           name: "New Preference Item",
+          text: "",
+        })
+      })
+    })
+  })
+  describe("editing preferences", () => {
+    it("should allow a preference to be edited and hidden from partners", async () => {
+      const user = userEvent.setup()
+      window.URL.createObjectURL = jest.fn()
+      document.cookie = "access-token-available=True"
+      const requestSpy = jest.fn()
+      server.use(
+        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+          return res(
+            ctx.json({
+              items: [
+                {
+                  ...multiselectQuestionPreferenceV2,
+                  jurisdiction: { id: "jurisdiction1", name: "jurisdictionWithJurisdictionAdmin" },
+                  status: MultiselectQuestionsStatusEnum.visible,
+                },
+              ],
+            })
+          )
+        }),
+        rest.put("http://localhost/api/adapter/multiselectQuestions", async (req, res, ctx) => {
+          requestSpy(await req.json())
+          return res(ctx.json({}))
+        })
+      )
+
+      render(
+        <ToastProvider>
+          <MultiselectQuestionsPreferences />
+        </ToastProvider>
+      )
+
+      await user.click(await screen.findByText("Edit"))
+      const drawer = await screen.findByRole("dialog")
+
+      // Change some values (jurisdiction and title)
+      await user.selectOptions(
+        screen.getByLabelText("Jurisdiction"),
+        "jurisdictionWithJurisdictionAdmin"
+      )
+      fireEvent.change(within(drawer).getByRole("textbox", { name: "Title" }), {
+        target: { value: "New Title" },
+      })
+      expect(within(drawer).getByRole("button", { name: "Hide from Partners" })).toBeInTheDocument()
+      await userEvent.click(within(drawer).getByRole("button", { name: "Hide from Partners" }))
+      await waitFor(() => {
+        expect(requestSpy).toHaveBeenCalledTimes(1)
+        expect(requestSpy).toHaveBeenCalledWith({
+          applicationSection: "preferences",
+          description: "At least one household member lives or works in County",
+          id: "id1",
+          hideFromListing: false,
+          jurisdictions: [],
+          jurisdiction: { id: "jurisdiction1", name: "jurisdictionWithJurisdictionAdmin" },
+          links: [
+            {
+              title: "Live/Work in County Link Title",
+              url: "https://www.example.com",
+            },
+          ],
+          isExclusive: false,
+          multiselectOptions: [
+            {
+              collectAddress: false,
+              createdAt: expect.any(String),
+              description: "A description of the option.",
+              id: "id",
+              links: [
+                {
+                  title: "Live in County Link Title",
+                  url: "https://www.example.com",
+                },
+              ],
+              text: "",
+              name: "Live in County",
+              updatedAt: expect.any(String),
+              ordinal: 1,
+            },
+            {
+              collectAddress: false,
+              createdAt: expect.any(String),
+              id: "id",
+              text: "",
+              name: "Work in County",
+              updatedAt: expect.any(String),
+              ordinal: 2,
+            },
+          ],
+          status: "draft",
+          name: "New Title",
           text: "",
         })
       })
