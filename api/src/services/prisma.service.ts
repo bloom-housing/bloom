@@ -46,14 +46,14 @@ export class PrismaService
       super({ adapter: new PrismaPg(pool) });
       this.pool = pool;
     } else {
+      const isLocal =
+        process.env.DATABASE_URL?.includes('localhost') ||
+        process.env.DATABASE_URL?.includes('@db:');
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
         keepAlive: true,
         keepAliveInitialDelayMillis: KEEP_ALIVE_DELAY_MS,
-        ssl:
-          process.env.NODE_ENV === 'production'
-            ? { rejectUnauthorized: false }
-            : undefined,
+        ssl: isLocal ? undefined : { rejectUnauthorized: false },
       });
       super({ adapter: new PrismaPg(pool) });
       this.pool = pool;
