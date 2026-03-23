@@ -117,7 +117,7 @@
           "useBackend": false
         }
       ],
-      "title": "API Requests",
+      "title": "API Request Rate",
       "type": "timeseries"
     }
   ],
