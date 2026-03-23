@@ -128,11 +128,7 @@ includeViews.base = {
       ordinal: 'asc',
     },
     include: {
-      multiselectQuestions: {
-        include: {
-          multiselectOptions: true,
-        },
-      },
+      multiselectQuestions: true,
     },
   },
   listingFeatures: true,
@@ -185,6 +181,18 @@ includeViews.full = {
   listingsApplicationPickUpAddress: true,
   listingsApplicationDropOffAddress: true,
   listingsApplicationMailingAddress: true,
+  listingMultiselectQuestions: {
+    orderBy: {
+      ordinal: 'asc',
+    },
+    include: {
+      multiselectQuestions: {
+        include: {
+          multiselectOptions: true,
+        },
+      },
+    },
+  },
   requestedChangesUser: true,
   property: true,
   requiredDocumentsList: true,
