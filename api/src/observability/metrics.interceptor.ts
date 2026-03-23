@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import * as opentelemetry from '@opentelemetry/api';
 
 @Injectable()
@@ -29,13 +29,15 @@ export class MetricsInterceptor implements NestInterceptor {
     const start = Date.now();
     const attributes = {
       controller: context.getClass().name,
-      method: context.getHandler().name,
+      handler: context.getHandler().name,
       protocol: context.getType(),
     };
+    const httpContext = context.switchToHttp();
+    attributes["http_method"] = httpContext.getRequest<Request>().method;
+
     return next.handle().pipe(
       tap(() => {
         const latency = Date.now() - start;
-        const httpContext = context.switchToHttp();
         attributes['response_code'] =
           httpContext.getResponse<Response>().statusCode;
 
