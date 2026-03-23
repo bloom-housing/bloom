@@ -789,7 +789,7 @@ model Jurisdictions {
   partnerTerms                        String?                             @map("partner_terms")
   publicUrl                           String                              @default("") @map("public_url")
   regions                             String[]                            @default([]) @map("regions")
-  referralSummaryDefault              String                              @map("referral_summary_default")
+  referralSummaryDefault              String?                             @map("referral_summary_default")
   rentalAssistanceDefault             String                              @map("rental_assistance_default")
   requiredListingFields               String[]                            @default([]) @map("required_listing_fields")
   visibleAccessibilityPriorityTypes   UnitAccessibilityPriorityTypeEnum[] @default([mobility, hearing, vision, hearingAndVision, mobilityAndHearing, mobilityAndVision, mobilityHearingAndVision]) @map("visible_accessibility_priority_types")
