@@ -4,7 +4,6 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Signer } from '@aws-sdk/rds-signer';
 
-const SSL_CONFIG = { rejectUnauthorized: false };
 const KEEP_ALIVE_DELAY_MS = 10000;
 
 /*
@@ -42,7 +41,7 @@ export class PrismaService
         },
         keepAlive: true,
         keepAliveInitialDelayMillis: KEEP_ALIVE_DELAY_MS,
-        ssl: SSL_CONFIG, // use SSL, but don't validate DB cert
+        ssl: { rejectUnauthorized: false }, // use SSL, but don't validate DB cert
       });
       super({ adapter: new PrismaPg(pool) });
       this.pool = pool;
@@ -51,7 +50,6 @@ export class PrismaService
         connectionString: process.env.DATABASE_URL,
         keepAlive: true,
         keepAliveInitialDelayMillis: KEEP_ALIVE_DELAY_MS,
-        ssl: process.env.NODE_ENV === 'production' ? SSL_CONFIG : false,
       });
       super({ adapter: new PrismaPg(pool) });
       this.pool = pool;
