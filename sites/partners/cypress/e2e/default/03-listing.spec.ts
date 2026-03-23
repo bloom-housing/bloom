@@ -580,7 +580,7 @@ describe("Listing Management Tests", () => {
     fillIfDataExists(cy, "specialNotes", listing.specialNotes, "type")
 
     // Second tab
-    cy.get("button").contains("Application process").click()
+    cy.get("button").contains("Application process").should("be.visible").click()
 
     // ----------
     // Section - Rankings and results
@@ -1647,7 +1647,7 @@ describe("Listing Management Tests", () => {
     verifyDataIfExists(cy, "specialNotes", listing.specialNotes, "type")
 
     // Second tab
-    cy.get("button").contains("Application process").click()
+    cy.get("button").contains("Application process").should("be.visible").click()
 
     // ----------
     // Section - Rankings and results
