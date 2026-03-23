@@ -333,14 +333,13 @@ const UnitForm = ({
   }
 
   async function onFormSubmit(action?: FormSubmitAction) {
-    setLoading(true)
     const data = getValues()
     const validation = await trigger()
     if (!validation) {
-      setLoading(false)
       return
     }
 
+    setLoading(true)
     const formData = formatFormData(data)
 
     // If we're looking at a draft unit in the drawer
