@@ -1,7 +1,7 @@
 // --- Meta Information --- //
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions", "views", "driverAdapters"]
+  previewFeatures = ["postgresqlExtensions", "views", "driverAdapters", "metrics"]
 }
 
 datasource db {

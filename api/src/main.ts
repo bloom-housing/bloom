@@ -7,6 +7,8 @@ import compression from 'compression';
 import { json } from 'express';
 import { AppModule } from './modules/app.module';
 import { CustomExceptionFilter } from './utilities/custom-exception-filter';
+import { MetricsInterceptor } from './observability/metrics.interceptor';
+import './observability/open-telemetry-init'; // required for side effects
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -15,6 +17,7 @@ async function bootstrap() {
         ? ['error', 'warn', 'log', 'debug']
         : ['error', 'warn', 'log'],
   });
+  app.useGlobalInterceptors(new MetricsInterceptor());
   const allowList = process.env.CORS_ORIGINS || [];
   const allowListRegex = process.env.CORS_REGEX
     ? JSON.parse(process.env.CORS_REGEX)
@@ -52,7 +55,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Bloom API')
     .setDescription('The API for Bloom')
-    .setVersion('2.0')
+    .setVersion('2.0') // Keep in sync with api/src/observability/open-telemetry-init.ts
     .addTag('listings')
     .build();
   const document = SwaggerModule.createDocument(app, config);
