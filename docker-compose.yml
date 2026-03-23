@@ -319,7 +319,7 @@ services:
       - "4317"
     command:
       - --config
-      - /etc/testing.yaml
+      - /etc/docker-compose-config.yaml
     depends_on:
       prometheus:
         condition: service_started
