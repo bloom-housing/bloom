@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { LanguagesEnum, Translations } from '@prisma/client';
-import { PrismaService } from './prisma.service';
-import { Listing } from '../dtos/listings/listing.dto';
-import { GoogleTranslateService } from './google-translate.service';
 import * as lodash from 'lodash';
+import { GoogleTranslateService } from './google-translate.service';
+import { PrismaService } from './prisma.service';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
+import { Listing } from '../dtos/listings/listing.dto';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 
 @Injectable()
 export class TranslationService {
@@ -81,6 +84,21 @@ export class TranslationService {
       return;
     }
 
+    const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        id: true,
+        featureFlags: true,
+      },
+      where: {
+        id: listing.jurisdictions.id,
+      },
+    });
+
+    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as unknown as Jurisdiction,
+      FeatureFlagEnum.enableV2MSQ,
+    );
+
     const pathsToFilter = {
       accessibility: listing.accessibility,
       amenities: listing.amenities,
@@ -137,7 +155,22 @@ export class TranslationService {
       });
     }
 
-    if (listing.listingMultiselectQuestions) {
+    if (listing.includeCommunityDisclaimer) {
+      pathsToFilter[`communityDisclaimerTitle`] =
+        listing.communityDisclaimerTitle;
+      pathsToFilter[`communityDisclaimerDescription`] =
+        listing.communityDisclaimerDescription;
+    }
+
+    if (listing.property?.description) {
+      pathsToFilter[`property.description`] = listing.property.description;
+    }
+
+    if (listing.property?.urlTitle) {
+      pathsToFilter[`property.urlTitle`] = listing.property.urlTitle;
+    }
+
+    if (!enableV2MSQ && listing.listingMultiselectQuestions) {
       listing.listingMultiselectQuestions.map((multiselectQuestion, index) => {
         multiselectQuestion.multiselectQuestions.untranslatedText =
           multiselectQuestion.multiselectQuestions?.text;
@@ -152,9 +185,6 @@ export class TranslationService {
         pathsToFilter[
           `listingMultiselectQuestions[${index}].multiselectQuestions.subText`
         ] = multiselectQuestion.multiselectQuestions?.subText;
-        pathsToFilter[
-          `listingMultiselectQuestions[${index}].multiselectQuestions.optOutText`
-        ] = multiselectQuestion.multiselectQuestions?.optOutText;
         multiselectQuestion.multiselectQuestions?.options?.map(
           (multiselectOption, optionIndex) => {
             multiselectOption.untranslatedText = multiselectOption.text;
@@ -164,27 +194,38 @@ export class TranslationService {
             pathsToFilter[
               `listingMultiselectQuestions[${index}].multiselectQuestions.options[${optionIndex}].description`
             ] = multiselectOption.description;
+          },
+        );
+        pathsToFilter[
+          `listingMultiselectQuestions[${index}].multiselectQuestions.optOutText`
+        ] = multiselectQuestion.multiselectQuestions?.optOutText;
+      });
+    } else if (enableV2MSQ && listing.listingMultiselectQuestions) {
+      listing.listingMultiselectQuestions.map((multiselectQuestion, index) => {
+        multiselectQuestion.multiselectQuestions.untranslatedName =
+          multiselectQuestion.multiselectQuestions?.name;
+        pathsToFilter[
+          `listingMultiselectQuestions[${index}].multiselectQuestions.name`
+        ] = multiselectQuestion.multiselectQuestions?.name;
+        pathsToFilter[
+          `listingMultiselectQuestions[${index}].multiselectQuestions.description`
+        ] = multiselectQuestion.multiselectQuestions?.description;
+        pathsToFilter[
+          `listingMultiselectQuestions[${index}].multiselectQuestions.subText`
+        ] = multiselectQuestion.multiselectQuestions?.subText;
+
+        multiselectQuestion.multiselectQuestions?.multiselectOptions?.map(
+          (multiselectOption, optionIndex) => {
+            multiselectOption.untranslatedName = multiselectOption.name;
             pathsToFilter[
-              `listingMultiselectQuestions[${index}].multiselectQuestions.options[${optionIndex}].description`
+              `listingMultiselectQuestions[${index}].multiselectQuestions.multiselectOptions[${optionIndex}].name`
+            ] = multiselectOption.name;
+            pathsToFilter[
+              `listingMultiselectQuestions[${index}].multiselectQuestions.multiselectOptions[${optionIndex}].description`
             ] = multiselectOption.description;
           },
         );
       });
-    }
-
-    if (listing.includeCommunityDisclaimer) {
-      pathsToFilter[`communityDisclaimerTitle`] =
-        listing.communityDisclaimerTitle;
-      pathsToFilter[`communityDisclaimerDescription`] =
-        listing.communityDisclaimerDescription;
-    }
-
-    if (listing.property?.description) {
-      pathsToFilter[`property.description`] = listing.property.description;
-    }
-
-    if (listing.property?.urlTitle) {
-      pathsToFilter[`property.urlTitle`] = listing.property.urlTitle;
     }
 
     const persistedTranslationsFromDB = await this.getPersistedTranslatedValues(
