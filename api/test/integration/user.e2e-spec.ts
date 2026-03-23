@@ -801,6 +801,76 @@ describe('User Controller Tests', () => {
       expect(userPostResend.resetToken).toBeNull();
       expect(mockforgotPassword.mock.calls.length).toBe(0);
     });
+
+    it('should set resetToken when forgot-password is called by approved advocate user', async () => {
+      const juris = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      const userA = await prisma.userAccounts.create({
+        data: await userFactory({
+          jurisdictionIds: [juris.id],
+          isAdvocate: true,
+          isApproved: true,
+        }),
+      });
+
+      const mockforgotPassword = jest.spyOn(testEmailService, 'forgotPassword');
+      const res = await request(app.getHttpServer())
+        .put(`/user/forgot-password/`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: userA.email,
+          appUrl: juris.publicUrl,
+        } as EmailAndAppUrl)
+        .expect(200);
+
+      expect(res.body.success).toBe(true);
+
+      const userPostResend = await prisma.userAccounts.findUnique({
+        where: {
+          id: userA.id,
+        },
+      });
+
+      expect(userPostResend.resetToken).not.toBeNull();
+      expect(mockforgotPassword.mock.calls.length).toBe(1);
+    });
+
+    it('should not set resetToken when forgot-password is called by unapproved advocate user', async () => {
+      const juris = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      const userA = await prisma.userAccounts.create({
+        data: await userFactory({
+          jurisdictionIds: [juris.id],
+          isAdvocate: true,
+          isApproved: false,
+        }),
+      });
+
+      const mockforgotPassword = jest.spyOn(testEmailService, 'forgotPassword');
+      const res = await request(app.getHttpServer())
+        .put(`/user/forgot-password/`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: userA.email,
+          appUrl: juris.publicUrl,
+        } as EmailAndAppUrl)
+        .expect(200);
+
+      expect(res.body.success).toBe(false);
+
+      const userPostResend = await prisma.userAccounts.findUnique({
+        where: {
+          id: userA.id,
+        },
+      });
+
+      expect(userPostResend.resetToken).toBeNull();
+      expect(mockforgotPassword.mock.calls.length).toBe(0);
+    });
   });
 
   describe('create endpoint', () => {
@@ -878,10 +948,7 @@ describe('User Controller Tests', () => {
         email: 'advocateUser@email.com',
         agreedToTermsOfService: true,
         agency: {
-          ...agencyData,
-          jurisdictions: {
-            id: agencyData.jurisdictionsId,
-          },
+          id: agencyData.id,
         },
         address: addressFactory() as AddressUpdate,
         jurisdictions: [{ id: juris.id }],

@@ -30,6 +30,7 @@ import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { AddressUpdate } from '../../../src/dtos/addresses/address-update.dto';
 import { AdvocateUserUpdate } from '../../../src/dtos/users/advocate-user-update.dto';
 import { UserOrderByKeys } from '../../../src/enums/listings/order-by-enum';
+import { Jurisdiction } from 'src/dtos/jurisdictions/jurisdiction.dto';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -56,7 +57,7 @@ describe('Testing user service', () => {
       jurisdictions: [
         {
           id: randomUUID(),
-        },
+        } as Jurisdiction,
       ],
       mfaEnabled: false,
       lastLoginAt: date,
@@ -99,7 +100,7 @@ describe('Testing user service', () => {
         PrismaService,
         EmailService,
         ConfigService,
-        EmailProvider,
+        EmailService,
         TranslationService,
         JurisdictionService,
         ApplicationService,
@@ -1282,6 +1283,98 @@ describe('Testing user service', () => {
         appUrl,
         expect.anything(),
       );
+    });
+
+    it('should not set resetToken when advocate user is not approved', async () => {
+      const id = randomUUID();
+      const email = 'email@example.com';
+
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id,
+        jurisdictions: [{ publicUrl: 'http://localhost:3000' }],
+        isAdvocate: true,
+        isApproved: false,
+      } as Partial<User>);
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+        resetToken: 'example reset token',
+      });
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+      emailService.forgotPassword = jest.fn();
+
+      await service.forgotPassword({
+        email,
+        appUrl: 'http://localhost:3000',
+      });
+      expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+        include: {
+          address: true,
+          agency: true,
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+          favoriteListings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        where: {
+          email,
+          id: undefined,
+        },
+      });
+      expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+    });
+
+    it('should set resetToken when advocate user is approved', async () => {
+      const id = randomUUID();
+      const email = 'email@example.com';
+
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id,
+        jurisdictions: [{ publicUrl: 'http://localhost:3000' }],
+        isAdvocate: true,
+        isApproved: true,
+      } as Partial<User>);
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+        resetToken: 'example reset token',
+      });
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id,
+      });
+      emailService.forgotPassword = jest.fn();
+
+      await service.forgotPassword({ email, appUrl: 'http://localhost:3000' });
+      expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+        include: {
+          address: true,
+          agency: true,
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+          favoriteListings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        where: {
+          email,
+          id: undefined,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          resetToken: expect.anything(),
+        },
+        where: {
+          id,
+        },
+      });
     });
   });
 
@@ -2963,12 +3056,6 @@ describe('Testing user service', () => {
           address: mockAdress as AddressUpdate,
           agency: {
             id: 'test_agency_id',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            name: 'Test Agency',
-            jurisdictions: {
-              id: jurisId,
-            },
           },
         },
         false,

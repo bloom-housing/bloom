@@ -1,7 +1,8 @@
 import React from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { AgTable, t, useAgTable, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import {
   Application,
   ApplicationReviewStatusEnum,

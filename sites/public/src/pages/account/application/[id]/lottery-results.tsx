@@ -112,6 +112,7 @@ const LotteryResults = () => {
         <FormsLayout
           className={styles["lottery-results"]}
           pageTitle={`${t("listings.lotteryResults.header")} - ${listing?.name}`}
+          metaDescription={t("pageDescription.lotteryResults")}
         >
           {noApplication && (
             <ApplicationError error={t("account.application.noApplicationError")} />
