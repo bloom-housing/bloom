@@ -84,7 +84,6 @@ export class Jurisdiction extends AbstractDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   referralSummaryDefault?: string;
 
