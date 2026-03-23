@@ -50,6 +50,10 @@ export class PrismaService
         connectionString: process.env.DATABASE_URL,
         keepAlive: true,
         keepAliveInitialDelayMillis: KEEP_ALIVE_DELAY_MS,
+        ssl:
+          process.env.NODE_ENV === 'production'
+            ? { rejectUnauthorized: false }
+            : undefined,
       });
       super({ adapter: new PrismaPg(pool) });
       this.pool = pool;
@@ -61,6 +65,6 @@ export class PrismaService
   }
 
   async onModuleDestroy() {
-    await this.pool.end();
+    await this.pool?.end();
   }
 }
