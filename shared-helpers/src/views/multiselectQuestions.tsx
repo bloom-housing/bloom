@@ -564,40 +564,40 @@ export const mapCheckboxesToApi = (
   const addressFields = Object.keys(data).filter((option) => Object.keys(data[option]))
   let hasOptedOut = false
   const selections: ApplicationSelectionOptionCreate[] = Object.keys(data).reduce((acc, key) => {
-      if (data[key] !== true) {
-        return acc
-      }
-      const foundOption = question.multiselectOptions?.find(
-        (elem) => cleanMultiselectString(elem.name) === key
+    if (data[key] !== true) {
+      return acc
+    }
+    const foundOption = question.multiselectOptions?.find(
+      (elem) => cleanMultiselectString(elem.name) === key
+    )
+    // the below guard is a mere formality, because we will always find an option
+    // from what the UI has rendered
+    if (!foundOption) return acc
+
+    if (foundOption.isOptOut) hasOptedOut = true
+    const selectionData: ApplicationSelectionOptionCreate = {
+      multiselectOption: { id: foundOption.id },
+    }
+    const addressData = addressFields.filter((addressField) => addressField === `${key}-address`)
+
+    if (addressData.length) {
+      const addressHolderNameData = addressFields.filter(
+        (addressField) => addressField === `${key}-${AddressHolder.Name}`
       )
-      // the below guard is a mere formality, because we will always find an option
-      // from what the UI has rendered
-      if (!foundOption) return acc
+      const addressHolderRelationshipData = addressFields.filter(
+        (addressField) => addressField === `${key}-${AddressHolder.Relationship}`
+      )
 
-      if (foundOption.isOptOut) hasOptedOut = true
-      const selectionData: ApplicationSelectionOptionCreate = {
-        multiselectOption: { id: foundOption.id },
+      selectionData[AddressHolder.Address] = data[addressData[0]]
+      if (addressHolderNameData.length) {
+        selectionData[AddressHolder.Name] = data[addressHolderNameData[0]]
       }
-      const addressData = addressFields.filter((addressField) => addressField === `${key}-address`)
-
-      if (addressData.length) {
-        const addressHolderNameData = addressFields.filter(
-          (addressField) => addressField === `${key}-${AddressHolder.Name}`
-        )
-        const addressHolderRelationshipData = addressFields.filter(
-          (addressField) => addressField === `${key}-${AddressHolder.Relationship}`
-        )
-
-        selectionData[AddressHolder.Address] = data[addressData[0]]
-        if (addressHolderNameData.length) {
-          selectionData[AddressHolder.Name] = data[addressHolderNameData[0]]
-        }
-        if (addressHolderRelationshipData.length) {
-          selectionData[AddressHolder.Relationship] = data[addressHolderRelationshipData[0]]
-        }
+      if (addressHolderRelationshipData.length) {
+        selectionData[AddressHolder.Relationship] = data[addressHolderRelationshipData[0]]
       }
-      return [...acc, selectionData]
-    }, [] as ApplicationSelectionOptionCreate[])
+    }
+    return [...acc, selectionData]
+  }, [] as ApplicationSelectionOptionCreate[])
   return {
     multiselectQuestion: { id: question.id },
     hasOptedOut,
