@@ -227,24 +227,6 @@ describe('Testing jurisdiction service', () => {
       visibleNeighborhoodAmenities: [],
     };
 
-    // expect(await service.update(params)).toEqual({
-    //   // id: mockedJurisdiction.id,
-    //   name: `updated jurisdiction 3`,
-    //   notificationsSignUpUrl: `notificationsSignUpUrl: 3`,
-    //   languages: [LanguagesEnum.en],
-    //   partnerTerms: `partnerTerms: 3`,
-    //   publicUrl: `publicUrl: 3`,
-    //   emailFromAddress: `emailFromAddress: 3`,
-    //   rentalAssistanceDefault: `rentalAssistanceDefault: 3`,
-    //   referralSummaryDefault: `referralSummaryDefault: 3`,
-    //   whatToExpect: `whatToExpect: 3`,
-    //   whatToExpectAdditionalText: `whatToExpectAdditionalText: 3`,
-    //   whatToExpectUnderConstruction: `whatToExpectUnderConstruction: 3`,
-    //   enablePartnerSettings: true,
-    //   createdAt: date,
-    //   updatedAt: date,
-    // });
-
     expect(await service.update(params)).toEqual({
       id: mockedJurisdiction.id,
       createdAt: date,
