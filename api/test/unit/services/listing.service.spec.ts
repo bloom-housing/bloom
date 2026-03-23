@@ -818,11 +818,7 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: {
-                include: {
-                  multiselectOptions: true,
-                },
-              },
+              multiselectQuestions: true,
             },
           },
           listingFeatures: true,
@@ -946,11 +942,7 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: {
-                include: {
-                  multiselectOptions: true,
-                },
-              },
+              multiselectQuestions: true,
             },
           },
           listingFeatures: true,
@@ -1334,11 +1326,7 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: {
-                include: {
-                  multiselectOptions: true,
-                },
-              },
+              multiselectQuestions: true,
             },
           },
           listingFeatures: true,
@@ -2417,11 +2405,7 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: {
-                include: {
-                  multiselectOptions: true,
-                },
-              },
+              multiselectQuestions: true,
             },
           },
           listingFeatures: true,
@@ -2915,11 +2899,7 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: {
-                include: {
-                  multiselectOptions: true,
-                },
-              },
+              multiselectQuestions: true,
             },
           },
           listingFeatures: true,
@@ -3213,11 +3193,7 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: {
-                include: {
-                  multiselectOptions: true,
-                },
-              },
+              multiselectQuestions: true,
             },
           },
           listingNeighborhoodAmenities: true,
