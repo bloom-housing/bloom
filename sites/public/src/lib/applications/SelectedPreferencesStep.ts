@@ -19,7 +19,7 @@ export default class SelectedPreferencesStep extends StepDefinition {
         this.conductor.listing?.listingMultiselectQuestions,
         MultiselectQuestionsApplicationSectionEnum.preferences,
         this.application?.applicationSelections
-      ).length > 0
+      ).filter(selection => !selection.hasOptedOut).length > 0
     )
   }
 }
