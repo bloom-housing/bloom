@@ -59,7 +59,7 @@ export class AppController {
   })
   @ApiProduces('text/plain')
   @Header('Content-Type', 'text/plain')
-  async metrics(): Promise<string> {
+  async prismaMetrics(): Promise<string> {
     return await this.prisma.$metrics.prometheus();
   }
 

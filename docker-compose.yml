@@ -222,8 +222,6 @@ services:
         condition: service_healthy
       dbinit:
         condition: service_completed_successfully
-      otel-collector:
-        condition: service_started
 
   partners:
     build:
@@ -313,6 +311,7 @@ services:
         condition: service_completed_successfully
 
   otel-collector:
+    profiles: ["observability"]
     build:
       context: ./infra/aws-otel-collector
       dockerfile: Dockerfile
@@ -327,6 +326,7 @@ services:
         condition: service_started
 
   prometheus:
+    profiles: ["observability"]
     image: docker.io/prom/prometheus:v3
     restart: no
     ports:
@@ -338,6 +338,7 @@ services:
       - "--web.enable-remote-write-receiver"
 
   grafana:
+    profiles: ["observability"]
     image: docker.io/grafana/grafana:11.6.0
     restart: no
     ports:
@@ -347,23 +348,22 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
     volumes:
-      - ./infra/grafana/provisioning:/etc/grafana/provisioning:z
-      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards:ro
     depends_on:
       prometheus:
         condition: service_started
 
-  grafana-dashboard-sync:
+  grafana-sync:
+    profiles: ["observability"]
     image: docker.io/python:3.13-alpine
     restart: no
     volumes:
-      - ./infra/grafana/sync-dashboards.sh:/sync-dashboards.sh:ro
+      - ./infra/grafana/sync-dashboards.py:/sync-dashboards.py:ro
       - ./infra/grafana/dashboards:/dashboards
-    environment:
-      GRAFANA_URL: "http://grafana:3300"
-      DASHBOARDS_DIR: "/dashboards"
-      SYNC_INTERVAL: "10"
-    command: ["/bin/sh", "/sync-dashboards.sh"]
+    command:
+      - python3
+      - /sync-dashboards.py
     depends_on:
       grafana:
         condition: service_started
