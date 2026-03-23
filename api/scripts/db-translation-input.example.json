@@ -1,23 +1,14 @@
 {
-  "accountRemoval": {
-    "subject": "Bloom Housing scheduled account removal due to inactivity",
-    "courtesyText": "This is a courtesy email to let you know that because your Bloom Housing Portal account has been inactive for 3 years, your account will be deleted in 30 days per our Terms of Use and Privacy Policy. If you’d like to keep your account, please log in sometime in the next month and we’ll consider your account active again.",
-    "signIn": "Sign in to Bloom Housing"
+  "t": {
+    "hello": "What's up"
   },
-  "advocateApproved": {
-    "subject": "Your account has been approved",
-    "hello": "Hello",
-    "approvalMessage": "Your account at %{appUrl} has been approved.",
-    "approvalInfo": "It will now be easier for you to start, save, and submit online applications <strong>on behalf of housing applicants</strong> for listings that appear on the site.",
-    "completeMessage": "To complete your account creation, please click the link below:",
-    "createAccount": "Create my account"
+  "footer": {
+    "footer": "New footer"
   },
-  "advocateRejected": {
-    "subject": "Update about your account request",
-    "hello": "Hello",
-    "rejectionMessageStart": "Thank you for your interest in creating an account on %{appUrl}.",
-    "rejectionMessageEnd": "We are not able to approve your account at this time.",
-    "rejectionInfoStart": "If you believe this decision was made in error or have questions about eligibility, please contact us at",
-    "rejectionInfoEnd": "for more information."
+  "confirmation": {
+    "subject": "Your Application Confirmation Updated",
+    "eligible": {
+      "fcfs": "Updated fcfs copy"
+    }
   }
 }
