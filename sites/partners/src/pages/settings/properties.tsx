@@ -111,8 +111,6 @@ const SettingsProperties = () => {
         cellRendererFramework: ({ data }) => {
           return (
             <ManageIconSection
-              onCopy={() => console.log("Copy: ", data.name)}
-              copyTestId={`property-copy-icon: ${data.name}`}
               onEdit={() => {
                 setEditConfirmModalOpen(data)
                 setIsDrawerOpen(true)
