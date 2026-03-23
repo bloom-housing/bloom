@@ -264,7 +264,7 @@ const Layout = (props: LayoutProps) => {
               })}
               titleLink={"/"}
               logo={
-                <Icon size={"lg"}>
+                <Icon size={"lg"} className={styles["jurisdiction-icon"]}>
                   <img src="/images/la-logo.svg" alt={t("footer.logoAlt")} />
                 </Icon>
               }
