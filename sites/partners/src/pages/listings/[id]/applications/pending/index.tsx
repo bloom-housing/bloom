@@ -5,14 +5,8 @@ import Head from "next/head"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
-import {
-  AgTable,
-  t,
-  useAgTable,
-  Breadcrumbs,
-  BreadcrumbLink,
-  AlertBox,
-} from "@bloom-housing/ui-components"
+import { t, Breadcrumbs, BreadcrumbLink, AlertBox } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import {
   ListingsStatusEnum,
   ReviewOrderTypeEnum,

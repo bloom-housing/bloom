@@ -1,7 +1,8 @@
 import React, { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { AgTable, t, useAgTable, useMutate } from "@bloom-housing/ui-components"
+import { t, useMutate } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
