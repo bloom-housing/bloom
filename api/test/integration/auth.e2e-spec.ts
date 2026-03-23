@@ -364,7 +364,6 @@ describe('Auth Controller Tests', () => {
         name: 'single_use_code_login_test',
         allowSingleUseCodeLogin: true,
         rentalAssistanceDefault: 'test',
-        referralSummaryDefault: 'test',
       },
     });
 
