@@ -13,15 +13,15 @@ import * as opentelemetry from '@opentelemetry/api';
 export class MetricsInterceptor implements NestInterceptor {
   meter: opentelemetry.Meter;
   request_counter: opentelemetry.Counter;
-  request_latency: opentelemetry.Histogram;
+  request_duration_ms: opentelemetry.Histogram;
 
   constructor() {
     this.meter = opentelemetry.metrics.getMeter('metrics.interceptor');
     this.request_counter = this.meter.createCounter(
       'metrics.interceptor.request_counter',
     );
-    this.request_latency = this.meter.createHistogram(
-      'metrics.interceptor.request_latency',
+    this.request_duration_ms = this.meter.createHistogram(
+      'metrics.interceptor.request_duration_ms',
     );
   }
 
@@ -33,16 +33,16 @@ export class MetricsInterceptor implements NestInterceptor {
       protocol: context.getType(),
     };
     const httpContext = context.switchToHttp();
-    attributes["http_method"] = httpContext.getRequest<Request>().method;
+    attributes['http_method'] = httpContext.getRequest<Request>().method;
 
     return next.handle().pipe(
       tap(() => {
-        const latency = Date.now() - start;
+        const duration_ms = Date.now() - start;
         attributes['response_code'] =
           httpContext.getResponse<Response>().statusCode;
 
         this.request_counter.add(1, attributes);
-        this.request_latency.record(latency, attributes);
+        this.request_duration_ms.record(duration_ms, attributes);
       }),
     );
   }
