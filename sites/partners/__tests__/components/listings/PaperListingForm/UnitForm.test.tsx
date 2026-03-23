@@ -397,7 +397,7 @@ describe("UnitForm", () => {
 
     await waitFor(() => {
       expect(screen.getByRole("textbox", { name: "Unit number" })).toHaveValue("A-101")
-      expect(screen.getByRole("combobox", { name: "Unit type" })).toHaveValue(unitTypes[0].id)
+      expect(screen.getByRole("combobox", { name: /unit type/i })).toHaveValue(unitTypes[0].id)
       expect(screen.getByLabelText(/square footage/i)).toHaveValue(321)
       expect(screen.getByLabelText(/minimum monthly income|monthly minimum income/i)).toHaveValue(
         2208
@@ -453,7 +453,7 @@ describe("UnitForm", () => {
 
     await waitFor(() => {
       expect(screen.getByRole("textbox", { name: "Unit number" })).toHaveValue("B-202")
-      expect(screen.getByRole("combobox", { name: "Unit type" })).toHaveValue(unitTypes[1].id)
+      expect(screen.getByRole("combobox", { name: /unit type/i })).toHaveValue(unitTypes[1].id)
       expect(screen.getByLabelText(/square footage/i)).toHaveValue(456)
       expect(screen.getByLabelText(/minimum monthly income|monthly minimum income/i)).toHaveValue(
         3200
