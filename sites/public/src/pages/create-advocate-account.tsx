@@ -66,7 +66,10 @@ const CreateAdvocateAccount = ({ agencies }: CreateAdvocateAccountProps) => {
   }
 
   return (
-    <FormsLayout pageTitle={t("advocateAccount.requestAccountTitle")}>
+    <FormsLayout
+      pageTitle={t("advocateAccount.requestAccountTitle")}
+      metaDescription={t("pageDescription.createAdvocateAccount")}
+    >
       <BloomCard
         iconSymbol="userCircle"
         title={t("advocateAccount.requestAccountTitle")}

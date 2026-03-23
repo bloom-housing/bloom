@@ -11,7 +11,10 @@ const CreateAdvocateAccountConfirmation = () => {
   const router = useRouter()
 
   return (
-    <FormsLayout pageTitle={t("authentication.requestAdvocateAccount.confirmationPageTitle")}>
+    <FormsLayout
+      pageTitle={t("authentication.requestAdvocateAccount.confirmationPageTitle")}
+      metaDescription={t("pageDescription.createAdvocateAccountConfirmation")}
+    >
       <BloomCard
         title={t("authentication.requestAdvocateAccount.confirmationTitle")}
         iconSymbol={"userCircle"}

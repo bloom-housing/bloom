@@ -1,14 +1,21 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Pool } from 'pg';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Signer } from '@aws-sdk/rds-signer';
 
+const KEEP_ALIVE_DELAY_MS = 10000;
+
 /*
     This service sets up our database connections
 */
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit {
+export class PrismaService
+  extends PrismaClient
+  implements OnModuleInit, OnModuleDestroy
+{
+  private pool!: Pool;
+
   constructor() {
     if (process.env.DB_USE_RDS_IAM_AUTH) {
       // Users of RDS IAM authentication are required to pass in variables separately to avoid
@@ -32,18 +39,28 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
         password: async function () {
           return await signer.getAuthToken();
         },
-        ssl: {
-          rejectUnauthorized: false, // use SSL, but don't validate DB cert
-        },
+        keepAlive: true,
+        keepAliveInitialDelayMillis: KEEP_ALIVE_DELAY_MS,
+        ssl: { rejectUnauthorized: false }, // use SSL, but don't validate DB cert
       });
       super({ adapter: new PrismaPg(pool) });
+      this.pool = pool;
     } else {
-      // Maintain backwards-compatibility for non-RDS IAM deployments.
-      super();
+      const pool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+        keepAlive: true,
+        keepAliveInitialDelayMillis: KEEP_ALIVE_DELAY_MS,
+      });
+      super({ adapter: new PrismaPg(pool) });
+      this.pool = pool;
     }
   }
 
   async onModuleInit() {
     await this.$connect();
+  }
+
+  async onModuleDestroy() {
+    await this.pool.end();
   }
 }

@@ -6,15 +6,8 @@ import { useForm } from "react-hook-form"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
 import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
-import {
-  t,
-  AgTable,
-  useAgTable,
-  Select,
-  Form,
-  SelectOption,
-  Field,
-} from "@bloom-housing/ui-components"
+import { t, Select, Form, SelectOption, Field } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
@@ -23,7 +16,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useListingExport, useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
-import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
 
 class formatLinkCell {
@@ -108,7 +100,6 @@ type CreateListingFormFields = {
 }
 
 export default function ListingsList() {
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const isAdmin =
     profile?.userRoles?.isAdmin ||
@@ -341,7 +332,6 @@ export default function ListingsList() {
       <Head>
         <title>{`Home - ${t("nav.siteTitlePartners")}`}</title>
       </Head>
-      <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
       <NavigationHeader title={t("nav.listings")}></NavigationHeader>
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
