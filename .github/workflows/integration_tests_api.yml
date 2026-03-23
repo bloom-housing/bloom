@@ -27,7 +27,7 @@ env:
   THROTTLE_LIMIT: 100
   API_PASS_KEY: "some-key-here"
   LOTTERY_DAYS_TILL_EXPIRY: 45
-  DB_NO_SSL: TRUE
+  DB_NO_SSL: 'TRUE'
 
 
 jobs:
