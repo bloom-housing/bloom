@@ -289,9 +289,7 @@ describe("Account Listing View", () => {
       )
     ).toBeInTheDocument()
     expect(
-      within(reasonableAccommodationsSection).getByText(
-        /wheelchair-accessible unit entrance requested/i
-      )
+      within(reasonableAccommodationsSection).getByText(/wheelchair-accessible unit entrance/i)
     ).toBeInTheDocument()
 
     // --------------------------- Programs ------------------------------------

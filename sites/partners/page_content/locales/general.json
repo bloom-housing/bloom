@@ -76,6 +76,7 @@
   "application.details.type": "Application submission type",
   "application.details.vouchers": "Housing Voucher or subsidy",
   "application.details.workInRegion": "Work in region",
+  "application.household.reasonableAccommodations.question": "Do you require Reasonable Accommodations? If so, please specify.",
   "application.review.demographics.howDidYouHearOptions.jurisdictionWebsite": "Jurisdiction website",
   "applications.addConfirmModalAddApplication": "Add application",
   "applications.addConfirmModalAddApplicationPostLottery": "A lottery has already been run for this listing.",
