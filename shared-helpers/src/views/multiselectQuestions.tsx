@@ -563,15 +563,16 @@ export const mapCheckboxesToApi = (
 
   const addressFields = Object.keys(data).filter((option) => Object.keys(data[option]))
   let hasOptedOut = false
-  const selections: (ApplicationSelectionOptionCreate | null)[] = Object.keys(data)
-    .filter((key) => data[key] === true)
-    .map((key) => {
+  const selections: ApplicationSelectionOptionCreate[] = Object.keys(data).reduce((acc, key) => {
+      if (data[key] !== true) {
+        return acc
+      }
       const foundOption = question.multiselectOptions?.find(
         (elem) => cleanMultiselectString(elem.name) === key
       )
       // the below guard is a mere formality, because we will always find an option
       // from what the UI has rendered
-      if (!foundOption) return null
+      if (!foundOption) return acc
 
       if (foundOption.isOptOut) hasOptedOut = true
       const selectionData: ApplicationSelectionOptionCreate = {
@@ -595,8 +596,8 @@ export const mapCheckboxesToApi = (
           selectionData[AddressHolder.Relationship] = data[addressHolderRelationshipData[0]]
         }
       }
-      return selectionData
-    })
+      return [...acc, selectionData]
+    }, [] as ApplicationSelectionOptionCreate[])
   return {
     multiselectQuestion: { id: question.id },
     hasOptedOut,
