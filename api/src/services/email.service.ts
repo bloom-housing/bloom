@@ -515,11 +515,11 @@ export class EmailService {
     application: Application,
     changes: ApplicationStatusChangeItem[],
     appUrl: string,
-    contactEmail?: string,
     isAdvocate = false,
     advocateEmail?: string,
   ) {
     const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+    const contactEmail = process.env.CONTACT_EMAIL;
     const buildSummaryItems = () =>
       changes.map((change) => {
         if (change.type === 'status') {
