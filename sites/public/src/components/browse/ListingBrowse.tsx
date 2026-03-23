@@ -61,7 +61,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   const [filterState, setFilterState] = useState<FilterData>({})
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
+  const metaDescription = t("pageDescription.listings", { regionName: t("region.name") })
 
   const filterQuery = getFilterQueryFromURL(router.query)
   const enableFiltering = isFeatureFlagOn(
