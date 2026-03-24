@@ -86,7 +86,7 @@
         "x": 0,
         "y": 0
       },
-      "id": 3,
+      "id": 2,
       "options": {
         "legend": {
           "calcs": [],
@@ -105,7 +105,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "histogram_quantile(0.99, sum by(controller, handler, http_method, response_code, protocol, le) (rate(metrics_interceptor_request_duration_ms_bucket[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by(le, method, path, response_code) (rate(middleware_request_duration_ms_bucket{job=\"bloom-site-public\"}[$__rate_interval])))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "__auto",
@@ -114,7 +114,7 @@
           "useBackend": false
         }
       ],
-      "title": "API Request Duration P99 (ms)",
+      "title": "Public Request Duration P99 (ms)",
       "type": "timeseries"
     },
     {
@@ -177,7 +177,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 17,
+        "h": 18,
         "w": 24,
         "x": 0,
         "y": 15
@@ -205,7 +205,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "rate(metrics_interceptor_request_counter_total[$__rate_interval])",
+          "expr": "rate(middleware_request_counter_total{job=\"bloom-site-public\"}[$__rate_interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -214,7 +214,7 @@
           "useBackend": false
         }
       ],
-      "title": "API Request Rate per second",
+      "title": "Public Request Rate per second",
       "type": "timeseries"
     }
   ],
@@ -231,6 +231,6 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "API",
-  "uid": "efgk3zx9oj5s0c"
+  "title": "Public Site",
+  "uid": "bfh0y827ibif4e"
 }
