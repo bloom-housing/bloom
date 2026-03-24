@@ -6,14 +6,10 @@ import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger
 import Layout from "../../../layouts"
 import PaperListingForm from "../../../components/listings/PaperListingForm"
 import { ListingContext } from "../../../components/listings/ListingContext"
-import { MetaTags } from "../../../components/shared/MetaTags"
 import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 
 const EditListing = (props: { listing: Listing }) => {
-  const metaDescription = ""
-  const metaImage = "" // TODO: replace with hero image
-
   const { listing: defaultlListing } = props
   const [listing, setListing] = useState<Listing>(defaultlListing)
   const [listingName, setListingName] = useState(listing?.name)
@@ -34,12 +30,6 @@ const EditListing = (props: { listing: Listing }) => {
           <Head>
             <title>{`Edit ${listingName} - ${t("nav.siteTitlePartners")}`}</title>
           </Head>
-
-          <MetaTags
-            title={t("nav.siteTitlePartners")}
-            image={metaImage}
-            description={metaDescription}
-          />
 
           <NavigationHeader
             title={`${t("t.edit")}: ${listingName}`}

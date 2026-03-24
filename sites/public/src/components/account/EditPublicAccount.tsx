@@ -131,7 +131,10 @@ export const EditPublicAccount = () => {
 
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-      <FormsLayout pageTitle={t("account.accountSettings")}>
+      <FormsLayout
+        pageTitle={t("account.accountSettings")}
+        metaDescription={t("pageDescription.accountSettings")}
+      >
         <BloomCard
           iconSymbol="userCircle"
           iconClass={"card-icon"}
