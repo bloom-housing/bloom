@@ -139,7 +139,7 @@ export function useListingsData({
   }
 }
 
-export const useListingExport = () => {
+export const useListingExport = (useSecurePathway = false) => {
   const { listingsService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
 
@@ -149,12 +149,21 @@ export const useListingExport = () => {
     setCsvExportLoading(true)
 
     try {
-      const content = await listingsService.listAsCsv(
-        { timeZone: dayjs.tz.guess() },
-        { responseType: "arraybuffer" }
-      )
-      const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
-      const url = window.URL.createObjectURL(blob)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let content: any
+      let url: string
+
+      if (useSecurePathway) {
+        content = await listingsService.listAsCsvSecure({ timeZone: dayjs.tz.guess() })
+        url = content
+      } else {
+        content = await listingsService.listAsCsv(
+          { timeZone: dayjs.tz.guess() },
+          { responseType: "arraybuffer" }
+        )
+        const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
+        url = window.URL.createObjectURL(blob)
+      }
       const link = document.createElement("a")
       link.href = url
       const now = new Date()
