@@ -348,8 +348,8 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
     volumes:
-      - ./infra/grafana/provisioning:/etc/grafana/provisioning:ro
-      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
     depends_on:
       prometheus:
         condition: service_started
@@ -359,8 +359,8 @@ services:
     image: docker.io/python:3.13-alpine
     restart: no
     volumes:
-      - ./infra/grafana/sync-dashboards.py:/sync-dashboards.py:ro
-      - ./infra/grafana/dashboards:/dashboards
+      - ./grafana/sync-dashboards.py:/sync-dashboards.py:ro
+      - ./grafana/dashboards:/dashboards
     command:
       - python3
       - /sync-dashboards.py
