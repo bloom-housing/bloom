@@ -279,7 +279,7 @@ export class ListingsService {
     })
   }
   /**
-   * Get listings and units as zip
+   * Get listings and units as secured zip
    */
   listAsCsvSecure(
     params: {
@@ -857,6 +857,28 @@ export class SnapshotService {
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/snapshot/createListingSnapshot"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create Application Snapshot
+   */
+  createApplicationSnapshot(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/snapshot/createApplicationSnapshot"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
