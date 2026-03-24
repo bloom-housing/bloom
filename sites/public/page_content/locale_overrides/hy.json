@@ -14,7 +14,5 @@
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua:",
   "resources.contactEmail": "bloomington@housing.org",
   "resources.contactInfo": "Բլումինգտոնի բնակարանային և համայնքային զարգացման վարչություն",
-  "resources.housingProgramsTitle": "Բլումինգտոնի բնակարանային և համայնքային զարգացման բնակարանային ծրագրեր",
-  "application.household.reasonableAccommodations.question": "Ձեզ անհրաժեշտ են՞ ողջամիտ հարմարեցումներ: Եթե այո, խնդրում ենք մանրամասնել:",
-  "pageTitle.reasonableAccommodations": "Խելամիտ հարմարեցումներ"
+  "resources.housingProgramsTitle": "Բլումինգտոնի բնակարանային և համայնքային զարգացման բնակարանային ծրագրեր"
 }

@@ -14,7 +14,5 @@
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "resources.contactEmail": "bloomington@housing.org সম্পর্কে",
   "resources.contactInfo": "ব্লুমিংটনের আবাসন ও সম্প্রদায় উন্নয়ন বিভাগ",
-  "resources.housingProgramsTitle": "ব্লুমিংটনের আবাসন ও সম্প্রদায় উন্নয়ন আবাসন কর্মসূচি",
-  "application.household.reasonableAccommodations.question": "আপনার কি কোনো যুক্তিসঙ্গত সহায়তার প্রয়োজন আছে? যদি থাকে, অনুগ্রহ করে উল্লেখ করুন।",
-  "pageTitle.reasonableAccommodations": "যুক্তিসঙ্গত বাসস্থান"
+  "resources.housingProgramsTitle": "ব্লুমিংটনের আবাসন ও সম্প্রদায় উন্নয়ন আবাসন কর্মসূচি"
 }

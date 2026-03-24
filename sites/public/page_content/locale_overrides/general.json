@@ -15,7 +15,5 @@
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "resources.contactEmail": "bloomington@housing.org",
   "resources.contactInfo": "Bloomington's Housing & Community Development Department",
-  "resources.housingProgramsTitle": "Bloomington's Housing & Community Development housing programs",
-  "application.household.reasonableAccommodations.question": "Do you require Reasonable Accommodations? If so, please specify.",
-  "pageTitle.reasonableAccommodations": "Reasonable accommodations"
+  "resources.housingProgramsTitle": "Bloomington's Housing & Community Development housing programs"
 }
