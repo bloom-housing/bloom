@@ -7,7 +7,6 @@ import {
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
 import { Listing } from '../../../src/dtos/listings/listing.dto';
-import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { TranslationService } from '../../../src/services/translation.service';

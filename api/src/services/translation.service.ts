@@ -3,10 +3,7 @@ import { LanguagesEnum, Translations } from '@prisma/client';
 import * as lodash from 'lodash';
 import { GoogleTranslateService } from './google-translate.service';
 import { PrismaService } from './prisma.service';
-import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { Listing } from '../dtos/listings/listing.dto';
-import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
-import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 
 @Injectable()
 export class TranslationService {
