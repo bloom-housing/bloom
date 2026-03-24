@@ -7,7 +7,14 @@ import { FormProvider, useForm } from "react-hook-form"
 
 const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0 }}>
+    <SWRConfig
+      value={{
+        provider: () => new Map(),
+        dedupingInterval: 0,
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+      }}
+    >
       <ConfigProvider apiUrl={"http://localhost:3100"}>
         <AuthProvider>{children}</AuthProvider>
       </ConfigProvider>

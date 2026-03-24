@@ -42,6 +42,7 @@ export class PrismaService
         keepAlive: true,
         keepAliveInitialDelayMillis: KEEP_ALIVE_DELAY_MS,
         ssl: { rejectUnauthorized: false }, // use SSL, but don't validate DB cert
+        options: '-c timezone=UTC',
       });
       super({ adapter: new PrismaPg(pool) });
       this.pool = pool;
@@ -54,6 +55,7 @@ export class PrismaService
           process.env.DB_NO_SSL === 'TRUE'
             ? undefined
             : { rejectUnauthorized: false },
+        options: '-c timezone=UTC',
       });
       super({ adapter: new PrismaPg(pool) });
       this.pool = pool;
