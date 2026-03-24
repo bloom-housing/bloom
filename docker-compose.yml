@@ -239,6 +239,7 @@ services:
           memory: "4096mb"
     environment:
       NODE_ENV: "production"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
       DISABLE_NEXT_TYPECHECK: "TRUE"
       NEXTJS_PORT: 3001
       BACKEND_API_BASE: "http://lb:3100"
@@ -275,6 +276,7 @@ services:
           memory: "6144mb"
     environment:
       NODE_ENV: "production"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
       DISABLE_NEXT_TYPECHECK: "TRUE"
       NEXTJS_PORT: 3000
       BACKEND_API_BASE: "http://lb:3100"
