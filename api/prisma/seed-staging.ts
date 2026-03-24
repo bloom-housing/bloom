@@ -805,12 +805,12 @@ export const stagingSeed = async (
   const workInCityQuestion = await prismaClient.multiselectQuestions.create({
     data: workInCityMsqData,
   });
-  let veteranProgramMsqData: Prisma.MultiselectQuestionsCreateInput;
+  let veteransProgramMsqData: Prisma.MultiselectQuestionsCreateInput;
   if (msqV2) {
-    veteranProgramMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
+    veteransProgramMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
       multiselectQuestion: {
         status: MultiselectQuestionsStatusEnum.active,
-        name: 'Veteran',
+        name: 'Veterans',
         description:
           'Have you or anyone in your household served in the US military?',
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
@@ -823,9 +823,9 @@ export const stagingSeed = async (
       },
     });
   } else {
-    veteranProgramMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
+    veteransProgramMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
       multiselectQuestion: {
-        text: 'Veteran',
+        text: 'Veterans',
         description:
           'Have you or anyone in your household served in the US military?',
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
@@ -838,11 +838,10 @@ export const stagingSeed = async (
       },
     });
   }
-  const veteranProgramQuestion = await prismaClient.multiselectQuestions.create(
-    {
-      data: veteranProgramMsqData,
-    },
-  );
+  const veteransProgramQuestion =
+    await prismaClient.multiselectQuestions.create({
+      data: veteransProgramMsqData,
+    });
   const mobilityAccessibilityNeedsProgramQuestion =
     await prismaClient.multiselectQuestions.create({
       data: multiselectQuestionFactory(angelopolisJurisdiction.id, {
@@ -1312,7 +1311,7 @@ export const stagingSeed = async (
             multiselectQuestions: [
               cityEmployeeQuestion,
               workInCityQuestion,
-              veteranProgramQuestion,
+              veteransProgramQuestion,
             ],
           }),
           await applicationFactory({
@@ -1326,7 +1325,7 @@ export const stagingSeed = async (
         multiselectQuestions: [
           workInCityQuestion,
           cityEmployeeQuestion,
-          veteranProgramQuestion,
+          veteransProgramQuestion,
         ],
         units: [
           {
