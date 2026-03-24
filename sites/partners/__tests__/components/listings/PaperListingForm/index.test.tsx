@@ -102,13 +102,18 @@ afterAll(() => server.close())
 
 describe("PaperListingForm", () => {
   describe("add listing", () => {
-    it("should render the add listing form", () => {
+    it("should render the add listing form", async () => {
       window.URL.createObjectURL = jest.fn()
       document.cookie = "access-token-available=True"
       server.use(
         rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
           return res(
-            ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true, isPartner: false } })
+            ctx.json({
+              id: "user1",
+              userRoles: { id: "user1", isAdmin: true, isPartner: false },
+              roles: { id: "user1", isAdmin: true, isPartner: false },
+              jurisdictions,
+            })
           )
         }),
         rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
@@ -124,7 +129,7 @@ describe("PaperListingForm", () => {
       render(<ListingForm jurisdictionId={"Bloomington"} />)
 
       // Listing Details Tab
-      expect(screen.getByRole("tab", { name: "Listing details" })).toBeInTheDocument()
+      expect(await screen.findByRole("tab", { name: "Listing details" })).toBeInTheDocument()
       const listingDetailsContent = screen.getByRole("tabpanel", { name: "Listing details" })
       expect(
         within(listingDetailsContent).getByRole("heading", { level: 2, name: "Listing intro" })
@@ -204,7 +209,7 @@ describe("PaperListingForm", () => {
   })
 
   describe("edit listing", () => {
-    it("should render the edit listing form with data populated", () => {
+    it("should render the edit listing form with data populated", async () => {
       window.URL.createObjectURL = jest.fn()
       document.cookie = "access-token-available=True"
       server.use(
@@ -213,6 +218,8 @@ describe("PaperListingForm", () => {
             ctx.json({
               id: "user1",
               userRoles: { id: "user1", isAdmin: true, isPartner: false },
+              roles: { id: "user1", isAdmin: true, isPartner: false },
+              jurisdictions,
             })
           )
         }),
@@ -230,7 +237,7 @@ describe("PaperListingForm", () => {
 
       // Preferences
       expect(
-        screen.getByRole("row", { name: "Order Name Additional fields Actions" })
+        await screen.findByRole("row", { name: "Order Name Additional fields Actions" })
       ).toBeInTheDocument()
       expect(screen.getByRole("row", { name: "1 Preference 1 Delete" })).toBeInTheDocument()
       expect(screen.getByRole("row", { name: "2 Preference 2 Delete" })).toBeInTheDocument()
