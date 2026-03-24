@@ -813,7 +813,7 @@ export const stagingSeed = async (
             ],
           },
         },
-        name: 'Veteran',
+        name: 'Veterans',
         status: MultiselectQuestionsStatusEnum.active,
       }
     : {
@@ -822,13 +822,13 @@ export const stagingSeed = async (
           'Have you or anyone in your household served in the US military?',
         optOutText: 'Prefer not to say',
         options: [
-          { text: 'Yes', exclusive: true, ordinal: 1 },
-          { text: 'No', exclusive: true, ordinal: 2 },
+          { text: 'Yes', exclusive: true, ordinal: 0 },
+          { text: 'No', exclusive: true, ordinal: 1 },
         ],
-        text: 'Veteran',
+        text: 'Veterans',
       };
-  const veteranProgramQuestion = await prismaClient.multiselectQuestions.create(
-    {
+  const veteransProgramQuestion =
+    await prismaClient.multiselectQuestions.create({
       data: multiselectQuestionFactory(
         mainJurisdiction.id,
         {
@@ -836,8 +836,7 @@ export const stagingSeed = async (
         },
         msqV2,
       ),
-    },
-  );
+    });
   const mobilityAccessibilityNeedsProgramMsqData = msqV2
     ? {
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
@@ -1424,7 +1423,7 @@ export const stagingSeed = async (
             multiselectQuestions: [
               cityEmployeeQuestion,
               workInCityQuestion,
-              veteranProgramQuestion,
+              veteransProgramQuestion,
             ],
           }),
           await applicationFactory({
@@ -1440,7 +1439,7 @@ export const stagingSeed = async (
         multiselectQuestions: [
           workInCityQuestion,
           cityEmployeeQuestion,
-          veteranProgramQuestion,
+          veteransProgramQuestion,
         ],
         units: [
           {
