@@ -52,6 +52,11 @@ configs:
           }
         }
       }
+  prometheus:
+    content: |
+      global:
+        scrape_interval: 5s
+        evaluation_interval: 5s
 
 services:
   lb:
@@ -331,8 +336,9 @@ services:
     restart: no
     ports:
       - "9090:9090"
-    volumes:
-      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    configs:
+      - source: prometheus
+        target: /etc/prometheus/prometheus.yml
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--web.enable-remote-write-receiver"
