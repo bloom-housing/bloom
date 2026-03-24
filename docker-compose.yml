@@ -162,6 +162,7 @@ services:
           memory: "4096mb"
     environment:
       DATABASE_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
+      DB_NO_SSL: "TRUE"
       DBSEED_USE_FULL_CLOUDINARY_URL_AS_FILE_ID: "1"
     command:
       - "yarn"
@@ -208,6 +209,7 @@ services:
       NODE_ENV: "production"
       APP_SECRET: "totally a secret"
       DATABASE_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
+      DB_NO_SSL: "TRUE"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://127.0.0.1:3100/"]
       interval: "5s"
