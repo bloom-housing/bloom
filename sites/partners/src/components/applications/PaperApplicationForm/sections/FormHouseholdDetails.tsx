@@ -25,6 +25,7 @@ type FormHouseholdDetailsProps = {
   enableOtherAdaOption?: boolean
   enableUnitGroups?: boolean
   enableFullTimeStudentQuestion?: boolean
+  enableReasonableAccommodations?: boolean
   listingType?: EnumListingListingType
 }
 
@@ -36,6 +37,7 @@ const FormHouseholdDetails = ({
   enableOtherAdaOption,
   enableUnitGroups,
   enableFullTimeStudentQuestion,
+  enableReasonableAccommodations,
   listingType,
 }: FormHouseholdDetailsProps) => {
   const formMethods = useFormContext()
@@ -186,19 +188,21 @@ const FormHouseholdDetails = ({
             </FieldValue>
           </Grid.Cell>
         </Grid.Row>
-        <Grid.Row columns="3">
-          <Grid.Cell>
-            <Textarea
-              id="application.reasonableAccommodations"
-              name="application.reasonableAccommodations"
-              label={t("application.household.reasonableAccommodations.question")}
-              register={register}
-              fullWidth={true}
-              maxLength={1000}
-              placeholder={""}
-            />
-          </Grid.Cell>
-        </Grid.Row>
+        {enableReasonableAccommodations && (
+          <Grid.Row columns="3">
+            <Grid.Cell>
+              <Textarea
+                id="application.reasonableAccommodations"
+                name="application.reasonableAccommodations"
+                label={t("application.household.reasonableAccommodations.question")}
+                register={register}
+                fullWidth={true}
+                maxLength={1000}
+                placeholder={""}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
       </SectionWithGrid>
     </>
   )

@@ -40,7 +40,9 @@ const renderApplicationView = (enableApplicationStatus = false) =>
         applicationsService: new ApplicationsService(),
         listingsService: new ListingsService(),
         doJurisdictionsHaveFeatureFlagOn: (flag) =>
-          flag === FeatureFlagEnum.enableApplicationStatus ? enableApplicationStatus : false,
+          flag === FeatureFlagEnum.enableApplicationStatus
+            ? enableApplicationStatus
+            : flag === FeatureFlagEnum.enableReasonableAccommodations,
       }}
     >
       <ApplicationView />

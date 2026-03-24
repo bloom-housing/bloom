@@ -10403,6 +10403,7 @@ export enum FeatureFlagEnum {
   "enablePartnerSettings" = "enablePartnerSettings",
   "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProperties" = "enableProperties",
+  "enableReasonableAccommodations" = "enableReasonableAccommodations",
   "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",
   "enableResources" = "enableResources",

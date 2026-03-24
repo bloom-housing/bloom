@@ -92,6 +92,11 @@ describe('Testing application export service', () => {
             name: FeatureFlagEnum.enableAdaOtherOption,
             active: true,
           },
+          {
+            id: 'enableReasonableAccommodations',
+            name: FeatureFlagEnum.enableReasonableAccommodations,
+            active: true,
+          },
         ],
       });
 
@@ -164,6 +169,11 @@ describe('Testing application export service', () => {
             name: FeatureFlagEnum.enableAdaOtherOption,
             active: true,
           },
+          {
+            id: 'enableReasonableAccommodations',
+            name: FeatureFlagEnum.enableReasonableAccommodations,
+            active: true,
+          },
         ],
       });
 
@@ -221,7 +231,13 @@ describe('Testing application export service', () => {
       const applications = mockApplicationSet(5, new Date(), 1);
       prisma.applications.findMany = jest.fn().mockReturnValue(applications);
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
-        featureFlags: [],
+        featureFlags: [
+          {
+            id: 'enableReasonableAccommodations',
+            name: FeatureFlagEnum.enableReasonableAccommodations,
+            active: true,
+          },
+        ],
       });
 
       prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
@@ -297,6 +313,11 @@ describe('Testing application export service', () => {
             name: FeatureFlagEnum.enableAdaOtherOption,
             active: true,
           },
+          {
+            id: 'enableReasonableAccommodations',
+            name: FeatureFlagEnum.enableReasonableAccommodations,
+            active: true,
+          },
         ],
       });
 
@@ -364,6 +385,11 @@ describe('Testing application export service', () => {
           {
             id: 'enableAdaOtherOption',
             name: FeatureFlagEnum.enableAdaOtherOption,
+            active: true,
+          },
+          {
+            id: 'enableReasonableAccommodations',
+            name: FeatureFlagEnum.enableReasonableAccommodations,
             active: true,
           },
         ],
@@ -436,6 +462,11 @@ describe('Testing application export service', () => {
           {
             id: 'enableAdaOtherOption',
             name: FeatureFlagEnum.enableAdaOtherOption,
+            active: true,
+          },
+          {
+            id: 'enableReasonableAccommodations',
+            name: FeatureFlagEnum.enableReasonableAccommodations,
             active: true,
           },
         ],
@@ -552,6 +583,7 @@ describe('Testing application export service', () => {
     it('should populate the data for each header and output a string', async () => {
       const headers = getExportHeaders(0, [], 'America/Los_Angeles', {
         enableAdaOtherOption: true,
+        enableReasonableAccommodations: true,
       });
       const id = randomUUID();
       const application = mockApplication({
@@ -575,6 +607,7 @@ describe('Testing application export service', () => {
     it('should populate the data for each header and output an object', async () => {
       const headers = getExportHeaders(0, [], 'America/Los_Angeles', {
         enableAdaOtherOption: true,
+        enableReasonableAccommodations: true,
       });
       const id = randomUUID();
       const application = mockApplication({

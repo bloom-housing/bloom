@@ -234,13 +234,6 @@ Cypress.Commands.add("fillHouseholdMember", (application, fieldsToSkip = []) => 
 })
 
 Cypress.Commands.add("fillHouseholdDetails", (application, fieldsToSkip = []) => {
-  const fieldsToType = [
-    {
-      id: "application.reasonableAccommodations",
-      fieldKey: "reasonableAccommodations",
-    },
-  ]
-
   const fieldsToClick = [
     {
       id: "application.householdExpectingChanges",
@@ -251,7 +244,7 @@ Cypress.Commands.add("fillHouseholdDetails", (application, fieldsToSkip = []) =>
       fieldKey: `application.householdStudent${application["householdStudent"]}`,
     },
   ]
-  fillFields(application, fieldsToType, [], fieldsToClick, fieldsToSkip)
+  fillFields(application, [], [], fieldsToClick, fieldsToSkip)
   cy.getByTestId(`preferredUnit.${application["preferredUnit"]}`).click()
 })
 
@@ -394,7 +387,6 @@ Cypress.Commands.add("verifyHouseholdDetails", (application, fieldsToSkip = []) 
     { id: "adaPriorities", fieldKey: "adaPriorities" },
     { id: "expectingChanges", fieldKey: "householdExpectingChanges" },
     { id: "householdStudent", fieldKey: "householdStudent" },
-    { id: "reasonableAccommodations", fieldKey: "reasonableAccommodations" },
   ]
   verifyHelper(application, fields, fieldsToSkip)
 })
