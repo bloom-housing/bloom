@@ -1,9 +1,9 @@
 import React, { useContext, useMemo, useState } from "react"
 import Head from "next/head"
-import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
-import { AgTable, useAgTable, t, AlertBox } from "@bloom-housing/ui-components"
+import { t, AlertBox } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import {
   FeatureFlagEnum,
   ListingViews,
@@ -25,7 +25,6 @@ type UserDrawerValue = {
 }
 
 const Users = () => {
-  const router = useRouter()
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const { mutate } = useSWRConfig()
   const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)

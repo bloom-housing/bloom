@@ -948,10 +948,7 @@ describe('User Controller Tests', () => {
         email: 'advocateUser@email.com',
         agreedToTermsOfService: true,
         agency: {
-          ...agencyData,
-          jurisdictions: {
-            id: agencyData.jurisdictionsId,
-          },
+          id: agencyData.id,
         },
         address: addressFactory() as AddressUpdate,
         jurisdictions: [{ id: juris.id }],

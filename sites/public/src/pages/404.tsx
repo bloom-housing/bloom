@@ -18,7 +18,7 @@ const ErrorPage = () => {
   }, [profile])
 
   return (
-    <Layout pageTitle={t("errors.notFound.title")}>
+    <Layout pageTitle={t("errors.notFound.title")} metaDescription={t("pageDescription.notFound")}>
       {process.env.showNewSeedsDesigns ? <Content404 /> : <Content404Deprecated />}
     </Layout>
   )
