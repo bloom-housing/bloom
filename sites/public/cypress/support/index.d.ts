@@ -25,7 +25,6 @@ declare namespace Cypress {
     step10Programs(application: Application, autofill?: boolean): Chainable
     step10Changes(application: Application, autofill?: boolean): Chainable
     step11Student(application: Application, programsExist: boolean, autofill?: boolean): Chainable
-    step11bReasonableAccommodations(application: Application, autofill?: boolean): Chainable
     step12Student(application: Application, autofill?: boolean): Chainable
     step12Programs(application: Application): Chainable
     step13IncomeVouchers(application: Application, autofill?: boolean): Chainable

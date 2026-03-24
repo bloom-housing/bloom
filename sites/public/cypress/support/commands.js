@@ -449,7 +449,7 @@ Cypress.Commands.add("step10Changes", (application, autofill) => {
   cy.isNextRouteValid("householdExpectingChanges")
 })
 
-Cypress.Commands.add("step11Student", (application, autofill) => {
+Cypress.Commands.add("step11Student", (application, programsExist, autofill) => {
   if (!autofill) {
     if (application.householdStudent) {
       cy.getByTestId("app-student").eq(0).check()
@@ -812,7 +812,7 @@ Cypress.Commands.add(
       const programsExist = listingQuestionSectionExists("programs")
       const preferencesExist = listingQuestionSectionExists("preferences")
 
-      cy.step11Student(application, autofill)
+      cy.step11Student(application, programsExist, autofill)
 
       if (programsExist) {
         cy.step12Programs(application)
