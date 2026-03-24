@@ -233,13 +233,20 @@ export const fileUploader = async ({
       timestamp,
       signature,
       onUploadProgress,
-    }).then((response) => {
-      setProgressValue(100)
-      setFileUploadData({
-        id: response.data.public_id,
-        url: cloudinaryUrlFromId(response.data.public_id),
-      })
     })
+      .then((response) => {
+        setProgressValue(100)
+        setFileUploadData({
+          id: response.data.public_id,
+          url: cloudinaryUrlFromId(response.data.public_id),
+        })
+      })
+      .catch(() => {
+        alert(
+          "Unable to upload the file. Please verify the file format is correct before retrying."
+        )
+        setProgressValue(0)
+      })
   }
 }
 
@@ -280,7 +287,7 @@ export const CloudinaryUpload = async ({
     throw err
   }
 
-  return axios.request({
+  return await axios.request({
     method: "post",
     url: url,
     data: data,

@@ -20,7 +20,7 @@ const DisclaimerSeeds = () => {
   }, [profile])
 
   return (
-    <Layout pageTitle={t("pageTitle.disclaimer")}>
+    <Layout pageTitle={t("pageTitle.disclaimer")} metaDescription={t("pageDescription.disclaimer")}>
       <PageHeaderLayout
         heading={t("pageTitle.disclaimer")}
         subheading="A design approach is a general philosophy that may or may not include a guide for specific methods."

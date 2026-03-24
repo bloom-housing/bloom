@@ -5,8 +5,8 @@ import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon"
 import TrashIcon from "@heroicons/react/24/solid/TrashIcon"
 
 type IconContentProps = {
-  onCopy: () => void
-  copyTestId: string
+  onCopy?: () => void
+  copyTestId?: string
   onDelete?: () => void
   deleteTestId?: string
   onEdit: () => void
@@ -27,16 +27,18 @@ const ManageIconSection = ({ align = "end", ...props }: IconContentProps) => {
           <PencilSquareIcon />
         </Icon>
       </button>
-      <button
-        className="text-primary"
-        onClick={props.onCopy}
-        aria-label={"Copy"}
-        data-testid={props.copyTestId}
-      >
-        <Icon size="md">
-          <DocumentDuplicateIcon />
-        </Icon>
-      </button>
+      {props.onCopy && (
+        <button
+          className="text-primary"
+          onClick={props.onCopy}
+          aria-label={"Copy"}
+          data-testid={props.copyTestId}
+        >
+          <Icon size="md">
+            <DocumentDuplicateIcon />
+          </Icon>
+        </button>
+      )}
       {props.onDelete && (
         <button
           className="text-alert"

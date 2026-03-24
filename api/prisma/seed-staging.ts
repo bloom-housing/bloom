@@ -1175,6 +1175,7 @@ export const stagingSeed = async (
         ],
         userAccounts: [{ id: partnerUser.id }],
         optionalFeatures: { carpetInUnit: true },
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1669,6 +1670,8 @@ export const stagingSeed = async (
       afsLastRunSetInPast: true,
       userAccounts: listingParams.userAccounts,
       optionalFeatures: listingParams.optionalFeatures,
+      enableListingFeaturesAndUtilities:
+        listingParams.enableListingFeaturesAndUtilities,
       propertyId: listingParams.propertyId,
     });
     const savedListing = await prismaClient.listings.create({
