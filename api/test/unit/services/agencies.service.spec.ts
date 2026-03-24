@@ -111,6 +111,11 @@ describe('Testing agency service', () => {
         include: {
           jurisdictions: true,
         },
+        orderBy: [
+          {
+            name: 'asc',
+          },
+        ],
         where: {
           AND: [],
         },
@@ -148,6 +153,11 @@ describe('Testing agency service', () => {
         include: {
           jurisdictions: true,
         },
+        orderBy: [
+          {
+            name: 'asc',
+          },
+        ],
         where: {
           AND: [],
         },
@@ -185,6 +195,11 @@ describe('Testing agency service', () => {
         include: {
           jurisdictions: true,
         },
+        orderBy: [
+          {
+            name: 'asc',
+          },
+        ],
         where: {
           AND: [],
         },
@@ -212,6 +227,11 @@ describe('Testing agency service', () => {
         include: {
           jurisdictions: true,
         },
+        orderBy: [
+          {
+            name: 'asc',
+          },
+        ],
         where: {
           AND: [],
         },
@@ -242,6 +262,11 @@ describe('Testing agency service', () => {
         include: {
           jurisdictions: true,
         },
+        orderBy: [
+          {
+            name: 'asc',
+          },
+        ],
         where: {
           AND: [
             {

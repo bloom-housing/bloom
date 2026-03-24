@@ -207,7 +207,7 @@ const ListingForm = ({
 
   const { data: properties } = usePropertiesList({
     page: null,
-    limit: null,
+    limit: "all",
     jurisdictions: jurisdictionId,
   })
 
