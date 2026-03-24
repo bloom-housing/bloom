@@ -84,21 +84,6 @@ export class TranslationService {
       return;
     }
 
-    const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
-      select: {
-        id: true,
-        featureFlags: true,
-      },
-      where: {
-        id: listing.jurisdictions.id,
-      },
-    });
-
-    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as unknown as Jurisdiction,
-      FeatureFlagEnum.enableV2MSQ,
-    );
-
     const pathsToFilter = {
       accessibility: listing.accessibility,
       amenities: listing.amenities,
@@ -170,40 +155,11 @@ export class TranslationService {
       pathsToFilter[`property.urlTitle`] = listing.property.urlTitle;
     }
 
-    if (!enableV2MSQ && listing.listingMultiselectQuestions) {
-      listing.listingMultiselectQuestions.map((multiselectQuestion, index) => {
-        multiselectQuestion.multiselectQuestions.untranslatedText =
-          multiselectQuestion.multiselectQuestions?.text;
-        multiselectQuestion.multiselectQuestions.untranslatedOptOutText =
-          multiselectQuestion.multiselectQuestions?.optOutText;
-        pathsToFilter[
-          `listingMultiselectQuestions[${index}].multiselectQuestions.text`
-        ] = multiselectQuestion.multiselectQuestions?.text;
-        pathsToFilter[
-          `listingMultiselectQuestions[${index}].multiselectQuestions.description`
-        ] = multiselectQuestion.multiselectQuestions?.description;
-        pathsToFilter[
-          `listingMultiselectQuestions[${index}].multiselectQuestions.subText`
-        ] = multiselectQuestion.multiselectQuestions?.subText;
-        multiselectQuestion.multiselectQuestions?.options?.map(
-          (multiselectOption, optionIndex) => {
-            multiselectOption.untranslatedText = multiselectOption.text;
-            pathsToFilter[
-              `listingMultiselectQuestions[${index}].multiselectQuestions.options[${optionIndex}].text`
-            ] = multiselectOption.text;
-            pathsToFilter[
-              `listingMultiselectQuestions[${index}].multiselectQuestions.options[${optionIndex}].description`
-            ] = multiselectOption.description;
-          },
-        );
-        pathsToFilter[
-          `listingMultiselectQuestions[${index}].multiselectQuestions.optOutText`
-        ] = multiselectQuestion.multiselectQuestions?.optOutText;
-      });
-    } else if (enableV2MSQ && listing.listingMultiselectQuestions) {
+    if (listing.listingMultiselectQuestions) {
       listing.listingMultiselectQuestions.map((multiselectQuestion, index) => {
         multiselectQuestion.multiselectQuestions.untranslatedName =
           multiselectQuestion.multiselectQuestions?.name;
+
         pathsToFilter[
           `listingMultiselectQuestions[${index}].multiselectQuestions.name`
         ] = multiselectQuestion.multiselectQuestions?.name;
@@ -225,6 +181,29 @@ export class TranslationService {
             ] = multiselectOption.description;
           },
         );
+
+        // TODO: Remove after V2MSQ
+        multiselectQuestion.multiselectQuestions.untranslatedText =
+          multiselectQuestion.multiselectQuestions?.text;
+        multiselectQuestion.multiselectQuestions.untranslatedOptOutText =
+          multiselectQuestion.multiselectQuestions?.optOutText;
+        pathsToFilter[
+          `listingMultiselectQuestions[${index}].multiselectQuestions.text`
+        ] = multiselectQuestion.multiselectQuestions?.text;
+        multiselectQuestion.multiselectQuestions?.options?.map(
+          (multiselectOption, optionIndex) => {
+            multiselectOption.untranslatedText = multiselectOption.text;
+            pathsToFilter[
+              `listingMultiselectQuestions[${index}].multiselectQuestions.options[${optionIndex}].text`
+            ] = multiselectOption.text;
+            pathsToFilter[
+              `listingMultiselectQuestions[${index}].multiselectQuestions.options[${optionIndex}].description`
+            ] = multiselectOption.description;
+          },
+        );
+        pathsToFilter[
+          `listingMultiselectQuestions[${index}].multiselectQuestions.optOutText`
+        ] = multiselectQuestion.multiselectQuestions?.optOutText;
       });
     }
 

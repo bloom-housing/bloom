@@ -173,11 +173,14 @@ const translatedStrings = (enableV2MSQ?: boolean) => {
     'translated community disclaimer description',
     'translated property description',
     'translated property url title',
-    `translated multiselect ${enableV2MSQ ? 'name' : 'text'}`,
+    enableV2MSQ ? 'translated multiselect name' : null,
     'translated multiselect description',
     'translated multiselect subtext',
-    `translated multiselectOption ${enableV2MSQ ? 'name' : 'text'}`,
-    'translated multiselectOption description',
+    enableV2MSQ ? 'translated multiselectOption name' : null,
+    enableV2MSQ ? 'translated multiselectOption description' : null,
+    !enableV2MSQ ? 'translated multiselect text' : null,
+    !enableV2MSQ ? 'translated multiselectOption text' : null,
+    !enableV2MSQ ? 'translated multiselectOption description' : null,
     !enableV2MSQ ? 'translated multiselect opt out text' : null,
   ];
 };
@@ -322,9 +325,6 @@ describe('Testing translations service', () => {
       prisma.generatedListingTranslations.create = jest
         .fn()
         .mockResolvedValue(null);
-      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
-        id: 'jurisdictionId',
-      });
 
       const result = await service.translateListing(
         mockListing() as Listing,
@@ -350,15 +350,6 @@ describe('Testing translations service', () => {
       prisma.generatedListingTranslations.create = jest
         .fn()
         .mockResolvedValue(null);
-      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
-        id: 'jurisdictionId',
-        featureFlags: [
-          {
-            name: FeatureFlagEnum.enableV2MSQ,
-            active: true,
-          },
-        ],
-      });
 
       const result = await service.translateListing(
         mockListing() as Listing,
@@ -391,9 +382,6 @@ describe('Testing translations service', () => {
       prisma.generatedListingTranslations.create = jest
         .fn()
         .mockResolvedValue(null);
-      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
-        id: 'jurisdictionId',
-      });
 
       const result = await service.translateListing(
         mockListing() as Listing,
@@ -413,9 +401,6 @@ describe('Testing translations service', () => {
       prisma.generatedListingTranslations.findFirst = jest
         .fn()
         .mockResolvedValue({ translations: [translatedStrings()] });
-      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
-        id: 'jurisdictionId',
-      });
 
       const result = await service.translateListing(
         mockListing() as Listing,
