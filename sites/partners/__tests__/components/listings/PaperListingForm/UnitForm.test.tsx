@@ -349,6 +349,7 @@ describe("UnitForm", () => {
 
     expect(onSubmit).not.toHaveBeenCalled()
     expect(onClose).not.toHaveBeenCalled()
+    expect(screen.getAllByText("This field is required")).toHaveLength(2)
   })
 
   it("should close drawer on cancel", async () => {
