@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Markdown from "markdown-to-jsx"
 import { t } from "@bloom-housing/ui-components"
 import { Heading, Card } from "@bloom-housing/ui-seeds"
 import { BloomCard } from "@bloom-housing/shared-helpers"
@@ -91,9 +92,9 @@ const Assistance = (props: AssistanceProps) => {
                 <Heading size="xl" priority={2}>
                   {t("footer.contact")}
                 </Heading>
-                <p className={styles["contact-card-description"]}>
-                  {t("resources.contactDescription")}
-                </p>
+                <div className={styles["contact-card-description"]}>
+                  <Markdown>{t("resources.contactDescription")}</Markdown>
+                </div>
               </div>
               <div className={styles["contact-card-subsection"]}>
                 <p className={styles["contact-card-info"]}>{t("resources.contactInfo")}</p>
