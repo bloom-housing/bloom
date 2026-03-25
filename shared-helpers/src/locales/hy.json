@@ -178,6 +178,7 @@
   "application.contact.phoneNumberTypes.work": "Աշխատանք",
   "application.contact.preferredContactType": "Նախընտրելի կապի տեսակը",
   "application.contact.provideAMailingAddress": "Նշեք հասցե, որտեղ կարող եք ստանալ ձեր դիմումի վերաբերյալ թարմացումներ և նյութեր։",
+  "application.contact.pobox": "Կա՞ փոստային արկղ:",
   "application.contact.secondNumber": "Երկրորդ համարը",
   "application.contact.sendMailToMailingAddress": "Ուղարկել իմ նամակը այլ հասցեով",
   "application.contact.state": "Պետություն",
