@@ -18,6 +18,8 @@ import { mapTo } from '../utilities/mapTo';
 import Agency from '../dtos/agency/agency.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
+import { buildOrderBy } from '../utilities/build-order-by';
+import { OrderByEnum } from '../enums/shared/order-by-enum';
 
 @Injectable()
 export class AgencyService {
@@ -46,6 +48,7 @@ export class AgencyService {
       include: {
         jurisdictions: true,
       },
+      orderBy: buildOrderBy(['name'], [OrderByEnum.ASC]),
       where: this.buildWhereClause(params),
     });
 

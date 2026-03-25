@@ -50,6 +50,7 @@ resource "aws_s3_bucket_cors_configuration" "public" {
     allowed_origins = [
       "https://partners.${var.domain_name}",
     ]
+    allowed_headers = ["Content-Type", "Content-Disposition"]
   }
 }
 resource "aws_s3_bucket_public_access_block" "public" {

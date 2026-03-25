@@ -57,7 +57,12 @@ describe('Testing asset service', () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     getSignedUrl = jest.fn().mockResolvedValue('fake-upload-url');
 
-    expect(await service.createS3UploadUrl()).toEqual({
+    expect(
+      await service.createS3UploadUrl({
+        contentDisposition: '',
+        contentType: '',
+      }),
+    ).toEqual({
       fileId: 'fake-uuid',
       uploadUrl: 'fake-upload-url',
       publicUrl: 'https://fake-public.s3.moon-2.amazonaws.com/fake-uuid',

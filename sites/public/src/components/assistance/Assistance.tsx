@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Markdown from "markdown-to-jsx"
 import { t } from "@bloom-housing/ui-components"
 import { Heading, Card } from "@bloom-housing/ui-seeds"
 import { BloomCard } from "@bloom-housing/shared-helpers"
@@ -17,31 +18,58 @@ interface AssistanceProps {
 
 const Assistance = (props: AssistanceProps) => {
   const enableResources = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableResources)
+  const enableHousingBasics = isFeatureFlagOn(
+    props.jurisdiction,
+    FeatureFlagEnum.enableHousingBasics
+  )
+  const enableFaq = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableFaq)
 
   return (
-    <Layout pageTitle={t("pageTitle.getAssistance")}>
+    <Layout
+      pageTitle={t("pageTitle.getAssistance")}
+      metaDescription={t("pageDescription.getAssistance")}
+    >
       <PageHeaderLayout
         heading={t("pageTitle.getAssistance")}
         inverse
         subheading={t("pageDescription.getAssistance")}
         className={styles["site-layout"]}
+        fullHeight={true}
       >
         <article className={styles["site-content"]}>
           <div className={styles["items-wrapper"]}>
-            <BloomCard
-              title={t("assistance.applyToHousingTitle")}
-              subtitle={t("assistance.applyToHousingDescription")}
-              headingPriority={2}
-              iconSymbol={"home"}
-              iconOutlined={true}
-              variant={"block"}
-              className={styles["item"]}
-              iconClass="card-icon"
-            >
-              <Card.Section className={styles["item-link"]}>
-                <Link href={"/housing-basics"}>{t("assistance.applyToHousingLink")}</Link>
-              </Card.Section>
-            </BloomCard>
+            {enableHousingBasics && (
+              <BloomCard
+                title={t("assistance.applyToHousingTitle")}
+                subtitle={t("assistance.applyToHousingDescription")}
+                headingPriority={2}
+                iconSymbol={"home"}
+                iconOutlined={true}
+                variant={"block"}
+                className={styles["item"]}
+                iconClass="card-icon"
+              >
+                <Card.Section className={styles["item-link"]}>
+                  <Link href={"/housing-basics"}>{t("assistance.applyToHousingLink")}</Link>
+                </Card.Section>
+              </BloomCard>
+            )}
+            {enableFaq && (
+              <BloomCard
+                title={t("pageTitle.faq")}
+                subtitle={t("faq.description")}
+                headingPriority={2}
+                iconSymbol={"questionMarkCircle"}
+                iconOutlined={true}
+                variant={"block"}
+                className={styles["item"]}
+                iconClass="card-icon"
+              >
+                <Card.Section className={styles["item-link"]}>
+                  <Link href={"/faq"}>{t("faq.linkText")}</Link>
+                </Card.Section>
+              </BloomCard>
+            )}
             {enableResources && (
               <BloomCard
                 title={t("assistance.additionalHousingTitle")}
@@ -67,9 +95,9 @@ const Assistance = (props: AssistanceProps) => {
                 <Heading size="xl" priority={2}>
                   {t("footer.contact")}
                 </Heading>
-                <p className={styles["contact-card-description"]}>
-                  {t("resources.contactDescription")}
-                </p>
+                <div className={styles["contact-card-description"]}>
+                  <Markdown>{t("resources.contactDescription")}</Markdown>
+                </div>
               </div>
               <div className={styles["contact-card-subsection"]}>
                 <p className={styles["contact-card-info"]}>{t("resources.contactInfo")}</p>

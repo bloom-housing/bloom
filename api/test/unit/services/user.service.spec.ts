@@ -30,6 +30,7 @@ import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { AddressUpdate } from '../../../src/dtos/addresses/address-update.dto';
 import { AdvocateUserUpdate } from '../../../src/dtos/users/advocate-user-update.dto';
 import { UserOrderByKeys } from '../../../src/enums/listings/order-by-enum';
+import { Jurisdiction } from 'src/dtos/jurisdictions/jurisdiction.dto';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -56,7 +57,7 @@ describe('Testing user service', () => {
       jurisdictions: [
         {
           id: randomUUID(),
-        },
+        } as Jurisdiction,
       ],
       mfaEnabled: false,
       lastLoginAt: date,
@@ -99,7 +100,7 @@ describe('Testing user service', () => {
         PrismaService,
         EmailService,
         ConfigService,
-        EmailProvider,
+        EmailService,
         TranslationService,
         JurisdictionService,
         ApplicationService,
@@ -522,9 +523,9 @@ describe('Testing user service', () => {
           },
         },
         orderBy: [
+          { isApproved: 'asc' },
           { firstName: 'asc' },
           { lastName: 'asc' },
-          { isApproved: 'asc' },
         ],
         skip: 0,
         take: 5,
@@ -582,9 +583,9 @@ describe('Testing user service', () => {
           },
         },
         orderBy: [
+          { isApproved: 'desc' },
           { firstName: 'asc' },
           { lastName: 'asc' },
-          { isApproved: 'desc' },
         ],
         skip: 0,
         take: 5,
@@ -852,6 +853,13 @@ describe('Testing user service', () => {
         .mockReturnValue([{ id: 'app id 1' }, { id: 'app id 2' }]);
 
       prisma.applications.update = jest.fn().mockReturnValue(null);
+      prisma.applications.findUnique = jest
+        .fn()
+        .mockReturnValue({ id: 'app id 1' });
+
+      prisma.applicationSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
       await service.connectUserWithExistingApplications(email, id);
       expect(prisma.applications.findMany).toHaveBeenCalledWith({
         where: {
@@ -885,6 +893,7 @@ describe('Testing user service', () => {
           id: 'app id 2',
         },
       });
+      expect(prisma.applicationSnapshot.create).toHaveBeenCalledTimes(2);
     });
 
     it('should not connect user when no matching applications exist', async () => {
@@ -1274,6 +1283,98 @@ describe('Testing user service', () => {
         appUrl,
         expect.anything(),
       );
+    });
+
+    it('should not set resetToken when advocate user is not approved', async () => {
+      const id = randomUUID();
+      const email = 'email@example.com';
+
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id,
+        jurisdictions: [{ publicUrl: 'http://localhost:3000' }],
+        isAdvocate: true,
+        isApproved: false,
+      } as Partial<User>);
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+        resetToken: 'example reset token',
+      });
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+      emailService.forgotPassword = jest.fn();
+
+      await service.forgotPassword({
+        email,
+        appUrl: 'http://localhost:3000',
+      });
+      expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+        include: {
+          address: true,
+          agency: true,
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+          favoriteListings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        where: {
+          email,
+          id: undefined,
+        },
+      });
+      expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+    });
+
+    it('should set resetToken when advocate user is approved', async () => {
+      const id = randomUUID();
+      const email = 'email@example.com';
+
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id,
+        jurisdictions: [{ publicUrl: 'http://localhost:3000' }],
+        isAdvocate: true,
+        isApproved: true,
+      } as Partial<User>);
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+        resetToken: 'example reset token',
+      });
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id,
+      });
+      emailService.forgotPassword = jest.fn();
+
+      await service.forgotPassword({ email, appUrl: 'http://localhost:3000' });
+      expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+        include: {
+          address: true,
+          agency: true,
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+          favoriteListings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        where: {
+          email,
+          id: undefined,
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          resetToken: expect.anything(),
+        },
+        where: {
+          id,
+        },
+      });
     });
   });
 
@@ -2756,6 +2857,12 @@ describe('Testing user service', () => {
         id,
         email: 'publicUser@email.com',
       });
+      prisma.applications.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: 'application id 1' });
+      prisma.applicationSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
       await service.createPublicUser(
         {
           firstName: 'public User firstName',
@@ -2862,6 +2969,7 @@ describe('Testing user service', () => {
         },
       });
       expect(canOrThrowMock).not.toHaveBeenCalled();
+      expect(prisma.applicationSnapshot.create).toHaveBeenCalledTimes(2);
     });
 
     it('should create a public user with jurisdiction from header when dto jurisdictions are missing', async () => {
@@ -2927,6 +3035,13 @@ describe('Testing user service', () => {
         id,
         email: 'advocateUser@email.com',
       });
+      prisma.applications.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: 'application id 1' });
+
+      prisma.applicationSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
 
       const mockAdress = addressFactory();
 
@@ -2941,12 +3056,6 @@ describe('Testing user service', () => {
           address: mockAdress as AddressUpdate,
           agency: {
             id: 'test_agency_id',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            name: 'Test Agency',
-            jurisdictions: {
-              id: jurisId,
-            },
           },
         },
         false,
@@ -3049,6 +3158,7 @@ describe('Testing user service', () => {
         },
       });
       expect(canOrThrowMock).not.toHaveBeenCalled();
+      expect(prisma.applicationSnapshot.create).toHaveBeenCalledTimes(2);
     });
 
     it('should create an advocate user with jurisdiction from header when dto jurisdictions are missing', async () => {
@@ -3207,8 +3317,10 @@ describe('Testing user service', () => {
       const advocateId = randomUUID();
       const jurisId = randomUUID();
 
+      process.env.APP_SECRET = 'SOME-LONG-SECRET-KEY';
       prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
         id: advocateId,
+        email: 'advocate@example.com',
         isAdvocate: true,
         jurisdictions: [{ id: jurisId, publicUrl: 'https://example_url.com' }],
       });
@@ -3247,7 +3359,19 @@ describe('Testing user service', () => {
           id: advocateId,
         },
       });
-      expect(emailService.advocateAccepted).toHaveBeenCalled();
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          confirmationToken: expect.any(String),
+        },
+        where: {
+          id: advocateId,
+        },
+      });
+      expect(emailService.advocateAccepted).toHaveBeenCalledWith(
+        expect.anything(),
+        'https://example_url.com',
+        expect.stringContaining('/complete-advocate-account?token='),
+      );
     });
 
     it('should update advocate users isApproved value when rejected', async () => {
@@ -4013,6 +4137,140 @@ describe('Testing user service', () => {
       });
       expect(prisma.userAccountSnapshot.create).toHaveBeenCalledTimes(1);
       expect(response).toEqual({ success: true });
+    });
+  });
+
+  describe('getAdvocateFromConfirmationToken', () => {
+    beforeEach(() => {
+      process.env.APP_SECRET = 'SOME-LONG-SECRET-KEY';
+    });
+
+    it('should return the advocate user when token is valid and user is found', async () => {
+      const id = randomUUID();
+      const token = service.createConfirmationToken(id, 'advocate@example.com');
+
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+        id,
+        email: 'advocate@example.com',
+        firstName: 'Jane',
+        lastName: 'Doe',
+        isAdvocate: true,
+        confirmationToken: token,
+        jurisdictions: [],
+        listings: [],
+        userRoles: {},
+      });
+
+      const result = await service.getAdvocateFromConfirmationToken({ token });
+
+      expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            id,
+            confirmationToken: token,
+            isAdvocate: true,
+            isApproved: true,
+            confirmedAt: null,
+          }),
+        }),
+      );
+      expect(result).toMatchObject({ id, email: 'advocate@example.com' });
+    });
+
+    it('should throw NotFoundException when no user matches the token', async () => {
+      const id = randomUUID();
+      const token = service.createConfirmationToken(id, 'advocate@example.com');
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue(null);
+
+      await expect(
+        service.getAdvocateFromConfirmationToken({ token }),
+      ).rejects.toThrowError('User not found for token');
+    });
+
+    it('should throw NotFoundException when the token is invalid', async () => {
+      await expect(
+        service.getAdvocateFromConfirmationToken({ token: 'not-a-valid-jwt' }),
+      ).rejects.toThrowError('User not found for token');
+    });
+  });
+
+  describe('resendAdvocateConfirmation', () => {
+    beforeEach(() => {
+      process.env.APP_SECRET = 'SOME-LONG-SECRET-KEY';
+    });
+
+    it('should return success without sending email when no user is found to ensure account existence is not discoverable', async () => {
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue(null);
+      prisma.userAccounts.update = jest.fn();
+      emailService.advocateAccepted = jest.fn();
+
+      const result = await service.resendAdvocateConfirmation({
+        email: 'unknown@example.com',
+        appUrl: 'https://public.example.com',
+      });
+
+      expect(result).toEqual({ success: true });
+      expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+      expect(emailService.advocateAccepted).not.toHaveBeenCalled();
+    });
+
+    it('should store a new token and send the email using jurisdiction URL when present', async () => {
+      const id = randomUUID();
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+        id,
+        email: 'advocate@example.com',
+        isAdvocate: true,
+        isApproved: true,
+        confirmedAt: null,
+        jurisdictions: [{ publicUrl: 'https://jurisdiction.example.com' }],
+        listings: [],
+        userRoles: {},
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+      emailService.advocateAccepted = jest.fn();
+
+      const result = await service.resendAdvocateConfirmation({
+        email: 'advocate@example.com',
+        appUrl: 'https://public.example.com',
+      });
+
+      expect(result).toEqual({ success: true });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: { confirmationToken: expect.any(String) },
+        where: { id },
+      });
+      expect(emailService.advocateAccepted).toHaveBeenCalledWith(
+        expect.anything(),
+        'https://jurisdiction.example.com',
+        expect.stringContaining('/complete-advocate-account?token='),
+      );
+    });
+
+    it('should fall back to dto appUrl when user has no jurisdictions', async () => {
+      const id = randomUUID();
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+        id,
+        email: 'advocate@example.com',
+        isAdvocate: true,
+        isApproved: true,
+        confirmedAt: null,
+        jurisdictions: [],
+        listings: [],
+        userRoles: {},
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+      emailService.advocateAccepted = jest.fn();
+
+      await service.resendAdvocateConfirmation({
+        email: 'advocate@example.com',
+        appUrl: 'https://fallback.example.com',
+      });
+
+      expect(emailService.advocateAccepted).toHaveBeenCalledWith(
+        expect.anything(),
+        'https://fallback.example.com',
+        expect.stringContaining('/complete-advocate-account?token='),
+      );
     });
   });
 });

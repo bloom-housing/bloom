@@ -36,7 +36,7 @@ const Resources = () => {
     content.contactCard?.email
 
   return (
-    <Layout pageTitle={pageTitle}>
+    <Layout pageTitle={pageTitle} metaDescription={t("pageDescription.additionalResources")}>
       <PageHeaderLayout
         inverse
         heading={pageTitle}

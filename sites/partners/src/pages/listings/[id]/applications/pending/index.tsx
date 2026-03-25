@@ -5,26 +5,21 @@ import Head from "next/head"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
-import {
-  AgTable,
-  t,
-  useAgTable,
-  Breadcrumbs,
-  BreadcrumbLink,
-  AlertBox,
-} from "@bloom-housing/ui-components"
+import { t, Breadcrumbs, BreadcrumbLink, AlertBox } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import {
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
   RuleEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useSingleListingData, useFlaggedApplicationsList } from "../../../../../lib/hooks"
-import { ListingStatusBar } from "../../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../components/applications/ApplicationsSideNav"
 import { NavigationHeader } from "../../../../../components/shared/NavigationHeader"
 import { mergeApplicationNames } from "../../../../../lib/helpers"
 import ListingGuard from "../../../../../components/shared/ListingGuard"
+import { StatusBar } from "../../../../../components/shared/StatusBar"
+import { getListingStatusTag } from "../../../../../components/listings/helpers"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -174,7 +169,7 @@ const ApplicationsList = () => {
           }
         />
 
-        <ListingStatusBar status={listingDto?.status} />
+        <StatusBar>{getListingStatusTag(listingDto?.status)}</StatusBar>
 
         <section className={"bg-gray-200 pt-4"}>
           <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-6 px-4">

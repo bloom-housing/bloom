@@ -245,3 +245,14 @@
 .darker-help-text {
   --field-value-help-text-color: var(--seeds-input-text-label-color);
 }
+
+.loading-state-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background-color: var(--seeds-bg-color-canvas);
+}
+
+.form-container {
+  background-color: var(--seeds-bg-color-canvas);
+}

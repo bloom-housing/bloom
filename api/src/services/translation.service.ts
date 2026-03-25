@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { LanguagesEnum, Translations } from '@prisma/client';
+import * as lodash from 'lodash';
+import { GoogleTranslateService } from './google-translate.service';
 import { PrismaService } from './prisma.service';
 import { Listing } from '../dtos/listings/listing.dto';
-import { GoogleTranslateService } from './google-translate.service';
-import * as lodash from 'lodash';
 
 @Injectable()
 export class TranslationService {
@@ -137,8 +137,49 @@ export class TranslationService {
       });
     }
 
+    if (listing.includeCommunityDisclaimer) {
+      pathsToFilter[`communityDisclaimerTitle`] =
+        listing.communityDisclaimerTitle;
+      pathsToFilter[`communityDisclaimerDescription`] =
+        listing.communityDisclaimerDescription;
+    }
+
+    if (listing.property?.description) {
+      pathsToFilter[`property.description`] = listing.property.description;
+    }
+
+    if (listing.property?.urlTitle) {
+      pathsToFilter[`property.urlTitle`] = listing.property.urlTitle;
+    }
+
     if (listing.listingMultiselectQuestions) {
       listing.listingMultiselectQuestions.map((multiselectQuestion, index) => {
+        multiselectQuestion.multiselectQuestions.untranslatedName =
+          multiselectQuestion.multiselectQuestions?.name;
+
+        pathsToFilter[
+          `listingMultiselectQuestions[${index}].multiselectQuestions.name`
+        ] = multiselectQuestion.multiselectQuestions?.name;
+        pathsToFilter[
+          `listingMultiselectQuestions[${index}].multiselectQuestions.description`
+        ] = multiselectQuestion.multiselectQuestions?.description;
+        pathsToFilter[
+          `listingMultiselectQuestions[${index}].multiselectQuestions.subText`
+        ] = multiselectQuestion.multiselectQuestions?.subText;
+
+        multiselectQuestion.multiselectQuestions?.multiselectOptions?.map(
+          (multiselectOption, optionIndex) => {
+            multiselectOption.untranslatedName = multiselectOption.name;
+            pathsToFilter[
+              `listingMultiselectQuestions[${index}].multiselectQuestions.multiselectOptions[${optionIndex}].name`
+            ] = multiselectOption.name;
+            pathsToFilter[
+              `listingMultiselectQuestions[${index}].multiselectQuestions.multiselectOptions[${optionIndex}].description`
+            ] = multiselectOption.description;
+          },
+        );
+
+        // TODO: Remove after V2MSQ
         multiselectQuestion.multiselectQuestions.untranslatedText =
           multiselectQuestion.multiselectQuestions?.text;
         multiselectQuestion.multiselectQuestions.untranslatedOptOutText =
@@ -146,15 +187,6 @@ export class TranslationService {
         pathsToFilter[
           `listingMultiselectQuestions[${index}].multiselectQuestions.text`
         ] = multiselectQuestion.multiselectQuestions?.text;
-        pathsToFilter[
-          `listingMultiselectQuestions[${index}].multiselectQuestions.description`
-        ] = multiselectQuestion.multiselectQuestions?.description;
-        pathsToFilter[
-          `listingMultiselectQuestions[${index}].multiselectQuestions.subText`
-        ] = multiselectQuestion.multiselectQuestions?.subText;
-        pathsToFilter[
-          `listingMultiselectQuestions[${index}].multiselectQuestions.optOutText`
-        ] = multiselectQuestion.multiselectQuestions?.optOutText;
         multiselectQuestion.multiselectQuestions?.options?.map(
           (multiselectOption, optionIndex) => {
             multiselectOption.untranslatedText = multiselectOption.text;
@@ -164,19 +196,12 @@ export class TranslationService {
             pathsToFilter[
               `listingMultiselectQuestions[${index}].multiselectQuestions.options[${optionIndex}].description`
             ] = multiselectOption.description;
-            pathsToFilter[
-              `listingMultiselectQuestions[${index}].multiselectQuestions.options[${optionIndex}].description`
-            ] = multiselectOption.description;
           },
         );
+        pathsToFilter[
+          `listingMultiselectQuestions[${index}].multiselectQuestions.optOutText`
+        ] = multiselectQuestion.multiselectQuestions?.optOutText;
       });
-    }
-
-    if (listing.includeCommunityDisclaimer) {
-      pathsToFilter[`communityDisclaimerTitle`] =
-        listing.communityDisclaimerTitle;
-      pathsToFilter[`communityDisclaimerDescription`] =
-        listing.communityDisclaimerDescription;
     }
 
     const persistedTranslationsFromDB = await this.getPersistedTranslatedValues(

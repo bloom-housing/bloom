@@ -185,9 +185,11 @@ export const stagingSeed = async (
         ...optionalMainFlags,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableCompanyWebsite,
+        FeatureFlagEnum.enableFaq,
         FeatureFlagEnum.enableGeocodingPreferences,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
         FeatureFlagEnum.enableHomeType,
+        FeatureFlagEnum.enableHousingBasics,
         FeatureFlagEnum.enableIsVerified,
         FeatureFlagEnum.enableLeasingAgentAltText,
         FeatureFlagEnum.enableListingFavoriting,
@@ -241,6 +243,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
         FeatureFlagEnum.enableHomeType,
+        FeatureFlagEnum.enableHousingBasics,
         FeatureFlagEnum.enableIsVerified,
         FeatureFlagEnum.enableLimitedHowDidYouHear,
         FeatureFlagEnum.enableLeasingAgentAltText,
@@ -309,6 +312,7 @@ export const stagingSeed = async (
     data: jurisdictionFactory('Angelopolis', {
       publicSiteBaseURL: publicSiteBaseURL,
       featureFlags: [
+        FeatureFlagEnum.disableAccessibilityFeaturesTag,
         FeatureFlagEnum.disableBuildingSelectionCriteria,
         FeatureFlagEnum.disableEthnicityQuestion,
         FeatureFlagEnum.disableListingPreferences,
@@ -316,6 +320,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableApplicationStatus,
         FeatureFlagEnum.enableConfigurableRegions,
         FeatureFlagEnum.enableCreditScreeningFee,
+        FeatureFlagEnum.enableFaq,
         FeatureFlagEnum.enableHousingAdvocate,
         FeatureFlagEnum.enableHousingDeveloperOwner,
         FeatureFlagEnum.enableLeasingAgentAltText,
@@ -328,13 +333,14 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableNeighborhoodAmenities,
         FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown,
         FeatureFlagEnum.enableParkingFee,
+        FeatureFlagEnum.enableParkingType,
         FeatureFlagEnum.enablePetPolicyCheckbox,
         FeatureFlagEnum.enableProperties,
         FeatureFlagEnum.enableReferralQuestionUnits,
         FeatureFlagEnum.enableResources,
         FeatureFlagEnum.enableSmokingPolicyRadio,
-        FeatureFlagEnum.enableParkingType,
         FeatureFlagEnum.enableSpokenLanguage,
+        FeatureFlagEnum.enableUnitAccessibilityTypeTags,
       ],
       visibleNeighborhoodAmenities: [
         NeighborhoodAmenitiesEnum.groceryStores,
@@ -798,31 +804,28 @@ export const stagingSeed = async (
   const workInCityQuestion = await prismaClient.multiselectQuestions.create({
     data: workInCityMsqData,
   });
-  let veteranProgramMsqData: Prisma.MultiselectQuestionsCreateInput;
+  let veteransProgramMsqData: Prisma.MultiselectQuestionsCreateInput;
   if (msqV2) {
-    veteranProgramMsqData = multiselectQuestionFactory(
-      mainJurisdiction.id,
-      {
-        multiselectQuestion: {
-          status: MultiselectQuestionsStatusEnum.active,
-          name: 'Veteran',
-          description:
-            'Have you or anyone in your household served in the US military?',
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.programs,
-          isExclusive: true,
-          options: [
-            { name: 'Yes', ordinal: 1 },
-            { name: 'No', ordinal: 2 },
-          ],
-        },
+    veteransProgramMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
+      multiselectQuestion: {
+        status: MultiselectQuestionsStatusEnum.active,
+        name: 'Veterans',
+        description:
+          'Have you or anyone in your household served in the US military?',
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        isExclusive: true,
+        optOutText: 'Prefer not to say',
+        options: [
+          { name: 'Yes', ordinal: 1 },
+          { name: 'No', ordinal: 2 },
+        ],
       },
       true,
     );
   } else {
-    veteranProgramMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
+    veteransProgramMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
       multiselectQuestion: {
-        text: 'Veteran',
+        text: 'Veterans',
         description:
           'Have you or anyone in your household served in the US military?',
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
@@ -835,11 +838,10 @@ export const stagingSeed = async (
       },
     });
   }
-  const veteranProgramQuestion = await prismaClient.multiselectQuestions.create(
-    {
-      data: veteranProgramMsqData,
-    },
-  );
+  const veteransProgramQuestion =
+    await prismaClient.multiselectQuestions.create({
+      data: veteransProgramMsqData,
+    });
   const mobilityAccessibilityNeedsProgramQuestion =
     await prismaClient.multiselectQuestions.create({
       data: multiselectQuestionFactory(angelopolisJurisdiction.id, {
@@ -1063,6 +1065,7 @@ export const stagingSeed = async (
         ],
         userAccounts: [{ id: partnerUser.id }],
         optionalFeatures: { carpetInUnit: true },
+        enableListingFeaturesAndUtilities: true,
       },
     ],
     [
@@ -1308,7 +1311,7 @@ export const stagingSeed = async (
             multiselectQuestions: [
               cityEmployeeQuestion,
               workInCityQuestion,
-              veteranProgramQuestion,
+              veteransProgramQuestion,
             ],
           }),
           await applicationFactory({
@@ -1322,7 +1325,7 @@ export const stagingSeed = async (
         multiselectQuestions: [
           workInCityQuestion,
           cityEmployeeQuestion,
-          veteranProgramQuestion,
+          veteransProgramQuestion,
         ],
         units: [
           {
@@ -1552,6 +1555,8 @@ export const stagingSeed = async (
       afsLastRunSetInPast: true,
       userAccounts: listingParams.userAccounts,
       optionalFeatures: listingParams.optionalFeatures,
+      enableListingFeaturesAndUtilities:
+        listingParams.enableListingFeaturesAndUtilities,
       propertyId: listingParams.propertyId,
     });
     const savedListing = await prismaClient.listings.create({

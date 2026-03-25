@@ -625,7 +625,7 @@ describe('Testing listing service', () => {
 
       expect(prisma.listings.findMany).toHaveBeenCalledWith({
         skip: 0,
-        take: undefined,
+        take: 10,
         orderBy: undefined,
         where: {
           AND: [],

@@ -257,37 +257,54 @@ export class ListingService implements OnModuleInit {
       totalPages: number;
     };
   }> {
-    const whereClause = this.buildWhereClause(params.filter, params.search);
+    const queryParams: ListingsQueryBody | ListingsQueryParams = {
+      page: params?.page ?? 1,
+      limit: params?.limit ?? 10,
+      ...params,
+    };
+    const whereClause = this.buildWhereClause(
+      queryParams.filter,
+      queryParams.search,
+    );
+
     const count = await this.prisma.listings.count({
       where: whereClause,
     });
 
     // if passed in page and limit would result in no results because there aren't that many listings
     // revert back to the first page
-    let page = params.page;
-    if (count && params.limit && params.limit !== 'all' && params.page > 1) {
-      if (Math.ceil(count / params.limit) < params.page) {
+    let page = queryParams.page;
+    if (
+      count &&
+      queryParams.limit &&
+      queryParams.limit !== 'all' &&
+      queryParams.page > 1
+    ) {
+      if (Math.ceil(count / queryParams.limit) < queryParams.page) {
         page = 1;
       }
     }
 
     const query = {
-      skip: calculateSkip(params.limit, page),
-      take: calculateTake(params.limit),
-      orderBy: buildOrderByForListings(params.orderBy, params.orderDir),
+      skip: calculateSkip(queryParams.limit, page),
+      take: calculateTake(queryParams.limit),
+      orderBy: buildOrderByForListings(
+        queryParams.orderBy,
+        queryParams.orderDir,
+      ),
       where: whereClause,
     };
-    const hasSelectView = selectViews[params.view];
+    const hasSelectView = selectViews[queryParams.view];
 
     // Prisma only allows either select or include so two separate
     const listingsRaw = hasSelectView
       ? await this.prisma.listings.findMany({
           ...query,
-          select: selectViews[params.view],
+          select: selectViews[queryParams.view],
         })
       : await this.prisma.listings.findMany({
           ...query,
-          include: includeViews[params.view ?? 'full'],
+          include: includeViews[queryParams.view ?? 'full'],
         });
 
     const listings = mapTo(Listing, listingsRaw);
@@ -307,7 +324,7 @@ export class ListingService implements OnModuleInit {
     addUnitGroupsSummarized(listings);
 
     const paginationInfo = buildPaginationMetaInfo(
-      params,
+      queryParams,
       count,
       listings.length,
     );

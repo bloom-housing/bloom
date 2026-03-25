@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react"
+import Head from "next/head"
 import { SWRConfig } from "swr"
 import type { AppProps } from "next/app"
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"
@@ -68,31 +69,38 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   )
 
   return (
-    <SWRConfig
-      value={{
-        onError: (error) => {
-          const { status } = error.response || {}
-          if (status === 403) {
-            window.location.href = "/unauthorized"
-          }
-        },
-      }}
-    >
-      <NavigationContext.Provider
+    <>
+      {process.env.allowSeoIndexing !== "TRUE" && (
+        <Head>
+          <meta name="robots" content="noindex, nofollow" />
+        </Head>
+      )}
+      <SWRConfig
         value={{
-          LinkComponent: LinkComponent,
-          router: router as GenericRouter,
+          onError: (error) => {
+            const { status } = error.response || {}
+            if (status === 403) {
+              window.location.href = "/unauthorized"
+            }
+          },
         }}
       >
-        {process.env.reCaptchaKey ? (
-          <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
-            {pageContent}
-          </GoogleReCaptchaProvider>
-        ) : (
-          pageContent
-        )}
-      </NavigationContext.Provider>
-    </SWRConfig>
+        <NavigationContext.Provider
+          value={{
+            LinkComponent: LinkComponent,
+            router: router as GenericRouter,
+          }}
+        >
+          {process.env.reCaptchaKey ? (
+            <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
+              {pageContent}
+            </GoogleReCaptchaProvider>
+          ) : (
+            pageContent
+          )}
+        </NavigationContext.Provider>
+      </SWRConfig>
+    </>
   )
 }
 
