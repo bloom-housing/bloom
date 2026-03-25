@@ -6,11 +6,8 @@ import http from "k6/http"
 import execution from "k6/execution"
 
 export const options = {
-  stages: [
-    { target: 20, duration: "1m" },
-    { target: 20, duration: "3m30s" },
-    { target: 0, duration: "1m" },
-  ],
+  vus: 10,
+  iterations: 100,
 }
 
 export default function () {
@@ -22,21 +19,6 @@ export default function () {
   const correlation_vars = {}
 
   group("Default group", function () {
-    params = {
-      headers: {
-        "Proxy-Connection": `keep-alive`,
-        Pragma: `no-cache`,
-        "Cache-Control": `no-cache`,
-        "Accept-Encoding": `gzip, deflate`,
-      },
-      cookies: {},
-    }
-
-    url = http.url`http://clients2.google.com/time/1/current?cup2key=9:iN-j6LJZm5HsCwzDvnWZhmDYrlD47lPMqnqE-B_9xCA&cup2hreq=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`
-    resp = http.request("GET", url, null, params)
-
-    check(resp, { "status equals 200": (r) => r.status === 200 })
-
     params = {
       headers: {
         "sec-ch-ua": `"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"`,
@@ -56,155 +38,6 @@ export default function () {
     }
 
     url = http.url`https://core-dev.bloomhousing.dev/`
-    resp = http.request("GET", url, null, params)
-
-    check(resp, { "status equals 200": (r) => r.status === 200 })
-
-    params = {
-      headers: {
-        authorization: `AidLogin 5487076626590519083:2647444296472586049`,
-        "content-type": `application/x-www-form-urlencoded`,
-        "sec-fetch-site": `none`,
-        "sec-fetch-mode": `no-cors`,
-        "sec-fetch-dest": `empty`,
-        "accept-encoding": `gzip, deflate, br, zstd`,
-        "accept-language": `en-US,en;q=0.9`,
-        priority: `u=4, i`,
-      },
-      cookies: {},
-    }
-
-    url = http.url`https://android.clients.google.com/c2dm/register3`
-    resp = http.request(
-      "POST",
-      url,
-      JSON.parse(
-        `{"app":"com.google.android.gms","device":"5487076626590519083","sender":"745476177629"}`
-      ),
-      params
-    )
-
-    check(resp, { "status equals 301": (r) => r.status === 301 })
-
-    params = {
-      headers: {
-        authorization: `AidLogin 5487076626590519083:2647444296472586049`,
-        "content-type": `application/x-www-form-urlencoded`,
-        "sec-fetch-site": `none`,
-        "sec-fetch-mode": `no-cors`,
-        "sec-fetch-dest": `empty`,
-        "accept-encoding": `gzip, deflate, br, zstd`,
-        "accept-language": `en-US,en;q=0.9`,
-        priority: `u=4, i`,
-      },
-      cookies: {},
-    }
-
-    url = http.url`https://android.clients.google.com/c2dm/register3`
-    resp = http.request(
-      "POST",
-      url,
-      JSON.parse(
-        `{"app":"com.chrome.macosx","X-subtype":"com.google.chrome.fcm.invalidations-245350905893","device":"5487076626590519083","scope":"GCM","X-scope":"GCM","gmsv":"146","appid":"eLj9Vyl_jok","sender":"245350905893","ttl":"1209600"}`
-      ),
-      params
-    )
-
-    check(resp, { "status equals 200": (r) => r.status === 200 })
-
-    params = {
-      headers: {
-        authorization: `AidLogin 5487076626590519083:2647444296472586049`,
-        "content-type": `application/x-www-form-urlencoded`,
-        "sec-fetch-site": `none`,
-        "sec-fetch-mode": `no-cors`,
-        "sec-fetch-dest": `empty`,
-        "accept-encoding": `gzip, deflate, br, zstd`,
-        "accept-language": `en-US,en;q=0.9`,
-        priority: `u=4, i`,
-      },
-      cookies: {},
-    }
-
-    url = http.url`https://android.clients.google.com/c2dm/register3`
-    resp = http.request(
-      "POST",
-      url,
-      JSON.parse(
-        `{"app":"com.chrome.macosx","X-subtype":"com.google.chrome.fcm.invalidations-585406161706","device":"5487076626590519083","scope":"GCM","X-scope":"GCM","gmsv":"146","appid":"eZ-yHMSP7i0","sender":"585406161706","ttl":"1209600"}`
-      ),
-      params
-    )
-
-    check(resp, { "status equals 200": (r) => r.status === 200 })
-
-    params = {
-      headers: {
-        Connection: `keep-alive`,
-        "sec-ch-ua-platform": `"macOS"`,
-        "sec-ch-ua": `"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"`,
-        "sec-ch-ua-mobile": `?0`,
-        Accept: `image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8`,
-        "Sec-Fetch-Site": `cross-site`,
-        "Sec-Fetch-Mode": `no-cors`,
-        "Sec-Fetch-Dest": `image`,
-        "Sec-Fetch-Storage-Access": `active`,
-        Referer: `https://core-dev.bloomhousing.dev/`,
-        "Accept-Encoding": `gzip, deflate, br, zstd`,
-        "Accept-Language": `en-US,en;q=0.9`,
-      },
-      cookies: {},
-    }
-
-    url = http.url`https://bloom-public-20260306001332301900000009.s3.us-west-2.amazonaws.com/0f20a5b5-32ef-494d-b2f9-664d067fc514`
-    resp = http.request("GET", url, null, params)
-
-    check(resp, { "status equals 200": (r) => r.status === 200 })
-
-    params = {
-      headers: {
-        Connection: `keep-alive`,
-        "sec-ch-ua-platform": `"macOS"`,
-        "sec-ch-ua": `"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"`,
-        "sec-ch-ua-mobile": `?0`,
-        Accept: `image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8`,
-        "Sec-Fetch-Site": `cross-site`,
-        "Sec-Fetch-Mode": `no-cors`,
-        "Sec-Fetch-Dest": `image`,
-        "Sec-Fetch-Storage-Access": `active`,
-        Referer: `https://core-dev.bloomhousing.dev/`,
-        "Accept-Encoding": `gzip, deflate, br, zstd`,
-        "Accept-Language": `en-US,en;q=0.9`,
-      },
-      cookies: {},
-    }
-
-    url = http.url`https://bloom-public-20260306001332301900000009.s3.us-west-2.amazonaws.com/2169ecf9-dc74-44be-891c-98212fa00de8`
-    resp = http.request("GET", url, null, params)
-
-    check(resp, { "status equals 200": (r) => r.status === 200 })
-
-    params = {
-      headers: {
-        language: `en`,
-        "sec-ch-ua-platform": `"macOS"`,
-        "sec-ch-ua": `"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"`,
-        "sec-ch-ua-mobile": `?0`,
-        jurisdictionname: `Bloomington`,
-        appurl: `https://core-dev.bloomhousing.dev`,
-        accept: `application/json, text/plain, */*`,
-        "sec-fetch-site": `same-origin`,
-        "sec-fetch-mode": `cors`,
-        "sec-fetch-dest": `empty`,
-        referer: `https://core-dev.bloomhousing.dev/applications/start/choose-language?listingId=496cd10a-4f3d-4add-9a79-c10ab7cd72b2`,
-        "accept-encoding": `gzip, deflate, br, zstd`,
-        "accept-language": `en-US,en;q=0.9`,
-        priority: `u=1, i`,
-      },
-      cookies: {},
-    }
-
-    url = http.url`https://core-dev.bloomhousing.dev/api/adapter/listings/496cd10a-4f3d-4add-9a79-c10ab7cd72b2`
     resp = http.request("GET", url, null, params)
 
     check(resp, { "status equals 200": (r) => r.status === 200 })
