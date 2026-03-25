@@ -19,6 +19,8 @@ export const options = {
         { duration: "30s", target: 3 },
         { duration: "30s", target: 3 },
       ],
+      // vus: 10,
+      // iterations: 100,
     },
   },
 }
@@ -195,6 +197,8 @@ export default async function () {
         exact: true,
       })
       .click()
+
+    await sleep(1)
   } finally {
     await page?.close()
   }
