@@ -7,7 +7,7 @@ import execution from "k6/execution"
 
 export const options = {
   vus: 10,
-  iterations: 100,
+  iterations: 1000,
 }
 
 export default function () {
@@ -69,32 +69,6 @@ export default function () {
 
     params = {
       headers: {
-        authorization: `AidLogin 5487076626590519083:2647444296472586049`,
-        "content-type": `application/x-www-form-urlencoded`,
-        "sec-fetch-site": `none`,
-        "sec-fetch-mode": `no-cors`,
-        "sec-fetch-dest": `empty`,
-        "accept-encoding": `gzip, deflate, br, zstd`,
-        "accept-language": `en-US,en;q=0.9`,
-        priority: `u=4, i`,
-      },
-      cookies: {},
-    }
-
-    url = http.url`https://android.clients.google.com/c2dm/register3`
-    resp = http.request(
-      "POST",
-      url,
-      JSON.parse(
-        `{"app":"com.google.android.gms","device":"5487076626590519083","sender":"745476177629"}`
-      ),
-      params
-    )
-
-    check(resp, { "status equals 429": (r) => r.status === 429 })
-
-    params = {
-      headers: {
         language: `en`,
         "sec-ch-ua-platform": `"macOS"`,
         "sec-ch-ua": `"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"`,
@@ -144,66 +118,6 @@ export default function () {
     resp = http.request("GET", url, null, params)
 
     check(resp, { "status equals 304": (r) => r.status === 304 })
-
-    params = {
-      headers: {
-        "x-goog-encode-response-if-executable": `base64`,
-        "x-goog-api-key": `AIzaSyDr2UxVnv_U85AbhhY8XSHSIavUW0DC-sY`,
-        "x-client-data": `CLPxygE=`,
-        "sec-fetch-site": `none`,
-        "sec-fetch-mode": `no-cors`,
-        "sec-fetch-dest": `empty`,
-        "accept-encoding": `gzip, deflate, br, zstd`,
-        "accept-language": `en-US,en;q=0.9`,
-        priority: `u=4, i`,
-      },
-      cookies: {},
-    }
-
-    url = http.url`https://content-autofill.googleapis.com/v1/pages/ChVDaHJvbWUvMTQ2LjAuNzY4MC4xNTQSQwkzMkXj9Vh8VRIFDWrz1SUSBQ1lRd3OEgUNCFxvNhIFDfVXpuQSBQ3NXi_2EgUN5gvj3hIFDefq_oshvuZlTKrXne8=?alt=proto`
-    resp = http.request("GET", url, null, params)
-
-    check(resp, { "status equals 200": (r) => r.status === 200 })
-
-    params = {
-      headers: {
-        "x-goog-encode-response-if-executable": `base64`,
-        "x-goog-api-key": `AIzaSyDr2UxVnv_U85AbhhY8XSHSIavUW0DC-sY`,
-        "x-client-data": `CLPxygE=`,
-        "sec-fetch-site": `none`,
-        "sec-fetch-mode": `no-cors`,
-        "sec-fetch-dest": `empty`,
-        "accept-encoding": `gzip, deflate, br, zstd`,
-        "accept-language": `en-US,en;q=0.9`,
-        priority: `u=4, i`,
-      },
-      cookies: {},
-    }
-
-    url = http.url`https://content-autofill.googleapis.com/v1/pages/ChVDaHJvbWUvMTQ2LjAuNzY4MC4xNTQSQwknfuljSgaOxhIFDd0WfqYSBQ1C9SSPEgUNzg9LXBIFDe9aUVYSBQ2XklCPEgUNyNQ4RxIFDQASGuUhOSAAINr-UYg=?alt=proto`
-    resp = http.request("GET", url, null, params)
-
-    check(resp, { "status equals 200": (r) => r.status === 200 })
-
-    params = {
-      headers: {
-        "x-goog-encode-response-if-executable": `base64`,
-        "x-goog-api-key": `AIzaSyDr2UxVnv_U85AbhhY8XSHSIavUW0DC-sY`,
-        "x-client-data": `CLPxygE=`,
-        "sec-fetch-site": `none`,
-        "sec-fetch-mode": `no-cors`,
-        "sec-fetch-dest": `empty`,
-        "accept-encoding": `gzip, deflate, br, zstd`,
-        "accept-language": `en-US,en;q=0.9`,
-        priority: `u=4, i`,
-      },
-      cookies: {},
-    }
-
-    url = http.url`https://content-autofill.googleapis.com/v1/pages/ChVDaHJvbWUvMTQ2LjAuNzY4MC4xNTQSGQmGBrjt4L6txBIFDYztGrMhWH2HdjiYOyc=?alt=proto`
-    resp = http.request("GET", url, null, params)
-
-    check(resp, { "status equals 200": (r) => r.status === 200 })
 
     params = {
       headers: {
