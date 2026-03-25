@@ -12,27 +12,29 @@ export const options = {
         browser: { type: "chromium" },
       },
       stages: [
-        { duration: "30s", target: 10 },
-        { duration: "30s", target: 10 },
-        { duration: "30s", target: 100 },
-        { duration: "30s", target: 100 },
-        { duration: "30s", target: 1000 },
-        { duration: "30s", target: 1000 },
+        { duration: "30s", target: 1 },
+        { duration: "30s", target: 1 },
+        { duration: "30s", target: 2 },
+        { duration: "30s", target: 2 },
+        { duration: "30s", target: 3 },
+        { duration: "30s", target: 3 },
       ],
     },
   },
 }
 
-const randomNumber = (min = 2, max = 5) => Math.random() * (max - min) + min
+const randomNumber = (min = 1, max = 5) => Math.floor(Math.random() * (max - min) + min)
+const randomString = (stringLength = 5) =>
+  (Math.random() + 1).toString(36).substring(2, stringLength + 2)
 
-const clickNext = async (page) => {
+const clickNext = async (page, waitFor = false) => {
   await page.getByRole("button", { name: "Next", exact: true }).click()
-  const text = await page.getByRole("heading", { name: "Blue Sky Apartments" })
+  //TODO: get rid of sleep
+  await sleep(randomNumber())
+  const text = await page.getByRole("button", { name: waitFor ? waitFor : "Next", exact: true })
   await text.waitFor({
     state: "visible",
   })
-  //TODO: get rid of sleep
-  await sleep(randomNumber())
 }
 
 export default async function () {
@@ -53,23 +55,29 @@ export default async function () {
 
     await clickNext(page)
 
-    await page.getByRole("textbox", { name: "First or given name", exact: true }).fill("First Name")
+    await page
+      .getByRole("textbox", { name: "First or given name", exact: true })
+      .fill(randomString())
 
     await page
       .getByRole("textbox", { name: "Middle name (optional)", exact: true })
-      .fill("Middle Name")
+      .fill(randomString())
 
-    await page.getByRole("textbox", { name: "Last or family name", exact: true }).fill("Last Name")
+    await page
+      .getByRole("textbox", { name: "Last or family name", exact: true })
+      .fill(randomString())
 
-    await page.getByRole("textbox", { name: "Month", exact: true }).fill("1")
+    await page.getByRole("textbox", { name: "Month", exact: true }).fill(`${randomNumber(1, 12)}`)
 
-    await page.getByRole("textbox", { name: "Day", exact: true }).fill("1")
+    await page.getByRole("textbox", { name: "Day", exact: true }).fill(`${randomNumber(1, 27)}`)
 
-    await page.getByRole("textbox", { name: "Year", exact: true }).fill("2000")
+    await page
+      .getByRole("textbox", { name: "Year", exact: true })
+      .fill(`${randomNumber(1980, 2005)}`)
 
     await page
       .getByRole("textbox", { name: "Your email address", exact: true })
-      .fill("example@exygy.com")
+      .fill(`example+${randomString(10)}@exygy.com`)
 
     await clickNext(page)
 
@@ -173,7 +181,7 @@ export default async function () {
 
     await page.locator(".border-none div:nth-of-type(5) .font-semibold").click()
 
-    await clickNext(page)
+    await clickNext(page, "Confirm")
 
     await page.getByRole("button", { name: "Confirm", exact: true }).click()
 
