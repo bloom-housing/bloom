@@ -6,21 +6,21 @@ export const options = {
   scenarios: {
     default: {
       executor: "ramping-vus",
-      startVUs: 0,
-      gracefulRampDown: "0s",
+      // startVUs: 0,
+      // gracefulRampDown: "0s",
       options: {
         browser: { type: "chromium" },
       },
-      stages: [
-        { duration: "30s", target: 1 },
-        { duration: "30s", target: 1 },
-        { duration: "30s", target: 2 },
-        { duration: "30s", target: 2 },
-        { duration: "30s", target: 3 },
-        { duration: "30s", target: 3 },
-      ],
-      // vus: 10,
-      // iterations: 100,
+      // stages: [
+      //   { duration: "30s", target: 1 },
+      //   { duration: "30s", target: 1 },
+      //   { duration: "30s", target: 2 },
+      //   { duration: "30s", target: 2 },
+      //   { duration: "30s", target: 3 },
+      //   { duration: "30s", target: 3 },
+      // ],
+      vus: 10,
+      iterations: 100,
     },
   },
 }
