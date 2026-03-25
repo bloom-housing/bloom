@@ -806,19 +806,23 @@ export const stagingSeed = async (
   });
   let veteransProgramMsqData: Prisma.MultiselectQuestionsCreateInput;
   if (msqV2) {
-    veteransProgramMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
-      multiselectQuestion: {
-        status: MultiselectQuestionsStatusEnum.active,
-        name: 'Veterans',
-        description:
-          'Have you or anyone in your household served in the US military?',
-        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        isExclusive: true,
-        optOutText: 'Prefer not to say',
-        options: [
-          { name: 'Yes', ordinal: 1 },
-          { name: 'No', ordinal: 2 },
-        ],
+    veteransProgramMsqData = multiselectQuestionFactory(
+      mainJurisdiction.id,
+      {
+        multiselectQuestion: {
+          status: MultiselectQuestionsStatusEnum.active,
+          name: 'Veterans',
+          description:
+            'Have you or anyone in your household served in the US military?',
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          isExclusive: true,
+          optOutText: 'Prefer not to say',
+          options: [
+            { name: 'Yes', ordinal: 1 },
+            { name: 'No', ordinal: 2 },
+          ],
+        },
       },
       true,
     );
