@@ -598,10 +598,10 @@ export const mapCheckboxesToApi = (
     }
     return [...acc, selectionData]
   }, [] as ApplicationSelectionOptionCreate[])
+
   return {
     multiselectQuestion: { id: question.id },
     hasOptedOut,
-    // @ts-ignore
     selections,
   }
 }
