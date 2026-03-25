@@ -187,6 +187,7 @@
   "application.contact.suggestedAddress": "آدرس پیشنهادی:",
   "application.contact.title": "ممنون %{firstName}، حالا باید بدونیم چطور در مورد درخواستتون باهاتون تماس بگیریم.",
   "application.contact.verifyAddressTitle": "ما آدرس زیر را پیدا کرده‌ایم، لطفاً صحت آن را تأیید کنید",
+  "application.contact.verifyMultipleAddresses": "از آنجا که این تنظیمات گزینه‌های متعددی دارد، باید چندین آدرس را تأیید کنید.",
   "application.contact.workAddress": "آدرس محل کار",
   "application.contact.youEntered": "شما وارد کردید:",
   "application.contact.yourAdditionalPhoneNumber": "شماره تلفن دوم شما",
