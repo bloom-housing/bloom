@@ -12,18 +12,18 @@ export const options = {
         browser: { type: "chromium" },
       },
       stages: [
-        { duration: "30s", target: 1 },
-        { duration: "30s", target: 1 },
-        { duration: "30s", target: 2 },
-        { duration: "30s", target: 2 },
-        { duration: "30s", target: 3 },
-        { duration: "30s", target: 3 },
+        { duration: "30s", target: 10 },
+        { duration: "30s", target: 10 },
+        { duration: "30s", target: 100 },
+        { duration: "30s", target: 100 },
+        { duration: "30s", target: 1000 },
+        { duration: "30s", target: 1000 },
       ],
     },
   },
 }
 
-const randomNumber = (min = 0, max = 5) => Math.random() * (max - min) + min
+const randomNumber = (min = 2, max = 5) => Math.random() * (max - min) + min
 
 const clickNext = async (page) => {
   await page.getByRole("button", { name: "Next", exact: true }).click()
