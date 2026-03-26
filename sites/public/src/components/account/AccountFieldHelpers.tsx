@@ -614,6 +614,16 @@ export const AccountSection = ({
   </Card.Section>
 )
 
+const omitPhoneIfPublic = (
+  updateFn: "updatePublic" | "updateAdvocate",
+  user: any // eslint-disable-line @typescript-eslint/no-explicit-any
+) => {
+  if (updateFn !== "updatePublic" || !user) return user
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { phoneNumber, ...rest } = user
+  return rest
+}
+
 // Submit handler factory for name submission
 export const createNameSubmitHandler = (
   userService: UserService,
@@ -629,7 +639,7 @@ export const createNameSubmitHandler = (
     setAlert(null)
     try {
       const newUser = await userService[updateFn]({
-        body: { ...user, firstName, middleName, lastName },
+        body: { ...omitPhoneIfPublic(updateFn, user), firstName, middleName, lastName },
       })
       setUser(newUser)
       setAlert({ type: "success", message: `${t("account.settings.alerts.nameSuccess")}` })
@@ -658,7 +668,7 @@ export const createEmailSubmitHandler = (
     try {
       const newUser = await userService[updateFn]({
         body: {
-          ...user,
+          ...omitPhoneIfPublic(updateFn, user),
           appUrl: window.location.origin,
           newEmail: email,
         },
@@ -704,7 +714,7 @@ export const createPasswordSubmitHandler = (
     }
     try {
       const newUser = await userService[updateFn]({
-        body: { ...user, password, currentPassword },
+        body: { ...omitPhoneIfPublic(updateFn, user), password, currentPassword },
       })
       setUser(newUser)
       setAlert({
@@ -744,7 +754,7 @@ export const createDobSubmitHandler = (
     try {
       const newUser = await userService[updateFn]({
         body: {
-          ...user,
+          ...omitPhoneIfPublic(updateFn, user),
           dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`).toDate(),
         },
       })
