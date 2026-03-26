@@ -320,7 +320,7 @@ export const addressFields = (
       </legend>
       <fieldset>
         <legend>
-          <p className="field-note mt-2 mb-3">{"Is there a PO Box?"}</p>
+          <p className="field-note mt-2 mb-3">{t("application.contact.pobox")}</p>
         </legend>
         <Field
           className="mb-1"

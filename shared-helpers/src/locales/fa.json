@@ -178,6 +178,7 @@
   "application.contact.phoneNumberTypes.work": "کار",
   "application.contact.preferredContactType": "نوع تماس ترجیحی",
   "application.contact.provideAMailingAddress": "آدرسی را ارائه دهید که بتوانید از طریق آن به‌روزرسانی‌ها و مطالب مربوط به درخواست خود را دریافت کنید.",
+  "application.contact.pobox": "آیا یک صندوق پستی وجود دارد؟",
   "application.contact.secondNumber": "شماره دوم",
   "application.contact.sendMailToMailingAddress": "نامه‌هایم را به آدرس دیگری بفرست",
   "application.contact.state": "ایالت",

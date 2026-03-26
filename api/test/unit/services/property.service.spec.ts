@@ -126,6 +126,11 @@ describe('Testing property service', () => {
         include: {
           jurisdictions: true,
         },
+        orderBy: [
+          {
+            name: 'asc',
+          },
+        ],
       });
     });
 
@@ -216,6 +221,11 @@ describe('Testing property service', () => {
         include: {
           jurisdictions: true,
         },
+        orderBy: [
+          {
+            name: 'asc',
+          },
+        ],
       });
     });
 
@@ -253,6 +263,11 @@ describe('Testing property service', () => {
         include: {
           jurisdictions: true,
         },
+        orderBy: [
+          {
+            name: 'asc',
+          },
+        ],
       });
     });
 
@@ -280,6 +295,11 @@ describe('Testing property service', () => {
         include: {
           jurisdictions: true,
         },
+        orderBy: [
+          {
+            name: 'asc',
+          },
+        ],
       });
     });
   });

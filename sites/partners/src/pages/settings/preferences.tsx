@@ -2,8 +2,8 @@ import React, { useContext, useState, useMemo, useEffect } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useSWRConfig } from "swr"
-import { LoadingOverlay, MinimalTable, StandardCard, t } from "@bloom-housing/ui-components"
-import { Button, Dialog } from "@bloom-housing/ui-seeds"
+import { MinimalTable, StandardCard, t } from "@bloom-housing/ui-components"
+import { Button, Dialog, LoadingState } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import { AuthContext, MessageContext, useMutate } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts"
@@ -198,7 +198,7 @@ const SettingsPreferences = () => {
             hideTabs={!enableProperties}
             tabs={getSettingsTabs(SettingsIndexEnum.preferences, v2Preferences)}
           >
-            <LoadingOverlay isLoading={loading}>
+            <LoadingState loading={loading}>
               <StandardCard
                 title={t("t.preferences")}
                 emptyStateMessage={t("t.none")}
@@ -218,7 +218,7 @@ const SettingsPreferences = () => {
               >
                 {getCardContent()}
               </StandardCard>
-            </LoadingOverlay>
+            </LoadingState>
           </TabView>
         )}
       </Layout>
