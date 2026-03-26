@@ -95,7 +95,7 @@ const DetailsHouseholdDetails = ({
           <Grid.Cell>
             <FieldValue
               id="reasonableAccommodations"
-              label={t("application.household.reasonableAccommodations.question")}
+              label={t("application.details.reasonableAccommodations")}
               testId="reasonableAccommodations"
             >
               {application.reasonableAccommodations || t("t.n/a")}

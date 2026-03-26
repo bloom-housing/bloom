@@ -190,11 +190,11 @@ const FormHouseholdDetails = ({
         </Grid.Row>
         {enableReasonableAccommodations && (
           <Grid.Row columns="3">
-            <Grid.Cell>
+            <Grid.Cell className={"seeds-grid-span-2"}>
               <Textarea
                 id="application.reasonableAccommodations"
                 name="application.reasonableAccommodations"
-                label={t("application.household.reasonableAccommodations.question")}
+                label={t("application.details.reasonableAccommodations")}
                 register={register}
                 fullWidth={true}
                 maxLength={1000}

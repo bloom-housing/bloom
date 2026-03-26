@@ -46,6 +46,7 @@ const ApplicationReasonableAccommodations = () => {
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.household.reasonableAccommodations.question")}
+          subheading={t("application.household.reasonableAccommodations.subtitle")}
           progressNavProps={{
             currentPageSection: currentPageSection,
             completedSections: application.completedSections,
@@ -61,8 +62,7 @@ const ApplicationReasonableAccommodations = () => {
             <Textarea
               id="reasonableAccommodations"
               name="reasonableAccommodations"
-              label={t("application.household.reasonableAccommodations.question")}
-              readerOnly
+              label={t("application.household.reasonableAccommodations.label")}
               register={register}
               fullWidth={true}
               maxLength={1000}
