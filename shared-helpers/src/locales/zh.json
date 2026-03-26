@@ -178,6 +178,7 @@
   "application.contact.phoneNumberTypes.work": "工作",
   "application.contact.preferredContactType": "首选联系方式",
   "application.contact.provideAMailingAddress": "請提供一個可收到您最新申請消息和資料的地址。",
+  "application.contact.pobox": "有邮政信箱吗？",
   "application.contact.secondNumber": "第二个数字",
   "application.contact.sendMailToMailingAddress": "請將我的郵件寄往另一地址",
   "application.contact.state": "州",

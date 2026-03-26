@@ -178,6 +178,7 @@
   "application.contact.phoneNumberTypes.work": "Trabajo",
   "application.contact.preferredContactType": "Tipo de contacto preferido",
   "application.contact.provideAMailingAddress": "Proporcione una dirección en donde pueda recibir información actualizada y materiales relacionados con su solicitud.",
+  "application.contact.pobox": "¿Hay una casilla postal?",
   "application.contact.secondNumber": "Segundo numero",
   "application.contact.sendMailToMailingAddress": "Envíenme mi correspondencia a una dirección diferente",
   "application.contact.state": "Estado",

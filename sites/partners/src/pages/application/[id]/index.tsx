@@ -4,6 +4,10 @@ import Head from "next/head"
 import { t, AlertBox, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  FeatureFlagEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Layout from "../../../layouts"
 import {
   DetailsMemberDrawer,
@@ -20,10 +24,6 @@ import { DetailsMultiselectQuestions } from "../../../components/applications/Pa
 import { DetailsHouseholdIncome } from "../../../components/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
 import { DetailsTerms } from "../../../components/applications/PaperApplicationDetails/sections/DetailsTerms"
 import { Aside } from "../../../components/applications/Aside"
-import {
-  FeatureFlagEnum,
-  MultiselectQuestionsApplicationSectionEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { ApplicationStatusTag } from "../../../components/listings/PaperListingDetails/sections/helpers"
 
@@ -117,7 +117,7 @@ const ApplicationsList = () => {
           <ApplicationStatusTag status={application?.status} />
         </StatusBar>
 
-        <section className="bg-primary-lighter">
+        <section className="form-container">
           <div className="mx-auto px-5 mt-5 max-w-screen-xl">
             {errorAlert && (
               <AlertBox

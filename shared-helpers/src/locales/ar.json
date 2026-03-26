@@ -178,6 +178,7 @@
   "application.contact.phoneNumberTypes.work": "عمل",
   "application.contact.preferredContactType": "نوع الاتصال المفضل",
   "application.contact.provideAMailingAddress": "قدم عنوانًا يمكنك من خلاله تلقي التحديثات والمواد المتعلقة بتطبيقك.",
+  "application.contact.pobox": "هل يوجد صندوق بريد؟",
   "application.contact.secondNumber": "الرقم الثاني",
   "application.contact.sendMailToMailingAddress": "أرسل بريدي إلى عنوان مختلف",
   "application.contact.state": "حالة",
