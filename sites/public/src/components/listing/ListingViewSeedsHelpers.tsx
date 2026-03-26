@@ -493,20 +493,19 @@ export const getEligibilitySections = (
 ): EligibilitySection[] => {
   const eligibilityFeatures: EligibilitySection[] = []
 
-  const swapCommunityTypeWithPrograms = isFeatureFlagOn(
-    jurisdiction,
-    FeatureFlagEnum.swapCommunityTypeWithPrograms
-  )
   const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
-
+  const enableV2MSQ = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableV2MSQ)
+  const disableBuildingSelectionCriteria = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.disableBuildingSelectionCriteria
+  )
   const disableListingPreferences = isFeatureFlagOn(
     jurisdiction,
     FeatureFlagEnum.disableListingPreferences
   )
-
-  const disableBuildingSelectionCriteria = isFeatureFlagOn(
+  const swapCommunityTypeWithPrograms = isFeatureFlagOn(
     jurisdiction,
-    FeatureFlagEnum.disableBuildingSelectionCriteria
+    FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
 
   // Reserved community type
@@ -596,7 +595,9 @@ export const getEligibilitySections = (
         <OrderedCardList
           cardContent={sortedPreferences.map((question) => {
             return {
-              heading: question.multiselectQuestions.name || question.multiselectQuestions.text,
+              heading: enableV2MSQ
+                ? question.multiselectQuestions.name
+                : question.multiselectQuestions.text,
               description: question.multiselectQuestions.description,
             }
           })}
@@ -622,8 +623,9 @@ export const getEligibilitySections = (
               <CardList
                 cardContent={sortedPrograms.map((question) => {
                   return {
-                    heading:
-                      question.multiselectQuestions.name || question.multiselectQuestions.text,
+                    heading: enableV2MSQ
+                      ? question.multiselectQuestions.name
+                      : question.multiselectQuestions.text,
                     description: question.multiselectQuestions.description,
                   }
                 })}
@@ -637,12 +639,20 @@ export const getEligibilitySections = (
             content: (
               <CardList
                 cardContent={sortedPrograms.map((question) => {
+                  const heading = enableV2MSQ
+                    ? t(
+                        question.multiselectQuestions.untranslatedName
+                          ? `listingFilters.program.${question.multiselectQuestions.untranslatedName}`
+                          : `listingFilters.program.${question.multiselectQuestions.name}`
+                      )
+                    : t(
+                        question.multiselectQuestions.untranslatedText
+                          ? `listingFilters.program.${question.multiselectQuestions.untranslatedText}`
+                          : `listingFilters.program.${question.multiselectQuestions.text}`
+                      )
+
                   return {
-                    heading: t(
-                      question.multiselectQuestions.untranslatedText
-                        ? `listingFilters.program.${question.multiselectQuestions.untranslatedText}`
-                        : `listingFilters.program.${question.multiselectQuestions.text}`
-                    ),
+                    heading: heading,
                     description: question.multiselectQuestions.description,
                   }
                 })}

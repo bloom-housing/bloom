@@ -178,6 +178,7 @@
   "application.contact.phoneNumberTypes.work": "일하다",
   "application.contact.preferredContactType": "선호하는 연락 방식",
   "application.contact.provideAMailingAddress": "신청 진행 상황 및 자료를 받을 수 있는 주소를 제공해 주세요.",
+  "application.contact.pobox": "사서함이 있나요?",
   "application.contact.secondNumber": "두 번째 숫자",
   "application.contact.sendMailToMailingAddress": "내 우편물을 다른 주소로 보내주세요",
   "application.contact.state": "상태",
