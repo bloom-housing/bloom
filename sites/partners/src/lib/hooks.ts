@@ -166,7 +166,12 @@ export const useListingExport = () => {
       addToast(t("t.exportSuccess"), { variant: "success" })
     } catch (err) {
       console.log(err)
-      addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+      addToast(
+        t("account.settings.alerts.genericError", { contactEmail: t("resources.contactEmail") }),
+        {
+          variant: "alert",
+        }
+      )
     }
 
     setCsvExportLoading(false)
@@ -643,7 +648,12 @@ export const useZipExport = (
       addToast(t("t.exportSuccess"), { variant: "success" })
     } catch (err) {
       console.log(err)
-      addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+      addToast(
+        t("account.settings.alerts.genericError", { contactEmail: t("resources.contactEmail") }),
+        {
+          variant: "alert",
+        }
+      )
     }
     setExportLoading(false)
   }, [])
@@ -693,7 +703,12 @@ const useCsvExport = (
       addToast(t("t.exportSuccess"), { variant: "success" })
     } catch (err) {
       console.log(err)
-      addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+      addToast(
+        t("account.settings.alerts.genericError", { contactEmail: t("resources.contactEmail") }),
+        {
+          variant: "alert",
+        }
+      )
     }
 
     setCsvExportLoading(false)

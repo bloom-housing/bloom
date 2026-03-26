@@ -23,7 +23,9 @@ const CreateAdvocateAccountConfirmation = () => {
       >
         <>
           <Card.Section className={"seeds-m-be-8"}>
-            {t("authentication.requestAdvocateAccount.confirmation")}
+            {t("authentication.requestAdvocateAccount.confirmation", {
+              contactEmail: t("resources.contactEmail"),
+            })}
           </Card.Section>
           <Card.Section className={styles["footer-card-section"]}>
             <Button variant="primary" onClick={() => router.push("/")}>

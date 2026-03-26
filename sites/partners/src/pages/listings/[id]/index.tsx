@@ -116,7 +116,10 @@ export default function ListingDetail(props: ListingProps) {
                     closeable
                     type="alert"
                   >
-                    {errorAlert || t("authentication.signIn.errorGenericMessage")}
+                    {errorAlert ||
+                      t("authentication.signIn.errorGenericMessage", {
+                        contactEmail: t("resources.contactEmail"),
+                      })}
                   </AlertBox>
                 )}
 
