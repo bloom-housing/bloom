@@ -277,12 +277,7 @@ Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
-
-  if (autofill & (application.householdMember.length > 0)) {
-    cy.isNextRouteValid("liveAlone")
-  } else {
-    cy.isNextRouteValid("alternateContactInfo")
-  }
+  cy.isNextRouteValid("liveAlone")
 })
 
 Cypress.Commands.add("step6HouseholdSize", (application, autofill) => {
