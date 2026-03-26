@@ -3,7 +3,7 @@ import { group, sleep, check } from "k6"
 import http from "k6/http"
 
 export const options = {
-  vus: 250,
+  vus: 400,
   iterations: 10000,
 }
 
@@ -88,7 +88,7 @@ export default function () {
     url = http.url`https://core-dev.bloomhousing.dev/api/adapter/listings/496cd10a-4f3d-4add-9a79-c10ab7cd72b2`
     resp = http.request("GET", url, null, params)
 
-    check(resp, { "status equals 304": (r) => r.status === 304 })
+    check(resp, { "status equals 200": (r) => r.status === 200 })
 
     params = {
       headers: {
@@ -105,7 +105,6 @@ export default function () {
         referer: `https://core-dev.bloomhousing.dev/applications/start/choose-language?listingId=496cd10a-4f3d-4add-9a79-c10ab7cd72b2`,
         "accept-encoding": `gzip, deflate, br, zstd`,
         "accept-language": `en-US,en;q=0.9`,
-        "if-none-match": `"nx0q0oqb909h8"`,
         priority: `u=1, i`,
       },
       cookies: {},
@@ -114,7 +113,7 @@ export default function () {
     url = http.url`https://core-dev.bloomhousing.dev/api/adapter/jurisdictions/38f7eb8c-e29c-447e-9b01-eb1c78f5457c`
     resp = http.request("GET", url, null, params)
 
-    check(resp, { "status equals 304": (r) => r.status === 304 })
+    check(resp, { "status equals 200": (r) => r.status === 200 })
 
     params = {
       headers: {
