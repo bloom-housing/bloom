@@ -76,7 +76,7 @@ includeViews.csv = {
   },
   userAccounts: true,
 };
-const NUMBER_TO_PAGINATE_BY = 500;
+const NUMBER_TO_PAGINATE_BY = 100;
 
 export const formatStatus = {
   active: 'Public',
