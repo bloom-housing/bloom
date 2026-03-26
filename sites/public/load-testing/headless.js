@@ -3,7 +3,7 @@ import { group, sleep, check } from "k6"
 import http from "k6/http"
 
 export const options = {
-  vus: 400,
+  vus: 1000,
   iterations: 10000,
 }
 
