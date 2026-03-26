@@ -49,6 +49,7 @@ import { MultiselectQuestionUpdate } from '../../../src/dtos/multiselect-questio
 import { AlternateContactRelationship } from '../../../src/enums/applications/alternate-contact-relationship-enum';
 import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
 import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/accessibility-priority-type-enum';
+import { ApplicationAccessibilityFeatureEnum } from '../../../src/enums/applications/application-accessibility-feature-enum';
 import { PublicUserCreate } from '../../../src/dtos/users/public-user-create.dto';
 import { PartnerUserCreate } from '../../../src/dtos/users/partner-user-create.dto';
 
@@ -118,6 +119,11 @@ export const buildJurisdictionCreateMock = (
     visibleNeighborhoodAmenities: [],
     regions: [],
     visibleAccessibilityPriorityTypes: [],
+    visibleApplicationAccessibilityFeatures: [
+      ApplicationAccessibilityFeatureEnum.mobility,
+      ApplicationAccessibilityFeatureEnum.hearing,
+      ApplicationAccessibilityFeatureEnum.vision,
+    ],
     visibleSpokenLanguages: [],
   };
 };
@@ -146,6 +152,11 @@ export const buildJurisdictionUpdateMock = (
     visibleNeighborhoodAmenities: [],
     regions: [],
     visibleAccessibilityPriorityTypes: [],
+    visibleApplicationAccessibilityFeatures: [
+      ApplicationAccessibilityFeatureEnum.mobility,
+      ApplicationAccessibilityFeatureEnum.hearing,
+      ApplicationAccessibilityFeatureEnum.vision,
+    ],
     visibleSpokenLanguages: [],
   };
 };
@@ -298,6 +309,7 @@ export const buildApplicationCreateMock = (
       mobility: false,
       vision: false,
       hearing: false,
+      hearingAndVision: false,
     },
     alternateContact: {
       type: AlternateContactRelationship.friend,
@@ -396,6 +408,7 @@ export const buildApplicationUpdateMock = (
       mobility: false,
       vision: false,
       hearing: false,
+      hearingAndVision: false,
     },
     alternateContact: {
       type: AlternateContactRelationship.friend,

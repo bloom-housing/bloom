@@ -151,10 +151,6 @@ const ApplicationSummary = () => {
               conductor.config,
               FeatureFlagEnum.enableFullTimeStudentQuestion
             )}
-            enableAdaOtherOption={isFeatureFlagOn(
-              conductor.config,
-              FeatureFlagEnum.enableAdaOtherOption
-            )}
             swapCommunityTypeWithPrograms={isFeatureFlagOn(
               conductor.config,
               FeatureFlagEnum.swapCommunityTypeWithPrograms

@@ -67,6 +67,7 @@ describe('Testing listing csv export service', () => {
     duplicateListingPermissions: [],
     requiredListingFields: [],
     visibleAccessibilityPriorityTypes: [],
+    visibleApplicationAccessibilityFeatures: [],
     visibleNeighborhoodAmenities: [],
     visibleSpokenLanguages: [],
     regions: [],

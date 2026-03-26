@@ -194,6 +194,7 @@ export const mockCreateApplicationData = (
       mobility: false,
       vision: false,
       hearing: false,
+      hearingAndVision: false,
       other: false,
     },
     additionalPhone: true,
@@ -366,6 +367,7 @@ const buildExpectedApplicationData = ({
     acceptedTerms: true,
     submissionDate: submissionDate,
     reviewStatus: ApplicationReviewStatusEnum.valid,
+    expireAfter: undefined,
     applicant: {
       create: {
         firstName: 'applicant first name',
@@ -380,6 +382,7 @@ const buildExpectedApplicationData = ({
         phoneNumberType: 'Cell',
         noPhone: false,
         workInRegion: YesNoEnum.yes,
+        fullTimeStudent: undefined,
         applicantAddress: {
           create: {
             ...exampleAddress,
@@ -397,6 +400,7 @@ const buildExpectedApplicationData = ({
         mobility: false,
         vision: false,
         hearing: false,
+        hearingAndVision: false,
         other: false,
       },
     },
@@ -456,6 +460,7 @@ const buildExpectedApplicationData = ({
           sameAddress: YesNoEnum.yes,
           relationship: HouseholdMemberRelationship.other,
           workInRegion: YesNoEnum.yes,
+          fullTimeStudent: undefined,
           householdMemberAddress: {
             create: {
               ...exampleAddress,
@@ -563,6 +568,7 @@ const detailView = {
       mobility: true,
       vision: true,
       hearing: true,
+      hearingAndVision: true,
       other: true,
     },
   },
@@ -785,6 +791,7 @@ const baseView = {
       mobility: true,
       vision: true,
       hearing: true,
+      hearingAndVision: true,
       other: true,
     },
   },
@@ -996,7 +1003,7 @@ describe('Testing application service', () => {
         id: 'juris id',
         featureFlags: [
           {
-            name: FeatureFlagEnum.enableAdaOtherOption,
+            name: FeatureFlagEnum.enableFullTimeStudentQuestion,
             description: '',
             active: true,
             jurisdictions: [],

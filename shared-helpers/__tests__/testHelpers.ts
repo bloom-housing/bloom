@@ -746,6 +746,7 @@ export const jurisdiction: Jurisdiction = {
   whatToExpectUnderConstruction: "",
   visibleNeighborhoodAmenities: [],
   visibleAccessibilityPriorityTypes: [],
+  visibleApplicationAccessibilityFeatures: [],
   regions: [],
   visibleSpokenLanguages: [],
 }
@@ -1238,6 +1239,7 @@ export const mockBaseJurisdiction: Jurisdiction = {
   whatToExpectUnderConstruction: "",
   visibleNeighborhoodAmenities: [],
   visibleAccessibilityPriorityTypes: [],
+  visibleApplicationAccessibilityFeatures: [],
   regions: [],
   visibleSpokenLanguages: [],
 }

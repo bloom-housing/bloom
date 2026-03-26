@@ -62,6 +62,8 @@ const loadListing = async (
     isAdvocate:
       isFeatureFlagOn(jurisdictionResponse, FeatureFlagEnum.enableHousingAdvocate) && isAdvocate,
     visibleSpokenLanguages: jurisdictionResponse.visibleSpokenLanguages,
+    visibleApplicationAccessibilityFeatures:
+      jurisdictionResponse.visibleApplicationAccessibilityFeatures,
     raceEthnicityConfiguration: jurisdictionResponse.raceEthnicityConfiguration,
   }
   stateFunction(conductor.listing)
