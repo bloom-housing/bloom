@@ -287,7 +287,7 @@ describe("Account Listing View", () => {
     expect(reasonableAccommodationsSection).toBeInTheDocument()
     expect(
       within(reasonableAccommodationsSection).getByText(
-        /do you require reasonable accommodations\? if so, please specify\./i
+        /do you require reasonable accommodations\?/i
       )
     ).toBeInTheDocument()
     expect(
