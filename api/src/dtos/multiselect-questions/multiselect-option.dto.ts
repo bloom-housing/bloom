@@ -115,6 +115,7 @@ export class MultiselectOption extends AbstractDTO {
   @ApiPropertyOptional()
   untranslatedName?: string;
 
+  // TODO: This will be sunseted after MSQ refactor
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()

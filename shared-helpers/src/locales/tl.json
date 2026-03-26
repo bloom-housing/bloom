@@ -178,6 +178,7 @@
   "application.contact.phoneNumberTypes.work": "Trabaho",
   "application.contact.preferredContactType": "Gustong uri ng contact",
   "application.contact.provideAMailingAddress": "Magbigay ng address kung saan maaari kang tumanggap ng mga update at materyal tungkol sa iyong application.",
+  "application.contact.pobox": "Mayroon bang PO box?",
   "application.contact.secondNumber": "Pangalawang numero",
   "application.contact.sendMailToMailingAddress": "Ipadala ang aking liham sa ibang address",
   "application.contact.state": "State",

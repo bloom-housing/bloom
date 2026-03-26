@@ -21,17 +21,20 @@ import { Unit } from '../../../src/dtos/units/unit.dto';
 import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
 import { FeatureFlag } from '../../../src/dtos/feature-flags/feature-flag.dto';
+import { S3Service } from '../../../src/services/s3.service';
 
 describe('Testing listing csv export service', () => {
   let service: ListingCsvExporterService;
+  let prisma: PrismaService;
   let writeStream;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PrismaService, ListingCsvExporterService, Logger],
+      providers: [PrismaService, ListingCsvExporterService, Logger, S3Service],
     }).compile();
 
     service = module.get<ListingCsvExporterService>(ListingCsvExporterService);
+    prisma = module.get<PrismaService>(PrismaService);
   });
 
   beforeEach(() => {
@@ -242,6 +245,9 @@ describe('Testing listing csv export service', () => {
 
   describe('createCsv', () => {
     it('should create the listing csv with no feature flags', async () => {
+      prisma.listings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([mockBaseListing]);
       await service.createCsv('sampleFile.csv', undefined, {
         listings: [mockBaseListing],
         user: { jurisdictions: [mockBaseJurisdiction] } as unknown as User,
@@ -259,6 +265,17 @@ describe('Testing listing csv export service', () => {
       );
     });
     it('should create the listing csv with marketing type seasons', async () => {
+      prisma.listings.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          ...mockBaseListing,
+          marketingMonth: null,
+          showWaitlist: false,
+          referralApplication: null,
+          listingsBuildingSelectionCriteriaFile: null,
+          buildingSelectionCriteria:
+            'https://www.example.com/building-criteria.pdf',
+        },
+      ]);
       await service.createCsv('sampleFile.csv', undefined, {
         listings: [
           {
@@ -298,6 +315,14 @@ describe('Testing listing csv export service', () => {
       );
     });
     it('should create the listing csv with marketing type months', async () => {
+      prisma.listings.findMany = jest.fn().mockResolvedValue([
+        {
+          ...mockBaseListing,
+          marketingSeason: null,
+          showWaitlist: false,
+          referralApplication: null,
+        },
+      ]);
       await service.createCsv('sampleFile.csv', undefined, {
         listings: [
           {
@@ -400,6 +425,12 @@ describe('Testing listing csv export service', () => {
           },
         ],
       };
+      prisma.listings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          mockListing as unknown as Listing,
+          mockListing2 as unknown as Listing,
+        ]);
       await service.createUnitCsv('sampleFile.csv', [
         mockListing as unknown as Listing,
         mockListing2 as unknown as Listing,
@@ -437,13 +468,17 @@ describe('Testing listing csv export service', () => {
         unitGroupAmiLevels: [
           {
             id: randomUUID(),
-            monthlyRentDeterminationType: 'percentOfIncome',
+            monthlyRentDeterminationType: 'flatRent',
             amiChart: { id: randomUUID(), name: 'Ami Chart Name' },
+            amiPercentage: 30,
+            flatRentValue: 3000,
           },
           {
             id: randomUUID(),
             monthlyRentDeterminationType: 'flatRent',
             amiChart: { id: randomUUID(), name: 'Ami Chart Name' },
+            amiPercentage: 50,
+            flatRentValue: 4000,
           },
         ],
       };
@@ -468,6 +503,10 @@ describe('Testing listing csv export service', () => {
         },
       };
 
+      prisma.listings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([mockListing as unknown as Listing]);
+
       await service.createUnitCsv(
         'sampleFile.csv',
         [mockListing as unknown as Listing],
@@ -483,7 +522,7 @@ describe('Testing listing csv export service', () => {
       );
 
       expect(content).toContain(
-        `"listing1-ID","listing1-Name","${unitGroup.id}","Studio, One Bedroom","Ami Chart Name","30% - 50%","Percent Of Income, Flat Rent","3000 - 4000","5","2","No","1","3","800","1000","1","3","1","2"`,
+        `"listing1-ID","listing1-Name","${unitGroup.id}","Studio, One Bedroom","Ami Chart Name","30% - 50%","Flat Rent","$3000 - $4000","5","2","No","1","3","800","1000","1","3","1","2"`,
       );
     });
   });
