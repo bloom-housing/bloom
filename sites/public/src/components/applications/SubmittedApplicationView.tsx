@@ -6,6 +6,7 @@ import {
   Application,
   ApplicationStatusEnum,
   FeatureFlagEnum,
+  Jurisdiction,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -13,19 +14,29 @@ import { useMemo, useContext } from "react"
 import { DATE_FORMAT } from "../../lib/constants"
 import dayjs from "dayjs"
 import { ApplicationListingCard } from "../account/ApplicationCards"
+import { isFeatureFlagOn } from "../../lib/helpers"
 
 interface SubmittedApplicationViewProps {
   application: Application
   listing: Listing
   backHref: string
+  jurisdiction?: Jurisdiction
 }
 
 const SubmittedApplicationView = ({
   application,
   listing,
   backHref,
+  jurisdiction,
 }: SubmittedApplicationViewProps) => {
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const checkFeatureFlag = (flag: FeatureFlagEnum) => {
+    return (
+      isFeatureFlagOn(jurisdiction, flag) ||
+      doJurisdictionsHaveFeatureFlagOn(flag, listing?.jurisdictions.id)
+    )
+  }
+
   const confirmationDate = useMemo(() => {
     return dayjs(application.submissionDate).format(DATE_FORMAT)
   }, [application.submissionDate])
@@ -103,22 +114,15 @@ const SubmittedApplicationView = ({
               ?.length === 0
           }
           editMode={false}
-          enableUnitGroups={doJurisdictionsHaveFeatureFlagOn(
-            FeatureFlagEnum.enableUnitGroups,
-            listing?.jurisdictions.id
+          enableUnitGroups={checkFeatureFlag(FeatureFlagEnum.enableUnitGroups)}
+          enableFullTimeStudentQuestion={checkFeatureFlag(
+            FeatureFlagEnum.enableFullTimeStudentQuestion
           )}
-          enableFullTimeStudentQuestion={doJurisdictionsHaveFeatureFlagOn(
-            FeatureFlagEnum.enableFullTimeStudentQuestion,
-            listing?.jurisdictions.id
+          enableAdaOtherOption={checkFeatureFlag(FeatureFlagEnum.enableAdaOtherOption)}
+          swapCommunityTypeWithPrograms={checkFeatureFlag(
+            FeatureFlagEnum.swapCommunityTypeWithPrograms
           )}
-          enableAdaOtherOption={doJurisdictionsHaveFeatureFlagOn(
-            FeatureFlagEnum.enableAdaOtherOption,
-            listing?.jurisdictions.id
-          )}
-          swapCommunityTypeWithPrograms={doJurisdictionsHaveFeatureFlagOn(
-            FeatureFlagEnum.swapCommunityTypeWithPrograms,
-            listing?.jurisdictions.id
-          )}
+          enableV2MSQ={checkFeatureFlag(FeatureFlagEnum.enableV2MSQ)}
         />
         <Card.Section>
           <div className="hide-for-print">
