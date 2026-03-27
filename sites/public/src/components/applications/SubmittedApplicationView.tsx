@@ -111,10 +111,6 @@ const SubmittedApplicationView = ({
             FeatureFlagEnum.enableFullTimeStudentQuestion,
             listing?.jurisdictions.id
           )}
-          enableAdaOtherOption={doJurisdictionsHaveFeatureFlagOn(
-            FeatureFlagEnum.enableAdaOtherOption,
-            listing?.jurisdictions.id
-          )}
           swapCommunityTypeWithPrograms={doJurisdictionsHaveFeatureFlagOn(
             FeatureFlagEnum.swapCommunityTypeWithPrograms,
             listing?.jurisdictions.id

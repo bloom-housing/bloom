@@ -175,7 +175,7 @@ describe("partners_application_index", () => {
           },
         }}
       >
-        <DetailsHouseholdDetails enableAdaOtherOption={false} />
+        <DetailsHouseholdDetails />
       </ApplicationContext.Provider>
     )
 
@@ -211,10 +211,7 @@ describe("partners_application_index", () => {
           },
         }}
       >
-        <DetailsHouseholdDetails
-          enableFullTimeStudentQuestion={true}
-          enableAdaOtherOption={false}
-        />
+        <DetailsHouseholdDetails enableFullTimeStudentQuestion={true} />
       </ApplicationContext.Provider>
     )
 

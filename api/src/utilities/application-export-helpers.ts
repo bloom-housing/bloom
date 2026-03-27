@@ -30,7 +30,6 @@ export const getExportHeaders = (
   timeZone: string,
   optionalParams?: {
     disableWorkInRegion?: boolean;
-    enableAdaOtherOption?: boolean;
     enableApplicationStatus?: boolean;
     enableFullTimeStudentQuestion?: boolean;
     enableSpokenLanguage?: boolean;
@@ -43,7 +42,6 @@ export const getExportHeaders = (
   const dateFormat = 'MM-DD-YYYY hh:mm:ssA z';
   const {
     disableWorkInRegion,
-    enableAdaOtherOption,
     enableApplicationStatus,
     enableFullTimeStudentQuestion,
     enableSpokenLanguage,
@@ -314,14 +312,14 @@ export const getExportHeaders = (
         path: 'accessibility.hearing',
         label: 'Accessibility Hearing',
       },
-      ...(enableAdaOtherOption
-        ? [
-            {
-              path: 'accessibility.other',
-              label: 'Accessibility Other',
-            },
-          ]
-        : []),
+      {
+        path: 'accessibility.hearingAndVision',
+        label: 'Accessibility Hearing and Vision',
+      },
+      {
+        path: 'accessibility.other',
+        label: 'Accessibility Other',
+      },
       {
         path: 'householdExpectingChanges',
         label: 'Expecting Household Changes',

@@ -12,6 +12,7 @@ import { JurisdictionUpdate } from '../../src/dtos/jurisdictions/jurisdiction-up
 import { IdDTO } from '../../src/dtos/shared/id.dto';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
+import { ApplicationAccessibilityFeatureEnum } from '../../src/enums/applications/application-accessibility-feature-enum';
 
 describe('Jurisdiction Controller Tests', () => {
   let app: INestApplication;
@@ -141,6 +142,11 @@ describe('Jurisdiction Controller Tests', () => {
       ],
       regions: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearing,
+        ApplicationAccessibilityFeatureEnum.vision,
+      ],
       visibleSpokenLanguages: [],
     };
     const res = await request(app.getHttpServer())
@@ -178,6 +184,11 @@ describe('Jurisdiction Controller Tests', () => {
       ],
       regions: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearing,
+        ApplicationAccessibilityFeatureEnum.vision,
+      ],
       visibleSpokenLanguages: [],
     };
     const res = await request(app.getHttpServer())
@@ -219,6 +230,11 @@ describe('Jurisdiction Controller Tests', () => {
       ],
       regions: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearing,
+        ApplicationAccessibilityFeatureEnum.vision,
+      ],
       visibleSpokenLanguages: [],
     };
 

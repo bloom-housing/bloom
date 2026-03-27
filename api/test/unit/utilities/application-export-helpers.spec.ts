@@ -232,6 +232,10 @@ describe('Testing application export helpers', () => {
       label: 'Accessibility Hearing',
     },
     {
+      path: 'accessibility.hearingAndVision',
+      label: 'Accessibility Hearing and Vision',
+    },
+    {
       path: 'accessibility.other',
       label: 'Accessibility Other',
     },
@@ -299,9 +303,7 @@ describe('Testing application export helpers', () => {
 
   describe('Testing getExportHeaders', () => {
     it('tests getCsvHeaders with no household members, multiselect questions or demographics', () => {
-      const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
-        enableAdaOtherOption: true,
-      });
+      const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {});
       const testHeaders = [
         ...getCsvHeader(),
         {
@@ -324,9 +326,7 @@ describe('Testing application export helpers', () => {
     });
 
     it('tests getCsvHeaders with household members and no multiselect questions or demographics', () => {
-      const headers = getExportHeaders(3, [], process.env.TIME_ZONE, {
-        enableAdaOtherOption: true,
-      });
+      const headers = getExportHeaders(3, [], process.env.TIME_ZONE, {});
 
       const testHeaders = [
         ...getCsvHeader(),
@@ -353,7 +353,6 @@ describe('Testing application export helpers', () => {
     it('tests getCsvHeaders with household members with no work in region', () => {
       const headers = getExportHeaders(3, [], process.env.TIME_ZONE, {
         disableWorkInRegion: true,
-        enableAdaOtherOption: true,
       });
 
       const testHeaders = [
@@ -394,7 +393,6 @@ describe('Testing application export helpers', () => {
         [multiselectQuestion],
         process.env.TIME_ZONE,
         {
-          enableAdaOtherOption: true,
           enableV2MSQ: true,
         },
       );

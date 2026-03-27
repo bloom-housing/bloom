@@ -10,7 +10,6 @@ export enum FeatureFlagEnum {
   disableListingPreferences = 'disableListingPreferences',
   disableWorkInRegion = 'disableWorkInRegion',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
-  enableAdaOtherOption = 'enableAdaOtherOption',
   enableAdditionalResources = 'enableAdditionalResources',
   enableApplicationStatus = 'enableApplicationStatus',
   enableCompanyWebsite = 'enableCompanyWebsite',
@@ -113,11 +112,6 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableAccessibilityFeatures,
     description:
       "When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view",
-  },
-  {
-    name: FeatureFlagEnum.enableAdaOtherOption,
-    description:
-      "When true, the ADA impairment options will include 'For Other Impairments'",
   },
   {
     name: FeatureFlagEnum.enableAdditionalResources,

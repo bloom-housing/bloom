@@ -1146,6 +1146,7 @@ export class SnapshotCreateService {
             createdAt: true,
             updatedAt: true,
             hearing: true,
+            hearingAndVision: true,
             mobility: true,
             other: true,
             vision: true,
