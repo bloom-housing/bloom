@@ -39,7 +39,12 @@ const CopyListingDialog = ({ isOpen, setOpen, listingInfo }: CopyListingDialogPr
     } catch (err) {
       console.error(err)
       setOpen(false)
-      addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+      addToast(
+        t("account.settings.alerts.genericError", { contactEmail: t("resources.contactEmail") }),
+        {
+          variant: "alert",
+        }
+      )
     }
   }
   return (

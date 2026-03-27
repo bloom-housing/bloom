@@ -25,6 +25,7 @@ import {
 } from "@bloom-housing/shared-helpers"
 import styles from "../../pages/account/account.module.scss"
 import { Agency, User, UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import Markdown from "markdown-to-jsx"
 
 export type AlertMessage = {
   type: AlertTypes
@@ -300,7 +301,13 @@ export const agencyFields = (
         error={agencyErrors?.agencyId}
         errorMessage={t("errors.requiredFieldError")}
         dataTestId={"account-agency"}
-        subNote={t("advocateAccount.agencyNotListed")}
+        subNote={
+          (
+            <Markdown>
+              {t("advocateAccount.agencyNotListed", { contactEmail: t("resources.contactEmail") })}
+            </Markdown>
+          ) as unknown as string
+        }
       />
     </>
   )
@@ -636,7 +643,12 @@ export const createNameSubmitHandler = (
       setLoading(false)
     } catch (err) {
       setLoading(false)
-      setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      setAlert({
+        type: "alert",
+        message: `${t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        })}`,
+      })
       console.warn(err)
     }
   }
@@ -669,7 +681,12 @@ export const createEmailSubmitHandler = (
     } catch (err) {
       setLoading(false)
       console.log("err = ", err)
-      setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      setAlert({
+        type: "alert",
+        message: `${t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        })}`,
+      })
       console.warn(err)
     }
   }
@@ -721,7 +738,12 @@ export const createPasswordSubmitHandler = (
           message: `${t("account.settings.alerts.currentPassword")}`,
         })
       } else {
-        setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+        setAlert({
+          type: "alert",
+          message: `${t("account.settings.alerts.genericError", {
+            contactEmail: t("resources.contactEmail"),
+          })}`,
+        })
       }
       console.warn(err)
     }
@@ -753,7 +775,12 @@ export const createDobSubmitHandler = (
       setLoading(false)
     } catch (err) {
       setLoading(false)
-      setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      setAlert({
+        type: "alert",
+        message: `${t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        })}`,
+      })
       console.warn(err)
     }
   }
@@ -801,7 +828,12 @@ export const createAddressSubmitHandler = (
       setLoading(false)
     } catch (err) {
       setLoading(false)
-      setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      setAlert({
+        type: "alert",
+        message: `${t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        })}`,
+      })
       console.warn(err)
     }
   }
@@ -852,7 +884,12 @@ export const createPhoneSubmitHandler = (
       if (err?.response?.data?.message[0].includes("must be a valid phone number")) {
         setAlert({ type: "alert", message: `${t("errors.validPhoneNumber")}` })
       } else {
-        setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+        setAlert({
+          type: "alert",
+          message: `${t("account.settings.alerts.genericError", {
+            contactEmail: t("resources.contactEmail"),
+          })}`,
+        })
       }
       console.warn(err)
     }
