@@ -8,7 +8,6 @@ import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
 import StepDefinition from "./StepDefinition"
 import AlternateContactStep from "./AlternateContactStep"
 import AlternateContactTypeStep from "./AlternateContactTypeStep"
-import LiveAloneStep from "./LiveAloneStep"
 import HouseholdMemberStep from "./HouseholdMemberStep"
 import SelectedPreferencesStep from "./SelectedPreferencesStep"
 import PreferencesAllStep from "./PreferencesAllStep"
@@ -75,7 +74,6 @@ export default class ApplicationConductor {
     },
     liveAlone: {
       url: "/applications/household/live-alone",
-      definition: LiveAloneStep,
     },
     householdMemberInfo: {
       url: "/applications/household/members-info",
