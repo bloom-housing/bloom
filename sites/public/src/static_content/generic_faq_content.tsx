@@ -1,7 +1,7 @@
-import Markdown from "markdown-to-jsx"
 import { Link } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import { FaqCategory, FaqContent } from "../patterns/FrequentlyAskedQuestions"
+import LazyMarkdown from "../components/core/LazyMarkdown"
 
 export const getGenericFaqContent = (): FaqContent => {
   const faqContentSection: FaqCategory = {
@@ -10,9 +10,9 @@ export const getGenericFaqContent = (): FaqContent => {
       {
         question: t("faq.howDoesThisWork"),
         answer: (
-          <Markdown>{`${t("content.genericParagraph")} ${t("content.genericParagraph")} ${t(
+          <LazyMarkdown>{`${t("content.genericParagraph")} ${t("content.genericParagraph")} ${t(
             "content.genericParagraph"
-          )}`}</Markdown>
+          )}`}</LazyMarkdown>
         ),
       },
       {

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import dayjs from "dayjs"
 import { NextRouter, useRouter } from "next/router"
-import Markdown from "markdown-to-jsx"
 import Head from "next/head"
 import HomeIcon from "@heroicons/react/24/solid/HomeIcon"
 import { Message, Toast, Icon } from "@bloom-housing/ui-seeds"
@@ -12,6 +11,7 @@ import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
 import CustomSiteFooter from "../components/shared/CustomSiteFooter"
 import { HeaderLink, SiteHeader } from "../patterns/SiteHeader"
 import styles from "./application.module.scss"
+import LazyMarkdown from "../components/core/LazyMarkdown"
 
 const isMessageActive = (windowEnv: string) => {
   let isActive = false
@@ -91,14 +91,14 @@ const getSiteHeaderDeprecated = (
       {showMaintenanceMessage && (
         <div className={`${styles["site-banner-container"]} ${styles["site-banner-alert-bg"]}`}>
           <Message className={styles["site-alert-banner-content"]} variant={"alert"}>
-            <Markdown>{t("alert.maintenance")}</Markdown>
+            <LazyMarkdown>{t("alert.maintenance")}</LazyMarkdown>
           </Message>
         </div>
       )}
       {showGenericSiteMessage && (
         <div className={`${styles["site-banner-container"]} ${styles["site-banner-primary-bg"]}`}>
           <Message className={styles["site-alert-banner-content"]} variant={"primary"}>
-            <Markdown>{t("siteMessage.generic")}</Markdown>
+            <LazyMarkdown>{t("siteMessage.generic")}</LazyMarkdown>
           </Message>
         </div>
       )}

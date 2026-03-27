@@ -62,7 +62,7 @@ describe("<RentSummary>", () => {
     expect(screen.getAllByText("Unit type").length).toBe(2)
     expect(screen.getAllByText("Minimum income").length).toBe(2)
     expect(screen.getAllByText("Availability").length).toBe(2)
-    expect(screen.getByText("Section 8 Housing Choice Voucher")).toBeDefined()
+    expect(screen.getByText(/Section 8 Housing Choice Voucher/)).toBeDefined()
   })
   it("shows nothing if no data", () => {
     render(

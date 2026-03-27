@@ -11,7 +11,7 @@ import {
   getUnitGroupSummariesTable,
 } from "@bloom-housing/shared-helpers"
 import styles from "./RentSummary.module.scss"
-import Markdown from "markdown-to-jsx"
+import LazyMarkdown from "../../core/LazyMarkdown"
 
 type RentSummaryProps = {
   amiValues: number[]
@@ -97,7 +97,7 @@ export const RentSummary = ({
       {rentTable}
       {section8Acceptance && (
         <div className={"seeds-p-bs-4"}>
-          <Markdown>{t("listings.section8VoucherInfo")}</Markdown>
+          <LazyMarkdown>{t("listings.section8VoucherInfo")}</LazyMarkdown>
         </div>
       )}
     </div>
