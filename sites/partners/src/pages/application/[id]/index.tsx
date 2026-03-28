@@ -35,11 +35,6 @@ const ApplicationsList = () => {
 
   const { applicationsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
-  const enableAdaOtherOption = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableAdaOtherOption,
-    listingDto?.jurisdictions.id
-  )
-
   const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableWorkInRegion,
     listingDto?.jurisdictions.id
@@ -158,7 +153,6 @@ const ApplicationsList = () => {
 
                 <DetailsHouseholdDetails
                   enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
-                  enableAdaOtherOption={enableAdaOtherOption}
                   enableReasonableAccommodations={enableReasonableAccommodations}
                 />
 

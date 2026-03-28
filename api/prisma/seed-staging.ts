@@ -35,6 +35,7 @@ import { RaceEthnicityConfiguration } from '../src/dtos/jurisdictions/race-ethni
 import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
 import { createAllFeatureFlags } from './seed-helpers/feature-flag-factory';
 import { FeatureFlagEnum } from '../src/enums/feature-flags/feature-flags-enum';
+import { ApplicationAccessibilityFeatureEnum } from '../src/enums/applications/application-accessibility-feature-enum';
 import { hollywoodHillsHeights } from './seed-helpers/listing-data/hollywood-hills-heights';
 import { districtViewApartments } from './seed-helpers/listing-data/district-view-apartments';
 import { blueSkyApartments } from './seed-helpers/listing-data/blue-sky-apartments';
@@ -238,7 +239,6 @@ export const stagingSeed = async (
         FeatureFlagEnum.disableListingPreferences,
         FeatureFlagEnum.disableWorkInRegion,
         FeatureFlagEnum.enableAccessibilityFeatures,
-        FeatureFlagEnum.enableAdaOtherOption,
         FeatureFlagEnum.enableAdditionalResources,
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
@@ -367,6 +367,10 @@ export const stagingSeed = async (
         UnitAccessibilityPriorityTypeEnum.mobility,
         UnitAccessibilityPriorityTypeEnum.hearingAndVision,
         UnitAccessibilityPriorityTypeEnum.mobilityHearingAndVision,
+      ],
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearingAndVision,
       ],
       regions: [
         'Metro Area',

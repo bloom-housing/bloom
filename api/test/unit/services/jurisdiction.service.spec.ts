@@ -5,6 +5,7 @@ import { JurisdictionCreate } from '../../../src/dtos/jurisdictions/jurisdiction
 import { JurisdictionUpdate } from '../../../src/dtos/jurisdictions/jurisdiction-update.dto';
 import { LanguagesEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
+import { ApplicationAccessibilityFeatureEnum } from '../../../src/enums/applications/application-accessibility-feature-enum';
 
 describe('Testing jurisdiction service', () => {
   let service: JurisdictionService;
@@ -152,6 +153,11 @@ describe('Testing jurisdiction service', () => {
       regions: [],
       requiredListingFields: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearing,
+        ApplicationAccessibilityFeatureEnum.vision,
+      ],
       visibleNeighborhoodAmenities: [],
       visibleSpokenLanguages: [],
     };
@@ -180,6 +186,11 @@ describe('Testing jurisdiction service', () => {
         regions: [],
         requiredListingFields: [],
         visibleAccessibilityPriorityTypes: [],
+        visibleApplicationAccessibilityFeatures: [
+          ApplicationAccessibilityFeatureEnum.mobility,
+          ApplicationAccessibilityFeatureEnum.hearing,
+          ApplicationAccessibilityFeatureEnum.vision,
+        ],
         visibleNeighborhoodAmenities: [],
         visibleSpokenLanguages: [],
       },
@@ -223,6 +234,11 @@ describe('Testing jurisdiction service', () => {
       regions: [],
       requiredListingFields: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearing,
+        ApplicationAccessibilityFeatureEnum.vision,
+      ],
       visibleSpokenLanguages: [],
       visibleNeighborhoodAmenities: [],
     };
@@ -255,6 +271,7 @@ describe('Testing jurisdiction service', () => {
       requiredListingFields: undefined,
       visibleNeighborhoodAmenities: undefined,
       visibleAccessibilityPriorityTypes: undefined,
+      visibleApplicationAccessibilityFeatures: undefined,
       visibleSpokenLanguages: undefined,
       regions: undefined,
       listingFeaturesConfiguration: undefined,
@@ -288,6 +305,11 @@ describe('Testing jurisdiction service', () => {
         regions: [],
         requiredListingFields: [],
         visibleAccessibilityPriorityTypes: [],
+        visibleApplicationAccessibilityFeatures: [
+          ApplicationAccessibilityFeatureEnum.mobility,
+          ApplicationAccessibilityFeatureEnum.hearing,
+          ApplicationAccessibilityFeatureEnum.vision,
+        ],
         visibleNeighborhoodAmenities: [],
         visibleSpokenLanguages: [],
       },
@@ -325,6 +347,11 @@ describe('Testing jurisdiction service', () => {
       regions: [],
       requiredListingFields: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearing,
+        ApplicationAccessibilityFeatureEnum.vision,
+      ],
       visibleNeighborhoodAmenities: [],
       visibleSpokenLanguages: [],
     };

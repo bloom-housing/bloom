@@ -1,7 +1,10 @@
 import React from "react"
 import { mockNextRouter, render, screen, FormProviderWrapper } from "../../../../testUtils"
 import { FormHouseholdDetails } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormHouseholdDetails"
-import { UnitTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ApplicationAccessibilityFeatureEnum,
+  UnitTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { unit } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import userEvent from "@testing-library/user-event"
 
@@ -33,6 +36,11 @@ describe("<FormHouseholdDetails>", () => {
           }}
           listingUnitGroups={[]}
           enableUnitGroups={false}
+          visibleApplicationAccessibilityFeatures={[
+            ApplicationAccessibilityFeatureEnum.mobility,
+            ApplicationAccessibilityFeatureEnum.vision,
+            ApplicationAccessibilityFeatureEnum.hearing,
+          ]}
         />
       </FormProviderWrapper>
     )
@@ -122,6 +130,11 @@ describe("<FormHouseholdDetails>", () => {
             },
           ]}
           enableUnitGroups={true}
+          visibleApplicationAccessibilityFeatures={[
+            ApplicationAccessibilityFeatureEnum.mobility,
+            ApplicationAccessibilityFeatureEnum.vision,
+            ApplicationAccessibilityFeatureEnum.hearing,
+          ]}
         />
       </FormProviderWrapper>
     )

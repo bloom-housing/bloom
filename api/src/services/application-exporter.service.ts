@@ -208,10 +208,6 @@ export class ApplicationExporterService {
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.disableWorkInRegion,
     );
-    const enableAdaOtherOption = doJurisdictionHaveFeatureFlagSet(
-      jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableAdaOtherOption,
-    );
     const enableApplicationStatus = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableApplicationStatus,
@@ -255,7 +251,6 @@ export class ApplicationExporterService {
       queryParams.timeZone,
       {
         disableWorkInRegion,
-        enableAdaOtherOption,
         enableApplicationStatus,
         enableFullTimeStudentQuestion,
         enableReasonableAccommodations,
@@ -492,10 +487,6 @@ export class ApplicationExporterService {
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.disableWorkInRegion,
     );
-    const enableAdaOtherOption = doJurisdictionHaveFeatureFlagSet(
-      jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableAdaOtherOption,
-    );
     const enableApplicationStatus = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableApplicationStatus,
@@ -535,7 +526,6 @@ export class ApplicationExporterService {
       queryParams.timeZone,
       {
         disableWorkInRegion,
-        enableAdaOtherOption,
         enableApplicationStatus,
         enableFullTimeStudentQuestion,
         enableReasonableAccommodations,

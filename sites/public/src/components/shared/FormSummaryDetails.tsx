@@ -27,7 +27,6 @@ type FormSummaryDetailsProps = {
   validationError?: boolean
   enableUnitGroups?: boolean
   enableFullTimeStudentQuestion?: boolean
-  enableAdaOtherOption?: boolean
   enableReasonableAccommodations?: boolean
   swapCommunityTypeWithPrograms?: boolean
 }
@@ -40,7 +39,6 @@ const FormSummaryDetails = ({
   hidePrograms = false,
   validationError = false,
   enableUnitGroups = false,
-  enableAdaOtherOption = false,
   enableReasonableAccommodations = false,
   enableFullTimeStudentQuestion = false,
   swapCommunityTypeWithPrograms = false,
@@ -59,8 +57,9 @@ const FormSummaryDetails = ({
     if (application.accessibility?.mobility) labels.push(t("application.ada.mobility"))
     if (application.accessibility?.vision) labels.push(t("application.ada.vision"))
     if (application.accessibility?.hearing) labels.push(t("application.ada.hearing"))
-    if (application.accessibility?.other && enableAdaOtherOption)
-      labels.push(t("application.ada.other"))
+    if (application.accessibility?.hearingAndVision)
+      labels.push(t("application.ada.hearingAndVision"))
+    if (application.accessibility?.other) labels.push(t("application.ada.other"))
     if (labels.length === 0) labels.push(t("t.no"))
 
     return labels

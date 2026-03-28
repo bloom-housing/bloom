@@ -608,6 +608,7 @@ describe('Application Controller Tests', () => {
           mobility: false,
           vision: false,
           hearing: false,
+          hearingAndVision: null,
           other: null,
         },
         alternateContact: {
@@ -1033,6 +1034,7 @@ describe('Application Controller Tests', () => {
           mobility: false,
           vision: false,
           hearing: false,
+          hearingAndVision: null,
           other: null,
         },
         alternateContact: {
