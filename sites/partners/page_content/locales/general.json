@@ -622,6 +622,7 @@
   "properties.propertyEditError": "This property is already attached to a listing and needs to be removed before it can be edited.",
   "properties.propetyAlertUpdated": "Property updated",
   "properties.total": "Total properties",
+  "resources.contactEmail": "email@email.com",
   "settings.createCopy": "Make a copy",
   "settings.createCopyDescription": "Create a copy of your preference.",
   "settings.navLabel": "Settings pages",

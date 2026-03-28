@@ -230,9 +230,11 @@ const FormSummaryDetails = ({
             testId={"app-summary-applicant-phone"}
             id="applicantPhone"
             label={t("t.phone")}
-            helpText={t(
-              `application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`
-            )}
+            helpText={
+              application.applicant.phoneNumberType
+                ? t(`application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`)
+                : undefined
+            }
             className={styles["summary-value"]}
           >
             {application.applicant.phoneNumber}
@@ -243,9 +245,11 @@ const FormSummaryDetails = ({
             testId={"app-summary-applicant-additional-phone"}
             id="applicantAdditionalPhone"
             label={t("t.additionalPhone")}
-            helpText={t(
-              `application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`
-            )}
+            helpText={
+              application.additionalPhoneNumberType
+                ? t(`application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`)
+                : undefined
+            }
             className={styles["summary-value"]}
           >
             {application.additionalPhoneNumber}
@@ -385,7 +389,7 @@ const FormSummaryDetails = ({
         </>
       )}
 
-      {application.householdSize > 1 && (
+      {application.householdSize > 1 && !!application.householdMember.length && (
         <>
           <Card.Header className={styles["summary-header"]}>
             <Heading priority={3} size="xl">

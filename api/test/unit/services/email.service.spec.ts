@@ -621,6 +621,12 @@ describe('Testing email service', () => {
   });
 
   describe('application update', () => {
+    const mockContactEmail = 'email@email.com';
+
+    beforeEach(() => {
+      process.env.CONTACT_EMAIL = mockContactEmail;
+    });
+
     it('should send application update email for applicant', async () => {
       const listing = {
         id: 'listingId',
@@ -649,7 +655,6 @@ describe('Testing email service', () => {
         application,
         changes,
         'http://localhost:3000',
-        'contact@example.com',
       );
 
       expect(sendMock).toHaveBeenCalledTimes(1);
@@ -669,6 +674,7 @@ describe('Testing email service', () => {
       expect(applicantEmailMock.body).toContain(
         'No further action is required at this time. If you have questions regarding this update, please reach out at',
       );
+      expect(applicantEmailMock.body).toContain(mockContactEmail);
     });
     it('should send advocate and applicant application update emails', async () => {
       const listing = {
@@ -705,7 +711,6 @@ describe('Testing email service', () => {
         application,
         changes,
         'http://localhost:3000',
-        'contact@example.com',
         true,
         'advocate.email@example.com',
       );
@@ -729,7 +734,7 @@ describe('Testing email service', () => {
       expect(advocateEmailMock.body).toContain(
         'Your Conventional wait list number is <strong>5</strong>',
       );
-      expect(advocateEmailMock.body).toContain('contact@example.com');
+      expect(advocateEmailMock.body).toContain(mockContactEmail);
       expect(advocateEmailMock.body).toMatch(
         'http://localhost:3000/account/applications',
       );
@@ -745,7 +750,7 @@ describe('Testing email service', () => {
       expect(applicantEmailMock.body).toContain(
         'If you have questions regarding this update, please reach out at',
       );
-      expect(applicantEmailMock.body).toContain('contact@example.com');
+      expect(applicantEmailMock.body).toContain(mockContactEmail);
       expect(applicantEmailMock.body).not.toMatch(
         'http://localhost:3000/account/applications',
       );

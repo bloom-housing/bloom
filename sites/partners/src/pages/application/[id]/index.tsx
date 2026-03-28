@@ -130,7 +130,9 @@ const ApplicationsList = () => {
                 closeable
                 type="alert"
               >
-                {t("authentication.signIn.errorGenericMessage")}
+                {t("authentication.signIn.errorGenericMessage", {
+                  contactEmail: t("resources.contactEmail"),
+                })}
               </AlertBox>
             )}
 

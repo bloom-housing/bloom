@@ -2385,6 +2385,9 @@ describe('Application Controller Tests', () => {
         data: jurisdictionFactory(),
       });
       await reservedCommunityTypeFactoryAll(juris.id, prisma);
+      const user = await prisma.userAccounts.create({
+        data: await userFactory({}),
+      });
       const listing = await prisma.listings.create({
         data: await listingFactory(juris.id, prisma, {
           status: ListingsStatusEnum.active,
@@ -2394,6 +2397,7 @@ describe('Application Controller Tests', () => {
       // Application that is the newest for a user
       const newestApplication = await prisma.applications.create({
         data: await applicationFactory({
+          userId: user.id,
           listingId: listing.id,
           isNewest: true,
           expireAfter: dayjs(new Date()).subtract(180, 'days').toDate(),
@@ -2402,6 +2406,7 @@ describe('Application Controller Tests', () => {
       // Application that expires in the future
       const futureApplication = await prisma.applications.create({
         data: await applicationFactory({
+          userId: user.id,
           listingId: listing.id,
           isNewest: false,
           expireAfter: dayjs(new Date()).add(3, 'days').toDate(),
@@ -2410,6 +2415,7 @@ describe('Application Controller Tests', () => {
       // This application should have the PII script run against it
       const applicationToBeCleaned = await prisma.applications.create({
         data: await applicationFactory({
+          userId: user.id,
           listingId: listing.id,
           isNewest: false,
           additionalPhone: '(123) 456-7890',
@@ -2525,6 +2531,7 @@ describe('Application Controller Tests', () => {
       });
       expect(application1.wasPIICleared).toBe(true);
       expect(application1.additionalPhoneNumber).toBeNull();
+      expect(application1.historicalUserId).toBe(user.id);
 
       // Verify that the other applications didn't have their data cleared
       const application2 = await prisma.applications.findFirst({
