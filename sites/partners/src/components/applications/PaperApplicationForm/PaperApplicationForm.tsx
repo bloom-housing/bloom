@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-import { t, Form, AlertBox, LoadingOverlay } from "@bloom-housing/ui-components"
-import { Button, Dialog } from "@bloom-housing/ui-seeds"
+import { t, Form, AlertBox } from "@bloom-housing/ui-components"
+import { Button, Dialog, LoadingState } from "@bloom-housing/ui-seeds"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -290,14 +290,13 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   }
 
   return (
-    <LoadingOverlay isLoading={loading}>
-      <>
-        <StatusBar>
-          <ApplicationStatusTag status={application?.status} />
-        </StatusBar>
-
+    <>
+      <StatusBar>
+        <ApplicationStatusTag status={application?.status} />
+      </StatusBar>
+      <LoadingState loading={loading}>
         <FormProvider {...formMethods}>
-          <section className="bg-primary-lighter py-5">
+          <section className="py-5">
             <div className="max-w-screen-xl px-5 mx-auto">
               {editMode && application?.markedAsDuplicate && (
                 <AlertBox className="mb-5" type="alert">
@@ -392,51 +391,50 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
             </div>
           </section>
         </FormProvider>
-
-        <Dialog
-          isOpen={confirmOpen}
-          ariaLabelledBy="application-save-confirmation-header"
-          ariaDescribedBy="application-save-confirmation-content"
-          onClose={closeConfirmDialog}
-        >
-          <Dialog.Header id="application-save-confirmation-header">
-            {t("application.confirmation.header")}
-          </Dialog.Header>
-          <Dialog.Content id="application-save-confirmation-content">
-            {confirmSections.changes.length > 0 && (
-              <>
-                <p>{t("application.confirmation.changesIntro")}</p>
-                <ul className="list-disc pl-5">
-                  {confirmSections.changes.map((item) => (
-                    <li key={`${item.label}-${item.value}`}>{`${item.label}: ${item.value}`}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-            {confirmSections.removals.length > 0 && (
-              <>
-                <p className={confirmSections.changes.length > 0 ? "mt-6" : ""}>
-                  {t("application.confirmation.removalsIntro")}
-                </p>
-                <ul className="list-disc pl-5">
-                  {confirmSections.removals.map((item) => (
-                    <li key={`${item.label}-${item.value}`}>{`${item.label}: ${item.value}`}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-          </Dialog.Content>
-          <Dialog.Footer>
-            <Button variant="primary" size="sm" onClick={() => void confirmSubmit()}>
-              {t("application.add.saveAndExit")}
-            </Button>
-            <Button variant="primary-outlined" size="sm" onClick={closeConfirmDialog}>
-              {t("t.cancel")}
-            </Button>
-          </Dialog.Footer>
-        </Dialog>
-      </>
-    </LoadingOverlay>
+      </LoadingState>
+      <Dialog
+        isOpen={confirmOpen}
+        ariaLabelledBy="application-save-confirmation-header"
+        ariaDescribedBy="application-save-confirmation-content"
+        onClose={closeConfirmDialog}
+      >
+        <Dialog.Header id="application-save-confirmation-header">
+          {t("application.confirmation.header")}
+        </Dialog.Header>
+        <Dialog.Content id="application-save-confirmation-content">
+          {confirmSections.changes.length > 0 && (
+            <>
+              <p>{t("application.confirmation.changesIntro")}</p>
+              <ul className="list-disc pl-5">
+                {confirmSections.changes.map((item) => (
+                  <li key={`${item.label}-${item.value}`}>{`${item.label}: ${item.value}`}</li>
+                ))}
+              </ul>
+            </>
+          )}
+          {confirmSections.removals.length > 0 && (
+            <>
+              <p className={confirmSections.changes.length > 0 ? "mt-6" : ""}>
+                {t("application.confirmation.removalsIntro")}
+              </p>
+              <ul className="list-disc pl-5">
+                {confirmSections.removals.map((item) => (
+                  <li key={`${item.label}-${item.value}`}>{`${item.label}: ${item.value}`}</li>
+                ))}
+              </ul>
+            </>
+          )}
+        </Dialog.Content>
+        <Dialog.Footer>
+          <Button variant="primary" size="sm" onClick={() => void confirmSubmit()}>
+            {t("application.add.saveAndExit")}
+          </Button>
+          <Button variant="primary-outlined" size="sm" onClick={closeConfirmDialog}>
+            {t("t.cancel")}
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
+    </>
   )
 }
 

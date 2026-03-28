@@ -45,6 +45,7 @@ class AutofillCleaner {
 
   removeAdditionalKeys() {
     const unsetIdentifiers = (obj: { id: string; createdAt?: Date; updatedAt?: Date }) => {
+      if (!obj) return
       delete obj.id
       delete obj.createdAt
       delete obj.updatedAt
@@ -53,18 +54,19 @@ class AutofillCleaner {
     unsetIdentifiers(this.application.accessibility)
     unsetIdentifiers(this.application.applicant)
     unsetIdentifiers(this.application.applicationsMailingAddress)
+    unsetIdentifiers(this.application.applicationsAlternateAddress)
 
-    if (this.application.applicationsAlternateAddress)
-      unsetIdentifiers(this.application.applicationsAlternateAddress)
+    if (this.application.householdMember) {
+      this.application.householdMember
+        .sort((a, b) => a.orderId - b.orderId)
+        .forEach((member, index) => {
+          unsetIdentifiers(member)
+          member.orderId = index
+          unsetIdentifiers(member.householdMemberAddress)
+          unsetIdentifiers(member.householdMemberWorkAddress)
+        })
+    }
 
-    this.application.householdMember
-      .sort((a, b) => a.orderId - b.orderId)
-      .forEach((member, index) => {
-        unsetIdentifiers(member)
-        member.orderId = index
-        if (member.householdMemberAddress) unsetIdentifiers(member.householdMemberAddress)
-        if (member.householdMemberWorkAddress) unsetIdentifiers(member.householdMemberWorkAddress)
-      })
     unsetIdentifiers(this.application.demographics)
 
     if (this.application.alternateContact) {

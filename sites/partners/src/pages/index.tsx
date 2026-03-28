@@ -107,7 +107,7 @@ export default function ListingsList() {
     profile?.userRoles?.isJurisdictionalAdmin ||
     profile?.userRoles?.isLimitedJurisdictionalAdmin ||
     false
-  const { onExport, csvExportLoading } = useListingExport()
+  const { onExport, csvExportLoading } = useListingExport(!!process.env.useSecureDownloadPathway)
   const router = useRouter()
   const tableOptions = useAgTable()
 

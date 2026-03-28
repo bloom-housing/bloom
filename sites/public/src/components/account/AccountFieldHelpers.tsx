@@ -25,6 +25,7 @@ import {
 } from "@bloom-housing/shared-helpers"
 import styles from "../../pages/account/account.module.scss"
 import { Agency, User, UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import Markdown from "markdown-to-jsx"
 
 export type AlertMessage = {
   type: AlertTypes
@@ -300,7 +301,13 @@ export const agencyFields = (
         error={agencyErrors?.agencyId}
         errorMessage={t("errors.requiredFieldError")}
         dataTestId={"account-agency"}
-        subNote={t("advocateAccount.agencyNotListed")}
+        subNote={
+          (
+            <Markdown>
+              {t("advocateAccount.agencyNotListed", { contactEmail: t("resources.contactEmail") })}
+            </Markdown>
+          ) as unknown as string
+        }
       />
     </>
   )
@@ -320,7 +327,7 @@ export const addressFields = (
       </legend>
       <fieldset>
         <legend>
-          <p className="field-note mt-2 mb-3">{"Is there a PO Box?"}</p>
+          <p className="field-note mt-2 mb-3">{t("application.contact.pobox")}</p>
         </legend>
         <Field
           className="mb-1"
@@ -614,6 +621,16 @@ export const AccountSection = ({
   </Card.Section>
 )
 
+const omitPhoneIfPublic = (
+  updateFn: "updatePublic" | "updateAdvocate",
+  user: any // eslint-disable-line @typescript-eslint/no-explicit-any
+) => {
+  if (updateFn !== "updatePublic" || !user) return user
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { phoneNumber, ...rest } = user
+  return rest
+}
+
 // Submit handler factory for name submission
 export const createNameSubmitHandler = (
   userService: UserService,
@@ -629,14 +646,19 @@ export const createNameSubmitHandler = (
     setAlert(null)
     try {
       const newUser = await userService[updateFn]({
-        body: { ...user, firstName, middleName, lastName },
+        body: { ...omitPhoneIfPublic(updateFn, user), firstName, middleName, lastName },
       })
       setUser(newUser)
       setAlert({ type: "success", message: `${t("account.settings.alerts.nameSuccess")}` })
       setLoading(false)
     } catch (err) {
       setLoading(false)
-      setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      setAlert({
+        type: "alert",
+        message: `${t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        })}`,
+      })
       console.warn(err)
     }
   }
@@ -658,7 +680,7 @@ export const createEmailSubmitHandler = (
     try {
       const newUser = await userService[updateFn]({
         body: {
-          ...user,
+          ...omitPhoneIfPublic(updateFn, user),
           appUrl: window.location.origin,
           newEmail: email,
         },
@@ -669,7 +691,12 @@ export const createEmailSubmitHandler = (
     } catch (err) {
       setLoading(false)
       console.log("err = ", err)
-      setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      setAlert({
+        type: "alert",
+        message: `${t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        })}`,
+      })
       console.warn(err)
     }
   }
@@ -704,7 +731,7 @@ export const createPasswordSubmitHandler = (
     }
     try {
       const newUser = await userService[updateFn]({
-        body: { ...user, password, currentPassword },
+        body: { ...omitPhoneIfPublic(updateFn, user), password, currentPassword },
       })
       setUser(newUser)
       setAlert({
@@ -721,7 +748,12 @@ export const createPasswordSubmitHandler = (
           message: `${t("account.settings.alerts.currentPassword")}`,
         })
       } else {
-        setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+        setAlert({
+          type: "alert",
+          message: `${t("account.settings.alerts.genericError", {
+            contactEmail: t("resources.contactEmail"),
+          })}`,
+        })
       }
       console.warn(err)
     }
@@ -744,7 +776,7 @@ export const createDobSubmitHandler = (
     try {
       const newUser = await userService[updateFn]({
         body: {
-          ...user,
+          ...omitPhoneIfPublic(updateFn, user),
           dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`).toDate(),
         },
       })
@@ -753,7 +785,12 @@ export const createDobSubmitHandler = (
       setLoading(false)
     } catch (err) {
       setLoading(false)
-      setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      setAlert({
+        type: "alert",
+        message: `${t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        })}`,
+      })
       console.warn(err)
     }
   }
@@ -801,7 +838,12 @@ export const createAddressSubmitHandler = (
       setLoading(false)
     } catch (err) {
       setLoading(false)
-      setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      setAlert({
+        type: "alert",
+        message: `${t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        })}`,
+      })
       console.warn(err)
     }
   }
@@ -852,7 +894,12 @@ export const createPhoneSubmitHandler = (
       if (err?.response?.data?.message[0].includes("must be a valid phone number")) {
         setAlert({ type: "alert", message: `${t("errors.validPhoneNumber")}` })
       } else {
-        setAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+        setAlert({
+          type: "alert",
+          message: `${t("account.settings.alerts.genericError", {
+            contactEmail: t("resources.contactEmail"),
+          })}`,
+        })
       }
       console.warn(err)
     }

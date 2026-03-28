@@ -277,31 +277,22 @@ Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
-
-  if (autofill & (application.householdMember.length > 0)) {
-    cy.isNextRouteValid("liveAlone")
-  } else {
-    cy.isNextRouteValid("alternateContactInfo")
-  }
+  cy.isNextRouteValid("alternateContactInfo")
 })
 
-Cypress.Commands.add("step6HouseholdSize", (application, autofill) => {
-  if (!autofill) {
-    if (application.householdMember.length > 0) {
-      cy.getByID("householdSizeLiveWithOthers").click()
-
-      cy.goNext()
-      cy.checkErrorAlert("not.exist")
-      cy.checkErrorMessages("not.exist")
-
-      cy.location("pathname").should("include", "applications/household/members-info")
-    } else {
-      cy.getByID("householdSizeLiveAlone").click()
-      cy.goNext()
-      cy.checkErrorAlert("not.exist")
-      cy.checkErrorMessages("not.exist")
-      cy.location("pathname").should("include", "applications/household/preferred-units")
-    }
+Cypress.Commands.add("step6HouseholdSize", (application) => {
+  if (application.householdMember.length > 0) {
+    cy.getByID("householdSizeLiveWithOthers").should("exist").click()
+    cy.goNext()
+    cy.checkErrorAlert("not.exist")
+    cy.checkErrorMessages("not.exist")
+    cy.location("pathname").should("include", "applications/household/members-info")
+  } else {
+    cy.getByID("householdSizeLiveAlone").should("exist").click()
+    cy.goNext()
+    cy.checkErrorAlert("not.exist")
+    cy.checkErrorMessages("not.exist")
+    cy.location("pathname").should("include", "applications/household/preferred-units")
   }
 })
 

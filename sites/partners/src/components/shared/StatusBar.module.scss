@@ -1,30 +1,31 @@
 .status-bar {
-  @apply border-t;
-  @apply bg-white;
-}
+  border: 1px solid var(--seeds-border-color);
+  background-color: var(--seeds-bg-color-surface);
 
-.status-bar__row {
-  @apply flex;
-  @apply flex-row;
-  @apply w-full;
-  @apply mx-auto;
-  @apply max-w-screen-xl;
-  @apply justify-between;
-  @apply px-5;
-  @apply items-center;
-  @apply my-3;
-
-  &.tag-only {
-    @apply flex-row-reverse;
-  }
-}
-.status-bar__tag {
-  @screen md {
-    @apply pl-6;
-    @apply w-3/12;
-  }
-  .tag.is-pill {
-    display: inline-block;
+  .status-bar__row {
+    display: flex;
+    flex-direction: row;
     width: 100%;
+    margin: 1rem auto;
+    justify-content: space-between;
+    padding-inline: var(--seeds-s5);
+    align-items: center;
+    margin-block: var(--seeds-s3);
+    max-width: var(--seeds-screen-xl);
+
+    &.tag-only {
+      justify-content: flex-end;
+    }
+
+    .status-bar__tag {
+      @media (--md-and-up) {
+        width: calc(3 / 12 * 100%);
+        padding-left: var(--seeds-s6);
+      }
+    }
   }
+}
+
+.status-bar-no-content {
+  border-bottom: 0;
 }

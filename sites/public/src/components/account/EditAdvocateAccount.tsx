@@ -154,7 +154,12 @@ export const EditAdvocateAccount = (props: EditAdvocateAccountProps) => {
       setAgencyLoading(false)
     } catch (err) {
       setAgencyLoading(false)
-      setAgencyAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      setAgencyAlert({
+        type: "alert",
+        message: `${t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        })}`,
+      })
       console.warn(err)
     }
   }
