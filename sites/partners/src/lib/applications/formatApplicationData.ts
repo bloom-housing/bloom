@@ -200,6 +200,7 @@ export const mapFormToApi = ({
   const acceptedTerms = getBooleanValue(data.application.acceptedTerms)
   const householdExpectingChanges = getBooleanValue(data.application.householdExpectingChanges)
   const householdStudent = getBooleanValue(data.application.householdStudent)
+  const reasonableAccommodations = data.application.reasonableAccommodations || null
 
   const submissionType = editMode ? data.submissionType : ApplicationSubmissionTypeEnum.paper
   const status = data.application.status || ApplicationStatusEnum.submitted
@@ -246,6 +247,7 @@ export const mapFormToApi = ({
     accessibility,
     householdExpectingChanges,
     householdStudent,
+    reasonableAccommodations,
     preferences: preferencesData,
     programs: programsData,
     income,
@@ -364,6 +366,7 @@ export const mapApiToForm = (applicationData: Application, listing: Listing) => 
     const acceptedTerms = getYesNoValue(applicationData.acceptedTerms)
     const householdExpectingChanges = getYesNoValue(applicationData.householdExpectingChanges)
     const householdStudent = getYesNoValue(applicationData.householdStudent)
+    const reasonableAccommodations = applicationData.reasonableAccommodations
 
     const workInRegion = applicationData.applicant.workInRegion
 
@@ -396,6 +399,7 @@ export const mapApiToForm = (applicationData: Application, listing: Listing) => 
       accessibility,
       householdExpectingChanges,
       householdStudent,
+      reasonableAccommodations,
       incomePeriod,
       incomeVouchers,
       demographics,

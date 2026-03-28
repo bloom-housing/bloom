@@ -7188,6 +7188,9 @@ export interface Application {
   householdStudent?: boolean
 
   /**  */
+  reasonableAccommodations?: string
+
+  /**  */
   incomeVouchers?: boolean
 
   /**  */
@@ -8155,6 +8158,9 @@ export interface PublicAppsFiltered {
   householdStudent?: boolean
 
   /**  */
+  reasonableAccommodations?: string
+
+  /**  */
   incomeVouchers?: boolean
 
   /**  */
@@ -8481,6 +8487,9 @@ export interface ApplicationCreate {
   householdStudent?: boolean
 
   /**  */
+  reasonableAccommodations?: string
+
+  /**  */
   incomeVouchers?: boolean
 
   /**  */
@@ -8795,6 +8804,9 @@ export interface ApplicationUpdate {
 
   /**  */
   householdStudent?: boolean
+
+  /**  */
+  reasonableAccommodations?: string
 
   /**  */
   incomeVouchers?: boolean
@@ -10468,6 +10480,7 @@ export enum FeatureFlagEnum {
   "enablePartnerSettings" = "enablePartnerSettings",
   "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProperties" = "enableProperties",
+  "enableReasonableAccommodations" = "enableReasonableAccommodations",
   "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",
   "enableResources" = "enableResources",

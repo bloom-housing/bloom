@@ -99,6 +99,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     FeatureFlagEnum.enableHousingAdvocate,
     listingDto?.jurisdictions.id
   )
+  const enableReasonableAccommodations = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReasonableAccommodations,
+    listingDto?.jurisdictions.id
+  )
 
   const units = listingDto?.units
 
@@ -346,6 +350,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       }
                       enableUnitGroups={enableUnitGroups}
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                      enableReasonableAccommodations={enableReasonableAccommodations}
                     />
 
                     <FormMultiselectQuestions

@@ -6,6 +6,7 @@ import {
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { unit } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import userEvent from "@testing-library/user-event"
 
 beforeAll(() => {
   mockNextRouter()
@@ -29,8 +30,6 @@ describe("<FormHouseholdDetails>", () => {
           applicationUnitTypes={[]}
           applicationAccessibilityFeatures={{
             id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             mobility: true,
             vision: true,
             hearing: true,
@@ -346,8 +345,6 @@ describe("<FormHouseholdDetails>", () => {
           applicationUnitTypes={[]}
           applicationAccessibilityFeatures={{
             id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             mobility: true,
             vision: true,
             hearing: true,
@@ -377,8 +374,6 @@ describe("<FormHouseholdDetails>", () => {
           applicationUnitTypes={[]}
           applicationAccessibilityFeatures={{
             id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             mobility: true,
             vision: true,
             hearing: true,
@@ -391,5 +386,38 @@ describe("<FormHouseholdDetails>", () => {
     expect(screen.getByText("All household members students")).toBeInTheDocument()
     expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(2)
     expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(2)
+  })
+
+  it("renders reasonable accommodations field when enabled", async () => {
+    render(
+      <FormProviderWrapper>
+        <FormHouseholdDetails
+          listingUnits={Object.values(UnitTypeEnum).map((item, index) => ({
+            ...unit,
+            unitTypes: {
+              id: `id_${index}`,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              numBedrooms: index,
+              name: item,
+            },
+          }))}
+          applicationUnitTypes={[]}
+          applicationAccessibilityFeatures={{
+            id: "id",
+            mobility: true,
+            vision: true,
+            hearing: true,
+          }}
+          enableReasonableAccommodations={true}
+        />
+      </FormProviderWrapper>
+    )
+
+    const reasonableAccommodationsInput = screen.getByLabelText(/reasonable accommodations/i)
+    expect(reasonableAccommodationsInput).toBeInTheDocument()
+
+    await userEvent.type(reasonableAccommodationsInput, "Need a step-free entrance.")
+    expect(reasonableAccommodationsInput).toHaveValue("Need a step-free entrance.")
   })
 })

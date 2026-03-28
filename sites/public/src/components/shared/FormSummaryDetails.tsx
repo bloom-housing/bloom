@@ -27,6 +27,7 @@ type FormSummaryDetailsProps = {
   validationError?: boolean
   enableUnitGroups?: boolean
   enableFullTimeStudentQuestion?: boolean
+  enableReasonableAccommodations?: boolean
   swapCommunityTypeWithPrograms?: boolean
 }
 
@@ -38,6 +39,7 @@ const FormSummaryDetails = ({
   hidePrograms = false,
   validationError = false,
   enableUnitGroups = false,
+  enableReasonableAccommodations = false,
   enableFullTimeStudentQuestion = false,
   swapCommunityTypeWithPrograms = false,
 }: FormSummaryDetailsProps) => {
@@ -516,6 +518,16 @@ const FormSummaryDetails = ({
           >
             {application.householdStudent ? t("t.yes") : t("t.no")}
           </FieldValue>
+          {enableReasonableAccommodations && (
+            <FieldValue
+              testId={"app-summary-reasonable-accommodations"}
+              id="reasonableAccommodations"
+              label={t("application.household.reasonableAccommodations.question")}
+              className={styles["summary-value"]}
+            >
+              {application.reasonableAccommodations || t("t.n/a")}
+            </FieldValue>
+          )}
         </Card.Section>
 
         {!hidePrograms &&

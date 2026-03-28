@@ -15,6 +15,7 @@ import { mockMultiselectQuestion } from './multiselect-question.service.spec';
 import { ApplicationCsvQueryParams } from '../../../src/dtos/applications/application-csv-query-params.dto';
 import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
 import { User } from '../../../src/dtos/users/user.dto';
+import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 import { ValidationMethod } from '../../../src/enums/multiselect-questions/validation-method-enum';
 import { ApplicationExporterService } from '../../../src/services/application-exporter.service';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
@@ -85,6 +86,141 @@ describe('Testing application export service', () => {
       const applications = mockApplicationSet(5, new Date(), 1);
       prisma.applications.findMany = jest.fn().mockReturnValue(applications);
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        featureFlags: [
+          {
+            id: 'enableReasonableAccommodations',
+            name: FeatureFlagEnum.enableReasonableAccommodations,
+            active: true,
+          },
+        ],
+      });
+
+      prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
+        {
+          ...mockMultiselectQuestion(
+            0,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          ),
+          options: [
+            { id: 1, text: 'text' },
+            { id: 2, text: 'text', collectAddress: true },
+          ],
+        },
+        {
+          ...mockMultiselectQuestion(
+            1,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          ),
+          options: [{ id: 1, text: 'text' }],
+        },
+      ]);
+
+      const exportResponse = await service.csvExport(
+        {
+          id: randomUUID(),
+          includeDemographics: false,
+        } as unknown as ApplicationCsvQueryParams,
+        requestingUser,
+      );
+
+      const headerRow =
+        '"Application Id","Application Confirmation Code","Application Type","Application Submission Date","Primary Applicant First Name","Primary Applicant Middle Name","Primary Applicant Last Name","Primary Applicant Birth Day","Primary Applicant Birth Month","Primary Applicant Birth Year","Primary Applicant Email Address","Primary Applicant Phone Number","Primary Applicant Phone Type","Primary Applicant Additional Phone Number","Primary Applicant Preferred Contact Type","Primary Applicant Work in Region","Primary Applicant Street","Primary Applicant Street 2","Primary Applicant City","Primary Applicant State","Primary Applicant Zip Code","Primary Applicant Mailing Street","Primary Applicant Mailing Street 2","Primary Applicant Mailing City","Primary Applicant Mailing State","Primary Applicant Mailing Zip Code","Primary Applicant Work Street","Primary Applicant Work Street 2","Primary Applicant Work City","Primary Applicant Work State","Primary Applicant Work Zip Code","Alternate Contact First Name","Alternate Contact Last Name","Alternate Contact Type","Alternate Contact Agency","Alternate Contact Other Type","Alternate Contact Email Address","Alternate Contact Phone Number","Alternate Contact Street","Alternate Contact Street 2","Alternate Contact City","Alternate Contact State","Alternate Contact Zip Code","Income","Income Period","Accessibility Mobility","Accessibility Vision","Accessibility Hearing","Accessibility Other","Expecting Household Changes","Household Includes Student or Member Nearing 18","Vouchers or Subsidies","Requested Unit Types","Preference text 0","Preference text 0 - text - Address","Program text 1","Household Size","Household Member (1) First Name","Household Member (1) Middle Name","Household Member (1) Last Name","Household Member (1) Birth Day","Household Member (1) Birth Month","Household Member (1) Birth Year","Household Member (1) Relationship","Household Member (1) Same as Primary Applicant","Household Member (1) Work in Region","Household Member (1) Street","Household Member (1) Street 2","Household Member (1) City","Household Member (1) State","Household Member (1) Zip Code","Marked As Duplicate","Flagged As Duplicate"';
+      const firstApp =
+        '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0",,"yes","application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode","application 0 mailingAddress street","application 0 mailingAddress street2","application 0 mailingAddress city","application 0 mailingAddress state","application 0 mailingAddress zipCode","application 0 applicantWorkAddress street","application 0 applicantWorkAddress street2","application 0 applicantWorkAddress city","application 0 applicantWorkAddress state","application 0 applicantWorkAddress zipCode","application 0 alternateContact firstName","application 0 alternateContact lastName","application 0 alternateContact type","application 0 alternateContact agency","application 0 alternateContact otherType","application 0 alternatecontact emailaddress","application 0 alternateContact phoneNumber","application 0 alternateContact address street","application 0 alternateContact address street2","application 0 alternateContact address city","application 0 alternateContact address state","application 0 alternateContact address zipCode","income 0","per month",,,,,"true","true","true","Studio,One Bedroom",,,,,,,,,,,,,,,,,,,,';
+
+      const mockedStream = new PassThrough();
+      exportResponse.pipe(mockedStream);
+
+      // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
+      const readable = await new Promise((resolve) => {
+        mockedStream.on('data', async (d) => {
+          const value = Buffer.from(d).toString();
+          mockedStream.end();
+          mockedStream.destroy();
+          resolve(value);
+        });
+      });
+
+      expect(readable).toContain(headerRow);
+      expect(readable).toContain(firstApp);
+    });
+
+    it('should build csv with demographics', async () => {
+      const requestingUser = {
+        id: 'requesting id',
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+      } as unknown as User;
+
+      const applications = mockApplicationSet(3, new Date());
+      prisma.applications.findMany = jest.fn().mockReturnValue(applications);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        featureFlags: [
+          {
+            id: 'enableReasonableAccommodations',
+            name: FeatureFlagEnum.enableReasonableAccommodations,
+            active: true,
+          },
+        ],
+      });
+
+      prisma.multiselectQuestions.findMany = jest
+        .fn()
+        .mockReturnValue([
+          mockMultiselectQuestion(
+            0,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          ),
+          mockMultiselectQuestion(
+            1,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          ),
+        ]);
+
+      const exportResponse = await service.csvExport(
+        {
+          id: 'test',
+          includeDemographics: true,
+        } as unknown as ApplicationCsvQueryParams,
+        requestingUser,
+      );
+
+      const headerRow =
+        '"Application Id","Application Confirmation Code","Application Type","Application Submission Date","Primary Applicant First Name","Primary Applicant Middle Name","Primary Applicant Last Name","Primary Applicant Birth Day","Primary Applicant Birth Month","Primary Applicant Birth Year","Primary Applicant Email Address","Primary Applicant Phone Number","Primary Applicant Phone Type","Primary Applicant Additional Phone Number","Primary Applicant Preferred Contact Type","Primary Applicant Work in Region","Primary Applicant Street","Primary Applicant Street 2","Primary Applicant City","Primary Applicant State","Primary Applicant Zip Code","Primary Applicant Mailing Street","Primary Applicant Mailing Street 2","Primary Applicant Mailing City","Primary Applicant Mailing State","Primary Applicant Mailing Zip Code","Primary Applicant Work Street","Primary Applicant Work Street 2","Primary Applicant Work City","Primary Applicant Work State","Primary Applicant Work Zip Code","Alternate Contact First Name","Alternate Contact Last Name","Alternate Contact Type","Alternate Contact Agency","Alternate Contact Other Type","Alternate Contact Email Address","Alternate Contact Phone Number","Alternate Contact Street","Alternate Contact Street 2","Alternate Contact City","Alternate Contact State","Alternate Contact Zip Code","Income","Income Period","Accessibility Mobility","Accessibility Vision","Accessibility Hearing","Accessibility Other","Expecting Household Changes","Household Includes Student or Member Nearing 18","Vouchers or Subsidies","Requested Unit Types","Preference text 0","Program text 1","Household Size","Marked As Duplicate","Flagged As Duplicate","Ethnicity","Race","How did you Hear?"';
+      const firstApp =
+        '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0",,"yes","application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode","application 0 mailingAddress street","application 0 mailingAddress street2","application 0 mailingAddress city","application 0 mailingAddress state","application 0 mailingAddress zipCode","application 0 applicantWorkAddress street","application 0 applicantWorkAddress street2","application 0 applicantWorkAddress city","application 0 applicantWorkAddress state","application 0 applicantWorkAddress zipCode","application 0 alternateContact firstName","application 0 alternateContact lastName","application 0 alternateContact type","application 0 alternateContact agency","application 0 alternateContact otherType","application 0 alternatecontact emailaddress","application 0 alternateContact phoneNumber","application 0 alternateContact address street","application 0 alternateContact address street2","application 0 alternateContact address city","application 0 alternateContact address state","application 0 alternateContact address zipCode","income 0","per month",,,,,"true","true","true","Studio,One Bedroom",,,,,,,"Decline to Respond"';
+
+      const mockedStream = new PassThrough();
+      exportResponse.pipe(mockedStream);
+      const readable = await new Promise((resolve) => {
+        mockedStream.on('data', async (d) => {
+          const value = Buffer.from(d).toString();
+          mockedStream.end();
+          mockedStream.destroy();
+          resolve(value);
+        });
+      });
+
+      expect(readable).toContain(headerRow);
+      expect(readable).toContain(firstApp);
+    });
+
+    it('should build csv without other ADA accessibility option', async () => {
+      const requestingUser = {
+        id: 'requesting id',
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+      } as unknown as User;
+
+      const applications = mockApplicationSet(5, new Date(), 1);
+      prisma.applications.findMany = jest.fn().mockReturnValue(applications);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
         featureFlags: [],
       });
 
@@ -119,71 +255,14 @@ describe('Testing application export service', () => {
       );
 
       const headerRow =
-        '"Application Id","Application Confirmation Code","Application Type","Application Submission Date","Primary Applicant First Name","Primary Applicant Middle Name","Primary Applicant Last Name","Primary Applicant Birth Day","Primary Applicant Birth Month","Primary Applicant Birth Year","Primary Applicant Email Address","Primary Applicant Phone Number","Primary Applicant Phone Type","Primary Applicant Additional Phone Number","Primary Applicant Preferred Contact Type","Primary Applicant Work in Region","Primary Applicant Street","Primary Applicant Street 2","Primary Applicant City","Primary Applicant State","Primary Applicant Zip Code","Primary Applicant Mailing Street","Primary Applicant Mailing Street 2","Primary Applicant Mailing City","Primary Applicant Mailing State","Primary Applicant Mailing Zip Code","Primary Applicant Work Street","Primary Applicant Work Street 2","Primary Applicant Work City","Primary Applicant Work State","Primary Applicant Work Zip Code","Alternate Contact First Name","Alternate Contact Last Name","Alternate Contact Type","Alternate Contact Agency","Alternate Contact Other Type","Alternate Contact Email Address","Alternate Contact Phone Number","Alternate Contact Street","Alternate Contact Street 2","Alternate Contact City","Alternate Contact State","Alternate Contact Zip Code","Income","Income Period","Accessibility Mobility","Accessibility Vision","Accessibility Hearing","Accessibility Hearing and Vision","Accessibility Other","Expecting Household Changes","Household Includes Student or Member Nearing 18","Vouchers or Subsidies","Requested Unit Types","Preference text 0","Preference text 0 - text - Address","Program text 1","Household Size","Household Member (1) First Name","Household Member (1) Middle Name","Household Member (1) Last Name","Household Member (1) Birth Day","Household Member (1) Birth Month","Household Member (1) Birth Year","Household Member (1) Relationship","Household Member (1) Same as Primary Applicant","Household Member (1) Work in Region","Household Member (1) Street","Household Member (1) Street 2","Household Member (1) City","Household Member (1) State","Household Member (1) Zip Code","Marked As Duplicate","Flagged As Duplicate"';
+        '"Application Id","Application Confirmation Code","Application Type","Application Submission Date","Primary Applicant First Name","Primary Applicant Middle Name","Primary Applicant Last Name","Primary Applicant Birth Day","Primary Applicant Birth Month","Primary Applicant Birth Year","Primary Applicant Email Address","Primary Applicant Phone Number","Primary Applicant Phone Type","Primary Applicant Additional Phone Number","Primary Applicant Preferred Contact Type","Primary Applicant Work in Region","Primary Applicant Street","Primary Applicant Street 2","Primary Applicant City","Primary Applicant State","Primary Applicant Zip Code","Primary Applicant Mailing Street","Primary Applicant Mailing Street 2","Primary Applicant Mailing City","Primary Applicant Mailing State","Primary Applicant Mailing Zip Code","Primary Applicant Work Street","Primary Applicant Work Street 2","Primary Applicant Work City","Primary Applicant Work State","Primary Applicant Work Zip Code","Alternate Contact First Name","Alternate Contact Last Name","Alternate Contact Type","Alternate Contact Agency","Alternate Contact Other Type","Alternate Contact Email Address","Alternate Contact Phone Number","Alternate Contact Street","Alternate Contact Street 2","Alternate Contact City","Alternate Contact State","Alternate Contact Zip Code","Income","Income Period","Accessibility Mobility","Accessibility Vision","Accessibility Hearing","Expecting Household Changes","Household Includes Student or Member Nearing 18","Vouchers or Subsidies","Requested Unit Types","Preference text 0","Preference text 0 - text - Address","Program text 1","Household Size","Household Member (1) First Name","Household Member (1) Middle Name","Household Member (1) Last Name","Household Member (1) Birth Day","Household Member (1) Birth Month","Household Member (1) Birth Year","Household Member (1) Relationship","Household Member (1) Same as Primary Applicant","Household Member (1) Work in Region","Household Member (1) Street","Household Member (1) Street 2","Household Member (1) City","Household Member (1) State","Household Member (1) Zip Code","Marked As Duplicate","Flagged As Duplicate"';
       const firstApp =
-        '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0",,"yes","application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode","application 0 mailingAddress street","application 0 mailingAddress street2","application 0 mailingAddress city","application 0 mailingAddress state","application 0 mailingAddress zipCode","application 0 applicantWorkAddress street","application 0 applicantWorkAddress street2","application 0 applicantWorkAddress city","application 0 applicantWorkAddress state","application 0 applicantWorkAddress zipCode","application 0 alternateContact firstName","application 0 alternateContact lastName","application 0 alternateContact type","application 0 alternateContact agency","application 0 alternateContact otherType","application 0 alternatecontact emailaddress","application 0 alternateContact phoneNumber","application 0 alternateContact address street","application 0 alternateContact address street2","application 0 alternateContact address city","application 0 alternateContact address state","application 0 alternateContact address zipCode","income 0","per month",,,,,,"true","true","true","Studio,One Bedroom",,,,,,,,,,,,,,,,,,,,';
+        '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0",,"yes","application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode","application 0 mailingAddress street","application 0 mailingAddress street2","application 0 mailingAddress city","application 0 mailingAddress state","application 0 mailingAddress zipCode","application 0 applicantWorkAddress street","application 0 applicantWorkAddress street2","application 0 applicantWorkAddress city","application 0 applicantWorkAddress state","application 0 applicantWorkAddress zipCode","application 0 alternateContact firstName","application 0 alternateContact lastName","application 0 alternateContact type","application 0 alternateContact agency","application 0 alternateContact otherType","application 0 alternatecontact emailaddress","application 0 alternateContact phoneNumber","application 0 alternateContact address street","application 0 alternateContact address street2","application 0 alternateContact address city","application 0 alternateContact address state","application 0 alternateContact address zipCode","income 0","per month",,,,"true","true","true","Studio,One Bedroom",,,,,,,,,,,,,,,,,,,,';
 
       const mockedStream = new PassThrough();
       exportResponse.pipe(mockedStream);
 
       // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
-      const readable = await new Promise((resolve) => {
-        mockedStream.on('data', async (d) => {
-          const value = Buffer.from(d).toString();
-          mockedStream.end();
-          mockedStream.destroy();
-          resolve(value);
-        });
-      });
-
-      expect(readable).toContain(headerRow);
-      expect(readable).toContain(firstApp);
-    });
-
-    it('should build csv with demographics', async () => {
-      const requestingUser = {
-        id: 'requesting id',
-        firstName: 'requesting fName',
-        lastName: 'requesting lName',
-        email: 'requestingUser@email.com',
-      } as unknown as User;
-
-      const applications = mockApplicationSet(3, new Date());
-      prisma.applications.findMany = jest.fn().mockReturnValue(applications);
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
-        featureFlags: [],
-      });
-
-      prisma.multiselectQuestions.findMany = jest
-        .fn()
-        .mockReturnValue([
-          mockMultiselectQuestion(
-            0,
-            new Date(),
-            MultiselectQuestionsApplicationSectionEnum.preferences,
-          ),
-          mockMultiselectQuestion(
-            1,
-            new Date(),
-            MultiselectQuestionsApplicationSectionEnum.programs,
-          ),
-        ]);
-
-      const exportResponse = await service.csvExport(
-        {
-          id: 'test',
-          includeDemographics: true,
-        } as unknown as ApplicationCsvQueryParams,
-        requestingUser,
-      );
-
-      const headerRow =
-        '"Application Id","Application Confirmation Code","Application Type","Application Submission Date","Primary Applicant First Name","Primary Applicant Middle Name","Primary Applicant Last Name","Primary Applicant Birth Day","Primary Applicant Birth Month","Primary Applicant Birth Year","Primary Applicant Email Address","Primary Applicant Phone Number","Primary Applicant Phone Type","Primary Applicant Additional Phone Number","Primary Applicant Preferred Contact Type","Primary Applicant Work in Region","Primary Applicant Street","Primary Applicant Street 2","Primary Applicant City","Primary Applicant State","Primary Applicant Zip Code","Primary Applicant Mailing Street","Primary Applicant Mailing Street 2","Primary Applicant Mailing City","Primary Applicant Mailing State","Primary Applicant Mailing Zip Code","Primary Applicant Work Street","Primary Applicant Work Street 2","Primary Applicant Work City","Primary Applicant Work State","Primary Applicant Work Zip Code","Alternate Contact First Name","Alternate Contact Last Name","Alternate Contact Type","Alternate Contact Agency","Alternate Contact Other Type","Alternate Contact Email Address","Alternate Contact Phone Number","Alternate Contact Street","Alternate Contact Street 2","Alternate Contact City","Alternate Contact State","Alternate Contact Zip Code","Income","Income Period","Accessibility Mobility","Accessibility Vision","Accessibility Hearing","Accessibility Hearing and Vision","Accessibility Other","Expecting Household Changes","Household Includes Student or Member Nearing 18","Vouchers or Subsidies","Requested Unit Types","Preference text 0","Program text 1","Household Size","Marked As Duplicate","Flagged As Duplicate","Ethnicity","Race","How did you Hear?"';
-      const firstApp =
-        '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0",,"yes","application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode","application 0 mailingAddress street","application 0 mailingAddress street2","application 0 mailingAddress city","application 0 mailingAddress state","application 0 mailingAddress zipCode","application 0 applicantWorkAddress street","application 0 applicantWorkAddress street2","application 0 applicantWorkAddress city","application 0 applicantWorkAddress state","application 0 applicantWorkAddress zipCode","application 0 alternateContact firstName","application 0 alternateContact lastName","application 0 alternateContact type","application 0 alternateContact agency","application 0 alternateContact otherType","application 0 alternatecontact emailaddress","application 0 alternateContact phoneNumber","application 0 alternateContact address street","application 0 alternateContact address street2","application 0 alternateContact address city","application 0 alternateContact address state","application 0 alternateContact address zipCode","income 0","per month",,,,,,"true","true","true","Studio,One Bedroom",,,,,,,"Decline to Respond"';
-
-      const mockedStream = new PassThrough();
-      exportResponse.pipe(mockedStream);
       const readable = await new Promise((resolve) => {
         mockedStream.on('data', async (d) => {
           const value = Buffer.from(d).toString();
@@ -212,7 +291,13 @@ describe('Testing application export service', () => {
       const applications = mockApplicationSet(5, new Date(), 1);
       prisma.applications.findMany = jest.fn().mockReturnValue(applications);
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
-        featureFlags: [],
+        featureFlags: [
+          {
+            id: 'enableReasonableAccommodations',
+            name: FeatureFlagEnum.enableReasonableAccommodations,
+            active: true,
+          },
+        ],
       });
 
       prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
@@ -275,7 +360,13 @@ describe('Testing application export service', () => {
       const applications = mockApplicationSet(5, new Date(), 1);
       prisma.applications.findMany = jest.fn().mockReturnValue(applications);
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
-        featureFlags: [],
+        featureFlags: [
+          {
+            id: 'enableReasonableAccommodations',
+            name: FeatureFlagEnum.enableReasonableAccommodations,
+            active: true,
+          },
+        ],
       });
 
       prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
@@ -341,7 +432,13 @@ describe('Testing application export service', () => {
       const applications = mockApplicationSet(5, new Date(), 1);
       prisma.applications.findMany = jest.fn().mockReturnValue(applications);
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
-        featureFlags: [],
+        featureFlags: [
+          {
+            id: 'enableReasonableAccommodations',
+            name: FeatureFlagEnum.enableReasonableAccommodations,
+            active: true,
+          },
+        ],
       });
 
       prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
@@ -453,7 +550,9 @@ describe('Testing application export service', () => {
 
   describe('populateDataForEachHeader', () => {
     it('should populate the data for each header and output a string', async () => {
-      const headers = getExportHeaders(0, [], 'America/Los_Angeles', {});
+      const headers = getExportHeaders(0, [], 'America/Los_Angeles', {
+        enableReasonableAccommodations: true,
+      });
       const id = randomUUID();
       const application = mockApplication({
         date: new Date('December 5, 2024 03:24:00 PST'),
@@ -469,12 +568,14 @@ describe('Testing application export service', () => {
 
       expect(objectData).toBe(undefined);
       expect(stringData).toEqual(
-        `"${id.toString()}","confirmationCode 1","electronic","12-05-2024 03:24:00AM PST","application 1 firstName","application 1 middleName","application 1 lastName","application 1 birthDay","application 1 birthMonth","application 1 birthYear","application 1 emailaddress","application 1 phoneNumber","application 1 phoneNumberType","additionalPhoneNumber 1",,"yes","application 1 applicantAddress street","application 1 applicantAddress street2","application 1 applicantAddress city","application 1 applicantAddress state","application 1 applicantAddress zipCode","application 1 mailingAddress street","application 1 mailingAddress street2","application 1 mailingAddress city","application 1 mailingAddress state","application 1 mailingAddress zipCode","application 1 applicantWorkAddress street","application 1 applicantWorkAddress street2","application 1 applicantWorkAddress city","application 1 applicantWorkAddress state","application 1 applicantWorkAddress zipCode","application 1 alternateContact firstName","application 1 alternateContact lastName","application 1 alternateContact type","application 1 alternateContact agency","application 1 alternateContact otherType","application 1 alternatecontact emailaddress","application 1 alternateContact phoneNumber","application 1 alternateContact address street","application 1 alternateContact address street2","application 1 alternateContact address city","application 1 alternateContact address state","application 1 alternateContact address zipCode","income 1","per month",,,,,,"true","true","true","Studio,One Bedroom","1","true","true"`,
+        `"${id.toString()}","confirmationCode 1","electronic","12-05-2024 03:24:00AM PST","application 1 firstName","application 1 middleName","application 1 lastName","application 1 birthDay","application 1 birthMonth","application 1 birthYear","application 1 emailaddress","application 1 phoneNumber","application 1 phoneNumberType","additionalPhoneNumber 1",,"yes","application 1 applicantAddress street","application 1 applicantAddress street2","application 1 applicantAddress city","application 1 applicantAddress state","application 1 applicantAddress zipCode","application 1 mailingAddress street","application 1 mailingAddress street2","application 1 mailingAddress city","application 1 mailingAddress state","application 1 mailingAddress zipCode","application 1 applicantWorkAddress street","application 1 applicantWorkAddress street2","application 1 applicantWorkAddress city","application 1 applicantWorkAddress state","application 1 applicantWorkAddress zipCode","application 1 alternateContact firstName","application 1 alternateContact lastName","application 1 alternateContact type","application 1 alternateContact agency","application 1 alternateContact otherType","application 1 alternatecontact emailaddress","application 1 alternateContact phoneNumber","application 1 alternateContact address street","application 1 alternateContact address street2","application 1 alternateContact address city","application 1 alternateContact address state","application 1 alternateContact address zipCode","income 1","per month",,,,,"true","true","true","Studio,One Bedroom","1","true","true"`,
       );
     });
 
     it('should populate the data for each header and output an object', async () => {
-      const headers = getExportHeaders(0, [], 'America/Los_Angeles', {});
+      const headers = getExportHeaders(0, [], 'America/Los_Angeles', {
+        enableReasonableAccommodations: true,
+      });
       const id = randomUUID();
       const application = mockApplication({
         date: new Date('December 5, 2024 03:24:00 PST'),
@@ -490,7 +591,6 @@ describe('Testing application export service', () => {
 
       expect(objectData).toEqual({
         'accessibility.hearing': '',
-        'accessibility.hearingAndVision': '',
         'accessibility.mobility': '',
         'accessibility.vision': '',
         'accessibility.other': '',

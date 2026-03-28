@@ -53,6 +53,10 @@ const ApplicationsList = () => {
     FeatureFlagEnum.enableHousingAdvocate,
     listingDto?.jurisdictions.id
   )
+  const enableReasonableAccommodations = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReasonableAccommodations,
+    listingDto?.jurisdictions.id
+  )
 
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
@@ -149,6 +153,7 @@ const ApplicationsList = () => {
 
                 <DetailsHouseholdDetails
                   enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                  enableReasonableAccommodations={enableReasonableAccommodations}
                 />
 
                 <DetailsMultiselectQuestions
