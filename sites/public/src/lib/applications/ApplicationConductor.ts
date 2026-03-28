@@ -13,6 +13,7 @@ import SelectedPreferencesStep from "./SelectedPreferencesStep"
 import PreferencesAllStep from "./PreferencesAllStep"
 import PreferredUnitSizeStep from "./PreferredUnitSizeStep"
 import ProgramsStep from "./ProgramsStep"
+import ReasonableAccommodationsStep from "./ReasonableAccommodationsStep"
 import CommunityTypesStep from "./CommunityTypesStep"
 import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
@@ -95,6 +96,10 @@ export default class ApplicationConductor {
     },
     householdStudent: {
       url: "/applications/household/student",
+    },
+    reasonableAccommodations: {
+      url: "/applications/household/reasonable-accommodations",
+      definition: ReasonableAccommodationsStep,
     },
     programs: {
       url: "/applications/programs/programs",

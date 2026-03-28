@@ -28,6 +28,7 @@ export type ApplicationTypes = {
   preferredUnit?: string[]
   householdExpectingChanges?: YesNoEnum
   householdStudent?: YesNoEnum
+  reasonableAccommodations?: string
   accessibility: string[]
   demographics: {
     ethnicity?: string

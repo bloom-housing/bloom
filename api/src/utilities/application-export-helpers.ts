@@ -33,6 +33,7 @@ export const getExportHeaders = (
     enableAdaOtherOption?: boolean;
     enableApplicationStatus?: boolean;
     enableFullTimeStudentQuestion?: boolean;
+    enableReasonableAccommodations?: boolean;
     enableSpokenLanguage?: boolean;
     enableV2MSQ?: boolean;
     forLottery?: boolean;
@@ -46,6 +47,7 @@ export const getExportHeaders = (
     enableAdaOtherOption,
     enableApplicationStatus,
     enableFullTimeStudentQuestion,
+    enableReasonableAccommodations,
     enableSpokenLanguage,
     enableV2MSQ,
     forLottery,
@@ -332,6 +334,14 @@ export const getExportHeaders = (
           ? 'All Household Members Students'
           : 'Household Includes Student or Member Nearing 18',
       },
+      ...(enableReasonableAccommodations
+        ? [
+            {
+              path: 'reasonableAccommodations',
+              label: 'Reasonable Accommodations',
+            },
+          ]
+        : []),
       {
         path: 'incomeVouchers',
         label: 'Vouchers or Subsidies',
