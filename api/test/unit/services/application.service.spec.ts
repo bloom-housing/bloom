@@ -367,7 +367,6 @@ const buildExpectedApplicationData = ({
     acceptedTerms: true,
     submissionDate: submissionDate,
     reviewStatus: ApplicationReviewStatusEnum.valid,
-    expireAfter: undefined,
     applicant: {
       create: {
         firstName: 'applicant first name',
@@ -382,7 +381,6 @@ const buildExpectedApplicationData = ({
         phoneNumberType: 'Cell',
         noPhone: false,
         workInRegion: YesNoEnum.yes,
-        fullTimeStudent: undefined,
         applicantAddress: {
           create: {
             ...exampleAddress,
@@ -460,7 +458,6 @@ const buildExpectedApplicationData = ({
           sameAddress: YesNoEnum.yes,
           relationship: HouseholdMemberRelationship.other,
           workInRegion: YesNoEnum.yes,
-          fullTimeStudent: undefined,
           householdMemberAddress: {
             create: {
               ...exampleAddress,
@@ -1001,14 +998,6 @@ describe('Testing application service', () => {
     jurisdictions: [
       {
         id: 'juris id',
-        featureFlags: [
-          {
-            name: FeatureFlagEnum.enableFullTimeStudentQuestion,
-            description: '',
-            active: true,
-            jurisdictions: [],
-          },
-        ],
       },
     ],
   } as unknown as User;

@@ -27,6 +27,7 @@ import {
   MultiselectQuestionsStatusEnum,
   ListingFeaturesConfiguration,
   RaceEthnicityConfiguration,
+  ApplicationAccessibilityFeatureEnum,
 } from "../src/types/backend-swagger"
 
 export const multiselectQuestionPreference: MultiselectQuestion = {
@@ -746,7 +747,11 @@ export const jurisdiction: Jurisdiction = {
   whatToExpectUnderConstruction: "",
   visibleNeighborhoodAmenities: [],
   visibleAccessibilityPriorityTypes: [],
-  visibleApplicationAccessibilityFeatures: [],
+  visibleApplicationAccessibilityFeatures: [
+    ApplicationAccessibilityFeatureEnum.mobility,
+    ApplicationAccessibilityFeatureEnum.vision,
+    ApplicationAccessibilityFeatureEnum.hearing,
+  ],
   regions: [],
   visibleSpokenLanguages: [],
 }
