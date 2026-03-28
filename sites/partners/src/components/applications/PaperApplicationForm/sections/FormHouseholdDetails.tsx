@@ -66,7 +66,7 @@ const FormHouseholdDetails = ({
     }
   })
 
-  const orderedVisibleAdaFeatures = visibleApplicationAccessibilityFeatures.sort((a, b) => {
+  const orderedVisibleAdaFeatures = (visibleApplicationAccessibilityFeatures ?? []).sort((a, b) => {
     if (a === "other") return 1
     if (b === "other") return -1
     return 0
