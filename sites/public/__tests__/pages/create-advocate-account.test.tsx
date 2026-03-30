@@ -79,7 +79,16 @@ describe("Create advocate page", () => {
 
     expect(screen.getByText("Your organization")).toBeInTheDocument()
     expect(screen.getByRole("combobox", { name: "Agency" })).toBeInTheDocument()
-    expect(screen.getByText("Contact support if your agency is not listed")).toBeInTheDocument()
+    // Support email will change per jurisdiction so validating the link is a mailto and the email has an @ symbol
+    expect(screen.getByRole("link", { name: "Contact support" })).toHaveAttribute(
+      "href",
+      expect.stringContaining("mailto")
+    )
+    expect(screen.getByRole("link", { name: "Contact support" })).toHaveAttribute(
+      "href",
+      expect.stringContaining("@")
+    )
+    expect(screen.getByText(/if your agency is not listed/i)).toBeInTheDocument()
 
     expect(screen.getByText("Your email address", { selector: "legend" })).toBeInTheDocument()
     expect(screen.getByRole("textbox", { name: "Email" })).toBeInTheDocument()

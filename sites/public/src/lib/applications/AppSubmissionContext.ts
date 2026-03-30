@@ -70,6 +70,9 @@ export const retrieveApplicationConfig = (listing: Listing, featureFlags: Featur
     },
     {
       name: "householdStudent",
+    },
+    {
+      name: "reasonableAccommodations",
     }
   )
   // conditionally add programs

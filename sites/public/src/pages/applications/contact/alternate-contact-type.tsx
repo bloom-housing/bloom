@@ -37,6 +37,7 @@ const ApplicationAlternateContactType = () => {
     const validation = await trigger()
     if (!validation) return
 
+    application.alternateContact = application.alternateContact || {}
     application.alternateContact.type = data.type
     application.alternateContact.otherType = data.otherType
 
@@ -48,7 +49,7 @@ const ApplicationAlternateContactType = () => {
   const onError = () => {
     onFormError()
   }
-  const type = watch("type", application.alternateContact.type)
+  const type = watch("type", application.alternateContact?.type)
   const getOptionLabel = (option: string) => {
     if (option === "caseManager" && enableHousingAdvocate) {
       return t("application.alternateContact.type.options.caseManagerAdvocate")
@@ -108,7 +109,7 @@ const ApplicationAlternateContactType = () => {
                       error={errors.type}
                       inputProps={{
                         value: option,
-                        defaultChecked: application.alternateContact.type === option,
+                        defaultChecked: application.alternateContact?.type === option,
                       }}
                       dataTestId={"app-alternate-type"}
                     />

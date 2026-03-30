@@ -1,3 +1,5 @@
+import { Logger } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   IncomePeriodEnum,
@@ -10,33 +12,32 @@ import {
   ListingsStatusEnum,
   LotteryStatusEnum,
 } from '@prisma/client';
-import { Logger } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
-import { PrismaService } from '../../../src/services/prisma.service';
-import { ApplicationService } from '../../../src/services/application.service';
+import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
+import { randomName } from '../../../prisma/seed-helpers/word-generator';
+import { AddressCreate } from '../../../src/dtos/addresses/address-create.dto';
+import { ApplicationCreate } from '../../../src/dtos/applications/application-create.dto';
 import { ApplicationQueryParams } from '../../../src/dtos/applications/application-query-params.dto';
-import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
+import { ApplicationUpdate } from '../../../src/dtos/applications/application-update.dto';
+import { PublicAppsViewQueryParams } from '../../../src/dtos/applications/public-apps-view-params.dto';
+import { User } from '../../../src/dtos/users/user.dto';
+import { AlternateContactRelationship } from '../../../src/enums/applications/alternate-contact-relationship-enum';
+import { ApplicationsFilterEnum } from '../../../src/enums/applications/filter-enum';
+import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
 import { ApplicationOrderByKeys } from '../../../src/enums/applications/order-by-enum';
 import { ApplicationViews } from '../../../src/enums/applications/view-enum';
-import { ApplicationCreate } from '../../../src/dtos/applications/application-create.dto';
-import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
-import { AddressCreate } from '../../../src/dtos/addresses/address-create.dto';
-import { InputType } from '../../../src/enums/shared/input-type-enum';
-import { ApplicationUpdate } from '../../../src/dtos/applications/application-update.dto';
-import { EmailService } from '../../../src/services/email.service';
-import { PermissionService } from '../../../src/services/permission.service';
-import { User } from '../../../src/dtos/users/user.dto';
-import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
-import { GeocodingService } from '../../../src/services/geocoding.service';
-import { AlternateContactRelationship } from '../../../src/enums/applications/alternate-contact-relationship-enum';
-import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
-import { PublicAppsViewQueryParams } from '../../../src/dtos/applications/public-apps-view-params.dto';
-import { ApplicationsFilterEnum } from '../../../src/enums/applications/filter-enum';
 import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
+import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
+import { InputType } from '../../../src/enums/shared/input-type-enum';
+import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
+import { ApplicationService } from '../../../src/services/application.service';
 import { CronJobService } from '../../../src/services/cron-job.service';
+import { EmailService } from '../../../src/services/email.service';
+import { GeocodingService } from '../../../src/services/geocoding.service';
+import { PermissionService } from '../../../src/services/permission.service';
+import { PrismaService } from '../../../src/services/prisma.service';
 import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 
 export const mockApplication = (options: {
@@ -333,7 +334,6 @@ const buildExpectedApplicationData = ({
   dto,
   submissionDate,
   preferredUnitTypesMode = 'connect',
-  includeApplicationSelections = false,
 }: {
   exampleAddress: AddressCreate;
   dto: { listings: { id: string } };
@@ -416,7 +416,7 @@ const buildExpectedApplicationData = ({
         },
       },
     },
-    ...(includeApplicationSelections ? { applicationSelections: {} } : {}),
+    applicationSelections: undefined,
     applicationsAlternateAddress: {
       create: {
         ...exampleAddress,
@@ -2521,13 +2521,9 @@ describe('Testing application service', () => {
         id: randomUUID(),
       });
 
-      prisma.$transaction = jest.fn().mockResolvedValue([
-        prisma.householdMember.deleteMany,
-        {
-          id: randomUUID(),
-          listingId: randomUUID(),
-        },
-      ]);
+      prisma.$transaction = jest
+        .fn()
+        .mockImplementation((callBack) => callBack(prisma));
 
       const exampleAddress = addressFactory() as AddressCreate;
       const submissionDate = new Date();
@@ -2560,7 +2556,6 @@ describe('Testing application service', () => {
             dto,
             submissionDate,
             preferredUnitTypesMode: 'set',
-            includeApplicationSelections: true,
           }),
         },
         where: {
@@ -2568,6 +2563,7 @@ describe('Testing application service', () => {
         },
       });
 
+      expect(prisma.$transaction).toHaveBeenCalled();
       expect(prisma.listings.update).toHaveBeenCalledWith({
         where: {
           id: expect.anything(),
@@ -2590,15 +2586,12 @@ describe('Testing application service', () => {
       expect(prisma.applicationSnapshot.create).toHaveBeenCalled();
     });
 
-    it.skip('should add new applicationSelection to an application with MSQV2 enabled', async () => {
+    it('should add new applicationSelection to an application with MSQV2 enabled', async () => {
       const applicationId = randomUUID();
       const multiselectQuestionId = randomUUID();
       const multiselectOptionId = randomUUID();
 
       prisma.address.create = jest.fn().mockResolvedValue({
-        id: randomUUID(),
-      });
-      prisma.applicationSelections.create = jest.fn().mockResolvedValue({
         id: randomUUID(),
       });
 
@@ -2610,6 +2603,14 @@ describe('Testing application service', () => {
       prisma.applications.update = jest.fn().mockResolvedValue({
         id: applicationId,
         listingId: randomUUID(),
+      });
+
+      prisma.applicationSelections.create = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+
+      prisma.applicationSelectionOptions.create = jest.fn().mockResolvedValue({
+        id: randomUUID(),
       });
 
       prisma.householdMember.deleteMany = jest.fn().mockResolvedValue(null);
@@ -2628,13 +2629,9 @@ describe('Testing application service', () => {
         id: randomUUID(),
       });
 
-      prisma.$transaction = jest.fn().mockResolvedValue([
-        prisma.householdMember.deleteMany,
-        {
-          id: randomUUID(),
-          listingId: randomUUID(),
-        },
-      ]);
+      prisma.$transaction = jest
+        .fn()
+        .mockImplementation((callBack) => callBack(prisma));
 
       const exampleAddress = addressFactory() as AddressCreate;
       const submissionDate = new Date();
@@ -2644,7 +2641,6 @@ describe('Testing application service', () => {
         id: applicationId,
         applicationSelections: [
           {
-            application: { id: applicationId },
             hasOptedOut: false,
             multiselectQuestion: { id: multiselectQuestionId },
             selections: [
@@ -2685,6 +2681,28 @@ describe('Testing application service', () => {
             },
           },
         },
+        include: {
+          multiselectQuestion: true,
+          selections: {
+            include: {
+              addressHolderAddress: {
+                select: {
+                  city: true,
+                  county: true,
+                  id: true,
+                  latitude: true,
+                  longitude: true,
+                  placeName: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                },
+              },
+              multiselectOption: true,
+            },
+          },
+        },
       });
 
       expect(prisma.applications.update).toHaveBeenCalledWith({
@@ -2697,7 +2715,6 @@ describe('Testing application service', () => {
             dto,
             submissionDate,
             preferredUnitTypesMode: 'set',
-            includeApplicationSelections: true,
           }),
         },
         where: {
@@ -2725,7 +2742,7 @@ describe('Testing application service', () => {
       );
     });
 
-    it.skip('should remove an applicationSelection to an application with MSQV2 enabled', async () => {
+    it('should remove an applicationSelection to an application with MSQV2 enabled', async () => {
       const applicationId = randomUUID();
       const multiselectQuestionId = randomUUID();
 
@@ -2776,14 +2793,9 @@ describe('Testing application service', () => {
         id: randomUUID(),
       });
 
-      prisma.$transaction = jest.fn().mockResolvedValue([
-        prisma.applicationSelections.deleteMany,
-        prisma.householdMember.deleteMany,
-        {
-          id: randomUUID(),
-          listingId: randomUUID(),
-        },
-      ]);
+      prisma.$transaction = jest
+        .fn()
+        .mockImplementation((callBack) => callBack(prisma));
 
       const exampleAddress = addressFactory() as AddressCreate;
       const submissionDate = new Date();
@@ -2820,7 +2832,6 @@ describe('Testing application service', () => {
             dto,
             submissionDate,
             preferredUnitTypesMode: 'set',
-            includeApplicationSelections: true,
           }),
         },
         where: {
@@ -2848,12 +2859,26 @@ describe('Testing application service', () => {
       );
     });
 
-    it.skip('should update an applicationSelection to an application with MSQV2 enabled', async () => {
+    it('should update an applicationSelection to an application with MSQV2 enabled', async () => {
       const applicationId = randomUUID();
       const applicationSelectionId = randomUUID();
+      const applicationSelectionOptionId = randomUUID();
       const multiselectQuestionId = randomUUID();
+      const multiselectOptionId = randomUUID();
 
       prisma.address.create = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+
+      prisma.applicationSelections.update = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+
+      prisma.applicationSelections.deleteMany = jest
+        .fn()
+        .mockResolvedValue(null);
+
+      prisma.applicationSelectionOptions.update = jest.fn().mockResolvedValue({
         id: randomUUID(),
       });
 
@@ -2867,8 +2892,8 @@ describe('Testing application service', () => {
             multiselectQuestion: { id: multiselectQuestionId },
             selections: [
               {
-                id: randomUUID(),
-                multiselectOption: { id: randomUUID() },
+                id: applicationSelectionOptionId,
+                multiselectOption: { id: multiselectOptionId },
               },
             ],
           },
@@ -2896,16 +2921,12 @@ describe('Testing application service', () => {
         id: randomUUID(),
       });
 
-      prisma.$transaction = jest.fn().mockResolvedValue([
-        prisma.applicationSelections.deleteMany,
-        prisma.householdMember.deleteMany,
-        {
-          id: randomUUID(),
-          listingId: randomUUID(),
-        },
-      ]);
+      prisma.$transaction = jest
+        .fn()
+        .mockImplementation((callBack) => callBack(prisma));
 
       const exampleAddress = addressFactory() as AddressCreate;
+      const name = randomName();
       const submissionDate = new Date();
 
       const dto: ApplicationUpdate = {
@@ -2914,13 +2935,13 @@ describe('Testing application service', () => {
         applicationSelections: [
           {
             id: applicationSelectionId,
-            application: { id: applicationId },
             hasOptedOut: true,
             multiselectQuestion: { id: multiselectQuestionId },
             selections: [
               {
-                id: randomUUID(),
-                multiselectOption: { id: randomUUID() },
+                id: applicationSelectionOptionId,
+                addressHolderName: name,
+                multiselectOption: { id: multiselectOptionId },
               },
             ],
           },
@@ -2939,8 +2960,24 @@ describe('Testing application service', () => {
         },
       });
 
-      expect(prisma.applicationSelections.deleteMany).toHaveBeenCalledWith({
-        where: { id: { in: [expect.anything()] } },
+      expect(prisma.applicationSelections.deleteMany).not.toHaveBeenCalled();
+
+      expect(prisma.applicationSelections.update).toHaveBeenCalledWith({
+        data: {
+          hasOptedOut: true,
+        },
+        where: {
+          id: applicationSelectionId,
+        },
+      });
+
+      expect(prisma.applicationSelectionOptions.update).toHaveBeenCalledWith({
+        data: {
+          addressHolderName: name,
+        },
+        where: {
+          id: applicationSelectionOptionId,
+        },
       });
 
       expect(prisma.applications.update).toHaveBeenCalledWith({
@@ -2953,7 +2990,6 @@ describe('Testing application service', () => {
             dto,
             submissionDate,
             preferredUnitTypesMode: 'set',
-            includeApplicationSelections: true,
           }),
         },
         where: {
@@ -2983,10 +3019,6 @@ describe('Testing application service', () => {
 
     it("should error trying to update an application when one doesn't exists", async () => {
       prisma.applications.findUnique = jest.fn().mockResolvedValue(null);
-      prisma.applications.update = jest.fn().mockResolvedValue(null);
-
-      prisma.listings.findUnique = jest.fn().mockResolvedValue(null);
-      prisma.listings.update = jest.fn().mockResolvedValue(null);
 
       const exampleAddress = addressFactory() as AddressCreate;
       const submissionDate = new Date();
