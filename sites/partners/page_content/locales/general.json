@@ -12,6 +12,8 @@
   "admin.addFeatureFlags": "Add all new feature flags",
   "admin.byFeatureFlag": "By feature flag",
   "admin.byJurisdiction": "By jurisdiction",
+  "admin.featureFlagManagement": "Feature flag management",
+  "admin.featureFlagManagementDescription": "Full description of each feature flag with examples and additional information can be found in the project's documentation.",
   "advocate.approved": "Approved",
   "advocate.requested": "Requested",
   "application.add.addHouseholdMember": "Add household member",
