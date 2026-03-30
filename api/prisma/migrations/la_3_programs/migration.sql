@@ -1,5 +1,4 @@
 INSERT INTO multiselect_questions (
-	id,
 	created_at,
 	updated_at,
 	application_section,
@@ -16,7 +15,6 @@ INSERT INTO multiselect_questions (
 	was_created_externally
 )
 SELECT
-	uuid_generate_v4(),
 	now(),
 	now(),
 	'programs'::"multiselect_questions_application_section_enum",
@@ -43,7 +41,6 @@ WHERE j.name = 'Los Angeles'
 
 
 INSERT INTO multiselect_questions (
-	id,
 	created_at,
 	updated_at,
 	application_section,
@@ -60,7 +57,6 @@ INSERT INTO multiselect_questions (
 	was_created_externally
 )
 SELECT
-	uuid_generate_v4(),
 	now(),
 	now(),
 	'programs'::"multiselect_questions_application_section_enum",
