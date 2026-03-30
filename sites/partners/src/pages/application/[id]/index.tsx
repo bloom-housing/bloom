@@ -58,6 +58,10 @@ const ApplicationsList = () => {
     FeatureFlagEnum.enableHousingAdvocate,
     listingDto?.jurisdictions.id
   )
+  const enableReasonableAccommodations = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReasonableAccommodations,
+    listingDto?.jurisdictions.id
+  )
 
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
@@ -126,7 +130,9 @@ const ApplicationsList = () => {
                 closeable
                 type="alert"
               >
-                {t("authentication.signIn.errorGenericMessage")}
+                {t("authentication.signIn.errorGenericMessage", {
+                  contactEmail: t("resources.contactEmail"),
+                })}
               </AlertBox>
             )}
 
@@ -153,6 +159,7 @@ const ApplicationsList = () => {
                 <DetailsHouseholdDetails
                   enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                   enableAdaOtherOption={enableAdaOtherOption}
+                  enableReasonableAccommodations={enableReasonableAccommodations}
                 />
 
                 <DetailsMultiselectQuestions

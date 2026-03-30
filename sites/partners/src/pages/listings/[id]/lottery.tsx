@@ -447,7 +447,12 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                   } catch (err) {
                     console.log(err)
                     setLoading(false)
-                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+                    addToast(
+                      t("account.settings.alerts.genericError", {
+                        contactEmail: t("resources.contactEmail"),
+                      }),
+                      { variant: "alert" }
+                    )
                   }
                 }}
                 size="sm"
@@ -515,7 +520,12 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                   } catch (err) {
                     console.log(err)
                     setLoading(false)
-                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+                    addToast(
+                      t("account.settings.alerts.genericError", {
+                        contactEmail: t("resources.contactEmail"),
+                      }),
+                      { variant: "alert" }
+                    )
                   }
                 }}
                 size="sm"
@@ -565,7 +575,12 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                   } catch (err) {
                     console.log(err)
                     setLoading(false)
-                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+                    addToast(
+                      t("account.settings.alerts.genericError", {
+                        contactEmail: t("resources.contactEmail"),
+                      }),
+                      { variant: "alert" }
+                    )
                   }
                 }}
                 loadingMessage={loading ? t("t.loading") : null}
@@ -645,7 +660,12 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                   } catch (err) {
                     console.log(err)
                     setLoading(false)
-                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+                    addToast(
+                      t("account.settings.alerts.genericError", {
+                        contactEmail: t("resources.contactEmail"),
+                      }),
+                      { variant: "alert" }
+                    )
                   }
                 }}
                 loadingMessage={loading ? t("t.loading") : null}
@@ -696,7 +716,12 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                     setExportModal(false)
                   } catch {
                     setLoading(false)
-                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+                    addToast(
+                      t("account.settings.alerts.genericError", {
+                        contactEmail: t("resources.contactEmail"),
+                      }),
+                      { variant: "alert" }
+                    )
                   }
                 }}
                 size="sm"
@@ -746,7 +771,12 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                     setTermsExportModal(false)
                   } catch {
                     setLoading(false)
-                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+                    addToast(
+                      t("account.settings.alerts.genericError", {
+                        contactEmail: t("resources.contactEmail"),
+                      }),
+                      { variant: "alert" }
+                    )
                   }
                 }}
                 size="sm"
@@ -797,7 +827,12 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                   } catch (err) {
                     console.log(err)
                     setLoading(false)
-                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+                    addToast(
+                      t("account.settings.alerts.genericError", {
+                        contactEmail: t("resources.contactEmail"),
+                      }),
+                      { variant: "alert" }
+                    )
                   }
                 }}
                 loadingMessage={loading ? t("t.loading") : null}

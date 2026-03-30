@@ -220,6 +220,10 @@ export class ApplicationExporterService {
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableFullTimeStudentQuestion,
     );
+    const enableReasonableAccommodations = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableReasonableAccommodations,
+    );
     const enableSpokenLanguage = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableSpokenLanguage,
@@ -254,6 +258,7 @@ export class ApplicationExporterService {
         enableAdaOtherOption,
         enableApplicationStatus,
         enableFullTimeStudentQuestion,
+        enableReasonableAccommodations,
         enableSpokenLanguage,
         enableV2MSQ,
         includeDemographics: queryParams.includeDemographics,
@@ -499,6 +504,10 @@ export class ApplicationExporterService {
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableFullTimeStudentQuestion,
     );
+    const enableReasonableAccommodations = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableReasonableAccommodations,
+    );
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
@@ -529,6 +538,7 @@ export class ApplicationExporterService {
         enableAdaOtherOption,
         enableApplicationStatus,
         enableFullTimeStudentQuestion,
+        enableReasonableAccommodations,
         enableV2MSQ,
         forLottery,
         includeDemographics: queryParams.includeDemographics,

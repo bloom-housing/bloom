@@ -80,7 +80,7 @@ export const bloomingtonListing: CypressListing = {
       multiselectQuestions: {
         name: "Work in the city",
         applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
-        description: "At least one member of my household works in the city",
+        description: "Workers in the local city.",
       },
     } as ListingMultiselectQuestion,
     {

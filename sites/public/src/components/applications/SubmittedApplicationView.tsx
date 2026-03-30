@@ -115,6 +115,10 @@ const SubmittedApplicationView = ({
             FeatureFlagEnum.enableAdaOtherOption,
             listing?.jurisdictions.id
           )}
+          enableReasonableAccommodations={doJurisdictionsHaveFeatureFlagOn(
+            FeatureFlagEnum.enableReasonableAccommodations,
+            listing?.jurisdictions.id
+          )}
           swapCommunityTypeWithPrograms={doJurisdictionsHaveFeatureFlagOn(
             FeatureFlagEnum.swapCommunityTypeWithPrograms,
             listing?.jurisdictions.id

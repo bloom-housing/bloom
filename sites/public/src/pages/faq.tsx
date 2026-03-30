@@ -52,7 +52,11 @@ const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
           </Card.Header>
           <Card.Section>
             <div className={"seeds-m-be-6"}>
-              <Markdown>{t("faq.stillHaveQuestionsContent")}</Markdown>
+              <Markdown>
+                {t("faq.stillHaveQuestionsContent", {
+                  contactEmail: t("resources.contactEmail"),
+                })}
+              </Markdown>
             </div>
             {enableResources && (
               <Button href={"/additional-resources"}>{t("faq.viewResourcePage")}</Button>
