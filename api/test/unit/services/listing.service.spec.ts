@@ -650,7 +650,11 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: {
                 include: {
-                  multiselectOptions: true,
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
                 },
               },
             },
@@ -2493,7 +2497,11 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: {
                 include: {
-                  multiselectOptions: true,
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
                 },
               },
             },
@@ -3023,7 +3031,11 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: {
                 include: {
-                  multiselectOptions: true,
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
                 },
               },
             },
@@ -3320,7 +3332,11 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: {
                 include: {
-                  multiselectOptions: true,
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
                 },
               },
             },
@@ -3456,7 +3472,11 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: {
                 include: {
-                  multiselectOptions: true,
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
                 },
               },
             },
@@ -3846,7 +3866,11 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: {
                 include: {
-                  multiselectOptions: true,
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
                 },
               },
             },
@@ -3995,7 +4019,11 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: {
                 include: {
-                  multiselectOptions: true,
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
                 },
               },
             },
@@ -4355,7 +4383,11 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: {
                 include: {
-                  multiselectOptions: true,
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
                 },
               },
             },
@@ -4764,7 +4796,11 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: {
                 include: {
-                  multiselectOptions: true,
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
                 },
               },
             },
@@ -4887,7 +4923,11 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: {
                 include: {
-                  multiselectOptions: true,
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
                 },
               },
             },
@@ -4997,7 +5037,11 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: {
                 include: {
-                  multiselectOptions: true,
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
                 },
               },
             },
@@ -5452,7 +5496,11 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: {
                 include: {
-                  multiselectOptions: true,
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
                 },
               },
             },
@@ -6013,7 +6061,11 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: {
                 include: {
-                  multiselectOptions: true,
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
                 },
               },
             },
@@ -6300,7 +6352,11 @@ describe('Testing listing service', () => {
             include: {
               multiselectQuestions: {
                 include: {
-                  multiselectOptions: true,
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
                 },
               },
             },
