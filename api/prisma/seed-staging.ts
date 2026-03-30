@@ -746,7 +746,7 @@ export const stagingSeed = async (
             data: [
               {
                 name: 'At least one member of my household works in the city',
-                ordinal: 0,
+                ordinal: 1,
                 shouldCollectAddress: true,
                 shouldCollectName: true,
                 shouldCollectRelationship: true,
@@ -755,7 +755,7 @@ export const stagingSeed = async (
               },
               {
                 name: 'All members of the household work in the city',
-                ordinal: 1,
+                ordinal: 2,
                 shouldCollectAddress: true,
               },
             ],
@@ -808,9 +808,9 @@ export const stagingSeed = async (
         multiselectOptions: {
           createMany: {
             data: [
-              { name: 'Yes', ordinal: 0 },
-              { name: 'No', ordinal: 1 },
-              { isOptOut: true, name: 'Prefer not to say', ordinal: 2 },
+              { name: 'Yes', ordinal: 1 },
+              { name: 'No', ordinal: 2 },
+              { isOptOut: true, name: 'Prefer not to say', ordinal: 3 },
             ],
           },
         },
