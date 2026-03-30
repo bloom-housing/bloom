@@ -188,7 +188,11 @@ includeViews.full = {
     include: {
       multiselectQuestions: {
         include: {
-          multiselectOptions: true,
+          multiselectOptions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
+          },
         },
       },
     },

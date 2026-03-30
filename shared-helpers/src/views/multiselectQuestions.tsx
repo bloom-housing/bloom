@@ -55,7 +55,7 @@ export const getSelectionsForApplicationSection = (
     (question) => question?.multiselectQuestions?.applicationSection === applicationSection
   )
   return applicationSelections?.filter((selection) =>
-    listingMSQs.find((item) => item.multiselectQuestions.id == selection.multiselectQuestion.id)
+    listingMSQs.find((item) => item.multiselectQuestions.id === selection.multiselectQuestion.id)
   )
 }
 
@@ -221,20 +221,7 @@ const getCheckboxField = (
           if (e.target.checked && trigger) {
             void trigger()
           }
-          const allOptions = question
-            ? getMSQOptions(question, enableV2MSQ).map((option) =>
-                fieldName(
-                  question.name || question.text,
-                  applicationSection,
-                  option.name || option.text
-                )
-              )
-            : []
-          if (!enableV2MSQ && question.optOutText) {
-            allOptions.push(
-              fieldName(question.name || question.text, applicationSection, question.optOutText)
-            )
-          }
+          const allOptions = getAllOptions(question, applicationSection, enableV2MSQ)
           const exclusiveOption =
             (!enableV2MSQ && option.exclusive) || (enableV2MSQ && option.isOptOut)
           if (exclusiveOption && e.target.checked && exclusiveKeys) {
