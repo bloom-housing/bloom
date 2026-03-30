@@ -204,7 +204,9 @@ describe("EditAdvocateAccount", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("There was an error. Please try again, or contact support for help.")
+        screen.getByText(
+          "There was an error. Please try again, or contact support at email@email.com for help."
+        )
       ).toBeInTheDocument()
     })
 

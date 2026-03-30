@@ -279,6 +279,27 @@ export class ListingsService {
     })
   }
   /**
+   * Get listings and units as secured zip
+   */
+  listAsCsvSecure(
+    params: {
+      /**  */
+      timeZone?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/csvSecure"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { timeZone: params["timeZone"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get listing map markers
    */
   mapMarkers(options: IRequestOptions = {}): Promise<ListingMapMarker[]> {
@@ -836,6 +857,28 @@ export class SnapshotService {
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/snapshot/createListingSnapshot"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create Application Snapshot
+   */
+  createApplicationSnapshot(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/snapshot/createApplicationSnapshot"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -7142,6 +7185,9 @@ export interface Application {
   householdStudent?: boolean
 
   /**  */
+  reasonableAccommodations?: string
+
+  /**  */
   incomeVouchers?: boolean
 
   /**  */
@@ -8100,6 +8146,9 @@ export interface PublicAppsFiltered {
   householdStudent?: boolean
 
   /**  */
+  reasonableAccommodations?: string
+
+  /**  */
   incomeVouchers?: boolean
 
   /**  */
@@ -8423,6 +8472,9 @@ export interface ApplicationCreate {
   householdStudent?: boolean
 
   /**  */
+  reasonableAccommodations?: string
+
+  /**  */
   incomeVouchers?: boolean
 
   /**  */
@@ -8731,6 +8783,9 @@ export interface ApplicationUpdate {
 
   /**  */
   householdStudent?: boolean
+
+  /**  */
+  reasonableAccommodations?: string
 
   /**  */
   incomeVouchers?: boolean
@@ -10397,6 +10452,7 @@ export enum FeatureFlagEnum {
   "enablePartnerSettings" = "enablePartnerSettings",
   "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProperties" = "enableProperties",
+  "enableReasonableAccommodations" = "enableReasonableAccommodations",
   "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",
   "enableResources" = "enableResources",

@@ -339,6 +339,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableParkingType,
         FeatureFlagEnum.enablePetPolicyCheckbox,
         FeatureFlagEnum.enableProperties,
+        FeatureFlagEnum.enableReasonableAccommodations,
         FeatureFlagEnum.enableReferralQuestionUnits,
         FeatureFlagEnum.enableResources,
         FeatureFlagEnum.enableSmokingPolicyRadio,

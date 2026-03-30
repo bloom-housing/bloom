@@ -1590,9 +1590,6 @@ export class ApplicationService {
       return { success: false };
     }
 
-    //TODO: This contact email is a placeholder and must be updated per jurisdiction
-    const contactEmail = 'https://www.exygy.com';
-
     await this.emailService.applicationUpdateEmail(
       rawApplication.listings.name,
       (rawApplication.listings as unknown as { jurisdictions: IdDTO })
@@ -1600,7 +1597,6 @@ export class ApplicationService {
       application,
       changes,
       rawApplication.appUrl,
-      contactEmail,
       isAdvocate,
       advocateEmail,
     );
@@ -1718,6 +1714,7 @@ export class ApplicationService {
       select: {
         id: true,
         mailingAddressId: true,
+        userId: true,
         applicant: {
           select: {
             id: true,
@@ -1844,6 +1841,7 @@ export class ApplicationService {
         data: {
           additionalPhoneNumber: null,
           wasPIICleared: true,
+          historicalUserId: application.userId,
         },
         where: {
           id: application.id,

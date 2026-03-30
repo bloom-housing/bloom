@@ -56,6 +56,7 @@ import { UnitGroupSummary } from '../dtos/unit-groups/unit-group-summary.dto';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 import { ListingDocuments } from '../dtos/listings/listing-documents.dto';
 import { ListingParkingType } from '../dtos/listings/listing-parking-type.dto';
+import { S3Service } from './s3.service';
 
 includeViews.csv = {
   listingMultiselectQuestions: {
@@ -75,6 +76,7 @@ includeViews.csv = {
   },
   userAccounts: true,
 };
+const NUMBER_TO_PAGINATE_BY = 100;
 
 export const formatStatus = {
   active: 'Public',
@@ -188,6 +190,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     private prisma: PrismaService,
     @Inject(Logger)
     private logger = new Logger(ListingCsvExporterService.name),
+    private s3Service: S3Service,
   ) {}
 
   /**
@@ -225,6 +228,128 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       `src/temp/unit-groups-${user.id}-${new Date().getTime()}.csv`,
     );
 
+    const enableUnitGroups = doAnyJurisdictionHaveFeatureFlagSet(
+      user.jurisdictions,
+      FeatureFlagEnum.enableUnitGroups,
+    );
+
+    const hasUnits =
+      !enableUnitGroups ||
+      doAnyJurisdictionHaveFalsyFeatureFlagValue(
+        user.jurisdictions,
+        FeatureFlagEnum.enableUnitGroups,
+      );
+
+    await this.generateExportedFiles(
+      user,
+      queryParams,
+      hasUnits,
+      enableUnitGroups,
+      listingFilePath,
+      unitFilePath,
+      unitGroupsFilePath,
+    );
+
+    return new Promise((resolve) => {
+      const output = fs.createWriteStream(zipFilePath);
+      const archive = archiver('zip', { zlib: { level: 9 } });
+
+      output.on('close', () => {
+        const zipFile = createReadStream(zipFilePath);
+        resolve(new StreamableFile(zipFile));
+      });
+
+      archive.pipe(output);
+      const listingCsv = createReadStream(listingFilePath);
+      archive.append(listingCsv, { name: 'listings.csv' });
+      if (hasUnits) {
+        const unitCsv = createReadStream(unitFilePath);
+        archive.append(unitCsv, { name: 'units.csv' });
+      }
+      if (enableUnitGroups) {
+        const unitGroupsCsv = createReadStream(unitGroupsFilePath);
+        archive.append(unitGroupsCsv, { name: 'unitGroups.csv' });
+      }
+      archive.finalize();
+    });
+  }
+
+  async exporterSecure<QueryParams extends ListingCsvQueryParams>(
+    req: ExpressRequest,
+    queryParams: QueryParams,
+  ): Promise<string> {
+    this.logger.warn('Generating Listing-Unit Zip Secure');
+    const user = mapTo(User, req['user']);
+    await this.authorizeCSVExport(user);
+    const now = new Date();
+
+    const zipFileName = `listings-units-${user.id}-${new Date().getTime()}.zip`;
+    const zipFilePath = join(process.cwd(), `src/temp/${zipFileName}`);
+
+    const listingFilePath = join(
+      process.cwd(),
+      `src/temp/listings-${user.id}-${new Date().getTime()}.csv`,
+    );
+    const unitFilePath = join(
+      process.cwd(),
+      `src/temp/units-${user.id}-${new Date().getTime()}.csv`,
+    );
+    const unitGroupsFilePath = join(
+      process.cwd(),
+      `src/temp/unit-groups-${user.id}-${new Date().getTime()}.csv`,
+    );
+
+    const enableUnitGroups = doAnyJurisdictionHaveFeatureFlagSet(
+      user.jurisdictions,
+      FeatureFlagEnum.enableUnitGroups,
+    );
+
+    const hasUnits =
+      !enableUnitGroups ||
+      doAnyJurisdictionHaveFalsyFeatureFlagValue(
+        user.jurisdictions,
+        FeatureFlagEnum.enableUnitGroups,
+      );
+
+    await this.generateExportedFiles(
+      user,
+      queryParams,
+      hasUnits,
+      enableUnitGroups,
+      listingFilePath,
+      unitFilePath,
+      unitGroupsFilePath,
+    );
+
+    const output = fs.createWriteStream(zipFilePath);
+    const archive = archiver('zip', { zlib: { level: 9 } });
+    archive.pipe(output);
+    const listingCsv = createReadStream(listingFilePath);
+    archive.append(listingCsv, { name: 'listings.csv' });
+    if (hasUnits) {
+      const unitCsv = createReadStream(unitFilePath);
+      archive.append(unitCsv, { name: 'units.csv' });
+    }
+    if (enableUnitGroups) {
+      const unitGroupsCsv = createReadStream(unitGroupsFilePath);
+      archive.append(unitGroupsCsv, { name: 'unitGroups.csv' });
+    }
+    await archive.finalize();
+
+    const s3Key = `listing_export_${now.getTime()}.zip`;
+    await this.s3Service.uploadToPrivate(s3Key, zipFilePath);
+    return await this.s3Service.urlForPrivate(s3Key);
+  }
+
+  async generateExportedFiles<QueryParams extends ListingCsvQueryParams>(
+    user: User,
+    queryParams: QueryParams,
+    hasUnits: boolean,
+    enableUnitGroups: boolean,
+    listingFilePath: string,
+    unitFilePath: string,
+    unitGroupsFilePath: string,
+  ): Promise<void> {
     if (queryParams.timeZone) {
       this.timeZone = queryParams.timeZone;
     }
@@ -240,34 +365,17 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         id: jurisdiction.id,
       });
     });
-
-    const enableUnitGroups = doAnyJurisdictionHaveFeatureFlagSet(
-      user.jurisdictions,
-      FeatureFlagEnum.enableUnitGroups,
-    );
-
-    const hasUnits =
-      !enableUnitGroups ||
-      doAnyJurisdictionHaveFalsyFeatureFlagValue(
-        user.jurisdictions,
-        FeatureFlagEnum.enableUnitGroups,
-      );
-
     const listings = await this.prisma.listings.findMany({
-      include: includeViews.csv,
+      select: {
+        id: true,
+      },
       where: whereClause,
     });
 
-    // Add unit groups summarized to listings
-    // should be removed when unit summarized stored in db
-    addUnitGroupsSummarized(listings as unknown as Listing[]);
-
-    await this.createCsv(listingFilePath, queryParams, {
+    await this.createCsv(listingFilePath, whereClause, {
       listings: listings as unknown as Listing[],
       user,
     });
-
-    const listingCsv = createReadStream(listingFilePath);
 
     if (enableUnitGroups) {
       await this.createUnitCsv(
@@ -284,28 +392,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         false,
       );
     }
-
-    return new Promise((resolve) => {
-      const output = fs.createWriteStream(zipFilePath);
-      const archive = archiver('zip', { zlib: { level: 9 } });
-
-      output.on('close', () => {
-        const zipFile = createReadStream(zipFilePath);
-        resolve(new StreamableFile(zipFile));
-      });
-
-      archive.pipe(output);
-      archive.append(listingCsv, { name: 'listings.csv' });
-      if (hasUnits) {
-        const unitCsv = createReadStream(unitFilePath);
-        archive.append(unitCsv, { name: 'units.csv' });
-      }
-      if (enableUnitGroups) {
-        const unitGroupsCsv = createReadStream(unitGroupsFilePath);
-        archive.append(unitGroupsCsv, { name: 'unitGroups.csv' });
-      }
-      archive.finalize();
-    });
   }
 
   /**
@@ -314,9 +400,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
    * @param optionParams
    * @returns a promise with SuccessDTO
    */
-  async createCsv<QueryParams extends ListingCsvQueryParams>(
+  async createCsv(
     filename: string,
-    queryParams: QueryParams,
+    whereClause: Record<string, any>,
     optionParams: { listings: Listing[]; user: User },
   ): Promise<void> {
     const csvHeaders = await this.getCsvHeaders(optionParams.user);
@@ -333,43 +419,77 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         .on('close', () => {
           resolve();
         })
-        .on('open', () => {
+        .on('open', async () => {
           writableStream.write(
             csvHeaders.map((header) => header.label).join(',') + '\n',
           );
 
-          // now loop over listings and write them to file
-          optionParams.listings.forEach((listing) => {
-            let row = '';
-            csvHeaders.forEach((header, index) => {
-              let value = header.path.split('.').reduce((acc, curr) => {
-                // handles working with arrays, e.g. householdMember.0.firstName
-                if (!isNaN(Number(curr))) {
-                  const index = Number(curr);
-                  return acc[index];
-                }
+          const promiseArray: Promise<string>[] = [];
+          for (
+            let i = 0;
+            i < optionParams.listings.length;
+            i += NUMBER_TO_PAGINATE_BY
+          ) {
+            promiseArray.push(
+              new Promise(async (resolve) => {
+                // grab listings NUMBER_TO_PAGINATE_BY at a time
+                const paginatedListings = await this.prisma.listings.findMany({
+                  include: includeViews.csv,
+                  where: {
+                    id: {
+                      in: optionParams.listings
+                        .slice(i, i + NUMBER_TO_PAGINATE_BY)
+                        .map((app) => app.id),
+                    },
+                  },
+                });
+                let data = '';
+                // now loop over listings and write them to file
+                paginatedListings.forEach((listing) => {
+                  let row = '';
+                  csvHeaders.forEach((header, index) => {
+                    let value = header.path.split('.').reduce((acc, curr) => {
+                      // handles working with arrays, e.g. householdMember.0.firstName
+                      if (!isNaN(Number(curr))) {
+                        const index = Number(curr);
+                        return acc[index];
+                      }
 
-                if (acc === null || acc === undefined) {
-                  return '';
-                }
-                return acc[curr];
-              }, listing);
-              value = value === undefined ? '' : value === null ? '' : value;
-              if (header.format) {
-                value = header.format(value, listing);
-              }
+                      if (acc === null || acc === undefined) {
+                        return '';
+                      }
+                      return acc[curr];
+                    }, listing);
+                    value =
+                      value === undefined ? '' : value === null ? '' : value;
+                    if (header.format) {
+                      value = header.format(value, listing);
+                    }
 
-              row += value ? `"${value.toString().replace(/"/g, `""`)}"` : '';
-              if (index < csvHeaders.length - 1) {
-                row += ',';
-              }
-            });
+                    row += value
+                      ? `"${value.toString().replace(/"/g, `""`)}"`
+                      : '';
+                    if (index < csvHeaders.length - 1) {
+                      row += ',';
+                    }
+                  });
 
+                  data += row + '\n';
+                });
+                resolve(data);
+              }),
+            );
+          }
+
+          const resolvedArray = await Promise.all(promiseArray);
+          // now loop over batched row data and write them to file
+          resolvedArray.forEach((row) => {
             try {
-              writableStream.write(row + '\n');
+              writableStream.write(row);
             } catch (e) {
               console.log('writeStream write error = ', e);
               writableStream.once('drain', () => {
+                console.log('drain buffer');
                 writableStream.write(row + '\n');
               });
             }
@@ -389,23 +509,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       ? this.getUnitGroupCsvHeaders()
       : this.getUnitCsvHeaders();
 
-    const data = enableUnitGroups
-      ? listings.flatMap(
-          (listing) =>
-            listing.unitGroups?.map((unitGroup, index) => ({
-              listing: { id: listing.id, name: listing.name },
-              unitGroup,
-              unitGroupSummary:
-                listing.unitGroupsSummarized?.unitGroupSummary?.[index],
-            })) || [],
-        )
-      : listings.flatMap((listing) =>
-          (listing.units || []).map((unit) => ({
-            listing: { id: listing.id, name: listing.name },
-            unit,
-          })),
-        );
-
     return new Promise((resolve, reject) => {
       const writableStream = fs.createWriteStream(`${filename}`);
       writableStream
@@ -417,46 +520,105 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         .on('close', () => {
           resolve();
         })
-        .on('open', () => {
+        .on('open', async () => {
           writableStream.write(
             csvHeaders.map((header) => header.label).join(',') + '\n',
           );
-          data.forEach((item) => {
-            let row = '';
-            csvHeaders.forEach((header, index) => {
-              let value = header.path.split('.').reduce((acc, curr) => {
-                // handles working with arrays, e.g. householdMember.0.firstName
-                if (!isNaN(Number(curr))) {
-                  const index = Number(curr);
-                  return acc[index];
+
+          const promiseArray: Promise<string>[] = [];
+          for (let i = 0; i < listings.length; i += NUMBER_TO_PAGINATE_BY) {
+            promiseArray.push(
+              new Promise(async (resolve) => {
+                // grab listings NUMBER_TO_PAGINATE_BY at a time
+                const paginatedListings = await this.prisma.listings.findMany({
+                  include: includeViews.csv,
+                  where: {
+                    id: {
+                      in: listings
+                        .slice(i, i + NUMBER_TO_PAGINATE_BY)
+                        .map((app) => app.id),
+                    },
+                  },
+                });
+
+                let data = '';
+
+                if (enableUnitGroups) {
+                  // Add unit groups summarized to listings
+                  // should be removed when unit summarized stored in db
+                  addUnitGroupsSummarized(
+                    paginatedListings as unknown as Listing[],
+                  );
                 }
+                const flattenedListings = enableUnitGroups
+                  ? (paginatedListings as unknown as Listing[]).flatMap(
+                      (listing) =>
+                        listing.unitGroups?.map((unitGroup, index) => ({
+                          listing: { id: listing.id, name: listing.name },
+                          unitGroup,
+                          unitGroupSummary:
+                            listing.unitGroupsSummarized?.unitGroupSummary?.[
+                              index
+                            ],
+                        })) || [],
+                    )
+                  : (paginatedListings as unknown as Listing[]).flatMap(
+                      (listing) =>
+                        (listing.units || []).map((unit) => ({
+                          listing: { id: listing.id, name: listing.name },
+                          unit,
+                        })),
+                    );
 
-                if (acc === null || acc === undefined) {
-                  return '';
-                }
-                return acc[curr];
-              }, item);
-              value = value === undefined ? '' : value === null ? '' : value;
-              if (header.format) {
-                value = header.format(value);
-              }
+                flattenedListings.forEach((item) => {
+                  let row = '';
+                  csvHeaders.forEach((header, index) => {
+                    let value = header.path.split('.').reduce((acc, curr) => {
+                      // handles working with arrays, e.g. householdMember.0.firstName
+                      if (!isNaN(Number(curr))) {
+                        const index = Number(curr);
+                        return acc[index];
+                      }
 
-              row += value ? `"${value.toString().replace(/"/g, `""`)}"` : '';
-              if (index < csvHeaders.length - 1) {
-                row += ',';
-              }
-            });
+                      if (acc === null || acc === undefined) {
+                        return '';
+                      }
+                      return acc[curr];
+                    }, item);
+                    value =
+                      value === undefined ? '' : value === null ? '' : value;
+                    if (header.format) {
+                      value = header.format(value);
+                    }
 
+                    row += value
+                      ? `"${value.toString().replace(/"/g, `""`)}"`
+                      : '';
+                    if (index < csvHeaders.length - 1) {
+                      row += ',';
+                    }
+                  });
+
+                  data += row + '\n';
+                });
+                resolve(data);
+              }),
+            );
+          }
+
+          const resolvedArray = await Promise.all(promiseArray);
+          // now loop over batched row data and write them to file
+          resolvedArray.forEach((row) => {
             try {
-              writableStream.write(row + '\n');
+              writableStream.write(row);
             } catch (e) {
               console.log('writeStream write error = ', e);
               writableStream.once('drain', () => {
+                console.log('drain buffer');
                 writableStream.write(row + '\n');
               });
             }
           });
-
           writableStream.end();
         });
     });

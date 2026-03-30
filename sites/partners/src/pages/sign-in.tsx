@@ -88,7 +88,9 @@ const SignIn = () => {
             setConfirmationStatusMessage({
               message: {
                 title: t("errors.somethingWentWrong"),
-                description: t("authentication.signIn.errorGenericMessage"),
+                description: t("authentication.signIn.errorGenericMessage", {
+                  contactEmail: t("resources.contactEmail"),
+                }),
                 error: err,
               },
               type: "alert",
