@@ -20,6 +20,7 @@ import {
 } from '@prisma/client';
 import { addressFactory } from '../../prisma/seed-helpers/address-factory';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
+import { applicationSelectionFactory } from '../../prisma/seed-helpers/application-selection-factory';
 import { createAllFeatureFlags } from '../../prisma/seed-helpers/feature-flag-factory';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { listingFactory } from '../../prisma/seed-helpers/listing-factory';
@@ -1250,7 +1251,7 @@ describe('Application Controller Tests', () => {
       });
     });
 
-    it.skip('should calculate geocoding on application', async () => {
+    it('should calculate geocoding on application', async () => {
       const exampleAddress = addressFactory() as AddressCreate;
       const listingGeocoding = await prisma.listings.create({
         data: await listingFactory(jurisdiction.id, prisma, {
@@ -1261,9 +1262,10 @@ describe('Application Controller Tests', () => {
         }),
       });
 
-      const multiselectQuestionPreference =
-        await prisma.multiselectQuestions.create({
-          data: multiselectQuestionFactory(jurisdiction.id, {
+      const multiselectQuestion = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(
+          jurisdiction.id,
+          {
             multiselectQuestion: {
               applicationSection:
                 MultiselectQuestionsApplicationSectionEnum.preferences,
@@ -1272,46 +1274,48 @@ describe('Application Controller Tests', () => {
                   listingId: listingGeocoding.id,
                 },
               },
-              options: [
-                {
-                  text: 'geocoding preference',
-                  collectAddress: true,
-                  validationMethod: ValidationMethod.radius,
-                  radiusSize: 5,
+              multiselectOptions: {
+                createMany: {
+                  data: [
+                    {
+                      name: 'geocoding preference',
+                      ordinal: 1,
+                      shouldCollectAddress: true,
+                      validationMethod: ValidationMethod.radius,
+                      radiusSize: 5,
+                    },
+                  ],
                 },
-              ],
+              },
             },
-          }),
-        });
-      const preferences = [
+          },
+          true,
+        ),
+        include: {
+          multiselectOptions: true,
+        },
+      });
+
+      const submissionDate = new Date();
+      const applicationSelections = [
         {
-          multiselectQuestionId: multiselectQuestionPreference.id,
-          key: multiselectQuestionPreference.text,
-          claimed: true,
-          options: [
+          multiselectQuestion: { id: multiselectQuestion.id },
+          selections: [
             {
-              key: 'geocoding preference',
-              checked: true,
-              extraData: [
-                {
-                  type: InputType.address,
-                  key: 'address',
-                  value: exampleAddress,
-                },
-              ],
+              addressHolderAddress: exampleAddress,
+              multiselectOption: {
+                id: multiselectQuestion.multiselectOptions[0].id,
+              },
             },
           ],
         },
       ];
-
-      const submissionDate = new Date();
       const dto: ApplicationCreate = applicationCreate(
         exampleAddress,
         listingGeocoding.id,
         submissionDate,
         unitTypeA.id,
-        [],
-        preferences,
+        applicationSelections,
       );
       const res = await request(app.getHttpServer())
         .post(`/applications/submit`)
@@ -1321,31 +1325,27 @@ describe('Application Controller Tests', () => {
 
       expect(res.body.id).not.toBeNull();
 
-      let savedApplication = await prisma.applications.findMany({
+      let savedApplication = await prisma.applications.findUnique({
+        include: { applicationSelections: { include: { selections: true } } },
         where: {
           id: res.body.id,
         },
       });
-      const savedPreferences = savedApplication[0].preferences;
-      expect(savedPreferences).toHaveLength(1);
-      let geocodingOptions = savedPreferences[0].options[0];
+      const savedSelections = savedApplication.applicationSelections;
+      expect(savedSelections).toHaveLength(1);
+      let geocodingSelection = savedSelections[0].selections[0];
       // This catches the edge case where the geocoding hasn't completed yet
-      if (geocodingOptions.extraData.length === 1) {
-        // I'm unsure why removing this console log makes this test fail. This should be looked into
-        console.log('');
-        savedApplication = await prisma.applications.findMany({
+      if (!!geocodingSelection.isGeocodingVerified) {
+        savedApplication = await prisma.applications.findUnique({
+          include: { applicationSelections: { include: { selections: true } } },
           where: {
             id: res.body.id,
           },
         });
       }
-      geocodingOptions = savedApplication[0].preferences[0].options[0];
-      expect(geocodingOptions.extraData).toHaveLength(2);
-      expect(geocodingOptions.extraData).toContainEqual({
-        key: 'geocodingVerified',
-        type: 'text',
-        value: true,
-      });
+      geocodingSelection =
+        savedApplication.applicationSelections[0].selections[0];
+      expect(geocodingSelection.isGeocodingVerified).toBeTrue();
     });
   });
 
@@ -1449,7 +1449,6 @@ describe('Application Controller Tests', () => {
           featureFlags: [FeatureFlagEnum.enableV2MSQ],
         }),
       });
-      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
       const listing1 = await prisma.listings.create({
         data: await listingFactory(jurisdiction.id, prisma),
       });
@@ -1689,6 +1688,520 @@ describe('Application Controller Tests', () => {
         },
       });
       expect(snapshot.originalId).toEqual(applicationA.id);
+    });
+
+    it('should update an application when one exists and add an applicationSelection with MSQ V2', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory('applicationUpdateWithV2MSQ', {
+          featureFlags: [FeatureFlagEnum.enableV2MSQ],
+        }),
+      });
+      const listing1 = await listingFactory(jurisdiction.id, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const multiselectQuestionPreference = await createMultiselectQuestion(
+        jurisdiction.id,
+        listing1Created.id,
+        MultiselectQuestionsApplicationSectionEnum.preferences,
+        true,
+      );
+      const multiselectQuestionProgram = await createMultiselectQuestion(
+        jurisdiction.id,
+        listing1Created.id,
+        MultiselectQuestionsApplicationSectionEnum.programs,
+        true,
+      );
+
+      const appA = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      const applicationA = await prisma.applications.create({
+        data: appA,
+        include: {
+          applicant: true,
+        },
+      });
+
+      const submissionDate = new Date();
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto: ApplicationUpdate = {
+        id: applicationA.id,
+        acceptedTerms: true,
+        accessibility: {
+          mobility: false,
+          vision: false,
+          hearing: false,
+        },
+        additionalPhone: true,
+        additionalPhoneNumber: '111-111-1111',
+        additionalPhoneNumberType: 'example type',
+        alternateContact: {
+          type: AlternateContactRelationship.friend,
+          otherType: 'example other type',
+          firstName: 'example first name',
+          lastName: 'example last name',
+          agency: 'example agency',
+          phoneNumber: '111-111-1111',
+          emailAddress: 'example@email.com',
+          address: exampleAddress,
+        },
+        applicant: {
+          firstName: 'applicant first name',
+          middleName: 'applicant middle name',
+          lastName: 'applicant last name',
+          birthMonth: '12',
+          birthDay: '17',
+          birthYear: '1993',
+          emailAddress: 'example@email.com',
+          noEmail: false,
+          phoneNumber: '111-111-1111',
+          phoneNumberType: 'Cell',
+          noPhone: false,
+          workInRegion: YesNoEnum.yes,
+          applicantWorkAddress: exampleAddress,
+          applicantAddress: exampleAddress,
+        },
+        applicationSelections: [
+          {
+            hasOptedOut: false,
+            multiselectQuestion: {
+              id: multiselectQuestionPreference.id,
+              name: multiselectQuestionPreference.name,
+            },
+            selections: [
+              {
+                addressHolderAddress: exampleAddress,
+                multiselectOption: {
+                  id: multiselectQuestionPreference.multiselectOptions[0].id,
+                  name: multiselectQuestionPreference.multiselectOptions[0]
+                    .name,
+                  ordinal: 1,
+                },
+              },
+            ],
+          },
+          {
+            hasOptedOut: true,
+            multiselectQuestion: {
+              id: multiselectQuestionProgram.id,
+              name: multiselectQuestionProgram.name,
+            },
+            selections: [
+              {
+                addressHolderAddress: exampleAddress,
+                multiselectOption: {
+                  id: multiselectQuestionProgram.multiselectOptions[0].id,
+                  name: multiselectQuestionProgram.multiselectOptions[0].name,
+                  ordinal: 1,
+                },
+              },
+            ],
+          },
+        ],
+        applicationsAlternateAddress: exampleAddress,
+        applicationsMailingAddress: exampleAddress,
+        appUrl: 'http://www.example.com',
+        contactPreferences: ['example contact preference'],
+        demographics: {
+          ethnicity: 'example ethnicity',
+          gender: 'example gender',
+          sexualOrientation: 'example sexual orientation',
+          howDidYouHear: ['example how did you hear'],
+          race: ['example race'],
+          spokenLanguage: 'example spoken language',
+        },
+        householdExpectingChanges: false,
+        householdMember: [
+          {
+            orderId: 0,
+            firstName: 'example first name',
+            middleName: 'example middle name',
+            lastName: 'example last name',
+            birthMonth: '12',
+            birthDay: '17',
+            birthYear: '1993',
+            sameAddress: YesNoEnum.yes,
+            relationship: HouseholdMemberRelationship.friend,
+            workInRegion: YesNoEnum.yes,
+            householdMemberWorkAddress: exampleAddress,
+            householdMemberAddress: exampleAddress,
+          },
+        ],
+        householdSize: 2,
+        householdStudent: false,
+        housingStatus: 'example status',
+        incomeVouchers: false,
+        income: '36000',
+        incomePeriod: IncomePeriodEnum.perYear,
+        language: LanguagesEnum.en,
+        listings: {
+          id: listing1Created.id,
+        },
+        preferredUnitTypes: [
+          {
+            id: unitTypeA.id,
+          },
+        ],
+        preferences: [],
+        reviewStatus: ApplicationReviewStatusEnum.valid,
+        sendMailToMailingAddress: true,
+        status: ApplicationStatusEnum.submitted,
+        submissionDate: submissionDate,
+        submissionType: ApplicationSubmissionTypeEnum.electronical,
+      };
+
+      const res = await request(app.getHttpServer())
+        .put(`/applications/${applicationA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(dto)
+        .set('Cookie', adminCookies)
+        .expect(200);
+
+      expect(res.body.applicant.firstName).toEqual(dto.applicant.firstName);
+      expect(res.body.id).toEqual(dto.id);
+      expect(res.body.applicationSelections.length).toEqual(2);
+    });
+
+    it('should update an application when one exists and update an applicationSelection with MSQ V2', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory('applicationSelectionUpdateWithV2MSQ', {
+          featureFlags: [FeatureFlagEnum.enableV2MSQ],
+        }),
+      });
+      const listing1 = await listingFactory(jurisdiction.id, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const multiselectQuestionPreference = await createMultiselectQuestion(
+        jurisdiction.id,
+        listing1Created.id,
+        MultiselectQuestionsApplicationSectionEnum.preferences,
+        true,
+      );
+
+      const appA = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      const applicationA = await prisma.applications.create({
+        data: appA,
+        include: {
+          applicant: true,
+        },
+      });
+
+      const applicationSelection = await prisma.applicationSelections.create({
+        data: await applicationSelectionFactory(
+          applicationA.id,
+          multiselectQuestionPreference.id,
+          prisma,
+          {
+            multiselectOptionId:
+              multiselectQuestionPreference.multiselectOptions[0].id,
+          },
+        ),
+        include: {
+          selections: true,
+        },
+      });
+
+      const submissionDate = new Date();
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto: ApplicationUpdate = {
+        id: applicationA.id,
+        acceptedTerms: true,
+        accessibility: {
+          mobility: false,
+          vision: false,
+          hearing: false,
+        },
+        additionalPhone: true,
+        additionalPhoneNumber: '111-111-1111',
+        additionalPhoneNumberType: 'example type',
+        alternateContact: {
+          type: AlternateContactRelationship.friend,
+          otherType: 'example other type',
+          firstName: 'example first name',
+          lastName: 'example last name',
+          agency: 'example agency',
+          phoneNumber: '111-111-1111',
+          emailAddress: 'example@email.com',
+          address: exampleAddress,
+        },
+        applicant: {
+          firstName: 'applicant first name',
+          middleName: 'applicant middle name',
+          lastName: 'applicant last name',
+          birthMonth: '12',
+          birthDay: '17',
+          birthYear: '1993',
+          emailAddress: 'example@email.com',
+          noEmail: false,
+          phoneNumber: '111-111-1111',
+          phoneNumberType: 'Cell',
+          noPhone: false,
+          workInRegion: YesNoEnum.yes,
+          applicantWorkAddress: exampleAddress,
+          applicantAddress: exampleAddress,
+        },
+        applicationSelections: [
+          {
+            hasOptedOut: !applicationSelection.hasOptedOut,
+            id: applicationSelection.id,
+            multiselectQuestion: {
+              id: multiselectQuestionPreference.id,
+              name: multiselectQuestionPreference.name,
+            },
+            selections: [
+              {
+                id: applicationSelection.selections[0].id,
+                addressHolderAddress: exampleAddress,
+                multiselectOption: {
+                  id: multiselectQuestionPreference.multiselectOptions[0].id,
+                  name: multiselectQuestionPreference.multiselectOptions[0]
+                    .name,
+                  ordinal: 1,
+                },
+              },
+            ],
+          },
+        ],
+        applicationsAlternateAddress: exampleAddress,
+        applicationsMailingAddress: exampleAddress,
+        appUrl: 'http://www.example.com',
+        contactPreferences: ['example contact preference'],
+        demographics: {
+          ethnicity: 'example ethnicity',
+          gender: 'example gender',
+          sexualOrientation: 'example sexual orientation',
+          howDidYouHear: ['example how did you hear'],
+          race: ['example race'],
+          spokenLanguage: 'example spoken language',
+        },
+        householdExpectingChanges: false,
+        householdMember: [
+          {
+            orderId: 0,
+            firstName: 'example first name',
+            middleName: 'example middle name',
+            lastName: 'example last name',
+            birthMonth: '12',
+            birthDay: '17',
+            birthYear: '1993',
+            sameAddress: YesNoEnum.yes,
+            relationship: HouseholdMemberRelationship.friend,
+            workInRegion: YesNoEnum.yes,
+            householdMemberWorkAddress: exampleAddress,
+            householdMemberAddress: exampleAddress,
+          },
+        ],
+        householdSize: 2,
+        householdStudent: false,
+        housingStatus: 'example status',
+        incomeVouchers: false,
+        income: '36000',
+        incomePeriod: IncomePeriodEnum.perYear,
+        language: LanguagesEnum.en,
+        listings: {
+          id: listing1Created.id,
+        },
+        preferredUnitTypes: [
+          {
+            id: unitTypeA.id,
+          },
+        ],
+        preferences: [],
+        reviewStatus: ApplicationReviewStatusEnum.valid,
+        sendMailToMailingAddress: true,
+        status: ApplicationStatusEnum.submitted,
+        submissionDate: submissionDate,
+        submissionType: ApplicationSubmissionTypeEnum.electronical,
+      };
+
+      const res = await request(app.getHttpServer())
+        .put(`/applications/${applicationA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(dto)
+        .set('Cookie', adminCookies)
+        .expect(200);
+
+      expect(res.body.id).toEqual(dto.id);
+      expect(res.body.applicationSelections.length).toEqual(1);
+      expect(res.body.applicationSelections[0].id).toEqual(
+        applicationSelection.id,
+      );
+      expect(res.body.applicationSelections[0].hasOptedOut).toEqual(
+        !applicationSelection.hasOptedOut,
+      );
+      expect(res.body.applicationSelections[0].selections[0].id).toEqual(
+        applicationSelection.selections[0].id,
+      );
+    });
+
+    it('should update an application when one exists and remove an applicationSelection with MSQ V2', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory('applicationSelectionDeleteWithV2MSQ', {
+          featureFlags: [FeatureFlagEnum.enableV2MSQ],
+        }),
+      });
+      const listing1 = await listingFactory(jurisdiction.id, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const multiselectQuestionPreference = await createMultiselectQuestion(
+        jurisdiction.id,
+        listing1Created.id,
+        MultiselectQuestionsApplicationSectionEnum.preferences,
+        true,
+      );
+
+      const appA = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      const applicationA = await prisma.applications.create({
+        data: appA,
+        include: {
+          applicant: true,
+        },
+      });
+
+      const applicationSelection = await prisma.applicationSelections.create({
+        data: await applicationSelectionFactory(
+          applicationA.id,
+          multiselectQuestionPreference.id,
+          prisma,
+          {
+            multiselectOptionId:
+              multiselectQuestionPreference.multiselectOptions[0].id,
+          },
+        ),
+        include: {
+          selections: true,
+        },
+      });
+
+      const submissionDate = new Date();
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto: ApplicationUpdate = {
+        id: applicationA.id,
+        acceptedTerms: true,
+        accessibility: {
+          mobility: false,
+          vision: false,
+          hearing: false,
+        },
+        additionalPhone: true,
+        additionalPhoneNumber: '111-111-1111',
+        additionalPhoneNumberType: 'example type',
+        alternateContact: {
+          type: AlternateContactRelationship.friend,
+          otherType: 'example other type',
+          firstName: 'example first name',
+          lastName: 'example last name',
+          agency: 'example agency',
+          phoneNumber: '111-111-1111',
+          emailAddress: 'example@email.com',
+          address: exampleAddress,
+        },
+        applicant: {
+          firstName: 'applicant first name',
+          middleName: 'applicant middle name',
+          lastName: 'applicant last name',
+          birthMonth: '12',
+          birthDay: '17',
+          birthYear: '1993',
+          emailAddress: 'example@email.com',
+          noEmail: false,
+          phoneNumber: '111-111-1111',
+          phoneNumberType: 'Cell',
+          noPhone: false,
+          workInRegion: YesNoEnum.yes,
+          applicantWorkAddress: exampleAddress,
+          applicantAddress: exampleAddress,
+        },
+        applicationSelections: [],
+        applicationsAlternateAddress: exampleAddress,
+        applicationsMailingAddress: exampleAddress,
+        appUrl: 'http://www.example.com',
+        contactPreferences: ['example contact preference'],
+        demographics: {
+          ethnicity: 'example ethnicity',
+          gender: 'example gender',
+          sexualOrientation: 'example sexual orientation',
+          howDidYouHear: ['example how did you hear'],
+          race: ['example race'],
+          spokenLanguage: 'example spoken language',
+        },
+        householdExpectingChanges: false,
+        householdMember: [
+          {
+            orderId: 0,
+            firstName: 'example first name',
+            middleName: 'example middle name',
+            lastName: 'example last name',
+            birthMonth: '12',
+            birthDay: '17',
+            birthYear: '1993',
+            sameAddress: YesNoEnum.yes,
+            relationship: HouseholdMemberRelationship.friend,
+            workInRegion: YesNoEnum.yes,
+            householdMemberWorkAddress: exampleAddress,
+            householdMemberAddress: exampleAddress,
+          },
+        ],
+        householdSize: 2,
+        householdStudent: false,
+        housingStatus: 'example status',
+        incomeVouchers: false,
+        income: '36000',
+        incomePeriod: IncomePeriodEnum.perYear,
+        language: LanguagesEnum.en,
+        listings: {
+          id: listing1Created.id,
+        },
+        preferredUnitTypes: [
+          {
+            id: unitTypeA.id,
+          },
+        ],
+        preferences: [],
+        reviewStatus: ApplicationReviewStatusEnum.valid,
+        sendMailToMailingAddress: true,
+        status: ApplicationStatusEnum.submitted,
+        submissionDate: submissionDate,
+        submissionType: ApplicationSubmissionTypeEnum.electronical,
+      };
+
+      const res = await request(app.getHttpServer())
+        .put(`/applications/${applicationA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(dto)
+        .set('Cookie', adminCookies)
+        .expect(200);
+
+      expect(res.body.id).toEqual(dto.id);
+      expect(res.body.applicationSelections.length).toEqual(0);
     });
 
     it("should throw an error when update is called with an Id that doesn't exist", async () => {
