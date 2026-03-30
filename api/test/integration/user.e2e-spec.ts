@@ -41,9 +41,10 @@ describe('User Controller Tests', () => {
   let logger: Logger;
 
   const invitePartnerUserMock = jest.fn();
+  const welcomeMock = jest.fn();
   const testEmailService = {
     confirmation: jest.fn(),
-    welcome: jest.fn(),
+    welcome: welcomeMock,
     invitePartnerUser: invitePartnerUserMock,
     changeEmail: jest.fn(),
     forgotPassword: jest.fn(),
@@ -888,6 +889,7 @@ describe('User Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .post(`/user/public/`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set({ jurisdictionname: 'Bloomington' })
         .send({
           firstName: 'Public First Name',
           lastName: 'Public Last Name',
@@ -895,8 +897,10 @@ describe('User Controller Tests', () => {
           passwordConfirmation: 'Abcdef12345!',
           email: 'publicUser@email.com',
           emailConfirmation: 'publicUser@email.com',
+          language: LanguagesEnum.es,
           dob: new Date(),
           jurisdictions: [{ id: juris.id }],
+          appUrl: 'http://www.example.com',
         } as PublicUserCreate)
         .set('Cookie', cookies)
         .expect(201);
@@ -906,6 +910,17 @@ describe('User Controller Tests', () => {
         expect.objectContaining({ id: juris.id, name: juris.name }),
       ]);
       expect(res.body.email).toEqual('publicuser@email.com');
+      expect(res.body.language).toEqual('es');
+
+      expect(welcomeMock).toHaveBeenCalledWith(
+        'Bloomington',
+        expect.objectContaining({
+          language: LanguagesEnum.es,
+          email: 'publicuser@email.com',
+        }),
+        'http://www.example.com',
+        expect.stringContaining('http://www.example.com?token='),
+      );
 
       const applicationsOnUser = await prisma.userAccounts.findUnique({
         include: {
