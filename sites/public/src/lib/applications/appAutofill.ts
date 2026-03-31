@@ -24,9 +24,11 @@ class AutofillCleaner {
   }
 
   addDefaults() {
-    ;["id", "createdAt", "updatedAt", "deletedAt", "listing", "submissionDate"].forEach((key) => {
-      delete this.application[key]
-    })
+    ;["id", "createdAt", "updatedAt", "deletedAt", "listing", "submissionDate", "user"].forEach(
+      (key) => {
+        delete this.application[key]
+      }
+    )
 
     this.application["confirmationCode"] = "" // only used on frontend
     this.application["completedSections"] = 0 // only used on frontend
