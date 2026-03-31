@@ -2796,10 +2796,10 @@ export class ListingService implements OnModuleInit {
 
       // if the listing is closed for the first time the expire_after value should be set on all applications
       void this.setExpireAfterValueOnApplications(mappedListing.id);
+    }
 
-      if (enableV2MSQ) {
-        void this.multiselectQuestionService.retireMultiselectQuestions();
-      }
+    if (enableV2MSQ) {
+      void this.multiselectQuestionService.retireMultiselectQuestions();
     }
 
     await this.cachePurge(
@@ -2981,7 +2981,8 @@ export class ListingService implements OnModuleInit {
     const invalid = [];
     for (const msq of multiselectQuestions) {
       if (
-        msq.status === MultiselectQuestionsStatusEnum.toRetire &&
+        (msq.status === MultiselectQuestionsStatusEnum.toRetire ||
+          msq.status === MultiselectQuestionsStatusEnum.retired) &&
         previousMultiselectQuestionIds.length
       ) {
         if (!previousMultiselectQuestionIds.includes(msq.id)) {
