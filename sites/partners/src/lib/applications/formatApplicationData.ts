@@ -6,6 +6,7 @@ import {
   mapCheckboxesToApiV1,
   mapApiToMultiselectForm,
   getSelectionsForApplicationSection,
+  mapCheckboxesToApi,
 } from "@bloom-housing/shared-helpers"
 import { FormTypes, ApplicationTypes, Address } from "../../lib/applications/FormTypes"
 
@@ -27,6 +28,7 @@ import {
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
   Application,
+  ApplicationSelectionUpdate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 dayjs.extend(customParseFormat)
 
@@ -143,12 +145,28 @@ export const mapFormToApi = ({
     }
   })()
 
+  // TODO:
   const preferencesData = preferences.map((pref: MultiselectQuestion) => {
     return mapCheckboxesToApiV1(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences)
   })
 
+  // TODO:
   const programsData = programs.map((program: MultiselectQuestion) => {
     return mapCheckboxesToApiV1(data, program, MultiselectQuestionsApplicationSectionEnum.programs)
+  })
+
+  let selections: ApplicationSelectionUpdate[] = []
+  programs.forEach((program: MultiselectQuestion) => {
+    selections = [
+      ...selections,
+      mapCheckboxesToApi(data, program, MultiselectQuestionsApplicationSectionEnum.programs),
+    ]
+  })
+  preferences.forEach((pref: MultiselectQuestion) => {
+    selections = [
+      ...selections,
+      mapCheckboxesToApi(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences),
+    ]
   })
 
   // additional phone
@@ -250,8 +268,11 @@ export const mapFormToApi = ({
     householdExpectingChanges,
     householdStudent,
     reasonableAccommodations,
+    // TODO:
     preferences: preferencesData,
+    // TODO:
     programs: programsData,
+    applicationSelections: selections,
     income,
     incomePeriod,
     incomeVouchers,
