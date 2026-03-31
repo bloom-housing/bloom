@@ -169,6 +169,7 @@ const ApplicationSummary = () => {
               conductor.config,
               FeatureFlagEnum.swapCommunityTypeWithPrograms
             )}
+            enableV2MSQ={isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableV2MSQ)}
           />
 
           <CardSection divider={"flush"} className={"border-none"}>

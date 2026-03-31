@@ -186,6 +186,7 @@
   "application.contact.suggestedAddress": "제안 주소:",
   "application.contact.title": "감사합니다, %{firstName}님. 이제 신청서와 관련하여 연락드릴 방법을 알려주시면 감사하겠습니다.",
   "application.contact.verifyAddressTitle": "다음과 같은 주소를 찾았습니다. 주소가 정확한지 확인해 주십시오.",
+  "application.contact.verifyMultipleAddresses": "이 환경 설정에는 여러 가지 옵션이 포함되어 있으므로, 여러 주소를 확인하셔야 합니다.",
   "application.contact.workAddress": "직장 주소",
   "application.contact.youEntered": "입력하신 내용:",
   "application.contact.yourAdditionalPhoneNumber": "두 번째 전화번호",

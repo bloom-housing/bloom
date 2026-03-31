@@ -1,12 +1,18 @@
 import React from "react"
 import { t } from "@bloom-housing/ui-components"
-import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import ApplicationMultiselectQuestionStep from "../../../components/applications/ApplicationMultiselectQuestionStep"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 
 const ApplicationPreferencesAll = () => {
-  const { listing } = useFormConductor("preferences")
+  const { conductor, listing } = useFormConductor("preferences")
+
+  const enableV2MSQ = isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableV2MSQ)
 
   return (
     <ApplicationMultiselectQuestionStep
@@ -23,6 +29,7 @@ const ApplicationPreferencesAll = () => {
         subTitle: t("application.preferences.preamble"),
       }}
       swapCommunityTypeWithPrograms={false}
+      enableV2MSQ={enableV2MSQ}
     />
   )
 }
