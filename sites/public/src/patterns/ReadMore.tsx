@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react"
-import Markdown from "markdown-to-jsx"
 import { t } from "@bloom-housing/ui-components"
 import styles from "./ReadMore.module.scss"
+import LazyMarkdown from "../components/core/LazyMarkdown"
 
 interface ReadMoreProps {
   /** Full content to display */
@@ -43,9 +43,9 @@ export const ReadMore = (props: ReadMoreProps) => {
 
   return (
     <div className={`${styles["read-more"]} ${props.className}`} aria-live={"polite"}>
-      <Markdown id={"read-more-content"} className={"bloom-markdown"}>
+      <LazyMarkdown id={"read-more-content"} className={"bloom-markdown"}>
         {expanded ? props.content : truncatedContent}
-      </Markdown>
+      </LazyMarkdown>
       {shouldTruncate && (
         <button
           className={`${styles["read-more-button"]} seeds-m-bs-text`}

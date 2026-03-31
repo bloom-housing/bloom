@@ -41,5 +41,6 @@ module.exports = {
   moduleNameMapper: {
     "\\.(scss|css|less)$": "identity-obj-proxy",
     "\\.module\\.scss$": "identity-obj-proxy",
+    "^.*core/LazyMarkdown$": "<rootDir>/.jest/mocks/LazyMarkdown.tsx",
   },
 }

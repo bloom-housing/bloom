@@ -1,6 +1,5 @@
 import { Address, MultiLineAddress, t } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
-import GeocodeService from "@mapbox/mapbox-sdk/services/geocoding"
 
 export interface FoundAddress {
   newAddress?: Address
@@ -12,18 +11,21 @@ export const findValidatedAddress = (
   address: Address,
   setFoundAddress: React.Dispatch<React.SetStateAction<FoundAddress>>,
   setNewAddressSelected: React.Dispatch<React.SetStateAction<boolean>>
-) => {
-  const geocodingClient = GeocodeService({
-    accessToken: process.env.mapBoxToken || process.env.MAPBOX_TOKEN,
-  })
+): Promise<void> => {
+  return import("@mapbox/mapbox-sdk/services/geocoding")
+    .then(({ default: GeocodeService }) => {
+      const geocodingClient = GeocodeService({
+        accessToken: process.env.mapBoxToken || process.env.MAPBOX_TOKEN,
+      })
 
-  geocodingClient
-    .forwardGeocode({
-      query: `${address.street}, ${address.city}, ${address.state} ${address.zipCode}, United States`,
-      limit: 1,
-      types: ["address"],
+      return geocodingClient
+        .forwardGeocode({
+          query: `${address.street}, ${address.city}, ${address.state} ${address.zipCode}, United States`,
+          limit: 1,
+          types: ["address"],
+        })
+        .send()
     })
-    .send()
     .then((response) => {
       const [street, city, region] = response.body.features[0].place_name.split(", ")
       const coordinates = response.body.features[0].geometry?.coordinates

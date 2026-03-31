@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, useMemo } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import Markdown from "markdown-to-jsx"
 import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t, Form } from "@bloom-housing/ui-components"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
@@ -13,6 +12,7 @@ import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 import { isUnitGroupAppBase, isUnitGroupAppWaitlist } from "../../../lib/helpers"
+import LazyMarkdown from "../../../components/core/LazyMarkdown"
 
 const ApplicationWhatToExpect = () => {
   const { profile } = useContext(AuthContext)
@@ -93,7 +93,7 @@ const ApplicationWhatToExpect = () => {
       >
         <CardSection>
           <div className="markdown">
-            <Markdown
+            <LazyMarkdown
               options={{
                 disableParsingRawHTML: true,
                 overrides: {
@@ -108,9 +108,9 @@ const ApplicationWhatToExpect = () => {
               }}
             >
               {content.steps}
-            </Markdown>
+            </LazyMarkdown>
 
-            <Markdown
+            <LazyMarkdown
               options={{
                 disableParsingRawHTML: true,
                 overrides: {
@@ -125,7 +125,7 @@ const ApplicationWhatToExpect = () => {
               }}
             >
               {content.finePrint}
-            </Markdown>
+            </LazyMarkdown>
           </div>
         </CardSection>
         <CardSection className={styles["application-form-action-footer"]}>
