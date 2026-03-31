@@ -15,6 +15,7 @@ receivers:
 exporters:
   prometheusremotewrite:
     endpoint: ${env:PROMETHEUS_REMOTE_WRITE_ENDPOINT}
+    auth_type: "sigv4"
 
 service:
   telemetry:
