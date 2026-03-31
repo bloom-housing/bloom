@@ -15,6 +15,7 @@ exporters:
       authenticator: sigv4auth
 
 service:
+  extensions: [sigv4auth]
   telemetry:
     logs:
       level: info

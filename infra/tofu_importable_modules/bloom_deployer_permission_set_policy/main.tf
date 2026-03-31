@@ -55,6 +55,8 @@ data "aws_iam_policy_document" "deployer" {
   statement {
     actions = [
       "application-autoscaling:Describe*",
+      "aps:Describe*",
+      "aps:List*",
       "cloudwatch:Describe*",
       "cloudwatch:Get*",
       "cloudwatch:List*",
@@ -177,6 +179,19 @@ data "aws_iam_policy_document" "deployer" {
       "arn:aws:s3:::${var.bloom_deployment_tofu_state_bucket_name}",
       "arn:aws:s3:::${var.bloom_deployment_tofu_state_bucket_name}/${var.bloom_deployment_tofu_state_file_prefix}/state",
       "arn:aws:s3:::${var.bloom_deployment_tofu_state_bucket_name}/${var.bloom_deployment_tofu_state_file_prefix}/state.tflock",
+    ]
+  }
+  statement {
+    # Allow creating Prometheus  workspace.
+    actions = [
+      "aps:CreateWorkspace",
+      "aps:DescribeLoggingConfiguration",
+      "aps:DescribeWorkspace",
+      "aps:ListTagsForResource",
+    ]
+    resources = [
+      "arn:aws:aps:${local.region_account}:/workspaces",
+      "arn:aws:aps:${local.region_account}:workspace/*",
     ]
   }
   statement {

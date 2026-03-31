@@ -10,9 +10,10 @@ locals {
     USE_AWS_SES         = "1"
     GOOGLE_API_ID       = var.google_translate_settings == null ? "" : var.google_translate_settings.project_id
     GOOGLE_API_EMAIL    = var.google_translate_settings == null ? "" : var.google_translate_settings.iam_user
-    S3_REGION           = var.aws_region
-    S3_PRIVATE_BUCKET   = aws_s3_bucket.private.id
-    S3_PUBLIC_BUCKET    = aws_s3_bucket.public.id
+    S3_REGION                       = var.aws_region
+    S3_PRIVATE_BUCKET               = aws_s3_bucket.private.id
+    S3_PUBLIC_BUCKET                = aws_s3_bucket.public.id
+    OTEL_EXPORTER_OTLP_ENDPOINT     = "http://127.0.0.1:4317"
   }
 }
 resource "aws_ecs_task_definition" "bloom_api" {
@@ -81,6 +82,32 @@ resource "aws_ecs_task_definition" "bloom_api" {
           "awslogs-region"        = var.aws_region
           "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-api"].name
           "awslogs-stream-prefix" = "bloom-api"
+        }
+      }
+    },
+    {
+      name      = "otel-sidecar"
+      image     = var.bloom_otel_collector_image
+      essential = false
+      command   = ["--config", "/etc/api-ecs-sidecar-config.yaml"]
+      environment = [
+        { name = "PROMETHEUS_REMOTE_WRITE_ENDPOINT", value = "${aws_prometheus_workspace.bloom.prometheus_endpoint}api/v1/remote_write" }
+      ]
+      portMappings = [
+        {
+          containerPort = 4317
+          appProtocol   = "grpc"
+        }
+      ]
+      restartPolicy = {
+        enabled = false
+      }
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-region"        = var.aws_region
+          "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-api"].name
+          "awslogs-stream-prefix" = "otel-sidecar"
         }
       }
     }

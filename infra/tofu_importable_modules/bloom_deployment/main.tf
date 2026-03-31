@@ -4,6 +4,10 @@ terraform {
       version = "6.21.0"
       source  = "hashicorp/aws"
     }
+    grafana = {
+      version = "4.28.2"
+      source  = "hashicorp/grafana"
+    }
   }
 }
 
@@ -228,6 +232,10 @@ variable "bloom_site_public_task_count" {
 }
 locals {
   bloom_site_public_task_count = var.bloom_site_public_task_count != null ? var.bloom_site_public_task_count : (var.high_availability ? 2 : 1)
+}
+variable "bloom_otel_collector_image" {
+  type        = string
+  description = "Container image for the AWS Distro for OpenTelemetry collector sidecar."
 }
 
 # Create a CloudTrail data store so that audit events are query-able in SQL.

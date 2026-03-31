@@ -15,7 +15,6 @@ receivers:
 extensions:
   sigv4auth:
     service: "aps"
-    region: "user-region"
 
 exporters:
   prometheusremotewrite:
@@ -24,6 +23,7 @@ exporters:
       authenticator: sigv4auth
 
 service:
+  extensions: [sigv4auth]
   telemetry:
     logs:
       level: info
