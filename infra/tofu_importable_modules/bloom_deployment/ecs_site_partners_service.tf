@@ -3,11 +3,11 @@ locals {
     NODE_ENV                    = "production"
     DISABLE_NEXT_TYPECHECK      = "TRUE"
     NEXTJS_PORT                 = "3001"
-    BACKEND_API_BASE                = "http://bloom-api:3100"
-    LISTINGS_QUERY                  = "/listings"
-    USE_SECURE_DOWNLOAD_PATHWAY     = "TRUE"
-    USE_S3_FILE_STORAGE             = "TRUE"
-    OTEL_EXPORTER_OTLP_ENDPOINT     = "http://127.0.0.1:4317"
+    BACKEND_API_BASE            = "http://bloom-api:3100"
+    LISTINGS_QUERY              = "/listings"
+    USE_SECURE_DOWNLOAD_PATHWAY = "TRUE"
+    USE_S3_FILE_STORAGE         = "TRUE"
+    OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317"
   }
 }
 resource "aws_ecs_task_definition" "bloom_site_partners" {

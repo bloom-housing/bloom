@@ -175,6 +175,6 @@ resource "grafana_data_source" "prometheus" {
   })
 }
 resource "grafana_dashboard" "bloom" {
-  for_each = fileset(path.module, "dashboards/*.json")
+  for_each    = fileset(path.module, "dashboards/*.json")
   config_json = file("${path.module}/${each.value}")
 }
