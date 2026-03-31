@@ -4,10 +4,15 @@ receivers:
       grpc:
         endpoint: 0.0.0.0:4317
 
+extensions:
+  sigv4auth:
+    service: "aps"
+
 exporters:
   prometheusremotewrite:
     endpoint: ${env:PROMETHEUS_REMOTE_WRITE_ENDPOINT}
-    auth_type: "sigv4"
+    auth:
+      authenticator: sigv4auth
 
 service:
   telemetry:

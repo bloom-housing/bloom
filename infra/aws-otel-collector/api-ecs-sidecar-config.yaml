@@ -12,10 +12,16 @@ receivers:
           static_configs:
             - targets: ['0.0.0.0:3100']
 
+extensions:
+  sigv4auth:
+    service: "aps"
+    region: "user-region"
+
 exporters:
   prometheusremotewrite:
     endpoint: ${env:PROMETHEUS_REMOTE_WRITE_ENDPOINT}
-    auth_type: "sigv4"
+    auth:
+      authenticator: sigv4auth
 
 service:
   telemetry:
