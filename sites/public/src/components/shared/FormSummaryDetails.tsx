@@ -216,15 +216,18 @@ const FormSummaryDetails = ({
             application.applicant.middleName ? ` ${application.applicant.middleName}` : ``
           } ${application.applicant.lastName}`}
         </FieldValue>
-        <FieldValue
-          testId={"app-summary-applicant-dob"}
-          id="applicantbirthDay"
-          label={t("application.household.member.dateOfBirth")}
-          className={styles["summary-value"]}
-        >
-          {application.applicant.birthMonth}/{application.applicant.birthDay}/
-          {application.applicant.birthYear}
-        </FieldValue>
+        {application.applicant.birthMonth && (
+          <FieldValue
+            testId={"app-summary-applicant-dob"}
+            id="applicantbirthDay"
+            label={t("application.household.member.dateOfBirth")}
+            className={styles["summary-value"]}
+          >
+            {application.applicant.birthMonth}/{application.applicant.birthDay}/
+            {application.applicant.birthYear}
+          </FieldValue>
+        )}
+
         {application.applicant.phoneNumber && (
           <FieldValue
             testId={"app-summary-applicant-phone"}
