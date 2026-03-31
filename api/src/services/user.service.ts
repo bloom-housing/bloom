@@ -578,17 +578,9 @@ export class UserService {
       }
     };
     // user on wrong site, return neutral message and don't send email
-    if (!(await isUserSiteMatch())) {
-      console.error(
-        `failed isUserSiteMatch check for forgot password with email: ${dto.email} appUrl: ${dto.appUrl}`,
-      );
-      return { success: true };
-    }
+    if (!(await isUserSiteMatch())) return { success: true };
 
     if (storedUser.isAdvocate && !storedUser.isApproved) {
-      console.error(
-        `advocate user attempted to reset password before approval, email: ${dto.email}`,
-      );
       return { success: false };
     }
 
