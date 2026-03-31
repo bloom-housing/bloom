@@ -237,6 +237,11 @@ variable "bloom_otel_collector_image" {
   type        = string
   description = "Container image for the AWS Distro for OpenTelemetry collector sidecar."
 }
+variable "grafana_editor_group_ids" {
+  type = list(string)
+  description = "IAM Identity Center group IDs that should have the editor role on the managed Grafana instance."
+  default = []
+}
 
 # Create a CloudTrail data store so that audit events are query-able in SQL.
 resource "aws_cloudtrail_event_data_store" "audit" {

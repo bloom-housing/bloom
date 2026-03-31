@@ -46,8 +46,11 @@ resource "aws_ssoadmin_permission_set_inline_policy" "deployer" {
 # non-whitespace characters present in the InlinePolicy Document is 10245 bytes which has exceeded
 # the maximum limit of 10240 bytes'
 #
-# So far I have resolved by removing sid names and adding as comments. We need to figure out
-# a better long-term plan for addressing this restriction.
+# So far I have resolved by:
+# - removing sid names and adding as comments.
+# - wild-carding get and describe permissions.
+#
+# We need to figure out a better long-term plan for addressing this restriction.
 data "aws_iam_policy_document" "deployer" {
   # TODO: we could have a separate permission set for humans debugging / looking at stuff through
   # the AWS web console. For now, just collect the added permissions for using the web console that
@@ -68,6 +71,8 @@ data "aws_iam_policy_document" "deployer" {
       "events:Describe*",
       "events:Get*",
       "events:List*",
+      "grafana:Describe*",
+      "grafana:List*",
       "logs:Describe*",
       "logs:Filter*",
       "logs:Get*",
@@ -84,6 +89,8 @@ data "aws_iam_policy_document" "deployer" {
       "servicediscovery:Discover*",
       "servicediscovery:Get*",
       "servicediscovery:List*",
+      "sso:Get*",
+      "sso:List*",
     ]
     resources = ["*"]
   }
@@ -182,7 +189,7 @@ data "aws_iam_policy_document" "deployer" {
     ]
   }
   statement {
-    # Allow creating Prometheus  workspace.
+    # Allow creating Prometheus workspace.
     actions = [
       "aps:CreateWorkspace",
       "aps:DescribeLoggingConfiguration",
@@ -190,8 +197,35 @@ data "aws_iam_policy_document" "deployer" {
       "aps:ListTagsForResource",
     ]
     resources = [
-      "arn:aws:aps:${local.region_account}:/workspaces",
       "arn:aws:aps:${local.region_account}:workspace/*",
+    ]
+  }
+  statement {
+    # Allow creating Grafana workspace.
+    actions = [
+      "grafana:CreateWorkspace",
+      "grafana:CreateWorkspaceServiceAccount",
+      "grafana:CreateWorkspaceServiceAccountToken",
+      "grafana:DeleteWorkspaceServiceAccount",
+      "grafana:DeleteWorkspaceServiceAccountToken",
+      "grafana:DescribeWorkspace",
+      "grafana:DescribeWorkspaceConfiguration",
+      "grafana:UpdatePermissions",
+      "grafana:UpdateWorkspace",
+    ]
+    resources = [
+      "arn:aws:grafana:${local.region_account}:/workspaces*",
+    ]
+  }
+  statement {
+    # Allow registering Grafana workspace in SSO.
+    actions = [
+      "sso:AssociateProfile",
+      "sso:CreateManagedApplicationInstance",
+      "sso:DescribeRegisteredRegions",
+    ]
+    resources = [
+      "*",
     ]
   }
   statement {
@@ -223,30 +257,8 @@ data "aws_iam_policy_document" "deployer" {
     # Describe calls are not scoped to a specific resource.
     actions = [
       "acm:ListCertificates",
-      "ec2:DescribeAccountAttributes",
-      "ec2:DescribeAddresses",
-      "ec2:DescribeAddressesAttribute",
-      "ec2:DescribeAvailabilityZones",
-      "ec2:DescribeInternetGateways",
-      "ec2:DescribeNatGateways",
-      "ec2:DescribeNetworkAcls",
-      "ec2:DescribeNetworkInterfaces",
-      "ec2:DescribePrefixLists",
-      "ec2:DescribeRouteTables",
-      "ec2:DescribeSecurityGroupRules",
-      "ec2:DescribeSecurityGroups",
-      "ec2:DescribeSubnets",
-      "ec2:DescribeVpcEndpoints",
-      "ec2:DescribeVpcPeeringConnections",
-      "ec2:DescribeVpcs",
-      "elasticloadbalancing:DescribeListenerAttributes",
-      "elasticloadbalancing:DescribeListeners",
-      "elasticloadbalancing:DescribeLoadBalancerAttributes",
-      "elasticloadbalancing:DescribeLoadBalancers",
-      "elasticloadbalancing:DescribeRules",
-      "elasticloadbalancing:DescribeTags",
-      "elasticloadbalancing:DescribeTargetGroupAttributes",
-      "elasticloadbalancing:DescribeTargetGroups",
+      "ec2:Describe*",
+      "elasticloadbalancing:Describe*",
     ]
     resources = ["*"]
   }

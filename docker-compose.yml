@@ -357,7 +357,7 @@ services:
       GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
     volumes:
       - ./infra/grafana/provisioning:/etc/grafana/provisioning:ro
-      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - ./infra/tofu_importable_modules/bloom_deployment/dashboards:/var/lib/grafana/dashboards:ro
     depends_on:
       prometheus:
         condition: service_started
@@ -368,7 +368,7 @@ services:
     restart: no
     volumes:
       - ./infra/grafana/sync-dashboards.py:/sync-dashboards.py:ro
-      - ./infra/grafana/dashboards:/dashboards
+      - ./infra/tofu_importable_modules/bloom_deployment/dashboards:/dashboards
     command:
       - python3
       - /sync-dashboards.py
