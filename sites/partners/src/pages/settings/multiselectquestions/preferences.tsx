@@ -42,6 +42,8 @@ const MultiselectQuestionsPreferences = () => {
         field: "name",
         flex: 2,
         sortable: true,
+        unSortIcon: true,
+        sort: "asc",
         // disable frontend sorting
         comparator: () => 0,
       },
@@ -50,6 +52,7 @@ const MultiselectQuestionsPreferences = () => {
         field: "status",
         flex: 1,
         sortable: true,
+        unSortIcon: true,
         // disable frontend sorting
         comparator: () => 0,
         cellRendererFramework: ({ data }) => {
@@ -72,6 +75,7 @@ const MultiselectQuestionsPreferences = () => {
         field: "jurisdiction",
         flex: 1.5,
         sortable: true,
+        unSortIcon: true,
         // disable frontend sorting
         comparator: () => 0,
       },
@@ -79,6 +83,7 @@ const MultiselectQuestionsPreferences = () => {
         headerName: t("t.lastUpdated"),
         field: "updatedAt",
         sortable: true,
+        unSortIcon: true,
         // disable frontend sorting
         comparator: () => 0,
       },
