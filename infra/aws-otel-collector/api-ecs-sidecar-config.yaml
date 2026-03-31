@@ -9,7 +9,7 @@ receivers:
         - job_name: 'prisma_metrics'
           scrape_interval: 10s
           metrics_path: /prisma_metrics
-          static_config:
+          static_configs:
             - targets: ['0.0.0.0:3100']
 
 exporters:
