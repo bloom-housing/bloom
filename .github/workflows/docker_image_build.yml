@@ -51,6 +51,10 @@ jobs:
             docker_context: "{{defaultContext}}:infra"
             dockerfile: Dockerfile.dev
             platforms: linux/amd64,linux/arm64
+          - container: aws-otel-collector
+            docker_context: "{{defaultContext}}:infra/aws-otel-collector"
+            dockerfile: Dockerfile
+            platforms: linux/amd64,linux/arm64
     runs-on: ubuntu-latest
     steps:
       - name: Log in to GitHub Container Registry
