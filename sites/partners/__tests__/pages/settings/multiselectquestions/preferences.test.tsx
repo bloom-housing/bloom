@@ -82,14 +82,6 @@ describe("settings/multiselectquestions/preferences", () => {
     it("should render the preference table", async () => {
       window.URL.createObjectURL = jest.fn()
       document.cookie = "access-token-available=True"
-      server.use(
-        rest.get(
-          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
-          (_req, res, ctx) => {
-            return res(ctx.json([listing]))
-          }
-        )
-      )
       render(<MultiselectQuestionsPreferences />)
 
       expect(screen.getByRole("heading", { level: 1, name: "Preferences" })).toBeInTheDocument()
@@ -167,12 +159,6 @@ describe("settings/multiselectquestions/preferences", () => {
             })
           )
         }),
-        rest.get(
-          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
-          (_req, res, ctx) => {
-            return res(ctx.json([listing]))
-          }
-        ),
         rest.post("http://localhost/api/adapter/multiselectQuestions", async (req, res, ctx) => {
           requestSpy(await req.json())
           return res(ctx.json({}))
@@ -255,7 +241,7 @@ describe("settings/multiselectquestions/preferences", () => {
         expect(requestSpy).toHaveBeenCalledWith({
           applicationSection: "preferences",
           description: "Preference Description",
-          hideFromListing: true,
+          hideFromListing: false,
           jurisdictions: [],
           jurisdiction: { id: "id1", name: "Housing Jurisdiction" },
           links: [],
