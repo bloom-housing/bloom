@@ -8,7 +8,7 @@ const request_duration_ms = meter.createHistogram("middleware.request_duration_m
 export function middleware(request: NextRequest) {
   const start = Date.now()
 
-  let path = request.nextUrl.pathname
+  const path = request.nextUrl.pathname
   let shortPath = path
   if (path.startsWith("/_next")) {
     // Turns '/_next/static/chunks/...' to '/_next/static'. Next static chunks have build ID, and

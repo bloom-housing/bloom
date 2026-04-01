@@ -43,6 +43,16 @@ def main():
         help="URL for the IAM Identity Center access portal.",
         required=True)
     p.add_argument(
+        "--dev_deployer_group_id",
+        help=
+        "IAM Identity Center group ID for the bloom-dev-deployers group. Used as the default Grafana editor group.",
+        required=True)
+    p.add_argument(
+        "--prod_deployer_group_id",
+        help=
+        "IAM Identity Center group ID for the bloom-prod-deployers group. Used as the default Grafana editor group.",
+        required=True)
+    p.add_argument(
         "--dev_deployer_permission_set_arn",
         help="ARN of the dev deployer IAM Identity center permission set",
         required=True)
@@ -82,16 +92,6 @@ def main():
         "--dev_domain_name", help="The domain name for the dev Bloom deployment.", required=True)
     p.add_argument(
         "--prod_domain_name", help="The domain name for the prod Bloom deployment.", required=True)
-    p.add_argument(
-        "--dev_deployer_group_id",
-        help=
-        "IAM Identity Center group ID for the bloom-dev-deployers group. Used as the default Grafana editor group.",
-        required=True)
-    p.add_argument(
-        "--prod_deployer_group_id",
-        help=
-        "IAM Identity Center group ID for the bloom-prod-deployers group. Used as the default Grafana editor group.",
-        required=True)
 
     p.add_argument(
         "--print_to_stdout",
@@ -142,7 +142,7 @@ def main():
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="dev",
             HIGH_AVAILABILITY="false",
-            GRAFANA_EDITOR_GROUP_IDS=args.dev_deployer_group_id,
+            GRAFANA_EDITOR_GROUP_ID=args.dev_deployer_group_id,
         ))
 
     write_template(
@@ -175,7 +175,7 @@ def main():
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="production",
             HIGH_AVAILABILITY="true",
-            GRAFANA_EDITOR_GROUP_IDS=args.prod_deployer_group_id,
+            GRAFANA_EDITOR_GROUP_ID=args.prod_deployer_group_id,
         ))
 
 
@@ -429,7 +429,7 @@ class BloomDeploymentTemplateArgs:
     GIT_COMMIT: str
     BLOOM_ENV_TYPE: str
     HIGH_AVAILABILITY: str
-    GRAFANA_EDITOR_GROUP_IDS: str
+    GRAFANA_EDITOR_GROUP_ID: str
 
 
 BLOOM_DEPLOYMENT_TEMPLATE = string.Template(
@@ -522,7 +522,7 @@ module "bloom_deployment" {
     RTL_LANGUAGES     = "ar,fa"
   }
 
-  grafana_editor_group_ids = ["${GRAFANA_EDITOR_GROUP_IDS}"]
+  grafana_editor_group_ids = ["${GRAFANA_EDITOR_GROUP_ID}"]
 }
 output "aws_lb_dns_name" {
   value       = module.bloom_deployment.lb_dns_name
