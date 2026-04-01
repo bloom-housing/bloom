@@ -88,7 +88,7 @@ const DetailsMultiselectQuestions = ({
                       (question: ApplicationSelection) =>
                         question.multiselectQuestion.id === listingQuestion?.multiselectQuestions.id
                     )
-                    if (!selection) return t("t.none")
+                    if (!selection || selection.selections.length === 0) return t("t.none")
 
                     return selection.selections.map(
                       (selectionOption: ApplicationSelectionOption) => {
