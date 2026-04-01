@@ -2056,15 +2056,15 @@ model UserAccounts {
   wasWarnedOfDeletion       Boolean?       @default(false) @map("was_warned_of_deletion")
 
   activityLogs              ActivityLog[]
-  address                   Address?                @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  agency                    Agency?                 @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  address                   Address?                     @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  agency                    Agency?                      @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   applicationFlaggedSet     ApplicationFlaggedSet[]
   applications              Applications[]
-  favoriteListings          Listings[]              @relation("favorite_listings")
+  favoriteListings          Listings[]                   @relation("favorite_listings")
   jurisdictions             Jurisdictions[]
-  lastUpdatedListingsByUser Listings[]              @relation("last_updated_by_user")
+  lastUpdatedListingsByUser Listings[]                   @relation("last_updated_by_user")
   listings                  Listings[]
-  requestedChangesListings  Listings[]              @relation("requested_changes_user")
+  requestedChangesListings  Listings[]                   @relation("requested_changes_user")
   userPreferences           UserPreferences?
   userRoles                 UserRoles?
 
