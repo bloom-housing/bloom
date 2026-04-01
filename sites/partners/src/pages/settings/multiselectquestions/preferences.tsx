@@ -27,7 +27,6 @@ import styles from "./preferences.module.scss"
 
 const MultiselectQuestionsPreferences = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
-  const router = useRouter()
   const tableOptions = useAgTable()
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
 
@@ -133,7 +132,9 @@ const MultiselectQuestionsPreferences = () => {
       MultiselectQuestionsStatusEnum.toRetire,
     ],
     {
-      sort: tableOptions.sort.sortOptions,
+      sort: tableOptions.sort.sortOptions?.length
+        ? tableOptions.sort.sortOptions
+        : [{ orderBy: "name", orderDir: "ASC" }],
       page: tableOptions.pagination.currentPage,
       limit: tableOptions.pagination.itemsPerPage,
       search: tableOptions.filter.filterValue,
