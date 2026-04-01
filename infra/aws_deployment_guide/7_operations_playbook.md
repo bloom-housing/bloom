@@ -68,6 +68,50 @@ To view the list of tables, run:
 bloom_prisma=> \dt
 ```
 
+### Accessing as the database master user
+
+Prefer accessing the database as the bloom_readonly user so that you can not accidentally delete
+data. In emergency scenarios, you can connect to the database using the master user. This requires
+more permissions than the deployers permission set has.
+
+1. Authenticate to the AWS account as the SystemAdministrator permission set.
+2. Create a cloudshell environment in the bloom VPC and any private subnet. Select the Security
+   Group with the tag 'bloom-api'.
+3. Go to the 'Aurora and RDS > Databases > bloom' page in the AWS web console. **Note the instance
+   Endpoint.** If viewing the 'Connecting using > Code snippets' section, you can copy the example
+   line from it to your Cloudshell:
+
+   ```bash
+   export RDSHOST="bloom.exampleid.us-west-2.rds.amazonaws.com"
+   ```
+
+4. Connect to the database:
+
+   ```bash
+   psql "host=$RDSHOST port=5432 dbname=postgres user=master"
+   ```
+
+   You will be prompted for the password.
+
+5. In the 'Connect using' section of the database overview page, under the 'Secret Manger' section,
+   click the 'Generate secret' then 'Copy secret' buttons. Paste it to cloudshell.
+
+## Recovering from a bad database migration
+
+Bloom database migrations are run by the API on task start. If a new API version being deployed
+contains a bad migration that causes the database to enter a broken state, the database can either
+be recovered through manual psql surgery or by initiating a RDS recovery. RDS recovery works by
+creating a new database instance which can take many minutes. In some cases, the database may be
+easily recovered with minimal risk of data loss through manual psql surgery. If in doubt, prefer the
+RDS recovery method:
+
+1. Determine a timestamp before the API ran the bad migration. This is the timestamp RDS will
+   restore the DB state to.
+2. Set the `bloom_api_image` root module parameter to the previous good API version.
+3. Set the `database_restore_timestamp` to the value determined in step 1.
+4. Set the `trigger_database_restore` root module parameter to `true`.
+5. Apply the root module. A `bloom-emergency-restore` database instance will be created and used.
+
 ## Manually accessing the Bloom API
 
 Find the IP addresses of the Bloom API tasks:
@@ -96,4 +140,3 @@ The API endpoint is documented at:
    ```
 3. Read the `export class RootService {` in `/shared-helpers/src/types/backend-swagger.ts` file on the Git commit of the deployed
    Bloom API ECS task.
-

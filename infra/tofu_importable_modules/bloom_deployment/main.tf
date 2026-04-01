@@ -138,6 +138,29 @@ locals {
     backup_retention_days = 7
   })
 }
+variable "database_restore_timestamp" {
+  type        = string
+  description = "The timestamp that the RDS restore instance will be restored to. Must be a timestamp in RFC 3339 format (e.g. 2026-04-01T00:00:00Z)"
+  default     = ""
+
+  validation {
+    condition     = var.database_restore_timestamp == "" || can(formatdate("", var.database_restore_timestamp))
+    error_message = "database_restore_timestamp must be a valid RFC 3339 timestamp."
+  }
+  validation {
+    condition     = var.database_restore_timestamp == "" || var.trigger_database_restore
+    error_message = "trigger_database_restore must be set to true if database_restore_timestamp is set."
+  }
+}
+variable "trigger_database_restore" {
+  type        = bool
+  description = "Trigger RDS database recover. Causes a new database instance to be created and restored to the time in database_restore_timestamp."
+  default     = false
+  validation {
+    condition     = !var.trigger_database_restore || var.database_restore_timestamp != ""
+    error_message = "database_restore_timestamp must be set if trigger_database_restore is set to true."
+  }
+}
 
 variable "domain_name" {
   type        = string
