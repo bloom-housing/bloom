@@ -919,6 +919,7 @@
   "listings.parkingTypeOptions.offStreet": "Off street",
   "listings.parkingTypeOptions.onStreet": "On street",
   "listings.percentAMIUnit": "%{percent}% AMI unit",
+  "listings.accessibleUnits": "Accessible units",
   "listings.priorityUnits": "Priority units",
   "listings.priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",
   "listings.processInfo": "Process info",

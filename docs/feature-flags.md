@@ -71,6 +71,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enablePartnerSettings](./feature-flags/enablePartnerSettings.md) | When true, the 'settings' tab in the partner site is visible |
 | [enablePetPolicyCheckbox](./feature-flags/enablePetPolicyCheckbox.md) | When true, the pet policy field in the listing form is displayed as checkboxes instead of a text area |
 | [enableProperties](./feature-flags/enableProperties.md) | When true, the properties feature is enabled |
+| [enableReasonableAccommodations](./feature-flags/enableReasonableAccommodations.md) | When true, the reasonable accommodations question is shown in the public and partner application flow |
 | [enableReferralQuestionUnits](./feature-flags/enableReferralQuestionUnits.md) | when true, updates the the referral details question labels |
 | [enableRegions](./feature-flags/enableRegions.md) | When true, the region can be defined for the building address |
 | [enableResources](./feature-flags/enableResources.md) | When true, the public site displays links to resources on various pages |
