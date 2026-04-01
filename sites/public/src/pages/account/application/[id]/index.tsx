@@ -30,7 +30,7 @@ const AccountApplication = () => {
         .then((app) => {
           setApplication(app)
           listingsService
-            ?.retrieve({ id: app.listings.id, view: ListingViews.base })
+            ?.retrieve({ id: app.listings.id, view: ListingViews.full })
             .then((retrievedListing) => {
               setListing(retrievedListing)
               setLoading(false)

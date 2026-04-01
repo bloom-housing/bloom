@@ -746,7 +746,7 @@ export const stagingSeed = async (
             data: [
               {
                 name: 'At least one member of my household works in the city',
-                ordinal: 0,
+                ordinal: 1,
                 shouldCollectAddress: true,
                 shouldCollectName: true,
                 shouldCollectRelationship: true,
@@ -755,7 +755,7 @@ export const stagingSeed = async (
               },
               {
                 name: 'All members of the household work in the city',
-                ordinal: 1,
+                ordinal: 2,
                 shouldCollectAddress: true,
               },
             ],
@@ -808,9 +808,9 @@ export const stagingSeed = async (
         multiselectOptions: {
           createMany: {
             data: [
-              { name: 'Yes', ordinal: 0 },
-              { name: 'No', ordinal: 1 },
-              { isOptOut: true, name: 'Prefer not to say', ordinal: 2 },
+              { name: 'Yes', ordinal: 1 },
+              { name: 'No', ordinal: 2 },
+              { isOptOut: true, name: 'Prefer not to say', ordinal: 3 },
             ],
           },
         },
@@ -847,11 +847,11 @@ export const stagingSeed = async (
         multiselectOptions: {
           createMany: {
             data: [
-              { name: 'Wheelchair', ordinal: 0 },
-              { name: 'Walker', ordinal: 1 },
-              { name: 'Power chair', ordinal: 2 },
-              { name: 'Other mobility device', ordinal: 3 },
-              { isOptOut: true, name: 'None of the above', ordinal: 4 },
+              { name: 'Wheelchair', ordinal: 1 },
+              { name: 'Walker', ordinal: 2 },
+              { name: 'Power chair', ordinal: 3 },
+              { name: 'Other mobility device', ordinal: 4 },
+              { isOptOut: true, name: 'None of the above', ordinal: 5 },
             ],
           },
         },
@@ -890,17 +890,17 @@ export const stagingSeed = async (
         multiselectOptions: {
           createMany: {
             data: [
-              { name: 'Audible and visual doorbells', ordinal: 0 },
+              { name: 'Audible and visual doorbells', ordinal: 1 },
               {
                 name: 'Fire and smoke alarms with hard wired strobes',
-                ordinal: 1,
+                ordinal: 2,
               },
               {
                 name: 'Documents in screen-reader accessible format',
-                ordinal: 2,
+                ordinal: 3,
               },
-              { name: 'Documents in large text or braille', ordinal: 3 },
-              { isOptOut: true, name: 'None of the above', ordinal: 4 },
+              { name: 'Documents in large text or braille', ordinal: 4 },
+              { isOptOut: true, name: 'None of the above', ordinal: 5 },
             ],
           },
         },
@@ -947,19 +947,19 @@ export const stagingSeed = async (
             data: [
               {
                 name: 'Not Permanent',
-                ordinal: 0,
-              },
-              {
-                name: 'Homeless',
                 ordinal: 1,
               },
               {
-                name: 'Do Not Consider',
+                name: 'Homeless',
                 ordinal: 2,
               },
               {
-                name: 'Prefer not to say',
+                name: 'Do Not Consider',
                 ordinal: 3,
+              },
+              {
+                name: 'Prefer not to say',
+                ordinal: 4,
               },
             ],
           },
@@ -1010,8 +1010,8 @@ export const stagingSeed = async (
         multiselectOptions: {
           createMany: {
             data: [
-              { name: 'Yes', ordinal: 0 },
-              { name: 'No', ordinal: 1 },
+              { name: 'Yes', ordinal: 1 },
+              { name: 'No', ordinal: 2 },
             ],
           },
         },
@@ -1048,8 +1048,8 @@ export const stagingSeed = async (
                   multiselectOptions: {
                     createMany: {
                       data: [
-                        { name: 'Yes', ordinal: 0 },
-                        { name: 'No', ordinal: 1 },
+                        { name: 'Yes', ordinal: 1 },
+                        { name: 'No', ordinal: 2 },
                       ],
                     },
                   },

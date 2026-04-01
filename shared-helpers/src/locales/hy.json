@@ -186,6 +186,7 @@
   "application.contact.suggestedAddress": "Առաջարկվող հասցե՝",
   "application.contact.title": "Շնորհակալություն %{firstName}, հիմա մենք պետք է իմանանք, թե ինչպես կապ հաստատել ձեզ հետ ձեր դիմումի վերաբերյալ։",
   "application.contact.verifyAddressTitle": "Մենք գտել ենք հետևյալ հասցեն, խնդրում ենք հաստատել, որ այն ճիշտ է։",
+  "application.contact.verifyMultipleAddresses": "Քանի որ այս նախընտրությունն ունի բազմաթիվ տարբերակներ, դուք պետք է հաստատեք մի քանի հասցե։",
   "application.contact.workAddress": "Աշխատանքային հասցե",
   "application.contact.youEntered": "Դուք մուտքագրել եք՝",
   "application.contact.yourAdditionalPhoneNumber": "Ձեր երկրորդ հեռախոսահամարը",
