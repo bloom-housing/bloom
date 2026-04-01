@@ -378,11 +378,11 @@ data "aws_iam_policy_document" "deployer" {
       "rds:ModifyDBInstance",
     ]
     resources = [
-      "arn:aws:rds:${local.region_account}:db:bloom",
-      "arn:aws:rds:${local.region_account}:og:bloom",
-      "arn:aws:rds:${local.region_account}:pg:bloom",
-      "arn:aws:rds:${local.region_account}:snapshot:bloom-db-finalsnapshot",
-      "arn:aws:rds:${local.region_account}:subgrp:bloom",
+      "arn:aws:rds:${local.region_account}:db:bloom*",
+      "arn:aws:rds:${local.region_account}:og:bloom*",
+      "arn:aws:rds:${local.region_account}:pg:bloom*",
+      "arn:aws:rds:${local.region_account}:snapshot:bloom*",
+      "arn:aws:rds:${local.region_account}:subgrp:bloom*",
     ]
   }
   statement {

@@ -89,7 +89,7 @@ locals {
         {
           Action   = "secretsmanager:GetSecretValue"
           Effect   = "Allow"
-          Resource = one([for s in aws_db_instance.bloom.master_user_secret : s.secret_arn if s.secret_status == "active"])
+          Resource = one([for s in local.bloom_db_instance.master_user_secret : s.secret_arn if s.secret_status == "active"])
         },
       ]
       container_policy = jsonencode({
@@ -120,7 +120,7 @@ locals {
           {
             Action   = "rds-db:connect"
             Effect   = "Allow"
-            Resource = "arn:aws:rds-db:${var.aws_region}:${var.aws_account_number}:dbuser:${aws_db_instance.bloom.id}/bloom_api"
+            Resource = "arn:aws:rds-db:${var.aws_region}:${var.aws_account_number}:dbuser:${local.bloom_db_instance.id}/bloom_api"
           },
           {
             Action   = "ses:SendEmail"
@@ -172,7 +172,7 @@ locals {
         Statement = [{
           Action   = "rds-db:connect"
           Effect   = "Allow"
-          Resource = "arn:aws:rds-db:${var.aws_region}:${var.aws_account_number}:dbuser:${aws_db_instance.bloom.id}/bloom_api"
+          Resource = "arn:aws:rds-db:${var.aws_region}:${var.aws_account_number}:dbuser:${local.bloom_db_instance.id}/bloom_api"
         }]
       })
     }
