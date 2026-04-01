@@ -2064,6 +2064,7 @@ model UserAccounts {
   jurisdictions             Jurisdictions[]
   lastUpdatedListingsByUser Listings[]                   @relation("last_updated_by_user")
   listings                  Listings[]
+  notificationPreferences   UserNotificationPreferences?
   requestedChangesListings  Listings[]                   @relation("requested_changes_user")
   userPreferences           UserPreferences?
   userRoles                 UserRoles?
@@ -2135,6 +2136,25 @@ model UserPreferences {
   favoritesListings Listings[]
 
   @@map("user_preferences")
+}
+
+model UserNotificationPreferences {
+  userId                   String       @id() @map("user_id") @db.Uuid
+  user                     UserAccounts @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lottery                  Boolean?     @default(false)
+  waitlist                 Boolean?     @default(false)
+  mobility                 Boolean?     @default(false)
+  hearing                  Boolean?     @default(false)
+  vision                   Boolean?     @default(false)
+  hearingAndVision         Boolean?     @default(false) @map("hearing_and_vision")
+  mobilityAndHearing       Boolean?     @default(false) @map("mobility_and_hearing")
+  mobilityAndVision        Boolean?     @default(false) @map("mobility_and_vision")
+  mobilityHearingAndVision Boolean?     @default(false) @map("mobility_hearing_and_vision")
+  wantsRegionNotifs        Boolean?     @default(false) @map("wants_region_notifs")
+  regions                  String[]
+
+  @@index([userId])
+  @@map("user_notification_preferences")
 }
 
 // UserRole Section
