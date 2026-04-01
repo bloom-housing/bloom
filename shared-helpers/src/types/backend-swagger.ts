@@ -846,6 +846,28 @@ export class SnapshotService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Create Application Snapshot
+   */
+  createApplicationSnapshot(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/snapshot/createApplicationSnapshot"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class AmiChartsService {
@@ -2333,6 +2355,28 @@ export class UserService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update user notification preferences
+   */
+  userControllerUpdatePreferences(
+    params: {
+      /** requestBody */
+      body?: UserNotificationPreferencesUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/preferences"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
 
       configs.data = data
 
@@ -8859,6 +8903,41 @@ export interface EmailAndAppUrl {
   appUrl?: string
 }
 
+export interface UserNotificationPreferences {
+  /**  */
+  lottery?: boolean
+
+  /**  */
+  waitlist?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  vision?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  mobilityAndHearing?: boolean
+
+  /**  */
+  mobilityAndVision?: boolean
+
+  /**  */
+  mobilityHearingAndVision?: boolean
+
+  /**  */
+  wantsRegionNotifs?: boolean
+
+  /**  */
+  regions: string[]
+}
+
 export interface UserRole {
   /**  */
   isAdmin?: boolean
@@ -8900,6 +8979,9 @@ export interface PublicUserCreate {
 
   /**  */
   listings: IdDTO[]
+
+  /**  */
+  notificationPreferences?: UserNotificationPreferences
 
   /**  */
   userRoles?: UserRole
@@ -9009,6 +9091,9 @@ export interface PartnerUserCreate {
   listings: IdDTO[]
 
   /**  */
+  notificationPreferences?: UserNotificationPreferences
+
+  /**  */
   language?: LanguagesEnum
 
   /**  */
@@ -9101,6 +9186,9 @@ export interface AdvocateUserCreate {
   listings: IdDTO[]
 
   /**  */
+  notificationPreferences?: UserNotificationPreferences
+
+  /**  */
   userRoles?: UserRole
 
   /**  */
@@ -9173,6 +9261,9 @@ export interface PublicUserUpdate {
 
   /**  */
   listings: IdDTO[]
+
+  /**  */
+  notificationPreferences?: UserNotificationPreferences
 
   /**  */
   userRoles?: UserRole
@@ -9285,6 +9376,9 @@ export interface PartnerUserUpdate {
   listings: IdDTO[]
 
   /**  */
+  notificationPreferences?: UserNotificationPreferences
+
+  /**  */
   language?: LanguagesEnum
 
   /**  */
@@ -9387,6 +9481,9 @@ export interface AdvocateUserUpdate {
 
   /**  */
   listings: IdDTO[]
+
+  /**  */
+  notificationPreferences?: UserNotificationPreferences
 
   /**  */
   userRoles?: UserRole
@@ -9516,6 +9613,9 @@ export interface User {
   listings: IdDTO[]
 
   /**  */
+  notificationPreferences?: UserNotificationPreferences
+
+  /**  */
   userRoles?: UserRole
 
   /**  */
@@ -9622,6 +9722,44 @@ export interface UserFavoriteListing {
 
   /**  */
   action: ModificationEnum
+}
+
+export interface UserNotificationPreferencesUpdate {
+  /**  */
+  lottery?: boolean
+
+  /**  */
+  waitlist?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  vision?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  mobilityAndHearing?: boolean
+
+  /**  */
+  mobilityAndVision?: boolean
+
+  /**  */
+  mobilityHearingAndVision?: boolean
+
+  /**  */
+  wantsRegionNotifs?: boolean
+
+  /**  */
+  regions: string[]
+
+  /**  */
+  id: string
 }
 
 export interface Login {
