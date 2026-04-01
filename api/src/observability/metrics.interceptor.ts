@@ -43,6 +43,9 @@ export class MetricsInterceptor implements NestInterceptor {
 
         this.request_counter.add(1, attributes);
         this.request_duration_ms.record(duration_ms, attributes);
+        console.log(
+          `Request: ${JSON.stringify(attributes)} took ${duration_ms}ms`,
+        );
       }),
     );
   }

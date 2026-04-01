@@ -24,6 +24,7 @@ export function middleware(request: NextRequest) {
   }
   request_counter.add(1, attributes)
   request_duration_ms.record(duration_ms, attributes)
+  console.log(`Request: ${path} ${JSON.stringify(attributes)} took ${duration_ms}ms`)
 
   return response
 }

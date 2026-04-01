@@ -48,14 +48,36 @@ docker compose restart grafana-sync
 
 The following containers are defined in the [docker-compose.yml](./docker-compose.yml) file:
 
+_Will always run_:
+
 - `lb`: a nginx load balancer that fronts the `api`, `partners`, and `public` containers. A LB is
   required to run multiple replicas of these containers.
-- `db`: the postgres database.
-- `dbinit`: runs a [db init script](./api/dbinit)
-- `dbseed`: runs a [db seed script](./api/Dockerfile.dbseed).
+- `db`: a postgres database.
+- `dbinit`: runs the [db init script](./api/dbinit)
+- `dbseed`: runs the [db seed script](./api/Dockerfile.dbseed).
 - `api`: the [api](./api).
 - `partners`: the [partners site](./sites/partners).
 - `public`: the [public site](./sites/public).
+
+_Will run with `COMPOSE_PROFILES=ci`_:
+
+- `dbreadonlycheck`: runs the [docker-compose.check.sql](./api/dbinit/docker-compose.check.sql)
+  script that validates the created DB users.
+
+_Will run with `COMPOSE_PROFILES=pgadmin`_:
+
+- `pgadmin`: runs pgadmin with a connection to the DB configured.
+
+_Will run with `COMPOSE_PROFILES=observability`_:
+
+- `otel-collector`: runs the [aws-otel-collector](./infra/aws-otel-collector) process that scrapes
+  metrics data from the api, partners, and public processes.
+- `prometheus`: runs a Prometheus server that stores the metric values.
+- `grafana`: runs a Grafana server with
+  [dashboards](./infra/tofu_importable_modules/bloom_deployment/dashboards) for the API, partners,
+  and public sites.
+- `grafana-sync`: runs a [dashboard sync script](./infra/grafana/sync-dashboards.py) that allows
+  editing graphs and dashboards in local Grafana then submitting for code review.
 
 Build, start, and tear down containers with the following commands. Each command takes an optional
 list of containers to operate on. By default the command operates on all containers.
