@@ -56,7 +56,7 @@ resource "aws_grafana_workspace" "bloom" {
 }
 resource "aws_grafana_role_association" "bloom" {
   workspace_id = aws_grafana_workspace.bloom.id
-  role         = "ADMIN"
+  role         = "EDITOR"
   group_ids    = var.grafana_editor_group_ids
 }
 output "grafana_url" {

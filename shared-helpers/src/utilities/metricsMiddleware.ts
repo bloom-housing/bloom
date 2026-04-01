@@ -9,9 +9,11 @@ export function middleware(request: NextRequest) {
   const start = Date.now()
 
   let path = request.nextUrl.pathname
+  let shortPath = path
   if (path.startsWith("/_next")) {
-    // Turns '/_next/static/chunks/...' to '/_next/static'
-    path = path.split("/").slice(0, 3).join("/")
+    // Turns '/_next/static/chunks/...' to '/_next/static'. Next static chunks have build ID, and
+    // would blow up metric cardinality if we included them.
+    shortPath = path.split("/").slice(0, 3).join("/")
   }
 
   const response = NextResponse.next()
@@ -19,12 +21,12 @@ export function middleware(request: NextRequest) {
   const duration_ms = Date.now() - start
   const attributes = {
     method: request.method,
-    path: path,
+    path: shortPath,
     response_code: response.status,
   }
   request_counter.add(1, attributes)
   request_duration_ms.record(duration_ms, attributes)
-  console.log(`Request: ${path} ${JSON.stringify(attributes)} took ${duration_ms}ms`)
+  console.log(`${path} ${JSON.stringify(attributes)} took ${duration_ms}ms`)
 
   return response
 }

@@ -1,11 +1,10 @@
 configs:
   nginx:
-    # Docker compose templates in variables with '$' so we need to use '$$' for the nginx config.
+    # Docker compose templates variables with '$' so we need to use '$$' for the nginx config.
     content: |
       events {}
       http {
-        log_format default '$$time_local from:$$remote_addr req:$$request resp:$$status upstream:$$upstream_addr in:$$request_time';
-        access_log /dev/stdout default;
+        access_log /dev/null;
 
         # Hack to get the DNS server address from /etc/resolv.conf at nginx container startup.
         include /etc/nginx/resolver.conf;
