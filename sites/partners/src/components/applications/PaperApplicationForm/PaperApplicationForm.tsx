@@ -109,9 +109,14 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
+  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableV2MSQ,
+    listingDto?.jurisdictions.id
+  )
+
   const units = listingDto?.units
 
-  const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}
+  const defaultValues = editMode ? mapApiToForm(application, listingDto, enableV2MSQ) : {}
 
   const formMethods = useForm<FormTypes>({
     defaultValues,
@@ -364,6 +369,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                           ? t("application.details.communityTypes")
                           : t("application.details.programs")
                       }
+                      enableV2MSQ={enableV2MSQ}
                     />
 
                     <FormHouseholdIncome />
@@ -372,6 +378,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       questions={preferences}
                       applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
                       sectionTitle={t("application.details.preferences")}
+                      enableV2MSQ={enableV2MSQ}
                     />
 
                     <FormDemographics
