@@ -2158,6 +2158,7 @@ model UserNotificationPreferences {
   regions                  String[]
 
   @@index([userId])
+  // TODO - Add partial indexes on all Boolean columns where value is TRUE (matching the 55_setup_user_notification_preferences migration script)
   @@map("user_notification_preferences")
 }
 
