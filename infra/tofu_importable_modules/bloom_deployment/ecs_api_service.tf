@@ -28,9 +28,8 @@ resource "aws_ecs_task_definition" "bloom_api" {
   execution_role_arn = aws_iam_role.bloom_ecs["api"].arn
   task_role_arn      = aws_iam_role.bloom_container["api"].arn
 
-  # Keep in sync with docker-compose.yml
-  cpu    = 1024     # 1 vCPU
-  memory = 2 * 1024 # 2 GiB in MiB
+  cpu    = var.bloom_api_resource_limits.vcpu
+  memory = var.bloom_api_resource_limits.memory_mib
 
   container_definitions = jsonencode([
     {
