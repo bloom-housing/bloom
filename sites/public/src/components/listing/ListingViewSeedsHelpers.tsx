@@ -33,6 +33,7 @@ import {
   listingUtilities,
   stackedOccupancyTable,
   stackedUnitGroupsOccupancyTable,
+  tIfExists,
 } from "@bloom-housing/shared-helpers"
 import { downloadExternalPDF, isFeatureFlagOn } from "../../lib/helpers"
 import { CardList, ContentCardProps } from "../../patterns/CardList"
@@ -207,7 +208,7 @@ export const getUtilitiesIncluded = (listing: Listing) => {
 export const getFeatures = (
   listing: Listing,
   jurisdiction: Jurisdiction
-): { heading: string; subheading?: string; content?: React.ReactNode }[] => {
+): { heading: string; subheading?: React.ReactNode; content?: React.ReactNode }[] => {
   const features = []
   if (listing.yearBuilt) {
     features.push({ heading: t("t.built"), subheading: listing.yearBuilt })
@@ -226,7 +227,7 @@ export const getFeatures = (
     if (petPolicy.length > 0) {
       features.push({
         heading: t("t.petsPolicy"),
-        content: (
+        subheading: (
           <ul data-testid="pet-policy-list">
             {petPolicy.map((petPolicyItem, index) => (
               <li key={index} className={styles["list-item"]}>
@@ -235,10 +236,15 @@ export const getFeatures = (
             ))}
           </ul>
         ),
+        content: tIfExists("listings.petPolicyDescription"),
       })
     }
   } else if (listing.petPolicy) {
-    features.push({ heading: t("t.petsPolicy"), subheading: listing.petPolicy })
+    features.push({
+      heading: t("t.petsPolicy"),
+      subheading: listing.petPolicy,
+      content: tIfExists("listings.petPolicyDescription"),
+    })
   }
   if (listing.amenities) {
     features.push({ heading: t("t.propertyAmenities"), subheading: listing.amenities })
