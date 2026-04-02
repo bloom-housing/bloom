@@ -13,6 +13,7 @@ locals {
     S3_REGION                   = var.aws_region
     S3_PRIVATE_BUCKET           = aws_s3_bucket.private.id
     S3_PUBLIC_BUCKET            = aws_s3_bucket.public.id
+    ENABLE_METRICS              = "TRUE"
     OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317"
   }
 }
@@ -91,7 +92,10 @@ resource "aws_ecs_task_definition" "bloom_api" {
       essential = false
       command   = ["--config", "/etc/api-ecs-sidecar-config.yaml"]
       environment = [
-        { name = "PROMETHEUS_REMOTE_WRITE_ENDPOINT", value = "${aws_prometheus_workspace.bloom.prometheus_endpoint}api/v1/remote_write" }
+        {
+          name  = "PROMETHEUS_REMOTE_WRITE_ENDPOINT",
+          value = "${aws_prometheus_workspace.bloom.prometheus_endpoint}api/v1/remote_write"
+        }
       ]
       portMappings = [
         {

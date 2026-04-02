@@ -192,6 +192,7 @@ data "aws_iam_policy_document" "deployer" {
     # Allow creating Prometheus workspace.
     actions = [
       "aps:CreateWorkspace",
+      "aps:DeleteWorkspace",
       "aps:DescribeLoggingConfiguration",
       "aps:DescribeWorkspace",
       "aps:ListTagsForResource",
@@ -206,6 +207,7 @@ data "aws_iam_policy_document" "deployer" {
       "grafana:CreateWorkspace",
       "grafana:CreateWorkspaceServiceAccount",
       "grafana:CreateWorkspaceServiceAccountToken",
+      "grafana:DeleteWorkspace",
       "grafana:DeleteWorkspaceServiceAccount",
       "grafana:DeleteWorkspaceServiceAccountToken",
       "grafana:DescribeWorkspace",
@@ -222,7 +224,9 @@ data "aws_iam_policy_document" "deployer" {
     actions = [
       "sso:AssociateProfile",
       "sso:CreateManagedApplicationInstance",
+      "sso:DeleteManagedApplicationInstance",
       "sso:DescribeRegisteredRegions",
+      "sso:DisassociateProfile",
     ]
     resources = [
       "*",

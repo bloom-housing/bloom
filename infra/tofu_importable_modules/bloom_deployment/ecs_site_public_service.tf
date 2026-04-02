@@ -14,6 +14,7 @@ locals {
     SHOW_MANDATED_ACCOUNTS        = "FALSE"
     SHOW_PWDLESS                  = "FALSE"
     SHOW_NEW_SEEDS_DESIGNS        = "FALSE"
+    ENABLE_METRICS                = "TRUE"
     OTEL_EXPORTER_OTLP_ENDPOINT   = "http://127.0.0.1:4317"
   }
 }
@@ -70,7 +71,10 @@ resource "aws_ecs_task_definition" "bloom_site_public" {
       essential = false
       command   = ["--config", "/etc/sites-ecs-sidecar-config.yaml"]
       environment = [
-        { name = "PROMETHEUS_REMOTE_WRITE_ENDPOINT", value = "${aws_prometheus_workspace.bloom.prometheus_endpoint}api/v1/remote_write" }
+        {
+          name  = "PROMETHEUS_REMOTE_WRITE_ENDPOINT",
+          value = "${aws_prometheus_workspace.bloom.prometheus_endpoint}api/v1/remote_write"
+        }
       ]
       portMappings = [
         {

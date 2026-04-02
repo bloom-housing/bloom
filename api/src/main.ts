@@ -17,7 +17,9 @@ async function bootstrap() {
         ? ['error', 'warn', 'log', 'debug']
         : ['error', 'warn', 'log'],
   });
-  app.useGlobalInterceptors(new MetricsInterceptor());
+  if (process.env.ENABLE_METRICS === "TRUE") {
+    app.useGlobalInterceptors(new MetricsInterceptor());
+  }
   const allowList = process.env.CORS_ORIGINS || [];
   const allowListRegex = process.env.CORS_REGEX
     ? JSON.parse(process.env.CORS_REGEX)
