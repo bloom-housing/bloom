@@ -27,7 +27,6 @@ import styles from "./preferences.module.scss"
 
 const MultiselectQuestionsPreferences = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
-  const router = useRouter()
   const tableOptions = useAgTable()
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
 
@@ -42,6 +41,8 @@ const MultiselectQuestionsPreferences = () => {
         field: "name",
         flex: 2,
         sortable: true,
+        unSortIcon: true,
+        sort: "asc",
         // disable frontend sorting
         comparator: () => 0,
       },
@@ -50,6 +51,7 @@ const MultiselectQuestionsPreferences = () => {
         field: "status",
         flex: 1,
         sortable: true,
+        unSortIcon: true,
         // disable frontend sorting
         comparator: () => 0,
         cellRendererFramework: ({ data }) => {
@@ -72,6 +74,7 @@ const MultiselectQuestionsPreferences = () => {
         field: "jurisdiction",
         flex: 1.5,
         sortable: true,
+        unSortIcon: true,
         // disable frontend sorting
         comparator: () => 0,
       },
@@ -79,6 +82,7 @@ const MultiselectQuestionsPreferences = () => {
         headerName: t("t.lastUpdated"),
         field: "updatedAt",
         sortable: true,
+        unSortIcon: true,
         // disable frontend sorting
         comparator: () => 0,
       },
@@ -128,7 +132,9 @@ const MultiselectQuestionsPreferences = () => {
       MultiselectQuestionsStatusEnum.toRetire,
     ],
     {
-      sort: tableOptions.sort.sortOptions,
+      sort: tableOptions.sort.sortOptions?.length
+        ? tableOptions.sort.sortOptions
+        : [{ orderBy: "name", orderDir: "ASC" }],
       page: tableOptions.pagination.currentPage,
       limit: tableOptions.pagination.itemsPerPage,
       search: tableOptions.filter.filterValue,
