@@ -1605,11 +1605,13 @@ export class UserService {
       });
     }
 
-    await this.prisma.userNotificationPreferences.delete({
-      where: {
-        userId: user.id,
-      },
-    });
+    if (user.notificationPreferences) {
+      await this.prisma.userNotificationPreferences.delete({
+        where: {
+          userId: user.id,
+        },
+      });
+    }
 
     await this.prisma.userAccounts.delete({
       where: {

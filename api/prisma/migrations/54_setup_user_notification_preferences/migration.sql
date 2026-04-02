@@ -32,4 +32,4 @@ CREATE INDEX "user_notification_preferences_mobility_hearing_vision_idx" ON "use
 CREATE INDEX "user_notification_preferences_wants_region_notifs_idx" ON "user_notification_preferences"("wants_region_notifs") WHERE "wants_region_notifs" = true;
 
 -- AddForeignKey
-ALTER TABLE "user_notification_preferences" ADD CONSTRAINT "user_notification_preferences_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user_accounts"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "user_notification_preferences" ADD CONSTRAINT "user_notification_preferences_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user_accounts"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
