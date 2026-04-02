@@ -13,8 +13,13 @@ service:
       exporters: [prometheusremotewrite]
     metrics/ecs:
       receivers: [awsecscontainermetrics]
-      processors: [transform/ecs]
+      processors: [resourcedetection/ecs]
       exporters: [prometheusremotewrite]
+
+processors:
+  resourcedetection/ecs:
+    detectors: [ecs]
+    timeout: 5s
 
 receivers:
   otlp:
@@ -24,12 +29,6 @@ receivers:
   awsecscontainermetrics:
     collection_interval: 10s
 
-processors:
-  transform/ecs:
-    metric_statements:
-    - context: resource
-      statements:
-      - keep_keys(attributes, ['aws.ecs.task.family', 'aws.ecs.task.id', 'container.name', 'aws.ecs.container.exit_code'])
 
 exporters:
   prometheusremotewrite:
