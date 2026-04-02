@@ -166,6 +166,7 @@ const FormMultiselectQuestions = ({
                   `${option.name || option.text}`
                 )}
                 geocodingClient={geocodingClient}
+                enableV2MSQ={enableV2MSQ}
               />
             </div>
           )}

@@ -29,9 +29,14 @@ interface BuildingAddress {
 type MultiselectQuestionsMapProps = {
   geocodingClient: GeocodeServiceType
   dataKey: string
+  enableV2MSQ: boolean
 }
 
-const MultiselectQuestionsMap = ({ geocodingClient, dataKey }: MultiselectQuestionsMapProps) => {
+const MultiselectQuestionsMap = ({
+  geocodingClient,
+  dataKey,
+  enableV2MSQ,
+}: MultiselectQuestionsMapProps) => {
   const [customMapPositionChosen, setCustomMapPositionChosen] = useState(true)
   const formMethods = useFormContext()
 
@@ -42,10 +47,14 @@ const MultiselectQuestionsMap = ({ geocodingClient, dataKey }: MultiselectQuesti
     control,
     name: `${dataKey}-address`,
   })
-  const mapPinPosition = useWatch({
-    control,
-    name: `${dataKey}-mapPinPosition`,
-  })
+
+  let mapPinPosition = "automatic"
+  if (!enableV2MSQ) {
+    mapPinPosition = useWatch({
+      control,
+      name: `${dataKey}-mapPinPosition`,
+    })
+  }
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
     latitude: buildingAddress?.latitude ?? null,
@@ -157,38 +166,42 @@ const MultiselectQuestionsMap = ({ geocodingClient, dataKey }: MultiselectQuesti
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>
-      <Grid.Row>
-        <Grid.Cell>
-          <p className="field-label m-4 ml-0">{t("listings.mapPinPosition")}</p>
-        </Grid.Cell>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Cell>
-          <FieldGroup
-            name={`${dataKey}-mapPinPosition`}
-            type="radio"
-            fieldGroupClassName={"flex-col"}
-            fieldClassName={"ml-0"}
-            register={register}
-            fields={[
-              {
-                label: t("t.automatic"),
-                value: "automatic",
-                id: `${dataKey}-mapPinPosition-automatic`,
-                note: t("listings.mapPinAutomaticDescription"),
-                defaultChecked: mapPinPosition === "automatic" || mapPinPosition === undefined,
-              },
-              {
-                label: t("t.custom"),
-                value: "custom",
-                id: `${dataKey}-mapPinPosition-custom`,
-                note: t("listings.mapPinCustomDescription"),
-                defaultChecked: mapPinPosition === "custom",
-              },
-            ]}
-          />
-        </Grid.Cell>
-      </Grid.Row>
+      {!enableV2MSQ && (
+        <>
+          <Grid.Row>
+            <Grid.Cell>
+              <p className="field-label m-4 ml-0">{t("listings.mapPinPosition")}</p>
+            </Grid.Cell>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Cell>
+              <FieldGroup
+                name={`${dataKey}-mapPinPosition`}
+                type="radio"
+                fieldGroupClassName={"flex-col"}
+                fieldClassName={"ml-0"}
+                register={register}
+                fields={[
+                  {
+                    label: t("t.automatic"),
+                    value: "automatic",
+                    id: `${dataKey}-mapPinPosition-automatic`,
+                    note: t("listings.mapPinAutomaticDescription"),
+                    defaultChecked: mapPinPosition === "automatic" || mapPinPosition === undefined,
+                  },
+                  {
+                    label: t("t.custom"),
+                    value: "custom",
+                    id: `${dataKey}-mapPinPosition-custom`,
+                    note: t("listings.mapPinCustomDescription"),
+                    defaultChecked: mapPinPosition === "custom",
+                  },
+                ]}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        </>
+      )}
     </>
   )
 }
