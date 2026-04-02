@@ -11,10 +11,6 @@ service:
     metrics:
       receivers: [otlp, prometheus]
       exporters: [prometheusremotewrite]
-    metrics/ecs:
-      receivers: [awsecscontainermetrics]
-      processors: [resourcedetection/ecs]
-      exporters: [prometheusremotewrite]
 
 receivers:
   otlp:
@@ -29,18 +25,9 @@ receivers:
           metrics_path: /prisma_metrics
           static_configs:
             - targets: ['0.0.0.0:3100']
-  awsecscontainermetrics:
-    collection_interval: 10s
-
-processors:
-  resourcedetection/ecs:
-    detectors: [ecs]
-    timeout: 5s
 
 exporters:
   prometheusremotewrite:
     endpoint: ${env:PROMETHEUS_REMOTE_WRITE_ENDPOINT}
     auth:
       authenticator: sigv4auth
-    resource_to_telemetry_conversion:
-      enabled: true

@@ -11,23 +11,12 @@ service:
     metrics:
       receivers: [otlp]
       exporters: [prometheusremotewrite]
-    metrics/ecs:
-      receivers: [awsecscontainermetrics]
-      processors: [resourcedetection/ecs]
-      exporters: [prometheusremotewrite]
-
-processors:
-  resourcedetection/ecs:
-    detectors: [ecs]
-    timeout: 5s
 
 receivers:
   otlp:
     protocols:
       grpc:
         endpoint: 0.0.0.0:4317
-  awsecscontainermetrics:
-    collection_interval: 10s
 
 
 exporters:
@@ -35,5 +24,3 @@ exporters:
     endpoint: ${env:PROMETHEUS_REMOTE_WRITE_ENDPOINT}
     auth:
       authenticator: sigv4auth
-    resource_to_telemetry_conversion:
-      enabled: true
