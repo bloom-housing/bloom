@@ -198,6 +198,7 @@ data "aws_iam_policy_document" "deployer" {
       "aps:ListTagsForResource",
     ]
     resources = [
+      "arn:aws:aps:${local.region_account}:/workspaces", # For aps:CreateWorkspace
       "arn:aws:aps:${local.region_account}:workspace/*",
     ]
   }

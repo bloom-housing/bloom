@@ -36,6 +36,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
   container_definitions = jsonencode([
     {
       Name        = "bloom-api"
+      essential   = true
       image       = var.bloom_api_image
       environment = [for k, v in merge(local.api_default_env_vars, var.bloom_api_env_vars) : { name = k, value = v }]
       entryPoint  = ["bash"]
@@ -103,7 +104,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
         }
       ]
       restartPolicy = {
-        enabled = false
+        enabled = true
       }
       logConfiguration = {
         logDriver = "awslogs"

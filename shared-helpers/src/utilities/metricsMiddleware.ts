@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server"
 import * as opentelemetry from "@opentelemetry/api"
 
-let middleware = undefined
+let middleware = function noNothing(request: NextRequest) {}
 
 if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT) {
   const meter = opentelemetry.metrics.getMeter("middleware")

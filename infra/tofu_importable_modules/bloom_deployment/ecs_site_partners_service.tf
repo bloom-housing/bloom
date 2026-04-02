@@ -30,6 +30,7 @@ resource "aws_ecs_task_definition" "bloom_site_partners" {
   container_definitions = jsonencode([
     {
       Name        = "bloom-site-partners"
+      essential   = true
       image       = var.bloom_site_partners_image
       environment = [for k, v in merge(local.site_partners_default_env_vars, var.bloom_site_partners_env_vars) : { name = k, value = v }]
       secrets = [
@@ -75,7 +76,7 @@ resource "aws_ecs_task_definition" "bloom_site_partners" {
         }
       ]
       restartPolicy = {
-        enabled = false
+        enabled = true
       }
       logConfiguration = {
         logDriver = "awslogs"

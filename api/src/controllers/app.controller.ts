@@ -60,7 +60,10 @@ export class AppController {
   @ApiProduces('text/plain')
   @Header('Content-Type', 'text/plain')
   async prismaMetrics(): Promise<string> {
-    return await this.prisma.$metrics.prometheus();
+    if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT) {
+      return await this.prisma.$metrics.prometheus();
+    }
+    return 'Not enabled';
   }
 
   @Put('clearTempFiles')

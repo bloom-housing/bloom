@@ -4,11 +4,11 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
-import { json } from 'express';
+import { json, Request, Response, NextFunction } from 'express';
 import { AppModule } from './modules/app.module';
 import { CustomExceptionFilter } from './utilities/custom-exception-filter';
-import { MetricsInterceptor } from './observability/metrics.interceptor';
-import './observability/open-telemetry-init'; // required for side effects
+import './utilities/open-telemetry-init'; // required for side effects
+import * as opentelemetry from '@opentelemetry/api';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -18,7 +18,29 @@ async function bootstrap() {
         : ['error', 'warn', 'log'],
   });
   if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT) {
-    app.useGlobalInterceptors(new MetricsInterceptor());
+    const meter = opentelemetry.metrics.getMeter('metrics.interceptor');
+    const request_counter = meter.createCounter(
+      'metrics.interceptor.request_counter',
+    );
+    const request_duration_ms = meter.createHistogram(
+      'metrics.interceptor.request_duration_ms',
+    );
+
+    app.use((req: Request, res: Response, next: NextFunction) => {
+      const start = Date.now();
+      res.on('finish', () => {
+        const duration_ms = Date.now() - start;
+        const attributes = {
+          method: req.method,
+          path: req.path,
+          response_code: res.statusCode,
+        };
+        request_counter.add(1, attributes);
+        request_duration_ms.record(duration_ms, attributes);
+        console.log(`${JSON.stringify(attributes)} took ${duration_ms}ms`);
+      });
+      next();
+    });
   }
   const allowList = process.env.CORS_ORIGINS || [];
   const allowListRegex = process.env.CORS_REGEX
