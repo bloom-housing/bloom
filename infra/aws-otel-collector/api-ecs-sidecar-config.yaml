@@ -13,6 +13,7 @@ service:
       exporters: [prometheusremotewrite]
     metrics/ecs:
       receivers: [awsecscontainermetrics]
+      processors: [transform/ecs]
       exporters: [prometheusremotewrite]
 
 receivers:
@@ -31,8 +32,17 @@ receivers:
   awsecscontainermetrics:
     collection_interval: 10s
 
+processors:
+  transform/ecs:
+    metric_statements:
+    - context: resource
+      statements:
+      - keep_keys(attributes, ['aws.ecs.task.family', 'aws.ecs.task.id', 'container.name', 'aws.ecs.container.exit_code'])
+
 exporters:
   prometheusremotewrite:
     endpoint: ${env:PROMETHEUS_REMOTE_WRITE_ENDPOINT}
     auth:
       authenticator: sigv4auth
+    resource_to_telemetry_conversion:
+      enabled: true
