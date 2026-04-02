@@ -32,7 +32,6 @@ import { AdvocateUserUpdate } from '../../../src/dtos/users/advocate-user-update
 import { UserOrderByKeys } from '../../../src/enums/listings/order-by-enum';
 import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
 import { UserNotificationPreferences } from '../../../src/dtos/users/user-notification-preferences.dto';
-import { create } from 'domain';
 
 describe('Testing user service', () => {
   let service: UserService;
