@@ -3,7 +3,7 @@ import * as opentelemetry from "@opentelemetry/api"
 
 let middleware = undefined
 
-if (process.env.ENABLE_METRICS === "TRUE") {
+if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT) {
   const meter = opentelemetry.metrics.getMeter("middleware")
   const request_counter = meter.createCounter("middleware.request_counter")
   const request_duration_ms = meter.createHistogram("middleware.request_duration_ms")

@@ -17,7 +17,7 @@ async function bootstrap() {
         ? ['error', 'warn', 'log', 'debug']
         : ['error', 'warn', 'log'],
   });
-  if (process.env.ENABLE_METRICS === "TRUE") {
+  if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT) {
     app.useGlobalInterceptors(new MetricsInterceptor());
   }
   const allowList = process.env.CORS_ORIGINS || [];

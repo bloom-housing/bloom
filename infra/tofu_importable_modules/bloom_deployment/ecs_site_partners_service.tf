@@ -7,7 +7,6 @@ locals {
     LISTINGS_QUERY              = "/listings"
     USE_SECURE_DOWNLOAD_PATHWAY = "TRUE"
     USE_S3_FILE_STORAGE         = "TRUE"
-    ENABLE_METRICS              = "TRUE"
     OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317"
   }
 }

@@ -14,7 +14,6 @@ locals {
     SHOW_MANDATED_ACCOUNTS        = "FALSE"
     SHOW_PWDLESS                  = "FALSE"
     SHOW_NEW_SEEDS_DESIGNS        = "FALSE"
-    ENABLE_METRICS                = "TRUE"
     OTEL_EXPORTER_OTLP_ENDPOINT   = "http://127.0.0.1:4317"
   }
 }

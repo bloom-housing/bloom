@@ -211,7 +211,6 @@ services:
     environment:
       PORT: 3100
       NODE_ENV: "production"
-      ENABLE_METRICS: "TRUE"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
       APP_SECRET: "totally a secret"
       DATABASE_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
@@ -246,7 +245,6 @@ services:
           memory: "4096mb"
     environment:
       NODE_ENV: "production"
-      ENABLE_METRICS: "TRUE"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
       DISABLE_NEXT_TYPECHECK: "TRUE"
       NEXTJS_PORT: 3001
@@ -284,7 +282,6 @@ services:
           memory: "6144mb"
     environment:
       NODE_ENV: "production"
-      ENABLE_METRICS: "TRUE"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
       DISABLE_NEXT_TYPECHECK: "TRUE"
       NEXTJS_PORT: 3000

@@ -13,7 +13,6 @@ locals {
     S3_REGION                   = var.aws_region
     S3_PRIVATE_BUCKET           = aws_s3_bucket.private.id
     S3_PUBLIC_BUCKET            = aws_s3_bucket.public.id
-    ENABLE_METRICS              = "TRUE"
     OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317"
   }
 }
