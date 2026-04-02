@@ -199,6 +199,19 @@ variable "bloom_api_task_count" {
 locals {
   bloom_api_task_count = var.bloom_api_task_count != null ? var.bloom_api_task_count : (var.high_availability ? 2 : 1)
 }
+variable "bloom_api_resource_limits" {
+  description = "ECS task resource limits for the API contianer. vcpu is in CPU units where 1024 CPU units = 1 CPU."
+  type = object({
+    vcpu       = number
+    memory_mib = number
+  })
+  # Keep in sync with docker-compose.yml
+  default = {
+    vcpu       = 1 * 1024 # 1 CPU
+    memory_mib = 2 * 1024 # 2 GiB
+  }
+}
+
 variable "bloom_site_partners_image" {
   type        = string
   description = "Container image for the Bloom partners site."
@@ -215,6 +228,18 @@ variable "bloom_site_partners_task_count" {
 }
 locals {
   bloom_site_partners_task_count = var.bloom_site_partners_task_count != null ? var.bloom_site_partners_task_count : (var.high_availability ? 2 : 1)
+}
+variable "bloom_site_partners_resource_limits" {
+  description = "ECS task resource limits for the partners site contianer. vcpu is in CPU units where 1024 CPU units = 1 CPU."
+  type = object({
+    vcpu       = number
+    memory_mib = number
+  })
+  # Keep in sync with docker-compose.yml
+  default = {
+    vcpu       = 2 * 1024 # 2 CPU
+    memory_mib = 4 * 1024 # 4 GiB
+  }
 }
 variable "bloom_site_public_image" {
   type        = string
@@ -233,6 +258,19 @@ variable "bloom_site_public_task_count" {
 locals {
   bloom_site_public_task_count = var.bloom_site_public_task_count != null ? var.bloom_site_public_task_count : (var.high_availability ? 2 : 1)
 }
+variable "bloom_site_public_resource_limits" {
+  description = "ECS task resource limits for the public site contianer. vcpu is in CPU units where 1024 CPU units = 1 CPU."
+  type = object({
+    vcpu       = number
+    memory_mib = number
+  })
+  # Keep in sync with docker-compose.yml
+  default = {
+    vcpu       = 2 * 1024 # 2 CPU
+    memory_mib = 6 * 1024 # 6 GiB
+  }
+}
+
 variable "bloom_otel_collector_image" {
   type        = string
   description = "Container image for the AWS Distro for OpenTelemetry collector sidecar."
