@@ -20,6 +20,7 @@ RUN yarn install --frozen-lockfile
 # checking.
 COPY --chown=2002:2002 tsconfig.json /app/tsconfig.json
 COPY --chown=2002:2002 sites/partners .
+COPY --chown=2002:2002 sites/middleware.ts /app/sites/partners/src/middleware.ts
 
 ENV NEXT_TELEMETRY_DISABLED=1
 CMD [ "/bin/bash", "-c", "NODE_OPTIONS='--max-semi-space-size=64 --max-old-space-size=2048' yarn build && yarn start" ]
