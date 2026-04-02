@@ -38,13 +38,12 @@ async function bootstrap() {
           method: req.method,
           path: req.path,
           response_code: res.statusCode,
-
-        }
+        };
         const log_attributes = {
           ...metric_attributes,
           x_forwarded_for: req.get('X-Forwarded-For'),
           remote_ip: req.ip,
-        }
+        };
         request_counter.add(1, metric_attributes);
         request_duration_ms.record(duration_ms, metric_attributes);
         console.log(`${JSON.stringify(log_attributes)} took ${duration_ms}ms`);
