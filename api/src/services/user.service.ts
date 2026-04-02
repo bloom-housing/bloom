@@ -1605,6 +1605,12 @@ export class UserService {
       });
     }
 
+    await this.prisma.userNotificationPreferences.delete({
+      where: {
+        userId: user.id,
+      },
+    });
+
     await this.prisma.userAccounts.delete({
       where: {
         id: user.id,
