@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import Head from "next/head"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
-import { Button, Dialog } from "@bloom-housing/ui-seeds"
+import { Button, Dialog, LoadingState } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationOrderByKeys,
@@ -19,12 +19,13 @@ import {
   useApplicationsData,
   useZipExport,
 } from "../../../../lib/hooks"
-import { ListingStatusBar } from "../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../layouts"
 import { getColDefs } from "../../../../components/applications/ApplicationsColDefs"
 import { ApplicationsSideNav } from "../../../../components/applications/ApplicationsSideNav"
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
 import ListingGuard from "../../../../components/shared/ListingGuard"
+import { StatusBar } from "../../../../components/shared/StatusBar"
+import { getListingStatusTag } from "../../../../components/listings/helpers"
 
 const ApplicationsList = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -38,7 +39,7 @@ const ApplicationsList = () => {
   const tableOptions = useAgTable()
 
   /* Data Fetching */
-  const { listingDto } = useSingleListingData(listingId)
+  const { listingDto, listingLoading } = useSingleListingData(listingId)
 
   const listingJurisdiction = profile?.jurisdictions.find(
     (jurisdiction) => jurisdiction.id === listingDto?.jurisdictions.id
@@ -155,110 +156,115 @@ const ApplicationsList = () => {
         <Head>
           <title>{`Applications - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
-        <NavigationHeader
-          title={listingName}
-          listingId={listingId}
-          tabs={{
-            show: true,
-            flagsQty: flaggedApps?.meta?.totalFlagged,
-            listingLabel: t("t.listingSingle"),
-            applicationsLabel: t("nav.applications"),
-            lotteryLabel:
-              listingDto?.status === ListingsStatusEnum.closed &&
-              listingDto?.lotteryOptIn &&
-              (listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery ||
-                listingDto?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery)
-                ? t("listings.lotteryTitle")
-                : undefined,
-          }}
-          breadcrumbs={
-            <Breadcrumbs>
-              <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
-              <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
-              <BreadcrumbLink href={`/listings/${listingId}/applications`} current>
-                {t("nav.applications")}
-              </BreadcrumbLink>
-            </Breadcrumbs>
-          }
-        />
+        <div className={"loading-state-wrapper"}>
+          <LoadingState loading={applications === undefined || listingLoading} className="w-full">
+            <NavigationHeader
+              title={listingName}
+              listingId={listingId}
+              tabs={{
+                show: true,
+                flagsQty: flaggedApps?.meta?.totalFlagged,
+                listingLabel: t("t.listingSingle"),
+                applicationsLabel: t("nav.applications"),
+                lotteryLabel:
+                  listingDto?.status === ListingsStatusEnum.closed &&
+                  listingDto?.lotteryOptIn &&
+                  (listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery ||
+                    listingDto?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery)
+                    ? t("listings.lotteryTitle")
+                    : undefined,
+              }}
+              breadcrumbs={
+                <Breadcrumbs>
+                  <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
+                  <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
+                  <BreadcrumbLink href={`/listings/${listingId}/applications`} current>
+                    {t("nav.applications")}
+                  </BreadcrumbLink>
+                </Breadcrumbs>
+              }
+            />
 
-        <ListingStatusBar status={listingDto?.status} />
+            <StatusBar>{getListingStatusTag(listingDto?.status)}</StatusBar>
 
-        <section className={"bg-gray-200 pt-4"}>
-          <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
-            {listingDto && (
-              <>
-                <ApplicationsSideNav
-                  className="w-full md:w-72"
-                  listingId={listingId}
-                  listingOpen={isListingOpen}
-                />
+            <section className={"bg-gray-200 pt-4"}>
+              <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
+                {listingDto && (
+                  <>
+                    <ApplicationsSideNav
+                      className="w-full md:w-72"
+                      listingId={listingId}
+                      listingOpen={isListingOpen}
+                    />
 
-                <AgTable
-                  className="w-full"
-                  id="applications-table"
-                  pagination={{
-                    perPage: tableOptions.pagination.itemsPerPage,
-                    setPerPage: tableOptions.pagination.setItemsPerPage,
-                    currentPage: tableOptions.pagination.currentPage,
-                    setCurrentPage: tableOptions.pagination.setCurrentPage,
-                  }}
-                  config={{
-                    gridComponents,
-                    columns: columnDefs,
-                    totalItemsLabel: t("applications.totalApplications"),
-                  }}
-                  data={{
-                    items: applications,
-                    loading: appsLoading,
-                    totalItems: appsMeta?.totalItems,
-                    totalPages: appsMeta?.totalPages,
-                  }}
-                  search={{
-                    setSearch: tableOptions.filter.setFilterValue,
-                  }}
-                  sort={{
-                    setSort: tableOptions.sort.setSortOptions,
-                  }}
-                  headerContent={
-                    <div className="flex gap-2 items-center">
-                      <Button
-                        onClick={() => {
-                          if (
-                            process.env.showLottery &&
-                            (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
-                              listingDto.lotteryStatus === LotteryStatusEnum.releasedToPartners ||
-                              listingDto.lotteryStatus === LotteryStatusEnum.publishedToPublic)
-                          ) {
-                            setApplicationConfirmAddPostLotteryModal(true)
-                          } else if (listingDto.status === ListingsStatusEnum.closed) {
-                            setApplicationConfirmAddModal(true)
-                          } else {
-                            void router.push(`/listings/${listingId}/applications/add`)
-                          }
-                        }}
-                        variant="primary-outlined"
-                        size="sm"
-                        id={"addApplicationButton"}
-                      >
-                        {t("applications.addApplication")}
-                      </Button>
+                    <AgTable
+                      className="w-full"
+                      id="applications-table"
+                      pagination={{
+                        perPage: tableOptions.pagination.itemsPerPage,
+                        setPerPage: tableOptions.pagination.setItemsPerPage,
+                        currentPage: tableOptions.pagination.currentPage,
+                        setCurrentPage: tableOptions.pagination.setCurrentPage,
+                      }}
+                      config={{
+                        gridComponents,
+                        columns: columnDefs,
+                        totalItemsLabel: t("applications.totalApplications"),
+                      }}
+                      data={{
+                        items: applications,
+                        loading: appsLoading,
+                        totalItems: appsMeta?.totalItems,
+                        totalPages: appsMeta?.totalPages,
+                      }}
+                      search={{
+                        setSearch: tableOptions.filter.setFilterValue,
+                      }}
+                      sort={{
+                        setSort: tableOptions.sort.setSortOptions,
+                      }}
+                      headerContent={
+                        <div className="flex gap-2 items-center">
+                          <Button
+                            onClick={() => {
+                              if (
+                                process.env.showLottery &&
+                                (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
+                                  listingDto.lotteryStatus ===
+                                    LotteryStatusEnum.releasedToPartners ||
+                                  listingDto.lotteryStatus === LotteryStatusEnum.publishedToPublic)
+                              ) {
+                                setApplicationConfirmAddPostLotteryModal(true)
+                              } else if (listingDto.status === ListingsStatusEnum.closed) {
+                                setApplicationConfirmAddModal(true)
+                              } else {
+                                void router.push(`/listings/${listingId}/applications/add`)
+                              }
+                            }}
+                            variant="primary-outlined"
+                            size="sm"
+                            id={"addApplicationButton"}
+                          >
+                            {t("applications.addApplication")}
+                          </Button>
 
-                      <Button
-                        variant="primary-outlined"
-                        size="sm"
-                        onClick={() => onExport()}
-                        loadingMessage={exportLoading && t("t.formSubmitted")}
-                      >
-                        {t("t.export")}
-                      </Button>
-                    </div>
-                  }
-                />
-              </>
-            )}
-          </article>
-        </section>
+                          <Button
+                            variant="primary-outlined"
+                            size="sm"
+                            onClick={() => onExport()}
+                            loadingMessage={exportLoading && t("t.formSubmitted")}
+                          >
+                            {t("t.export")}
+                          </Button>
+                        </div>
+                      }
+                    />
+                  </>
+                )}
+              </article>
+            </section>
+          </LoadingState>
+        </div>
 
         <Dialog
           isOpen={applicationConfirmAddModal}

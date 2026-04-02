@@ -98,7 +98,9 @@ export const useCatchNetworkError = () => {
       default:
         setNetworkError({
           title: t("errors.somethingWentWrong"),
-          description: t("authentication.signIn.errorGenericMessage"),
+          description: t("authentication.signIn.errorGenericMessage", {
+            contactEmail: t("resources.contactEmail"),
+          }),
           error,
         })
     }

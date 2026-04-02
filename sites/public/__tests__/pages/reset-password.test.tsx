@@ -158,7 +158,7 @@ describe("Public Reset Password Page", () => {
 
       expect(
         await screen.findByText(
-          "There was an error. Please try again, or contact support for help."
+          /There was an error. Please try again, or contact support at [a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,} for help/
         )
       ).toBeInTheDocument()
     })

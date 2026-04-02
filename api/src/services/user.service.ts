@@ -918,6 +918,7 @@ export class UserService {
     let newUser = await this.prisma.userAccounts.create({
       data: {
         passwordHash: passwordHash,
+        language: dto.language,
         email: dto.email,
         firstName: dto.firstName,
         middleName: dto.middleName,
@@ -1120,6 +1121,7 @@ export class UserService {
     let newUser = await this.prisma.userAccounts.create({
       data: {
         passwordHash: passwordHash,
+        language: dto.language,
         email: dto.email,
         firstName: dto.firstName,
         middleName: dto.middleName,

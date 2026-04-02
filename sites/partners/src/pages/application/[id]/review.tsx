@@ -148,7 +148,11 @@ const Flag = () => {
               closeable
               onClose={() => reset()}
             >
-              {isSuccess ? t("t.updated") : t("account.settings.alerts.genericError")}
+              {isSuccess
+                ? t("t.updated")
+                : t("account.settings.alerts.genericError", {
+                    contactEmail: t("resources.contactEmail"),
+                  })}
             </AlertBox>
           )}
 

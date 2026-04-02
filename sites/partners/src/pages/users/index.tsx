@@ -160,7 +160,9 @@ const Users = () => {
                 type="alert"
                 inverted
               >
-                {t("account.settings.alerts.genericError")}
+                {t("account.settings.alerts.genericError", {
+                  contactEmail: t("resources.contactEmail"),
+                })}
               </AlertBox>
             )}
             <AgTable

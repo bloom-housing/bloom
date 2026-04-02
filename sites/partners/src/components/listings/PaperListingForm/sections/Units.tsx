@@ -19,6 +19,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
+import { useAmiChartList, useJurisdiction, useUnitTypeList } from "../../../../lib/hooks"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit, TempUnitGroup } from "../../../../lib/listings/formTypes"
 import { defaultFieldProps, fieldHasError, fieldMessage, getLabel } from "../../../../lib/helpers"
@@ -76,6 +77,9 @@ const FormUnits = ({
 }: UnitProps) => {
   const { addToast } = useContext(MessageContext)
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { data: amiCharts, loading: amiChartsLoading } = useAmiChartList(jurisdiction)
+  const { data: unitTypes, loading: unitTypesLoading } = useUnitTypeList()
+  const { data: jurisdictionData, loading: jurisdictionLoading } = useJurisdiction(jurisdiction)
   const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
@@ -554,7 +558,13 @@ const FormUnits = ({
           />
         ) : (
           <UnitForm
-            jurisdiction={jurisdiction}
+            key={`${defaultUnit?.tempId ?? "new"}-${unitDrawerOpen ? "open" : "closed"}`}
+            amiCharts={amiCharts}
+            amiChartsLoading={amiChartsLoading}
+            unitTypes={unitTypes}
+            unitTypesLoading={unitTypesLoading}
+            jurisdictionData={jurisdictionData}
+            jurisdictionLoading={jurisdictionLoading}
             onSubmit={(unit) => {
               saveUnit(unit)
             }}
@@ -563,8 +573,9 @@ const FormUnits = ({
               if (openNextUnit) {
                 if (defaultUnit) {
                   addToast(t("listings.unit.unitCopied"), { variant: "success" })
+                } else {
+                  editUnit(nextId)
                 }
-                editUnit(nextId)
               } else if (!openCurrentUnit) {
                 setUnitDrawerOpen(false)
               } else {

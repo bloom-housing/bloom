@@ -648,7 +648,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingFeatures: true,
@@ -2487,7 +2495,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingFeatures: true,
@@ -3013,7 +3029,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingFeatures: true,
@@ -3180,7 +3204,9 @@ describe('Testing listing service', () => {
             orderBy: {
               ordinal: 'asc',
             },
-            include: { multiselectQuestions: true },
+            include: {
+              multiselectQuestions: true,
+            },
           },
           listingNeighborhoodAmenities: true,
           listingFeatures: true,
@@ -3304,7 +3330,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -3436,7 +3470,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -3822,7 +3864,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -3967,7 +4017,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
 
@@ -4323,7 +4381,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -4728,7 +4794,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -4847,7 +4921,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -4953,7 +5035,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -5404,7 +5494,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -5961,7 +6059,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -6112,6 +6218,10 @@ describe('Testing listing service', () => {
           status: MultiselectQuestionsStatusEnum.active,
         },
       ]);
+
+      expect(
+        multiselectQuestionServiceMock.retireMultiselectQuestions,
+      ).toHaveBeenCalled();
     });
 
     it('should update a simple listing to closed with a toRetire multiselectQuestion when enableV2MSQ is true', async () => {
@@ -6240,7 +6350,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -6907,6 +7025,56 @@ describe('Testing listing service', () => {
           ]),
       ).rejects.toThrowError(
         `The following multiselectQuestions provided are not in a valid state to be associated to this listing: toRetire MSQ`,
+      );
+
+      expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
+        select: { id: true, name: true, status: true },
+        where: { id: { in: multiselectQuestionIds } },
+      });
+    });
+
+    it('should pass with a retired multiselectQuestion that was previously attached', async () => {
+      const id = randomUUID();
+      prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([
+        {
+          id: id,
+          name: 'retired MSQ',
+          status: MultiselectQuestionsStatusEnum.retired,
+        },
+      ]);
+
+      const multiselectQuestionIds = [id];
+
+      await service.validateMultiselectQuestions(
+        multiselectQuestionIds,
+        multiselectQuestionIds,
+      );
+
+      expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
+        select: { id: true, name: true, status: true },
+        where: { id: { in: multiselectQuestionIds } },
+      });
+    });
+
+    it('should error with a retired multiselectQuestion that was not previously attached', async () => {
+      const id = randomUUID();
+      prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([
+        {
+          id: id,
+          name: 'retired MSQ',
+          status: MultiselectQuestionsStatusEnum.retired,
+        },
+      ]);
+
+      const multiselectQuestionIds = [id];
+
+      await expect(
+        async () =>
+          await service.validateMultiselectQuestions(multiselectQuestionIds, [
+            randomUUID(),
+          ]),
+      ).rejects.toThrowError(
+        `The following multiselectQuestions provided are not in a valid state to be associated to this listing: retired MSQ`,
       );
 
       expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
