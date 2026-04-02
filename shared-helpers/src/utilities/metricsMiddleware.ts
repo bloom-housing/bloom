@@ -24,14 +24,22 @@ if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT) {
     const response = NextResponse.next()
 
     const duration_ms = Date.now() - start
-    const attributes = {
+    // https://docs.aws.amazon.com/elasticloadbalancing/latest/application/x-forwarded-headers.html
+    const metric_attributes = {
+      host: request.headers.get("Host"),
+      x_forwarded_proto: request.headers.get("X-Forwarded-Proto"),
+      x_forwarded_port: request.headers.get("X-Forwarded-Port"),
       method: request.method,
       path: shortPath,
       response_code: response.status,
     }
-    request_counter.add(1, attributes)
-    request_duration_ms.record(duration_ms, attributes)
-    console.log(`${path} ${JSON.stringify(attributes)} took ${duration_ms}ms`)
+    const log_attributes = {
+      ...metric_attributes,
+      x_forwarded_for: request.headers.get("X-Forwarded-For"),
+    }
+    request_counter.add(1, metric_attributes)
+    request_duration_ms.record(duration_ms, metric_attributes)
+    console.log(`${path} ${JSON.stringify(log_attributes)} took ${duration_ms}ms`)
 
     return response
   }

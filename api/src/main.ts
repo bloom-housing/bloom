@@ -30,14 +30,24 @@ async function bootstrap() {
       const start = Date.now();
       res.on('finish', () => {
         const duration_ms = Date.now() - start;
-        const attributes = {
+        // https://docs.aws.amazon.com/elasticloadbalancing/latest/application/x-forwarded-headers.html
+        const metric_attributes = {
+          host: req.get('Host'),
+          x_forwarded_proto: req.get('X-Forwarded-Proto'),
+          x_forwarded_port: req.get('X-Forwarded-Port'),
           method: req.method,
           path: req.path,
           response_code: res.statusCode,
-        };
-        request_counter.add(1, attributes);
-        request_duration_ms.record(duration_ms, attributes);
-        console.log(`${JSON.stringify(attributes)} took ${duration_ms}ms`);
+
+        }
+        const log_attributes = {
+          ...metric_attributes,
+          x_forwarded_for: req.get('X-Forwarded-For'),
+          remote_ip: req.ip,
+        }
+        request_counter.add(1, metric_attributes);
+        request_duration_ms.record(duration_ms, metric_attributes);
+        console.log(`${JSON.stringify(log_attributes)} took ${duration_ms}ms`);
       });
       next();
     });

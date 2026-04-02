@@ -162,8 +162,8 @@ because it already seeded the database on the previous run. Either:
 
 - Run `docker compose down` between running `docker compose up`. This wipes the database state
   clean.
-- Run `docker compose up lb db api partners public` to restart just the `lb`, `db`, `api`, `partners`, and
-  `public` containers.
+- Run `docker compose up lb db api partners public --no-deps` to restart just the `lb`, `db`, `api`,
+  `partners`, and `public` containers.
 
 By default `docker compose up` will not rebuild images. Rebuild with `docker compose build`.
 
