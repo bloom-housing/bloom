@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { FieldGroup, t } from "@bloom-housing/ui-components"
 import { Map, LatitudeLongitude } from "@bloom-housing/shared-helpers"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { useFormContext, useWatch } from "react-hook-form"
+import { useFormContext } from "react-hook-form"
 import { GeocodeService as GeocodeServiceType } from "@mapbox/mapbox-sdk/services/geocoding"
 
 interface MapBoxFeature {
@@ -41,19 +41,13 @@ const MultiselectQuestionsMap = ({
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control, getValues, setValue, watch } = formMethods
+  const { register, getValues, setValue, watch } = formMethods
 
-  const buildingAddress: BuildingAddress = useWatch({
-    control,
-    name: `${dataKey}-address`,
-  })
+  const buildingAddress: BuildingAddress = watch(`${dataKey}-address`)
 
   let mapPinPosition = "automatic"
   if (!enableV2MSQ) {
-    mapPinPosition = useWatch({
-      control,
-      name: `${dataKey}-mapPinPosition`,
-    })
+    mapPinPosition = watch(`${dataKey}-mapPinPosition`)
   }
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
