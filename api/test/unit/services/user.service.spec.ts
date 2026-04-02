@@ -30,7 +30,8 @@ import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { AddressUpdate } from '../../../src/dtos/addresses/address-update.dto';
 import { AdvocateUserUpdate } from '../../../src/dtos/users/advocate-user-update.dto';
 import { UserOrderByKeys } from '../../../src/enums/listings/order-by-enum';
-import { Jurisdiction } from 'src/dtos/jurisdictions/jurisdiction.dto';
+import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
+import { UserNotificationPreferences } from '../../../src/dtos/users/user-notification-preferences.dto';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -4271,6 +4272,35 @@ describe('Testing user service', () => {
         'https://fallback.example.com',
         expect.stringContaining('/complete-advocate-account?token='),
       );
+    });
+  });
+
+  describe('updatePreferences', () => {
+    it('should update requesting users notification preferences', async () => {
+      prisma.userNotificationPreferences.update = jest.fn();
+
+      const newPreferences: UserNotificationPreferences = {
+        mobility: true,
+        hearingAndVision: true,
+        wantsRegionNotifs: true,
+        regions: ['test region'],
+      };
+      const requestingUser = mockUser(1, new Date());
+
+      const res = await service.updatePreferences(
+        newPreferences,
+        requestingUser,
+      );
+
+      expect(res).toEqual({ success: true });
+      expect(prisma.userNotificationPreferences.update).toHaveBeenCalledWith({
+        data: {
+          ...newPreferences,
+        },
+        where: {
+          userId: requestingUser.id,
+        },
+      });
     });
   });
 });
