@@ -32,6 +32,7 @@ import { AdvocateUserUpdate } from '../../../src/dtos/users/advocate-user-update
 import { UserOrderByKeys } from '../../../src/enums/listings/order-by-enum';
 import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
 import { UserNotificationPreferences } from '../../../src/dtos/users/user-notification-preferences.dto';
+import { create } from 'domain';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -170,6 +171,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -223,6 +225,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -330,6 +333,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -399,6 +403,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -450,6 +455,7 @@ describe('Testing user service', () => {
         include: {
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           address: true,
           agency: true,
@@ -513,6 +519,7 @@ describe('Testing user service', () => {
         include: {
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           address: true,
           agency: true,
@@ -573,6 +580,7 @@ describe('Testing user service', () => {
         include: {
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           address: true,
           agency: true,
@@ -619,6 +627,7 @@ describe('Testing user service', () => {
           address: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -646,6 +655,7 @@ describe('Testing user service', () => {
           address: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -739,6 +749,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -764,6 +775,7 @@ describe('Testing user service', () => {
         include: {
           jurisdictions: true,
           userRoles: true,
+          notificationPreferences: true,
         },
         where: {
           id,
@@ -787,6 +799,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1072,6 +1085,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1120,6 +1134,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1160,6 +1175,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1207,6 +1223,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1240,6 +1257,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1313,6 +1331,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1355,6 +1374,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1402,6 +1422,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1448,6 +1469,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1493,6 +1515,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1526,6 +1549,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1610,6 +1634,7 @@ describe('Testing user service', () => {
         include: {
           jurisdictions: true,
           userRoles: true,
+          notificationPreferences: true,
         },
       });
       expect(prisma.userAccounts.delete).toHaveBeenCalledWith({
@@ -1661,6 +1686,7 @@ describe('Testing user service', () => {
         include: {
           jurisdictions: true,
           userRoles: true,
+          notificationPreferences: true,
         },
       });
       expect(prisma.userAccounts.delete).toHaveBeenCalledWith({
@@ -1709,6 +1735,7 @@ describe('Testing user service', () => {
         include: {
           jurisdictions: true,
           userRoles: true,
+          notificationPreferences: true,
         },
       });
 
@@ -1757,6 +1784,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1784,6 +1812,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1858,6 +1887,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1884,6 +1914,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1955,6 +1986,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2024,6 +2056,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2093,6 +2126,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2118,6 +2152,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2193,6 +2228,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2258,6 +2294,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2335,6 +2372,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2385,6 +2423,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2462,6 +2501,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2512,6 +2552,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2569,6 +2610,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2625,6 +2667,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2644,6 +2687,9 @@ describe('Testing user service', () => {
           firstName: 'Partner User firstName',
           lastName: 'Partner User lastName',
           mfaEnabled: true,
+          notificationPreferences: {
+            create: {},
+          },
           jurisdictions: {
             connect: [{ id: jurisId }],
           },
@@ -2707,6 +2753,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2725,6 +2772,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2811,6 +2859,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2890,6 +2939,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2911,6 +2961,9 @@ describe('Testing user service', () => {
           lastName: 'public User lastName',
           listings: undefined,
           middleName: undefined,
+          notificationPreferences: {
+            create: {},
+          },
           jurisdictions: {
             connect: [{ id: expect.anything() }],
           },
@@ -2922,6 +2975,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -3074,6 +3128,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -3095,6 +3150,9 @@ describe('Testing user service', () => {
           listings: undefined,
           middleName: undefined,
           isAdvocate: true,
+          notificationPreferences: {
+            create: {},
+          },
           agency: {
             connect: {
               id: 'test_agency_id',
@@ -3111,6 +3169,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -3849,6 +3908,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -3900,6 +3960,7 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
+          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
