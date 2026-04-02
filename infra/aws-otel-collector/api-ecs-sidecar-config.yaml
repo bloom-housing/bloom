@@ -1,3 +1,21 @@
+extensions:
+  sigv4auth:
+    service: "aps"
+
+service:
+  extensions: [sigv4auth]
+  telemetry:
+    logs:
+      level: info
+  pipelines:
+    metrics:
+      receivers: [otlp, prometheus]
+      exporters: [prometheusremotewrite]
+    metrics/ecs:
+      receivers: [awsecscontainermetrics]
+      processors: [filter]
+      exporters: [prometheusremotewrite]
+
 receivers:
   otlp:
     protocols:
@@ -11,23 +29,26 @@ receivers:
           metrics_path: /prisma_metrics
           static_configs:
             - targets: ['0.0.0.0:3100']
+  awsecscontainermetrics:
+    collection_interval: 10s
 
-extensions:
-  sigv4auth:
-    service: "aps"
+processors:
+  filter:
+    metrics:
+      include:
+        match_type: strict
+        metric_names:
+          - ecs.task.memory.utilized
+          - ecs.task.memory.reserved
+          - ecs.task.cpu.utilized
+          - ecs.task.cpu.reserved
+          - ecs.task.network.rate.rx
+          - ecs.task.network.rate.tx
+          - ecs.task.storage.read_bytes
+          - ecs.task.storage.write_bytes
 
 exporters:
   prometheusremotewrite:
     endpoint: ${env:PROMETHEUS_REMOTE_WRITE_ENDPOINT}
     auth:
       authenticator: sigv4auth
-
-service:
-  extensions: [sigv4auth]
-  telemetry:
-    logs:
-      level: info
-  pipelines:
-    metrics:
-      receivers: [otlp, prometheus]
-      exporters: [prometheusremotewrite]
