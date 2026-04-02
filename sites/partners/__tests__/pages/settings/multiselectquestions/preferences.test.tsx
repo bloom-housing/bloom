@@ -1,9 +1,6 @@
 import React from "react"
 import { MessageContext, MessageProvider } from "@bloom-housing/shared-helpers"
-import {
-  listing,
-  multiselectQuestionPreferenceV2,
-} from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { multiselectQuestionPreferenceV2 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   FeatureFlagEnum,
   MultiselectQuestionsStatusEnum,
