@@ -8,11 +8,13 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 type DetailsHouseholdDetailsProps = {
   enableAdaOtherOption: boolean
   enableFullTimeStudentQuestion?: boolean
+  enableReasonableAccommodations?: boolean
 }
 
 const DetailsHouseholdDetails = ({
   enableAdaOtherOption,
   enableFullTimeStudentQuestion,
+  enableReasonableAccommodations,
 }: DetailsHouseholdDetailsProps) => {
   const application = useContext(ApplicationContext)
 
@@ -88,6 +90,19 @@ const DetailsHouseholdDetails = ({
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>
+      {enableReasonableAccommodations && (
+        <Grid.Row>
+          <Grid.Cell>
+            <FieldValue
+              id="reasonableAccommodations"
+              label={t("application.details.reasonableAccommodations")}
+              testId="reasonableAccommodations"
+            >
+              {application.reasonableAccommodations || t("t.n/a")}
+            </FieldValue>
+          </Grid.Cell>
+        </Grid.Row>
+      )}
     </SectionWithGrid>
   )
 }

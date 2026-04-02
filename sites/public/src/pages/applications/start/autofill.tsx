@@ -10,6 +10,8 @@ import {
   AuthContext,
   getPreferredUnitTypes,
 } from "@bloom-housing/shared-helpers"
+import { Button, LoadingState } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
@@ -22,8 +24,6 @@ import {
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 import { isFeatureFlagOn } from "../../../lib/helpers"
-import { Button } from "@bloom-housing/ui-seeds"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const Autofill = () => {
   const router = useRouter()
@@ -107,81 +107,85 @@ const Autofill = () => {
     }
   }, [profile, applicationsService, onSubmit, previousApplication, initialStateLoaded, isAdvocate])
 
-  return previousApplication ? (
+  return (
     <FormsLayout
       pageTitle={`${t("pageTitle.autofill")} - ${t("listings.apply.applyOnline")} - ${
         listing?.name
       }`}
     >
-      <ApplicationFormLayout
-        listingName={listing?.name}
-        heading={t("application.autofill.saveTime")}
-        subheading={t("application.autofill.prefillYourApplication")}
-        progressNavProps={{
-          currentPageSection: currentPageSection,
-          completedSections: application.completedSections,
-          labels: conductor.config.sections.map((label) => t(`t.${label}`)),
-          mounted: mounted,
-        }}
-        backLink={{
-          url: `/applications/start/what-to-expect`,
-        }}
-        hideBorder={true}
-      >
-        <FormSummaryDetails
-          application={previousApplication}
-          listing={listing}
-          editMode={false}
-          hidePreferences={true}
-          hidePrograms={true}
-          enableUnitGroups={isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)}
-          enableFullTimeStudentQuestion={isFeatureFlagOn(
-            conductor.config,
-            FeatureFlagEnum.enableFullTimeStudentQuestion
-          )}
-          enableAdaOtherOption={isFeatureFlagOn(
-            conductor.config,
-            FeatureFlagEnum.enableAdaOtherOption
-          )}
-          swapCommunityTypeWithPrograms={isFeatureFlagOn(
-            conductor.config,
-            FeatureFlagEnum.swapCommunityTypeWithPrograms
-          )}
-        />
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <CardSection
-            id={"application-initial-page"}
-            className={`${styles["application-form-action-footer"]} border-none`}
-            divider={"flush"}
-          >
-            <Button
-              variant={"primary"}
-              onClick={() => {
-                useDetailsRef.current = true
-              }}
-              id={"autofill-accept"}
-              type={"submit"}
+      <LoadingState loading={!previousApplication}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.autofill.saveTime")}
+          subheading={t("application.autofill.prefillYourApplication")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: mounted,
+          }}
+          backLink={{
+            url: `/applications/start/what-to-expect`,
+          }}
+          hideBorder={true}
+        >
+          <FormSummaryDetails
+            application={previousApplication}
+            listing={listing}
+            editMode={false}
+            hidePreferences={true}
+            hidePrograms={true}
+            enableUnitGroups={isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)}
+            enableFullTimeStudentQuestion={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.enableFullTimeStudentQuestion
+            )}
+            enableAdaOtherOption={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.enableAdaOtherOption
+            )}
+            enableReasonableAccommodations={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.enableReasonableAccommodations
+            )}
+            swapCommunityTypeWithPrograms={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.swapCommunityTypeWithPrograms
+            )}
+          />
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <CardSection
+              id={"application-initial-page"}
+              className={`${styles["application-form-action-footer"]} border-none`}
+              divider={"flush"}
             >
-              {t("application.autofill.start")}
-            </Button>
-          </CardSection>
-          <CardSection>
-            <Button
-              variant={"text"}
-              onClick={() => {
-                useDetailsRef.current = false
-              }}
-              type={"submit"}
-              id={"autofill-decline"}
-            >
-              {t("application.autofill.reset")}
-            </Button>
-          </CardSection>
-        </Form>
-      </ApplicationFormLayout>
+              <Button
+                variant={"primary"}
+                onClick={() => {
+                  useDetailsRef.current = true
+                }}
+                id={"autofill-accept"}
+                type={"submit"}
+              >
+                {t("application.autofill.start")}
+              </Button>
+            </CardSection>
+            <CardSection>
+              <Button
+                variant={"text"}
+                onClick={() => {
+                  useDetailsRef.current = false
+                }}
+                type={"submit"}
+                id={"autofill-decline"}
+              >
+                {t("application.autofill.reset")}
+              </Button>
+            </CardSection>
+          </Form>
+        </ApplicationFormLayout>
+      </LoadingState>
     </FormsLayout>
-  ) : (
-    <FormsLayout></FormsLayout>
   )
 }
 

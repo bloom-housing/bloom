@@ -106,7 +106,7 @@ export const stagingSeed = async (
 ) => {
   // Seed feature flags
   await createAllFeatureFlags(prismaClient);
-  const optionalMainFlags = msqV2 ? [FeatureFlagEnum.enableV2MSQ] : [];
+  const optionalV2MSQ = msqV2 ? [FeatureFlagEnum.enableV2MSQ] : [];
   const defaultListingFeatureConfiguration: ListingFeaturesConfiguration = {
     fields: [
       { id: 'wheelchairRamp' },
@@ -182,7 +182,7 @@ export const stagingSeed = async (
       publicSiteBaseURL: publicSiteBaseURL,
       listingApprovalPermissions: [UserRoleEnum.admin],
       featureFlags: [
-        ...optionalMainFlags,
+        ...optionalV2MSQ,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableFaq,
@@ -234,6 +234,7 @@ export const stagingSeed = async (
     data: jurisdictionFactory('Lakeview', {
       publicSiteBaseURL: publicSiteBaseURL,
       featureFlags: [
+        ...optionalV2MSQ,
         FeatureFlagEnum.disableJurisdictionalAdmin,
         FeatureFlagEnum.disableListingPreferences,
         FeatureFlagEnum.disableWorkInRegion,
@@ -286,6 +287,7 @@ export const stagingSeed = async (
     data: jurisdictionFactory('Bridge Bay', {
       publicSiteBaseURL: publicSiteBaseURL,
       featureFlags: [
+        ...optionalV2MSQ,
         FeatureFlagEnum.enableGeocodingPreferences,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
         FeatureFlagEnum.enableLeasingAgentAltText,
@@ -304,7 +306,7 @@ export const stagingSeed = async (
   const nadaHill = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Nada Hill', {
       publicSiteBaseURL: publicSiteBaseURL,
-      featureFlags: [],
+      featureFlags: [...optionalV2MSQ],
       requiredListingFields: ['name'],
     }),
   });
@@ -312,6 +314,7 @@ export const stagingSeed = async (
     data: jurisdictionFactory('Angelopolis', {
       publicSiteBaseURL: publicSiteBaseURL,
       featureFlags: [
+        ...optionalV2MSQ,
         FeatureFlagEnum.disableAccessibilityFeaturesTag,
         FeatureFlagEnum.disableBuildingSelectionCriteria,
         FeatureFlagEnum.disableEthnicityQuestion,
@@ -336,6 +339,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableParkingType,
         FeatureFlagEnum.enablePetPolicyCheckbox,
         FeatureFlagEnum.enableProperties,
+        FeatureFlagEnum.enableReasonableAccommodations,
         FeatureFlagEnum.enableReferralQuestionUnits,
         FeatureFlagEnum.enableResources,
         FeatureFlagEnum.enableSmokingPolicyRadio,
@@ -693,37 +697,29 @@ export const stagingSeed = async (
       simplifiedDCMap,
     ),
   });
-  // NOTE: the previous V1 msq factory had a bug where options aren't actually used
-  // and random data is generated no matter what. I've only fixed this in V2 seeding.
-  let cityEmployeeMsqData: Prisma.MultiselectQuestionsCreateInput;
-  if (msqV2) {
-    cityEmployeeMsqData = multiselectQuestionFactory(
-      mainJurisdiction.id,
-      {
-        multiselectQuestion: {
-          status: MultiselectQuestionsStatusEnum.active,
-          name: 'City Employees',
-          description: 'Employees of the local city.',
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.preferences,
-          options: [
-            {
-              name: 'At least one member of my household is a city employee',
-              shouldCollectAddress: false,
-              ordinal: 1,
-            },
-          ],
-        },
-      },
-      true,
-    );
-  } else {
-    cityEmployeeMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
-      multiselectQuestion: {
-        text: 'City Employees',
-        description: 'Employees of the local city.',
+  const cityEmployeeMsqData = msqV2
+    ? {
         applicationSection:
           MultiselectQuestionsApplicationSectionEnum.preferences,
+        description: 'Employees of the local city.',
+        multiselectOptions: {
+          createMany: {
+            data: [
+              {
+                name: 'At least one member of my household is a city employee',
+                shouldCollectAddress: false,
+                ordinal: 1,
+              },
+            ],
+          },
+        },
+        name: 'City Employees',
+        status: MultiselectQuestionsStatusEnum.active,
+      }
+    : {
+        applicationSection:
+          MultiselectQuestionsApplicationSectionEnum.preferences,
+        description: 'Employees of the local city.',
         options: [
           {
             text: 'At least one member of my household is a city employee',
@@ -731,55 +727,47 @@ export const stagingSeed = async (
             ordinal: 0,
           },
         ],
-      },
-    });
-  }
+        text: 'City Employees',
+      };
   const cityEmployeeQuestion = await prismaClient.multiselectQuestions.create({
-    data: cityEmployeeMsqData,
-  });
-  let workInCityMsqData: Prisma.MultiselectQuestionsCreateInput;
-  if (msqV2) {
-    workInCityMsqData = multiselectQuestionFactory(
+    data: multiselectQuestionFactory(
       mainJurisdiction.id,
-      {
-        optOut: true,
-        status: MultiselectQuestionsStatusEnum.active,
-        multiselectQuestion: {
-          name: 'Work in the city',
-          description: 'At least one member of my household works in the city',
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.preferences,
-          options: [
-            {
-              name: 'At least one member of my household works in the city',
-              ordinal: 1,
-              shouldCollectAddress: true,
-              shouldCollectName: true,
-              shouldCollectRelationship: true,
-              mapLayerId: mapLayer.id,
-              validationMethod: ValidationMethod.map,
-            },
-            {
-              name: 'All members of the household work in the city',
-              ordinal: 2,
-              shouldCollectAddress: true,
-              validationMethod: ValidationMethod.none,
-              shouldCollectName: false,
-              shouldCollectRelationship: false,
-            },
-          ],
-        },
-      },
-      true,
-    );
-  } else {
-    workInCityMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
-      optOut: true,
-      multiselectQuestion: {
-        text: 'Work in the city',
-        description: 'At least one member of my household works in the city',
+      { multiselectQuestion: cityEmployeeMsqData },
+      msqV2,
+    ),
+  });
+  const workInCityMsqData = msqV2
+    ? {
         applicationSection:
           MultiselectQuestionsApplicationSectionEnum.preferences,
+        description: 'Workers in the local city.',
+        multiselectOptions: {
+          createMany: {
+            data: [
+              {
+                name: 'At least one member of my household works in the city',
+                ordinal: 1,
+                shouldCollectAddress: true,
+                shouldCollectName: true,
+                shouldCollectRelationship: true,
+                mapLayerId: mapLayer.id,
+                validationMethod: ValidationMethod.map,
+              },
+              {
+                name: 'All members of the household work in the city',
+                ordinal: 2,
+                shouldCollectAddress: true,
+              },
+            ],
+          },
+        },
+        name: 'Work in the city',
+        status: MultiselectQuestionsStatusEnum.active,
+      }
+    : {
+        applicationSection:
+          MultiselectQuestionsApplicationSectionEnum.preferences,
+        description: 'Workers in the local city.',
         options: [
           {
             text: 'At least one member of my household works in the city',
@@ -799,138 +787,250 @@ export const stagingSeed = async (
             collectRelationship: false,
           },
         ],
-      },
-    });
-  }
+        text: 'Work in the city',
+      };
   const workInCityQuestion = await prismaClient.multiselectQuestions.create({
-    data: workInCityMsqData,
+    data: multiselectQuestionFactory(
+      mainJurisdiction.id,
+      {
+        optOut: true,
+        multiselectQuestion: workInCityMsqData,
+      },
+      msqV2,
+    ),
   });
-  let veteranProgramMsqData: Prisma.MultiselectQuestionsCreateInput;
-  if (msqV2) {
-    veteranProgramMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
-      multiselectQuestion: {
+  const veteranProgramMsqData = msqV2
+    ? {
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        description:
+          'Have you or anyone in your household served in the US military?',
+        isExclusive: true,
+        multiselectOptions: {
+          createMany: {
+            data: [
+              { name: 'Yes', ordinal: 1 },
+              { name: 'No', ordinal: 2 },
+              { isOptOut: true, name: 'Prefer not to say', ordinal: 3 },
+            ],
+          },
+        },
+        name: 'Veterans',
         status: MultiselectQuestionsStatusEnum.active,
-        name: 'Veteran',
+      }
+    : {
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         description:
           'Have you or anyone in your household served in the US military?',
-        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        isExclusive: true,
         optOutText: 'Prefer not to say',
         options: [
-          { name: 'Yes', ordinal: 1 },
-          { name: 'No', ordinal: 2 },
+          { text: 'Yes', exclusive: true, ordinal: 0 },
+          { text: 'No', exclusive: true, ordinal: 1 },
         ],
-      },
+        text: 'Veterans',
+      };
+  const veteransProgramQuestion =
+    await prismaClient.multiselectQuestions.create({
+      data: multiselectQuestionFactory(
+        mainJurisdiction.id,
+        {
+          multiselectQuestion: veteranProgramMsqData,
+        },
+        msqV2,
+      ),
     });
-  } else {
-    veteranProgramMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
-      multiselectQuestion: {
-        text: 'Veteran',
+  const mobilityAccessibilityNeedsProgramMsqData = msqV2
+    ? {
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         description:
-          'Have you or anyone in your household served in the US military?',
+          'Some units require at least one resident to have a mobility accessibility need',
+        isExclusive: false,
+        multiselectOptions: {
+          createMany: {
+            data: [
+              { name: 'Wheelchair', ordinal: 1 },
+              { name: 'Walker', ordinal: 2 },
+              { name: 'Power chair', ordinal: 3 },
+              { name: 'Other mobility device', ordinal: 4 },
+              { isOptOut: true, name: 'None of the above', ordinal: 5 },
+            ],
+          },
+        },
+        name: 'Mobility accessibility needs',
+        status: MultiselectQuestionsStatusEnum.active,
+      }
+    : {
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        isExclusive: true,
-        optOutText: 'Prefer not to say',
+        description:
+          'Some units require at least one resident to have a mobility accessibility need',
+        optOutText: 'None of the above',
         options: [
-          { text: 'Yes', exclusive: true, ordinal: 1 },
-          { text: 'No', exclusive: true, ordinal: 2 },
+          { text: 'Wheelchair', ordinal: 0 },
+          { text: 'Walker', ordinal: 1 },
+          { text: 'Power chair', ordinal: 2 },
+          { text: 'Other mobility device', ordinal: 3 },
         ],
-      },
-    });
-  }
-  const veteranProgramQuestion = await prismaClient.multiselectQuestions.create(
-    {
-      data: veteranProgramMsqData,
-    },
-  );
+        text: 'Mobility accessibility needs',
+      };
   const mobilityAccessibilityNeedsProgramQuestion =
     await prismaClient.multiselectQuestions.create({
-      data: multiselectQuestionFactory(angelopolisJurisdiction.id, {
-        multiselectQuestion: {
-          text: 'Mobility accessibility needs',
-          description:
-            'Some units require at least one resident to have a mobility accessibility need',
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.programs,
-          optOutText: 'None of the above',
-          options: [
-            { text: 'Wheelchair', ordinal: 0 },
-            { text: 'Walker', ordinal: 1 },
-            { text: 'Power chair', ordinal: 2 },
-            { text: 'Other mobility device', ordinal: 3 },
-          ],
+      data: multiselectQuestionFactory(
+        angelopolisJurisdiction.id,
+        {
+          multiselectQuestion: mobilityAccessibilityNeedsProgramMsqData,
         },
-      }),
+        msqV2,
+      ),
     });
+  const hearingVisionAccessibilityNeedsProgramMsqData = msqV2
+    ? {
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        description:
+          'Some units require at least one resident to have a hearing / vision accessibility need',
+        isExclusive: false,
+        multiselectOptions: {
+          createMany: {
+            data: [
+              { name: 'Audible and visual doorbells', ordinal: 1 },
+              {
+                name: 'Fire and smoke alarms with hard wired strobes',
+                ordinal: 2,
+              },
+              {
+                name: 'Documents in screen-reader accessible format',
+                ordinal: 3,
+              },
+              { name: 'Documents in large text or braille', ordinal: 4 },
+              { isOptOut: true, name: 'None of the above', ordinal: 5 },
+            ],
+          },
+        },
+        name: 'Hearing/vision accessibility needs',
+        status: MultiselectQuestionsStatusEnum.active,
+      }
+    : {
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        description:
+          'Some units require at least one resident to have a hearing / vision accessibility need',
+        optOutText: 'None of the above',
+        options: [
+          { text: 'Audible and visual doorbells', ordinal: 0 },
+          {
+            text: 'Fire and smoke alarms with hard wired strobes',
+            ordinal: 1,
+          },
+          {
+            text: 'Documents in screen-reader accessible format',
+            ordinal: 2,
+          },
+          { text: 'Documents in large text or braille', ordinal: 3 },
+        ],
+        text: 'Hearing/vision accessibility needs',
+      };
   const hearingVisionAccessibilityNeedsProgramQuestion =
     await prismaClient.multiselectQuestions.create({
-      data: multiselectQuestionFactory(angelopolisJurisdiction.id, {
-        multiselectQuestion: {
-          text: 'Hearing/vision accessibility needs',
-          description:
-            'Some units require at least one resident to have a hearing / vision accessibility need',
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.programs,
-          optOutText: 'None of the above',
-          options: [
-            { text: 'Audible and visual doorbells', ordinal: 0 },
-            {
-              text: 'Fire and smoke alarms with hard wired strobes',
-              ordinal: 1,
-            },
-            {
-              text: 'Documents in screen-reader accessible format',
-              ordinal: 2,
-            },
-            { text: 'Documents in large text or braille', ordinal: 3 },
-          ],
+      data: multiselectQuestionFactory(
+        angelopolisJurisdiction.id,
+        {
+          multiselectQuestion: hearingVisionAccessibilityNeedsProgramMsqData,
         },
-      }),
+        msqV2,
+      ),
     });
-
-  const multiselectQuestionPrograms =
+  const housingSituationProgramMsqData = msqV2
+    ? {
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        description:
+          'Thinking about the past 30 days, do either of these describe your housing situation?',
+        isExclusive: false,
+        multiselectOptions: {
+          createMany: {
+            data: [
+              {
+                name: 'Not Permanent',
+                ordinal: 1,
+              },
+              {
+                name: 'Homeless',
+                ordinal: 2,
+              },
+              {
+                name: 'Do Not Consider',
+                ordinal: 3,
+              },
+              {
+                name: 'Prefer not to say',
+                ordinal: 4,
+              },
+            ],
+          },
+        },
+        name: 'Housing Situation',
+        status: MultiselectQuestionsStatusEnum.active,
+      }
+    : {
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        description:
+          'Thinking about the past 30 days, do either of these describe your housing situation?',
+        options: [
+          {
+            text: 'Not Permanent',
+            ordinal: 0,
+          },
+          {
+            text: 'Homeless',
+            ordinal: 1,
+          },
+          {
+            text: 'Do Not Consider',
+            ordinal: 2,
+          },
+          {
+            text: 'Prefer not to say',
+            ordinal: 3,
+          },
+        ],
+        text: 'Housing Situation',
+      };
+  const housingSituationProgramQuestion =
     await prismaClient.multiselectQuestions.create({
-      data: multiselectQuestionFactory(mainJurisdiction.id, {
-        multiselectQuestion: {
-          text: 'Housing Situation',
-          description:
-            'Thinking about the past 30 days, do either of these describe your housing situation?',
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.programs,
-          options: [
-            {
-              text: 'Not Permanent',
-              ordinal: 0,
-            },
-            {
-              text: 'Homeless',
-              ordinal: 1,
-            },
-            {
-              text: 'Do Not Consider',
-              ordinal: 2,
-            },
-            {
-              text: 'Prefer not to say',
-              ordinal: 3,
-            },
-          ],
+      data: multiselectQuestionFactory(
+        angelopolisJurisdiction.id,
+        {
+          multiselectQuestion: housingSituationProgramMsqData,
         },
-      }),
+        msqV2,
+      ),
     });
-  await prismaClient.multiselectQuestions.create({
-    data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
-      multiselectQuestion: {
-        text: 'Seniors 62+',
+  const senior62PlusProgramMsqData = msqV2
+    ? {
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         description:
           'Are you or anyone in your household 62 years of age or older?',
-        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         isExclusive: true,
+        multiselectOptions: {
+          createMany: {
+            data: [
+              { name: 'Yes', ordinal: 1 },
+              { name: 'No', ordinal: 2 },
+            ],
+          },
+        },
+        name: 'Seniors 62+',
+        status: MultiselectQuestionsStatusEnum.active,
+      }
+    : {
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        description:
+          'Are you or anyone in your household 62 years of age or older?',
         options: [
-          { text: 'Yes', exclusive: true, ordinal: 1 },
-          { text: 'No', exclusive: true, ordinal: 2 },
+          { text: 'Yes', exclusive: true, ordinal: 0 },
+          { text: 'No', exclusive: true, ordinal: 1 },
         ],
-      },
+        text: 'Seniors 62+',
+      };
+  await prismaClient.multiselectQuestions.create({
+    data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
+      multiselectQuestion: senior62PlusProgramMsqData,
     }),
   });
 
@@ -940,16 +1040,31 @@ export const stagingSeed = async (
       async (text) =>
         await prismaClient.multiselectQuestions.create({
           data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
-            multiselectQuestion: {
-              applicationSection:
-                MultiselectQuestionsApplicationSectionEnum.programs,
-              text,
-              isExclusive: true,
-              options: [
-                { text: 'Yes', exclusive: true, ordinal: 1 },
-                { text: 'No', exclusive: true, ordinal: 2 },
-              ],
-            },
+            multiselectQuestion: msqV2
+              ? {
+                  applicationSection:
+                    MultiselectQuestionsApplicationSectionEnum.programs,
+                  isExclusive: true,
+                  multiselectOptions: {
+                    createMany: {
+                      data: [
+                        { name: 'Yes', ordinal: 1 },
+                        { name: 'No', ordinal: 2 },
+                      ],
+                    },
+                  },
+                  name: text,
+                  status: MultiselectQuestionsStatusEnum.active,
+                }
+              : {
+                  applicationSection:
+                    MultiselectQuestionsApplicationSectionEnum.programs,
+                  options: [
+                    { text: 'Yes', exclusive: true, ordinal: 0 },
+                    { text: 'No', exclusive: true, ordinal: 1 },
+                  ],
+                  text,
+                },
           }),
         }),
     ),
@@ -1008,11 +1123,9 @@ export const stagingSeed = async (
           },
         ],
         multiselectQuestions: [
-          cityEmployeeQuestion,
-          workInCityQuestion,
-          multiselectQuestionPrograms,
-          mobilityAccessibilityNeedsProgramQuestion,
           hearingVisionAccessibilityNeedsProgramQuestion,
+          housingSituationProgramQuestion,
+          mobilityAccessibilityNeedsProgramQuestion,
         ],
         applications: [
           ...(await applicationFactoryMany(2, {
@@ -1051,11 +1164,7 @@ export const stagingSeed = async (
             },
           },
         })),
-        multiselectQuestions: [
-          cityEmployeeQuestion,
-          workInCityQuestion,
-          multiselectQuestionPrograms,
-        ],
+        multiselectQuestions: [housingSituationProgramQuestion],
         applications: [
           await applicationFactory({
             raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
@@ -1305,20 +1414,25 @@ export const stagingSeed = async (
       {
         listing: elmVillage,
         applications: [
+          // TODO: Needs to handle V2MSQ
           await applicationFactory({
+            enableV2MSQ: msqV2,
             multiselectQuestions: [workInCityQuestion, cityEmployeeQuestion],
           }),
           await applicationFactory({
+            enableV2MSQ: msqV2,
             multiselectQuestions: [
               cityEmployeeQuestion,
               workInCityQuestion,
-              veteranProgramQuestion,
+              veteransProgramQuestion,
             ],
           }),
           await applicationFactory({
+            enableV2MSQ: msqV2,
             multiselectQuestions: [workInCityQuestion, cityEmployeeQuestion],
           }),
           ...(await applicationFactoryMany(2, {
+            enableV2MSQ: msqV2,
             multiselectQuestions: [workInCityQuestion],
           })),
           await applicationFactory(),
@@ -1326,7 +1440,7 @@ export const stagingSeed = async (
         multiselectQuestions: [
           workInCityQuestion,
           cityEmployeeQuestion,
-          veteranProgramQuestion,
+          veteransProgramQuestion,
         ],
         units: [
           {

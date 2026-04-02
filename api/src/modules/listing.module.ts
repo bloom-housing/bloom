@@ -13,6 +13,7 @@ import { ListingCsvExporterService } from '../services/listing-csv-export.servic
 import { GoogleTranslateService } from '../services/google-translate.service';
 import { TranslationService } from '../services/translation.service';
 import { SnapshotCreateModule } from './snapshot-create.module';
+import { S3Module } from './s3.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SnapshotCreateModule } from './snapshot-create.module';
     PermissionModule,
     PrismaModule,
     SnapshotCreateModule,
+    S3Module,
   ],
   controllers: [ListingController],
   providers: [

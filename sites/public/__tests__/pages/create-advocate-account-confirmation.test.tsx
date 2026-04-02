@@ -19,7 +19,11 @@ describe("Create advocate account confirmation page", () => {
       })
     ).toBeInTheDocument()
     expect(
-      screen.getByText(t("authentication.requestAdvocateAccount.confirmation"))
+      screen.getByText(
+        t("authentication.requestAdvocateAccount.confirmation", {
+          contactEmail: t("resources.contactEmail"),
+        })
+      )
     ).toBeInTheDocument()
     expect(screen.getByRole("button", { name: t("t.ok") })).toBeInTheDocument()
   })

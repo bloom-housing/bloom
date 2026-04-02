@@ -21,6 +21,7 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { Prisma } from '@prisma/client';
 import { buildFilter } from '../utilities/build-filter';
 import { PermissionService } from './permission.service';
+import { OrderByEnum } from '../enums/shared/order-by-enum';
 
 @Injectable()
 export class PropertyService {
@@ -57,6 +58,11 @@ export class PropertyService {
       include: {
         jurisdictions: true,
       },
+      orderBy: [
+        {
+          name: OrderByEnum.ASC,
+        },
+      ],
     });
 
     const properties = mapTo(Property, propertiesRaw);

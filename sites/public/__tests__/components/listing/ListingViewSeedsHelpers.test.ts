@@ -835,6 +835,7 @@ describe("ListingViewSeedsHelpers", () => {
       expect(result).toBeUndefined()
     })
   })
+
   describe("getEligibilitySections", () => {
     let minimalEligibilitySectionsListing: Listing
 
@@ -954,6 +955,97 @@ describe("ListingViewSeedsHelpers", () => {
         note: "Affordable housing properties often receive funding to house specific populations, like seniors, residents with disabilities, etc. Properties can serve more than one population. Contact this property if you are unsure if you qualify.",
         subheader: "This program includes opportunities for members of specific communities",
         content: expect.anything(),
+      })
+    })
+
+    it("should return preferences and programs correctly when enableV2MSQ is true", () => {
+      const eligibilitySections = getEligibilitySections(
+        {
+          ...jurisdiction,
+          featureFlags: [
+            {
+              name: FeatureFlagEnum.enableV2MSQ,
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        },
+        {
+          ...minimalEligibilitySectionsListing,
+          listingMultiselectQuestions: [
+            {
+              ordinal: 1,
+              multiselectQuestions: {
+                id: "id",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                description: "Preference 1 description",
+                name: "Preference 1",
+                jurisdictions: [],
+                applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+                status: MultiselectQuestionsStatusEnum.active,
+                text: "",
+              },
+            },
+            {
+              ordinal: 2,
+              multiselectQuestions: {
+                id: "id",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                name: "Veterans",
+                description: "Veteran program",
+                jurisdictions: [],
+                applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                status: MultiselectQuestionsStatusEnum.active,
+                text: "",
+              },
+            },
+            {
+              ordinal: 1,
+              multiselectQuestions: {
+                id: "id",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                name: "Families",
+                description: "Families program",
+                jurisdictions: [],
+                applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                status: MultiselectQuestionsStatusEnum.active,
+                text: "",
+              },
+            },
+          ],
+        }
+      )
+
+      expect(eligibilitySections).toContainEqual({
+        header: "Housing preferences",
+        note: "After all preference holders have been considered, any remaining units will be available to other qualified applicants.",
+        subheader: "Preference holders will be given highest ranking.",
+        content: expect.objectContaining({
+          props: expect.objectContaining({
+            cardContent: [{ description: "Preference 1 description", heading: "Preference 1" }],
+          }),
+        }),
+      })
+      expect(eligibilitySections).toContainEqual({
+        header: "Housing programs",
+        note: "One or more questions in the application will help to determine whether or not you are eligible for the housing programs listed above. After you have submitted your application, the property manager will ask you to verify your housing program eligibility by providing documentation or another form of verification.",
+        subheader:
+          "Some or all of the units for this property are reserved for persons who qualify for the particular housing program(s) listed below. You may need to qualify for one of these programs in order to be eligible for a unit at this property.",
+        content: expect.objectContaining({
+          props: expect.objectContaining({
+            cardContent: [
+              { description: "Families program", heading: "Families" },
+              { description: "Veteran program", heading: "Veterans" },
+            ],
+          }),
+        }),
       })
     })
 
@@ -1080,6 +1172,7 @@ describe("ListingViewSeedsHelpers", () => {
       expect(eligibilitySections).toEqual([])
     })
   })
+
   describe("getCurrencyFromArgumentString", () => {
     it("should return range at end of formatted string", () => {
       expect(getCurrencyFromArgumentString("listings.annualIncome*income:$36,000")).toEqual(
@@ -1093,6 +1186,7 @@ describe("ListingViewSeedsHelpers", () => {
       )
     })
   })
+
   describe("getStackedHmiData", () => {
     it("should return correctly for multiple ami percentages and some ranges", () => {
       expect(
@@ -1294,6 +1388,7 @@ describe("ListingViewSeedsHelpers", () => {
       ])
     })
   })
+
   describe("getAdditionalInformation", () => {
     it("should return card content with required documents", () => {
       const mockListing: Listing = {

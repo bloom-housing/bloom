@@ -2,8 +2,8 @@ import { DateFieldValues, TimeFieldPeriod, TimeFieldValues } from "@bloom-housin
 import {
   fieldGroupObjectToArray,
   adaFeatureKeys,
-  mapApiToMultiselectForm,
-  mapCheckboxesToApi,
+  mapApiToMultiselectFormV1,
+  mapCheckboxesToApiV1,
 } from "@bloom-housing/shared-helpers"
 import { FormTypes, ApplicationTypes, Address } from "../../lib/applications/FormTypes"
 
@@ -142,11 +142,11 @@ export const mapFormToApi = ({
   })()
 
   const preferencesData = preferences.map((pref: MultiselectQuestion) => {
-    return mapCheckboxesToApi(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences)
+    return mapCheckboxesToApiV1(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences)
   })
 
   const programsData = programs.map((program: MultiselectQuestion) => {
-    return mapCheckboxesToApi(data, program, MultiselectQuestionsApplicationSectionEnum.programs)
+    return mapCheckboxesToApiV1(data, program, MultiselectQuestionsApplicationSectionEnum.programs)
   })
 
   // additional phone
@@ -200,6 +200,7 @@ export const mapFormToApi = ({
   const acceptedTerms = getBooleanValue(data.application.acceptedTerms)
   const householdExpectingChanges = getBooleanValue(data.application.householdExpectingChanges)
   const householdStudent = getBooleanValue(data.application.householdStudent)
+  const reasonableAccommodations = data.application.reasonableAccommodations || null
 
   const submissionType = editMode ? data.submissionType : ApplicationSubmissionTypeEnum.paper
   const status = data.application.status || ApplicationStatusEnum.submitted
@@ -246,6 +247,7 @@ export const mapFormToApi = ({
     accessibility,
     householdExpectingChanges,
     householdStudent,
+    reasonableAccommodations,
     preferences: preferencesData,
     programs: programsData,
     income,
@@ -330,14 +332,14 @@ export const mapApiToForm = (applicationData: Application, listing: Listing) => 
   const phoneNumber = applicationData.applicant.phoneNumber
 
   const preferences =
-    mapApiToMultiselectForm(
+    mapApiToMultiselectFormV1(
       Array.isArray(applicationData.preferences) ? applicationData.preferences : [],
       listing?.listingMultiselectQuestions,
       MultiselectQuestionsApplicationSectionEnum.preferences
     ).application.preferences ?? []
 
   const programs =
-    mapApiToMultiselectForm(
+    mapApiToMultiselectFormV1(
       Array.isArray(applicationData.programs) ? applicationData.programs : [],
       listing?.listingMultiselectQuestions,
       MultiselectQuestionsApplicationSectionEnum.programs
@@ -364,6 +366,7 @@ export const mapApiToForm = (applicationData: Application, listing: Listing) => 
     const acceptedTerms = getYesNoValue(applicationData.acceptedTerms)
     const householdExpectingChanges = getYesNoValue(applicationData.householdExpectingChanges)
     const householdStudent = getYesNoValue(applicationData.householdStudent)
+    const reasonableAccommodations = applicationData.reasonableAccommodations
 
     const workInRegion = applicationData.applicant.workInRegion
 
@@ -396,6 +399,7 @@ export const mapApiToForm = (applicationData: Application, listing: Listing) => 
       accessibility,
       householdExpectingChanges,
       householdStudent,
+      reasonableAccommodations,
       incomePeriod,
       incomeVouchers,
       demographics,
