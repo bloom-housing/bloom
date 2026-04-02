@@ -70,6 +70,7 @@ const views: Partial<Record<UserViews, Prisma.UserAccountsInclude>> = {
   base: {
     jurisdictions: true,
     userRoles: true,
+    notificationPreferences: true,
   },
 };
 
@@ -923,6 +924,9 @@ export class UserService {
         middleName: dto.middleName,
         lastName: dto.lastName,
         dob: dto.dob,
+        notificationPreferences: {
+          create: {},
+        },
         jurisdictions: jurisdictionsToConnect
           ? {
               connect: jurisdictionsToConnect.map((juris) => ({
@@ -1023,6 +1027,9 @@ export class UserService {
           create: {
             ...dto.userRoles,
           },
+        },
+        notificationPreferences: {
+          create: {},
         },
         jurisdictions: dto.jurisdictions
           ? {
@@ -1130,6 +1137,9 @@ export class UserService {
           },
         },
         isAdvocate: true,
+        notificationPreferences: {
+          create: {},
+        },
         jurisdictions: jurisdictionsToConnect
           ? {
               connect: jurisdictionsToConnect,
