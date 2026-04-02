@@ -13,7 +13,6 @@ service:
       exporters: [prometheusremotewrite]
     metrics/ecs:
       receivers: [awsecscontainermetrics]
-      processors: [resourcedetection/ecs, filter]
       exporters: [prometheusremotewrite]
 
 receivers:
@@ -31,23 +30,6 @@ receivers:
             - targets: ['0.0.0.0:3100']
   awsecscontainermetrics:
     collection_interval: 10s
-
-processors:
-  resourcedetection/ecs:
-    detectors: [ecs]
-  filter:
-    metrics:
-      include:
-        match_type: strict
-        metric_names:
-          - ecs.task.memory.utilized
-          - ecs.task.memory.reserved
-          - ecs.task.cpu.utilized
-          - ecs.task.cpu.reserved
-          - ecs.task.network.rate.rx
-          - ecs.task.network.rate.tx
-          - ecs.task.storage.read_bytes
-          - ecs.task.storage.write_bytes
 
 exporters:
   prometheusremotewrite:
