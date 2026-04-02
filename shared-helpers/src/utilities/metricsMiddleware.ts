@@ -39,7 +39,7 @@ if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT) {
     }
     request_counter.add(1, metric_attributes)
     request_duration_ms.record(duration_ms, metric_attributes)
-    console.log(`${path} ${JSON.stringify(log_attributes)} took ${duration_ms}ms`)
+    console.log(`${JSON.stringify(log_attributes)} took ${duration_ms}ms`)
 
     return response
   }

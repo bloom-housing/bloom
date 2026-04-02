@@ -105,7 +105,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "histogram_quantile(0.99, sum by(path, response_code, protocol, le, method) (rate(metrics_interceptor_request_duration_ms_bucket{job=\"bloom-api\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by(path, response_code, protocol, le, method, host) (rate(metrics_interceptor_request_duration_ms_bucket{job=\"bloom-api\"}[$__rate_interval])))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "__auto",
