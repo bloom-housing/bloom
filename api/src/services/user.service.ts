@@ -58,7 +58,8 @@ import { PartnerUserCreate } from '../dtos/users/partner-user-create.dto';
 import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
 import { SnapshotCreateService } from './snapshot-create.service';
 import { toAddHelper, toRemoveHelper } from '../utilities/snapshot-helpers';
-import { AdvocateUserAccept } from 'src/dtos/users/advocate-user-accept.dto';
+import { AdvocateUserAccept } from '../dtos/users/advocate-user-accept.dto';
+import { UserNotificationPreferences } from '../dtos/users/user-notification-preferences.dto';
 
 /*
   this is the service for users
@@ -1714,6 +1715,23 @@ export class UserService {
         success: false,
       };
     }
+    return {
+      success: true,
+    };
+  }
+
+  async updatePreferences(
+    dto: UserNotificationPreferences,
+    requestingUser: User,
+  ): Promise<SuccessDTO> {
+    await this.prisma.userNotificationPreferences.update({
+      data: {
+        ...dto,
+      },
+      where: {
+        userId: requestingUser.id,
+      },
+    });
     return {
       success: true,
     };
