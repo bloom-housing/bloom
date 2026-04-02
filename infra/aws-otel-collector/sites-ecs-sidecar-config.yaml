@@ -11,6 +11,10 @@ service:
     metrics:
       receivers: [otlp]
       exporters: [prometheusremotewrite]
+    metrics/ecs:
+      receivers: [awsecscontainermetrics]
+      processors: [resourcedetection/ecs, filter]
+      exporters: [prometheusremotewrite]
 
 receivers:
   otlp:
@@ -21,6 +25,8 @@ receivers:
     collection_interval: 10s
 
 processors:
+  resourcedetection/ecs:
+    detectors: [ecs]
   filter:
     metrics:
       include:
