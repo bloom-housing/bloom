@@ -31,8 +31,7 @@ import { AddressUpdate } from '../../src/dtos/addresses/address-update.dto';
 import { UserOrderByKeys } from '../../src/enums/listings/order-by-enum';
 import { OrderByEnum } from '../../src/enums/shared/order-by-enum';
 import { AdvocateUserAccept } from '../../src/dtos/users/advocate-user-accept.dto';
-import { User } from 'src/dtos/users/user.dto';
-import { UserNotificationPreferences } from 'src/dtos/users/user-notification-preferences.dto';
+import { UserNotificationPreferences } from '../../src/dtos/users/user-notification-preferences.dto';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -41,7 +40,6 @@ describe('User Controller Tests', () => {
   let emailService: EmailService;
   let cookies = '';
   let logger: Logger;
-  let requestingUserId = '';
 
   const invitePartnerUserMock = jest.fn();
   const welcomeMock = jest.fn();
@@ -102,7 +100,6 @@ describe('User Controller Tests', () => {
       } as Login)
       .expect(201);
 
-    requestingUserId = storedUser.id;
     cookies = resLogIn.headers['set-cookie'];
   });
 
