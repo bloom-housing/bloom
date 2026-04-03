@@ -2060,15 +2060,16 @@ model UserAccounts {
   wasWarnedOfDeletion       Boolean?       @default(false) @map("was_warned_of_deletion")
 
   activityLogs              ActivityLog[]
-  address                   Address?                @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  agency                    Agency?                 @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  address                   Address?                     @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  agency                    Agency?                      @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   applicationFlaggedSet     ApplicationFlaggedSet[]
   applications              Applications[]
-  favoriteListings          Listings[]              @relation("favorite_listings")
+  favoriteListings          Listings[]                   @relation("favorite_listings")
   jurisdictions             Jurisdictions[]
-  lastUpdatedListingsByUser Listings[]              @relation("last_updated_by_user")
+  lastUpdatedListingsByUser Listings[]                   @relation("last_updated_by_user")
   listings                  Listings[]
-  requestedChangesListings  Listings[]              @relation("requested_changes_user")
+  notificationPreferences   UserNotificationPreferences?
+  requestedChangesListings  Listings[]                   @relation("requested_changes_user")
   userPreferences           UserPreferences?
   userRoles                 UserRoles?
 
@@ -2119,11 +2120,12 @@ model UserAccountSnapshot {
   title                     String?
   wasWarnedOfDeletion       Boolean?       @default(false) @map("was_warned_of_deletion")
 
-  address      AddressSnapshot?  @relation(fields: [addressSnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  agency       Agency?           @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  jurisdiction Jurisdictions[]
-  listing      Listings[]
-  userRole     UserRoleSnapshot?
+  address                 AddressSnapshot?                     @relation(fields: [addressSnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  agency                  Agency?                              @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  notificationPreferences UserNotificationPreferencesSnapshot?
+  jurisdiction            Jurisdictions[]
+  listing                 Listings[]
+  userRole                UserRoleSnapshot?              
 
   @@map("user_account_snapshot")
 }
@@ -2139,6 +2141,44 @@ model UserPreferences {
   favoritesListings Listings[]
 
   @@map("user_preferences")
+}
+
+model UserNotificationPreferences {
+  userId                   String       @id() @map("user_id") @db.Uuid
+  user                     UserAccounts @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  lottery                  Boolean?     @default(false)
+  waitlist                 Boolean?     @default(false)
+  mobility                 Boolean?     @default(false)
+  hearing                  Boolean?     @default(false)
+  vision                   Boolean?     @default(false)
+  hearingAndVision         Boolean?     @default(false) @map("hearing_and_vision")
+  mobilityAndHearing       Boolean?     @default(false) @map("mobility_and_hearing")
+  mobilityAndVision        Boolean?     @default(false) @map("mobility_and_vision")
+  mobilityHearingAndVision Boolean?     @default(false) @map("mobility_hearing_and_vision")
+  wantsRegionNotifs        Boolean?     @default(false) @map("wants_region_notifs")
+  regions                  String[]
+
+  @@index([userId])
+  // TODO - Add partial indexes on all Boolean columns where value is TRUE (matching the 55_setup_user_notification_preferences migration script)
+  @@map("user_notification_preferences")
+}
+
+model UserNotificationPreferencesSnapshot {
+  userId                   String                @id() @map("user_id") @db.Uuid
+  user                     UserAccountSnapshot   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  lottery                  Boolean?              @default(false)
+  waitlist                 Boolean?              @default(false)
+  mobility                 Boolean?              @default(false)
+  hearing                  Boolean?              @default(false)
+  vision                   Boolean?              @default(false)
+  hearingAndVision         Boolean?              @default(false) @map("hearing_and_vision")
+  mobilityAndHearing       Boolean?              @default(false) @map("mobility_and_hearing")
+  mobilityAndVision        Boolean?              @default(false) @map("mobility_and_vision")
+  mobilityHearingAndVision Boolean?              @default(false) @map("mobility_hearing_and_vision")
+  wantsRegionNotifs        Boolean?              @default(false) @map("wants_region_notifs")
+  regions                  String[]
+
+  @@map("user_notification_preferences_snapshot")
 }
 
 // UserRole Section

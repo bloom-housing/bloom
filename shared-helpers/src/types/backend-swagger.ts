@@ -2015,6 +2015,42 @@ export class UserService {
     })
   }
   /**
+   * Get the notification preferences of the requesting user
+   */
+  getNotificationPreferences(options: IRequestOptions = {}): Promise<UserNotificationPreferences> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/preferences"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update user notification preferences
+   */
+  userControllerUpdatePreferences(
+    params: {
+      /** requestBody */
+      body?: UserNotificationPreferences
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/preferences"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Creates a public only user
    */
   createPublic(
@@ -8911,6 +8947,41 @@ export interface EmailAndAppUrl {
   appUrl?: string
 }
 
+export interface UserNotificationPreferences {
+  /**  */
+  lottery?: boolean
+
+  /**  */
+  waitlist?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  vision?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  mobilityAndHearing?: boolean
+
+  /**  */
+  mobilityAndVision?: boolean
+
+  /**  */
+  mobilityHearingAndVision?: boolean
+
+  /**  */
+  wantsRegionNotifs?: boolean
+
+  /**  */
+  regions: string[]
+}
+
 export interface UserRole {
   /**  */
   isAdmin?: boolean
@@ -8952,6 +9023,9 @@ export interface PublicUserCreate {
 
   /**  */
   listings: IdDTO[]
+
+  /**  */
+  notificationPreferences?: UserNotificationPreferences
 
   /**  */
   userRoles?: UserRole
@@ -9061,6 +9135,9 @@ export interface PartnerUserCreate {
   listings: IdDTO[]
 
   /**  */
+  notificationPreferences?: UserNotificationPreferences
+
+  /**  */
   language?: LanguagesEnum
 
   /**  */
@@ -9153,6 +9230,9 @@ export interface AdvocateUserCreate {
   listings: IdDTO[]
 
   /**  */
+  notificationPreferences?: UserNotificationPreferences
+
+  /**  */
   userRoles?: UserRole
 
   /**  */
@@ -9225,6 +9305,9 @@ export interface PublicUserUpdate {
 
   /**  */
   listings: IdDTO[]
+
+  /**  */
+  notificationPreferences?: UserNotificationPreferences
 
   /**  */
   userRoles?: UserRole
@@ -9337,6 +9420,9 @@ export interface PartnerUserUpdate {
   listings: IdDTO[]
 
   /**  */
+  notificationPreferences?: UserNotificationPreferences
+
+  /**  */
   language?: LanguagesEnum
 
   /**  */
@@ -9439,6 +9525,9 @@ export interface AdvocateUserUpdate {
 
   /**  */
   listings: IdDTO[]
+
+  /**  */
+  notificationPreferences?: UserNotificationPreferences
 
   /**  */
   userRoles?: UserRole
@@ -9566,6 +9655,9 @@ export interface User {
 
   /**  */
   listings: IdDTO[]
+
+  /**  */
+  notificationPreferences?: UserNotificationPreferences
 
   /**  */
   userRoles?: UserRole
