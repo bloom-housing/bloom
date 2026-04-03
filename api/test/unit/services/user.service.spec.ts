@@ -170,7 +170,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -224,7 +223,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -332,7 +330,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -402,7 +399,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -454,7 +450,6 @@ describe('Testing user service', () => {
         include: {
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           address: true,
           agency: true,
@@ -518,7 +513,6 @@ describe('Testing user service', () => {
         include: {
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           address: true,
           agency: true,
@@ -579,7 +573,6 @@ describe('Testing user service', () => {
         include: {
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           address: true,
           agency: true,
@@ -626,7 +619,6 @@ describe('Testing user service', () => {
           address: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -654,7 +646,6 @@ describe('Testing user service', () => {
           address: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -748,7 +739,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -774,7 +764,6 @@ describe('Testing user service', () => {
         include: {
           jurisdictions: true,
           userRoles: true,
-          notificationPreferences: true,
         },
         where: {
           id,
@@ -798,7 +787,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1084,7 +1072,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1133,7 +1120,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1174,7 +1160,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1222,7 +1207,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1256,7 +1240,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1330,7 +1313,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1373,7 +1355,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1421,7 +1402,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1468,7 +1448,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1514,7 +1493,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1548,7 +1526,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1633,7 +1610,6 @@ describe('Testing user service', () => {
         include: {
           jurisdictions: true,
           userRoles: true,
-          notificationPreferences: true,
         },
       });
       expect(prisma.userAccounts.delete).toHaveBeenCalledWith({
@@ -1685,7 +1661,6 @@ describe('Testing user service', () => {
         include: {
           jurisdictions: true,
           userRoles: true,
-          notificationPreferences: true,
         },
       });
       expect(prisma.userAccounts.delete).toHaveBeenCalledWith({
@@ -1734,7 +1709,6 @@ describe('Testing user service', () => {
         include: {
           jurisdictions: true,
           userRoles: true,
-          notificationPreferences: true,
         },
       });
 
@@ -1783,7 +1757,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1811,7 +1784,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1886,7 +1858,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1913,7 +1884,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -1985,7 +1955,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2055,7 +2024,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2125,7 +2093,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2151,7 +2118,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2227,7 +2193,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2293,7 +2258,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2371,7 +2335,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2422,7 +2385,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2500,7 +2462,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2551,7 +2512,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2609,7 +2569,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2666,7 +2625,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2752,7 +2710,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2771,7 +2728,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2858,7 +2814,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2938,7 +2893,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -2974,7 +2928,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -3127,7 +3080,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -3168,7 +3120,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -3907,7 +3858,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {
@@ -3959,7 +3909,6 @@ describe('Testing user service', () => {
           agency: true,
           jurisdictions: true,
           listings: true,
-          notificationPreferences: true,
           userRoles: true,
           favoriteListings: {
             select: {

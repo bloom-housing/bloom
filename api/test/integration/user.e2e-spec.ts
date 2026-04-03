@@ -1501,14 +1501,14 @@ describe('User Controller Tests', () => {
   describe('update users notification preferences', () => {
     it('should update users notification preferences', async () => {
       let res = await request(app.getHttpServer())
-        .get(`/user/${requestingUserId}`)
+        .get(`/user/preferences`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
 
-      let userData: User = res.body;
+      let userPreferences: UserNotificationPreferences = res.body;
 
-      expect(userData.notificationPreferences).toEqual({
+      expect(userPreferences).toEqual({
         lottery: false,
         waitlist: false,
         mobility: false,
@@ -1538,14 +1538,14 @@ describe('User Controller Tests', () => {
       expect(res.body.success).toBeTrue();
 
       res = await request(app.getHttpServer())
-        .get(`/user/${requestingUserId}`)
+        .get('/user/preferences')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
 
-      userData = res.body;
+      userPreferences = res.body;
 
-      expect(userData.notificationPreferences).toEqual({
+      expect(userPreferences).toEqual({
         lottery: false,
         waitlist: false,
         mobility: true,
