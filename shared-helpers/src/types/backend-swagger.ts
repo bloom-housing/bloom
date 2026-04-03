@@ -3559,6 +3559,9 @@ export interface ListingFilterParams {
 
   /**  */
   parkingType?: ParkingTypeEnum
+
+  /**  */
+  accessibilityPriorityTypes?: UnitAccessibilityPriorityTypeEnum[]
 }
 
 export interface ListingsQueryBody {
@@ -10049,6 +10052,16 @@ export enum ParkingTypeEnum {
   "garage" = "garage",
   "carport" = "carport",
 }
+
+export enum UnitAccessibilityPriorityTypeEnum {
+  "mobility" = "mobility",
+  "hearing" = "hearing",
+  "vision" = "vision",
+  "hearingAndVision" = "hearingAndVision",
+  "mobilityAndHearing" = "mobilityAndHearing",
+  "mobilityAndVision" = "mobilityAndVision",
+  "mobilityHearingAndVision" = "mobilityHearingAndVision",
+}
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
@@ -10088,12 +10101,14 @@ export enum OrderByEnum {
 }
 
 export enum ListingFilterKeys {
+  "accessibilityPriorityTypes" = "accessibilityPriorityTypes",
   "availabilities" = "availabilities",
   "availability" = "availability",
   "bathrooms" = "bathrooms",
   "bedrooms" = "bedrooms",
   "bedroomTypes" = "bedroomTypes",
   "city" = "city",
+  "configurableRegions" = "configurableRegions",
   "counties" = "counties",
   "homeTypes" = "homeTypes",
   "ids" = "ids",
@@ -10101,18 +10116,17 @@ export enum ListingFilterKeys {
   "jurisdiction" = "jurisdiction",
   "leasingAgent" = "leasingAgent",
   "listingFeatures" = "listingFeatures",
+  "listingType" = "listingType",
   "monthlyRent" = "monthlyRent",
   "multiselectQuestions" = "multiselectQuestions",
   "name" = "name",
   "neighborhood" = "neighborhood",
   "parkingType" = "parkingType",
   "regions" = "regions",
-  "configurableRegions" = "configurableRegions",
   "reservedCommunityTypes" = "reservedCommunityTypes",
   "section8Acceptance" = "section8Acceptance",
   "status" = "status",
   "zipCode" = "zipCode",
-  "listingType" = "listingType",
 }
 
 export enum ApplicationAddressTypeEnum {
@@ -10196,16 +10210,6 @@ export enum UnitTypeEnum {
 export enum UnitRentTypeEnum {
   "fixed" = "fixed",
   "percentageOfIncome" = "percentageOfIncome",
-}
-
-export enum UnitAccessibilityPriorityTypeEnum {
-  "mobility" = "mobility",
-  "hearing" = "hearing",
-  "vision" = "vision",
-  "hearingAndVision" = "hearingAndVision",
-  "mobilityAndHearing" = "mobilityAndHearing",
-  "mobilityAndVision" = "mobilityAndVision",
-  "mobilityHearingAndVision" = "mobilityHearingAndVision",
 }
 
 export enum RentTypeEnum {

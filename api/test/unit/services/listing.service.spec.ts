@@ -2120,6 +2120,61 @@ describe('Testing listing service', () => {
       });
     });
 
+    it('should return a where clause for filter accessibilityPriorityTypes with single type', () => {
+      const types = [UnitAccessibilityPriorityTypeEnum.mobility];
+      const filter = [
+        {
+          $comparison: 'IN',
+          accessibilityPriorityTypes: types,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              { units: { some: { accessibilityPriorityType: 'mobility' } } },
+              {
+                unitGroups: { some: { accessibilityPriorityType: 'mobility' } },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter accessibilityPriorityTypes with multiple types', () => {
+      const types = [
+        UnitAccessibilityPriorityTypeEnum.mobility,
+        UnitAccessibilityPriorityTypeEnum.hearing,
+      ];
+      const filter = [
+        {
+          $comparison: 'IN',
+          accessibilityPriorityTypes: types,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              { units: { some: { accessibilityPriorityType: 'mobility' } } },
+              {
+                unitGroups: { some: { accessibilityPriorityType: 'mobility' } },
+              },
+              { units: { some: { accessibilityPriorityType: 'hearing' } } },
+              {
+                unitGroups: { some: { accessibilityPriorityType: 'hearing' } },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
     it('should return a where clause for filter monthlyRent', () => {
       const monthlyRent = '1500';
       const filter = [
