@@ -162,6 +162,19 @@ export class UserController {
     return await this.userService.favoriteListings(userId);
   }
 
+  @Get('preferences')
+  @ApiOperation({
+    summary: 'Get the notification preferences of the requesting user',
+    operationId: 'getNotificationPreferences',
+  })
+  @ApiOkResponse({ type: UserNotificationPreferences })
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  async notificationPreferences(
+    @Request() req: ExpressRequest,
+  ): Promise<UserNotificationPreferences> {
+    return await this.userService.retrievePreferences(mapTo(User, req['user']));
+  }
+
   @Post('/public')
   @ApiOperation({
     summary: 'Creates a public only user',

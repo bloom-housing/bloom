@@ -70,7 +70,6 @@ const views: Partial<Record<UserViews, Prisma.UserAccountsInclude>> = {
   base: {
     jurisdictions: true,
     userRoles: true,
-    notificationPreferences: true,
   },
 };
 
@@ -1738,6 +1737,23 @@ export class UserService {
     return {
       success: true,
     };
+  }
+
+  async retrievePreferences(requestingUser: User) {
+    const notifiactionPreferences =
+      await this.prisma.userNotificationPreferences.findUnique({
+        where: {
+          userId: requestingUser.id,
+        },
+      });
+
+    if (!notifiactionPreferences) {
+      throw new NotFoundException(
+        'Failed to retrieve user notification preferences',
+      );
+    }
+
+    return mapTo(UserNotificationPreferences, notifiactionPreferences);
   }
 
   async updatePreferences(
