@@ -2015,6 +2015,42 @@ export class UserService {
     })
   }
   /**
+   * Get the notification preferences of the requesting user
+   */
+  getNotificationPreferences(options: IRequestOptions = {}): Promise<UserNotificationPreferences> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/preferences"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update user notification preferences
+   */
+  userControllerUpdatePreferences(
+    params: {
+      /** requestBody */
+      body?: UserNotificationPreferences
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/preferences"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Creates a public only user
    */
   createPublic(
@@ -2376,28 +2412,6 @@ export class UserService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update user notification preferences
-   */
-  userControllerUpdatePreferences(
-    params: {
-      /** requestBody */
-      body?: UserNotificationPreferencesUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/preferences"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
 
       configs.data = data
 
@@ -9752,44 +9766,6 @@ export interface UserFavoriteListing {
 
   /**  */
   action: ModificationEnum
-}
-
-export interface UserNotificationPreferencesUpdate {
-  /**  */
-  lottery?: boolean
-
-  /**  */
-  waitlist?: boolean
-
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  vision?: boolean
-
-  /**  */
-  hearingAndVision?: boolean
-
-  /**  */
-  mobilityAndHearing?: boolean
-
-  /**  */
-  mobilityAndVision?: boolean
-
-  /**  */
-  mobilityHearingAndVision?: boolean
-
-  /**  */
-  wantsRegionNotifs?: boolean
-
-  /**  */
-  regions: string[]
-
-  /**  */
-  id: string
 }
 
 export interface Login {
