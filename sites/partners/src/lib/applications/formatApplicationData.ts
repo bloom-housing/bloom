@@ -86,7 +86,7 @@ export const mapFormToApi = ({
   editMode,
   programs,
   preferences,
-  enableV2MSQ
+  enableV2MSQ,
 }: mapFormToApiProps) => {
   const language: LanguagesEnum | null = data.application?.language
     ? data.application?.language
@@ -151,14 +151,22 @@ export const mapFormToApi = ({
   let preferencesData: ApplicationMultiselectQuestion[] = []
   if (!enableV2MSQ) {
     preferencesData = preferences.map((pref: MultiselectQuestion) => {
-      return mapCheckboxesToApiV1(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences)
+      return mapCheckboxesToApiV1(
+        data,
+        pref,
+        MultiselectQuestionsApplicationSectionEnum.preferences
+      )
     })
   }
 
   let programsData: ApplicationMultiselectQuestion[] = []
   if (!enableV2MSQ) {
     programsData = programs.map((program: MultiselectQuestion) => {
-      return mapCheckboxesToApiV1(data, program, MultiselectQuestionsApplicationSectionEnum.programs)
+      return mapCheckboxesToApiV1(
+        data,
+        program,
+        MultiselectQuestionsApplicationSectionEnum.programs
+      )
     })
   }
 
