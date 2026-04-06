@@ -228,6 +228,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       editMode,
       programs: programs.map((item) => item?.multiselectQuestions),
       preferences: preferences.map((item) => item?.multiselectQuestions),
+      enableV2MSQ,
     })
 
     try {

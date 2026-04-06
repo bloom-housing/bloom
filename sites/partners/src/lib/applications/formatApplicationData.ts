@@ -29,6 +29,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   Application,
   ApplicationSelectionUpdate,
+  ApplicationMultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 dayjs.extend(customParseFormat)
 
@@ -72,6 +73,7 @@ type mapFormToApiProps = {
   editMode: boolean
   programs: MultiselectQuestion[]
   preferences: MultiselectQuestion[]
+  enableV2MSQ: boolean
 }
 
 /*
@@ -84,6 +86,7 @@ export const mapFormToApi = ({
   editMode,
   programs,
   preferences,
+  enableV2MSQ
 }: mapFormToApiProps) => {
   const language: LanguagesEnum | null = data.application?.language
     ? data.application?.language
@@ -145,29 +148,35 @@ export const mapFormToApi = ({
     }
   })()
 
-  // TODO:
-  const preferencesData = preferences.map((pref: MultiselectQuestion) => {
-    return mapCheckboxesToApiV1(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences)
-  })
+  let preferencesData: ApplicationMultiselectQuestion[] = []
+  if (!enableV2MSQ) {
+    preferencesData = preferences.map((pref: MultiselectQuestion) => {
+      return mapCheckboxesToApiV1(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences)
+    })
+  }
 
-  // TODO:
-  const programsData = programs.map((program: MultiselectQuestion) => {
-    return mapCheckboxesToApiV1(data, program, MultiselectQuestionsApplicationSectionEnum.programs)
-  })
+  let programsData: ApplicationMultiselectQuestion[] = []
+  if (!enableV2MSQ) {
+    programsData = programs.map((program: MultiselectQuestion) => {
+      return mapCheckboxesToApiV1(data, program, MultiselectQuestionsApplicationSectionEnum.programs)
+    })
+  }
 
   let selections: ApplicationSelectionUpdate[] = []
-  programs.forEach((program: MultiselectQuestion) => {
-    selections = [
-      ...selections,
-      mapCheckboxesToApi(data, program, MultiselectQuestionsApplicationSectionEnum.programs),
-    ]
-  })
-  preferences.forEach((pref: MultiselectQuestion) => {
-    selections = [
-      ...selections,
-      mapCheckboxesToApi(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences),
-    ]
-  })
+  if (enableV2MSQ) {
+    programs.forEach((program: MultiselectQuestion) => {
+      selections = [
+        ...selections,
+        mapCheckboxesToApi(data, program, MultiselectQuestionsApplicationSectionEnum.programs),
+      ]
+    })
+    preferences.forEach((pref: MultiselectQuestion) => {
+      selections = [
+        ...selections,
+        mapCheckboxesToApi(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences),
+      ]
+    })
+  }
 
   // additional phone
   const {
@@ -268,9 +277,7 @@ export const mapFormToApi = ({
     householdExpectingChanges,
     householdStudent,
     reasonableAccommodations,
-    // TODO:
     preferences: preferencesData,
-    // TODO:
     programs: programsData,
     applicationSelections: selections,
     income,
