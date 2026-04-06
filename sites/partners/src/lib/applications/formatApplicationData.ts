@@ -148,6 +148,7 @@ export const mapFormToApi = ({
     }
   })()
 
+  // TODO: We can sunset this after full V2MSQ rollout
   let preferencesData: ApplicationMultiselectQuestion[] = []
   if (!enableV2MSQ) {
     preferencesData = preferences.map((pref: MultiselectQuestion) => {
@@ -159,6 +160,7 @@ export const mapFormToApi = ({
     })
   }
 
+  // TODO: We can sunset this after full V2MSQ rollout
   let programsData: ApplicationMultiselectQuestion[] = []
   if (!enableV2MSQ) {
     programsData = programs.map((program: MultiselectQuestion) => {
