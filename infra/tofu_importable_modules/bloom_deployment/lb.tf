@@ -14,6 +14,9 @@ resource "aws_lb" "bloom" {
   enable_zonal_shift         = true
   desync_mitigation_mode     = "strictest"
   drop_invalid_header_fields = true
+  enable_xff_client_port     = true
+  preserve_host_header       = true
+  xff_header_processing_mode = "append"
 }
 output "lb_dns_name" {
   value       = aws_lb.bloom.dns_name
@@ -93,9 +96,7 @@ resource "aws_lb_target_group" "site_partners" {
   load_balancing_algorithm_type = "round_robin"
   stickiness {
     enabled = true
-    type    = "app_cookie"
-    # https://github.com/bloom-housing/bloom/blob/main/docs/Authentication.md
-    cookie_name = "access-token"
+    type    = "lb_cookie"
   }
 
   deregistration_delay = 5 # seconds
