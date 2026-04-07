@@ -36,7 +36,7 @@ export default function () {
     }
     url = http.url`https://core-dev.bloomhousing.dev/`
     resp = http.request("GET", url, null, params)
-    check(resp, { "status equals 200": (r) => r.status === 200 })
+    check(resp, { "home page get": (r) => r.status === 200 })
 
     // jurisdictions get
     params = {
@@ -60,7 +60,7 @@ export default function () {
     }
     url = http.url`https://core-dev.bloomhousing.dev/api/adapter/jurisdictions/38f7eb8c-e29c-447e-9b01-eb1c78f5457c`
     resp = http.request("GET", url, null, params)
-    check(resp, { "status equals 200": (r) => r.status === 200 })
+    check(resp, { "jurisdictions get 1": (r) => r.status === 200 })
 
     // listings get
     params = {
@@ -85,7 +85,7 @@ export default function () {
     }
     url = http.url`https://core-dev.bloomhousing.dev/api/adapter/listings/496cd10a-4f3d-4add-9a79-c10ab7cd72b2`
     resp = http.request("GET", url, null, params)
-    check(resp, { "status equals 200": (r) => r.status === 200 })
+    check(resp, { "listing get": (r) => r.status === 200 })
 
     // jurisdiction get
     params = {
@@ -109,7 +109,7 @@ export default function () {
     }
     url = http.url`https://core-dev.bloomhousing.dev/api/adapter/jurisdictions/38f7eb8c-e29c-447e-9b01-eb1c78f5457c`
     resp = http.request("GET", url, null, params)
-    check(resp, { "status equals 200": (r) => r.status === 200 })
+    check(resp, { "jurisdiction get 2": (r) => r.status === 200 })
 
     // verify application
     params = {
@@ -141,7 +141,7 @@ export default function () {
       params
     )
 
-    check(resp, { "status equals 201": (r) => r.status === 201 })
+    check(resp, { "verify ": (r) => r.status === 201 })
 
     // application submission
     params = {
@@ -169,11 +169,11 @@ export default function () {
     resp = http.request(
       "POST",
       url,
-      `{"loaded":false,"autofilled":false,"completedSections":6,"submissionType":"electronical","language":"en","acceptedTerms":true,"status":"submitted","accessibleUnitWaitlistNumber":null,"conventionalUnitWaitlistNumber":null,"manualLotteryPositionNumber":null,"applicant":{"phoneNumberType":"home","noPhone":false,"applicantAddress":{"street":"Eastborne Avenue","street2":"1/2","city":"Los Angeles","state":"AZ","zipCode":"90024","county":"","longitude":-118.426842,"latitude":34.056933},"workInRegion":"no","phoneNumber":"(520) 123-4567","firstName":"${randomString()}}","middleName":"${randomString()}}","lastName":"${randomString()}}","birthMonth":"1","birthDay":"1","birthYear":"2000","emailAddress":"example+${randomString()}@exygy.com","noEmail":false,"fullTimeStudent":null,"applicantWorkAddress":{"street":"","street2":"","city":"","state":"","zipCode":"","county":""}},"additionalPhone":false,"additionalPhoneNumber":"","additionalPhoneNumberType":"","contactPreferences":["letter"],"householdSize":1,"housingStatus":"","sendMailToMailingAddress":false,"applicationsMailingAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"applicationsAlternateAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"alternateContact":{"type":"noContact","firstName":"","lastName":"","agency":"","phoneNumber":"","emailAddress":null,"address":{"street":"","street2":"","city":"","state":"","zipCode":""}},"accessibility":{"mobility":false,"vision":false,"hearing":false,"other":null},"householdExpectingChanges":false,"householdStudent":false,"incomeVouchers":true,"income":"5000.00","incomePeriod":"perMonth","householdMember":[],"preferredUnitTypes":[{"id":"cb6dad5c-88af-4afe-af72-4eb4a0318ef7"}],"demographics":{"ethnicity":"notHispanicLatino","gender":"","sexualOrientation":"","howDidYouHear":["friend"],"race":["asian","asian-asianIndian"],"spokenLanguage":""},"preferences":[],"programs":[],"confirmationCode":"","id":"","reachedReviewStep":true,"reviewStatus":"pending","listings":{"id":"496cd10a-4f3d-4add-9a79-c10ab7cd72b2"},"appUrl":"https://core-dev.bloomhousing.dev"}`,
+      `{"loaded":false,"autofilled":false,"completedSections":3,"submissionType":"electronical","language":"en","acceptedTerms":false,"status":"submitted","accessibleUnitWaitlistNumber":null,"conventionalUnitWaitlistNumber":null,"manualLotteryPositionNumber":null,"applicant":{"phoneNumberType":"home","noPhone":false,"applicantAddress":{"street":"Eastborne Avenue","street2":"1/2","city":"Los Angeles","state":"AZ","zipCode":"90024","county":"","longitude":-118.426842,"latitude":34.056933},"workInRegion":"no","phoneNumber":"(520) 123-4567","firstName":"First Name","middleName":"Middle Name","lastName":"Last Name","birthMonth":"1","birthDay":"1","birthYear":"2000","emailAddress":"example@exygy.com","noEmail":false,"fullTimeStudent":null,"applicantWorkAddress":{"street":"","street2":"","city":"","state":"","zipCode":"","county":""}},"additionalPhone":false,"additionalPhoneNumber":"","additionalPhoneNumberType":"","contactPreferences":["letter"],"householdSize":1,"housingStatus":"","sendMailToMailingAddress":false,"applicationsMailingAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"applicationsAlternateAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"alternateContact":{"type":"noContact","firstName":"","lastName":"","agency":"","phoneNumber":"","emailAddress":null,"address":{"street":"","street2":"","city":"","state":"","zipCode":""}},"accessibility":{"mobility":false,"vision":false,"hearing":false,"other":null},"householdExpectingChanges":false,"householdStudent":false,"incomeVouchers":true,"income":"5000.00","incomePeriod":"perMonth","householdMember":[],"preferredUnitTypes":[{"id":"cb6dad5c-88af-4afe-af72-4eb4a0318ef7"}],"demographics":{"ethnicity":"notHispanicLatino","gender":"","sexualOrientation":"","howDidYouHear":["friend"],"race":["asian","asian-asianIndian"],"spokenLanguage":""},"preferences":[{"multiselectQuestionId":"3497f10d-404d-48b6-8881-36b1188fe24d","key":"City Employees","claimed":true,"options":[{"key":"At least one member of my household is a city employee","checked":true,"extraData":[]}]}],"programs":[{"multiselectQuestionId":"45583597-37a0-4c5d-bfcf-9a82a28ba337","key":"Veteran","claimed":true,"options":[{"key":"Yes","checked":true,"extraData":[]}]}],"confirmationCode":"","id":"","reachedReviewStep":true,"reviewStatus":"pending","listing":{"id":"496cd10a-4f3d-4add-9a79-c10ab7cd72b2"},"appUrl":"https://core-dev.bloomhousing.dev"}`,
       params
     )
 
-    check(resp, { "status equals 201": (r) => r.status === 201 })
+    check(resp, { "submission ": (r) => r.status === 201 })
   })
   sleep(1)
 }
