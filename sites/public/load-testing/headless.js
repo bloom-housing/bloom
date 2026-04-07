@@ -19,8 +19,12 @@ export const options = {
 const randomString = (stringLength = 5) =>
   (Math.random() + 1).toString(36).substring(2, stringLength + 2)
 
-// eslint-disable-next-line no-undef
-const db = sql.open(driver, __ENV.DB_URL)
+let db
+
+export function setup() {
+  // eslint-disable-next-line no-undef
+  db = sql.open(driver, __ENV.DB_URL)
+}
 
 export function teardown() {
   db.close()
