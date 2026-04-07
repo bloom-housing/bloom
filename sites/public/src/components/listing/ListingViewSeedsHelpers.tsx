@@ -221,7 +221,6 @@ export const getFeatures = (
   const enableParkingTypes = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableParkingType)
 
   if (enablePetPolicyCheckbox && (listing.allowsDogs || listing.allowsCats)) {
-    const petPolicyDescription = tIfExists("listings.petPolicyDescription")
     const petPolicy = []
     if (listing.allowsDogs) petPolicy.push(t("listings.allowsDogs"))
     if (listing.allowsCats) petPolicy.push(t("listings.allowsCats"))
@@ -237,7 +236,9 @@ export const getFeatures = (
                 </li>
               ))}
             </ul>
-            {petPolicyDescription}
+            {tIfExists("listings.petPolicyDescription") && (
+              <p className={"seeds-m-bs-2"}>{t("listings.petPolicyDescription")}</p>
+            )}
           </>
         ),
       })
