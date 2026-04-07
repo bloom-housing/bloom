@@ -51,14 +51,14 @@ export default function () {
         "sec-fetch-site": `same-origin`,
         "sec-fetch-mode": `cors`,
         "sec-fetch-dest": `empty`,
-        referer: `https://core-dev.bloomhousing.dev/applications/start/choose-language?listingId=496cd10a-4f3d-4add-9a79-c10ab7cd72b2`,
+        referer: `https://core-dev.bloomhousing.dev/applications/start/choose-language?listingId=53468ecc-7736-4d3b-a489-10e62e3cb8b7`,
         "accept-encoding": `gzip, deflate, br, zstd`,
         "accept-language": `en-US,en;q=0.9`,
         priority: `u=1, i`,
       },
       cookies: {},
     }
-    url = http.url`https://core-dev.bloomhousing.dev/api/adapter/jurisdictions/38f7eb8c-e29c-447e-9b01-eb1c78f5457c`
+    url = http.url`https://core-dev.bloomhousing.dev/api/adapter/jurisdictions/42561f98-4e0e-46f4-a653-cf8097cd38c0`
     resp = http.request("GET", url, null, params)
     check(resp, { "jurisdictions get 1": (r) => r.status === 200 })
 
@@ -75,7 +75,7 @@ export default function () {
         "sec-fetch-site": `same-origin`,
         "sec-fetch-mode": `cors`,
         "sec-fetch-dest": `empty`,
-        referer: `https://core-dev.bloomhousing.dev/applications/start/choose-language?listingId=496cd10a-4f3d-4add-9a79-c10ab7cd72b2`,
+        referer: `https://core-dev.bloomhousing.dev/applications/start/choose-language?listingId=53468ecc-7736-4d3b-a489-10e62e3cb8b7`,
         "accept-encoding": `gzip, deflate, br, zstd`,
         "accept-language": `en-US,en;q=0.9`,
         "if-none-match": `"89n9pbkw5fd51"`,
@@ -83,7 +83,7 @@ export default function () {
       },
       cookies: {},
     }
-    url = http.url`https://core-dev.bloomhousing.dev/api/adapter/listings/496cd10a-4f3d-4add-9a79-c10ab7cd72b2`
+    url = http.url`https://core-dev.bloomhousing.dev/api/adapter/listings/53468ecc-7736-4d3b-a489-10e62e3cb8b7`
     resp = http.request("GET", url, null, params)
     check(resp, { "listing get": (r) => r.status === 200 })
 
@@ -100,14 +100,14 @@ export default function () {
         "sec-fetch-site": `same-origin`,
         "sec-fetch-mode": `cors`,
         "sec-fetch-dest": `empty`,
-        referer: `https://core-dev.bloomhousing.dev/applications/start/choose-language?listingId=496cd10a-4f3d-4add-9a79-c10ab7cd72b2`,
+        referer: `https://core-dev.bloomhousing.dev/applications/start/choose-language?listingId=53468ecc-7736-4d3b-a489-10e62e3cb8b7`,
         "accept-encoding": `gzip, deflate, br, zstd`,
         "accept-language": `en-US,en;q=0.9`,
         priority: `u=1, i`,
       },
       cookies: {},
     }
-    url = http.url`https://core-dev.bloomhousing.dev/api/adapter/jurisdictions/38f7eb8c-e29c-447e-9b01-eb1c78f5457c`
+    url = http.url`https://core-dev.bloomhousing.dev/api/adapter/jurisdictions/42561f98-4e0e-46f4-a653-cf8097cd38c0`
     resp = http.request("GET", url, null, params)
     check(resp, { "jurisdiction get 2": (r) => r.status === 200 })
 
@@ -137,7 +137,7 @@ export default function () {
     resp = http.request(
       "POST",
       url,
-      `{"loaded":false,"autofilled":false,"completedSections":3,"submissionType":"electronical","language":"en","acceptedTerms":false,"status":"submitted","accessibleUnitWaitlistNumber":null,"conventionalUnitWaitlistNumber":null,"manualLotteryPositionNumber":null,"applicant":{"phoneNumberType":"home","noPhone":false,"applicantAddress":{"street":"Eastborne Avenue","street2":"1/2","city":"Los Angeles","state":"AZ","zipCode":"90024","county":"","longitude":-118.426842,"latitude":34.056933},"workInRegion":"no","phoneNumber":"(520) 123-4567","firstName":"First Name","middleName":"Middle Name","lastName":"Last Name","birthMonth":"1","birthDay":"1","birthYear":"2000","emailAddress":"example@exygy.com","noEmail":false,"fullTimeStudent":null,"applicantWorkAddress":{"street":"","street2":"","city":"","state":"","zipCode":"","county":""}},"additionalPhone":false,"additionalPhoneNumber":"","additionalPhoneNumberType":"","contactPreferences":["letter"],"householdSize":1,"housingStatus":"","sendMailToMailingAddress":false,"applicationsMailingAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"applicationsAlternateAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"alternateContact":{"type":"noContact","firstName":"","lastName":"","agency":"","phoneNumber":"","emailAddress":null,"address":{"street":"","street2":"","city":"","state":"","zipCode":""}},"accessibility":{"mobility":false,"vision":false,"hearing":false,"other":null},"householdExpectingChanges":false,"householdStudent":false,"incomeVouchers":true,"income":"5000.00","incomePeriod":"perMonth","householdMember":[],"preferredUnitTypes":[{"id":"cb6dad5c-88af-4afe-af72-4eb4a0318ef7"}],"demographics":{"ethnicity":"notHispanicLatino","gender":"","sexualOrientation":"","howDidYouHear":["friend"],"race":["asian","asian-asianIndian"],"spokenLanguage":""},"preferences":[{"multiselectQuestionId":"3497f10d-404d-48b6-8881-36b1188fe24d","key":"City Employees","claimed":true,"options":[{"key":"At least one member of my household is a city employee","checked":true,"extraData":[]}]}],"programs":[{"multiselectQuestionId":"45583597-37a0-4c5d-bfcf-9a82a28ba337","key":"Veteran","claimed":true,"options":[{"key":"Yes","checked":true,"extraData":[]}]}],"confirmationCode":"","id":"","reachedReviewStep":true,"reviewStatus":"pending","listing":{"id":"496cd10a-4f3d-4add-9a79-c10ab7cd72b2"},"appUrl":"https://core-dev.bloomhousing.dev"}`,
+      `{"loaded":false,"autofilled":false,"completedSections":3,"submissionType":"electronical","language":"en","acceptedTerms":false,"status":"submitted","accessibleUnitWaitlistNumber":null,"conventionalUnitWaitlistNumber":null,"manualLotteryPositionNumber":null,"applicant":{"phoneNumberType":"home","noPhone":false,"applicantAddress":{"street":"Eastborne Avenue","street2":"1/2","city":"Los Angeles","state":"AZ","zipCode":"90024","county":"","longitude":-118.426842,"latitude":34.056933},"workInRegion":"no","phoneNumber":"(520) 123-4567","firstName":"First Name","middleName":"Middle Name","lastName":"Last Name","birthMonth":"1","birthDay":"1","birthYear":"2000","emailAddress":"example@exygy.com","noEmail":false,"fullTimeStudent":null,"applicantWorkAddress":{"street":"","street2":"","city":"","state":"","zipCode":"","county":""}},"additionalPhone":false,"additionalPhoneNumber":"","additionalPhoneNumberType":"","contactPreferences":["letter"],"householdSize":1,"housingStatus":"","sendMailToMailingAddress":false,"applicationsMailingAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"applicationsAlternateAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"alternateContact":{"type":"noContact","firstName":"","lastName":"","agency":"","phoneNumber":"","emailAddress":null,"address":{"street":"","street2":"","city":"","state":"","zipCode":""}},"accessibility":{"mobility":false,"vision":false,"hearing":false,"other":null},"householdExpectingChanges":false,"householdStudent":false,"incomeVouchers":true,"income":"5000.00","incomePeriod":"perMonth","householdMember":[],"preferredUnitTypes":[{"id":"cb6dad5c-88af-4afe-af72-4eb4a0318ef7"}],"demographics":{"ethnicity":"notHispanicLatino","gender":"","sexualOrientation":"","howDidYouHear":["friend"],"race":["asian","asian-asianIndian"],"spokenLanguage":""},"preferences":[{"multiselectQuestionId":"3497f10d-404d-48b6-8881-36b1188fe24d","key":"City Employees","claimed":true,"options":[{"key":"At least one member of my household is a city employee","checked":true,"extraData":[]}]}],"programs":[{"multiselectQuestionId":"45583597-37a0-4c5d-bfcf-9a82a28ba337","key":"Veteran","claimed":true,"options":[{"key":"Yes","checked":true,"extraData":[]}]}],"confirmationCode":"","id":"","reachedReviewStep":true,"reviewStatus":"pending","listing":{"id":"53468ecc-7736-4d3b-a489-10e62e3cb8b7"},"appUrl":"https://core-dev.bloomhousing.dev"}`,
       params
     )
 
@@ -169,7 +169,7 @@ export default function () {
     resp = http.request(
       "POST",
       url,
-      `{"loaded":false,"autofilled":false,"completedSections":3,"submissionType":"electronical","language":"en","acceptedTerms":false,"status":"submitted","accessibleUnitWaitlistNumber":null,"conventionalUnitWaitlistNumber":null,"manualLotteryPositionNumber":null,"applicant":{"phoneNumberType":"home","noPhone":false,"applicantAddress":{"street":"Eastborne Avenue","street2":"1/2","city":"Los Angeles","state":"AZ","zipCode":"90024","county":"","longitude":-118.426842,"latitude":34.056933},"workInRegion":"no","phoneNumber":"(520) 123-4567","firstName":"First Name","middleName":"Middle Name","lastName":"Last Name","birthMonth":"1","birthDay":"1","birthYear":"2000","emailAddress":"example@exygy.com","noEmail":false,"fullTimeStudent":null,"applicantWorkAddress":{"street":"","street2":"","city":"","state":"","zipCode":"","county":""}},"additionalPhone":false,"additionalPhoneNumber":"","additionalPhoneNumberType":"","contactPreferences":["letter"],"householdSize":1,"housingStatus":"","sendMailToMailingAddress":false,"applicationsMailingAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"applicationsAlternateAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"alternateContact":{"type":"noContact","firstName":"","lastName":"","agency":"","phoneNumber":"","emailAddress":null,"address":{"street":"","street2":"","city":"","state":"","zipCode":""}},"accessibility":{"mobility":false,"vision":false,"hearing":false,"other":null},"householdExpectingChanges":false,"householdStudent":false,"incomeVouchers":true,"income":"5000.00","incomePeriod":"perMonth","householdMember":[],"preferredUnitTypes":[{"id":"cb6dad5c-88af-4afe-af72-4eb4a0318ef7"}],"demographics":{"ethnicity":"notHispanicLatino","gender":"","sexualOrientation":"","howDidYouHear":["friend"],"race":["asian","asian-asianIndian"],"spokenLanguage":""},"preferences":[{"multiselectQuestionId":"3497f10d-404d-48b6-8881-36b1188fe24d","key":"City Employees","claimed":true,"options":[{"key":"At least one member of my household is a city employee","checked":true,"extraData":[]}]}],"programs":[{"multiselectQuestionId":"45583597-37a0-4c5d-bfcf-9a82a28ba337","key":"Veteran","claimed":true,"options":[{"key":"Yes","checked":true,"extraData":[]}]}],"confirmationCode":"","id":"","reachedReviewStep":true,"reviewStatus":"pending","listing":{"id":"496cd10a-4f3d-4add-9a79-c10ab7cd72b2"},"appUrl":"https://core-dev.bloomhousing.dev"}`,
+      `{"loaded":false,"autofilled":false,"completedSections":3,"submissionType":"electronical","language":"en","acceptedTerms":false,"status":"submitted","accessibleUnitWaitlistNumber":null,"conventionalUnitWaitlistNumber":null,"manualLotteryPositionNumber":null,"applicant":{"phoneNumberType":"home","noPhone":false,"applicantAddress":{"street":"Eastborne Avenue","street2":"1/2","city":"Los Angeles","state":"AZ","zipCode":"90024","county":"","longitude":-118.426842,"latitude":34.056933},"workInRegion":"no","phoneNumber":"(520) 123-4567","firstName":"First Name","middleName":"Middle Name","lastName":"Last Name","birthMonth":"1","birthDay":"1","birthYear":"2000","emailAddress":"example@exygy.com","noEmail":false,"fullTimeStudent":null,"applicantWorkAddress":{"street":"","street2":"","city":"","state":"","zipCode":"","county":""}},"additionalPhone":false,"additionalPhoneNumber":"","additionalPhoneNumberType":"","contactPreferences":["letter"],"householdSize":1,"housingStatus":"","sendMailToMailingAddress":false,"applicationsMailingAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"applicationsAlternateAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"alternateContact":{"type":"noContact","firstName":"","lastName":"","agency":"","phoneNumber":"","emailAddress":null,"address":{"street":"","street2":"","city":"","state":"","zipCode":""}},"accessibility":{"mobility":false,"vision":false,"hearing":false,"other":null},"householdExpectingChanges":false,"householdStudent":false,"incomeVouchers":true,"income":"5000.00","incomePeriod":"perMonth","householdMember":[],"preferredUnitTypes":[{"id":"cb6dad5c-88af-4afe-af72-4eb4a0318ef7"}],"demographics":{"ethnicity":"notHispanicLatino","gender":"","sexualOrientation":"","howDidYouHear":["friend"],"race":["asian","asian-asianIndian"],"spokenLanguage":""},"preferences":[{"multiselectQuestionId":"3497f10d-404d-48b6-8881-36b1188fe24d","key":"City Employees","claimed":true,"options":[{"key":"At least one member of my household is a city employee","checked":true,"extraData":[]}]}],"programs":[{"multiselectQuestionId":"45583597-37a0-4c5d-bfcf-9a82a28ba337","key":"Veteran","claimed":true,"options":[{"key":"Yes","checked":true,"extraData":[]}]}],"confirmationCode":"","id":"","reachedReviewStep":true,"reviewStatus":"pending","listing":{"id":"53468ecc-7736-4d3b-a489-10e62e3cb8b7"},"appUrl":"https://core-dev.bloomhousing.dev"}`,
       params
     )
 
