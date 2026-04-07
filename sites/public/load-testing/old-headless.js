@@ -3,8 +3,8 @@ import { group, sleep, check } from "k6"
 import http from "k6/http"
 
 export const options = {
-  vus: 100,
-  iterations: 1000,
+  vus: 500,
+  iterations: 10000,
 }
 
 const randomString = (stringLength = 5) =>
