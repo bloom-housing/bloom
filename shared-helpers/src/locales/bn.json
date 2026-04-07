@@ -803,6 +803,7 @@
   "listings.amenities.schools": "স্কুল",
   "listings.amenities.seniorCenters": "সিনিয়র সেন্টারসমূহ",
   "listings.amenities.shoppingVenues": "শপিং ভেন্যু",
+  "listings.amiDisclaimer": "সতর্কীকরণ: উপরে উল্লিখিত AMI আয়ের স্তরগুলো শুধুমাত্র তথ্যের জন্য দেওয়া হয়েছে। অনুগ্রহ করে প্রকল্পের মালিক বা সম্পত্তি ব্যবস্থাপকের সাথে আপনার পছন্দের ইউনিটের জন্য প্রযোজ্য আয় এবং ভাড়ার সীমা নিশ্চিত করুন। প্রকল্পগুলিতে একাধিক সময়সূচী এবং বিধিনিষেধ থাকতে পারে যা প্রকল্পের ভাড়া এবং আয়ের সীমাকে প্রভাবিত করে।",
   "listings.annualIncome": "%{income} প্রতি বছর",
   "listings.applicationAlreadySubmitted": "এই আবেদনটি ইতিমধ্যেই জমা দেওয়া হয়েছে।",
   "listings.applicationDeadline": "আবেদনের শেষ তারিখ",

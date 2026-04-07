@@ -800,6 +800,7 @@
   "listings.amenities.schools": "학교",
   "listings.amenities.seniorCenters": "노인 센터",
   "listings.amenities.shoppingVenues": "쇼핑 장소",
+  "listings.amiDisclaimer": "면책 조항: 위의 AMI 소득 수준은 정보 제공 목적으로만 제시되었습니다. 관심 있는 유닛의 적용 가능한 소득 및 임대료 제한은 프로젝트 소유자 또는 부동산 관리자에게 확인하십시오. 프로젝트마다 여러 일정과 제한 사항이 있을 수 있으며, 이는 프로젝트 임대료 및 소득 제한에 영향을 미칩니다.",
   "listings.annualIncome": "연간 %{income}",
   "listings.applicationAlreadySubmitted": "이 신청서는 이미 제출되었습니다.",
   "listings.applicationDeadline": "지원 마감일",
