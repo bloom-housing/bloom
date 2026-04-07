@@ -221,22 +221,25 @@ export const getFeatures = (
   const enableParkingTypes = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableParkingType)
 
   if (enablePetPolicyCheckbox && (listing.allowsDogs || listing.allowsCats)) {
+    const petPolicyDescription = tIfExists("listings.petPolicyDescription")
     const petPolicy = []
     if (listing.allowsDogs) petPolicy.push(t("listings.allowsDogs"))
     if (listing.allowsCats) petPolicy.push(t("listings.allowsCats"))
     if (petPolicy.length > 0) {
       features.push({
         heading: t("t.petsPolicy"),
-        subheading: (
-          <ul data-testid="pet-policy-list">
-            {petPolicy.map((petPolicyItem, index) => (
-              <li key={index} className={styles["list-item"]}>
-                {petPolicyItem}
-              </li>
-            ))}
-          </ul>
+        content: (
+          <>
+            <ul data-testid="pet-policy-list">
+              {petPolicy.map((petPolicyItem, index) => (
+                <li key={index} className={styles["list-item"]}>
+                  {petPolicyItem}
+                </li>
+              ))}
+            </ul>
+            {petPolicyDescription}
+          </>
         ),
-        content: tIfExists("listings.petPolicyDescription"),
       })
     }
   } else if (listing.petPolicy) {
