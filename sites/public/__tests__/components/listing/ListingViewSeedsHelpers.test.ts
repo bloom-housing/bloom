@@ -519,14 +519,17 @@ describe("ListingViewSeedsHelpers", () => {
       const result = getFeatures(mockListing, mockJurisdiction)
       const petPolicyFeature = result.find((f) => f.heading === "Pets policy")
       expect(petPolicyFeature).toBeDefined()
-      expect(petPolicyFeature?.subheading).toBeDefined()
+      expect(petPolicyFeature?.content).toBeDefined()
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const elementList = petPolicyFeature.subheading as any
-      const petList = elementList.props.children
-      expect(petList.length).toBe(2)
-      expect(petList[0].props.children).toBe("Allows dogs")
-      expect(petList[1].props.children).toBe("Allows cats")
+      const contentElement = petPolicyFeature?.content as any
+      const contentChildren = contentElement.props.children
+      const petList = Array.isArray(contentChildren) ? contentChildren[0] : contentChildren
+      const petItems = petList.props.children
+
+      expect(petItems.length).toBe(2)
+      expect(petItems[0].props.children).toBe("Allows dogs")
+      expect(petItems[1].props.children).toBe("Allows cats")
     })
     it("should include parking fee when available", () => {
       const mockListing: Listing = {
