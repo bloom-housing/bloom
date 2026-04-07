@@ -92,7 +92,7 @@ export default function () {
     )
     check(resp, { "status equals 201": (r) => r.status === 201 })
 
-    const userToConfirm = sql.query(
+    const userToConfirm = db.query(
       db,
       `SELECT id, confirmation_token FROM user_accounts WHERE email = '${email}';`
     )
