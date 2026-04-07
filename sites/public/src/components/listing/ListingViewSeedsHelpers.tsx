@@ -208,7 +208,7 @@ export const getUtilitiesIncluded = (listing: Listing) => {
 export const getFeatures = (
   listing: Listing,
   jurisdiction: Jurisdiction
-): { heading: string; subheading?: React.ReactNode; content?: React.ReactNode }[] => {
+): { heading: string; subheading?: string; content?: React.ReactNode }[] => {
   const features = []
   if (listing.yearBuilt) {
     features.push({ heading: t("t.built"), subheading: listing.yearBuilt })
