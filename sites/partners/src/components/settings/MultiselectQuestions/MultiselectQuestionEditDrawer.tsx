@@ -425,6 +425,7 @@ const MultiselectQuestionEditDrawer = ({
                       register={register}
                       dataTestId={"preference-description"}
                       defaultValue={questionData?.description}
+                      placeholder={""}
                     />
                   </Grid.Cell>
                 </Grid.Row>
@@ -693,6 +694,7 @@ const MultiselectQuestionEditDrawer = ({
                       register={register}
                       dataTestId={"preference-option-description"}
                       defaultValue={optionData?.description}
+                      placeholder={""}
                     />
                   </Grid.Cell>
                 </Grid.Row>
