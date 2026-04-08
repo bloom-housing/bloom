@@ -800,10 +800,20 @@ describe('Testing listing service', () => {
               ],
             },
             {
-              name: {
-                contains: 'simple search',
-                mode: 'insensitive',
-              },
+              OR: [
+                {
+                  name: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  listingFileNumber: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+              ],
             },
           ],
         },
@@ -891,10 +901,20 @@ describe('Testing listing service', () => {
               ],
             },
             {
-              name: {
-                contains: 'simple search',
-                mode: 'insensitive',
-              },
+              OR: [
+                {
+                  name: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  listingFileNumber: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+              ],
             },
           ],
         },
@@ -1329,10 +1349,20 @@ describe('Testing listing service', () => {
               ],
             },
             {
-              name: {
-                contains: 'simple search',
-                mode: 'insensitive',
-              },
+              OR: [
+                {
+                  name: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  listingFileNumber: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+              ],
             },
           ],
         },
@@ -1413,10 +1443,20 @@ describe('Testing listing service', () => {
               ],
             },
             {
-              name: {
-                contains: 'simple search',
-                mode: 'insensitive',
-              },
+              OR: [
+                {
+                  name: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  listingFileNumber: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+              ],
             },
           ],
         },
