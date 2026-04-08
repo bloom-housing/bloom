@@ -34,6 +34,11 @@ describe("<RentSummary>", () => {
     expect(screen.getByText("Minimum income")).toBeDefined()
     expect(screen.getByText("Availability")).toBeDefined()
     expect(screen.queryByText("Section 8 Housing Choice Voucher")).toBeNull()
+    expect(
+      screen.getByText(
+        "Disclaimer: The AMI income levels above are for informational purposes only. Please confirm the applicable income and rent limits for your interested unit with the project's owner or property manager. Projects may have multiple schedules and restrictions that affect project rents and income limits."
+      )
+    ).toBeDefined()
   })
   it("shows all content for multiple percentages", () => {
     render(

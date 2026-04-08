@@ -8,6 +8,7 @@ import {
   ListingFilterParams,
   ParkingTypeEnum,
   RegionEnum,
+  UnitAccessibilityPriorityTypeEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { UseFormMethods } from "react-hook-form"
@@ -42,6 +43,7 @@ export interface FilterData {
   multiselectQuestions?: Record<string, BooleanOrBooleanString>
   name?: string
   parkingType?: { [K in ParkingTypeEnum]?: BooleanOrBooleanString }
+  accessibilityPriorityTypes?: { [K in UnitAccessibilityPriorityTypeEnum]?: BooleanOrBooleanString }
 }
 
 export interface FilterField {
@@ -90,6 +92,7 @@ const arrayFilters: ListingFilterKeys[] = [
   ListingFilterKeys.availabilities,
   ListingFilterKeys.multiselectQuestions,
   ListingFilterKeys.parkingType,
+  ListingFilterKeys.accessibilityPriorityTypes,
 ]
 
 const booleanFilters: ListingFilterKeys[] = [
