@@ -40,7 +40,6 @@ const MultiselectQuestionReactivateModal = ({
     >
       <Dialog.Header id="preference-reactivate-modal-header">{t("t.areYouSure")}</Dialog.Header>
       <Dialog.Content id="preference-reactivate-modal-description">
-        This action will un-retire this preference. Partners will be able to add this preference to listings once again.
         {t("settings.preferenceReactivateConfirmation")}
       </Dialog.Content>
       <Dialog.Footer>

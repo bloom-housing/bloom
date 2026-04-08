@@ -40,7 +40,6 @@ const MultiselectQuestionRetireModal = ({
     >
       <Dialog.Header id="preference-retire-modal-header">{t("t.areYouSure")}</Dialog.Header>
       <Dialog.Content id="preference-retire-modal-description">
-        This action will prevent future listings from using this preference. This preference will automatically be deleted when the last currently published listing with this preference is closed.
         {t("settings.preferenceRetireConfirmation")}
       </Dialog.Content>
       <Dialog.Footer>
