@@ -25,6 +25,7 @@ organization. The guide is broken down into a series of files that should be fol
    2. S3 bucket name and region for the OpenTofu state file bucket.
    3. IAM Identity Center Instance ARN, region, and AWS access portal URL.
    4. Permission set ARNs for `bloom-dev-deployer` and `bloom-prod-deployer`.
+   5. Group IDs for the `bloom-dev-deployers` and `bloom-prod-deployers` groups.
 2. Decide where you would like to host then Bloom fork. GitHub will work out-of-the-box. If choosing
    another provider, you will need to implement a method for building and storing docker images from
    the repo. If choosing GitHub, **note the GitHub org or account name** the fork will exist in.

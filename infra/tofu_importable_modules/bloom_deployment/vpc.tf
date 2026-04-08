@@ -201,7 +201,7 @@ locals {
   # List of AWS services that PrivateLink endpoints will be created for. This keeps traffic from
   # Bloom services to the AWS services internal to the VPC instead of going over the public
   # internet.
-  aws_privatelink_services = ["secretsmanager", "rds", "data-servicediscovery"]
+  aws_privatelink_services = ["secretsmanager", "rds", "data-servicediscovery", "aps-workspaces"]
   aws_privatelink_users = flatten([
     for sg, config in local.bloom_security_groups : [
       for aws_service in config.egress == null ? [] : config.egress.privatelink_services : {
@@ -251,6 +251,7 @@ locals {
         privatelink_services = [
           "secretsmanager", # to read JWT signing key and Google Translate key.
           "rds",            # to generate an auth token for bloom_api DB user.
+          "aps-workspaces", # to write metrics.
         ]
         nat             = true # to download container image from GitHub.
         security_groups = ["db"]
@@ -263,9 +264,12 @@ locals {
         port        = 3001
       }
       egress = {
-        privatelink_services = ["secretsmanager"] # to read Mapbox API key.
-        nat                  = true               # to download container image from GitHub.
-        security_groups      = ["api"]
+        privatelink_services = [
+          "secretsmanager", # to read Mapbox API key
+          "aps-workspaces"  # to write metrics.
+        ]
+        nat             = true # to download container image from GitHub.
+        security_groups = ["api"]
       }
     }
     "site-public" : {
@@ -275,9 +279,12 @@ locals {
         port        = 3000
       }
       egress = {
-        privatelink_services = ["secretsmanager"] # to read Mapbox API key.
-        nat                  = true               # to download container image from GitHub.
-        security_groups      = ["api"]
+        privatelink_services = [
+          "secretsmanager", # to read Mapbox API key
+          "aps-workspaces"  # to write metrics.
+        ]
+        nat             = true # to download container image from GitHub.
+        security_groups = ["api"]
       }
     }
     "cloudshell" : {

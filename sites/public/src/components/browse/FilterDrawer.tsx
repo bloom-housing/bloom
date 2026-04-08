@@ -9,6 +9,7 @@ import {
   FeatureFlagEnum,
   ListingFeaturesConfiguration,
   ParkingTypeEnum,
+  UnitAccessibilityPriorityTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
 import {
@@ -35,6 +36,7 @@ export interface FilterDrawerProps {
   onClose: () => void
   onSubmit: (data: FilterData) => void
   regions?: string[]
+  visibleAccessibilityPriorityTypes?: UnitAccessibilityPriorityTypeEnum[]
 }
 
 const FilterDrawer = (props: FilterDrawerProps) => {
@@ -198,6 +200,20 @@ const FilterDrawer = (props: FilterDrawerProps) => {
                     ),
                   }
                 })}
+                register={register}
+              />
+            )}
+            {props.visibleAccessibilityPriorityTypes?.length > 0 && (
+              <CheckboxGroup
+                groupLabel={t("listings.accessibleUnits")}
+                fields={buildDefaultFilterFields(
+                  ListingFilterKeys.accessibilityPriorityTypes,
+                  props.visibleAccessibilityPriorityTypes.map((type) =>
+                    t(`listings.unit.accessibilityType.${type}`)
+                  ),
+                  props.visibleAccessibilityPriorityTypes,
+                  props.filterState
+                )}
                 register={register}
               />
             )}

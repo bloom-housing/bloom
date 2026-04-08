@@ -8,6 +8,7 @@ import {
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
+  UnitAccessibilityPriorityTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   defaultListingFeaturesConfiguration,
@@ -612,5 +613,98 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("group", { name: "Mobility" })).toBeInTheDocument()
     expect(screen.getByRole("group", { name: "Bathroom" })).toBeInTheDocument()
     expect(screen.getByLabelText("Wheelchair ramp")).toBeInTheDocument()
+  })
+
+  it("should not show accessible units section when visibleAccessibilityPriorityTypes is not provided", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Accessible units" })).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("Mobility")).not.toBeInTheDocument()
+  })
+
+  it("should not show accessible units section when visibleAccessibilityPriorityTypes is empty", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        visibleAccessibilityPriorityTypes={[]}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Accessible units" })).not.toBeInTheDocument()
+  })
+
+  it("should show accessible units section with checkboxes when visibleAccessibilityPriorityTypes is provided", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        visibleAccessibilityPriorityTypes={[
+          UnitAccessibilityPriorityTypeEnum.mobility,
+          UnitAccessibilityPriorityTypeEnum.hearing,
+          UnitAccessibilityPriorityTypeEnum.vision,
+        ]}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Accessible units" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Mobility")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Mobility" })).not.toBeChecked()
+    expect(screen.getByLabelText("Hearing")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Hearing" })).not.toBeChecked()
+    expect(screen.getByLabelText("Vision")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Vision" })).not.toBeChecked()
+  })
+
+  it("should show accessible units checkboxes as checked when filterState has selections", () => {
+    const filterState: FilterData = {
+      [ListingFilterKeys.accessibilityPriorityTypes]: {
+        [UnitAccessibilityPriorityTypeEnum.mobility]: true,
+        [UnitAccessibilityPriorityTypeEnum.hearing]: false,
+      },
+    }
+
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={filterState}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        visibleAccessibilityPriorityTypes={[
+          UnitAccessibilityPriorityTypeEnum.mobility,
+          UnitAccessibilityPriorityTypeEnum.hearing,
+        ]}
+      />
+    )
+
+    expect(screen.getByRole("checkbox", { name: "Mobility" })).toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "Hearing" })).not.toBeChecked()
   })
 })
