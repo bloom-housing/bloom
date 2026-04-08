@@ -1760,6 +1760,15 @@ export class UserService {
     dto: UserNotificationPreferences,
     requestingUser: User,
   ): Promise<SuccessDTO> {
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'userProfile',
+      permissionActions.update,
+      {
+        id: requestingUser.id,
+      },
+    );
+
     await this.prisma.userNotificationPreferences.update({
       data: {
         ...dto,
