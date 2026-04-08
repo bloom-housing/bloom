@@ -7,7 +7,6 @@ import {
   PrismaClient,
   UserRoleEnum,
   MultiselectQuestionsStatusEnum,
-  Prisma,
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
@@ -280,6 +279,12 @@ export const stagingSeed = async (
       ],
       listingFeaturesConfiguration: defaultListingFeatureConfiguration,
       raceEthnicityConfiguration: defaultRaceEthnicityConfiguration,
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearing,
+        ApplicationAccessibilityFeatureEnum.vision,
+        ApplicationAccessibilityFeatureEnum.other,
+      ],
     }),
   });
   // Basic configuration jurisdiction
