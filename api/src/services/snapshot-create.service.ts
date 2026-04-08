@@ -174,6 +174,7 @@ export class SnapshotCreateService {
           ? {
               create: {
                 ...notificationPreferences,
+                originalUserID: id,
               },
             }
           : undefined,

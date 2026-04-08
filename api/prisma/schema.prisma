@@ -2125,7 +2125,7 @@ model UserAccountSnapshot {
   notificationPreferences UserNotificationPreferencesSnapshot?
   jurisdiction            Jurisdictions[]
   listing                 Listings[]
-  userRole                UserRoleSnapshot?              
+  userRole                UserRoleSnapshot?
 
   @@map("user_account_snapshot")
 }
@@ -2164,18 +2164,19 @@ model UserNotificationPreferences {
 }
 
 model UserNotificationPreferencesSnapshot {
-  userId                   String                @id() @map("user_id") @db.Uuid
-  user                     UserAccountSnapshot   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  lottery                  Boolean?              @default(false)
-  waitlist                 Boolean?              @default(false)
-  mobility                 Boolean?              @default(false)
-  hearing                  Boolean?              @default(false)
-  vision                   Boolean?              @default(false)
-  hearingAndVision         Boolean?              @default(false) @map("hearing_and_vision")
-  mobilityAndHearing       Boolean?              @default(false) @map("mobility_and_hearing")
-  mobilityAndVision        Boolean?              @default(false) @map("mobility_and_vision")
-  mobilityHearingAndVision Boolean?              @default(false) @map("mobility_hearing_and_vision")
-  wantsRegionNotifs        Boolean?              @default(false) @map("wants_region_notifs")
+  userSnapshotId           String              @id() @map("user_snapshot_id") @db.Uuid
+  originalUserID           String              @map("original_user_id") @db.Uuid
+  user                     UserAccountSnapshot @relation(fields: [userSnapshotId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  lottery                  Boolean?            @default(false)
+  waitlist                 Boolean?            @default(false)
+  mobility                 Boolean?            @default(false)
+  hearing                  Boolean?            @default(false)
+  vision                   Boolean?            @default(false)
+  hearingAndVision         Boolean?            @default(false) @map("hearing_and_vision")
+  mobilityAndHearing       Boolean?            @default(false) @map("mobility_and_hearing")
+  mobilityAndVision        Boolean?            @default(false) @map("mobility_and_vision")
+  mobilityHearingAndVision Boolean?            @default(false) @map("mobility_hearing_and_vision")
+  wantsRegionNotifs        Boolean?            @default(false) @map("wants_region_notifs")
   regions                  String[]
 
   @@map("user_notification_preferences_snapshot")

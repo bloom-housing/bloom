@@ -35,7 +35,8 @@ CREATE INDEX "user_notification_preferences_wants_region_notifs_idx" ON "user_no
 ALTER TABLE "user_notification_preferences" ADD CONSTRAINT "user_notification_preferences_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user_accounts"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 CREATE TABLE "user_notification_preferences_snapshot" (
-    "user_id" UUID NOT NULL,
+    "original_user_id" UUID NOT NULL,
+    "user_snapshot_id" UUID NOT NULL,
     "lottery" BOOLEAN DEFAULT false,
     "waitlist" BOOLEAN DEFAULT false,
     "mobility" BOOLEAN DEFAULT false,
@@ -48,8 +49,8 @@ CREATE TABLE "user_notification_preferences_snapshot" (
     "wants_region_notifs" BOOLEAN DEFAULT false,
     "regions" TEXT[],
 
-    CONSTRAINT "user_notification_preferences_snapshot_pkey" PRIMARY KEY ("user_id")
+    CONSTRAINT "user_notification_preferences_snapshot_pkey" PRIMARY KEY ("user_snapshot_id")
 );
 
 -- AddForeignKey
-ALTER TABLE "user_notification_preferences_snapshot" ADD CONSTRAINT "user_notification_preferences_snapshot_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user_account_snapshot"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE "user_notification_preferences_snapshot" ADD CONSTRAINT "user_notification_preferences_snapshot_user_snapshot_id_fkey" FOREIGN KEY ("user_snapshot_id") REFERENCES "user_account_snapshot"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
