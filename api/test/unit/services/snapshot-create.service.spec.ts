@@ -496,6 +496,7 @@ describe('Testing snapshot create service', () => {
           },
           notificationPreferences: {
             create: {
+              originalUserID: id,
               lottery: false,
               waitlist: false,
               mobility: false,
