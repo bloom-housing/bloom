@@ -31,15 +31,15 @@ describe("<FormHouseholdDetails>", () => {
           applicationAccessibilityFeatures={{
             id: "id",
             mobility: true,
-            vision: true,
-            hearing: true,
+            vision: false,
+            hearing: false,
+            hearingAndVision: true,
           }}
           listingUnitGroups={[]}
           enableUnitGroups={false}
           visibleApplicationAccessibilityFeatures={[
             ApplicationAccessibilityFeatureEnum.mobility,
-            ApplicationAccessibilityFeatureEnum.vision,
-            ApplicationAccessibilityFeatureEnum.hearing,
+            ApplicationAccessibilityFeatureEnum.hearingAndVision,
           ]}
         />
       </FormProviderWrapper>
@@ -60,8 +60,10 @@ describe("<FormHouseholdDetails>", () => {
 
     expect(screen.getByText(/ada priorities selected/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/mobility impairments/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/vision impairments/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/hearing impairments/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/hearing and vision impairments/i)).toBeInTheDocument()
+    expect(screen.queryByLabelText(/other impairments/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/hearing impairments/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/vision impairments/i)).not.toBeInTheDocument()
 
     expect(screen.getByText(/expecting household changes/i)).toBeInTheDocument()
     expect(screen.getByText(/household includes student or member nearing 18/i)).toBeInTheDocument()
@@ -77,8 +79,6 @@ describe("<FormHouseholdDetails>", () => {
           applicationUnitTypes={[]}
           applicationAccessibilityFeatures={{
             id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             mobility: true,
             vision: true,
             hearing: true,
@@ -153,6 +153,8 @@ describe("<FormHouseholdDetails>", () => {
     expect(screen.getByLabelText(/mobility impairments/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/vision impairments/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/hearing impairments/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/hearing and vision impairments/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/other impairments/i)).not.toBeInTheDocument()
 
     expect(screen.getByText(/expecting household changes/i)).toBeInTheDocument()
     expect(screen.getByText(/household includes student or member nearing 18/i)).toBeInTheDocument()
@@ -168,8 +170,6 @@ describe("<FormHouseholdDetails>", () => {
           applicationUnitTypes={[]}
           applicationAccessibilityFeatures={{
             id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             mobility: true,
             vision: true,
             hearing: true,
@@ -242,8 +242,6 @@ describe("<FormHouseholdDetails>", () => {
           applicationUnitTypes={[]}
           applicationAccessibilityFeatures={{
             id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             mobility: true,
             vision: true,
             hearing: true,
@@ -419,5 +417,37 @@ describe("<FormHouseholdDetails>", () => {
 
     await userEvent.type(reasonableAccommodationsInput, "Need a step-free entrance.")
     expect(reasonableAccommodationsInput).toHaveValue("Need a step-free entrance.")
+  })
+
+  it("renders all possible ADA options when configured", () => {
+    render(
+      <FormProviderWrapper>
+        <FormHouseholdDetails
+          listingUnits={[]}
+          applicationUnitTypes={[]}
+          applicationAccessibilityFeatures={{
+            id: "id",
+            mobility: false,
+            vision: false,
+            hearing: false,
+            hearingAndVision: false,
+            other: false,
+          }}
+          visibleApplicationAccessibilityFeatures={[
+            ApplicationAccessibilityFeatureEnum.mobility,
+            ApplicationAccessibilityFeatureEnum.vision,
+            ApplicationAccessibilityFeatureEnum.hearing,
+            ApplicationAccessibilityFeatureEnum.hearingAndVision,
+            ApplicationAccessibilityFeatureEnum.other,
+          ]}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.getByLabelText(/mobility impairments/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/vision impairments/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/hearing impairments/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/hearing and vision impairments/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/other impairments/i)).toBeInTheDocument()
   })
 })
