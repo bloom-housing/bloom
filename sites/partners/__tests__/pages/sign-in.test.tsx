@@ -295,6 +295,60 @@ describe("Partners Sign In Page", () => {
         expect(mockRouter.push).toHaveBeenCalledWith("/")
       })
     })
+
+    it("skips MFA type step when SMS MFA is disabled", async () => {
+      process.env.showSmsMfa = ""
+
+      try {
+        const mockError = {
+          response: {
+            status: 401,
+            data: {
+              name: "mfaCodeIsMissing",
+              message: "MFA code is missing",
+            },
+          },
+        }
+
+        const mockLogin = jest.fn().mockRejectedValue(mockError)
+        const mockRequestMfaCode = jest.fn().mockResolvedValue({ phoneNumberVerified: true })
+
+        const { getByLabelText, getByRole, findByText, queryByText } = render(
+          <AuthContext.Provider
+            value={{
+              initialStateLoaded: true,
+              profile: undefined,
+              login: mockLogin,
+              requestMfaCode: mockRequestMfaCode,
+              doJurisdictionsHaveFeatureFlagOn: mockDoJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
+            <MessageContext.Provider value={TOAST_MESSAGE}>
+              <SignIn />
+            </MessageContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        fireEvent.change(getByLabelText("Email"), { target: { value: "partner@example.com" } })
+        fireEvent.change(getByLabelText("Password"), { target: { value: "password123" } })
+        fireEvent.click(getByRole("button", { name: /sign in/i }))
+
+        await waitFor(() => {
+          expect(mockRequestMfaCode).toHaveBeenCalledWith(
+            "partner@example.com",
+            "password123",
+            MfaType.email
+          )
+        })
+
+        expect(await findByText(/we sent a code to your email/i)).toBeInTheDocument()
+        expect(
+          queryByText(/how would you like us to verify that it's you\?/i)
+        ).not.toBeInTheDocument()
+      } finally {
+        process.env.showSmsMfa = "TRUE"
+      }
+    })
   })
 
   describe("Phone number addition flow tests", () => {

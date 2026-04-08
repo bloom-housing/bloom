@@ -30,6 +30,8 @@ const FormSignInMFAType = ({
     window.scrollTo(0, 0)
   }
 
+  const showSmsMfa = String(process.env.showSmsMfa).toLowerCase() === "true"
+
   return (
     <BloomCard
       iconSymbol="userCircle"
@@ -73,7 +75,7 @@ const FormSignInMFAType = ({
           >
             {t("nav.signInMFA.verifyByEmail")}
           </Button>
-          {process.env.showSmsMfa && (
+          {showSmsMfa && (
             <div className={"seeds-m-bs-4"}>
               <Button
                 type="submit"
