@@ -1740,20 +1740,20 @@ export class UserService {
   }
 
   async retrievePreferences(requestingUser: User) {
-    const notifiactionPreferences =
+    const notificationPreferences =
       await this.prisma.userNotificationPreferences.findUnique({
         where: {
           userId: requestingUser.id,
         },
       });
 
-    if (!notifiactionPreferences) {
+    if (!notificationPreferences) {
       throw new NotFoundException(
         'Failed to retrieve user notification preferences',
       );
     }
 
-    return mapTo(UserNotificationPreferences, notifiactionPreferences);
+    return mapTo(UserNotificationPreferences, notificationPreferences);
   }
 
   async updatePreferences(
