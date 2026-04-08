@@ -1040,10 +1040,20 @@ describe('Testing listing service', () => {
       expect(service.buildWhereClause(null, 'simple search')).toEqual({
         AND: [
           {
-            name: {
-              contains: 'simple search',
-              mode: 'insensitive',
-            },
+            OR: [
+              {
+                name: {
+                  contains: 'simple search',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                listingFileNumber: {
+                  contains: 'simple search',
+                  mode: 'insensitive',
+                },
+              },
+            ],
           },
         ],
       });
@@ -1096,10 +1106,20 @@ describe('Testing listing service', () => {
             ],
           },
           {
-            name: {
-              contains: 'simple search',
-              mode: 'insensitive',
-            },
+            OR: [
+              {
+                name: {
+                  contains: 'simple search',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                listingFileNumber: {
+                  contains: 'simple search',
+                  mode: 'insensitive',
+                },
+              },
+            ],
           },
         ],
       });
@@ -2430,10 +2450,20 @@ describe('Testing listing service', () => {
       expect(whereClause).toStrictEqual({
         AND: [
           {
-            name: {
-              contains: search,
-              mode: 'insensitive',
-            },
+            OR: [
+              {
+                name: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                listingFileNumber: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+            ],
           },
         ],
       });
