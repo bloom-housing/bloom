@@ -667,6 +667,8 @@
   "settings.preferenceOptOut": "Can applicants opt out?",
   "settings.preferenceOptOutOption": "Is this an opt out option?",
   "settings.preferenceOptOutLabel": "Opt out label",
+  "settings.preferenceRetire": "Retire",
+  "settings.preferenceReturnToActive": "Return to active",
   "settings.preferences": "Preferences",
   "settings.preferenceShowOnListing": "Show preference on listing?",
   "settings.preferenceShowToPartners": "Show to partners",

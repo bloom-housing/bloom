@@ -177,8 +177,8 @@ const MultiselectQuestionViewDrawer = ({
           >
             {questionData?.status === MultiselectQuestionsStatusEnum.retired ||
             questionData?.status === MultiselectQuestionsStatusEnum.toRetire
-              ? "Return to active"
-              : "Retire"}
+              ? t("settings.preferenceReturnToActive")
+              : t("settings.preferenceRetire")}
           </Button>
         </Drawer.Footer>
       </Drawer>
