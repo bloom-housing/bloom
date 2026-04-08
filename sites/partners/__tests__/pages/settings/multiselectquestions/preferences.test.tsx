@@ -204,7 +204,7 @@ describe("settings/multiselectquestions/preferences", () => {
       ).toBeInTheDocument()
 
       expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
-      expect(screen.getByRole("button", { name: "Show to Partners" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Show to partners" })).toBeInTheDocument()
       expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument()
 
       // Fill out the form
@@ -304,8 +304,8 @@ describe("settings/multiselectquestions/preferences", () => {
       fireEvent.change(within(drawer).getByRole("textbox", { name: "Title" }), {
         target: { value: "New Title" },
       })
-      expect(within(drawer).getByRole("button", { name: "Hide from Partners" })).toBeInTheDocument()
-      await userEvent.click(within(drawer).getByRole("button", { name: "Hide from Partners" }))
+      expect(within(drawer).getByRole("button", { name: "Hide from partners" })).toBeInTheDocument()
+      await userEvent.click(within(drawer).getByRole("button", { name: "Hide from partners" }))
       await waitFor(() => {
         expect(requestSpy).toHaveBeenCalledTimes(1)
         expect(requestSpy).toHaveBeenCalledWith({

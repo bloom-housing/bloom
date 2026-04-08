@@ -42,9 +42,9 @@ const MultiselectQuestionsPreferences = () => {
         flex: 2,
         sortable: true,
         unSortIcon: true,
-        sort: "asc",
         // disable frontend sorting
         comparator: () => 0,
+        minWidth: 290,
       },
       {
         headerName: t("application.status"),
@@ -65,9 +65,10 @@ const MultiselectQuestionsPreferences = () => {
               variant = "highlight-warm"
               break
           }
-          const statusText = `${data.status.charAt(0).toUpperCase()}${data.status.slice(1)}`
+          const statusText = t(`msq.status.${data.status}`)
           return <Tag variant={variant}>{statusText}</Tag>
         },
+        minWidth: 110,
       },
       {
         headerName: t("t.jurisdiction"),
@@ -77,19 +78,23 @@ const MultiselectQuestionsPreferences = () => {
         unSortIcon: true,
         // disable frontend sorting
         comparator: () => 0,
+        minWidth: 150,
       },
       {
         headerName: t("t.lastUpdated"),
         field: "updatedAt",
+        sort: "desc",
         sortable: true,
         unSortIcon: true,
         // disable frontend sorting
         comparator: () => 0,
+        minWidth: 160,
       },
       {
-        headerName: "actions",
+        headerName: "action",
         field: "",
         flex: 0.75,
+        minWidth: 100,
         cellRendererFramework: ({ data }) => {
           const { preference, id } = data
 
@@ -134,7 +139,7 @@ const MultiselectQuestionsPreferences = () => {
     {
       sort: tableOptions.sort.sortOptions?.length
         ? tableOptions.sort.sortOptions
-        : [{ orderBy: "name", orderDir: "ASC" }],
+        : [{ orderBy: "updatedAt", orderDir: "DESC" }],
       page: tableOptions.pagination.currentPage,
       limit: tableOptions.pagination.itemsPerPage,
       search: tableOptions.filter.filterValue,
