@@ -56,6 +56,7 @@ const SignIn = () => {
   }>()
 
   const reCaptchaEnabled = !!process.env.reCaptchaKey
+  const showSmsMfa = String(process.env.showSmsMfa).toLowerCase() === "true"
 
   const {
     mutate: mutateResendConfirmation,
@@ -156,11 +157,14 @@ const SignIn = () => {
               setEmail,
               setPassword,
               setRenderStep,
+              setMfaType,
               determineNetworkError,
               login,
+              requestMfaCode,
               router,
               resetNetworkError,
               setLoading,
+              showSmsMfa,
               reCaptchaEnabled,
               reCaptchaToken,
               setRefreshReCaptcha,
