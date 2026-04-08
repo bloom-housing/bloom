@@ -33,6 +33,7 @@ import {
   listingUtilities,
   stackedOccupancyTable,
   stackedUnitGroupsOccupancyTable,
+  tIfExists,
 } from "@bloom-housing/shared-helpers"
 import { downloadExternalPDF, isFeatureFlagOn } from "../../lib/helpers"
 import { CardList, ContentCardProps } from "../../patterns/CardList"
@@ -227,18 +228,27 @@ export const getFeatures = (
       features.push({
         heading: t("t.petsPolicy"),
         content: (
-          <ul data-testid="pet-policy-list">
-            {petPolicy.map((petPolicyItem, index) => (
-              <li key={index} className={styles["list-item"]}>
-                {petPolicyItem}
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul data-testid="pet-policy-list">
+              {petPolicy.map((petPolicyItem, index) => (
+                <li key={index} className={styles["list-item"]}>
+                  {petPolicyItem}
+                </li>
+              ))}
+            </ul>
+            {tIfExists("listings.petPolicyDescription") && (
+              <p className={"seeds-m-bs-2"}>{t("listings.petPolicyDescription")}</p>
+            )}
+          </>
         ),
       })
     }
   } else if (listing.petPolicy) {
-    features.push({ heading: t("t.petsPolicy"), subheading: listing.petPolicy })
+    features.push({
+      heading: t("t.petsPolicy"),
+      subheading: listing.petPolicy,
+      content: tIfExists("listings.petPolicyDescription"),
+    })
   }
   if (listing.amenities) {
     features.push({ heading: t("t.propertyAmenities"), subheading: listing.amenities })

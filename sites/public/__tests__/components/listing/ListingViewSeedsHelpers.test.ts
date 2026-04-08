@@ -41,6 +41,14 @@ import {
   getMarketingFlyers,
 } from "../../../src/components/listing/ListingViewSeedsHelpers"
 
+jest.mock("@bloom-housing/shared-helpers", () => {
+  const actual = jest.requireActual("@bloom-housing/shared-helpers")
+  return {
+    ...actual,
+    tIfExists: jest.fn(actual.tIfExists),
+  }
+})
+
 describe("ListingViewSeedsHelpers", () => {
   describe("getFilteredMultiselectQuestions", () => {
     it("should filter multiselect questions by application section", () => {
@@ -416,6 +424,21 @@ describe("ListingViewSeedsHelpers", () => {
   })
 
   describe("getFeatures", () => {
+    it("should return null for petPolicyDescription if translation is missing", () => {
+      const { tIfExists } = require("@bloom-housing/shared-helpers")
+      tIfExists.mockReturnValueOnce(null)
+
+      const mockListing: Listing = {
+        ...listing,
+        allowsDogs: true,
+        allowsCats: true,
+      }
+
+      const result = getFeatures(mockListing, jurisdiction)
+      const petPolicyFeature = result.find((f) => f.heading === "Pets policy")
+      expect(petPolicyFeature).toBeDefined()
+      expect(petPolicyFeature?.content).toBeNull()
+    })
     it("should include year built when available", () => {
       const mockListing: Listing = {
         ...listing,
@@ -456,6 +479,26 @@ describe("ListingViewSeedsHelpers", () => {
       const petPolicyFeature = result.find((f) => f.heading === "Pet policy")
       expect(petPolicyFeature).toBeUndefined()
     })
+
+    it("should include petPolicyDescription translation in content if present", () => {
+      const { tIfExists } = require("@bloom-housing/shared-helpers")
+      tIfExists.mockReturnValueOnce(
+        "Service dogs and emotional support animals are not pets and are permitted as required by law. Pets may also be required to be allowed in certain types of housing, such as publicly financed housing developments."
+      )
+
+      const mockListing = {
+        ...listing,
+        allowsDogs: true,
+        allowsCats: true,
+      }
+      const result = getFeatures(mockListing, jurisdiction)
+      const petPolicyFeature = result.find((f) => f.heading === "Pets policy")
+      expect(petPolicyFeature).toBeDefined()
+      expect(petPolicyFeature?.content).toBe(
+        "Service dogs and emotional support animals are not pets and are permitted as required by law. Pets may also be required to be allowed in certain types of housing, such as publicly financed housing developments."
+      )
+    })
+
     it("should show the correct bullets when enablePetPolicyCheckbox is true", () => {
       const mockJurisdiction = {
         ...jurisdiction,
@@ -479,11 +522,14 @@ describe("ListingViewSeedsHelpers", () => {
       expect(petPolicyFeature?.content).toBeDefined()
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const elementList = petPolicyFeature.content as any
-      const petList = elementList.props.children
-      expect(petList.length).toBe(2)
-      expect(petList[0].props.children).toBe("Allows dogs")
-      expect(petList[1].props.children).toBe("Allows cats")
+      const contentElement = petPolicyFeature?.content as any
+      const contentChildren = contentElement.props.children
+      const petList = Array.isArray(contentChildren) ? contentChildren[0] : contentChildren
+      const petItems = petList.props.children
+
+      expect(petItems.length).toBe(2)
+      expect(petItems[0].props.children).toBe("Allows dogs")
+      expect(petItems[1].props.children).toBe("Allows cats")
     })
     it("should include parking fee when available", () => {
       const mockListing: Listing = {
