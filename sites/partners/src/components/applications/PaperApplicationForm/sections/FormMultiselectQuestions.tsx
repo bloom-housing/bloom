@@ -63,6 +63,7 @@ const FormMultiselectQuestions = ({
         ]
       })
     } else {
+      // TODO: We can sunset this after full V2MSQ rollout
       questions?.forEach((listingQuestion) =>
         listingQuestion?.multiselectQuestions?.options?.forEach((option) =>
           keys.push(
@@ -231,6 +232,7 @@ const FormMultiselectQuestions = ({
         <Grid.Row columns={2}>
           {questions?.map((listingQuestion) => {
             const question = listingQuestion?.multiselectQuestions
+            // TODO: We can sunset parts of this after full V2MSQ rollout
             const inputType = enableV2MSQ
               ? question.isExclusive
                 ? "radio"
