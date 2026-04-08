@@ -876,7 +876,7 @@
   "listings.favorite": "最喜欢的",
   "listings.favoriteSaveError": "列表未保存至收藏夹 - 重试",
   "listings.featuresCards": "特色卡",
-  "listings.forIncomeCalculations": "收入計算、家庭人數（包括所有住在單位內所有年齡的人）。",
+  "listings.forIncomeCalculations": "收入计算中，家庭规模包括居住在该单元内的所有人员（所有年龄段）。此信息旨在帮助您了解您是否符合该房产的入住资格。此处列出的“最高收入”不包括任何可能的扣除或豁免，因此即使您的家庭收入略高于最高收入，您也可能符合资格。如果您被选中，届时您需要提供具体的收入信息。",
   "listings.forIncomeCalculationsBMR": "收入計算是以單位類型為準",
   "listings.hasEbllClearance": "该房产已获得美国住房和城市发展部 (HUD) EBLL 许可。",
   "listings.hideClosedListings": "隐藏已关闭的列表",
