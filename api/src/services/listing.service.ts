@@ -181,6 +181,22 @@ includeViews.full = {
   listingsApplicationPickUpAddress: true,
   listingsApplicationDropOffAddress: true,
   listingsApplicationMailingAddress: true,
+  listingMultiselectQuestions: {
+    orderBy: {
+      ordinal: 'asc',
+    },
+    include: {
+      multiselectQuestions: {
+        include: {
+          multiselectOptions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
+          },
+        },
+      },
+    },
+  },
   requestedChangesUser: true,
   property: true,
   requiredDocumentsList: true,
@@ -941,6 +957,15 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
+        if (filter[ListingFilterKeys.accessibilityPriorityTypes]) {
+          const types = filter[ListingFilterKeys.accessibilityPriorityTypes];
+          filters.push({
+            OR: types.flatMap((type) => [
+              { units: { some: { accessibilityPriorityType: type } } },
+              { unitGroups: { some: { accessibilityPriorityType: type } } },
+            ]),
+          });
+        }
         if (filter[ListingFilterKeys.monthlyRent]) {
           if (minRent && maxRent) return;
           const builtFilter = buildFilter({
@@ -1122,10 +1147,20 @@ export class ListingService implements OnModuleInit {
 
     if (search) {
       filters.push({
-        name: {
-          contains: search,
-          mode: Prisma.QueryMode.insensitive,
-        },
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: Prisma.QueryMode.insensitive,
+            },
+          },
+          {
+            listingFileNumber: {
+              contains: search,
+              mode: Prisma.QueryMode.insensitive,
+            },
+          },
+        ],
       });
     }
 

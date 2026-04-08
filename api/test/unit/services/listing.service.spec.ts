@@ -648,7 +648,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingFeatures: true,
@@ -792,10 +800,20 @@ describe('Testing listing service', () => {
               ],
             },
             {
-              name: {
-                contains: 'simple search',
-                mode: 'insensitive',
-              },
+              OR: [
+                {
+                  name: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  listingFileNumber: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+              ],
             },
           ],
         },
@@ -883,10 +901,20 @@ describe('Testing listing service', () => {
               ],
             },
             {
-              name: {
-                contains: 'simple search',
-                mode: 'insensitive',
-              },
+              OR: [
+                {
+                  name: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  listingFileNumber: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+              ],
             },
           ],
         },
@@ -1032,10 +1060,20 @@ describe('Testing listing service', () => {
       expect(service.buildWhereClause(null, 'simple search')).toEqual({
         AND: [
           {
-            name: {
-              contains: 'simple search',
-              mode: 'insensitive',
-            },
+            OR: [
+              {
+                name: {
+                  contains: 'simple search',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                listingFileNumber: {
+                  contains: 'simple search',
+                  mode: 'insensitive',
+                },
+              },
+            ],
           },
         ],
       });
@@ -1088,10 +1126,20 @@ describe('Testing listing service', () => {
             ],
           },
           {
-            name: {
-              contains: 'simple search',
-              mode: 'insensitive',
-            },
+            OR: [
+              {
+                name: {
+                  contains: 'simple search',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                listingFileNumber: {
+                  contains: 'simple search',
+                  mode: 'insensitive',
+                },
+              },
+            ],
           },
         ],
       });
@@ -1301,10 +1349,20 @@ describe('Testing listing service', () => {
               ],
             },
             {
-              name: {
-                contains: 'simple search',
-                mode: 'insensitive',
-              },
+              OR: [
+                {
+                  name: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  listingFileNumber: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+              ],
             },
           ],
         },
@@ -1385,10 +1443,20 @@ describe('Testing listing service', () => {
               ],
             },
             {
-              name: {
-                contains: 'simple search',
-                mode: 'insensitive',
-              },
+              OR: [
+                {
+                  name: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  listingFileNumber: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+              ],
             },
           ],
         },
@@ -2112,6 +2180,61 @@ describe('Testing listing service', () => {
       });
     });
 
+    it('should return a where clause for filter accessibilityPriorityTypes with single type', () => {
+      const types = [UnitAccessibilityPriorityTypeEnum.mobility];
+      const filter = [
+        {
+          $comparison: 'IN',
+          accessibilityPriorityTypes: types,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              { units: { some: { accessibilityPriorityType: 'mobility' } } },
+              {
+                unitGroups: { some: { accessibilityPriorityType: 'mobility' } },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter accessibilityPriorityTypes with multiple types', () => {
+      const types = [
+        UnitAccessibilityPriorityTypeEnum.mobility,
+        UnitAccessibilityPriorityTypeEnum.hearing,
+      ];
+      const filter = [
+        {
+          $comparison: 'IN',
+          accessibilityPriorityTypes: types,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              { units: { some: { accessibilityPriorityType: 'mobility' } } },
+              {
+                unitGroups: { some: { accessibilityPriorityType: 'mobility' } },
+              },
+              { units: { some: { accessibilityPriorityType: 'hearing' } } },
+              {
+                unitGroups: { some: { accessibilityPriorityType: 'hearing' } },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
     it('should return a where clause for filter monthlyRent', () => {
       const monthlyRent = '1500';
       const filter = [
@@ -2367,10 +2490,20 @@ describe('Testing listing service', () => {
       expect(whereClause).toStrictEqual({
         AND: [
           {
-            name: {
-              contains: search,
-              mode: 'insensitive',
-            },
+            OR: [
+              {
+                name: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                listingFileNumber: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+            ],
           },
         ],
       });
@@ -2487,7 +2620,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingFeatures: true,
@@ -3013,7 +3154,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingFeatures: true,
@@ -3180,7 +3329,9 @@ describe('Testing listing service', () => {
             orderBy: {
               ordinal: 'asc',
             },
-            include: { multiselectQuestions: true },
+            include: {
+              multiselectQuestions: true,
+            },
           },
           listingNeighborhoodAmenities: true,
           listingFeatures: true,
@@ -3304,7 +3455,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -3436,7 +3595,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -3822,7 +3989,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -3967,7 +4142,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
 
@@ -4323,7 +4506,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -4728,7 +4919,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -4847,7 +5046,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -4953,7 +5160,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -5404,7 +5619,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -5961,7 +6184,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -6244,7 +6475,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,

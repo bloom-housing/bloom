@@ -68,6 +68,11 @@ const ApplicationsList = () => {
     listingDto?.jurisdictions.id
   )
 
+  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableV2MSQ,
+    listingDto?.jurisdictions.id
+  )
+
   const [errorAlert, setErrorAlert] = useState(false)
 
   const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
@@ -170,6 +175,7 @@ const ApplicationsList = () => {
                       ? t("application.details.communityTypes")
                       : t("application.details.programs")
                   }
+                  enableV2MSQ={enableV2MSQ}
                 />
 
                 <DetailsHouseholdIncome />
@@ -178,6 +184,7 @@ const ApplicationsList = () => {
                   listingId={application?.listings?.id}
                   applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
                   title={t("application.details.preferences")}
+                  enableV2MSQ={enableV2MSQ}
                 />
 
                 <DetailsTerms />

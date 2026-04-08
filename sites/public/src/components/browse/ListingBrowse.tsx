@@ -181,6 +181,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         onClear={onFilterClear}
         regions={props.jurisdiction?.regions}
         listingFeaturesConfiguration={props.jurisdiction?.listingFeaturesConfiguration}
+        visibleAccessibilityPriorityTypes={props.jurisdiction?.visibleAccessibilityPriorityTypes}
       />
       <LoadingState loading={isLoading}>
         <div className={styles["listing-directory"]}>
