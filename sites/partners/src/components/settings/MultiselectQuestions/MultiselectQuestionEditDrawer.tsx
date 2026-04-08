@@ -66,8 +66,8 @@ type OptionForm = {
   mapLayerId?: string
 }
 
-const alphaNumericStartQuestionPattern = /^[a-zA-Z0-9][^:*\\]+$/
-const alphaNumericStartOptionPattern = /^[a-zA-Z0-9][\w\W]+$/
+const alphaNumericStartQuestionPattern = /^[a-zA-Z0-9][^:*\\]*$/
+const alphaNumericStartOptionPattern = /^[a-zA-Z0-9][\w\W]*$/
 
 const MultiselectQuestionEditDrawer = ({
   drawerType,
