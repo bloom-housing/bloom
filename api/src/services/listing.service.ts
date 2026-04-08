@@ -1147,10 +1147,20 @@ export class ListingService implements OnModuleInit {
 
     if (search) {
       filters.push({
-        name: {
-          contains: search,
-          mode: Prisma.QueryMode.insensitive,
-        },
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: Prisma.QueryMode.insensitive,
+            },
+          },
+          {
+            listingFileNumber: {
+              contains: search,
+              mode: Prisma.QueryMode.insensitive,
+            },
+          },
+        ],
       });
     }
 

@@ -193,21 +193,34 @@ export default function ListingsList() {
       })
     }
 
-    columns.push(
-      {
-        headerName: t("listings.listingStatusText"),
-        field: "status",
-        sortable: true,
-        unSortIcon: true,
-        sort: "asc",
-        // disable frontend sorting
-        comparator: () => 0,
+    columns.push({
+      headerName: t("listings.listingStatusText"),
+      field: "status",
+      sortable: true,
+      unSortIcon: true,
+      sort: "asc",
+      // disable frontend sorting
+      comparator: () => 0,
+      filter: false,
+      resizable: true,
+      valueFormatter: ({ value }) => t(`listings.listingStatus.${value}`),
+      cellRenderer: !profile?.userRoles?.isLimitedJurisdictionalAdmin ? "ApplicationsLink" : "",
+      minWidth: 190,
+    })
+
+    if (doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableListingFileNumber)) {
+      columns.push({
+        headerName: t("listings.listingFileNumber"),
+        field: "listingFileNumber",
+        sortable: false,
         filter: false,
         resizable: true,
-        valueFormatter: ({ value }) => t(`listings.listingStatus.${value}`),
-        cellRenderer: !profile?.userRoles?.isLimitedJurisdictionalAdmin ? "ApplicationsLink" : "",
-        minWidth: 190,
-      },
+        minWidth: 160,
+        valueFormatter: ({ value }) => value ?? t("t.none"),
+      })
+    }
+
+    columns.push(
       {
         headerName: t("listings.createdDate"),
         field: "createdAt",

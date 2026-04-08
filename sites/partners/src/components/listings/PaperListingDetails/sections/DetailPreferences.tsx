@@ -34,7 +34,11 @@ const DetailPreferences = () => {
               listingPreference?.multiselectQuestions?.name ||
               listingPreference?.multiselectQuestions?.text,
           },
-          description: { content: listingPreference?.multiselectQuestions?.description },
+          description: {
+            content: listingPreference?.multiselectQuestions?.description
+              ? listingPreference?.multiselectQuestions?.description
+              : t("t.n/a"),
+          },
         })
       ),
     [listing]
