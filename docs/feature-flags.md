@@ -35,7 +35,6 @@ The following are all of the feature flags currently available in the Bloom plat
 | [disableListingPreferences](./feature-flags/disableListingPreferences.md) | When true listings will no longer support preferences section |
 | [disableWorkInRegion](./feature-flags/disableWorkInRegion.md) | When true the "Work in Region" question will be removed from the application process |
 | [enableAccessibilityFeatures](./feature-flags/enableAccessibilityFeatures.md) | When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view |
-| [enableAdaOtherOption](./feature-flags/enableAdaOtherOption.md) | When true, the ADA impairment options will include 'For Other Impairments' |
 | [enableAdditionalResources](./feature-flags/enableAdditionalResources.md) | When true, the 'learn more' section is displayed on the home page |
 | [enableApplicationStatus](./feature-flags/enableApplicationStatus.md) | When true, the application status and notifications feature is enabled on public and partners |
 | [enableCompanyWebsite](./feature-flags/enableCompanyWebsite.md) | When true, allows partners to add company website information |
