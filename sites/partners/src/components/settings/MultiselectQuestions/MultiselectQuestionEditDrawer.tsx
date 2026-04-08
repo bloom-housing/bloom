@@ -62,7 +62,7 @@ type OptionForm = {
   optionLinkTitle: string
   optionTitle: string
   optionUrl: string
-  canYouOptOut: YesNoEnum
+  optOutOption: YesNoEnum
   mapLayerId?: string
 }
 
@@ -82,6 +82,7 @@ const MultiselectQuestionEditDrawer = ({
 }: MultiselectQuestionEditDrawerProps) => {
   const [optionDrawerOpen, setOptionDrawerOpen] = useState<DrawerType | null>(null)
   const [optionData, setOptionData] = useState<MultiselectOption>(null)
+  const [optOutSelection, setOptOutSelection] = useState<boolean>(null)
   const [dragOrder, setDragOrder] = useState([])
 
   const { profile } = useContext(AuthContext)
@@ -94,7 +95,6 @@ const MultiselectQuestionEditDrawer = ({
   const isAdditionalDetailsEnabled = profile?.jurisdictions?.some(
     (jurisdiction) => jurisdiction.enableGeocodingPreferences
   )
-  const optOutOption = watch("optOutOption")
   const shouldCollectAddress = watch("shouldCollectAddress")
   const validationMethod = watch("validationMethod")
   const shouldCollectAddressExpand =
@@ -151,6 +151,7 @@ const MultiselectQuestionEditDrawer = ({
                 }}
                 copyTestId={`option-copy-icon: ${item.name}`}
                 onEdit={() => {
+                  setOptOutSelection(item.isOptOut)
                   setOptionData(item)
                   setOptionDrawerOpen("edit")
                 }}
@@ -189,9 +190,7 @@ const MultiselectQuestionEditDrawer = ({
       variant = "highlight-warm"
       break
   }
-  const statusText = `${questionData?.status
-    ?.charAt(0)
-    ?.toUpperCase()}${questionData?.status?.slice(1)}`
+  const statusText = t(`msq.status.${questionData?.status}`)
   const statusTag = questionData?.status ? <Tag variant={variant}>{statusText}</Tag> : undefined
 
   let validationMethodsFields = [
@@ -344,7 +343,7 @@ const MultiselectQuestionEditDrawer = ({
         : [],
       ordinal: getNewOrdinal(),
       shouldCollectAddress: formData.shouldCollectAddress === YesNoEnum.yes,
-      isOptOut: formData.canYouOptOut === YesNoEnum.yes,
+      isOptOut: formData.optOutOption === YesNoEnum.yes,
       text: "",
     }
     if (formData.shouldCollectAddress === YesNoEnum.yes) {
@@ -397,14 +396,13 @@ const MultiselectQuestionEditDrawer = ({
                       id="name"
                       name="name"
                       label={t("t.title")}
-                      placeholder={t("t.title")}
                       register={register}
                       type="text"
                       dataTestId={"preference-title"}
                       defaultValue={questionData?.name}
                       errorMessage={`${t("errors.requiredFieldError")}. ${t(
                         "errors.alphaNumericError"
-                      )}. ${t("errors.disallowedCharacters")}`}
+                      )}. ${t("errors.characterLimit")}. ${t("errors.disallowedCharacters")}`}
                       validation={{
                         required: true,
                         pattern: alphaNumericStartQuestionPattern,
@@ -424,7 +422,6 @@ const MultiselectQuestionEditDrawer = ({
                       name={"description"}
                       id={"description"}
                       fullWidth={true}
-                      placeholder={t("settings.preferenceDescription")}
                       register={register}
                       dataTestId={"preference-description"}
                       defaultValue={questionData?.description}
@@ -457,7 +454,6 @@ const MultiselectQuestionEditDrawer = ({
                       id="preferenceLinkTitle"
                       name="preferenceLinkTitle"
                       label={t("settings.preferenceLinkTitle")}
-                      placeholder={t("settings.preferenceLinkTitle")}
                       register={register}
                       type="text"
                       dataTestId={"preference-link-title"}
@@ -493,6 +489,7 @@ const MultiselectQuestionEditDrawer = ({
                     clearErrors("questions")
                     setOptionData(null)
                     setOptionDrawerOpen("add")
+                    setOptOutSelection(false)
                   }}
                   id={"preference-add-option-button"}
                 >
@@ -667,7 +664,6 @@ const MultiselectQuestionEditDrawer = ({
                         id="optionTitle"
                         name="optionTitle"
                         label={t("t.title")}
-                        placeholder={t("t.title")}
                         register={register}
                         validation={{ required: true, pattern: alphaNumericStartOptionPattern }}
                         type="text"
@@ -693,7 +689,6 @@ const MultiselectQuestionEditDrawer = ({
                       label={t("t.descriptionTitle")}
                       name={"optionDescription"}
                       id={"optionDescription"}
-                      placeholder={t("settings.preferenceOptionDescription")}
                       fullWidth={true}
                       register={register}
                       dataTestId={"preference-option-description"}
@@ -729,7 +724,6 @@ const MultiselectQuestionEditDrawer = ({
                         id="optionLinkTitle"
                         name="optionLinkTitle"
                         label={t("settings.preferenceLinkTitle")}
-                        placeholder={t("settings.preferenceLinkTitle")}
                         register={register}
                         type="text"
                         readerOnly
@@ -756,6 +750,11 @@ const MultiselectQuestionEditDrawer = ({
                             value: YesNoEnum.yes,
                             defaultChecked: optionData?.isOptOut,
                             dataTestId: "opt-out-option-yes",
+                            inputProps: {
+                              onChange: () => {
+                                setOptOutSelection(true)
+                              },
+                            },
                           },
                           {
                             id: "optOutNo",
@@ -767,6 +766,11 @@ const MultiselectQuestionEditDrawer = ({
                               !optionData,
 
                             dataTestId: "opt-out-option-no",
+                            inputProps: {
+                              onChange: () => {
+                                setOptOutSelection(false)
+                              },
+                            },
                           },
                         ]}
                         fieldClassName="m-0"
@@ -778,7 +782,7 @@ const MultiselectQuestionEditDrawer = ({
                 </Grid.Row>
               </SectionWithGrid>
             </Card.Section>
-            {optOutOption !== YesNoEnum.yes && (
+            {!optOutSelection && (
               <Card.Section>
                 <div className="border-t pt-8" />
                 <SectionWithGrid heading={t("settings.preferenceAdditionalFields")}>
