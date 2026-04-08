@@ -1,4 +1,5 @@
 import {
+  ApplicationAccessibilityFeatureEnum,
   ApplicationSubmissionTypeEnum,
   MultiselectQuestionsApplicationSectionEnum,
   ValidationMethodEnum,
@@ -38,6 +39,7 @@ export const getExportHeaders = (
     forLottery?: boolean;
     includeDemographics?: boolean;
     swapCommunityTypeWithPrograms?: boolean;
+    visibleApplicationAccessibilityFeatures?: ApplicationAccessibilityFeatureEnum[];
   },
 ): CsvHeader[] => {
   const dateFormat = 'MM-DD-YYYY hh:mm:ssA z';
@@ -51,7 +53,17 @@ export const getExportHeaders = (
     forLottery,
     includeDemographics,
     swapCommunityTypeWithPrograms,
+    visibleApplicationAccessibilityFeatures,
   } = optionalParams;
+
+  const includeAccessibilityFeature = (
+    feature: ApplicationAccessibilityFeatureEnum,
+  ): boolean => {
+    if (!visibleApplicationAccessibilityFeatures) {
+      return true;
+    }
+    return visibleApplicationAccessibilityFeatures.includes(feature);
+  };
 
   const headers: CsvHeader[] = [
     {
@@ -302,26 +314,54 @@ export const getExportHeaders = (
         format: (val: string): string =>
           val === 'perMonth' ? 'per month' : 'per year',
       },
-      {
-        path: 'accessibility.mobility',
-        label: 'Accessibility Mobility',
-      },
-      {
-        path: 'accessibility.vision',
-        label: 'Accessibility Vision',
-      },
-      {
-        path: 'accessibility.hearing',
-        label: 'Accessibility Hearing',
-      },
-      {
-        path: 'accessibility.hearingAndVision',
-        label: 'Accessibility Hearing and Vision',
-      },
-      {
-        path: 'accessibility.other',
-        label: 'Accessibility Other',
-      },
+      ...(includeAccessibilityFeature(
+        ApplicationAccessibilityFeatureEnum.mobility,
+      )
+        ? [
+            {
+              path: 'accessibility.mobility',
+              label: 'Accessibility Mobility',
+            },
+          ]
+        : []),
+      ...(includeAccessibilityFeature(
+        ApplicationAccessibilityFeatureEnum.vision,
+      )
+        ? [
+            {
+              path: 'accessibility.vision',
+              label: 'Accessibility Vision',
+            },
+          ]
+        : []),
+      ...(includeAccessibilityFeature(
+        ApplicationAccessibilityFeatureEnum.hearing,
+      )
+        ? [
+            {
+              path: 'accessibility.hearing',
+              label: 'Accessibility Hearing',
+            },
+          ]
+        : []),
+      ...(includeAccessibilityFeature(
+        ApplicationAccessibilityFeatureEnum.hearingAndVision,
+      )
+        ? [
+            {
+              path: 'accessibility.hearingAndVision',
+              label: 'Accessibility Hearing and Vision',
+            },
+          ]
+        : []),
+      ...(includeAccessibilityFeature(ApplicationAccessibilityFeatureEnum.other)
+        ? [
+            {
+              path: 'accessibility.other',
+              label: 'Accessibility Other',
+            },
+          ]
+        : []),
       {
         path: 'householdExpectingChanges',
         label: 'Expecting Household Changes',

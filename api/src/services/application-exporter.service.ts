@@ -194,6 +194,7 @@ export class ApplicationExporterService {
     const jurisdiction = await this.prisma.jurisdictions.findFirst({
       select: {
         featureFlags: true,
+        visibleApplicationAccessibilityFeatures: true,
       },
       where: {
         listings: {
@@ -258,6 +259,8 @@ export class ApplicationExporterService {
         enableV2MSQ,
         includeDemographics: queryParams.includeDemographics,
         swapCommunityTypeWithPrograms,
+        visibleApplicationAccessibilityFeatures:
+          jurisdiction?.visibleApplicationAccessibilityFeatures,
       },
     );
 
@@ -473,6 +476,7 @@ export class ApplicationExporterService {
     const jurisdiction = await this.prisma.jurisdictions.findFirst({
       select: {
         featureFlags: true,
+        visibleApplicationAccessibilityFeatures: true,
       },
       where: {
         listings: {
@@ -533,6 +537,8 @@ export class ApplicationExporterService {
         forLottery,
         includeDemographics: queryParams.includeDemographics,
         swapCommunityTypeWithPrograms,
+        visibleApplicationAccessibilityFeatures:
+          jurisdiction?.visibleApplicationAccessibilityFeatures,
       },
     );
 
