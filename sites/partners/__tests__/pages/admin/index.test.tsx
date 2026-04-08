@@ -124,7 +124,9 @@ describe("admin", () => {
     )
     render(<Admin />)
     await screen.findByRole("cell", { name: "jurisdiction 1" })
-    expect(screen.getByRole("heading", { level: 1, name: "Administration" })).toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Feature flag management" })
+    ).toBeInTheDocument()
     expect(screen.getByRole("tab", { name: "By jurisdiction" })).toBeInTheDocument()
     expect(screen.getByRole("tabpanel", { name: "By jurisdiction" })).toBeInTheDocument()
     expect(screen.getByRole("tab", { name: "By feature flag" })).toBeInTheDocument()

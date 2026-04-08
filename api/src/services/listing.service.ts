@@ -181,6 +181,22 @@ includeViews.full = {
   listingsApplicationPickUpAddress: true,
   listingsApplicationDropOffAddress: true,
   listingsApplicationMailingAddress: true,
+  listingMultiselectQuestions: {
+    orderBy: {
+      ordinal: 'asc',
+    },
+    include: {
+      multiselectQuestions: {
+        include: {
+          multiselectOptions: {
+            orderBy: {
+              ordinal: 'asc',
+            },
+          },
+        },
+      },
+    },
+  },
   requestedChangesUser: true,
   property: true,
   requiredDocumentsList: true,
@@ -939,6 +955,15 @@ export class ListingService implements OnModuleInit {
                 [feature]: true,
               },
             })),
+          });
+        }
+        if (filter[ListingFilterKeys.accessibilityPriorityTypes]) {
+          const types = filter[ListingFilterKeys.accessibilityPriorityTypes];
+          filters.push({
+            OR: types.flatMap((type) => [
+              { units: { some: { accessibilityPriorityType: type } } },
+              { unitGroups: { some: { accessibilityPriorityType: type } } },
+            ]),
           });
         }
         if (filter[ListingFilterKeys.monthlyRent]) {
@@ -2796,10 +2821,10 @@ export class ListingService implements OnModuleInit {
 
       // if the listing is closed for the first time the expire_after value should be set on all applications
       void this.setExpireAfterValueOnApplications(mappedListing.id);
+    }
 
-      if (enableV2MSQ) {
-        void this.multiselectQuestionService.retireMultiselectQuestions();
-      }
+    if (enableV2MSQ) {
+      void this.multiselectQuestionService.retireMultiselectQuestions();
     }
 
     await this.cachePurge(
@@ -2981,7 +3006,8 @@ export class ListingService implements OnModuleInit {
     const invalid = [];
     for (const msq of multiselectQuestions) {
       if (
-        msq.status === MultiselectQuestionsStatusEnum.toRetire &&
+        (msq.status === MultiselectQuestionsStatusEnum.toRetire ||
+          msq.status === MultiselectQuestionsStatusEnum.retired) &&
         previousMultiselectQuestionIds.length
       ) {
         if (!previousMultiselectQuestionIds.includes(msq.id)) {

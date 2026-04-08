@@ -131,7 +131,7 @@ describe("EditPublicAccount", () => {
       await waitFor(() => {
         expect(
           screen.getByText(
-            "There was an error. Please try again, or contact support at email@email.com for help."
+            /There was an error. Please try again, or contact support at [a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,} for help/
           )
         ).toBeInTheDocument()
       })
@@ -204,7 +204,7 @@ describe("EditPublicAccount", () => {
       await waitFor(() => {
         expect(
           screen.getByText(
-            "There was an error. Please try again, or contact support at email@email.com for help."
+            /There was an error. Please try again, or contact support at [a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,} for help/
           )
         ).toBeInTheDocument()
       })

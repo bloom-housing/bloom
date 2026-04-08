@@ -194,7 +194,8 @@ const FormMultiselectQuestions = ({
         inputProps={{
           value: !!option.text,
           onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-            uncheckOptions(getAllOptions(question, applicationSection), setValue)
+            // TODO: pass V2MSQ flag state to `getAllOptions`
+            uncheckOptions(getAllOptions(question, applicationSection, false), setValue)
             setValue(optionFieldName, e.target?.value)
           },
         }}
