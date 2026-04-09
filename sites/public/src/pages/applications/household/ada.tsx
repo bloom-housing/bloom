@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { FormErrorMessage } from "@bloom-housing/ui-seeds"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Form, t, FieldGroup, FieldSingle } from "@bloom-housing/ui-components"
 import {
   OnClientSide,
@@ -12,7 +11,6 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
-import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout, {
@@ -23,23 +21,19 @@ import ApplicationFormLayout, {
 const ApplicationAda = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("adaHouseholdMembers")
-  const enableAdaOtherOption = isFeatureFlagOn(
-    conductor.config,
-    FeatureFlagEnum.enableAdaOtherOption
-  )
   const currentPageSection = 2
-
+  const visibleAdaFeatureKeys = conductor.config?.visibleApplicationAccessibilityFeatures || []
+  const orderedVisibleAdaFeatureKeys = visibleAdaFeatureKeys.sort((a, b) => {
+    if (a === "other") return 1
+    if (b === "other") return -1
+    return 0
+  })
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, setValue, errors, getValues, clearErrors, trigger } = useForm<
-    Record<string, any>
+    Record<string, unknown>
   >({
     defaultValues: {
-      none:
-        (application.accessibility.mobility === false &&
-          application.accessibility.vision === false &&
-          application.accessibility.hearing === false &&
-          !enableAdaOtherOption) ||
-        (enableAdaOtherOption && application.accessibility.other),
+      none: visibleAdaFeatureKeys.every((feature) => !application.accessibility?.[feature]),
     },
     shouldFocusError: false,
   })
@@ -47,13 +41,13 @@ const ApplicationAda = () => {
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
+    const accessibility = adaFeatureKeys.reduce<Record<string, boolean | null>>((acc, feature) => {
+      acc[feature] = !!data[`app-accessibility-${feature}`]
+      return acc
+    }, {})
+
     conductor.currentStep.save({
-      accessibility: {
-        mobility: !!data["app-accessibility-mobility"],
-        vision: !!data["app-accessibility-vision"],
-        hearing: !!data["app-accessibility-hearing"],
-        other: enableAdaOtherOption ? !!data["app-accessibility-other"] : null,
-      },
+      accessibility,
     })
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
@@ -70,50 +64,41 @@ const ApplicationAda = () => {
     })
   }, [profile])
 
-  const adaFeaturesOptions: FieldSingle[] = adaFeatureKeys
-    .filter((item) => {
-      return item === "other" ? enableAdaOtherOption : true
-    })
-    .map((item) => {
-      const isChecked = application.accessibility[item]
+  const adaFeaturesOptions: FieldSingle[] = orderedVisibleAdaFeatureKeys.map((item) => {
+    const isChecked = application.accessibility[item]
 
-      return {
-        id: item,
-        label: t(`application.ada.${item}`),
-        value: item,
-        defaultChecked: isChecked,
-        dataTestId: `app-ada-${item}`,
-        uniqueName: true,
-        inputProps: {
-          onChange: () => {
-            setTimeout(() => {
-              setValue("app-accessibility-no-features", false)
-              clearErrors()
-            }, 1)
-          },
+    return {
+      id: item,
+      label: t(`application.ada.${item}`),
+      value: item,
+      defaultChecked: isChecked,
+      dataTestId: `app-ada-${item}`,
+      uniqueName: true,
+      inputProps: {
+        onChange: () => {
+          setTimeout(() => {
+            setValue("app-accessibility-no-features", false)
+            clearErrors()
+          }, 1)
         },
-      }
-    })
+      },
+    }
+  })
 
   adaFeaturesOptions.push({
     id: "no-features",
     label: t(`t.no`),
     value: "no-features",
-    defaultChecked:
-      application.accessibility["mobility"] === false &&
-      application.accessibility["hearing"] === false &&
-      application.accessibility["vision"] === false &&
-      !application.accessibility["other"],
+    defaultChecked: visibleAdaFeatureKeys.every((feature) => !application.accessibility?.[feature]),
     dataTestId: `app-ada-none`,
     uniqueName: true,
     inputProps: {
       onChange: (e) => {
         if (e.target.checked) {
           setValue("app-accessibility-no-features", true)
-          setValue("app-accessibility-mobility", false)
-          setValue("app-accessibility-vision", false)
-          setValue("app-accessibility-hearing", false)
-          setValue("app-accessibility-other", false)
+          visibleAdaFeatureKeys.forEach((feature) => {
+            setValue(`app-accessibility-${feature}`, false)
+          })
           clearErrors()
         }
       },

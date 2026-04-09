@@ -23,5 +23,10 @@ export class Accessibility extends IdOnlyDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  hearingAndVision?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
   other?: boolean;
 }
