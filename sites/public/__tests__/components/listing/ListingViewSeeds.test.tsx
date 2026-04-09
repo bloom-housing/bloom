@@ -5,6 +5,7 @@ import { ListingViewSeeds } from "../../../src/components/listing/ListingViewSee
 import {
   EnumListingListingType,
   FeatureFlagEnum,
+  ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 
@@ -549,5 +550,71 @@ describe("<ListingViewSeeds>", () => {
     expect(within(parkingTypeList).getByText("Off street")).toBeInTheDocument()
     expect(within(parkingTypeList).getByText("Garage")).toBeInTheDocument()
     expect(within(parkingTypeList).getByText("Carport")).toBeInTheDocument()
+  })
+
+  describe("Rent and HMI sections", () => {
+    it("should render the rent and HMI sections on active listings", () => {
+      render(
+        <AuthContext.Provider
+          value={{
+            doJurisdictionsHaveFeatureFlagOn: () => true,
+          }}
+        >
+          <ListingViewSeeds
+            listing={{
+              ...listing,
+              status: ListingsStatusEnum.active,
+            }}
+            jurisdiction={jurisdiction}
+          />
+        </AuthContext.Provider>
+      )
+
+      expect(screen.getByRole("heading", { level: 1, name: /archer studios/i })).toBeInTheDocument()
+
+      const rentSectionTitle = screen.getByRole("heading", { level: 2, name: /rent/i })
+      expect(rentSectionTitle).toBeInTheDocument()
+      expect(within(rentSectionTitle.parentElement).getByRole("table")).toBeInTheDocument()
+
+      const hmiSectionTitle = screen.getByRole("heading", {
+        level: 3,
+        name: /household maximum income/i,
+      })
+      expect(hmiSectionTitle).toBeInTheDocument()
+      expect(
+        within(hmiSectionTitle.parentElement).getByText(
+          "For income calculations, household size includes everyone (all ages) living in the unit."
+        )
+      ).toBeInTheDocument()
+      expect(
+        within(hmiSectionTitle.parentElement.parentElement).getByRole("table")
+      ).toBeInTheDocument()
+    })
+
+    it("should not render the rent and HMI sections on closed listings", () => {
+      render(
+        <AuthContext.Provider
+          value={{
+            doJurisdictionsHaveFeatureFlagOn: () => true,
+          }}
+        >
+          <ListingViewSeeds
+            listing={{
+              ...listing,
+              status: ListingsStatusEnum.closed,
+            }}
+            jurisdiction={jurisdiction}
+          />
+        </AuthContext.Provider>
+      )
+      expect(screen.getByRole("heading", { level: 1, name: /archer studios/i })).toBeInTheDocument()
+      expect(screen.queryByRole("heading", { level: 2, name: /rent/i })).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole("heading", {
+          level: 3,
+          name: /household maximum income/i,
+        })
+      ).not.toBeInTheDocument()
+    })
   })
 })
