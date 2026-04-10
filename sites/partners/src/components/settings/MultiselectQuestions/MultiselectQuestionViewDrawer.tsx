@@ -163,7 +163,7 @@ const MultiselectQuestionViewDrawer = ({
                 ? "alert-outlined"
                 : "primary-outlined"
             }
-            onClick={async () => {
+            onClick={() => {
               questionData?.status === MultiselectQuestionsStatusEnum.retired ||
               questionData?.status === MultiselectQuestionsStatusEnum.toRetire
                 ? setReactivateConfirmModalOpen(questionData)
