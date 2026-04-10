@@ -135,7 +135,6 @@ const EditMultiselectQuestion = ({
       <MultiselectQuestionViewDrawer
         drawerOpen={multiselectQuestionDrawerOpen === "view"}
         questionData={questionData}
-        questionsService={multiselectQuestionsService}
         copyQuestion={copyQuestion}
         onDrawerClose={() => {
           setMultiselectQuestionDrawerOpen(null)

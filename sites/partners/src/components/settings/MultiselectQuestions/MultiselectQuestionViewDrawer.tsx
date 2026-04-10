@@ -5,7 +5,6 @@ import {
   MultiselectOption,
   MultiselectQuestion,
   MultiselectQuestionCreate,
-  MultiselectQuestionsService,
   MultiselectQuestionsStatusEnum,
   ValidationMethodEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -15,7 +14,6 @@ import { useMapLayersList } from "../../../lib/hooks"
 type MultiselectQuestionViewDrawerProps = {
   drawerOpen: boolean
   questionData: MultiselectQuestion
-  questionsService: MultiselectQuestionsService
   copyQuestion: (data: MultiselectQuestionCreate) => void
   onDrawerClose: () => void
   setReactivateConfirmModalOpen: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
@@ -25,11 +23,10 @@ type MultiselectQuestionViewDrawerProps = {
 const MultiselectQuestionViewDrawer = ({
   drawerOpen,
   questionData,
-  questionsService,
   copyQuestion,
   onDrawerClose,
   setReactivateConfirmModalOpen,
-  setRetireConfirmModalOpen
+  setRetireConfirmModalOpen,
 }: MultiselectQuestionViewDrawerProps) => {
   const [optionData, setOptionData] = useState<MultiselectOption>(null)
 
