@@ -8,8 +8,10 @@ import {
   MultiselectQuestionUpdate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import MultiselectQuestionEditDrawer from "./MultiselectQuestionEditDrawer"
 import MultiselectQuestionDeleteModal from "./MultiselectQuestionDeleteModal"
+import MultiselectQuestionEditDrawer from "./MultiselectQuestionEditDrawer"
+import MultiselectQuestionReactivateModal from "./MultiselectQuestionReactivateModal"
+import MultiselectQuestionRetireModal from "./MultiselectQuestionRetireModal"
 import MultiselectQuestionViewDrawer from "./MultiselectQuestionViewDrawer"
 
 export type DrawerType = "add" | "edit" | "view"
@@ -41,6 +43,11 @@ const EditMultiselectQuestion = ({
   const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState<MultiselectQuestion | null>(
     null
   )
+  const [retireConfirmModalOpen, setRetireConfirmModalOpen] = useState<MultiselectQuestion | null>(
+    null
+  )
+  const [reActivateConfirmModelOpen, setReactivateConfirmModalOpen] =
+    useState<MultiselectQuestion | null>(null)
 
   const copyQuestion = (data: MultiselectQuestionCreate) => {
     const newData = {
@@ -128,14 +135,32 @@ const EditMultiselectQuestion = ({
       <MultiselectQuestionViewDrawer
         drawerOpen={multiselectQuestionDrawerOpen === "view"}
         questionData={questionData}
-        questionsService={multiselectQuestionsService}
         copyQuestion={copyQuestion}
-        cacheKey={cacheKey}
         onDrawerClose={() => {
           setMultiselectQuestionDrawerOpen(null)
         }}
+        setReactivateConfirmModalOpen={setReactivateConfirmModalOpen}
+        setRetireConfirmModalOpen={setRetireConfirmModalOpen}
       />
 
+      {retireConfirmModalOpen && (
+        <MultiselectQuestionRetireModal
+          multiselectQuestion={retireConfirmModalOpen}
+          onClose={() => {
+            setRetireConfirmModalOpen(null)
+            void mutate(cacheKey)
+          }}
+        />
+      )}
+      {reActivateConfirmModelOpen && (
+        <MultiselectQuestionReactivateModal
+          multiselectQuestion={reActivateConfirmModelOpen}
+          onClose={() => {
+            setReactivateConfirmModalOpen(null)
+            void mutate(cacheKey)
+          }}
+        />
+      )}
       {deleteConfirmModalOpen && (
         <MultiselectQuestionDeleteModal
           multiselectQuestion={deleteConfirmModalOpen}

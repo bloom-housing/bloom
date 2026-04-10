@@ -5,32 +5,29 @@ import {
   MultiselectOption,
   MultiselectQuestion,
   MultiselectQuestionCreate,
-  MultiselectQuestionsService,
   MultiselectQuestionsStatusEnum,
   ValidationMethodEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../shared/SectionWithGrid"
-import { useSWRConfig } from "swr"
 import { useMapLayersList } from "../../../lib/hooks"
 
 type MultiselectQuestionViewDrawerProps = {
   drawerOpen: boolean
   questionData: MultiselectQuestion
-  questionsService: MultiselectQuestionsService
   copyQuestion: (data: MultiselectQuestionCreate) => void
-  cacheKey: string
   onDrawerClose: () => void
+  setReactivateConfirmModalOpen: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
+  setRetireConfirmModalOpen: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
 }
 
 const MultiselectQuestionViewDrawer = ({
   drawerOpen,
   questionData,
-  questionsService,
   copyQuestion,
-  cacheKey,
   onDrawerClose,
+  setReactivateConfirmModalOpen,
+  setRetireConfirmModalOpen,
 }: MultiselectQuestionViewDrawerProps) => {
-  const { mutate } = useSWRConfig()
   const [optionData, setOptionData] = useState<MultiselectOption>(null)
 
   const drawerTitle = t("settings.preferenceView")
@@ -166,13 +163,12 @@ const MultiselectQuestionViewDrawer = ({
                 ? "alert-outlined"
                 : "primary-outlined"
             }
-            onClick={async () => {
+            onClick={() => {
               questionData?.status === MultiselectQuestionsStatusEnum.retired ||
               questionData?.status === MultiselectQuestionsStatusEnum.toRetire
-                ? await questionsService.reActivate({ body: { id: questionData.id } })
-                : await questionsService.retire({ body: { id: questionData.id } })
+                ? setReactivateConfirmModalOpen(questionData)
+                : setRetireConfirmModalOpen(questionData)
               onDrawerClose()
-              await mutate(cacheKey)
             }}
           >
             {questionData?.status === MultiselectQuestionsStatusEnum.retired ||
