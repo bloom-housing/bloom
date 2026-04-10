@@ -2145,6 +2145,7 @@ model UserPreferences {
 
 model UserNotificationPreferences {
   userId                   String       @id() @map("user_id") @db.Uuid
+  updatedAt                DateTime     @updatedAt @map("updated_at") @db.Timestamp(6)
   user                     UserAccounts @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   lottery                  Boolean?     @default(false)
   waitlist                 Boolean?     @default(false)
@@ -2166,6 +2167,7 @@ model UserNotificationPreferences {
 model UserNotificationPreferencesSnapshot {
   userSnapshotId           String              @id() @map("user_snapshot_id") @db.Uuid
   originalUserID           String              @map("original_user_id") @db.Uuid
+  updatedAt                DateTime            @updatedAt @map("updated_at") @db.Timestamp(6)
   user                     UserAccountSnapshot @relation(fields: [userSnapshotId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   lottery                  Boolean?            @default(false)
   waitlist                 Boolean?            @default(false)

@@ -1,6 +1,7 @@
 -- CreateTable
 CREATE TABLE "user_notification_preferences" (
     "user_id" UUID NOT NULL,
+    "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "lottery" BOOLEAN DEFAULT false,
     "waitlist" BOOLEAN DEFAULT false,
     "mobility" BOOLEAN DEFAULT false,
@@ -37,6 +38,7 @@ ALTER TABLE "user_notification_preferences" ADD CONSTRAINT "user_notification_pr
 CREATE TABLE "user_notification_preferences_snapshot" (
     "original_user_id" UUID NOT NULL,
     "user_snapshot_id" UUID NOT NULL,
+    "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "lottery" BOOLEAN DEFAULT false,
     "waitlist" BOOLEAN DEFAULT false,
     "mobility" BOOLEAN DEFAULT false,
