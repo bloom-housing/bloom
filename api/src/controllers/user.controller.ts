@@ -61,6 +61,7 @@ import { PartnerUserUpdate } from '../dtos/users/partner-user-update.dto';
 import { AdvocateUserUpdate } from '../dtos/users/advocate-user-update.dto';
 import { AdvocateUserCsvExporterService } from '../services/advocate-user-csv-export.service';
 import { AdvocateUserAccept } from '../dtos/users/advocate-user-accept.dto';
+import { UserNotificationPreferences } from '../dtos/users/user-notification-preferences.dto';
 
 @Controller('user')
 @ApiTags('user')
@@ -159,6 +160,19 @@ export class UserController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
   ): Promise<IdDTO[]> {
     return await this.userService.favoriteListings(userId);
+  }
+
+  @Get('preferences')
+  @ApiOperation({
+    summary: 'Get the notification preferences of the requesting user',
+    operationId: 'getNotificationPreferences',
+  })
+  @ApiOkResponse({ type: UserNotificationPreferences })
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  async notificationPreferences(
+    @Request() req: ExpressRequest,
+  ): Promise<UserNotificationPreferences> {
+    return await this.userService.retrievePreferences(mapTo(User, req['user']));
   }
 
   @Post('/public')
@@ -398,6 +412,20 @@ export class UserController {
     @Body() dto: AdvocateUserUpdate,
   ): Promise<User> {
     return await this.userService.update(dto, req);
+  }
+
+  @Put('/preferences')
+  @ApiOperation({ summary: 'Update user notification preferences' })
+  @ApiOkResponse({ type: SuccessDTO })
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  async updatePreferences(
+    @Request() req: ExpressRequest,
+    @Body() dto: UserNotificationPreferences,
+  ): Promise<SuccessDTO> {
+    return await this.userService.updatePreferences(
+      dto,
+      mapTo(User, req['user']),
+    );
   }
 
   @Get(`:id`)
