@@ -5,32 +5,29 @@ import {
   MultiselectOption,
   MultiselectQuestion,
   MultiselectQuestionCreate,
-  MultiselectQuestionsService,
   MultiselectQuestionsStatusEnum,
   ValidationMethodEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../shared/SectionWithGrid"
-import { useSWRConfig } from "swr"
 import { useMapLayersList } from "../../../lib/hooks"
 
 type MultiselectQuestionViewDrawerProps = {
   drawerOpen: boolean
   questionData: MultiselectQuestion
-  questionsService: MultiselectQuestionsService
   copyQuestion: (data: MultiselectQuestionCreate) => void
-  cacheKey: string
   onDrawerClose: () => void
+  setReactivateConfirmModalOpen: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
+  setRetireConfirmModalOpen: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
 }
 
 const MultiselectQuestionViewDrawer = ({
   drawerOpen,
   questionData,
-  questionsService,
   copyQuestion,
-  cacheKey,
   onDrawerClose,
+  setReactivateConfirmModalOpen,
+  setRetireConfirmModalOpen,
 }: MultiselectQuestionViewDrawerProps) => {
-  const { mutate } = useSWRConfig()
   const [optionData, setOptionData] = useState<MultiselectOption>(null)
 
   const drawerTitle = t("settings.preferenceView")
@@ -48,9 +45,7 @@ const MultiselectQuestionViewDrawer = ({
       variant = "highlight-warm"
       break
   }
-  const statusText = `${questionData?.status
-    ?.charAt(0)
-    ?.toUpperCase()}${questionData?.status?.slice(1)}`
+  const statusText = t(`msq.status.${questionData?.status}`)
   const statusTag = <Tag variant={variant}>{statusText}</Tag>
 
   return (
@@ -105,10 +100,14 @@ const MultiselectQuestionViewDrawer = ({
                         data={questionData.multiselectOptions.map((item) => ({
                           order: { content: item.ordinal },
                           name: { content: item.name },
-                          description: { content: item.description },
+                          description: { content: item.description ?? t("t.n/a") },
                           view: {
                             content: (
-                              <Button variant="text" onClick={() => setOptionData(item)}>
+                              <Button
+                                className={"font-semibold darker-link"}
+                                variant="text"
+                                onClick={() => setOptionData(item)}
+                              >
                                 {t("t.view")}
                               </Button>
                             ),
@@ -164,19 +163,18 @@ const MultiselectQuestionViewDrawer = ({
                 ? "alert-outlined"
                 : "primary-outlined"
             }
-            onClick={async () => {
+            onClick={() => {
               questionData?.status === MultiselectQuestionsStatusEnum.retired ||
               questionData?.status === MultiselectQuestionsStatusEnum.toRetire
-                ? await questionsService.reActivate({ body: { id: questionData.id } })
-                : await questionsService.retire({ body: { id: questionData.id } })
+                ? setReactivateConfirmModalOpen(questionData)
+                : setRetireConfirmModalOpen(questionData)
               onDrawerClose()
-              await mutate(cacheKey)
             }}
           >
             {questionData?.status === MultiselectQuestionsStatusEnum.retired ||
             questionData?.status === MultiselectQuestionsStatusEnum.toRetire
-              ? "Return to Active"
-              : "Retire"}
+              ? t("settings.preferenceReturnToActive")
+              : t("settings.preferenceRetire")}
           </Button>
         </Drawer.Footer>
       </Drawer>
@@ -196,9 +194,11 @@ const MultiselectQuestionViewDrawer = ({
           <Card>
             <Card.Section>
               <SectionWithGrid heading={t("t.option")}>
-                <Grid.Row columns={3}>
+                <Grid.Row>
                   <FieldValue label={t("t.title")}>{optionData?.name}</FieldValue>
-                  <FieldValue label={t("t.descriptionTitle")}>{optionData?.description}</FieldValue>
+                  <FieldValue label={t("t.descriptionTitle")}>
+                    {optionData?.description ?? t("t.n/a")}
+                  </FieldValue>
                 </Grid.Row>
                 {optionData?.links?.length > 0 && (
                   <Grid.Row>

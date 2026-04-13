@@ -15,6 +15,7 @@ import {
   ListingMultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
   ListingFeaturesConfiguration,
+  ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   FieldGroup,
@@ -27,12 +28,12 @@ import {
 import {
   allListingFeatures,
   cloudinaryPdfFromId,
-  getOccupancyDescription,
   ListingFeaturesValues,
   listingParkingTypes,
   listingUtilities,
   stackedOccupancyTable,
   stackedUnitGroupsOccupancyTable,
+  tIfExists,
 } from "@bloom-housing/shared-helpers"
 import { downloadExternalPDF, isFeatureFlagOn } from "../../lib/helpers"
 import { CardList, ContentCardProps } from "../../patterns/CardList"
@@ -227,18 +228,27 @@ export const getFeatures = (
       features.push({
         heading: t("t.petsPolicy"),
         content: (
-          <ul data-testid="pet-policy-list">
-            {petPolicy.map((petPolicyItem, index) => (
-              <li key={index} className={styles["list-item"]}>
-                {petPolicyItem}
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul data-testid="pet-policy-list">
+              {petPolicy.map((petPolicyItem, index) => (
+                <li key={index} className={styles["list-item"]}>
+                  {petPolicyItem}
+                </li>
+              ))}
+            </ul>
+            {tIfExists("listings.petPolicyDescription") && (
+              <p className={"seeds-m-bs-2"}>{t("listings.petPolicyDescription")}</p>
+            )}
+          </>
         ),
       })
     }
   } else if (listing.petPolicy) {
-    features.push({ heading: t("t.petsPolicy"), subheading: listing.petPolicy })
+    features.push({
+      heading: t("t.petsPolicy"),
+      subheading: listing.petPolicy,
+      content: tIfExists("listings.petPolicyDescription"),
+    })
   }
   if (listing.amenities) {
     features.push({ heading: t("t.propertyAmenities"), subheading: listing.amenities })
@@ -530,7 +540,8 @@ export const getEligibilitySections = (
   const stackedHmiData = getStackedHmiData(listing)
   const hideHMI =
     (enableUnitGroups && stackedUnitGroupsHmiData.length === 0) ||
-    (!enableUnitGroups && stackedHmiData.length === 0)
+    (!enableUnitGroups && stackedHmiData.length === 0) ||
+    listing.status === ListingsStatusEnum.closed
   if (!hideHMI) {
     eligibilityFeatures.push({
       header: t("listings.householdMaximumIncome"),
@@ -560,7 +571,7 @@ export const getEligibilitySections = (
   if (!hideOccupancy) {
     eligibilityFeatures.push({
       header: t("t.occupancy"),
-      subheader: getOccupancyDescription(listing, enableUnitGroups),
+      subheader: t("listings.occupancyDescriptionNoSro"),
       content: (
         <StackedTable
           headers={{

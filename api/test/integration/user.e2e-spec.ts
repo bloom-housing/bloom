@@ -31,6 +31,7 @@ import { AddressUpdate } from '../../src/dtos/addresses/address-update.dto';
 import { UserOrderByKeys } from '../../src/enums/listings/order-by-enum';
 import { OrderByEnum } from '../../src/enums/shared/order-by-enum';
 import { AdvocateUserAccept } from '../../src/dtos/users/advocate-user-accept.dto';
+import { UserNotificationPreferences } from '../../src/dtos/users/user-notification-preferences.dto';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -1491,6 +1492,69 @@ describe('User Controller Tests', () => {
 
       expect(updatedUser).toBe(null);
       expect(mockRejectedEmail.mock.calls.length).toBe(1);
+    });
+  });
+
+  describe('update users notification preferences', () => {
+    it('should update users notification preferences', async () => {
+      let res = await request(app.getHttpServer())
+        .get(`/user/preferences`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      let userPreferences: UserNotificationPreferences = res.body;
+
+      expect(userPreferences).toEqual({
+        lottery: false,
+        waitlist: false,
+        mobility: false,
+        hearing: false,
+        vision: false,
+        hearingAndVision: false,
+        mobilityAndHearing: false,
+        mobilityAndVision: false,
+        mobilityHearingAndVision: false,
+        wantsRegionNotifs: false,
+        regions: [],
+      });
+
+      res = await request(app.getHttpServer())
+        .put(`/user/preferences`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .send({
+          mobility: true,
+          hearingAndVision: true,
+          mobilityHearingAndVision: true,
+          wantsRegionNotifs: true,
+          regions: ['Noti Region'],
+        } as UserNotificationPreferences)
+        .expect(200);
+
+      expect(res.body.success).toBeTrue();
+
+      res = await request(app.getHttpServer())
+        .get('/user/preferences')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      userPreferences = res.body;
+
+      expect(userPreferences).toEqual({
+        lottery: false,
+        waitlist: false,
+        mobility: true,
+        hearing: false,
+        vision: false,
+        hearingAndVision: true,
+        mobilityAndHearing: false,
+        mobilityAndVision: false,
+        mobilityHearingAndVision: true,
+        wantsRegionNotifs: true,
+        regions: ['Noti Region'],
+      });
     });
   });
 });

@@ -58,7 +58,8 @@ import { PartnerUserCreate } from '../dtos/users/partner-user-create.dto';
 import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
 import { SnapshotCreateService } from './snapshot-create.service';
 import { toAddHelper, toRemoveHelper } from '../utilities/snapshot-helpers';
-import { AdvocateUserAccept } from 'src/dtos/users/advocate-user-accept.dto';
+import { AdvocateUserAccept } from '../dtos/users/advocate-user-accept.dto';
+import { UserNotificationPreferences } from '../dtos/users/user-notification-preferences.dto';
 
 /*
   this is the service for users
@@ -923,6 +924,9 @@ export class UserService {
         middleName: dto.middleName,
         lastName: dto.lastName,
         dob: dto.dob,
+        notificationPreferences: {
+          create: {},
+        },
         jurisdictions: jurisdictionsToConnect
           ? {
               connect: jurisdictionsToConnect.map((juris) => ({
@@ -1023,6 +1027,9 @@ export class UserService {
           create: {
             ...dto.userRoles,
           },
+        },
+        notificationPreferences: {
+          create: {},
         },
         jurisdictions: dto.jurisdictions
           ? {
@@ -1131,6 +1138,9 @@ export class UserService {
           },
         },
         isAdvocate: true,
+        notificationPreferences: {
+          create: {},
+        },
         jurisdictions: jurisdictionsToConnect
           ? {
               connect: jurisdictionsToConnect,
@@ -1594,6 +1604,14 @@ export class UserService {
       });
     }
 
+    if (user.notificationPreferences) {
+      await this.prisma.userNotificationPreferences.delete({
+        where: {
+          userId: user.id,
+        },
+      });
+    }
+
     await this.prisma.userAccounts.delete({
       where: {
         id: user.id,
@@ -1716,6 +1734,49 @@ export class UserService {
         success: false,
       };
     }
+    return {
+      success: true,
+    };
+  }
+
+  async retrievePreferences(requestingUser: User) {
+    const notificationPreferences =
+      await this.prisma.userNotificationPreferences.findUnique({
+        where: {
+          userId: requestingUser.id,
+        },
+      });
+
+    if (!notificationPreferences) {
+      throw new NotFoundException(
+        'Failed to retrieve user notification preferences',
+      );
+    }
+
+    return mapTo(UserNotificationPreferences, notificationPreferences);
+  }
+
+  async updatePreferences(
+    dto: UserNotificationPreferences,
+    requestingUser: User,
+  ): Promise<SuccessDTO> {
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'userProfile',
+      permissionActions.update,
+      {
+        id: requestingUser.id,
+      },
+    );
+
+    await this.prisma.userNotificationPreferences.update({
+      data: {
+        ...dto,
+      },
+      where: {
+        userId: requestingUser.id,
+      },
+    });
     return {
       success: true,
     };
