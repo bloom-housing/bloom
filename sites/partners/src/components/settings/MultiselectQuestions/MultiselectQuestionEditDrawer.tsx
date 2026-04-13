@@ -33,7 +33,7 @@ import {
 import ManageIconSection from "../ManageIconSection"
 import { DrawerType } from "./EditMultiselectQuestion"
 import SectionWithGrid from "../../shared/SectionWithGrid"
-import s from "./MultiselectQuestionEditDrawer.module.scss"
+import styles from "./MultiselectQuestionEditDrawer.module.scss"
 import { useMapLayersList } from "../../../lib/hooks"
 
 type MultiselectQuestionEditDrawerProps = {
@@ -874,7 +874,7 @@ const MultiselectQuestionEditDrawer = ({
                         <FieldValue
                           label={t("settings.preferenceValidatingAddress.selectMapLayer")}
                         >
-                          <p className={s.helperText}>
+                          <p className={styles["helperText"]}>
                             {t("settings.preferenceValidatingAddress.selectMapLayerDescription")}
                           </p>
                           <Select
