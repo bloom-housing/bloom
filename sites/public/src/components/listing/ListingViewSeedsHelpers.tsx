@@ -27,7 +27,6 @@ import {
 import {
   allListingFeatures,
   cloudinaryPdfFromId,
-  getOccupancyDescription,
   ListingFeaturesValues,
   listingParkingTypes,
   listingUtilities,
@@ -560,7 +559,7 @@ export const getEligibilitySections = (
   if (!hideOccupancy) {
     eligibilityFeatures.push({
       header: t("t.occupancy"),
-      subheader: getOccupancyDescription(listing, enableUnitGroups),
+      subheader: t("listings.occupancyDescriptionNoSro"),
       content: (
         <StackedTable
           headers={{
