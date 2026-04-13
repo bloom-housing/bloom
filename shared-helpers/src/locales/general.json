@@ -871,7 +871,7 @@
   "listings.favoriteSaveError": "Listing was not saved to favorites - try again",
   "listings.featuresCards": "Features cards",
   "listings.forIncomeCalculations": "For income calculations, household size includes everyone (all ages) living in the unit. This information is to help you understand whether you may be eligible for a unit at this property. The “maximum income” listed here does not include possible deductions or exclusions, so you may be eligible even if your household income is somewhat higher than the maximum. If you are selected, you will have to provide specific information about your income at that time.",
-  "listings.forIncomeCalculationsBMR": "Income calculations are based on unit type",
+  "listings.forIncomeCalculationsBMR": "Income calculations are based on unit type. This information is to help you understand whether you may be eligible for a unit at this property. The “maximum income” listed here does not include possible deductions or exclusions, so you may be eligible even if your household income is somewhat higher than the maximum. If you are selected, you will have to provide specific information about your income at that time.",
   "listings.hasEbllClearance": "This property has received HUD EBLL clearance.",
   "listings.hideClosedListings": "Hide closed listings",
   "listings.homeType.apartment": "Apartment",

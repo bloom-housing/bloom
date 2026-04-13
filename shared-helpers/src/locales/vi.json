@@ -878,7 +878,7 @@
   "listings.favoriteSaveError": "Danh sách không được lưu vào mục yêu thích - hãy thử lại",
   "listings.featuresCards": "Thẻ tính năng",
   "listings.forIncomeCalculations": "Để tính toán thu nhập, quy mô hộ gia đình bao gồm tất cả mọi người (mọi lứa tuổi) sống trong căn hộ. Thông tin này nhằm giúp bạn hiểu liệu bạn có đủ điều kiện thuê căn hộ tại khu nhà này hay không. Mức “thu nhập tối đa” được liệt kê ở đây không bao gồm các khoản khấu trừ hoặc loại trừ có thể có, vì vậy bạn có thể đủ điều kiện ngay cả khi thu nhập hộ gia đình của bạn cao hơn mức tối đa một chút. Nếu được chọn, bạn sẽ phải cung cấp thông tin cụ thể về thu nhập của mình tại thời điểm đó.",
-  "listings.forIncomeCalculationsBMR": "Tính thu nhập dựa trên loại căn nhà",
+  "listings.forIncomeCalculationsBMR": "Việc tính toán thu nhập dựa trên loại căn hộ. Thông tin này nhằm giúp bạn hiểu liệu bạn có đủ điều kiện thuê căn hộ tại khu nhà này hay không. Mức “thu nhập tối đa” được liệt kê ở đây không bao gồm các khoản khấu trừ hoặc loại trừ có thể có, vì vậy bạn có thể đủ điều kiện ngay cả khi thu nhập hộ gia đình của bạn cao hơn mức tối đa một chút. Nếu bạn được chọn, bạn sẽ phải cung cấp thông tin cụ thể về thu nhập của mình tại thời điểm đó.",
   "listings.hasEbllClearance": "Bất động sản này đã được HUD EBLL cấp phép.",
   "listings.hideClosedListings": "Ẩn danh sách đã đóng",
   "listings.homeType.apartment": "Căn hộ",

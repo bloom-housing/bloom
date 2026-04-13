@@ -877,7 +877,7 @@
   "listings.favoriteSaveError": "El listado no se guardó en favoritos: inténtalo de nuevo.",
   "listings.featuresCards": "Tarjetas de características",
   "listings.forIncomeCalculations": "Para el cálculo de ingresos, el tamaño del hogar incluye a todas las personas (de todas las edades) que viven en la vivienda. Esta información le ayudará a determinar si cumple con los requisitos para obtener una vivienda en esta propiedad. El \"ingreso máximo\" que se indica aquí no incluye posibles deducciones ni exclusiones, por lo que podría ser elegible incluso si el ingreso de su hogar es ligeramente superior al máximo. Si resulta seleccionado, deberá proporcionar información específica sobre sus ingresos en ese momento.",
-  "listings.forIncomeCalculationsBMR": "Los cálculos de los ingresos están basados en el tipo de vivienda",
+  "listings.forIncomeCalculationsBMR": "Los cálculos de ingresos se basan en el tipo de unidad. Esta información le ayudará a determinar si cumple con los requisitos para obtener una unidad en esta propiedad. El \"ingreso máximo\" que se indica aquí no incluye posibles deducciones ni exclusiones, por lo que podría ser elegible incluso si sus ingresos familiares superan ligeramente el máximo. Si resulta seleccionado, deberá proporcionar información específica sobre sus ingresos en ese momento.",
   "listings.hasEbllClearance": "Esta propiedad ha recibido la autorización EBLL de HUD.",
   "listings.hideClosedListings": "Ocultar los Listados cerrados",
   "listings.homeType.apartment": "Departamento",
