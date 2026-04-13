@@ -100,7 +100,9 @@ const MultiselectQuestionViewDrawer = ({
                         data={questionData.multiselectOptions.map((item) => ({
                           order: { content: item.ordinal },
                           name: { content: item.name },
-                          description: { content: item.description ?? t("t.n/a") },
+                          description: {
+                            content: item.description ? item.description : t("t.n/a"),
+                          },
                           view: {
                             content: (
                               <Button
@@ -197,7 +199,7 @@ const MultiselectQuestionViewDrawer = ({
                 <Grid.Row>
                   <FieldValue label={t("t.title")}>{optionData?.name}</FieldValue>
                   <FieldValue label={t("t.descriptionTitle")}>
-                    {optionData?.description ?? t("t.n/a")}
+                    {optionData?.description ? optionData.description : t("t.n/a")}
                   </FieldValue>
                 </Grid.Row>
                 {optionData?.links?.length > 0 && (
