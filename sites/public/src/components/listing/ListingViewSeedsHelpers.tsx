@@ -15,6 +15,7 @@ import {
   ListingMultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
   ListingFeaturesConfiguration,
+  ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   FieldGroup,
@@ -540,7 +541,8 @@ export const getEligibilitySections = (
   const stackedHmiData = getStackedHmiData(listing)
   const hideHMI =
     (enableUnitGroups && stackedUnitGroupsHmiData.length === 0) ||
-    (!enableUnitGroups && stackedHmiData.length === 0)
+    (!enableUnitGroups && stackedHmiData.length === 0) ||
+    listing.status === ListingsStatusEnum.closed
   if (!hideHMI) {
     eligibilityFeatures.push({
       header: t("listings.householdMaximumIncome"),

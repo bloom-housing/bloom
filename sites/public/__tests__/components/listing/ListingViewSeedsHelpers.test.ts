@@ -1214,6 +1214,12 @@ describe("ListingViewSeedsHelpers", () => {
         buildingSelectionCriteria: null,
         rentalAssistance: null,
         criminalBackground: null,
+        unitsSummarized: {
+          ...listing.unitsSummarized,
+          hmi: { columns: {}, rows: [] },
+          amiPercentages: [],
+          byUnitType: [],
+        },
       })
       expect(eligibilitySections).toEqual([])
     })
