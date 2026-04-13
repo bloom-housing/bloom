@@ -91,7 +91,7 @@ const SelectAndOrder = ({
       {t("listings.providesAdditionalFields")}
     </Tag>
   )
-
+  // TODO: clean-up after enableV2MSQ is turned on
   const draggableTableData: StandardTableData = useMemo(
     () =>
       draftListingData.map((item) => ({
@@ -100,9 +100,11 @@ const SelectAndOrder = ({
         additionalFields: {
           content: (
             <>
-              {determineOptionsForQuestion(item).some(
+              {(determineOptionsForQuestion(item).some(
                 (option) => option.shouldCollectAddress || option.collectAddress
-              ) && additionalFieldsTag()}
+              ) &&
+                additionalFieldsTag()) ||
+                t("t.n/a")}
             </>
           ),
         },
@@ -135,9 +137,11 @@ const SelectAndOrder = ({
         additionalFields: {
           content: (
             <>
-              {determineOptionsForQuestion(item).some(
+              {(determineOptionsForQuestion(item).some(
                 (option) => option.shouldCollectAddress || option.collectAddress
-              ) && additionalFieldsTag()}
+              ) &&
+                additionalFieldsTag()) ||
+                t("t.n/a")}
             </>
           ),
         },
@@ -188,7 +192,10 @@ const SelectAndOrder = ({
           MultiselectQuestionsStatusEnum.toRetire,
           MultiselectQuestionsStatusEnum.retired,
         ]
-      : undefined
+      : undefined,
+    {
+      sort: [{ orderBy: "name", orderDir: "ASC" }],
+    }
   )
   const fetchedData = data?.items ?? []
 
@@ -256,8 +263,17 @@ const SelectAndOrder = ({
         </div>
       )
     }
-    const statusVariant = item.status === MultiselectQuestionsStatusEnum.active ? "success" : null
-    const statusText = `${item.status.charAt(0).toUpperCase()}${item.status.slice(1)}`
+    let statusVariant
+    switch (item.status) {
+      case MultiselectQuestionsStatusEnum.active:
+        statusVariant = "success"
+        break
+      case MultiselectQuestionsStatusEnum.toRetire:
+      case MultiselectQuestionsStatusEnum.retired:
+        statusVariant = "highlight-warm"
+        break
+    }
+    const statusText = t(`msq.status.${item.status}`)
     const showAdditionalTag = determineOptionsForQuestion(item).some(
       (option) => option.shouldCollectAddress || option.collectAddress
     )

@@ -239,8 +239,8 @@ describe("PaperListingForm", () => {
       expect(
         await screen.findByRole("row", { name: "Order Name Additional fields Actions" })
       ).toBeInTheDocument()
-      expect(screen.getByRole("row", { name: "1 Preference 1 Delete" })).toBeInTheDocument()
-      expect(screen.getByRole("row", { name: "2 Preference 2 Delete" })).toBeInTheDocument()
+      expect(screen.getByRole("row", { name: "1 Preference 1 n/a Delete" })).toBeInTheDocument()
+      expect(screen.getByRole("row", { name: "2 Preference 2 n/a Delete" })).toBeInTheDocument()
       expect(screen.getByRole("button", { name: "Edit preferences" })).toBeInTheDocument()
 
       // units
