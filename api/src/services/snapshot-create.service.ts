@@ -88,6 +88,21 @@ export class SnapshotCreateService {
             isSupportAdmin: true,
           },
         },
+        notificationPreferences: {
+          select: {
+            lottery: true,
+            waitlist: true,
+            mobility: true,
+            hearing: true,
+            vision: true,
+            hearingAndVision: true,
+            mobilityAndHearing: true,
+            mobilityAndVision: true,
+            mobilityHearingAndVision: true,
+            wantsRegionNotifs: true,
+            regions: true,
+          },
+        },
       },
     });
 
@@ -106,6 +121,7 @@ export class SnapshotCreateService {
       userRoles,
       id,
       createdAt,
+      notificationPreferences,
       ...rest
     } = currData;
 
@@ -152,6 +168,14 @@ export class SnapshotCreateService {
               connect: listings.map((elem) => ({
                 id: elem.id,
               })),
+            }
+          : undefined,
+        notificationPreferences: notificationPreferences
+          ? {
+              create: {
+                ...notificationPreferences,
+                originalUserID: id,
+              },
             }
           : undefined,
       },

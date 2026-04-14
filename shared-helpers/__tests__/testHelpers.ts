@@ -1044,10 +1044,68 @@ export const listing: Listing = {
     ],
     unitTypes: [],
     priorityTypes: [],
-    amiPercentages: [],
-    byUnitType: [],
+    amiPercentages: ["30"],
+    byUnitType: [
+      {
+        areaRange: {
+          min: 750,
+          max: 750,
+        },
+        minIncomeRange: {
+          min: "$2,000",
+          max: "$2,000",
+        },
+        occupancyRange: {
+          min: 1,
+          max: 3,
+        },
+        rentRange: {
+          min: "$1,200",
+          max: "$1,200",
+        },
+        rentAsPercentIncomeRange: {
+          min: 0,
+          max: 20,
+        },
+        floorRange: {
+          min: 1,
+          max: 1,
+        },
+        unitTypes: {
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          id: "dbfd0d09-5e49-42dc-a660-709a2406d025",
+          name: UnitTypeEnum.oneBdrm,
+          numBedrooms: 1,
+        },
+        totalAvailable: 0,
+      },
+    ],
     byAMI: [],
-    hmi: { columns: {}, rows: [] },
+    hmi: {
+      columns: {
+        sizeColumn: "listings.householdSize",
+        maxIncomeMonth: "listings.maxIncomeMonth",
+        maxIncomeYear: "listings.maxIncomeYear",
+      },
+      rows: [
+        {
+          sizeColumn: 1,
+          maxIncomeMonth: "listings.monthlyIncome*income:$3,000",
+          maxIncomeYear: "listings.annualIncome*income:$36,000",
+        },
+        {
+          sizeColumn: 2,
+          maxIncomeMonth: "listings.monthlyIncome*income:$4,000",
+          maxIncomeYear: "listings.annualIncome*income:$48,000",
+        },
+        {
+          sizeColumn: 3,
+          maxIncomeMonth: "listings.monthlyIncome*income:$5,000",
+          maxIncomeYear: "listings.annualIncome*income:$60,000",
+        },
+      ],
+    },
   },
   unitAmenities: "Dishwasher",
   developer: "Charities Housing",
