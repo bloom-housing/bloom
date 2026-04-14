@@ -1,6 +1,7 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
 import { fireEvent } from "@testing-library/react"
+import { t } from "@bloom-housing/ui-components"
 import { mockNextRouter, render } from "../../../testUtils"
 import ApplicationMember from "../../../../src/pages/applications/household/member"
 
@@ -45,8 +46,8 @@ describe("applications pages", () => {
       expect(
         await findByText("There are errors you'll need to resolve before moving on.")
       ).toBeInTheDocument()
-      expect(getByText("Please enter a given name")).toBeInTheDocument()
-      expect(getByText("Please enter a family name")).toBeInTheDocument()
+      expect(getByText(t("errors.givenNameError"))).toBeInTheDocument()
+      expect(getByText(t("errors.familyNameError"))).toBeInTheDocument()
       expect(getByText("Please enter a valid date of birth")).toBeInTheDocument()
       expect(getAllByText("Please select one of the options above.")).toHaveLength(3)
     })

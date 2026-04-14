@@ -1,6 +1,9 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
 import { fireEvent } from "@testing-library/react"
+import { AuthContext, blankApplication } from "@bloom-housing/shared-helpers"
+import { listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { t } from "@bloom-housing/ui-components"
 import { mockNextRouter, render } from "../../../testUtils"
 import ApplicationName from "../../../../src/pages/applications/contact/name"
 import {
@@ -8,8 +11,6 @@ import {
   retrieveApplicationConfig,
 } from "../../../../src/lib/applications/AppSubmissionContext"
 import ApplicationConductor from "../../../../src/lib/applications/ApplicationConductor"
-import { AuthContext, blankApplication } from "@bloom-housing/shared-helpers"
-import { listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 
 window.scrollTo = jest.fn()
 
@@ -86,8 +87,8 @@ describe("applications pages", () => {
       expect(
         await findByText("There are errors you'll need to resolve before moving on.")
       ).toBeInTheDocument()
-      expect(getByText("Please enter a given name")).toBeInTheDocument()
-      expect(getByText("Please enter a family name")).toBeInTheDocument()
+      expect(getByText(t("errors.givenNameError"))).toBeInTheDocument()
+      expect(getByText(t("errors.familyNameError"))).toBeInTheDocument()
       expect(
         getByText("Please enter a valid date of birth, must be 18 or older")
       ).toBeInTheDocument()

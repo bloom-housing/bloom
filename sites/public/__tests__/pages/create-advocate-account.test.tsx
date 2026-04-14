@@ -1,6 +1,7 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
 import userEvent from "@testing-library/user-event"
+import { t } from "@bloom-housing/ui-components"
 import { Agency } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { fireEvent, mockNextRouter, render, screen, waitFor } from "../testUtils"
 import CreateAdvocateAccount from "../../src/pages/create-advocate-account"
@@ -49,8 +50,12 @@ const fillAdvocateForm = async (
   email = "john.doe@example.com",
   agency = "agency-1"
 ) => {
-  const firstNameField = screen.getByRole("textbox", { name: "First or given name" })
-  const lastNameField = screen.getByRole("textbox", { name: "Last or family name" })
+  const firstNameField = screen.getByRole("textbox", {
+    name: t("application.name.firstOrGivenName"),
+  })
+  const lastNameField = screen.getByRole("textbox", {
+    name: t("application.name.lastOrFamilyName"),
+  })
   const emailField = screen.getByRole("textbox", { name: "Email" })
   const agencySelect = screen.getByRole("combobox", { name: "Agency" })
   const submitButton = screen.getByRole("button", { name: "Request an account" })
@@ -73,9 +78,13 @@ describe("Create advocate page", () => {
     expect(screen.getByText("Housing advocate")).toBeInTheDocument()
 
     expect(screen.getByText("Your name", { selector: "legend" })).toBeInTheDocument()
-    expect(screen.getByRole("textbox", { name: "First or given name" })).toBeInTheDocument()
+    expect(
+      screen.getByRole("textbox", { name: t("application.name.firstOrGivenName") })
+    ).toBeInTheDocument()
     expect(screen.getByRole("textbox", { name: "Middle name (optional)" })).toBeInTheDocument()
-    expect(screen.getByRole("textbox", { name: "Last or family name" })).toBeInTheDocument()
+    expect(
+      screen.getByRole("textbox", { name: t("application.name.lastOrFamilyName") })
+    ).toBeInTheDocument()
 
     expect(screen.getByText("Your organization")).toBeInTheDocument()
     expect(screen.getByRole("combobox", { name: "Agency" })).toBeInTheDocument()
@@ -117,10 +126,14 @@ describe("Create advocate page", () => {
       const submitButton = screen.getByRole("button", { name: "Request an account" })
       await userEvent.click(submitButton)
 
-      expect(screen.getByRole("textbox", { name: "First or given name" })).toBeInvalid()
+      expect(
+        screen.getByRole("textbox", { name: t("application.name.firstOrGivenName") })
+      ).toBeInvalid()
       expect(screen.getByText("Please enter a first name")).toBeInTheDocument()
 
-      expect(screen.getByRole("textbox", { name: "Last or family name" })).toBeInvalid()
+      expect(
+        screen.getByRole("textbox", { name: t("application.name.lastOrFamilyName") })
+      ).toBeInvalid()
       expect(screen.getByText("Please enter a last name")).toBeInTheDocument()
 
       expect(screen.getByRole("textbox", { name: "Email" })).toBeInvalid()
@@ -134,9 +147,13 @@ describe("Create advocate page", () => {
       renderCreateAdvocateAccountPage()
 
       const submitButton = screen.getByRole("button", { name: "Request an account" })
-      const firstNameField = screen.getByRole("textbox", { name: "First or given name" })
+      const firstNameField = screen.getByRole("textbox", {
+        name: t("application.name.firstOrGivenName"),
+      })
       const middleNameField = screen.getByRole("textbox", { name: "Middle name (optional)" })
-      const lastNameField = screen.getByRole("textbox", { name: "Last or family name" })
+      const lastNameField = screen.getByRole("textbox", {
+        name: t("application.name.lastOrFamilyName"),
+      })
 
       await userEvent.type(firstNameField, Array(65).fill("a").join(""))
       await userEvent.type(middleNameField, Array(65).fill("a").join(""))

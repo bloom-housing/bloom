@@ -1,5 +1,6 @@
 import { fireEvent, mockNextRouter, render, waitFor, screen } from "../testUtils"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { t } from "@bloom-housing/ui-components"
 import React from "react"
 import CreateAccount from "../../src/pages/create-account"
 import userEvent from "@testing-library/user-event"
@@ -35,9 +36,13 @@ describe("Create Account Page", () => {
     expect(screen.getByRole("heading", { name: /create account/i, level: 1 })).toBeInTheDocument()
 
     expect(screen.getByText("Your name", { selector: "legend" })).toBeInTheDocument()
-    verifyInitialInput(screen.getByRole("textbox", { name: /first or given name/i }))
+    verifyInitialInput(
+      screen.getByRole("textbox", { name: t("application.name.firstOrGivenName") })
+    )
     verifyInitialInput(screen.getByRole("textbox", { name: /middle name \(optional\)/i }))
-    verifyInitialInput(screen.getByRole("textbox", { name: /last or family name/i }))
+    verifyInitialInput(
+      screen.getByRole("textbox", { name: t("application.name.lastOrFamilyName") })
+    )
 
     expect(screen.getByText("Your date of birth", { selector: "legend" })).toBeInTheDocument()
     verifyInitialInput(screen.getByRole("textbox", { name: /month/i }))
@@ -101,10 +106,14 @@ describe("Create Account Page", () => {
       expect(createAccountButton).toBeInTheDocument()
       await userEvent.click(createAccountButton)
 
-      expect(screen.getByRole("textbox", { name: /first or given name/i })).toBeInvalid()
+      expect(
+        screen.getByRole("textbox", { name: t("application.name.firstOrGivenName") })
+      ).toBeInvalid()
       expect(screen.getByText("Please enter a first name")).toBeInTheDocument()
 
-      expect(screen.getByRole("textbox", { name: /last or family name/i })).toBeInvalid()
+      expect(
+        screen.getByRole("textbox", { name: t("application.name.lastOrFamilyName") })
+      ).toBeInvalid()
       expect(screen.getByText("Please enter a last name")).toBeInTheDocument()
 
       expect(screen.getByRole("textbox", { name: /month/i })).toBeInvalid()
@@ -128,9 +137,13 @@ describe("Create Account Page", () => {
       render(<CreateAccount />)
 
       const createAccountButton = screen.getByRole("button", { name: /create account/i })
-      const firstNameField = screen.getByRole("textbox", { name: /first or given name/i })
+      const firstNameField = screen.getByRole("textbox", {
+        name: t("application.name.firstOrGivenName"),
+      })
       const middleNameField = screen.getByRole("textbox", { name: /middle name \(optional\)/i })
-      const lastNameField = screen.getByRole("textbox", { name: /last or family name/i })
+      const lastNameField = screen.getByRole("textbox", {
+        name: t("application.name.lastOrFamilyName"),
+      })
       expect(firstNameField).toBeInTheDocument()
       expect(middleNameField).toBeInTheDocument()
       expect(lastNameField).toBeInTheDocument()
@@ -385,9 +398,15 @@ describe("Create Account Page", () => {
 
       expect(screen.getByRole("heading", { name: /create account/i, level: 1 })).toBeInTheDocument()
 
-      await userEvent.type(screen.getByRole("textbox", { name: /first or given name/i }), "John")
+      await userEvent.type(
+        screen.getByRole("textbox", { name: t("application.name.firstOrGivenName") }),
+        "John"
+      )
       await userEvent.type(screen.getByRole("textbox", { name: /middle name/i }), "Admin")
-      await userEvent.type(screen.getByRole("textbox", { name: /last or family name/i }), "Doe")
+      await userEvent.type(
+        screen.getByRole("textbox", { name: t("application.name.lastOrFamilyName") }),
+        "Doe"
+      )
       await userEvent.type(screen.getByRole("textbox", { name: /month/i }), "2")
       await userEvent.type(screen.getByRole("textbox", { name: /day/i }), "4")
       await userEvent.type(screen.getByRole("textbox", { name: /year/i }), "2000")
@@ -423,9 +442,15 @@ describe("Create Account Page", () => {
 
     expect(screen.getByRole("heading", { name: /create account/i, level: 1 })).toBeInTheDocument()
 
-    await userEvent.type(screen.getByRole("textbox", { name: /first or given name/i }), "John")
+    await userEvent.type(
+      screen.getByRole("textbox", { name: t("application.name.firstOrGivenName") }),
+      "John"
+    )
     await userEvent.type(screen.getByRole("textbox", { name: /middle name/i }), "Admin")
-    await userEvent.type(screen.getByRole("textbox", { name: /last or family name/i }), "Doe")
+    await userEvent.type(
+      screen.getByRole("textbox", { name: t("application.name.lastOrFamilyName") }),
+      "Doe"
+    )
     await userEvent.type(screen.getByRole("textbox", { name: /month/i }), "2")
     await userEvent.type(screen.getByRole("textbox", { name: /day/i }), "4")
     await userEvent.type(screen.getByRole("textbox", { name: /year/i }), "2000")

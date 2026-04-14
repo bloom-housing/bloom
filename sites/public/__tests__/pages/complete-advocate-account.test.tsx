@@ -1,6 +1,7 @@
 import React from "react"
 import userEvent from "@testing-library/user-event"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
 import {
   Agency,
   AuthService,
@@ -95,8 +96,12 @@ describe("CompleteAdvocateAccount page", () => {
       expect(
         screen.getByText("Please fill out the required fields to complete your account setup.")
       ).toBeInTheDocument()
-      expect(screen.getByRole("textbox", { name: "First or given name" })).toBeInTheDocument()
-      expect(screen.getByRole("textbox", { name: "Last or family name" })).toBeInTheDocument()
+      expect(
+        screen.getByRole("textbox", { name: t("application.name.firstOrGivenName") })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole("textbox", { name: t("application.name.lastOrFamilyName") })
+      ).toBeInTheDocument()
       expect(screen.getByRole("button", { name: "Submit" })).toBeInTheDocument()
     })
 
@@ -106,9 +111,13 @@ describe("CompleteAdvocateAccount page", () => {
       renderPage()
 
       await waitFor(() => {
-        expect(screen.getByRole("textbox", { name: "First or given name" })).toHaveValue("Jane")
+        expect(
+          screen.getByRole("textbox", { name: t("application.name.firstOrGivenName") })
+        ).toHaveValue("Jane")
       })
-      expect(screen.getByRole("textbox", { name: "Last or family name" })).toHaveValue("Doe")
+      expect(
+        screen.getByRole("textbox", { name: t("application.name.lastOrFamilyName") })
+      ).toHaveValue("Doe")
     })
 
     it("shows the expired/resend state when the token is invalid", async () => {
@@ -250,8 +259,12 @@ describe("CompleteAdvocateAccount page", () => {
       })
 
       // Name section (pre-filled from existing user)
-      expect(screen.getByRole("textbox", { name: "First or given name" })).toHaveValue("Jane")
-      expect(screen.getByRole("textbox", { name: "Last or family name" })).toHaveValue("Doe")
+      expect(
+        screen.getByRole("textbox", { name: t("application.name.firstOrGivenName") })
+      ).toHaveValue("Jane")
+      expect(
+        screen.getByRole("textbox", { name: t("application.name.lastOrFamilyName") })
+      ).toHaveValue("Doe")
 
       // Address section
       expect(screen.getByRole("textbox", { name: "Street address" })).toBeInTheDocument()

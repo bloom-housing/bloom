@@ -2,6 +2,7 @@ import React from "react"
 import userEvent from "@testing-library/user-event"
 import { useRouter } from "next/router"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { t } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { User, UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Edit from "../../../src/pages/account/edit"
@@ -98,8 +99,12 @@ describe("EditPublicAccount", () => {
         expect(screen.getByDisplayValue("First")).toBeInTheDocument()
       })
 
-      const firstNameField = screen.getByLabelText("First or given name", { selector: "input" })
-      const lastNameField = screen.getByLabelText("Last or family name", { selector: "input" })
+      const firstNameField = screen.getByLabelText(t("application.name.firstOrGivenName"), {
+        selector: "input",
+      })
+      const lastNameField = screen.getByLabelText(t("application.name.lastOrFamilyName"), {
+        selector: "input",
+      })
       const updateButton = document.getElementById("account-submit-name")
 
       await userEvent.clear(firstNameField)

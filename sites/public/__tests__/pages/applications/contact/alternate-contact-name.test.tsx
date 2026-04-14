@@ -1,6 +1,7 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
 import { fireEvent } from "@testing-library/react"
+import { t } from "@bloom-housing/ui-components"
 import { mockNextRouter, render } from "../../../testUtils"
 import ApplicationAlternateContactName from "../../../../src/pages/applications/contact/alternate-contact-name"
 import {
@@ -87,8 +88,8 @@ describe("applications pages", () => {
       expect(
         await findByText("There are errors you'll need to resolve before moving on.")
       ).toBeInTheDocument()
-      expect(getByText("Please enter a given name")).toBeInTheDocument()
-      expect(getByText("Please enter a family name")).toBeInTheDocument()
+      expect(getByText(t("errors.givenNameError"))).toBeInTheDocument()
+      expect(getByText(t("errors.familyNameError"))).toBeInTheDocument()
     })
 
     it("should disable fields and autofill alternate contact name for advocates", async () => {

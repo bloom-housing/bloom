@@ -2,6 +2,7 @@ import React from "react"
 import { useRouter } from "next/router"
 import userEvent from "@testing-library/user-event"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { Agency, User, UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { EditAdvocateAccount } from "../../../src/components/account/EditAdvocateAccount"
@@ -106,7 +107,9 @@ describe("EditAdvocateAccount", () => {
     renderEditAdvocateAccount()
 
     await waitFor(() => {
-      expect(screen.getByRole("textbox", { name: "First or given name" })).toBeInTheDocument()
+      expect(
+        screen.getByRole("textbox", { name: t("application.name.firstOrGivenName") })
+      ).toBeInTheDocument()
     })
 
     await userEvent.selectOptions(screen.getByRole("combobox", { name: "Agency" }), "agency-2")
@@ -197,7 +200,9 @@ describe("EditAdvocateAccount", () => {
     renderEditAdvocateAccount()
 
     await waitFor(() => {
-      expect(screen.getByRole("textbox", { name: "First or given name" })).toBeInTheDocument()
+      expect(
+        screen.getByRole("textbox", { name: t("application.name.firstOrGivenName") })
+      ).toBeInTheDocument()
     })
 
     await userEvent.click(screen.getByRole("button", { name: "Update Agency" }))
