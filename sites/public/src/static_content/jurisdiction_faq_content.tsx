@@ -125,6 +125,14 @@ export const getJurisdictionFaqContent = (): FaqContent => {
         question: t("faq.imExperiencingHomelessness"),
         answer: renderMD("faq.imExperiencingHomelessnessAnswer"),
       },
+      {
+        question: t("faq.whatIsAchp"),
+        answer: renderMD("faq.whatIsAchpAnswer"),
+      },
+      {
+        question: t("faq.whereAchpForms"),
+        answer: renderMD("faq.whereAchpFormsAnswer"),
+      },
     ],
   }
 
