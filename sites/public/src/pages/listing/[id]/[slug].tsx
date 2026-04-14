@@ -28,7 +28,7 @@ export default function ListingPage(props: ListingProps) {
   const { profile } = useContext(AuthContext)
 
   useEffect(() => {
-    if (!listing.id) return
+    if (!listing?.id) return
     pushGtmEvent<ListingDetail>({
       event: "pageView",
       pageTitle: `${listing.name} - Housing Portal`,
@@ -42,14 +42,14 @@ export default function ListingPage(props: ListingProps) {
       paperApplication: listing.paperApplication,
     })
   }, [
-    listing.applicationDueDate,
-    listing.applicationOpenDate,
-    listing.digitalApplication,
-    listing.id,
-    listing.name,
-    listing.paperApplication,
-    listing.reviewOrderType,
-    listing.status,
+    listing?.applicationDueDate,
+    listing?.applicationOpenDate,
+    listing?.digitalApplication,
+    listing?.id,
+    listing?.name,
+    listing?.paperApplication,
+    listing?.reviewOrderType,
+    listing?.status,
     profile,
   ])
 
