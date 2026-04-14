@@ -21,7 +21,7 @@ const ApplicationsSideNav = ({ listingId, listingOpen = false }: ApplicationsSid
 
   return (
     <>
-      <Tabs verticalSidebar navigation={true}>
+      <Tabs verticalSidebar navigation={true} navigationLabel={t("applications.navLabel")}>
         <Tabs.TabList>
           <Tabs.Tab href={tabUrls.total} active={tabUrls.total === router.asPath}>
             <div className={styles["application-count-tab-content"]}>
