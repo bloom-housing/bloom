@@ -64,4 +64,10 @@ BEGIN
     WHERE rct.name = 'referralOnly62'
       AND rct.jurisdiction_id = la_jurisdiction_id
   );
+  -- Update all listings to use the associated reserved community type description
+  UPDATE listings
+  SET reserved_community_description = reserved_community_types.description
+  FROM reserved_community_types
+  WHERE listings.reserved_community_type_id = reserved_community_types.id;
+
 END $$;
