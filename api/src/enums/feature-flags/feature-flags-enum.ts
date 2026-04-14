@@ -67,6 +67,7 @@ export enum FeatureFlagEnum {
   example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
+  disableReservedCommunityTypeEdit = 'disableReservedCommunityTypeEdit',
 }
 
 // List of all of existing flags and their descriptions.
@@ -379,5 +380,10 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
     description:
       'When true, the programs section on the frontend is displayed as community types.',
+  },
+  {
+    name: FeatureFlagEnum.disableReservedCommunityTypeEdit,
+    description:
+      'When true, disables editing of reserved community type description in the partners site (shows as plaintext only).',
   },
 ];

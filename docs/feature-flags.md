@@ -91,5 +91,6 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableWhatToExpectAdditionalField](./feature-flags/enableWhatToExpectAdditionalField.md) | When true, the what to expect additional field is displayed in listing creation/edit form on the partner site |
 | [hideCloseListingButton](./feature-flags/hideCloseListingButton.md) | When true, close button is hidden on the listing edit form |
 | [swapCommunityTypeWithPrograms](./feature-flags/swapCommunityTypeWithPrograms.md) | When true, the programs section on the frontend is displayed as community types. |
+| [disableReservedCommunityTypeEdit](./feature-flags/disableReservedCommunityTypeEdit.md) | When true, disables editing of reserved community type description in the partners site (shows as plaintext only). |
 
 <!-- TABLE:END -->

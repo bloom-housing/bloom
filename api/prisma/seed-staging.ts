@@ -344,6 +344,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableSmokingPolicyRadio,
         FeatureFlagEnum.enableSpokenLanguage,
         FeatureFlagEnum.enableUnitAccessibilityTypeTags,
+        FeatureFlagEnum.disableReservedCommunityTypeEdit,
       ],
       visibleNeighborhoodAmenities: [
         NeighborhoodAmenitiesEnum.groceryStores,

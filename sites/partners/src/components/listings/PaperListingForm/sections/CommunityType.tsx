@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Select, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
-import { Grid } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import {
   ReservedCommunityType,
   YesNoEnum,
@@ -20,12 +20,14 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
 type CommunityTypeProps = {
+  disableReservedCommunityTypeEdit?: boolean
   listing?: FormListing
   requiredFields: string[]
   swapCommunityTypeWithPrograms?: boolean
 }
 
 const CommunityType = ({
+  disableReservedCommunityTypeEdit,
   listing,
   requiredFields,
   swapCommunityTypeWithPrograms,
@@ -37,9 +39,9 @@ const CommunityType = ({
   const reservedCommunityType = watch("reservedCommunityTypes.id")
 
   const [options, setOptions] = useState([])
-  const [currentCommunityType, setCurrentCommunityType] = useState(
-    listing?.reservedCommunityTypes?.id
-  )
+
+  // Store the reserved community description in state for immediate updates
+  const [description, setDescription] = useState<string>("")
 
   const { data: reservedCommunityTypes = [], loading } = useReservedCommunityTypeList()
 
@@ -58,19 +60,24 @@ const CommunityType = ({
     }
   }, [options, reservedCommunityTypes, loading])
 
+  // Set reservedCommunityTypes.id from listing only after options are loaded
   useEffect(() => {
-    setValue("reservedCommunityTypes.id", currentCommunityType)
-  }, [options, setValue, currentCommunityType])
-
-  useEffect(() => {
-    if (![listing?.reservedCommunityTypes?.id, undefined, ""].includes(reservedCommunityType)) {
-      setCurrentCommunityType(reservedCommunityType)
-      const matchedType = reservedCommunityTypes.find((type) => type.id === reservedCommunityType)
-      if (matchedType?.description !== undefined) {
-        setValue("reservedCommunityDescription", matchedType.description)
-      }
+    if (listing?.reservedCommunityTypes?.id && !reservedCommunityType && options.length > 0) {
+      setValue("reservedCommunityTypes.id", listing.reservedCommunityTypes.id)
     }
-  }, [reservedCommunityType, listing?.reservedCommunityTypes?.id, reservedCommunityTypes, setValue])
+  }, [listing?.reservedCommunityTypes?.id, reservedCommunityType, setValue, options])
+
+  // Always update description state and form value when reservedCommunityType or types change
+  useEffect(() => {
+    if (reservedCommunityType && reservedCommunityTypes.length > 0) {
+      const matchedType = reservedCommunityTypes.find((type) => type.id === reservedCommunityType)
+      const desc = matchedType?.description ?? ""
+      setValue("reservedCommunityDescription", desc)
+      setDescription(desc)
+    } else {
+      setDescription("")
+    }
+  }, [reservedCommunityType, reservedCommunityTypes, setValue])
 
   useEffect(() => {
     if (
@@ -107,8 +114,8 @@ const CommunityType = ({
                 controlClassName="control"
                 options={options}
                 inputProps={{
-                  onChange: () => {
-                    setCurrentCommunityType(reservedCommunityType)
+                  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
+                    setValue("reservedCommunityTypes.id", e.target.value)
                     fieldHasError(errors?.reservedCommunityTypes) &&
                       clearErrors("reservedCommunityTypes")
                   },
@@ -120,29 +127,46 @@ const CommunityType = ({
             </Grid.Cell>
           )}
         </Grid.Row>
-        <Grid.Row columns={3}>
+        <Grid.Row
+          columns={3}
+          className={!disableReservedCommunityTypeEdit ? styles["hidden-field"] : ""}
+        >
           <Grid.Cell className="seeds-grid-span-2">
-            <Textarea
-              label={getLabel(
-                "reservedCommunityDescription",
-                requiredFields,
-                t("listings.reservedCommunityDescription")
-              )}
-              placeholder={""}
-              name={"reservedCommunityDescription"}
-              id={"reservedCommunityDescription"}
-              fullWidth={true}
-              register={register}
-              note={t("listings.appearsInListing")}
-              errorMessage={fieldMessage(errors?.reservedCommunityDescription)}
-              inputProps={{
-                onChange: () => {
-                  fieldHasError(errors?.reservedCommunityDescription) &&
-                    clearErrors("reservedCommunityDescription")
-                },
-                "aria-required": fieldIsRequired("reservedCommunityDescription", requiredFields),
-              }}
-            />
+            {disableReservedCommunityTypeEdit && (
+              <FieldValue label={t("listings.reservedCommunityDescription")}>
+                {description || t("t.none")}
+              </FieldValue>
+            )}
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row
+          columns={3}
+          className={disableReservedCommunityTypeEdit ? styles["hidden-field"] : ""}
+        >
+          <Grid.Cell className="seeds-grid-span-2">
+            <div>
+              <Textarea
+                label={getLabel(
+                  "reservedCommunityDescription",
+                  requiredFields,
+                  t("listings.reservedCommunityDescription")
+                )}
+                placeholder={""}
+                name={"reservedCommunityDescription"}
+                id={"reservedCommunityDescription"}
+                fullWidth={true}
+                register={register}
+                note={t("listings.appearsInListing")}
+                errorMessage={fieldMessage(errors?.reservedCommunityDescription)}
+                inputProps={{
+                  onChange: () => {
+                    fieldHasError(errors?.reservedCommunityDescription) &&
+                      clearErrors("reservedCommunityDescription")
+                  },
+                  "aria-required": fieldIsRequired("reservedCommunityDescription", requiredFields),
+                }}
+              />
+            </div>
           </Grid.Cell>
         </Grid.Row>
 
@@ -159,20 +183,20 @@ const CommunityType = ({
                   label: t("t.yes"),
                   value: YesNoEnum.yes,
                   id: "includeCommunityDisclaimerYes",
-                  disabled: !currentCommunityType,
+                  disabled: !reservedCommunityType,
                 },
                 {
                   label: t("t.no"),
                   value: YesNoEnum.no,
                   id: "includeCommunityDisclaimerNo",
-                  disabled: !currentCommunityType,
+                  disabled: !reservedCommunityType,
                 },
               ]}
             />
           </Grid.Cell>
         </Grid.Row>
 
-        {watch("includeCommunityDisclaimerQuestion") === YesNoEnum.yes && currentCommunityType && (
+        {watch("includeCommunityDisclaimerQuestion") === YesNoEnum.yes && reservedCommunityType && (
           <>
             <Grid.Row columns={3}>
               <Grid.Cell className="seeds-grid-span-2">
