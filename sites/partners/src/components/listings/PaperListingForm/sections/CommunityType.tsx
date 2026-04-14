@@ -65,8 +65,12 @@ const CommunityType = ({
   useEffect(() => {
     if (![listing?.reservedCommunityTypes?.id, undefined, ""].includes(reservedCommunityType)) {
       setCurrentCommunityType(reservedCommunityType)
+      const matchedType = reservedCommunityTypes.find((type) => type.id === reservedCommunityType)
+      if (matchedType?.description !== undefined) {
+        setValue("reservedCommunityDescription", matchedType.description)
+      }
     }
-  }, [reservedCommunityType, listing?.reservedCommunityTypes?.id])
+  }, [reservedCommunityType, listing?.reservedCommunityTypes?.id, reservedCommunityTypes, setValue])
 
   useEffect(() => {
     if (
