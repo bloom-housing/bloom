@@ -1,8 +1,10 @@
 import React from "react"
+import Link from "next/link"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 import customParseFormat from "dayjs/plugin/customParseFormat"
+import Markdown from "markdown-to-jsx"
 dayjs.extend(customParseFormat)
 import { Control, DeepMap, FieldError, FieldValues, UseFormMethods } from "react-hook-form"
 import {
@@ -15,17 +17,16 @@ import {
   AlertBox,
   AlertTypes,
 } from "@bloom-housing/ui-components"
-import Link from "next/link"
 import { Button, Card } from "@bloom-housing/ui-seeds"
 import {
   passwordRegex,
   emailRegex,
   stateKeys,
   phoneNumberKeys,
+  tIfExists,
 } from "@bloom-housing/shared-helpers"
-import styles from "../../pages/account/account.module.scss"
 import { Agency, User, UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import Markdown from "markdown-to-jsx"
+import styles from "../../pages/account/account.module.scss"
 
 export type AlertMessage = {
   type: AlertTypes
@@ -119,6 +120,12 @@ export const dobFields = (
       <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
       {show18SubNote && (
         <p className={"field-sub-note seeds-m-bs-4"}>{t("application.name.dobHelper2")}</p>
+      )}
+
+      {tIfExists("account.create.dobSubnote") && (
+        <p className={styles["section-sub-note"]}>
+          {<Markdown>{t("account.create.dobSubnote")}</Markdown>}
+        </p>
       )}
     </>
   )

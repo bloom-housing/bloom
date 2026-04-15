@@ -1,4 +1,5 @@
 {
+  "account.create.dobSubnote": "노숙자이거나 노숙 위험에 처해 있거나 안전하지 않은 주거 환경에 계신 경우, [이 링크](https://www.exygy.com)를 클릭하여 블루밍턴 노숙자 지원 기관(BHSA) 및 공실이 있을 수 있는 통합 입소 시스템(CES) 시설의 소유주 및 관리자와 정보를 공유해 주십시오. 링크를 클릭하시면 귀하의 정보가 해당 기관과 공유되는 것에 동의하시는 것입니다.",
   "advocateAccount.agencyNotListed": "소속 기관이 목록에 없는 경우 <a href='mailto:%{contactEmail}'>지원팀에 문의하십시오</a>.",
   "application.referralApplication.instructions": "영구 지원 주택은 블루밍턴의 통합 입주 시스템(Coordinated Entry System)을 통해 직접 배정됩니다. 노숙 가구는 123-456-7890으로 전화하여 담당자와 연결하고 통합 입주 시스템에 대한 자세한 정보와 주택 관련 자원을 이용할 수 있습니다.",
   "application.referralApplication.phoneNumber": "211",
