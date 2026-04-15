@@ -1,4 +1,5 @@
 {
+  "account.create.initialDisclaimer": "Nếu bạn đang gặp tình trạng vô gia cư, có nguy cơ vô gia cư hoặc đang sống trong điều kiện nhà ở không an toàn, vui lòng chọn <a href='https://www.exygy.com' target='_blank'>liên kết này</a> để chia sẻ thông tin của bạn với Cơ quan Dịch vụ Người vô gia cư Bloomington (BHSA) và chủ sở hữu cũng như người quản lý bất động sản thuộc Hệ thống Tiếp cận Phối hợp (CES) có thể đang thiếu chỗ ở. Bằng cách này, bạn cho phép thông tin của mình được chia sẻ với các bên này.",
   "advocateAccount.agencyNotListed": "Nếu cơ quan của bạn không có trong danh sách, vui lòng <a href='mailto:%{contactEmail}'>liên hệ bộ phận hỗ trợ</a>.",
   "application.referralApplication.instructions": "Các đơn vị nhà ở hỗ trợ lâu dài được giới thiệu trực tiếp thông qua Hệ thống Tiếp cận Phối hợp của Bloomington. Các hộ gia đình đang gặp tình trạng vô gia cư có thể gọi số 123-456-7890 để được kết nối với Điểm Tiếp cận nhằm tìm hiểu thêm về hệ thống tiếp cận phối hợp và tiếp cận các nguồn lực và thông tin liên quan đến nhà ở.",
   "application.referralApplication.phoneNumber": "211",
