@@ -20,6 +20,17 @@ import additionalKoreanTranslations from "../../page_content/locale_overrides/ko
 import additionalArmenianTranslations from "../../page_content/locale_overrides/hy.json"
 import additionalFarsiTranslations from "../../page_content/locale_overrides/fa.json"
 
+import featuresGeneralTranslations from "../../page_content/locale_overrides/features/general.json"
+import featuresEsTranslations from "../../page_content/locale_overrides/features/es.json"
+import featuresZhTranslations from "../../page_content/locale_overrides/features/zh.json"
+import featuresViTranslations from "../../page_content/locale_overrides/features/vi.json"
+import featuresTlTranslations from "../../page_content/locale_overrides/features/tl.json"
+import featuresBnTranslations from "../../page_content/locale_overrides/features/bn.json"
+import featuresArTranslations from "../../page_content/locale_overrides/features/ar.json"
+import featuresKoTranslations from "../../page_content/locale_overrides/features/ko.json"
+import featuresHyTranslations from "../../page_content/locale_overrides/features/hy.json"
+import featuresFaTranslations from "../../page_content/locale_overrides/features/fa.json"
+
 export const translations = {
   general: generalTranslations,
   es: spanishTranslations,
@@ -34,14 +45,14 @@ export const translations = {
 } as Record<string, any>
 
 export const overrideTranslations = {
-  en: additionalGeneralTranslations,
-  es: additionalSpanishTranslations,
-  zh: additionalChineseTranslations,
-  vi: additionalVietnameseTranslations,
-  tl: additionalTagalogTranslations,
-  bn: additionalBengaliTranslations,
-  ar: additionalArabicTranslations,
-  ko: additionalKoreanTranslations,
-  hy: additionalArmenianTranslations,
-  fa: additionalFarsiTranslations,
+  en: { ...additionalGeneralTranslations, ...featuresGeneralTranslations },
+  es: { ...additionalSpanishTranslations, ...featuresEsTranslations },
+  zh: { ...additionalChineseTranslations, ...featuresZhTranslations },
+  vi: { ...additionalVietnameseTranslations, ...featuresViTranslations },
+  tl: { ...additionalTagalogTranslations, ...featuresTlTranslations },
+  bn: { ...additionalBengaliTranslations, ...featuresBnTranslations },
+  ar: { ...additionalArabicTranslations, ...featuresArTranslations },
+  ko: { ...additionalKoreanTranslations, ...featuresKoTranslations },
+  hy: { ...additionalArmenianTranslations, ...featuresHyTranslations },
+  fa: { ...additionalFarsiTranslations, ...featuresFaTranslations },
 } as Record<string, any>
