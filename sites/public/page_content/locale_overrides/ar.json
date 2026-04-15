@@ -1,4 +1,5 @@
 {
+  "account.create.initialDisclaimer": "إذا كنت تعاني من التشرد، أو معرضًا لخطر التشرد، أو تسكن في مسكن غير آمن، يُرجى الضغط على <a href='https://www.exygy.com' target='_blank'>هذا الرابط</a> لمشاركة معلوماتك مع هيئة خدمات المشردين في بلومنجتون (BHSA) ومالكي ومديري العقارات التابعة لنظام الدخول المنسق (CES) التي قد تتوفر فيها وحدات سكنية شاغرة. بذلك، فإنك تمنح الإذن بمشاركة معلوماتك مع هذه الجهات.",
   "advocateAccount.agencyNotListed": "<a href='mailto:%{contactEmail}'>اتصل بالدعم</a> إذا لم تكن وكالتك مدرجة.",
   "application.referralApplication.instructions": "تُحال وحدات السكن الدائم المدعوم مباشرةً عبر نظام الدخول المنسق في بلومنجتون. يمكن للأسر التي تعاني من التشرد الاتصال بالرقم 123-456-7890 للتواصل مع مركز خدمة العملاء لمعرفة المزيد عن نظام الدخول المنسق والوصول إلى الموارد والمعلومات المتعلقة بالسكن.",
   "application.referralApplication.phoneNumber": "211",
@@ -9,6 +10,7 @@
   "footer.content.projectOf": "بوابة بلومنجتون للإسكان هي مشروع تابع لـ",
   "footer.copyright": "© مدينة ومقاطعة بلومنجتون",
   "footer.forGeneralQuestions": "للاستفسارات العامة عن البرنامج، يمكنك الاتصال بنا على الرقم 000-000-0000.",
+  "listings.petPolicyDescription": "الكلاب المدربة على خدمة ذوي الاحتياجات الخاصة وحيوانات الدعم العاطفي ليست حيوانات أليفة، ويُسمح باقتنائها وفقًا لما ينص عليه القانون. وقد يُشترط أيضًا السماح باقتناء الحيوانات الأليفة في أنواع معينة من المساكن، مثل مشاريع الإسكان الممولة من القطاع العام.",
   "pageDescription.faq": "ابحث عن إجابات للأسئلة الشائعة حول السكن الميسور التكلفة في بلومنجتون.",
   "region.name": "بلومنجتون",
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut Labore et dolore magna aliqua.",

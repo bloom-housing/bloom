@@ -9,17 +9,8 @@ import {
   createNameSubmitHandler,
   createPasswordSubmitHandler,
   createPhoneSubmitHandler,
-  dobFields,
 } from "../../../src/components/account/AccountFieldHelpers"
 import { UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-
-jest.mock("@bloom-housing/shared-helpers", () => {
-  const actual = jest.requireActual("@bloom-housing/shared-helpers")
-  return {
-    ...actual,
-    tIfExists: jest.fn(actual.tIfExists),
-  }
-})
 
 describe("AccountFieldHelpers", () => {
   const baseUser = {
@@ -587,43 +578,6 @@ describe("AccountFieldHelpers", () => {
         }),
       })
       expect(consoleWarnSpy).toHaveBeenCalled()
-    })
-  })
-
-  describe("dobFields", () => {
-    it("renders the dob sub-note when tIfExists returns a translation", () => {
-      render(
-        <>
-          {dobFields(
-            {} as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-            jest.fn() as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-            jest.fn() as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-            null,
-            false
-          )}
-        </>
-      )
-
-      expect(screen.getByText(/experiencing homelessness/i)).toBeInTheDocument()
-    })
-
-    it("does not render the dob sub-note when tIfExists returns null", () => {
-      const { tIfExists } = require("@bloom-housing/shared-helpers")
-      tIfExists.mockReturnValueOnce(null)
-
-      render(
-        <>
-          {dobFields(
-            {} as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-            jest.fn() as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-            jest.fn() as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-            null,
-            false
-          )}
-        </>
-      )
-
-      expect(screen.queryByText(/experiencing homelessness/i)).not.toBeInTheDocument()
     })
   })
 

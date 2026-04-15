@@ -1,4 +1,5 @@
 {
+  "account.create.initialDisclaimer": "Kung ikaw ay nakararanas ng kawalan ng tirahan, nanganganib na mawalan ng tirahan, o nasa hindi ligtas na pabahay, pakipili <a href='https://www.exygy.com' target='_blank'>ang link na ito</a> upang ibahagi ang iyong impormasyon sa Bloomington Homeless Service Authority (BHSA) at mga may-ari at tagapamahala ng ari-arian ng mga ari-arian na Coordinated Entry System (CES) na maaaring may bakanteng tirahan. Sa paggawa nito, binibigyan mo ng pahintulot na ibahagi ang iyong impormasyon sa mga partidong ito.",
   "advocateAccount.agencyNotListed": "<a href='mailto:%{contactEmail}'>Makipag-ugnayan sa suporta</a> kung ang iyong ahensya ay hindi nakalista",
   "application.referralApplication.instructions": "Ang mga permanenteng supportive housing unit ay direktang inire-refer sa pamamagitan ng Bloomington&#39;s Coordinated Entry System. Ang mga sambahayang nakararanas ng kawalan ng tirahan ay maaaring tumawag sa 123-456-7890 upang makakonekta sa isang Access Point upang matuto nang higit pa tungkol sa coordinated entry system at ma-access ang mga mapagkukunan at impormasyon na may kaugnayan sa pabahay.",
   "application.referralApplication.phoneNumber": "211",
@@ -9,6 +10,7 @@
   "footer.content.projectOf": "Ang Bloomington Housing Portal ay isang proyekto ng",
   "footer.copyright": "© Lungsod at Kondado ng Bloomington",
   "footer.forGeneralQuestions": "Para sa mga pangkalahatang katanungan tungkol sa programa, maaari ninyo kaming tawagan sa 000-000-0000.",
+  "listings.petPolicyDescription": "Ang mga service dog at mga hayop na sumusuporta sa emosyon ay hindi mga alagang hayop at pinahihintulutan ayon sa hinihingi ng batas. Maaari ring kailanganing pahintulutan ang mga alagang hayop sa ilang partikular na uri ng pabahay, tulad ng mga pagpapaunlad ng pabahay na pinopondohan ng publiko.",
   "pageDescription.faq": "Maghanap ng mga sagot sa mga karaniwang tanong tungkol sa abot-kayang pabahay sa Bloomington.",
   "region.name": "Bloomington",
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

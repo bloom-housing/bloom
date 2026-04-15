@@ -1,4 +1,5 @@
 {
+  "account.create.initialDisclaimer": "Si se encuentra en situación de calle, en riesgo de quedarse sin hogar o en una vivienda insegura, haga clic en <a href='https://www.exygy.com' target='_blank'>este enlace</a> para compartir su información con la Autoridad de Servicios para Personas sin Hogar de Bloomington (BHSA) y con los propietarios y administradores de propiedades del Sistema de Acceso Coordinado (CES) que puedan tener una vacante. Al hacerlo, autoriza que su información se comparta con estas entidades.",
   "advocateAccount.agencyNotListed": "<a href='mailto:%{contactEmail}'>Comuníquese con el soporte</a> si su agencia no está en la lista",
   "application.referralApplication.instructions": "Las unidades de vivienda permanente con apoyo se derivan directamente a través del Sistema de Entrada Coordinada de Bloomington. Las familias sin hogar pueden llamar al 123-456-7890 para conectarse con un Punto de Acceso y obtener más información sobre el sistema de entrada coordinada y acceder a recursos e información sobre vivienda.",
   "application.referralApplication.phoneNumber": "211",
@@ -9,6 +10,7 @@
   "footer.content.projectOf": "Bloomington Housing Portal es un proyecto de la",
   "footer.copyright": "© Ciudad y condado de Bloomington",
   "footer.forGeneralQuestions": "Para consultas generales sobre el programa, puede llamarnos al 000-000-0000.",
+  "listings.petPolicyDescription": "Los perros de servicio y los animales de apoyo emocional no se consideran mascotas y están permitidos según lo estipula la ley. En ciertos tipos de vivienda, como en los complejos de viviendas públicas, también puede ser obligatorio permitir mascotas.",
   "pageDescription.faq": "Encuentre respuestas a preguntas comunes sobre viviendas asequibles en Bloomington.",
   "region.name": "Bloomington",
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

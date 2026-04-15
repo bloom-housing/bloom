@@ -20,17 +20,6 @@ import additionalKoreanTranslations from "../../page_content/locale_overrides/ko
 import additionalArmenianTranslations from "../../page_content/locale_overrides/hy.json"
 import additionalFarsiTranslations from "../../page_content/locale_overrides/fa.json"
 
-import featuresGeneralTranslations from "../../page_content/locale_overrides/features/general.json"
-import featuresEsTranslations from "../../page_content/locale_overrides/features/es.json"
-import featuresZhTranslations from "../../page_content/locale_overrides/features/zh.json"
-import featuresViTranslations from "../../page_content/locale_overrides/features/vi.json"
-import featuresTlTranslations from "../../page_content/locale_overrides/features/tl.json"
-import featuresBnTranslations from "../../page_content/locale_overrides/features/bn.json"
-import featuresArTranslations from "../../page_content/locale_overrides/features/ar.json"
-import featuresKoTranslations from "../../page_content/locale_overrides/features/ko.json"
-import featuresHyTranslations from "../../page_content/locale_overrides/features/hy.json"
-import featuresFaTranslations from "../../page_content/locale_overrides/features/fa.json"
-
 export const translations = {
   general: generalTranslations,
   es: spanishTranslations,
@@ -44,31 +33,15 @@ export const translations = {
   fa: farsiTranslations,
 } as Record<string, any>
 
-const featuresEnabled = process.env.stringFeaturesEnabled === "TRUE"
-const features = featuresEnabled
-  ? {
-      en: featuresGeneralTranslations,
-      es: featuresEsTranslations,
-      zh: featuresZhTranslations,
-      vi: featuresViTranslations,
-      tl: featuresTlTranslations,
-      bn: featuresBnTranslations,
-      ar: featuresArTranslations,
-      ko: featuresKoTranslations,
-      hy: featuresHyTranslations,
-      fa: featuresFaTranslations,
-    }
-  : {}
-
 export const overrideTranslations = {
-  en: { ...additionalGeneralTranslations, ...features["en"] },
-  es: { ...additionalSpanishTranslations, ...features["es"] },
-  zh: { ...additionalChineseTranslations, ...features["zh"] },
-  vi: { ...additionalVietnameseTranslations, ...features["vi"] },
-  tl: { ...additionalTagalogTranslations, ...features["tl"] },
-  bn: { ...additionalBengaliTranslations, ...features["bn"] },
-  ar: { ...additionalArabicTranslations, ...features["ar"] },
-  ko: { ...additionalKoreanTranslations, ...features["ko"] },
-  hy: { ...additionalArmenianTranslations, ...features["hy"] },
-  fa: { ...additionalFarsiTranslations, ...features["fa"] },
+  en: additionalGeneralTranslations,
+  es: additionalSpanishTranslations,
+  zh: additionalChineseTranslations,
+  vi: additionalVietnameseTranslations,
+  tl: additionalTagalogTranslations,
+  bn: additionalBengaliTranslations,
+  ar: additionalArabicTranslations,
+  ko: additionalKoreanTranslations,
+  hy: additionalArmenianTranslations,
+  fa: additionalFarsiTranslations,
 } as Record<string, any>

@@ -1,4 +1,5 @@
 {
+  "account.create.initialDisclaimer": "If you are experiencing homelessness, at risk of homelessness, or in unsafe housing, please select <a href='https://www.exygy.com' target='_blank'>this link</a> to share your information with the Bloomington Homeless Service Authority (BHSA) and owners and property managers of Coordinated Entry System (CES) properties that may have a vacancy. By doing so, you are giving permission for your information to be shared with these parties.",
   "advocateAccount.agencyNotListed": "<a href='mailto:%{contactEmail}'>Contact support</a> if your agency is not listed",
   "advocateAccount.resendLinkSuccess": "If there is an approved advocate account with that email, you'll receive an email with a new link to confirm your account. Be aware, the link will expire in 24 hours. If you do not receive an email, you may not have an account under that email and would need to request one. If you have any questions in the meantime, please reach out to example@email.com.",
   "application.referralApplication.instructions": "The permanent supportive housing units are referred directly through Bloomington's Coordinated Entry System. Households experiencing homelessness can call 123-456-7890 in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information.",
@@ -10,6 +11,7 @@
   "footer.content.projectOf": "Bloomington Housing Portal is a project of the",
   "footer.copyright": "© City & County of Bloomington",
   "footer.forGeneralQuestions": "For general program inquiries, you may call us at 000-000-0000.",
+  "listings.petPolicyDescription": "Service dogs and emotional support animals are not pets and are permitted as required by law. Pets may also be required to be allowed in certain types of housing, such as publicly financed housing developments.",
   "pageDescription.faq": "Find answers to common questions about affordable housing in Bloomington.",
   "region.name": "Bloomington",
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

@@ -23,7 +23,6 @@ import {
   emailRegex,
   stateKeys,
   phoneNumberKeys,
-  tIfExists,
 } from "@bloom-housing/shared-helpers"
 import { Agency, User, UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "../../pages/account/account.module.scss"
@@ -120,12 +119,6 @@ export const dobFields = (
       <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
       {show18SubNote && (
         <p className={"field-sub-note seeds-m-bs-4"}>{t("application.name.dobHelper2")}</p>
-      )}
-
-      {tIfExists("account.create.dobSubnote") && (
-        <p className={styles["section-sub-note"]}>
-          {<Markdown>{t("account.create.dobSubnote")}</Markdown>}
-        </p>
       )}
     </>
   )
