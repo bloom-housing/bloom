@@ -97,7 +97,8 @@ const CommunityType = ({
   }, [currentCommunityType, loading])
 
   useEffect(() => {
-    if (currentCommunityType && reservedCommunityTypes.length > 0) {
+    const isListingInitialType = currentCommunityType === listing?.reservedCommunityTypes?.id
+    if (currentCommunityType && reservedCommunityTypes.length > 0 && !isListingInitialType) {
       const matchedType = reservedCommunityTypes.find((type) => type.id === currentCommunityType)
       setValue("reservedCommunityDescription", matchedType?.description ?? "")
     }
