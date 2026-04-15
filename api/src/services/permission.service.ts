@@ -6,7 +6,9 @@ import { User } from '../dtos/users/user.dto';
 import { PrismaService } from './prisma.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
-import Listing from '../dtos/listings/listing.dto';
+import { Listing } from '../dtos/listings/listing.dto';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { ListingsStatusEnum } from '@prisma/client';
 
 export type permissionCheckingObj = {
   jurisdictionId?: string;
@@ -137,6 +139,28 @@ export class PermissionService {
     } else if (user.userRoles?.isPartner) {
       await enforcer.addRoleForUser(user.id, UserRoleEnum.partner);
 
+      const listingIds = user.listings.map((listing) => listing.id);
+
+      const openEditBlockedListingIds = new Set(
+        (
+          await this.prisma.listings.findMany({
+            select: { id: true },
+            where: {
+              id: { in: listingIds },
+              status: ListingsStatusEnum.active,
+              jurisdictions: {
+                featureFlags: {
+                  some: {
+                    name: FeatureFlagEnum.disablePartnerOpenListingEdits,
+                    active: true,
+                  },
+                },
+              },
+            },
+          })
+        ).map((listing) => listing.id),
+      );
+
       await Promise.all(
         user?.listings.map(async (listing: Listing) => {
           await enforcer.addPermissionForUser(
@@ -145,11 +169,14 @@ export class PermissionService {
             `r.obj.listingId == '${listing.id}'`,
             `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
           );
+
           await enforcer.addPermissionForUser(
             user.id,
             'listing',
             `r.obj.id == '${listing.id}'`,
-            `(${permissionActions.read}|${permissionActions.update})`,
+            openEditBlockedListingIds.has(listing.id)
+              ? permissionActions.read
+              : `(${permissionActions.read}|${permissionActions.update})`,
           );
         }),
       );

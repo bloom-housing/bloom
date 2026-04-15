@@ -7,6 +7,7 @@ import { t } from "@bloom-housing/ui-components"
 import { Button, Link, Grid, Icon } from "@bloom-housing/ui-seeds"
 import { pdfUrlFromListingEvents, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
+  FeatureFlagEnum,
   ListingEventsTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
@@ -83,10 +84,20 @@ const ListingFormActions = ({
   const listingJurisdiction = profile?.jurisdictions?.find(
     (jurisdiction) => jurisdiction.id === listing?.jurisdictions?.id
   )
+
   const hideCloseButton = doJurisdictionsHaveFeatureFlagOn(
-    "hideCloseListingButton",
+    FeatureFlagEnum.hideCloseListingButton,
     listingJurisdiction?.id
   )
+  const isPartnerOpenListingRestrictionEnabled = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disablePartnerOpenListingEdits,
+    listingJurisdiction?.id
+  )
+
+  const isEditOpenListingRestricted =
+    !!profile?.userRoles?.isPartner &&
+    isPartnerOpenListingRestrictionEnabled &&
+    listing?.status === ListingsStatusEnum.active
 
   const recordUpdated = useMemo(() => {
     if (!listing) return null
@@ -478,7 +489,9 @@ const ListingFormActions = ({
       listing.status === ListingsStatusEnum.active &&
       type === ListingFormActionsType.details
     ) {
-      elements.push(editFromDetailButton)
+      if (!isEditOpenListingRestricted) {
+        elements.push(editFromDetailButton)
+      }
       if (isListingCopier) elements.push(copyButton)
       elements.push(previewButton)
     }
@@ -527,6 +540,7 @@ const ListingFormActions = ({
     isListingApprovalEnabled,
     isListingApprover,
     isListingCopier,
+    isEditOpenListingRestricted,
     listing,
     listingId,
     listingJurisdiction?.publicUrl,

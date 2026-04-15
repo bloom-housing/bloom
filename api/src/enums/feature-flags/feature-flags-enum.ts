@@ -8,6 +8,7 @@ export enum FeatureFlagEnum {
   disableEthnicityQuestion = 'disableEthnicityQuestion',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
+  disablePartnerOpenListingEdits = 'disablePartnerOpenListingEdits',
   disableReservedCommunityTypeEdit = 'disableReservedCommunityTypeEdit',
   disableWorkInRegion = 'disableWorkInRegion',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
@@ -380,6 +381,11 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.hideCloseListingButton,
     description: 'When true, close button is hidden on the listing edit form',
+  },
+  {
+    name: FeatureFlagEnum.disablePartnerOpenListingEdits,
+    description:
+      'When true, partner users cannot edit or unpublish open listings',
   },
   {
     name: FeatureFlagEnum.swapCommunityTypeWithPrograms,

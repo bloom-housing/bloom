@@ -318,6 +318,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.disableBuildingSelectionCriteria,
         FeatureFlagEnum.disableEthnicityQuestion,
         FeatureFlagEnum.disableListingPreferences,
+        FeatureFlagEnum.disablePartnerOpenListingEdits,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableApplicationStatus,
         FeatureFlagEnum.enableConfigurableRegions,
