@@ -55,6 +55,7 @@ module.exports = withBundleAnalyzer({
     showNewSeedsDesigns: process.env.SHOW_NEW_SEEDS_DESIGNS === "TRUE" ? "TRUE" : "",
     showMandatedAccounts: process.env.SHOW_MANDATED_ACCOUNTS === "TRUE" ? "TRUE" : "",
     showPwdless: process.env.SHOW_PWDLESS === "TRUE" ? "TRUE" : "",
+    stringFeaturesEnabled: process.env.STRING_FEATURES_ENABLED === "TRUE" ? "TRUE" : "",
     maintenanceWindow: process.env.MAINTENANCE_WINDOW,
     siteMessageWindow: process.env.SITE_MESSAGE_WINDOW,
     reCaptchaKey: process.env.RECAPTCHA_KEY,

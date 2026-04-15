@@ -44,15 +44,31 @@ export const translations = {
   fa: farsiTranslations,
 } as Record<string, any>
 
+const featuresEnabled = process.env.stringFeaturesEnabled === "TRUE"
+const features = featuresEnabled
+  ? {
+      en: featuresGeneralTranslations,
+      es: featuresEsTranslations,
+      zh: featuresZhTranslations,
+      vi: featuresViTranslations,
+      tl: featuresTlTranslations,
+      bn: featuresBnTranslations,
+      ar: featuresArTranslations,
+      ko: featuresKoTranslations,
+      hy: featuresHyTranslations,
+      fa: featuresFaTranslations,
+    }
+  : {}
+
 export const overrideTranslations = {
-  en: { ...additionalGeneralTranslations, ...featuresGeneralTranslations },
-  es: { ...additionalSpanishTranslations, ...featuresEsTranslations },
-  zh: { ...additionalChineseTranslations, ...featuresZhTranslations },
-  vi: { ...additionalVietnameseTranslations, ...featuresViTranslations },
-  tl: { ...additionalTagalogTranslations, ...featuresTlTranslations },
-  bn: { ...additionalBengaliTranslations, ...featuresBnTranslations },
-  ar: { ...additionalArabicTranslations, ...featuresArTranslations },
-  ko: { ...additionalKoreanTranslations, ...featuresKoTranslations },
-  hy: { ...additionalArmenianTranslations, ...featuresHyTranslations },
-  fa: { ...additionalFarsiTranslations, ...featuresFaTranslations },
+  en: { ...additionalGeneralTranslations, ...features["en"] },
+  es: { ...additionalSpanishTranslations, ...features["es"] },
+  zh: { ...additionalChineseTranslations, ...features["zh"] },
+  vi: { ...additionalVietnameseTranslations, ...features["vi"] },
+  tl: { ...additionalTagalogTranslations, ...features["tl"] },
+  bn: { ...additionalBengaliTranslations, ...features["bn"] },
+  ar: { ...additionalArabicTranslations, ...features["ar"] },
+  ko: { ...additionalKoreanTranslations, ...features["ko"] },
+  hy: { ...additionalArmenianTranslations, ...features["hy"] },
+  fa: { ...additionalFarsiTranslations, ...features["fa"] },
 } as Record<string, any>
