@@ -28,6 +28,7 @@
   "account.applicationsClose": "申请截止日期：",
   "account.closedApplications": "已截止的申請",
   "account.closedApplicationsSubtitle": "查看不再接受申請的房源。",
+  "account.create.initialDisclaimer": "如果您目前无家可归、面临无家可归的风险或居住在不安全的住所，请点击<a href='https://www.exygy.com' target='_blank'>此链接</a>，将您的信息分享给布卢明顿无家可归者服务管理局 (BHSA) 以及协调准入系统 (CES) 内可能存在空置房源的房产的所有者和物业经理。点击此链接即表示您同意将您的信息分享给上述各方。",
   "account.createAccount": "创建账户",
   "account.errorFetchingApplications": "擷取申請時發生錯誤",
   "account.haveAnAccount": "已開立帳戶？",

@@ -28,6 +28,7 @@
   "account.applicationsClose": "Applications close:",
   "account.closedApplications": "Closed applications",
   "account.closedApplicationsSubtitle": "View listings that are no longer accepting submissions.",
+  "account.create.initialDisclaimer": "If you are experiencing homelessness, at risk of homelessness, or in unsafe housing, please select <a href='https://www.exygy.com' target='_blank'>this link</a> to share your information with the Bloomington Homeless Service Authority (BHSA) and owners and property managers of Coordinated Entry System (CES) properties that may have a vacancy. By doing so, you are giving permission for your information to be shared with these parties.",
   "account.createAccount": "Create account",
   "account.errorFetchingApplications": "Error fetching applications",
   "account.haveAnAccount": "Already have an account?",

@@ -28,6 +28,7 @@
   "account.applicationsClose": "지원 마감일:",
   "account.closedApplications": "지원 마감됨",
   "account.closedApplicationsSubtitle": "더 이상 응모를 받지 않는 목록을 확인하세요.",
+  "account.create.initialDisclaimer": "노숙자이거나 노숙 위험에 처해 있거나 안전하지 않은 주거 환경에 계신 경우, <a href='https://www.exygy.com' target='_blank'>이 링크를</a> 클릭하여 블루밍턴 노숙자 지원 기관(BHSA) 및 공실이 있을 수 있는 통합 입소 시스템(CES) 시설의 소유주 및 관리자와 정보를 공유해 주십시오. 링크를 클릭하시면 귀하의 정보가 해당 기관들과 공유되는 것에 동의하시는 것입니다.",
   "account.createAccount": "계정 생성",
   "account.errorFetchingApplications": "애플리케이션을 불러오는 중 오류가 발생했습니다.",
   "account.haveAnAccount": "이미 계정이 있으신가요?",

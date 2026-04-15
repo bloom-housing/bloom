@@ -3,9 +3,16 @@ import { setupServer } from "msw/lib/node"
 import { rest } from "msw"
 import userEvent from "@testing-library/user-event"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import * as sharedHelpers from "@bloom-housing/shared-helpers"
 import CreateAccount from "../../src/pages/create-account"
 import { fireEvent, mockNextRouter, render, waitFor, screen } from "../testUtils"
+
+jest.mock("@bloom-housing/shared-helpers", () => {
+  const actual = jest.requireActual("@bloom-housing/shared-helpers")
+  return {
+    ...actual,
+    tIfExists: jest.fn(actual.tIfExists),
+  }
+})
 
 const server = setupServer()
 
@@ -26,24 +33,36 @@ afterAll(() => server.close())
 describe("Create Account Page", () => {
   describe("initial disclaimer", () => {
     it("renders the disclaimer when tIfExists returns a value", () => {
+      const { tIfExists } = require("@bloom-housing/shared-helpers")
+      const actual = jest.requireActual("@bloom-housing/shared-helpers")
+      tIfExists.mockImplementation((key, ...args) =>
+        key === "account.create.initialDisclaimer" ? "present" : actual.tIfExists(key, ...args)
+      )
+
       render(<CreateAccount />)
 
-      expect(screen.getByText(/if you are experiencing homelessness/i)).toBeInTheDocument()
+      expect(screen.getByText(/experiencing homelessness/i)).toBeInTheDocument()
       expect(screen.getByRole("link", { name: /this link/i })).toHaveAttribute(
         "href",
         "https://www.exygy.com"
       )
+
+      tIfExists.mockImplementation(actual.tIfExists)
     })
 
     it("does not render the disclaimer when tIfExists returns null", () => {
-      const tIfExistsSpy = jest.spyOn(sharedHelpers, "tIfExists").mockReturnValueOnce(null)
+      const { tIfExists } = require("@bloom-housing/shared-helpers")
+      const actual = jest.requireActual("@bloom-housing/shared-helpers")
+      tIfExists.mockImplementation((key, ...args) =>
+        key === "account.create.initialDisclaimer" ? null : actual.tIfExists(key, ...args)
+      )
 
       render(<CreateAccount />)
 
+      expect(screen.queryByText(/experiencing homelessness/i)).not.toBeInTheDocument()
       expect(screen.queryByRole("link", { name: /this link/i })).not.toBeInTheDocument()
-      expect(screen.queryByText(/if you are experiencing homelessness/i)).not.toBeInTheDocument()
 
-      tIfExistsSpy.mockRestore()
+      tIfExists.mockImplementation(actual.tIfExists)
     })
   })
 
