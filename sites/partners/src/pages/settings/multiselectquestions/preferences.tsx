@@ -11,7 +11,6 @@ import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { Button, Tag } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import Head from "next/head"
-import { useRouter } from "next/router"
 import EditMultiselectQuestion, {
   DrawerType,
 } from "../../../components/settings/MultiselectQuestions/EditMultiselectQuestion"
@@ -21,7 +20,7 @@ import {
 } from "../../../components/settings/SettingsViewHelpers"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import Layout from "../../../layouts"
-import TabView from "../../../layouts/TabView"
+import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 import styles from "./preferences.module.scss"
 

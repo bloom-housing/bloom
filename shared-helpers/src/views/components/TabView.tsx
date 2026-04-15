@@ -7,7 +7,7 @@ type TabViewProps = {
   hideTabs: boolean
 }
 
-const TabView = (props: TabViewProps) => {
+export const TabView = (props: TabViewProps) => {
   return (
     <div className={styles["section-container"]}>
       {!props.hideTabs && <> {props.tabs}</>}
@@ -15,5 +15,3 @@ const TabView = (props: TabViewProps) => {
     </div>
   )
 }
-
-export default TabView
