@@ -2,6 +2,7 @@ import React from "react"
 import { setupServer } from "msw/lib/node"
 import { rest } from "msw"
 import userEvent from "@testing-library/user-event"
+import { addTranslation } from "@bloom-housing/ui-components"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import CreateAccount from "../../src/pages/create-account"
 import { fireEvent, mockNextRouter, render, waitFor, screen } from "../testUtils"
@@ -13,6 +14,9 @@ jest.mock("@bloom-housing/shared-helpers", () => {
     tIfExists: jest.fn(actual.tIfExists),
   }
 })
+
+const { tIfExists } = require("@bloom-housing/shared-helpers")
+const actual = jest.requireActual("@bloom-housing/shared-helpers")
 
 const server = setupServer()
 
@@ -26,6 +30,8 @@ afterEach(() => {
   server.resetHandlers()
   window.localStorage.clear()
   window.sessionStorage.clear()
+  tIfExists.mockReset()
+  tIfExists.mockImplementation(actual.tIfExists)
 })
 
 afterAll(() => server.close())
@@ -33,11 +39,12 @@ afterAll(() => server.close())
 describe("Create Account Page", () => {
   describe("initial disclaimer", () => {
     it("renders the disclaimer when tIfExists returns a value", () => {
-      const { tIfExists } = require("@bloom-housing/shared-helpers")
-      const actual = jest.requireActual("@bloom-housing/shared-helpers")
-      tIfExists.mockImplementation((key, ...args) =>
-        key === "account.create.initialDisclaimer" ? "present" : actual.tIfExists(key, ...args)
-      )
+      tIfExists.mockReturnValue("present")
+
+      addTranslation({
+        "account.create.initialDisclaimer":
+          "If you are experiencing homelessness, please select <a href='https://www.exygy.com' target='_blank'>this link</a>.",
+      })
 
       render(<CreateAccount />)
 
@@ -46,23 +53,15 @@ describe("Create Account Page", () => {
         "href",
         "https://www.exygy.com"
       )
-
-      tIfExists.mockImplementation(actual.tIfExists)
     })
 
     it("does not render the disclaimer when tIfExists returns null", () => {
-      const { tIfExists } = require("@bloom-housing/shared-helpers")
-      const actual = jest.requireActual("@bloom-housing/shared-helpers")
-      tIfExists.mockImplementation((key, ...args) =>
-        key === "account.create.initialDisclaimer" ? null : actual.tIfExists(key, ...args)
-      )
+      tIfExists.mockReturnValue(null)
 
       render(<CreateAccount />)
 
       expect(screen.queryByText(/experiencing homelessness/i)).not.toBeInTheDocument()
       expect(screen.queryByRole("link", { name: /this link/i })).not.toBeInTheDocument()
-
-      tIfExists.mockImplementation(actual.tIfExists)
     })
   })
 

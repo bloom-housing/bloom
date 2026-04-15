@@ -28,7 +28,6 @@
   "account.applicationsClose": "Isara ang mga aplikasyon:",
   "account.closedApplications": "Mga saradong aplikasyon",
   "account.closedApplicationsSubtitle": "Tingnan ang mga listahan na hindi na tumatanggap ng mga pagsusumite.",
-  "account.create.initialDisclaimer": "Kung ikaw ay nakararanas ng kawalan ng tirahan, nanganganib na mawalan ng tirahan, o nasa hindi ligtas na pabahay, pakipili <a href='https://www.exygy.com' target='_blank'>ang link na ito</a> upang ibahagi ang iyong impormasyon sa Bloomington Homeless Service Authority (BHSA) at mga may-ari at tagapamahala ng ari-arian ng mga ari-arian na Coordinated Entry System (CES) na maaaring may bakanteng tirahan. Sa paggawa nito, binibigyan mo ng pahintulot na ibahagi ang iyong impormasyon sa mga partidong ito.",
   "account.createAccount": "Gumawa ng account",
   "account.errorFetchingApplications": "Mga application sa error fetching",
   "account.haveAnAccount": "May account na?",

@@ -28,7 +28,6 @@
   "account.applicationsClose": "برنامه های کاربردی بسته شده:",
   "account.closedApplications": "برنامه‌های بسته",
   "account.closedApplicationsSubtitle": "مشاهده آگهی‌هایی که دیگر درخواستی نمی‌پذیرند.",
-  "account.create.initialDisclaimer": "اگر بی‌خانمان هستید، در معرض خطر بی‌خانمانی هستید یا در مسکن ناامن زندگی می‌کنید، لطفاً <a href='https://www.exygy.com' target='_blank'>این لینک را</a> انتخاب کنید تا اطلاعات خود را با سازمان خدمات بی‌خانمان‌های بلومینگتون (BHSA) و مالکان و مدیران املاک سیستم ورود هماهنگ (CES) که ممکن است جای خالی داشته باشند، به اشتراک بگذارید. با انجام این کار، شما اجازه می‌دهید اطلاعات شما با این اشخاص به اشتراک گذاشته شود.",
   "account.createAccount": "ایجاد حساب کاربری",
   "account.errorFetchingApplications": "خطا در دریافت برنامه‌ها",
   "account.haveAnAccount": "قبلاً حساب کاربری دارید؟",

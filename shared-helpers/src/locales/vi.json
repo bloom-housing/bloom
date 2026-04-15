@@ -28,7 +28,6 @@
   "account.applicationsClose": "Đóng đơn đăng ký:",
   "account.closedApplications": "Đơn đăng ký đã đóng",
   "account.closedApplicationsSubtitle": "Xem danh sách không còn nhận hồ sơ.",
-  "account.create.initialDisclaimer": "Nếu bạn đang gặp tình trạng vô gia cư, có nguy cơ vô gia cư hoặc đang sống trong điều kiện nhà ở không an toàn, vui lòng chọn <a href='https://www.exygy.com' target='_blank'>liên kết này</a> để chia sẻ thông tin của bạn với Cơ quan Dịch vụ Người vô gia cư Bloomington (BHSA) và chủ sở hữu cũng như người quản lý bất động sản thuộc Hệ thống Tiếp cận Phối hợp (CES) có thể đang thiếu chỗ ở. Bằng cách này, bạn cho phép thông tin của mình được chia sẻ với các bên này.",
   "account.createAccount": "Tạo tài khoản",
   "account.errorFetchingApplications": "Đã xảy ra lỗi khi tìm kiếm đơn đăng ký",
   "account.haveAnAccount": "Quý vị đã có một tài khoản chưa?",
