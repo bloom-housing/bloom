@@ -1,4 +1,5 @@
 {
+  "account.create.initialDisclaimer": "如果您目前无家可归、面临无家可归的风险或居住在不安全的住所，请点击<a href='https://www.exygy.com' target='_blank'>此链接</a>，将您的信息分享给布卢明顿无家可归者服务管理局 (BHSA) 以及协调准入系统 (CES) 内可能存在空置房源的房产的所有者和物业经理。点击此链接即表示您同意将您的信息分享给上述各方。",
   "advocateAccount.agencyNotListed": "如果您的机构未列出，请<a href='mailto:%{contactEmail}'>联系支持部门</a>。",
   "application.referralApplication.instructions": "永久性支持住房单元由布卢明顿的协调准入系统直接推荐。无家可归的家庭可以拨打 123-456-7890 联系服务点，了解更多关于协调准入系统的信息，并获取与住房相关的资源和信息。",
   "application.referralApplication.phoneNumber": "211",
@@ -15,6 +16,5 @@
   "resources.contactDescription": "Lorem ipsum dolor sat amet，consectetur adipiscing elit，sed do eiusmod tempor incididunt ut Labore et dolore magna aliqua。",
   "resources.contactEmail": "email@email.com",
   "resources.contactInfo": "布卢明顿住房和社区发展部",
-  "resources.housingProgramsTitle": "布卢明顿的住房和社区发展住房项目",
-  "account.create.initialDisclaimer": "如果您目前无家可归、面临无家可归的风险或居住在不安全的住所，请点击<a href='https://www.exygy.com' target='_blank'>此链接</a>，将您的信息分享给布卢明顿无家可归者服务管理局 (BHSA) 以及协调准入系统 (CES) 内可能存在空置房源的房产的所有者和物业经理。点击此链接即表示您同意将您的信息分享给上述各方。"
+  "resources.housingProgramsTitle": "布卢明顿的住房和社区发展住房项目"
 }
