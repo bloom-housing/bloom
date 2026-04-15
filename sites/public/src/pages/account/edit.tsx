@@ -1,20 +1,37 @@
 import React, { useContext } from "react"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import { EditPublicAccount } from "../../components/account/EditPublicAccount"
 import { EditAdvocateAccount } from "../../components/account/EditAdvocateAccount"
 import { fetchAgencies, fetchJurisdictionByName } from "../../lib/hooks"
-import { Agency } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Agency,
+  FeatureFlagEnum,
+  Jurisdiction,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { isFeatureFlagOn } from "../../lib/helpers"
+import { t } from "@bloom-housing/ui-components"
+import { EditAccountView } from "../../components/account/EditAccountView"
 
 interface EditProps {
   agencies: Agency[]
+  jursidiction: Jurisdiction
 }
 
 const Edit = (props: EditProps) => {
-  const { profile } = useContext(AuthContext)
-  return profile?.isAdvocate ? (
-    <EditAdvocateAccount agencies={props.agencies} />
-  ) : (
-    <EditPublicAccount />
+  const enableNotificationSettings = isFeatureFlagOn(
+    props.jursidiction,
+    FeatureFlagEnum.enableCustomListingNotifications
+  )
+
+  // TODO: Replace undefined with <TabView> with notification settings integrated.
+  const pageContent = enableNotificationSettings ? undefined : (
+    <EditAccountView agencies={props.agencies} />
+  )
+
+  return (
+    <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
+      {pageContent}
+    </RequireLogin>
   )
 }
 
