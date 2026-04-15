@@ -39,6 +39,10 @@ const CommunityType = ({
   const reservedCommunityType = watch("reservedCommunityTypes.id")
 
   const [options, setOptions] = useState([])
+  const [currentCommunityType, setCurrentCommunityType] = useState(
+    listing?.reservedCommunityTypes?.id
+  )
+  const [currentCommunityDescription] = useState(listing?.reservedCommunityDescription)
 
   // Store the reserved community description in state for immediate updates
   const [description, setDescription] = useState<string>("")
@@ -60,24 +64,16 @@ const CommunityType = ({
     }
   }, [options, reservedCommunityTypes, loading])
 
-  // Set reservedCommunityTypes.id from listing only after options are loaded
   useEffect(() => {
-    if (listing?.reservedCommunityTypes?.id && !reservedCommunityType && options.length > 0) {
-      setValue("reservedCommunityTypes.id", listing.reservedCommunityTypes.id)
-    }
-  }, [listing?.reservedCommunityTypes?.id, reservedCommunityType, setValue, options])
+    setValue("reservedCommunityTypes.id", currentCommunityType)
+    setValue("reservedCommunityDescription", currentCommunityDescription)
+  }, [options, setValue, currentCommunityType, currentCommunityDescription])
 
-  // Always update description state and form value when reservedCommunityType or types change
   useEffect(() => {
-    if (reservedCommunityType && reservedCommunityTypes.length > 0) {
-      const matchedType = reservedCommunityTypes.find((type) => type.id === reservedCommunityType)
-      const desc = matchedType?.description ?? ""
-      setValue("reservedCommunityDescription", desc)
-      setDescription(desc)
-    } else {
-      setDescription("")
+    if (![listing?.reservedCommunityTypes?.id, undefined, ""].includes(reservedCommunityType)) {
+      setCurrentCommunityType(reservedCommunityType)
     }
-  }, [reservedCommunityType, reservedCommunityTypes, setValue])
+  }, [reservedCommunityType, listing?.reservedCommunityTypes?.id])
 
   useEffect(() => {
     if (
@@ -91,6 +87,24 @@ const CommunityType = ({
       )
     }
   }, [setValue, listing?.includeCommunityDisclaimer, watch, listing])
+
+  useEffect(() => {
+    if (currentCommunityType && reservedCommunityTypes.length > 0) {
+      const matchedType = reservedCommunityTypes.find((type) => type.id === currentCommunityType)
+      setDescription(matchedType?.description ?? "")
+    } else {
+      setDescription("")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentCommunityType, loading])
+
+  useEffect(() => {
+    if (currentCommunityType && reservedCommunityTypes.length > 0) {
+      const matchedType = reservedCommunityTypes.find((type) => type.id === currentCommunityType)
+      setValue("reservedCommunityDescription", matchedType?.description ?? "")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentCommunityType])
 
   return !swapCommunityTypeWithPrograms ? (
     <>
@@ -114,8 +128,8 @@ const CommunityType = ({
                 controlClassName="control"
                 options={options}
                 inputProps={{
-                  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
-                    setValue("reservedCommunityTypes.id", e.target.value)
+                  onChange: () => {
+                    setCurrentCommunityType(reservedCommunityType)
                     fieldHasError(errors?.reservedCommunityTypes) &&
                       clearErrors("reservedCommunityTypes")
                   },
@@ -183,20 +197,20 @@ const CommunityType = ({
                   label: t("t.yes"),
                   value: YesNoEnum.yes,
                   id: "includeCommunityDisclaimerYes",
-                  disabled: !reservedCommunityType,
+                  disabled: !currentCommunityType,
                 },
                 {
                   label: t("t.no"),
                   value: YesNoEnum.no,
                   id: "includeCommunityDisclaimerNo",
-                  disabled: !reservedCommunityType,
+                  disabled: !currentCommunityType,
                 },
               ]}
             />
           </Grid.Cell>
         </Grid.Row>
 
-        {watch("includeCommunityDisclaimerQuestion") === YesNoEnum.yes && reservedCommunityType && (
+        {watch("includeCommunityDisclaimerQuestion") === YesNoEnum.yes && currentCommunityType && (
           <>
             <Grid.Row columns={3}>
               <Grid.Cell className="seeds-grid-span-2">

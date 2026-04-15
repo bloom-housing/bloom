@@ -310,10 +310,10 @@ describe("CommunityType", () => {
 
     // Description should be shown as plaintext
     expect(screen.getByText("For folks over the age of 65")).toBeInTheDocument()
-    // Textarea should be hidden
-    expect(
-      screen.queryByRole("textbox", { name: "Reserved community description" })
-    ).not.toBeVisible()
+    // Textarea should be present but visually hidden (has hidden-field class)
+    const textarea = screen.getByRole("textbox", { name: "Reserved community description" })
+    expect(textarea).toBeInTheDocument()
+    expect(textarea.closest(".hidden-field")).not.toBeNull()
   })
 
   it("should update plaintext description when dropdown changes in disabled edit mode", async () => {
