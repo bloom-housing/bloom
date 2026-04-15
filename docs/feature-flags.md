@@ -33,6 +33,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [disableEthnicityQuestion](./feature-flags/disableEthnicityQuestion.md) | When true, the ethnicity question is hidden in the application demographics section |
 | [disableJurisdictionalAdmin](./feature-flags/disableJurisdictionalAdmin.md) | When true, jurisdictional admins cannot be created |
 | [disableListingPreferences](./feature-flags/disableListingPreferences.md) | When true listings will no longer support preferences section |
+| [disableReservedCommunityTypeEdit](./feature-flags/disableReservedCommunityTypeEdit.md) | When true, disables editing of reserved community type description in the partners site (shows as plaintext only). |
 | [disableWorkInRegion](./feature-flags/disableWorkInRegion.md) | When true the "Work in Region" question will be removed from the application process |
 | [enableAccessibilityFeatures](./feature-flags/enableAccessibilityFeatures.md) | When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view |
 | [enableAdaOtherOption](./feature-flags/enableAdaOtherOption.md) | When true, the ADA impairment options will include 'For Other Impairments' |
@@ -91,6 +92,5 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableWhatToExpectAdditionalField](./feature-flags/enableWhatToExpectAdditionalField.md) | When true, the what to expect additional field is displayed in listing creation/edit form on the partner site |
 | [hideCloseListingButton](./feature-flags/hideCloseListingButton.md) | When true, close button is hidden on the listing edit form |
 | [swapCommunityTypeWithPrograms](./feature-flags/swapCommunityTypeWithPrograms.md) | When true, the programs section on the frontend is displayed as community types. |
-| [disableReservedCommunityTypeEdit](./feature-flags/disableReservedCommunityTypeEdit.md) | When true, disables editing of reserved community type description in the partners site (shows as plaintext only). |
 
 <!-- TABLE:END -->

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Select, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
@@ -45,6 +45,7 @@ const CommunityType = ({
 
   // Store the reserved community description in state for immediate updates
   const [description, setDescription] = useState<string>("")
+  const hasInitializedCommunityTypeDescription = useRef(false)
 
   const { data: reservedCommunityTypes = [], loading } = useReservedCommunityTypeList()
 
@@ -87,23 +88,25 @@ const CommunityType = ({
   }, [setValue, listing?.includeCommunityDisclaimer, watch, listing])
 
   useEffect(() => {
-    if (currentCommunityType && reservedCommunityTypes.length > 0) {
-      const matchedType = reservedCommunityTypes.find((type) => type.id === currentCommunityType)
-      setDescription(matchedType?.description ?? "")
-    } else {
-      setDescription("")
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentCommunityType, loading])
+    if (loading) return
 
-  useEffect(() => {
-    const isListingInitialType = currentCommunityType === listing?.reservedCommunityTypes?.id
-    if (currentCommunityType && reservedCommunityTypes.length > 0 && !isListingInitialType) {
-      const matchedType = reservedCommunityTypes.find((type) => type.id === currentCommunityType)
-      setValue("reservedCommunityDescription", matchedType?.description ?? "")
+    const matchedType = currentCommunityType
+      ? reservedCommunityTypes.find((type) => type.id === currentCommunityType)
+      : undefined
+    const nextDescription = matchedType?.description ?? ""
+
+    // Always show the selected community type's description in read-only mode.
+    setDescription(nextDescription)
+
+    // Skip auto-overwriting the listing's existing description on initial form load.
+    if (!hasInitializedCommunityTypeDescription.current) {
+      hasInitializedCommunityTypeDescription.current = true
+      return
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentCommunityType])
+
+    // For subsequent type changes, keep the editable description in sync with selection.
+    setValue("reservedCommunityDescription", nextDescription)
+  }, [currentCommunityType, reservedCommunityTypes, loading, setValue])
 
   return !swapCommunityTypeWithPrograms ? (
     <>
