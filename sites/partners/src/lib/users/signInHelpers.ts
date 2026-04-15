@@ -12,11 +12,14 @@ export const onSubmitEmailAndPassword =
     setEmail,
     setPassword,
     setRenderStep,
+    setMfaType,
     determineNetworkError,
     login,
+    requestMfaCode,
     router,
     resetNetworkError,
     setLoading,
+    showSmsMfa,
     reCaptchaEnabled,
     reCaptchaToken,
     setRefreshReCaptcha,
@@ -55,7 +58,20 @@ export const onSubmitEmailAndPassword =
         setEmail(email)
         setPassword(password)
         resetNetworkError()
-        setRenderStep(EnumRenderStep.mfaType)
+
+        if (showSmsMfa) {
+          setRenderStep(EnumRenderStep.mfaType)
+          return
+        }
+
+        try {
+          await requestMfaCode(email, password, MfaType.email)
+          setMfaType(MfaType.email)
+          setRenderStep(EnumRenderStep.enterCode)
+        } catch (requestError) {
+          const { status } = requestError.response || {}
+          determineNetworkError(status, requestError)
+        }
       } else {
         const { status } = error.response || {}
         determineNetworkError(status, error)
