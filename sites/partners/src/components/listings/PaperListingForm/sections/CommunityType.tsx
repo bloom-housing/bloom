@@ -42,7 +42,6 @@ const CommunityType = ({
   const [currentCommunityType, setCurrentCommunityType] = useState(
     listing?.reservedCommunityTypes?.id
   )
-  const [currentCommunityDescription] = useState(listing?.reservedCommunityDescription)
 
   // Store the reserved community description in state for immediate updates
   const [description, setDescription] = useState<string>("")
@@ -66,8 +65,7 @@ const CommunityType = ({
 
   useEffect(() => {
     setValue("reservedCommunityTypes.id", currentCommunityType)
-    setValue("reservedCommunityDescription", currentCommunityDescription)
-  }, [options, setValue, currentCommunityType, currentCommunityDescription])
+  }, [options, setValue, currentCommunityType])
 
   useEffect(() => {
     if (![listing?.reservedCommunityTypes?.id, undefined, ""].includes(reservedCommunityType)) {
