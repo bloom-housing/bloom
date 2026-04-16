@@ -7,6 +7,7 @@ import { t } from "@bloom-housing/ui-components"
 import { Button, Link, Grid, Icon } from "@bloom-housing/ui-seeds"
 import { pdfUrlFromListingEvents, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
+  FeatureFlagEnum,
   ListingEventsTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
@@ -83,10 +84,20 @@ const ListingFormActions = ({
   const listingJurisdiction = profile?.jurisdictions?.find(
     (jurisdiction) => jurisdiction.id === listing?.jurisdictions?.id
   )
+
   const hideCloseButton = doJurisdictionsHaveFeatureFlagOn(
-    "hideCloseListingButton",
+    FeatureFlagEnum.hideCloseListingButton,
     listingJurisdiction?.id
   )
+  const isPartnerPublicListingRestrictionEnabled = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disablePartnerPublicListingEdits,
+    listingJurisdiction?.id
+  )
+
+  const isEditPublicListingRestricted =
+    !!profile?.userRoles?.isPartner &&
+    isPartnerPublicListingRestrictionEnabled &&
+    (listing?.status === ListingsStatusEnum.active || listing?.status === ListingsStatusEnum.closed)
 
   const recordUpdated = useMemo(() => {
     if (!listing) return null
@@ -478,7 +489,9 @@ const ListingFormActions = ({
       listing.status === ListingsStatusEnum.active &&
       type === ListingFormActionsType.details
     ) {
-      elements.push(editFromDetailButton)
+      if (!isEditPublicListingRestricted) {
+        elements.push(editFromDetailButton)
+      }
       if (isListingCopier) elements.push(copyButton)
       elements.push(previewButton)
     }
@@ -499,8 +512,12 @@ const ListingFormActions = ({
       listing.status === ListingsStatusEnum.closed &&
       type === ListingFormActionsType.details
     ) {
-      if (profile?.userRoles.isAdmin || !process.env.limitClosedListingActions)
+      if (
+        (profile?.userRoles.isAdmin || !process.env.limitClosedListingActions) &&
+        !isEditPublicListingRestricted
+      ) {
         elements.push(editFromDetailButton)
+      }
       if (isListingCopier) elements.push(copyButton)
       elements.push(previewButton)
       viewlotteryResultsButton()
@@ -527,6 +544,7 @@ const ListingFormActions = ({
     isListingApprovalEnabled,
     isListingApprover,
     isListingCopier,
+    isEditPublicListingRestricted,
     listing,
     listingId,
     listingJurisdiction?.publicUrl,
