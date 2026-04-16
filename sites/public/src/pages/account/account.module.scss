@@ -26,3 +26,15 @@
   color: var(--seeds-text-color);
   font-size: var(--seeds-font-size-base);
 }
+
+.settings-page-view {
+  background-color: var(--seeds-bg-color-canvas);
+  border-top: 1px solid var(--seeds-border-color);
+
+  &-section {
+    padding-block: var(--seeds-s12);
+    padding-inline: var(--seeds-s12);
+    margin-inline: auto;
+    max-width: unset;
+  }
+}

@@ -1,33 +1,36 @@
-import React from "react"
-import { RequireLogin } from "@bloom-housing/shared-helpers"
-import { fetchAgencies, fetchJurisdictionByName } from "../../lib/hooks"
-import {
-  Agency,
-  FeatureFlagEnum,
-  Jurisdiction,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
-import { isFeatureFlagOn } from "../../lib/helpers"
-import { t } from "@bloom-housing/ui-components"
-import { EditAccountView } from "../../components/account/EditAccountView"
 import {
   getAccountSettingsTabs,
   SettingsIndexEnum,
 } from "../../components/account/AccountSettingsHelpers"
+import { RequireLogin } from "@bloom-housing/shared-helpers"
 import { ApplicationTimeout } from "../../components/applications/ApplicationTimeout"
 import Layout from "../../layouts/application"
+import { t } from "@bloom-housing/ui-components"
 import styles from "./account.module.scss"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { isFeatureFlagOn } from "../../lib/helpers"
+import { useRouter } from "next/router"
+import { fetchJurisdictionByName } from "../../lib/hooks"
+import { NotificationPreferences } from "../../components/account/NotificationPreferences"
 
-interface EditProps {
-  agencies: Agency[]
+interface NotificationProps {
   jurisdiction: Jurisdiction
 }
 
-const Edit = (props: EditProps) => {
+const Notifications = (props: NotificationProps) => {
+  const router = useRouter()
   const enableNotificationSettings = isFeatureFlagOn(
     props.jurisdiction,
     FeatureFlagEnum.enableCustomListingNotifications
   )
+
+  if (!enableNotificationSettings) {
+    void router.push("/account/edit")
+  }
 
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
@@ -38,13 +41,13 @@ const Edit = (props: EditProps) => {
       >
         <section className={styles["settings-page-view"]}>
           <TabView
-            hideTabs={!enableNotificationSettings}
-            tabs={getAccountSettingsTabs(SettingsIndexEnum.profile)}
+            hideTabs={false}
+            tabs={getAccountSettingsTabs(SettingsIndexEnum.notifications)}
             styles={{
               sectionStyles: styles["settings-page-view-section"],
             }}
           >
-            <EditAccountView agencies={props.agencies} tabbedView={enableNotificationSettings} />
+            <NotificationPreferences />
           </TabView>
         </section>
       </Layout>
@@ -52,14 +55,13 @@ const Edit = (props: EditProps) => {
   )
 }
 
-export default Edit
+export default Notifications
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: { req: any; query: any }) {
   const jurisdiction = await fetchJurisdictionByName(context.req)
-  const agencies = await fetchAgencies(context.req, jurisdiction?.id)
 
   return {
-    props: { jurisdiction, agencies: agencies?.items || [] },
+    props: { jurisdiction },
   }
 }
