@@ -98,7 +98,6 @@ describe("applications pages", () => {
     it("should require form input", async () => {
       const { getByText, findByText } = renderWithConfiguredAdaFeatures(configuredAdaFeatures)
 
-      fireEvent.click(getByText("No"))
       fireEvent.click(getByText("Next"))
       expect(
         await findByText("There are errors you'll need to resolve before moving on.")
