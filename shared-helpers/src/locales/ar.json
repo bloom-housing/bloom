@@ -100,6 +100,8 @@
   "account.settings.notifications.regionLabel": "المناطق",
   "account.settings.notifications.regionNote_none": "لم يتم تحديد أي منطقة",
   "account.settings.notifications.regionNote_selected": "%{smart_count} منطقة محددة |||| %{smart_count} مناطق محددة",
+  "account.settings.notifications.updateSuccess": "تم حفظ تفضيلات الإشعارات بنجاح!",
+  "account.settings.notifications.updateFail": "فشل تحديث تفضيلات الإشعارات",
   "account.signUpSaveTime.applyFaster": "قم بالتقديم بشكل أسرع باستخدام تفاصيل التطبيق المحفوظة",
   "account.signUpSaveTime.checkStatus": "التحقق من حالة الطلب في أي وقت",
   "account.signUpSaveTime.resetPassword": "قم ببساطة بإعادة تعيين كلمة المرور الخاصة بك إذا نسيتها",

@@ -100,6 +100,8 @@
   "account.settings.notifications.regionLabel": "地区",
   "account.settings.notifications.regionNote_none": "未选择任何地区",
   "account.settings.notifications.regionNote_selected": "已选择 %{smart_count} 个地区 |||| 已选择 %{smart_count} 个地区",
+  "account.settings.notifications.updateSuccess": "通知偏好设置已成功保存！",
+  "account.settings.notifications.updateFail": "更新通知偏好设置失败",
   "account.signUpSaveTime.applyFaster": "儲存申請資訊加快申請速度",
   "account.signUpSaveTime.checkStatus": "隨時查看申請狀態",
   "account.signUpSaveTime.resetPassword": "如果忘记密码，只需重置即可",

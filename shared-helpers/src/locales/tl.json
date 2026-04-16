@@ -100,6 +100,8 @@
   "account.settings.notifications.regionLabel": "Mga rehiyon",
   "account.settings.notifications.regionNote_none": "Walang napiling rehiyon",
   "account.settings.notifications.regionNote_selected": "%{smart_count} rehiyon ang napili |||| %{smart_count} mga rehiyon ang napili",
+  "account.settings.notifications.updateSuccess": "Matagumpay na na-save ang mga kagustuhan sa abiso!",
+  "account.settings.notifications.updateFail": "Nabigo ang pag-update ng mga kagustuhan sa abiso",
   "account.signUpSaveTime.applyFaster": "Mag-apply nang mas mabilis gamit ang mga naka-save na detalye ng aplikasyon",
   "account.signUpSaveTime.checkStatus": "Tingnan ang status ng isang aplikasyon anumang oras",
   "account.signUpSaveTime.resetPassword": "I-reset lang ang iyong password kung nakalimutan mo ito",

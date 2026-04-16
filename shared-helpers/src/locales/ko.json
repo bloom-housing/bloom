@@ -100,6 +100,8 @@
   "account.settings.notifications.regionLabel": "지역",
   "account.settings.notifications.regionNote_none": "선택된 지역 없음",
   "account.settings.notifications.regionNote_selected": "%{smart_count}개 지역 선택됨 |||| %{smart_count}개 지역 선택됨",
+  "account.settings.notifications.updateSuccess": "알림 환경설정이 성공적으로 저장되었습니다!",
+  "account.settings.notifications.updateFail": "알림 환경설정 업데이트에 실패했습니다",
   "account.signUpSaveTime.applyFaster": "저장된 지원 정보로 더 빠르게 지원하세요",
   "account.signUpSaveTime.checkStatus": "언제든지 신청 상태를 확인할 수 있습니다.",
   "account.signUpSaveTime.resetPassword": "비밀번호를 잊어버린 경우 간단히 비밀번호를 재설정하세요.",

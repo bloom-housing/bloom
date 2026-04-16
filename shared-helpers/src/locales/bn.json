@@ -100,6 +100,8 @@
   "account.settings.notifications.regionLabel": "অঞ্চল",
   "account.settings.notifications.regionNote_none": "কোনো অঞ্চল নির্বাচিত হয়নি",
   "account.settings.notifications.regionNote_selected": "%{smart_count}টি অঞ্চল নির্বাচিত |||| %{smart_count}টি অঞ্চল নির্বাচিত",
+  "account.settings.notifications.updateSuccess": "বিজ্ঞপ্তির পছন্দগুলি সফলভাবে সংরক্ষিত হয়েছে!",
+  "account.settings.notifications.updateFail": "বিজ্ঞপ্তির পছন্দগুলি আপডেট করতে ব্যর্থ হয়েছে",
   "account.signUpSaveTime.applyFaster": "সংরক্ষিত আবেদনের বিবরণের মাধ্যমে দ্রুত আবেদন করুন",
   "account.signUpSaveTime.checkStatus": "যেকোনো সময় আবেদনের স্থিতি পরীক্ষা করুন",
   "account.signUpSaveTime.resetPassword": "আপনার পাসওয়ার্ড ভুলে গেলে কেবল এটি পুনরায় সেট করুন",

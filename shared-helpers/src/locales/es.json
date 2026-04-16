@@ -100,6 +100,8 @@
   "account.settings.notifications.regionLabel": "Regiones",
   "account.settings.notifications.regionNote_none": "Ninguna región seleccionada",
   "account.settings.notifications.regionNote_selected": "%{smart_count} región seleccionada |||| %{smart_count} regiones seleccionadas",
+  "account.settings.notifications.updateSuccess": "¡Preferencias de notificaciones guardadas correctamente!",
+  "account.settings.notifications.updateFail": "Error al actualizar las preferencias de notificaciones",
   "account.signUpSaveTime.applyFaster": "Presente su solicitud más rápido con los datos guardados",
   "account.signUpSaveTime.checkStatus": "Compruebe el estado de una solicitud en cualquier momento",
   "account.signUpSaveTime.resetPassword": "Simplemente restablezca su contraseña si la olvida",

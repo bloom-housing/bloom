@@ -100,6 +100,8 @@
   "account.settings.notifications.regionLabel": "Khu vực",
   "account.settings.notifications.regionNote_none": "Chưa chọn khu vực nào",
   "account.settings.notifications.regionNote_selected": "%{smart_count} khu vực được chọn |||| %{smart_count} khu vực được chọn",
+  "account.settings.notifications.updateSuccess": "Đã lưu tùy chọn thông báo thành công!",
+  "account.settings.notifications.updateFail": "Cập nhật tùy chọn thông báo thất bại",
   "account.signUpSaveTime.applyFaster": "Nộp hồ sơ nhanh hơn với thông tin đăng ký đã lưu",
   "account.signUpSaveTime.checkStatus": "Kiểm tra trạng thái hồ sơ bất cứ lúc nào",
   "account.signUpSaveTime.resetPassword": "Đơn giản chỉ cần đặt lại mật khẩu của bạn nếu bạn quên nó",

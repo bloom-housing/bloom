@@ -101,6 +101,8 @@
   "account.settings.notifications.regionLabel": "مناطق",
   "account.settings.notifications.regionNote_none": "هیچ منطقه‌ای انتخاب نشده",
   "account.settings.notifications.regionNote_selected": "%{smart_count} منطقه انتخاب شده |||| %{smart_count} منطقه انتخاب شده",
+  "account.settings.notifications.updateSuccess": "تنظیمات اعلان‌ها با موفقیت ذخیره شد!",
+  "account.settings.notifications.updateFail": "به‌روزرسانی تنظیمات اعلان‌ها انجام نشد",
   "account.signUpSaveTime.applyFaster": "با جزئیات برنامه ذخیره شده، سریعتر درخواست دهید",
   "account.signUpSaveTime.checkStatus": "بررسی وضعیت درخواست در هر زمان",
   "account.signUpSaveTime.resetPassword": "اگر رمز عبور خود را فراموش کردید، به سادگی آن را بازنشانی کنید",

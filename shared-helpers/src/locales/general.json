@@ -100,6 +100,8 @@
   "account.settings.notifications.regionLabel": "Regions",
   "account.settings.notifications.regionNote_none": "No regions selected",
   "account.settings.notifications.regionNote_selected": "%{smart_count} region selected|||| %{smart_count} regions selected",
+  "account.settings.notifications.updateSuccess": "Notification preferences saved successfully!",
+  "account.settings.notifications.updateFail": "Failed to update Notification preferences",
   "account.signUpSaveTime.applyFaster": "Apply faster with saved application details",
   "account.signUpSaveTime.checkStatus": "Check on the status of an application at any time",
   "account.signUpSaveTime.resetPassword": "Simply reset your password if you forget it",

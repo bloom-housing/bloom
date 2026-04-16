@@ -100,6 +100,8 @@
   "account.settings.notifications.regionLabel": "Շրջաններ",
   "account.settings.notifications.regionNote_none": "Շրջան չի ընտրվել",
   "account.settings.notifications.regionNote_selected": "%{smart_count} շրջան ընտրված է |||| %{smart_count} շրջան ընտրված է",
+  "account.settings.notifications.updateSuccess": "Ծանուցումների նախընտրությունները հաջողությամբ պահպանվեցին!",
+  "account.settings.notifications.updateFail": "Ծանուցումների նախընտրությունների թարմացումը չհաջողվեց",
   "account.signUpSaveTime.applyFaster": "Դիմեք ավելի արագ՝ պահպանված դիմումի մանրամասներով",
   "account.signUpSaveTime.checkStatus": "Ստուգեք դիմումի կարգավիճակը ցանկացած պահի",
   "account.signUpSaveTime.resetPassword": "Պարզապես վերագործարկեք ձեր գաղտնաբառը, եթե մոռանաք այն",
