@@ -19,8 +19,8 @@ export const NotificationPreferences = () => {
       iconSymbol="envelope"
       iconClass={"card-icon"}
       headingClass={"seeds-large-heading"}
-      title="My notifications"
-      subtitle="Choose which notifications you’d like to receive"
+      title={t("account.settings.myNotification")}
+      subtitle={t("account.settings.notifications.subtitle")}
       headingPriority={3}
       variant="block"
     >
@@ -34,33 +34,33 @@ export const NotificationPreferences = () => {
             fields={[
               {
                 id: "select-all-checkbox",
-                label: "Select all",
-                note: "Subscribe to all notification types",
+                label: t("account.settings.notifications.selectAllLabel"),
+                note: t("account.settings.notifications.selectAllNote"),
               },
               {
                 id: "hearing-vision-checkbox",
-                label: "Hearing/Vision units",
-                note: "Receive notifications for units with hearing/vision accessibility",
+                label: t("account.settings.notifications.hearingVisionLabel"),
+                note: t("account.settings.notifications.hearingVisionNote"),
               },
               {
                 id: "mobility-checkbox",
-                label: "Mobility units",
-                note: "Receive notifications for new mobility accessible units",
+                label: t("account.settings.notifications.mobilityLabel"),
+                note: t("account.settings.notifications.mobilityNote"),
               },
               {
                 id: "mobility-hearing-vision-checkbox",
-                label: "Mobility and Hearing/Vision units",
-                note: "Receive notifications for units with both mobility and hearing/vision accessibility",
+                label: t("account.settings.notifications.mobilityHearingVisionLabel"),
+                note: t("account.settings.notifications.mobilityHearingVisionNote"),
               },
               {
                 id: "new-lotteries-checkbox",
-                label: "New lotteries",
-                note: "Receive notifications when new housing lotteries open",
+                label: t("account.settings.notifications.lotteriesLabel"),
+                note: t("account.settings.notifications.lotteriesNote"),
               },
               {
                 id: "new-waitlists-checkbox",
-                label: "New waitlists",
-                note: "Receive notifications when new waitlists become available",
+                label: t("account.settings.notifications.waitlistLabel"),
+                note: t("account.settings.notifications.waitlistNote"),
               },
             ]}
           />
@@ -73,7 +73,9 @@ export const NotificationPreferences = () => {
                 className={styles["button"]}
               >
                 <div className={styles["button-label-container"]}>
-                  <span className={styles["button-label"]}>Regions</span>
+                  <span className={styles["button-label"]}>
+                    {t("account.settings.notifications.regionLabel")}
+                  </span>
                   <div>
                     <div className={styles["button-icon"]}>
                       {collapsed ? (
@@ -89,7 +91,9 @@ export const NotificationPreferences = () => {
                   </div>
                 </div>
               </button>
-              <span className={styles["collapsible-field-group-note"]}>Two regions selected</span>
+              <span className={styles["collapsible-field-group-note"]}>
+                {t("account.settings.notifications.regionNote_selected", { smart_count: 0 })}
+              </span>
             </div>
             <div>
               {!collapsed && (

@@ -22,14 +22,14 @@ export const getAccountSettingsTabs = (selectedIndex: SettingsIndexEnum) => {
           data-testid="profile-tab"
           active={selectedIndex === SettingsIndexEnum.profile}
         >
-          <span>{"Profile"}</span>
+          <span>{t("account.settings.myProfile")}</span>
         </Tabs.Tab>
         <Tabs.Tab
           href={`${baseUrl}/notifications`}
           data-testid="notifications-tab"
           active={selectedIndex === SettingsIndexEnum.notifications}
         >
-          <span>{"Notifications"}</span>
+          <span>{t("account.settings.myNotification")}</span>
         </Tabs.Tab>
       </Tabs.TabList>
     </Tabs>
