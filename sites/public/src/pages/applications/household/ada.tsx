@@ -33,7 +33,9 @@ const ApplicationAda = () => {
     Record<string, unknown>
   >({
     defaultValues: {
-      none: visibleAdaFeatureKeys.every((feature) => !application.accessibility?.[feature]),
+      none:
+        visibleAdaFeatureKeys.length > 0 &&
+        visibleAdaFeatureKeys.every((feature) => application.accessibility?.[feature] === false),
     },
     shouldFocusError: false,
   })
@@ -89,7 +91,9 @@ const ApplicationAda = () => {
     id: "no-features",
     label: t(`t.no`),
     value: "no-features",
-    defaultChecked: visibleAdaFeatureKeys.every((feature) => !application.accessibility?.[feature]),
+    defaultChecked:
+      visibleAdaFeatureKeys.length > 0 &&
+      visibleAdaFeatureKeys.every((feature) => application.accessibility?.[feature] === false),
     dataTestId: `app-ada-none`,
     uniqueName: true,
     inputProps: {
