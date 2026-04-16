@@ -20,15 +20,15 @@ const ListingGuard = ({ children }: AuthGuardProps) => {
 
   const leasingAgentInListingsIds = profile?.listings?.map((item) => item.id)
   const isEditRoute = router.pathname === "/listings/[id]/edit"
-  const disablePartnerOpenListingEdits = doJurisdictionsHaveFeatureFlagOn?.(
-    FeatureFlagEnum.disablePartnerOpenListingEdits,
+  const disablePartnerPublicListingEdits = doJurisdictionsHaveFeatureFlagOn?.(
+    FeatureFlagEnum.disablePartnerPublicListingEdits,
     listing?.jurisdictions?.id
   )
-  const isEditOpenListingRestricted =
+  const isEditPublicListingRestricted =
     isEditRoute &&
     !!profile?.userRoles?.isPartner &&
-    disablePartnerOpenListingEdits &&
-    listing?.status === ListingsStatusEnum.active
+    disablePartnerPublicListingEdits &&
+    (listing?.status === ListingsStatusEnum.active || listing?.status === ListingsStatusEnum.closed)
 
   const hasPrivileges =
     profile?.userRoles?.isAdmin ||
@@ -37,7 +37,7 @@ const ListingGuard = ({ children }: AuthGuardProps) => {
     profile?.userRoles?.isLimitedJurisdictionalAdmin ||
     leasingAgentInListingsIds?.includes(listingId)
 
-  if (isEditOpenListingRestricted && listingId) {
+  if (isEditPublicListingRestricted && listingId) {
     window.location.href = `/listings/${listingId}`
     return null
   }

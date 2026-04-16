@@ -1826,7 +1826,7 @@ describe("<ListingFormActions>", () => {
     })
   })
 
-  describe("with disablePartnerOpenListingEdits flag enabled", () => {
+  describe("with disablePartnerPublicListingEdits flag enabled", () => {
     beforeAll(() => {
       doJurisdictionsHaveFeatureFlagOn = () => true
     })
@@ -1837,6 +1837,19 @@ describe("<ListingFormActions>", () => {
           <ListingFormActionsComponent
             user={partnerUser}
             listingStatus={ListingsStatusEnum.active}
+            formActionType={ListingFormActionsType.details}
+          />
+        )
+
+        expect(screen.queryByRole("link", { name: "Edit" })).not.toBeInTheDocument()
+        expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
+      })
+
+      it("should not render edit button in closed detail state", () => {
+        render(
+          <ListingFormActionsComponent
+            user={partnerUser}
+            listingStatus={ListingsStatusEnum.closed}
             formActionType={ListingFormActionsType.details}
           />
         )

@@ -141,17 +141,19 @@ export class PermissionService {
 
       const listingIds = user.listings.map((listing) => listing.id);
 
-      const openEditBlockedListingIds = new Set(
+      const blockedFromEditListingIds = new Set(
         (
           await this.prisma.listings.findMany({
             select: { id: true },
             where: {
               id: { in: listingIds },
-              status: ListingsStatusEnum.active,
+              status: {
+                in: [ListingsStatusEnum.active, ListingsStatusEnum.closed],
+              },
               jurisdictions: {
                 featureFlags: {
                   some: {
-                    name: FeatureFlagEnum.disablePartnerOpenListingEdits,
+                    name: FeatureFlagEnum.disablePartnerPublicListingEdits,
                     active: true,
                   },
                 },
@@ -174,7 +176,7 @@ export class PermissionService {
             user.id,
             'listing',
             `r.obj.id == '${listing.id}'`,
-            openEditBlockedListingIds.has(listing.id)
+            blockedFromEditListingIds.has(listing.id)
               ? permissionActions.read
               : `(${permissionActions.read}|${permissionActions.update})`,
           );

@@ -89,15 +89,16 @@ const ListingFormActions = ({
     FeatureFlagEnum.hideCloseListingButton,
     listingJurisdiction?.id
   )
-  const isPartnerOpenListingRestrictionEnabled = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.disablePartnerOpenListingEdits,
+  const isPartnerPublicListingRestrictionEnabled = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disablePartnerPublicListingEdits,
     listingJurisdiction?.id
   )
 
-  const isEditOpenListingRestricted =
+  console.log({ isPartnerPublicListingRestrictionEnabled })
+  const isEditPublicListingRestricted =
     !!profile?.userRoles?.isPartner &&
-    isPartnerOpenListingRestrictionEnabled &&
-    listing?.status === ListingsStatusEnum.active
+    isPartnerPublicListingRestrictionEnabled &&
+    (listing?.status === ListingsStatusEnum.active || listing?.status === ListingsStatusEnum.closed)
 
   const recordUpdated = useMemo(() => {
     if (!listing) return null
@@ -489,7 +490,7 @@ const ListingFormActions = ({
       listing.status === ListingsStatusEnum.active &&
       type === ListingFormActionsType.details
     ) {
-      if (!isEditOpenListingRestricted) {
+      if (!isEditPublicListingRestricted) {
         elements.push(editFromDetailButton)
       }
       if (isListingCopier) elements.push(copyButton)
@@ -512,8 +513,12 @@ const ListingFormActions = ({
       listing.status === ListingsStatusEnum.closed &&
       type === ListingFormActionsType.details
     ) {
-      if (profile?.userRoles.isAdmin || !process.env.limitClosedListingActions)
+      if (
+        (profile?.userRoles.isAdmin || !process.env.limitClosedListingActions) &&
+        !isEditPublicListingRestricted
+      ) {
         elements.push(editFromDetailButton)
+      }
       if (isListingCopier) elements.push(copyButton)
       elements.push(previewButton)
       viewlotteryResultsButton()
@@ -540,7 +545,7 @@ const ListingFormActions = ({
     isListingApprovalEnabled,
     isListingApprover,
     isListingCopier,
-    isEditOpenListingRestricted,
+    isEditPublicListingRestricted,
     listing,
     listingId,
     listingJurisdiction?.publicUrl,

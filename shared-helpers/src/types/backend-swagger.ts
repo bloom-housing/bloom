@@ -10525,7 +10525,7 @@ export enum FeatureFlagEnum {
   "disableEthnicityQuestion" = "disableEthnicityQuestion",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
-  "disablePartnerOpenListingEdits" = "disablePartnerOpenListingEdits",
+  "disablePartnerPublicListingEdits" = "disablePartnerPublicListingEdits",
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableAdaOtherOption" = "enableAdaOtherOption",

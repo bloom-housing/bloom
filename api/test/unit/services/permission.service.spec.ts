@@ -324,7 +324,7 @@ describe('Testing permission service', () => {
     ).toEqual(false);
   });
 
-  it('should disallow partner from updating open listing when restriction flag is enabled', async () => {
+  it('should disallow partner from updating open or closed listing when restriction flag is enabled', async () => {
     const user = {
       id: 'example id',
       userRoles: {
@@ -352,11 +352,11 @@ describe('Testing permission service', () => {
       select: { id: true },
       where: {
         id: { in: ['listing id 1'] },
-        status: ListingsStatusEnum.active,
+        status: { in: [ListingsStatusEnum.active, ListingsStatusEnum.closed] },
         jurisdictions: {
           featureFlags: {
             some: {
-              name: FeatureFlagEnum.disablePartnerOpenListingEdits,
+              name: FeatureFlagEnum.disablePartnerPublicListingEdits,
               active: true,
             },
           },
