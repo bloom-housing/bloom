@@ -1,19 +1,25 @@
 import { Prisma, PrismaClient, ReservedCommunityTypes } from '@prisma/client';
 import { randomInt } from 'crypto';
 
-const reservedCommunityTypeOptions = [
-  'specialNeeds',
-  'senior',
-  'senior55',
-  'senior62',
-  'specialNeeds',
-  'developmentalDisability',
-  'tay',
-  'veteran',
-  'schoolEmployee',
-  'farmworkerHousing',
-  'housingVoucher',
-  'referralOnly',
+const reservedCommunityTypeOptions: { name: string; description?: string }[] = [
+  { name: 'specialNeeds' },
+  {
+    name: 'senior',
+  },
+  { name: 'senior55' },
+  {
+    name: 'senior62',
+    description:
+      'This property is reserved for seniors aged 62 and older. Applicants must meet the age requirement to be eligible.',
+  },
+  { name: 'specialNeeds' },
+  { name: 'developmentalDisability' },
+  { name: 'tay' },
+  { name: 'veteran' },
+  { name: 'schoolEmployee' },
+  { name: 'farmworkerHousing' },
+  { name: 'housingVoucher' },
+  { name: 'referralOnly' },
 ];
 
 export const reservedCommunityTypeFactory = (
@@ -36,9 +42,10 @@ export const reservedCommunityTypeFactoryAll = async (
   prismaClient: PrismaClient,
 ) => {
   await prismaClient.reservedCommunityTypes.createMany({
-    data: reservedCommunityTypeOptions.map((value) => ({
-      name: value,
-      jurisdictionId: jurisdictionId,
+    data: reservedCommunityTypeOptions.map(({ name, description }) => ({
+      name,
+      description,
+      jurisdictionId,
     })),
   });
 };
@@ -51,9 +58,8 @@ export const reservedCommunityTypeFactoryGet = async (
   // if name is not given pick one randomly from the above list
   const chosenName =
     name ||
-    reservedCommunityTypeOptions[
-      randomInt(reservedCommunityTypeOptions.length)
-    ];
+    reservedCommunityTypeOptions[randomInt(reservedCommunityTypeOptions.length)]
+      .name;
   const reservedCommunityType =
     await prismaClient.reservedCommunityTypes.findFirst({
       where: {

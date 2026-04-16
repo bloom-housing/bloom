@@ -10570,6 +10570,7 @@ export enum FeatureFlagEnum {
   "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
+  "disableReservedCommunityTypeEdit" = "disableReservedCommunityTypeEdit",
 }
 
 export enum InputType {

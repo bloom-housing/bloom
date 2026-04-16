@@ -150,6 +150,113 @@ describe("CommunityType", () => {
     expect(screen.getAllByText("Appears as first page of application")).toHaveLength(2)
   })
 
+  it("should pre-populate description from the listing's existing reservedCommunityDescription", async () => {
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(ctx.json(adminUserWithJurisdictions))
+      }),
+      rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
+        return res(ctx.json(reservedCommunityTypes))
+      }),
+      rest.get("http://localhost/api/adapter/reservedCommunityTypes", (_req, res, ctx) => {
+        return res(ctx.json(reservedCommunityTypes))
+      })
+    )
+
+    render(
+      <FormProviderWrapper
+        values={{
+          reservedCommunityDescription: "Custom description for this listing",
+          reservedCommunityTypes: { id: "rct1" } as never,
+        }}
+      >
+        <CommunityType
+          listing={{ reservedCommunityTypes: { id: "rct1" } } as never}
+          requiredFields={[]}
+          swapCommunityTypeWithPrograms={false}
+        />
+      </FormProviderWrapper>
+    )
+
+    await screen.findByRole("heading", { level: 2, name: "Community type" })
+    await screen.findByRole("option", { name: "Seniors" })
+
+    expect(screen.getByRole("textbox", { name: "Reserved community description" })).toHaveValue(
+      "Custom description for this listing"
+    )
+  })
+
+  it("should pre-populate description when selecting a community type", async () => {
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(ctx.json(adminUserWithJurisdictions))
+      }),
+      rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
+        return res(ctx.json(reservedCommunityTypes))
+      }),
+      rest.get("http://localhost/api/adapter/reservedCommunityTypes", (_req, res, ctx) => {
+        return res(ctx.json(reservedCommunityTypes))
+      })
+    )
+
+    render(
+      <FormProviderWrapper>
+        <CommunityType requiredFields={[]} swapCommunityTypeWithPrograms={false} />
+      </FormProviderWrapper>
+    )
+
+    await screen.findByRole("heading", { level: 2, name: "Community type" })
+    await screen.findByRole("option", { name: "Seniors" })
+
+    await userEvent.selectOptions(
+      screen.getByRole("combobox", { name: "Reserved community type" }),
+      "Seniors"
+    )
+
+    expect(screen.getByRole("textbox", { name: "Reserved community description" })).toHaveValue(
+      "For folks over the age of 65"
+    )
+  })
+
+  it("should allow the user to edit the pre-populated description", async () => {
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(ctx.json(adminUserWithJurisdictions))
+      }),
+      rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
+        return res(ctx.json(reservedCommunityTypes))
+      }),
+      rest.get("http://localhost/api/adapter/reservedCommunityTypes", (_req, res, ctx) => {
+        return res(ctx.json(reservedCommunityTypes))
+      })
+    )
+
+    render(
+      <FormProviderWrapper>
+        <CommunityType requiredFields={[]} swapCommunityTypeWithPrograms={false} />
+      </FormProviderWrapper>
+    )
+
+    await screen.findByRole("heading", { level: 2, name: "Community type" })
+    await screen.findByRole("option", { name: "Seniors" })
+
+    await userEvent.selectOptions(
+      screen.getByRole("combobox", { name: "Reserved community type" }),
+      "Seniors"
+    )
+
+    const textarea = screen.getByRole("textbox", { name: "Reserved community description" })
+    expect(textarea).toHaveValue("For folks over the age of 65")
+
+    await userEvent.clear(textarea)
+    await userEvent.type(textarea, "Updated custom description")
+
+    expect(textarea).toHaveValue("Updated custom description")
+  })
+
   it("should not render when swapCommunityTypesWithPrograms is true", () => {
     document.cookie = "access-token-available=True"
     server.use(
@@ -169,5 +276,82 @@ describe("CommunityType", () => {
     )
 
     expect(results.queryAllByRole("heading", { level: 2, name: "Community type" })).toHaveLength(0)
+  })
+
+  it("should show plaintext description and hide textarea when disableReservedCommunityTypeEdit is true", async () => {
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(ctx.json(adminUserWithJurisdictions))
+      }),
+      rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
+        return res(ctx.json(reservedCommunityTypes))
+      })
+    )
+
+    render(
+      <FormProviderWrapper>
+        <CommunityType
+          requiredFields={[]}
+          disableReservedCommunityTypeEdit={true}
+          swapCommunityTypeWithPrograms={false}
+        />
+      </FormProviderWrapper>
+    )
+
+    await screen.findByRole("heading", { level: 2, name: "Community type" })
+    await screen.findByRole("option", { name: "Seniors" })
+
+    // Select a community type
+    await userEvent.selectOptions(
+      screen.getByRole("combobox", { name: "Reserved community type" }),
+      "Seniors"
+    )
+
+    // Description should be shown as plaintext
+    expect(screen.getByText("For folks over the age of 65")).toBeInTheDocument()
+    // Textarea should be present but visually hidden (has hidden-field class)
+    const textarea = screen.getByRole("textbox", { name: "Reserved community description" })
+    expect(textarea).toBeInTheDocument()
+    expect(textarea.closest(".hidden-field")).not.toBeNull()
+  })
+
+  it("should update plaintext description when dropdown changes in disabled edit mode", async () => {
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(ctx.json(adminUserWithJurisdictions))
+      }),
+      rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
+        return res(ctx.json(reservedCommunityTypes))
+      })
+    )
+
+    render(
+      <FormProviderWrapper>
+        <CommunityType
+          requiredFields={[]}
+          disableReservedCommunityTypeEdit={true}
+          swapCommunityTypeWithPrograms={false}
+        />
+      </FormProviderWrapper>
+    )
+
+    await screen.findByRole("heading", { level: 2, name: "Community type" })
+    await screen.findByRole("option", { name: "Seniors" })
+
+    // Select "Seniors"
+    await userEvent.selectOptions(
+      screen.getByRole("combobox", { name: "Reserved community type" }),
+      "Seniors"
+    )
+    expect(screen.getByText("For folks over the age of 65")).toBeInTheDocument()
+
+    // Select "Veteran"
+    await userEvent.selectOptions(
+      screen.getByRole("combobox", { name: "Reserved community type" }),
+      "Veteran"
+    )
+    expect(screen.getByText("For folks who served in the armed forces")).toBeInTheDocument()
   })
 })
