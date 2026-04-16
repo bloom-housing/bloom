@@ -5,13 +5,19 @@ type TabViewProps = {
   children: React.ReactNode
   tabs: React.ReactNode
   hideTabs: boolean
+  styles?: {
+    sectionStyles?: string
+    contentStyles?: string
+  }
 }
 
 export const TabView = (props: TabViewProps) => {
   return (
-    <div className={styles["section-container"]}>
+    <div className={`${styles["section-container"]} ${props.styles?.sectionStyles}`}>
       {!props.hideTabs && <> {props.tabs}</>}
-      <div className={styles["content-container"]}>{props.children}</div>
+      <div className={`${styles["content-container"]} ${props.styles?.contentStyles}`}>
+        {props.children}
+      </div>
     </div>
   )
 }
