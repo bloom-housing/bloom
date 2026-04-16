@@ -94,7 +94,6 @@ const ListingFormActions = ({
     listingJurisdiction?.id
   )
 
-  console.log({ isPartnerPublicListingRestrictionEnabled })
   const isEditPublicListingRestricted =
     !!profile?.userRoles?.isPartner &&
     isPartnerPublicListingRestrictionEnabled &&
