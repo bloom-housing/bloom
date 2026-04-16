@@ -7,7 +7,7 @@ export enum SettingsIndexEnum {
 }
 
 export const getAccountSettingsTabs = (selectedIndex: SettingsIndexEnum) => {
-  const baseUrl = "/account/"
+  const baseUrl = "/account"
 
   return (
     <Tabs verticalSidebar navigation={true} selectedIndex={selectedIndex}>
