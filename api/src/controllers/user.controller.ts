@@ -415,7 +415,10 @@ export class UserController {
   }
 
   @Put('/preferences')
-  @ApiOperation({ summary: 'Update user notification preferences' })
+  @ApiOperation({
+    summary: 'Update user notification preferences',
+    operationId: 'updateNotificationPreferences',
+  })
   @ApiOkResponse({ type: SuccessDTO })
   @UseGuards(JwtAuthGuard, PermissionGuard)
   async updatePreferences(
