@@ -1,0 +1,25 @@
+.card {
+  &-footer {
+    margin: var(--seeds-spacer-section);
+  }
+}
+
+.notification-preferences-field-group {
+  & > div:first-child {
+    padding-block-end: var(--seeds-s4);
+    border-block-end: var(--card-divider-width) solid var(--card-divider-color);
+
+    & + div {
+      padding-block-start: var(--seeds-s4);
+    }
+  }
+
+  & > div:nth-child(n + 3) {
+    margin-block-start: var(--seeds-s6);
+  }
+
+  & span {
+    margin-inline-start: var(--seeds-s8);
+  }
+}
+
