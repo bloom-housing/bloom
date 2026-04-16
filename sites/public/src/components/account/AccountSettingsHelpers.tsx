@@ -10,12 +10,7 @@ export const getAccountSettingsTabs = (selectedIndex: SettingsIndexEnum) => {
   const baseUrl = "/account/"
 
   return (
-    <Tabs
-      verticalSidebar
-      navigation={true}
-      navigationLabel={t("settings.navLabel")}
-      selectedIndex={selectedIndex}
-    >
+    <Tabs verticalSidebar navigation={true} selectedIndex={selectedIndex}>
       <Tabs.TabList>
         <Tabs.Tab
           href={`${baseUrl}/edit`}
