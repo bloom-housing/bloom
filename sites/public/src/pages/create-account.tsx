@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
-import { Form, t, AlertBox } from "@bloom-housing/ui-components"
+import { t, AlertBox } from "@bloom-housing/ui-components"
 import { Button, Dialog, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
@@ -13,6 +13,7 @@ import {
   pushGtmEvent,
   AuthContext,
   BloomCard,
+  Form,
   tIfExists,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
