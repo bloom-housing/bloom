@@ -6949,6 +6949,9 @@ export interface Accessibility {
   hearing?: boolean
 
   /**  */
+  hearingAndVision?: boolean
+
+  /**  */
   other?: boolean
 }
 
@@ -7890,6 +7893,9 @@ export interface JurisdictionCreate {
   visibleSpokenLanguages: SpokenLanguageEnum[]
 
   /**  */
+  visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
+
+  /**  */
   regions: []
 
   /**  */
@@ -7971,6 +7977,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   visibleSpokenLanguages: SpokenLanguageEnum[]
+
+  /**  */
+  visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
 
   /**  */
   regions: []
@@ -8089,6 +8098,9 @@ export interface Jurisdiction {
 
   /**  */
   visibleSpokenLanguages: SpokenLanguageEnum[]
+
+  /**  */
+  visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
 
   /**  */
   regions: []
@@ -8340,6 +8352,9 @@ export interface AccessibilityCreate {
 
   /**  */
   hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
 
   /**  */
   other?: boolean
@@ -8598,6 +8613,9 @@ export interface AccessibilityUpdate {
 
   /**  */
   hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
 
   /**  */
   other?: boolean
@@ -10504,6 +10522,14 @@ export enum SpokenLanguageEnum {
   "notListed" = "notListed",
 }
 
+export enum ApplicationAccessibilityFeatureEnum {
+  "hearing" = "hearing",
+  "hearingAndVision" = "hearingAndVision",
+  "mobility" = "mobility",
+  "other" = "other",
+  "vision" = "vision",
+}
+
 export enum FeatureFlagEnum {
   "disableAccessibilityFeaturesTag" = "disableAccessibilityFeaturesTag",
   "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
@@ -10513,7 +10539,6 @@ export enum FeatureFlagEnum {
   "disableListingPreferences" = "disableListingPreferences",
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
-  "enableAdaOtherOption" = "enableAdaOtherOption",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableApplicationStatus" = "enableApplicationStatus",
   "enableCompanyWebsite" = "enableCompanyWebsite",
