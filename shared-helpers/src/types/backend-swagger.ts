@@ -5,12 +5,23 @@
 /** Generate by swagger-axios-codegen */
 /* eslint-disable */
 // @ts-nocheck
-import axiosStatic, { AxiosInstance, AxiosRequestConfig } from "axios"
+import axiosStatic from "axios"
+import type { AxiosInstance, AxiosRequestConfig } from "axios"
 
 export interface IRequestOptions extends AxiosRequestConfig {
-  /** only in axios interceptor config*/
+  /**
+   * show loading status
+   */
   loading?: boolean
+  /**
+   * display error message
+   */
   showError?: boolean
+  /**
+   * indicates whether Authorization credentials are required for the request
+   * @default true
+   */
+  withAuthorization?: boolean
 }
 
 export interface IRequestConfig {
@@ -112,8 +123,6 @@ export class RootService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -126,7 +135,17 @@ export class RootService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Prisma database metrics in Prometheus format
+   */
+  prismaMetrics(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/prisma_metrics"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       axios(configs, resolve, reject)
     })
@@ -153,10 +172,6 @@ export class RootService {
       let url = basePath + "/clearTempFiles"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -200,8 +215,6 @@ export class ListingsService {
         search: params["search"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -241,6 +254,10 @@ export class ListingsService {
       let url = basePath + "/listings"
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
 
       let data = params.body
 
@@ -287,8 +304,6 @@ export class ListingsService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { timeZone: params["timeZone"] }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -308,8 +323,6 @@ export class ListingsService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { timeZone: params["timeZone"] }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -321,8 +334,6 @@ export class ListingsService {
       let url = basePath + "/listings/mapMarkers"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -345,8 +356,6 @@ export class ListingsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { view: params["view"] }
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -381,10 +390,6 @@ export class ListingsService {
       let url = basePath + "/listings/closeListings"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -433,8 +438,6 @@ export class ListingsService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { view: params["view"] }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -454,8 +457,6 @@ export class ListingsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -474,8 +475,6 @@ export class ListingsService {
       url = url.replace("{propertyId}", params["propertyId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -513,8 +512,6 @@ export class ApplicationFlaggedSetsService {
         search: params["search"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -548,8 +545,6 @@ export class ApplicationFlaggedSetsService {
         search: params["search"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -568,8 +563,6 @@ export class ApplicationFlaggedSetsService {
       url = url.replace("{afsId}", params["afsId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -613,10 +606,6 @@ export class ApplicationFlaggedSetsService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
       configs.params = { listingId: params["listingId"], force: params["force"] }
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -682,8 +671,6 @@ export class MultiselectQuestionsService {
         view: params["view"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -746,6 +733,10 @@ export class MultiselectQuestionsService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
       let data = params.body
 
       configs.data = data
@@ -806,10 +797,6 @@ export class MultiselectQuestionsService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -828,8 +815,6 @@ export class MultiselectQuestionsService {
       url = url.replace("{multiselectQuestionId}", params["multiselectQuestionId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -922,8 +907,6 @@ export class AmiChartsService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { jurisdictionId: params["jurisdictionId"] }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -964,6 +947,10 @@ export class AmiChartsService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
       let data = params.body
 
       configs.data = data
@@ -986,8 +973,6 @@ export class AmiChartsService {
       url = url.replace("{amiChartId}", params["amiChartId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1033,8 +1018,6 @@ export class ReservedCommunityTypesService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { jurisdictionId: params["jurisdictionId"] }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -1075,6 +1058,10 @@ export class ReservedCommunityTypesService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
       let data = params.body
 
       configs.data = data
@@ -1097,8 +1084,6 @@ export class ReservedCommunityTypesService {
       url = url.replace("{reservedCommunityTypeId}", params["reservedCommunityTypeId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1136,8 +1121,6 @@ export class UnitTypesService {
       let url = basePath + "/unitTypes"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1179,6 +1162,10 @@ export class UnitTypesService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
       let data = params.body
 
       configs.data = data
@@ -1201,8 +1188,6 @@ export class UnitTypesService {
       url = url.replace("{unitTypeId}", params["unitTypeId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1240,8 +1225,6 @@ export class UnitRentTypesService {
       let url = basePath + "/unitRentTypes"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1283,6 +1266,10 @@ export class UnitRentTypesService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
       let data = params.body
 
       configs.data = data
@@ -1305,8 +1292,6 @@ export class UnitRentTypesService {
       url = url.replace("{unitRentTypeId}", params["unitRentTypeId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1344,8 +1329,6 @@ export class JurisdictionsService {
       let url = basePath + "/jurisdictions"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1387,6 +1370,10 @@ export class JurisdictionsService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
       let data = params.body
 
       configs.data = data
@@ -1409,8 +1396,6 @@ export class JurisdictionsService {
       url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1452,8 +1437,6 @@ export class JurisdictionsService {
       url = url.replace("{jurisdictionName}", params["jurisdictionName"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1500,8 +1483,6 @@ export class ApplicationsService {
         markedAsDuplicate: params["markedAsDuplicate"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -1542,6 +1523,10 @@ export class ApplicationsService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
       let data = params.body
 
       configs.data = data
@@ -1564,8 +1549,6 @@ export class ApplicationsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { userId: params["userId"] }
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1603,8 +1586,6 @@ export class ApplicationsService {
         applicantNameSearch: params["applicantNameSearch"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -1631,8 +1612,6 @@ export class ApplicationsService {
         includeDemographics: params["includeDemographics"],
         timeZone: params["timeZone"],
       }
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1661,8 +1640,6 @@ export class ApplicationsService {
         timeZone: params["timeZone"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -1689,8 +1666,6 @@ export class ApplicationsService {
         includeDemographics: params["includeDemographics"],
         timeZone: params["timeZone"],
       }
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1719,8 +1694,6 @@ export class ApplicationsService {
         timeZone: params["timeZone"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -1739,8 +1712,6 @@ export class ApplicationsService {
       url = url.replace("{applicationId}", params["applicationId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1797,10 +1768,6 @@ export class ApplicationsService {
       let url = basePath + "/applications/removePIICronJob"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -1914,8 +1881,6 @@ export class UserService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -1933,6 +1898,10 @@ export class UserService {
       let url = basePath + "/user"
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
 
       let data = params.body
 
@@ -1974,8 +1943,6 @@ export class UserService {
         orderDir: params["orderDir"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -1988,8 +1955,6 @@ export class UserService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -2001,8 +1966,6 @@ export class UserService {
       let url = basePath + "/user/advocate/csv"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2023,8 +1986,6 @@ export class UserService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -2036,8 +1997,6 @@ export class UserService {
       let url = basePath + "/user/preferences"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2409,10 +2368,6 @@ export class UserService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -2424,10 +2379,6 @@ export class UserService {
       let url = basePath + "/user/deleteInactiveUsersCronJob"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2447,8 +2398,6 @@ export class UserService {
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2509,8 +2458,6 @@ export class AuthService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -2544,8 +2491,6 @@ export class AuthService {
       let url = basePath + "/auth/requestNewToken"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2613,8 +2558,6 @@ export class MapLayersService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { jurisdictionId: params["jurisdictionId"] }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -2629,10 +2572,6 @@ export class ScriptRunnerService {
       let url = basePath + "/scriptRunner/exampleScript"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2712,10 +2651,6 @@ export class ScriptRunnerService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -2728,10 +2663,6 @@ export class ScriptRunnerService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -2743,10 +2674,6 @@ export class ScriptRunnerService {
       let url = basePath + "/scriptRunner/optOutExistingLotteries"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2782,10 +2709,6 @@ export class ScriptRunnerService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -2797,10 +2720,6 @@ export class ScriptRunnerService {
       let url = basePath + "/scriptRunner/hideProgramsFromListings"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2814,10 +2733,6 @@ export class ScriptRunnerService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -2829,10 +2744,6 @@ export class ScriptRunnerService {
       let url = basePath + "/scriptRunner/addFeatureFlags"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2846,10 +2757,6 @@ export class ScriptRunnerService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -2861,10 +2768,6 @@ export class ScriptRunnerService {
       let url = basePath + "/scriptRunner/migrateMultiselectDataToRefactor"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2900,10 +2803,6 @@ export class ScriptRunnerService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -2915,10 +2814,6 @@ export class ScriptRunnerService {
       let url = basePath + "/scriptRunner/setIsNewestApplicationValues"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2934,8 +2829,6 @@ export class FeatureFlagsService {
       let url = basePath + "/featureFlags"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2999,6 +2892,10 @@ export class FeatureFlagsService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
       let data = params.body
 
       configs.data = data
@@ -3037,10 +2934,6 @@ export class FeatureFlagsService {
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -3059,8 +2952,6 @@ export class FeatureFlagsService {
       url = url.replace("{featureFlagId}", params["featureFlagId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -3114,8 +3005,6 @@ export class LotteryService {
         timeZone: params["timeZone"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -3142,8 +3031,6 @@ export class LotteryService {
         includeDemographics: params["includeDemographics"],
         timeZone: params["timeZone"],
       }
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -3186,8 +3073,6 @@ export class LotteryService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -3200,10 +3085,6 @@ export class LotteryService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -3215,10 +3096,6 @@ export class LotteryService {
       let url = basePath + "/lottery/expireLotteries"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -3239,8 +3116,6 @@ export class LotteryService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -3259,8 +3134,6 @@ export class LotteryService {
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -3294,8 +3167,6 @@ export class PropertiesService {
         search: params["search"],
         filter: params["filter"],
       }
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -3359,6 +3230,10 @@ export class PropertiesService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
       let data = params.body
 
       configs.data = data
@@ -3381,8 +3256,6 @@ export class PropertiesService {
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -3431,8 +3304,6 @@ export class AgencyService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { page: params["page"], limit: params["limit"], filter: params["filter"] }
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -3496,6 +3367,10 @@ export class AgencyService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
       let data = params.body
 
       configs.data = data
@@ -3519,18 +3394,18 @@ export class AgencyService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
 }
 
+/** SuccessDTO */
 export interface SuccessDTO {
   /**  */
   success: boolean
 }
 
+/** ListingFilterParams */
 export interface ListingFilterParams {
   /**  */
   $comparison: EnumListingFilterParamsComparison
@@ -3614,6 +3489,7 @@ export interface ListingFilterParams {
   accessibilityPriorityTypes?: UnitAccessibilityPriorityTypeEnum[]
 }
 
+/** ListingsQueryBody */
 export interface ListingsQueryBody {
   /**  */
   page?: number
@@ -3637,6 +3513,7 @@ export interface ListingsQueryBody {
   search?: string
 }
 
+/** ListingsQueryParams */
 export interface ListingsQueryParams {
   /**  */
   page?: number
@@ -3660,16 +3537,19 @@ export interface ListingsQueryParams {
   search?: string
 }
 
+/** ListingFilterKeyDTO */
 export interface ListingFilterKeyDTO {
   /**  */
   value?: ListingFilterKeys
 }
 
+/** ListingsRetrieveParams */
 export interface ListingsRetrieveParams {
   /**  */
   view?: ListingViews
 }
 
+/** PaginationAllowsAllQueryParams */
 export interface PaginationAllowsAllQueryParams {
   /**  */
   page?: number
@@ -3678,6 +3558,7 @@ export interface PaginationAllowsAllQueryParams {
   limit?: number | "all"
 }
 
+/** IdDTO */
 export interface IdDTO {
   /**  */
   id: string
@@ -3689,6 +3570,7 @@ export interface IdDTO {
   ordinal?: number
 }
 
+/** ListingParkingType */
 export interface ListingParkingType {
   /**  */
   id: string
@@ -3712,6 +3594,7 @@ export interface ListingParkingType {
   carport?: boolean
 }
 
+/** ListingDocuments */
 export interface ListingDocuments {
   /**  */
   socialSecurityCard?: boolean
@@ -3741,6 +3624,7 @@ export interface ListingDocuments {
   proofOfCustody?: boolean
 }
 
+/** MultiselectLink */
 export interface MultiselectLink {
   /**  */
   title: string
@@ -3749,6 +3633,7 @@ export interface MultiselectLink {
   url: string
 }
 
+/** MultiselectOption */
 export interface MultiselectOption {
   /**  */
   id: string
@@ -3820,6 +3705,7 @@ export interface MultiselectOption {
   validationMethod?: ValidationMethodEnum
 }
 
+/** MultiselectQuestion */
 export interface MultiselectQuestion {
   /**  */
   id: string
@@ -3882,6 +3768,7 @@ export interface MultiselectQuestion {
   untranslatedOptOutText?: string
 }
 
+/** ListingMultiselectQuestion */
 export interface ListingMultiselectQuestion {
   /**  */
   multiselectQuestions: MultiselectQuestion
@@ -3890,6 +3777,7 @@ export interface ListingMultiselectQuestion {
   ordinal?: number
 }
 
+/** Asset */
 export interface Asset {
   /**  */
   id: string
@@ -3907,6 +3795,7 @@ export interface Asset {
   label: string
 }
 
+/** PaperApplication */
 export interface PaperApplication {
   /**  */
   id: string
@@ -3924,6 +3813,7 @@ export interface PaperApplication {
   assets: Asset
 }
 
+/** ApplicationMethod */
 export interface ApplicationMethod {
   /**  */
   id: string
@@ -3953,6 +3843,7 @@ export interface ApplicationMethod {
   paperApplications?: PaperApplication[]
 }
 
+/** ListingEvent */
 export interface ListingEvent {
   /**  */
   id: string
@@ -3988,6 +3879,7 @@ export interface ListingEvent {
   assets?: Asset
 }
 
+/** Address */
 export interface Address {
   /**  */
   id: string
@@ -4020,6 +3912,7 @@ export interface Address {
   longitude?: number
 }
 
+/** ListingImage */
 export interface ListingImage {
   /**  */
   assets: Asset
@@ -4031,6 +3924,7 @@ export interface ListingImage {
   description?: string
 }
 
+/** ListingFeatures */
 export interface ListingFeatures {
   /**  */
   id: string
@@ -4180,6 +4074,7 @@ export interface ListingFeatures {
   wideDoorways?: boolean
 }
 
+/** ListingUtilities */
 export interface ListingUtilities {
   /**  */
   id: string
@@ -4209,6 +4104,7 @@ export interface ListingUtilities {
   internet?: boolean
 }
 
+/** AmiChartItem */
 export interface AmiChartItem {
   /**  */
   percentOfAmi: number
@@ -4220,6 +4116,7 @@ export interface AmiChartItem {
   income: number
 }
 
+/** AmiChart */
 export interface AmiChart {
   /**  */
   id: string
@@ -4240,6 +4137,7 @@ export interface AmiChart {
   jurisdictions: IdDTO
 }
 
+/** UnitType */
 export interface UnitType {
   /**  */
   id: string
@@ -4257,6 +4155,7 @@ export interface UnitType {
   numBedrooms: number
 }
 
+/** UnitRentType */
 export interface UnitRentType {
   /**  */
   id: string
@@ -4271,6 +4170,7 @@ export interface UnitRentType {
   name: UnitRentTypeEnum
 }
 
+/** UnitAmiChartOverride */
 export interface UnitAmiChartOverride {
   /**  */
   id: string
@@ -4285,6 +4185,7 @@ export interface UnitAmiChartOverride {
   items: AmiChartItem[]
 }
 
+/** Unit */
 export interface Unit {
   /**  */
   id: string
@@ -4353,6 +4254,7 @@ export interface Unit {
   unitAmiChartOverrides?: UnitAmiChartOverride
 }
 
+/** UnitGroupAmiLevel */
 export interface UnitGroupAmiLevel {
   /**  */
   id: string
@@ -4379,6 +4281,7 @@ export interface UnitGroupAmiLevel {
   amiChart?: AmiChart
 }
 
+/** UnitGroup */
 export interface UnitGroup {
   /**  */
   id: string
@@ -4444,6 +4347,7 @@ export interface UnitGroup {
   unitTypes?: UnitType[]
 }
 
+/** MinMaxCurrency */
 export interface MinMaxCurrency {
   /**  */
   min: string
@@ -4452,6 +4356,7 @@ export interface MinMaxCurrency {
   max: string
 }
 
+/** MinMax */
 export interface MinMax {
   /**  */
   min: number
@@ -4460,6 +4365,7 @@ export interface MinMax {
   max: number
 }
 
+/** UnitSummary */
 export interface UnitSummary {
   /**  */
   unitTypes: UnitType
@@ -4486,6 +4392,7 @@ export interface UnitSummary {
   floorRange?: MinMax
 }
 
+/** UnitSummaryByAMI */
 export interface UnitSummaryByAMI {
   /**  */
   percent: string
@@ -4494,6 +4401,7 @@ export interface UnitSummaryByAMI {
   byUnitType: UnitSummary[]
 }
 
+/** HMI */
 export interface HMI {
   /**  */
   columns: object
@@ -4502,6 +4410,7 @@ export interface HMI {
   rows: object[]
 }
 
+/** UnitsSummarized */
 export interface UnitsSummarized {
   /**  */
   unitTypes: UnitType[]
@@ -4525,6 +4434,7 @@ export interface UnitsSummarized {
   hmi: HMI
 }
 
+/** UnitGroupSummary */
 export interface UnitGroupSummary {
   /**  */
   unitTypes?: UnitType[]
@@ -4554,6 +4464,7 @@ export interface UnitGroupSummary {
   bathroomRange?: MinMax
 }
 
+/** HMIColumns */
 export interface HMIColumns {
   /**  */
   "20"?: number
@@ -4607,6 +4518,7 @@ export interface HMIColumns {
   householdSize: string
 }
 
+/** HouseholdMaxIncomeSummary */
 export interface HouseholdMaxIncomeSummary {
   /**  */
   columns: HMIColumns
@@ -4615,6 +4527,7 @@ export interface HouseholdMaxIncomeSummary {
   rows: HMIColumns[]
 }
 
+/** UnitGroupsSummarized */
 export interface UnitGroupsSummarized {
   /**  */
   unitGroupSummary: UnitGroupSummary[]
@@ -4623,6 +4536,7 @@ export interface UnitGroupsSummarized {
   householdMaxIncomeSummary: HouseholdMaxIncomeSummary
 }
 
+/** UnitsSummary */
 export interface UnitsSummary {
   /**  */
   id: string
@@ -4688,6 +4602,7 @@ export interface UnitsSummary {
   monthlyRent?: number
 }
 
+/** ApplicationLotteryTotal */
 export interface ApplicationLotteryTotal {
   /**  */
   listingId: string
@@ -4699,6 +4614,7 @@ export interface ApplicationLotteryTotal {
   total: number
 }
 
+/** ListingNeighborhoodAmenities */
 export interface ListingNeighborhoodAmenities {
   /**  */
   id: string
@@ -4740,6 +4656,7 @@ export interface ListingNeighborhoodAmenities {
   busStops?: string
 }
 
+/** Property */
 export interface Property {
   /**  */
   id: string
@@ -4766,6 +4683,7 @@ export interface Property {
   jurisdictions?: IdDTO
 }
 
+/** Listing */
 export interface Listing {
   /**  */
   id: string
@@ -5167,6 +5085,7 @@ export interface Listing {
   property?: Property
 }
 
+/** PaginationMeta */
 export interface PaginationMeta {
   /**  */
   currentPage: number
@@ -5184,6 +5103,7 @@ export interface PaginationMeta {
   totalPages: number
 }
 
+/** PaginatedListing */
 export interface PaginatedListing {
   /**  */
   items: Listing[]
@@ -5192,6 +5112,7 @@ export interface PaginatedListing {
   meta: PaginationMeta
 }
 
+/** ListingMapMarker */
 export interface ListingMapMarker {
   /**  */
   id: string
@@ -5203,6 +5124,7 @@ export interface ListingMapMarker {
   lng: number
 }
 
+/** AssetCreate */
 export interface AssetCreate {
   /**  */
   fileId: string
@@ -5214,6 +5136,7 @@ export interface AssetCreate {
   id?: string
 }
 
+/** UnitsSummaryCreate */
 export interface UnitsSummaryCreate {
   /**  */
   unitTypes: IdDTO
@@ -5276,6 +5199,7 @@ export interface UnitsSummaryCreate {
   monthlyRent?: number
 }
 
+/** ListingImageCreate */
 export interface ListingImageCreate {
   /**  */
   ordinal?: number
@@ -5287,6 +5211,7 @@ export interface ListingImageCreate {
   description?: string
 }
 
+/** ListingFeaturesCreate */
 export interface ListingFeaturesCreate {
   /**  */
   accessibleHeightToilet?: boolean
@@ -5433,6 +5358,7 @@ export interface ListingFeaturesCreate {
   wideDoorways?: boolean
 }
 
+/** ListingParkingTypeCreate */
 export interface ListingParkingTypeCreate {
   /**  */
   onStreet?: boolean
@@ -5447,11 +5373,13 @@ export interface ListingParkingTypeCreate {
   carport?: boolean
 }
 
+/** UnitAmiChartOverrideCreate */
 export interface UnitAmiChartOverrideCreate {
   /**  */
   items: AmiChartItem[]
 }
 
+/** UnitCreate */
 export interface UnitCreate {
   /**  */
   amiPercentage?: string
@@ -5511,6 +5439,7 @@ export interface UnitCreate {
   unitAmiChartOverrides?: UnitAmiChartOverrideCreate
 }
 
+/** UnitGroupAmiLevelCreate */
 export interface UnitGroupAmiLevelCreate {
   /**  */
   amiPercentage?: number
@@ -5528,6 +5457,7 @@ export interface UnitGroupAmiLevelCreate {
   amiChart?: IdDTO
 }
 
+/** UnitGroupCreate */
 export interface UnitGroupCreate {
   /**  */
   maxOccupancy?: number
@@ -5584,6 +5514,7 @@ export interface UnitGroupCreate {
   unitGroupAmiLevels?: UnitGroupAmiLevelCreate[]
 }
 
+/** PaperApplicationCreate */
 export interface PaperApplicationCreate {
   /**  */
   language: LanguagesEnum
@@ -5592,6 +5523,7 @@ export interface PaperApplicationCreate {
   assets?: AssetCreate
 }
 
+/** ApplicationMethodCreate */
 export interface ApplicationMethodCreate {
   /**  */
   type: ApplicationMethodsTypeEnum
@@ -5612,6 +5544,7 @@ export interface ApplicationMethodCreate {
   paperApplications?: PaperApplicationCreate[]
 }
 
+/** AddressCreate */
 export interface AddressCreate {
   /**  */
   placeName?: string
@@ -5641,6 +5574,7 @@ export interface AddressCreate {
   longitude?: number
 }
 
+/** ListingEventCreate */
 export interface ListingEventCreate {
   /**  */
   type: ListingEventsTypeEnum
@@ -5667,6 +5601,7 @@ export interface ListingEventCreate {
   assets?: AssetCreate
 }
 
+/** ListingUtilitiesCreate */
 export interface ListingUtilitiesCreate {
   /**  */
   water?: boolean
@@ -5693,6 +5628,7 @@ export interface ListingUtilitiesCreate {
   internet?: boolean
 }
 
+/** ListingNeighborhoodAmenitiesCreate */
 export interface ListingNeighborhoodAmenitiesCreate {
   /**  */
   groceryStores?: string
@@ -5731,6 +5667,7 @@ export interface ListingNeighborhoodAmenitiesCreate {
   busStops?: string
 }
 
+/** ListingCreate */
 export interface ListingCreate {
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -6093,6 +6030,7 @@ export interface ListingCreate {
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenitiesCreate
 }
 
+/** ListingDuplicate */
 export interface ListingDuplicate {
   /**  */
   name: string
@@ -6104,6 +6042,7 @@ export interface ListingDuplicate {
   storedListing: IdDTO
 }
 
+/** UnitAmiChartOverrideUpdate */
 export interface UnitAmiChartOverrideUpdate {
   /**  */
   items: AmiChartItem[]
@@ -6112,6 +6051,7 @@ export interface UnitAmiChartOverrideUpdate {
   id?: string
 }
 
+/** UnitUpdate */
 export interface UnitUpdate {
   /**  */
   amiPercentage?: string
@@ -6174,6 +6114,7 @@ export interface UnitUpdate {
   unitAmiChartOverrides?: UnitAmiChartOverrideUpdate
 }
 
+/** UnitGroupAmiLevelUpdate */
 export interface UnitGroupAmiLevelUpdate {
   /**  */
   amiPercentage?: number
@@ -6194,6 +6135,7 @@ export interface UnitGroupAmiLevelUpdate {
   amiChart?: IdDTO
 }
 
+/** UnitGroupUpdate */
 export interface UnitGroupUpdate {
   /**  */
   maxOccupancy?: number
@@ -6253,6 +6195,7 @@ export interface UnitGroupUpdate {
   unitGroupAmiLevels?: UnitGroupAmiLevelUpdate[]
 }
 
+/** PaperApplicationUpdate */
 export interface PaperApplicationUpdate {
   /**  */
   language: LanguagesEnum
@@ -6264,6 +6207,7 @@ export interface PaperApplicationUpdate {
   assets?: AssetCreate
 }
 
+/** ApplicationMethodUpdate */
 export interface ApplicationMethodUpdate {
   /**  */
   type: ApplicationMethodsTypeEnum
@@ -6287,6 +6231,7 @@ export interface ApplicationMethodUpdate {
   paperApplications?: PaperApplicationUpdate[]
 }
 
+/** AddressUpdate */
 export interface AddressUpdate {
   /**  */
   placeName?: string
@@ -6319,6 +6264,7 @@ export interface AddressUpdate {
   id?: string
 }
 
+/** ListingEventUpdate */
 export interface ListingEventUpdate {
   /**  */
   type: ListingEventsTypeEnum
@@ -6348,6 +6294,7 @@ export interface ListingEventUpdate {
   id?: string
 }
 
+/** ListingFeaturesUpdate */
 export interface ListingFeaturesUpdate {
   /**  */
   accessibleHeightToilet?: boolean
@@ -6497,6 +6444,7 @@ export interface ListingFeaturesUpdate {
   id?: string
 }
 
+/** ListingUtilitiesUpdate */
 export interface ListingUtilitiesUpdate {
   /**  */
   water?: boolean
@@ -6526,6 +6474,7 @@ export interface ListingUtilitiesUpdate {
   id?: string
 }
 
+/** ListingParkingTypeUpdate */
 export interface ListingParkingTypeUpdate {
   /**  */
   onStreet?: boolean
@@ -6543,6 +6492,7 @@ export interface ListingParkingTypeUpdate {
   id?: string
 }
 
+/** ListingNeighborhoodAmenitiesUpdate */
 export interface ListingNeighborhoodAmenitiesUpdate {
   /**  */
   groceryStores?: string
@@ -6584,6 +6534,7 @@ export interface ListingNeighborhoodAmenitiesUpdate {
   id?: string
 }
 
+/** ListingUpdate */
 export interface ListingUpdate {
   /**  */
   id: string
@@ -6949,6 +6900,7 @@ export interface ListingUpdate {
   property?: IdDTO
 }
 
+/** Accessibility */
 export interface Accessibility {
   /**  */
   id: string
@@ -6969,6 +6921,7 @@ export interface Accessibility {
   other?: boolean
 }
 
+/** Demographic */
 export interface Demographic {
   /**  */
   id: string
@@ -6992,6 +6945,7 @@ export interface Demographic {
   spokenLanguage?: string
 }
 
+/** Applicant */
 export interface Applicant {
   /**  */
   id: string
@@ -7042,6 +6996,7 @@ export interface Applicant {
   applicantAddress: Address
 }
 
+/** AlternateContact */
 export interface AlternateContact {
   /**  */
   id: string
@@ -7071,6 +7026,7 @@ export interface AlternateContact {
   address: Address
 }
 
+/** HouseholdMember */
 export interface HouseholdMember {
   /**  */
   id: string
@@ -7115,6 +7071,7 @@ export interface HouseholdMember {
   householdMemberAddress: Address
 }
 
+/** ApplicationSelectionOption */
 export interface ApplicationSelectionOption {
   /**  */
   id: string
@@ -7138,6 +7095,7 @@ export interface ApplicationSelectionOption {
   multiselectOption: IdDTO
 }
 
+/** ApplicationSelection */
 export interface ApplicationSelection {
   /**  */
   id: string
@@ -7155,6 +7113,7 @@ export interface ApplicationSelection {
   selections: ApplicationSelectionOption[]
 }
 
+/** ApplicationMultiselectQuestionOption */
 export interface ApplicationMultiselectQuestionOption {
   /**  */
   key: string
@@ -7169,6 +7128,7 @@ export interface ApplicationMultiselectQuestionOption {
   extraData?: AllExtraDataTypes[]
 }
 
+/** ApplicationMultiselectQuestion */
 export interface ApplicationMultiselectQuestion {
   /**  */
   multiselectQuestionId: string
@@ -7183,6 +7143,7 @@ export interface ApplicationMultiselectQuestion {
   options: ApplicationMultiselectQuestionOption[]
 }
 
+/** ApplicationLotteryPosition */
 export interface ApplicationLotteryPosition {
   /**  */
   listingId: string
@@ -7197,6 +7158,7 @@ export interface ApplicationLotteryPosition {
   ordinal: number
 }
 
+/** Application */
 export interface Application {
   /**  */
   id: string
@@ -7331,6 +7293,7 @@ export interface Application {
   isNewest?: boolean
 }
 
+/** ApplicationFlaggedSet */
 export interface ApplicationFlaggedSet {
   /**  */
   id: string
@@ -7369,6 +7332,7 @@ export interface ApplicationFlaggedSet {
   applications: Application[]
 }
 
+/** ApplicationFlaggedSetPaginationMeta */
 export interface ApplicationFlaggedSetPaginationMeta {
   /**  */
   currentPage: number
@@ -7389,6 +7353,7 @@ export interface ApplicationFlaggedSetPaginationMeta {
   totalFlagged: number
 }
 
+/** PaginatedAfs */
 export interface PaginatedAfs {
   /**  */
   items: ApplicationFlaggedSet[]
@@ -7397,6 +7362,7 @@ export interface PaginatedAfs {
   meta: ApplicationFlaggedSetPaginationMeta
 }
 
+/** AfsMeta */
 export interface AfsMeta {
   /**  */
   totalCount?: number
@@ -7414,6 +7380,7 @@ export interface AfsMeta {
   totalEmailPendingCount?: number
 }
 
+/** AfsResolve */
 export interface AfsResolve {
   /**  */
   afsId: string
@@ -7425,6 +7392,7 @@ export interface AfsResolve {
   applications: IdDTO[]
 }
 
+/** MultiselectOptionCreate */
 export interface MultiselectOptionCreate {
   /**  */
   collectAddress?: boolean
@@ -7481,6 +7449,7 @@ export interface MultiselectOptionCreate {
   validationMethod?: ValidationMethodEnum
 }
 
+/** MultiselectQuestionCreate */
 export interface MultiselectQuestionCreate {
   /**  */
   applicationSection: MultiselectQuestionsApplicationSectionEnum
@@ -7528,6 +7497,7 @@ export interface MultiselectQuestionCreate {
   options?: MultiselectOptionCreate[]
 }
 
+/** MultiselectOptionUpdate */
 export interface MultiselectOptionUpdate {
   /**  */
   collectAddress?: boolean
@@ -7587,6 +7557,7 @@ export interface MultiselectOptionUpdate {
   id?: string
 }
 
+/** MultiselectQuestionUpdate */
 export interface MultiselectQuestionUpdate {
   /**  */
   id: string
@@ -7637,6 +7608,7 @@ export interface MultiselectQuestionUpdate {
   options?: MultiselectOptionUpdate[]
 }
 
+/** MultiselectQuestionQueryParams */
 export interface MultiselectQuestionQueryParams {
   /**  */
   page?: number
@@ -7660,6 +7632,7 @@ export interface MultiselectQuestionQueryParams {
   view?: MultiselectQuestionViews
 }
 
+/** MultiselectQuestionFilterParams */
 export interface MultiselectQuestionFilterParams {
   /**  */
   $comparison: EnumMultiselectQuestionFilterParamsComparison
@@ -7674,6 +7647,7 @@ export interface MultiselectQuestionFilterParams {
   status?: MultiselectQuestionsStatusEnum
 }
 
+/** PaginatedMultiselectQuestion */
 export interface PaginatedMultiselectQuestion {
   /**  */
   items: MultiselectQuestion[]
@@ -7682,11 +7656,13 @@ export interface PaginatedMultiselectQuestion {
   meta: PaginationMeta
 }
 
+/** AmiChartQueryParams */
 export interface AmiChartQueryParams {
   /**  */
   jurisdictionId?: string
 }
 
+/** AmiChartCreate */
 export interface AmiChartCreate {
   /**  */
   items: AmiChartItem[]
@@ -7698,6 +7674,7 @@ export interface AmiChartCreate {
   jurisdictions: IdDTO
 }
 
+/** AmiChartUpdate */
 export interface AmiChartUpdate {
   /**  */
   id: string
@@ -7709,11 +7686,13 @@ export interface AmiChartUpdate {
   name: string
 }
 
+/** ReservedCommunityTypeQueryParams */
 export interface ReservedCommunityTypeQueryParams {
   /**  */
   jurisdictionId?: string
 }
 
+/** ReservedCommunityType */
 export interface ReservedCommunityType {
   /**  */
   id: string
@@ -7734,6 +7713,7 @@ export interface ReservedCommunityType {
   jurisdictions: IdDTO
 }
 
+/** ReservedCommunityTypeCreate */
 export interface ReservedCommunityTypeCreate {
   /**  */
   name: string
@@ -7745,6 +7725,7 @@ export interface ReservedCommunityTypeCreate {
   jurisdictions: IdDTO
 }
 
+/** ReservedCommunityTypeUpdate */
 export interface ReservedCommunityTypeUpdate {
   /**  */
   id: string
@@ -7756,6 +7737,7 @@ export interface ReservedCommunityTypeUpdate {
   description?: string
 }
 
+/** UnitTypeCreate */
 export interface UnitTypeCreate {
   /**  */
   name: UnitTypeEnum
@@ -7764,6 +7746,7 @@ export interface UnitTypeCreate {
   numBedrooms: number
 }
 
+/** UnitTypeUpdate */
 export interface UnitTypeUpdate {
   /**  */
   id: string
@@ -7775,11 +7758,13 @@ export interface UnitTypeUpdate {
   numBedrooms: number
 }
 
+/** UnitRentTypeCreate */
 export interface UnitRentTypeCreate {
   /**  */
   name: UnitRentTypeEnum
 }
 
+/** UnitRentTypeUpdate */
 export interface UnitRentTypeUpdate {
   /**  */
   id: string
@@ -7788,11 +7773,13 @@ export interface UnitRentTypeUpdate {
   name: UnitRentTypeEnum
 }
 
+/** ListingFeatureField */
 export interface ListingFeatureField {
   /**  */
   id: string
 }
 
+/** ListingFeatureCategory */
 export interface ListingFeatureCategory {
   /**  */
   id: string
@@ -7804,6 +7791,7 @@ export interface ListingFeatureCategory {
   required?: boolean
 }
 
+/** ListingFeaturesConfiguration */
 export interface ListingFeaturesConfiguration {
   /** Categorized features (use this or the flat list, not both) */
   categories?: ListingFeatureCategory[]
@@ -7812,6 +7800,7 @@ export interface ListingFeaturesConfiguration {
   fields?: ListingFeatureField[]
 }
 
+/** RaceEthnicitySubOption */
 export interface RaceEthnicitySubOption {
   /**  */
   id: string
@@ -7820,6 +7809,7 @@ export interface RaceEthnicitySubOption {
   allowOtherText?: boolean
 }
 
+/** RaceEthnicityOption */
 export interface RaceEthnicityOption {
   /**  */
   id: string
@@ -7831,11 +7821,13 @@ export interface RaceEthnicityOption {
   allowOtherText?: boolean
 }
 
+/** RaceEthnicityConfiguration */
 export interface RaceEthnicityConfiguration {
   /** List of race\/ethnicity options available for this jurisdiction */
   options: RaceEthnicityOption[]
 }
 
+/** JurisdictionCreate */
 export interface JurisdictionCreate {
   /**  */
   name: string
@@ -7919,6 +7911,7 @@ export interface JurisdictionCreate {
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
 }
 
+/** JurisdictionUpdate */
 export interface JurisdictionUpdate {
   /**  */
   id: string
@@ -8005,6 +7998,7 @@ export interface JurisdictionUpdate {
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
 }
 
+/** FeatureFlag */
 export interface FeatureFlag {
   /**  */
   id: string
@@ -8028,6 +8022,7 @@ export interface FeatureFlag {
   jurisdictions: IdDTO[]
 }
 
+/** Jurisdiction */
 export interface Jurisdiction {
   /**  */
   id: string
@@ -8126,6 +8121,7 @@ export interface Jurisdiction {
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
 }
 
+/** AddressInput */
 export interface AddressInput {
   /**  */
   type: InputType
@@ -8137,6 +8133,7 @@ export interface AddressInput {
   value: AddressCreate
 }
 
+/** BooleanInput */
 export interface BooleanInput {
   /**  */
   type: InputType
@@ -8148,6 +8145,7 @@ export interface BooleanInput {
   value: boolean
 }
 
+/** TextInput */
 export interface TextInput {
   /**  */
   type: InputType
@@ -8159,6 +8157,7 @@ export interface TextInput {
   value: string
 }
 
+/** PaginatedApplication */
 export interface PaginatedApplication {
   /**  */
   items: Application[]
@@ -8167,6 +8166,7 @@ export interface PaginatedApplication {
   meta: PaginationMeta
 }
 
+/** PublicAppsFiltered */
 export interface PublicAppsFiltered {
   /**  */
   id: string
@@ -8301,6 +8301,7 @@ export interface PublicAppsFiltered {
   listings: Listing
 }
 
+/** PublicAppsCount */
 export interface PublicAppsCount {
   /**  */
   total: number
@@ -8315,6 +8316,7 @@ export interface PublicAppsCount {
   open: number
 }
 
+/** PublicAppsViewResponse */
 export interface PublicAppsViewResponse {
   /**  */
   items: PublicAppsFiltered[]
@@ -8326,6 +8328,7 @@ export interface PublicAppsViewResponse {
   applicationsCount: PublicAppsCount
 }
 
+/** ApplicationSelectionOptionCreate */
 export interface ApplicationSelectionOptionCreate {
   /**  */
   addressHolderName?: string
@@ -8346,6 +8349,7 @@ export interface ApplicationSelectionOptionCreate {
   addressHolderAddress?: AddressCreate
 }
 
+/** ApplicationSelectionCreate */
 export interface ApplicationSelectionCreate {
   /**  */
   hasOptedOut?: boolean
@@ -8357,6 +8361,7 @@ export interface ApplicationSelectionCreate {
   selections: ApplicationSelectionOptionCreate[]
 }
 
+/** AccessibilityCreate */
 export interface AccessibilityCreate {
   /**  */
   mobility?: boolean
@@ -8374,6 +8379,7 @@ export interface AccessibilityCreate {
   other?: boolean
 }
 
+/** AlternateContactCreate */
 export interface AlternateContactCreate {
   /**  */
   type?: AlternateContactRelationship
@@ -8400,6 +8406,7 @@ export interface AlternateContactCreate {
   address: AddressCreate
 }
 
+/** ApplicantCreate */
 export interface ApplicantCreate {
   /**  */
   firstName?: string
@@ -8447,6 +8454,7 @@ export interface ApplicantCreate {
   applicantWorkAddress: AddressCreate
 }
 
+/** DemographicCreate */
 export interface DemographicCreate {
   /**  */
   ethnicity?: string
@@ -8467,6 +8475,7 @@ export interface DemographicCreate {
   spokenLanguage?: string
 }
 
+/** HouseholdMemberCreate */
 export interface HouseholdMemberCreate {
   /**  */
   orderId?: number
@@ -8508,6 +8517,7 @@ export interface HouseholdMemberCreate {
   householdMemberWorkAddress?: AddressCreate
 }
 
+/** ApplicationCreate */
 export interface ApplicationCreate {
   /**  */
   appUrl?: string
@@ -8618,6 +8628,7 @@ export interface ApplicationCreate {
   householdMember: HouseholdMemberCreate[]
 }
 
+/** AccessibilityUpdate */
 export interface AccessibilityUpdate {
   /**  */
   mobility?: boolean
@@ -8638,6 +8649,7 @@ export interface AccessibilityUpdate {
   id?: string
 }
 
+/** AlternateContactUpdate */
 export interface AlternateContactUpdate {
   /**  */
   type?: AlternateContactRelationship
@@ -8667,6 +8679,7 @@ export interface AlternateContactUpdate {
   address: AddressUpdate
 }
 
+/** ApplicantUpdate */
 export interface ApplicantUpdate {
   /**  */
   firstName?: string
@@ -8717,6 +8730,7 @@ export interface ApplicantUpdate {
   applicantWorkAddress: AddressUpdate
 }
 
+/** ApplicationSelectionOptionUpdate */
 export interface ApplicationSelectionOptionUpdate {
   /**  */
   addressHolderName?: string
@@ -8740,6 +8754,7 @@ export interface ApplicationSelectionOptionUpdate {
   applicationSelection?: IdDTO
 }
 
+/** ApplicationSelectionUpdate */
 export interface ApplicationSelectionUpdate {
   /**  */
   hasOptedOut?: boolean
@@ -8754,6 +8769,7 @@ export interface ApplicationSelectionUpdate {
   selections: ApplicationSelectionOptionUpdate[]
 }
 
+/** DemographicUpdate */
 export interface DemographicUpdate {
   /**  */
   ethnicity?: string
@@ -8777,6 +8793,7 @@ export interface DemographicUpdate {
   id?: string
 }
 
+/** HouseholdMemberUpdate */
 export interface HouseholdMemberUpdate {
   /**  */
   orderId?: number
@@ -8821,6 +8838,7 @@ export interface HouseholdMemberUpdate {
   householdMemberWorkAddress?: AddressUpdate
 }
 
+/** ApplicationUpdate */
 export interface ApplicationUpdate {
   /**  */
   id: string
@@ -8934,6 +8952,7 @@ export interface ApplicationUpdate {
   preferredUnitTypes: IdDTO[]
 }
 
+/** ApplicationUpdateEmail */
 export interface ApplicationUpdateEmail {
   /**  */
   previousStatus?: ApplicationStatusEnum
@@ -8945,16 +8964,19 @@ export interface ApplicationUpdateEmail {
   previousConventionalUnitWaitlistNumber?: number
 }
 
+/** CreatePresignedUploadMetadata */
 export interface CreatePresignedUploadMetadata {
   /**  */
   parametersToSign: object
 }
 
+/** CreatePresignedUploadMetadataResponse */
 export interface CreatePresignedUploadMetadataResponse {
   /**  */
   signature: string
 }
 
+/** CreateS3UploadUrl */
 export interface CreateS3UploadUrl {
   /**  */
   fileId: string
@@ -8966,6 +8988,7 @@ export interface CreateS3UploadUrl {
   publicUrl: string
 }
 
+/** CreateS3UploadMetadata */
 export interface CreateS3UploadMetadata {
   /**  */
   contentType: string
@@ -8974,6 +8997,7 @@ export interface CreateS3UploadMetadata {
   contentDisposition: string
 }
 
+/** EmailAndAppUrl */
 export interface EmailAndAppUrl {
   /**  */
   email: string
@@ -8982,6 +9006,7 @@ export interface EmailAndAppUrl {
   appUrl?: string
 }
 
+/** UserNotificationPreferences */
 export interface UserNotificationPreferences {
   /**  */
   lottery?: boolean
@@ -9017,6 +9042,7 @@ export interface UserNotificationPreferences {
   regions: string[]
 }
 
+/** UserRole */
 export interface UserRole {
   /**  */
   isAdmin?: boolean
@@ -9037,6 +9063,7 @@ export interface UserRole {
   isSupportAdmin?: boolean
 }
 
+/** PublicUserCreate */
 export interface PublicUserCreate {
   /**  */
   confirmedAt?: Date
@@ -9144,6 +9171,7 @@ export interface PublicUserCreate {
   emailConfirmation?: string
 }
 
+/** PartnerUserCreate */
 export interface PartnerUserCreate {
   /**  */
   confirmedAt?: Date
@@ -9242,6 +9270,7 @@ export interface PartnerUserCreate {
   jurisdictions: IdDTO[]
 }
 
+/** AdvocateUserCreate */
 export interface AdvocateUserCreate {
   /**  */
   confirmedAt?: Date
@@ -9316,6 +9345,7 @@ export interface AdvocateUserCreate {
   jurisdictions?: IdDTO[]
 }
 
+/** PublicUserUpdate */
 export interface PublicUserUpdate {
   /**  */
   id: string
@@ -9426,6 +9456,7 @@ export interface PublicUserUpdate {
   jurisdictions?: IdDTO[]
 }
 
+/** PartnerUserUpdate */
 export interface PartnerUserUpdate {
   /**  */
   id: string
@@ -9536,6 +9567,7 @@ export interface PartnerUserUpdate {
   jurisdictions?: IdDTO[]
 }
 
+/** AdvocateUserUpdate */
 export interface AdvocateUserUpdate {
   /**  */
   id: string
@@ -9643,6 +9675,7 @@ export interface AdvocateUserUpdate {
   jurisdictions?: IdDTO[]
 }
 
+/** AdvocateUserAccept */
 export interface AdvocateUserAccept {
   /**  */
   advocateId: IdDTO
@@ -9651,6 +9684,7 @@ export interface AdvocateUserAccept {
   isAccepted: boolean
 }
 
+/** User */
 export interface User {
   /**  */
   id: string
@@ -9761,6 +9795,7 @@ export interface User {
   isAdvocate?: boolean
 }
 
+/** UserFilterParams */
 export interface UserFilterParams {
   /**  */
   isPortalUser?: boolean
@@ -9769,6 +9804,7 @@ export interface UserFilterParams {
   isAdvocateUser?: boolean
 }
 
+/** PaginatedUser */
 export interface PaginatedUser {
   /**  */
   items: User[]
@@ -9777,6 +9813,7 @@ export interface PaginatedUser {
   meta: PaginationMeta
 }
 
+/** UserDeleteDTO */
 export interface UserDeleteDTO {
   /**  */
   id: string
@@ -9785,16 +9822,19 @@ export interface UserDeleteDTO {
   shouldRemoveApplication?: boolean
 }
 
+/** RequestSingleUseCode */
 export interface RequestSingleUseCode {
   /**  */
   email: string
 }
 
+/** ConfirmationRequest */
 export interface ConfirmationRequest {
   /**  */
   token: string
 }
 
+/** UserFavoriteListing */
 export interface UserFavoriteListing {
   /**  */
   id: string
@@ -9803,6 +9843,7 @@ export interface UserFavoriteListing {
   action: ModificationEnum
 }
 
+/** Login */
 export interface Login {
   /**  */
   email: string
@@ -9820,6 +9861,7 @@ export interface Login {
   reCaptchaToken?: string
 }
 
+/** LoginViaSingleUseCode */
 export interface LoginViaSingleUseCode {
   /**  */
   email: string
@@ -9828,6 +9870,7 @@ export interface LoginViaSingleUseCode {
   singleUseCode: string
 }
 
+/** RequestMfaCode */
 export interface RequestMfaCode {
   /**  */
   email: string
@@ -9842,6 +9885,7 @@ export interface RequestMfaCode {
   phoneNumber?: string
 }
 
+/** RequestMfaCodeResponse */
 export interface RequestMfaCodeResponse {
   /**  */
   phoneNumber?: string
@@ -9853,6 +9897,7 @@ export interface RequestMfaCodeResponse {
   phoneNumberVerified?: boolean
 }
 
+/** UpdatePassword */
 export interface UpdatePassword {
   /**  */
   password: string
@@ -9864,6 +9909,7 @@ export interface UpdatePassword {
   token: string
 }
 
+/** Confirm */
 export interface Confirm {
   /**  */
   token: string
@@ -9872,6 +9918,7 @@ export interface Confirm {
   password?: string
 }
 
+/** MapLayer */
 export interface MapLayer {
   /**  */
   id: string
@@ -9883,11 +9930,13 @@ export interface MapLayer {
   jurisdictionId: string
 }
 
+/** BulkApplicationResendDTO */
 export interface BulkApplicationResendDTO {
   /**  */
   listingId: string
 }
 
+/** AmiChartImportDTO */
 export interface AmiChartImportDTO {
   /**  */
   values: string
@@ -9899,6 +9948,7 @@ export interface AmiChartImportDTO {
   jurisdictionId: string
 }
 
+/** AmiChartUpdateImportDTO */
 export interface AmiChartUpdateImportDTO {
   /**  */
   values: string
@@ -9907,6 +9957,7 @@ export interface AmiChartUpdateImportDTO {
   amiId: string
 }
 
+/** CommunityTypeDTO */
 export interface CommunityTypeDTO {
   /**  */
   id: string
@@ -9918,6 +9969,7 @@ export interface CommunityTypeDTO {
   description?: string
 }
 
+/** PaginationDTO */
 export interface PaginationDTO {
   /**  */
   page?: number
@@ -9926,6 +9978,7 @@ export interface PaginationDTO {
   pageSize?: number
 }
 
+/** FeatureFlagAssociate */
 export interface FeatureFlagAssociate {
   /**  */
   id: string
@@ -9937,6 +9990,7 @@ export interface FeatureFlagAssociate {
   remove: string[]
 }
 
+/** FeatureFlagCreate */
 export interface FeatureFlagCreate {
   /**  */
   name: FeatureFlagEnum
@@ -9948,6 +10002,7 @@ export interface FeatureFlagCreate {
   active: boolean
 }
 
+/** FeatureFlagUpdate */
 export interface FeatureFlagUpdate {
   /**  */
   id: string
@@ -9959,6 +10014,7 @@ export interface FeatureFlagUpdate {
   active: boolean
 }
 
+/** ApplicationCsvQueryParams */
 export interface ApplicationCsvQueryParams {
   /**  */
   id: string
@@ -9970,6 +10026,7 @@ export interface ApplicationCsvQueryParams {
   timeZone?: string
 }
 
+/** ListingLotteryStatus */
 export interface ListingLotteryStatus {
   /**  */
   id: string
@@ -9978,6 +10035,7 @@ export interface ListingLotteryStatus {
   lotteryStatus: LotteryStatusEnum
 }
 
+/** LotteryActivityLogItem */
 export interface LotteryActivityLogItem {
   /**  */
   status: string
@@ -9989,6 +10047,7 @@ export interface LotteryActivityLogItem {
   logDate: Date
 }
 
+/** PublicLotteryResult */
 export interface PublicLotteryResult {
   /**  */
   ordinal: number
@@ -9997,6 +10056,7 @@ export interface PublicLotteryResult {
   multiselectQuestionId?: string
 }
 
+/** PublicLotteryTotal */
 export interface PublicLotteryTotal {
   /**  */
   total: number
@@ -10005,6 +10065,7 @@ export interface PublicLotteryTotal {
   multiselectQuestionId?: string
 }
 
+/** PropertyCreate */
 export interface PropertyCreate {
   /**  */
   name: string
@@ -10022,6 +10083,7 @@ export interface PropertyCreate {
   jurisdictions?: IdDTO
 }
 
+/** PropertyUpdate */
 export interface PropertyUpdate {
   /**  */
   id: string
@@ -10042,6 +10104,7 @@ export interface PropertyUpdate {
   jurisdictions?: IdDTO
 }
 
+/** PropertyFilterParams */
 export interface PropertyFilterParams {
   /**  */
   $comparison: EnumPropertyFilterParamsComparison
@@ -10050,6 +10113,7 @@ export interface PropertyFilterParams {
   jurisdiction?: string
 }
 
+/** PropertyQueryParams */
 export interface PropertyQueryParams {
   /**  */
   page?: number
@@ -10064,6 +10128,7 @@ export interface PropertyQueryParams {
   filter?: string[]
 }
 
+/** PaginatedProperty */
 export interface PaginatedProperty {
   /**  */
   items: Property[]
@@ -10072,6 +10137,7 @@ export interface PaginatedProperty {
   meta: PaginationMeta
 }
 
+/** AgencyCreate */
 export interface AgencyCreate {
   /**  */
   name: string
@@ -10080,6 +10146,7 @@ export interface AgencyCreate {
   jurisdictions: IdDTO
 }
 
+/** Agency */
 export interface Agency {
   /**  */
   id: string
@@ -10097,6 +10164,7 @@ export interface Agency {
   jurisdictions: IdDTO
 }
 
+/** AgencyUpdate */
 export interface AgencyUpdate {
   /**  */
   id: string
@@ -10108,6 +10176,7 @@ export interface AgencyUpdate {
   jurisdictions: IdDTO
 }
 
+/** AgencyQueryParams */
 export interface AgencyQueryParams {
   /**  */
   page?: number
@@ -10119,6 +10188,7 @@ export interface AgencyQueryParams {
   filter?: string[]
 }
 
+/** AgencyFilterParams */
 export interface AgencyFilterParams {
   /**  */
   $comparison: EnumAgencyFilterParamsComparison
@@ -10127,6 +10197,7 @@ export interface AgencyFilterParams {
   jurisdiction?: string
 }
 
+/** PaginatedAgency */
 export interface PaginatedAgency {
   /**  */
   items: Agency[]
