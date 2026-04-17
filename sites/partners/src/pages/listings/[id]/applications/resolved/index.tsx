@@ -17,6 +17,7 @@ import { mergeApplicationNames } from "../../../../../lib/helpers"
 import ListingGuard from "../../../../../components/shared/ListingGuard"
 import { StatusBar } from "../../../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../../../../../components/listings/helpers"
+import TabView from "../../../../../layouts/TabView"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -122,44 +123,38 @@ const ApplicationsList = () => {
 
         <StatusBar>{getListingStatusTag(listingDto?.status)}</StatusBar>
 
-        <section className={"bg-gray-200 pt-4"}>
-          <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
-            <ApplicationsSideNav className="w-full md:w-72" listingId={listingId} />
-
-            <div className="w-full">
-              <AgTable
-                id="applications-table"
-                className="w-full"
-                pagination={{
-                  perPage: tableOptions.pagination.itemsPerPage,
-                  setPerPage: tableOptions.pagination.setItemsPerPage,
-                  currentPage: tableOptions.pagination.currentPage,
-                  setCurrentPage: tableOptions.pagination.setCurrentPage,
-                }}
-                config={{
-                  gridComponents: { formatLinkCell: getLinkCellFormatter(router) },
-                  columns: columns,
-                  totalItemsLabel:
-                    flaggedAppsData?.meta?.totalItems === 1
-                      ? t("applications.duplicates.set")
-                      : t("applications.duplicates.sets"),
-                }}
-                data={{
-                  items: flaggedAppsData?.items ?? [],
-                  loading: flaggedAppsLoading,
-                  totalItems: flaggedAppsData?.meta?.totalItems ?? 0,
-                  totalPages: flaggedAppsData?.meta?.totalPages ?? 0,
-                }}
-                search={{
-                  setSearch: tableOptions.filter.setFilterValue,
-                }}
-                sort={{
-                  setSort: tableOptions.sort.setSortOptions,
-                }}
-              />
-            </div>
-          </article>
-        </section>
+        <TabView hideTabs={false} tabs={<ApplicationsSideNav listingId={listingId} />}>
+          <AgTable
+            id="applications-table"
+            className="w-full"
+            pagination={{
+              perPage: tableOptions.pagination.itemsPerPage,
+              setPerPage: tableOptions.pagination.setItemsPerPage,
+              currentPage: tableOptions.pagination.currentPage,
+              setCurrentPage: tableOptions.pagination.setCurrentPage,
+            }}
+            config={{
+              gridComponents: { formatLinkCell: getLinkCellFormatter(router) },
+              columns: columns,
+              totalItemsLabel:
+                flaggedAppsData?.meta?.totalItems === 1
+                  ? t("applications.duplicates.set")
+                  : t("applications.duplicates.sets"),
+            }}
+            data={{
+              items: flaggedAppsData?.items ?? [],
+              loading: flaggedAppsLoading,
+              totalItems: flaggedAppsData?.meta?.totalItems ?? 0,
+              totalPages: flaggedAppsData?.meta?.totalPages ?? 0,
+            }}
+            search={{
+              setSearch: tableOptions.filter.setFilterValue,
+            }}
+            sort={{
+              setSort: tableOptions.sort.setSortOptions,
+            }}
+          />
+        </TabView>
       </Layout>
     </ListingGuard>
   )

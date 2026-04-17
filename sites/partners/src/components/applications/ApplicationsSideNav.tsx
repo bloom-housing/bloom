@@ -1,62 +1,50 @@
 import React from "react"
 import { useRouter } from "next/router"
-import { t, SideNav } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { Tabs } from "@bloom-housing/ui-seeds"
 import { useFlaggedApplicationsMeta } from "../../lib/hooks"
+import styles from "./ApplicationsSideNav.module.scss"
 
 type ApplicationsSideNavProps = {
-  className?: string
   listingId: string
   listingOpen?: boolean
 }
 
-const ApplicationsSideNav = ({
-  className,
-  listingId,
-  listingOpen = false,
-}: ApplicationsSideNavProps) => {
+const ApplicationsSideNav = ({ listingId, listingOpen = false }: ApplicationsSideNavProps) => {
   const router = useRouter()
   const { data } = useFlaggedApplicationsMeta(listingId)
-  const resolvedNav = listingOpen
-    ? []
-    : {
-        label: t("t.resolved"),
-        url: `/listings/${listingId}/applications/resolved`,
-        count: data?.totalResolvedCount || 0,
-      }
-
-  const items = [
-    {
-      label: t("applications.allApplications"),
-      url: `/listings/${listingId}/applications`,
-      count: data?.totalCount || 0,
-    },
-    {
-      label: t("applications.pendingReview"),
-      url: `/listings/${listingId}/applications/pending`,
-      count: data?.totalPendingCount || 0,
-    },
-  ]
-    .concat(resolvedNav)
-    .reduce((acc, curr) => {
-      // check which element is currently active
-
-      if (curr.url === router.asPath) {
-        Object.assign(curr, { current: true })
-      }
-
-      acc.push(curr)
-
-      return acc
-    }, [])
+  const tabUrls = {
+    total: `/listings/${listingId}/applications`,
+    pending: `/listings/${listingId}/applications/pending`,
+    resolved: `/listings/${listingId}/applications/resolved`,
+  }
 
   return (
     <>
-      <div className={"hidden md:block"}>
-        <SideNav className={className} navItems={items} />
-      </div>
-      <div className={"block md:hidden mb-4 w-full sm:w-auto"}>
-        <SideNav className={`${className} side-nav__horizontal`} navItems={items} />
-      </div>
+      <Tabs verticalSidebar navigation={true} navigationLabel={t("applications.navLabel")}>
+        <Tabs.TabList>
+          <Tabs.Tab href={tabUrls.total} active={tabUrls.total === router.asPath}>
+            <div className={styles["application-count-tab-content"]}>
+              <span>{t("applications.allApplications")}</span>
+              <span>{data?.totalCount || 0}</span>
+            </div>
+          </Tabs.Tab>
+          <Tabs.Tab href={tabUrls.pending} active={tabUrls.pending === router.asPath}>
+            <div className={styles["application-count-tab-content"]}>
+              <span>{t("applications.pendingReview")}</span>
+              <span>{data?.totalPendingCount || 0}</span>
+            </div>
+          </Tabs.Tab>
+          {!listingOpen && (
+            <Tabs.Tab href={tabUrls.resolved} active={tabUrls.resolved === router.asPath}>
+              <div className={styles["application-count-tab-content"]}>
+                <span>{t("t.resolved")}</span>
+                <span>{data?.totalResolvedCount || 0}</span>
+              </div>
+            </Tabs.Tab>
+          )}
+        </Tabs.TabList>
+      </Tabs>
     </>
   )
 }
