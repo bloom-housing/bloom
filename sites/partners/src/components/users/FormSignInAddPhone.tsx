@@ -1,14 +1,8 @@
 import React from "react"
 import type { UseFormMethods } from "react-hook-form"
-import {
-  Form,
-  t,
-  PhoneField,
-  FormSignInErrorBox,
-  NetworkStatus,
-} from "@bloom-housing/ui-components"
+import { t, PhoneField, FormSignInErrorBox, NetworkStatus } from "@bloom-housing/ui-components"
 import { Button, Card } from "@bloom-housing/ui-seeds"
-import { BloomCard } from "@bloom-housing/shared-helpers"
+import { BloomCard, Form } from "@bloom-housing/shared-helpers"
 
 export type FormSignInAddPhoneProps = {
   control: FormSignInAddPhoneControl

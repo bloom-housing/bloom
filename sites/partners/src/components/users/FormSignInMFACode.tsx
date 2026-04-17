@@ -1,14 +1,13 @@
 import React from "react"
 import {
   Field,
-  Form,
   t,
   FormSignInErrorBox,
   NetworkStatus,
   FormSignInControl,
 } from "@bloom-housing/ui-components"
 import { Button, Card } from "@bloom-housing/ui-seeds"
-import { BloomCard } from "@bloom-housing/shared-helpers"
+import { BloomCard, Form } from "@bloom-housing/shared-helpers"
 
 export enum RequestType {
   email = "email",

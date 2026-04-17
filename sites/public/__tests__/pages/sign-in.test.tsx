@@ -1,5 +1,6 @@
 import React from "react"
 import { render, fireEvent, waitFor, act, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { useRouter } from "next/router"
 import { MessageContext, AuthContext } from "@bloom-housing/shared-helpers"
 import { jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
@@ -153,6 +154,44 @@ describe("Sign In Page", () => {
       expect(mockAddToast).toHaveBeenCalledWith("Welcome back, User!", {
         variant: "success",
       })
+    })
+  })
+
+  it("allows logging in by pressing the Enter key", async () => {
+    const mockUser = { firstName: "User", id: "user-123" }
+    const mockLogin = jest.fn().mockResolvedValue(mockUser)
+    const mockAddToast = jest.fn()
+    const mockRouter = { query: {}, push: jest.fn() }
+    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+    const { getByLabelText, getByRole } = render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: undefined,
+          login: mockLogin,
+        }}
+      >
+        <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
+          <SignInComponent jurisdiction={jurisdiction} />
+        </MessageContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    await userEvent.type(getByLabelText("Email"), "user@example.com")
+    await userEvent.type(getByLabelText("Password"), "password123{enter}")
+
+    // Verify toast is shown with the correct message
+    expect(mockLogin).toHaveBeenCalledWith(
+      "user@example.com",
+      "password123",
+      undefined,
+      undefined,
+      undefined,
+      undefined
+    )
+    expect(mockAddToast).toHaveBeenCalledWith("Welcome back, User!", {
+      variant: "success",
     })
   })
 
