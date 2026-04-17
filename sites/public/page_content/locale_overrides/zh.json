@@ -1,6 +1,12 @@
 {
-  "account.create.initialDisclaimer": "如果您目前无家可归、面临无家可归的风险或居住在不安全的住所，请点击<a href='https://www.exygy.com' target='_blank'>此链接</a>，将您的信息分享给布卢明顿无家可归者服务管理局 (BHSA) 以及协调准入系统 (CES) 内可能存在空置房源的房产的所有者和物业经理。点击此链接即表示您同意将您的信息分享给上述各方。",
   "advocateAccount.agencyNotListed": "如果您的机构未列出，请<a href='mailto:%{contactEmail}'>联系支持部门</a>。",
+  "application.ada.hearing": "听力辅助功能",
+  "application.ada.hearingAndVision": "听觉和视觉辅助功能",
+  "application.ada.label": "辅助功能",
+  "application.ada.mobility": "移动辅助功能",
+  "application.ada.other": "其他辅助功能",
+  "application.ada.subTitle": "仅出租给需要无障碍设施的人士，这些被称为“无障碍单元”的房屋。如果残疾情况或对无障碍设施的需求并不明显，物业可能会要求您提供更多信息和/或由可靠人士出具的关于残疾相关需求的书面证明。可靠人士可以是任何了解您及其残疾情况的人，例如家庭成员、神职人员、社工、医疗专业人员或其他相关人士，例如互助小组组长或照护者。可靠人士不一定是医生、护士或其他医疗专业人员。物业不能要求您提供医疗记录或诊断结果，但可以提供一份表格，由可靠人士填写。",
+  "application.ada.title": "您或您的家人是否需要以下任何辅助功能？",
   "application.financial.income.instruction2": "您现在只需提供预估总额即可。如果您入选下一轮筛选，我们将要求您提供家庭收入证明，房产方将核实您的收入。请参阅房产信息或直接联系房产方，了解更多关于确定您资格所需的收入证明文件的信息。",
   "application.referralApplication.instructions": "永久性支持住房单元由布卢明顿的协调准入系统直接推荐。无家可归的家庭可以拨打 123-456-7890 联系服务点，了解更多关于协调准入系统的信息，并获取与住房相关的资源和信息。",
   "application.referralApplication.phoneNumber": "211",
