@@ -27,6 +27,12 @@
   font-size: var(--seeds-font-size-base);
 }
 
+.section-sub-note {
+  color: var(--seeds-color-gray-750);
+  font-size: var(--seeds-font-size-sm);
+  margin-block-start: var(--seeds-s6);
+}
+
 .settings-page-view {
   background-color: var(--seeds-bg-color-canvas);
   border-top: 1px solid var(--seeds-border-color);
