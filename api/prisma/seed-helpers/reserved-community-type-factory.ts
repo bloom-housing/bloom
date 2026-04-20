@@ -41,13 +41,27 @@ export const reservedCommunityTypeFactoryAll = async (
   jurisdictionId: string,
   prismaClient: PrismaClient,
 ) => {
-  await prismaClient.reservedCommunityTypes.createMany({
-    data: reservedCommunityTypeOptions.map(({ name, description }) => ({
-      name,
-      description,
-      jurisdictionId,
-    })),
-  });
+  for (const { name, description } of reservedCommunityTypeOptions) {
+    const exists = await prismaClient.reservedCommunityTypes.findFirst({
+      select: {
+        id: true,
+      },
+      where: {
+        name,
+        description,
+        jurisdictionId,
+      },
+    });
+    if (!exists?.id) {
+      await prismaClient.reservedCommunityTypes.create({
+        data: {
+          name,
+          description,
+          jurisdictionId,
+        },
+      });
+    }
+  }
 };
 
 export const reservedCommunityTypeFactoryGet = async (
