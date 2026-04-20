@@ -262,7 +262,7 @@ export const mapFormToApi = ({
 
   const accessibility: Omit<Accessibility, "id" | "createdAt" | "updatedAt"> =
     adaFeatureKeys.reduce((acc, feature) => {
-      acc[feature] = data.application.accessibility.includes(feature)
+      acc[feature] = data.application.accessibility?.includes(feature)
       return acc
     }, {})
 

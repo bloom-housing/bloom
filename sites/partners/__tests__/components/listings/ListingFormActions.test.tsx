@@ -12,6 +12,7 @@ import ListingFormActions, {
 } from "../../../src/components/listings/ListingFormActions"
 import { mockNextRouter, render } from "../../testUtils"
 import {
+  FeatureFlagEnum,
   UserRoleEnum,
   Jurisdiction,
   ListingsStatusEnum,
@@ -1821,6 +1822,40 @@ describe("<ListingFormActions>", () => {
           />
         )
         expect(screen.queryByText("Close")).toBeFalsy()
+      })
+    })
+  })
+
+  describe("with disablePartnerPublicListingEdits flag enabled", () => {
+    beforeAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = () => true
+    })
+
+    describe("as partner", () => {
+      it("should not render edit button in open detail state", () => {
+        render(
+          <ListingFormActionsComponent
+            user={partnerUser}
+            listingStatus={ListingsStatusEnum.active}
+            formActionType={ListingFormActionsType.details}
+          />
+        )
+
+        expect(screen.queryByRole("link", { name: "Edit" })).not.toBeInTheDocument()
+        expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
+      })
+
+      it("should not render edit button in closed detail state", () => {
+        render(
+          <ListingFormActionsComponent
+            user={partnerUser}
+            listingStatus={ListingsStatusEnum.closed}
+            formActionType={ListingFormActionsType.details}
+          />
+        )
+
+        expect(screen.queryByRole("link", { name: "Edit" })).not.toBeInTheDocument()
+        expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
       })
     })
   })

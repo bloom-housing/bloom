@@ -8,9 +8,10 @@ export enum FeatureFlagEnum {
   disableEthnicityQuestion = 'disableEthnicityQuestion',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
+  disablePartnerPublicListingEdits = 'disablePartnerPublicListingEdits',
+  disableReservedCommunityTypeEdit = 'disableReservedCommunityTypeEdit',
   disableWorkInRegion = 'disableWorkInRegion',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
-  enableAdaOtherOption = 'enableAdaOtherOption',
   enableAdditionalResources = 'enableAdditionalResources',
   enableApplicationStatus = 'enableApplicationStatus',
   enableCompanyWebsite = 'enableCompanyWebsite',
@@ -22,14 +23,14 @@ export enum FeatureFlagEnum {
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
   enableHousingAdvocate = 'enableHousingAdvocate',
-  enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
   enableHousingBasics = 'enableHousingBasics',
+  enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
   enableIsVerified = 'enableIsVerified',
+  enableLeasingAgentAltText = 'enableLeasingAgentAltText',
   enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
   enableListingFavoriting = 'enableListingFavoriting',
   enableListingFileNumber = 'enableListingFileNumber',
   enableListingFiltering = 'enableListingFiltering',
-  enableLeasingAgentAltText = 'enableLeasingAgentAltText',
   enableListingImageAltText = 'enableListingImageAltText',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
@@ -41,6 +42,7 @@ export enum FeatureFlagEnum {
   enableNeighborhoodAmenitiesDropdown = 'enableNeighborhoodAmenitiesDropdown',
   enableNonRegulatedListings = 'enableNonRegulatedListings',
   enableParkingFee = 'enableParkingFee',
+  enableParkingType = 'enableParkingType',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
   enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
@@ -58,12 +60,11 @@ export enum FeatureFlagEnum {
   enableUnitAccessibilityTypeTags = 'enableUnitAccessibilityTypeTags',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
+  enableV2MSQ = 'enableV2MSQ',
   enableVerifyIncome = 'enableVerifyIncome',
   enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
   enableWaitlistLottery = 'enableWaitlistLottery',
   enableWhatToExpectAdditionalField = 'enableWhatToExpectAdditionalField',
-  enableParkingType = 'enableParkingType',
-  enableV2MSQ = 'enableV2MSQ',
   example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
@@ -106,6 +107,16 @@ export const featureFlagMap: {
       'When true listings will no longer support preferences section',
   },
   {
+    name: FeatureFlagEnum.disablePartnerPublicListingEdits,
+    description:
+      'When true, partner users cannot edit open or closed listings, or unpublish open listings',
+  },
+  {
+    name: FeatureFlagEnum.disableReservedCommunityTypeEdit,
+    description:
+      'When true, disables editing of reserved community type description in the partners site (shows as plaintext only).',
+  },
+  {
     name: FeatureFlagEnum.disableWorkInRegion,
     description:
       'When true the "Work in Region" question will be removed from the application process',
@@ -114,11 +125,6 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableAccessibilityFeatures,
     description:
       "When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view",
-  },
-  {
-    name: FeatureFlagEnum.enableAdaOtherOption,
-    description:
-      "When true, the ADA impairment options will include 'For Other Impairments'",
   },
   {
     name: FeatureFlagEnum.enableAdditionalResources,

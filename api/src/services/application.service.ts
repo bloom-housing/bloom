@@ -123,6 +123,7 @@ export const view: Partial<
         mobility: true,
         vision: true,
         hearing: true,
+        hearingAndVision: true,
         other: true,
       },
     },

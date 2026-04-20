@@ -11,8 +11,7 @@ global.ResizeObserver = jest.fn(() => ({
 }))
 import { addTranslation } from "@bloom-housing/ui-components"
 import general from "../page_content/locales/general.json"
-import generalOverrides from "../page_content/overrides/general.json"
-addTranslation({ ...generalShared, ...general, ...generalOverrides })
+addTranslation({ ...generalShared, ...general })
 
 process.env.cloudinaryCloudName = "exygy"
 process.env.cloudinarySignedPreset = "test123"

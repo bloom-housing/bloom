@@ -140,10 +140,6 @@ const Autofill = () => {
               conductor.config,
               FeatureFlagEnum.enableFullTimeStudentQuestion
             )}
-            enableAdaOtherOption={isFeatureFlagOn(
-              conductor.config,
-              FeatureFlagEnum.enableAdaOtherOption
-            )}
             enableReasonableAccommodations={isFeatureFlagOn(
               conductor.config,
               FeatureFlagEnum.enableReasonableAccommodations

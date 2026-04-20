@@ -132,6 +132,20 @@ export class RootService {
     })
   }
   /**
+   * Prisma database metrics in Prometheus format
+   */
+  prismaMetrics(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/prisma_metrics"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Trigger the removal of CSVs job
    */
   clearTempFiles(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -6949,6 +6963,9 @@ export interface Accessibility {
   hearing?: boolean
 
   /**  */
+  hearingAndVision?: boolean
+
+  /**  */
   other?: boolean
 }
 
@@ -7890,6 +7907,9 @@ export interface JurisdictionCreate {
   visibleSpokenLanguages: SpokenLanguageEnum[]
 
   /**  */
+  visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
+
+  /**  */
   regions: []
 
   /**  */
@@ -7971,6 +7991,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   visibleSpokenLanguages: SpokenLanguageEnum[]
+
+  /**  */
+  visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
 
   /**  */
   regions: []
@@ -8089,6 +8112,9 @@ export interface Jurisdiction {
 
   /**  */
   visibleSpokenLanguages: SpokenLanguageEnum[]
+
+  /**  */
+  visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
 
   /**  */
   regions: []
@@ -8340,6 +8366,9 @@ export interface AccessibilityCreate {
 
   /**  */
   hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
 
   /**  */
   other?: boolean
@@ -8598,6 +8627,9 @@ export interface AccessibilityUpdate {
 
   /**  */
   hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
 
   /**  */
   other?: boolean
@@ -10504,6 +10536,14 @@ export enum SpokenLanguageEnum {
   "notListed" = "notListed",
 }
 
+export enum ApplicationAccessibilityFeatureEnum {
+  "hearing" = "hearing",
+  "hearingAndVision" = "hearingAndVision",
+  "mobility" = "mobility",
+  "other" = "other",
+  "vision" = "vision",
+}
+
 export enum FeatureFlagEnum {
   "disableAccessibilityFeaturesTag" = "disableAccessibilityFeaturesTag",
   "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
@@ -10511,9 +10551,9 @@ export enum FeatureFlagEnum {
   "disableEthnicityQuestion" = "disableEthnicityQuestion",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
+  "disablePartnerPublicListingEdits" = "disablePartnerPublicListingEdits",
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
-  "enableAdaOtherOption" = "enableAdaOtherOption",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableApplicationStatus" = "enableApplicationStatus",
   "enableCompanyWebsite" = "enableCompanyWebsite",
@@ -10570,6 +10610,7 @@ export enum FeatureFlagEnum {
   "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
+  "disableReservedCommunityTypeEdit" = "disableReservedCommunityTypeEdit",
 }
 
 export enum InputType {
