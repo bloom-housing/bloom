@@ -48,8 +48,6 @@ export const reservedCommunityTypeFactoryAll = async (
       },
       where: {
         name,
-        description,
-        jurisdictionId,
       },
     });
     if (!exists?.id) {
