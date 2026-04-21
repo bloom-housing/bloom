@@ -131,7 +131,6 @@ export const angelopolisListing: CypressListing = {
   reservedCommunityTypes: {
     id: "Seniors 62+",
   },
-  reservedCommunityTypeDescription: "",
   creditScreeningFee: "150",
   reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
   disableUnitsAccordion: true,
