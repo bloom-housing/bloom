@@ -1084,6 +1084,8 @@ export const stagingSeed = async (
 
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
+  // Clear all existing reserved community types and add new ones
+  await prismaClient.reservedCommunityTypes.deleteMany();
   await reservedCommunityTypeFactoryAll(mainJurisdiction.id, prismaClient);
   const expiredApplicationDate = process.env.APPLICATION_DAYS_TILL_EXPIRY
     ? dayjs(new Date()).subtract(10, 'days').toDate()

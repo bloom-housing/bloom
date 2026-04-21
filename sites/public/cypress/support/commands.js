@@ -662,20 +662,20 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
   ]
 
   if (application.accessibility.mobility) {
-    const val = "For mobility impairments"
-    fields.push({ id: val, fieldValue: val })
+    const val = "mobility"
+    fields.push({ id: "ada-mobility", fieldValue: val })
   }
   if (application.accessibility.vision) {
-    const val = "For vision impairments"
-    fields.push({ id: val, fieldValue: val })
+    const val = "vision"
+    fields.push({ id: "ada-vision", fieldValue: val })
   }
   if (application.accessibility.hearing) {
-    const val = "For hearing impairments"
-    fields.push({ id: val, fieldValue: val })
+    const val = "hearing"
+    fields.push({ id: "ada-hearing", fieldValue: val })
   }
   if (application.accessibility.hearingAndVision) {
-    const val = "For hearing and/or vision impairments"
-    fields.push({ id: val, fieldValue: val })
+    const val = "hearing and/or vision"
+    fields.push({ id: "ada-hearingAndVision", fieldValue: val })
   }
 
   if (application.alternateContact.type !== "noContact") {
