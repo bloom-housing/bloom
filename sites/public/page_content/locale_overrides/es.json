@@ -1,4 +1,5 @@
 {
+  "account.create.initialDisclaimer": "Si se encuentra en situación de calle, en riesgo de quedarse sin hogar o en una vivienda insegura, haga clic en <a href='https://lahousing.lacity.org/BloomExtension' target='_blank'>este enlace</a> para compartir su información con la Autoridad de Servicios para Personas sin Hogar de Los Ángeles (LAHSA) y con los propietarios y administradores de propiedades del Sistema de Acceso Coordinado (CES) que puedan tener una vacante. Al hacerlo, autoriza que su información se comparta con estas entidades.",
   "advocateAccount.agencyNotListed": "<a href='mailto:%{contactEmail}'>Comuníquese con el soporte</a> si su agencia no está en la lista",
   "application.ada.hearing": "Características de accesibilidad auditiva",
   "application.ada.hearingAndVision": "Características de accesibilidad auditiva y visual",

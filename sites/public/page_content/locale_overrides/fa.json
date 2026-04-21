@@ -1,4 +1,5 @@
 {
+  "account.create.initialDisclaimer": "اگر بی‌خانمان هستید، در معرض خطر بی‌خانمانی هستید یا در مسکن ناامن زندگی می‌کنید، لطفاً <a href='https://lahousing.lacity.org/BloomExtension' target='_blank'>این لینک را</a> انتخاب کنید تا اطلاعات خود را با سازمان خدمات بی‌خانمان‌های لس‌آنجلس (LAHSA) و مالکان و مدیران املاک سیستم ورود هماهنگ (CES) که ممکن است جای خالی داشته باشند، به اشتراک بگذارید. با انجام این کار، شما اجازه می‌دهید اطلاعات شما با این اشخاص به اشتراک گذاشته شود.",
   "advocateAccount.agencyNotListed": "اگر آژانس شما در لیست نیست، <a href='mailto:%{contactEmail}'>با پشتیبانی تماس بگیرید</a>",
   "application.ada.hearing": "ویژگی‌های دسترسی شنوایی",
   "application.ada.hearingAndVision": "ویژگی‌های دسترسی شنوایی و بینایی",

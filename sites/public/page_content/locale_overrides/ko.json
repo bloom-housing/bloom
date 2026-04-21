@@ -1,4 +1,5 @@
 {
+  "account.create.initialDisclaimer": "만약 노숙자이거나, 노숙 위험에 처해 있거나, 안전하지 않은 주거 환경에 있다면, <a href='https://lahousing.lacity.org/BloomExtension' target='_blank'>이 링크를</a> 클릭하여 로스앤젤레스 노숙자 지원국(LAHSA) 및 공실이 있을 수 있는 통합 입소 시스템(CES) 시설의 소유주 및 관리자에게 정보를 제공해 주십시오. 이 링크를 클릭하시면 귀하의 정보가 해당 기관들과 공유되는 것에 동의하시는 것입니다.",
   "advocateAccount.agencyNotListed": "소속 기관이 목록에 없는 경우 <a href='mailto:%{contactEmail}'>지원팀에 문의하십시오</a>.",
   "application.ada.hearing": "청각 장애인을 위한 접근성 기능",
   "application.ada.hearingAndVision": "청각 및 시각 접근성 기능",

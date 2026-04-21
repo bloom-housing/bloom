@@ -1,4 +1,5 @@
 {
+  "account.create.initialDisclaimer": "If you are experiencing homelessness, at risk of homelessness, or in unsafe housing, please select <a href='https://lahousing.lacity.org/BloomExtension' target='_blank'>this link</a> to share your information with the Los Angeles Homeless Service Authority (LAHSA) and owners and property managers of Coordinated Entry System (CES) properties that may have a vacancy. By doing so, you are giving permission for your information to be shared with these parties.",
   "advocateAccount.agencyNotListed": "<a href='mailto:%{contactEmail}'>Contact support</a> if your agency is not listed",
   "advocateAccount.resendLinkSuccess": "If there is an approved advocate account with that email, you'll receive an email with a new link to confirm your account. Be aware, the link will expire in 24 hours. If you do not receive an email, you may not have an account under that email and would need to request one. If you have any questions in the meantime, please reach out to lahd.achp@lacity.org",
   "application.ada.hearing": "Hearing accessibility features",

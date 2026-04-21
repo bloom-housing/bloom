@@ -1,4 +1,5 @@
 {
+  "account.create.initialDisclaimer": "Nếu bạn đang vô gia cư, có nguy cơ vô gia cư hoặc đang sống trong điều kiện nhà ở không an toàn, vui lòng chọn <a href='https://lahousing.lacity.org/BloomExtension' target='_blank'>liên kết này</a> để chia sẻ thông tin của bạn với Cơ quan Dịch vụ Người vô gia cư Los Angeles (LAHSA) và chủ sở hữu cũng như người quản lý bất động sản thuộc Hệ thống Tiếp cận Phối hợp (CES) có thể đang thiếu chỗ ở. Bằng cách này, bạn cho phép thông tin của mình được chia sẻ với các bên này.",
   "advocateAccount.agencyNotListed": "Nếu cơ quan của bạn không có trong danh sách, vui lòng <a href='mailto:%{contactEmail}'>liên hệ bộ phận hỗ trợ</a>.",
   "application.ada.hearing": "Các tính năng hỗ trợ thính giác",
   "application.ada.hearingAndVision": "Các tính năng hỗ trợ tiếp cận về thính giác và thị giác",
