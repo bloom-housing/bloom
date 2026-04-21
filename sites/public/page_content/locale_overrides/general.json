@@ -1,6 +1,13 @@
 {
   "advocateAccount.agencyNotListed": "<a href='mailto:%{contactEmail}'>Contact support</a> if your agency is not listed",
   "advocateAccount.resendLinkSuccess": "If there is an approved advocate account with that email, you'll receive an email with a new link to confirm your account. Be aware, the link will expire in 24 hours. If you do not receive an email, you may not have an account under that email and would need to request one. If you have any questions in the meantime, please reach out to lahd.achp@lacity.org",
+  "application.ada.hearing": "Hearing accessibility features",
+  "application.ada.hearingAndVision": "Hearing and vision accessibility features",
+  "application.ada.label": "Accessibility features",
+  "application.ada.mobility": "Mobility accessibility features",
+  "application.ada.other": "Other accessibility features",
+  "application.ada.subTitle": "Units called 'Accessible Units' are only rented to people who need the accessible features. If the disability or need for the features is not obvious, the property can ask you to provide additional information and/or written documentation about the disability-related need from a reliable person. A reliable person can be anyone who knows the person and their disability well. It can be a family member, clergy, social worker, medical professional, or other knowledgeable individual like a peer support group moderator or caregiver. It does not need to be a doctor, nurse or medical professional. They cannot ask for your medical records or a diagnosis but can give you a form to be filled out by the reliable person.",
+  "application.ada.title": "Do you or anyone in your household need any of the following accessibility features?",
   "application.financial.income.instruction2": "You only need to provide an estimated total right now. If you're selected to move forward in the selection process, you will be asked to provide proof of household income, and the property will verify your income. Please refer to the property listing or contact the property directly for more information about income documentation that will be required to determine your eligibility.",
   "application.referralApplication.instructions": "The permanent supportive housing units are referred directly through Bloomington's Coordinated Entry System. Households experiencing homelessness can call 123-456-7890 in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information.",
   "application.referralApplication.phoneNumber": "211",

@@ -149,6 +149,7 @@ export default class ApplicationConductor {
     isAdvocate: false,
     raceEthnicityConfiguration: null,
     visibleSpokenLanguages: [],
+    visibleApplicationAccessibilityFeatures: [],
   }
   private _listing: Listing
 

@@ -25,6 +25,7 @@ export type CypressListing = Listing & {
   cypressFeatures?: CypressListingFeatures[]
   jurisdiction: Jurisdiction
   units: CypressUnit[]
+  reservedCommunityTypeDescription?: string
 }
 
 export type CypressListingDateTime = {

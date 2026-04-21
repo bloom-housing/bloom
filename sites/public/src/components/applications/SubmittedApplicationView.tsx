@@ -121,7 +121,6 @@ const SubmittedApplicationView = ({
           enableReasonableAccommodations={checkFeatureFlag(
             FeatureFlagEnum.enableReasonableAccommodations
           )}
-          enableAdaOtherOption={checkFeatureFlag(FeatureFlagEnum.enableAdaOtherOption)}
           swapCommunityTypeWithPrograms={checkFeatureFlag(
             FeatureFlagEnum.swapCommunityTypeWithPrograms
           )}

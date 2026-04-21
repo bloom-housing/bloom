@@ -403,10 +403,14 @@ Cypress.Commands.add("step9Accessibility", (application, autofill) => {
     if (application.accessibility.hearing) {
       cy.getByTestId("app-ada-hearing").check()
     }
+    if (application.accessibility.hearingAndVision) {
+      cy.getByTestId("app-ada-hearingAndVision").check()
+    }
     if (
       !application.accessibility.hearing &&
-      !application.accessibility.hearing &&
-      !application.accessibility.mobility
+      !application.accessibility.vision &&
+      !application.accessibility.mobility &&
+      !application.accessibility.hearingAndVision
     ) {
       cy.getByTestId("app-ada-none").check()
     }
@@ -658,7 +662,7 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
   ]
 
   if (application.accessibility.mobility) {
-    const val = "For mobility impairments"
+    const val = "Mobility accessibility features"
     fields.push({ id: val, fieldValue: val })
   }
   if (application.accessibility.vision) {
@@ -666,7 +670,11 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
     fields.push({ id: val, fieldValue: val })
   }
   if (application.accessibility.hearing) {
-    const val = "For hearing impairments"
+    const val = "Hearing accessibility features"
+    fields.push({ id: val, fieldValue: val })
+  }
+  if (application.accessibility.hearingAndVision) {
+    const val = "For hearing and/or vision impairments"
     fields.push({ id: val, fieldValue: val })
   }
 

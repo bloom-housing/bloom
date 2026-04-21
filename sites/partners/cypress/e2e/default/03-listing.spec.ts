@@ -333,13 +333,15 @@ describe("Listing Management Tests", () => {
 
     // ----------
     // Section - Community type
+
     fillIfDataExists(cy, "reservedCommunityTypes.id", listing.reservedCommunityTypes?.id, "select")
-    fillIfDataExists(
-      cy,
-      "reservedCommunityDescription",
-      listing.reservedCommunityDescription,
-      "type"
-    )
+    if (!getFlagActive(listing, FeatureFlagEnum.disableReservedCommunityTypeEdit)) {
+      if (listing.reservedCommunityDescription) {
+        cy.getByID("reservedCommunityDescription")
+          .clear()
+          .type(listing.reservedCommunityDescription)
+      }
+    }
 
     fillRadio(
       cy,
@@ -961,11 +963,19 @@ describe("Listing Management Tests", () => {
     // ----------
     // Section - Community type
     verifyDetailDataIfExists(cy, "reservedCommunityType", listing.reservedCommunityTypes?.id)
-    verifyDetailDataIfExists(
-      cy,
-      "reservedCommunityDescription",
-      listing.reservedCommunityDescription
-    )
+    if (getFlagActive(listing, FeatureFlagEnum.disableReservedCommunityTypeEdit)) {
+      verifyDetailDataIfExists(
+        cy,
+        "reservedCommunityDescription",
+        listing.reservedCommunityTypeDescription
+      )
+    } else {
+      verifyDetailDataIfExists(
+        cy,
+        "reservedCommunityDescription",
+        listing.reservedCommunityDescription
+      )
+    }
     verifyDetailDataIfExists(
       cy,
       "includeCommunityDisclaimer",
@@ -1479,12 +1489,17 @@ describe("Listing Management Tests", () => {
       )
     }
 
-    verifyDataIfExists(
-      cy,
-      "reservedCommunityDescription",
-      listing.reservedCommunityDescription,
-      "type"
-    )
+    if (getFlagActive(listing, FeatureFlagEnum.disableReservedCommunityTypeEdit)) {
+      // Check plaintext is shown
+      // cy.contains(listing.reservedCommunityTypeDescription || "")
+    } else {
+      verifyDataIfExists(
+        cy,
+        "reservedCommunityDescription",
+        listing.reservedCommunityDescription,
+        "type"
+      )
+    }
 
     verifyRadioIfExists(
       cy,

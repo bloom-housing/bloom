@@ -1,5 +1,12 @@
 {
   "advocateAccount.agencyNotListed": "소속 기관이 목록에 없는 경우 <a href='mailto:%{contactEmail}'>지원팀에 문의하십시오</a>.",
+  "application.ada.hearing": "청각 장애인을 위한 접근성 기능",
+  "application.ada.hearingAndVision": "청각 및 시각 접근성 기능",
+  "application.ada.label": "접근성 기능",
+  "application.ada.mobility": "이동성 접근성 기능",
+  "application.ada.other": "기타 접근성 기능",
+  "application.ada.subTitle": "&#39;장애인 편의시설 완비 유닛&#39;은 장애인 편의시설이 필요한 분들에게만 임대됩니다. 장애 또는 편의시설 필요성이 명확하지 않은 경우, 임대인은 신뢰할 수 있는 사람으로부터 장애 관련 필요성에 대한 추가 정보 및/또는 서면 증빙 자료를 요청할 수 있습니다. 신뢰할 수 있는 사람은 해당 개인과 장애를 잘 아는 사람이라면 누구든지 될 수 있습니다. 가족, 성직자, 사회복지사, 의료 전문가, 또는 자조 모임 진행자나 간병인과 같이 장애에 대해 잘 아는 사람이면 됩니다. 의사, 간호사 또는 기타 의료 전문가일 필요는 없습니다. 임대인은 의료 기록이나 진단서를 요구할 수는 없지만, 신뢰할 수 있는 사람이 작성할 양식을 제공할 수 있습니다.",
+  "application.ada.title": "귀하 또는 귀하의 가족 구성원 중 다음과 같은 접근성 기능이 필요한 분이 계십니까?",
   "application.financial.income.instruction2": "지금은 예상 총액만 제공해 주시면 됩니다. 선정 절차가 진행될 경우, 가구 소득 증빙 자료를 제출하셔야 하며, 해당 부동산에서 소득을 확인할 것입니다. 소득 증빙 서류에 대한 자세한 내용은 부동산 목록을 참조하시거나 해당 부동산에 직접 문의해 주시기 바랍니다.",
   "application.referralApplication.instructions": "영구 지원 주택은 블루밍턴의 통합 입주 시스템(Coordinated Entry System)을 통해 직접 배정됩니다. 노숙 가구는 123-456-7890으로 전화하여 담당자와 연결하고 통합 입주 시스템에 대한 자세한 정보와 주택 관련 자원을 이용할 수 있습니다.",
   "application.referralApplication.phoneNumber": "211",
