@@ -1491,7 +1491,7 @@ describe("Listing Management Tests", () => {
 
     if (getFlagActive(listing, FeatureFlagEnum.disableReservedCommunityTypeEdit)) {
       // Check plaintext is shown
-      // cy.contains(listing.reservedCommunityTypeDescription || "")
+      cy.contains(listing.reservedCommunityTypeDescription || "")
     } else {
       verifyDataIfExists(
         cy,

@@ -2,12 +2,23 @@ import { Prisma, PrismaClient, ReservedCommunityTypes } from '@prisma/client';
 import { randomInt } from 'crypto';
 
 const reservedCommunityTypeOptions: { name: string; description?: string }[] = [
+  { name: 'specialNeeds' },
+  {
+    name: 'senior',
+  },
   { name: 'senior55' },
   {
     name: 'senior62',
     description:
       'This property is reserved for seniors aged 62 and older. Applicants must meet the age requirement to be eligible.',
   },
+  { name: 'specialNeeds' },
+  { name: 'developmentalDisability' },
+  { name: 'tay' },
+  { name: 'veteran' },
+  { name: 'schoolEmployee' },
+  { name: 'farmworkerHousing' },
+  { name: 'housingVoucher' },
   { name: 'referralOnly' },
 ];
 
