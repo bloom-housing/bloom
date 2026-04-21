@@ -133,6 +133,7 @@
   "advocateAccount.subtitle": "Housing advocate",
   "alert.maintenance": "This site is undergoing scheduled maintenance. We apologize for any inconvenience.",
   "application.ada.hearing": "For hearing impairments",
+  "application.ada.hearingAndVision": "For hearing and vision impairments",
   "application.ada.label": "ADA accessible units",
   "application.ada.mobility": "For mobility impairments",
   "application.ada.other": "For other impairments",

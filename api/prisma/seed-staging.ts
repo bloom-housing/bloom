@@ -34,6 +34,7 @@ import { RaceEthnicityConfiguration } from '../src/dtos/jurisdictions/race-ethni
 import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
 import { createAllFeatureFlags } from './seed-helpers/feature-flag-factory';
 import { FeatureFlagEnum } from '../src/enums/feature-flags/feature-flags-enum';
+import { ApplicationAccessibilityFeatureEnum } from '../src/enums/applications/application-accessibility-feature-enum';
 import { hollywoodHillsHeights } from './seed-helpers/listing-data/hollywood-hills-heights';
 import { districtViewApartments } from './seed-helpers/listing-data/district-view-apartments';
 import { blueSkyApartments } from './seed-helpers/listing-data/blue-sky-apartments';
@@ -238,7 +239,6 @@ export const stagingSeed = async (
         FeatureFlagEnum.disableListingPreferences,
         FeatureFlagEnum.disableWorkInRegion,
         FeatureFlagEnum.enableAccessibilityFeatures,
-        FeatureFlagEnum.enableAdaOtherOption,
         FeatureFlagEnum.enableAdditionalResources,
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
@@ -279,6 +279,12 @@ export const stagingSeed = async (
       ],
       listingFeaturesConfiguration: defaultListingFeatureConfiguration,
       raceEthnicityConfiguration: defaultRaceEthnicityConfiguration,
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearing,
+        ApplicationAccessibilityFeatureEnum.vision,
+        ApplicationAccessibilityFeatureEnum.other,
+      ],
     }),
   });
   // Basic configuration jurisdiction
@@ -312,12 +318,14 @@ export const stagingSeed = async (
   const angelopolisJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Angelopolis', {
       publicSiteBaseURL: publicSiteBaseURL,
+      listingApprovalPermissions: [UserRoleEnum.admin],
       featureFlags: [
         ...optionalV2MSQ,
         FeatureFlagEnum.disableAccessibilityFeaturesTag,
         FeatureFlagEnum.disableBuildingSelectionCriteria,
         FeatureFlagEnum.disableEthnicityQuestion,
         FeatureFlagEnum.disableListingPreferences,
+        FeatureFlagEnum.disablePartnerPublicListingEdits,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableApplicationStatus,
         FeatureFlagEnum.enableConfigurableRegions,
@@ -344,6 +352,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableSmokingPolicyRadio,
         FeatureFlagEnum.enableSpokenLanguage,
         FeatureFlagEnum.enableUnitAccessibilityTypeTags,
+        FeatureFlagEnum.disableReservedCommunityTypeEdit,
       ],
       visibleNeighborhoodAmenities: [
         NeighborhoodAmenitiesEnum.groceryStores,
@@ -369,6 +378,10 @@ export const stagingSeed = async (
         UnitAccessibilityPriorityTypeEnum.mobility,
         UnitAccessibilityPriorityTypeEnum.hearingAndVision,
         UnitAccessibilityPriorityTypeEnum.mobilityHearingAndVision,
+      ],
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearingAndVision,
       ],
       regions: [
         'Metro Area',

@@ -1107,6 +1107,47 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
       expect(activityLogResult).not.toBeNull();
     });
 
+    it('should error as forbidden for update endpoint on open listing when partner listing edit restriction flag is enabled', async () => {
+      const listingsFindManySpy = jest.spyOn(prisma.listings, 'findMany');
+      listingsFindManySpy.mockResolvedValueOnce([{ id: userListingId }] as any);
+
+      const val = await constructFullListingData(
+        prisma,
+        userListingId,
+        jurisdictionId,
+      );
+
+      await request(app.getHttpServer())
+        .put(`/listings/${userListingId}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(val)
+        .set('Cookie', cookies)
+        .expect(403);
+
+      listingsFindManySpy.mockRestore();
+    });
+
+    it('should error as forbidden for update endpoint on closed listing when partner listing edit restriction flag is enabled', async () => {
+      const listingsFindManySpy = jest.spyOn(prisma.listings, 'findMany');
+      listingsFindManySpy.mockResolvedValueOnce([{ id: userListingId }] as any);
+
+      const val = await constructFullListingData(
+        prisma,
+        userListingId,
+        jurisdictionId,
+      );
+      val.status = ListingsStatusEnum.closed;
+
+      await request(app.getHttpServer())
+        .put(`/listings/${userListingId}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(val)
+        .set('Cookie', cookies)
+        .expect(403);
+
+      listingsFindManySpy.mockRestore();
+    });
+
     it('should error as forbidden for create endpoint', async () => {
       const val = await constructFullListingData(
         prisma,

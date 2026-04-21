@@ -74,7 +74,7 @@ export const contactPreferencesKeys = [
   },
 ]
 
-export const adaFeatureKeys = ["mobility", "vision", "hearing", "other"]
+export const adaFeatureKeys = ["mobility", "vision", "hearing", "hearingAndVision", "other"]
 
 export const relationshipKeys = ["", ...Object.values(HouseholdMemberRelationship)]
 

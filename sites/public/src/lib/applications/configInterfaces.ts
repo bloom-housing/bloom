@@ -1,4 +1,5 @@
 import {
+  ApplicationAccessibilityFeatureEnum,
   FeatureFlag,
   RaceEthnicityConfiguration,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -22,4 +23,5 @@ export interface ApplicationFormConfig {
   isAdvocate: boolean
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
   visibleSpokenLanguages?: string[]
+  visibleApplicationAccessibilityFeatures?: ApplicationAccessibilityFeatureEnum[]
 }

@@ -194,6 +194,7 @@ export class ApplicationExporterService {
     const jurisdiction = await this.prisma.jurisdictions.findFirst({
       select: {
         featureFlags: true,
+        visibleApplicationAccessibilityFeatures: true,
       },
       where: {
         listings: {
@@ -207,10 +208,6 @@ export class ApplicationExporterService {
     const disableWorkInRegion = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.disableWorkInRegion,
-    );
-    const enableAdaOtherOption = doJurisdictionHaveFeatureFlagSet(
-      jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableAdaOtherOption,
     );
     const enableApplicationStatus = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
@@ -255,7 +252,6 @@ export class ApplicationExporterService {
       queryParams.timeZone,
       {
         disableWorkInRegion,
-        enableAdaOtherOption,
         enableApplicationStatus,
         enableFullTimeStudentQuestion,
         enableReasonableAccommodations,
@@ -263,6 +259,8 @@ export class ApplicationExporterService {
         enableV2MSQ,
         includeDemographics: queryParams.includeDemographics,
         swapCommunityTypeWithPrograms,
+        visibleApplicationAccessibilityFeatures:
+          jurisdiction?.visibleApplicationAccessibilityFeatures,
       },
     );
 
@@ -478,6 +476,7 @@ export class ApplicationExporterService {
     const jurisdiction = await this.prisma.jurisdictions.findFirst({
       select: {
         featureFlags: true,
+        visibleApplicationAccessibilityFeatures: true,
       },
       where: {
         listings: {
@@ -491,10 +490,6 @@ export class ApplicationExporterService {
     const disableWorkInRegion = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.disableWorkInRegion,
-    );
-    const enableAdaOtherOption = doJurisdictionHaveFeatureFlagSet(
-      jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableAdaOtherOption,
     );
     const enableApplicationStatus = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
@@ -535,7 +530,6 @@ export class ApplicationExporterService {
       queryParams.timeZone,
       {
         disableWorkInRegion,
-        enableAdaOtherOption,
         enableApplicationStatus,
         enableFullTimeStudentQuestion,
         enableReasonableAccommodations,
@@ -543,6 +537,8 @@ export class ApplicationExporterService {
         forLottery,
         includeDemographics: queryParams.includeDemographics,
         swapCommunityTypeWithPrograms,
+        visibleApplicationAccessibilityFeatures:
+          jurisdiction?.visibleApplicationAccessibilityFeatures,
       },
     );
 

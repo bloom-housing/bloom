@@ -628,6 +628,10 @@ const ListingForm = ({
                             setLatLong={setLatitudeLongitude}
                           />
                           <CommunityType
+                            disableReservedCommunityTypeEdit={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.disableReservedCommunityTypeEdit,
+                              jurisdictionId
+                            )}
                             listing={listing}
                             swapCommunityTypeWithPrograms={swapCommunityTypeWithPrograms}
                             requiredFields={requiredFields}

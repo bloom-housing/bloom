@@ -583,7 +583,7 @@ describe("<ListingViewSeeds>", () => {
       expect(hmiSectionTitle).toBeInTheDocument()
       expect(
         within(hmiSectionTitle.parentElement).getByText(
-          /For income calculations, household size includes everyone \(all ages\) living in the unit\./
+          /For income calculations, household size includes everyone \(all ages\) living in the unit\./i
         )
       ).toBeInTheDocument()
       expect(
