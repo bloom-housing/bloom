@@ -131,8 +131,7 @@ export const angelopolisListing: CypressListing = {
   reservedCommunityTypes: {
     id: "Seniors 62+",
   },
-  reservedCommunityTypeDescription:
-    "This property is reserved for seniors aged 62 and older. Applicants must meet the age requirement to be eligible.",
+  reservedCommunityTypeDescription: "",
   creditScreeningFee: "150",
   reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
   disableUnitsAccordion: true,
