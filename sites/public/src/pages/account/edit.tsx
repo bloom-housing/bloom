@@ -17,6 +17,7 @@ import {
 import { ApplicationTimeout } from "../../components/applications/ApplicationTimeout"
 import Layout from "../../layouts/application"
 import styles from "./account.module.scss"
+import MaxWidthLayout from "../../layouts/max-width"
 
 interface EditProps {
   agencies: Agency[]
@@ -37,15 +38,15 @@ const Edit = (props: EditProps) => {
         metaDescription={t("pageDescription.accountSettings")}
       >
         <section className={styles["settings-page-view"]}>
-          <TabView
-            hideTabs={!enableNotificationSettings}
-            tabs={getAccountSettingsTabs(SettingsIndexEnum.profile)}
-            styles={{
-              sectionStyles: styles["settings-page-view-section"],
-            }}
-          >
-            <EditAccountView agencies={props.agencies} tabbedView={enableNotificationSettings} />
-          </TabView>
+          <MaxWidthLayout>
+            <TabView
+              hideTabs={!enableNotificationSettings}
+              tabs={getAccountSettingsTabs(SettingsIndexEnum.profile)}
+              styles={{ parentStyles: styles["settings-page-view"] }}
+            >
+              <EditAccountView agencies={props.agencies} tabbedView={enableNotificationSettings} />
+            </TabView>
+          </MaxWidthLayout>
         </section>
       </Layout>
     </RequireLogin>

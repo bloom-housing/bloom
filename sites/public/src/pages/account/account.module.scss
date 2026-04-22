@@ -35,12 +35,7 @@
 
 .settings-page-view {
   background-color: var(--seeds-bg-color-canvas);
-  border-top: 1px solid var(--seeds-border-color);
-
-  &-section {
-    padding-block: var(--seeds-s12);
-    padding-inline: var(--seeds-s12);
-    margin-inline: auto;
-    max-width: unset;
+  [class*="tab-view"] {
+    --padding-inline: 0;
   }
 }

@@ -4,6 +4,10 @@
   }
 }
 
+.select-all-container {
+  margin-block-end: var(--seeds-s6);
+}
+
 .select-all {
   padding-block-end: var(--seeds-s4);
   border-block-end: var(--card-divider-width) solid var(--card-divider-color);

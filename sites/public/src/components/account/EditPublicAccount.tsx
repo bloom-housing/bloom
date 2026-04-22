@@ -3,15 +3,8 @@ import { useForm } from "react-hook-form"
 import { t } from "@bloom-housing/ui-components"
 import { LoadingState } from "@bloom-housing/ui-seeds"
 import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import {
-  PageView,
-  pushGtmEvent,
-  AuthContext,
-  RequireLogin,
-  BloomCard,
-} from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
-import FormsLayout from "../../layouts/forms"
 import {
   accountNameFields,
   dobFields,
@@ -137,6 +130,7 @@ export const EditPublicAccount = () => {
       subtitle={t("account.accountSettingsSubtitle")}
       headingPriority={1}
       headingClass={"seeds-large-heading"}
+      variant="block"
     >
       <div data-testid="edit-public-account">
         <LoadingState loading={loading}>
