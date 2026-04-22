@@ -18,7 +18,7 @@ SET translations = jsonb_set(
       "line2": "Please view listing for the most updated information"
     },
     "viewButton": {
-      "en": "View listing & apply",
+      "en": "View listing & apply"
     },
     "footer": {
       "accessibleMarketingFlyer": "Accessible marketing flyer",
