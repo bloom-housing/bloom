@@ -1,5 +1,5 @@
 import React from "react"
-import { render, fireEvent, waitFor } from "@testing-library/react"
+import { render, fireEvent, waitFor, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { useRouter } from "next/router"
 import { MessageContext, AuthContext } from "@bloom-housing/shared-helpers"
@@ -196,7 +196,7 @@ describe("Partners Sign In Page", () => {
       const mockRouter = { query: {}, push: jest.fn() }
       ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
 
-      const { getByLabelText, container } = render(
+      render(
         <AuthContext.Provider
           value={{
             initialStateLoaded: true,
@@ -211,8 +211,8 @@ describe("Partners Sign In Page", () => {
         </AuthContext.Provider>
       )
 
-      await userEvent.type(getByLabelText("Email"), "partner@example.com")
-      await userEvent.type(getByLabelText("Password"), "password123{enter}")
+      await userEvent.type(screen.getByLabelText("Email"), "partner@example.com")
+      await userEvent.type(screen.getByLabelText("Password"), "password123{enter}")
 
       expect(mockLogin).toHaveBeenCalledWith(
         "partner@example.com",

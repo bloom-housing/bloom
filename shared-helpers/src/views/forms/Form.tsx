@@ -2,10 +2,10 @@ import React, { useCallback } from "react"
 
 export interface FormProps {
   children: React.ReactNode
-  id?: string
   className?: string
-  suppressSubmitOnEnter?: boolean
+  id?: string
   onSubmit?: () => unknown
+  suppressSubmitOnEnter?: boolean
 }
 
 export const Form = ({ children, id, className, suppressSubmitOnEnter, onSubmit }: FormProps) => {

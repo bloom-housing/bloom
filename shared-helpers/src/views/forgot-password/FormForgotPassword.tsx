@@ -14,6 +14,7 @@ export type FormForgotPasswordProps = {
   control: FormForgotPasswordControl
   onSubmit: (data: FormForgotPasswordValues) => void
   networkError: FormForgotPasswordNetworkError
+  loading?: boolean
 }
 
 export type FormForgotPasswordNetworkError = {
@@ -32,6 +33,7 @@ export type FormForgotPasswordValues = {
 }
 
 const FormForgotPassword = ({
+  loading,
   onSubmit,
   networkError,
   control: { errors, register, handleSubmit },
@@ -81,7 +83,11 @@ const FormForgotPassword = ({
               onChange={() => networkError.reset()}
               labelClassName={`text__caps-spaced ${styles["field-weight"]}`}
             />
-            <Button type="submit" className={styles["forgot-password-submit-button"]}>
+            <Button
+              type="submit"
+              className={styles["forgot-password-submit-button"]}
+              loadingMessage={loading ? t("t.loading") : null}
+            >
               {t("authentication.forgotPassword.sendEmailButton")}
             </Button>
 

@@ -164,7 +164,7 @@ describe("Sign In Page", () => {
     const mockRouter = { query: {}, push: jest.fn() }
     ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
 
-    const { getByLabelText, getByRole } = render(
+    render(
       <AuthContext.Provider
         value={{
           initialStateLoaded: true,
@@ -178,8 +178,8 @@ describe("Sign In Page", () => {
       </AuthContext.Provider>
     )
 
-    await userEvent.type(getByLabelText("Email"), "user@example.com")
-    await userEvent.type(getByLabelText("Password"), "password123{enter}")
+    await userEvent.type(screen.getByLabelText("Email"), "user@example.com")
+    await userEvent.type(screen.getByLabelText("Password"), "password123{enter}")
 
     // Verify toast is shown with the correct message
     expect(mockLogin).toHaveBeenCalledWith(

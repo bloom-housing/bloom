@@ -62,11 +62,11 @@ const FormSignInDefault = ({
           type={"password"}
           dataTestId="sign-in-password-field"
         />
-        <aside className={styles["forgot-password-wrapper"]}>
+        <div className={styles["forgot-password-wrapper"]}>
           <Link href={forgetPasswordURL} className={styles["forgot-password"]}>
             {t("authentication.signIn.forgotPassword")}
           </Link>
-        </aside>
+        </div>
       </div>
       <div className={styles["sign-in-action"]}>
         <Button
