@@ -1,5 +1,6 @@
 import React from "react"
-import { render, fireEvent, waitFor } from "@testing-library/react"
+import { render, fireEvent, waitFor, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { useRouter } from "next/router"
 import { MessageContext, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserService, MfaType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -188,6 +189,40 @@ describe("Partners Sign In Page", () => {
       ).toBeInTheDocument()
       expect(await findByText("Please enter your login email")).toBeInTheDocument()
       expect(await findByText("Please enter your login password")).toBeInTheDocument()
+    })
+
+    it("allows logging in by pressing the Enter key", async () => {
+      const mockLogin = jest.fn().mockResolvedValue({ firstName: "Partner", id: "user-123" })
+      const mockRouter = { query: {}, push: jest.fn() }
+      ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+      render(
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: undefined,
+            login: mockLogin,
+            doJurisdictionsHaveFeatureFlagOn: mockDoJurisdictionsHaveFeatureFlagOn,
+          }}
+        >
+          <MessageContext.Provider value={TOAST_MESSAGE}>
+            <SignIn />
+          </MessageContext.Provider>
+        </AuthContext.Provider>
+      )
+
+      await userEvent.type(screen.getByLabelText("Email"), "partner@example.com")
+      await userEvent.type(screen.getByLabelText("Password"), "password123{enter}")
+
+      expect(mockLogin).toHaveBeenCalledWith(
+        "partner@example.com",
+        "password123",
+        undefined,
+        undefined,
+        true,
+        undefined
+      )
+      expect(mockRouter.push).toHaveBeenCalledWith("/")
     })
   })
 
