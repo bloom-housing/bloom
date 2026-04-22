@@ -1,21 +1,22 @@
+import { useRouter } from "next/router"
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
-import {
-  getAccountSettingsTabs,
-  SettingsIndexEnum,
-} from "../../components/account/AccountSettingsHelpers"
 import { RequireLogin } from "@bloom-housing/shared-helpers"
-import { ApplicationTimeout } from "../../components/applications/ApplicationTimeout"
-import Layout from "../../layouts/application"
 import { t } from "@bloom-housing/ui-components"
-import styles from "./account.module.scss"
 import {
   FeatureFlagEnum,
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { isFeatureFlagOn } from "../../lib/helpers"
-import { useRouter } from "next/router"
 import { fetchJurisdictionByName } from "../../lib/hooks"
 import { NotificationPreferences } from "../../components/account/NotificationPreferences"
+import MaxWidthLayout from "../../layouts/max-width"
+import Layout from "../../layouts/application"
+import { ApplicationTimeout } from "../../components/applications/ApplicationTimeout"
+import {
+  getAccountSettingsTabs,
+  SettingsIndexEnum,
+} from "../../components/account/AccountSettingsHelpers"
+import styles from "./account.module.scss"
 
 interface NotificationProps {
   jurisdiction: Jurisdiction
@@ -40,15 +41,15 @@ const Notifications = (props: NotificationProps) => {
         metaDescription={t("pageDescription.accountSettings")}
       >
         <section className={styles["settings-page-view"]}>
-          <TabView
-            hideTabs={false}
-            tabs={getAccountSettingsTabs(SettingsIndexEnum.notifications)}
-            styles={{
-              sectionStyles: styles["settings-page-view-section"],
-            }}
-          >
-            <NotificationPreferences />
-          </TabView>
+          <MaxWidthLayout>
+            <TabView
+              hideTabs={false}
+              tabs={getAccountSettingsTabs(SettingsIndexEnum.notifications)}
+              styles={{ parentStyles: styles["settings-page-view"] }}
+            >
+              <NotificationPreferences jurisdiction={props.jurisdiction} />
+            </TabView>
+          </MaxWidthLayout>
         </section>
       </Layout>
     </RequireLogin>

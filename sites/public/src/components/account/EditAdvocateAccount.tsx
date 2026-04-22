@@ -201,6 +201,7 @@ export const EditAdvocateAccount = (props: EditAdvocateAccountProps) => {
       headingPriority={1}
       headingClass={"seeds-large-heading"}
       id={"edit-advocate-account"}
+      variant={"block"}
     >
       <div data-testid="edit-advocate-account">
         <LoadingState loading={loading}>
