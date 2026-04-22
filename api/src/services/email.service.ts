@@ -18,6 +18,7 @@ import { TranslationService } from './translation.service';
 import { Application } from '../dtos/applications/application.dto';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { Listing } from '../dtos/listings/listing.dto';
+import { TestListingOpportunityEmailDto } from '../dtos/listings/test-listing-opportunity-email.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { User } from '../dtos/users/user.dto';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
@@ -844,6 +845,100 @@ export class EmailService {
       console.log('lottery published admin email failed', err);
       throw new HttpException('email failed', 500);
     }
+  }
+
+  public async testListingOpportunityEmail(
+    dto: TestListingOpportunityEmailDto,
+  ): Promise<void> {
+    const jurisdiction = await this.getJurisdiction([
+      { id: dto.jurisdictionId },
+    ]);
+    if (!jurisdiction) {
+      throw new HttpException('jurisdiction not found', 404);
+    }
+    void (await this.loadTranslations(jurisdiction, dto.language));
+
+    const listingName = dto.listingName || 'Greenway Apartments';
+    const tableRows = [
+      {
+        label: this.polyglot.t('rentalOpportunity.community'),
+        value: 'Senior 55+',
+      },
+      {
+        label: this.polyglot.t('rentalOpportunity.applicationsDue'),
+        value: this.formatLocalDate(
+          dayjs().add(30, 'day').toDate(),
+          'MMMM D, YYYY',
+        ),
+        bolded: true,
+      },
+      {
+        label: this.polyglot.t('rentalOpportunity.address'),
+        value: '2330 Webster Street, Oakland CA 94612',
+      },
+      {
+        label: 'Neighborhood',
+        value: 'Laurel Heights',
+      },
+      {
+        label: 'Unit type',
+        value: 'Mobility and Hearing/Vision',
+      },
+      {
+        label: 'Opportunity type',
+        value: 'Lottery',
+      },
+      {
+        label: '1 Bedrooms',
+        value: '1 unit, 1 bath, 668 sqft',
+      },
+      {
+        label: '2 Bedrooms',
+        value: '2 units, 1 - 2 baths, 900 - 968 sqft',
+      },
+      {
+        label: this.polyglot.t('rentalOpportunity.rent'),
+        value: '$1,251 - $1,609 per month',
+      },
+      {
+        label: this.polyglot.t('rentalOpportunity.minIncome'),
+        value: '$2,502 - $3,218 per month',
+      },
+      {
+        label: this.polyglot.t('rentalOpportunity.maxIncome'),
+        value: '$6,092 - $10,096 per month',
+      },
+      {
+        label: this.polyglot.t('rentalOpportunity.lottery'),
+        value: this.formatLocalDate(
+          dayjs().add(60, 'day').toDate(),
+          'MMMM D, YYYY',
+        ),
+      },
+    ];
+    const languageUrls = [
+      {
+        name: this.polyglot.t('rentalOpportunity.viewButton.en'),
+        url: `${jurisdiction.publicUrl}/listing/${jurisdiction.id}`,
+      },
+    ];
+    const accessibleMarketingFlyerUrl = `${jurisdiction.publicUrl}/listing/${jurisdiction.id}`;
+    const unsubscribeUrl = `${jurisdiction.publicUrl}/unsubscribe`;
+    const emailSettingsUrl = `${jurisdiction.publicUrl}/email-settings`;
+
+    await this.send(
+      dto.email,
+      jurisdiction.emailFromAddress,
+      `Test listing opportunity: ${listingName}`,
+      this.template('listing-opportunity')({
+        listingName,
+        tableRows,
+        languageUrls,
+        accessibleMarketingFlyerUrl,
+        unsubscribeUrl,
+        emailSettingsUrl,
+      }),
+    );
   }
 
   /**

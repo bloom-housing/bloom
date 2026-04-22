@@ -58,6 +58,8 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { mapTo } from '../utilities/mapTo';
 import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
 import { ListingFilterKeyDTO } from '../dtos/listings/listing-filter-key.dto';
+import { TestListingOpportunityEmailDto } from '../dtos/listings/test-listing-opportunity-email.dto';
+import { EmailService } from '../services/email.service';
 
 @Controller('listings')
 @ApiTags('listings')
@@ -66,6 +68,7 @@ import { ListingFilterKeyDTO } from '../dtos/listings/listing-filter-key.dto';
   ListingsQueryParams,
   ListingFilterParams,
   ListingFilterKeyDTO,
+  TestListingOpportunityEmailDto,
   ListingsRetrieveParams,
   PaginationAllowsAllQueryParams,
   IdDTO,
@@ -78,6 +81,7 @@ export class ListingController {
   constructor(
     private readonly listingService: ListingService,
     private readonly listingCsvExportService: ListingCsvExporterService,
+    private readonly emailService: EmailService,
   ) {}
 
   @Get()
@@ -219,6 +223,21 @@ export class ListingController {
   @UseGuards(ApiKeyGuard, OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
   async closeListings(): Promise<SuccessDTO> {
     return await this.listingService.closeListings();
+  }
+
+  @Put('testListingOpportunityEmail')
+  @ApiOperation({
+    summary: 'Send listing opportunity email with dummy data',
+    operationId: 'testListingOpportunityEmail',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @PermissionAction(permissionActions.submit)
+  @UseGuards(ApiKeyGuard)
+  async testListingOpportunityEmail(
+    @Body() body: TestListingOpportunityEmailDto,
+  ): Promise<SuccessDTO> {
+    await this.emailService.testListingOpportunityEmail(body);
+    return { success: true };
   }
 
   @Put(':id')
