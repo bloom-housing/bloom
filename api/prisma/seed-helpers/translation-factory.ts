@@ -571,6 +571,28 @@ const translations = (
             'This is a courtesy email to let you know that because your Bloom Housing Portal account has been inactive for 3 years, your account will be deleted in 30 days per our Terms of Use and Privacy Policy. If you’d like to keep your account, please log in sometime in the next month and we’ll consider your account active again.',
           signIn: 'Sign in to Bloom Housing',
         },
+        rentalOpportunity: {
+          intro: 'Rental opportunity at',
+          community: 'Community',
+          applicationsDue: 'Applications Due',
+          address: 'Address',
+          rent: 'Rent',
+          minIncome: 'Minimum Income',
+          maxIncome: 'Maximum Income',
+          lottery: 'Lottery Date',
+          viewListingNotice: {
+            line1: 'THIS INFORMATION MAY CHANGE',
+            line2: 'Please view listing for the most updated information',
+          },
+          viewButton: {
+            en: 'View listing & apply',
+          },
+          footer: {
+            accessibleMarketingFlyer: 'Accessible marketing flyer',
+            unsubscribe: 'Unsubscribe',
+            emailSettings: 'Email settings',
+          },
+        },
         advocateApproved: {
           subject: 'Your account has been approved',
           hello: 'Hello',
