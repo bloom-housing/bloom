@@ -2,7 +2,7 @@ import { AddressUpdate } from '../addresses/address-update.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { ApplicationMethodUpdate } from '../application-methods/application-method-update.dto';
-import { ArrayMaxSize, Validate, ValidateNested } from 'class-validator';
+import { Validate, ValidateNested } from 'class-validator';
 import { AssetCreate } from '../assets/asset-create.dto';
 import { Expose, Type } from 'class-transformer';
 import { IdDTO } from '../shared/id.dto';
@@ -84,7 +84,6 @@ export class ListingUpdate extends OmitType(Listing, [
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitUpdate)
-  @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: UnitUpdate, isArray: true })
   units?: UnitUpdate[];
 
