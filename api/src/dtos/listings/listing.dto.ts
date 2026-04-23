@@ -996,7 +996,7 @@ class Listing extends AbstractDTO {
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => Unit)
-  @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(500, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: Unit, isArray: true })
   units: Unit[];
 
