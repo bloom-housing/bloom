@@ -84,7 +84,7 @@ export class ListingUpdate extends OmitType(Listing, [
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitUpdate)
-  @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(500, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: UnitUpdate, isArray: true })
   units?: UnitUpdate[];
 

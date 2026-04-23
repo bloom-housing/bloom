@@ -42,7 +42,7 @@ export class ListingCreate extends OmitType(ListingUpdate, [
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitCreate)
-  @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(500, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: UnitCreate, isArray: true })
   units?: UnitCreate[];
 
