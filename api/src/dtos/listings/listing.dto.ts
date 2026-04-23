@@ -1,6 +1,5 @@
 import { Expose, Transform, TransformFnParams, Type } from 'class-transformer';
 import {
-  ArrayMaxSize,
   IsArray,
   IsBoolean,
   IsDate,
@@ -996,7 +995,6 @@ class Listing extends AbstractDTO {
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => Unit)
-  @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: Unit, isArray: true })
   units: Unit[];
 
