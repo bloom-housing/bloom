@@ -105,22 +105,22 @@ describe('Unit Transformations', () => {
         },
         rows: [
           {
-            maxIncomeMonth: 'listings.monthlyIncome*income:$2,583',
+            maxIncomeMonth: 'listings.monthlyIncome*income:$2,583.33',
             maxIncomeYear: 'listings.annualIncome*income:$31,000',
             sizeColumn: 2,
           },
           {
-            maxIncomeMonth: 'listings.monthlyIncome*income:$2,667',
+            maxIncomeMonth: 'listings.monthlyIncome*income:$2,666.67',
             maxIncomeYear: 'listings.annualIncome*income:$32,000',
             sizeColumn: 3,
           },
           {
-            maxIncomeMonth: 'listings.monthlyIncome*income:$2,750',
+            maxIncomeMonth: 'listings.monthlyIncome*income:$2,750.00',
             maxIncomeYear: 'listings.annualIncome*income:$33,000',
             sizeColumn: 4,
           },
           {
-            maxIncomeMonth: 'listings.monthlyIncome*income:$2,833',
+            maxIncomeMonth: 'listings.monthlyIncome*income:$2,833.33',
             maxIncomeYear: 'listings.annualIncome*income:$34,000',
             sizeColumn: 5,
           },
@@ -142,7 +142,7 @@ describe('Unit Transformations', () => {
         },
         rows: [
           {
-            maxIncomeMonth: 'listings.monthlyIncome*income:$3,083',
+            maxIncomeMonth: 'listings.monthlyIncome*income:$3,083.33',
             maxIncomeYear: 'listings.annualIncome*income:$37,000',
             sizeColumn: 8,
           },
@@ -248,7 +248,7 @@ describe('Unit Transformations', () => {
         },
         rows: [
           {
-            maxIncomeMonth: 'listings.monthlyIncome*income:$2,583',
+            maxIncomeMonth: 'listings.monthlyIncome*income:$2,583.33',
             maxIncomeYear: 'listings.annualIncome*income:$31,000',
             sizeColumn: 'listings.unitTypes.oneBdrm',
           },
