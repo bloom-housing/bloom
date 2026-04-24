@@ -5,7 +5,7 @@
 }
 
 .select-all-container {
-  margin-block-end: var(--seeds-s6);
+  margin-block-end: var(--seeds-s2);
 }
 
 .select-all {
@@ -43,7 +43,6 @@
   flex-direction: column;
   gap: var(--seeds-s2);
   margin-block-start: var(--seeds-spacer-content);
-  margin-inline-start: var(--seeds-s8);
 
   .button {
     &-header {
