@@ -10,7 +10,11 @@ When true, the 'neighborhood amenities' section is displayed in listing creation
 
 ## Additional Information
 
-- The amenities can be switched to dropdowns if the [enableNeighborhoodAmenitiesDropdown](./enableNeighborhoodAmenitiesDropdown.md) feature flag is turned on
+NOTE: The amenities can be switched to dropdowns if the [enableNeighborhoodAmenitiesDropdown](./enableNeighborhoodAmenitiesDropdown.md) feature flag is turned on
+
+Which fields displayed are determined by the `visibleNeighborhoodAmenities` on the jurisdiction table. Current options are:
+
+bus stops, grocery stores, health care resources, hospitals, parks and community centers, pharmacies, playgrounds, public transportation, recreation facilities, schools, senior centers, and shopping venues
 
 ## Images
 

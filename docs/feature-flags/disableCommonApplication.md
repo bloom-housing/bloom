@@ -1,14 +1,14 @@
 # Common Application Disabling - disableCommonApplication
 
-### Name
+## Name
 
 `disableCommonApplication`
 
-### Description
+## Description
 
 When true, the digital common application is not an option for listings.
 
-### Images
+## Images
 
 Partners - Listing create/edit with Common App enabled
 
