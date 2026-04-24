@@ -189,7 +189,7 @@ export const NotificationPreferences = ({ jurisdiction }: NotificationPreference
                         : t("account.settings.notifications.regionNote_none")}
                     </span>
                   </div>
-                  <div>
+                  <div data-testid={"regions-field-group"}>
                     <FieldGroup
                       register={register}
                       fieldClassName={styles[`regions-field-group${collapsed ? "-hidden" : ""}`]}

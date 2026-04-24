@@ -54,6 +54,14 @@ describe("<Notifications>", () => {
       regions: [],
     }
 
+    const mockRegions: string[] = [
+      "Metro_Area",
+      "South_Bay",
+      "Downtown",
+      "Harbor_Area",
+      "Southwest",
+    ]
+
     mockUserService.retrieve.mockResolvedValue(user)
     mockUserService.getNotificationPreferences.mockResolvedValue(mockNotificationPreferences)
     render(
@@ -68,6 +76,7 @@ describe("<Notifications>", () => {
         <Notifications
           jurisdiction={{
             ...jurisdiction,
+            regions: mockRegions as [],
             featureFlags: [
               ...jurisdiction.featureFlags,
               {
@@ -107,7 +116,7 @@ describe("<Notifications>", () => {
     expect(hearingAndVisionCheckbox).not.toBeChecked()
     expect(
       within(hearingAndVisionCheckbox.parentElement.parentElement).getByText(
-        "Receive notifications for units with hearing/vision accessibility"
+        "Receive notifications for new units with hearing/vision accessibility features"
       )
     ).toBeInTheDocument()
 
@@ -116,7 +125,7 @@ describe("<Notifications>", () => {
     expect(mobilityCheckbox).not.toBeChecked()
     expect(
       within(mobilityCheckbox.parentElement.parentElement).getByText(
-        "Receive notifications for new mobility accessible units"
+        "Receive notifications for new units with mobility accessibility features"
       )
     ).toBeInTheDocument()
 
@@ -127,7 +136,7 @@ describe("<Notifications>", () => {
     expect(mobilityHearingAndVisionCheckbox).not.toBeChecked()
     expect(
       within(mobilityHearingAndVisionCheckbox.parentElement.parentElement).getByText(
-        "Receive notifications for units with both mobility and hearing/vision accessibility"
+        "Receive notifications for new units with mobility and hearing/vision accessibility features"
       )
     ).toBeInTheDocument()
 
@@ -152,12 +161,16 @@ describe("<Notifications>", () => {
       )
     ).toBeInTheDocument()
 
-    const regionsButtons = within(formWrapper).getByText(/^regions$/i)
-    expect(regionsButtons).toBeInTheDocument()
+    const regionsFieldGroup = within(formWrapper).getByTestId("regions-field-group")
+    expect(regionsFieldGroup).toBeInTheDocument()
+
+    const regionsButton = within(regionsFieldGroup).getByText(/regions$/i)
+    expect(regionsButton).toBeInTheDocument()
+
     expect(within(formWrapper).getByText("No regions selected")).toBeInTheDocument()
-    Object.values(RegionEnum).map((region) => {
+    Object.values(mockRegions).map((region) => {
       expect(
-        screen.getByRole("checkbox", {
+        within(regionsFieldGroup).getByRole("checkbox", {
           name: region.replace("_", " "),
         })
       ).toBeInTheDocument()
@@ -179,6 +192,14 @@ describe("<Notifications>", () => {
       regions: [],
     }
 
+    const mockRegions: string[] = [
+      "Metro_Area",
+      "South_Bay",
+      "Downtown",
+      "Harbor_Area",
+      "Southwest",
+    ]
+
     mockUserService.retrieve.mockResolvedValue(user)
     mockUserService.getNotificationPreferences.mockResolvedValue(mockNotificationPreferences)
     render(
@@ -193,6 +214,7 @@ describe("<Notifications>", () => {
         <Notifications
           jurisdiction={{
             ...jurisdiction,
+            regions: mockRegions as [],
             featureFlags: [
               ...jurisdiction.featureFlags,
               {
@@ -216,12 +238,15 @@ describe("<Notifications>", () => {
     const formWrapper = await screen.findByRole("article")
     expect(formWrapper).toBeInTheDocument()
 
-    const regionsButton = within(formWrapper).getByText(/^regions$/i)
+    const regionsFieldGroup = within(formWrapper).getByTestId("regions-field-group")
+    expect(regionsFieldGroup).toBeInTheDocument()
+    const regionsButton = within(regionsFieldGroup).getByText(/regions$/i)
     expect(regionsButton).toBeInTheDocument()
+
     expect(within(formWrapper).getByText("No regions selected")).toBeInTheDocument()
 
-    const regionsCheckboxes = Object.values(RegionEnum).map((region) =>
-      screen.getByRole("checkbox", {
+    const regionsCheckboxes = Object.values(mockRegions).map((region) =>
+      within(regionsFieldGroup).getByRole("checkbox", {
         name: region.replace("_", " "),
       })
     )
