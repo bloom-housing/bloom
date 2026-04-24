@@ -135,6 +135,7 @@ export const NotificationPreferences = ({ jurisdiction }: NotificationPreference
                 name="preferencesFieldGroup"
                 type={"checkbox"}
                 groupLabel={t("account.settings.notifications.notificationTypes")}
+                groupLabelClassName="sr-only"
                 fieldGroupClassName={styles["notification-preferences-field-group"]}
                 fields={preferenceOptions.map((option) => ({
                   id: option,
@@ -194,6 +195,7 @@ export const NotificationPreferences = ({ jurisdiction }: NotificationPreference
                       fieldClassName={styles[`regions-field-group${collapsed ? "-hidden" : ""}`]}
                       name="regionsFieldGroup"
                       groupLabel={t("account.settings.notifications.regionLabel")}
+                      groupLabelClassName="sr-only"
                       type={"checkbox"}
                       fields={jurisdictionRegions.map((region) => ({
                         id: region,
