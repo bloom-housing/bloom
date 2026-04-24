@@ -1,9 +1,9 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { IdDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
-import { Field, Form, t } from "@bloom-housing/ui-components"
+import { Field, t } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, Form, MessageContext } from "@bloom-housing/shared-helpers"
 
 export interface CopyListingDialogProps {
   isOpen: boolean
@@ -18,12 +18,14 @@ type CopyListingFormFields = {
 
 const CopyListingDialog = ({ isOpen, setOpen, listingInfo }: CopyListingDialogProps) => {
   const { listingsService, loadProfile } = useContext(AuthContext)
+  const [submitting, setSubmitting] = useState(false)
   const { addToast } = useContext(MessageContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, handleSubmit, clearErrors } = useForm<CopyListingFormFields>()
 
   const onSubmit = async (data: CopyListingFormFields) => {
     try {
+      setSubmitting(true)
       const res = await listingsService.duplicate({
         body: {
           includeUnits: data.includeUnitData,
@@ -34,11 +36,13 @@ const CopyListingDialog = ({ isOpen, setOpen, listingInfo }: CopyListingDialogPr
         },
       })
       setOpen(false)
+      setSubmitting(false)
       loadProfile(`/listings/${res.id}`)
       addToast(t("listings.copy.success"), { variant: "success" })
     } catch (err) {
       console.error(err)
       setOpen(false)
+      setSubmitting(false)
       addToast(
         t("account.settings.alerts.genericError", { contactEmail: t("resources.contactEmail") }),
         {
@@ -54,10 +58,10 @@ const CopyListingDialog = ({ isOpen, setOpen, listingInfo }: CopyListingDialogPr
       ariaLabelledBy="listing-form-copy-listing-dialog-header"
       ariaDescribedBy="listing-form-copy-listing-dialog-content"
     >
+      <Dialog.Header id="listing-form-copy-listing-dialog-header">
+        {t("listings.copyListing")}
+      </Dialog.Header>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Dialog.Header id="listing-form-copy-listing-dialog-header">
-          {t("listings.copyListing")}
-        </Dialog.Header>
         <Dialog.Content id="listing-form-copy-listing-dialog-content">
           <span>{t("listings.copy.description")}</span>
           <Field
@@ -85,7 +89,13 @@ const CopyListingDialog = ({ isOpen, setOpen, listingInfo }: CopyListingDialogPr
           />
         </Dialog.Content>
         <Dialog.Footer>
-          <Button type="submit" variant="primary" size="sm" id={"copy-listing-modal-button"}>
+          <Button
+            type="submit"
+            variant="primary"
+            size="sm"
+            id={"copy-listing-modal-button"}
+            loadingMessage={submitting && t("t.loading")}
+          >
             {t("actions.copy")}
           </Button>
           <Button
