@@ -337,6 +337,8 @@ export const mapApiToForm = (
 
   const receivedAt = applicationData.receivedAt ? dayjs(new Date(applicationData.receivedAt)) : null
 
+  const receivedBy = applicationData.receivedBy
+
   const dateOfBirth = (() => {
     const { birthDay, birthMonth, birthYear } = applicationData.applicant
 
@@ -508,7 +510,7 @@ export const mapApiToForm = (
       acceptedTerms,
       alternateContact,
       programs,
-      receivedBy: applicationData.receivedBy,
+      receivedBy,
       status,
       accessibleUnitWaitlistNumber,
       conventionalUnitWaitlistNumber,
