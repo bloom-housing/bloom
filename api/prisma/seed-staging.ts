@@ -207,6 +207,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableUtilitiesIncluded,
         FeatureFlagEnum.enableWaitlistLottery,
         FeatureFlagEnum.enableWhatToExpectAdditionalField,
+        FeatureFlagEnum.enableCustomListingNotifications,
       ],
       languages: Object.values(LanguagesEnum),
       requiredListingFields: [
@@ -353,6 +354,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableSpokenLanguage,
         FeatureFlagEnum.enableUnitAccessibilityTypeTags,
         FeatureFlagEnum.disableReservedCommunityTypeEdit,
+        FeatureFlagEnum.enableCustomListingNotifications,
       ],
       visibleNeighborhoodAmenities: [
         NeighborhoodAmenitiesEnum.groceryStores,
