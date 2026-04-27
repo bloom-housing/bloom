@@ -183,10 +183,10 @@ export const NotificationPreferences = ({ jurisdiction }: NotificationPreference
                     </button>
                     <span className={styles["collapsible-field-group-note"]}>
                       {selectedRegions.length
-                        ? t("account.settings.notifications.regionNote_selected", {
+                        ? t("account.settings.notifications.regionNoteSelected", {
                             smart_count: selectedRegions.length,
                           })
-                        : t("account.settings.notifications.regionNote_none")}
+                        : t("account.settings.notifications.regionNoteNone")}
                     </span>
                   </div>
                   <div data-testid={"regions-field-group"}>
