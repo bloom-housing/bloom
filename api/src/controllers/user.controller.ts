@@ -168,7 +168,7 @@ export class UserController {
     operationId: 'getNotificationPreferences',
   })
   @ApiOkResponse({ type: UserNotificationPreferences })
-  @UseGuards(JwtAuthGuard, PermissionGuard)
+  @UseGuards(JwtAuthGuard)
   async notificationPreferences(
     @Request() req: ExpressRequest,
   ): Promise<UserNotificationPreferences> {
@@ -420,7 +420,7 @@ export class UserController {
     operationId: 'updateNotificationPreferences',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  @UseGuards(JwtAuthGuard, PermissionGuard)
+  @UseGuards(JwtAuthGuard)
   async updatePreferences(
     @Request() req: ExpressRequest,
     @Body() dto: UserNotificationPreferences,
