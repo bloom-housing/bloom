@@ -115,6 +115,10 @@ export const mapFormToApi = ({
 
   const submissionDate: Date | null = getDateTime(data?.dateSubmitted, data?.timeSubmitted)
 
+  const receivedAt: Date | null = getDateTime(data?.dateReceived, data?.timeReceived)
+
+  const receivedBy = data.application?.receivedBy || null
+
   // create applicant
   const applicant = ((): ApplicantUpdate => {
     const phoneNumber: string | null = data?.phoneNumber || null
@@ -273,6 +277,8 @@ export const mapFormToApi = ({
   } = data.application
 
   const result = {
+    receivedAt,
+    receivedBy,
     submissionDate,
     language,
     applicant,
@@ -329,6 +335,8 @@ export const mapApiToForm = (
     ? dayjs(new Date(applicationData.submissionDate))
     : null
 
+  const receivedAt = applicationData.receivedAt ? dayjs(new Date(applicationData.receivedAt)) : null
+
   const dateOfBirth = (() => {
     const { birthDay, birthMonth, birthYear } = applicationData.applicant
 
@@ -365,6 +373,36 @@ export const mapApiToForm = (
     const month = submissionDate.format("MM")
     const day = submissionDate.format("DD")
     const year = submissionDate.format("YYYY")
+
+    return {
+      month,
+      day,
+      year,
+    }
+  })()
+
+  const timeReceived = (() => {
+    if (!receivedAt) return
+
+    const hours = receivedAt.format("hh")
+    const minutes = receivedAt.format("mm")
+    const seconds = receivedAt.format("ss")
+    const period = receivedAt.format("a").toLowerCase() as TimeFieldPeriod
+
+    return {
+      hours,
+      minutes,
+      seconds,
+      period,
+    }
+  })()
+
+  const dateReceived = (() => {
+    if (!receivedAt) return null
+
+    const month = receivedAt.format("MM")
+    const day = receivedAt.format("DD")
+    const year = receivedAt.format("YYYY")
 
     return {
       month,
@@ -470,6 +508,7 @@ export const mapApiToForm = (
       acceptedTerms,
       alternateContact,
       programs,
+      receivedBy: applicationData.receivedBy,
       status,
       accessibleUnitWaitlistNumber,
       conventionalUnitWaitlistNumber,
@@ -483,6 +522,8 @@ export const mapApiToForm = (
     dateOfBirth,
     dateSubmitted,
     timeSubmitted,
+    dateReceived,
+    timeReceived,
     phoneNumber,
     incomeMonth,
     incomeYear,
