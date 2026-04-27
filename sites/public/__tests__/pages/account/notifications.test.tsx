@@ -4,7 +4,6 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import { jurisdiction, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   FeatureFlagEnum,
-  RegionEnum,
   User,
   UserNotificationPreferences,
   UserService,
@@ -100,7 +99,9 @@ describe("<Notifications>", () => {
     const formWrapper = await screen.findByRole("article")
     expect(formWrapper).toBeInTheDocument()
 
-    const selectAllCheckbox = within(formWrapper).getByRole("checkbox", { name: /select all/i })
+    const selectAllCheckbox = await within(formWrapper).findByRole("checkbox", {
+      name: /select all/i,
+    })
     expect(selectAllCheckbox).toBeInTheDocument()
     expect(selectAllCheckbox).not.toBeChecked()
     expect(
