@@ -1,4 +1,25 @@
 :root {
+  // TODO figure out how to get metropolis font
+  @import "fonts/metropolis/metropolis.css";
+  @import url("https://fonts.googleapis.com/css?family=Noto+Serif:400,600,700,400italic");
+
+  // Seeds token overrides
+  --seeds-font-alt-sans: "Metropolis", "Helvetica", "Arial", "Verdana", "sans-serif";
+  --seeds-font-sans: "Metropolis", "Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif";
+  --seeds-font-serif: "Noto Serif", "Droid Serif", "Georgia", "Times", "serif";
+  --seeds-color-primary-darker: #0d223b;
+  --seeds-color-primary-dark: #133258;
+  --seeds-color-primary: #205493;
+  --seeds-color-primary-light: #daeeff;
+  --seeds-color-primary-lighter: #f5f8f9;
+  --seeds-color-secondary-darker: #009db0;
+  --seeds-color-secondary-dark: #00bed5;
+  --seeds-color-secondary: #c8f1ff;
+  --seeds-color-secondary-light: #eafdff;
+  --seeds-color-secondary-lighter: #f5feff;
+  --seeds-bg-color-surface-primary-inverse: var(--seeds-color-secondary);
+  --seeds-color-on-inverse: #222222;
+
   .seeds-button {
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }
@@ -298,5 +319,18 @@
     @media (--sm-only) {
       font-size: var(--seeds-font-size-lg);
     }
+  }
+
+  .seeds-button {
+    --button-border-radius-sm: var(--seeds-rounded-full);
+    --button-border-radius-md: var(--seeds-rounded-full);
+    --button-border-radius-lg: var(--seeds-rounded-full);
+
+    --button-padding-md: calc(var(--seeds-s3) - 2px) calc(var(--seeds-s6) - 2px);
+    --button-padding-sm: calc(var(--seeds-s3) - 2px) calc(var(--seeds-s6) - 2px);
+
+    --seeds-color-on-inverse: #ffffff;
+
+    -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }
 }
