@@ -172,7 +172,7 @@
   "application.contact.givenName": "نام داده شده",
   "application.contact.mailingAddress": "آدرس پستی",
   "application.contact.noPhoneNumber": "شماره تلفن ندارم",
-  "application.contact.number.subNote": "ده رقمی، مثلاً ۹۹۹-۹۹۹-۹۹۹۹",
+  "application.contact.number.subNote": "ده رقمی، مثلاً \u2066999-999-9999\u2069",
   "application.contact.number": "شماره",
   "application.contact.phoneNumberTypes.cell": "سلول",
   "application.contact.phoneNumberTypes.home": "خانه",

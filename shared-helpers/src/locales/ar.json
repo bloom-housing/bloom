@@ -172,7 +172,7 @@
   "application.contact.givenName": "الاسم الأول",
   "application.contact.mailingAddress": "عنوان البريد",
   "application.contact.noPhoneNumber": "ليس لدي رقم هاتف",
-  "application.contact.number.subNote": "10 أرقام، على سبيل المثال 999-999-9999",
+  "application.contact.number.subNote": "10 أرقام، على سبيل المثال \u2066999-999-9999\u2069",
   "application.contact.number": "رقم",
   "application.contact.phoneNumberTypes.cell": "زنزانة",
   "application.contact.phoneNumberTypes.home": "الصفحة الرئيسية",
