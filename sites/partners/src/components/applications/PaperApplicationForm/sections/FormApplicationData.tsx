@@ -11,6 +11,7 @@ import { Grid } from "@bloom-housing/ui-seeds"
 import {
   LanguagesEnum,
   ApplicationStatusEnum,
+  ApplicationSubmissionTypeEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useFormContext } from "react-hook-form"
@@ -18,12 +19,16 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type FormApplicationDataProps = {
   enableApplicationStatus: boolean
+  enableReceivedAtAndByFields: boolean
+  appType: ApplicationSubmissionTypeEnum
   disableApplicationStatusControls?: boolean
   reviewOrderType?: ReviewOrderTypeEnum
 }
 
 const FormApplicationData = ({
   enableApplicationStatus,
+  enableReceivedAtAndByFields,
+  appType,
   disableApplicationStatusControls = false,
   reviewOrderType,
 }: FormApplicationDataProps) => {
@@ -38,6 +43,12 @@ const FormApplicationData = ({
 
   const isDateRequired =
     dateSubmittedValue?.day || dateSubmittedValue?.month || dateSubmittedValue?.year
+
+  const dateReceivedValue: DateFieldValues = watch("dateReceived")
+  const isDateReceivedFilled =
+    dateReceivedValue?.day && dateReceivedValue?.month && dateReceivedValue?.year
+  const isDateReceivedRequired =
+    dateReceivedValue?.day && dateReceivedValue?.month && dateReceivedValue?.year
 
   const applicationStatus: ApplicationStatusEnum = watch("application.status")
 
@@ -97,6 +108,53 @@ const FormApplicationData = ({
           />
         </Grid.Cell>
       </Grid.Row>
+
+      {enableReceivedAtAndByFields && appType !== ApplicationSubmissionTypeEnum.electronical && (
+        <Grid.Row>
+          <Grid.Cell>
+            <DateField
+              id="dateReceived"
+              name="dateReceived"
+              register={register}
+              error={isDateReceivedRequired ? errors?.dateReceived : undefined}
+              watch={watch}
+              setValue={setValue}
+              label={t("application.add.dateReceivedAt")}
+              errorMessage={t("errors.dateError")}
+              required={!!isDateReceivedRequired}
+              labelClass={"text__caps-spaced"}
+              dataTestId="dateReceived"
+            />
+          </Grid.Cell>
+
+          <Grid.Cell>
+            <TimeField
+              id="timeReceived"
+              name="timeReceived"
+              label={t("application.add.timeReceivedAt")}
+              register={register}
+              setValue={setValue}
+              watch={watch}
+              error={!!errors?.timeReceived}
+              disabled={!isDateReceivedFilled}
+              required={!!isDateReceivedFilled}
+              labelClass={"text__caps-spaced"}
+              dataTestId="timeReceived"
+            />
+          </Grid.Cell>
+
+          <Grid.Cell>
+            <Field
+              id="application.receivedBy"
+              name="application.receivedBy"
+              label={t("application.add.receivedBy")}
+              placeholder={t("application.add.receivedBy")}
+              register={register}
+              dataTestId="receivedBy"
+            />
+          </Grid.Cell>
+        </Grid.Row>
+      )}
       {enableApplicationStatus && (
         <>
           <Grid.Row columns={3}>

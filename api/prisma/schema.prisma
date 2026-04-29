@@ -419,6 +419,8 @@ model Applications {
   status                         ApplicationStatusEnum         @default(submitted)
   submissionDate                 DateTime?                     @map("submission_date") @db.Timestamptz(6)
   submissionType                 ApplicationSubmissionTypeEnum @map("submission_type")
+  receivedAt                     DateTime?                     @map("received_at") @db.Timestamptz(6)
+  receivedBy                     String?                       @map("received_by")
   userId                         String?                       @map("user_id") @db.Uuid
   // Used to denote when an application was transferred from another jurisdiction
   wasCreatedExternally           Boolean                       @default(false) @map("was_created_externally")
