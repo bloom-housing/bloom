@@ -151,20 +151,6 @@ export class RootService {
     })
   }
   /**
-   * Prisma database metrics in Prometheus format
-   */
-  prismaMetrics(options: IRequestOptions = {}): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/prisma_metrics"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * Trigger the removal of CSVs job
    */
   clearTempFiles(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -10623,6 +10609,7 @@ export enum FeatureFlagEnum {
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
   "disablePartnerPublicListingEdits" = "disablePartnerPublicListingEdits",
+  "disableReservedCommunityTypeEdit" = "disableReservedCommunityTypeEdit",
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableAdditionalResources" = "enableAdditionalResources",
@@ -10632,18 +10619,19 @@ export enum FeatureFlagEnum {
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFaq" = "enableFaq",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
+  "enableGenderQuestion" = "enableGenderQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
   "enableHousingAdvocate" = "enableHousingAdvocate",
-  "enableHousingDeveloperOwner" = "enableHousingDeveloperOwner",
   "enableHousingBasics" = "enableHousingBasics",
+  "enableHousingDeveloperOwner" = "enableHousingDeveloperOwner",
   "enableIsVerified" = "enableIsVerified",
+  "enableLeasingAgentAltText" = "enableLeasingAgentAltText",
   "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
   "enableListingFavoriting" = "enableListingFavoriting",
   "enableListingFileNumber" = "enableListingFileNumber",
   "enableListingFiltering" = "enableListingFiltering",
-  "enableLeasingAgentAltText" = "enableLeasingAgentAltText",
   "enableListingImageAltText" = "enableListingImageAltText",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
@@ -10655,6 +10643,7 @@ export enum FeatureFlagEnum {
   "enableNeighborhoodAmenitiesDropdown" = "enableNeighborhoodAmenitiesDropdown",
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
   "enableParkingFee" = "enableParkingFee",
+  "enableParkingType" = "enableParkingType",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
   "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
@@ -10672,16 +10661,14 @@ export enum FeatureFlagEnum {
   "enableUnitAccessibilityTypeTags" = "enableUnitAccessibilityTypeTags",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "enableV2MSQ" = "enableV2MSQ",
   "enableVerifyIncome" = "enableVerifyIncome",
   "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
   "enableWaitlistLottery" = "enableWaitlistLottery",
   "enableWhatToExpectAdditionalField" = "enableWhatToExpectAdditionalField",
-  "enableParkingType" = "enableParkingType",
-  "enableV2MSQ" = "enableV2MSQ",
   "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
-  "disableReservedCommunityTypeEdit" = "disableReservedCommunityTypeEdit",
 }
 
 export enum InputType {
