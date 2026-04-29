@@ -603,6 +603,8 @@ describe('Application Controller Tests', () => {
         markedAsDuplicate: false,
         manualLotteryPositionNumber: null,
         reasonableAccommodations: null,
+        receivedAt: null,
+        receivedBy: null,
         submissionDate: expect.any(String),
         accessibility: {
           id: expect.any(String),
@@ -1029,6 +1031,8 @@ describe('Application Controller Tests', () => {
         markedAsDuplicate: false,
         manualLotteryPositionNumber: null,
         reasonableAccommodations: null,
+        receivedAt: null,
+        receivedBy: null,
         submissionDate: expect.any(String),
         accessibility: {
           id: expect.any(String),

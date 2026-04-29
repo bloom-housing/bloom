@@ -65,6 +65,7 @@ export type ApplicationTypes = {
   reviewStatus?: ApplicationReviewStatusEnum
   status?: ApplicationStatusEnum
   phoneNumber?: string
+  receivedBy?: string
   accessibleUnitWaitlistNumber?: number
   conventionalUnitWaitlistNumber?: number
   manualLotteryPositionNumber?: number
@@ -74,6 +75,8 @@ export type FormTypes = {
   dateOfBirth: DOBFieldValues
   timeSubmitted: TimeFieldValues
   dateSubmitted: DateFieldValues
+  timeReceived?: TimeFieldValues
+  dateReceived?: DateFieldValues
   phoneNumber: string
   incomeYear?: string
   incomeMonth?: string

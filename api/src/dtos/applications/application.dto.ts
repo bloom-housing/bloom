@@ -18,6 +18,7 @@ import {
   IsOptional,
   IsString,
   MaxLength,
+  MinLength,
   ValidateNested,
 } from 'class-validator';
 import { Accessibility } from './accessibility.dto';
@@ -182,6 +183,20 @@ export class Application extends AbstractDTO {
   @Type(() => Date)
   @ApiPropertyOptional()
   submissionDate?: Date;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @MinLength(1, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  receivedBy?: string;
+
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  @ApiPropertyOptional()
+  receivedAt?: Date;
 
   // if this field is true then the application is a confirmed duplicate
   // meaning that the record in the applicaiton flagged set table has a status of duplicate

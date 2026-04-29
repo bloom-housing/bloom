@@ -5,15 +5,22 @@ import {
   LanguagesEnum,
   ApplicationStatusEnum,
   ReviewOrderTypeEnum,
+  ApplicationSubmissionTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FormProviderWrapper } from "../../../../testUtils"
 import { FormApplicationData } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormApplicationData"
+
+const defaultFormApplicationDataProps = {
+  enableApplicationStatus: false,
+  enableReceivedAtAndByFields: false,
+  appType: ApplicationSubmissionTypeEnum.paper,
+}
 
 describe("<FormApplicationData>", () => {
   it("renders the form with application data fields", () => {
     render(
       <FormProviderWrapper>
-        <FormApplicationData enableApplicationStatus={false} />
+        <FormApplicationData {...defaultFormApplicationDataProps} />
       </FormProviderWrapper>
     )
     expect(screen.getByRole("heading", { level: 2, name: /application data/i })).toBeInTheDocument()
@@ -34,7 +41,7 @@ describe("<FormApplicationData>", () => {
   it("time fields are disabled when date is not fully entered", async () => {
     render(
       <FormProviderWrapper>
-        <FormApplicationData enableApplicationStatus={false} />
+        <FormApplicationData {...defaultFormApplicationDataProps} />
       </FormProviderWrapper>
     )
 
@@ -64,7 +71,7 @@ describe("<FormApplicationData>", () => {
   it("language selection works correctly", async () => {
     render(
       <FormProviderWrapper>
-        <FormApplicationData enableApplicationStatus={false} />
+        <FormApplicationData {...defaultFormApplicationDataProps} />
       </FormProviderWrapper>
     )
 
@@ -77,7 +84,7 @@ describe("<FormApplicationData>", () => {
   it("clearing date fields does not resets time fields", async () => {
     render(
       <FormProviderWrapper>
-        <FormApplicationData enableApplicationStatus={false} />
+        <FormApplicationData {...defaultFormApplicationDataProps} />
       </FormProviderWrapper>
     )
 
@@ -112,11 +119,70 @@ describe("<FormApplicationData>", () => {
     expect((timePeriod as HTMLSelectElement).value).toBe("pm")
   })
 
+  describe("received at and by fields", () => {
+    it("does not render received fields when the feature flag is disabled", () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData {...defaultFormApplicationDataProps} />
+        </FormProviderWrapper>
+      )
+
+      expect(screen.queryByText(/date received at/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/time received at/i)).not.toBeInTheDocument()
+      expect(screen.queryByLabelText(/received by/i)).not.toBeInTheDocument()
+    })
+
+    it("renders received fields for paper applications when the feature flag is enabled", async () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableReceivedAtAndByFields={true}
+          />
+        </FormProviderWrapper>
+      )
+
+      expect(screen.getByText(/date received at/i)).toBeInTheDocument()
+      expect(screen.getByTestId("dateReceived-month")).toBeInTheDocument()
+      expect(screen.getByTestId("dateReceived-day")).toBeInTheDocument()
+      expect(screen.getByTestId("dateReceived-year")).toBeInTheDocument()
+
+      const timeReceivedHours = screen.getByTestId("timeReceived-hours")
+      const timeReceivedMinutes = screen.getByTestId("timeReceived-minutes")
+      const timeReceivedPeriod = screen.getByTestId("timeReceived-period")
+
+      expect(screen.getByText(/time received at/i)).toBeInTheDocument()
+      expect(timeReceivedHours).toBeDisabled()
+      expect(timeReceivedMinutes).toBeDisabled()
+      expect(timeReceivedPeriod).toBeDisabled()
+
+      const receivedByInput = screen.getByLabelText(/received by/i)
+      await userEvent.type(receivedByInput, "Leasing Office")
+      expect((receivedByInput as HTMLInputElement).value).toBe("Leasing Office")
+    })
+
+    it("does not render received fields for electronic applications", () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableReceivedAtAndByFields={true}
+            appType={ApplicationSubmissionTypeEnum.electronical}
+          />
+        </FormProviderWrapper>
+      )
+
+      expect(screen.queryByText(/date received at/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/time received at/i)).not.toBeInTheDocument()
+      expect(screen.queryByLabelText(/received by/i)).not.toBeInTheDocument()
+    })
+  })
+
   describe("application status dropdown", () => {
     it("does not render when enableApplicationStatus is false", () => {
       render(
         <FormProviderWrapper>
-          <FormApplicationData enableApplicationStatus={false} />
+          <FormApplicationData {...defaultFormApplicationDataProps} />
         </FormProviderWrapper>
       )
 
@@ -126,7 +192,10 @@ describe("<FormApplicationData>", () => {
     it("allows selecting different application status values", async () => {
       render(
         <FormProviderWrapper>
-          <FormApplicationData enableApplicationStatus={true} />
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
         </FormProviderWrapper>
       )
 
@@ -153,7 +222,10 @@ describe("<FormApplicationData>", () => {
     it("renders waitlist fields when status is waitlist", async () => {
       render(
         <FormProviderWrapper>
-          <FormApplicationData enableApplicationStatus={true} />
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
         </FormProviderWrapper>
       )
 
@@ -172,7 +244,10 @@ describe("<FormApplicationData>", () => {
     it("renders waitlist fields when status is waitlistDeclined", async () => {
       render(
         <FormProviderWrapper>
-          <FormApplicationData enableApplicationStatus={true} />
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
         </FormProviderWrapper>
       )
 
@@ -190,7 +265,10 @@ describe("<FormApplicationData>", () => {
     it("does not render waitlist fields when status is not waitlist and no numbers are present", async () => {
       render(
         <FormProviderWrapper>
-          <FormApplicationData enableApplicationStatus={true} />
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
         </FormProviderWrapper>
       )
 
@@ -209,6 +287,7 @@ describe("<FormApplicationData>", () => {
       render(
         <FormProviderWrapper>
           <FormApplicationData
+            {...defaultFormApplicationDataProps}
             enableApplicationStatus={true}
             reviewOrderType={ReviewOrderTypeEnum.lottery}
           />
@@ -222,6 +301,7 @@ describe("<FormApplicationData>", () => {
       render(
         <FormProviderWrapper>
           <FormApplicationData
+            {...defaultFormApplicationDataProps}
             enableApplicationStatus={true}
             disableApplicationStatusControls={true}
             reviewOrderType={ReviewOrderTypeEnum.lottery}

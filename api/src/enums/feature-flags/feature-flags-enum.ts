@@ -49,6 +49,7 @@ export enum FeatureFlagEnum {
   enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
   enableProperties = 'enableProperties',
   enableReasonableAccommodations = 'enableReasonableAccommodations',
+  enableReceivedAtAndByFields = 'enableReceivedAtAndByFields',
   enableReferralQuestionUnits = 'enableReferralQuestionUnits',
   enableRegions = 'enableRegions',
   enableResources = 'enableResources',
@@ -296,6 +297,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableReasonableAccommodations,
     description:
       'When true, the reasonable accommodations question is shown in the public and partner application flow',
+  },
+  {
+    name: FeatureFlagEnum.enableReceivedAtAndByFields,
+    description:
+      'When true, partners can view/edit paper application received at/by fields and include them in application exports',
   },
   {
     name: FeatureFlagEnum.enableReferralQuestionUnits,

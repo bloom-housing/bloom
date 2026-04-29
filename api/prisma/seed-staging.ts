@@ -200,6 +200,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableNeighborhoodAmenities,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableReceivedAtAndByFields,
         FeatureFlagEnum.enableResources,
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
