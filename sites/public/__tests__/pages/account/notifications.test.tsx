@@ -324,7 +324,7 @@ describe("<Notifications>", () => {
     expect(regionsButton).toHaveAttribute("aria-expanded", "false")
   })
 
-  it("does not render regions checkboxes for jurisdiction without", async () => {
+  it("does not render regions checkboxes for jurisdiction without regions", async () => {
     const mockNotificationPreferences: UserNotificationPreferences = {
       lottery: false,
       waitlist: false,
