@@ -42,6 +42,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableCompanyWebsite](./feature-flags/enableCompanyWebsite.md) | When true, allows partners to add company website information |
 | [enableConfigurableRegions](./feature-flags/enableConfigurableRegions.md) | When true, allows for configurable regions per jurisdiction enabled on partners and public |
 | [enableCreditScreeningFee](./feature-flags/enableCreditScreeningFee.md) | When true, credit screening fee is enabled for listings |
+| [enableCustomListingNotifications](./feature-flags/enableCustomListingNotifications.md) | When true, users have access to custom notification settings |
 | [enableFaq](./feature-flags/enableFaq.md) | When true, a link to the FAQ page is displayed on the get assistance page |
 | [enableFullTimeStudentQuestion](./feature-flags/enableFullTimeStudentQuestion.md) | When true, the full time student question is displayed in the application form |
 | [enableGeocodingPreferences](./feature-flags/enableGeocodingPreferences.md) | When true, preferences can be created with geocoding functionality and when an application is created/updated on a listing that is geocoding then the application gets geocoded |

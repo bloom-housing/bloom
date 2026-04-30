@@ -1,34 +1,37 @@
-import React from "react"
+import { useRouter } from "next/router"
+import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import { RequireLogin } from "@bloom-housing/shared-helpers"
-import { fetchAgencies, fetchJurisdictionByName } from "../../lib/hooks"
+import { t } from "@bloom-housing/ui-components"
 import {
-  Agency,
   FeatureFlagEnum,
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import { isFeatureFlagOn } from "../../lib/helpers"
-import { t } from "@bloom-housing/ui-components"
-import { EditAccountView } from "../../components/account/EditAccountView"
+import { fetchJurisdictionByName } from "../../lib/hooks"
+import { NotificationPreferences } from "../../components/account/NotificationPreferences"
+import MaxWidthLayout from "../../layouts/max-width"
+import Layout from "../../layouts/application"
+import { ApplicationTimeout } from "../../components/applications/ApplicationTimeout"
 import {
   getAccountSettingsTabs,
   SettingsIndexEnum,
 } from "../../components/account/AccountSettingsHelpers"
-import { ApplicationTimeout } from "../../components/applications/ApplicationTimeout"
-import Layout from "../../layouts/application"
 import styles from "./account.module.scss"
-import MaxWidthLayout from "../../layouts/max-width"
 
-interface EditProps {
-  agencies: Agency[]
+interface NotificationProps {
   jurisdiction: Jurisdiction
 }
 
-const Edit = (props: EditProps) => {
+const Notifications = (props: NotificationProps) => {
+  const router = useRouter()
   const enableNotificationSettings = isFeatureFlagOn(
     props.jurisdiction,
     FeatureFlagEnum.enableCustomListingNotifications
   )
+
+  if (!enableNotificationSettings) {
+    void router.push("/account/edit")
+  }
 
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
@@ -40,11 +43,11 @@ const Edit = (props: EditProps) => {
         <section className={styles["settings-page-view"]}>
           <MaxWidthLayout>
             <TabView
-              hideTabs={!enableNotificationSettings}
-              tabs={getAccountSettingsTabs(SettingsIndexEnum.profile)}
+              hideTabs={false}
+              tabs={getAccountSettingsTabs(SettingsIndexEnum.notifications)}
               styles={{ parentStyles: styles["settings-page-view"] }}
             >
-              <EditAccountView agencies={props.agencies} tabbedView={enableNotificationSettings} />
+              <NotificationPreferences jurisdiction={props.jurisdiction} />
             </TabView>
           </MaxWidthLayout>
         </section>
@@ -53,14 +56,13 @@ const Edit = (props: EditProps) => {
   )
 }
 
-export default Edit
+export default Notifications
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: { req: any; query: any }) {
   const jurisdiction = await fetchJurisdictionByName(context.req)
-  const agencies = await fetchAgencies(context.req, jurisdiction?.id)
 
   return {
-    props: { jurisdiction, agencies: agencies?.items || [] },
+    props: { jurisdiction },
   }
 }

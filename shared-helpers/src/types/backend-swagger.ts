@@ -1990,7 +1990,7 @@ export class UserService {
   /**
    * Update user notification preferences
    */
-  userControllerUpdatePreferences(
+  updateNotificationPreferences(
     params: {
       /** requestBody */
       body?: UserNotificationPreferences
@@ -10639,6 +10639,7 @@ export enum FeatureFlagEnum {
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableApplicationStatus" = "enableApplicationStatus",
   "enableCompanyWebsite" = "enableCompanyWebsite",
+  "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFaq" = "enableFaq",
