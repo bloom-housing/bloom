@@ -46,7 +46,7 @@
   "application.confirmation.changesIntro": "Saving will send an email to the applicant summarizing the following change(s):",
   "application.confirmation.conventionalWaitListLabel": "Conventional Wait list #",
   "application.confirmation.header": "Are you sure?",
-  "application.confirmation.removalsIntro": "The following waitlist number(s) will no longer be accessible to the applicant:",
+  "application.confirmation.removalsIntro": "The following will no longer be accessible to the applicant:",
   "application.deleteApplicationDescription": "Deleting this application means you will lose all the information you've entered.",
   "application.deleteMemberDescription": "Do you really want to delete this member?",
   "application.deleteThisApplication": "Delete this application?",

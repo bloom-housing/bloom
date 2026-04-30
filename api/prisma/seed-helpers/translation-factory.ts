@@ -91,6 +91,8 @@ const translations = (
           summaryTitle: 'Resumen de cambios:',
           statusChange:
             'El estado de su solicitud ha cambiado de %{from} a %{to}',
+          declineReasonChange:
+            'El motivo de rechazo de su solicitud es %{value}',
           accessibleWaitListChange:
             'Su número de lista de espera accesible es %{value}',
           conventionalWaitListChange:
@@ -112,6 +114,14 @@ const translations = (
             receivedUnit: 'Unidad recibida',
             waitlist: 'Lista de espera',
             waitlistDeclined: 'Lista de espera - Rechazada',
+          },
+          declineReason: {
+            doesNotQualify: 'No califica',
+            incomeDoesNotQualify: 'Los ingresos no califican',
+            householdSizeDoesNotQualify: 'El tamaño del hogar no califica',
+            applicationSubmittedAfterDeadline:
+              'Solicitud enviada después de la fecha límite',
+            other: 'Otro',
           },
         },
         advocateApproved: {
@@ -384,6 +394,7 @@ const translations = (
           summaryTitle: 'Summary of changes:',
           statusChange:
             'Your application status has changed from %{from} to %{to}',
+          declineReasonChange: 'Your application decline reason is %{value}',
           accessibleWaitListChange:
             'Your Accessible wait list number is %{value}',
           conventionalWaitListChange:
@@ -404,6 +415,14 @@ const translations = (
             receivedUnit: 'Received a unit',
             waitlist: 'Wait list',
             waitlistDeclined: 'Wait list - Declined',
+          },
+          declineReason: {
+            doesNotQualify: 'Does not qualify',
+            incomeDoesNotQualify: 'Income does not qualify',
+            householdSizeDoesNotQualify: 'Household size does not qualify',
+            applicationSubmittedAfterDeadline:
+              'Application submitted after deadline',
+            other: 'Other',
           },
         },
         confirmation: {

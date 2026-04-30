@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
+  ApplicationDeclineReasonEnum,
   ApplicationReviewStatusEnum,
   ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
@@ -138,6 +139,17 @@ export class Application extends AbstractDTO {
     enumName: 'ApplicationStatusEnum',
   })
   status: ApplicationStatusEnum;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ApplicationDeclineReasonEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional({
+    enum: ApplicationDeclineReasonEnum,
+    enumName: 'ApplicationDeclineReasonEnum',
+  })
+  applicationDeclineReason?: ApplicationDeclineReasonEnum;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

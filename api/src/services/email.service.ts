@@ -536,6 +536,16 @@ export class EmailService {
             }),
           );
         }
+        if (change.type === 'declineReason') {
+          const reasonLabel = this.polyglot.t(
+            `applicationUpdate.declineReason.${change.value}`,
+          );
+          return new Handlebars.SafeString(
+            this.polyglot.t('applicationUpdate.declineReasonChange', {
+              value: `<strong>${reasonLabel}</strong>`,
+            }),
+          );
+        }
         if (change.type === 'accessibleWaitlist') {
           return new Handlebars.SafeString(
             this.polyglot.t('applicationUpdate.accessibleWaitListChange', {

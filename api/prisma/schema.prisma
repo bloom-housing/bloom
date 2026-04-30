@@ -417,6 +417,7 @@ model Applications {
   reviewStatus                   ApplicationReviewStatusEnum   @default(pending) @map("review_status")
   sendMailToMailingAddress       Boolean?                      @map("send_mail_to_mailing_address")
   status                         ApplicationStatusEnum         @default(submitted)
+  applicationDeclineReason       ApplicationDeclineReasonEnum? @map("application_decline_reason")
   submissionDate                 DateTime?                     @map("submission_date") @db.Timestamptz(6)
   submissionType                 ApplicationSubmissionTypeEnum @map("submission_type")
   receivedAt                     DateTime?                     @map("received_at") @db.Timestamptz(6)
@@ -494,6 +495,7 @@ model ApplicationSnapshot {
   reviewStatus                   ApplicationReviewStatusEnum   @default(pending) @map("review_status")
   sendMailToMailingAddress       Boolean?                      @map("send_mail_to_mailing_address")
   status                         ApplicationStatusEnum         @default(submitted)
+  applicationDeclineReason       ApplicationDeclineReasonEnum? @map("application_decline_reason")
   submissionDate                 DateTime?                     @map("submission_date") @db.Timestamptz(6)
   submissionType                 ApplicationSubmissionTypeEnum @map("submission_type")
   userId                         String?                       @map("user_id") @db.Uuid
@@ -2272,6 +2274,16 @@ enum ApplicationStatusEnum {
   waitlistDeclined
 
   @@map("application_status_enum")
+}
+
+enum ApplicationDeclineReasonEnum {
+  doesNotQualify
+  incomeDoesNotQualify
+  householdSizeDoesNotQualify
+  applicationSubmittedAfterDeadline
+  other
+
+  @@map("application_decline_reason_enum")
 }
 
 enum ApplicationSubmissionTypeEnum {

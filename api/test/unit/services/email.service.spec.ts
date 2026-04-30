@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigModule } from '@nestjs/config';
 import {
+  ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
   LanguagesEnum,
   ListingsStatusEnum,
@@ -753,6 +754,106 @@ describe('Testing email service', () => {
       expect(applicantEmailMock.body).toContain(mockContactEmail);
       expect(applicantEmailMock.body).not.toMatch(
         'http://localhost:3000/account/applications',
+      );
+    });
+
+    it('should include decline reason in application update email', async () => {
+      const listing = {
+        id: 'listingId',
+        name: 'Example Listing',
+        jurisdictions: { name: 'Jurisdiction 1', id: 'jurisdictionId' },
+      } as Listing;
+      const application = {
+        language: LanguagesEnum.en,
+        applicant: {
+          firstName: 'First',
+          lastName: 'Last',
+          emailAddress: 'applicant.email@example.com',
+        },
+      } as Application;
+      const changes = [
+        {
+          type: 'status',
+          from: ApplicationStatusEnum.submitted,
+          to: ApplicationStatusEnum.declined,
+        },
+        {
+          type: 'declineReason',
+          value: ApplicationDeclineReasonEnum.incomeDoesNotQualify,
+        },
+      ] as ApplicationStatusChangeItem[];
+
+      await service.applicationUpdateEmail(
+        listing.name,
+        listing.jurisdictions,
+        application,
+        changes,
+        'http://localhost:3000',
+      );
+
+      expect(sendMock).toHaveBeenCalledTimes(1);
+
+      const emailMock = sendMock.mock.calls[0][0];
+      expect(emailMock.to).toEqual('applicant.email@example.com');
+      expect(emailMock.body).toContain(
+        'Your application status has changed from <strong>Submitted</strong> to <strong>Declined</strong>',
+      );
+      expect(emailMock.body).toContain(
+        'Your application decline reason is <strong>Income does not qualify</strong>',
+      );
+    });
+
+    it('should include decline reason in advocate application update email', async () => {
+      const listing = {
+        id: 'listingId',
+        name: 'Example Listing',
+        jurisdictions: { name: 'Jurisdiction 1', id: 'jurisdictionId' },
+      } as Listing;
+      const application = {
+        language: LanguagesEnum.en,
+        applicant: {
+          firstName: 'First',
+          lastName: 'Last',
+          emailAddress: 'applicant.email@example.com',
+        },
+        alternateContact: {
+          firstName: 'Housing',
+          lastName: 'Advocate',
+          emailAddress: 'advocate.email@example.com',
+        },
+      } as Application;
+      const changes = [
+        {
+          type: 'status',
+          from: ApplicationStatusEnum.submitted,
+          to: ApplicationStatusEnum.declined,
+        },
+        {
+          type: 'declineReason',
+          value: ApplicationDeclineReasonEnum.doesNotQualify,
+        },
+      ] as ApplicationStatusChangeItem[];
+
+      await service.applicationUpdateEmail(
+        listing.name,
+        listing.jurisdictions,
+        application,
+        changes,
+        'http://localhost:3000',
+        true,
+        'advocate.email@example.com',
+      );
+
+      expect(sendMock).toHaveBeenCalledTimes(2);
+
+      const advocateEmailMock = sendMock.mock.calls[0][0];
+      expect(advocateEmailMock.body).toContain(
+        'Your application decline reason is <strong>Does not qualify</strong>',
+      );
+
+      const applicantEmailMock = sendMock.mock.calls[1][0];
+      expect(applicantEmailMock.body).toContain(
+        'Your application decline reason is <strong>Does not qualify</strong>',
       );
     });
   });

@@ -16,6 +16,7 @@ dayjs.extend(utc)
 import customParseFormat from "dayjs/plugin/customParseFormat"
 import {
   HouseholdMember,
+  ApplicationDeclineReasonEnum,
   ApplicationSubmissionTypeEnum,
   MultiselectQuestion,
   LanguagesEnum,
@@ -247,6 +248,10 @@ export const mapFormToApi = ({
 
   const submissionType = editMode ? data.submissionType : ApplicationSubmissionTypeEnum.paper
   const status = data.application.status || ApplicationStatusEnum.submitted
+  const applicationDeclineReason =
+    status === ApplicationStatusEnum.declined
+      ? (data.application.applicationDeclineReason as ApplicationDeclineReasonEnum) || null
+      : null
 
   const listings = {
     id: listingId,
@@ -303,6 +308,7 @@ export const mapFormToApi = ({
     acceptedTerms,
     submissionType,
     status,
+    applicationDeclineReason,
     listings,
     preferredUnitTypes: preferredUnit,
     applicationsAlternateAddress: alternateAddress,
@@ -461,6 +467,7 @@ export const mapApiToForm = (
       additionalPhoneNumberType,
       alternateContact,
       status,
+      applicationDeclineReason,
       accessibleUnitWaitlistNumber,
       conventionalUnitWaitlistNumber,
       manualLotteryPositionNumber,
@@ -512,6 +519,7 @@ export const mapApiToForm = (
       programs,
       receivedBy,
       status,
+      applicationDeclineReason,
       accessibleUnitWaitlistNumber,
       conventionalUnitWaitlistNumber,
       manualLotteryPositionNumber,

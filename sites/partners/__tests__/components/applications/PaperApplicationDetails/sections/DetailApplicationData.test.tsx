@@ -1,6 +1,8 @@
 /* eslint-disable import/no-named-as-default */
 import React from "react"
 import {
+  ApplicationDeclineReasonEnum,
+  ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
   LanguagesEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -12,9 +14,11 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 
 const renderDetailsApplicationData = ({
   applicationOverrides = {},
+  enableApplicationStatus = false,
   enableReceivedAtAndByFields = false,
 }: {
   applicationOverrides?: Partial<typeof application>
+  enableApplicationStatus?: boolean
   enableReceivedAtAndByFields?: boolean
 } = {}) => {
   mockNextRouter({ id: "application_1" })
@@ -30,7 +34,10 @@ const renderDetailsApplicationData = ({
           ...applicationOverrides,
         }}
       >
-        <DetailsApplicationData enableReceivedAtAndByFields={enableReceivedAtAndByFields} />
+        <DetailsApplicationData
+          enableApplicationStatus={enableApplicationStatus}
+          enableReceivedAtAndByFields={enableReceivedAtAndByFields}
+        />
       </ApplicationContext.Provider>
     </AuthContext.Provider>
   )
@@ -125,5 +132,85 @@ describe("DetailApplicationData", () => {
     expect(screen.queryByTestId("receivedDate")).not.toBeInTheDocument()
     expect(screen.queryByTestId("receivedTime")).not.toBeInTheDocument()
     expect(screen.queryByTestId("receivedBy")).not.toBeInTheDocument()
+  })
+
+  describe("decline reason", () => {
+    it("does not display decline reason when enableApplicationStatus is false", () => {
+      renderDetailsApplicationData({
+        applicationOverrides: {
+          status: ApplicationStatusEnum.declined,
+          applicationDeclineReason: ApplicationDeclineReasonEnum.doesNotQualify,
+        },
+        enableApplicationStatus: false,
+      })
+
+      expect(screen.queryByText(/decline reason/i)).not.toBeInTheDocument()
+    })
+
+    it("does not display decline reason when status is not declined", () => {
+      renderDetailsApplicationData({
+        applicationOverrides: {
+          status: ApplicationStatusEnum.submitted,
+          applicationDeclineReason: undefined,
+        },
+        enableApplicationStatus: true,
+      })
+
+      expect(screen.queryByText(/decline reason/i)).not.toBeInTheDocument()
+    })
+
+    it("displays decline reason label with n/a when status is declined but no reason is set", () => {
+      renderDetailsApplicationData({
+        applicationOverrides: {
+          status: ApplicationStatusEnum.declined,
+          applicationDeclineReason: undefined,
+        },
+        enableApplicationStatus: true,
+      })
+
+      expect(screen.getByText(/decline reason/i)).toBeInTheDocument()
+      expect(screen.getByText("n/a")).toBeInTheDocument()
+    })
+
+    it("displays decline reason label and translated value when status is declined", () => {
+      renderDetailsApplicationData({
+        applicationOverrides: {
+          status: ApplicationStatusEnum.declined,
+          applicationDeclineReason: ApplicationDeclineReasonEnum.doesNotQualify,
+        },
+        enableApplicationStatus: true,
+      })
+
+      expect(screen.getByText(/decline reason/i)).toBeInTheDocument()
+      expect(screen.getByText(/does not qualify/i)).toBeInTheDocument()
+    })
+
+    it("displays the correct label for each decline reason value", () => {
+      const cases: [ApplicationDeclineReasonEnum, RegExp][] = [
+        [ApplicationDeclineReasonEnum.doesNotQualify, /does not qualify/i],
+        [ApplicationDeclineReasonEnum.incomeDoesNotQualify, /income does not qualify/i],
+        [
+          ApplicationDeclineReasonEnum.householdSizeDoesNotQualify,
+          /household size does not qualify/i,
+        ],
+        [
+          ApplicationDeclineReasonEnum.applicationSubmittedAfterDeadline,
+          /application submitted after deadline/i,
+        ],
+        [ApplicationDeclineReasonEnum.other, /^other$/i],
+      ]
+
+      cases.forEach(([reason, labelPattern]) => {
+        const { unmount } = renderDetailsApplicationData({
+          applicationOverrides: {
+            status: ApplicationStatusEnum.declined,
+            applicationDeclineReason: reason,
+          },
+          enableApplicationStatus: true,
+        })
+        expect(screen.getByText(labelPattern)).toBeInTheDocument()
+        unmount()
+      })
+    })
   })
 })

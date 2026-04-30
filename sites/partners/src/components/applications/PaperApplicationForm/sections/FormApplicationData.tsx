@@ -10,6 +10,7 @@ import {
 import { Grid } from "@bloom-housing/ui-seeds"
 import {
   LanguagesEnum,
+  ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
   ReviewOrderTypeEnum,
@@ -60,7 +61,10 @@ const FormApplicationData = ({
     applicationStatus === ApplicationStatusEnum.waitlist ||
     applicationStatus === ApplicationStatusEnum.waitlistDeclined
 
+  const isDeclinedStatus = applicationStatus === ApplicationStatusEnum.declined
+
   const applicationStatusOptions = Array.from(Object.values(ApplicationStatusEnum))
+  const applicationDeclineReasonOptions = Array.from(Object.values(ApplicationDeclineReasonEnum))
   return (
     <SectionWithGrid heading={t("application.details.applicationData")}>
       <Grid.Row>
@@ -184,6 +188,37 @@ const FormApplicationData = ({
                   defaultValue={applicationStatus}
                   disabled
                   dataTestId="applicationStatusSelectDisplay"
+                />
+              )}
+            </Grid.Cell>
+            {/* We need active hidden field to send value even when field is not visible and disabled */}
+            <Grid.Cell className={isDeclinedStatus ? "" : "hidden"}>
+              <div
+                className={isDeclinedStatus && !disableApplicationStatusControls ? "" : "hidden"}
+              >
+                <Select
+                  id="application.applicationDeclineReason"
+                  name="application.applicationDeclineReason"
+                  label={t("application.details.applicationDeclineReason")}
+                  register={register}
+                  controlClassName="control"
+                  options={["", ...applicationDeclineReasonOptions]}
+                  keyPrefix="application.details.applicationDeclineReason"
+                  dataTestId="applicationDeclineReasonSelect"
+                />
+              </div>
+              {disableApplicationStatusControls && (
+                <Select
+                  id="application.applicationDeclineReason.display"
+                  name="application.applicationDeclineReason.display"
+                  label={t("application.details.applicationDeclineReason")}
+                  controlClassName="control"
+                  options={["", ...applicationDeclineReasonOptions]}
+                  keyPrefix="application.details.applicationDeclineReason"
+                  key={`application-decline-reason-display-${applicationStatus}`}
+                  defaultValue={watch("application.applicationDeclineReason")}
+                  disabled
+                  dataTestId="applicationDeclineReasonSelectDisplay"
                 />
               )}
             </Grid.Cell>

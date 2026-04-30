@@ -1,9 +1,11 @@
 import { t } from "@bloom-housing/ui-components"
-import { Button, Card, Heading, Icon } from "@bloom-housing/ui-seeds"
+import { Button, Card, Heading, Icon, Tag } from "@bloom-housing/ui-seeds"
 import FormSummaryDetails from "../shared/FormSummaryDetails"
 import { CustomIconMap, listingSectionQuestions, AuthContext } from "@bloom-housing/shared-helpers"
+import { getApplicationStatusVariant } from "@bloom-housing/shared-helpers/src/utilities/applicationStatus"
 import {
   Application,
+  ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
   FeatureFlagEnum,
   Jurisdiction,
@@ -46,6 +48,18 @@ const SubmittedApplicationView = ({
   const isWaitlistStatus =
     application?.status === ApplicationStatusEnum.waitlist ||
     application?.status === ApplicationStatusEnum.waitlistDeclined
+  const isDeclinedStatus = application?.status === ApplicationStatusEnum.declined
+  const applicationDeclineReason = application?.applicationDeclineReason as
+    | ApplicationDeclineReasonEnum
+    | undefined
+
+  const enableApplicationStatus = checkFeatureFlag(FeatureFlagEnum.enableApplicationStatus)
+  const statusTagContent = application?.markedAsDuplicate
+    ? t("application.details.applicationStatus.duplicate")
+    : t(`application.details.applicationStatus.${application?.status}`)
+  const statusTagVariant = application?.markedAsDuplicate
+    ? "secondary-inverse"
+    : getApplicationStatusVariant(application?.status)
 
   const displayNumbers: { label: string; value: string | number }[] = []
   if (isWaitlistStatus && accessibleUnitWaitlistNumber != undefined) {
@@ -90,6 +104,11 @@ const SubmittedApplicationView = ({
             {t("application.confirmation.submitted")}
             {confirmationDate}
           </p>
+          {enableApplicationStatus && (
+            <div className="mt-4">
+              <Tag variant={statusTagVariant}>{statusTagContent}</Tag>
+            </div>
+          )}
         </Card.Section>
         <Card.Section divider={"inset"} className={"border-none"}>
           {displayNumbers.map((item, index) => (
@@ -101,6 +120,14 @@ const SubmittedApplicationView = ({
               <p className="font-semibold text-lg mt-3">{item.value}</p>
             </div>
           ))}
+          {isDeclinedStatus && applicationDeclineReason && (
+            <div className={displayNumbers.length > 0 ? "seeds-p-bs-content" : ""}>
+              <p>{`${t("application.details.applicationDeclineReason")}:`}</p>
+              <p className="font-semibold text-lg mt-3">
+                {t(`application.details.applicationDeclineReason.${applicationDeclineReason}`)}
+              </p>
+            </div>
+          )}
         </Card.Section>
         <FormSummaryDetails
           listing={listing}

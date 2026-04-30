@@ -3,6 +3,7 @@ import React from "react"
 import userEvent from "@testing-library/user-event"
 import {
   LanguagesEnum,
+  ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
   ReviewOrderTypeEnum,
   ApplicationSubmissionTypeEnum,
@@ -332,6 +333,97 @@ describe("<FormApplicationData>", () => {
       )
       expect(activeLotteryInput.closest(".hidden")).toBeInTheDocument()
       expect(displayLotteryInput).toBeDisabled()
+    })
+  })
+
+  describe("decline reason dropdown", () => {
+    it("does not render when enableApplicationStatus is false", () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData {...defaultFormApplicationDataProps} />
+        </FormProviderWrapper>
+      )
+
+      expect(screen.queryByTestId("applicationDeclineReasonSelect")).not.toBeInTheDocument()
+    })
+
+    it("does not render when status is not declined", async () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
+        </FormProviderWrapper>
+      )
+
+      const statusSelect = screen.getByTestId("applicationStatusSelect")
+      await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.submitted)
+
+      const declineReasonCell = screen
+        .getByTestId("applicationDeclineReasonSelect")
+        .closest(".hidden")
+      expect(declineReasonCell).toBeInTheDocument()
+    })
+
+    it("renders and is interactive when status is declined", async () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
+        </FormProviderWrapper>
+      )
+
+      const statusSelect = screen.getByTestId("applicationStatusSelect")
+      await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
+
+      const declineSelect = screen.getByTestId("applicationDeclineReasonSelect")
+      expect(declineSelect.closest(".hidden")).not.toBeInTheDocument()
+
+      await userEvent.selectOptions(declineSelect, ApplicationDeclineReasonEnum.doesNotQualify)
+      expect((declineSelect as HTMLSelectElement).value).toBe(
+        ApplicationDeclineReasonEnum.doesNotQualify
+      )
+    })
+
+    it("allows selecting all decline reason options", async () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
+        </FormProviderWrapper>
+      )
+
+      const statusSelect = screen.getByTestId("applicationStatusSelect")
+      await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
+
+      const declineSelect = screen.getByTestId("applicationDeclineReasonSelect")
+
+      for (const reason of Object.values(ApplicationDeclineReasonEnum)) {
+        await userEvent.selectOptions(declineSelect, reason)
+        expect((declineSelect as HTMLSelectElement).value).toBe(reason)
+      }
+    })
+
+    it("hides the active select and shows disabled display when controls are disabled", async () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+            disableApplicationStatusControls={true}
+          />
+        </FormProviderWrapper>
+      )
+
+      const activeSelect = screen.getByTestId("applicationDeclineReasonSelect")
+      const displaySelect = screen.getByTestId("applicationDeclineReasonSelectDisplay")
+      expect(activeSelect.closest(".hidden")).toBeInTheDocument()
+      expect(displaySelect).toBeDisabled()
     })
   })
 })

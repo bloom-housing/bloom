@@ -7213,6 +7213,9 @@ export interface Application {
   status: ApplicationStatusEnum
 
   /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
   accessibleUnitWaitlistNumber?: number
 
   /**  */
@@ -8977,6 +8980,9 @@ export interface ApplicationUpdateEmail {
   previousStatus?: ApplicationStatusEnum
 
   /**  */
+  previousApplicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
   previousAccessibleUnitWaitlistNumber?: number
 
   /**  */
@@ -10522,6 +10528,14 @@ export enum ApplicationStatusEnum {
   "receivedUnit" = "receivedUnit",
   "waitlist" = "waitlist",
   "waitlistDeclined" = "waitlistDeclined",
+}
+
+export enum ApplicationDeclineReasonEnum {
+  "doesNotQualify" = "doesNotQualify",
+  "incomeDoesNotQualify" = "incomeDoesNotQualify",
+  "householdSizeDoesNotQualify" = "householdSizeDoesNotQualify",
+  "applicationSubmittedAfterDeadline" = "applicationSubmittedAfterDeadline",
+  "other" = "other",
 }
 
 export enum ApplicationSubmissionTypeEnum {
