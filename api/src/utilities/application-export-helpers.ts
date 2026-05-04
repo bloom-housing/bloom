@@ -37,6 +37,7 @@ export const getExportHeaders = (
     enableSpokenLanguage?: boolean;
     enableGenderQuestion?: boolean;
     enableV2MSQ?: boolean;
+    enableReceivedAtAndByFields?: boolean;
     forLottery?: boolean;
     includeDemographics?: boolean;
     swapCommunityTypeWithPrograms?: boolean;
@@ -52,6 +53,7 @@ export const getExportHeaders = (
     enableSpokenLanguage,
     enableGenderQuestion,
     enableV2MSQ,
+    enableReceivedAtAndByFields,
     forLottery,
     includeDemographics,
     swapCommunityTypeWithPrograms,
@@ -109,6 +111,23 @@ export const getExportHeaders = (
       },
     ],
   );
+
+  if (enableReceivedAtAndByFields) {
+    headers.push(
+      ...[
+        {
+          path: 'receivedAt',
+          label: 'Application Received At',
+          format: (val: string): string =>
+            formatLocalDate(val, dateFormat, timeZone ?? process.env.TIME_ZONE),
+        },
+        {
+          path: 'receivedBy',
+          label: 'Application Received By',
+        },
+      ],
+    );
+  }
 
   if (enableApplicationStatus) {
     headers.push(

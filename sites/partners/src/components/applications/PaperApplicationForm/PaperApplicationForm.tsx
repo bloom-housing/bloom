@@ -114,6 +114,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
+  const enableReceivedAtAndByFields = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReceivedAtAndByFields,
+    listingDto?.jurisdictions.id
+  )
+
   const units = listingDto?.units
 
   const defaultValues = editMode ? mapApiToForm(application, listingDto, enableV2MSQ) : {}
@@ -331,6 +336,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                   <div className="info-card md:w-9/12">
                     <FormApplicationData
                       enableApplicationStatus={enableApplicationStatus}
+                      enableReceivedAtAndByFields={enableReceivedAtAndByFields}
+                      appType={application?.submissionType}
                       disableApplicationStatusControls={
                         enableApplicationStatus && editMode && application?.markedAsDuplicate
                       }

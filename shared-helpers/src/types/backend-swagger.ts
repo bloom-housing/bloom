@@ -1990,7 +1990,7 @@ export class UserService {
   /**
    * Update user notification preferences
    */
-  userControllerUpdatePreferences(
+  updateNotificationPreferences(
     params: {
       /** requestBody */
       body?: UserNotificationPreferences
@@ -7225,6 +7225,12 @@ export interface Application {
   submissionDate?: Date
 
   /**  */
+  receivedBy?: string
+
+  /**  */
+  receivedAt?: Date
+
+  /**  */
   markedAsDuplicate: boolean
 
   /**  */
@@ -8233,6 +8239,12 @@ export interface PublicAppsFiltered {
   submissionDate?: Date
 
   /**  */
+  receivedBy?: string
+
+  /**  */
+  receivedAt?: Date
+
+  /**  */
   markedAsDuplicate: boolean
 
   /**  */
@@ -8572,6 +8584,12 @@ export interface ApplicationCreate {
   submissionDate?: Date
 
   /**  */
+  receivedBy?: string
+
+  /**  */
+  receivedAt?: Date
+
+  /**  */
   reviewStatus?: ApplicationReviewStatusEnum
 
   /**  */
@@ -8894,6 +8912,12 @@ export interface ApplicationUpdate {
 
   /**  */
   submissionDate?: Date
+
+  /**  */
+  receivedBy?: string
+
+  /**  */
+  receivedAt?: Date
 
   /**  */
   reviewStatus?: ApplicationReviewStatusEnum
@@ -10615,6 +10639,7 @@ export enum FeatureFlagEnum {
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableApplicationStatus" = "enableApplicationStatus",
   "enableCompanyWebsite" = "enableCompanyWebsite",
+  "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFaq" = "enableFaq",
@@ -10649,6 +10674,7 @@ export enum FeatureFlagEnum {
   "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProperties" = "enableProperties",
   "enableReasonableAccommodations" = "enableReasonableAccommodations",
+  "enableReceivedAtAndByFields" = "enableReceivedAtAndByFields",
   "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",
   "enableResources" = "enableResources",
