@@ -14,6 +14,7 @@ import {
   applicationSelectionDataFormatter,
   constructHouseholdHeaders,
   constructMultiselectQuestionHeaders,
+  convertGenderToReadable,
   convertDemographicRaceToReadable,
   getExportHeaders,
   multiselectQuestionFormat,
@@ -306,6 +307,37 @@ describe('Testing application export helpers', () => {
   };
 
   describe('Testing getExportHeaders', () => {
+    it('includes gender after ethnicity when demographics and enableGenderQuestion are on', () => {
+      const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
+        enableReasonableAccommodations: true,
+        includeDemographics: true,
+        enableGenderQuestion: true,
+      });
+      const paths = headers.map((h) => h.path);
+      const ethnicityIdx = paths.indexOf('demographics.ethnicity');
+      expect(ethnicityIdx).toBeGreaterThanOrEqual(0);
+      expect(paths[ethnicityIdx + 1]).toEqual('demographics.gender');
+      expect(paths[ethnicityIdx + 2]).toEqual('demographics.race');
+    });
+
+    it('omits gender when enableGenderQuestion is off', () => {
+      const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
+        enableReasonableAccommodations: true,
+        includeDemographics: true,
+        enableGenderQuestion: false,
+      });
+      expect(headers.some((h) => h.path === 'demographics.gender')).toBeFalsy();
+    });
+
+    it('omits gender when includeDemographics is off even if enableGenderQuestion is on', () => {
+      const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
+        enableReasonableAccommodations: true,
+        includeDemographics: false,
+        enableGenderQuestion: true,
+      });
+      expect(headers.some((h) => h.path === 'demographics.gender')).toBeFalsy();
+    });
+
     it('tests getCsvHeaders with no household members, multiselect questions or demographics', () => {
       const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
         enableReasonableAccommodations: true,
@@ -698,6 +730,31 @@ describe('Testing application export helpers', () => {
       );
       expect(res[2].path).toEqual(
         `multiselectQuestion.${questionId}.${optionId}.isGeocodingVerified`,
+      );
+    });
+  });
+
+  describe('Testing convertGenderToReadable', () => {
+    it('tests convertGenderToReadable with valid gender keys', () => {
+      expect(convertGenderToReadable('male')).toEqual('Male');
+      expect(convertGenderToReadable('female')).toEqual('Female');
+      expect(convertGenderToReadable('genderqueerGenderNon-Binary')).toEqual(
+        'Genderqueer / gender non-binary',
+      );
+      expect(convertGenderToReadable('transMale')).toEqual(
+        'Trans man / Transmasculine / Trans male',
+      );
+      expect(convertGenderToReadable('transFemale')).toEqual(
+        'Trans woman / Transfeminine / Trans female',
+      );
+      expect(convertGenderToReadable('differentTerm')).toEqual(
+        'I use a different term',
+      );
+      expect(convertGenderToReadable('dontKnow')).toEqual(
+        "I don't know or don't understand the question",
+      );
+      expect(convertGenderToReadable('preferNoResponse')).toEqual(
+        'Prefer not to respond',
       );
     });
   });
