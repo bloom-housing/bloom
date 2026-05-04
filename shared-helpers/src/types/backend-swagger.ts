@@ -4924,6 +4924,9 @@ export interface Listing {
   publishedAt?: Date
 
   /**  */
+  scheduledPublishAt?: Date
+
+  /**  */
   closedAt?: Date
 
   /**  */
@@ -5887,6 +5890,9 @@ export interface ListingCreate {
   contentUpdatedAt?: Date
 
   /**  */
+  scheduledPublishAt?: Date
+
+  /**  */
   lotteryLastPublishedAt?: Date
 
   /**  */
@@ -6755,6 +6761,9 @@ export interface ListingUpdate {
 
   /**  */
   contentUpdatedAt?: Date
+
+  /**  */
+  scheduledPublishAt?: Date
 
   /**  */
   lotteryLastPublishedAt?: Date
@@ -10638,6 +10647,7 @@ export enum FeatureFlagEnum {
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableApplicationStatus" = "enableApplicationStatus",
+  "enableAutopublish" = "enableAutopublish",
   "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",

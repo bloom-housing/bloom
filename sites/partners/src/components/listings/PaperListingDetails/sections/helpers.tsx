@@ -75,6 +75,9 @@ export const getReadableErrorMessage = (errorMessage: string | undefined) => {
     case "must be a valid phone number":
       readableMessage = t("errors.phoneNumberError")
       break
+    case "must be in the future":
+      readableMessage = t("errors.dateMustBeInTheFuture")
+      break
     default:
       readableMessage = t("errors.requiredFieldError")
   }

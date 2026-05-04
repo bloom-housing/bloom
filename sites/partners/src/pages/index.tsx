@@ -238,17 +238,30 @@ export default function ListingsList() {
         resizable: true,
         valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
         maxWidth: 150,
-      },
-      {
-        headerName: t("listings.applicationDueDate"),
-        field: "applicationDueDate",
+      }
+    )
+
+    if (doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableAutopublish)) {
+      columns.push({
+        headerName: t("listings.scheduledListingPublishDate"),
+        field: "scheduledPublishAt",
         sortable: false,
         filter: false,
         resizable: true,
         valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-        maxWidth: 120,
-      }
-    )
+        maxWidth: 180,
+      })
+    }
+
+    columns.push({
+      headerName: t("listings.applicationDueDate"),
+      field: "applicationDueDate",
+      sortable: false,
+      filter: false,
+      resizable: true,
+      valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
+      maxWidth: 120,
+    })
 
     if (
       getFlagInAllJurisdictions(
