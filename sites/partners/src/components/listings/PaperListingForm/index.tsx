@@ -494,11 +494,6 @@ const ListingForm = ({
               if (readableError) {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 setError(fieldName as any, { message: readableError })
-                // DateField is registered as scheduledListingPublishDateField; API validates scheduledPublishAt
-                if (fieldName === "scheduledPublishAt") {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  setError("scheduledListingPublishDateField" as any, { message: readableError })
-                }
                 if (fieldName === "buildingAddress" || fieldName === "buildingAddress.nested") {
                   const setIfEmpty = (
                     fieldName: string,
