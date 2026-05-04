@@ -16,7 +16,6 @@ import { translationFactory } from '../../../prisma/seed-helpers/translation-fac
 import { yellowstoneAddress } from '../../../prisma/seed-helpers/address-factory';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { User } from '../../../src/dtos/users/user.dto';
-import { ApplicationCreate } from '../../../src/dtos/applications/application-create.dto';
 import { Logger } from '@nestjs/common';
 import { ApplicationStatusChangeItem } from 'src/utilities/applicationStatusChanges';
 import Listing from 'src/dtos/listings/listing.dto';
@@ -241,6 +240,7 @@ describe('Testing email service', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      applicationLotteryTotals: null,
     };
     const application = {
       language: LanguagesEnum.en,
@@ -259,7 +259,7 @@ describe('Testing email service', () => {
     it('Test first come first serve', async () => {
       await service.applicationConfirmation(
         listing,
-        application as ApplicationCreate,
+        application,
         'http://localhost:3001',
       );
       expect(sendMock).toHaveBeenCalled();
@@ -289,7 +289,7 @@ describe('Testing email service', () => {
     it('Test lottery', async () => {
       await service.applicationConfirmation(
         { ...listing, reviewOrderType: ReviewOrderTypeEnum.lottery },
-        application as ApplicationCreate,
+        application,
         'http://localhost:3001',
       );
       expect(sendMock).toHaveBeenCalled();
@@ -322,7 +322,7 @@ describe('Testing email service', () => {
     it('Test waitlist', async () => {
       await service.applicationConfirmation(
         { ...listing, reviewOrderType: ReviewOrderTypeEnum.waitlist },
-        application as ApplicationCreate,
+        application,
         'http://localhost:3001',
       );
       expect(sendMock).toHaveBeenCalled();
@@ -355,7 +355,7 @@ describe('Testing email service', () => {
     it('Test waitlistLottery', async () => {
       await service.applicationConfirmation(
         { ...listing, reviewOrderType: ReviewOrderTypeEnum.waitlistLottery },
-        application as ApplicationCreate,
+        application,
         'http://localhost:3001',
       );
       expect(sendMock).toHaveBeenCalled();
@@ -398,7 +398,7 @@ describe('Testing email service', () => {
 
       await service.applicationConfirmation(
         listingWithLeasingAgent,
-        application as ApplicationCreate,
+        application,
         'http://localhost:3001',
       );
 
@@ -424,7 +424,7 @@ describe('Testing email service', () => {
 
       await service.applicationConfirmation(
         listingWithPartialLeasingAgent,
-        application as ApplicationCreate,
+        application,
         'http://localhost:3001',
       );
 
@@ -441,7 +441,7 @@ describe('Testing email service', () => {
     it('Test no property manager and office hours', async () => {
       await service.applicationConfirmation(
         listing,
-        application as ApplicationCreate,
+        application,
         'http://localhost:3001',
       );
 
@@ -462,7 +462,7 @@ describe('Testing email service', () => {
         {
           ...application,
           language: LanguagesEnum.es,
-        } as ApplicationCreate,
+        },
         'http://localhost:3001',
         true,
       );
@@ -779,7 +779,7 @@ describe('Testing email service', () => {
         },
         {
           type: 'declineReason',
-          value: ApplicationDeclineReasonEnum.incomeDoesNotQualify,
+          value: ApplicationDeclineReasonEnum.incomeRestriction,
         },
       ] as ApplicationStatusChangeItem[];
 
@@ -799,7 +799,7 @@ describe('Testing email service', () => {
         'Your application status has changed from <strong>Submitted</strong> to <strong>Declined</strong>',
       );
       expect(emailMock.body).toContain(
-        'Your application decline reason is <strong>Income does not qualify</strong>',
+        'Your application decline reason is <strong>Income Restriction</strong>',
       );
     });
 
@@ -830,7 +830,7 @@ describe('Testing email service', () => {
         },
         {
           type: 'declineReason',
-          value: ApplicationDeclineReasonEnum.doesNotQualify,
+          value: ApplicationDeclineReasonEnum.ageRestriction,
         },
       ] as ApplicationStatusChangeItem[];
 
@@ -848,12 +848,12 @@ describe('Testing email service', () => {
 
       const advocateEmailMock = sendMock.mock.calls[0][0];
       expect(advocateEmailMock.body).toContain(
-        'Your application decline reason is <strong>Does not qualify</strong>',
+        'Your application decline reason is <strong>Age Restriction</strong>',
       );
 
       const applicantEmailMock = sendMock.mock.calls[1][0];
       expect(applicantEmailMock.body).toContain(
-        'Your application decline reason is <strong>Does not qualify</strong>',
+        'Your application decline reason is <strong>Age Restriction</strong>',
       );
     });
   });

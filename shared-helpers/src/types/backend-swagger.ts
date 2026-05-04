@@ -7216,6 +7216,9 @@ export interface Application {
   applicationDeclineReason?: ApplicationDeclineReasonEnum
 
   /**  */
+  applicationDeclineReasonAdditionalDetails?: string
+
+  /**  */
   accessibleUnitWaitlistNumber?: number
 
   /**  */
@@ -8230,6 +8233,12 @@ export interface PublicAppsFiltered {
   status: ApplicationStatusEnum
 
   /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
+
+  /**  */
   accessibleUnitWaitlistNumber?: number
 
   /**  */
@@ -8575,6 +8584,12 @@ export interface ApplicationCreate {
   status: ApplicationStatusEnum
 
   /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
+
+  /**  */
   accessibleUnitWaitlistNumber?: number
 
   /**  */
@@ -8903,6 +8918,12 @@ export interface ApplicationUpdate {
 
   /**  */
   status: ApplicationStatusEnum
+
+  /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
 
   /**  */
   accessibleUnitWaitlistNumber?: number
@@ -10531,10 +10552,12 @@ export enum ApplicationStatusEnum {
 }
 
 export enum ApplicationDeclineReasonEnum {
-  "doesNotQualify" = "doesNotQualify",
-  "incomeDoesNotQualify" = "incomeDoesNotQualify",
-  "householdSizeDoesNotQualify" = "householdSizeDoesNotQualify",
-  "applicationSubmittedAfterDeadline" = "applicationSubmittedAfterDeadline",
+  "ageRestriction" = "ageRestriction",
+  "incomeRestriction" = "incomeRestriction",
+  "unitRestriction" = "unitRestriction",
+  "programRestriction" = "programRestriction",
+  "attemptedToContactNoResponse" = "attemptedToContactNoResponse",
+  "householdDoesNotNeedAccessibleUnit" = "householdDoesNotNeedAccessibleUnit",
   "other" = "other",
 }
 

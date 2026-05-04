@@ -153,6 +153,13 @@ export class Application extends AbstractDTO {
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  applicationDeclineReasonAdditionalDetails?: string;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   accessibleUnitWaitlistNumber?: number;

@@ -47,7 +47,7 @@ describe("buildAppStatusConfirmSections", () => {
       const result = buildAppStatusConfirmSections(
         makeFormTypes(
           ApplicationStatusEnum.declined,
-          ApplicationDeclineReasonEnum.doesNotQualify
+          ApplicationDeclineReasonEnum.ageRestriction
         ) as FormTypes,
         makeFormTypes(ApplicationStatusEnum.submitted)
       )
@@ -59,7 +59,7 @@ describe("buildAppStatusConfirmSections", () => {
       const result = buildAppStatusConfirmSections(
         makeFormTypes(
           ApplicationStatusEnum.declined,
-          ApplicationDeclineReasonEnum.incomeDoesNotQualify
+          ApplicationDeclineReasonEnum.incomeRestriction
         ) as FormTypes,
         makeFormTypes(ApplicationStatusEnum.declined, ApplicationDeclineReasonEnum.other)
       )
@@ -83,7 +83,7 @@ describe("buildAppStatusConfirmSections", () => {
       const result = buildAppStatusConfirmSections(
         makeFormTypes(
           ApplicationStatusEnum.submitted,
-          ApplicationDeclineReasonEnum.doesNotQualify
+          ApplicationDeclineReasonEnum.ageRestriction
         ) as FormTypes,
         makeFormTypes(ApplicationStatusEnum.submitted)
       )
@@ -114,7 +114,7 @@ describe("buildAppStatusConfirmSections", () => {
     it("adds decline reason to removals when status changes away from declined", () => {
       const result = buildAppStatusConfirmSections(
         makeFormTypes(ApplicationStatusEnum.submitted) as FormTypes,
-        makeFormTypes(ApplicationStatusEnum.declined, ApplicationDeclineReasonEnum.doesNotQualify)
+        makeFormTypes(ApplicationStatusEnum.declined, ApplicationDeclineReasonEnum.ageRestriction)
       )
       expect(result.removals.find((r) => r.label.toLowerCase().includes("decline"))).toBeDefined()
     })
@@ -142,7 +142,7 @@ describe("buildAppStatusConfirmSections", () => {
       const result = buildAppStatusConfirmSections(
         makeFormTypes(
           ApplicationStatusEnum.declined,
-          ApplicationDeclineReasonEnum.incomeDoesNotQualify
+          ApplicationDeclineReasonEnum.incomeRestriction
         ) as FormTypes,
         makeFormTypes(ApplicationStatusEnum.declined, ApplicationDeclineReasonEnum.other)
       )
@@ -175,7 +175,7 @@ describe("buildAppStatusConfirmSections", () => {
       const result = buildAppStatusConfirmSections(
         makeFormTypes(
           ApplicationStatusEnum.declined,
-          ApplicationDeclineReasonEnum.householdSizeDoesNotQualify
+          ApplicationDeclineReasonEnum.unitRestriction
         ) as FormTypes,
         makeFormTypes(ApplicationStatusEnum.submitted)
       )

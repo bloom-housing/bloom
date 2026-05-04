@@ -69,38 +69,11 @@ describe("<SubmittedApplicationView>", () => {
     it("shows decline reason label and value when status is declined and reason is set", () => {
       renderView({
         status: ApplicationStatusEnum.declined,
-        applicationDeclineReason: ApplicationDeclineReasonEnum.doesNotQualify,
+        applicationDeclineReason: ApplicationDeclineReasonEnum.ageRestriction,
       })
 
       expect(screen.getByText(/decline reason/i)).toBeInTheDocument()
-      expect(screen.getByText(/does not qualify/i)).toBeInTheDocument()
-    })
-
-    it("shows the correct label for incomeDoesNotQualify", () => {
-      renderView({
-        status: ApplicationStatusEnum.declined,
-        applicationDeclineReason: ApplicationDeclineReasonEnum.incomeDoesNotQualify,
-      })
-
-      expect(screen.getByText(/income does not qualify/i)).toBeInTheDocument()
-    })
-
-    it("shows the correct label for householdSizeDoesNotQualify", () => {
-      renderView({
-        status: ApplicationStatusEnum.declined,
-        applicationDeclineReason: ApplicationDeclineReasonEnum.householdSizeDoesNotQualify,
-      })
-
-      expect(screen.getByText(/household size does not qualify/i)).toBeInTheDocument()
-    })
-
-    it("shows the correct label for applicationSubmittedAfterDeadline", () => {
-      renderView({
-        status: ApplicationStatusEnum.declined,
-        applicationDeclineReason: ApplicationDeclineReasonEnum.applicationSubmittedAfterDeadline,
-      })
-
-      expect(screen.getByText(/application submitted after deadline/i)).toBeInTheDocument()
+      expect(screen.getByText(/age restriction/i)).toBeInTheDocument()
     })
 
     it("shows the correct label for other", () => {

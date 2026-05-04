@@ -250,7 +250,11 @@ export const mapFormToApi = ({
   const status = data.application.status || ApplicationStatusEnum.submitted
   const applicationDeclineReason =
     status === ApplicationStatusEnum.declined
-      ? (data.application.applicationDeclineReason as ApplicationDeclineReasonEnum) || null
+      ? data.application.applicationDeclineReason || null
+      : null
+  const applicationDeclineReasonAdditionalDetails =
+    status === ApplicationStatusEnum.declined && applicationDeclineReason
+      ? data.application.applicationDeclineReasonAdditionalDetails || null
       : null
 
   const listings = {
@@ -309,6 +313,7 @@ export const mapFormToApi = ({
     submissionType,
     status,
     applicationDeclineReason,
+    applicationDeclineReasonAdditionalDetails,
     listings,
     preferredUnitTypes: preferredUnit,
     applicationsAlternateAddress: alternateAddress,
@@ -468,6 +473,7 @@ export const mapApiToForm = (
       alternateContact,
       status,
       applicationDeclineReason,
+      applicationDeclineReasonAdditionalDetails,
       accessibleUnitWaitlistNumber,
       conventionalUnitWaitlistNumber,
       manualLotteryPositionNumber,
@@ -520,6 +526,7 @@ export const mapApiToForm = (
       receivedBy,
       status,
       applicationDeclineReason,
+      applicationDeclineReasonAdditionalDetails,
       accessibleUnitWaitlistNumber,
       conventionalUnitWaitlistNumber,
       manualLotteryPositionNumber,

@@ -418,6 +418,7 @@ model Applications {
   sendMailToMailingAddress       Boolean?                      @map("send_mail_to_mailing_address")
   status                         ApplicationStatusEnum         @default(submitted)
   applicationDeclineReason       ApplicationDeclineReasonEnum? @map("application_decline_reason")
+  applicationDeclineReasonAdditionalDetails String?           @map("application_decline_reason_additional_details")
   submissionDate                 DateTime?                     @map("submission_date") @db.Timestamptz(6)
   submissionType                 ApplicationSubmissionTypeEnum @map("submission_type")
   receivedAt                     DateTime?                     @map("received_at") @db.Timestamptz(6)
@@ -496,6 +497,7 @@ model ApplicationSnapshot {
   sendMailToMailingAddress       Boolean?                      @map("send_mail_to_mailing_address")
   status                         ApplicationStatusEnum         @default(submitted)
   applicationDeclineReason       ApplicationDeclineReasonEnum? @map("application_decline_reason")
+  applicationDeclineReasonAdditionalDetails String?           @map("application_decline_reason_additional_details")
   submissionDate                 DateTime?                     @map("submission_date") @db.Timestamptz(6)
   submissionType                 ApplicationSubmissionTypeEnum @map("submission_type")
   userId                         String?                       @map("user_id") @db.Uuid
@@ -2277,10 +2279,12 @@ enum ApplicationStatusEnum {
 }
 
 enum ApplicationDeclineReasonEnum {
-  doesNotQualify
-  incomeDoesNotQualify
-  householdSizeDoesNotQualify
-  applicationSubmittedAfterDeadline
+  ageRestriction
+  incomeRestriction
+  unitRestriction
+  programRestriction
+  attemptedToContactNoResponse
+  householdDoesNotNeedAccessibleUnit
   other
 
   @@map("application_decline_reason_enum")

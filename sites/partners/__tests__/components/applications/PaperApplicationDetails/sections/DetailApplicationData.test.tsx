@@ -139,7 +139,7 @@ describe("DetailApplicationData", () => {
       renderDetailsApplicationData({
         applicationOverrides: {
           status: ApplicationStatusEnum.declined,
-          applicationDeclineReason: ApplicationDeclineReasonEnum.doesNotQualify,
+          applicationDeclineReason: ApplicationDeclineReasonEnum.ageRestriction,
         },
         enableApplicationStatus: false,
       })
@@ -169,6 +169,30 @@ describe("DetailApplicationData", () => {
       })
 
       expect(screen.getByText(/decline reason/i)).toBeInTheDocument()
+      expect(screen.getAllByText("n/a")).toHaveLength(2)
+    })
+
+    it("displays additional details when provided and n/a when not", () => {
+      const { unmount } = renderDetailsApplicationData({
+        applicationOverrides: {
+          status: ApplicationStatusEnum.declined,
+          applicationDeclineReason: ApplicationDeclineReasonEnum.ageRestriction,
+          applicationDeclineReasonAdditionalDetails: "Some extra context",
+        },
+        enableApplicationStatus: true,
+      })
+      expect(screen.getByText("Some extra context")).toBeInTheDocument()
+      unmount()
+
+      renderDetailsApplicationData({
+        applicationOverrides: {
+          status: ApplicationStatusEnum.declined,
+          applicationDeclineReason: ApplicationDeclineReasonEnum.ageRestriction,
+          applicationDeclineReasonAdditionalDetails: undefined,
+        },
+        enableApplicationStatus: true,
+      })
+      expect(screen.getByText(/decline reason additional details/i)).toBeInTheDocument()
       expect(screen.getByText("n/a")).toBeInTheDocument()
     })
 
@@ -176,26 +200,25 @@ describe("DetailApplicationData", () => {
       renderDetailsApplicationData({
         applicationOverrides: {
           status: ApplicationStatusEnum.declined,
-          applicationDeclineReason: ApplicationDeclineReasonEnum.doesNotQualify,
+          applicationDeclineReason: ApplicationDeclineReasonEnum.ageRestriction,
         },
         enableApplicationStatus: true,
       })
 
       expect(screen.getByText(/decline reason/i)).toBeInTheDocument()
-      expect(screen.getByText(/does not qualify/i)).toBeInTheDocument()
+      expect(screen.getByText(/age restriction/i)).toBeInTheDocument()
     })
 
     it("displays the correct label for each decline reason value", () => {
       const cases: [ApplicationDeclineReasonEnum, RegExp][] = [
-        [ApplicationDeclineReasonEnum.doesNotQualify, /does not qualify/i],
-        [ApplicationDeclineReasonEnum.incomeDoesNotQualify, /income does not qualify/i],
+        [ApplicationDeclineReasonEnum.ageRestriction, /age restriction/i],
+        [ApplicationDeclineReasonEnum.incomeRestriction, /income restriction/i],
+        [ApplicationDeclineReasonEnum.unitRestriction, /unit restriction/i],
+        [ApplicationDeclineReasonEnum.programRestriction, /program restriction/i],
+        [ApplicationDeclineReasonEnum.attemptedToContactNoResponse, /attempted to contact/i],
         [
-          ApplicationDeclineReasonEnum.householdSizeDoesNotQualify,
-          /household size does not qualify/i,
-        ],
-        [
-          ApplicationDeclineReasonEnum.applicationSubmittedAfterDeadline,
-          /application submitted after deadline/i,
+          ApplicationDeclineReasonEnum.householdDoesNotNeedAccessibleUnit,
+          /household does not need accessible unit/i,
         ],
         [ApplicationDeclineReasonEnum.other, /^other$/i],
       ]

@@ -116,11 +116,15 @@ const translations = (
             waitlistDeclined: 'Lista de espera - Rechazada',
           },
           declineReason: {
-            doesNotQualify: 'No califica',
-            incomeDoesNotQualify: 'Los ingresos no califican',
-            householdSizeDoesNotQualify: 'El tamaño del hogar no califica',
-            applicationSubmittedAfterDeadline:
-              'Solicitud enviada después de la fecha límite',
+            ageRestriction: 'Restricción de edad',
+            incomeRestriction: 'Restricción de ingresos',
+            unitRestriction:
+              'Restricción de unidad (p. ej., número de habitaciones y/o ocupación)',
+            programRestriction:
+              'Restricción de programa (p. ej., unidad CES, unidad para veteranos, unidad VASH, etc.)',
+            attemptedToContactNoResponse: 'Intento de contacto; sin respuesta',
+            householdDoesNotNeedAccessibleUnit:
+              'El hogar no necesita características de unidad accesible',
             other: 'Otro',
           },
         },
@@ -417,11 +421,15 @@ const translations = (
             waitlistDeclined: 'Wait list - Declined',
           },
           declineReason: {
-            doesNotQualify: 'Does not qualify',
-            incomeDoesNotQualify: 'Income does not qualify',
-            householdSizeDoesNotQualify: 'Household size does not qualify',
-            applicationSubmittedAfterDeadline:
-              'Application submitted after deadline',
+            ageRestriction: 'Age Restriction',
+            incomeRestriction: 'Income Restriction',
+            unitRestriction:
+              'Unit Restriction (e.g. bedroom count and/or occupancy)',
+            programRestriction:
+              'Program Restriction (e.g. CES unit, Veteran Unit, VASH unit, etc.)',
+            attemptedToContactNoResponse: 'Attempted to Contact; No Response',
+            householdDoesNotNeedAccessibleUnit:
+              'Household does not need accessible unit features',
             other: 'Other',
           },
         },

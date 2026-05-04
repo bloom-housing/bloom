@@ -124,6 +124,13 @@ const DetailsApplicationData = ({
                     : t("t.n/a")}
                 </FieldValue>
               </Grid.Cell>
+              <Grid.Cell className={"seeds-grid-span-2"}>
+                <FieldValue
+                  label={t("application.details.applicationDeclineReasonAdditionalDetails")}
+                >
+                  {application.applicationDeclineReasonAdditionalDetails ?? t("t.n/a")}
+                </FieldValue>
+              </Grid.Cell>
             </Grid.Row>
           )}
           <Grid.Row columns={3}>

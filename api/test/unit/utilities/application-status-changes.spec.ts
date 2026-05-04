@@ -71,11 +71,11 @@ describe('buildApplicationStatusChanges', () => {
         initialStatus: 'submitted',
         nextStatus: 'declined',
         initialApplicationDeclineReason: null,
-        nextApplicationDeclineReason: 'doesNotQualify',
+        nextApplicationDeclineReason: 'ageRestriction',
       });
       expect(changes).toContainEqual({
         type: 'declineReason',
-        value: 'doesNotQualify',
+        value: 'ageRestriction',
       });
     });
 
@@ -84,11 +84,11 @@ describe('buildApplicationStatusChanges', () => {
         initialStatus: 'declined',
         nextStatus: 'declined',
         initialApplicationDeclineReason: 'other',
-        nextApplicationDeclineReason: 'incomeDoesNotQualify',
+        nextApplicationDeclineReason: 'incomeRestriction',
       });
       expect(changes).toContainEqual({
         type: 'declineReason',
-        value: 'incomeDoesNotQualify',
+        value: 'incomeRestriction',
       });
     });
 
@@ -97,7 +97,7 @@ describe('buildApplicationStatusChanges', () => {
         initialStatus: 'submitted',
         nextStatus: 'waitlist',
         initialApplicationDeclineReason: null,
-        nextApplicationDeclineReason: 'doesNotQualify',
+        nextApplicationDeclineReason: 'ageRestriction',
       });
       expect(changes.find((c) => c.type === 'declineReason')).toBeUndefined();
     });
@@ -181,7 +181,7 @@ describe('buildApplicationStatusChanges', () => {
       const changes = buildApplicationStatusChanges({
         initialStatus: 'submitted',
         nextStatus: 'declined',
-        nextApplicationDeclineReason: 'incomeDoesNotQualify',
+        nextApplicationDeclineReason: 'incomeRestriction',
       });
       expect(changes).toHaveLength(2);
       expect(changes[0]).toEqual({
@@ -191,7 +191,7 @@ describe('buildApplicationStatusChanges', () => {
       });
       expect(changes[1]).toEqual({
         type: 'declineReason',
-        value: 'incomeDoesNotQualify',
+        value: 'incomeRestriction',
       });
     });
 

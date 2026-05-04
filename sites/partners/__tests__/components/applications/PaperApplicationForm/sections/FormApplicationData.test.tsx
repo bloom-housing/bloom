@@ -382,9 +382,9 @@ describe("<FormApplicationData>", () => {
       const declineSelect = screen.getByTestId("applicationDeclineReasonSelect")
       expect(declineSelect.closest(".hidden")).not.toBeInTheDocument()
 
-      await userEvent.selectOptions(declineSelect, ApplicationDeclineReasonEnum.doesNotQualify)
+      await userEvent.selectOptions(declineSelect, ApplicationDeclineReasonEnum.ageRestriction)
       expect((declineSelect as HTMLSelectElement).value).toBe(
-        ApplicationDeclineReasonEnum.doesNotQualify
+        ApplicationDeclineReasonEnum.ageRestriction
       )
     })
 
@@ -409,7 +409,30 @@ describe("<FormApplicationData>", () => {
       }
     })
 
-    it("hides the active select and shows disabled display when controls are disabled", async () => {
+    it("shows additional details textarea only when status is declined and a reason is selected", async () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
+        </FormProviderWrapper>
+      )
+
+      expect(screen.queryByLabelText(/decline reason additional details/i)).not.toBeInTheDocument()
+
+      const statusSelect = screen.getByTestId("applicationStatusSelect")
+      await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
+
+      expect(screen.queryByLabelText(/decline reason additional details/i)).not.toBeInTheDocument()
+
+      const declineSelect = screen.getByTestId("applicationDeclineReasonSelect")
+      await userEvent.selectOptions(declineSelect, ApplicationDeclineReasonEnum.ageRestriction)
+
+      expect(screen.getByLabelText(/decline reason additional details/i)).toBeInTheDocument()
+    })
+
+    it("hides the active select and shows disabled display when controls are disabled", () => {
       render(
         <FormProviderWrapper>
           <FormApplicationData

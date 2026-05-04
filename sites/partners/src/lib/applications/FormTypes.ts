@@ -66,6 +66,7 @@ export type ApplicationTypes = {
   reviewStatus?: ApplicationReviewStatusEnum
   status?: ApplicationStatusEnum
   applicationDeclineReason?: ApplicationDeclineReasonEnum
+  applicationDeclineReasonAdditionalDetails?: string
   phoneNumber?: string
   receivedBy?: string
   accessibleUnitWaitlistNumber?: number
