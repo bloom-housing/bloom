@@ -14,7 +14,7 @@ import {
   applicationSelectionDataFormatter,
   constructHouseholdHeaders,
   constructMultiselectQuestionHeaders,
-  convertGenderToReadable,
+  convertDemographicGenderToReadable,
   convertDemographicRaceToReadable,
   getExportHeaders,
   multiselectQuestionFormat,
@@ -734,26 +734,26 @@ describe('Testing application export helpers', () => {
     });
   });
 
-  describe('Testing convertGenderToReadable', () => {
-    it('tests convertGenderToReadable with valid gender keys', () => {
-      expect(convertGenderToReadable('male')).toEqual('Male');
-      expect(convertGenderToReadable('female')).toEqual('Female');
-      expect(convertGenderToReadable('genderqueerGenderNon-Binary')).toEqual(
-        'Genderqueer / gender non-binary',
-      );
-      expect(convertGenderToReadable('transMale')).toEqual(
+  describe('Testing convertDemographicGenderToReadable', () => {
+    it('tests convertDemographicGenderToReadable with valid gender keys', () => {
+      expect(convertDemographicGenderToReadable('male')).toEqual('Male');
+      expect(convertDemographicGenderToReadable('female')).toEqual('Female');
+      expect(
+        convertDemographicGenderToReadable('genderqueerGenderNon-Binary'),
+      ).toEqual('Genderqueer / gender non-binary');
+      expect(convertDemographicGenderToReadable('transMale')).toEqual(
         'Trans man / Transmasculine / Trans male',
       );
-      expect(convertGenderToReadable('transFemale')).toEqual(
+      expect(convertDemographicGenderToReadable('transFemale')).toEqual(
         'Trans woman / Transfeminine / Trans female',
       );
-      expect(convertGenderToReadable('differentTerm')).toEqual(
+      expect(convertDemographicGenderToReadable('differentTerm')).toEqual(
         'I use a different term',
       );
-      expect(convertGenderToReadable('dontKnow')).toEqual(
+      expect(convertDemographicGenderToReadable('dontKnow')).toEqual(
         "I don't know or don't understand the question",
       );
-      expect(convertGenderToReadable('preferNoResponse')).toEqual(
+      expect(convertDemographicGenderToReadable('preferNoResponse')).toEqual(
         'Prefer not to respond',
       );
     });
