@@ -1,12 +1,11 @@
 import React from "react"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
 import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import type { SubmitFunction } from "../index"
-
-dayjs.extend(utc)
 
 export interface ListingApprovalDialogProps {
   isOpen: boolean
