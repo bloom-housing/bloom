@@ -1492,6 +1492,24 @@ describe('Testing listing service', () => {
                   },
                 ],
               },
+              {
+                AND: [
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
+                    },
+                  },
+                  { isWaitlistOpen: { equals: false } },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
             ],
           },
         ],
@@ -1540,6 +1558,23 @@ describe('Testing listing service', () => {
                   {
                     unitGroups: {
                       some: { openWaitlist: { equals: true } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
+                AND: [
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
                     },
                   },
                   {
@@ -1646,6 +1681,23 @@ describe('Testing listing service', () => {
                 ],
               },
               {
+                AND: [
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
                 unitsAvailable: {
                   gte: 1,
                 },
@@ -1685,6 +1737,24 @@ describe('Testing listing service', () => {
                       some: { openWaitlist: { equals: false } },
                     },
                   },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
+                AND: [
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
+                    },
+                  },
+                  { isWaitlistOpen: { equals: false } },
                   {
                     marketingType: {
                       not: { equals: MarketingTypeEnum.comingSoon },
@@ -1740,6 +1810,23 @@ describe('Testing listing service', () => {
                   {
                     unitGroups: {
                       some: { openWaitlist: { equals: true } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
+                AND: [
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
                     },
                   },
                   {

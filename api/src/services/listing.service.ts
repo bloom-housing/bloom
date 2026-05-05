@@ -543,21 +543,41 @@ export class ListingService implements OnModuleInit {
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
-                return {
-                  AND: builtFilter
-                    .map((filt) => ({
-                      unitGroups: {
-                        some: {
-                          [FilterAvailabilityEnum.openWaitlist]: filt,
+                // Two OR branches: unit-groups listings use unitGroups.openWaitlist,
+                // listings without unit groups require reviewOrderType + isWaitlistOpen:false
+                return [
+                  {
+                    AND: builtFilter
+                      .map((filt) => ({
+                        unitGroups: {
+                          some: {
+                            [FilterAvailabilityEnum.openWaitlist]: filt,
+                          },
+                        },
+                      }))
+                      .concat(
+                        notUnderConstruction.map((filt) => ({
+                          marketingType: filt,
+                        })),
+                      ),
+                  },
+                  {
+                    AND: [
+                      {
+                        reviewOrderType: {
+                          in: [
+                            ReviewOrderTypeEnum.waitlist,
+                            ReviewOrderTypeEnum.waitlistLottery,
+                          ],
                         },
                       },
-                    }))
-                    .concat(
-                      notUnderConstruction.map((filt) => ({
+                      { isWaitlistOpen: { equals: false } },
+                      ...notUnderConstruction.map((filt) => ({
                         marketingType: filt,
                       })),
-                    ),
-                };
+                    ],
+                  },
+                ];
               } else if (availability === FilterAvailabilityEnum.comingSoon) {
                 const builtFilter = buildFilter({
                   $comparison: Compare['='],
@@ -577,21 +597,38 @@ export class ListingService implements OnModuleInit {
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
-                return {
-                  AND: builtFilter
-                    .map((filt) => ({
-                      unitGroups: {
-                        some: {
-                          [FilterAvailabilityEnum.openWaitlist]: filt,
+                return [
+                  {
+                    AND: builtFilter
+                      .map((filt) => ({
+                        unitGroups: {
+                          some: {
+                            [FilterAvailabilityEnum.openWaitlist]: filt,
+                          },
+                        },
+                      }))
+                      .concat(
+                        notUnderConstruction.map((filt) => ({
+                          marketingType: filt,
+                        })),
+                      ),
+                  },
+                  {
+                    AND: [
+                      {
+                        reviewOrderType: {
+                          in: [
+                            ReviewOrderTypeEnum.waitlist,
+                            ReviewOrderTypeEnum.waitlistLottery,
+                          ],
                         },
                       },
-                    }))
-                    .concat(
-                      notUnderConstruction.map((filt) => ({
+                      ...notUnderConstruction.map((filt) => ({
                         marketingType: filt,
                       })),
-                    ),
-                };
+                    ],
+                  },
+                ];
               } else if (availability === FilterAvailabilityEnum.waitlistOpen) {
                 const builtFilter = buildFilter({
                   $comparison: Compare.IN,
@@ -662,6 +699,22 @@ export class ListingService implements OnModuleInit {
                     })),
                   ),
               },
+              {
+                AND: [
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
+                    },
+                  },
+                  { isWaitlistOpen: { equals: false } },
+                  ...notUnderConstruction.map((filt) => ({
+                    marketingType: filt,
+                  })),
+                ],
+              },
             ],
           });
         } else if (
@@ -705,6 +758,21 @@ export class ListingService implements OnModuleInit {
                       marketingType: filt,
                     })),
                   ),
+              },
+              {
+                AND: [
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
+                    },
+                  },
+                  ...notUnderConstruction.map((filt) => ({
+                    marketingType: filt,
+                  })),
+                ],
               },
             ],
           });
