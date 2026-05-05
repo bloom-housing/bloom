@@ -137,6 +137,16 @@ export const getExportHeaders = (
           label: 'Application Status',
         },
         {
+          path: 'applicationDeclineReason',
+          label: 'Application Decline Reason',
+          format: (val: string): string =>
+            convertApplicationDeclineReasonToReadable(val),
+        },
+        {
+          path: 'applicationDeclineReasonAdditionalDetails',
+          label: 'Application Decline Reason Additional Details',
+        },
+        {
           path: 'manualLotteryPositionNumber',
           label: 'Lottery Position Number',
         },
@@ -961,6 +971,29 @@ export const convertDemographicLanguageToReadable = (type: string): string => {
     notListed: notListedString,
   };
   return typeMap[rootKey] ?? rootKey;
+};
+
+/**
+ *
+ * @param type takes in the decline reason enum key
+ * @returns outputs the readable version of the string
+ */
+export const convertApplicationDeclineReasonToReadable = (
+  type: string,
+): string => {
+  const typeMap = {
+    ageRestriction: 'Age restriction',
+    incomeRestriction: 'Income restriction',
+    unitRestriction: 'Unit restriction (e.g. bedroom count and/or occupancy)',
+    programRestriction:
+      'Program restriction (e.g. CES unit, Veteran Unit, VASH unit, etc.)',
+    attemptedToContactNoResponse: 'Attempted to contact; no response',
+    householdDoesNotNeedAccessibleUnit:
+      'Household does not need accessible unit features',
+    other: 'Other',
+  };
+
+  return typeMap[type] ?? type;
 };
 
 /**
