@@ -57,7 +57,7 @@ const ResetPassword = () => {
     } catch (err) {
       setLoading(false)
       const { status, data } = err.response || {}
-      if (status === 400) {
+      if (status === 400 || status === 401) {
         setRequestError(`${t(`authentication.forgotPassword.errors.${data.message}`)}`)
       } else {
         console.error(err)

@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CookieOptions, Response } from 'express';
@@ -328,17 +327,23 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new NotFoundException(
+      console.error(
         `user resetToken: ${dto.token} was requested but not found`,
       );
+      throw new UnauthorizedException('tokenMissing');
     }
 
-    const token: IdDTO = verify(dto.token, process.env.APP_SECRET) as IdDTO;
-
+    let token: IdDTO = { id: undefined };
+    try {
+      token = verify(dto.token, process.env.APP_SECRET) as IdDTO;
+    } catch (e) {
+      throw new UnauthorizedException('tokenExpired');
+    }
     if (token.id !== user.id) {
-      throw new UnauthorizedException(
+      console.error(
         `resetToken ${dto.token} does not match user ${user.id}'s reset token (${user.resetToken})`,
       );
+      throw new UnauthorizedException('tokenExpired');
     }
     await this.snapshotCreateService.createUserSnapshot(user.id);
     await this.prisma.userAccounts.update({
