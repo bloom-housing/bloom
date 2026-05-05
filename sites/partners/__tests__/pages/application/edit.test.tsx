@@ -5,6 +5,7 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import { render, screen, mockNextRouter } from "../../testUtils"
 import userEvent from "@testing-library/user-event"
 import {
+  ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -70,6 +71,9 @@ describe("application edit page", () => {
 
       const statusSelect = await screen.findByLabelText(/status/i)
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
+
+      const declineSelect = screen.getByTestId("applicationDeclineReasonSelect")
+      await userEvent.selectOptions(declineSelect, ApplicationDeclineReasonEnum.ageRestriction)
 
       const saveButton = screen.getByRole("button", { name: "Save & exit" })
       await userEvent.click(saveButton)
