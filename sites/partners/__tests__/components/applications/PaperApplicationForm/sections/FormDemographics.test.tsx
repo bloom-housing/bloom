@@ -1,5 +1,6 @@
 import React from "react"
 import userEvent from "@testing-library/user-event"
+import { genderKeys } from "@bloom-housing/shared-helpers"
 import { RaceEthnicityConfiguration } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { defaultRaceEthnicityConfiguration } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { t } from "@bloom-housing/ui-components"
@@ -397,7 +398,7 @@ describe("<FormDemographics>", () => {
     )
 
     const select = screen.getByRole("combobox", {
-      name: "Which language is most commonly spoken in your home?",
+      name: t("application.add.spokenLanguage"),
     })
     expect(select).toBeInTheDocument()
 
@@ -424,7 +425,7 @@ describe("<FormDemographics>", () => {
 
     expect(
       screen.queryByRole("combobox", {
-        name: "Which language is most commonly spoken in your home?",
+        name: t("application.add.spokenLanguage"),
       })
     ).not.toBeInTheDocument()
   })
@@ -447,10 +448,87 @@ describe("<FormDemographics>", () => {
     )
 
     const select = screen.getByRole("combobox", {
-      name: "Which language is most commonly spoken in your home?",
+      name: t("application.add.spokenLanguage"),
     })
     await userEvent.selectOptions(select, "notListed")
 
     expect(screen.getByLabelText("Please specify:")).toBeInTheDocument()
+  })
+
+  it("shows gender select when enableGenderQuestion is enabled", () => {
+    render(
+      <FormProviderWrapper>
+        <FormDemographics
+          formValues={{
+            id: "id",
+            race: [],
+            howDidYouHear: [],
+          }}
+          raceEthnicityConfiguration={defaultRaceEthnicityConfiguration}
+          enableLimitedHowDidYouHear={false}
+          disableEthnicityQuestion={false}
+          enableGenderQuestion={true}
+        />
+      </FormProviderWrapper>
+    )
+
+    const select = screen.getByRole("combobox", {
+      name: t("application.add.gender"),
+    })
+    expect(select).toBeInTheDocument()
+
+    const optionValues = Array.from(select.querySelectorAll("option")).map((option) => option.value)
+    expect(optionValues).toEqual(expect.arrayContaining(["", ...genderKeys]))
+  })
+
+  it("hides gender select when enableGenderQuestion is disabled", () => {
+    render(
+      <FormProviderWrapper>
+        <FormDemographics
+          formValues={{
+            id: "id",
+            race: [],
+            howDidYouHear: [],
+          }}
+          raceEthnicityConfiguration={defaultRaceEthnicityConfiguration}
+          enableLimitedHowDidYouHear={false}
+          disableEthnicityQuestion={false}
+          enableGenderQuestion={false}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(
+      screen.queryByRole("combobox", {
+        name: t("application.add.gender"),
+      })
+    ).not.toBeInTheDocument()
+  })
+
+  it("shows gender without ethnicity when disableEthnicityQuestion and no spoken languages are visible and enableGenderQuestion is enabled", () => {
+    render(
+      <FormProviderWrapper>
+        <FormDemographics
+          formValues={{
+            id: "id",
+            race: [],
+            howDidYouHear: [],
+          }}
+          raceEthnicityConfiguration={defaultRaceEthnicityConfiguration}
+          enableLimitedHowDidYouHear={false}
+          enableSpokenLanguage={false}
+          disableEthnicityQuestion={true}
+          enableGenderQuestion={true}
+          visibleSpokenLanguages={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.queryByLabelText("Ethnicity")).not.toBeInTheDocument()
+    expect(
+      screen.getByRole("combobox", {
+        name: t("application.add.gender"),
+      })
+    ).toBeInTheDocument()
   })
 })

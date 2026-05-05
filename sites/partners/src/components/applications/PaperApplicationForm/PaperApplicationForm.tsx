@@ -91,6 +91,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
+  const enableGenderQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableGenderQuestion,
+    listingDto?.jurisdictions.id
+  )
+
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
@@ -106,6 +111,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableV2MSQ,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableReceivedAtAndByFields = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReceivedAtAndByFields,
     listingDto?.jurisdictions.id
   )
 
@@ -326,6 +336,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                   <div className="info-card md:w-9/12">
                     <FormApplicationData
                       enableApplicationStatus={enableApplicationStatus}
+                      enableReceivedAtAndByFields={enableReceivedAtAndByFields}
+                      appType={application?.submissionType}
                       disableApplicationStatusControls={
                         enableApplicationStatus && editMode && application?.markedAsDuplicate
                       }
@@ -386,6 +398,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       raceEthnicityConfiguration={jurisdictionData?.raceEthnicityConfiguration}
                       enableSpokenLanguage={enableSpokenLanguage}
                       visibleSpokenLanguages={jurisdictionData?.visibleSpokenLanguages}
+                      enableGenderQuestion={enableGenderQuestion}
                     />
 
                     <FormTerms />

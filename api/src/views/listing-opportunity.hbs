@@ -1,0 +1,57 @@
+{{#> layout_default }}
+
+  <h1><span class="intro">{{t "rentalOpportunity.intro"}}</span> <br />{{{listingName}}}</h1>
+  <p align="center"><em>{{t "rentalOpportunity.viewListingNotice.line1"}}</em></p>
+  <p align="center"><em>{{t "rentalOpportunity.viewListingNotice.line2"}}</em></p>
+  <table class="inset fit-content" role="presentation" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td>
+          <div>
+              <table role="presentation" border="1px" cellpadding="12px" cellspacing="0" class="bordered fit-content">
+                  {{#each tableRows}}
+                    <tr>
+                        <td class="bold">
+                            {{label}}
+                        </td>
+                        <td{{#if bolded}} class="bold"{{/if}}>
+                            {{value}}
+                        </td>
+                    </tr>
+                  {{/each}}
+              </table>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="my3" role="presentation" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      {{#each languageUrls}}
+        <tr>
+          <td align="center">
+            <a href="{{this.url}}" class="btn btn-primary btn-submit" target="_blank" style="color:white">{{{this.name}}}</a>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td align="center">
+          <a href="{{accessibleMarketingFlyerUrl}}" target="_blank">{{t "rentalOpportunity.footer.accessibleMarketingFlyer"}}</a>
+        </td>
+      </tr>
+      <tr>
+        <td align="center">
+          <a href="{{unsubscribeUrl}}" target="_blank">{{t "rentalOpportunity.footer.unsubscribe"}}</a>
+          <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+          <a href="{{emailSettingsUrl}}" target="_blank">{{t "rentalOpportunity.footer.emailSettings"}}</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+{{/layout_default }}

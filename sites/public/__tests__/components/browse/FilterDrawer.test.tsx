@@ -95,8 +95,7 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "Units available" })).not.toBeChecked()
     expect(screen.getByLabelText("Open waitlist")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Open waitlist" })).not.toBeChecked()
-    expect(screen.getByLabelText("Closed waitlist")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Closed waitlist" })).not.toBeChecked()
+    expect(screen.queryByLabelText("Closed waitlist")).not.toBeInTheDocument()
     expect(screen.getByLabelText("Coming soon")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Coming soon" })).not.toBeChecked()
 
@@ -280,8 +279,7 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "Units available" })).not.toBeChecked()
     expect(screen.getByLabelText("Open waitlist")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Open waitlist" })).not.toBeChecked()
-    expect(screen.getByLabelText("Closed waitlist")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Closed waitlist" })).not.toBeChecked()
+    expect(screen.queryByLabelText("Closed waitlist")).not.toBeInTheDocument()
     expect(screen.getByLabelText("Coming soon")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Coming soon" })).not.toBeChecked()
 
@@ -447,6 +445,46 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "4 bedroom" })).not.toBeChecked()
     expect(screen.queryByLabelText("SRO")).not.toBeInTheDocument()
     expect(screen.queryByLabelText("5 bedroom")).not.toBeInTheDocument()
+  })
+
+  it("should not show closed waitlist when unit groups flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={[]}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Availability" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Units available")).toBeInTheDocument()
+    expect(screen.getByLabelText("Open waitlist")).toBeInTheDocument()
+    expect(screen.queryByLabelText("Closed waitlist")).not.toBeInTheDocument()
+    expect(screen.getByLabelText("Coming soon")).toBeInTheDocument()
+  })
+
+  it("should show closed waitlist when unit groups flag is on", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={[]}
+        activeFeatureFlags={[FeatureFlagEnum.enableUnitGroups]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Availability" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Closed waitlist")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Closed waitlist" })).not.toBeChecked()
   })
 
   it("should not show regions if toggles are off", () => {

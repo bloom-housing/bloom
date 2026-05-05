@@ -35,7 +35,9 @@ export const getExportHeaders = (
     enableFullTimeStudentQuestion?: boolean;
     enableReasonableAccommodations?: boolean;
     enableSpokenLanguage?: boolean;
+    enableGenderQuestion?: boolean;
     enableV2MSQ?: boolean;
+    enableReceivedAtAndByFields?: boolean;
     forLottery?: boolean;
     includeDemographics?: boolean;
     swapCommunityTypeWithPrograms?: boolean;
@@ -49,7 +51,9 @@ export const getExportHeaders = (
     enableFullTimeStudentQuestion,
     enableReasonableAccommodations,
     enableSpokenLanguage,
+    enableGenderQuestion,
     enableV2MSQ,
+    enableReceivedAtAndByFields,
     forLottery,
     includeDemographics,
     swapCommunityTypeWithPrograms,
@@ -107,6 +111,23 @@ export const getExportHeaders = (
       },
     ],
   );
+
+  if (enableReceivedAtAndByFields) {
+    headers.push(
+      ...[
+        {
+          path: 'receivedAt',
+          label: 'Application Received At',
+          format: (val: string): string =>
+            formatLocalDate(val, dateFormat, timeZone ?? process.env.TIME_ZONE),
+        },
+        {
+          path: 'receivedBy',
+          label: 'Application Received By',
+        },
+      ],
+    );
+  }
 
   if (enableApplicationStatus) {
     headers.push(
@@ -449,11 +470,19 @@ export const getExportHeaders = (
   );
 
   if (includeDemographics) {
+    headers.push({
+      path: 'demographics.ethnicity',
+      label: 'Ethnicity',
+    });
+    if (enableGenderQuestion) {
+      headers.push({
+        path: 'demographics.gender',
+        label: 'Gender',
+        format: (val: string | undefined): string =>
+          convertDemographicGenderToReadable(val),
+      });
+    }
     headers.push(
-      {
-        path: 'demographics.ethnicity',
-        label: 'Ethnicity',
-      },
       {
         path: 'demographics.race',
         label: 'Race',
@@ -887,6 +916,25 @@ export const convertDemographicRaceToReadable = (type: string): string => {
     'white-otherWhite': `White[Other White${customValueFormatted}]`,
   };
   return typeMap[rootKey] ?? rootKey;
+};
+
+/**
+ *
+ * @param type takes in the gender string
+ * @returns outputs the readable version of the string
+ */
+export const convertDemographicGenderToReadable = (type: string): string => {
+  const typeMap: Record<string, string> = {
+    'genderqueerGenderNon-Binary': 'Genderqueer / gender non-binary',
+    transMale: 'Trans man / Transmasculine / Trans male',
+    transFemale: 'Trans woman / Transfeminine / Trans female',
+    male: 'Male',
+    female: 'Female',
+    differentTerm: 'I use a different term',
+    dontKnow: "I don't know or don't understand the question",
+    preferNoResponse: 'Prefer not to respond',
+  };
+  return typeMap[type] ?? type;
 };
 
 /**
