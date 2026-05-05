@@ -17,7 +17,7 @@ import { FormUserManage } from "../../components/users/FormUserManage"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
 import { getUsersTabs, UsersIndexEnum } from "../../components/users/UsersViewHelpers"
-import TabView from "../../layouts/TabView"
+import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 
 type UserDrawerValue = {
   type: "add" | "edit"

@@ -3,15 +3,8 @@ import { useForm } from "react-hook-form"
 import { t } from "@bloom-housing/ui-components"
 import { LoadingState } from "@bloom-housing/ui-seeds"
 import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import {
-  PageView,
-  pushGtmEvent,
-  AuthContext,
-  RequireLogin,
-  BloomCard,
-} from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
-import FormsLayout from "../../layouts/forms"
 import {
   accountNameFields,
   dobFields,
@@ -130,80 +123,72 @@ export const EditPublicAccount = () => {
   )
 
   return (
-    <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-      <FormsLayout
-        pageTitle={t("account.accountSettings")}
-        metaDescription={t("pageDescription.accountSettings")}
-      >
-        <BloomCard
-          iconSymbol="userCircle"
-          iconClass={"card-icon"}
-          title={t("account.accountSettings")}
-          subtitle={t("account.accountSettingsSubtitle")}
-          headingPriority={1}
-          headingClass={"seeds-large-heading"}
-        >
-          <div data-testid="edit-public-account">
-            <LoadingState loading={loading}>
-              <AccountSection
-                alert={nameAlert}
-                setAlert={setNameAlert}
-                formId="update-name"
-                onSubmit={nameHandleSubmit(onNameSubmit)}
-                loading={nameLoading}
-                buttonId="account-submit-name"
-                buttonAriaLabel={`${t("account.settings.update")} ${t(
-                  "application.name.yourName"
-                )}`}
-              >
-                {accountNameFields(nameErrors, nameRegister, user, clearNameErrors)}
-              </AccountSection>
+    <BloomCard
+      iconSymbol="userCircle"
+      iconClass={"card-icon"}
+      title={t("account.accountSettings")}
+      subtitle={t("account.accountSettingsSubtitle")}
+      headingPriority={1}
+      headingClass={"seeds-large-heading"}
+      variant="block"
+    >
+      <div data-testid="edit-public-account">
+        <LoadingState loading={loading}>
+          <AccountSection
+            alert={nameAlert}
+            setAlert={setNameAlert}
+            formId="update-name"
+            onSubmit={nameHandleSubmit(onNameSubmit)}
+            loading={nameLoading}
+            buttonId="account-submit-name"
+            buttonAriaLabel={`${t("account.settings.update")} ${t("application.name.yourName")}`}
+          >
+            {accountNameFields(nameErrors, nameRegister, user, clearNameErrors)}
+          </AccountSection>
 
-              <AccountSection
-                alert={dobAlert}
-                setAlert={setDobAlert}
-                formId="update-birthdate"
-                onSubmit={dobHandleSubmit(onBirthdateSubmit)}
-                loading={birthdateLoading}
-                buttonId="account-submit-dob"
-                buttonAriaLabel={`${t("account.settings.update")} ${t(
-                  "application.name.yourDateOfBirth"
-                )}`}
-              >
-                {dobFields(dobErrors, dobRegister, dobWatch, user)}
-              </AccountSection>
+          <AccountSection
+            alert={dobAlert}
+            setAlert={setDobAlert}
+            formId="update-birthdate"
+            onSubmit={dobHandleSubmit(onBirthdateSubmit)}
+            loading={birthdateLoading}
+            buttonId="account-submit-dob"
+            buttonAriaLabel={`${t("account.settings.update")} ${t(
+              "application.name.yourDateOfBirth"
+            )}`}
+          >
+            {dobFields(dobErrors, dobRegister, dobWatch, user)}
+          </AccountSection>
 
-              <AccountSection
-                alert={emailAlert}
-                setAlert={setEmailAlert}
-                formId="update-email"
-                onSubmit={emailHandleSubmit(onEmailSubmit)}
-                loading={emailLoading}
-                buttonId="account-submit-email"
-                buttonAriaLabel={`${t("account.settings.update")} ${t(
-                  "application.name.yourEmailAddress"
-                )}`}
-              >
-                {emailFields(emailErrors, emailRegister, user, clearEmailErrors)}
-              </AccountSection>
+          <AccountSection
+            alert={emailAlert}
+            setAlert={setEmailAlert}
+            formId="update-email"
+            onSubmit={emailHandleSubmit(onEmailSubmit)}
+            loading={emailLoading}
+            buttonId="account-submit-email"
+            buttonAriaLabel={`${t("account.settings.update")} ${t(
+              "application.name.yourEmailAddress"
+            )}`}
+          >
+            {emailFields(emailErrors, emailRegister, user, clearEmailErrors)}
+          </AccountSection>
 
-              <AccountSection
-                alert={passwordAlert}
-                setAlert={setPasswordAlert}
-                formId="update-password"
-                onSubmit={pwdHandleSubmit(onPasswordSubmit)}
-                loading={passwordLoading}
-                buttonId="account-submit-password"
-                buttonAriaLabel={`${t("account.settings.update")} ${t(
-                  "authentication.createAccount.password"
-                )}`}
-              >
-                {passwordFields(pwdErrors, pwdRegister, password, MIN_PASSWORD_LENGTH)}
-              </AccountSection>
-            </LoadingState>
-          </div>
-        </BloomCard>
-      </FormsLayout>
-    </RequireLogin>
+          <AccountSection
+            alert={passwordAlert}
+            setAlert={setPasswordAlert}
+            formId="update-password"
+            onSubmit={pwdHandleSubmit(onPasswordSubmit)}
+            loading={passwordLoading}
+            buttonId="account-submit-password"
+            buttonAriaLabel={`${t("account.settings.update")} ${t(
+              "authentication.createAccount.password"
+            )}`}
+          >
+            {passwordFields(pwdErrors, pwdRegister, password, MIN_PASSWORD_LENGTH)}
+          </AccountSection>
+        </LoadingState>
+      </div>
+    </BloomCard>
   )
 }

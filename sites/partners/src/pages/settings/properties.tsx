@@ -9,7 +9,7 @@ import {
   Property,
   PropertyCreate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import TabView from "../../layouts/TabView"
+import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
