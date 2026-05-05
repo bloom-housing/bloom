@@ -543,23 +543,21 @@ export class ListingService implements OnModuleInit {
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
-                return [
-                  {
-                    AND: builtFilter
-                      .map((filt) => ({
-                        unitGroups: {
-                          some: {
-                            [FilterAvailabilityEnum.openWaitlist]: filt,
-                          },
+                return {
+                  AND: builtFilter
+                    .map((filt) => ({
+                      unitGroups: {
+                        some: {
+                          [FilterAvailabilityEnum.openWaitlist]: filt,
                         },
-                      }))
-                      .concat(
-                        notUnderConstruction.map((filt) => ({
-                          marketingType: filt,
-                        })),
-                      ),
-                  },
-                ];
+                      },
+                    }))
+                    .concat(
+                      notUnderConstruction.map((filt) => ({
+                        marketingType: filt,
+                      })),
+                    ),
+                };
               } else if (availability === FilterAvailabilityEnum.comingSoon) {
                 const builtFilter = buildFilter({
                   $comparison: Compare['='],
@@ -597,6 +595,7 @@ export class ListingService implements OnModuleInit {
                   },
                   {
                     AND: [
+                      { unitGroups: { none: {} } },
                       {
                         reviewOrderType: {
                           in: [
@@ -727,6 +726,7 @@ export class ListingService implements OnModuleInit {
               },
               {
                 AND: [
+                  { unitGroups: { none: {} } },
                   {
                     reviewOrderType: {
                       in: [

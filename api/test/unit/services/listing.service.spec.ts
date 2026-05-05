@@ -1551,6 +1551,7 @@ describe('Testing listing service', () => {
               },
               {
                 AND: [
+                  { unitGroups: { none: {} } },
                   {
                     reviewOrderType: {
                       in: [
@@ -1664,6 +1665,7 @@ describe('Testing listing service', () => {
               },
               {
                 AND: [
+                  { unitGroups: { none: {} } },
                   {
                     reviewOrderType: {
                       in: [
@@ -1785,6 +1787,7 @@ describe('Testing listing service', () => {
               },
               {
                 AND: [
+                  { unitGroups: { none: {} } },
                   {
                     reviewOrderType: {
                       in: [

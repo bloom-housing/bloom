@@ -1006,10 +1006,10 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/ui-components@14.0.1":
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-14.0.1.tgz#6e069b7f4396a0cd8b24223f3f527154d1b36813"
-  integrity sha512-sB6j9y7GrwiJ70M3YKBkk7TAI0XeRmLZICYpIFe+iO+HxVo4K7hzn+EAJZri6YRGtEA/jqR16Wne27+1DDMYCg==
+"@bloom-housing/ui-components@14.0.2":
+  version "14.0.2"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-14.0.2.tgz#89df6a2672faf33621e2755adaf4162f3ce70e60"
+  integrity sha512-RhNtz8lyh8f5LwUpiPFYClowgZBPNDh+K3GU5ZDoSIF0TGfec63BpB3GjwvyUSCeJCdsRoSX0q+RRtcfnj6BWQ==
   dependencies:
     "@dnd-kit/react" "^0.3.2"
     "@fortawesome/fontawesome-svg-core" "^6.1.1"
