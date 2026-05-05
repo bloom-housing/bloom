@@ -494,6 +494,9 @@ const ListingForm = ({
               if (readableError) {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 setError(fieldName as any, { message: readableError })
+                if (fieldName === "scheduledPublishAt") {
+                  setError("scheduledListingPublishDateField", { message: readableError })
+                }
                 if (fieldName === "buildingAddress" || fieldName === "buildingAddress.nested") {
                   const setIfEmpty = (
                     fieldName: string,
