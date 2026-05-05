@@ -5,6 +5,7 @@ import { AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import { LoadingState } from "@bloom-housing/ui-seeds"
 import {
   Application,
+  Jurisdiction,
   Listing,
   ListingViews,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -15,33 +16,43 @@ import FormsLayout from "../../../../layouts/forms"
 const AccountApplication = () => {
   const router = useRouter()
   const applicationId = router.query.id as string
-  const { applicationsService, listingsService, profile } = useContext(AuthContext)
+  const { applicationsService, listingsService, jurisdictionsService, profile } =
+    useContext(AuthContext)
   const [application, setApplication] = useState<Application>()
   const [listing, setListing] = useState<Listing>()
+  const [jurisdiction, setJurisdiction] = useState<Jurisdiction>()
   const [unauthorized, setUnauthorized] = useState(false)
   const [noApplication, setNoApplication] = useState(false)
   const [loading, setLoading] = useState(null)
 
   useEffect(() => {
     if (profile && !application && loading === null && !!applicationId) {
-      setLoading(true)
-      applicationsService
-        .retrieve({ applicationId })
-        .then((app) => {
+      const fetchApplicationData = async () => {
+        setLoading(true)
+
+        try {
+          const app = await applicationsService.retrieve({ applicationId })
           setApplication(app)
-          listingsService
-            ?.retrieve({ id: app.listings.id, view: ListingViews.full })
-            .then((retrievedListing) => {
-              setListing(retrievedListing)
-              setLoading(false)
+
+          try {
+            const retrievedListing = await listingsService?.retrieve({
+              id: app.listings.id,
+              view: ListingViews.full,
             })
-            .catch((err) => {
-              setLoading(false)
-              console.error(`Error fetching listing: ${err}`)
-            })
-        })
-        .catch((err) => {
-          setLoading(false)
+            setListing(retrievedListing)
+
+            try {
+              const retrievedJurisdiction = await jurisdictionsService?.retrieve({
+                jurisdictionId: retrievedListing.jurisdictions.id,
+              })
+              setJurisdiction(retrievedJurisdiction)
+            } catch (err) {
+              console.error(`Error fetching jurisdiction: ${err}`)
+            }
+          } catch (err) {
+            console.error(`Error fetching listing: ${err}`)
+          }
+        } catch (err) {
           console.error(`Error fetching application: ${err}`)
           const { status } = err.response || {}
           if (status === 404) {
@@ -50,9 +61,22 @@ const AccountApplication = () => {
           if (status === 403) {
             setUnauthorized(true)
           }
-        })
+        } finally {
+          setLoading(false)
+        }
+      }
+
+      void fetchApplicationData()
     }
-  }, [profile, applicationId, applicationsService, listingsService])
+  }, [
+    profile,
+    application,
+    loading,
+    applicationId,
+    applicationsService,
+    listingsService,
+    jurisdictionsService,
+  ])
 
   return (
     <>
@@ -71,6 +95,7 @@ const AccountApplication = () => {
                 application={application}
                 listing={listing}
                 backHref={"/account/applications"}
+                jurisdiction={jurisdiction}
               />
             )}
           </LoadingState>

@@ -5,7 +5,6 @@ import { CustomIconMap, listingSectionQuestions, AuthContext } from "@bloom-hous
 import { getApplicationStatusVariant } from "@bloom-housing/shared-helpers/src/utilities/applicationStatus"
 import {
   Application,
-  ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
   FeatureFlagEnum,
   Jurisdiction,
