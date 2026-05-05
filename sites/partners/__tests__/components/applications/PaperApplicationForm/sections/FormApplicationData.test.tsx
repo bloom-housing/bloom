@@ -300,7 +300,15 @@ describe("<FormApplicationData>", () => {
 
     it("shows disabled display fields when status controls are disabled", () => {
       render(
-        <FormProviderWrapper>
+        <FormProviderWrapper
+          values={{
+            application: {
+              status: ApplicationStatusEnum.waitlist,
+              accessibleUnitWaitlistNumber: 2,
+              conventionalUnitWaitlistNumber: 4,
+            } as never,
+          }}
+        >
           <FormApplicationData
             {...defaultFormApplicationDataProps}
             enableApplicationStatus={true}

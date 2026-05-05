@@ -49,9 +49,7 @@ const SubmittedApplicationView = ({
     application?.status === ApplicationStatusEnum.waitlist ||
     application?.status === ApplicationStatusEnum.waitlistDeclined
   const isDeclinedStatus = application?.status === ApplicationStatusEnum.declined
-  const applicationDeclineReason = application?.applicationDeclineReason as
-    | ApplicationDeclineReasonEnum
-    | undefined
+  const applicationDeclineReason = application?.applicationDeclineReason
 
   const enableApplicationStatus = checkFeatureFlag(FeatureFlagEnum.enableApplicationStatus)
   const statusTagContent = application?.markedAsDuplicate

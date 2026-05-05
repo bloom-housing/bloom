@@ -92,7 +92,7 @@ describe("<SubmittedApplicationView>", () => {
     it("does not render the status pill when the feature flag is off", () => {
       renderView({ status: ApplicationStatusEnum.submitted })
 
-      expect(screen.queryByText(/submitted/i)).not.toBeInTheDocument()
+      expect(screen.queryByText("Submitted")).not.toBeInTheDocument()
     })
 
     it("renders the status pill when the feature flag is on", () => {

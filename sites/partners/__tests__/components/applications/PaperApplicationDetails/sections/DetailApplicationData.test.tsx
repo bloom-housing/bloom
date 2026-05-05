@@ -168,8 +168,12 @@ describe("DetailApplicationData", () => {
         enableApplicationStatus: true,
       })
 
-      expect(screen.getByText(/decline reason/i)).toBeInTheDocument()
-      expect(screen.getAllByText("n/a")).toHaveLength(2)
+      expect(
+        within(screen.getByTestId("applicationDeclineReason")).getByText("n/a")
+      ).toBeInTheDocument()
+      expect(
+        within(screen.getByTestId("applicationDeclineReasonAdditionalDetails")).getByText("n/a")
+      ).toBeInTheDocument()
     })
 
     it("displays additional details when provided and n/a when not", () => {
@@ -192,8 +196,9 @@ describe("DetailApplicationData", () => {
         },
         enableApplicationStatus: true,
       })
-      expect(screen.getByText(/decline reason additional details/i)).toBeInTheDocument()
-      expect(screen.getByText("n/a")).toBeInTheDocument()
+      expect(
+        within(screen.getByTestId("applicationDeclineReasonAdditionalDetails")).getByText("n/a")
+      ).toBeInTheDocument()
     })
 
     it("displays decline reason label and translated value when status is declined", () => {
@@ -205,7 +210,7 @@ describe("DetailApplicationData", () => {
         enableApplicationStatus: true,
       })
 
-      expect(screen.getByText(/decline reason/i)).toBeInTheDocument()
+      expect(screen.getByText("Decline reason")).toBeInTheDocument()
       expect(screen.getByText(/age restriction/i)).toBeInTheDocument()
     })
 

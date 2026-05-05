@@ -243,97 +243,88 @@ const FormApplicationData = ({
               </Grid.Cell>
             </Grid.Row>
           )}
-          {(isWaitlistStatus ||
-            accessibleUnitWaitlistNumberValue ||
-            conventionalUnitWaitlistNumberValue ||
-            reviewOrderType === ReviewOrderTypeEnum.lottery) && (
-            <Grid.Row columns={3}>
-              {/* We need active hidden field to send value even when field is not visible and disabled */}
-              {(isWaitlistStatus || accessibleUnitWaitlistNumberValue) && (
-                <Grid.Cell>
-                  <Field
-                    className={
-                      isWaitlistStatus && !disableApplicationStatusControls ? "" : "hidden"
-                    }
-                    type="number"
-                    id="application.accessibleUnitWaitlistNumber"
-                    name="application.accessibleUnitWaitlistNumber"
-                    label={t("application.details.accessibleUnitWaitlistNumber")}
-                    register={register}
-                    error={!!errors?.application?.accessibleUnitWaitlistNumber}
-                    dataTestId="applicationAccessibleUnitWaitlistNumber"
-                  />
-                  {(!isWaitlistStatus || disableApplicationStatusControls) && (
-                    <Field
-                      type="number"
-                      name="application.accessibleUnitWaitlistNumber"
-                      label={t("application.details.accessibleUnitWaitlistNumber")}
-                      inputProps={{
-                        value: accessibleUnitWaitlistNumberValue,
-                      }}
-                      disabled
-                      dataTestId="applicationAccessibleUnitWaitlistNumberDisplay"
-                    />
-                  )}
-                </Grid.Cell>
+          <Grid.Row columns={3}>
+            {/* We need active hidden field to send value even when field is not visible and disabled */}
+            <Grid.Cell
+              className={isWaitlistStatus || accessibleUnitWaitlistNumberValue ? "" : "hidden"}
+            >
+              <Field
+                className={isWaitlistStatus && !disableApplicationStatusControls ? "" : "hidden"}
+                type="number"
+                id="application.accessibleUnitWaitlistNumber"
+                name="application.accessibleUnitWaitlistNumber"
+                label={t("application.details.accessibleUnitWaitlistNumber")}
+                register={register}
+                error={!!errors?.application?.accessibleUnitWaitlistNumber}
+                dataTestId="applicationAccessibleUnitWaitlistNumber"
+              />
+              {(!isWaitlistStatus || disableApplicationStatusControls) && (
+                <Field
+                  type="number"
+                  name="application.accessibleUnitWaitlistNumber"
+                  label={t("application.details.accessibleUnitWaitlistNumber")}
+                  inputProps={{
+                    value: accessibleUnitWaitlistNumberValue,
+                  }}
+                  disabled
+                  dataTestId="applicationAccessibleUnitWaitlistNumberDisplay"
+                />
               )}
-              {/* We need active hidden field to send value even when field is not visible and disabled */}
-              {(isWaitlistStatus || conventionalUnitWaitlistNumberValue) && (
-                <Grid.Cell>
-                  <Field
-                    className={
-                      isWaitlistStatus && !disableApplicationStatusControls ? "" : "hidden"
-                    }
-                    type="number"
-                    id="application.conventionalUnitWaitlistNumber"
-                    name="application.conventionalUnitWaitlistNumber"
-                    label={t("application.details.conventionalUnitWaitlistNumber")}
-                    register={register}
-                    error={!!errors?.application?.conventionalUnitWaitlistNumber}
-                    dataTestId="applicationConventionalUnitWaitlistNumber"
-                  />
-                  {(!isWaitlistStatus || disableApplicationStatusControls) && (
-                    <Field
-                      type="number"
-                      name="application.conventionalUnitWaitlistNumber"
-                      label={t("application.details.conventionalUnitWaitlistNumber")}
-                      inputProps={{
-                        value: conventionalUnitWaitlistNumberValue,
-                      }}
-                      disabled
-                      dataTestId="applicationConventionalUnitWaitlistNumberDisplay"
-                    />
-                  )}
-                </Grid.Cell>
+            </Grid.Cell>
+            {/* We need active hidden field to send value even when field is not visible and disabled */}
+            <Grid.Cell
+              className={isWaitlistStatus || conventionalUnitWaitlistNumberValue ? "" : "hidden"}
+            >
+              <Field
+                className={isWaitlistStatus && !disableApplicationStatusControls ? "" : "hidden"}
+                type="number"
+                id="application.conventionalUnitWaitlistNumber"
+                name="application.conventionalUnitWaitlistNumber"
+                label={t("application.details.conventionalUnitWaitlistNumber")}
+                register={register}
+                error={!!errors?.application?.conventionalUnitWaitlistNumber}
+                dataTestId="applicationConventionalUnitWaitlistNumber"
+              />
+              {(!isWaitlistStatus || disableApplicationStatusControls) && (
+                <Field
+                  type="number"
+                  name="application.conventionalUnitWaitlistNumber"
+                  label={t("application.details.conventionalUnitWaitlistNumber")}
+                  inputProps={{
+                    value: conventionalUnitWaitlistNumberValue,
+                  }}
+                  disabled
+                  dataTestId="applicationConventionalUnitWaitlistNumberDisplay"
+                />
               )}
-              {reviewOrderType === ReviewOrderTypeEnum.lottery && (
-                <Grid.Cell>
+            </Grid.Cell>
+            {reviewOrderType === ReviewOrderTypeEnum.lottery && (
+              <Grid.Cell>
+                <Field
+                  className={disableApplicationStatusControls ? "hidden" : ""}
+                  type="number"
+                  id="application.manualLotteryPositionNumber"
+                  name="application.manualLotteryPositionNumber"
+                  label={t("application.details.manualLotteryPositionNumber")}
+                  register={register}
+                  error={!!errors?.application?.manualLotteryPositionNumber}
+                  dataTestId="applicationManualLotteryPositionNumber"
+                />
+                {disableApplicationStatusControls && (
                   <Field
-                    className={disableApplicationStatusControls ? "hidden" : ""}
                     type="number"
-                    id="application.manualLotteryPositionNumber"
                     name="application.manualLotteryPositionNumber"
                     label={t("application.details.manualLotteryPositionNumber")}
-                    register={register}
-                    error={!!errors?.application?.manualLotteryPositionNumber}
-                    dataTestId="applicationManualLotteryPositionNumber"
+                    inputProps={{
+                      value: manualLotteryPositionNumberValue,
+                    }}
+                    disabled
+                    dataTestId="applicationManualLotteryPositionNumberDisplay"
                   />
-                  {disableApplicationStatusControls && (
-                    <Field
-                      type="number"
-                      name="application.manualLotteryPositionNumber"
-                      label={t("application.details.manualLotteryPositionNumber")}
-                      inputProps={{
-                        value: manualLotteryPositionNumberValue,
-                      }}
-                      disabled
-                      dataTestId="applicationManualLotteryPositionNumberDisplay"
-                    />
-                  )}
-                </Grid.Cell>
-              )}
-            </Grid.Row>
-          )}
+                )}
+              </Grid.Cell>
+            )}
+          </Grid.Row>
         </>
       )}
     </SectionWithGrid>

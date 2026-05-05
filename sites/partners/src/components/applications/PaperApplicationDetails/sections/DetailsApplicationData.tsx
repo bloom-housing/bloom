@@ -116,7 +116,10 @@ const DetailsApplicationData = ({
           {application.status === ApplicationStatusEnum.declined && (
             <Grid.Row columns={3}>
               <Grid.Cell>
-                <FieldValue label={t("application.details.applicationDeclineReason")}>
+                <FieldValue
+                  label={t("application.details.applicationDeclineReason")}
+                  testId="applicationDeclineReason"
+                >
                   {application.applicationDeclineReason
                     ? t(
                         `application.details.applicationDeclineReason.${application.applicationDeclineReason}`
@@ -127,6 +130,7 @@ const DetailsApplicationData = ({
               <Grid.Cell className={"seeds-grid-span-2"}>
                 <FieldValue
                   label={t("application.details.applicationDeclineReasonAdditionalDetails")}
+                  testId="applicationDeclineReasonAdditionalDetails"
                 >
                   {application.applicationDeclineReasonAdditionalDetails ?? t("t.n/a")}
                 </FieldValue>

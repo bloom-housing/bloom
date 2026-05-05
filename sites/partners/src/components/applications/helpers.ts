@@ -88,12 +88,8 @@ export const buildAppStatusConfirmSections = (
   const initialStatus = defaultValues?.application?.status
   const nextStatus = data?.application?.status
 
-  const initialDeclineReason = defaultValues?.application?.applicationDeclineReason as
-    | ApplicationDeclineReasonEnum
-    | undefined
-  const nextDeclineReason = data?.application?.applicationDeclineReason as
-    | ApplicationDeclineReasonEnum
-    | undefined
+  const initialDeclineReason = defaultValues?.application?.applicationDeclineReason
+  const nextDeclineReason = data?.application?.applicationDeclineReason
 
   const initialAccessible = normalizeValue(defaultValues?.application?.accessibleUnitWaitlistNumber)
   const nextAccessible = normalizeValue(data?.application?.accessibleUnitWaitlistNumber)
