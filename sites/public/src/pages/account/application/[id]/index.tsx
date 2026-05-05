@@ -23,6 +23,7 @@ const AccountApplication = () => {
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction>()
   const [unauthorized, setUnauthorized] = useState(false)
   const [noApplication, setNoApplication] = useState(false)
+  const [listingUnavailable, setListingUnavailable] = useState(false)
   const [loading, setLoading] = useState(null)
 
   useEffect(() => {
@@ -39,18 +40,27 @@ const AccountApplication = () => {
               id: app.listings.id,
               view: ListingViews.full,
             })
+
+            if (!retrievedListing) {
+              setListingUnavailable(true)
+              return
+            }
+
             setListing(retrievedListing)
 
-            try {
-              const retrievedJurisdiction = await jurisdictionsService?.retrieve({
-                jurisdictionId: retrievedListing.jurisdictions.id,
-              })
-              setJurisdiction(retrievedJurisdiction)
-            } catch (err) {
-              console.error(`Error fetching jurisdiction: ${err}`)
+            if (retrievedListing?.jurisdictions?.id) {
+              try {
+                const retrievedJurisdiction = await jurisdictionsService?.retrieve({
+                  jurisdictionId: retrievedListing.jurisdictions.id,
+                })
+                setJurisdiction(retrievedJurisdiction)
+              } catch (err) {
+                console.error(`Error fetching jurisdiction: ${err}`)
+              }
             }
           } catch (err) {
             console.error(`Error fetching listing: ${err}`)
+            setListingUnavailable(true)
           }
         } catch (err) {
           console.error(`Error fetching application: ${err}`)
@@ -86,11 +96,11 @@ const AccountApplication = () => {
           metaDescription={t("pageDescription.viewApplication")}
         >
           <LoadingState loading={loading || loading === null}>
-            {noApplication && (
+            {(noApplication || listingUnavailable) && (
               <ApplicationError error={t("account.application.noApplicationError")} />
             )}
             {unauthorized && <ApplicationError error={t("account.application.noAccessError")} />}
-            {application && (
+            {application && listing && (
               <SubmittedApplicationView
                 application={application}
                 listing={listing}

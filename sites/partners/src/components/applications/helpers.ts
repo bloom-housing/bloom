@@ -1,10 +1,7 @@
 import { t } from "@bloom-housing/ui-components"
 import { NextRouter } from "next/router"
 import { FormTypes } from "../../lib/applications/FormTypes"
-import {
-  ApplicationDeclineReasonEnum,
-  ApplicationStatusEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ApplicationStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export const tableColumns = [
   {
