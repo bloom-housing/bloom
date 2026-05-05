@@ -220,26 +220,15 @@ export default function ListingsList() {
       })
     }
 
-    columns.push(
-      {
-        headerName: t("listings.createdDate"),
-        field: "createdAt",
-        sortable: false,
-        filter: false,
-        resizable: true,
-        valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-        maxWidth: 140,
-      },
-      {
-        headerName: t("listings.publishedDate"),
-        field: "publishedAt",
-        sortable: false,
-        filter: false,
-        resizable: true,
-        valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-        maxWidth: 150,
-      }
-    )
+    columns.push({
+      headerName: t("listings.createdDate"),
+      field: "createdAt",
+      sortable: false,
+      filter: false,
+      resizable: true,
+      valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
+      maxWidth: 140,
+    })
 
     if (doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableAutopublish)) {
       columns.push({
@@ -253,15 +242,26 @@ export default function ListingsList() {
       })
     }
 
-    columns.push({
-      headerName: t("listings.applicationDueDate"),
-      field: "applicationDueDate",
-      sortable: false,
-      filter: false,
-      resizable: true,
-      valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-      maxWidth: 120,
-    })
+    columns.push(
+      {
+        headerName: t("listings.publishedDate"),
+        field: "publishedAt",
+        sortable: false,
+        filter: false,
+        resizable: true,
+        valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
+        maxWidth: 150,
+      },
+      {
+        headerName: t("listings.applicationDueDate"),
+        field: "applicationDueDate",
+        sortable: false,
+        filter: false,
+        resizable: true,
+        valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
+        maxWidth: 120,
+      }
+    )
 
     if (
       getFlagInAllJurisdictions(
