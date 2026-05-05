@@ -20,6 +20,7 @@ export enum FeatureFlagEnum {
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableFaq = 'enableFaq',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
+  enableGenderQuestion = 'enableGenderQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
@@ -165,6 +166,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
     description:
       'When true, the full time student question is displayed in the application form',
+  },
+  {
+    name: FeatureFlagEnum.enableGenderQuestion,
+    description:
+      'When true, the gender identity question is displayed in the public and partner application demographics section',
   },
   {
     name: FeatureFlagEnum.enableGeocodingPreferences,

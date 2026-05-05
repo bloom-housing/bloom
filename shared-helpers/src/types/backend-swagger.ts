@@ -10644,6 +10644,7 @@ export enum FeatureFlagEnum {
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFaq" = "enableFaq",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
+  "enableGenderQuestion" = "enableGenderQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",

@@ -4,6 +4,7 @@ import { t, Select, FieldGroup, Field } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import {
   ethnicityKeys,
+  genderKeys,
   isKeyIncluded,
   getCustomValue,
   howDidYouHear,
@@ -23,6 +24,7 @@ type FormDemographicsProps = {
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
   enableSpokenLanguage?: boolean
   visibleSpokenLanguages?: string[]
+  enableGenderQuestion?: boolean
 }
 
 const FormDemographics = ({
@@ -32,6 +34,7 @@ const FormDemographics = ({
   raceEthnicityConfiguration,
   enableSpokenLanguage,
   visibleSpokenLanguages,
+  enableGenderQuestion,
 }: FormDemographicsProps) => {
   const formMethods = useFormContext()
 
@@ -116,18 +119,60 @@ const FormDemographics = ({
               />
             </Grid.Cell>
           )}
-          {!disableEthnicityQuestion && (
+          {(!disableEthnicityQuestion ||
+            enableGenderQuestion ||
+            (enableSpokenLanguage && visibleSpokenLanguages?.length > 0)) && (
             <Grid.Cell>
-              <Select
-                id="application.demographics.ethnicity"
-                name="application.demographics.ethnicity"
-                placeholder={t("t.selectOne")}
-                label={t("application.add.ethnicity")}
-                register={register}
-                controlClassName="control"
-                options={ethnicityKeys}
-                keyPrefix="application.review.demographics.ethnicityOptions"
-              />
+              {!disableEthnicityQuestion && (
+                <Select
+                  id="application.demographics.ethnicity"
+                  name="application.demographics.ethnicity"
+                  placeholder={t("t.selectOne")}
+                  label={t("application.add.ethnicity")}
+                  register={register}
+                  controlClassName="control"
+                  options={ethnicityKeys}
+                  keyPrefix="application.review.demographics.ethnicityOptions"
+                />
+              )}
+              {enableGenderQuestion && (
+                <div className={!disableEthnicityQuestion ? "seeds-m-bs-4" : ""}>
+                  <Select
+                    id="application.demographics.gender"
+                    name="application.demographics.gender"
+                    label={t("application.add.gender")}
+                    register={register}
+                    controlClassName="control"
+                    options={["", ...genderKeys]}
+                    keyPrefix="application.review.demographics.genderOptions"
+                  />
+                </div>
+              )}
+              {enableSpokenLanguage && visibleSpokenLanguages?.length > 0 && (
+                <div
+                  className={
+                    !disableEthnicityQuestion || enableGenderQuestion ? "seeds-m-bs-4" : ""
+                  }
+                >
+                  <Select
+                    id="application.demographics.spokenLanguage"
+                    name="application.demographics.spokenLanguage"
+                    label={t("application.add.spokenLanguage")}
+                    register={register}
+                    controlClassName="control"
+                    options={["", ...getSpokenLanguageOptions()]}
+                    keyPrefix="application.review.demographics.spokenLanguageOptions"
+                  />
+                  {spokenLanguageValue === "notListed" && (
+                    <Field
+                      id="application.demographics.spokenLanguageNotListed"
+                      name="application.demographics.spokenLanguageNotListed"
+                      label={t("application.review.demographics.spokenLanguageSpecify")}
+                      register={register}
+                    />
+                  )}
+                </div>
+              )}
             </Grid.Cell>
           )}
         </Grid.Row>
@@ -143,29 +188,6 @@ const FormDemographics = ({
             />
           </Grid.Cell>
         </Grid.Row>
-        {enableSpokenLanguage && visibleSpokenLanguages?.length > 0 && (
-          <Grid.Row columns={2}>
-            <Grid.Cell>
-              <Select
-                id="application.demographics.spokenLanguage"
-                name="application.demographics.spokenLanguage"
-                label={t("application.review.demographics.spokenLanguageLabel")}
-                register={register}
-                controlClassName="control"
-                options={["", ...getSpokenLanguageOptions()]}
-                keyPrefix="application.review.demographics.spokenLanguageOptions"
-              />
-              {spokenLanguageValue === "notListed" && (
-                <Field
-                  id="application.demographics.spokenLanguageNotListed"
-                  name="application.demographics.spokenLanguageNotListed"
-                  label={t("application.review.demographics.spokenLanguageSpecify")}
-                  register={register}
-                />
-              )}
-            </Grid.Cell>
-          </Grid.Row>
-        )}
       </SectionWithGrid>
     </>
   )
