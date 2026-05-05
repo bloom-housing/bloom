@@ -1,7 +1,7 @@
+@import "./fonts/metropolis/metropolis.css";
+@import url("https://fonts.googleapis.com/css?family=Noto+Serif:400,600,700,400italic");
 :root {
   // TODO figure out how to get metropolis font
-  @import "fonts/metropolis/metropolis.css";
-  @import url("https://fonts.googleapis.com/css?family=Noto+Serif:400,600,700,400italic");
 
   // Seeds token overrides
   --seeds-font-alt-sans: "Metropolis", "Helvetica", "Arial", "Verdana", "sans-serif";
@@ -19,6 +19,8 @@
   --seeds-color-secondary-lighter: #f5feff;
   --seeds-bg-color-surface-primary-inverse: var(--seeds-color-secondary);
   --seeds-color-on-inverse: #222222;
+
+  --seeds-spacer-text: var(--seeds-s1);
 
   .seeds-button {
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
@@ -332,5 +334,8 @@
     --seeds-color-on-inverse: #ffffff;
 
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
+  }
+
+  .markdown {
   }
 }

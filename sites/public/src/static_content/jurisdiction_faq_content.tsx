@@ -4,7 +4,7 @@ import { t } from "@bloom-housing/ui-components"
 import Link from "next/link"
 
 export const getJurisdictionFaqContent = (): FaqContent => {
-  const faqContentSection: FaqCategory = {
+  const howToPrepare: FaqCategory = {
     title: t("help.faq.processPreparation"),
     faqs: [
       {
@@ -25,7 +25,8 @@ export const getJurisdictionFaqContent = (): FaqContent => {
               <li>{t("help.faq.neededIdentificationResp4a")}</li>
               <li>{t("help.faq.neededIdentificationResp4b")}</li>
             </ul>
-            <Markdown>{t("help.faq.neededIdentificationResp5")}</Markdown>
+            <br />
+            {t("help.faq.neededIdentificationResp5")}
             <ul>
               <li>{t("help.faq.neededIdentificationResp5a")}</li>
               <li>{t("help.faq.neededIdentificationResp5b")}</li>
@@ -137,7 +138,40 @@ export const getJurisdictionFaqContent = (): FaqContent => {
     ],
   }
 
+  const afterIApply: FaqCategory = {
+    title: t("help.faq.whatsNextHeader"),
+    faqs: [
+      {
+        question: t("help.faq.selections"),
+        answer: (
+          <>
+            {t("help.faq.selectionsResp")}
+            <ul>
+              <li>
+                <b>{t("help.faq.selectionsResp1")}</b>
+                {t("help.faq.selectionsResp1b")}
+              </li>
+              <li>
+                <b>{t("help.faq.selectionsResp2")}</b>
+                {t("help.faq.selectionsResp2b")}
+              </li>
+            </ul>
+          </>
+        ),
+      },
+    ],
+  }
+
+  const whatElseToKnow: FaqCategory = {
+    title: t("help.faq.whatElseToKnowHeader"),
+    faqs: [],
+  }
+  const lotteryResults: FaqCategory = {
+    title: t("help.faq.lotteryResults"),
+    faqs: [],
+  }
+
   return {
-    categories: [faqContentSection],
+    categories: [howToPrepare, afterIApply, whatElseToKnow, lotteryResults],
   }
 }
