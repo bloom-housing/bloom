@@ -2,6 +2,7 @@ import { Form, t } from "@bloom-housing/ui-components"
 import { Button, Drawer } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import {
+  FilterAvailabilityEnum,
   RegionEnum,
   HomeTypeEnum,
   ListingFilterKeys,
@@ -84,8 +85,15 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     (entry) => entry === FeatureFlagEnum.enableSection8Question
   )
 
-  const availabilityLabels = getAvailabilityValues(enableUnitGroups).map((key) =>
+  // When unit groups are off, closed waitlist has no backend signal, so hide it
+  const availabilityDisplayValues = getAvailabilityValues(enableUnitGroups).filter(
+    (key) => enableUnitGroups || key !== FilterAvailabilityEnum.closedWaitlist
+  )
+  const availabilityLabels = availabilityDisplayValues.map((key) =>
     t(`listings.availability.${key}`)
+  )
+  const availabilityKeys = getAvailabilityValues(false).filter(
+    (key) => enableUnitGroups || key !== FilterAvailabilityEnum.closedWaitlist
   )
 
   return (
@@ -119,7 +127,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               fields={buildDefaultFilterFields(
                 ListingFilterKeys.availabilities,
                 availabilityLabels,
-                getAvailabilityValues(false),
+                availabilityKeys,
                 props.filterState
               )}
               register={register}

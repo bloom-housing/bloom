@@ -634,9 +634,11 @@ describe('Listing Controller Tests', () => {
     let listing4WithUnitGroups;
     let listing5WithUnitGroups;
     let listing6WithUnitGroups;
+    let listingWithWaitlistReviewOrder;
     let jurisdictionB;
     let jurisdictionC;
     let jurisdictionDWithUnitGroups;
+    let jurisdictionEWithoutUnitGroups;
     let multiselectQuestionPreference1;
     let multiselectQuestionPreference2;
     let multiselectQuestionPreference3;
@@ -803,6 +805,20 @@ describe('Listing Controller Tests', () => {
       listing6WithUnitGroups = await prisma.listings.create({
         data: listing6Input,
       });
+
+      jurisdictionEWithoutUnitGroups = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(`filterableList E ${randomName()}`),
+      });
+      const listing7Input = await listingFactory(
+        jurisdictionEWithoutUnitGroups.id,
+        prisma,
+        {
+          reviewOrderType: ReviewOrderTypeEnum.waitlist,
+        },
+      );
+      listingWithWaitlistReviewOrder = await prisma.listings.create({
+        data: listing7Input,
+      });
     });
 
     it('should get listings from list endpoint when no params are sent', async () => {
@@ -938,6 +954,33 @@ describe('Listing Controller Tests', () => {
 
       expect(res.body.items[0].id).toEqual(listing4WithUnitGroups.id);
     });
+
+    it('should return a listing based on filter availabilities - openWaitlist - no unit groups', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['IN'],
+            availabilities: [FilterAvailabilityEnum.openWaitlist],
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionEWithoutUnitGroups.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items[0].id).toEqual(listingWithWaitlistReviewOrder.id);
+    });
+
     it('should return a listing based on filter availabilities - waitlistOpen', async () => {
       const query: ListingsQueryBody = {
         page: 1,
@@ -1099,6 +1142,33 @@ describe('Listing Controller Tests', () => {
 
       expect(res.body.items[0].id).toEqual(listing4WithUnitGroups.id);
     });
+
+    it('should return a listing based on filter availability - openWaitlist - no unit groups', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['='],
+            availability: FilterAvailabilityEnum.openWaitlist,
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionEWithoutUnitGroups.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items[0].id).toEqual(listingWithWaitlistReviewOrder.id);
+    });
+
     it('should return a listing based on filter availability - waitlistOpen', async () => {
       const query: ListingsQueryBody = {
         page: 1,
