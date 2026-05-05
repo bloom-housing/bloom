@@ -20,6 +20,7 @@ export enum FeatureFlagEnum {
   enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableFaq = 'enableFaq',
+  enableFilterByBathroom = 'enableFilterByBathroom',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGenderQuestion = 'enableGenderQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
@@ -167,6 +168,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableFaq,
     description:
       'When true, a link to the FAQ page is displayed on the get assistance page',
+  },
+  {
+    name: FeatureFlagEnum.enableFilterByBathroom,
+    description:
+      'When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms',
   },
   {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
