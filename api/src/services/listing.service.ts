@@ -543,8 +543,6 @@ export class ListingService implements OnModuleInit {
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
-                // Two OR branches: unit-groups listings use unitGroups.openWaitlist,
-                // listings without unit groups require reviewOrderType + isWaitlistOpen:false
                 return [
                   {
                     AND: builtFilter
@@ -560,22 +558,6 @@ export class ListingService implements OnModuleInit {
                           marketingType: filt,
                         })),
                       ),
-                  },
-                  {
-                    AND: [
-                      {
-                        reviewOrderType: {
-                          in: [
-                            ReviewOrderTypeEnum.waitlist,
-                            ReviewOrderTypeEnum.waitlistLottery,
-                          ],
-                        },
-                      },
-                      { isWaitlistOpen: { equals: false } },
-                      ...notUnderConstruction.map((filt) => ({
-                        marketingType: filt,
-                      })),
-                    ],
                   },
                 ];
               } else if (availability === FilterAvailabilityEnum.comingSoon) {
@@ -698,22 +680,6 @@ export class ListingService implements OnModuleInit {
                       marketingType: filt,
                     })),
                   ),
-              },
-              {
-                AND: [
-                  {
-                    reviewOrderType: {
-                      in: [
-                        ReviewOrderTypeEnum.waitlist,
-                        ReviewOrderTypeEnum.waitlistLottery,
-                      ],
-                    },
-                  },
-                  { isWaitlistOpen: { equals: false } },
-                  ...notUnderConstruction.map((filt) => ({
-                    marketingType: filt,
-                  })),
-                ],
               },
             ],
           });
