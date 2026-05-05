@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import React from "react"
 import userEvent from "@testing-library/user-event"
+import { FormProvider, useForm } from "react-hook-form"
 import {
   LanguagesEnum,
   ApplicationDeclineReasonEnum,
@@ -10,6 +11,18 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FormProviderWrapper } from "../../../../testUtils"
 import { FormApplicationData } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormApplicationData"
+
+const FormWithSubmit = ({ children }: { children: React.ReactNode }) => {
+  const formMethods = useForm({ shouldUnregister: false })
+  return (
+    <FormProvider {...formMethods}>
+      <form onSubmit={formMethods.handleSubmit(() => null)}>
+        {children}
+        <button type="submit">Submit</button>
+      </form>
+    </FormProvider>
+  )
+}
 
 const defaultFormApplicationDataProps = {
   enableApplicationStatus: false,
@@ -438,6 +451,26 @@ describe("<FormApplicationData>", () => {
       await userEvent.selectOptions(declineSelect, ApplicationDeclineReasonEnum.ageRestriction)
 
       expect(screen.getByLabelText(/decline reason additional details/i)).toBeInTheDocument()
+    })
+
+    it("shows an error when submitted with status declined but no reason selected", async () => {
+      render(
+        <FormWithSubmit>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
+        </FormWithSubmit>
+      )
+
+      const statusSelect = screen.getByTestId("applicationStatusSelect")
+      await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
+
+      await userEvent.click(screen.getByRole("button", { name: /submit/i }))
+
+      await waitFor(() => {
+        expect(screen.getByText(/please select one of the options above/i)).toBeInTheDocument()
+      })
     })
 
     it("hides the active select and shows disabled display when controls are disabled", () => {

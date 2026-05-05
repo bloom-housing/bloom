@@ -18,6 +18,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useFormContext } from "react-hook-form"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { addAsterisk } from "../../../../lib/helpers"
 
 type FormApplicationDataProps = {
   enableApplicationStatus: boolean
@@ -37,7 +38,7 @@ const FormApplicationData = ({
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors, setValue } = formMethods
+  const { register, watch, errors, setValue, clearErrors } = formMethods
 
   const dateSubmittedValue: DateFieldValues = watch("dateSubmitted")
   const isDateFilled =
@@ -203,11 +204,19 @@ const FormApplicationData = ({
                 <Select
                   id="application.applicationDeclineReason"
                   name="application.applicationDeclineReason"
-                  label={t("application.details.applicationDeclineReason")}
+                  label={addAsterisk(t("application.details.applicationDeclineReason"))}
                   register={register}
                   controlClassName="control"
                   options={["", ...applicationDeclineReasonOptions]}
                   keyPrefix="application.details.applicationDeclineReason"
+                  validation={{ required: isDeclinedStatus }}
+                  error={errors?.application?.applicationDeclineReason}
+                  errorMessage={t("errors.selectOption")}
+                  inputProps={{
+                    onChange: () => {
+                      clearErrors("application.applicationDeclineReason")
+                    },
+                  }}
                   dataTestId="applicationDeclineReasonSelect"
                 />
               </div>
