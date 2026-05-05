@@ -52,9 +52,7 @@ describe("ApplicationDates", () => {
     expect(screen.getByRole("combobox", { name: "time" })).toBeInTheDocument()
     expect(screen.getByRole("option", { name: "AM" })).toBeInTheDocument()
     expect(screen.getByRole("option", { name: "PM" })).toBeInTheDocument()
-    expect(
-      screen.getByText("Listing will automatically close on this date and time")
-    ).toBeInTheDocument()
+    expect(screen.getByText("When applications close to the public")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Add open house" })).toBeInTheDocument()
     expect(screen.queryByText("Marketing status")).not.toBeInTheDocument()
   })
@@ -192,6 +190,9 @@ describe("ApplicationDates", () => {
       screen.getByText(
         "Listing will automatically go live on this date between 12:00 AM and 2:00 AM"
       )
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText("Listing will automatically close on this date and time")
     ).toBeInTheDocument()
   })
 })

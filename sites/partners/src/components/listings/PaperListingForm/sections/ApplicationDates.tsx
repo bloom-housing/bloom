@@ -173,7 +173,11 @@ const ApplicationDates = ({
                   year: hasDueDateError,
                 }
               }
-              note={t("listings.whenApplicationsClose")}
+              note={
+                enableAutopublish
+                  ? t("listings.listingWillAutomaticallyClose")
+                  : t("listings.whenApplicationsClose")
+              }
               defaultDate={{
                 month: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
