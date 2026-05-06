@@ -7,7 +7,11 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import tz from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
-import { LanguagesEnum, ReviewOrderTypeEnum } from '@prisma/client';
+import {
+  LanguagesEnum,
+  ListingEventsTypeEnum,
+  ReviewOrderTypeEnum,
+} from '@prisma/client';
 import { JurisdictionService } from './jurisdiction.service';
 import {
   EmailProvider,
@@ -24,6 +28,11 @@ import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { getPublicEmailURL } from '../utilities/get-public-email-url';
 import type { ApplicationStatusChangeItem } from '../utilities/applicationStatusChanges';
+import {
+  oneLineAddress,
+  summarizeListingUnitsByType,
+} from '../utilities/listing-data-formatters';
+import { unitTypeMapping } from 'prisma/seed-helpers/unit-type-factory';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
@@ -946,6 +955,192 @@ export class EmailService {
         appOptions: { appUrl },
       }),
     );
+  }
+
+  public async listingPublishNotification(
+    jurisdictionId: IdDTO,
+    listing: Listing,
+    emails: string[],
+    // publicUrl: string,
+  ) {
+    try {
+      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      void (await this.loadTranslations(jurisdiction));
+      this.logger.log(
+        `Sending listing approved email for listing ${listing.name} to ${emails.length} emails`,
+      );
+
+      const listingDetails: { label: string; value: string | number }[] = [];
+
+      if (listing?.reservedCommunityTypes?.name) {
+        listingDetails.push({
+          label: this.polyglot.t('rentalOpportunity.community'),
+          value: this.polyglot.t(
+            `rentalOpportunity.communityType.${listing.reservedCommunityTypes.name}`,
+          ),
+        });
+      }
+
+      if (listing?.applicationDueDate) {
+        listingDetails.push({
+          label: this.polyglot.t('rentalOpportunity.applicationsDue'),
+          value: this.formatLocalDate(
+            listing.applicationDueDate,
+            'MMMM DD, YYYY',
+          ),
+        });
+      }
+
+      listingDetails.push({
+        label: this.polyglot.t('rentalOpportunity.address'),
+        value: oneLineAddress(listing.listingsBuildingAddress),
+      });
+
+      if (listing.neighborhood) {
+        listingDetails.push({
+          label: this.polyglot.t('rentalOpportunity.neighborhood'),
+          value: listing.neighborhood,
+        });
+      }
+
+      if (
+        listing.reviewOrderType &&
+        (listing.reviewOrderType === ReviewOrderTypeEnum.lottery ||
+          listing.reviewOrderType === ReviewOrderTypeEnum.waitlist)
+      ) {
+        listingDetails.push({
+          label: this.polyglot.t('rentalOpportunity.opportunityType'),
+          value: this.polyglot.t(
+            `rentalOpportunity.${listing.reviewOrderType}`,
+          ),
+        });
+      }
+
+      const listingUnitsSummary = summarizeListingUnitsByType(listing.units);
+
+      // console.table(JSON.stringify(listingUnitsSummary, null, 2));
+      const unitRowOrder = Object.keys(listingUnitsSummary.units).sort(
+        (a, b) => unitTypeMapping[a] - unitTypeMapping[b],
+      );
+
+      unitRowOrder.forEach((key) => {
+        const { count, baths, sqft } = listingUnitsSummary.units[key];
+        let summaryString = `${this.polyglot.t('rentalOpportunity.unitCount', {
+          smart_count: count,
+        })}`;
+
+        if (baths) {
+          summaryString += `, ${
+            baths.min === baths.max
+              ? this.polyglot.t('rentalOpportunity.bathCount', {
+                  smart_count: baths.max,
+                })
+              : `${baths.min} - ${this.polyglot.t(
+                  'rentalOpportunity.bathCount',
+                  {
+                    smart_count: baths.max,
+                  },
+                )}`
+          }`;
+        }
+
+        if (sqft) {
+          summaryString += `, ${
+            sqft.min === sqft.max ? sqft.max : `${sqft.min} - ${sqft.max}`
+          } ${this.polyglot.t('rentalOpportunity.sqft')}`;
+        }
+
+        listingDetails.push({
+          label: this.polyglot.t(`rentalOpportunity.unitTypes.${key}`),
+          value: summaryString,
+        });
+      });
+
+      if (listingUnitsSummary.rent) {
+        listingDetails.push({
+          label: this.polyglot.t('rentalOpportunity.rent'),
+          value: `${
+            listingUnitsSummary.rent.min === listingUnitsSummary.rent.max
+              ? this.polyglot.t('rentalOpportunity.income', {
+                  smart_count: listingUnitsSummary.rent.max,
+                })
+              : `$${listingUnitsSummary.rent.min} - ${this.polyglot.t(
+                  'rentalOpportunity.income',
+                  {
+                    income: listingUnitsSummary.rent.max,
+                  },
+                )}`
+          }`,
+        });
+      }
+
+      if (listingUnitsSummary.minIncome) {
+        listingDetails.push({
+          label: this.polyglot.t('rentalOpportunity.minIncome'),
+          value: `${
+            listingUnitsSummary.minIncome.min ===
+            listingUnitsSummary.minIncome.max
+              ? this.polyglot.t('rentalOpportunity.income', {
+                  smart_count: listingUnitsSummary.minIncome.max,
+                })
+              : `$${listingUnitsSummary.minIncome.min} - ${this.polyglot.t(
+                  'rentalOpportunity.income',
+                  {
+                    income: listingUnitsSummary.minIncome.max,
+                  },
+                )}`
+          }`,
+        });
+      }
+
+      if (listingUnitsSummary.maxIncome) {
+        listingDetails.push({
+          label: this.polyglot.t('rentalOpportunity.maxIncome'),
+          value: `${
+            listingUnitsSummary.maxIncome.min ===
+            listingUnitsSummary.maxIncome.max
+              ? this.polyglot.t('rentalOpportunity.income', {
+                  smart_count: listingUnitsSummary.rent.max,
+                })
+              : `$${listingUnitsSummary.maxIncome.min} - ${this.polyglot.t(
+                  'rentalOpportunity.income',
+                  {
+                    income: listingUnitsSummary.maxIncome.max,
+                  },
+                )}`
+          }`,
+        });
+      }
+
+      const lotteryInfo = listing.listingEvents.filter(
+        (event) => event.type === ListingEventsTypeEnum.publicLottery,
+      );
+
+      if (lotteryInfo.length) {
+        listingDetails.push({
+          label: this.polyglot.t('rentalOpportunity.lotteryDate'),
+          value: this.formatLocalDate(
+            lotteryInfo[0].startDate,
+            'MMMM DD, YYYY',
+          ),
+        });
+      }
+
+      // console.table(JSON.stringify(listingDetails, null, 2));
+
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        'Listing Published',
+        this.template('listing-opportunity')({
+          listingName: listing.name,
+          tableRows: listingDetails,
+        }),
+      );
+    } catch (err) {
+      console.log('listing approval email failed', err);
+      throw new HttpException('email failed', 500);
+    }
   }
 
   formatLocalDate(rawDate: string | Date, format: string): string {
