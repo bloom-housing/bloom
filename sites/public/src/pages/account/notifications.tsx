@@ -34,7 +34,10 @@ const Notifications = (props: NotificationProps) => {
   }
 
   return (
-    <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
+    <RequireLogin
+      signInPath="/sign-in?redirectUrl=/account/notifications"
+      signInMessage={t("t.loginIsRequired")}
+    >
       <ApplicationTimeout />
       <Layout
         pageTitle={t("account.accountSettings")}
