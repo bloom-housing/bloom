@@ -1,3 +1,5 @@
+import { useMemo, useContext } from "react"
+import dayjs from "dayjs"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Card, Heading, Icon, Tag } from "@bloom-housing/ui-seeds"
 import FormSummaryDetails from "../shared/FormSummaryDetails"
@@ -11,11 +13,10 @@ import {
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { useMemo, useContext } from "react"
 import { DATE_FORMAT } from "../../lib/constants"
-import dayjs from "dayjs"
 import { ApplicationListingCard } from "../account/ApplicationCards"
 import { isFeatureFlagOn } from "../../lib/helpers"
+import styles from "./SubmittedApplicationView.module.scss"
 
 interface SubmittedApplicationViewProps {
   application: Application
@@ -84,7 +85,7 @@ const SubmittedApplicationView = ({
         listingName={application.listings?.name || listing?.name}
         listingId={application.listings?.id || listing?.id}
       />
-      <Card spacing={"lg"} className={"mb-6"}>
+      <Card spacing={"lg"} className={"seeds-m-be-6"}>
         <Card.Section divider={"inset"}>
           <Button
             size="sm"
@@ -94,15 +95,15 @@ const SubmittedApplicationView = ({
           >
             {t("t.back")}
           </Button>
-          <Heading priority={2} size={"2xl"} className="mt-6 seeds-large-heading">
+          <Heading priority={2} size={"2xl"} className="seeds-m-bs-6 seeds-large-heading">
             {t("application.confirmation.informationSubmittedTitle")}
           </Heading>
-          <p className="field-note mt-4">
+          <p className="field-note seeds-m-bs-4">
             {t("application.confirmation.submitted")}
             {confirmationDate}
           </p>
           {enableApplicationStatus && (
-            <div className="mt-4">
+            <div className="seeds-m-bs-4">
               <Tag variant={statusTagVariant}>{statusTagContent}</Tag>
             </div>
           )}
@@ -114,13 +115,13 @@ const SubmittedApplicationView = ({
               className={index === displayNumbers.length - 1 ? "" : "seeds-p-be-content"}
             >
               <p>{`${item.label}:`}</p>
-              <p className="font-semibold text-lg mt-3">{item.value}</p>
+              <p className={styles["highlighted-value"]}>{item.value}</p>
             </div>
           ))}
           {isDeclinedStatus && applicationDeclineReason && (
             <div className={displayNumbers.length > 0 ? "seeds-p-bs-content" : ""}>
               <p>{`${t("application.details.applicationDeclineReason")}:`}</p>
-              <p className="font-semibold text-lg mt-3">
+              <p className={styles["highlighted-value"]}>
                 {t(`application.details.applicationDeclineReason.${applicationDeclineReason}`)}
               </p>
             </div>

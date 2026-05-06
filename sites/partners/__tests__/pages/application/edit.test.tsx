@@ -72,7 +72,7 @@ describe("application edit page", () => {
       const statusSelect = await screen.findByLabelText(/status/i)
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
 
-      const declineSelect = screen.getByTestId("applicationDeclineReasonSelect")
+      const declineSelect = screen.getByLabelText(/decline reason/i)
       await userEvent.selectOptions(declineSelect, ApplicationDeclineReasonEnum.ageRestriction)
 
       const saveButton = screen.getByRole("button", { name: "Save & exit" })

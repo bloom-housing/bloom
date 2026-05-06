@@ -168,7 +168,6 @@ const FormApplicationData = ({
         <>
           <Grid.Row columns={3}>
             <Grid.Cell>
-              {/* We need active hidden field to send value even when field is disabled */}
               <div className={disableApplicationStatusControls ? "hidden" : ""}>
                 <Select
                   id="application.status"
@@ -196,11 +195,8 @@ const FormApplicationData = ({
                 />
               )}
             </Grid.Cell>
-            {/* We need active hidden field to send value even when field is not visible and disabled */}
-            <Grid.Cell className={isDeclinedStatus ? "" : "hidden"}>
-              <div
-                className={isDeclinedStatus && !disableApplicationStatusControls ? "" : "hidden"}
-              >
+            {isDeclinedStatus && (
+              <Grid.Cell>
                 <Select
                   id="application.applicationDeclineReason"
                   name="application.applicationDeclineReason"
@@ -219,22 +215,8 @@ const FormApplicationData = ({
                   }}
                   dataTestId="applicationDeclineReasonSelect"
                 />
-              </div>
-              {disableApplicationStatusControls && (
-                <Select
-                  id="application.applicationDeclineReason.display"
-                  name="application.applicationDeclineReason.display"
-                  label={t("application.details.applicationDeclineReason")}
-                  controlClassName="control"
-                  options={["", ...applicationDeclineReasonOptions]}
-                  keyPrefix="application.details.applicationDeclineReason"
-                  key={`application-decline-reason-display-${applicationStatus}`}
-                  defaultValue={watch("application.applicationDeclineReason")}
-                  disabled
-                  dataTestId="applicationDeclineReasonSelectDisplay"
-                />
-              )}
-            </Grid.Cell>
+              </Grid.Cell>
+            )}
           </Grid.Row>
           {showDeclineReasonDetails && (
             <Grid.Row columns={3}>
