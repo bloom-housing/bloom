@@ -1,5 +1,6 @@
 import React from "react"
 import { cleanup, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   listing,
@@ -18,7 +19,6 @@ import {
   ListingsStatusEnum,
   User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import userEvent from "@testing-library/user-event"
 
 afterEach(cleanup)
 
@@ -62,7 +62,7 @@ let partnerUser: User = {
   userRoles: { isPartner: true },
 }
 
-let doJurisdictionsHaveFeatureFlagOn = () => {
+let doJurisdictionsHaveFeatureFlagOn: (featureFlag: string) => boolean = () => {
   return false
 }
 
@@ -469,7 +469,6 @@ describe("<ListingFormActions>", () => {
             formActionType={ListingFormActionsType.edit}
           />
         )
-        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Request changes" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
@@ -497,7 +496,6 @@ describe("<ListingFormActions>", () => {
             formActionType={ListingFormActionsType.edit}
           />
         )
-        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
@@ -554,21 +552,6 @@ describe("<ListingFormActions>", () => {
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Post results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
-      })
-
-      it("click approve and publish in edit mode", async () => {
-        const submitMock = jest.fn()
-        render(
-          <ListingFormActionsComponent
-            user={adminUser}
-            listingStatus={ListingsStatusEnum.pendingReview}
-            formActionType={ListingFormActionsType.edit}
-            submitFormWithStatus={submitMock}
-          />
-        )
-
-        await userEvent.click(screen.getByRole("button", { name: "Approve & publish" }))
-        expect(submitMock).toBeCalledWith("redirect", ListingsStatusEnum.active)
       })
     })
     describe("as a jurisdictional admin", () => {
@@ -947,7 +930,6 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Request changes" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
@@ -989,7 +971,6 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
@@ -1159,7 +1140,6 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Request changes" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
@@ -1200,7 +1180,6 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
@@ -1823,6 +1802,50 @@ describe("<ListingFormActions>", () => {
         )
         expect(screen.queryByText("Close")).toBeFalsy()
       })
+    })
+  })
+
+  describe("with enableAutopublish enabled", () => {
+    afterAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = () => false
+    })
+
+    beforeAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = (flag) => flag === FeatureFlagEnum.enableAutopublish
+      adminUser = { ...adminUser, jurisdictions: [mockAdminOnlyApprovalJurisdiction] }
+    })
+
+    it("shows Approve (not Approve & publish) on listing detail when pending review", () => {
+      render(
+        <ListingFormActionsComponent
+          user={adminUser}
+          listingStatus={ListingsStatusEnum.pendingReview}
+          formActionType={ListingFormActionsType.details}
+        />
+      )
+      expect(screen.getByRole("button", { name: "Approve" })).toBeInTheDocument()
+      expect(screen.queryByRole("button", { name: "Approve & publish" })).not.toBeInTheDocument()
+    })
+
+    it("opens admin approve modal after approve click on listing detail when pending review", async () => {
+      const user = userEvent.setup()
+      render(
+        <ListingFormActionsComponent
+          user={adminUser}
+          listingStatus={ListingsStatusEnum.pendingReview}
+          formActionType={ListingFormActionsType.details}
+        />
+      )
+
+      expect(screen.queryByRole("heading", { name: "Approve listing" })).not.toBeInTheDocument()
+      await user.click(screen.getByRole("button", { name: "Approve" }))
+
+      expect(screen.getByRole("heading", { name: "Approve listing" })).toBeInTheDocument()
+      expect(
+        screen.getByText(
+          "This listing has no scheduled publish date entered. Approving it will publish it immediately. To delay publication, set a publish date before approving."
+        )
+      ).toBeInTheDocument()
     })
   })
 
