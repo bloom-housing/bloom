@@ -41,18 +41,18 @@ const AdminListingApprovalDialog = ({
     <Dialog
       isOpen={isOpen}
       onClose={onClose}
-      ariaLabelledBy="admin-approve-listing-dialog-header"
-      ariaDescribedBy="admin-approve-listing-dialog-content"
+      ariaLabelledBy="admin-listing-approval-dialog-header"
+      ariaDescribedBy="admin-listing-approval-dialog-content"
     >
-      <Dialog.Header id="admin-approve-listing-dialog-header">
+      <Dialog.Header id="admin-listing-approval-dialog-header">
         {t("listings.approval.adminApproveDialogTitle")}
       </Dialog.Header>
-      <Dialog.Content id="admin-approve-listing-dialog-content">
+      <Dialog.Content id="admin-listing-approval-dialog-content">
         {getAdminListingApprovalModalBody()}
       </Dialog.Content>
       <Dialog.Footer>
         <Button
-          id="adminApproveListingConfirm"
+          id="adminListingApprovalButtonConfirm"
           type="button"
           variant="success"
           size="sm"
