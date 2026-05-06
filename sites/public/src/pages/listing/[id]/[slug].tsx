@@ -64,12 +64,12 @@ export default function ListingPage(props: ListingProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (!(listing?.status === "active" || listing?.status === "closed")) {
-    return null
-  }
-
   if (!listing) {
     return <ErrorPage />
+  }
+
+  if (!(listing?.status === "active" || listing?.status === "closed")) {
+    return null
   }
 
   const metaDescription = t("pageDescription.listing", {
