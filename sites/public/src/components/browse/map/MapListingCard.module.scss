@@ -24,7 +24,6 @@
       color: var(--seeds-text-color);
       font-family: var(--seeds-font-alt-sans);
       width: 100%;
-      min-height: var(--seeds-s56);
       @media (--md-down) {
         flex-direction: column;
       }
@@ -42,10 +41,10 @@
         background-size: cover;
         background-position: center;
         @media (--md-down) {
-          min-height: var(--seeds-s96);
+          min-height: var(--seeds-s60);
         }
         @media (--sm-only) {
-          min-height: var(--seeds-s56);
+          min-height: var(--seeds-s40);
         }
       }
 

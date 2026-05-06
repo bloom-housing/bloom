@@ -426,7 +426,7 @@ export const MapClusterer = ({
             setInfoWindowContent(null)
             setInfoWindowIndex(null)
           }}
-          className={"info-window"}
+          className={styles["info-window"]}
           minWidth={250}
           maxWidth={460}
           disableAutoPan={false}
