@@ -793,6 +793,7 @@
   "housingCounselors.languageServices": "언어 서비스: ",
   "housingCounselors.subtitle": "본인의 필요에 맞는 지역 주택 상담사와 상담하십시오.",
   "housingCounselors.visitWebsite": "%{name}을 방문하세요",
+  "invalidListing.redirect": "해당 상품은 현재 판매되지 않습니다.",
   "languages.ar": "عربى",
   "languages.bn": "বাংলা",
   "languages.en": "English",

@@ -796,6 +796,7 @@
   "housingCounselors.languageServices": "Mga serbisyo sa wika:",
   "housingCounselors.subtitle": "Makipag-usap sa lokal na tagapayo ng pabahay na para lang sa iyong mga pangangailangan.",
   "housingCounselors.visitWebsite": "Bisitahin ang %{name}",
+  "invalidListing.redirect": "Hindi magagamit ang listahang ito",
   "languages.ar": "عربى",
   "languages.bn": "বাংলা",
   "languages.en": "English",

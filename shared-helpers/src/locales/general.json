@@ -792,6 +792,7 @@
   "housingCounselors.languageServices": "Language services: ",
   "housingCounselors.subtitle": "Talk with a local housing counselor specific to your needs.",
   "housingCounselors.visitWebsite": "Visit %{name}",
+  "invalidListing.redirect": "This listing is unavailable",
   "languages.ar": "عربى",
   "languages.bn": "বাংলা",
   "languages.en": "English",

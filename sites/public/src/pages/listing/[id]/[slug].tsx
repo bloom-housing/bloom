@@ -7,6 +7,7 @@ import {
   ListingDetail,
   pushGtmEvent,
   AuthContext,
+  MessageContext,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 import Layout from "../../../layouts/application"
@@ -16,6 +17,7 @@ import dayjs from "dayjs"
 import { fetchJurisdictionByName } from "../../../lib/hooks"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingViewSeeds } from "../../../components/listing/ListingViewSeeds"
+import { useRouter } from "next/router"
 
 interface ListingProps {
   listing: Listing
@@ -26,6 +28,8 @@ export default function ListingPage(props: ListingProps) {
   const { listing } = props
 
   const { profile } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
+  const router = useRouter()
 
   useEffect(() => {
     if (!listing?.id) return
@@ -52,6 +56,17 @@ export default function ListingPage(props: ListingProps) {
     listing?.status,
     profile,
   ])
+  useEffect(() => {
+    if (!(listing?.status === "active" || listing?.status === "closed")) {
+      addToast(t("invalidListing.redirect"), { variant: "alert" })
+      void router.push("/")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  if (!(listing?.status === "active" || listing?.status === "closed")) {
+    return null
+  }
 
   if (!listing) {
     return <ErrorPage />

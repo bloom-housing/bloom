@@ -796,6 +796,7 @@
   "housingCounselors.languageServices": "الخدمات اللغوية:",
   "housingCounselors.subtitle": "تحدث مع مستشار الإسكان المحلي الخاص باحتياجاتك.",
   "housingCounselors.visitWebsite": "قم بزيارة %{name}",
+  "invalidListing.redirect": "هذا المنتج غير متوفر",
   "languages.ar": "عربى",
   "languages.bn": "বাংলা",
   "languages.en": "English",

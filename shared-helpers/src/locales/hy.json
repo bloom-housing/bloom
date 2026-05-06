@@ -793,6 +793,7 @@
   "housingCounselors.languageServices": "Լեզվական ծառայություններ՝ ",
   "housingCounselors.subtitle": "Խոսեք տեղական բնակարանային խորհրդատուի հետ՝ ձեր կարիքներին համապատասխան։",
   "housingCounselors.visitWebsite": "Այցելեք %{name}",
+  "invalidListing.redirect": "Այս ցուցակը հասանելի չէ",
   "languages.ar": "عربى",
   "languages.bn": "বাংলা",
   "languages.en": "English",

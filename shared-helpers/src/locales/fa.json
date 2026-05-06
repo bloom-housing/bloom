@@ -793,6 +793,7 @@
   "housingCounselors.languageServices": "خدمات زبانی: ",
   "housingCounselors.subtitle": "با یک مشاور مسکن محلی که مختص نیازهای شماست صحبت کنید.",
   "housingCounselors.visitWebsite": "از %{name} بازدید کنید",
+  "invalidListing.redirect": "این آگهی موجود نیست",
   "languages.ar": "عربى",
   "languages.bn": "বাংলা",
   "languages.en": "English",

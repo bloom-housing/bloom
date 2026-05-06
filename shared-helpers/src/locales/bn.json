@@ -796,6 +796,7 @@
   "housingCounselors.languageServices": "ভাষা পরিষেবা:",
   "housingCounselors.subtitle": "আপনার প্রয়োজনের জন্য নির্দিষ্ট স্থানীয় হাউজিং কাউন্সেলরের সাথে কথা বলুন।",
   "housingCounselors.visitWebsite": "%{name} এ যান",
+  "invalidListing.redirect": "এই তালিকাটি অনুপলব্ধ।",
   "languages.ar": "عربى",
   "languages.bn": "বাংলা",
   "languages.en": "English",
