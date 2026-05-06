@@ -1581,6 +1581,7 @@ describe("listing data", () => {
         expect(screen.getByText("Application dates")).toBeInTheDocument()
         expect(screen.getByText("Application due date")).toBeInTheDocument()
         expect(screen.getByText("Application due time")).toBeInTheDocument()
+        expect(screen.queryByText("Scheduled listing publish date")).not.toBeInTheDocument()
         expect(screen.getAllByText("None")).toHaveLength(2)
         expect(screen.queryByText("Open houses")).not.toBeInTheDocument()
         expect(screen.queryByText("Open house")).not.toBeInTheDocument()
@@ -1602,13 +1603,15 @@ describe("listing data", () => {
             value={{
               profile: { ...user, jurisdictions: [], listings: [] },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-                featureFlag === FeatureFlagEnum.enableMarketingFlyer,
+                featureFlag === FeatureFlagEnum.enableMarketingFlyer ||
+                featureFlag === FeatureFlagEnum.enableAutopublish,
             }}
           >
             <ListingContext.Provider
               value={{
                 ...listing,
                 applicationDueDate: new Date(2024, 11, 20, 15, 30),
+                scheduledPublishAt: new Date("2030-06-15T00:00:00.000Z"),
                 listingEvents: [
                   {
                     id: "event_id_1",
@@ -1650,6 +1653,8 @@ describe("listing data", () => {
         expect(screen.getByText("12/20/2024")).toBeInTheDocument()
         expect(screen.getByText("Application due time")).toBeInTheDocument()
         expect(screen.getByText("03:30 PM")).toBeInTheDocument()
+        expect(screen.getByText("Scheduled listing publish date")).toBeInTheDocument()
+        expect(screen.getByText("06/15/2030")).toBeInTheDocument()
         expect(screen.getByText("Open houses")).toBeInTheDocument()
         expect(screen.getByText("Date")).toBeInTheDocument()
         expect(screen.getByText("02/18/2024")).toBeInTheDocument()

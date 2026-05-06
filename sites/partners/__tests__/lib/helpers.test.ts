@@ -43,6 +43,12 @@ describe("helpers", () => {
       expect(createDate({ year: "2025", month: "13", day: "10" })).toBeFalsy()
       expect(createDate({ year: "2025", month: "13", day: "35" })).toBeFalsy()
     })
+    it("should return UTC midnight when utcMidnight is true", () => {
+      expect(createDate({ year: "2030", month: "6", day: "15" }, true)?.toISOString()).toEqual(
+        "2030-06-15T00:00:00.000Z"
+      )
+      expect(createDate(undefined, true)).toBeNull()
+    })
   })
   describe("fieldIsRequired", () => {
     it("should return true if field is required", () => {

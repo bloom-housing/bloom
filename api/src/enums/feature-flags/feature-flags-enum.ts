@@ -14,6 +14,7 @@ export enum FeatureFlagEnum {
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
   enableAdditionalResources = 'enableAdditionalResources',
   enableApplicationStatus = 'enableApplicationStatus',
+  enableAutopublish = 'enableAutopublish',
   enableCompanyWebsite = 'enableCompanyWebsite',
   enableCustomListingNotifications = 'enableCustomListingNotifications',
   enableConfigurableRegions = 'enableConfigurableRegions',
@@ -138,6 +139,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableApplicationStatus,
     description:
       'When true, the application status and notifications feature is enabled on public and partners',
+  },
+  {
+    name: FeatureFlagEnum.enableAutopublish,
+    description:
+      'When true, partners can set an optional scheduled listing publish date',
   },
   {
     name: FeatureFlagEnum.enableCompanyWebsite,
