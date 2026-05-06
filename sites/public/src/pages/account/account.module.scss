@@ -32,3 +32,10 @@
   font-size: var(--seeds-font-size-sm);
   margin-block-start: var(--seeds-s6);
 }
+
+.settings-page-view {
+  background-color: var(--seeds-bg-color-canvas);
+  [class*="tab-view"] {
+    --padding-inline: 0;
+  }
+}

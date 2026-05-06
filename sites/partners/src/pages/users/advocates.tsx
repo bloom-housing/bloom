@@ -19,7 +19,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
-import TabView from "../../layouts/TabView"
+import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import { getUsersTabs, UsersIndexEnum } from "../../components/users/UsersViewHelpers"
 import { useAdvocateUserExport, useUserList } from "../../lib/hooks"
 

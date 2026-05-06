@@ -6,9 +6,9 @@ import { useForm } from "react-hook-form"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
 import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
-import { t, Select, Form, SelectOption, Field } from "@bloom-housing/ui-components"
+import { t, Select, SelectOption, Field } from "@bloom-housing/ui-components"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, Form } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
@@ -424,13 +424,12 @@ export default function ListingsList() {
         ariaDescribedBy="listing-select-dialog-content"
         onClose={() => onModalClose()}
       >
+        <Dialog.Header id="listing-select-dialog-header">
+          {defaultJurisdiction
+            ? t("listings.selectListingType")
+            : t("listings.selectJurisdictionTitle")}
+        </Dialog.Header>
         <Form id="listing-select-form" onSubmit={handleSubmit(onSubmit)}>
-          <Dialog.Header id="listing-select-dialog-header">
-            {defaultJurisdiction
-              ? t("listings.selectListingType")
-              : t("listings.selectJurisdictionTitle")}
-          </Dialog.Header>
-
           <Dialog.Content id="listing-select-dialog-content">
             {t("listings.selectJurisdictionContent")}
             <Grid>

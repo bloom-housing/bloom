@@ -110,6 +110,7 @@
   "footer.content2": " TTY: 기술적인 변화로 인해 TTY를 이용하여 연락해야 하는 경우, 텍스트 음성 변환 TTY 기반 TRS, 음성 변환 릴레이 서비스, 공유 비영어권 언어 릴레이 서비스, 자막 전화 서비스, IP 자막 전화 서비스, 인터넷 프로토콜 릴레이 서비스 또는 비디오 릴레이 서비스와 같은 통신 릴레이 서비스(TRS)를 이용하시거나 711번으로 전화해 주십시오.",
   "footer.copyright": "© Los Angeles시",
   "footer.forGeneralQuestions": "프로그램 관련 일반 문의는 000-000-0000으로 전화 주시기 바랍니다.",
+  "listings.additionalFeesDisclaimer": "장애로 인해 필요한 합리적인 편의 시설(예: 정서적 지원 동물)에 대해서는 수수료가 부과되지 않습니다. 또한 장애로 인해 효과적인 의사소통에 필요한 보조 기구 및 서비스에 대해서도 수수료가 부과되지 않습니다. 신용 조회와 관련하여, 정부 임대료 보조금을 받는 신청자는 신용 기록에 의존하는 대신 임대료 지불 능력을 입증할 수 있는 \"합법적이고 검증 가능한 대체 증거\"를 제출할 수 있습니다.",
   "listings.petPolicyDescription": "안내견과 정서적 지원 동물은 애완동물이 아니며 법률에 따라 허용됩니다. 또한 공공 자금으로 건설된 주택 단지와 같은 특정 유형의 주택에서는 애완동물 사육이 의무화될 수 있습니다.",
   "listings.reservedCommunityTypeDescriptions.referralOnly55": "추천을 통해서만 55세 이상 가입 가능",
   "listings.reservedCommunityTypeDescriptions.referralOnly62": "추천인만 참여 가능 (62세 이상)",

@@ -35,6 +35,13 @@ export const usd = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 });
 
+const usdTwoDecimal = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
 export const minMax = (baseValue: MinMax, newValue: number): MinMax => {
   return {
     min: Math.min(baseValue.min, newValue),
@@ -57,7 +64,9 @@ export const minMaxCurrency = (
 };
 
 export const yearlyCurrencyStringToMonthly = (currency: string) => {
-  return usd.format(parseFloat(currency.replace(/[^0-9.-]+/g, '')) / 12);
+  return usdTwoDecimal.format(
+    parseFloat(currency.replace(/[^0-9.-]+/g, '')) / 12,
+  );
 };
 
 export const getAmiChartItemUniqueKey = (amiChartItem: AmiChartItem) => {

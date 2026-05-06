@@ -5,10 +5,11 @@ import { Button, Dialog, Card } from "@bloom-housing/ui-seeds"
 import {
   AuthContext,
   BloomCard,
+  Form,
   MessageContext,
   passwordRegex,
 } from "@bloom-housing/shared-helpers"
-import { t, Form, Field, useMutate, AlertBox } from "@bloom-housing/ui-components"
+import { t, Field, useMutate, AlertBox } from "@bloom-housing/ui-components"
 import { ReRequestConfirmation } from "./ReRequestConfirmation"
 import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 

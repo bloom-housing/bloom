@@ -186,6 +186,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableFaq,
+        FeatureFlagEnum.enableGenderQuestion,
         FeatureFlagEnum.enableGeocodingPreferences,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
         FeatureFlagEnum.enableHomeType,
@@ -200,6 +201,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableNeighborhoodAmenities,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableReceivedAtAndByFields,
         FeatureFlagEnum.enableResources,
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
@@ -207,6 +209,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableUtilitiesIncluded,
         FeatureFlagEnum.enableWaitlistLottery,
         FeatureFlagEnum.enableWhatToExpectAdditionalField,
+        FeatureFlagEnum.enableCustomListingNotifications,
       ],
       languages: Object.values(LanguagesEnum),
       requiredListingFields: [
@@ -353,6 +356,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableSpokenLanguage,
         FeatureFlagEnum.enableUnitAccessibilityTypeTags,
         FeatureFlagEnum.disableReservedCommunityTypeEdit,
+        FeatureFlagEnum.enableCustomListingNotifications,
       ],
       visibleNeighborhoodAmenities: [
         NeighborhoodAmenitiesEnum.groceryStores,

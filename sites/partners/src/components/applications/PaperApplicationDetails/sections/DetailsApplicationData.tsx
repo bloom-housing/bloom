@@ -4,15 +4,20 @@ import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
 import { convertDataToLocal } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ApplicationSubmissionTypeEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type DetailsApplicationDataProps = {
   enableApplicationStatus?: boolean
+  enableReceivedAtAndByFields?: boolean
   reviewOrderType?: ReviewOrderTypeEnum
 }
 
 const DetailsApplicationData = ({
   enableApplicationStatus,
+  enableReceivedAtAndByFields,
   reviewOrderType,
 }: DetailsApplicationDataProps) => {
   const application = useContext(ApplicationContext)
@@ -21,6 +26,12 @@ const DetailsApplicationData = ({
     if (!application) return null
 
     return convertDataToLocal(application?.submissionDate)
+  }, [application])
+
+  const receivedDate = useMemo(() => {
+    if (!application) return null
+
+    return convertDataToLocal(application?.receivedAt)
   }, [application])
 
   return (
@@ -66,6 +77,29 @@ const DetailsApplicationData = ({
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>
+
+      {enableReceivedAtAndByFields &&
+        application.submissionType === ApplicationSubmissionTypeEnum.paper && (
+          <Grid.Row>
+            <Grid.Cell>
+              <FieldValue label={t("application.details.receivedDate")} testId="receivedDate">
+                {receivedDate?.date}
+              </FieldValue>
+            </Grid.Cell>
+
+            <Grid.Cell>
+              <FieldValue label={t("application.details.receivedTime")} testId="receivedTime">
+                {receivedDate?.time}
+              </FieldValue>
+            </Grid.Cell>
+
+            <Grid.Cell>
+              <FieldValue label={t("application.details.receivedBy")} testId="receivedBy">
+                {application.receivedBy ? application.receivedBy : t("t.n/a")}
+              </FieldValue>
+            </Grid.Cell>
+          </Grid.Row>
+        )}
 
       <Grid.Row>
         <Grid.Cell>

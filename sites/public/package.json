@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@bloom-housing/shared-helpers": "^7.7.1",
-    "@bloom-housing/ui-components": "14.0.1",
+    "@bloom-housing/ui-components": "14.0.2",
     "@bloom-housing/ui-seeds": "3.4.1",
     "@heroicons/react": "^2.1.1",
     "@mapbox/mapbox-sdk": "^0.13.0",

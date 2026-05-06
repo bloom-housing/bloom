@@ -68,6 +68,11 @@ const ApplicationsList = () => {
     listingDto?.jurisdictions.id
   )
 
+  const enableReceivedAtAndByFields = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReceivedAtAndByFields,
+    listingDto?.jurisdictions.id
+  )
+
   const [errorAlert, setErrorAlert] = useState(false)
 
   const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
@@ -140,6 +145,7 @@ const ApplicationsList = () => {
               <div className="info-card md:w-9/12">
                 <DetailsApplicationData
                   enableApplicationStatus={enableApplicationStatus}
+                  enableReceivedAtAndByFields={enableReceivedAtAndByFields}
                   reviewOrderType={listingDto?.reviewOrderType}
                 />
 

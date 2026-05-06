@@ -225,9 +225,17 @@ export class ApplicationExporterService {
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableSpokenLanguage,
     );
+    const enableGenderQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableGenderQuestion,
+    );
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
+    );
+    const enableReceivedAtAndByFields = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableReceivedAtAndByFields,
     );
     const swapCommunityTypeWithPrograms = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
@@ -256,7 +264,9 @@ export class ApplicationExporterService {
         enableFullTimeStudentQuestion,
         enableReasonableAccommodations,
         enableSpokenLanguage,
+        enableGenderQuestion,
         enableV2MSQ,
+        enableReceivedAtAndByFields,
         includeDemographics: queryParams.includeDemographics,
         swapCommunityTypeWithPrograms,
         visibleApplicationAccessibilityFeatures:
@@ -503,9 +513,17 @@ export class ApplicationExporterService {
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableReasonableAccommodations,
     );
+    const enableGenderQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableGenderQuestion,
+    );
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
+    );
+    const enableReceivedAtAndByFields = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableReceivedAtAndByFields,
     );
     const swapCommunityTypeWithPrograms = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
@@ -533,7 +551,9 @@ export class ApplicationExporterService {
         enableApplicationStatus,
         enableFullTimeStudentQuestion,
         enableReasonableAccommodations,
+        enableGenderQuestion,
         enableV2MSQ,
+        enableReceivedAtAndByFields,
         forLottery,
         includeDemographics: queryParams.includeDemographics,
         swapCommunityTypeWithPrograms,

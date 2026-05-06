@@ -3,15 +3,8 @@ import { useForm } from "react-hook-form"
 import { t } from "@bloom-housing/ui-components"
 import { LoadingState } from "@bloom-housing/ui-seeds"
 import { Agency } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import {
-  PageView,
-  pushGtmEvent,
-  AuthContext,
-  RequireLogin,
-  BloomCard,
-} from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
-import FormsLayout from "../../layouts/forms"
 import {
   accountNameFields,
   addressFields,
@@ -200,122 +193,110 @@ export const EditAdvocateAccount = (props: EditAdvocateAccountProps) => {
   const hasAdditionalPhone = phoneWatch("hasAdditionalPhone", !!user?.additionalPhoneNumber)
 
   return (
-    <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-      <FormsLayout
-        pageTitle={t("account.accountSettings")}
-        metaDescription={t("pageDescription.accountSettings")}
-      >
-        <BloomCard
-          iconSymbol="userCircle"
-          iconClass={"card-icon"}
-          title={t("account.accountSettings")}
-          subtitle={t("account.accountSettingsSubtitle")}
-          headingPriority={1}
-          headingClass={"seeds-large-heading"}
-          id={"edit-advocate-account"}
-        >
-          <div data-testid="edit-advocate-account">
-            <LoadingState loading={loading}>
-              <AccountSection
-                alert={nameAlert}
-                setAlert={setNameAlert}
-                formId="update-name"
-                onSubmit={nameHandleSubmit(onNameSubmit)}
-                loading={nameLoading}
-                buttonId="account-submit-name"
-                buttonAriaLabel={`${t("account.settings.update")} ${t(
-                  "application.name.yourName"
-                )}`}
-              >
-                {accountNameFields(nameErrors, nameRegister, user, nameClearErrors)}
-              </AccountSection>
+    <BloomCard
+      iconSymbol="userCircle"
+      iconClass={"card-icon"}
+      title={t("account.accountSettings")}
+      subtitle={t("account.accountSettingsSubtitle")}
+      headingPriority={1}
+      headingClass={"seeds-large-heading"}
+      id={"edit-advocate-account"}
+      variant={"block"}
+    >
+      <div data-testid="edit-advocate-account">
+        <LoadingState loading={loading}>
+          <AccountSection
+            alert={nameAlert}
+            setAlert={setNameAlert}
+            formId="update-name"
+            onSubmit={nameHandleSubmit(onNameSubmit)}
+            loading={nameLoading}
+            buttonId="account-submit-name"
+            buttonAriaLabel={`${t("account.settings.update")} ${t("application.name.yourName")}`}
+          >
+            {accountNameFields(nameErrors, nameRegister, user, nameClearErrors)}
+          </AccountSection>
 
-              <AccountSection
-                alert={agencyAlert}
-                setAlert={setAgencyAlert}
-                formId="update-agency"
-                onSubmit={agencyHandleSubmit(onAgencySubmit)}
-                loading={agencyLoading}
-                buttonId="account-submit-agency"
-                buttonAriaLabel={`${t("account.settings.update")} ${t(
-                  "advocateAccount.agencyLabel"
-                )}`}
-              >
-                {agencyFields(agencyErrors, agencyRegister, user, props.agencies)}
-              </AccountSection>
+          <AccountSection
+            alert={agencyAlert}
+            setAlert={setAgencyAlert}
+            formId="update-agency"
+            onSubmit={agencyHandleSubmit(onAgencySubmit)}
+            loading={agencyLoading}
+            buttonId="account-submit-agency"
+            buttonAriaLabel={`${t("account.settings.update")} ${t("advocateAccount.agencyLabel")}`}
+          >
+            {agencyFields(agencyErrors, agencyRegister, user, props.agencies)}
+          </AccountSection>
 
-              <AccountSection
-                alert={addressAlert}
-                setAlert={setAddressAlert}
-                formId="update-address"
-                onSubmit={addressHandleSubmit(onAddressSubmit)}
-                loading={addressLoading}
-                buttonId="account-submit-address"
-                buttonAriaLabel={`${t("account.settings.update")} ${t(
-                  "application.contact.address"
-                )}`}
-              >
-                {addressFields(
-                  addressErrors,
-                  addressRegister,
-                  user,
-                  isPOBoxSelected,
-                  user?.address?.street?.toLowerCase().startsWith("po box")
-                )}
-              </AccountSection>
+          <AccountSection
+            alert={addressAlert}
+            setAlert={setAddressAlert}
+            formId="update-address"
+            onSubmit={addressHandleSubmit(onAddressSubmit)}
+            loading={addressLoading}
+            buttonId="account-submit-address"
+            buttonAriaLabel={`${t("account.settings.update")} ${t("application.contact.address")}`}
+          >
+            {addressFields(
+              addressErrors,
+              addressRegister,
+              user,
+              isPOBoxSelected,
+              user?.address?.street?.toLowerCase().startsWith("po box")
+            )}
+          </AccountSection>
 
-              <AccountSection
-                alert={phoneAlert}
-                setAlert={setPhoneAlert}
-                formId="update-phone-number"
-                onSubmit={phoneHandleSubmit(onPhoneSubmit)}
-                loading={phoneLoading}
-                buttonId="account-submit-phone"
-                buttonAriaLabel={`${t("account.settings.update")} ${t(
-                  "application.contact.yourPhoneNumber"
-                )}`}
-              >
-                {phoneFields(
-                  phoneErrors,
-                  phoneRegister,
-                  phoneControl,
-                  setPhoneValue,
-                  user,
-                  hasAdditionalPhone
-                )}
-              </AccountSection>
+          <AccountSection
+            alert={phoneAlert}
+            setAlert={setPhoneAlert}
+            formId="update-phone-number"
+            onSubmit={phoneHandleSubmit(onPhoneSubmit)}
+            loading={phoneLoading}
+            buttonId="account-submit-phone"
+            buttonAriaLabel={`${t("account.settings.update")} ${t(
+              "application.contact.yourPhoneNumber"
+            )}`}
+          >
+            {phoneFields(
+              phoneErrors,
+              phoneRegister,
+              phoneControl,
+              setPhoneValue,
+              user,
+              hasAdditionalPhone
+            )}
+          </AccountSection>
 
-              <AccountSection
-                alert={emailAlert}
-                setAlert={setEmailAlert}
-                formId="update-email"
-                onSubmit={emailHandleSubmit(onEmailSubmit)}
-                loading={emailLoading}
-                buttonId="account-submit-email"
-                buttonAriaLabel={`${t("account.settings.update")} ${t(
-                  "application.name.yourEmailAddress"
-                )}`}
-              >
-                {emailFields(emailErrors, emailRegister, user, emailClearErrors)}
-              </AccountSection>
+          <AccountSection
+            alert={emailAlert}
+            setAlert={setEmailAlert}
+            formId="update-email"
+            onSubmit={emailHandleSubmit(onEmailSubmit)}
+            loading={emailLoading}
+            buttonId="account-submit-email"
+            buttonAriaLabel={`${t("account.settings.update")} ${t(
+              "application.name.yourEmailAddress"
+            )}`}
+          >
+            {emailFields(emailErrors, emailRegister, user, emailClearErrors)}
+          </AccountSection>
 
-              <AccountSection
-                alert={passwordAlert}
-                setAlert={setPasswordAlert}
-                formId="update-password"
-                onSubmit={pwdHandleSubmit(onPasswordSubmit)}
-                loading={passwordLoading}
-                buttonId="account-submit-password"
-                buttonAriaLabel={`${t("account.settings.update")} ${t(
-                  "authentication.createAccount.password"
-                )}`}
-              >
-                {passwordFields(pwdErrors, pwdRegister, password, MIN_PASSWORD_LENGTH)}
-              </AccountSection>
-            </LoadingState>
-          </div>
-        </BloomCard>
-      </FormsLayout>
-    </RequireLogin>
+          <AccountSection
+            alert={passwordAlert}
+            setAlert={setPasswordAlert}
+            formId="update-password"
+            onSubmit={pwdHandleSubmit(onPasswordSubmit)}
+            loading={passwordLoading}
+            buttonId="account-submit-password"
+            buttonAriaLabel={`${t("account.settings.update")} ${t(
+              "authentication.createAccount.password"
+            )}`}
+          >
+            {passwordFields(pwdErrors, pwdRegister, password, MIN_PASSWORD_LENGTH)}
+          </AccountSection>
+        </LoadingState>
+      </div>
+    </BloomCard>
   )
 }

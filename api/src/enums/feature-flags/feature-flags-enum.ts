@@ -15,10 +15,12 @@ export enum FeatureFlagEnum {
   enableAdditionalResources = 'enableAdditionalResources',
   enableApplicationStatus = 'enableApplicationStatus',
   enableCompanyWebsite = 'enableCompanyWebsite',
+  enableCustomListingNotifications = 'enableCustomListingNotifications',
   enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableFaq = 'enableFaq',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
+  enableGenderQuestion = 'enableGenderQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
@@ -48,6 +50,7 @@ export enum FeatureFlagEnum {
   enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
   enableProperties = 'enableProperties',
   enableReasonableAccommodations = 'enableReasonableAccommodations',
+  enableReceivedAtAndByFields = 'enableReceivedAtAndByFields',
   enableReferralQuestionUnits = 'enableReferralQuestionUnits',
   enableRegions = 'enableRegions',
   enableResources = 'enableResources',
@@ -142,6 +145,10 @@ export const featureFlagMap: {
       'When true, allows partners to add company website information',
   },
   {
+    name: FeatureFlagEnum.enableCustomListingNotifications,
+    description: 'When true, users have access to custom notification settings',
+  },
+  {
     name: FeatureFlagEnum.enableConfigurableRegions,
     description:
       'When true, allows for configurable regions per jurisdiction enabled on partners and public',
@@ -159,6 +166,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
     description:
       'When true, the full time student question is displayed in the application form',
+  },
+  {
+    name: FeatureFlagEnum.enableGenderQuestion,
+    description:
+      'When true, the gender identity question is displayed in the public and partner application demographics section',
   },
   {
     name: FeatureFlagEnum.enableGeocodingPreferences,
@@ -291,6 +303,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableReasonableAccommodations,
     description:
       'When true, the reasonable accommodations question is shown in the public and partner application flow',
+  },
+  {
+    name: FeatureFlagEnum.enableReceivedAtAndByFields,
+    description:
+      'When true, partners can view/edit paper application received at/by fields and include them in application exports',
   },
   {
     name: FeatureFlagEnum.enableReferralQuestionUnits,
