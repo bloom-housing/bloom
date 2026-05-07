@@ -1,6 +1,4 @@
 import { LanguagesEnum, PrismaClient } from '@prisma/client';
-import { ListingFeaturesConfiguration } from '../src/dtos/jurisdictions/listing-features-config.dto';
-import { RaceEthnicityConfiguration } from '../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
 import { createAllFeatureFlags } from './seed-helpers/feature-flag-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
@@ -10,84 +8,6 @@ import { createBloomingtonJurisdiction } from './seed-staging/seed-bloomington';
 import { createBridgeBayJurisdictions } from './seed-staging/seed-bridge-bay';
 import { createLakeviewJurisdiction } from './seed-staging/seed-lakeview';
 import { createNadaHillJurisdiction } from './seed-staging/seed-nada-hill';
-
-export const defaultRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
-  options: [
-    {
-      id: 'americanIndianAlaskanNative',
-      subOptions: [],
-      allowOtherText: false,
-    },
-    {
-      id: 'asian',
-      subOptions: [
-        { id: 'asianIndian', allowOtherText: false },
-        { id: 'chinese', allowOtherText: false },
-        { id: 'filipino', allowOtherText: false },
-        { id: 'japanese', allowOtherText: false },
-        { id: 'korean', allowOtherText: false },
-        { id: 'vietnamese', allowOtherText: false },
-        { id: 'otherAsian', allowOtherText: true },
-      ],
-      allowOtherText: false,
-    },
-    {
-      id: 'blackAfricanAmerican',
-      subOptions: [],
-      allowOtherText: false,
-    },
-    {
-      id: 'nativeHawaiianOtherPacificIslander',
-      subOptions: [
-        { id: 'nativeHawaiian', allowOtherText: false },
-        { id: 'guamanianOrChamorro', allowOtherText: false },
-        { id: 'samoan', allowOtherText: false },
-        { id: 'otherPacificIslander', allowOtherText: true },
-      ],
-      allowOtherText: false,
-    },
-    {
-      id: 'white',
-      subOptions: [],
-      allowOtherText: false,
-    },
-    {
-      id: 'otherMultiracial',
-      subOptions: [],
-      allowOtherText: true,
-    },
-    {
-      id: 'declineToRespond',
-      subOptions: [],
-      allowOtherText: false,
-    },
-  ],
-};
-export const defaultListingFeatureConfiguration: ListingFeaturesConfiguration =
-  {
-    fields: [
-      { id: 'wheelchairRamp' },
-      { id: 'elevator' },
-      { id: 'serviceAnimalsAllowed' },
-      { id: 'accessibleParking' },
-      { id: 'parkingOnSite' },
-      { id: 'inUnitWasherDryer' },
-      { id: 'laundryInBuilding' },
-      { id: 'barrierFreeEntrance' },
-      { id: 'rollInShower' },
-      { id: 'grabBars' },
-      { id: 'heatingInUnit' },
-      { id: 'acInUnit' },
-      { id: 'hearing' },
-      { id: 'mobility' },
-      { id: 'visual' },
-      { id: 'barrierFreeUnitEntrance' },
-      { id: 'loweredLightSwitch' },
-      { id: 'barrierFreeBathroom' },
-      { id: 'wideDoorways' },
-      { id: 'loweredCabinets' },
-    ],
-  };
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -108,7 +28,7 @@ export const stagingSeed = async (
 
   const unitTypes = await unitTypeFactoryAll(prismaClient);
 
-  // create a partner
+  // create a partner user that can be passed to the jurisdiction creation functions
   const partnerUser = await prismaClient.userAccounts.create({
     data: await userFactory({
       roles: { isPartner: true },

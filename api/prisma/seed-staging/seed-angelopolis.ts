@@ -21,7 +21,7 @@ import { ApplicationAccessibilityFeatureEnum } from '../../src/enums/application
 import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessibility-priority-type-enum';
 import { RaceEthnicityConfiguration } from '../../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
 import { hollywoodHillsHeights } from '../seed-helpers/listing-data/hollywood-hills-heights';
-import { seedListings } from './seed-listings';
+import { seedListings } from './seed-staging-helpers';
 
 export const angelopolisRaceEthnicityConfiguration: RaceEthnicityConfiguration =
   {

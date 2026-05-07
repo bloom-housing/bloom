@@ -1,16 +1,21 @@
 import {
   LanguagesEnum,
   ListingsStatusEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   PrismaClient,
 } from '@prisma/client';
 import { randomInt } from 'crypto';
 import dayjs from 'dayjs';
-import { jurisdictionFactory } from '../seed-helpers/jurisdiction-factory';
-import { FeatureFlagEnum } from '../../src/enums/feature-flags/feature-flags-enum';
 import { SpokenLanguageEnum } from '../../src/enums/applications/spoken-language-enum';
+import { FeatureFlagEnum } from '../../src/enums/feature-flags/feature-flags-enum';
 import { randomBoolean } from '../seed-helpers/boolean-generator';
-import { defaultListingFeatureConfiguration } from '../seed-staging';
-import { seedListings } from './seed-listings';
+import { jurisdictionFactory } from '../seed-helpers/jurisdiction-factory';
+import { multiselectQuestionFactory } from '../seed-helpers/multiselect-question-factory';
+import {
+  defaultListingFeatureConfiguration,
+  seedListings,
+} from './seed-staging-helpers';
 
 export const realisticAddressesForActive = [
   {
@@ -2506,6 +2511,21 @@ const visibleSpokenLanguages = [
   SpokenLanguageEnum.notListed,
 ];
 
+const requiredListingFields = [
+  'listingsBuildingAddress',
+  'name',
+  'developer',
+  'listingImages',
+  'leasingAgentEmail',
+  'leasingAgentName',
+  'leasingAgentPhone',
+  'jurisdictions',
+  'units',
+  'digitalApplication',
+  'paperApplication',
+  'applicationDueDate',
+];
+
 const subJurisdictions = [
   'San Flor',
   'Coyote Ridge',
@@ -2546,7 +2566,7 @@ export const createBridgeBayJurisdictions = async (
       listingFeaturesConfiguration: defaultListingFeatureConfiguration,
       raceEthnicityConfiguration: raceEthnicityConfiguration,
       visibleSpokenLanguages: visibleSpokenLanguages,
-      //TODO: add required listing fields
+      requiredListingFields: requiredListingFields,
     }),
   });
 
@@ -2560,9 +2580,50 @@ export const createBridgeBayJurisdictions = async (
         listingFeaturesConfiguration: defaultListingFeatureConfiguration,
         raceEthnicityConfiguration: raceEthnicityConfiguration,
         visibleSpokenLanguages: visibleSpokenLanguages,
+        requiredListingFields: requiredListingFields,
       }),
     });
     otherJurisdictions.push(createdSubJurisdiction);
+
+    const msqData = msqV2
+      ? {
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          description: `${subJurisdiction} preference question`,
+          multiselectOptions: {
+            createMany: {
+              data: [
+                {
+                  name: `At least one member of my household lives in ${subJurisdiction}`,
+                  shouldCollectAddress: false,
+                  ordinal: 1,
+                },
+              ],
+            },
+          },
+          name: `${subJurisdiction} Preference`,
+          status: MultiselectQuestionsStatusEnum.active,
+        }
+      : {
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          description: 'Employees of the local city.',
+          options: [
+            {
+              text: `At least one member of my household lives in ${subJurisdiction}`,
+              collectAddress: false,
+              ordinal: 0,
+            },
+          ],
+          text: `${subJurisdiction} Preference`,
+        };
+    const preferenceQuestion = await prismaClient.multiselectQuestions.create({
+      data: multiselectQuestionFactory(
+        createdSubJurisdiction.id,
+        { multiselectQuestion: msqData },
+        msqV2,
+      ),
+    });
 
     const listings = Object.values(realisticAddressesForActive)
       .filter((address) => address.county === subJurisdiction)
@@ -2573,6 +2634,7 @@ export const createBridgeBayJurisdictions = async (
           digitalApp: !!(index % 2),
           status: ListingsStatusEnum.active,
           address: addr,
+          multiselectQuestions: randomBoolean() ? [preferenceQuestion] : [],
           publishedAt: dayjs(new Date())
             .subtract(randomInt(1, 10), 'days')
             .toDate(),

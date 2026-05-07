@@ -15,8 +15,8 @@ import { multiselectQuestionFactory } from '../seed-helpers/multiselect-question
 import {
   defaultListingFeatureConfiguration,
   defaultRaceEthnicityConfiguration,
-} from '../seed-staging';
-import { seedListings } from './seed-listings';
+  seedListings,
+} from './seed-staging-helpers';
 
 export const createLakeviewJurisdiction = async (
   prismaClient: PrismaClient,

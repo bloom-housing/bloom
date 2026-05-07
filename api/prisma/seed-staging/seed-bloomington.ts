@@ -33,8 +33,8 @@ import { reservedCommunityTypeFactoryAll } from '../seed-helpers/reserved-commun
 import {
   defaultListingFeatureConfiguration,
   defaultRaceEthnicityConfiguration,
-} from '../seed-staging';
-import { seedListings } from './seed-listings';
+  seedListings,
+} from './seed-staging-helpers';
 
 export const createBloomingtonJurisdiction = async (
   prismaClient: PrismaClient,
@@ -482,7 +482,6 @@ export const createBloomingtonJurisdiction = async (
       listing: elmVillage,
       numberOfUnits: 0,
       applications: [
-        // TODO: Needs to handle V2MSQ
         await applicationFactory({
           enableV2MSQ: msqV2,
           multiselectQuestions: [workInCityQuestion, cityEmployeeQuestion],
