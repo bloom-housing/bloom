@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from "react"
 import { GetStaticPaths, GetStaticProps } from "next"
+import { useRouter } from "next/router"
 import axios from "axios"
 import { t } from "@bloom-housing/ui-components"
 import {
@@ -17,7 +18,6 @@ import dayjs from "dayjs"
 import { fetchJurisdictionByName } from "../../../lib/hooks"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingViewSeeds } from "../../../components/listing/ListingViewSeeds"
-import { useRouter } from "next/router"
 
 interface ListingProps {
   listing: Listing
@@ -58,7 +58,7 @@ export default function ListingPage(props: ListingProps) {
   ])
   useEffect(() => {
     if (!(listing?.status === "active" || listing?.status === "closed")) {
-      addToast(t("invalidListing.redirect"), { variant: "alert" })
+      addToast(t("errors.invalidListing.redirect"), { variant: "alert" })
       void router.push("/")
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
