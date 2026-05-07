@@ -57,6 +57,7 @@ const SettingsPreferences = () => {
     true
   )
   const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
+  const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
 
   const tableData = useMemo(() => {
     return data?.items
@@ -196,7 +197,7 @@ const SettingsPreferences = () => {
         {!v2Preferences && (
           <TabView
             hideTabs={!enableProperties}
-            tabs={getSettingsTabs(SettingsIndexEnum.preferences, v2Preferences)}
+            tabs={getSettingsTabs(SettingsIndexEnum.preferences, v2Preferences, enableAgencies)}
           >
             <LoadingState loading={loading}>
               <StandardCard

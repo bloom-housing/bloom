@@ -1,38 +1,39 @@
+import { useSWRConfig } from "swr"
+import dayjs from "dayjs"
 import React, { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
+import { ColDef, ColGroupDef } from "ag-grid-community"
 import { t, useMutate } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
+  Agency,
+  AgencyCreate,
   FeatureFlagEnum,
-  Property,
-  PropertyCreate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
-import { Button } from "@bloom-housing/ui-seeds"
-import { usePropertiesList } from "../../lib/hooks"
-import dayjs from "dayjs"
+import { useAgenciesList } from "../../lib/hooks"
 import ManageIconSection from "../../components/settings/ManageIconSection"
-import { ColDef, ColGroupDef } from "ag-grid-community"
-import { PropertyDrawer } from "../../components/settings/PropertyDrawer"
-import { useSWRConfig } from "swr"
-import { PropertyDeleteModal } from "../../components/settings/PropertyDeleteModal"
+import { AgencyDrawer } from "../../components/settings/AgencyDrawer"
+import { AgencyDeleteModal } from "../../components/settings/AgencyDeleteModal"
 
-const SettingsProperties = () => {
+const SettingsAgencies = () => {
   const router = useRouter()
   const tableOptions = useAgTable()
   const { mutate } = useSWRConfig()
-  const { mutate: updateProperty, isLoading: isUpdateLoading } = useMutate()
-  const { mutate: createProperty, isLoading: isCreateLoading } = useMutate()
+  const { mutate: updateAgency, isLoading: isUpdateLoading } = useMutate()
+  const { mutate: createAgency, isLoading: isCreateLoading } = useMutate()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const [editConfirmModalOpen, setEditConfirmModalOpen] = useState<Property | null>(null)
-  const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState<Property | null>(null)
+  const [editConfirmModalOpen, setEditConfirmModalOpen] = useState<Agency | null>(null)
+  const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState<Agency | null>(null)
   const { addToast } = useContext(MessageContext)
-  const { profile, propertiesService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { profile, agencyService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
   const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableListingPreferences,
@@ -40,10 +41,9 @@ const SettingsProperties = () => {
     true
   )
   const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
-  const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
 
   if (
-    !enableProperties ||
+    !enableAgencies ||
     profile?.userRoles?.isPartner ||
     profile?.userRoles?.isSupportAdmin ||
     profile?.userRoles?.isLimitedJurisdictionalAdmin
@@ -52,10 +52,10 @@ const SettingsProperties = () => {
   }
 
   const {
-    data: propertiesData,
+    data: agenciesData,
     loading,
     cacheKey,
-  } = usePropertiesList({
+  } = useAgenciesList({
     page: tableOptions.pagination.currentPage,
     limit: tableOptions.pagination.itemsPerPage,
     search: tableOptions.filter.filterValue,
@@ -69,24 +69,6 @@ const SettingsProperties = () => {
         field: "name",
         minWidth: 150,
         flex: 1,
-      },
-      {
-        headerName: t("t.descriptionTitle"),
-        field: "description",
-        minWidth: 130,
-        flex: 1,
-      },
-      {
-        headerName: t("t.url"),
-        field: "url",
-        minWidth: 100,
-        cellRendererFramework: ({ value }) => {
-          return (
-            <a href={value} target="_blank">
-              {value}
-            </a>
-          )
-        },
       },
       ...(profile.jurisdictions.length > 1
         ? [
@@ -117,9 +99,9 @@ const SettingsProperties = () => {
                 setEditConfirmModalOpen(data)
                 setIsDrawerOpen(true)
               }}
-              editTestId={`property-edit-icon: ${data.name}`}
+              editTestId={`agency-edit-icon: ${data.name}`}
               onDelete={() => setDeleteConfirmModalOpen(data)}
-              deleteTestId={`property-delete-icon: ${data.name}`}
+              deleteTestId={`agency-delete-icon: ${data.name}`}
               align="start"
             />
           )
@@ -129,18 +111,18 @@ const SettingsProperties = () => {
     [profile?.jurisdictions]
   )
 
-  const handleSave = (propertyData: PropertyCreate) => {
+  const handleSave = (agencyData: AgencyCreate) => {
     if (editConfirmModalOpen) {
-      void updateProperty(() =>
-        propertiesService
+      void updateAgency(() =>
+        agencyService
           .update({
             body: {
-              ...propertyData,
+              ...agencyData,
               id: editConfirmModalOpen.id,
             },
           })
           .then(() => {
-            addToast(t("properties.alertUpdated"), { variant: "success" })
+            addToast(t("agencies.alertUpdated"), { variant: "success" })
           })
           .catch((e) => {
             addToast(t(`errors.alert.badRequest`), { variant: "alert" })
@@ -153,13 +135,13 @@ const SettingsProperties = () => {
           })
       )
     } else {
-      void createProperty(() =>
-        propertiesService
-          .add({
-            body: propertyData,
+      void createAgency(() =>
+        agencyService
+          .create({
+            body: agencyData,
           })
           .then(() => {
-            addToast(t("properties.alertCreated"), { variant: "success" })
+            addToast(t("agencies.alertCreated"), { variant: "success" })
           })
           .catch((e) => {
             addToast(t(`errors.alert.badRequest`), { variant: "alert" })
@@ -178,16 +160,16 @@ const SettingsProperties = () => {
       <Layout>
         <Head>
           <title>
-            {`${t("t.settings")} - ${t("settings.properties")} - ${t("nav.siteTitlePartners")}`}
+            {`${t("t.settings")} - ${t("settings.agencies")} - ${t("nav.siteTitlePartners")}`}
           </title>
         </Head>
         <NavigationHeader className="relative" title={t("t.settings")} />
         <TabView
-          hideTabs={!(atLeastOneJurisdictionEnablesPreferences && enableProperties)}
-          tabs={getSettingsTabs(SettingsIndexEnum.properties, v2Preferences, enableAgencies)}
+          hideTabs={!atLeastOneJurisdictionEnablesPreferences && !enableProperties}
+          tabs={getSettingsTabs(SettingsIndexEnum.agencies, v2Preferences, enableAgencies)}
         >
           <AgTable
-            id="properties-table"
+            id="agencies-table"
             pagination={{
               perPage: tableOptions.pagination.itemsPerPage,
               setPerPage: tableOptions.pagination.setItemsPerPage,
@@ -195,14 +177,14 @@ const SettingsProperties = () => {
               setCurrentPage: tableOptions.pagination.setCurrentPage,
             }}
             data={{
-              items: propertiesData?.items,
+              items: agenciesData?.items,
               loading: loading,
-              totalItems: propertiesData?.meta?.totalItems,
-              totalPages: propertiesData?.meta?.totalPages,
+              totalItems: agenciesData?.meta?.totalItems,
+              totalPages: agenciesData?.meta?.totalPages,
             }}
             config={{
               columns: columnDefs,
-              totalItemsLabel: t("properties.total"),
+              totalItemsLabel: t("agencies.total"),
             }}
             search={{
               setSearch: tableOptions.filter.setFilterValue,
@@ -212,27 +194,27 @@ const SettingsProperties = () => {
                 size="sm"
                 variant="primary"
                 onClick={() => setIsDrawerOpen(true)}
-                id="addListingButton"
+                id="addAgencyButton"
               >
-                {t("properties.add")}
+                {t("agencies.add")}
               </Button>
             }
           />
         </TabView>
       </Layout>
-      <PropertyDrawer
+      <AgencyDrawer
         drawerOpen={isDrawerOpen}
         onDrawerClose={() => {
           setIsDrawerOpen(false)
           setEditConfirmModalOpen(null)
         }}
-        editedProperty={editConfirmModalOpen}
-        saveQuestion={handleSave}
+        editedAgency={editConfirmModalOpen}
+        saveAgency={handleSave}
         isLoading={isCreateLoading || isUpdateLoading}
       />
       {deleteConfirmModalOpen && (
-        <PropertyDeleteModal
-          property={deleteConfirmModalOpen}
+        <AgencyDeleteModal
+          agency={deleteConfirmModalOpen}
           onClose={() => {
             setDeleteConfirmModalOpen(null)
             void mutate(cacheKey)
@@ -243,4 +225,4 @@ const SettingsProperties = () => {
   )
 }
 
-export default SettingsProperties
+export default SettingsAgencies

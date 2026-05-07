@@ -81,9 +81,7 @@ export const PropertyDrawer = ({
       <Drawer.Content>
         <Card>
           <Card.Section>
-            <p className="field-label seeds-m-be-label">
-              {t("listings.requiredToPublishAsterisk")}
-            </p>
+            <p className="field-label seeds-m-be-label">{t("listings.requiredToSaveAsterisk")}</p>
             <SectionWithGrid heading={t("properties.drawer.formTitle")}>
               <Grid.Row columns={3}>
                 <Grid.Cell className="seeds-grid-span-2">

@@ -5,9 +5,14 @@ import { Tabs } from "@bloom-housing/ui-seeds"
 export enum SettingsIndexEnum {
   preferences = 0,
   properties,
+  agencies,
 }
 
-export const getSettingsTabs = (selectedIndex: SettingsIndexEnum, enableV2MSQ: boolean) => {
+export const getSettingsTabs = (
+  selectedIndex: SettingsIndexEnum,
+  enableV2MSQ: boolean,
+  enableAgencies?: boolean
+) => {
   const baseUrl = "/settings/"
 
   return (
@@ -34,6 +39,15 @@ export const getSettingsTabs = (selectedIndex: SettingsIndexEnum, enableV2MSQ: b
         >
           <span>{t("settings.properties")}</span>
         </Tabs.Tab>
+        {enableAgencies && (
+          <Tabs.Tab
+            href={`${baseUrl}/agencies`}
+            data-testid="agencies-tab"
+            active={selectedIndex === SettingsIndexEnum.agencies}
+          >
+            <span>{t("settings.agencies")}</span>
+          </Tabs.Tab>
+        )}
       </Tabs.TabList>
     </Tabs>
   )

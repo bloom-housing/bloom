@@ -28,6 +28,7 @@ const MultiselectQuestionsPreferences = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const tableOptions = useAgTable()
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
+  const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
 
   const [multiselectQuestionDrawerOpen, setMultiselectQuestionDrawerOpen] =
     useState<DrawerType | null>(null)
@@ -173,7 +174,7 @@ const MultiselectQuestionsPreferences = () => {
         <NavigationHeader className="relative" title={t("settings.preferences")} />
         <TabView
           hideTabs={!enableProperties}
-          tabs={getSettingsTabs(SettingsIndexEnum.preferences, true)}
+          tabs={getSettingsTabs(SettingsIndexEnum.preferences, true, enableAgencies)}
         >
           <section className={styles["preferences-section"]}>
             <div className={styles["table-wrapper"]}>

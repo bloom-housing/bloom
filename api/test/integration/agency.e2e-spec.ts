@@ -8,6 +8,8 @@ import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-fact
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { AgencyQueryParams } from '../../src/dtos/agency/agency-query-params.dto';
+import { AgencyFilterParams } from '../../src/dtos/agency/agency-filter-params.dto';
+import { Compare } from '../../src/dtos/shared/base-filter.dto';
 import { stringify } from 'querystring';
 import { randomUUID } from 'crypto';
 import AgencyCreate from '../../src/dtos/agency/agency-create.dto';
@@ -18,6 +20,7 @@ describe('Agencies Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let jurisdictionId: string;
+  let jurisdictionBId: string;
   let agencyAId: string;
   let cookies = '';
 
@@ -55,6 +58,11 @@ describe('Agencies Controller Tests', () => {
 
     jurisdictionId = jurisdiction.id;
 
+    const jurisdictionB = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
+    jurisdictionBId = jurisdictionB.id;
+
     const agencyA = await prisma.agency.create({
       data: {
         name: 'Agency A',
@@ -73,6 +81,17 @@ describe('Agencies Controller Tests', () => {
         jurisdictions: {
           connect: {
             id: jurisdiction.id,
+          },
+        },
+      },
+    });
+
+    await prisma.agency.create({
+      data: {
+        name: 'Agency C',
+        jurisdictions: {
+          connect: {
+            id: jurisdictionB.id,
           },
         },
       },
@@ -109,6 +128,49 @@ describe('Agencies Controller Tests', () => {
       expect(res.body.meta.totalItems).toBeGreaterThanOrEqual(2);
       expect(res.body.meta.totalPages).toBeGreaterThanOrEqual(1);
       expect(res.body.meta.itemCount).toBeGreaterThanOrEqual(2);
+    });
+
+    it('should return agencies matching search term', async () => {
+      const queryParams: AgencyQueryParams = {
+        limit: 'all',
+        page: 1,
+        search: 'Agency A',
+      };
+
+      const res = await request(app.getHttpServer())
+        .get(`/agency?${stringify(queryParams as any)}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
+      expect(
+        res.body.items.every((agency) =>
+          agency.name.toLowerCase().includes('agency a'),
+        ),
+      ).toBe(true);
+    });
+
+    it('should return only agencies for the given jurisdiction filter', async () => {
+      const filter: AgencyFilterParams[] = [
+        {
+          $comparison: Compare['='],
+          jurisdiction: jurisdictionBId,
+        },
+      ];
+
+      const res = await request(app.getHttpServer())
+        .get(`/agency?${stringify({ limit: 'all', page: 1, filter } as any)}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
+      expect(
+        res.body.items.every(
+          (agency) => agency.jurisdictions?.id === jurisdictionBId,
+        ),
+      ).toBe(true);
     });
 
     it('should get agencies when pagination params are sent', async () => {

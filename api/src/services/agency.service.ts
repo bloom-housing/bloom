@@ -20,6 +20,7 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { buildOrderBy } from '../utilities/build-order-by';
 import { OrderByEnum } from '../enums/shared/order-by-enum';
+import { buildFilter } from '../utilities/build-filter';
 
 @Injectable()
 export class AgencyService {
@@ -63,23 +64,40 @@ export class AgencyService {
   buildWhereClause(params: AgencyQueryParams): Prisma.AgencyWhereInput {
     const filters: Prisma.AgencyWhereInput[] = [];
 
-    const jurisdictionId = params?.filter?.find(
-      (filter) => filter[AgencyFilterKeys.jurisdiction],
-    )?.[AgencyFilterKeys.jurisdiction];
-
-    if (jurisdictionId) {
+    if (params.search) {
       filters.push({
-        jurisdictions: {
-          is: {
-            id: jurisdictionId,
-          },
+        name: {
+          contains: params.search,
+          mode: Prisma.QueryMode.insensitive,
         },
       });
     }
 
-    return {
-      AND: filters,
-    };
+    if (!params?.filter?.length) {
+      return { AND: filters };
+    }
+
+    params.filter.forEach((filter) => {
+      if (!filter[AgencyFilterKeys.jurisdiction]) return;
+
+      const builtFilter = buildFilter({
+        $comparison: filter.$comparison,
+        $include_nulls: false,
+        value: filter[AgencyFilterKeys.jurisdiction],
+        key: AgencyFilterKeys.jurisdiction,
+        caseSensitive: true,
+      });
+
+      filters.push({
+        OR: builtFilter.map((entry) => ({
+          jurisdictions: {
+            id: entry,
+          },
+        })),
+      });
+    });
+
+    return { AND: filters };
   }
 
   /**

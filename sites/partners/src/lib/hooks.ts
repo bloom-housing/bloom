@@ -560,6 +560,8 @@ export function useUserList({
 
   const paramsString = qs.stringify(params)
 
+  console.log({ params })
+
   const { userService } = useContext(AuthContext)
 
   const fetcher = () => userService.list(params)
@@ -782,6 +784,48 @@ export function useWatchOnFormNumberFieldsChange(
     return () => clearTimeout(timeoutId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldToTriggerWatch.join(","), fieldValuesToWatch.join(","), trigger])
+}
+
+type UseAgenciesListProps = PaginationProps & {
+  search?: string
+  jurisdictions?: string
+}
+
+export function useAgenciesList({ page, limit, search, jurisdictions }: UseAgenciesListProps) {
+  const params = {
+    page,
+    limit,
+    search,
+    filter: [],
+  }
+
+  if (search?.length < 3) {
+    delete params.search
+  } else {
+    Object.assign(params, { search })
+  }
+
+  params.filter.push({
+    $comparison: "IN",
+    jurisdiction: jurisdictions && jurisdictions !== "" ? jurisdictions : undefined,
+  })
+
+  const paramsString = qs.stringify(params)
+
+  const { agencyService } = useContext(AuthContext)
+
+  const fetcher = () => agencyService.list(params)
+
+  const cacheKey = `/api/adapter/agency?${paramsString}`
+
+  const { data, error } = useSWR(cacheKey, fetcher)
+
+  return {
+    cacheKey,
+    data,
+    loading: !error && !data,
+    error,
+  }
 }
 
 export function usePropertiesList({ page, limit, search, jurisdictions }: UsePropertiesListProps) {
