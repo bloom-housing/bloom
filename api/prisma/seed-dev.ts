@@ -14,6 +14,7 @@ import { randomName } from './seed-helpers/word-generator';
 import { randomInt } from 'node:crypto';
 import { applicationFactoryMany } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
+import { upsertTranslation } from './seed-helpers/upsert-translation';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
 import { APPLICATIONS_PER_LISTINGS, LISTINGS_TO_SEED } from './constants';
@@ -98,17 +99,17 @@ export const devSeeding = async (
     }),
   });
   // add jurisdiction specific translations and default ones
-  await prismaClient.translations.create({
-    data: translationFactory({
+  await upsertTranslation(
+    prismaClient,
+    translationFactory({
       jurisdiction: { id: jurisdiction.id, name: jurisdiction.name },
     }),
-  });
-  await prismaClient.translations.create({
-    data: translationFactory({ language: LanguagesEnum.es }),
-  });
-  await prismaClient.translations.create({
-    data: translationFactory(),
-  });
+  );
+  await upsertTranslation(
+    prismaClient,
+    translationFactory({ language: LanguagesEnum.es }),
+  );
+  await upsertTranslation(prismaClient, translationFactory());
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   const amiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(10, jurisdiction.id, null, jurisdiction.name),

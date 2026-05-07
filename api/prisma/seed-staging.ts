@@ -8,6 +8,7 @@ import { createBloomingtonJurisdiction } from './seed-staging/seed-bloomington';
 import { createBridgeBayJurisdictions } from './seed-staging/seed-bridge-bay';
 import { createLakeviewJurisdiction } from './seed-staging/seed-lakeview';
 import { createNadaHillJurisdiction } from './seed-staging/seed-nada-hill';
+import { upsertTranslation } from './seed-helpers/upsert-translation';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -193,15 +194,15 @@ export const stagingSeed = async (
   });
 
   // add jurisdiction specific translations and default ones
-  await prismaClient.translations.create({
-    data: translationFactory({
+  await upsertTranslation(
+    prismaClient,
+    translationFactory({
       jurisdiction: { id: mainJurisdiction.id, name: mainJurisdiction.name },
     }),
-  });
-  await prismaClient.translations.create({
-    data: translationFactory({ language: LanguagesEnum.es }),
-  });
-  await prismaClient.translations.create({
-    data: translationFactory(),
-  });
+  );
+  await upsertTranslation(
+    prismaClient,
+    translationFactory({ language: LanguagesEnum.es }),
+  );
+  await upsertTranslation(prismaClient, translationFactory());
 };
