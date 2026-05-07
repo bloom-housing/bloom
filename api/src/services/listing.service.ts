@@ -2888,9 +2888,9 @@ export class ListingService implements OnModuleInit {
         language: true,
       },
       where: {
-        // userPreferences: {
-        //   sendEmailNotifications: true,
-        // },
+        userPreferences: {
+          sendEmailNotifications: true,
+        },
         notificationPreferences: {
           OR: preferenceFilters,
         },
