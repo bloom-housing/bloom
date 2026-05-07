@@ -33,6 +33,7 @@ import {
   summarizeListingUnitsByType,
 } from '../utilities/listing-data-formatters';
 import { unitTypeMapping } from 'prisma/seed-helpers/unit-type-factory';
+import { UnitAccessibilityPriorityTypeEnum } from 'src/enums/units/accessibility-priority-type-enum';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
@@ -960,6 +961,7 @@ export class EmailService {
   public async listingPublishNotification(
     jurisdictionId: IdDTO,
     listing: Listing,
+    priorityTypes: UnitAccessibilityPriorityTypeEnum[],
     emails: string[],
     // publicUrl: string,
   ) {
@@ -1003,6 +1005,17 @@ export class EmailService {
         });
       }
 
+      if (priorityTypes.length) {
+        listingDetails.push({
+          label: this.polyglot.t('rentalOpportunity.unitType'),
+          value: priorityTypes
+            .map((type) =>
+              this.polyglot.t(`rentalOpportunity.accessibilityType.${type}`),
+            )
+            .join(', '),
+        });
+      }
+
       if (
         listing.reviewOrderType &&
         (listing.reviewOrderType === ReviewOrderTypeEnum.lottery ||
@@ -1018,7 +1031,6 @@ export class EmailService {
 
       const listingUnitsSummary = summarizeListingUnitsByType(listing.units);
 
-      // console.table(JSON.stringify(listingUnitsSummary, null, 2));
       const unitRowOrder = Object.keys(listingUnitsSummary.units).sort(
         (a, b) => unitTypeMapping[a] - unitTypeMapping[b],
       );
@@ -1056,21 +1068,46 @@ export class EmailService {
         });
       });
 
-      if (listingUnitsSummary.rent) {
+      if (listingUnitsSummary.flatRent || listingUnitsSummary.percentageRent) {
+        let rentSummaryValue = '';
+
+        // If a listing has mixed rent type units, show more generic information
+        if (
+          listingUnitsSummary.flatRent &&
+          listingUnitsSummary.percentageRent
+        ) {
+          rentSummaryValue = `% ${this.polyglot.t(
+            'rentalOpportunity.ofIncome',
+          )}, ${this.polyglot.t('rentalOpportunity.orUpTo')} $${
+            listingUnitsSummary.flatRent.max
+          }`;
+        }
+        // Otherwise show more specific ranges
+        else if (listingUnitsSummary.flatRent) {
+          rentSummaryValue =
+            listingUnitsSummary.flatRent.max ===
+            listingUnitsSummary.flatRent.min
+              ? `$${listingUnitsSummary.flatRent.min} ${this.polyglot.t(
+                  'rentalOpportunity.perMonth',
+                )}`
+              : `$${listingUnitsSummary.flatRent.min} - $${
+                  listingUnitsSummary.flatRent.max
+                } ${this.polyglot.t('rentalOpportunity.perMonth')}`;
+        } else {
+          rentSummaryValue =
+            listingUnitsSummary.percentageRent.max ===
+            listingUnitsSummary.percentageRent.min
+              ? `${listingUnitsSummary.percentageRent.min}% ${this.polyglot.t(
+                  'rentalOpportunity.ofIncome',
+                )}`
+              : `${listingUnitsSummary.percentageRent.min}% - ${
+                  listingUnitsSummary.percentageRent.max
+                }% ${this.polyglot.t('rentalOpportunity.ofIncome')}`;
+        }
+
         listingDetails.push({
           label: this.polyglot.t('rentalOpportunity.rent'),
-          value: `${
-            listingUnitsSummary.rent.min === listingUnitsSummary.rent.max
-              ? this.polyglot.t('rentalOpportunity.income', {
-                  smart_count: listingUnitsSummary.rent.max,
-                })
-              : `$${listingUnitsSummary.rent.min} - ${this.polyglot.t(
-                  'rentalOpportunity.income',
-                  {
-                    income: listingUnitsSummary.rent.max,
-                  },
-                )}`
-          }`,
+          value: rentSummaryValue,
         });
       }
 
@@ -1080,15 +1117,12 @@ export class EmailService {
           value: `${
             listingUnitsSummary.minIncome.min ===
             listingUnitsSummary.minIncome.max
-              ? this.polyglot.t('rentalOpportunity.income', {
-                  smart_count: listingUnitsSummary.minIncome.max,
-                })
-              : `$${listingUnitsSummary.minIncome.min} - ${this.polyglot.t(
-                  'rentalOpportunity.income',
-                  {
-                    income: listingUnitsSummary.minIncome.max,
-                  },
+              ? `$${listingUnitsSummary.minIncome.max} ${this.polyglot.t(
+                  'rentalOpportunity.perMonth',
                 )}`
+              : `$${listingUnitsSummary.minIncome.min} - $${
+                  listingUnitsSummary.minIncome.max
+                } ${this.polyglot.t('rentalOpportunity.perMonth')}`
           }`,
         });
       }
@@ -1099,15 +1133,12 @@ export class EmailService {
           value: `${
             listingUnitsSummary.maxIncome.min ===
             listingUnitsSummary.maxIncome.max
-              ? this.polyglot.t('rentalOpportunity.income', {
-                  smart_count: listingUnitsSummary.rent.max,
-                })
-              : `$${listingUnitsSummary.maxIncome.min} - ${this.polyglot.t(
-                  'rentalOpportunity.income',
-                  {
-                    income: listingUnitsSummary.maxIncome.max,
-                  },
+              ? `$${listingUnitsSummary.maxIncome.max} ${this.polyglot.t(
+                  'rentalOpportunity.perMonth',
                 )}`
+              : `$${listingUnitsSummary.maxIncome.min} - $${
+                  listingUnitsSummary.maxIncome.max
+                } ${this.polyglot.t('rentalOpportunity.perMonth')}`
           }`,
         });
       }

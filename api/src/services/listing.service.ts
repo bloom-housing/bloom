@@ -2882,8 +2882,6 @@ export class ListingService implements OnModuleInit {
       });
     }
 
-    console.log(preferenceFilters);
-
     const users = await this.prisma.userAccounts.findMany({
       select: {
         email: true,
@@ -2926,6 +2924,7 @@ export class ListingService implements OnModuleInit {
     await this.emailService.listingPublishNotification(
       { id: jurisdiction.id },
       listing,
+      priorityTypes,
       users.map((user) => user.email),
     );
   }

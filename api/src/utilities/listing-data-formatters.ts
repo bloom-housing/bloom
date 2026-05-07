@@ -22,7 +22,8 @@ type UnitTypeSummary = {
 
 type ListingUnitsSummary = {
   units: { [key: string]: UnitTypeSummary };
-  rent: MinMax | undefined;
+  flatRent: MinMax | undefined;
+  percentageRent: MinMax | undefined;
   minIncome: MinMax | undefined;
   maxIncome: MinMax | undefined;
 };
@@ -53,7 +54,8 @@ export const summarizeListingUnitsByType = (
 ): ListingUnitsSummary => {
   let minimumIncomeRange: MinMax = undefined;
   let maximumIncomeRange: MinMax = undefined;
-  let rentRange: MinMax = undefined;
+  let flatRentRange: MinMax = undefined;
+  let percentageRentRange: MinMax = undefined;
 
   const groupedUnits = units?.reduce(
     (summaries, unit): { [key: string]: UnitTypeSummary } => {
@@ -73,7 +75,14 @@ export const summarizeListingUnitsByType = (
       }
 
       if (unit.monthlyRent) {
-        rentRange = minMaxFinder(Number(unit.monthlyRent), rentRange);
+        flatRentRange = minMaxFinder(Number(unit.monthlyRent), flatRentRange);
+      }
+
+      if (unit.monthlyRentAsPercentOfIncome) {
+        percentageRentRange = minMaxFinder(
+          Number(unit.monthlyRentAsPercentOfIncome),
+          percentageRentRange,
+        );
       }
 
       const thisBedroomInfo: UnitTypeSummary | undefined =
@@ -94,6 +103,7 @@ export const summarizeListingUnitsByType = (
     units: groupedUnits,
     maxIncome: maximumIncomeRange,
     minIncome: minimumIncomeRange,
-    rent: rentRange,
+    flatRent: flatRentRange,
+    percentageRent: percentageRentRange,
   };
 };
