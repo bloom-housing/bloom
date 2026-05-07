@@ -2885,6 +2885,7 @@ export class ListingService implements OnModuleInit {
     const users = await this.prisma.userAccounts.findMany({
       select: {
         email: true,
+        language: true,
       },
       where: {
         // userPreferences: {
@@ -2896,20 +2897,33 @@ export class ListingService implements OnModuleInit {
       },
     });
 
-    console.table(users);
+    const emailUsers = users.filter((user) => !!user?.email);
 
-    const emails = Array.from(
-      new Set(
-        users.map((user) => user.email).filter((email) => Boolean(email)),
-      ),
-    );
-
-    if (!emails.length) {
+    if (!emailUsers.length) {
       this.logger.log(
         `Skipping publish notification for listing ${listing.id}: no matching users`,
       );
       return;
     }
+
+    const emailByLanguage = {};
+    Object.keys(LanguagesEnum).forEach((languageKey) => {
+      emailByLanguage[languageKey] = emailUsers
+        .filter((user) => user.language === languageKey)
+        .map((userObj) => userObj.email);
+    });
+
+    const noLanguageIndicated = emailUsers
+      .filter((user) => !user.language)
+      .map((userObj) => userObj.email);
+
+    if (!emailByLanguage[LanguagesEnum.en])
+      emailByLanguage[LanguagesEnum.en] = noLanguageIndicated;
+    else
+      emailByLanguage[LanguagesEnum.en] = [
+        ...emailByLanguage[LanguagesEnum.en],
+        ...noLanguageIndicated,
+      ];
 
     const jurisdiction = await this.prisma.jurisdictions.findUnique({
       select: {
@@ -2925,7 +2939,7 @@ export class ListingService implements OnModuleInit {
       { id: jurisdiction.id },
       listing,
       priorityTypes,
-      users.map((user) => user.email),
+      emailByLanguage,
     );
   }
 
