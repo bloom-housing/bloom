@@ -327,6 +327,10 @@ export class ListingsService {
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
+      let data = params.body
+
+      configs.data = data
+
       axios(configs, resolve, reject)
     })
   }

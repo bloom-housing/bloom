@@ -20,14 +20,15 @@ import { randomBoolean } from './boolean-generator';
 import { assetFileId } from './asset-file-id-helper';
 
 const cloudinaryIds = [
-  'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
-  'dev/krzysztof-hepner-V7Q0Oh3Az-c-unsplash_xoj7sr',
-  'dev/dillon-kydd-2keCPb73aQY-unsplash_lm7krp',
-  'dev/inside_qo9wre',
-  'dev/interior_mc9erd',
-  'dev/apartment_ez3yyz',
-  'dev/trayan-xIOYJSVEZ8c-unsplash_f1axsg',
-  'dev/apartment_building_2_b7ujdd',
+  'dev/test-image-1_qae5xs',
+  'dev/test-image-2_urfv8t',
+  'dev/test-image-3_psuxhc',
+  'dev/test-image-4_ml8eu7',
+  'dev/test-image-5_itqity',
+  'dev/test-image-6_hpudrr',
+  'dev/test-image-7_gta09s',
+  'dev/test-image-8_g5tjnv',
+  'dev/test-image-9_bejazc',
 ];
 
 export const listingFactory = async (
