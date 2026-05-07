@@ -270,11 +270,15 @@ describe('Testing agency service', () => {
         where: {
           AND: [
             {
-              jurisdictions: {
-                is: {
-                  id: jurisdictionId,
+              OR: [
+                {
+                  jurisdictions: {
+                    id: {
+                      equals: jurisdictionId,
+                    },
+                  },
                 },
-              },
+              ],
             },
           ],
         },
@@ -306,11 +310,15 @@ describe('Testing agency service', () => {
       expect(where).toEqual({
         AND: [
           {
-            jurisdictions: {
-              is: {
-                id: jurisdictionId,
+            OR: [
+              {
+                jurisdictions: {
+                  id: {
+                    equals: jurisdictionId,
+                  },
+                },
               },
-            },
+            ],
           },
         ],
       });
