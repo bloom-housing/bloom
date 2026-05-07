@@ -135,6 +135,7 @@ const translations = (
           rejectionInfoEnd: 'para obtener más información.',
         },
         rentalOpportunity: {
+          subject: 'Nueva oportunidad de alquiler en %{listingName}',
           intro: 'Oportunidad de alquiler en',
           community: 'Comunidad',
           communityType: {
@@ -233,6 +234,7 @@ const translations = (
           rejectionInfoEnd: 'để biết thêm thông tin.',
         },
         rentalOpportunity: {
+          subject: 'Cơ hội thuê nhà mới tại %{listingName}',
           intro: 'Cơ hội thuê nhà tại',
           community: 'Cộng đồng',
           communityType: {
@@ -327,6 +329,7 @@ const translations = (
           rejectionInfoEnd: '获取更多信息。',
         },
         rentalOpportunity: {
+          subject: '新租赁机会：%{listingName}',
           intro: '租赁机会，地点：',
           community: '社区',
           communityType: {
@@ -424,6 +427,7 @@ const translations = (
           rejectionInfoEnd: 'para sa higit pang impormasyon.',
         },
         rentalOpportunity: {
+          subject: 'Bagong pagkakataon sa pag-upa sa %{listingName}',
           intro: 'Pagkakataon sa pag-upa sa',
           community: 'Komunidad',
           communityType: {
@@ -522,6 +526,7 @@ const translations = (
           rejectionInfoEnd: 'আরও তথ্যের জন্য।',
         },
         rentalOpportunity: {
+          subject: '%{listingName}-এ নতুন ভাড়ার সুযোগ',
           intro: 'ভাড়ার সুযোগ:',
           community: 'কমিউনিটি',
           communityType: {
@@ -616,6 +621,7 @@ const translations = (
           rejectionInfoEnd: 'للحصول على مزيد من المعلومات.',
         },
         rentalOpportunity: {
+          subject: 'فرصة إيجار جديدة في %{listingName}',
           intro: 'فرصة إيجار في',
           community: 'المجتمع',
           communityType: {
@@ -711,6 +717,7 @@ const translations = (
           rejectionInfoEnd: '자세한 내용은',
         },
         rentalOpportunity: {
+          subject: '%{listingName}의 새로운 임대 기회',
           intro: '임대 기회 위치:',
           community: '커뮤니티',
           communityType: {
@@ -807,6 +814,7 @@ const translations = (
           rejectionInfoEnd: 'ավելի շատ տեղեկատվության համար:',
         },
         rentalOpportunity: {
+          subject: 'Նոր վարձակալության հնարավորություն՝ %{listingName}',
           intro: 'Վարձակալության հնարավորություն',
           community: 'Համայնք',
           communityType: {
@@ -905,6 +913,7 @@ const translations = (
           rejectionInfoEnd: 'برای اطلاعات بیشتر.',
         },
         rentalOpportunity: {
+          subject: 'فرصت اجاره جدید در %{listingName}',
           intro: 'فرصت اجاره در',
           community: 'جامعه',
           communityType: {
@@ -1220,6 +1229,7 @@ const translations = (
           signIn: 'Sign in to Bloom Housing',
         },
         rentalOpportunity: {
+          subject: 'New rental opportunity at %{listingName}',
           intro: 'Rental opportunity at',
           community: 'Community',
           communityType: {

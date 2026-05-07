@@ -5,6 +5,7 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+    "subject": "New rental opportunity at %{listingName}",
     "intro": "Rental opportunity at",
     "community": "Community",
     "communityType": {
@@ -85,6 +86,7 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+    "subject": "Nueva oportunidad de alquiler en %{listingName}",
     "intro": "Oportunidad de alquiler en",
     "community": "Comunidad",
     "communityType": {
@@ -165,6 +167,7 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+    "subject": "Cơ hội thuê nhà mới tại %{listingName}",
     "intro": "Cơ hội thuê nhà tại",
     "community": "Cộng đồng",
     "communityType": {
@@ -245,6 +248,7 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+    "subject": "新租赁机会：%{listingName}",
     "intro": "租赁机会，地点：",
     "community": "社区",
     "communityType": {
@@ -325,6 +329,7 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+    "subject": "Bagong pagkakataon sa pag-upa sa %{listingName}",
     "intro": "Pagkakataon sa pag-upa sa",
     "community": "Komunidad",
     "communityType": {
@@ -405,6 +410,7 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+    "subject": "%{listingName}-এ নতুন ভাড়ার সুযোগ",
     "intro": "ভাড়ার সুযোগ:",
     "community": "কমিউনিটি",
     "communityType": {
@@ -485,6 +491,7 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+    "subject": "فرصة إيجار جديدة في %{listingName}",
     "intro": "فرصة إيجار في",
     "community": "المجتمع",
     "communityType": {
@@ -565,6 +572,7 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+    "subject": "%{listingName}의 새로운 임대 기회",
     "intro": "임대 기회 위치:",
     "community": "커뮤니티",
     "communityType": {
@@ -645,6 +653,7 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+    "subject": "Նոր վարձակալության հնարավորություն՝ %{listingName}",
     "intro": "Վարձակալության հնարավորություն",
     "community": "Համայնք",
     "communityType": {
@@ -725,6 +734,7 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+    "subject": "فرصت اجاره جدید در %{listingName}",
     "intro": "فرصت اجاره در",
     "community": "جامعه",
     "communityType": {

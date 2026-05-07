@@ -1175,7 +1175,9 @@ export class EmailService {
         await this.send(
           emails[language],
           jurisdiction.emailFromAddress,
-          'Listing Published',
+          this.polyglot.t(`rentalOpportunity.subject`, {
+            listingName: listing.name,
+          }),
           this.template('listing-opportunity')({
             listingName: listing.name,
             tableRows: listingDetails,
