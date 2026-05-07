@@ -1157,7 +1157,10 @@ export class EmailService {
         });
       }
 
-      // console.table(JSON.stringify(listingDetails, null, 2));
+      const emailButtons = jurisdiction.languages.map((code) => ({
+        name: this.polyglot.t(`rentalOpportunity.viewButton.${code}`),
+        url: `${jurisdiction.publicUrl}/${code}/listing/${listing.id}/${listing.urlSlug}`,
+      }));
 
       await this.send(
         emails,
@@ -1166,6 +1169,7 @@ export class EmailService {
         this.template('listing-opportunity')({
           listingName: listing.name,
           tableRows: listingDetails,
+          languageUrls: emailButtons,
         }),
       );
     } catch (err) {
