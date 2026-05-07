@@ -560,8 +560,6 @@ export function useUserList({
 
   const paramsString = qs.stringify(params)
 
-  console.log({ params })
-
   const { userService } = useContext(AuthContext)
 
   const fetcher = () => userService.list(params)

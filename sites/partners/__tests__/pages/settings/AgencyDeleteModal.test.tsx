@@ -1,7 +1,8 @@
+import { rest } from "msw"
+import { setupServer } from "msw/node"
 import React from "react"
 import userEvent from "@testing-library/user-event"
-import { setupServer } from "msw/node"
-import { rest } from "msw"
+import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { AuthContext, MessageContext, MessageProvider } from "@bloom-housing/shared-helpers"
 import { Toast } from "@bloom-housing/ui-seeds"
 import {
@@ -10,9 +11,8 @@ import {
   UserService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
-import { mockNextRouter, render, waitFor, screen, within } from "../../testUtils"
 import { AgencyDeleteModal } from "../../../src/components/settings/AgencyDeleteModal"
-import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { mockNextRouter, render, waitFor, screen, within } from "../../testUtils"
 
 const server = setupServer()
 
