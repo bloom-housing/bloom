@@ -1549,6 +1549,24 @@ describe('Testing listing service', () => {
                   },
                 ],
               },
+              {
+                AND: [
+                  { unitGroups: { none: {} } },
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
             ],
           },
         ],
@@ -1636,6 +1654,24 @@ describe('Testing listing service', () => {
                   {
                     unitGroups: {
                       some: { openWaitlist: { equals: true } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
+                AND: [
+                  { unitGroups: { none: {} } },
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
                     },
                   },
                   {
@@ -1740,6 +1776,24 @@ describe('Testing listing service', () => {
                   {
                     unitGroups: {
                       some: { openWaitlist: { equals: true } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
+                AND: [
+                  { unitGroups: { none: {} } },
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
                     },
                   },
                   {
@@ -3513,6 +3567,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -4047,6 +4102,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           depositMin: '5',
           lastUpdatedByUser: {
             connect: {
@@ -5677,6 +5733,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -5863,6 +5920,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           depositMin: '5',
           assets: [
             {
@@ -6242,6 +6300,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -6534,6 +6593,7 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           closedAt: expect.anything(),
+          scheduledPublishAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,

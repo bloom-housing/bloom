@@ -42,6 +42,7 @@ import { usePropertiesList } from "../../../lib/hooks"
 import { EditorExtensions } from "../../shared/TextEditor"
 import ListingFormActions, { ListingFormActionsType } from "../ListingFormActions"
 import { cleanRichText, getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
+import { createDate } from "../../../lib/helpers"
 import { getListingStatusTag } from "../helpers"
 import AdditionalDetails from "./sections/AdditionalDetails"
 import AdditionalEligibility from "./sections/AdditionalEligibility"
@@ -138,6 +139,8 @@ const ListingForm = ({
   const { getValues, setError, clearErrors, reset, watch, setValue } = formMethods
 
   const marketingTypeChoice = watch("marketingType")
+  const scheduledListingPublishDateField = watch("scheduledListingPublishDateField")
+  const scheduledPublishAtFromForm = createDate(scheduledListingPublishDateField, true)
 
   const { listingsService, profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
@@ -273,6 +276,11 @@ const ListingForm = ({
   )
 
   const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ, jurisdictionId)
+
+  const enableAutopublish = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAutopublish,
+    jurisdictionId
+  )
 
   useEffect(() => {
     if (enableNonRegulatedListings && !listing?.listingType) {
@@ -416,6 +424,11 @@ const ListingForm = ({
             delete formData.configurableAccessibilityFeatures
           }
 
+          if (!enableAutopublish) {
+            delete formData.scheduledListingPublishDateField
+            formData.scheduledPublishAt = null
+          }
+
           if (successful) {
             const dataPipeline = new ListingDataPipeline(formData, {
               preferences: disableListingPreferences ? [] : preferences,
@@ -481,6 +494,9 @@ const ListingForm = ({
               if (readableError) {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 setError(fieldName as any, { message: readableError })
+                if (fieldName === "scheduledPublishAt") {
+                  setError("scheduledListingPublishDateField", { message: readableError })
+                }
                 if (fieldName === "buildingAddress" || fieldName === "buildingAddress.nested") {
                   const setIfEmpty = (
                     fieldName: string,
@@ -528,6 +544,7 @@ const ListingForm = ({
       profile,
       addToast,
       enableUnitGroups,
+      enableAutopublish,
     ]
   )
   return (
@@ -811,6 +828,7 @@ const ListingForm = ({
                               FeatureFlagEnum.enableMarketingStatusMonths,
                               jurisdictionId
                             )}
+                            enableAutopublish={enableAutopublish}
                             listing={listing}
                             openHouseEvents={openHouseEvents}
                             requiredFields={requiredFields}
@@ -897,6 +915,8 @@ const ListingForm = ({
         isOpen={submitForApprovalDialog}
         setOpen={setSubmitForApprovalDialog}
         submitFormWithStatus={triggerSubmitWithStatus}
+        enableAutopublish={enableAutopublish}
+        scheduledPublishAt={scheduledPublishAtFromForm}
       />
 
       <RequestChangesDialog

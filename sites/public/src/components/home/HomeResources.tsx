@@ -20,10 +20,19 @@ export const HomeResources = (props: HomeResourcesProps) => {
 
   const enableResources = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableResources)
 
+  const enableCustomListingNotifications = isFeatureFlagOn(
+    props.jurisdiction,
+    FeatureFlagEnum.enableCustomListingNotifications
+  )
+
+  const showNotificationsCard =
+    enableCustomListingNotifications ||
+    (props.jurisdiction && props.jurisdiction.notificationsSignUpUrl)
+
   return (
     <Grid spacing="lg">
       <Grid.Row columns={enableAdditionalResources ? 3 : 2}>
-        {props.jurisdiction && props.jurisdiction.notificationsSignUpUrl && (
+        {showNotificationsCard && (
           <Grid.Cell>
             <BloomCard
               iconSymbol={"envelope"}
@@ -36,7 +45,11 @@ export const HomeResources = (props: HomeResourcesProps) => {
               <Card.Section>
                 <Button
                   key={"sign-up"}
-                  href={props.jurisdiction.notificationsSignUpUrl}
+                  href={
+                    enableCustomListingNotifications
+                      ? "/account/notifications"
+                      : props.jurisdiction.notificationsSignUpUrl
+                  }
                   variant="primary-outlined"
                   size={"sm"}
                 >

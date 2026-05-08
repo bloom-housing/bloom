@@ -577,21 +577,39 @@ export class ListingService implements OnModuleInit {
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
-                return {
-                  AND: builtFilter
-                    .map((filt) => ({
-                      unitGroups: {
-                        some: {
-                          [FilterAvailabilityEnum.openWaitlist]: filt,
+                return [
+                  {
+                    AND: builtFilter
+                      .map((filt) => ({
+                        unitGroups: {
+                          some: {
+                            [FilterAvailabilityEnum.openWaitlist]: filt,
+                          },
+                        },
+                      }))
+                      .concat(
+                        notUnderConstruction.map((filt) => ({
+                          marketingType: filt,
+                        })),
+                      ),
+                  },
+                  {
+                    AND: [
+                      { unitGroups: { none: {} } },
+                      {
+                        reviewOrderType: {
+                          in: [
+                            ReviewOrderTypeEnum.waitlist,
+                            ReviewOrderTypeEnum.waitlistLottery,
+                          ],
                         },
                       },
-                    }))
-                    .concat(
-                      notUnderConstruction.map((filt) => ({
+                      ...notUnderConstruction.map((filt) => ({
                         marketingType: filt,
                       })),
-                    ),
-                };
+                    ],
+                  },
+                ];
               } else if (availability === FilterAvailabilityEnum.waitlistOpen) {
                 const builtFilter = buildFilter({
                   $comparison: Compare.IN,
@@ -705,6 +723,22 @@ export class ListingService implements OnModuleInit {
                       marketingType: filt,
                     })),
                   ),
+              },
+              {
+                AND: [
+                  { unitGroups: { none: {} } },
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
+                    },
+                  },
+                  ...notUnderConstruction.map((filt) => ({
+                    marketingType: filt,
+                  })),
+                ],
               },
             ],
           });
@@ -1378,6 +1412,15 @@ export class ListingService implements OnModuleInit {
       rawJurisdiction as unknown as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
+
+    const enableAutopublish = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as unknown as Jurisdiction,
+      FeatureFlagEnum.enableAutopublish,
+    );
+
+    if (!enableAutopublish) {
+      dto.scheduledPublishAt = null;
+    }
 
     if (
       (enableUnitGroups && dto.units?.length > 0) ||
@@ -2179,6 +2222,15 @@ export class ListingService implements OnModuleInit {
       rawJurisdiction as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
+
+    const enableAutopublish = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableAutopublish,
+    );
+
+    if (!enableAutopublish) {
+      incomingDto.scheduledPublishAt = null;
+    }
 
     if (
       (enableUnitGroups && incomingDto.units?.length > 0) ||
