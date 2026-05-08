@@ -32,8 +32,8 @@ import {
   oneLineAddress,
   summarizeListingUnitsByType,
 } from '../utilities/listing-data-formatters';
-import { unitTypeMapping } from 'prisma/seed-helpers/unit-type-factory';
-import { UnitAccessibilityPriorityTypeEnum } from 'src/enums/units/accessibility-priority-type-enum';
+import { unitTypeMapping } from '../../prisma/seed-helpers/unit-type-factory';
+import { UnitAccessibilityPriorityTypeEnum } from '../enums/units/accessibility-priority-type-enum';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
