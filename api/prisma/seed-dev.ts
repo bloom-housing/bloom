@@ -13,8 +13,10 @@ import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { randomName } from './seed-helpers/word-generator';
 import { randomInt } from 'node:crypto';
 import { applicationFactoryMany } from './seed-helpers/application-factory';
-import { translationFactory } from './seed-helpers/translation-factory';
-import { upsertTranslation } from './seed-helpers/upsert-translation';
+import {
+  translationFactory,
+  upsertTranslation,
+} from './seed-helpers/translation-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
 import { APPLICATIONS_PER_LISTINGS, LISTINGS_TO_SEED } from './constants';
