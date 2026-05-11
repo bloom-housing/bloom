@@ -969,14 +969,18 @@ export class EmailService {
       const listingUnitsSummary = summarizeListingUnitsByType(listing.units);
 
       for (const language in emails) {
+        if (!emails[language].length) {
+          continue;
+        }
+
         void (await this.loadTranslations(
           jurisdiction,
           language as LanguagesEnum,
         ));
 
-        if (!emails[language].length) {
-          continue;
-        }
+        this.logger.log(
+          `Sending lottery published ${language} email for listing ${listing.name} to ${emails[language]?.length} emails`,
+        );
 
         const listingDetails: { label: string; value: string | number }[] = [];
 
