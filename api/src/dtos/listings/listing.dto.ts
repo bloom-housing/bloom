@@ -1,8 +1,10 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import tz from 'dayjs/plugin/timezone';
 import { Expose, Transform, TransformFnParams, Type } from 'class-transformer';
 
 dayjs.extend(utc);
+dayjs.extend(tz);
 import {
   IsArray,
   IsBoolean,
@@ -782,10 +784,19 @@ class Listing extends AbstractDTO {
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @MinDate(() => dayjs.utc().add(1, 'day').startOf('day').toDate(), {
-    groups: [ValidationsGroupsEnum.default],
-    message: 'scheduledPublishAt must be in the future',
-  })
+  @MinDate(
+    () =>
+      dayjs
+        .utc()
+        .tz(process.env.TIME_ZONE)
+        .add(1, 'day')
+        .startOf('day')
+        .toDate(),
+    {
+      groups: [ValidationsGroupsEnum.default],
+      message: 'scheduledPublishAt must be in the future',
+    },
+  )
   @ApiPropertyOptional()
   scheduledPublishAt?: Date;
 
