@@ -48,7 +48,7 @@ export const MapListingCard = ({
   const actions = []
 
   const unitsPreviewTable = (() => {
-    const hasData = listing.unitGroups.length || listing.units.length
+    const hasData = listing.unitGroups?.length || listing.units?.length
 
     if (!hasData) {
       return

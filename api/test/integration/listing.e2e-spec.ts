@@ -3468,6 +3468,13 @@ describe('Listing Controller Tests', () => {
       const ids = res.body.map((marker) => marker.id);
       expect(ids).toContain(listing.id);
       expect(ids).not.toContain(closedListing.id);
+
+      // Validate only ids and lat/lng are returned
+      expect(res.body[0]).toEqual({
+        id: ids[0],
+        lat: expect.any(Number),
+        lng: expect.any(Number),
+      });
     });
   });
 });

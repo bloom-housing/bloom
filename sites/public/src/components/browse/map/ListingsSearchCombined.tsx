@@ -73,8 +73,7 @@ function ListingsSearchCombined() {
     })
   }, [profile, searchResults])
 
-  // Map TODO: Update items per pagination to realistic number, this is for development
-  const pageSize = 6
+  const pageSize = process.env.maxBrowseListings || 10
 
   const map = useMap()
 

@@ -1462,6 +1462,61 @@ describe('Testing listing service', () => {
         },
       });
     });
+
+    it('should build select for map view', async () => {
+      prisma.listings.findMany = jest
+        .fn()
+        .mockResolvedValue(mockListingSet(10));
+
+      prisma.listings.count = jest.fn().mockResolvedValue(10);
+
+      const params: ListingsQueryParams = {
+        view: ListingViews.map,
+      };
+
+      await service.list(params);
+
+      expect(prisma.listings.findMany).toHaveBeenCalledWith({
+        skip: 0,
+        take: 10,
+        orderBy: undefined,
+        where: {
+          AND: [],
+        },
+        select: {
+          name: true,
+          id: true,
+          property: true,
+          jurisdictions: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          listingsBuildingAddress: true,
+          listingImages: {
+            include: {
+              assets: true,
+            },
+          },
+          reservedCommunityTypes: true,
+          units: {
+            select: {
+              monthlyRent: true,
+              unitTypes: {
+                select: { numBedrooms: true, name: true },
+              },
+            },
+          },
+        },
+      });
+
+      expect(prisma.listings.count).toHaveBeenCalledWith({
+        where: {
+          AND: [],
+        },
+      });
+    });
   });
 
   describe('Test buildWhereClause helper', () => {

@@ -106,6 +106,25 @@ selectViews.address = {
   },
 };
 
+selectViews.map = {
+  ...selectViews.name,
+  listingsBuildingAddress: true,
+  listingImages: {
+    include: {
+      assets: true,
+    },
+  },
+  reservedCommunityTypes: true,
+  units: {
+    select: {
+      monthlyRent: true,
+      unitTypes: {
+        select: { numBedrooms: true, name: true },
+      },
+    },
+  },
+};
+
 export const includeViews: Partial<
   Record<ListingViews, Prisma.ListingsInclude>
 > = {
@@ -152,15 +171,6 @@ includeViews.base = {
           },
         },
       },
-    },
-  },
-};
-
-includeViews.map = {
-  ...includeViews.base,
-  jurisdictions: {
-    select: {
-      featureFlags: true,
     },
   },
 };
@@ -320,10 +330,7 @@ export class ListingService implements OnModuleInit {
           include: includeViews[queryParams.view ?? 'full'],
         });
 
-    const listings =
-      params.view === ListingViews.map
-        ? (listingsRaw as unknown as Listing[])
-        : mapTo(Listing, listingsRaw);
+    const listings = mapTo(Listing, listingsRaw);
 
     listings.forEach((listing) => {
       if (Array.isArray(listing.units) && listing.units.length > 0) {
