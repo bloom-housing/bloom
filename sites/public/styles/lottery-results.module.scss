@@ -31,6 +31,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    word-break: break-word;
   }
 
   .rank-number {
@@ -45,6 +46,7 @@
     height: var(--seeds-s10);
     letter-spacing: -0.05em;
     margin-inline-end: var(--seeds-s6);
+    min-width: fit-content;
   }
 
   .rank-number-content {

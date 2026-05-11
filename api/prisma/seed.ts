@@ -11,12 +11,13 @@ const options: { [name: string]: { type: 'string' | 'boolean' } } = {
   environment: { type: 'string' },
   jurisdictionName: { type: 'string' },
   msqV2: { type: 'boolean' },
+  asRegion: { type: 'boolean' },
 };
 
 const prisma = new PrismaService();
 async function main() {
   const {
-    values: { environment, jurisdictionName, msqV2 },
+    values: { environment, jurisdictionName, msqV2, asRegion },
   } = parseArgs({ options });
   const publicSiteBaseURL = env.DBSEED_PUBLIC_SITE_BASE_URL;
 
@@ -34,22 +35,18 @@ async function main() {
     case 'staging':
       // Staging setup should have realistic looking data with a preset list of listings
       // along with all of the required tables (ami, users, etc)
-      stagingSeed(
-        prisma,
-        jurisdictionName as string,
-        publicSiteBaseURL,
-        msqV2 as boolean,
-      );
+      stagingSeed(prisma, {
+        jurisdictionName: jurisdictionName as string,
+        publicSiteBaseURL: publicSiteBaseURL,
+        msqV2: msqV2 as boolean,
+        asRegion: asRegion as boolean,
+      });
       break;
     case 'development':
     default:
       // Development is less realistic data, but can be more experimental and also should
       // be partially randomized so we cover all bases
       devSeeding(prisma, jurisdictionName as string);
-      break;
-    case 'staging-large':
-      // Staging setup should have a large amount of realistic looking data
-      stagingSeed(prisma, jurisdictionName as string, undefined, false, true);
       break;
   }
 }
