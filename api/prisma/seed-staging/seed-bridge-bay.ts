@@ -2406,6 +2406,7 @@ const featureFlags = [
   FeatureFlagEnum.enableGenderQuestion,
   FeatureFlagEnum.enableLeasingAgentAltText,
   FeatureFlagEnum.enableListingFiltering,
+  FeatureFlagEnum.enableListingMap,
   FeatureFlagEnum.enableListingOpportunity,
   FeatureFlagEnum.enableListingPagination,
   FeatureFlagEnum.enablePartnerDemographics,

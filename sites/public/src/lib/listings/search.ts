@@ -115,6 +115,8 @@ export function buildSearchString(input: ListingSearchParams) {
 export function generateSearchQuery(params: ListingSearchParams) {
   const qb = new ListingQueryBuilder()
 
+  if (!params) return qb
+
   // Find listings that have units with greater than or equal number of bedrooms
   if (params.bedrooms != null) {
     qb.whereGreaterThanEqual("bedrooms", params.bedrooms)

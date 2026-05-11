@@ -21,15 +21,8 @@ export const seedListings = async (
   for (const params of listingsToCreate) {
     const listing = await listingFactory(jurisdictionId, prismaClient, {
       amiChart,
-      numberOfUnits: params.numberOfUnits,
-      listing: params.listing,
-      units: params.units,
-      multiselectQuestions: params.multiselectQuestions,
-      applications: params.applications,
       afsLastRunSetInPast: true,
-      userAccounts: params.userAccounts,
-      enableListingFeaturesAndUtilities:
-        params.enableListingFeaturesAndUtilities,
+      ...params,
     });
     const savedListing = await prismaClient.listings.create({ data: listing });
     await prismaClient.userAccounts.create({
