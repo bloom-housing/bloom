@@ -16,7 +16,6 @@ describe("AdminListingApprovalDialog", () => {
 
   beforeEach(() => {
     jest.useFakeTimers("modern")
-    jest.setSystemTime(dayjs.utc("2026-05-06T12:00:00.000Z").toDate())
   })
 
   afterEach(() => {
@@ -42,6 +41,7 @@ describe("AdminListingApprovalDialog", () => {
   })
 
   it("renders future-scheduled body copy when publish window has not ended", () => {
+    jest.setSystemTime(dayjs.utc("2026-06-14T23:00:00.000Z").toDate())
     render(
       <AdminListingApprovalDialog
         isOpen={true}
