@@ -47,7 +47,7 @@
     "dotenv": "^17.2.3",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.5.3",
-    "next": "^15.5.7",
+    "next": "^16.2.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-test-renderer": "19.2.3",
