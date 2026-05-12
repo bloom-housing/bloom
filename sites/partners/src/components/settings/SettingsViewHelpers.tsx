@@ -27,11 +27,10 @@ export const getSettingsTabs = (
   { enablePreferences, enableProperties, enableAgencies }: SettingsTabsFeatureFlags
 ) => {
   const baseUrl = "/settings/"
-  const enabledTabs = [
-    enablePreferences && SettingsIndexEnum.preferences,
-    enableProperties && SettingsIndexEnum.properties,
-    enableAgencies && SettingsIndexEnum.agencies,
-  ].filter((tab): tab is SettingsIndexEnum => tab !== false && tab !== undefined)
+  const enabledTabs: SettingsIndexEnum[] = []
+  if (enablePreferences) enabledTabs.push(SettingsIndexEnum.preferences)
+  if (enableProperties) enabledTabs.push(SettingsIndexEnum.properties)
+  if (enableAgencies) enabledTabs.push(SettingsIndexEnum.agencies)
 
   return (
     <Tabs
