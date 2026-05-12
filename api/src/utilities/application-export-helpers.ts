@@ -409,6 +409,9 @@ export const getExportHeaders = (
         path: 'preferredUnitTypes',
         label: 'Requested Unit Types',
         format: (val: UnitType[]): string => {
+          if (!val?.map) {
+            return '';
+          }
           return val.map((unit) => unitTypeToReadable(unit.name)).join(',');
         },
       },
@@ -486,8 +489,14 @@ export const getExportHeaders = (
       {
         path: 'demographics.race',
         label: 'Race',
-        format: (val: string[]): string =>
-          val.map((race) => convertDemographicRaceToReadable(race)).join(','),
+        format: (val: string[]): string => {
+          if (!val?.map) {
+            return '';
+          }
+          return val
+            .map((race) => convertDemographicRaceToReadable(race))
+            .join(',');
+        },
       },
       {
         path: 'demographics.howDidYouHear',
