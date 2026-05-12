@@ -158,9 +158,13 @@ describe('Agencies Controller Tests', () => {
           jurisdiction: jurisdictionBId,
         },
       ];
+      const query = stringify(
+        { limit: 'all', page: 1, filter },
+        { encode: false },
+      );
 
       const res = await request(app.getHttpServer())
-        .get(`/agency?${stringify({ limit: 'all', page: 1, filter } as any)}`)
+        .get(`/agency?${query}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
@@ -433,6 +437,38 @@ describe('Agencies Controller Tests', () => {
 
       expect(res.body.message).toBe(
         `An agency with id: ${randId} was not found`,
+      );
+    });
+
+    it('should throw error when agency has associated users', async () => {
+      const protectedAgency = await prisma.agency.create({
+        data: {
+          name: 'Agency With Users',
+          jurisdictions: {
+            connect: {
+              id: jurisdictionId,
+            },
+          },
+        },
+      });
+
+      await prisma.userAccounts.create({
+        data: await userFactory({
+          agencyId: protectedAgency.id,
+        }),
+      });
+
+      const res = await request(app.getHttpServer())
+        .delete('/agency')
+        .send({
+          id: protectedAgency.id,
+        } as IdDTO)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(400);
+
+      expect(res.body.message).toBe(
+        'This agency is currently associated with user(s) and is unable to be deleted.',
       );
     });
 

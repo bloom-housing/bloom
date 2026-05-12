@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react"
+import React, { useContext, useEffect, useMemo } from "react"
 import { MinimalTable, t } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
@@ -15,7 +15,11 @@ export const AgencyDeleteModal = ({ agency, onClose }: AgencyDeleteModalProps) =
   const { agencyService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
 
-  const { data: usersData, loading: usersLoading } = useUserList({
+  const {
+    data: usersData,
+    loading: usersLoading,
+    error: usersError,
+  } = useUserList({
     page: 1,
     limit: "all",
     filter: { agencyId: agency.id, isAdvocateUser: true },
@@ -30,7 +34,18 @@ export const AgencyDeleteModal = ({ agency, onClose }: AgencyDeleteModalProps) =
     [usersData]
   )
 
+  useEffect(() => {
+    if (usersError) {
+      addToast(t("errors.alert.badRequest"), { variant: "alert" })
+      onClose()
+    }
+  }, [addToast, onClose, usersError])
+
   if (usersLoading) {
+    return null
+  }
+
+  if (usersError) {
     return null
   }
 

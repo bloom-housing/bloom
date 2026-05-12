@@ -2,7 +2,7 @@ import { useCallback, useContext } from "react"
 import { useForm } from "react-hook-form"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { Agency, AgencyCreate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { Field, Select, SelectOption, t } from "@bloom-housing/ui-components"
 import { addAsterisk, defaultFieldProps, fieldHasError } from "../../lib/helpers"
 import SectionWithGrid from "../../components/shared/SectionWithGrid"
@@ -50,6 +50,10 @@ export const AgencyDrawer = ({
     ? jurisdictionOptions[1].value
     : null
 
+  const defaultJurisdictionName =
+    jurisdictionOptions.find((jurisdiction) => jurisdiction.value === defaultJurisdiction)?.label ||
+    editedAgency?.jurisdictions?.name
+
   const handleSave = useCallback(async () => {
     const validated = await trigger()
     if (!validated) return
@@ -92,27 +96,29 @@ export const AgencyDrawer = ({
               {profile.jurisdictions.length > 1 && (
                 <Grid.Row columns={3}>
                   <Grid.Cell>
-                    <Select
-                      id={"jurisdiction"}
-                      defaultValue={defaultJurisdiction}
-                      disabled={!!editedAgency}
-                      name={"jurisdictions.id"}
-                      label={addAsterisk(t("t.jurisdiction"))}
-                      register={register}
-                      error={fieldHasError(errors?.jurisdictions?.id)}
-                      controlClassName={"control"}
-                      errorMessage={t("errors.requiredFieldError")}
-                      keyPrefix={"jurisdictions"}
-                      options={jurisdictionOptions}
-                      validation={{ required: true }}
-                      inputProps={{
-                        onChange: () => {
-                          clearErrors("jurisdictions.id")
-                        },
-                        "aria-required": true,
-                        "aria-hidden": !!defaultJurisdiction,
-                      }}
-                    />
+                    {editedAgency ? (
+                      <FieldValue label={t("t.jurisdiction")}>{defaultJurisdictionName}</FieldValue>
+                    ) : (
+                      <Select
+                        id={"jurisdiction"}
+                        defaultValue={defaultJurisdiction}
+                        name={"jurisdictions.id"}
+                        label={addAsterisk(t("t.jurisdiction"))}
+                        register={register}
+                        error={fieldHasError(errors?.jurisdictions?.id)}
+                        controlClassName={"control"}
+                        errorMessage={t("errors.requiredFieldError")}
+                        keyPrefix={"jurisdictions"}
+                        options={jurisdictionOptions}
+                        validation={{ required: true }}
+                        inputProps={{
+                          onChange: () => {
+                            clearErrors("jurisdictions.id")
+                          },
+                          "aria-required": true,
+                        }}
+                      />
+                    )}
                   </Grid.Cell>
                 </Grid.Row>
               )}

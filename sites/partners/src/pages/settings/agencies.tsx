@@ -16,7 +16,11 @@ import {
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
-import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
+import {
+  getEnabledSettingsTabCount,
+  getSettingsTabs,
+  SettingsIndexEnum,
+} from "../../components/settings/SettingsViewHelpers"
 import { useAgenciesList } from "../../lib/hooks"
 import ManageIconSection from "../../components/settings/ManageIconSection"
 import { AgencyDrawer } from "../../components/settings/AgencyDrawer"
@@ -41,6 +45,11 @@ const SettingsAgencies = () => {
     true
   )
   const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
+  const settingsTabsFeatureFlags = {
+    enablePreferences: atLeastOneJurisdictionEnablesPreferences,
+    enableProperties,
+    enableAgencies,
+  }
 
   if (
     !enableAgencies ||
@@ -165,8 +174,12 @@ const SettingsAgencies = () => {
         </Head>
         <NavigationHeader className="relative" title={t("t.settings")} />
         <TabView
-          hideTabs={!atLeastOneJurisdictionEnablesPreferences && !enableProperties}
-          tabs={getSettingsTabs(SettingsIndexEnum.agencies, v2Preferences, enableAgencies)}
+          hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags) <= 1}
+          tabs={getSettingsTabs(
+            SettingsIndexEnum.agencies,
+            v2Preferences,
+            settingsTabsFeatureFlags
+          )}
         >
           <AgTable
             id="agencies-table"

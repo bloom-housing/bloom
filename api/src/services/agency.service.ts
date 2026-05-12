@@ -192,7 +192,7 @@ export class AgencyService {
    *
    * @param agencyId - The ID of the agency which should be removed.
    * @returns A `SuccessDTO` indicating that the delete operation completed successfully.
-   * @throws {BadRequestException} If no property ID is provided.
+   * @throws {BadRequestException} If no agency ID is provided or the agency is associated with users.
    */
   async deleteOne(idDto: IdDTO) {
     if (!idDto || !idDto.id) {
@@ -200,6 +200,18 @@ export class AgencyService {
     }
 
     await this.findOrThrowAgency(idDto.id);
+
+    const associatedUsersCount = await this.prisma.userAccounts.count({
+      where: {
+        agencyId: idDto.id,
+      },
+    });
+
+    if (associatedUsersCount > 0) {
+      throw new BadRequestException(
+        'This agency is currently associated with user(s) and is unable to be deleted.',
+      );
+    }
 
     await this.prisma.agency.delete({
       where: {

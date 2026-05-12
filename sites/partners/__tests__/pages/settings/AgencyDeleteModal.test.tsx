@@ -3,14 +3,12 @@ import { setupServer } from "msw/node"
 import React from "react"
 import userEvent from "@testing-library/user-event"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { AuthContext, MessageContext, MessageProvider } from "@bloom-housing/shared-helpers"
-import { Toast } from "@bloom-housing/ui-seeds"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   Agency,
   AgencyService,
   UserService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
 import { AgencyDeleteModal } from "../../../src/components/settings/AgencyDeleteModal"
 import { mockNextRouter, render, waitFor, screen, within } from "../../testUtils"
 
@@ -49,26 +47,20 @@ const mockUserWithoutAgency = {
   lastName: "Doe",
   email: "john.doe@example.com",
 }
-const ToastProvider = (props: React.PropsWithChildren<ToastProps>) => {
-  const { toastMessagesRef } = React.useContext(MessageContext)
-  return (
-    <MessageProvider>
-      {toastMessagesRef.current?.map((toastMessage) => (
-        <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
-          {toastMessage.message}
-        </Toast>
-      ))}
-      {props.children}
-    </MessageProvider>
-  )
-}
 
 const renderWithAuth = (
   ui: React.ReactElement,
-  { agencyService = new AgencyService(), userService = new UserService() } = {}
+  {
+    agencyService = new AgencyService(),
+    userService = new UserService(),
+    messageContext = {
+      addToast: jest.fn(),
+      toastMessagesRef: { current: [] },
+    },
+  } = {}
 ) => {
   return render(
-    <ToastProvider>
+    <MessageContext.Provider value={messageContext}>
       <AuthContext.Provider
         value={{
           profile: {
@@ -82,7 +74,7 @@ const renderWithAuth = (
       >
         {ui}
       </AuthContext.Provider>
-    </ToastProvider>
+    </MessageContext.Provider>
   )
 }
 
@@ -161,6 +153,35 @@ describe("Testing AgencyDeleteModal component", () => {
       ).toBeInTheDocument()
       expect(await within(dialog).findByText(mockUserWithAgency.email)).toBeInTheDocument()
       expect(await within(dialog).findByText(anotherUser.email)).toBeInTheDocument()
+    })
+  })
+
+  describe("when associated users cannot be loaded", () => {
+    it("should close and show an error toast without delete confirmation", async () => {
+      server.use(
+        rest.get("http://localhost:3100/user/list", (_req, res, ctx) => {
+          return res(ctx.status(500))
+        })
+      )
+
+      const onClose = jest.fn()
+      const messageContext = {
+        addToast: jest.fn(),
+        toastMessagesRef: { current: [] },
+      }
+
+      renderWithAuth(<AgencyDeleteModal agency={mockAgency} onClose={onClose} />, {
+        messageContext,
+      })
+
+      await waitFor(() => {
+        expect(messageContext.addToast).toHaveBeenCalledWith(
+          expect.stringContaining("Looks like something went wrong"),
+          { variant: "alert" }
+        )
+        expect(onClose).toHaveBeenCalledTimes(1)
+      })
+      expect(screen.queryByRole("button", { name: /delete/i })).not.toBeInTheDocument()
     })
   })
 

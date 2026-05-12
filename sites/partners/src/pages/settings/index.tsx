@@ -16,15 +16,24 @@ const Settings = () => {
   )
 
   useEffect(() => {
-    if (!enableProperties && !atLeastOneJurisdictionEnablesPreferences && !enableAgencies)
+    if (!enableProperties && !atLeastOneJurisdictionEnablesPreferences && !enableAgencies) {
       void router.replace("/")
-    void router.replace(
-      atLeastOneJurisdictionEnablesPreferences
-        ? "/settings/preferences"
-        : enableProperties
-        ? "/settings/properties"
-        : "/settings/agencies"
-    )
+      return
+    }
+
+    if (atLeastOneJurisdictionEnablesPreferences) {
+      void router.replace("/settings/preferences")
+      return
+    }
+
+    if (enableProperties) {
+      void router.replace("/settings/properties")
+      return
+    }
+
+    if (enableAgencies) {
+      void router.replace("/settings/agencies")
+    }
   }, [router, atLeastOneJurisdictionEnablesPreferences, enableProperties, enableAgencies])
 }
 

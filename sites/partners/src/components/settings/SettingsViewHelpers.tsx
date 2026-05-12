@@ -8,37 +8,59 @@ export enum SettingsIndexEnum {
   agencies,
 }
 
+type SettingsTabsFeatureFlags = {
+  enablePreferences: boolean
+  enableProperties: boolean
+  enableAgencies?: boolean
+}
+
+export const getEnabledSettingsTabCount = ({
+  enablePreferences,
+  enableProperties,
+  enableAgencies,
+}: SettingsTabsFeatureFlags) =>
+  [enablePreferences, enableProperties, enableAgencies].filter(Boolean).length
+
 export const getSettingsTabs = (
   selectedIndex: SettingsIndexEnum,
   enableV2MSQ: boolean,
-  enableAgencies?: boolean
+  { enablePreferences, enableProperties, enableAgencies }: SettingsTabsFeatureFlags
 ) => {
   const baseUrl = "/settings/"
+  const enabledTabs = [
+    enablePreferences && SettingsIndexEnum.preferences,
+    enableProperties && SettingsIndexEnum.properties,
+    enableAgencies && SettingsIndexEnum.agencies,
+  ].filter((tab): tab is SettingsIndexEnum => tab !== false && tab !== undefined)
 
   return (
     <Tabs
       verticalSidebar
       navigation={true}
       navigationLabel={t("settings.navLabel")}
-      selectedIndex={selectedIndex}
+      selectedIndex={Math.max(enabledTabs.indexOf(selectedIndex), 0)}
     >
       <Tabs.TabList>
-        <Tabs.Tab
-          href={`${
-            enableV2MSQ ? `${baseUrl}/multiselectquestions/preferences` : `${baseUrl}/preferences`
-          }`}
-          data-testid="preferences-tab"
-          active={selectedIndex === SettingsIndexEnum.preferences}
-        >
-          <span>{t("settings.preferences")}</span>
-        </Tabs.Tab>
-        <Tabs.Tab
-          href={`${baseUrl}/properties`}
-          data-testid="properties-tab"
-          active={selectedIndex === SettingsIndexEnum.properties}
-        >
-          <span>{t("settings.properties")}</span>
-        </Tabs.Tab>
+        {enablePreferences && (
+          <Tabs.Tab
+            href={`${
+              enableV2MSQ ? `${baseUrl}/multiselectquestions/preferences` : `${baseUrl}/preferences`
+            }`}
+            data-testid="preferences-tab"
+            active={selectedIndex === SettingsIndexEnum.preferences}
+          >
+            <span>{t("settings.preferences")}</span>
+          </Tabs.Tab>
+        )}
+        {enableProperties && (
+          <Tabs.Tab
+            href={`${baseUrl}/properties`}
+            data-testid="properties-tab"
+            active={selectedIndex === SettingsIndexEnum.properties}
+          >
+            <span>{t("settings.properties")}</span>
+          </Tabs.Tab>
+        )}
         {enableAgencies && (
           <Tabs.Tab
             href={`${baseUrl}/agencies`}

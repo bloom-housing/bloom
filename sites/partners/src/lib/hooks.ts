@@ -7,7 +7,9 @@ import tz from "dayjs/plugin/timezone"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import {
+  AgencyFilterParams,
   ApplicationOrderByKeys,
+  EnumAgencyFilterParamsComparison,
   EnumListingFilterParamsComparison,
   EnumMultiselectQuestionFilterParamsComparison,
   EnumPropertyFilterParamsComparison,
@@ -790,11 +792,12 @@ type UseAgenciesListProps = PaginationProps & {
 }
 
 export function useAgenciesList({ page, limit, search, jurisdictions }: UseAgenciesListProps) {
+  const filter: AgencyFilterParams[] = []
   const params = {
     page,
     limit,
     search,
-    filter: [],
+    filter,
   }
 
   if (search?.length < 3) {
@@ -804,7 +807,7 @@ export function useAgenciesList({ page, limit, search, jurisdictions }: UseAgenc
   }
 
   params.filter.push({
-    $comparison: "IN",
+    $comparison: EnumAgencyFilterParamsComparison.IN,
     jurisdiction: jurisdictions && jurisdictions !== "" ? jurisdictions : undefined,
   })
 

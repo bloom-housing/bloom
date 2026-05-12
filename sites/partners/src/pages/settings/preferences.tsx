@@ -1,17 +1,11 @@
 import React, { useContext, useState, useMemo, useEffect } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
+import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
 import { MinimalTable, StandardCard, t } from "@bloom-housing/ui-components"
 import { Button, Dialog, LoadingState } from "@bloom-housing/ui-seeds"
-import dayjs from "dayjs"
-import { AuthContext, MessageContext, useMutate } from "@bloom-housing/shared-helpers"
-import Layout from "../../layouts"
-import PreferenceDrawer from "../../components/settings/PreferenceDrawer"
-import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
-import ManageIconSection from "../../components/settings/ManageIconSection"
-import { PreferenceDeleteModal } from "../../components/settings/PreferenceDeleteModal"
-import { NavigationHeader } from "../../components/shared/NavigationHeader"
+import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import {
   FeatureFlagEnum,
   MultiselectQuestion,
@@ -19,9 +13,19 @@ import {
   MultiselectQuestionUpdate,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext, MessageContext, useMutate } from "@bloom-housing/shared-helpers"
+import Layout from "../../layouts"
+import PreferenceDrawer from "../../components/settings/PreferenceDrawer"
+import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
+import ManageIconSection from "../../components/settings/ManageIconSection"
+import { PreferenceDeleteModal } from "../../components/settings/PreferenceDeleteModal"
+import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import { PreferenceEditModal } from "../../components/settings/PreferenceEditModal"
-import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
-import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
+import {
+  getEnabledSettingsTabCount,
+  getSettingsTabs,
+  SettingsIndexEnum,
+} from "../../components/settings/SettingsViewHelpers"
 
 export type DrawerType = "add" | "edit"
 
@@ -58,6 +62,11 @@ const SettingsPreferences = () => {
   )
   const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
   const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
+  const settingsTabsFeatureFlags = {
+    enablePreferences: atLeastOneJurisdictionEnablesPreferences,
+    enableProperties,
+    enableAgencies,
+  }
 
   const tableData = useMemo(() => {
     return data?.items
@@ -196,8 +205,12 @@ const SettingsPreferences = () => {
         <NavigationHeader className="relative" title={t("t.settings")} />
         {!v2Preferences && (
           <TabView
-            hideTabs={!enableProperties}
-            tabs={getSettingsTabs(SettingsIndexEnum.preferences, v2Preferences, enableAgencies)}
+            hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags) <= 1}
+            tabs={getSettingsTabs(
+              SettingsIndexEnum.preferences,
+              v2Preferences,
+              settingsTabsFeatureFlags
+            )}
           >
             <LoadingState loading={loading}>
               <StandardCard
