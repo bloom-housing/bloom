@@ -43,7 +43,8 @@ type AlertErrorType = "api" | "form"
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
   const { data: jurisdictionData } = useJurisdiction(listingDto?.jurisdictions?.id)
-  const { doJurisdictionsHaveFeatureFlagOn, applicationsService } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn, applicationsService, getJurisdictionLanguages } =
+    useContext(AuthContext)
 
   const preferences = listingSectionQuestions(
     listingDto,
@@ -150,6 +151,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     data: FormTypes
     redirect: "details" | "new"
   } | null>(null)
+
+  const availableJurisdictionLanguages = listingDto?.jurisdictions?.id
+    ? getJurisdictionLanguages(listingDto?.jurisdictions?.id)
+    : []
 
   useEffect(() => {
     if (application?.householdMember) {
@@ -342,6 +347,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                         enableApplicationStatus && editMode && application?.markedAsDuplicate
                       }
                       reviewOrderType={listingDto?.reviewOrderType}
+                      availableJurisdictionLanguages={availableJurisdictionLanguages}
                     />
 
                     <FormPrimaryApplicant

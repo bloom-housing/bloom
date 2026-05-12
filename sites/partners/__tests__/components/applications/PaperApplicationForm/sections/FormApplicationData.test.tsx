@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react"
+import { render, screen, waitFor, within } from "@testing-library/react"
 import React from "react"
 import userEvent from "@testing-library/user-event"
 import {
@@ -14,6 +14,12 @@ const defaultFormApplicationDataProps = {
   enableApplicationStatus: false,
   enableReceivedAtAndByFields: false,
   appType: ApplicationSubmissionTypeEnum.paper,
+  availableJurisdictionLanguages: [
+    LanguagesEnum.en,
+    LanguagesEnum.es,
+    LanguagesEnum.vi,
+    LanguagesEnum.zh,
+  ],
 }
 
 describe("<FormApplicationData>", () => {
@@ -76,6 +82,7 @@ describe("<FormApplicationData>", () => {
     )
 
     const languageSelect = screen.getByLabelText(/language submitted in/i)
+    expect(within(languageSelect).getAllByRole("option")).toHaveLength(5)
     await userEvent.selectOptions(languageSelect, LanguagesEnum.en)
 
     expect((languageSelect as HTMLSelectElement).value).toBe(LanguagesEnum.en)

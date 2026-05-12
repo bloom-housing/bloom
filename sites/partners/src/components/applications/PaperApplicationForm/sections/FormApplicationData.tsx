@@ -23,6 +23,7 @@ type FormApplicationDataProps = {
   appType: ApplicationSubmissionTypeEnum
   disableApplicationStatusControls?: boolean
   reviewOrderType?: ReviewOrderTypeEnum
+  availableJurisdictionLanguages?: LanguagesEnum[]
 }
 
 const FormApplicationData = ({
@@ -31,6 +32,7 @@ const FormApplicationData = ({
   appType,
   disableApplicationStatusControls = false,
   reviewOrderType,
+  availableJurisdictionLanguages = [],
 }: FormApplicationDataProps) => {
   const formMethods = useFormContext()
 
@@ -103,7 +105,13 @@ const FormApplicationData = ({
             label={t("application.add.languageSubmittedIn")}
             register={register}
             controlClassName="control"
-            options={["", ...Object.values(LanguagesEnum)]}
+            options={[
+              "",
+              ...availableJurisdictionLanguages.map((item) => ({
+                label: t(`languages.${item}`),
+                value: item,
+              })),
+            ]}
             keyPrefix="languages"
           />
         </Grid.Cell>

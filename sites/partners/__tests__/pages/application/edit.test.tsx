@@ -7,6 +7,7 @@ import userEvent from "@testing-library/user-event"
 import {
   ApplicationStatusEnum,
   FeatureFlagEnum,
+  LanguagesEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { application, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 
@@ -33,6 +34,7 @@ describe("application edit page", () => {
         value={{
           profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
           doJurisdictionsHaveFeatureFlagOn: () => false,
+          getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
         }}
       >
         <EditApplication />
@@ -60,6 +62,7 @@ describe("application edit page", () => {
             profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
             doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
               featureFlag === FeatureFlagEnum.enableApplicationStatus,
+            getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
           }}
         >
           <EditApplication />
@@ -106,6 +109,7 @@ describe("application edit page", () => {
             profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
             doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
               featureFlag === FeatureFlagEnum.enableApplicationStatus,
+            getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
           }}
         >
           <EditApplication />
@@ -151,6 +155,7 @@ describe("application edit page", () => {
             profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
             doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
               featureFlag === FeatureFlagEnum.enableApplicationStatus,
+            getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
           }}
         >
           <EditApplication />
@@ -199,6 +204,7 @@ describe("application edit page", () => {
             profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
             doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
               featureFlag === FeatureFlagEnum.enableApplicationStatus,
+            getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
           }}
         >
           <EditApplication />
