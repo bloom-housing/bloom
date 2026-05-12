@@ -24,6 +24,8 @@ interface ListingProps {
   jurisdiction: Jurisdiction
 }
 
+const VALID_STATUSES = ["active", "closed"]
+
 export default function ListingPage(props: ListingProps) {
   const { listing } = props
 
@@ -57,7 +59,7 @@ export default function ListingPage(props: ListingProps) {
     profile,
   ])
   useEffect(() => {
-    if (!(listing?.status === "active" || listing?.status === "closed")) {
+    if (!VALID_STATUSES.includes(listing?.status)) {
       addToast(t("errors.invalidListing.redirect"), { variant: "alert" })
       void router.push("/")
     }
@@ -68,7 +70,7 @@ export default function ListingPage(props: ListingProps) {
     return <ErrorPage />
   }
 
-  if (!(listing?.status === "active" || listing?.status === "closed")) {
+  if (!VALID_STATUSES.includes(listing?.status)) {
     return null
   }
 
