@@ -448,12 +448,6 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
         filter[ListingFilterKeys.monthlyRent] = userSelections["maxRent"]?.replace(",", "")
         filters.push(filter)
       }
-      // } else if (filterType === ListingFilterKeys.bathrooms && userSelections) {
-      //   const filter = {
-      //     $comparison: EnumListingFilterParamsComparison["="],
-      //   }
-      //   filter[ListingFilterKeys.bathrooms] = userSelections
-      //   filters.push(filter)
     } else if (filterType === ListingFilterKeys.name) {
       const filter = {
         $comparison: EnumListingFilterParamsComparison["LIKE"],

@@ -178,10 +178,11 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             {enableFilterByBathroom && (
               <CheckboxGroup
                 groupLabel={t("t.bathrooms")}
-                fields={["1", "2", "3", "4"].map((bathroomCount) => {
+                fields={["0", "1", "2", "3", "4", "5"].map((bathroomCount) => {
                   return {
                     key: `${ListingFilterKeys.bathrooms}.${bathroomCount}`,
-                    label: bathroomCount,
+                    label:
+                      bathroomCount === "0" ? t("listings.unit.sharedBathroom") : bathroomCount,
                     defaultChecked: isTrue(
                       props.filterState?.[ListingFilterKeys.bathrooms]?.[bathroomCount]
                     ),
