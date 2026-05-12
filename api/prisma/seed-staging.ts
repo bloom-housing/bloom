@@ -1,6 +1,9 @@
 import { LanguagesEnum, PrismaClient } from '@prisma/client';
 import { createAllFeatureFlags } from './seed-helpers/feature-flag-factory';
-import { translationFactory } from './seed-helpers/translation-factory';
+import {
+  translationFactory,
+  upsertTranslation,
+} from './seed-helpers/translation-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { userFactory } from './seed-helpers/user-factory';
 import { createAngelopolisJurisdiction } from './seed-staging/seed-angelopolis';
@@ -8,7 +11,6 @@ import { createBloomingtonJurisdiction } from './seed-staging/seed-bloomington';
 import { createBridgeBayJurisdictions } from './seed-staging/seed-bridge-bay';
 import { createLakeviewJurisdiction } from './seed-staging/seed-lakeview';
 import { createNadaHillJurisdiction } from './seed-staging/seed-nada-hill';
-import { upsertTranslation } from './seed-helpers/upsert-translation';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
