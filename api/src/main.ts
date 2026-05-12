@@ -9,12 +9,18 @@ import { AppModule } from './modules/app.module';
 import { CustomExceptionFilter } from './utilities/custom-exception-filter';
 import './utilities/open-telemetry-init'; // required for side effects
 import * as opentelemetry from '@opentelemetry/api';
+import { WinstonModule } from 'nest-winston';
+import { winstonLogger } from './logger/winston.logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger:
       process.env.NODE_ENV === 'development'
         ? ['error', 'warn', 'log', 'debug']
+        : process.env.USE_WINSTON === 'TRUE'
+        ? WinstonModule.createLogger({
+            instance: winstonLogger,
+          })
         : ['error', 'warn', 'log'],
   });
   if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT) {
@@ -76,6 +82,7 @@ async function bootstrap() {
     }
     cb(null, options);
   });
+  app.use(logger);
   app.use(
     cookieParser(),
     compression({
