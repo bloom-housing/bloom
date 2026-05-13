@@ -73,7 +73,9 @@ function ListingsSearchCombined() {
     })
   }, [profile, searchResults])
 
-  const pageSize = process.env.maxBrowseListings || 10
+  const pageSize = process.env.maxBrowseListings
+    ? Number.parseInt(process.env.maxBrowseListings)
+    : 10
 
   const map = useMap()
 
