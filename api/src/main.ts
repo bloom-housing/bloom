@@ -82,9 +82,6 @@ async function bootstrap() {
     }
     cb(null, options);
   });
-  if (process.env.USE_WINSTON === 'TRUE') {
-    app.use(logger);
-  }
   app.use(
     cookieParser(),
     compression({
