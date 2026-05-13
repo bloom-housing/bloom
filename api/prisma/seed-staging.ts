@@ -23,6 +23,9 @@ export const stagingSeed = async (
     asRegion: boolean;
   },
 ) => {
+  // TODO: This is temporary until the RCT seed test fix is merged in core
+  await prismaClient.reservedCommunityTypes.deleteMany();
+
   // Seed feature flags
   await createAllFeatureFlags(prismaClient);
 
