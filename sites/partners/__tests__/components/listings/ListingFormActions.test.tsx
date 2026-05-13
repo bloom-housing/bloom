@@ -129,6 +129,19 @@ describe("<ListingFormActions>", () => {
         expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
       })
 
+      it("renders correct buttons in a scheduled detail state", () => {
+        render(
+          <ListingFormActionsComponent
+            user={adminUser}
+            listingStatus={ListingsStatusEnum.scheduled}
+            formActionType={ListingFormActionsType.details}
+          />
+        )
+        expect(screen.getByRole("link", { name: "Edit" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument()
+        expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
+      })
+
       it("renders correct buttons in a draft edit state", () => {
         render(
           <ListingFormActionsComponent
@@ -335,6 +348,19 @@ describe("<ListingFormActions>", () => {
           <ListingFormActionsComponent
             user={partnerUser}
             listingStatus={ListingsStatusEnum.pending}
+            formActionType={ListingFormActionsType.edit}
+          />
+        )
+        expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
+      })
+
+      it("renders correct buttons in a scheduled edit state", () => {
+        render(
+          <ListingFormActionsComponent
+            user={partnerUser}
+            listingStatus={ListingsStatusEnum.scheduled}
             formActionType={ListingFormActionsType.edit}
           />
         )

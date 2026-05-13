@@ -2338,6 +2338,7 @@ enum ListingEventsTypeEnum {
 enum ListingsStatusEnum {
   active
   pending
+  scheduled
   closed
   pendingReview
   changesRequested
