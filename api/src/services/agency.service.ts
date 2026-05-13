@@ -21,10 +21,16 @@ import { IdDTO } from '../dtos/shared/id.dto';
 import { buildOrderBy } from '../utilities/build-order-by';
 import { OrderByEnum } from '../enums/shared/order-by-enum';
 import { buildFilter } from '../utilities/build-filter';
+import { PermissionService } from './permission.service';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { User } from '../dtos/users/user.dto';
 
 @Injectable()
 export class AgencyService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private permissionService: PermissionService,
+  ) {}
 
   /**
    * Returns a paginated list of agencies matching the provided query parameters.
@@ -126,12 +132,19 @@ export class AgencyService {
    * @throws {BadRequestException} If a jurisdiction ID to link to is not provided.
    * @throws {NotFoundException} If a jurisdiction to link to is not found for the given ID.
    */
-  async create(agencyDto: AgencyCreate) {
+  async create(agencyDto: AgencyCreate, requestingUser: User) {
     if (!agencyDto.jurisdictions || !agencyDto.jurisdictions.id) {
       throw new BadRequestException('A valid jurisdiction must be provided');
     }
 
     await this.findOrThrowJurisdiction(agencyDto.jurisdictions.id);
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'agency',
+      permissionActions.create,
+      { jurisdictionId: agencyDto.jurisdictions.id },
+    );
 
     const rawAgency = await this.prisma.agency.create({
       data: {
@@ -158,7 +171,7 @@ export class AgencyService {
    * @throws {BadRequestException} If a jurisdiction ID to link to is not provided.
    * @throws {NotFoundException} If a jurisdiction to link to is not found for the given ID.
    */
-  async update(agencyDto: AgencyUpdate) {
+  async update(agencyDto: AgencyUpdate, requestingUser: User) {
     if (!agencyDto.jurisdictions || !agencyDto.jurisdictions.id) {
       throw new BadRequestException('A valid jurisdiction must be provided');
     }
@@ -166,6 +179,13 @@ export class AgencyService {
     await this.findOrThrowJurisdiction(agencyDto.jurisdictions.id);
 
     await this.findOrThrowAgency(agencyDto.id);
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'agency',
+      permissionActions.update,
+      { jurisdictionId: agencyDto.jurisdictions.id },
+    );
 
     const rawAgency = await this.prisma.agency.update({
       data: {
@@ -194,12 +214,19 @@ export class AgencyService {
    * @returns A `SuccessDTO` indicating that the delete operation completed successfully.
    * @throws {BadRequestException} If no agency ID is provided or the agency is associated with users.
    */
-  async deleteOne(idDto: IdDTO) {
+  async deleteOne(idDto: IdDTO, requestingUser: User) {
     if (!idDto || !idDto.id) {
       throw new BadRequestException('A agency ID must be provided');
     }
 
-    await this.findOrThrowAgency(idDto.id);
+    const existingAgency = await this.findOrThrowAgency(idDto.id);
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'agency',
+      permissionActions.delete,
+      { jurisdictionId: existingAgency.jurisdictions?.id },
+    );
 
     const associatedUsersCount = await this.prisma.userAccounts.count({
       where: {

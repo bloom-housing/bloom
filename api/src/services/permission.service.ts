@@ -114,6 +114,12 @@ export class PermissionService {
           );
           await enforcer.addPermissionForUser(
             user.id,
+            'agency',
+            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+            `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
+          );
+          await enforcer.addPermissionForUser(
+            user.id,
             'user',
             `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
             `(${permissionActions.read}|${permissionActions.invitePartner}|${permissionActions.inviteJurisdictionalAdmin}|${permissionActions.update}|${permissionActions.delete})`,
