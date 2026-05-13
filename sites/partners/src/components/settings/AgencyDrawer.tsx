@@ -1,7 +1,11 @@
 import { useCallback, useContext } from "react"
 import { useForm } from "react-hook-form"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { Agency, AgencyCreate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Agency,
+  AgencyCreate,
+  FeatureFlagEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { Field, Select, SelectOption, t } from "@bloom-housing/ui-components"
 import { addAsterisk, defaultFieldProps, fieldHasError } from "../../lib/helpers"
@@ -33,11 +37,17 @@ export const AgencyDrawer = ({
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, clearErrors, trigger, getValues } = useForm<AgencyFormTypes>()
 
+  const eligibleJurisdictions = profile.jurisdictions.filter((j) =>
+    j.featureFlags?.some(
+      (flag) => flag.name === FeatureFlagEnum.enableHousingAdvocate && flag.active
+    )
+  )
+
   const jurisdictionOptions: SelectOption[] =
-    profile.jurisdictions.length !== 0
+    eligibleJurisdictions.length !== 0
       ? [
           { label: "", value: "" },
-          ...profile.jurisdictions.map((jurisdiction) => ({
+          ...eligibleJurisdictions.map((jurisdiction) => ({
             label: jurisdiction.name,
             value: jurisdiction.id,
           })),

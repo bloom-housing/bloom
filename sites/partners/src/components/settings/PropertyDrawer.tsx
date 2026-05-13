@@ -1,4 +1,5 @@
 import {
+  FeatureFlagEnum,
   Listing,
   Property,
   PropertyCreate,
@@ -45,11 +46,15 @@ export const PropertyDrawer = ({
     (listing) => listing.property?.id === editedProperty?.id
   )
 
+  const eligibleJurisdictions = profile.jurisdictions.filter((j) =>
+    j.featureFlags?.some((flag) => flag.name === FeatureFlagEnum.enableProperties && flag.active)
+  )
+
   const jurisdictionOptions: SelectOption[] =
-    profile.jurisdictions.length !== 0
+    eligibleJurisdictions.length !== 0
       ? [
           { label: "", value: "" },
-          ...profile.jurisdictions.map((jurisdiction) => ({
+          ...eligibleJurisdictions.map((jurisdiction) => ({
             label: jurisdiction.name,
             value: jurisdiction.id,
           })),
