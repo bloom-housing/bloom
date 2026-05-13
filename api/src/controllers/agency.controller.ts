@@ -8,10 +8,12 @@ import {
   Post,
   Put,
   Query,
+  Request,
   UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
 import {
   ApiExtraModels,
   ApiOkResponse,
@@ -23,9 +25,12 @@ import { AgencyUpdate } from '../dtos/agency/agency-update.dto';
 import Agency from '../dtos/agency/agency.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { ApiKeyGuard } from '../guards/api-key.guard';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 import { OptionalAuthGuard } from '../../src/guards/optional.guard';
 import { PermissionGuard } from '../guards/permission.guard';
 import { AgencyService } from '../services/agency.service';
+import { mapTo } from '../utilities/mapTo';
+import { User } from '../dtos/users/user.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { PaginatedAgencyDto } from '../dtos/agency/paginated-agency.dto';
@@ -81,9 +86,12 @@ export class AgencyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Agency })
-  @UseGuards(PermissionGuard)
-  public async createAgency(@Body() agencyDto: AgencyCreate): Promise<Agency> {
-    return await this.agencyService.create(agencyDto);
+  @UseGuards(JwtAuthGuard)
+  public async createAgency(
+    @Body() agencyDto: AgencyCreate,
+    @Request() req: ExpressRequest,
+  ): Promise<Agency> {
+    return await this.agencyService.create(agencyDto, mapTo(User, req['user']));
   }
 
   @Put()
@@ -93,9 +101,12 @@ export class AgencyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Agency })
-  @UseGuards(PermissionGuard)
-  public async update(@Body() agencyDto: AgencyUpdate): Promise<Agency> {
-    return await this.agencyService.update(agencyDto);
+  @UseGuards(JwtAuthGuard)
+  public async update(
+    @Body() agencyDto: AgencyUpdate,
+    @Request() req: ExpressRequest,
+  ): Promise<Agency> {
+    return await this.agencyService.update(agencyDto, mapTo(User, req['user']));
   }
 
   @Delete()
@@ -103,9 +114,12 @@ export class AgencyController {
     summary: 'Deletes an agency entry from the database by its ID',
     operationId: 'delete',
   })
-  @UseGuards(PermissionGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: SuccessDTO })
-  public async delete(@Body() idDto: IdDTO): Promise<SuccessDTO> {
-    return await this.agencyService.deleteOne(idDto);
+  public async delete(
+    @Body() idDto: IdDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.agencyService.deleteOne(idDto, mapTo(User, req['user']));
   }
 }
