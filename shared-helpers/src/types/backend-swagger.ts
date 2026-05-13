@@ -3281,6 +3281,8 @@ export class AgencyService {
       /**  */
       limit?: number | "all"
       /**  */
+      search?: string
+      /**  */
       filter?: AgencyFilterParams[]
     } = {} as any,
     options: IRequestOptions = {}
@@ -3289,7 +3291,12 @@ export class AgencyService {
       let url = basePath + "/agency"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { page: params["page"], limit: params["limit"], filter: params["filter"] }
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        search: params["search"],
+        filter: params["filter"],
+      }
 
       axios(configs, resolve, reject)
     })
@@ -4924,6 +4931,9 @@ export interface Listing {
   publishedAt?: Date
 
   /**  */
+  scheduledPublishAt?: Date
+
+  /**  */
   closedAt?: Date
 
   /**  */
@@ -5887,6 +5897,9 @@ export interface ListingCreate {
   contentUpdatedAt?: Date
 
   /**  */
+  scheduledPublishAt?: Date
+
+  /**  */
   lotteryLastPublishedAt?: Date
 
   /**  */
@@ -6755,6 +6768,9 @@ export interface ListingUpdate {
 
   /**  */
   contentUpdatedAt?: Date
+
+  /**  */
+  scheduledPublishAt?: Date
 
   /**  */
   lotteryLastPublishedAt?: Date
@@ -9812,6 +9828,9 @@ export interface UserFilterParams {
 
   /**  */
   isAdvocateUser?: boolean
+
+  /**  */
+  agencyId?: string
 }
 
 /** PaginatedUser */
@@ -10193,6 +10212,9 @@ export interface AgencyQueryParams {
 
   /**  */
   limit?: number | "all"
+
+  /**  */
+  search?: string
 
   /**  */
   filter?: string[]
@@ -10638,6 +10660,7 @@ export enum FeatureFlagEnum {
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableApplicationStatus" = "enableApplicationStatus",
+  "enableAutopublish" = "enableAutopublish",
   "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableConfigurableRegions" = "enableConfigurableRegions",

@@ -1,14 +1,16 @@
 import { INestApplication } from '@nestjs/common';
+import { stringify } from 'qs';
+import cookieParser from 'cookie-parser';
+import request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../src/services/prisma.service';
 import { AppModule } from '../../src/modules/app.module';
-import cookieParser from 'cookie-parser';
-import request from 'supertest';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { AgencyQueryParams } from '../../src/dtos/agency/agency-query-params.dto';
-import { stringify } from 'querystring';
+import { AgencyFilterParams } from '../../src/dtos/agency/agency-filter-params.dto';
+import { Compare } from '../../src/dtos/shared/base-filter.dto';
 import { randomUUID } from 'crypto';
 import AgencyCreate from '../../src/dtos/agency/agency-create.dto';
 import { AgencyUpdate } from '../../src/dtos/agency/agency-update.dto';
@@ -18,6 +20,7 @@ describe('Agencies Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let jurisdictionId: string;
+  let jurisdictionBId: string;
   let agencyAId: string;
   let cookies = '';
 
@@ -55,6 +58,11 @@ describe('Agencies Controller Tests', () => {
 
     jurisdictionId = jurisdiction.id;
 
+    const jurisdictionB = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
+    jurisdictionBId = jurisdictionB.id;
+
     const agencyA = await prisma.agency.create({
       data: {
         name: 'Agency A',
@@ -73,6 +81,17 @@ describe('Agencies Controller Tests', () => {
         jurisdictions: {
           connect: {
             id: jurisdiction.id,
+          },
+        },
+      },
+    });
+
+    await prisma.agency.create({
+      data: {
+        name: 'Agency C',
+        jurisdictions: {
+          connect: {
+            id: jurisdictionB.id,
           },
         },
       },
@@ -109,6 +128,53 @@ describe('Agencies Controller Tests', () => {
       expect(res.body.meta.totalItems).toBeGreaterThanOrEqual(2);
       expect(res.body.meta.totalPages).toBeGreaterThanOrEqual(1);
       expect(res.body.meta.itemCount).toBeGreaterThanOrEqual(2);
+    });
+
+    it('should return agencies matching search term', async () => {
+      const queryParams: AgencyQueryParams = {
+        limit: 'all',
+        page: 1,
+        search: 'Agency A',
+      };
+
+      const res = await request(app.getHttpServer())
+        .get(`/agency?${stringify(queryParams as any)}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
+      expect(
+        res.body.items.every((agency) =>
+          agency.name.toLowerCase().includes('agency a'),
+        ),
+      ).toBe(true);
+    });
+
+    it('should return only agencies for the given jurisdiction filter', async () => {
+      const filter: AgencyFilterParams[] = [
+        {
+          $comparison: Compare['='],
+          jurisdiction: jurisdictionBId,
+        },
+      ];
+      const query = stringify(
+        { limit: 'all', page: 1, filter },
+        { encode: false },
+      );
+
+      const res = await request(app.getHttpServer())
+        .get(`/agency?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
+      expect(
+        res.body.items.every(
+          (agency) => agency.jurisdictions?.id === jurisdictionBId,
+        ),
+      ).toBe(true);
     });
 
     it('should get agencies when pagination params are sent', async () => {
@@ -371,6 +437,38 @@ describe('Agencies Controller Tests', () => {
 
       expect(res.body.message).toBe(
         `An agency with id: ${randId} was not found`,
+      );
+    });
+
+    it('should throw error when agency has associated users', async () => {
+      const protectedAgency = await prisma.agency.create({
+        data: {
+          name: 'Agency With Users',
+          jurisdictions: {
+            connect: {
+              id: jurisdictionId,
+            },
+          },
+        },
+      });
+
+      await prisma.userAccounts.create({
+        data: await userFactory({
+          agencyId: protectedAgency.id,
+        }),
+      });
+
+      const res = await request(app.getHttpServer())
+        .delete('/agency')
+        .send({
+          id: protectedAgency.id,
+        } as IdDTO)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(400);
+
+      expect(res.body.message).toBe(
+        'This agency is currently associated with user(s) and is unable to be deleted.',
       );
     });
 

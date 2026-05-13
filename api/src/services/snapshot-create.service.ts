@@ -279,6 +279,7 @@ export class SnapshotCreateService {
         postmarkedApplicationsReceivedByDate: true,
         programRules: true,
         publishedAt: true,
+        scheduledPublishAt: true,
         referralOpportunity: true,
         region: true,
         rentalAssistance: true,

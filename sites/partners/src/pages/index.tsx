@@ -220,16 +220,29 @@ export default function ListingsList() {
       })
     }
 
-    columns.push(
-      {
-        headerName: t("listings.createdDate"),
-        field: "createdAt",
+    columns.push({
+      headerName: t("listings.createdDate"),
+      field: "createdAt",
+      sortable: false,
+      filter: false,
+      resizable: true,
+      valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
+      maxWidth: 140,
+    })
+
+    if (doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableAutopublish)) {
+      columns.push({
+        headerName: t("listings.scheduledListingPublishDate"),
+        field: "scheduledPublishAt",
         sortable: false,
         filter: false,
         resizable: true,
         valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-        maxWidth: 140,
-      },
+        maxWidth: 180,
+      })
+    }
+
+    columns.push(
       {
         headerName: t("listings.publishedDate"),
         field: "publishedAt",

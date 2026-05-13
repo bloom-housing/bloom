@@ -39,6 +39,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableAccessibilityFeatures](./feature-flags/enableAccessibilityFeatures.md) | When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view |
 | [enableAdditionalResources](./feature-flags/enableAdditionalResources.md) | When true, the 'learn more' section is displayed on the home page |
 | [enableApplicationStatus](./feature-flags/enableApplicationStatus.md) | When true, the application status and notifications feature is enabled on public and partners |
+| [enableAutopublish](./feature-flags/enableAutopublish.md) | When true, partners can set an optional scheduled listing publish date |
 | [enableCompanyWebsite](./feature-flags/enableCompanyWebsite.md) | When true, allows partners to add company website information |
 | [enableConfigurableRegions](./feature-flags/enableConfigurableRegions.md) | When true, allows for configurable regions per jurisdiction enabled on partners and public |
 | [enableCreditScreeningFee](./feature-flags/enableCreditScreeningFee.md) | When true, credit screening fee is enabled for listings |

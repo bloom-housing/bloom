@@ -1288,6 +1288,7 @@ model Listings {
   resultId                             String?                     @map("result_id") @db.Uuid
   resultLink                           String?                     @map("result_link")
   reviewOrderType                      ReviewOrderTypeEnum?        @map("review_order_type")
+  scheduledPublishAt                   DateTime?                   @map("scheduled_publish_at") @db.Timestamptz(6)
   section8Acceptance                   Boolean?                    @map("section8_acceptance")
   servicesOffered                      String?                     @map("services_offered")
   smokingPolicy                        String?                     @map("smoking_policy")
@@ -1464,6 +1465,7 @@ model ListingSnapshot {
   resultSnapshotId                        String?                     @map("result_snapshot_id") @db.Uuid
   resultLink                              String?                     @map("result_link")
   reviewOrderType                         ReviewOrderTypeEnum?        @map("review_order_type")
+  scheduledPublishAt                      DateTime?                   @map("scheduled_publish_at") @db.Timestamptz(6)
   section8Acceptance                      Boolean?                    @map("section8_acceptance")
   servicesOffered                         String?                     @map("services_offered")
   smokingPolicy                           String?                     @map("smoking_policy")

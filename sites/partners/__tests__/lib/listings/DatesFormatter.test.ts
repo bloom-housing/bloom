@@ -46,4 +46,18 @@ describe("DatesFormatter", () => {
       "2021-10-20T10:30:00.000Z"
     )
   })
+
+  it("should set scheduledPublishAt to UTC midnight when scheduled date field is complete", () => {
+    const data = {
+      scheduledListingPublishDateField: { year: "2030", month: "06", day: "15" },
+    }
+    expect(formatData(data).scheduledPublishAt?.toISOString()).toEqual("2030-06-15T00:00:00.000Z")
+  })
+
+  it("should set scheduledPublishAt to null when scheduled date field is incomplete", () => {
+    const data = {
+      scheduledListingPublishDateField: { year: "2030", month: "", day: "" },
+    }
+    expect(formatData(data).scheduledPublishAt).toBeNull()
+  })
 })
