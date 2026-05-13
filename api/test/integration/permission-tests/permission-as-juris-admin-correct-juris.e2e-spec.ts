@@ -1613,7 +1613,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .expect(200);
     });
 
-    it('should error as forbidden for create endpoint', async () => {
+    it('should succeed for create endpoint', async () => {
       const agencyData = {
         name: 'New Test Agency',
         jurisdictions: {
@@ -1626,10 +1626,10 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .send(agencyData)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(201);
     });
 
-    it('should error as forbidden for update endpoint', async () => {
+    it('should succeed for update endpoint', async () => {
       if (!agencyId) {
         throw new Error('Agency ID not set up for test');
       }
@@ -1647,10 +1647,10 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .send(agencyUpdateData)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
-    it('should error as forbidden for delete endpoint', async () => {
+    it('should succeed for delete endpoint', async () => {
       const agencyData = {
         name: 'Agency to Delete',
         jurisdictions: {
@@ -1677,7 +1677,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         } as IdDTO)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
   });
 });

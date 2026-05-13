@@ -15,6 +15,7 @@ import EditMultiselectQuestion, {
   DrawerType,
 } from "../../../components/settings/MultiselectQuestions/EditMultiselectQuestion"
 import {
+  getEnabledSettingsTabCount,
   getSettingsTabs,
   SettingsIndexEnum,
 } from "../../../components/settings/SettingsViewHelpers"
@@ -28,6 +29,12 @@ const MultiselectQuestionsPreferences = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const tableOptions = useAgTable()
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
+  const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
+  const settingsTabsFeatureFlags = {
+    enablePreferences: true,
+    enableProperties,
+    enableAgencies,
+  }
 
   const [multiselectQuestionDrawerOpen, setMultiselectQuestionDrawerOpen] =
     useState<DrawerType | null>(null)
@@ -172,8 +179,8 @@ const MultiselectQuestionsPreferences = () => {
         </Head>
         <NavigationHeader className="relative" title={t("settings.preferences")} />
         <TabView
-          hideTabs={!enableProperties}
-          tabs={getSettingsTabs(SettingsIndexEnum.preferences, true)}
+          hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags) <= 1}
+          tabs={getSettingsTabs(SettingsIndexEnum.preferences, true, settingsTabsFeatureFlags)}
         >
           <section className={styles["preferences-section"]}>
             <div className={styles["table-wrapper"]}>

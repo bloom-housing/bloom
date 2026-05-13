@@ -706,6 +706,7 @@
   "errors.givenNameError": "이름을 입력해 주세요.",
   "errors.householdTooBig": "귀하의 가구 구성원 수가 너무 많습니다.",
   "errors.householdTooSmall": "귀하의 가구 구성원 수가 너무 적습니다.",
+  "errors.invalidListing.redirect": "해당 상품은 현재 판매되지 않습니다.",
   "errors.lastNameError": "성을 입력해 주세요.",
   "errors.maxLength": "%{length}자를 초과해서는 안 됩니다.",
   "errors.maxLessThanMinRentError": "최대 임대료는 최소 임대료보다 크거나 같아야 합니다.",

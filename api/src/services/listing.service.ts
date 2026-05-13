@@ -1413,6 +1413,15 @@ export class ListingService implements OnModuleInit {
       FeatureFlagEnum.enableV2MSQ,
     );
 
+    const enableAutopublish = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as unknown as Jurisdiction,
+      FeatureFlagEnum.enableAutopublish,
+    );
+
+    if (!enableAutopublish) {
+      dto.scheduledPublishAt = null;
+    }
+
     if (
       (enableUnitGroups && dto.units?.length > 0) ||
       (!enableUnitGroups && dto.unitGroups?.length > 0)
@@ -2213,6 +2222,15 @@ export class ListingService implements OnModuleInit {
       rawJurisdiction as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
+
+    const enableAutopublish = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableAutopublish,
+    );
+
+    if (!enableAutopublish) {
+      incomingDto.scheduledPublishAt = null;
+    }
 
     if (
       (enableUnitGroups && incomingDto.units?.length > 0) ||

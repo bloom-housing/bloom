@@ -709,6 +709,7 @@
   "errors.givenNameError": "অনুগ্রহ করে একটি নির্দিষ্ট নাম লিখুন।",
   "errors.householdTooBig": "আপনার পরিবারের আকার অনেক বড়।",
   "errors.householdTooSmall": "আপনার পরিবারের আকার খুব ছোট।",
+  "errors.invalidListing.redirect": "এই তালিকাটি অনুপলব্ধ।",
   "errors.lastNameError": "অনুগ্রহ করে একটি পদবি লিখুন।",
   "errors.maxLength": "%{length} অক্ষরের বেশি হওয়া উচিত নয়।",
   "errors.maxLessThanMinRentError": "সর্বোচ্চ ভাড়া অবশ্যই সর্বনিম্ন ভাড়ার চেয়ে বেশি বা সমান হতে হবে",

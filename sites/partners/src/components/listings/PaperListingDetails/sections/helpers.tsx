@@ -7,8 +7,11 @@ import { getApplicationStatusVariant } from "@bloom-housing/shared-helpers/src/u
 import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid, Tag } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { TextEditorContent } from "../../../shared/TextEditor"
+
+dayjs.extend(utc)
 
 export const getDetailFieldNumber = (listingNumber: number) => {
   return listingNumber ? listingNumber.toString() : t("t.none")
@@ -28,6 +31,13 @@ export const getDetailFieldRichText = (listingString: string, fieldId: string) =
 
 export const getDetailFieldDate = (listingDate: Date) => {
   return listingDate ? dayjs(new Date(listingDate)).format("MM/DD/YYYY") : t("t.none")
+}
+
+export const getDetailFieldUtcDate = (listingDate: Date | string | null | undefined) => {
+  if (!listingDate || !dayjs.utc(listingDate).isValid()) {
+    return t("t.none")
+  }
+  return dayjs.utc(listingDate).format("MM/DD/YYYY")
 }
 
 export const getDetailFieldTime = (listingTime: Date) => {
@@ -74,6 +84,9 @@ export const getReadableErrorMessage = (errorMessage: string | undefined) => {
       break
     case "must be a valid phone number":
       readableMessage = t("errors.phoneNumberError")
+      break
+    case "must be in the future":
+      readableMessage = t("errors.dateMustBeInTheFuture")
       break
     default:
       readableMessage = t("errors.requiredFieldError")

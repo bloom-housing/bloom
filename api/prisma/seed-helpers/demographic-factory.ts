@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { randomAdjective, randomName } from './word-generator';
 import { randomInt } from 'crypto';
 import { RaceEthnicityConfiguration } from '../../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
-import { defaultRaceEthnicityConfiguration } from '../../prisma/seed-staging';
+import { defaultRaceEthnicityConfiguration } from '../seed-staging/seed-staging-helpers';
 
 export const demographicsFactory = async (
   raceEthnicityConfiguration?: RaceEthnicityConfiguration,
