@@ -248,14 +248,34 @@ describe("<SettingsAgencies>", () => {
         return res(ctx.json(user))
       })
     )
+    const enableHousingAdvocateFlag = {
+      name: FeatureFlagEnum.enableHousingAdvocate,
+      active: true,
+      id: "ff-enable-housing-advocate",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      description: "",
+      jurisdictions: [],
+    }
+
     render(
       <AuthContext.Provider
         value={{
           profile: {
             ...user,
             jurisdictions: [
-              { ...jurisdiction, id: "jurisdiction1", name: "Jurisdiction 1" },
-              { ...jurisdiction, id: "jurisdiction2", name: "Jurisdiction 2" },
+              {
+                ...jurisdiction,
+                id: "jurisdiction1",
+                name: "Jurisdiction 1",
+                featureFlags: [...jurisdiction.featureFlags, enableHousingAdvocateFlag],
+              },
+              {
+                ...jurisdiction,
+                id: "jurisdiction2",
+                name: "Jurisdiction 2",
+                featureFlags: [...jurisdiction.featureFlags, enableHousingAdvocateFlag],
+              },
             ],
             listings: [],
           },
