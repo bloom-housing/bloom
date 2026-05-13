@@ -84,6 +84,7 @@ export const formatStatus = {
   active: 'Public',
   closed: 'Closed',
   pending: 'Draft',
+  scheduled: 'Scheduled',
   pendingReview: 'Pending Review',
   changesRequested: 'Changes Requested',
 };

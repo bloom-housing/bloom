@@ -10250,6 +10250,7 @@ export enum RegionEnum {
 export enum ListingsStatusEnum {
   "active" = "active",
   "pending" = "pending",
+  "scheduled" = "scheduled",
   "closed" = "closed",
   "pendingReview" = "pendingReview",
   "changesRequested" = "changesRequested",

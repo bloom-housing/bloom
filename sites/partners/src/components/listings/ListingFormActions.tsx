@@ -115,38 +115,60 @@ const ListingFormActions = ({
     return dayjsDate.format("MMMM DD, YYYY, hh:mm A")
   }, [listing])
 
-  const approveAndPublish = useCallback(async () => {
-    try {
-      const result = await listingsService.update({
-        id: listing.id,
-        body: {
-          ...(listing as unknown as ListingUpdate),
-          // account for type mismatch between ListingMultiSelectQuestionType and IdDto
-          listingMultiselectQuestions: listing.listingMultiselectQuestions?.map(
-            (multiselectQuestions) => ({
-              ordinal: multiselectQuestions.ordinal,
-              id: multiselectQuestions.multiselectQuestions?.id,
-            })
-          ),
-          status: ListingsStatusEnum.active,
-        },
-      })
-      if (result) {
-        addToast(t("listings.approval.listingPublished"), { variant: "success" })
-        await router.push(`/`)
-      }
-    } catch (err) {
-      if (err.response?.status === 400) {
-        setErrorAlert?.(t("errors.alert.listingPublishError"))
-      }
-      addToast(
-        err.response?.data?.message === "email failed"
-          ? t("errors.alert.listingsApprovalEmailError")
-          : t("errors.somethingWentWrong"),
-        { variant: "warn" }
-      )
+  const getApprovedStatus = useCallback((): ListingsStatusEnum => {
+    const hasValidScheduledAt =
+      listing?.scheduledPublishAt != null && dayjs.utc(listing.scheduledPublishAt).isValid()
+
+    if (!hasValidScheduledAt) return ListingsStatusEnum.active
+
+    const scheduledAtDate = dayjs.utc(listing.scheduledPublishAt).format("MM/DD/YYYY")
+    if (dayjs().startOf("day").isBefore(dayjs(scheduledAtDate).startOf("day"))) {
+      return ListingsStatusEnum.scheduled
     }
-  }, [addToast, listing, listingsService, router, setErrorAlert])
+
+    return ListingsStatusEnum.active
+  }, [listing?.scheduledPublishAt])
+
+  const approveAndSetStatus = useCallback(
+    async (status: ListingsStatusEnum = ListingsStatusEnum.active) => {
+      try {
+        const result = await listingsService.update({
+          id: listing.id,
+          body: {
+            ...(listing as unknown as ListingUpdate),
+            // account for type mismatch between ListingMultiSelectQuestionType and IdDto
+            listingMultiselectQuestions: listing.listingMultiselectQuestions?.map(
+              (multiselectQuestions) => ({
+                ordinal: multiselectQuestions.ordinal,
+                id: multiselectQuestions.multiselectQuestions?.id,
+              })
+            ),
+            status,
+          },
+        })
+        if (result) {
+          addToast(
+            status === ListingsStatusEnum.scheduled
+              ? t("listings.approval.listingScheduled")
+              : t("listings.approval.listingPublished"),
+            { variant: "success" }
+          )
+          await router.push(`/`)
+        }
+      } catch (err) {
+        if (err.response?.status === 400) {
+          setErrorAlert?.(t("errors.alert.listingPublishError"))
+        }
+        addToast(
+          err.response?.data?.message === "email failed"
+            ? t("errors.alert.listingsApprovalEmailError")
+            : t("errors.somethingWentWrong"),
+          { variant: "warn" }
+        )
+      }
+    },
+    [addToast, listing, listingsService, router, setErrorAlert]
+  )
 
   const actions = useMemo(() => {
     const cancelButton = (
@@ -346,7 +368,7 @@ const ListingFormActions = ({
               setAdminApproveDialogOpen(true)
               return
             }
-            await approveAndPublish()
+            await approveAndSetStatus()
           }}
         >
           {enableAutopublish
@@ -427,7 +449,8 @@ const ListingFormActions = ({
     }
     //draft listing, detail view
     else if (
-      listing.status === ListingsStatusEnum.pending &&
+      (listing?.status === ListingsStatusEnum.pending ||
+        listing?.status === ListingsStatusEnum.scheduled) &&
       type === ListingFormActionsType.details
     ) {
       elements.push(editFromDetailButton)
@@ -436,7 +459,8 @@ const ListingFormActions = ({
     }
     //draft listing, edit view
     else if (
-      listing.status === ListingsStatusEnum.pending &&
+      (listing?.status === ListingsStatusEnum.pending ||
+        listing?.status === ListingsStatusEnum.scheduled) &&
       type === ListingFormActionsType.edit
     ) {
       elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
@@ -558,7 +582,7 @@ const ListingFormActions = ({
     listing,
     listingId,
     listingJurisdiction?.publicUrl,
-    approveAndPublish,
+    approveAndSetStatus,
     profile,
     setAdminApproveDialogOpen,
     showCloseListingModal,
@@ -593,8 +617,7 @@ const ListingFormActions = ({
           onClose={() => setAdminApproveDialogOpen(false)}
           onConfirm={async () => {
             setAdminApproveDialogOpen(false)
-            // TODO: update to handle scheduledPublishAt when it is implemented
-            await approveAndPublish()
+            await approveAndSetStatus(getApprovedStatus())
           }}
           scheduledPublishAt={listing?.scheduledPublishAt}
         />
