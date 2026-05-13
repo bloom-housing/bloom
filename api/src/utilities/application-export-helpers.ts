@@ -409,7 +409,7 @@ export const getExportHeaders = (
         path: 'preferredUnitTypes',
         label: 'Requested Unit Types',
         format: (val: UnitType[]): string => {
-          if (!val?.map) {
+          if (!val) {
             return '';
           }
           return val.map((unit) => unitTypeToReadable(unit.name)).join(',');
@@ -490,7 +490,7 @@ export const getExportHeaders = (
         path: 'demographics.race',
         label: 'Race',
         format: (val: string[]): string => {
-          if (!val?.map) {
+          if (!val) {
             return '';
           }
           return val
