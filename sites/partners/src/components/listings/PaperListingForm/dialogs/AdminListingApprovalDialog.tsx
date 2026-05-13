@@ -26,11 +26,11 @@ const AdminListingApprovalDialog = ({
       return t("listings.approval.adminApproveNoScheduledDate")
     }
 
-    const scheduledAt = dayjs.utc(scheduledPublishAt)
+    const scheduledAtDate = dayjs.utc(scheduledPublishAt).format("MM/DD/YYYY")
 
-    if (dayjs.utc().isBefore(scheduledAt.startOf("day"))) {
+    if (dayjs().startOf("day").isBefore(dayjs(scheduledAtDate).startOf("day"))) {
       return t("listings.approval.adminApproveScheduledFuture", {
-        date: scheduledAt.format("MM/DD/YYYY"),
+        date: scheduledAtDate,
       })
     }
 

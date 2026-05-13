@@ -41,7 +41,7 @@ describe("AdminListingApprovalDialog", () => {
   })
 
   it("renders future-scheduled body copy when publish window has not ended", () => {
-    jest.setSystemTime(dayjs.utc("2026-06-14T23:00:00.000Z").toDate())
+    jest.setSystemTime(new Date("2026-06-14T23:30:00"))
     render(
       <AdminListingApprovalDialog
         isOpen={true}
@@ -59,7 +59,7 @@ describe("AdminListingApprovalDialog", () => {
   })
 
   it("renders past-scheduled body copy when publish window has ended", () => {
-    jest.setSystemTime(dayjs.utc("2026-06-15T00:00:01.000Z").toDate())
+    jest.setSystemTime(new Date("2026-06-15T00:00:01"))
 
     render(
       <AdminListingApprovalDialog
