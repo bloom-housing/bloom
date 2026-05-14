@@ -5,10 +5,10 @@ import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
-import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
+import { Button, Dialog, Grid, Icon, Link } from "@bloom-housing/ui-seeds"
 import { t, Select, SelectOption, Field } from "@bloom-housing/ui-components"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
-import { AuthContext, Form } from "@bloom-housing/shared-helpers"
+import { AuthContext, Form, tIfExists } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
@@ -448,6 +448,38 @@ export default function ListingsList() {
             <Grid>
               <Grid.Row columns={3}>
                 <Grid.Cell className={"seeds-grid-span-2"}>
+                  {tIfExists("listings.otherPortals.title") && !defaultJurisdiction && (
+                    <div
+                      className={"seeds-m-bs-4 border border-red-500 p-4"}
+                      data-testid={"other-portals-banner"}
+                    >
+                      <p>{tIfExists("listings.otherPortals.title")}</p>
+                      <ul>
+                        {tIfExists("listings.otherPortals.portal1.name") &&
+                          tIfExists("listings.otherPortals.portal1.url") && (
+                            <li>
+                              <Link
+                                href={tIfExists("listings.otherPortals.portal1.url")}
+                                target={"_blank"}
+                              >
+                                {tIfExists("listings.otherPortals.portal1.name")}
+                              </Link>
+                            </li>
+                          )}
+                        {tIfExists("listings.otherPortals.portal2.name") &&
+                          tIfExists("listings.otherPortals.portal2.url") && (
+                            <li>
+                              <Link
+                                href={tIfExists("listings.otherPortals.portal2.url")}
+                                target={"_blank"}
+                              >
+                                {tIfExists("listings.otherPortals.portal2.name")}
+                              </Link>
+                            </li>
+                          )}
+                      </ul>
+                    </div>
+                  )}
                   <div className={`${defaultJurisdiction ? "hidden" : ""} seeds-m-bs-4`}>
                     <Select
                       id={"jurisdiction"}
