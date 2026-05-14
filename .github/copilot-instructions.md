@@ -86,7 +86,7 @@ When changing one area, run that area’s tests first, then run broader checks o
 - Unit tests are required for new features and bug fixes; aim for good coverage of new logic and edge cases, but avoid over-testing implementation details.
 - Unit/Integration tests should be written with Jest and React Testing Library; avoid Cypress for new tests unless the happy path of new end-to-end behavior is being validated.
 - Always follow good security practices, especially when handling user data or authentication flows. If you identify a potential security issue, report it immediately and follow responsible disclosure guidelines.
-- Accessibility is a key focus.
+- Accessibility is a key focus. We aim to meet WCAG 2.2 AA standards. Additional guidelines can be found in `a11y-guidelines.md`. If you identify an accessibility issue, please report it and consider how to fix it in a way that improves the experience for all users.
 - Follow existing patterns and prefer `ui-seeds` and CSS/SCSS variables over `ui-components` and Tailwind for consistent styling (though both component libraries are owned by the team, so bugs in either can be reported and fixed).
 - Use scripts and utilities in `shared-helpers` when possible to avoid duplication and maintain consistency across the public and partners apps. If you find a gap in shared functionality, consider adding to `shared-helpers` rather than creating new utilities in each app.
 - Translation keys used only in partners should be added to the partners translation file `sites/partners/page_content/locales/general.json`. Translation keys used only in partners that we anticipate will be overridden in a fork should be added to the partners translation overrides file `sites/partners/page_content/overrides/general.json`. 
