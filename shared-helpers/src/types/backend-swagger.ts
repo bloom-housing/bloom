@@ -7220,6 +7220,12 @@ export interface Application {
   status: ApplicationStatusEnum
 
   /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
+
+  /**  */
   accessibleUnitWaitlistNumber?: number
 
   /**  */
@@ -8234,6 +8240,12 @@ export interface PublicAppsFiltered {
   status: ApplicationStatusEnum
 
   /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
+
+  /**  */
   accessibleUnitWaitlistNumber?: number
 
   /**  */
@@ -8579,6 +8591,12 @@ export interface ApplicationCreate {
   status: ApplicationStatusEnum
 
   /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
+
+  /**  */
   accessibleUnitWaitlistNumber?: number
 
   /**  */
@@ -8909,6 +8927,12 @@ export interface ApplicationUpdate {
   status: ApplicationStatusEnum
 
   /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
+
+  /**  */
   accessibleUnitWaitlistNumber?: number
 
   /**  */
@@ -8982,6 +9006,9 @@ export interface ApplicationUpdate {
 export interface ApplicationUpdateEmail {
   /**  */
   previousStatus?: ApplicationStatusEnum
+
+  /**  */
+  previousApplicationDeclineReason?: ApplicationDeclineReasonEnum
 
   /**  */
   previousAccessibleUnitWaitlistNumber?: number
@@ -10535,6 +10562,18 @@ export enum ApplicationStatusEnum {
   "receivedUnit" = "receivedUnit",
   "waitlist" = "waitlist",
   "waitlistDeclined" = "waitlistDeclined",
+}
+
+export enum ApplicationDeclineReasonEnum {
+  "householdIncomeTooHigh" = "householdIncomeTooHigh",
+  "householdIncomeTooLow" = "householdIncomeTooLow",
+  "householdSizeTooLarge" = "householdSizeTooLarge",
+  "householdSizeTooSmall" = "householdSizeTooSmall",
+  "attemptedToContactNoResponse" = "attemptedToContactNoResponse",
+  "applicantDeclinedUnit" = "applicantDeclinedUnit",
+  "doesNotMeetSeniorBuildingRequirement" = "doesNotMeetSeniorBuildingRequirement",
+  "householdDoesNotNeedAccessibleUnit" = "householdDoesNotNeedAccessibleUnit",
+  "other" = "other",
 }
 
 export enum ApplicationSubmissionTypeEnum {

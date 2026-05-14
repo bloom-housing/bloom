@@ -208,6 +208,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
         id: applicationId,
         body: {
           previousStatus: application.status,
+          previousApplicationDeclineReason: application.applicationDeclineReason,
           previousAccessibleUnitWaitlistNumber: application.accessibleUnitWaitlistNumber,
           previousConventionalUnitWaitlistNumber: application.conventionalUnitWaitlistNumber,
         },

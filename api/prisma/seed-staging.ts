@@ -1,6 +1,9 @@
 import { LanguagesEnum, PrismaClient } from '@prisma/client';
 import { createAllFeatureFlags } from './seed-helpers/feature-flag-factory';
-import { translationFactory } from './seed-helpers/translation-factory';
+import {
+  translationFactory,
+  upsertTranslation,
+} from './seed-helpers/translation-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { userFactory } from './seed-helpers/user-factory';
 import { createAngelopolisJurisdiction } from './seed-staging/seed-angelopolis';
@@ -193,15 +196,15 @@ export const stagingSeed = async (
   });
 
   // add jurisdiction specific translations and default ones
-  await prismaClient.translations.create({
-    data: translationFactory({
+  await upsertTranslation(
+    prismaClient,
+    translationFactory({
       jurisdiction: { id: mainJurisdiction.id, name: mainJurisdiction.name },
     }),
-  });
-  await prismaClient.translations.create({
-    data: translationFactory({ language: LanguagesEnum.es }),
-  });
-  await prismaClient.translations.create({
-    data: translationFactory(),
-  });
+  );
+  await upsertTranslation(
+    prismaClient,
+    translationFactory({ language: LanguagesEnum.es }),
+  );
+  await upsertTranslation(prismaClient, translationFactory());
 };
