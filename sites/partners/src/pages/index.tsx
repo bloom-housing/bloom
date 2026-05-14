@@ -453,8 +453,8 @@ export default function ListingsList() {
           <Dialog.Content id="listing-select-dialog-content">
             {t("listings.selectJurisdictionContent")}
             <Grid>
-              <Grid.Row columns={3}>
-                <Grid.Cell className={"seeds-grid-span-2"}>
+              <Grid.Row className={"seeds-m-bs-4"}>
+                <Grid.Cell>
                   {otherPortalsTitle && !defaultJurisdiction && (
                     <div
                       className={styles["other-portals-banner"]}
@@ -464,22 +464,22 @@ export default function ListingsList() {
                       <ul>
                         {otherPortalsPortal1Name && otherPortalsPortal1Url && (
                           <li>
-                            <Link href={otherPortalsPortal1Url} target={"_blank"}>
-                              {otherPortalsPortal1Name}
-                            </Link>
+                            <Link href={otherPortalsPortal1Url}>{otherPortalsPortal1Name}</Link>
                           </li>
                         )}
                         {otherPortalsPortal2Name && otherPortalsPortal2Url && (
                           <li>
-                            <Link href={otherPortalsPortal2Url} target={"_blank"}>
-                              {otherPortalsPortal2Name}
-                            </Link>
+                            <Link href={otherPortalsPortal2Url}>{otherPortalsPortal2Name}</Link>
                           </li>
                         )}
                       </ul>
                     </div>
                   )}
-                  <div className={`${defaultJurisdiction ? "hidden" : ""} seeds-m-bs-4`}>
+                </Grid.Cell>
+              </Grid.Row>
+              <Grid.Row columns={3}>
+                <Grid.Cell className={"seeds-grid-span-2"}>
+                  <div className={`${defaultJurisdiction ? "hidden" : ""}`}>
                     <Select
                       id={"jurisdiction"}
                       defaultValue={defaultJurisdiction}
