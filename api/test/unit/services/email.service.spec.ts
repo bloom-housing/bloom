@@ -779,7 +779,7 @@ describe('Testing email service', () => {
         },
         {
           type: 'declineReason',
-          value: ApplicationDeclineReasonEnum.incomeRestriction,
+          value: ApplicationDeclineReasonEnum.householdIncomeTooLow,
         },
       ] as ApplicationStatusChangeItem[];
 
@@ -799,7 +799,7 @@ describe('Testing email service', () => {
         'Your application status has changed from <strong>Submitted</strong> to <strong>Declined</strong>',
       );
       expect(emailMock.body).toContain(
-        'Your application decline reason is <strong>Income Restriction</strong>',
+        'Your application decline reason is <strong>Household income too low</strong>',
       );
     });
 
@@ -830,7 +830,7 @@ describe('Testing email service', () => {
         },
         {
           type: 'declineReason',
-          value: ApplicationDeclineReasonEnum.ageRestriction,
+          value: ApplicationDeclineReasonEnum.householdIncomeTooHigh,
         },
       ] as ApplicationStatusChangeItem[];
 
@@ -848,12 +848,12 @@ describe('Testing email service', () => {
 
       const advocateEmailMock = sendMock.mock.calls[0][0];
       expect(advocateEmailMock.body).toContain(
-        'Your application decline reason is <strong>Age Restriction</strong>',
+        'Your application decline reason is <strong>Household income too high</strong>',
       );
 
       const applicantEmailMock = sendMock.mock.calls[1][0];
       expect(applicantEmailMock.body).toContain(
-        'Your application decline reason is <strong>Age Restriction</strong>',
+        'Your application decline reason is <strong>Household income too high</strong>',
       );
     });
   });

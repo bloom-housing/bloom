@@ -73,7 +73,10 @@ describe("application edit page", () => {
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
 
       const declineSelect = screen.getByLabelText(/decline reason/i)
-      await userEvent.selectOptions(declineSelect, ApplicationDeclineReasonEnum.ageRestriction)
+      await userEvent.selectOptions(
+        declineSelect,
+        ApplicationDeclineReasonEnum.householdIncomeTooHigh
+      )
 
       const saveButton = screen.getByRole("button", { name: "Save & exit" })
       await userEvent.click(saveButton)

@@ -982,12 +982,14 @@ export const convertApplicationDeclineReasonToReadable = (
   type: string,
 ): string => {
   const typeMap = {
-    ageRestriction: 'Age restriction',
-    incomeRestriction: 'Income restriction',
-    unitRestriction: 'Unit restriction (e.g. bedroom count and/or occupancy)',
-    programRestriction:
-      'Program restriction (e.g. CES unit, Veteran Unit, VASH unit, etc.)',
+    householdIncomeTooHigh: 'Household income too high',
+    householdIncomeTooLow: 'Household income too low',
+    householdSizeTooLarge: 'Household size too large',
+    householdSizeTooSmall: 'Household size too small',
     attemptedToContactNoResponse: 'Attempted to contact; no response',
+    applicantDeclinedUnit: 'Applicant declined unit',
+    doesNotMeetSeniorBuildingRequirement:
+      'Does not meet senior building requirement',
     householdDoesNotNeedAccessibleUnit:
       'Household does not need accessible unit features',
     other: 'Other',

@@ -66,7 +66,16 @@ const FormApplicationData = ({
   const isDeclinedStatus = applicationStatus === ApplicationStatusEnum.declined
 
   const applicationDeclineReasonValue: string = watch("application.applicationDeclineReason")
-  const showDeclineReasonDetails = isDeclinedStatus && !!applicationDeclineReasonValue
+  const declineReasonsRequiringDetails = [
+    ApplicationDeclineReasonEnum.attemptedToContactNoResponse,
+    ApplicationDeclineReasonEnum.applicantDeclinedUnit,
+    ApplicationDeclineReasonEnum.other,
+  ]
+  const showDeclineReasonDetails =
+    isDeclinedStatus &&
+    declineReasonsRequiringDetails.includes(
+      applicationDeclineReasonValue as ApplicationDeclineReasonEnum
+    )
 
   const applicationStatusOptions = Array.from(Object.values(ApplicationStatusEnum))
   const applicationDeclineReasonOptions = Array.from(Object.values(ApplicationDeclineReasonEnum))
@@ -224,9 +233,17 @@ const FormApplicationData = ({
                 <Textarea
                   id="application.applicationDeclineReasonAdditionalDetails"
                   name="application.applicationDeclineReasonAdditionalDetails"
-                  label={t("application.details.applicationDeclineReasonAdditionalDetails")}
+                  label={addAsterisk(
+                    t("application.details.applicationDeclineReasonAdditionalDetails")
+                  )}
                   note={t("application.details.applicationDeclineReasonAdditionalDetailsNote")}
                   register={register}
+                  validation={{ required: true }}
+                  errorMessage={
+                    errors?.application?.applicationDeclineReasonAdditionalDetails
+                      ? t("errors.requiredFieldError")
+                      : undefined
+                  }
                   fullWidth={true}
                   maxLength={2000}
                   placeholder={""}

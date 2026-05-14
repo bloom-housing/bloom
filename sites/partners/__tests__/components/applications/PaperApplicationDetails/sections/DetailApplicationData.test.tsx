@@ -139,7 +139,7 @@ describe("DetailApplicationData", () => {
       renderDetailsApplicationData({
         applicationOverrides: {
           status: ApplicationStatusEnum.declined,
-          applicationDeclineReason: ApplicationDeclineReasonEnum.ageRestriction,
+          applicationDeclineReason: ApplicationDeclineReasonEnum.householdIncomeTooHigh,
         },
         enableApplicationStatus: false,
       })
@@ -180,7 +180,7 @@ describe("DetailApplicationData", () => {
       const { unmount } = renderDetailsApplicationData({
         applicationOverrides: {
           status: ApplicationStatusEnum.declined,
-          applicationDeclineReason: ApplicationDeclineReasonEnum.ageRestriction,
+          applicationDeclineReason: ApplicationDeclineReasonEnum.householdIncomeTooHigh,
           applicationDeclineReasonAdditionalDetails: "Some extra context",
         },
         enableApplicationStatus: true,
@@ -191,7 +191,7 @@ describe("DetailApplicationData", () => {
       renderDetailsApplicationData({
         applicationOverrides: {
           status: ApplicationStatusEnum.declined,
-          applicationDeclineReason: ApplicationDeclineReasonEnum.ageRestriction,
+          applicationDeclineReason: ApplicationDeclineReasonEnum.householdIncomeTooHigh,
           applicationDeclineReasonAdditionalDetails: undefined,
         },
         enableApplicationStatus: true,
@@ -205,22 +205,27 @@ describe("DetailApplicationData", () => {
       renderDetailsApplicationData({
         applicationOverrides: {
           status: ApplicationStatusEnum.declined,
-          applicationDeclineReason: ApplicationDeclineReasonEnum.ageRestriction,
+          applicationDeclineReason: ApplicationDeclineReasonEnum.householdIncomeTooHigh,
         },
         enableApplicationStatus: true,
       })
 
       expect(screen.getByText("Decline reason")).toBeInTheDocument()
-      expect(screen.getByText(/age restriction/i)).toBeInTheDocument()
+      expect(screen.getByText(/household income too high/i)).toBeInTheDocument()
     })
 
     it("displays the correct label for each decline reason value", () => {
       const cases: [ApplicationDeclineReasonEnum, RegExp][] = [
-        [ApplicationDeclineReasonEnum.ageRestriction, /age restriction/i],
-        [ApplicationDeclineReasonEnum.incomeRestriction, /income restriction/i],
-        [ApplicationDeclineReasonEnum.unitRestriction, /unit restriction/i],
-        [ApplicationDeclineReasonEnum.programRestriction, /program restriction/i],
+        [ApplicationDeclineReasonEnum.householdIncomeTooHigh, /household income too high/i],
+        [ApplicationDeclineReasonEnum.householdIncomeTooLow, /household income too low/i],
+        [ApplicationDeclineReasonEnum.householdSizeTooLarge, /household size too large/i],
+        [ApplicationDeclineReasonEnum.householdSizeTooSmall, /household size too small/i],
         [ApplicationDeclineReasonEnum.attemptedToContactNoResponse, /attempted to contact/i],
+        [ApplicationDeclineReasonEnum.applicantDeclinedUnit, /applicant declined unit/i],
+        [
+          ApplicationDeclineReasonEnum.doesNotMeetSeniorBuildingRequirement,
+          /does not meet senior building requirement/i,
+        ],
         [
           ApplicationDeclineReasonEnum.householdDoesNotNeedAccessibleUnit,
           /household does not need accessible unit/i,

@@ -69,11 +69,11 @@ describe("<SubmittedApplicationView>", () => {
     it("shows decline reason label and value when status is declined and reason is set", () => {
       renderView({
         status: ApplicationStatusEnum.declined,
-        applicationDeclineReason: ApplicationDeclineReasonEnum.ageRestriction,
+        applicationDeclineReason: ApplicationDeclineReasonEnum.householdIncomeTooHigh,
       })
 
       expect(screen.getByText(/decline reason/i)).toBeInTheDocument()
-      expect(screen.getByText(/age restriction/i)).toBeInTheDocument()
+      expect(screen.getByText(/household income too high/i)).toBeInTheDocument()
     })
 
     it("shows the correct label for other", () => {

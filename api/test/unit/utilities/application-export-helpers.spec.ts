@@ -783,8 +783,8 @@ describe('Testing application export helpers', () => {
   describe('Testing convertApplicationDeclineReasonToReadable', () => {
     it('returns the readable decline reason for known enum keys', () => {
       expect(
-        convertApplicationDeclineReasonToReadable('ageRestriction'),
-      ).toEqual('Age restriction');
+        convertApplicationDeclineReasonToReadable('householdIncomeTooHigh'),
+      ).toEqual('Household income too high');
       expect(
         convertApplicationDeclineReasonToReadable(
           'attemptedToContactNoResponse',

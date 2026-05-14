@@ -400,9 +400,12 @@ describe("<FormApplicationData>", () => {
       const declineSelect = screen.getByLabelText(/decline reason/i)
       expect(declineSelect.closest(".hidden")).not.toBeInTheDocument()
 
-      await userEvent.selectOptions(declineSelect, ApplicationDeclineReasonEnum.ageRestriction)
+      await userEvent.selectOptions(
+        declineSelect,
+        ApplicationDeclineReasonEnum.householdIncomeTooHigh
+      )
       expect((declineSelect as HTMLSelectElement).value).toBe(
-        ApplicationDeclineReasonEnum.ageRestriction
+        ApplicationDeclineReasonEnum.householdIncomeTooHigh
       )
     })
 
@@ -427,7 +430,7 @@ describe("<FormApplicationData>", () => {
       }
     })
 
-    it("shows additional details textarea only when status is declined and a reason is selected", async () => {
+    it("does not show additional details textarea when no reason is selected", async () => {
       render(
         <FormProviderWrapper>
           <FormApplicationData
@@ -437,18 +440,78 @@ describe("<FormApplicationData>", () => {
         </FormProviderWrapper>
       )
 
-      expect(screen.queryByLabelText(/decline reason additional details/i)).not.toBeInTheDocument()
-
       const statusSelect = screen.getByLabelText(/status/i)
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
 
       expect(screen.queryByLabelText(/decline reason additional details/i)).not.toBeInTheDocument()
-
-      const declineSelect = screen.getByLabelText(/decline reason/i)
-      await userEvent.selectOptions(declineSelect, ApplicationDeclineReasonEnum.ageRestriction)
-
-      expect(screen.getByLabelText(/decline reason additional details/i)).toBeInTheDocument()
     })
+
+    const reasonsRequiringDetails = [
+      ApplicationDeclineReasonEnum.attemptedToContactNoResponse,
+      ApplicationDeclineReasonEnum.applicantDeclinedUnit,
+      ApplicationDeclineReasonEnum.other,
+    ]
+
+    const reasonsNotRequiringDetails = [
+      ApplicationDeclineReasonEnum.householdIncomeTooHigh,
+      ApplicationDeclineReasonEnum.householdIncomeTooLow,
+      ApplicationDeclineReasonEnum.householdSizeTooLarge,
+      ApplicationDeclineReasonEnum.householdSizeTooSmall,
+      ApplicationDeclineReasonEnum.doesNotMeetSeniorBuildingRequirement,
+      ApplicationDeclineReasonEnum.householdDoesNotNeedAccessibleUnit,
+    ]
+
+    it.each(reasonsRequiringDetails)(
+      "shows required additional details textarea for reason: %s",
+      async (reason) => {
+        render(
+          <FormWithSubmit>
+            <FormApplicationData
+              {...defaultFormApplicationDataProps}
+              enableApplicationStatus={true}
+            />
+          </FormWithSubmit>
+        )
+
+        const statusSelect = screen.getByLabelText(/status/i)
+        await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
+
+        const declineSelect = screen.getByLabelText(/decline reason/i)
+        await userEvent.selectOptions(declineSelect, reason)
+
+        expect(screen.getByLabelText(/decline reason additional details/i)).toBeInTheDocument()
+
+        await userEvent.click(screen.getByRole("button", { name: /submit/i }))
+
+        await waitFor(() => {
+          expect(screen.getByText(/this field is required/i)).toBeInTheDocument()
+        })
+      }
+    )
+
+    it.each(reasonsNotRequiringDetails)(
+      "does not show additional details textarea for reason: %s",
+      async (reason) => {
+        render(
+          <FormProviderWrapper>
+            <FormApplicationData
+              {...defaultFormApplicationDataProps}
+              enableApplicationStatus={true}
+            />
+          </FormProviderWrapper>
+        )
+
+        const statusSelect = screen.getByLabelText(/status/i)
+        await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
+
+        const declineSelect = screen.getByLabelText(/decline reason/i)
+        await userEvent.selectOptions(declineSelect, reason)
+
+        expect(
+          screen.queryByLabelText(/decline reason additional details/i)
+        ).not.toBeInTheDocument()
+      }
+    )
 
     it("shows an error when submitted with status declined but no reason selected", async () => {
       render(

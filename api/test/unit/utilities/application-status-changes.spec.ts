@@ -71,11 +71,11 @@ describe('buildApplicationStatusChanges', () => {
         initialStatus: 'submitted',
         nextStatus: 'declined',
         initialApplicationDeclineReason: null,
-        nextApplicationDeclineReason: 'ageRestriction',
+        nextApplicationDeclineReason: 'householdIncomeTooHigh',
       });
       expect(changes).toContainEqual({
         type: 'declineReason',
-        value: 'ageRestriction',
+        value: 'householdIncomeTooHigh',
       });
     });
 
@@ -84,11 +84,11 @@ describe('buildApplicationStatusChanges', () => {
         initialStatus: 'declined',
         nextStatus: 'declined',
         initialApplicationDeclineReason: 'other',
-        nextApplicationDeclineReason: 'incomeRestriction',
+        nextApplicationDeclineReason: 'householdIncomeTooLow',
       });
       expect(changes).toContainEqual({
         type: 'declineReason',
-        value: 'incomeRestriction',
+        value: 'householdIncomeTooLow',
       });
     });
 
@@ -97,7 +97,7 @@ describe('buildApplicationStatusChanges', () => {
         initialStatus: 'submitted',
         nextStatus: 'waitlist',
         initialApplicationDeclineReason: null,
-        nextApplicationDeclineReason: 'ageRestriction',
+        nextApplicationDeclineReason: 'householdIncomeTooHigh',
       });
       expect(changes.find((c) => c.type === 'declineReason')).toBeUndefined();
     });
@@ -181,7 +181,7 @@ describe('buildApplicationStatusChanges', () => {
       const changes = buildApplicationStatusChanges({
         initialStatus: 'submitted',
         nextStatus: 'declined',
-        nextApplicationDeclineReason: 'incomeRestriction',
+        nextApplicationDeclineReason: 'householdIncomeTooLow',
       });
       expect(changes).toHaveLength(2);
       expect(changes[0]).toEqual({
@@ -191,7 +191,7 @@ describe('buildApplicationStatusChanges', () => {
       });
       expect(changes[1]).toEqual({
         type: 'declineReason',
-        value: 'incomeRestriction',
+        value: 'householdIncomeTooLow',
       });
     });
 
