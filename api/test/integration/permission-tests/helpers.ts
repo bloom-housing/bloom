@@ -125,6 +125,24 @@ export const buildJurisdictionCreateMock = (
       ApplicationAccessibilityFeatureEnum.vision,
     ],
     visibleSpokenLanguages: [],
+    visibleHouseholdMemberRelationships: [
+      HouseholdMemberRelationship.spouse,
+      HouseholdMemberRelationship.registeredDomesticPartner,
+      HouseholdMemberRelationship.parent,
+      HouseholdMemberRelationship.child,
+      HouseholdMemberRelationship.sibling,
+      HouseholdMemberRelationship.cousin,
+      HouseholdMemberRelationship.aunt,
+      HouseholdMemberRelationship.uncle,
+      HouseholdMemberRelationship.nephew,
+      HouseholdMemberRelationship.niece,
+      HouseholdMemberRelationship.grandparent,
+      HouseholdMemberRelationship.greatGrandparent,
+      HouseholdMemberRelationship.inLaw,
+      HouseholdMemberRelationship.friend,
+      HouseholdMemberRelationship.other,
+      HouseholdMemberRelationship.aideOrAttendant,
+    ],
   };
 };
 
@@ -158,6 +176,24 @@ export const buildJurisdictionUpdateMock = (
       ApplicationAccessibilityFeatureEnum.vision,
     ],
     visibleSpokenLanguages: [],
+    visibleHouseholdMemberRelationships: [
+      HouseholdMemberRelationship.spouse,
+      HouseholdMemberRelationship.registeredDomesticPartner,
+      HouseholdMemberRelationship.parent,
+      HouseholdMemberRelationship.child,
+      HouseholdMemberRelationship.sibling,
+      HouseholdMemberRelationship.cousin,
+      HouseholdMemberRelationship.aunt,
+      HouseholdMemberRelationship.uncle,
+      HouseholdMemberRelationship.nephew,
+      HouseholdMemberRelationship.niece,
+      HouseholdMemberRelationship.grandparent,
+      HouseholdMemberRelationship.greatGrandparent,
+      HouseholdMemberRelationship.inLaw,
+      HouseholdMemberRelationship.friend,
+      HouseholdMemberRelationship.other,
+      HouseholdMemberRelationship.aideOrAttendant,
+    ],
   };
 };
 
