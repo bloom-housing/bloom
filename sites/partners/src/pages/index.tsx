@@ -17,6 +17,7 @@ import {
 import { useListingExport, useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
+import styles from "./index.module.scss"
 
 class formatLinkCell {
   link: HTMLAnchorElement
@@ -451,33 +452,33 @@ export default function ListingsList() {
         <Form id="listing-select-form" onSubmit={handleSubmit(onSubmit)}>
           <Dialog.Content id="listing-select-dialog-content">
             {t("listings.selectJurisdictionContent")}
-            {otherPortalsTitle && !defaultJurisdiction && (
-              <div
-                className={"seeds-m-bs-4 border-2 border-red-500 p-4 w-full"}
-                data-testid={"other-portals-banner"}
-              >
-                <p>{otherPortalsTitle}</p>
-                <ul className={"list-disc pl-5"}>
-                  {otherPortalsPortal1Name && otherPortalsPortal1Url && (
-                    <li>
-                      <Link href={otherPortalsPortal1Url} target={"_blank"}>
-                        {otherPortalsPortal1Name}
-                      </Link>
-                    </li>
-                  )}
-                  {otherPortalsPortal2Name && otherPortalsPortal2Url && (
-                    <li>
-                      <Link href={otherPortalsPortal2Url} target={"_blank"}>
-                        {otherPortalsPortal2Name}
-                      </Link>
-                    </li>
-                  )}
-                </ul>
-              </div>
-            )}
             <Grid>
               <Grid.Row columns={3}>
                 <Grid.Cell className={"seeds-grid-span-2"}>
+                  {otherPortalsTitle && !defaultJurisdiction && (
+                    <div
+                      className={styles["other-portals-banner"]}
+                      data-testid={"other-portals-banner"}
+                    >
+                      <p>{otherPortalsTitle}</p>
+                      <ul>
+                        {otherPortalsPortal1Name && otherPortalsPortal1Url && (
+                          <li>
+                            <Link href={otherPortalsPortal1Url} target={"_blank"}>
+                              {otherPortalsPortal1Name}
+                            </Link>
+                          </li>
+                        )}
+                        {otherPortalsPortal2Name && otherPortalsPortal2Url && (
+                          <li>
+                            <Link href={otherPortalsPortal2Url} target={"_blank"}>
+                              {otherPortalsPortal2Name}
+                            </Link>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  )}
                   <div className={`${defaultJurisdiction ? "hidden" : ""} seeds-m-bs-4`}>
                     <Select
                       id={"jurisdiction"}
