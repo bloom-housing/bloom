@@ -82,6 +82,7 @@ When changing one area, run that area’s tests first, then run broader checks o
 
 ## Project guidelines
 - Always use the conventional commit format for commit messages and PR titles.
+- Pull requests should link to an issue if one exists. If no issue exists, the PR description should include a clear summary of the change and its motivation.
 - Use the prettier configuration in the repo root for consistent formatting.
 - Unit tests are required for new features and bug fixes; aim for good coverage of new logic and edge cases, but avoid over-testing implementation details.
 - Unit/Integration tests should be written with Jest and React Testing Library; avoid Cypress for new tests unless the happy path of new end-to-end behavior is being validated.
