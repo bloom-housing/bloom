@@ -103,3 +103,4 @@ memory-bank/
 # Terraform providers
 .terraform
 *.tfstate
+tsconfig.tsbuildinfo
