@@ -1,53 +1,46 @@
-import {
-  FeatureFlagEnum,
-  Listing,
-  Property,
-  PropertyCreate,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import SectionWithGrid from "../../components/shared/SectionWithGrid"
-import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { Field, Select, SelectOption, t, Textarea } from "@bloom-housing/ui-components"
-import { useForm } from "react-hook-form"
-import { addAsterisk, defaultFieldProps, fieldHasError } from "../../lib/helpers"
 import { useCallback, useContext } from "react"
+import { useForm } from "react-hook-form"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  Agency,
+  AgencyCreate,
+  FeatureFlagEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Field, Select, SelectOption, t } from "@bloom-housing/ui-components"
+import { addAsterisk, defaultFieldProps, fieldHasError } from "../../lib/helpers"
+import SectionWithGrid from "../../components/shared/SectionWithGrid"
 
-type PropertyDrawerProps = {
+type AgencyDrawerProps = {
   drawerOpen: boolean
-  editedProperty: Property | null
+  editedAgency: Agency | null
   isLoading?: boolean
-  listings?: Listing[]
   onDrawerClose: () => void
-  saveQuestion: (formattedData: PropertyCreate) => void
+  saveAgency: (formattedData: AgencyCreate) => void
 }
 
-type PropertyFormTypes = {
+type AgencyFormTypes = {
   name: string
-  description: string
-  url: string
-  urlTitle: string
   jurisdictions: {
     id: string
   }
 }
 
-export const PropertyDrawer = ({
+export const AgencyDrawer = ({
   drawerOpen,
-  editedProperty,
-  listings,
+  editedAgency,
   isLoading,
   onDrawerClose,
-  saveQuestion,
-}: PropertyDrawerProps) => {
+  saveAgency,
+}: AgencyDrawerProps) => {
   const { profile } = useContext(AuthContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, clearErrors, trigger, getValues } = useForm<PropertyFormTypes>()
-  const propertyHasListing = listings?.find(
-    (listing) => listing.property?.id === editedProperty?.id
-  )
+  const { register, errors, clearErrors, trigger, getValues } = useForm<AgencyFormTypes>()
 
   const eligibleJurisdictions = profile.jurisdictions.filter((j) =>
-    j.featureFlags?.some((flag) => flag.name === FeatureFlagEnum.enableProperties && flag.active)
+    j.featureFlags?.some(
+      (flag) => flag.name === FeatureFlagEnum.enableHousingAdvocate && flag.active
+    )
   )
 
   const jurisdictionOptions: SelectOption[] =
@@ -61,15 +54,15 @@ export const PropertyDrawer = ({
         ]
       : []
 
-  const defaultJurisdiction = editedProperty?.jurisdictions
-    ? editedProperty.jurisdictions.id
+  const defaultJurisdiction = editedAgency?.jurisdictions
+    ? editedAgency.jurisdictions.id
     : jurisdictionOptions.length !== 0
     ? jurisdictionOptions[1].value
     : null
 
   const defaultJurisdictionName =
     jurisdictionOptions.find((jurisdiction) => jurisdiction.value === defaultJurisdiction)?.label ||
-    editedProperty?.jurisdictions?.name
+    editedAgency?.jurisdictions?.name
 
   const handleSave = useCallback(async () => {
     const validated = await trigger()
@@ -79,28 +72,28 @@ export const PropertyDrawer = ({
       values.jurisdictions = { id: defaultJurisdiction }
     }
 
-    saveQuestion(values)
-  }, [trigger, getValues, defaultJurisdiction, saveQuestion])
+    saveAgency(values)
+  }, [trigger, getValues, defaultJurisdiction, saveAgency])
 
   return (
-    <Drawer isOpen={drawerOpen && !propertyHasListing} onClose={onDrawerClose}>
+    <Drawer isOpen={drawerOpen} onClose={onDrawerClose}>
       <Drawer.Header>
-        {t(editedProperty ? "properties.drawer.editTitle" : "properties.drawer.addTitle")}
+        {t(editedAgency ? "agencies.drawer.editTitle" : "agencies.drawer.addTitle")}
       </Drawer.Header>
       <Drawer.Content>
         <Card>
           <Card.Section>
             <p className="field-label seeds-m-be-label">{t("listings.requiredToSaveAsterisk")}</p>
-            <SectionWithGrid heading={t("properties.drawer.formTitle")}>
+            <SectionWithGrid heading={t("agencies.drawer.formTitle")}>
               <Grid.Row columns={3}>
                 <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     register={register}
-                    defaultValue={editedProperty?.name}
+                    defaultValue={editedAgency?.name}
                     validation={{ required: true }}
                     {...defaultFieldProps(
                       "name",
-                      t("properties.drawer.nameLabel"),
+                      t("agencies.drawer.nameLabel"),
                       [],
                       errors,
                       clearErrors,
@@ -110,62 +103,10 @@ export const PropertyDrawer = ({
                   />
                 </Grid.Cell>
               </Grid.Row>
-              <Grid.Row columns={3}>
-                <Grid.Cell className="seeds-grid-span-2">
-                  <Textarea
-                    fullWidth={true}
-                    register={register}
-                    defaultValue={editedProperty?.description}
-                    {...defaultFieldProps(
-                      "description",
-                      t("properties.drawer.descriptionLabel"),
-                      [],
-                      errors,
-                      clearErrors
-                    )}
-                  />
-                </Grid.Cell>
-              </Grid.Row>
-              <Grid.Row columns={3}>
-                <Grid.Cell>
-                  <Field
-                    register={register}
-                    placeholder="https://"
-                    defaultValue={editedProperty?.url}
-                    {...defaultFieldProps(
-                      "url",
-                      t("properties.drawer.urlLabel"),
-                      [],
-                      errors,
-                      clearErrors
-                    )}
-                    type="url"
-                    error={!!errors?.url}
-                    errorMessage={
-                      errors?.url?.type === "https"
-                        ? t("errors.urlHttpsError")
-                        : t("errors.urlError")
-                    }
-                  />
-                </Grid.Cell>
-                <Grid.Cell>
-                  <Field
-                    register={register}
-                    defaultValue={editedProperty?.urlTitle}
-                    {...defaultFieldProps(
-                      "urlTitle",
-                      t("properties.drawer.urlTitleLabel"),
-                      [],
-                      errors,
-                      clearErrors
-                    )}
-                  />
-                </Grid.Cell>
-              </Grid.Row>
               {profile.jurisdictions.length > 1 && (
                 <Grid.Row columns={3}>
                   <Grid.Cell>
-                    {editedProperty ? (
+                    {editedAgency ? (
                       <FieldValue label={t("t.jurisdiction")}>{defaultJurisdictionName}</FieldValue>
                     ) : (
                       <Select
@@ -202,7 +143,7 @@ export const PropertyDrawer = ({
           loadingMessage={isLoading && t("t.formSubmitted")}
           disabled={isLoading}
           onClick={handleSave}
-          id={"property-save-button"}
+          id={"agency-save-button"}
         >
           {t("t.save")}
         </Button>

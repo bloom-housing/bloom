@@ -3291,6 +3291,8 @@ export class AgencyService {
       /**  */
       limit?: number | "all"
       /**  */
+      search?: string
+      /**  */
       filter?: AgencyFilterParams[]
     } = {} as any,
     options: IRequestOptions = {}
@@ -3299,7 +3301,12 @@ export class AgencyService {
       let url = basePath + "/agency"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { page: params["page"], limit: params["limit"], filter: params["filter"] }
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        search: params["search"],
+        filter: params["filter"],
+      }
 
       axios(configs, resolve, reject)
     })
@@ -9831,6 +9838,9 @@ export interface UserFilterParams {
 
   /**  */
   isAdvocateUser?: boolean
+
+  /**  */
+  agencyId?: string
 }
 
 /** PaginatedUser */
@@ -10212,6 +10222,9 @@ export interface AgencyQueryParams {
 
   /**  */
   limit?: number | "all"
+
+  /**  */
+  search?: string
 
   /**  */
   filter?: string[]

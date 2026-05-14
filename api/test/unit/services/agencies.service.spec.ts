@@ -270,11 +270,15 @@ describe('Testing agency service', () => {
         where: {
           AND: [
             {
-              jurisdictions: {
-                is: {
-                  id: jurisdictionId,
+              OR: [
+                {
+                  jurisdictions: {
+                    id: {
+                      equals: jurisdictionId,
+                    },
+                  },
                 },
-              },
+              ],
             },
           ],
         },
@@ -306,11 +310,15 @@ describe('Testing agency service', () => {
       expect(where).toEqual({
         AND: [
           {
-            jurisdictions: {
-              is: {
-                id: jurisdictionId,
+            OR: [
+              {
+                jurisdictions: {
+                  id: {
+                    equals: jurisdictionId,
+                  },
+                },
               },
-            },
+            ],
           },
         ],
       });
@@ -564,14 +572,40 @@ describe('Testing agency service', () => {
         ...mockAgency(1, new Date(), randomUUID()),
         id: randID,
       });
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(0);
       prisma.agency.delete = jest.fn();
 
       await service.deleteOne({ id: randID });
+      expect(prisma.userAccounts.count).toHaveBeenCalledWith({
+        where: {
+          agencyId: randID,
+        },
+      });
       expect(prisma.agency.delete).toHaveBeenCalledWith({
         where: {
           id: randID,
         },
       });
+    });
+
+    it('should throw error when agency has associated users', async () => {
+      const randID = randomUUID();
+      prisma.agency.findUnique = jest.fn().mockResolvedValue({
+        ...mockAgency(1, new Date(), randomUUID()),
+        id: randID,
+      });
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
+      prisma.agency.delete = jest.fn();
+
+      await expect(
+        async () => await service.deleteOne({ id: randID }),
+      ).rejects.toThrow(BadRequestException);
+      await expect(
+        async () => await service.deleteOne({ id: randID }),
+      ).rejects.toThrowError(
+        'This agency is currently associated with user(s) and is unable to be deleted.',
+      );
+      expect(prisma.agency.delete).not.toHaveBeenCalled();
     });
   });
 });

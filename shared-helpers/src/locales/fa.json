@@ -706,6 +706,7 @@
   "errors.givenNameError": "لطفا نام دلخواه را وارد کنید",
   "errors.householdTooBig": "اندازه خانه شما خیلی بزرگ است.",
   "errors.householdTooSmall": "اندازه خانه شما خیلی کوچک است.",
+  "errors.invalidListing.redirect": "این آگهی موجود نیست",
   "errors.lastNameError": "لطفا نام خانوادگی را وارد کنید",
   "errors.maxLength": "نباید بیشتر از %{length} کاراکتر باشد.",
   "errors.maxLessThanMinRentError": "حداکثر اجاره باید بزرگتر یا مساوی حداقل اجاره باشد",

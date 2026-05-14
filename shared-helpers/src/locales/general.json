@@ -705,6 +705,7 @@
   "errors.givenNameError": "Please enter a given name",
   "errors.householdTooBig": "Your household size is too big.",
   "errors.householdTooSmall": "Your household size is too small.",
+  "errors.invalidListing.redirect": "This listing is unavailable",
   "errors.lastNameError": "Please enter a last name",
   "errors.maxLength": "Must not be more than %{length} characters.",
   "errors.maxLessThanMinRentError": "Max rent must be greater than or equal to min rent",

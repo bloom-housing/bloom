@@ -709,6 +709,7 @@
   "errors.givenNameError": "Mangyaring magpasok ng isang ibinigay na pangalan",
   "errors.householdTooBig": "Napakalaki ng iyong sambahayan.",
   "errors.householdTooSmall": "Napakaliit ng iyong sambahayan.",
+  "errors.invalidListing.redirect": "Hindi magagamit ang listahang ito",
   "errors.lastNameError": "Mangyaring maglagay ng apelyido",
   "errors.maxLength": "Hindi dapat higit sa %{length} na character.",
   "errors.maxLessThanMinRentError": "Ang max na upa ay dapat na mas malaki kaysa o katumbas ng min na upa",

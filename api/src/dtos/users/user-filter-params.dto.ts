@@ -1,6 +1,6 @@
 import { Expose, Transform } from 'class-transformer';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class UserFilterParams {
@@ -25,4 +25,12 @@ export class UserFilterParams {
   )
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   isAdvocateUser?: boolean;
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: String,
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  agencyId?: string;
 }

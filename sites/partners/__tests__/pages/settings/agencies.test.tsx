@@ -1,30 +1,27 @@
+import dayjs from "dayjs"
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { screen, within } from "@testing-library/react"
 import { rest } from "msw"
+import { screen, within } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { AuthContext, MessageContext, MessageProvider } from "@bloom-housing/shared-helpers"
 import { Toast } from "@bloom-housing/ui-seeds"
 import {
+  Agency,
+  AgencyService,
   FeatureFlagEnum,
-  PropertiesService,
-  Property,
-  ListingsService,
+  UserService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { mockNextRouter, render } from "../../testUtils"
-import SettingsProperties from "../../../src/pages/settings/properties"
 import { jurisdiction, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import dayjs from "dayjs"
-import userEvent from "@testing-library/user-event"
 import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
+import SettingsAgencies from "../../../src/pages/settings/agencies"
+import { mockNextRouter, render } from "../../testUtils"
 
 const server = setupServer()
 
-const mockProperty: Property = {
-  id: "property1",
-  name: "Test Property",
-  description: "Test Description",
-  url: "http://example.com",
-  urlTitle: "Example",
+const mockAgency: Agency = {
+  id: "agency1",
+  name: "Test Agency",
   createdAt: new Date(Date.now()),
   updatedAt: new Date(Date.now()),
   jurisdictions: {
@@ -56,10 +53,10 @@ const ToastProvider = (props: React.PropsWithChildren<ToastProps>) => {
   )
 }
 
-describe("<SettingsProperties>", () => {
-  it("should render `none` when no properties exist", () => {
+describe("<SettingsAgencies>", () => {
+  it("should render empty state when no agencies exist", () => {
     server.use(
-      rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/agency", (_req, res, ctx) => {
         return res(ctx.json({ items: [], meta: { totalItems: 0, totalPages: 0 } }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
@@ -75,35 +72,32 @@ describe("<SettingsProperties>", () => {
             jurisdictions: [],
             listings: [],
           },
-          propertiesService: new PropertiesService(),
+          agencyService: new AgencyService(),
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            featureFlag === FeatureFlagEnum.enableProperties,
+            featureFlag === FeatureFlagEnum.enableHousingAdvocate,
         }}
       >
-        <SettingsProperties />
+        <SettingsAgencies />
       </AuthContext.Provider>
     )
 
     expect(screen.getByRole("heading", { level: 1, name: "Settings" })).toBeInTheDocument()
-    expect(screen.getByRole("tab", { name: "Properties" })).toBeInTheDocument()
-    expect(screen.getByRole("tab", { name: "Preferences" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Agencies" })).toBeInTheDocument()
 
-    expect(screen.getByRole("button", { name: "Add property" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Add agency" })).toBeInTheDocument()
 
     const headers = screen.getAllByRole("columnheader")
-    expect(headers).toHaveLength(5)
+    expect(headers).toHaveLength(3)
     expect(headers[0]).toHaveTextContent("Name")
-    expect(headers[1]).toHaveTextContent("Description")
-    expect(headers[2]).toHaveTextContent("URL")
-    expect(headers[3]).toHaveTextContent("Update date")
-    expect(headers[4]).toHaveTextContent("Actions")
+    expect(headers[1]).toHaveTextContent("Update date")
+    expect(headers[2]).toHaveTextContent("Actions")
 
     expect(screen.queryAllByRole("gridcell")).toHaveLength(0)
   })
 
-  it("should not render tabs if only properties is on", async () => {
+  it("should not render tabs if only agencies is on", async () => {
     server.use(
-      rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/agency", (_req, res, ctx) => {
         return res(ctx.json({ items: [], meta: { totalItems: 0, totalPages: 0 } }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
@@ -119,30 +113,29 @@ describe("<SettingsProperties>", () => {
             jurisdictions: [],
             listings: [],
           },
-          propertiesService: new PropertiesService(),
+          agencyService: new AgencyService(),
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) => {
-            if (featureFlag === FeatureFlagEnum.enableProperties) return true
+            if (featureFlag === FeatureFlagEnum.enableHousingAdvocate) return true
             if (featureFlag === FeatureFlagEnum.disableListingPreferences) return true
             return false
           },
         }}
       >
-        <SettingsProperties />
+        <SettingsAgencies />
       </AuthContext.Provider>
     )
     expect(await screen.findByRole("heading", { name: "Settings" })).toBeInTheDocument()
     expect(screen.queryByRole("tablist")).not.toBeInTheDocument()
-    expect(screen.queryByRole("tab", { name: "Preferences" })).not.toBeInTheDocument()
   })
 
-  it("should render the properties table", async () => {
+  it("should render the agencies table", async () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/agency", (_req, res, ctx) => {
         return res(
           ctx.json({
-            items: [mockProperty],
+            items: [mockAgency],
             meta: { totalItems: 1, totalPages: 1 },
           })
         )
@@ -159,56 +152,46 @@ describe("<SettingsProperties>", () => {
             jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
             listings: [],
           },
-          propertiesService: new PropertiesService(),
+          agencyService: new AgencyService(),
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            featureFlag === FeatureFlagEnum.enableProperties,
+            featureFlag === FeatureFlagEnum.enableHousingAdvocate,
         }}
       >
-        <SettingsProperties />
+        <SettingsAgencies />
       </AuthContext.Provider>
     )
 
     const headers = screen.getAllByRole("columnheader")
-    expect(headers).toHaveLength(5)
+    expect(headers).toHaveLength(3)
     expect(headers[0]).toHaveTextContent("Name")
-    expect(headers[1]).toHaveTextContent("Description")
-    expect(headers[2]).toHaveTextContent("URL")
-    expect(headers[3]).toHaveTextContent("Update date")
-    expect(headers[4]).toHaveTextContent("Actions")
+    expect(headers[1]).toHaveTextContent("Update date")
+    expect(headers[2]).toHaveTextContent("Actions")
 
     const cells = await screen.findAllByRole("gridcell")
 
-    expect(cells).toHaveLength(5)
-    expect(cells[0]).toHaveTextContent(mockProperty.name)
-    expect(cells[1]).toHaveTextContent(mockProperty.description)
-    const firstRowUrl = await within(cells[2]).findByRole("link", { name: mockProperty.url })
-    expect(firstRowUrl).toBeInTheDocument()
-    expect(firstRowUrl).toHaveAttribute("href", mockProperty.url)
-    expect(cells[3]).toHaveTextContent(dayjs(mockProperty.updatedAt).format("MM/DD/YYYY"))
-    const firstRowActions = await within(cells[4]).findAllByRole("button")
-    expect(firstRowActions).toHaveLength(3)
+    expect(cells).toHaveLength(3)
+    expect(cells[0]).toHaveTextContent(mockAgency.name)
+    expect(cells[1]).toHaveTextContent(dayjs(mockAgency.updatedAt).format("MM/DD/YYYY"))
+    const firstRowActions = await within(cells[2]).findAllByRole("button")
+    expect(firstRowActions).toHaveLength(2)
     expect(firstRowActions[0]).toHaveAttribute(
       "data-testid",
-      `property-edit-icon: ${mockProperty.name}`
+      `agency-edit-icon: ${mockAgency.name}`
     )
     expect(firstRowActions[1]).toHaveAttribute(
       "data-testid",
-      `property-copy-icon: ${mockProperty.name}`
-    )
-    expect(firstRowActions[2]).toHaveAttribute(
-      "data-testid",
-      `property-delete-icon: ${mockProperty.name}`
+      `agency-delete-icon: ${mockAgency.name}`
     )
   })
 
   it("should render jurisdiction column when user has multiple jurisdictions", async () => {
     server.use(
-      rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/agency", (_req, res, ctx) => {
         return res(
           ctx.json({
             items: [
               {
-                ...mockProperty,
+                ...mockAgency,
                 jurisdictions: { id: "jurisdiction1", name: "Jurisdiction 1" },
               },
             ],
@@ -231,34 +214,32 @@ describe("<SettingsProperties>", () => {
             ],
             listings: [],
           },
-          propertiesService: new PropertiesService(),
+          agencyService: new AgencyService(),
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            featureFlag === FeatureFlagEnum.enableProperties,
+            featureFlag === FeatureFlagEnum.enableHousingAdvocate,
         }}
       >
-        <SettingsProperties />
+        <SettingsAgencies />
       </AuthContext.Provider>
     )
 
     const headers = screen.getAllByRole("columnheader")
-    expect(headers).toHaveLength(6)
+    expect(headers).toHaveLength(4)
     expect(headers[0]).toHaveTextContent("Name")
-    expect(headers[1]).toHaveTextContent("Description")
-    expect(headers[2]).toHaveTextContent("URL")
-    expect(headers[3]).toHaveTextContent("Jurisdiction")
-    expect(headers[4]).toHaveTextContent("Update date")
-    expect(headers[5]).toHaveTextContent("Actions")
+    expect(headers[1]).toHaveTextContent("Jurisdiction")
+    expect(headers[2]).toHaveTextContent("Update date")
+    expect(headers[3]).toHaveTextContent("Actions")
 
     const cells = await screen.findAllByRole("gridcell")
-    expect(cells[3]).toHaveTextContent(mockProperty.jurisdictions.name)
+    expect(cells[1]).toHaveTextContent(mockAgency.jurisdictions.name)
   })
 
   it("should open drawer when Add button is clicked", async () => {
     server.use(
-      rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/agency", (_req, res, ctx) => {
         return res(
           ctx.json({
-            items: [mockProperty],
+            items: [mockAgency],
             meta: { totalItems: 1, totalPages: 1 },
           })
         )
@@ -267,10 +248,10 @@ describe("<SettingsProperties>", () => {
         return res(ctx.json(user))
       })
     )
-    const enablePropertiesFlag = {
-      name: FeatureFlagEnum.enableProperties,
+    const enableHousingAdvocateFlag = {
+      name: FeatureFlagEnum.enableHousingAdvocate,
       active: true,
-      id: "ff-enable-properties",
+      id: "ff-enable-housing-advocate",
       createdAt: new Date(),
       updatedAt: new Date(),
       description: "",
@@ -287,23 +268,23 @@ describe("<SettingsProperties>", () => {
                 ...jurisdiction,
                 id: "jurisdiction1",
                 name: "Jurisdiction 1",
-                featureFlags: [...jurisdiction.featureFlags, enablePropertiesFlag],
+                featureFlags: [...jurisdiction.featureFlags, enableHousingAdvocateFlag],
               },
               {
                 ...jurisdiction,
                 id: "jurisdiction2",
                 name: "Jurisdiction 2",
-                featureFlags: [...jurisdiction.featureFlags, enablePropertiesFlag],
+                featureFlags: [...jurisdiction.featureFlags, enableHousingAdvocateFlag],
               },
             ],
             listings: [],
           },
-          propertiesService: new PropertiesService(),
+          agencyService: new AgencyService(),
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            featureFlag === FeatureFlagEnum.enableProperties,
+            featureFlag === FeatureFlagEnum.enableHousingAdvocate,
         }}
       >
-        <SettingsProperties />
+        <SettingsAgencies />
       </AuthContext.Provider>
     )
 
@@ -313,28 +294,21 @@ describe("<SettingsProperties>", () => {
     const addDialog = await screen.findByRole("dialog")
     expect(addDialog).toBeInTheDocument()
     expect(
-      within(addDialog).getByRole("heading", { level: 1, name: /add property/i })
+      within(addDialog).getByRole("heading", { level: 1, name: /add agency/i })
     ).toBeInTheDocument()
 
-    expect(within(addDialog).getByRole("textbox", { name: /property name/i })).toBeInTheDocument()
-    expect(
-      within(addDialog).getByRole("textbox", { name: /property description/i })
-    ).toBeInTheDocument()
-    expect(within(addDialog).getByRole("textbox", { name: /website url/i })).toBeInTheDocument()
-    expect(within(addDialog).getByRole("textbox", { name: /link title/i })).toBeInTheDocument()
-    expect(within(addDialog).getByRole("combobox", { name: /jurisdiction/i })).toBeInTheDocument()
-    expect(within(addDialog).getByRole("option", { name: "Select one" })).toBeInTheDocument()
-    expect(within(addDialog).getByRole("option", { name: "Jurisdiction 1" })).toBeInTheDocument()
-    expect(within(addDialog).getByRole("option", { name: "Jurisdiction 2" })).toBeInTheDocument()
+    expect(within(addDialog).getByRole("textbox", { name: /agency name/i })).toBeInTheDocument()
     expect(within(addDialog).getByRole("button", { name: "Save" })).toBeInTheDocument()
+    expect(screen.getAllByText("Jurisdiction 1").length).toBeGreaterThan(0)
+    expect(screen.getAllByText("Jurisdiction 2").length).toBeGreaterThan(0)
   })
 
-  it.only("should open drawer with property data when edit icon is clicked", async () => {
+  it("should open drawer with agency data when edit icon is clicked", async () => {
     server.use(
-      rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/agency", (_req, res, ctx) => {
         return res(
           ctx.json({
-            items: [mockProperty],
+            items: [mockAgency],
             meta: { totalItems: 1, totalPages: 1 },
           })
         )
@@ -354,59 +328,55 @@ describe("<SettingsProperties>", () => {
             ],
             listings: [],
           },
-          propertiesService: new PropertiesService(),
+          agencyService: new AgencyService(),
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            featureFlag === FeatureFlagEnum.enableProperties,
+            featureFlag === FeatureFlagEnum.enableHousingAdvocate,
         }}
       >
-        <SettingsProperties />
+        <SettingsAgencies />
       </AuthContext.Provider>
     )
 
-    await screen.findByText(mockProperty.name)
-    const editButton = await screen.findByTestId(`property-edit-icon: ${mockProperty.name}`)
+    await screen.findByText(mockAgency.name)
+    const editButton = await screen.findByTestId(`agency-edit-icon: ${mockAgency.name}`)
     await userEvent.click(editButton)
 
     const editDialog = await screen.findByRole("dialog")
-    expect(editDialog)
-    const labelInput = within(editDialog).getByRole("textbox", { name: /property name/i })
-    expect(labelInput).toHaveValue(mockProperty.name)
-    const descriptionInput = within(editDialog).getByRole("textbox", {
-      name: /property description/i,
-    })
-    expect(descriptionInput).toHaveValue(mockProperty.description)
-    const urlInput = within(editDialog).getByRole("textbox", { name: /website url/i })
-    expect(urlInput).toHaveValue(mockProperty.url)
-    const titleInput = within(editDialog).getByRole("textbox", { name: /link title/i })
-    expect(titleInput).toHaveValue(mockProperty.urlTitle)
+    expect(editDialog).toBeInTheDocument()
+    expect(
+      within(editDialog).getByRole("heading", { level: 1, name: /edit agency/i })
+    ).toBeInTheDocument()
+
+    const nameInput = within(editDialog).getByRole("textbox", { name: /agency name/i })
+    expect(nameInput).toHaveValue(mockAgency.name)
   })
 
-  it("should create a property successfully", async () => {
-    const newProperty: Property = {
-      ...mockProperty,
-      id: "new-property",
-      name: "New Property",
+  it("should create an agency successfully", async () => {
+    const newAgency: Agency = {
+      ...mockAgency,
+      id: "new-agency",
+      name: "New Agency",
     }
 
     server.use(
-      rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/agency", (_req, res, ctx) => {
         return res(
           ctx.json({
-            items: [mockProperty],
+            items: [mockAgency],
             meta: { totalItems: 1, totalPages: 1 },
           })
         )
       }),
-      rest.get("http://localhost/api/adapter/properties", (_req, res, ctx) => {
+      rest.get("http://localhost/api/adapter/agency", (_req, res, ctx) => {
         return res(
           ctx.json({
-            items: [newProperty],
+            items: [newAgency],
             meta: { totalItems: 1, totalPages: 1 },
           })
         )
       }),
-      rest.post("http://localhost/api/adapter/properties", (_req, res, ctx) => {
-        return res(ctx.json(newProperty))
+      rest.post("http://localhost/api/adapter/agency", (_req, res, ctx) => {
+        return res(ctx.json(newAgency))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(ctx.json(user))
@@ -422,12 +392,12 @@ describe("<SettingsProperties>", () => {
               jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
               listings: [],
             },
-            propertiesService: new PropertiesService(),
+            agencyService: new AgencyService(),
             doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-              featureFlag === FeatureFlagEnum.enableProperties,
+              featureFlag === FeatureFlagEnum.enableHousingAdvocate,
           }}
         >
-          <SettingsProperties />
+          <SettingsAgencies />
         </AuthContext.Provider>
       </ToastProvider>
     )
@@ -438,13 +408,8 @@ describe("<SettingsProperties>", () => {
     const addDrawer = await screen.findByRole("dialog")
     expect(addDrawer).toBeInTheDocument()
 
-    expect(
-      within(addDrawer).getByRole("heading", { level: 1, name: /add property/i })
-    ).toBeInTheDocument()
-
-    const labelInput = within(addDrawer).getByRole("textbox", { name: /property name/i })
-    expect(labelInput).toBeInTheDocument()
-    await userEvent.type(labelInput, "New Property")
+    const nameInput = within(addDrawer).getByRole("textbox", { name: /agency name/i })
+    await userEvent.type(nameInput, "New Agency")
 
     const saveButton = screen.getByRole("button", { name: /save/i })
     await userEvent.click(saveButton)
@@ -454,68 +419,41 @@ describe("<SettingsProperties>", () => {
     ).not.toBeInTheDocument()
 
     const cells = await screen.findAllByRole("gridcell")
-
-    expect(cells).toHaveLength(5)
-    expect(cells[0]).toHaveTextContent(newProperty.name)
-    expect(cells[1]).toHaveTextContent(newProperty.description)
-    const firstRowUrl = await within(cells[2]).findByRole("link", { name: newProperty.url })
-    expect(firstRowUrl).toBeInTheDocument()
-    expect(firstRowUrl).toHaveAttribute("href", newProperty.url)
-    expect(cells[3]).toHaveTextContent(dayjs(newProperty.updatedAt).format("MM/DD/YYYY"))
-    const firstRowActions = await within(cells[4]).findAllByRole("button")
-    expect(firstRowActions).toHaveLength(3)
-    expect(firstRowActions[0]).toHaveAttribute(
-      "data-testid",
-      `property-edit-icon: ${newProperty.name}`
-    )
-    expect(firstRowActions[1]).toHaveAttribute(
-      "data-testid",
-      `property-copy-icon: ${newProperty.name}`
-    )
-    expect(firstRowActions[2]).toHaveAttribute(
-      "data-testid",
-      `property-delete-icon: ${newProperty.name}`
-    )
+    expect(cells[0]).toHaveTextContent(newAgency.name)
   })
 
-  it("should update a property successfully", async () => {
+  it("should update an agency successfully", async () => {
     window.URL.createObjectURL = jest.fn()
-    const updatedProperty: Property = {
-      ...mockProperty,
-      name: "Updated Property",
-      description: "Updated Description",
+    const updatedAgency: Agency = {
+      ...mockAgency,
+      name: "Updated Agency",
     }
 
     server.use(
-      rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/agency", (_req, res, ctx) => {
         return res(
           ctx.json({
-            items: [mockProperty],
+            items: [mockAgency],
             meta: { totalItems: 1, totalPages: 1 },
           })
         )
       }),
-      rest.get("http://localhost/api/adapter/properties", (_req, res, ctx) => {
+      rest.get("http://localhost/api/adapter/agency", (_req, res, ctx) => {
         return res(
           ctx.json({
-            items: [updatedProperty],
+            items: [updatedAgency],
             meta: { totalItems: 1, totalPages: 1 },
           })
         )
       }),
-      rest.put("http://localhost/api/adapter/properties", (_req, res, ctx) => {
-        return res(ctx.json(updatedProperty))
+      rest.put("http://localhost/api/adapter/agency", (_req, res, ctx) => {
+        return res(ctx.json(updatedAgency))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(ctx.json(user))
       }),
-      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
-        return res(
-          ctx.json({
-            items: [],
-            meta: { totalItems: 0, totalPages: 0 },
-          })
-        )
+      rest.get("http://localhost:3100/user/list", (_req, res, ctx) => {
+        return res(ctx.json({ items: [], meta: { totalItems: 0, totalPages: 0 } }))
       })
     )
 
@@ -528,31 +466,29 @@ describe("<SettingsProperties>", () => {
               jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
               listings: [],
             },
-            listingsService: new ListingsService(),
-            propertiesService: new PropertiesService(),
+            agencyService: new AgencyService(),
+            userService: new UserService(),
             doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-              featureFlag === FeatureFlagEnum.enableProperties,
+              featureFlag === FeatureFlagEnum.enableHousingAdvocate,
           }}
         >
-          <SettingsProperties />
+          <SettingsAgencies />
         </AuthContext.Provider>
       </ToastProvider>
     )
 
-    expect(await screen.findByText(mockProperty.name)).toBeInTheDocument()
-    const editButton = await screen.findByTestId(`property-edit-icon: ${mockProperty.name}`)
-    expect(editButton).toBeInTheDocument()
+    expect(await screen.findByText(mockAgency.name)).toBeInTheDocument()
+    const editButton = await screen.findByTestId(`agency-edit-icon: ${mockAgency.name}`)
     await userEvent.click(editButton)
 
     const editDrawer = await screen.findByRole("dialog")
     expect(editDrawer).toBeInTheDocument()
-
     expect(
-      within(editDrawer).getByRole("heading", { level: 1, name: /edit property/i })
+      within(editDrawer).getByRole("heading", { level: 1, name: /edit agency/i })
     ).toBeInTheDocument()
 
-    const labelInput = within(editDrawer).getByRole("textbox", { name: /property name/i })
-    await userEvent.type(labelInput, updatedProperty.name)
+    const nameInput = within(editDrawer).getByRole("textbox", { name: /agency name/i })
+    await userEvent.type(nameInput, updatedAgency.name)
 
     const saveButton = screen.getByRole("button", { name: /save/i })
     await userEvent.click(saveButton)
@@ -561,8 +497,8 @@ describe("<SettingsProperties>", () => {
       screen.queryByText(/looks like something went wrong. please try again./i)
     ).not.toBeInTheDocument()
 
-    expect(await screen.queryByText(mockProperty.name)).not.toBeInTheDocument()
-    expect(await screen.findByText(updatedProperty.name)).toBeInTheDocument()
+    expect(await screen.queryByText(mockAgency.name)).not.toBeInTheDocument()
+    expect(await screen.findByText(updatedAgency.name)).toBeInTheDocument()
   })
 
   it("should redirect to unauthorized if user is partner", async () => {
@@ -571,18 +507,9 @@ describe("<SettingsProperties>", () => {
 
     server.use(
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(
-          ctx.json({
-            ...user,
-            userRoles: {
-              isPartner: false,
-              isAdmin: false,
-              isSupportAdmin: false,
-            },
-          })
-        )
+        return res(ctx.json(user))
       }),
-      rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/agency", (_req, res, ctx) => {
         return res(ctx.json([]))
       })
     )
@@ -602,12 +529,12 @@ describe("<SettingsProperties>", () => {
             jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
             listings: [],
           },
-          propertiesService: new PropertiesService(),
+          agencyService: new AgencyService(),
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            featureFlag === FeatureFlagEnum.enableProperties,
+            featureFlag === FeatureFlagEnum.enableHousingAdvocate,
         }}
       >
-        <SettingsProperties />
+        <SettingsAgencies />
       </AuthContext.Provider>
     )
 
@@ -615,7 +542,7 @@ describe("<SettingsProperties>", () => {
     expect(pushMock).toHaveBeenCalledWith("/unauthorized")
   })
 
-  it("should redirect to unauthorized if properties feature flag is off", async () => {
+  it("should redirect to unauthorized if housing advocate feature flag is off", async () => {
     window.URL.createObjectURL = jest.fn()
     const { pushMock } = mockNextRouter()
 
@@ -623,7 +550,7 @@ describe("<SettingsProperties>", () => {
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(ctx.json(user))
       }),
-      rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/agency", (_req, res, ctx) => {
         return res(ctx.json([]))
       })
     )
@@ -636,11 +563,11 @@ describe("<SettingsProperties>", () => {
             jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
             listings: [],
           },
-          propertiesService: new PropertiesService(),
+          agencyService: new AgencyService(),
           doJurisdictionsHaveFeatureFlagOn: () => false,
         }}
       >
-        <SettingsProperties />
+        <SettingsAgencies />
       </AuthContext.Provider>
     )
 
@@ -648,57 +575,18 @@ describe("<SettingsProperties>", () => {
     expect(pushMock).toHaveBeenCalledWith("/unauthorized")
   })
 
-  it("should render URL as a link in the table", async () => {
-    window.URL.createObjectURL = jest.fn()
-    server.use(
-      rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
-        return res(
-          ctx.json({
-            items: [mockProperty],
-            meta: { totalItems: 1, totalPages: 1 },
-          })
-        )
-      }),
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(user))
-      })
-    )
-    render(
-      <AuthContext.Provider
-        value={{
-          profile: {
-            ...user,
-            jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
-            listings: [],
-          },
-          propertiesService: new PropertiesService(),
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            featureFlag === FeatureFlagEnum.enableProperties,
-        }}
-      >
-        <SettingsProperties />
-      </AuthContext.Provider>
-    )
-
-    const cells = await screen.findAllByRole("gridcell")
-    const link = await within(cells[2]).findByRole("link", { name: mockProperty.url })
-    expect(link).toHaveAttribute("href", mockProperty.url)
-    expect(link).toHaveAttribute("target", "_blank")
-    expect(link).toHaveTextContent(mockProperty.url)
-  })
-
   it("should display 'None' when updatedAt is missing", async () => {
     window.URL.createObjectURL = jest.fn()
-    const propertyWithoutDate = {
-      ...mockProperty,
+    const agencyWithoutDate = {
+      ...mockAgency,
       updatedAt: null,
-    } as Property
+    } as Agency
 
     server.use(
-      rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/agency", (_req, res, ctx) => {
         return res(
           ctx.json({
-            items: [propertyWithoutDate],
+            items: [agencyWithoutDate],
             meta: { totalItems: 1, totalPages: 1 },
           })
         )
@@ -715,17 +603,17 @@ describe("<SettingsProperties>", () => {
             jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
             listings: [],
           },
-          propertiesService: new PropertiesService(),
+          agencyService: new AgencyService(),
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            featureFlag === FeatureFlagEnum.enableProperties,
+            featureFlag === FeatureFlagEnum.enableHousingAdvocate,
         }}
       >
-        <SettingsProperties />
+        <SettingsAgencies />
       </AuthContext.Provider>
     )
 
     const cells = await screen.findAllByRole("gridcell")
-    const updatedCell = cells[3]
+    const updatedCell = cells[1]
     expect(updatedCell).toHaveTextContent("None")
   })
 })

@@ -7,7 +7,9 @@ import tz from "dayjs/plugin/timezone"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import {
+  AgencyFilterParams,
   ApplicationOrderByKeys,
+  EnumAgencyFilterParamsComparison,
   EnumListingFilterParamsComparison,
   EnumMultiselectQuestionFilterParamsComparison,
   EnumPropertyFilterParamsComparison,
@@ -782,6 +784,49 @@ export function useWatchOnFormNumberFieldsChange(
     return () => clearTimeout(timeoutId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldToTriggerWatch.join(","), fieldValuesToWatch.join(","), trigger])
+}
+
+type UseAgenciesListProps = PaginationProps & {
+  search?: string
+  jurisdictions?: string
+}
+
+export function useAgenciesList({ page, limit, search, jurisdictions }: UseAgenciesListProps) {
+  const filter: AgencyFilterParams[] = []
+  const params = {
+    page,
+    limit,
+    search,
+    filter,
+  }
+
+  if (search?.length < 3) {
+    delete params.search
+  } else {
+    Object.assign(params, { search })
+  }
+
+  params.filter.push({
+    $comparison: EnumAgencyFilterParamsComparison.IN,
+    jurisdiction: jurisdictions && jurisdictions !== "" ? jurisdictions : undefined,
+  })
+
+  const paramsString = qs.stringify(params)
+
+  const { agencyService } = useContext(AuthContext)
+
+  const fetcher = () => agencyService.list(params)
+
+  const cacheKey = `/api/adapter/agency?${paramsString}`
+
+  const { data, error } = useSWR(cacheKey, fetcher)
+
+  return {
+    cacheKey,
+    data,
+    loading: !error && !data,
+    error,
+  }
 }
 
 export function usePropertiesList({ page, limit, search, jurisdictions }: UsePropertiesListProps) {
