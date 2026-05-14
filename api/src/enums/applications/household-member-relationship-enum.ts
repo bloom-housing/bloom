@@ -15,4 +15,11 @@ export enum HouseholdMemberRelationship {
   friend = 'friend',
   other = 'other',
   aideOrAttendant = 'aideOrAttendant',
+  spousePartner = 'spousePartner',
+  girlfriendBoyfriend = 'girlfriendBoyfriend',
+  brotherSister = 'brotherSister',
+  auntUncle = 'auntUncle',
+  nephewNiece = 'nephewNiece',
+  grandparentGreatGrandparent = 'grandparentGreatGrandparent',
+  liveInAide = 'liveInAide',
 }

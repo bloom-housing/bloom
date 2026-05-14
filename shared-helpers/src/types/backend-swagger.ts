@@ -7926,6 +7926,9 @@ export interface JurisdictionCreate {
   visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
 
   /**  */
+  visibleHouseholdMemberRelationships: HouseholdMemberRelationship[]
+
+  /**  */
   regions: []
 
   /**  */
@@ -8011,6 +8014,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
+
+  /**  */
+  visibleHouseholdMemberRelationships: HouseholdMemberRelationship[]
 
   /**  */
   regions: []
@@ -8134,6 +8140,9 @@ export interface Jurisdiction {
 
   /**  */
   visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
+
+  /**  */
+  visibleHouseholdMemberRelationships: HouseholdMemberRelationship[]
 
   /**  */
   regions: []
@@ -10629,6 +10638,13 @@ export enum HouseholdMemberRelationship {
   "friend" = "friend",
   "other" = "other",
   "aideOrAttendant" = "aideOrAttendant",
+  "spousePartner" = "spousePartner",
+  "girlfriendBoyfriend" = "girlfriendBoyfriend",
+  "brotherSister" = "brotherSister",
+  "auntUncle" = "auntUncle",
+  "nephewNiece" = "nephewNiece",
+  "grandparentGreatGrandparent" = "grandparentGreatGrandparent",
+  "liveInAide" = "liveInAide",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
 export enum MultiselectQuestionOrderByKeys {

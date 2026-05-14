@@ -1,6 +1,7 @@
 import {
   ApplicationAccessibilityFeatureEnum,
   FeatureFlag,
+  HouseholdMemberRelationship,
   RaceEthnicityConfiguration,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import StepDefinition from "./StepDefinition"
@@ -24,4 +25,5 @@ export interface ApplicationFormConfig {
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
   visibleSpokenLanguages?: string[]
   visibleApplicationAccessibilityFeatures?: ApplicationAccessibilityFeatureEnum[]
+  visibleHouseholdMemberRelationships?: HouseholdMemberRelationship[]
 }
