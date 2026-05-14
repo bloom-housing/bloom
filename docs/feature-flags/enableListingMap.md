@@ -12,4 +12,4 @@ When true, a map is displayed on the listings page
 
 ## Images
 
-![image.png](./images/image%2057.png)
+![image.png](./images/image%2075.png)
