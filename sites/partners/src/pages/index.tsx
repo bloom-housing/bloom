@@ -120,6 +120,12 @@ export default function ListingsList() {
   const defaultJurisdiction =
     profile?.jurisdictions?.length === 1 ? profile.jurisdictions[0].id : null
 
+  const otherPortalsTitle = tIfExists("listings.otherPortals.title")
+  const otherPortalsPortal1Name = tIfExists("listings.otherPortals.portal1.name")
+  const otherPortalsPortal1Url = tIfExists("listings.otherPortals.portal1.url")
+  const otherPortalsPortal2Name = tIfExists("listings.otherPortals.portal2.name")
+  const otherPortalsPortal2Url = tIfExists("listings.otherPortals.portal2.url")
+
   const jurisdictions = profile?.jurisdictions || []
 
   const jurisdictionOptions: SelectOption[] = [
@@ -448,35 +454,27 @@ export default function ListingsList() {
             <Grid>
               <Grid.Row columns={3}>
                 <Grid.Cell className={"seeds-grid-span-2"}>
-                  {tIfExists("listings.otherPortals.title") && !defaultJurisdiction && (
+                  {otherPortalsTitle && !defaultJurisdiction && (
                     <div
                       className={"seeds-m-bs-4 border border-red-500 p-4"}
                       data-testid={"other-portals-banner"}
                     >
-                      <p>{tIfExists("listings.otherPortals.title")}</p>
+                      <p>{otherPortalsTitle}</p>
                       <ul>
-                        {tIfExists("listings.otherPortals.portal1.name") &&
-                          tIfExists("listings.otherPortals.portal1.url") && (
-                            <li>
-                              <Link
-                                href={tIfExists("listings.otherPortals.portal1.url")}
-                                target={"_blank"}
-                              >
-                                {tIfExists("listings.otherPortals.portal1.name")}
-                              </Link>
-                            </li>
-                          )}
-                        {tIfExists("listings.otherPortals.portal2.name") &&
-                          tIfExists("listings.otherPortals.portal2.url") && (
-                            <li>
-                              <Link
-                                href={tIfExists("listings.otherPortals.portal2.url")}
-                                target={"_blank"}
-                              >
-                                {tIfExists("listings.otherPortals.portal2.name")}
-                              </Link>
-                            </li>
-                          )}
+                        {otherPortalsPortal1Name && otherPortalsPortal1Url && (
+                          <li>
+                            <Link href={otherPortalsPortal1Url} target={"_blank"}>
+                              {otherPortalsPortal1Name}
+                            </Link>
+                          </li>
+                        )}
+                        {otherPortalsPortal2Name && otherPortalsPortal2Url && (
+                          <li>
+                            <Link href={otherPortalsPortal2Url} target={"_blank"}>
+                              {otherPortalsPortal2Name}
+                            </Link>
+                          </li>
+                        )}
                       </ul>
                     </div>
                   )}
