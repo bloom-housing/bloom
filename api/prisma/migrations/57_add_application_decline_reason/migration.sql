@@ -1,10 +1,12 @@
 -- CreateEnum
 CREATE TYPE "application_decline_reason_enum" AS ENUM (
-  'ageRestriction',
-  'incomeRestriction',
-  'unitRestriction',
-  'programRestriction',
+  'householdIncomeTooHigh',
+  'householdIncomeTooLow',
+  'householdSizeTooLarge',
+  'householdSizeTooSmall',
   'attemptedToContactNoResponse',
+  'applicantDeclinedUnit',
+  'doesNotMeetSeniorBuildingRequirement',
   'householdDoesNotNeedAccessibleUnit',
   'other'
 );

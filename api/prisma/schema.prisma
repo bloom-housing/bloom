@@ -2279,11 +2279,13 @@ enum ApplicationStatusEnum {
 }
 
 enum ApplicationDeclineReasonEnum {
-  ageRestriction
-  incomeRestriction
-  unitRestriction
-  programRestriction
+  householdIncomeTooHigh
+  householdIncomeTooLow
+  householdSizeTooLarge
+  householdSizeTooSmall
   attemptedToContactNoResponse
+  applicantDeclinedUnit
+  doesNotMeetSeniorBuildingRequirement
   householdDoesNotNeedAccessibleUnit
   other
 

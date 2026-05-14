@@ -10552,11 +10552,13 @@ export enum ApplicationStatusEnum {
 }
 
 export enum ApplicationDeclineReasonEnum {
-  "ageRestriction" = "ageRestriction",
-  "incomeRestriction" = "incomeRestriction",
-  "unitRestriction" = "unitRestriction",
-  "programRestriction" = "programRestriction",
+  "householdIncomeTooHigh" = "householdIncomeTooHigh",
+  "householdIncomeTooLow" = "householdIncomeTooLow",
+  "householdSizeTooLarge" = "householdSizeTooLarge",
+  "householdSizeTooSmall" = "householdSizeTooSmall",
   "attemptedToContactNoResponse" = "attemptedToContactNoResponse",
+  "applicantDeclinedUnit" = "applicantDeclinedUnit",
+  "doesNotMeetSeniorBuildingRequirement" = "doesNotMeetSeniorBuildingRequirement",
   "householdDoesNotNeedAccessibleUnit" = "householdDoesNotNeedAccessibleUnit",
   "other" = "other",
 }

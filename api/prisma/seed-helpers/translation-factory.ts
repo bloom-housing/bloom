@@ -117,13 +117,14 @@ const translations = (
             waitlistDeclined: 'Lista de espera - Rechazada',
           },
           declineReason: {
-            ageRestriction: 'Restricción de edad',
-            incomeRestriction: 'Restricción de ingresos',
-            unitRestriction:
-              'Restricción de unidad (p. ej., número de habitaciones y/o ocupación)',
-            programRestriction:
-              'Restricción de programa (p. ej., unidad CES, unidad para veteranos, unidad VASH, etc.)',
+            householdIncomeTooHigh: 'Ingresos del hogar demasiado altos',
+            householdIncomeTooLow: 'Ingresos del hogar demasiado bajos',
+            householdSizeTooLarge: 'Tamaño del hogar demasiado grande',
+            householdSizeTooSmall: 'Tamaño del hogar demasiado pequeño',
             attemptedToContactNoResponse: 'Intento de contacto; sin respuesta',
+            applicantDeclinedUnit: 'El solicitante rechazó la unidad',
+            doesNotMeetSeniorBuildingRequirement:
+              'No cumple con los requisitos del edificio para personas mayores',
             householdDoesNotNeedAccessibleUnit:
               'El hogar no necesita características de unidad accesible',
             other: 'Otro',
@@ -422,13 +423,14 @@ const translations = (
             waitlistDeclined: 'Wait list - Declined',
           },
           declineReason: {
-            ageRestriction: 'Age Restriction',
-            incomeRestriction: 'Income Restriction',
-            unitRestriction:
-              'Unit Restriction (e.g. bedroom count and/or occupancy)',
-            programRestriction:
-              'Program Restriction (e.g. CES unit, Veteran Unit, VASH unit, etc.)',
-            attemptedToContactNoResponse: 'Attempted to Contact; No Response',
+            householdIncomeTooHigh: 'Household income too high',
+            householdIncomeTooLow: 'Household income too low',
+            householdSizeTooLarge: 'Household size too large',
+            householdSizeTooSmall: 'Household size too small',
+            attemptedToContactNoResponse: 'Attempted to contact; no response',
+            applicantDeclinedUnit: 'Applicant declined unit',
+            doesNotMeetSeniorBuildingRequirement:
+              'Does not meet senior building requirement',
             householdDoesNotNeedAccessibleUnit:
               'Household does not need accessible unit features',
             other: 'Other',
