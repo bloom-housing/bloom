@@ -4,6 +4,8 @@ import { ListingFeaturesConfiguration } from '../../src/dtos/jurisdictions/listi
 import { RaceEthnicityConfiguration } from '../../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
 import { listingFactory } from '../seed-helpers/listing-factory';
 import { userFactory } from '../seed-helpers/user-factory';
+import { randomName } from 'prisma/seed-helpers/word-generator';
+import { randomInt } from 'crypto';
 
 export const seedListings = async (
   prismaClient: PrismaClient,
@@ -25,6 +27,18 @@ export const seedListings = async (
       ...params,
     });
     const savedListing = await prismaClient.listings.create({ data: listing });
+    let email = `partner-user-${savedListing.name
+      .toLowerCase()
+      .replaceAll(' ', '-')}@example.com`;
+    const savedUserAccount = prismaClient.userAccounts.findMany({
+      select: { id: true },
+      where: { email: email },
+    });
+    if (savedUserAccount.length) {
+      email = `partner-user-${savedListing.name
+        .toLowerCase()
+        .replaceAll(' ', '-')}${randomInt(10)}@example.com`;
+    }
     await prismaClient.userAccounts.create({
       data: await userFactory({
         roles: {
@@ -32,9 +46,7 @@ export const seedListings = async (
           isPartner: true,
           isJurisdictionalAdmin: false,
         },
-        email: `partner-user-${savedListing.name
-          .toLowerCase()
-          .replaceAll(' ', '-')}@example.com`,
+        email: email,
         confirmedAt: new Date(),
         jurisdictionIds: [savedListing.jurisdictionId],
         acceptedTerms: true,
