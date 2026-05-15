@@ -92,7 +92,7 @@ export const jurisdictionFactory = (
     ],
   visibleHouseholdMemberRelationships:
     optionalFields?.visibleHouseholdMemberRelationships || [
-      HouseholdMemberRelationship.spousePartner,
+      HouseholdMemberRelationship.spouse,
       HouseholdMemberRelationship.registeredDomesticPartner,
       HouseholdMemberRelationship.parent,
       HouseholdMemberRelationship.child,
