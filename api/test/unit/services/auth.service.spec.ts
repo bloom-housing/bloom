@@ -1059,9 +1059,7 @@ describe('Testing auth service', () => {
           },
           response as unknown as Response,
         ),
-    ).rejects.toThrowError(
-      `resetToken ${token} does not match user ${secondId}'s reset token (${secondToken})`,
-    );
+    ).rejects.toThrowError(`tokenExpired`);
 
     expect(prisma.userAccounts.update).not.toHaveBeenCalled();
   });
