@@ -337,6 +337,19 @@ describe("filter drawer helpers", () => {
       const backendFilters = encodeFilterDataToBackendFilters(filterData)
       expect(backendFilters).toStrictEqual([{ $comparison: "LIKE", name: "Listing Name" }])
     })
+    it("should return correct BE filters for bathrooms count", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.bathrooms]: {
+          "1": false,
+          "2": true,
+          "3": true,
+          "4": false,
+        },
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([{ $comparison: "IN", bathrooms: [2, 3] }])
+    })
     it("should return correct BE filters for all comparison types combined", () => {
       const filterData: FilterData = {
         [ListingFilterKeys.isVerified]: true,

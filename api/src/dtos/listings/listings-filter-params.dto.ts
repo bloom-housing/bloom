@@ -52,11 +52,12 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiPropertyOptional({
-    example: '2',
+    isArray: true,
+    example: [1],
+    default: [1],
   })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Number)
-  [ListingFilterKeys.bathrooms]?: number;
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default], each: true })
+  [ListingFilterKeys.bathrooms]?: number[];
 
   @Expose()
   @ApiPropertyOptional({

@@ -45,6 +45,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableCreditScreeningFee](./feature-flags/enableCreditScreeningFee.md) | When true, credit screening fee is enabled for listings |
 | [enableCustomListingNotifications](./feature-flags/enableCustomListingNotifications.md) | When true, users have access to custom notification settings |
 | [enableFaq](./feature-flags/enableFaq.md) | When true, a link to the FAQ page is displayed on the get assistance page |
+| [enableFilterByBathroom](./feature-flags/enableFilterByBathroom.md) | When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms |
 | [enableFullTimeStudentQuestion](./feature-flags/enableFullTimeStudentQuestion.md) | When true, the full time student question is displayed in the application form |
 | [enableGenderQuestion](./feature-flags/enableGenderQuestion.md) | When true, the gender identity question is displayed in the public and partner application demographics section |
 | [enableGeocodingPreferences](./feature-flags/enableGeocodingPreferences.md) | When true, preferences can be created with geocoding functionality and when an application is created/updated on a listing that is geocoding then the application gets geocoded |
