@@ -6,7 +6,10 @@ import { rest } from "msw"
 import { application, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import userEvent from "@testing-library/user-event"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { ApplicationsService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ApplicationsService,
+  LanguagesEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
 
@@ -43,6 +46,7 @@ describe("listing applications add page", () => {
           profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
             mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+          getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
         }}
       >
         <NewApplication />
@@ -105,6 +109,7 @@ describe("listing applications add page", () => {
           profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
             mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+          getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
         }}
       >
         <NewApplication />
@@ -135,6 +140,7 @@ describe("listing applications add page", () => {
           profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
             mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+          getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
         }}
       >
         <NewApplication />
