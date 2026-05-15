@@ -851,7 +851,8 @@ describe("listings", () => {
       document.cookie = "access-token-available=True"
       tIfExists.mockImplementation((key: string) => {
         const translations: Record<string, string> = {
-          "listings.otherPortals.title": "To add listings in other jurisdictions, use one of these portals:",
+          "listings.otherPortals.title":
+            "To add listings in other jurisdictions, use one of these portals:",
           "listings.otherPortals.portal1.name": "Other portal 1",
           "listings.otherPortals.portal1.url": "https://portal1.example.com",
           "listings.otherPortals.portal2.name": "Other portal 2",
@@ -885,7 +886,8 @@ describe("listings", () => {
       document.cookie = "access-token-available=True"
       tIfExists.mockImplementation((key: string) => {
         const translations: Record<string, string> = {
-          "listings.otherPortals.title": "To add listings in other jurisdictions, use one of these portals:",
+          "listings.otherPortals.title":
+            "To add listings in other jurisdictions, use one of these portals:",
           "listings.otherPortals.portal1.name": "Other portal 1",
           "listings.otherPortals.portal1.url": "https://portal1.example.com",
           "listings.otherPortals.portal2.name": "Other portal 2",
