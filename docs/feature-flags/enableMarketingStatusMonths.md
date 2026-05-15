@@ -11,3 +11,5 @@ When true, the 'marketing status' sub-section uses months instead of seasons (fu
 ## Additional Information
 
 ## Images
+
+![image.png](./images/image%2069.png)

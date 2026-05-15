@@ -106,6 +106,25 @@ selectViews.address = {
   },
 };
 
+selectViews.map = {
+  ...selectViews.name,
+  listingsBuildingAddress: true,
+  listingImages: {
+    include: {
+      assets: true,
+    },
+  },
+  reservedCommunityTypes: true,
+  units: {
+    select: {
+      monthlyRent: true,
+      unitTypes: {
+        select: { numBedrooms: true, name: true },
+      },
+    },
+  },
+};
+
 export const includeViews: Partial<
   Record<ListingViews, Prisma.ListingsInclude>
 > = {
@@ -3285,24 +3304,46 @@ export class ListingService implements OnModuleInit {
     return listing.jurisdictionId;
   }
 
-  async mapMarkers(): Promise<ListingMapMarker[]> {
-    const listingsRaw = await this.prisma.listings.findMany({
+  async mapMarkers(params: ListingsQueryParams): Promise<ListingMapMarker[]> {
+    const filters: ListingFilterParams[] = [
+      ...(params?.filter || []),
+      {
+        $comparison: Compare['='],
+        status: ListingsStatusEnum.active,
+      },
+    ];
+
+    const mapMarkersRaw = await this.prisma.listings.findMany({
       select: {
         id: true,
-        listingsBuildingAddress: true,
+        listingsBuildingAddress: {
+          select: {
+            latitude: true,
+            longitude: true,
+          },
+        },
       },
       where: {
-        status: ListingsStatusEnum.active,
+        ...this.buildWhereClause(filters, params?.search),
+        buildingAddressId: {
+          not: null,
+        },
+        listingsBuildingAddress: {
+          latitude: {
+            not: null,
+          },
+          longitude: {
+            not: null,
+          },
+        },
       },
     });
 
-    const listings = mapTo(Listing, listingsRaw);
-
-    return listings.map((listing) => {
+    return mapMarkersRaw.map((mapMarker) => {
       return {
-        id: listing.id,
-        lat: listing.listingsBuildingAddress?.latitude,
-        lng: listing.listingsBuildingAddress?.longitude,
+        id: mapMarker.id,
+        lat: Number(mapMarker.listingsBuildingAddress.latitude),
+        lng: Number(mapMarker.listingsBuildingAddress.longitude),
       } as ListingMapMarker;
     });
   }

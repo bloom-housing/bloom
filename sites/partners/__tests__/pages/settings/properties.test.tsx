@@ -267,14 +267,34 @@ describe("<SettingsProperties>", () => {
         return res(ctx.json(user))
       })
     )
+    const enablePropertiesFlag = {
+      name: FeatureFlagEnum.enableProperties,
+      active: true,
+      id: "ff-enable-properties",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      description: "",
+      jurisdictions: [],
+    }
+
     render(
       <AuthContext.Provider
         value={{
           profile: {
             ...user,
             jurisdictions: [
-              { id: "jurisdiction1", name: "Jurisdiction 1" } as Jurisdiction,
-              { id: "jurisdiction2", name: "Jurisdiction 2" } as Jurisdiction,
+              {
+                ...jurisdiction,
+                id: "jurisdiction1",
+                name: "Jurisdiction 1",
+                featureFlags: [...jurisdiction.featureFlags, enablePropertiesFlag],
+              },
+              {
+                ...jurisdiction,
+                id: "jurisdiction2",
+                name: "Jurisdiction 2",
+                featureFlags: [...jurisdiction.featureFlags, enablePropertiesFlag],
+              },
             ],
             listings: [],
           },

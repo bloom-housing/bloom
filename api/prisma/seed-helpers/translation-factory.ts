@@ -1,4 +1,5 @@
-import { LanguagesEnum, Prisma } from '@prisma/client';
+import { LanguagesEnum, Prisma, PrismaClient } from '@prisma/client';
+import * as lodash from 'lodash';
 
 const translations = (
   jurisdiction?: {
@@ -91,6 +92,8 @@ const translations = (
           summaryTitle: 'Resumen de cambios:',
           statusChange:
             'El estado de su solicitud ha cambiado de %{from} a %{to}',
+          declineReasonChange:
+            'El motivo de rechazo de su solicitud es %{value}',
           accessibleWaitListChange:
             'Su número de lista de espera accesible es %{value}',
           conventionalWaitListChange:
@@ -112,6 +115,19 @@ const translations = (
             receivedUnit: 'Unidad recibida',
             waitlist: 'Lista de espera',
             waitlistDeclined: 'Lista de espera - Rechazada',
+          },
+          declineReason: {
+            householdIncomeTooHigh: 'Ingresos del hogar demasiado altos',
+            householdIncomeTooLow: 'Ingresos del hogar demasiado bajos',
+            householdSizeTooLarge: 'Tamaño del hogar demasiado grande',
+            householdSizeTooSmall: 'Tamaño del hogar demasiado pequeño',
+            attemptedToContactNoResponse: 'Intento de contacto; sin respuesta',
+            applicantDeclinedUnit: 'El solicitante rechazó la unidad',
+            doesNotMeetSeniorBuildingRequirement:
+              'No cumple con los requisitos del edificio para personas mayores',
+            householdDoesNotNeedAccessibleUnit:
+              'El hogar no necesita características de unidad accesible',
+            other: 'Otro',
           },
         },
         advocateApproved: {
@@ -1041,6 +1057,7 @@ const translations = (
           summaryTitle: 'Summary of changes:',
           statusChange:
             'Your application status has changed from %{from} to %{to}',
+          declineReasonChange: 'Your application decline reason is %{value}',
           accessibleWaitListChange:
             'Your Accessible wait list number is %{value}',
           conventionalWaitListChange:
@@ -1061,6 +1078,19 @@ const translations = (
             receivedUnit: 'Received a unit',
             waitlist: 'Wait list',
             waitlistDeclined: 'Wait list - Declined',
+          },
+          declineReason: {
+            householdIncomeTooHigh: 'Household income too high',
+            householdIncomeTooLow: 'Household income too low',
+            householdSizeTooLarge: 'Household size too large',
+            householdSizeTooSmall: 'Household size too small',
+            attemptedToContactNoResponse: 'Attempted to contact; no response',
+            applicantDeclinedUnit: 'Applicant declined unit',
+            doesNotMeetSeniorBuildingRequirement:
+              'Does not meet senior building requirement',
+            householdDoesNotNeedAccessibleUnit:
+              'Household does not need accessible unit features',
+            other: 'Other',
           },
         },
         confirmation: {
@@ -1326,6 +1356,34 @@ const translations = (
       };
   }
 };
+
+export async function upsertTranslation(
+  prisma: PrismaClient,
+  data: Prisma.TranslationsCreateInput,
+): Promise<void> {
+  const jurisdictionId = data.jurisdictions?.connect?.id ?? null;
+  const { language } = data;
+
+  const existing = await prisma.translations.findFirst({
+    where: { language, jurisdictionId },
+  });
+
+  if (!existing) {
+    await prisma.translations.create({ data });
+    return;
+  }
+
+  const merged = lodash.merge(
+    {},
+    existing.translations as Record<string, unknown>,
+    data.translations as Record<string, unknown>,
+  );
+
+  await prisma.translations.update({
+    where: { id: existing.id },
+    data: { translations: merged as Prisma.InputJsonValue },
+  });
+}
 
 export const translationFactory = (optionalParams?: {
   jurisdiction?: {

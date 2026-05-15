@@ -15,6 +15,7 @@ import {
   constructHouseholdHeaders,
   constructMultiselectQuestionHeaders,
   convertDemographicGenderToReadable,
+  convertApplicationDeclineReasonToReadable,
   convertDemographicRaceToReadable,
   getExportHeaders,
   multiselectQuestionFormat,
@@ -418,6 +419,26 @@ describe('Testing application export helpers', () => {
       expect(JSON.stringify(headers)).toEqual(JSON.stringify(testHeaders));
     });
 
+    it('includes decline reason export headers when application status is enabled', () => {
+      const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
+        enableApplicationStatus: true,
+        enableReasonableAccommodations: true,
+      });
+
+      expect(headers).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: 'applicationDeclineReason',
+            label: 'Application Decline Reason',
+          }),
+          expect.objectContaining({
+            path: 'applicationDeclineReasonAdditionalDetails',
+            label: 'Application Decline Reason Additional Details',
+          }),
+        ]),
+      );
+    });
+
     it('should return csv headers with v2 multiselect questions', () => {
       const applicationSection =
         MultiselectQuestionsApplicationSectionEnum.preferences;
@@ -755,6 +776,25 @@ describe('Testing application export helpers', () => {
       );
       expect(convertDemographicGenderToReadable('preferNoResponse')).toEqual(
         'Prefer not to respond',
+      );
+    });
+  });
+
+  describe('Testing convertApplicationDeclineReasonToReadable', () => {
+    it('returns the readable decline reason for known enum keys', () => {
+      expect(
+        convertApplicationDeclineReasonToReadable('householdIncomeTooHigh'),
+      ).toEqual('Household income too high');
+      expect(
+        convertApplicationDeclineReasonToReadable(
+          'attemptedToContactNoResponse',
+        ),
+      ).toEqual('Attempted to contact; no response');
+    });
+
+    it('returns the original decline reason when no mapping exists', () => {
+      expect(convertApplicationDeclineReasonToReadable('customValue')).toEqual(
+        'customValue',
       );
     });
   });

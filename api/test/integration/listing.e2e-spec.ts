@@ -3458,14 +3458,23 @@ describe('Listing Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .get('/listings/mapMarkers')
-        .expect(200);
+        .post('/listings/mapMarkers')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({})
+        .expect(201);
 
       expect(res.body.length).toBeGreaterThanOrEqual(1);
 
       const ids = res.body.map((marker) => marker.id);
       expect(ids).toContain(listing.id);
       expect(ids).not.toContain(closedListing.id);
+
+      // Validate only ids and lat/lng are returned
+      expect(res.body[0]).toEqual({
+        id: ids[0],
+        lat: expect.any(Number),
+        lng: expect.any(Number),
+      });
     });
   });
 });

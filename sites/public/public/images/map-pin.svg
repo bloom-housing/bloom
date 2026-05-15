@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    viewBox="0 0 1080 1080" xml:space="preserve" width="50" height="50">
+    <defs>
+            <filter id="shadow" filterRes="200">
+                <feDropShadow dx="0" dy="0" stdDeviation="0.9" flood-color="black" flood-opacity="0.5" />
+            </filter>
+        </defs>
+    <g transform=" matrix(1 0 0 1 540 540)" id=" bee36b58-8a45-44d0-a91a-5c5aec964454">
+        <rect style=" stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1; visibility: hidden;" vector-effect=" non-scaling-stroke"  x=" -540" y=" -540" rx=" 0" ry=" 0" width=" 1080" height=" 1080" stroke=" #FFFFFF" />
+    </g>
+    <g transform=" matrix(1 0 0 1 540 540)" id=" 0ac6d638-099a-476e-b64b-ff71bc14f916" />
+    <g transform=" matrix(2.72 0 0 2.72 536.01 441.97)" id=" 069af094-c18c-4fc6-ae47-5dcc754107af">
+        <circle style=" stroke: rgb(0,0,0); stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" vector-effect=" non-scaling-stroke"  cx=" 0" cy=" 0" r=" 35" />
+    </g>
+    <g transform=" matrix(37.13 0 0 37.13 540 540)" id=" pin_fill_sharp_circle-[#634]">
+        <path style=" stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill-rule: nonzero; opacity: 1;" vector-effect=" non-scaling-stroke"  transform=" translate(-174, -5249)" d=" M 174 5248.219 C 172.895 5248.219 172 5247.324 172 5246.219 C 172 5245.114 172.895 5244.219 174 5244.219 C 175.105 5244.219 176 5245.114 176 5246.219 C 176 5247.324 175.105 5248.219 174 5248.219 M 174 5239 C 170.134 5239 167 5242.134 167 5246 C 167 5249.866 174 5259 174 5259 C 174 5259 181 5249.866 181 5246 C 181 5242.134 177.866 5239 174 5239" stroke-linecap=" round" stroke=" #FFFFFF" fill=" #205493" filter=" url(#shadow)" />
+    </g>
+    <g transform=" matrix(37.13 0 0 37.13 540 540)" id=" pin_fill_sharp_circle-[#634]">
+        <path style=" stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill-rule: nonzero; opacity: 1;" vector-effect=" non-scaling-stroke"  transform=" translate(-174, -5249)" d=" M 174 5248.219 C 172.895 5248.219 172 5247.324 172 5246.219 C 172 5245.114 172.895 5244.219 174 5244.219 C 175.105 5244.219 176 5245.114 176 5246.219 C 176 5247.324 175.105 5248.219 174 5248.219 M 174 5239 C 170.134 5239 167 5242.134 167 5246 C 167 5249.866 174 5259 174 5259 C 174 5259 181 5249.866 181 5246 C 181 5242.134 177.866 5239 174 5239" stroke-linecap=" round" stroke=" #FFFFFF" fill=" #205493"/>
+    </g>
+</svg>

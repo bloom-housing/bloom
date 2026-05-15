@@ -1070,10 +1070,10 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
     it('should succeed for mapMarkers endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/listings/mapMarkers`)
+        .post(`/listings/mapMarkers`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(201);
     });
   });
 
@@ -1476,7 +1476,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         .send(agencyData)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(401);
     });
 
     it('should error as unauthorized for update endpoint', async () => {
@@ -1497,7 +1497,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         .send(agencyUpdateData)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(401);
     });
 
     it('should error as unauthorized for delete endpoint', async () => {
@@ -1527,7 +1527,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         } as IdDTO)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(401);
     });
   });
 });
