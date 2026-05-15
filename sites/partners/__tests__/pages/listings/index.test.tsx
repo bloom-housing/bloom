@@ -14,6 +14,17 @@ import {
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
+jest.mock("@bloom-housing/shared-helpers", () => {
+  const actual = jest.requireActual("@bloom-housing/shared-helpers")
+  return {
+    ...actual,
+    tIfExists: jest.fn(actual.tIfExists),
+  }
+})
+
+const { tIfExists } = require("@bloom-housing/shared-helpers")
+const actual = jest.requireActual("@bloom-housing/shared-helpers")
+
 //Mock the jszip package used for Export
 const mockFile = jest.fn()
 let mockFolder: jest.Mock
@@ -86,6 +97,8 @@ beforeAll(() => {
 afterEach(() => {
   server.resetHandlers()
   window.sessionStorage.clear()
+  tIfExists.mockReset()
+  tIfExists.mockImplementation(actual.tIfExists)
 })
 
 afterAll(() => server.close())
@@ -780,6 +793,151 @@ describe("listings", () => {
         pathname: "/listings/add",
         query: { jurisdictionId: "id1" },
       })
+    })
+  })
+
+  describe("other portals banner", () => {
+    const multipleJurisdictionHandlers = [
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { id: "user1", isAdmin: true, isPartner: false },
+            jurisdictions: [
+              {
+                id: "id1",
+                name: "JurisdictionA",
+                featureFlags: [],
+              } as Jurisdiction,
+              {
+                id: "id2",
+                name: "JurisdictionB",
+                featureFlags: [],
+              } as Jurisdiction,
+            ],
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+    ]
+
+    it("should not show the other portals banner when translation key does not exist", async () => {
+      window.URL.createObjectURL = jest.fn()
+      document.cookie = "access-token-available=True"
+      tIfExists.mockReturnValue(null)
+      server.use(...multipleJurisdictionHandlers)
+
+      render(<ListingsList />)
+
+      const addListingButton = await screen.findByRole("button", { name: "Add listing" })
+      await userEvent.click(addListingButton)
+
+      expect(
+        screen.getByRole("heading", { level: 1, name: "Select jurisdiction" })
+      ).toBeInTheDocument()
+      expect(screen.queryByTestId("other-portals-banner")).not.toBeInTheDocument()
+    })
+
+    it("should show the other portals banner with title and links when translation keys exist", async () => {
+      window.URL.createObjectURL = jest.fn()
+      document.cookie = "access-token-available=True"
+      tIfExists.mockImplementation((key: string) => {
+        const translations: Record<string, string> = {
+          "listings.otherPortals.title":
+            "To add listings in other jurisdictions, use one of these portals:",
+          "listings.otherPortals.portal1.name": "Other portal 1",
+          "listings.otherPortals.portal1.url": "https://portal1.example.com",
+          "listings.otherPortals.portal2.name": "Other portal 2",
+          "listings.otherPortals.portal2.url": "https://portal2.example.com",
+        }
+        return translations[key] ?? actual.tIfExists(key)
+      })
+      server.use(...multipleJurisdictionHandlers)
+
+      render(<ListingsList />)
+
+      const addListingButton = await screen.findByRole("button", { name: "Add listing" })
+      await userEvent.click(addListingButton)
+
+      expect(screen.getByTestId("other-portals-banner")).toBeInTheDocument()
+      expect(
+        screen.getByText("To add listings in other jurisdictions, use one of these portals:")
+      ).toBeInTheDocument()
+      expect(screen.getByRole("link", { name: "Other portal 1" })).toHaveAttribute(
+        "href",
+        "https://portal1.example.com"
+      )
+      expect(screen.getByRole("link", { name: "Other portal 2" })).toHaveAttribute(
+        "href",
+        "https://portal2.example.com"
+      )
+    })
+
+    it("should not show the other portals banner when user has only one jurisdiction", async () => {
+      window.URL.createObjectURL = jest.fn()
+      document.cookie = "access-token-available=True"
+      tIfExists.mockImplementation((key: string) => {
+        const translations: Record<string, string> = {
+          "listings.otherPortals.title":
+            "To add listings in other jurisdictions, use one of these portals:",
+          "listings.otherPortals.portal1.name": "Other portal 1",
+          "listings.otherPortals.portal1.url": "https://portal1.example.com",
+          "listings.otherPortals.portal2.name": "Other portal 2",
+          "listings.otherPortals.portal2.url": "https://portal2.example.com",
+        }
+        return translations[key] ?? actual.tIfExists(key)
+      })
+      server.use(
+        rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+          return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+        }),
+        rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+          return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+        }),
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(
+            ctx.json({
+              id: "user1",
+              userRoles: { id: "user1", isAdmin: true, isPartner: false },
+              jurisdictions: [
+                {
+                  id: "id1",
+                  name: "JurisdictionA",
+                  featureFlags: [
+                    {
+                      id: "id_1",
+                      name: FeatureFlagEnum.enableNonRegulatedListings,
+                      active: true,
+                    },
+                  ],
+                } as Jurisdiction,
+              ],
+            })
+          )
+        }),
+        rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+          return res(ctx.json(""))
+        })
+      )
+
+      render(<ListingsList />)
+
+      const addListingButton = await screen.findByRole("button", { name: "Add listing" })
+      await userEvent.click(addListingButton)
+
+      // When user has only one jurisdiction, the modal shows "Select Listing Type" not "Select jurisdiction"
+      expect(
+        screen.getByRole("heading", { level: 1, name: "Select Listing Type" })
+      ).toBeInTheDocument()
+      expect(screen.queryByTestId("other-portals-banner")).not.toBeInTheDocument()
     })
   })
 })

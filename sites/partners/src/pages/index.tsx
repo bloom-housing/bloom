@@ -5,10 +5,10 @@ import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
-import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
+import { Button, Dialog, Grid, Icon, Link } from "@bloom-housing/ui-seeds"
 import { t, Select, SelectOption, Field } from "@bloom-housing/ui-components"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
-import { AuthContext, Form } from "@bloom-housing/shared-helpers"
+import { AuthContext, Form, tIfExists } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
@@ -17,6 +17,7 @@ import {
 import { useListingExport, useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
+import styles from "./index.module.scss"
 
 class formatLinkCell {
   link: HTMLAnchorElement
@@ -119,6 +120,12 @@ export default function ListingsList() {
 
   const defaultJurisdiction =
     profile?.jurisdictions?.length === 1 ? profile.jurisdictions[0].id : null
+
+  const otherPortalsTitle = tIfExists("listings.otherPortals.title")
+  const otherPortalsPortal1Name = tIfExists("listings.otherPortals.portal1.name")
+  const otherPortalsPortal1Url = tIfExists("listings.otherPortals.portal1.url")
+  const otherPortalsPortal2Name = tIfExists("listings.otherPortals.portal2.name")
+  const otherPortalsPortal2Url = tIfExists("listings.otherPortals.portal2.url")
 
   const jurisdictions = profile?.jurisdictions || []
 
@@ -446,9 +453,33 @@ export default function ListingsList() {
           <Dialog.Content id="listing-select-dialog-content">
             {t("listings.selectJurisdictionContent")}
             <Grid>
+              <Grid.Row className={"seeds-m-bs-4"}>
+                <Grid.Cell>
+                  {otherPortalsTitle && !defaultJurisdiction && (
+                    <div
+                      className={styles["other-portals-banner"]}
+                      data-testid={"other-portals-banner"}
+                    >
+                      <p>{otherPortalsTitle}</p>
+                      <ul>
+                        {otherPortalsPortal1Name && otherPortalsPortal1Url && (
+                          <li>
+                            <Link href={otherPortalsPortal1Url}>{otherPortalsPortal1Name}</Link>
+                          </li>
+                        )}
+                        {otherPortalsPortal2Name && otherPortalsPortal2Url && (
+                          <li>
+                            <Link href={otherPortalsPortal2Url}>{otherPortalsPortal2Name}</Link>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  )}
+                </Grid.Cell>
+              </Grid.Row>
               <Grid.Row columns={3}>
                 <Grid.Cell className={"seeds-grid-span-2"}>
-                  <div className={`${defaultJurisdiction ? "hidden" : ""} seeds-m-bs-4`}>
+                  <div className={`${defaultJurisdiction ? "hidden" : ""}`}>
                     <Select
                       id={"jurisdiction"}
                       defaultValue={defaultJurisdiction}

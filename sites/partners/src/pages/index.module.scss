@@ -1,0 +1,10 @@
+.other-portals-banner {
+  border: var(--seeds-border-2) solid var(--seeds-color-alert);
+  padding: var(--seeds-s4);
+
+  ul {
+    list-style-type: disc;
+    margin-block-start: var(--seeds-s2);
+    padding-left: var(--seeds-s5);
+  }
+}
