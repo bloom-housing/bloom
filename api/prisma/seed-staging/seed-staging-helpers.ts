@@ -30,11 +30,11 @@ export const seedListings = async (
     let email = `partner-user-${savedListing.name
       .toLowerCase()
       .replaceAll(' ', '-')}@example.com`;
-    const savedUserAccount = prismaClient.userAccounts.findMany({
+    const existingUser = await prismaClient.userAccounts.findFirst({
       select: { id: true },
       where: { email: email },
     });
-    if (savedUserAccount.length) {
+    if (existingUser) {
       email = `partner-user-${savedListing.name
         .toLowerCase()
         .replaceAll(' ', '-')}${randomInt(10)}@example.com`;

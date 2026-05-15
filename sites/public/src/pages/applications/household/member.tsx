@@ -23,7 +23,6 @@ import {
   OnClientSide,
   PageView,
   pushGtmEvent,
-  relationshipKeys,
   stateKeys,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
@@ -96,6 +95,11 @@ const ApplicationMember = () => {
   )
 
   const disableWorkInRegion = isFeatureFlagOn(conductor.config, FeatureFlagEnum.disableWorkInRegion)
+
+  const relationshipKeys =
+    conductor.config.visibleHouseholdMemberRelationships?.length > 0
+      ? ["", ...conductor.config.visibleHouseholdMemberRelationships]
+      : ["", ...Object.values(HouseholdMemberRelationship)]
 
   if (router.query?.memberId) {
     memberId = parseInt(router.query?.memberId.toString())
