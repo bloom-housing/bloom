@@ -1,0 +1,18 @@
+.form-section-container {
+  margin-inline: auto;
+  max-width: 100%;
+
+  &-tabbed {
+    margin-inline: unset;
+
+    @media (min-width: theme("screens.sm")) {
+      margin-bottom: var(--seeds-s20);
+      max-width: var(--seeds-width-lg);
+    }
+  }
+
+  @media (min-width: theme("screens.sm")) {
+    margin-bottom: var(--seeds-s20);
+    max-width: var(--seeds-width-lg);
+  }
+}

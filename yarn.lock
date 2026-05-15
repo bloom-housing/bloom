@@ -1006,10 +1006,10 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/ui-components@14.0.1":
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-14.0.1.tgz#6e069b7f4396a0cd8b24223f3f527154d1b36813"
-  integrity sha512-sB6j9y7GrwiJ70M3YKBkk7TAI0XeRmLZICYpIFe+iO+HxVo4K7hzn+EAJZri6YRGtEA/jqR16Wne27+1DDMYCg==
+"@bloom-housing/ui-components@14.0.2":
+  version "14.0.2"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-14.0.2.tgz#89df6a2672faf33621e2755adaf4162f3ce70e60"
+  integrity sha512-RhNtz8lyh8f5LwUpiPFYClowgZBPNDh+K3GU5ZDoSIF0TGfec63BpB3GjwvyUSCeJCdsRoSX0q+RRtcfnj6BWQ==
   dependencies:
     "@dnd-kit/react" "^0.3.2"
     "@fortawesome/fontawesome-svg-core" "^6.1.1"
@@ -1459,6 +1459,15 @@
     extend "^3.0.2"
     google-gax "^5.0.0"
     is-html "^2.0.0"
+
+"@googlemaps/markerclusterer@^2.5.3":
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/@googlemaps/markerclusterer/-/markerclusterer-2.6.2.tgz#b1b86868b4d9437a3e1218f7f63ca594ba868ffb"
+  integrity sha512-U6uVhq8iWhiIckA89sgRu8OK35mjd6/3CuoZKWakKEf0QmRRWpatlsPb3kqXkoWSmbcZkopRiI4dnW6DQSd7bQ==
+  dependencies:
+    "@types/supercluster" "^7.1.3"
+    fast-equals "^5.2.2"
+    supercluster "^8.0.1"
 
 "@grpc/grpc-js@^1.12.6":
   version "1.13.4"
@@ -3315,6 +3324,11 @@
   resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.16.tgz#8ebe53d69efada7044454e3305c19017d97ced2a"
   integrity sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==
 
+"@types/google.maps@^3.54.10":
+  version "3.58.1"
+  resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.58.1.tgz#71ce3dec44de1452f56641d2c87c7dd8ea964b4d"
+  integrity sha512-X9QTSvGJ0nCfMzYOnaVs/k6/4L+7F5uCS+4iUmkLEls6J9S/Phv+m/i3mDeyc49ZBgwab3EFO1HEoBY7k98EGQ==
+
 "@types/graceful-fs@^4.1.2":
   version "4.1.3"
   resolved "https://registry.npmjs.org/@types/graceful-fs/-/graceful-fs-4.1.3.tgz"
@@ -3759,6 +3773,14 @@
   version "1.2.0"
   resolved "https://registry.npmjs.org/@ungap/structured-clone/-/structured-clone-1.2.0.tgz"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
+
+"@vis.gl/react-google-maps@^1.3.0":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@vis.gl/react-google-maps/-/react-google-maps-1.7.1.tgz#d6144042b97cf08ac7fb561fd150102d703b6b82"
+  integrity sha512-F/GJzJyri7Jqf+bkLNxoi2RcH2hCIo1I3//PyiILqQzdzglMoqZVO1DLXlHPifNdebk1/zib6dMJA3i73nwmuQ==
+  dependencies:
+    "@types/google.maps" "^3.54.10"
+    fast-deep-equal "^3.1.3"
 
 "@vis.gl/react-mapbox@8.1.0":
   version "8.1.0"
@@ -6498,6 +6520,11 @@ fast-diff@^1.1.2:
   resolved "https://registry.npmjs.org/fast-diff/-/fast-diff-1.2.0.tgz"
   integrity sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==
 
+fast-equals@^5.2.2:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/fast-equals/-/fast-equals-5.4.0.tgz#b60073b8764f27029598447f05773c7534ba7f1e"
+  integrity sha512-jt2DW/aNFNwke7AUd+Z+e6pz39KO5rzdbbFCg2sGafS4mk13MI7Z8O5z9cADNn5lhGODIgLwug6TZO2ctf7kcw==
+
 fast-glob@^3.2.7, fast-glob@^3.2.9:
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.3.3.tgz#d06d585ce8dba90a16b0505c543c3ccfb3aeb818"
@@ -8993,12 +9020,12 @@ lodash.topath@^4.5.2:
   resolved "https://registry.npmjs.org/lodash.topath/-/lodash.topath-4.5.2.tgz"
   integrity sha512-1/W4dM+35DwvE/iEd1M9ekewOSTlpFekhw9mhAtrwjVqUr83/ilQiyAvmg4tVX7Unkcfl1KC+i9WdaT4B6aQcg==
 
-lodash@4.17.21, lodash@4.x, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.7.0:
+lodash@4.17.21:
   version "4.17.21"
-  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
-lodash@^4.18.1:
+lodash@4.x, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.18.1, lodash@^4.7.0:
   version "4.18.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.18.1.tgz#ff2b66c1f6326d59513de2407bf881439812771c"
   integrity sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==

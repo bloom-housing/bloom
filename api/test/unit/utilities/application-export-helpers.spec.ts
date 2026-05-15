@@ -14,6 +14,8 @@ import {
   applicationSelectionDataFormatter,
   constructHouseholdHeaders,
   constructMultiselectQuestionHeaders,
+  convertDemographicGenderToReadable,
+  convertApplicationDeclineReasonToReadable,
   convertDemographicRaceToReadable,
   getExportHeaders,
   multiselectQuestionFormat,
@@ -306,6 +308,37 @@ describe('Testing application export helpers', () => {
   };
 
   describe('Testing getExportHeaders', () => {
+    it('includes gender after ethnicity when demographics and enableGenderQuestion are on', () => {
+      const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
+        enableReasonableAccommodations: true,
+        includeDemographics: true,
+        enableGenderQuestion: true,
+      });
+      const paths = headers.map((h) => h.path);
+      const ethnicityIdx = paths.indexOf('demographics.ethnicity');
+      expect(ethnicityIdx).toBeGreaterThanOrEqual(0);
+      expect(paths[ethnicityIdx + 1]).toEqual('demographics.gender');
+      expect(paths[ethnicityIdx + 2]).toEqual('demographics.race');
+    });
+
+    it('omits gender when enableGenderQuestion is off', () => {
+      const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
+        enableReasonableAccommodations: true,
+        includeDemographics: true,
+        enableGenderQuestion: false,
+      });
+      expect(headers.some((h) => h.path === 'demographics.gender')).toBeFalsy();
+    });
+
+    it('omits gender when includeDemographics is off even if enableGenderQuestion is on', () => {
+      const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
+        enableReasonableAccommodations: true,
+        includeDemographics: false,
+        enableGenderQuestion: true,
+      });
+      expect(headers.some((h) => h.path === 'demographics.gender')).toBeFalsy();
+    });
+
     it('tests getCsvHeaders with no household members, multiselect questions or demographics', () => {
       const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
         enableReasonableAccommodations: true,
@@ -384,6 +417,26 @@ describe('Testing application export helpers', () => {
         },
       ];
       expect(JSON.stringify(headers)).toEqual(JSON.stringify(testHeaders));
+    });
+
+    it('includes decline reason export headers when application status is enabled', () => {
+      const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
+        enableApplicationStatus: true,
+        enableReasonableAccommodations: true,
+      });
+
+      expect(headers).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: 'applicationDeclineReason',
+            label: 'Application Decline Reason',
+          }),
+          expect.objectContaining({
+            path: 'applicationDeclineReasonAdditionalDetails',
+            label: 'Application Decline Reason Additional Details',
+          }),
+        ]),
+      );
     });
 
     it('should return csv headers with v2 multiselect questions', () => {
@@ -698,6 +751,50 @@ describe('Testing application export helpers', () => {
       );
       expect(res[2].path).toEqual(
         `multiselectQuestion.${questionId}.${optionId}.isGeocodingVerified`,
+      );
+    });
+  });
+
+  describe('Testing convertDemographicGenderToReadable', () => {
+    it('tests convertDemographicGenderToReadable with valid gender keys', () => {
+      expect(convertDemographicGenderToReadable('male')).toEqual('Male');
+      expect(convertDemographicGenderToReadable('female')).toEqual('Female');
+      expect(
+        convertDemographicGenderToReadable('genderqueerGenderNon-Binary'),
+      ).toEqual('Genderqueer / gender non-binary');
+      expect(convertDemographicGenderToReadable('transMale')).toEqual(
+        'Trans man / Transmasculine / Trans male',
+      );
+      expect(convertDemographicGenderToReadable('transFemale')).toEqual(
+        'Trans woman / Transfeminine / Trans female',
+      );
+      expect(convertDemographicGenderToReadable('differentTerm')).toEqual(
+        'I use a different term',
+      );
+      expect(convertDemographicGenderToReadable('dontKnow')).toEqual(
+        "I don't know or don't understand the question",
+      );
+      expect(convertDemographicGenderToReadable('preferNoResponse')).toEqual(
+        'Prefer not to respond',
+      );
+    });
+  });
+
+  describe('Testing convertApplicationDeclineReasonToReadable', () => {
+    it('returns the readable decline reason for known enum keys', () => {
+      expect(
+        convertApplicationDeclineReasonToReadable('householdIncomeTooHigh'),
+      ).toEqual('Household income too high');
+      expect(
+        convertApplicationDeclineReasonToReadable(
+          'attemptedToContactNoResponse',
+        ),
+      ).toEqual('Attempted to contact; no response');
+    });
+
+    it('returns the original decline reason when no mapping exists', () => {
+      expect(convertApplicationDeclineReasonToReadable('customValue')).toEqual(
+        'customValue',
       );
     });
   });

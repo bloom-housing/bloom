@@ -1462,6 +1462,61 @@ describe('Testing listing service', () => {
         },
       });
     });
+
+    it('should build select for map view', async () => {
+      prisma.listings.findMany = jest
+        .fn()
+        .mockResolvedValue(mockListingSet(10));
+
+      prisma.listings.count = jest.fn().mockResolvedValue(10);
+
+      const params: ListingsQueryParams = {
+        view: ListingViews.map,
+      };
+
+      await service.list(params);
+
+      expect(prisma.listings.findMany).toHaveBeenCalledWith({
+        skip: 0,
+        take: 10,
+        orderBy: undefined,
+        where: {
+          AND: [],
+        },
+        select: {
+          name: true,
+          id: true,
+          property: true,
+          jurisdictions: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          listingsBuildingAddress: true,
+          listingImages: {
+            include: {
+              assets: true,
+            },
+          },
+          reservedCommunityTypes: true,
+          units: {
+            select: {
+              monthlyRent: true,
+              unitTypes: {
+                select: { numBedrooms: true, name: true },
+              },
+            },
+          },
+        },
+      });
+
+      expect(prisma.listings.count).toHaveBeenCalledWith({
+        where: {
+          AND: [],
+        },
+      });
+    });
   });
 
   describe('Test buildWhereClause helper', () => {
@@ -1540,6 +1595,24 @@ describe('Testing listing service', () => {
                   {
                     unitGroups: {
                       some: { openWaitlist: { equals: true } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
+                AND: [
+                  { unitGroups: { none: {} } },
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
                     },
                   },
                   {
@@ -1646,6 +1719,24 @@ describe('Testing listing service', () => {
                 ],
               },
               {
+                AND: [
+                  { unitGroups: { none: {} } },
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
                 unitsAvailable: {
                   gte: 1,
                 },
@@ -1740,6 +1831,24 @@ describe('Testing listing service', () => {
                   {
                     unitGroups: {
                       some: { openWaitlist: { equals: true } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
+                AND: [
+                  { unitGroups: { none: {} } },
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
                     },
                   },
                   {
@@ -3513,6 +3622,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -4047,6 +4157,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           depositMin: '5',
           lastUpdatedByUser: {
             connect: {
@@ -5677,6 +5788,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -5863,6 +5975,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           depositMin: '5',
           assets: [
             {
@@ -6242,6 +6355,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -6534,6 +6648,7 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           closedAt: expect.anything(),
+          scheduledPublishAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -7073,15 +7188,39 @@ describe('Testing listing service', () => {
         },
       ]);
 
-      await service.mapMarkers();
+      await service.mapMarkers({});
 
       expect(prisma.listings.findMany).toHaveBeenCalledWith({
         select: {
           id: true,
-          listingsBuildingAddress: true,
+          listingsBuildingAddress: {
+            select: {
+              latitude: true,
+              longitude: true,
+            },
+          },
         },
         where: {
-          status: ListingsStatusEnum.active,
+          AND: [
+            {
+              OR: [
+                {
+                  status: { equals: ListingsStatusEnum.active },
+                },
+              ],
+            },
+          ],
+          buildingAddressId: {
+            not: null,
+          },
+          listingsBuildingAddress: {
+            latitude: {
+              not: null,
+            },
+            longitude: {
+              not: null,
+            },
+          },
         },
       });
     });

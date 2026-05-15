@@ -91,6 +91,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
+  const enableGenderQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableGenderQuestion,
+    listingDto?.jurisdictions.id
+  )
+
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
@@ -203,6 +208,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
         id: applicationId,
         body: {
           previousStatus: application.status,
+          previousApplicationDeclineReason: application.applicationDeclineReason,
           previousAccessibleUnitWaitlistNumber: application.accessibleUnitWaitlistNumber,
           previousConventionalUnitWaitlistNumber: application.conventionalUnitWaitlistNumber,
         },
@@ -393,6 +399,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       raceEthnicityConfiguration={jurisdictionData?.raceEthnicityConfiguration}
                       enableSpokenLanguage={enableSpokenLanguage}
                       visibleSpokenLanguages={jurisdictionData?.visibleSpokenLanguages}
+                      enableGenderQuestion={enableGenderQuestion}
                     />
 
                     <FormTerms />

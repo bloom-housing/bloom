@@ -35,6 +35,7 @@ export const getExportHeaders = (
     enableFullTimeStudentQuestion?: boolean;
     enableReasonableAccommodations?: boolean;
     enableSpokenLanguage?: boolean;
+    enableGenderQuestion?: boolean;
     enableV2MSQ?: boolean;
     enableReceivedAtAndByFields?: boolean;
     forLottery?: boolean;
@@ -50,6 +51,7 @@ export const getExportHeaders = (
     enableFullTimeStudentQuestion,
     enableReasonableAccommodations,
     enableSpokenLanguage,
+    enableGenderQuestion,
     enableV2MSQ,
     enableReceivedAtAndByFields,
     forLottery,
@@ -133,6 +135,16 @@ export const getExportHeaders = (
         {
           path: 'status',
           label: 'Application Status',
+        },
+        {
+          path: 'applicationDeclineReason',
+          label: 'Application Decline Reason',
+          format: (val: string): string =>
+            convertApplicationDeclineReasonToReadable(val),
+        },
+        {
+          path: 'applicationDeclineReasonAdditionalDetails',
+          label: 'Application Decline Reason Additional Details',
         },
         {
           path: 'manualLotteryPositionNumber',
@@ -407,6 +419,9 @@ export const getExportHeaders = (
         path: 'preferredUnitTypes',
         label: 'Requested Unit Types',
         format: (val: UnitType[]): string => {
+          if (!val) {
+            return '';
+          }
           return val.map((unit) => unitTypeToReadable(unit.name)).join(',');
         },
       },
@@ -468,16 +483,30 @@ export const getExportHeaders = (
   );
 
   if (includeDemographics) {
+    headers.push({
+      path: 'demographics.ethnicity',
+      label: 'Ethnicity',
+    });
+    if (enableGenderQuestion) {
+      headers.push({
+        path: 'demographics.gender',
+        label: 'Gender',
+        format: (val: string | undefined): string =>
+          convertDemographicGenderToReadable(val),
+      });
+    }
     headers.push(
-      {
-        path: 'demographics.ethnicity',
-        label: 'Ethnicity',
-      },
       {
         path: 'demographics.race',
         label: 'Race',
-        format: (val: string[]): string =>
-          val.map((race) => convertDemographicRaceToReadable(race)).join(','),
+        format: (val: string[]): string => {
+          if (!val) {
+            return '';
+          }
+          return val
+            .map((race) => convertDemographicRaceToReadable(race))
+            .join(',');
+        },
       },
       {
         path: 'demographics.howDidYouHear',
@@ -910,6 +939,25 @@ export const convertDemographicRaceToReadable = (type: string): string => {
 
 /**
  *
+ * @param type takes in the gender string
+ * @returns outputs the readable version of the string
+ */
+export const convertDemographicGenderToReadable = (type: string): string => {
+  const typeMap: Record<string, string> = {
+    'genderqueerGenderNon-Binary': 'Genderqueer / gender non-binary',
+    transMale: 'Trans man / Transmasculine / Trans male',
+    transFemale: 'Trans woman / Transfeminine / Trans female',
+    male: 'Male',
+    female: 'Female',
+    differentTerm: 'I use a different term',
+    dontKnow: "I don't know or don't understand the question",
+    preferNoResponse: 'Prefer not to respond',
+  };
+  return typeMap[type] ?? type;
+};
+
+/**
+ *
  * @param type takes in the demographic string
  * @returns outputs the readable version of the string
  */
@@ -932,6 +980,31 @@ export const convertDemographicLanguageToReadable = (type: string): string => {
     notListed: notListedString,
   };
   return typeMap[rootKey] ?? rootKey;
+};
+
+/**
+ *
+ * @param type takes in the decline reason enum key
+ * @returns outputs the readable version of the string
+ */
+export const convertApplicationDeclineReasonToReadable = (
+  type: string,
+): string => {
+  const typeMap = {
+    householdIncomeTooHigh: 'Household income too high',
+    householdIncomeTooLow: 'Household income too low',
+    householdSizeTooLarge: 'Household size too large',
+    householdSizeTooSmall: 'Household size too small',
+    attemptedToContactNoResponse: 'Attempted to contact; no response',
+    applicantDeclinedUnit: 'Applicant declined unit',
+    doesNotMeetSeniorBuildingRequirement:
+      'Does not meet senior building requirement',
+    householdDoesNotNeedAccessibleUnit:
+      'Household does not need accessible unit features',
+    other: 'Other',
+  };
+
+  return typeMap[type] ?? type;
 };
 
 /**

@@ -605,6 +605,8 @@ describe('Application Controller Tests', () => {
         reasonableAccommodations: null,
         receivedAt: null,
         receivedBy: null,
+        applicationDeclineReason: null,
+        applicationDeclineReasonAdditionalDetails: null,
         submissionDate: expect.any(String),
         accessibility: {
           id: expect.any(String),
@@ -1033,6 +1035,8 @@ describe('Application Controller Tests', () => {
         reasonableAccommodations: null,
         receivedAt: null,
         receivedBy: null,
+        applicationDeclineReason: null,
+        applicationDeclineReasonAdditionalDetails: null,
         submissionDate: expect.any(String),
         accessibility: {
           id: expect.any(String),

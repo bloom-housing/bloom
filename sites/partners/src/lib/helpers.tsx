@@ -141,11 +141,14 @@ export const createTime = (
 
   return dayjs(date).hour(formattedHours).minute(parseInt(formTime.minutes)).toDate()
 }
-
 /**
- * Create Date object depending on DateField component
+ * Create Date object depending on DateField component.
+ * Pass `utcMidnight: true` for UTC midnight (start of the day) of the selected calendar date.
  */
-export const createDate = (formDate: { year: string; month: string; day: string }) => {
+export const createDate = (
+  formDate: { year: string; month: string; day: string },
+  utcMidnight?: boolean
+) => {
   const year = formDate?.year
   let month = formDate?.month
   let day = formDate?.day
@@ -154,10 +157,15 @@ export const createDate = (formDate: { year: string; month: string; day: string 
   if (day.length === 1) day = `0${day}`
   if (month.length === 1) month = `0${month}`
 
-  const date = dayjs(`${year}-${month}-${day}`, "YYYY-MM-DD", true)
-  if (!date.isValid()) return null
+  const dateStr = `${year}-${month}-${day}`
+  const parsed = dayjs(dateStr, "YYYY-MM-DD", true)
+  if (!parsed.isValid()) return null
 
-  return date.toDate()
+  if (utcMidnight) {
+    return dayjs.utc(dateStr, "YYYY-MM-DD", true).startOf("day").toDate()
+  }
+
+  return parsed.toDate()
 }
 
 interface FileUploaderParams {

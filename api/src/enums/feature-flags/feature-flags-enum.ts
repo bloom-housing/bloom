@@ -14,11 +14,14 @@ export enum FeatureFlagEnum {
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
   enableAdditionalResources = 'enableAdditionalResources',
   enableApplicationStatus = 'enableApplicationStatus',
+  enableAutopublish = 'enableAutopublish',
   enableCompanyWebsite = 'enableCompanyWebsite',
+  enableCustomListingNotifications = 'enableCustomListingNotifications',
   enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableFaq = 'enableFaq',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
+  enableGenderQuestion = 'enableGenderQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
@@ -32,6 +35,7 @@ export enum FeatureFlagEnum {
   enableListingFileNumber = 'enableListingFileNumber',
   enableListingFiltering = 'enableListingFiltering',
   enableListingImageAltText = 'enableListingImageAltText',
+  enableListingMap = 'enableListingMap',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
   enableListingUpdatedAt = 'enableListingUpdatedAt',
@@ -138,9 +142,18 @@ export const featureFlagMap: {
       'When true, the application status and notifications feature is enabled on public and partners',
   },
   {
+    name: FeatureFlagEnum.enableAutopublish,
+    description:
+      'When true, partners can set an optional scheduled listing publish date',
+  },
+  {
     name: FeatureFlagEnum.enableCompanyWebsite,
     description:
       'When true, allows partners to add company website information',
+  },
+  {
+    name: FeatureFlagEnum.enableCustomListingNotifications,
+    description: 'When true, users have access to custom notification settings',
   },
   {
     name: FeatureFlagEnum.enableConfigurableRegions,
@@ -160,6 +173,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
     description:
       'When true, the full time student question is displayed in the application form',
+  },
+  {
+    name: FeatureFlagEnum.enableGenderQuestion,
+    description:
+      'When true, the gender identity question is displayed in the public and partner application demographics section',
   },
   {
     name: FeatureFlagEnum.enableGeocodingPreferences,
@@ -221,6 +239,10 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableListingImageAltText,
     description: 'When true, allows partners to add alt text to listing images',
+  },
+  {
+    name: FeatureFlagEnum.enableListingMap,
+    description: 'When true, a map is displayed on the listings page',
   },
   {
     name: FeatureFlagEnum.enableListingOpportunity,

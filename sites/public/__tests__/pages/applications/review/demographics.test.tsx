@@ -1,7 +1,7 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
 import { fireEvent, screen, within } from "@testing-library/react"
-import { blankApplication } from "@bloom-housing/shared-helpers"
+import { blankApplication, genderKeys } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlag,
   FeatureFlagEnum,
@@ -617,5 +617,68 @@ describe("Demographics", () => {
     fireEvent.change(select, { target: { value: "notListed" } })
 
     expect(screen.getByRole("textbox", { name: "Please specify:" })).toBeInTheDocument()
+  })
+
+  it("should render gender select when enableGenderQuestion is on", () => {
+    const conductor = new ApplicationConductor({}, {})
+    conductor.config.featureFlags = [
+      { name: FeatureFlagEnum.enableLimitedHowDidYouHear, active: true } as FeatureFlag,
+      { name: FeatureFlagEnum.enableGenderQuestion, active: true } as FeatureFlag,
+    ]
+    conductor.config.raceEthnicityConfiguration = defaultRaceEthnicityConfiguration
+
+    render(
+      <AppSubmissionContext.Provider
+        value={{
+          conductor,
+          application: JSON.parse(JSON.stringify(blankApplication)),
+          listing: {} as unknown as Listing,
+          syncApplication: () => {
+            return
+          },
+          syncListing: () => {
+            return
+          },
+        }}
+      >
+        <ApplicationDemographics />
+      </AppSubmissionContext.Provider>
+    )
+
+    const select = screen.getByLabelText(t("application.review.demographics.genderLabel"))
+    expect(select).toBeInTheDocument()
+    expect(screen.getByTestId("app-demographics-gender")).toBeInTheDocument()
+
+    const optionValues = Array.from(select.querySelectorAll("option")).map((option) => option.value)
+    expect(optionValues).toEqual(expect.arrayContaining(genderKeys))
+  })
+
+  it("should hide gender select when enableGenderQuestion is off", () => {
+    const conductor = new ApplicationConductor({}, {})
+    conductor.config.featureFlags = [
+      { name: FeatureFlagEnum.enableLimitedHowDidYouHear, active: true } as FeatureFlag,
+      { name: FeatureFlagEnum.enableGenderQuestion, active: false } as FeatureFlag,
+    ]
+    conductor.config.raceEthnicityConfiguration = defaultRaceEthnicityConfiguration
+
+    render(
+      <AppSubmissionContext.Provider
+        value={{
+          conductor,
+          application: JSON.parse(JSON.stringify(blankApplication)),
+          listing: {} as unknown as Listing,
+          syncApplication: () => {
+            return
+          },
+          syncListing: () => {
+            return
+          },
+        }}
+      >
+        <ApplicationDemographics />
+      </AppSubmissionContext.Provider>
+    )
+
+    expect(screen.queryByTestId("app-demographics-gender")).not.toBeInTheDocument()
   })
 })

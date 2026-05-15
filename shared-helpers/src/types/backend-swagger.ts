@@ -315,11 +315,21 @@ export class ListingsService {
   /**
    * Get listing map markers
    */
-  mapMarkers(options: IRequestOptions = {}): Promise<ListingMapMarker[]> {
+  mapMarkers(
+    params: {
+      /** requestBody */
+      body?: ListingsQueryBody
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ListingMapMarker[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/mapMarkers"
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -1990,7 +2000,7 @@ export class UserService {
   /**
    * Update user notification preferences
    */
-  userControllerUpdatePreferences(
+  updateNotificationPreferences(
     params: {
       /** requestBody */
       body?: UserNotificationPreferences
@@ -3281,6 +3291,8 @@ export class AgencyService {
       /**  */
       limit?: number | "all"
       /**  */
+      search?: string
+      /**  */
       filter?: AgencyFilterParams[]
     } = {} as any,
     options: IRequestOptions = {}
@@ -3289,7 +3301,12 @@ export class AgencyService {
       let url = basePath + "/agency"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { page: params["page"], limit: params["limit"], filter: params["filter"] }
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        search: params["search"],
+        filter: params["filter"],
+      }
 
       axios(configs, resolve, reject)
     })
@@ -4924,6 +4941,9 @@ export interface Listing {
   publishedAt?: Date
 
   /**  */
+  scheduledPublishAt?: Date
+
+  /**  */
   closedAt?: Date
 
   /**  */
@@ -5887,6 +5907,9 @@ export interface ListingCreate {
   contentUpdatedAt?: Date
 
   /**  */
+  scheduledPublishAt?: Date
+
+  /**  */
   lotteryLastPublishedAt?: Date
 
   /**  */
@@ -6757,6 +6780,9 @@ export interface ListingUpdate {
   contentUpdatedAt?: Date
 
   /**  */
+  scheduledPublishAt?: Date
+
+  /**  */
   lotteryLastPublishedAt?: Date
 
   /**  */
@@ -7202,6 +7228,12 @@ export interface Application {
 
   /**  */
   status: ApplicationStatusEnum
+
+  /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
 
   /**  */
   accessibleUnitWaitlistNumber?: number
@@ -8218,6 +8250,12 @@ export interface PublicAppsFiltered {
   status: ApplicationStatusEnum
 
   /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
+
+  /**  */
   accessibleUnitWaitlistNumber?: number
 
   /**  */
@@ -8563,6 +8601,12 @@ export interface ApplicationCreate {
   status: ApplicationStatusEnum
 
   /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
+
+  /**  */
   accessibleUnitWaitlistNumber?: number
 
   /**  */
@@ -8893,6 +8937,12 @@ export interface ApplicationUpdate {
   status: ApplicationStatusEnum
 
   /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
+
+  /**  */
   accessibleUnitWaitlistNumber?: number
 
   /**  */
@@ -8966,6 +9016,9 @@ export interface ApplicationUpdate {
 export interface ApplicationUpdateEmail {
   /**  */
   previousStatus?: ApplicationStatusEnum
+
+  /**  */
+  previousApplicationDeclineReason?: ApplicationDeclineReasonEnum
 
   /**  */
   previousAccessibleUnitWaitlistNumber?: number
@@ -9812,6 +9865,9 @@ export interface UserFilterParams {
 
   /**  */
   isAdvocateUser?: boolean
+
+  /**  */
+  agencyId?: string
 }
 
 /** PaginatedUser */
@@ -10195,6 +10251,9 @@ export interface AgencyQueryParams {
   limit?: number | "all"
 
   /**  */
+  search?: string
+
+  /**  */
   filter?: string[]
 }
 
@@ -10282,6 +10341,7 @@ export enum ListingViews {
   "csv" = "csv",
   "full" = "full",
   "fundamentals" = "fundamentals",
+  "map" = "map",
   "name" = "name",
 }
 
@@ -10515,6 +10575,18 @@ export enum ApplicationStatusEnum {
   "waitlistDeclined" = "waitlistDeclined",
 }
 
+export enum ApplicationDeclineReasonEnum {
+  "householdIncomeTooHigh" = "householdIncomeTooHigh",
+  "householdIncomeTooLow" = "householdIncomeTooLow",
+  "householdSizeTooLarge" = "householdSizeTooLarge",
+  "householdSizeTooSmall" = "householdSizeTooSmall",
+  "attemptedToContactNoResponse" = "attemptedToContactNoResponse",
+  "applicantDeclinedUnit" = "applicantDeclinedUnit",
+  "doesNotMeetSeniorBuildingRequirement" = "doesNotMeetSeniorBuildingRequirement",
+  "householdDoesNotNeedAccessibleUnit" = "householdDoesNotNeedAccessibleUnit",
+  "other" = "other",
+}
+
 export enum ApplicationSubmissionTypeEnum {
   "paper" = "paper",
   "electronical" = "electronical",
@@ -10638,11 +10710,14 @@ export enum FeatureFlagEnum {
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableApplicationStatus" = "enableApplicationStatus",
+  "enableAutopublish" = "enableAutopublish",
   "enableCompanyWebsite" = "enableCompanyWebsite",
+  "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFaq" = "enableFaq",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
+  "enableGenderQuestion" = "enableGenderQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
@@ -10656,6 +10731,7 @@ export enum FeatureFlagEnum {
   "enableListingFileNumber" = "enableListingFileNumber",
   "enableListingFiltering" = "enableListingFiltering",
   "enableListingImageAltText" = "enableListingImageAltText",
+  "enableListingMap" = "enableListingMap",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
   "enableListingUpdatedAt" = "enableListingUpdatedAt",

@@ -417,6 +417,8 @@ model Applications {
   reviewStatus                   ApplicationReviewStatusEnum   @default(pending) @map("review_status")
   sendMailToMailingAddress       Boolean?                      @map("send_mail_to_mailing_address")
   status                         ApplicationStatusEnum         @default(submitted)
+  applicationDeclineReason       ApplicationDeclineReasonEnum? @map("application_decline_reason")
+  applicationDeclineReasonAdditionalDetails String?           @map("application_decline_reason_additional_details")
   submissionDate                 DateTime?                     @map("submission_date") @db.Timestamptz(6)
   submissionType                 ApplicationSubmissionTypeEnum @map("submission_type")
   receivedAt                     DateTime?                     @map("received_at") @db.Timestamptz(6)
@@ -494,6 +496,8 @@ model ApplicationSnapshot {
   reviewStatus                   ApplicationReviewStatusEnum   @default(pending) @map("review_status")
   sendMailToMailingAddress       Boolean?                      @map("send_mail_to_mailing_address")
   status                         ApplicationStatusEnum         @default(submitted)
+  applicationDeclineReason       ApplicationDeclineReasonEnum? @map("application_decline_reason")
+  applicationDeclineReasonAdditionalDetails String?           @map("application_decline_reason_additional_details")
   submissionDate                 DateTime?                     @map("submission_date") @db.Timestamptz(6)
   submissionType                 ApplicationSubmissionTypeEnum @map("submission_type")
   userId                         String?                       @map("user_id") @db.Uuid
@@ -1288,6 +1292,7 @@ model Listings {
   resultId                             String?                     @map("result_id") @db.Uuid
   resultLink                           String?                     @map("result_link")
   reviewOrderType                      ReviewOrderTypeEnum?        @map("review_order_type")
+  scheduledPublishAt                   DateTime?                   @map("scheduled_publish_at") @db.Timestamptz(6)
   section8Acceptance                   Boolean?                    @map("section8_acceptance")
   servicesOffered                      String?                     @map("services_offered")
   smokingPolicy                        String?                     @map("smoking_policy")
@@ -1464,6 +1469,7 @@ model ListingSnapshot {
   resultSnapshotId                        String?                     @map("result_snapshot_id") @db.Uuid
   resultLink                              String?                     @map("result_link")
   reviewOrderType                         ReviewOrderTypeEnum?        @map("review_order_type")
+  scheduledPublishAt                      DateTime?                   @map("scheduled_publish_at") @db.Timestamptz(6)
   section8Acceptance                      Boolean?                    @map("section8_acceptance")
   servicesOffered                         String?                     @map("services_offered")
   smokingPolicy                           String?                     @map("smoking_policy")
@@ -2270,6 +2276,20 @@ enum ApplicationStatusEnum {
   waitlistDeclined
 
   @@map("application_status_enum")
+}
+
+enum ApplicationDeclineReasonEnum {
+  householdIncomeTooHigh
+  householdIncomeTooLow
+  householdSizeTooLarge
+  householdSizeTooSmall
+  attemptedToContactNoResponse
+  applicantDeclinedUnit
+  doesNotMeetSeniorBuildingRequirement
+  householdDoesNotNeedAccessibleUnit
+  other
+
+  @@map("application_decline_reason_enum")
 }
 
 enum ApplicationSubmissionTypeEnum {

@@ -368,12 +368,46 @@ export const buildSql = (
     let updateExpression = "COALESCE(translations, '{}'::jsonb)";
     const insertPayload: Record<string, unknown> = {};
 
+    // jsonb_set's create_missing only creates the leaf key — intermediate path
+    // segments must already exist. To avoid silently dropped updates for paths
+    // deeper than 2 levels, group those entries by their depth-2 prefix and set
+    // the whole subtree in a single jsonb_set call.
+    const shallowEntries: Array<{ path: string[]; value: string }> = [];
+    const groupedByDepth2 = new Map<
+      string,
+      { path: string[]; subtree: Record<string, unknown> }
+    >();
+
     patch.forEach((entry) => {
+      setNestedValue(insertPayload, entry.path, entry.value);
+
+      if (entry.path.length <= 2) {
+        shallowEntries.push(entry);
+      } else {
+        const groupKey = entry.path.slice(0, 2).join('.');
+        if (!groupedByDepth2.has(groupKey)) {
+          groupedByDepth2.set(groupKey, {
+            path: entry.path.slice(0, 2),
+            subtree: {},
+          });
+        }
+        const group = groupedByDepth2.get(groupKey);
+        if (group) {
+          setNestedValue(group.subtree, entry.path.slice(2), entry.value);
+        }
+      }
+    });
+
+    shallowEntries.forEach((entry) => {
       const pathLiteral = `{${entry.path.join(',')}}`;
       const valueLiteral = toJsonbLiteral(entry.value);
-
       updateExpression = `jsonb_set(${updateExpression}, '${pathLiteral}', ${valueLiteral}, true)`;
-      setNestedValue(insertPayload, entry.path, entry.value);
+    });
+
+    groupedByDepth2.forEach((group) => {
+      const pathLiteral = `{${group.path.join(',')}}`;
+      const valueLiteral = toJsonbLiteral(group.subtree);
+      updateExpression = `jsonb_set(${updateExpression}, '${pathLiteral}', ${valueLiteral}, true)`;
     });
 
     const insertPayloadLiteral = toJsonbLiteral(insertPayload);

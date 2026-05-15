@@ -1,10 +1,11 @@
 import {
+  FeatureFlagEnum,
   Listing,
   Property,
   PropertyCreate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../components/shared/SectionWithGrid"
-import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { Field, Select, SelectOption, t, Textarea } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { addAsterisk, defaultFieldProps, fieldHasError } from "../../lib/helpers"
@@ -45,11 +46,15 @@ export const PropertyDrawer = ({
     (listing) => listing.property?.id === editedProperty?.id
   )
 
+  const eligibleJurisdictions = profile.jurisdictions.filter((j) =>
+    j.featureFlags?.some((flag) => flag.name === FeatureFlagEnum.enableProperties && flag.active)
+  )
+
   const jurisdictionOptions: SelectOption[] =
-    profile.jurisdictions.length !== 0
+    eligibleJurisdictions.length !== 0
       ? [
           { label: "", value: "" },
-          ...profile.jurisdictions.map((jurisdiction) => ({
+          ...eligibleJurisdictions.map((jurisdiction) => ({
             label: jurisdiction.name,
             value: jurisdiction.id,
           })),
@@ -61,6 +66,10 @@ export const PropertyDrawer = ({
     : jurisdictionOptions.length !== 0
     ? jurisdictionOptions[1].value
     : null
+
+  const defaultJurisdictionName =
+    jurisdictionOptions.find((jurisdiction) => jurisdiction.value === defaultJurisdiction)?.label ||
+    editedProperty?.jurisdictions?.name
 
   const handleSave = useCallback(async () => {
     const validated = await trigger()
@@ -81,9 +90,7 @@ export const PropertyDrawer = ({
       <Drawer.Content>
         <Card>
           <Card.Section>
-            <p className="field-label seeds-m-be-label">
-              {t("listings.requiredToPublishAsterisk")}
-            </p>
+            <p className="field-label seeds-m-be-label">{t("listings.requiredToSaveAsterisk")}</p>
             <SectionWithGrid heading={t("properties.drawer.formTitle")}>
               <Grid.Row columns={3}>
                 <Grid.Cell className="seeds-grid-span-2">
@@ -158,27 +165,29 @@ export const PropertyDrawer = ({
               {profile.jurisdictions.length > 1 && (
                 <Grid.Row columns={3}>
                   <Grid.Cell>
-                    <Select
-                      id={"jurisdiction"}
-                      defaultValue={defaultJurisdiction}
-                      disabled={!!editedProperty}
-                      name={"jurisdictions.id"}
-                      label={addAsterisk(t("t.jurisdiction"))}
-                      register={register}
-                      error={fieldHasError(errors?.jurisdictions?.id)}
-                      controlClassName={"control"}
-                      errorMessage={t("errors.requiredFieldError")}
-                      keyPrefix={"jurisdictions"}
-                      options={jurisdictionOptions}
-                      validation={{ required: true }}
-                      inputProps={{
-                        onChange: () => {
-                          clearErrors("jurisdictions.id")
-                        },
-                        "aria-required": true,
-                        "aria-hidden": !!defaultJurisdiction,
-                      }}
-                    />
+                    {editedProperty ? (
+                      <FieldValue label={t("t.jurisdiction")}>{defaultJurisdictionName}</FieldValue>
+                    ) : (
+                      <Select
+                        id={"jurisdiction"}
+                        defaultValue={defaultJurisdiction}
+                        name={"jurisdictions.id"}
+                        label={addAsterisk(t("t.jurisdiction"))}
+                        register={register}
+                        error={fieldHasError(errors?.jurisdictions?.id)}
+                        controlClassName={"control"}
+                        errorMessage={t("errors.requiredFieldError")}
+                        keyPrefix={"jurisdictions"}
+                        options={jurisdictionOptions}
+                        validation={{ required: true }}
+                        inputProps={{
+                          onChange: () => {
+                            clearErrors("jurisdictions.id")
+                          },
+                          "aria-required": true,
+                        }}
+                      />
+                    )}
                   </Grid.Cell>
                 </Grid.Row>
               )}

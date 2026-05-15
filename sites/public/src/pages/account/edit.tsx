@@ -1,20 +1,55 @@
-import React, { useContext } from "react"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import { EditPublicAccount } from "../../components/account/EditPublicAccount"
-import { EditAdvocateAccount } from "../../components/account/EditAdvocateAccount"
+import React from "react"
+import { RequireLogin } from "@bloom-housing/shared-helpers"
 import { fetchAgencies, fetchJurisdictionByName } from "../../lib/hooks"
-import { Agency } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Agency,
+  FeatureFlagEnum,
+  Jurisdiction,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
+import { isFeatureFlagOn } from "../../lib/helpers"
+import { t } from "@bloom-housing/ui-components"
+import { EditAccountView } from "../../components/account/EditAccountView"
+import {
+  getAccountSettingsTabs,
+  SettingsIndexEnum,
+} from "../../components/account/AccountSettingsHelpers"
+import { ApplicationTimeout } from "../../components/applications/ApplicationTimeout"
+import Layout from "../../layouts/application"
+import styles from "./account.module.scss"
+import MaxWidthLayout from "../../layouts/max-width"
 
 interface EditProps {
   agencies: Agency[]
+  jurisdiction: Jurisdiction
 }
 
 const Edit = (props: EditProps) => {
-  const { profile } = useContext(AuthContext)
-  return profile?.isAdvocate ? (
-    <EditAdvocateAccount agencies={props.agencies} />
-  ) : (
-    <EditPublicAccount />
+  const enableNotificationSettings = isFeatureFlagOn(
+    props.jurisdiction,
+    FeatureFlagEnum.enableCustomListingNotifications
+  )
+
+  return (
+    <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
+      <ApplicationTimeout />
+      <Layout
+        pageTitle={t("account.accountSettings")}
+        metaDescription={t("pageDescription.accountSettings")}
+      >
+        <section className={styles["settings-page-view"]}>
+          <MaxWidthLayout>
+            <TabView
+              hideTabs={!enableNotificationSettings}
+              tabs={getAccountSettingsTabs(SettingsIndexEnum.profile)}
+              styles={{ parentStyles: styles["settings-page-view"] }}
+            >
+              <EditAccountView agencies={props.agencies} tabbedView={enableNotificationSettings} />
+            </TabView>
+          </MaxWidthLayout>
+        </section>
+      </Layout>
+    </RequireLogin>
   )
 }
 

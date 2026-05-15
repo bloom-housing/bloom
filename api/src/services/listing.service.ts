@@ -106,6 +106,25 @@ selectViews.address = {
   },
 };
 
+selectViews.map = {
+  ...selectViews.name,
+  listingsBuildingAddress: true,
+  listingImages: {
+    include: {
+      assets: true,
+    },
+  },
+  reservedCommunityTypes: true,
+  units: {
+    select: {
+      monthlyRent: true,
+      unitTypes: {
+        select: { numBedrooms: true, name: true },
+      },
+    },
+  },
+};
+
 export const includeViews: Partial<
   Record<ListingViews, Prisma.ListingsInclude>
 > = {
@@ -577,21 +596,39 @@ export class ListingService implements OnModuleInit {
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
-                return {
-                  AND: builtFilter
-                    .map((filt) => ({
-                      unitGroups: {
-                        some: {
-                          [FilterAvailabilityEnum.openWaitlist]: filt,
+                return [
+                  {
+                    AND: builtFilter
+                      .map((filt) => ({
+                        unitGroups: {
+                          some: {
+                            [FilterAvailabilityEnum.openWaitlist]: filt,
+                          },
+                        },
+                      }))
+                      .concat(
+                        notUnderConstruction.map((filt) => ({
+                          marketingType: filt,
+                        })),
+                      ),
+                  },
+                  {
+                    AND: [
+                      { unitGroups: { none: {} } },
+                      {
+                        reviewOrderType: {
+                          in: [
+                            ReviewOrderTypeEnum.waitlist,
+                            ReviewOrderTypeEnum.waitlistLottery,
+                          ],
                         },
                       },
-                    }))
-                    .concat(
-                      notUnderConstruction.map((filt) => ({
+                      ...notUnderConstruction.map((filt) => ({
                         marketingType: filt,
                       })),
-                    ),
-                };
+                    ],
+                  },
+                ];
               } else if (availability === FilterAvailabilityEnum.waitlistOpen) {
                 const builtFilter = buildFilter({
                   $comparison: Compare.IN,
@@ -705,6 +742,22 @@ export class ListingService implements OnModuleInit {
                       marketingType: filt,
                     })),
                   ),
+              },
+              {
+                AND: [
+                  { unitGroups: { none: {} } },
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
+                    },
+                  },
+                  ...notUnderConstruction.map((filt) => ({
+                    marketingType: filt,
+                  })),
+                ],
               },
             ],
           });
@@ -1378,6 +1431,15 @@ export class ListingService implements OnModuleInit {
       rawJurisdiction as unknown as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
+
+    const enableAutopublish = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as unknown as Jurisdiction,
+      FeatureFlagEnum.enableAutopublish,
+    );
+
+    if (!enableAutopublish) {
+      dto.scheduledPublishAt = null;
+    }
 
     if (
       (enableUnitGroups && dto.units?.length > 0) ||
@@ -2179,6 +2241,15 @@ export class ListingService implements OnModuleInit {
       rawJurisdiction as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
+
+    const enableAutopublish = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableAutopublish,
+    );
+
+    if (!enableAutopublish) {
+      incomingDto.scheduledPublishAt = null;
+    }
 
     if (
       (enableUnitGroups && incomingDto.units?.length > 0) ||
@@ -3136,24 +3207,46 @@ export class ListingService implements OnModuleInit {
     return listing.jurisdictionId;
   }
 
-  async mapMarkers(): Promise<ListingMapMarker[]> {
-    const listingsRaw = await this.prisma.listings.findMany({
+  async mapMarkers(params: ListingsQueryParams): Promise<ListingMapMarker[]> {
+    const filters: ListingFilterParams[] = [
+      ...(params?.filter || []),
+      {
+        $comparison: Compare['='],
+        status: ListingsStatusEnum.active,
+      },
+    ];
+
+    const mapMarkersRaw = await this.prisma.listings.findMany({
       select: {
         id: true,
-        listingsBuildingAddress: true,
+        listingsBuildingAddress: {
+          select: {
+            latitude: true,
+            longitude: true,
+          },
+        },
       },
       where: {
-        status: ListingsStatusEnum.active,
+        ...this.buildWhereClause(filters, params?.search),
+        buildingAddressId: {
+          not: null,
+        },
+        listingsBuildingAddress: {
+          latitude: {
+            not: null,
+          },
+          longitude: {
+            not: null,
+          },
+        },
       },
     });
 
-    const listings = mapTo(Listing, listingsRaw);
-
-    return listings.map((listing) => {
+    return mapMarkersRaw.map((mapMarker) => {
       return {
-        id: listing.id,
-        lat: listing.listingsBuildingAddress?.latitude,
-        lng: listing.listingsBuildingAddress?.longitude,
+        id: mapMarker.id,
+        lat: Number(mapMarker.listingsBuildingAddress.latitude),
+        lng: Number(mapMarker.listingsBuildingAddress.longitude),
       } as ListingMapMarker;
     });
   }
