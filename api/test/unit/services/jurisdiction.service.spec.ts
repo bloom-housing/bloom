@@ -79,9 +79,20 @@ describe('Testing jurisdiction service', () => {
           equals: 'example Id',
         },
       },
-      include: {
-        featureFlags: true,
-        multiselectQuestions: true,
+      select: {
+        featureFlags: {
+          select: {
+            active: true,
+            id: true,
+            name: true,
+          },
+        },
+        id: true,
+        listingFeaturesConfiguration: true,
+        name: true,
+        regions: true,
+        subJurisdictions: true,
+        visibleAccessibilityPriorityTypes: true,
       },
     });
   });
@@ -101,9 +112,20 @@ describe('Testing jurisdiction service', () => {
           equals: 'example Id',
         },
       },
-      include: {
-        featureFlags: true,
-        multiselectQuestions: true,
+      select: {
+        featureFlags: {
+          select: {
+            active: true,
+            id: true,
+            name: true,
+          },
+        },
+        id: true,
+        listingFeaturesConfiguration: true,
+        name: true,
+        regions: true,
+        subJurisdictions: true,
+        visibleAccessibilityPriorityTypes: true,
       },
     });
   });
@@ -123,9 +145,20 @@ describe('Testing jurisdiction service', () => {
           equals: 'example Id',
         },
       },
-      include: {
-        featureFlags: true,
-        multiselectQuestions: true,
+      select: {
+        featureFlags: {
+          select: {
+            active: true,
+            id: true,
+            name: true,
+          },
+        },
+        id: true,
+        listingFeaturesConfiguration: true,
+        name: true,
+        regions: true,
+        subJurisdictions: true,
+        visibleAccessibilityPriorityTypes: true,
       },
     });
   });

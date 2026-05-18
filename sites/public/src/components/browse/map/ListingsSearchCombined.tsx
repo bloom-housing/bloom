@@ -49,7 +49,7 @@ function ListingsSearchCombined() {
       minRent: "",
       monthlyRent: "",
       propertyName: "",
-      jurisdictions: props.jurisdictions,
+      jurisdictions: props.jurisdictions.map((juris) => juris.label),
       availability: null,
       ids: undefined,
     })

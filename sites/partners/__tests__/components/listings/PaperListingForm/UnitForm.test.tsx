@@ -52,13 +52,24 @@ const waitForFormLoad = async () => {
 }
 
 describe("UnitForm", () => {
+  window.URL.createObjectURL = jest.fn()
+  document.cookie = "access-token-available=True"
   server.use(
     rest.get(
       "http://localhost/api/adapter/amiCharts/4e64914b-3169-4d6f-a8ef-d4b11b34ebcd",
       (_req, res, ctx) => {
         return res(ctx.json(amiChart1))
       }
-    )
+    ),
+    rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+      return res(
+        ctx.json({
+          id: "user1",
+          userRoles: { id: "user1", isAdmin: true, isPartner: false },
+          jurisdictions: [jurisdictionData],
+        })
+      )
+    })
   )
   it("should render the unit form without any selection", async () => {
     render(
@@ -69,6 +80,7 @@ describe("UnitForm", () => {
         draft={true}
         nextId={1}
         defaultUnit={tempUnit}
+        jurisdictionId={"123"}
       />
     )
 
@@ -229,6 +241,7 @@ describe("UnitForm", () => {
         draft={true}
         nextId={1}
         defaultUnit={tempUnit}
+        jurisdictionId={"123"}
       />
     )
 
@@ -291,6 +304,7 @@ describe("UnitForm", () => {
         draft={true}
         nextId={1}
         defaultUnit={undefined}
+        jurisdictionId={"123"}
       />
     )
 
@@ -340,6 +354,7 @@ describe("UnitForm", () => {
         draft={true}
         nextId={12}
         defaultUnit={undefined}
+        jurisdictionId={"123"}
       />
     )
 
@@ -363,6 +378,7 @@ describe("UnitForm", () => {
         draft={true}
         nextId={1}
         defaultUnit={tempUnit}
+        jurisdictionId={"123"}
       />
     )
 
@@ -391,6 +407,7 @@ describe("UnitForm", () => {
         draft={false}
         nextId={1}
         defaultUnit={prepopulatedUnit}
+        jurisdictionId={"123"}
       />
     )
 
@@ -430,6 +447,7 @@ describe("UnitForm", () => {
         draft={false}
         nextId={20}
         defaultUnit={prepopulatedUnit}
+        jurisdictionId={"123"}
       />
     )
 
@@ -447,6 +465,7 @@ describe("UnitForm", () => {
         draft={true}
         nextId={21}
         defaultUnit={copiedUnit}
+        jurisdictionId={"123"}
       />
     )
 

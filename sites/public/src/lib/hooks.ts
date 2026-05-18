@@ -161,17 +161,29 @@ export async function fetchBaseListingData(
   let listings
   let pagination
   try {
-    const { id: jurisdictionId, featureFlags } = await fetchJurisdictionByName(req)
+    const {
+      id: jurisdictionId,
+      featureFlags,
+      subJurisdictions,
+    } = await fetchJurisdictionByName(req)
 
     if (!jurisdictionId) {
       return listings
     }
-    let filter: ListingFilterParams[] = [
-      {
-        $comparison: EnumListingFilterParamsComparison["="],
-        jurisdiction: jurisdictionId,
-      },
-    ]
+    // if there are subjurisdictions, we want to pull listings for all of those jurisdictions, otherwise just pull for the single jurisdiction
+    let filter: ListingFilterParams[] = subJurisdictions
+      ? [
+          {
+            $comparison: EnumListingFilterParamsComparison["IN"],
+            jurisdictions: [jurisdictionId, ...subJurisdictions],
+          },
+        ]
+      : [
+          {
+            $comparison: EnumListingFilterParamsComparison["="],
+            jurisdiction: jurisdictionId,
+          },
+        ]
 
     if (additionalFilters) {
       filter = filter.concat(additionalFilters)
