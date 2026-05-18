@@ -233,6 +233,64 @@ describe("Demographics", () => {
       fireEvent.click(screen.getByRole("checkbox", { name: "Other / Multiracial" }))
       expect(await screen.findAllByTestId("otherMultiracial")).toHaveLength(2)
     })
+
+    describe("'Decline to respond' race exclusivity", () => {
+      const renderDemographics = () => {
+        const conductor = new ApplicationConductor({}, {})
+        conductor.config.featureFlags = [
+          { name: FeatureFlagEnum.enableLimitedHowDidYouHear, active: false } as FeatureFlag,
+        ]
+        conductor.config.raceEthnicityConfiguration = defaultRaceEthnicityConfiguration
+
+        render(
+          <AppSubmissionContext.Provider
+            value={{
+              conductor,
+              application: JSON.parse(JSON.stringify(blankApplication)),
+              listing: {} as unknown as Listing,
+              syncApplication: () => {
+                return
+              },
+              syncListing: () => {
+                return
+              },
+            }}
+          >
+            <ApplicationDemographics />
+          </AppSubmissionContext.Provider>
+        )
+      }
+
+      it("clears other race options when 'Decline to respond' is checked", () => {
+        renderDemographics()
+        const asian = screen.getByRole("checkbox", { name: "Asian" })
+        const white = screen.getByRole("checkbox", { name: "White" })
+        const decline = screen.getByRole("checkbox", { name: "Decline to respond" })
+
+        fireEvent.click(asian)
+        fireEvent.click(white)
+        expect(asian).toBeChecked()
+        expect(white).toBeChecked()
+
+        fireEvent.click(decline)
+        expect(decline).toBeChecked()
+        expect(asian).not.toBeChecked()
+        expect(white).not.toBeChecked()
+      })
+
+      it("clears 'Decline to respond' when another race option is checked", () => {
+        renderDemographics()
+        const decline = screen.getByRole("checkbox", { name: "Decline to respond" })
+        const white = screen.getByRole("checkbox", { name: "White" })
+
+        fireEvent.click(decline)
+        expect(decline).toBeChecked()
+
+        fireEvent.click(white)
+        expect(white).toBeChecked()
+        expect(decline).not.toBeChecked()
+      })
+    })
   })
 
   it("should show limited list of how did you hear fields when enableLimitedHowDidYouHear is on", () => {

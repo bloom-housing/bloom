@@ -20,12 +20,16 @@ import {
   limitedHowDidYouHear,
   getRaceEthnicityOptions,
   genderKeys,
+  setExclusive,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+
+// Race option that is mutually exclusive with every other race option.
+const RACE_DECLINE_TO_RESPOND = "declineToRespond"
 
 const ApplicationDemographics = () => {
   const { profile } = useContext(AuthContext)
@@ -39,7 +43,7 @@ const ApplicationDemographics = () => {
     currentPageSection += 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch, setValue } = useForm({
     defaultValues: {
       ethnicity: application.demographics?.ethnicity,
       race: application.demographics?.race,
@@ -106,8 +110,45 @@ const ApplicationDemographics = () => {
     }))
   }
 
+  const raceKeys = useMemo(
+    () => getRaceEthnicityOptions(conductor.config.raceEthnicityConfiguration),
+    [conductor.config.raceEthnicityConfiguration]
+  )
+
+  // Field names FieldGroup registers for the race group, e.g. "race-white". Because
+  // the race options have subFields, FieldGroup names every input `${name}-${value}`.
+  const allRaceFieldNames = useMemo(
+    () =>
+      raceKeys
+        ? Object.entries(raceKeys).flatMap(([rootKey, subKeys]) => [
+            `race-${rootKey}`,
+            ...subKeys.map((subKey) => `race-${subKey}`),
+          ])
+        : [],
+    [raceKeys]
+  )
+
+  const exclusiveRaceFieldNames = useMemo(
+    () => allRaceFieldNames.filter((fieldName) => fieldName === `race-${RACE_DECLINE_TO_RESPOND}`),
+    [allRaceFieldNames]
+  )
+
+  // Checking "Decline to respond" clears every other race option; checking any
+  // other option clears "Decline to respond". Reuses the shared setExclusive
+  // helper that powers the same behavior in ApplicationMultiselectQuestionStep.
+  const handleRaceExclusiveChange = (
+    changedFieldName: string,
+    isExclusiveOption: boolean,
+    checked: boolean
+  ) => {
+    if (isExclusiveOption && checked) {
+      setExclusive(true, setValue, exclusiveRaceFieldNames, changedFieldName, allRaceFieldNames)
+    } else if (!isExclusiveOption) {
+      setExclusive(false, setValue, exclusiveRaceFieldNames, changedFieldName, allRaceFieldNames)
+    }
+  }
+
   const raceOptions = useMemo(() => {
-    const raceKeys = getRaceEthnicityOptions(conductor.config.raceEthnicityConfiguration)
     if (!raceKeys) return []
     return Object.keys(raceKeys).map((rootKey) => ({
       id: rootKey,
@@ -116,6 +157,14 @@ const ApplicationDemographics = () => {
       additionalText: rootKey.indexOf("other") >= 0,
       defaultChecked: isKeyIncluded(rootKey, application.demographics?.race),
       defaultText: getCustomValue(rootKey, application.demographics?.race),
+      inputProps: {
+        onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+          handleRaceExclusiveChange(
+            `race-${rootKey}`,
+            rootKey === RACE_DECLINE_TO_RESPOND,
+            e.target.checked
+          ),
+      },
       subFields: raceKeys[rootKey].map((subKey) => ({
         id: subKey,
         label: t(`application.review.demographics.raceOptions.${subKey}`),
@@ -123,12 +172,16 @@ const ApplicationDemographics = () => {
         defaultChecked: isKeyIncluded(subKey, application.demographics?.race),
         additionalText: subKey.indexOf("other") >= 0,
         defaultText: getCustomValue(subKey, application.demographics?.race),
+        inputProps: {
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+            handleRaceExclusiveChange(`race-${subKey}`, false, e.target.checked),
+        },
         dataTestId: subKey,
       })),
       dataTestId: rootKey,
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [register])
+  }, [register, raceKeys])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
