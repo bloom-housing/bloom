@@ -2953,12 +2953,24 @@ export class ListingService implements OnModuleInit {
       });
     }
 
-    const users = await this.prisma.userAccounts.findMany({
+    const emailUsers = await this.prisma.userAccounts.findMany({
       select: {
         email: true,
         language: true,
       },
       where: {
+        AND: [
+          {
+            email: {
+              not: null,
+            },
+          },
+          {
+            email: {
+              not: '',
+            },
+          },
+        ],
         userPreferences: {
           sendEmailNotifications: true,
         },
@@ -2967,8 +2979,6 @@ export class ListingService implements OnModuleInit {
         },
       },
     });
-
-    const emailUsers = users.filter((user) => !!user?.email);
 
     if (!emailUsers.length) {
       this.logger.log(
