@@ -2929,7 +2929,7 @@ export class ListingService implements OnModuleInit {
       new Set(
         (listing.units || [])
           .map((unit) => unit.accessibilityPriorityType)
-          .filter((type): type is NonNullable<typeof type> => Boolean(type)),
+          .filter((type) => !!type),
       ),
     );
 
