@@ -1,6 +1,5 @@
 import Unit from '../dtos/units/unit.dto';
 import { Address } from '../dtos/addresses/address.dto';
-import { unitTypeMapping } from 'prisma/seed-helpers/unit-type-factory';
 
 export const oneLineAddress = (address: Address) => {
   if (!address) return '';
