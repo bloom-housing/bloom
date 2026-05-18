@@ -3017,9 +3017,9 @@
   integrity sha512-p67EoSsvhys3D0a5jjnorEapV71nX6ZkhsNfrqsio3h3cc1YONA47wbx8bCnahMR8BtczzUNhdRHM5LHLjzPTA==
 
 "@tiptap/extension-character-count@^2.24.0":
-  version "2.24.0"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-character-count/-/extension-character-count-2.24.0.tgz#058e4789f72a7fe87767df5bc8cef0de773be646"
-  integrity sha512-i3zhp/ESA0XDhnAIuFVyW6k0cdIxqEKIFmajcMuJaKV5I8vIAw+Y4SXCUH7huEWpOut8aTVXIwYESg4aNKSQeQ==
+  version "2.27.2"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-character-count/-/extension-character-count-2.27.2.tgz#b8d8f1b0934a0ec383751263c2e039c1f4c99cb0"
+  integrity sha512-EcQRIvbLbMDDzo7uFqXYgh1CfgedS9sYX4BllktY2OlXLPdNpwo9t8WMK/a7soESNv0Le3WZ5pNvnNhv7Z2YdA==
 
 "@tiptap/extension-code-block@^2.24.0":
   version "2.24.0"
