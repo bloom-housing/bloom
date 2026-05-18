@@ -73,7 +73,12 @@ describe('generate-db-translation-sql helpers', () => {
     expect(sql).toContain("COALESCE(translations, '{}'::jsonb)");
     expect(sql).toContain("'{footer,line1}'");
     expect(sql).toContain("'{footer,thankYou}'");
-    expect(sql).toContain("'{applicationUpdate,applicationStatus,submitted}'");
+    // depth-3+ paths are grouped at depth-2 to avoid silent jsonb_set failures
+    expect(sql).toContain("'{applicationUpdate,applicationStatus}'");
+    expect(sql).toContain('"submitted":"Submitted"');
+    expect(sql).not.toContain(
+      "'{applicationUpdate,applicationStatus,submitted}'",
+    );
   });
 
   it('targets default generic translations with null jurisdiction', () => {

@@ -85,6 +85,9 @@ export const buildAppStatusConfirmSections = (
   const initialStatus = defaultValues?.application?.status
   const nextStatus = data?.application?.status
 
+  const initialDeclineReason = defaultValues?.application?.applicationDeclineReason
+  const nextDeclineReason = data?.application?.applicationDeclineReason
+
   const initialAccessible = normalizeValue(defaultValues?.application?.accessibleUnitWaitlistNumber)
   const nextAccessible = normalizeValue(data?.application?.accessibleUnitWaitlistNumber)
 
@@ -98,12 +101,34 @@ export const buildAppStatusConfirmSections = (
 
   const statusChanged = !!nextStatus && nextStatus !== initialStatus
   const initialIsWaitlist = isApplicationWaitlistStatus(initialStatus)
+  const initialIsDeclined = initialStatus === ApplicationStatusEnum.declined
   const nextIsWaitlist = isApplicationWaitlistStatus(nextStatus)
+  const nextIsDeclined = nextStatus === ApplicationStatusEnum.declined
 
   if (statusChanged) {
     changes.push({
       label: t("application.details.applicationStatus"),
       value: t(`application.details.applicationStatus.${nextStatus}`),
+    })
+  }
+
+  if (nextIsDeclined && nextDeclineReason && nextDeclineReason !== initialDeclineReason) {
+    changes.push({
+      label: t("application.details.applicationDeclineReason"),
+      value: t(`application.details.applicationDeclineReason.${nextDeclineReason}`),
+    })
+  }
+
+  // removing decline reason: cleared while still declined, or status changed away from declined
+  if (nextIsDeclined && initialDeclineReason && !nextDeclineReason) {
+    removals.push({
+      label: t("application.details.applicationDeclineReason"),
+      value: t(`application.details.applicationDeclineReason.${initialDeclineReason}`),
+    })
+  } else if (statusChanged && initialIsDeclined && initialDeclineReason) {
+    removals.push({
+      label: t("application.details.applicationDeclineReason"),
+      value: t(`application.details.applicationDeclineReason.${initialDeclineReason}`),
     })
   }
 

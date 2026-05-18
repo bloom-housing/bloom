@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigModule } from '@nestjs/config';
 import {
+  ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
   LanguagesEnum,
   ListingsStatusEnum,
@@ -15,7 +16,6 @@ import { translationFactory } from '../../../prisma/seed-helpers/translation-fac
 import { yellowstoneAddress } from '../../../prisma/seed-helpers/address-factory';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { User } from '../../../src/dtos/users/user.dto';
-import { ApplicationCreate } from '../../../src/dtos/applications/application-create.dto';
 import { Logger } from '@nestjs/common';
 import { ApplicationStatusChangeItem } from 'src/utilities/applicationStatusChanges';
 import Listing from 'src/dtos/listings/listing.dto';
@@ -240,6 +240,7 @@ describe('Testing email service', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      applicationLotteryTotals: null,
     };
     const application = {
       language: LanguagesEnum.en,
@@ -258,7 +259,7 @@ describe('Testing email service', () => {
     it('Test first come first serve', async () => {
       await service.applicationConfirmation(
         listing,
-        application as ApplicationCreate,
+        application,
         'http://localhost:3001',
       );
       expect(sendMock).toHaveBeenCalled();
@@ -288,7 +289,7 @@ describe('Testing email service', () => {
     it('Test lottery', async () => {
       await service.applicationConfirmation(
         { ...listing, reviewOrderType: ReviewOrderTypeEnum.lottery },
-        application as ApplicationCreate,
+        application,
         'http://localhost:3001',
       );
       expect(sendMock).toHaveBeenCalled();
@@ -321,7 +322,7 @@ describe('Testing email service', () => {
     it('Test waitlist', async () => {
       await service.applicationConfirmation(
         { ...listing, reviewOrderType: ReviewOrderTypeEnum.waitlist },
-        application as ApplicationCreate,
+        application,
         'http://localhost:3001',
       );
       expect(sendMock).toHaveBeenCalled();
@@ -354,7 +355,7 @@ describe('Testing email service', () => {
     it('Test waitlistLottery', async () => {
       await service.applicationConfirmation(
         { ...listing, reviewOrderType: ReviewOrderTypeEnum.waitlistLottery },
-        application as ApplicationCreate,
+        application,
         'http://localhost:3001',
       );
       expect(sendMock).toHaveBeenCalled();
@@ -397,7 +398,7 @@ describe('Testing email service', () => {
 
       await service.applicationConfirmation(
         listingWithLeasingAgent,
-        application as ApplicationCreate,
+        application,
         'http://localhost:3001',
       );
 
@@ -423,7 +424,7 @@ describe('Testing email service', () => {
 
       await service.applicationConfirmation(
         listingWithPartialLeasingAgent,
-        application as ApplicationCreate,
+        application,
         'http://localhost:3001',
       );
 
@@ -440,7 +441,7 @@ describe('Testing email service', () => {
     it('Test no property manager and office hours', async () => {
       await service.applicationConfirmation(
         listing,
-        application as ApplicationCreate,
+        application,
         'http://localhost:3001',
       );
 
@@ -461,7 +462,7 @@ describe('Testing email service', () => {
         {
           ...application,
           language: LanguagesEnum.es,
-        } as ApplicationCreate,
+        },
         'http://localhost:3001',
         true,
       );
@@ -753,6 +754,106 @@ describe('Testing email service', () => {
       expect(applicantEmailMock.body).toContain(mockContactEmail);
       expect(applicantEmailMock.body).not.toMatch(
         'http://localhost:3000/account/applications',
+      );
+    });
+
+    it('should include decline reason in application update email', async () => {
+      const listing = {
+        id: 'listingId',
+        name: 'Example Listing',
+        jurisdictions: { name: 'Jurisdiction 1', id: 'jurisdictionId' },
+      } as Listing;
+      const application = {
+        language: LanguagesEnum.en,
+        applicant: {
+          firstName: 'First',
+          lastName: 'Last',
+          emailAddress: 'applicant.email@example.com',
+        },
+      } as Application;
+      const changes = [
+        {
+          type: 'status',
+          from: ApplicationStatusEnum.submitted,
+          to: ApplicationStatusEnum.declined,
+        },
+        {
+          type: 'declineReason',
+          value: ApplicationDeclineReasonEnum.householdIncomeTooLow,
+        },
+      ] as ApplicationStatusChangeItem[];
+
+      await service.applicationUpdateEmail(
+        listing.name,
+        listing.jurisdictions,
+        application,
+        changes,
+        'http://localhost:3000',
+      );
+
+      expect(sendMock).toHaveBeenCalledTimes(1);
+
+      const emailMock = sendMock.mock.calls[0][0];
+      expect(emailMock.to).toEqual('applicant.email@example.com');
+      expect(emailMock.body).toContain(
+        'Your application status has changed from <strong>Submitted</strong> to <strong>Declined</strong>',
+      );
+      expect(emailMock.body).toContain(
+        'Your application decline reason is <strong>Household income too low</strong>',
+      );
+    });
+
+    it('should include decline reason in advocate application update email', async () => {
+      const listing = {
+        id: 'listingId',
+        name: 'Example Listing',
+        jurisdictions: { name: 'Jurisdiction 1', id: 'jurisdictionId' },
+      } as Listing;
+      const application = {
+        language: LanguagesEnum.en,
+        applicant: {
+          firstName: 'First',
+          lastName: 'Last',
+          emailAddress: 'applicant.email@example.com',
+        },
+        alternateContact: {
+          firstName: 'Housing',
+          lastName: 'Advocate',
+          emailAddress: 'advocate.email@example.com',
+        },
+      } as Application;
+      const changes = [
+        {
+          type: 'status',
+          from: ApplicationStatusEnum.submitted,
+          to: ApplicationStatusEnum.declined,
+        },
+        {
+          type: 'declineReason',
+          value: ApplicationDeclineReasonEnum.householdIncomeTooHigh,
+        },
+      ] as ApplicationStatusChangeItem[];
+
+      await service.applicationUpdateEmail(
+        listing.name,
+        listing.jurisdictions,
+        application,
+        changes,
+        'http://localhost:3000',
+        true,
+        'advocate.email@example.com',
+      );
+
+      expect(sendMock).toHaveBeenCalledTimes(2);
+
+      const advocateEmailMock = sendMock.mock.calls[0][0];
+      expect(advocateEmailMock.body).toContain(
+        'Your application decline reason is <strong>Household income too high</strong>',
+      );
+
+      const applicantEmailMock = sendMock.mock.calls[1][0];
+      expect(applicantEmailMock.body).toContain(
+        'Your application decline reason is <strong>Household income too high</strong>',
       );
     });
   });

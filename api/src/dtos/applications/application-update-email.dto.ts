@@ -1,5 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { ApplicationStatusEnum } from '@prisma/client';
+import {
+  ApplicationDeclineReasonEnum,
+  ApplicationStatusEnum,
+} from '@prisma/client';
 import { Expose, Type } from 'class-transformer';
 import { IsEnum, IsNumber, IsOptional } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
@@ -15,6 +18,17 @@ export class ApplicationUpdateEmailDto {
     enumName: 'ApplicationStatusEnum',
   })
   previousStatus?: ApplicationStatusEnum;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ApplicationDeclineReasonEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional({
+    enum: ApplicationDeclineReasonEnum,
+    enumName: 'ApplicationDeclineReasonEnum',
+  })
+  previousApplicationDeclineReason?: ApplicationDeclineReasonEnum;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

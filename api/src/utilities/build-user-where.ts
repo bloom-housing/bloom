@@ -142,6 +142,12 @@ export const buildWhereClause = (
         ],
       });
     }
+
+    if ('agencyId' in filter && filter['agencyId']) {
+      filters.push({
+        agencyId: filter['agencyId'],
+      });
+    }
   });
   return {
     AND: filters,

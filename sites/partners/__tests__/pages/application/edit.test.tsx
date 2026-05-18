@@ -5,6 +5,7 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import { render, screen, mockNextRouter } from "../../testUtils"
 import userEvent from "@testing-library/user-event"
 import {
+  ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -71,6 +72,12 @@ describe("application edit page", () => {
       const statusSelect = await screen.findByLabelText(/status/i)
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
 
+      const declineSelect = screen.getByLabelText(/decline reason/i)
+      await userEvent.selectOptions(
+        declineSelect,
+        ApplicationDeclineReasonEnum.householdIncomeTooHigh
+      )
+
       const saveButton = screen.getByRole("button", { name: "Save & exit" })
       await userEvent.click(saveButton)
 
@@ -82,9 +89,7 @@ describe("application edit page", () => {
       ).toBeInTheDocument()
       expect(screen.getByText("Status: Declined")).toBeInTheDocument()
       expect(
-        screen.getByText(
-          "The following waitlist number(s) will no longer be accessible to the applicant:"
-        )
+        screen.getByText("The following will no longer be accessible to the applicant:")
       ).toBeInTheDocument()
       expect(screen.getByText("Accessible Wait list #: 3")).toBeInTheDocument()
       expect(screen.getByText("Conventional Wait list #: 8")).toBeInTheDocument()
@@ -126,9 +131,7 @@ describe("application edit page", () => {
       ).toBeInTheDocument()
       expect(screen.getByText("Status: Wait list - Declined")).toBeInTheDocument()
       expect(
-        screen.queryByText(
-          "The following waitlist number(s) will no longer be accessible to the applicant:"
-        )
+        screen.queryByText("The following will no longer be accessible to the applicant:")
       ).not.toBeInTheDocument()
       expect(screen.queryByText("Accessible Wait list #: 3")).not.toBeInTheDocument()
       expect(screen.queryByText("Conventional Wait list #: 8")).not.toBeInTheDocument()
@@ -221,9 +224,7 @@ describe("application edit page", () => {
         )
       ).not.toBeInTheDocument()
       expect(
-        screen.getByText(
-          "The following waitlist number(s) will no longer be accessible to the applicant:"
-        )
+        screen.getByText("The following will no longer be accessible to the applicant:")
       ).toBeInTheDocument()
       expect(screen.getByText("Accessible Wait list #: 2")).toBeInTheDocument()
       expect(screen.getByText("Conventional Wait list #: 4")).toBeInTheDocument()

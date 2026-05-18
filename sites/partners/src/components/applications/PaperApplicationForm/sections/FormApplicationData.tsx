@@ -6,16 +6,19 @@ import {
   DateField,
   DateFieldValues,
   Field,
+  Textarea,
 } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import {
   LanguagesEnum,
+  ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useFormContext } from "react-hook-form"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { addAsterisk } from "../../../../lib/helpers"
 
 type FormApplicationDataProps = {
   enableApplicationStatus: boolean
@@ -35,7 +38,7 @@ const FormApplicationData = ({
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors, setValue } = formMethods
+  const { register, watch, errors, setValue, clearErrors } = formMethods
 
   const dateSubmittedValue: DateFieldValues = watch("dateSubmitted")
   const isDateFilled =
@@ -60,7 +63,22 @@ const FormApplicationData = ({
     applicationStatus === ApplicationStatusEnum.waitlist ||
     applicationStatus === ApplicationStatusEnum.waitlistDeclined
 
+  const isDeclinedStatus = applicationStatus === ApplicationStatusEnum.declined
+
+  const applicationDeclineReasonValue: string = watch("application.applicationDeclineReason")
+  const declineReasonsRequiringDetails = [
+    ApplicationDeclineReasonEnum.attemptedToContactNoResponse,
+    ApplicationDeclineReasonEnum.applicantDeclinedUnit,
+    ApplicationDeclineReasonEnum.other,
+  ]
+  const showDeclineReasonDetails =
+    isDeclinedStatus &&
+    declineReasonsRequiringDetails.includes(
+      applicationDeclineReasonValue as ApplicationDeclineReasonEnum
+    )
+
   const applicationStatusOptions = Array.from(Object.values(ApplicationStatusEnum))
+  const applicationDeclineReasonOptions = Array.from(Object.values(ApplicationDeclineReasonEnum))
   return (
     <SectionWithGrid heading={t("application.details.applicationData")}>
       <Grid.Row>
@@ -159,7 +177,6 @@ const FormApplicationData = ({
         <>
           <Grid.Row columns={3}>
             <Grid.Cell>
-              {/* We need active hidden field to send value even when field is disabled */}
               <div className={disableApplicationStatusControls ? "hidden" : ""}>
                 <Select
                   id="application.status"
@@ -187,7 +204,53 @@ const FormApplicationData = ({
                 />
               )}
             </Grid.Cell>
+            {isDeclinedStatus && (
+              <Grid.Cell>
+                <Select
+                  id="application.applicationDeclineReason"
+                  name="application.applicationDeclineReason"
+                  label={addAsterisk(t("application.details.applicationDeclineReason"))}
+                  register={register}
+                  controlClassName="control"
+                  options={["", ...applicationDeclineReasonOptions]}
+                  keyPrefix="application.details.applicationDeclineReason"
+                  validation={{ required: isDeclinedStatus }}
+                  error={errors?.application?.applicationDeclineReason}
+                  errorMessage={t("errors.selectOption")}
+                  inputProps={{
+                    onChange: () => {
+                      clearErrors("application.applicationDeclineReason")
+                    },
+                  }}
+                  dataTestId="applicationDeclineReasonSelect"
+                />
+              </Grid.Cell>
+            )}
           </Grid.Row>
+          {showDeclineReasonDetails && (
+            <Grid.Row columns={3}>
+              <Grid.Cell className={"seeds-grid-span-2"}>
+                <Textarea
+                  id="application.applicationDeclineReasonAdditionalDetails"
+                  name="application.applicationDeclineReasonAdditionalDetails"
+                  label={addAsterisk(
+                    t("application.details.applicationDeclineReasonAdditionalDetails")
+                  )}
+                  note={t("application.details.applicationDeclineReasonAdditionalDetailsNote")}
+                  register={register}
+                  validation={{ required: true }}
+                  errorMessage={
+                    errors?.application?.applicationDeclineReasonAdditionalDetails
+                      ? t("errors.requiredFieldError")
+                      : undefined
+                  }
+                  fullWidth={true}
+                  maxLength={2000}
+                  placeholder={""}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+          )}
           <Grid.Row columns={3}>
             {/* We need active hidden field to send value even when field is not visible and disabled */}
             <Grid.Cell
