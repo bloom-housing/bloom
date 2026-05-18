@@ -10,11 +10,34 @@ import { mapTo } from '../utilities/mapTo';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { Prisma } from '@prisma/client';
 import { JurisdictionUpdate } from '../dtos/jurisdictions/jurisdiction-update.dto';
+import { JurisdictionViews } from '../enums/jurisdictions/view-enum';
 
+// TODO: convert this to the selectViews
 const view: Prisma.JurisdictionsInclude = {
   featureFlags: true,
   multiselectQuestions: true,
 };
+
+const selectViews: Partial<
+  Record<JurisdictionViews, Prisma.JurisdictionsSelect>
+> = {
+  [JurisdictionViews.public]: {
+    id: true,
+    name: true,
+    regions: true,
+    listingFeaturesConfiguration: true,
+    visibleAccessibilityPriorityTypes: true,
+    featureFlags: {
+      select: {
+        id: true,
+        name: true,
+        active: true,
+      },
+    },
+    subJurisdictions: true,
+  },
+};
+
 /**
   this is the service for jurisdictions
   it handles all the backend's business logic for reading/writing/deleting jurisdiction data
@@ -62,16 +85,18 @@ export class JurisdictionService {
   async findOne(condition: {
     jurisdictionId?: string;
     jurisdictionName?: string;
+    view?: JurisdictionViews;
   }): Promise<Jurisdiction> {
     if (!condition.jurisdictionId && !condition.jurisdictionName) {
       throw new BadRequestException(
         'a jurisdiction id or jurisdiction name must be provided',
       );
     }
+    const viewToUse = condition.view || JurisdictionViews.public;
 
     const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
       where: this.buildWhere(condition),
-      include: view,
+      select: selectViews[viewToUse],
     });
 
     if (!rawJurisdiction) {

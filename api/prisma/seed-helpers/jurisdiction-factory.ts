@@ -32,6 +32,7 @@ export const jurisdictionFactory = (
     visibleSpokenLanguages?: SpokenLanguageEnum[];
     visibleApplicationAccessibilityFeatures?: ApplicationAccessibilityFeatureEnum[];
     visibleHouseholdMemberRelationships?: HouseholdMemberRelationship[];
+    subJurisdictions?: string[];
   },
 ): Prisma.JurisdictionsCreateInput => ({
   name: jurisdictionName,
@@ -109,4 +110,5 @@ export const jurisdictionFactory = (
       HouseholdMemberRelationship.other,
       HouseholdMemberRelationship.aideOrAttendant,
     ],
+  subJurisdictions: optionalFields?.subJurisdictions || [],
 });

@@ -38,22 +38,27 @@ export const seedListings = async (
         .toLowerCase()
         .replaceAll(' ', '-')}${randomInt(10)}@example.com`;
     }
-    await prismaClient.userAccounts.create({
-      data: await userFactory({
-        roles: {
-          isAdmin: false,
-          isPartner: true,
-          isJurisdictionalAdmin: false,
-        },
-        email: email,
-        confirmedAt: new Date(),
-        jurisdictionIds: [savedListing.jurisdictionId],
-        acceptedTerms: true,
-        listings: [savedListing.id],
-      }),
-    });
-
     console.log(`Added listing - ${savedListing.name}`);
+    try {
+      await prismaClient.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isAdmin: false,
+            isPartner: true,
+            isJurisdictionalAdmin: false,
+          },
+          email: email,
+          confirmedAt: new Date(),
+          jurisdictionIds: [savedListing.jurisdictionId],
+          acceptedTerms: true,
+          listings: [savedListing.id],
+        }),
+      });
+    } catch (error) {
+      console.error(
+        `Error creating user account for listing ${savedListing.name}: ${error}`,
+      );
+    }
   }
 };
 

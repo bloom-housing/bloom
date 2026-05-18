@@ -3447,6 +3447,9 @@ export interface ListingFilterParams {
   jurisdiction?: string
 
   /**  */
+  jurisdictions?: string[]
+
+  /**  */
   leasingAgent?: string
 
   /**  */
@@ -7945,6 +7948,9 @@ export interface JurisdictionCreate {
 
   /**  */
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
+
+  /**  */
+  subJurisdictions?: []
 }
 
 /** JurisdictionUpdate */
@@ -8035,6 +8041,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
+
+  /**  */
+  subJurisdictions?: []
 }
 
 /** FeatureFlag */
@@ -8161,6 +8170,9 @@ export interface Jurisdiction {
 
   /**  */
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
+
+  /**  */
+  subJurisdictions?: []
 }
 
 /** AddressInput */
@@ -10398,6 +10410,7 @@ export enum ListingFilterKeys {
   "ids" = "ids",
   "isVerified" = "isVerified",
   "jurisdiction" = "jurisdiction",
+  "jurisdictions" = "jurisdictions",
   "leasingAgent" = "leasingAgent",
   "listingFeatures" = "listingFeatures",
   "listingType" = "listingType",

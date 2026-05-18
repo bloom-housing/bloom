@@ -48,8 +48,7 @@ export const ListingMap = (props: ListingBrowseProps) => {
     googleMapsApiKey: process.env.googleMapsApiKey,
     googleMapsMapId: process.env.googleMapsMapId,
     searchString,
-    // Map TODO: Dynamic jurisdictions
-    jurisdictionIds: [],
+    jurisdictionIds: [props.jurisdiction?.id, ...props.jurisdiction.subJurisdictions],
     bedrooms: [],
     bathrooms: [],
     activeFeatureFlags: props.jurisdiction?.featureFlags
@@ -58,8 +57,7 @@ export const ListingMap = (props: ListingBrowseProps) => {
     multiselectData: props.multiselectData,
     regions: props.jurisdiction?.regions,
     listingFeaturesConfiguration: props.jurisdiction?.listingFeaturesConfiguration,
-    // Map TODO: Dynamic jurisdictions
-    jurisdictions: [{ label: props.jurisdiction.name, value: props.jurisdiction.id }],
+    jurisdictions: props.jurisdiction?.subJurisdictions,
   }
 
   return (
