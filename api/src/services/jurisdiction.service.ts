@@ -22,15 +22,6 @@ const selectViews: Partial<
   Record<JurisdictionViews, Prisma.JurisdictionsSelect>
 > = {
   [JurisdictionViews.public]: {
-    id: true,
-    name: true,
-    regions: true,
-    languages: true,
-    listingFeaturesConfiguration: true,
-    visibleAccessibilityPriorityTypes: true,
-    visibleSpokenLanguages: true,
-    notificationsSignUpUrl: true,
-    raceEthnicityConfiguration: true,
     featureFlags: {
       select: {
         id: true,
@@ -38,7 +29,17 @@ const selectViews: Partial<
         active: true,
       },
     },
+    id: true,
+    name: true,
+    languages: true,
+    notificationsSignUpUrl: true,
+    raceEthnicityConfiguration: true,
+    regions: true,
     subJurisdictions: true,
+    listingFeaturesConfiguration: true,
+    visibleAccessibilityPriorityTypes: true,
+    visibleApplicationAccessibilityFeatures: true,
+    visibleSpokenLanguages: true,
   },
 };
 
