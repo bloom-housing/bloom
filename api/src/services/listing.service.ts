@@ -1446,6 +1446,10 @@ export class ListingService implements OnModuleInit {
       dto.scheduledPublishAt = null;
     }
 
+    if (enableAutopublish && dto.scheduledPublishAt) {
+      this.checkScheduledPublishAtIsInFuture(dto.scheduledPublishAt);
+    }
+
     if (
       (enableUnitGroups && dto.units?.length > 0) ||
       (!enableUnitGroups && dto.unitGroups?.length > 0)
@@ -2263,22 +2267,7 @@ export class ListingService implements OnModuleInit {
       incomingDto.scheduledPublishAt &&
       enableAutopublish
     ) {
-      const appTimezone = process.env.TIME_ZONE;
-      const minimumScheduledPublishAt = dayjs
-        .utc()
-        .tz(appTimezone)
-        .add(1, 'day')
-        .startOf('day');
-
-      const incomingScheduledPublishAt = dayjs(incomingDto.scheduledPublishAt)
-        .tz(appTimezone, true)
-        .startOf('day');
-
-      if (incomingScheduledPublishAt.isBefore(minimumScheduledPublishAt)) {
-        throw new BadRequestException([
-          'scheduledPublishAt must be in the future',
-        ]);
-      }
+      this.checkScheduledPublishAtIsInFuture(incomingDto.scheduledPublishAt);
     }
 
     if (
@@ -3093,6 +3082,25 @@ export class ListingService implements OnModuleInit {
       );
     }
   };
+
+  private checkScheduledPublishAtIsInFuture(scheduledPublishAt: Date): void {
+    const appTimezone = process.env.TIME_ZONE;
+    const minimumScheduledPublishAt = dayjs
+      .utc()
+      .tz(appTimezone)
+      .add(1, 'day')
+      .startOf('day');
+
+    const incomingScheduledPublishAt = dayjs(scheduledPublishAt)
+      .tz(appTimezone, true)
+      .startOf('day');
+
+    if (incomingScheduledPublishAt.isBefore(minimumScheduledPublishAt)) {
+      throw new BadRequestException([
+        'scheduledPublishAt must be in the future',
+      ]);
+    }
+  }
 
   /**
    * validates that the requested multiselectQuestions to be associated with the listing are in a valid state
