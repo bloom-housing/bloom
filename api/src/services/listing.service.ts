@@ -2965,11 +2965,6 @@ export class ListingService implements OnModuleInit {
               not: null,
             },
           },
-          {
-            email: {
-              not: '',
-            },
-          },
         ],
         userPreferences: {
           sendEmailNotifications: true,
