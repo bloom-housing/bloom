@@ -90,12 +90,15 @@ module.exports = withBundleAnalyzer({
   },
   headers() {
     if (process.env.ALLOW_SEO_INDEXING === "TRUE") {
-      return []
+      return [{ key: "cache-control", value: "no-store" }]
     }
     return [
       {
         source: "/:path*",
-        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+        headers: [
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+          { key: "cache-control", value: "no-store" },
+        ],
       },
     ]
   },
