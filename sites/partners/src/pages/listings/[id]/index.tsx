@@ -41,7 +41,6 @@ import DetailListingNotes from "../../../components/listings/PaperListingDetails
 import CopyListingDialog from "../../../components/listings/PaperListingForm/dialogs/CopyListingDialog"
 import DetailListingVerification from "../../../components/listings/PaperListingDetails/sections/DetailListingVerification"
 import DetailAccessibilityFeatures from "../../../components/listings/PaperListingDetails/sections/DetailAccessibilityFeatures"
-import { useJurisdiction } from "../../../lib/hooks"
 import { getListingStatusTag } from "../../../components/listings/helpers"
 import { StatusBar } from "../../../components/shared/StatusBar"
 
@@ -51,14 +50,13 @@ interface ListingProps {
 
 export default function ListingDetail(props: ListingProps) {
   const { listing } = props
-  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn, getJurisdiction } = useContext(AuthContext)
   const [errorAlert, setErrorAlert] = useState<string>(null)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
   const [copyListingDialog, setCopyListingDialog] = useState(false)
 
-  const { data: jurisdictionData } = useJurisdiction(listing.jurisdictions.id)
-
   if (!listing) return null
+  const jurisdictionData = getJurisdiction(listing.jurisdictions.id)
 
   const enableConfigurableRegions = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableConfigurableRegions,

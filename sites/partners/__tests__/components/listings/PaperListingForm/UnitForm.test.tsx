@@ -85,6 +85,7 @@ describe("UnitForm", () => {
     )
 
     await screen.findByRole("option", { name: "Studio" })
+    await screen.findByRole("option", { name: "Mobility" })
 
     expect(screen.getByRole("heading", { name: "Details", level: 2 })).toBeInTheDocument()
     expect(screen.getByRole("textbox", { name: "Unit number" })).toBeInTheDocument()

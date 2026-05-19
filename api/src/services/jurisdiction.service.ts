@@ -25,8 +25,12 @@ const selectViews: Partial<
     id: true,
     name: true,
     regions: true,
+    languages: true,
     listingFeaturesConfiguration: true,
     visibleAccessibilityPriorityTypes: true,
+    visibleSpokenLanguages: true,
+    notificationsSignUpUrl: true,
+    raceEthnicityConfiguration: true,
     featureFlags: {
       select: {
         id: true,
