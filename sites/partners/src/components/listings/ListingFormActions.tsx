@@ -449,8 +449,7 @@ const ListingFormActions = ({
     }
     //draft listing, detail view
     else if (
-      (listing?.status === ListingsStatusEnum.pending ||
-        listing?.status === ListingsStatusEnum.scheduled) &&
+      listing?.status === ListingsStatusEnum.pending &&
       type === ListingFormActionsType.details
     ) {
       elements.push(editFromDetailButton)
@@ -459,8 +458,7 @@ const ListingFormActions = ({
     }
     //draft listing, edit view
     else if (
-      (listing?.status === ListingsStatusEnum.pending ||
-        listing?.status === ListingsStatusEnum.scheduled) &&
+      listing?.status === ListingsStatusEnum.pending &&
       type === ListingFormActionsType.edit
     ) {
       elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
