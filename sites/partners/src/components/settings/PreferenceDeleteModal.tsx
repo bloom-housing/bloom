@@ -3,6 +3,7 @@ import { MinimalTable, t } from "@bloom-housing/ui-components"
 import { Button, Dialog, Link } from "@bloom-housing/ui-seeds"
 import { useListingsMultiselectQuestionList } from "../../lib/hooks"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import styles from "./DeleteModal.module.scss"
 import { MultiselectQuestion } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type PreferenceDeleteModalProps = {
@@ -62,11 +63,13 @@ export const PreferenceDeleteModal = ({
           <div className="pb-3" id="preference-changes-modal-description">
             {t("settings.preferenceDeleteError")}
           </div>
-          <MinimalTable
-            headers={{ name: "listings.listingName" }}
-            data={listingsTableData}
-            cellClassName={" "}
-          />
+          <div className={styles["table-wrapper"]}>
+            <MinimalTable
+              headers={{ name: "listings.listingName" }}
+              data={listingsTableData}
+              cellClassName={" "}
+            />
+          </div>
         </Dialog.Content>
         <Dialog.Footer>
           <Button type="button" variant="primary" onClick={onClose} size="sm">

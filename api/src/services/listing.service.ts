@@ -21,6 +21,8 @@ import {
   UserRoleEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import tz from 'dayjs/plugin/timezone';
 import { firstValueFrom } from 'rxjs';
 import { ApplicationFlaggedSetService } from './application-flagged-set.service';
 import { CronJobService } from './cron-job.service';
@@ -67,6 +69,9 @@ import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformation
 import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
 import { SnapshotCreateService } from './snapshot-create.service';
 
+dayjs.extend(utc);
+dayjs.extend(tz);
+
 export type getListingsArgs = {
   skip: number;
   take: number;
@@ -102,6 +107,25 @@ selectViews.address = {
       state: true,
       latitude: true,
       longitude: true,
+    },
+  },
+};
+
+selectViews.map = {
+  ...selectViews.name,
+  listingsBuildingAddress: true,
+  listingImages: {
+    include: {
+      assets: true,
+    },
+  },
+  reservedCommunityTypes: true,
+  units: {
+    select: {
+      monthlyRent: true,
+      unitTypes: {
+        select: { numBedrooms: true, name: true },
+      },
     },
   },
 };
@@ -2232,6 +2256,31 @@ export class ListingService implements OnModuleInit {
       incomingDto.scheduledPublishAt = null;
     }
 
+    // test if not publishing or unpublishing listing and scheduledPublishAt is set
+    if (
+      incomingDto.status === storedListing.status &&
+      incomingDto.status !== ListingsStatusEnum.active &&
+      incomingDto.scheduledPublishAt &&
+      enableAutopublish
+    ) {
+      const appTimezone = process.env.TIME_ZONE;
+      const minimumScheduledPublishAt = dayjs
+        .utc()
+        .tz(appTimezone)
+        .add(1, 'day')
+        .startOf('day');
+
+      const incomingScheduledPublishAt = dayjs(incomingDto.scheduledPublishAt)
+        .tz(appTimezone, true)
+        .startOf('day');
+
+      if (incomingScheduledPublishAt.isBefore(minimumScheduledPublishAt)) {
+        throw new BadRequestException([
+          'scheduledPublishAt must be in the future',
+        ]);
+      }
+    }
+
     if (
       (enableUnitGroups && incomingDto.units?.length > 0) ||
       (!enableUnitGroups && incomingDto.unitGroups?.length > 0)
@@ -3188,24 +3237,46 @@ export class ListingService implements OnModuleInit {
     return listing.jurisdictionId;
   }
 
-  async mapMarkers(): Promise<ListingMapMarker[]> {
-    const listingsRaw = await this.prisma.listings.findMany({
+  async mapMarkers(params: ListingsQueryParams): Promise<ListingMapMarker[]> {
+    const filters: ListingFilterParams[] = [
+      ...(params?.filter || []),
+      {
+        $comparison: Compare['='],
+        status: ListingsStatusEnum.active,
+      },
+    ];
+
+    const mapMarkersRaw = await this.prisma.listings.findMany({
       select: {
         id: true,
-        listingsBuildingAddress: true,
+        listingsBuildingAddress: {
+          select: {
+            latitude: true,
+            longitude: true,
+          },
+        },
       },
       where: {
-        status: ListingsStatusEnum.active,
+        ...this.buildWhereClause(filters, params?.search),
+        buildingAddressId: {
+          not: null,
+        },
+        listingsBuildingAddress: {
+          latitude: {
+            not: null,
+          },
+          longitude: {
+            not: null,
+          },
+        },
       },
     });
 
-    const listings = mapTo(Listing, listingsRaw);
-
-    return listings.map((listing) => {
+    return mapMarkersRaw.map((mapMarker) => {
       return {
-        id: listing.id,
-        lat: listing.listingsBuildingAddress?.latitude,
-        lng: listing.listingsBuildingAddress?.longitude,
+        id: mapMarker.id,
+        lat: Number(mapMarker.listingsBuildingAddress.latitude),
+        lng: Number(mapMarker.listingsBuildingAddress.longitude),
       } as ListingMapMarker;
     });
   }

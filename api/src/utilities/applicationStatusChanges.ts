@@ -1,6 +1,8 @@
 type ApplicationStatusChangeInput = {
   initialStatus?: string | null;
   nextStatus?: string | null;
+  initialApplicationDeclineReason?: string | null;
+  nextApplicationDeclineReason?: string | null;
   initialAccessibleUnitWaitlistNumber?: string | number | null;
   nextAccessibleUnitWaitlistNumber?: string | number | null;
   initialConventionalUnitWaitlistNumber?: string | number | null;
@@ -12,6 +14,10 @@ export type ApplicationStatusChangeItem =
       type: 'status';
       from: string;
       to: string;
+    }
+  | {
+      type: 'declineReason';
+      value: string;
     }
   | {
       type: 'accessibleWaitlist';
@@ -39,6 +45,11 @@ export const buildApplicationStatusChanges = (
   const initialStatus = input.initialStatus ?? undefined;
   const nextStatus = input.nextStatus ?? undefined;
 
+  const initialDeclineReason = normalizeValue(
+    input.initialApplicationDeclineReason,
+  );
+  const nextDeclineReason = normalizeValue(input.nextApplicationDeclineReason);
+
   const initialAccessible = normalizeValue(
     input.initialAccessibleUnitWaitlistNumber,
   );
@@ -51,6 +62,7 @@ export const buildApplicationStatusChanges = (
   );
 
   const statusChanged = !!nextStatus && nextStatus !== initialStatus;
+  const nextIsDeclined = nextStatus === 'declined';
   const nextIsWaitlist = isApplicationWaitlistStatus(nextStatus);
 
   const changes: ApplicationStatusChangeItem[] = [];
@@ -60,6 +72,17 @@ export const buildApplicationStatusChanges = (
       type: 'status',
       from: initialStatus ?? '',
       to: nextStatus,
+    });
+  }
+
+  if (
+    nextIsDeclined &&
+    nextDeclineReason !== initialDeclineReason &&
+    hasValue(nextDeclineReason)
+  ) {
+    changes.push({
+      type: 'declineReason',
+      value: nextDeclineReason,
     });
   }
 

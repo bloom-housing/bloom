@@ -14,4 +14,4 @@ When true, partners can view/edit paper application received at/by fields and in
 
 Partners - paper application create / edit - shows whole bottom row
 
-![image.png](./images/image%2055.png)
+![image.png](./images/image%2073.png)

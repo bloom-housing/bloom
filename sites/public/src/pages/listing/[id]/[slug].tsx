@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from "react"
 import { GetStaticPaths, GetStaticProps } from "next"
+import { useRouter } from "next/router"
 import axios from "axios"
 import { t } from "@bloom-housing/ui-components"
 import {
@@ -7,6 +8,7 @@ import {
   ListingDetail,
   pushGtmEvent,
   AuthContext,
+  MessageContext,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 import Layout from "../../../layouts/application"
@@ -22,10 +24,14 @@ interface ListingProps {
   jurisdiction: Jurisdiction
 }
 
+const VALID_STATUSES = ["active", "closed"]
+
 export default function ListingPage(props: ListingProps) {
   const { listing } = props
 
   const { profile } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
+  const router = useRouter()
 
   useEffect(() => {
     if (!listing?.id) return
@@ -52,9 +58,20 @@ export default function ListingPage(props: ListingProps) {
     listing?.status,
     profile,
   ])
+  useEffect(() => {
+    if (!VALID_STATUSES.includes(listing?.status)) {
+      addToast(t("errors.invalidListing.redirect"), { variant: "alert" })
+      void router.push("/")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (!listing) {
     return <ErrorPage />
+  }
+
+  if (!VALID_STATUSES.includes(listing?.status)) {
+    return null
   }
 
   const metaDescription = t("pageDescription.listing", {
