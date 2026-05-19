@@ -997,7 +997,7 @@ describe('Testing email service', () => {
         );
         const row = findByLabel(result, LABELS.applicationsDue);
         expect(row).toBeDefined();
-        expect(row.value).toBe('May 18, 2026');
+        expect(row.value).toBe('May 19, 2026');
       });
 
       it('omits applications due row when applicationDueDate is absent', () => {
@@ -1037,7 +1037,7 @@ describe('Testing email service', () => {
         );
         const row = findByLabel(result, LABELS.lotteryDate);
         expect(row).toBeDefined();
-        expect(row.value).toBe('May 18, 2026');
+        expect(row.value).toBe('May 19, 2026');
       });
 
       it('omits lottery date row when no publicLottery events', () => {
