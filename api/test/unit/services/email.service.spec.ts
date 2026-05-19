@@ -4,8 +4,10 @@ import {
   ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
   LanguagesEnum,
+  ListingEventsTypeEnum,
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
+  UnitTypeEnum,
 } from '@prisma/client';
 import { EmailService } from '../../../src/services/email.service';
 import { EmailProvider } from '../../../src/services/email-provider.service';
@@ -19,6 +21,11 @@ import { User } from '../../../src/dtos/users/user.dto';
 import { Logger } from '@nestjs/common';
 import { ApplicationStatusChangeItem } from 'src/utilities/applicationStatusChanges';
 import Listing from 'src/dtos/listings/listing.dto';
+import {
+  ListingUnitsSummary,
+  oneLineAddress,
+} from '../../../src/utilities/listing-data-formatters';
+import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/accessibility-priority-type-enum';
 
 let sendMock;
 const translationServiceMock = {
@@ -903,6 +910,512 @@ describe('Testing email service', () => {
         'jurisdictionId',
         'es',
       );
+    });
+  });
+
+  describe('listing rental opportunity details', () => {
+    const LABELS = {
+      community: 'Community',
+      applicationsDue: 'Applications Due',
+      address: 'Address',
+      neighborhood: 'Neighborhood',
+      unitType: 'Unit type',
+      opportunityType: 'Opportunity type',
+      rent: 'Rent',
+      minIncome: 'Minimum Income',
+      maxIncome: 'Maximum Income',
+      lotteryDate: 'Lottery Date',
+      studio: 'Studio',
+      oneBdrm: '1 bedroom',
+      twoBdrm: '2 bedroom',
+      threeBdrm: '3 bedroom',
+    };
+
+    const emptySummary = (): ListingUnitsSummary => ({
+      units: {},
+      flatRent: undefined,
+      percentageRent: undefined,
+      minIncome: undefined,
+      maxIncome: undefined,
+    });
+
+    const baseListing = (overrides: Partial<Listing> = {}): Listing =>
+      ({
+        listingsBuildingAddress: yellowstoneAddress,
+        listingEvents: [],
+        ...overrides,
+      } as Listing);
+
+    const findByLabel = (
+      rows: { label: string; value: string | number }[],
+      label: string,
+    ) => rows.find((r) => r.label === label);
+
+    const buildDetails = (
+      listing: Listing,
+      priorityTypes: UnitAccessibilityPriorityTypeEnum[] = [],
+      summary: ListingUnitsSummary = emptySummary(),
+    ) => service.buildListingDetails(listing, priorityTypes, summary);
+
+    beforeEach(() => {
+      service.polyglot.replace(translationFactory().translations);
+    });
+
+    it('includes only address when all optional inputs are absent', () => {
+      const result = buildDetails(baseListing(), [], emptySummary());
+      expect(result).toHaveLength(1);
+      expect(result[0].label).toBe(LABELS.address);
+      expect(result[0].value).toBe(
+        oneLineAddress(
+          yellowstoneAddress as Parameters<typeof oneLineAddress>[0],
+        ),
+      );
+    });
+
+    describe('conditional listing fields', () => {
+      it('includes community row when reservedCommunityTypes.name is set', () => {
+        const result = buildDetails(
+          baseListing({
+            reservedCommunityTypes: { name: 'veteran' },
+          } as Partial<Listing>),
+        );
+        const row = findByLabel(result, LABELS.community);
+        expect(row).toBeDefined();
+        expect(row.value).toBe('Veteran');
+      });
+
+      it('omits community row when reservedCommunityTypes.name is missing', () => {
+        const result = buildDetails(baseListing());
+        expect(findByLabel(result, LABELS.community)).toBeUndefined();
+      });
+
+      it('includes applications due row when applicationDueDate is set', () => {
+        const result = buildDetails(
+          baseListing({
+            applicationDueDate: new Date(2026, 4, 19),
+          } as Partial<Listing>),
+        );
+        const row = findByLabel(result, LABELS.applicationsDue);
+        expect(row).toBeDefined();
+        expect(row.value).toBe('May 18, 2026');
+      });
+
+      it('omits applications due row when applicationDueDate is absent', () => {
+        const result = buildDetails(baseListing());
+        expect(findByLabel(result, LABELS.applicationsDue)).toBeUndefined();
+      });
+
+      it('includes neighborhood row when neighborhood is truthy', () => {
+        const result = buildDetails(
+          baseListing({ neighborhood: 'Downtown' } as Partial<Listing>),
+        );
+        const row = findByLabel(result, LABELS.neighborhood);
+        expect(row).toBeDefined();
+        expect(row.value).toBe('Downtown');
+      });
+
+      it.each([undefined, ''])(
+        'omits neighborhood row when neighborhood is falsy (%s)',
+        (neighborhood) => {
+          const result = buildDetails(
+            baseListing({ neighborhood } as Partial<Listing>),
+          );
+          expect(findByLabel(result, LABELS.neighborhood)).toBeUndefined();
+        },
+      );
+
+      it('includes lottery date row when a publicLottery event exists', () => {
+        const result = buildDetails(
+          baseListing({
+            listingEvents: [
+              {
+                type: ListingEventsTypeEnum.publicLottery,
+                startDate: new Date(2026, 4, 19),
+              },
+            ],
+          } as Partial<Listing>),
+        );
+        const row = findByLabel(result, LABELS.lotteryDate);
+        expect(row).toBeDefined();
+        expect(row.value).toBe('May 18, 2026');
+      });
+
+      it('omits lottery date row when no publicLottery events', () => {
+        const result = buildDetails(baseListing({ listingEvents: [] }));
+        expect(findByLabel(result, LABELS.lotteryDate)).toBeUndefined();
+      });
+    });
+
+    describe('accessibility / opportunity type', () => {
+      it('includes unit type row when priorityTypes is non-empty', () => {
+        const result = buildDetails(baseListing(), [
+          UnitAccessibilityPriorityTypeEnum.mobility,
+          UnitAccessibilityPriorityTypeEnum.hearing,
+        ]);
+        const row = findByLabel(result, LABELS.unitType);
+        expect(row).toBeDefined();
+        expect(row.value).toBe('Mobility, Hearing');
+      });
+
+      it('omits unit type row when priorityTypes is empty', () => {
+        const result = buildDetails(baseListing(), []);
+        expect(findByLabel(result, LABELS.unitType)).toBeUndefined();
+      });
+
+      it('includes opportunity type for lottery review order', () => {
+        const result = buildDetails(
+          baseListing({
+            reviewOrderType: ReviewOrderTypeEnum.lottery,
+          } as Partial<Listing>),
+        );
+        const row = findByLabel(result, LABELS.opportunityType);
+        expect(row).toBeDefined();
+        expect(row.value).toBe('Lottery');
+      });
+
+      it('includes opportunity type for waitlist review order', () => {
+        const result = buildDetails(
+          baseListing({
+            reviewOrderType: ReviewOrderTypeEnum.waitlist,
+          } as Partial<Listing>),
+        );
+        const row = findByLabel(result, LABELS.opportunityType);
+        expect(row).toBeDefined();
+        expect(row.value).toBe('Waitlist');
+      });
+
+      it('omits opportunity type for firstComeFirstServe', () => {
+        const result = buildDetails(
+          baseListing({
+            reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+          } as Partial<Listing>),
+        );
+        expect(findByLabel(result, LABELS.opportunityType)).toBeUndefined();
+      });
+
+      it('omits opportunity type for waitlistLottery', () => {
+        const result = buildDetails(
+          baseListing({
+            reviewOrderType: ReviewOrderTypeEnum.waitlistLottery,
+          } as Partial<Listing>),
+        );
+        expect(findByLabel(result, LABELS.opportunityType)).toBeUndefined();
+      });
+    });
+
+    describe('unit summary rows', () => {
+      it('adds one row per unit type key in summary.units', () => {
+        const result = buildDetails(baseListing(), [], {
+          ...emptySummary(),
+          units: {
+            [UnitTypeEnum.oneBdrm]: {
+              count: 3,
+              baths: undefined,
+              sqft: undefined,
+            },
+          },
+        });
+        const row = findByLabel(result, LABELS.oneBdrm);
+        expect(row).toBeDefined();
+        expect(row.value).toContain('3 units');
+      });
+
+      it('sorts unit rows by unitTypeMapping order', () => {
+        const result = buildDetails(baseListing(), [], {
+          ...emptySummary(),
+          units: {
+            [UnitTypeEnum.threeBdrm]: {
+              count: 2,
+              baths: undefined,
+              sqft: undefined,
+            },
+            [UnitTypeEnum.studio]: {
+              count: 5,
+              baths: undefined,
+              sqft: undefined,
+            },
+            [UnitTypeEnum.twoBdrm]: {
+              count: 3,
+              baths: undefined,
+              sqft: undefined,
+            },
+          },
+        });
+        const unitLabels = result
+          .filter((r) =>
+            [LABELS.studio, LABELS.twoBdrm, LABELS.threeBdrm].includes(r.label),
+          )
+          .map((r) => r.label);
+        expect(unitLabels).toEqual([
+          LABELS.studio,
+          LABELS.twoBdrm,
+          LABELS.threeBdrm,
+        ]);
+      });
+
+      it('formats unit summary with count only', () => {
+        const result = buildDetails(baseListing(), [], {
+          ...emptySummary(),
+          units: {
+            [UnitTypeEnum.studio]: {
+              count: 2,
+              baths: undefined,
+              sqft: undefined,
+            },
+          },
+        });
+        const row = findByLabel(result, LABELS.studio);
+        expect(row.value).toBe('2 units');
+      });
+
+      it('formats unit summary with single bath count', () => {
+        const result = buildDetails(baseListing(), [], {
+          ...emptySummary(),
+          units: {
+            [UnitTypeEnum.oneBdrm]: {
+              count: 1,
+              baths: { min: 1, max: 1 },
+              sqft: undefined,
+            },
+          },
+        });
+        const row = findByLabel(result, LABELS.oneBdrm);
+        expect(row.value).toContain('1 bath');
+      });
+
+      it('formats unit summary with bath min-max using max in pluralization', () => {
+        const result = buildDetails(baseListing(), [], {
+          ...emptySummary(),
+          units: {
+            [UnitTypeEnum.oneBdrm]: {
+              count: 1,
+              baths: { min: 1, max: 2 },
+              sqft: undefined,
+            },
+          },
+        });
+        const row = findByLabel(result, LABELS.oneBdrm);
+        expect(row.value).toMatch(/1 - 2 baths/);
+      });
+
+      it.each([
+        {
+          sqft: { min: 600, max: 600 },
+          expected: '600 sqft',
+          type: 'single',
+        },
+        {
+          sqft: { min: 500, max: 650 },
+          expected: '500 - 650 sqft',
+          type: 'range',
+        },
+      ])('formats unit summary with sqft as $type', ({ sqft, expected }) => {
+        const result = buildDetails(baseListing(), [], {
+          ...emptySummary(),
+          units: {
+            [UnitTypeEnum.studio]: {
+              count: 1,
+              baths: undefined,
+              sqft,
+            },
+          },
+        });
+        const row = findByLabel(result, LABELS.studio);
+        expect(row.value).toContain(expected);
+      });
+    });
+
+    describe('rent formatting', () => {
+      it('formats mixed flat and percentage rent', () => {
+        const result = buildDetails(baseListing(), [], {
+          ...emptySummary(),
+          flatRent: { min: 1500, max: 2000 },
+          percentageRent: { min: 25, max: 30 },
+        });
+        const row = findByLabel(result, LABELS.rent);
+        expect(row.value).toMatch(/% of income, or up to \$2000/);
+      });
+
+      it.each([
+        {
+          flatRent: { min: 1500, max: 1500 },
+          expected: '$1500 per month',
+          type: 'single',
+        },
+        {
+          flatRent: { min: 1500, max: 2000 },
+          expected: '$1500 - $2000 per month',
+          type: 'range',
+        },
+      ])('formats flat rent as $type', ({ flatRent, expected }) => {
+        const result = buildDetails(baseListing(), [], {
+          ...emptySummary(),
+          flatRent,
+        });
+        const row = findByLabel(result, LABELS.rent);
+        expect(row.value).toBe(expected);
+      });
+
+      it.each([
+        {
+          percentageRent: { min: 30, max: 30 },
+          expected: '30% of income',
+          type: 'single',
+        },
+        {
+          percentageRent: { min: 25, max: 30 },
+          expected: '25% - 30% of income',
+          type: 'range',
+        },
+      ])('formats percentage rent as $type', ({ percentageRent, expected }) => {
+        const result = buildDetails(baseListing(), [], {
+          ...emptySummary(),
+          percentageRent,
+        });
+        const row = findByLabel(result, LABELS.rent);
+        expect(row.value).toBe(expected);
+      });
+
+      it('omits rent row when neither flatRent nor percentageRent is set', () => {
+        const result = buildDetails(baseListing(), [], emptySummary());
+        expect(findByLabel(result, LABELS.rent)).toBeUndefined();
+      });
+    });
+
+    describe('income formatting', () => {
+      it.each([
+        {
+          minIncome: { min: 3000, max: 3000 },
+          type: 'single',
+          expected: '$3000 per month',
+        },
+        {
+          minIncome: { min: 4000, max: 6000 },
+          type: 'range',
+          expected: '$4000 - $6000 per month',
+        },
+      ])(
+        'includes and formats min income as $type',
+        ({ minIncome, expected }) => {
+          const result = buildDetails(baseListing(), [], {
+            ...emptySummary(),
+            minIncome,
+          });
+          const row = findByLabel(result, LABELS.minIncome);
+          expect(row).toBeDefined();
+          expect(row.value).toBe(expected);
+        },
+      );
+
+      it.each([
+        {
+          maxIncome: { min: 3000, max: 3000 },
+          type: 'single',
+          expected: '$3000 per month',
+        },
+        {
+          maxIncome: { min: 4000, max: 6000 },
+          type: 'range',
+          expected: '$4000 - $6000 per month',
+        },
+      ])(
+        'includes and formats max income as $type',
+        ({ maxIncome, expected }) => {
+          const result = buildDetails(baseListing(), [], {
+            ...emptySummary(),
+            maxIncome,
+          });
+          const row = findByLabel(result, LABELS.maxIncome);
+          expect(row).toBeDefined();
+          expect(row.value).toBe(expected);
+        },
+      );
+
+      it('omits min income when undefined', () => {
+        const result = buildDetails(baseListing(), [], emptySummary());
+        expect(findByLabel(result, LABELS.minIncome)).toBeUndefined();
+      });
+
+      it('omits max income when undefined', () => {
+        const result = buildDetails(baseListing(), [], emptySummary());
+        expect(findByLabel(result, LABELS.maxIncome)).toBeUndefined();
+      });
+    });
+
+    describe('full assembly / order', () => {
+      it('builds all sections when every input is populated', () => {
+        const result = buildDetails(
+          baseListing({
+            reservedCommunityTypes: { name: 'veteran' },
+            applicationDueDate: new Date(2026, 5, 19),
+            neighborhood: 'Downtown',
+            reviewOrderType: ReviewOrderTypeEnum.lottery,
+            listingEvents: [
+              {
+                type: ListingEventsTypeEnum.publicLottery,
+                startDate: new Date(2026, 5, 25),
+              },
+            ],
+          } as Partial<Listing>),
+          [
+            UnitAccessibilityPriorityTypeEnum.mobility,
+            UnitAccessibilityPriorityTypeEnum.hearing,
+          ],
+          {
+            units: {
+              [UnitTypeEnum.studio]: {
+                count: 2,
+                baths: undefined,
+                sqft: undefined,
+              },
+              [UnitTypeEnum.oneBdrm]: {
+                count: 3,
+                baths: undefined,
+                sqft: undefined,
+              },
+            },
+            flatRent: { min: 1500, max: 2000 },
+            percentageRent: { min: 25, max: 30 },
+            minIncome: { min: 3000, max: 3000 },
+            maxIncome: { min: 4000, max: 6000 },
+          },
+        );
+        expect(result).toHaveLength(12);
+        expect(result[0].label).toBe(LABELS.community);
+        expect(result[1].label).toBe(LABELS.applicationsDue);
+        expect(result[2].label).toBe(LABELS.address);
+        expect(result[result.length - 1].label).toBe(LABELS.lotteryDate);
+      });
+
+      it('preserves section order for a representative mixed fixture', () => {
+        const result = buildDetails(
+          baseListing({
+            reservedCommunityTypes: { name: 'veteran' },
+            applicationDueDate: new Date(2026, 5, 19),
+          } as Partial<Listing>),
+          [],
+          {
+            units: {
+              [UnitTypeEnum.studio]: {
+                count: 2,
+                baths: undefined,
+                sqft: undefined,
+              },
+            },
+            flatRent: { min: 1500, max: 1500 },
+            percentageRent: undefined,
+            minIncome: undefined,
+            maxIncome: undefined,
+          },
+        );
+        expect(result.map((r) => r.label)).toEqual([
+          LABELS.community,
+          LABELS.applicationsDue,
+          LABELS.address,
+          LABELS.studio,
+          LABELS.rent,
+        ]);
+      });
     });
   });
 });
