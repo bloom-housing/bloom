@@ -19,7 +19,7 @@ type UnitTypeSummary = {
   sqft: MinMax | undefined;
 };
 
-type ListingUnitsSummary = {
+export type ListingUnitsSummary = {
   units: { [key: string]: UnitTypeSummary };
   flatRent: MinMax | undefined;
   percentageRent: MinMax | undefined;
