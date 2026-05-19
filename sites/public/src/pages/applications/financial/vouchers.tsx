@@ -10,7 +10,10 @@ import {
   listingSectionQuestions,
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
-import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
@@ -18,6 +21,7 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 
 const ApplicationVouchers = () => {
   const { profile } = useContext(AuthContext)
@@ -29,9 +33,22 @@ const ApplicationVouchers = () => {
     ? 4
     : 3
 
+  const enableSection8vsRentalAssistance = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableSection8vsRentalAssistance
+  )
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues, trigger } = useForm({
-    defaultValues: { incomeVouchers: application.incomeVouchers?.toString() },
+    defaultValues: enableSection8vsRentalAssistance
+      ? {
+          incomeVouchers: application.incomeVouchers ?? [],
+        }
+      : {
+          incomeVouchers: application.incomeVouchers?.length
+            ? "true"
+            : undefined,
+        },
     shouldFocusError: false,
   })
 
@@ -39,8 +56,16 @@ const ApplicationVouchers = () => {
     const validation = await trigger()
     if (!validation) return
 
-    const { incomeVouchers } = data
-    const toSave = { incomeVouchers: JSON.parse(incomeVouchers) }
+    let toSave: { incomeVouchers: string[] }
+    if (enableSection8vsRentalAssistance) {
+      const selected = Object.entries(data)
+        .filter(([key, val]) => key.startsWith("incomeVouchers.") && val === true)
+        .map(([key]) => key.replace("incomeVouchers.", ""))
+      toSave = { incomeVouchers: selected }
+    } else {
+      const { incomeVouchers } = data
+      toSave = { incomeVouchers: JSON.parse(incomeVouchers) ? ["incomeVoucher"] : [] }
+    }
 
     conductor.currentStep.save(toSave)
     conductor.routeToNextOrReturnUrl()
@@ -59,6 +84,30 @@ const ApplicationVouchers = () => {
       id: "incomeVouchersNo",
       value: "false",
       label: t("t.no"),
+    },
+  ]
+
+  const incomeVouchersCheckboxValues = [
+    {
+      id: "incomeVouchers.incomeVoucher",
+      value: "incomeVoucher",
+      label: t("application.financial.vouchers.incomeVoucher"),
+      defaultChecked: application.incomeVouchers?.includes("incomeVoucher"),
+    },
+    {
+      id: "incomeVouchers.rentalAssistance",
+      value: "rentalAssistance",
+      label: t("application.financial.vouchers.rentalAssistance"),
+      defaultChecked: application.incomeVouchers?.includes("rentalAssistance"),
+    },
+    {
+      id: "incomeVouchers.issuedVouchers",
+      value: "issuedVouchers",
+      label: t("application.financial.vouchers.issuedVouchers"),
+      defaultChecked:
+        !application.incomeVouchers?.includes("incomeVoucher") &&
+        !application.incomeVouchers?.includes("rentalAssistance"),
+      exclusive: true,
     },
   ]
 
@@ -81,20 +130,22 @@ const ApplicationVouchers = () => {
           listingName={listing?.name}
           heading={t("application.financial.vouchers.title")}
           subheading={
-            <div>
-              <p className="field-note mb-4">
-                <strong>{t("application.financial.vouchers.housingVouchers.strong")}</strong>
-                {` ${t("application.financial.vouchers.housingVouchers.text")}`}
-              </p>
-              <p className="field-note mb-4">
-                <strong>{t("application.financial.vouchers.nonTaxableIncome.strong")}</strong>
-                {` ${t("application.financial.vouchers.nonTaxableIncome.text")}`}
-              </p>
-              <p className="field-note">
-                <strong>{t("application.financial.vouchers.rentalSubsidies.strong")}</strong>
-                {` ${t("application.financial.vouchers.rentalSubsidies.text")}`}
-              </p>
-            </div>
+            !enableSection8vsRentalAssistance ? (
+              <div>
+                <p className="field-note mb-4">
+                  <strong>{t("application.financial.vouchers.housingVouchers.strong")}</strong>
+                  {` ${t("application.financial.vouchers.housingVouchers.text")}`}
+                </p>
+                <p className="field-note mb-4">
+                  <strong>{t("application.financial.vouchers.nonTaxableIncome.strong")}</strong>
+                  {` ${t("application.financial.vouchers.nonTaxableIncome.text")}`}
+                </p>
+                <p className="field-note">
+                  <strong>{t("application.financial.vouchers.rentalSubsidies.strong")}</strong>
+                  {` ${t("application.financial.vouchers.rentalSubsidies.text")}`}
+                </p>
+              </div>
+            ) : undefined
           }
           progressNavProps={{
             currentPageSection: currentPageSection,
@@ -111,23 +162,46 @@ const ApplicationVouchers = () => {
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="sr-only">{t("application.financial.vouchers.legend")}</legend>
-              <FieldGroup
-                fieldGroupClassName="grid grid-cols-1"
-                fieldClassName="ml-0"
-                type="radio"
-                name="incomeVouchers"
-                groupNote={t("t.pleaseSelectOne")}
-                error={errors.incomeVouchers}
-                errorMessage={t("errors.selectAnOption")}
-                register={register}
-                fields={incomeVouchersValues}
-                dataTestId={"app-income-vouchers"}
-                validation={{
-                  validate: () => {
-                    return !!Object.values(getValues()).filter((value) => value).length
-                  },
-                }}
-              />
+              {enableSection8vsRentalAssistance ? (
+                <FieldGroup
+                  fieldGroupClassName="grid grid-cols-1"
+                  fieldClassName="ml-0"
+                  type="checkbox"
+                  name="incomeVouchers"
+                  error={errors.incomeVouchers}
+                  errorMessage={t("errors.selectAnOption")}
+                  register={register}
+                  fields={incomeVouchersCheckboxValues}
+                  dataTestId={"app-income-vouchers"}
+                  validation={{
+                    validate: () => {
+                      const values = getValues()
+                      const anyChecked = incomeVouchersCheckboxValues.some(
+                        (f) => values[`incomeVouchers.${f.value}`]
+                      )
+                      return anyChecked
+                    },
+                  }}
+                />
+              ) : (
+                <FieldGroup
+                  fieldGroupClassName="grid grid-cols-1"
+                  fieldClassName="ml-0"
+                  type="radio"
+                  name="incomeVouchers"
+                  groupNote={t("t.pleaseSelectOne")}
+                  error={errors.incomeVouchers}
+                  errorMessage={t("errors.selectAnOption")}
+                  register={register}
+                  fields={incomeVouchersValues}
+                  dataTestId={"app-income-vouchers"}
+                  validation={{
+                    validate: () => {
+                      return !!Object.values(getValues()).filter((value) => value).length
+                    },
+                  }}
+                />
+              )}
             </fieldset>
           </CardSection>
         </ApplicationFormLayout>

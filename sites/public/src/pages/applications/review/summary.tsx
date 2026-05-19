@@ -162,6 +162,10 @@ const ApplicationSummary = () => {
               conductor.config,
               FeatureFlagEnum.enableReasonableAccommodations
             )}
+            enableSection8vsRentalAssistance={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.enableSection8vsRentalAssistance
+            )}
             swapCommunityTypeWithPrograms={isFeatureFlagOn(
               conductor.config,
               FeatureFlagEnum.swapCommunityTypeWithPrograms

@@ -129,6 +129,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
+  const enableSection8vsRentalAssistance = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSection8vsRentalAssistance,
+    listingDto?.jurisdictions.id
+  )
+
   const units = listingDto?.units
 
   const defaultValues = editMode ? mapApiToForm(application, listingDto, enableV2MSQ) : {}
@@ -401,7 +406,9 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       enableV2MSQ={enableV2MSQ}
                     />
 
-                    <FormHouseholdIncome />
+                    <FormHouseholdIncome
+                      enableSection8vsRentalAssistance={enableSection8vsRentalAssistance}
+                    />
 
                     <FormMultiselectQuestions
                       questions={preferences}

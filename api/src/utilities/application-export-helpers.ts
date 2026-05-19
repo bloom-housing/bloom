@@ -34,6 +34,7 @@ export const getExportHeaders = (
     enableApplicationStatus?: boolean;
     enableFullTimeStudentQuestion?: boolean;
     enableReasonableAccommodations?: boolean;
+    enableSection8vsRentalAssistance?: boolean;
     enableSpokenLanguage?: boolean;
     enableGenderQuestion?: boolean;
     enableSexualOrientationQuestion?: boolean;
@@ -51,6 +52,7 @@ export const getExportHeaders = (
     enableApplicationStatus,
     enableFullTimeStudentQuestion,
     enableReasonableAccommodations,
+    enableSection8vsRentalAssistance,
     enableSpokenLanguage,
     enableGenderQuestion,
     enableSexualOrientationQuestion,
@@ -416,6 +418,12 @@ export const getExportHeaders = (
       {
         path: 'incomeVouchers',
         label: 'Vouchers or Subsidies',
+        format: (val: string[]): string => {
+          if (!val || val.length === 0) {
+            return enableSection8vsRentalAssistance ? 'None' : 'No';
+          }
+          return val.join(', ');
+        },
       },
       {
         path: 'preferredUnitTypes',

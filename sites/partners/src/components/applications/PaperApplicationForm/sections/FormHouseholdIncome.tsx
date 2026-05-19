@@ -1,5 +1,5 @@
 import React from "react"
-import { t, Field, Select } from "@bloom-housing/ui-components"
+import { t, Field, Select, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import {
@@ -8,13 +8,36 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
-const FormHouseholdIncome = () => {
+type FormHouseholdIncomeProps = {
+  enableSection8vsRentalAssistance?: boolean
+}
+
+const FormHouseholdIncome = ({ enableSection8vsRentalAssistance }: FormHouseholdIncomeProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch } = formMethods
 
   const incomePeriodValue: string = watch("application.incomePeriod")
+
+  const incomeVouchersCheckboxValues = [
+    {
+      id: "application.incomeVouchers.incomeVoucher",
+      value: "incomeVoucher",
+      label: t("application.financial.vouchers.incomeVoucher"),
+    },
+    {
+      id: "application.incomeVouchers.rentalAssistance",
+      value: "rentalAssistance",
+      label: t("application.financial.vouchers.rentalAssistance"),
+    },
+    {
+      id: "application.incomeVouchers.issuedVouchers",
+      value: "issuedVouchers",
+      label: t("application.financial.vouchers.issuedVouchers"),
+      exclusive: true,
+    },
+  ]
 
   return (
     <>
@@ -86,16 +109,32 @@ const FormHouseholdIncome = () => {
           </Grid.Cell>
 
           <Grid.Cell>
-            <Select
-              id="application.incomeVouchers"
-              name="application.incomeVouchers"
-              placeholder={t("t.selectOne")}
-              label={t("application.details.vouchers")}
-              register={register}
-              controlClassName="control"
-              options={[YesNoEnum.yes, YesNoEnum.no]}
-              keyPrefix="t"
-            />
+            {enableSection8vsRentalAssistance ? (
+              <fieldset>
+                <legend className="field-label--caps mb-1">
+                  {t("application.details.vouchers")}
+                </legend>
+                <FieldGroup
+                  fieldGroupClassName="grid grid-cols-1"
+                  fieldClassName="ml-0"
+                  type="checkbox"
+                  name="application.incomeVouchers"
+                  register={register}
+                  fields={incomeVouchersCheckboxValues}
+                />
+              </fieldset>
+            ) : (
+              <Select
+                id="application.incomeVouchers"
+                name="application.incomeVouchers"
+                placeholder={t("t.selectOne")}
+                label={t("application.details.vouchers")}
+                register={register}
+                controlClassName="control"
+                options={[YesNoEnum.yes, YesNoEnum.no]}
+                keyPrefix="t"
+              />
+            )}
           </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>

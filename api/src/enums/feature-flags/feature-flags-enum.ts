@@ -58,6 +58,7 @@ export enum FeatureFlagEnum {
   enableRegions = 'enableRegions',
   enableResources = 'enableResources',
   enableSection8Question = 'enableSection8Question',
+  enableSection8vsRentalAssistance = 'enableSection8vsRentalAssistance',
   enableSexualOrientationQuestion = 'enableSexualOrientationQuestion',
   enableSingleUseCode = 'enableSingleUseCode',
   enableSmokingPolicyRadio = 'enableSmokingPolicyRadio',
@@ -344,6 +345,11 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableSection8Question,
     description: 'When true, the Section 8 listing data will be visible',
+  },
+  {
+    name: FeatureFlagEnum.enableSection8vsRentalAssistance,
+    description:
+      'When true, the vouchers question on the application form becomes a multi-select checkbox experience with Section 8, rental assistance, and none of the above as options',
   },
   {
     name: FeatureFlagEnum.enableSexualOrientationQuestion,

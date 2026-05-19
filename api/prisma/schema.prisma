@@ -402,7 +402,7 @@ model Applications {
   housingStatus                  String?                       @map("housing_status")
   income                         String?
   incomePeriod                   IncomePeriodEnum?             @map("income_period")
-  incomeVouchers                 Boolean?                      @map("income_vouchers")
+  incomeVouchers                 String[]                      @map("income_vouchers")
   // This application is the most recent for the user
   isNewest                       Boolean?                      @default(false) @map("is_newest")
   language                       LanguagesEnum?
@@ -481,7 +481,7 @@ model ApplicationSnapshot {
   housingStatus                  String?                       @map("housing_status")
   income                         String?
   incomePeriod                   IncomePeriodEnum?             @map("income_period")
-  incomeVouchers                 Boolean?                      @map("income_vouchers")
+  incomeVouchers                 String[]                      @map("income_vouchers")
   // This application is the most recent for the user
   isNewest                       Boolean?                      @default(false) @map("is_newest")
   language                       LanguagesEnum?

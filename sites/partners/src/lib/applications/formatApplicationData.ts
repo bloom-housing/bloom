@@ -239,7 +239,7 @@ export const mapFormToApi = ({
   const incomePeriod: IncomePeriodEnum | null = data.application?.incomePeriod || null
 
   const income = incomePeriod === IncomePeriodEnum.perMonth ? incomeMonth : incomeYear || null
-  const incomeVouchers = getBooleanValue(data.application.incomeVouchers)
+  const incomeVouchers = data.application.incomeVouchers ?? []
   const acceptedTerms = getBooleanValue(data.application.acceptedTerms)
   const householdExpectingChanges = getBooleanValue(data.application.householdExpectingChanges)
   const householdStudent = getBooleanValue(data.application.householdStudent)
@@ -478,7 +478,7 @@ export const mapApiToForm = (
       manualLotteryPositionNumber,
     } = applicationData
 
-    const incomeVouchers = getYesNoValue(applicationData.incomeVouchers)
+    const incomeVouchers = applicationData.incomeVouchers ?? []
     const acceptedTerms = getYesNoValue(applicationData.acceptedTerms)
     const householdExpectingChanges = getYesNoValue(applicationData.householdExpectingChanges)
     const householdStudent = getYesNoValue(applicationData.householdStudent)

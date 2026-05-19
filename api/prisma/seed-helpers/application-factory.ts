@@ -132,7 +132,7 @@ export const applicationFactory = async (optionalParams?: {
           },
         }
       : undefined,
-    incomeVouchers: randomBoolean(),
+    incomeVouchers: [],
     additionalPhoneNumber: includeAdditionalPhone
       ? optionalParams?.additionalPhone || '(456) 456-4564'
       : undefined,

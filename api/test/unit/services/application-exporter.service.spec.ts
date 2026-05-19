@@ -662,7 +662,7 @@ describe('Testing application export service', () => {
         id: id,
         income: 'income 1',
         incomePeriod: 'per month',
-        incomeVouchers: 'true',
+        incomeVouchers: 'incomeVoucher',
         markedAsDuplicate: 'true',
         preferredUnitTypes: 'Studio,One Bedroom',
         reasonableAccommodations: '',

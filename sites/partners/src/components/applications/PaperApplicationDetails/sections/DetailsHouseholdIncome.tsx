@@ -6,8 +6,27 @@ import { formatIncome } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { IncomePeriodEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-const DetailsHouseholdIncome = () => {
+type DetailsHouseholdIncomeProps = {
+  enableSection8vsRentalAssistance?: boolean
+}
+
+const DetailsHouseholdIncome = ({ enableSection8vsRentalAssistance }: DetailsHouseholdIncomeProps) => {
   const application = useContext(ApplicationContext)
+
+  const renderVouchers = () => {
+    if (enableSection8vsRentalAssistance) {
+      if (!application.incomeVouchers || application.incomeVouchers.length === 0) {
+        return t("application.financial.vouchers.issuedVouchers")
+      }
+      return application.incomeVouchers
+        .map((v) => t(`application.financial.vouchers.${v}`))
+        .join(", ")
+    }
+    if (application.incomeVouchers === null || application.incomeVouchers === undefined) {
+      return t("t.n/a")
+    }
+    return application.incomeVouchers.length > 0 ? t("t.yes") : t("t.no")
+  }
 
   return (
     <SectionWithGrid heading={t("application.details.householdIncome")} inset>
@@ -38,15 +57,7 @@ const DetailsHouseholdIncome = () => {
 
         <Grid.Cell>
           <FieldValue label={t("application.details.vouchers")} testId="vouchers">
-            {(() => {
-              if (application.incomeVouchers === null) return t("t.n/a")
-
-              if (application.incomeVouchers) {
-                return t("t.yes")
-              }
-
-              return t("t.no")
-            })()}
+            {renderVouchers()}
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>
