@@ -2959,12 +2959,10 @@ export class ListingService implements OnModuleInit {
         language: true,
       },
       where: {
+        NOT: {
+          email: '',
+        },
         AND: [
-          {
-            email: {
-              not: null,
-            },
-          },
           {
             userPreferences: {
               sendEmailNotifications: true,
