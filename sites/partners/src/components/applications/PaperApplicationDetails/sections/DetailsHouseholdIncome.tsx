@@ -16,7 +16,7 @@ const DetailsHouseholdIncome = ({ enableSection8vsRentalAssistance }: DetailsHou
   const renderVouchers = () => {
     if (enableSection8vsRentalAssistance) {
       if (!application.incomeVouchers || application.incomeVouchers.length === 0) {
-        return t("application.financial.vouchers.issuedVouchers")
+        return t("t.n/a")
       }
       return application.incomeVouchers
         .map((v) => t(`application.financial.vouchers.${v}`))
