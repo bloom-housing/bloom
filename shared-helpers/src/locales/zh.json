@@ -178,6 +178,7 @@
   "application.chooseLanguage.letsGetStarted": "我們來展開申請程序",
   "application.chooseLanguage.signInSaveTime": "登入網站從上次申請的詳情開始，這可節省您的時間，並讓您隨時查看這次申請的進展情況。",
   "application.confirmation.informationSubmittedTitle": "這是您提交的資料。",
+  "application.confirmation.expiredDetailsWarning": "如果您的家庭信息自提交申请后发生了变化，请直接联系该房产。家庭信息随时间发生变化是很常见的，过时的信息不会对您造成不利影响。提交后编辑申请的功能目前正在开发中，您将能够在以后对现有申请进行更改。",
   "application.confirmation.lotteryNumber": "您的確認號碼",
   "application.confirmation.printCopy": "請列印一份副本存檔",
   "application.confirmation.submitted": "已提交： ",

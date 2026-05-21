@@ -178,6 +178,7 @@
   "application.chooseLanguage.letsGetStarted": "لنبدأ في تطبيقك",
   "application.chooseLanguage.signInSaveTime": "يمكن أن يوفر لك تسجيل الدخول الوقت من خلال البدء بتفاصيل تطبيقك الأخير ، ويسمح لك بالتحقق من حالة هذا التطبيق في أي وقت.",
   "application.confirmation.informationSubmittedTitle": "هذه هي المعلومات التي قدمتها.",
+  "application.confirmation.expiredDetailsWarning": "إذا تغيرت تفاصيل أسرتك منذ تقديم طلبك، يرجى التواصل مع العقار مباشرةً. من الشائع أن تتغير تفاصيل الأسرة بمرور الوقت، ولن يُؤخذ عليك أي معلومة لم تعد محدّثة. إمكانية تعديل الطلب بعد تقديمه قيد التطوير حالياً، وستتمكن من إجراء تغييرات على طلب موجود في تاريخ لاحق.",
   "application.confirmation.lotteryNumber": "رقم التأكيد الخاص بك",
   "application.confirmation.printCopy": "اطبع نسخة لسجلاتك",
   "application.confirmation.submitted": "مقدم:",
