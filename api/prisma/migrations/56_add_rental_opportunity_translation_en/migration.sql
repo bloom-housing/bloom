@@ -1,5 +1,3 @@
--- Adds English copy for listing opportunity email notices.
-
 UPDATE translations
 SET translations = jsonb_set(
   translations,
