@@ -22,20 +22,14 @@ const FormHouseholdIncome = ({ enableSection8vsRentalAssistance }: FormHousehold
 
   const incomeVouchersCheckboxValues = [
     {
-      id: "application.incomeVouchers.incomeVoucher",
-      value: "incomeVoucher",
-      label: t("application.financial.vouchers.incomeVoucher"),
+      id: "application.incomeVouchers.issuedVouchers",
+      value: "issuedVouchers",
+      label: t("application.financial.vouchers.issuedVouchers"),
     },
     {
       id: "application.incomeVouchers.rentalAssistance",
       value: "rentalAssistance",
       label: t("application.financial.vouchers.rentalAssistance"),
-    },
-    {
-      id: "application.incomeVouchers.issuedVouchers",
-      value: "issuedVouchers",
-      label: t("application.financial.vouchers.issuedVouchers"),
-      exclusive: true,
     },
   ]
 
@@ -109,32 +103,46 @@ const FormHouseholdIncome = ({ enableSection8vsRentalAssistance }: FormHousehold
           </Grid.Cell>
 
           <Grid.Cell>
-            {enableSection8vsRentalAssistance ? (
-              <fieldset>
-                <legend className="field-label--caps mb-1">
-                  {t("application.details.vouchers")}
-                </legend>
-                <FieldGroup
-                  fieldGroupClassName="grid grid-cols-1"
-                  fieldClassName="ml-0"
-                  type="checkbox"
-                  name="application.incomeVouchers"
-                  register={register}
-                  fields={incomeVouchersCheckboxValues}
-                />
-              </fieldset>
-            ) : (
-              <Select
-                id="application.incomeVouchers"
-                name="application.incomeVouchers"
-                placeholder={t("t.selectOne")}
-                label={t("application.details.vouchers")}
-                register={register}
-                controlClassName="control"
-                options={[YesNoEnum.yes, YesNoEnum.no]}
-                keyPrefix="t"
-              />
-            )}
+            <FieldGroup
+              fieldGroupClassName="grid grid-cols-1"
+              fieldClassName="ml-0"
+              type="checkbox"
+              name="application.incomeVouchers"
+              register={register}
+              fields={
+                enableSection8vsRentalAssistance
+                  ? [
+                      {
+                        id: "application.incomeVouchers.issuedVouchers",
+                        value: "issuedVouchers",
+                        label: t("application.financial.vouchers.issuedVouchers"),
+                      },
+                      {
+                        id: "application.incomeVouchers.rentalAssistance",
+                        value: "rentalAssistance",
+                        label: t("application.financial.vouchers.rentalAssistance"),
+                      },
+                      {
+                        id: "application.incomeVouchers.none",
+                        value: "none",
+                        label: t("application.financial.vouchers.none"),
+                      },
+                    ]
+                  : [
+                      {
+                        id: "application.incomeVouchers.incomeVoucher",
+                        value: "incomeVoucher",
+                        label: YesNoEnum.yes,
+                      },
+                      {
+                        id: "application.incomeVouchers.none",
+                        value: "none",
+                        label: YesNoEnum.no,
+                      },
+                    ]
+              }
+              groupLabel={t("application.details.vouchers")}
+            />
           </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>

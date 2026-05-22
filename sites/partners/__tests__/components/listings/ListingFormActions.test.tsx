@@ -13,7 +13,6 @@ import ListingFormActions, {
 } from "../../../src/components/listings/ListingFormActions"
 import { mockNextRouter, render } from "../../testUtils"
 import {
-  FeatureFlagEnum,
   UserRoleEnum,
   Jurisdiction,
   ListingsStatusEnum,

@@ -45,9 +45,7 @@ const ApplicationVouchers = () => {
           incomeVouchers: application.incomeVouchers ?? [],
         }
       : {
-          incomeVouchers: application.incomeVouchers?.length
-            ? "true"
-            : undefined,
+          incomeVouchers: application.incomeVouchers?.length ? "true" : undefined,
         },
     shouldFocusError: false,
   })
@@ -89,10 +87,10 @@ const ApplicationVouchers = () => {
 
   const incomeVouchersCheckboxValues = [
     {
-      id: "incomeVouchers.incomeVoucher",
-      value: "incomeVoucher",
-      label: t("application.financial.vouchers.incomeVoucher"),
-      defaultChecked: application.incomeVouchers?.includes("incomeVoucher"),
+      id: "incomeVouchers.issuedVouchers",
+      value: "issuedVouchers",
+      label: t("application.financial.vouchers.issuedVouchers"),
+      defaultChecked: application.incomeVouchers?.includes("issuedVouchers"),
     },
     {
       id: "incomeVouchers.rentalAssistance",
@@ -101,11 +99,11 @@ const ApplicationVouchers = () => {
       defaultChecked: application.incomeVouchers?.includes("rentalAssistance"),
     },
     {
-      id: "incomeVouchers.issuedVouchers",
-      value: "issuedVouchers",
-      label: t("application.financial.vouchers.issuedVouchers"),
+      id: "incomeVouchers.none",
+      value: "none",
+      label: t("application.financial.vouchers.none"),
       defaultChecked:
-        !application.incomeVouchers?.includes("incomeVoucher") &&
+        !application.incomeVouchers?.includes("issuedVouchers") &&
         !application.incomeVouchers?.includes("rentalAssistance"),
       exclusive: true,
     },

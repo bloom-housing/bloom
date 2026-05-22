@@ -10,7 +10,9 @@ type DetailsHouseholdIncomeProps = {
   enableSection8vsRentalAssistance?: boolean
 }
 
-const DetailsHouseholdIncome = ({ enableSection8vsRentalAssistance }: DetailsHouseholdIncomeProps) => {
+const DetailsHouseholdIncome = ({
+  enableSection8vsRentalAssistance,
+}: DetailsHouseholdIncomeProps) => {
   const application = useContext(ApplicationContext)
 
   const renderVouchers = () => {
