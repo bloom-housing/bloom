@@ -2886,6 +2886,10 @@ export class ListingService implements OnModuleInit {
         jurisId: rawJurisdiction.id,
       });
 
+    if (mappedListing.status === ListingsStatusEnum.active) {
+      await this.sendListingPublishNotification(mappedListing);
+    }
+
     if (enableV2MSQ && mappedListing.status === ListingsStatusEnum.active) {
       const multiselectQuestions =
         mappedListing.listingMultiselectQuestions.map(
@@ -2915,6 +2919,106 @@ export class ListingService implements OnModuleInit {
     );
 
     return mappedListing;
+  }
+
+  /**
+   * When listing is published, notify users with declared approval for example
+   */
+  async sendListingPublishNotification(listing: Listing): Promise<void> {
+    const priorityTypes = Array.from(
+      new Set(
+        (listing.units || [])
+          .map((unit) => unit.accessibilityPriorityType)
+          .filter((type) => !!type),
+      ),
+    );
+
+    const preferenceFilters = priorityTypes.map((priorityType) => {
+      return {
+        [priorityType]: true,
+      } as Prisma.UserNotificationPreferencesWhereInput;
+    });
+
+    if (listing?.region) {
+      preferenceFilters.push({
+        regions: {
+          has: listing.region,
+        },
+      } as Prisma.UserNotificationPreferencesWhereInput);
+    }
+
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
+      preferenceFilters.push({
+        lottery: true,
+      });
+    }
+
+    const emailUsers = await this.prisma.userAccounts.findMany({
+      select: {
+        email: true,
+        language: true,
+      },
+      where: {
+        NOT: {
+          email: '',
+        },
+        AND: [
+          {
+            userPreferences: {
+              sendEmailNotifications: true,
+            },
+          },
+          {
+            notificationPreferences: {
+              OR: preferenceFilters,
+            },
+          },
+        ],
+      },
+    });
+
+    if (!emailUsers.length) {
+      this.logger.log(
+        `Skipping publish notification for listing ${listing.id}: no matching users`,
+      );
+      return;
+    }
+
+    const emailByLanguage = {};
+    Object.keys(LanguagesEnum).forEach((languageKey) => {
+      emailByLanguage[languageKey] = emailUsers
+        .filter((user) => user.language === languageKey)
+        .map((userObj) => userObj.email);
+    });
+
+    const noLanguageIndicated = emailUsers
+      .filter((user) => !user.language)
+      .map((userObj) => userObj.email);
+
+    if (!emailByLanguage[LanguagesEnum.en])
+      emailByLanguage[LanguagesEnum.en] = noLanguageIndicated;
+    else
+      emailByLanguage[LanguagesEnum.en] = [
+        ...emailByLanguage[LanguagesEnum.en],
+        ...noLanguageIndicated,
+      ];
+
+    const jurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        id: true,
+        publicUrl: true,
+      },
+      where: {
+        id: listing.jurisdictions.id,
+      },
+    });
+
+    await this.emailService.listingPublishNotification(
+      { id: jurisdiction.id },
+      listing,
+      priorityTypes,
+      emailByLanguage,
+    );
   }
 
   /**
