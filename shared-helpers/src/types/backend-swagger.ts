@@ -10781,6 +10781,7 @@ export enum FeatureFlagEnum {
   "enableRegions" = "enableRegions",
   "enableResources" = "enableResources",
   "enableSection8Question" = "enableSection8Question",
+  "enableSection8vsRentalAssistance" = "enableSection8vsRentalAssistance",
   "enableSingleUseCode" = "enableSingleUseCode",
   "enableSmokingPolicyRadio" = "enableSmokingPolicyRadio",
   "enableSpokenLanguage" = "enableSpokenLanguage",
