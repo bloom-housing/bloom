@@ -17,6 +17,7 @@ export const userFactory = async (optionalParams?: {
   password?: string;
   phoneNumber?: string;
   phoneNumberVerified?: boolean;
+  passwordUpdatedAt?: Date;
   roles?: Prisma.UserRolesUncheckedCreateWithoutUserAccountsInput;
   singleUseCode?: string;
   lastLoginAt?: Date;
@@ -41,6 +42,7 @@ export const userFactory = async (optionalParams?: {
   passwordHash: optionalParams?.password
     ? await passwordToHash(optionalParams?.password)
     : await passwordToHash('Abcdef12345!'),
+  passwordUpdatedAt: optionalParams?.passwordUpdatedAt || new Date(),
   phoneNumber:
     optionalParams?.phoneNumber ||
     (optionalParams?.isAdvocate ? '(415) 555-1212' : undefined),
