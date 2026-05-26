@@ -68,13 +68,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.statusMessage = response.statusText
     if (response.headers) {
       if (response.headers["content-type"]) {
-        res.setHeader("content-type", response.headers["content-type"])
+        res.setHeader("content-type", response.headers["content-type"] as string)
       }
       if (response.headers["content-disposition"]) {
-        res.setHeader("content-disposition", response.headers["content-disposition"])
+        res.setHeader("content-disposition", response.headers["content-disposition"] as string)
       }
       if (response.headers["connection"]) {
-        res.setHeader("connection", response.headers["connection"])
+        res.setHeader("connection", response.headers["connection"] as string)
       }
     }
     res.status(response.status).send(response.data)
