@@ -255,6 +255,95 @@ describe('Unit Transformations', () => {
         ],
       });
     });
+    it('should handle missing min occupancy limit', () => {
+      const result = generateHmiData(
+        [unit],
+        [{ min: null, max: 4 }],
+        [generateAmiChart()],
+      );
+
+      expect(result).toEqual({
+        columns: {
+          maxIncomeMonth: 'listings.maxIncomeMonth',
+          maxIncomeYear: 'listings.maxIncomeYear',
+          sizeColumn: 'listings.householdSize',
+        },
+        rows: [
+          {
+            maxIncomeMonth: 'listings.monthlyIncome*income:$2,500.00',
+            maxIncomeYear: 'listings.annualIncome*income:$30,000',
+            sizeColumn: 1,
+          },
+          {
+            maxIncomeMonth: 'listings.monthlyIncome*income:$2,583.33',
+            maxIncomeYear: 'listings.annualIncome*income:$31,000',
+            sizeColumn: 2,
+          },
+          {
+            maxIncomeMonth: 'listings.monthlyIncome*income:$2,666.67',
+            maxIncomeYear: 'listings.annualIncome*income:$32,000',
+            sizeColumn: 3,
+          },
+          {
+            maxIncomeMonth: 'listings.monthlyIncome*income:$2,750.00',
+            maxIncomeYear: 'listings.annualIncome*income:$33,000',
+            sizeColumn: 4,
+          },
+        ],
+      });
+    });
+    it('should handle missing max occupancy limit', () => {
+      const result = generateHmiData(
+        [unit],
+        [{ min: 2, max: null }],
+        [generateAmiChart()],
+      );
+
+      expect(result).toEqual({
+        columns: {
+          maxIncomeMonth: 'listings.maxIncomeMonth',
+          maxIncomeYear: 'listings.maxIncomeYear',
+          sizeColumn: 'listings.householdSize',
+        },
+        rows: [
+          {
+            maxIncomeMonth: 'listings.monthlyIncome*income:$2,583.33',
+            maxIncomeYear: 'listings.annualIncome*income:$31,000',
+            sizeColumn: 2,
+          },
+          {
+            maxIncomeMonth: 'listings.monthlyIncome*income:$2,666.67',
+            maxIncomeYear: 'listings.annualIncome*income:$32,000',
+            sizeColumn: 3,
+          },
+          {
+            maxIncomeMonth: 'listings.monthlyIncome*income:$2,750.00',
+            maxIncomeYear: 'listings.annualIncome*income:$33,000',
+            sizeColumn: 4,
+          },
+          {
+            maxIncomeMonth: 'listings.monthlyIncome*income:$2,833.33',
+            maxIncomeYear: 'listings.annualIncome*income:$34,000',
+            sizeColumn: 5,
+          },
+          {
+            maxIncomeMonth: 'listings.monthlyIncome*income:$2,916.67',
+            maxIncomeYear: 'listings.annualIncome*income:$35,000',
+            sizeColumn: 6,
+          },
+          {
+            maxIncomeMonth: 'listings.monthlyIncome*income:$3,000.00',
+            maxIncomeYear: 'listings.annualIncome*income:$36,000',
+            sizeColumn: 7,
+          },
+          {
+            maxIncomeMonth: 'listings.monthlyIncome*income:$3,083.33',
+            maxIncomeYear: 'listings.annualIncome*income:$37,000',
+            sizeColumn: 8,
+          },
+        ],
+      });
+    });
   });
   describe('convertToTitleCase', () => {
     it('should return empty string for empty input', () => {
