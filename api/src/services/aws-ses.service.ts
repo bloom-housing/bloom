@@ -9,6 +9,7 @@ import {
   SESv2ServiceException,
   SendBulkEmailRequest,
   SendBulkEmailCommand,
+  BulkEmailStatus,
 } from '@aws-sdk/client-sesv2';
 
 @Injectable()
@@ -48,37 +49,42 @@ export class AwsSesService extends EmailProvider {
         return accum;
       }, []);
       for (const emailList of emailsChunked) {
-        const commandInput: SendBulkEmailRequest = {
-          FromEmailAddress: from,
-          BulkEmailEntries: emailList.map((email) => {
-            return {
-              Destination: {
-                ToAddresses: [email],
+        try {
+          const commandInput: SendBulkEmailRequest = {
+            FromEmailAddress: from,
+            BulkEmailEntries: emailList.map((email) => {
+              return {
+                Destination: {
+                  ToAddresses: [email],
+                },
+              };
+            }),
+            DefaultContent: {
+              Template: {
+                TemplateContent: {
+                  Subject: subject,
+                  Html: body,
+                },
+                TemplateData: '{}', // We need to send template data even if there are no variables,
+                Attachments: attachments,
               },
-            };
-          }),
-          DefaultContent: {
-            Template: {
-              TemplateContent: {
-                Subject: subject,
-                Html: body,
-              },
-              TemplateData: '{}', // We need to send template data even if there are no variables,
-              Attachments: attachments,
             },
-          },
-        };
-        const command = new SendBulkEmailCommand(commandInput);
-        return this.sesClient
-          .send(command)
-          .catch(function (err: SESv2ServiceException) {
+          };
+          const command = new SendBulkEmailCommand(commandInput);
+          const response = await this.sesClient.send(command);
+
+          const nonSuccessResults = response.BulkEmailEntryResults.filter(
+            (result) => result.Status !== BulkEmailStatus.SUCCESS,
+          );
+          if (nonSuccessResults.length) {
             console.error(
-              `Error sending email to: ${
-                isMultipleRecipients ? to.toString() : to
-              }! Error body:`,
-              err.toString(),
+              `Failed to send emails to ${nonSuccessResults.toString()}`,
             );
-          });
+          }
+        } catch (e) {
+          console.log(e);
+          console.error(`Failed to send emails to ${emailList.toString()}`);
+        }
       }
     } else {
       const commandInput: SendEmailRequest = {
@@ -103,7 +109,7 @@ export class AwsSesService extends EmailProvider {
         },
       };
       const command = new SendEmailCommand(commandInput);
-      await this.sesClient
+      return await this.sesClient
         .send(command)
         .catch(function (err: SESv2ServiceException) {
           console.error(
