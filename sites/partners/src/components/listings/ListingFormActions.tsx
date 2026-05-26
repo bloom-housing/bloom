@@ -747,7 +747,11 @@ const ListingFormActions = ({
             onClose={() => setSaveScheduledDialogOpen(false)}
             onConfirm={async () => {
               setSaveScheduledDialogOpen(false)
-              await approveAndSetStatus(ListingsStatusEnum.scheduled)
+              const hasScheduledDate =
+                scheduledPublishAt != null && dayjs.utc(scheduledPublishAt).isValid()
+              await approveAndSetStatus(
+                hasScheduledDate ? ListingsStatusEnum.scheduled : ListingsStatusEnum.active
+              )
             }}
             currentScheduledPublishAt={scheduledPublishAt}
           />

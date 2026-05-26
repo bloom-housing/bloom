@@ -4,8 +4,6 @@ import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 import { t } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
-import { SubmitFunction } from "../index"
-import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type SaveScheduledListingDialogProps = {
   isOpen: boolean
