@@ -2,12 +2,7 @@ import React from "react"
 import { setupServer } from "msw/lib/node"
 import { fireEvent, mockNextRouter, render } from "../../../testUtils"
 import ApplicationMember from "../../../../src/pages/applications/household/member"
-import {
-  AuthProvider,
-  ConfigProvider,
-  blankApplication,
-  MessageProvider,
-} from "@bloom-housing/shared-helpers"
+import { blankApplication } from "@bloom-housing/shared-helpers"
 import {
   HouseholdMemberRelationship,
   Listing,
@@ -56,13 +51,7 @@ const renderWithCustomRelationships = (relationships: HouseholdMemberRelationshi
         },
       }}
     >
-      <ConfigProvider apiUrl={"http://localhost:3100"}>
-        <AuthProvider>
-          <MessageProvider>
-            <ApplicationMember />
-          </MessageProvider>
-        </AuthProvider>
-      </ConfigProvider>
+      <ApplicationMember />
     </AppSubmissionContext.Provider>
   )
 }
