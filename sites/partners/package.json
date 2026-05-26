@@ -38,7 +38,7 @@
     "@tiptap/extension-character-count": "^2.24.0",
     "@tiptap/extension-link": "^2.24.0",
     "@tiptap/pm": "^2.24.0",
-    "@tiptap/react": "^2.24.0",
+    "@tiptap/react": "^3.23.6",
     "@tiptap/starter-kit": "^2.24.0",
     "ag-grid-community": "^26.0.0",
     "autoprefixer": "^10.3.4",
