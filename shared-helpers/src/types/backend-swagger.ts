@@ -10636,7 +10636,6 @@ export enum HouseholdMemberRelationship {
   "greatGrandparent" = "greatGrandparent",
   "inLaw" = "inLaw",
   "friend" = "friend",
-  "other" = "other",
   "aideOrAttendant" = "aideOrAttendant",
   "spousePartner" = "spousePartner",
   "girlfriendBoyfriend" = "girlfriendBoyfriend",
@@ -10645,6 +10644,7 @@ export enum HouseholdMemberRelationship {
   "nephewNiece" = "nephewNiece",
   "grandparentGreatGrandparent" = "grandparentGreatGrandparent",
   "liveInAide" = "liveInAide",
+  "other" = "other",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
 export enum MultiselectQuestionOrderByKeys {

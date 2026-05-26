@@ -1,7 +1,6 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { fireEvent, render as rtlRender } from "@testing-library/react"
-import { mockNextRouter, render } from "../../../testUtils"
+import { fireEvent, mockNextRouter, render } from "../../../testUtils"
 import ApplicationMember from "../../../../src/pages/applications/household/member"
 import {
   AuthProvider,
@@ -43,7 +42,7 @@ const renderWithCustomRelationships = (relationships: HouseholdMemberRelationshi
     visibleHouseholdMemberRelationships: relationships,
   }
 
-  return rtlRender(
+  return render(
     <AppSubmissionContext.Provider
       value={{
         conductor: conductor,
@@ -171,7 +170,7 @@ describe("applications pages", () => {
       const { getByTestId } = renderWithCustomRelationships(customRelationships)
 
       const select = getByTestId("app-household-member-relationship")
-      const options = select.querySelectorAll("option")
+      const options = select.querySelectorAll<HTMLOptionElement>("option")
       const optionValues = Array.from(options)
         .map((opt) => opt.getAttribute("value"))
         .filter((v) => v !== "")
