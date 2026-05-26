@@ -1447,6 +1447,9 @@ export class ListingService implements OnModuleInit {
     }
 
     if (enableAutopublish && dto.scheduledPublishAt) {
+      dto.scheduledPublishAt = this.normalizeScheduledPublishAt(
+        dto.scheduledPublishAt,
+      );
       this.checkScheduledPublishAtIsInFuture(dto.scheduledPublishAt);
     }
 
@@ -2267,6 +2270,9 @@ export class ListingService implements OnModuleInit {
       incomingDto.scheduledPublishAt &&
       enableAutopublish
     ) {
+      incomingDto.scheduledPublishAt = this.normalizeScheduledPublishAt(
+        incomingDto.scheduledPublishAt,
+      );
       this.checkScheduledPublishAtIsInFuture(incomingDto.scheduledPublishAt);
     }
 
@@ -3083,6 +3089,12 @@ export class ListingService implements OnModuleInit {
     }
   };
 
+  normalizeScheduledPublishAt(scheduledPublishAt: Date): Date {
+    const appTimezone = process.env.TIME_ZONE;
+    const dateStr = dayjs.utc(scheduledPublishAt).format('YYYY-MM-DD');
+    return dayjs.tz(dateStr, 'YYYY-MM-DD', appTimezone).startOf('day').toDate();
+  }
+
   private checkScheduledPublishAtIsInFuture(scheduledPublishAt: Date): void {
     const appTimezone = process.env.TIME_ZONE;
     const minimumScheduledPublishAt = dayjs
@@ -3091,9 +3103,9 @@ export class ListingService implements OnModuleInit {
       .add(1, 'day')
       .startOf('day');
 
-    const incomingScheduledPublishAt = dayjs(scheduledPublishAt)
-      .tz(appTimezone, true)
-      .startOf('day');
+    const incomingScheduledPublishAt = dayjs
+      .utc(scheduledPublishAt)
+      .tz(appTimezone);
 
     if (incomingScheduledPublishAt.isBefore(minimumScheduledPublishAt)) {
       throw new BadRequestException([
