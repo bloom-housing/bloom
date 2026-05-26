@@ -103,7 +103,7 @@ export class AwsSesService extends EmailProvider {
         },
       };
       const command = new SendEmailCommand(commandInput);
-      return this.sesClient
+      await this.sesClient
         .send(command)
         .catch(function (err: SESv2ServiceException) {
           console.error(
