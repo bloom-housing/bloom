@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
+import { useFormContext } from "react-hook-form"
 import dayjs from "dayjs"
 import LinkIcon from "@heroicons/react/20/solid/LinkIcon"
 import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon"
@@ -8,6 +9,9 @@ import { Button, Link, Grid, Icon } from "@bloom-housing/ui-seeds"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 import AdminListingApprovalDialog from "./PaperListingForm/dialogs/AdminListingApprovalDialog"
+import UnapproveListingDialog from "./PaperListingForm/dialogs/UnapproveListingDialog"
+import PublishScheduledListingDialog from "./PaperListingForm/dialogs/PublishScheduledListingDialog"
+import SaveScheduledListingDialog from "./PaperListingForm/dialogs/SaveScheduledListingDialog"
 import { pdfUrlFromListingEvents, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
@@ -19,6 +23,7 @@ import {
 import { StatusAside } from "../shared/StatusAside"
 import { SubmitFunction } from "./PaperListingForm"
 import { ListingContext } from "./ListingContext"
+import { createDate } from "../../lib/helpers"
 
 export enum ListingFormActionsType {
   add = "add",
@@ -49,11 +54,19 @@ const ListingFormActions = ({
   submitFormWithStatus,
   setErrorAlert,
 }: ListingFormActionsProps) => {
+  const formContext = useFormContext()
+  const scheduledPublishAt = createDate(
+    formContext?.watch("scheduledListingPublishDateField"),
+    true
+  )
   const listing = useContext(ListingContext)
   const { profile, listingsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   const router = useRouter()
   const [adminApproveDialogOpen, setAdminApproveDialogOpen] = useState(false)
+  const [unapproveDialogOpen, setUnapproveDialogOpen] = useState(false)
+  const [publishScheduledDialogOpen, setPublishScheduledDialogOpen] = useState(false)
+  const [saveScheduledDialogOpen, setSaveScheduledDialogOpen] = useState(false)
   const isSameEditingUser = profile?.id === listing?.lastUpdatedByUser?.id
   const showLastUpdatedByUser =
     !!listing?.lastUpdatedByUser?.name && type !== ListingFormActionsType.add
@@ -169,6 +182,31 @@ const ListingFormActions = ({
     },
     [addToast, listing, listingsService, router, setErrorAlert]
   )
+
+  const unapproveAndSetStatus = useCallback(async () => {
+    try {
+      const result = await listingsService.update({
+        id: listing.id,
+        body: {
+          ...(listing as unknown as ListingUpdate),
+          // account for type mismatch between ListingMultiSelectQuestionType and IdDto
+          listingMultiselectQuestions: listing.listingMultiselectQuestions?.map(
+            (multiselectQuestions) => ({
+              ordinal: multiselectQuestions.ordinal,
+              id: multiselectQuestions.multiselectQuestions?.id,
+            })
+          ),
+          status: ListingsStatusEnum.pendingReview,
+        },
+      })
+      if (result) {
+        addToast(t("listings.approval.submittedForReview"), { variant: "success" })
+        await router.push(`/`)
+      }
+    } catch (err) {
+      addToast(t("errors.somethingWentWrong"), { variant: "warn" })
+    }
+  }, [addToast, listing, listingsService, router])
 
   const actions = useMemo(() => {
     const cancelButton = (
@@ -407,6 +445,48 @@ const ListingFormActions = ({
       </Grid.Cell>
     )
 
+    const unapproveButton = (
+      <Grid.Cell key="btn-unapprove">
+        <Button
+          id="unapproveButton"
+          type="button"
+          variant="alert-outlined"
+          className="w-full"
+          onClick={() => setUnapproveDialogOpen(true)}
+        >
+          {t("listings.approval.unapprove")}
+        </Button>
+      </Grid.Cell>
+    )
+
+    const publishScheduledButton = (
+      <Grid.Cell key="btn-publish-scheduled">
+        <Button
+          id="publishScheduledButton"
+          type="button"
+          variant="success"
+          className="w-full"
+          onClick={() => setPublishScheduledDialogOpen(true)}
+        >
+          {t("listings.actions.publish")}
+        </Button>
+      </Grid.Cell>
+    )
+
+    const saveScheduledButton = (
+      <Grid.Cell key="btn-save-scheduled">
+        <Button
+          id="saveScheduledButton"
+          type="button"
+          variant="primary-outlined"
+          className="w-full"
+          onClick={() => setSaveScheduledDialogOpen(true)}
+        >
+          {t("t.save")}
+        </Button>
+      </Grid.Cell>
+    )
+
     const elements = []
 
     //lottery buttons for listing edit view
@@ -539,6 +619,29 @@ const ListingFormActions = ({
       elements.push(saveContinueButton)
       elements.push(cancelButton)
     }
+    //scheduled listing, detail view
+    else if (
+      enableAutopublish &&
+      listing.status === ListingsStatusEnum.scheduled &&
+      type === ListingFormActionsType.details
+    ) {
+      if (isListingApprover && !profile?.userRoles.isPartner) {
+        elements.push(publishScheduledButton)
+        elements.push(editFromDetailButton)
+      }
+      if (isListingCopier) elements.push(copyButton)
+      elements.push(previewButton)
+    }
+    //scheduled listing, edit view
+    else if (
+      enableAutopublish &&
+      listing.status === ListingsStatusEnum.scheduled &&
+      type === ListingFormActionsType.edit
+    ) {
+      elements.push(saveScheduledButton)
+      elements.push(unapproveButton)
+      elements.push(cancelButton)
+    }
     //closed listing, detail view
     else if (
       listing.status === ListingsStatusEnum.closed &&
@@ -583,6 +686,9 @@ const ListingFormActions = ({
     approveAndSetStatus,
     profile,
     setAdminApproveDialogOpen,
+    setUnapproveDialogOpen,
+    setPublishScheduledDialogOpen,
+    setSaveScheduledDialogOpen,
     showCloseListingModal,
     showCopyListingDialog,
     showLotteryResultsDrawer,
@@ -610,15 +716,42 @@ const ListingFormActions = ({
         </div>
       </StatusAside>
       {enableAutopublish && (
-        <AdminListingApprovalDialog
-          isOpen={adminApproveDialogOpen}
-          onClose={() => setAdminApproveDialogOpen(false)}
-          onConfirm={async () => {
-            setAdminApproveDialogOpen(false)
-            await approveAndSetStatus(getApprovedStatus())
-          }}
-          scheduledPublishAt={listing?.scheduledPublishAt}
-        />
+        <>
+          <AdminListingApprovalDialog
+            isOpen={adminApproveDialogOpen}
+            onClose={() => setAdminApproveDialogOpen(false)}
+            onConfirm={async () => {
+              setAdminApproveDialogOpen(false)
+              await approveAndSetStatus(getApprovedStatus())
+            }}
+            scheduledPublishAt={listing?.scheduledPublishAt}
+          />
+          <UnapproveListingDialog
+            isOpen={unapproveDialogOpen}
+            onClose={() => setUnapproveDialogOpen(false)}
+            onConfirm={async () => {
+              setUnapproveDialogOpen(false)
+              await unapproveAndSetStatus()
+            }}
+          />
+          <PublishScheduledListingDialog
+            isOpen={publishScheduledDialogOpen}
+            onClose={() => setPublishScheduledDialogOpen(false)}
+            onConfirm={async () => {
+              setPublishScheduledDialogOpen(false)
+              await approveAndSetStatus(ListingsStatusEnum.active)
+            }}
+          />
+          <SaveScheduledListingDialog
+            isOpen={saveScheduledDialogOpen}
+            onClose={() => setSaveScheduledDialogOpen(false)}
+            onConfirm={async () => {
+              setSaveScheduledDialogOpen(false)
+              await approveAndSetStatus(ListingsStatusEnum.scheduled)
+            }}
+            currentScheduledPublishAt={scheduledPublishAt}
+          />
+        </>
       )}
     </>
   )

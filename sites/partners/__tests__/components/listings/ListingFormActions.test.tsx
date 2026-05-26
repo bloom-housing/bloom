@@ -1849,6 +1849,112 @@ describe("<ListingFormActions>", () => {
     })
   })
 
+  describe("with enableAutopublish enabled for scheduled listings", () => {
+    beforeAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = (flag) => flag === FeatureFlagEnum.enableAutopublish
+    })
+
+    afterAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = () => false
+    })
+
+    describe("as an admin", () => {
+      beforeAll(() => {
+        adminUser = { ...adminUser, jurisdictions: [mockAdminOnlyApprovalJurisdiction] }
+      })
+
+      it("renders correct buttons in a scheduled detail state", () => {
+        render(
+          <ListingFormActionsComponent
+            user={adminUser}
+            listingStatus={ListingsStatusEnum.scheduled}
+            formActionType={ListingFormActionsType.details}
+          />
+        )
+        expect(screen.getByRole("button", { name: "Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("link", { name: "Edit" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument()
+        expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
+      })
+
+      it("renders correct buttons in a scheduled edit state", () => {
+        render(
+          <ListingFormActionsComponent
+            user={adminUser}
+            listingStatus={ListingsStatusEnum.scheduled}
+            formActionType={ListingFormActionsType.edit}
+          />
+        )
+        expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Unapprove" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
+      })
+
+      it("opens publish scheduled dialog after publish click on scheduled listing detail", async () => {
+        const user = userEvent.setup()
+        render(
+          <ListingFormActionsComponent
+            user={adminUser}
+            listingStatus={ListingsStatusEnum.scheduled}
+            formActionType={ListingFormActionsType.details}
+          />
+        )
+
+        expect(screen.queryByRole("heading", { name: "Are you sure?" })).not.toBeInTheDocument()
+        await user.click(screen.getByRole("button", { name: "Publish" }))
+
+        expect(screen.getByRole("heading", { name: "Are you sure?" })).toBeInTheDocument()
+        expect(
+          screen.getByText(
+            "This listing will go live immediately, overriding the scheduled publish date."
+          )
+        ).toBeInTheDocument()
+      })
+
+      it("opens unapprove dialog after unapprove click on scheduled listing edit", async () => {
+        const user = userEvent.setup()
+        render(
+          <ListingFormActionsComponent
+            user={adminUser}
+            listingStatus={ListingsStatusEnum.scheduled}
+            formActionType={ListingFormActionsType.edit}
+          />
+        )
+
+        expect(screen.queryByRole("heading", { name: "Are you sure?" })).not.toBeInTheDocument()
+        await user.click(screen.getByRole("button", { name: "Unapprove" }))
+
+        expect(screen.getByRole("heading", { name: "Are you sure?" })).toBeInTheDocument()
+        expect(
+          screen.getByText(
+            "This listing will be returned to under review status and will no longer be scheduled to automatically publish. It will need to be re-approved before it can be published."
+          )
+        ).toBeInTheDocument()
+      })
+
+      it("opens save scheduled dialog after save click on scheduled listing edit", async () => {
+        const user = userEvent.setup()
+        render(
+          <ListingFormActionsComponent
+            user={adminUser}
+            listingStatus={ListingsStatusEnum.scheduled}
+            formActionType={ListingFormActionsType.edit}
+          />
+        )
+
+        expect(screen.queryByRole("heading", { name: "Are you sure?" })).not.toBeInTheDocument()
+        await user.click(screen.getByRole("button", { name: "Save" }))
+
+        expect(screen.getByRole("heading", { name: "Are you sure?" })).toBeInTheDocument()
+        expect(
+          screen.getByText(
+            "This listing no longer has a scheduled publish date entered. As it is already approved, saving will publish it immediately. To delay publication, set a publish date before saving, or Unapprove the listing."
+          )
+        ).toBeInTheDocument()
+      })
+    })
+  })
+
   describe("with disablePartnerPublicListingEdits flag enabled", () => {
     beforeAll(() => {
       doJurisdictionsHaveFeatureFlagOn = () => true
