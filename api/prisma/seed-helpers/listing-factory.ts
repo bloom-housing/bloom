@@ -20,20 +20,22 @@ import { randomBoolean } from './boolean-generator';
 import { assetFileId } from './asset-file-id-helper';
 
 const cloudinaryIds = [
-  'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
-  'dev/krzysztof-hepner-V7Q0Oh3Az-c-unsplash_xoj7sr',
-  'dev/dillon-kydd-2keCPb73aQY-unsplash_lm7krp',
-  'dev/inside_qo9wre',
-  'dev/interior_mc9erd',
-  'dev/apartment_ez3yyz',
-  'dev/trayan-xIOYJSVEZ8c-unsplash_f1axsg',
-  'dev/apartment_building_2_b7ujdd',
+  'dev/test-image-1_qae5xs',
+  'dev/test-image-2_urfv8t',
+  'dev/test-image-3_psuxhc',
+  'dev/test-image-4_ml8eu7',
+  'dev/test-image-5_itqity',
+  'dev/test-image-6_hpudrr',
+  'dev/test-image-7_gta09s',
+  'dev/test-image-8_g5tjnv',
+  'dev/test-image-9_bejazc',
 ];
 
 export const listingFactory = async (
   jurisdictionId: string,
   prismaClient: PrismaClient,
   optionalParams?: {
+    address?: Prisma.AddressCreateInput;
     afsLastRunSetInPast?: boolean;
     amiChart?: AmiChart;
     applications?: Prisma.ApplicationsCreateInput[];
@@ -53,6 +55,7 @@ export const listingFactory = async (
     numberOfUnits?: number;
     optionalFeatures?: Prisma.ListingFeaturesCreateInput;
     optionalUtilities?: Prisma.ListingUtilitiesCreateInput;
+    publishedAt?: Date;
     propertyId?: string;
     reviewOrderType?: ReviewOrderTypeEnum;
     status?: ListingsStatusEnum;
@@ -156,7 +159,7 @@ export const listingFactory = async (
       create: addressFactory(),
     },
     listingsBuildingAddress: {
-      create: addressFactory(),
+      create: optionalParams?.address || addressFactory(),
     },
     listingEvents: optionalParams?.listingEvents
       ? {
@@ -181,6 +184,13 @@ export const listingFactory = async (
     listingsLeasingAgentAddress: {
       create: addressFactory(),
     },
+    publishedAt:
+      optionalParams?.publishedAt ||
+      (!!optionalParams?.status &&
+      optionalParams.status !== ListingsStatusEnum.active &&
+      optionalParams.status !== ListingsStatusEnum.closed
+        ? null
+        : new Date()),
     listingMultiselectQuestions: optionalParams?.multiselectQuestions
       ? {
           create: [

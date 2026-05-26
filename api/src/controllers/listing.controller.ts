@@ -138,14 +138,19 @@ export class ListingController {
     return await this.listingCsvExportService.exporterSecure(req, queryParams);
   }
 
-  @Get('mapMarkers')
+  @Post('mapMarkers')
   @ApiOperation({
     summary: 'Get listing map markers',
     operationId: 'mapMarkers',
   })
+  @PermissionAction(permissionActions.read)
   @ApiOkResponse({ type: ListingMapMarker, isArray: true })
-  async mapMarkers() {
-    return await this.listingService.mapMarkers();
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  async mapMarkers(
+    @Body() queryParams: ListingsQueryBody,
+  ): Promise<ListingMapMarker[]> {
+    return await this.listingService.mapMarkers(queryParams);
   }
 
   @Get(`external/:id`)

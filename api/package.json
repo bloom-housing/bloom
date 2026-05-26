@@ -32,6 +32,7 @@
     "db:setup:staging": "yarn db:resetup && yarn db:migration:run && yarn db:seed:staging --jurisdictionName Bloomington",
     "db:setup:staging-region": "yarn db:resetup && yarn db:migration:run && yarn db:seed:staging-region",
     "setup": "yarn install && yarn prisma generate && yarn build && yarn db:setup:staging",
+    "setup:region": "yarn install && yarn prisma generate && yarn build && yarn db:setup:staging-region",
     "db:migration:skip": "yarn prisma migrate resolve --applied ",
     "setup:dev": "yarn install && yarn prisma generate && yarn build && yarn db:setup",
     "translations:sql": "ts-node scripts/generate-db-translation-sql.ts"
@@ -85,6 +86,7 @@
     "handlebars": "4.7.9",
     "jsonwebtoken": "~9.0.1",
     "lodash": "~4.17.21",
+    "nest-winston": "^1.10.2",
     "node-polyglot": "^2.6.0",
     "passport": "~0.6.0",
     "passport-jwt": "~4.0.1",
@@ -97,7 +99,8 @@
     "rxjs": "~7.8.1",
     "sanitize-html": "^2.17.0",
     "swagger-axios-codegen": "^0.18.1",
-    "twilio": "^5.13.1"
+    "twilio": "^5.13.1",
+    "winston": "^3.19.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.4.5",

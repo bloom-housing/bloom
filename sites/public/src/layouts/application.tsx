@@ -198,6 +198,7 @@ const getHeaderLinks = (
 
 interface LayoutProps {
   children: React.ReactNode
+  hideFooter?: boolean
   metaDescription?: string
   metaImage?: string
   pageTitle?: string
@@ -299,7 +300,7 @@ const Layout = (props: LayoutProps) => {
           </div>
         </div>
 
-        <CustomSiteFooter />
+        {!props.hideFooter && <CustomSiteFooter />}
       </div>
     </>
   )

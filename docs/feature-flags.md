@@ -45,6 +45,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableCreditScreeningFee](./feature-flags/enableCreditScreeningFee.md) | When true, credit screening fee is enabled for listings |
 | [enableCustomListingNotifications](./feature-flags/enableCustomListingNotifications.md) | When true, users have access to custom notification settings |
 | [enableFaq](./feature-flags/enableFaq.md) | When true, a link to the FAQ page is displayed on the get assistance page |
+| [enableFilterByBathroom](./feature-flags/enableFilterByBathroom.md) | When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms |
 | [enableFullTimeStudentQuestion](./feature-flags/enableFullTimeStudentQuestion.md) | When true, the full time student question is displayed in the application form |
 | [enableGenderQuestion](./feature-flags/enableGenderQuestion.md) | When true, the gender identity question is displayed in the public and partner application demographics section |
 | [enableGeocodingPreferences](./feature-flags/enableGeocodingPreferences.md) | When true, preferences can be created with geocoding functionality and when an application is created/updated on a listing that is geocoding then the application gets geocoded |
@@ -60,6 +61,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableListingFileNumber](./feature-flags/enableListingFileNumber.md) | When true, partners can enter and export a listing file number |
 | [enableListingFiltering](./feature-flags/enableListingFiltering.md) | When true, a filter button is shown on listings browse and users can filter with the options in the drawer |
 | [enableListingImageAltText](./feature-flags/enableListingImageAltText.md) | When true, allows partners to add alt text to listing images |
+| [enableListingMap](./feature-flags/enableListingMap.md) | When true, a map is displayed on the listings page |
 | [enableListingOpportunity](./feature-flags/enableListingOpportunity.md) | When true, any newly published listing will send a gov delivery email to everyone that has signed up for the 'listing alerts' |
 | [enableListingPagination](./feature-flags/enableListingPagination.md) | When true listings browser will display pagination controls section |
 | [enableListingUpdatedAt](./feature-flags/enableListingUpdatedAt.md) | When true, listings detail will display an updated at date |
