@@ -108,7 +108,7 @@ const SubmittedApplicationView = ({
             {confirmationDate}
           </p>
           {tIfExists("application.confirmation.expiredDetailsWarning") && (
-            <p className="field-note seeds-m-bs-4 italic">
+            <p className="field-note seeds-m-bs-4">
               {t("application.confirmation.expiredDetailsWarning")}
             </p>
           )}
