@@ -69,7 +69,7 @@ export const mockApplication = (options: {
     sendMailToMailingAddress: true,
     householdExpectingChanges: true,
     householdStudent: true,
-    incomeVouchers: ["incomeVoucher"],
+    incomeVouchers: ['incomeVoucher'],
     income: `income ${options.position}`,
     incomePeriod: IncomePeriodEnum.perMonth,
     preferences: options.preferences || [],
