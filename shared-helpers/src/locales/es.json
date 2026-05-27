@@ -178,7 +178,6 @@
   "application.chooseLanguage.letsGetStarted": "Empecemos su solicitud",
   "application.chooseLanguage.signInSaveTime": "Iniciar sesión podría ahorrarle tiempo al empezar con los detalles de su última solicitud, y permitirle verificar el estatus de esta solicitud en cualquier momento.",
   "application.confirmation.informationSubmittedTitle": "Esta es la información que usted envió.",
-  "application.confirmation.expiredDetailsWarning": "Si los detalles de su hogar han cambiado desde que envió su solicitud, comuníquese directamente con la propiedad. Es común que los detalles del hogar cambien con el tiempo, y la información que ya no está vigente no se usará en su contra. La capacidad de editar una solicitud después de enviarla está actualmente en desarrollo y podrá realizar cambios en una solicitud existente en una fecha posterior.",
   "application.confirmation.lotteryNumber": "Su número de confirmación",
   "application.confirmation.printCopy": "Imprima una copia para sus archivos",
   "application.confirmation.submitted": "Enviada: ",

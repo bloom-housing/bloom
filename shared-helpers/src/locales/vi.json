@@ -178,7 +178,6 @@
   "application.chooseLanguage.letsGetStarted": "Hãy bắt đầu làm đơn ghi danh của quý vị",
   "application.chooseLanguage.signInSaveTime": "Việc đăng nhập có thể giúp quý vị tiết kiệm thời gian bằng cách bắt đầu với các thông tin chi tiết về đơn ghi danh gần đây nhất của quý vị và cho phép quý vị kiểm tra trạng thái của đơn ghi danh này bất kỳ lúc nào.",
   "application.confirmation.informationSubmittedTitle": "Đây là thông tin quý vị đã nộp.",
-  "application.confirmation.expiredDetailsWarning": "Nếu thông tin hộ gia đình của bạn đã thay đổi kể từ khi bạn nộp đơn, vui lòng liên hệ trực tiếp với cơ sở. Việc thông tin hộ gia đình thay đổi theo thời gian là điều bình thường, và thông tin không còn hiện hành sẽ không bị dùng để bất lợi cho bạn. Khả năng chỉnh sửa đơn sau khi nộp hiện đang được phát triển và bạn sẽ có thể thực hiện các thay đổi đối với đơn hiện có vào một ngày sau.",
   "application.confirmation.lotteryNumber": "Số xác nhận của quý vị",
   "application.confirmation.printCopy": "In một bản sao để quý vị lưu hồ sơ",
   "application.confirmation.submitted": "Đã nộp: ",

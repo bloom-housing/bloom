@@ -178,7 +178,6 @@
   "application.chooseLanguage.letsGetStarted": "Let’s get started on your application",
   "application.chooseLanguage.signInSaveTime": "Signing in could save you time by starting with details of your last application, and allow you to check the status of this application at any time.",
   "application.confirmation.informationSubmittedTitle": "Here's the information you submitted.",
-  "application.confirmation.expiredDetailsWarning": "If your household details have changed since you submitted your application, please contact the property directly. It is common for household details to change over time, and information that is no longer current will not be held against you. The ability to edit an application after submission is currently in development and you will be able to make changes to an existing application at a later date.",
   "application.confirmation.lotteryNumber": "Your confirmation number",
   "application.confirmation.printCopy": "Print a copy for your records",
   "application.confirmation.submitted": "Submitted: ",

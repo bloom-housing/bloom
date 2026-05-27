@@ -178,7 +178,6 @@
   "application.chooseLanguage.letsGetStarted": "আপনার আবেদন শুরু করা যাক",
   "application.chooseLanguage.signInSaveTime": "সাইন ইন করা আপনার শেষ আবেদনের বিবরণ দিয়ে শুরু করে আপনার সময় বাঁচাতে পারে এবং যে কোন সময় আপনাকে এই অ্যাপ্লিকেশনের অবস্থা পরীক্ষা করতে দেয়।",
   "application.confirmation.informationSubmittedTitle": "আপনার জমা দেওয়া তথ্য এখানে।",
-  "application.confirmation.expiredDetailsWarning": "যদি আপনার আবেদন জমা দেওয়ার পর থেকে আপনার পরিবারের বিবরণ পরিবর্তিত হয়ে থাকে, তাহলে সরাসরি সম্পত্তির সাথে যোগাযোগ করুন। সময়ের সাথে সাথে পরিবারের বিবরণ পরিবর্তন হওয়া স্বাভাবিক, এবং যে তথ্য আর বর্তমান নয় তা আপনার বিরুদ্ধে ব্যবহার করা হবে না। জমা দেওয়ার পরে আবেদন সম্পাদনা করার সুবিধাটি বর্তমানে উন্নয়নাধীন এবং আপনি পরবর্তী তারিখে একটি বিদ্যমান আবেদনে পরিবর্তন করতে সক্ষম হবেন।",
   "application.confirmation.lotteryNumber": "আপনার কনফার্মেশন নম্বর",
   "application.confirmation.printCopy": "আপনার রেকর্ডের জন্য একটি কপি মুদ্রণ করুন",
   "application.confirmation.submitted": "জমা দেওয়া হয়েছে:",
