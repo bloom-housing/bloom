@@ -7926,6 +7926,9 @@ export interface JurisdictionCreate {
   visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
 
   /**  */
+  visibleHouseholdMemberRelationships: HouseholdMemberRelationship[]
+
+  /**  */
   regions: []
 
   /**  */
@@ -8011,6 +8014,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
+
+  /**  */
+  visibleHouseholdMemberRelationships: HouseholdMemberRelationship[]
 
   /**  */
   regions: []
@@ -8134,6 +8140,9 @@ export interface Jurisdiction {
 
   /**  */
   visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
+
+  /**  */
+  visibleHouseholdMemberRelationships: HouseholdMemberRelationship[]
 
   /**  */
   regions: []
@@ -10627,8 +10636,15 @@ export enum HouseholdMemberRelationship {
   "greatGrandparent" = "greatGrandparent",
   "inLaw" = "inLaw",
   "friend" = "friend",
-  "other" = "other",
   "aideOrAttendant" = "aideOrAttendant",
+  "spousePartner" = "spousePartner",
+  "girlfriendBoyfriend" = "girlfriendBoyfriend",
+  "brotherSister" = "brotherSister",
+  "auntUncle" = "auntUncle",
+  "nephewNiece" = "nephewNiece",
+  "grandparentGreatGrandparent" = "grandparentGreatGrandparent",
+  "liveInAide" = "liveInAide",
+  "other" = "other",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
 export enum MultiselectQuestionOrderByKeys {
@@ -10716,6 +10732,7 @@ export enum FeatureFlagEnum {
   "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFaq" = "enableFaq",
+  "enableFilterByBathroom" = "enableFilterByBathroom",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGenderQuestion" = "enableGenderQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",

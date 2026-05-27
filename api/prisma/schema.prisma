@@ -808,6 +808,7 @@ model Jurisdictions {
   visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[]         @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
   visibleSpokenLanguages              SpokenLanguageEnum[]                @default([chineseCantonese, chineseMandarin, english, filipino, korean, russian, spanish, vietnamese, farsi, afghani, notListed]) @map("visible_spoken_languages")
   visibleApplicationAccessibilityFeatures ApplicationAccessibilityFeatureEnum[] @default([mobility, hearing, vision]) @map("visible_application_accessibility_features")
+  visibleHouseholdMemberRelationships HouseholdMemberRelationshipEnum[]   @default([spouse, registeredDomesticPartner, parent, child, sibling, cousin, aunt, uncle, nephew, niece, grandparent, greatGrandparent, inLaw, friend, other, aideOrAttendant]) @map("visible_household_member_relationships")
   whatToExpect                        String                              @default("Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.") @map("what_to_expect")
   whatToExpectAdditionalText          String                              @default("") @map("what_to_expect_additional_text")
   whatToExpectUnderConstruction       String                              @default("") @map("what_to_expect_under_construction")
@@ -2491,6 +2492,34 @@ enum ApplicationAccessibilityFeatureEnum {
   vision
 
   @@map("application_accessibility_feature_enum")
+}
+
+enum HouseholdMemberRelationshipEnum {
+  spouse
+  registeredDomesticPartner
+  parent
+  child
+  sibling
+  cousin
+  aunt
+  uncle
+  nephew
+  niece
+  grandparent
+  greatGrandparent
+  inLaw
+  friend
+  other
+  aideOrAttendant
+  spousePartner
+  girlfriendBoyfriend
+  brotherSister
+  auntUncle
+  nephewNiece
+  grandparentGreatGrandparent
+  liveInAide
+
+  @@map("household_member_relationship_enum")
 }
 
 enum RegionEnum {
