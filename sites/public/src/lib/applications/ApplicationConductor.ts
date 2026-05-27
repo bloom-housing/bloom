@@ -150,6 +150,7 @@ export default class ApplicationConductor {
     raceEthnicityConfiguration: null,
     visibleSpokenLanguages: [],
     visibleApplicationAccessibilityFeatures: [],
+    visibleHouseholdMemberRelationships: [],
   }
   private _listing: Listing
 
