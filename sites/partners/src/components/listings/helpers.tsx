@@ -60,6 +60,17 @@ export const getListingStatusTag = (listingStatus: ListingsStatusEnum) => {
           {t(`listings.listingStatus.pending`)}
         </Tag>
       )
+    case ListingsStatusEnum.scheduled:
+      return (
+        <Tag
+          className="tag-full-width"
+          variant={"highlight-cool"}
+          size={"lg"}
+          id={"listing-status-scheduled"}
+        >
+          {t(`listings.listingStatus.scheduled`)}
+        </Tag>
+      )
     default:
       return null
   }
