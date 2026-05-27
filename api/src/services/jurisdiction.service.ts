@@ -39,8 +39,31 @@ const selectViews: Partial<
     listingFeaturesConfiguration: true,
     visibleAccessibilityPriorityTypes: true,
     visibleApplicationAccessibilityFeatures: true,
+    visibleHouseholdMemberRelationships: true,
     visibleSpokenLanguages: true,
   },
+};
+
+selectViews[JurisdictionViews.full] = {
+  ...selectViews[JurisdictionViews.public],
+  multiselectQuestions: true,
+  emailFromAddress: true,
+  allowSingleUseCodeLogin: true,
+  duplicateListingPermissions: true,
+  enableGeocodingPreferences: true,
+  enablePartnerDemographics: true,
+  enablePartnerSettings: true,
+  listingApprovalPermissions: true,
+  minimumListingPublishImagesRequired: true,
+  notificationsSignUpUrl: true,
+  partnerTerms: true,
+  publicUrl: true,
+  referralSummaryDefault: true,
+  rentalAssistanceDefault: true,
+  requiredListingFields: true,
+  whatToExpect: true,
+  whatToExpectAdditionalText: true,
+  whatToExpectUnderConstruction: true,
 };
 
 /**
@@ -54,9 +77,9 @@ export class JurisdictionService {
   /**
     this will get a set of jurisdictions given the params passed in
   */
-  async list(): Promise<Jurisdiction[]> {
+  async list(view?: JurisdictionViews): Promise<Jurisdiction[]> {
     const rawJurisdictions = await this.prisma.jurisdictions.findMany({
-      include: view,
+      select: view ? selectViews[view] : selectViews[JurisdictionViews.full],
     });
     return mapTo(Jurisdiction, rawJurisdictions);
   }
