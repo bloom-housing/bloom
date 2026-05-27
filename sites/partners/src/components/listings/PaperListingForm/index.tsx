@@ -99,6 +99,7 @@ const getToast = (
     [ListingsStatusEnum.pendingReview]: t("listings.approval.submittedForReview"),
     [ListingsStatusEnum.changesRequested]: t("listings.listingStatus.changesRequested"),
     [ListingsStatusEnum.active]: t("listings.approval.listingPublished"),
+    [ListingsStatusEnum.scheduled]: t("listings.approval.listingScheduled"),
     [ListingsStatusEnum.pending]: t("listings.approval.listingUnpublished"),
     [ListingsStatusEnum.closed]: t("listings.approval.listingClosed"),
     saved: t("listings.progressSaved"),
