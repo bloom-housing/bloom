@@ -20,6 +20,7 @@ export enum FeatureFlagEnum {
   enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableFaq = 'enableFaq',
+  enableFilterByBathroom = 'enableFilterByBathroom',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGenderQuestion = 'enableGenderQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
@@ -35,6 +36,7 @@ export enum FeatureFlagEnum {
   enableListingFileNumber = 'enableListingFileNumber',
   enableListingFiltering = 'enableListingFiltering',
   enableListingImageAltText = 'enableListingImageAltText',
+  enableListingMap = 'enableListingMap',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
   enableListingUpdatedAt = 'enableListingUpdatedAt',
@@ -169,6 +171,11 @@ export const featureFlagMap: {
       'When true, a link to the FAQ page is displayed on the get assistance page',
   },
   {
+    name: FeatureFlagEnum.enableFilterByBathroom,
+    description:
+      'When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms',
+  },
+  {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
     description:
       'When true, the full time student question is displayed in the application form',
@@ -238,6 +245,10 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableListingImageAltText,
     description: 'When true, allows partners to add alt text to listing images',
+  },
+  {
+    name: FeatureFlagEnum.enableListingMap,
+    description: 'When true, a map is displayed on the listings page',
   },
   {
     name: FeatureFlagEnum.enableListingOpportunity,

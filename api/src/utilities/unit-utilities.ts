@@ -184,9 +184,15 @@ export const generateHmiData = (
     // Get all numbers between min and max
     // If min is more than the largest chart value, make sure we show the largest value
     const unitHouseholdSizes = [
-      ...Array(Math.min(minMax.max, maxAMIChartHouseholdSize) + 1).keys(),
+      ...Array(
+        (!!minMax.max
+          ? Math.min(minMax.max, maxAMIChartHouseholdSize)
+          : maxAMIChartHouseholdSize) + 1,
+      ).keys(),
     ].filter(
-      (value) => value >= Math.min(minMax.min, maxAMIChartHouseholdSize),
+      (value) =>
+        value >=
+        (!!minMax.min ? Math.min(minMax.min, maxAMIChartHouseholdSize) : 1),
     );
     return [...new Set([...validSizes, ...unitHouseholdSizes])].sort((a, b) =>
       a < b ? -1 : 1,

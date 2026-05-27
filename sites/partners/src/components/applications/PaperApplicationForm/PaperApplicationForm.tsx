@@ -43,7 +43,8 @@ type AlertErrorType = "api" | "form"
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
   const { data: jurisdictionData } = useJurisdiction(listingDto?.jurisdictions?.id)
-  const { doJurisdictionsHaveFeatureFlagOn, applicationsService } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn, applicationsService, getJurisdictionLanguages } =
+    useContext(AuthContext)
 
   const preferences = listingSectionQuestions(
     listingDto,
@@ -151,6 +152,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     redirect: "details" | "new"
   } | null>(null)
 
+  const availableJurisdictionLanguages = listingDto?.jurisdictions?.id
+    ? getJurisdictionLanguages(listingDto?.jurisdictions?.id)
+    : []
+
   useEffect(() => {
     if (application?.householdMember) {
       const householdMemberNum = application.householdMember.length
@@ -208,6 +213,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
         id: applicationId,
         body: {
           previousStatus: application.status,
+          previousApplicationDeclineReason: application.applicationDeclineReason,
           previousAccessibleUnitWaitlistNumber: application.accessibleUnitWaitlistNumber,
           previousConventionalUnitWaitlistNumber: application.conventionalUnitWaitlistNumber,
         },
@@ -342,6 +348,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                         enableApplicationStatus && editMode && application?.markedAsDuplicate
                       }
                       reviewOrderType={listingDto?.reviewOrderType}
+                      availableJurisdictionLanguages={availableJurisdictionLanguages}
                     />
 
                     <FormPrimaryApplicant
@@ -356,6 +363,9 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       setHouseholdMembers={setHouseholdMembers}
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                       disableWorkInRegion={disableWorkInRegion}
+                      visibleHouseholdMemberRelationships={
+                        jurisdictionData?.visibleHouseholdMemberRelationships
+                      }
                     />
 
                     <FormHouseholdDetails
