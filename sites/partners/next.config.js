@@ -95,6 +95,7 @@ module.exports = withBundleAnalyzer(
         },
       ]
 
+      config.resolve.alias["prosemirror-model"] = require.resolve("prosemirror-model")
       return config
     },
     eslint: {
