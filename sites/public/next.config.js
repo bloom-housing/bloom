@@ -83,6 +83,17 @@ module.exports = withBundleAnalyzer({
       type: "asset/source",
     })
 
+    // Suppress noisy-but-harmless protobufjs dynamic require warning
+    // from @opentelemetry/exporter-metrics-otlp-grpc
+    config.ignoreWarnings = [
+      ...(config.ignoreWarnings || []),
+      {
+        module:
+          /node_modules\/@opentelemetry\/exporter-metrics-otlp-grpc\/node_modules\/protobufjs/,
+        message: /Critical dependency/,
+      },
+    ]
+
     return config
   },
   eslint: {
