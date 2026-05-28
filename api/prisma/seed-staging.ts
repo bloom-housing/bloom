@@ -19,11 +19,13 @@ export const stagingSeed = async (
     publicSiteBaseURL,
     msqV2,
     asRegion = false,
+    angelopolisJurisdictionName,
   }: {
     jurisdictionName: string;
     publicSiteBaseURL: string;
     msqV2: boolean;
     asRegion: boolean;
+    angelopolisJurisdictionName?: string;
   },
 ) => {
   // Seed feature flags
@@ -72,7 +74,13 @@ export const stagingSeed = async (
     );
     const angelopolisJurisdiction = await createAngelopolisJurisdiction(
       prismaClient,
-      { publicSiteBaseURL, unitTypes, partnerUser, msqV2 },
+      {
+        publicSiteBaseURL,
+        unitTypes,
+        partnerUser,
+        msqV2,
+        jurisdictionName: angelopolisJurisdictionName,
+      },
     );
     const nadaHill = await createNadaHillJurisdiction(prismaClient, {
       publicSiteBaseURL,

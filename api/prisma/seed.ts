@@ -20,6 +20,7 @@ async function main() {
     values: { environment, jurisdictionName, msqV2, asRegion },
   } = parseArgs({ options });
   const publicSiteBaseURL = env.DBSEED_PUBLIC_SITE_BASE_URL;
+  const angelopolisJurisdictionName = env.DBSEED_ANGELOPOLIS_JURISDICTION_NAME;
 
   switch (environment) {
     case 'production':
@@ -40,6 +41,7 @@ async function main() {
         publicSiteBaseURL: publicSiteBaseURL,
         msqV2: msqV2 as boolean,
         asRegion: asRegion as boolean,
+        angelopolisJurisdictionName,
       });
       break;
     case 'development':
