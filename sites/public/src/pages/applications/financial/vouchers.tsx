@@ -39,7 +39,7 @@ const ApplicationVouchers = () => {
   )
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, getValues, trigger } = useForm({
+  const { register, handleSubmit, errors, getValues, trigger, setValue } = useForm({
     defaultValues: enableSection8vsRentalAssistance
       ? {
           incomeVouchers: application.incomeVouchers ?? [],
@@ -56,13 +56,10 @@ const ApplicationVouchers = () => {
 
     let toSave: { incomeVouchers: string[] }
     if (enableSection8vsRentalAssistance) {
-      const selected = Object.entries(data)
-        .filter(([key, val]) => key.startsWith("incomeVouchers.") && val === true)
-        .map(([key]) => key.replace("incomeVouchers.", ""))
-      toSave = { incomeVouchers: selected }
+      const selected = Object.values(data).filter((val) => val !== false)
+      toSave = { incomeVouchers: selected as string[] }
     } else {
-      const { incomeVouchers } = data
-      toSave = { incomeVouchers: JSON.parse(incomeVouchers) ? ["incomeVoucher"] : [] }
+      toSave = { incomeVouchers: data?.incomeVouchers ? [data.incomeVouchers] : [] }
     }
 
     conductor.currentStep.save(toSave)
@@ -71,43 +68,6 @@ const ApplicationVouchers = () => {
   const onError = () => {
     onFormError()
   }
-
-  const incomeVouchersValues = [
-    {
-      id: "incomeVouchersYes",
-      value: "true",
-      label: t("t.yes"),
-    },
-    {
-      id: "incomeVouchersNo",
-      value: "false",
-      label: t("t.no"),
-    },
-  ]
-
-  const incomeVouchersCheckboxValues = [
-    {
-      id: "incomeVouchers.issuedVouchers",
-      value: "issuedVouchers",
-      label: t("application.financial.vouchers.issuedVouchers"),
-      defaultChecked: application.incomeVouchers?.includes("issuedVouchers"),
-    },
-    {
-      id: "incomeVouchers.rentalAssistance",
-      value: "rentalAssistance",
-      label: t("application.financial.vouchers.rentalAssistance"),
-      defaultChecked: application.incomeVouchers?.includes("rentalAssistance"),
-    },
-    {
-      id: "incomeVouchers.none",
-      value: "none",
-      label: t("application.financial.vouchers.none"),
-      defaultChecked:
-        !application.incomeVouchers?.includes("issuedVouchers") &&
-        !application.incomeVouchers?.includes("rentalAssistance"),
-      exclusive: true,
-    },
-  ]
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -126,7 +86,11 @@ const ApplicationVouchers = () => {
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}
-          heading={t("application.financial.vouchers.title")}
+          heading={
+            !enableSection8vsRentalAssistance
+              ? t("application.financial.vouchers.title")
+              : t("application.financial.vouchers.titleAlt")
+          }
           subheading={
             !enableSection8vsRentalAssistance ? (
               <div>
@@ -143,7 +107,9 @@ const ApplicationVouchers = () => {
                   {` ${t("application.financial.vouchers.rentalSubsidies.text")}`}
                 </p>
               </div>
-            ) : undefined
+            ) : (
+              `${t("application.financial.vouchers.subtitleAlt")}`
+            )
           }
           progressNavProps={{
             currentPageSection: currentPageSection,
@@ -166,20 +132,69 @@ const ApplicationVouchers = () => {
                   fieldClassName="ml-0"
                   type="checkbox"
                   name="incomeVouchers"
-                  error={errors.incomeVouchers}
                   errorMessage={t("errors.selectAnOption")}
                   register={register}
-                  fields={incomeVouchersCheckboxValues}
-                  dataTestId={"app-income-vouchers"}
                   validation={{
                     validate: () => {
-                      const values = getValues()
-                      const anyChecked = incomeVouchersCheckboxValues.some(
-                        (f) => values[`incomeVouchers.${f.value}`]
-                      )
-                      return anyChecked
+                      return !!Object.values(getValues()).filter((value) => value).length
                     },
                   }}
+                  error={
+                    Object.keys(errors).length === Object.keys(getValues()).length &&
+                    Object.keys(getValues()).length > 0
+                  }
+                  fields={[
+                    {
+                      id: "issuedVouchers",
+                      value: "issuedVouchers",
+                      label: t("application.financial.vouchers.issuedVouchers"),
+                      defaultChecked: application.incomeVouchers?.includes("issuedVouchers"),
+                      uniqueName: true,
+                      inputProps: {
+                        onChange: (e) => {
+                          if (e.target.checked) {
+                            setValue("incomeVouchers-none", false)
+                            setValue("incomeVouchers-issuedVouchers", true)
+                          }
+                        },
+                      },
+                    },
+                    {
+                      id: "rentalAssistance",
+                      value: "rentalAssistance",
+                      label: t("application.financial.vouchers.rentalAssistance"),
+                      defaultChecked: application.incomeVouchers?.includes("rentalAssistance"),
+                      uniqueName: true,
+                      inputProps: {
+                        onChange: (e) => {
+                          if (e.target.checked) {
+                            setValue("incomeVouchers-none", false)
+                            setValue("incomeVouchers-rentalAssistance", true)
+                          }
+                        },
+                      },
+                    },
+                    {
+                      id: "none",
+                      value: "none",
+                      label: t("application.financial.vouchers.none"),
+                      defaultChecked:
+                        application.incomeVouchers?.length > 0 &&
+                        !application.incomeVouchers?.includes("issuedVouchers") &&
+                        !application.incomeVouchers?.includes("rentalAssistance"),
+                      uniqueName: true,
+                      inputProps: {
+                        onChange: (e) => {
+                          if (e.target.checked) {
+                            setValue("incomeVouchers-none", true)
+                            setValue("incomeVouchers-issuedVouchers", false)
+                            setValue("incomeVouchers-rentalAssistance", false)
+                          }
+                        },
+                      },
+                    },
+                  ]}
+                  dataTestId={"app-income-vouchers"}
                 />
               ) : (
                 <FieldGroup
@@ -191,7 +206,18 @@ const ApplicationVouchers = () => {
                   error={errors.incomeVouchers}
                   errorMessage={t("errors.selectAnOption")}
                   register={register}
-                  fields={incomeVouchersValues}
+                  fields={[
+                    {
+                      id: "incomeVouchersYes",
+                      value: "incomeVoucher",
+                      label: t("t.yes"),
+                    },
+                    {
+                      id: "incomeVouchersNo",
+                      value: "none",
+                      label: t("t.no"),
+                    },
+                  ]}
                   dataTestId={"app-income-vouchers"}
                   validation={{
                     validate: () => {

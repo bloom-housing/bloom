@@ -266,6 +266,8 @@
   "application.financial.vouchers.rentalAssistance": "Rental assistance from other sources",
   "application.financial.vouchers.rentalSubsidies.strong": "Rental subsidies",
   "application.financial.vouchers.rentalSubsidies.text": "like VASH, HSA, HOPWA, Catholic Charities, AIDS Foundation, etc.",
+  "application.financial.vouchers.subtitleAlt": "Rental assistance from other sources includes support from programs such as Catholic Charities or the AIDS Foundation.",
+  "application.financial.vouchers.titleAlt": "Do you or anyone in your household receive Section 8 or Housing Authority issued vouchers, including Veterans Affairs Supportive Housing (VASH) vouchers, or rental assistance from other sources?",
   "application.financial.vouchers.title": "Do you or anyone on this application receive any of the following?",
   "application.form.general.advocateWarning": "You are applying on behalf of a client; please enter your client’s information, <strong>not your own</strong>.",
   "application.form.general.saveAndFinishLater": "Save and finish later",

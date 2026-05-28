@@ -1,5 +1,5 @@
 import React from "react"
-import { t, Field, Select, FieldGroup } from "@bloom-housing/ui-components"
+import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import {
@@ -19,19 +19,6 @@ const FormHouseholdIncome = ({ enableSection8vsRentalAssistance }: FormHousehold
   const { register, setValue, watch } = formMethods
 
   const incomePeriodValue: string = watch("application.incomePeriod")
-
-  const incomeVouchersCheckboxValues = [
-    {
-      id: "application.incomeVouchers.issuedVouchers",
-      value: "issuedVouchers",
-      label: t("application.financial.vouchers.issuedVouchers"),
-    },
-    {
-      id: "application.incomeVouchers.rentalAssistance",
-      value: "rentalAssistance",
-      label: t("application.financial.vouchers.rentalAssistance"),
-    },
-  ]
 
   return (
     <>
@@ -106,7 +93,7 @@ const FormHouseholdIncome = ({ enableSection8vsRentalAssistance }: FormHousehold
             <FieldGroup
               fieldGroupClassName="grid grid-cols-1"
               fieldClassName="ml-0"
-              type="checkbox"
+              type={enableSection8vsRentalAssistance ? "checkbox" : "radio"}
               name="application.incomeVouchers"
               register={register}
               fields={
@@ -129,15 +116,30 @@ const FormHouseholdIncome = ({ enableSection8vsRentalAssistance }: FormHousehold
                       },
                     ]
                   : [
+                      // TODO: get this to work
                       {
                         id: "application.incomeVouchers.incomeVoucher",
                         value: "incomeVoucher",
                         label: YesNoEnum.yes,
+                        inputProps: {
+                          onChange: (e) => {
+                            if (e.target.checked) {
+                              setValue("application.incomeVouchers", ["incomeVoucher"])
+                            }
+                          },
+                        },
                       },
                       {
                         id: "application.incomeVouchers.none",
                         value: "none",
                         label: YesNoEnum.no,
+                        inputProps: {
+                          onChange: (e) => {
+                            if (e.target.checked) {
+                              setValue("application.incomeVouchers", ["none"])
+                            }
+                          },
+                        },
                       },
                     ]
               }
