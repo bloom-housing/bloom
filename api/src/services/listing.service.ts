@@ -3351,8 +3351,9 @@ export class ListingService implements OnModuleInit {
 
   /**
    * Runs the cron job to publish listings in 'scheduled' status whose
-   * scheduledPublishAt date has arrived. Registered twice - once at 12:01 AM
-   * (primary) and once at 1:00 AM (retry).
+   * scheduledPublishAt date is in the past. There are two cron jobs:
+   * - primary cron job (should run after midnight ex. 12:01 AM)
+   * - retry cron job (should run after the primary cron job within 2 hours ex. 1:00 AM)
    */
   async publishScheduledListingsCronJob(): Promise<SuccessDTO> {
     this.logger.warn('publishScheduledListingsCron job running');
