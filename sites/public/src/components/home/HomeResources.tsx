@@ -95,7 +95,7 @@ export const HomeResources = (props: HomeResourcesProps) => {
               <Card.Section>
                 <Button
                   key={"learn-more"}
-                  href="/housing-basics"
+                  href={t("resources.additionalResourcesLink")}
                   variant="primary-outlined"
                   size={"sm"}
                 >

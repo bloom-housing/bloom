@@ -19,5 +19,6 @@
   "resources.contactEmail": "email@email.com",
   "resources.contactInfo": "Bloomington's Housing & Community Development Department",
   "resources.housingProgramsTitle": "Bloomington's Housing & Community Development housing programs",
+  "resources.additionalResourcesLink": "https://lahousing.lacity.org/AAHR/ComCon/Tab/RenderTab?tabName=Overview",
   "resources.additionalResourcesTitle": "Get more information about the Accessible Housing Program (AcHP), including a list of covered housing projects, tenant resources, policies, and how to file a grievance."
 }
