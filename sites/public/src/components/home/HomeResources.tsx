@@ -86,7 +86,7 @@ export const HomeResources = (props: HomeResourcesProps) => {
           <Grid.Cell>
             <BloomCard
               iconSymbol="questionMarkCircle"
-              title={t("welcome.learnHousingBasics")}
+              title={t("resources.additionalResourcesTitle")}
               variant={"block"}
               headingPriority={3}
               className={styles["resource"]}

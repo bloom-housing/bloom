@@ -17,5 +17,6 @@
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut Labore et dolore magna aliqua.",
   "resources.contactEmail": "email@email.com",
   "resources.contactInfo": "블루밍턴 시 주택 및 지역사회 개발부",
-  "resources.housingProgramsTitle": "블루밍턴 주택 및 지역사회 개발부의 주택 프로그램"
+  "resources.housingProgramsTitle": "블루밍턴 주택 및 지역사회 개발부의 주택 프로그램",
+  "resources.additionalResourcesTitle": "접근 가능한 주택 프로그램(AcHP)에 대한 자세한 정보를 확인하십시오. 여기에는 대상 주택 프로젝트 목록, 임차인 자원, 정책 및 불만을 제기하는 방법이 포함됩니다."
 }
