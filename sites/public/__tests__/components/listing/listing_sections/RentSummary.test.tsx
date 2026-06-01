@@ -216,7 +216,7 @@ describe("<RentSummary>", () => {
     expect(firstAvailability).toHaveTextContent(/5 vacant units/i)
 
     const [secondUnitType, secondRent, secondAvailability] = within(rows[1]).getAllByRole("cell")
-    expect(secondUnitType).toHaveTextContent(/1 BR, 2 BR/i)
+    expect(secondUnitType).toHaveTextContent(/1 Bedroom, 2 Bedrooms/i)
     expect(secondRent).toHaveTextContent(/\$200.*\$700/i)
     expect(secondAvailability).toHaveTextContent("Not available")
   })
