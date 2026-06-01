@@ -1,6 +1,6 @@
 import React from "react"
 import userEvent from "@testing-library/user-event"
-import { genderKeys } from "@bloom-housing/shared-helpers"
+import { genderKeys, sexualOrientationKeys } from "@bloom-housing/shared-helpers"
 import { RaceEthnicityConfiguration } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { defaultRaceEthnicityConfiguration } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { t } from "@bloom-housing/ui-components"
@@ -271,6 +271,7 @@ describe("<FormDemographics>", () => {
     expect(screen.getByLabelText("Ethnicity")).toBeInTheDocument()
     expect(screen.getByText("Race", { selector: "legend" })).toBeInTheDocument()
   })
+
   it("should render race options with custom configuration", () => {
     render(
       <FormProviderWrapper>
@@ -501,6 +502,58 @@ describe("<FormDemographics>", () => {
     expect(
       screen.queryByRole("combobox", {
         name: t("application.add.gender"),
+      })
+    ).not.toBeInTheDocument()
+  })
+
+  it("shows sexual orientation select when enableSexualOrientationQuestion is enabled", () => {
+    render(
+      <FormProviderWrapper>
+        <FormDemographics
+          formValues={{
+            id: "id",
+            race: [],
+            howDidYouHear: [],
+          }}
+          raceEthnicityConfiguration={defaultRaceEthnicityConfiguration}
+          enableLimitedHowDidYouHear={false}
+          disableEthnicityQuestion={false}
+          enableGenderQuestion={false}
+          enableSexualOrientationQuestion={true}
+        />
+      </FormProviderWrapper>
+    )
+
+    const select = screen.getByRole("combobox", {
+      name: t("application.add.sexualOrientation"),
+    })
+    expect(select).toBeInTheDocument()
+
+    const optionValues = Array.from(select.querySelectorAll("option")).map((option) => option.value)
+    expect(optionValues).toEqual(expect.arrayContaining(["", ...sexualOrientationKeys]))
+  })
+
+  it("", () => {
+    render(
+      <FormProviderWrapper>
+        <FormDemographics
+          formValues={{
+            id: "id",
+            race: [],
+            howDidYouHear: [],
+          }}
+          raceEthnicityConfiguration={defaultRaceEthnicityConfiguration}
+          enableLimitedHowDidYouHear={false}
+          disableEthnicityQuestion={false}
+          enableGenderQuestion={false}
+          enableSexualOrientationQuestion={false}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(
+      screen.queryByRole("combobox", {
+        name: t("application.add.sexualOrientation"),
       })
     ).not.toBeInTheDocument()
   })
