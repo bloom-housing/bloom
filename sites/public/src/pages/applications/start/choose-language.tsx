@@ -64,6 +64,7 @@ const loadListing = async (
     visibleSpokenLanguages: jurisdictionResponse.visibleSpokenLanguages,
     visibleApplicationAccessibilityFeatures:
       jurisdictionResponse.visibleApplicationAccessibilityFeatures,
+    visibleHouseholdMemberRelationships: jurisdictionResponse.visibleHouseholdMemberRelationships,
     raceEthnicityConfiguration: jurisdictionResponse.raceEthnicityConfiguration,
   }
   stateFunction(conductor.listing)

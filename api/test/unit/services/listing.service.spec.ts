@@ -7393,4 +7393,33 @@ describe('Testing listing service', () => {
       });
     });
   });
+
+  describe('Test normalizeScheduledPublishAt helper', () => {
+    const originalTimezone = process.env.TIME_ZONE;
+
+    afterEach(() => {
+      process.env.TIME_ZONE = originalTimezone;
+    });
+
+    it('should convert UTC midnight to midnight in the app timezone (UTC-7, LA summer)', () => {
+      process.env.TIME_ZONE = 'America/Los_Angeles';
+      const utcMidnight = new Date('2026-05-15T00:00:00.000Z');
+      const normalized = service.normalizeScheduledPublishAt(utcMidnight);
+      expect(normalized.toISOString()).toBe('2026-05-15T07:00:00.000Z');
+    });
+
+    it('should convert UTC midnight to midnight in the app timezone (UTC-8, LA winter)', () => {
+      process.env.TIME_ZONE = 'America/Los_Angeles';
+      const utcMidnight = new Date('2026-01-15T00:00:00.000Z');
+      const normalized = service.normalizeScheduledPublishAt(utcMidnight);
+      expect(normalized.toISOString()).toBe('2026-01-15T08:00:00.000Z');
+    });
+
+    it('should preserve the user-selected wall-clock date regardless of input time', () => {
+      process.env.TIME_ZONE = 'America/Los_Angeles';
+      const nonMidnight = new Date('2026-05-15T14:30:00.000Z');
+      const normalized = service.normalizeScheduledPublishAt(nonMidnight);
+      expect(normalized.toISOString()).toBe('2026-05-15T07:00:00.000Z');
+    });
+  });
 });
