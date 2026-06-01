@@ -1,6 +1,7 @@
 import {
   ApplicationSubmissionTypeEnum,
   LanguagesEnum,
+  ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   PrismaClient,
@@ -481,6 +482,78 @@ export const createBloomingtonJurisdiction = async (
     },
     {
       listing: elmVillage,
+      numberOfUnits: 0,
+      applications: [
+        await applicationFactory({
+          enableV2MSQ: msqV2,
+          multiselectQuestions: [workInCityQuestion, cityEmployeeQuestion],
+        }),
+        await applicationFactory({
+          enableV2MSQ: msqV2,
+          multiselectQuestions: [
+            cityEmployeeQuestion,
+            workInCityQuestion,
+            veteransProgramQuestion,
+          ],
+        }),
+        await applicationFactory({
+          enableV2MSQ: msqV2,
+          multiselectQuestions: [workInCityQuestion, cityEmployeeQuestion],
+        }),
+        ...(await applicationFactoryMany(2, {
+          enableV2MSQ: msqV2,
+          multiselectQuestions: [workInCityQuestion],
+        })),
+        await applicationFactory(),
+      ],
+      multiselectQuestions: [
+        workInCityQuestion,
+        cityEmployeeQuestion,
+        veteransProgramQuestion,
+      ],
+      units: [
+        {
+          ...defaultUnit,
+          numBedrooms: 0,
+          unitTypes: { connect: { id: unitTypes[0].id } },
+        },
+        {
+          ...defaultUnit,
+          numBedrooms: 0,
+          unitTypes: { connect: { id: unitTypes[5].id } },
+        },
+        { ...defaultUnit },
+        {
+          ...defaultUnit,
+          numBedrooms: 2,
+          sqFeet: '1050.00',
+          unitTypes: { connect: { id: unitTypes[2].id } },
+        },
+        {
+          ...defaultUnit,
+          numBathrooms: 2,
+          numBedrooms: 3,
+          sqFeet: '1250.00',
+          unitTypes: { connect: { id: unitTypes[3].id } },
+        },
+        {
+          ...defaultUnit,
+          numBathrooms: 3,
+          numBedrooms: 4,
+          sqFeet: '1750.00',
+          unitTypes: { connect: { id: unitTypes[4].id } },
+        },
+      ],
+      userAccounts: [{ id: partnerUser.id }],
+      enableListingFeaturesAndUtilities: true,
+    },
+    {
+      listing: {
+        ...elmVillage,
+        name: 'test notification listing',
+        status: ListingsStatusEnum.active,
+        region: 'Eastside',
+      },
       numberOfUnits: 0,
       applications: [
         await applicationFactory({

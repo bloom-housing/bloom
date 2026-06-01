@@ -121,6 +121,25 @@ export const stagingSeed = async (
       password: 'abcdef',
     }),
   });
+
+  for (let i = 0; i < 100000; i++) {
+    prismaClient.userAccounts.create({
+      data: await userFactory({
+        email: `yazeed.loonat+${i}@exygy.com`,
+        confirmedAt: new Date(),
+        jurisdictionIds: allJurisdictions,
+        acceptedTerms: true,
+        password: 'abcdef',
+        notificationPreferences: {
+          regions: ['test'],
+        },
+        userPreferences: true,
+      }),
+    });
+    if (i % 1000 === 0) {
+      console.log(new Date(), 'I have created', i, ' users so far');
+    }
+  }
   // create a support admin
   await prismaClient.userAccounts.create({
     data: await userFactory({

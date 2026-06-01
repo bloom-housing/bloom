@@ -51,14 +51,14 @@ export default function () {
         "sec-fetch-site": `same-origin`,
         "sec-fetch-mode": `cors`,
         "sec-fetch-dest": `empty`,
-        referer: `https://core-dev.bloomhousing.dev/applications/start/choose-language?listingId=53468ecc-7736-4d3b-a489-10e62e3cb8b7`,
+        referer: `https://core-dev.bloomhousing.dev/applications/start/choose-language?listingId=5fdfd253-d270-48e4-92ee-793ec5beda78`,
         "accept-encoding": `gzip, deflate, br, zstd`,
         "accept-language": `en-US,en;q=0.9`,
         priority: `u=1, i`,
       },
       cookies: {},
     }
-    url = http.url`https://core-dev.bloomhousing.dev/api/adapter/jurisdictions/42561f98-4e0e-46f4-a653-cf8097cd38c0`
+    url = http.url`https://core-dev.bloomhousing.dev/api/adapter/jurisdictions/2bc7a6c3-13b2-4a7e-9a98-2f47d9686ba5`
     resp = http.request("GET", url, null, params)
     check(resp, { "jurisdictions get 1": (r) => r.status === 200 })
 
@@ -75,7 +75,7 @@ export default function () {
         "sec-fetch-site": `same-origin`,
         "sec-fetch-mode": `cors`,
         "sec-fetch-dest": `empty`,
-        referer: `https://core-dev.bloomhousing.dev/applications/start/choose-language?listingId=53468ecc-7736-4d3b-a489-10e62e3cb8b7`,
+        referer: `https://core-dev.bloomhousing.dev/applications/start/choose-language?listingId=5fdfd253-d270-48e4-92ee-793ec5beda78`,
         "accept-encoding": `gzip, deflate, br, zstd`,
         "accept-language": `en-US,en;q=0.9`,
         "if-none-match": `"89n9pbkw5fd51"`,
@@ -83,7 +83,7 @@ export default function () {
       },
       cookies: {},
     }
-    url = http.url`https://core-dev.bloomhousing.dev/api/adapter/listings/53468ecc-7736-4d3b-a489-10e62e3cb8b7`
+    url = http.url`https://core-dev.bloomhousing.dev/api/adapter/listings/5fdfd253-d270-48e4-92ee-793ec5beda78`
     resp = http.request("GET", url, null, params)
     check(resp, { "listing get": (r) => r.status === 200 })
 
@@ -100,14 +100,14 @@ export default function () {
         "sec-fetch-site": `same-origin`,
         "sec-fetch-mode": `cors`,
         "sec-fetch-dest": `empty`,
-        referer: `https://core-dev.bloomhousing.dev/applications/start/choose-language?listingId=53468ecc-7736-4d3b-a489-10e62e3cb8b7`,
+        referer: `https://core-dev.bloomhousing.dev/applications/start/choose-language?listingId=5fdfd253-d270-48e4-92ee-793ec5beda78`,
         "accept-encoding": `gzip, deflate, br, zstd`,
         "accept-language": `en-US,en;q=0.9`,
         priority: `u=1, i`,
       },
       cookies: {},
     }
-    url = http.url`https://core-dev.bloomhousing.dev/api/adapter/jurisdictions/42561f98-4e0e-46f4-a653-cf8097cd38c0`
+    url = http.url`https://core-dev.bloomhousing.dev/api/adapter/jurisdictions/2bc7a6c3-13b2-4a7e-9a98-2f47d9686ba5`
     resp = http.request("GET", url, null, params)
     check(resp, { "jurisdiction get 2": (r) => r.status === 200 })
 
@@ -137,7 +137,7 @@ export default function () {
     resp = http.request(
       "POST",
       url,
-      `{"loaded":false,"autofilled":false,"completedSections":6,"submissionType":"electronical","language":"en","acceptedTerms":true,"status":"submitted","accessibleUnitWaitlistNumber":null,"conventionalUnitWaitlistNumber":null,"manualLotteryPositionNumber":null,"applicant":{"phoneNumberType":"","noPhone":true,"applicantAddress":{"street":"2024 1st Street","city":"Napa","state":"CA","zipCode":"94559","county":"","longitude":-122.29551,"latitude":38.297914},"workInRegion":"no","phoneNumber":"","firstName":"Eric","middleName":"","lastName":"McGarry","birthMonth":"02","birthDay":"12","birthYear":"1998","emailAddress":"eric.mcgarry@exygy.com","noEmail":false,"fullTimeStudent":null,"applicantWorkAddress":{"street":"","street2":"","city":"","state":"","zipCode":"","county":""}},"additionalPhone":false,"additionalPhoneNumber":"","additionalPhoneNumberType":"","contactPreferences":["email"],"householdSize":1,"housingStatus":"","sendMailToMailingAddress":false,"applicationsMailingAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"applicationsAlternateAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"alternateContact":null,"accessibility":{"mobility":false,"vision":false,"hearing":false,"other":null},"householdExpectingChanges":false,"householdStudent":false,"reasonableAccommodations":"","incomeVouchers":false,"income":"1234.00","incomePeriod":"perYear","householdMember":[],"preferredUnitTypes":[{"id":"1f227674-9d40-4656-8e6f-23807eba9479"}],"demographics":{"ethnicity":"","gender":"","sexualOrientation":"","howDidYouHear":[],"race":[],"spokenLanguage":""},"preferences":[{"multiselectQuestionId":"3497f10d-404d-48b6-8881-36b1188fe24d","key":"City Employees","claimed":true,"options":[{"key":"At least one member of my household is a city employee","checked":true,"extraData":[]}]}],"programs":[{"multiselectQuestionId":"45583597-37a0-4c5d-bfcf-9a82a28ba337","key":"Veteran","claimed":true,"options":[{"key":"Yes","checked":true,"extraData":[]}]}],"applicationSelections":[],"confirmationCode":"","id":"","reachedReviewStep":true,"reviewStatus":"pending","listings":{"id":"53468ecc-7736-4d3b-a489-10e62e3cb8b7"},"appUrl":"https://core-dev.bloomhousing.dev"}`,
+      `{"loaded":false,"autofilled":false,"completedSections":6,"submissionType":"electronical","language":"en","acceptedTerms":true,"status":"submitted","accessibleUnitWaitlistNumber":null,"conventionalUnitWaitlistNumber":null,"manualLotteryPositionNumber":null,"applicant":{"phoneNumberType":"","noPhone":true,"applicantAddress":{"street":"2024 1st Street","city":"Napa","state":"CA","zipCode":"94559","county":"","longitude":-122.29551,"latitude":38.297914},"workInRegion":"no","phoneNumber":"","firstName":"Eric","middleName":"","lastName":"McGarry","birthMonth":"02","birthDay":"12","birthYear":"1998","emailAddress":"eric.mcgarry@exygy.com","noEmail":false,"fullTimeStudent":null,"applicantWorkAddress":{"street":"","street2":"","city":"","state":"","zipCode":"","county":""}},"additionalPhone":false,"additionalPhoneNumber":"","additionalPhoneNumberType":"","contactPreferences":["email"],"householdSize":1,"housingStatus":"","sendMailToMailingAddress":false,"applicationsMailingAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"applicationsAlternateAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"alternateContact":null,"accessibility":{"mobility":false,"vision":false,"hearing":false,"other":null},"householdExpectingChanges":false,"householdStudent":false,"reasonableAccommodations":"","incomeVouchers":false,"income":"1234.00","incomePeriod":"perYear","householdMember":[],"preferredUnitTypes":[{"id":"ee78d841-c49a-487d-b316-834037673338"}],"demographics":{"ethnicity":"","gender":"","sexualOrientation":"","howDidYouHear":[],"race":[],"spokenLanguage":""},"preferences":[{"multiselectQuestionId":"fe910943-d01f-4900-bd3e-b62782d61740","key":"City Employees","claimed":true,"options":[{"key":"At least one member of my household is a city employee","checked":true,"extraData":[]}]}],"programs":[{"multiselectQuestionId":"6cef9823-d856-404e-83e1-d77c0f0caf3b","key":"Veteran","claimed":true,"options":[{"key":"Yes","checked":true,"extraData":[]}]}],"applicationSelections":[],"confirmationCode":"","id":"","reachedReviewStep":true,"reviewStatus":"pending","listings":{"id":"5fdfd253-d270-48e4-92ee-793ec5beda78"},"appUrl":"https://core-dev.bloomhousing.dev"}`,
       params
     )
 
@@ -169,7 +169,7 @@ export default function () {
     resp = http.request(
       "POST",
       url,
-      `{"loaded":false,"autofilled":false,"completedSections":6,"submissionType":"electronical","language":"en","acceptedTerms":true,"status":"submitted","accessibleUnitWaitlistNumber":null,"conventionalUnitWaitlistNumber":null,"manualLotteryPositionNumber":null,"applicant":{"phoneNumberType":"","noPhone":true,"applicantAddress":{"street":"2024 1st Street","city":"Napa","state":"CA","zipCode":"94559","county":"","longitude":-122.29551,"latitude":38.297914},"workInRegion":"no","phoneNumber":"","firstName":"Eric","middleName":"","lastName":"McGarry","birthMonth":"02","birthDay":"12","birthYear":"1998","emailAddress":"eric.mcgarry@exygy.com","noEmail":false,"fullTimeStudent":null,"applicantWorkAddress":{"street":"","street2":"","city":"","state":"","zipCode":"","county":""}},"additionalPhone":false,"additionalPhoneNumber":"","additionalPhoneNumberType":"","contactPreferences":["email"],"householdSize":1,"housingStatus":"","sendMailToMailingAddress":false,"applicationsMailingAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"applicationsAlternateAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"alternateContact":null,"accessibility":{"mobility":false,"vision":false,"hearing":false,"other":null},"householdExpectingChanges":false,"householdStudent":false,"reasonableAccommodations":"","incomeVouchers":false,"income":"1234.00","incomePeriod":"perYear","householdMember":[],"preferredUnitTypes":[{"id":"1f227674-9d40-4656-8e6f-23807eba9479"}],"demographics":{"ethnicity":"","gender":"","sexualOrientation":"","howDidYouHear":[],"race":[],"spokenLanguage":""},"preferences":[{"multiselectQuestionId":"3497f10d-404d-48b6-8881-36b1188fe24d","key":"City Employees","claimed":true,"options":[{"key":"At least one member of my household is a city employee","checked":true,"extraData":[]}]}],"programs":[{"multiselectQuestionId":"45583597-37a0-4c5d-bfcf-9a82a28ba337","key":"Veteran","claimed":true,"options":[{"key":"Yes","checked":true,"extraData":[]}]}],"applicationSelections":[],"confirmationCode":"","id":"","reachedReviewStep":true,"reviewStatus":"pending","listings":{"id":"53468ecc-7736-4d3b-a489-10e62e3cb8b7"},"appUrl":"https://core-dev.bloomhousing.dev"}`,
+      `{"loaded":false,"autofilled":false,"completedSections":6,"submissionType":"electronical","language":"en","acceptedTerms":true,"status":"submitted","accessibleUnitWaitlistNumber":null,"conventionalUnitWaitlistNumber":null,"manualLotteryPositionNumber":null,"applicant":{"phoneNumberType":"","noPhone":true,"applicantAddress":{"street":"2024 1st Street","city":"Napa","state":"CA","zipCode":"94559","county":"","longitude":-122.29551,"latitude":38.297914},"workInRegion":"no","phoneNumber":"","firstName":"Eric","middleName":"","lastName":"McGarry","birthMonth":"02","birthDay":"12","birthYear":"1998","emailAddress":"eric.mcgarry@exygy.com","noEmail":false,"fullTimeStudent":null,"applicantWorkAddress":{"street":"","street2":"","city":"","state":"","zipCode":"","county":""}},"additionalPhone":false,"additionalPhoneNumber":"","additionalPhoneNumberType":"","contactPreferences":["email"],"householdSize":1,"housingStatus":"","sendMailToMailingAddress":false,"applicationsMailingAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"applicationsAlternateAddress":{"street":"","street2":"","city":"","state":"","zipCode":""},"alternateContact":null,"accessibility":{"mobility":false,"vision":false,"hearing":false,"other":null},"householdExpectingChanges":false,"householdStudent":false,"reasonableAccommodations":"","incomeVouchers":false,"income":"1234.00","incomePeriod":"perYear","householdMember":[],"preferredUnitTypes":[{"id":"ee78d841-c49a-487d-b316-834037673338"}],"demographics":{"ethnicity":"","gender":"","sexualOrientation":"","howDidYouHear":[],"race":[],"spokenLanguage":""},"preferences":[{"multiselectQuestionId":"fe910943-d01f-4900-bd3e-b62782d61740","key":"City Employees","claimed":true,"options":[{"key":"At least one member of my household is a city employee","checked":true,"extraData":[]}]}],"programs":[{"multiselectQuestionId":"6cef9823-d856-404e-83e1-d77c0f0caf3b","key":"Veteran","claimed":true,"options":[{"key":"Yes","checked":true,"extraData":[]}]}],"applicationSelections":[],"confirmationCode":"","id":"","reachedReviewStep":true,"reviewStatus":"pending","listings":{"id":"5fdfd253-d270-48e4-92ee-793ec5beda78"},"appUrl":"https://core-dev.bloomhousing.dev"}`,
       params
     )
     check(resp, { "submission ": (r) => r.status === 201 })
