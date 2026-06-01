@@ -2933,23 +2933,40 @@ export class ListingService implements OnModuleInit {
       ),
     );
 
-    const preferenceFilters = priorityTypes.map((priorityType) => {
+    let preferenceFilters = [];
+
+    preferenceFilters = priorityTypes.map((priorityType) => {
       return {
         [priorityType]: true,
-      } as Prisma.UserNotificationPreferencesWhereInput;
+      };
     });
 
     if (listing?.region) {
       preferenceFilters.push({
-        regions: {
-          has: listing.region,
-        },
-      } as Prisma.UserNotificationPreferencesWhereInput);
+        OR: [
+          {
+            regions: {
+              has: listing.region,
+            },
+          },
+          {
+            regions: {
+              has: listing.configurableRegion,
+            },
+          },
+        ],
+      });
     }
 
     if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
       preferenceFilters.push({
         lottery: true,
+      });
+    }
+
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
+      preferenceFilters.push({
+        waitlist: true,
       });
     }
 
