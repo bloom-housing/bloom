@@ -96,6 +96,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     FeatureFlagEnum.enableGenderQuestion,
     listingDto?.jurisdictions.id
   )
+  const enableSexualOrientationQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSexualOrientationQuestion,
+    listingDto?.jurisdictions.id
+  )
 
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
@@ -409,6 +413,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       enableSpokenLanguage={enableSpokenLanguage}
                       visibleSpokenLanguages={jurisdictionData?.visibleSpokenLanguages}
                       enableGenderQuestion={enableGenderQuestion}
+                      enableSexualOrientationQuestion={enableSexualOrientationQuestion}
                     />
 
                     <FormTerms />

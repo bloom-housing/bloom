@@ -10,6 +10,7 @@ import {
   howDidYouHear,
   limitedHowDidYouHear,
   getRaceEthnicityOptions,
+  sexualOrientationKeys,
 } from "@bloom-housing/shared-helpers"
 import {
   Demographic,
@@ -25,6 +26,7 @@ type FormDemographicsProps = {
   enableSpokenLanguage?: boolean
   visibleSpokenLanguages?: string[]
   enableGenderQuestion?: boolean
+  enableSexualOrientationQuestion?: boolean
 }
 
 const FormDemographics = ({
@@ -35,6 +37,7 @@ const FormDemographics = ({
   enableSpokenLanguage,
   visibleSpokenLanguages,
   enableGenderQuestion,
+  enableSexualOrientationQuestion,
 }: FormDemographicsProps) => {
   const formMethods = useFormContext()
 
@@ -147,6 +150,17 @@ const FormDemographics = ({
                     keyPrefix="application.review.demographics.genderOptions"
                   />
                 </div>
+              )}
+              {enableSexualOrientationQuestion && (
+                <Select
+                  id="application.demographics.sexualOrientation"
+                  name="application.demographics.sexualOrientation"
+                  label={t("application.add.sexualOrientation")}
+                  register={register}
+                  controlClassName="control"
+                  options={["", ...sexualOrientationKeys]}
+                  keyPrefix="application.review.demographics.sexualOrientationOptions"
+                />
               )}
               {enableSpokenLanguage && visibleSpokenLanguages?.length > 0 && (
                 <div
