@@ -1199,6 +1199,7 @@ export class EmailService {
             listingName: listing.name,
             tableRows: listingDetails,
             languageUrls: emailButtons,
+            accessibleMarketingFlyerUrl: listing.accessibleMarketingFlyer,
             emailSettingsUrl: `${jurisdiction.publicUrl}/sign-in?redirectUrl=/account/notifications`,
           }),
         );

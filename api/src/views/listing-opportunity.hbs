@@ -40,11 +40,13 @@
 
   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
     <tbody>
-      <tr>
-        <td align="center">
-          <a href="{{accessibleMarketingFlyerUrl}}" target="_blank">{{t "rentalOpportunity.footer.accessibleMarketingFlyer"}}</a>
-        </td>
-      </tr>
+      {{#if accessibleMarketingFlyerUrl}}
+        <tr>
+          <td align="center">
+            <a href="{{accessibleMarketingFlyerUrl}}" target="_blank">{{t "rentalOpportunity.footer.accessibleMarketingFlyer"}}</a>
+          </td>
+        </tr>
+      {{/if}}
       <tr>
         <td align="center">
           <a href="{{emailSettingsUrl}}" target="_blank">{{t "rentalOpportunity.footer.unsubscribeAndEmailSettings"}}</a>
