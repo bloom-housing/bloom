@@ -1007,6 +1007,13 @@ export class EmailService {
       });
     }
 
+    if (listing.region || listing.configurableRegion) {
+      listingDetails.push({
+        label: this.polyglot.t('rentalOpportunity.region'),
+        value: listing.region || listing.configurableRegion,
+      });
+    }
+
     if (priorityTypes.length) {
       listingDetails.push({
         label: this.polyglot.t('rentalOpportunity.unitType'),
