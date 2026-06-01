@@ -122,8 +122,8 @@ export const stagingSeed = async (
     }),
   });
 
-  for (let i = 0; i < 100000; i++) {
-    prismaClient.userAccounts.create({
+  for (let i = 0; i < 20000; i++) {
+    await prismaClient.userAccounts.create({
       data: await userFactory({
         email: `yazeed.loonat+${i}@exygy.com`,
         confirmedAt: new Date(),
@@ -131,7 +131,7 @@ export const stagingSeed = async (
         acceptedTerms: true,
         password: 'abcdef',
         notificationPreferences: {
-          regions: ['test'],
+          regions: ['Eastside'],
         },
         userPreferences: true,
       }),
