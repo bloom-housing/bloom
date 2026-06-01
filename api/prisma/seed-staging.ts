@@ -122,7 +122,7 @@ export const stagingSeed = async (
     }),
   });
 
-  for (let i = 0; i < 20000; i++) {
+  for (let i = 0; i < 10000; i++) {
     await prismaClient.userAccounts.create({
       data: await userFactory({
         email: `yazeed.loonat+${i}@exygy.com`,
