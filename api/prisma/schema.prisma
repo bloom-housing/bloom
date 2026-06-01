@@ -1234,6 +1234,9 @@ model Listings {
   disableUnitsAccordion                Boolean?                    @map("disable_units_accordion")
   displayWaitlistSize                  Boolean                     @map("display_waitlist_size")
   documentsId                          String?                     @unique() @map("documents_id") @db.Uuid
+  externalJurisdictionId               String?                     @map("external_jurisdiction_id") @db.Uuid
+  externalListingId                    String?                     @map("external_listing_id") @db.Uuid
+  externalURL                          String?                     @map("external_url")
   featuresId                           String?                     @unique() @map("features_id") @db.Uuid
   hasHudEbllClearance                  Boolean?                    @map("has_hud_ebll_clearance")
   homeType                             HomeTypeEnum?               @map("home_type")
@@ -1411,6 +1414,9 @@ model ListingSnapshot {
   disableUnitsAccordion                   Boolean?                    @map("disable_units_accordion")
   displayWaitlistSize                     Boolean                     @map("display_waitlist_size")
   documentSnapshotId                      String?                     @unique() @map("document_snapshot_id") @db.Uuid
+  externalJurisdictionId                  String?                     @map("external_jurisdiction_id") @db.Uuid
+  externalListingId                       String?                     @map("external_listing_id") @db.Uuid
+  externalURL                             String?                     @map("external_url")
   featureSnapshotId                       String?                     @unique() @map("feature_snapshot_id") @db.Uuid
   hasHudEbllClearance                     Boolean?                    @map("has_hud_ebll_clearance")
   homeType                                HomeTypeEnum?               @map("home_type")
