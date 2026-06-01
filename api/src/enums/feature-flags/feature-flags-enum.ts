@@ -23,6 +23,7 @@ export enum FeatureFlagEnum {
   enableFilterByBathroom = 'enableFilterByBathroom',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGenderQuestion = 'enableGenderQuestion',
+  enableSexualOrientationQuestion = 'enableSexualOrientationQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
@@ -184,6 +185,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableGenderQuestion,
     description:
       'When true, the gender identity question is displayed in the public and partner application demographics section',
+  },
+  {
+    name: FeatureFlagEnum.enableSexualOrientationQuestion,
+    description:
+      'When true, the sexual orientation question is displayed in the public and partner application demographics section',
   },
   {
     name: FeatureFlagEnum.enableGeocodingPreferences,

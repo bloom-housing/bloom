@@ -10736,6 +10736,7 @@ export enum FeatureFlagEnum {
   "enableFilterByBathroom" = "enableFilterByBathroom",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGenderQuestion" = "enableGenderQuestion",
+  "enableSexualOrientationQuestion" = "enableSexualOrientationQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
