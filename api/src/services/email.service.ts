@@ -1010,7 +1010,7 @@ export class EmailService {
     if (listing.region || listing.configurableRegion) {
       listingDetails.push({
         label: this.polyglot.t('rentalOpportunity.region'),
-        value: listing.region || listing.configurableRegion,
+        value: listing.region ?? listing.configurableRegion,
       });
     }
 
