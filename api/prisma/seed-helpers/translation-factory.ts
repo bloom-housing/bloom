@@ -512,7 +512,7 @@ const translations = (
           footer: {
             accessibleMarketingFlyer: 'Naa-access na flyer sa marketing',
             unsubscribeAndEmailSettings:
-              'Mag-unsubscribe at pamahalaan ang mga setting ng email',
+              'Mag-unsubscribe at pamahalaan ang mga settings ng email',
           },
         },
       };
@@ -1324,7 +1324,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Accessible marketing flyer',
-            unsubscribeAndEmailSettings: 'Unsubscribe and manage email setting',
+            unsubscribeAndEmailSettings:
+              'Unsubscribe and manage email settings',
           },
         },
         advocateApproved: {

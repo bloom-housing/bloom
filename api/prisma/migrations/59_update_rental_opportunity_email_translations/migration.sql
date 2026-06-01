@@ -6,7 +6,7 @@ SET translations = jsonb_set(
   '{rentalOpportunity}',
     COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
     "footer": {
-      "unsubscribeAndEmailSettings": "Unsubscribe and manage email setting"
+      "unsubscribeAndEmailSettings": "Unsubscribe and manage email settings"
     }}'::jsonb
 
 )
@@ -53,7 +53,7 @@ SET translations = jsonb_set(
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
   "footer": {
-    "unsubscribeAndEmailSettings": "Mag-unsubscribe at pamahalaan ang mga setting ng email"
+    "unsubscribeAndEmailSettings": "Mag-unsubscribe at pamahalaan ang mga settings ng email"
   }
   }'::jsonb
 )
