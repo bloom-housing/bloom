@@ -24,13 +24,13 @@ const UnapproveListingDialog = ({ isOpen, onClose, onConfirm }: UnapproveListing
         <Button
           id="unapproveListingButtonConfirm"
           type="button"
-          variant="alert-outlined"
+          variant="alert"
           size="sm"
           onClick={onConfirm}
         >
           {t("listings.approval.unapprove")}
         </Button>
-        <Button type="button" onClick={onClose} size="sm">
+        <Button type="button" variant="primary-outlined" onClick={onClose} size="sm">
           {t("t.cancel")}
         </Button>
       </Dialog.Footer>

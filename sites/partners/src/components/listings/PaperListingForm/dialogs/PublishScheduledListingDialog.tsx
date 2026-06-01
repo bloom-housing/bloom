@@ -36,7 +36,7 @@ const PublishScheduledListingDialog = ({
         >
           {t("listings.actions.publish")}
         </Button>
-        <Button type="button" onClick={onClose} size="sm">
+        <Button type="button" variant="primary-outlined" onClick={onClose} size="sm">
           {t("t.cancel")}
         </Button>
       </Dialog.Footer>

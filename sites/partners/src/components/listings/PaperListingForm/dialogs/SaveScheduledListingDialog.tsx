@@ -46,7 +46,7 @@ const SaveScheduledListingDialog = ({
         >
           {t("t.save")}
         </Button>
-        <Button type="button" onClick={onClose} size="sm">
+        <Button type="button" variant="primary-outlined" onClick={onClose} size="sm">
           {t("t.cancel")}
         </Button>
       </Dialog.Footer>
