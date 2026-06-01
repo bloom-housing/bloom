@@ -5,6 +5,10 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
     COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+    "region": "Region",
+    "accessibilityType": {
+      "hearingAndVision": "Hearing/Vision"
+    },
     "footer": {
       "unsubscribeAndEmailSettings": "Unsubscribe and manage email settings"
     }}'::jsonb
@@ -17,6 +21,10 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "Región",
+  "accessibilityType": {
+    "hearingAndVision": "Auditiva/visual"
+  },
   "footer": {
     "unsubscribeAndEmailSettings": "Cancelar suscripción y gestionar configuración de correo electrónico"
   }}'::jsonb
@@ -28,6 +36,10 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "Vùng đất",
+  "accessibilityType" : {
+    "hearingAndVision": "Thính giác / thị giác"
+  },
   "footer": {
     "unsubscribeAndEmailSettings": "Hủy đăng ký và quản lý cài đặt email"
   }
@@ -40,6 +52,10 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+    "region": "地区",
+    "accessibilityType": {
+      "hearingAndVision": "听力/视力"
+    },
     "footer": {
       "unsubscribeAndEmailSettings": "取消订阅并管理电子邮件设置"
     }
@@ -52,6 +68,10 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "Rehiyon",
+  "accessibilityType": {
+    "hearingAndVision": "Pandinig/paningin"
+  },
   "footer": {
     "unsubscribeAndEmailSettings": "Mag-unsubscribe at pamahalaan ang mga settings ng email"
   }
@@ -64,10 +84,14 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "অঞ্চল",
+  "accessibilityType": {
+    "hearingAndVision": "শ্রবণ/দৃষ্টি"
+  },
   "footer": {
     "unsubscribeAndEmailSettings": "আনসাবস্ক্রাইব করুন এবং ইমেইল সেটিংস পরিচালনা করুন"
   }
-  }'::jsonb
+}'::jsonb
 )
 WHERE language = 'bn';
 
@@ -76,10 +100,14 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "منطقة",
+  "accessibilityType": {
+    "hearingAndVision": "السمع/البصر"
+  },
   "footer": {
     "unsubscribeAndEmailSettings": "إلغاء الاشتراك وإدارة إعدادات البريد الإلكتروني"
   }
-  }'::jsonb
+}'::jsonb
 )
 WHERE language = 'ar';
 
@@ -88,10 +116,14 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "지역",
+  "accessibilityType": {
+    "hearingAndVision": "청각/시각"
+  },
   "footer": {
     "unsubscribeAndEmailSettings": "구독 취소 및 이메일 설정 관리"
   }
-  }'::jsonb
+}'::jsonb
 )
 WHERE language = 'ko';
 
@@ -100,10 +132,14 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "Տարածաշրջան",
+  "accessibilityType": {
+    "hearingAndVision": "Լսողություն/տեսողություն"
+  },
   "footer": {
     "unsubscribeAndEmailSettings": "Դադարեցնել բաժանորդագրությունը և կառավարել էլ. փոստի կարգավորումները"
   }
-  }'::jsonb
+}'::jsonb
 )
 WHERE language = 'hy';
 
@@ -112,9 +148,13 @@ SET translations = jsonb_set(
   translations,
   '{rentalOpportunity}',
   COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "منطقه",
+  "accessibilityType": {
+    "hearingAndVision": "شنوایی/بینایی"
+  },
   "footer": {
     "unsubscribeAndEmailSettings": "لغو اشتراک و مدیریت تنظیمات ایمیل"
   }
-  }'::jsonb
+}'::jsonb
 )
 WHERE language = 'fa';
