@@ -2963,11 +2963,11 @@ export class ListingService implements OnModuleInit {
           email: '',
         },
         AND: [
-          {
-            userPreferences: {
-              sendEmailNotifications: true,
-            },
-          },
+          // { TODO: consider enabling this when this flag will be available to update from user account page
+          //   userPreferences: {
+          //     sendEmailNotifications: true,
+          //   },
+          // },
           {
             notificationPreferences: {
               OR: preferenceFilters,
