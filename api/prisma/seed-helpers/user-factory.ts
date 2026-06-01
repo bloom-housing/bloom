@@ -26,7 +26,6 @@ export const userFactory = async (optionalParams?: {
   isApproved?: boolean;
   agencyId?: string;
   notificationPreferences?: UserNotificationPreferences;
-  userPreferences?: boolean;
 }): Promise<Prisma.UserAccountsCreateInput> => ({
   agreedToTermsOfService: optionalParams?.acceptedTerms || false,
   confirmedAt: optionalParams?.confirmedAt || null,
@@ -107,13 +106,6 @@ export const userFactory = async (optionalParams?: {
           city: 'Oakland',
           state: 'CA',
           zipCode: '94612',
-        },
-      }
-    : undefined,
-  userPreferences: optionalParams?.userPreferences
-    ? {
-        create: {
-          sendEmailNotifications: true,
         },
       }
     : undefined,

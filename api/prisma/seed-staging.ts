@@ -121,7 +121,6 @@ export const stagingSeed = async (
       password: 'abcdef',
     }),
   });
-
   // create a support admin
   await prismaClient.userAccounts.create({
     data: await userFactory({
