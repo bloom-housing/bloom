@@ -68,6 +68,7 @@ import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-util
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
 import { SnapshotCreateService } from './snapshot-create.service';
+import { userFactory } from '../../prisma/seed-helpers/user-factory';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -3404,5 +3405,29 @@ export class ListingService implements OnModuleInit {
         lng: Number(mapMarker.listingsBuildingAddress.longitude),
       } as ListingMapMarker;
     });
+  }
+
+  async makeUsers() {
+    const juris = await this.prisma.jurisdictions.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+    for (let i = 0; i < 10000; i++) {
+      await this.prisma.userAccounts.create({
+        data: await userFactory({
+          email: `yazeed.loonat+${i}@exygy.com`,
+          confirmedAt: new Date(),
+          jurisdictionIds: juris.map((elem) => elem.id),
+          acceptedTerms: true,
+          password: 'abcdef',
+          notificationPreferences: {
+            regions: ['Eastside'],
+          },
+          userPreferences: true,
+        }),
+      });
+    }
   }
 }

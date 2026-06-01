@@ -253,6 +253,18 @@ export class ListingsService {
     })
   }
   /**
+   * make users
+   */
+  makeusers(options: IRequestOptions = {}): Promise<PaginatedListing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/makeusers"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get a paginated set of listings
    */
   filterableList(
@@ -3420,7 +3432,7 @@ export interface ListingFilterParams {
   availability?: FilterAvailabilityEnum
 
   /**  */
-  bathrooms?: number
+  bathrooms?: []
 
   /**  */
   bedrooms?: number

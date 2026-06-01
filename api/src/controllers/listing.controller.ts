@@ -92,6 +92,19 @@ export class ListingController {
     return await this.listingService.list(queryParams);
   }
 
+  // TODO: REMOVE THIS
+  @Get('makeusers')
+  @ApiOperation({
+    summary: 'make users',
+    operationId: 'makeusers',
+  })
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOkResponse({ type: PaginatedListingDto })
+  public async makeUsers() {
+    return await this.listingService.makeUsers();
+  }
+
   @Post('list')
   @ApiOperation({
     summary: 'Get a paginated set of listings',
