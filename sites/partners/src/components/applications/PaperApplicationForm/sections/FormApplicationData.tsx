@@ -6,31 +6,41 @@ import {
   DateField,
   DateFieldValues,
   Field,
+  Textarea,
 } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import {
   LanguagesEnum,
+  ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
+  ApplicationSubmissionTypeEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useFormContext } from "react-hook-form"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { addAsterisk } from "../../../../lib/helpers"
 
 type FormApplicationDataProps = {
   enableApplicationStatus: boolean
+  enableReceivedAtAndByFields: boolean
+  appType: ApplicationSubmissionTypeEnum
   disableApplicationStatusControls?: boolean
   reviewOrderType?: ReviewOrderTypeEnum
+  availableJurisdictionLanguages?: LanguagesEnum[]
 }
 
 const FormApplicationData = ({
   enableApplicationStatus,
+  enableReceivedAtAndByFields,
+  appType,
   disableApplicationStatusControls = false,
   reviewOrderType,
+  availableJurisdictionLanguages = [],
 }: FormApplicationDataProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors, setValue } = formMethods
+  const { register, watch, errors, setValue, clearErrors } = formMethods
 
   const dateSubmittedValue: DateFieldValues = watch("dateSubmitted")
   const isDateFilled =
@@ -38,6 +48,12 @@ const FormApplicationData = ({
 
   const isDateRequired =
     dateSubmittedValue?.day || dateSubmittedValue?.month || dateSubmittedValue?.year
+
+  const dateReceivedValue: DateFieldValues = watch("dateReceived")
+  const isDateReceivedFilled =
+    dateReceivedValue?.day && dateReceivedValue?.month && dateReceivedValue?.year
+  const isDateReceivedRequired =
+    dateReceivedValue?.day && dateReceivedValue?.month && dateReceivedValue?.year
 
   const applicationStatus: ApplicationStatusEnum = watch("application.status")
 
@@ -49,7 +65,22 @@ const FormApplicationData = ({
     applicationStatus === ApplicationStatusEnum.waitlist ||
     applicationStatus === ApplicationStatusEnum.waitlistDeclined
 
+  const isDeclinedStatus = applicationStatus === ApplicationStatusEnum.declined
+
+  const applicationDeclineReasonValue: string = watch("application.applicationDeclineReason")
+  const declineReasonsRequiringDetails = [
+    ApplicationDeclineReasonEnum.attemptedToContactNoResponse,
+    ApplicationDeclineReasonEnum.applicantDeclinedUnit,
+    ApplicationDeclineReasonEnum.other,
+  ]
+  const showDeclineReasonDetails =
+    isDeclinedStatus &&
+    declineReasonsRequiringDetails.includes(
+      applicationDeclineReasonValue as ApplicationDeclineReasonEnum
+    )
+
   const applicationStatusOptions = Array.from(Object.values(ApplicationStatusEnum))
+  const applicationDeclineReasonOptions = Array.from(Object.values(ApplicationDeclineReasonEnum))
   return (
     <SectionWithGrid heading={t("application.details.applicationData")}>
       <Grid.Row>
@@ -92,16 +123,68 @@ const FormApplicationData = ({
             label={t("application.add.languageSubmittedIn")}
             register={register}
             controlClassName="control"
-            options={["", ...Object.values(LanguagesEnum)]}
+            options={[
+              "",
+              ...availableJurisdictionLanguages.map((item) => ({
+                label: t(`languages.${item}`),
+                value: item,
+              })),
+            ]}
             keyPrefix="languages"
           />
         </Grid.Cell>
       </Grid.Row>
+
+      {enableReceivedAtAndByFields && appType !== ApplicationSubmissionTypeEnum.electronical && (
+        <Grid.Row>
+          <Grid.Cell>
+            <DateField
+              id="dateReceived"
+              name="dateReceived"
+              register={register}
+              error={isDateReceivedRequired ? errors?.dateReceived : undefined}
+              watch={watch}
+              setValue={setValue}
+              label={t("application.add.dateReceivedAt")}
+              errorMessage={t("errors.dateError")}
+              required={!!isDateReceivedRequired}
+              labelClass={"text__caps-spaced"}
+              dataTestId="dateReceived"
+            />
+          </Grid.Cell>
+
+          <Grid.Cell>
+            <TimeField
+              id="timeReceived"
+              name="timeReceived"
+              label={t("application.add.timeReceivedAt")}
+              register={register}
+              setValue={setValue}
+              watch={watch}
+              error={!!errors?.timeReceived}
+              disabled={!isDateReceivedFilled}
+              required={!!isDateReceivedFilled}
+              labelClass={"text__caps-spaced"}
+              dataTestId="timeReceived"
+            />
+          </Grid.Cell>
+
+          <Grid.Cell>
+            <Field
+              id="application.receivedBy"
+              name="application.receivedBy"
+              label={t("application.add.receivedBy")}
+              placeholder={t("application.add.receivedBy")}
+              register={register}
+              dataTestId="receivedBy"
+            />
+          </Grid.Cell>
+        </Grid.Row>
+      )}
       {enableApplicationStatus && (
         <>
           <Grid.Row columns={3}>
             <Grid.Cell>
-              {/* We need active hidden field to send value even when field is disabled */}
               <div className={disableApplicationStatusControls ? "hidden" : ""}>
                 <Select
                   id="application.status"
@@ -129,7 +212,53 @@ const FormApplicationData = ({
                 />
               )}
             </Grid.Cell>
+            {isDeclinedStatus && (
+              <Grid.Cell>
+                <Select
+                  id="application.applicationDeclineReason"
+                  name="application.applicationDeclineReason"
+                  label={addAsterisk(t("application.details.applicationDeclineReason"))}
+                  register={register}
+                  controlClassName="control"
+                  options={["", ...applicationDeclineReasonOptions]}
+                  keyPrefix="application.details.applicationDeclineReason"
+                  validation={{ required: isDeclinedStatus }}
+                  error={errors?.application?.applicationDeclineReason}
+                  errorMessage={t("errors.selectOption")}
+                  inputProps={{
+                    onChange: () => {
+                      clearErrors("application.applicationDeclineReason")
+                    },
+                  }}
+                  dataTestId="applicationDeclineReasonSelect"
+                />
+              </Grid.Cell>
+            )}
           </Grid.Row>
+          {showDeclineReasonDetails && (
+            <Grid.Row columns={3}>
+              <Grid.Cell className={"seeds-grid-span-2"}>
+                <Textarea
+                  id="application.applicationDeclineReasonAdditionalDetails"
+                  name="application.applicationDeclineReasonAdditionalDetails"
+                  label={addAsterisk(
+                    t("application.details.applicationDeclineReasonAdditionalDetails")
+                  )}
+                  note={t("application.details.applicationDeclineReasonAdditionalDetailsNote")}
+                  register={register}
+                  validation={{ required: true }}
+                  errorMessage={
+                    errors?.application?.applicationDeclineReasonAdditionalDetails
+                      ? t("errors.requiredFieldError")
+                      : undefined
+                  }
+                  fullWidth={true}
+                  maxLength={2000}
+                  placeholder={""}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+          )}
           <Grid.Row columns={3}>
             {/* We need active hidden field to send value even when field is not visible and disabled */}
             <Grid.Cell

@@ -94,6 +94,7 @@ export const blankApplication = {
     mobility: null,
     vision: null,
     hearing: null,
+    hearingAndVision: null,
   },
   householdExpectingChanges: null,
   householdStudent: null,

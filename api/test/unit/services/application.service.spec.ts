@@ -195,6 +195,7 @@ export const mockCreateApplicationData = (
       mobility: false,
       vision: false,
       hearing: false,
+      hearingAndVision: false,
       other: false,
     },
     additionalPhone: true,
@@ -397,6 +398,7 @@ const buildExpectedApplicationData = ({
         mobility: false,
         vision: false,
         hearing: false,
+        hearingAndVision: false,
         other: false,
       },
     },
@@ -563,6 +565,7 @@ const detailView = {
       mobility: true,
       vision: true,
       hearing: true,
+      hearingAndVision: true,
       other: true,
     },
   },
@@ -785,6 +788,7 @@ const baseView = {
       mobility: true,
       vision: true,
       hearing: true,
+      hearingAndVision: true,
       other: true,
     },
   },
@@ -994,14 +998,6 @@ describe('Testing application service', () => {
     jurisdictions: [
       {
         id: 'juris id',
-        featureFlags: [
-          {
-            name: FeatureFlagEnum.enableAdaOtherOption,
-            description: '',
-            active: true,
-            jurisdictions: [],
-          },
-        ],
       },
     ],
   } as unknown as User;

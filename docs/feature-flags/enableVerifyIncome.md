@@ -11,3 +11,7 @@ When true, the income question on the application will be validated against the 
 ## Additional Information
 
 ## Images
+
+### Public
+
+![image.png](./images/image%2065.png)

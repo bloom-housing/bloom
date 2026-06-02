@@ -61,7 +61,7 @@ export const bloomingtonListing: CypressListing = {
     listingFeaturesConfiguration: listingFeaturesConfiguration,
   } as Jurisdiction,
   jurisdictions: { id: "Bloomington" },
-  name: "Basic Test Listing Bloomington",
+  name: `Basic Test Listing Bloomington ${Date.now()}`,
   developer: "Basic Test Developer",
   listingsBuildingAddress: {
     street: "548 Market St. #59930",

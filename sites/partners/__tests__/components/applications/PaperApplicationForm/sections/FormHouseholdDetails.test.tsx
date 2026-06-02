@@ -1,7 +1,10 @@
 import React from "react"
 import { mockNextRouter, render, screen, FormProviderWrapper } from "../../../../testUtils"
 import { FormHouseholdDetails } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormHouseholdDetails"
-import { UnitTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ApplicationAccessibilityFeatureEnum,
+  UnitTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { unit } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import userEvent from "@testing-library/user-event"
 
@@ -28,11 +31,16 @@ describe("<FormHouseholdDetails>", () => {
           applicationAccessibilityFeatures={{
             id: "id",
             mobility: true,
-            vision: true,
-            hearing: true,
+            vision: false,
+            hearing: false,
+            hearingAndVision: true,
           }}
           listingUnitGroups={[]}
           enableUnitGroups={false}
+          visibleApplicationAccessibilityFeatures={[
+            ApplicationAccessibilityFeatureEnum.mobility,
+            ApplicationAccessibilityFeatureEnum.hearingAndVision,
+          ]}
         />
       </FormProviderWrapper>
     )
@@ -51,9 +59,11 @@ describe("<FormHouseholdDetails>", () => {
     expect(screen.getByLabelText("Studio")).toBeInTheDocument()
 
     expect(screen.getByText(/ada priorities selected/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/mobility impairments/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/vision impairments/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/hearing impairments/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/for mobility impairments$/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/for hearing and vision impairments$/i)).toBeInTheDocument()
+    expect(screen.queryByLabelText(/for other impairments$/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/for hearing impairments$/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/for vision impairments$/i)).not.toBeInTheDocument()
 
     expect(screen.getByText(/expecting household changes/i)).toBeInTheDocument()
     expect(screen.getByText(/household includes student or member nearing 18/i)).toBeInTheDocument()
@@ -69,8 +79,6 @@ describe("<FormHouseholdDetails>", () => {
           applicationUnitTypes={[]}
           applicationAccessibilityFeatures={{
             id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             mobility: true,
             vision: true,
             hearing: true,
@@ -122,6 +130,11 @@ describe("<FormHouseholdDetails>", () => {
             },
           ]}
           enableUnitGroups={true}
+          visibleApplicationAccessibilityFeatures={[
+            ApplicationAccessibilityFeatureEnum.mobility,
+            ApplicationAccessibilityFeatureEnum.vision,
+            ApplicationAccessibilityFeatureEnum.hearing,
+          ]}
         />
       </FormProviderWrapper>
     )
@@ -137,9 +150,11 @@ describe("<FormHouseholdDetails>", () => {
     expect(screen.getByLabelText("3 bedroom")).toBeInTheDocument()
 
     expect(screen.getByText(/ada priorities selected/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/mobility impairments/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/vision impairments/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/hearing impairments/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/for mobility impairments$/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/for vision impairments$/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/for hearing impairments$/i)).toBeInTheDocument()
+    expect(screen.queryByLabelText(/for hearing and vision impairments$/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/for other impairments$/i)).not.toBeInTheDocument()
 
     expect(screen.getByText(/expecting household changes/i)).toBeInTheDocument()
     expect(screen.getByText(/household includes student or member nearing 18/i)).toBeInTheDocument()
@@ -155,8 +170,6 @@ describe("<FormHouseholdDetails>", () => {
           applicationUnitTypes={[]}
           applicationAccessibilityFeatures={{
             id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             mobility: true,
             vision: true,
             hearing: true,
@@ -229,8 +242,6 @@ describe("<FormHouseholdDetails>", () => {
           applicationUnitTypes={[]}
           applicationAccessibilityFeatures={{
             id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
             mobility: true,
             vision: true,
             hearing: true,
@@ -406,5 +417,37 @@ describe("<FormHouseholdDetails>", () => {
 
     await userEvent.type(reasonableAccommodationsInput, "Need a step-free entrance.")
     expect(reasonableAccommodationsInput).toHaveValue("Need a step-free entrance.")
+  })
+
+  it("renders all possible ADA options when configured", () => {
+    render(
+      <FormProviderWrapper>
+        <FormHouseholdDetails
+          listingUnits={[]}
+          applicationUnitTypes={[]}
+          applicationAccessibilityFeatures={{
+            id: "id",
+            mobility: false,
+            vision: false,
+            hearing: false,
+            hearingAndVision: false,
+            other: false,
+          }}
+          visibleApplicationAccessibilityFeatures={[
+            ApplicationAccessibilityFeatureEnum.mobility,
+            ApplicationAccessibilityFeatureEnum.vision,
+            ApplicationAccessibilityFeatureEnum.hearing,
+            ApplicationAccessibilityFeatureEnum.hearingAndVision,
+            ApplicationAccessibilityFeatureEnum.other,
+          ]}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.getByLabelText(/for mobility impairments$/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/for vision impairments$/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/for hearing impairments$/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/for hearing and vision impairments$/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/for other impairments$/i)).toBeInTheDocument()
   })
 })

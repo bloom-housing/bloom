@@ -71,8 +71,9 @@ export { customRender as render }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const mockNextRouter = (query?: any) => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const useRouter = jest.spyOn(require("next/router"), "useRouter")
-  const pushMock = jest.fn()
+  const router = require("next/router")
+  const useRouter = jest.spyOn(router, "useRouter")
+  const pushMock = jest.fn().mockResolvedValue(true)
   const backMock = jest.fn()
   const replaceMock = jest.fn()
   useRouter.mockImplementation(() => ({
@@ -82,6 +83,10 @@ export const mockNextRouter = (query?: any) => {
     back: backMock,
     replace: replaceMock,
   }))
+  if (router.default) {
+    router.default.push = pushMock
+    router.default.replace = replaceMock
+  }
 
   return { useRouter, pushMock, backMock, replaceMock }
 }

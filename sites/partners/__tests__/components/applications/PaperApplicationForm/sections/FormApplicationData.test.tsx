@@ -1,19 +1,46 @@
-import { render, screen, waitFor } from "@testing-library/react"
+import { render, screen, waitFor, within } from "@testing-library/react"
 import React from "react"
 import userEvent from "@testing-library/user-event"
+import { FormProvider, useForm } from "react-hook-form"
 import {
   LanguagesEnum,
+  ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
   ReviewOrderTypeEnum,
+  ApplicationSubmissionTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FormProviderWrapper } from "../../../../testUtils"
 import { FormApplicationData } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormApplicationData"
+
+const FormWithSubmit = ({ children }: { children: React.ReactNode }) => {
+  const formMethods = useForm({ shouldUnregister: false })
+  return (
+    <FormProvider {...formMethods}>
+      <form onSubmit={formMethods.handleSubmit(() => null)}>
+        {children}
+        <button type="submit">Submit</button>
+      </form>
+    </FormProvider>
+  )
+}
+
+const defaultFormApplicationDataProps = {
+  enableApplicationStatus: false,
+  enableReceivedAtAndByFields: false,
+  appType: ApplicationSubmissionTypeEnum.paper,
+  availableJurisdictionLanguages: [
+    LanguagesEnum.en,
+    LanguagesEnum.es,
+    LanguagesEnum.vi,
+    LanguagesEnum.zh,
+  ],
+}
 
 describe("<FormApplicationData>", () => {
   it("renders the form with application data fields", () => {
     render(
       <FormProviderWrapper>
-        <FormApplicationData enableApplicationStatus={false} />
+        <FormApplicationData {...defaultFormApplicationDataProps} />
       </FormProviderWrapper>
     )
     expect(screen.getByRole("heading", { level: 2, name: /application data/i })).toBeInTheDocument()
@@ -34,7 +61,7 @@ describe("<FormApplicationData>", () => {
   it("time fields are disabled when date is not fully entered", async () => {
     render(
       <FormProviderWrapper>
-        <FormApplicationData enableApplicationStatus={false} />
+        <FormApplicationData {...defaultFormApplicationDataProps} />
       </FormProviderWrapper>
     )
 
@@ -64,11 +91,12 @@ describe("<FormApplicationData>", () => {
   it("language selection works correctly", async () => {
     render(
       <FormProviderWrapper>
-        <FormApplicationData enableApplicationStatus={false} />
+        <FormApplicationData {...defaultFormApplicationDataProps} />
       </FormProviderWrapper>
     )
 
     const languageSelect = screen.getByLabelText(/language submitted in/i)
+    expect(within(languageSelect).getAllByRole("option")).toHaveLength(5)
     await userEvent.selectOptions(languageSelect, LanguagesEnum.en)
 
     expect((languageSelect as HTMLSelectElement).value).toBe(LanguagesEnum.en)
@@ -77,7 +105,7 @@ describe("<FormApplicationData>", () => {
   it("clearing date fields does not resets time fields", async () => {
     render(
       <FormProviderWrapper>
-        <FormApplicationData enableApplicationStatus={false} />
+        <FormApplicationData {...defaultFormApplicationDataProps} />
       </FormProviderWrapper>
     )
 
@@ -112,11 +140,70 @@ describe("<FormApplicationData>", () => {
     expect((timePeriod as HTMLSelectElement).value).toBe("pm")
   })
 
+  describe("received at and by fields", () => {
+    it("does not render received fields when the feature flag is disabled", () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData {...defaultFormApplicationDataProps} />
+        </FormProviderWrapper>
+      )
+
+      expect(screen.queryByText(/date received at/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/time received at/i)).not.toBeInTheDocument()
+      expect(screen.queryByLabelText(/received by/i)).not.toBeInTheDocument()
+    })
+
+    it("renders received fields for paper applications when the feature flag is enabled", async () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableReceivedAtAndByFields={true}
+          />
+        </FormProviderWrapper>
+      )
+
+      expect(screen.getByText(/date received at/i)).toBeInTheDocument()
+      expect(screen.getByTestId("dateReceived-month")).toBeInTheDocument()
+      expect(screen.getByTestId("dateReceived-day")).toBeInTheDocument()
+      expect(screen.getByTestId("dateReceived-year")).toBeInTheDocument()
+
+      const timeReceivedHours = screen.getByTestId("timeReceived-hours")
+      const timeReceivedMinutes = screen.getByTestId("timeReceived-minutes")
+      const timeReceivedPeriod = screen.getByTestId("timeReceived-period")
+
+      expect(screen.getByText(/time received at/i)).toBeInTheDocument()
+      expect(timeReceivedHours).toBeDisabled()
+      expect(timeReceivedMinutes).toBeDisabled()
+      expect(timeReceivedPeriod).toBeDisabled()
+
+      const receivedByInput = screen.getByLabelText(/received by/i)
+      await userEvent.type(receivedByInput, "Leasing Office")
+      expect((receivedByInput as HTMLInputElement).value).toBe("Leasing Office")
+    })
+
+    it("does not render received fields for electronic applications", () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableReceivedAtAndByFields={true}
+            appType={ApplicationSubmissionTypeEnum.electronical}
+          />
+        </FormProviderWrapper>
+      )
+
+      expect(screen.queryByText(/date received at/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/time received at/i)).not.toBeInTheDocument()
+      expect(screen.queryByLabelText(/received by/i)).not.toBeInTheDocument()
+    })
+  })
+
   describe("application status dropdown", () => {
     it("does not render when enableApplicationStatus is false", () => {
       render(
         <FormProviderWrapper>
-          <FormApplicationData enableApplicationStatus={false} />
+          <FormApplicationData {...defaultFormApplicationDataProps} />
         </FormProviderWrapper>
       )
 
@@ -126,7 +213,10 @@ describe("<FormApplicationData>", () => {
     it("allows selecting different application status values", async () => {
       render(
         <FormProviderWrapper>
-          <FormApplicationData enableApplicationStatus={true} />
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
         </FormProviderWrapper>
       )
 
@@ -153,7 +243,10 @@ describe("<FormApplicationData>", () => {
     it("renders waitlist fields when status is waitlist", async () => {
       render(
         <FormProviderWrapper>
-          <FormApplicationData enableApplicationStatus={true} />
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
         </FormProviderWrapper>
       )
 
@@ -172,7 +265,10 @@ describe("<FormApplicationData>", () => {
     it("renders waitlist fields when status is waitlistDeclined", async () => {
       render(
         <FormProviderWrapper>
-          <FormApplicationData enableApplicationStatus={true} />
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
         </FormProviderWrapper>
       )
 
@@ -190,7 +286,10 @@ describe("<FormApplicationData>", () => {
     it("does not render waitlist fields when status is not waitlist and no numbers are present", async () => {
       render(
         <FormProviderWrapper>
-          <FormApplicationData enableApplicationStatus={true} />
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
         </FormProviderWrapper>
       )
 
@@ -209,6 +308,7 @@ describe("<FormApplicationData>", () => {
       render(
         <FormProviderWrapper>
           <FormApplicationData
+            {...defaultFormApplicationDataProps}
             enableApplicationStatus={true}
             reviewOrderType={ReviewOrderTypeEnum.lottery}
           />
@@ -220,8 +320,17 @@ describe("<FormApplicationData>", () => {
 
     it("shows disabled display fields when status controls are disabled", () => {
       render(
-        <FormProviderWrapper>
+        <FormProviderWrapper
+          values={{
+            application: {
+              status: ApplicationStatusEnum.waitlist,
+              accessibleUnitWaitlistNumber: 2,
+              conventionalUnitWaitlistNumber: 4,
+            } as never,
+          }}
+        >
           <FormApplicationData
+            {...defaultFormApplicationDataProps}
             enableApplicationStatus={true}
             disableApplicationStatusControls={true}
             reviewOrderType={ReviewOrderTypeEnum.lottery}
@@ -252,6 +361,183 @@ describe("<FormApplicationData>", () => {
       )
       expect(activeLotteryInput.closest(".hidden")).toBeInTheDocument()
       expect(displayLotteryInput).toBeDisabled()
+    })
+  })
+
+  describe("decline reason dropdown", () => {
+    it("does not render when enableApplicationStatus is false", () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData {...defaultFormApplicationDataProps} />
+        </FormProviderWrapper>
+      )
+
+      expect(screen.queryByLabelText(/decline reason/i)).not.toBeInTheDocument()
+    })
+
+    it("does not render when status is not declined", async () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
+        </FormProviderWrapper>
+      )
+
+      const statusSelect = screen.getByLabelText(/status/i)
+      await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.submitted)
+
+      expect(screen.queryByLabelText(/decline reason/i)).not.toBeInTheDocument()
+    })
+
+    it("renders and is interactive when status is declined", async () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
+        </FormProviderWrapper>
+      )
+
+      const statusSelect = screen.getByLabelText(/status/i)
+      await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
+
+      const declineSelect = screen.getByLabelText(/decline reason/i)
+      expect(declineSelect.closest(".hidden")).not.toBeInTheDocument()
+
+      await userEvent.selectOptions(
+        declineSelect,
+        ApplicationDeclineReasonEnum.householdIncomeTooHigh
+      )
+      expect((declineSelect as HTMLSelectElement).value).toBe(
+        ApplicationDeclineReasonEnum.householdIncomeTooHigh
+      )
+    })
+
+    it("allows selecting all decline reason options", async () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
+        </FormProviderWrapper>
+      )
+
+      const statusSelect = screen.getByLabelText(/status/i)
+      await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
+
+      const declineSelect = screen.getByLabelText(/decline reason/i)
+
+      for (const reason of Object.values(ApplicationDeclineReasonEnum)) {
+        await userEvent.selectOptions(declineSelect, reason)
+        expect((declineSelect as HTMLSelectElement).value).toBe(reason)
+      }
+    })
+
+    it("does not show additional details textarea when no reason is selected", async () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
+        </FormProviderWrapper>
+      )
+
+      const statusSelect = screen.getByLabelText(/status/i)
+      await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
+
+      expect(screen.queryByLabelText(/decline reason additional details/i)).not.toBeInTheDocument()
+    })
+
+    const reasonsRequiringDetails = [
+      ApplicationDeclineReasonEnum.attemptedToContactNoResponse,
+      ApplicationDeclineReasonEnum.applicantDeclinedUnit,
+      ApplicationDeclineReasonEnum.other,
+    ]
+
+    const reasonsNotRequiringDetails = [
+      ApplicationDeclineReasonEnum.householdIncomeTooHigh,
+      ApplicationDeclineReasonEnum.householdIncomeTooLow,
+      ApplicationDeclineReasonEnum.householdSizeTooLarge,
+      ApplicationDeclineReasonEnum.householdSizeTooSmall,
+      ApplicationDeclineReasonEnum.doesNotMeetSeniorBuildingRequirement,
+      ApplicationDeclineReasonEnum.householdDoesNotNeedAccessibleUnit,
+    ]
+
+    it.each(reasonsRequiringDetails)(
+      "shows required additional details textarea for reason: %s",
+      async (reason) => {
+        render(
+          <FormWithSubmit>
+            <FormApplicationData
+              {...defaultFormApplicationDataProps}
+              enableApplicationStatus={true}
+            />
+          </FormWithSubmit>
+        )
+
+        const statusSelect = screen.getByLabelText(/status/i)
+        await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
+
+        const declineSelect = screen.getByLabelText(/decline reason/i)
+        await userEvent.selectOptions(declineSelect, reason)
+
+        expect(screen.getByLabelText(/decline reason additional details/i)).toBeInTheDocument()
+
+        await userEvent.click(screen.getByRole("button", { name: /submit/i }))
+
+        await waitFor(() => {
+          expect(screen.getByText(/this field is required/i)).toBeInTheDocument()
+        })
+      }
+    )
+
+    it.each(reasonsNotRequiringDetails)(
+      "does not show additional details textarea for reason: %s",
+      async (reason) => {
+        render(
+          <FormProviderWrapper>
+            <FormApplicationData
+              {...defaultFormApplicationDataProps}
+              enableApplicationStatus={true}
+            />
+          </FormProviderWrapper>
+        )
+
+        const statusSelect = screen.getByLabelText(/status/i)
+        await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
+
+        const declineSelect = screen.getByLabelText(/decline reason/i)
+        await userEvent.selectOptions(declineSelect, reason)
+
+        expect(
+          screen.queryByLabelText(/decline reason additional details/i)
+        ).not.toBeInTheDocument()
+      }
+    )
+
+    it("shows an error when submitted with status declined but no reason selected", async () => {
+      render(
+        <FormWithSubmit>
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+          />
+        </FormWithSubmit>
+      )
+
+      const statusSelect = screen.getByLabelText(/status/i)
+      await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.declined)
+
+      await userEvent.click(screen.getByRole("button", { name: /submit/i }))
+
+      await waitFor(() => {
+        expect(screen.getByText(/please select one of the options above/i)).toBeInTheDocument()
+      })
     })
   })
 })

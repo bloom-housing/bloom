@@ -35,6 +35,13 @@ export const usd = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 });
 
+const usdTwoDecimal = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
 export const minMax = (baseValue: MinMax, newValue: number): MinMax => {
   return {
     min: Math.min(baseValue.min, newValue),
@@ -57,7 +64,9 @@ export const minMaxCurrency = (
 };
 
 export const yearlyCurrencyStringToMonthly = (currency: string) => {
-  return usd.format(parseFloat(currency.replace(/[^0-9.-]+/g, '')) / 12);
+  return usdTwoDecimal.format(
+    parseFloat(currency.replace(/[^0-9.-]+/g, '')) / 12,
+  );
 };
 
 export const getAmiChartItemUniqueKey = (amiChartItem: AmiChartItem) => {
@@ -175,9 +184,15 @@ export const generateHmiData = (
     // Get all numbers between min and max
     // If min is more than the largest chart value, make sure we show the largest value
     const unitHouseholdSizes = [
-      ...Array(Math.min(minMax.max, maxAMIChartHouseholdSize) + 1).keys(),
+      ...Array(
+        (!!minMax.max
+          ? Math.min(minMax.max, maxAMIChartHouseholdSize)
+          : maxAMIChartHouseholdSize) + 1,
+      ).keys(),
     ].filter(
-      (value) => value >= Math.min(minMax.min, maxAMIChartHouseholdSize),
+      (value) =>
+        value >=
+        (!!minMax.min ? Math.min(minMax.min, maxAMIChartHouseholdSize) : 1),
     );
     return [...new Set([...validSizes, ...unitHouseholdSizes])].sort((a, b) =>
       a < b ? -1 : 1,

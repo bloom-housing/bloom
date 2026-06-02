@@ -115,6 +115,10 @@ export const mapFormToApi = ({
 
   const submissionDate: Date | null = getDateTime(data?.dateSubmitted, data?.timeSubmitted)
 
+  const receivedAt: Date | null = getDateTime(data?.dateReceived, data?.timeReceived)
+
+  const receivedBy = data.application?.receivedBy || null
+
   // create applicant
   const applicant = ((): ApplicantUpdate => {
     const phoneNumber: string | null = data?.phoneNumber || null
@@ -243,6 +247,14 @@ export const mapFormToApi = ({
 
   const submissionType = editMode ? data.submissionType : ApplicationSubmissionTypeEnum.paper
   const status = data.application.status || ApplicationStatusEnum.submitted
+  const applicationDeclineReason =
+    status === ApplicationStatusEnum.declined
+      ? data.application.applicationDeclineReason || null
+      : null
+  const applicationDeclineReasonAdditionalDetails =
+    status === ApplicationStatusEnum.declined && applicationDeclineReason
+      ? data.application.applicationDeclineReasonAdditionalDetails || null
+      : null
 
   const listings = {
     id: listingId,
@@ -262,7 +274,7 @@ export const mapFormToApi = ({
 
   const accessibility: Omit<Accessibility, "id" | "createdAt" | "updatedAt"> =
     adaFeatureKeys.reduce((acc, feature) => {
-      acc[feature] = data.application.accessibility.includes(feature)
+      acc[feature] = data.application.accessibility?.includes(feature)
       return acc
     }, {})
 
@@ -273,6 +285,8 @@ export const mapFormToApi = ({
   } = data.application
 
   const result = {
+    receivedAt,
+    receivedBy,
     submissionDate,
     language,
     applicant,
@@ -297,6 +311,8 @@ export const mapFormToApi = ({
     acceptedTerms,
     submissionType,
     status,
+    applicationDeclineReason,
+    applicationDeclineReasonAdditionalDetails,
     listings,
     preferredUnitTypes: preferredUnit,
     applicationsAlternateAddress: alternateAddress,
@@ -328,6 +344,10 @@ export const mapApiToForm = (
   const submissionDate = applicationData.submissionDate
     ? dayjs(new Date(applicationData.submissionDate))
     : null
+
+  const receivedAt = applicationData.receivedAt ? dayjs(new Date(applicationData.receivedAt)) : null
+
+  const receivedBy = applicationData.receivedBy
 
   const dateOfBirth = (() => {
     const { birthDay, birthMonth, birthYear } = applicationData.applicant
@@ -365,6 +385,36 @@ export const mapApiToForm = (
     const month = submissionDate.format("MM")
     const day = submissionDate.format("DD")
     const year = submissionDate.format("YYYY")
+
+    return {
+      month,
+      day,
+      year,
+    }
+  })()
+
+  const timeReceived = (() => {
+    if (!receivedAt) return
+
+    const hours = receivedAt.format("hh")
+    const minutes = receivedAt.format("mm")
+    const seconds = receivedAt.format("ss")
+    const period = receivedAt.format("a").toLowerCase() as TimeFieldPeriod
+
+    return {
+      hours,
+      minutes,
+      seconds,
+      period,
+    }
+  })()
+
+  const dateReceived = (() => {
+    if (!receivedAt) return null
+
+    const month = receivedAt.format("MM")
+    const day = receivedAt.format("DD")
+    const year = receivedAt.format("YYYY")
 
     return {
       month,
@@ -421,6 +471,8 @@ export const mapApiToForm = (
       additionalPhoneNumberType,
       alternateContact,
       status,
+      applicationDeclineReason,
+      applicationDeclineReasonAdditionalDetails,
       accessibleUnitWaitlistNumber,
       conventionalUnitWaitlistNumber,
       manualLotteryPositionNumber,
@@ -470,7 +522,10 @@ export const mapApiToForm = (
       acceptedTerms,
       alternateContact,
       programs,
+      receivedBy,
       status,
+      applicationDeclineReason,
+      applicationDeclineReasonAdditionalDetails,
       accessibleUnitWaitlistNumber,
       conventionalUnitWaitlistNumber,
       manualLotteryPositionNumber,
@@ -483,6 +538,8 @@ export const mapApiToForm = (
     dateOfBirth,
     dateSubmitted,
     timeSubmitted,
+    dateReceived,
+    timeReceived,
     phoneNumber,
     incomeMonth,
     incomeYear,

@@ -9,6 +9,8 @@ import { ListingFeaturesConfiguration } from '../../src/dtos/jurisdictions/listi
 import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessibility-priority-type-enum';
 import { RaceEthnicityConfiguration } from '../../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
 import { SpokenLanguageEnum } from '../../src/enums/applications/spoken-language-enum';
+import { ApplicationAccessibilityFeatureEnum } from '../../src/enums/applications/application-accessibility-feature-enum';
+import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
 
 export const jurisdictionFactory = (
   jurisdictionName = `${randomName()} ${Math.random()
@@ -28,6 +30,8 @@ export const jurisdictionFactory = (
     listingFeaturesConfiguration?: ListingFeaturesConfiguration;
     raceEthnicityConfiguration?: RaceEthnicityConfiguration;
     visibleSpokenLanguages?: SpokenLanguageEnum[];
+    visibleApplicationAccessibilityFeatures?: ApplicationAccessibilityFeatureEnum[];
+    visibleHouseholdMemberRelationships?: HouseholdMemberRelationship[];
   },
 ): Prisma.JurisdictionsCreateInput => ({
   name: jurisdictionName,
@@ -80,4 +84,29 @@ export const jurisdictionFactory = (
     : undefined,
   visibleSpokenLanguages:
     optionalFields?.visibleSpokenLanguages || Object.values(SpokenLanguageEnum),
+  visibleApplicationAccessibilityFeatures:
+    optionalFields?.visibleApplicationAccessibilityFeatures || [
+      ApplicationAccessibilityFeatureEnum.mobility,
+      ApplicationAccessibilityFeatureEnum.hearing,
+      ApplicationAccessibilityFeatureEnum.vision,
+    ],
+  visibleHouseholdMemberRelationships:
+    optionalFields?.visibleHouseholdMemberRelationships || [
+      HouseholdMemberRelationship.spouse,
+      HouseholdMemberRelationship.registeredDomesticPartner,
+      HouseholdMemberRelationship.parent,
+      HouseholdMemberRelationship.child,
+      HouseholdMemberRelationship.sibling,
+      HouseholdMemberRelationship.cousin,
+      HouseholdMemberRelationship.aunt,
+      HouseholdMemberRelationship.uncle,
+      HouseholdMemberRelationship.nephew,
+      HouseholdMemberRelationship.niece,
+      HouseholdMemberRelationship.grandparent,
+      HouseholdMemberRelationship.greatGrandparent,
+      HouseholdMemberRelationship.inLaw,
+      HouseholdMemberRelationship.friend,
+      HouseholdMemberRelationship.other,
+      HouseholdMemberRelationship.aideOrAttendant,
+    ],
 });

@@ -1,6 +1,5 @@
 import { Expose, Transform, TransformFnParams, Type } from 'class-transformer';
 import {
-  ArrayMaxSize,
   IsArray,
   IsBoolean,
   IsDate,
@@ -779,6 +778,12 @@ class Listing extends AbstractDTO {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   @ApiPropertyOptional()
+  scheduledPublishAt?: Date;
+
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  @ApiPropertyOptional()
   closedAt?: Date;
 
   @Expose()
@@ -996,7 +1001,6 @@ class Listing extends AbstractDTO {
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => Unit)
-  @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: Unit, isArray: true })
   units: Unit[];
 

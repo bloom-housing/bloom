@@ -2,6 +2,8 @@ import React, { useState, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
 import {
   t,
   DateField,
@@ -29,6 +31,7 @@ type ApplicationDatesProps = {
   enableMarketingFlyer?: boolean
   enableMarketingStatus?: boolean
   enableMarketingStatusMonths?: boolean
+  enableAutopublish?: boolean
   openHouseEvents: TempEvent[]
   requiredFields: string[]
   listing?: FormListing
@@ -39,6 +42,7 @@ const ApplicationDates = ({
   enableMarketingFlyer,
   enableMarketingStatus,
   enableMarketingStatusMonths,
+  enableAutopublish,
   listing,
   openHouseEvents,
   requiredFields,
@@ -137,6 +141,9 @@ const ApplicationDates = ({
 
   const hasDueDateError = errors?.applicationDueDate || errors?.applicationDueDateField
 
+  const hasScheduledPublishError =
+    errors?.scheduledPublishAt || errors?.scheduledListingPublishDateField
+
   const marketingTypeChoice = watch("marketingType")
 
   return (
@@ -166,7 +173,11 @@ const ApplicationDates = ({
                   year: hasDueDateError,
                 }
               }
-              note={t("listings.whenApplicationsClose")}
+              note={
+                enableAutopublish
+                  ? t("listings.listingWillAutomaticallyClose")
+                  : t("listings.whenApplicationsClose")
+              }
               defaultDate={{
                 month: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
@@ -212,6 +223,40 @@ const ApplicationDates = ({
             />
           </Grid.Cell>
         </Grid.Row>
+        {enableAutopublish && (
+          <Grid.Row columns={2}>
+            <Grid.Cell className="seeds-grid-span-2">
+              <DateField
+                label={t("listings.scheduledListingPublishDate")}
+                name={"scheduledListingPublishDateField"}
+                id={"scheduledListingPublishDateField"}
+                register={register}
+                setValue={setValue}
+                watch={watch}
+                error={
+                  hasScheduledPublishError && {
+                    month: hasScheduledPublishError,
+                    day: hasScheduledPublishError,
+                    year: hasScheduledPublishError,
+                  }
+                }
+                errorMessage={fieldMessage(errors?.scheduledListingPublishDateField)}
+                note={t("listings.scheduledListingPublishDateHelper")}
+                defaultDate={{
+                  month: listing?.scheduledPublishAt
+                    ? dayjs.utc(listing.scheduledPublishAt).format("MM")
+                    : null,
+                  day: listing?.scheduledPublishAt
+                    ? dayjs.utc(listing.scheduledPublishAt).format("DD")
+                    : null,
+                  year: listing?.scheduledPublishAt
+                    ? dayjs.utc(listing.scheduledPublishAt).format("YYYY")
+                    : null,
+                }}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
         {enableMarketingStatus && (
           <Grid.Row columns={2}>
             <Grid.Cell>

@@ -20,10 +20,6 @@
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }
 
-  .seeds-button[data-variant="primary"] {
-    color: white; // AG grid styling from UIC was messing up our primary button
-  }
-
   .card-icon {
     color: var(--seeds-color-primary);
     background-color: var(--seeds-bg-color-surface-primary);

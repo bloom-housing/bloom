@@ -43,7 +43,8 @@ type AlertErrorType = "api" | "form"
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
   const { data: jurisdictionData } = useJurisdiction(listingDto?.jurisdictions?.id)
-  const { doJurisdictionsHaveFeatureFlagOn, applicationsService } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn, applicationsService, getJurisdictionLanguages } =
+    useContext(AuthContext)
 
   const preferences = listingSectionQuestions(
     listingDto,
@@ -71,11 +72,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
-  const enableAdaOtherOption = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableAdaOtherOption,
-    listingDto?.jurisdictions.id
-  )
-
   const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableWorkInRegion,
     listingDto?.jurisdictions.id
@@ -96,6 +92,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
+  const enableGenderQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableGenderQuestion,
+    listingDto?.jurisdictions.id
+  )
+
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
@@ -111,6 +112,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableV2MSQ,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableReceivedAtAndByFields = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReceivedAtAndByFields,
     listingDto?.jurisdictions.id
   )
 
@@ -145,6 +151,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     data: FormTypes
     redirect: "details" | "new"
   } | null>(null)
+
+  const availableJurisdictionLanguages = listingDto?.jurisdictions?.id
+    ? getJurisdictionLanguages(listingDto?.jurisdictions?.id)
+    : []
 
   useEffect(() => {
     if (application?.householdMember) {
@@ -203,6 +213,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
         id: applicationId,
         body: {
           previousStatus: application.status,
+          previousApplicationDeclineReason: application.applicationDeclineReason,
           previousAccessibleUnitWaitlistNumber: application.accessibleUnitWaitlistNumber,
           previousConventionalUnitWaitlistNumber: application.conventionalUnitWaitlistNumber,
         },
@@ -331,10 +342,13 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                   <div className="info-card md:w-9/12">
                     <FormApplicationData
                       enableApplicationStatus={enableApplicationStatus}
+                      enableReceivedAtAndByFields={enableReceivedAtAndByFields}
+                      appType={application?.submissionType}
                       disableApplicationStatusControls={
                         enableApplicationStatus && editMode && application?.markedAsDuplicate
                       }
                       reviewOrderType={listingDto?.reviewOrderType}
+                      availableJurisdictionLanguages={availableJurisdictionLanguages}
                     />
 
                     <FormPrimaryApplicant
@@ -349,6 +363,9 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       setHouseholdMembers={setHouseholdMembers}
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                       disableWorkInRegion={disableWorkInRegion}
+                      visibleHouseholdMemberRelationships={
+                        jurisdictionData?.visibleHouseholdMemberRelationships
+                      }
                     />
 
                     <FormHouseholdDetails
@@ -356,7 +373,9 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       listingUnitGroups={listingDto?.unitGroups}
                       applicationUnitTypes={application?.preferredUnitTypes}
                       applicationAccessibilityFeatures={application?.accessibility}
-                      enableOtherAdaOption={enableAdaOtherOption}
+                      visibleApplicationAccessibilityFeatures={
+                        jurisdictionData?.visibleApplicationAccessibilityFeatures
+                      }
                       enableUnitGroups={enableUnitGroups}
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                       enableReasonableAccommodations={enableReasonableAccommodations}
@@ -389,6 +408,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       raceEthnicityConfiguration={jurisdictionData?.raceEthnicityConfiguration}
                       enableSpokenLanguage={enableSpokenLanguage}
                       visibleSpokenLanguages={jurisdictionData?.visibleSpokenLanguages}
+                      enableGenderQuestion={enableGenderQuestion}
                     />
 
                     <FormTerms />

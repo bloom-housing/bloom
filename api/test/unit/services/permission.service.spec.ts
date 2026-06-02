@@ -1,11 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { newEnforcer } from 'casbin';
 import path from 'path';
+import { ListingsStatusEnum } from '@prisma/client';
 import { UserRoleEnum } from '../../../src/enums/permissions/user-role-enum';
 import { User } from '../../../src/dtos/users/user.dto';
 import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
+import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 
 describe('Testing permission service', () => {
   let service: PermissionService;
@@ -169,6 +171,8 @@ describe('Testing permission service', () => {
       ],
     } as User;
 
+    prisma.listings.findMany = jest.fn().mockResolvedValue([]);
+
     const enforcer = await service.addUserPermissions(e, user);
     expect(
       await enforcer.hasRoleForUser('example id', UserRoleEnum.partner),
@@ -285,6 +289,8 @@ describe('Testing permission service', () => {
       ],
     } as User;
 
+    prisma.listings.findMany = jest.fn().mockResolvedValue([]);
+
     expect(
       await service.can(user, 'application', permissionActions.create, {
         listingId: 'listing id 2',
@@ -309,11 +315,77 @@ describe('Testing permission service', () => {
       ],
     } as User;
 
+    prisma.listings.findMany = jest.fn().mockResolvedValue([]);
+
     expect(
       await service.can(user, 'application', permissionActions.create, {
         listingId: 'listing id 3',
       }),
     ).toEqual(false);
+  });
+
+  it('should disallow partner from updating open or closed listing when restriction flag is enabled', async () => {
+    const user = {
+      id: 'example id',
+      userRoles: {
+        isPartner: true,
+      },
+      jurisdictions: [],
+      listings: [
+        {
+          id: 'listing id 1',
+        },
+      ],
+    } as User;
+
+    prisma.listings.findMany = jest
+      .fn()
+      .mockResolvedValue([{ id: 'listing id 1' }]);
+
+    expect(
+      await service.can(user, 'listing', permissionActions.update, {
+        id: 'listing id 1',
+      }),
+    ).toEqual(false);
+
+    expect(prisma.listings.findMany).toHaveBeenCalledWith({
+      select: { id: true },
+      where: {
+        id: { in: ['listing id 1'] },
+        status: { in: [ListingsStatusEnum.active, ListingsStatusEnum.closed] },
+        jurisdictions: {
+          featureFlags: {
+            some: {
+              name: FeatureFlagEnum.disablePartnerPublicListingEdits,
+              active: true,
+            },
+          },
+        },
+      },
+    });
+  });
+
+  it('should allow partner to update open listing when restriction flag is disabled', async () => {
+    const user = {
+      id: 'example id',
+      userRoles: {
+        isPartner: true,
+      },
+      jurisdictions: [],
+      listings: [
+        {
+          id: 'listing id 1',
+        },
+      ],
+    } as User;
+
+    prisma.listings.findMany = jest.fn().mockResolvedValue([]);
+
+    expect(
+      await service.can(user, 'listing', permissionActions.update, {
+        id: 'listing id 1',
+      }),
+    ).toEqual(true);
   });
 
   it('should allow jurisdictional admin to read user in the correct jurisdiction', async () => {

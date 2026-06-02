@@ -5,6 +5,8 @@ import { JurisdictionCreate } from '../../../src/dtos/jurisdictions/jurisdiction
 import { JurisdictionUpdate } from '../../../src/dtos/jurisdictions/jurisdiction-update.dto';
 import { LanguagesEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
+import { ApplicationAccessibilityFeatureEnum } from '../../../src/enums/applications/application-accessibility-feature-enum';
+import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
 
 describe('Testing jurisdiction service', () => {
   let service: JurisdictionService;
@@ -152,8 +154,19 @@ describe('Testing jurisdiction service', () => {
       regions: [],
       requiredListingFields: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearing,
+        ApplicationAccessibilityFeatureEnum.vision,
+      ],
       visibleNeighborhoodAmenities: [],
       visibleSpokenLanguages: [],
+      visibleHouseholdMemberRelationships: [
+        HouseholdMemberRelationship.spouse,
+        HouseholdMemberRelationship.child,
+        HouseholdMemberRelationship.parent,
+        HouseholdMemberRelationship.other,
+      ],
     };
 
     expect(await service.create(params)).toEqual(mockedValue);
@@ -180,8 +193,19 @@ describe('Testing jurisdiction service', () => {
         regions: [],
         requiredListingFields: [],
         visibleAccessibilityPriorityTypes: [],
+        visibleApplicationAccessibilityFeatures: [
+          ApplicationAccessibilityFeatureEnum.mobility,
+          ApplicationAccessibilityFeatureEnum.hearing,
+          ApplicationAccessibilityFeatureEnum.vision,
+        ],
         visibleNeighborhoodAmenities: [],
         visibleSpokenLanguages: [],
+        visibleHouseholdMemberRelationships: [
+          HouseholdMemberRelationship.spouse,
+          HouseholdMemberRelationship.child,
+          HouseholdMemberRelationship.parent,
+          HouseholdMemberRelationship.other,
+        ],
       },
       include: {
         featureFlags: true,
@@ -223,8 +247,19 @@ describe('Testing jurisdiction service', () => {
       regions: [],
       requiredListingFields: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearing,
+        ApplicationAccessibilityFeatureEnum.vision,
+      ],
       visibleSpokenLanguages: [],
       visibleNeighborhoodAmenities: [],
+      visibleHouseholdMemberRelationships: [
+        HouseholdMemberRelationship.spousePartner,
+        HouseholdMemberRelationship.child,
+        HouseholdMemberRelationship.parent,
+        HouseholdMemberRelationship.liveInAide,
+      ],
     };
 
     expect(await service.update(params)).toEqual({
@@ -255,7 +290,9 @@ describe('Testing jurisdiction service', () => {
       requiredListingFields: undefined,
       visibleNeighborhoodAmenities: undefined,
       visibleAccessibilityPriorityTypes: undefined,
+      visibleApplicationAccessibilityFeatures: undefined,
       visibleSpokenLanguages: undefined,
+      visibleHouseholdMemberRelationships: undefined,
       regions: undefined,
       listingFeaturesConfiguration: undefined,
       raceEthnicityConfiguration: undefined,
@@ -288,8 +325,19 @@ describe('Testing jurisdiction service', () => {
         regions: [],
         requiredListingFields: [],
         visibleAccessibilityPriorityTypes: [],
+        visibleApplicationAccessibilityFeatures: [
+          ApplicationAccessibilityFeatureEnum.mobility,
+          ApplicationAccessibilityFeatureEnum.hearing,
+          ApplicationAccessibilityFeatureEnum.vision,
+        ],
         visibleNeighborhoodAmenities: [],
         visibleSpokenLanguages: [],
+        visibleHouseholdMemberRelationships: [
+          HouseholdMemberRelationship.spousePartner,
+          HouseholdMemberRelationship.child,
+          HouseholdMemberRelationship.parent,
+          HouseholdMemberRelationship.liveInAide,
+        ],
       },
       where: {
         id: mockedJurisdiction.id,
@@ -325,8 +373,17 @@ describe('Testing jurisdiction service', () => {
       regions: [],
       requiredListingFields: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearing,
+        ApplicationAccessibilityFeatureEnum.vision,
+      ],
       visibleNeighborhoodAmenities: [],
       visibleSpokenLanguages: [],
+      visibleHouseholdMemberRelationships: [
+        HouseholdMemberRelationship.spouse,
+        HouseholdMemberRelationship.child,
+      ],
     };
 
     await expect(async () => await service.update(params)).rejects.toThrowError(

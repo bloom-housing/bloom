@@ -11,17 +11,17 @@ import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { Button, Tag } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import Head from "next/head"
-import { useRouter } from "next/router"
 import EditMultiselectQuestion, {
   DrawerType,
 } from "../../../components/settings/MultiselectQuestions/EditMultiselectQuestion"
 import {
+  getEnabledSettingsTabCount,
   getSettingsTabs,
   SettingsIndexEnum,
 } from "../../../components/settings/SettingsViewHelpers"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import Layout from "../../../layouts"
-import TabView from "../../../layouts/TabView"
+import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 import styles from "./preferences.module.scss"
 
@@ -29,6 +29,12 @@ const MultiselectQuestionsPreferences = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const tableOptions = useAgTable()
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
+  const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
+  const settingsTabsFeatureFlags = {
+    enablePreferences: true,
+    enableProperties,
+    enableAgencies,
+  }
 
   const [multiselectQuestionDrawerOpen, setMultiselectQuestionDrawerOpen] =
     useState<DrawerType | null>(null)
@@ -173,8 +179,8 @@ const MultiselectQuestionsPreferences = () => {
         </Head>
         <NavigationHeader className="relative" title={t("settings.preferences")} />
         <TabView
-          hideTabs={!enableProperties}
-          tabs={getSettingsTabs(SettingsIndexEnum.preferences, true)}
+          hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags) <= 1}
+          tabs={getSettingsTabs(SettingsIndexEnum.preferences, true, settingsTabsFeatureFlags)}
         >
           <section className={styles["preferences-section"]}>
             <div className={styles["table-wrapper"]}>

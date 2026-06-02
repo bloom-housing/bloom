@@ -6,9 +6,9 @@ import { useForm } from "react-hook-form"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
 import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
-import { t, Select, Form, SelectOption, Field } from "@bloom-housing/ui-components"
+import { t, Select, SelectOption, Field } from "@bloom-housing/ui-components"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, Form } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
@@ -220,16 +220,29 @@ export default function ListingsList() {
       })
     }
 
-    columns.push(
-      {
-        headerName: t("listings.createdDate"),
-        field: "createdAt",
+    columns.push({
+      headerName: t("listings.createdDate"),
+      field: "createdAt",
+      sortable: false,
+      filter: false,
+      resizable: true,
+      valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
+      maxWidth: 140,
+    })
+
+    if (doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableAutopublish)) {
+      columns.push({
+        headerName: t("listings.scheduledListingPublishDate"),
+        field: "scheduledPublishAt",
         sortable: false,
         filter: false,
         resizable: true,
         valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-        maxWidth: 140,
-      },
+        maxWidth: 180,
+      })
+    }
+
+    columns.push(
       {
         headerName: t("listings.publishedDate"),
         field: "publishedAt",
@@ -424,13 +437,12 @@ export default function ListingsList() {
         ariaDescribedBy="listing-select-dialog-content"
         onClose={() => onModalClose()}
       >
+        <Dialog.Header id="listing-select-dialog-header">
+          {defaultJurisdiction
+            ? t("listings.selectListingType")
+            : t("listings.selectJurisdictionTitle")}
+        </Dialog.Header>
         <Form id="listing-select-form" onSubmit={handleSubmit(onSubmit)}>
-          <Dialog.Header id="listing-select-dialog-header">
-            {defaultJurisdiction
-              ? t("listings.selectListingType")
-              : t("listings.selectJurisdictionTitle")}
-          </Dialog.Header>
-
           <Dialog.Content id="listing-select-dialog-content">
             {t("listings.selectJurisdictionContent")}
             <Grid>

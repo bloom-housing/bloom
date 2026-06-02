@@ -1,7 +1,8 @@
-import { Form, t } from "@bloom-housing/ui-components"
+import { Field, Form, t } from "@bloom-housing/ui-components"
 import { Button, Drawer } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import {
+  FilterAvailabilityEnum,
   RegionEnum,
   HomeTypeEnum,
   ListingFilterKeys,
@@ -84,8 +85,19 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     (entry) => entry === FeatureFlagEnum.enableSection8Question
   )
 
-  const availabilityLabels = getAvailabilityValues(enableUnitGroups).map((key) =>
+  const enableFilterByBathroom = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableFilterByBathroom
+  )
+
+  // When unit groups are off, closed waitlist has no backend signal, so hide it
+  const availabilityDisplayValues = getAvailabilityValues(enableUnitGroups).filter(
+    (key) => enableUnitGroups || key !== FilterAvailabilityEnum.closedWaitlist
+  )
+  const availabilityLabels = availabilityDisplayValues.map((key) =>
     t(`listings.availability.${key}`)
+  )
+  const availabilityKeys = getAvailabilityValues(false).filter(
+    (key) => enableUnitGroups || key !== FilterAvailabilityEnum.closedWaitlist
   )
 
   return (
@@ -119,7 +131,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               fields={buildDefaultFilterFields(
                 ListingFilterKeys.availabilities,
                 availabilityLabels,
-                getAvailabilityValues(false),
+                availabilityKeys,
                 props.filterState
               )}
               register={register}
@@ -163,6 +175,22 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               )}
               register={register}
             />
+            {enableFilterByBathroom && (
+              <CheckboxGroup
+                groupLabel={t("t.bathrooms")}
+                fields={["0", "1", "2", "3", "4", "5"].map((bathroomCount) => {
+                  return {
+                    key: `${ListingFilterKeys.bathrooms}.${bathroomCount}`,
+                    label:
+                      bathroomCount === "0" ? t("listings.unit.sharedBathroom") : bathroomCount,
+                    defaultChecked: isTrue(
+                      props.filterState?.[ListingFilterKeys.bathrooms]?.[bathroomCount]
+                    ),
+                  }
+                })}
+                register={register}
+              />
+            )}
             <RentSection
               register={register}
               getValues={getValues}

@@ -1,7 +1,7 @@
 import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
 import "@bloom-housing/ui-seeds/src/global/app-css.scss"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { FunctionComponent, useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"
 import {
@@ -10,6 +10,8 @@ import {
   NavigationContext as UICNavigationContext,
 } from "@bloom-housing/ui-components"
 import { NavigationContext } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
+import type { LinkProps as UICLinkProps } from "@bloom-housing/ui-components/src/config/NavigationContext"
+import type { LinkProps as SeedsLinkProps } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
 import {
   blankApplication,
   LoggedInUserIdleTimeout,
@@ -103,11 +105,14 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     </ConfigProvider>
   )
 
+  const seedsLinkComponent = LinkComponent as FunctionComponent<SeedsLinkProps>
+  const uicLinkComponent = LinkComponent as FunctionComponent<UICLinkProps>
+
   return (
-    <NavigationContext.Provider value={{ LinkComponent }}>
+    <NavigationContext.Provider value={{ LinkComponent: seedsLinkComponent }}>
       <UICNavigationContext.Provider
         value={{
-          LinkComponent,
+          LinkComponent: uicLinkComponent,
           router: router as GenericRouter,
         }}
       >

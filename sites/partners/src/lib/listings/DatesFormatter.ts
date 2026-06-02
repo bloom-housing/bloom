@@ -31,6 +31,8 @@ export default class DatesFormatter extends Formatter {
 
     this.data.marketingType = MarketingTypeEnum[this.data.marketingType]
 
+    this.data.scheduledPublishAt = createDate(this.data.scheduledListingPublishDateField, true)
+
     if (this.data.marketingType === MarketingTypeEnum.comingSoon) {
       this.data.marketingYear = this.data.marketingYear ? Number(this.data.marketingYear) : null
       this.data.marketingSeason = this.data.marketingSeason

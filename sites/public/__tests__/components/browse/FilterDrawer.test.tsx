@@ -95,8 +95,7 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "Units available" })).not.toBeChecked()
     expect(screen.getByLabelText("Open waitlist")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Open waitlist" })).not.toBeChecked()
-    expect(screen.getByLabelText("Closed waitlist")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Closed waitlist" })).not.toBeChecked()
+    expect(screen.queryByLabelText("Closed waitlist")).not.toBeInTheDocument()
     expect(screen.getByLabelText("Coming soon")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Coming soon" })).not.toBeChecked()
 
@@ -280,8 +279,7 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "Units available" })).not.toBeChecked()
     expect(screen.getByLabelText("Open waitlist")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Open waitlist" })).not.toBeChecked()
-    expect(screen.getByLabelText("Closed waitlist")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Closed waitlist" })).not.toBeChecked()
+    expect(screen.queryByLabelText("Closed waitlist")).not.toBeInTheDocument()
     expect(screen.getByLabelText("Coming soon")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Coming soon" })).not.toBeChecked()
 
@@ -449,6 +447,46 @@ describe("FilterDrawer", () => {
     expect(screen.queryByLabelText("5 bedroom")).not.toBeInTheDocument()
   })
 
+  it("should not show closed waitlist when unit groups flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={[]}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Availability" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Units available")).toBeInTheDocument()
+    expect(screen.getByLabelText("Open waitlist")).toBeInTheDocument()
+    expect(screen.queryByLabelText("Closed waitlist")).not.toBeInTheDocument()
+    expect(screen.getByLabelText("Coming soon")).toBeInTheDocument()
+  })
+
+  it("should show closed waitlist when unit groups flag is on", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={[]}
+        activeFeatureFlags={[FeatureFlagEnum.enableUnitGroups]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Availability" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Closed waitlist")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Closed waitlist" })).not.toBeChecked()
+  })
+
   it("should not show regions if toggles are off", () => {
     render(
       <FilterDrawer
@@ -537,6 +575,74 @@ describe("FilterDrawer", () => {
 
     expect(screen.queryByRole("group", { name: "Home type" })).not.toBeInTheDocument()
     expect(screen.queryByRole("checkbox", { name: "Apartment" })).not.toBeInTheDocument()
+  })
+
+  it("should not show bathrooms section when enableFilterByBathroom flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Bathrooms" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("checkbox", { name: "1" })).not.toBeInTheDocument()
+  })
+
+  it("should show bathrooms section with unchecked checkboxes when flag is on and no filter state", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableFilterByBathroom]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Bathrooms" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "1" })).not.toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "2" })).not.toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "3" })).not.toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "4" })).not.toBeChecked()
+  })
+
+  it("should show bathrooms checkboxes as checked when filterState has selections", () => {
+    const filterState: FilterData = {
+      [ListingFilterKeys.bathrooms]: {
+        "1": true,
+        "2": false,
+        "3": true,
+        "4": false,
+      },
+    }
+
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={filterState}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableFilterByBathroom]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("checkbox", { name: "1" })).toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "2" })).not.toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "3" })).toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "4" })).not.toBeChecked()
   })
 
   it("should not show parking types section when parkingType flag is off", () => {

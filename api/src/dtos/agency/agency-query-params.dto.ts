@@ -1,11 +1,26 @@
 import { Expose, Type } from 'class-transformer';
 import { ApiPropertyOptional, getSchemaPath } from '@nestjs/swagger';
-import { ArrayMaxSize, IsArray, ValidateNested } from 'class-validator';
+import {
+  ArrayMaxSize,
+  IsArray,
+  MinLength,
+  ValidateNested,
+} from 'class-validator';
 import { ValidationsGroupsEnum } from '../../../src/enums/shared/validation-groups-enum';
 import { PaginationAllowsAllQueryParams } from '../shared/pagination.dto';
 import { AgencyFilterParams } from './agency-filter-params.dto';
 
 export class AgencyQueryParams extends PaginationAllowsAllQueryParams {
+  @Expose()
+  @ApiPropertyOptional({
+    example: 'search',
+  })
+  @MinLength(3, {
+    message: 'Search must be at least 3 characters',
+    groups: [ValidationsGroupsEnum.default],
+  })
+  search?: string;
+
   @Expose()
   @ApiPropertyOptional({
     type: [String],

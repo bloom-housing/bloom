@@ -123,6 +123,7 @@ export const view: Partial<
         mobility: true,
         vision: true,
         hearing: true,
+        hearingAndVision: true,
         other: true,
       },
     },
@@ -1568,6 +1569,8 @@ export class ApplicationService {
     const changes = buildApplicationStatusChanges({
       initialStatus: dto.previousStatus,
       nextStatus: application.status,
+      initialApplicationDeclineReason: dto.previousApplicationDeclineReason,
+      nextApplicationDeclineReason: application.applicationDeclineReason,
       initialAccessibleUnitWaitlistNumber:
         dto.previousAccessibleUnitWaitlistNumber,
       nextAccessibleUnitWaitlistNumber:

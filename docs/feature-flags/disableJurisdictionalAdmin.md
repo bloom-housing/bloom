@@ -1,14 +1,14 @@
 # Disable Jurisdiction Admin - disableJurisdictionalAdmin
 
-### Name
+## Name
 
 `disableJurisdictionalAdmin`
 
-### Description
+## Description
 
 When true, jurisdictional admins cannot be created.
 
-### Images
+## Images
 
 Partner - add user
 

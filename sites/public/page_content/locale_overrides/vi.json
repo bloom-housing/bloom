@@ -1,5 +1,7 @@
 {
+  "account.create.initialDisclaimer": "Nếu bạn đang gặp tình trạng vô gia cư, có nguy cơ vô gia cư hoặc đang sống trong điều kiện nhà ở không an toàn, vui lòng chọn <a href='https://www.exygy.com' target='_blank'>liên kết này</a> để chia sẻ thông tin của bạn với Cơ quan Dịch vụ Người vô gia cư Bloomington (BHSA) và chủ sở hữu cũng như người quản lý bất động sản thuộc Hệ thống Tiếp cận Phối hợp (CES) có thể đang thiếu chỗ ở. Bằng cách này, bạn cho phép thông tin của mình được chia sẻ với các bên này.",
   "advocateAccount.agencyNotListed": "Nếu cơ quan của bạn không có trong danh sách, vui lòng <a href='mailto:%{contactEmail}'>liên hệ bộ phận hỗ trợ</a>.",
+  "application.confirmation.expiredDetailsWarning": "Nếu thông tin hộ gia đình của bạn đã thay đổi kể từ khi bạn nộp đơn, vui lòng liên hệ trực tiếp với cơ sở. Việc thông tin hộ gia đình thay đổi theo thời gian là điều bình thường, và thông tin không còn hiện hành sẽ không bị dùng để bất lợi cho bạn. Khả năng chỉnh sửa đơn sau khi nộp hiện đang được phát triển và bạn sẽ có thể thực hiện các thay đổi đối với đơn hiện có vào một ngày sau.",
   "application.referralApplication.instructions": "Các đơn vị nhà ở hỗ trợ lâu dài được giới thiệu trực tiếp thông qua Hệ thống Tiếp cận Phối hợp của Bloomington. Các hộ gia đình đang gặp tình trạng vô gia cư có thể gọi số 123-456-7890 để được kết nối với Điểm Tiếp cận nhằm tìm hiểu thêm về hệ thống tiếp cận phối hợp và tiếp cận các nguồn lực và thông tin liên quan đến nhà ở.",
   "application.referralApplication.phoneNumber": "211",
   "application.review.demographics.howDidYouHearOptions.jurisdictionWebsite": "Trang web của cơ quan quản lý",
@@ -9,6 +11,7 @@
   "footer.content.projectOf": "Cổng thông tin nhà ở Bloomington là một dự án của",
   "footer.copyright": "© Thành phố và Quận Bloomington",
   "footer.forGeneralQuestions": "Để được giải đáp các thắc mắc chung về chương trình, vui lòng gọi cho chúng tôi theo số 000-000-0000.",
+  "listings.additionalFeesDisclaimer": "Không thu phí đối với các điều chỉnh hợp lý cần thiết do khuyết tật, chẳng hạn như động vật hỗ trợ tinh thần. Cũng không thu phí đối với các thiết bị và dịch vụ cần thiết để giao tiếp hiệu quả do khuyết tật. Về việc kiểm tra tín dụng, người nộp đơn nhận trợ cấp thuê nhà của chính phủ có thể lựa chọn cung cấp \"bằng chứng thay thế hợp pháp, có thể kiểm chứng\" về khả năng trả tiền thuê nhà của họ, thay vì dựa vào lịch sử tín dụng.",
   "listings.petPolicyDescription": "Chó nghiệp vụ và động vật hỗ trợ tinh thần không phải là thú cưng và chỉ được phép nuôi nếu luật pháp cho phép. Thú cưng cũng có thể phải được cho phép ở một số loại nhà ở nhất định, chẳng hạn như các khu nhà ở được tài trợ bằng ngân sách nhà nước.",
   "pageDescription.faq": "Tìm câu trả lời cho những câu hỏi thường gặp về nhà ở giá rẻ tại Bloomington.",
   "region.name": "Bloomington",

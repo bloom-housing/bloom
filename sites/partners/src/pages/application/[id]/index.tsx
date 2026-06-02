@@ -35,11 +35,6 @@ const ApplicationsList = () => {
 
   const { applicationsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
-  const enableAdaOtherOption = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableAdaOtherOption,
-    listingDto?.jurisdictions.id
-  )
-
   const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableWorkInRegion,
     listingDto?.jurisdictions.id
@@ -70,6 +65,11 @@ const ApplicationsList = () => {
 
   const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableV2MSQ,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableReceivedAtAndByFields = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReceivedAtAndByFields,
     listingDto?.jurisdictions.id
   )
 
@@ -145,6 +145,7 @@ const ApplicationsList = () => {
               <div className="info-card md:w-9/12">
                 <DetailsApplicationData
                   enableApplicationStatus={enableApplicationStatus}
+                  enableReceivedAtAndByFields={enableReceivedAtAndByFields}
                   reviewOrderType={listingDto?.reviewOrderType}
                 />
 
@@ -163,7 +164,6 @@ const ApplicationsList = () => {
 
                 <DetailsHouseholdDetails
                   enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
-                  enableAdaOtherOption={enableAdaOtherOption}
                   enableReasonableAccommodations={enableReasonableAccommodations}
                 />
 

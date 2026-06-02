@@ -18,10 +18,11 @@ model Accessibility {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 
-  hearing  Boolean?
-  mobility Boolean?
-  other    Boolean?
-  vision   Boolean?
+  hearing          Boolean?
+  hearingAndVision Boolean? @map("hearing_and_vision")
+  mobility         Boolean?
+  other            Boolean?
+  vision           Boolean?
 
   applications Applications?
 
@@ -36,10 +37,11 @@ model AccessibilitySnapshot {
   originalCreatedAt DateTime @map("original_created_at") @db.Timestamp(6)
   updatedAt         DateTime @map("updated_at") @db.Timestamp(6)
 
-  hearing  Boolean?
-  mobility Boolean?
-  other    Boolean?
-  vision   Boolean?
+  hearing          Boolean?
+  hearingAndVision Boolean? @map("hearing_and_vision")
+  mobility         Boolean?
+  other            Boolean?
+  vision           Boolean?
 
   application ApplicationSnapshot?
 
@@ -415,8 +417,12 @@ model Applications {
   reviewStatus                   ApplicationReviewStatusEnum   @default(pending) @map("review_status")
   sendMailToMailingAddress       Boolean?                      @map("send_mail_to_mailing_address")
   status                         ApplicationStatusEnum         @default(submitted)
+  applicationDeclineReason       ApplicationDeclineReasonEnum? @map("application_decline_reason")
+  applicationDeclineReasonAdditionalDetails String?           @map("application_decline_reason_additional_details")
   submissionDate                 DateTime?                     @map("submission_date") @db.Timestamptz(6)
   submissionType                 ApplicationSubmissionTypeEnum @map("submission_type")
+  receivedAt                     DateTime?                     @map("received_at") @db.Timestamptz(6)
+  receivedBy                     String?                       @map("received_by")
   userId                         String?                       @map("user_id") @db.Uuid
   // Used to denote when an application was transferred from another jurisdiction
   wasCreatedExternally           Boolean                       @default(false) @map("was_created_externally")
@@ -490,6 +496,8 @@ model ApplicationSnapshot {
   reviewStatus                   ApplicationReviewStatusEnum   @default(pending) @map("review_status")
   sendMailToMailingAddress       Boolean?                      @map("send_mail_to_mailing_address")
   status                         ApplicationStatusEnum         @default(submitted)
+  applicationDeclineReason       ApplicationDeclineReasonEnum? @map("application_decline_reason")
+  applicationDeclineReasonAdditionalDetails String?           @map("application_decline_reason_additional_details")
   submissionDate                 DateTime?                     @map("submission_date") @db.Timestamptz(6)
   submissionType                 ApplicationSubmissionTypeEnum @map("submission_type")
   userId                         String?                       @map("user_id") @db.Uuid
@@ -799,6 +807,8 @@ model Jurisdictions {
   visibleAccessibilityPriorityTypes   UnitAccessibilityPriorityTypeEnum[] @default([mobility, hearing, vision, hearingAndVision, mobilityAndHearing, mobilityAndVision, mobilityHearingAndVision]) @map("visible_accessibility_priority_types")
   visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[]         @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
   visibleSpokenLanguages              SpokenLanguageEnum[]                @default([chineseCantonese, chineseMandarin, english, filipino, korean, russian, spanish, vietnamese, farsi, afghani, notListed]) @map("visible_spoken_languages")
+  visibleApplicationAccessibilityFeatures ApplicationAccessibilityFeatureEnum[] @default([mobility, hearing, vision]) @map("visible_application_accessibility_features")
+  visibleHouseholdMemberRelationships HouseholdMemberRelationshipEnum[]   @default([spouse, registeredDomesticPartner, parent, child, sibling, cousin, aunt, uncle, nephew, niece, grandparent, greatGrandparent, inLaw, friend, other, aideOrAttendant]) @map("visible_household_member_relationships")
   whatToExpect                        String                              @default("Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.") @map("what_to_expect")
   whatToExpectAdditionalText          String                              @default("") @map("what_to_expect_additional_text")
   whatToExpectUnderConstruction       String                              @default("") @map("what_to_expect_under_construction")
@@ -1283,6 +1293,7 @@ model Listings {
   resultId                             String?                     @map("result_id") @db.Uuid
   resultLink                           String?                     @map("result_link")
   reviewOrderType                      ReviewOrderTypeEnum?        @map("review_order_type")
+  scheduledPublishAt                   DateTime?                   @map("scheduled_publish_at") @db.Timestamptz(6)
   section8Acceptance                   Boolean?                    @map("section8_acceptance")
   servicesOffered                      String?                     @map("services_offered")
   smokingPolicy                        String?                     @map("smoking_policy")
@@ -1459,6 +1470,7 @@ model ListingSnapshot {
   resultSnapshotId                        String?                     @map("result_snapshot_id") @db.Uuid
   resultLink                              String?                     @map("result_link")
   reviewOrderType                         ReviewOrderTypeEnum?        @map("review_order_type")
+  scheduledPublishAt                      DateTime?                   @map("scheduled_publish_at") @db.Timestamptz(6)
   section8Acceptance                      Boolean?                    @map("section8_acceptance")
   servicesOffered                         String?                     @map("services_offered")
   smokingPolicy                           String?                     @map("smoking_policy")
@@ -2267,6 +2279,20 @@ enum ApplicationStatusEnum {
   @@map("application_status_enum")
 }
 
+enum ApplicationDeclineReasonEnum {
+  householdIncomeTooHigh
+  householdIncomeTooLow
+  householdSizeTooLarge
+  householdSizeTooSmall
+  attemptedToContactNoResponse
+  applicantDeclinedUnit
+  doesNotMeetSeniorBuildingRequirement
+  householdDoesNotNeedAccessibleUnit
+  other
+
+  @@map("application_decline_reason_enum")
+}
+
 enum ApplicationSubmissionTypeEnum {
   paper
   electronical
@@ -2331,6 +2357,7 @@ enum ListingEventsTypeEnum {
 enum ListingsStatusEnum {
   active
   pending
+  scheduled
   closed
   pendingReview
   changesRequested
@@ -2456,6 +2483,44 @@ enum SpokenLanguageEnum {
   notListed
 
   @@map("spoken_language_enum")
+}
+
+enum ApplicationAccessibilityFeatureEnum {
+  hearing
+  hearingAndVision
+  mobility
+  other
+  vision
+
+  @@map("application_accessibility_feature_enum")
+}
+
+enum HouseholdMemberRelationshipEnum {
+  spouse
+  registeredDomesticPartner
+  parent
+  child
+  sibling
+  cousin
+  aunt
+  uncle
+  nephew
+  niece
+  grandparent
+  greatGrandparent
+  inLaw
+  friend
+  other
+  aideOrAttendant
+  spousePartner
+  girlfriendBoyfriend
+  brotherSister
+  auntUncle
+  nephewNiece
+  grandparentGreatGrandparent
+  liveInAide
+
+  @@map("household_member_relationship_enum")
 }
 
 enum RegionEnum {

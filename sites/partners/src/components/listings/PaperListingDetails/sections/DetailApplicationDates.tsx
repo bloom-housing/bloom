@@ -12,7 +12,12 @@ import {
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
 import DetailMarketingFlyerSection from "./DetailMarketingFlyerSection"
-import { getDetailFieldDate, getDetailFieldString, getDetailFieldTime } from "./helpers"
+import {
+  getDetailFieldDate,
+  getDetailFieldString,
+  getDetailFieldTime,
+  getDetailFieldUtcDate,
+} from "./helpers"
 
 const DetailApplicationDates = () => {
   const listing = useContext(ListingContext)
@@ -31,6 +36,11 @@ const DetailApplicationDates = () => {
 
   const enableMarketingFlyer = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableMarketingFlyer,
+    listing?.jurisdictions?.id
+  )
+
+  const enableAutopublish = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAutopublish,
     listing?.jurisdictions?.id
   )
 
@@ -107,6 +117,19 @@ const DetailApplicationDates = () => {
             </FieldValue>
           </Grid.Cell>
         </Grid.Row>
+
+        {enableAutopublish && (
+          <Grid.Row columns={3}>
+            <Grid.Cell>
+              <FieldValue
+                id="scheduledListingPublishDate"
+                label={t("listings.scheduledListingPublishDate")}
+              >
+                {getDetailFieldUtcDate(listing.scheduledPublishAt)}
+              </FieldValue>
+            </Grid.Cell>
+          </Grid.Row>
+        )}
 
         {!!openHouseEvents.length && (
           <Grid.Row columns={1}>

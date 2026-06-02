@@ -74,7 +74,7 @@ export const contactPreferencesKeys = [
   },
 ]
 
-export const adaFeatureKeys = ["mobility", "vision", "hearing", "other"]
+export const adaFeatureKeys = ["mobility", "vision", "hearing", "hearingAndVision", "other"]
 
 export const relationshipKeys = ["", ...Object.values(HouseholdMemberRelationship)]
 
@@ -83,12 +83,14 @@ export const altContactRelationshipKeys = Object.values(AlternateContactRelation
 export const ethnicityKeys = ["hispanicLatino", "notHispanicLatino"]
 
 export const genderKeys = [
-  "female",
-  "male",
   "genderqueerGenderNon-Binary",
-  "transFemale",
   "transMale",
-  "notListed",
+  "transFemale",
+  "male",
+  "female",
+  "differentTerm",
+  "dontKnow",
+  "preferNoResponse",
 ]
 
 export const sexualOrientation = [

@@ -8,14 +8,14 @@ import { User } from '../dtos/users/user.dto';
 export type CsvHeader = {
   path: string;
   label: string;
-  format?: (val: unknown, fullObject?: unknown) => unknown;
+  format?: (val: any, fullObject?: any) => any;
 };
 
 export interface LotteryHeader {
   path: string;
   key?: string;
   header: string;
-  format?: (val: unknown, fullObject?: unknown) => unknown;
+  format?: (val: any, fullObject?: any) => any;
 }
 
 type OneOrMoreArgs<T> = { 0: T } & Array<T>;
