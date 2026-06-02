@@ -533,7 +533,7 @@ describe("<FormDemographics>", () => {
     expect(optionValues).toEqual(expect.arrayContaining(["", ...sexualOrientationKeys]))
   })
 
-  it("", () => {
+  it("hides sexual orientation select when enableSexualOrientationQuestion is disabled", () => {
     render(
       <FormProviderWrapper>
         <FormDemographics
