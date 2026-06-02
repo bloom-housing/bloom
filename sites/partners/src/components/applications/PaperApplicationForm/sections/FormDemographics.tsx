@@ -124,6 +124,7 @@ const FormDemographics = ({
           )}
           {(!disableEthnicityQuestion ||
             enableGenderQuestion ||
+            enableSexualOrientationQuestion ||
             (enableSpokenLanguage && visibleSpokenLanguages?.length > 0)) && (
             <Grid.Cell>
               {!disableEthnicityQuestion && (
@@ -152,20 +153,30 @@ const FormDemographics = ({
                 </div>
               )}
               {enableSexualOrientationQuestion && (
-                <Select
-                  id="application.demographics.sexualOrientation"
-                  name="application.demographics.sexualOrientation"
-                  label={t("application.add.sexualOrientation")}
-                  register={register}
-                  controlClassName="control"
-                  options={["", ...sexualOrientationKeys]}
-                  keyPrefix="application.review.demographics.sexualOrientationOptions"
-                />
+                <div
+                  className={
+                    !disableEthnicityQuestion || enableGenderQuestion ? "seeds-m-bs-4" : ""
+                  }
+                >
+                  <Select
+                    id="application.demographics.sexualOrientation"
+                    name="application.demographics.sexualOrientation"
+                    label={t("application.add.sexualOrientation")}
+                    register={register}
+                    controlClassName="control"
+                    options={["", ...sexualOrientationKeys]}
+                    keyPrefix="application.review.demographics.sexualOrientationOptions"
+                  />
+                </div>
               )}
               {enableSpokenLanguage && visibleSpokenLanguages?.length > 0 && (
                 <div
                   className={
-                    !disableEthnicityQuestion || enableGenderQuestion ? "seeds-m-bs-4" : ""
+                    !disableEthnicityQuestion ||
+                    enableGenderQuestion ||
+                    enableSexualOrientationQuestion
+                      ? "seeds-m-bs-4"
+                      : ""
                   }
                 >
                   <Select
