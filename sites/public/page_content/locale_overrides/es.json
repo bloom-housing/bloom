@@ -19,6 +19,6 @@
   "resources.contactEmail": "email@email.com",
   "resources.contactInfo": "Departamento de Vivienda y Desarrollo Comunitario de Bloomington",
   "resources.housingProgramsTitle": "Programas de vivienda de Vivienda y Desarrollo Comunitario de Bloomington",
-  "resources.additionalResourcesLink": "https://lahousing.lacity.org/AAHR/ComCon/Tab/RenderTab?tabName=Overview",
+  "resources.additionalResourcesLink": "/housing-basics",
   "resources.additionalResourcesTitle": "Obtenga más información sobre el Programa de Vivienda Accesible (AcHP), incluida una lista de proyectos de vivienda cubiertos, recursos para inquilinos, políticas y cómo presentar una queja."
 }

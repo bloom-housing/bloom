@@ -19,6 +19,6 @@
   "resources.contactEmail": "email@email.com",
   "resources.contactInfo": "إدارة الإسكان والتنمية المجتمعية في بلومنجتون",
   "resources.housingProgramsTitle": "برامج الإسكان التابعة لإدارة الإسكان والتنمية المجتمعية في بلومنجتون",
-  "resources.additionalResourcesLink": "https://lahousing.lacity.org/AAHR/ComCon/Tab/RenderTab?tabName=Overview",
+  "resources.additionalResourcesLink": "/housing-basics",
   "resources.additionalResourcesTitle": "احصل على مزيد من المعلومات حول برنامج الإسكان الميسور (AcHP)، بما في ذلك قائمة بمشاريع الإسكان المغطاة والموارد المتاحة للمستأجرين والسياسات وكيفية تقديم شكوى."
 }

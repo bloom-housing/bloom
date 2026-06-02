@@ -19,6 +19,6 @@
   "resources.contactEmail": "email@email.com",
   "resources.contactInfo": "Kagawaran ng Pabahay at Pagpapaunlad ng Komunidad ng Bloomington",
   "resources.housingProgramsTitle": "Mga programa sa pabahay ng Bloomington para sa Pabahay at Pagpapaunlad ng Komunidad",
-  "resources.additionalResourcesLink": "https://lahousing.lacity.org/AAHR/ComCon/Tab/RenderTab?tabName=Overview",
+  "resources.additionalResourcesLink": "/housing-basics",
   "resources.additionalResourcesTitle": "Makakuha ng higit pang impormasyon tungkol sa Accessible Housing Program (AcHP), kabilang ang isang listahan ng mga saklaw na proyektong pang-tahanan, mapagkukunan para sa mga tenant, patakaran, at kung paano magsampa ng reklamo."
 }
