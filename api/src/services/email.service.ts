@@ -1161,7 +1161,8 @@ export class EmailService {
         if (!emails[language].length) {
           continue;
         }
-
+        //TODO: remove
+        console.log('# of emails:', emails[language].length);
         void (await this.loadTranslations(
           jurisdiction,
           language as LanguagesEnum,
