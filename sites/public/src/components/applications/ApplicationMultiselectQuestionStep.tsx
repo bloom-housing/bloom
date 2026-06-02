@@ -11,13 +11,18 @@ import {
   getPageQuestion,
   getRadioOption,
   listingSectionQuestions,
+  mapApiToMultiselectFormV1,
   mapApiToMultiselectForm,
+  mapCheckboxesToApiV1,
   mapCheckboxesToApi,
   OnClientSide,
   PageView,
   pushGtmEvent,
+  AddressHolder,
+  getSelectionsForApplicationSection,
 } from "@bloom-housing/shared-helpers"
 import {
+  ApplicationSelectionCreate,
   MultiselectOption,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -39,6 +44,7 @@ export interface ApplicationMultiselectQuestionStepProps {
     subTitle?: string
   }
   swapCommunityTypeWithPrograms: boolean
+  enableV2MSQ: boolean
 }
 
 export const getMultiselectStepTitle = (
@@ -61,6 +67,7 @@ const ApplicationMultiselectQuestionStep = ({
   applicationSectionNumber,
   strings,
   swapCommunityTypeWithPrograms,
+  enableV2MSQ,
 }: ApplicationMultiselectQuestionStepProps) => {
   const [verifyAddress, setVerifyAddress] = useState(false)
   const [verifyAddressStep, setVerifyAddressStep] = useState(0)
@@ -74,18 +81,35 @@ const ApplicationMultiselectQuestionStep = ({
   const questions = listingSectionQuestions(listing, applicationSection)
   const [page, setPage] = useState(conductor.navigatedThroughBack ? questions.length : 1)
   const [applicationQuestions, setApplicationQuestions] = useState(
-    Array.isArray(application[applicationSection]) ? application[applicationSection] : []
+    enableV2MSQ
+      ? getSelectionsForApplicationSection(
+          questions,
+          applicationSection,
+          application.applicationSelections
+        )
+      : Array.isArray(application[applicationSection])
+      ? application[applicationSection]
+      : []
   )
   const question = getPageQuestion(questions, page)
+  const questionOptions = (enableV2MSQ ? question?.multiselectOptions : question?.options) || []
 
-  const questionSetInputType = getInputType(question?.options)
+  const questionSetInputType = enableV2MSQ
+    ? question?.isExclusive
+      ? "radio"
+      : "checkbox"
+    : getInputType(question?.options)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, handleSubmit, errors, getValues, reset, trigger } = useForm({
-    defaultValues: mapApiToMultiselectForm(applicationQuestions, questions, applicationSection),
+    defaultValues: enableV2MSQ
+      ? mapApiToMultiselectForm(applicationQuestions, questions, applicationSection)
+      : mapApiToMultiselectFormV1(applicationQuestions, questions, applicationSection),
   })
 
-  const [exclusiveKeys, setExclusiveKeys] = useState(getExclusiveKeys(question, applicationSection))
+  const [exclusiveKeys, setExclusiveKeys] = useState(
+    getExclusiveKeys(question, applicationSection, enableV2MSQ)
+  )
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -93,53 +117,80 @@ const ApplicationMultiselectQuestionStep = ({
       pageTitle: `Application - All ${applicationSection}`,
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
-  }, [profile])
+  }, [profile, applicationSection])
 
   // Required to keep the form up to date before submitting this section if you're moving between pages
   useEffect(() => {
     reset(
-      mapApiToMultiselectForm(
-        Array.isArray(applicationQuestions) ? applicationQuestions : [],
-        questions,
-        applicationSection
-      )
+      enableV2MSQ
+        ? mapApiToMultiselectForm(
+            Array.isArray(applicationQuestions) ? applicationQuestions : [],
+            questions,
+            applicationSection
+          )
+        : mapApiToMultiselectFormV1(
+            Array.isArray(applicationQuestions) ? applicationQuestions : [],
+            questions,
+            applicationSection
+          )
     )
-    setExclusiveKeys(getExclusiveKeys(question, applicationSection))
+    setExclusiveKeys(getExclusiveKeys(question, applicationSection, enableV2MSQ))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, applicationQuestions, reset])
 
   const allOptionNames = useMemo(() => {
-    return getAllOptions(question, applicationSection)
-  }, [question])
+    return getAllOptions(question, applicationSection, enableV2MSQ)
+  }, [applicationSection, enableV2MSQ, question])
 
   const body = useRef(null)
 
+  const getAddressFromOptionStep = (step: number) => {
+    if (enableV2MSQ) {
+      return body.current.selections[step]?.[AddressHolder.Address]
+    } else {
+      return body.current.options[step]?.extraData?.[0]?.value
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const setAddressForOptionStep = (step: number, newAddress: any) => {
+    if (enableV2MSQ) {
+      body.current.selections[step][AddressHolder.Address] = newAddress
+    } else {
+      body.current.options[step].extraData[0].value = newAddress
+    }
+  }
+
   const onSubmit = (data) => {
     if (verifyAddressStep === 0) {
-      body.current = mapCheckboxesToApi(data, question, applicationSection)
+      body.current = enableV2MSQ
+        ? mapCheckboxesToApi(data, question, applicationSection)
+        : mapCheckboxesToApiV1(data, question, applicationSection)
     }
 
     // Verify address on preferences
-    if (question?.options.some((item) => item?.collectAddress)) {
-      const step: number = body.current.options.findIndex(
+    if (questionOptions.some((item) => item.shouldCollectAddress || item.collectAddress)) {
+      const step: number = (body.current.selections || body.current.options).findIndex(
         (option, index) =>
-          index >= verifyAddressStep && option.checked === true && option.extraData?.[0]?.value
+          index >= verifyAddressStep &&
+          (option[AddressHolder.Address] ||
+            (option.checked === true && option.extraData?.[0]?.value))
       )
 
       if (
         newAddressSelected &&
         foundAddress.newAddress &&
-        body.current.options[verifyAddressStep - 1]?.extraData?.[0]?.value
+        getAddressFromOptionStep(verifyAddressStep - 1)
       ) {
-        body.current.options[verifyAddressStep - 1].extraData[0].value = foundAddress.newAddress
+        setAddressForOptionStep(verifyAddressStep - 1, foundAddress.newAddress)
       }
 
       if (step !== -1) {
-        if (body.current.options[step].extraData[0]?.value) {
+        if (getAddressFromOptionStep(step)) {
           setFoundAddress({})
           setVerifyAddress(true)
           findValidatedAddress(
-            body.current.options[step].extraData[0]?.value,
+            getAddressFromOptionStep(step),
             setFoundAddress,
             setNewAddressSelected
           )
@@ -152,11 +203,16 @@ const ApplicationMultiselectQuestionStep = ({
 
     if (questions.length > 1 && body.current) {
       // If there is more than one question, save the data in segments
-      const currentQuestions = conductor.currentStep.application[applicationSection].filter(
-        (question) => {
-          return question.key !== body.current.key
-        }
-      )
+      const currentQuestions = enableV2MSQ
+        ? conductor.application.applicationSelections.filter(
+            (selection: ApplicationSelectionCreate) =>
+              questions.find(
+                (question) => question.multiselectQuestions.id === selection.multiselectQuestion.id
+              ) && selection.multiselectQuestion.id != body.current.multiselectQuestion.id
+          )
+        : conductor.application[applicationSection].filter(
+            (question) => question.key !== body.current.key
+          )
 
       conductor.currentStep.save([...currentQuestions, body.current])
       setApplicationQuestions([...currentQuestions, body.current])
@@ -199,6 +255,7 @@ const ApplicationMultiselectQuestionStep = ({
       getValues,
       allOptionNames,
       watchQuestions,
+      enableV2MSQ,
       errors,
       trigger,
       exclusiveKeys
@@ -220,8 +277,8 @@ const ApplicationMultiselectQuestionStep = ({
     )
   }
 
-  const allOptions = question?.options ? [...question.options] : []
-  if (question?.optOutText) {
+  const allOptions = [...questionOptions]
+  if (!enableV2MSQ && question?.optOutText) {
     allOptions.push({
       text: question?.optOutText,
       description: null,
@@ -237,7 +294,10 @@ const ApplicationMultiselectQuestionStep = ({
 
   const getSubtitle = () => {
     if (verifyAddress) {
-      if (body.current.options.filter((option) => option.checked).length > 1) {
+      if (
+        (body.current.selections || body.current.options.filter((option) => option.checked) || [])
+          .length > 1
+      ) {
         return t("application.contact.verifyMultipleAddresses")
       }
       return null
@@ -294,7 +354,7 @@ const ApplicationMultiselectQuestionStep = ({
                 <legend className="text__caps-spaced mb-4 sr-only">{question?.text}</legend>
                 {applicationSection === MultiselectQuestionsApplicationSectionEnum.preferences && (
                   <div className="mb-6">
-                    <p className="text__caps-spaced m-0">{question?.text}</p>
+                    <p className="text__caps-spaced m-0">{question?.name || question?.text}</p>
                     {question?.description && (
                       <p className="field-note mt-3">{question?.description}</p>
                     )}

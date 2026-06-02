@@ -3,8 +3,8 @@ import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import { CharacterCount as CharacterCountExtension } from "@tiptap/extension-character-count"
 import { useEditor } from "@tiptap/react"
-import { t, Form, AlertBox, LoadingOverlay } from "@bloom-housing/ui-components"
-import { Button, Icon, Tabs } from "@bloom-housing/ui-seeds"
+import { t, Form, AlertBox } from "@bloom-housing/ui-components"
+import { Button, Icon, LoadingState, Tabs } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
 import {
@@ -42,6 +42,7 @@ import { usePropertiesList } from "../../../lib/hooks"
 import { EditorExtensions } from "../../shared/TextEditor"
 import ListingFormActions, { ListingFormActionsType } from "../ListingFormActions"
 import { cleanRichText, getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
+import { createDate } from "../../../lib/helpers"
 import { getListingStatusTag } from "../helpers"
 import AdditionalDetails from "./sections/AdditionalDetails"
 import AdditionalEligibility from "./sections/AdditionalEligibility"
@@ -98,6 +99,7 @@ const getToast = (
     [ListingsStatusEnum.pendingReview]: t("listings.approval.submittedForReview"),
     [ListingsStatusEnum.changesRequested]: t("listings.listingStatus.changesRequested"),
     [ListingsStatusEnum.active]: t("listings.approval.listingPublished"),
+    [ListingsStatusEnum.scheduled]: t("listings.approval.listingScheduled"),
     [ListingsStatusEnum.pending]: t("listings.approval.listingUnpublished"),
     [ListingsStatusEnum.closed]: t("listings.approval.listingClosed"),
     saved: t("listings.progressSaved"),
@@ -138,6 +140,8 @@ const ListingForm = ({
   const { getValues, setError, clearErrors, reset, watch, setValue } = formMethods
 
   const marketingTypeChoice = watch("marketingType")
+  const scheduledListingPublishDateField = watch("scheduledListingPublishDateField")
+  const scheduledPublishAtFromForm = createDate(scheduledListingPublishDateField, true)
 
   const { listingsService, profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
@@ -205,9 +209,9 @@ const ListingForm = ({
     immediatelyRender: true,
   })
 
-  const { data: properties } = usePropertiesList({
+  const { data: properties, loading: propertiesLoading } = usePropertiesList({
     page: null,
-    limit: null,
+    limit: "all",
     jurisdictions: jurisdictionId,
   })
 
@@ -273,6 +277,11 @@ const ListingForm = ({
   )
 
   const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ, jurisdictionId)
+
+  const enableAutopublish = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAutopublish,
+    jurisdictionId
+  )
 
   useEffect(() => {
     if (enableNonRegulatedListings && !listing?.listingType) {
@@ -416,6 +425,11 @@ const ListingForm = ({
             delete formData.configurableAccessibilityFeatures
           }
 
+          if (!enableAutopublish) {
+            delete formData.scheduledListingPublishDateField
+            formData.scheduledPublishAt = null
+          }
+
           if (successful) {
             const dataPipeline = new ListingDataPipeline(formData, {
               preferences: disableListingPreferences ? [] : preferences,
@@ -481,6 +495,9 @@ const ListingForm = ({
               if (readableError) {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 setError(fieldName as any, { message: readableError })
+                if (fieldName === "scheduledPublishAt") {
+                  setError("scheduledListingPublishDateField", { message: readableError })
+                }
                 if (fieldName === "buildingAddress" || fieldName === "buildingAddress.nested") {
                   const setIfEmpty = (
                     fieldName: string,
@@ -528,16 +545,17 @@ const ListingForm = ({
       profile,
       addToast,
       enableUnitGroups,
+      enableAutopublish,
     ]
   )
-  return loading === true ? null : (
-    <>
-      <LoadingOverlay isLoading={loading}>
+  return (
+    <div className={"loading-state-wrapper"}>
+      <LoadingState loading={loading || propertiesLoading}>
         <>
           <StatusBar>{getListingStatusTag(listing?.status)}</StatusBar>
 
           <FormProvider {...formMethods}>
-            <section className={`bg-primary-lighter py-5 ${styles["form-overrides"]}`}>
+            <section className={`py-5 ${styles["form-overrides"]}`}>
               <div className="max-w-screen-xl px-5 mx-auto">
                 {alert && (
                   <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
@@ -628,6 +646,10 @@ const ListingForm = ({
                             setLatLong={setLatitudeLongitude}
                           />
                           <CommunityType
+                            disableReservedCommunityTypeEdit={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.disableReservedCommunityTypeEdit,
+                              jurisdictionId
+                            )}
                             listing={listing}
                             swapCommunityTypeWithPrograms={swapCommunityTypeWithPrograms}
                             requiredFields={requiredFields}
@@ -791,6 +813,7 @@ const ListingForm = ({
                             jurisdiction={jurisdictionId}
                             listing={listing}
                             requiredFields={requiredFields}
+                            defaultReferralText={selectedJurisdictionData?.referralSummaryDefault}
                           />
                           <ApplicationAddress requiredFields={requiredFields} listing={listing} />
                           <ApplicationDates
@@ -806,6 +829,7 @@ const ListingForm = ({
                               FeatureFlagEnum.enableMarketingStatusMonths,
                               jurisdictionId
                             )}
+                            enableAutopublish={enableAutopublish}
                             listing={listing}
                             openHouseEvents={openHouseEvents}
                             requiredFields={requiredFields}
@@ -860,7 +884,7 @@ const ListingForm = ({
             </section>
           </FormProvider>
         </>
-      </LoadingOverlay>
+      </LoadingState>
 
       <SaveBeforeExitDialog
         isOpen={closeSaveDialog}
@@ -892,6 +916,8 @@ const ListingForm = ({
         isOpen={submitForApprovalDialog}
         setOpen={setSubmitForApprovalDialog}
         submitFormWithStatus={triggerSubmitWithStatus}
+        enableAutopublish={enableAutopublish}
+        scheduledPublishAt={scheduledPublishAtFromForm}
       />
 
       <RequestChangesDialog
@@ -900,7 +926,7 @@ const ListingForm = ({
         setModalIsOpen={setRequestChangesDialog}
         submitFormWithStatus={triggerSubmitWithStatus}
       />
-    </>
+    </div>
   )
 }
 

@@ -648,7 +648,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingFeatures: true,
@@ -792,10 +800,20 @@ describe('Testing listing service', () => {
               ],
             },
             {
-              name: {
-                contains: 'simple search',
-                mode: 'insensitive',
-              },
+              OR: [
+                {
+                  name: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  listingFileNumber: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+              ],
             },
           ],
         },
@@ -883,10 +901,20 @@ describe('Testing listing service', () => {
               ],
             },
             {
-              name: {
-                contains: 'simple search',
-                mode: 'insensitive',
-              },
+              OR: [
+                {
+                  name: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  listingFileNumber: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+              ],
             },
           ],
         },
@@ -1032,10 +1060,20 @@ describe('Testing listing service', () => {
       expect(service.buildWhereClause(null, 'simple search')).toEqual({
         AND: [
           {
-            name: {
-              contains: 'simple search',
-              mode: 'insensitive',
-            },
+            OR: [
+              {
+                name: {
+                  contains: 'simple search',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                listingFileNumber: {
+                  contains: 'simple search',
+                  mode: 'insensitive',
+                },
+              },
+            ],
           },
         ],
       });
@@ -1088,10 +1126,20 @@ describe('Testing listing service', () => {
             ],
           },
           {
-            name: {
-              contains: 'simple search',
-              mode: 'insensitive',
-            },
+            OR: [
+              {
+                name: {
+                  contains: 'simple search',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                listingFileNumber: {
+                  contains: 'simple search',
+                  mode: 'insensitive',
+                },
+              },
+            ],
           },
         ],
       });
@@ -1301,10 +1349,20 @@ describe('Testing listing service', () => {
               ],
             },
             {
-              name: {
-                contains: 'simple search',
-                mode: 'insensitive',
-              },
+              OR: [
+                {
+                  name: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  listingFileNumber: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+              ],
             },
           ],
         },
@@ -1385,12 +1443,77 @@ describe('Testing listing service', () => {
               ],
             },
             {
-              name: {
-                contains: 'simple search',
-                mode: 'insensitive',
-              },
+              OR: [
+                {
+                  name: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  listingFileNumber: {
+                    contains: 'simple search',
+                    mode: 'insensitive',
+                  },
+                },
+              ],
             },
           ],
+        },
+      });
+    });
+
+    it('should build select for map view', async () => {
+      prisma.listings.findMany = jest
+        .fn()
+        .mockResolvedValue(mockListingSet(10));
+
+      prisma.listings.count = jest.fn().mockResolvedValue(10);
+
+      const params: ListingsQueryParams = {
+        view: ListingViews.map,
+      };
+
+      await service.list(params);
+
+      expect(prisma.listings.findMany).toHaveBeenCalledWith({
+        skip: 0,
+        take: 10,
+        orderBy: undefined,
+        where: {
+          AND: [],
+        },
+        select: {
+          name: true,
+          id: true,
+          property: true,
+          jurisdictions: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          listingsBuildingAddress: true,
+          listingImages: {
+            include: {
+              assets: true,
+            },
+          },
+          reservedCommunityTypes: true,
+          units: {
+            select: {
+              monthlyRent: true,
+              unitTypes: {
+                select: { numBedrooms: true, name: true },
+              },
+            },
+          },
+        },
+      });
+
+      expect(prisma.listings.count).toHaveBeenCalledWith({
+        where: {
+          AND: [],
         },
       });
     });
@@ -1472,6 +1595,24 @@ describe('Testing listing service', () => {
                   {
                     unitGroups: {
                       some: { openWaitlist: { equals: true } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
+                AND: [
+                  { unitGroups: { none: {} } },
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
                     },
                   },
                   {
@@ -1578,6 +1719,24 @@ describe('Testing listing service', () => {
                 ],
               },
               {
+                AND: [
+                  { unitGroups: { none: {} } },
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
                 unitsAvailable: {
                   gte: 1,
                 },
@@ -1672,6 +1831,24 @@ describe('Testing listing service', () => {
                   {
                     unitGroups: {
                       some: { openWaitlist: { equals: true } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
+                AND: [
+                  { unitGroups: { none: {} } },
+                  {
+                    reviewOrderType: {
+                      in: [
+                        ReviewOrderTypeEnum.waitlist,
+                        ReviewOrderTypeEnum.waitlistLottery,
+                      ],
                     },
                   },
                   {
@@ -2112,6 +2289,61 @@ describe('Testing listing service', () => {
       });
     });
 
+    it('should return a where clause for filter accessibilityPriorityTypes with single type', () => {
+      const types = [UnitAccessibilityPriorityTypeEnum.mobility];
+      const filter = [
+        {
+          $comparison: 'IN',
+          accessibilityPriorityTypes: types,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              { units: { some: { accessibilityPriorityType: 'mobility' } } },
+              {
+                unitGroups: { some: { accessibilityPriorityType: 'mobility' } },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter accessibilityPriorityTypes with multiple types', () => {
+      const types = [
+        UnitAccessibilityPriorityTypeEnum.mobility,
+        UnitAccessibilityPriorityTypeEnum.hearing,
+      ];
+      const filter = [
+        {
+          $comparison: 'IN',
+          accessibilityPriorityTypes: types,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              { units: { some: { accessibilityPriorityType: 'mobility' } } },
+              {
+                unitGroups: { some: { accessibilityPriorityType: 'mobility' } },
+              },
+              { units: { some: { accessibilityPriorityType: 'hearing' } } },
+              {
+                unitGroups: { some: { accessibilityPriorityType: 'hearing' } },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
     it('should return a where clause for filter monthlyRent', () => {
       const monthlyRent = '1500';
       const filter = [
@@ -2367,10 +2599,20 @@ describe('Testing listing service', () => {
       expect(whereClause).toStrictEqual({
         AND: [
           {
-            name: {
-              contains: search,
-              mode: 'insensitive',
-            },
+            OR: [
+              {
+                name: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                listingFileNumber: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+            ],
           },
         ],
       });
@@ -2487,7 +2729,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingFeatures: true,
@@ -3013,7 +3263,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingFeatures: true,
@@ -3180,7 +3438,9 @@ describe('Testing listing service', () => {
             orderBy: {
               ordinal: 'asc',
             },
-            include: { multiselectQuestions: true },
+            include: {
+              multiselectQuestions: true,
+            },
           },
           listingNeighborhoodAmenities: true,
           listingFeatures: true,
@@ -3304,7 +3564,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -3354,6 +3622,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -3436,7 +3705,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -3822,7 +4099,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -3872,6 +4157,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           depositMin: '5',
           lastUpdatedByUser: {
             connect: {
@@ -3967,7 +4253,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
 
@@ -4323,7 +4617,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -4728,7 +5030,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -4847,7 +5157,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -4953,7 +5271,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -5404,7 +5730,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -5454,6 +5788,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -5640,6 +5975,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           depositMin: '5',
           assets: [
             {
@@ -5885,6 +6221,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue([]);
       prisma.$transaction = jest.fn().mockResolvedValue([
         {
           id: 'example id',
@@ -5961,7 +6298,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -6011,6 +6356,7 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          scheduledPublishAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -6112,6 +6458,10 @@ describe('Testing listing service', () => {
           status: MultiselectQuestionsStatusEnum.active,
         },
       ]);
+
+      expect(
+        multiselectQuestionServiceMock.retireMultiselectQuestions,
+      ).toHaveBeenCalled();
     });
 
     it('should update a simple listing to closed with a toRetire multiselectQuestion when enableV2MSQ is true', async () => {
@@ -6240,7 +6590,15 @@ describe('Testing listing service', () => {
               ordinal: 'asc',
             },
             include: {
-              multiselectQuestions: true,
+              multiselectQuestions: {
+                include: {
+                  multiselectOptions: {
+                    orderBy: {
+                      ordinal: 'asc',
+                    },
+                  },
+                },
+              },
             },
           },
           listingUtilities: true,
@@ -6291,6 +6649,7 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           closedAt: expect.anything(),
+          scheduledPublishAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -6830,15 +7189,39 @@ describe('Testing listing service', () => {
         },
       ]);
 
-      await service.mapMarkers();
+      await service.mapMarkers({});
 
       expect(prisma.listings.findMany).toHaveBeenCalledWith({
         select: {
           id: true,
-          listingsBuildingAddress: true,
+          listingsBuildingAddress: {
+            select: {
+              latitude: true,
+              longitude: true,
+            },
+          },
         },
         where: {
-          status: ListingsStatusEnum.active,
+          AND: [
+            {
+              OR: [
+                {
+                  status: { equals: ListingsStatusEnum.active },
+                },
+              ],
+            },
+          ],
+          buildingAddressId: {
+            not: null,
+          },
+          listingsBuildingAddress: {
+            latitude: {
+              not: null,
+            },
+            longitude: {
+              not: null,
+            },
+          },
         },
       });
     });
@@ -6915,6 +7298,56 @@ describe('Testing listing service', () => {
       });
     });
 
+    it('should pass with a retired multiselectQuestion that was previously attached', async () => {
+      const id = randomUUID();
+      prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([
+        {
+          id: id,
+          name: 'retired MSQ',
+          status: MultiselectQuestionsStatusEnum.retired,
+        },
+      ]);
+
+      const multiselectQuestionIds = [id];
+
+      await service.validateMultiselectQuestions(
+        multiselectQuestionIds,
+        multiselectQuestionIds,
+      );
+
+      expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
+        select: { id: true, name: true, status: true },
+        where: { id: { in: multiselectQuestionIds } },
+      });
+    });
+
+    it('should error with a retired multiselectQuestion that was not previously attached', async () => {
+      const id = randomUUID();
+      prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([
+        {
+          id: id,
+          name: 'retired MSQ',
+          status: MultiselectQuestionsStatusEnum.retired,
+        },
+      ]);
+
+      const multiselectQuestionIds = [id];
+
+      await expect(
+        async () =>
+          await service.validateMultiselectQuestions(multiselectQuestionIds, [
+            randomUUID(),
+          ]),
+      ).rejects.toThrowError(
+        `The following multiselectQuestions provided are not in a valid state to be associated to this listing: retired MSQ`,
+      );
+
+      expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
+        select: { id: true, name: true, status: true },
+        where: { id: { in: multiselectQuestionIds } },
+      });
+    });
+
     it('should error with draft/toRetire/retired multiselectQuestions and no previous multiselectQuestions', async () => {
       prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([
         {
@@ -6958,6 +7391,35 @@ describe('Testing listing service', () => {
         select: { id: true, name: true, status: true },
         where: { id: { in: multiselectQuestionIds } },
       });
+    });
+  });
+
+  describe('Test normalizeScheduledPublishAt helper', () => {
+    const originalTimezone = process.env.TIME_ZONE;
+
+    afterEach(() => {
+      process.env.TIME_ZONE = originalTimezone;
+    });
+
+    it('should convert UTC midnight to midnight in the app timezone (UTC-7, LA summer)', () => {
+      process.env.TIME_ZONE = 'America/Los_Angeles';
+      const utcMidnight = new Date('2026-05-15T00:00:00.000Z');
+      const normalized = service.normalizeScheduledPublishAt(utcMidnight);
+      expect(normalized.toISOString()).toBe('2026-05-15T07:00:00.000Z');
+    });
+
+    it('should convert UTC midnight to midnight in the app timezone (UTC-8, LA winter)', () => {
+      process.env.TIME_ZONE = 'America/Los_Angeles';
+      const utcMidnight = new Date('2026-01-15T00:00:00.000Z');
+      const normalized = service.normalizeScheduledPublishAt(utcMidnight);
+      expect(normalized.toISOString()).toBe('2026-01-15T08:00:00.000Z');
+    });
+
+    it('should preserve the user-selected wall-clock date regardless of input time', () => {
+      process.env.TIME_ZONE = 'America/Los_Angeles';
+      const nonMidnight = new Date('2026-05-15T14:30:00.000Z');
+      const normalized = service.normalizeScheduledPublishAt(nonMidnight);
+      expect(normalized.toISOString()).toBe('2026-05-15T07:00:00.000Z');
     });
   });
 });

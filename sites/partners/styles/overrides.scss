@@ -20,10 +20,6 @@
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }
 
-  .seeds-button[data-variant="primary"] {
-    color: white; // AG grid styling from UIC was messing up our primary button
-  }
-
   .card-icon {
     color: var(--seeds-color-primary);
     background-color: var(--seeds-bg-color-surface-primary);
@@ -244,4 +240,15 @@
 
 .darker-help-text {
   --field-value-help-text-color: var(--seeds-input-text-label-color);
+}
+
+.loading-state-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background-color: var(--seeds-bg-color-canvas);
+}
+
+.form-container {
+  background-color: var(--seeds-bg-color-canvas);
 }

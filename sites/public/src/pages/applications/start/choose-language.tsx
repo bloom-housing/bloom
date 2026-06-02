@@ -62,6 +62,9 @@ const loadListing = async (
     isAdvocate:
       isFeatureFlagOn(jurisdictionResponse, FeatureFlagEnum.enableHousingAdvocate) && isAdvocate,
     visibleSpokenLanguages: jurisdictionResponse.visibleSpokenLanguages,
+    visibleApplicationAccessibilityFeatures:
+      jurisdictionResponse.visibleApplicationAccessibilityFeatures,
+    visibleHouseholdMemberRelationships: jurisdictionResponse.visibleHouseholdMemberRelationships,
     raceEthnicityConfiguration: jurisdictionResponse.raceEthnicityConfiguration,
   }
   stateFunction(conductor.listing)
@@ -72,6 +75,7 @@ const ApplicationChooseLanguage = () => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
   const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const context = useContext(AppSubmissionContext)
   const { initialStateLoaded, profile, listingsService, jurisdictionsService } =
     useContext(AuthContext)
@@ -144,6 +148,7 @@ const ApplicationChooseLanguage = () => {
 
   const onLanguageSelect = useCallback(
     (language: LanguagesEnum) => {
+      setIsLoading(true)
       conductor.currentStep.save({
         language,
       })
@@ -174,7 +179,7 @@ const ApplicationChooseLanguage = () => {
   return (
     <>
       <FormsLayout pageTitle={`${t("listings.apply.applyOnline")} - ${listing?.name}`}>
-        <LoadingState loading={!listing}>
+        <LoadingState loading={!listing || isLoading}>
           <ApplicationFormLayout
             listingName={listing?.name}
             heading={t("application.chooseLanguage.letsGetStarted")}

@@ -7,6 +7,7 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 
 export class ApplicationSelectionUpdate extends OmitType(ApplicationSelection, [
   'id',
+  'application',
   'selections',
 ]) {
   @Expose()

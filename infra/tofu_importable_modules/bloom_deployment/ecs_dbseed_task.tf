@@ -50,11 +50,11 @@ resource "aws_ecs_task_definition" "bloom_dbseed" {
   ])
 }
 
-// Avoids the error :
-//
-// module.bloom_deployment.null_resource.bloom_dbseed_run (local-exec): An error occurred
-// (ClientException) when calling the RunTask operation: ECS was unable to assume the role
-// 'arn:aws:iam::x:role/bloom-dbseed-container' that was provided for this task.
+# Avoids the error:
+#
+# module.bloom_deployment.null_resource.bloom_dbseed_run (local-exec): An error occurred
+# (ClientException) when calling the RunTask operation: ECS was unable to assume the role
+# 'arn:aws:iam::x:role/bloom-dbseed-container' that was provided for this task.
 resource "time_sleep" "on_dbseed_container_role_creation" {
   count = var.bloom_dbseed_image == "" ? 0 : 1
 

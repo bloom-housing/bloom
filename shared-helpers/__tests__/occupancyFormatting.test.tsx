@@ -2,13 +2,11 @@ import React from "react"
 import { cleanup } from "@testing-library/react"
 import {
   occupancyTable,
-  getOccupancyDescription,
   getOccupancy,
   stackedOccupancyTable,
   stackedUnitGroupsOccupancyTable,
 } from "../src/views/occupancyFormatting"
-import { t } from "@bloom-housing/ui-components"
-import { Listing, UnitType, UnitTypeEnum, UnitsSummarized } from "../src/types/backend-swagger"
+import { Listing, UnitTypeEnum, UnitsSummarized } from "../src/types/backend-swagger"
 import { unitGroup } from "./testHelpers"
 
 const testListing: Listing = {} as Listing
@@ -131,39 +129,6 @@ describe("occupancy formatting helper", () => {
         unitType: { content: <strong>SRO</strong> },
       },
     ])
-  })
-  it("properly creates occupancy description for some SRO", () => {
-    expect(getOccupancyDescription(testListing)).toBe(t("listings.occupancyDescriptionSomeSro"))
-  })
-  it("properly creates occupancy description for no SRO", () => {
-    const testListing2 = testListing
-    testListing2.unitsSummarized = {
-      ...unitsSummarized,
-      unitTypes: [
-        {
-          name: "threeBdrm",
-          numBedrooms: 3,
-        },
-        {
-          name: "twoBdrm",
-          numBedrooms: 2,
-        },
-      ] as UnitType[],
-    }
-    expect(getOccupancyDescription(testListing2)).toBe(t("listings.occupancyDescriptionNoSro"))
-  })
-  it("properly creates occupancy description for all SRO", () => {
-    const testListing3 = testListing
-    testListing3.unitsSummarized = {
-      ...unitsSummarized,
-      unitTypes: [
-        {
-          name: "SRO",
-          numBedrooms: 1,
-        },
-      ] as UnitType[],
-    }
-    expect(getOccupancyDescription(testListing3)).toBe(t("listings.occupancyDescriptionAllSro"))
   })
 })
 

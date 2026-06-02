@@ -1,13 +1,21 @@
 import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { Form, t, AlertBox } from "@bloom-housing/ui-components"
+import Markdown from "markdown-to-jsx"
+import { t, AlertBox } from "@bloom-housing/ui-components"
 import { Button, Dialog, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
 import { useRouter } from "next/router"
-import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
+import {
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  BloomCard,
+  Form,
+  tIfExists,
+} from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 import {
@@ -98,6 +106,7 @@ const CreateAccount = () => {
     <FormsLayout
       className={signUpCopy ? "sm:max-w-lg md:max-w-full" : undefined}
       pageTitle={t("account.createAccount")}
+      metaDescription={t("pageDescription.createAccount")}
     >
       <div className={signUpCopy ? signUpBenefitsStyles["benefits-container"] : undefined}>
         {signUpCopy && (
@@ -120,6 +129,16 @@ const CreateAccount = () => {
                 </AlertBox>
               )}
               <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
+                {tIfExists("account.create.initialDisclaimer") && (
+                  <CardSection
+                    divider={"inset"}
+                    className={accountCardStyles["account-card-settings-section"]}
+                  >
+                    <p className={`${accountCardStyles["section-sub-note"]} seeds-m-be-6`}>
+                      {<Markdown>{t("account.create.initialDisclaimer")}</Markdown>}
+                    </p>
+                  </CardSection>
+                )}
                 <CardSection
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}

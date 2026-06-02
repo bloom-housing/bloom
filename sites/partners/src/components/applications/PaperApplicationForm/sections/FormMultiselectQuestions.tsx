@@ -27,6 +27,7 @@ type FormMultiselectQuestionsProps = {
   questions: ListingMultiselectQuestion[]
   applicationSection: MultiselectQuestionsApplicationSectionEnum
   sectionTitle: string
+  enableV2MSQ: boolean
 }
 
 // Set the value as false for a set of option field names
@@ -40,6 +41,7 @@ const FormMultiselectQuestions = ({
   applicationSection,
   questions,
   sectionTitle,
+  enableV2MSQ,
 }: FormMultiselectQuestionsProps) => {
   const formMethods = useFormContext()
 
@@ -52,21 +54,30 @@ const FormMultiselectQuestions = ({
   } = formMethods
 
   const allOptionFieldNames = useMemo(() => {
-    const keys = []
-    questions?.forEach((listingQuestion) =>
-      listingQuestion?.multiselectQuestions?.options?.forEach((option) =>
-        keys.push(
-          fieldName(
-            listingQuestion?.multiselectQuestions.text,
-            applicationSection,
-            cleanMultiselectString(option.text)
+    let keys = []
+    if (enableV2MSQ) {
+      questions?.forEach((listingQuestion) => {
+        keys = [
+          ...keys,
+          ...getAllOptions(listingQuestion?.multiselectQuestions, applicationSection, enableV2MSQ),
+        ]
+      })
+    } else {
+      // TODO: We can sunset this after full V2MSQ rollout
+      questions?.forEach((listingQuestion) =>
+        listingQuestion?.multiselectQuestions?.options?.forEach((option) =>
+          keys.push(
+            fieldName(
+              listingQuestion?.multiselectQuestions.text,
+              applicationSection,
+              cleanMultiselectString(option.text)
+            )
           )
         )
       )
-    )
-
+    }
     return keys
-  }, [questions, applicationSection])
+  }, [questions, applicationSection, enableV2MSQ])
 
   const [geocodingClient, setGeocodingClient] = useState<GeocodeServiceType>()
 
@@ -92,15 +103,15 @@ const FormMultiselectQuestions = ({
     question: MultiselectQuestion
   ) => {
     const optionFieldName = fieldName(
-      question.text,
+      question.name || question.text,
       applicationSection,
-      cleanMultiselectString(option.text)
+      cleanMultiselectString(option.name || option.text)
     )
     return (
-      <React.Fragment key={option.text}>
+      <React.Fragment key={option.name || option.text}>
         {field}
 
-        {watchQuestions[optionFieldName] && option?.collectName && (
+        {watchQuestions[optionFieldName] && (option?.shouldCollectName || option?.collectName) && (
           <Field
             id={AddressHolder.Name}
             name={`${optionFieldName}-${AddressHolder.Name}`}
@@ -116,57 +127,68 @@ const FormMultiselectQuestions = ({
             }
           />
         )}
-        {watchQuestions[optionFieldName] && option?.collectRelationship && (
-          <Field
-            id={AddressHolder.Relationship}
-            name={`${optionFieldName}-${AddressHolder.Relationship}`}
-            label={t(`application.preferences.options.${AddressHolder.Relationship}`)}
-            register={register}
-            validation={{ required: true, maxLength: 64 }}
-            error={!!resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)}
-            errorMessage={
-              resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)?.type ===
-              "maxLength"
-                ? t("errors.maxLength", { length: 64 })
-                : t("errors.requiredFieldError")
-            }
-          />
-        )}
-        {watchQuestions[optionFieldName] && option.collectAddress && (
-          <div className="pb-4">
-            <FormAddressAlternate
-              subtitle={t("application.preferences.options.qualifyingAddress")}
-              dataKey={fieldName(question.text, applicationSection, `${option.text}-address`)}
+        {watchQuestions[optionFieldName] &&
+          (option?.shouldCollectRelationship || option?.collectRelationship) && (
+            <Field
+              id={AddressHolder.Relationship}
+              name={`${optionFieldName}-${AddressHolder.Relationship}`}
+              label={t(`application.preferences.options.${AddressHolder.Relationship}`)}
               register={register}
-              required={true}
-              errors={errors}
-              stateKeys={stateKeys}
-              data-testid={"app-question-extra-field"}
+              validation={{ required: true, maxLength: 64 }}
+              error={!!resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)}
+              errorMessage={
+                resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)?.type ===
+                "maxLength"
+                  ? t("errors.maxLength", { length: 64 })
+                  : t("errors.requiredFieldError")
+              }
             />
-            <MultiselectQuestionsMap
-              dataKey={fieldName(question.text, applicationSection, `${option.text}`)}
-              geocodingClient={geocodingClient}
-            />
-          </div>
-        )}
+          )}
+        {watchQuestions[optionFieldName] &&
+          (option.shouldCollectAddress || option.collectAddress) && (
+            <div className="pb-4">
+              <FormAddressAlternate
+                subtitle={t("application.preferences.options.qualifyingAddress")}
+                dataKey={fieldName(
+                  question.name || question.text,
+                  applicationSection,
+                  `${option.name || option.text}-address`
+                )}
+                register={register}
+                required={true}
+                errors={errors}
+                stateKeys={stateKeys}
+                data-testid={"app-question-extra-field"}
+              />
+              <MultiselectQuestionsMap
+                dataKey={fieldName(
+                  question.name || question.text,
+                  applicationSection,
+                  `${option.name || option.text}`
+                )}
+                geocodingClient={geocodingClient}
+                enableV2MSQ={enableV2MSQ}
+              />
+            </div>
+          )}
       </React.Fragment>
     )
   }
 
   const getCheckboxOption = (option: MultiselectOption, question: MultiselectQuestion) => {
     const optionFieldName = fieldName(
-      question.text,
+      question.name || question.text,
       applicationSection,
-      cleanMultiselectString(option.text)
+      cleanMultiselectString(option.name || option.text)
     )
 
     const checkboxField = (
       <Field
-        id={`${question?.text}-${option.text}`}
+        id={`${question?.name || question?.text}-${option.name || option.text}`}
         name={optionFieldName}
         labelClassName="font-semibold"
         type={"checkbox"}
-        label={option.text}
+        label={option.name || option.text}
         register={register}
       />
     )
@@ -179,22 +201,22 @@ const FormMultiselectQuestions = ({
     setValue: UseFormMethods["setValue"]
   ) => {
     const optionFieldName = fieldName(
-      question.text,
+      question.name || question.text,
       applicationSection,
-      cleanMultiselectString(option.text)
+      cleanMultiselectString(option.name || option.text)
     )
 
     const radioField = (
       <Field
-        id={`${question?.text}-${option.text}`}
+        id={`${question?.name || question?.text}-${option.name || option.text}`}
         name={optionFieldName}
         type={"radio"}
-        label={option.text}
+        label={option.name || option.text}
         register={register}
         inputProps={{
-          value: !!option.text,
+          value: !!(option.name || option.text),
           onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-            uncheckOptions(getAllOptions(question, applicationSection), setValue)
+            uncheckOptions(getAllOptions(question, applicationSection, enableV2MSQ), setValue)
             setValue(optionFieldName, e.target?.value)
           },
         }}
@@ -210,19 +232,25 @@ const FormMultiselectQuestions = ({
         <Grid.Row columns={2}>
           {questions?.map((listingQuestion) => {
             const question = listingQuestion?.multiselectQuestions
-            const inputType = getInputType(question.options as unknown as MultiselectOption[])
+            // TODO: We can sunset parts of this after full V2MSQ rollout
+            const inputType = enableV2MSQ
+              ? question.isExclusive
+                ? "radio"
+                : "checkbox"
+              : getInputType(question.options as unknown as MultiselectOption[])
             return (
-              <Grid.Cell key={question.text}>
-                <FieldValue label={question.text}>
+              <Grid.Cell key={question.name || question.text}>
+                <FieldValue label={question.name || question.text}>
                   <fieldset className={"mt-4"}>
                     {inputType === "checkbox" ? (
                       <>
-                        {question?.options
+                        {(enableV2MSQ ? question?.multiselectOptions : question?.options)
                           ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
                           .map((option) => {
                             return getCheckboxOption(option, question)
                           })}
-                        {question?.optOutText &&
+                        {!enableV2MSQ &&
+                          question?.optOutText &&
                           getCheckboxOption(
                             {
                               text: question.optOutText,
@@ -240,12 +268,13 @@ const FormMultiselectQuestions = ({
                       </>
                     ) : (
                       <>
-                        {question?.options
+                        {(enableV2MSQ ? question?.multiselectOptions : question?.options)
                           ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
                           .map((option) => {
                             return getRadioOption(option, question, setValue)
                           })}
-                        {question?.optOutText &&
+                        {!enableV2MSQ &&
+                          question?.optOutText &&
                           getRadioOption(
                             {
                               text: question.optOutText,

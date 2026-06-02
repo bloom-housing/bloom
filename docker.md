@@ -5,6 +5,15 @@ Compose are required. The easiest way is to install [Docker
 Desktop](https://docs.docker.com/desktop/) but [Podman](https://podman.io/docs/installation) is also
 supported if you manually install [Docker Compose](https://github.com/docker/compose).
 
+> [!NOTE]
+> If running on mac apple silicon, docker and podman run a linux VM where the images are build and
+> run. We have hit issues when the VM does not have enough disk space and memory. We've found the
+> following limits to work okay:
+>
+> - 8 CPU
+> - 12GB memory
+> - 200GB disk space
+
 To get started, run `docker compose build` to build the required images. Run `docker compose up` to
 start the deployment. The sites are available at:
 
@@ -21,27 +30,54 @@ Optionally, start pgadmin for looking around the database:
    - database user: `bloom_readonly`
    - database password: `bloom_readonly_pw`
 
-> [!NOTE]
-> If running on mac apple silicon, docker and podman run a linux VM where the images are build and
-> run. We have hit issues when the VM does not have enough disk space and memory. We've found the
-> following limits to work okay:
->
-> - 8 CPU
-> - 12GB memory
-> - 200GB disk space
+Optionally, start the observability stack to see metrics:
+
+`COMPOSE_PROFILES=observability docker compose up`:
+
+- grafana: http://localhost:3300
+
+To include dashboard changes in code review,  make the edits in the Grafana web UI, then click the
+'Save dashboard' button. Once the dashboard is saved in the web UI, sync the changes to the git repo
+by running:
+
+```bash
+docker compose restart grafana-sync
+```
 
 ## Containers
 
 The following containers are defined in the [docker-compose.yml](./docker-compose.yml) file:
 
+_Will always run_:
+
 - `lb`: a nginx load balancer that fronts the `api`, `partners`, and `public` containers. A LB is
   required to run multiple replicas of these containers.
-- `db`: the postgres database.
-- `dbinit`: runs a [db init script](./api/dbinit)
-- `dbseed`: runs a [db seed script](./api/Dockerfile.dbseed).
+- `db`: a postgres database.
+- `dbinit`: runs the [db init script](./api/dbinit)
+- `dbseed`: runs the [db seed script](./api/Dockerfile.dbseed).
 - `api`: the [api](./api).
 - `partners`: the [partners site](./sites/partners).
 - `public`: the [public site](./sites/public).
+
+_Will run with `COMPOSE_PROFILES=ci`_:
+
+- `dbreadonlycheck`: runs the [docker-compose.check.sql](./api/dbinit/docker-compose.check.sql)
+  script that validates the created DB users.
+
+_Will run with `COMPOSE_PROFILES=pgadmin`_:
+
+- `pgadmin`: runs pgadmin with a connection to the DB configured.
+
+_Will run with `COMPOSE_PROFILES=observability`_:
+
+- `otel-collector`: runs the [aws-otel-collector](./infra/aws-otel-collector) process that scrapes
+  metrics data from the api, partners, and public processes.
+- `prometheus`: runs a Prometheus server that stores the metric values.
+- `grafana`: runs a Grafana server with
+  [dashboards](./infra/tofu_importable_modules/bloom_deployment/dashboards) for the API, partners,
+  and public sites.
+- `grafana-sync`: runs a [dashboard sync script](./infra/grafana/sync-dashboards.py) that allows
+  editing graphs and dashboards in local Grafana then submitting for code review.
 
 Build, start, and tear down containers with the following commands. Each command takes an optional
 list of containers to operate on. By default the command operates on all containers.
@@ -107,7 +143,7 @@ implemented.
 The compose stack is tested in the
 [docker_compose_ci.yml](./.github/workflows/docker_compose_ci.yml) GitHub workflow.
 
-### Multiple replicas
+## Multiple replicas
 
 By default the `api`, `partners`, and `public` containers each run with 1 replica. To control the
 number of replicas, use the `API_REPLICAS`, `PARTNERS_REPLICAS`, and `PUBLIC_REPLICAS` environment
@@ -117,7 +153,7 @@ variables. For example, the following command runs 3 replicas for each service:
 API_REPLICAS=3 PARTNERS_REPLICAS=3 PUBLIC_REPLICAS=3 docker compose up
 ```
 
-### Restarting and rebuilding
+## Restarting and rebuilding
 
 By default the containers are just stopped and not deleted when you exit the `docker compose up`
 command. If you run `docker compose up` again the containers will be restarted. This means the `db`
@@ -126,8 +162,8 @@ because it already seeded the database on the previous run. Either:
 
 - Run `docker compose down` between running `docker compose up`. This wipes the database state
   clean.
-- Run `docker compose up lb db api partners public` to restart just the `lb`, `db`, `api`, `partners`, and
-  `public` containers.
+- Run `docker compose up lb db api partners public --no-deps` to restart just the `lb`, `db`, `api`,
+  `partners`, and `public` containers.
 
 By default `docker compose up` will not rebuild images. Rebuild with `docker compose build`.
 

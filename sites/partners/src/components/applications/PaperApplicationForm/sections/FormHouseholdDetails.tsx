@@ -1,15 +1,12 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
+import { t, Field, FieldGroup, Textarea } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import {
-  getUniqueUnitTypes,
-  adaFeatureKeys,
-  getUniqueUnitGroupUnitTypes,
-} from "@bloom-housing/shared-helpers"
+import { getUniqueUnitTypes, getUniqueUnitGroupUnitTypes } from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import {
   Accessibility,
+  ApplicationAccessibilityFeatureEnum,
   EnumListingListingType,
   Unit,
   UnitGroup,
@@ -22,10 +19,11 @@ type FormHouseholdDetailsProps = {
   applicationUnitTypes: UnitType[]
   applicationAccessibilityFeatures: Accessibility
   listingUnitGroups?: UnitGroup[]
-  enableOtherAdaOption?: boolean
   enableUnitGroups?: boolean
   enableFullTimeStudentQuestion?: boolean
+  enableReasonableAccommodations?: boolean
   listingType?: EnumListingListingType
+  visibleApplicationAccessibilityFeatures?: ApplicationAccessibilityFeatureEnum[]
 }
 
 const FormHouseholdDetails = ({
@@ -33,9 +31,10 @@ const FormHouseholdDetails = ({
   applicationUnitTypes,
   applicationAccessibilityFeatures,
   listingUnitGroups,
-  enableOtherAdaOption,
+  visibleApplicationAccessibilityFeatures,
   enableUnitGroups,
   enableFullTimeStudentQuestion,
+  enableReasonableAccommodations,
   listingType,
 }: FormHouseholdDetailsProps) => {
   const formMethods = useFormContext()
@@ -69,22 +68,23 @@ const FormHouseholdDetails = ({
     }
   })
 
-  const adaFeaturesOptions = adaFeatureKeys
-    .filter((item) => (item === "other" ? enableOtherAdaOption : true))
-    .map((item) => {
-      const isChecked =
-        applicationAccessibilityFeatures &&
-        Object.keys(applicationAccessibilityFeatures).includes(item) &&
-        applicationAccessibilityFeatures[item] === true
+  const orderedVisibleAdaFeatures = (visibleApplicationAccessibilityFeatures ?? []).sort((a, b) => {
+    if (a === "other") return 1
+    if (b === "other") return -1
+    return 0
+  })
 
-      return {
-        id: item,
-        label: t(`application.ada.${item}`),
-        value: item,
-        defaultChecked: isChecked,
-        dataTestId: `adaFeature.${item}`,
-      }
-    })
+  const adaFeaturesOptions = orderedVisibleAdaFeatures.map((item) => {
+    const isChecked = applicationAccessibilityFeatures?.[item] === true
+
+    return {
+      id: item,
+      label: t(`application.ada.${item}`),
+      value: item,
+      defaultChecked: isChecked,
+      dataTestId: `adaFeature.${item}`,
+    }
+  })
 
   return (
     <>
@@ -186,6 +186,21 @@ const FormHouseholdDetails = ({
             </FieldValue>
           </Grid.Cell>
         </Grid.Row>
+        {enableReasonableAccommodations && (
+          <Grid.Row columns="3">
+            <Grid.Cell className={"seeds-grid-span-2"}>
+              <Textarea
+                id="application.reasonableAccommodations"
+                name="application.reasonableAccommodations"
+                label={t("application.details.reasonableAccommodations")}
+                register={register}
+                fullWidth={true}
+                maxLength={1000}
+                placeholder={""}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
       </SectionWithGrid>
     </>
   )

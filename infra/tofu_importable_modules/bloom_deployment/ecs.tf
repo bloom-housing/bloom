@@ -127,6 +127,11 @@ locals {
             Effect   = "Allow"
             Resource = "arn:aws:ses:${var.aws_region}:${var.aws_account_number}:identity/*"
           },
+          {
+            Action   = "aps:RemoteWrite"
+            Effect   = "Allow"
+            Resource = aws_prometheus_workspace.bloom.arn
+          },
         ]
       })
     }
@@ -141,9 +146,9 @@ locals {
       container_policy = jsonencode({
         Version = "2012-10-17"
         Statement = [{
-          Action   = "*"
-          Effect   = "Deny"
-          Resource = "*"
+          Action   = "aps:RemoteWrite"
+          Effect   = "Allow"
+          Resource = aws_prometheus_workspace.bloom.arn
         }]
       })
     }
@@ -158,9 +163,9 @@ locals {
       container_policy = jsonencode({
         Version = "2012-10-17"
         Statement = [{
-          Action   = "*"
-          Effect   = "Deny"
-          Resource = "*"
+          Action   = "aps:RemoteWrite"
+          Effect   = "Allow"
+          Resource = aws_prometheus_workspace.bloom.arn
         }]
       })
     }

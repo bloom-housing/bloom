@@ -1,9 +1,9 @@
 import React, { useContext, useMemo, useState } from "react"
 import Head from "next/head"
-import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
-import { AgTable, useAgTable, t, AlertBox } from "@bloom-housing/ui-components"
+import { t, AlertBox } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import {
   FeatureFlagEnum,
   ListingViews,
@@ -17,7 +17,7 @@ import { FormUserManage } from "../../components/users/FormUserManage"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
 import { getUsersTabs, UsersIndexEnum } from "../../components/users/UsersViewHelpers"
-import TabView from "../../layouts/TabView"
+import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 
 type UserDrawerValue = {
   type: "add" | "edit"
@@ -25,7 +25,6 @@ type UserDrawerValue = {
 }
 
 const Users = () => {
-  const router = useRouter()
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const { mutate } = useSWRConfig()
   const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)
@@ -161,7 +160,9 @@ const Users = () => {
                 type="alert"
                 inverted
               >
-                {t("account.settings.alerts.genericError")}
+                {t("account.settings.alerts.genericError", {
+                  contactEmail: t("resources.contactEmail"),
+                })}
               </AlertBox>
             )}
             <AgTable

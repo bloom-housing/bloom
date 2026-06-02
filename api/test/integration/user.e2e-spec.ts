@@ -31,6 +31,7 @@ import { AddressUpdate } from '../../src/dtos/addresses/address-update.dto';
 import { UserOrderByKeys } from '../../src/enums/listings/order-by-enum';
 import { OrderByEnum } from '../../src/enums/shared/order-by-enum';
 import { AdvocateUserAccept } from '../../src/dtos/users/advocate-user-accept.dto';
+import { UserNotificationPreferences } from '../../src/dtos/users/user-notification-preferences.dto';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -41,9 +42,10 @@ describe('User Controller Tests', () => {
   let logger: Logger;
 
   const invitePartnerUserMock = jest.fn();
+  const welcomeMock = jest.fn();
   const testEmailService = {
     confirmation: jest.fn(),
-    welcome: jest.fn(),
+    welcome: welcomeMock,
     invitePartnerUser: invitePartnerUserMock,
     changeEmail: jest.fn(),
     forgotPassword: jest.fn(),
@@ -801,6 +803,76 @@ describe('User Controller Tests', () => {
       expect(userPostResend.resetToken).toBeNull();
       expect(mockforgotPassword.mock.calls.length).toBe(0);
     });
+
+    it('should set resetToken when forgot-password is called by approved advocate user', async () => {
+      const juris = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      const userA = await prisma.userAccounts.create({
+        data: await userFactory({
+          jurisdictionIds: [juris.id],
+          isAdvocate: true,
+          isApproved: true,
+        }),
+      });
+
+      const mockforgotPassword = jest.spyOn(testEmailService, 'forgotPassword');
+      const res = await request(app.getHttpServer())
+        .put(`/user/forgot-password/`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: userA.email,
+          appUrl: juris.publicUrl,
+        } as EmailAndAppUrl)
+        .expect(200);
+
+      expect(res.body.success).toBe(true);
+
+      const userPostResend = await prisma.userAccounts.findUnique({
+        where: {
+          id: userA.id,
+        },
+      });
+
+      expect(userPostResend.resetToken).not.toBeNull();
+      expect(mockforgotPassword.mock.calls.length).toBe(1);
+    });
+
+    it('should not set resetToken when forgot-password is called by unapproved advocate user', async () => {
+      const juris = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      const userA = await prisma.userAccounts.create({
+        data: await userFactory({
+          jurisdictionIds: [juris.id],
+          isAdvocate: true,
+          isApproved: false,
+        }),
+      });
+
+      const mockforgotPassword = jest.spyOn(testEmailService, 'forgotPassword');
+      const res = await request(app.getHttpServer())
+        .put(`/user/forgot-password/`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: userA.email,
+          appUrl: juris.publicUrl,
+        } as EmailAndAppUrl)
+        .expect(200);
+
+      expect(res.body.success).toBe(false);
+
+      const userPostResend = await prisma.userAccounts.findUnique({
+        where: {
+          id: userA.id,
+        },
+      });
+
+      expect(userPostResend.resetToken).toBeNull();
+      expect(mockforgotPassword.mock.calls.length).toBe(0);
+    });
   });
 
   describe('create endpoint', () => {
@@ -818,6 +890,7 @@ describe('User Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .post(`/user/public/`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set({ jurisdictionname: 'Bloomington' })
         .send({
           firstName: 'Public First Name',
           lastName: 'Public Last Name',
@@ -825,8 +898,10 @@ describe('User Controller Tests', () => {
           passwordConfirmation: 'Abcdef12345!',
           email: 'publicUser@email.com',
           emailConfirmation: 'publicUser@email.com',
+          language: LanguagesEnum.es,
           dob: new Date(),
           jurisdictions: [{ id: juris.id }],
+          appUrl: 'http://www.example.com',
         } as PublicUserCreate)
         .set('Cookie', cookies)
         .expect(201);
@@ -836,6 +911,17 @@ describe('User Controller Tests', () => {
         expect.objectContaining({ id: juris.id, name: juris.name }),
       ]);
       expect(res.body.email).toEqual('publicuser@email.com');
+      expect(res.body.language).toEqual('es');
+
+      expect(welcomeMock).toHaveBeenCalledWith(
+        'Bloomington',
+        expect.objectContaining({
+          language: LanguagesEnum.es,
+          email: 'publicuser@email.com',
+        }),
+        'http://www.example.com',
+        expect.stringContaining('http://www.example.com?token='),
+      );
 
       const applicationsOnUser = await prisma.userAccounts.findUnique({
         include: {
@@ -878,10 +964,7 @@ describe('User Controller Tests', () => {
         email: 'advocateUser@email.com',
         agreedToTermsOfService: true,
         agency: {
-          ...agencyData,
-          jurisdictions: {
-            id: agencyData.jurisdictionsId,
-          },
+          id: agencyData.id,
         },
         address: addressFactory() as AddressUpdate,
         jurisdictions: [{ id: juris.id }],
@@ -1409,6 +1492,69 @@ describe('User Controller Tests', () => {
 
       expect(updatedUser).toBe(null);
       expect(mockRejectedEmail.mock.calls.length).toBe(1);
+    });
+  });
+
+  describe('update users notification preferences', () => {
+    it('should update users notification preferences', async () => {
+      let res = await request(app.getHttpServer())
+        .get(`/user/preferences`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      let userPreferences: UserNotificationPreferences = res.body;
+
+      expect(userPreferences).toEqual({
+        lottery: false,
+        waitlist: false,
+        mobility: false,
+        hearing: false,
+        vision: false,
+        hearingAndVision: false,
+        mobilityAndHearing: false,
+        mobilityAndVision: false,
+        mobilityHearingAndVision: false,
+        wantsRegionNotifs: false,
+        regions: [],
+      });
+
+      res = await request(app.getHttpServer())
+        .put(`/user/preferences`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .send({
+          mobility: true,
+          hearingAndVision: true,
+          mobilityHearingAndVision: true,
+          wantsRegionNotifs: true,
+          regions: ['Noti Region'],
+        } as UserNotificationPreferences)
+        .expect(200);
+
+      expect(res.body.success).toBeTrue();
+
+      res = await request(app.getHttpServer())
+        .get('/user/preferences')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      userPreferences = res.body;
+
+      expect(userPreferences).toEqual({
+        lottery: false,
+        waitlist: false,
+        mobility: true,
+        hearing: false,
+        vision: false,
+        hearingAndVision: true,
+        mobilityAndHearing: false,
+        mobilityAndVision: false,
+        mobilityHearingAndVision: true,
+        wantsRegionNotifs: true,
+        regions: ['Noti Region'],
+      });
     });
   });
 });

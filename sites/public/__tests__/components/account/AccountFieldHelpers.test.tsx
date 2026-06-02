@@ -100,7 +100,9 @@ describe("AccountFieldHelpers", () => {
       expect(setUser).not.toHaveBeenCalled()
       expect(setAlert).toHaveBeenCalledWith({
         type: "alert",
-        message: t("account.settings.alerts.genericError"),
+        message: t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        }),
       })
       expect(consoleWarnSpy).toHaveBeenCalled()
     })
@@ -157,7 +159,9 @@ describe("AccountFieldHelpers", () => {
       expect(setUser).not.toHaveBeenCalled()
       expect(setAlert).toHaveBeenCalledWith({
         type: "alert",
-        message: t("account.settings.alerts.genericError"),
+        message: t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        }),
       })
       expect(consoleLogSpy).toHaveBeenCalled()
       expect(consoleWarnSpy).toHaveBeenCalled()
@@ -225,7 +229,9 @@ describe("AccountFieldHelpers", () => {
       expect(setUser).not.toHaveBeenCalled()
       expect(setAlert).toHaveBeenCalledWith({
         type: "alert",
-        message: t("account.settings.alerts.genericError"),
+        message: t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        }),
       })
       expect(consoleWarnSpy).toHaveBeenCalled()
     })
@@ -314,7 +320,9 @@ describe("AccountFieldHelpers", () => {
       expect(setUser).not.toHaveBeenCalled()
       expect(setAlert).toHaveBeenCalledWith({
         type: "alert",
-        message: t("account.settings.alerts.genericError"),
+        message: t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        }),
       })
       expect(consoleWarnSpy).toHaveBeenCalled()
     })
@@ -426,7 +434,9 @@ describe("AccountFieldHelpers", () => {
       expect(setUser).not.toHaveBeenCalled()
       expect(setAlert).toHaveBeenCalledWith({
         type: "alert",
-        message: t("account.settings.alerts.genericError"),
+        message: t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        }),
       })
       expect(consoleWarnSpy).toHaveBeenCalled()
     })
@@ -563,7 +573,9 @@ describe("AccountFieldHelpers", () => {
       expect(setUser).not.toHaveBeenCalled()
       expect(setAlert).toHaveBeenCalledWith({
         type: "alert",
-        message: t("account.settings.alerts.genericError"),
+        message: t("account.settings.alerts.genericError", {
+          contactEmail: t("resources.contactEmail"),
+        }),
       })
       expect(consoleWarnSpy).toHaveBeenCalled()
     })

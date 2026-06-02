@@ -65,7 +65,7 @@ describe("settings", () => {
       const { getByText, findByText } = render(<SettingsPreferences />)
 
       expect(getByText("Settings")).toBeInTheDocument()
-      expect(getByText("Preferences")).toBeInTheDocument()
+      expect(await findByText("Preferences")).toBeInTheDocument()
 
       await findByText("None")
       expect(getByText("None")).toBeInTheDocument()
@@ -229,7 +229,7 @@ describe("settings", () => {
       const { getByText, findByText, findByRole } = render(<SettingsPreferences />)
 
       expect(getByText("Settings")).toBeInTheDocument()
-      expect(getByText("Preferences")).toBeInTheDocument()
+      expect(await findByText("Preferences")).toBeInTheDocument()
 
       await findByText("Name")
       const table = await findByRole("table")

@@ -110,13 +110,14 @@ export const angelopolisListing: CypressListing = {
       { name: FeatureFlagEnum.enableListingImageAltText, active: true } as FeatureFlag,
       { name: FeatureFlagEnum.enableAccessibilityFeatures, active: true } as FeatureFlag,
       { name: FeatureFlagEnum.enableProperties, active: true } as FeatureFlag,
+      { name: FeatureFlagEnum.disableReservedCommunityTypeEdit, active: true } as FeatureFlag,
     ],
     listingFeaturesConfiguration: listingFeaturesConfiguration,
   } as Jurisdiction,
   jurisdictions: { id: "Angelopolis" },
   region: undefined,
   configurableRegion: "Harbor Area",
-  name: "Basic Test Listing Angelopolis",
+  name: `Basic Test Listing Angelopolis ${Date.now()}`,
   developer: "Basic Test Developer",
   listingsBuildingAddress: {
     street: "548 Market St. #59930",
@@ -128,8 +129,10 @@ export const angelopolisListing: CypressListing = {
   neighborhood: "Basic Test Neighborhood",
   yearBuilt: 2021,
   reservedCommunityTypes: {
-    id: "Seniors",
+    id: "Seniors 62+",
   },
+  reservedCommunityTypeDescription:
+    "This property is reserved for seniors aged 62 and older. Applicants must meet the age requirement to be eligible.",
   creditScreeningFee: "150",
   reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
   disableUnitsAccordion: true,

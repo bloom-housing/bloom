@@ -2,7 +2,10 @@ import { DateFieldValues, TimeFieldPeriod, TimeFieldValues } from "@bloom-housin
 import {
   fieldGroupObjectToArray,
   adaFeatureKeys,
+  mapApiToMultiselectFormV1,
+  mapCheckboxesToApiV1,
   mapApiToMultiselectForm,
+  getSelectionsForApplicationSection,
   mapCheckboxesToApi,
 } from "@bloom-housing/shared-helpers"
 import { FormTypes, ApplicationTypes, Address } from "../../lib/applications/FormTypes"
@@ -25,6 +28,8 @@ import {
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
   Application,
+  ApplicationSelectionUpdate,
+  ApplicationMultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 dayjs.extend(customParseFormat)
 
@@ -68,6 +73,7 @@ type mapFormToApiProps = {
   editMode: boolean
   programs: MultiselectQuestion[]
   preferences: MultiselectQuestion[]
+  enableV2MSQ: boolean
 }
 
 /*
@@ -80,6 +86,7 @@ export const mapFormToApi = ({
   editMode,
   programs,
   preferences,
+  enableV2MSQ,
 }: mapFormToApiProps) => {
   const language: LanguagesEnum | null = data.application?.language
     ? data.application?.language
@@ -107,6 +114,10 @@ export const mapFormToApi = ({
   }
 
   const submissionDate: Date | null = getDateTime(data?.dateSubmitted, data?.timeSubmitted)
+
+  const receivedAt: Date | null = getDateTime(data?.dateReceived, data?.timeReceived)
+
+  const receivedBy = data.application?.receivedBy || null
 
   // create applicant
   const applicant = ((): ApplicantUpdate => {
@@ -141,13 +152,45 @@ export const mapFormToApi = ({
     }
   })()
 
-  const preferencesData = preferences.map((pref: MultiselectQuestion) => {
-    return mapCheckboxesToApi(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences)
-  })
+  // TODO: We can sunset this after full V2MSQ rollout
+  let preferencesData: ApplicationMultiselectQuestion[] = []
+  if (!enableV2MSQ) {
+    preferencesData = preferences.map((pref: MultiselectQuestion) => {
+      return mapCheckboxesToApiV1(
+        data,
+        pref,
+        MultiselectQuestionsApplicationSectionEnum.preferences
+      )
+    })
+  }
 
-  const programsData = programs.map((program: MultiselectQuestion) => {
-    return mapCheckboxesToApi(data, program, MultiselectQuestionsApplicationSectionEnum.programs)
-  })
+  // TODO: We can sunset this after full V2MSQ rollout
+  let programsData: ApplicationMultiselectQuestion[] = []
+  if (!enableV2MSQ) {
+    programsData = programs.map((program: MultiselectQuestion) => {
+      return mapCheckboxesToApiV1(
+        data,
+        program,
+        MultiselectQuestionsApplicationSectionEnum.programs
+      )
+    })
+  }
+
+  let selections: ApplicationSelectionUpdate[] = []
+  if (enableV2MSQ) {
+    programs.forEach((program: MultiselectQuestion) => {
+      selections = [
+        ...selections,
+        mapCheckboxesToApi(data, program, MultiselectQuestionsApplicationSectionEnum.programs),
+      ]
+    })
+    preferences.forEach((pref: MultiselectQuestion) => {
+      selections = [
+        ...selections,
+        mapCheckboxesToApi(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences),
+      ]
+    })
+  }
 
   // additional phone
   const {
@@ -200,9 +243,18 @@ export const mapFormToApi = ({
   const acceptedTerms = getBooleanValue(data.application.acceptedTerms)
   const householdExpectingChanges = getBooleanValue(data.application.householdExpectingChanges)
   const householdStudent = getBooleanValue(data.application.householdStudent)
+  const reasonableAccommodations = data.application.reasonableAccommodations || null
 
   const submissionType = editMode ? data.submissionType : ApplicationSubmissionTypeEnum.paper
   const status = data.application.status || ApplicationStatusEnum.submitted
+  const applicationDeclineReason =
+    status === ApplicationStatusEnum.declined
+      ? data.application.applicationDeclineReason || null
+      : null
+  const applicationDeclineReasonAdditionalDetails =
+    status === ApplicationStatusEnum.declined && applicationDeclineReason
+      ? data.application.applicationDeclineReasonAdditionalDetails || null
+      : null
 
   const listings = {
     id: listingId,
@@ -222,7 +274,7 @@ export const mapFormToApi = ({
 
   const accessibility: Omit<Accessibility, "id" | "createdAt" | "updatedAt"> =
     adaFeatureKeys.reduce((acc, feature) => {
-      acc[feature] = data.application.accessibility.includes(feature)
+      acc[feature] = data.application.accessibility?.includes(feature)
       return acc
     }, {})
 
@@ -233,6 +285,8 @@ export const mapFormToApi = ({
   } = data.application
 
   const result = {
+    receivedAt,
+    receivedBy,
     submissionDate,
     language,
     applicant,
@@ -246,8 +300,10 @@ export const mapFormToApi = ({
     accessibility,
     householdExpectingChanges,
     householdStudent,
+    reasonableAccommodations,
     preferences: preferencesData,
     programs: programsData,
+    applicationSelections: selections,
     income,
     incomePeriod,
     incomeVouchers,
@@ -255,6 +311,8 @@ export const mapFormToApi = ({
     acceptedTerms,
     submissionType,
     status,
+    applicationDeclineReason,
+    applicationDeclineReasonAdditionalDetails,
     listings,
     preferredUnitTypes: preferredUnit,
     applicationsAlternateAddress: alternateAddress,
@@ -278,10 +336,18 @@ export const mapFormToApi = ({
   Format data which comes from the API into correct react-hook-form format.
 */
 
-export const mapApiToForm = (applicationData: Application, listing: Listing) => {
+export const mapApiToForm = (
+  applicationData: Application,
+  listing: Listing,
+  enableV2MSQ: boolean
+) => {
   const submissionDate = applicationData.submissionDate
     ? dayjs(new Date(applicationData.submissionDate))
     : null
+
+  const receivedAt = applicationData.receivedAt ? dayjs(new Date(applicationData.receivedAt)) : null
+
+  const receivedBy = applicationData.receivedBy
 
   const dateOfBirth = (() => {
     const { birthDay, birthMonth, birthYear } = applicationData.applicant
@@ -327,21 +393,71 @@ export const mapApiToForm = (applicationData: Application, listing: Listing) => 
     }
   })()
 
+  const timeReceived = (() => {
+    if (!receivedAt) return
+
+    const hours = receivedAt.format("hh")
+    const minutes = receivedAt.format("mm")
+    const seconds = receivedAt.format("ss")
+    const period = receivedAt.format("a").toLowerCase() as TimeFieldPeriod
+
+    return {
+      hours,
+      minutes,
+      seconds,
+      period,
+    }
+  })()
+
+  const dateReceived = (() => {
+    if (!receivedAt) return null
+
+    const month = receivedAt.format("MM")
+    const day = receivedAt.format("DD")
+    const year = receivedAt.format("YYYY")
+
+    return {
+      month,
+      day,
+      year,
+    }
+  })()
+
   const phoneNumber = applicationData.applicant.phoneNumber
 
   const preferences =
-    mapApiToMultiselectForm(
-      Array.isArray(applicationData.preferences) ? applicationData.preferences : [],
-      listing?.listingMultiselectQuestions,
-      MultiselectQuestionsApplicationSectionEnum.preferences
-    ).application.preferences ?? []
+    (enableV2MSQ
+      ? mapApiToMultiselectForm(
+          getSelectionsForApplicationSection(
+            listing?.listingMultiselectQuestions || [],
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+            applicationData.applicationSelections
+          ) || [],
+          listing?.listingMultiselectQuestions || [],
+          MultiselectQuestionsApplicationSectionEnum.preferences
+        ).application.preferences
+      : mapApiToMultiselectFormV1(
+          Array.isArray(applicationData.preferences) ? applicationData.preferences : [],
+          listing?.listingMultiselectQuestions,
+          MultiselectQuestionsApplicationSectionEnum.preferences
+        ).application.preferences) ?? []
 
   const programs =
-    mapApiToMultiselectForm(
-      Array.isArray(applicationData.programs) ? applicationData.programs : [],
-      listing?.listingMultiselectQuestions,
-      MultiselectQuestionsApplicationSectionEnum.programs
-    ).application.programs ?? []
+    (enableV2MSQ
+      ? mapApiToMultiselectForm(
+          getSelectionsForApplicationSection(
+            listing?.listingMultiselectQuestions || [],
+            MultiselectQuestionsApplicationSectionEnum.programs,
+            applicationData.applicationSelections
+          ) || [],
+          listing?.listingMultiselectQuestions || [],
+          MultiselectQuestionsApplicationSectionEnum.programs
+        ).application.programs
+      : mapApiToMultiselectFormV1(
+          Array.isArray(applicationData.programs) ? applicationData.programs : [],
+          listing?.listingMultiselectQuestions,
+          MultiselectQuestionsApplicationSectionEnum.programs
+        ).application.programs) ?? []
 
   const application: ApplicationTypes = (() => {
     const {
@@ -355,6 +471,8 @@ export const mapApiToForm = (applicationData: Application, listing: Listing) => 
       additionalPhoneNumberType,
       alternateContact,
       status,
+      applicationDeclineReason,
+      applicationDeclineReasonAdditionalDetails,
       accessibleUnitWaitlistNumber,
       conventionalUnitWaitlistNumber,
       manualLotteryPositionNumber,
@@ -364,6 +482,7 @@ export const mapApiToForm = (applicationData: Application, listing: Listing) => 
     const acceptedTerms = getYesNoValue(applicationData.acceptedTerms)
     const householdExpectingChanges = getYesNoValue(applicationData.householdExpectingChanges)
     const householdStudent = getYesNoValue(applicationData.householdStudent)
+    const reasonableAccommodations = applicationData.reasonableAccommodations
 
     const workInRegion = applicationData.applicant.workInRegion
 
@@ -396,13 +515,17 @@ export const mapApiToForm = (applicationData: Application, listing: Listing) => 
       accessibility,
       householdExpectingChanges,
       householdStudent,
+      reasonableAccommodations,
       incomePeriod,
       incomeVouchers,
       demographics,
       acceptedTerms,
       alternateContact,
       programs,
+      receivedBy,
       status,
+      applicationDeclineReason,
+      applicationDeclineReasonAdditionalDetails,
       accessibleUnitWaitlistNumber,
       conventionalUnitWaitlistNumber,
       manualLotteryPositionNumber,
@@ -415,6 +538,8 @@ export const mapApiToForm = (applicationData: Application, listing: Listing) => 
     dateOfBirth,
     dateSubmitted,
     timeSubmitted,
+    dateReceived,
+    timeReceived,
     phoneNumber,
     incomeMonth,
     incomeYear,

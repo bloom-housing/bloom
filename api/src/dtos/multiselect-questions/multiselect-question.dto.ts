@@ -132,6 +132,7 @@ class MultiselectQuestion extends AbstractDTO {
   @ApiPropertyOptional()
   untranslatedText?: string;
 
+  // TODO: This will be sunseted after MSQ refactor
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()

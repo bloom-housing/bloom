@@ -61,7 +61,7 @@ export const bloomingtonListing: CypressListing = {
     listingFeaturesConfiguration: listingFeaturesConfiguration,
   } as Jurisdiction,
   jurisdictions: { id: "Bloomington" },
-  name: "Basic Test Listing Bloomington",
+  name: `Basic Test Listing Bloomington ${Date.now()}`,
   developer: "Basic Test Developer",
   listingsBuildingAddress: {
     street: "548 Market St. #59930",
@@ -80,7 +80,7 @@ export const bloomingtonListing: CypressListing = {
       multiselectQuestions: {
         name: "Work in the city",
         applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
-        description: "At least one member of my household works in the city",
+        description: "Workers in the local city.",
       },
     } as ListingMultiselectQuestion,
     {

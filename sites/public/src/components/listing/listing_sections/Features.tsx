@@ -8,7 +8,7 @@ type FeaturesProps = {
   children: React.ReactNode
   features: {
     heading: string
-    subheading?: string
+    subheading?: React.ReactNode
     content?: React.ReactNode
   }[]
 }

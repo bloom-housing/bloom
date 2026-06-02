@@ -1,4 +1,5 @@
 export enum AddressHolder {
-  Relationship = "addressHolderRelationship",
+  Address = "addressHolderAddress",
   Name = "addressHolderName",
+  Relationship = "addressHolderRelationship",
 }

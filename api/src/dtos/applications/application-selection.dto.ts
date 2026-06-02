@@ -29,6 +29,6 @@ export class ApplicationSelection extends IdOnlyDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationSelectionOption)
-  @ApiProperty({ type: ApplicationSelectionOption })
+  @ApiProperty({ type: ApplicationSelectionOption, isArray: true })
   selections: ApplicationSelectionOption[];
 }

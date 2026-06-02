@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-import { t, Form, AlertBox, LoadingOverlay } from "@bloom-housing/ui-components"
-import { Button, Dialog } from "@bloom-housing/ui-seeds"
+import { t, Form, AlertBox } from "@bloom-housing/ui-components"
+import { Button, Dialog, LoadingState } from "@bloom-housing/ui-seeds"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -43,7 +43,8 @@ type AlertErrorType = "api" | "form"
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
   const { data: jurisdictionData } = useJurisdiction(listingDto?.jurisdictions?.id)
-  const { doJurisdictionsHaveFeatureFlagOn, applicationsService } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn, applicationsService, getJurisdictionLanguages } =
+    useContext(AuthContext)
 
   const preferences = listingSectionQuestions(
     listingDto,
@@ -71,11 +72,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
-  const enableAdaOtherOption = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableAdaOtherOption,
-    listingDto?.jurisdictions.id
-  )
-
   const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableWorkInRegion,
     listingDto?.jurisdictions.id
@@ -96,6 +92,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
+  const enableGenderQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableGenderQuestion,
+    listingDto?.jurisdictions.id
+  )
+
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
@@ -104,10 +105,24 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     FeatureFlagEnum.enableHousingAdvocate,
     listingDto?.jurisdictions.id
   )
+  const enableReasonableAccommodations = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReasonableAccommodations,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableV2MSQ,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableReceivedAtAndByFields = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReceivedAtAndByFields,
+    listingDto?.jurisdictions.id
+  )
 
   const units = listingDto?.units
 
-  const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}
+  const defaultValues = editMode ? mapApiToForm(application, listingDto, enableV2MSQ) : {}
 
   const formMethods = useForm<FormTypes>({
     defaultValues,
@@ -136,6 +151,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     data: FormTypes
     redirect: "details" | "new"
   } | null>(null)
+
+  const availableJurisdictionLanguages = listingDto?.jurisdictions?.id
+    ? getJurisdictionLanguages(listingDto?.jurisdictions?.id)
+    : []
 
   useEffect(() => {
     if (application?.householdMember) {
@@ -194,6 +213,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
         id: applicationId,
         body: {
           previousStatus: application.status,
+          previousApplicationDeclineReason: application.applicationDeclineReason,
           previousAccessibleUnitWaitlistNumber: application.accessibleUnitWaitlistNumber,
           previousConventionalUnitWaitlistNumber: application.conventionalUnitWaitlistNumber,
         },
@@ -219,6 +239,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       editMode,
       programs: programs.map((item) => item?.multiselectQuestions),
       preferences: preferences.map((item) => item?.multiselectQuestions),
+      enableV2MSQ,
     })
 
     try {
@@ -295,14 +316,13 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   }
 
   return (
-    <LoadingOverlay isLoading={loading}>
-      <>
-        <StatusBar>
-          <ApplicationStatusTag status={application?.status} />
-        </StatusBar>
-
+    <>
+      <StatusBar>
+        <ApplicationStatusTag status={application?.status} />
+      </StatusBar>
+      <LoadingState loading={loading}>
         <FormProvider {...formMethods}>
-          <section className="bg-primary-lighter py-5">
+          <section className="py-5">
             <div className="max-w-screen-xl px-5 mx-auto">
               {editMode && application?.markedAsDuplicate && (
                 <AlertBox className="mb-5" type="alert">
@@ -322,10 +342,13 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                   <div className="info-card md:w-9/12">
                     <FormApplicationData
                       enableApplicationStatus={enableApplicationStatus}
+                      enableReceivedAtAndByFields={enableReceivedAtAndByFields}
+                      appType={application?.submissionType}
                       disableApplicationStatusControls={
                         enableApplicationStatus && editMode && application?.markedAsDuplicate
                       }
                       reviewOrderType={listingDto?.reviewOrderType}
+                      availableJurisdictionLanguages={availableJurisdictionLanguages}
                     />
 
                     <FormPrimaryApplicant
@@ -340,6 +363,9 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       setHouseholdMembers={setHouseholdMembers}
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                       disableWorkInRegion={disableWorkInRegion}
+                      visibleHouseholdMemberRelationships={
+                        jurisdictionData?.visibleHouseholdMemberRelationships
+                      }
                     />
 
                     <FormHouseholdDetails
@@ -347,9 +373,12 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       listingUnitGroups={listingDto?.unitGroups}
                       applicationUnitTypes={application?.preferredUnitTypes}
                       applicationAccessibilityFeatures={application?.accessibility}
-                      enableOtherAdaOption={enableAdaOtherOption}
+                      visibleApplicationAccessibilityFeatures={
+                        jurisdictionData?.visibleApplicationAccessibilityFeatures
+                      }
                       enableUnitGroups={enableUnitGroups}
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                      enableReasonableAccommodations={enableReasonableAccommodations}
                     />
 
                     <FormMultiselectQuestions
@@ -360,6 +389,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                           ? t("application.details.communityTypes")
                           : t("application.details.programs")
                       }
+                      enableV2MSQ={enableV2MSQ}
                     />
 
                     <FormHouseholdIncome />
@@ -368,6 +398,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       questions={preferences}
                       applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
                       sectionTitle={t("application.details.preferences")}
+                      enableV2MSQ={enableV2MSQ}
                     />
 
                     <FormDemographics
@@ -377,6 +408,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       raceEthnicityConfiguration={jurisdictionData?.raceEthnicityConfiguration}
                       enableSpokenLanguage={enableSpokenLanguage}
                       visibleSpokenLanguages={jurisdictionData?.visibleSpokenLanguages}
+                      enableGenderQuestion={enableGenderQuestion}
                     />
 
                     <FormTerms />
@@ -395,51 +427,50 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
             </div>
           </section>
         </FormProvider>
-
-        <Dialog
-          isOpen={confirmOpen}
-          ariaLabelledBy="application-save-confirmation-header"
-          ariaDescribedBy="application-save-confirmation-content"
-          onClose={closeConfirmDialog}
-        >
-          <Dialog.Header id="application-save-confirmation-header">
-            {t("application.confirmation.header")}
-          </Dialog.Header>
-          <Dialog.Content id="application-save-confirmation-content">
-            {confirmSections.changes.length > 0 && (
-              <>
-                <p>{t("application.confirmation.changesIntro")}</p>
-                <ul className="list-disc pl-5">
-                  {confirmSections.changes.map((item) => (
-                    <li key={`${item.label}-${item.value}`}>{`${item.label}: ${item.value}`}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-            {confirmSections.removals.length > 0 && (
-              <>
-                <p className={confirmSections.changes.length > 0 ? "mt-6" : ""}>
-                  {t("application.confirmation.removalsIntro")}
-                </p>
-                <ul className="list-disc pl-5">
-                  {confirmSections.removals.map((item) => (
-                    <li key={`${item.label}-${item.value}`}>{`${item.label}: ${item.value}`}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-          </Dialog.Content>
-          <Dialog.Footer>
-            <Button variant="primary" size="sm" onClick={() => void confirmSubmit()}>
-              {t("application.add.saveAndExit")}
-            </Button>
-            <Button variant="primary-outlined" size="sm" onClick={closeConfirmDialog}>
-              {t("t.cancel")}
-            </Button>
-          </Dialog.Footer>
-        </Dialog>
-      </>
-    </LoadingOverlay>
+      </LoadingState>
+      <Dialog
+        isOpen={confirmOpen}
+        ariaLabelledBy="application-save-confirmation-header"
+        ariaDescribedBy="application-save-confirmation-content"
+        onClose={closeConfirmDialog}
+      >
+        <Dialog.Header id="application-save-confirmation-header">
+          {t("application.confirmation.header")}
+        </Dialog.Header>
+        <Dialog.Content id="application-save-confirmation-content">
+          {confirmSections.changes.length > 0 && (
+            <>
+              <p>{t("application.confirmation.changesIntro")}</p>
+              <ul className="list-disc pl-5">
+                {confirmSections.changes.map((item) => (
+                  <li key={`${item.label}-${item.value}`}>{`${item.label}: ${item.value}`}</li>
+                ))}
+              </ul>
+            </>
+          )}
+          {confirmSections.removals.length > 0 && (
+            <>
+              <p className={confirmSections.changes.length > 0 ? "mt-6" : ""}>
+                {t("application.confirmation.removalsIntro")}
+              </p>
+              <ul className="list-disc pl-5">
+                {confirmSections.removals.map((item) => (
+                  <li key={`${item.label}-${item.value}`}>{`${item.label}: ${item.value}`}</li>
+                ))}
+              </ul>
+            </>
+          )}
+        </Dialog.Content>
+        <Dialog.Footer>
+          <Button variant="primary" size="sm" onClick={() => void confirmSubmit()}>
+            {t("application.add.saveAndExit")}
+          </Button>
+          <Button variant="primary-outlined" size="sm" onClick={closeConfirmDialog}>
+            {t("t.cancel")}
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
+    </>
   )
 }
 

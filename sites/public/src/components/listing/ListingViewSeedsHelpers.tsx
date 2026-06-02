@@ -15,6 +15,7 @@ import {
   ListingMultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
   ListingFeaturesConfiguration,
+  ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   FieldGroup,
@@ -27,12 +28,12 @@ import {
 import {
   allListingFeatures,
   cloudinaryPdfFromId,
-  getOccupancyDescription,
   ListingFeaturesValues,
   listingParkingTypes,
   listingUtilities,
   stackedOccupancyTable,
   stackedUnitGroupsOccupancyTable,
+  tIfExists,
 } from "@bloom-housing/shared-helpers"
 import { downloadExternalPDF, isFeatureFlagOn } from "../../lib/helpers"
 import { CardList, ContentCardProps } from "../../patterns/CardList"
@@ -227,18 +228,27 @@ export const getFeatures = (
       features.push({
         heading: t("t.petsPolicy"),
         content: (
-          <ul data-testid="pet-policy-list">
-            {petPolicy.map((petPolicyItem, index) => (
-              <li key={index} className={styles["list-item"]}>
-                {petPolicyItem}
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul data-testid="pet-policy-list">
+              {petPolicy.map((petPolicyItem, index) => (
+                <li key={index} className={styles["list-item"]}>
+                  {petPolicyItem}
+                </li>
+              ))}
+            </ul>
+            {tIfExists("listings.petPolicyDescription") && (
+              <p className={"seeds-m-bs-2"}>{t("listings.petPolicyDescription")}</p>
+            )}
+          </>
         ),
       })
     }
   } else if (listing.petPolicy) {
-    features.push({ heading: t("t.petsPolicy"), subheading: listing.petPolicy })
+    features.push({
+      heading: t("t.petsPolicy"),
+      subheading: listing.petPolicy,
+      content: tIfExists("listings.petPolicyDescription"),
+    })
   }
   if (listing.amenities) {
     features.push({ heading: t("t.propertyAmenities"), subheading: listing.amenities })
@@ -493,20 +503,19 @@ export const getEligibilitySections = (
 ): EligibilitySection[] => {
   const eligibilityFeatures: EligibilitySection[] = []
 
-  const swapCommunityTypeWithPrograms = isFeatureFlagOn(
-    jurisdiction,
-    FeatureFlagEnum.swapCommunityTypeWithPrograms
-  )
   const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
-
+  const enableV2MSQ = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableV2MSQ)
+  const disableBuildingSelectionCriteria = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.disableBuildingSelectionCriteria
+  )
   const disableListingPreferences = isFeatureFlagOn(
     jurisdiction,
     FeatureFlagEnum.disableListingPreferences
   )
-
-  const disableBuildingSelectionCriteria = isFeatureFlagOn(
+  const swapCommunityTypeWithPrograms = isFeatureFlagOn(
     jurisdiction,
-    FeatureFlagEnum.disableBuildingSelectionCriteria
+    FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
 
   // Reserved community type
@@ -531,7 +540,8 @@ export const getEligibilitySections = (
   const stackedHmiData = getStackedHmiData(listing)
   const hideHMI =
     (enableUnitGroups && stackedUnitGroupsHmiData.length === 0) ||
-    (!enableUnitGroups && stackedHmiData.length === 0)
+    (!enableUnitGroups && stackedHmiData.length === 0) ||
+    listing.status === ListingsStatusEnum.closed
   if (!hideHMI) {
     eligibilityFeatures.push({
       header: t("listings.householdMaximumIncome"),
@@ -561,7 +571,7 @@ export const getEligibilitySections = (
   if (!hideOccupancy) {
     eligibilityFeatures.push({
       header: t("t.occupancy"),
-      subheader: getOccupancyDescription(listing, enableUnitGroups),
+      subheader: t("listings.occupancyDescriptionNoSro"),
       content: (
         <StackedTable
           headers={{
@@ -596,7 +606,9 @@ export const getEligibilitySections = (
         <OrderedCardList
           cardContent={sortedPreferences.map((question) => {
             return {
-              heading: question.multiselectQuestions.name || question.multiselectQuestions.text,
+              heading: enableV2MSQ
+                ? question.multiselectQuestions.name
+                : question.multiselectQuestions.text,
               description: question.multiselectQuestions.description,
             }
           })}
@@ -622,8 +634,9 @@ export const getEligibilitySections = (
               <CardList
                 cardContent={sortedPrograms.map((question) => {
                   return {
-                    heading:
-                      question.multiselectQuestions.name || question.multiselectQuestions.text,
+                    heading: enableV2MSQ
+                      ? question.multiselectQuestions.name
+                      : question.multiselectQuestions.text,
                     description: question.multiselectQuestions.description,
                   }
                 })}
@@ -637,12 +650,20 @@ export const getEligibilitySections = (
             content: (
               <CardList
                 cardContent={sortedPrograms.map((question) => {
+                  const heading = enableV2MSQ
+                    ? t(
+                        question.multiselectQuestions.untranslatedName
+                          ? `listingFilters.program.${question.multiselectQuestions.untranslatedName}`
+                          : `listingFilters.program.${question.multiselectQuestions.name}`
+                      )
+                    : t(
+                        question.multiselectQuestions.untranslatedText
+                          ? `listingFilters.program.${question.multiselectQuestions.untranslatedText}`
+                          : `listingFilters.program.${question.multiselectQuestions.text}`
+                      )
+
                   return {
-                    heading: t(
-                      question.multiselectQuestions.untranslatedText
-                        ? `listingFilters.program.${question.multiselectQuestions.untranslatedText}`
-                        : `listingFilters.program.${question.multiselectQuestions.text}`
-                    ),
+                    heading: heading,
                     description: question.multiselectQuestions.description,
                   }
                 })}

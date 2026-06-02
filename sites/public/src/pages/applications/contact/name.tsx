@@ -14,7 +14,6 @@ import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
-  LockIcon,
   onFormError,
 } from "../../../layouts/application-form"
 
@@ -40,9 +39,8 @@ const ApplicationName = () => {
     const validation = await trigger()
     if (!validation) return
 
-    if (!autofilled) {
-      conductor.currentStep.save({ applicant: { ...application.applicant, ...data.applicant } })
-    }
+    conductor.currentStep.save({ applicant: { ...application.applicant, ...data.applicant } })
+
     conductor.routeToNextOrReturnUrl()
   }
 
@@ -95,14 +93,12 @@ const ApplicationName = () => {
                 <legend
                   className={`text__caps-spaced ${errors.applicant?.firstName ? "text-alert" : ""}`}
                 >
-                  <LockIcon locked={autofilled} />
                   {t("application.name.yourName")}
                 </legend>
 
                 <Field
                   name="applicant.firstName"
                   label={t("application.name.firstOrGivenName")}
-                  disabled={autofilled}
                   defaultValue={application.applicant.firstName}
                   validation={{ required: true, maxLength: 64 }}
                   error={errors.applicant?.firstName}
@@ -118,7 +114,6 @@ const ApplicationName = () => {
                 <Field
                   name="applicant.middleName"
                   label={t("application.name.middleNameOptional")}
-                  disabled={autofilled}
                   defaultValue={application.applicant.middleName}
                   register={register}
                   dataTestId={"app-primary-middle-name"}
@@ -130,7 +125,6 @@ const ApplicationName = () => {
                 <Field
                   name="applicant.lastName"
                   label={t("application.name.lastOrFamilyName")}
-                  disabled={autofilled}
                   defaultValue={application.applicant.lastName}
                   validation={{ required: true, maxLength: 64 }}
                   error={errors.applicant?.lastName}
@@ -152,7 +146,6 @@ const ApplicationName = () => {
                 birthMonth: application.applicant.birthMonth,
                 birthYear: application.applicant.birthYear,
               }}
-              disabled={autofilled}
               register={register}
               required={true}
               error={errors.applicant}
@@ -161,12 +154,7 @@ const ApplicationName = () => {
               watch={watch}
               validateAge18={true}
               errorMessage={t("errors.dateOfBirthErrorAge")}
-              label={
-                <>
-                  <LockIcon locked={autofilled} />
-                  {t("application.name.yourDateOfBirth")}
-                </>
-              }
+              label={t("application.name.yourDateOfBirth")}
             />
             <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
           </CardSection>
@@ -177,7 +165,6 @@ const ApplicationName = () => {
                   errors.applicant?.emailAddress ? "text-alert" : ""
                 }`}
               >
-                <LockIcon locked={autofilled} />
                 {t("application.name.yourEmailAddress")}
               </legend>
 
@@ -203,7 +190,7 @@ const ApplicationName = () => {
                 errorMessage={emailErrorMessage}
                 register={register}
                 onChange={() => clearErrors("applicant.emailAddress")}
-                disabled={clientLoaded && (noEmail || autofilled)}
+                disabled={clientLoaded && noEmail}
                 dataTestId={"app-primary-email"}
                 subNote={"example@mail.com"}
               />
@@ -215,7 +202,7 @@ const ApplicationName = () => {
                 label={t("application.name.noEmailAddress")}
                 primary={true}
                 register={register}
-                disabled={clientLoaded && (emailPresent?.length > 0 || autofilled)}
+                disabled={clientLoaded && emailPresent?.length > 0}
                 onChange={(e) => {
                   if (e.target.checked) clearErrors("applicant.emailAddress")
                 }}

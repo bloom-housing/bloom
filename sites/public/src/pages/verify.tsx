@@ -84,7 +84,10 @@ const Verify = () => {
   }
 
   return (
-    <FormsLayout pageTitle={t("pageTitle.verifyCode")}>
+    <FormsLayout
+      pageTitle={t("pageTitle.verifyCode")}
+      metaDescription={t("pageDescription.verifyCode")}
+    >
       <BloomCard
         title={t("account.pwdless.verifyTitle")}
         iconSymbol={"userCircle"}

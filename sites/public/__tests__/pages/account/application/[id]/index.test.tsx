@@ -40,7 +40,9 @@ const renderApplicationView = (enableApplicationStatus = false) =>
         applicationsService: new ApplicationsService(),
         listingsService: new ListingsService(),
         doJurisdictionsHaveFeatureFlagOn: (flag) =>
-          flag === FeatureFlagEnum.enableApplicationStatus ? enableApplicationStatus : false,
+          flag === FeatureFlagEnum.enableApplicationStatus
+            ? enableApplicationStatus
+            : flag === FeatureFlagEnum.enableReasonableAccommodations,
       }}
     >
       <ApplicationView />
@@ -278,6 +280,19 @@ describe("Account Listing View", () => {
       within(householdStudentSection).getByText(/household includes student or member nearing 18/i)
     ).toBeInTheDocument()
     expect(within(householdStudentSection).getByText(/no/i)).toBeInTheDocument()
+
+    const reasonableAccommodationsSection = screen.getByTestId(
+      "app-summary-reasonable-accommodations"
+    )
+    expect(reasonableAccommodationsSection).toBeInTheDocument()
+    expect(
+      within(reasonableAccommodationsSection).getByText(
+        /do you require reasonable accommodations\?/i
+      )
+    ).toBeInTheDocument()
+    expect(
+      within(reasonableAccommodationsSection).getByText(/wheelchair-accessible unit entrance/i)
+    ).toBeInTheDocument()
 
     // --------------------------- Programs ------------------------------------
 

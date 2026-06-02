@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Select, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
-import { Grid } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import {
   ReservedCommunityType,
   YesNoEnum,
@@ -20,12 +20,14 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
 type CommunityTypeProps = {
+  disableReservedCommunityTypeEdit?: boolean
   listing?: FormListing
   requiredFields: string[]
   swapCommunityTypeWithPrograms?: boolean
 }
 
 const CommunityType = ({
+  disableReservedCommunityTypeEdit,
   listing,
   requiredFields,
   swapCommunityTypeWithPrograms,
@@ -40,6 +42,10 @@ const CommunityType = ({
   const [currentCommunityType, setCurrentCommunityType] = useState(
     listing?.reservedCommunityTypes?.id
   )
+
+  // Store the reserved community description in state for immediate updates
+  const [description, setDescription] = useState<string>("")
+  const hasInitializedCommunityTypeDescription = useRef(false)
 
   const { data: reservedCommunityTypes = [], loading } = useReservedCommunityTypeList()
 
@@ -81,6 +87,27 @@ const CommunityType = ({
     }
   }, [setValue, listing?.includeCommunityDisclaimer, watch, listing])
 
+  useEffect(() => {
+    if (loading) return
+
+    const matchedType = currentCommunityType
+      ? reservedCommunityTypes.find((type) => type.id === currentCommunityType)
+      : undefined
+    const nextDescription = matchedType?.description ?? ""
+
+    // Always show the selected community type's description in read-only mode.
+    setDescription(nextDescription)
+
+    // Skip auto-overwriting the listing's existing description on initial form load.
+    if (!hasInitializedCommunityTypeDescription.current) {
+      hasInitializedCommunityTypeDescription.current = true
+      return
+    }
+
+    // For subsequent type changes, keep the editable description in sync with selection.
+    setValue("reservedCommunityDescription", nextDescription)
+  }, [currentCommunityType, reservedCommunityTypes, loading, setValue])
+
   return !swapCommunityTypeWithPrograms ? (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -116,29 +143,46 @@ const CommunityType = ({
             </Grid.Cell>
           )}
         </Grid.Row>
-        <Grid.Row columns={3}>
+        <Grid.Row
+          columns={3}
+          className={!disableReservedCommunityTypeEdit ? styles["hidden-field"] : ""}
+        >
           <Grid.Cell className="seeds-grid-span-2">
-            <Textarea
-              label={getLabel(
-                "reservedCommunityDescription",
-                requiredFields,
-                t("listings.reservedCommunityDescription")
-              )}
-              placeholder={""}
-              name={"reservedCommunityDescription"}
-              id={"reservedCommunityDescription"}
-              fullWidth={true}
-              register={register}
-              note={t("listings.appearsInListing")}
-              errorMessage={fieldMessage(errors?.reservedCommunityDescription)}
-              inputProps={{
-                onChange: () => {
-                  fieldHasError(errors?.reservedCommunityDescription) &&
-                    clearErrors("reservedCommunityDescription")
-                },
-                "aria-required": fieldIsRequired("reservedCommunityDescription", requiredFields),
-              }}
-            />
+            {disableReservedCommunityTypeEdit && (
+              <FieldValue label={t("listings.reservedCommunityDescription")}>
+                {description || t("t.none")}
+              </FieldValue>
+            )}
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row
+          columns={3}
+          className={disableReservedCommunityTypeEdit ? styles["hidden-field"] : ""}
+        >
+          <Grid.Cell className="seeds-grid-span-2">
+            <div>
+              <Textarea
+                label={getLabel(
+                  "reservedCommunityDescription",
+                  requiredFields,
+                  t("listings.reservedCommunityDescription")
+                )}
+                placeholder={""}
+                name={"reservedCommunityDescription"}
+                id={"reservedCommunityDescription"}
+                fullWidth={true}
+                register={register}
+                note={t("listings.appearsInListing")}
+                errorMessage={fieldMessage(errors?.reservedCommunityDescription)}
+                inputProps={{
+                  onChange: () => {
+                    fieldHasError(errors?.reservedCommunityDescription) &&
+                      clearErrors("reservedCommunityDescription")
+                  },
+                  "aria-required": fieldIsRequired("reservedCommunityDescription", requiredFields),
+                }}
+              />
+            </div>
           </Grid.Cell>
         </Grid.Row>
 

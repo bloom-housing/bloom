@@ -161,7 +161,7 @@ describe("users", () => {
     expect(exportButton).toBeInTheDocument()
     fireEvent.click(exportButton)
     const errorMessage = await findByText(
-      "There was an error. Please try again, or contact support for help.",
+      "There was an error. Please try again, or contact support at email@email.com for help.",
       {
         exact: false,
       }

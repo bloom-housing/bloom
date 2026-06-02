@@ -22,7 +22,10 @@ export default function Finder(props: FinderProps) {
     ) || []
 
   return (
-    <Layout pageTitle={t("pageTitle.rentalFinder")}>
+    <Layout
+      pageTitle={t("pageTitle.rentalFinder")}
+      metaDescription={t("pageDescription.rentalFinder")}
+    >
       <RentalsFinder
         activeFeatureFlags={activeFeatureFlags}
         multiselectData={props.multiselectData}

@@ -38,7 +38,7 @@ const closedListings = (listings) => {
 
 export const ListingBrowseDeprecated = (props: ListingBrowseDeprecatedProps) => {
   const { profile } = useContext(AuthContext)
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
+  const metaDescription = t("pageDescription.listings", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
 
   useEffect(() => {

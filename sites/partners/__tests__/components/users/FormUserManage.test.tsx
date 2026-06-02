@@ -165,7 +165,7 @@ describe("<FormUserManage>", () => {
             />
           )
 
-          await waitFor(() => screen.getByText("Jurisdictional admin"))
+          await waitFor(() => screen.getByRole("option", { name: "Administrator" }))
           // "Role" select should have all three role option
           expect(screen.getByRole("combobox", { name: "Role" })).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument()
@@ -249,7 +249,7 @@ describe("<FormUserManage>", () => {
             />
           )
 
-          await waitFor(() => screen.getByText("Jurisdictional admin"))
+          await waitFor(() => screen.getByRole("option", { name: "Administrator" }))
           // "Role" select should have all three role option
           expect(screen.getByRole("combobox", { name: "Role" })).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument()

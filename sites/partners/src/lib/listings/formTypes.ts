@@ -83,6 +83,11 @@ export type FormListing = Omit<
     day: string
     year: string
   }
+  scheduledListingPublishDateField?: {
+    month: string
+    day: string
+    year: string
+  }
   reviewOrderQuestion?: string
   lotteryOptInQuestion?: YesNoEnum
   listingAvailabilityQuestion?: string
@@ -160,6 +165,7 @@ export const formDefaults: FormListing = {
   name: null,
   postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,
+  scheduledPublishAt: null,
   listingMultiselectQuestions: [],
   programRules: "",
   rentalAssistance: null,

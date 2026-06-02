@@ -29,7 +29,6 @@ import {
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
-  getOccupancyDescription,
   imageUrlFromListing,
   occupancyTable,
   getTimeRangeString,
@@ -172,7 +171,6 @@ export const ListingView = (props: ListingProps) => {
     )
   } // else condition is handled inline below
 
-  const occupancyDescription = getOccupancyDescription(listing)
   const occupancyHeaders = {
     unitType: "t.unitType",
     occupancy: "t.occupancy",
@@ -794,7 +792,10 @@ export const ListingView = (props: ListingProps) => {
               />
             </ListSection>
 
-            <ListSection title={t("t.occupancy")} subtitle={occupancyDescription}>
+            <ListSection
+              title={t("t.occupancy")}
+              subtitle={t("listings.occupancyDescriptionNoSro")}
+            >
               <StandardTable
                 headers={occupancyHeaders}
                 data={occupancyData}

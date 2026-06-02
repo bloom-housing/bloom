@@ -436,7 +436,7 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByID("addUnitsButton").contains("Add unit").click()
     cy.getByID("number").type(listing["number"])
     cy.getByID("unitTypes.id").select(listing["unitType.id"])
-    cy.getByID("unitFormSaveAndExitButton").contains("Save & exit").click()
+    cy.getByID("unitFormSaveAndExitButton").contains("Save & exit").should("be.visible").click()
     cy.getByID("amiChart.id").select(1).trigger("change")
     cy.getByID("amiPercentage").select(1)
     cy.getByID("unitFormSaveAndExitButton").contains("Save & exit").click()

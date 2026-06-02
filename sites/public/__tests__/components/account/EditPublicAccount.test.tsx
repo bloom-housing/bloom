@@ -81,8 +81,10 @@ describe("EditPublicAccount", () => {
 
   describe("Name form", () => {
     it("should update name successfully", async () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { phoneNumber, ...userWithoutPhone } = user
       const updatedUser = {
-        ...user,
+        ...userWithoutPhone,
         firstName: "Jane",
         lastName: "Smith",
         listings: [],
@@ -128,7 +130,9 @@ describe("EditPublicAccount", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText("There was an error. Please try again, or contact support for help.")
+          screen.getByText(
+            /There was an error. Please try again, or contact support at [a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,} for help/
+          )
         ).toBeInTheDocument()
       })
 
@@ -199,7 +203,9 @@ describe("EditPublicAccount", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText("There was an error. Please try again, or contact support for help.")
+          screen.getByText(
+            /There was an error. Please try again, or contact support at [a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,} for help/
+          )
         ).toBeInTheDocument()
       })
 
@@ -241,8 +247,10 @@ describe("EditPublicAccount", () => {
 
   describe("Email form", () => {
     it("should update email successfully", async () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { phoneNumber, ...userWithoutPhone } = user
       const updatedUser = {
-        ...user,
+        ...userWithoutPhone,
         email: "first.last@bloom.com",
         newEmail: "new.email@example.com",
         appUrl: "http://localhost",

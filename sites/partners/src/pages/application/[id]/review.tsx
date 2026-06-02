@@ -5,7 +5,8 @@ import { useSWRConfig } from "swr"
 import { useRouter } from "next/router"
 import { GridApi } from "ag-grid-community"
 import { useForm } from "react-hook-form"
-import { t, AlertBox, AgTable, useAgTable, Field } from "@bloom-housing/ui-components"
+import { t, AlertBox, Field } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { Button, Dialog, Icon, Tag } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import {
@@ -85,7 +86,7 @@ const Flag = () => {
         name: `${data?.applications[0].applicant.firstName} ${data?.applications[0].applicant.lastName}`,
       })
     } else if (data?.rule === RuleEnum.combination) {
-      return t("flags.combindationRule", {
+      return t("flags.combinationRule", {
         name: `${data?.applications[0].applicant.firstName} ${data?.applications[0].applicant.lastName}`,
         email: data?.applications[0].applicant.emailAddress,
       })
@@ -147,7 +148,11 @@ const Flag = () => {
               closeable
               onClose={() => reset()}
             >
-              {isSuccess ? t("t.updated") : t("account.settings.alerts.genericError")}
+              {isSuccess
+                ? t("t.updated")
+                : t("account.settings.alerts.genericError", {
+                    contactEmail: t("resources.contactEmail"),
+                  })}
             </AlertBox>
           )}
 

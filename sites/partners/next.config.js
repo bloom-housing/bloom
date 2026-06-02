@@ -45,6 +45,8 @@ module.exports = withBundleAnalyzer(
       // esmExternals: "loose"
     },
     env: {
+      // Set ALLOW_SEO_INDEXING=TRUE only in production so dev/staging get noindex
+      allowSeoIndexing: process.env.ALLOW_SEO_INDEXING === "TRUE" ? "TRUE" : "",
       backendApiBase: BACKEND_API_BASE,
       backendProxyBase: BACKEND_PROXY_BASE,
       listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
@@ -81,10 +83,33 @@ module.exports = withBundleAnalyzer(
         test: /\.md$/,
         type: "asset/source",
       })
+
+      // Suppress noisy-but-harmless protobufjs dynamic require warning
+      // from @opentelemetry/exporter-metrics-otlp-grpc
+      config.ignoreWarnings = [
+        ...(config.ignoreWarnings || []),
+        {
+          module:
+            /node_modules\/@opentelemetry\/exporter-metrics-otlp-grpc\/node_modules\/protobufjs/,
+          message: /Critical dependency/,
+        },
+      ]
+
       return config
     },
     eslint: {
       ignoreDuringBuilds: true,
+    },
+    headers() {
+      if (process.env.ALLOW_SEO_INDEXING === "TRUE") {
+        return []
+      }
+      return [
+        {
+          source: "/:path*",
+          headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+        },
+      ]
     },
   })
 )

@@ -7,6 +7,7 @@ import {
   HomeTypeEnum,
   ListingFilterKeys,
   RegionEnum,
+  UnitAccessibilityPriorityTypeEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
@@ -336,6 +337,19 @@ describe("filter drawer helpers", () => {
       const backendFilters = encodeFilterDataToBackendFilters(filterData)
       expect(backendFilters).toStrictEqual([{ $comparison: "LIKE", name: "Listing Name" }])
     })
+    it("should return correct BE filters for bathrooms count", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.bathrooms]: {
+          "1": false,
+          "2": true,
+          "3": true,
+          "4": false,
+        },
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([{ $comparison: "IN", bathrooms: [2, 3] }])
+    })
     it("should return correct BE filters for all comparison types combined", () => {
       const filterData: FilterData = {
         [ListingFilterKeys.isVerified]: true,
@@ -360,6 +374,31 @@ describe("filter drawer helpers", () => {
         { $comparison: ">=", monthlyRent: "500.00" },
         { $comparison: "<=", monthlyRent: "900.00" },
         { $comparison: "LIKE", name: "Listing Name" },
+      ])
+    })
+    it("should return correct backend filters for accessibilityPriorityTypes with single type", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.accessibilityPriorityTypes]: {
+          [UnitAccessibilityPriorityTypeEnum.mobility]: true,
+        },
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([
+        { $comparison: "IN", accessibilityPriorityTypes: ["mobility"] },
+      ])
+    })
+    it("should return correct backend filters for accessibilityPriorityTypes with multiple types", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.accessibilityPriorityTypes]: {
+          [UnitAccessibilityPriorityTypeEnum.mobility]: true,
+          [UnitAccessibilityPriorityTypeEnum.hearing]: true,
+        },
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([
+        { $comparison: "IN", accessibilityPriorityTypes: ["mobility", "hearing"] },
       ])
     })
   })
@@ -483,6 +522,17 @@ describe("filter drawer helpers", () => {
         "isVerified=true&homeTypes=apartment&monthlyRent=500.00-900.00&name=Listing Name"
       )
     })
+    it("should return correct filter query with accessibilityPriorityTypes filter", () => {
+      const partialFormObject: FilterData = {
+        [ListingFilterKeys.accessibilityPriorityTypes]: {
+          [UnitAccessibilityPriorityTypeEnum.mobility]: true,
+          [UnitAccessibilityPriorityTypeEnum.hearing]: true,
+        },
+      }
+      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual(
+        "accessibilityPriorityTypes=mobility,hearing"
+      )
+    })
   })
 
   describe("decodeQueryToFilterData", () => {
@@ -552,6 +602,23 @@ describe("filter drawer helpers", () => {
     it("should return correct filter data with query with all filtering types", () => {
       expect(decodeQueryToFilterData({ name: "Listing Name" })).toStrictEqual({
         [ListingFilterKeys.name]: "Listing Name",
+      })
+    })
+    it("should return correct filter data with accessibilityPriorityTypes single type query", () => {
+      expect(decodeQueryToFilterData({ accessibilityPriorityTypes: "mobility" })).toStrictEqual({
+        [ListingFilterKeys.accessibilityPriorityTypes]: {
+          [UnitAccessibilityPriorityTypeEnum.mobility]: true,
+        },
+      })
+    })
+    it("should return correct filter data with accessibilityPriorityTypes multiple types query", () => {
+      expect(
+        decodeQueryToFilterData({ accessibilityPriorityTypes: "mobility,hearing" })
+      ).toStrictEqual({
+        [ListingFilterKeys.accessibilityPriorityTypes]: {
+          [UnitAccessibilityPriorityTypeEnum.mobility]: true,
+          [UnitAccessibilityPriorityTypeEnum.hearing]: true,
+        },
       })
     })
   })

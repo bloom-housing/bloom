@@ -76,6 +76,10 @@ const ApplicationTerms = () => {
         .submit({
           body: {
             ...application,
+            alternateContact:
+              application.alternateContact?.type === "noContact"
+                ? null
+                : application.alternateContact,
             reviewStatus: ApplicationReviewStatusEnum.pending,
             listings: {
               id: listing.id,

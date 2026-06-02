@@ -43,6 +43,16 @@ def main():
         help="URL for the IAM Identity Center access portal.",
         required=True)
     p.add_argument(
+        "--dev_deployer_group_id",
+        help=
+        "IAM Identity Center group ID for the bloom-dev-deployers group. Used as the default Grafana editor group.",
+        required=True)
+    p.add_argument(
+        "--prod_deployer_group_id",
+        help=
+        "IAM Identity Center group ID for the bloom-prod-deployers group. Used as the default Grafana editor group.",
+        required=True)
+    p.add_argument(
         "--dev_deployer_permission_set_arn",
         help="ARN of the dev deployer IAM Identity center permission set",
         required=True)
@@ -132,6 +142,7 @@ def main():
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="dev",
             HIGH_AVAILABILITY="false",
+            GRAFANA_EDITOR_GROUP_ID=args.dev_deployer_group_id,
         ))
 
     write_template(
@@ -164,6 +175,7 @@ def main():
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="production",
             HIGH_AVAILABILITY="true",
+            GRAFANA_EDITOR_GROUP_ID=args.prod_deployer_group_id,
         ))
 
 
@@ -236,6 +248,18 @@ def validate_inputs(args):
     if args.dev_domain_name == args.prod_domain_name:
         errors.append(
             f"--dev_domain_name and --prod_domain_name must be different, both are '{args.dev_domain_name}'"
+        )
+
+    # Deployer group IDs
+    for arg, value in [
+        ("--dev_deployer_group_id", args.dev_deployer_group_id),
+        ("--prod_deployer_group_id", args.prod_deployer_group_id),
+    ]:
+        if not value:
+            errors.append(f"{arg} must not be empty")
+    if args.dev_deployer_group_id == args.prod_deployer_group_id:
+        errors.append(
+            f"--dev_deployer_group_id and --prod_deployer_group_id must be different, both are '{args.dev_deployer_group_id}'"
         )
 
     # GitHub org: not the empty string
@@ -405,6 +429,7 @@ class BloomDeploymentTemplateArgs:
     GIT_COMMIT: str
     BLOOM_ENV_TYPE: str
     HIGH_AVAILABILITY: str
+    GRAFANA_EDITOR_GROUP_ID: str
 
 
 BLOOM_DEPLOYMENT_TEMPLATE = string.Template(
@@ -496,6 +521,8 @@ module "bloom_deployment" {
     LANGUAGES         = "en,es,zh,vi,tl,ko,hy"
     RTL_LANGUAGES     = "ar,fa"
   }
+
+  grafana_editor_group_ids = ["${GRAFANA_EDITOR_GROUP_ID}"]
 }
 output "aws_lb_dns_name" {
   value       = module.bloom_deployment.lb_dns_name

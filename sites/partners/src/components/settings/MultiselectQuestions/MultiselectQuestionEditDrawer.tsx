@@ -33,7 +33,7 @@ import {
 import ManageIconSection from "../ManageIconSection"
 import { DrawerType } from "./EditMultiselectQuestion"
 import SectionWithGrid from "../../shared/SectionWithGrid"
-import s from "./MultiselectQuestionEditDrawer.module.scss"
+import styles from "./MultiselectQuestionEditDrawer.module.scss"
 import { useMapLayersList } from "../../../lib/hooks"
 
 type MultiselectQuestionEditDrawerProps = {
@@ -62,11 +62,12 @@ type OptionForm = {
   optionLinkTitle: string
   optionTitle: string
   optionUrl: string
-  canYouOptOut: YesNoEnum
+  optOutOption: YesNoEnum
   mapLayerId?: string
 }
 
-const alphaNumericPattern = /^[a-zA-Z0-9 '()]+$/
+const alphaNumericStartQuestionPattern = /^[a-zA-Z0-9][^:*\\]*$/
+const alphaNumericStartOptionPattern = /^[a-zA-Z0-9][\w\W]*$/
 
 const MultiselectQuestionEditDrawer = ({
   drawerType,
@@ -81,6 +82,7 @@ const MultiselectQuestionEditDrawer = ({
 }: MultiselectQuestionEditDrawerProps) => {
   const [optionDrawerOpen, setOptionDrawerOpen] = useState<DrawerType | null>(null)
   const [optionData, setOptionData] = useState<MultiselectOption>(null)
+  const [optOutSelection, setOptOutSelection] = useState<boolean>(null)
   const [dragOrder, setDragOrder] = useState([])
 
   const { profile } = useContext(AuthContext)
@@ -149,6 +151,7 @@ const MultiselectQuestionEditDrawer = ({
                 }}
                 copyTestId={`option-copy-icon: ${item.name}`}
                 onEdit={() => {
+                  setOptOutSelection(item.isOptOut)
                   setOptionData(item)
                   setOptionDrawerOpen("edit")
                 }}
@@ -187,9 +190,7 @@ const MultiselectQuestionEditDrawer = ({
       variant = "highlight-warm"
       break
   }
-  const statusText = `${questionData?.status
-    ?.charAt(0)
-    ?.toUpperCase()}${questionData?.status?.slice(1)}`
+  const statusText = t(`msq.status.${questionData?.status}`)
   const statusTag = questionData?.status ? <Tag variant={variant}>{statusText}</Tag> : undefined
 
   let validationMethodsFields = [
@@ -302,7 +303,8 @@ const MultiselectQuestionEditDrawer = ({
 
   const saveOption = async () => {
     const formData = getValues() as OptionForm
-    await trigger()
+    const validation = await trigger("optionTitle")
+    if (!validation) return
     if (!formData.optionTitle || formData.optionTitle === "") {
       setError("optionTitle", { message: t("errors.requiredFieldError") })
       return
@@ -341,7 +343,7 @@ const MultiselectQuestionEditDrawer = ({
         : [],
       ordinal: getNewOrdinal(),
       shouldCollectAddress: formData.shouldCollectAddress === YesNoEnum.yes,
-      isOptOut: formData.canYouOptOut === YesNoEnum.yes,
+      isOptOut: formData.optOutOption === YesNoEnum.yes,
       text: "",
     }
     if (formData.shouldCollectAddress === YesNoEnum.yes) {
@@ -394,16 +396,19 @@ const MultiselectQuestionEditDrawer = ({
                       id="name"
                       name="name"
                       label={t("t.title")}
-                      placeholder={t("t.title")}
                       register={register}
                       type="text"
                       dataTestId={"preference-title"}
                       defaultValue={questionData?.name}
                       errorMessage={`${t("errors.requiredFieldError")}. ${t(
                         "errors.alphaNumericError"
-                      )}`}
-                      validation={{ required: true, pattern: alphaNumericPattern, maxLength: 32 }}
-                      error={errors.name}
+                      )}. ${t("errors.characterLimit")}. ${t("errors.disallowedCharacters")}`}
+                      validation={{
+                        required: true,
+                        pattern: alphaNumericStartQuestionPattern,
+                        maxLength: 31,
+                      }}
+                      error={!!errors.name}
                       inputProps={{
                         onChange: () => clearErrors("name"),
                       }}
@@ -417,10 +422,10 @@ const MultiselectQuestionEditDrawer = ({
                       name={"description"}
                       id={"description"}
                       fullWidth={true}
-                      placeholder={t("settings.preferenceDescription")}
                       register={register}
                       dataTestId={"preference-description"}
                       defaultValue={questionData?.description}
+                      placeholder={""}
                     />
                   </Grid.Cell>
                 </Grid.Row>
@@ -450,7 +455,6 @@ const MultiselectQuestionEditDrawer = ({
                       id="preferenceLinkTitle"
                       name="preferenceLinkTitle"
                       label={t("settings.preferenceLinkTitle")}
-                      placeholder={t("settings.preferenceLinkTitle")}
                       register={register}
                       type="text"
                       dataTestId={"preference-link-title"}
@@ -486,6 +490,7 @@ const MultiselectQuestionEditDrawer = ({
                     clearErrors("questions")
                     setOptionData(null)
                     setOptionDrawerOpen("add")
+                    setOptOutSelection(false)
                   }}
                   id={"preference-add-option-button"}
                 >
@@ -538,14 +543,16 @@ const MultiselectQuestionEditDrawer = ({
                           id: "showOnListingYes",
                           label: t("t.yes"),
                           value: YesNoEnum.yes,
-                          defaultChecked: questionData && !questionData?.hideFromListing,
+                          defaultChecked:
+                            questionData === null ||
+                            (questionData && !questionData?.hideFromListing),
                           dataTestId: "show-on-listing-question-yes",
                         },
                         {
                           id: "showOnListingNo",
                           label: t("t.no"),
                           value: YesNoEnum.no,
-                          defaultChecked: questionData === null || questionData?.hideFromListing,
+                          defaultChecked: questionData?.hideFromListing,
                           dataTestId: "show-on-listing-question-no",
                         },
                       ]}
@@ -658,9 +665,8 @@ const MultiselectQuestionEditDrawer = ({
                         id="optionTitle"
                         name="optionTitle"
                         label={t("t.title")}
-                        placeholder={t("t.title")}
                         register={register}
-                        validation={{ required: true, pattern: alphaNumericPattern }}
+                        validation={{ required: true, pattern: alphaNumericStartOptionPattern }}
                         type="text"
                         readerOnly
                         dataTestId={"preference-option-title"}
@@ -684,11 +690,11 @@ const MultiselectQuestionEditDrawer = ({
                       label={t("t.descriptionTitle")}
                       name={"optionDescription"}
                       id={"optionDescription"}
-                      placeholder={t("settings.preferenceOptionDescription")}
                       fullWidth={true}
                       register={register}
                       dataTestId={"preference-option-description"}
                       defaultValue={optionData?.description}
+                      placeholder={""}
                     />
                   </Grid.Cell>
                 </Grid.Row>
@@ -720,7 +726,6 @@ const MultiselectQuestionEditDrawer = ({
                         id="optionLinkTitle"
                         name="optionLinkTitle"
                         label={t("settings.preferenceLinkTitle")}
-                        placeholder={t("settings.preferenceLinkTitle")}
                         register={register}
                         type="text"
                         readerOnly
@@ -736,7 +741,7 @@ const MultiselectQuestionEditDrawer = ({
                   <Grid.Cell>
                     <div className="pb-4">
                       <FieldGroup
-                        name="canYouOptOut"
+                        name="optOutOption"
                         type="radio"
                         register={register}
                         groupLabel={t("settings.preferenceOptOutOption")}
@@ -746,167 +751,62 @@ const MultiselectQuestionEditDrawer = ({
                             label: t("t.yes"),
                             value: YesNoEnum.yes,
                             defaultChecked: optionData?.isOptOut,
-                            dataTestId: "opt-out-question-yes",
+                            dataTestId: "opt-out-option-yes",
+                            inputProps: {
+                              onChange: () => {
+                                setOptOutSelection(true)
+                              },
+                            },
                           },
                           {
                             id: "optOutNo",
                             label: t("t.no"),
                             value: YesNoEnum.no,
                             defaultChecked:
-                              optionData?.isOptOut !== undefined && optionData?.isOptOut === false,
-                            dataTestId: "opt-out-question-no",
+                              (optionData?.isOptOut !== undefined &&
+                                optionData?.isOptOut === false) ||
+                              !optionData,
+
+                            dataTestId: "opt-out-option-no",
+                            inputProps: {
+                              onChange: () => {
+                                setOptOutSelection(false)
+                              },
+                            },
                           },
                         ]}
                         fieldClassName="m-0"
                         fieldGroupClassName="flex h-12 items-center"
-                        dataTestId={"preference-can-you-opt-out"}
+                        dataTestId={"preference-opt-out-option"}
                       />
                     </div>
                   </Grid.Cell>
                 </Grid.Row>
               </SectionWithGrid>
             </Card.Section>
-
-            <Card.Section>
-              <div className="border-t pt-8" />
-              <SectionWithGrid heading={t("settings.preferenceAdditionalFields")}>
-                <Grid.Row columns={3}>
-                  <Grid.Cell className="pr-8">
-                    <FieldValue label={t("settings.preferenceCollectAddress")}>
-                      <FieldGroup
-                        name="shouldCollectAddress"
-                        type="radio"
-                        register={register}
-                        validation={{ required: true }}
-                        error={errors.shouldCollectAddress}
-                        fields={[
-                          {
-                            label: t("t.yes"),
-                            value: YesNoEnum.yes,
-                            defaultChecked: optionData?.shouldCollectAddress,
-                            id: "shouldCollectAddressYes",
-                            dataTestId: "collect-address-yes",
-                            inputProps: {
-                              onChange: () => {
-                                clearErrors("shouldCollectAddress")
-                              },
-                            },
-                          },
-                          {
-                            label: t("t.no"),
-                            value: YesNoEnum.no,
-                            defaultChecked:
-                              optionData?.shouldCollectAddress !== undefined &&
-                              optionData?.shouldCollectAddress === false,
-                            id: "shouldCollectAddressNo",
-                            dataTestId: "collect-address-no",
-                            inputProps: {
-                              onChange: () => {
-                                clearErrors("shouldCollectAddress")
-                              },
-                            },
-                          },
-                        ]}
-                        fieldClassName="m-0"
-                        fieldGroupClassName="flex column items-center"
-                        dataTestId={"preference-option-collect-address"}
-                      />
-                    </FieldValue>
-                  </Grid.Cell>
-                  <Grid.Cell className="pr-12">
-                    {shouldCollectAddressExpand && (
-                      <FieldValue label={t("settings.preferenceValidatingAddress")}>
-                        <FieldGroup
-                          name="validationMethod"
-                          type="radio"
-                          register={register}
-                          validation={{ required: true }}
-                          error={errors.validationMethod}
-                          fields={validationMethodsFields}
-                          fieldClassName="m-0"
-                          fieldGroupClassName="flex flex-col"
-                          dataTestId={"preference-option-validation-method"}
-                        />
-                      </FieldValue>
-                    )}
-                  </Grid.Cell>
-                  <Grid.Cell className="pr-8">
-                    {shouldCollectAddressExpand && radiusExpand && isValidationRadiusVisible && (
-                      <FieldValue label={t("settings.preferenceValidatingAddress.howManyMiles")}>
-                        <Field
-                          id="radiusSize"
-                          name="radiusSize"
-                          label={t("settings.preferenceValidatingAddress.howManyMiles")}
-                          register={register}
-                          validation={{ required: true, min: 0 }}
-                          error={errors.radiusSize}
-                          errorMessage={t("errors.requiredFieldError")}
-                          type="number"
-                          readerOnly
-                          defaultValue={optionData?.radiusSize ?? null}
-                          dataTestId={"preference-option-radius-size"}
-                          inputProps={{
-                            onChange: () => clearErrors("radiusSize"),
-                          }}
-                        />
-                      </FieldValue>
-                    )}
-                    {shouldCollectAddressExpand && mapExpand && (
-                      <FieldValue label={t("settings.preferenceValidatingAddress.selectMapLayer")}>
-                        <p className={s.helperText}>
-                          {t("settings.preferenceValidatingAddress.selectMapLayerDescription")}
-                        </p>
-                        <Select
-                          id={"mapLayerId"}
-                          name={"mapLayerId"}
-                          register={register}
-                          label={t("settings.preferenceValidatingAddress.selectMapLayer")}
-                          labelClassName="sr-only"
-                          controlClassName={"control"}
-                          options={
-                            mapLayers
-                              ? [
-                                  { label: "", value: "" },
-                                  ...mapLayers.map((layer) => ({
-                                    label: layer.name,
-                                    value: layer.id,
-                                  })),
-                                ]
-                              : [{ label: "", value: "" }]
-                          }
-                          dataTestId={"preference-map-layer"}
-                          defaultValue={optionData?.mapLayerId ?? null}
-                          errorMessage={t("errors.requiredFieldError")}
-                          error={errors.mapLayerId}
-                          validation={{ required: true }}
-                          inputProps={{
-                            onChange: () => clearErrors("mapLayerId"),
-                          }}
-                        />
-                      </FieldValue>
-                    )}
-                  </Grid.Cell>
-                </Grid.Row>
-                {shouldCollectAddressExpand && (
+            {!optOutSelection && (
+              <Card.Section>
+                <div className="border-t pt-8" />
+                <SectionWithGrid heading={t("settings.preferenceAdditionalFields")}>
                   <Grid.Row columns={3}>
                     <Grid.Cell className="pr-8">
-                      <FieldValue label={t("settings.preferenceCollectAddressHolderName")}>
+                      <FieldValue label={t("settings.preferenceCollectAddress")}>
                         <FieldGroup
-                          name="shouldCollectName"
+                          name="shouldCollectAddress"
                           type="radio"
                           register={register}
                           validation={{ required: true }}
-                          error={errors.shouldCollectName}
+                          error={errors.shouldCollectAddress}
                           fields={[
                             {
                               label: t("t.yes"),
                               value: YesNoEnum.yes,
-                              defaultChecked: optionData?.shouldCollectName,
-                              id: "shouldCollectNameYes",
-                              dataTestId: "collect-name-yes",
+                              defaultChecked: optionData?.shouldCollectAddress,
+                              id: "shouldCollectAddressYes",
+                              dataTestId: "collect-address-yes",
                               inputProps: {
                                 onChange: () => {
-                                  clearErrors("shouldCollectName")
+                                  clearErrors("shouldCollectAddress")
                                 },
                               },
                             },
@@ -914,69 +814,193 @@ const MultiselectQuestionEditDrawer = ({
                               label: t("t.no"),
                               value: YesNoEnum.no,
                               defaultChecked:
-                                optionData?.shouldCollectName !== undefined &&
-                                !optionData?.shouldCollectName,
-                              id: "shouldCollectNameNo",
-                              dataTestId: "collect-name-no",
+                                (optionData?.shouldCollectAddress !== undefined &&
+                                  optionData?.shouldCollectAddress === false) ||
+                                !optionData,
+                              id: "shouldCollectAddressNo",
+                              dataTestId: "collect-address-no",
                               inputProps: {
                                 onChange: () => {
-                                  clearErrors("shouldCollectName")
+                                  clearErrors("shouldCollectAddress")
                                 },
                               },
                             },
                           ]}
                           fieldClassName="m-0"
                           fieldGroupClassName="flex column items-center"
-                          dataTestId={"preference-option-collect-name"}
+                          dataTestId={"preference-option-collect-address"}
                         />
                       </FieldValue>
+                    </Grid.Cell>
+                    <Grid.Cell className="pr-12">
+                      {shouldCollectAddressExpand && (
+                        <FieldValue label={t("settings.preferenceValidatingAddress")}>
+                          <FieldGroup
+                            name="validationMethod"
+                            type="radio"
+                            register={register}
+                            validation={{ required: true }}
+                            error={errors.validationMethod}
+                            fields={validationMethodsFields}
+                            fieldClassName="m-0"
+                            fieldGroupClassName="flex flex-col"
+                            dataTestId={"preference-option-validation-method"}
+                          />
+                        </FieldValue>
+                      )}
                     </Grid.Cell>
                     <Grid.Cell className="pr-8">
-                      <FieldValue label={t("settings.preferenceCollectAddressHolderRelationship")}>
-                        <FieldGroup
-                          name="shouldCollectRelationship"
-                          type="radio"
-                          register={register}
-                          validation={{ required: true }}
-                          error={errors.shouldCollectRelationship}
-                          fields={[
-                            {
-                              label: t("t.yes"),
-                              value: YesNoEnum.yes,
-                              defaultChecked: optionData?.shouldCollectRelationship,
-                              id: "shouldCollectRelationshipYes",
-                              dataTestId: "collect-relationship-yes",
-                              inputProps: {
-                                onChange: () => {
-                                  clearErrors("shouldCollectRelationship")
-                                },
-                              },
-                            },
-                            {
-                              label: t("t.no"),
-                              value: YesNoEnum.no,
-                              defaultChecked:
-                                optionData?.shouldCollectRelationship !== undefined &&
-                                !optionData?.shouldCollectRelationship,
-                              id: "shouldCollectRelationshipNo",
-                              dataTestId: "collect-relationship-no",
-                              inputProps: {
-                                onChange: () => {
-                                  clearErrors("shouldCollectRelationship")
-                                },
-                              },
-                            },
-                          ]}
-                          fieldClassName="m-0"
-                          fieldGroupClassName="flex"
-                          dataTestId={"preference-option-collect-relationship"}
-                        />
-                      </FieldValue>
+                      {shouldCollectAddressExpand && radiusExpand && isValidationRadiusVisible && (
+                        <FieldValue label={t("settings.preferenceValidatingAddress.howManyMiles")}>
+                          <Field
+                            id="radiusSize"
+                            name="radiusSize"
+                            label={t("settings.preferenceValidatingAddress.howManyMiles")}
+                            register={register}
+                            validation={{ required: true, min: 0 }}
+                            error={errors.radiusSize}
+                            errorMessage={t("errors.requiredFieldError")}
+                            type="number"
+                            readerOnly
+                            defaultValue={optionData?.radiusSize ?? null}
+                            dataTestId={"preference-option-radius-size"}
+                            inputProps={{
+                              onChange: () => clearErrors("radiusSize"),
+                            }}
+                          />
+                        </FieldValue>
+                      )}
+                      {shouldCollectAddressExpand && mapExpand && (
+                        <FieldValue
+                          label={t("settings.preferenceValidatingAddress.selectMapLayer")}
+                        >
+                          <p className={styles["helperText"]}>
+                            {t("settings.preferenceValidatingAddress.selectMapLayerDescription")}
+                          </p>
+                          <Select
+                            id={"mapLayerId"}
+                            name={"mapLayerId"}
+                            register={register}
+                            label={t("settings.preferenceValidatingAddress.selectMapLayer")}
+                            labelClassName="sr-only"
+                            controlClassName={"control"}
+                            options={
+                              mapLayers
+                                ? [
+                                    { label: "", value: "" },
+                                    ...mapLayers.map((layer) => ({
+                                      label: layer.name,
+                                      value: layer.id,
+                                    })),
+                                  ]
+                                : [{ label: "", value: "" }]
+                            }
+                            dataTestId={"preference-map-layer"}
+                            defaultValue={optionData?.mapLayerId ?? null}
+                            errorMessage={t("errors.requiredFieldError")}
+                            error={errors.mapLayerId}
+                            validation={{ required: true }}
+                            inputProps={{
+                              onChange: () => clearErrors("mapLayerId"),
+                            }}
+                          />
+                        </FieldValue>
+                      )}
                     </Grid.Cell>
                   </Grid.Row>
-                )}
-              </SectionWithGrid>
-            </Card.Section>
+                  {shouldCollectAddressExpand && (
+                    <Grid.Row columns={3}>
+                      <Grid.Cell className="pr-8">
+                        <FieldValue label={t("settings.preferenceCollectAddressHolderName")}>
+                          <FieldGroup
+                            name="shouldCollectName"
+                            type="radio"
+                            register={register}
+                            validation={{ required: true }}
+                            error={errors.shouldCollectName}
+                            fields={[
+                              {
+                                label: t("t.yes"),
+                                value: YesNoEnum.yes,
+                                defaultChecked: optionData?.shouldCollectName,
+                                id: "shouldCollectNameYes",
+                                dataTestId: "collect-name-yes",
+                                inputProps: {
+                                  onChange: () => {
+                                    clearErrors("shouldCollectName")
+                                  },
+                                },
+                              },
+                              {
+                                label: t("t.no"),
+                                value: YesNoEnum.no,
+                                defaultChecked:
+                                  optionData?.shouldCollectName !== undefined &&
+                                  !optionData?.shouldCollectName,
+                                id: "shouldCollectNameNo",
+                                dataTestId: "collect-name-no",
+                                inputProps: {
+                                  onChange: () => {
+                                    clearErrors("shouldCollectName")
+                                  },
+                                },
+                              },
+                            ]}
+                            fieldClassName="m-0"
+                            fieldGroupClassName="flex column items-center"
+                            dataTestId={"preference-option-collect-name"}
+                          />
+                        </FieldValue>
+                      </Grid.Cell>
+                      <Grid.Cell className="pr-8">
+                        <FieldValue
+                          label={t("settings.preferenceCollectAddressHolderRelationship")}
+                        >
+                          <FieldGroup
+                            name="shouldCollectRelationship"
+                            type="radio"
+                            register={register}
+                            validation={{ required: true }}
+                            error={errors.shouldCollectRelationship}
+                            fields={[
+                              {
+                                label: t("t.yes"),
+                                value: YesNoEnum.yes,
+                                defaultChecked: optionData?.shouldCollectRelationship,
+                                id: "shouldCollectRelationshipYes",
+                                dataTestId: "collect-relationship-yes",
+                                inputProps: {
+                                  onChange: () => {
+                                    clearErrors("shouldCollectRelationship")
+                                  },
+                                },
+                              },
+                              {
+                                label: t("t.no"),
+                                value: YesNoEnum.no,
+                                defaultChecked:
+                                  optionData?.shouldCollectRelationship !== undefined &&
+                                  !optionData?.shouldCollectRelationship,
+                                id: "shouldCollectRelationshipNo",
+                                dataTestId: "collect-relationship-no",
+                                inputProps: {
+                                  onChange: () => {
+                                    clearErrors("shouldCollectRelationship")
+                                  },
+                                },
+                              },
+                            ]}
+                            fieldClassName="m-0"
+                            fieldGroupClassName="flex"
+                            dataTestId={"preference-option-collect-relationship"}
+                          />
+                        </FieldValue>
+                      </Grid.Cell>
+                    </Grid.Row>
+                  )}
+                </SectionWithGrid>
+              </Card.Section>
+            )}
           </Card>
         </Drawer.Content>
         <Drawer.Footer>

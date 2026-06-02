@@ -69,7 +69,10 @@ const FavoritesView = ({ jurisdiction }: FavoritesViewProps) => {
 
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-      <Layout pageTitle={t("account.myFavorites")}>
+      <Layout
+        pageTitle={t("account.myFavorites")}
+        metaDescription={t("pageDescription.myFavorites")}
+      >
         <PageHeaderLayout
           heading={t("account.myFavorites")}
           inverse

@@ -1,6 +1,7 @@
 import { LanguagesEnum, Prisma } from '@prisma/client';
 import { randomAdjective, randomNoun } from './word-generator';
 import { passwordToHash } from '../../src/utilities/password-helpers';
+import { UserNotificationPreferences } from '../../src/dtos/users/user-notification-preferences.dto';
 
 export const userFactory = async (optionalParams?: {
   acceptedTerms?: boolean;
@@ -24,6 +25,7 @@ export const userFactory = async (optionalParams?: {
   isAdvocate?: boolean;
   isApproved?: boolean;
   agencyId?: string;
+  notificationPreferences?: UserNotificationPreferences;
 }): Promise<Prisma.UserAccountsCreateInput> => ({
   agreedToTermsOfService: optionalParams?.acceptedTerms || false,
   confirmedAt: optionalParams?.confirmedAt || null,
@@ -85,6 +87,11 @@ export const userFactory = async (optionalParams?: {
         },
       }
     : undefined,
+  notificationPreferences: {
+    create: {
+      ...optionalParams?.notificationPreferences,
+    },
+  },
   agency: optionalParams?.agencyId
     ? {
         connect: {

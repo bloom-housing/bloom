@@ -19,6 +19,7 @@ import {
   listingSectionQuestions,
   limitedHowDidYouHear,
   getRaceEthnicityOptions,
+  genderKeys,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { isFeatureFlagOn } from "../../../lib/helpers"
@@ -40,8 +41,8 @@ const ApplicationDemographics = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, watch } = useForm({
     defaultValues: {
-      ethnicity: application.demographics.ethnicity,
-      race: application.demographics.race,
+      ethnicity: application.demographics?.ethnicity,
+      race: application.demographics?.race,
     },
   })
 
@@ -54,7 +55,7 @@ const ApplicationDemographics = () => {
     conductor.currentStep.save({
       demographics: {
         ethnicity: data.ethnicity || "",
-        gender: "",
+        gender: enableGenderQuestion ? data.gender : "",
         sexualOrientation: "",
         howDidYouHear: data.howDidYouHear,
         race: fieldGroupObjectToArray(data, "race"),
@@ -83,6 +84,11 @@ const ApplicationDemographics = () => {
     FeatureFlagEnum.enableSpokenLanguage
   )
 
+  const enableGenderQuestion = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableGenderQuestion
+  )
+
   const getSpokenLanguageOptions = () => {
     const availableLanguages =
       conductor.config.visibleSpokenLanguages && conductor.config.visibleSpokenLanguages.length > 0
@@ -95,7 +101,7 @@ const ApplicationDemographics = () => {
     return (enableLimitedHowDidYouHear ? limitedHowDidYouHear : howDidYouHear)?.map((item) => ({
       id: item.id,
       label: t(`application.review.demographics.howDidYouHearOptions.${item.id}`),
-      defaultChecked: application.demographics.howDidYouHear?.includes(item.id),
+      defaultChecked: application.demographics?.howDidYouHear?.includes(item.id),
       register,
     }))
   }
@@ -133,6 +139,9 @@ const ApplicationDemographics = () => {
   }, [profile])
 
   const showRaceQuestion = raceOptions.length > 0
+  const showEthnicitySection = !disableEthnicityQuestion
+  const showSpokenLanguageSection =
+    enableSpokenLanguage && (conductor.config?.visibleSpokenLanguages?.length ?? 0) > 0
 
   return (
     <FormsLayout
@@ -177,8 +186,8 @@ const ApplicationDemographics = () => {
                 />
               </fieldset>
             )}
-            {!disableEthnicityQuestion && (
-              <div className={`${showRaceQuestion ? "seeds-p-bs-8" : ""}`}>
+            {showEthnicitySection && (
+              <div className={showRaceQuestion ? "seeds-p-bs-8" : ""}>
                 <Select
                   id="ethnicity"
                   name="ethnicity"
@@ -193,15 +202,15 @@ const ApplicationDemographics = () => {
                 />
               </div>
             )}
-            {enableSpokenLanguage && conductor.config?.visibleSpokenLanguages?.length > 0 && (
-              <div className={"seeds-p-bs-8"}>
+            {showSpokenLanguageSection && (
+              <div className={showRaceQuestion || showEthnicitySection ? "seeds-p-bs-8" : ""}>
                 <Select
                   id="spokenLanguage"
                   name="spokenLanguage"
                   defaultValue={
-                    application.demographics.spokenLanguage?.includes("notListed")
+                    application.demographics?.spokenLanguage?.includes("notListed")
                       ? "notListed"
-                      : application.demographics.spokenLanguage
+                      : application.demographics?.spokenLanguage
                   }
                   label={t("application.review.demographics.spokenLanguageLabel")}
                   placeholder={t("t.selectOne")}
@@ -217,8 +226,8 @@ const ApplicationDemographics = () => {
                     id="spokenLanguageNotListed"
                     name="spokenLanguageNotListed"
                     defaultValue={
-                      application.demographics.spokenLanguage?.includes("notListed")
-                        ? application.demographics.spokenLanguage.split(":")[1]
+                      application.demographics?.spokenLanguage?.includes("notListed")
+                        ? application.demographics?.spokenLanguage.split(":")[1]
                         : undefined
                     }
                     label={t("application.review.demographics.spokenLanguageSpecify")}
@@ -226,6 +235,29 @@ const ApplicationDemographics = () => {
                     register={register}
                   />
                 )}
+              </div>
+            )}
+            {enableGenderQuestion && (
+              <div
+                className={
+                  showRaceQuestion || showEthnicitySection || showSpokenLanguageSection
+                    ? "seeds-p-bs-8"
+                    : ""
+                }
+              >
+                <Select
+                  id="gender"
+                  name="gender"
+                  label={t("application.review.demographics.genderLabel")}
+                  defaultValue={application.demographics?.gender}
+                  placeholder={t("t.selectOne")}
+                  register={register}
+                  labelClassName="text__caps-spaced mb-0"
+                  controlClassName="control"
+                  options={genderKeys}
+                  keyPrefix="application.review.demographics.genderOptions"
+                  dataTestId={"app-demographics-gender"}
+                />
               </div>
             )}
           </CardSection>

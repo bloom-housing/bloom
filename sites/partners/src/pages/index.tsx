@@ -6,16 +6,9 @@ import { useForm } from "react-hook-form"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
 import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
-import {
-  t,
-  AgTable,
-  useAgTable,
-  Select,
-  Form,
-  SelectOption,
-  Field,
-} from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { t, Select, SelectOption, Field } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
+import { AuthContext, Form } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
@@ -23,7 +16,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useListingExport, useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
-import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
 
 class formatLinkCell {
@@ -108,7 +100,6 @@ type CreateListingFormFields = {
 }
 
 export default function ListingsList() {
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const isAdmin =
     profile?.userRoles?.isAdmin ||
@@ -116,7 +107,7 @@ export default function ListingsList() {
     profile?.userRoles?.isJurisdictionalAdmin ||
     profile?.userRoles?.isLimitedJurisdictionalAdmin ||
     false
-  const { onExport, csvExportLoading } = useListingExport()
+  const { onExport, csvExportLoading } = useListingExport(!!process.env.useSecureDownloadPathway)
   const router = useRouter()
   const tableOptions = useAgTable()
 
@@ -202,30 +193,56 @@ export default function ListingsList() {
       })
     }
 
-    columns.push(
-      {
-        headerName: t("listings.listingStatusText"),
-        field: "status",
-        sortable: true,
-        unSortIcon: true,
-        sort: "asc",
-        // disable frontend sorting
-        comparator: () => 0,
+    columns.push({
+      headerName: t("listings.listingStatusText"),
+      field: "status",
+      sortable: true,
+      unSortIcon: true,
+      sort: "asc",
+      // disable frontend sorting
+      comparator: () => 0,
+      filter: false,
+      resizable: true,
+      valueFormatter: ({ value }) => t(`listings.listingStatus.${value}`),
+      cellRenderer: !profile?.userRoles?.isLimitedJurisdictionalAdmin ? "ApplicationsLink" : "",
+      minWidth: 190,
+    })
+
+    if (doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableListingFileNumber)) {
+      columns.push({
+        headerName: t("listings.listingFileNumber"),
+        field: "listingFileNumber",
+        sortable: false,
         filter: false,
         resizable: true,
-        valueFormatter: ({ value }) => t(`listings.listingStatus.${value}`),
-        cellRenderer: !profile?.userRoles?.isLimitedJurisdictionalAdmin ? "ApplicationsLink" : "",
-        minWidth: 190,
-      },
-      {
-        headerName: t("listings.createdDate"),
-        field: "createdAt",
+        minWidth: 160,
+        valueFormatter: ({ value }) => value ?? t("t.none"),
+      })
+    }
+
+    columns.push({
+      headerName: t("listings.createdDate"),
+      field: "createdAt",
+      sortable: false,
+      filter: false,
+      resizable: true,
+      valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
+      maxWidth: 140,
+    })
+
+    if (doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableAutopublish)) {
+      columns.push({
+        headerName: t("listings.scheduledListingPublishDate"),
+        field: "scheduledPublishAt",
         sortable: false,
         filter: false,
         resizable: true,
         valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-        maxWidth: 140,
-      },
+        maxWidth: 180,
+      })
+    }
+
+    columns.push(
       {
         headerName: t("listings.publishedDate"),
         field: "publishedAt",
@@ -341,7 +358,6 @@ export default function ListingsList() {
       <Head>
         <title>{`Home - ${t("nav.siteTitlePartners")}`}</title>
       </Head>
-      <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
       <NavigationHeader title={t("nav.listings")}></NavigationHeader>
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
@@ -421,13 +437,12 @@ export default function ListingsList() {
         ariaDescribedBy="listing-select-dialog-content"
         onClose={() => onModalClose()}
       >
+        <Dialog.Header id="listing-select-dialog-header">
+          {defaultJurisdiction
+            ? t("listings.selectListingType")
+            : t("listings.selectJurisdictionTitle")}
+        </Dialog.Header>
         <Form id="listing-select-form" onSubmit={handleSubmit(onSubmit)}>
-          <Dialog.Header id="listing-select-dialog-header">
-            {defaultJurisdiction
-              ? t("listings.selectListingType")
-              : t("listings.selectJurisdictionTitle")}
-          </Dialog.Header>
-
           <Dialog.Content id="listing-select-dialog-content">
             {t("listings.selectJurisdictionContent")}
             <Grid>

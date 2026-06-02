@@ -256,7 +256,7 @@ export const ElmVillageApplication: Application = {
   programs: [
     {
       claimed: true,
-      key: "Veteran",
+      key: "Veterans",
       options: [
         {
           key: "servedInMilitary",

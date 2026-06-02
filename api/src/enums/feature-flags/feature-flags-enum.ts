@@ -8,29 +8,35 @@ export enum FeatureFlagEnum {
   disableEthnicityQuestion = 'disableEthnicityQuestion',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
+  disablePartnerPublicListingEdits = 'disablePartnerPublicListingEdits',
+  disableReservedCommunityTypeEdit = 'disableReservedCommunityTypeEdit',
   disableWorkInRegion = 'disableWorkInRegion',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
-  enableAdaOtherOption = 'enableAdaOtherOption',
   enableAdditionalResources = 'enableAdditionalResources',
   enableApplicationStatus = 'enableApplicationStatus',
+  enableAutopublish = 'enableAutopublish',
   enableCompanyWebsite = 'enableCompanyWebsite',
+  enableCustomListingNotifications = 'enableCustomListingNotifications',
   enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableFaq = 'enableFaq',
+  enableFilterByBathroom = 'enableFilterByBathroom',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
+  enableGenderQuestion = 'enableGenderQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
   enableHousingAdvocate = 'enableHousingAdvocate',
-  enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
   enableHousingBasics = 'enableHousingBasics',
+  enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
   enableIsVerified = 'enableIsVerified',
+  enableLeasingAgentAltText = 'enableLeasingAgentAltText',
   enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
   enableListingFavoriting = 'enableListingFavoriting',
   enableListingFileNumber = 'enableListingFileNumber',
   enableListingFiltering = 'enableListingFiltering',
-  enableLeasingAgentAltText = 'enableLeasingAgentAltText',
   enableListingImageAltText = 'enableListingImageAltText',
+  enableListingMap = 'enableListingMap',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
   enableListingUpdatedAt = 'enableListingUpdatedAt',
@@ -41,10 +47,13 @@ export enum FeatureFlagEnum {
   enableNeighborhoodAmenitiesDropdown = 'enableNeighborhoodAmenitiesDropdown',
   enableNonRegulatedListings = 'enableNonRegulatedListings',
   enableParkingFee = 'enableParkingFee',
+  enableParkingType = 'enableParkingType',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
   enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
   enableProperties = 'enableProperties',
+  enableReasonableAccommodations = 'enableReasonableAccommodations',
+  enableReceivedAtAndByFields = 'enableReceivedAtAndByFields',
   enableReferralQuestionUnits = 'enableReferralQuestionUnits',
   enableRegions = 'enableRegions',
   enableResources = 'enableResources',
@@ -57,12 +66,11 @@ export enum FeatureFlagEnum {
   enableUnitAccessibilityTypeTags = 'enableUnitAccessibilityTypeTags',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
+  enableV2MSQ = 'enableV2MSQ',
   enableVerifyIncome = 'enableVerifyIncome',
   enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
   enableWaitlistLottery = 'enableWaitlistLottery',
   enableWhatToExpectAdditionalField = 'enableWhatToExpectAdditionalField',
-  enableParkingType = 'enableParkingType',
-  enableV2MSQ = 'enableV2MSQ',
   example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
@@ -105,6 +113,16 @@ export const featureFlagMap: {
       'When true listings will no longer support preferences section',
   },
   {
+    name: FeatureFlagEnum.disablePartnerPublicListingEdits,
+    description:
+      'When true, partner users cannot edit open or closed listings, or unpublish open listings',
+  },
+  {
+    name: FeatureFlagEnum.disableReservedCommunityTypeEdit,
+    description:
+      'When true, disables editing of reserved community type description in the partners site (shows as plaintext only).',
+  },
+  {
     name: FeatureFlagEnum.disableWorkInRegion,
     description:
       'When true the "Work in Region" question will be removed from the application process',
@@ -113,11 +131,6 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableAccessibilityFeatures,
     description:
       "When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view",
-  },
-  {
-    name: FeatureFlagEnum.enableAdaOtherOption,
-    description:
-      "When true, the ADA impairment options will include 'For Other Impairments'",
   },
   {
     name: FeatureFlagEnum.enableAdditionalResources,
@@ -130,9 +143,18 @@ export const featureFlagMap: {
       'When true, the application status and notifications feature is enabled on public and partners',
   },
   {
+    name: FeatureFlagEnum.enableAutopublish,
+    description:
+      'When true, partners can set an optional scheduled listing publish date',
+  },
+  {
     name: FeatureFlagEnum.enableCompanyWebsite,
     description:
       'When true, allows partners to add company website information',
+  },
+  {
+    name: FeatureFlagEnum.enableCustomListingNotifications,
+    description: 'When true, users have access to custom notification settings',
   },
   {
     name: FeatureFlagEnum.enableConfigurableRegions,
@@ -149,9 +171,19 @@ export const featureFlagMap: {
       'When true, a link to the FAQ page is displayed on the get assistance page',
   },
   {
+    name: FeatureFlagEnum.enableFilterByBathroom,
+    description:
+      'When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms',
+  },
+  {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
     description:
       'When true, the full time student question is displayed in the application form',
+  },
+  {
+    name: FeatureFlagEnum.enableGenderQuestion,
+    description:
+      'When true, the gender identity question is displayed in the public and partner application demographics section',
   },
   {
     name: FeatureFlagEnum.enableGeocodingPreferences,
@@ -213,6 +245,10 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableListingImageAltText,
     description: 'When true, allows partners to add alt text to listing images',
+  },
+  {
+    name: FeatureFlagEnum.enableListingMap,
+    description: 'When true, a map is displayed on the listings page',
   },
   {
     name: FeatureFlagEnum.enableListingOpportunity,
@@ -279,6 +315,16 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableProperties,
     description: 'When true, the properties feature is enabled',
+  },
+  {
+    name: FeatureFlagEnum.enableReasonableAccommodations,
+    description:
+      'When true, the reasonable accommodations question is shown in the public and partner application flow',
+  },
+  {
+    name: FeatureFlagEnum.enableReceivedAtAndByFields,
+    description:
+      'When true, partners can view/edit paper application received at/by fields and include them in application exports',
   },
   {
     name: FeatureFlagEnum.enableReferralQuestionUnits,

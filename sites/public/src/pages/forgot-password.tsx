@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react"
+import React, { useEffect, useContext, useState } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { t } from "@bloom-housing/ui-components"
@@ -17,6 +17,7 @@ const ForgotPassword = () => {
   const router = useRouter()
   const { forgotPassword } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
+  const [isLoading, setIsLoading] = useState(false)
 
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
@@ -38,17 +39,23 @@ const ForgotPassword = () => {
     const listingId = router.query?.listingId as string
     const listingIdRedirect = listingId && process.env.showMandatedAccounts ? listingId : undefined
     try {
+      setIsLoading(true)
       await forgotPassword(email, listingIdRedirect)
     } catch (error) {
       const { status } = error.response || {}
       determineNetworkError(status, error)
+    } finally {
+      setIsLoading(false)
     }
     addToast(t(`authentication.forgotPassword.message`), { variant: "primary" })
     await router.push("/sign-in")
   }
 
   return (
-    <FormsLayout pageTitle={t("pageTitle.forgotPassword")}>
+    <FormsLayout
+      pageTitle={t("pageTitle.forgotPassword")}
+      metaDescription={t("pageDescription.forgotPassword")}
+    >
       <FormForgotPassword
         onSubmit={(data) => void onSubmit(data)}
         control={{ register, errors, handleSubmit }}
@@ -56,6 +63,7 @@ const ForgotPassword = () => {
           error: networkError,
           reset: resetNetworkError,
         }}
+        loading={isLoading}
       />
     </FormsLayout>
   )

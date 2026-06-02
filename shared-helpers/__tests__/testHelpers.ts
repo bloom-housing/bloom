@@ -27,6 +27,7 @@ import {
   MultiselectQuestionsStatusEnum,
   ListingFeaturesConfiguration,
   RaceEthnicityConfiguration,
+  ApplicationAccessibilityFeatureEnum,
 } from "../src/types/backend-swagger"
 
 export const multiselectQuestionPreference: MultiselectQuestion = {
@@ -194,6 +195,7 @@ export const application: Application = {
   sendMailToMailingAddress: true,
   householdExpectingChanges: true,
   householdStudent: false,
+  reasonableAccommodations: "Wheelchair-accessible unit entrance",
   incomeVouchers: true,
   income: "40000.00",
   incomePeriod: IncomePeriodEnum.perYear,
@@ -700,6 +702,8 @@ export const jurisdiction: Jurisdiction = {
   emailFromAddress: "Bloomington <bloom-no-reply@exygy.dev>",
   rentalAssistanceDefault:
     "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+  referralSummaryDefault:
+    "Some additional units in this property are only available through a referral from a local nonprofit or agency. To learn if you qualify, please call the number listed above or reach out to the property manager.",
   whatToExpect:
     "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.",
   whatToExpectAdditionalText:
@@ -744,6 +748,11 @@ export const jurisdiction: Jurisdiction = {
   whatToExpectUnderConstruction: "",
   visibleNeighborhoodAmenities: [],
   visibleAccessibilityPriorityTypes: [],
+  visibleApplicationAccessibilityFeatures: [
+    ApplicationAccessibilityFeatureEnum.mobility,
+    ApplicationAccessibilityFeatureEnum.vision,
+    ApplicationAccessibilityFeatureEnum.hearing,
+  ],
   regions: [],
   visibleSpokenLanguages: [],
 }
@@ -1041,10 +1050,68 @@ export const listing: Listing = {
     ],
     unitTypes: [],
     priorityTypes: [],
-    amiPercentages: [],
-    byUnitType: [],
+    amiPercentages: ["30"],
+    byUnitType: [
+      {
+        areaRange: {
+          min: 750,
+          max: 750,
+        },
+        minIncomeRange: {
+          min: "$2,000",
+          max: "$2,000",
+        },
+        occupancyRange: {
+          min: 1,
+          max: 3,
+        },
+        rentRange: {
+          min: "$1,200",
+          max: "$1,200",
+        },
+        rentAsPercentIncomeRange: {
+          min: 0,
+          max: 20,
+        },
+        floorRange: {
+          min: 1,
+          max: 1,
+        },
+        unitTypes: {
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          id: "dbfd0d09-5e49-42dc-a660-709a2406d025",
+          name: UnitTypeEnum.oneBdrm,
+          numBedrooms: 1,
+        },
+        totalAvailable: 0,
+      },
+    ],
     byAMI: [],
-    hmi: { columns: {}, rows: [] },
+    hmi: {
+      columns: {
+        sizeColumn: "listings.householdSize",
+        maxIncomeMonth: "listings.maxIncomeMonth",
+        maxIncomeYear: "listings.maxIncomeYear",
+      },
+      rows: [
+        {
+          sizeColumn: 1,
+          maxIncomeMonth: "listings.monthlyIncome*income:$3,000",
+          maxIncomeYear: "listings.annualIncome*income:$36,000",
+        },
+        {
+          sizeColumn: 2,
+          maxIncomeMonth: "listings.monthlyIncome*income:$4,000",
+          maxIncomeYear: "listings.annualIncome*income:$48,000",
+        },
+        {
+          sizeColumn: 3,
+          maxIncomeMonth: "listings.monthlyIncome*income:$5,000",
+          maxIncomeYear: "listings.annualIncome*income:$60,000",
+        },
+      ],
+    },
   },
   unitAmenities: "Dishwasher",
   developer: "Charities Housing",
@@ -1220,6 +1287,8 @@ export const mockBaseJurisdiction: Jurisdiction = {
   emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
   rentalAssistanceDefault:
     "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+  referralSummaryDefault:
+    "Some additional units in this property are only available through a referral from a local nonprofit or agency. To learn if you qualify, please call the number listed above or reach out to the property manager.",
   whatToExpect:
     "<p>If you are interested in applying for this property, please get in touch in one of these ways:</p><ul><li><p>Phone</p></li><li><p>Email</p></li><li><p>In-person</p></li><li><p>In some instances, the property has a link directly to an application</p></li></ul><p>Once you contact a property, ask if they have any available units if you are looking to move in immediately.</p><p><strong>Waitlists</strong>:</p><p>If none are available, but you are still interested in eventually living at the property, ask how you can be placed on their waitlist.</p>",
   whatToExpectAdditionalText:
@@ -1234,6 +1303,7 @@ export const mockBaseJurisdiction: Jurisdiction = {
   whatToExpectUnderConstruction: "",
   visibleNeighborhoodAmenities: [],
   visibleAccessibilityPriorityTypes: [],
+  visibleApplicationAccessibilityFeatures: [],
   regions: [],
   visibleSpokenLanguages: [],
 }

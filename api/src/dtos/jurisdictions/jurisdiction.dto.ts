@@ -22,6 +22,8 @@ import { IdDTO } from '../shared/id.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { UnitAccessibilityPriorityTypeEnum } from '../../enums/units/accessibility-priority-type-enum';
 import { SpokenLanguageEnum } from '../../enums/applications/spoken-language-enum';
+import { ApplicationAccessibilityFeatureEnum } from '../../enums/applications/application-accessibility-feature-enum';
+import { HouseholdMemberRelationship } from '../../enums/applications/household-member-relationship-enum';
 import { ListingFeaturesConfiguration } from './listing-features-config.dto';
 import { RaceEthnicityConfiguration } from './race-ethnicity-configuration.dto';
 
@@ -81,6 +83,11 @@ export class Jurisdiction extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   emailFromAddress: string;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  referralSummaryDefault?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -216,6 +223,34 @@ export class Jurisdiction extends AbstractDTO {
     isArray: true,
   })
   visibleSpokenLanguages: SpokenLanguageEnum[];
+
+  @Expose()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ApplicationAccessibilityFeatureEnum, {
+    groups: [ValidationsGroupsEnum.default],
+    each: true,
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: ApplicationAccessibilityFeatureEnum,
+    enumName: 'ApplicationAccessibilityFeatureEnum',
+    isArray: true,
+  })
+  visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[];
+
+  @Expose()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(HouseholdMemberRelationship, {
+    groups: [ValidationsGroupsEnum.default],
+    each: true,
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: HouseholdMemberRelationship,
+    enumName: 'HouseholdMemberRelationship',
+    isArray: true,
+  })
+  visibleHouseholdMemberRelationships: HouseholdMemberRelationship[];
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })

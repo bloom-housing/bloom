@@ -1,7 +1,7 @@
 // --- Meta Information --- //
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions", "views", "driverAdapters"]
+  previewFeatures = ["postgresqlExtensions", "views", "driverAdapters", "metrics"]
 }
 
 datasource db {
@@ -18,10 +18,11 @@ model Accessibility {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 
-  hearing  Boolean?
-  mobility Boolean?
-  other    Boolean?
-  vision   Boolean?
+  hearing          Boolean?
+  hearingAndVision Boolean? @map("hearing_and_vision")
+  mobility         Boolean?
+  other            Boolean?
+  vision           Boolean?
 
   applications Applications?
 
@@ -36,10 +37,11 @@ model AccessibilitySnapshot {
   originalCreatedAt DateTime @map("original_created_at") @db.Timestamp(6)
   updatedAt         DateTime @map("updated_at") @db.Timestamp(6)
 
-  hearing  Boolean?
-  mobility Boolean?
-  other    Boolean?
-  vision   Boolean?
+  hearing          Boolean?
+  hearingAndVision Boolean? @map("hearing_and_vision")
+  mobility         Boolean?
+  other            Boolean?
+  vision           Boolean?
 
   application ApplicationSnapshot?
 
@@ -391,9 +393,12 @@ model Applications {
   demographicsId                 String?                       @unique() @map("demographics_id") @db.Uuid
   // Signifies when PII data should be cleared
   expireAfter                    DateTime?                     @map("expire_after") @db.Timestamp(6)
+  // If a user is deleted we want the historic data of what applications were associated with that user
+  historicalUserId               String?                       @map("historical_user_id") @db.Uuid
   householdExpectingChanges      Boolean?                      @map("household_expecting_changes")
   householdSize                  Int?                          @map("household_size")
   householdStudent               Boolean?                      @map("household_student")
+  reasonableAccommodations       String?                       @map("reasonable_accommodations")
   housingStatus                  String?                       @map("housing_status")
   income                         String?
   incomePeriod                   IncomePeriodEnum?             @map("income_period")
@@ -412,8 +417,12 @@ model Applications {
   reviewStatus                   ApplicationReviewStatusEnum   @default(pending) @map("review_status")
   sendMailToMailingAddress       Boolean?                      @map("send_mail_to_mailing_address")
   status                         ApplicationStatusEnum         @default(submitted)
+  applicationDeclineReason       ApplicationDeclineReasonEnum? @map("application_decline_reason")
+  applicationDeclineReasonAdditionalDetails String?           @map("application_decline_reason_additional_details")
   submissionDate                 DateTime?                     @map("submission_date") @db.Timestamptz(6)
   submissionType                 ApplicationSubmissionTypeEnum @map("submission_type")
+  receivedAt                     DateTime?                     @map("received_at") @db.Timestamptz(6)
+  receivedBy                     String?                       @map("received_by")
   userId                         String?                       @map("user_id") @db.Uuid
   // Used to denote when an application was transferred from another jurisdiction
   wasCreatedExternally           Boolean                       @default(false) @map("was_created_externally")
@@ -468,6 +477,7 @@ model ApplicationSnapshot {
   householdExpectingChanges      Boolean?                      @map("household_expecting_changes")
   householdSize                  Int?                          @map("household_size")
   householdStudent               Boolean?                      @map("household_student")
+  reasonableAccommodations       String?                       @map("reasonable_accommodations")
   housingStatus                  String?                       @map("housing_status")
   income                         String?
   incomePeriod                   IncomePeriodEnum?             @map("income_period")
@@ -486,6 +496,8 @@ model ApplicationSnapshot {
   reviewStatus                   ApplicationReviewStatusEnum   @default(pending) @map("review_status")
   sendMailToMailingAddress       Boolean?                      @map("send_mail_to_mailing_address")
   status                         ApplicationStatusEnum         @default(submitted)
+  applicationDeclineReason       ApplicationDeclineReasonEnum? @map("application_decline_reason")
+  applicationDeclineReasonAdditionalDetails String?           @map("application_decline_reason_additional_details")
   submissionDate                 DateTime?                     @map("submission_date") @db.Timestamptz(6)
   submissionType                 ApplicationSubmissionTypeEnum @map("submission_type")
   userId                         String?                       @map("user_id") @db.Uuid
@@ -789,11 +801,14 @@ model Jurisdictions {
   partnerTerms                        String?                             @map("partner_terms")
   publicUrl                           String                              @default("") @map("public_url")
   regions                             String[]                            @default([]) @map("regions")
+  referralSummaryDefault              String?                             @map("referral_summary_default")
   rentalAssistanceDefault             String                              @map("rental_assistance_default")
   requiredListingFields               String[]                            @default([]) @map("required_listing_fields")
   visibleAccessibilityPriorityTypes   UnitAccessibilityPriorityTypeEnum[] @default([mobility, hearing, vision, hearingAndVision, mobilityAndHearing, mobilityAndVision, mobilityHearingAndVision]) @map("visible_accessibility_priority_types")
   visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[]         @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
   visibleSpokenLanguages              SpokenLanguageEnum[]                @default([chineseCantonese, chineseMandarin, english, filipino, korean, russian, spanish, vietnamese, farsi, afghani, notListed]) @map("visible_spoken_languages")
+  visibleApplicationAccessibilityFeatures ApplicationAccessibilityFeatureEnum[] @default([mobility, hearing, vision]) @map("visible_application_accessibility_features")
+  visibleHouseholdMemberRelationships HouseholdMemberRelationshipEnum[]   @default([spouse, registeredDomesticPartner, parent, child, sibling, cousin, aunt, uncle, nephew, niece, grandparent, greatGrandparent, inLaw, friend, other, aideOrAttendant]) @map("visible_household_member_relationships")
   whatToExpect                        String                              @default("Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.") @map("what_to_expect")
   whatToExpectAdditionalText          String                              @default("") @map("what_to_expect_additional_text")
   whatToExpectUnderConstruction       String                              @default("") @map("what_to_expect_under_construction")
@@ -1278,6 +1293,7 @@ model Listings {
   resultId                             String?                     @map("result_id") @db.Uuid
   resultLink                           String?                     @map("result_link")
   reviewOrderType                      ReviewOrderTypeEnum?        @map("review_order_type")
+  scheduledPublishAt                   DateTime?                   @map("scheduled_publish_at") @db.Timestamptz(6)
   section8Acceptance                   Boolean?                    @map("section8_acceptance")
   servicesOffered                      String?                     @map("services_offered")
   smokingPolicy                        String?                     @map("smoking_policy")
@@ -1454,6 +1470,7 @@ model ListingSnapshot {
   resultSnapshotId                        String?                     @map("result_snapshot_id") @db.Uuid
   resultLink                              String?                     @map("result_link")
   reviewOrderType                         ReviewOrderTypeEnum?        @map("review_order_type")
+  scheduledPublishAt                      DateTime?                   @map("scheduled_publish_at") @db.Timestamptz(6)
   section8Acceptance                      Boolean?                    @map("section8_acceptance")
   servicesOffered                         String?                     @map("services_offered")
   smokingPolicy                           String?                     @map("smoking_policy")
@@ -2055,15 +2072,16 @@ model UserAccounts {
   wasWarnedOfDeletion       Boolean?       @default(false) @map("was_warned_of_deletion")
 
   activityLogs              ActivityLog[]
-  address                   Address?                @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  agency                    Agency?                 @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  address                   Address?                     @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  agency                    Agency?                      @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   applicationFlaggedSet     ApplicationFlaggedSet[]
   applications              Applications[]
-  favoriteListings          Listings[]              @relation("favorite_listings")
+  favoriteListings          Listings[]                   @relation("favorite_listings")
   jurisdictions             Jurisdictions[]
-  lastUpdatedListingsByUser Listings[]              @relation("last_updated_by_user")
+  lastUpdatedListingsByUser Listings[]                   @relation("last_updated_by_user")
   listings                  Listings[]
-  requestedChangesListings  Listings[]              @relation("requested_changes_user")
+  notificationPreferences   UserNotificationPreferences?
+  requestedChangesListings  Listings[]                   @relation("requested_changes_user")
   userPreferences           UserPreferences?
   userRoles                 UserRoles?
 
@@ -2114,11 +2132,12 @@ model UserAccountSnapshot {
   title                     String?
   wasWarnedOfDeletion       Boolean?       @default(false) @map("was_warned_of_deletion")
 
-  address      AddressSnapshot?  @relation(fields: [addressSnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  agency       Agency?           @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  jurisdiction Jurisdictions[]
-  listing      Listings[]
-  userRole     UserRoleSnapshot?
+  address                 AddressSnapshot?                     @relation(fields: [addressSnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  agency                  Agency?                              @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  notificationPreferences UserNotificationPreferencesSnapshot?
+  jurisdiction            Jurisdictions[]
+  listing                 Listings[]
+  userRole                UserRoleSnapshot?
 
   @@map("user_account_snapshot")
 }
@@ -2134,6 +2153,47 @@ model UserPreferences {
   favoritesListings Listings[]
 
   @@map("user_preferences")
+}
+
+model UserNotificationPreferences {
+  userId                   String       @id() @map("user_id") @db.Uuid
+  updatedAt                DateTime     @updatedAt @map("updated_at") @db.Timestamp(6)
+  user                     UserAccounts @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  lottery                  Boolean?     @default(false)
+  waitlist                 Boolean?     @default(false)
+  mobility                 Boolean?     @default(false)
+  hearing                  Boolean?     @default(false)
+  vision                   Boolean?     @default(false)
+  hearingAndVision         Boolean?     @default(false) @map("hearing_and_vision")
+  mobilityAndHearing       Boolean?     @default(false) @map("mobility_and_hearing")
+  mobilityAndVision        Boolean?     @default(false) @map("mobility_and_vision")
+  mobilityHearingAndVision Boolean?     @default(false) @map("mobility_hearing_and_vision")
+  wantsRegionNotifs        Boolean?     @default(false) @map("wants_region_notifs")
+  regions                  String[]
+
+  @@index([userId])
+  // TODO - Add partial indexes on all Boolean columns where value is TRUE (matching the 55_setup_user_notification_preferences migration script)
+  @@map("user_notification_preferences")
+}
+
+model UserNotificationPreferencesSnapshot {
+  userSnapshotId           String              @id() @map("user_snapshot_id") @db.Uuid
+  originalUserID           String              @map("original_user_id") @db.Uuid
+  updatedAt                DateTime            @updatedAt @map("updated_at") @db.Timestamp(6)
+  user                     UserAccountSnapshot @relation(fields: [userSnapshotId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  lottery                  Boolean?            @default(false)
+  waitlist                 Boolean?            @default(false)
+  mobility                 Boolean?            @default(false)
+  hearing                  Boolean?            @default(false)
+  vision                   Boolean?            @default(false)
+  hearingAndVision         Boolean?            @default(false) @map("hearing_and_vision")
+  mobilityAndHearing       Boolean?            @default(false) @map("mobility_and_hearing")
+  mobilityAndVision        Boolean?            @default(false) @map("mobility_and_vision")
+  mobilityHearingAndVision Boolean?            @default(false) @map("mobility_hearing_and_vision")
+  wantsRegionNotifs        Boolean?            @default(false) @map("wants_region_notifs")
+  regions                  String[]
+
+  @@map("user_notification_preferences_snapshot")
 }
 
 // UserRole Section
@@ -2219,6 +2279,20 @@ enum ApplicationStatusEnum {
   @@map("application_status_enum")
 }
 
+enum ApplicationDeclineReasonEnum {
+  householdIncomeTooHigh
+  householdIncomeTooLow
+  householdSizeTooLarge
+  householdSizeTooSmall
+  attemptedToContactNoResponse
+  applicantDeclinedUnit
+  doesNotMeetSeniorBuildingRequirement
+  householdDoesNotNeedAccessibleUnit
+  other
+
+  @@map("application_decline_reason_enum")
+}
+
 enum ApplicationSubmissionTypeEnum {
   paper
   electronical
@@ -2283,6 +2357,7 @@ enum ListingEventsTypeEnum {
 enum ListingsStatusEnum {
   active
   pending
+  scheduled
   closed
   pendingReview
   changesRequested
@@ -2408,6 +2483,44 @@ enum SpokenLanguageEnum {
   notListed
 
   @@map("spoken_language_enum")
+}
+
+enum ApplicationAccessibilityFeatureEnum {
+  hearing
+  hearingAndVision
+  mobility
+  other
+  vision
+
+  @@map("application_accessibility_feature_enum")
+}
+
+enum HouseholdMemberRelationshipEnum {
+  spouse
+  registeredDomesticPartner
+  parent
+  child
+  sibling
+  cousin
+  aunt
+  uncle
+  nephew
+  niece
+  grandparent
+  greatGrandparent
+  inLaw
+  friend
+  other
+  aideOrAttendant
+  spousePartner
+  girlfriendBoyfriend
+  brotherSister
+  auntUncle
+  nephewNiece
+  grandparentGreatGrandparent
+  liveInAide
+
+  @@map("household_member_relationship_enum")
 }
 
 enum RegionEnum {

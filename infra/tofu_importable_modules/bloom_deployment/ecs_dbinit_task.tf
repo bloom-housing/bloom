@@ -50,11 +50,11 @@ resource "aws_ecs_task_definition" "bloom_dbinit" {
   ])
 }
 
-// Avoids the error :
-//
-// module.bloom_deployment.null_resource.bloom_dbinit_run (local-exec): An error occurred
-// (ClientException) when calling the RunTask operation: ECS was unable to assume the role
-// 'arn:aws:iam::x:role/bloom-dbinit-container' that was provided for this task.
+# Avoids the error:
+#
+# module.bloom_deployment.null_resource.bloom_dbinit_run (local-exec): An error occurred
+# (ClientException) when calling the RunTask operation: ECS was unable to assume the role
+# 'arn:aws:iam::x:role/bloom-dbinit-container' that was provided for this task.
 resource "time_sleep" "on_dbinit_container_role_creation" {
   depends_on = [
     aws_iam_role_policy.bloom_ecs["dbinit"],

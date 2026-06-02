@@ -24,6 +24,7 @@ env:
   MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
   FEATURE_LISTINGS_APPROVAL: "TRUE"
   API_PASS_KEY: "some-key-here"
+  DB_NO_SSL: 'TRUE'
 
 
 jobs:

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { StackedTableRow, StandardTableData, t } from "@bloom-housing/ui-components"
-import { Listing, UnitGroup, UnitType, UnitTypeEnum } from "../types/backend-swagger"
+import { Listing, UnitGroup, UnitType } from "../types/backend-swagger"
 
 export const getOccupancy = (minOcc?: number | null, maxOcc?: number | null) => {
   if (minOcc && maxOcc && minOcc < maxOcc) {
@@ -126,33 +126,4 @@ export const stackedUnitGroupsOccupancyTable = (listing: Listing) => {
     return acc
   }, [])
   return tableRows
-}
-
-export const getOccupancyDescription = (listing: Listing, enableUnitGroups?: boolean) => {
-  if (enableUnitGroups) {
-    const hasSRO = listing.unitGroups?.some((unitGroup) =>
-      unitGroup.unitTypes?.some((unitType) => unitType.name === UnitTypeEnum.SRO)
-    )
-    const unitTypes = listing.unitGroups?.map((unitGroup) => unitGroup.unitTypes)
-    if (hasSRO) {
-      return unitTypes?.length === 1
-        ? t("listings.occupancyDescriptionAllSro")
-        : t("listings.occupancyDescriptionSomeSro")
-    } else {
-      return t("listings.occupancyDescriptionNoSro")
-    }
-  } else {
-    const unitsSummarized = listing.unitsSummarized
-    if (
-      unitsSummarized &&
-      unitsSummarized.unitTypes &&
-      unitsSummarized.unitTypes.map((unitType) => unitType.name).includes(UnitTypeEnum.SRO)
-    ) {
-      return unitsSummarized.unitTypes.length === 1
-        ? t("listings.occupancyDescriptionAllSro")
-        : t("listings.occupancyDescriptionSomeSro")
-    } else {
-      return t("listings.occupancyDescriptionNoSro")
-    }
-  }
 }

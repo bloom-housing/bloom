@@ -6,29 +6,35 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AgTable, t, useAgTable } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { Button, Tag } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import Head from "next/head"
-import { useRouter } from "next/router"
 import EditMultiselectQuestion, {
   DrawerType,
 } from "../../../components/settings/MultiselectQuestions/EditMultiselectQuestion"
 import {
+  getEnabledSettingsTabCount,
   getSettingsTabs,
   SettingsIndexEnum,
 } from "../../../components/settings/SettingsViewHelpers"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import Layout from "../../../layouts"
-import TabView from "../../../layouts/TabView"
+import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 import styles from "./preferences.module.scss"
 
 const MultiselectQuestionsPreferences = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
-  const router = useRouter()
   const tableOptions = useAgTable()
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
+  const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
+  const settingsTabsFeatureFlags = {
+    enablePreferences: true,
+    enableProperties,
+    enableAgencies,
+  }
 
   const [multiselectQuestionDrawerOpen, setMultiselectQuestionDrawerOpen] =
     useState<DrawerType | null>(null)
@@ -41,14 +47,17 @@ const MultiselectQuestionsPreferences = () => {
         field: "name",
         flex: 2,
         sortable: true,
+        unSortIcon: true,
         // disable frontend sorting
         comparator: () => 0,
+        minWidth: 290,
       },
       {
         headerName: t("application.status"),
         field: "status",
         flex: 1,
         sortable: true,
+        unSortIcon: true,
         // disable frontend sorting
         comparator: () => 0,
         cellRendererFramework: ({ data }) => {
@@ -62,29 +71,36 @@ const MultiselectQuestionsPreferences = () => {
               variant = "highlight-warm"
               break
           }
-          const statusText = `${data.status.charAt(0).toUpperCase()}${data.status.slice(1)}`
+          const statusText = t(`msq.status.${data.status}`)
           return <Tag variant={variant}>{statusText}</Tag>
         },
+        minWidth: 110,
       },
       {
         headerName: t("t.jurisdiction"),
         field: "jurisdiction",
         flex: 1.5,
         sortable: true,
+        unSortIcon: true,
         // disable frontend sorting
         comparator: () => 0,
+        minWidth: 150,
       },
       {
         headerName: t("t.lastUpdated"),
         field: "updatedAt",
+        sort: "desc",
         sortable: true,
+        unSortIcon: true,
         // disable frontend sorting
         comparator: () => 0,
+        minWidth: 160,
       },
       {
-        headerName: "actions",
+        headerName: "action",
         field: "",
         flex: 0.75,
+        minWidth: 100,
         cellRendererFramework: ({ data }) => {
           const { preference, id } = data
 
@@ -127,7 +143,9 @@ const MultiselectQuestionsPreferences = () => {
       MultiselectQuestionsStatusEnum.toRetire,
     ],
     {
-      sort: tableOptions.sort.sortOptions,
+      sort: tableOptions.sort.sortOptions?.length
+        ? tableOptions.sort.sortOptions
+        : [{ orderBy: "updatedAt", orderDir: "DESC" }],
       page: tableOptions.pagination.currentPage,
       limit: tableOptions.pagination.itemsPerPage,
       search: tableOptions.filter.filterValue,
@@ -161,8 +179,8 @@ const MultiselectQuestionsPreferences = () => {
         </Head>
         <NavigationHeader className="relative" title={t("settings.preferences")} />
         <TabView
-          hideTabs={!enableProperties}
-          tabs={getSettingsTabs(SettingsIndexEnum.preferences, true)}
+          hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags) <= 1}
+          tabs={getSettingsTabs(SettingsIndexEnum.preferences, true, settingsTabsFeatureFlags)}
         >
           <section className={styles["preferences-section"]}>
             <div className={styles["table-wrapper"]}>

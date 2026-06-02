@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@bloom-housing/shared-helpers": "^7.7.1",
-    "@bloom-housing/ui-components": "13.0.7",
+    "@bloom-housing/ui-components": "14.0.2",
     "@bloom-housing/ui-seeds": "3.4.1",
     "@heroicons/react": "^2.2.0",
     "@mapbox/mapbox-sdk": "^0.13.0",
@@ -42,7 +42,7 @@
     "@tiptap/starter-kit": "^2.24.0",
     "ag-grid-community": "^26.0.0",
     "autoprefixer": "^10.3.4",
-    "axios": "^1.8.3",
+    "axios": "^1.15.0",
     "axios-cookiejar-support": "^5.0.5",
     "clone-deep": "^4.0.1",
     "dayjs": "^1.10.7",

@@ -7,7 +7,9 @@ import tz from "dayjs/plugin/timezone"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import {
+  AgencyFilterParams,
   ApplicationOrderByKeys,
+  EnumAgencyFilterParamsComparison,
   EnumListingFilterParamsComparison,
   EnumMultiselectQuestionFilterParamsComparison,
   EnumPropertyFilterParamsComparison,
@@ -139,7 +141,7 @@ export function useListingsData({
   }
 }
 
-export const useListingExport = () => {
+export const useListingExport = (useSecurePathway = false) => {
   const { listingsService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
 
@@ -149,12 +151,21 @@ export const useListingExport = () => {
     setCsvExportLoading(true)
 
     try {
-      const content = await listingsService.listAsCsv(
-        { timeZone: dayjs.tz.guess() },
-        { responseType: "arraybuffer" }
-      )
-      const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
-      const url = window.URL.createObjectURL(blob)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let content: any
+      let url: string
+
+      if (useSecurePathway) {
+        content = await listingsService.listAsCsvSecure({ timeZone: dayjs.tz.guess() })
+        url = content
+      } else {
+        content = await listingsService.listAsCsv(
+          { timeZone: dayjs.tz.guess() },
+          { responseType: "arraybuffer" }
+        )
+        const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
+        url = window.URL.createObjectURL(blob)
+      }
       const link = document.createElement("a")
       link.href = url
       const now = new Date()
@@ -166,7 +177,12 @@ export const useListingExport = () => {
       addToast(t("t.exportSuccess"), { variant: "success" })
     } catch (err) {
       console.log(err)
-      addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+      addToast(
+        t("account.settings.alerts.genericError", { contactEmail: t("resources.contactEmail") }),
+        {
+          variant: "alert",
+        }
+      )
     }
 
     setCsvExportLoading(false)
@@ -643,7 +659,12 @@ export const useZipExport = (
       addToast(t("t.exportSuccess"), { variant: "success" })
     } catch (err) {
       console.log(err)
-      addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+      addToast(
+        t("account.settings.alerts.genericError", { contactEmail: t("resources.contactEmail") }),
+        {
+          variant: "alert",
+        }
+      )
     }
     setExportLoading(false)
   }, [])
@@ -693,7 +714,12 @@ const useCsvExport = (
       addToast(t("t.exportSuccess"), { variant: "success" })
     } catch (err) {
       console.log(err)
-      addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+      addToast(
+        t("account.settings.alerts.genericError", { contactEmail: t("resources.contactEmail") }),
+        {
+          variant: "alert",
+        }
+      )
     }
 
     setCsvExportLoading(false)
@@ -758,6 +784,49 @@ export function useWatchOnFormNumberFieldsChange(
     return () => clearTimeout(timeoutId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldToTriggerWatch.join(","), fieldValuesToWatch.join(","), trigger])
+}
+
+type UseAgenciesListProps = PaginationProps & {
+  search?: string
+  jurisdictions?: string
+}
+
+export function useAgenciesList({ page, limit, search, jurisdictions }: UseAgenciesListProps) {
+  const filter: AgencyFilterParams[] = []
+  const params = {
+    page,
+    limit,
+    search,
+    filter,
+  }
+
+  if (search?.length < 3) {
+    delete params.search
+  } else {
+    Object.assign(params, { search })
+  }
+
+  params.filter.push({
+    $comparison: EnumAgencyFilterParamsComparison.IN,
+    jurisdiction: jurisdictions && jurisdictions !== "" ? jurisdictions : undefined,
+  })
+
+  const paramsString = qs.stringify(params)
+
+  const { agencyService } = useContext(AuthContext)
+
+  const fetcher = () => agencyService.list(params)
+
+  const cacheKey = `/api/adapter/agency?${paramsString}`
+
+  const { data, error } = useSWR(cacheKey, fetcher)
+
+  return {
+    cacheKey,
+    data,
+    loading: !error && !data,
+    error,
+  }
 }
 
 export function usePropertiesList({ page, limit, search, jurisdictions }: UsePropertiesListProps) {

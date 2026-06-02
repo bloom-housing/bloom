@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
+  ApplicationDeclineReasonEnum,
   ApplicationReviewStatusEnum,
   ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
@@ -18,6 +19,7 @@ import {
   IsOptional,
   IsString,
   MaxLength,
+  MinLength,
   ValidateNested,
 } from 'class-validator';
 import { Accessibility } from './accessibility.dto';
@@ -105,6 +107,13 @@ export class Application extends AbstractDTO {
   householdStudent?: boolean;
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(1000, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  reasonableAccommodations?: string;
+
+  @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
   @ApiPropertyOptional()
@@ -130,6 +139,24 @@ export class Application extends AbstractDTO {
     enumName: 'ApplicationStatusEnum',
   })
   status: ApplicationStatusEnum;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ApplicationDeclineReasonEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional({
+    enum: ApplicationDeclineReasonEnum,
+    enumName: 'ApplicationDeclineReasonEnum',
+  })
+  applicationDeclineReason?: ApplicationDeclineReasonEnum;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  applicationDeclineReasonAdditionalDetails?: string;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -175,6 +202,20 @@ export class Application extends AbstractDTO {
   @Type(() => Date)
   @ApiPropertyOptional()
   submissionDate?: Date;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @MinLength(1, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  receivedBy?: string;
+
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  @ApiPropertyOptional()
+  receivedAt?: Date;
 
   // if this field is true then the application is a confirmed duplicate
   // meaning that the record in the applicaiton flagged set table has a status of duplicate

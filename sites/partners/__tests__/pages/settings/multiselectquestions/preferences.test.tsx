@@ -1,9 +1,6 @@
 import React from "react"
 import { MessageContext, MessageProvider } from "@bloom-housing/shared-helpers"
-import {
-  listing,
-  multiselectQuestionPreferenceV2,
-} from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { multiselectQuestionPreferenceV2 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   FeatureFlagEnum,
   MultiselectQuestionsStatusEnum,
@@ -82,14 +79,6 @@ describe("settings/multiselectquestions/preferences", () => {
     it("should render the preference table", async () => {
       window.URL.createObjectURL = jest.fn()
       document.cookie = "access-token-available=True"
-      server.use(
-        rest.get(
-          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
-          (_req, res, ctx) => {
-            return res(ctx.json([listing]))
-          }
-        )
-      )
       render(<MultiselectQuestionsPreferences />)
 
       expect(screen.getByRole("heading", { level: 1, name: "Preferences" })).toBeInTheDocument()
@@ -167,12 +156,6 @@ describe("settings/multiselectquestions/preferences", () => {
             })
           )
         }),
-        rest.get(
-          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
-          (_req, res, ctx) => {
-            return res(ctx.json([listing]))
-          }
-        ),
         rest.post("http://localhost/api/adapter/multiselectQuestions", async (req, res, ctx) => {
           requestSpy(await req.json())
           return res(ctx.json({}))
@@ -221,7 +204,7 @@ describe("settings/multiselectquestions/preferences", () => {
       ).toBeInTheDocument()
 
       expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
-      expect(screen.getByRole("button", { name: "Show to Partners" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Show to partners" })).toBeInTheDocument()
       expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument()
 
       // Fill out the form
@@ -255,7 +238,7 @@ describe("settings/multiselectquestions/preferences", () => {
         expect(requestSpy).toHaveBeenCalledWith({
           applicationSection: "preferences",
           description: "Preference Description",
-          hideFromListing: true,
+          hideFromListing: false,
           jurisdictions: [],
           jurisdiction: { id: "id1", name: "Housing Jurisdiction" },
           links: [],
@@ -321,8 +304,8 @@ describe("settings/multiselectquestions/preferences", () => {
       fireEvent.change(within(drawer).getByRole("textbox", { name: "Title" }), {
         target: { value: "New Title" },
       })
-      expect(within(drawer).getByRole("button", { name: "Hide from Partners" })).toBeInTheDocument()
-      await userEvent.click(within(drawer).getByRole("button", { name: "Hide from Partners" }))
+      expect(within(drawer).getByRole("button", { name: "Hide from partners" })).toBeInTheDocument()
+      await userEvent.click(within(drawer).getByRole("button", { name: "Hide from partners" }))
       await waitFor(() => {
         expect(requestSpy).toHaveBeenCalledTimes(1)
         expect(requestSpy).toHaveBeenCalledWith({

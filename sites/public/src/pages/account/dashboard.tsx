@@ -62,7 +62,7 @@ function Dashboard(props: DashboardProps) {
 
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-      <Layout pageTitle={t("nav.myDashboard")}>
+      <Layout pageTitle={t("nav.myDashboard")} metaDescription={t("pageDescription.dashboard")}>
         {alertMessage && (
           <AlertBox className="" onClose={() => closeAlert()} type="success">
             {t(alertMessage)}

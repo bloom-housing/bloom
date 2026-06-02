@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
-import { Form, t, AlertBox } from "@bloom-housing/ui-components"
+import { t, AlertBox } from "@bloom-housing/ui-components"
 import { Agency } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { PageView, pushGtmEvent, BloomCard, AuthContext } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, BloomCard, Form } from "@bloom-housing/shared-helpers"
 import { fetchAgencies, fetchJurisdictionByName } from "../lib/hooks"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
@@ -66,7 +66,10 @@ const CreateAdvocateAccount = ({ agencies }: CreateAdvocateAccountProps) => {
   }
 
   return (
-    <FormsLayout pageTitle={t("advocateAccount.requestAccountTitle")}>
+    <FormsLayout
+      pageTitle={t("advocateAccount.requestAccountTitle")}
+      metaDescription={t("pageDescription.createAdvocateAccount")}
+    >
       <BloomCard
         iconSymbol="userCircle"
         title={t("advocateAccount.requestAccountTitle")}

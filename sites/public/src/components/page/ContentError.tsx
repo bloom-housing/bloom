@@ -7,7 +7,9 @@ export const ContentError = () => {
   return (
     <Hero
       title={t("errors.somethingWentWrong")}
-      subtitle={t("authentication.signIn.errorGenericMessage")}
+      subtitle={t("authentication.signIn.errorGenericMessage", {
+        contactEmail: t("resources.contactEmail"),
+      })}
       note={"500"}
       action={
         <Button variant="primary-outlined" href="/">

@@ -58,7 +58,8 @@ import { PartnerUserCreate } from '../dtos/users/partner-user-create.dto';
 import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
 import { SnapshotCreateService } from './snapshot-create.service';
 import { toAddHelper, toRemoveHelper } from '../utilities/snapshot-helpers';
-import { AdvocateUserAccept } from 'src/dtos/users/advocate-user-accept.dto';
+import { AdvocateUserAccept } from '../dtos/users/advocate-user-accept.dto';
+import { UserNotificationPreferences } from '../dtos/users/user-notification-preferences.dto';
 
 /*
   this is the service for users
@@ -559,6 +560,7 @@ export class UserService {
       storedUser.userRoles?.isLimitedJurisdictionalAdmin ||
       storedUser.userRoles?.isPartner ||
       storedUser.userRoles?.isSupportAdmin;
+
     const isUserSiteMatch = async () => {
       if (isPartnerPortalUser) {
         return dto.appUrl === process.env.PARTNERS_PORTAL_URL;
@@ -578,6 +580,10 @@ export class UserService {
     };
     // user on wrong site, return neutral message and don't send email
     if (!(await isUserSiteMatch())) return { success: true };
+
+    if (storedUser.isAdvocate && !storedUser.isApproved) {
+      return { success: false };
+    }
 
     const payload = {
       id: storedUser.id,
@@ -912,11 +918,15 @@ export class UserService {
     let newUser = await this.prisma.userAccounts.create({
       data: {
         passwordHash: passwordHash,
+        language: dto.language,
         email: dto.email,
         firstName: dto.firstName,
         middleName: dto.middleName,
         lastName: dto.lastName,
         dob: dto.dob,
+        notificationPreferences: {
+          create: {},
+        },
         jurisdictions: jurisdictionsToConnect
           ? {
               connect: jurisdictionsToConnect.map((juris) => ({
@@ -1018,6 +1028,9 @@ export class UserService {
             ...dto.userRoles,
           },
         },
+        notificationPreferences: {
+          create: {},
+        },
         jurisdictions: dto.jurisdictions
           ? {
               connect: dto.jurisdictions.map((juris) => ({
@@ -1114,6 +1127,7 @@ export class UserService {
     let newUser = await this.prisma.userAccounts.create({
       data: {
         passwordHash: passwordHash,
+        language: dto.language,
         email: dto.email,
         firstName: dto.firstName,
         middleName: dto.middleName,
@@ -1124,6 +1138,9 @@ export class UserService {
           },
         },
         isAdvocate: true,
+        notificationPreferences: {
+          create: {},
+        },
         jurisdictions: jurisdictionsToConnect
           ? {
               connect: jurisdictionsToConnect,
@@ -1587,6 +1604,14 @@ export class UserService {
       });
     }
 
+    if (user.notificationPreferences) {
+      await this.prisma.userNotificationPreferences.delete({
+        where: {
+          userId: user.id,
+        },
+      });
+    }
+
     await this.prisma.userAccounts.delete({
       where: {
         id: user.id,
@@ -1709,6 +1734,49 @@ export class UserService {
         success: false,
       };
     }
+    return {
+      success: true,
+    };
+  }
+
+  async retrievePreferences(requestingUser: User) {
+    const notificationPreferences =
+      await this.prisma.userNotificationPreferences.findUnique({
+        where: {
+          userId: requestingUser.id,
+        },
+      });
+
+    if (!notificationPreferences) {
+      throw new NotFoundException(
+        'Failed to retrieve user notification preferences',
+      );
+    }
+
+    return mapTo(UserNotificationPreferences, notificationPreferences);
+  }
+
+  async updatePreferences(
+    dto: UserNotificationPreferences,
+    requestingUser: User,
+  ): Promise<SuccessDTO> {
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'userProfile',
+      permissionActions.update,
+      {
+        id: requestingUser.id,
+      },
+    );
+
+    await this.prisma.userNotificationPreferences.update({
+      data: {
+        ...dto,
+      },
+      where: {
+        userId: requestingUser.id,
+      },
+    });
     return {
       success: true,
     };

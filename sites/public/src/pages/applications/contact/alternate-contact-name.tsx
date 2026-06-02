@@ -91,7 +91,7 @@ const ApplicationAlternateContactName = () => {
                 id="firstName"
                 name="firstName"
                 label={t("application.contact.givenName")}
-                defaultValue={application.alternateContact.firstName}
+                defaultValue={application.alternateContact?.firstName}
                 disabled={isAdvocate}
                 validation={isAdvocate ? undefined : { required: true, maxLength: 64 }}
                 errorMessage={
@@ -107,7 +107,7 @@ const ApplicationAlternateContactName = () => {
                 id="lastName"
                 name="lastName"
                 label={t("application.contact.familyName")}
-                defaultValue={application.alternateContact.lastName}
+                defaultValue={application.alternateContact?.lastName}
                 disabled={isAdvocate}
                 validation={isAdvocate ? undefined : { required: true, maxLength: 64 }}
                 error={errors.lastName}
@@ -120,7 +120,7 @@ const ApplicationAlternateContactName = () => {
                 dataTestId={"app-alternate-last-name"}
               />
             </fieldset>
-            {application.alternateContact.type === "caseManager" && (
+            {application.alternateContact?.type === "caseManager" && (
               <div className="mt-6">
                 <fieldset>
                   <legend className="text__caps-spaced">
@@ -133,7 +133,7 @@ const ApplicationAlternateContactName = () => {
                     id="agency"
                     name="agency"
                     label={t("application.alternateContact.name.caseManagerAgencyFormPlaceHolder")}
-                    defaultValue={application.alternateContact.agency}
+                    defaultValue={application.alternateContact?.agency}
                     disabled={isAdvocate}
                     validation={isAdvocate ? undefined : { required: true }}
                     error={errors.agency}

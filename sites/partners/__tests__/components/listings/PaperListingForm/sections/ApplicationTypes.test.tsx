@@ -317,4 +317,34 @@ describe("ApplicationTypes", () => {
     expect(customApplicationInput).toBeInTheDocument()
     expect(customApplicationInput).toHaveAttribute("placeholder", "https://")
   })
+
+  it("should prefill the reference summary with default text", async () => {
+    render(
+      <FormProviderWrapper>
+        <ApplicationTypes
+          disableCommonApplication={true}
+          enableReferralQuestionUnits={false}
+          jurisdiction={jurisdiction.id}
+          listing={listing}
+          requiredFields={[]}
+          defaultReferralText="Test default referral summary text"
+        />
+      </FormProviderWrapper>
+    )
+
+    const referralFieldset = screen.getByRole("group", {
+      name: /is there a referral opportunity/i,
+    })
+    expect(referralFieldset).toBeInTheDocument()
+
+    const referralYesOption = within(referralFieldset).getByRole("radio", { name: /yes/i })
+    expect(referralYesOption).toBeInTheDocument()
+    await userEvent.click(referralYesOption)
+
+    expect(referralYesOption).toBeChecked()
+
+    const textBox = await screen.findByRole("textbox", { name: /referral summary/i })
+    expect(textBox).toBeInTheDocument()
+    expect(textBox).toHaveValue("Test default referral summary text")
+  })
 })

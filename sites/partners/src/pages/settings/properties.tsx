@@ -1,17 +1,22 @@
 import React, { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { AgTable, t, useAgTable, useMutate } from "@bloom-housing/ui-components"
+import { t, useMutate } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   Property,
   PropertyCreate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import TabView from "../../layouts/TabView"
+import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
-import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
+import {
+  getEnabledSettingsTabCount,
+  getSettingsTabs,
+  SettingsIndexEnum,
+} from "../../components/settings/SettingsViewHelpers"
 import { Button } from "@bloom-housing/ui-seeds"
 import { usePropertiesList } from "../../lib/hooks"
 import dayjs from "dayjs"
@@ -39,6 +44,12 @@ const SettingsProperties = () => {
     true
   )
   const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
+  const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
+  const settingsTabsFeatureFlags = {
+    enablePreferences: atLeastOneJurisdictionEnablesPreferences,
+    enableProperties,
+    enableAgencies,
+  }
 
   if (
     !enableProperties ||
@@ -181,8 +192,12 @@ const SettingsProperties = () => {
         </Head>
         <NavigationHeader className="relative" title={t("t.settings")} />
         <TabView
-          hideTabs={!(atLeastOneJurisdictionEnablesPreferences && enableProperties)}
-          tabs={getSettingsTabs(SettingsIndexEnum.properties, v2Preferences)}
+          hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags) <= 1}
+          tabs={getSettingsTabs(
+            SettingsIndexEnum.properties,
+            v2Preferences,
+            settingsTabsFeatureFlags
+          )}
         >
           <AgTable
             id="properties-table"

@@ -277,31 +277,22 @@ Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
-
-  if (autofill & (application.householdMember.length > 0)) {
-    cy.isNextRouteValid("liveAlone")
-  } else {
-    cy.isNextRouteValid("alternateContactInfo")
-  }
+  cy.isNextRouteValid("alternateContactInfo")
 })
 
-Cypress.Commands.add("step6HouseholdSize", (application, autofill) => {
-  if (!autofill) {
-    if (application.householdMember.length > 0) {
-      cy.getByID("householdSizeLiveWithOthers").click()
-
-      cy.goNext()
-      cy.checkErrorAlert("not.exist")
-      cy.checkErrorMessages("not.exist")
-
-      cy.location("pathname").should("include", "applications/household/members-info")
-    } else {
-      cy.getByID("householdSizeLiveAlone").click()
-      cy.goNext()
-      cy.checkErrorAlert("not.exist")
-      cy.checkErrorMessages("not.exist")
-      cy.location("pathname").should("include", "applications/household/preferred-units")
-    }
+Cypress.Commands.add("step6HouseholdSize", (application) => {
+  if (application.householdMember.length > 0) {
+    cy.getByID("householdSizeLiveWithOthers").should("exist").click()
+    cy.goNext()
+    cy.checkErrorAlert("not.exist")
+    cy.checkErrorMessages("not.exist")
+    cy.location("pathname").should("include", "applications/household/members-info")
+  } else {
+    cy.getByID("householdSizeLiveAlone").should("exist").click()
+    cy.goNext()
+    cy.checkErrorAlert("not.exist")
+    cy.checkErrorMessages("not.exist")
+    cy.location("pathname").should("include", "applications/household/preferred-units")
   }
 })
 
@@ -412,10 +403,14 @@ Cypress.Commands.add("step9Accessibility", (application, autofill) => {
     if (application.accessibility.hearing) {
       cy.getByTestId("app-ada-hearing").check()
     }
+    if (application.accessibility.hearingAndVision) {
+      cy.getByTestId("app-ada-hearingAndVision").check()
+    }
     if (
       !application.accessibility.hearing &&
-      !application.accessibility.hearing &&
-      !application.accessibility.mobility
+      !application.accessibility.vision &&
+      !application.accessibility.mobility &&
+      !application.accessibility.hearingAndVision
     ) {
       cy.getByTestId("app-ada-none").check()
     }
@@ -676,6 +671,10 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
   }
   if (application.accessibility.hearing) {
     const val = "For hearing impairments"
+    fields.push({ id: val, fieldValue: val })
+  }
+  if (application.accessibility.hearingAndVision) {
+    const val = "For hearing and/or vision impairments"
     fields.push({ id: val, fieldValue: val })
   }
 

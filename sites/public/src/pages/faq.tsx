@@ -34,7 +34,7 @@ const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
   const enableResources = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableResources)
 
   return (
-    <Layout pageTitle={t("pageTitle.faq")}>
+    <Layout pageTitle={t("pageTitle.faq")} metaDescription={t("pageDescription.faq")}>
       <PageHeaderLayout
         heading={t("pageTitle.faq")}
         subheading={t("pageDescription.faq")}
@@ -52,7 +52,11 @@ const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
           </Card.Header>
           <Card.Section>
             <div className={"seeds-m-be-6"}>
-              <Markdown>{t("faq.stillHaveQuestionsContent")}</Markdown>
+              <Markdown>
+                {t("faq.stillHaveQuestionsContent", {
+                  contactEmail: t("resources.contactEmail"),
+                })}
+              </Markdown>
             </div>
             {enableResources && (
               <Button href={"/additional-resources"}>{t("faq.viewResourcePage")}</Button>

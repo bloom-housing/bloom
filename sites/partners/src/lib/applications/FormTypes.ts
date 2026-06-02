@@ -1,5 +1,6 @@
 import { DateFieldValues, DOBFieldValues, TimeFieldValues } from "@bloom-housing/ui-components"
 import {
+  ApplicationDeclineReasonEnum,
   ApplicationReviewStatusEnum,
   ApplicationStatusEnum,
   IncomePeriodEnum,
@@ -28,6 +29,7 @@ export type ApplicationTypes = {
   preferredUnit?: string[]
   householdExpectingChanges?: YesNoEnum
   householdStudent?: YesNoEnum
+  reasonableAccommodations?: string
   accessibility: string[]
   demographics: {
     ethnicity?: string
@@ -63,7 +65,10 @@ export type ApplicationTypes = {
   programs?: Record<string, string | unknown>
   reviewStatus?: ApplicationReviewStatusEnum
   status?: ApplicationStatusEnum
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+  applicationDeclineReasonAdditionalDetails?: string
   phoneNumber?: string
+  receivedBy?: string
   accessibleUnitWaitlistNumber?: number
   conventionalUnitWaitlistNumber?: number
   manualLotteryPositionNumber?: number
@@ -73,6 +78,8 @@ export type FormTypes = {
   dateOfBirth: DOBFieldValues
   timeSubmitted: TimeFieldValues
   dateSubmitted: DateFieldValues
+  timeReceived?: TimeFieldValues
+  dateReceived?: DateFieldValues
   phoneNumber: string
   incomeYear?: string
   incomeMonth?: string

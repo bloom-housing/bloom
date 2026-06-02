@@ -113,7 +113,6 @@ const ApplicationAddMembers = () => {
               <li>
                 <HouseholdMemberForm
                   editMember={editMember}
-                  editMode={!application.autofilled}
                   memberFirstName={applicant.firstName}
                   memberLastName={applicant.lastName}
                   subtitle={t("application.household.primaryApplicant")}

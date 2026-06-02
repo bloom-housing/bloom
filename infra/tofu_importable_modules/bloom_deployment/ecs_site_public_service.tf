@@ -14,6 +14,7 @@ locals {
     SHOW_MANDATED_ACCOUNTS        = "FALSE"
     SHOW_PWDLESS                  = "FALSE"
     SHOW_NEW_SEEDS_DESIGNS        = "FALSE"
+    OTEL_EXPORTER_OTLP_ENDPOINT   = "http://127.0.0.1:4317"
   }
 }
 resource "aws_ecs_task_definition" "bloom_site_public" {
@@ -29,13 +30,13 @@ resource "aws_ecs_task_definition" "bloom_site_public" {
   execution_role_arn = aws_iam_role.bloom_ecs["site-public"].arn
   task_role_arn      = aws_iam_role.bloom_container["site-public"].arn
 
-  # Keep in sync with docker-compose.yml
-  cpu    = 2 * 1024 # 2 vCPU
-  memory = 6 * 1024 # 6 GiB in MiB
+  cpu    = var.bloom_site_public_resource_limits.vcpu
+  memory = var.bloom_site_public_resource_limits.memory_mib
 
   container_definitions = jsonencode([
     {
       Name        = "bloom-site-public"
+      essential   = true
       image       = var.bloom_site_public_image
       environment = [for k, v in merge(local.site_public_default_env_vars, var.bloom_site_public_env_vars) : { name = k, value = v }]
       secrets = [
@@ -60,6 +61,35 @@ resource "aws_ecs_task_definition" "bloom_site_public" {
           "awslogs-region"        = var.aws_region
           "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-site-public"].name
           "awslogs-stream-prefix" = "bloom-site-public"
+        }
+      }
+    },
+    {
+      name      = "otel-sidecar"
+      image     = var.bloom_otel_collector_image
+      essential = false
+      command   = ["--config", "/etc/sites-ecs-sidecar-config.yaml"]
+      environment = [
+        {
+          name  = "PROMETHEUS_REMOTE_WRITE_ENDPOINT",
+          value = "${aws_prometheus_workspace.bloom.prometheus_endpoint}api/v1/remote_write"
+        }
+      ]
+      portMappings = [
+        {
+          containerPort = 4317
+          appProtocol   = "grpc"
+        }
+      ]
+      restartPolicy = {
+        enabled = true
+      }
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-region"        = var.aws_region
+          "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-site-public"].name
+          "awslogs-stream-prefix" = "otel-sidecar"
         }
       }
     }

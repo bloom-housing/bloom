@@ -112,6 +112,7 @@ const LotteryResults = () => {
         <FormsLayout
           className={styles["lottery-results"]}
           pageTitle={`${t("listings.lotteryResults.header")} - ${listing?.name}`}
+          metaDescription={t("pageDescription.lotteryResults")}
         >
           {noApplication && (
             <ApplicationError error={t("account.application.noApplicationError")} />
@@ -221,7 +222,9 @@ const LotteryResults = () => {
                       return result
                         ? preferenceRank(
                             result.ordinal,
-                            question.multiselectQuestions.text,
+                            question.multiselectQuestions.name
+                              ? question.multiselectQuestions.name
+                              : question.multiselectQuestions.text,
                             totals?.find(
                               (total) =>
                                 total.multiselectQuestionId === question.multiselectQuestions.id

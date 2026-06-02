@@ -239,7 +239,9 @@ const SignIn = (props: SignInProps) => {
             setConfirmationStatusMessage({
               message: {
                 title: t("errors.somethingWentWrong"),
-                description: t("authentication.signIn.errorGenericMessage"),
+                description: t("authentication.signIn.errorGenericMessage", {
+                  contactEmail: t("resources.contactEmail"),
+                }),
                 error: err,
               },
               type: "alert",
@@ -289,6 +291,7 @@ const SignIn = (props: SignInProps) => {
       <FormsLayout
         className={signUpCopy ? "sm:max-w-lg md:max-w-full" : undefined}
         pageTitle={t("nav.signIn")}
+        metaDescription={t("pageDescription.signIn")}
       >
         <div className={signUpCopy ? signUpBenefitsStyles["benefits-container"] : undefined}>
           {signUpCopy && (

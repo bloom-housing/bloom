@@ -2,8 +2,8 @@ import React, { useState, useContext, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { Button, Card } from "@bloom-housing/ui-seeds"
-import { Field, Form, t, AlertBox } from "@bloom-housing/ui-components"
-import { AuthContext, BloomCard, MessageContext } from "@bloom-housing/shared-helpers"
+import { Field, t, AlertBox } from "@bloom-housing/ui-components"
+import { AuthContext, BloomCard, Form, MessageContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../layouts/forms"
 
 const ResetPassword = () => {
@@ -38,7 +38,11 @@ const ResetPassword = () => {
         setRequestError(`${t(`authentication.forgotPassword.errors.${data.message}`)}`)
       } else {
         console.error(err)
-        setRequestError(`${t("account.settings.alerts.genericError")}`)
+        setRequestError(
+          `${t("account.settings.alerts.genericError", {
+            contactEmail: t("resources.contactEmail"),
+          })}`
+        )
       }
     }
   }

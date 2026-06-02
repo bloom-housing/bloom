@@ -147,7 +147,9 @@ describe("forgot-password", () => {
       fireEvent.click(submitButton)
     })
 
-    const genericError = await findByText("Please try again, or contact support for help.")
+    const genericError = await findByText(
+      "Please try again, or contact support at email@email.com for help."
+    )
     expect(genericError).toBeInTheDocument()
   })
 })

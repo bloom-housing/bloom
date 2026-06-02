@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import { Field, Form, t, AlertBox } from "@bloom-housing/ui-components"
+import { Field, t, AlertBox } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -9,6 +9,7 @@ import {
   pushGtmEvent,
   AuthContext,
   BloomCard,
+  Form,
   MessageContext,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
@@ -60,13 +61,20 @@ const ResetPassword = () => {
         setRequestError(`${t(`authentication.forgotPassword.errors.${data.message}`)}`)
       } else {
         console.error(err)
-        setRequestError(`${t("account.settings.alerts.genericError")}`)
+        setRequestError(
+          `${t("account.settings.alerts.genericError", {
+            contactEmail: t("resources.contactEmail"),
+          })}`
+        )
       }
     }
   }
 
   return (
-    <FormsLayout pageTitle={t("pageTitle.resetPassword")}>
+    <FormsLayout
+      pageTitle={t("pageTitle.resetPassword")}
+      metaDescription={t("pageDescription.resetPassword")}
+    >
       <BloomCard
         title={t("authentication.forgotPassword.changePassword")}
         iconSymbol={"userCircle"}

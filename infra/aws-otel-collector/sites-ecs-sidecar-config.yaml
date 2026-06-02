@@ -1,0 +1,26 @@
+extensions:
+  sigv4auth:
+    service: "aps"
+
+service:
+  extensions: [sigv4auth]
+  telemetry:
+    logs:
+      level: info
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      exporters: [prometheusremotewrite]
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+
+
+exporters:
+  prometheusremotewrite:
+    endpoint: ${env:PROMETHEUS_REMOTE_WRITE_ENDPOINT}
+    auth:
+      authenticator: sigv4auth

@@ -21,6 +21,7 @@ import { IdDTO } from '../shared/id.dto';
 import { UserRole } from './user-role.dto';
 import { Jurisdiction } from '../jurisdictions/jurisdiction.dto';
 import { Address } from '../addresses/address.dto';
+import { UserNotificationPreferences } from './user-notification-preferences.dto';
 
 export class User extends AbstractDTO {
   @Expose()
@@ -79,6 +80,11 @@ export class User extends AbstractDTO {
   @Type(() => IdDTO)
   @ApiProperty({ type: IdDTO, isArray: true, nullable: true })
   listings?: IdDTO[];
+
+  @Expose()
+  @Type(() => UserNotificationPreferences)
+  @ApiPropertyOptional()
+  notificationPreferences?: UserNotificationPreferences;
 
   @Expose()
   @Type(() => UserRole)

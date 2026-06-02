@@ -286,13 +286,15 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             setListingFavorited={saveFavorite}
             showHomeType={isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableHomeType)}
           />
-          <RentSummary
-            amiValues={getAmiValues(listing)}
-            reviewOrderType={listing.reviewOrderType}
-            unitsSummarized={listing.unitsSummarized}
-            section8Acceptance={listing.section8Acceptance}
-            listing={listing}
-          />
+          {listing.status !== ListingsStatusEnum.closed && (
+            <RentSummary
+              amiValues={getAmiValues(listing)}
+              reviewOrderType={listing.reviewOrderType}
+              unitsSummarized={listing.unitsSummarized}
+              section8Acceptance={listing.section8Acceptance}
+              listing={listing}
+            />
+          )}
           <div className={styles["main-content"]}>
             <div className={styles["hide-desktop"]}>{ApplyBar}</div>
             <Eligibility eligibilitySections={getEligibilitySections(jurisdiction, listing)} />

@@ -11,7 +11,10 @@ const CreateAdvocateAccountConfirmation = () => {
   const router = useRouter()
 
   return (
-    <FormsLayout pageTitle={t("authentication.requestAdvocateAccount.confirmationPageTitle")}>
+    <FormsLayout
+      pageTitle={t("authentication.requestAdvocateAccount.confirmationPageTitle")}
+      metaDescription={t("pageDescription.createAdvocateAccountConfirmation")}
+    >
       <BloomCard
         title={t("authentication.requestAdvocateAccount.confirmationTitle")}
         iconSymbol={"userCircle"}
@@ -20,7 +23,9 @@ const CreateAdvocateAccountConfirmation = () => {
       >
         <>
           <Card.Section className={"seeds-m-be-8"}>
-            {t("authentication.requestAdvocateAccount.confirmation")}
+            {t("authentication.requestAdvocateAccount.confirmation", {
+              contactEmail: t("resources.contactEmail"),
+            })}
           </Card.Section>
           <Card.Section className={styles["footer-card-section"]}>
             <Button variant="primary" onClick={() => router.push("/")}>

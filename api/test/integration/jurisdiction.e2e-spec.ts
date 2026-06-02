@@ -12,6 +12,8 @@ import { JurisdictionUpdate } from '../../src/dtos/jurisdictions/jurisdiction-up
 import { IdDTO } from '../../src/dtos/shared/id.dto';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
+import { ApplicationAccessibilityFeatureEnum } from '../../src/enums/applications/application-accessibility-feature-enum';
+import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
 
 describe('Jurisdiction Controller Tests', () => {
   let app: INestApplication;
@@ -141,7 +143,26 @@ describe('Jurisdiction Controller Tests', () => {
       ],
       regions: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearing,
+        ApplicationAccessibilityFeatureEnum.vision,
+      ],
       visibleSpokenLanguages: [],
+      visibleHouseholdMemberRelationships: [
+        HouseholdMemberRelationship.spousePartner,
+        HouseholdMemberRelationship.girlfriendBoyfriend,
+        HouseholdMemberRelationship.child,
+        HouseholdMemberRelationship.parent,
+        HouseholdMemberRelationship.friend,
+        HouseholdMemberRelationship.brotherSister,
+        HouseholdMemberRelationship.cousin,
+        HouseholdMemberRelationship.auntUncle,
+        HouseholdMemberRelationship.nephewNiece,
+        HouseholdMemberRelationship.grandparentGreatGrandparent,
+        HouseholdMemberRelationship.liveInAide,
+        HouseholdMemberRelationship.other,
+      ],
     };
     const res = await request(app.getHttpServer())
       .post('/jurisdictions')
@@ -151,6 +172,20 @@ describe('Jurisdiction Controller Tests', () => {
       .expect(201);
 
     expect(res.body.name).toEqual('new jurisdiction');
+    expect(res.body.visibleHouseholdMemberRelationships).toEqual([
+      'spousePartner',
+      'girlfriendBoyfriend',
+      'child',
+      'parent',
+      'friend',
+      'brotherSister',
+      'cousin',
+      'auntUncle',
+      'nephewNiece',
+      'grandparentGreatGrandparent',
+      'liveInAide',
+      'other',
+    ]);
   });
 
   it("update endpoint with id that doesn't exist should error", async () => {
@@ -178,7 +213,16 @@ describe('Jurisdiction Controller Tests', () => {
       ],
       regions: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearing,
+        ApplicationAccessibilityFeatureEnum.vision,
+      ],
       visibleSpokenLanguages: [],
+      visibleHouseholdMemberRelationships: [
+        HouseholdMemberRelationship.spouse,
+        HouseholdMemberRelationship.child,
+      ],
     };
     const res = await request(app.getHttpServer())
       .put(`/jurisdictions/${id}`)
@@ -219,7 +263,19 @@ describe('Jurisdiction Controller Tests', () => {
       ],
       regions: [],
       visibleAccessibilityPriorityTypes: [],
+      visibleApplicationAccessibilityFeatures: [
+        ApplicationAccessibilityFeatureEnum.mobility,
+        ApplicationAccessibilityFeatureEnum.hearing,
+        ApplicationAccessibilityFeatureEnum.vision,
+      ],
       visibleSpokenLanguages: [],
+      visibleHouseholdMemberRelationships: [
+        HouseholdMemberRelationship.spousePartner,
+        HouseholdMemberRelationship.child,
+        HouseholdMemberRelationship.parent,
+        HouseholdMemberRelationship.liveInAide,
+        HouseholdMemberRelationship.other,
+      ],
     };
 
     const res = await request(app.getHttpServer())
@@ -231,6 +287,13 @@ describe('Jurisdiction Controller Tests', () => {
 
     expect(res.body.name).toEqual('updated name: 10');
     expect(res.body.publicUrl).toEqual('updated publicUrl: 10');
+    expect(res.body.visibleHouseholdMemberRelationships).toEqual([
+      'spousePartner',
+      'child',
+      'parent',
+      'liveInAide',
+      'other',
+    ]);
   });
 
   it("delete endpoint with id that doesn't exist should error", async () => {
