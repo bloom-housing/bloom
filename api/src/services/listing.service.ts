@@ -3000,7 +3000,7 @@ export class ListingService implements OnModuleInit {
           },
         ],
       },
-      take: 7500,
+      take: 10000,
     });
 
     if (!emailUsers.length) {
