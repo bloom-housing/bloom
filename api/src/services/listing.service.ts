@@ -2966,20 +2966,11 @@ export class ListingService implements OnModuleInit {
       };
     });
 
-    if (listing?.region) {
+    if (listing.region || listing.configurableRegion) {
       preferenceFilters.push({
-        OR: [
-          {
-            regions: {
-              has: listing.region,
-            },
-          },
-          {
-            regions: {
-              has: listing.configurableRegion,
-            },
-          },
-        ],
+        regions: {
+          has: listing.region ?? listing.configurableRegion,
+        },
       });
     }
 
