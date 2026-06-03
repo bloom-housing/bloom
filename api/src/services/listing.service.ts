@@ -428,6 +428,7 @@ export class ListingService implements OnModuleInit {
     approvingRoles: UserRoleEnum[];
     previousStatus?: ListingsStatusEnum;
     jurisId: string;
+    scheduledPublishAt?: Date;
   }) {
     const nonApprovingRoles: UserRoleEnum[] = [UserRoleEnum.partner];
     if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
@@ -470,6 +471,29 @@ export class ListingService implements OnModuleInit {
         },
         userInfo.emails,
         this.configService.get('PARTNERS_PORTAL_URL'),
+      );
+    }
+    // admin moves a listing from pendingReview to scheduled for autopublish
+    else if (
+      params.status === ListingsStatusEnum.scheduled &&
+      params.previousStatus === ListingsStatusEnum.pendingReview
+    ) {
+      const userInfo = await this.getUserEmailInfo(
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
+        params.listingInfo.id,
+        params.jurisId,
+      );
+      await this.emailService.listingScheduled(
+        { id: params.jurisId },
+        { id: params.listingInfo.id, name: params.listingInfo.name },
+        userInfo.emails,
+        params.scheduledPublishAt,
       );
     }
     // check if status of active requires notification
@@ -2923,6 +2947,7 @@ export class ListingService implements OnModuleInit {
         status: incomingDto.status,
         previousStatus: storedListing.status,
         jurisId: rawJurisdiction.id,
+        scheduledPublishAt: incomingDto.scheduledPublishAt,
       });
 
     if (mappedListing.status === ListingsStatusEnum.active) {
@@ -3375,7 +3400,16 @@ export class ListingService implements OnModuleInit {
 
   private async publishScheduledListings(logName: string): Promise<SuccessDTO> {
     const listings = await this.prisma.listings.findMany({
-      select: { id: true },
+      select: {
+        id: true,
+        name: true,
+        jurisdictionId: true,
+        jurisdictions: {
+          select: {
+            publicUrl: true,
+          },
+        },
+      },
       where: {
         status: ListingsStatusEnum.scheduled,
         AND: [
@@ -3429,6 +3463,34 @@ export class ListingService implements OnModuleInit {
         ListingsStatusEnum.scheduled,
         '',
       );
+    }
+
+    // notify partners and admins with access that each listing has been auto-published
+    for (const listing of listings) {
+      try {
+        const userInfo = await this.getUserEmailInfo(
+          [
+            UserRoleEnum.partner,
+            UserRoleEnum.admin,
+            UserRoleEnum.jurisdictionAdmin,
+            UserRoleEnum.limitedJurisdictionAdmin,
+            UserRoleEnum.supportAdmin,
+          ],
+          listing.id,
+          listing.jurisdictionId,
+        );
+        await this.emailService.listingPublished(
+          { id: listing.jurisdictionId },
+          { id: listing.id, name: listing.name },
+          userInfo.emails,
+          listing.jurisdictions?.publicUrl || '',
+        );
+      } catch (err) {
+        this.logger.error(
+          `${logName} failed to send published email for listing ${listing.id}`,
+          err,
+        );
+      }
     }
 
     return { success: true };

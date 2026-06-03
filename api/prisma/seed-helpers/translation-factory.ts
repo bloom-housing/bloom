@@ -1197,9 +1197,23 @@ const translations = (
             'and navigate to the listing detail page to view the request and edit the listing.',
         },
         listingApproved: {
-          header: 'New published listing',
+          header: 'New published listing - %{listingName}',
           adminApproved:
             'The %{listingName} listing has been approved and published by an administrator.',
+          viewPublished:
+            'To view the published listing, please click on the link below',
+        },
+        listingScheduled: {
+          header: 'New scheduled listing',
+          subject: 'New scheduled listing - %{listingName}',
+          adminScheduled:
+            'The %{listingName} listing has been approved by an administrator and is scheduled to be automatically published on %{date} between 12:00 AM and 2:00 AM. If you have questions or require changes, please contact an administrator.',
+        },
+        listingPublished: {
+          header: 'New published listing',
+          subject: 'New published listing - %{listingName}',
+          autoPublished:
+            'The %{listingName} listing has been automatically published.',
           viewPublished:
             'To view the published listing, please click on the link below',
         },
