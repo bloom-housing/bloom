@@ -57,7 +57,7 @@ const ApplicationDemographics = () => {
       demographics: {
         ethnicity: data.ethnicity || "",
         gender: enableGenderQuestion ? data.gender : "",
-        sexualOrientation: "",
+        sexualOrientation: enableSexualOrientationQuestion ? data.sexualOrientation : "",
         howDidYouHear: data.howDidYouHear,
         race: fieldGroupObjectToArray(data, "race"),
         spokenLanguage: enableSpokenLanguage
