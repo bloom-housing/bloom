@@ -2263,6 +2263,10 @@ export class ListingService implements OnModuleInit {
       incomingDto.scheduledPublishAt = null;
     }
 
+    const sendPublishNotificationEmail =
+      incomingDto.status === ListingsStatusEnum.active &&
+      storedListing.status !== ListingsStatusEnum.active;
+
     // test if not publishing or unpublishing listing and scheduledPublishAt is set
     if (
       incomingDto.status === storedListing.status &&
@@ -2911,7 +2915,7 @@ export class ListingService implements OnModuleInit {
         jurisId: rawJurisdiction.id,
       });
 
-    if (mappedListing.status === ListingsStatusEnum.active) {
+    if (sendPublishNotificationEmail) {
       await this.sendListingPublishNotification(mappedListing);
     }
 
