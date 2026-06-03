@@ -23,7 +23,6 @@ export enum FeatureFlagEnum {
   enableFilterByBathroom = 'enableFilterByBathroom',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGenderQuestion = 'enableGenderQuestion',
-  enableSexualOrientationQuestion = 'enableSexualOrientationQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
@@ -59,6 +58,7 @@ export enum FeatureFlagEnum {
   enableRegions = 'enableRegions',
   enableResources = 'enableResources',
   enableSection8Question = 'enableSection8Question',
+  enableSexualOrientationQuestion = 'enableSexualOrientationQuestion',
   enableSingleUseCode = 'enableSingleUseCode',
   enableSmokingPolicyRadio = 'enableSmokingPolicyRadio',
   enableSpokenLanguage = 'enableSpokenLanguage',
@@ -185,11 +185,6 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableGenderQuestion,
     description:
       'When true, the gender identity question is displayed in the public and partner application demographics section',
-  },
-  {
-    name: FeatureFlagEnum.enableSexualOrientationQuestion,
-    description:
-      'When true, the sexual orientation question is displayed in the public and partner application demographics section',
   },
   {
     name: FeatureFlagEnum.enableGeocodingPreferences,
@@ -349,6 +344,11 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableSection8Question,
     description: 'When true, the Section 8 listing data will be visible',
+  },
+  {
+    name: FeatureFlagEnum.enableSexualOrientationQuestion,
+    description:
+      'When true, the sexual orientation question is displayed in the public and partner application demographics section',
   },
   {
     name: FeatureFlagEnum.enableSingleUseCode,
