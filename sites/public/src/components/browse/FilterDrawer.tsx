@@ -1,4 +1,5 @@
-import { Form, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { Form } from "@bloom-housing/shared-helpers"
 import { Button, Drawer } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import {
@@ -111,7 +112,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
       <Drawer.Header id="drawer-heading">{t("t.filter")}</Drawer.Header>
       <Drawer.Content id="drawer-content">
         <div role="document">
-          <Form onSubmit={handleSubmit(props.onSubmit)} id="filter">
+          <Form method="get" onSubmit={handleSubmit(props.onSubmit)} id="filter">
             {enableIsVerified && (
               <CheckboxGroup
                 groupLabel={t("listings.confirmedListings")}

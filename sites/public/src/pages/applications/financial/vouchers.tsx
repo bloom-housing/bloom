@@ -1,13 +1,14 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { Form, t, FieldGroup } from "@bloom-housing/ui-components"
+import { t, FieldGroup } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
   listingSectionQuestions,
+  pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
 import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"

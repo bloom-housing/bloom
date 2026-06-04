@@ -4,11 +4,19 @@ export interface FormProps {
   children: React.ReactNode
   className?: string
   id?: string
+  method?: "get" | "post"
   onSubmit?: () => unknown
   suppressSubmitOnEnter?: boolean
 }
 
-export const Form = ({ children, id, className, suppressSubmitOnEnter, onSubmit }: FormProps) => {
+export const Form = ({
+  children,
+  id,
+  className,
+  method = "post",
+  suppressSubmitOnEnter = true,
+  onSubmit,
+}: FormProps) => {
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       if (
@@ -29,7 +37,7 @@ export const Form = ({ children, id, className, suppressSubmitOnEnter, onSubmit 
       onSubmit={onSubmit}
       onKeyDown={onKeyDown}
       noValidate
-      method="post"
+      method={method}
     >
       {children}
     </form>

@@ -1,8 +1,14 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { Form, t, Textarea } from "@bloom-housing/ui-components"
+import { t, Textarea } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  AuthContext,
+  Form,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+} from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"

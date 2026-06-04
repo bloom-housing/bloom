@@ -5,8 +5,13 @@ import { Form } from "../src/views/forms/Form"
 afterEach(cleanup)
 
 describe("<Form>", () => {
-  it("renders with method post", () => {
+  it("defaults to method post", () => {
     const { container } = render(<Form>content</Form>)
     expect(container.querySelector("form")).toHaveAttribute("method", "post")
+  })
+
+  it("accepts method get", () => {
+    const { container } = render(<Form method="get">content</Form>)
+    expect(container.querySelector("form")).toHaveAttribute("method", "get")
   })
 })
