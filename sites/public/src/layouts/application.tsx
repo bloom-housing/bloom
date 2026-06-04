@@ -3,7 +3,6 @@ import dayjs from "dayjs"
 import { NextRouter, useRouter } from "next/router"
 import Markdown from "markdown-to-jsx"
 import Head from "next/head"
-import HomeIcon from "@heroicons/react/24/solid/HomeIcon"
 import { Message, Toast, Icon } from "@bloom-housing/ui-seeds"
 import { MenuLink, t, SiteHeader as UICSiteHeader } from "@bloom-housing/ui-components"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
@@ -250,7 +249,6 @@ const Layout = (props: LayoutProps) => {
         <div className="site-content">
           {process.env.showNewSeedsDesigns ? (
             <SiteHeader
-              title={t("nav.siteTitle")}
               languageDropdown={true}
               languages={languages?.map((lang) => {
                 return {
@@ -266,8 +264,8 @@ const Layout = (props: LayoutProps) => {
               })}
               titleLink={"/"}
               logo={
-                <Icon size={"lg"}>
-                  <HomeIcon />
+                <Icon size={"lg"} className={styles["jurisdiction-icon"]}>
+                  <img src="/images/doorway-logo.png" alt={t("footer.logoAlt")} />
                 </Icon>
               }
               mainContentId="main-content"
