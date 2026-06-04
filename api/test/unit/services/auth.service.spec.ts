@@ -996,6 +996,7 @@ describe('Testing auth service', () => {
         confirmedAt: expect.anything(),
         confirmationToken: null,
         lastLoginAt: expect.anything(),
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,

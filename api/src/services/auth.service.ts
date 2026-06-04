@@ -349,6 +349,7 @@ export class AuthService {
         confirmedAt: user.confirmedAt || new Date(),
         confirmationToken: null,
         lastLoginAt: new Date(),
+        wasWarnedOfDeletion: false,
       },
       where: {
         id: user.id,
