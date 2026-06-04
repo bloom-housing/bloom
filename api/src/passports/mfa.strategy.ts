@@ -210,6 +210,7 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
         phoneNumberVerified,
         failedLoginAttemptsCount,
         lastLoginAt: new Date(),
+        wasWarnedOfDeletion: false,
       },
       where: {
         id: userId,

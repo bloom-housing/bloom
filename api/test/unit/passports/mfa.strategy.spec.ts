@@ -259,6 +259,7 @@ describe('Testing mfa strategy', () => {
         singleUseCodeUpdatedAt: null,
         phoneNumberVerified: null,
         lastLoginAt: expect.anything(),
+        wasWarnedOfDeletion: false,
         failedLoginAttemptsCount: 0,
       },
       where: {
@@ -476,6 +477,7 @@ describe('Testing mfa strategy', () => {
         phoneNumberVerified: false,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 1,
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,
@@ -534,6 +536,7 @@ describe('Testing mfa strategy', () => {
         phoneNumberVerified: false,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 1,
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,
@@ -604,6 +607,7 @@ describe('Testing mfa strategy', () => {
         phoneNumberVerified: true,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 0,
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,
@@ -659,6 +663,7 @@ describe('Testing mfa strategy', () => {
         phoneNumberVerified: false,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 0,
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,

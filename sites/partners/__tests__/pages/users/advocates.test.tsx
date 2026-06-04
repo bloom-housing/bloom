@@ -71,7 +71,7 @@ describe("advocate users", () => {
 
     renderAdvocateUsersPage()
 
-    const header = await screen.findByText("Partners Portal")
+    const header = await screen.findByText("Users")
     expect(header).toBeInTheDocument()
 
     const tableHeaders = await screen.findAllByRole("columnheader")
@@ -129,7 +129,7 @@ describe("advocate users", () => {
 
     renderAdvocateUsersPage()
 
-    const header = await screen.findByText("Partners Portal")
+    const header = await screen.findByText("Users")
     expect(header).toBeInTheDocument()
 
     const tableHeaders = await screen.findAllByRole("columnheader")
@@ -181,7 +181,7 @@ describe("advocate users", () => {
 
     renderAdvocateUsersPage()
 
-    const header = await screen.findByText("Partners Portal")
+    const header = await screen.findByText("Users")
     expect(header).toBeInTheDocument()
 
     const tableHeaders = await screen.findAllByRole("columnheader")

@@ -2,8 +2,14 @@ import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { Button } from "@bloom-housing/ui-seeds"
-import { t, Form } from "@bloom-housing/ui-components"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
+import {
+  AuthContext,
+  Form,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+} from "@bloom-housing/shared-helpers"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
 import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"

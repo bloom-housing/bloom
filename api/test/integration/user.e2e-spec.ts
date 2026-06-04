@@ -1231,12 +1231,14 @@ describe('User Controller Tests', () => {
       const publicUserInactiveNotWarned = await prisma.userAccounts.create({
         data: await userFactory({
           lastLoginAt: dayjs(new Date()).subtract(1100, 'days').toDate(),
+          passwordUpdatedAt: dayjs(new Date()).subtract(1100, 'days').toDate(),
           wasWarnedOfDeletion: false,
         }),
       });
       const publicUserInactiveWarned = await prisma.userAccounts.create({
         data: await userFactory({
           lastLoginAt: dayjs(new Date()).subtract(1100, 'days').toDate(),
+          passwordUpdatedAt: dayjs(new Date()).subtract(1300, 'days').toDate(),
           wasWarnedOfDeletion: true,
         }),
       });
@@ -1302,6 +1304,10 @@ describe('User Controller Tests', () => {
           firstName: 'A',
           confirmedAt: new Date(),
           lastLoginAt: dayjs(new Date()).subtract(4, 'years').toDate(),
+          passwordUpdatedAt: dayjs(new Date())
+            .subtract(4, 'years')
+            .subtract(25, 'days')
+            .toDate(),
         }),
       });
       // User that has logged in recently
@@ -1310,6 +1316,7 @@ describe('User Controller Tests', () => {
           firstName: 'B',
           confirmedAt: new Date(),
           lastLoginAt: dayjs(new Date()).subtract(4, 'days').toDate(),
+          passwordUpdatedAt: dayjs(new Date()).subtract(4, 'days').toDate(),
         }),
       });
       // Partner user
@@ -1336,6 +1343,10 @@ describe('User Controller Tests', () => {
           firstName: 'E',
           confirmedAt: new Date(),
           lastLoginAt: dayjs(new Date()).subtract(4, 'years').toDate(),
+          passwordUpdatedAt: dayjs(new Date())
+            .subtract(3, 'years')
+            .subtract(2, 'days')
+            .toDate(),
           language: LanguagesEnum.es,
         }),
       });
