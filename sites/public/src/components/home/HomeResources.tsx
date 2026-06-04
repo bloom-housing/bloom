@@ -31,7 +31,7 @@ export const HomeResources = (props: HomeResourcesProps) => {
 
   return (
     <Grid spacing="lg">
-      <Grid.Row columns={enableAdditionalResources ? 3 : 2}>
+      <Grid.Row columns={2}>
         {showNotificationsCard && (
           <Grid.Cell>
             <BloomCard
