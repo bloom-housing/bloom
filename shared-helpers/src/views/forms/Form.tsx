@@ -23,7 +23,14 @@ export const Form = ({ children, id, className, suppressSubmitOnEnter, onSubmit 
 
   return (
     // eslint-disable-next-line  jsx-a11y/no-noninteractive-element-interactions
-    <form id={id} className={className} onSubmit={onSubmit} onKeyDown={onKeyDown} noValidate>
+    <form
+      id={id}
+      className={className}
+      onSubmit={onSubmit}
+      onKeyDown={onKeyDown}
+      noValidate
+      method="post"
+    >
       {children}
     </form>
   )
