@@ -20,6 +20,8 @@ const FormHouseholdIncome = ({ enableSection8vsRentalAssistance }: FormHousehold
 
   const incomePeriodValue: string = watch("application.incomePeriod")
 
+  const incomeVouchersValue: string[] = watch("application.incomeVouchers") || []
+
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -94,7 +96,11 @@ const FormHouseholdIncome = ({ enableSection8vsRentalAssistance }: FormHousehold
               fieldGroupClassName="grid grid-cols-1"
               fieldClassName="ml-0"
               type={enableSection8vsRentalAssistance ? "checkbox" : "radio"}
-              name="application.incomeVouchers"
+              name={
+                enableSection8vsRentalAssistance
+                  ? "application.incomeVouchers"
+                  : "application.incomeVouchersYesNo"
+              }
               register={register}
               fields={
                 enableSection8vsRentalAssistance
@@ -116,30 +122,18 @@ const FormHouseholdIncome = ({ enableSection8vsRentalAssistance }: FormHousehold
                       },
                     ]
                   : [
-                      // TODO: get this to work
                       {
-                        id: "application.incomeVouchers.incomeVoucher",
+                        id: "incomeVoucherYes",
                         value: "incomeVoucher",
                         label: YesNoEnum.yes,
-                        inputProps: {
-                          onChange: (e) => {
-                            if (e.target.checked) {
-                              setValue("application.incomeVouchers", ["incomeVoucher"])
-                            }
-                          },
-                        },
+                        defaultChecked: incomeVouchersValue?.includes("incomeVoucher"),
                       },
                       {
-                        id: "application.incomeVouchers.none",
+                        id: "incomeVoucherNo",
                         value: "none",
                         label: YesNoEnum.no,
-                        inputProps: {
-                          onChange: (e) => {
-                            if (e.target.checked) {
-                              setValue("application.incomeVouchers", ["none"])
-                            }
-                          },
-                        },
+                        defaultChecked:
+                          incomeVouchersValue?.includes("none") || incomeVouchersValue.length === 0,
                       },
                     ]
               }

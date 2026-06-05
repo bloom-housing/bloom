@@ -258,7 +258,7 @@ Cypress.Commands.add("fillHouseholdIncome", (application, fieldsToSkip = []) => 
     cy.getByID("incomeYear").type(application["incomeYear"])
   }
   if (!fieldsToSkip.includes("application.incomeVouchers")) {
-    cy.getByID("application.incomeVouchers").select(application["incomeVouchers"])
+    cy.getByID(`application.incomeVouchers.${application["incomeVouchers"]}`).click()
   }
 })
 
@@ -395,7 +395,7 @@ Cypress.Commands.add("verifyHouseholdIncome", (application, fieldsToSkip = []) =
   const fields = [
     { id: "annualIncome", fieldKey: "annualIncome" },
     { id: "monthlyIncome", fieldKey: "formattedMonthlyIncome" },
-    { id: "vouchers", fieldKey: "incomeVouchers" },
+    { id: "vouchers", fieldKey: "vouchers" },
   ]
   verifyHelper(application, fields, fieldsToSkip)
 })
