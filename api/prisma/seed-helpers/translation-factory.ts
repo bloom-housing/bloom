@@ -170,12 +170,13 @@ const translations = (
           applicationsDue: 'Fecha límite de solicitudes',
           address: 'Dirección',
           neighborhood: 'Vecindario',
+          region: 'Región',
           unitType: 'Tipo de unidad',
           accessibilityType: {
             hearing: 'Auditiva',
             mobility: 'Movilidad',
             vision: 'Visual',
-            hearingAndVision: 'Auditiva y visual',
+            hearingAndVision: 'Auditiva/visual',
             mobilityAndHearing: 'Movilidad y auditiva',
             mobilityAndVision: 'Movilidad y visual',
             mobilityHearingAndVision: 'Movilidad y auditiva/visual',
@@ -221,8 +222,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Volante de marketing accesible',
-            unsubscribe: 'Cancelar suscripción',
-            emailSettings: 'Configuración de correo electrónico',
+            unsubscribeAndEmailSettings:
+              'Cancelar suscripción y gestionar configuración de correo electrónico',
           },
         },
       };
@@ -269,12 +270,13 @@ const translations = (
           applicationsDue: 'Hạn nộp đơn',
           address: 'Địa chỉ',
           neighborhood: 'Khu phố',
+          region: 'Vùng đất',
           unitType: 'Loại căn hộ',
           accessibilityType: {
             hearing: 'Thính giác',
             mobility: 'Di chuyển',
             vision: 'Thị giác',
-            hearingAndVision: 'Thính giác và thị giác',
+            hearingAndVision: 'Thính giác / thị giác',
             mobilityAndHearing: 'Di chuyển và thính giác',
             mobilityAndVision: 'Di chuyển và thị giác',
             mobilityHearingAndVision: 'Di chuyển và thính giác/thị giác',
@@ -319,8 +321,7 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Tờ rơi tiếp thị có thể truy cập',
-            unsubscribe: 'Hủy đăng ký',
-            emailSettings: 'Cài đặt email',
+            unsubscribeAndEmailSettings: 'Hủy đăng ký và quản lý cài đặt email',
           },
         },
       };
@@ -364,12 +365,13 @@ const translations = (
           applicationsDue: '申请截止日期',
           address: '地址',
           neighborhood: '街区',
+          region: '地区',
           unitType: '单元类型',
           accessibilityType: {
             hearing: '听力',
             mobility: '行动',
             vision: '视力',
-            hearingAndVision: '听力和视力',
+            hearingAndVision: '听力/视力',
             mobilityAndHearing: '行动和听力',
             mobilityAndVision: '行动和视力',
             mobilityHearingAndVision: '行动和听力/视力',
@@ -414,8 +416,7 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: '无障碍营销传单',
-            unsubscribe: '取消订阅',
-            emailSettings: '电子邮件设置',
+            unsubscribeAndEmailSettings: '取消订阅并管理电子邮件设置',
           },
         },
       };
@@ -462,12 +463,13 @@ const translations = (
           applicationsDue: 'Deadline ng Aplikasyon',
           address: 'Address',
           neighborhood: 'Kapitbahayan',
+          region: 'Rehiyon',
           unitType: 'Uri ng unit',
           accessibilityType: {
             hearing: 'Pandinig',
             mobility: 'Mobilidad',
             vision: 'Paningin',
-            hearingAndVision: 'Pandinig at paningin',
+            hearingAndVision: 'Pandinig/paningin',
             mobilityAndHearing: 'Mobilidad at pandinig',
             mobilityAndVision: 'Mobilidad at paningin',
             mobilityHearingAndVision: 'Mobilidad at pandinig/paningin',
@@ -513,8 +515,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Naa-access na flyer sa marketing',
-            unsubscribe: 'Mag-unsubscribe',
-            emailSettings: 'Mga setting ng email',
+            unsubscribeAndEmailSettings:
+              'Mag-unsubscribe at pamahalaan ang mga settings ng email',
           },
         },
       };
@@ -561,12 +563,13 @@ const translations = (
           applicationsDue: 'আবেদনের শেষ তারিখ',
           address: 'ঠিকানা',
           neighborhood: 'এলাকা',
+          region: 'অঞ্চল',
           unitType: 'ইউনিটের ধরন',
           accessibilityType: {
             hearing: 'শ্রবণ',
             mobility: 'গতিশীলতা',
             vision: 'দৃষ্টি',
-            hearingAndVision: 'শ্রবণ ও দৃষ্টি',
+            hearingAndVision: 'শ্রবণ/দৃষ্টি',
             mobilityAndHearing: 'গতিশীলতা ও শ্রবণ',
             mobilityAndVision: 'গতিশীলতা ও দৃষ্টি',
             mobilityHearingAndVision: 'গতিশীলতা এবং শ্রবণ/দৃষ্টি',
@@ -611,8 +614,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'অ্যাক্সেসযোগ্য মার্কেটিং ফ্লায়ার',
-            unsubscribe: 'আনসাবস্ক্রাইব',
-            emailSettings: 'ইমেইল সেটিংস',
+            unsubscribeAndEmailSettings:
+              'আনসাবস্ক্রাইব করুন এবং ইমেইল সেটিংস পরিচালনা করুন',
           },
         },
       };
@@ -656,12 +659,13 @@ const translations = (
           applicationsDue: 'تاريخ انتهاء الطلبات',
           address: 'العنوان',
           neighborhood: 'الحي',
+          region: 'منطقة',
           unitType: 'نوع الوحدة',
           accessibilityType: {
             hearing: 'السمع',
             mobility: 'الحركة',
             vision: 'البصر',
-            hearingAndVision: 'السمع والبصر',
+            hearingAndVision: 'السمع/البصر',
             mobilityAndHearing: 'الحركة والسمع',
             mobilityAndVision: 'الحركة والبصر',
             mobilityHearingAndVision: 'الحركة والسمع/البصر',
@@ -706,8 +710,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'نشرة تسويقية ميسّرة',
-            unsubscribe: 'إلغاء الاشتراك',
-            emailSettings: 'إعدادات البريد الإلكتروني',
+            unsubscribeAndEmailSettings:
+              'إلغاء الاشتراك وإدارة إعدادات البريد الإلكتروني',
           },
         },
       };
@@ -752,12 +756,13 @@ const translations = (
           applicationsDue: '신청 마감일',
           address: '주소',
           neighborhood: '동네',
+          region: '지역',
           unitType: '유닛 유형',
           accessibilityType: {
             hearing: '청각',
             mobility: '이동성',
             vision: '시각',
-            hearingAndVision: '청각 및 시각',
+            hearingAndVision: '청각/시각',
             mobilityAndHearing: '이동성 및 청각',
             mobilityAndVision: '이동성 및 시각',
             mobilityHearingAndVision: '이동성 및 청각/시각',
@@ -802,8 +807,7 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: '접근 가능한 마케팅 전단지',
-            unsubscribe: '구독 취소',
-            emailSettings: '이메일 설정',
+            unsubscribeAndEmailSettings: '구독 취소 및 이메일 설정 관리',
           },
         },
       };
@@ -849,12 +853,13 @@ const translations = (
           applicationsDue: 'Դիմումների վերջնաժամկետ',
           address: 'Հասցե',
           neighborhood: 'Թաղամաս',
+          region: 'Տարածաշրջան',
           unitType: 'Բնակարանի տեսակ',
           accessibilityType: {
             hearing: 'Լսողություն',
             mobility: 'Շարժունակություն',
             vision: 'Տեսողություն',
-            hearingAndVision: 'Լսողություն և տեսողություն',
+            hearingAndVision: 'Լսողություն/տեսողություն',
             mobilityAndHearing: 'Շարժունակություն և լսողություն',
             mobilityAndVision: 'Շարժունակություն և տեսողություն',
             mobilityHearingAndVision:
@@ -900,8 +905,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Հասանելի մարքեթինգային թռուցիկ',
-            unsubscribe: 'Դուրս գալ բաժանորդագրությունից',
-            emailSettings: 'Էլ. փոստի կարգավորումներ',
+            unsubscribeAndEmailSettings:
+              'Դադարեցնել բաժանորդագրությունը և կառավարել էլ. փոստի կարգավորումները',
           },
         },
       };
@@ -948,12 +953,13 @@ const translations = (
           applicationsDue: 'مهلت ارسال درخواست',
           address: 'آدرس',
           neighborhood: 'محله',
+          region: 'منطقه',
           unitType: 'نوع واحد',
           accessibilityType: {
             hearing: 'شنوایی',
             mobility: 'تحرک',
             vision: 'بینایی',
-            hearingAndVision: 'شنوایی و بینایی',
+            hearingAndVision: 'شنوایی/بینایی',
             mobilityAndHearing: 'تحرک و شنوایی',
             mobilityAndVision: 'تحرک و بینایی',
             mobilityHearingAndVision: 'تحرک و شنوایی/بینایی',
@@ -986,8 +992,7 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'بروشور بازاریابی قابل دسترس',
-            unsubscribe: 'لغو اشتراک',
-            emailSettings: 'تنظیمات ایمیل',
+            unsubscribeAndEmailSettings: 'لغو اشتراک و مدیریت تنظیمات ایمیل',
           },
         },
       };
@@ -1278,12 +1283,13 @@ const translations = (
           applicationsDue: 'Applications Due',
           address: 'Address',
           neighborhood: 'Neighborhood',
+          region: 'Region',
           unitType: 'Unit type',
           accessibilityType: {
             hearing: 'Hearing',
             mobility: 'Mobility',
             vision: 'Vision',
-            hearingAndVision: 'Hearing and Vision',
+            hearingAndVision: 'Hearing/Vision',
             mobilityAndHearing: 'Mobility and Hearing',
             mobilityAndVision: 'Mobility and Vision',
             mobilityHearingAndVision: 'Mobility and Hearing/Vision',
@@ -1328,8 +1334,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Accessible marketing flyer',
-            unsubscribe: 'Unsubscribe',
-            emailSettings: 'Email settings',
+            unsubscribeAndEmailSettings:
+              'Unsubscribe and manage email settings',
           },
         },
         advocateApproved: {

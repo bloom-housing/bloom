@@ -2263,6 +2263,10 @@ export class ListingService implements OnModuleInit {
       incomingDto.scheduledPublishAt = null;
     }
 
+    const sendPublishNotificationEmail =
+      incomingDto.status === ListingsStatusEnum.active &&
+      storedListing.status !== ListingsStatusEnum.active;
+
     // test if not publishing or unpublishing listing and scheduledPublishAt is set
     if (
       incomingDto.status === storedListing.status &&
@@ -2911,7 +2915,7 @@ export class ListingService implements OnModuleInit {
         jurisId: rawJurisdiction.id,
       });
 
-    if (mappedListing.status === ListingsStatusEnum.active) {
+    if (sendPublishNotificationEmail) {
       await this.sendListingPublishNotification(mappedListing);
     }
 
@@ -2958,23 +2962,31 @@ export class ListingService implements OnModuleInit {
       ),
     );
 
-    const preferenceFilters = priorityTypes.map((priorityType) => {
+    let preferenceFilters = [];
+
+    preferenceFilters = priorityTypes.map((priorityType) => {
       return {
         [priorityType]: true,
-      } as Prisma.UserNotificationPreferencesWhereInput;
+      };
     });
 
-    if (listing?.region) {
+    if (listing.region || listing.configurableRegion) {
       preferenceFilters.push({
         regions: {
-          has: listing.region,
+          has: listing.region ?? listing.configurableRegion,
         },
-      } as Prisma.UserNotificationPreferencesWhereInput);
+      });
     }
 
     if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
       preferenceFilters.push({
         lottery: true,
+      });
+    }
+
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
+      preferenceFilters.push({
+        waitlist: true,
       });
     }
 
@@ -2988,11 +3000,11 @@ export class ListingService implements OnModuleInit {
           email: '',
         },
         AND: [
-          {
-            userPreferences: {
-              sendEmailNotifications: true,
-            },
-          },
+          // { TODO: consider enabling this when this flag will be available to update from user account page
+          //   userPreferences: {
+          //     sendEmailNotifications: true,
+          //   },
+          // },
           {
             notificationPreferences: {
               OR: preferenceFilters,
