@@ -14,6 +14,7 @@ locals {
     S3_PRIVATE_BUCKET           = aws_s3_bucket.private.id
     S3_PUBLIC_BUCKET            = aws_s3_bucket.public.id
     OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317"
+    USE_WINSTON                 = "TRUE"
   }
 }
 resource "aws_ecs_task_definition" "bloom_api" {
