@@ -159,6 +159,7 @@ export const ElmVillageApplication: Application = {
     hearing: true,
   },
   incomeVouchers: ["incomeVoucher"],
+  voucher: "Section 8 Housing Choice Voucher",
   income: "3000.00",
   incomePeriod: IncomePeriodEnum.perMonth,
   householdMember: [
