@@ -95,12 +95,12 @@ describe("Public Reset Password Page", () => {
       {
         title: "Expired Token",
         message: "tokenExpired",
-        value: "Reset password token expired. Please request for a new one.",
+        value: "Reset password link expired. Please request a new one.",
       },
       {
         title: "Missing Token",
         message: "tokenMissing",
-        value: "Token not found. Please request for a new one.",
+        value: "Reset password link is malformed. Please request a new one.",
       },
     ].map((entry) =>
       Object.assign(entry, {

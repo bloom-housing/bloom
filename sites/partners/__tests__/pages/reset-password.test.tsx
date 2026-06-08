@@ -54,9 +54,11 @@ describe("reset-password", () => {
         )
       ).not.toBeInTheDocument()
       expect(
-        queryByText("Reset password token expired. Please request for a new one.")
+        queryByText("Reset password link expired. Please request a new one.")
       ).not.toBeInTheDocument()
-      expect(queryByText("Token not found. Please request for a new one.")).not.toBeInTheDocument()
+      expect(
+        queryByText("Reset password link is malformed. Please request a new one.")
+      ).not.toBeInTheDocument()
     })
 
     it("should show only password input error", async () => {
@@ -193,11 +195,11 @@ describe("reset-password", () => {
       },
       expiredToken: {
         code: "tokenExpired",
-        message: "Reset password token expired. Please request for a new one.",
+        message: "Reset password link expired. Please request a new one.",
       },
       missingToken: {
         code: "tokenMissing",
-        message: "Token not found. Please request for a new one.",
+        message: "Reset password link is malformed. Please request a new one.",
       },
     }
 
