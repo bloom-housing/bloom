@@ -18,7 +18,7 @@ import FormsLayout from "../layouts/forms"
 const ResetPassword = () => {
   const router = useRouter()
   const { token } = router.query
-  const { resetPassword } = useContext(AuthContext)
+  const { resetPassword, userService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
@@ -39,6 +39,34 @@ const ResetPassword = () => {
     })
   }, [])
 
+  useEffect(() => {
+    if (token) {
+      userService
+        .isUserConfirmationTokenValid({ body: { token: token as string } })
+        .then((res) => {
+          if (!res) {
+            addToast(
+              `${t("authentication.forgotPassword.errors.tokenExpired", {
+                contactEmail: t("resources.contactEmail"),
+              })}`,
+              { variant: "warn" }
+            )
+            void router.push("/forgot-password")
+          }
+        })
+        .catch(() => {
+          addToast(
+            `${t("authentication.forgotPassword.errors.tokenExpired", {
+              contactEmail: t("resources.contactEmail"),
+            })}`,
+            { variant: "warn" }
+          )
+          void router.push("/forgot-password")
+        })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, userService])
+
   const onSubmit = async (data: { password: string; passwordConfirmation: string }) => {
     setLoading(true)
     const { password, passwordConfirmation } = data
@@ -58,15 +86,19 @@ const ResetPassword = () => {
       setLoading(false)
       const { status, data } = err.response || {}
       if (status === 400 || status === 401) {
-        setRequestError(`${t(`authentication.forgotPassword.errors.${data.message}`)}`)
+        addToast(`${t(`authentication.forgotPassword.errors.${data.message}`)}`, {
+          variant: "warn",
+        })
       } else {
         console.error(err)
-        setRequestError(
+        addToast(
           `${t("account.settings.alerts.genericError", {
             contactEmail: t("resources.contactEmail"),
-          })}`
+          })}`,
+          { variant: "warn" }
         )
       }
+      await router.push("/forgot-password")
     }
   }
 
