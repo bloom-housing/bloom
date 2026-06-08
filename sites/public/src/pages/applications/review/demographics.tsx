@@ -1,25 +1,26 @@
 import React, { useContext, useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
-import { Field, FieldGroup, Form, Select, t } from "@bloom-housing/ui-components"
+import { Field, FieldGroup, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   FeatureFlagEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
-  ethnicityKeys,
-  isKeyIncluded,
-  getCustomValue,
-  howDidYouHear,
-  fieldGroupObjectToArray,
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
-  listingSectionQuestions,
-  limitedHowDidYouHear,
-  getRaceEthnicityOptions,
+  ethnicityKeys,
+  fieldGroupObjectToArray,
   genderKeys,
+  getCustomValue,
+  getRaceEthnicityOptions,
+  howDidYouHear,
+  isKeyIncluded,
+  limitedHowDidYouHear,
+  listingSectionQuestions,
+  pushGtmEvent,
   sexualOrientationKeys,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"

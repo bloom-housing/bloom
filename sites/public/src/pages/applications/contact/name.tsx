@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { DOBField, Field, Form, t } from "@bloom-housing/ui-components"
+import { DOBField, Field, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
   emailRegex,
+  pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"

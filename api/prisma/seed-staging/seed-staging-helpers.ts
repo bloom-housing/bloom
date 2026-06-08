@@ -4,7 +4,6 @@ import { ListingFeaturesConfiguration } from '../../src/dtos/jurisdictions/listi
 import { RaceEthnicityConfiguration } from '../../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
 import { listingFactory } from '../seed-helpers/listing-factory';
 import { userFactory } from '../seed-helpers/user-factory';
-import { randomName } from 'prisma/seed-helpers/word-generator';
 import { randomInt } from 'crypto';
 
 export const seedListings = async (

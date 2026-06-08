@@ -1,8 +1,13 @@
 import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-import { t, Form, AlertBox } from "@bloom-housing/ui-components"
+import { t, AlertBox } from "@bloom-housing/ui-components"
 import { Button, Dialog, LoadingState } from "@bloom-housing/ui-seeds"
-import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import {
+  AuthContext,
+  Form,
+  MessageContext,
+  listingSectionQuestions,
+} from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
   Application,
