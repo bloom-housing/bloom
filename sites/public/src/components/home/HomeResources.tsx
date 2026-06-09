@@ -31,7 +31,7 @@ export const HomeResources = (props: HomeResourcesProps) => {
 
   return (
     <Grid spacing="lg">
-      <Grid.Row columns={enableAdditionalResources ? 3 : 2}>
+      <Grid.Row columns={2}>
         {showNotificationsCard && (
           <Grid.Cell>
             <BloomCard
@@ -86,7 +86,7 @@ export const HomeResources = (props: HomeResourcesProps) => {
           <Grid.Cell>
             <BloomCard
               iconSymbol="questionMarkCircle"
-              title={t("welcome.learnHousingBasics")}
+              title={t("resources.additionalResourcesTitle")}
               variant={"block"}
               headingPriority={3}
               className={styles["resource"]}
@@ -95,7 +95,7 @@ export const HomeResources = (props: HomeResourcesProps) => {
               <Card.Section>
                 <Button
                   key={"learn-more"}
-                  href="/housing-basics"
+                  href={t("resources.additionalResourcesLink")}
                   variant="primary-outlined"
                   size={"sm"}
                 >

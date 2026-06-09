@@ -71,7 +71,11 @@ const FormForgotPassword = ({
         )}
 
         <CardSection>
-          <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
+          <Form
+            id="sign-in"
+            suppressSubmitOnEnter={false}
+            onSubmit={handleSubmit(onSubmit, onError)}
+          >
             <Field
               name="email"
               label={t("t.email")}

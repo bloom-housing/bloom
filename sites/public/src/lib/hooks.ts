@@ -17,7 +17,6 @@ import {
   OrderByEnum,
   PaginatedListing,
   EnumAgencyFilterParamsComparison,
-  AgencyFilterParams,
   ListingMapMarker,
   ListingsService,
   ListingViews,

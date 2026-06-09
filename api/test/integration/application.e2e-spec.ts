@@ -2096,7 +2096,7 @@ describe('Application Controller Tests', () => {
         },
       });
 
-      const applicationSelection = await prisma.applicationSelections.create({
+      await prisma.applicationSelections.create({
         data: await applicationSelectionFactory(
           applicationA.id,
           multiselectQuestionPreference.id,
