@@ -2,9 +2,9 @@ import { useContext, useEffect, useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon"
 import MinusIcon from "@heroicons/react/24/solid/MinusIcon"
-import { AuthContext, BloomCard, MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, BloomCard, Form, MessageContext } from "@bloom-housing/shared-helpers"
 import { Button, Card, Icon, LoadingState } from "@bloom-housing/ui-seeds"
-import { Field, FieldGroup, Form, t } from "@bloom-housing/ui-components"
+import { Field, FieldGroup, t } from "@bloom-housing/ui-components"
 import {
   Jurisdiction,
   UserNotificationPreferences,

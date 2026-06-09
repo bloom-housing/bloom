@@ -21,6 +21,8 @@ import {
   UserRoleEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import tz from 'dayjs/plugin/timezone';
 import { firstValueFrom } from 'rxjs';
 import { ApplicationFlaggedSetService } from './application-flagged-set.service';
 import { CronJobService } from './cron-job.service';
@@ -66,6 +68,9 @@ import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-util
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
 import { SnapshotCreateService } from './snapshot-create.service';
+
+dayjs.extend(utc);
+dayjs.extend(tz);
 
 export type getListingsArgs = {
   skip: number;
@@ -1441,6 +1446,13 @@ export class ListingService implements OnModuleInit {
       dto.scheduledPublishAt = null;
     }
 
+    if (enableAutopublish && dto.scheduledPublishAt) {
+      dto.scheduledPublishAt = this.normalizeScheduledPublishAt(
+        dto.scheduledPublishAt,
+      );
+      this.checkScheduledPublishAtIsInFuture(dto.scheduledPublishAt);
+    }
+
     if (
       (enableUnitGroups && dto.units?.length > 0) ||
       (!enableUnitGroups && dto.unitGroups?.length > 0)
@@ -2251,6 +2263,23 @@ export class ListingService implements OnModuleInit {
       incomingDto.scheduledPublishAt = null;
     }
 
+    const sendPublishNotificationEmail =
+      incomingDto.status === ListingsStatusEnum.active &&
+      storedListing.status !== ListingsStatusEnum.active;
+
+    // test if not publishing or unpublishing listing and scheduledPublishAt is set
+    if (
+      incomingDto.status === storedListing.status &&
+      incomingDto.status !== ListingsStatusEnum.active &&
+      incomingDto.scheduledPublishAt &&
+      enableAutopublish
+    ) {
+      incomingDto.scheduledPublishAt = this.normalizeScheduledPublishAt(
+        incomingDto.scheduledPublishAt,
+      );
+      this.checkScheduledPublishAtIsInFuture(incomingDto.scheduledPublishAt);
+    }
+
     if (
       (enableUnitGroups && incomingDto.units?.length > 0) ||
       (!enableUnitGroups && incomingDto.unitGroups?.length > 0)
@@ -2886,6 +2915,10 @@ export class ListingService implements OnModuleInit {
         jurisId: rawJurisdiction.id,
       });
 
+    if (sendPublishNotificationEmail) {
+      await this.sendListingPublishNotification(mappedListing);
+    }
+
     if (enableV2MSQ && mappedListing.status === ListingsStatusEnum.active) {
       const multiselectQuestions =
         mappedListing.listingMultiselectQuestions.map(
@@ -2915,6 +2948,114 @@ export class ListingService implements OnModuleInit {
     );
 
     return mappedListing;
+  }
+
+  /**
+   * When listing is published, notify users with declared approval for example
+   */
+  async sendListingPublishNotification(listing: Listing): Promise<void> {
+    const priorityTypes = Array.from(
+      new Set(
+        (listing.units || [])
+          .map((unit) => unit.accessibilityPriorityType)
+          .filter((type) => !!type),
+      ),
+    );
+
+    let preferenceFilters = [];
+
+    preferenceFilters = priorityTypes.map((priorityType) => {
+      return {
+        [priorityType]: true,
+      };
+    });
+
+    if (listing.region || listing.configurableRegion) {
+      preferenceFilters.push({
+        regions: {
+          has: listing.region ?? listing.configurableRegion,
+        },
+      });
+    }
+
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
+      preferenceFilters.push({
+        lottery: true,
+      });
+    }
+
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
+      preferenceFilters.push({
+        waitlist: true,
+      });
+    }
+
+    const emailUsers = await this.prisma.userAccounts.findMany({
+      select: {
+        email: true,
+        language: true,
+      },
+      where: {
+        NOT: {
+          email: '',
+        },
+        AND: [
+          // { TODO: consider enabling this when this flag will be available to update from user account page
+          //   userPreferences: {
+          //     sendEmailNotifications: true,
+          //   },
+          // },
+          {
+            notificationPreferences: {
+              OR: preferenceFilters,
+            },
+          },
+        ],
+      },
+    });
+
+    if (!emailUsers.length) {
+      this.logger.log(
+        `Skipping publish notification for listing ${listing.id}: no matching users`,
+      );
+      return;
+    }
+
+    const emailByLanguage = {};
+    Object.keys(LanguagesEnum).forEach((languageKey) => {
+      emailByLanguage[languageKey] = emailUsers
+        .filter((user) => user.language === languageKey)
+        .map((userObj) => userObj.email);
+    });
+
+    const noLanguageIndicated = emailUsers
+      .filter((user) => !user.language)
+      .map((userObj) => userObj.email);
+
+    if (!emailByLanguage[LanguagesEnum.en])
+      emailByLanguage[LanguagesEnum.en] = noLanguageIndicated;
+    else
+      emailByLanguage[LanguagesEnum.en] = [
+        ...emailByLanguage[LanguagesEnum.en],
+        ...noLanguageIndicated,
+      ];
+
+    const jurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        id: true,
+        publicUrl: true,
+      },
+      where: {
+        id: listing.jurisdictions.id,
+      },
+    });
+
+    await this.emailService.listingPublishNotification(
+      { id: jurisdiction.id },
+      listing,
+      priorityTypes,
+      emailByLanguage,
+    );
   }
 
   /**
@@ -3063,6 +3204,31 @@ export class ListingService implements OnModuleInit {
       );
     }
   };
+
+  normalizeScheduledPublishAt(scheduledPublishAt: Date): Date {
+    const appTimezone = process.env.TIME_ZONE;
+    const dateStr = dayjs.utc(scheduledPublishAt).format('YYYY-MM-DD');
+    return dayjs.tz(dateStr, 'YYYY-MM-DD', appTimezone).startOf('day').toDate();
+  }
+
+  private checkScheduledPublishAtIsInFuture(scheduledPublishAt: Date): void {
+    const appTimezone = process.env.TIME_ZONE;
+    const minimumScheduledPublishAt = dayjs
+      .utc()
+      .tz(appTimezone)
+      .add(1, 'day')
+      .startOf('day');
+
+    const incomingScheduledPublishAt = dayjs
+      .utc(scheduledPublishAt)
+      .tz(appTimezone);
+
+    if (incomingScheduledPublishAt.isBefore(minimumScheduledPublishAt)) {
+      throw new BadRequestException([
+        'scheduledPublishAt must be in the future',
+      ]);
+    }
+  }
 
   /**
    * validates that the requested multiselectQuestions to be associated with the listing are in a valid state

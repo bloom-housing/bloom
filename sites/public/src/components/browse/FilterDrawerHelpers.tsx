@@ -38,6 +38,7 @@ export interface FilterData {
   monthlyRent?: { [K in "maxRent" | "minRent"]?: string }
   regions?: { [K in RegionEnum]: BooleanOrBooleanString }
   configurableRegions?: string
+  bathrooms?: { [K in "1" | "2" | "3" | "4"]?: BooleanOrBooleanString }
   section8Acceptance?: BooleanOrBooleanString
   reservedCommunityTypes?: { [K in ReservedCommunityTypes]?: BooleanOrBooleanString }
   multiselectQuestions?: Record<string, BooleanOrBooleanString>
@@ -83,6 +84,7 @@ export interface AccessibilitySectionProps {
 
 const arrayFilters: ListingFilterKeys[] = [
   ListingFilterKeys.bedroomTypes,
+  ListingFilterKeys.bathrooms,
   ListingFilterKeys.counties,
   ListingFilterKeys.homeTypes,
   ListingFilterKeys.listingFeatures,
@@ -406,6 +408,8 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
         if (field[1]) {
           if (filterType === ListingFilterKeys.bedroomTypes) {
             selectedFields.push(unitTypeMapping[field[0]]?.value)
+          } else if (filterType === ListingFilterKeys.bathrooms) {
+            selectedFields.push(parseInt(field[0]))
           } else {
             selectedFields.push(field[0])
           }
@@ -534,6 +538,8 @@ export const decodeQueryToFilterData = (parsedQuery: ParsedUrlQuery): FilterData
       //custom separator to avoid conflicts with higher values with commas
       const rentArr = userSelections.split("-")
       filterData[filterType] = { minRent: rentArr[0] ?? "", maxRent: rentArr[1] ?? "" }
+    } else if (filterType === ListingFilterKeys.bathrooms && typeof userSelections === "string") {
+      filterData[filterType] = userSelections
     } else if (filterType === ListingFilterKeys.name) {
       filterData[filterType] = userSelections
     }
@@ -566,6 +572,8 @@ export const removeUnselectedFilterData = (data: FilterData): FilterData => {
       (filterType === ListingFilterKeys.monthlyRent && userSelections["minRent"]) ||
       userSelections["maxRent"]
     ) {
+      cleanedFilterData[filterType] = userSelections
+    } else if (filterType === ListingFilterKeys.bathrooms && userSelections) {
       cleanedFilterData[filterType] = userSelections
     } else if (filterType === ListingFilterKeys.name && userSelections) {
       cleanedFilterData[filterType] = userSelections
