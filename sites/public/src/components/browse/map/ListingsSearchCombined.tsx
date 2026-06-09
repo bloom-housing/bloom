@@ -42,6 +42,8 @@ function ListingsSearchCombined() {
   const hasCompletedInitialListingsCallRef = useRef(false)
   const listingsVarsRef = useRef<HTMLDivElement>(null)
 
+  const jurisdictionIds = props.jurisdictions.map((jurisdiction) => jurisdiction.id)
+
   const [searchFilter] = useState(
     parseSearchString(props.searchString, {
       bedrooms: null,
@@ -170,7 +172,7 @@ function ListingsSearchCombined() {
         page,
         listingsService,
         ListingViews.map,
-        props.jurisdictionIds,
+        jurisdictionIds,
         drawerFilters
       )
       hasCompletedInitialListingsCallRef.current = true
@@ -185,7 +187,7 @@ function ListingsSearchCombined() {
       newMarkers = await searchMapMarkers(
         genericQb,
         listingsService,
-        props.jurisdictionIds,
+        jurisdictionIds,
         drawerFilters
       )
       // If the filter from the homepage has zero results, don't fetch the listings
@@ -340,7 +342,7 @@ function ListingsSearchCombined() {
 
   const mapContextValue = {
     searchString: props.searchString,
-    jurisdictionIds: props.jurisdictionIds,
+    jurisdictionIds: jurisdictionIds,
     googleMapsApiKey: props.googleMapsApiKey,
     googleMapsMapId: props.googleMapsMapId,
     bedrooms: props.bedrooms,

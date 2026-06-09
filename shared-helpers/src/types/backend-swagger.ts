@@ -7948,9 +7948,6 @@ export interface JurisdictionCreate {
 
   /**  */
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
-
-  /**  */
-  subJurisdictions?: []
 }
 
 /** JurisdictionUpdate */
@@ -8041,9 +8038,6 @@ export interface JurisdictionUpdate {
 
   /**  */
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
-
-  /**  */
-  subJurisdictions?: []
 }
 
 /** FeatureFlag */
@@ -8172,7 +8166,7 @@ export interface Jurisdiction {
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
 
   /**  */
-  subJurisdictions?: []
+  subJurisdictions?: IdDTO[]
 }
 
 /** AddressInput */

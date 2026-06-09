@@ -86,7 +86,9 @@ describe('Testing jurisdiction service', () => {
         regions: true,
         rentalAssistanceDefault: true,
         requiredListingFields: true,
-        subJurisdictions: true,
+        subJurisdictions: {
+          select: { id: true, name: true },
+        },
         visibleAccessibilityPriorityTypes: true,
         visibleApplicationAccessibilityFeatures: true,
         visibleHouseholdMemberRelationships: true,
@@ -128,7 +130,9 @@ describe('Testing jurisdiction service', () => {
         raceEthnicityConfiguration: true,
         name: true,
         regions: true,
-        subJurisdictions: true,
+        subJurisdictions: {
+          select: { id: true, name: true },
+        },
         visibleAccessibilityPriorityTypes: true,
         visibleSpokenLanguages: true,
         visibleApplicationAccessibilityFeatures: true,
@@ -167,7 +171,9 @@ describe('Testing jurisdiction service', () => {
         raceEthnicityConfiguration: true,
         name: true,
         regions: true,
-        subJurisdictions: true,
+        subJurisdictions: {
+          select: { id: true, name: true },
+        },
         visibleAccessibilityPriorityTypes: true,
         visibleSpokenLanguages: true,
         visibleApplicationAccessibilityFeatures: true,
@@ -206,7 +212,9 @@ describe('Testing jurisdiction service', () => {
         raceEthnicityConfiguration: true,
         name: true,
         regions: true,
-        subJurisdictions: true,
+        subJurisdictions: {
+          select: { id: true, name: true },
+        },
         visibleAccessibilityPriorityTypes: true,
         visibleSpokenLanguages: true,
         visibleApplicationAccessibilityFeatures: true,

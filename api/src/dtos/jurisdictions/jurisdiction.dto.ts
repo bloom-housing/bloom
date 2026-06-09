@@ -272,7 +272,7 @@ export class Jurisdiction extends AbstractDTO {
   raceEthnicityConfiguration?: RaceEthnicityConfiguration;
 
   @Expose()
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiPropertyOptional({ isArray: true })
-  subJurisdictions?: string[];
+  @Type(() => IdDTO)
+  @ApiPropertyOptional({ isArray: true, type: IdDTO })
+  subJurisdictions?: IdDTO[];
 }

@@ -175,7 +175,10 @@ export async function fetchBaseListingData(
       ? [
           {
             $comparison: EnumListingFilterParamsComparison["IN"],
-            jurisdictions: [jurisdictionId, ...subJurisdictions],
+            jurisdictions: [
+              jurisdictionId,
+              ...subJurisdictions.map((jurisdiction) => jurisdiction.id),
+            ],
           },
         ]
       : [

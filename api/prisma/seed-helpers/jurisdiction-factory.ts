@@ -110,5 +110,9 @@ export const jurisdictionFactory = (
       HouseholdMemberRelationship.other,
       HouseholdMemberRelationship.aideOrAttendant,
     ],
-  subJurisdictions: optionalFields?.subJurisdictions || [],
+  subJurisdictions: optionalFields?.subJurisdictions
+    ? {
+        connect: optionalFields?.subJurisdictions?.map((id) => ({ id })),
+      }
+    : undefined,
 });

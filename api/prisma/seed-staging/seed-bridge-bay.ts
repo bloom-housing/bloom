@@ -2688,9 +2688,11 @@ export const createBridgeBayJurisdictions = async (
   await prismaClient.jurisdictions.update({
     where: { id: bridgeBayJurisdiction.id },
     data: {
-      subJurisdictions: otherJurisdictions.map(
-        (jurisdiction) => jurisdiction.id,
-      ),
+      subJurisdictions: {
+        connect: otherJurisdictions.map((jurisdiction) => ({
+          id: jurisdiction.id,
+        })),
+      },
     },
   });
 

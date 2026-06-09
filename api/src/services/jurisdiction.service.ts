@@ -35,7 +35,9 @@ const selectViews: Partial<
     notificationsSignUpUrl: true,
     raceEthnicityConfiguration: true,
     regions: true,
-    subJurisdictions: true,
+    subJurisdictions: {
+      select: { id: true, name: true },
+    },
     listingFeaturesConfiguration: true,
     visibleAccessibilityPriorityTypes: true,
     visibleApplicationAccessibilityFeatures: true,
@@ -115,6 +117,7 @@ export class JurisdictionService {
     jurisdictionName?: string;
     view?: JurisdictionViews;
   }): Promise<Jurisdiction> {
+    console.warn('here');
     if (!condition.jurisdictionId && !condition.jurisdictionName) {
       throw new BadRequestException(
         'a jurisdiction id or jurisdiction name must be provided',
