@@ -1,25 +1,27 @@
 import React, { useContext, useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
-import { Field, FieldGroup, Form, Select, t } from "@bloom-housing/ui-components"
+import { Field, FieldGroup, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   FeatureFlagEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
-  ethnicityKeys,
-  isKeyIncluded,
-  getCustomValue,
-  howDidYouHear,
-  fieldGroupObjectToArray,
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
-  listingSectionQuestions,
-  limitedHowDidYouHear,
-  getRaceEthnicityOptions,
+  ethnicityKeys,
+  fieldGroupObjectToArray,
   genderKeys,
+  getCustomValue,
+  getRaceEthnicityOptions,
+  howDidYouHear,
+  isKeyIncluded,
+  limitedHowDidYouHear,
+  listingSectionQuestions,
+  pushGtmEvent,
+  sexualOrientationKeys,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { isFeatureFlagOn } from "../../../lib/helpers"
@@ -56,7 +58,7 @@ const ApplicationDemographics = () => {
       demographics: {
         ethnicity: data.ethnicity || "",
         gender: enableGenderQuestion ? data.gender : "",
-        sexualOrientation: "",
+        sexualOrientation: enableSexualOrientationQuestion ? data.sexualOrientation : "",
         howDidYouHear: data.howDidYouHear,
         race: fieldGroupObjectToArray(data, "race"),
         spokenLanguage: enableSpokenLanguage
@@ -87,6 +89,11 @@ const ApplicationDemographics = () => {
   const enableGenderQuestion = isFeatureFlagOn(
     conductor.config,
     FeatureFlagEnum.enableGenderQuestion
+  )
+
+  const enableSexualOrientationQuestion = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableSexualOrientationQuestion
   )
 
   const getSpokenLanguageOptions = () => {
@@ -257,6 +264,32 @@ const ApplicationDemographics = () => {
                   options={genderKeys}
                   keyPrefix="application.review.demographics.genderOptions"
                   dataTestId={"app-demographics-gender"}
+                />
+              </div>
+            )}
+            {enableSexualOrientationQuestion && (
+              <div
+                className={
+                  showRaceQuestion ||
+                  showEthnicitySection ||
+                  showSpokenLanguageSection ||
+                  enableGenderQuestion
+                    ? "seeds-p-bs-8"
+                    : ""
+                }
+              >
+                <Select
+                  id="sexualOrientation"
+                  name="sexualOrientation"
+                  label={t("application.review.demographics.sexualOrientationLabel")}
+                  defaultValue={application.demographics.sexualOrientation}
+                  placeholder={t("t.selectOne")}
+                  register={register}
+                  labelClassName="text__caps-spaced mb-0"
+                  controlClassName="control"
+                  options={sexualOrientationKeys}
+                  keyPrefix="application.review.demographics.sexualOrientationOptions"
+                  dataTestId={"app-demographics-sexual-orientation"}
                 />
               </div>
             )}

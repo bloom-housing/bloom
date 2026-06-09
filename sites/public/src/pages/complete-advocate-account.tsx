@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
-import { Form, t, AlertBox, Field } from "@bloom-housing/ui-components"
+import { t, AlertBox, Field } from "@bloom-housing/ui-components"
 import { Agency, User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, LoadingState } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { BloomCard, AuthContext, emailRegex } from "@bloom-housing/shared-helpers"
+import { AuthContext, BloomCard, Form, emailRegex } from "@bloom-housing/shared-helpers"
 import { fetchAgencies, fetchJurisdictionByName } from "../lib/hooks"
 import FormsLayout from "../layouts/forms"
 import {
@@ -158,7 +158,11 @@ const CreateAdvocateAccount = ({ agencies }: CreateAdvocateAccountProps) => {
 
   const formContent = (
     <>
-      <Form id="complete-advocate-account" onSubmit={handleSubmit(onSubmit)}>
+      <Form
+        id="complete-advocate-account"
+        suppressSubmitOnEnter={false}
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <LoadingState loading={submitLoading}>
           <CardSection
             divider={"inset"}
@@ -210,7 +214,11 @@ const CreateAdvocateAccount = ({ agencies }: CreateAdvocateAccountProps) => {
         <p className={`${accountCardStyles["card-content"]} seeds-m-be-6`}>
           {t("advocateAccount.linkExpiredMessage")}
         </p>
-        <Form id="resend-advocate-confirmation" onSubmit={resendHandleSubmit(onResend)}>
+        <Form
+          id="resend-advocate-confirmation"
+          suppressSubmitOnEnter={false}
+          onSubmit={resendHandleSubmit(onResend)}
+        >
           <Field
             name="resendEmail"
             type="email"

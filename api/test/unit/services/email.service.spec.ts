@@ -6,6 +6,7 @@ import {
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
+  RegionEnum,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
 } from '@prisma/client';
@@ -929,6 +930,7 @@ describe('Testing email service', () => {
       oneBdrm: '1 bedroom',
       twoBdrm: '2 bedroom',
       threeBdrm: '3 bedroom',
+      region: 'Region',
     };
 
     const emptySummary = (): ListingUnitsSummary => ({
@@ -1003,6 +1005,26 @@ describe('Testing email service', () => {
       it('omits applications due row when applicationDueDate is absent', () => {
         const result = buildDetails(baseListing());
         expect(findByLabel(result, LABELS.applicationsDue)).toBeUndefined();
+      });
+
+      it('includes region row when regions is truthy', () => {
+        const result = buildDetails(
+          baseListing({ region: RegionEnum.Eastside } as Partial<Listing>),
+        );
+        const row = findByLabel(result, LABELS.region);
+        expect(row).toBeDefined();
+        expect(row.value).toBe(RegionEnum.Eastside);
+      });
+
+      it('includes region row when configurableRegion is truthy', () => {
+        const result = buildDetails(
+          baseListing({
+            configurableRegion: 'Test Region',
+          } as Partial<Listing>),
+        );
+        const row = findByLabel(result, LABELS.region);
+        expect(row).toBeDefined();
+        expect(row.value).toBe('Test Region');
       });
 
       it('includes neighborhood row when neighborhood is truthy', () => {

@@ -5353,6 +5353,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue([]);
       const updateMock = jest
         .fn()
         .mockResolvedValue({ id: 'example id', name: 'example name' });

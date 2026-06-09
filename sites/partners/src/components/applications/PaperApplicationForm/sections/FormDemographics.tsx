@@ -10,6 +10,7 @@ import {
   howDidYouHear,
   limitedHowDidYouHear,
   getRaceEthnicityOptions,
+  sexualOrientationKeys,
 } from "@bloom-housing/shared-helpers"
 import {
   Demographic,
@@ -25,6 +26,7 @@ type FormDemographicsProps = {
   enableSpokenLanguage?: boolean
   visibleSpokenLanguages?: string[]
   enableGenderQuestion?: boolean
+  enableSexualOrientationQuestion?: boolean
 }
 
 const FormDemographics = ({
@@ -35,6 +37,7 @@ const FormDemographics = ({
   enableSpokenLanguage,
   visibleSpokenLanguages,
   enableGenderQuestion,
+  enableSexualOrientationQuestion,
 }: FormDemographicsProps) => {
   const formMethods = useFormContext()
 
@@ -121,6 +124,7 @@ const FormDemographics = ({
           )}
           {(!disableEthnicityQuestion ||
             enableGenderQuestion ||
+            enableSexualOrientationQuestion ||
             (enableSpokenLanguage && visibleSpokenLanguages?.length > 0)) && (
             <Grid.Cell>
               {!disableEthnicityQuestion && (
@@ -148,10 +152,31 @@ const FormDemographics = ({
                   />
                 </div>
               )}
-              {enableSpokenLanguage && visibleSpokenLanguages?.length > 0 && (
+              {enableSexualOrientationQuestion && (
                 <div
                   className={
                     !disableEthnicityQuestion || enableGenderQuestion ? "seeds-m-bs-4" : ""
+                  }
+                >
+                  <Select
+                    id="application.demographics.sexualOrientation"
+                    name="application.demographics.sexualOrientation"
+                    label={t("application.add.sexualOrientation")}
+                    register={register}
+                    controlClassName="control"
+                    options={["", ...sexualOrientationKeys]}
+                    keyPrefix="application.review.demographics.sexualOrientationOptions"
+                  />
+                </div>
+              )}
+              {enableSpokenLanguage && visibleSpokenLanguages?.length > 0 && (
+                <div
+                  className={
+                    !disableEthnicityQuestion ||
+                    enableGenderQuestion ||
+                    enableSexualOrientationQuestion
+                      ? "seeds-m-bs-4"
+                      : ""
                   }
                 >
                   <Select

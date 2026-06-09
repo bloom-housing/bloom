@@ -3972,6 +3972,7 @@ describe('Testing user service', () => {
       );
     });
     it('should delete users for all inactive user', async () => {
+      jest.useFakeTimers().setSystemTime(new Date('2025-11-22T12:25:00.000Z'));
       // This test goes through all possible options
       //  has or has not been warned of deletion
       //  has or doesn't have applications
@@ -4003,6 +4004,21 @@ describe('Testing user service', () => {
       process.env.USERS_DAYS_TILL_EXPIRY = '1095';
       const response = await service.deleteAfterInactivity();
       expect(response).toEqual({ success: true });
+      expect(prisma.userAccounts.findMany).toBeCalledWith({
+        select: {
+          id: true,
+          wasWarnedOfDeletion: true,
+        },
+        where: {
+          lastLoginAt: {
+            lt: new Date('2022-11-23T12:25:00.000Z'),
+          },
+          passwordUpdatedAt: {
+            lt: new Date('2022-11-23T12:25:00.000Z'),
+          },
+          userRoles: null,
+        },
+      });
       expect(prisma.userAccounts.delete).toBeCalledWith({
         where: { id: 'userId1' },
       });
@@ -4064,9 +4080,11 @@ describe('Testing user service', () => {
         },
         where: {
           lastLoginAt: { lte: new Date('2022-12-23T12:25:00.000Z') },
+          passwordUpdatedAt: { lte: new Date('2022-12-23T12:25:00.000Z') },
           userRoles: null,
           wasWarnedOfDeletion: false,
         },
+        take: 1000,
       });
       expect(prisma.userAccounts.update).toBeCalledWith({
         data: {
@@ -4123,9 +4141,11 @@ describe('Testing user service', () => {
         },
         where: {
           lastLoginAt: { lte: new Date('2022-12-23T12:25:00.000Z') },
+          passwordUpdatedAt: { lte: new Date('2022-12-23T12:25:00.000Z') },
           userRoles: null,
           wasWarnedOfDeletion: false,
         },
+        take: 1000,
       });
       expect(emailService.warnOfAccountRemoval).toBeCalledTimes(2);
       expect(prisma.userAccounts.update).toBeCalledTimes(1);
