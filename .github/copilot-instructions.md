@@ -22,7 +22,7 @@ This repository is called "core". The model for Bloom is to have one generic cor
 1. Start in repo root: `/home/runner/work/bloom/bloom`
 2. Install dependencies:
    - Normal: `yarn install`
-   - In restricted-network sandboxes: `SENTRYCLI_SKIP_DOWNLOAD=1 CYPRESS_INSTALL_BINARY=0 yarn install`
+   - In restricted-network sandboxes: `CYPRESS_INSTALL_BINARY=0 yarn install`
 3. Copy env templates before app builds/runs:
    - `cp /home/runner/work/bloom/bloom/api/.env.template /home/runner/work/bloom/bloom/api/.env`
    - `cp /home/runner/work/bloom/bloom/sites/public/.env.template /home/runner/work/bloom/bloom/sites/public/.env`
@@ -59,19 +59,16 @@ When changing one area, run that area’s tests first, then run broader checks o
 - Reuse existing shared helpers/types instead of duplicating interfaces or utilities.
 
 ## Errors encountered in this cloud sandbox and workarounds
-1. **`yarn install` failed downloading `@sentry/cli` binary**  
-   - Error: `ENOTFOUND downloads.sentry-cdn.com`  
-   - Workaround: `SENTRYCLI_SKIP_DOWNLOAD=1 yarn install`
 
-2. **`yarn install` failed downloading Cypress binary**  
+1. **`yarn install` failed downloading Cypress binary**  
    - Error: `ENOTFOUND download.cypress.io`  
    - Workaround: `CYPRESS_INSTALL_BINARY=0 yarn install`
 
-3. **`sites/public` build failed during prerender with missing env context**  
+2. **`sites/public` build failed during prerender with missing env context**  
    - Observed failures included invalid/missing analytics env and prerender `TypeError` paths.  
    - Workaround: ensure `.env` is created from `sites/public/.env.template` before building; use template defaults for `GA_KEY`, `GTM_KEY`, and related keys.
 
-4. **`api` unit tests had local failures when run with incomplete env**  
+3. **`api` unit tests had local failures when run with incomplete env**
    - Missing/incorrect env can produce noisy service initialization errors and unstable expectations.
    - Workaround: run with CI-like env values from `.github/workflows/unit_tests_api.yml` and required README values (`TIME_ZONE`, `CLOUDINARY_CLOUD_NAME`).
 

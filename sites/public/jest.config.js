@@ -6,15 +6,7 @@ process.env.TZ = "UTC"
 module.exports = {
   testRegex: ["/*.test.tsx$", "/*.test.ts$"],
   collectCoverageFrom: ["**/*.ts", "**/*.tsx"],
-  coveragePathIgnorePatterns: [
-    "cypress",
-    "types",
-    "__tests__",
-    "next-env.d.ts",
-    "sentry.client.config.ts",
-    "sentry.server.config.ts",
-    "sentry.edge.config.ts",
-  ],
+  coveragePathIgnorePatterns: ["cypress", "types", "__tests__", "next-env.d.ts"],
   coverageReporters: ["lcov", "text"],
   coverageDirectory: "test-coverage",
   coverageThreshold: {
