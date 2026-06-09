@@ -19,15 +19,16 @@ export const stagingSeed = async (
     publicSiteBaseURL,
     msqV2,
     asRegion = false,
-    angelopolisJurisdictionName,
+    jurisdiction,
   }: {
     jurisdictionName: string;
     publicSiteBaseURL: string;
     msqV2: boolean;
     asRegion: boolean;
-    angelopolisJurisdictionName?: string;
+    jurisdiction?: string;
   },
 ) => {
+  const resolvedJurisdictionName = jurisdictionName?.replace(/_/g, ' ');
   // Seed feature flags
   await createAllFeatureFlags(prismaClient);
 
@@ -56,9 +57,47 @@ export const stagingSeed = async (
       ...bridgeBayJurisdictions.map((jurisdiction) => jurisdiction.id),
     );
     mainJurisdiction = bridgeBayJurisdictions[0];
+  } else if (jurisdiction) {
+    switch (jurisdiction) {
+      case 'Bloomington':
+        mainJurisdiction = await createBloomingtonJurisdiction(prismaClient, {
+          jurisdictionName: resolvedJurisdictionName ?? 'Bloomington',
+          publicSiteBaseURL,
+          unitTypes,
+          partnerUser,
+          msqV2,
+        });
+        break;
+      case 'Lakeview':
+        mainJurisdiction = await createLakeviewJurisdiction(prismaClient, {
+          jurisdictionName: resolvedJurisdictionName,
+          publicSiteBaseURL,
+          unitTypes,
+          msqV2,
+        });
+        break;
+      case 'Angelopolis':
+        mainJurisdiction = await createAngelopolisJurisdiction(prismaClient, {
+          jurisdictionName: resolvedJurisdictionName,
+          publicSiteBaseURL,
+          unitTypes,
+          partnerUser,
+          msqV2,
+        });
+        break;
+      case 'NadaHill':
+        mainJurisdiction = await createNadaHillJurisdiction(prismaClient, {
+          jurisdictionName: resolvedJurisdictionName,
+          publicSiteBaseURL,
+        });
+        break;
+      default:
+        throw new Error(`Unknown jurisdiction: ${jurisdiction}`);
+    }
+    allJurisdictions.push(mainJurisdiction.id);
   } else {
     mainJurisdiction = await createBloomingtonJurisdiction(prismaClient, {
-      jurisdictionName,
+      jurisdictionName: resolvedJurisdictionName ?? jurisdictionName,
       publicSiteBaseURL,
       unitTypes,
       partnerUser,
@@ -79,7 +118,6 @@ export const stagingSeed = async (
         unitTypes,
         partnerUser,
         msqV2,
-        jurisdictionName: angelopolisJurisdictionName,
       },
     );
     const nadaHill = await createNadaHillJurisdiction(prismaClient, {

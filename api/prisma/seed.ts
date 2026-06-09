@@ -20,7 +20,8 @@ async function main() {
     values: { environment, jurisdictionName, msqV2, asRegion },
   } = parseArgs({ options });
   const publicSiteBaseURL = env.DBSEED_PUBLIC_SITE_BASE_URL;
-  const angelopolisJurisdictionName = env.DBSEED_ANGELOPOLIS_JURISDICTION_NAME;
+  const seedJurisdiction = env.DBSEED_JURISDICTION;
+  const seedJurisdictionName = env.DBSEED_JURISDICTION_NAME ?? jurisdictionName;
 
   switch (environment) {
     case 'production':
@@ -37,11 +38,11 @@ async function main() {
       // Staging setup should have realistic looking data with a preset list of listings
       // along with all of the required tables (ami, users, etc)
       stagingSeed(prisma, {
-        jurisdictionName: jurisdictionName as string,
+        jurisdictionName: seedJurisdictionName as string,
         publicSiteBaseURL: publicSiteBaseURL,
         msqV2: msqV2 as boolean,
         asRegion: asRegion as boolean,
-        angelopolisJurisdictionName,
+        jurisdiction: seedJurisdiction,
       });
       break;
     case 'development':
