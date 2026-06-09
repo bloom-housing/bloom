@@ -1,14 +1,15 @@
 import React, { useContext, useState, useEffect, useCallback, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import { Form, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import {
-  blankApplication,
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
+  blankApplication,
   getPreferredUnitTypes,
+  pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
 import { Button, LoadingState } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"

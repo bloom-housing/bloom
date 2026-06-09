@@ -1,9 +1,9 @@
 import React from "react"
 import Markdown from "markdown-to-jsx"
 import { useForm } from "react-hook-form"
-import { Field, Form, MarkdownSection, t } from "@bloom-housing/ui-components"
+import { Field, MarkdownSection, t } from "@bloom-housing/ui-components"
 import { Button, Card, LoadingState } from "@bloom-housing/ui-seeds"
-import { BloomCard } from "@bloom-housing/shared-helpers"
+import { BloomCard, Form } from "@bloom-housing/shared-helpers"
 
 type FormTermsInValues = {
   agree: boolean

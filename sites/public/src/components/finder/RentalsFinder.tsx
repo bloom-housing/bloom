@@ -1,7 +1,7 @@
 import { FormProvider, useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { useCallback, useMemo, useRef, useState } from "react"
-import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers"
+import { BloomCard, CustomIconMap, Form } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   ListingFeaturesConfiguration,
@@ -9,7 +9,7 @@ import {
   MultiselectQuestion,
   RegionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Form, ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
+import { ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
 import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FinderDisclaimer from "./FinderDisclaimer"
@@ -297,7 +297,7 @@ export default function RentalsFinder({
           subtitle={activeQuestion.subtitle}
           headingPriority={2}
         >
-          <Form id="finderForm" onSubmit={handleSubmit(onSubmit)}>
+          <Form id="finderForm" method="get" onSubmit={handleSubmit(onSubmit)}>
             <CardSection className={styles["questions-section"]} divider="flush">
               <div className={styles["questions-wrapper"]}>
                 <FormProvider {...formMethods}>{activeQuestion.content}</FormProvider>

@@ -243,8 +243,6 @@ includeViews.full = {
 const LISTING_CRON_JOB_NAME = 'LISTING_CRON_JOB';
 const LISTING_SCHEDULED_PUBLISH_CRON_JOB_NAME =
   'LISTING_SCHEDULED_PUBLISH_CRON_STRING';
-const LISTING_SCHEDULED_PUBLISH_RETRY_CRON_JOB_NAME =
-  'LISTING_SCHEDULED_PUBLISH_RETRY_CRON_STRING';
 /*
   this is the service for listings
   it handles all the backend's business logic for reading in listing(s)
@@ -276,11 +274,6 @@ export class ListingService implements OnModuleInit {
       LISTING_SCHEDULED_PUBLISH_CRON_JOB_NAME,
       process.env.LISTING_SCHEDULED_PUBLISH_CRON_STRING,
       this.publishScheduledListingsCronJob.bind(this),
-    );
-    this.cronJobService.startCronJob(
-      LISTING_SCHEDULED_PUBLISH_RETRY_CRON_JOB_NAME,
-      process.env.LISTING_SCHEDULED_PUBLISH_RETRY_CRON_STRING,
-      this.publishScheduledListingsRetryCronJob.bind(this),
     );
   }
 
@@ -2301,6 +2294,10 @@ export class ListingService implements OnModuleInit {
       incomingDto.scheduledPublishAt = null;
     }
 
+    const sendPublishNotificationEmail =
+      incomingDto.status === ListingsStatusEnum.active &&
+      storedListing.status !== ListingsStatusEnum.active;
+
     // test if not publishing or unpublishing listing and scheduledPublishAt is set
     if (
       incomingDto.status === storedListing.status &&
@@ -2950,7 +2947,7 @@ export class ListingService implements OnModuleInit {
         scheduledPublishAt: incomingDto.scheduledPublishAt,
       });
 
-    if (mappedListing.status === ListingsStatusEnum.active) {
+    if (sendPublishNotificationEmail) {
       await this.sendListingPublishNotification(mappedListing);
     }
 
@@ -2997,23 +2994,31 @@ export class ListingService implements OnModuleInit {
       ),
     );
 
-    const preferenceFilters = priorityTypes.map((priorityType) => {
+    let preferenceFilters = [];
+
+    preferenceFilters = priorityTypes.map((priorityType) => {
       return {
         [priorityType]: true,
-      } as Prisma.UserNotificationPreferencesWhereInput;
+      };
     });
 
-    if (listing?.region) {
+    if (listing.region || listing.configurableRegion) {
       preferenceFilters.push({
         regions: {
-          has: listing.region,
+          has: listing.region ?? listing.configurableRegion,
         },
-      } as Prisma.UserNotificationPreferencesWhereInput);
+      });
     }
 
     if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
       preferenceFilters.push({
         lottery: true,
+      });
+    }
+
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
+      preferenceFilters.push({
+        waitlist: true,
       });
     }
 
@@ -3027,11 +3032,11 @@ export class ListingService implements OnModuleInit {
           email: '',
         },
         AND: [
-          {
-            userPreferences: {
-              sendEmailNotifications: true,
-            },
-          },
+          // { TODO: consider enabling this when this flag will be available to update from user account page
+          //   userPreferences: {
+          //     sendEmailNotifications: true,
+          //   },
+          // },
           {
             notificationPreferences: {
               OR: preferenceFilters,
@@ -3376,29 +3381,15 @@ export class ListingService implements OnModuleInit {
 
   /**
    * Runs the cron job to publish listings in 'scheduled' status whose
-   * scheduledPublishAt date is in the past. There are two cron jobs:
-   * - primary cron job (should run after midnight ex. 12:01 AM)
-   * - retry cron job (should run after the primary cron job within 2 hours ex. 1:00 AM)
+   * scheduledPublishAt date is in the past.
    */
   async publishScheduledListingsCronJob(): Promise<SuccessDTO> {
-    this.logger.warn('publishScheduledListingsCron job running');
+    const logName = 'publishScheduledListingsCron';
+    this.logger.warn(`${logName} job running`);
     await this.cronJobService.markCronJobAsStarted(
       LISTING_SCHEDULED_PUBLISH_CRON_JOB_NAME,
     );
 
-    return this.publishScheduledListings('publishScheduledListingsCron');
-  }
-
-  async publishScheduledListingsRetryCronJob(): Promise<SuccessDTO> {
-    this.logger.warn('publishScheduledListingsRetryCron job running');
-    await this.cronJobService.markCronJobAsStarted(
-      LISTING_SCHEDULED_PUBLISH_RETRY_CRON_JOB_NAME,
-    );
-
-    return this.publishScheduledListings('publishScheduledListingsRetryCron');
-  }
-
-  private async publishScheduledListings(logName: string): Promise<SuccessDTO> {
     const listings = await this.prisma.listings.findMany({
       select: {
         id: true,

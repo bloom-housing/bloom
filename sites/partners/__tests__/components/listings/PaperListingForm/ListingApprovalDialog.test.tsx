@@ -1,5 +1,5 @@
 import React from "react"
-import { cleanup, screen } from "@testing-library/react"
+import { screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ListingApprovalDialog from "../../../../src/components/listings/PaperListingForm/dialogs/ListingApprovalDialog"

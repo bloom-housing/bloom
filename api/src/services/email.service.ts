@@ -1072,6 +1072,13 @@ export class EmailService {
       });
     }
 
+    if (listing.region || listing.configurableRegion) {
+      listingDetails.push({
+        label: this.polyglot.t('rentalOpportunity.region'),
+        value: listing.region ?? listing.configurableRegion,
+      });
+    }
+
     if (priorityTypes.length) {
       listingDetails.push({
         label: this.polyglot.t('rentalOpportunity.unitType'),
@@ -1257,6 +1264,8 @@ export class EmailService {
             listingName: listing.name,
             tableRows: listingDetails,
             languageUrls: emailButtons,
+            accessibleMarketingFlyerUrl: listing.accessibleMarketingFlyer,
+            emailSettingsUrl: `${jurisdiction.publicUrl}/sign-in?redirectUrl=/account/notifications`,
           }),
         );
       }

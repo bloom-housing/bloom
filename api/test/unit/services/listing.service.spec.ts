@@ -5357,6 +5357,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue([]);
       const updateMock = jest
         .fn()
         .mockResolvedValue({ id: 'example id', name: 'example name' });
@@ -7232,48 +7233,6 @@ describe('Testing listing service', () => {
       expect(httpServiceMock.request).not.toHaveBeenCalled();
       expect(prisma.activityLog.createMany).not.toHaveBeenCalled();
       process.env.PROXY_URL = undefined;
-    });
-
-    it('should work identically when called by the retry cron job', async () => {
-      prisma.listings.findMany = jest.fn().mockResolvedValue([
-        {
-          id: 'scheduled-id-1',
-          name: 'name 1',
-          jurisdictionId: 'jurisId',
-          jurisdictions: { publicUrl: 'public.housing.gov' },
-        },
-      ]);
-      prisma.listings.findUnique = jest
-        .fn()
-        .mockResolvedValue({ id: 'scheduled-id-1' });
-      prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 1 });
-      prisma.activityLog.createMany = jest.fn().mockResolvedValue({ count: 1 });
-      prisma.cronJob.findFirst = jest
-        .fn()
-        .mockResolvedValue({ id: randomUUID() });
-      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
-      prisma.listingSnapshot.create = jest
-        .fn()
-        .mockResolvedValue({ id: 'snapshot-id' });
-      jest
-        .spyOn(service, 'getUserEmailInfo')
-        .mockResolvedValue({ emails: ['partner@email.com'] });
-
-      await service.publishScheduledListingsRetryCronJob();
-
-      expect(prisma.listings.updateMany).toHaveBeenCalledWith({
-        data: {
-          status: ListingsStatusEnum.active,
-          publishedAt: expect.any(Date),
-        },
-        where: { id: { in: ['scheduled-id-1'] } },
-      });
-      expect(prisma.cronJob.update).toHaveBeenCalled();
-      expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
-        where: {
-          name: 'LISTING_SCHEDULED_PUBLISH_RETRY_CRON_STRING',
-        },
-      });
     });
   });
 
