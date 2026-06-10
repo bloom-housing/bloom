@@ -1451,15 +1451,19 @@ export class ListingService implements OnModuleInit {
       dto.scheduledPublishAt = this.normalizeScheduledPublishAt(
         dto.scheduledPublishAt,
       );
-      this.checkScheduledPublishAtIsInFuture(dto.scheduledPublishAt);
+      this.checkScheduledDateIsInFuture(
+        dto.scheduledPublishAt,
+        'scheduledPublishAt',
+      );
     }
 
     if (enableAutopublish && dto.scheduledApplicationOpenAt) {
       dto.scheduledApplicationOpenAt = this.normalizeScheduledApplicationOpenAt(
         dto.scheduledApplicationOpenAt,
       );
-      this.checkScheduledApplicationOpenAtIsInFuture(
+      this.checkScheduledDateIsInFuture(
         dto.scheduledApplicationOpenAt,
+        'scheduledApplicationOpenAt',
       );
       this.checkScheduledApplicationOpenAtIsAfterPublish(
         dto.scheduledApplicationOpenAt,
@@ -2292,7 +2296,10 @@ export class ListingService implements OnModuleInit {
         incomingDto.status !== ListingsStatusEnum.active &&
         incomingDto.scheduledPublishAt
       ) {
-        this.checkScheduledPublishAtIsInFuture(incomingDto.scheduledPublishAt);
+        this.checkScheduledDateIsInFuture(
+          incomingDto.scheduledPublishAt,
+          'scheduledPublishAt',
+        );
       }
 
       incomingDto.scheduledApplicationOpenAt =
@@ -2307,8 +2314,9 @@ export class ListingService implements OnModuleInit {
         incomingDto.status !== ListingsStatusEnum.active &&
         incomingDto.scheduledApplicationOpenAt
       ) {
-        this.checkScheduledApplicationOpenAtIsInFuture(
+        this.checkScheduledDateIsInFuture(
           incomingDto.scheduledApplicationOpenAt,
+          'scheduledApplicationOpenAt',
         );
         this.checkScheduledApplicationOpenAtIsAfterPublish(
           incomingDto.scheduledApplicationOpenAt,
@@ -3248,22 +3256,12 @@ export class ListingService implements OnModuleInit {
     return dayjs.tz(dateStr, 'YYYY-MM-DD', appTimezone).startOf('day').toDate();
   }
 
-  private checkScheduledPublishAtIsInFuture(scheduledPublishAt: Date): void {
+  private checkScheduledDateIsInFuture(date: Date, fieldName: string): void {
     const appTimezone = process.env.TIME_ZONE;
-    const minimumScheduledPublishAt = dayjs
-      .utc()
-      .tz(appTimezone)
-      .add(1, 'day')
-      .startOf('day');
+    const minimum = dayjs.utc().tz(appTimezone).add(1, 'day').startOf('day');
 
-    const incomingScheduledPublishAt = dayjs
-      .utc(scheduledPublishAt)
-      .tz(appTimezone);
-
-    if (incomingScheduledPublishAt.isBefore(minimumScheduledPublishAt)) {
-      throw new BadRequestException([
-        'scheduledPublishAt must be in the future',
-      ]);
+    if (dayjs.utc(date).tz(appTimezone).isBefore(minimum)) {
+      throw new BadRequestException([`${fieldName} must be in the future`]);
     }
   }
 
@@ -3276,31 +3274,6 @@ export class ListingService implements OnModuleInit {
       .startOf('day')
       .add(9, 'hour')
       .toDate();
-  }
-
-  private checkScheduledApplicationOpenAtIsInFuture(
-    scheduledApplicationOpenAt: Date,
-  ): void {
-    const appTimezone = process.env.TIME_ZONE;
-    const minimumScheduledApplicationOpenAt = dayjs
-      .utc()
-      .tz(appTimezone)
-      .add(1, 'day')
-      .startOf('day');
-
-    const incomingScheduledApplicationOpenAt = dayjs
-      .utc(scheduledApplicationOpenAt)
-      .tz(appTimezone);
-
-    if (
-      incomingScheduledApplicationOpenAt.isBefore(
-        minimumScheduledApplicationOpenAt,
-      )
-    ) {
-      throw new BadRequestException([
-        'scheduledApplicationOpenAt must be in the future',
-      ]);
-    }
   }
 
   private checkScheduledApplicationOpenAtIsAfterPublish(
