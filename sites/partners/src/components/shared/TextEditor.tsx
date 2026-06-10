@@ -87,7 +87,7 @@ const MenuBar = ({ editor }) => {
     }
   }, [editor])
 
-  if (!editor) {
+  if (!editor || editor.isDestroyed) {
     return null
   }
 
@@ -250,7 +250,7 @@ export const TextEditor = ({
 
   const labelId = `${editorId}Label`
 
-  if (!editor) {
+  if (!editor || editor.isDestroyed) {
     return null
   }
 
