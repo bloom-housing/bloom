@@ -1335,6 +1335,7 @@
   "t.delete": "삭제",
   "t.deposit": "보증금",
   "t.description": "설명을 입력하세요",
+  "t.devSiteBanner": "이 사이트는 테스트용으로만 제작되었습니다. 사이트의 모든 데이터는 테스트 목적으로만 사용되므로, 지원하지 마십시오.",
   "t.download": "다운로드",
   "t.dragFilesHere": "여기에 파일을 드래그하세요.",
   "t.dropFilesHere": "여기에 파일을 드롭하세요...",

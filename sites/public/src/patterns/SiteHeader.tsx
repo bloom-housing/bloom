@@ -3,7 +3,7 @@ import ChevronDown from "@heroicons/react/20/solid/ChevronDownIcon"
 import ChevronUp from "@heroicons/react/20/solid/ChevronUpIcon"
 import MenuIcon from "@heroicons/react/20/solid/Bars3Icon"
 import Language from "@heroicons/react/20/solid/LanguageIcon"
-import { Button, Icon, Link } from "@bloom-housing/ui-seeds"
+import { Button, Icon, Link, Message } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import LinkComponent from "../components/core/LinkComponent"
 import MaxWidthLayout from "../layouts/max-width"
@@ -436,7 +436,14 @@ export const SiteHeader = (props: SiteHeaderProps) => {
       )}
       {props.showMessageBar && (
         <HeadingWrapper className={styles["message-wrapper"]}>
-          <div className={styles["message-container"]}>{props.message ?? ""}</div>
+          <div className={styles["message-container"]}>{props.message ? props.message : ""}</div>
+        </HeadingWrapper>
+      )}
+      {process.env.devSiteBanner && (
+        <HeadingWrapper className={styles["message-wrapper"]}>
+          <Message className={styles["devsite-banner"]} variant={"alert"}>
+            {t("t.devSiteBanner")}
+          </Message>
         </HeadingWrapper>
       )}
       <nav aria-label={"Main"}>

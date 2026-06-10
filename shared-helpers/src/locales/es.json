@@ -1331,6 +1331,7 @@
   "t.delete": "Borrar",
   "t.deposit": "Depósito",
   "t.description": "Ingrese descripción",
+  "t.devSiteBanner": "Este sitio es solo para pruebas. Todos los datos de este sitio son solo para pruebas. Por favor, no se registren.",
   "t.download": "Descargar",
   "t.dragFilesHere": "Arrastre los archivos aquí",
   "t.dropFilesHere": "Suelta los archivos aquí...",

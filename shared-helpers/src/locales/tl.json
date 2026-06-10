@@ -1331,6 +1331,7 @@
   "t.delete": "Tanggalin",
   "t.deposit": "Deposito",
   "t.description": "Ipasok ang paglalarawan",
+  "t.devSiteBanner": "Ang site na ito ay para sa pagsubok lamang. Ang lahat ng datos sa site na ito ay para sa pagsubok lamang. Mangyaring huwag mag-apply.",
   "t.download": "I-download",
   "t.dragFilesHere": "Hilahin ang mga file dito",
   "t.dropFilesHere": "I-drop ang mga file dito...",

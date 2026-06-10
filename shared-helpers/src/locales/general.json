@@ -1327,6 +1327,7 @@
   "t.delete": "Delete",
   "t.deposit": "Deposit",
   "t.description": "Enter description",
+  "t.devSiteBanner": "This site is for testing only. All data on this site is for testing only. Please do not apply",
   "t.download": "Download",
   "t.dragFilesHere": "Drag files here",
   "t.dropFilesHere": "Drop files here...",

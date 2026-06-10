@@ -84,6 +84,10 @@
       color: var(--seeds-color-white);
       font-size: var(--seeds-type-label-size);
     }
+    .devsite-banner {
+      font-size: var(--seeds-type-heading-size-lg);
+      max-width: 100%;
+    }
   }
 
   .navigation-wrapper {
