@@ -5040,6 +5040,9 @@ export interface Listing {
   scheduledPublishAt?: Date
 
   /**  */
+  scheduledApplicationOpenAt?: Date
+
+  /**  */
   section8Acceptance?: boolean
 
   /**  */
@@ -5940,6 +5943,9 @@ export interface ListingCreate {
   scheduledPublishAt?: Date
 
   /**  */
+  scheduledApplicationOpenAt?: Date
+
+  /**  */
   section8Acceptance?: boolean
 
   /**  */
@@ -6811,6 +6817,9 @@ export interface ListingUpdate {
 
   /**  */
   scheduledPublishAt?: Date
+
+  /**  */
+  scheduledApplicationOpenAt?: Date
 
   /**  */
   section8Acceptance?: boolean
@@ -10745,7 +10754,6 @@ export enum FeatureFlagEnum {
   "enableFilterByBathroom" = "enableFilterByBathroom",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGenderQuestion" = "enableGenderQuestion",
-  "enableSexualOrientationQuestion" = "enableSexualOrientationQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
@@ -10781,6 +10789,7 @@ export enum FeatureFlagEnum {
   "enableRegions" = "enableRegions",
   "enableResources" = "enableResources",
   "enableSection8Question" = "enableSection8Question",
+  "enableSexualOrientationQuestion" = "enableSexualOrientationQuestion",
   "enableSingleUseCode" = "enableSingleUseCode",
   "enableSmokingPolicyRadio" = "enableSmokingPolicyRadio",
   "enableSpokenLanguage" = "enableSpokenLanguage",

@@ -429,6 +429,8 @@ const ListingForm = ({
           if (!enableAutopublish) {
             delete formData.scheduledListingPublishDateField
             formData.scheduledPublishAt = null
+            delete formData.scheduledApplicationOpenDateField
+            formData.scheduledApplicationOpenAt = null
           }
 
           if (successful) {
@@ -498,6 +500,9 @@ const ListingForm = ({
                 setError(fieldName as any, { message: readableError })
                 if (fieldName === "scheduledPublishAt") {
                   setError("scheduledListingPublishDateField", { message: readableError })
+                }
+                if (fieldName === "scheduledApplicationOpenAt") {
+                  setError("scheduledApplicationOpenDateField", { message: readableError })
                 }
                 if (fieldName === "buildingAddress" || fieldName === "buildingAddress.nested") {
                   const setIfEmpty = (

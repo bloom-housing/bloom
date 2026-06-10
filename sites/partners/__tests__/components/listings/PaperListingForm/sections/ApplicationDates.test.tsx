@@ -5,6 +5,7 @@ import userEvent from "@testing-library/user-event"
 import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 import { FormListing } from "../../../../../src/lib/listings/formTypes"
 import ApplicationDates from "../../../../../src/components/listings/PaperListingForm/sections/ApplicationDates"
+import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
 
@@ -194,5 +195,83 @@ describe("ApplicationDates", () => {
     expect(
       screen.getByText("Listing will automatically close on this date and time")
     ).toBeInTheDocument()
+  })
+
+  it("should show scheduled application open date when feature flag is on", () => {
+    render(
+      <FormProviderWrapper>
+        <ApplicationDates
+          enableAutopublish={true}
+          listing={{} as unknown as FormListing}
+          requiredFields={[]}
+          openHouseEvents={[]}
+          setOpenHouseEvents={() => {
+            return
+          }}
+        />
+      </FormProviderWrapper>
+    )
+    expect(
+      screen.getByRole("group", { name: "Scheduled application open date" })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        "Applications will open on this date between 9:00 AM and 11:00 AM. If entered, listing is publicly visible but not accepting applications until this date."
+      )
+    ).toBeInTheDocument()
+  })
+
+  it("should make scheduled dates read-only once passed on a non-draft listing", () => {
+    render(
+      <FormProviderWrapper>
+        <ApplicationDates
+          enableAutopublish={true}
+          listing={
+            {
+              status: ListingsStatusEnum.active,
+              scheduledPublishAt: new Date("2020-01-01T00:00:00.000Z"),
+              scheduledApplicationOpenAt: new Date("2020-01-02T16:00:00.000Z"),
+            } as unknown as FormListing
+          }
+          requiredFields={[]}
+          openHouseEvents={[]}
+          setOpenHouseEvents={() => {
+            return
+          }}
+        />
+      </FormProviderWrapper>
+    )
+
+    const openDateGroup = screen.getByRole("group", { name: "Scheduled application open date" })
+    openDateGroup.querySelectorAll("input").forEach((input) => expect(input).toBeDisabled())
+
+    const publishDateGroup = screen.getByRole("group", { name: "Scheduled listing publish date" })
+    publishDateGroup.querySelectorAll("input").forEach((input) => expect(input).toBeDisabled())
+  })
+
+  it("should keep scheduled dates editable on a draft listing even after the date has passed", () => {
+    render(
+      <FormProviderWrapper>
+        <ApplicationDates
+          enableAutopublish={true}
+          listing={
+            {
+              status: ListingsStatusEnum.pending,
+              scheduledApplicationOpenAt: new Date("2020-01-02T16:00:00.000Z"),
+            } as unknown as FormListing
+          }
+          requiredFields={[]}
+          openHouseEvents={[]}
+          setOpenHouseEvents={() => {
+            return
+          }}
+        />
+      </FormProviderWrapper>
+    )
+
+    screen
+      .getByRole("group", { name: "Scheduled application open date" })
+      .querySelectorAll("input")
+      .forEach((input) => expect(input).not.toBeDisabled())
   })
 })

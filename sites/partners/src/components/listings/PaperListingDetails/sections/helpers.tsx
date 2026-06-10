@@ -88,6 +88,9 @@ export const getReadableErrorMessage = (errorMessage: string | undefined) => {
     case "must be in the future":
       readableMessage = t("errors.dateMustBeInTheFuture")
       break
+    case "must be after scheduled publish date":
+      readableMessage = t("errors.dateMustBeAfterScheduledPublishDate")
+      break
     default:
       readableMessage = t("errors.requiredFieldError")
   }

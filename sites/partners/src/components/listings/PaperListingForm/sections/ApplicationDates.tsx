@@ -23,6 +23,7 @@ import {
   MarketingTypeEnum,
   MarketingSeasonEnum,
   MonthEnum,
+  ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
@@ -144,6 +145,13 @@ const ApplicationDates = ({
   const hasScheduledPublishError =
     errors?.scheduledPublishAt || errors?.scheduledListingPublishDateField
 
+  const hasScheduledApplicationOpenError =
+    errors?.scheduledApplicationOpenAt || errors?.scheduledApplicationOpenDateField
+
+  const scheduledApplicationOpenHasPassed =
+    !!listing?.scheduledApplicationOpenAt &&
+    dayjs.utc(listing.scheduledApplicationOpenAt).isBefore(dayjs())
+
   const marketingTypeChoice = watch("marketingType")
 
   return (
@@ -233,6 +241,10 @@ const ApplicationDates = ({
                 register={register}
                 setValue={setValue}
                 watch={watch}
+                disabled={
+                  listing?.status === ListingsStatusEnum.active ||
+                  listing?.status === ListingsStatusEnum.closed
+                }
                 error={
                   hasScheduledPublishError && {
                     month: hasScheduledPublishError,
@@ -251,6 +263,41 @@ const ApplicationDates = ({
                     : null,
                   year: listing?.scheduledPublishAt
                     ? dayjs.utc(listing.scheduledPublishAt).format("YYYY")
+                    : null,
+                }}
+              />
+            </Grid.Cell>
+            <Grid.Cell className="seeds-grid-span-2">
+              <DateField
+                label={t("listings.scheduledApplicationOpenDate")}
+                name={"scheduledApplicationOpenDateField"}
+                id={"scheduledApplicationOpenDateField"}
+                register={register}
+                setValue={setValue}
+                watch={watch}
+                disabled={
+                  (listing?.status === ListingsStatusEnum.active ||
+                    listing?.status === ListingsStatusEnum.closed) &&
+                  scheduledApplicationOpenHasPassed
+                }
+                error={
+                  hasScheduledApplicationOpenError && {
+                    month: hasScheduledApplicationOpenError,
+                    day: hasScheduledApplicationOpenError,
+                    year: hasScheduledApplicationOpenError,
+                  }
+                }
+                errorMessage={fieldMessage(errors?.scheduledApplicationOpenDateField)}
+                note={t("listings.scheduledApplicationOpenDateHelper")}
+                defaultDate={{
+                  month: listing?.scheduledApplicationOpenAt
+                    ? dayjs.utc(listing.scheduledApplicationOpenAt).format("MM")
+                    : null,
+                  day: listing?.scheduledApplicationOpenAt
+                    ? dayjs.utc(listing.scheduledApplicationOpenAt).format("DD")
+                    : null,
+                  year: listing?.scheduledApplicationOpenAt
+                    ? dayjs.utc(listing.scheduledApplicationOpenAt).format("YYYY")
                     : null,
                 }}
               />

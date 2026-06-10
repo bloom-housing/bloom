@@ -1444,6 +1444,7 @@ export class ListingService implements OnModuleInit {
 
     if (!enableAutopublish) {
       dto.scheduledPublishAt = null;
+      dto.scheduledApplicationOpenAt = null;
     }
 
     if (enableAutopublish && dto.scheduledPublishAt) {
@@ -1451,6 +1452,19 @@ export class ListingService implements OnModuleInit {
         dto.scheduledPublishAt,
       );
       this.checkScheduledPublishAtIsInFuture(dto.scheduledPublishAt);
+    }
+
+    if (enableAutopublish && dto.scheduledApplicationOpenAt) {
+      dto.scheduledApplicationOpenAt = this.normalizeScheduledApplicationOpenAt(
+        dto.scheduledApplicationOpenAt,
+      );
+      this.checkScheduledApplicationOpenAtIsInFuture(
+        dto.scheduledApplicationOpenAt,
+      );
+      this.checkScheduledApplicationOpenAtIsAfterPublish(
+        dto.scheduledApplicationOpenAt,
+        dto.scheduledPublishAt,
+      );
     }
 
     if (
@@ -2261,23 +2275,46 @@ export class ListingService implements OnModuleInit {
 
     if (!enableAutopublish) {
       incomingDto.scheduledPublishAt = null;
+      incomingDto.scheduledApplicationOpenAt = null;
     }
 
     const sendPublishNotificationEmail =
       incomingDto.status === ListingsStatusEnum.active &&
       storedListing.status !== ListingsStatusEnum.active;
 
-    // test if not publishing or unpublishing listing and scheduledPublishAt is set
-    if (
-      incomingDto.status === storedListing.status &&
-      incomingDto.status !== ListingsStatusEnum.active &&
-      incomingDto.scheduledPublishAt &&
-      enableAutopublish
-    ) {
-      incomingDto.scheduledPublishAt = this.normalizeScheduledPublishAt(
-        incomingDto.scheduledPublishAt,
-      );
-      this.checkScheduledPublishAtIsInFuture(incomingDto.scheduledPublishAt);
+    if (enableAutopublish) {
+      incomingDto.scheduledPublishAt = incomingDto.scheduledPublishAt
+        ? this.normalizeScheduledPublishAt(incomingDto.scheduledPublishAt)
+        : null;
+      // test if not publishing or unpublishing listing and scheduledPublishAt is set
+      if (
+        incomingDto.status === storedListing.status &&
+        incomingDto.status !== ListingsStatusEnum.active &&
+        incomingDto.scheduledPublishAt
+      ) {
+        this.checkScheduledPublishAtIsInFuture(incomingDto.scheduledPublishAt);
+      }
+
+      incomingDto.scheduledApplicationOpenAt =
+        incomingDto.scheduledApplicationOpenAt
+          ? this.normalizeScheduledApplicationOpenAt(
+              incomingDto.scheduledApplicationOpenAt,
+            )
+          : null;
+      // test if not publishing or unpublishing listing and scheduledApplicationOpenAt is set
+      if (
+        incomingDto.status === storedListing.status &&
+        incomingDto.status !== ListingsStatusEnum.active &&
+        incomingDto.scheduledApplicationOpenAt
+      ) {
+        this.checkScheduledApplicationOpenAtIsInFuture(
+          incomingDto.scheduledApplicationOpenAt,
+        );
+        this.checkScheduledApplicationOpenAtIsAfterPublish(
+          incomingDto.scheduledApplicationOpenAt,
+          incomingDto.scheduledPublishAt,
+        );
+      }
     }
 
     if (
@@ -3226,6 +3263,63 @@ export class ListingService implements OnModuleInit {
     if (incomingScheduledPublishAt.isBefore(minimumScheduledPublishAt)) {
       throw new BadRequestException([
         'scheduledPublishAt must be in the future',
+      ]);
+    }
+  }
+
+  normalizeScheduledApplicationOpenAt(scheduledApplicationOpenAt: Date): Date {
+    const appTimezone = process.env.TIME_ZONE;
+    const dateStr = dayjs.utc(scheduledApplicationOpenAt).format('YYYY-MM-DD');
+    // Applications open at 9:00 AM in the app timezone
+    return dayjs
+      .tz(dateStr, 'YYYY-MM-DD', appTimezone)
+      .startOf('day')
+      .add(9, 'hour')
+      .toDate();
+  }
+
+  private checkScheduledApplicationOpenAtIsInFuture(
+    scheduledApplicationOpenAt: Date,
+  ): void {
+    const appTimezone = process.env.TIME_ZONE;
+    const minimumScheduledApplicationOpenAt = dayjs
+      .utc()
+      .tz(appTimezone)
+      .add(1, 'day')
+      .startOf('day');
+
+    const incomingScheduledApplicationOpenAt = dayjs
+      .utc(scheduledApplicationOpenAt)
+      .tz(appTimezone);
+
+    if (
+      incomingScheduledApplicationOpenAt.isBefore(
+        minimumScheduledApplicationOpenAt,
+      )
+    ) {
+      throw new BadRequestException([
+        'scheduledApplicationOpenAt must be in the future',
+      ]);
+    }
+  }
+
+  private checkScheduledApplicationOpenAtIsAfterPublish(
+    scheduledApplicationOpenAt: Date,
+    scheduledPublishAt?: Date,
+  ): void {
+    if (!scheduledApplicationOpenAt || !scheduledPublishAt) {
+      return;
+    }
+
+    // Same calendar day is allowed (publish is normalized to midnight and the
+    // application open date to 9:00 AM), so an instant comparison is sufficient.
+    if (
+      dayjs
+        .utc(scheduledApplicationOpenAt)
+        .isAfter(dayjs.utc(scheduledPublishAt)) === false
+    ) {
+      throw new BadRequestException([
+        'scheduledApplicationOpenAt must be after scheduled publish date',
       ]);
     }
   }
