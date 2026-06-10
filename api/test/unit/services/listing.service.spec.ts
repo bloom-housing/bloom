@@ -7136,21 +7136,17 @@ describe('Testing listing service', () => {
     it('should not purge cache or write activity logs when no listings are due', async () => {
       prisma.listings.findMany = jest.fn().mockResolvedValue([]);
       prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 0 });
+      prisma.activityLog.createMany = jest.fn().mockResolvedValue({ count: 0 });
       prisma.cronJob.findFirst = jest
         .fn()
         .mockResolvedValue({ id: randomUUID() });
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
 
       process.env.PROXY_URL = 'https://www.google.com';
-      await service.publishScheduledListingsCronJob();
+      const result = await service.publishScheduledListingsCronJob();
 
-      expect(prisma.listings.updateMany).toHaveBeenCalledWith({
-        data: {
-          status: ListingsStatusEnum.active,
-          publishedAt: expect.any(Date),
-        },
-        where: { id: { in: [] } },
-      });
+      expect(result).toEqual({ success: true });
+      expect(prisma.listings.updateMany).not.toHaveBeenCalled();
       expect(httpServiceMock.request).not.toHaveBeenCalled();
       expect(prisma.activityLog.createMany).not.toHaveBeenCalled();
       process.env.PROXY_URL = undefined;
