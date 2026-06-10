@@ -3415,11 +3415,13 @@ export class ListingService implements OnModuleInit {
       `${logName} found ${listingIds.length} listing(s) ready to publish`,
     );
 
-    if (listingIds.length > 0) {
-      this.logger.log(
-        `${logName} listing IDs to publish: ${listingIds.join(', ')}`,
-      );
+    if (!listingIds.length) {
+      return { success: true };
     }
+
+    this.logger.log(
+      `${logName} listing IDs to publish: ${listingIds.join(', ')}`,
+    );
 
     for (const listingId of listingIds) {
       await this.snapshotCreateService.createListingSnapshot(listingId);
