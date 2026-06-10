@@ -7066,6 +7066,99 @@ describe('Testing listing service', () => {
     });
   });
 
+  describe('Test publishScheduledListings', () => {
+    it('should publish due scheduled listings, write snapshots, activity logs and purge cache', async () => {
+      prisma.listings.findMany = jest
+        .fn()
+        .mockResolvedValue([
+          { id: 'scheduled-id-1' },
+          { id: 'scheduled-id-2' },
+        ]);
+      prisma.listings.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: 'scheduled-id-1' });
+      prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 2 });
+      prisma.activityLog.createMany = jest.fn().mockResolvedValue({ count: 2 });
+      prisma.cronJob.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'snapshot-id' });
+
+      process.env.PROXY_URL = 'https://www.google.com';
+      await service.publishScheduledListingsCronJob();
+
+      expect(prisma.listings.findMany).toHaveBeenCalledWith({
+        select: { id: true },
+        where: {
+          status: ListingsStatusEnum.scheduled,
+          AND: [
+            { scheduledPublishAt: { not: null } },
+            { scheduledPublishAt: { lte: expect.any(Date) } },
+          ],
+        },
+      });
+      expect(prisma.listings.updateMany).toHaveBeenCalledWith({
+        data: {
+          status: ListingsStatusEnum.active,
+          publishedAt: expect.any(Date),
+        },
+        where: { id: { in: ['scheduled-id-1', 'scheduled-id-2'] } },
+      });
+      expect(prisma.activityLog.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            module: 'listing',
+            recordId: 'scheduled-id-1',
+            action: 'update',
+            metadata: { status: ListingsStatusEnum.active },
+          },
+          {
+            module: 'listing',
+            recordId: 'scheduled-id-2',
+            action: 'update',
+            metadata: { status: ListingsStatusEnum.active },
+          },
+        ],
+      });
+      expect(prisma.listingSnapshot.create).toHaveBeenCalledTimes(2);
+      expect(httpServiceMock.request).toHaveBeenCalledWith({
+        baseURL: 'https://www.google.com',
+        method: 'PURGE',
+        url: `/listings?*`,
+      });
+      expect(prisma.cronJob.findFirst).toHaveBeenCalled();
+      expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
+        where: {
+          name: 'LISTING_SCHEDULED_PUBLISH_CRON_STRING',
+        },
+      });
+      expect(prisma.cronJob.update).toHaveBeenCalled();
+      process.env.PROXY_URL = undefined;
+    });
+
+    it('should not purge cache or write activity logs when no listings are due', async () => {
+      prisma.listings.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 0 });
+      prisma.activityLog.createMany = jest.fn().mockResolvedValue({ count: 0 });
+      prisma.cronJob.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+
+      process.env.PROXY_URL = 'https://www.google.com';
+      const result = await service.publishScheduledListingsCronJob();
+
+      expect(result).toEqual({ success: true });
+      expect(prisma.listings.updateMany).not.toHaveBeenCalled();
+      expect(httpServiceMock.request).not.toHaveBeenCalled();
+      expect(prisma.activityLog.createMany).not.toHaveBeenCalled();
+      process.env.PROXY_URL = undefined;
+    });
+  });
+
   describe('Test updateListingEvents endpoint', () => {
     it('should clear asset from listing events if they are present', async () => {
       prisma.listingEvents.findMany = jest.fn().mockResolvedValue([
