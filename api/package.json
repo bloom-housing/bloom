@@ -51,7 +51,7 @@
     "@nestjs/core": "^10.4.4",
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/passport": "^10.0.3",
-    "@nestjs/platform-express": "^10.4.4",
+    "@nestjs/platform-express": "^10.4.15",
     "@nestjs/schedule": "^4.1.1",
     "@nestjs/swagger": "^7.4.2",
     "@nestjs/throttler": "^5.1.2",
