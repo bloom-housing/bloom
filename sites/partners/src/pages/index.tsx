@@ -555,7 +555,12 @@ export default function ListingsList() {
           </Form>
         </Dialog.Content>
         <Dialog.Footer>
-          <Button variant="primary" size="sm" type={"submit"} form="listing-select-form">
+          <Button
+            variant="primary"
+            size="sm"
+            type={"submit"}
+            nativeButtonProps={{ form: "listing-select-form" }}
+          >
             {t("listings.getStarted")}
           </Button>
           <Button
