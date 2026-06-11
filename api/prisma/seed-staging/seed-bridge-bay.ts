@@ -2414,6 +2414,7 @@ const featureFlags = [
   FeatureFlagEnum.enablePartnerDemographics,
   FeatureFlagEnum.enablePartnerSettings,
   FeatureFlagEnum.enableReceivedAtAndByFields,
+  FeatureFlagEnum.enableSexualOrientationQuestion,
   FeatureFlagEnum.enableSupportAdmin,
 ];
 

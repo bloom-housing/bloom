@@ -1,5 +1,6 @@
 import React from "react"
-import { Form, t, Textarea } from "@bloom-housing/ui-components"
+import { t, Textarea } from "@bloom-housing/ui-components"
+import { Form } from "@bloom-housing/shared-helpers"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
