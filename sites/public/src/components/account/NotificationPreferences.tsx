@@ -94,7 +94,7 @@ export const NotificationPreferences = ({ jurisdiction }: NotificationPreference
       .then(() =>
         addToast(t("account.settings.notifications.updateSuccess"), { variant: "success" })
       )
-      .catch(() => addToast("account.settings.notifications.updateFail", { variant: "alert" }))
+      .catch(() => addToast(t("account.settings.notifications.updateFail"), { variant: "alert" }))
   }
 
   return (
