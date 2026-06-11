@@ -1,4 +1,5 @@
 import * as React from "react"
+import dayjs from "dayjs"
 import { Card, Heading } from "@bloom-housing/ui-seeds"
 import {
   FeatureFlagEnum,
@@ -14,6 +15,7 @@ import {
   getListingStatusMessage,
   getListingStatusMessageContent,
   isFeatureFlagOn,
+  scheduledApplicationOpenInFuture,
 } from "../../../lib/helpers"
 import styles from "./Availability.module.scss"
 
@@ -221,7 +223,16 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     subheading
   )
 
+  const scheduledOpenContent = getCardSection(
+    t("listings.availability.comingSoon"),
+    undefined,
+    t("listings.scheduledApplicationOpen", {
+      openDate: dayjs(listing.scheduledApplicationOpenAt).format("MM/DD/YYYY"),
+    })
+  )
+
   const getSections = () => {
+    if (scheduledApplicationOpenInFuture(listing)) return [scheduledOpenContent]
     if (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
       return [constructionContent]
     if (enableUnitGroups) {

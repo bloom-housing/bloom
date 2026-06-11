@@ -16,6 +16,7 @@ import {
   getListingStatusMessage,
   getListingStatusMessageContent,
   getStatusPrefix,
+  scheduledApplicationOpenInFuture,
 } from "../../src/lib/helpers"
 
 describe("helpers", () => {
@@ -592,6 +593,33 @@ describe("helpers", () => {
       expect(getApplicationSeason(MarketingSeasonEnum.spring, null, 2027)).toEqual(
         "Residents should apply in Spring 2027"
       )
+    })
+  })
+
+  describe("scheduledApplicationOpenInFuture", () => {
+    it("returns true when scheduledApplicationOpenAt is in the future", () => {
+      expect(
+        scheduledApplicationOpenInFuture({
+          ...listing,
+          scheduledApplicationOpenAt: dayjs().add(2, "days").toDate(),
+        })
+      ).toBe(true)
+    })
+    it("returns false when scheduledApplicationOpenAt is in the past", () => {
+      expect(
+        scheduledApplicationOpenInFuture({
+          ...listing,
+          scheduledApplicationOpenAt: dayjs().subtract(1, "day").toDate(),
+        })
+      ).toBe(false)
+    })
+    it("returns false when scheduledApplicationOpenAt is null", () => {
+      expect(
+        scheduledApplicationOpenInFuture({
+          ...listing,
+          scheduledApplicationOpenAt: null,
+        })
+      ).toBe(false)
     })
   })
 })
