@@ -20,6 +20,14 @@ const baseConfig: Cypress.ConfigOptions<any> = {
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     setupNodeEvents(on, config) {
+      // Allow for custom logging. See https://docs.cypress.io/api/commands/task#Usage
+      on("task", {
+        log(message) {
+          console.log(message)
+          return null
+        },
+      })
+
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       return require("./cypress/plugins/index.js")(on, config)
     },

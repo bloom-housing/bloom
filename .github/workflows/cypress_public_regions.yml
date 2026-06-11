@@ -14,7 +14,7 @@ env:
   CLOUDINARY_KEY: CLOUDINARY_KEY
   PARTNERS_PORTAL_URL: http://localhost:3001
   DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
-  JURISDICTION_NAME: 'Bloomington'
+  JURISDICTION_NAME: 'Bridge Bay'
   BACKEND_API_BASE: http://localhost:3100
   LISTINGS_QUERY: /listings
   NEXTJS_PORT: 3000
@@ -78,7 +78,7 @@ jobs:
           PGPASSWORD: bloom
 
       - name: Setup backend
-        run: yarn test:backend:new:dbsetup:withseed
+        run: yarn test:backend:new:dbsetup:withseed-regions
         env:
           PGHOST: 127.0.0.1
           PGPASSWORD: bloom
@@ -88,7 +88,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           working-directory: ./sites/public
-          spec: cypress/e2e/default/*.spec.ts
+          spec: cypress/e2e/regions/*.spec.ts
           build: yarn build
           start: yarn dev:new-backend, yarn start
           wait-on: 'http://localhost:3100/jurisdictions'

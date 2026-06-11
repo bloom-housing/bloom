@@ -88,6 +88,7 @@ export const MapListingCard = ({
     <li
       className={`${styles["list-item"]} ${forceMobileView ? styles["force-mobile-view"] : ""}`}
       key={index}
+      data-testid={`listing-card-component`}
     >
       <ClickableCard className={styles["listing-card-container"]}>
         <Card.Section>

@@ -3,7 +3,7 @@ import {
   publicUser,
   updatedAdvocateUser,
   updatedPublicUser,
-} from "../../mockData/userData"
+} from "../../../mockData/userData"
 
 describe("User accounts", () => {
   it("should allow users to update their account information", () => {
