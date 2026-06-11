@@ -1776,8 +1776,12 @@ export class UserService {
       },
     );
 
-    await this.prisma.userNotificationPreferences.update({
-      data: {
+    await this.prisma.userNotificationPreferences.upsert({
+      create: {
+        ...dto,
+        userId: requestingUser.id,
+      },
+      update: {
         ...dto,
       },
       where: {
