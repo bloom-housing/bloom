@@ -28,7 +28,6 @@ export const stagingSeed = async (
     jurisdiction?: string;
   },
 ) => {
-  const resolvedJurisdictionName = jurisdictionName?.replace(/_/g, ' ');
   // Seed feature flags
   await createAllFeatureFlags(prismaClient);
 
@@ -61,7 +60,7 @@ export const stagingSeed = async (
     switch (jurisdiction) {
       case 'Bloomington':
         mainJurisdiction = await createBloomingtonJurisdiction(prismaClient, {
-          jurisdictionName: resolvedJurisdictionName ?? 'Bloomington',
+          jurisdictionName: jurisdictionName ?? 'Bloomington',
           publicSiteBaseURL,
           unitTypes,
           partnerUser,
@@ -70,7 +69,7 @@ export const stagingSeed = async (
         break;
       case 'Lakeview':
         mainJurisdiction = await createLakeviewJurisdiction(prismaClient, {
-          jurisdictionName: resolvedJurisdictionName,
+          jurisdictionName: jurisdictionName,
           publicSiteBaseURL,
           unitTypes,
           msqV2,
@@ -78,7 +77,7 @@ export const stagingSeed = async (
         break;
       case 'Angelopolis':
         mainJurisdiction = await createAngelopolisJurisdiction(prismaClient, {
-          jurisdictionName: resolvedJurisdictionName,
+          jurisdictionName: jurisdictionName,
           publicSiteBaseURL,
           unitTypes,
           partnerUser,
@@ -87,7 +86,7 @@ export const stagingSeed = async (
         break;
       case 'NadaHill':
         mainJurisdiction = await createNadaHillJurisdiction(prismaClient, {
-          jurisdictionName: resolvedJurisdictionName,
+          jurisdictionName: jurisdictionName,
           publicSiteBaseURL,
         });
         break;
@@ -97,7 +96,7 @@ export const stagingSeed = async (
     allJurisdictions.push(mainJurisdiction.id);
   } else {
     mainJurisdiction = await createBloomingtonJurisdiction(prismaClient, {
-      jurisdictionName: resolvedJurisdictionName ?? jurisdictionName,
+      jurisdictionName: jurisdictionName,
       publicSiteBaseURL,
       unitTypes,
       partnerUser,
