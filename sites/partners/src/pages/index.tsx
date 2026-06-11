@@ -122,10 +122,13 @@ export default function ListingsList() {
     profile?.jurisdictions?.length === 1 ? profile.jurisdictions[0].id : null
 
   const otherPortalsTitle = tIfExists("listings.otherPortals.title")
-  const otherPortalsPortal1Name = tIfExists("listings.otherPortals.portal1.name")
-  const otherPortalsPortal1Url = tIfExists("listings.otherPortals.portal1.url")
-  const otherPortalsPortal2Name = tIfExists("listings.otherPortals.portal2.name")
-  const otherPortalsPortal2Url = tIfExists("listings.otherPortals.portal2.url")
+  const otherPortals: { name: string; url: string }[] = []
+  for (let i = 1; ; i++) {
+    const name = tIfExists(`listings.otherPortals.portal${i}.name`)
+    const url = tIfExists(`listings.otherPortals.portal${i}.url`)
+    if (!name || !url) break
+    otherPortals.push({ name, url })
+  }
 
   const jurisdictions = profile?.jurisdictions || []
 
@@ -462,16 +465,11 @@ export default function ListingsList() {
                     >
                       <p>{otherPortalsTitle}</p>
                       <ul>
-                        {otherPortalsPortal1Name && otherPortalsPortal1Url && (
-                          <li>
-                            <Link href={otherPortalsPortal1Url}>{otherPortalsPortal1Name}</Link>
+                        {otherPortals.map(({ name, url }) => (
+                          <li key={url}>
+                            <Link href={url}>{name}</Link>
                           </li>
-                        )}
-                        {otherPortalsPortal2Name && otherPortalsPortal2Url && (
-                          <li>
-                            <Link href={otherPortalsPortal2Url}>{otherPortalsPortal2Name}</Link>
-                          </li>
-                        )}
+                        ))}
                       </ul>
                     </div>
                   )}
