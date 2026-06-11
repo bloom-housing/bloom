@@ -2644,9 +2644,6 @@ describe('Testing user service', () => {
           firstName: 'Partner User firstName',
           lastName: 'Partner User lastName',
           mfaEnabled: true,
-          notificationPreferences: {
-            create: {},
-          },
           jurisdictions: {
             connect: [{ id: jurisId }],
           },
@@ -2914,9 +2911,6 @@ describe('Testing user service', () => {
           lastName: 'public User lastName',
           listings: undefined,
           middleName: undefined,
-          notificationPreferences: {
-            create: {},
-          },
           jurisdictions: {
             connect: [{ id: expect.anything() }],
           },
@@ -3101,9 +3095,6 @@ describe('Testing user service', () => {
           listings: undefined,
           middleName: undefined,
           isAdvocate: true,
-          notificationPreferences: {
-            create: {},
-          },
           agency: {
             connect: {
               id: 'test_agency_id',
