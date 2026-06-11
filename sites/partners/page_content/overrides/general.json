@@ -13,6 +13,7 @@
   "listings.otherPortals.portal1.url": "https://www.example.com",
   "listings.otherPortals.portal2.name": "Other portal 2",
   "listings.otherPortals.portal2.url": "https://www.example.com",
+  "listings.otherPortals.title": "To add listings in other jurisdictions, use one of these portals:",
   "nav.siteTitlePartners": "Partners Portal",
   "settings.preferenceValidatingAddress.selectMapLayerDescription": "Select your map layer based on your district. If you don't see your map contact us"
 }
