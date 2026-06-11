@@ -1,4 +1,4 @@
-name: Public Cypress
+name: Public Cypress Regions
 
 on:
   pull_request:
@@ -36,7 +36,7 @@ env:
   HOUSING_COUNSELOR_SERVICE_URL: "/get-assistance"
 
 jobs:
-  public-cypress:
+  public-cypress-regions:
     runs-on: ubuntu-latest
     services:
       postgres:
