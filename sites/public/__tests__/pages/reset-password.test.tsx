@@ -199,4 +199,88 @@ describe("Public Reset Password Page", () => {
       expect(pushMock).toHaveBeenCalledWith("/account/applications")
     })
   })
+
+  describe("redirect URL validation with showMandatedAccounts", () => {
+    let originalShowMandatedAccounts: string
+
+    beforeEach(() => {
+      originalShowMandatedAccounts = process.env.showMandatedAccounts
+      process.env.showMandatedAccounts = "TRUE"
+      server.use(
+        rest.put("http://localhost/api/adapter/auth/update-password", (_req, res, ctx) => {
+          return res(ctx.json({ success: true }))
+        }),
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(
+            ctx.json({ ...user, firstName: "John", listings: [], agreedToTermsOfService: true })
+          )
+        })
+      )
+    })
+
+    afterEach(() => {
+      process.env.showMandatedAccounts = originalShowMandatedAccounts
+    })
+
+    const submitForm = async () => {
+      await userEvent.type(screen.getByLabelText(/^password$/i, { selector: "input" }), "Password")
+      await userEvent.type(
+        screen.getByLabelText(/password confirmation/i, { selector: "input" }),
+        "Password"
+      )
+      await userEvent.click(screen.getByRole("button", { name: /change password/i }))
+    }
+
+    it("redirects to a valid internal redirectUrl", async () => {
+      const { pushMock } = mockNextRouter({
+        token: "ex4mpl3-tok3n",
+        redirectUrl: "/listings/abc",
+        listingId: "abc",
+      })
+      render(<ResetPassword />)
+      await submitForm()
+      await waitFor(() => {
+        expect(pushMock).toHaveBeenCalledWith("/listings/abc?listingId=abc")
+      })
+    })
+
+    it("falls back to /account/applications for an external redirectUrl", async () => {
+      const { pushMock } = mockNextRouter({
+        token: "ex4mpl3-tok3n",
+        redirectUrl: "https://bad.com",
+        listingId: "abc",
+      })
+      render(<ResetPassword />)
+      await submitForm()
+      await waitFor(() => {
+        expect(pushMock).toHaveBeenCalledWith("/account/applications")
+      })
+    })
+
+    it("falls back to /account/applications for a protocol-relative redirectUrl", async () => {
+      const { pushMock } = mockNextRouter({
+        token: "ex4mpl3-tok3n",
+        redirectUrl: "//bad.com",
+        listingId: "abc",
+      })
+      render(<ResetPassword />)
+      await submitForm()
+      await waitFor(() => {
+        expect(pushMock).toHaveBeenCalledWith("/account/applications")
+      })
+    })
+
+    it("falls back to /account/applications for a javascript: redirectUrl", async () => {
+      const { pushMock } = mockNextRouter({
+        token: "ex4mpl3-tok3n",
+        redirectUrl: "javascript:alert(1)",
+        listingId: "abc",
+      })
+      render(<ResetPassword />)
+      await submitForm()
+      await waitFor(() => {
+        expect(pushMock).toHaveBeenCalledWith("/account/applications")
+      })
+    })
+  })
 })
