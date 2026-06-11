@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react"
 import Markdown from "markdown-to-jsx"
 import { EditorContent, Editor } from "@tiptap/react"
 import { StarterKit } from "@tiptap/starter-kit"
+import { CharacterCount } from "@tiptap/extension-character-count"
 import BoldIcon from "@heroicons/react/16/solid/BoldIcon"
 import BulletListIcon from "@heroicons/react/16/solid/ListBulletIcon"
 import OrderedListIcon from "@heroicons/react/16/solid/NumberedListIcon"
@@ -13,6 +14,7 @@ import { t } from "@bloom-housing/ui-components"
 import styles from "./TextEditor.module.scss"
 
 export const EditorExtensions = [
+  CharacterCount,
   StarterKit.configure({
     heading: false,
     code: false,
@@ -247,6 +249,9 @@ export const TextEditor = ({
   label,
 }: TextEditorProps) => {
   const [errorState, setErrorState] = useState(error)
+  const [characterCount, setCharacterCount] = useState(
+    () => editor?.storage?.characterCount?.characters() ?? 0
+  )
 
   const labelId = `${editorId}Label`
 
@@ -256,6 +261,7 @@ export const TextEditor = ({
 
   editor.on("update", () => {
     if (errorState) setErrorState(false)
+    setCharacterCount(editor?.storage?.characterCount?.characters() ?? 0)
   })
 
   editor.on("create", () => {
@@ -263,8 +269,6 @@ export const TextEditor = ({
       attributes: { "aria-labelledby": labelId, role: "textbox" },
     })
   })
-
-  const characterCount = editor?.storage?.characterCount?.characters()
   const overLimit = characterCount > characterLimit
 
   return (
