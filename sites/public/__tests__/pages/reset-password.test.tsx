@@ -11,7 +11,7 @@ const server = setupServer()
 
 beforeAll(() => {
   server.listen()
-  mockNextRouter({ token: "ex4mpl3-tok3n" })
+  mockNextRouter({ token: "test-reset-token" })
 })
 
 afterEach(() => server.resetHandlers())
@@ -165,7 +165,7 @@ describe("Public Reset Password Page", () => {
   })
 
   it("should navigate on success", async () => {
-    const { pushMock } = mockNextRouter({ token: "ex4mpl3-tok3n" })
+    const { pushMock } = mockNextRouter({ token: "test-reset-token" })
     server.use(
       rest.put("http://localhost/api/adapter/auth/update-password", (_req, res, ctx) => {
         return res(
@@ -233,7 +233,7 @@ describe("Public Reset Password Page", () => {
 
     it("redirects to a valid internal redirectUrl", async () => {
       const { pushMock } = mockNextRouter({
-        token: "ex4mpl3-tok3n",
+        token: "test-reset-token",
         redirectUrl: "/listings/abc",
         listingId: "abc",
       })
@@ -246,7 +246,7 @@ describe("Public Reset Password Page", () => {
 
     it("falls back to /account/applications for an external redirectUrl", async () => {
       const { pushMock } = mockNextRouter({
-        token: "ex4mpl3-tok3n",
+        token: "test-reset-token",
         redirectUrl: "https://bad.com",
         listingId: "abc",
       })
@@ -259,7 +259,7 @@ describe("Public Reset Password Page", () => {
 
     it("falls back to /account/applications for a protocol-relative redirectUrl", async () => {
       const { pushMock } = mockNextRouter({
-        token: "ex4mpl3-tok3n",
+        token: "test-reset-token",
         redirectUrl: "//bad.com",
         listingId: "abc",
       })
@@ -272,7 +272,7 @@ describe("Public Reset Password Page", () => {
 
     it("falls back to /account/applications for a javascript: redirectUrl", async () => {
       const { pushMock } = mockNextRouter({
-        token: "ex4mpl3-tok3n",
+        token: "test-reset-token",
         redirectUrl: "javascript:alert(1)",
         listingId: "abc",
       })
