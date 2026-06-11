@@ -1,5 +1,11 @@
-import { AuthContext, OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
-import { Form, t } from "@bloom-housing/ui-components"
+import {
+  AuthContext,
+  Form,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+} from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
 import React, { useContext, useEffect } from "react"
 
 import ApplicationFormLayout from "../../../layouts/application-form"

@@ -229,6 +229,10 @@ export class ApplicationExporterService {
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableGenderQuestion,
     );
+    const enableSexualOrientationQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableSexualOrientationQuestion,
+    );
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
@@ -265,6 +269,7 @@ export class ApplicationExporterService {
         enableReasonableAccommodations,
         enableSpokenLanguage,
         enableGenderQuestion,
+        enableSexualOrientationQuestion,
         enableV2MSQ,
         enableReceivedAtAndByFields,
         includeDemographics: queryParams.includeDemographics,
@@ -517,6 +522,10 @@ export class ApplicationExporterService {
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableGenderQuestion,
     );
+    const enableSexualOrientationQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableSexualOrientationQuestion,
+    );
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
@@ -552,6 +561,7 @@ export class ApplicationExporterService {
         enableFullTimeStudentQuestion,
         enableReasonableAccommodations,
         enableGenderQuestion,
+        enableSexualOrientationQuestion,
         enableV2MSQ,
         enableReceivedAtAndByFields,
         forLottery,

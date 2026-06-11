@@ -93,6 +93,17 @@ export const genderKeys = [
   "preferNoResponse",
 ]
 
+export const sexualOrientationKeys = [
+  "asexual",
+  "bisexual",
+  "gayLesbianSameGenderLoving",
+  "questioningUnsure",
+  "straightHeterosexual",
+  "differentTerm",
+  "dontKnow",
+  "preferNoResponse",
+]
+
 export const sexualOrientation = [
   "bisexual",
   "gayLesbianSameGenderLoving",

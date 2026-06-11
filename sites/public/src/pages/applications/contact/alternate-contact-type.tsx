@@ -2,12 +2,13 @@ import React, { Fragment, useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Field, Form, t } from "@bloom-housing/ui-components"
+import { Field, t } from "@bloom-housing/ui-components"
 import {
-  altContactRelationshipKeys,
   AuthContext,
+  Form,
   OnClientSide,
   PageView,
+  altContactRelationshipKeys,
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"

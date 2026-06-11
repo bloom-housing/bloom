@@ -46,11 +46,11 @@ export class ListingUpdate extends OmitType(Listing, [
   'listingsResult',
   'listingUtilities',
   'parkType',
+  'property',
   'requestedChangesUser',
   'unitGroups',
   'units',
   'unitsSummary',
-  'property',
 
   // fields removed entirely
   'afsLastRunAt',
@@ -58,6 +58,9 @@ export class ListingUpdate extends OmitType(Listing, [
   'applicationLotteryTotals',
   'closedAt',
   'createdAt',
+  'externalJurisdictionId',
+  'externalListingId',
+  'externalURL',
   'publishedAt',
   'referralApplication',
   'showWaitlist',
