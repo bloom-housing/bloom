@@ -4306,7 +4306,7 @@ describe('Testing user service', () => {
 
   describe('updatePreferences', () => {
     it('should update requesting users notification preferences', async () => {
-      prisma.userNotificationPreferences.update = jest.fn();
+      prisma.userNotificationPreferences.upsert = jest.fn();
 
       const newPreferences: UserNotificationPreferences = {
         mobility: true,
@@ -4322,8 +4322,12 @@ describe('Testing user service', () => {
       );
 
       expect(res).toEqual({ success: true });
-      expect(prisma.userNotificationPreferences.update).toHaveBeenCalledWith({
-        data: {
+      expect(prisma.userNotificationPreferences.upsert).toHaveBeenCalledWith({
+        create: {
+          ...newPreferences,
+          userId: requestingUser.id,
+        },
+        update: {
           ...newPreferences,
         },
         where: {
