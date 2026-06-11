@@ -452,30 +452,11 @@ export default function ListingsList() {
             ? t("listings.selectListingType")
             : t("listings.selectJurisdictionTitle")}
         </Dialog.Header>
-        <Form id="listing-select-form" onSubmit={handleSubmit(onSubmit)}>
-          <Dialog.Content id="listing-select-dialog-content">
+        <Dialog.Content id="listing-select-dialog-content">
+          <Form id="listing-select-form" onSubmit={handleSubmit(onSubmit)}>
             {t("listings.selectJurisdictionContent")}
             <Grid>
-              <Grid.Row className={"seeds-m-bs-4"}>
-                <Grid.Cell>
-                  {otherPortalsTitle && !defaultJurisdiction && (
-                    <div
-                      className={styles["other-portals-banner"]}
-                      data-testid={"other-portals-banner"}
-                    >
-                      <p>{otherPortalsTitle}</p>
-                      <ul>
-                        {otherPortals.map(({ name, url }) => (
-                          <li key={url}>
-                            <Link href={url}>{name}</Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </Grid.Cell>
-              </Grid.Row>
-              <Grid.Row columns={3}>
+              <Grid.Row columns={3} className={"seeds-m-bs-4"}>
                 <Grid.Cell className={"seeds-grid-span-2"}>
                   <div className={`${defaultJurisdiction ? "hidden" : ""}`}>
                     <Select
@@ -508,6 +489,25 @@ export default function ListingsList() {
                   </div>
                 </Grid.Cell>
               </Grid.Row>
+              {otherPortalsTitle && !defaultJurisdiction && (
+                <Grid.Row>
+                  <Grid.Cell>
+                    <div
+                      className={styles["other-portals-banner"]}
+                      data-testid={"other-portals-banner"}
+                    >
+                      <p>{otherPortalsTitle}</p>
+                      <ul>
+                        {otherPortals.map(({ name, url }) => (
+                          <li key={url}>
+                            <Link href={url}>{name}</Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </Grid.Cell>
+                </Grid.Row>
+              )}
               {isNonRegulatedEnabled && (
                 <div aria-live="polite">
                   <fieldset>
@@ -552,23 +552,23 @@ export default function ListingsList() {
                 </div>
               )}
             </Grid>
-          </Dialog.Content>
-          <Dialog.Footer>
-            <Button variant="primary" size="sm" type={"submit"}>
-              {t("listings.getStarted")}
-            </Button>
-            <Button
-              variant="primary-outlined"
-              onClick={() => {
-                setListingSelectModal(false)
-              }}
-              size="sm"
-              type={"button"}
-            >
-              {t("t.cancel")}
-            </Button>
-          </Dialog.Footer>
-        </Form>
+          </Form>
+        </Dialog.Content>
+        <Dialog.Footer>
+          <Button variant="primary" size="sm" type={"submit"} form="listing-select-form">
+            {t("listings.getStarted")}
+          </Button>
+          <Button
+            variant="primary-outlined"
+            onClick={() => {
+              setListingSelectModal(false)
+            }}
+            size="sm"
+            type={"button"}
+          >
+            {t("t.cancel")}
+          </Button>
+        </Dialog.Footer>
       </Dialog>
     </Layout>
   )
