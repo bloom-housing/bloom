@@ -8,6 +8,7 @@ import {
 import { randomInt } from 'crypto';
 import dayjs from 'dayjs';
 import { SpokenLanguageEnum } from '../../src/enums/applications/spoken-language-enum';
+import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
 import { FeatureFlagEnum } from '../../src/enums/feature-flags/feature-flags-enum';
 import { randomBoolean } from '../seed-helpers/boolean-generator';
 import { jurisdictionFactory } from '../seed-helpers/jurisdiction-factory';
@@ -2401,6 +2402,7 @@ export const realisticAddressesForOtherStatuses = [
 const featureFlags = [
   FeatureFlagEnum.disableEthnicityQuestion,
   FeatureFlagEnum.disableWorkInRegion,
+  FeatureFlagEnum.enableFilterByBathroom,
   FeatureFlagEnum.enableGeocodingPreferences,
   FeatureFlagEnum.enableGeocodingRadiusMethod,
   FeatureFlagEnum.enableGenderQuestion,
@@ -2412,6 +2414,7 @@ const featureFlags = [
   FeatureFlagEnum.enablePartnerDemographics,
   FeatureFlagEnum.enablePartnerSettings,
   FeatureFlagEnum.enableReceivedAtAndByFields,
+  FeatureFlagEnum.enableSexualOrientationQuestion,
   FeatureFlagEnum.enableSupportAdmin,
 ];
 
@@ -2512,6 +2515,21 @@ const visibleSpokenLanguages = [
   SpokenLanguageEnum.notListed,
 ];
 
+const visibleHouseholdMemberRelationships = [
+  HouseholdMemberRelationship.spousePartner,
+  HouseholdMemberRelationship.girlfriendBoyfriend,
+  HouseholdMemberRelationship.child,
+  HouseholdMemberRelationship.parent,
+  HouseholdMemberRelationship.friend,
+  HouseholdMemberRelationship.brotherSister,
+  HouseholdMemberRelationship.cousin,
+  HouseholdMemberRelationship.auntUncle,
+  HouseholdMemberRelationship.nephewNiece,
+  HouseholdMemberRelationship.grandparentGreatGrandparent,
+  HouseholdMemberRelationship.liveInAide,
+  HouseholdMemberRelationship.other,
+];
+
 const requiredListingFields = [
   'listingsBuildingAddress',
   'name',
@@ -2568,6 +2586,7 @@ export const createBridgeBayJurisdictions = async (
       raceEthnicityConfiguration: raceEthnicityConfiguration,
       visibleSpokenLanguages: visibleSpokenLanguages,
       requiredListingFields: requiredListingFields,
+      visibleHouseholdMemberRelationships: visibleHouseholdMemberRelationships,
     }),
   });
 
@@ -2582,6 +2601,8 @@ export const createBridgeBayJurisdictions = async (
         raceEthnicityConfiguration: raceEthnicityConfiguration,
         visibleSpokenLanguages: visibleSpokenLanguages,
         requiredListingFields: requiredListingFields,
+        visibleHouseholdMemberRelationships:
+          visibleHouseholdMemberRelationships,
       }),
     });
     otherJurisdictions.push(createdSubJurisdiction);

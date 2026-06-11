@@ -41,7 +41,7 @@ const FormSignInPwdless = ({
   const forgetPasswordURL = getListingRedirectUrl(listingIdRedirect, "/forgot-password")
 
   return (
-    <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form id="sign-in" suppressSubmitOnEnter={false} onSubmit={handleSubmit(onSubmit, onError)}>
       <Field
         className={styles["sign-in-email-input"]}
         name="email"

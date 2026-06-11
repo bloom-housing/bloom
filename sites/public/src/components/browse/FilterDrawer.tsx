@@ -1,4 +1,5 @@
-import { Form, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { Form } from "@bloom-housing/shared-helpers"
 import { Button, Drawer } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import {
@@ -85,6 +86,10 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     (entry) => entry === FeatureFlagEnum.enableSection8Question
   )
 
+  const enableFilterByBathroom = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableFilterByBathroom
+  )
+
   // When unit groups are off, closed waitlist has no backend signal, so hide it
   const availabilityDisplayValues = getAvailabilityValues(enableUnitGroups).filter(
     (key) => enableUnitGroups || key !== FilterAvailabilityEnum.closedWaitlist
@@ -107,7 +112,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
       <Drawer.Header id="drawer-heading">{t("t.filter")}</Drawer.Header>
       <Drawer.Content id="drawer-content">
         <div role="document">
-          <Form onSubmit={handleSubmit(props.onSubmit)} id="filter">
+          <Form method="get" onSubmit={handleSubmit(props.onSubmit)} id="filter">
             {enableIsVerified && (
               <CheckboxGroup
                 groupLabel={t("listings.confirmedListings")}
@@ -171,6 +176,22 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               )}
               register={register}
             />
+            {enableFilterByBathroom && (
+              <CheckboxGroup
+                groupLabel={t("t.bathrooms")}
+                fields={["0", "1", "2", "3", "4", "5"].map((bathroomCount) => {
+                  return {
+                    key: `${ListingFilterKeys.bathrooms}.${bathroomCount}`,
+                    label:
+                      bathroomCount === "0" ? t("listings.unit.sharedBathroom") : bathroomCount,
+                    defaultChecked: isTrue(
+                      props.filterState?.[ListingFilterKeys.bathrooms]?.[bathroomCount]
+                    ),
+                  }
+                })}
+                register={register}
+              />
+            )}
             <RentSection
               register={register}
               getValues={getValues}

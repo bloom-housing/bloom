@@ -5,12 +5,14 @@ export const createNadaHillJurisdiction = async (
   prismaClient: PrismaClient,
   {
     publicSiteBaseURL,
+    jurisdictionName = 'Nada Hill',
   }: {
     publicSiteBaseURL: string;
+    jurisdictionName?: string;
   },
 ) => {
   return await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Nada Hill', {
+    data: jurisdictionFactory(jurisdictionName, {
       publicSiteBaseURL,
       featureFlags: [],
       requiredListingFields: ['name'],

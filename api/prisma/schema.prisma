@@ -808,6 +808,7 @@ model Jurisdictions {
   visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[]         @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
   visibleSpokenLanguages              SpokenLanguageEnum[]                @default([chineseCantonese, chineseMandarin, english, filipino, korean, russian, spanish, vietnamese, farsi, afghani, notListed]) @map("visible_spoken_languages")
   visibleApplicationAccessibilityFeatures ApplicationAccessibilityFeatureEnum[] @default([mobility, hearing, vision]) @map("visible_application_accessibility_features")
+  visibleHouseholdMemberRelationships HouseholdMemberRelationshipEnum[]   @default([spouse, registeredDomesticPartner, parent, child, sibling, cousin, aunt, uncle, nephew, niece, grandparent, greatGrandparent, inLaw, friend, other, aideOrAttendant]) @map("visible_household_member_relationships")
   whatToExpect                        String                              @default("Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.") @map("what_to_expect")
   whatToExpectAdditionalText          String                              @default("") @map("what_to_expect_additional_text")
   whatToExpectUnderConstruction       String                              @default("") @map("what_to_expect_under_construction")
@@ -1233,6 +1234,9 @@ model Listings {
   disableUnitsAccordion                Boolean?                    @map("disable_units_accordion")
   displayWaitlistSize                  Boolean                     @map("display_waitlist_size")
   documentsId                          String?                     @unique() @map("documents_id") @db.Uuid
+  externalJurisdictionId               String?                     @map("external_jurisdiction_id")
+  externalListingId                    String?                     @map("external_listing_id")
+  externalURL                          String?                     @map("external_url")
   featuresId                           String?                     @unique() @map("features_id") @db.Uuid
   hasHudEbllClearance                  Boolean?                    @map("has_hud_ebll_clearance")
   homeType                             HomeTypeEnum?               @map("home_type")
@@ -1410,6 +1414,9 @@ model ListingSnapshot {
   disableUnitsAccordion                   Boolean?                    @map("disable_units_accordion")
   displayWaitlistSize                     Boolean                     @map("display_waitlist_size")
   documentSnapshotId                      String?                     @unique() @map("document_snapshot_id") @db.Uuid
+  externalJurisdictionId                  String?                     @map("external_jurisdiction_id")
+  externalListingId                       String?                     @map("external_listing_id")
+  externalURL                             String?                     @map("external_url")
   featureSnapshotId                       String?                     @unique() @map("feature_snapshot_id") @db.Uuid
   hasHudEbllClearance                     Boolean?                    @map("has_hud_ebll_clearance")
   homeType                                HomeTypeEnum?               @map("home_type")
@@ -2356,6 +2363,7 @@ enum ListingEventsTypeEnum {
 enum ListingsStatusEnum {
   active
   pending
+  scheduled
   closed
   pendingReview
   changesRequested
@@ -2491,6 +2499,34 @@ enum ApplicationAccessibilityFeatureEnum {
   vision
 
   @@map("application_accessibility_feature_enum")
+}
+
+enum HouseholdMemberRelationshipEnum {
+  spouse
+  registeredDomesticPartner
+  parent
+  child
+  sibling
+  cousin
+  aunt
+  uncle
+  nephew
+  niece
+  grandparent
+  greatGrandparent
+  inLaw
+  friend
+  other
+  aideOrAttendant
+  spousePartner
+  girlfriendBoyfriend
+  brotherSister
+  auntUncle
+  nephewNiece
+  grandparentGreatGrandparent
+  liveInAide
+
+  @@map("household_member_relationship_enum")
 }
 
 enum RegionEnum {

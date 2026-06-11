@@ -1,8 +1,13 @@
 import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-import { t, Form, AlertBox } from "@bloom-housing/ui-components"
+import { t, AlertBox } from "@bloom-housing/ui-components"
 import { Button, Dialog, LoadingState } from "@bloom-housing/ui-seeds"
-import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import {
+  AuthContext,
+  Form,
+  MessageContext,
+  listingSectionQuestions,
+} from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
   Application,
@@ -43,7 +48,8 @@ type AlertErrorType = "api" | "form"
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
   const { data: jurisdictionData } = useJurisdiction(listingDto?.jurisdictions?.id)
-  const { doJurisdictionsHaveFeatureFlagOn, applicationsService } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn, applicationsService, getJurisdictionLanguages } =
+    useContext(AuthContext)
 
   const preferences = listingSectionQuestions(
     listingDto,
@@ -93,6 +99,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const enableGenderQuestion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableGenderQuestion,
+    listingDto?.jurisdictions.id
+  )
+  const enableSexualOrientationQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSexualOrientationQuestion,
     listingDto?.jurisdictions.id
   )
 
@@ -150,6 +160,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     data: FormTypes
     redirect: "details" | "new"
   } | null>(null)
+
+  const availableJurisdictionLanguages = listingDto?.jurisdictions?.id
+    ? getJurisdictionLanguages(listingDto?.jurisdictions?.id)
+    : []
 
   useEffect(() => {
     if (application?.householdMember) {
@@ -343,6 +357,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                         enableApplicationStatus && editMode && application?.markedAsDuplicate
                       }
                       reviewOrderType={listingDto?.reviewOrderType}
+                      availableJurisdictionLanguages={availableJurisdictionLanguages}
                     />
 
                     <FormPrimaryApplicant
@@ -357,6 +372,9 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       setHouseholdMembers={setHouseholdMembers}
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                       disableWorkInRegion={disableWorkInRegion}
+                      visibleHouseholdMemberRelationships={
+                        jurisdictionData?.visibleHouseholdMemberRelationships
+                      }
                     />
 
                     <FormHouseholdDetails
@@ -400,6 +418,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       enableSpokenLanguage={enableSpokenLanguage}
                       visibleSpokenLanguages={jurisdictionData?.visibleSpokenLanguages}
                       enableGenderQuestion={enableGenderQuestion}
+                      enableSexualOrientationQuestion={enableSexualOrientationQuestion}
                     />
 
                     <FormTerms />

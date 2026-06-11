@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, FieldGroup, Form } from "@bloom-housing/ui-components"
+import { t, FieldGroup } from "@bloom-housing/ui-components"
+import { Form } from "@bloom-housing/shared-helpers"
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { ListingFeaturesConfiguration } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { addAsterisk, fieldHasError, getLabel } from "../../../../lib/helpers"

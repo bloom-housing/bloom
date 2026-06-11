@@ -3,7 +3,12 @@ import dayjs from "dayjs"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Card, Heading, Icon, Tag } from "@bloom-housing/ui-seeds"
 import FormSummaryDetails from "../shared/FormSummaryDetails"
-import { CustomIconMap, listingSectionQuestions, AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  CustomIconMap,
+  listingSectionQuestions,
+  AuthContext,
+  tIfExists,
+} from "@bloom-housing/shared-helpers"
 import { getApplicationStatusVariant } from "@bloom-housing/shared-helpers/src/utilities/applicationStatus"
 import {
   Application,
@@ -102,6 +107,11 @@ const SubmittedApplicationView = ({
             {t("application.confirmation.submitted")}
             {confirmationDate}
           </p>
+          {tIfExists("application.confirmation.expiredDetailsWarning") && (
+            <p className="field-note seeds-m-bs-4">
+              {t("application.confirmation.expiredDetailsWarning")}
+            </p>
+          )}
           {enableApplicationStatus && (
             <div className="seeds-m-bs-4">
               <Tag variant={statusTagVariant}>{statusTagContent}</Tag>
