@@ -3,7 +3,7 @@ name: Shared Helpers Unit
 on:
   pull_request:
     branches:
-      - main2
+      - main
     paths-ignore:
       - 'infra/**'
 

@@ -3,7 +3,7 @@ name: Partners Unit
 on:
   pull_request:
     branches:
-      - main2
+      - main
     paths-ignore:
       - 'infra/**'
 

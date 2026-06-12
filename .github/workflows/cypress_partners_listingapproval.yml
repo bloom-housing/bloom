@@ -3,7 +3,7 @@ name: Partners Cypress (LA)
 on:
   pull_request:
     branches:
-      - main2
+      - main
     paths-ignore:
       - 'infra/**'
 env:
