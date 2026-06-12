@@ -3,6 +3,7 @@
 -- "footer" and "accessibilityType", replacing those nested objects entirely
 -- rather than merging into them. This dropped accessibleMarketingFlyer from
 -- footer and all accessibilityType subtypes except hearingAndVision.
+-- Only targets global translations (jurisdiction_id IS NULL).
 
 -- Restore footer.accessibleMarketingFlyer
 
@@ -10,81 +11,81 @@ UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,footer}',
-  (translations->'rentalOpportunity'->'footer') || '{"accessibleMarketingFlyer": "Accessible marketing flyer"}'::jsonb
+  COALESCE(translations->'rentalOpportunity'->'footer', '{}'::jsonb) || '{"accessibleMarketingFlyer": "Accessible marketing flyer"}'::jsonb
 )
-WHERE language = 'en';
+WHERE language = 'en' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,footer}',
-  (translations->'rentalOpportunity'->'footer') || '{"accessibleMarketingFlyer": "Volante de marketing accesible"}'::jsonb
+  COALESCE(translations->'rentalOpportunity'->'footer', '{}'::jsonb) || '{"accessibleMarketingFlyer": "Volante de marketing accesible"}'::jsonb
 )
-WHERE language = 'es';
+WHERE language = 'es' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,footer}',
-  (translations->'rentalOpportunity'->'footer') || '{"accessibleMarketingFlyer": "Tờ rơi tiếp thị có thể truy cập"}'::jsonb
+  COALESCE(translations->'rentalOpportunity'->'footer', '{}'::jsonb) || '{"accessibleMarketingFlyer": "Tờ rơi tiếp thị có thể truy cập"}'::jsonb
 )
-WHERE language = 'vi';
+WHERE language = 'vi' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,footer}',
-  (translations->'rentalOpportunity'->'footer') || '{"accessibleMarketingFlyer": "无障碍营销传单"}'::jsonb
+  COALESCE(translations->'rentalOpportunity'->'footer', '{}'::jsonb) || '{"accessibleMarketingFlyer": "无障碍营销传单"}'::jsonb
 )
-WHERE language = 'zh';
+WHERE language = 'zh' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,footer}',
-  (translations->'rentalOpportunity'->'footer') || '{"accessibleMarketingFlyer": "Naa-access na flyer sa marketing"}'::jsonb
+  COALESCE(translations->'rentalOpportunity'->'footer', '{}'::jsonb) || '{"accessibleMarketingFlyer": "Naa-access na flyer sa marketing"}'::jsonb
 )
-WHERE language = 'tl';
+WHERE language = 'tl' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,footer}',
-  (translations->'rentalOpportunity'->'footer') || '{"accessibleMarketingFlyer": "অ্যাক্সেসযোগ্য মার্কেটিং ফ্লায়ার"}'::jsonb
+  COALESCE(translations->'rentalOpportunity'->'footer', '{}'::jsonb) || '{"accessibleMarketingFlyer": "অ্যাক্সেসযোগ্য মার্কেটিং ফ্লায়ার"}'::jsonb
 )
-WHERE language = 'bn';
+WHERE language = 'bn' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,footer}',
-  (translations->'rentalOpportunity'->'footer') || '{"accessibleMarketingFlyer": "نشرة تسويقية ميسّرة"}'::jsonb
+  COALESCE(translations->'rentalOpportunity'->'footer', '{}'::jsonb) || '{"accessibleMarketingFlyer": "نشرة تسويقية ميسّرة"}'::jsonb
 )
-WHERE language = 'ar';
+WHERE language = 'ar' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,footer}',
-  (translations->'rentalOpportunity'->'footer') || '{"accessibleMarketingFlyer": "접근 가능한 마케팅 전단지"}'::jsonb
+  COALESCE(translations->'rentalOpportunity'->'footer', '{}'::jsonb) || '{"accessibleMarketingFlyer": "접근 가능한 마케팅 전단지"}'::jsonb
 )
-WHERE language = 'ko';
+WHERE language = 'ko' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,footer}',
-  (translations->'rentalOpportunity'->'footer') || '{"accessibleMarketingFlyer": "بروشور بازاریابی قابل دسترس"}'::jsonb
+  COALESCE(translations->'rentalOpportunity'->'footer', '{}'::jsonb) || '{"accessibleMarketingFlyer": "بروشور بازاریابی قابل دسترس"}'::jsonb
 )
-WHERE language = 'fa';
+WHERE language = 'fa' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,footer}',
-  (translations->'rentalOpportunity'->'footer') || '{"accessibleMarketingFlyer": "Հասանելի մարքեթինգային թռուցիկ"}'::jsonb
+  COALESCE(translations->'rentalOpportunity'->'footer', '{}'::jsonb) || '{"accessibleMarketingFlyer": "Հասանելի մարքեթինգային թռուցիկ"}'::jsonb
 )
-WHERE language = 'hy';
+WHERE language = 'hy' AND jurisdiction_id IS NULL;
 
 -- Restore accessibilityType subtypes (hearing, mobility, vision,
 -- mobilityAndHearing, mobilityAndVision, mobilityHearingAndVision).
@@ -94,7 +95,7 @@ UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,accessibilityType}',
-  (translations->'rentalOpportunity'->'accessibilityType') || '{
+  COALESCE(translations->'rentalOpportunity'->'accessibilityType', '{}'::jsonb) || '{
     "hearing": "Hearing",
     "mobility": "Mobility",
     "vision": "Vision",
@@ -103,13 +104,13 @@ SET translations = jsonb_set(
     "mobilityHearingAndVision": "Mobility and Hearing/Vision"
   }'::jsonb
 )
-WHERE language = 'en';
+WHERE language = 'en' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,accessibilityType}',
-  (translations->'rentalOpportunity'->'accessibilityType') || '{
+  COALESCE(translations->'rentalOpportunity'->'accessibilityType', '{}'::jsonb) || '{
     "hearing": "Auditiva",
     "mobility": "Movilidad",
     "vision": "Visual",
@@ -118,13 +119,13 @@ SET translations = jsonb_set(
     "mobilityHearingAndVision": "Movilidad y auditiva/visual"
   }'::jsonb
 )
-WHERE language = 'es';
+WHERE language = 'es' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,accessibilityType}',
-  (translations->'rentalOpportunity'->'accessibilityType') || '{
+  COALESCE(translations->'rentalOpportunity'->'accessibilityType', '{}'::jsonb) || '{
     "hearing": "Thính giác",
     "mobility": "Di chuyển",
     "vision": "Thị giác",
@@ -133,13 +134,13 @@ SET translations = jsonb_set(
     "mobilityHearingAndVision": "Di chuyển và thính giác/thị giác"
   }'::jsonb
 )
-WHERE language = 'vi';
+WHERE language = 'vi' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,accessibilityType}',
-  (translations->'rentalOpportunity'->'accessibilityType') || '{
+  COALESCE(translations->'rentalOpportunity'->'accessibilityType', '{}'::jsonb) || '{
     "hearing": "听力",
     "mobility": "行动",
     "vision": "视力",
@@ -148,13 +149,13 @@ SET translations = jsonb_set(
     "mobilityHearingAndVision": "行动和听力/视力"
   }'::jsonb
 )
-WHERE language = 'zh';
+WHERE language = 'zh' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,accessibilityType}',
-  (translations->'rentalOpportunity'->'accessibilityType') || '{
+  COALESCE(translations->'rentalOpportunity'->'accessibilityType', '{}'::jsonb) || '{
     "hearing": "Pandinig",
     "mobility": "Mobilidad",
     "vision": "Paningin",
@@ -163,13 +164,13 @@ SET translations = jsonb_set(
     "mobilityHearingAndVision": "Mobilidad at pandinig/paningin"
   }'::jsonb
 )
-WHERE language = 'tl';
+WHERE language = 'tl' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,accessibilityType}',
-  (translations->'rentalOpportunity'->'accessibilityType') || '{
+  COALESCE(translations->'rentalOpportunity'->'accessibilityType', '{}'::jsonb) || '{
     "hearing": "শ্রবণ",
     "mobility": "গতিশীলতা",
     "vision": "দৃষ্টি",
@@ -178,13 +179,13 @@ SET translations = jsonb_set(
     "mobilityHearingAndVision": "গতিশীলতা এবং শ্রবণ/দৃষ্টি"
   }'::jsonb
 )
-WHERE language = 'bn';
+WHERE language = 'bn' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,accessibilityType}',
-  (translations->'rentalOpportunity'->'accessibilityType') || '{
+  COALESCE(translations->'rentalOpportunity'->'accessibilityType', '{}'::jsonb) || '{
     "hearing": "السمع",
     "mobility": "الحركة",
     "vision": "البصر",
@@ -193,13 +194,13 @@ SET translations = jsonb_set(
     "mobilityHearingAndVision": "الحركة والسمع/البصر"
   }'::jsonb
 )
-WHERE language = 'ar';
+WHERE language = 'ar' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,accessibilityType}',
-  (translations->'rentalOpportunity'->'accessibilityType') || '{
+  COALESCE(translations->'rentalOpportunity'->'accessibilityType', '{}'::jsonb) || '{
     "hearing": "청각",
     "mobility": "이동성",
     "vision": "시각",
@@ -208,13 +209,13 @@ SET translations = jsonb_set(
     "mobilityHearingAndVision": "이동성 및 청각/시각"
   }'::jsonb
 )
-WHERE language = 'ko';
+WHERE language = 'ko' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,accessibilityType}',
-  (translations->'rentalOpportunity'->'accessibilityType') || '{
+  COALESCE(translations->'rentalOpportunity'->'accessibilityType', '{}'::jsonb) || '{
     "hearing": "شنوایی",
     "mobility": "تحرک",
     "vision": "بینایی",
@@ -223,13 +224,13 @@ SET translations = jsonb_set(
     "mobilityHearingAndVision": "تحرک و شنوایی/بینایی"
   }'::jsonb
 )
-WHERE language = 'fa';
+WHERE language = 'fa' AND jurisdiction_id IS NULL;
 
 UPDATE translations
 SET translations = jsonb_set(
   translations,
   '{rentalOpportunity,accessibilityType}',
-  (translations->'rentalOpportunity'->'accessibilityType') || '{
+  COALESCE(translations->'rentalOpportunity'->'accessibilityType', '{}'::jsonb) || '{
     "hearing": "Լսողություն",
     "mobility": "Շարժունակություն",
     "vision": "Տեսողություն",
@@ -238,5 +239,5 @@ SET translations = jsonb_set(
     "mobilityHearingAndVision": "Շարժունակություն և լսողություն/տեսողություն"
   }'::jsonb
 )
-WHERE language = 'hy';
+WHERE language = 'hy' AND jurisdiction_id IS NULL;
 
