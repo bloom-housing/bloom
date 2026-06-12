@@ -7,6 +7,7 @@ import { EmailModule } from './email.module';
 import { MultiselectQuestionModule } from './multiselect-question.module';
 import { PermissionModule } from './permission.module';
 import { PrismaModule } from './prisma.module';
+import { SnapshotCreateModule } from './snapshot-create.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PrismaModule } from './prisma.module';
     MultiselectQuestionModule,
     PermissionModule,
     PrismaModule,
+    SnapshotCreateModule,
   ],
   controllers: [ScriptRunnerController],
   providers: [ScriptRunnerService, Logger],

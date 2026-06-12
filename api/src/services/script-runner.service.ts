@@ -5,6 +5,8 @@ import {
   Inject,
   Logger,
 } from '@nestjs/common';
+import { SnapshotCreateService } from './snapshot-create.service';
+import { BulkUpdateLoadTestDTO } from '../dtos/script-runner/bulk-update-load-test.dto';
 import {
   LanguagesEnum,
   ListingsStatusEnum,
@@ -47,6 +49,7 @@ export class ScriptRunnerService {
     private featureFlagService: FeatureFlagService,
     private multiselectQuestionService: MultiselectQuestionService,
     private prisma: PrismaService,
+    private snapshotCreateService: SnapshotCreateService,
     @Inject(Logger)
     private logger = new Logger(ScriptRunnerService.name),
   ) {}
@@ -1516,5 +1519,94 @@ export class ScriptRunnerService {
           reject(`getting broke: ${url}`);
         }),
     );
+  }
+
+  /**
+   * Load test for the bulk application update processing loop.
+   * Runs: read → snapshot → no-op write for every application in a listing.
+   * Emails are intentionally skipped. Check server logs for detailed timing output.
+   */
+  async bulkUpdateLoadTest(dto: BulkUpdateLoadTestDTO): Promise<SuccessDTO> {
+    const jobStart = Date.now();
+
+    const applicationIds = await this.prisma.applications.findMany({
+      where: { listingId: dto.listingId },
+      select: { id: true },
+    });
+
+    const totalRecords = applicationIds.length;
+    this.logger.log(
+      `[BulkUpdateLoadTest] Starting: listingId=${dto.listingId} records=${totalRecords}`,
+    );
+
+    let totalReadMs = 0;
+    let totalSnapshotMs = 0;
+    let totalWriteMs = 0;
+    let processedCount = 0;
+
+    for (const { id } of applicationIds) {
+      // Minimal read — only the fields the real processing loop will need
+      const readStart = Date.now();
+      await this.prisma.applications.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          status: true,
+          applicationDeclineReason: true,
+          applicationDeclineReasonAdditionalDetails: true,
+          manualLotteryPositionNumber: true,
+          accessibleUnitWaitlistNumber: true,
+          conventionalUnitWaitlistNumber: true,
+          submissionDate: true,
+          applicant: {
+            select: { firstName: true, lastName: true },
+          },
+        },
+      });
+      totalReadMs += Date.now() - readStart;
+
+      // Snapshot (same call the real loop will make)
+      const snapshotStart = Date.now();
+      await this.snapshotCreateService.createApplicationSnapshot(id);
+      totalSnapshotMs += Date.now() - snapshotStart;
+
+      // No-op write — simulates the update cost without changing data
+      const writeStart = Date.now();
+      await this.prisma.applications.update({
+        where: { id },
+        data: { updatedAt: new Date() },
+      });
+      totalWriteMs += Date.now() - writeStart;
+
+      processedCount++;
+
+      if (processedCount % 100 === 0) {
+        const elapsedMs = Date.now() - jobStart;
+        const recsPerMin = processedCount / (elapsedMs / 1000 / 60);
+        const estTotalMin = totalRecords / recsPerMin;
+        this.logger.log(
+          `[BulkUpdateLoadTest] ${processedCount}/${totalRecords} ` +
+            `(${Math.round((processedCount / totalRecords) * 100)}%) ` +
+            `elapsed=${Math.round(elapsedMs / 1000)}s ` +
+            `rate=${Math.round(recsPerMin)}rec/min ` +
+            `est_total=${Math.round(estTotalMin)}min`,
+        );
+      }
+    }
+
+    const totalMs = Date.now() - jobStart;
+    this.logger.log(
+      `[BulkUpdateLoadTest] Done. ` +
+        `records=${totalRecords} ` +
+        `total=${Math.round(totalMs / 1000)}s (${Math.round(
+          totalMs / 1000 / 60,
+        )}min) ` +
+        `avg_per_record=${Math.round(totalMs / totalRecords)}ms ` +
+        `avg_read=${Math.round(totalReadMs / totalRecords)}ms ` +
+        `avg_snapshot=${Math.round(totalSnapshotMs / totalRecords)}ms ` +
+        `avg_write=${Math.round(totalWriteMs / totalRecords)}ms`,
+    );
+
+    return { success: true };
   }
 }

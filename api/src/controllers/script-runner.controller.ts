@@ -15,6 +15,7 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
+import { BulkUpdateLoadTestDTO } from '../dtos/script-runner/bulk-update-load-test.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { CommunityTypeDTO } from '../dtos/script-runner/community-type.dto';
@@ -265,5 +266,18 @@ export class ScriptRunnerController {
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.setIsNewestApplicationValues(req);
+  }
+
+  @Put('bulkUpdateLoadTest')
+  @ApiOperation({
+    summary:
+      'POC load test: runs read → snapshot → no-op write for all applications in a listing. Check server logs for timing output.',
+    operationId: 'bulkUpdateLoadTest',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async bulkUpdateLoadTest(
+    @Body() dto: BulkUpdateLoadTestDTO,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.bulkUpdateLoadTest(dto);
   }
 }
