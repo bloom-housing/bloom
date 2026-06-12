@@ -574,11 +574,6 @@ const ApplicationTypes = ({
                 name="referralSummary"
                 id="referralSummary"
                 maxLength={500}
-                defaultValue={
-                  methods?.referral?.externalReference
-                    ? methods.referral.externalReference
-                    : defaultReferralText
-                }
                 inputProps={{
                   value: methods?.referral
                     ? methods?.referral?.externalReference
