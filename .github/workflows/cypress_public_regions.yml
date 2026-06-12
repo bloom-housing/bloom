@@ -36,7 +36,7 @@ env:
   HOUSING_COUNSELOR_SERVICE_URL: "/get-assistance"
 
 jobs:
-  public-cypress-regions:
+  run-backend:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -48,7 +48,6 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         ports:
           - 5432:5432
-
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
@@ -60,9 +59,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 22
-
-      - name: yarn in root dir
-        run: yarn
 
       - name: yarn in api dir
         working-directory: ./api
@@ -83,6 +79,24 @@ jobs:
           PGHOST: 127.0.0.1
           PGPASSWORD: bloom
           PGUSER: bloom-dev
+
+  public-cypress-regions:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 22
+
+      - name: yarn in root dir
+        run: yarn
+
+      - name: wait for backend to be ready
+        run: npx wait-on -t 120000 http://localhost:3100/jurisdictions
 
       - name: Cypress run
         uses: cypress-io/github-action@v5
