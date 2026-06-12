@@ -79,7 +79,10 @@ jobs:
           PGHOST: 127.0.0.1
           PGPASSWORD: bloom
           PGUSER: bloom-dev
-
+      
+      - name: Start backend
+        run: yarn dev:backend
+        
   public-cypress-regions:
     runs-on: ubuntu-latest
 
