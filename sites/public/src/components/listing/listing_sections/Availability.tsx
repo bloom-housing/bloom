@@ -1,5 +1,4 @@
 import * as React from "react"
-import dayjs from "dayjs"
 import { Card, Heading } from "@bloom-housing/ui-seeds"
 import {
   FeatureFlagEnum,
@@ -17,6 +16,7 @@ import {
   isFeatureFlagOn,
   scheduledApplicationOpenInFuture,
 } from "../../../lib/helpers"
+import { getDateString } from "../ListingViewSeedsHelpers"
 import styles from "./Availability.module.scss"
 
 type AvailabilityProps = {
@@ -133,17 +133,19 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
 
   const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
 
-  const statusMessage = getListingStatusMessageContent(
-    listing.status,
-    listing.applicationDueDate,
-    enableMarketingStatus,
-    enableMarketingStatusMonths,
-    listing.marketingType,
-    listing.marketingSeason,
-    listing.marketingMonth,
-    listing.marketingYear,
-    false
-  )
+  const statusMessage = scheduledApplicationOpenInFuture(listing)
+    ? null
+    : getListingStatusMessageContent(
+        listing.status,
+        listing.applicationDueDate,
+        enableMarketingStatus,
+        enableMarketingStatusMonths,
+        listing.marketingType,
+        listing.marketingSeason,
+        listing.marketingMonth,
+        listing.marketingYear,
+        false
+      )
   const unitsAvailable =
     listing.unitGroups.length > 0
       ? listing.unitGroups.reduce((acc, curr) => acc + curr.totalAvailable, 0)
@@ -227,7 +229,7 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     t("listings.availability.comingSoon"),
     undefined,
     t("listings.scheduledApplicationOpen", {
-      openDate: dayjs(listing.scheduledApplicationOpenAt).format("MM/DD/YYYY"),
+      openDate: getDateString(listing.scheduledApplicationOpenAt, "MM/DD/YYYY"),
     })
   )
 
