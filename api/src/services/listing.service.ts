@@ -482,12 +482,14 @@ export class ListingService implements OnModuleInit {
         params.listingInfo.id,
         params.jurisId,
       );
-      await this.emailService.listingScheduled(
-        { id: params.jurisId },
-        { id: params.listingInfo.id, name: params.listingInfo.name },
-        userInfo.emails,
-        params.scheduledPublishAt,
-      );
+      if (params.scheduledPublishAt) {
+        await this.emailService.listingScheduled(
+          { id: params.jurisId },
+          { id: params.listingInfo.id, name: params.listingInfo.name },
+          userInfo.emails,
+          params.scheduledPublishAt,
+        );
+      }
     }
     // check if status of active requires notification
     else if (params.status === ListingsStatusEnum.active) {
@@ -2298,17 +2300,19 @@ export class ListingService implements OnModuleInit {
       incomingDto.status === ListingsStatusEnum.active &&
       storedListing.status !== ListingsStatusEnum.active;
 
-    // test if not publishing or unpublishing listing and scheduledPublishAt is set
-    if (
-      incomingDto.status === storedListing.status &&
-      incomingDto.status !== ListingsStatusEnum.active &&
-      incomingDto.scheduledPublishAt &&
-      enableAutopublish
-    ) {
+    if (incomingDto.scheduledPublishAt && enableAutopublish) {
       incomingDto.scheduledPublishAt = this.normalizeScheduledPublishAt(
         incomingDto.scheduledPublishAt,
       );
-      this.checkScheduledPublishAtIsInFuture(incomingDto.scheduledPublishAt);
+      // test if not publishing or unpublishing listing and scheduledPublishAt is set
+      if (
+        incomingDto.status === storedListing.status &&
+        incomingDto.status !== ListingsStatusEnum.active &&
+        incomingDto.scheduledPublishAt &&
+        enableAutopublish
+      ) {
+        this.checkScheduledPublishAtIsInFuture(incomingDto.scheduledPublishAt);
+      }
     }
 
     if (
