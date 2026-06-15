@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { ForbiddenException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   ApplicationDeclineReasonEnum,
@@ -101,20 +102,20 @@ describe('Testing application bulk upload services', () => {
     prisma = module.get<PrismaService>(PrismaService);
   });
 
-  beforeEach(() => {
-    writeStream = fs.createWriteStream('sampleTemplate.csv');
-    jest.spyOn(fs, 'createWriteStream').mockReturnValue(writeStream);
-  });
-
-  afterEach(() => {
-    writeStream.end();
-    if (fs.existsSync('sampleTemplate.csv')) {
-      fs.unlinkSync('sampleTemplate.csv');
-    }
-    jest.restoreAllMocks();
-  });
-
   describe('bulk update template csv export', () => {
+    beforeEach(() => {
+      writeStream = fs.createWriteStream('sampleTemplate.csv');
+      jest.spyOn(fs, 'createWriteStream').mockReturnValue(writeStream);
+    });
+
+    afterEach(() => {
+      writeStream.end();
+      if (fs.existsSync('sampleTemplate.csv')) {
+        fs.unlinkSync('sampleTemplate.csv');
+      }
+      jest.restoreAllMocks();
+    });
+
     const applicationsSet = [
       mockApplication({
         id: randomUUID(),
@@ -182,6 +183,66 @@ describe('Testing application bulk upload services', () => {
       expect(content).toContain(rowOne);
       expect(content).toContain(rowTwo);
       expect(content).toContain(rowThree);
+    });
+  });
+
+  describe('authorizeExport', () => {
+    const listingId = randomUUID();
+    const jurisdictionId = randomUUID();
+
+    beforeEach(() => {
+      listingServiceMock.getJurisdictionIdByListingId.mockResolvedValue(
+        jurisdictionId,
+      );
+      canOrThrowMock.mockResolvedValue(undefined);
+    });
+
+    afterEach(() => {
+      listingServiceMock.getJurisdictionIdByListingId.mockReset();
+      canOrThrowMock.mockReset();
+    });
+
+    it('should throw ForbiddenException immediately for isLimitedJurisdictionalAdmin users', async () => {
+      const user = { userRoles: { isLimitedJurisdictionalAdmin: true } };
+
+      await expect(service.authorizeExport(user, listingId)).rejects.toThrow(
+        ForbiddenException,
+      );
+
+      expect(
+        listingServiceMock.getJurisdictionIdByListingId,
+      ).not.toHaveBeenCalled();
+      expect(canOrThrowMock).not.toHaveBeenCalled();
+    });
+
+    it('should call listingService.getJurisdictionIdByListingId with the correct listingId', async () => {
+      const user = { userRoles: { isLimitedJurisdictionalAdmin: false } };
+
+      await service.authorizeExport(user, listingId);
+
+      expect(
+        listingServiceMock.getJurisdictionIdByListingId,
+      ).toHaveBeenCalledWith(listingId);
+    });
+
+    it('should call permissionService.canOrThrow with listing, update, and resolved jurisdictionId', async () => {
+      const user = { userRoles: { isLimitedJurisdictionalAdmin: false } };
+
+      await service.authorizeExport(user, listingId);
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(user, 'listing', 'update', {
+        id: listingId,
+        jurisdictionId,
+      });
+    });
+
+    it('should re-throw ForbiddenException when canOrThrow rejects', async () => {
+      const user = { userRoles: { isLimitedJurisdictionalAdmin: false } };
+      canOrThrowMock.mockRejectedValue(new ForbiddenException());
+
+      await expect(service.authorizeExport(user, listingId)).rejects.toThrow(
+        ForbiddenException,
+      );
     });
   });
 });
