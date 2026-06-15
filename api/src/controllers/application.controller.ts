@@ -53,6 +53,7 @@ import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
+import { ApplicationBulkUploadService } from '../services/application-bulk-upload.service';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -70,6 +71,7 @@ export class ApplicationController {
   constructor(
     private readonly applicationService: ApplicationService,
     private readonly applicationExportService: ApplicationExporterService,
+    private readonly applicationBulkUploadService: ApplicationBulkUploadService,
   ) {}
 
   @Get()
@@ -202,6 +204,23 @@ export class ApplicationController {
     @Param('applicationId') applicationId: string,
   ) {
     return this.applicationService.findOne(applicationId, req);
+  }
+
+  @Get('bulk-update/template/:listingId')
+  @ApiOperation({
+    summary:
+      'Download a template CSV for bulk updating applications for a listing',
+    operationId: 'downloadBulkUpdateTemplate',
+  })
+  @ApiOkResponse({ type: StreamableFile })
+  async downloadBulkUpdateTemplate(
+    @Request() req: ExpressRequest,
+    @Param('listingId') listingId: string,
+  ): Promise<StreamableFile> {
+    return await this.applicationBulkUploadService.downloadBulkUpdateTemplate(
+      listingId,
+      mapTo(User, req['user']),
+    );
   }
 
   @Post()
