@@ -200,14 +200,14 @@ const ListingForm = ({
   const whatToExpectEditor = useEditor({
     extensions: [...EditorExtensions, CharacterCountExtension.configure()],
     content: listing?.whatToExpect || selectedJurisdictionData?.whatToExpect,
-    immediatelyRender: true,
+    immediatelyRender: false,
   })
 
   const whatToExpectAdditionalDetailsEditor = useEditor({
     extensions: [...EditorExtensions, CharacterCountExtension.configure()],
     content:
       listing?.whatToExpectAdditionalText || selectedJurisdictionData?.whatToExpectAdditionalText,
-    immediatelyRender: true,
+    immediatelyRender: false,
   })
 
   const { data: properties, loading: propertiesLoading } = usePropertiesList({
@@ -230,26 +230,31 @@ const ListingForm = ({
         marketingTypeChoice === MarketingTypeEnum.comingSoon &&
         !!selectedJurisdictionData.whatToExpectUnderConstruction
       ) {
-        whatToExpectEditor.commands.setContent(
+        whatToExpectEditor?.commands.setContent(
           selectedJurisdictionData.whatToExpectUnderConstruction
         )
-        whatToExpectAdditionalDetailsEditor.commands.clearContent()
+        whatToExpectAdditionalDetailsEditor?.commands.clearContent()
         return
       }
 
       if (!editMode) {
         if (!whatToExpectEditor?.storage.characterCount.characters()) {
-          whatToExpectEditor.commands.setContent(selectedJurisdictionData.whatToExpect)
+          whatToExpectEditor?.commands.setContent(selectedJurisdictionData.whatToExpect)
         }
         if (!whatToExpectAdditionalDetailsEditor?.storage.characterCount.characters()) {
-          whatToExpectAdditionalDetailsEditor.commands.setContent(
+          whatToExpectAdditionalDetailsEditor?.commands.setContent(
             selectedJurisdictionData.whatToExpectAdditionalText
           )
         }
       }
     }
     //eslint-disable-next-line
-  }, [selectedJurisdictionData, marketingTypeChoice])
+  }, [
+    selectedJurisdictionData,
+    marketingTypeChoice,
+    whatToExpectEditor,
+    whatToExpectAdditionalDetailsEditor,
+  ])
 
   const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableUnitGroups,
@@ -369,12 +374,10 @@ const ListingForm = ({
     async (formData: FormListing, continueEditing: boolean) => {
       if (!loading) {
         try {
-          setLoading(true)
           clearErrors()
           const successful = await formMethods.trigger()
 
           if (whatToExpectEditor?.storage.characterCount.characters() > CHARACTER_LIMIT) {
-            setLoading(false)
             setAlert("form")
             return
           }
@@ -385,7 +388,6 @@ const ListingForm = ({
             whatToExpectAdditionalDetailsEditor?.storage.characterCount.characters() >
             CHARACTER_LIMIT
           ) {
-            setLoading(false)
             setAlert("form")
             return
           }
@@ -432,6 +434,8 @@ const ListingForm = ({
             delete formData.scheduledApplicationOpenDateField
             formData.scheduledApplicationOpenAt = null
           }
+
+          setLoading(true)
 
           if (successful) {
             const dataPipeline = new ListingDataPipeline(formData, {
@@ -552,6 +556,8 @@ const ListingForm = ({
       addToast,
       enableUnitGroups,
       enableAutopublish,
+      whatToExpectEditor,
+      whatToExpectAdditionalDetailsEditor,
     ]
   )
   return (
