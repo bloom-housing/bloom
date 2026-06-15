@@ -5468,10 +5468,10 @@ csstype@^3.0.2, csstype@^3.2.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.2.3.tgz#ec48c0f3e993e50648c86da559e2610995cf989a"
   integrity sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==
 
-csv-parse@^5.5.5:
-  version "5.5.6"
-  resolved "https://registry.npmjs.org/csv-parse/-/csv-parse-5.5.6.tgz"
-  integrity sha512-uNpm30m/AGSkLxxy7d9yRXpJQFrZzVWLFBkS+6ngPcZkw/5k3L/jjFuj7tVnEpRn+QgmiXr21nDlhCiUK4ij2A==
+csv-parse@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-7.0.0.tgz#ef2495b2ed6424808defc92d0f40bbe228674447"
+  integrity sha512-CSssqPAK5us09FhMI9juM0jnqXUJP+rtWeIfivTYBLNH/8rnxkQlZvoRemF6MAyfNov9XU8mN2wwF/pP68sxTA==
 
 cypress-file-upload@^5.0.8:
   version "5.0.8"

@@ -43,7 +43,7 @@
     "@types/react-test-renderer": "19.1.0",
     "@types/react-text-mask": "^5.4.14",
     "@types/react-transition-group": "^4.4.12",
-    "csv-parse": "^5.5.5",
+    "csv-parse": "^7.0.0",
     "dotenv": "^17.2.3",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.5.3",
