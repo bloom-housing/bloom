@@ -1038,6 +1038,7 @@
   "listings.reservedUnits": "Mga reserbang unit",
   "listings.reservedUnitsDescription": "Upang maging kuwalipikado para sa mga unit na ito, ang isa sa mga sumusunod ay dapat na angkop sa iyo o sa isang tao sa iyong sambahayan:",
   "listings.reservedUnitsForWhoAre": "Nakareserba para sa %{communityType} na %{reservedType}",
+  "listings.scheduledApplicationOpen": "Maaaring magsumite ng mga aplikasyon simula sa %{openDate}",
   "listings.search.subNote": "Ilagay ang buo o bahagyang pangalan ng listahan",
   "listings.section8Acceptance": "Tumatanggap ng Section 8 Housing Choice Voucher",
   "listings.section8VoucherInfo": "Kung mayroon kang <strong>Section 8 Housing Choice Voucher</strong> , hindi nalalapat ang mga kinakailangan sa kita at magbabayad ka ng renta batay sa iyong kita",

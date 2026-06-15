@@ -1038,6 +1038,7 @@
   "listings.reservedUnits": "保留单位",
   "listings.reservedUnitsDescription": "您或您的家庭成員必須符合以下其中一項條件，才符合這些單位的申請資格：",
   "listings.reservedUnitsForWhoAre": "保留給是 %{reservedType} 的 %{communityType}",
+  "listings.scheduledApplicationOpen": "申请可于%{openDate}日开始提交。",
   "listings.search.subNote": "输入完整或部分列表名称",
   "listings.section8Acceptance": "接受第 8 部分住房选择券",
   "listings.section8VoucherInfo": "如果您有<strong>第 8 部分住房选择券</strong>，则收入要求不适用，您将根据您的收入支付租金",

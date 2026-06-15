@@ -1035,6 +1035,7 @@
   "listings.reservedUnits": "واحدهای رزرو شده",
   "listings.reservedUnitsDescription": "برای واجد شرایط بودن برای این واحدها، یکی از موارد زیر باید در مورد شما یا یکی از اعضای خانواده‌تان صدق کند:",
   "listings.reservedUnitsForWhoAre": "برای %{communityType} که %{reservedType} هستند، رزرو شده است",
+  "listings.scheduledApplicationOpen": "درخواست‌ها می‌توانند از %{openDate} ارسال شوند",
   "listings.search.subNote": "نام کامل یا جزئی آگهی را وارد کنید",
   "listings.section8Acceptance": "کوپن‌های انتخاب مسکن بخش ۸ را می‌پذیرد",
   "listings.section8VoucherInfo": "اگر <strong>کوپن انتخاب مسکن بخش ۸</strong> دارید، شرایط درآمدی اعمال نمی‌شود و شما بر اساس درآمد خود اجاره بها را پرداخت خواهید کرد.",
