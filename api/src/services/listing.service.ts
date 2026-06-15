@@ -2309,18 +2309,10 @@ export class ListingService implements OnModuleInit {
         );
       }
 
-      incomingDto.scheduledApplicationOpenAt =
-        incomingDto.scheduledApplicationOpenAt
-          ? this.normalizeScheduledApplicationOpenAt(
-              incomingDto.scheduledApplicationOpenAt,
-            )
-          : null;
-      // test if not publishing or unpublishing listing and scheduledApplicationOpenAt is set
-      if (
-        incomingDto.status === storedListing.status &&
-        incomingDto.status !== ListingsStatusEnum.active &&
-        incomingDto.scheduledApplicationOpenAt
-      ) {
+      if (incomingDto.scheduledApplicationOpenAt) {
+        this.normalizeScheduledApplicationOpenAt(
+          incomingDto.scheduledApplicationOpenAt,
+        );
         this.checkScheduledDateIsInFuture(
           incomingDto.scheduledApplicationOpenAt,
           'scheduledApplicationOpenAt',
