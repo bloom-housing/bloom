@@ -48,7 +48,7 @@ export class AppService implements OnModuleInit {
     );
     try {
       const files = await fs.promises.readdir(join(process.cwd(), 'src/temp/'));
-      const filesToDelete = files.filter((f) => !f.includes('.git'));
+      const filesToDelete = files.filter((f) => f !== '.gitignore');
       await Promise.all(
         filesToDelete.map((f) =>
           fs.promises.rm(join(process.cwd(), 'src/temp/', f), {
@@ -60,6 +60,7 @@ export class AppService implements OnModuleInit {
         `listing csv clear job completed: ${filesToDelete.length} files were deleted`,
       );
     } catch (e) {
+      this.logger.error('listing csv clear job failed', e);
       throw new InternalServerErrorException(e);
     }
     return {
