@@ -48,7 +48,7 @@ describe('Testing app service', () => {
     it('should delete non-.git files and return success', async () => {
       jest
         .spyOn(fs.promises, 'readdir')
-        .mockResolvedValue(['file1.csv', 'file2.zip', '.gitkeep'] as any);
+        .mockResolvedValue(['file1.csv', 'file2.zip', '.gitignore'] as any);
       const rmSpy = jest.spyOn(fs.promises, 'rm').mockResolvedValue(undefined);
 
       const result = await service.clearTempFiles();
@@ -64,7 +64,7 @@ describe('Testing app service', () => {
         { recursive: true },
       );
       expect(rmSpy).not.toHaveBeenCalledWith(
-        expect.stringContaining('.gitkeep'),
+        expect.stringContaining('.gitignore'),
         expect.anything(),
       );
     });
