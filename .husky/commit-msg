@@ -1,0 +1,5 @@
+#!/bin/sh
+echo "\n(1) Verifying conventional commit format... \n   (If this fails, install commitizen and commit with 'git cz' to automate the formatting!)\n----------"
+npx --no-install commitlint --edit "$1"
+echo "\n(2) Linting...\n----------"
+npx --no-install lint-staged
