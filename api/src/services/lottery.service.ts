@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
+  ApplicationSubmissionTypeEnum,
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
@@ -395,6 +396,9 @@ export class LotteryService {
         listingId,
         markedAsDuplicate: {
           not: true,
+        },
+        submissionType: {
+          not: ApplicationSubmissionTypeEnum.paper,
         },
       },
     });
