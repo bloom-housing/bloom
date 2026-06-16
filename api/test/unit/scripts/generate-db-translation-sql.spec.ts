@@ -55,6 +55,32 @@ describe('generate-db-translation-sql helpers', () => {
     );
   });
 
+  it('merges into existing sub-object for depth-3 paths instead of replacing it', () => {
+    const sql = buildSql(
+      {
+        en: [
+          {
+            path: [
+              'rentalOpportunity',
+              'accessibilityType',
+              'hearingAndVision',
+            ],
+            value: 'Hearing/Vision',
+          },
+        ],
+      } as any,
+      ['en'],
+    );
+
+    // Should merge into the existing accessibilityType sub-object, not replace it
+    expect(sql).toContain(
+      "COALESCE(translations->'rentalOpportunity'->'accessibilityType', '{}'::jsonb) ||",
+    );
+    expect(sql).not.toContain(
+      "jsonb_set(COALESCE(translations, '{}'::jsonb), '{rentalOpportunity,accessibilityType}', '{\"hearingAndVision\"",
+    );
+  });
+
   it('builds non-destructive SQL with coalesced root and nested jsonb_set paths', () => {
     const sql = buildSql(
       {

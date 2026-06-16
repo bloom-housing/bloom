@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react"
 import Markdown from "markdown-to-jsx"
 import { EditorContent, Editor } from "@tiptap/react"
 import { StarterKit } from "@tiptap/starter-kit"
-import { Link as LinkExtension } from "@tiptap/extension-link"
+import { CharacterCount } from "@tiptap/extension-character-count"
 import BoldIcon from "@heroicons/react/16/solid/BoldIcon"
 import BulletListIcon from "@heroicons/react/16/solid/ListBulletIcon"
 import OrderedListIcon from "@heroicons/react/16/solid/NumberedListIcon"
@@ -14,48 +14,49 @@ import { t } from "@bloom-housing/ui-components"
 import styles from "./TextEditor.module.scss"
 
 export const EditorExtensions = [
+  CharacterCount,
   StarterKit.configure({
     heading: false,
     code: false,
     blockquote: false,
     codeBlock: false,
     italic: false,
-  }),
-  LinkExtension.configure({
-    openOnClick: true,
-    autolink: true,
-    defaultProtocol: "https",
-    protocols: [
-      "http",
-      "https",
-      { scheme: "mailto", optionalSlashes: true },
-      { scheme: "tel", optionalSlashes: true },
-    ],
-    isAllowedUri: (url, ctx) => {
-      try {
-        // construct URL
-        const parsedUrl = url.includes(":")
-          ? new URL(url)
-          : new URL(`${ctx.defaultProtocol}://${url}`)
+    link: {
+      openOnClick: true,
+      autolink: true,
+      defaultProtocol: "https",
+      protocols: [
+        "http",
+        "https",
+        { scheme: "mailto", optionalSlashes: true },
+        { scheme: "tel", optionalSlashes: true },
+      ],
+      isAllowedUri: (url, ctx) => {
+        try {
+          // construct URL
+          const parsedUrl = url.includes(":")
+            ? new URL(url)
+            : new URL(`${ctx.defaultProtocol}://${url}`)
 
-        // use default validation
-        if (!ctx.defaultValidate(parsedUrl.href)) {
+          // use default validation
+          if (!ctx.defaultValidate(parsedUrl.href)) {
+            return false
+          }
+
+          const protocol = parsedUrl.protocol.replace(":", "")
+
+          // only allow protocols specified in ctx.protocols
+          const allowedProtocols = ctx.protocols.map((p) => (typeof p === "string" ? p : p.scheme))
+
+          if (!allowedProtocols.includes(protocol)) {
+            return false
+          }
+
+          return true
+        } catch {
           return false
         }
-
-        const protocol = parsedUrl.protocol.replace(":", "")
-
-        // only allow protocols specified in ctx.protocols
-        const allowedProtocols = ctx.protocols.map((p) => (typeof p === "string" ? p : p.scheme))
-
-        if (!allowedProtocols.includes(protocol)) {
-          return false
-        }
-
-        return true
-      } catch {
-        return false
-      }
+      },
     },
   }),
 ]
@@ -77,15 +78,18 @@ const MenuBar = ({ editor }) => {
       return
     }
 
+    // Prepend https:// if the user typed a bare URL with no protocol.
+    const href = /^[a-z][a-z0-9+.-]*:/i.test(url) ? url : `https://${url}`
+
     // update link
     try {
-      editor?.chain().focus().extendMarkRange("link").setLink({ href: url }).run()
+      editor?.chain().focus().extendMarkRange("link").setLink({ href }).run()
     } catch (e) {
       alert(e.message)
     }
   }, [editor])
 
-  if (!editor) {
+  if (!editor || editor.isDestroyed) {
     return null
   }
 
@@ -245,15 +249,19 @@ export const TextEditor = ({
   label,
 }: TextEditorProps) => {
   const [errorState, setErrorState] = useState(error)
+  const [characterCount, setCharacterCount] = useState(
+    () => editor?.storage?.characterCount?.characters() ?? 0
+  )
 
   const labelId = `${editorId}Label`
 
-  if (!editor) {
+  if (!editor || editor.isDestroyed) {
     return null
   }
 
   editor.on("update", () => {
     if (errorState) setErrorState(false)
+    setCharacterCount(editor?.storage?.characterCount?.characters() ?? 0)
   })
 
   editor.on("create", () => {
@@ -261,8 +269,6 @@ export const TextEditor = ({
       attributes: { "aria-labelledby": labelId, role: "textbox" },
     })
   })
-
-  const characterCount = editor?.storage?.characterCount?.characters()
   const overLimit = characterCount > characterLimit
 
   return (
