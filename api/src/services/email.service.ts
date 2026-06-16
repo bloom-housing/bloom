@@ -25,6 +25,7 @@ import { Listing } from '../dtos/listings/listing.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { User } from '../dtos/users/user.dto';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { JurisdictionViews } from '../enums/jurisdictions/view-enum';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { getPublicEmailURL } from '../utilities/get-public-email-url';
 import type { ApplicationStatusChangeItem } from '../utilities/applicationStatusChanges';
@@ -160,10 +161,12 @@ export class EmailService {
     if (jurisdictionIds?.length === 1) {
       return await this.jurisdictionService.findOne({
         jurisdictionId: jurisdictionIds[0]?.id,
+        view: JurisdictionViews.full,
       });
     } else if (jurisdictionName) {
       return await this.jurisdictionService.findOne({
         jurisdictionName: jurisdictionName,
+        view: JurisdictionViews.full,
       });
     }
     return null;
@@ -181,6 +184,7 @@ export class EmailService {
     if (jurisdictionIds.length > 1) {
       const firstJurisdiction = await this.jurisdictionService.findOne({
         jurisdictionId: jurisdictionIds[0].id,
+        view: JurisdictionViews.full,
       });
       return firstJurisdiction?.emailFromAddress || '';
     }
