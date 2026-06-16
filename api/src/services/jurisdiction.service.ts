@@ -117,7 +117,6 @@ export class JurisdictionService {
     jurisdictionName?: string;
     view?: JurisdictionViews;
   }): Promise<Jurisdiction> {
-    console.warn('here');
     if (!condition.jurisdictionId && !condition.jurisdictionName) {
       throw new BadRequestException(
         'a jurisdiction id or jurisdiction name must be provided',

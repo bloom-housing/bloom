@@ -25,6 +25,7 @@ import { Listing } from '../dtos/listings/listing.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { User } from '../dtos/users/user.dto';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { JurisdictionViews } from '../enums/jurisdictions/view-enum';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { getPublicEmailURL } from '../utilities/get-public-email-url';
 import type { ApplicationStatusChangeItem } from '../utilities/applicationStatusChanges';
@@ -35,7 +36,6 @@ import {
 } from '../utilities/listing-data-formatters';
 import { unitTypeMapping } from '../../prisma/seed-helpers/unit-type-factory';
 import { UnitAccessibilityPriorityTypeEnum } from '../enums/units/accessibility-priority-type-enum';
-import { JurisdictionViews } from 'src/enums/jurisdictions/view-enum';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
