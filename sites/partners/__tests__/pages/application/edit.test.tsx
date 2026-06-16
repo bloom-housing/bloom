@@ -1,16 +1,24 @@
 import React from "react"
 import { expect } from "@jest/globals"
 import EditApplication from "../../../src/pages/application/[id]/edit"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { render, screen, mockNextRouter } from "../../testUtils"
 import userEvent from "@testing-library/user-event"
 import {
   ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
+  FeatureFlag,
   FeatureFlagEnum,
-  LanguagesEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { application, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { rest } from "msw"
+import { setupServer } from "msw/lib/node"
+
+const server = setupServer()
+
+beforeAll(() => {
+  mockNextRouter()
+  server.listen()
+})
 
 describe("application edit page", () => {
   beforeEach(() => {
@@ -18,6 +26,29 @@ describe("application edit page", () => {
     jest.spyOn(require("../../../src/lib/hooks"), "useSingleListingData").mockReturnValue({
       listingDto: listing,
     })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            ...user,
+            listings: [{ id: listing.id }],
+            jurisdictions: [
+              {
+                id: "id",
+                name: "Bloomington",
+                featureFlags: [
+                  {
+                    name: FeatureFlagEnum.enableApplicationStatus,
+                    active: true,
+                  } as FeatureFlag,
+                ],
+              },
+            ],
+          })
+        )
+      })
+    )
   })
 
   it("renders when preferences and programs are not arrays", async () => {
@@ -30,17 +61,7 @@ describe("application edit page", () => {
       },
     })
 
-    render(
-      <AuthContext.Provider
-        value={{
-          profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
-          doJurisdictionsHaveFeatureFlagOn: () => false,
-          getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
-        }}
-      >
-        <EditApplication />
-      </AuthContext.Provider>
-    )
+    render(<EditApplication />)
 
     expect(await screen.findByRole("button", { name: /save & exit/i })).toBeInTheDocument()
   })
@@ -57,18 +78,7 @@ describe("application edit page", () => {
         },
       })
 
-      render(
-        <AuthContext.Provider
-          value={{
-            profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
-            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-              featureFlag === FeatureFlagEnum.enableApplicationStatus,
-            getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
-          }}
-        >
-          <EditApplication />
-        </AuthContext.Provider>
-      )
+      render(<EditApplication />)
 
       expect(screen.queryByText("Are you sure?")).toBeNull()
 
@@ -108,18 +118,7 @@ describe("application edit page", () => {
         },
       })
 
-      render(
-        <AuthContext.Provider
-          value={{
-            profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
-            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-              featureFlag === FeatureFlagEnum.enableApplicationStatus,
-            getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
-          }}
-        >
-          <EditApplication />
-        </AuthContext.Provider>
-      )
+      render(<EditApplication />)
 
       const statusSelect = await screen.findByLabelText("Status")
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.waitlistDeclined)
@@ -152,18 +151,7 @@ describe("application edit page", () => {
         },
       })
 
-      render(
-        <AuthContext.Provider
-          value={{
-            profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
-            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-              featureFlag === FeatureFlagEnum.enableApplicationStatus,
-            getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
-          }}
-        >
-          <EditApplication />
-        </AuthContext.Provider>
-      )
+      render(<EditApplication />)
 
       const statusSelect = await screen.findByLabelText("Status")
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.waitlist)
@@ -201,18 +189,7 @@ describe("application edit page", () => {
         },
       })
 
-      render(
-        <AuthContext.Provider
-          value={{
-            profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
-            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-              featureFlag === FeatureFlagEnum.enableApplicationStatus,
-            getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
-          }}
-        >
-          <EditApplication />
-        </AuthContext.Provider>
-      )
+      render(<EditApplication />)
 
       const accessibleInput = await screen.findByLabelText("Accessible unit wait list (AUWL)")
       await userEvent.clear(accessibleInput)
