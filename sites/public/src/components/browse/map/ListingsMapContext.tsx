@@ -46,6 +46,7 @@ export type ListingsMapContextValue = {
   onPageChange: (page: number) => void
   infoWindowIndex: number | null
   setInfoWindowIndex: React.Dispatch<React.SetStateAction<number | null>>
+  notificationsSignUpUrl?: string
 }
 
 export const ListingsMapContext = createContext<ListingsMapContextValue | null>(null)

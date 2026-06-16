@@ -368,6 +368,7 @@ function ListingsSearchCombined() {
     onPageChange,
     infoWindowIndex,
     setInfoWindowIndex,
+    notificationsSignUpUrl: props.notificationsSignUpUrl,
   }
 
   return (

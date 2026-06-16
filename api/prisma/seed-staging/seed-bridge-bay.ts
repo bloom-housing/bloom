@@ -1505,12 +1505,12 @@ export const realisticAddressesForActive = [
     county: 'San Flor',
   },
   {
-    street: '1120A Madera Avenue, Menlo Park, CA 94025',
+    street: '1120A Madera Avenue',
     city: 'Menlo Park',
     state: 'CA',
     zipCode: '94025',
-    latitude: 36.961738,
-    longitude: -120.064487,
+    latitude: 37.47197516388515,
+    longitude: -122.15722059781827,
     county: 'San Flor',
   },
   {
