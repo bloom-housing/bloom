@@ -9,6 +9,7 @@ import {
   ValidateNested,
   IsBoolean,
   IsNumber,
+  IsUUID,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
@@ -269,4 +270,9 @@ export class Jurisdiction extends AbstractDTO {
   @Type(() => RaceEthnicityConfiguration)
   @ApiPropertyOptional({ type: RaceEthnicityConfiguration })
   raceEthnicityConfiguration?: RaceEthnicityConfiguration;
+
+  @Expose()
+  @Type(() => IdDTO)
+  @ApiPropertyOptional({ isArray: true, type: IdDTO })
+  subJurisdictions?: IdDTO[];
 }

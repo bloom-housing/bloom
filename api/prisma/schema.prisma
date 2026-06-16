@@ -804,6 +804,8 @@ model Jurisdictions {
   referralSummaryDefault              String?                             @map("referral_summary_default")
   rentalAssistanceDefault             String                              @map("rental_assistance_default")
   requiredListingFields               String[]                            @default([]) @map("required_listing_fields")
+  subJurisdictions                    Jurisdictions[]                     @relation("SubJurisdictions")
+  parentJurisdictions                 Jurisdictions[]                     @relation("SubJurisdictions")
   visibleAccessibilityPriorityTypes   UnitAccessibilityPriorityTypeEnum[] @default([mobility, hearing, vision, hearingAndVision, mobilityAndHearing, mobilityAndVision, mobilityHearingAndVision]) @map("visible_accessibility_priority_types")
   visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[]         @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
   visibleSpokenLanguages              SpokenLanguageEnum[]                @default([chineseCantonese, chineseMandarin, english, filipino, korean, russian, spanish, vietnamese, farsi, afghani, notListed]) @map("visible_spoken_languages")

@@ -1,4 +1,7 @@
-import { ElmVillageApplication, autofillBlueSkyApplication } from "../../mockData/applicationData"
+import {
+  ElmVillageApplication,
+  autofillBlueSkyApplication,
+} from "../../../mockData/applicationData"
 
 describe("Submit", function () {
   it("should submit an application for the Elm Village listing, then autofill and submit an application for Blue Sky Apartments", function () {

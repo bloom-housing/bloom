@@ -237,7 +237,8 @@ export default function ListingsList() {
         sortable: false,
         filter: false,
         resizable: true,
-        valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
+        valueFormatter: ({ value }) =>
+          value ? dayjs.utc(value).format("MM/DD/YYYY") : t("t.none"),
         maxWidth: 180,
       })
     }

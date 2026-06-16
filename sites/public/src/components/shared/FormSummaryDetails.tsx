@@ -354,7 +354,7 @@ const FormSummaryDetails = ({
             }
             className={styles["summary-value"]}
           >
-            {application.applicant.phoneNumber}
+            <span dir="ltr">{application.applicant.phoneNumber}</span>
           </FieldValue>
         )}
         {application.additionalPhoneNumber && (
@@ -369,7 +369,7 @@ const FormSummaryDetails = ({
             }
             className={styles["summary-value"]}
           >
-            {application.additionalPhoneNumber}
+            <span dir="ltr">{application.additionalPhoneNumber}</span>
           </FieldValue>
         )}
         {application.applicant.emailAddress && (
@@ -487,7 +487,7 @@ const FormSummaryDetails = ({
                 label={t("t.phone")}
                 className={styles["summary-value"]}
               >
-                {application.alternateContact.phoneNumber}
+                <span dir="ltr">{application.alternateContact.phoneNumber}</span>
               </FieldValue>
             )}
 
