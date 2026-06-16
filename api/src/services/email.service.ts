@@ -35,6 +35,7 @@ import {
 } from '../utilities/listing-data-formatters';
 import { unitTypeMapping } from '../../prisma/seed-helpers/unit-type-factory';
 import { UnitAccessibilityPriorityTypeEnum } from '../enums/units/accessibility-priority-type-enum';
+import { JurisdictionViews } from 'src/enums/jurisdictions/view-enum';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
@@ -160,10 +161,12 @@ export class EmailService {
     if (jurisdictionIds?.length === 1) {
       return await this.jurisdictionService.findOne({
         jurisdictionId: jurisdictionIds[0]?.id,
+        view: JurisdictionViews.full,
       });
     } else if (jurisdictionName) {
       return await this.jurisdictionService.findOne({
         jurisdictionName: jurisdictionName,
+        view: JurisdictionViews.full,
       });
     }
     return null;
@@ -181,6 +184,7 @@ export class EmailService {
     if (jurisdictionIds.length > 1) {
       const firstJurisdiction = await this.jurisdictionService.findOne({
         jurisdictionId: jurisdictionIds[0].id,
+        view: JurisdictionViews.full,
       });
       return firstJurisdiction?.emailFromAddress || '';
     }
