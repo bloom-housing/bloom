@@ -681,7 +681,7 @@ describe('Application flagged set Controller Tests', () => {
       await createComplexApplication('2', 1, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set('Cookie', adminAccessToken)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
@@ -704,7 +704,7 @@ describe('Application flagged set Controller Tests', () => {
       await createComplexApplication('1', 1, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set('Cookie', adminAccessToken)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
@@ -737,7 +737,7 @@ describe('Application flagged set Controller Tests', () => {
         workInRegion: YesNoEnum.yes,
       });
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set('Cookie', adminAccessToken)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
@@ -832,7 +832,7 @@ describe('Application flagged set Controller Tests', () => {
       await createComplexApplication('2', 1, listing, 'TEST');
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -855,7 +855,7 @@ describe('Application flagged set Controller Tests', () => {
       const appB = await createComplexApplication('1', 2, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -900,7 +900,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -928,7 +928,7 @@ describe('Application flagged set Controller Tests', () => {
       const appB = await createComplexApplication('2', 1, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -973,7 +973,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1001,7 +1001,7 @@ describe('Application flagged set Controller Tests', () => {
       await createComplexApplication('1', 2, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1047,7 +1047,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1072,7 +1072,7 @@ describe('Application flagged set Controller Tests', () => {
       await createComplexApplication('1', 3, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1119,7 +1119,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1144,7 +1144,7 @@ describe('Application flagged set Controller Tests', () => {
       await createComplexApplication('2', 1, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1194,7 +1194,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1219,7 +1219,7 @@ describe('Application flagged set Controller Tests', () => {
       const appC = await createComplexApplication('1', 3, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1269,7 +1269,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1297,7 +1297,7 @@ describe('Application flagged set Controller Tests', () => {
       const appC = await createComplexApplication('3', 1, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1351,7 +1351,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set('Cookie', adminAccessToken)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
@@ -1382,7 +1382,7 @@ describe('Application flagged set Controller Tests', () => {
       const appD = await createComplexApplication('3', 4, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1445,7 +1445,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1476,7 +1476,7 @@ describe('Application flagged set Controller Tests', () => {
       const appD = await createComplexApplication('4', 3, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1543,7 +1543,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1579,7 +1579,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set('Cookie', adminAccessToken)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
@@ -1617,7 +1617,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set('Cookie', adminAccessToken)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
@@ -1650,7 +1650,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1673,7 +1673,7 @@ describe('Application flagged set Controller Tests', () => {
       const appC = await createComplexApplication('1', 3, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1728,7 +1728,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1756,7 +1756,7 @@ describe('Application flagged set Controller Tests', () => {
       const appC = await createComplexApplication('3', 1, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1811,7 +1811,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1839,7 +1839,7 @@ describe('Application flagged set Controller Tests', () => {
       await createComplexApplication('2', 1, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1881,7 +1881,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1909,7 +1909,7 @@ describe('Application flagged set Controller Tests', () => {
       await createComplexApplication('4', 3, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1970,7 +1970,7 @@ describe('Application flagged set Controller Tests', () => {
         },
       });
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
