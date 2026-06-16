@@ -16,8 +16,8 @@ const renderConfirmationModal = (
   authContextOverrides: Record<string, unknown> = {},
   query: Record<string, unknown> = {}
 ) => {
-  mockNextRouter(query)
-  return render(
+  const { pushMock } = mockNextRouter(query)
+  const renderResult = render(
     <MessageContext.Provider value={TOAST_MESSAGE}>
       <AuthContext.Provider
         value={{
@@ -34,6 +34,7 @@ const renderConfirmationModal = (
       </AuthContext.Provider>
     </MessageContext.Provider>
   )
+  return { ...renderResult, pushMock }
 }
 
 beforeAll(() => {
@@ -118,6 +119,68 @@ describe("ConfirmationModal", () => {
       expect(pushMock).toHaveBeenCalledWith(
         expect.objectContaining({ pathname: "/account/dashboard" })
       )
+    })
+  })
+
+  describe("redirect URL validation with showMandatedAccounts", () => {
+    let originalShowMandatedAccounts: string
+
+    beforeEach(() => {
+      originalShowMandatedAccounts = process.env.showMandatedAccounts
+      process.env.showMandatedAccounts = "TRUE"
+      mockConfirmAccount.mockResolvedValue(undefined)
+    })
+
+    afterEach(() => {
+      process.env.showMandatedAccounts = originalShowMandatedAccounts
+    })
+
+    it("redirects to a valid internal redirectUrl", async () => {
+      const { pushMock } = renderConfirmationModal(
+        {},
+        { token: "abc123", redirectUrl: "/listings/abc", listingId: "abc" }
+      )
+      await waitFor(() => {
+        expect(pushMock).toHaveBeenCalledWith(
+          expect.objectContaining({ pathname: "/listings/abc" })
+        )
+      })
+    })
+
+    it("falls back to /account/dashboard for an external redirectUrl", async () => {
+      const { pushMock } = renderConfirmationModal(
+        {},
+        { token: "abc123", redirectUrl: "https://bad.com", listingId: "abc" }
+      )
+      await waitFor(() => {
+        expect(pushMock).toHaveBeenCalledWith(
+          expect.objectContaining({ pathname: "/account/dashboard" })
+        )
+      })
+    })
+
+    it("falls back to /account/dashboard for a protocol-relative redirectUrl", async () => {
+      const { pushMock } = renderConfirmationModal(
+        {},
+        { token: "abc123", redirectUrl: "//bad.com", listingId: "abc" }
+      )
+      await waitFor(() => {
+        expect(pushMock).toHaveBeenCalledWith(
+          expect.objectContaining({ pathname: "/account/dashboard" })
+        )
+      })
+    })
+
+    it("falls back to /account/dashboard for a javascript: redirectUrl", async () => {
+      const { pushMock } = renderConfirmationModal(
+        {},
+        { token: "abc123", redirectUrl: "javascript:alert(1)", listingId: "abc" }
+      )
+      await waitFor(() => {
+        expect(pushMock).toHaveBeenCalledWith(
+          expect.objectContaining({ pathname: "/account/dashboard" })
+        )
+      })
     })
   })
 

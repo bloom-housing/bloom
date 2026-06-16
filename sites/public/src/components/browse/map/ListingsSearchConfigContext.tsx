@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react"
 import {
   FeatureFlagEnum,
+  IdDTO,
   ListingFeaturesConfiguration,
   MultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -8,12 +9,11 @@ import { FormOption } from "../../../lib/listings/search"
 
 export type ListingsSearchConfig = {
   searchString?: string
-  jurisdictionIds?: string[]
   googleMapsApiKey: string
   googleMapsMapId: string
   bedrooms: FormOption[]
   bathrooms: FormOption[]
-  jurisdictions: FormOption[]
+  jurisdictions: IdDTO[]
   activeFeatureFlags?: FeatureFlagEnum[]
   multiselectData: MultiselectQuestion[]
   regions?: string[]

@@ -981,6 +981,20 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
+        if (filter[ListingFilterKeys.jurisdictions]) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: filter[ListingFilterKeys.jurisdictions],
+            key: ListingFilterKeys.jurisdictions,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: builtFilter.map((filt) => ({
+              jurisdictionId: filt,
+            })),
+          });
+        }
         if (filter[ListingFilterKeys.jurisdiction]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
