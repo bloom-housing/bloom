@@ -726,7 +726,9 @@ export class EmailService {
       await this.send(
         emails,
         jurisdiction.emailFromAddress,
-        this.polyglot.t('listingApproved.header'),
+        this.polyglot.t('listingApproved.header', {
+          listingName: listingInfo.name,
+        }),
         this.template('listing-approved')({
           appOptions: { listingName: listingInfo.name },
           listingUrl: `${publicUrl}/listing/${listingInfo.id}`,
@@ -734,6 +736,69 @@ export class EmailService {
       );
     } catch (err) {
       console.log('listing approval email failed', err);
+      throw new HttpException('email failed', 500);
+    }
+  }
+
+  public async listingScheduled(
+    jurisdictionId: IdDTO,
+    listingInfo: IdDTO,
+    emails: string[],
+    scheduledPublishAt: Date,
+  ) {
+    try {
+      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      void (await this.loadTranslations(jurisdiction));
+      this.logger.log(
+        `Sending listing scheduled email for listing ${listingInfo.name} to ${emails.length} emails`,
+      );
+
+      const formattedDate = dayjs
+        .utc(scheduledPublishAt)
+        .tz(process.env.TIME_ZONE)
+        .format('MM/DD/YYYY');
+
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t('listingScheduled.subject', {
+          listingName: listingInfo.name,
+        }),
+        this.template('listing-scheduled')({
+          appOptions: { listingName: listingInfo.name, date: formattedDate },
+        }),
+      );
+    } catch (err) {
+      console.log('listing scheduled email failed', err);
+      throw new HttpException('email failed', 500);
+    }
+  }
+
+  public async listingPublished(
+    jurisdictionId: IdDTO,
+    listingInfo: IdDTO,
+    emails: string[],
+    publicUrl: string,
+  ) {
+    try {
+      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      void (await this.loadTranslations(jurisdiction));
+      this.logger.log(
+        `Sending listing published email for listing ${listingInfo.name} to ${emails.length} emails`,
+      );
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t('listingPublished.subject', {
+          listingName: listingInfo.name,
+        }),
+        this.template('listing-published')({
+          appOptions: { listingName: listingInfo.name },
+          listingUrl: `${publicUrl}/listing/${listingInfo.id}`,
+        }),
+      );
+    } catch (err) {
+      console.log('listing published email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
