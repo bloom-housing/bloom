@@ -33,14 +33,14 @@ const ApplicationVouchers = () => {
     ? 4
     : 3
 
-  const enableSection8vsRentalAssistance = isFeatureFlagOn(
+  const enableMultiselectVoucherQuestion = isFeatureFlagOn(
     conductor.config,
-    FeatureFlagEnum.enableSection8vsRentalAssistance
+    FeatureFlagEnum.enableMultiselectVoucherQuestion
   )
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues, trigger, setValue } = useForm({
-    defaultValues: enableSection8vsRentalAssistance
+    defaultValues: enableMultiselectVoucherQuestion
       ? {
           incomeVouchers: application.incomeVouchers ?? [],
         }
@@ -55,7 +55,7 @@ const ApplicationVouchers = () => {
     if (!validation) return
 
     let toSave: { incomeVouchers: string[] }
-    if (enableSection8vsRentalAssistance) {
+    if (enableMultiselectVoucherQuestion) {
       const selected = Object.values(data).filter((val) => val !== false)
       toSave = { incomeVouchers: selected as string[] }
     } else {
@@ -87,12 +87,12 @@ const ApplicationVouchers = () => {
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={
-            !enableSection8vsRentalAssistance
+            !enableMultiselectVoucherQuestion
               ? t("application.financial.vouchers.title")
               : t("application.financial.vouchers.titleAlt")
           }
           subheading={
-            !enableSection8vsRentalAssistance ? (
+            !enableMultiselectVoucherQuestion ? (
               <div>
                 <p className="field-note mb-4">
                   <strong>{t("application.financial.vouchers.housingVouchers.strong")}</strong>
@@ -126,7 +126,7 @@ const ApplicationVouchers = () => {
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="sr-only">{t("application.financial.vouchers.legend")}</legend>
-              {enableSection8vsRentalAssistance ? (
+              {enableMultiselectVoucherQuestion ? (
                 <FieldGroup
                   fieldGroupClassName="grid grid-cols-1"
                   fieldClassName="ml-0"

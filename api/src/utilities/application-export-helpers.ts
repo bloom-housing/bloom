@@ -34,7 +34,7 @@ export const getExportHeaders = (
     enableApplicationStatus?: boolean;
     enableFullTimeStudentQuestion?: boolean;
     enableReasonableAccommodations?: boolean;
-    enableSection8vsRentalAssistance?: boolean;
+    enableMultiselectVoucherQuestion?: boolean;
     enableSpokenLanguage?: boolean;
     enableGenderQuestion?: boolean;
     enableSexualOrientationQuestion?: boolean;
@@ -52,7 +52,7 @@ export const getExportHeaders = (
     enableApplicationStatus,
     enableFullTimeStudentQuestion,
     enableReasonableAccommodations,
-    enableSection8vsRentalAssistance,
+    enableMultiselectVoucherQuestion,
     enableSpokenLanguage,
     enableGenderQuestion,
     enableSexualOrientationQuestion,
@@ -419,7 +419,7 @@ export const getExportHeaders = (
         path: 'incomeVouchers',
         label: 'Vouchers or Subsidies',
         format: (val: string[]): string => {
-          if (!enableSection8vsRentalAssistance) {
+          if (!enableMultiselectVoucherQuestion) {
             return (!val && val.length === 0) || val[0] === 'none'
               ? 'No'
               : 'Yes';

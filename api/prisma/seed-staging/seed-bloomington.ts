@@ -88,7 +88,7 @@ export const createBloomingtonJurisdiction = async (
         FeatureFlagEnum.enableUtilitiesIncluded,
         FeatureFlagEnum.enableWaitlistLottery,
         FeatureFlagEnum.enableWhatToExpectAdditionalField,
-        FeatureFlagEnum.enableSection8vsRentalAssistance,
+        FeatureFlagEnum.enableMultiselectVoucherQuestion,
       ],
       languages: Object.values(LanguagesEnum),
       requiredListingFields: [

@@ -2,17 +2,14 @@ import React from "react"
 import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
-import {
-  IncomePeriodEnum,
-  YesNoEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { IncomePeriodEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type FormHouseholdIncomeProps = {
-  enableSection8vsRentalAssistance?: boolean
+  enableMultiselectVoucherQuestion?: boolean
 }
 
-const FormHouseholdIncome = ({ enableSection8vsRentalAssistance }: FormHouseholdIncomeProps) => {
+const FormHouseholdIncome = ({ enableMultiselectVoucherQuestion }: FormHouseholdIncomeProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -95,43 +92,74 @@ const FormHouseholdIncome = ({ enableSection8vsRentalAssistance }: FormHousehold
             <FieldGroup
               fieldGroupClassName="grid grid-cols-1"
               fieldClassName="ml-0"
-              type={enableSection8vsRentalAssistance ? "checkbox" : "radio"}
+              type={enableMultiselectVoucherQuestion ? "checkbox" : "radio"}
               name={
-                enableSection8vsRentalAssistance
+                enableMultiselectVoucherQuestion
                   ? "application.incomeVouchers"
                   : "application.incomeVouchersYesNo"
               }
               register={register}
               fields={
-                enableSection8vsRentalAssistance
+                enableMultiselectVoucherQuestion
                   ? [
                       {
                         id: "application.incomeVouchers.issuedVouchers",
                         value: "issuedVouchers",
                         label: t("application.financial.vouchers.issuedVouchers"),
+                        inputProps: {
+                          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                            if (e.target.checked) {
+                              setValue("application.incomeVouchers", [
+                                ...new Set([
+                                  ...incomeVouchersValue.filter((v) => v !== "none"),
+                                  "issuedVouchers",
+                                ]),
+                              ])
+                            }
+                          },
+                        },
                       },
                       {
                         id: "application.incomeVouchers.rentalAssistance",
                         value: "rentalAssistance",
                         label: t("application.financial.vouchers.rentalAssistance"),
+                        inputProps: {
+                          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                            if (e.target.checked) {
+                              setValue("application.incomeVouchers", [
+                                ...new Set([
+                                  ...incomeVouchersValue.filter((v) => v !== "none"),
+                                  "rentalAssistance",
+                                ]),
+                              ])
+                            }
+                          },
+                        },
                       },
                       {
                         id: "application.incomeVouchers.none",
                         value: "none",
                         label: t("application.financial.vouchers.none"),
+                        inputProps: {
+                          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                            if (e.target.checked) {
+                              setValue("application.incomeVouchers", ["none"])
+                            }
+                          },
+                        },
                       },
                     ]
                   : [
                       {
                         id: "incomeVoucherYes",
                         value: "incomeVoucher",
-                        label: YesNoEnum.yes,
+                        label: t("t.yes"),
                         defaultChecked: incomeVouchersValue?.includes("incomeVoucher"),
                       },
                       {
                         id: "incomeVoucherNo",
                         value: "none",
-                        label: YesNoEnum.no,
+                        label: t("t.no"),
                         defaultChecked:
                           incomeVouchersValue?.includes("none") || incomeVouchersValue.length === 0,
                       },

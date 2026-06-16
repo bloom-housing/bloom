@@ -7,16 +7,16 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { IncomePeriodEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type DetailsHouseholdIncomeProps = {
-  enableSection8vsRentalAssistance?: boolean
+  enableMultiselectVoucherQuestion?: boolean
 }
 
 const DetailsHouseholdIncome = ({
-  enableSection8vsRentalAssistance,
+  enableMultiselectVoucherQuestion,
 }: DetailsHouseholdIncomeProps) => {
   const application = useContext(ApplicationContext)
 
   const renderVouchers = () => {
-    if (enableSection8vsRentalAssistance) {
+    if (enableMultiselectVoucherQuestion) {
       if (!application.incomeVouchers || application.incomeVouchers.length === 0) {
         return t("t.n/a")
       }

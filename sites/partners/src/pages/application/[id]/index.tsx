@@ -73,8 +73,8 @@ const ApplicationsList = () => {
     listingDto?.jurisdictions.id
   )
 
-  const enableSection8vsRentalAssistance = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableSection8vsRentalAssistance,
+  const enableMultiselectVoucherQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMultiselectVoucherQuestion,
     listingDto?.jurisdictions.id
   )
 
@@ -184,7 +184,7 @@ const ApplicationsList = () => {
                 />
 
                 <DetailsHouseholdIncome
-                  enableSection8vsRentalAssistance={enableSection8vsRentalAssistance}
+                  enableMultiselectVoucherQuestion={enableMultiselectVoucherQuestion}
                 />
 
                 <DetailsMultiselectQuestions

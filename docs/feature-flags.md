@@ -83,7 +83,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableRegions](./feature-flags/enableRegions.md) | When true, the region can be defined for the building address |
 | [enableResources](./feature-flags/enableResources.md) | When true, the public site displays links to resources on various pages |
 | [enableSection8Question](./feature-flags/enableSection8Question.md) | When true, the Section 8 listing data will be visible |
-| [enableSection8vsRentalAssistance](./feature-flags/enableSection8vsRentalAssistance.md) | When true, the vouchers question on the application form becomes a multi-select checkbox experience with Section 8, rental assistance, and none of the above as options |
+| [enableMultiselectVoucherQuestion](./feature-flags/enableMultiselectVoucherQuestion.md) | When true, the vouchers question on the application form becomes a multi-select checkbox experience with Section 8, rental assistance, and none of the above as options |
 | [enableSexualOrientationQuestion](./feature-flags/enableSexualOrientationQuestion.md) | When true, the sexual orientation question is displayed in the public and partner application demographics section |
 | [enableSingleUseCode](./feature-flags/enableSingleUseCode.md) | When true, the backend allows for logging into this jurisdiction using the single use code flow |
 | [enableSmokingPolicyRadio](./feature-flags/enableSmokingPolicyRadio.md) | When true, the listing 'Smoking policy' field is a radio group |

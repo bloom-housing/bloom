@@ -133,10 +133,12 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
-  const enableSection8vsRentalAssistance = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableSection8vsRentalAssistance,
+  const enableMultiselectVoucherQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMultiselectVoucherQuestion,
     listingDto?.jurisdictions.id
   )
+
+  console.log("enableMultiselectVoucherQuestion", enableMultiselectVoucherQuestion)
 
   const units = listingDto?.units
 
@@ -413,7 +415,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                     />
 
                     <FormHouseholdIncome
-                      enableSection8vsRentalAssistance={enableSection8vsRentalAssistance}
+                      enableMultiselectVoucherQuestion={enableMultiselectVoucherQuestion}
                     />
 
                     <FormMultiselectQuestions

@@ -156,8 +156,8 @@ const SubmittedApplicationView = ({
           enableReasonableAccommodations={checkFeatureFlag(
             FeatureFlagEnum.enableReasonableAccommodations
           )}
-          enableSection8vsRentalAssistance={checkFeatureFlag(
-            FeatureFlagEnum.enableSection8vsRentalAssistance
+          enableMultiselectVoucherQuestion={checkFeatureFlag(
+            FeatureFlagEnum.enableMultiselectVoucherQuestion
           )}
           swapCommunityTypeWithPrograms={checkFeatureFlag(
             FeatureFlagEnum.swapCommunityTypeWithPrograms

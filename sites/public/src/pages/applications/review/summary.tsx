@@ -162,9 +162,9 @@ const ApplicationSummary = () => {
               conductor.config,
               FeatureFlagEnum.enableReasonableAccommodations
             )}
-            enableSection8vsRentalAssistance={isFeatureFlagOn(
+            enableMultiselectVoucherQuestion={isFeatureFlagOn(
               conductor.config,
-              FeatureFlagEnum.enableSection8vsRentalAssistance
+              FeatureFlagEnum.enableMultiselectVoucherQuestion
             )}
             swapCommunityTypeWithPrograms={isFeatureFlagOn(
               conductor.config,
