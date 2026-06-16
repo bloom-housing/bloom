@@ -83,6 +83,11 @@ module.exports = withBundleAnalyzer({
       type: "asset/source",
     })
 
+    // @opentelemetry/sdk-node conditionally requires this at runtime only when
+    // producer.opencensus is configured (which it never is here). Marking it
+    // external prevents a webpack "Module not found" error during the build.
+    config.externals = [...(config.externals || []), "@opentelemetry/shim-opencensus"]
+
     // Suppress noisy-but-harmless protobufjs dynamic require warning
     // from @opentelemetry/exporter-metrics-otlp-grpc
     config.ignoreWarnings = [

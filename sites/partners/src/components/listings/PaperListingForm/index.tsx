@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
-import { CharacterCount as CharacterCountExtension } from "@tiptap/extension-character-count"
 import { useEditor } from "@tiptap/react"
 import { t, AlertBox } from "@bloom-housing/ui-components"
 import { Button, Icon, LoadingState, Tabs } from "@bloom-housing/ui-seeds"
@@ -198,13 +197,13 @@ const ListingForm = ({
   const requiredFields = selectedJurisdictionData?.requiredListingFields || []
 
   const whatToExpectEditor = useEditor({
-    extensions: [...EditorExtensions, CharacterCountExtension.configure()],
+    extensions: [...EditorExtensions],
     content: listing?.whatToExpect || selectedJurisdictionData?.whatToExpect,
     immediatelyRender: false,
   })
 
   const whatToExpectAdditionalDetailsEditor = useEditor({
-    extensions: [...EditorExtensions, CharacterCountExtension.configure()],
+    extensions: [...EditorExtensions],
     content:
       listing?.whatToExpectAdditionalText || selectedJurisdictionData?.whatToExpectAdditionalText,
     immediatelyRender: false,
