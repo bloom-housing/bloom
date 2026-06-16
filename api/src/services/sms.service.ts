@@ -13,19 +13,21 @@ export class SmsService {
   awsClient: PinpointSMSVoiceV2Client;
   public constructor() {
     if (process.env.SMS_PROVIDER === 'aws') {
-      let credentials: undefined | AwsCredentialIdentity;
-      const keyId = process.env.AWS_SMS_ACCESS_KEY_ID;
-      const secret = process.env.AWS_SMS_SECRET_ACCESS_KEY;
-      if (keyId && secret) {
-        credentials = {
-          accessKeyId: keyId,
-          secretAccessKey: secret,
-        };
+      if (process.env.AWS_SMS_REGION) {
+        let credentials: undefined | AwsCredentialIdentity;
+        const keyId = process.env.AWS_SMS_ACCESS_KEY_ID;
+        const secret = process.env.AWS_SMS_SECRET_ACCESS_KEY;
+        if (keyId && secret) {
+          credentials = {
+            accessKeyId: keyId,
+            secretAccessKey: secret,
+          };
+        }
+        this.awsClient = new PinpointSMSVoiceV2Client({
+          region: process.env.AWS_SMS_REGION,
+          credentials,
+        });
       }
-      this.awsClient = new PinpointSMSVoiceV2Client({
-        region: process.env.AWS_SMS_REGION,
-        credentials,
-      });
     } else if (
       process.env.TWILIO_ACCOUNT_SID &&
       process.env.TWILIO_AUTH_TOKEN
