@@ -1,5 +1,6 @@
 import { Logger, Module } from '@nestjs/common';
 import { ScriptRunnerController } from '../controllers/script-runner.controller';
+import { BulkUpdateLoadTestController } from '../controllers/bulk-update-load-test.controller';
 import { ScriptRunnerService } from '../services/script-runner.service';
 import { AmiChartModule } from './ami-chart.module';
 import { FeatureFlagModule } from './feature-flag.module';
@@ -19,7 +20,7 @@ import { SnapshotCreateModule } from './snapshot-create.module';
     PrismaModule,
     SnapshotCreateModule,
   ],
-  controllers: [ScriptRunnerController],
+  controllers: [ScriptRunnerController, BulkUpdateLoadTestController],
   providers: [ScriptRunnerService, Logger],
   exports: [ScriptRunnerService],
 })

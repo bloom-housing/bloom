@@ -1522,9 +1522,60 @@ export class ScriptRunnerService {
   }
 
   /**
-   * Load test for the bulk application update processing loop.
+   * Seeds realistic applications (with household members + alternate contact) for load testing.
+   * Safe to run multiple times — each call adds `count` more applications.
+   *
+   * curl -X PUT http://localhost:3100/scriptRunner/seedApplicationsForLoadTest \
+   *   -H "passkey: <API_PASS_KEY>" \
+   *   -H "Content-Type: application/json" \
+   *   -d '{"listingId": "<listingId>", "count": <count>}'
+   */
+  async seedApplicationsForLoadTest(
+    dto: import('../dtos/script-runner/bulk-update-seed.dto').BulkUpdateSeedDTO,
+  ): Promise<SuccessDTO> {
+    const { applicationFactory } = await import(
+      '../../prisma/seed-helpers/application-factory'
+    );
+    const { householdMemberFactoryMany } = await import(
+      '../../prisma/seed-helpers/household-member-factory'
+    );
+    const { randomInt } = await import('crypto');
+
+    this.logger.log(
+      `[BulkUpdateSeed] Seeding ${dto.count} applications for listing ${dto.listingId}`,
+    );
+
+    for (let i = 0; i < dto.count; i++) {
+      const householdSize = randomInt(1, 5);
+      const householdMembers = await householdMemberFactoryMany(
+        householdSize - 1,
+      );
+      const appData = await applicationFactory({
+        listingId: dto.listingId,
+        householdMember: householdMembers,
+      });
+      await this.prisma.applications.create({ data: appData });
+
+      if ((i + 1) % 100 === 0) {
+        this.logger.log(`[BulkUpdateSeed] Created ${i + 1}/${dto.count}`);
+      }
+    }
+
+    this.logger.log(
+      `[BulkUpdateSeed] Done. Created ${dto.count} applications.`,
+    );
+    return { success: true };
+  }
+
+  /**
+   * Load test for the bulk application update processing loop (Option 2: one-by-one).
    * Runs: read → snapshot → no-op write for every application in a listing.
    * Emails are intentionally skipped. Check server logs for detailed timing output.
+   *
+   * curl -X PUT http://localhost:3100/scriptRunner/bulkUpdateLoadTest \
+   *   -H "passkey: <API_PASS_KEY>" \
+   *   -H "Content-Type: application/json" \
+   *   -d '{"listingId": "<listingId>"}'
    */
   async bulkUpdateLoadTest(dto: BulkUpdateLoadTestDTO): Promise<SuccessDTO> {
     const jobStart = Date.now();
@@ -1605,6 +1656,87 @@ export class ScriptRunnerService {
         `avg_read=${Math.round(totalReadMs / totalRecords)}ms ` +
         `avg_snapshot=${Math.round(totalSnapshotMs / totalRecords)}ms ` +
         `avg_write=${Math.round(totalWriteMs / totalRecords)}ms`,
+    );
+
+    return { success: true };
+  }
+
+  /**
+   * Load test for Option 1 (single transaction) approach.
+   * Runs: bulk read → N snapshots → one $transaction with N updates.
+   * Compare results to bulkUpdateLoadTest (Option 2) to quantify the difference.
+   *
+   * curl -X PUT http://localhost:3100/scriptRunner/bulkUpdateTransactionLoadTest \
+   *   -H "passkey: <API_PASS_KEY>" \
+   *   -H "Content-Type: application/json" \
+   *   -d '{"listingId": "<listingId>"}'
+   */
+  async bulkUpdateTransactionLoadTest(
+    dto: BulkUpdateLoadTestDTO,
+  ): Promise<SuccessDTO> {
+    const jobStart = Date.now();
+
+    // Phase 1: bulk read (one query for all IDs + fields)
+    const readStart = Date.now();
+    const applications = await this.prisma.applications.findMany({
+      where: { listingId: dto.listingId },
+      select: {
+        id: true,
+        status: true,
+        applicationDeclineReason: true,
+        applicationDeclineReasonAdditionalDetails: true,
+        manualLotteryPositionNumber: true,
+        accessibleUnitWaitlistNumber: true,
+        conventionalUnitWaitlistNumber: true,
+        submissionDate: true,
+        applicant: {
+          select: { firstName: true, lastName: true },
+        },
+      },
+    });
+    const totalReadMs = Date.now() - readStart;
+    const totalRecords = applications.length;
+
+    this.logger.log(
+      `[BulkUpdateTxLoadTest] Starting: listingId=${dto.listingId} records=${totalRecords} bulk_read=${totalReadMs}ms`,
+    );
+
+    // Phase 2: N snapshots (must happen before the transaction, same as real Option 1)
+    const snapshotStart = Date.now();
+    for (const { id } of applications) {
+      await this.snapshotCreateService.createApplicationSnapshot(id);
+    }
+    const totalSnapshotMs = Date.now() - snapshotStart;
+
+    this.logger.log(
+      `[BulkUpdateTxLoadTest] Snapshots done. total=${totalSnapshotMs}ms avg=${Math.round(
+        totalSnapshotMs / totalRecords,
+      )}ms`,
+    );
+
+    // Phase 3: single transaction with N updates
+    const txStart = Date.now();
+    await this.prisma.$transaction(
+      applications.map(({ id }) =>
+        this.prisma.applications.update({
+          where: { id },
+          data: { updatedAt: new Date() },
+        }),
+      ),
+    );
+    const totalTxMs = Date.now() - txStart;
+
+    const totalMs = Date.now() - jobStart;
+    this.logger.log(
+      `[BulkUpdateTxLoadTest] Done. ` +
+        `records=${totalRecords} ` +
+        `total=${Math.round(totalMs / 1000)}s ` +
+        `bulk_read=${totalReadMs}ms ` +
+        `snapshots=${totalSnapshotMs}ms (avg ${Math.round(
+          totalSnapshotMs / totalRecords,
+        )}ms) ` +
+        `transaction=${totalTxMs}ms ` +
+        `avg_per_record=${Math.round(totalMs / totalRecords)}ms`,
     );
 
     return { success: true };
