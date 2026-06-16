@@ -621,7 +621,7 @@ describe('Application flagged set Controller Tests', () => {
       await createComplexApplication('2', 2, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
