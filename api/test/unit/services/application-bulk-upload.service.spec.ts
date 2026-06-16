@@ -175,9 +175,9 @@ describe('Testing application bulk upload services', () => {
       const headers =
         '"Application Id","Applicant First Name","Applicant Last Name","Application Submission Date","Lottery Position Number","Application Status","Application Decline Reason","Application Decline Reason Additional Details","Waitlist Position (Accessible Unit)","Waitlist Position (Conventional Unit)"';
 
-      const rowOne = `"${applicationsSet[0].id}","Colleen","Tawnee","05-18-2026 10:00:00PM GMT+2",,"Declined","householdSizeTooLarge","Some additional details",,`;
-      const rowTwo = `"${applicationsSet[1].id}","Erin","Patsy","04-01-2026 10:00:00PM GMT+2",,"Submitted",,,"2",`;
-      const rowThree = `"${applicationsSet[2].id}","Nanny","Hayley","07-22-2026 10:00:00PM GMT+2",,"Waitlist",,,,"5"`;
+      const rowOne = `"${applicationsSet[0].id}","Colleen","Tawnee","05-19-2026 03:00:00PM PDT",,"Declined","householdSizeTooLarge","Some additional details",,`;
+      const rowTwo = `"${applicationsSet[1].id}","Erin","Patsy","04-02-2026 03:00:00AM PDT",,"Submitted",,,"2",`;
+      const rowThree = `"${applicationsSet[2].id}","Nanny","Hayley","07-23-2026 08:30:00AM PDT",,"Waitlist",,,,"5"`;
 
       expect(content).toContain(headers);
       expect(content).toContain(rowOne);
