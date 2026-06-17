@@ -1,6 +1,7 @@
 {
   "account.accountSettings": "Account settings",
   "account.accountSettingsSubtitle": "Account settings, email and password",
+  "account.accountSettingsSubtitleWithNotifications": "Account settings, email, password and notifications",
   "account.accountSettingsUpdate": "Update account settings",
   "account.allMyApplications": "All my applications",
   "account.allMyApplicationsSubtitle": "See listings for properties for which you’ve applied.",

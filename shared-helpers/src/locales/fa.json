@@ -1,6 +1,7 @@
 {
   "account.accountSettings": "تنظیمات حساب",
   "account.accountSettingsSubtitle": "تنظیمات حساب، ایمیل و رمز عبور",
+  "account.accountSettingsSubtitleWithNotifications": "تنظیمات حساب، ایمیل، رمز عبور و اعلان‌ها",
   "account.accountSettingsUpdate": "تنظیمات حساب را به‌روزرسانی کنید",
   "account.allMyApplications": "تمام برنامه‌های من",
   "account.allMyApplicationsSubtitle": "لیست املاکی که برای آنها درخواست داده‌اید را مشاهده کنید.",
@@ -198,7 +199,7 @@
   "application.contact.givenName": "نام داده شده",
   "application.contact.mailingAddress": "آدرس پستی",
   "application.contact.noPhoneNumber": "شماره تلفن ندارم",
-  "application.contact.number.subNote": "ده رقمی، مثلاً \u2066999-999-9999\u2069",
+  "application.contact.number.subNote": "ده رقمی، مثلاً ⁦999-999-9999⁩",
   "application.contact.number": "شماره",
   "application.contact.phoneNumberTypes.cell": "سلول",
   "application.contact.phoneNumberTypes.home": "خانه",

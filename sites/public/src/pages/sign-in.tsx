@@ -42,7 +42,8 @@ const SignIn = (props: SignInProps) => {
   const { addToast } = useContext(MessageContext)
   const router = useRouter()
 
-  const { login, requestSingleUseCode, userService } = useContext(AuthContext)
+  const { login, requestSingleUseCode, userService, initialStateLoaded, profile } =
+    useContext(AuthContext)
   const signUpCopy = process.env.showMandatedAccounts
   const reCaptchaEnabled = !!process.env.reCaptchaKey
 
@@ -83,6 +84,14 @@ const SignIn = (props: SignInProps) => {
     reset: resetResendConfirmation,
     isLoading: isResendConfirmationLoading,
   } = useMutate<SuccessDTO>()
+
+  useEffect(() => {
+    if (initialStateLoaded && profile) {
+      const redirectUrl = (router.query?.redirectUrl as string) || "/account/dashboard"
+      void router.push(redirectUrl)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialStateLoaded, profile])
 
   useEffect(() => {
     pushGtmEvent<PageView>({

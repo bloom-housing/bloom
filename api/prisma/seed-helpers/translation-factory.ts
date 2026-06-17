@@ -175,7 +175,7 @@ const translations = (
           address: 'Dirección',
           neighborhood: 'Vecindario',
           region: 'Región',
-          unitType: 'Tipo de unidad',
+          unitType: 'Unidades accesibles disponibles',
           accessibilityType: {
             hearing: 'Auditiva',
             mobility: 'Movilidad',
@@ -275,7 +275,7 @@ const translations = (
           address: 'Địa chỉ',
           neighborhood: 'Khu phố',
           region: 'Vùng đất',
-          unitType: 'Loại căn hộ',
+          unitType: 'Các căn hộ có sẵn',
           accessibilityType: {
             hearing: 'Thính giác',
             mobility: 'Di chuyển',
@@ -370,7 +370,7 @@ const translations = (
           address: '地址',
           neighborhood: '街区',
           region: '地区',
-          unitType: '单元类型',
+          unitType: '可用的无障碍单元',
           accessibilityType: {
             hearing: '听力',
             mobility: '行动',
@@ -468,7 +468,7 @@ const translations = (
           address: 'Address',
           neighborhood: 'Kapitbahayan',
           region: 'Rehiyon',
-          unitType: 'Uri ng unit',
+          unitType: 'Mga available na accessible unit',
           accessibilityType: {
             hearing: 'Pandinig',
             mobility: 'Mobilidad',
@@ -568,7 +568,7 @@ const translations = (
           address: 'ঠিকানা',
           neighborhood: 'এলাকা',
           region: 'অঞ্চল',
-          unitType: 'ইউনিটের ধরন',
+          unitType: 'উপলব্ধ প্রবেশযোগ্য ইউনিট',
           accessibilityType: {
             hearing: 'শ্রবণ',
             mobility: 'গতিশীলতা',
@@ -664,7 +664,7 @@ const translations = (
           address: 'العنوان',
           neighborhood: 'الحي',
           region: 'منطقة',
-          unitType: 'نوع الوحدة',
+          unitType: 'الوحدات المتاحة لذوي الاحتياجات الخاصة',
           accessibilityType: {
             hearing: 'السمع',
             mobility: 'الحركة',
@@ -761,7 +761,7 @@ const translations = (
           address: '주소',
           neighborhood: '동네',
           region: '지역',
-          unitType: '유닛 유형',
+          unitType: '장애인 접근 가능 객실',
           accessibilityType: {
             hearing: '청각',
             mobility: '이동성',
@@ -858,7 +858,7 @@ const translations = (
           address: 'Հասցե',
           neighborhood: 'Թաղամաս',
           region: 'Տարածաշրջան',
-          unitType: 'Բնակարանի տեսակ',
+          unitType: 'Հասանելի հաշմանդամների համար նախատեսված միավորներ',
           accessibilityType: {
             hearing: 'Լսողություն',
             mobility: 'Շարժունակություն',
@@ -958,7 +958,7 @@ const translations = (
           address: 'آدرس',
           neighborhood: 'محله',
           region: 'منطقه',
-          unitType: 'نوع واحد',
+          unitType: 'واحدهای قابل دسترس موجود',
           accessibilityType: {
             hearing: 'شنوایی',
             mobility: 'تحرک',
@@ -1189,7 +1189,7 @@ const translations = (
           changePassword: 'Change my password',
         },
         requestApproval: {
-          header: 'Listing approval requested',
+          header: 'Listing approval requested - %{listingName}',
           partnerRequest:
             'A Partner has submitted an approval request to publish the %{listingName} listing.',
           logInToReviewStart: 'Please log into the',
@@ -1199,7 +1199,7 @@ const translations = (
             'To access the listing after logging in, please click the link below',
         },
         changesRequested: {
-          header: 'Listing changes requested',
+          header: 'Listing changes requested - %{listingName}',
           adminRequestStart:
             'An administrator is requesting changes to the %{listingName} listing. Please log into the',
           adminRequestEnd:
@@ -1219,7 +1219,7 @@ const translations = (
             'The %{listingName} listing has been approved by an administrator and is scheduled to be automatically published on %{date} between 12:00 AM and 2:00 AM. If you have questions or require changes, please contact an administrator.',
         },
         listingPublished: {
-          header: 'New published listing',
+          header: 'New published listing - %{listingName}',
           subject: 'New published listing - %{listingName}',
           autoPublished:
             'The %{listingName} listing has been automatically published.',
@@ -1306,7 +1306,7 @@ const translations = (
           address: 'Address',
           neighborhood: 'Neighborhood',
           region: 'Region',
-          unitType: 'Unit type',
+          unitType: 'Available accessible units',
           accessibilityType: {
             hearing: 'Hearing',
             mobility: 'Mobility',
