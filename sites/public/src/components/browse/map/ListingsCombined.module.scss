@@ -115,6 +115,12 @@
       width: 55%;
     }
   }
+
+  h3 {
+    font-family: var(--seeds-font-alt-sans);
+    font-weight: var(--seeds-font-weight-semibold);
+    font-size: var(--seeds-font-size-xl);
+  }
 }
 
 .listings-list-wrapper {
@@ -168,6 +174,12 @@
   max-width: var(--seeds-s64);
 }
 
+.listings-list-info-card {
+  padding: 0 var(--seeds-s4) var(--seeds-s4) var(--seeds-s4);
+}
+
 .listings-list-info-cards {
-  padding: var(--seeds-s4);
+  background-color: var(--seeds-bg-color-muted);
+  padding-top: var(--seeds-s4);
+  border-top: 1px solid var(--seeds-color-gray-450);
 }
