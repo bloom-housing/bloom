@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useLayoutEffect, useRef } from "react"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
@@ -45,7 +45,6 @@ export const MapListingCard = ({
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
   )
-  const actions = []
 
   const unitsPreviewTable = (() => {
     const hasData = listing.unitGroups?.length || listing.units?.length
@@ -90,7 +89,10 @@ export const MapListingCard = ({
       key={index}
       data-testid={`listing-card-component`}
     >
-      <ClickableCard className={styles["listing-card-container"]}>
+      <ClickableCard
+        className={styles["listing-card-container"]}
+        containerClassName={styles["listing-card-outer-container"]}
+      >
         <Card.Section>
           <div className={styles["listing-card-content"]}>
             <div className={styles["details"]}>
@@ -105,7 +107,8 @@ export const MapListingCard = ({
               </Link>
 
               <div className={styles["address"]}>
-                {oneLineAddress(listing.listingsBuildingAddress)}
+                {/* TODO: make the county display conditional on if the county filter is enabled */}
+                {oneLineAddress(listing.listingsBuildingAddress, true)}
               </div>
               {listingTags.length > 0 && (
                 <div className={`${styles["tags"]}`}>
@@ -124,9 +127,6 @@ export const MapListingCard = ({
               <div className={`${styles["unit-table"]} styled-stacked-table`}>
                 {unitsPreviewTable}
               </div>
-              {actions.length > 0 && (
-                <div className={styles["action-container"]}>{actions.map((action) => action)}</div>
-              )}
             </div>
             <div className={styles["image"]}>
               {forceMobileView && onClose && (
@@ -157,4 +157,33 @@ export const MapListingCard = ({
       </ClickableCard>
     </li>
   )
+}
+
+const DESKTOP_MIN_WIDTH = 768
+
+export const MapListingCardList = ({ children }: { children: React.ReactNode }) => {
+  const listRef = useRef<HTMLUListElement>(null)
+
+  useLayoutEffect(() => {
+    const equalize = () => {
+      const ul = listRef.current
+      if (!ul) return
+
+      const items = Array.from(ul.querySelectorAll<HTMLLIElement>(":scope > li"))
+      items.forEach((li) => (li.style.minHeight = ""))
+
+      if (items.length <= 1 || window.innerWidth < DESKTOP_MIN_WIDTH) return
+
+      const max = Math.max(...items.map((li) => li.getBoundingClientRect().height))
+      if (isFinite(max) && max > 0) {
+        items.forEach((li) => (li.style.minHeight = `${max}px`))
+      }
+    }
+
+    equalize()
+    window.addEventListener("resize", equalize)
+    return () => window.removeEventListener("resize", equalize)
+  })
+
+  return <ul ref={listRef}>{children}</ul>
 }
