@@ -225,7 +225,7 @@ describe("<Dashboard>", () => {
     )
 
     expect(
-      within(accountSettingsCard).getByText("Account settings, email, password and notifications")
+      within(accountSettingsCard).getByText("Account settings, email, password, and notifications")
     ).toBeInTheDocument()
   })
 })
