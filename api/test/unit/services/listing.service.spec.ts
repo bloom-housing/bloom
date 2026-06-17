@@ -4963,6 +4963,50 @@ describe('Testing listing service', () => {
         },
       ]);
     });
+
+    it('should send listingPublished and public notification when creating directly as active', async () => {
+      prisma.listings.create = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.active,
+        listingMultiselectQuestions: [],
+        units: [],
+      });
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        publicUrl: 'public.housing.gov',
+        listingApprovalPermissions: [],
+      });
+      jest
+        .spyOn(service, 'getUserEmailInfo')
+        .mockResolvedValueOnce({ emails: ['partner@email.com'] });
+      jest
+        .spyOn(service, 'sendListingPublishNotification')
+        .mockResolvedValueOnce(undefined);
+
+      await service.create(
+        {
+          name: 'listing name',
+          depositMin: '5',
+          assets: [],
+          jurisdictions: { id: 'jurisdiction-id' },
+          status: ListingsStatusEnum.active,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+          isVerified: true,
+        } as ListingCreate,
+        user,
+      );
+
+      expect(listingPublishedMock).toHaveBeenCalledWith(
+        { id: 'jurisdiction-id' },
+        { id: 'listing-id', name: 'listing name' },
+        ['partner@email.com'],
+        'public.housing.gov',
+      );
+      expect(service.sendListingPublishNotification).toHaveBeenCalled();
+    });
   });
 
   describe('Test duplicate endpoint', () => {
@@ -6913,6 +6957,72 @@ describe('Testing listing service', () => {
       });
 
       expect(listingApprovedMock).toBeCalledTimes(0);
+    });
+
+    it('should send listingPublished when publishing from draft with no approval permissions', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        publicUrl: 'public.housing.gov',
+        featureFlags: [],
+        listingApprovalPermissions: [],
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.pending,
+        jurisdictionId: 'jurisdiction-id',
+        listingMultiselectQuestions: [],
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.active,
+        listingMultiselectQuestions: [],
+        units: [],
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'snapshot-id' });
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        {
+          id: 'listing-id',
+          name: 'listing name',
+          status: ListingsStatusEnum.active,
+          listingMultiselectQuestions: [],
+          units: [],
+        },
+      ]);
+      jest
+        .spyOn(service, 'getUserEmailInfo')
+        .mockResolvedValueOnce({ emails: ['partner@email.com'] });
+      jest
+        .spyOn(service, 'sendListingPublishNotification')
+        .mockResolvedValueOnce(undefined);
+
+      await service.update(
+        {
+          id: 'listing-id',
+          name: 'listing name',
+          depositMin: '5',
+          assets: [],
+          jurisdictions: { id: 'jurisdiction-id' },
+          status: ListingsStatusEnum.active,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+          lastUpdatedByUser: user,
+        } as ListingUpdate,
+        user,
+      );
+
+      expect(listingPublishedMock).toHaveBeenCalledWith(
+        { id: 'jurisdiction-id' },
+        { id: 'listing-id', name: 'listing name' },
+        ['partner@email.com'],
+        'public.housing.gov',
+      );
+      expect(service.sendListingPublishNotification).toHaveBeenCalled();
     });
   });
 

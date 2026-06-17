@@ -187,4 +187,45 @@ describe("<Dashboard>", () => {
     ).not.toBeInTheDocument()
     expect(screen.queryByRole("link", { name: /view applications/i })).not.toBeInTheDocument()
   })
+
+  it("should show notifications subtitle when enableCustomListingNotifications flag is enabled", () => {
+    render(
+      <AuthContext.Provider
+        value={{
+          profile: {
+            ...user,
+            listings: [],
+            jurisdictions: [],
+          },
+        }}
+      >
+        <Dashboard
+          jurisdiction={{
+            ...jurisdiction,
+            featureFlags: [
+              ...jurisdiction.featureFlags,
+              {
+                name: FeatureFlagEnum.enableCustomListingNotifications,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                id: "4ac85a8b-c319-4257-bedb-2db95133fab3",
+                description: "Enables custom listing notification preferences for users",
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          }}
+        />
+      </AuthContext.Provider>
+    )
+
+    const dashboardCards = screen.getAllByRole("article")
+    const accountSettingsCard = dashboardCards.find((card) =>
+      within(card).queryByRole("heading", { level: 2, name: /account settings/i })
+    )
+
+    expect(
+      within(accountSettingsCard).getByText("Account settings, email, password and notifications")
+    ).toBeInTheDocument()
+  })
 })

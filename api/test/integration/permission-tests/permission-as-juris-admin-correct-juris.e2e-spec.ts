@@ -72,6 +72,7 @@ const testEmailService = {
   sendMfaCode: jest.fn(),
   sendCSV: jest.fn(),
   applicationConfirmation: jest.fn(),
+  listingPublished: jest.fn(),
 };
 
 const testCronJobService = {

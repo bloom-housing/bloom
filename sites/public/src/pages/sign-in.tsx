@@ -20,6 +20,7 @@ import {
   NetworkErrorMessage,
   useMutate,
   getListingRedirectUrl,
+  isInternalLink,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import { PasswordExpiredModal } from "../components/account/PasswordExpiredModal"
@@ -87,7 +88,9 @@ const SignIn = (props: SignInProps) => {
 
   useEffect(() => {
     if (initialStateLoaded && profile) {
-      const redirectUrl = (router.query?.redirectUrl as string) || "/account/dashboard"
+      const rawRedirectUrl = router.query?.redirectUrl as string
+      const redirectUrl =
+        rawRedirectUrl && isInternalLink(rawRedirectUrl) ? rawRedirectUrl : "/account/dashboard"
       void router.push(redirectUrl)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
