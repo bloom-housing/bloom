@@ -51,9 +51,11 @@
     "test:backend:new:cov": "cd api && yarn jest --config ./test/jest-with-coverage.config.js --detectOpenHandles --logHeapUsage",
     "test:backend:new:dbsetup": "cd api && yarn db:migration:run",
     "test:backend:new:dbsetup:withseed": "cd api && yarn db:migration:run && yarn db:seed:staging --jurisdictionName Bloomington",
+    "test:backend:new:dbsetup:withseed-regions": "cd api && yarn db:migration:run && yarn db:seed:staging-region",
     "backend:new:install": "cd api && yarn install",
     "prettier": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
-    "ui-load-test": "ruby ./utilities/ui-load-tester.rb"
+    "ui-load-test": "ruby ./utilities/ui-load-tester.rb",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
@@ -64,13 +66,13 @@
     "commitizen": "^4.3.1",
     "concurrently": "^5.3.0",
     "eslint": "^8.0.1",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsx-a11y": "^6.10.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.37.1",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "husky": "^4.3.0",
+    "husky": "^9.1.7",
     "jest": "^26.5.3",
     "lint-staged": "^10.4.0",
     "prettier": "^2.8.8",
@@ -85,11 +87,6 @@
     "singleQuote": false,
     "printWidth": 100,
     "semi": false
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "echo '\n(1) Verifying conventional commit format... \n   (If this fails, install commitizen and commit with 'git cz' to automate the formatting!)\n----------' && commitlint -E HUSKY_GIT_PARAMS && echo '\n(2) Linting...\n----------' && lint-staged"
-    }
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint"

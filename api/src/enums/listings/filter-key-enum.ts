@@ -12,6 +12,7 @@ export enum ListingFilterKeys {
   ids = 'ids',
   isVerified = 'isVerified',
   jurisdiction = 'jurisdiction',
+  jurisdictions = 'jurisdictions',
   leasingAgent = 'leasingAgent',
   listingFeatures = 'listingFeatures',
   listingType = 'listingType',

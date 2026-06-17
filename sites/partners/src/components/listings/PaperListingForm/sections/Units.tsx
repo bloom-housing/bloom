@@ -79,7 +79,6 @@ const FormUnits = ({
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const { data: amiCharts, loading: amiChartsLoading } = useAmiChartList(jurisdiction)
   const { data: unitTypes, loading: unitTypesLoading } = useUnitTypeList()
-  const { data: jurisdictionData, loading: jurisdictionLoading } = useJurisdiction(jurisdiction)
   const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
@@ -563,8 +562,7 @@ const FormUnits = ({
             amiChartsLoading={amiChartsLoading}
             unitTypes={unitTypes}
             unitTypesLoading={unitTypesLoading}
-            jurisdictionData={jurisdictionData}
-            jurisdictionLoading={jurisdictionLoading}
+            jurisdictionId={jurisdiction}
             onSubmit={(unit) => {
               saveUnit(unit)
             }}
