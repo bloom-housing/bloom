@@ -54,7 +54,8 @@
     "test:backend:new:dbsetup:withseed-regions": "cd api && yarn db:migration:run && yarn db:seed:staging-region",
     "backend:new:install": "cd api && yarn install",
     "prettier": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
-    "ui-load-test": "ruby ./utilities/ui-load-tester.rb"
+    "ui-load-test": "ruby ./utilities/ui-load-tester.rb",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
@@ -71,7 +72,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.37.1",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "husky": "^4.3.0",
+    "husky": "^9.1.7",
     "jest": "^26.5.3",
     "lint-staged": "^10.4.0",
     "prettier": "^2.8.8",
@@ -86,11 +87,6 @@
     "singleQuote": false,
     "printWidth": 100,
     "semi": false
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "echo '\n(1) Verifying conventional commit format... \n   (If this fails, install commitizen and commit with 'git cz' to automate the formatting!)\n----------' && commitlint -E HUSKY_GIT_PARAMS && echo '\n(2) Linting...\n----------' && lint-staged"
-    }
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint"
