@@ -27,7 +27,11 @@ const DetailsHouseholdIncome = ({
     if (application.incomeVouchers === null || application.incomeVouchers === undefined) {
       return t("t.n/a")
     }
-    return application.incomeVouchers?.includes("incomeVoucher") ? t("t.yes") : t("t.no")
+    return application.incomeVouchers?.includes("incomeVoucher")
+      ? t("t.yes")
+      : application.incomeVouchers?.includes("none")
+      ? t("t.no")
+      : t("t.n/a")
   }
 
   return (
