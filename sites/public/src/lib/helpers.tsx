@@ -39,7 +39,7 @@ import {
 import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import { Icon, Message } from "@bloom-housing/ui-seeds"
 import { ApplicationFormConfig } from "./applications/configInterfaces"
-import { MapListingCard } from "../components/browse/map/MapListingCard"
+import { MapListingCard, MapListingCardList } from "../components/browse/map/MapListingCard"
 import styles from "./helpers.module.scss"
 
 export const getGenericAddress = (bloomAddress: Address) => {
@@ -423,7 +423,7 @@ export const getListings = (listings) => {
 
 export const getMapListings = (listings: Listing[]) => {
   return (
-    <ul>
+    <MapListingCardList>
       {listings.map((listing, index) => {
         return (
           <MapListingCard
@@ -434,7 +434,7 @@ export const getMapListings = (listings: Listing[]) => {
           />
         )
       })}
-    </ul>
+    </MapListingCardList>
   )
 }
 
