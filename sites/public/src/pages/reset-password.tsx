@@ -11,6 +11,7 @@ import {
   BloomCard,
   Form,
   MessageContext,
+  isInternalLink,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
@@ -49,7 +50,7 @@ const ResetPassword = () => {
       const listingId = router.query?.listingId as string
 
       const routerRedirectUrl =
-        process.env.showMandatedAccounts && redirectUrl && listingId
+        process.env.showMandatedAccounts && redirectUrl && listingId && isInternalLink(redirectUrl)
           ? `${redirectUrl}?listingId=${listingId}`
           : "/account/applications"
       addToast(t(`authentication.signIn.success`, { name: user.firstName }), { variant: "success" })

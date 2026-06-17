@@ -69,9 +69,13 @@ const translations = (
         accountRemoval: {
           subject:
             'Eliminación programada de cuenta de Bloom Housing debido a inactividad',
-          courtesyText:
-            'Este es un correo electrónico de cortesía para informarle que, debido a que su cuenta del Portal de Bloom Housing ha estado inactiva durante 3 años, se eliminará en 30 días según nuestros Términos de Uso y Política de Privacidad. Si desea conservar su cuenta, inicie sesión durante el próximo mes y la consideraremos activa de nuevo.',
+          courtesyText1:
+            'Este es un mensaje de cortesía para informarle que, debido a que su cuenta del portal Bloom Housing ha estado inactiva durante 3 años, se eliminará en un plazo de 30 días conforme a nuestra',
+          courtesyText2:
+            'Si desea conservar su cuenta, por favor inicie sesión en cualquier momento durante el próximo mes y la consideraremos nuevamente activa.',
           signIn: 'Iniciar sesión en Bloom Housing',
+          privacyPolicy: 'Política de privacidad',
+          privacyPolicyUrl: 'localhost:3000/privacy-policy',
         },
         register: {
           welcome: 'Bienvenido',
@@ -1202,9 +1206,23 @@ const translations = (
             'and navigate to the listing detail page to view the request and edit the listing.',
         },
         listingApproved: {
-          header: 'New published listing',
+          header: 'New published listing - %{listingName}',
           adminApproved:
             'The %{listingName} listing has been approved and published by an administrator.',
+          viewPublished:
+            'To view the published listing, please click on the link below',
+        },
+        listingScheduled: {
+          header: 'New scheduled listing',
+          subject: 'New scheduled listing - %{listingName}',
+          adminScheduled:
+            'The %{listingName} listing has been approved by an administrator and is scheduled to be automatically published on %{date} between 12:00 AM and 2:00 AM. If you have questions or require changes, please contact an administrator.',
+        },
+        listingPublished: {
+          header: 'New published listing',
+          subject: 'New published listing - %{listingName}',
+          autoPublished:
+            'The %{listingName} listing has been automatically published.',
           viewPublished:
             'To view the published listing, please click on the link below',
         },
@@ -1259,9 +1277,13 @@ const translations = (
         },
         accountRemoval: {
           subject: 'Bloom Housing Scheduled Account Removal Due to Inactivity',
-          courtesyText:
-            'This is a courtesy email to let you know that because your Bloom Housing Portal account has been inactive for 3 years, your account will be deleted in 30 days per our Terms of Use and Privacy Policy. If you’d like to keep your account, please log in sometime in the next month and we’ll consider your account active again.',
+          courtesyText1:
+            'This is a courtesy email to let you know that because your Bloom Housing Portal account has been inactive for 3 years, your account will be deleted in 30 days per our',
+          courtesyText2:
+            'If you’d like to keep your account, please log in anytime in the next month and we’ll consider your account active again.',
           signIn: 'Sign in to Bloom Housing',
+          privacyPolicy: 'Privacy Policy',
+          privacyPolicyUrl: 'localhost:3000/privacy-policy',
         },
         rentalOpportunity: {
           subject: 'New rental opportunity at %{listingName}',

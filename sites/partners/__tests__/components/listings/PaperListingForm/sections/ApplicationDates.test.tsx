@@ -249,7 +249,7 @@ describe("ApplicationDates", () => {
     publishDateGroup.querySelectorAll("input").forEach((input) => expect(input).toBeDisabled())
   })
 
-  it("should keep scheduled dates editable on a draft listing even after the date has passed", () => {
+  it("should keep scheduled dates editable on a pending listing even after the date has passed", () => {
     render(
       <FormProviderWrapper>
         <ApplicationDates

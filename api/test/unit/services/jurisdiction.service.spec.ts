@@ -57,9 +57,45 @@ describe('Testing jurisdiction service', () => {
     expect(await service.list()).toEqual(mockedValue);
 
     expect(prisma.jurisdictions.findMany).toHaveBeenCalledWith({
-      include: {
-        featureFlags: true,
+      select: {
+        allowSingleUseCodeLogin: true,
+        duplicateListingPermissions: true,
+        emailFromAddress: true,
+        enableGeocodingPreferences: true,
+        enablePartnerDemographics: true,
+        enablePartnerSettings: true,
+        featureFlags: {
+          select: {
+            active: true,
+            id: true,
+            name: true,
+          },
+        },
+        id: true,
+        languages: true,
+        listingApprovalPermissions: true,
+        listingFeaturesConfiguration: true,
+        minimumListingPublishImagesRequired: true,
         multiselectQuestions: true,
+        name: true,
+        notificationsSignUpUrl: true,
+        partnerTerms: true,
+        publicUrl: true,
+        raceEthnicityConfiguration: true,
+        referralSummaryDefault: true,
+        regions: true,
+        rentalAssistanceDefault: true,
+        requiredListingFields: true,
+        subJurisdictions: {
+          select: { id: true, name: true },
+        },
+        visibleAccessibilityPriorityTypes: true,
+        visibleApplicationAccessibilityFeatures: true,
+        visibleHouseholdMemberRelationships: true,
+        visibleSpokenLanguages: true,
+        whatToExpect: true,
+        whatToExpectAdditionalText: true,
+        whatToExpectUnderConstruction: true,
       },
     });
   });
@@ -79,9 +115,28 @@ describe('Testing jurisdiction service', () => {
           equals: 'example Id',
         },
       },
-      include: {
-        featureFlags: true,
-        multiselectQuestions: true,
+      select: {
+        featureFlags: {
+          select: {
+            active: true,
+            id: true,
+            name: true,
+          },
+        },
+        id: true,
+        languages: true,
+        listingFeaturesConfiguration: true,
+        notificationsSignUpUrl: true,
+        raceEthnicityConfiguration: true,
+        name: true,
+        regions: true,
+        subJurisdictions: {
+          select: { id: true, name: true },
+        },
+        visibleAccessibilityPriorityTypes: true,
+        visibleSpokenLanguages: true,
+        visibleApplicationAccessibilityFeatures: true,
+        visibleHouseholdMemberRelationships: true,
       },
     });
   });
@@ -101,9 +156,28 @@ describe('Testing jurisdiction service', () => {
           equals: 'example Id',
         },
       },
-      include: {
-        featureFlags: true,
-        multiselectQuestions: true,
+      select: {
+        featureFlags: {
+          select: {
+            active: true,
+            id: true,
+            name: true,
+          },
+        },
+        id: true,
+        languages: true,
+        listingFeaturesConfiguration: true,
+        notificationsSignUpUrl: true,
+        raceEthnicityConfiguration: true,
+        name: true,
+        regions: true,
+        subJurisdictions: {
+          select: { id: true, name: true },
+        },
+        visibleAccessibilityPriorityTypes: true,
+        visibleSpokenLanguages: true,
+        visibleApplicationAccessibilityFeatures: true,
+        visibleHouseholdMemberRelationships: true,
       },
     });
   });
@@ -123,9 +197,28 @@ describe('Testing jurisdiction service', () => {
           equals: 'example Id',
         },
       },
-      include: {
-        featureFlags: true,
-        multiselectQuestions: true,
+      select: {
+        featureFlags: {
+          select: {
+            active: true,
+            id: true,
+            name: true,
+          },
+        },
+        id: true,
+        languages: true,
+        listingFeaturesConfiguration: true,
+        notificationsSignUpUrl: true,
+        raceEthnicityConfiguration: true,
+        name: true,
+        regions: true,
+        subJurisdictions: {
+          select: { id: true, name: true },
+        },
+        visibleAccessibilityPriorityTypes: true,
+        visibleSpokenLanguages: true,
+        visibleApplicationAccessibilityFeatures: true,
+        visibleHouseholdMemberRelationships: true,
       },
     });
   });

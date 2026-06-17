@@ -33,8 +33,6 @@ export const ListingMap = (props: ListingBrowseProps) => {
 
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
 
-  // Map TODO: Dynamic jurisdictions
-  // let searchString = `jurisdictions:${props.jurisdiction.name}`
   let searchString = ""
   const searchParam = Array.isArray(router.query.search)
     ? router.query.search[0]
@@ -48,8 +46,6 @@ export const ListingMap = (props: ListingBrowseProps) => {
     googleMapsApiKey: process.env.googleMapsApiKey,
     googleMapsMapId: process.env.googleMapsMapId,
     searchString,
-    // Map TODO: Dynamic jurisdictions
-    jurisdictionIds: [],
     bedrooms: [],
     bathrooms: [],
     activeFeatureFlags: props.jurisdiction?.featureFlags
@@ -58,8 +54,10 @@ export const ListingMap = (props: ListingBrowseProps) => {
     multiselectData: props.multiselectData,
     regions: props.jurisdiction?.regions,
     listingFeaturesConfiguration: props.jurisdiction?.listingFeaturesConfiguration,
-    // Map TODO: Dynamic jurisdictions
-    jurisdictions: [{ label: props.jurisdiction.name, value: props.jurisdiction.id }],
+    jurisdictions: [
+      { id: props.jurisdiction?.id, name: props.jurisdiction?.name },
+      ...props.jurisdiction.subJurisdictions,
+    ],
   }
 
   return (

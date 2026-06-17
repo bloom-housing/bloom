@@ -5,11 +5,6 @@ import { setupServer } from "msw/lib/node"
 import { rest } from "msw"
 import { application, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import userEvent from "@testing-library/user-event"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import {
-  ApplicationsService,
-  LanguagesEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
 
@@ -22,6 +17,24 @@ beforeEach(() => {
   jest
     .spyOn(require("../../../../../src/lib/hooks"), "useSingleListingData")
     .mockReturnValue({ listingDto: listing })
+  window.URL.createObjectURL = jest.fn()
+  document.cookie = "access-token-available=True"
+  server.use(
+    rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+      return res(
+        ctx.json({
+          ...user,
+          listings: [{ id: listing.id }],
+          jurisdictions: [
+            {
+              id: "id",
+              name: "Bloomington",
+            },
+          ],
+        })
+      )
+    })
+  )
 })
 
 afterEach(() => {
@@ -32,27 +45,13 @@ afterAll(() => {
   server.close()
 })
 
-function mockJurisdictionsHaveFeatureFlagOn(_featureFlag: string) {
-  return false
-}
-
 describe("listing applications add page", () => {
-  it("should render all application form sections and control buttons", () => {
+  it("should render all application form sections and control buttons", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
 
-    render(
-      <AuthContext.Provider
-        value={{
-          profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
-          getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
-        }}
-      >
-        <NewApplication />
-      </AuthContext.Provider>
-    )
+    render(<NewApplication />)
 
+    await screen.findByRole("heading", { level: 1, name: /new application/i })
     expect(screen.getByRole("heading", { level: 1, name: /new application/i })).toBeInTheDocument()
     expect(screen.getByText(/draft/i)).toBeInTheDocument()
 
@@ -102,20 +101,9 @@ describe("listing applications add page", () => {
       })
     )
 
-    render(
-      <AuthContext.Provider
-        value={{
-          applicationsService: new ApplicationsService(),
-          profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
-          getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
-        }}
-      >
-        <NewApplication />
-      </AuthContext.Provider>
-    )
+    render(<NewApplication />)
 
+    await screen.findByText(/draft/i)
     expect(screen.getByText(/draft/i)).toBeInTheDocument()
     const submitButton = screen.getByRole("button", { name: /^submit$/i })
     expect(submitButton).toBeInTheDocument()
@@ -133,20 +121,9 @@ describe("listing applications add page", () => {
       })
     )
 
-    render(
-      <AuthContext.Provider
-        value={{
-          applicationsService: new ApplicationsService(),
-          profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
-          getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
-        }}
-      >
-        <NewApplication />
-      </AuthContext.Provider>
-    )
+    render(<NewApplication />)
 
+    await screen.findByRole("button", { name: /submit & new/i })
     const submitButton = screen.getByRole("button", { name: /submit & new/i })
     expect(submitButton).toBeInTheDocument()
     await userEvent.click(submitButton)

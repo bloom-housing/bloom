@@ -239,7 +239,7 @@ const ApplicationDates = ({
         </Grid.Row>
         {enableAutopublish && (
           <Grid.Row columns={2}>
-            <Grid.Cell className="seeds-grid-span-2">
+            <Grid.Cell>
               <DateField
                 label={t("listings.scheduledListingPublishDate")}
                 name={"scheduledListingPublishDateField"}
@@ -273,7 +273,7 @@ const ApplicationDates = ({
                 }}
               />
             </Grid.Cell>
-            <Grid.Cell className="seeds-grid-span-2">
+            <Grid.Cell>
               <DateField
                 label={t("listings.scheduledApplicationOpenDate")}
                 name={"scheduledApplicationOpenDateField"}
