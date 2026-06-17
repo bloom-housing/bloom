@@ -1569,8 +1569,8 @@ export class ScriptRunnerService {
 
   /**
    * Load test for the bulk application update processing loop (Option 2: one-by-one).
-   * Runs: read → snapshot → no-op write for every application in a listing.
-   * Emails are intentionally skipped. Check server logs for detailed timing output.
+   * Reads applications in pages, then processes each record: snapshot → write.
+   * Assumes all records change (worst case). Emails skipped. Check server logs for timing.
    *
    * curl -X PUT http://localhost:3100/scriptRunner/bulkUpdateLoadTest \
    *   -H "passkey: <API_PASS_KEY>" \
@@ -1578,28 +1578,31 @@ export class ScriptRunnerService {
    *   -d '{"listingId": "<listingId>"}'
    */
   async bulkUpdateLoadTest(dto: BulkUpdateLoadTestDTO): Promise<SuccessDTO> {
+    const PAGE_SIZE = 500;
     const jobStart = Date.now();
 
-    const applicationIds = await this.prisma.applications.findMany({
+    // Get total count and all IDs upfront for progress tracking
+    const allIds = await this.prisma.applications.findMany({
       where: { listingId: dto.listingId },
       select: { id: true },
     });
+    const totalRecords = allIds.length;
 
-    const totalRecords = applicationIds.length;
     this.logger.log(
-      `[BulkUpdateLoadTest] Starting: listingId=${dto.listingId} records=${totalRecords}`,
+      `[BulkUpdateLoadTest] Starting: listingId=${dto.listingId} records=${totalRecords} page_size=${PAGE_SIZE}`,
     );
 
     let totalReadMs = 0;
     let totalSnapshotMs = 0;
     let totalWriteMs = 0;
     let processedCount = 0;
+    let page = 0;
 
-    for (const { id } of applicationIds) {
-      // Minimal read — only the fields the real processing loop will need
+    while (processedCount < totalRecords) {
+      // Paginated bulk read
       const readStart = Date.now();
-      await this.prisma.applications.findUnique({
-        where: { id },
+      const apps = await this.prisma.applications.findMany({
+        where: { listingId: dto.listingId },
         select: {
           id: true,
           status: true,
@@ -1609,40 +1612,45 @@ export class ScriptRunnerService {
           accessibleUnitWaitlistNumber: true,
           conventionalUnitWaitlistNumber: true,
           submissionDate: true,
-          applicant: {
-            select: { firstName: true, lastName: true },
-          },
+          applicant: { select: { firstName: true, lastName: true } },
         },
+        skip: page * PAGE_SIZE,
+        take: PAGE_SIZE,
       });
       totalReadMs += Date.now() - readStart;
 
-      // Snapshot (same call the real loop will make)
-      const snapshotStart = Date.now();
-      await this.snapshotCreateService.createApplicationSnapshot(id);
-      totalSnapshotMs += Date.now() - snapshotStart;
+      if (apps.length === 0) break;
 
-      // No-op write — simulates the update cost without changing data
-      const writeStart = Date.now();
-      await this.prisma.applications.update({
-        where: { id },
-        data: { updatedAt: new Date() },
-      });
-      totalWriteMs += Date.now() - writeStart;
+      // Process each record in the page one-by-one
+      for (const app of apps) {
+        const snapshotStart = Date.now();
+        await this.snapshotCreateService.createApplicationSnapshot(app.id);
+        totalSnapshotMs += Date.now() - snapshotStart;
 
-      processedCount++;
+        const writeStart = Date.now();
+        await this.prisma.applications.update({
+          where: { id: app.id },
+          data: { updatedAt: new Date() },
+        });
+        totalWriteMs += Date.now() - writeStart;
 
-      if (processedCount % 100 === 0) {
-        const elapsedMs = Date.now() - jobStart;
-        const recsPerMin = processedCount / (elapsedMs / 1000 / 60);
-        const estTotalMin = totalRecords / recsPerMin;
-        this.logger.log(
-          `[BulkUpdateLoadTest] ${processedCount}/${totalRecords} ` +
-            `(${Math.round((processedCount / totalRecords) * 100)}%) ` +
-            `elapsed=${Math.round(elapsedMs / 1000)}s ` +
-            `rate=${Math.round(recsPerMin)}rec/min ` +
-            `est_total=${Math.round(estTotalMin)}min`,
-        );
+        processedCount++;
+
+        if (processedCount % 100 === 0) {
+          const elapsedMs = Date.now() - jobStart;
+          const recsPerMin = processedCount / (elapsedMs / 1000 / 60);
+          const estTotalMin = totalRecords / recsPerMin;
+          this.logger.log(
+            `[BulkUpdateLoadTest] ${processedCount}/${totalRecords} ` +
+              `(${Math.round((processedCount / totalRecords) * 100)}%) ` +
+              `elapsed=${Math.round(elapsedMs / 1000)}s ` +
+              `rate=${Math.round(recsPerMin)}rec/min ` +
+              `est_total=${Math.round(estTotalMin)}min`,
+          );
+        }
       }
+
+      page++;
     }
 
     const totalMs = Date.now() - jobStart;
@@ -1653,9 +1661,15 @@ export class ScriptRunnerService {
           totalMs / 1000 / 60,
         )}min) ` +
         `avg_per_record=${Math.round(totalMs / totalRecords)}ms ` +
-        `avg_read=${Math.round(totalReadMs / totalRecords)}ms ` +
-        `avg_snapshot=${Math.round(totalSnapshotMs / totalRecords)}ms ` +
-        `avg_write=${Math.round(totalWriteMs / totalRecords)}ms`,
+        `total_read=${totalReadMs}ms (${Math.round(
+          totalReadMs / totalRecords,
+        )}ms/rec) ` +
+        `total_snapshot=${totalSnapshotMs}ms (${Math.round(
+          totalSnapshotMs / totalRecords,
+        )}ms/rec) ` +
+        `total_write=${totalWriteMs}ms (${Math.round(
+          totalWriteMs / totalRecords,
+        )}ms/rec)`,
     );
 
     return { success: true };
@@ -1663,7 +1677,8 @@ export class ScriptRunnerService {
 
   /**
    * Load test for Option 1 (single transaction) approach.
-   * Runs: bulk read → N snapshots → one $transaction with N updates.
+   * Runs: bulk read → interactive $transaction (snapshot + update per record) → post-tx snapshot read.
+   * The post-tx snapshot read simulates the cost of fetching change data to construct emails.
    * Compare results to bulkUpdateLoadTest (Option 2) to quantify the difference.
    *
    * curl -X PUT http://localhost:3100/scriptRunner/bulkUpdateTransactionLoadTest \
@@ -1676,7 +1691,7 @@ export class ScriptRunnerService {
   ): Promise<SuccessDTO> {
     const jobStart = Date.now();
 
-    // Phase 1: bulk read (one query for all IDs + fields)
+    // Phase 1: bulk read (one query for all records + fields)
     const readStart = Date.now();
     const applications = await this.prisma.applications.findMany({
       where: { listingId: dto.listingId },
@@ -1689,29 +1704,30 @@ export class ScriptRunnerService {
         accessibleUnitWaitlistNumber: true,
         conventionalUnitWaitlistNumber: true,
         submissionDate: true,
-        applicant: {
-          select: { firstName: true, lastName: true },
-        },
+        applicant: { select: { firstName: true, lastName: true } },
       },
     });
     const totalReadMs = Date.now() - readStart;
     const totalRecords = applications.length;
+    const applicationIds = applications.map((a) => a.id);
 
     this.logger.log(
       `[BulkUpdateTxLoadTest] Starting: listingId=${dto.listingId} records=${totalRecords} bulk_read=${totalReadMs}ms`,
     );
 
-    // Phase 2: N snapshots (must happen before the transaction, same as real Option 1)
-    const snapshotStart = Date.now();
+    // Phase 2: N snapshots before opening the transaction
+    let totalSnapshotMs = 0;
     for (const { id } of applications) {
+      const snapshotStart = Date.now();
       await this.snapshotCreateService.createApplicationSnapshot(id);
+      totalSnapshotMs += Date.now() - snapshotStart;
     }
-    const totalSnapshotMs = Date.now() - snapshotStart;
 
     this.logger.log(
-      `[BulkUpdateTxLoadTest] Snapshots done. total=${totalSnapshotMs}ms avg=${Math.round(
-        totalSnapshotMs / totalRecords,
-      )}ms`,
+      `[BulkUpdateTxLoadTest] Snapshots done. ` +
+        `total=${totalSnapshotMs}ms avg=${Math.round(
+          totalSnapshotMs / totalRecords,
+        )}ms`,
     );
 
     // Phase 3: single transaction with N updates
@@ -1726,16 +1742,35 @@ export class ScriptRunnerService {
     );
     const totalTxMs = Date.now() - txStart;
 
+    this.logger.log(
+      `[BulkUpdateTxLoadTest] Transaction done. tx_total=${totalTxMs}ms`,
+    );
+
+    // Phase 3: post-transaction snapshot read — simulates fetching change data to build emails
+    const snapshotReadStart = Date.now();
+    await this.prisma.applicationSnapshot.findMany({
+      where: { originalId: { in: applicationIds } },
+      select: {
+        originalId: true,
+        status: true,
+        applicationDeclineReason: true,
+        applicationDeclineReasonAdditionalDetails: true,
+        manualLotteryPositionNumber: true,
+        accessibleUnitWaitlistNumber: true,
+        conventionalUnitWaitlistNumber: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+    const snapshotReadMs = Date.now() - snapshotReadStart;
+
     const totalMs = Date.now() - jobStart;
     this.logger.log(
       `[BulkUpdateTxLoadTest] Done. ` +
         `records=${totalRecords} ` +
         `total=${Math.round(totalMs / 1000)}s ` +
         `bulk_read=${totalReadMs}ms ` +
-        `snapshots=${totalSnapshotMs}ms (avg ${Math.round(
-          totalSnapshotMs / totalRecords,
-        )}ms) ` +
         `transaction=${totalTxMs}ms ` +
+        `post_tx_snapshot_read=${snapshotReadMs}ms ` +
         `avg_per_record=${Math.round(totalMs / totalRecords)}ms`,
     );
 
