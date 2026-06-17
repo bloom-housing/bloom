@@ -3,10 +3,14 @@
 ALTER TABLE "applications"
 ADD COLUMN "income_vouchers_new" TEXT[] NOT NULL DEFAULT '{}';
 
--- Migrate existing true values to ['incomeVoucher'], false/null to empty array
+-- Migrate existing true values to ['incomeVoucher'], false/null to ['none']
 UPDATE "applications"
 SET "income_vouchers_new" = ARRAY['incomeVoucher']
 WHERE "income_vouchers" = true;
+
+UPDATE "applications"
+SET "income_vouchers_new" = ARRAY['none']
+WHERE "income_vouchers" = false;
 
 ALTER TABLE "applications"
 DROP COLUMN "income_vouchers";

@@ -160,8 +160,7 @@ const FormHouseholdIncome = ({ enableMultiselectVoucherQuestion }: FormHousehold
                         id: "incomeVoucherNo",
                         value: "none",
                         label: t("t.no"),
-                        defaultChecked:
-                          incomeVouchersValue?.includes("none") || incomeVouchersValue.length === 0,
+                        defaultChecked: incomeVouchersValue?.includes("none"),
                       },
                     ]
               }

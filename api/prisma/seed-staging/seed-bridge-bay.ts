@@ -2411,10 +2411,10 @@ const featureFlags = [
   FeatureFlagEnum.enableListingMap,
   FeatureFlagEnum.enableListingOpportunity,
   FeatureFlagEnum.enableListingPagination,
+  FeatureFlagEnum.enableMultiselectVoucherQuestion,
   FeatureFlagEnum.enablePartnerDemographics,
   FeatureFlagEnum.enablePartnerSettings,
   FeatureFlagEnum.enableReceivedAtAndByFields,
-  FeatureFlagEnum.enableMultiselectVoucherQuestion,
   FeatureFlagEnum.enableSexualOrientationQuestion,
   FeatureFlagEnum.enableSupportAdmin,
 ];

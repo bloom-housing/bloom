@@ -45,7 +45,11 @@ const ApplicationVouchers = () => {
           incomeVouchers: application.incomeVouchers ?? [],
         }
       : {
-          incomeVouchers: application.incomeVouchers?.length ? "true" : undefined,
+          incomeVouchers: application.incomeVouchers?.includes("incomeVoucher")
+            ? "incomeVoucher"
+            : application.incomeVouchers?.includes("none")
+            ? "none"
+            : undefined,
         },
     shouldFocusError: false,
   })
@@ -211,11 +215,13 @@ const ApplicationVouchers = () => {
                       id: "incomeVouchersYes",
                       value: "incomeVoucher",
                       label: t("t.yes"),
+                      defaultChecked: application.incomeVouchers?.includes("incomeVoucher"),
                     },
                     {
                       id: "incomeVouchersNo",
                       value: "none",
                       label: t("t.no"),
+                      defaultChecked: application.incomeVouchers?.includes("none"),
                     },
                   ]}
                   dataTestId={"app-income-vouchers"}

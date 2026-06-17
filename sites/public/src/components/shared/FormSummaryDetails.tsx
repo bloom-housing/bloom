@@ -713,8 +713,8 @@ const FormSummaryDetails = ({
                 ? application.incomeVouchers
                     .map((v) => t(`application.financial.vouchers.${v}`))
                     .join(", ")
-                : t("application.financial.vouchers.issuedVouchers")
-              : application.incomeVouchers?.length
+                : t("application.financial.vouchers.none")
+              : application.incomeVouchers?.includes("incomeVoucher")
               ? t("t.yes")
               : t("t.no")}
           </FieldValue>
