@@ -1,3 +1,4 @@
+import { createHmac } from 'crypto';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigModule } from '@nestjs/config';
 import {
@@ -1495,6 +1496,125 @@ describe('Testing email service', () => {
           LABELS.rent,
         ]);
       });
+    });
+  });
+
+  describe('listingPublishNotification', () => {
+    const TEST_SECRET = 'test-app-secret';
+    const PUBLIC_URL = 'https://example.com';
+
+    const expectedSig = (email: string) =>
+      createHmac('sha256', TEST_SECRET).update(email).digest('hex');
+
+    const expectedUnsubscribeUrl = (email: string) =>
+      `${PUBLIC_URL}/unsubscribe?email=${encodeURIComponent(
+        email,
+      )}&sig=${expectedSig(email)}`;
+
+    const baseListing = (): Listing =>
+      ({
+        id: 'listing-id',
+        name: 'Test Listing',
+        urlSlug: 'test-listing',
+        units: [],
+        listingsBuildingAddress: yellowstoneAddress,
+        listingEvents: [],
+        accessibleMarketingFlyer: undefined,
+      } as unknown as Listing);
+
+    beforeEach(() => {
+      process.env.APP_SECRET = TEST_SECRET;
+      service.polyglot.replace(translationFactory().translations);
+      jest.spyOn(jurisdictionServiceMock, 'findOne').mockReturnValue({
+        id: 'jurisdictionId',
+        name: 'Jurisdiction 1',
+        publicUrl: PUBLIC_URL,
+        emailFromAddress: 'no-reply@example.com',
+        languages: ['en'],
+      } as any);
+    });
+
+    it('sends one bulk call per language with all recipients', async () => {
+      const emails = ['a@example.com', 'b@example.com'];
+      await service.listingPublishNotification(
+        { id: 'jurisdictionId' },
+        baseListing(),
+        [],
+        { en: emails },
+      );
+
+      expect(sendMock).toHaveBeenCalledTimes(1);
+      expect(sendMock.mock.calls[0][0].to).toEqual(emails);
+    });
+
+    it('body contains the -unsubscribeUrl- placeholder, not a resolved URL', async () => {
+      await service.listingPublishNotification(
+        { id: 'jurisdictionId' },
+        baseListing(),
+        [],
+        { en: ['user@example.com'] },
+      );
+
+      const body: string = sendMock.mock.calls[0][0].body;
+      expect(body).toContain('-unsubscribeUrl-');
+      expect(body).not.toContain('unsubscribe?email=');
+    });
+
+    it('passes perRecipientData with a correct HMAC-signed URL per recipient', async () => {
+      const emails = ['a@example.com', 'b@example.com'];
+      await service.listingPublishNotification(
+        { id: 'jurisdictionId' },
+        baseListing(),
+        [],
+        { en: emails },
+      );
+
+      const perRecipientData: { unsubscribeUrl: string }[] =
+        sendMock.mock.calls[0][0].perRecipientData;
+
+      expect(perRecipientData).toHaveLength(2);
+      expect(perRecipientData[0].unsubscribeUrl).toBe(
+        expectedUnsubscribeUrl('a@example.com'),
+      );
+      expect(perRecipientData[1].unsubscribeUrl).toBe(
+        expectedUnsubscribeUrl('b@example.com'),
+      );
+    });
+
+    it('body contains the manage subscriptions link', async () => {
+      await service.listingPublishNotification(
+        { id: 'jurisdictionId' },
+        baseListing(),
+        [],
+        { en: ['user@example.com'] },
+      );
+
+      const body: string = sendMock.mock.calls[0][0].body;
+      expect(body).toContain(
+        `${PUBLIC_URL}/sign-in?redirectUrl=/account/notifications`,
+      );
+    });
+
+    it('sends separate bulk calls for each language', async () => {
+      await service.listingPublishNotification(
+        { id: 'jurisdictionId' },
+        baseListing(),
+        [],
+        { en: ['en@example.com'], es: ['es@example.com'] },
+      );
+
+      expect(sendMock).toHaveBeenCalledTimes(2);
+    });
+
+    it('skips languages with no recipients', async () => {
+      await service.listingPublishNotification(
+        { id: 'jurisdictionId' },
+        baseListing(),
+        [],
+        { en: ['user@example.com'], es: [] },
+      );
+
+      expect(sendMock).toHaveBeenCalledTimes(1);
     });
   });
 });

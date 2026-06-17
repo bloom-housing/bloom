@@ -1,4 +1,5 @@
 import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
+import { createHmac } from 'crypto';
 import fs from 'fs';
 import Handlebars from 'handlebars';
 import Polyglot from 'node-polyglot';
@@ -120,6 +121,7 @@ export class EmailService {
     subject: string,
     body: string,
     attachment?: EmailAttachmentData,
+    perRecipientData?: Record<string, string>[],
   ) {
     const isMultipleRecipients = Array.isArray(to);
     if (isMultipleRecipients && to.length === 0) {
@@ -135,6 +137,7 @@ export class EmailService {
       subject,
       body,
       attachment,
+      perRecipientData,
     };
     await this.emailProvider.send(emailParams);
   }
@@ -1223,6 +1226,17 @@ export class EmailService {
     return listingDetails;
   }
 
+  // These links do not expire — a valid link from any historical email will always work.
+  // This is intentional so users can unsubscribe from old emails without needing a fresh link.
+  private generateUnsubscribeUrl(publicUrl: string, email: string): string {
+    const sig = createHmac('sha256', process.env.APP_SECRET)
+      .update(email)
+      .digest('hex');
+    return `${publicUrl}/unsubscribe?email=${encodeURIComponent(
+      email,
+    )}&sig=${sig}`;
+  }
+
   public async listingPublishNotification(
     jurisdictionId: IdDTO,
     listing: Listing,
@@ -1258,19 +1272,32 @@ export class EmailService {
           url: `${jurisdiction.publicUrl}/${code}/listing/${listing.id}/${listing.urlSlug}`,
         }));
 
+        const subject = this.polyglot.t(`rentalOpportunity.subject`, {
+          listingName: listing.name,
+        });
+        const manageSubscriptionsUrl = `${jurisdiction.publicUrl}/sign-in?redirectUrl=/account/notifications`;
+
+        const perRecipientData = emails[language].map((email) => ({
+          unsubscribeUrl: this.generateUnsubscribeUrl(
+            jurisdiction.publicUrl,
+            email,
+          ),
+        }));
+        const templateBody = this.template('listing-opportunity')({
+          listingName: listing.name,
+          tableRows: listingDetails,
+          languageUrls: emailButtons,
+          accessibleMarketingFlyerUrl: listing.accessibleMarketingFlyer,
+          unsubscribeUrl: '-unsubscribeUrl-',
+          manageSubscriptionsUrl,
+        });
         await this.send(
           emails[language],
           jurisdiction.emailFromAddress,
-          this.polyglot.t(`rentalOpportunity.subject`, {
-            listingName: listing.name,
-          }),
-          this.template('listing-opportunity')({
-            listingName: listing.name,
-            tableRows: listingDetails,
-            languageUrls: emailButtons,
-            accessibleMarketingFlyerUrl: listing.accessibleMarketingFlyer,
-            emailSettingsUrl: `${jurisdiction.publicUrl}/sign-in?redirectUrl=/account/notifications`,
-          }),
+          subject,
+          templateBody,
+          undefined,
+          perRecipientData,
         );
       }
     } catch (err) {
