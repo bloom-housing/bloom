@@ -4571,6 +4571,7 @@ describe('Testing listing service', () => {
       });
 
       prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([]);
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue([]);
 
       prisma.listings.create = jest.fn().mockResolvedValue({
         id: 'example id',
