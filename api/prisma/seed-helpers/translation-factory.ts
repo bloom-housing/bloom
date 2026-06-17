@@ -1189,7 +1189,7 @@ const translations = (
           changePassword: 'Change my password',
         },
         requestApproval: {
-          header: 'Listing approval requested - %{listingName}',
+          header: 'Listing approval requested',
           partnerRequest:
             'A Partner has submitted an approval request to publish the %{listingName} listing.',
           logInToReviewStart: 'Please log into the',
@@ -1199,7 +1199,7 @@ const translations = (
             'To access the listing after logging in, please click the link below',
         },
         changesRequested: {
-          header: 'Listing changes requested - %{listingName}',
+          header: 'Listing changes requested',
           adminRequestStart:
             'An administrator is requesting changes to the %{listingName} listing. Please log into the',
           adminRequestEnd:
