@@ -1,5 +1,5 @@
 import * as React from "react"
-import { BloomCard } from "@bloom-housing/shared-helpers"
+import { BloomCard, tIfExists } from "@bloom-housing/shared-helpers"
 import { Button, Card, Heading } from "@bloom-housing/ui-seeds"
 import { LoadingOverlay, t } from "@bloom-housing/ui-components"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -58,64 +58,100 @@ const ListingsList = (props: ListingsListProps) => {
   )
   const showNotificationsCard = enableCustomListingNotifications || !!notificationsSignUpUrl
 
+  const otherCards = []
+  let hasAdditionalCards = true
+  while (hasAdditionalCards) {
+    const index = otherCards.length + 1
+    if (tIfExists(`listingResource.additionalCard${index}.title`)) {
+      otherCards.push(
+        <div className={styles["listings-list-info-card"]}>
+          <BloomCard
+            title={t(`listingResource.additionalCard${index}.title`)}
+            variant="block"
+            headingPriority={3}
+            iconClass="card-icon"
+            subtitle={tIfExists(`listingResource.additionalCard${index}.subtext`)}
+          >
+            <Card.Section>
+              <Button
+                href={t(`listingResource.additionalCard${index}.link`)}
+                variant="primary-outlined"
+                size="sm"
+              >
+                {t(`listingResource.additionalCard${index}.linkLabel`)}
+              </Button>
+            </Card.Section>
+          </BloomCard>
+        </div>
+      )
+    } else {
+      hasAdditionalCards = false
+    }
+  }
+
   const infoCards = (
     <div className={styles["listings-list-info-cards"]}>
       {showNotificationsCard && (
-        <BloomCard
-          iconSymbol="envelope"
-          title={t("welcome.signUp")}
-          variant="block"
-          headingPriority={3}
-          iconClass="card-icon"
-        >
-          <Card.Section>
-            <Button
-              href={
-                enableCustomListingNotifications ? "/account/notifications" : notificationsSignUpUrl
-              }
-              variant="primary-outlined"
-              size="sm"
-            >
-              {t("welcome.signUpToday")}
-            </Button>
-          </Card.Section>
-        </BloomCard>
+        <div className={styles["listings-list-info-card"]}>
+          <BloomCard
+            title={t("welcome.signUp")}
+            variant="block"
+            headingPriority={3}
+            iconClass="card-icon"
+          >
+            <Card.Section>
+              <Button
+                href={
+                  enableCustomListingNotifications
+                    ? "/account/notifications"
+                    : notificationsSignUpUrl
+                }
+                variant="primary-outlined"
+                size="sm"
+              >
+                {t("welcome.signUpToday")}
+              </Button>
+            </Card.Section>
+          </BloomCard>
+        </div>
       )}
       {activeFeatureFlags?.includes(FeatureFlagEnum.enableResources) && (
-        <BloomCard
-          iconSymbol="house"
-          title={t("welcome.seeMoreOpportunitiesTruncated")}
-          variant="block"
-          headingPriority={3}
-          iconClass="card-icon"
-        >
-          <Card.Section>
-            <Button href="/additional-resources" variant="primary-outlined" size="sm">
-              {t("welcome.viewAdditionalHousingTruncated")}
-            </Button>
-          </Card.Section>
-        </BloomCard>
+        <div className={styles["listings-list-info-card"]}>
+          <BloomCard
+            title={t("welcome.seeMoreOpportunitiesTruncated")}
+            variant="block"
+            headingPriority={3}
+            iconClass="card-icon"
+          >
+            <Card.Section>
+              <Button href="/additional-resources" variant="primary-outlined" size="sm">
+                {t("welcome.viewAdditionalHousingTruncated")}
+              </Button>
+            </Card.Section>
+          </BloomCard>
+        </div>
       )}
       {activeFeatureFlags?.includes(FeatureFlagEnum.enableAdditionalResources) && (
-        <BloomCard
-          iconSymbol="questionMarkCircle"
-          title={t("resources.additionalResourcesTitle")}
-          variant="block"
-          headingPriority={3}
-          iconClass="card-icon"
-        >
-          <Card.Section>
-            <Button
-              href={t("resources.additionalResourcesLink")}
-              variant="primary-outlined"
-              size="sm"
-            >
-              {t("welcome.learnMore")}
-            </Button>
-          </Card.Section>
-        </BloomCard>
+        <div className={styles["listings-list-info-card"]}>
+          <BloomCard
+            title={t("resources.additionalResourcesTitle")}
+            variant="block"
+            headingPriority={3}
+            iconClass="card-icon"
+          >
+            <Card.Section>
+              <Button
+                href={t("resources.additionalResourcesLink")}
+                variant="primary-outlined"
+                size="sm"
+              >
+                {t("welcome.learnMore")}
+              </Button>
+            </Card.Section>
+          </BloomCard>
+        </div>
       )}
-      {/* TODO: add the Looking for housing in San Francisco? card here */}
+      {otherCards}
     </div>
   )
 
