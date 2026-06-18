@@ -68,7 +68,7 @@ export class ApplicationBulkUploadService {
           ),
       },
       {
-        path: 'applicationLotteryPositions.ordinal',
+        path: 'manualLotteryPositionNumber',
         label: 'Lottery Position Number',
       },
       {
@@ -186,11 +186,7 @@ export class ApplicationBulkUploadService {
                         },
                       },
                       submissionDate: true,
-                      applicationLotteryPositions: {
-                        select: {
-                          ordinal: true,
-                        },
-                      },
+                      manualLotteryPositionNumber: true,
                       status: true,
                       applicationDeclineReason: true,
                       applicationDeclineReasonAdditionalDetails: true,
