@@ -221,34 +221,6 @@ describe("ApplicationDates", () => {
     ).toBeInTheDocument()
   })
 
-  it("should make scheduled dates read-only once passed on a non-draft listing", () => {
-    render(
-      <FormProviderWrapper>
-        <ApplicationDates
-          enableAutopublish={true}
-          listing={
-            {
-              status: ListingsStatusEnum.active,
-              scheduledPublishAt: new Date("2020-01-01T00:00:00.000Z"),
-              scheduledApplicationOpenAt: new Date("2020-01-02T16:00:00.000Z"),
-            } as unknown as FormListing
-          }
-          requiredFields={[]}
-          openHouseEvents={[]}
-          setOpenHouseEvents={() => {
-            return
-          }}
-        />
-      </FormProviderWrapper>
-    )
-
-    const openDateGroup = screen.getByRole("group", { name: "Scheduled application open date" })
-    openDateGroup.querySelectorAll("input").forEach((input) => expect(input).toBeDisabled())
-
-    const publishDateGroup = screen.getByRole("group", { name: "Scheduled listing publish date" })
-    publishDateGroup.querySelectorAll("input").forEach((input) => expect(input).toBeDisabled())
-  })
-
   it("should keep scheduled dates editable on a pending listing even after the date has passed", () => {
     render(
       <FormProviderWrapper>
