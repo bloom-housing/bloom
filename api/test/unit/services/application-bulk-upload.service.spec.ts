@@ -53,7 +53,7 @@ const mockApplication = ({
     markedAsDuplicate: markedAsDuplicate,
     confirmationCode: `confirmationCode ${options?.position}`,
     applicant: applicant as Applicant,
-    manualLotteryPositionNumber: options?.manualLotteryPositionNumber ?? 0,
+    manualLotteryPositionNumber: options?.manualLotteryPositionNumber ?? null,
     applicationLotteryPositions: [],
     applicationsMailingAddress: addressFactory() as unknown as Address,
     applicationsAlternateAddress: addressFactory() as unknown as Address,
