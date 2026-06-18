@@ -924,9 +924,6 @@ export class UserService {
         middleName: dto.middleName,
         lastName: dto.lastName,
         dob: dto.dob,
-        notificationPreferences: {
-          create: {},
-        },
         jurisdictions: jurisdictionsToConnect
           ? {
               connect: jurisdictionsToConnect.map((juris) => ({
@@ -1027,9 +1024,6 @@ export class UserService {
           create: {
             ...dto.userRoles,
           },
-        },
-        notificationPreferences: {
-          create: {},
         },
         jurisdictions: dto.jurisdictions
           ? {
@@ -1138,9 +1132,6 @@ export class UserService {
           },
         },
         isAdvocate: true,
-        notificationPreferences: {
-          create: {},
-        },
         jurisdictions: jurisdictionsToConnect
           ? {
               connect: jurisdictionsToConnect,
@@ -1755,9 +1746,7 @@ export class UserService {
       });
 
     if (!notificationPreferences) {
-      throw new NotFoundException(
-        'Failed to retrieve user notification preferences',
-      );
+      return mapTo(UserNotificationPreferences, { regions: [] });
     }
 
     return mapTo(UserNotificationPreferences, notificationPreferences);
@@ -1776,8 +1765,12 @@ export class UserService {
       },
     );
 
-    await this.prisma.userNotificationPreferences.update({
-      data: {
+    await this.prisma.userNotificationPreferences.upsert({
+      create: {
+        ...dto,
+        userId: requestingUser.id,
+      },
+      update: {
         ...dto,
       },
       where: {

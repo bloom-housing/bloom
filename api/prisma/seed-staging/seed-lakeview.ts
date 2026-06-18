@@ -24,15 +24,17 @@ export const createLakeviewJurisdiction = async (
     publicSiteBaseURL,
     unitTypes,
     msqV2,
+    jurisdictionName = 'Lakeview',
   }: {
     publicSiteBaseURL: string;
     unitTypes: { id: string }[];
     msqV2: boolean;
+    jurisdictionName?: string;
   },
 ) => {
   const optionalV2MSQ = msqV2 ? [FeatureFlagEnum.enableV2MSQ] : [];
   const jurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Lakeview', {
+    data: jurisdictionFactory(jurisdictionName, {
       publicSiteBaseURL,
       featureFlags: [
         ...optionalV2MSQ,

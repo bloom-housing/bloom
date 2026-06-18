@@ -6,4 +6,5 @@ export class JurisdictionUpdate extends OmitType(Jurisdiction, [
   'updatedAt',
   'featureFlags',
   'multiselectQuestions',
+  'subJurisdictions',
 ]) {}

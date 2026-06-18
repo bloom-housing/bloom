@@ -10,11 +10,64 @@ import { mapTo } from '../utilities/mapTo';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { Prisma } from '@prisma/client';
 import { JurisdictionUpdate } from '../dtos/jurisdictions/jurisdiction-update.dto';
+import { JurisdictionViews } from '../enums/jurisdictions/view-enum';
 
+// TODO: convert this to the selectViews
 const view: Prisma.JurisdictionsInclude = {
   featureFlags: true,
   multiselectQuestions: true,
 };
+
+const selectViews: Partial<
+  Record<JurisdictionViews, Prisma.JurisdictionsSelect>
+> = {
+  [JurisdictionViews.public]: {
+    featureFlags: {
+      select: {
+        id: true,
+        name: true,
+        active: true,
+      },
+    },
+    id: true,
+    name: true,
+    languages: true,
+    notificationsSignUpUrl: true,
+    raceEthnicityConfiguration: true,
+    regions: true,
+    subJurisdictions: {
+      select: { id: true, name: true },
+    },
+    listingFeaturesConfiguration: true,
+    visibleAccessibilityPriorityTypes: true,
+    visibleApplicationAccessibilityFeatures: true,
+    visibleHouseholdMemberRelationships: true,
+    visibleSpokenLanguages: true,
+  },
+};
+
+selectViews[JurisdictionViews.full] = {
+  ...selectViews[JurisdictionViews.public],
+  multiselectQuestions: true,
+  emailFromAddress: true,
+  allowSingleUseCodeLogin: true,
+  duplicateListingPermissions: true,
+  enableGeocodingPreferences: true,
+  enablePartnerDemographics: true,
+  enablePartnerSettings: true,
+  listingApprovalPermissions: true,
+  minimumListingPublishImagesRequired: true,
+  notificationsSignUpUrl: true,
+  partnerTerms: true,
+  publicUrl: true,
+  referralSummaryDefault: true,
+  rentalAssistanceDefault: true,
+  requiredListingFields: true,
+  whatToExpect: true,
+  whatToExpectAdditionalText: true,
+  whatToExpectUnderConstruction: true,
+};
+
 /**
   this is the service for jurisdictions
   it handles all the backend's business logic for reading/writing/deleting jurisdiction data
@@ -26,9 +79,9 @@ export class JurisdictionService {
   /**
     this will get a set of jurisdictions given the params passed in
   */
-  async list(): Promise<Jurisdiction[]> {
+  async list(view?: JurisdictionViews): Promise<Jurisdiction[]> {
     const rawJurisdictions = await this.prisma.jurisdictions.findMany({
-      include: view,
+      select: view ? selectViews[view] : selectViews[JurisdictionViews.full],
     });
     return mapTo(Jurisdiction, rawJurisdictions);
   }
@@ -62,16 +115,19 @@ export class JurisdictionService {
   async findOne(condition: {
     jurisdictionId?: string;
     jurisdictionName?: string;
+    view?: JurisdictionViews;
   }): Promise<Jurisdiction> {
+    console.warn('here');
     if (!condition.jurisdictionId && !condition.jurisdictionName) {
       throw new BadRequestException(
         'a jurisdiction id or jurisdiction name must be provided',
       );
     }
+    const viewToUse = condition.view || JurisdictionViews.public;
 
     const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
       where: this.buildWhere(condition),
-      include: view,
+      select: selectViews[viewToUse],
     });
 
     if (!rawJurisdiction) {
