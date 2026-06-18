@@ -212,6 +212,8 @@ export class ApplicationController {
       'Download a template CSV for bulk updating applications for a listing',
     operationId: 'downloadBulkUpdateTemplate',
   })
+  @Header('Content-Type', 'application/zip')
+  @UseInterceptors(ExportLogInterceptor)
   @ApiOkResponse({ type: StreamableFile })
   async downloadBulkUpdateTemplate(
     @Request() req: ExpressRequest,

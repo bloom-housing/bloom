@@ -27,14 +27,12 @@ const mockApplication = ({
     applicantAddress: addressFactory() as unknown as Address,
     applicantWorkAddress: addressFactory() as unknown as Address,
   },
-  applicationLotteryPositions = [],
   ...options
 }: {
   id?: string;
   applicant?: Partial<Applicant>;
   submissionDate?: Date;
   deletedAt?: Date;
-  applicationLotteryPositions?: ApplicationLotteryPosition[];
   status?: ApplicationStatusEnum;
   applicationDeclineReason?: ApplicationDeclineReasonEnum;
   applicationDeclineReasonAdditionalDetails?: string;
@@ -42,21 +40,22 @@ const mockApplication = ({
   conventionalUnitWaitlistNumber?: number;
   markedAsDuplicate?: boolean;
   position?: number;
+  manualLotteryPositionNumber?: number;
 }): Application => {
   return {
     id: options?.id || randomUUID(),
     createdAt: new Date(),
     updatedAt: new Date(),
-    deletedAt: options.deletedAt ?? null,
-    submissionDate: options.submissionDate ?? new Date(),
+    deletedAt: options?.deletedAt ?? null,
+    submissionDate: options?.submissionDate ?? new Date(),
     contactPreferences: ['example contact preference'],
-    status: options.status ?? ApplicationStatusEnum.submitted,
+    status: options?.status ?? ApplicationStatusEnum.submitted,
     submissionType: ApplicationSubmissionTypeEnum.electronical,
     markedAsDuplicate: markedAsDuplicate,
-    confirmationCode: `confirmationCode ${options.position}`,
+    confirmationCode: `confirmationCode ${options?.position}`,
     applicant: applicant as Applicant,
-    applicationLotteryPositions:
-      applicationLotteryPositions as ApplicationLotteryPosition[],
+    manualLotteryPositionNumber: options?.manualLotteryPositionNumber ?? 0,
+    applicationLotteryPositions: [],
     applicationsMailingAddress: addressFactory() as unknown as Address,
     applicationsAlternateAddress: addressFactory() as unknown as Address,
     accessibility: {} as Accessibility,
@@ -67,11 +66,11 @@ const mockApplication = ({
     } as unknown as AlternateContact,
     householdMember: [],
     listings: { id: randomUUID() },
-    applicationDeclineReason: options.applicationDeclineReason ?? null,
+    applicationDeclineReason: options?.applicationDeclineReason ?? null,
     applicationDeclineReasonAdditionalDetails:
-      options.applicationDeclineReasonAdditionalDetails ?? null,
-    accessibleUnitWaitlistNumber: options.accessibleUnitWaitlistNumber,
-    conventionalUnitWaitlistNumber: options.conventionalUnitWaitlistNumber,
+      options?.applicationDeclineReasonAdditionalDetails ?? null,
+    accessibleUnitWaitlistNumber: options?.accessibleUnitWaitlistNumber,
+    conventionalUnitWaitlistNumber: options?.conventionalUnitWaitlistNumber,
   };
 };
 
@@ -126,9 +125,7 @@ describe('Testing application bulk upload services', () => {
           lastName: 'Tawnee',
         },
         status: ApplicationStatusEnum.declined,
-        applicationLotteryPositions: [
-          { ordinal: 15 } as ApplicationLotteryPosition,
-        ],
+        manualLotteryPositionNumber: 15,
         applicationDeclineReason:
           ApplicationDeclineReasonEnum.householdSizeTooLarge,
         applicationDeclineReasonAdditionalDetails: 'Some additional details',
@@ -175,7 +172,7 @@ describe('Testing application bulk upload services', () => {
       const headers =
         '"Application Id","Applicant First Name","Applicant Last Name","Application Submission Date","Lottery Position Number","Application Status","Application Decline Reason","Application Decline Reason Additional Details","Waitlist Position (Accessible Unit)","Waitlist Position (Conventional Unit)"';
 
-      const rowOne = `"${applicationsSet[0].id}","Colleen","Tawnee","05-19-2026 03:00:00PM PDT",,"Declined","householdSizeTooLarge","Some additional details",,`;
+      const rowOne = `"${applicationsSet[0].id}","Colleen","Tawnee","05-19-2026 03:00:00PM PDT","15","Declined","householdSizeTooLarge","Some additional details",,`;
       const rowTwo = `"${applicationsSet[1].id}","Erin","Patsy","04-02-2026 03:00:00AM PDT",,"Submitted",,,"2",`;
       const rowThree = `"${applicationsSet[2].id}","Nanny","Hayley","07-23-2026 08:30:00AM PDT",,"Waitlist",,,,"5"`;
 

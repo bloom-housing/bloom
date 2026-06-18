@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable, StreamableFile } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  StreamableFile,
+  NotFoundException,
+} from '@nestjs/common';
 import { ApplicationStatusEnum } from '@prisma/client';
 import fs, { createReadStream } from 'fs';
 import dayjs from 'dayjs';
@@ -115,7 +120,7 @@ export class ApplicationBulkUploadService {
     });
 
     if (applications.length === 0) {
-      throw new Error(
+      throw new NotFoundException(
         `Listing with id: ${listingId} does not contain valid applications`,
       );
     }
@@ -164,74 +169,81 @@ export class ApplicationBulkUploadService {
           resolve();
         })
         .on('open', async () => {
-          writableStream.write(
-            csvHeaders
-              .map((header) => `"${header.label.replace(/"/g, `""`)}"`)
-              .join(',') + '\n',
-          );
+          try {
+            writableStream.write(
+              csvHeaders
+                .map((header) => `"${header.label.replace(/"/g, `""`)}"`)
+                .join(',') + '\n',
+            );
 
-          const promiseArray: Promise<string>[] = [];
-          for (let i = 0; i < applications.length; i += NUMBER_TO_PAGINATE_BY) {
-            promiseArray.push(
-              new Promise(async (resolve) => {
-                // grab applications NUMBER_TO_PAGINATE_BY at a time
-                const paginatedApplications =
-                  await this.prisma.applications.findMany({
-                    select: {
-                      id: true,
-                      applicant: {
-                        select: {
-                          firstName: true,
-                          lastName: true,
+            const promiseArray: Promise<string>[] = [];
+            for (
+              let i = 0;
+              i < applications.length;
+              i += NUMBER_TO_PAGINATE_BY
+            ) {
+              promiseArray.push(
+                (async () => {
+                  const paginatedApplications =
+                    await this.prisma.applications.findMany({
+                      select: {
+                        id: true,
+                        applicant: {
+                          select: {
+                            firstName: true,
+                            lastName: true,
+                          },
+                        },
+                        submissionDate: true,
+                        manualLotteryPositionNumber: true,
+                        status: true,
+                        applicationDeclineReason: true,
+                        applicationDeclineReasonAdditionalDetails: true,
+                        accessibleUnitWaitlistNumber: true,
+                        conventionalUnitWaitlistNumber: true,
+                      },
+                      where: {
+                        listingId: listingId,
+                        markedAsDuplicate: false,
+                        deletedAt: null,
+                        id: {
+                          in: applications
+                            .slice(i, i + NUMBER_TO_PAGINATE_BY)
+                            .map((app) => app.id),
                         },
                       },
-                      submissionDate: true,
-                      manualLotteryPositionNumber: true,
-                      status: true,
-                      applicationDeclineReason: true,
-                      applicationDeclineReasonAdditionalDetails: true,
-                      accessibleUnitWaitlistNumber: true,
-                      conventionalUnitWaitlistNumber: true,
-                    },
-                    where: {
-                      listingId: listingId,
-                      markedAsDuplicate: false,
-                      deletedAt: null,
-                      id: {
-                        in: applications
-                          .slice(i, i + NUMBER_TO_PAGINATE_BY)
-                          .map((app) => app.id),
-                      },
-                    },
-                  });
+                    });
 
-                let data = '';
-                paginatedApplications.forEach((app) => {
-                  const stringData = this.populateDataForEachHeader(
-                    csvHeaders,
-                    app,
-                    { stringData: data },
-                  );
-                  data = stringData + '\n';
-                });
-                resolve(data);
-              }),
-            );
-          }
-          const resolvedArray = await Promise.all(promiseArray);
-          // now loop over batched row data and write them to file
-          resolvedArray.forEach((row) => {
-            try {
-              writableStream.write(row);
-            } catch (e) {
-              console.log('writeStream write error = ', e);
-              writableStream.once('drain', () => {
-                console.log('drain buffer');
-                writableStream.write(row + '\n');
-              });
+                  let data = '';
+                  paginatedApplications.forEach((app) => {
+                    const stringData = this.populateDataForEachHeader(
+                      csvHeaders,
+                      app,
+                      { stringData: data },
+                    );
+                    data = stringData + '\n';
+                  });
+                  return data;
+                })(),
+              );
             }
-          });
-          writableStream.end();
+            const resolvedArray = await Promise.all(promiseArray);
+            // now loop over batched row data and write them to file
+            resolvedArray.forEach((row) => {
+              try {
+                writableStream.write(row);
+              } catch (e) {
+                console.log('writeStream write error = ', e);
+                writableStream.once('drain', () => {
+                  console.log('drain buffer');
+                  writableStream.write(row + '\n');
+                });
+              }
+            });
+            writableStream.end();
+          } catch (e) {
+            reject(e);
+          }
         });
     });
   }
@@ -243,7 +255,7 @@ export class ApplicationBulkUploadService {
       stringData?: string;
     },
   ): string {
-    let stringData = optionalParams.stringData;
+    let stringData = optionalParams?.stringData ?? '';
 
     csvHeaders.forEach((header, index) => {
       let value;
@@ -271,7 +283,8 @@ export class ApplicationBulkUploadService {
       }
 
       if (stringData !== undefined) {
-        stringData += value ? `"${value.toString().replace(/"/g, `""`)}"` : '';
+        stringData +=
+          value !== '' ? `"${value.toString().replace(/"/g, `""`)}"` : '';
         if (index < csvHeaders.length - 1) {
           stringData += ',';
         }
