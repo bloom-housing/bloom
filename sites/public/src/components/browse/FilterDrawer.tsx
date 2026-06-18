@@ -275,10 +275,21 @@ const FilterDrawer = (props: FilterDrawerProps) => {
         </div>
       </Drawer.Content>
       <Drawer.Footer>
-        <Button type="submit" variant="primary" size="sm" nativeButtonProps={{ form: "filter" }}>
+        <Button
+          type="submit"
+          variant="primary"
+          size="sm"
+          nativeButtonProps={{ form: "filter" }}
+          id="show-listings-button"
+        >
           {t("listings.showMatchingListings")}
         </Button>
-        <Button variant="primary-outlined" size="sm" onClick={() => props.onClear(reset)}>
+        <Button
+          variant="primary-outlined"
+          size="sm"
+          onClick={() => props.onClear(reset)}
+          id="clear-listings-button"
+        >
           {t("listingFilters.clear")}
         </Button>
       </Drawer.Footer>

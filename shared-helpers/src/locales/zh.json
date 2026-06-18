@@ -1,6 +1,7 @@
 {
   "account.accountSettings": "帐户设置",
   "account.accountSettingsSubtitle": "账户设置、邮箱和密码",
+  "account.accountSettingsSubtitleWithNotifications": "账户设置、电子邮件、密码和通知",
   "account.accountSettingsUpdate": "更新帐户设置",
   "account.allMyApplications": "我的所有申請",
   "account.allMyApplicationsSubtitle": "查看您已申請的房源列表。",

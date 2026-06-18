@@ -608,7 +608,7 @@ describe('Testing email service', () => {
       expect(sendMock).toHaveBeenCalled();
       const emailMock = sendMock.mock.calls[0][0];
       expect(emailMock.to).toEqual(emailArr);
-      expect(emailMock.subject).toEqual('New published listing');
+      expect(emailMock.subject).toEqual('New published listing - listing name');
       expect(emailMock.body).toMatch(
         `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" />`,
       );
@@ -616,6 +616,63 @@ describe('Testing email service', () => {
       expect(emailMock.body).toMatch('Hello,');
       expect(emailMock.body).toMatch(
         `The listing name listing has been approved and published by an administrator.`,
+      );
+      expect(emailMock.body).toMatch(
+        'To view the published listing, please click on the link below',
+      );
+      expect(emailMock.body).toMatch('View Listing');
+      expect(emailMock.body).toMatch(
+        /http:\/\/localhost:3000\/listing\/listingId/,
+      );
+      expect(emailMock.body).toMatch('Thank you,');
+      expect(emailMock.body).toMatch('Bloom Housing Portal');
+    });
+  });
+
+  describe('scheduled listing', () => {
+    it('should generate html body', async () => {
+      const emailArr = ['testOne@xample.com', 'testTwo@example.com'];
+      const service = await module.resolve(EmailService);
+      await service.listingScheduled(
+        { name: 'test jurisdiction', id: 'jurisdictionId' },
+        { name: 'listing name', id: 'listingId' },
+        emailArr,
+        new Date('2026-07-15T12:00:00.000Z'),
+      );
+
+      expect(sendMock).toHaveBeenCalled();
+      const emailMock = sendMock.mock.calls[0][0];
+      expect(emailMock.to).toEqual(emailArr);
+      expect(emailMock.subject).toEqual('New scheduled listing - listing name');
+      expect(emailMock.body).toMatch('New scheduled listing');
+      expect(emailMock.body).toMatch('Hello,');
+      expect(emailMock.body).toMatch(
+        'The listing name listing has been approved by an administrator and is scheduled to be automatically published on 07/15/2026 between 12:00 AM and 2:00 AM. If you have questions or require changes, please contact an administrator.',
+      );
+      expect(emailMock.body).toMatch('Thank you,');
+      expect(emailMock.body).toMatch('Bloom Housing Portal');
+    });
+  });
+
+  describe('auto-published listing', () => {
+    it('should generate html body', async () => {
+      const emailArr = ['testOne@xample.com', 'testTwo@example.com'];
+      const service = await module.resolve(EmailService);
+      await service.listingPublished(
+        { name: 'test jurisdiction', id: 'jurisdictionId' },
+        { name: 'listing name', id: 'listingId' },
+        emailArr,
+        'http://localhost:3000',
+      );
+
+      expect(sendMock).toHaveBeenCalled();
+      const emailMock = sendMock.mock.calls[0][0];
+      expect(emailMock.to).toEqual(emailArr);
+      expect(emailMock.subject).toEqual('New published listing - listing name');
+      expect(emailMock.body).toMatch('New published listing');
+      expect(emailMock.body).toMatch('Hello,');
+      expect(emailMock.body).toMatch(
+        'The listing name listing has been automatically published.',
       );
       expect(emailMock.body).toMatch(
         'To view the published listing, please click on the link below',
@@ -920,7 +977,7 @@ describe('Testing email service', () => {
       applicationsDue: 'Applications Due',
       address: 'Address',
       neighborhood: 'Neighborhood',
-      unitType: 'Unit type',
+      unitType: 'Available accessible units',
       opportunityType: 'Opportunity type',
       rent: 'Rent',
       minIncome: 'Minimum Income',

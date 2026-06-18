@@ -1,6 +1,7 @@
 {
   "account.accountSettings": "계정 설정",
   "account.accountSettingsSubtitle": "계정 설정, 이메일 및 비밀번호",
+  "account.accountSettingsSubtitleWithNotifications": "계정 설정, 이메일, 비밀번호 및 알림",
   "account.accountSettingsUpdate": "계정 설정 업데이트",
   "account.allMyApplications": "내 모든 지원서",
   "account.allMyApplicationsSubtitle": "신청하신 매물 목록을 확인하세요.",
