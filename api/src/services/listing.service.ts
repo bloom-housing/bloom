@@ -1468,6 +1468,7 @@ export class ListingService implements OnModuleInit {
         id: true,
         featureFlags: true,
         listingApprovalPermissions: true,
+        publicUrl: true,
       },
       where: {
         id: dto.jurisdictions.id,
@@ -1874,16 +1875,33 @@ export class ListingService implements OnModuleInit {
         approvingRoles: rawJurisdiction.listingApprovalPermissions,
         jurisId: rawJurisdiction.id,
       });
-    } else if (
-      enableV2MSQ &&
-      mappedListing.status === ListingsStatusEnum.active
-    ) {
-      const multiselectQuestions =
-        mappedListing.listingMultiselectQuestions.map(
-          (listingMultiselectQuestion) =>
-            listingMultiselectQuestion.multiselectQuestions,
-        );
-      void this.multiselectQuestionService.activateMany(multiselectQuestions);
+    } else if (mappedListing.status === ListingsStatusEnum.active) {
+      if (enableV2MSQ) {
+        const multiselectQuestions =
+          mappedListing.listingMultiselectQuestions.map(
+            (listingMultiselectQuestion) =>
+              listingMultiselectQuestion.multiselectQuestions,
+          );
+        void this.multiselectQuestionService.activateMany(multiselectQuestions);
+      }
+      const userInfo = await this.getUserEmailInfo(
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
+        mappedListing.id,
+        rawJurisdiction.id,
+      );
+      await this.emailService.listingPublished(
+        { id: rawJurisdiction.id },
+        { id: mappedListing.id, name: mappedListing.name },
+        userInfo.emails,
+        rawJurisdiction.publicUrl || '',
+      );
+      await this.sendListingPublishNotification(mappedListing);
     }
     await this.cachePurge(undefined, dto.status, mappedListing.id);
     return mappedListing;
@@ -2964,6 +2982,32 @@ export class ListingService implements OnModuleInit {
         jurisId: rawJurisdiction.id,
         scheduledPublishAt: incomingDto.scheduledPublishAt,
       });
+    else if (
+      incomingDto.status === ListingsStatusEnum.active &&
+      storedListing.status === ListingsStatusEnum.pending
+    ) {
+      const userInfo = await this.getUserEmailInfo(
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
+        mappedListing.id,
+        rawJurisdiction.id,
+      );
+      const jurisdiction = await this.prisma.jurisdictions.findUnique({
+        select: { publicUrl: true },
+        where: { id: rawJurisdiction.id },
+      });
+      await this.emailService.listingPublished(
+        { id: rawJurisdiction.id },
+        { id: mappedListing.id, name: mappedListing.name },
+        userInfo.emails,
+        jurisdiction.publicUrl || '',
+      );
+    }
 
     if (sendPublishNotificationEmail) {
       await this.sendListingPublishNotification(mappedListing);

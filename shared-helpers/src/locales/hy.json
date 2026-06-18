@@ -1,6 +1,7 @@
 {
   "account.accountSettings": "Հաշվի կարգավորումներ",
   "account.accountSettingsSubtitle": "Հաշվի կարգավորումներ, էլ․ փոստ և գաղտնաբառ",
+  "account.accountSettingsSubtitleWithNotifications": "Հաշվի կարգավորումներ, էլ. փոստ, գաղտնաբառ և ծանուցումներ",
   "account.accountSettingsUpdate": "Հաշվի կարգավորումների թարմացում",
   "account.allMyApplications": "Իմ բոլոր դիմումները",
   "account.allMyApplicationsSubtitle": "Տեսեք այն անշարժ գույքի ցուցակները, որոնց համար դիմել եք։",
