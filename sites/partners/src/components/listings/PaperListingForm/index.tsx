@@ -911,6 +911,8 @@ const ListingForm = ({
         isOpen={publishDialog}
         setOpen={setPublishDialog}
         submitFormWithStatus={triggerSubmitWithStatus}
+        enableAutopublish={enableAutopublish}
+        scheduledPublishAt={scheduledPublishAtFromForm}
       />
 
       <LiveConfirmationDialog

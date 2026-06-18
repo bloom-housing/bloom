@@ -260,6 +260,7 @@
   "listings.applicationType.referral": "Referral",
   "listings.applicationType.referralUnit": "Referral only units",
   "listings.approval.adminApproveDialogTitle": "Approve listing",
+  "listings.approval.adminPublishWithScheduledDate": "This listing will publish automatically on %{date} between 12:00 AM and 2:00 AM.",
   "listings.approval.adminApproveNoScheduledDate": "This listing has no scheduled publish date entered. Approving it will publish it immediately. To delay publication, set a publish date before approving.",
   "listings.approval.adminApproveScheduledFuture": "This listing is scheduled to publish automatically on %{date} between 12:00 AM and 2:00 AM. Approving now will not publish it immediately.",
   "listings.approval.adminApproveScheduledPast": "The scheduled publish date entered on the listing has passed. Approving this listing will publish it immediately. To delay publication, update the scheduled publish date before approving.",
