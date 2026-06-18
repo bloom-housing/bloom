@@ -1,6 +1,7 @@
 {
   "account.accountSettings": "অ্যাকাউন্ট সেটিংস",
   "account.accountSettingsSubtitle": "অ্যাকাউন্ট সেটিংস, ইমেল এবং পাসওয়ার্ড",
+  "account.accountSettingsSubtitleWithNotifications": "অ্যাকাউন্ট সেটিংস, ইমেল, পাসওয়ার্ড এবং বিজ্ঞপ্তি",
   "account.accountSettingsUpdate": "অ্যাকাউন্ট সেটিংস আপডেট করুন",
   "account.allMyApplications": "আমার সকল আবেদনপত্র",
   "account.allMyApplicationsSubtitle": "আপনার আবেদনকৃত সম্পত্তির তালিকা দেখুন।",
