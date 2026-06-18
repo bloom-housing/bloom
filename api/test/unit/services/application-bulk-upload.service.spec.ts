@@ -174,7 +174,7 @@ describe('Testing application bulk upload services', () => {
 
       const rowOne = `"${applicationsSet[0].id}","Colleen","Tawnee","05-19-2026 03:00:00PM PDT","15","Declined","householdSizeTooLarge","Some additional details",,`;
       const rowTwo = `"${applicationsSet[1].id}","Erin","Patsy","04-02-2026 03:00:00AM PDT",,"Submitted",,,"2",`;
-      const rowThree = `"${applicationsSet[2].id}","Nanny","Hayley","07-23-2026 08:30:00AM PDT",,"Waitlist",,,,"5"`;
+      const rowThree = `"${applicationsSet[2].id}","Nanny","Hayley","07-23-2026 08:30:00AM PDT",,"Wait list",,,,"5"`;
 
       expect(content).toContain(headers);
       expect(content).toContain(rowOne);

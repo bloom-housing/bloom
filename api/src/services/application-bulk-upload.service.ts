@@ -36,13 +36,13 @@ export class ApplicationBulkUploadService {
       case ApplicationStatusEnum.declined:
         return 'Declined';
       case ApplicationStatusEnum.receivedUnit:
-        return 'Received Unit';
+        return 'Received a Unit';
       case ApplicationStatusEnum.submitted:
         return 'Submitted';
       case ApplicationStatusEnum.waitlist:
-        return 'Waitlist';
+        return 'Wait list';
       case ApplicationStatusEnum.waitlistDeclined:
-        return 'Waitlist Declined';
+        return 'Wait list - Declined';
       default:
         return statusEnum;
     }
