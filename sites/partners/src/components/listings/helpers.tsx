@@ -112,10 +112,11 @@ export const formatRange = (
 export function getValidFutureScheduledDate(
   scheduledPublishAt: Date | string | null | undefined
 ): string | false {
-  if (scheduledPublishAt == null || !dayjs.utc(scheduledPublishAt).isValid()) return false
-  const scheduledAtDate = dayjs.utc(scheduledPublishAt).format("MM/DD/YYYY")
-  if (dayjs().startOf("day").isBefore(dayjs(scheduledAtDate).startOf("day"))) {
-    return scheduledAtDate
+  if (scheduledPublishAt == null) return false
+  const scheduledAt = dayjs.utc(scheduledPublishAt)
+  if (!scheduledAt.isValid()) return false
+  if (dayjs().startOf("day").isBefore(scheduledAt.startOf("day"))) {
+    return scheduledAt.format("MM/DD/YYYY")
   }
   return false
 }
