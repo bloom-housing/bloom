@@ -148,10 +148,6 @@ const ApplicationDates = ({
   const hasScheduledApplicationOpenError =
     errors?.scheduledApplicationOpenAt || errors?.scheduledApplicationOpenDateField
 
-  const scheduledApplicationOpenHasPassed =
-    !!listing?.scheduledApplicationOpenAt &&
-    dayjs.utc(listing.scheduledApplicationOpenAt).isBefore(dayjs())
-
   const scheduledApplicationOpenDateVal = watch("scheduledApplicationOpenDateField")
   const isScheduledApplicationOpenDateEmpty =
     !scheduledApplicationOpenDateVal?.month &&
@@ -281,13 +277,6 @@ const ApplicationDates = ({
                 register={register}
                 setValue={setValue}
                 watch={watch}
-                disabled={
-                  ((listing?.status === ListingsStatusEnum.active ||
-                    listing?.status === ListingsStatusEnum.closed) &&
-                    scheduledApplicationOpenHasPassed) ||
-                  (listing?.status === ListingsStatusEnum.active &&
-                    isScheduledApplicationOpenDateEmpty)
-                }
                 error={
                   hasScheduledApplicationOpenError && {
                     month: hasScheduledApplicationOpenError,
