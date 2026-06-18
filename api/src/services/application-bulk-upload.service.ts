@@ -18,7 +18,7 @@ import { User } from '../dtos/users/user.dto';
 import { ListingService } from './listing.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { convertApplicationDeclineReasonToReadable } from 'src/utilities/application-export-helpers';
+import { convertApplicationDeclineReasonToReadable } from '../utilities/application-export-helpers';
 
 const NUMBER_TO_PAGINATE_BY = 500;
 

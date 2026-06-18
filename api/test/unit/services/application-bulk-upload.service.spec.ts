@@ -12,7 +12,6 @@ import { Address } from '../../../src/dtos/addresses/address.dto';
 import { Accessibility } from '../../../src/dtos/applications/accessibility.dto';
 import { AlternateContact } from '../../../src/dtos/applications/alternate-contact.dto';
 import { Applicant } from '../../../src/dtos/applications/applicant.dto';
-import { ApplicationLotteryPosition } from '../../../src/dtos/applications/application-lottery-position.dto';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { Demographic } from '../../../src/dtos/applications/demographic.dto';
 import { ApplicationBulkUploadService } from '../../../src/services/application-bulk-upload.service';
