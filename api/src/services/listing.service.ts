@@ -543,6 +543,24 @@ export class ListingService implements OnModuleInit {
       caseSensitive: true,
     });
 
+    const includeExternal = params?.find(
+      (f) => f[ListingFilterKeys.includeExternal] !== undefined,
+    );
+    if (
+      includeExternal === undefined ||
+      includeExternal[ListingFilterKeys.includeExternal] === false
+    ) {
+      filters.push({
+        OR: [
+          {
+            externalListingId: {
+              equals: null,
+            },
+          },
+        ],
+      });
+    }
+
     // detect combined >=/<= monthlyRent filters and add one range filter
     const rentParams =
       params?.filter((f) => f[ListingFilterKeys.monthlyRent] !== undefined) ||
@@ -3392,6 +3410,7 @@ export class ListingService implements OnModuleInit {
               lte: new Date(),
             },
           },
+          { externalListingId: { equals: null } },
         ],
       },
     });
@@ -3468,6 +3487,7 @@ export class ListingService implements OnModuleInit {
         AND: [
           { scheduledPublishAt: { not: null } },
           { scheduledPublishAt: { lte: new Date() } },
+          { externalListingId: { equals: null } },
         ],
       },
     });

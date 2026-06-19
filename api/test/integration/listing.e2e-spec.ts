@@ -636,6 +636,7 @@ describe('Listing Controller Tests', () => {
     let listing5WithUnitGroups;
     let listing6WithUnitGroups;
     let listingWithWaitlistReviewOrder;
+    let externalListing;
     let jurisdictionB;
     let jurisdictionC;
     let jurisdictionDWithUnitGroups;
@@ -756,6 +757,13 @@ describe('Listing Controller Tests', () => {
       const listing3Input = await listingFactory(jurisdictionC.id, prisma);
       listing3WithUnits = await prisma.listings.create({
         data: listing3Input,
+      });
+      const externalListingInput = await listingFactory(
+        jurisdictionC.id,
+        prisma,
+      );
+      externalListing = await prisma.listings.create({
+        data: { ...externalListingInput, externalListingId: randomUUID() },
       });
       jurisdictionDWithUnitGroups = await prisma.jurisdictions.create({
         data: jurisdictionFactory(`filterableList D ${randomName()}`),
@@ -1259,8 +1267,8 @@ describe('Listing Controller Tests', () => {
         view: ListingViews.base,
         filter: [
           {
-            $comparison: Compare['='],
-            bathrooms: 1,
+            $comparison: Compare['IN'],
+            bathrooms: [1],
           },
           {
             $comparison: Compare['='],
@@ -1521,6 +1529,35 @@ describe('Listing Controller Tests', () => {
 
       const foundId = res.body.items.some(
         (elem) => elem.id === listing2WithUnits.id,
+      );
+      expect(foundId).toEqual(true);
+    });
+    it('should return a listing based on filter includeExternal', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['='],
+            includeExternal: true,
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionC.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
+
+      const foundId = res.body.items.some(
+        (elem) => elem.id === externalListing.id,
       );
       expect(foundId).toEqual(true);
     });

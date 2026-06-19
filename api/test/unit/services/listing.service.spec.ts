@@ -632,7 +632,17 @@ describe('Testing listing service', () => {
         take: 10,
         orderBy: undefined,
         where: {
-          AND: [],
+          AND: [
+            {
+              OR: [
+                {
+                  externalListingId: {
+                    equals: null,
+                  },
+                },
+              ],
+            },
+          ],
         },
         include: {
           jurisdictions: true,
@@ -721,7 +731,17 @@ describe('Testing listing service', () => {
 
       expect(prisma.listings.count).toHaveBeenCalledWith({
         where: {
-          AND: [],
+          AND: [
+            {
+              OR: [
+                {
+                  externalListingId: {
+                    equals: null,
+                  },
+                },
+              ],
+            },
+          ],
         },
       });
     });
@@ -767,6 +787,15 @@ describe('Testing listing service', () => {
         ],
         where: {
           AND: [
+            {
+              OR: [
+                {
+                  externalListingId: {
+                    equals: null,
+                  },
+                },
+              ],
+            },
             {
               OR: [
                 {
@@ -868,6 +897,15 @@ describe('Testing listing service', () => {
       expect(prisma.listings.count).toHaveBeenCalledWith({
         where: {
           AND: [
+            {
+              OR: [
+                {
+                  externalListingId: {
+                    equals: null,
+                  },
+                },
+              ],
+            },
             {
               OR: [
                 {
@@ -954,7 +992,17 @@ describe('Testing listing service', () => {
           },
         ],
         where: {
-          AND: [],
+          AND: [
+            {
+              OR: [
+                {
+                  externalListingId: {
+                    equals: null,
+                  },
+                },
+              ],
+            },
+          ],
         },
         include: {
           jurisdictions: true,
@@ -1001,7 +1049,17 @@ describe('Testing listing service', () => {
 
       expect(prisma.listings.count).toHaveBeenCalledWith({
         where: {
-          AND: [],
+          AND: [
+            {
+              OR: [
+                {
+                  externalListingId: {
+                    equals: null,
+                  },
+                },
+              ],
+            },
+          ],
         },
       });
     });
@@ -1020,6 +1078,15 @@ describe('Testing listing service', () => {
 
       expect(service.buildWhereClause(params)).toEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -1066,6 +1133,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 name: {
                   contains: 'simple search',
                   mode: 'insensitive',
@@ -1097,6 +1173,15 @@ describe('Testing listing service', () => {
 
       expect(service.buildWhereClause(params, 'simple search')).toEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -1325,6 +1410,15 @@ describe('Testing listing service', () => {
             {
               OR: [
                 {
+                  externalListingId: {
+                    equals: null,
+                  },
+                },
+              ],
+            },
+            {
+              OR: [
+                {
                   name: {
                     in: ['listing', 'name'],
                     mode: 'insensitive',
@@ -1419,6 +1513,15 @@ describe('Testing listing service', () => {
             {
               OR: [
                 {
+                  externalListingId: {
+                    equals: null,
+                  },
+                },
+              ],
+            },
+            {
+              OR: [
+                {
                   name: {
                     in: ['listing', 'name'],
                     mode: 'insensitive',
@@ -1485,7 +1588,17 @@ describe('Testing listing service', () => {
         take: 10,
         orderBy: undefined,
         where: {
-          AND: [],
+          AND: [
+            {
+              OR: [
+                {
+                  externalListingId: {
+                    equals: null,
+                  },
+                },
+              ],
+            },
+          ],
         },
         select: {
           name: true,
@@ -1517,7 +1630,17 @@ describe('Testing listing service', () => {
 
       expect(prisma.listings.count).toHaveBeenCalledWith({
         where: {
-          AND: [],
+          AND: [
+            {
+              OR: [
+                {
+                  externalListingId: {
+                    equals: null,
+                  },
+                },
+              ],
+            },
+          ],
         },
       });
     });
@@ -1535,6 +1658,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -1571,6 +1703,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 marketingType: {
                   equals: MarketingTypeEnum.comingSoon,
                 },
@@ -1592,6 +1733,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -1646,6 +1796,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 reviewOrderType: {
                   in: [
                     ReviewOrderTypeEnum.waitlist,
@@ -1670,6 +1829,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -1706,6 +1874,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -1774,6 +1951,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 AND: [
                   {
                     unitGroups: {
@@ -1807,6 +1993,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 marketingType: {
                   equals: MarketingTypeEnum.comingSoon,
                 },
@@ -1828,6 +2023,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -1882,6 +2086,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 reviewOrderType: {
                   in: [
                     ReviewOrderTypeEnum.waitlist,
@@ -1909,6 +2122,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 unitsAvailable: {
                   gte: 1,
                 },
@@ -1930,7 +2152,7 @@ describe('Testing listing service', () => {
 
     it('should return a where clause for filter bathrooms', () => {
       const filter = [
-        { $comparison: '=', bathrooms: 2 } as ListingFilterParams,
+        { $comparison: 'IN', bathrooms: [2] } as ListingFilterParams,
       ];
       const whereClause = service.buildWhereClause(filter, '');
 
@@ -1939,10 +2161,19 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 units: {
                   some: {
                     numBathrooms: {
-                      equals: 2,
+                      in: [2],
                     },
                   },
                 },
@@ -1959,6 +2190,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -1997,6 +2237,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -2039,6 +2288,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 listingsBuildingAddress: {
                   city: {
                     equals: cityName,
@@ -2064,6 +2322,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -2095,6 +2362,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 homeType: {
                   in: homeTypes,
                 },
@@ -2117,6 +2393,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -2150,6 +2435,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 parkType: {
                   carport: true,
                 },
@@ -2175,6 +2469,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 id: {
                   in: uuids,
                 },
@@ -2182,6 +2485,20 @@ describe('Testing listing service', () => {
             ],
           },
         ],
+      });
+    });
+
+    it('should return an empty where clause for filter includeExternal', () => {
+      const filter = [
+        {
+          $comparison: '=',
+          includeExternal: true,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [],
       });
     });
 
@@ -2196,6 +2513,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -2224,6 +2550,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 jurisdictionId: {
                   equals: jurisdictionId,
                 },
@@ -2246,6 +2581,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -2275,6 +2619,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             AND: [
               {
@@ -2307,6 +2660,15 @@ describe('Testing listing service', () => {
         AND: [
           {
             OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
               { units: { some: { accessibilityPriorityType: 'mobility' } } },
               {
                 unitGroups: { some: { accessibilityPriorityType: 'mobility' } },
@@ -2334,6 +2696,15 @@ describe('Testing listing service', () => {
         AND: [
           {
             OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
               { units: { some: { accessibilityPriorityType: 'mobility' } } },
               {
                 unitGroups: { some: { accessibilityPriorityType: 'mobility' } },
@@ -2357,6 +2728,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -2411,6 +2791,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 listingMultiselectQuestions: {
                   some: {
                     multiselectQuestionId: {
@@ -2437,6 +2826,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 name: {
                   contains: name,
                   mode: 'insensitive',
@@ -2460,6 +2858,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 neighborhood: {
                   equals: neighborhood,
                   mode: 'insensitive',
@@ -2480,6 +2887,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -2511,6 +2927,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 reservedCommunityTypes: {
                   name: {
                     in: reservedLowerCase,
@@ -2538,6 +2963,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 section8Acceptance: {
                   equals: false,
                 },
@@ -2557,6 +2991,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -2582,6 +3025,15 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
                 listingsBuildingAddress: {
                   zipCode: {
                     equals: zipCode,
@@ -2602,6 +3054,15 @@ describe('Testing listing service', () => {
 
       expect(whereClause).toStrictEqual({
         AND: [
+          {
+            OR: [
+              {
+                externalListingId: {
+                  equals: null,
+                },
+              },
+            ],
+          },
           {
             OR: [
               {
@@ -7110,6 +7571,7 @@ describe('Testing listing service', () => {
                 lte: expect.anything(),
               },
             },
+            { externalListingId: { equals: null } },
           ],
         },
       });
@@ -7274,6 +7736,7 @@ describe('Testing listing service', () => {
           AND: [
             { scheduledPublishAt: { not: null } },
             { scheduledPublishAt: { lte: expect.any(Date) } },
+            { externalListingId: { equals: null } },
           ],
         },
       });
@@ -7487,6 +7950,15 @@ describe('Testing listing service', () => {
         },
         where: {
           AND: [
+            {
+              OR: [
+                {
+                  externalListingId: {
+                    equals: null,
+                  },
+                },
+              ],
+            },
             {
               OR: [
                 {
