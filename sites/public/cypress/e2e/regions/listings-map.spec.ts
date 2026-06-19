@@ -30,7 +30,8 @@ function logListingResults() {
   })
 }
 
-describe("Listings map", function () {
+// This test is skipped until google maps is configured
+describe.skip("Listings map", function () {
   it("renders the listing map", function () {
     cy.viewport(1500, 800)
     cy.intercept("**/listings/mapMarkers", (req) => {
