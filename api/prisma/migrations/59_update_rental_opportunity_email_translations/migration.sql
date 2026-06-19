@@ -1,0 +1,160 @@
+-- Adds additional fields for rental opportunity translations
+
+UPDATE translations
+SET translations = jsonb_set(
+  translations,
+  '{rentalOpportunity}',
+    COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+    "region": "Region",
+    "accessibilityType": {
+      "hearingAndVision": "Hearing/Vision"
+    },
+    "footer": {
+      "unsubscribeAndEmailSettings": "Unsubscribe and manage email settings"
+    }}'::jsonb
+
+)
+WHERE language = 'en';
+
+UPDATE translations
+SET translations = jsonb_set(
+  translations,
+  '{rentalOpportunity}',
+  COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "Región",
+  "accessibilityType": {
+    "hearingAndVision": "Auditiva/visual"
+  },
+  "footer": {
+    "unsubscribeAndEmailSettings": "Cancelar suscripción y gestionar configuración de correo electrónico"
+  }}'::jsonb
+)
+WHERE language = 'es';
+
+UPDATE translations
+SET translations = jsonb_set(
+  translations,
+  '{rentalOpportunity}',
+  COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "Vùng đất",
+  "accessibilityType" : {
+    "hearingAndVision": "Thính giác / thị giác"
+  },
+  "footer": {
+    "unsubscribeAndEmailSettings": "Hủy đăng ký và quản lý cài đặt email"
+  }
+}'::jsonb
+)
+WHERE language = 'vi';
+
+UPDATE translations
+SET translations = jsonb_set(
+  translations,
+  '{rentalOpportunity}',
+  COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+    "region": "地区",
+    "accessibilityType": {
+      "hearingAndVision": "听力/视力"
+    },
+    "footer": {
+      "unsubscribeAndEmailSettings": "取消订阅并管理电子邮件设置"
+    }
+}'::jsonb
+)
+WHERE language = 'zh';
+
+UPDATE translations
+SET translations = jsonb_set(
+  translations,
+  '{rentalOpportunity}',
+  COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "Rehiyon",
+  "accessibilityType": {
+    "hearingAndVision": "Pandinig/paningin"
+  },
+  "footer": {
+    "unsubscribeAndEmailSettings": "Mag-unsubscribe at pamahalaan ang mga settings ng email"
+  }
+  }'::jsonb
+)
+WHERE language = 'tl';
+
+UPDATE translations
+SET translations = jsonb_set(
+  translations,
+  '{rentalOpportunity}',
+  COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "অঞ্চল",
+  "accessibilityType": {
+    "hearingAndVision": "শ্রবণ/দৃষ্টি"
+  },
+  "footer": {
+    "unsubscribeAndEmailSettings": "আনসাবস্ক্রাইব করুন এবং ইমেইল সেটিংস পরিচালনা করুন"
+  }
+}'::jsonb
+)
+WHERE language = 'bn';
+
+UPDATE translations
+SET translations = jsonb_set(
+  translations,
+  '{rentalOpportunity}',
+  COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "منطقة",
+  "accessibilityType": {
+    "hearingAndVision": "السمع/البصر"
+  },
+  "footer": {
+    "unsubscribeAndEmailSettings": "إلغاء الاشتراك وإدارة إعدادات البريد الإلكتروني"
+  }
+}'::jsonb
+)
+WHERE language = 'ar';
+
+UPDATE translations
+SET translations = jsonb_set(
+  translations,
+  '{rentalOpportunity}',
+  COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "지역",
+  "accessibilityType": {
+    "hearingAndVision": "청각/시각"
+  },
+  "footer": {
+    "unsubscribeAndEmailSettings": "구독 취소 및 이메일 설정 관리"
+  }
+}'::jsonb
+)
+WHERE language = 'ko';
+
+UPDATE translations
+SET translations = jsonb_set(
+  translations,
+  '{rentalOpportunity}',
+  COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "Տարածաշրջան",
+  "accessibilityType": {
+    "hearingAndVision": "Լսողություն/տեսողություն"
+  },
+  "footer": {
+    "unsubscribeAndEmailSettings": "Դադարեցնել բաժանորդագրությունը և կառավարել էլ. փոստի կարգավորումները"
+  }
+}'::jsonb
+)
+WHERE language = 'hy';
+
+UPDATE translations
+SET translations = jsonb_set(
+  translations,
+  '{rentalOpportunity}',
+  COALESCE(translations->'rentalOpportunity', '{}'::jsonb) || '{
+  "region": "منطقه",
+  "accessibilityType": {
+    "hearingAndVision": "شنوایی/بینایی"
+  },
+  "footer": {
+    "unsubscribeAndEmailSettings": "لغو اشتراک و مدیریت تنظیمات ایمیل"
+  }
+}'::jsonb
+)
+WHERE language = 'fa';

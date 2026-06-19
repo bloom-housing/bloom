@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from "react"
 import type {
   FeatureFlagEnum,
+  IdDTO,
   Listing,
   ListingFeaturesConfiguration,
   ListingMapMarker,
@@ -24,7 +25,7 @@ export type ListingsMapContextValue = {
   googleMapsMapId?: string
   bedrooms: FormOption[]
   bathrooms: FormOption[]
-  jurisdictions: FormOption[]
+  jurisdictions: IdDTO[]
   activeFeatureFlags?: FeatureFlagEnum[]
   multiselectData: MultiselectQuestion[]
   regions?: string[]

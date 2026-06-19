@@ -406,8 +406,13 @@ export const buildSql = (
 
     groupedByDepth2.forEach((group) => {
       const pathLiteral = `{${group.path.join(',')}}`;
+      const existingExpr = group.path.reduce(
+        (acc, key) => `${acc}->'${key}'`,
+        'translations',
+      );
       const valueLiteral = toJsonbLiteral(group.subtree);
-      updateExpression = `jsonb_set(${updateExpression}, '${pathLiteral}', ${valueLiteral}, true)`;
+      // Merge into the existing sub-object so unrelated sibling keys are preserved.
+      updateExpression = `jsonb_set(${updateExpression}, '${pathLiteral}', COALESCE(${existingExpr}, '{}'::jsonb) || ${valueLiteral}, true)`;
     });
 
     const insertPayloadLiteral = toJsonbLiteral(insertPayload);

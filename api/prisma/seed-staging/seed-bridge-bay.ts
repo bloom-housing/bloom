@@ -2414,6 +2414,7 @@ const featureFlags = [
   FeatureFlagEnum.enablePartnerDemographics,
   FeatureFlagEnum.enablePartnerSettings,
   FeatureFlagEnum.enableReceivedAtAndByFields,
+  FeatureFlagEnum.enableSexualOrientationQuestion,
   FeatureFlagEnum.enableSupportAdmin,
 ];
 
@@ -2683,6 +2684,17 @@ export const createBridgeBayJurisdictions = async (
     },
   );
   await seedListings(prismaClient, bridgeBayJurisdiction.id, listings);
+
+  await prismaClient.jurisdictions.update({
+    where: { id: bridgeBayJurisdiction.id },
+    data: {
+      subJurisdictions: {
+        connect: otherJurisdictions.map((jurisdiction) => ({
+          id: jurisdiction.id,
+        })),
+      },
+    },
+  });
 
   return [bridgeBayJurisdiction, ...otherJurisdictions];
 };
