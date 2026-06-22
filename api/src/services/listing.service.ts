@@ -551,13 +551,9 @@ export class ListingService implements OnModuleInit {
       includeExternal[ListingFilterKeys.includeExternal] === false
     ) {
       filters.push({
-        OR: [
-          {
-            externalListingId: {
-              equals: null,
-            },
-          },
-        ],
+        externalListingId: {
+          equals: null,
+        },
       });
     }
 
