@@ -75,6 +75,7 @@ describe('Listing Controller Tests', () => {
     lotteryReleased: async () => {},
     lotteryPublishedAdmin: async () => {},
     lotteryPublishedApplicant: async () => {},
+    listingPublished: async () => {},
   };
   const mockChangesRequested = jest.spyOn(testEmailService, 'changesRequested');
   const mockRequestApproval = jest.spyOn(testEmailService, 'requestApproval');

@@ -104,7 +104,14 @@ function Dashboard(props: DashboardProps) {
                     iconSymbol="userCircle"
                     iconClass={"card-icon"}
                     title={t("account.accountSettings")}
-                    subtitle={t("account.accountSettingsSubtitle")}
+                    subtitle={t(
+                      isFeatureFlagOn(
+                        props.jurisdiction,
+                        FeatureFlagEnum.enableCustomListingNotifications
+                      )
+                        ? "account.accountSettingsSubtitleWithNotifications"
+                        : "account.accountSettingsSubtitle"
+                    )}
                     headingClass={"seeds-large-heading"}
                     id="account-dashboard-settings"
                     variant={"block"}

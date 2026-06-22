@@ -75,6 +75,7 @@ const testEmailService = {
   applicationConfirmation: jest.fn(),
   lotteryPublishedAdmin: jest.fn(),
   lotteryPublishedApplicant: jest.fn(),
+  listingPublished: jest.fn(),
 };
 
 const testCronJobService = {

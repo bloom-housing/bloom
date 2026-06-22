@@ -1,6 +1,7 @@
 {
   "account.accountSettings": "Mga setting ng account",
   "account.accountSettingsSubtitle": "Mga setting ng account, email at password",
+  "account.accountSettingsSubtitleWithNotifications": "Mga setting ng account, email, password at mga notification",
   "account.accountSettingsUpdate": "I-update ang mga setting ng account",
   "account.allMyApplications": "Lahat ng aking mga aplikasyon",
   "account.allMyApplicationsSubtitle": "Tingnan ang mga listahan para sa mga ari-arian na inapplyan mo.",
