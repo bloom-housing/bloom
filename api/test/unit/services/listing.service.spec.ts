@@ -3627,6 +3627,7 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           scheduledPublishAt: null,
+          scheduledApplicationOpenAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -4162,6 +4163,7 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           scheduledPublishAt: null,
+          scheduledApplicationOpenAt: null,
           depositMin: '5',
           lastUpdatedByUser: {
             connect: {
@@ -5839,6 +5841,7 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           scheduledPublishAt: null,
+          scheduledApplicationOpenAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -6026,6 +6029,7 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           scheduledPublishAt: null,
+          scheduledApplicationOpenAt: null,
           depositMin: '5',
           assets: [
             {
@@ -6407,6 +6411,7 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           scheduledPublishAt: null,
+          scheduledApplicationOpenAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -6700,6 +6705,7 @@ describe('Testing listing service', () => {
           contentUpdatedAt: expect.anything(),
           closedAt: expect.anything(),
           scheduledPublishAt: null,
+          scheduledApplicationOpenAt: null,
           lastUpdatedByUser: {
             connect: {
               id: user.id,
@@ -7704,6 +7710,38 @@ describe('Testing listing service', () => {
       const nonMidnight = new Date('2026-05-15T14:30:00.000Z');
       const normalized = service.normalizeScheduledPublishAt(nonMidnight);
       expect(normalized.toISOString()).toBe('2026-05-15T07:00:00.000Z');
+    });
+  });
+
+  describe('Test normalizeScheduledApplicationOpenAt helper', () => {
+    const originalTimezone = process.env.TIME_ZONE;
+
+    afterEach(() => {
+      process.env.TIME_ZONE = originalTimezone;
+    });
+
+    it('should convert UTC midnight to 9:00 AM in the app timezone (UTC-7, LA summer)', () => {
+      process.env.TIME_ZONE = 'America/Los_Angeles';
+      const utcMidnight = new Date('2026-05-15T00:00:00.000Z');
+      const normalized =
+        service.normalizeScheduledApplicationOpenAt(utcMidnight);
+      expect(normalized.toISOString()).toBe('2026-05-15T16:00:00.000Z');
+    });
+
+    it('should convert UTC midnight to 9:00 AM in the app timezone (UTC-8, LA winter)', () => {
+      process.env.TIME_ZONE = 'America/Los_Angeles';
+      const utcMidnight = new Date('2026-01-15T00:00:00.000Z');
+      const normalized =
+        service.normalizeScheduledApplicationOpenAt(utcMidnight);
+      expect(normalized.toISOString()).toBe('2026-01-15T17:00:00.000Z');
+    });
+
+    it('should preserve the user-selected wall-clock date regardless of input time', () => {
+      process.env.TIME_ZONE = 'America/Los_Angeles';
+      const nonMidnight = new Date('2026-05-15T14:30:00.000Z');
+      const normalized =
+        service.normalizeScheduledApplicationOpenAt(nonMidnight);
+      expect(normalized.toISOString()).toBe('2026-05-15T16:00:00.000Z');
     });
   });
 });
