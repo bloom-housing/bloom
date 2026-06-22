@@ -159,31 +159,8 @@ export const MapListingCard = ({
   )
 }
 
-const DESKTOP_MIN_WIDTH = 768
-
 export const MapListingCardList = ({ children }: { children: React.ReactNode }) => {
   const listRef = useRef<HTMLUListElement>(null)
-
-  useLayoutEffect(() => {
-    const equalize = () => {
-      const ul = listRef.current
-      if (!ul) return
-
-      const items = Array.from(ul.querySelectorAll<HTMLLIElement>(":scope > li"))
-      items.forEach((li) => (li.style.minHeight = ""))
-
-      if (items.length <= 1 || window.innerWidth < DESKTOP_MIN_WIDTH) return
-
-      const max = Math.max(...items.map((li) => li.getBoundingClientRect().height))
-      if (isFinite(max) && max > 0) {
-        items.forEach((li) => (li.style.minHeight = `${max}px`))
-      }
-    }
-
-    equalize()
-    window.addEventListener("resize", equalize)
-    return () => window.removeEventListener("resize", equalize)
-  })
 
   return <ul ref={listRef}>{children}</ul>
 }
