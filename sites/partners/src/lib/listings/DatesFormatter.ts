@@ -33,6 +33,11 @@ export default class DatesFormatter extends Formatter {
 
     this.data.scheduledPublishAt = createDate(this.data.scheduledListingPublishDateField, true)
 
+    this.data.scheduledApplicationOpenAt = createDate(
+      this.data.scheduledApplicationOpenDateField,
+      true
+    )
+
     if (this.data.marketingType === MarketingTypeEnum.comingSoon) {
       this.data.marketingYear = this.data.marketingYear ? Number(this.data.marketingYear) : null
       this.data.marketingSeason = this.data.marketingSeason

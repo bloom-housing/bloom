@@ -1,6 +1,7 @@
 {
   "account.accountSettings": "অ্যাকাউন্ট সেটিংস",
   "account.accountSettingsSubtitle": "অ্যাকাউন্ট সেটিংস, ইমেল এবং পাসওয়ার্ড",
+  "account.accountSettingsSubtitleWithNotifications": "অ্যাকাউন্ট সেটিংস, ইমেল, পাসওয়ার্ড এবং বিজ্ঞপ্তি",
   "account.accountSettingsUpdate": "অ্যাকাউন্ট সেটিংস আপডেট করুন",
   "account.allMyApplications": "আমার সকল আবেদনপত্র",
   "account.allMyApplicationsSubtitle": "আপনার আবেদনকৃত সম্পত্তির তালিকা দেখুন।",
@@ -1043,6 +1044,7 @@
   "listings.reservedUnits": "সংরক্ষিত ইউনিট",
   "listings.reservedUnitsDescription": "এই ইউনিটগুলির জন্য যোগ্যতা অর্জনের জন্য নিম্নলিখিতগুলির মধ্যে একটি আপনার বা আপনার পরিবারের কারো জন্য আবেদন করতে হবে:",
   "listings.reservedUnitsForWhoAre": "%{communityType} এর জন্য সংরক্ষিত যারা %{reservedType}",
+  "listings.scheduledApplicationOpen": "%{openDate} তারিখ থেকে আবেদনপত্র জমা দেওয়া যাবে।",
   "listings.search.subNote": "সম্পূর্ণ বা আংশিক তালিকার নাম লিখুন",
   "listings.section8Acceptance": "সেকশন 8 হাউজিং চয়েস ভাউচার গ্রহণ করে",
   "listings.section8VoucherInfo": "যদি আপনার কাছে <strong>সেকশন ৮ হাউজিং চয়েস ভাউচার</strong> থাকে, তাহলে আয়ের প্রয়োজনীয়তা প্রযোজ্য হবে না এবং আপনাকে আপনার আয়ের উপর ভিত্তি করে ভাড়া দিতে হবে।",

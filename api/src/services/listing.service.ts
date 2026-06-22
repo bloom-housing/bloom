@@ -1468,6 +1468,7 @@ export class ListingService implements OnModuleInit {
         id: true,
         featureFlags: true,
         listingApprovalPermissions: true,
+        publicUrl: true,
       },
       where: {
         id: dto.jurisdictions.id,
@@ -1491,13 +1492,31 @@ export class ListingService implements OnModuleInit {
 
     if (!enableAutopublish) {
       dto.scheduledPublishAt = null;
+      dto.scheduledApplicationOpenAt = null;
     }
 
     if (enableAutopublish && dto.scheduledPublishAt) {
       dto.scheduledPublishAt = this.normalizeScheduledPublishAt(
         dto.scheduledPublishAt,
       );
-      this.checkScheduledPublishAtIsInFuture(dto.scheduledPublishAt);
+      this.checkScheduledDateIsInFuture(
+        dto.scheduledPublishAt,
+        'scheduledPublishAt',
+      );
+    }
+
+    if (enableAutopublish && dto.scheduledApplicationOpenAt) {
+      dto.scheduledApplicationOpenAt = this.normalizeScheduledApplicationOpenAt(
+        dto.scheduledApplicationOpenAt,
+      );
+      this.checkScheduledDateIsInFuture(
+        dto.scheduledApplicationOpenAt,
+        'scheduledApplicationOpenAt',
+      );
+      this.checkScheduledApplicationOpenAtIsAfterPublish(
+        dto.scheduledApplicationOpenAt,
+        dto.scheduledPublishAt,
+      );
     }
 
     if (
@@ -1874,16 +1893,33 @@ export class ListingService implements OnModuleInit {
         approvingRoles: rawJurisdiction.listingApprovalPermissions,
         jurisId: rawJurisdiction.id,
       });
-    } else if (
-      enableV2MSQ &&
-      mappedListing.status === ListingsStatusEnum.active
-    ) {
-      const multiselectQuestions =
-        mappedListing.listingMultiselectQuestions.map(
-          (listingMultiselectQuestion) =>
-            listingMultiselectQuestion.multiselectQuestions,
-        );
-      void this.multiselectQuestionService.activateMany(multiselectQuestions);
+    } else if (mappedListing.status === ListingsStatusEnum.active) {
+      if (enableV2MSQ) {
+        const multiselectQuestions =
+          mappedListing.listingMultiselectQuestions.map(
+            (listingMultiselectQuestion) =>
+              listingMultiselectQuestion.multiselectQuestions,
+          );
+        void this.multiselectQuestionService.activateMany(multiselectQuestions);
+      }
+      const userInfo = await this.getUserEmailInfo(
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
+        mappedListing.id,
+        rawJurisdiction.id,
+      );
+      await this.emailService.listingPublished(
+        { id: rawJurisdiction.id },
+        { id: mappedListing.id, name: mappedListing.name },
+        userInfo.emails,
+        rawJurisdiction.publicUrl || '',
+      );
+      await this.sendListingPublishNotification(mappedListing);
     }
     await this.cachePurge(undefined, dto.status, mappedListing.id);
     return mappedListing;
@@ -2308,24 +2344,41 @@ export class ListingService implements OnModuleInit {
 
     if (!enableAutopublish) {
       incomingDto.scheduledPublishAt = null;
+      incomingDto.scheduledApplicationOpenAt = null;
     }
 
     const sendPublishNotificationEmail =
       incomingDto.status === ListingsStatusEnum.active &&
       storedListing.status !== ListingsStatusEnum.active;
 
-    if (incomingDto.scheduledPublishAt && enableAutopublish) {
-      incomingDto.scheduledPublishAt = this.normalizeScheduledPublishAt(
-        incomingDto.scheduledPublishAt,
-      );
+    if (enableAutopublish) {
+      incomingDto.scheduledPublishAt = incomingDto.scheduledPublishAt
+        ? this.normalizeScheduledPublishAt(incomingDto.scheduledPublishAt)
+        : null;
       // test if not publishing or unpublishing listing and scheduledPublishAt is set
       if (
         incomingDto.status === storedListing.status &&
         incomingDto.status !== ListingsStatusEnum.active &&
-        incomingDto.scheduledPublishAt &&
-        enableAutopublish
+        incomingDto.scheduledPublishAt
       ) {
-        this.checkScheduledPublishAtIsInFuture(incomingDto.scheduledPublishAt);
+        this.checkScheduledDateIsInFuture(
+          incomingDto.scheduledPublishAt,
+          'scheduledPublishAt',
+        );
+      }
+
+      if (incomingDto.scheduledApplicationOpenAt) {
+        this.normalizeScheduledApplicationOpenAt(
+          incomingDto.scheduledApplicationOpenAt,
+        );
+        this.checkScheduledDateIsInFuture(
+          incomingDto.scheduledApplicationOpenAt,
+          'scheduledApplicationOpenAt',
+        );
+        this.checkScheduledApplicationOpenAtIsAfterPublish(
+          incomingDto.scheduledApplicationOpenAt,
+          incomingDto.scheduledPublishAt,
+        );
       }
     }
 
@@ -2964,6 +3017,32 @@ export class ListingService implements OnModuleInit {
         jurisId: rawJurisdiction.id,
         scheduledPublishAt: incomingDto.scheduledPublishAt,
       });
+    else if (
+      incomingDto.status === ListingsStatusEnum.active &&
+      storedListing.status === ListingsStatusEnum.pending
+    ) {
+      const userInfo = await this.getUserEmailInfo(
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
+        mappedListing.id,
+        rawJurisdiction.id,
+      );
+      const jurisdiction = await this.prisma.jurisdictions.findUnique({
+        select: { publicUrl: true },
+        where: { id: rawJurisdiction.id },
+      });
+      await this.emailService.listingPublished(
+        { id: rawJurisdiction.id },
+        { id: mappedListing.id, name: mappedListing.name },
+        userInfo.emails,
+        jurisdiction.publicUrl || '',
+      );
+    }
 
     if (sendPublishNotificationEmail) {
       await this.sendListingPublishNotification(mappedListing);
@@ -3261,21 +3340,43 @@ export class ListingService implements OnModuleInit {
     return dayjs.tz(dateStr, 'YYYY-MM-DD', appTimezone).startOf('day').toDate();
   }
 
-  private checkScheduledPublishAtIsInFuture(scheduledPublishAt: Date): void {
+  private checkScheduledDateIsInFuture(date: Date, fieldName: string): void {
     const appTimezone = process.env.TIME_ZONE;
-    const minimumScheduledPublishAt = dayjs
-      .utc()
-      .tz(appTimezone)
-      .add(1, 'day')
-      .startOf('day');
+    const minimum = dayjs.utc().tz(appTimezone).add(1, 'day').startOf('day');
 
-    const incomingScheduledPublishAt = dayjs
-      .utc(scheduledPublishAt)
-      .tz(appTimezone);
+    if (dayjs.utc(date).tz(appTimezone).isBefore(minimum)) {
+      throw new BadRequestException([`${fieldName} must be in the future`]);
+    }
+  }
 
-    if (incomingScheduledPublishAt.isBefore(minimumScheduledPublishAt)) {
+  normalizeScheduledApplicationOpenAt(scheduledApplicationOpenAt: Date): Date {
+    const appTimezone = process.env.TIME_ZONE;
+    const dateStr = dayjs.utc(scheduledApplicationOpenAt).format('YYYY-MM-DD');
+    // Applications open at 9:00 AM in the app timezone
+    return dayjs
+      .tz(dateStr, 'YYYY-MM-DD', appTimezone)
+      .startOf('day')
+      .add(9, 'hour')
+      .toDate();
+  }
+
+  private checkScheduledApplicationOpenAtIsAfterPublish(
+    scheduledApplicationOpenAt: Date,
+    scheduledPublishAt?: Date,
+  ): void {
+    if (!scheduledApplicationOpenAt || !scheduledPublishAt) {
+      return;
+    }
+
+    // Same calendar day is allowed (publish is normalized to midnight and the
+    // application open date to 9:00 AM), so an instant comparison is sufficient.
+    if (
+      dayjs
+        .utc(scheduledApplicationOpenAt)
+        .isAfter(dayjs.utc(scheduledPublishAt)) === false
+    ) {
       throw new BadRequestException([
-        'scheduledPublishAt must be in the future',
+        'scheduledApplicationOpenAt must be after scheduled publish date',
       ]);
     }
   }

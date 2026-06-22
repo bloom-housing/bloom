@@ -1,6 +1,7 @@
 {
   "account.accountSettings": "Cài đặt tài khoản",
   "account.accountSettingsSubtitle": "Cài đặt tài khoản, email và mật khẩu",
+  "account.accountSettingsSubtitleWithNotifications": "Cài đặt tài khoản, email, mật khẩu và thông báo",
   "account.accountSettingsUpdate": "Cập nhật cài đặt tài khoản",
   "account.allMyApplications": "Tất cả các ứng dụng của tôi",
   "account.allMyApplicationsSubtitle": "Xem danh sách các bất động sản mà bạn đã đăng ký.",
@@ -1043,6 +1044,7 @@
   "listings.reservedUnits": "Đơn vị dự trữ",
   "listings.reservedUnitsDescription": "Để hội đủ điều kiện được nhận các căn nhà này, một trong những điều sau đây phải đúng với quý vị hoặc một người nào đó trong hộ gia đình của quý vị:",
   "listings.reservedUnitsForWhoAre": "Dành riêng cho %{communityType} những người %{reservedType}",
+  "listings.scheduledApplicationOpen": "Hồ sơ đăng ký có thể được nộp bắt đầu từ ngày %{openDate}.",
   "listings.search.subNote": "Nhập tên danh sách đầy đủ hoặc một phần",
   "listings.section8Acceptance": "Chấp nhận Phiếu lựa chọn nhà ở theo Mục 8",
   "listings.section8VoucherInfo": "Nếu bạn có <strong>Phiếu lựa chọn nhà ở theo Mục 8</strong> , các yêu cầu về thu nhập không được áp dụng và bạn sẽ trả tiền thuê nhà dựa trên thu nhập của mình",
