@@ -43,6 +43,7 @@ export enum FeatureFlagEnum {
   enableMarketingFlyer = 'enableMarketingFlyer',
   enableMarketingStatus = 'enableMarketingStatus',
   enableMarketingStatusMonths = 'enableMarketingStatusMonths',
+  enableMultiselectVoucherQuestion = 'enableMultiselectVoucherQuestion',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enableNeighborhoodAmenitiesDropdown = 'enableNeighborhoodAmenitiesDropdown',
   enableNonRegulatedListings = 'enableNonRegulatedListings',
@@ -58,7 +59,6 @@ export enum FeatureFlagEnum {
   enableRegions = 'enableRegions',
   enableResources = 'enableResources',
   enableSection8Question = 'enableSection8Question',
-  enableMultiselectVoucherQuestion = 'enableMultiselectVoucherQuestion',
   enableSexualOrientationQuestion = 'enableSexualOrientationQuestion',
   enableSingleUseCode = 'enableSingleUseCode',
   enableSmokingPolicyRadio = 'enableSmokingPolicyRadio',
@@ -282,6 +282,11 @@ export const featureFlagMap: {
       "When true, the 'marketing status' sub-section uses months instead of seasons (functions only if enableMarketingStatus is also true)",
   },
   {
+    name: FeatureFlagEnum.enableMultiselectVoucherQuestion,
+    description:
+      'When true, the vouchers question on the application form becomes a multi-select checkbox experience with Section 8, rental assistance, and none of the above as options',
+  },
+  {
     name: FeatureFlagEnum.enableNeighborhoodAmenities,
     description:
       "When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view",
@@ -345,11 +350,6 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableSection8Question,
     description: 'When true, the Section 8 listing data will be visible',
-  },
-  {
-    name: FeatureFlagEnum.enableMultiselectVoucherQuestion,
-    description:
-      'When true, the vouchers question on the application form becomes a multi-select checkbox experience with Section 8, rental assistance, and none of the above as options',
   },
   {
     name: FeatureFlagEnum.enableSexualOrientationQuestion,
