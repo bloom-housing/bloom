@@ -9,7 +9,7 @@ import {
   ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { downloadExternalPDF } from "../../../lib/helpers"
+import { downloadExternalPDF, scheduledApplicationOpenInFuture } from "../../../lib/helpers"
 import {
   getAddress,
   getDateString,
@@ -125,7 +125,8 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
       applicationDropOffAddress) &&
     !applicationsClosed &&
     (validOnlineApplication || validPaperApplication) &&
-    listing.status !== ListingsStatusEnum.closed
+    listing.status !== ListingsStatusEnum.closed &&
+    !scheduledApplicationOpenInFuture(listing)
 
   const showSecondarySection =
     (hasPaperApplication && onlineApplicationUrl) ||

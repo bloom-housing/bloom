@@ -148,12 +148,6 @@ const ApplicationDates = ({
   const hasScheduledApplicationOpenError =
     errors?.scheduledApplicationOpenAt || errors?.scheduledApplicationOpenDateField
 
-  const scheduledApplicationOpenDateVal = watch("scheduledApplicationOpenDateField")
-  const isScheduledApplicationOpenDateEmpty =
-    !scheduledApplicationOpenDateVal?.month &&
-    !scheduledApplicationOpenDateVal?.day &&
-    !scheduledApplicationOpenDateVal?.year
-
   const marketingTypeChoice = watch("marketingType")
 
   return (

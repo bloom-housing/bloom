@@ -1039,6 +1039,7 @@
   "listings.reservedUnits": "Đơn vị dự trữ",
   "listings.reservedUnitsDescription": "Để hội đủ điều kiện được nhận các căn nhà này, một trong những điều sau đây phải đúng với quý vị hoặc một người nào đó trong hộ gia đình của quý vị:",
   "listings.reservedUnitsForWhoAre": "Dành riêng cho %{communityType} những người %{reservedType}",
+  "listings.scheduledApplicationOpen": "Hồ sơ đăng ký có thể được nộp bắt đầu từ ngày %{openDate}.",
   "listings.search.subNote": "Nhập tên danh sách đầy đủ hoặc một phần",
   "listings.section8Acceptance": "Chấp nhận Phiếu lựa chọn nhà ở theo Mục 8",
   "listings.section8VoucherInfo": "Nếu bạn có <strong>Phiếu lựa chọn nhà ở theo Mục 8</strong> , các yêu cầu về thu nhập không được áp dụng và bạn sẽ trả tiền thuê nhà dựa trên thu nhập của mình",

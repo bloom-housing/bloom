@@ -1039,6 +1039,7 @@
   "listings.reservedUnits": "الوحدات المحجوزة",
   "listings.reservedUnitsDescription": "من أجل التأهل لهذه الوحدات ، يجب أن ينطبق أحد ما يلي عليك أو على أحد أفراد أسرتك:",
   "listings.reservedUnitsForWhoAre": "محجوز لـ %{communityType} من %{reservedType}",
+  "listings.scheduledApplicationOpen": "يمكن تقديم الطلبات ابتداءً من %{openDate}",
   "listings.search.subNote": "أدخل اسم القائمة بالكامل أو جزئيًا",
   "listings.section8Acceptance": "يقبل قسائم اختيار المسكن بالقسم 8",
   "listings.section8VoucherInfo": "إذا كان لديك <strong>قسيمة اختيار السكن بموجب القسم 8</strong> ، فإن متطلبات الدخل لا تنطبق عليك وسوف تدفع الإيجار بناءً على دخلك",
