@@ -1036,6 +1036,7 @@
   "listings.reservedUnits": "Պահուստավորված միավորներ",
   "listings.reservedUnitsDescription": "Այս միավորներին որակավորվելու համար ձեզ կամ ձեր տնային տնտեսության որևէ անդամի վրա պետք է կիրառվի հետևյալ պայմաններից մեկը.",
   "listings.reservedUnitsForWhoAre": "Պահված է %{communityType}-ի համար, ովքեր %{reservedType} են",
+  "listings.scheduledApplicationOpen": "Դիմումները կարող են ներկայացվել սկսած %{openDate}-ից",
   "listings.search.subNote": "Մուտքագրեք ցուցակի լրիվ կամ մասնակի անվանումը",
   "listings.section8Acceptance": "Ընդունում է 8-րդ բաժնի բնակարանային ընտրության վաուչերներ",
   "listings.section8VoucherInfo": "Եթե դուք ունեք <strong>8-րդ բաժնի բնակարանային ընտրության վաուչեր</strong> , եկամտի պահանջները չեն կիրառվում, և դուք վարձավճար կվճարեք ձեր եկամտի հիման վրա։",

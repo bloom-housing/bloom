@@ -1039,6 +1039,7 @@
   "listings.reservedUnits": "Viviendas reservadas",
   "listings.reservedUnitsDescription": "Para poder reunir los requisitos de estas viviendas, una de las siguientes condiciones debe aplicarse a usted o a alguna persona de su hogar:",
   "listings.reservedUnitsForWhoAre": "Reservada para %{communityType} que son %{reservedType}",
+  "listings.scheduledApplicationOpen": "Las solicitudes se pueden presentar a partir del %{openDate}",
   "listings.search.subNote": "Ingrese el nombre del listado completo o parcial",
   "listings.section8Acceptance": "Acepta vales de elección de vivienda de la Sección 8",
   "listings.section8VoucherInfo": "Si tiene un <strong>vale de elección de vivienda de la Sección 8</strong> , los requisitos de ingresos no se aplican y pagará el alquiler en función de sus ingresos.",
