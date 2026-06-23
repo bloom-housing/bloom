@@ -57,25 +57,52 @@ describe('Testing sms service', () => {
     it('should initialize AWS client when SMS_PROVIDER is aws', () => {
       process.env.SMS_PROVIDER = 'aws';
       process.env.AWS_SMS_REGION = 'us-east-1';
+      process.env.AWS_SMS_ORIGINATION_NUMBER = '1234567890';
       const service = new SmsService();
       expect(service.awsClient).toBeDefined();
       expect(service.client).toBeUndefined();
     });
 
-    it('should silently return when AWS client is not initialized', async () => {
+    it('should not initialize AWS client when region is missing', () => {
       process.env.SMS_PROVIDER = 'aws';
       delete process.env.AWS_SMS_REGION;
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(jest.fn());
+      const service = new SmsService();
+      expect(service.awsClient).toBeUndefined();
+      expect(warnSpy).toHaveBeenCalledWith(
+        'SMS_PROVIDER is aws but AWS_SMS_REGION is not set.',
+      );
+      warnSpy.mockRestore();
+    });
+
+    it('should not initialize AWS client when origination number is missing', () => {
+      process.env.SMS_PROVIDER = 'aws';
+      process.env.AWS_SMS_REGION = 'us-east-1';
+      delete process.env.AWS_SMS_ORIGINATION_NUMBER;
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(jest.fn());
+      const service = new SmsService();
+      expect(service.awsClient).toBeUndefined();
+      expect(warnSpy).toHaveBeenCalledWith(
+        'SMS_PROVIDER is aws but AWS_SMS_ORIGINATION_NUMBER is not set.',
+      );
+      warnSpy.mockRestore();
+    });
+
+    it('should warn and return when AWS client is not initialized', async () => {
+      process.env.SMS_PROVIDER = 'aws';
+      delete process.env.AWS_SMS_REGION;
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(jest.fn());
       const service = new SmsService();
       await expect(
         service.sendMfaCode('+15555555555', '12345'),
       ).resolves.toBeUndefined();
+      warnSpy.mockRestore();
     });
 
     it('should send message via AWS End User Messaging', async () => {
       process.env.SMS_PROVIDER = 'aws';
       process.env.AWS_SMS_REGION = 'us-east-1';
-      process.env.AWS_SMS_ORIGINATION_NUMBER =
-        'arn:aws:sms-voice:us-east-1:123456789012:phone-number/test';
+      process.env.AWS_SMS_ORIGINATION_NUMBER = '1234567890';
       const service = new SmsService();
       const sendMock = jest.fn().mockResolvedValue({});
       service.awsClient = { send: sendMock } as any;
@@ -83,8 +110,7 @@ describe('Testing sms service', () => {
       const [command] = sendMock.mock.calls[0];
       expect(command.input).toEqual({
         DestinationPhoneNumber: '+15555555555',
-        OriginationIdentity:
-          'arn:aws:sms-voice:us-east-1:123456789012:phone-number/test',
+        OriginationIdentity: '1234567890',
         MessageBody: 'Your Partners Portal account access token: 12345',
         MessageType: 'TRANSACTIONAL',
       });

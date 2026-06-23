@@ -13,7 +13,13 @@ export class SmsService {
   awsClient: PinpointSMSVoiceV2Client;
   public constructor() {
     if (process.env.SMS_PROVIDER === 'aws') {
-      if (process.env.AWS_SMS_REGION) {
+      if (!process.env.AWS_SMS_REGION) {
+        console.warn('SMS_PROVIDER is aws but AWS_SMS_REGION is not set.');
+      } else if (!process.env.AWS_SMS_ORIGINATION_NUMBER) {
+        console.warn(
+          'SMS_PROVIDER is aws but AWS_SMS_ORIGINATION_NUMBER is not set.',
+        );
+      } else {
         let credentials: undefined | AwsCredentialIdentity;
         const keyId = process.env.AWS_SMS_ACCESS_KEY_ID;
         const secret = process.env.AWS_SMS_SECRET_ACCESS_KEY;
@@ -44,6 +50,9 @@ export class SmsService {
   ): Promise<void> {
     if (process.env.SMS_PROVIDER === 'aws') {
       if (!this.awsClient) {
+        console.warn(
+          'AWS SMS client is not initialized, skipping MFA SMS send.',
+        );
         return;
       }
       await this.awsClient.send(
@@ -56,6 +65,9 @@ export class SmsService {
       );
     } else {
       if (!this.client) {
+        console.warn(
+          'Twilio SMS client is not initialized, skipping MFA SMS send.',
+        );
         return;
       }
       await this.client.messages.create({
