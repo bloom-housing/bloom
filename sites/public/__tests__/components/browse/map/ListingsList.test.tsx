@@ -42,6 +42,10 @@ jest.mock("@bloom-housing/ui-components", () => {
 
   return {
     ...actual,
+    t: (key: string) => {
+      const result = tIfExistsMock(key)
+      return result !== null && result !== undefined ? result : actual.t(key)
+    },
     LoadingOverlay: ({ isLoading, children }) => (
       <div data-testid="loading-overlay" data-loading={String(isLoading)}>
         {children}
@@ -193,6 +197,14 @@ describe("ListingsList", () => {
       ;(useListingsMapContext as jest.Mock).mockReturnValue({
         ...baseContext,
         activeFeatureFlags: [FeatureFlagEnum.enableAdditionalResources],
+      })
+
+      tIfExistsMock.mockImplementation((key: string) => {
+        const translations: Record<string, string> = {
+          "resources.additionalResourcesTitle": "Get more information about the Accessible Housing",
+          "resources.additionalResourcesLink": "https://example.com/additional-resources",
+        }
+        return translations[key] ?? null
       })
 
       render(<ListingsList />)
