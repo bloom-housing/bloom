@@ -2,6 +2,11 @@ import React from "react"
 import { fireEvent, render, screen } from "@testing-library/react"
 import { MapListingCard } from "../../../../src/components/browse/map/MapListingCard"
 import {
+  ListingsMapContext,
+  ListingsMapContextValue,
+} from "../../../../src/components/browse/map/ListingsMapContext"
+import { ListingSearchParams } from "../../../../src/lib/listings/search"
+import {
   getListingStackedGroupTableData,
   getListingStackedTableData,
   isFeatureFlagOn,
@@ -34,7 +39,32 @@ jest.mock("../../../../src/components/listing/listing_sections/MainDetails", () 
 }))
 
 describe("MapListingCard", () => {
-  const jurisdiction = { id: "jurisdiction-1", featureFlags: [] } as any
+  const mockContextValue: ListingsMapContextValue = {
+    bedrooms: [],
+    bathrooms: [],
+    jurisdictions: [],
+    multiselectData: [],
+    searchFilter: {} as ListingSearchParams,
+    searchResults: { listings: [], markers: [], currentPage: 1, lastPage: 1, totalItems: 0 },
+    listView: false,
+    setListView: jest.fn(),
+    isDesktop: true,
+    isLoading: false,
+    setIsLoading: jest.fn(),
+    visibleMarkers: [],
+    setVisibleMarkers: jest.fn(),
+    isFirstBoundsLoad: true,
+    setIsFirstBoundsLoad: jest.fn(),
+    setFilterDrawerOpen: jest.fn(),
+    filterCount: 0,
+    onPageChange: jest.fn(),
+    infoWindowIndex: null,
+    setInfoWindowIndex: jest.fn(),
+    activeFeatureFlags: [],
+  }
+
+  const renderWithContext = (ui: React.ReactElement) =>
+    render(<ListingsMapContext.Provider value={mockContextValue}>{ui}</ListingsMapContext.Provider>)
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -42,7 +72,7 @@ describe("MapListingCard", () => {
   })
 
   it("renders core listing content and uses units summarized table data", () => {
-    render(<MapListingCard listing={listing} index={0} jurisdiction={jurisdiction} />)
+    renderWithContext(<MapListingCard listing={listing} index={0} />)
 
     expect(screen.getByRole("heading", { name: listing.name })).toBeInTheDocument()
     expect(screen.getByText("123 Test Street")).toBeInTheDocument()
@@ -53,14 +83,8 @@ describe("MapListingCard", () => {
 
   it("renders close button in force mobile view and triggers onClose", () => {
     const onClose = jest.fn()
-    render(
-      <MapListingCard
-        listing={listing}
-        index={0}
-        jurisdiction={jurisdiction}
-        forceMobileView={true}
-        onClose={onClose}
-      />
+    renderWithContext(
+      <MapListingCard listing={listing} index={0} forceMobileView={true} onClose={onClose} />
     )
 
     fireEvent.click(screen.getByRole("button", { name: /close/i }))
@@ -75,7 +99,7 @@ describe("MapListingCard", () => {
       unitGroups: [],
     }
 
-    render(<MapListingCard listing={listingWithoutUnits} index={0} jurisdiction={jurisdiction} />)
+    renderWithContext(<MapListingCard listing={listingWithoutUnits} index={0} />)
 
     expect(screen.queryByRole("table")).not.toBeInTheDocument()
     expect(getListingStackedTableData).not.toHaveBeenCalled()
