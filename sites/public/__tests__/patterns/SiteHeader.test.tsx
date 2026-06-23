@@ -1,7 +1,7 @@
 import React from "react"
 import { render, screen, cleanup, waitFor, fireEvent, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { SiteHeader, HeaderLink } from "../../src/patterns/SiteHeader"
+import { SiteHeader, HeaderLink, SiteHeaderBanner } from "../../src/patterns/SiteHeader"
 
 afterEach(cleanup)
 
@@ -29,10 +29,35 @@ describe("SiteHeader", () => {
     expect(skipLink).toHaveAttribute("href", "#main-content")
   })
 
-  it("renders a message bar when enabled", () => {
-    render(<SiteHeader {...baseProps} showMessageBar={true} message="Message content" />)
+  describe("banners", () => {
+    it("renders no banner content when banners prop is not provided", () => {
+      render(<SiteHeader {...baseProps} />)
+      expect(screen.queryByTestId("messages-container")).not.toBeInTheDocument()
+    })
 
-    expect(screen.getByText("Message content")).toBeInTheDocument()
+    it("renders no banner content when banners is empty", () => {
+      render(<SiteHeader {...baseProps} banners={[]} />)
+      expect(screen.queryByTestId("messages-container")).not.toBeInTheDocument()
+    })
+
+    it("renders a banner with the provided text", () => {
+      const banners: SiteHeaderBanner[] = [{ text: "Site under maintenance", variant: "warn" }]
+      render(<SiteHeader {...baseProps} banners={banners} />)
+      expect(screen.getByText("Site under maintenance")).toBeInTheDocument()
+    })
+
+    it("renders multiple banners", () => {
+      const banners: SiteHeaderBanner[] = [
+        { text: "First banner", variant: "alert" },
+        { text: "Second banner", variant: "warn" },
+      ]
+      render(<SiteHeader {...baseProps} banners={banners} />)
+
+      const first = screen.getByText("First banner")
+      const second = screen.getByText("Second banner")
+      expect(first).toBeInTheDocument()
+      expect(second).toBeInTheDocument()
+    })
   })
 
   it("renders language buttons when dropdown is disabled", () => {

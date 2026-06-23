@@ -47,6 +47,23 @@
     }
   }
 
+  .messages-container {
+    width: 100%;
+
+    .message-band {
+      [class*="seeds-message"] {
+        --message-link-gap: 0;
+        background: transparent;
+        width: 100%;
+        max-width: 100%;
+        padding-inline: var(--seeds-s1);
+        a {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
   .language-wrapper {
     background-color: var(--seeds-bg-color-inverse);
     .language-container {
@@ -83,10 +100,6 @@
       padding-inline: var(--seeds-s2);
       color: var(--seeds-color-white);
       font-size: var(--seeds-type-label-size);
-    }
-    .devsite-banner {
-      font-size: var(--seeds-type-heading-size-lg);
-      max-width: 100%;
     }
   }
 

@@ -20,5 +20,6 @@
   "resources.contactInfo": "Sở Phát triển Nhà ở và Cộng đồng của Bloomington",
   "resources.housingProgramsTitle": "Các chương trình nhà ở của Sở Nhà ở và Phát triển Cộng đồng Bloomington",
   "resources.additionalResourcesLink": "/housing-basics",
-  "resources.additionalResourcesTitle": "Nhận thêm thông tin về Chương trình Nhà ở Có thể tiếp cận được (AcHP), bao gồm danh sách các dự án nhà ở được bảo hiểm, tài nguyên cho người thuê nhà, chính sách và cách nộp đơn khiếu nại."
+  "resources.additionalResourcesTitle": "Nhận thêm thông tin về Chương trình Nhà ở Có thể tiếp cận được (AcHP), bao gồm danh sách các dự án nhà ở được bảo hiểm, tài nguyên cho người thuê nhà, chính sách và cách nộp đơn khiếu nại.",
+  "t.nonProdBanner": "Trang web này chỉ dành cho mục đích thử nghiệm. Các đơn đăng ký sẽ không được xem xét. Vui lòng truy cập <a href='https://www.example.com/' target='_blank'>trang web chính thức</a> để đăng ký nhà ở."
 }

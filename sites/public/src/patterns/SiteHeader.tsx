@@ -5,6 +5,7 @@ import MenuIcon from "@heroicons/react/20/solid/Bars3Icon"
 import Language from "@heroicons/react/20/solid/LanguageIcon"
 import { Button, Icon, Link, Message } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
+import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import LinkComponent from "../components/core/LinkComponent"
 import MaxWidthLayout from "../layouts/max-width"
 import styles from "./SiteHeader.module.scss"
@@ -307,11 +308,17 @@ const LanguageButton = (props: LanguageButtonProps) => {
 interface HeadingWrapperProps {
   children: React.ReactNode
   className?: string
+  style?: React.CSSProperties
+  testId?: string
 }
 
 const HeadingWrapper = (props: HeadingWrapperProps) => {
   return (
-    <div className={`${styles["header-container"]} ${props.className ? props.className : ""}`}>
+    <div
+      className={`${styles["header-container"]} ${props.className ? props.className : ""}`}
+      style={props.style}
+      data-testid={props.testId}
+    >
       <MaxWidthLayout>
         <div className={styles["header-wrapper"]}>
           <div className={styles["content"]}>{props.children}</div>
@@ -327,7 +334,14 @@ export type Language = {
   onClick: () => void
 }
 
+export interface SiteHeaderBanner {
+  background?: string
+  text: React.ReactNode
+  variant: CommonMessageVariant
+}
+
 interface SiteHeaderProps {
+  banners?: SiteHeaderBanner[]
   className?: string
   languageDropdown?: boolean
   languages: Language[]
@@ -418,6 +432,20 @@ export const SiteHeader = (props: SiteHeaderProps) => {
           {t("t.skipToMainContent")}
         </a>
       )}
+      {props.banners?.length > 0 && (
+        <div className={styles["messages-container"]} data-testid="messages-container">
+          {props.banners.map((banner, index) => (
+            <HeadingWrapper
+              key={index}
+              className={styles["message-band"]}
+              style={{ background: banner.background }}
+              testId={`banner-band-${index}`}
+            >
+              <Message variant={banner.variant}>{banner.text}</Message>
+            </HeadingWrapper>
+          ))}
+        </div>
+      )}
       {!props.languageDropdown && props.languages?.length > 0 && (
         <HeadingWrapper className={styles["language-wrapper"]}>
           <div className={styles["language-container"]}>
@@ -437,13 +465,6 @@ export const SiteHeader = (props: SiteHeaderProps) => {
       {props.showMessageBar && (
         <HeadingWrapper className={styles["message-wrapper"]}>
           <div className={styles["message-container"]}>{props.message ? props.message : ""}</div>
-        </HeadingWrapper>
-      )}
-      {process.env.devSiteBanner && (
-        <HeadingWrapper className={styles["message-wrapper"]}>
-          <Message className={styles["devsite-banner"]} variant={"alert"}>
-            {t("t.devSiteBanner")}
-          </Message>
         </HeadingWrapper>
       )}
       <nav aria-label={"Main"}>
