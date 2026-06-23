@@ -1,26 +1,21 @@
-import React, { useLayoutEffect, useRef } from "react"
+import { ClickableCard, imageUrlFromListing, oneLineAddress } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
-  Jurisdiction,
   Listing,
   MarketingTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { imageUrlFromListing, oneLineAddress, ClickableCard } from "@bloom-housing/shared-helpers"
 import { StackedTable, t } from "@bloom-housing/ui-components"
-import { Card, Heading, Link, Tag, Icon } from "@bloom-housing/ui-seeds"
-import {
-  getListingStackedGroupTableData,
-  getListingStackedTableData,
-  isFeatureFlagOn,
-} from "../../../lib/helpers"
+import { Card, Heading, Icon, Link, Tag } from "@bloom-housing/ui-seeds"
+import React, { useRef } from "react"
+import { getListingStackedGroupTableData, getListingStackedTableData } from "../../../lib/helpers"
 import { getListingTags } from "../../listing/listing_sections/MainDetails"
+import { useListingsMapContext } from "./ListingsMapContext"
 import styles from "./MapListingCard.module.scss"
 
 export interface MapListingCardProps {
   listing: Listing
   index: number
-  jurisdiction: Jurisdiction
   showHomeType?: boolean
   forceMobileView?: boolean
   onClose?: () => void
@@ -28,23 +23,29 @@ export interface MapListingCardProps {
 
 export const MapListingCard = ({
   listing,
-  jurisdiction,
   showHomeType,
   index,
   forceMobileView,
   onClose,
 }: MapListingCardProps) => {
-  const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
+  const { activeFeatureFlags } = useListingsMapContext()
+  const enableUnitGroups = activeFeatureFlags?.includes(FeatureFlagEnum.enableUnitGroups)
 
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
-  const listingTags = getListingTags(
-    listing,
-    true,
-    !showHomeType,
-    !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
-  )
+  const listingTags = getListingTags(listing, {
+    hideReviewTags: true,
+    hideHomeTypeTag: !showHomeType,
+    hideAccessibilityFeaturesTag: activeFeatureFlags?.includes(
+      FeatureFlagEnum.disableAccessibilityFeaturesTag
+    ),
+    enableUnitAccessibilityTypeTags: activeFeatureFlags?.includes(
+      FeatureFlagEnum.enableUnitAccessibilityTypeTags
+    ),
+    enableIsVerified: activeFeatureFlags?.includes(FeatureFlagEnum.enableIsVerified),
+    swapCommunityTypeWithPrograms: activeFeatureFlags?.includes(
+      FeatureFlagEnum.swapCommunityTypeWithPrograms
+    ),
+  })
 
   const unitsPreviewTable = (() => {
     const hasData = listing.unitGroups?.length || listing.units?.length

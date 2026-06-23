@@ -64,7 +64,7 @@ const ListingsList = (props: ListingsListProps) => {
     const index = otherCards.length + 1
     if (tIfExists(`listingResource.additionalCard${index}.title`)) {
       otherCards.push(
-        <div className={styles["listings-list-info-card"]}>
+        <div className={styles["listings-list-info-card"]} key={`additional-card-${index}`}>
           <BloomCard
             title={t(`listingResource.additionalCard${index}.title`)}
             variant="block"
