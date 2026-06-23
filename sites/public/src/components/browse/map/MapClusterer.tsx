@@ -303,7 +303,6 @@ export const MapClusterer = ({
             <MapListingCard
               listing={response}
               index={markerKey}
-              jurisdiction={response.jurisdictions as Jurisdiction}
               forceMobileView={true}
               onClose={() => {
                 setInfoWindowContent(null)
