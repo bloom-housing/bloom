@@ -36,6 +36,7 @@ export const getExportHeaders = (
     enableReasonableAccommodations?: boolean;
     enableSpokenLanguage?: boolean;
     enableGenderQuestion?: boolean;
+    enableSexualOrientationQuestion?: boolean;
     enableV2MSQ?: boolean;
     enableReceivedAtAndByFields?: boolean;
     forLottery?: boolean;
@@ -52,6 +53,7 @@ export const getExportHeaders = (
     enableReasonableAccommodations,
     enableSpokenLanguage,
     enableGenderQuestion,
+    enableSexualOrientationQuestion,
     enableV2MSQ,
     enableReceivedAtAndByFields,
     forLottery,
@@ -493,6 +495,14 @@ export const getExportHeaders = (
         label: 'Gender',
         format: (val: string | undefined): string =>
           convertDemographicGenderToReadable(val),
+      });
+    }
+    if (enableSexualOrientationQuestion) {
+      headers.push({
+        path: 'demographics.sexualOrientation',
+        label: 'Sexual Orientation',
+        format: (val: string | undefined): string =>
+          convertDemographicSexualOrientationToReadable(val),
       });
     }
     headers.push(
@@ -951,6 +961,27 @@ export const convertDemographicGenderToReadable = (type: string): string => {
     female: 'Female',
     differentTerm: 'I use a different term',
     dontKnow: "I don't know or don't understand the question",
+    preferNoResponse: 'Prefer not to respond',
+  };
+  return typeMap[type] ?? type;
+};
+
+/**
+ *
+ * @param type takes in the demographic string
+ * @returns outputs the readable version of the string
+ */
+export const convertDemographicSexualOrientationToReadable = (
+  type: string,
+): string => {
+  const typeMap = {
+    asexual: 'Asexual',
+    bisexual: 'Bisexual',
+    gayLesbianSameGenderLoving: 'Gay / Lesbian / Same-Gender Loving',
+    questioningUnsure: 'Questioning / Unsure',
+    straightHeterosexual: 'Straight / Heterosexual',
+    differentTerm: 'I use a different term',
+    dontKnow: 'I don’t understand the question',
     preferNoResponse: 'Prefer not to respond',
   };
   return typeMap[type] ?? type;

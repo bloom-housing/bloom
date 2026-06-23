@@ -132,6 +132,14 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiPropertyOptional({
+    type: Array,
+    example: ['jurisdiction1', 'jurisdiction2'],
+  })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.jurisdictions]?: string[];
+
+  @Expose()
+  @ApiPropertyOptional({
     example: 'FAB1A3C6-965E-4054-9A48-A282E92E9426',
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })

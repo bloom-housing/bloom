@@ -69,9 +69,13 @@ const translations = (
         accountRemoval: {
           subject:
             'Eliminación programada de cuenta de Bloom Housing debido a inactividad',
-          courtesyText:
-            'Este es un correo electrónico de cortesía para informarle que, debido a que su cuenta del Portal de Bloom Housing ha estado inactiva durante 3 años, se eliminará en 30 días según nuestros Términos de Uso y Política de Privacidad. Si desea conservar su cuenta, inicie sesión durante el próximo mes y la consideraremos activa de nuevo.',
+          courtesyText1:
+            'Este es un mensaje de cortesía para informarle que, debido a que su cuenta del portal Bloom Housing ha estado inactiva durante 3 años, se eliminará en un plazo de 30 días conforme a nuestra',
+          courtesyText2:
+            'Si desea conservar su cuenta, por favor inicie sesión en cualquier momento durante el próximo mes y la consideraremos nuevamente activa.',
           signIn: 'Iniciar sesión en Bloom Housing',
+          privacyPolicy: 'Política de privacidad',
+          privacyPolicyUrl: 'localhost:3000/privacy-policy',
         },
         register: {
           welcome: 'Bienvenido',
@@ -170,12 +174,13 @@ const translations = (
           applicationsDue: 'Fecha límite de solicitudes',
           address: 'Dirección',
           neighborhood: 'Vecindario',
-          unitType: 'Tipo de unidad',
+          region: 'Región',
+          unitType: 'Unidades accesibles disponibles',
           accessibilityType: {
             hearing: 'Auditiva',
             mobility: 'Movilidad',
             vision: 'Visual',
-            hearingAndVision: 'Auditiva y visual',
+            hearingAndVision: 'Auditiva/visual',
             mobilityAndHearing: 'Movilidad y auditiva',
             mobilityAndVision: 'Movilidad y visual',
             mobilityHearingAndVision: 'Movilidad y auditiva/visual',
@@ -221,8 +226,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Volante de marketing accesible',
-            unsubscribe: 'Cancelar suscripción',
-            emailSettings: 'Configuración de correo electrónico',
+            unsubscribeAndEmailSettings:
+              'Cancelar suscripción y gestionar configuración de correo electrónico',
           },
         },
       };
@@ -269,12 +274,13 @@ const translations = (
           applicationsDue: 'Hạn nộp đơn',
           address: 'Địa chỉ',
           neighborhood: 'Khu phố',
-          unitType: 'Loại căn hộ',
+          region: 'Vùng đất',
+          unitType: 'Các căn hộ có sẵn',
           accessibilityType: {
             hearing: 'Thính giác',
             mobility: 'Di chuyển',
             vision: 'Thị giác',
-            hearingAndVision: 'Thính giác và thị giác',
+            hearingAndVision: 'Thính giác / thị giác',
             mobilityAndHearing: 'Di chuyển và thính giác',
             mobilityAndVision: 'Di chuyển và thị giác',
             mobilityHearingAndVision: 'Di chuyển và thính giác/thị giác',
@@ -319,8 +325,7 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Tờ rơi tiếp thị có thể truy cập',
-            unsubscribe: 'Hủy đăng ký',
-            emailSettings: 'Cài đặt email',
+            unsubscribeAndEmailSettings: 'Hủy đăng ký và quản lý cài đặt email',
           },
         },
       };
@@ -364,12 +369,13 @@ const translations = (
           applicationsDue: '申请截止日期',
           address: '地址',
           neighborhood: '街区',
-          unitType: '单元类型',
+          region: '地区',
+          unitType: '可用的无障碍单元',
           accessibilityType: {
             hearing: '听力',
             mobility: '行动',
             vision: '视力',
-            hearingAndVision: '听力和视力',
+            hearingAndVision: '听力/视力',
             mobilityAndHearing: '行动和听力',
             mobilityAndVision: '行动和视力',
             mobilityHearingAndVision: '行动和听力/视力',
@@ -414,8 +420,7 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: '无障碍营销传单',
-            unsubscribe: '取消订阅',
-            emailSettings: '电子邮件设置',
+            unsubscribeAndEmailSettings: '取消订阅并管理电子邮件设置',
           },
         },
       };
@@ -462,12 +467,13 @@ const translations = (
           applicationsDue: 'Deadline ng Aplikasyon',
           address: 'Address',
           neighborhood: 'Kapitbahayan',
-          unitType: 'Uri ng unit',
+          region: 'Rehiyon',
+          unitType: 'Mga available na accessible unit',
           accessibilityType: {
             hearing: 'Pandinig',
             mobility: 'Mobilidad',
             vision: 'Paningin',
-            hearingAndVision: 'Pandinig at paningin',
+            hearingAndVision: 'Pandinig/paningin',
             mobilityAndHearing: 'Mobilidad at pandinig',
             mobilityAndVision: 'Mobilidad at paningin',
             mobilityHearingAndVision: 'Mobilidad at pandinig/paningin',
@@ -513,8 +519,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Naa-access na flyer sa marketing',
-            unsubscribe: 'Mag-unsubscribe',
-            emailSettings: 'Mga setting ng email',
+            unsubscribeAndEmailSettings:
+              'Mag-unsubscribe at pamahalaan ang mga settings ng email',
           },
         },
       };
@@ -561,12 +567,13 @@ const translations = (
           applicationsDue: 'আবেদনের শেষ তারিখ',
           address: 'ঠিকানা',
           neighborhood: 'এলাকা',
-          unitType: 'ইউনিটের ধরন',
+          region: 'অঞ্চল',
+          unitType: 'উপলব্ধ প্রবেশযোগ্য ইউনিট',
           accessibilityType: {
             hearing: 'শ্রবণ',
             mobility: 'গতিশীলতা',
             vision: 'দৃষ্টি',
-            hearingAndVision: 'শ্রবণ ও দৃষ্টি',
+            hearingAndVision: 'শ্রবণ/দৃষ্টি',
             mobilityAndHearing: 'গতিশীলতা ও শ্রবণ',
             mobilityAndVision: 'গতিশীলতা ও দৃষ্টি',
             mobilityHearingAndVision: 'গতিশীলতা এবং শ্রবণ/দৃষ্টি',
@@ -611,8 +618,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'অ্যাক্সেসযোগ্য মার্কেটিং ফ্লায়ার',
-            unsubscribe: 'আনসাবস্ক্রাইব',
-            emailSettings: 'ইমেইল সেটিংস',
+            unsubscribeAndEmailSettings:
+              'আনসাবস্ক্রাইব করুন এবং ইমেইল সেটিংস পরিচালনা করুন',
           },
         },
       };
@@ -656,12 +663,13 @@ const translations = (
           applicationsDue: 'تاريخ انتهاء الطلبات',
           address: 'العنوان',
           neighborhood: 'الحي',
-          unitType: 'نوع الوحدة',
+          region: 'منطقة',
+          unitType: 'الوحدات المتاحة لذوي الاحتياجات الخاصة',
           accessibilityType: {
             hearing: 'السمع',
             mobility: 'الحركة',
             vision: 'البصر',
-            hearingAndVision: 'السمع والبصر',
+            hearingAndVision: 'السمع/البصر',
             mobilityAndHearing: 'الحركة والسمع',
             mobilityAndVision: 'الحركة والبصر',
             mobilityHearingAndVision: 'الحركة والسمع/البصر',
@@ -706,8 +714,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'نشرة تسويقية ميسّرة',
-            unsubscribe: 'إلغاء الاشتراك',
-            emailSettings: 'إعدادات البريد الإلكتروني',
+            unsubscribeAndEmailSettings:
+              'إلغاء الاشتراك وإدارة إعدادات البريد الإلكتروني',
           },
         },
       };
@@ -752,12 +760,13 @@ const translations = (
           applicationsDue: '신청 마감일',
           address: '주소',
           neighborhood: '동네',
-          unitType: '유닛 유형',
+          region: '지역',
+          unitType: '장애인 접근 가능 객실',
           accessibilityType: {
             hearing: '청각',
             mobility: '이동성',
             vision: '시각',
-            hearingAndVision: '청각 및 시각',
+            hearingAndVision: '청각/시각',
             mobilityAndHearing: '이동성 및 청각',
             mobilityAndVision: '이동성 및 시각',
             mobilityHearingAndVision: '이동성 및 청각/시각',
@@ -802,8 +811,7 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: '접근 가능한 마케팅 전단지',
-            unsubscribe: '구독 취소',
-            emailSettings: '이메일 설정',
+            unsubscribeAndEmailSettings: '구독 취소 및 이메일 설정 관리',
           },
         },
       };
@@ -849,12 +857,13 @@ const translations = (
           applicationsDue: 'Դիմումների վերջնաժամկետ',
           address: 'Հասցե',
           neighborhood: 'Թաղամաս',
-          unitType: 'Բնակարանի տեսակ',
+          region: 'Տարածաշրջան',
+          unitType: 'Հասանելի հաշմանդամների համար նախատեսված միավորներ',
           accessibilityType: {
             hearing: 'Լսողություն',
             mobility: 'Շարժունակություն',
             vision: 'Տեսողություն',
-            hearingAndVision: 'Լսողություն և տեսողություն',
+            hearingAndVision: 'Լսողություն/տեսողություն',
             mobilityAndHearing: 'Շարժունակություն և լսողություն',
             mobilityAndVision: 'Շարժունակություն և տեսողություն',
             mobilityHearingAndVision:
@@ -900,8 +909,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Հասանելի մարքեթինգային թռուցիկ',
-            unsubscribe: 'Դուրս գալ բաժանորդագրությունից',
-            emailSettings: 'Էլ. փոստի կարգավորումներ',
+            unsubscribeAndEmailSettings:
+              'Դադարեցնել բաժանորդագրությունը և կառավարել էլ. փոստի կարգավորումները',
           },
         },
       };
@@ -948,12 +957,13 @@ const translations = (
           applicationsDue: 'مهلت ارسال درخواست',
           address: 'آدرس',
           neighborhood: 'محله',
-          unitType: 'نوع واحد',
+          region: 'منطقه',
+          unitType: 'واحدهای قابل دسترس موجود',
           accessibilityType: {
             hearing: 'شنوایی',
             mobility: 'تحرک',
             vision: 'بینایی',
-            hearingAndVision: 'شنوایی و بینایی',
+            hearingAndVision: 'شنوایی/بینایی',
             mobilityAndHearing: 'تحرک و شنوایی',
             mobilityAndVision: 'تحرک و بینایی',
             mobilityHearingAndVision: 'تحرک و شنوایی/بینایی',
@@ -986,8 +996,7 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'بروشور بازاریابی قابل دسترس',
-            unsubscribe: 'لغو اشتراک',
-            emailSettings: 'تنظیمات ایمیل',
+            unsubscribeAndEmailSettings: 'لغو اشتراک و مدیریت تنظیمات ایمیل',
           },
         },
       };
@@ -1197,9 +1206,23 @@ const translations = (
             'and navigate to the listing detail page to view the request and edit the listing.',
         },
         listingApproved: {
-          header: 'New published listing',
+          header: 'New published listing - %{listingName}',
           adminApproved:
             'The %{listingName} listing has been approved and published by an administrator.',
+          viewPublished:
+            'To view the published listing, please click on the link below',
+        },
+        listingScheduled: {
+          header: 'New scheduled listing',
+          subject: 'New scheduled listing - %{listingName}',
+          adminScheduled:
+            'The %{listingName} listing has been approved by an administrator and is scheduled to be automatically published on %{date} between 12:00 AM and 2:00 AM. If you have questions or require changes, please contact an administrator.',
+        },
+        listingPublished: {
+          header: 'New published listing - %{listingName}',
+          subject: 'New published listing - %{listingName}',
+          autoPublished:
+            'The %{listingName} listing has been automatically published.',
           viewPublished:
             'To view the published listing, please click on the link below',
         },
@@ -1254,9 +1277,13 @@ const translations = (
         },
         accountRemoval: {
           subject: 'Bloom Housing Scheduled Account Removal Due to Inactivity',
-          courtesyText:
-            'This is a courtesy email to let you know that because your Bloom Housing Portal account has been inactive for 3 years, your account will be deleted in 30 days per our Terms of Use and Privacy Policy. If you’d like to keep your account, please log in sometime in the next month and we’ll consider your account active again.',
+          courtesyText1:
+            'This is a courtesy email to let you know that because your Bloom Housing Portal account has been inactive for 3 years, your account will be deleted in 30 days per our',
+          courtesyText2:
+            'If you’d like to keep your account, please log in anytime in the next month and we’ll consider your account active again.',
           signIn: 'Sign in to Bloom Housing',
+          privacyPolicy: 'Privacy Policy',
+          privacyPolicyUrl: 'localhost:3000/privacy-policy',
         },
         rentalOpportunity: {
           subject: 'New rental opportunity at %{listingName}',
@@ -1278,12 +1305,13 @@ const translations = (
           applicationsDue: 'Applications Due',
           address: 'Address',
           neighborhood: 'Neighborhood',
-          unitType: 'Unit type',
+          region: 'Region',
+          unitType: 'Available accessible units',
           accessibilityType: {
             hearing: 'Hearing',
             mobility: 'Mobility',
             vision: 'Vision',
-            hearingAndVision: 'Hearing and Vision',
+            hearingAndVision: 'Hearing/Vision',
             mobilityAndHearing: 'Mobility and Hearing',
             mobilityAndVision: 'Mobility and Vision',
             mobilityHearingAndVision: 'Mobility and Hearing/Vision',
@@ -1328,8 +1356,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Accessible marketing flyer',
-            unsubscribe: 'Unsubscribe',
-            emailSettings: 'Email settings',
+            unsubscribeAndEmailSettings:
+              'Unsubscribe and manage email settings',
           },
         },
         advocateApproved: {

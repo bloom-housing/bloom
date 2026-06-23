@@ -88,6 +88,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           working-directory: ./sites/public
+          spec: cypress/e2e/default/*.spec.ts
           build: yarn build
           start: yarn dev:new-backend, yarn start
           wait-on: 'http://localhost:3100/jurisdictions'

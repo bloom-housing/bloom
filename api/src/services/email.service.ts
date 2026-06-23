@@ -25,6 +25,7 @@ import { Listing } from '../dtos/listings/listing.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { User } from '../dtos/users/user.dto';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { JurisdictionViews } from '../enums/jurisdictions/view-enum';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { getPublicEmailURL } from '../utilities/get-public-email-url';
 import type { ApplicationStatusChangeItem } from '../utilities/applicationStatusChanges';
@@ -160,10 +161,12 @@ export class EmailService {
     if (jurisdictionIds?.length === 1) {
       return await this.jurisdictionService.findOne({
         jurisdictionId: jurisdictionIds[0]?.id,
+        view: JurisdictionViews.full,
       });
     } else if (jurisdictionName) {
       return await this.jurisdictionService.findOne({
         jurisdictionName: jurisdictionName,
+        view: JurisdictionViews.full,
       });
     }
     return null;
@@ -181,6 +184,7 @@ export class EmailService {
     if (jurisdictionIds.length > 1) {
       const firstJurisdiction = await this.jurisdictionService.findOne({
         jurisdictionId: jurisdictionIds[0].id,
+        view: JurisdictionViews.full,
       });
       return firstJurisdiction?.emailFromAddress || '';
     }
@@ -726,7 +730,9 @@ export class EmailService {
       await this.send(
         emails,
         jurisdiction.emailFromAddress,
-        this.polyglot.t('listingApproved.header'),
+        this.polyglot.t('listingApproved.header', {
+          listingName: listingInfo.name,
+        }),
         this.template('listing-approved')({
           appOptions: { listingName: listingInfo.name },
           listingUrl: `${publicUrl}/listing/${listingInfo.id}`,
@@ -734,6 +740,69 @@ export class EmailService {
       );
     } catch (err) {
       console.log('listing approval email failed', err);
+      throw new HttpException('email failed', 500);
+    }
+  }
+
+  public async listingScheduled(
+    jurisdictionId: IdDTO,
+    listingInfo: IdDTO,
+    emails: string[],
+    scheduledPublishAt: Date,
+  ) {
+    try {
+      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      void (await this.loadTranslations(jurisdiction));
+      this.logger.log(
+        `Sending listing scheduled email for listing ${listingInfo.name} to ${emails.length} emails`,
+      );
+
+      const formattedDate = dayjs
+        .utc(scheduledPublishAt)
+        .tz(process.env.TIME_ZONE)
+        .format('MM/DD/YYYY');
+
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t('listingScheduled.subject', {
+          listingName: listingInfo.name,
+        }),
+        this.template('listing-scheduled')({
+          appOptions: { listingName: listingInfo.name, date: formattedDate },
+        }),
+      );
+    } catch (err) {
+      console.log('listing scheduled email failed', err);
+      throw new HttpException('email failed', 500);
+    }
+  }
+
+  public async listingPublished(
+    jurisdictionId: IdDTO,
+    listingInfo: IdDTO,
+    emails: string[],
+    publicUrl: string,
+  ) {
+    try {
+      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      void (await this.loadTranslations(jurisdiction));
+      this.logger.log(
+        `Sending listing published email for listing ${listingInfo.name} to ${emails.length} emails`,
+      );
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t('listingPublished.subject', {
+          listingName: listingInfo.name,
+        }),
+        this.template('listing-published')({
+          appOptions: { listingName: listingInfo.name },
+          listingUrl: `${publicUrl}/listing/${listingInfo.id}`,
+        }),
+      );
+    } catch (err) {
+      console.log('listing published email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -1007,6 +1076,13 @@ export class EmailService {
       });
     }
 
+    if (listing.region || listing.configurableRegion) {
+      listingDetails.push({
+        label: this.polyglot.t('rentalOpportunity.region'),
+        value: listing.region ?? listing.configurableRegion,
+      });
+    }
+
     if (priorityTypes.length) {
       listingDetails.push({
         label: this.polyglot.t('rentalOpportunity.unitType'),
@@ -1192,6 +1268,8 @@ export class EmailService {
             listingName: listing.name,
             tableRows: listingDetails,
             languageUrls: emailButtons,
+            accessibleMarketingFlyerUrl: listing.accessibleMarketingFlyer,
+            emailSettingsUrl: `${jurisdiction.publicUrl}/sign-in?redirectUrl=/account/notifications`,
           }),
         );
       }

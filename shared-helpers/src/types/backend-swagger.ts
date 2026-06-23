@@ -3447,6 +3447,9 @@ export interface ListingFilterParams {
   jurisdiction?: string
 
   /**  */
+  jurisdictions?: string[]
+
+  /**  */
   leasingAgent?: string
 
   /**  */
@@ -8161,6 +8164,9 @@ export interface Jurisdiction {
 
   /**  */
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
+
+  /**  */
+  subJurisdictions?: IdDTO[]
 }
 
 /** AddressInput */
@@ -10398,6 +10404,7 @@ export enum ListingFilterKeys {
   "ids" = "ids",
   "isVerified" = "isVerified",
   "jurisdiction" = "jurisdiction",
+  "jurisdictions" = "jurisdictions",
   "leasingAgent" = "leasingAgent",
   "listingFeatures" = "listingFeatures",
   "listingType" = "listingType",
@@ -10745,6 +10752,7 @@ export enum FeatureFlagEnum {
   "enableFilterByBathroom" = "enableFilterByBathroom",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGenderQuestion" = "enableGenderQuestion",
+  "enableSexualOrientationQuestion" = "enableSexualOrientationQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",

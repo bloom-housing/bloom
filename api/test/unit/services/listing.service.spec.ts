@@ -215,6 +215,8 @@ const mockListingSet = (
 const requestApprovalMock = jest.fn();
 const changesRequestedMock = jest.fn();
 const listingApprovedMock = jest.fn();
+const listingScheduledMock = jest.fn();
+const listingPublishedMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
 const lotteryPublishedAdminMock = jest.fn();
 const lotteryPublishedApplicantMock = jest.fn();
@@ -281,6 +283,8 @@ describe('Testing listing service', () => {
             requestApproval: requestApprovalMock,
             changesRequested: changesRequestedMock,
             listingApproved: listingApprovedMock,
+            listingScheduled: listingScheduledMock,
+            listingPublished: listingPublishedMock,
             lotteryReleased: lotteryReleasedMock,
             lotteryPublishedAdmin: lotteryPublishedAdminMock,
             lotteryPublishedApplicant: lotteryPublishedApplicantMock,
@@ -4567,6 +4571,7 @@ describe('Testing listing service', () => {
       });
 
       prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([]);
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue([]);
 
       prisma.listings.create = jest.fn().mockResolvedValue({
         id: 'example id',
@@ -4958,6 +4963,50 @@ describe('Testing listing service', () => {
           status: MultiselectQuestionsStatusEnum.active,
         },
       ]);
+    });
+
+    it('should send listingPublished and public notification when creating directly as active', async () => {
+      prisma.listings.create = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.active,
+        listingMultiselectQuestions: [],
+        units: [],
+      });
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        publicUrl: 'public.housing.gov',
+        listingApprovalPermissions: [],
+      });
+      jest
+        .spyOn(service, 'getUserEmailInfo')
+        .mockResolvedValueOnce({ emails: ['partner@email.com'] });
+      jest
+        .spyOn(service, 'sendListingPublishNotification')
+        .mockResolvedValueOnce(undefined);
+
+      await service.create(
+        {
+          name: 'listing name',
+          depositMin: '5',
+          assets: [],
+          jurisdictions: { id: 'jurisdiction-id' },
+          status: ListingsStatusEnum.active,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+          isVerified: true,
+        } as ListingCreate,
+        user,
+      );
+
+      expect(listingPublishedMock).toHaveBeenCalledWith(
+        { id: 'jurisdiction-id' },
+        { id: 'listing-id', name: 'listing name' },
+        ['partner@email.com'],
+        'public.housing.gov',
+      );
+      expect(service.sendListingPublishNotification).toHaveBeenCalled();
     });
   });
 
@@ -5353,6 +5402,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue([]);
       const updateMock = jest
         .fn()
         .mockResolvedValue({ id: 'example id', name: 'example name' });
@@ -6849,6 +6899,54 @@ describe('Testing listing service', () => {
       );
     });
 
+    it('listingApprovalNotify listing scheduled email', async () => {
+      const scheduledPublishAt = new Date('2026-07-15T00:00:00.000Z');
+      jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
+        emails: ['partner@email.com', 'admin@example.com'],
+      });
+      await service.listingApprovalNotify({
+        user,
+        listingInfo: { id: 'id', name: 'name' },
+        status: ListingsStatusEnum.scheduled,
+        previousStatus: ListingsStatusEnum.pendingReview,
+        approvingRoles: [UserRoleEnum.admin],
+        jurisId: 'jurisId',
+        scheduledPublishAt,
+      });
+
+      expect(service.getUserEmailInfo).toBeCalledWith(
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
+        'id',
+        'jurisId',
+      );
+      expect(listingScheduledMock).toBeCalledWith(
+        { id: 'jurisId' },
+        { id: 'id', name: 'name' },
+        ['partner@email.com', 'admin@example.com'],
+        scheduledPublishAt,
+      );
+    });
+
+    it('listingApprovalNotify scheduled listing from non-pendingReview not requiring email', async () => {
+      await service.listingApprovalNotify({
+        user,
+        listingInfo: { id: 'id', name: 'name' },
+        status: ListingsStatusEnum.scheduled,
+        previousStatus: ListingsStatusEnum.changesRequested,
+        approvingRoles: [UserRoleEnum.admin],
+        jurisId: 'jurisId',
+        scheduledPublishAt: new Date('2026-07-15T00:00:00.000Z'),
+      });
+
+      expect(listingScheduledMock).toBeCalledTimes(0);
+    });
+
     it('listingApprovalNotify active listing not requiring email', async () => {
       await service.listingApprovalNotify({
         user,
@@ -6860,6 +6958,72 @@ describe('Testing listing service', () => {
       });
 
       expect(listingApprovedMock).toBeCalledTimes(0);
+    });
+
+    it('should send listingPublished when publishing from draft with no approval permissions', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        publicUrl: 'public.housing.gov',
+        featureFlags: [],
+        listingApprovalPermissions: [],
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.pending,
+        jurisdictionId: 'jurisdiction-id',
+        listingMultiselectQuestions: [],
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.active,
+        listingMultiselectQuestions: [],
+        units: [],
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'snapshot-id' });
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        {
+          id: 'listing-id',
+          name: 'listing name',
+          status: ListingsStatusEnum.active,
+          listingMultiselectQuestions: [],
+          units: [],
+        },
+      ]);
+      jest
+        .spyOn(service, 'getUserEmailInfo')
+        .mockResolvedValueOnce({ emails: ['partner@email.com'] });
+      jest
+        .spyOn(service, 'sendListingPublishNotification')
+        .mockResolvedValueOnce(undefined);
+
+      await service.update(
+        {
+          id: 'listing-id',
+          name: 'listing name',
+          depositMin: '5',
+          assets: [],
+          jurisdictions: { id: 'jurisdiction-id' },
+          status: ListingsStatusEnum.active,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+          lastUpdatedByUser: user,
+        } as ListingUpdate,
+        user,
+      );
+
+      expect(listingPublishedMock).toHaveBeenCalledWith(
+        { id: 'jurisdiction-id' },
+        { id: 'listing-id', name: 'listing name' },
+        ['partner@email.com'],
+        'public.housing.gov',
+      );
+      expect(service.sendListingPublishNotification).toHaveBeenCalled();
     });
   });
 
@@ -7056,6 +7220,126 @@ describe('Testing listing service', () => {
       });
       expect(prisma.listingSnapshot.create).toHaveBeenCalledTimes(2);
       process.env.APPLICATION_DAYS_TILL_EXPIRY = null;
+    });
+  });
+
+  describe('Test publishScheduledListings', () => {
+    it('should publish due scheduled listings, write snapshots, activity logs and purge cache', async () => {
+      prisma.listings.findMany = jest.fn().mockResolvedValue([
+        {
+          id: 'scheduled-id-1',
+          name: 'name 1',
+          jurisdictionId: 'jurisId',
+          jurisdictions: { publicUrl: 'public.housing.gov' },
+        },
+        {
+          id: 'scheduled-id-2',
+          name: 'name 2',
+          jurisdictionId: 'jurisId',
+          jurisdictions: { publicUrl: 'public.housing.gov' },
+        },
+      ]);
+      prisma.listings.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: 'scheduled-id-1' });
+      prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 2 });
+      prisma.activityLog.createMany = jest.fn().mockResolvedValue({ count: 2 });
+      prisma.cronJob.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'snapshot-id' });
+      jest
+        .spyOn(service, 'getUserEmailInfo')
+        .mockResolvedValue({ emails: ['partner@email.com'] });
+
+      process.env.PROXY_URL = 'https://www.google.com';
+      await service.publishScheduledListingsCronJob();
+
+      expect(prisma.listings.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          name: true,
+          jurisdictionId: true,
+          jurisdictions: {
+            select: {
+              publicUrl: true,
+            },
+          },
+        },
+        where: {
+          status: ListingsStatusEnum.scheduled,
+          AND: [
+            { scheduledPublishAt: { not: null } },
+            { scheduledPublishAt: { lte: expect.any(Date) } },
+          ],
+        },
+      });
+      expect(prisma.listings.updateMany).toHaveBeenCalledWith({
+        data: {
+          status: ListingsStatusEnum.active,
+          publishedAt: expect.any(Date),
+        },
+        where: { id: { in: ['scheduled-id-1', 'scheduled-id-2'] } },
+      });
+      expect(prisma.activityLog.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            module: 'listing',
+            recordId: 'scheduled-id-1',
+            action: 'update',
+            metadata: { status: ListingsStatusEnum.active },
+          },
+          {
+            module: 'listing',
+            recordId: 'scheduled-id-2',
+            action: 'update',
+            metadata: { status: ListingsStatusEnum.active },
+          },
+        ],
+      });
+      expect(prisma.listingSnapshot.create).toHaveBeenCalledTimes(2);
+      expect(httpServiceMock.request).toHaveBeenCalledWith({
+        baseURL: 'https://www.google.com',
+        method: 'PURGE',
+        url: `/listings?*`,
+      });
+      expect(prisma.cronJob.findFirst).toHaveBeenCalled();
+      expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
+        where: {
+          name: 'LISTING_SCHEDULED_PUBLISH_CRON_STRING',
+        },
+      });
+      expect(prisma.cronJob.update).toHaveBeenCalled();
+      expect(listingPublishedMock).toHaveBeenCalledTimes(2);
+      expect(listingPublishedMock).toHaveBeenCalledWith(
+        { id: 'jurisId' },
+        { id: 'scheduled-id-1', name: 'name 1' },
+        ['partner@email.com'],
+        'public.housing.gov',
+      );
+      process.env.PROXY_URL = undefined;
+    });
+
+    it('should not purge cache or write activity logs when no listings are due', async () => {
+      prisma.listings.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 0 });
+      prisma.activityLog.createMany = jest.fn().mockResolvedValue({ count: 0 });
+      prisma.cronJob.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+
+      process.env.PROXY_URL = 'https://www.google.com';
+      const result = await service.publishScheduledListingsCronJob();
+
+      expect(result).toEqual({ success: true });
+      expect(prisma.listings.updateMany).not.toHaveBeenCalled();
+      expect(httpServiceMock.request).not.toHaveBeenCalled();
+      expect(prisma.activityLog.createMany).not.toHaveBeenCalled();
+      process.env.PROXY_URL = undefined;
     });
   });
 
