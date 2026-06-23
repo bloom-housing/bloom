@@ -456,14 +456,7 @@ export const getMapListings = (listings: Listing[]) => {
   return (
     <MapListingCardList>
       {listings.map((listing, index) => {
-        return (
-          <MapListingCard
-            key={index}
-            listing={listing}
-            index={index}
-            jurisdiction={listing.jurisdictions as Jurisdiction}
-          />
-        )
+        return <MapListingCard key={index} listing={listing} index={index} />
       })}
     </MapListingCardList>
   )

@@ -1581,6 +1581,7 @@ describe('Testing listing service', () => {
               unitTypes: {
                 select: { numBedrooms: true, name: true },
               },
+              accessibilityPriorityType: true,
             },
           },
         },
