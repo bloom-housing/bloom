@@ -29,6 +29,12 @@ describe("SiteHeader", () => {
     expect(skipLink).toHaveAttribute("href", "#main-content")
   })
 
+  it("renders a message bar when enabled", () => {
+    render(<SiteHeader {...baseProps} showMessageBar={true} message="Message content" />)
+
+    expect(screen.getByText("Message content")).toBeInTheDocument()
+  })
+
   describe("banners", () => {
     it("renders no banner content when banners prop is not provided", () => {
       render(<SiteHeader {...baseProps} />)
