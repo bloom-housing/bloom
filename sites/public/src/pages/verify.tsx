@@ -8,15 +8,16 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@bloom-housing/ui-seeds/src/overlays/Dialog"
-import { Field, Form, t } from "@bloom-housing/ui-components"
+import { Field, t } from "@bloom-housing/ui-components"
 import {
+  AuthContext,
+  BloomCard,
+  Form,
+  FormSignInErrorBox,
+  MessageContext,
   PageView,
   pushGtmEvent,
   useCatchNetworkError,
-  BloomCard,
-  AuthContext,
-  MessageContext,
-  FormSignInErrorBox,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
@@ -117,7 +118,7 @@ const Verify = () => {
 
             {alertMessage && <Message className={styles["verify-message"]}>{alertMessage}</Message>}
 
-            <Form id="verify" onSubmit={handleSubmit(onSubmit)}>
+            <Form id="verify" suppressSubmitOnEnter={false} onSubmit={handleSubmit(onSubmit)}>
               <Field
                 name="code"
                 label={t("account.pwdless.code")}

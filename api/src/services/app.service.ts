@@ -46,35 +46,23 @@ export class AppService implements OnModuleInit {
     await this.cronJobService.markCronJobAsStarted(
       TEMP_FILE_CLEAR_CRON_JOB_NAME,
     );
-    let filesDeletedCount = 0;
-    await fs.readdir(join(process.cwd(), 'src/temp/'), (err, files) => {
-      if (err) {
-        throw new InternalServerErrorException(err);
-      }
-      Promise.all(
-        files.map((f) => {
-          if (!f.includes('.git')) {
-            filesDeletedCount++;
-            try {
-              fs.rm(
-                join(process.cwd(), 'src/temp/', f),
-                { recursive: true },
-                (err) => {
-                  if (err) {
-                    throw new InternalServerErrorException(err);
-                  }
-                },
-              );
-            } catch (e) {
-              throw new InternalServerErrorException(e);
-            }
-          }
-        }),
+    try {
+      const files = await fs.promises.readdir(join(process.cwd(), 'src/temp/'));
+      const filesToDelete = files.filter((f) => f !== '.gitignore');
+      await Promise.all(
+        filesToDelete.map((f) =>
+          fs.promises.rm(join(process.cwd(), 'src/temp/', f), {
+            recursive: true,
+          }),
+        ),
       );
       this.logger.warn(
-        `listing csv clear job completed: ${filesDeletedCount} files were deleted`,
+        `listing csv clear job completed: ${filesToDelete.length} files were deleted`,
       );
-    });
+    } catch (e) {
+      this.logger.error('listing csv clear job failed', e);
+      throw new InternalServerErrorException(e);
+    }
     return {
       success: true,
     };

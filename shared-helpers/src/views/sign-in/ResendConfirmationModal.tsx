@@ -1,4 +1,5 @@
-import { t, Form, Field } from "@bloom-housing/ui-components"
+import { t, Field } from "@bloom-housing/ui-components"
+import { Form } from "@bloom-housing/shared-helpers"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import React, { useCallback, useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"

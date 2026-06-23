@@ -1,6 +1,7 @@
 {
   "account.accountSettings": "계정 설정",
   "account.accountSettingsSubtitle": "계정 설정, 이메일 및 비밀번호",
+  "account.accountSettingsSubtitleWithNotifications": "계정 설정, 이메일, 비밀번호 및 알림",
   "account.accountSettingsUpdate": "계정 설정 업데이트",
   "account.allMyApplications": "내 모든 지원서",
   "account.allMyApplicationsSubtitle": "신청하신 매물 목록을 확인하세요.",
@@ -1035,6 +1036,7 @@
   "listings.reservedUnits": "예약된 유닛",
   "listings.reservedUnitsDescription": "이러한 주택에 입주하려면 다음 조건 중 하나에 해당하거나 귀하의 가구 구성원 중 한 명이 해당해야 합니다.",
   "listings.reservedUnitsForWhoAre": "%{reservedType}인 %{communityType} 회원을 위해 예약되었습니다.",
+  "listings.scheduledApplicationOpen": "지원서는 %{openDate}일부터 제출할 수 있습니다.",
   "listings.search.subNote": "전체 또는 부분 목록 이름을 입력하세요.",
   "listings.section8Acceptance": "섹션 8 주택 선택 바우처를 받습니다.",
   "listings.section8VoucherInfo": "<strong>섹션 8 주택 선택 바우처를</strong> 소지하고 계신 경우, 소득 요건이 적용되지 않으며 소득에 따라 임대료를 지불하게 됩니다.",
@@ -1467,7 +1469,6 @@
   "welcome.allApplicationClosed": "현재 모든 신청 접수가 마감되었지만, 마감된 공고는 확인하실 수 있습니다.",
   "welcome.cityRegions": "도시 지역",
   "welcome.findRentalsForYou": "당신에게 맞는 임대 숙소를 찾아보세요",
-  "welcome.learnHousingBasics": "저렴한 주택을 신청하고 자격을 갖추는 방법을 알아보세요.",
   "welcome.learnMore": "더 알아보기",
   "welcome.resources": "자원",
   "welcome.seeMoreOpportunities": "더 많은 임대 및 소유 주택 기회를 확인하세요.",

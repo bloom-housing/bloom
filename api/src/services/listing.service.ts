@@ -241,6 +241,8 @@ includeViews.full = {
 };
 
 const LISTING_CRON_JOB_NAME = 'LISTING_CRON_JOB';
+const LISTING_SCHEDULED_PUBLISH_CRON_JOB_NAME =
+  'LISTING_SCHEDULED_PUBLISH_CRON_STRING';
 /*
   this is the service for listings
   it handles all the backend's business logic for reading in listing(s)
@@ -267,6 +269,11 @@ export class ListingService implements OnModuleInit {
       LISTING_CRON_JOB_NAME,
       process.env.LISTING_PROCESSING_CRON_STRING,
       this.closeListings.bind(this),
+    );
+    this.cronJobService.startCronJob(
+      LISTING_SCHEDULED_PUBLISH_CRON_JOB_NAME,
+      process.env.LISTING_SCHEDULED_PUBLISH_CRON_STRING,
+      this.publishScheduledListingsCronJob.bind(this),
     );
   }
 
@@ -414,6 +421,7 @@ export class ListingService implements OnModuleInit {
     approvingRoles: UserRoleEnum[];
     previousStatus?: ListingsStatusEnum;
     jurisId: string;
+    scheduledPublishAt?: Date;
   }) {
     const nonApprovingRoles: UserRoleEnum[] = [UserRoleEnum.partner];
     if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
@@ -457,6 +465,31 @@ export class ListingService implements OnModuleInit {
         userInfo.emails,
         this.configService.get('PARTNERS_PORTAL_URL'),
       );
+    }
+    // admin moves a listing from pendingReview to scheduled for autopublish
+    else if (
+      params.status === ListingsStatusEnum.scheduled &&
+      params.previousStatus === ListingsStatusEnum.pendingReview
+    ) {
+      const userInfo = await this.getUserEmailInfo(
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
+        params.listingInfo.id,
+        params.jurisId,
+      );
+      if (params.scheduledPublishAt) {
+        await this.emailService.listingScheduled(
+          { id: params.jurisId },
+          { id: params.listingInfo.id, name: params.listingInfo.name },
+          userInfo.emails,
+          params.scheduledPublishAt,
+        );
+      }
     }
     // check if status of active requires notification
     else if (params.status === ListingsStatusEnum.active) {
@@ -509,6 +542,20 @@ export class ListingService implements OnModuleInit {
       key: ListingFilterKeys.availabilities,
       caseSensitive: true,
     });
+
+    const includeExternal = params?.find(
+      (f) => f[ListingFilterKeys.includeExternal] !== undefined,
+    );
+    if (
+      includeExternal === undefined ||
+      includeExternal[ListingFilterKeys.includeExternal] === false
+    ) {
+      filters.push({
+        externalListingId: {
+          equals: null,
+        },
+      });
+    }
 
     // detect combined >=/<= monthlyRent filters and add one range filter
     const rentParams =
@@ -974,6 +1021,20 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
+        if (filter[ListingFilterKeys.jurisdictions]) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: filter[ListingFilterKeys.jurisdictions],
+            key: ListingFilterKeys.jurisdictions,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: builtFilter.map((filt) => ({
+              jurisdictionId: filt,
+            })),
+          });
+        }
         if (filter[ListingFilterKeys.jurisdiction]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
@@ -1421,6 +1482,7 @@ export class ListingService implements OnModuleInit {
         id: true,
         featureFlags: true,
         listingApprovalPermissions: true,
+        publicUrl: true,
       },
       where: {
         id: dto.jurisdictions.id,
@@ -1444,13 +1506,31 @@ export class ListingService implements OnModuleInit {
 
     if (!enableAutopublish) {
       dto.scheduledPublishAt = null;
+      dto.scheduledApplicationOpenAt = null;
     }
 
     if (enableAutopublish && dto.scheduledPublishAt) {
       dto.scheduledPublishAt = this.normalizeScheduledPublishAt(
         dto.scheduledPublishAt,
       );
-      this.checkScheduledPublishAtIsInFuture(dto.scheduledPublishAt);
+      this.checkScheduledDateIsInFuture(
+        dto.scheduledPublishAt,
+        'scheduledPublishAt',
+      );
+    }
+
+    if (enableAutopublish && dto.scheduledApplicationOpenAt) {
+      dto.scheduledApplicationOpenAt = this.normalizeScheduledApplicationOpenAt(
+        dto.scheduledApplicationOpenAt,
+      );
+      this.checkScheduledDateIsInFuture(
+        dto.scheduledApplicationOpenAt,
+        'scheduledApplicationOpenAt',
+      );
+      this.checkScheduledApplicationOpenAtIsAfterPublish(
+        dto.scheduledApplicationOpenAt,
+        dto.scheduledPublishAt,
+      );
     }
 
     if (
@@ -1827,16 +1907,33 @@ export class ListingService implements OnModuleInit {
         approvingRoles: rawJurisdiction.listingApprovalPermissions,
         jurisId: rawJurisdiction.id,
       });
-    } else if (
-      enableV2MSQ &&
-      mappedListing.status === ListingsStatusEnum.active
-    ) {
-      const multiselectQuestions =
-        mappedListing.listingMultiselectQuestions.map(
-          (listingMultiselectQuestion) =>
-            listingMultiselectQuestion.multiselectQuestions,
-        );
-      void this.multiselectQuestionService.activateMany(multiselectQuestions);
+    } else if (mappedListing.status === ListingsStatusEnum.active) {
+      if (enableV2MSQ) {
+        const multiselectQuestions =
+          mappedListing.listingMultiselectQuestions.map(
+            (listingMultiselectQuestion) =>
+              listingMultiselectQuestion.multiselectQuestions,
+          );
+        void this.multiselectQuestionService.activateMany(multiselectQuestions);
+      }
+      const userInfo = await this.getUserEmailInfo(
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
+        mappedListing.id,
+        rawJurisdiction.id,
+      );
+      await this.emailService.listingPublished(
+        { id: rawJurisdiction.id },
+        { id: mappedListing.id, name: mappedListing.name },
+        userInfo.emails,
+        rawJurisdiction.publicUrl || '',
+      );
+      await this.sendListingPublishNotification(mappedListing);
     }
     await this.cachePurge(undefined, dto.status, mappedListing.id);
     return mappedListing;
@@ -2261,19 +2358,42 @@ export class ListingService implements OnModuleInit {
 
     if (!enableAutopublish) {
       incomingDto.scheduledPublishAt = null;
+      incomingDto.scheduledApplicationOpenAt = null;
     }
 
-    // test if not publishing or unpublishing listing and scheduledPublishAt is set
-    if (
-      incomingDto.status === storedListing.status &&
-      incomingDto.status !== ListingsStatusEnum.active &&
-      incomingDto.scheduledPublishAt &&
-      enableAutopublish
-    ) {
-      incomingDto.scheduledPublishAt = this.normalizeScheduledPublishAt(
-        incomingDto.scheduledPublishAt,
-      );
-      this.checkScheduledPublishAtIsInFuture(incomingDto.scheduledPublishAt);
+    const sendPublishNotificationEmail =
+      incomingDto.status === ListingsStatusEnum.active &&
+      storedListing.status !== ListingsStatusEnum.active;
+
+    if (enableAutopublish) {
+      incomingDto.scheduledPublishAt = incomingDto.scheduledPublishAt
+        ? this.normalizeScheduledPublishAt(incomingDto.scheduledPublishAt)
+        : null;
+      // test if not publishing or unpublishing listing and scheduledPublishAt is set
+      if (
+        incomingDto.status === storedListing.status &&
+        incomingDto.status !== ListingsStatusEnum.active &&
+        incomingDto.scheduledPublishAt
+      ) {
+        this.checkScheduledDateIsInFuture(
+          incomingDto.scheduledPublishAt,
+          'scheduledPublishAt',
+        );
+      }
+
+      if (incomingDto.scheduledApplicationOpenAt) {
+        this.normalizeScheduledApplicationOpenAt(
+          incomingDto.scheduledApplicationOpenAt,
+        );
+        this.checkScheduledDateIsInFuture(
+          incomingDto.scheduledApplicationOpenAt,
+          'scheduledApplicationOpenAt',
+        );
+        this.checkScheduledApplicationOpenAtIsAfterPublish(
+          incomingDto.scheduledApplicationOpenAt,
+          incomingDto.scheduledPublishAt,
+        );
+      }
     }
 
     if (
@@ -2909,9 +3029,36 @@ export class ListingService implements OnModuleInit {
         status: incomingDto.status,
         previousStatus: storedListing.status,
         jurisId: rawJurisdiction.id,
+        scheduledPublishAt: incomingDto.scheduledPublishAt,
       });
+    else if (
+      incomingDto.status === ListingsStatusEnum.active &&
+      storedListing.status === ListingsStatusEnum.pending
+    ) {
+      const userInfo = await this.getUserEmailInfo(
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
+        mappedListing.id,
+        rawJurisdiction.id,
+      );
+      const jurisdiction = await this.prisma.jurisdictions.findUnique({
+        select: { publicUrl: true },
+        where: { id: rawJurisdiction.id },
+      });
+      await this.emailService.listingPublished(
+        { id: rawJurisdiction.id },
+        { id: mappedListing.id, name: mappedListing.name },
+        userInfo.emails,
+        jurisdiction.publicUrl || '',
+      );
+    }
 
-    if (mappedListing.status === ListingsStatusEnum.active) {
+    if (sendPublishNotificationEmail) {
       await this.sendListingPublishNotification(mappedListing);
     }
 
@@ -2958,23 +3105,31 @@ export class ListingService implements OnModuleInit {
       ),
     );
 
-    const preferenceFilters = priorityTypes.map((priorityType) => {
+    let preferenceFilters = [];
+
+    preferenceFilters = priorityTypes.map((priorityType) => {
       return {
         [priorityType]: true,
-      } as Prisma.UserNotificationPreferencesWhereInput;
+      };
     });
 
-    if (listing?.region) {
+    if (listing.region || listing.configurableRegion) {
       preferenceFilters.push({
         regions: {
-          has: listing.region,
+          has: listing.region ?? listing.configurableRegion,
         },
-      } as Prisma.UserNotificationPreferencesWhereInput);
+      });
     }
 
     if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
       preferenceFilters.push({
         lottery: true,
+      });
+    }
+
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
+      preferenceFilters.push({
+        waitlist: true,
       });
     }
 
@@ -2988,11 +3143,11 @@ export class ListingService implements OnModuleInit {
           email: '',
         },
         AND: [
-          {
-            userPreferences: {
-              sendEmailNotifications: true,
-            },
-          },
+          // { TODO: consider enabling this when this flag will be available to update from user account page
+          //   userPreferences: {
+          //     sendEmailNotifications: true,
+          //   },
+          // },
           {
             notificationPreferences: {
               OR: preferenceFilters,
@@ -3199,21 +3354,43 @@ export class ListingService implements OnModuleInit {
     return dayjs.tz(dateStr, 'YYYY-MM-DD', appTimezone).startOf('day').toDate();
   }
 
-  private checkScheduledPublishAtIsInFuture(scheduledPublishAt: Date): void {
+  private checkScheduledDateIsInFuture(date: Date, fieldName: string): void {
     const appTimezone = process.env.TIME_ZONE;
-    const minimumScheduledPublishAt = dayjs
-      .utc()
-      .tz(appTimezone)
-      .add(1, 'day')
-      .startOf('day');
+    const minimum = dayjs.utc().tz(appTimezone).add(1, 'day').startOf('day');
 
-    const incomingScheduledPublishAt = dayjs
-      .utc(scheduledPublishAt)
-      .tz(appTimezone);
+    if (dayjs.utc(date).tz(appTimezone).isBefore(minimum)) {
+      throw new BadRequestException([`${fieldName} must be in the future`]);
+    }
+  }
 
-    if (incomingScheduledPublishAt.isBefore(minimumScheduledPublishAt)) {
+  normalizeScheduledApplicationOpenAt(scheduledApplicationOpenAt: Date): Date {
+    const appTimezone = process.env.TIME_ZONE;
+    const dateStr = dayjs.utc(scheduledApplicationOpenAt).format('YYYY-MM-DD');
+    // Applications open at 9:00 AM in the app timezone
+    return dayjs
+      .tz(dateStr, 'YYYY-MM-DD', appTimezone)
+      .startOf('day')
+      .add(9, 'hour')
+      .toDate();
+  }
+
+  private checkScheduledApplicationOpenAtIsAfterPublish(
+    scheduledApplicationOpenAt: Date,
+    scheduledPublishAt?: Date,
+  ): void {
+    if (!scheduledApplicationOpenAt || !scheduledPublishAt) {
+      return;
+    }
+
+    // Same calendar day is allowed (publish is normalized to midnight and the
+    // application open date to 9:00 AM), so an instant comparison is sufficient.
+    if (
+      dayjs
+        .utc(scheduledApplicationOpenAt)
+        .isAfter(dayjs.utc(scheduledPublishAt)) === false
+    ) {
       throw new BadRequestException([
-        'scheduledPublishAt must be in the future',
+        'scheduledApplicationOpenAt must be after scheduled publish date',
       ]);
     }
   }
@@ -3286,6 +3463,7 @@ export class ListingService implements OnModuleInit {
               lte: new Date(),
             },
           },
+          { externalListingId: { equals: null } },
         ],
       },
     });
@@ -3333,6 +3511,117 @@ export class ListingService implements OnModuleInit {
     return {
       success: true,
     };
+  }
+
+  /**
+   * Runs the cron job to publish listings in 'scheduled' status whose
+   * scheduledPublishAt date is in the past.
+   */
+  async publishScheduledListingsCronJob(): Promise<SuccessDTO> {
+    const logName = 'publishScheduledListingsCron';
+    this.logger.warn(`${logName} job running`);
+    await this.cronJobService.markCronJobAsStarted(
+      LISTING_SCHEDULED_PUBLISH_CRON_JOB_NAME,
+    );
+
+    const listings = await this.prisma.listings.findMany({
+      select: {
+        id: true,
+        name: true,
+        jurisdictionId: true,
+        jurisdictions: {
+          select: {
+            publicUrl: true,
+          },
+        },
+      },
+      where: {
+        status: ListingsStatusEnum.scheduled,
+        AND: [
+          { scheduledPublishAt: { not: null } },
+          { scheduledPublishAt: { lte: new Date() } },
+          { externalListingId: { equals: null } },
+        ],
+      },
+    });
+
+    const listingIds = listings.map((listing) => listing.id);
+    this.logger.warn(
+      `${logName} found ${listingIds.length} listing(s) ready to publish`,
+    );
+
+    if (!listingIds.length) {
+      return { success: true };
+    }
+
+    this.logger.log(
+      `${logName} listing IDs to publish: ${listingIds.join(', ')}`,
+    );
+
+    for (const listingId of listingIds) {
+      await this.snapshotCreateService.createListingSnapshot(listingId);
+    }
+
+    const res = await this.prisma.listings.updateMany({
+      data: {
+        status: ListingsStatusEnum.active,
+        publishedAt: new Date(),
+      },
+      where: { id: { in: listingIds } },
+    });
+
+    if (listingIds.length > 0) {
+      await this.prisma.activityLog.createMany({
+        data: listingIds.map((id) => ({
+          module: 'listing',
+          recordId: id,
+          action: 'update',
+          metadata: { status: ListingsStatusEnum.active },
+        })),
+      });
+    }
+
+    this.logger.warn(
+      `${logName} published ${res?.count} listing(s) to active status`,
+    );
+
+    if (res?.count) {
+      await this.cachePurge(
+        ListingsStatusEnum.active,
+        ListingsStatusEnum.scheduled,
+        '',
+      );
+    }
+
+    // notify partners and admins with access that each listing has been auto-published
+    for (const listing of listings) {
+      try {
+        const userInfo = await this.getUserEmailInfo(
+          [
+            UserRoleEnum.partner,
+            UserRoleEnum.admin,
+            UserRoleEnum.jurisdictionAdmin,
+            UserRoleEnum.limitedJurisdictionAdmin,
+            UserRoleEnum.supportAdmin,
+          ],
+          listing.id,
+          listing.jurisdictionId,
+        );
+        await this.emailService.listingPublished(
+          { id: listing.jurisdictionId },
+          { id: listing.id, name: listing.name },
+          userInfo.emails,
+          listing.jurisdictions?.publicUrl || '',
+        );
+      } catch (err) {
+        this.logger.error(
+          `${logName} failed to send published email for listing ${listing.id}`,
+          err,
+        );
+      }
+    }
+
+    return { success: true };
   }
 
   /**

@@ -1,8 +1,13 @@
 import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-import { t, Form, AlertBox } from "@bloom-housing/ui-components"
+import { t, AlertBox } from "@bloom-housing/ui-components"
 import { Button, Dialog, LoadingState } from "@bloom-housing/ui-seeds"
-import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import {
+  AuthContext,
+  Form,
+  MessageContext,
+  listingSectionQuestions,
+} from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
   Application,
@@ -14,7 +19,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mapFormToApi, mapApiToForm } from "../../../lib/applications/formatApplicationData"
-import { useJurisdiction, useSingleListingData } from "../../../lib/hooks"
+import { useSingleListingData } from "../../../lib/hooks"
 import { FormApplicationData } from "./sections/FormApplicationData"
 import { FormPrimaryApplicant } from "./sections/FormPrimaryApplicant"
 import { FormAlternateContact } from "./sections/FormAlternateContact"
@@ -42,9 +47,13 @@ type AlertErrorType = "api" | "form"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
-  const { data: jurisdictionData } = useJurisdiction(listingDto?.jurisdictions?.id)
-  const { doJurisdictionsHaveFeatureFlagOn, applicationsService, getJurisdictionLanguages } =
-    useContext(AuthContext)
+  // const { data: jurisdictionData } = useJurisdiction(listingDto?.jurisdictions?.id)
+  const {
+    doJurisdictionsHaveFeatureFlagOn,
+    applicationsService,
+    getJurisdictionLanguages,
+    getJurisdiction,
+  } = useContext(AuthContext)
 
   const preferences = listingSectionQuestions(
     listingDto,
@@ -94,6 +103,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const enableGenderQuestion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableGenderQuestion,
+    listingDto?.jurisdictions.id
+  )
+  const enableSexualOrientationQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSexualOrientationQuestion,
     listingDto?.jurisdictions.id
   )
 
@@ -315,6 +328,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     }
   }
 
+  const jurisdictionData = getJurisdiction(listingDto?.jurisdictions?.id)
+
   return (
     <>
       <StatusBar>
@@ -409,6 +424,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       enableSpokenLanguage={enableSpokenLanguage}
                       visibleSpokenLanguages={jurisdictionData?.visibleSpokenLanguages}
                       enableGenderQuestion={enableGenderQuestion}
+                      enableSexualOrientationQuestion={enableSexualOrientationQuestion}
                     />
 
                     <FormTerms />

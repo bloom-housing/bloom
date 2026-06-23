@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState } from "react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
-import { AlertBox, AlertNotice, Field, FieldGroup, Form, t } from "@bloom-housing/ui-components"
+import { AlertBox, AlertNotice, Field, FieldGroup, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
   listingSectionQuestions,
+  pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,

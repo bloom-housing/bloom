@@ -1,6 +1,7 @@
 {
   "account.accountSettings": "帐户设置",
   "account.accountSettingsSubtitle": "账户设置、邮箱和密码",
+  "account.accountSettingsSubtitleWithNotifications": "账户设置、电子邮件、密码和通知",
   "account.accountSettingsUpdate": "更新帐户设置",
   "account.allMyApplications": "我的所有申請",
   "account.allMyApplicationsSubtitle": "查看您已申請的房源列表。",
@@ -1038,6 +1039,7 @@
   "listings.reservedUnits": "保留单位",
   "listings.reservedUnitsDescription": "您或您的家庭成員必須符合以下其中一項條件，才符合這些單位的申請資格：",
   "listings.reservedUnitsForWhoAre": "保留給是 %{reservedType} 的 %{communityType}",
+  "listings.scheduledApplicationOpen": "申请可于%{openDate}日开始提交。",
   "listings.search.subNote": "输入完整或部分列表名称",
   "listings.section8Acceptance": "接受第 8 部分住房选择券",
   "listings.section8VoucherInfo": "如果您有<strong>第 8 部分住房选择券</strong>，则收入要求不适用，您将根据您的收入支付租金",
@@ -1463,7 +1465,6 @@
   "welcome.allApplicationClosed": "目前所有申請已截止，但您可以查看已截止申請的上市名單。",
   "welcome.cityRegions": "城市区域",
   "welcome.findRentalsForYou": "为您寻找出租房源",
-  "welcome.learnHousingBasics": "了解如何获得资格并申请经济适用住房",
   "welcome.learnMore": "了解更多",
   "welcome.resources": "资源",
   "welcome.seeMoreOpportunities": "查看更多租賃和自購住房的機會",

@@ -76,17 +76,19 @@ export const createAngelopolisJurisdiction = async (
     unitTypes,
     partnerUser,
     msqV2,
+    jurisdictionName = 'Angelopolis',
   }: {
     publicSiteBaseURL: string;
     unitTypes: { id: string }[];
     partnerUser: { id: string };
     msqV2: boolean;
+    jurisdictionName?: string;
   },
 ) => {
   const optionalV2MSQ = msqV2 ? [FeatureFlagEnum.enableV2MSQ] : [];
 
   const jurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Angelopolis', {
+    data: jurisdictionFactory(jurisdictionName, {
       publicSiteBaseURL,
       listingApprovalPermissions: [UserRoleEnum.admin],
       featureFlags: [
@@ -255,7 +257,7 @@ export const createAngelopolisJurisdiction = async (
     }),
   });
 
-  await agencyFactory(jurisdiction.id, prismaClient, 5, 'Angelopolis');
+  await agencyFactory(jurisdiction.id, prismaClient, 5, jurisdictionName);
 
   const agency = await prismaClient.agency.findFirst({
     where: {

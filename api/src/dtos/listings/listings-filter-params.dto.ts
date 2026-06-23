@@ -57,6 +57,7 @@ export class ListingFilterParams extends BaseFilter {
     default: [1],
   })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default], each: true })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.bathrooms]?: number[];
 
   @Expose()
@@ -121,6 +122,14 @@ export class ListingFilterParams extends BaseFilter {
     example: false,
   })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.includeExternal]?: boolean;
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: Boolean,
+    example: false,
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.isVerified]?: boolean;
 
   @Expose()
@@ -129,6 +138,14 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.jurisdiction]?: string;
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: Array,
+    example: ['jurisdiction1', 'jurisdiction2'],
+  })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.jurisdictions]?: string[];
 
   @Expose()
   @ApiPropertyOptional({

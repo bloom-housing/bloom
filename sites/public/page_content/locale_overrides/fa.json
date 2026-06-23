@@ -18,5 +18,7 @@
   "resources.contactDescription": "Lorem ipsum dolor sit amet، consectetur adipiscing elit، sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "resources.contactEmail": "email@email.com",
   "resources.contactInfo": "اداره مسکن و توسعه اجتماعی بلومینگتون",
-  "resources.housingProgramsTitle": "برنامه‌های مسکن و توسعه اجتماعی بلومینگتون"
+  "resources.housingProgramsTitle": "برنامه‌های مسکن و توسعه اجتماعی بلومینگتون",
+  "resources.additionalResourcesLink": "/housing-basics",
+  "resources.additionalResourcesTitle": "اطلاعات بیشتری در مورد برنامج مسکن در دسترس (AcHP) کسب کنید، شامل فهرستی از پروژه های مسکن پوشش داده شده، منابع برای مستاجران، سیاست ها و نحوه ثبت شکایت."
 }
