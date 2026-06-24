@@ -646,7 +646,7 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
     },
     {
       id: "app-summary-income-vouchers",
-      fieldValue: application.incomeVouchers ? "Yes" : "No",
+      fieldValue: application.incomeVouchers ? application.voucher : "None",
     },
     {
       id: "app-summary-income",

@@ -57,7 +57,7 @@ describe("applications pages", () => {
             ...JSON.parse(JSON.stringify(blankApplication)),
             income: "10000",
             incomePeriod: "perMonth",
-            incomeVouchers: false,
+            incomeVouchers: [],
           },
           listing: {
             units: [

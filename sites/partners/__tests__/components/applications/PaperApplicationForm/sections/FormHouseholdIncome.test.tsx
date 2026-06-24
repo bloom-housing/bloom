@@ -21,7 +21,7 @@ describe("<FormHouseholdIncome>", () => {
     expect(screen.getByLabelText(/per month/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/annual income/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/monthly income/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/housing voucher or subsidy/i)).toBeInTheDocument()
+    expect(screen.getByRole("group", { name: /housing voucher or subsidy/i })).toBeInTheDocument()
   })
 
   it("should disable income value fields until income period is selected", async () => {

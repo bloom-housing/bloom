@@ -394,15 +394,15 @@ model Applications {
   // Signifies when PII data should be cleared
   expireAfter                               DateTime?                     @map("expire_after") @db.Timestamp(6)
   // If a user is deleted we want the historic data of what applications were associated with that user
-  historicalUserId                          String?                       @map("historical_user_id") @db.Uuid
-  householdExpectingChanges                 Boolean?                      @map("household_expecting_changes")
-  householdSize                             Int?                          @map("household_size")
-  householdStudent                          Boolean?                      @map("household_student")
-  reasonableAccommodations                  String?                       @map("reasonable_accommodations")
-  housingStatus                             String?                       @map("housing_status")
-  income                                    String?
-  incomePeriod                              IncomePeriodEnum?             @map("income_period")
-  incomeVouchers                            Boolean?                      @map("income_vouchers")
+  historicalUserId               String?                       @map("historical_user_id") @db.Uuid
+  householdExpectingChanges      Boolean?                      @map("household_expecting_changes")
+  householdSize                  Int?                          @map("household_size")
+  householdStudent               Boolean?                      @map("household_student")
+  reasonableAccommodations       String?                       @map("reasonable_accommodations")
+  housingStatus                  String?                       @map("housing_status")
+  income                         String?
+  incomePeriod                   IncomePeriodEnum?             @map("income_period")
+  incomeVouchers                 String[]                      @map("income_vouchers")
   // This application is the most recent for the user
   isNewest                                  Boolean?                      @default(false) @map("is_newest")
   language                                  LanguagesEnum?
@@ -473,15 +473,15 @@ model ApplicationSnapshot {
   deletedAt                                 DateTime?                     @map("deleted_at") @db.Timestamp(6)
   demographicSnapshotId                     String?                       @unique() @map("demographic_snapshot_id") @db.Uuid
   // Signifies when PII data should be cleared
-  expireAfter                               DateTime?                     @map("expire_after") @db.Timestamp(6)
-  householdExpectingChanges                 Boolean?                      @map("household_expecting_changes")
-  householdSize                             Int?                          @map("household_size")
-  householdStudent                          Boolean?                      @map("household_student")
-  reasonableAccommodations                  String?                       @map("reasonable_accommodations")
-  housingStatus                             String?                       @map("housing_status")
-  income                                    String?
-  incomePeriod                              IncomePeriodEnum?             @map("income_period")
-  incomeVouchers                            Boolean?                      @map("income_vouchers")
+  expireAfter                    DateTime?                     @map("expire_after") @db.Timestamp(6)
+  householdExpectingChanges      Boolean?                      @map("household_expecting_changes")
+  householdSize                  Int?                          @map("household_size")
+  householdStudent               Boolean?                      @map("household_student")
+  reasonableAccommodations       String?                       @map("reasonable_accommodations")
+  housingStatus                  String?                       @map("housing_status")
+  income                         String?
+  incomePeriod                   IncomePeriodEnum?             @map("income_period")
+  incomeVouchers                 String[]                      @map("income_vouchers")
   // This application is the most recent for the user
   isNewest                                  Boolean?                      @default(false) @map("is_newest")
   language                                  LanguagesEnum?
