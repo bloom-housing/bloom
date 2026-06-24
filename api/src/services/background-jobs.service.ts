@@ -41,7 +41,7 @@ export class BackgroundJobsService {
       permissionActions.create,
     );
 
-    const hasActiveListing = !!this.findActiveForListing(listingId);
+    const hasActiveListing = !!(await this.findActiveForListing(listingId));
 
     if (hasActiveListing) {
       throw new ConflictException(
@@ -92,7 +92,7 @@ export class BackgroundJobsService {
    * @returns Details on the currently processed job for the desired listing
    */
   async findActiveForListing(listingId: string): Promise<BackgroundJob | null> {
-    const activeJob = this.prismaService.backgroundJob.findFirst({
+    const activeJob = await this.prismaService.backgroundJob.findFirst({
       where: {
         listingId: listingId,
         status: BackgroundJobStatusEnum.processing,
