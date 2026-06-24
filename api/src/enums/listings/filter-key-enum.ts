@@ -10,6 +10,7 @@ export enum ListingFilterKeys {
   counties = 'counties',
   homeTypes = 'homeTypes',
   ids = 'ids',
+  includeExternal = 'includeExternal',
   isVerified = 'isVerified',
   jurisdiction = 'jurisdiction',
   jurisdictions = 'jurisdictions',

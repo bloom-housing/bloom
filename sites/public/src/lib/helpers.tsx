@@ -69,6 +69,10 @@ export const openInFuture = (listing: Listing) => {
   return listing.applicationOpenDate && nowTime < dayjs(listing.applicationOpenDate)
 }
 
+export const scheduledApplicationOpenInFuture = (listing: Listing): boolean => {
+  return !!listing.scheduledApplicationOpenAt && dayjs() < dayjs(listing.scheduledApplicationOpenAt)
+}
+
 const getListingCardSubtitle = (address: Address) => {
   const { street, city, state, zipCode } = address || {}
   return address ? `${street}, ${city} ${state}, ${zipCode}` : null

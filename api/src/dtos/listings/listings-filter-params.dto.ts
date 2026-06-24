@@ -57,6 +57,7 @@ export class ListingFilterParams extends BaseFilter {
     default: [1],
   })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default], each: true })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.bathrooms]?: number[];
 
   @Expose()
@@ -114,6 +115,14 @@ export class ListingFilterParams extends BaseFilter {
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @FixLargeObjectArray()
   [ListingFilterKeys.ids]?: string[];
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: Boolean,
+    example: false,
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.includeExternal]?: boolean;
 
   @Expose()
   @ApiPropertyOptional({

@@ -60,4 +60,20 @@ describe("DatesFormatter", () => {
     }
     expect(formatData(data).scheduledPublishAt).toBeNull()
   })
+
+  it("should set scheduledApplicationOpenAt to UTC midnight when open date field is complete", () => {
+    const data = {
+      scheduledApplicationOpenDateField: { year: "2030", month: "06", day: "15" },
+    }
+    expect(formatData(data).scheduledApplicationOpenAt?.toISOString()).toEqual(
+      "2030-06-15T00:00:00.000Z"
+    )
+  })
+
+  it("should set scheduledApplicationOpenAt to null when open date field is incomplete", () => {
+    const data = {
+      scheduledApplicationOpenDateField: { year: "2030", month: "", day: "" },
+    }
+    expect(formatData(data).scheduledApplicationOpenAt).toBeNull()
+  })
 })

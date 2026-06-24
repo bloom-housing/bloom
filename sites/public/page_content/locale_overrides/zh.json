@@ -170,5 +170,6 @@
   "resources.sectionTitle.seniorCenters": "多功能老年中心",
   "resources.sectionTitle.servingDisabilities": "为残疾人士服务的组织",
   "resources.sectionTitle.servingTheHomeless": "为无家可归者服务的组织",
+  "t.nonProdBanner": "本网站仅用于测试目的，不接受任何申请。请访问<a href='https://www.example.com/' target='_blank'>官方网站</a>申请住房。",
   "welcome.title": "申请经济适用且方便的住房"
 }
