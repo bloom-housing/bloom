@@ -6,6 +6,7 @@ import Head from "next/head"
 import HomeIcon from "@heroicons/react/24/solid/HomeIcon"
 import { Message, Toast, Icon } from "@bloom-housing/ui-seeds"
 import { MenuLink, t, SiteHeader as UICSiteHeader } from "@bloom-housing/ui-components"
+import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
@@ -271,7 +272,27 @@ const Layout = (props: LayoutProps) => {
                 </Icon>
               }
               mainContentId="main-content"
-              showMessageBar={true}
+              showMessageBar={false}
+              banners={[
+                ...(process.env.nonProdBanner
+                  ? [
+                      {
+                        text: <Markdown>{t("t.nonProdBanner")}</Markdown>,
+                        variant: "alert" as CommonMessageVariant,
+                        background: "var(--seeds-color-alert-light)",
+                      },
+                    ]
+                  : []),
+                ...(isMessageActive(process.env.maintenanceWindow)
+                  ? [
+                      {
+                        text: <Markdown>{t("alert.maintenance")}</Markdown>,
+                        variant: "warn" as CommonMessageVariant,
+                        background: "var(--seeds-color-warn-light)",
+                      },
+                    ]
+                  : []),
+              ]}
             />
           ) : (
             getSiteHeaderDeprecated(

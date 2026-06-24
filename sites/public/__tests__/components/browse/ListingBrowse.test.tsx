@@ -169,7 +169,7 @@ describe("<ListingBrowse>", () => {
       // Validate first row
       const [unitType, minIncome, rent] = within(rows[0]).getAllByRole("cell")
 
-      expect(unitType).toHaveTextContent("1 BR")
+      expect(unitType).toHaveTextContent("1 Bedroom")
       expect(minIncome).toHaveTextContent("$150")
       expect(minIncome).toHaveTextContent("per month")
       expect(rent).toHaveTextContent("% of income, or up to $1,200")
@@ -370,7 +370,7 @@ describe("<ListingBrowse>", () => {
       // Validate first row
       const [unitType, rent, availability] = within(rows[0]).getAllByRole("cell")
 
-      expect(unitType).toHaveTextContent("Studio - 1 BR")
+      expect(unitType).toHaveTextContent("Studio - 1 Bedroom")
       expect(rent).toHaveTextContent("$1,500per month")
       expect(availability).toHaveTextContent("Open waitlist")
     })
