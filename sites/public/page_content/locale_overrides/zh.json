@@ -18,5 +18,7 @@
   "resources.contactDescription": "Lorem ipsum dolor sat amet，consectetur adipiscing elit，sed do eiusmod tempor incididunt ut Labore et dolore magna aliqua。",
   "resources.contactEmail": "email@email.com",
   "resources.contactInfo": "布卢明顿住房和社区发展部",
-  "resources.housingProgramsTitle": "布卢明顿的住房和社区发展住房项目"
+  "resources.housingProgramsTitle": "布卢明顿的住房和社区发展住房项目",
+  "resources.additionalResourcesLink": "/housing-basics",
+  "resources.additionalResourcesTitle": "了解更多关于可达性住房计划 (AcHP) 的信息，包括涵盖的住房项目清单、租户资源、政策以及如何提交申诉。"
 }

@@ -1564,6 +1564,7 @@ describe("listing data", () => {
               profile: { ...user, jurisdictions: [], listings: [] },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
                 featureFlag === FeatureFlagEnum.enableMarketingFlyer,
+              getJurisdiction: () => jurisdiction,
             }}
           >
             <ListingContext.Provider
@@ -1605,6 +1606,7 @@ describe("listing data", () => {
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
                 featureFlag === FeatureFlagEnum.enableMarketingFlyer ||
                 featureFlag === FeatureFlagEnum.enableAutopublish,
+              getJurisdiction: () => jurisdiction,
             }}
           >
             <ListingContext.Provider
@@ -1691,6 +1693,7 @@ describe("listing data", () => {
                   enableUnitGroups: false,
                   enableIsVerified: false,
                 }),
+              getJurisdiction: () => jurisdiction,
             }}
           >
             <ListingContext.Provider
@@ -1718,6 +1721,7 @@ describe("listing data", () => {
               profile: { ...user, jurisdictions: [], listings: [] },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
                 mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+              getJurisdiction: () => jurisdiction,
             }}
           >
             <ListingContext.Provider
@@ -1794,6 +1798,7 @@ describe("listing data", () => {
               },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
                 mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+              getJurisdiction: () => jurisdiction,
             }}
           >
             <ListingDetail
@@ -1836,6 +1841,7 @@ describe("listing data", () => {
             },
             doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
               mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+            getJurisdiction: () => jurisdiction,
           }}
         >
           <ListingDetail listing={result.props.listing} />
@@ -1872,6 +1878,7 @@ describe("listing data", () => {
               },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
                 mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+              getJurisdiction: () => jurisdiction,
             }}
           >
             <ListingDetail listing={result.props.listing} />
@@ -1931,6 +1938,7 @@ describe("listing data", () => {
               },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
                 mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+              getJurisdiction: () => jurisdiction,
             }}
           >
             <ListingDetail listing={result.props.listing} />
@@ -1982,6 +1990,7 @@ describe("listing data", () => {
             },
             doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
               mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+            getJurisdiction: () => jurisdiction,
           }}
         >
           <ListingDetail listing={result.props.listing} />
@@ -2018,6 +2027,7 @@ describe("listing data", () => {
           },
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
             mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+          getJurisdiction: () => jurisdiction,
         }}
       >
         <ListingDetail
@@ -2117,6 +2127,7 @@ describe("listing data", () => {
           },
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
             mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+          getJurisdiction: () => jurisdiction,
         }}
       >
         <ListingDetail listing={listing} />
@@ -2135,6 +2146,7 @@ describe("listing data", () => {
   })
 
   it("should display correct nav links for lottery", async () => {
+    process.env.showLottery = "true"
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     render(
@@ -2147,6 +2159,7 @@ describe("listing data", () => {
           },
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
             mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+          getJurisdiction: () => jurisdiction,
         }}
       >
         <ListingDetail
@@ -2168,6 +2181,7 @@ describe("listing data", () => {
     expect(
       within(secondaryNavigation).getByRole("link", { name: "Applications" })
     ).toBeInTheDocument()
+    await within(secondaryNavigation).findByRole("link", { name: "Lottery" })
     expect(within(secondaryNavigation).getByRole("link", { name: "Lottery" })).toBeInTheDocument()
   })
 })

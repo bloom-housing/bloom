@@ -1,18 +1,19 @@
 import React, { useContext, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { FormErrorMessage } from "@bloom-housing/ui-seeds"
-import { Field, FieldGroup, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
+import { Field, FieldGroup, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
-  contactPreferencesKeys,
-  phoneNumberKeys,
-  stateKeys,
-  blankApplication,
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
+  blankApplication,
+  contactPreferencesKeys,
   mergeDeep,
+  phoneNumberKeys,
+  pushGtmEvent,
+  stateKeys,
 } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"

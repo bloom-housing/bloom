@@ -256,6 +256,77 @@ describe("Sign In Page", () => {
       expect(getByLabelText("Password")).toBeInTheDocument()
     })
   })
+
+  describe("User already logged in", () => {
+    it("redirects to redirectUrl when already authenticated", async () => {
+      const mockRouter = { query: { redirectUrl: "/account/notifications" }, push: jest.fn() }
+      ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+      render(
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: { firstName: "User", id: "user-123" } as User,
+          }}
+        >
+          <MessageContext.Provider value={TOAST_MESSAGE}>
+            <SignInComponent jurisdiction={jurisdiction} />
+          </MessageContext.Provider>
+        </AuthContext.Provider>
+      )
+
+      await waitFor(() => {
+        expect(mockRouter.push).toHaveBeenCalledWith("/account/notifications")
+      })
+    })
+
+    it("redirects to dashboard when no redirectUrl and already authenticated", async () => {
+      const mockRouter = { query: {}, push: jest.fn() }
+      ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+      render(
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: { firstName: "User", id: "user-123" } as User,
+          }}
+        >
+          <MessageContext.Provider value={TOAST_MESSAGE}>
+            <SignInComponent jurisdiction={jurisdiction} />
+          </MessageContext.Provider>
+        </AuthContext.Provider>
+      )
+
+      await waitFor(() => {
+        expect(mockRouter.push).toHaveBeenCalledWith("/account/dashboard")
+      })
+    })
+
+    it.each([
+      ["https://evil.com", "external URL"],
+      ["//evil.com", "protocol-relative URL"],
+    ])("redirects to dashboard instead of %s (%s)", async (maliciousUrl) => {
+      const mockRouter = { query: { redirectUrl: maliciousUrl }, push: jest.fn() }
+      ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+      render(
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: { firstName: "User", id: "user-123" } as User,
+          }}
+        >
+          <MessageContext.Provider value={TOAST_MESSAGE}>
+            <SignInComponent jurisdiction={jurisdiction} />
+          </MessageContext.Provider>
+        </AuthContext.Provider>
+      )
+
+      await waitFor(() => {
+        expect(mockRouter.push).toHaveBeenCalledWith("/account/dashboard")
+      })
+    })
+  })
 })
 
 describe("Passwordless Sign In page", () => {

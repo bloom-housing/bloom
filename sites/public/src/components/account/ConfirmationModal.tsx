@@ -1,9 +1,15 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import { t, Form, Field } from "@bloom-housing/ui-components"
+import { t, Field } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
-import { AuthContext, useToastyRef, emailRegex } from "@bloom-housing/shared-helpers"
+import {
+  AuthContext,
+  Form,
+  emailRegex,
+  useToastyRef,
+  isInternalLink,
+} from "@bloom-housing/shared-helpers"
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ConfirmationModalProps {}
@@ -48,7 +54,7 @@ const ConfirmationModal = () => {
     const listingId = router.query?.listingId as string
 
     const routerRedirectUrl =
-      process.env.showMandatedAccounts && redirectUrl && listingId
+      process.env.showMandatedAccounts && redirectUrl && listingId && isInternalLink(redirectUrl)
         ? `${redirectUrl}`
         : "/account/dashboard"
     if (router?.query?.token && initialStateLoaded && !hasCalledConfirm.current) {
@@ -91,7 +97,11 @@ const ConfirmationModal = () => {
         {t("authentication.createAccount.linkExpired")}
       </Dialog.Header>
       <Dialog.Content>
-        <Form id="resend-confirmation" onSubmit={handleSubmit(onSubmit)}>
+        <Form
+          id="resend-confirmation"
+          suppressSubmitOnEnter={false}
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Field
             type="email"
             name="email"

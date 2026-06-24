@@ -2644,9 +2644,6 @@ describe('Testing user service', () => {
           firstName: 'Partner User firstName',
           lastName: 'Partner User lastName',
           mfaEnabled: true,
-          notificationPreferences: {
-            create: {},
-          },
           jurisdictions: {
             connect: [{ id: jurisId }],
           },
@@ -2914,9 +2911,6 @@ describe('Testing user service', () => {
           lastName: 'public User lastName',
           listings: undefined,
           middleName: undefined,
-          notificationPreferences: {
-            create: {},
-          },
           jurisdictions: {
             connect: [{ id: expect.anything() }],
           },
@@ -3101,9 +3095,6 @@ describe('Testing user service', () => {
           listings: undefined,
           middleName: undefined,
           isAdvocate: true,
-          notificationPreferences: {
-            create: {},
-          },
           agency: {
             connect: {
               id: 'test_agency_id',
@@ -4306,7 +4297,7 @@ describe('Testing user service', () => {
 
   describe('updatePreferences', () => {
     it('should update requesting users notification preferences', async () => {
-      prisma.userNotificationPreferences.update = jest.fn();
+      prisma.userNotificationPreferences.upsert = jest.fn();
 
       const newPreferences: UserNotificationPreferences = {
         mobility: true,
@@ -4322,8 +4313,12 @@ describe('Testing user service', () => {
       );
 
       expect(res).toEqual({ success: true });
-      expect(prisma.userNotificationPreferences.update).toHaveBeenCalledWith({
-        data: {
+      expect(prisma.userNotificationPreferences.upsert).toHaveBeenCalledWith({
+        create: {
+          ...newPreferences,
+          userId: requestingUser.id,
+        },
+        update: {
           ...newPreferences,
         },
         where: {

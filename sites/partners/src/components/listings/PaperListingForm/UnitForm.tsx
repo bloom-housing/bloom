@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState, useContext, useMemo } from "react"
-import { t, Field, Select, FieldGroup, Form, numberOptions } from "@bloom-housing/ui-components"
+import { t, Field, Select, FieldGroup, numberOptions } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, LoadingState } from "@bloom-housing/ui-seeds"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, Form } from "@bloom-housing/shared-helpers"
 import { useWatch, useForm } from "react-hook-form"
 import { TempUnit } from "../../../lib/listings/formTypes"
 import {
   AmiChart,
   AmiChartItem,
-  Jurisdiction,
   UnitType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useWatchOnFormNumberFieldsChange } from "../../../lib/hooks"
@@ -20,8 +19,7 @@ type UnitFormProps = {
   amiChartsLoading: boolean
   defaultUnit: TempUnit | undefined
   draft: boolean
-  jurisdictionData: Jurisdiction | undefined
-  jurisdictionLoading: boolean
+  jurisdictionId: string
   nextId: number
   onClose: (openNextUnit: boolean, openCurrentUnit: boolean, defaultUnit: TempUnit) => void
   onSubmit: (unit: TempUnit) => void
@@ -34,15 +32,14 @@ const UnitForm = ({
   amiChartsLoading,
   defaultUnit,
   draft,
-  jurisdictionData,
-  jurisdictionLoading,
+  jurisdictionId,
   nextId,
   onClose,
   onSubmit,
   unitTypes,
   unitTypesLoading,
 }: UnitFormProps) => {
-  const { amiChartsService } = useContext(AuthContext)
+  const { amiChartsService, getJurisdiction } = useContext(AuthContext)
 
   const initialLoadComplete = useRef(false)
   const [isAmiPercentageDirty, setIsAmiPercentageDirty] = useState(false)
@@ -65,8 +62,7 @@ const UnitForm = ({
     mode: "onChange",
     shouldFocusError: false,
   })
-  const hasInitializedFormData =
-    amiCharts !== undefined && unitTypes !== undefined && jurisdictionData !== undefined
+  const hasInitializedFormData = amiCharts !== undefined && unitTypes !== undefined
 
   const amiChartsOptions = useMemo(() => {
     if (!amiCharts) return []
@@ -78,14 +74,16 @@ const UnitForm = ({
     return arrayToFormOptions<UnitType>(unitTypes, "name", "id", "listings.unit.typeOptions")
   }, [unitTypes])
 
+  const jurisdiction = getJurisdiction(jurisdictionId)
+
   const unitPrioritiesOptions = useMemo(() => {
-    const visibleTypes = jurisdictionData?.visibleAccessibilityPriorityTypes || []
+    const visibleTypes = jurisdiction?.visibleAccessibilityPriorityTypes || []
     return visibleTypes.map((type) => ({
       value: type,
       id: type,
       label: t(`listings.unit.accessibilityType.${type}`),
     }))
-  }, [jurisdictionData?.visibleAccessibilityPriorityTypes])
+  }, [jurisdiction])
 
   const numberOccupancyOptions = 11
 
@@ -414,13 +412,7 @@ const UnitForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rentType])
 
-  if (
-    !hasInitializedFormData ||
-    loading ||
-    amiChartsLoading ||
-    unitTypesLoading ||
-    jurisdictionLoading
-  ) {
+  if (!hasInitializedFormData || loading || amiChartsLoading || unitTypesLoading) {
     return (
       <LoadingState loading={true}>
         <></>

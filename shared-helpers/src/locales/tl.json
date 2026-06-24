@@ -1,6 +1,7 @@
 {
   "account.accountSettings": "Mga setting ng account",
   "account.accountSettingsSubtitle": "Mga setting ng account, email at password",
+  "account.accountSettingsSubtitleWithNotifications": "Mga setting ng account, email, password at mga notification",
   "account.accountSettingsUpdate": "I-update ang mga setting ng account",
   "account.allMyApplications": "Lahat ng aking mga aplikasyon",
   "account.allMyApplicationsSubtitle": "Tingnan ang mga listahan para sa mga ari-arian na inapplyan mo.",
@@ -1038,6 +1039,7 @@
   "listings.reservedUnits": "Mga reserbang unit",
   "listings.reservedUnitsDescription": "Upang maging kuwalipikado para sa mga unit na ito, ang isa sa mga sumusunod ay dapat na angkop sa iyo o sa isang tao sa iyong sambahayan:",
   "listings.reservedUnitsForWhoAre": "Nakareserba para sa %{communityType} na %{reservedType}",
+  "listings.scheduledApplicationOpen": "Maaaring magsumite ng mga aplikasyon simula sa %{openDate}",
   "listings.search.subNote": "Ilagay ang buo o bahagyang pangalan ng listahan",
   "listings.section8Acceptance": "Tumatanggap ng Section 8 Housing Choice Voucher",
   "listings.section8VoucherInfo": "Kung mayroon kang <strong>Section 8 Housing Choice Voucher</strong> , hindi nalalapat ang mga kinakailangan sa kita at magbabayad ka ng renta batay sa iyong kita",
@@ -1463,7 +1465,6 @@
   "welcome.allApplicationClosed": "Ang lahat ng mga application ay kasalukuyang sarado, ngunit maaari mong tingnan ang mga sarado nang listahan.",
   "welcome.cityRegions": "Mga rehiyon ng lungsod",
   "welcome.findRentalsForYou": "Maghanap ng mga rental para sa iyo",
-  "welcome.learnHousingBasics": "Alamin kung paano ka magiging kwalipikado at mag-aplay para sa abot-kayang pabahay",
   "welcome.learnMore": "Matuto pa",
   "welcome.resources": "Mga mapagkukunan",
   "welcome.seeMoreOpportunities": "Tingnan ang mas maraming renta at mga oportunidad ng pag-aari ng pabahay",

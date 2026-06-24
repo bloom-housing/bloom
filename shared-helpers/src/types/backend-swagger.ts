@@ -3441,10 +3441,16 @@ export interface ListingFilterParams {
   ids?: string[]
 
   /**  */
+  includeExternal?: boolean
+
+  /**  */
   isVerified?: boolean
 
   /**  */
   jurisdiction?: string
+
+  /**  */
+  jurisdictions?: string[]
 
   /**  */
   leasingAgent?: string
@@ -5040,6 +5046,9 @@ export interface Listing {
   scheduledPublishAt?: Date
 
   /**  */
+  scheduledApplicationOpenAt?: Date
+
+  /**  */
   section8Acceptance?: boolean
 
   /**  */
@@ -5940,6 +5949,9 @@ export interface ListingCreate {
   scheduledPublishAt?: Date
 
   /**  */
+  scheduledApplicationOpenAt?: Date
+
+  /**  */
   section8Acceptance?: boolean
 
   /**  */
@@ -6811,6 +6823,9 @@ export interface ListingUpdate {
 
   /**  */
   scheduledPublishAt?: Date
+
+  /**  */
+  scheduledApplicationOpenAt?: Date
 
   /**  */
   section8Acceptance?: boolean
@@ -8161,6 +8176,9 @@ export interface Jurisdiction {
 
   /**  */
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
+
+  /**  */
+  subJurisdictions?: IdDTO[]
 }
 
 /** AddressInput */
@@ -10396,8 +10414,10 @@ export enum ListingFilterKeys {
   "counties" = "counties",
   "homeTypes" = "homeTypes",
   "ids" = "ids",
+  "includeExternal" = "includeExternal",
   "isVerified" = "isVerified",
   "jurisdiction" = "jurisdiction",
+  "jurisdictions" = "jurisdictions",
   "leasingAgent" = "leasingAgent",
   "listingFeatures" = "listingFeatures",
   "listingType" = "listingType",
@@ -10780,6 +10800,7 @@ export enum FeatureFlagEnum {
   "enableRegions" = "enableRegions",
   "enableResources" = "enableResources",
   "enableSection8Question" = "enableSection8Question",
+  "enableSexualOrientationQuestion" = "enableSexualOrientationQuestion",
   "enableSingleUseCode" = "enableSingleUseCode",
   "enableSmokingPolicyRadio" = "enableSmokingPolicyRadio",
   "enableSpokenLanguage" = "enableSpokenLanguage",

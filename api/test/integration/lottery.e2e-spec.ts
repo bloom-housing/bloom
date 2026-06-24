@@ -1192,6 +1192,21 @@ describe('Lottery Controller Tests', () => {
           {
             preferences: [],
             status: ApplicationStatusEnum.submitted,
+            confirmationCode: 'ABC678',
+            submissionType: ApplicationSubmissionTypeEnum.paper,
+            language: LanguagesEnum.en,
+            userAccounts: {
+              create: {
+                email: 'partner@email.com',
+                firstName: 'first',
+                lastName: 'last',
+                passwordHash: 'abcd1234',
+              },
+            },
+          },
+          {
+            preferences: [],
+            status: ApplicationStatusEnum.submitted,
             confirmationCode: 'MNOP3456',
             submissionType: ApplicationSubmissionTypeEnum.electronical,
             language: null,
@@ -1260,10 +1275,10 @@ describe('Lottery Controller Tests', () => {
           name: listing.name,
           juris: expect.stringMatching(jurisdictionAId),
         },
-        expect.objectContaining({
+        {
           en: ['applicant@email.com', 'applicant3@email.com'],
           es: ['applicant2@email.com'],
-        }),
+        },
       );
     });
   });

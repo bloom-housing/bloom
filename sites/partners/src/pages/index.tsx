@@ -5,10 +5,10 @@ import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
-import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
+import { Button, Dialog, Grid, Icon, Link } from "@bloom-housing/ui-seeds"
 import { t, Select, SelectOption, Field } from "@bloom-housing/ui-components"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
-import { AuthContext, Form } from "@bloom-housing/shared-helpers"
+import { AuthContext, Form, tIfExists } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
@@ -17,6 +17,7 @@ import {
 import { useListingExport, useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
+import styles from "./index.module.scss"
 
 class formatLinkCell {
   link: HTMLAnchorElement
@@ -119,6 +120,15 @@ export default function ListingsList() {
 
   const defaultJurisdiction =
     profile?.jurisdictions?.length === 1 ? profile.jurisdictions[0].id : null
+
+  const otherPortalsTitle = tIfExists("listings.otherPortals.title")
+  const otherPortals: { name: string; url: string }[] = []
+  for (let i = 1; ; i++) {
+    const name = tIfExists(`listings.otherPortals.portal${i}.name`)
+    const url = tIfExists(`listings.otherPortals.portal${i}.url`)
+    if (!name || !url) break
+    otherPortals.push({ name, url })
+  }
 
   const jurisdictions = profile?.jurisdictions || []
 
@@ -237,7 +247,8 @@ export default function ListingsList() {
         sortable: false,
         filter: false,
         resizable: true,
-        valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
+        valueFormatter: ({ value }) =>
+          value ? dayjs.utc(value).format("MM/DD/YYYY") : t("t.none"),
         maxWidth: 180,
       })
     }
@@ -442,13 +453,13 @@ export default function ListingsList() {
             ? t("listings.selectListingType")
             : t("listings.selectJurisdictionTitle")}
         </Dialog.Header>
-        <Form id="listing-select-form" onSubmit={handleSubmit(onSubmit)}>
-          <Dialog.Content id="listing-select-dialog-content">
+        <Dialog.Content id="listing-select-dialog-content">
+          <Form id="listing-select-form" onSubmit={handleSubmit(onSubmit)}>
             {t("listings.selectJurisdictionContent")}
             <Grid>
-              <Grid.Row columns={3}>
+              <Grid.Row columns={3} className={"seeds-m-bs-4"}>
                 <Grid.Cell className={"seeds-grid-span-2"}>
-                  <div className={`${defaultJurisdiction ? "hidden" : ""} seeds-m-bs-4`}>
+                  <div className={`${defaultJurisdiction ? "hidden" : ""}`}>
                     <Select
                       id={"jurisdiction"}
                       defaultValue={defaultJurisdiction}
@@ -479,6 +490,25 @@ export default function ListingsList() {
                   </div>
                 </Grid.Cell>
               </Grid.Row>
+              {otherPortalsTitle && !defaultJurisdiction && (
+                <Grid.Row>
+                  <Grid.Cell>
+                    <div
+                      className={styles["other-portals-banner"]}
+                      data-testid={"other-portals-banner"}
+                    >
+                      <p>{otherPortalsTitle}</p>
+                      <ul>
+                        {otherPortals.map(({ name, url }) => (
+                          <li key={url}>
+                            <Link href={url}>{name}</Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </Grid.Cell>
+                </Grid.Row>
+              )}
               {isNonRegulatedEnabled && (
                 <div aria-live="polite">
                   <fieldset>
@@ -523,23 +553,28 @@ export default function ListingsList() {
                 </div>
               )}
             </Grid>
-          </Dialog.Content>
-          <Dialog.Footer>
-            <Button variant="primary" size="sm" type={"submit"}>
-              {t("listings.getStarted")}
-            </Button>
-            <Button
-              variant="primary-outlined"
-              onClick={() => {
-                setListingSelectModal(false)
-              }}
-              size="sm"
-              type={"button"}
-            >
-              {t("t.cancel")}
-            </Button>
-          </Dialog.Footer>
-        </Form>
+          </Form>
+        </Dialog.Content>
+        <Dialog.Footer>
+          <Button
+            variant="primary"
+            size="sm"
+            type={"submit"}
+            nativeButtonProps={{ form: "listing-select-form" }}
+          >
+            {t("listings.getStarted")}
+          </Button>
+          <Button
+            variant="primary-outlined"
+            onClick={() => {
+              setListingSelectModal(false)
+            }}
+            size="sm"
+            type={"button"}
+          >
+            {t("t.cancel")}
+          </Button>
+        </Dialog.Footer>
       </Dialog>
     </Layout>
   )
