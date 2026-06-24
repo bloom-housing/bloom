@@ -60,6 +60,7 @@ import { SnapshotCreateService } from './snapshot-create.service';
 import { toAddHelper, toRemoveHelper } from '../utilities/snapshot-helpers';
 import { AdvocateUserAccept } from '../dtos/users/advocate-user-accept.dto';
 import { UserNotificationPreferences } from '../dtos/users/user-notification-preferences.dto';
+import { UnsubscribeAllDto } from '../dtos/users/unsubscribe-all.dto';
 
 /*
   this is the service for users
@@ -1750,6 +1751,57 @@ export class UserService {
     }
 
     return mapTo(UserNotificationPreferences, notificationPreferences);
+  }
+
+  async unsubscribeAll(dto: UnsubscribeAllDto): Promise<SuccessDTO> {
+    const expectedSig = crypto
+      .createHmac('sha256', process.env.APP_SECRET)
+      .update(dto.email)
+      .digest('hex');
+
+    if (expectedSig !== dto.sig) {
+      throw new UnauthorizedException('Invalid unsubscribe token');
+    }
+
+    const user = await this.prisma.userAccounts.findUnique({
+      where: { email: dto.email },
+      select: { id: true },
+    });
+
+    if (user) {
+      await this.prisma.userNotificationPreferences.upsert({
+        create: {
+          userId: user.id,
+          lottery: false,
+          waitlist: false,
+          mobility: false,
+          hearing: false,
+          vision: false,
+          hearingAndVision: false,
+          mobilityAndHearing: false,
+          mobilityAndVision: false,
+          mobilityHearingAndVision: false,
+          wantsRegionNotifs: false,
+          regions: [],
+        },
+        update: {
+          lottery: false,
+          waitlist: false,
+          mobility: false,
+          hearing: false,
+          vision: false,
+          hearingAndVision: false,
+          mobilityAndHearing: false,
+          mobilityAndVision: false,
+          mobilityHearingAndVision: false,
+          wantsRegionNotifs: false,
+          regions: [],
+        },
+        where: { userId: user.id },
+      });
+    }
+
+    return { success: true };
   }
 
   async updatePreferences(

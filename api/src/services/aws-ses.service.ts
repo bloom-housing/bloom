@@ -16,7 +16,10 @@ import {
 export class AwsSesService extends EmailProvider {
   sesClient: SESv2Client;
 
-  constructor(private readonly configService: ConfigService) {
+  // SES bulk send limit per API call.
+  static readonly MAX_EMAIL_TO_SEND_IN_BULK = 50;
+
+  constructor(configService: ConfigService) {
     super();
     const config: SESv2ClientConfig = {
       maxAttempts: configService.get<number>('EMAIL_MAX_RETRIES', 3),
@@ -41,24 +44,59 @@ export class AwsSesService extends EmailProvider {
     }
 
     if (isMultipleRecipients) {
-      const MAX_EMAIL_TO_SEND_IN_BULK = 50;
+      // SES inline templates (TemplateContent) do not support per-recipient variable
+      // substitution via ReplacementTemplateData — that only works with stored named
+      // templates. When perRecipientData is present, substitute __variable__ placeholders
+      // manually per user and send in concurrent batches of MAX_EMAIL_TO_SEND_IN_BULK.
+      if (input.perRecipientData?.length) {
+        for (
+          let i = 0;
+          i < to.length;
+          i += AwsSesService.MAX_EMAIL_TO_SEND_IN_BULK
+        ) {
+          const batch = to.slice(
+            i,
+            i + AwsSesService.MAX_EMAIL_TO_SEND_IN_BULK,
+          );
+          await Promise.all(
+            batch.map((email, j) => {
+              const data = input.perRecipientData[i + j];
+              const resolvedBody = data
+                ? Object.entries(data).reduce(
+                    (html, [key, value]) => html.replaceAll(`-${key}-`, value),
+                    body,
+                  )
+                : body;
+              return this.send({
+                ...input,
+                to: email,
+                body: resolvedBody,
+                perRecipientData: undefined,
+              });
+            }),
+          );
+        }
+        return;
+      }
 
-      const emailsChunked = to.reduce((accum, curr, i) => {
-        const chunk = Math.floor(i / MAX_EMAIL_TO_SEND_IN_BULK);
-        accum[chunk] = [].concat(accum[chunk] || [], curr);
-        return accum;
-      }, []);
-      for (const emailList of emailsChunked) {
+      const chunked: string[][] = [];
+      for (
+        let i = 0;
+        i < to.length;
+        i += AwsSesService.MAX_EMAIL_TO_SEND_IN_BULK
+      ) {
+        chunked.push(to.slice(i, i + AwsSesService.MAX_EMAIL_TO_SEND_IN_BULK));
+      }
+
+      for (const chunk of chunked) {
         try {
           const commandInput: SendBulkEmailRequest = {
             FromEmailAddress: from,
-            BulkEmailEntries: emailList.map((email) => {
-              return {
-                Destination: {
-                  ToAddresses: [email],
-                },
-              };
-            }),
+            BulkEmailEntries: chunk.map((email) => ({
+              Destination: {
+                ToAddresses: [email],
+              },
+            })),
             DefaultContent: {
               Template: {
                 TemplateContent: {
@@ -83,7 +121,7 @@ export class AwsSesService extends EmailProvider {
           }
         } catch (e) {
           console.log(e);
-          console.error(`Failed to send emails to ${emailList.toString()}`);
+          console.error(`Failed to send emails to ${chunk.toString()}`);
         }
       }
     } else {

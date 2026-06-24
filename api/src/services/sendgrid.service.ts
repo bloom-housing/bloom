@@ -9,6 +9,9 @@ export class SendGridService extends EmailProvider {
   maxRetries: number;
   mailService: MailService;
 
+  // SendGrid allows up to 1000 personalizations per API call (platform limit).
+  static readonly MAX_PERSONALIZATIONS = 1000;
+
   constructor(private readonly configService: ConfigService) {
     super();
     this.mailService = new MailService();
@@ -17,6 +20,43 @@ export class SendGridService extends EmailProvider {
   }
 
   public async send(input: SendEmailInput): Promise<unknown> {
+    // When per-recipient data is present, use SendGrid personalizations so all
+    // recipients are handled in one API call per 1000 (rather than one call each) which is SendGrid's personalization limit.
+    // Substitution keys are passed bare (e.g. 'unsubscribeUrl') — the @sendgrid/mail SDK wraps
+    // them in {{}} automatically via wrapSubstitutions, so they match \{{key}} placeholders in the body.
+    if (Array.isArray(input.to) && input.perRecipientData?.length) {
+      const chunks: string[][] = [];
+      for (
+        let i = 0;
+        i < input.to.length;
+        i += SendGridService.MAX_PERSONALIZATIONS
+      ) {
+        chunks.push(
+          input.to.slice(i, i + SendGridService.MAX_PERSONALIZATIONS),
+        );
+      }
+
+      return Promise.all(
+        chunks.map((chunk, chunkIndex) => {
+          const offset = chunkIndex * SendGridService.MAX_PERSONALIZATIONS;
+          const emailParams: MailDataRequired = {
+            from: input.from,
+            subject: input.subject,
+            html: input.body,
+            // Wrappers tell the SDK to emit '-key-' substitution tags rather than the
+            // default '{{key}}', which SendGrid would interpret as a dynamic template
+            // expression and silently replace with empty string.
+            substitutionWrappers: ['-', '-'],
+            personalizations: chunk.map((email, i) => ({
+              to: [{ email }],
+              substitutions: input.perRecipientData[offset + i] || {},
+            })),
+          };
+          return this.send_inner_params(emailParams, this.maxRetries);
+        }),
+      );
+    }
+
     return this.send_inner(input, this.maxRetries);
   }
 
@@ -44,16 +84,28 @@ export class SendGridService extends EmailProvider {
       ];
     }
 
+    return this.send_inner_params(emailParams, retries, isMultipleRecipients);
+  }
+
+  private async send_inner_params(
+    emailParams: MailDataRequired,
+    retries: number,
+    isMultipleRecipients = false,
+  ): Promise<unknown> {
     const callBack = (error) => {
       if (error) {
         console.error(
-          `Error sending email to: ${
-            isMultipleRecipients ? to.toString() : to
-          }! Error body:`,
+          `Error sending email to: ${JSON.stringify(
+            emailParams.to,
+          )}! Error body:`,
           error?.response?.body || error,
         );
         if (retries > 0) {
-          void this.send_inner(input, retries - 1);
+          void this.send_inner_params(
+            emailParams,
+            retries - 1,
+            isMultipleRecipients,
+          );
         }
       }
     };

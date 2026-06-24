@@ -2020,6 +2020,28 @@ export class UserService {
     })
   }
   /**
+   * Unsubscribe from all notifications
+   */
+  unsubscribeFromAll(
+    params: {
+      /** requestBody */
+      body?: UnsubscribeAllDto
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/unsubscribe-from-all"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Creates a public only user
    */
   createPublic(
@@ -9922,6 +9944,15 @@ export interface UserDeleteDTO {
 
   /**  */
   shouldRemoveApplication?: boolean
+}
+
+/** UnsubscribeAllDto */
+export interface UnsubscribeAllDto {
+  /**  */
+  email: string
+
+  /**  */
+  sig: string
 }
 
 /** RequestSingleUseCode */

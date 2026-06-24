@@ -226,8 +226,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Volante de marketing accesible',
-            unsubscribeAndEmailSettings:
-              'Cancelar suscripción y gestionar configuración de correo electrónico',
+            unsubscribeFromAll: 'Cancelar todas las suscripciones',
+            manageSubscriptions: 'Gestionar suscripciones',
           },
         },
       };
@@ -325,7 +325,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Tờ rơi tiếp thị có thể truy cập',
-            unsubscribeAndEmailSettings: 'Hủy đăng ký và quản lý cài đặt email',
+            unsubscribeFromAll: 'Hủy đăng ký tất cả',
+            manageSubscriptions: 'Quản lý đăng ký',
           },
         },
       };
@@ -420,7 +421,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: '无障碍营销传单',
-            unsubscribeAndEmailSettings: '取消订阅并管理电子邮件设置',
+            unsubscribeFromAll: '取消所有订阅',
+            manageSubscriptions: '管理订阅',
           },
         },
       };
@@ -519,8 +521,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Naa-access na flyer sa marketing',
-            unsubscribeAndEmailSettings:
-              'Mag-unsubscribe at pamahalaan ang mga settings ng email',
+            unsubscribeFromAll: 'I-unsubscribe sa lahat',
+            manageSubscriptions: 'Pamahalaan ang mga subscription',
           },
         },
       };
@@ -618,8 +620,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'অ্যাক্সেসযোগ্য মার্কেটিং ফ্লায়ার',
-            unsubscribeAndEmailSettings:
-              'আনসাবস্ক্রাইব করুন এবং ইমেইল সেটিংস পরিচালনা করুন',
+            unsubscribeFromAll: 'সমস্ত থেকে আনসাবস্ক্রাইব করুন',
+            manageSubscriptions: 'সাবস্ক্রিপশন পরিচালনা করুন',
           },
         },
       };
@@ -714,8 +716,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'نشرة تسويقية ميسّرة',
-            unsubscribeAndEmailSettings:
-              'إلغاء الاشتراك وإدارة إعدادات البريد الإلكتروني',
+            unsubscribeFromAll: 'إلغاء الاشتراك من الكل',
+            manageSubscriptions: 'إدارة الاشتراكات',
           },
         },
       };
@@ -811,7 +813,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: '접근 가능한 마케팅 전단지',
-            unsubscribeAndEmailSettings: '구독 취소 및 이메일 설정 관리',
+            unsubscribeFromAll: '모든 구독 취소',
+            manageSubscriptions: '구독 관리',
           },
         },
       };
@@ -909,8 +912,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Հասանելի մարքեթինգային թռուցիկ',
-            unsubscribeAndEmailSettings:
-              'Դադարեցնել բաժանորդագրությունը և կառավարել էլ. փոստի կարգավորումները',
+            unsubscribeFromAll: 'Դադարեցնել բոլոր բաժանորդագրությունները',
+            manageSubscriptions: 'Կառավարել բաժանորդագրությունները',
           },
         },
       };
@@ -996,7 +999,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'بروشور بازاریابی قابل دسترس',
-            unsubscribeAndEmailSettings: 'لغو اشتراک و مدیریت تنظیمات ایمیل',
+            unsubscribeFromAll: 'لغو اشتراک از همه',
+            manageSubscriptions: 'مدیریت اشتراک‌ها',
           },
         },
       };
@@ -1356,8 +1360,8 @@ const translations = (
           },
           footer: {
             accessibleMarketingFlyer: 'Accessible marketing flyer',
-            unsubscribeAndEmailSettings:
-              'Unsubscribe and manage email settings',
+            unsubscribeFromAll: 'Unsubscribe from all',
+            manageSubscriptions: 'Manage subscriptions',
           },
         },
         advocateApproved: {
