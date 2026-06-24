@@ -107,7 +107,7 @@ export class BackgroundJobsService {
    * @returns True if any active job exists (false otherwise)
    */
   async findActiveJob(): Promise<boolean> {
-    const activeJob = this.prismaService.backgroundJob.findFirst({
+    const activeJob = await this.prismaService.backgroundJob.findFirst({
       select: {},
       where: {
         status: BackgroundJobStatusEnum.processing,
