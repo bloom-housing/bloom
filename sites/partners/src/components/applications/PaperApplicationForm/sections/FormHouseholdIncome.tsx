@@ -1,20 +1,23 @@
 import React from "react"
-import { t, Field, Select } from "@bloom-housing/ui-components"
+import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
-import {
-  IncomePeriodEnum,
-  YesNoEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { IncomePeriodEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
-const FormHouseholdIncome = () => {
+type FormHouseholdIncomeProps = {
+  enableMultiselectVoucherQuestion?: boolean
+}
+
+const FormHouseholdIncome = ({ enableMultiselectVoucherQuestion }: FormHouseholdIncomeProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch } = formMethods
 
   const incomePeriodValue: string = watch("application.incomePeriod")
+
+  const incomeVouchersValue: string[] = watch("application.incomeVouchers") || []
 
   return (
     <>
@@ -86,15 +89,82 @@ const FormHouseholdIncome = () => {
           </Grid.Cell>
 
           <Grid.Cell>
-            <Select
-              id="application.incomeVouchers"
-              name="application.incomeVouchers"
-              placeholder={t("t.selectOne")}
-              label={t("application.details.vouchers")}
+            <FieldGroup
+              fieldGroupClassName="grid grid-cols-1"
+              fieldClassName="ml-0"
+              type={enableMultiselectVoucherQuestion ? "checkbox" : "radio"}
+              name={
+                enableMultiselectVoucherQuestion
+                  ? "application.incomeVouchers"
+                  : "application.incomeVouchersYesNo"
+              }
               register={register}
-              controlClassName="control"
-              options={[YesNoEnum.yes, YesNoEnum.no]}
-              keyPrefix="t"
+              fields={
+                enableMultiselectVoucherQuestion
+                  ? [
+                      {
+                        id: "application.incomeVouchers.issuedVouchers",
+                        value: "issuedVouchers",
+                        label: t("application.financial.vouchers.issuedVouchers"),
+                        inputProps: {
+                          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                            if (e.target.checked) {
+                              setValue("application.incomeVouchers", [
+                                ...new Set([
+                                  ...incomeVouchersValue.filter((v) => v !== "none"),
+                                  "issuedVouchers",
+                                ]),
+                              ])
+                            }
+                          },
+                        },
+                      },
+                      {
+                        id: "application.incomeVouchers.rentalAssistance",
+                        value: "rentalAssistance",
+                        label: t("application.financial.vouchers.rentalAssistance"),
+                        inputProps: {
+                          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                            if (e.target.checked) {
+                              setValue("application.incomeVouchers", [
+                                ...new Set([
+                                  ...incomeVouchersValue.filter((v) => v !== "none"),
+                                  "rentalAssistance",
+                                ]),
+                              ])
+                            }
+                          },
+                        },
+                      },
+                      {
+                        id: "application.incomeVouchers.none",
+                        value: "none",
+                        label: t("application.financial.vouchers.none"),
+                        inputProps: {
+                          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                            if (e.target.checked) {
+                              setValue("application.incomeVouchers", ["none"])
+                            }
+                          },
+                        },
+                      },
+                    ]
+                  : [
+                      {
+                        id: "incomeVoucherYes",
+                        value: "incomeVoucher",
+                        label: t("t.yes"),
+                        defaultChecked: incomeVouchersValue?.includes("incomeVoucher"),
+                      },
+                      {
+                        id: "incomeVoucherNo",
+                        value: "none",
+                        label: t("t.no"),
+                        defaultChecked: incomeVouchersValue?.includes("none"),
+                      },
+                    ]
+              }
+              groupLabel={t("application.details.vouchers")}
             />
           </Grid.Cell>
         </Grid.Row>

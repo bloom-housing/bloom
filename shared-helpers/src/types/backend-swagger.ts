@@ -7242,7 +7242,7 @@ export interface Application {
   reasonableAccommodations?: string
 
   /**  */
-  incomeVouchers?: boolean
+  incomeVouchers?: string[]
 
   /**  */
   income?: string
@@ -8274,7 +8274,7 @@ export interface PublicAppsFiltered {
   reasonableAccommodations?: string
 
   /**  */
-  incomeVouchers?: boolean
+  incomeVouchers?: string[]
 
   /**  */
   income?: string
@@ -8625,7 +8625,7 @@ export interface ApplicationCreate {
   reasonableAccommodations?: string
 
   /**  */
-  incomeVouchers?: boolean
+  incomeVouchers?: string[]
 
   /**  */
   income?: string
@@ -8961,7 +8961,7 @@ export interface ApplicationUpdate {
   reasonableAccommodations?: string
 
   /**  */
-  incomeVouchers?: boolean
+  incomeVouchers?: string[]
 
   /**  */
   income?: string
@@ -10785,6 +10785,7 @@ export enum FeatureFlagEnum {
   "enableMarketingFlyer" = "enableMarketingFlyer",
   "enableMarketingStatus" = "enableMarketingStatus",
   "enableMarketingStatusMonths" = "enableMarketingStatusMonths",
+  "enableMultiselectVoucherQuestion" = "enableMultiselectVoucherQuestion",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "enableNeighborhoodAmenitiesDropdown" = "enableNeighborhoodAmenitiesDropdown",
   "enableNonRegulatedListings" = "enableNonRegulatedListings",

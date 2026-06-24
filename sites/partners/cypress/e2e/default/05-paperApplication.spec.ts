@@ -29,7 +29,6 @@ describe("Paper Application Tests", () => {
     })
   })
 
-  // TODO: unskip when application flow is connected
   it("submit with no data", () => {
     cy.fixture("emptyApplication").then((application) => {
       cy.fillTerms(application, true)

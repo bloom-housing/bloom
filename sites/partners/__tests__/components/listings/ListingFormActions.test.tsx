@@ -13,11 +13,11 @@ import ListingFormActions, {
 } from "../../../src/components/listings/ListingFormActions"
 import { mockNextRouter, render } from "../../testUtils"
 import {
-  FeatureFlagEnum,
   UserRoleEnum,
   Jurisdiction,
   ListingsStatusEnum,
   User,
+  FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 afterEach(cleanup)

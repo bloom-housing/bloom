@@ -78,7 +78,7 @@ export const applicationFactory = async (optionalParams?: {
         ? createdAtDate
         : dayjs(createdAtDate).add(2, 'days').toDate(),
     householdSize: householdSize,
-    income: '40000',
+    income: randomInt(500, 100000).toString(),
     incomePeriod: randomBoolean()
       ? IncomePeriodEnum.perYear
       : IncomePeriodEnum.perMonth,
@@ -132,7 +132,7 @@ export const applicationFactory = async (optionalParams?: {
           },
         }
       : undefined,
-    incomeVouchers: randomBoolean(),
+    incomeVouchers: randomBoolean() ? ['incomeVoucher'] : [],
     additionalPhoneNumber: includeAdditionalPhone
       ? optionalParams?.additionalPhone || '(456) 456-4564'
       : undefined,
