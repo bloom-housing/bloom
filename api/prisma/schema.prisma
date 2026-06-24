@@ -2238,6 +2238,23 @@ model UserRoleSnapshot {
   @@map("user_role_snapshot")
 }
 
+model BackgroundJob {
+  id                String                  @id @default(uuid()) @db.Uuid
+  listingId         String                  @map("listing_id") @db.Uuid
+  requestedByUserId String                  @map("requested_by_user_id") @db.Uuid
+  status            BackgroundJobStatusEnum
+  totalRecords      Int?                    @map("total_records")
+  inputS3Key        String                  @map("input_s3_key")
+  errorMessage      String?                 @map("error_message")
+  errorRow          Int?                    @map("error_row")
+  createdAt         DateTime                @default(now()) @map("created_at")
+  updatedAt         DateTime                @updatedAt @map("updated_at")
+  completedAt       DateTime?               @map("completed-at")
+
+  @@index([listingId])
+  @@map("background_job")
+}
+
 // --- View Section --- //
 view ApplicationFlaggedSetPossibilities {
   key           String
@@ -2616,4 +2633,10 @@ enum YesNoEnum {
   no
 
   @@map("yes_no_enum")
+}
+
+enum BackgroundJobStatusEnum {
+  processing
+  completed
+  failed
 }
