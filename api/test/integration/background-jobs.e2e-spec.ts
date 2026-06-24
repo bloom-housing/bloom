@@ -203,7 +203,7 @@ describe('Background Jobs Controller Tests', () => {
         .set('Cookie', cookies)
         .expect(200);
 
-      expect(res.body).toBeNull();
+      expect(res.body).toBeEmpty();
     });
 
     it('should return 401 when passkey header is missing', async () => {
