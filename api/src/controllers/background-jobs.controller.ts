@@ -7,8 +7,15 @@ import {
   Query,
   Request,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Request as ExpressRequest } from 'express';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { BackgroundJobsService } from '../services/background-jobs.service';
@@ -18,9 +25,11 @@ import { User } from '../dtos/users/user.dto';
 import { BackgroundJob } from '../dtos/background-jobs/background-job.dto';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { JwtAuthGuard } from '../guards/jwt.guard';
+import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 
 @Controller('jobs')
 @ApiTags('jobs')
+@ApiExtraModels(BackgroundJob, BackgroundJobCreate)
 @PermissionTypeDecorator('jobs')
 @UseGuards(ApiKeyGuard, JwtAuthGuard)
 export class BackgroundJobsController {
@@ -31,6 +40,7 @@ export class BackgroundJobsController {
     summary: 'Creates a new background job record in the database',
     operationId: 'createBackgroundJob',
   })
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @UseGuards(ApiKeyGuard)
   @ApiOkResponse({ type: BackgroundJob })
   public async createBackgroundJob(
