@@ -179,11 +179,11 @@ describe('Background Jobs Controller Tests', () => {
       const listingData = await listingFactory(jurisdictionId, prisma);
       const newListing = await prisma.listings.create({ data: listingData });
 
-      prisma.backgroundJob.createMany({
+      await prisma.backgroundJob.createMany({
         data: [
           {
             listingId: newListing.id,
-            status: BackgroundJobStatusEnum.processing,
+            status: BackgroundJobStatusEnum.completed,
             requestedByUserId: storedUserId,
             inputS3Key: 'test-s3-key',
           },
