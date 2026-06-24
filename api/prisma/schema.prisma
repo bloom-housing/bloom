@@ -2251,7 +2251,7 @@ model BackgroundJob {
   updatedAt         DateTime                @updatedAt @map("updated_at")
   completedAt       DateTime?               @map("completed-at")
 
-  @@index([listingId])
+  @@index([listingId, status])
   @@map("background_job")
 }
 

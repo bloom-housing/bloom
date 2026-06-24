@@ -19,4 +19,4 @@ CREATE TABLE "background_job" (
 );
 
 -- CreateIndex
-CREATE INDEX "background_job_listing_id_idx" ON "background_job"("listing_id");
+CREATE INDEX "background_job_listing_id_status_idx" ON "background_job"("listing_id", "status");
