@@ -51,7 +51,7 @@ export class BackgroundJobsController {
   @ApiOkResponse({ type: BackgroundJob })
   public async getListingActiveJob(
     @Query('listingId') listingId: string,
-  ): Promise<BackgroundJob> {
+  ): Promise<BackgroundJob | null> {
     return await this.backgroundJobsService.findActiveForListing(listingId);
   }
 
