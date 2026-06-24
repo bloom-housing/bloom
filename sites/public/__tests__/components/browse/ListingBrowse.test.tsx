@@ -663,7 +663,7 @@ describe("<ListingBrowse>", () => {
     fireEvent.click(showMatchingButton)
     await waitFor(() => {
       expect(pushMock).toHaveBeenCalledWith(
-        "/listings?isVerified=true&availabilities=unitsAvailable&homeTypes=apartment,townhome&monthlyRent=500.00-900.00&name=Test Search"
+        "/listings?name=Test Search&isVerified=true&availabilities=unitsAvailable&homeTypes=apartment,townhome&monthlyRent=500.00-900.00"
       )
     })
   })
