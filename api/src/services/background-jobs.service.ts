@@ -12,7 +12,7 @@ import { S3Service } from './s3.service';
 import { User } from 'src/dtos/users/user.dto';
 import { BackgroundJobCreate } from 'src/dtos/background-jobs/background-job-create.dto';
 import { PermissionService } from './permission.service';
-import { permissionActions } from 'src/enums/permissions/permission-actions-enum';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
 @Injectable()
 export class BackgroundJobsService {
@@ -37,7 +37,7 @@ export class BackgroundJobsService {
 
     await this.permissionService.canOrThrow(
       requestingUser,
-      'job',
+      'jobs',
       permissionActions.create,
     );
 
@@ -74,7 +74,7 @@ export class BackgroundJobsService {
    */
   async getById(jobId: string): Promise<BackgroundJob> {
     try {
-      const jobData = this.prismaService.backgroundJob.findFirstOrThrow({
+      const jobData = await this.prismaService.backgroundJob.findFirstOrThrow({
         where: {
           id: jobId,
         },
