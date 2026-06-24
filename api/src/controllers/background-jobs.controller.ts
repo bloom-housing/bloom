@@ -62,7 +62,9 @@ export class BackgroundJobsController {
   })
   @UseGuards(ApiKeyGuard)
   @ApiOkResponse({ type: BackgroundJob })
-  public async getJobById(@Param('id') jobId: string): Promise<BackgroundJob> {
+  public async getJobById(
+    @Param('jobId') jobId: string,
+  ): Promise<BackgroundJob> {
     return await this.backgroundJobsService.getById(jobId);
   }
 }
