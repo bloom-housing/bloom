@@ -1379,6 +1379,7 @@
   "t.noMoreThan": "hindi hihigit sa %{amount}",
   "t.none": "Wala",
   "t.noneFound": "Walang nakita.",
+  "t.nonProdBanner": "Ang site na ito ay para lamang sa mga layunin ng pagsusulit. Hindi isasaalang-alang ang mga aplikasyon. Pakibisita ang <a href='https://www.example.com/' target='_blank'>opisyal na site</a> upang mag-aplay para sa pabahay.",
   "t.noVisibleListings": "Walang nakikitang mga listahan",
   "t.numOfIncome": "%{num}% ng kita",
   "t.occupancy": "Paninirahan",

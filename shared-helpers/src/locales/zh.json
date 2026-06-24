@@ -1379,6 +1379,7 @@
   "t.noMoreThan": "不超過 %{amount}",
   "t.none": "無",
   "t.noneFound": "找不到。",
+  "t.nonProdBanner": "本网站仅用于测试目的，不接受任何申请。请访问<a href='https://www.example.com/' target='_blank'>官方网站</a>申请住房。",
   "t.noVisibleListings": "没有可见的列表",
   "t.numOfIncome": "收入的 %{num}%",
   "t.occupancy": "入住人數",

@@ -1379,6 +1379,7 @@
   "t.noMoreThan": "لا أكثر من %{amount}",
   "t.none": "لا أحد",
   "t.noneFound": "لا شيء وجد.",
+  "t.nonProdBanner": "هذا الموقع مخصص لأغراض الاختبار فقط. لن يتم النظر في الطلبات. يرجى زيارة <a href='https://www.example.com/' target='_blank'>الموقع الرسمي</a> لتقديم طلب السكن.",
   "t.noVisibleListings": "لا توجد قوائم مرئية",
   "t.numOfIncome": "%{num}% من الدخل",
   "t.occupancy": "شغل",

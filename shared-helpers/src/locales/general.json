@@ -1327,6 +1327,7 @@
   "t.delete": "Delete",
   "t.deposit": "Deposit",
   "t.description": "Enter description",
+  "t.nonProdBanner": "This site is for testing purposes only. Applications will not be considered. Please visit the <a href='https://www.example.com/' target='_blank'>official site</a> to apply for housing.",
   "t.download": "Download",
   "t.dragFilesHere": "Drag files here",
   "t.dropFilesHere": "Drop files here...",

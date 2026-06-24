@@ -1383,6 +1383,7 @@
   "t.noMoreThan": "%{amount} 이하",
   "t.none": "없음",
   "t.noneFound": "찾을 수 없습니다.",
+  "t.nonProdBanner": "이 사이트는 테스트 목적으로만 운영됩니다. 신청서는 접수되지 않습니다. 주택 신청은 <a href='https://www.example.com/' target='_blank'>공식 사이트를</a> 방문해 주세요.",
   "t.noVisibleListings": "표시된 목록이 없습니다.",
   "t.numOfIncome": "소득의 %{num}%",
   "t.occupancy": "점유",

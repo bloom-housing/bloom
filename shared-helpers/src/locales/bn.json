@@ -1379,6 +1379,7 @@
   "t.noMoreThan": "এর বেশি নয় %{amount}",
   "t.none": "কোনটিই নয়",
   "t.noneFound": "কোন পাওয়া যায়নি।",
+  "t.nonProdBanner": "এই সাইটটি শুধুমাত্র পরীক্ষার উদ্দেশ্যে তৈরি। কোনো আবেদনপত্র বিবেচনা করা হবে না। আবাসনের জন্য আবেদন করতে অনুগ্রহ করে <a href='https://www.example.com/' target='_blank'>অফিসিয়াল সাইট</a> ভিজিট করুন।",
   "t.noVisibleListings": "কোনও দৃশ্যমান তালিকা নেই",
   "t.numOfIncome": "আয়ের %{num}%",
   "t.occupancy": "দখল",

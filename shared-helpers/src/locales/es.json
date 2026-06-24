@@ -1379,6 +1379,7 @@
   "t.noMoreThan": "no más que %{amount}",
   "t.none": "Ninguno",
   "t.noneFound": "No se encontró ninguno.",
+  "t.nonProdBanner": "Este sitio es solo para fines de prueba. No se aceptarán solicitudes. Visite el <a href='https://www.example.com/' target='_blank'>sitio web oficial</a> para solicitar vivienda.",
   "t.noVisibleListings": "No hay listados visibles",
   "t.numOfIncome": "%{num}% de los ingresos",
   "t.occupancy": "Ocupación",

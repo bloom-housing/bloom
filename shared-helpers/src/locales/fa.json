@@ -1383,6 +1383,7 @@
   "t.noMoreThan": "حداکثر %{amount}",
   "t.none": "هیچکدام",
   "t.noneFound": "هیچ کدام پیدا نشد.",
+  "t.nonProdBanner": "این سایت فقط برای اهداف آزمایشی است. درخواست‌ها بررسی نخواهند شد. لطفاً برای درخواست مسکن به <a href='https://www.example.com/' target='_blank'>سایت رسمی</a> مراجعه کنید.",
   "t.noVisibleListings": "هیچ آگهی قابل مشاهده‌ای وجود ندارد",
   "t.numOfIncome": "%{num}% از درآمد",
   "t.occupancy": "اشغال",
