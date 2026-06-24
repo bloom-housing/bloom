@@ -60,7 +60,6 @@ export class BackgroundJobsController {
     summary: 'Get a background job data by its ID',
     operationId: 'getBackgroundJob',
   })
-  @UseGuards(ApiKeyGuard)
   @ApiOkResponse({ type: BackgroundJob })
   public async getJobById(
     @Param('jobId') jobId: string,
