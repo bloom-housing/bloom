@@ -170,6 +170,6 @@
   "resources.sectionTitle.seniorCenters": "다목적 노인 센터",
   "resources.sectionTitle.servingDisabilities": "장애인을 지원하는 단체",
   "resources.sectionTitle.servingTheHomeless": "노숙자들을 지원하는 단체들",
-  "t.nonProdBanner": "이 사이트는 테스트 목적으로만 운영됩니다. 신청서는 접수되지 않습니다. 주택 신청은 <a href='https://www.example.com/' target='_blank'>공식 사이트를</a> 방문해 주세요.",
+  "t.nonProdBanner": "이 사이트는 테스트 목적으로만 운영됩니다. 신청서는 접수되지 않습니다. 주택 신청은 <a href='https://access.housing.lacity.gov/ko'>공식 사이트를</a> 방문해 주세요.",
   "welcome.title": "저렴하고 접근성이 좋은 주택을 신청하세요"
 }

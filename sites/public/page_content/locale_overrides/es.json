@@ -134,7 +134,6 @@
   "resources.contactInfo": "Departamento de Vivienda de la Ciudad de Los Ángeles",
   "resources.contactTitleCard": "Departamento de Vivienda de la Ciudad de Los Ángeles",
   "resources.housingProgramsTitle": "Programas de vivienda de Vivienda y Desarrollo Comunitario de Bloomington",
-<<<<<<< HEAD
   "resources.resourceType.aidsSupportGroup": "Grupo de apoyo para el SIDA",
   "resources.resourceType.assistanceAnimalsOpen": "Animales de asistencia/Abierto",
   "resources.resourceType.benefits": "Beneficios",
@@ -171,10 +170,6 @@
   "resources.sectionTitle.seniorCenters": "Centros multiusos para personas mayores",
   "resources.sectionTitle.servingDisabilities": "Organizaciones que sirven a personas con discapacidad",
   "resources.sectionTitle.servingTheHomeless": "Organizaciones que sirven a las personas sin hogar",
-  "welcome.title": "Solicite vivienda asequible y accesible en"
-=======
-  "resources.additionalResourcesLink": "/housing-basics",
-  "resources.additionalResourcesTitle": "Obtenga más información sobre el Programa de Vivienda Accesible (AcHP), incluida una lista de proyectos de vivienda cubiertos, recursos para inquilinos, políticas y cómo presentar una queja.",
-  "t.nonProdBanner": "Este sitio es solo para fines de prueba. No se aceptarán solicitudes. Visite el <a href='https://www.example.com/' target='_blank'>sitio web oficial</a> para solicitar vivienda."
->>>>>>> upstream/main
+  "welcome.title": "Solicite vivienda asequible y accesible en",
+  "t.nonProdBanner": "Este sitio es solo para fines de prueba. No se aceptarán solicitudes. Visite el <a href='https://access.housing.lacity.gov/es'>sitio web oficial</a> para solicitar vivienda."
 }

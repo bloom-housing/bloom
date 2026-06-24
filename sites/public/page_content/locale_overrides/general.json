@@ -173,6 +173,6 @@
   "resources.sectionTitle.seniorCenters": "Multipurpose senior centers",
   "resources.sectionTitle.servingDisabilities": "Organizations serving people with disabilities",
   "resources.sectionTitle.servingTheHomeless": "Organizations serving the homeless",
-  "t.nonProdBanner": "This site is for testing purposes only. Applications will not be considered. Please visit the <a href='https://www.example.com/' target='_blank'>official site</a> to apply for housing.",
+  "t.nonProdBanner": "This site is for testing purposes only. Applications will not be considered. Please visit the <a href='https://access.housing.lacity.gov/'>official site</a> to apply for housing.",
   "welcome.title": "Apply for affordable and accessible housing in"
 }
