@@ -2537,6 +2537,69 @@ export class AuthService {
   }
 }
 
+export class JobsService {
+  /**
+   * Creates a new background job record in the database
+   */
+  createBackgroundJob(
+    params: {
+      /** requestBody */
+      body?: BackgroundJobCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<BackgroundJob> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get an active background job for a listing
+   */
+  findActiveJobForListing(
+    params: {
+      /**  */
+      listingId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<BackgroundJob> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { listingId: params["listingId"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a background job data by its ID
+   */
+  getBackgroundJob(
+    params: {
+      /**  */
+      jobId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<BackgroundJob> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs/{jobId}"
+      url = url.replace("{jobId}", params["jobId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class MapLayersService {
   /**
    * List map layers
@@ -10008,6 +10071,51 @@ export interface Confirm {
   password?: string
 }
 
+/** BackgroundJob */
+export interface BackgroundJob {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  listingId: string
+
+  /**  */
+  requestedByUserId: string
+
+  /**  */
+  status: BackgroundJobStatusEnum
+
+  /**  */
+  totalRecords?: number
+
+  /**  */
+  inputS3Key: string
+
+  /**  */
+  errorMessage?: string
+
+  /**  */
+  errorRow?: number
+
+  /**  */
+  completedAt?: Date
+}
+
+/** BackgroundJobCreate */
+export interface BackgroundJobCreate {
+  /**  */
+  listingId: string
+
+  /**  */
+  inputS3Key: string
+}
+
 /** MapLayer */
 export interface MapLayer {
   /**  */
@@ -10752,7 +10860,6 @@ export enum FeatureFlagEnum {
   "enableFilterByBathroom" = "enableFilterByBathroom",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGenderQuestion" = "enableGenderQuestion",
-  "enableSexualOrientationQuestion" = "enableSexualOrientationQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
@@ -10788,6 +10895,7 @@ export enum FeatureFlagEnum {
   "enableRegions" = "enableRegions",
   "enableResources" = "enableResources",
   "enableSection8Question" = "enableSection8Question",
+  "enableSexualOrientationQuestion" = "enableSexualOrientationQuestion",
   "enableSingleUseCode" = "enableSingleUseCode",
   "enableSmokingPolicyRadio" = "enableSmokingPolicyRadio",
   "enableSpokenLanguage" = "enableSpokenLanguage",
@@ -10839,6 +10947,12 @@ export enum ModificationEnum {
 export enum MfaType {
   "sms" = "sms",
   "email" = "email",
+}
+
+export enum BackgroundJobStatusEnum {
+  "processing" = "processing",
+  "completed" = "completed",
+  "failed" = "failed",
 }
 export enum EnumPropertyFilterParamsComparison {
   "=" = "=",
