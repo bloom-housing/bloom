@@ -1,7 +1,6 @@
 import {
   ConflictException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
@@ -59,10 +58,6 @@ export class BackgroundJobsService {
         status: BackgroundJobStatusEnum.processing,
       },
     });
-
-    if (!backgroundJob) {
-      throw new InternalServerErrorException('Failed to create new job record');
-    }
 
     return mapTo(BackgroundJob, backgroundJob);
   }

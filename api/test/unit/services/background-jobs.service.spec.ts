@@ -110,15 +110,6 @@ describe('Background Jobs Service Tests', () => {
         ),
       );
     });
-
-    it('should throw InternalServerErrorException when the DB create returns a falsy value', async () => {
-      prisma.backgroundJob.findFirst = jest.fn().mockResolvedValue(null);
-      prisma.backgroundJob.create = jest.fn().mockResolvedValue(null);
-
-      await expect(service.create(createDto, requestingUser)).rejects.toThrow(
-        InternalServerErrorException,
-      );
-    });
   });
 
   describe('getById', () => {
