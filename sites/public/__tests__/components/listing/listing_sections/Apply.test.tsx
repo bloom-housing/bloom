@@ -1010,4 +1010,31 @@ describe("<Apply>", () => {
       )
     }
   })
+
+  it("does not render when scheduledApplicationOpenAt is in the future", () => {
+    render(
+      <Apply
+        listing={{
+          ...listing,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          scheduledApplicationOpenAt: dayjs(new Date()).add(3, "days").toDate(),
+          applicationMethods: [
+            {
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              type: ApplicationMethodsTypeEnum.Internal,
+              acceptsPostmarkedApplications: null,
+              externalReference: "https://www.example.com",
+              paperApplications: [],
+              phoneNumber: null,
+            },
+          ],
+        }}
+        preview={false}
+        setShowDownloadModal={() => null}
+      />
+    )
+    expect(screen.queryByText("How to apply")).not.toBeInTheDocument()
+  })
 })

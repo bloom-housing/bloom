@@ -118,15 +118,15 @@ describe("occupancy formatting helper", () => {
     expect(occupancyTable(testListing)).toStrictEqual([
       {
         occupancy: { content: "2-6 people" },
-        unitType: { content: <strong>3 BR</strong> },
+        unitType: { content: <strong>3 Bedrooms</strong> },
       },
       {
         occupancy: { content: "at least 1 person" },
-        unitType: { content: <strong>2 BR</strong> },
+        unitType: { content: <strong>2 Bedrooms</strong> },
       },
       {
         occupancy: { content: "1 person" },
-        unitType: { content: <strong>SRO</strong> },
+        unitType: { content: <strong>Single Room Occupancy</strong> },
       },
     ])
   })
@@ -137,15 +137,15 @@ describe("occupancy formatting helper stacked table", () => {
     expect(stackedOccupancyTable(testListing)).toStrictEqual([
       {
         occupancy: { cellText: "2-6 people" },
-        unitType: { cellText: "3 BR" },
+        unitType: { cellText: "3 Bedrooms" },
       },
       {
         occupancy: { cellText: "at least 1 person" },
-        unitType: { cellText: "2 BR" },
+        unitType: { cellText: "2 Bedrooms" },
       },
       {
         occupancy: { cellText: "1 person" },
-        unitType: { cellText: "SRO" },
+        unitType: { cellText: "Single Room Occupancy" },
       },
     ])
   })
@@ -208,11 +208,11 @@ describe("occupancy formatting helper stacked table", () => {
         occupancy: { cellText: "1-2 people" },
       },
       {
-        unitType: { cellText: "1 BR" },
+        unitType: { cellText: "1 Bedroom" },
         occupancy: { cellText: "1-2 people" },
       },
       {
-        unitType: { cellText: "2 BR, 3 BR" },
+        unitType: { cellText: "2 Bedrooms, 3 Bedrooms" },
         occupancy: { cellText: "2-4 people" },
       },
     ])
@@ -336,19 +336,19 @@ describe("occupancy formatting helper stacked table", () => {
 
     expect(stackedUnitGroupsOccupancyTable(testListing)).toStrictEqual([
       {
-        unitType: { cellText: "Studio, 1 BR" },
+        unitType: { cellText: "Studio, 1 Bedroom" },
         occupancy: { cellText: "1-4 people" },
       },
       {
-        unitType: { cellText: "2 BR" },
+        unitType: { cellText: "2 Bedrooms" },
         occupancy: { cellText: "at least 2 people" },
       },
       {
-        unitType: { cellText: "3 BR" },
+        unitType: { cellText: "3 Bedrooms" },
         occupancy: { cellText: "no more than 6 people" },
       },
       {
-        unitType: { cellText: "4 BR" },
+        unitType: { cellText: "4 Bedrooms" },
         occupancy: { cellText: "3-6 people" },
       },
     ])

@@ -1064,6 +1064,12 @@ class Listing extends AbstractDTO {
   scheduledPublishAt?: Date;
 
   @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  @ApiPropertyOptional()
+  scheduledApplicationOpenAt?: Date;
+
+  @Expose()
   @ValidateListingPublish('section8Acceptance', {
     groups: [ValidationsGroupsEnum.default],
   })
