@@ -20,6 +20,7 @@ export enum FeatureFlagEnum {
   enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableFaq = 'enableFaq',
+  enableFaqResourceCard = 'enableFaqResourceCard',
   enableFilterByBathroom = 'enableFilterByBathroom',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGenderQuestion = 'enableGenderQuestion',
@@ -170,6 +171,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableFaq,
     description:
       'When true, a link to the FAQ page is displayed on the get assistance page',
+  },
+  {
+    name: FeatureFlagEnum.enableFaqResourceCard,
+    description:
+      'When true, the FAQ resource card is displayed on the home page',
   },
   {
     name: FeatureFlagEnum.enableFilterByBathroom,
