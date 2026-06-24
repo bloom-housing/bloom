@@ -1,18 +1,70 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from './prisma.service';
+import { BackgroundJobStatusEnum } from '@prisma/client';
+import { mapTo } from '../utilities/mapTo';
+import { BackgroundJob } from '../dtos/background-jobs/background-job.dto';
+import { S3Service } from './s3.service';
+import { User } from 'src/dtos/users/user.dto';
+import { BackgroundJobCreate } from 'src/dtos/background-jobs/background-job-create.dto';
+import { PermissionService } from './permission.service';
+import { permissionActions } from 'src/enums/permissions/permission-actions-enum';
 
 @Injectable()
 export class BackgroundJobsService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly s3Service: S3Service,
+    private readonly permissionService: PermissionService,
+  ) {}
 
   /**
    * Creates an instance of a background job runner for a listing
-   * @param listingId - Id for the listing on which data the runner will be working on
-   * @param inputS3Key - S3 key for accessing data store in the AWS bucket
-   * @param requestedByUserId - Id of the uer who requested the process creation
+   * @param dto - background job creation DTO
+   * @param requestingUser - Data on requesting user
+   * @returns The newly created background job
    */
-  create() {
-    return;
+  async create(
+    dto: BackgroundJobCreate,
+    requestingUser: User,
+  ): Promise<BackgroundJob> {
+    const { listingId, inputS3Key } = dto;
+    const requestedByUserId = requestingUser.id;
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'job',
+      permissionActions.create,
+    );
+
+    const hasActiveListing = !!this.findActiveForListing(listingId);
+
+    if (hasActiveListing) {
+      throw new ConflictException(
+        `Listing with ID: ${listingId} has a currently running job assigned`,
+      );
+    }
+
+    // TODO: Integrate the connection with the S3 service
+
+    const backgroundJob = await this.prismaService.backgroundJob.create({
+      data: {
+        listingId,
+        requestedByUserId,
+        inputS3Key,
+        status: BackgroundJobStatusEnum.processing,
+      },
+    });
+
+    if (!backgroundJob) {
+      throw new InternalServerErrorException('Failed to create new job record');
+    }
+
+    return mapTo(BackgroundJob, backgroundJob);
   }
 
   /**
@@ -20,8 +72,18 @@ export class BackgroundJobsService {
    * @param jobId - Id of the job to return data on
    * @returns Details on the requested job
    */
-  getById() {
-    return;
+  async getById(jobId: string): Promise<BackgroundJob> {
+    try {
+      const jobData = this.prismaService.backgroundJob.findFirstOrThrow({
+        where: {
+          id: jobId,
+        },
+      });
+
+      return mapTo(BackgroundJob, jobData);
+    } catch {
+      throw new NotFoundException(`Job with id: ${jobId} was not found`);
+    }
   }
 
   /**
@@ -29,15 +91,29 @@ export class BackgroundJobsService {
    * @param listingId - Id of the listing for which the job should be retrieved
    * @returns Details on the currently processed job for the desired listing
    */
-  findActiveForListing() {
-    return;
+  async findActiveForListing(listingId: string): Promise<BackgroundJob | null> {
+    const activeJob = this.prismaService.backgroundJob.findFirst({
+      where: {
+        listingId: listingId,
+        status: BackgroundJobStatusEnum.processing,
+      },
+    });
+
+    return activeJob ? mapTo(BackgroundJob, activeJob) : null;
   }
 
   /**
    * Returns true if there is any job running (i.e. in status other than completed or failed)
    * @returns True if any active job exists (false otherwise)
    */
-  findActiveJob() {
-    return;
+  async findActiveJob(): Promise<boolean> {
+    const activeJob = this.prismaService.backgroundJob.findFirst({
+      select: {},
+      where: {
+        status: BackgroundJobStatusEnum.processing,
+      },
+    });
+
+    return !!activeJob;
   }
 }
