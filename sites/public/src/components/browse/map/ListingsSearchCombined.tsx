@@ -17,15 +17,23 @@ import {
   ListingViews,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FilterDrawer } from "../FilterDrawer"
-import { encodeFilterDataToBackendFilters, FilterData } from "../FilterDrawerHelpers"
+import {
+  encodeFilterDataToBackendFilters,
+  FilterData,
+  encodeFilterDataToQuery,
+  getFilterQueryFromURL,
+  decodeQueryToFilterData,
+} from "../FilterDrawerHelpers"
 import { ListingsMapContext } from "./ListingsMapContext"
 import { useListingsSearchConfigContext } from "./ListingsSearchConfigContext"
+import { useRouter } from "next/router"
 
 /**
  * This combines the search form with the listings map/list. Listings are updated
  * in both when the search form is submitted.
  */
 function ListingsSearchCombined() {
+  const router = useRouter()
   const props = useListingsSearchConfigContext()
   const { profile, listingsService } = useContext(AuthContext)
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false)
@@ -43,8 +51,10 @@ function ListingsSearchCombined() {
   const listingsVarsRef = useRef<HTMLDivElement>(null)
 
   const jurisdictionIds = props.jurisdictions.map((jurisdiction) => jurisdiction.id)
+  const filterQuery = getFilterQueryFromURL(router.query)
 
   const [searchFilter] = useState(
+    // TODO: this doesn't work, is it needed?
     parseSearchString(props.searchString, {
       bedrooms: null,
       bathrooms: null,
@@ -243,6 +253,13 @@ function ListingsSearchCombined() {
     return () => window.removeEventListener("resize", updateMedia)
   }, [])
 
+  useEffect(() => {
+    const filterData = decodeQueryToFilterData(router.query)
+    setFilterState(filterData)
+    setFilterCount(encodeFilterDataToBackendFilters(filterData).length)
+    setIsLoading(false)
+  }, [router.query])
+
   // Re-search when the filter is updated
   useEffect(() => {
     async function searchListings() {
@@ -330,6 +347,12 @@ function ListingsSearchCombined() {
     setDrawerFilters(backendFilters)
     setFilterCount(backendFilters.length)
     setIsFilterDrawerOpen(false)
+    const updatedFilterQuery = encodeFilterDataToQuery(data)
+    setIsFilterDrawerOpen(false)
+    if (updatedFilterQuery !== filterQuery) {
+      setIsLoading(true)
+      void router.push(`/listings?${updatedFilterQuery}`)
+    }
   }
 
   const onDrawerClear = (resetFilters: (data: FilterData) => void) => {
@@ -338,6 +361,7 @@ function ListingsSearchCombined() {
     setDrawerFilters([])
     setFilterCount(0)
     setIsFilterDrawerOpen(false)
+    void router.push(`/listings`)
   }
 
   const mapContextValue = {
