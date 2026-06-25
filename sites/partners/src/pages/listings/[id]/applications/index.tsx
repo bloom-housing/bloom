@@ -26,6 +26,7 @@ import { NavigationHeader } from "../../../../components/shared/NavigationHeader
 import ListingGuard from "../../../../components/shared/ListingGuard"
 import { StatusBar } from "../../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../../../../components/listings/helpers"
+import TabView from "../../../../layouts/TabView"
 
 const ApplicationsList = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -187,82 +188,74 @@ const ApplicationsList = () => {
 
             <StatusBar>{getListingStatusTag(listingDto?.status)}</StatusBar>
 
-            <section className={"bg-gray-200 pt-4"}>
-              <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
-                {listingDto && (
-                  <>
-                    <ApplicationsSideNav
-                      className="w-full md:w-72"
-                      listingId={listingId}
-                      listingOpen={isListingOpen}
-                    />
+            {listingDto && (
+              <TabView
+                hideTabs={false}
+                tabs={<ApplicationsSideNav listingId={listingId} listingOpen={isListingOpen} />}
+              >
+                <AgTable
+                  className="w-full"
+                  id="applications-table"
+                  pagination={{
+                    perPage: tableOptions.pagination.itemsPerPage,
+                    setPerPage: tableOptions.pagination.setItemsPerPage,
+                    currentPage: tableOptions.pagination.currentPage,
+                    setCurrentPage: tableOptions.pagination.setCurrentPage,
+                  }}
+                  config={{
+                    gridComponents,
+                    columns: columnDefs,
+                    totalItemsLabel: t("applications.totalApplications"),
+                  }}
+                  data={{
+                    items: applications,
+                    loading: appsLoading,
+                    totalItems: appsMeta?.totalItems,
+                    totalPages: appsMeta?.totalPages,
+                  }}
+                  search={{
+                    setSearch: tableOptions.filter.setFilterValue,
+                  }}
+                  sort={{
+                    setSort: tableOptions.sort.setSortOptions,
+                  }}
+                  headerContent={
+                    <div className="flex gap-2 items-center">
+                      <Button
+                        onClick={() => {
+                          if (
+                            process.env.showLottery &&
+                            (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
+                              listingDto.lotteryStatus === LotteryStatusEnum.releasedToPartners ||
+                              listingDto.lotteryStatus === LotteryStatusEnum.publishedToPublic)
+                          ) {
+                            setApplicationConfirmAddPostLotteryModal(true)
+                          } else if (listingDto.status === ListingsStatusEnum.closed) {
+                            setApplicationConfirmAddModal(true)
+                          } else {
+                            void router.push(`/listings/${listingId}/applications/add`)
+                          }
+                        }}
+                        variant="primary-outlined"
+                        size="sm"
+                        id={"addApplicationButton"}
+                      >
+                        {t("applications.addApplication")}
+                      </Button>
 
-                    <AgTable
-                      className="w-full"
-                      id="applications-table"
-                      pagination={{
-                        perPage: tableOptions.pagination.itemsPerPage,
-                        setPerPage: tableOptions.pagination.setItemsPerPage,
-                        currentPage: tableOptions.pagination.currentPage,
-                        setCurrentPage: tableOptions.pagination.setCurrentPage,
-                      }}
-                      config={{
-                        gridComponents,
-                        columns: columnDefs,
-                        totalItemsLabel: t("applications.totalApplications"),
-                      }}
-                      data={{
-                        items: applications,
-                        loading: appsLoading,
-                        totalItems: appsMeta?.totalItems,
-                        totalPages: appsMeta?.totalPages,
-                      }}
-                      search={{
-                        setSearch: tableOptions.filter.setFilterValue,
-                      }}
-                      sort={{
-                        setSort: tableOptions.sort.setSortOptions,
-                      }}
-                      headerContent={
-                        <div className="flex gap-2 items-center">
-                          <Button
-                            onClick={() => {
-                              if (
-                                process.env.showLottery &&
-                                (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
-                                  listingDto.lotteryStatus ===
-                                    LotteryStatusEnum.releasedToPartners ||
-                                  listingDto.lotteryStatus === LotteryStatusEnum.publishedToPublic)
-                              ) {
-                                setApplicationConfirmAddPostLotteryModal(true)
-                              } else if (listingDto.status === ListingsStatusEnum.closed) {
-                                setApplicationConfirmAddModal(true)
-                              } else {
-                                void router.push(`/listings/${listingId}/applications/add`)
-                              }
-                            }}
-                            variant="primary-outlined"
-                            size="sm"
-                            id={"addApplicationButton"}
-                          >
-                            {t("applications.addApplication")}
-                          </Button>
-
-                          <Button
-                            variant="primary-outlined"
-                            size="sm"
-                            onClick={() => onExport()}
-                            loadingMessage={exportLoading && t("t.formSubmitted")}
-                          >
-                            {t("t.export")}
-                          </Button>
-                        </div>
-                      }
-                    />
-                  </>
-                )}
-              </article>
-            </section>
+                      <Button
+                        variant="primary-outlined"
+                        size="sm"
+                        onClick={() => onExport()}
+                        loadingMessage={exportLoading && t("t.formSubmitted")}
+                      >
+                        {t("t.export")}
+                      </Button>
+                    </div>
+                  }
+                />
+              </TabView>
+            )}
           </LoadingState>
         </div>
 

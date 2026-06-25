@@ -1,11 +1,11 @@
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
-import { AuthContext, formatDateTime } from "@bloom-housing/shared-helpers"
+import { AuthContext, CustomIconMap, formatDateTime } from "@bloom-housing/shared-helpers"
 import Head from "next/head"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
-import { t, Breadcrumbs, BreadcrumbLink, AlertBox } from "@bloom-housing/ui-components"
+import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import {
   ListingsStatusEnum,
@@ -20,6 +20,9 @@ import { mergeApplicationNames } from "../../../../../lib/helpers"
 import ListingGuard from "../../../../../components/shared/ListingGuard"
 import { StatusBar } from "../../../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../../../../../components/listings/helpers"
+import TabView from "../../../../../layouts/TabView"
+import { Icon, Message } from "@bloom-housing/ui-seeds"
+import styles from "../pending.module.scss"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -171,65 +174,61 @@ const ApplicationsList = () => {
 
         <StatusBar>{getListingStatusTag(listingDto?.status)}</StatusBar>
 
-        <section className={"bg-gray-200 pt-4"}>
-          <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-6 px-4">
-            {listingDto && (
-              <>
-                <ApplicationsSideNav
-                  className="w-full md:w-72"
-                  listingId={listingId}
-                  listingOpen={isListingOpen}
-                />
-
-                <div className="w-full">
-                  {isListingOpen && (
-                    <AlertBox type="notice" className="mb-3" customIcon={"lock"} closeable>
-                      {listingDto?.applicationDueDate
-                        ? t("applications.duplicatesAlertDate", {
-                            date: formatDateTime(listingDto.applicationDueDate, true),
-                          })
-                        : t("applications.duplicatesAlert")}
-                    </AlertBox>
-                  )}
-                  <AgTable
-                    id="applications-table"
-                    pagination={{
-                      perPage: tableOptions.pagination.itemsPerPage,
-                      setPerPage: tableOptions.pagination.setItemsPerPage,
-                      currentPage: tableOptions.pagination.currentPage,
-                      setCurrentPage: tableOptions.pagination.setCurrentPage,
-                    }}
-                    config={{
-                      gridComponents,
-                      columns,
-                      totalItemsLabel:
-                        flaggedAppsData?.meta?.totalItems === 1
-                          ? t("applications.duplicates.set")
-                          : t("applications.duplicates.sets"),
-                    }}
-                    data={{
-                      items: flaggedAppsData?.items ?? [],
-                      loading: flaggedAppsLoading,
-                      totalItems: flaggedAppsData?.meta?.totalItems ?? 0,
-                      totalPages: flaggedAppsData?.meta?.totalPages ?? 0,
-                    }}
-                    search={{
-                      setSearch: tableOptions.filter.setFilterValue,
-                    }}
-                    sort={{
-                      setSort: tableOptions.sort.setSortOptions,
-                    }}
-                  />
-                  {afsLastRun && (
-                    <span className="text-gray-750 text-sm flex max-w-screen-xl mx-auto pt-6 pb-4 px-4 justify-end">
-                      {`${t("t.lastUpdated")} ${afsLastRun.date} ${t("t.at")} ${afsLastRun.time}`}
-                    </span>
-                  )}
-                </div>
-              </>
+        {listingDto && (
+          <TabView
+            hideTabs={false}
+            tabs={<ApplicationsSideNav listingId={listingId} listingOpen={isListingOpen} />}
+          >
+            {isListingOpen && (
+              <Message
+                closeable
+                fullwidth
+                customIcon={<Icon>{CustomIconMap.lockClosed}</Icon>}
+                className={styles["pending-applications-message"]}
+              >
+                {listingDto?.applicationDueDate
+                  ? t("applications.duplicatesAlertDate", {
+                      date: formatDateTime(listingDto.applicationDueDate, true),
+                    })
+                  : t("applications.duplicatesAlert")}
+              </Message>
             )}
-          </article>
-        </section>
+            <AgTable
+              id="applications-table"
+              pagination={{
+                perPage: tableOptions.pagination.itemsPerPage,
+                setPerPage: tableOptions.pagination.setItemsPerPage,
+                currentPage: tableOptions.pagination.currentPage,
+                setCurrentPage: tableOptions.pagination.setCurrentPage,
+              }}
+              config={{
+                gridComponents,
+                columns,
+                totalItemsLabel:
+                  flaggedAppsData?.meta?.totalItems === 1
+                    ? t("applications.duplicates.set")
+                    : t("applications.duplicates.sets"),
+              }}
+              data={{
+                items: flaggedAppsData?.items ?? [],
+                loading: flaggedAppsLoading,
+                totalItems: flaggedAppsData?.meta?.totalItems ?? 0,
+                totalPages: flaggedAppsData?.meta?.totalPages ?? 0,
+              }}
+              search={{
+                setSearch: tableOptions.filter.setFilterValue,
+              }}
+              sort={{
+                setSort: tableOptions.sort.setSortOptions,
+              }}
+            />
+            {afsLastRun && (
+              <p className={styles["pending-applications-updated"]}>
+                {`${t("t.lastUpdated")} ${afsLastRun.date} ${t("t.at")} ${afsLastRun.time}`}
+              </p>
+            )}
+          </TabView>
+        )}
       </Layout>
     </ListingGuard>
   )

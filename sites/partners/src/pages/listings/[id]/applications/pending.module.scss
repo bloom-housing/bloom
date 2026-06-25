@@ -1,0 +1,13 @@
+.pending-applications-message {
+  --message-max-width: var(--seeds-width-4xl);
+
+  margin-block-end: var(--seeds-s3);
+}
+
+.pending-applications-updated {
+  margin: var(--seeds-s4);
+  margin-block-start: var(--seeds-s6);
+  text-align: right;
+  font-size: var(--seeds-font-size-sm);
+  color: var(--seeds-text-color);
+}
