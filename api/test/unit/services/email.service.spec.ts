@@ -981,7 +981,7 @@ describe('Testing email service', () => {
       applicationsOpen: 'Applications Open',
       address: 'Address',
       neighborhood: 'Neighborhood',
-      unitType: 'Unit type',
+      unitType: 'Available accessible units',
       opportunityType: 'Opportunity type',
       rent: 'Rent',
       minIncome: 'Minimum Income',
