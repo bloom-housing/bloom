@@ -1,10 +1,8 @@
 :root {
-  @import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
-
   // Seeds token overrides
-  --seeds-font-alt-sans: "Source Sans 3", "Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif";
-  --seeds-font-sans: "Source Sans 3", "Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif";
-  --seeds-font-serif: "Source Sans 3", "Droid Serif", "Georgia", "Times", "serif";
+  --seeds-font-alt-sans: "Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif";
+  --seeds-font-sans: "Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif";
+  --seeds-font-serif: "Open Sans", "Droid Serif", "Georgia", "Times", "serif";
   --seeds-color-primary-darker: #173b64;
   --seeds-color-primary-dark: #215792;
   --seeds-color-primary: #2a70bc;
