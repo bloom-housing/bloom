@@ -17,10 +17,6 @@
   }
 }
 
-.divider {
-  border-top: 1px solid var(--seeds-border-color);
-}
-
 .account-card-settings-section {
   --card-content-padding-inline: var(--seeds-s12);
   @media (max-width: theme("screens.sm")) {

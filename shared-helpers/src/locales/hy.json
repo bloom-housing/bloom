@@ -77,6 +77,7 @@
   "account.settings.alerts.passwordSuccess": "Գաղտնաբառի թարմացումը հաջողվեց",
   "account.settings.confirmNewPassword": "Հաստատեք նոր գաղտնաբառը",
   "account.settings.currentPassword": "Ընթացիկ գաղտնաբառ",
+  "account.settings.disclaimer": "Դուք կարող եք կապվել Բլումինգտոնի հետ՝ ձեր հաշվի տեղեկությունները և դրանց հետ կապված տվյալները ջնջելու համար ցանկացած պահի: Դրա համար խնդրում ենք կապվել %{contactEmail}-ի հետ:",
   "account.settings.myNotification": "Իմ ծանուցումները",
   "account.settings.myProfile": "Իմ պրոֆիլը",
   "account.settings.newPassword": "Նոր գաղտնաբառ",
