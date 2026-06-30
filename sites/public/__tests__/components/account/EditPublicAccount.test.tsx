@@ -2,7 +2,7 @@ import React from "react"
 import userEvent from "@testing-library/user-event"
 import { useRouter } from "next/router"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, tIfExists } from "@bloom-housing/shared-helpers"
 import { User, UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Edit from "../../../src/pages/account/edit"
 import { render, screen, waitFor } from "../../testUtils"
@@ -10,6 +10,14 @@ import { render, screen, waitFor } from "../../testUtils"
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }))
+
+jest.mock("@bloom-housing/shared-helpers", () => {
+  const actual = jest.requireActual("@bloom-housing/shared-helpers")
+  return {
+    ...actual,
+    tIfExists: jest.fn(actual.tIfExists),
+  }
+})
 
 const mockUserService = {
   retrieve: jest.fn(),
@@ -404,6 +412,36 @@ describe("EditPublicAccount", () => {
       })
 
       expect(consoleWarnSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe("Disclaimer section", () => {
+    beforeEach(() => {
+      ;(tIfExists as jest.Mock).mockReset()
+    })
+
+    it("renders disclaimer when account.settings.disclaimer string exists", async () => {
+      ;(tIfExists as jest.Mock).mockReturnValue("Disclaimer text")
+
+      renderEditPage()
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue("First")).toBeInTheDocument()
+      })
+
+      expect(screen.getByText(/You can contact Bloomington/i)).toBeInTheDocument()
+    })
+
+    it("does not render disclaimer when account.settings.disclaimer string does not exist", async () => {
+      ;(tIfExists as jest.Mock).mockReturnValue(null)
+
+      renderEditPage()
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue("First")).toBeInTheDocument()
+      })
+
+      expect(screen.queryByText(/You can contact Bloomington/i)).not.toBeInTheDocument()
     })
   })
 })
