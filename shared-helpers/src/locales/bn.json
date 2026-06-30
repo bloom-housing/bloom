@@ -77,6 +77,7 @@
   "account.settings.alerts.passwordSuccess": "পাসওয়ার্ড আপডেট সফল",
   "account.settings.confirmNewPassword": "নিশ্চিত কর নতুন গোপননম্বর",
   "account.settings.currentPassword": "বর্তমান পাসওয়ার্ড",
+  "account.settings.disclaimer": "আপনার অ্যাকাউন্টের তথ্য ও সংশ্লিষ্ট ডেটা মুছে ফেলার জন্য আপনি যেকোনো সময় ব্লুমিংটনের সাথে যোগাযোগ করতে পারেন। এর জন্য, অনুগ্রহ করে %{contactEmail}-এ যোগাযোগ করুন।",
   "account.settings.myNotification": "আমার বিজ্ঞপ্তিগুলি",
   "account.settings.myProfile": "আমার প্রোফাইল",
   "account.settings.newPassword": "নতুন পাসওয়ার্ড",

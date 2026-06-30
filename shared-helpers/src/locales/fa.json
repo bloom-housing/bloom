@@ -77,6 +77,7 @@
   "account.settings.alerts.passwordSuccess": "به‌روزرسانی رمز عبور با موفقیت انجام شد",
   "account.settings.confirmNewPassword": "رمز عبور جدید را تأیید کنید",
   "account.settings.currentPassword": "رمز عبور فعلی",
+  "account.settings.disclaimer": "شما می‌توانید در هر زمانی برای حذف اطلاعات حساب کاربری و داده‌های مرتبط با آن با بلومینگتون تماس بگیرید. برای انجام این کار، لطفاً با %{contactEmail} تماس بگیرید.",
   "account.settings.myNotification": "اعلان‌های من",
   "account.settings.myProfile": "پروفایل من",
   "account.settings.newPassword": "رمز عبور جدید",
