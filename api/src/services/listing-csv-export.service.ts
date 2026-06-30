@@ -361,6 +361,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       jurisdictions: {
         OR: [],
       },
+      externalListingId: {
+        equals: null,
+      },
     };
 
     user.jurisdictions?.forEach((jurisdiction) => {

@@ -543,6 +543,20 @@ export class ListingService implements OnModuleInit {
       caseSensitive: true,
     });
 
+    const includeExternal = params?.find(
+      (f) => f[ListingFilterKeys.includeExternal] !== undefined,
+    );
+    if (
+      includeExternal === undefined ||
+      includeExternal[ListingFilterKeys.includeExternal] === false
+    ) {
+      filters.push({
+        externalListingId: {
+          equals: null,
+        },
+      });
+    }
+
     // detect combined >=/<= monthlyRent filters and add one range filter
     const rentParams =
       params?.filter((f) => f[ListingFilterKeys.monthlyRent] !== undefined) ||
@@ -1492,13 +1506,31 @@ export class ListingService implements OnModuleInit {
 
     if (!enableAutopublish) {
       dto.scheduledPublishAt = null;
+      dto.scheduledApplicationOpenAt = null;
     }
 
     if (enableAutopublish && dto.scheduledPublishAt) {
       dto.scheduledPublishAt = this.normalizeScheduledPublishAt(
         dto.scheduledPublishAt,
       );
-      this.checkScheduledPublishAtIsInFuture(dto.scheduledPublishAt);
+      this.checkScheduledDateIsInFuture(
+        dto.scheduledPublishAt,
+        'scheduledPublishAt',
+      );
+    }
+
+    if (enableAutopublish && dto.scheduledApplicationOpenAt) {
+      dto.scheduledApplicationOpenAt = this.normalizeScheduledApplicationOpenAt(
+        dto.scheduledApplicationOpenAt,
+      );
+      this.checkScheduledDateIsInFuture(
+        dto.scheduledApplicationOpenAt,
+        'scheduledApplicationOpenAt',
+      );
+      this.checkScheduledApplicationOpenAtIsAfterPublish(
+        dto.scheduledApplicationOpenAt,
+        dto.scheduledPublishAt,
+      );
     }
 
     if (
@@ -2326,24 +2358,41 @@ export class ListingService implements OnModuleInit {
 
     if (!enableAutopublish) {
       incomingDto.scheduledPublishAt = null;
+      incomingDto.scheduledApplicationOpenAt = null;
     }
 
     const sendPublishNotificationEmail =
       incomingDto.status === ListingsStatusEnum.active &&
       storedListing.status !== ListingsStatusEnum.active;
 
-    if (incomingDto.scheduledPublishAt && enableAutopublish) {
-      incomingDto.scheduledPublishAt = this.normalizeScheduledPublishAt(
-        incomingDto.scheduledPublishAt,
-      );
+    if (enableAutopublish) {
+      incomingDto.scheduledPublishAt = incomingDto.scheduledPublishAt
+        ? this.normalizeScheduledPublishAt(incomingDto.scheduledPublishAt)
+        : null;
       // test if not publishing or unpublishing listing and scheduledPublishAt is set
       if (
         incomingDto.status === storedListing.status &&
         incomingDto.status !== ListingsStatusEnum.active &&
-        incomingDto.scheduledPublishAt &&
-        enableAutopublish
+        incomingDto.scheduledPublishAt
       ) {
-        this.checkScheduledPublishAtIsInFuture(incomingDto.scheduledPublishAt);
+        this.checkScheduledDateIsInFuture(
+          incomingDto.scheduledPublishAt,
+          'scheduledPublishAt',
+        );
+      }
+
+      if (incomingDto.scheduledApplicationOpenAt) {
+        this.normalizeScheduledApplicationOpenAt(
+          incomingDto.scheduledApplicationOpenAt,
+        );
+        this.checkScheduledDateIsInFuture(
+          incomingDto.scheduledApplicationOpenAt,
+          'scheduledApplicationOpenAt',
+        );
+        this.checkScheduledApplicationOpenAtIsAfterPublish(
+          incomingDto.scheduledApplicationOpenAt,
+          incomingDto.scheduledPublishAt,
+        );
       }
     }
 
@@ -3305,21 +3354,43 @@ export class ListingService implements OnModuleInit {
     return dayjs.tz(dateStr, 'YYYY-MM-DD', appTimezone).startOf('day').toDate();
   }
 
-  private checkScheduledPublishAtIsInFuture(scheduledPublishAt: Date): void {
+  private checkScheduledDateIsInFuture(date: Date, fieldName: string): void {
     const appTimezone = process.env.TIME_ZONE;
-    const minimumScheduledPublishAt = dayjs
-      .utc()
-      .tz(appTimezone)
-      .add(1, 'day')
-      .startOf('day');
+    const minimum = dayjs.utc().tz(appTimezone).add(1, 'day').startOf('day');
 
-    const incomingScheduledPublishAt = dayjs
-      .utc(scheduledPublishAt)
-      .tz(appTimezone);
+    if (dayjs.utc(date).tz(appTimezone).isBefore(minimum)) {
+      throw new BadRequestException([`${fieldName} must be in the future`]);
+    }
+  }
 
-    if (incomingScheduledPublishAt.isBefore(minimumScheduledPublishAt)) {
+  normalizeScheduledApplicationOpenAt(scheduledApplicationOpenAt: Date): Date {
+    const appTimezone = process.env.TIME_ZONE;
+    const dateStr = dayjs.utc(scheduledApplicationOpenAt).format('YYYY-MM-DD');
+    // Applications open at 9:00 AM in the app timezone
+    return dayjs
+      .tz(dateStr, 'YYYY-MM-DD', appTimezone)
+      .startOf('day')
+      .add(9, 'hour')
+      .toDate();
+  }
+
+  private checkScheduledApplicationOpenAtIsAfterPublish(
+    scheduledApplicationOpenAt: Date,
+    scheduledPublishAt?: Date,
+  ): void {
+    if (!scheduledApplicationOpenAt || !scheduledPublishAt) {
+      return;
+    }
+
+    // Same calendar day is allowed (publish is normalized to midnight and the
+    // application open date to 9:00 AM), so an instant comparison is sufficient.
+    if (
+      dayjs
+        .utc(scheduledApplicationOpenAt)
+        .isAfter(dayjs.utc(scheduledPublishAt)) === false
+    ) {
       throw new BadRequestException([
-        'scheduledPublishAt must be in the future',
+        'scheduledApplicationOpenAt must be after scheduled publish date',
       ]);
     }
   }
@@ -3392,6 +3463,7 @@ export class ListingService implements OnModuleInit {
               lte: new Date(),
             },
           },
+          { externalListingId: { equals: null } },
         ],
       },
     });
@@ -3468,6 +3540,7 @@ export class ListingService implements OnModuleInit {
         AND: [
           { scheduledPublishAt: { not: null } },
           { scheduledPublishAt: { lte: new Date() } },
+          { externalListingId: { equals: null } },
         ],
       },
     });

@@ -170,5 +170,6 @@
   "resources.sectionTitle.seniorCenters": "Centros multiusos para personas mayores",
   "resources.sectionTitle.servingDisabilities": "Organizaciones que sirven a personas con discapacidad",
   "resources.sectionTitle.servingTheHomeless": "Organizaciones que sirven a las personas sin hogar",
-  "welcome.title": "Solicite vivienda asequible y accesible en"
+  "welcome.title": "Solicite vivienda asequible y accesible en",
+  "t.nonProdBanner": "Este sitio es solo para fines de prueba. No se aceptarán solicitudes. Visite el <a href='https://access.housing.lacity.gov/es'>sitio web oficial</a> para solicitar vivienda."
 }

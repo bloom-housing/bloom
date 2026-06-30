@@ -128,6 +128,14 @@ const DetailApplicationDates = () => {
                 {getDetailFieldUtcDate(listing.scheduledPublishAt)}
               </FieldValue>
             </Grid.Cell>
+            <Grid.Cell>
+              <FieldValue
+                id="scheduledApplicationOpenDate"
+                label={t("listings.scheduledApplicationOpenDate")}
+              >
+                {getDetailFieldUtcDate(listing.scheduledApplicationOpenAt)}
+              </FieldValue>
+            </Grid.Cell>
           </Grid.Row>
         )}
 

@@ -280,6 +280,7 @@ export class SnapshotCreateService {
         programRules: true,
         publishedAt: true,
         scheduledPublishAt: true,
+        scheduledApplicationOpenAt: true,
         referralOpportunity: true,
         region: true,
         rentalAssistance: true,
