@@ -3247,13 +3247,18 @@ export class ListingService implements OnModuleInit {
   addUnitsSummarized = async (listing: Listing) => {
     if (Array.isArray(listing.units) && listing.units.length > 0) {
       const unitsWithCharts = listing.units.filter((unit) => unit.amiChart?.id);
-      const amiChartsRaw = await this.prisma.amiChart.findMany({
-        where: {
-          id: {
-            in: unitsWithCharts.map((unit) => unit.amiChart?.id),
-          },
-        },
-      });
+      // Skip the findMany when none of the units carry an amiChart (e.g.
+      // when called from a view that doesn't select amiChart). Otherwise
+      // we'd run an `in: []` query that downstream views weren't expecting.
+      const amiChartsRaw = unitsWithCharts.length
+        ? await this.prisma.amiChart.findMany({
+            where: {
+              id: {
+                in: unitsWithCharts.map((unit) => unit.amiChart?.id),
+              },
+            },
+          })
+        : [];
       const amiCharts = mapTo(AmiChart, amiChartsRaw);
       listing.unitsSummarized = summarizeUnits(listing, amiCharts);
     }
