@@ -162,6 +162,10 @@ const ApplicationSummary = () => {
               conductor.config,
               FeatureFlagEnum.enableReasonableAccommodations
             )}
+            enableMultiselectVoucherQuestion={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.enableMultiselectVoucherQuestion
+            )}
             swapCommunityTypeWithPrograms={isFeatureFlagOn(
               conductor.config,
               FeatureFlagEnum.swapCommunityTypeWithPrograms
