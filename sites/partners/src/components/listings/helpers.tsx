@@ -115,7 +115,7 @@ export function getValidFutureScheduledDate(
   if (scheduledPublishAt == null) return false
   const scheduledAt = dayjs.utc(scheduledPublishAt)
   if (!scheduledAt.isValid()) return false
-  if (dayjs().startOf("day").isBefore(scheduledAt.startOf("day"))) {
+  if (dayjs.utc().startOf("day").isBefore(scheduledAt.startOf("day"))) {
     return scheduledAt.format("MM/DD/YYYY")
   }
   return false

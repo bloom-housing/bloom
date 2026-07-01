@@ -1,5 +1,5 @@
 import React from "react"
-import { cleanup, screen } from "@testing-library/react"
+import { screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
@@ -8,8 +8,6 @@ import PublishListingDialog from "../../../../src/components/listings/PaperListi
 import { mockNextRouter, render } from "../../../testUtils"
 
 dayjs.extend(utc)
-
-afterEach(cleanup)
 
 describe("PublishListingDialog", () => {
   beforeAll(() => {
