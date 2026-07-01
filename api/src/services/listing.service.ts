@@ -124,8 +124,12 @@ selectViews.map = {
     select: {
       monthlyRent: true,
       unitTypes: {
-        select: { numBedrooms: true, name: true },
+        select: {
+          numBedrooms: true,
+          name: true,
+        },
       },
+      accessibilityPriorityType: true,
     },
   },
 };

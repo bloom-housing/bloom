@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import { SpokenLanguageEnum } from '../../src/enums/applications/spoken-language-enum';
 import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
 import { FeatureFlagEnum } from '../../src/enums/feature-flags/feature-flags-enum';
+import { amiChartFactory } from '../seed-helpers/ami-chart-factory';
 import { randomBoolean } from '../seed-helpers/boolean-generator';
 import { jurisdictionFactory } from '../seed-helpers/jurisdiction-factory';
 import { multiselectQuestionFactory } from '../seed-helpers/multiselect-question-factory';
@@ -1505,12 +1506,12 @@ export const realisticAddressesForActive = [
     county: 'San Flor',
   },
   {
-    street: '1120A Madera Avenue, Menlo Park, CA 94025',
+    street: '1120A Madera Avenue',
     city: 'Menlo Park',
     state: 'CA',
     zipCode: '94025',
-    latitude: 36.961738,
-    longitude: -120.064487,
+    latitude: 37.47197516388515,
+    longitude: -122.15722059781827,
     county: 'San Flor',
   },
   {
@@ -2608,6 +2609,15 @@ export const createBridgeBayJurisdictions = async (
     });
     otherJurisdictions.push(createdSubJurisdiction);
 
+    const amiChart = await prismaClient.amiChart.create({
+      data: amiChartFactory(
+        10,
+        createdSubJurisdiction.id,
+        null,
+        createdSubJurisdiction.name,
+      ),
+    });
+
     const msqData = msqV2
       ? {
           applicationSection:
@@ -2664,7 +2674,12 @@ export const createBridgeBayJurisdictions = async (
         };
       });
 
-    await seedListings(prismaClient, createdSubJurisdiction.id, listings);
+    await seedListings(
+      prismaClient,
+      createdSubJurisdiction.id,
+      listings,
+      amiChart,
+    );
   }
 
   // Add some listings with pending and closed status to the top level jurisdiction
