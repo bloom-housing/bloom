@@ -8,6 +8,7 @@ import { AppService } from '../services/app.service';
 import { AssetModule } from './asset.module';
 import { AuthModule } from './auth.module';
 import { CronJobModule } from './cron-job.module';
+import { ExternalListingModule } from './external-listing.module';
 import { FeatureFlagModule } from './feature-flag.module';
 import { JurisdictionModule } from './jurisdiction.module';
 import { ListingModule } from './listing.module';
@@ -29,26 +30,24 @@ import { UserModule } from './user.module';
 
 @Module({
   imports: [
-    ListingModule,
+    AgencyModule,
     AmiChartModule,
-    ReservedCommunityTypeModule,
-    UnitTypeModule,
-    UnitRentTypeModule,
-    JurisdictionModule,
-    MultiselectQuestionModule,
+    ApplicationFlaggedSetModule,
     ApplicationModule,
     AssetModule,
-    UserModule,
-    PrismaModule,
     AuthModule,
-    ApplicationFlaggedSetModule,
-    MapLayerModule,
-    ScriptRunnerModule,
-    LotteryModule,
-    FeatureFlagModule,
     CronJobModule,
+    ExternalListingModule,
+    FeatureFlagModule,
+    JurisdictionModule,
+    ListingModule,
+    LotteryModule,
+    MapLayerModule,
+    MultiselectQuestionModule,
+    PrismaModule,
     PropertyModule,
-    AgencyModule,
+    ReservedCommunityTypeModule,
+    ScriptRunnerModule,
     SnapshotCreateModule,
     ThrottlerModule.forRoot([
       {
@@ -56,6 +55,9 @@ import { UserModule } from './user.module';
         limit: Number(process.env.THROTTLE_LIMIT),
       },
     ]),
+    UnitTypeModule,
+    UnitRentTypeModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [
@@ -68,26 +70,27 @@ import { UserModule } from './user.module';
     },
   ],
   exports: [
-    PropertyModule,
     AgencyModule,
-    ListingModule,
     AmiChartModule,
-    ReservedCommunityTypeModule,
-    UnitTypeModule,
-    UnitRentTypeModule,
-    JurisdictionModule,
-    MultiselectQuestionModule,
+    ApplicationFlaggedSetModule,
     ApplicationModule,
     AssetModule,
-    UserModule,
-    PrismaModule,
     AuthModule,
-    ApplicationFlaggedSetModule,
-    MapLayerModule,
-    ScriptRunnerModule,
-    LotteryModule,
+    ExternalListingModule,
     FeatureFlagModule,
+    JurisdictionModule,
+    ListingModule,
+    LotteryModule,
+    MapLayerModule,
+    MultiselectQuestionModule,
+    PrismaModule,
+    PropertyModule,
+    ReservedCommunityTypeModule,
+    ScriptRunnerModule,
     SnapshotCreateModule,
+    UnitTypeModule,
+    UnitRentTypeModule,
+    UserModule,
   ],
 })
 export class AppModule {}
