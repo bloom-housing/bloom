@@ -15,6 +15,7 @@ locals {
     SHOW_PWDLESS                  = "FALSE"
     SHOW_NEW_SEEDS_DESIGNS        = "FALSE"
     OTEL_EXPORTER_OTLP_ENDPOINT   = "http://127.0.0.1:4317"
+    NON_PROD_BANNER               = "FALSE"
   }
 }
 resource "aws_ecs_task_definition" "bloom_site_public" {
