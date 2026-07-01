@@ -77,6 +77,7 @@
   "account.settings.alerts.passwordSuccess": "密碼更新成功",
   "account.settings.confirmNewPassword": "確認新密碼",
   "account.settings.currentPassword": "目前密碼",
+  "account.settings.disclaimer": "您可以随时联系布卢明顿，要求删除您的帐户信息和相关数据。为此，请联系 %{contactEmail}。",
   "account.settings.myNotification": "我的通知",
   "account.settings.myProfile": "我的个人资料",
   "account.settings.newPassword": "新密碼",

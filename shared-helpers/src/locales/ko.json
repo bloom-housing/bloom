@@ -77,6 +77,7 @@
   "account.settings.alerts.passwordSuccess": "비밀번호 업데이트가 완료되었습니다.",
   "account.settings.confirmNewPassword": "새 비밀번호를 확인하세요",
   "account.settings.currentPassword": "현재 비밀번호",
+  "account.settings.disclaimer": "계정 정보 및 관련 데이터 삭제를 원하시면 언제든지 블루밍턴에 문의하실 수 있습니다. 삭제를 원하시면 %{contactEmail}로 연락해 주세요.",
   "account.settings.myNotification": "내 알림",
   "account.settings.myProfile": "내 프로필",
   "account.settings.newPassword": "새 비밀번호",

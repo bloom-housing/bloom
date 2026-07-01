@@ -16,3 +16,19 @@
     max-width: var(--seeds-width-lg);
   }
 }
+
+.account-card-settings-section {
+  --card-content-padding-inline: var(--seeds-s12);
+  @media (max-width: theme("screens.sm")) {
+    --card-content-padding-inline: var(--seeds-s4);
+    --card-content-padding-block: var(--seeds-s6);
+  }
+  a:not(:global(.seeds-button)) {
+    text-decoration: underline;
+  }
+}
+
+.account-settings-disclaimer {
+  font-size: var(--seeds-font-size-xs);
+  color: var(--seeds-text-color-light);
+}
