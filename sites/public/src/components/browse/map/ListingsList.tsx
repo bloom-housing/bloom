@@ -69,6 +69,7 @@ const ListingsList = (props: ListingsListProps) => {
             title={t(`listingResource.additionalCard${index}.title`)}
             variant="block"
             headingPriority={3}
+            headingClass={styles["listing-resource-header"]}
             iconClass="card-icon"
             subtitle={tIfExists(`listingResource.additionalCard${index}.subtext`)}
           >
@@ -97,6 +98,7 @@ const ListingsList = (props: ListingsListProps) => {
             title={t("welcome.signUp")}
             variant="block"
             headingPriority={3}
+            headingClass={styles["listing-resource-header"]}
             iconClass="card-icon"
           >
             <Card.Section>
@@ -121,6 +123,7 @@ const ListingsList = (props: ListingsListProps) => {
             title={t("welcome.seeMoreOpportunitiesTruncated")}
             variant="block"
             headingPriority={3}
+            headingClass={styles["listing-resource-header"]}
             iconClass="card-icon"
           >
             <Card.Section>
@@ -137,6 +140,7 @@ const ListingsList = (props: ListingsListProps) => {
             title={t("resources.additionalResourcesTitle")}
             variant="block"
             headingPriority={3}
+            headingClass={styles["listing-resource-header"]}
             iconClass="card-icon"
           >
             <Card.Section>
