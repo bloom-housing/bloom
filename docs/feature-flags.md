@@ -68,6 +68,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableMarketingFlyer](./feature-flags/enableMarketingFlyer.md) | When true, the 'marketing flyer' sub-section is displayed in listing creation/edit and the public listing view |
 | [enableMarketingStatus](./feature-flags/enableMarketingStatus.md) | When true, the 'marketing status' sub-section is displayed in listing creation/edit and the public listing view |
 | [enableMarketingStatusMonths](./feature-flags/enableMarketingStatusMonths.md) | When true, the 'marketing status' sub-section uses months instead of seasons (functions only if enableMarketingStatus is also true) |
+| [enableMultiselectVoucherQuestion](./feature-flags/enableMultiselectVoucherQuestion.md) | When true, the vouchers question on the application form becomes a multi-select checkbox experience with Section 8, rental assistance, and none of the above as options |
 | [enableNeighborhoodAmenities](./feature-flags/enableNeighborhoodAmenities.md) | When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view |
 | [enableNeighborhoodAmenitiesDropdown](./feature-flags/enableNeighborhoodAmenitiesDropdown.md) | When true, neighborhood amenities inputs render as dropdowns with distance options instead of textareas |
 | [enableNonRegulatedListings](./feature-flags/enableNonRegulatedListings.md) | When true, non-regulated listings are displayed in listing creation/edit and public listing view |
@@ -83,7 +84,6 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableRegions](./feature-flags/enableRegions.md) | When true, the region can be defined for the building address |
 | [enableResources](./feature-flags/enableResources.md) | When true, the public site displays links to resources on various pages |
 | [enableSection8Question](./feature-flags/enableSection8Question.md) | When true, the Section 8 listing data will be visible |
-| [enableMultiselectVoucherQuestion](./feature-flags/enableMultiselectVoucherQuestion.md) | When true, the vouchers question on the application form becomes a multi-select checkbox experience with Section 8, rental assistance, and none of the above as options |
 | [enableSexualOrientationQuestion](./feature-flags/enableSexualOrientationQuestion.md) | When true, the sexual orientation question is displayed in the public and partner application demographics section |
 | [enableSingleUseCode](./feature-flags/enableSingleUseCode.md) | When true, the backend allows for logging into this jurisdiction using the single use code flow |
 | [enableSmokingPolicyRadio](./feature-flags/enableSmokingPolicyRadio.md) | When true, the listing 'Smoking policy' field is a radio group |

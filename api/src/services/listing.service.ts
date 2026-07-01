@@ -160,8 +160,9 @@ includeViews.base = {
   listingNeighborhoodAmenities: true,
   units: {
     include: {
-      unitTypes: true,
       unitAmiChartOverrides: true,
+      unitRentTypes: true,
+      unitTypes: true,
     },
   },
   unitGroups: {
