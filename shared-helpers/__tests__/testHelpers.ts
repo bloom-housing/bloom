@@ -196,7 +196,7 @@ export const application: Application = {
   householdExpectingChanges: true,
   householdStudent: false,
   reasonableAccommodations: "Wheelchair-accessible unit entrance",
-  incomeVouchers: true,
+  incomeVouchers: ["incomeVoucher"],
   income: "40000.00",
   incomePeriod: IncomePeriodEnum.perYear,
   status: ApplicationStatusEnum.submitted,
