@@ -129,7 +129,7 @@ export const MapListingCard = ({
                 {unitsPreviewTable}
               </div>
             </div>
-            <div className={styles["image"]}>
+            <div className={`${styles["image"]} ${!forceMobileView ? styles["image-side"] : ""}`}>
               {forceMobileView && onClose && (
                 <button
                   type="button"
