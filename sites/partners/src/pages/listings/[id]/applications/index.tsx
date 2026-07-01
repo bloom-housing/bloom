@@ -26,7 +26,7 @@ import { NavigationHeader } from "../../../../components/shared/NavigationHeader
 import ListingGuard from "../../../../components/shared/ListingGuard"
 import { StatusBar } from "../../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../../../../components/listings/helpers"
-import BulkUpdateModal from "../../../../components/applications/BulkUpdateModal"
+import BulkUpdateDrawer from "../../../../components/applications/BulkUpdateDrawer"
 
 const ApplicationsList = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -344,7 +344,7 @@ const ApplicationsList = () => {
           </Dialog.Footer>
         </Dialog>
 
-        <BulkUpdateModal
+        <BulkUpdateDrawer
           isOpen={bulkUpdateModalOpen}
           onClose={() => setBulkUpdateModalOpen(false)}
         />
