@@ -2371,8 +2371,9 @@ export class ListingService implements OnModuleInit {
         : null;
       // test if not publishing or unpublishing listing and scheduledPublishAt is set
       if (
-        incomingDto.status === storedListing.status &&
-        incomingDto.status !== ListingsStatusEnum.active &&
+        storedListing.status !== ListingsStatusEnum.active &&
+        (incomingDto.status === storedListing.status ||
+          incomingDto.status === ListingsStatusEnum.pendingReview) &&
         incomingDto.scheduledPublishAt
       ) {
         this.checkScheduledDateIsInFuture(
