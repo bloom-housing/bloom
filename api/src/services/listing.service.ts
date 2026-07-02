@@ -242,9 +242,9 @@ includeViews.full = {
 
 const LISTING_CRON_JOB_NAME = 'LISTING_CRON_JOB';
 const LISTING_SCHEDULED_PUBLISH_CRON_JOB_NAME =
-  'LISTING_SCHEDULED_PUBLISH_CRON_STRING';
+  'LISTING_SCHEDULED_PUBLISH_CRON_JOB';
 const LISTING_OPEN_DATE_NOTIFICATION_CRON_JOB_NAME =
-  'LISTING_OPEN_DATE_NOTIFICATION_CRON_STRING';
+  'LISTING_OPEN_DATE_NOTIFICATION_CRON_JOB';
 /*
   this is the service for listings
   it handles all the backend's business logic for reading in listing(s)
@@ -2389,9 +2389,10 @@ export class ListingService implements OnModuleInit {
       }
 
       if (incomingDto.scheduledApplicationOpenAt) {
-        this.normalizeScheduledApplicationOpenAt(
-          incomingDto.scheduledApplicationOpenAt,
-        );
+        incomingDto.scheduledApplicationOpenAt =
+          this.normalizeScheduledApplicationOpenAt(
+            incomingDto.scheduledApplicationOpenAt,
+          );
         this.checkScheduledDateIsInFuture(
           incomingDto.scheduledApplicationOpenAt,
           'scheduledApplicationOpenAt',
@@ -3113,6 +3114,29 @@ export class ListingService implements OnModuleInit {
     listing: Listing,
     variant: ListingNotificationVariant = 'standard',
   ): Promise<void> {
+    const jurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        id: true,
+        featureFlags: true,
+        publicUrl: true,
+      },
+      where: {
+        id: listing.jurisdictions.id,
+      },
+    });
+
+    if (
+      !doJurisdictionHaveFeatureFlagSet(
+        jurisdiction as Jurisdiction,
+        FeatureFlagEnum.enableCustomListingNotifications,
+      )
+    ) {
+      this.logger.log(
+        `Skipping publish notification for listing ${listing.id}: enableCustomListingNotifications flag is off for jurisdiction ${jurisdiction?.id}`,
+      );
+      return;
+    }
+
     const priorityTypes = Array.from(
       new Set(
         (listing.units || [])
@@ -3198,16 +3222,6 @@ export class ListingService implements OnModuleInit {
         ...emailByLanguage[LanguagesEnum.en],
         ...noLanguageIndicated,
       ];
-
-    const jurisdiction = await this.prisma.jurisdictions.findUnique({
-      select: {
-        id: true,
-        publicUrl: true,
-      },
-      where: {
-        id: listing.jurisdictions.id,
-      },
-    });
 
     await this.emailService.listingPublishNotification(
       { id: jurisdiction.id },
@@ -3673,30 +3687,32 @@ export class ListingService implements OnModuleInit {
       previousRun?.lastRunDate ?? dayjs(now).subtract(1, 'day').toDate();
 
     const listings = await this.prisma.listings.findMany({
-      select: { id: true, publishedAt: true, scheduledApplicationOpenAt: true },
+      select: { id: true },
       where: {
         status: ListingsStatusEnum.active,
         AND: [
           { scheduledApplicationOpenAt: { not: null } },
           { scheduledApplicationOpenAt: { gt: windowStart } },
           { scheduledApplicationOpenAt: { lte: now } },
+          {
+            OR: [
+              { publishedAt: null },
+              {
+                publishedAt: {
+                  lt: this.prisma.listings.fields.scheduledApplicationOpenAt,
+                },
+              },
+            ],
+          },
         ],
       },
     });
 
-    // listings published after their open date already received the standard
-    // email from the publish path
-    const toNotify = listings.filter(
-      (listing) =>
-        !listing.publishedAt ||
-        listing.publishedAt < listing.scheduledApplicationOpenAt,
-    );
-
     this.logger.warn(
-      `${logName} found ${toNotify.length} listing(s) with applications newly open`,
+      `${logName} found ${listings.length} listing(s) with applications newly open`,
     );
 
-    for (const { id } of toNotify) {
+    for (const { id } of listings) {
       try {
         const listing = await this.findOne(id);
         await this.sendListingPublishNotification(listing, 'standard');

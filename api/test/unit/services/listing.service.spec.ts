@@ -4844,6 +4844,7 @@ describe('Testing listing service', () => {
 
       prisma.listings.create = jest.fn().mockResolvedValue({
         id: 'example id',
+        jurisdictions: { id: 'jurisdiction-id' },
         listingMultiselectQuestions: [
           {
             id: randomUUID(),
@@ -7590,7 +7591,7 @@ describe('Testing listing service', () => {
       expect(prisma.cronJob.findFirst).toHaveBeenCalled();
       expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
         where: {
-          name: 'LISTING_SCHEDULED_PUBLISH_CRON_STRING',
+          name: 'LISTING_SCHEDULED_PUBLISH_CRON_JOB',
         },
       });
       expect(prisma.cronJob.update).toHaveBeenCalled();
@@ -7665,7 +7666,6 @@ describe('Testing listing service', () => {
   describe('Test sendApplicationOpenNotificationsCronJob', () => {
     it('should send the standard notification for listings whose open date was reached', async () => {
       const lastRunDate = new Date(2026, 5, 10, 9);
-      const openAt = new Date(2026, 5, 11, 9);
       prisma.cronJob.findFirst = jest
         .fn()
         .mockResolvedValue({ id: randomUUID(), lastRunDate });
@@ -7673,8 +7673,6 @@ describe('Testing listing service', () => {
       prisma.listings.findMany = jest.fn().mockResolvedValue([
         {
           id: 'open-id-1',
-          publishedAt: new Date(2026, 5, 1),
-          scheduledApplicationOpenAt: openAt,
         },
       ]);
       prisma.listings.update = jest.fn();
@@ -7691,17 +7689,23 @@ describe('Testing listing service', () => {
 
       expect(result).toEqual({ success: true });
       expect(prisma.listings.findMany).toHaveBeenCalledWith({
-        select: {
-          id: true,
-          publishedAt: true,
-          scheduledApplicationOpenAt: true,
-        },
+        select: { id: true },
         where: {
           status: ListingsStatusEnum.active,
           AND: [
             { scheduledApplicationOpenAt: { not: null } },
             { scheduledApplicationOpenAt: { gt: lastRunDate } },
             { scheduledApplicationOpenAt: { lte: expect.any(Date) } },
+            {
+              OR: [
+                { publishedAt: null },
+                {
+                  publishedAt: {
+                    lt: prisma.listings.fields.scheduledApplicationOpenAt,
+                  },
+                },
+              ],
+            },
           ],
         },
       });
@@ -7714,7 +7718,7 @@ describe('Testing listing service', () => {
       expect(prisma.listings.updateMany).not.toHaveBeenCalled();
       expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
         where: {
-          name: 'LISTING_OPEN_DATE_NOTIFICATION_CRON_STRING',
+          name: 'LISTING_OPEN_DATE_NOTIFICATION_CRON_JOB',
         },
       });
       expect(prisma.cronJob.update).toHaveBeenCalled();
@@ -7724,18 +7728,11 @@ describe('Testing listing service', () => {
     });
 
     it('should skip listings published after their open date', async () => {
-      const openAt = new Date(2026, 5, 11, 9);
       prisma.cronJob.findFirst = jest
         .fn()
         .mockResolvedValue({ id: randomUUID(), lastRunDate: new Date() });
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
-      prisma.listings.findMany = jest.fn().mockResolvedValue([
-        {
-          id: 'published-after-open-id',
-          publishedAt: new Date(2026, 5, 12),
-          scheduledApplicationOpenAt: openAt,
-        },
-      ]);
+      prisma.listings.findMany = jest.fn().mockResolvedValue([]);
       const sendNotificationSpy = jest
         .spyOn(service, 'sendListingPublishNotification')
         .mockResolvedValue(undefined);
@@ -7760,17 +7757,23 @@ describe('Testing listing service', () => {
 
       expect(result).toEqual({ success: true });
       expect(prisma.listings.findMany).toHaveBeenCalledWith({
-        select: {
-          id: true,
-          publishedAt: true,
-          scheduledApplicationOpenAt: true,
-        },
+        select: { id: true },
         where: {
           status: ListingsStatusEnum.active,
           AND: [
             { scheduledApplicationOpenAt: { not: null } },
             { scheduledApplicationOpenAt: { gt: expect.any(Date) } },
             { scheduledApplicationOpenAt: { lte: expect.any(Date) } },
+            {
+              OR: [
+                { publishedAt: null },
+                {
+                  publishedAt: {
+                    lt: prisma.listings.fields.scheduledApplicationOpenAt,
+                  },
+                },
+              ],
+            },
           ],
         },
       });
@@ -7795,9 +7798,16 @@ describe('Testing listing service', () => {
         .mockResolvedValue([
           { email: 'user@example.com', language: LanguagesEnum.en },
         ]);
-      prisma.jurisdictions.findUnique = jest
-        .fn()
-        .mockResolvedValue({ id: 'juris-id', publicUrl: 'https://localhost' });
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'juris-id',
+        publicUrl: 'https://localhost',
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableCustomListingNotifications,
+            active: true,
+          },
+        ],
+      });
     });
 
     it('should forward the standard variant by default', async () => {
@@ -7825,6 +7835,18 @@ describe('Testing listing service', () => {
         expect.objectContaining({ en: ['user@example.com'] }),
         'comingSoon',
       );
+    });
+
+    it('should skip sending when the feature flag is off for the jurisdiction', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'juris-id',
+        publicUrl: 'https://localhost',
+        featureFlags: [],
+      });
+
+      await service.sendListingPublishNotification(publishedListing);
+
+      expect(listingPublishNotificationMock).not.toHaveBeenCalled();
     });
   });
 
