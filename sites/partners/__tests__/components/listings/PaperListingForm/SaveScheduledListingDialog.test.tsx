@@ -1,6 +1,5 @@
 import React from "react"
 import { screen } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
 import SaveScheduledListingDialog from "../../../../src/components/listings/PaperListingForm/dialogs/SaveScheduledListingDialog"
 import { mockNextRouter, render } from "../../../testUtils"
 
