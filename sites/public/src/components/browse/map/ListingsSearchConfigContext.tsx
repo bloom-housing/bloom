@@ -25,6 +25,7 @@ export type ListingsSearchConfig = {
   multiselectData: MultiselectQuestion[]
   regions?: string[]
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
+  subJurisdictions?: IdDTO[]
 }
 
 const ListingsSearchConfigContext = createContext<ListingsSearchConfig | null>(null)

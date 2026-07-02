@@ -952,21 +952,6 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
-        if (filter[ListingFilterKeys.counties]) {
-          const builtFilter = buildFilter({
-            $comparison: filter.$comparison,
-            $include_nulls: false,
-            value: filter[ListingFilterKeys.counties],
-            key: ListingFilterKeys.counties,
-          });
-          filters.push({
-            OR: builtFilter.map((filt) => ({
-              listingsBuildingAddress: {
-                county: filt,
-              },
-            })),
-          });
-        }
         if (filter[ListingFilterKeys.homeTypes]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,

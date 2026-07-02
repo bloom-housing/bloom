@@ -470,6 +470,8 @@ export const searchMapMarkers = async (
 ): Promise<ListingMapMarker[]> => {
   const filter = qb.getFilterParams().concat(additionalFilters)
 
+  console.log("filter = ", filter)
+
   if (jurisdictionIds.length > 0) {
     filter.push({
       $comparison: EnumListingFilterParamsComparison.IN,

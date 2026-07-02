@@ -1432,40 +1432,6 @@ describe('Listing Controller Tests', () => {
       );
       expect(foundId).toEqual(true);
     });
-    it('should return a listing based on filter counties', async () => {
-      const buildingAddress = await prisma.address.findFirst({
-        where: {
-          id: listing2WithUnits.buildingAddressId,
-        },
-      });
-      const query: ListingsQueryBody = {
-        page: 1,
-        view: ListingViews.base,
-        filter: [
-          {
-            $comparison: Compare.IN,
-            counties: [buildingAddress.county],
-          },
-          {
-            $comparison: Compare['='],
-            jurisdiction: jurisdictionB.id,
-          },
-        ],
-      };
-
-      const res = await request(app.getHttpServer())
-        .post(`/listings/list`)
-        .send(query)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .expect(201);
-
-      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
-
-      const foundId = res.body.items.some(
-        (elem) => elem.id === listing2WithUnits.id,
-      );
-      expect(foundId).toEqual(true);
-    });
     it('should return a listing based on filter homeTypes', async () => {
       const query: ListingsQueryBody = {
         page: 1,

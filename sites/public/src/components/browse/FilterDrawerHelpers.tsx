@@ -17,6 +17,7 @@ import { Field, t } from "@bloom-housing/ui-components"
 import { encode, ParsedUrlQuery } from "querystring"
 import { isTrue } from "../../lib/helpers"
 import styles from "./FilterDrawer.module.scss"
+import Markdown from "markdown-to-jsx"
 
 type BooleanOrBooleanString = boolean | "true" | "false"
 
@@ -39,6 +40,7 @@ export interface FilterData {
   regions?: { [K in RegionEnum]: BooleanOrBooleanString }
   configurableRegions?: string
   bathrooms?: { [K in "1" | "2" | "3" | "4"]?: BooleanOrBooleanString }
+  jurisdictions?: { [K in string]?: BooleanOrBooleanString }
   section8Acceptance?: BooleanOrBooleanString
   reservedCommunityTypes?: { [K in ReservedCommunityTypes]?: BooleanOrBooleanString }
   multiselectQuestions?: Record<string, BooleanOrBooleanString>
@@ -58,6 +60,7 @@ export interface CheckboxGroupProps {
   fields: FilterField[]
   register: UseFormMethods["register"]
   customColumnNumber?: number
+  optionalSubNote?: string
 }
 
 export interface RentSectionProps {
@@ -85,7 +88,6 @@ export interface AccessibilitySectionProps {
 const arrayFilters: ListingFilterKeys[] = [
   ListingFilterKeys.bedroomTypes,
   ListingFilterKeys.bathrooms,
-  ListingFilterKeys.counties,
   ListingFilterKeys.homeTypes,
   ListingFilterKeys.listingFeatures,
   ListingFilterKeys.regions,
@@ -225,6 +227,11 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
           })}
         </Grid.Row>
       </Grid>
+      {props.optionalSubNote && (
+        <div className={styles["filter-sub-note"]}>
+          <Markdown>{props.optionalSubNote}</Markdown>
+        </div>
+      )}
     </fieldset>
   )
 }
@@ -455,6 +462,21 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
 
       filter[ListingFilterKeys.name] = userSelections
       filters.push(filter)
+    } else if (filterType === ListingFilterKeys.jurisdictions) {
+      const jurisdictionIds = Object.entries(userSelections)
+        .map(([key, value]) => {
+          return value ? key : null
+        })
+        .filter((id) => id)
+
+      // jurisdictions (counties) filter is an array but by default it's filtered on all counties so
+      // don't need to add the filter unless at least one county is deselected
+      if (jurisdictionIds.length && jurisdictionIds.length !== Object.keys(userSelections).length) {
+        filters.push({
+          $comparison: EnumListingFilterParamsComparison["IN"],
+          jurisdictions: jurisdictionIds,
+        })
+      }
     }
   })
 
