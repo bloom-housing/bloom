@@ -1,9 +1,7 @@
 import React from "react"
-import dayjs from "dayjs"
-import utc from "dayjs/plugin/utc"
-dayjs.extend(utc)
 import { t } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
+import { getValidFutureScheduledDate } from "../../helpers"
 
 type AdminListingApprovalDialogProps = {
   isOpen: boolean
@@ -19,22 +17,17 @@ const AdminListingApprovalDialog = ({
   scheduledPublishAt,
 }: AdminListingApprovalDialogProps) => {
   const getAdminListingApprovalModalBody = (): string => {
-    const hasValidScheduledAt =
-      scheduledPublishAt != null && dayjs.utc(scheduledPublishAt).isValid()
+    const scheduledAtDate = getValidFutureScheduledDate(scheduledPublishAt)
 
-    if (!hasValidScheduledAt) {
-      return t("listings.approval.adminApproveNoScheduledDate")
+    if (scheduledAtDate) {
+      return t("listings.approval.adminApproveScheduledFuture", { date: scheduledAtDate })
     }
 
-    const scheduledAtDate = dayjs.utc(scheduledPublishAt).format("MM/DD/YYYY")
-
-    if (dayjs().startOf("day").isBefore(dayjs(scheduledAtDate).startOf("day"))) {
-      return t("listings.approval.adminApproveScheduledFuture", {
-        date: scheduledAtDate,
-      })
+    if (scheduledPublishAt != null) {
+      return t("listings.approval.adminApproveScheduledPast")
     }
 
-    return t("listings.approval.adminApproveScheduledPast")
+    return t("listings.approval.adminApproveNoScheduledDate")
   }
 
   return (
