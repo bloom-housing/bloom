@@ -46,13 +46,13 @@ const BulkUpdateDrawer = ({ isOpen, onClose }: BulkUpdateDrawerProps) => {
             <Heading priority={3} size="lg" className="seeds-m-be-header">
               {t("applications.bulkUpdateStep3Title")}
             </Heading>
+            <p className="seeds-m-be-content">{t("applications.bulkUpdateStep3Body")}</p>
             <Dropzone
               id="bulk-update-upload"
               uploader={csvUploader}
               label={t("applications.bulkUpdateStep3DropzoneLabel")}
               accept=".csv"
             />
-            <p>{t("applications.bulkUpdateStep3Body")}</p>
           </Card.Section>
         </Card>
       </Drawer.Content>
