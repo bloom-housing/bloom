@@ -7323,6 +7323,40 @@ describe('Testing listing service', () => {
           ),
         ).resolves.not.toThrow();
       });
+
+      it('should normalize and validate scheduledApplicationOpenAt when enableAutoOpenDate is enabled without autopublish', async () => {
+        jest
+          .useFakeTimers()
+          .setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
+        prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+          id: 'jurisdiction-id',
+          featureFlags: [
+            { name: FeatureFlagEnum.enableAutoOpenDate, active: true },
+          ],
+          listingApprovalPermissions: [],
+        });
+        mockStoredListing(ListingsStatusEnum.pending);
+        mockListingUpdate(ListingsStatusEnum.pending);
+
+        const scheduledApplicationOpenAt = new Date('2026-05-15T14:30:00.000Z');
+
+        await expect(
+          service.update(
+            {
+              ...baseDto(ListingsStatusEnum.pending, futureDate),
+              scheduledApplicationOpenAt,
+            },
+            user,
+          ),
+        ).resolves.not.toThrow();
+
+        const updateMock = prisma.listings.update as jest.Mock;
+        const updateCall = updateMock.mock.calls[0][0];
+        expect(updateCall.data.scheduledApplicationOpenAt.toISOString()).toBe(
+          '2026-05-15T16:00:00.000Z',
+        );
+        jest.useRealTimers();
+      });
     });
   });
 
@@ -8269,6 +8303,14 @@ describe('Testing listing service', () => {
       const normalized =
         service.normalizeScheduledApplicationOpenAt(nonMidnight);
       expect(normalized.toISOString()).toBe('2026-05-15T16:00:00.000Z');
+    });
+
+    it('should normalize to 9:00 AM in the configured app timezone', () => {
+      process.env.TIME_ZONE = 'America/New_York';
+      const utcMidnight = new Date('2026-01-15T00:00:00.000Z');
+      const normalized =
+        service.normalizeScheduledApplicationOpenAt(utcMidnight);
+      expect(normalized.toISOString()).toBe('2026-01-15T14:00:00.000Z');
     });
   });
 });

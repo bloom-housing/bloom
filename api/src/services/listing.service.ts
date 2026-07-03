@@ -2397,20 +2397,21 @@ export class ListingService implements OnModuleInit {
           'scheduledPublishAt',
         );
       }
+    }
 
-      if (enableAutoOpenDate && incomingDto.scheduledApplicationOpenAt) {
+    if (enableAutoOpenDate && incomingDto.scheduledApplicationOpenAt) {
+      incomingDto.scheduledApplicationOpenAt =
         this.normalizeScheduledApplicationOpenAt(
           incomingDto.scheduledApplicationOpenAt,
         );
-        this.checkScheduledDateIsInFuture(
-          incomingDto.scheduledApplicationOpenAt,
-          'scheduledApplicationOpenAt',
-        );
-        this.checkScheduledApplicationOpenAtIsAfterPublish(
-          incomingDto.scheduledApplicationOpenAt,
-          incomingDto.scheduledPublishAt,
-        );
-      }
+      this.checkScheduledDateIsInFuture(
+        incomingDto.scheduledApplicationOpenAt,
+        'scheduledApplicationOpenAt',
+      );
+      this.checkScheduledApplicationOpenAtIsAfterPublish(
+        incomingDto.scheduledApplicationOpenAt,
+        incomingDto.scheduledPublishAt,
+      );
     }
 
     if (
