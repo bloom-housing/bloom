@@ -31,12 +31,13 @@ export default class DatesFormatter extends Formatter {
 
     this.data.marketingType = MarketingTypeEnum[this.data.marketingType]
 
-    this.data.scheduledPublishAt = createDate(this.data.scheduledListingPublishDateField, true)
+    this.data.scheduledPublishAt = this.metadata.enableAutopublish
+      ? createDate(this.data.scheduledListingPublishDateField, true)
+      : null
 
-    this.data.scheduledApplicationOpenAt = createDate(
-      this.data.scheduledApplicationOpenDateField,
-      true
-    )
+    this.data.scheduledApplicationOpenAt = this.metadata.enableAutoOpenDate
+      ? createDate(this.data.scheduledApplicationOpenDateField, true)
+      : null
 
     if (this.data.marketingType === MarketingTypeEnum.comingSoon) {
       this.data.marketingYear = this.data.marketingYear ? Number(this.data.marketingYear) : null

@@ -1504,8 +1504,16 @@ export class ListingService implements OnModuleInit {
       FeatureFlagEnum.enableAutopublish,
     );
 
+    const enableAutoOpenDate = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as unknown as Jurisdiction,
+      FeatureFlagEnum.enableAutoOpenDate,
+    );
+
     if (!enableAutopublish) {
       dto.scheduledPublishAt = null;
+    }
+
+    if (!enableAutoOpenDate) {
       dto.scheduledApplicationOpenAt = null;
     }
 
@@ -1519,7 +1527,7 @@ export class ListingService implements OnModuleInit {
       );
     }
 
-    if (enableAutopublish && dto.scheduledApplicationOpenAt) {
+    if (enableAutoOpenDate && dto.scheduledApplicationOpenAt) {
       dto.scheduledApplicationOpenAt = this.normalizeScheduledApplicationOpenAt(
         dto.scheduledApplicationOpenAt,
       );
@@ -2356,8 +2364,16 @@ export class ListingService implements OnModuleInit {
       FeatureFlagEnum.enableAutopublish,
     );
 
+    const enableAutoOpenDate = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableAutoOpenDate,
+    );
+
     if (!enableAutopublish) {
       incomingDto.scheduledPublishAt = null;
+    }
+
+    if (!enableAutoOpenDate) {
       incomingDto.scheduledApplicationOpenAt = null;
     }
 
@@ -2382,7 +2398,7 @@ export class ListingService implements OnModuleInit {
         );
       }
 
-      if (incomingDto.scheduledApplicationOpenAt) {
+      if (enableAutoOpenDate && incomingDto.scheduledApplicationOpenAt) {
         this.normalizeScheduledApplicationOpenAt(
           incomingDto.scheduledApplicationOpenAt,
         );

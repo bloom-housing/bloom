@@ -5882,6 +5882,35 @@ describe('Testing listing service', () => {
         ).resolves.not.toThrow();
         jest.useRealTimers();
       });
+
+      it('should ignore scheduledApplicationOpenAt when enableAutoOpenDate is disabled', async () => {
+        mockJurisdictionWithAutopublish();
+        prisma.listings.create = jest.fn().mockResolvedValue({
+          id: 'example id',
+          name: 'example name',
+        });
+        prisma.listingSnapshot.create = jest
+          .fn()
+          .mockResolvedValue({ id: 'snapshot-id' });
+
+        await expect(
+          service.create(
+            {
+              name: 'listing name',
+              depositMin: '5',
+              assets: [],
+              jurisdictions: { id: randomUUID() },
+              status: ListingsStatusEnum.pending,
+              displayWaitlistSize: false,
+              unitsSummary: null,
+              listingEvents: [],
+              isVerified: true,
+              scheduledApplicationOpenAt: new Date('2020-01-01T00:00:00.000Z'),
+            } as ListingCreate,
+            user,
+          ),
+        ).resolves.not.toThrow();
+      });
     });
   });
 
@@ -7276,6 +7305,22 @@ describe('Testing listing service', () => {
 
         await expect(
           service.update(baseDto(ListingsStatusEnum.pending, futureDate), user),
+        ).resolves.not.toThrow();
+      });
+
+      it('should ignore scheduledApplicationOpenAt on update when enableAutoOpenDate is disabled', async () => {
+        mockStoredListing(ListingsStatusEnum.pending);
+        mockJurisdictionWithAutopublish();
+        mockListingUpdate(ListingsStatusEnum.pending);
+
+        await expect(
+          service.update(
+            {
+              ...baseDto(ListingsStatusEnum.pending, futureDate),
+              scheduledApplicationOpenAt: pastDate,
+            },
+            user,
+          ),
         ).resolves.not.toThrow();
       });
     });
