@@ -563,6 +563,25 @@ describe("helpers", () => {
     )
     expect(view.getByText("10:30AM", { exact: false })).toBeDefined()
   })
+  it("should show short applications open copy in the status bar for future scheduled open date", () => {
+    const view = render(
+      getListingStatusMessage(
+        {
+          ...listing,
+          status: ListingsStatusEnum.active,
+          applicationDueDate: null,
+          scheduledApplicationOpenAt: new Date("2030-07-15T16:00:00.000Z"),
+        },
+        jurisdiction,
+        null,
+        false,
+        false
+      )
+    )
+    expect(view.getByText(/Applications open:/)).toBeDefined()
+    expect(view.getByText(/9:00AM/)).toBeDefined()
+    expect(view.queryByText(/Applications can be submitted starting on/)).toBeNull()
+  })
   it("should return correctly for open listing without date", () => {
     const view = render(
       getListingStatusMessage(

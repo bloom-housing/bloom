@@ -236,7 +236,8 @@ export const getListingStatusMessageContent = (
   marketingMonth: MonthEnum,
   marketingYear: number,
   hideTime?: boolean,
-  scheduledApplicationOpenAt?: Date
+  scheduledApplicationOpenAt?: Date,
+  useShortScheduledOpenCopy?: boolean
 ) => {
   let content = ""
   let formattedDate = ""
@@ -244,9 +245,11 @@ export const getListingStatusMessageContent = (
   if (status !== ListingsStatusEnum.closed) {
     if (scheduledApplicationOpenAt && dayjs() < dayjs(scheduledApplicationOpenAt)) {
       formattedDate = formatDateInConfiguredTimeZone(scheduledApplicationOpenAt, false)
-      content = t("listings.scheduledApplicationOpen", {
-        openDate: formattedDate,
-      })
+      content = useShortScheduledOpenCopy
+        ? `${t("listings.applicationOpenPeriod")}: ${formattedDate}`
+        : t("listings.scheduledApplicationOpen", {
+            openDate: formattedDate,
+          })
       hasScheduledApplicationOpenMessage = true
     } else if (applicationDueDate) {
       const dueDate = dayjs(applicationDueDate)
@@ -348,7 +351,8 @@ export const getListingStatusMessage = (
                 listing.marketingMonth,
                 listing.marketingYear,
                 hideTime,
-                listing.scheduledApplicationOpenAt
+                listing.scheduledApplicationOpenAt,
+                true
               )}
             </div>
           )}
