@@ -899,9 +899,7 @@ const ListingForm = ({
                         showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
                         showRequestChangesModal={() => setRequestChangesDialog(true)}
                         showSubmitForApprovalModal={async () => {
-                          const valid = await formMethods.trigger(
-                            "scheduledListingPublishDateField"
-                          )
+                          const valid = await formMethods.trigger()
                           if (!valid) {
                             setAlert("form")
                             return
