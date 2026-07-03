@@ -3,7 +3,7 @@ describe("Listings autopublish feature", () => {
   futurePublishDate.setFullYear(futurePublishDate.getFullYear() + 1)
 
   const uniqueListingName = `autopublish-${Date.now()}`
-  const adminDraftListingName = `autopublish-admin-draft-${Date.now()}`
+  const adminDraftListingName = uniqueListingName
 
   it("should approve to scheduled and publish from scheduled with autopublish enabled", () => {
     cy.intercept("POST", "https://api.cloudinary.com/v1_1/exygy/upload", {
