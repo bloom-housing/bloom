@@ -1,6 +1,8 @@
 import React from "react"
 import { UseFormMethods } from "react-hook-form"
 import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+import timezone from "dayjs/plugin/timezone"
 import { Button, Dialog, Heading, Link } from "@bloom-housing/ui-seeds"
 import {
   ApplicationAddressTypeEnum,
@@ -41,6 +43,9 @@ import { OrderedCardList } from "../../patterns/OrderedCardList"
 import { ReadMore } from "../../patterns/ReadMore"
 import { DateSectionFlyer } from "./listing_sections/DateSection"
 import styles from "./ListingViewSeeds.module.scss"
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 export const getFilteredMultiselectQuestions = (
   multiselectQuestions: ListingMultiselectQuestion[],
@@ -461,7 +466,8 @@ export const getReservedTitle = (reservedCommunityType: IdDTO) => {
 }
 
 export const getDateString = (date: Date, format: string) => {
-  return date ? dayjs(date).format(format) : null
+  if (!date) return null
+  return dayjs(date).tz(process.env.timeZone).format(format)
 }
 
 export const getBuildingSelectionCriteria = (listing: Listing) => {

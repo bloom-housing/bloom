@@ -5911,6 +5911,47 @@ describe('Testing listing service', () => {
           ),
         ).resolves.not.toThrow();
       });
+
+      it('should normalize and save scheduledApplicationOpenAt when enableAutoOpenDate is enabled without autopublish', async () => {
+        jest
+          .useFakeTimers()
+          .setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
+        prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+          id: 'jurisdiction-id',
+          featureFlags: [
+            { name: FeatureFlagEnum.enableAutoOpenDate, active: true },
+          ],
+          listingApprovalPermissions: [],
+          publicUrl: '',
+        });
+        prisma.listings.create = jest.fn().mockResolvedValue({
+          id: 'example id',
+          name: 'example name',
+          scheduledApplicationOpenAt: new Date('2026-05-15T16:00:00.000Z'),
+        });
+        prisma.listingSnapshot.create = jest
+          .fn()
+          .mockResolvedValue({ id: 'snapshot-id' });
+
+        await expect(
+          service.create(
+            {
+              name: 'listing name',
+              depositMin: '5',
+              assets: [],
+              jurisdictions: { id: randomUUID() },
+              status: ListingsStatusEnum.pending,
+              displayWaitlistSize: false,
+              unitsSummary: null,
+              listingEvents: [],
+              isVerified: true,
+              scheduledApplicationOpenAt: new Date('2026-05-15T00:00:00.000Z'),
+            } as ListingCreate,
+            user,
+          ),
+        ).resolves.not.toThrow();
+        jest.useRealTimers();
+      });
     });
   });
 

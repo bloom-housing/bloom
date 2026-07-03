@@ -496,6 +496,38 @@ describe("helpers", () => {
       )
     ).toEqual("Applications open")
   })
+  it("should return applications open with date and time when scheduled open date is in the future", () => {
+    const result = getListingStatusMessageContent(
+      ListingsStatusEnum.active,
+      null,
+      false,
+      false,
+      null,
+      null,
+      null,
+      null,
+      false,
+      new Date("2030-07-15T16:00:00.000Z")
+    )
+    expect(result).toContain("Applications can be submitted starting on")
+    expect(result).toContain("9:00AM")
+  })
+  it("should return applications open with date and time when hideTime is true", () => {
+    const result = getListingStatusMessageContent(
+      ListingsStatusEnum.active,
+      null,
+      false,
+      false,
+      null,
+      null,
+      null,
+      null,
+      true,
+      new Date("2030-07-15T16:00:00.000Z")
+    )
+    expect(result).toContain("Applications can be submitted starting on")
+    expect(result).toContain("9:00AM")
+  })
 
   describe("getListingStatusMessage", () => {
     it("should return correctly for closed listing", () => {
