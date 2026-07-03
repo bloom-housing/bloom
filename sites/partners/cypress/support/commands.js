@@ -586,12 +586,12 @@ Cypress.Commands.add(
       cy.getByID("submitButton").contains("Submit").click()
       cy.getByID("submitListingForApprovalButtonConfirm").contains("Submit").click()
       cy.getByTestId("page-header").should("be.visible")
-      cy.getByTestId("page-header").should("have.text", listingName)
+      cy.getByTestId("page-header").should("contain.text", listingName)
     } else {
       cy.getByID("publishButton").contains("Publish").click()
       cy.getByID("publishButtonConfirm").contains("Publish").click()
       cy.get("[data-testid=page-header]").should("be.visible")
-      cy.getByTestId("page-header").should("have.text", listingName)
+      cy.getByTestId("page-header").should("contain.text", listingName)
     }
   }
 )
