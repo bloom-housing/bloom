@@ -5950,6 +5950,12 @@ describe('Testing listing service', () => {
             user,
           ),
         ).resolves.not.toThrow();
+
+        const createCall = (prisma.listings.create as jest.Mock).mock
+          .calls[0][0];
+        expect(createCall.data.scheduledApplicationOpenAt.toISOString()).toBe(
+          '2026-05-15T16:00:00.000Z',
+        );
         jest.useRealTimers();
       });
     });
@@ -8347,11 +8353,16 @@ describe('Testing listing service', () => {
     });
 
     it('should normalize to 9:00 AM in the configured app timezone', () => {
-      process.env.TIME_ZONE = 'America/New_York';
-      const utcMidnight = new Date('2026-01-15T00:00:00.000Z');
-      const normalized =
-        service.normalizeScheduledApplicationOpenAt(utcMidnight);
-      expect(normalized.toISOString()).toBe('2026-01-15T14:00:00.000Z');
+      const previousTimeZone = process.env.TIME_ZONE;
+      try {
+        process.env.TIME_ZONE = 'America/New_York';
+        const utcMidnight = new Date('2026-01-15T00:00:00.000Z');
+        const normalized =
+          service.normalizeScheduledApplicationOpenAt(utcMidnight);
+        expect(normalized.toISOString()).toBe('2026-01-15T14:00:00.000Z');
+      } finally {
+        process.env.TIME_ZONE = previousTimeZone;
+      }
     });
   });
 });

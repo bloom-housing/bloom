@@ -467,7 +467,8 @@ export const getReservedTitle = (reservedCommunityType: IdDTO) => {
 
 export const getDateString = (date: Date, format: string) => {
   if (!date) return null
-  return dayjs(date).tz(process.env.timeZone).format(format)
+  const configuredTimeZone = process.env.timeZone || "America/Los_Angeles"
+  return dayjs(date).tz(configuredTimeZone).format(format)
 }
 
 export const getBuildingSelectionCriteria = (listing: Listing) => {
