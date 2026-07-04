@@ -86,6 +86,7 @@ This repository is called "core". Bloom's model is one generic core codebase for
 
 ### General
 
+- Before starting implementation on a ticket, flag anything ambiguous in the requirements or any assumption being made, rather than silently picking an interpretation.
 - Follow existing file patterns in each package (NestJS patterns in `api`, Next.js patterns in `sites/*`).
 - Keep changes focused; avoid broad refactors in this monorepo unless required.
 - Reuse existing shared helpers/types instead of duplicating interfaces or utilities. If there's a gap in shared functionality, prefer adding to `shared-helpers` over duplicating logic per app.
