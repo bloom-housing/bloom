@@ -2406,22 +2406,6 @@ export class ListingService implements OnModuleInit {
       }
     }
 
-<<<<<<< HEAD
-      if (incomingDto.scheduledApplicationOpenAt) {
-        incomingDto.scheduledApplicationOpenAt =
-          this.normalizeScheduledApplicationOpenAt(
-            incomingDto.scheduledApplicationOpenAt,
-          );
-        this.checkScheduledDateIsInFuture(
-          incomingDto.scheduledApplicationOpenAt,
-          'scheduledApplicationOpenAt',
-        );
-        this.checkScheduledApplicationOpenAtIsAfterPublish(
-          incomingDto.scheduledApplicationOpenAt,
-          incomingDto.scheduledPublishAt,
-        );
-      }
-=======
     if (enableAutoOpenDate && incomingDto.scheduledApplicationOpenAt) {
       incomingDto.scheduledApplicationOpenAt =
         this.normalizeScheduledApplicationOpenAt(
@@ -2435,7 +2419,6 @@ export class ListingService implements OnModuleInit {
         incomingDto.scheduledApplicationOpenAt,
         incomingDto.scheduledPublishAt,
       );
->>>>>>> origin/main
     }
 
     if (
