@@ -443,7 +443,10 @@ describe('Testing external listing service', () => {
 
       expect(prisma.listings.findMany).toHaveBeenCalledExactlyOnceWith({
         select: { id: true, contentUpdatedAt: true, externalListingId: true },
-        where: { externalJurisdictionId: externalJurisdictionId },
+        where: {
+          externalJurisdictionId: externalJurisdictionId,
+          jurisdictionId: internalJurisdictionId,
+        },
       });
       expect(
         prisma.reservedCommunityTypes.findMany,
