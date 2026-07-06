@@ -92,7 +92,7 @@ const testEmailService = {
 
 const testHttpService = {
   pipe: jest.fn(),
-  get: jest.fn((url) => {
+  get: jest.fn(() => {
     // Get and parse the URL parameter.
     const response = {
       status: 200,

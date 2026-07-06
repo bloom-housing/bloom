@@ -86,8 +86,7 @@ const testEmailService = {
 
 const testHttpService = {
   pipe: jest.fn(),
-  get: jest.fn((url) => {
-    // Get and parse the URL parameter.
+  get: jest.fn(() => {
     const response = {
       status: 200,
       statusText: 'OK',
@@ -1587,7 +1586,7 @@ describe('Testing Permission-ing of endpoints as logged out user', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(body)
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(401);
     });
   });
 });
