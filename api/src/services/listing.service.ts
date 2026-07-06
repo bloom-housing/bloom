@@ -1504,8 +1504,16 @@ export class ListingService implements OnModuleInit {
       FeatureFlagEnum.enableAutopublish,
     );
 
+    const enableAutoOpenDate = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as unknown as Jurisdiction,
+      FeatureFlagEnum.enableAutoOpenDate,
+    );
+
     if (!enableAutopublish) {
       dto.scheduledPublishAt = null;
+    }
+
+    if (!enableAutoOpenDate) {
       dto.scheduledApplicationOpenAt = null;
     }
 
@@ -1519,7 +1527,7 @@ export class ListingService implements OnModuleInit {
       );
     }
 
-    if (enableAutopublish && dto.scheduledApplicationOpenAt) {
+    if (enableAutoOpenDate && dto.scheduledApplicationOpenAt) {
       dto.scheduledApplicationOpenAt = this.normalizeScheduledApplicationOpenAt(
         dto.scheduledApplicationOpenAt,
       );
@@ -2356,8 +2364,16 @@ export class ListingService implements OnModuleInit {
       FeatureFlagEnum.enableAutopublish,
     );
 
+    const enableAutoOpenDate = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableAutoOpenDate,
+    );
+
     if (!enableAutopublish) {
       incomingDto.scheduledPublishAt = null;
+    }
+
+    if (!enableAutoOpenDate) {
       incomingDto.scheduledApplicationOpenAt = null;
     }
 
@@ -2381,20 +2397,21 @@ export class ListingService implements OnModuleInit {
           'scheduledPublishAt',
         );
       }
+    }
 
-      if (incomingDto.scheduledApplicationOpenAt) {
+    if (enableAutoOpenDate && incomingDto.scheduledApplicationOpenAt) {
+      incomingDto.scheduledApplicationOpenAt =
         this.normalizeScheduledApplicationOpenAt(
           incomingDto.scheduledApplicationOpenAt,
         );
-        this.checkScheduledDateIsInFuture(
-          incomingDto.scheduledApplicationOpenAt,
-          'scheduledApplicationOpenAt',
-        );
-        this.checkScheduledApplicationOpenAtIsAfterPublish(
-          incomingDto.scheduledApplicationOpenAt,
-          incomingDto.scheduledPublishAt,
-        );
-      }
+      this.checkScheduledDateIsInFuture(
+        incomingDto.scheduledApplicationOpenAt,
+        'scheduledApplicationOpenAt',
+      );
+      this.checkScheduledApplicationOpenAtIsAfterPublish(
+        incomingDto.scheduledApplicationOpenAt,
+        incomingDto.scheduledPublishAt,
+      );
     }
 
     if (
@@ -2926,11 +2943,11 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
-          publishedAt:
-            storedListing.status !== ListingsStatusEnum.active &&
-            incomingDto.status === ListingsStatusEnum.active
-              ? new Date()
-              : storedListing.publishedAt,
+          publishedAt: ListingService.resolvePublishedAt(
+            incomingDto.status,
+            storedListing.status,
+            storedListing.publishedAt,
+          ),
           closedAt:
             storedListing.status !== ListingsStatusEnum.closed &&
             incomingDto.status === ListingsStatusEnum.closed
@@ -3350,9 +3367,26 @@ export class ListingService implements OnModuleInit {
   };
 
   normalizeScheduledPublishAt(scheduledPublishAt: Date): Date {
-    const appTimezone = process.env.TIME_ZONE;
+    const appTimezone = process.env.TIME_ZONE || 'America/Los_Angeles';
     const dateStr = dayjs.utc(scheduledPublishAt).format('YYYY-MM-DD');
-    return dayjs.tz(dateStr, 'YYYY-MM-DD', appTimezone).startOf('day').toDate();
+    return dayjs.tz(`${dateStr}T00:00:00`, appTimezone).toDate();
+  }
+
+  private static resolvePublishedAt(
+    incomingStatus: ListingsStatusEnum,
+    storedStatus: ListingsStatusEnum,
+    storedPublishedAt: Date | null,
+  ): Date | null {
+    if (
+      incomingStatus === ListingsStatusEnum.active &&
+      storedStatus !== ListingsStatusEnum.active
+    ) {
+      return new Date();
+    }
+    if (incomingStatus === ListingsStatusEnum.pending) {
+      return null;
+    }
+    return storedPublishedAt ?? null;
   }
 
   private checkScheduledDateIsInFuture(date: Date, fieldName: string): void {
@@ -3365,14 +3399,10 @@ export class ListingService implements OnModuleInit {
   }
 
   normalizeScheduledApplicationOpenAt(scheduledApplicationOpenAt: Date): Date {
-    const appTimezone = process.env.TIME_ZONE;
+    const appTimezone = process.env.TIME_ZONE || 'America/Los_Angeles';
     const dateStr = dayjs.utc(scheduledApplicationOpenAt).format('YYYY-MM-DD');
     // Applications open at 9:00 AM in the app timezone
-    return dayjs
-      .tz(dateStr, 'YYYY-MM-DD', appTimezone)
-      .startOf('day')
-      .add(9, 'hour')
-      .toDate();
+    return dayjs.tz(`${dateStr}T00:00:00`, appTimezone).add(9, 'hour').toDate();
   }
 
   private checkScheduledApplicationOpenAtIsAfterPublish(

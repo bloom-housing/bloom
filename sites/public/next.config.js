@@ -49,6 +49,7 @@ module.exports = withBundleAnalyzer({
     gtmKey: process.env.GTM_KEY || null,
     idleTimeout: process.env.IDLE_TIMEOUT,
     jurisdictionName: process.env.JURISDICTION_NAME,
+    timeZone: process.env.TIME_ZONE || "America/Los_Angeles",
     cacheRevalidate: process.env.CACHE_REVALIDATE ? process.env.CACHE_REVALIDATE : "30",
     cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
     showPublicLottery: process.env.SHOW_PUBLIC_LOTTERY === "TRUE" ? "TRUE" : "",

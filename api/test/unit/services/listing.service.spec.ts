@@ -5882,6 +5882,82 @@ describe('Testing listing service', () => {
         ).resolves.not.toThrow();
         jest.useRealTimers();
       });
+
+      it('should ignore scheduledApplicationOpenAt when enableAutoOpenDate is disabled', async () => {
+        mockJurisdictionWithAutopublish();
+        prisma.listings.create = jest.fn().mockResolvedValue({
+          id: 'example id',
+          name: 'example name',
+        });
+        prisma.listingSnapshot.create = jest
+          .fn()
+          .mockResolvedValue({ id: 'snapshot-id' });
+
+        await expect(
+          service.create(
+            {
+              name: 'listing name',
+              depositMin: '5',
+              assets: [],
+              jurisdictions: { id: randomUUID() },
+              status: ListingsStatusEnum.pending,
+              displayWaitlistSize: false,
+              unitsSummary: null,
+              listingEvents: [],
+              isVerified: true,
+              scheduledApplicationOpenAt: new Date('2020-01-01T00:00:00.000Z'),
+            } as ListingCreate,
+            user,
+          ),
+        ).resolves.not.toThrow();
+      });
+
+      it('should normalize and save scheduledApplicationOpenAt when enableAutoOpenDate is enabled without autopublish', async () => {
+        jest
+          .useFakeTimers()
+          .setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
+        prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+          id: 'jurisdiction-id',
+          featureFlags: [
+            { name: FeatureFlagEnum.enableAutoOpenDate, active: true },
+          ],
+          listingApprovalPermissions: [],
+          publicUrl: '',
+        });
+        prisma.listings.create = jest.fn().mockResolvedValue({
+          id: 'example id',
+          name: 'example name',
+          scheduledApplicationOpenAt: new Date('2026-05-15T16:00:00.000Z'),
+        });
+        prisma.listingSnapshot.create = jest
+          .fn()
+          .mockResolvedValue({ id: 'snapshot-id' });
+
+        await expect(
+          service.create(
+            {
+              name: 'listing name',
+              depositMin: '5',
+              assets: [],
+              jurisdictions: { id: randomUUID() },
+              status: ListingsStatusEnum.pending,
+              displayWaitlistSize: false,
+              unitsSummary: null,
+              listingEvents: [],
+              isVerified: true,
+              scheduledApplicationOpenAt: new Date('2026-05-15T00:00:00.000Z'),
+            } as ListingCreate,
+            user,
+          ),
+        ).resolves.not.toThrow();
+
+        const createCall = (prisma.listings.create as jest.Mock).mock
+          .calls[0][0];
+        expect(createCall.data.scheduledApplicationOpenAt.toISOString()).toBe(
+          '2026-05-15T16:00:00.000Z',
+        );
+        jest.useRealTimers();
+      });
     });
   });
 
@@ -6246,6 +6322,7 @@ describe('Testing listing service', () => {
           section8Acceptance: false,
           unitsAvailable: 0,
           isVerified: false,
+          publishedAt: null,
         },
         where: {
           id: expect.anything(),
@@ -6467,6 +6544,7 @@ describe('Testing listing service', () => {
           },
           isVerified: false,
           section8Acceptance: false,
+          publishedAt: null,
         },
         where: {
           id: expect.anything(),
@@ -7037,6 +7115,7 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           closedAt: expect.anything(),
+          publishedAt: null,
           scheduledPublishAt: null,
           scheduledApplicationOpenAt: null,
           lastUpdatedByUser: {
@@ -7277,6 +7356,56 @@ describe('Testing listing service', () => {
         await expect(
           service.update(baseDto(ListingsStatusEnum.pending, futureDate), user),
         ).resolves.not.toThrow();
+      });
+
+      it('should ignore scheduledApplicationOpenAt on update when enableAutoOpenDate is disabled', async () => {
+        mockStoredListing(ListingsStatusEnum.pending);
+        mockJurisdictionWithAutopublish();
+        mockListingUpdate(ListingsStatusEnum.pending);
+
+        await expect(
+          service.update(
+            {
+              ...baseDto(ListingsStatusEnum.pending, futureDate),
+              scheduledApplicationOpenAt: pastDate,
+            },
+            user,
+          ),
+        ).resolves.not.toThrow();
+      });
+
+      it('should normalize and validate scheduledApplicationOpenAt when enableAutoOpenDate is enabled without autopublish', async () => {
+        jest
+          .useFakeTimers()
+          .setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
+        prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+          id: 'jurisdiction-id',
+          featureFlags: [
+            { name: FeatureFlagEnum.enableAutoOpenDate, active: true },
+          ],
+          listingApprovalPermissions: [],
+        });
+        mockStoredListing(ListingsStatusEnum.pending);
+        mockListingUpdate(ListingsStatusEnum.pending);
+
+        const scheduledApplicationOpenAt = new Date('2026-05-15T14:30:00.000Z');
+
+        await expect(
+          service.update(
+            {
+              ...baseDto(ListingsStatusEnum.pending, futureDate),
+              scheduledApplicationOpenAt,
+            },
+            user,
+          ),
+        ).resolves.not.toThrow();
+
+        const updateMock = prisma.listings.update as jest.Mock;
+        const updateCall = updateMock.mock.calls[0][0];
+        expect(updateCall.data.scheduledApplicationOpenAt.toISOString()).toBe(
+          '2026-05-15T16:00:00.000Z',
+        );
+        jest.useRealTimers();
       });
     });
   });
@@ -8224,6 +8353,77 @@ describe('Testing listing service', () => {
       const normalized =
         service.normalizeScheduledApplicationOpenAt(nonMidnight);
       expect(normalized.toISOString()).toBe('2026-05-15T16:00:00.000Z');
+    });
+
+    it('should normalize to 9:00 AM in the configured app timezone', () => {
+      const previousTimeZone = process.env.TIME_ZONE;
+      try {
+        process.env.TIME_ZONE = 'America/New_York';
+        const utcMidnight = new Date('2026-01-15T00:00:00.000Z');
+        const normalized =
+          service.normalizeScheduledApplicationOpenAt(utcMidnight);
+        expect(normalized.toISOString()).toBe('2026-01-15T14:00:00.000Z');
+      } finally {
+        process.env.TIME_ZONE = previousTimeZone;
+      }
+    });
+  });
+
+  describe('resolvePublishedAt', () => {
+    const storedDate = new Date('2025-01-01T00:00:00.000Z');
+
+    it('pending → active: returns a new Date (first publish)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.active,
+        ListingsStatusEnum.pending,
+        null,
+      );
+      expect(result).toBeInstanceOf(Date);
+    });
+
+    it('active → active: returns stored value (no re-stamp)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.active,
+        ListingsStatusEnum.active,
+        storedDate,
+      );
+      expect(result).toBe(storedDate);
+    });
+
+    it('active → pending: returns null (clears publishedAt)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.pending,
+        ListingsStatusEnum.active,
+        storedDate,
+      );
+      expect(result).toBeNull();
+    });
+
+    it('pending → pending: returns null (was never published)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.pending,
+        ListingsStatusEnum.pending,
+        null,
+      );
+      expect(result).toBeNull();
+    });
+
+    it('active → closed: returns stored value', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.closed,
+        ListingsStatusEnum.active,
+        storedDate,
+      );
+      expect(result).toBe(storedDate);
+    });
+
+    it('scheduled → active: returns a new Date (scheduled auto-publish path)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.active,
+        ListingsStatusEnum.scheduled,
+        null,
+      );
+      expect(result).toBeInstanceOf(Date);
     });
   });
 });
