@@ -48,7 +48,7 @@ export class ExternalListingController {
     operationId: 'ingest',
   })
   @PermissionAction(permissionActions.submit)
-  // @UseGuards(JwtAuthGuard, PermissionGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiOkResponse({ type: SuccessDTO })
   async ingest(@Body() dto: IngestParams): Promise<SuccessDTO> {
     return await this.externalListingService.ingest(dto);

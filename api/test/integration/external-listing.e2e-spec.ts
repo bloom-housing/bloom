@@ -311,6 +311,7 @@ describe('External Listings Controller Tests', () => {
 
       expect(res.body.success).toEqual(true);
 
+      await new Promise((resolve) => setTimeout(resolve, 100));
       const listings = await prisma.listings.findMany({
         include: {
           units: {
@@ -351,7 +352,7 @@ describe('External Listings Controller Tests', () => {
           externalURL: 'externalJurisdictionName.com',
         },
       });
-      console.log(jurisdiction.id);
+
       const ingestParams = {
         externalURL: 'externalJurisdictionName.com',
         jurisdictionId: jurisdiction.id,
