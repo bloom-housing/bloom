@@ -5,8 +5,7 @@ import { FormMetadata } from "../../../src/lib/listings/formTypes"
 import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 // test helpers
-const metadata = {} as FormMetadata
-const formatData = (data) => {
+const formatData = (data, metadata = {} as FormMetadata) => {
   return new DatesFormatter({ ...data }, metadata).format().data
 }
 const dueDate = {
@@ -51,28 +50,52 @@ describe("DatesFormatter", () => {
     const data = {
       scheduledListingPublishDateField: { year: "2030", month: "06", day: "15" },
     }
-    expect(formatData(data).scheduledPublishAt?.toISOString()).toEqual("2030-06-15T00:00:00.000Z")
+    expect(
+      formatData(data, {
+        enableAutopublish: true,
+      } as FormMetadata).scheduledPublishAt?.toISOString()
+    ).toEqual("2030-06-15T00:00:00.000Z")
   })
 
   it("should set scheduledPublishAt to null when scheduled date field is incomplete", () => {
     const data = {
       scheduledListingPublishDateField: { year: "2030", month: "", day: "" },
     }
+    expect(
+      formatData(data, { enableAutopublish: true } as FormMetadata).scheduledPublishAt
+    ).toBeNull()
+  })
+
+  it("should set scheduledPublishAt to null when enableAutopublish is disabled", () => {
+    const data = {
+      scheduledListingPublishDateField: { year: "2030", month: "06", day: "15" },
+    }
     expect(formatData(data).scheduledPublishAt).toBeNull()
   })
 
-  it("should set scheduledApplicationOpenAt to UTC midnight when open date field is complete", () => {
+  it("should set scheduledApplicationOpenAt to UTC midnight when open date field is complete and flag is enabled", () => {
     const data = {
       scheduledApplicationOpenDateField: { year: "2030", month: "06", day: "15" },
     }
-    expect(formatData(data).scheduledApplicationOpenAt?.toISOString()).toEqual(
-      "2030-06-15T00:00:00.000Z"
-    )
+    expect(
+      formatData(data, {
+        enableAutoOpenDate: true,
+      } as FormMetadata).scheduledApplicationOpenAt?.toISOString()
+    ).toEqual("2030-06-15T00:00:00.000Z")
   })
 
   it("should set scheduledApplicationOpenAt to null when open date field is incomplete", () => {
     const data = {
       scheduledApplicationOpenDateField: { year: "2030", month: "", day: "" },
+    }
+    expect(
+      formatData(data, { enableAutoOpenDate: true } as FormMetadata).scheduledApplicationOpenAt
+    ).toBeNull()
+  })
+
+  it("should set scheduledApplicationOpenAt to null when enableAutoOpenDate is disabled", () => {
+    const data = {
+      scheduledApplicationOpenDateField: { year: "2030", month: "06", day: "15" },
     }
     expect(formatData(data).scheduledApplicationOpenAt).toBeNull()
   })
