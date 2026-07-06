@@ -202,6 +202,7 @@ describe("ApplicationDates", () => {
       <FormProviderWrapper>
         <ApplicationDates
           enableAutopublish={true}
+          enableAutoOpenDate={true}
           listing={{} as unknown as FormListing}
           requiredFields={[]}
           openHouseEvents={[]}
@@ -226,6 +227,7 @@ describe("ApplicationDates", () => {
       <FormProviderWrapper>
         <ApplicationDates
           enableAutopublish={true}
+          enableAutoOpenDate={true}
           listing={
             {
               status: ListingsStatusEnum.pending,

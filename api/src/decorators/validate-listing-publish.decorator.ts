@@ -22,7 +22,7 @@ class ListingPublishRequiredConstraint implements ValidatorConstraintInterface {
 
   /*
    * Check if the listing is being published.
-   * A listing is considered "publishing" if its status is 'active' or 'pending review'.
+   * A listing is considered "publishing" if its status is 'active', 'pending review', or 'scheduled'.
    * If status is undefined, null, or an empty string we have to assume that it is publishing in order to apply validation
    * so that strict validation will be applied
    */
@@ -30,6 +30,7 @@ class ListingPublishRequiredConstraint implements ValidatorConstraintInterface {
     return (
       status === ListingsStatusEnum.active ||
       status === ListingsStatusEnum.pendingReview ||
+      status === ListingsStatusEnum.scheduled ||
       status === undefined ||
       status === null ||
       status === ''
