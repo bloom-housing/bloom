@@ -133,7 +133,7 @@ export class BackgroundJobsService {
     );
     
     const activeJob = await this.prismaService.backgroundJob.findFirst({
-      select: {},
+      select: { id: true },
       where: {
         status: BackgroundJobStatusEnum.processing,
       },
