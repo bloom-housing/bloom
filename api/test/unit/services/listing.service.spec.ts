@@ -15,6 +15,7 @@ import {
   UserRoleEnum,
 } from '@prisma/client';
 import { Logger } from '@nestjs/common';
+import dayjs from 'dayjs';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import { randomUUID } from 'crypto';
@@ -7606,7 +7607,7 @@ describe('Testing listing service', () => {
     });
 
     it('should send comingSoon subscriber notification when scheduledApplicationOpenAt is in the future', async () => {
-      const futureOpenAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      const futureOpenAt = dayjs().add(7, 'days').toDate();
       prisma.listings.findMany = jest.fn().mockResolvedValue([
         {
           id: 'scheduled-id-1',
