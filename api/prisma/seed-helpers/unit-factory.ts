@@ -8,7 +8,6 @@ import {
 } from '@prisma/client';
 import { unitTypeFactorySingle } from './unit-type-factory';
 import {
-  unitRentTypeArray,
   unitRentTypeFactory,
   unitRentTypeFactorySingle,
 } from './unit-rent-type-factory';

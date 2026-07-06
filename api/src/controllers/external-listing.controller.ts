@@ -10,16 +10,16 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags, ApiOkResponse } from '@nestjs/swagger';
+import { PermissionAction } from '../decorators/permission-action.decorator';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import { ExternalizedDetails } from '../dtos/external-listings/externalized-details.dto';
+import { IngestParams } from '../dtos/external-listings/ingest-params.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 import { PermissionGuard } from '../guards/permission.guard';
 import { ExternalListingService } from '../services/external-listing.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
-import { ExternalizedDetails } from '../dtos/external-listings/externalized-details.dto';
-import { SuccessDTO } from '../dtos/shared/success.dto';
-import { PermissionAction } from '../decorators/permission-action.decorator';
-import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { IngestParams } from '../dtos/external-listings/ingest-params.dto';
-import { JwtAuthGuard } from 'src/guards/jwt.guard';
 
 @Controller('externalListings')
 @ApiTags('externalListings')
@@ -48,7 +48,7 @@ export class ExternalListingController {
     operationId: 'ingest',
   })
   @PermissionAction(permissionActions.submit)
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiOkResponse({ type: SuccessDTO })
   async ingest(@Body() dto: IngestParams): Promise<SuccessDTO> {
     return await this.externalListingService.ingest(dto);

@@ -98,7 +98,10 @@ export class ExternalListingService {
     // query for existing external listings within the system
     const currentExternalListings = await this.prisma.listings.findMany({
       select: { id: true, contentUpdatedAt: true, externalListingId: true },
-      where: { externalJurisdictionId: externalJurisdiction.id },
+      where: {
+        externalJurisdictionId: externalJurisdiction.id,
+        jurisdictionId: jurisdictionId,
+      },
     });
 
     if (listings.length === 0) {
@@ -190,7 +193,6 @@ export class ExternalListingService {
             await this.prisma.listings.delete({
               where: { id: existingListing.id },
             });
-
             // recreate with updated data
             this.createExternalListing(
               combinedRCTs,
@@ -215,6 +217,8 @@ export class ExternalListingService {
           newExternalListing &&
           newExternalListing.jurisdictionId === externalJurisdiction.id
         ) {
+          this.logger.error('This should be impossible');
+
           // create newly active listings
           this.createExternalListing(
             combinedRCTs,
@@ -279,7 +283,7 @@ export class ExternalListingService {
     }
     if (reservedCommunityTypeId === undefined) {
       this.logger.error(
-        `Listing with external id ${externalListing.id} could not be created. Reserved community type ${data.reservedCommunityTypes.name} does not `,
+        `Listing with external id ${externalListing.id} could not be created. Reserved community type ${data.reservedCommunityTypes.name} does not exist.`,
       );
       return;
     }
