@@ -13,7 +13,7 @@ CREATE TABLE "background_job" (
     "error_row" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "completed-at" TIMESTAMP(3),
+    "completed_at" TIMESTAMP(3),
 
     CONSTRAINT "background_job_pkey" PRIMARY KEY ("id")
 );

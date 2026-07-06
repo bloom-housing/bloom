@@ -2251,7 +2251,7 @@ model BackgroundJob {
   errorRow          Int?                    @map("error_row")
   createdAt         DateTime                @default(now()) @map("created_at")
   updatedAt         DateTime                @updatedAt @map("updated_at")
-  completedAt       DateTime?               @map("completed-at")
+  completedAt       DateTime?               @map("completed_at")
 
   @@index([listingId, status])
   @@map("background_job")
