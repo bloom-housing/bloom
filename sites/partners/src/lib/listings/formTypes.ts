@@ -250,4 +250,6 @@ export type FormMetadata = {
   latLong: LatitudeLongitude
   customMapPositionChosen: boolean
   enableUnitGroups: boolean
+  enableAutopublish?: boolean
+  enableAutoOpenDate?: boolean
 }
