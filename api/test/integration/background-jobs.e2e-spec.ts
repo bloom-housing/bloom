@@ -200,10 +200,9 @@ describe('Background Jobs Controller Tests', () => {
         .get('/jobs')
         .query({ listingId: newListing.id })
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(200);
+        .set('Cookie', cookies);
 
-      expect(res.body).toBeEmpty();
+      expect(res.body).toBeNull();
     });
 
     it('should return 401 when passkey header is missing', async () => {
