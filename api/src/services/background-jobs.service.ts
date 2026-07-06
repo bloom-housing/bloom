@@ -131,7 +131,7 @@ export class BackgroundJobsService {
       'jobs',
       permissionActions.read,
     );
-    
+
     const activeJob = await this.prismaService.backgroundJob.findFirst({
       select: { id: true },
       where: {
