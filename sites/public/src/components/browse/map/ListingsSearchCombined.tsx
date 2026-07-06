@@ -244,13 +244,14 @@ function ListingsSearchCombined() {
 
   useEffect(() => {
     const filterData = decodeQueryToFilterData(router.query)
-    const backendFilters = encodeFilterDataToBackendFilters(filterData).filter(
-      (filter) => filter.name !== ""
-    )
+    const backendFilters = encodeFilterDataToBackendFilters(
+      filterData,
+      props.subJurisdictions
+    ).filter((filter) => filter.name !== "")
     setFilterState(filterData)
     setDrawerFilters(backendFilters)
     setFilterCount(backendFilters.length)
-  }, [router.query])
+  }, [router.query, props.subJurisdictions])
 
   // Re-search when filters change or when entering/leaving mobile
   // Combined into one effect so the initial load only triggers a single search

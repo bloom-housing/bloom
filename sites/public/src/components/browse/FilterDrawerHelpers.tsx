@@ -2,6 +2,7 @@ import {
   EnumListingFilterParamsComparison,
   FilterAvailabilityEnum,
   HomeTypeEnum,
+  IdDTO,
   ListingFeatures,
   ListingFeaturesConfiguration,
   ListingFilterKeys,
@@ -97,6 +98,7 @@ const arrayFilters: ListingFilterKeys[] = [
   ListingFilterKeys.multiselectQuestions,
   ListingFilterKeys.parkingType,
   ListingFilterKeys.accessibilityPriorityTypes,
+  ListingFilterKeys.jurisdictions,
 ]
 
 const booleanFilters: ListingFilterKeys[] = [
@@ -406,7 +408,10 @@ export const SearchSection = (props: SearchSectionProps) => (
  * @param data object containing form selections or url params decoded
  * @returns array of formatted backend filters
  */
-export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilterParams[] => {
+export const encodeFilterDataToBackendFilters = (
+  data: FilterData,
+  subJurisdictions?: IdDTO[]
+): ListingFilterParams[] => {
   const filters: ListingFilterParams[] = []
   Object.entries(data).forEach(([filterType, userSelections]) => {
     if (arrayFilters.includes(ListingFilterKeys[filterType])) {
@@ -422,7 +427,15 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
           }
         }
       })
-      if (selectedFields.length > 0) {
+      if (
+        selectedFields.length > 0 &&
+        // jurisdictions (counties) filter is an array but by default it's filtered on all counties so
+        // don't need to add the filter unless at least one county is deselected
+        !(
+          filterType === ListingFilterKeys.jurisdictions &&
+          subJurisdictions?.length === selectedFields.length
+        )
+      ) {
         const filter = {
           $comparison: EnumListingFilterParamsComparison["IN"],
         }
@@ -462,21 +475,6 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
 
       filter[ListingFilterKeys.name] = userSelections
       filters.push(filter)
-    } else if (filterType === ListingFilterKeys.jurisdictions) {
-      const jurisdictionIds = Object.entries(userSelections)
-        .map(([key, value]) => {
-          return value ? key : null
-        })
-        .filter((id) => id)
-
-      // jurisdictions (counties) filter is an array but by default it's filtered on all counties so
-      // don't need to add the filter unless at least one county is deselected
-      if (jurisdictionIds.length && jurisdictionIds.length !== Object.keys(userSelections).length) {
-        filters.push({
-          $comparison: EnumListingFilterParamsComparison["IN"],
-          jurisdictions: jurisdictionIds,
-        })
-      }
     }
   })
 

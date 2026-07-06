@@ -409,7 +409,9 @@ describe("filter drawer helpers", () => {
         },
       }
 
-      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      const subJurisdictions = [{ id: "123" }, { id: "234" }, { id: "345" }]
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData, subJurisdictions)
       expect(backendFilters).toStrictEqual([])
     })
     it("should return correct backend filters for accessibilityPriorityTypes with multiple types", () => {
