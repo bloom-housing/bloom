@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Query,
   Request,
@@ -60,8 +61,8 @@ export class BackgroundJobsController {
   })
   @ApiOkResponse({ type: BackgroundJob })
   public async getListingActiveJob(
-    @Query('listingId') listingId: string,
     @Request() req: ExpressRequest,
+    @Query('listingId', new ParseUUIDPipe({ version: '4' })) listingId: string,
   ): Promise<BackgroundJob | null> {
     return await this.backgroundJobsService.findActiveForListing(
       listingId,
@@ -76,8 +77,8 @@ export class BackgroundJobsController {
   })
   @ApiOkResponse({ type: BackgroundJob })
   public async getJobById(
-    @Param('jobId') jobId: string,
     @Request() req: ExpressRequest,
+    @Param('jobId', new ParseUUIDPipe({ version: '4' })) jobId: string,
   ): Promise<BackgroundJob> {
     return await this.backgroundJobsService.getById(
       jobId,
