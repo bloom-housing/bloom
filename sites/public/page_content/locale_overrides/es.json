@@ -1,4 +1,5 @@
 {
+  "account.settings.disclaimer": "",
   "account.create.initialDisclaimer": "Si se encuentra en situación de calle, en riesgo de quedarse sin hogar o en una vivienda insegura, haga clic en <a href='https://www.exygy.com' target='_blank'>este enlace</a> para compartir su información con la Autoridad de Servicios para Personas sin Hogar de Bloomington (BHSA) y con los propietarios y administradores de propiedades del Sistema de Acceso Coordinado (CES) que puedan tener una vacante. Al hacerlo, autoriza que su información se comparta con estas entidades.",
   "advocateAccount.agencyNotListed": "<a href='mailto:%{contactEmail}'>Comuníquese con el soporte</a> si su agencia no está en la lista",
   "application.confirmation.expiredDetailsWarning": "Si los detalles de su hogar han cambiado desde que envió su solicitud, comuníquese directamente con la propiedad. Es común que los detalles del hogar cambien con el tiempo, y la información que ya no está vigente no se usará en su contra. La capacidad de editar una solicitud después de enviarla está actualmente en desarrollo y podrá realizar cambios en una solicitud existente en una fecha posterior.",

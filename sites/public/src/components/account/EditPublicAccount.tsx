@@ -129,8 +129,6 @@ export const EditPublicAccount = () => {
     user
   )
 
-  console.log("tIfExists", tIfExists("account.settings.disclaimer"))
-
   return (
     <BloomCard
       iconSymbol="userCircle"
