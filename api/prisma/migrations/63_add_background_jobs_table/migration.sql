@@ -3,7 +3,7 @@ CREATE TYPE "BackgroundJobStatusEnum" AS ENUM ('processing', 'completed', 'faile
 
 -- CreateTable
 CREATE TABLE "background_job" (
-    "id" UUID NOT NULL,
+    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "listing_id" UUID NOT NULL,
     "requested_by_user_id" UUID NOT NULL,
     "status" "BackgroundJobStatusEnum" NOT NULL,
