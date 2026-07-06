@@ -5,7 +5,14 @@ import {
   ListingFeaturesConfiguration,
   MultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { FormOption } from "../../../lib/listings/search"
+
+export type FormOption = {
+  label: string
+  value: string
+  isDisabled?: boolean
+  labelNoteHTML?: string
+  doubleColumn?: boolean
+}
 
 export type ListingsSearchConfig = {
   searchString?: string

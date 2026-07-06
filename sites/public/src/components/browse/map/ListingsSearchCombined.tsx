@@ -2,30 +2,35 @@ import React, { useState, useEffect, useContext, useRef } from "react"
 import { useMap } from "@vis.gl/react-google-maps"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
-import {
-  ListingSearchParams,
-  generateSearchQuery,
-  parseSearchString,
-} from "../../../lib/listings/search"
 import { UserStatus } from "../../../lib/constants"
 import styles from "./ListingsSearch.module.scss"
 import { ListingsCombined } from "./ListingsCombined"
 import { MapMarkerData } from "./ListingsMap"
 import { searchListings, searchMapMarkers } from "../../../lib/hooks"
 import {
+  EnumListingFilterParamsComparison,
   ListingFilterParams,
   ListingViews,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FilterDrawer } from "../FilterDrawer"
-import { encodeFilterDataToBackendFilters, FilterData } from "../FilterDrawerHelpers"
+import {
+  encodeFilterDataToBackendFilters,
+  FilterData,
+  encodeFilterDataToQuery,
+  getFilterQueryFromURL,
+  decodeQueryToFilterData,
+} from "../FilterDrawerHelpers"
 import { ListingsMapContext } from "./ListingsMapContext"
 import { useListingsSearchConfigContext } from "./ListingsSearchConfigContext"
+import { useRouter } from "next/router"
+import { ListingQueryBuilder } from "../../../lib/listings/listing-query-builder"
 
 /**
  * This combines the search form with the listings map/list. Listings are updated
  * in both when the search form is submitted.
  */
 function ListingsSearchCombined() {
+  const router = useRouter()
   const props = useListingsSearchConfigContext()
   const { profile, listingsService } = useContext(AuthContext)
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false)
@@ -43,19 +48,7 @@ function ListingsSearchCombined() {
   const listingsVarsRef = useRef<HTMLDivElement>(null)
 
   const jurisdictionIds = props.jurisdictions.map((jurisdiction) => jurisdiction.id)
-
-  const [searchFilter] = useState(
-    parseSearchString(props.searchString, {
-      bedrooms: null,
-      bathrooms: null,
-      minRent: "",
-      monthlyRent: "",
-      propertyName: "",
-      jurisdictions: props.jurisdictions.map((juris) => juris.name),
-      availability: null,
-      ids: undefined,
-    })
-  )
+  const filterQuery = getFilterQueryFromURL(router.query)
 
   const [searchResults, setSearchResults] = useState({
     listings: [],
@@ -138,14 +131,12 @@ function ListingsSearchCombined() {
       return
     }
 
-    const modifiedParams: ListingSearchParams = {
-      ...searchFilter,
-      ids: visibleMarkers?.map((marker) => marker.id),
-    }
-
-    // Search the listings by both the filter & the visible markers - but search the markers by only the filter, so that you can scroll out of the currently searched view and still see the markers
-    const listingIdsOnlyQb = generateSearchQuery(modifiedParams)
-    const genericQb = generateSearchQuery(searchFilter)
+    // All searches should only look for "active" listings
+    const genericQb = new ListingQueryBuilder().addFilter(
+      "status",
+      EnumListingFilterParamsComparison["="],
+      "active"
+    )
 
     let newListings = null
     let newMeta
@@ -167,13 +158,21 @@ function ListingsSearchCombined() {
     ) {
       setIsLoading(true)
       const result = await searchListings(
-        isDesktop ? listingIdsOnlyQb : genericQb,
+        genericQb,
         pageSize,
         page,
         listingsService,
         ListingViews.map,
         jurisdictionIds,
-        drawerFilters
+        isDesktop
+          ? [
+              ...drawerFilters,
+              {
+                $comparison: EnumListingFilterParamsComparison.IN,
+                ids: visibleMarkers?.map((marker) => marker.id),
+              },
+            ]
+          : drawerFilters
       )
       hasCompletedInitialListingsCallRef.current = true
       newListings = result.items
@@ -243,33 +242,26 @@ function ListingsSearchCombined() {
     return () => window.removeEventListener("resize", updateMedia)
   }, [])
 
-  // Re-search when the filter is updated
   useEffect(() => {
-    async function searchListings() {
+    const filterData = decodeQueryToFilterData(router.query)
+    const backendFilters = encodeFilterDataToBackendFilters(filterData).filter(
+      (filter) => filter.name !== ""
+    )
+    setFilterState(filterData)
+    setDrawerFilters(backendFilters)
+    setFilterCount(backendFilters.length)
+  }, [router.query])
+
+  // Re-search when filters change or when entering/leaving mobile
+  // Combined into one effect so the initial load only triggers a single search
+  useEffect(() => {
+    if (isDesktop === undefined) return
+    async function doSearch() {
       await search(1, true)
     }
-    void searchListings()
+    void doSearch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchFilter])
-
-  // Re-search when entering mobile
-  useEffect(() => {
-    async function searchListings() {
-      await search(1, true)
-    }
-
-    void searchListings()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDesktop])
-
-  useEffect(() => {
-    async function searchListings() {
-      await search(1, true)
-    }
-
-    void searchListings()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [drawerFilters])
+  }, [isDesktop, drawerFilters])
 
   // Re-set the view when entering the map on mobile to fit bounds
   useEffect(() => {
@@ -323,21 +315,18 @@ function ListingsSearchCombined() {
   }
 
   const onDrawerSubmit = (data: FilterData) => {
-    const backendFilters = encodeFilterDataToBackendFilters(data).filter(
-      (filter) => filter.name !== ""
-    )
-    setFilterState(data)
-    setDrawerFilters(backendFilters)
-    setFilterCount(backendFilters.length)
     setIsFilterDrawerOpen(false)
+    const updatedFilterQuery = encodeFilterDataToQuery(data)
+    if (updatedFilterQuery !== filterQuery) {
+      setIsLoading(true)
+      void router.push(`/listings?${updatedFilterQuery}`)
+    }
   }
 
   const onDrawerClear = (resetFilters: (data: FilterData) => void) => {
     resetFilters({ name: "", monthlyRent: { minRent: "", maxRent: "" } })
-    setFilterState({})
-    setDrawerFilters([])
-    setFilterCount(0)
     setIsFilterDrawerOpen(false)
+    void router.push(`/listings`)
   }
 
   const mapContextValue = {
@@ -352,7 +341,6 @@ function ListingsSearchCombined() {
     multiselectData: props.multiselectData,
     regions: props.regions,
     listingFeaturesConfiguration: props.listingFeaturesConfiguration,
-    searchFilter,
     searchResults,
     listView,
     setListView,
