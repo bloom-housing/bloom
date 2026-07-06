@@ -34,6 +34,7 @@ export const getExportHeaders = (
     enableApplicationStatus?: boolean;
     enableFullTimeStudentQuestion?: boolean;
     enableReasonableAccommodations?: boolean;
+    enableMultiselectVoucherQuestion?: boolean;
     enableSpokenLanguage?: boolean;
     enableGenderQuestion?: boolean;
     enableSexualOrientationQuestion?: boolean;
@@ -51,6 +52,7 @@ export const getExportHeaders = (
     enableApplicationStatus,
     enableFullTimeStudentQuestion,
     enableReasonableAccommodations,
+    enableMultiselectVoucherQuestion,
     enableSpokenLanguage,
     enableGenderQuestion,
     enableSexualOrientationQuestion,
@@ -416,6 +418,18 @@ export const getExportHeaders = (
       {
         path: 'incomeVouchers',
         label: 'Vouchers or Subsidies',
+        format: (val: string[]): string => {
+          if (!enableMultiselectVoucherQuestion) {
+            return (!val && val.length === 0) || val[0] === 'none'
+              ? 'No'
+              : 'Yes';
+          }
+          if (!val || val.length === 0) {
+            return 'None';
+          }
+
+          return val.map((v) => incomeVouchersToReadable(v)).join(', ');
+        },
       },
       {
         path: 'preferredUnitTypes',
@@ -1085,4 +1099,22 @@ export const typeMap = {
  */
 export const unitTypeToReadable = (type: string): string => {
   return typeMap[type] ?? type;
+};
+
+/**
+ * @param type value of the income voucher type to convert to readable string
+ * @returns the string representation of that income voucher type
+ */
+export const incomeVouchersToReadable = (type: string): string => {
+  switch (type) {
+    case 'issuedVouchers':
+      return 'Section 8';
+    case 'rentalAssistance':
+      return 'Rental Assistance from other source';
+    case 'incomeVoucher':
+      return 'Income Voucher';
+    case 'none':
+    default:
+      return 'None';
+  }
 };

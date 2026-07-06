@@ -489,7 +489,7 @@ describe("stackedUnitSummariesTable", () => {
       {
         minimumIncome: { cellSubText: "per month", cellText: "$150" },
         rent: { cellSubText: "per month", cellText: "$1,200" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom" },
       },
     ])
   })
@@ -498,7 +498,7 @@ describe("stackedUnitSummariesTable", () => {
       {
         minimumIncome: { cellSubText: "per month", cellText: "$120 to $150" },
         rent: { cellSubText: "per month", cellText: "$1,200 to $1,500" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom" },
       },
     ])
   })
@@ -507,7 +507,7 @@ describe("stackedUnitSummariesTable", () => {
       {
         minimumIncome: { cellSubText: "per month", cellText: "$0" },
         rent: { cellSubText: "per month", cellText: "30% of income" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom" },
       },
     ])
   })
@@ -516,7 +516,7 @@ describe("stackedUnitSummariesTable", () => {
       {
         minimumIncome: { cellSubText: "per month", cellText: "$0" },
         rent: { cellSubText: "per month", cellText: "5% to 20% of income" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom" },
       },
     ])
   })
@@ -525,7 +525,7 @@ describe("stackedUnitSummariesTable", () => {
       {
         minimumIncome: { cellSubText: "per month", cellText: "$0 to $60" },
         rent: { cellSubText: "per month", cellText: "% of income, or up to $750" },
-        unitType: { cellSubText: "", cellText: "1 BR - 3 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom - 3 Bedrooms" },
       },
     ])
   })
@@ -534,7 +534,7 @@ describe("stackedUnitSummariesTable", () => {
       {
         minimumIncome: { cellSubText: "", cellText: "n/a" },
         rent: { cellSubText: "", cellText: "n/a" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom" },
       },
     ])
   })
@@ -632,7 +632,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(groupRentNoRanges)).toEqual([
       {
         rent: { cellSubText: "per month", cellText: "$1,200" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom" },
         availability: { cellText: "Closed waitlist" },
       },
     ])
@@ -641,7 +641,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(groupRentRanges)).toEqual([
       {
         rent: { cellSubText: "per month", cellText: "$1,200 to $1,500" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom" },
         availability: { cellText: "Closed waitlist" },
       },
     ])
@@ -650,7 +650,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(groupPercentageRentNoRanges)).toEqual([
       {
         rent: { cellSubText: "per month", cellText: "30% of income" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom" },
         availability: { cellText: "Closed waitlist" },
       },
     ])
@@ -659,7 +659,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(groupPercentageRent)).toEqual([
       {
         rent: { cellSubText: "per month", cellText: "5% to 20% of income" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom" },
         availability: { cellText: "Closed waitlist" },
       },
     ])
@@ -668,7 +668,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(groupMixedRentUnits)).toEqual([
       {
         rent: { cellSubText: "per month", cellText: "% of income, or up to $750" },
-        unitType: { cellSubText: "", cellText: "1 BR - 3 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom - 3 Bedrooms" },
         availability: { cellText: "Closed waitlist" },
       },
     ])
@@ -677,7 +677,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(groupNoRentData)).toEqual([
       {
         rent: { cellSubText: "", cellText: "n/a" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom" },
         availability: { cellText: "Closed waitlist" },
       },
     ])
@@ -686,7 +686,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(groupMultipleUnitTypes)).toEqual([
       {
         rent: { cellSubText: "per month", cellText: "$1,200 to $1,500" },
-        unitType: { cellSubText: "", cellText: "1 BR - 2 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom - 2 Bedrooms" },
         availability: { cellText: "Closed waitlist" },
       },
     ])
@@ -708,7 +708,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(openWaitlistGroup)).toEqual([
       {
         rent: { cellSubText: "", cellText: "n/a" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom" },
         availability: { cellText: "Open waitlist" },
       },
     ])
@@ -730,7 +730,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(vacantUnitsGroup)).toEqual([
       {
         rent: { cellSubText: "", cellText: "n/a" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom" },
         availability: {
           cellText: "3 Vacant units & Closed waitlist",
         },
@@ -753,7 +753,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(comingSoonGroup, true)).toEqual([
       {
         rent: { cellSubText: "", cellText: "n/a" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 Bedroom" },
         availability: { cellText: "Under construction" },
       },
     ])
@@ -835,7 +835,7 @@ describe("getAvailabilityText", () => {
           },
         })
       )
-      expect(renderToString(result.barContent)).toContain("1 BR")
+      expect(renderToString(result.barContent)).toContain("1 Bedroom")
       expect(renderToString(result.barContent)).toContain("1 unit")
     })
     it("hide headers if no data", () => {

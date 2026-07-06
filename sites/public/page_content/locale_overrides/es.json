@@ -20,5 +20,6 @@
   "resources.contactInfo": "Departamento de Vivienda y Desarrollo Comunitario de Bloomington",
   "resources.housingProgramsTitle": "Programas de vivienda de Vivienda y Desarrollo Comunitario de Bloomington",
   "resources.additionalResourcesLink": "/housing-basics",
-  "resources.additionalResourcesTitle": "Obtenga más información sobre el Programa de Vivienda Accesible (AcHP), incluida una lista de proyectos de vivienda cubiertos, recursos para inquilinos, políticas y cómo presentar una queja."
+  "resources.additionalResourcesTitle": "Obtenga más información sobre el Programa de Vivienda Accesible (AcHP), incluida una lista de proyectos de vivienda cubiertos, recursos para inquilinos, políticas y cómo presentar una queja.",
+  "t.nonProdBanner": "Este sitio es solo para fines de prueba. No se aceptarán solicitudes. Visite el <a href='https://www.example.com/' target='_blank'>sitio web oficial</a> para solicitar vivienda."
 }

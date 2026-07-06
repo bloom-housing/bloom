@@ -73,6 +73,11 @@ const ApplicationsList = () => {
     listingDto?.jurisdictions.id
   )
 
+  const enableMultiselectVoucherQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMultiselectVoucherQuestion,
+    listingDto?.jurisdictions.id
+  )
+
   const [errorAlert, setErrorAlert] = useState(false)
 
   const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
@@ -178,7 +183,9 @@ const ApplicationsList = () => {
                   enableV2MSQ={enableV2MSQ}
                 />
 
-                <DetailsHouseholdIncome />
+                <DetailsHouseholdIncome
+                  enableMultiselectVoucherQuestion={enableMultiselectVoucherQuestion}
+                />
 
                 <DetailsMultiselectQuestions
                   listingId={application?.listings?.id}

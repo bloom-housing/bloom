@@ -245,6 +245,10 @@ export class ApplicationExporterService {
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.swapCommunityTypeWithPrograms,
     );
+    const enableMultiselectVoucherQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableMultiselectVoucherQuestion,
+    );
 
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
@@ -267,6 +271,7 @@ export class ApplicationExporterService {
         enableApplicationStatus,
         enableFullTimeStudentQuestion,
         enableReasonableAccommodations,
+        enableMultiselectVoucherQuestion,
         enableSpokenLanguage,
         enableGenderQuestion,
         enableSexualOrientationQuestion,
@@ -538,6 +543,10 @@ export class ApplicationExporterService {
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.swapCommunityTypeWithPrograms,
     );
+    const enableMultiselectVoucherQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableMultiselectVoucherQuestion,
+    );
 
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
@@ -560,6 +569,7 @@ export class ApplicationExporterService {
         enableApplicationStatus,
         enableFullTimeStudentQuestion,
         enableReasonableAccommodations,
+        enableMultiselectVoucherQuestion,
         enableGenderQuestion,
         enableSexualOrientationQuestion,
         enableV2MSQ,

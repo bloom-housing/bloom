@@ -84,7 +84,7 @@ const ApplicationIncome = () => {
     const incomeValue = income.replaceAll(",", "")
     // Skip validation of total income if no units or the applicant has income vouchers.
     const validationError =
-      !listing.units?.length || application.incomeVouchers || !enableVerifyIncome
+      !listing.units?.length || application.incomeVouchers?.length > 0 || !enableVerifyIncome
         ? null
         : verifyIncome(listing, incomeValue, incomePeriod)
     setIncomeError(validationError)

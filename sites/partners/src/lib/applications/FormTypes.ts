@@ -25,7 +25,8 @@ export type ApplicationTypes = {
   contactPreferences?: string[]
   acceptedTerms?: YesNoEnum
   incomePeriod?: IncomePeriodEnum
-  incomeVouchers?: YesNoEnum
+  incomeVouchers?: string[]
+  incomeVouchersYesNo?: string
   preferredUnit?: string[]
   householdExpectingChanges?: YesNoEnum
   householdStudent?: YesNoEnum

@@ -20,5 +20,6 @@
   "resources.contactInfo": "布卢明顿住房和社区发展部",
   "resources.housingProgramsTitle": "布卢明顿的住房和社区发展住房项目",
   "resources.additionalResourcesLink": "/housing-basics",
-  "resources.additionalResourcesTitle": "了解更多关于可达性住房计划 (AcHP) 的信息，包括涵盖的住房项目清单、租户资源、政策以及如何提交申诉。"
+  "resources.additionalResourcesTitle": "了解更多关于可达性住房计划 (AcHP) 的信息，包括涵盖的住房项目清单、租户资源、政策以及如何提交申诉。",
+  "t.nonProdBanner": "本网站仅用于测试目的，不接受任何申请。请访问<a href='https://www.example.com/' target='_blank'>官方网站</a>申请住房。"
 }

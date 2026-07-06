@@ -213,9 +213,9 @@ export function getColDefs(
       width: 100,
       minWidth: 50,
       valueFormatter: (data) => {
-        if (!data.value) return ""
+        if (!data.value || data.value.length === 0) return t("t.no")
 
-        return data.value ? t("t.yes") : t("t.no")
+        return data.value.join(", ")
       },
       comparator: compareStrings,
     },
