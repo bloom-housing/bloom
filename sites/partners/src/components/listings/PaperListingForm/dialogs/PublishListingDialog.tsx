@@ -3,18 +3,25 @@ import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/back
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import { SubmitFunction } from "../index"
+import { getValidFutureScheduledDate } from "../../helpers"
 
 export interface PublishListingDialogProps {
   isOpen: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   submitFormWithStatus: SubmitFunction
+  enableAutopublish?: boolean
+  scheduledPublishAt?: Date | string | null
 }
 
 const PublishListingDialog = ({
   isOpen,
   setOpen,
   submitFormWithStatus,
+  enableAutopublish,
+  scheduledPublishAt,
 }: PublishListingDialogProps) => {
+  const scheduledDate = enableAutopublish ? getValidFutureScheduledDate(scheduledPublishAt) : false
+
   return (
     <Dialog
       isOpen={!!isOpen}
@@ -26,20 +33,25 @@ const PublishListingDialog = ({
         {t("t.areYouSure")}
       </Dialog.Header>
       <Dialog.Content id="listing-form-publish-listing-dialog-content">
-        {t("listings.publishThisListing")}
+        {scheduledDate
+          ? t("listings.approval.adminPublishWithScheduledDate", { date: scheduledDate })
+          : t("listings.publishThisListing")}
       </Dialog.Content>
       <Dialog.Footer>
         <Button
           id="publishButtonConfirm"
           type="button"
-          variant="success"
+          variant={scheduledDate ? "primary" : "success"}
           onClick={() => {
             setOpen(false)
-            submitFormWithStatus("redirect", ListingsStatusEnum.active)
+            submitFormWithStatus(
+              "redirect",
+              scheduledDate ? ListingsStatusEnum.scheduled : ListingsStatusEnum.active
+            )
           }}
           size="sm"
         >
-          {t("listings.actions.publish")}
+          {scheduledDate ? t("t.submit") : t("listings.actions.publish")}
         </Button>
         <Button
           type="button"

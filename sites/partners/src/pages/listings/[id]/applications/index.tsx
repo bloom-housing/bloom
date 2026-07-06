@@ -26,6 +26,7 @@ import { NavigationHeader } from "../../../../components/shared/NavigationHeader
 import ListingGuard from "../../../../components/shared/ListingGuard"
 import { StatusBar } from "../../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../../../../components/listings/helpers"
+import BulkUpdateDrawer from "../../../../components/applications/BulkUpdateDrawer"
 
 const ApplicationsList = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -35,6 +36,7 @@ const ApplicationsList = () => {
   const [applicationConfirmAddModal, setApplicationConfirmAddModal] = useState(false)
   const [applicationConfirmAddPostLotteryModal, setApplicationConfirmAddPostLotteryModal] =
     useState(false)
+  const [bulkUpdateModalOpen, setBulkUpdateModalOpen] = useState(false)
 
   const tableOptions = useAgTable()
 
@@ -256,6 +258,16 @@ const ApplicationsList = () => {
                           >
                             {t("t.export")}
                           </Button>
+
+                          {enableApplicationStatus && (
+                            <Button
+                              variant="primary-outlined"
+                              size="sm"
+                              onClick={() => setBulkUpdateModalOpen(true)}
+                            >
+                              {t("applications.bulkUpdate")}
+                            </Button>
+                          )}
                         </div>
                       }
                     />
@@ -331,6 +343,11 @@ const ApplicationsList = () => {
             </Button>
           </Dialog.Footer>
         </Dialog>
+
+        <BulkUpdateDrawer
+          isOpen={bulkUpdateModalOpen}
+          onClose={() => setBulkUpdateModalOpen(false)}
+        />
       </Layout>
     </ListingGuard>
   )

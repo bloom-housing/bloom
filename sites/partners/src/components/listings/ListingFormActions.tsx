@@ -24,6 +24,7 @@ import { StatusAside } from "../shared/StatusAside"
 import { SubmitFunction } from "./PaperListingForm"
 import { ListingContext } from "./ListingContext"
 import { createDate } from "../../lib/helpers"
+import { getValidFutureScheduledDate } from "./helpers"
 
 export enum ListingFormActionsType {
   add = "add",
@@ -129,17 +130,9 @@ const ListingFormActions = ({
   }, [listing])
 
   const getApprovedStatus = useCallback((): ListingsStatusEnum => {
-    const hasValidScheduledAt =
-      listing?.scheduledPublishAt != null && dayjs.utc(listing.scheduledPublishAt).isValid()
-
-    if (!hasValidScheduledAt) return ListingsStatusEnum.active
-
-    const scheduledAtDate = dayjs.utc(listing.scheduledPublishAt).format("MM/DD/YYYY")
-    if (dayjs().startOf("day").isBefore(dayjs(scheduledAtDate).startOf("day"))) {
-      return ListingsStatusEnum.scheduled
-    }
-
-    return ListingsStatusEnum.active
+    return getValidFutureScheduledDate(listing?.scheduledPublishAt)
+      ? ListingsStatusEnum.scheduled
+      : ListingsStatusEnum.active
   }, [listing?.scheduledPublishAt])
 
   const approveAndSetStatus = useCallback(
@@ -747,9 +740,7 @@ const ListingFormActions = ({
             onClose={() => setSaveScheduledDialogOpen(false)}
             onConfirm={() => {
               setSaveScheduledDialogOpen(false)
-              const hasScheduledDate =
-                scheduledPublishAt != null && dayjs.utc(scheduledPublishAt).isValid()
-              if (hasScheduledDate) {
+              if (getValidFutureScheduledDate(scheduledPublishAt)) {
                 submitFormWithStatus("continue", ListingsStatusEnum.scheduled)
               } else {
                 submitFormWithStatus("redirect", ListingsStatusEnum.active)

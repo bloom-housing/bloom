@@ -113,6 +113,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
       <Drawer.Content id="drawer-content">
         <div role="document">
           <Form method="get" onSubmit={handleSubmit(props.onSubmit)} id="filter">
+            <SearchSection register={register} nameState={props.filterState?.name} />
             {enableIsVerified && (
               <CheckboxGroup
                 groupLabel={t("listings.confirmedListings")}
@@ -254,7 +255,6 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               />
             )}
 
-            <SearchSection register={register} nameState={props.filterState?.name} />
             {props.multiselectData?.length > 0 && (
               <CheckboxGroup
                 groupLabel={t("t.community")}
