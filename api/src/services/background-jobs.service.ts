@@ -76,7 +76,13 @@ export class BackgroundJobsService {
    * @param jobId - Id of the job to return data on
    * @returns Details on the requested job
    */
-  async getById(jobId: string): Promise<BackgroundJob> {
+  async getById(jobId: string, requestingUser: User): Promise<BackgroundJob> {
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'jobs',
+      permissionActions.read,
+    );
+
     try {
       const jobData = await this.prismaService.backgroundJob.findFirstOrThrow({
         where: {
@@ -95,7 +101,16 @@ export class BackgroundJobsService {
    * @param listingId - Id of the listing for which the job should be retrieved
    * @returns Details on the currently processed job for the desired listing
    */
-  async findActiveForListing(listingId: string): Promise<BackgroundJob | null> {
+  async findActiveForListing(
+    listingId: string,
+    requestingUser: User,
+  ): Promise<BackgroundJob | null> {
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'jobs',
+      permissionActions.read,
+    );
+
     const activeJob = await this.prismaService.backgroundJob.findFirst({
       where: {
         listingId: listingId,
@@ -110,7 +125,13 @@ export class BackgroundJobsService {
    * Returns true if there is any job running (i.e. in status other than completed or failed)
    * @returns True if any active job exists (false otherwise)
    */
-  async findActiveJob(): Promise<boolean> {
+  async findActiveJob(requestingUser: User): Promise<boolean> {
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'jobs',
+      permissionActions.read,
+    );
+    
     const activeJob = await this.prismaService.backgroundJob.findFirst({
       select: {},
       where: {

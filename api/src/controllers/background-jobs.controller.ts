@@ -61,8 +61,12 @@ export class BackgroundJobsController {
   @ApiOkResponse({ type: BackgroundJob })
   public async getListingActiveJob(
     @Query('listingId') listingId: string,
+    @Request() req: ExpressRequest,
   ): Promise<BackgroundJob | null> {
-    return await this.backgroundJobsService.findActiveForListing(listingId);
+    return await this.backgroundJobsService.findActiveForListing(
+      listingId,
+      mapTo(User, req['user']),
+    );
   }
 
   @Get(':jobId')
@@ -73,7 +77,11 @@ export class BackgroundJobsController {
   @ApiOkResponse({ type: BackgroundJob })
   public async getJobById(
     @Param('jobId') jobId: string,
+    @Request() req: ExpressRequest,
   ): Promise<BackgroundJob> {
-    return await this.backgroundJobsService.getById(jobId);
+    return await this.backgroundJobsService.getById(
+      jobId,
+      mapTo(User, req['user']),
+    );
   }
 }
