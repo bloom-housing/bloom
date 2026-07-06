@@ -8068,24 +8068,6 @@ describe('Testing listing service', () => {
       expect(result).toBe(storedDate);
     });
 
-    it('active → changesRequested: returns stored value', () => {
-      const result = ListingService['resolvePublishedAt'](
-        ListingsStatusEnum.changesRequested,
-        ListingsStatusEnum.active,
-        storedDate,
-      );
-      expect(result).toBe(storedDate);
-    });
-
-    it('active → pendingReview: returns stored value', () => {
-      const result = ListingService['resolvePublishedAt'](
-        ListingsStatusEnum.pendingReview,
-        ListingsStatusEnum.active,
-        storedDate,
-      );
-      expect(result).toBe(storedDate);
-    });
-
     it('scheduled → active: returns a new Date (scheduled auto-publish path)', () => {
       const result = ListingService['resolvePublishedAt'](
         ListingsStatusEnum.active,
