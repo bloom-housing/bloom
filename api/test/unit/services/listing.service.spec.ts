@@ -6246,6 +6246,7 @@ describe('Testing listing service', () => {
           section8Acceptance: false,
           unitsAvailable: 0,
           isVerified: false,
+          publishedAt: null,
         },
         where: {
           id: expect.anything(),
@@ -6467,6 +6468,7 @@ describe('Testing listing service', () => {
           },
           isVerified: false,
           section8Acceptance: false,
+          publishedAt: null,
         },
         where: {
           id: expect.anything(),
@@ -7037,6 +7039,7 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           closedAt: expect.anything(),
+          publishedAt: null,
           scheduledPublishAt: null,
           scheduledApplicationOpenAt: null,
           lastUpdatedByUser: {
@@ -8224,6 +8227,64 @@ describe('Testing listing service', () => {
       const normalized =
         service.normalizeScheduledApplicationOpenAt(nonMidnight);
       expect(normalized.toISOString()).toBe('2026-05-15T16:00:00.000Z');
+    });
+  });
+
+  describe('resolvePublishedAt', () => {
+    const storedDate = new Date('2025-01-01T00:00:00.000Z');
+
+    it('pending → active: returns a new Date (first publish)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.active,
+        ListingsStatusEnum.pending,
+        null,
+      );
+      expect(result).toBeInstanceOf(Date);
+    });
+
+    it('active → active: returns stored value (no re-stamp)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.active,
+        ListingsStatusEnum.active,
+        storedDate,
+      );
+      expect(result).toBe(storedDate);
+    });
+
+    it('active → pending: returns null (clears publishedAt)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.pending,
+        ListingsStatusEnum.active,
+        storedDate,
+      );
+      expect(result).toBeNull();
+    });
+
+    it('pending → pending: returns null (was never published)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.pending,
+        ListingsStatusEnum.pending,
+        null,
+      );
+      expect(result).toBeNull();
+    });
+
+    it('active → closed: returns stored value', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.closed,
+        ListingsStatusEnum.active,
+        storedDate,
+      );
+      expect(result).toBe(storedDate);
+    });
+
+    it('scheduled → active: returns a new Date (scheduled auto-publish path)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.active,
+        ListingsStatusEnum.scheduled,
+        null,
+      );
+      expect(result).toBeInstanceOf(Date);
     });
   });
 });
