@@ -1,4 +1,7 @@
 import React from "react"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
 import { t } from "@bloom-housing/ui-components"
 import { Tag } from "@bloom-housing/ui-seeds"
 import { ListingsStatusEnum, MinMax } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -100,6 +103,22 @@ export const formatRange = (
   if (min == max || !max) return `${prefix}${min}${postfix}`
   if (!min) return `${prefix}${max}${postfix}`
   return `${prefix}${min}${postfix} - ${prefix}${max}${postfix}`
+}
+
+/**
+ * Returns the formatted scheduled publish date (MM/DD/YYYY) if it is valid and in the future,
+ * or false if the date is absent, invalid, or in the past.
+ */
+export function getValidFutureScheduledDate(
+  scheduledPublishAt: Date | string | null | undefined
+): string | false {
+  if (scheduledPublishAt == null) return false
+  const scheduledAt = dayjs.utc(scheduledPublishAt)
+  if (!scheduledAt.isValid()) return false
+  if (dayjs.utc().startOf("day").isBefore(scheduledAt.startOf("day"))) {
+    return scheduledAt.format("MM/DD/YYYY")
+  }
+  return false
 }
 
 export function formatRentRange(rent: MinMax, percent: MinMax): string {

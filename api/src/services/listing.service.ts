@@ -2372,8 +2372,9 @@ export class ListingService implements OnModuleInit {
         : null;
       // test if not publishing or unpublishing listing and scheduledPublishAt is set
       if (
-        incomingDto.status === storedListing.status &&
-        incomingDto.status !== ListingsStatusEnum.active &&
+        storedListing.status !== ListingsStatusEnum.active &&
+        (incomingDto.status === storedListing.status ||
+          incomingDto.status === ListingsStatusEnum.pendingReview) &&
         incomingDto.scheduledPublishAt
       ) {
         this.checkScheduledDateIsInFuture(
@@ -2926,11 +2927,11 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
-          publishedAt:
-            storedListing.status !== ListingsStatusEnum.active &&
-            incomingDto.status === ListingsStatusEnum.active
-              ? new Date()
-              : storedListing.publishedAt,
+          publishedAt: ListingService.resolvePublishedAt(
+            incomingDto.status,
+            storedListing.status,
+            storedListing.publishedAt,
+          ),
           closedAt:
             storedListing.status !== ListingsStatusEnum.closed &&
             incomingDto.status === ListingsStatusEnum.closed
@@ -3353,6 +3354,23 @@ export class ListingService implements OnModuleInit {
     const appTimezone = process.env.TIME_ZONE;
     const dateStr = dayjs.utc(scheduledPublishAt).format('YYYY-MM-DD');
     return dayjs.tz(dateStr, 'YYYY-MM-DD', appTimezone).startOf('day').toDate();
+  }
+
+  private static resolvePublishedAt(
+    incomingStatus: ListingsStatusEnum,
+    storedStatus: ListingsStatusEnum,
+    storedPublishedAt: Date | null,
+  ): Date | null {
+    if (
+      incomingStatus === ListingsStatusEnum.active &&
+      storedStatus !== ListingsStatusEnum.active
+    ) {
+      return new Date();
+    }
+    if (incomingStatus === ListingsStatusEnum.pending) {
+      return null;
+    }
+    return storedPublishedAt ?? null;
   }
 
   private checkScheduledDateIsInFuture(date: Date, fieldName: string): void {

@@ -5821,6 +5821,74 @@ describe('Testing listing service', () => {
       );
       expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
+
+    describe('scheduledPublishAt validation on create', () => {
+      const mockJurisdictionWithAutopublish = () => {
+        prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+          id: 'jurisdiction-id',
+          featureFlags: [
+            { name: FeatureFlagEnum.enableAutopublish, active: true },
+          ],
+        });
+      };
+
+      it('should throw when creating a listing with a past scheduledPublishAt', async () => {
+        mockJurisdictionWithAutopublish();
+
+        await expect(
+          service.create(
+            {
+              name: 'listing name',
+              depositMin: '5',
+              assets: [],
+              jurisdictions: { id: randomUUID() },
+              status: ListingsStatusEnum.pending,
+              displayWaitlistSize: false,
+              unitsSummary: null,
+              listingEvents: [],
+              isVerified: true,
+              scheduledPublishAt: new Date('2020-01-01T00:00:00.000Z'),
+            } as ListingCreate,
+            user,
+          ),
+        ).rejects.toMatchObject({
+          response: { message: ['scheduledPublishAt must be in the future'] },
+        });
+      });
+
+      it('should not throw when creating a listing with a future scheduledPublishAt', async () => {
+        jest
+          .useFakeTimers()
+          .setSystemTime(new Date('2020-01-01T00:00:00.000Z'));
+        mockJurisdictionWithAutopublish();
+        prisma.listings.create = jest.fn().mockResolvedValue({
+          id: 'example id',
+          name: 'example name',
+        });
+        prisma.listingSnapshot.create = jest
+          .fn()
+          .mockResolvedValue({ id: 'snapshot-id' });
+
+        await expect(
+          service.create(
+            {
+              name: 'listing name',
+              depositMin: '5',
+              assets: [],
+              jurisdictions: { id: randomUUID() },
+              status: ListingsStatusEnum.pending,
+              displayWaitlistSize: false,
+              unitsSummary: null,
+              listingEvents: [],
+              isVerified: true,
+              scheduledPublishAt: new Date('2030-01-01T00:00:00.000Z'),
+            } as ListingCreate,
+            user,
+          ),
+        ).resolves.not.toThrow();
+        jest.useRealTimers();
+      });
+    });
   });
 
   describe('Test delete endpoint', () => {
@@ -6184,6 +6252,7 @@ describe('Testing listing service', () => {
           section8Acceptance: false,
           unitsAvailable: 0,
           isVerified: false,
+          publishedAt: null,
         },
         where: {
           id: expect.anything(),
@@ -6405,6 +6474,7 @@ describe('Testing listing service', () => {
           },
           isVerified: false,
           section8Acceptance: false,
+          publishedAt: null,
         },
         where: {
           id: expect.anything(),
@@ -6975,6 +7045,7 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           closedAt: expect.anything(),
+          publishedAt: null,
           scheduledPublishAt: null,
           scheduledApplicationOpenAt: null,
           lastUpdatedByUser: {
@@ -7074,6 +7145,148 @@ describe('Testing listing service', () => {
       expect(
         multiselectQuestionServiceMock.retireMultiselectQuestions,
       ).toHaveBeenCalled();
+    });
+
+    describe('scheduledPublishAt validation bypasses on publishing or unpublishing', () => {
+      const pastDate = new Date('2020-01-01T00:00:00.000Z');
+      const futureDate = new Date('2030-01-01T00:00:00.000Z');
+
+      beforeAll(() => {
+        jest
+          .useFakeTimers()
+          .setSystemTime(new Date('2025-01-01T00:00:00.000Z'));
+      });
+
+      afterAll(() => {
+        jest.useRealTimers();
+      });
+
+      const baseDto = (
+        incomingStatus: ListingsStatusEnum,
+        scheduledPublishAt: Date,
+      ) =>
+        ({
+          id: 'listing-id',
+          name: 'listing name',
+          depositMin: '5',
+          assets: [],
+          jurisdictions: { id: 'jurisdiction-id' },
+          status: incomingStatus,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+          lastUpdatedByUser: user,
+          scheduledPublishAt,
+        } as ListingUpdate);
+
+      const mockStoredListing = (status: ListingsStatusEnum) => {
+        prisma.listings.findUnique = jest.fn().mockResolvedValue({
+          id: 'listing-id',
+          status,
+          listingMultiselectQuestions: [],
+        });
+      };
+
+      const mockJurisdictionWithAutopublish = () => {
+        prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+          id: 'jurisdiction-id',
+          featureFlags: [
+            { name: FeatureFlagEnum.enableAutopublish, active: true },
+          ],
+          listingApprovalPermissions: [],
+        });
+      };
+
+      const mockListingUpdate = (resultStatus: ListingsStatusEnum) => {
+        prisma.listings.update = jest.fn().mockResolvedValue({
+          id: 'listing-id',
+          status: resultStatus,
+          listingMultiselectQuestions: [],
+          units: [],
+        });
+        prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+        prisma.$transaction = jest.fn().mockResolvedValue([
+          {
+            id: 'listing-id',
+            listingMultiselectQuestions: [],
+            units: [],
+          },
+        ]);
+      };
+
+      it('should throw when updating a non-active listing with no status change and a past scheduledPublishAt', async () => {
+        mockStoredListing(ListingsStatusEnum.pending);
+        mockJurisdictionWithAutopublish();
+
+        await expect(
+          service.update(baseDto(ListingsStatusEnum.pending, pastDate), user),
+        ).rejects.toMatchObject({
+          response: { message: ['scheduledPublishAt must be in the future'] },
+        });
+      });
+
+      it('should throw when transitioning from non-active to pendingReview with a past scheduledPublishAt', async () => {
+        mockStoredListing(ListingsStatusEnum.pending);
+        mockJurisdictionWithAutopublish();
+
+        await expect(
+          service.update(
+            baseDto(ListingsStatusEnum.pendingReview, pastDate),
+            user,
+          ),
+        ).rejects.toMatchObject({
+          response: { message: ['scheduledPublishAt must be in the future'] },
+        });
+      });
+
+      it('should not throw when publishing (status → active) with a past scheduledPublishAt', async () => {
+        mockStoredListing(ListingsStatusEnum.pending);
+        mockJurisdictionWithAutopublish();
+        mockListingUpdate(ListingsStatusEnum.active);
+        jest
+          .spyOn(service, 'getUserEmailInfo')
+          .mockResolvedValueOnce({ emails: [] });
+        jest
+          .spyOn(service, 'sendListingPublishNotification')
+          .mockResolvedValueOnce(undefined);
+
+        await expect(
+          service.update(baseDto(ListingsStatusEnum.active, pastDate), user),
+        ).resolves.not.toThrow();
+      });
+
+      it('should not throw when unpublishing (active → pending) with a past scheduledPublishAt', async () => {
+        mockStoredListing(ListingsStatusEnum.active);
+        mockJurisdictionWithAutopublish();
+        mockListingUpdate(ListingsStatusEnum.pending);
+
+        await expect(
+          service.update(baseDto(ListingsStatusEnum.pending, pastDate), user),
+        ).resolves.not.toThrow();
+      });
+
+      it('should not throw when an active listing stays active with a past scheduledPublishAt', async () => {
+        mockStoredListing(ListingsStatusEnum.active);
+        mockJurisdictionWithAutopublish();
+        mockListingUpdate(ListingsStatusEnum.active);
+        jest
+          .spyOn(service, 'sendListingPublishNotification')
+          .mockResolvedValueOnce(undefined);
+
+        await expect(
+          service.update(baseDto(ListingsStatusEnum.active, pastDate), user),
+        ).resolves.not.toThrow();
+      });
+
+      it('should not throw when updating a non-active listing with a future scheduledPublishAt', async () => {
+        mockStoredListing(ListingsStatusEnum.pending);
+        mockJurisdictionWithAutopublish();
+        mockListingUpdate(ListingsStatusEnum.pending);
+
+        await expect(
+          service.update(baseDto(ListingsStatusEnum.pending, futureDate), user),
+        ).resolves.not.toThrow();
+      });
     });
   });
 
@@ -8020,6 +8233,64 @@ describe('Testing listing service', () => {
       const normalized =
         service.normalizeScheduledApplicationOpenAt(nonMidnight);
       expect(normalized.toISOString()).toBe('2026-05-15T16:00:00.000Z');
+    });
+  });
+
+  describe('resolvePublishedAt', () => {
+    const storedDate = new Date('2025-01-01T00:00:00.000Z');
+
+    it('pending → active: returns a new Date (first publish)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.active,
+        ListingsStatusEnum.pending,
+        null,
+      );
+      expect(result).toBeInstanceOf(Date);
+    });
+
+    it('active → active: returns stored value (no re-stamp)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.active,
+        ListingsStatusEnum.active,
+        storedDate,
+      );
+      expect(result).toBe(storedDate);
+    });
+
+    it('active → pending: returns null (clears publishedAt)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.pending,
+        ListingsStatusEnum.active,
+        storedDate,
+      );
+      expect(result).toBeNull();
+    });
+
+    it('pending → pending: returns null (was never published)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.pending,
+        ListingsStatusEnum.pending,
+        null,
+      );
+      expect(result).toBeNull();
+    });
+
+    it('active → closed: returns stored value', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.closed,
+        ListingsStatusEnum.active,
+        storedDate,
+      );
+      expect(result).toBe(storedDate);
+    });
+
+    it('scheduled → active: returns a new Date (scheduled auto-publish path)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.active,
+        ListingsStatusEnum.scheduled,
+        null,
+      );
+      expect(result).toBeInstanceOf(Date);
     });
   });
 });
