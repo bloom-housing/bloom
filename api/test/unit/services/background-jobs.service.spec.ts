@@ -117,7 +117,7 @@ describe('Background Jobs Service Tests', () => {
         .fn()
         .mockResolvedValue(dbJobRecord);
 
-      const result = await service.getById(jobId);
+      const result = await service.getById(jobId, requestingUser);
 
       expect(result).toBeInstanceOf(BackgroundJob);
       expect(result.listingId).toBe(listingId);
@@ -132,7 +132,9 @@ describe('Background Jobs Service Tests', () => {
         .fn()
         .mockRejectedValue(new Error('Not found'));
 
-      await expect(service.getById('non-existent-id')).rejects.toThrow(
+      await expect(
+        service.getById('non-existent-id', requestingUser),
+      ).rejects.toThrow(
         new NotFoundException(`Job with id: non-existent-id was not found`),
       );
     });
@@ -141,7 +143,10 @@ describe('Background Jobs Service Tests', () => {
   describe('findActiveForListing', () => {
     it('should return a BackgroundJob when an active processing job exists', async () => {
       prisma.backgroundJob.findFirst = jest.fn().mockResolvedValue(dbJobRecord);
-      const result = await service.findActiveForListing(listingId);
+      const result = await service.findActiveForListing(
+        listingId,
+        requestingUser,
+      );
 
       expect(result).toBeInstanceOf(BackgroundJob);
       expect(result?.listingId).toBe(listingId);
@@ -156,7 +161,10 @@ describe('Background Jobs Service Tests', () => {
 
     it('should return null when no active processing job exists for the listing', async () => {
       prisma.backgroundJob.findFirst = jest.fn().mockResolvedValue(null);
-      const result = await service.findActiveForListing(listingId);
+      const result = await service.findActiveForListing(
+        listingId,
+        requestingUser,
+      );
 
       expect(result).toBeNull();
     });
@@ -165,11 +173,11 @@ describe('Background Jobs Service Tests', () => {
   describe('findActiveJob', () => {
     it('should return true when a processing job exists', async () => {
       prisma.backgroundJob.findFirst = jest.fn().mockResolvedValue(dbJobRecord);
-      const result = await service.findActiveJob();
+      const result = await service.findActiveJob(requestingUser);
 
       expect(result).toBe(true);
       expect(prisma.backgroundJob.findFirst).toHaveBeenCalledWith({
-        select: {},
+        select: { id: true },
         where: {
           status: BackgroundJobStatusEnum.processing,
         },
@@ -178,7 +186,7 @@ describe('Background Jobs Service Tests', () => {
 
     it('should return false when no processing job exists', async () => {
       prisma.backgroundJob.findFirst = jest.fn().mockResolvedValue(null);
-      const result = await service.findActiveJob();
+      const result = await service.findActiveJob(requestingUser);
 
       expect(result).toBe(false);
     });
