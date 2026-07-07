@@ -370,6 +370,7 @@ function ListingsSearchCombined() {
         activeFeatureFlags={props.activeFeatureFlags}
         regions={props.regions}
         listingFeaturesConfiguration={props.listingFeaturesConfiguration}
+        subJurisdictions={props.subJurisdictions}
       />
 
       <ListingsMapContext.Provider value={mapContextValue}>
