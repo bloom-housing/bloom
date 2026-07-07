@@ -9,6 +9,7 @@ dayjs.extend(customParseFormat)
 import { Control, DeepMap, FieldError, FieldValues, UseFormMethods } from "react-hook-form"
 import {
   Field,
+  PasswordField,
   t,
   DOBField,
   DOBFieldValues,
@@ -156,7 +157,6 @@ export const emailFields = (
 export const passwordFields = (
   pwdErrors: DeepMap<FieldValues, FieldError>,
   pwdRegister: UseFormMethods["register"],
-  password: React.RefObject<unknown>,
   minLength: number
 ) => {
   return (
@@ -166,8 +166,7 @@ export const passwordFields = (
       </legend>
       <p className="field-note mt-2 mb-3">{t("account.settings.passwordRemember")}</p>
       <div className={"flex flex-col"}>
-        <Field
-          type="password"
+        <PasswordField
           name="currentPassword"
           label={t("account.settings.currentPassword")}
           error={pwdErrors.currentPassword}
@@ -180,8 +179,7 @@ export const passwordFields = (
         </span>
       </div>
 
-      <Field
-        type="password"
+      <PasswordField
         name="password"
         label={t("account.settings.newPassword")}
         labelClassName="mt-4"
@@ -196,21 +194,6 @@ export const passwordFields = (
         register={pwdRegister}
         dataTestId={"account-password"}
       />
-
-      <Field
-        type="password"
-        name="passwordConfirmation"
-        label={t("account.settings.confirmNewPassword")}
-        className="mt-4"
-        validation={{
-          validate: (value) =>
-            value === password.current || t("authentication.createAccount.errors.passwordMismatch"),
-        }}
-        error={pwdErrors.passwordConfirmation}
-        errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
-        register={pwdRegister}
-        dataTestId={"account-password-confirmation"}
-      />
     </fieldset>
   )
 }
@@ -218,18 +201,15 @@ export const passwordFields = (
 export const createAccountPasswordFields = (
   pwdErrors: DeepMap<FieldValues, FieldError>,
   pwdRegister: UseFormMethods["register"],
-  password: React.RefObject<unknown>,
-  controlClassName?: string,
-  fieldClassName?: string
+  controlClassName?: string
 ) => {
   return (
     <fieldset>
       <legend className={"text__caps-spaced seeds-m-be-0"}>
         {t("authentication.createAccount.password")}
       </legend>
-      <Field
+      <PasswordField
         labelClassName={"sr-only"}
-        type={"password"}
         name="password"
         note={t("authentication.createAccount.passwordInfo")}
         label={t("authentication.createAccount.password")}
@@ -242,31 +222,6 @@ export const createAccountPasswordFields = (
         errorMessage={t("authentication.signIn.passwordError")}
         register={pwdRegister}
         controlClassName={controlClassName}
-      />
-      <Field
-        type="password"
-        id="passwordConfirmation"
-        name="passwordConfirmation"
-        validation={{
-          validate: (value) =>
-            value === password.current || t("authentication.createAccount.errors.passwordMismatch"),
-        }}
-        onPaste={(e) => {
-          e.preventDefault()
-          e.nativeEvent.stopImmediatePropagation()
-          return false
-        }}
-        onDrop={(e) => {
-          e.preventDefault()
-          e.nativeEvent.stopImmediatePropagation()
-          return false
-        }}
-        error={pwdErrors.passwordConfirmation}
-        errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
-        register={pwdRegister}
-        controlClassName={controlClassName}
-        label={t("authentication.createAccount.reEnterPassword")}
-        className={fieldClassName ? `${fieldClassName} seeds-m-bs-0` : "seeds-m-bs-0"}
       />
     </fieldset>
   )
@@ -711,21 +666,12 @@ export const createPasswordSubmitHandler = (
   setUser: React.Dispatch<React.SetStateAction<User>>,
   user: any // eslint-disable-line @typescript-eslint/no-explicit-any
 ) => {
-  return async (data: {
-    password: string
-    passwordConfirmation: string
-    currentPassword: string
-  }) => {
+  return async (data: { password: string; currentPassword: string }) => {
     setLoading(true)
-    const { password, passwordConfirmation, currentPassword } = data
+    const { password, currentPassword } = data
     setAlert(null)
-    if (passwordConfirmation === "" || password === "") {
+    if (password === "") {
       setAlert({ type: "alert", message: `${t("account.settings.alerts.passwordEmpty")}` })
-      setLoading(false)
-      return
-    }
-    if (passwordConfirmation !== password) {
-      setAlert({ type: "alert", message: `${t("account.settings.alerts.passwordMatch")}` })
       setLoading(false)
       return
     }

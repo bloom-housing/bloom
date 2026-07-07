@@ -316,43 +316,18 @@ describe("EditPublicAccount", () => {
 
       const currentPasswordField = screen.getByLabelText(/current password/i, { selector: "input" })
       const newPasswordField = screen.getByLabelText(/^new password$/i, { selector: "input" })
-      const confirmPasswordField = screen.getByLabelText(/^confirm new password$/i, {
-        selector: "input",
-      })
       const updateButton = document.getElementById("account-submit-password")
 
       await userEvent.type(currentPasswordField, "currentPassword123!")
       await userEvent.type(newPasswordField, "newPassword123!")
-      await userEvent.type(confirmPasswordField, "newPassword123!")
       await userEvent.click(updateButton)
 
       expect(mockUserService.updatePublic).toHaveBeenCalled()
-    })
 
-    it("should show error when passwords don't match", async () => {
-      renderEditPage()
-
-      await waitFor(() => {
-        expect(
-          screen.getByLabelText(/current password/i, { selector: "input" })
-        ).toBeInTheDocument()
-      })
-
-      const currentPasswordField = screen.getByLabelText(/current password/i, { selector: "input" })
-      const newPasswordField = screen.getByLabelText(/^new password$/i, { selector: "input" })
-      const confirmPasswordField = screen.getByLabelText(/^confirm new password$/i, {
-        selector: "input",
-      })
-      const updateButton = document.getElementById("account-submit-password")
-
-      await userEvent.type(currentPasswordField, "currentPassword123!")
-      await userEvent.type(newPasswordField, "newPassword123!")
-      await userEvent.type(confirmPasswordField, "differentPassword123!")
-      await userEvent.click(updateButton)
-
-      await waitFor(() => {
-        expect(screen.getByText(/The passwords do not match/i)).toBeInTheDocument()
-      })
+      const passwordInput = screen.getByLabelText(/^new password$/i, { selector: "input" })
+      expect(passwordInput).toHaveAttribute("type", "password")
+      await userEvent.click(screen.getByLabelText(/show password/i))
+      expect(passwordInput).toHaveAttribute("type", "text")
     })
 
     it("should show error when password fields are empty", async () => {
@@ -388,14 +363,10 @@ describe("EditPublicAccount", () => {
 
       const currentPasswordField = screen.getByLabelText(/current password/i, { selector: "input" })
       const newPasswordField = screen.getByLabelText(/^new password$/i, { selector: "input" })
-      const confirmPasswordField = screen.getByLabelText(/^confirm new password$/i, {
-        selector: "input",
-      })
       const updateButton = document.getElementById("account-submit-password")
 
       await userEvent.type(currentPasswordField, "wrongPassword")
       await userEvent.type(newPasswordField, "newPassword123!")
-      await userEvent.type(confirmPasswordField, "newPassword123!")
 
       await userEvent.click(updateButton)
 

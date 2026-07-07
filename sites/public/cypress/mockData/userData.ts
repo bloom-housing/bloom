@@ -12,7 +12,6 @@ export const publicUser = {
 export const updatedPublicUser = {
   email: "public-user@example.com",
   password: "Abcdefghijk1!",
-  passwordConfirmation: "Abcdefghijk1!",
   firstName: "First Updated",
   middleName: "Middle Updated",
   lastName: "Last Updated",
@@ -37,7 +36,6 @@ export const advocateUser = {
 export const updatedAdvocateUser = {
   email: "advocate@example.com",
   password: "Abcdefghijk1!",
-  passwordConfirmation: "Abcdefghijk1!",
   firstName: "Advocate Updated",
   middleName: "Middle Updated",
   lastName: "Last Updated",

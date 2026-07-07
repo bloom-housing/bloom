@@ -456,7 +456,6 @@ describe("AccountFieldHelpers", () => {
       await handler({
         currentPassword: "current-password",
         password: "",
-        passwordConfirmation: "",
       })
 
       expect(userService.updatePublic).not.toHaveBeenCalled()
@@ -464,30 +463,6 @@ describe("AccountFieldHelpers", () => {
       expect(setAlert).toHaveBeenCalledWith({
         type: "alert",
         message: t("account.settings.alerts.passwordEmpty"),
-      })
-    })
-
-    it("shows mismatch alert when password and confirmation differ", async () => {
-      const handler = createPasswordSubmitHandler(
-        userService as unknown as UserService,
-        "updatePublic",
-        setAlert,
-        setLoading,
-        setUser,
-        baseUser
-      )
-
-      await handler({
-        currentPassword: "current-password",
-        password: "newPassword123!",
-        passwordConfirmation: "differentPassword123!",
-      })
-
-      expect(userService.updatePublic).not.toHaveBeenCalled()
-      expect(setUser).not.toHaveBeenCalled()
-      expect(setAlert).toHaveBeenCalledWith({
-        type: "alert",
-        message: t("account.settings.alerts.passwordMatch"),
       })
     })
 
@@ -509,7 +484,6 @@ describe("AccountFieldHelpers", () => {
       await handler({
         currentPassword: "current-password",
         password: "newPassword123!",
-        passwordConfirmation: "newPassword123!",
       })
 
       expect(userService.updatePublic).toHaveBeenCalledWith({
@@ -541,7 +515,6 @@ describe("AccountFieldHelpers", () => {
       await handler({
         currentPassword: "current-password",
         password: "newPassword123!",
-        passwordConfirmation: "newPassword123!",
       })
 
       expect(setUser).not.toHaveBeenCalled()
@@ -567,7 +540,6 @@ describe("AccountFieldHelpers", () => {
       await handler({
         currentPassword: "current-password",
         password: "newPassword123!",
-        passwordConfirmation: "newPassword123!",
       })
 
       expect(setUser).not.toHaveBeenCalled()

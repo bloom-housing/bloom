@@ -42,7 +42,6 @@ describe("User accounts", () => {
     // Change the password
     cy.getByTestId("account-current-password").type(publicUser.password)
     cy.getByTestId("account-password").type(updatedPublicUser.password)
-    cy.getByTestId("account-password-confirmation").type(updatedPublicUser.passwordConfirmation)
     cy.getByID("account-submit-password").click()
     cy.getByTestId("alert-box").contains("Password update successful")
     cy.get("[aria-label='close alert']").click()
@@ -146,7 +145,6 @@ describe("User accounts", () => {
     // Change the password
     cy.getByTestId("account-current-password").type(advocateUser.password)
     cy.getByTestId("account-password").type(updatedAdvocateUser.password)
-    cy.getByTestId("account-password-confirmation").type(updatedAdvocateUser.passwordConfirmation)
     cy.getByID("account-submit-password").click()
     cy.getByTestId("alert-box").contains("Password update successful")
     cy.get("[aria-label='close alert']").click()

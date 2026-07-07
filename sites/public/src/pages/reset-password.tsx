@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext, useRef } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import { Field, t, AlertBox } from "@bloom-housing/ui-components"
+import { PasswordField, t, AlertBox } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -25,12 +25,9 @@ const ResetPassword = () => {
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch } = useForm()
+  const { register, handleSubmit, errors } = useForm()
   const [requestError, setRequestError] = useState<string>()
   const [loading, setLoading] = useState(false)
-
-  const passwordValue = useRef({})
-  passwordValue.current = watch("password", "")
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -40,12 +37,12 @@ const ResetPassword = () => {
     })
   }, [])
 
-  const onSubmit = async (data: { password: string; passwordConfirmation: string }) => {
+  const onSubmit = async (data: { password: string }) => {
     setLoading(true)
-    const { password, passwordConfirmation } = data
+    const { password } = data
 
     try {
-      const user = await resetPassword(token.toString(), password, passwordConfirmation)
+      const user = await resetPassword(token.toString(), password)
       const redirectUrl = router.query?.redirectUrl as string
       const listingId = router.query?.listingId as string
 
@@ -91,29 +88,13 @@ const ResetPassword = () => {
           <CardSection>
             <Form id="sign-in" onSubmit={handleSubmit(onSubmit)}>
               <p className="field-label mb-2">{t("authentication.createAccount.passwordInfo")}</p>
-              <Field
+              <PasswordField
                 name="password"
                 label={t("authentication.createAccount.password")}
                 validation={{ required: true }}
                 error={errors.password}
                 errorMessage={t("authentication.forgotPassword.enterNewLoginPassword")}
                 register={register}
-                type="password"
-                labelClassName={"text__caps-spaced"}
-              />
-
-              <Field
-                name="passwordConfirmation"
-                label={t("authentication.forgotPassword.passwordConfirmation")}
-                validation={{
-                  validate: (value) =>
-                    value === passwordValue.current ||
-                    t("authentication.createAccount.errors.passwordMismatch"),
-                }}
-                error={errors.passwordConfirmation}
-                errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
-                register={register}
-                type="password"
                 labelClassName={"text__caps-spaced"}
               />
 
