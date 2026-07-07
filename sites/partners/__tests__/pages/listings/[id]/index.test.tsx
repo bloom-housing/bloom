@@ -1678,6 +1678,34 @@ describe("listing data", () => {
         expect(screen.getByText("Accessible marketing flyer")).toBeInTheDocument()
         expect(screen.getByText("file_id_2.pdf")).toBeInTheDocument()
       })
+
+      it("should display scheduled application open date only when enableAutoOpenDate is enabled", () => {
+        render(
+          <AuthContext.Provider
+            value={{
+              profile: { ...user, jurisdictions: [], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                featureFlag === FeatureFlagEnum.enableAutoOpenDate,
+              getJurisdiction: () => jurisdiction,
+            }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                applicationDueDate: new Date(2024, 11, 20, 15, 30),
+                scheduledApplicationOpenAt: new Date("2030-06-16T00:00:00.000Z"),
+                listingEvents: [],
+              }}
+            >
+              <DetailApplicationDates />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        expect(screen.queryByText("Scheduled listing publish date")).not.toBeInTheDocument()
+        expect(screen.getByText("Scheduled application open date")).toBeInTheDocument()
+        expect(screen.getByText("06/16/2030")).toBeInTheDocument()
+      })
     })
 
     describe("should display Verification section", () => {
