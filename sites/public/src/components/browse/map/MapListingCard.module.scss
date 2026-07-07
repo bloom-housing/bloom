@@ -38,7 +38,9 @@
       }
 
       .image-side {
-        padding: var(--seeds-s3) 0 var(--seeds-s3) var(--seeds-s3);
+        @media (--md-and-up) {
+          padding: var(--seeds-s3) 0 var(--seeds-s3) var(--seeds-s3);
+        }
       }
 
       .image-background {
