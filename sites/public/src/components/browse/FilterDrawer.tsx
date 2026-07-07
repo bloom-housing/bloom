@@ -246,9 +246,9 @@ const FilterDrawer = (props: FilterDrawerProps) => {
                   return {
                     key: `${ListingFilterKeys.jurisdictions}.${county.id}`,
                     label: county.name,
-                    defaultChecked:
-                      isTrue(props.filterState?.[ListingFilterKeys.jurisdictions]?.[county.id]) ||
-                      !props.filterState?.[ListingFilterKeys.jurisdictions],
+                    defaultChecked: isTrue(
+                      props.filterState?.[ListingFilterKeys.jurisdictions]?.[county.id]
+                    ),
                   }
                 })}
                 register={register}

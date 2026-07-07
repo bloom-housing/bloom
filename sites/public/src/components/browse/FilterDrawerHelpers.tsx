@@ -408,10 +408,7 @@ export const SearchSection = (props: SearchSectionProps) => (
  * @param data object containing form selections or url params decoded
  * @returns array of formatted backend filters
  */
-export const encodeFilterDataToBackendFilters = (
-  data: FilterData,
-  subJurisdictions?: IdDTO[]
-): ListingFilterParams[] => {
+export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilterParams[] => {
   const filters: ListingFilterParams[] = []
   Object.entries(data).forEach(([filterType, userSelections]) => {
     if (arrayFilters.includes(ListingFilterKeys[filterType])) {
@@ -427,15 +424,7 @@ export const encodeFilterDataToBackendFilters = (
           }
         }
       })
-      if (
-        selectedFields.length > 0 &&
-        // jurisdictions (counties) filter is an array but by default it's filtered on all counties so
-        // don't need to add the filter unless at least one county is deselected
-        !(
-          filterType === ListingFilterKeys.jurisdictions &&
-          subJurisdictions?.length === selectedFields.length
-        )
-      ) {
+      if (selectedFields.length > 0) {
         const filter = {
           $comparison: EnumListingFilterParamsComparison["IN"],
         }
