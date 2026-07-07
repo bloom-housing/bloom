@@ -44,6 +44,11 @@ const DetailApplicationDates = () => {
     listing?.jurisdictions?.id
   )
 
+  const enableAutoOpenDate = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAutoOpenDate,
+    listing?.jurisdictions?.id
+  )
+
   const openHouseHeaders = {
     date: "t.date",
     startTime: "t.startTime",
@@ -101,6 +106,31 @@ const DetailApplicationDates = () => {
   return (
     <>
       <SectionWithGrid heading={t("listings.sections.applicationDatesTitle")} inset>
+        {(enableAutopublish || enableAutoOpenDate) && (
+          <Grid.Row columns={3}>
+            {enableAutopublish && (
+              <Grid.Cell>
+                <FieldValue
+                  id="scheduledListingPublishDate"
+                  label={t("listings.scheduledListingPublishDate")}
+                >
+                  {getDetailFieldUtcDate(listing.scheduledPublishAt)}
+                </FieldValue>
+              </Grid.Cell>
+            )}
+            {enableAutoOpenDate && (
+              <Grid.Cell>
+                <FieldValue
+                  id="scheduledApplicationOpenDate"
+                  label={t("listings.scheduledApplicationOpenDate")}
+                >
+                  {getDetailFieldUtcDate(listing.scheduledApplicationOpenAt)}
+                </FieldValue>
+              </Grid.Cell>
+            )}
+          </Grid.Row>
+        )}
+
         <Grid.Row columns={3}>
           <Grid.Cell>
             <FieldValue id="applicationDeadline" label={t("listings.applicationDeadline")}>
@@ -117,27 +147,6 @@ const DetailApplicationDates = () => {
             </FieldValue>
           </Grid.Cell>
         </Grid.Row>
-
-        {enableAutopublish && (
-          <Grid.Row columns={3}>
-            <Grid.Cell>
-              <FieldValue
-                id="scheduledListingPublishDate"
-                label={t("listings.scheduledListingPublishDate")}
-              >
-                {getDetailFieldUtcDate(listing.scheduledPublishAt)}
-              </FieldValue>
-            </Grid.Cell>
-            <Grid.Cell>
-              <FieldValue
-                id="scheduledApplicationOpenDate"
-                label={t("listings.scheduledApplicationOpenDate")}
-              >
-                {getDetailFieldUtcDate(listing.scheduledApplicationOpenAt)}
-              </FieldValue>
-            </Grid.Cell>
-          </Grid.Row>
-        )}
 
         {!!openHouseEvents.length && (
           <Grid.Row columns={1}>
