@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test, TestingModule } from '@nestjs/testing';
 import { LanguagesEnum } from '@prisma/client';
-import { randomUUID } from 'crypto';
+import { createHmac, randomUUID } from 'crypto';
 import { Request } from 'express';
 import { verify } from 'jsonwebtoken';
 import { IdDTO } from '../../../src/dtos/shared/id.dto';
@@ -32,6 +32,7 @@ import { AdvocateUserUpdate } from '../../../src/dtos/users/advocate-user-update
 import { UserOrderByKeys } from '../../../src/enums/listings/order-by-enum';
 import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
 import { UserNotificationPreferences } from '../../../src/dtos/users/user-notification-preferences.dto';
+import { UnsubscribeAllDto } from '../../../src/dtos/users/unsubscribe-all.dto';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -4325,6 +4326,70 @@ describe('Testing user service', () => {
           userId: requestingUser.id,
         },
       });
+    });
+  });
+
+  describe('unsubscribeAll', () => {
+    const TEST_SECRET = 'test-app-secret';
+    const TEST_EMAIL = 'user@example.com';
+
+    const validSig = () =>
+      createHmac('sha256', TEST_SECRET).update(TEST_EMAIL).digest('hex');
+
+    const validDto = (): UnsubscribeAllDto => ({
+      email: TEST_EMAIL,
+      sig: validSig(),
+    });
+
+    beforeEach(() => {
+      process.env.APP_SECRET = TEST_SECRET;
+    });
+
+    it('returns success and upserts all prefs to false when user exists', async () => {
+      const userId = randomUUID();
+      prisma.userAccounts.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: userId });
+      prisma.userNotificationPreferences.upsert = jest
+        .fn()
+        .mockResolvedValue({});
+
+      const result = await service.unsubscribeAll(validDto());
+
+      expect(result).toEqual({ success: true });
+      expect(prisma.userNotificationPreferences.upsert).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { userId },
+          update: expect.objectContaining({
+            lottery: false,
+            waitlist: false,
+            wantsRegionNotifs: false,
+            regions: [],
+          }),
+        }),
+      );
+    });
+
+    it('returns success without upsert when user is not found', async () => {
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.userNotificationPreferences.upsert = jest.fn();
+
+      const result = await service.unsubscribeAll(validDto());
+
+      expect(result).toEqual({ success: true });
+      expect(prisma.userNotificationPreferences.upsert).not.toHaveBeenCalled();
+    });
+
+    it('throws UnauthorizedException when HMAC signature is invalid', async () => {
+      const dto: UnsubscribeAllDto = {
+        email: TEST_EMAIL,
+        sig: 'bad-signature',
+      };
+
+      await expect(service.unsubscribeAll(dto)).rejects.toThrow(
+        'Invalid unsubscribe token',
+      );
+      expect(prisma.userAccounts.findUnique).not.toHaveBeenCalled();
     });
   });
 });

@@ -62,6 +62,7 @@ import { AdvocateUserUpdate } from '../dtos/users/advocate-user-update.dto';
 import { AdvocateUserCsvExporterService } from '../services/advocate-user-csv-export.service';
 import { AdvocateUserAccept } from '../dtos/users/advocate-user-accept.dto';
 import { UserNotificationPreferences } from '../dtos/users/user-notification-preferences.dto';
+import { UnsubscribeAllDto } from '../dtos/users/unsubscribe-all.dto';
 
 @Controller('user')
 @ApiTags('user')
@@ -412,6 +413,18 @@ export class UserController {
     @Body() dto: AdvocateUserUpdate,
   ): Promise<User> {
     return await this.userService.update(dto, req);
+  }
+
+  @Put('/unsubscribe-from-all')
+  @ApiOperation({
+    summary: 'Unsubscribe from all notifications',
+    operationId: 'unsubscribeFromAll',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async unsubscribeFromAll(
+    @Body() dto: UnsubscribeAllDto,
+  ): Promise<SuccessDTO> {
+    return await this.userService.unsubscribeAll(dto);
   }
 
   @Put('/preferences')
