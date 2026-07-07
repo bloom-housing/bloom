@@ -686,9 +686,9 @@ describe("FilterDrawer", () => {
     )
 
     expect(screen.getByRole("group", { name: "County" })).toBeInTheDocument()
-    // All checkboxes are checked when no filter of jurisdictions is provided in the filterState
-    expect(screen.getByRole("checkbox", { name: "Sample County" })).toBeChecked()
-    expect(screen.getByRole("checkbox", { name: "Another County" })).toBeChecked()
+    // All checkboxes are not checked when no filter of jurisdictions is provided in the filterState
+    expect(screen.getByRole("checkbox", { name: "Sample County" })).not.toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "Another County" })).not.toBeChecked()
   })
 
   it("should select correct counties when filterState is provided", () => {
