@@ -75,11 +75,11 @@ export class ExternalListingService {
     );
 
     const {
-      jurisdictions,
-      listings,
-      reservedCommunityTypes,
-      unitRentTypes,
-      unitTypes,
+      jurisdictions = [],
+      listings = [],
+      reservedCommunityTypes = [],
+      unitRentTypes = [],
+      unitTypes = [],
     } = data;
     const externalJurisdiction = jurisdictions.find(
       (juris) => juris.name === targetName,
@@ -113,67 +113,57 @@ export class ExternalListingService {
           select: { id: true, name: true },
         });
 
-      const combinedRCTs = [];
-
-      reservedCommunityTypes.forEach((rct) => {
+      const combinedRCTs = reservedCommunityTypes.reduce((acc, rct) => {
         const matchingRCT = internalReservedCommunityTypes.find(
           (internalRCT) => internalRCT.name === rct.name,
         );
         if (matchingRCT) {
-          combinedRCTs.push({ internalId: matchingRCT.id, externalId: rct.id });
+          acc.push({ internalId: matchingRCT.id, externalId: rct.id });
         } else {
           this.logger.error(
             `External reserved community type ${rct.name} could not be matched`,
           );
         }
-      });
+        return acc;
+      }, []);
 
       // query and compare unit rent types
       const internalUnitRentTypes = await this.prisma.unitRentTypes.findMany({
         select: { id: true, name: true },
       });
 
-      const combinedURTs = [];
-
-      unitRentTypes.forEach((unitRentType) => {
+      const combinedURTs = unitRentTypes.reduce((acc, urt) => {
         const matchingURT = internalUnitRentTypes.find(
-          (internalUnitRentType) =>
-            internalUnitRentType.name === unitRentType.name,
+          (internalUnitRentType) => internalUnitRentType.name === urt.name,
         );
         if (matchingURT) {
-          combinedURTs.push({
-            internalId: matchingURT.id,
-            externalId: unitRentType.id,
-          });
+          acc.push({ internalId: matchingURT.id, externalId: urt.id });
         } else {
           this.logger.error(
-            `External unit rent type ${unitRentType.name} could not be matched`,
+            `External unit rent type ${urt.name} could not be matched`,
           );
         }
-      });
+        return acc;
+      }, []);
 
       // query and compare unit types
       const internalUnitTypes = await this.prisma.unitTypes.findMany({
         select: { id: true, name: true },
       });
 
-      const combinedUTs = [];
-
-      unitTypes.forEach((unitType) => {
+      const combinedUTs = unitTypes.reduce((acc, unitType) => {
         const matchingUT = internalUnitTypes.find(
           (internalUnitType) => internalUnitType.name === unitType.name,
         );
         if (matchingUT) {
-          combinedUTs.push({
-            internalId: matchingUT.id,
-            externalId: unitType.id,
-          });
+          acc.push({ internalId: matchingUT.id, externalId: unitType.id });
         } else {
           this.logger.error(
             `External unit type ${unitType.name} could not be matched`,
           );
         }
-      });
+        return acc;
+      }, []);
 
       for (const existingListing of currentExternalListings) {
         const index = listings.findIndex(
@@ -217,8 +207,6 @@ export class ExternalListingService {
           newExternalListing &&
           newExternalListing.jurisdictionId === externalJurisdiction.id
         ) {
-          this.logger.error('This should be impossible');
-
           // create newly active listings
           this.createExternalListing(
             combinedRCTs,
@@ -275,17 +263,25 @@ export class ExternalListingService {
         ),
     );
 
+    if (data === null || data === undefined) {
+      this.logger.error(
+        `Listing with external id ${externalListing.id} could not be created. Endpoint returned null.`,
+      );
+      return;
+    }
+
     let reservedCommunityTypeId: string;
     if (data.reservedCommunityTypes) {
       reservedCommunityTypeId = combinedRCTs.find(
         (rct) => rct.externalId === data.reservedCommunityTypes.id,
       )?.internalId;
-    }
-    if (reservedCommunityTypeId === undefined) {
-      this.logger.error(
-        `Listing with external id ${externalListing.id} could not be created. Reserved community type ${data.reservedCommunityTypes.name} does not exist.`,
-      );
-      return;
+
+      if (reservedCommunityTypeId === undefined) {
+        this.logger.error(
+          `Listing with external id ${externalListing.id} could not be created. Reserved community type ${data.reservedCommunityTypes.name} does not exist.`,
+        );
+        return;
+      }
     }
 
     await this.prisma.listings.create({

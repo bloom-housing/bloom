@@ -135,6 +135,31 @@ describe('Testing external listing service', () => {
       ).rejects.toThrow(HttpException);
     });
 
+    it('should error if nothing is returned', async () => {
+      // Create a spy on the `get` method of `httpService` and mock the implementation
+      const mockExternalDetailsResponse: AxiosResponse = {
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: {
+          headers: undefined,
+        },
+        data: {},
+      };
+
+      jest
+        .spyOn(httpService, 'get')
+        .mockImplementationOnce(() => of(mockExternalDetailsResponse));
+
+      await expect(
+        service.ingest({
+          externalURL: 'example.com',
+          jurisdictionId: randomUUID(),
+          targetName: 'mismatch',
+        }),
+      ).rejects.toThrow(HttpException);
+    });
+
     it('should error if jurisdiction cannot be matched', async () => {
       // Create a spy on the `get` method of `httpService` and mock the implementation
       const mockExternalDetailsResponse: AxiosResponse = {

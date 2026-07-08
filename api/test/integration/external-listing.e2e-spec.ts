@@ -38,10 +38,10 @@ describe('External Listings Controller Tests', () => {
     get: jest.fn((url) => {
       // Get and parse the URL parameter.
       let response = {};
-      if (url === 'error.com/externalListings') {
+      if (url === 'https://www.error.com/externalListings') {
         response = { response: 'resp', status: '500' };
         return new Observable((subscriber) => subscriber.error(response));
-      } else if (url === 'noMatch.com/externalListings') {
+      } else if (url === 'https://www.noMatch.com/externalListings') {
         response = {
           status: 200,
           statusText: 'OK',
@@ -57,7 +57,9 @@ describe('External Listings Controller Tests', () => {
             unitTypes: [],
           },
         };
-      } else if (url === 'externalJurisdictionName.com/externalListings') {
+      } else if (
+        url === 'https://www.externalJurisdictionName.com/externalListings'
+      ) {
         response = {
           status: 200,
           statusText: 'OK',
@@ -75,7 +77,9 @@ describe('External Listings Controller Tests', () => {
             listings: [
               {
                 id: 'externalListingId',
-                contentUpdatedAt: new Date(),
+                contentUpdatedAt: dayjs(new Date())
+                  .subtract(1, 'days')
+                  .toDate(),
                 jurisdictionId: 'externalJurisdictionId',
               },
             ],
@@ -95,7 +99,7 @@ describe('External Listings Controller Tests', () => {
         };
       } else if (
         url ===
-        `externalJurisdictionName.com/listings/externalListingId?view=base`
+        `https://www.externalJurisdictionName.com/listings/externalListingId?view=base`
       ) {
         response = {
           status: 200,
@@ -112,7 +116,7 @@ describe('External Listings Controller Tests', () => {
                 label: 'example asset',
               },
             ],
-            contentUpdatedAt: new Date(),
+            contentUpdatedAt: dayjs(new Date()).subtract(1, 'days').toDate(),
             displayWaitlistSize: false,
             isVerified: true,
             jurisdictions: [
@@ -257,7 +261,7 @@ describe('External Listings Controller Tests', () => {
 
     it('should error if external call fails', async () => {
       const ingestParams = {
-        externalURL: 'error.com',
+        externalURL: 'https://www.error.com',
         jurisdictionId: '',
         targetName: '',
       };
@@ -270,14 +274,14 @@ describe('External Listings Controller Tests', () => {
 
       expect(res.body.message).toEqual('External details call failed');
       expect(logger.error).toBeCalledWith(
-        'Request to external Bloom instance with URL error.com failed',
+        'Request to external Bloom instance with URL https://www.error.com failed',
         { response: 'resp', status: '500' },
       );
     });
 
     it('should error if jurisdiction cannot be matched', async () => {
       const ingestParams = {
-        externalURL: 'noMatch.com',
+        externalURL: 'https://www.noMatch.com',
         jurisdictionId: '',
         targetName: 'externalJurisdictionName',
       };
@@ -298,7 +302,7 @@ describe('External Listings Controller Tests', () => {
       await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
 
       const ingestParams = {
-        externalURL: 'externalJurisdictionName.com',
+        externalURL: 'https://www.externalJurisdictionName.com',
         jurisdictionId: jurisdiction.id,
         targetName: 'externalJurisdictionName',
       };
@@ -329,7 +333,9 @@ describe('External Listings Controller Tests', () => {
 
       expect(listings.length).toEqual(1);
       expect(listings[0].externalListingId).toEqual('externalListingId');
-      expect(listings[0].externalURL).toEqual('externalJurisdictionName.com');
+      expect(listings[0].externalURL).toEqual(
+        'https://www.externalJurisdictionName.com',
+      );
       expect(listings[0].units.length).toEqual(1);
       expect(listings[0].units[0].unitRentTypes.name).toEqual(
         UnitRentTypeEnum.fixed,
@@ -346,15 +352,15 @@ describe('External Listings Controller Tests', () => {
       const listingCreated = await prisma.listings.create({
         data: {
           ...listingData,
-          contentUpdatedAt: dayjs(new Date()).subtract(1, 'days').toDate(),
+          contentUpdatedAt: dayjs(new Date()).subtract(2, 'days').toDate(),
           externalJurisdictionId: 'externalJurisdictionId',
           externalListingId: 'externalListingId',
-          externalURL: 'externalJurisdictionName.com',
+          externalURL: 'https://www.externalJurisdictionName.com',
         },
       });
 
       const ingestParams = {
-        externalURL: 'externalJurisdictionName.com',
+        externalURL: 'https://www.externalJurisdictionName.com',
         jurisdictionId: jurisdiction.id,
         targetName: 'externalJurisdictionName',
       };
@@ -389,7 +395,9 @@ describe('External Listings Controller Tests', () => {
         listingCreated.contentUpdatedAt,
       );
       expect(listings[0].externalListingId).toEqual('externalListingId');
-      expect(listings[0].externalURL).toEqual('externalJurisdictionName.com');
+      expect(listings[0].externalURL).toEqual(
+        'https://www.externalJurisdictionName.com',
+      );
       expect(listings[0].units.length).toEqual(1);
       expect(listings[0].units[0].unitRentTypes.name).toEqual(
         UnitRentTypeEnum.fixed,
@@ -406,15 +414,15 @@ describe('External Listings Controller Tests', () => {
       const listingCreated = await prisma.listings.create({
         data: {
           ...listingData,
-          contentUpdatedAt: dayjs(new Date()).add(1, 'days').toDate(),
+          contentUpdatedAt: new Date(),
           externalJurisdictionId: 'externalJurisdictionId',
           externalListingId: 'externalListingId',
-          externalURL: 'externalJurisdictionName.com',
+          externalURL: 'https://www.externalJurisdictionName.com',
         },
       });
 
       const ingestParams = {
-        externalURL: 'externalJurisdictionName.com',
+        externalURL: 'https://www.externalJurisdictionName.com',
         jurisdictionId: jurisdiction.id,
         targetName: 'externalJurisdictionName',
       };
@@ -437,7 +445,9 @@ describe('External Listings Controller Tests', () => {
         listingCreated.contentUpdatedAt,
       );
       expect(listings.externalListingId).toEqual('externalListingId');
-      expect(listings.externalURL).toEqual('externalJurisdictionName.com');
+      expect(listings.externalURL).toEqual(
+        'https://www.externalJurisdictionName.com',
+      );
     });
   });
 });
