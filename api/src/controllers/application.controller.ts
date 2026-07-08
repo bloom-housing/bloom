@@ -54,6 +54,7 @@ import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
 import { ApplicationBulkUploadService } from '../services/application-bulk-upload.service';
+import { ApplicationBulkUpload } from '../dtos/applications/application-bulk-upload.dto';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -325,6 +326,17 @@ export class ApplicationController {
       dto,
       mapTo(User, req['user']),
     );
+  }
+
+  @Post('bulk-update/upload-url')
+  @ApiOperation({
+    summary:
+      'Allows the user to upload the bulk upload CSV to a private S3 bucket',
+    operationId: 'uploadBulkUpdate',
+  })
+  @ApiOkResponse({ type: Boolean })
+  async uploadBulkUpdate(@Body() dto: ApplicationBulkUpload): Promise<boolean> {
+    return this.applicationBulkUploadService.uploadUrl(dto);
   }
 
   @Delete()
