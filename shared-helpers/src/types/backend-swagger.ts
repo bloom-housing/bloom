@@ -3488,9 +3488,6 @@ export interface ListingFilterParams {
   city?: string
 
   /**  */
-  counties?: string[]
-
-  /**  */
   homeTypes?: HomeTypeEnum[]
 
   /**  */
@@ -10518,7 +10515,6 @@ export enum ListingFilterKeys {
   "bedroomTypes" = "bedroomTypes",
   "city" = "city",
   "configurableRegions" = "configurableRegions",
-  "counties" = "counties",
   "homeTypes" = "homeTypes",
   "ids" = "ids",
   "includeExternal" = "includeExternal",
@@ -10866,11 +10862,12 @@ export enum FeatureFlagEnum {
   "enableAutoOpenDate" = "enableAutoOpenDate",
   "enableAutopublish" = "enableAutopublish",
   "enableCompanyWebsite" = "enableCompanyWebsite",
-  "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
+  "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableFaq" = "enableFaq",
   "enableFilterByBathroom" = "enableFilterByBathroom",
+  "enableFilterByCounty" = "enableFilterByCounty",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGenderQuestion" = "enableGenderQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
