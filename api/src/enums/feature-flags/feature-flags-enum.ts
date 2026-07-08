@@ -17,11 +17,12 @@ export enum FeatureFlagEnum {
   enableAutoOpenDate = 'enableAutoOpenDate',
   enableAutopublish = 'enableAutopublish',
   enableCompanyWebsite = 'enableCompanyWebsite',
-  enableCustomListingNotifications = 'enableCustomListingNotifications',
   enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
+  enableCustomListingNotifications = 'enableCustomListingNotifications',
   enableFaq = 'enableFaq',
   enableFilterByBathroom = 'enableFilterByBathroom',
+  enableFilterByCounty = 'enableFilterByCounty',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGenderQuestion = 'enableGenderQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
@@ -182,6 +183,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableFilterByBathroom,
     description:
       'When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms',
+  },
+  {
+    name: FeatureFlagEnum.enableFilterByCounty,
+    description:
+      'When true, the filter drawer on the public site includes the option to filter listings by county',
   },
   {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,

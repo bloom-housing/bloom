@@ -14,6 +14,7 @@ import {
   defaultListingFeaturesConfiguration,
   expandedListingFeaturesConfiguration,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { addTranslation } from "@bloom-housing/ui-components"
 import { mockNextRouter, render } from "../../testUtils"
 import { FilterDrawer } from "../../../src/components/browse/FilterDrawer"
 import { FilterData } from "../../../src/components/browse/FilterDrawerHelpers"
@@ -643,6 +644,103 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "2" })).not.toBeChecked()
     expect(screen.getByRole("checkbox", { name: "3" })).toBeChecked()
     expect(screen.getByRole("checkbox", { name: "4" })).not.toBeChecked()
+  })
+
+  it("should not show counties section when enableFilterByCounty flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        subJurisdictions={[
+          { id: "1", name: "Sample County" },
+          { id: "2", name: "Another County" },
+        ]}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Counties" })).not.toBeInTheDocument()
+  })
+
+  it("should show counties section when enableFilterByCounty flag is on and subJurisdictions are available", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableFilterByCounty]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        subJurisdictions={[
+          { id: "1", name: "Sample County" },
+          { id: "2", name: "Another County" },
+        ]}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "County" })).toBeInTheDocument()
+    // All checkboxes are not checked when no filter of jurisdictions is provided in the filterState
+    expect(screen.getByRole("checkbox", { name: "Sample County" })).not.toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "Another County" })).not.toBeChecked()
+  })
+
+  it("should select correct counties when filterState is provided", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{
+          [ListingFilterKeys.jurisdictions]: {
+            "123": true,
+            "2": false,
+          },
+        }}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableFilterByCounty]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        subJurisdictions={[
+          { id: "123", name: "Sample County" },
+          { id: "234", name: "Another County" },
+        ]}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "County" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Sample County" })).toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "Another County" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Another County" })).not.toBeChecked()
+  })
+
+  it("should show counties section subnote if text exists", () => {
+    addTranslation({ listingFilters: { countyFilterNote: "This is a county filter note" } })
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableFilterByCounty]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        subJurisdictions={[
+          { id: "1", name: "Sample County" },
+          { id: "2", name: "Another County" },
+        ]}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "County" })).toBeInTheDocument()
+    expect(screen.getByText("This is a county filter note")).toBeInTheDocument()
   })
 
   it("should not show parking types section when parkingType flag is off", () => {

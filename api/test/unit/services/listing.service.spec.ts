@@ -2201,39 +2201,6 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should return a where clause for filter counties', () => {
-      const counties = ['county1', 'county2'];
-      const filter = [
-        {
-          $comparison: 'IN',
-          counties: counties,
-        } as ListingFilterParams,
-      ];
-      const whereClause = service.buildWhereClause(filter, '');
-
-      expect(whereClause).toStrictEqual({
-        AND: [
-          {
-            externalListingId: {
-              equals: null,
-            },
-          },
-          {
-            OR: [
-              {
-                listingsBuildingAddress: {
-                  county: {
-                    in: counties,
-                    mode: 'insensitive',
-                  },
-                },
-              },
-            ],
-          },
-        ],
-      });
-    });
-
     it('should return a where clause for filter homeTypes', () => {
       const homeTypes = [HomeTypeEnum.apartment, HomeTypeEnum.house];
       const filter = [

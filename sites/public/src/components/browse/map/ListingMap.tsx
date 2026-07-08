@@ -58,6 +58,7 @@ export const ListingMap = (props: ListingBrowseProps) => {
       { id: props.jurisdiction?.id, name: props.jurisdiction?.name },
       ...props.jurisdiction.subJurisdictions,
     ],
+    subJurisdictions: props.jurisdiction.subJurisdictions,
   }
 
   return (
