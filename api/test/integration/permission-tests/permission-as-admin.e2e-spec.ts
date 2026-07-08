@@ -1781,7 +1781,7 @@ describe('Testing Permission-ing of endpoints as Admin User', () => {
 
     it('should succeed for ingest endpoint', async () => {
       const body = {
-        externalURL: 'externalJurisdictionName.com',
+        externalURL: 'https://www.externalJurisdictionName.com',
         jurisdictionId: randomUUID(),
         targetName: 'externalJurisdictionName',
       };
