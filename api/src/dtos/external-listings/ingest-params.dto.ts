@@ -10,7 +10,7 @@ export class IngestParams {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @hasHttps({ groups: [ValidationsGroupsEnum.default] })
   @IsUrl(
-    { require_protocol: true },
+    { require_protocol: false, require_tld: false },
     { groups: [ValidationsGroupsEnum.default] },
   )
   @ApiProperty()
