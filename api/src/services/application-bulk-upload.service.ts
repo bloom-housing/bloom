@@ -3,6 +3,7 @@ import {
   Injectable,
   StreamableFile,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApplicationStatusEnum } from '@prisma/client';
 import fs, { createReadStream } from 'fs';
@@ -19,8 +20,18 @@ import { ListingService } from './listing.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { convertApplicationDeclineReasonToReadable } from '../utilities/application-export-helpers';
+import { ApplicationBulkUpload } from '../dtos/applications/application-bulk-upload.dto';
+import { doJurisdictionHaveFeatureFlagSet } from 'src/utilities/feature-flag-utilities';
+import { FeatureFlagEnum } from 'src/enums/feature-flags/feature-flags-enum';
+import { Jurisdiction } from 'src/dtos/jurisdictions/jurisdiction.dto';
 
 const NUMBER_TO_PAGINATE_BY = 500;
+
+const UUID = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
+const BULK_UPLOAD_KEY_PATTERN = new RegExp(
+  `^bulk-application-updates-(${UUID})-(${UUID})-(.+)\\.csv$`,
+  'i',
+);
 
 @Injectable()
 export class ApplicationBulkUploadService {
@@ -293,6 +304,68 @@ export class ApplicationBulkUploadService {
       }
     });
     return stringData;
+  }
+
+  async uploadUrl(dto: ApplicationBulkUpload) {
+    const { s3Key, uploadUrl } = dto;
+
+    const match = BULK_UPLOAD_KEY_PATTERN.exec(s3Key);
+    if (!match) {
+      throw new BadRequestException(
+        's3Key must match format: bulk-application-updates-{listingId}-{userId}-{time-generated}.csv',
+      );
+    }
+
+    const [, listingId, userId] = match;
+
+    const listingData = await this.prisma.listings.findUnique({
+      select: {
+        jurisdictionId: true,
+        jurisdictions: {
+          select: {
+            featureFlags: true,
+          },
+        },
+      },
+      where: {
+        id: listingId,
+      },
+    });
+
+    if (!listingData) {
+      throw new NotFoundException(
+        `Listing with id: ${listingId} can not be found`,
+      );
+    }
+
+    const requestingUser = await this.prisma.userAccounts.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+
+    await this.permissionService.canOrThrow(
+      mapTo(User, requestingUser),
+      'listing',
+      permissionActions.update,
+      {
+        id: listingId,
+        jurisdictionId: listingData.jurisdictionId,
+      },
+    );
+
+    if (
+      !doJurisdictionHaveFeatureFlagSet(
+        mapTo(Jurisdiction, listingData.jurisdictions),
+        FeatureFlagEnum.enableApplicationStatus,
+      )
+    ) {
+      throw new BadRequestException(
+        `Jurisdiction with id: ${listingData.jurisdictionId} does not have the enableApplicationStatus flag enabled`,
+      );
+    }
+
+    return true;
   }
 
   async authorizeExport(user, listingId): Promise<void> {
