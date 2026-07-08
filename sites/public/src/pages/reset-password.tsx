@@ -43,7 +43,7 @@ const ResetPassword = () => {
   useEffect(() => {
     if (token) {
       userService
-        .isUserConfirmationTokenValid({ body: { token: token as string } })
+        .isUserResetTokenValid({ body: { token: token as string } })
         .then((res) => {
           if (!res) {
             addToast(
@@ -66,7 +66,7 @@ const ResetPassword = () => {
         })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, userService])
+  }, [token])
 
   const onSubmit = async (data: { password: string; passwordConfirmation: string }) => {
     setLoading(true)

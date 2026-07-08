@@ -664,6 +664,52 @@ export class UserService {
   }
 
   /*
+    checks to see if the reset token is valid
+  */
+  async isUserResetTokenValid(dto: ConfirmationRequest): Promise<SuccessDTO> {
+    try {
+      const token = verify(dto.token, process.env.APP_SECRET) as IdDTO;
+
+      const storedUser = await this.prisma.userAccounts.findUnique({
+        where: {
+          id: token.id,
+        },
+      });
+      this.checkUserAndToken(storedUser.id, dto.token, storedUser.resetToken);
+
+      return {
+        success: true,
+      } as SuccessDTO;
+    } catch (_) {
+      try {
+        const storedUser = await this.prisma.userAccounts.findFirst({
+          where: {
+            resetToken: dto.token,
+          },
+        });
+        this.checkUserAndToken(storedUser.id, dto.token, storedUser.resetToken);
+      } catch (e) {
+        console.error('isUserResetTokenValid error = ', e);
+      }
+    }
+  }
+
+  checkUserAndToken(
+    userId: string,
+    incomingToken: string,
+    storedToken: string,
+  ): void {
+    if (!userId) {
+      throw new NotFoundException(
+        `user reset token ${incomingToken} was requested but not found`,
+      );
+    }
+    if (!incomingToken || !storedToken || incomingToken !== storedToken) {
+      throw new BadRequestException('tokenMissing');
+    }
+  }
+
+  /*
     Returns an advocate user's basic info by validating their confirmation token.
     Used to pre-populate the account completion form on the public site.
   */

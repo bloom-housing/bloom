@@ -309,6 +309,19 @@ export class UserController {
     return await this.userService.isUserConfirmationTokenValid(dto);
   }
 
+  @Post('is-reset-token-valid')
+  @ApiOperation({
+    summary: 'Verifies token is valid',
+    operationId: 'isUserResetTokenValid',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @UseGuards(OptionalAuthGuard, PermissionGuard)
+  async isUserResetTokenValid(
+    @Body() dto: ConfirmationRequest,
+  ): Promise<SuccessDTO> {
+    return await this.userService.isUserResetTokenValid(dto);
+  }
+
   @Post('advocate-from-token')
   @ApiOperation({
     summary: 'Get advocate user from confirmation token',

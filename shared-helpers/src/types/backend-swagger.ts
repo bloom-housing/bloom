@@ -2287,6 +2287,28 @@ export class UserService {
     })
   }
   /**
+   * Verifies token is valid
+   */
+  isUserResetTokenValid(
+    params: {
+      /** requestBody */
+      body?: ConfirmationRequest
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/is-reset-token-valid"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get advocate user from confirmation token
    */
   getAdvocateFromConfirmationToken(
@@ -8418,6 +8440,9 @@ export interface PublicAppsViewResponse {
   /**  */
   applicationsCount: PublicAppsCount
 }
+
+/** StreamableFile */
+export interface StreamableFile {}
 
 /** ApplicationSelectionOptionCreate */
 export interface ApplicationSelectionOptionCreate {
