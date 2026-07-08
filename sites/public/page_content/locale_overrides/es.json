@@ -182,6 +182,7 @@
   "help.faq.whatMakesAffordableResp8": "Vivienda de ingresos restringidos",
   "help.faq.whatMakesAffordableResp9": "Vivienda de la Sección 8 (no toda la vivienda asequible es vivienda de la Sección 8)",
   "help.faq.whatsNextHeader": "Después de aplicar, ¿qué sigue?",
+  "listingFilters.countyFilterNote": "(Para anuncios de San Francisco, visite <a className='lined' href='https://housing.sfgov.org/' target='_blank'>DAHLIA</a>)",
   "listings.additionalFeesDisclaimer": "No se cobran tarifas por adaptaciones razonables necesarias debido a una discapacidad, como animales de apoyo emocional. Tampoco se cobran tarifas por ayudas y servicios necesarios para una comunicación efectiva debido a una discapacidad. Con respecto a la verificación de crédito, los solicitantes que reciben subsidios gubernamentales para el alquiler tienen la opción de proporcionar \"pruebas alternativas legales y verificables\" de su capacidad de pago, en lugar de basarse en su historial crediticio.",
   "listings.petPolicyDescription": "Los perros de servicio y los animales de apoyo emocional no se consideran mascotas y están permitidos según lo estipula la ley. En ciertos tipos de vivienda, como en los complejos de viviendas públicas, también puede ser obligatorio permitir mascotas.",
   "listings.unitTypes.SRO": "SRO",
@@ -244,6 +245,4 @@
   "welcome.viewCountyMap": "Ver mapa del condado",
   "welcome.whatDoesAffordableMean": "¿Qué significa \"asequible\"?",
   "welcome.whatHappens": "¿Qué sucede después de aplicar?"
-=======
-  >>>>>>> origin/main
 }

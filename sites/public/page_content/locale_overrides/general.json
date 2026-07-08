@@ -279,6 +279,7 @@
   "help.housingHelp.vouchers.title": "Section 8 Housing Vouchers and Units",
   "help.housingHelp.vouchers.vacavilleHA": "City of Vacaville Housing Authority",
   "help.housingHelp.vouchers.vallejoHA": "Housing Authority of the City of Vallejo",
+  "listingFilters.countyFilterNote": "(For San Francisco listings, go to <a className='lined' href='https://housing.sfgov.org/' target='_blank'>DAHLIA</a>)",
   "listings.additionalFeesDisclaimer": "Fees are not charged for reasonable accommodations needed due to disability, such as emotional support animals. Fees are also not charged for aids and services needed for effective communication due to a disability. With respect to credit checks, applicants receiving government rent subsidies have the option to provide \"lawful, verifiable alternative evidence\" of their ability to pay rent, instead of relying on their credit history.",
   "listings.petPolicyDescription": "Service dogs and emotional support animals are not pets and are permitted as required by law. Pets may also be required to be allowed in certain types of housing, such as publicly financed housing developments.",
   "listings.unitTypes.fiveBdrm": "5 beds",
