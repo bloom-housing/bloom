@@ -7,7 +7,6 @@ export enum ListingFilterKeys {
   bedroomTypes = 'bedroomTypes',
   city = 'city',
   configurableRegions = 'configurableRegions',
-  counties = 'counties',
   homeTypes = 'homeTypes',
   ids = 'ids',
   includeExternal = 'includeExternal',

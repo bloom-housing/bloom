@@ -11,10 +11,12 @@ import { PermissionModule } from './permission.module';
 import { PrismaModule } from './prisma.module';
 import { SnapshotCreateModule } from './snapshot-create.module';
 import { UnitTypeModule } from './unit-type.module';
+import { ApplicationBulkUploadModule } from './application-bulk-upload.module';
 
 @Module({
   imports: [
     ApplicationExporterModule,
+    ApplicationBulkUploadModule,
     CronJobModule,
     EmailModule,
     ListingModule,

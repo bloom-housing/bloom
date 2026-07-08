@@ -114,10 +114,11 @@ export class Application extends AbstractDTO {
   reasonableAccommodations?: string;
 
   @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ each: true, groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
   @ApiPropertyOptional()
-  incomeVouchers?: boolean;
+  incomeVouchers?: string[];
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

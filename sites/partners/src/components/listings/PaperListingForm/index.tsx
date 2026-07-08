@@ -289,6 +289,11 @@ const ListingForm = ({
     jurisdictionId
   )
 
+  const enableAutoOpenDate = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAutoOpenDate,
+    jurisdictionId
+  )
+
   useEffect(() => {
     if (enableNonRegulatedListings && !listing?.listingType) {
       setValue(
@@ -431,6 +436,9 @@ const ListingForm = ({
           if (!enableAutopublish) {
             delete formData.scheduledListingPublishDateField
             formData.scheduledPublishAt = null
+          }
+
+          if (!enableAutoOpenDate) {
             delete formData.scheduledApplicationOpenDateField
             formData.scheduledApplicationOpenAt = null
           }
@@ -448,6 +456,8 @@ const ListingForm = ({
               latLong,
               customMapPositionChosen,
               enableUnitGroups,
+              enableAutopublish,
+              enableAutoOpenDate,
             })
             const formattedData = await dataPipeline.run()
             let result
@@ -556,6 +566,7 @@ const ListingForm = ({
       addToast,
       enableUnitGroups,
       enableAutopublish,
+      enableAutoOpenDate,
       whatToExpectEditor,
       whatToExpectAdditionalDetailsEditor,
     ]
@@ -842,6 +853,7 @@ const ListingForm = ({
                               jurisdictionId
                             )}
                             enableAutopublish={enableAutopublish}
+                            enableAutoOpenDate={enableAutoOpenDate}
                             listing={listing}
                             openHouseEvents={openHouseEvents}
                             requiredFields={requiredFields}
@@ -886,7 +898,14 @@ const ListingForm = ({
                         showCloseListingModal={() => setCloseListingDialog(true)}
                         showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
                         showRequestChangesModal={() => setRequestChangesDialog(true)}
-                        showSubmitForApprovalModal={() => setSubmitForApprovalDialog(true)}
+                        showSubmitForApprovalModal={async () => {
+                          const valid = await formMethods.trigger()
+                          if (!valid) {
+                            setAlert("form")
+                            return
+                          }
+                          setSubmitForApprovalDialog(true)
+                        }}
                         submitFormWithStatus={triggerSubmitWithStatus}
                       />
                     </aside>
@@ -916,6 +935,8 @@ const ListingForm = ({
         isOpen={publishDialog}
         setOpen={setPublishDialog}
         submitFormWithStatus={triggerSubmitWithStatus}
+        enableAutopublish={enableAutopublish}
+        scheduledPublishAt={scheduledPublishAtFromForm}
       />
 
       <LiveConfirmationDialog

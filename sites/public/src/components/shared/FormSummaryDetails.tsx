@@ -104,6 +104,7 @@ type FormSummaryDetailsProps = {
   enableUnitGroups?: boolean
   enableFullTimeStudentQuestion?: boolean
   enableReasonableAccommodations?: boolean
+  enableMultiselectVoucherQuestion?: boolean
   swapCommunityTypeWithPrograms?: boolean
   enableV2MSQ?: boolean
 }
@@ -118,6 +119,7 @@ const FormSummaryDetails = ({
   enableUnitGroups = false,
   enableReasonableAccommodations = false,
   enableFullTimeStudentQuestion = false,
+  enableMultiselectVoucherQuestion = false,
   swapCommunityTypeWithPrograms = false,
   enableV2MSQ = false,
 }: FormSummaryDetailsProps) => {
@@ -706,7 +708,15 @@ const FormSummaryDetails = ({
             label={t("application.review.voucherOrSubsidy")}
             className={styles["summary-value"]}
           >
-            {application.incomeVouchers ? t("t.yes") : t("t.no")}
+            {enableMultiselectVoucherQuestion
+              ? application.incomeVouchers?.length
+                ? application.incomeVouchers
+                    .map((v) => t(`application.financial.vouchers.${v}`))
+                    .join(", ")
+                : t("application.financial.vouchers.none")
+              : application.incomeVouchers?.includes("incomeVoucher")
+              ? t("t.yes")
+              : t("t.no")}
           </FieldValue>
 
           {application.incomePeriod && (

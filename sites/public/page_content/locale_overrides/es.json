@@ -204,6 +204,7 @@
   "resources.contactEmail": "email@email.com",
   "resources.contactInfo": "Departamento de Vivienda y Desarrollo Comunitario de Bloomington",
   "resources.housingProgramsTitle": "Programas de vivienda de Vivienda y Desarrollo Comunitario de Bloomington",
+  "t.nonProdBanner": "Este sitio es solo para fines de prueba. No se aceptarán solicitudes. Visite el <a href='https://housingbayarea.mtc.ca.gov/' target='_blank'>sitio web oficial</a> para solicitar vivienda.",
   "welcome.allApplicationClosed": "Todas las solicitudes están actualmente cerradas, pero puede ver los anuncios cerrados.",
   "welcome.bayAreaCountyMap": "Mapa del condado del Área de la Bahía",
   "welcome.call211": "Llame al 211 (311 en San Francisco) para vivienda de emergencia o recursos específicamente para personas sin hogar. Haga clic en Obtener ayuda para más opciones.",
@@ -243,4 +244,6 @@
   "welcome.viewCountyMap": "Ver mapa del condado",
   "welcome.whatDoesAffordableMean": "¿Qué significa \"asequible\"?",
   "welcome.whatHappens": "¿Qué sucede después de aplicar?"
+=======
+  >>>>>>> origin/main
 }

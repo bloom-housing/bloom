@@ -258,7 +258,13 @@ Cypress.Commands.add("fillHouseholdIncome", (application, fieldsToSkip = []) => 
     cy.getByID("incomeYear").type(application["incomeYear"])
   }
   if (!fieldsToSkip.includes("application.incomeVouchers")) {
-    cy.getByID("application.incomeVouchers").select(application["incomeVouchers"])
+    if (application["incomeVouchers"] === "No") {
+      cy.getByID(`incomeVoucherNo`).click()
+    } else if (application["incomeVouchers"] === "Yes") {
+      cy.getByID(`incomeVoucherYes`).click()
+    } else {
+      cy.getByID(`application.incomeVouchers.${application["incomeVouchers"]}`).click()
+    }
   }
 })
 
@@ -395,7 +401,7 @@ Cypress.Commands.add("verifyHouseholdIncome", (application, fieldsToSkip = []) =
   const fields = [
     { id: "annualIncome", fieldKey: "annualIncome" },
     { id: "monthlyIncome", fieldKey: "formattedMonthlyIncome" },
-    { id: "vouchers", fieldKey: "incomeVouchers" },
+    { id: "vouchers", fieldKey: "vouchers" },
   ]
   verifyHelper(application, fields, fieldsToSkip)
 })
@@ -404,82 +410,191 @@ Cypress.Commands.add("verifyTerms", (application) => {
   cy.getByTestId("signatureOnTerms").contains(application["acceptedTerms"])
 })
 
-Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, jurisdiction) => {
-  // Create and publish minimal FCFS or Lottery listing
-  // TODO: test Open Waitlist, though maybe with integration test instead
-  cy.getByID("addListingButton").contains("Add listing").click()
-  if (jurisdiction) {
-    cy.getByID("jurisdiction").select("Bloomington")
-    cy.get("button").contains("Get started").click()
-  }
-  cy.contains("New listing")
-  cy.fixture("minimalListing").then((listing) => {
-    cy.getByID("name").type(listingName)
-    cy.getByID("developer").type(listing["developer"])
-    cy.getByID("add-photos-button").contains("Add photo").click()
-    cy.getByTestId("dropzone-input").attachFile(
-      "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpg",
-      {
-        subjectType: "drag-n-drop",
+Cypress.Commands.add(
+  "addMinimalListing",
+  (listingName, isLottery, isApproval, jurisdiction, scheduledPublishDate, existingListingName) => {
+    // Create and publish minimal FCFS or Lottery listing
+    // TODO: test Open Waitlist, though maybe with integration test instead
+    if (existingListingName) {
+      cy.findAndOpenListing(existingListingName)
+      cy.getByID("listingEditButton").contains("Edit").click()
+    } else {
+      cy.getByID("addListingButton").contains("Add listing").click()
+      if (jurisdiction) {
+        // jurisdiction can be a boolean (defaults to "Bloomington") or a jurisdiction name string
+        const jurisdictionName = typeof jurisdiction === "string" ? jurisdiction : "Bloomington"
+        cy.getByID("jurisdiction").select(jurisdictionName)
+        cy.get("button").contains("Get started").click()
       }
-    )
-    cy.getByTestId("drawer-photos-table")
-      .find("img")
-      .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
-    cy.getByID("listing-photo-uploaded").contains("Save").click()
-    cy.getByID("listingsBuildingAddress.street").type(listing["buildingAddress.street"])
-    cy.getByID("neighborhood").type(listing["neighborhood"])
-    cy.getByID("listingsBuildingAddress.city").type(listing["buildingAddress.city"])
-    cy.getByID("listingsBuildingAddress.state").select(listing["buildingAddress.state"])
-    cy.getByID("listingsBuildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
-    cy.getByID("addUnitsButton").contains("Add unit").click()
-    cy.getByID("number").type(listing["number"])
-    cy.getByID("unitTypes.id").select(listing["unitType.id"])
-    cy.getByID("unitFormSaveAndExitButton").contains("Save & exit").should("be.visible").click()
-    cy.getByID("amiChart.id").select(1).trigger("change")
-    cy.getByID("amiPercentage").select(1)
-    cy.getByID("unitFormSaveAndExitButton").contains("Save & exit").click()
-    cy.get("button").contains("Application process").click()
-    if (isLottery) {
-      cy.getByID("reviewOrderLottery").check()
-      cy.getByTestId("lottery-start-date-month").type("1")
-      cy.getByTestId("lottery-start-date-day").type("17")
-      cy.getByTestId("lottery-start-date-year").type("2026")
-      cy.getByTestId("lottery-start-time-hours").type("9")
-      cy.getByTestId("lottery-start-time-minutes").type("00")
-      cy.getByTestId("lottery-start-time-period").select("AM")
-      cy.getByTestId("lottery-end-time-hours").type("10")
-      cy.getByTestId("lottery-end-time-minutes").type("00")
-      cy.getByTestId("lottery-end-time-period").select("AM")
+      cy.contains("New listing")
     }
-    cy.getByID("leasingAgentName").type(listing["leasingAgentName"])
-    cy.getByID("leasingAgentEmail").type(listing["leasingAgentEmail"])
-    cy.getByID("leasingAgentPhone").type(listing["leasingAgentPhone"])
-    cy.getByID("digitalApplicationChoiceYes").check()
-    cy.getByID("commonDigitalApplicationChoiceYes").check()
-    cy.getByID("paperApplicationNo").check()
-    cy.getByID("referralOpportunityNo").check()
-    cy.getByID("applicationDueDateField.month").type(listing["date.month"])
-    cy.getByID("applicationDueDateField.day").type(listing["date.day"])
-    cy.getByID("applicationDueDateField.year").type((new Date().getFullYear() + 1).toString())
-    cy.getByID("applicationDueTimeField.hours").type(listing["date.hours"])
-    cy.getByID("applicationDueTimeField.minutes").type(listing["date.minutes"])
-    cy.getByID("applicationDueTimeField.period").select("PM")
-  })
 
-  if (isApproval) {
-    cy.getByID("submitButton").contains("Submit").click()
-    cy.getByID("submitListingForApprovalButtonConfirm").contains("Submit").click()
-    cy.getByTestId("page-header").should("be.visible")
-    cy.getByTestId("page-header").should("have.text", listingName)
-  } else {
-    cy.getByID("publishButton").contains("Publish").click()
-    cy.getByID("publishButtonConfirm").contains("Publish").click()
-    cy.get("[data-testid=page-header]").should("be.visible")
-    cy.getByTestId("page-header").should("have.text", listingName)
+    cy.fixture("minimalListing").then((listing) => {
+      const uploadListingPhoto = (
+        fixtureName,
+        description,
+        isFirstUpload = false,
+        requiresAltText = false,
+        imageIndex = 0
+      ) => {
+        const publicId = `dev/${fixtureName.replace(".jpg", "")}`
+
+        // Use per-image intercepts so each upload resolves to its own Cloudinary URL.
+        cy.intercept("POST", "https://api.cloudinary.com/v1_1/exygy/upload", {
+          public_id: publicId,
+        })
+        cy.intercept(
+          "GET",
+          `https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/${publicId}.jpg`,
+          {
+            fixture: fixtureName,
+          }
+        )
+
+        cy.getByID("add-photos-button")
+          .contains(isFirstUpload ? "Add photo" : "Edit photos")
+          .click()
+        cy.getByTestId("dropzone-input").attachFile(fixtureName, {
+          subjectType: "drag-n-drop",
+        })
+        // Angelopolis-style listings require alt text before a photo is added to the drawer table.
+        if (requiresAltText) {
+          cy.get("#image-description").should("be.visible")
+          cy.getByID("image-description").clear().type(description)
+          cy.getByID("save-alt-text-button").click()
+        }
+        cy.getByTestId("drawer-photos-table").should("be.visible")
+        cy.getByID(`listing-drawer-image-${imageIndex}`)
+          .should("have.attr", "src")
+          .should("include", fixtureName.replace(".jpg", ""))
+        cy.getByID("listing-photo-uploaded").contains("Save").click()
+      }
+
+      cy.getByID("name").clear().type(listingName)
+      cy.getByID("developer").type(listing["developer"])
+
+      cy.get("body").then(($body) => {
+        const hasListingFileNumber = $body.find("#listingFileNumber").length > 0
+
+        if (hasListingFileNumber) {
+          cy.getByID("listingFileNumber").type(`AUTO-${Date.now()}`)
+        }
+
+        if ($body.find("[id='property.id']").length > 0) {
+          cy.getByID("property.id")
+            .find("option")
+            .eq(1)
+            .invoke("val")
+            .then((val) => {
+              cy.getByID("property.id").select(val)
+            })
+        }
+
+        // Angelopolis requires three images and image descriptions.
+        if (hasListingFileNumber) {
+          uploadListingPhoto(
+            "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpg",
+            "Building exterior photo",
+            true,
+            true,
+            0
+          )
+          uploadListingPhoto(
+            "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg",
+            "Building lobby photo",
+            false,
+            true,
+            1
+          )
+          uploadListingPhoto(
+            "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpg",
+            "Building entrance photo",
+            false,
+            true,
+            2
+          )
+        } else {
+          uploadListingPhoto(
+            "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpg",
+            "Building exterior photo",
+            true
+          )
+        }
+      })
+
+      cy.getByID("listingsBuildingAddress.street").type(listing["buildingAddress.street"])
+      cy.getByID("neighborhood").type(listing["neighborhood"])
+      cy.getByID("listingsBuildingAddress.city").type(listing["buildingAddress.city"])
+      cy.getByID("listingsBuildingAddress.state").select(listing["buildingAddress.state"])
+      cy.getByID("listingsBuildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
+      cy.getByID("addUnitsButton").contains("Add unit").click()
+      cy.getByID("number").type(listing["number"])
+      cy.getByID("unitTypes.id").select(listing["unitType.id"])
+      cy.getByID("unitFormSaveAndExitButton").contains("Save & exit").should("be.visible").click()
+      cy.getByID("amiChart.id").select(1).trigger("change")
+      cy.getByID("amiPercentage").select(1)
+      cy.getByID("unitFormSaveAndExitButton").contains("Save & exit").click()
+
+      // Some jurisdictions require at least one accessibility feature selection.
+      cy.get("body").then(($body) => {
+        if ($body.find("#addFeaturesButton").length > 0) {
+          cy.getByID("addFeaturesButton").contains("Add features").click()
+          cy.get("body").then(($featureBody) => {
+            if ($featureBody.find("#carpetInUnit").length > 0) {
+              cy.getByID("carpetInUnit").check({ force: true })
+            }
+          })
+          cy.getByID("saveFeaturesButton").contains("Save").click()
+        }
+      })
+
+      cy.get("button").contains("Application process").click()
+      if (scheduledPublishDate) {
+        const d = new Date(scheduledPublishDate)
+        cy.getByID("scheduledListingPublishDateField.month").type(`${d.getMonth() + 1}`)
+        cy.getByID("scheduledListingPublishDateField.day").type(`${d.getDate()}`)
+        cy.getByID("scheduledListingPublishDateField.year").type(`${d.getFullYear()}`)
+      }
+      if (isLottery) {
+        cy.getByID("reviewOrderLottery").check()
+        cy.getByTestId("lottery-start-date-month").type("1")
+        cy.getByTestId("lottery-start-date-day").type("17")
+        cy.getByTestId("lottery-start-date-year").type("2026")
+        cy.getByTestId("lottery-start-time-hours").type("9")
+        cy.getByTestId("lottery-start-time-minutes").type("00")
+        cy.getByTestId("lottery-start-time-period").select("AM")
+        cy.getByTestId("lottery-end-time-hours").type("10")
+        cy.getByTestId("lottery-end-time-minutes").type("00")
+        cy.getByTestId("lottery-end-time-period").select("AM")
+      }
+      cy.getByID("leasingAgentName").type(listing["leasingAgentName"])
+      cy.getByID("leasingAgentEmail").type(listing["leasingAgentEmail"])
+      cy.getByID("leasingAgentPhone").type(listing["leasingAgentPhone"])
+      cy.getByID("digitalApplicationChoiceYes").check()
+      cy.getByID("commonDigitalApplicationChoiceYes").check()
+      cy.getByID("paperApplicationNo").check()
+      cy.getByID("referralOpportunityNo").check()
+      cy.getByID("applicationDueDateField.month").type(listing["date.month"])
+      cy.getByID("applicationDueDateField.day").type(listing["date.day"])
+      cy.getByID("applicationDueDateField.year").type((new Date().getFullYear() + 1).toString())
+      cy.getByID("applicationDueTimeField.hours").type(listing["date.hours"])
+      cy.getByID("applicationDueTimeField.minutes").type(listing["date.minutes"])
+      cy.getByID("applicationDueTimeField.period").select("PM")
+    })
+
+    if (isApproval) {
+      cy.getByID("submitButton").contains("Submit").click()
+      cy.getByID("submitListingForApprovalButtonConfirm").contains("Submit").click()
+      cy.getByTestId("page-header").should("be.visible")
+      cy.getByTestId("page-header").should("contain.text", listingName)
+    } else {
+      cy.getByID("publishButton").contains("Publish").click()
+      cy.getByID("publishButtonConfirm").contains("Publish").click()
+      cy.get("[data-testid=page-header]").should("be.visible")
+      cy.getByTestId("page-header").should("contain.text", listingName)
+    }
   }
-})
+)
 
 Cypress.Commands.add("addMinimalApplication", (listingName) => {
   cy.visit("/")

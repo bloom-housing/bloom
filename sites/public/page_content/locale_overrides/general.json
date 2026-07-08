@@ -302,6 +302,7 @@
   "resources.contactEmail": "doorway@bayareametro.gov",
   "resources.contactInfo": "Bloomington's Housing & Community Development Department",
   "resources.housingProgramsTitle": "Bloomington's Housing & Community Development housing programs",
+  "t.nonProdBanner": "This site is for testing purposes only. Applications will not be considered. Please visit the <a href='https://housingbayarea.mtc.ca.gov/' target='_blank'>official site</a> to apply for housing.",
   "welcome.allApplicationClosed": "All applications are currently closed, but you can view closed listings.",
   "welcome.bayAreaCountyMap": "Bay Area County Map",
   "welcome.call211": "Call 211 (311 in San Francisco) for emergency housing or resources specifically for homeless persons. Click Get Help for more options.",
