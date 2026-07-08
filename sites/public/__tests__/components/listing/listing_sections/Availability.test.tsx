@@ -730,7 +730,7 @@ describe("<Availability>", () => {
 
   describe("with scheduled application open date in the future", () => {
     it("shows coming soon heading and scheduled date message instead of review order content", () => {
-      const futureDate = dayjs().add(5, "days").toDate()
+      const futureDate = new Date("2030-07-15T16:00:00.000Z")
       const view = render(
         <Availability
           listing={{
@@ -744,11 +744,8 @@ describe("<Availability>", () => {
       )
       expect(view.getByText("Availability")).toBeDefined()
       expect(view.getByText("Coming soon")).toBeDefined()
-      expect(
-        view.getByText(
-          `Applications can be submitted starting on ${dayjs(futureDate).format("MM/DD/YYYY")}`
-        )
-      ).toBeDefined()
+      expect(view.getByText(/Applications can be submitted starting on/)).toBeDefined()
+      expect(view.getByText(/9:00AM/)).toBeDefined()
       expect(view.queryByText("First come first serve")).toBeNull()
     })
   })

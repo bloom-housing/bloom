@@ -814,8 +814,18 @@ describe("ListingViewSeedsHelpers", () => {
   })
 
   describe("getDateString", () => {
+    const originalTimeZone = process.env.timeZone
+
+    beforeEach(() => {
+      process.env.timeZone = "America/Los_Angeles"
+    })
+
+    afterEach(() => {
+      process.env.timeZone = originalTimeZone
+    })
+
     it("should format date with given format string", () => {
-      const date = new Date("2024-01-15T10:30:00")
+      const date = new Date("2024-01-15T18:30:00.000Z")
       const result = getDateString(date, "MMMM DD, YYYY")
       expect(result).toBe("January 15, 2024")
     })
@@ -826,7 +836,7 @@ describe("ListingViewSeedsHelpers", () => {
     })
 
     it("should format date with different format", () => {
-      const date = new Date("2024-01-15T10:30:00")
+      const date = new Date("2024-01-15T18:30:00.000Z")
       const result = getDateString(date, "MM/DD/YYYY")
       expect(result).toBe("01/15/2024")
     })

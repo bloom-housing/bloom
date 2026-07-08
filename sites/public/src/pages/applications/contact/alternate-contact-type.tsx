@@ -124,7 +124,7 @@ const ApplicationAlternateContactType = () => {
                         id="otherType"
                         name="otherType"
                         label={t("application.alternateContact.type.otherTypeFormPlaceholder")}
-                        defaultValue={application.alternateContact.otherType}
+                        defaultValue={application.alternateContact?.otherType}
                         validation={{ required: true, maxLength: 64 }}
                         error={errors.otherType}
                         errorMessage={

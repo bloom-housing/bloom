@@ -4,6 +4,7 @@ import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 import { t } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
+import { getValidFutureScheduledDate } from "../../helpers"
 
 type SaveScheduledListingDialogProps = {
   isOpen: boolean
@@ -18,13 +19,16 @@ const SaveScheduledListingDialog = ({
   onConfirm,
   currentScheduledPublishAt,
 }: SaveScheduledListingDialogProps) => {
-  const hasScheduledDate =
-    currentScheduledPublishAt != null && dayjs.utc(currentScheduledPublishAt).isValid()
+  const scheduledDate = getValidFutureScheduledDate(currentScheduledPublishAt)
+  const hasPastDate =
+    !scheduledDate &&
+    currentScheduledPublishAt != null &&
+    dayjs.utc(currentScheduledPublishAt).isValid()
 
-  const content = hasScheduledDate
-    ? t("listings.approval.saveScheduledWithDate", {
-        date: dayjs.utc(currentScheduledPublishAt).format("MM/DD/YYYY"),
-      })
+  const content = scheduledDate
+    ? t("listings.approval.saveScheduledWithDate", { date: scheduledDate })
+    : hasPastDate
+    ? t("listings.approval.saveScheduledWithPastDate")
     : t("listings.approval.saveScheduledNoDate")
 
   return (
