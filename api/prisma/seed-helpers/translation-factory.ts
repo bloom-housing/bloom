@@ -1237,6 +1237,7 @@ const translations = (
           header: 'Listing approval requested',
           partnerRequest:
             'A Partner has submitted an approval request to publish the %{listingName} listing.',
+          fileNumber: 'The listing file number is %{listingFileNumber}.',
           logInToReviewStart: 'Please log into the',
           logInToReviewEnd:
             'and navigate to the listing detail page to review and publish.',

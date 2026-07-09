@@ -662,6 +662,7 @@ export class EmailService {
   public async requestApproval(
     jurisdictionId: IdDTO,
     listingInfo: IdDTO,
+    listingFileNumber: string,
     emails: string[],
     appUrl: string,
   ) {
@@ -671,12 +672,17 @@ export class EmailService {
       this.logger.log(
         `Sending request approval email for listing ${listingInfo.name} to ${emails.length} emails`,
       );
+      const appOptions = {
+        listingName: listingInfo.name,
+        listingFileNumber,
+      };
       await this.send(
         emails,
         jurisdiction.emailFromAddress,
-        this.polyglot.t('requestApproval.header'),
+        `${this.polyglot.t('requestApproval.header')} - ${listingInfo.name}`,
         this.template('request-approval')({
-          appOptions: { listingName: listingInfo.name },
+          appOptions,
+          listingFileNumber,
           appUrl: appUrl,
           listingUrl: `${appUrl}/listings/${listingInfo.id}`,
         }),

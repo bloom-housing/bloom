@@ -1,8 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
 import cookieParser from 'cookie-parser';
+import { randomUUID } from 'crypto';
+import { of } from 'rxjs';
 import { stringify } from 'qs';
+import request from 'supertest';
+import { HttpService } from '@nestjs/axios';
+import { INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import {
   FlaggedSetStatusEnum,
   ListingsStatusEnum,
@@ -64,6 +67,11 @@ import {
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { PublicUserUpdate } from '../../../src/dtos/users/public-user-update.dto';
 
+const testCronJobService = {
+  startCronJob: jest.fn().mockResolvedValue(undefined),
+  markCronJobAsStarted: jest.fn().mockResolvedValue(undefined),
+};
+
 const testEmailService = {
   confirmation: jest.fn(),
   welcome: jest.fn(),
@@ -75,15 +83,39 @@ const testEmailService = {
   applicationConfirmation: jest.fn(),
   lotteryPublishedAdmin: jest.fn(),
   lotteryPublishedApplicant: jest.fn(),
+  listingPublishNotification: jest.fn(),
   listingPublished: jest.fn(),
 };
 
-const testCronJobService = {
-  startCronJob: jest.fn().mockResolvedValue(undefined),
-  markCronJobAsStarted: jest.fn().mockResolvedValue(undefined),
+const testHttpService = {
+  pipe: jest.fn(),
+  get: jest.fn(() => {
+    const response = {
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config: {
+        headers: undefined,
+      },
+      data: {
+        jurisdictions: [
+          {
+            id: 'externalJurisdictionId',
+            name: 'externalJurisdictionName',
+          },
+        ],
+        listings: [],
+        reservedCommunityTypes: [],
+        unitRentTypes: [],
+        unitTypes: [],
+      },
+    };
+
+    return of(response);
+  }),
 };
 
-describe('Testing Permissioning of endpoints as partner with correct listing', () => {
+describe('Testing Permission-ing of endpoints as partner with correct listing', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
@@ -101,10 +133,12 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-      .overrideProvider(EmailService)
-      .useValue(testEmailService)
       .overrideProvider(CronJobService)
       .useValue(testCronJobService)
+      .overrideProvider(EmailService)
+      .useValue(testEmailService)
+      .overrideProvider(HttpService)
+      .useValue(testHttpService)
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -1630,6 +1664,31 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
           id: deleteId,
         } as IdDTO)
         .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+  });
+
+  describe('Testing external listing endpoints', () => {
+    it('should succeed for externalize endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/externalListings`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should error as forbidden for ingest endpoint', async () => {
+      const body = {
+        externalURL: 'externalJurisdictionName.com',
+        jurisdictionId: randomUUID(),
+        targetName: 'externalJurisdictionName',
+      };
+
+      await request(app.getHttpServer())
+        .put(`/externalListings/ingest`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(body)
         .set('Cookie', cookies)
         .expect(403);
     });

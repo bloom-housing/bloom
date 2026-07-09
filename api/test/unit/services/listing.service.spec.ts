@@ -864,8 +864,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -1009,8 +1010,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -1449,8 +1451,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -2890,8 +2893,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -3388,8 +3392,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -3700,8 +3705,9 @@ describe('Testing listing service', () => {
           },
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
         },
@@ -7402,6 +7408,7 @@ describe('Testing listing service', () => {
       expect(requestApprovalMock).toBeCalledWith(
         { id: 'jurisId' },
         { id: 'id', name: 'name' },
+        undefined,
         ['admin@email.com'],
         config.get('PARTNERS_PORTAL_URL'),
       );

@@ -111,6 +111,8 @@ p, supportAdmin, mapLayers, true, .*
 p, jurisdictionAdmin, mapLayers, true, .*
 p, limitedJurisdictionAdmin, mapLayers, true, .*
 
+p, admin, externalListings, true, .*
+
 p, admin, featureFlags, true, .*
 
 g, admin, supportAdmin
