@@ -53,8 +53,10 @@ import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
-import { ApplicationBulkUploadService } from '../services/application-bulk-upload.service';
-import { ApplicationBulkUpload } from '../dtos/applications/application-bulk-upload.dto';
+import {
+  ApplicationBulkPresignedUrl,
+  ApplicationBulkUploadService,
+} from '../services/application-bulk-upload.service';
 import { ApplicationBulkUrl } from '../dtos/applications/application-bulk-url.dto';
 
 @Controller('applications')
@@ -335,8 +337,9 @@ export class ApplicationController {
     operationId: 'uploadBulkUpdate',
   })
   @ApiOkResponse({ type: Boolean })
-  async uploadBulkUpdate(@Body() dto: ApplicationBulkUpload): Promise<boolean> {
+  async uploadBulkUpdate(
     @Body() dto: ApplicationBulkUrl,
+  ): Promise<ApplicationBulkPresignedUrl> {
     return this.applicationBulkUploadService.uploadUrl(dto);
   }
 
