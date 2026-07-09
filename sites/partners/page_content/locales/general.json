@@ -612,6 +612,8 @@
   "listings.unit.typeOptions.fiveBdrm": "Five bedroom",
   "listings.unit.typeOptions.fourBdrm": "Four bedroom",
   "listings.unit.typeOptions.oneBdrm": "One bedroom",
+  "listings.unit.typeOptions.sevenBdrm": "Seven+ bedroom",
+  "listings.unit.typeOptions.sixBdrm": "Six bedroom",
   "listings.unit.typeOptions.SRO": "SRO",
   "listings.unit.typeOptions.studio": "Studio",
   "listings.unit.typeOptions.threeBdrm": "Three bedroom",

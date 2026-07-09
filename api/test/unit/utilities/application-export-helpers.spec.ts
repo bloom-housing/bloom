@@ -882,6 +882,9 @@ describe('Testing application export helpers', () => {
         'twoBdrm',
         'threeBdrm',
         'fourBdrm',
+        'fiveBdrm',
+        'sixBdrm',
+        'sevenBdrm',
       ];
 
       const readableTypes = [
@@ -891,6 +894,9 @@ describe('Testing application export helpers', () => {
         'Two Bedroom',
         'Three Bedroom',
         'Four+ Bedroom',
+        'Five Bedroom',
+        'Six Bedroom',
+        'Seven+ Bedroom',
       ];
 
       for (let i = 0; i < types.length; i++) {

@@ -156,6 +156,16 @@ export const unitTypeMapping = {
     ordinal: 6,
     labelKey: "listings.unitTypes.expanded.fiveBdrm",
   },
+  [UnitTypeEnum.sixBdrm]: {
+    value: 6,
+    ordinal: 7,
+    labelKey: "listings.unitTypes.expanded.sixBdrm",
+  },
+  [UnitTypeEnum.sevenBdrm]: {
+    value: 7,
+    ordinal: 8,
+    labelKey: "listings.unitTypes.expanded.sevenBdrm",
+  },
 }
 
 export const unitTypeUnitGroupsMapping = {

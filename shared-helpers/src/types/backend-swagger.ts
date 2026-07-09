@@ -8416,6 +8416,9 @@ export interface PublicAppsViewResponse {
   applicationsCount: PublicAppsCount
 }
 
+/** StreamableFile */
+export interface StreamableFile {}
+
 /** ApplicationSelectionOptionCreate */
 export interface ApplicationSelectionOptionCreate {
   /**  */
@@ -10559,6 +10562,8 @@ export enum UnitTypeEnum {
   "fourBdrm" = "fourBdrm",
   "SRO" = "SRO",
   "fiveBdrm" = "fiveBdrm",
+  "sixBdrm" = "sixBdrm",
+  "sevenBdrm" = "sevenBdrm",
 }
 
 export enum UnitRentTypeEnum {
