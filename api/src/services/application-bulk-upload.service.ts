@@ -304,6 +304,7 @@ export class ApplicationBulkUploadService {
     return stringData;
   }
 
+  // TODO Yazeed - Integrate the uploadUrl method with S3 presigned URL generation logic
   async uploadUrl(
     dto: ApplicationBulkUrl,
   ): Promise<ApplicationBulkPresignedUrl> {
@@ -363,7 +364,7 @@ export class ApplicationBulkUploadService {
 
     return {
       key: s3KeyTemplate,
-      presignedUrl: '',
+      presignedUrl: '', // TODO: Yazeed - Add S3 generated presigned URL
     };
   }
 
