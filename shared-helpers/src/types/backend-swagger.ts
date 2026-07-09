@@ -10449,6 +10449,7 @@ export enum ListingsStatusEnum {
 export enum ListingTypeEnum {
   "regulated" = "regulated",
   "nonRegulated" = "nonRegulated",
+  "landUse" = "landUse",
 }
 
 export enum ParkingTypeEnum {
@@ -10660,6 +10661,7 @@ export enum EnumListingDepositType {
 export enum EnumListingListingType {
   "regulated" = "regulated",
   "nonRegulated" = "nonRegulated",
+  "landUse" = "landUse",
 }
 export enum EnumUnitGroupAmiLevelCreateMonthlyRentDeterminationType {
   "flatRent" = "flatRent",
@@ -10672,6 +10674,7 @@ export enum EnumListingCreateDepositType {
 export enum EnumListingCreateListingType {
   "regulated" = "regulated",
   "nonRegulated" = "nonRegulated",
+  "landUse" = "landUse",
 }
 export enum EnumUnitGroupAmiLevelUpdateMonthlyRentDeterminationType {
   "flatRent" = "flatRent",
@@ -10684,6 +10687,7 @@ export enum EnumListingUpdateDepositType {
 export enum EnumListingUpdateListingType {
   "regulated" = "regulated",
   "nonRegulated" = "nonRegulated",
+  "landUse" = "landUse",
 }
 export enum AfsView {
   "pending" = "pending",
@@ -10877,6 +10881,7 @@ export enum FeatureFlagEnum {
   "enableHousingBasics" = "enableHousingBasics",
   "enableHousingDeveloperOwner" = "enableHousingDeveloperOwner",
   "enableIsVerified" = "enableIsVerified",
+  "enableLandUse" = "enableLandUse",
   "enableLeasingAgentAltText" = "enableLeasingAgentAltText",
   "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
   "enableListingFavoriting" = "enableListingFavoriting",
