@@ -418,6 +418,7 @@ export class ListingService implements OnModuleInit {
   public async listingApprovalNotify(params: {
     user: User;
     listingInfo: IdDTO;
+    listingFileNumber?: string;
     status: ListingsStatusEnum;
     approvingRoles: UserRoleEnum[];
     previousStatus?: ListingsStatusEnum;
@@ -442,6 +443,7 @@ export class ListingService implements OnModuleInit {
       await this.emailService.requestApproval(
         { id: params.jurisId },
         { id: params.listingInfo.id, name: params.listingInfo.name },
+        params.listingFileNumber,
         userInfo.emails,
         this.configService.get('PARTNERS_PORTAL_URL'),
       );
@@ -1897,6 +1899,7 @@ export class ListingService implements OnModuleInit {
       await this.listingApprovalNotify({
         user: requestingUser,
         listingInfo: { id: mappedListing.id, name: mappedListing.name },
+        listingFileNumber: mappedListing.listingFileNumber,
         status: mappedListing.status,
         approvingRoles: rawJurisdiction.listingApprovalPermissions,
         jurisId: rawJurisdiction.id,
@@ -3029,6 +3032,7 @@ export class ListingService implements OnModuleInit {
       await this.listingApprovalNotify({
         user: requestingUser,
         listingInfo: { id: mappedListing.id, name: mappedListing.name },
+        listingFileNumber: mappedListing.listingFileNumber,
         approvingRoles: listingApprovalPermissions,
         status: incomingDto.status,
         previousStatus: storedListing.status,

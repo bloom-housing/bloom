@@ -7404,6 +7404,7 @@ describe('Testing listing service', () => {
       expect(requestApprovalMock).toBeCalledWith(
         { id: 'jurisId' },
         { id: 'id', name: 'name' },
+        undefined,
         ['admin@email.com'],
         config.get('PARTNERS_PORTAL_URL'),
       );
