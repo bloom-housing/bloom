@@ -360,7 +360,7 @@ export class ApplicationBulkUploadService {
         FeatureFlagEnum.enableApplicationStatus,
       )
     ) {
-      throw new BadRequestException(
+      throw new ForbiddenException(
         `Jurisdiction with id: ${listingData.jurisdictionId} does not have the enableApplicationStatus flag enabled`,
       );
     }
