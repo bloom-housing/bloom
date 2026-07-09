@@ -330,8 +330,7 @@ export class ApplicationController {
 
   @Post('bulk-update/upload-url')
   @ApiOperation({
-    summary:
-      'Allows the user to upload the bulk upload CSV to a private S3 bucket',
+    summary: 'Generates an presigned URL link to a private S3 bucket',
     operationId: 'uploadBulkUpdate',
   })
   @ApiOkResponse({ type: Boolean })
