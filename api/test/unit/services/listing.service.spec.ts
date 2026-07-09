@@ -15,6 +15,7 @@ import {
   UserRoleEnum,
 } from '@prisma/client';
 import { Logger } from '@nestjs/common';
+import dayjs from 'dayjs';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import { randomUUID } from 'crypto';
@@ -220,6 +221,7 @@ const listingPublishedMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
 const lotteryPublishedAdminMock = jest.fn();
 const lotteryPublishedApplicantMock = jest.fn();
+const listingPublishNotificationMock = jest.fn();
 
 const canOrThrowMock = jest.fn();
 
@@ -288,6 +290,7 @@ describe('Testing listing service', () => {
             lotteryReleased: lotteryReleasedMock,
             lotteryPublishedAdmin: lotteryPublishedAdminMock,
             lotteryPublishedApplicant: lotteryPublishedApplicantMock,
+            listingPublishNotification: listingPublishNotificationMock,
           },
         },
         {
@@ -861,8 +864,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -1006,8 +1010,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -1478,8 +1483,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -2919,8 +2925,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -3417,8 +3424,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -3729,8 +3737,9 @@ describe('Testing listing service', () => {
           },
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
         },
@@ -4841,6 +4850,7 @@ describe('Testing listing service', () => {
 
       prisma.listings.create = jest.fn().mockResolvedValue({
         id: 'example id',
+        jurisdictions: { id: 'jurisdiction-id' },
         listingMultiselectQuestions: [
           {
             id: randomUUID(),
@@ -7430,6 +7440,7 @@ describe('Testing listing service', () => {
       expect(requestApprovalMock).toBeCalledWith(
         { id: 'jurisId' },
         { id: 'id', name: 'name' },
+        undefined,
         ['admin@email.com'],
         config.get('PARTNERS_PORTAL_URL'),
       );
@@ -7840,15 +7851,20 @@ describe('Testing listing service', () => {
           id: 'scheduled-id-1',
           name: 'name 1',
           jurisdictionId: 'jurisId',
+          scheduledApplicationOpenAt: null,
           jurisdictions: { publicUrl: 'public.housing.gov' },
         },
         {
           id: 'scheduled-id-2',
           name: 'name 2',
           jurisdictionId: 'jurisId',
+          scheduledApplicationOpenAt: null,
           jurisdictions: { publicUrl: 'public.housing.gov' },
         },
       ]);
+      jest
+        .spyOn(service, 'findOne')
+        .mockResolvedValue({ id: 'scheduled-id-1' } as any);
       prisma.listings.findUnique = jest
         .fn()
         .mockResolvedValue({ id: 'scheduled-id-1' });
@@ -7873,6 +7889,7 @@ describe('Testing listing service', () => {
           id: true,
           name: true,
           jurisdictionId: true,
+          scheduledApplicationOpenAt: true,
           jurisdictions: {
             select: {
               publicUrl: true,
@@ -7920,7 +7937,7 @@ describe('Testing listing service', () => {
       expect(prisma.cronJob.findFirst).toHaveBeenCalled();
       expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
         where: {
-          name: 'LISTING_SCHEDULED_PUBLISH_CRON_STRING',
+          name: 'LISTING_SCHEDULED_PUBLISH_CRON_JOB',
         },
       });
       expect(prisma.cronJob.update).toHaveBeenCalled();
@@ -7932,6 +7949,44 @@ describe('Testing listing service', () => {
         'public.housing.gov',
       );
       process.env.PROXY_URL = undefined;
+    });
+
+    it('should send comingSoon subscriber notification when scheduledApplicationOpenAt is in the future', async () => {
+      const futureOpenAt = dayjs().add(7, 'days').toDate();
+      prisma.listings.findMany = jest.fn().mockResolvedValue([
+        {
+          id: 'scheduled-id-1',
+          name: 'name 1',
+          jurisdictionId: 'jurisId',
+          scheduledApplicationOpenAt: futureOpenAt,
+          jurisdictions: { publicUrl: 'public.housing.gov' },
+        },
+      ]);
+      prisma.listings.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: 'scheduled-id-1' });
+      prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 1 });
+      prisma.activityLog.createMany = jest.fn().mockResolvedValue({ count: 1 });
+      prisma.cronJob.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'snapshot-id' });
+      jest
+        .spyOn(service, 'getUserEmailInfo')
+        .mockResolvedValue({ emails: ['partner@email.com'] });
+      const fullListing = { id: 'scheduled-id-1', name: 'name 1' };
+      jest.spyOn(service, 'findOne').mockResolvedValue(fullListing as any);
+      const sendNotifSpy = jest
+        .spyOn(service, 'sendListingPublishNotification')
+        .mockResolvedValue(undefined);
+
+      await service.publishScheduledListingsCronJob();
+
+      expect(service.findOne).toHaveBeenCalledWith('scheduled-id-1');
+      expect(sendNotifSpy).toHaveBeenCalledWith(fullListing, 'comingSoon');
     });
 
     it('should not purge cache or write activity logs when no listings are due', async () => {
@@ -7951,6 +8006,193 @@ describe('Testing listing service', () => {
       expect(httpServiceMock.request).not.toHaveBeenCalled();
       expect(prisma.activityLog.createMany).not.toHaveBeenCalled();
       process.env.PROXY_URL = undefined;
+    });
+  });
+
+  describe('Test sendApplicationOpenNotificationsCronJob', () => {
+    it('should send the standard notification for listings whose open date was reached', async () => {
+      const lastRunDate = new Date(2026, 5, 10, 9);
+      prisma.cronJob.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID(), lastRunDate });
+      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+      prisma.listings.findMany = jest.fn().mockResolvedValue([
+        {
+          id: 'open-id-1',
+        },
+      ]);
+      prisma.listings.update = jest.fn();
+      prisma.listings.updateMany = jest.fn();
+      const mockedListing = { id: 'open-id-1' } as unknown as Listing;
+      const findOneSpy = jest
+        .spyOn(service, 'findOne')
+        .mockResolvedValue(mockedListing);
+      const sendNotificationSpy = jest
+        .spyOn(service, 'sendListingPublishNotification')
+        .mockResolvedValue(undefined);
+
+      const result = await service.sendApplicationOpenNotificationsCronJob();
+
+      expect(result).toEqual({ success: true });
+      expect(prisma.listings.findMany).toHaveBeenCalledWith({
+        select: { id: true },
+        where: {
+          status: ListingsStatusEnum.active,
+          AND: [
+            { scheduledApplicationOpenAt: { not: null } },
+            { scheduledApplicationOpenAt: { gt: lastRunDate } },
+            { scheduledApplicationOpenAt: { lte: expect.any(Date) } },
+            {
+              OR: [
+                { publishedAt: null },
+                {
+                  publishedAt: {
+                    lt: prisma.listings.fields.scheduledApplicationOpenAt,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      });
+      expect(findOneSpy).toHaveBeenCalledWith('open-id-1');
+      expect(sendNotificationSpy).toHaveBeenCalledWith(
+        mockedListing,
+        'standard',
+      );
+      expect(prisma.listings.update).not.toHaveBeenCalled();
+      expect(prisma.listings.updateMany).not.toHaveBeenCalled();
+      expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
+        where: {
+          name: 'LISTING_OPEN_DATE_NOTIFICATION_CRON_JOB',
+        },
+      });
+      expect(prisma.cronJob.update).toHaveBeenCalled();
+
+      findOneSpy.mockRestore();
+      sendNotificationSpy.mockRestore();
+    });
+
+    it('should skip listings published after their open date', async () => {
+      prisma.cronJob.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID(), lastRunDate: new Date() });
+      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+      prisma.listings.findMany = jest.fn().mockResolvedValue([]);
+      const sendNotificationSpy = jest
+        .spyOn(service, 'sendListingPublishNotification')
+        .mockResolvedValue(undefined);
+
+      const result = await service.sendApplicationOpenNotificationsCronJob();
+
+      expect(result).toEqual({ success: true });
+      expect(sendNotificationSpy).not.toHaveBeenCalled();
+
+      sendNotificationSpy.mockRestore();
+    });
+
+    it('should query with a fallback window on the first run', async () => {
+      prisma.cronJob.findFirst = jest.fn().mockResolvedValue(null);
+      prisma.cronJob.create = jest.fn().mockResolvedValue(true);
+      prisma.listings.findMany = jest.fn().mockResolvedValue([]);
+      const sendNotificationSpy = jest
+        .spyOn(service, 'sendListingPublishNotification')
+        .mockResolvedValue(undefined);
+
+      const result = await service.sendApplicationOpenNotificationsCronJob();
+
+      expect(result).toEqual({ success: true });
+      expect(prisma.listings.findMany).toHaveBeenCalledWith({
+        select: { id: true },
+        where: {
+          status: ListingsStatusEnum.active,
+          AND: [
+            { scheduledApplicationOpenAt: { not: null } },
+            { scheduledApplicationOpenAt: { gt: expect.any(Date) } },
+            { scheduledApplicationOpenAt: { lte: expect.any(Date) } },
+            {
+              OR: [
+                { publishedAt: null },
+                {
+                  publishedAt: {
+                    lt: prisma.listings.fields.scheduledApplicationOpenAt,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      });
+      expect(prisma.cronJob.create).toHaveBeenCalled();
+      expect(sendNotificationSpy).not.toHaveBeenCalled();
+
+      sendNotificationSpy.mockRestore();
+    });
+  });
+
+  describe('Test sendListingPublishNotification', () => {
+    const publishedListing = {
+      id: 'listing-id',
+      name: 'Test Listing',
+      units: [],
+      jurisdictions: { id: 'juris-id' },
+    } as unknown as Listing;
+
+    beforeEach(() => {
+      prisma.userAccounts.findMany = jest
+        .fn()
+        .mockResolvedValue([
+          { email: 'user@example.com', language: LanguagesEnum.en },
+        ]);
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'juris-id',
+        publicUrl: 'https://localhost',
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableCustomListingNotifications,
+            active: true,
+          },
+        ],
+      });
+    });
+
+    it('should forward the standard variant by default', async () => {
+      await service.sendListingPublishNotification(publishedListing);
+
+      expect(listingPublishNotificationMock).toHaveBeenCalledWith(
+        { id: 'juris-id' },
+        publishedListing,
+        [],
+        expect.objectContaining({ en: ['user@example.com'] }),
+        'standard',
+      );
+    });
+
+    it('should forward the comingSoon variant', async () => {
+      await service.sendListingPublishNotification(
+        publishedListing,
+        'comingSoon',
+      );
+
+      expect(listingPublishNotificationMock).toHaveBeenCalledWith(
+        { id: 'juris-id' },
+        publishedListing,
+        [],
+        expect.objectContaining({ en: ['user@example.com'] }),
+        'comingSoon',
+      );
+    });
+
+    it('should skip sending when the feature flag is off for the jurisdiction', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'juris-id',
+        publicUrl: 'https://localhost',
+        featureFlags: [],
+      });
+
+      await service.sendListingPublishNotification(publishedListing);
+
+      expect(listingPublishNotificationMock).not.toHaveBeenCalled();
     });
   });
 

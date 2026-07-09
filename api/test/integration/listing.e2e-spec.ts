@@ -3096,6 +3096,7 @@ describe('Listing Controller Tests', () => {
           id: jurisdictionA.id,
         }),
         { id: listing.id, name: val.name },
+        null,
         expect.arrayContaining([adminUser.email, jurisAdmin.email]),
         process.env.PARTNERS_PORTAL_URL,
       );
