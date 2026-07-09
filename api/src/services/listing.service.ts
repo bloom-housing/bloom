@@ -26,7 +26,7 @@ import tz from 'dayjs/plugin/timezone';
 import { firstValueFrom } from 'rxjs';
 import { ApplicationFlaggedSetService } from './application-flagged-set.service';
 import { CronJobService } from './cron-job.service';
-import { EmailService } from './email.service';
+import { EmailService, ListingNotificationVariant } from './email.service';
 import { MultiselectQuestionService } from './multiselect-question.service';
 import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
@@ -243,7 +243,9 @@ includeViews.full = {
 
 const LISTING_CRON_JOB_NAME = 'LISTING_CRON_JOB';
 const LISTING_SCHEDULED_PUBLISH_CRON_JOB_NAME =
-  'LISTING_SCHEDULED_PUBLISH_CRON_STRING';
+  'LISTING_SCHEDULED_PUBLISH_CRON_JOB';
+const LISTING_OPEN_DATE_NOTIFICATION_CRON_JOB_NAME =
+  'LISTING_OPEN_DATE_NOTIFICATION_CRON_JOB';
 /*
   this is the service for listings
   it handles all the backend's business logic for reading in listing(s)
@@ -275,6 +277,11 @@ export class ListingService implements OnModuleInit {
       LISTING_SCHEDULED_PUBLISH_CRON_JOB_NAME,
       process.env.LISTING_SCHEDULED_PUBLISH_CRON_STRING,
       this.publishScheduledListingsCronJob.bind(this),
+    );
+    this.cronJobService.startCronJob(
+      LISTING_OPEN_DATE_NOTIFICATION_CRON_JOB_NAME,
+      process.env.LISTING_OPEN_DATE_NOTIFICATION_CRON_STRING,
+      this.sendApplicationOpenNotificationsCronJob.bind(this),
     );
   }
 
@@ -3067,7 +3074,13 @@ export class ListingService implements OnModuleInit {
     }
 
     if (sendPublishNotificationEmail) {
-      await this.sendListingPublishNotification(mappedListing);
+      const useComingSoon =
+        !!mappedListing.scheduledApplicationOpenAt &&
+        dayjs(mappedListing.scheduledApplicationOpenAt).isAfter(new Date());
+      await this.sendListingPublishNotification(
+        mappedListing,
+        useComingSoon ? 'comingSoon' : 'standard',
+      );
     }
 
     if (enableV2MSQ && mappedListing.status === ListingsStatusEnum.active) {
@@ -3104,7 +3117,33 @@ export class ListingService implements OnModuleInit {
   /**
    * When listing is published, notify users with declared approval for example
    */
-  async sendListingPublishNotification(listing: Listing): Promise<void> {
+  async sendListingPublishNotification(
+    listing: Listing,
+    variant: ListingNotificationVariant = 'standard',
+  ): Promise<void> {
+    const jurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        id: true,
+        featureFlags: true,
+        publicUrl: true,
+      },
+      where: {
+        id: listing.jurisdictions.id,
+      },
+    });
+
+    if (
+      !doJurisdictionHaveFeatureFlagSet(
+        jurisdiction as Jurisdiction,
+        FeatureFlagEnum.enableCustomListingNotifications,
+      )
+    ) {
+      this.logger.log(
+        `Skipping publish notification for listing ${listing.id}: enableCustomListingNotifications flag is off for jurisdiction ${jurisdiction?.id}`,
+      );
+      return;
+    }
+
     const priorityTypes = Array.from(
       new Set(
         (listing.units || [])
@@ -3191,21 +3230,12 @@ export class ListingService implements OnModuleInit {
         ...noLanguageIndicated,
       ];
 
-    const jurisdiction = await this.prisma.jurisdictions.findUnique({
-      select: {
-        id: true,
-        publicUrl: true,
-      },
-      where: {
-        id: listing.jurisdictions.id,
-      },
-    });
-
     await this.emailService.listingPublishNotification(
       { id: jurisdiction.id },
       listing,
       priorityTypes,
       emailByLanguage,
+      variant,
     );
   }
 
@@ -3550,6 +3580,7 @@ export class ListingService implements OnModuleInit {
         id: true,
         name: true,
         jurisdictionId: true,
+        scheduledApplicationOpenAt: true,
         jurisdictions: {
           select: {
             publicUrl: true,
@@ -3639,6 +3670,74 @@ export class ListingService implements OnModuleInit {
           `${logName} failed to send published email for listing ${listing.id}`,
           err,
         );
+      }
+
+      const notifyUserAboutScheduledApplicationOpenAt =
+        !!listing.scheduledApplicationOpenAt &&
+        dayjs(listing.scheduledApplicationOpenAt).isAfter(new Date());
+      if (notifyUserAboutScheduledApplicationOpenAt) {
+        const fullListing = await this.findOne(listing.id);
+        await this.sendListingPublishNotification(fullListing, 'comingSoon');
+      }
+    }
+
+    return { success: true };
+  }
+
+  /**
+    runs daily to notify opted-in users that applications opened for active
+    listings whose scheduledApplicationOpenAt was reached since the previous
+    run; sends the standard notification email and never modifies the listing
+  */
+  async sendApplicationOpenNotificationsCronJob(): Promise<SuccessDTO> {
+    const logName = 'sendApplicationOpenNotificationsCron';
+    this.logger.warn(`${logName} job running`);
+
+    // previous run date is the dedupe window lower bound, so read it before
+    // marking the job as started (which overwrites it)
+    const previousRun = await this.prisma.cronJob.findFirst({
+      where: { name: LISTING_OPEN_DATE_NOTIFICATION_CRON_JOB_NAME },
+    });
+    await this.cronJobService.markCronJobAsStarted(
+      LISTING_OPEN_DATE_NOTIFICATION_CRON_JOB_NAME,
+    );
+
+    const now = new Date();
+    const windowStart =
+      previousRun?.lastRunDate ?? dayjs(now).subtract(1, 'day').toDate();
+
+    const listings = await this.prisma.listings.findMany({
+      select: { id: true },
+      where: {
+        status: ListingsStatusEnum.active,
+        AND: [
+          { scheduledApplicationOpenAt: { not: null } },
+          { scheduledApplicationOpenAt: { gt: windowStart } },
+          { scheduledApplicationOpenAt: { lte: now } },
+          {
+            OR: [
+              { publishedAt: null },
+              {
+                publishedAt: {
+                  lt: this.prisma.listings.fields.scheduledApplicationOpenAt,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    this.logger.warn(
+      `${logName} found ${listings.length} listing(s) with applications newly open`,
+    );
+
+    for (const { id } of listings) {
+      try {
+        const listing = await this.findOne(id);
+        await this.sendListingPublishNotification(listing, 'standard');
+      } catch (e) {
+        this.logger.error(`${logName} failed for listing ${id}: ${e}`);
       }
     }
 

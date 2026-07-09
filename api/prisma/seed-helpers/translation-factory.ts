@@ -157,6 +157,10 @@ const translations = (
         rentalOpportunity: {
           subject: 'Nueva oportunidad de alquiler en %{listingName}',
           intro: 'Oportunidad de alquiler en',
+          comingSoon: {
+            subject: 'Próximamente - %{listingName}',
+            intro: 'Próximamente',
+          },
           community: 'Comunidad',
           communityType: {
             developmentalDisability: 'La discapacidad del desarrollo',
@@ -172,6 +176,7 @@ const translations = (
             veteran: 'Veterano',
           },
           applicationsDue: 'Fecha límite de solicitudes',
+          applicationsOpen: 'Apertura de solicitudes',
           address: 'Dirección',
           neighborhood: 'Vecindario',
           region: 'Región',
@@ -257,6 +262,10 @@ const translations = (
         rentalOpportunity: {
           subject: 'Cơ hội thuê nhà mới tại %{listingName}',
           intro: 'Cơ hội thuê nhà tại',
+          comingSoon: {
+            subject: 'Sắp ra mắt - %{listingName}',
+            intro: 'Sắp ra mắt',
+          },
           community: 'Cộng đồng',
           communityType: {
             developmentalDisability: 'Khuyết tật phát triển',
@@ -272,6 +281,7 @@ const translations = (
             veteran: 'Cựu chiến binh',
           },
           applicationsDue: 'Hạn nộp đơn',
+          applicationsOpen: 'Ngày bắt đầu nhận đơn',
           address: 'Địa chỉ',
           neighborhood: 'Khu phố',
           region: 'Vùng đất',
@@ -352,6 +362,10 @@ const translations = (
         rentalOpportunity: {
           subject: '新租赁机会：%{listingName}',
           intro: '租赁机会，地点：',
+          comingSoon: {
+            subject: '即将推出 - %{listingName}',
+            intro: '即将推出',
+          },
           community: '社区',
           communityType: {
             developmentalDisability: '发育障碍',
@@ -367,6 +381,7 @@ const translations = (
             veteran: '老將',
           },
           applicationsDue: '申请截止日期',
+          applicationsOpen: '申请开放日期',
           address: '地址',
           neighborhood: '街区',
           region: '地区',
@@ -450,6 +465,10 @@ const translations = (
         rentalOpportunity: {
           subject: 'Bagong pagkakataon sa pag-upa sa %{listingName}',
           intro: 'Pagkakataon sa pag-upa sa',
+          comingSoon: {
+            subject: 'Malapit na - %{listingName}',
+            intro: 'Malapit na',
+          },
           community: 'Komunidad',
           communityType: {
             developmentalDisability: 'Kapansanan sa pag-unlad',
@@ -465,6 +484,7 @@ const translations = (
             veteran: 'Beterano',
           },
           applicationsDue: 'Deadline ng Aplikasyon',
+          applicationsOpen: 'Pagbubukas ng Aplikasyon',
           address: 'Address',
           neighborhood: 'Kapitbahayan',
           region: 'Rehiyon',
@@ -550,6 +570,10 @@ const translations = (
         rentalOpportunity: {
           subject: '%{listingName}-এ নতুন ভাড়ার সুযোগ',
           intro: 'ভাড়ার সুযোগ:',
+          comingSoon: {
+            subject: 'শীঘ্রই আসছে - %{listingName}',
+            intro: 'শীঘ্রই আসছে',
+          },
           community: 'কমিউনিটি',
           communityType: {
             developmentalDisability: 'বিকাশগত অক্ষমতা',
@@ -565,6 +589,7 @@ const translations = (
             veteran: 'প্রবীণ',
           },
           applicationsDue: 'আবেদনের শেষ তারিখ',
+          applicationsOpen: 'আবেদন শুরুর তারিখ',
           address: 'ঠিকানা',
           neighborhood: 'এলাকা',
           region: 'অঞ্চল',
@@ -646,6 +671,10 @@ const translations = (
         rentalOpportunity: {
           subject: 'فرصة إيجار جديدة في %{listingName}',
           intro: 'فرصة إيجار في',
+          comingSoon: {
+            subject: 'قريباً - %{listingName}',
+            intro: 'قريباً',
+          },
           community: 'المجتمع',
           communityType: {
             developmentalDisability: 'الإعاقة النمائية',
@@ -661,6 +690,7 @@ const translations = (
             veteran: 'محارب قديم',
           },
           applicationsDue: 'تاريخ انتهاء الطلبات',
+          applicationsOpen: 'تاريخ فتح الطلبات',
           address: 'العنوان',
           neighborhood: 'الحي',
           region: 'منطقة',
@@ -743,6 +773,10 @@ const translations = (
         rentalOpportunity: {
           subject: '%{listingName}의 새로운 임대 기회',
           intro: '임대 기회 위치:',
+          comingSoon: {
+            subject: '곧 공개 예정 - %{listingName}',
+            intro: '곧 공개 예정',
+          },
           community: '커뮤니티',
           communityType: {
             developmentalDisability: '발달 장애',
@@ -758,6 +792,7 @@ const translations = (
             veteran: '재향 군인',
           },
           applicationsDue: '신청 마감일',
+          applicationsOpen: '신청 시작일',
           address: '주소',
           neighborhood: '동네',
           region: '지역',
@@ -840,6 +875,10 @@ const translations = (
         rentalOpportunity: {
           subject: 'Նոր վարձակալության հնարավորություն՝ %{listingName}',
           intro: 'Վարձակալության հնարավորություն',
+          comingSoon: {
+            subject: 'Շուտով - %{listingName}',
+            intro: 'Շուտով',
+          },
           community: 'Համայնք',
           communityType: {
             developmentalDisability: 'Զարգացման հաշմանդամություն',
@@ -855,6 +894,7 @@ const translations = (
             veteran: 'Վետերան',
           },
           applicationsDue: 'Դիմումների վերջնաժամկետ',
+          applicationsOpen: 'Դիմումների մեկնարկի ամսաթիվ',
           address: 'Հասցե',
           neighborhood: 'Թաղամաս',
           region: 'Տարածաշրջան',
@@ -940,6 +980,10 @@ const translations = (
         rentalOpportunity: {
           subject: 'فرصت اجاره جدید در %{listingName}',
           intro: 'فرصت اجاره در',
+          comingSoon: {
+            subject: 'به زودی - %{listingName}',
+            intro: 'به زودی',
+          },
           community: 'جامعه',
           communityType: {
             developmentalDisability: 'ناتوانی رشدی',
@@ -955,6 +999,7 @@ const translations = (
             veteran: 'جانباز',
           },
           applicationsDue: 'مهلت ارسال درخواست',
+          applicationsOpen: 'تاریخ شروع درخواست‌ها',
           address: 'آدرس',
           neighborhood: 'محله',
           region: 'منطقه',
@@ -1289,6 +1334,10 @@ const translations = (
         rentalOpportunity: {
           subject: 'New rental opportunity at %{listingName}',
           intro: 'Rental opportunity at',
+          comingSoon: {
+            subject: 'Coming soon - %{listingName}',
+            intro: 'Coming soon',
+          },
           community: 'Community',
           communityType: {
             developmentalDisability: 'Developmental disability',
@@ -1304,6 +1353,7 @@ const translations = (
             veteran: 'Veteran',
           },
           applicationsDue: 'Applications Due',
+          applicationsOpen: 'Applications Open',
           address: 'Address',
           neighborhood: 'Neighborhood',
           region: 'Region',
