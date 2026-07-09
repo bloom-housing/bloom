@@ -73,12 +73,14 @@ export const createAngelopolisJurisdiction = async (
   prismaClient: PrismaClient,
   {
     publicSiteBaseURL,
+    unitRentTypes,
     unitTypes,
     partnerUser,
     msqV2,
     jurisdictionName = 'Angelopolis',
   }: {
     publicSiteBaseURL: string;
+    unitRentTypes: { id: string }[];
     unitTypes: { id: string }[];
     partnerUser: { id: string };
     msqV2: boolean;
@@ -101,6 +103,7 @@ export const createAngelopolisJurisdiction = async (
         FeatureFlagEnum.disableReservedCommunityTypeEdit,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableApplicationStatus,
+        FeatureFlagEnum.enableAutoOpenDate,
         FeatureFlagEnum.enableAutopublish,
         FeatureFlagEnum.enableConfigurableRegions,
         FeatureFlagEnum.enableCreditScreeningFee,
@@ -443,6 +446,7 @@ export const createAngelopolisJurisdiction = async (
           sqFeet: '750.00',
           amiChart: { connect: { id: angelopolisAmiChart.id } },
           unitTypes: { connect: { id: unitTypes[0].id } },
+          unitRentTypes: { connect: { id: unitRentTypes[0].id } },
         },
         {
           amiPercentage: '30',
@@ -450,12 +454,14 @@ export const createAngelopolisJurisdiction = async (
           floor: 1,
           maxOccupancy: 3,
           minOccupancy: 1,
+          monthlyRent: '1200',
           numBathrooms: 1,
           numBedrooms: 1,
           number: '101',
           sqFeet: '750.00',
           amiChart: { connect: { id: angelopolisAmiChart.id } },
           unitTypes: { connect: { id: unitTypes[1].id } },
+          unitRentTypes: { connect: { id: unitRentTypes[0].id } },
         },
       ],
       multiselectQuestions: [
@@ -485,12 +491,14 @@ export const createAngelopolisJurisdiction = async (
         floor: 1,
         maxOccupancy: 3,
         minOccupancy: 1,
+        monthlyRent: '1200',
         numBathrooms: 1,
         numBedrooms: 1,
         number: `${i}`,
         sqFeet: `${i}`,
         amiChart: { connect: { id: angelopolisAmiChart.id } },
         unitTypes: { connect: { id: unitTypes[1].id } },
+        unitRentTypes: { connect: { id: unitRentTypes[0].id } },
       })),
       multiselectQuestions: [housingSituationProgramQuestion],
       applications: [

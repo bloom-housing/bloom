@@ -861,8 +861,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -1006,8 +1007,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -1446,8 +1448,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -2198,39 +2201,6 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should return a where clause for filter counties', () => {
-      const counties = ['county1', 'county2'];
-      const filter = [
-        {
-          $comparison: 'IN',
-          counties: counties,
-        } as ListingFilterParams,
-      ];
-      const whereClause = service.buildWhereClause(filter, '');
-
-      expect(whereClause).toStrictEqual({
-        AND: [
-          {
-            externalListingId: {
-              equals: null,
-            },
-          },
-          {
-            OR: [
-              {
-                listingsBuildingAddress: {
-                  county: {
-                    in: counties,
-                    mode: 'insensitive',
-                  },
-                },
-              },
-            ],
-          },
-        ],
-      });
-    });
-
     it('should return a where clause for filter homeTypes', () => {
       const homeTypes = [HomeTypeEnum.apartment, HomeTypeEnum.house];
       const filter = [
@@ -2920,8 +2890,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -3418,8 +3389,9 @@ describe('Testing listing service', () => {
           listingNeighborhoodAmenities: true,
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
           unitGroups: {
@@ -3730,8 +3702,9 @@ describe('Testing listing service', () => {
           },
           units: {
             include: {
-              unitTypes: true,
               unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
             },
           },
         },
@@ -5882,6 +5855,82 @@ describe('Testing listing service', () => {
         ).resolves.not.toThrow();
         jest.useRealTimers();
       });
+
+      it('should ignore scheduledApplicationOpenAt when enableAutoOpenDate is disabled', async () => {
+        mockJurisdictionWithAutopublish();
+        prisma.listings.create = jest.fn().mockResolvedValue({
+          id: 'example id',
+          name: 'example name',
+        });
+        prisma.listingSnapshot.create = jest
+          .fn()
+          .mockResolvedValue({ id: 'snapshot-id' });
+
+        await expect(
+          service.create(
+            {
+              name: 'listing name',
+              depositMin: '5',
+              assets: [],
+              jurisdictions: { id: randomUUID() },
+              status: ListingsStatusEnum.pending,
+              displayWaitlistSize: false,
+              unitsSummary: null,
+              listingEvents: [],
+              isVerified: true,
+              scheduledApplicationOpenAt: new Date('2020-01-01T00:00:00.000Z'),
+            } as ListingCreate,
+            user,
+          ),
+        ).resolves.not.toThrow();
+      });
+
+      it('should normalize and save scheduledApplicationOpenAt when enableAutoOpenDate is enabled without autopublish', async () => {
+        jest
+          .useFakeTimers()
+          .setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
+        prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+          id: 'jurisdiction-id',
+          featureFlags: [
+            { name: FeatureFlagEnum.enableAutoOpenDate, active: true },
+          ],
+          listingApprovalPermissions: [],
+          publicUrl: '',
+        });
+        prisma.listings.create = jest.fn().mockResolvedValue({
+          id: 'example id',
+          name: 'example name',
+          scheduledApplicationOpenAt: new Date('2026-05-15T16:00:00.000Z'),
+        });
+        prisma.listingSnapshot.create = jest
+          .fn()
+          .mockResolvedValue({ id: 'snapshot-id' });
+
+        await expect(
+          service.create(
+            {
+              name: 'listing name',
+              depositMin: '5',
+              assets: [],
+              jurisdictions: { id: randomUUID() },
+              status: ListingsStatusEnum.pending,
+              displayWaitlistSize: false,
+              unitsSummary: null,
+              listingEvents: [],
+              isVerified: true,
+              scheduledApplicationOpenAt: new Date('2026-05-15T00:00:00.000Z'),
+            } as ListingCreate,
+            user,
+          ),
+        ).resolves.not.toThrow();
+
+        const createCall = (prisma.listings.create as jest.Mock).mock
+          .calls[0][0];
+        expect(createCall.data.scheduledApplicationOpenAt.toISOString()).toBe(
+          '2026-05-15T16:00:00.000Z',
+        );
+        jest.useRealTimers();
+      });
     });
   });
 
@@ -7281,6 +7330,56 @@ describe('Testing listing service', () => {
           service.update(baseDto(ListingsStatusEnum.pending, futureDate), user),
         ).resolves.not.toThrow();
       });
+
+      it('should ignore scheduledApplicationOpenAt on update when enableAutoOpenDate is disabled', async () => {
+        mockStoredListing(ListingsStatusEnum.pending);
+        mockJurisdictionWithAutopublish();
+        mockListingUpdate(ListingsStatusEnum.pending);
+
+        await expect(
+          service.update(
+            {
+              ...baseDto(ListingsStatusEnum.pending, futureDate),
+              scheduledApplicationOpenAt: pastDate,
+            },
+            user,
+          ),
+        ).resolves.not.toThrow();
+      });
+
+      it('should normalize and validate scheduledApplicationOpenAt when enableAutoOpenDate is enabled without autopublish', async () => {
+        jest
+          .useFakeTimers()
+          .setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
+        prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+          id: 'jurisdiction-id',
+          featureFlags: [
+            { name: FeatureFlagEnum.enableAutoOpenDate, active: true },
+          ],
+          listingApprovalPermissions: [],
+        });
+        mockStoredListing(ListingsStatusEnum.pending);
+        mockListingUpdate(ListingsStatusEnum.pending);
+
+        const scheduledApplicationOpenAt = new Date('2026-05-15T14:30:00.000Z');
+
+        await expect(
+          service.update(
+            {
+              ...baseDto(ListingsStatusEnum.pending, futureDate),
+              scheduledApplicationOpenAt,
+            },
+            user,
+          ),
+        ).resolves.not.toThrow();
+
+        const updateMock = prisma.listings.update as jest.Mock;
+        const updateCall = updateMock.mock.calls[0][0];
+        expect(updateCall.data.scheduledApplicationOpenAt.toISOString()).toBe(
+          '2026-05-15T16:00:00.000Z',
+        );
+        jest.useRealTimers();
+      });
     });
   });
 
@@ -8227,6 +8326,19 @@ describe('Testing listing service', () => {
       const normalized =
         service.normalizeScheduledApplicationOpenAt(nonMidnight);
       expect(normalized.toISOString()).toBe('2026-05-15T16:00:00.000Z');
+    });
+
+    it('should normalize to 9:00 AM in the configured app timezone', () => {
+      const previousTimeZone = process.env.TIME_ZONE;
+      try {
+        process.env.TIME_ZONE = 'America/New_York';
+        const utcMidnight = new Date('2026-01-15T00:00:00.000Z');
+        const normalized =
+          service.normalizeScheduledApplicationOpenAt(utcMidnight);
+        expect(normalized.toISOString()).toBe('2026-01-15T14:00:00.000Z');
+      } finally {
+        process.env.TIME_ZONE = previousTimeZone;
+      }
     });
   });
 

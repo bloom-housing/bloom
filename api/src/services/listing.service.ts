@@ -160,8 +160,9 @@ includeViews.base = {
   listingNeighborhoodAmenities: true,
   units: {
     include: {
-      unitTypes: true,
       unitAmiChartOverrides: true,
+      unitRentTypes: true,
+      unitTypes: true,
     },
   },
   unitGroups: {
@@ -952,21 +953,6 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
-        if (filter[ListingFilterKeys.counties]) {
-          const builtFilter = buildFilter({
-            $comparison: filter.$comparison,
-            $include_nulls: false,
-            value: filter[ListingFilterKeys.counties],
-            key: ListingFilterKeys.counties,
-          });
-          filters.push({
-            OR: builtFilter.map((filt) => ({
-              listingsBuildingAddress: {
-                county: filt,
-              },
-            })),
-          });
-        }
         if (filter[ListingFilterKeys.homeTypes]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
@@ -1504,8 +1490,16 @@ export class ListingService implements OnModuleInit {
       FeatureFlagEnum.enableAutopublish,
     );
 
+    const enableAutoOpenDate = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as unknown as Jurisdiction,
+      FeatureFlagEnum.enableAutoOpenDate,
+    );
+
     if (!enableAutopublish) {
       dto.scheduledPublishAt = null;
+    }
+
+    if (!enableAutoOpenDate) {
       dto.scheduledApplicationOpenAt = null;
     }
 
@@ -1519,7 +1513,7 @@ export class ListingService implements OnModuleInit {
       );
     }
 
-    if (enableAutopublish && dto.scheduledApplicationOpenAt) {
+    if (enableAutoOpenDate && dto.scheduledApplicationOpenAt) {
       dto.scheduledApplicationOpenAt = this.normalizeScheduledApplicationOpenAt(
         dto.scheduledApplicationOpenAt,
       );
@@ -2356,8 +2350,16 @@ export class ListingService implements OnModuleInit {
       FeatureFlagEnum.enableAutopublish,
     );
 
+    const enableAutoOpenDate = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableAutoOpenDate,
+    );
+
     if (!enableAutopublish) {
       incomingDto.scheduledPublishAt = null;
+    }
+
+    if (!enableAutoOpenDate) {
       incomingDto.scheduledApplicationOpenAt = null;
     }
 
@@ -2381,20 +2383,21 @@ export class ListingService implements OnModuleInit {
           'scheduledPublishAt',
         );
       }
+    }
 
-      if (incomingDto.scheduledApplicationOpenAt) {
+    if (enableAutoOpenDate && incomingDto.scheduledApplicationOpenAt) {
+      incomingDto.scheduledApplicationOpenAt =
         this.normalizeScheduledApplicationOpenAt(
           incomingDto.scheduledApplicationOpenAt,
         );
-        this.checkScheduledDateIsInFuture(
-          incomingDto.scheduledApplicationOpenAt,
-          'scheduledApplicationOpenAt',
-        );
-        this.checkScheduledApplicationOpenAtIsAfterPublish(
-          incomingDto.scheduledApplicationOpenAt,
-          incomingDto.scheduledPublishAt,
-        );
-      }
+      this.checkScheduledDateIsInFuture(
+        incomingDto.scheduledApplicationOpenAt,
+        'scheduledApplicationOpenAt',
+      );
+      this.checkScheduledApplicationOpenAtIsAfterPublish(
+        incomingDto.scheduledApplicationOpenAt,
+        incomingDto.scheduledPublishAt,
+      );
     }
 
     if (
@@ -3350,9 +3353,9 @@ export class ListingService implements OnModuleInit {
   };
 
   normalizeScheduledPublishAt(scheduledPublishAt: Date): Date {
-    const appTimezone = process.env.TIME_ZONE;
+    const appTimezone = process.env.TIME_ZONE || 'America/Los_Angeles';
     const dateStr = dayjs.utc(scheduledPublishAt).format('YYYY-MM-DD');
-    return dayjs.tz(dateStr, 'YYYY-MM-DD', appTimezone).startOf('day').toDate();
+    return dayjs.tz(`${dateStr}T00:00:00`, appTimezone).toDate();
   }
 
   private static resolvePublishedAt(
@@ -3382,14 +3385,10 @@ export class ListingService implements OnModuleInit {
   }
 
   normalizeScheduledApplicationOpenAt(scheduledApplicationOpenAt: Date): Date {
-    const appTimezone = process.env.TIME_ZONE;
+    const appTimezone = process.env.TIME_ZONE || 'America/Los_Angeles';
     const dateStr = dayjs.utc(scheduledApplicationOpenAt).format('YYYY-MM-DD');
     // Applications open at 9:00 AM in the app timezone
-    return dayjs
-      .tz(dateStr, 'YYYY-MM-DD', appTimezone)
-      .startOf('day')
-      .add(9, 'hour')
-      .toDate();
+    return dayjs.tz(`${dateStr}T00:00:00`, appTimezone).add(9, 'hour').toDate();
   }
 
   private checkScheduledApplicationOpenAtIsAfterPublish(

@@ -3484,6 +3484,43 @@ export class AgencyService {
   }
 }
 
+export class ExternalListingsService {
+  /**
+   * Get an object of externalized system data details
+   */
+  externalize(options: IRequestOptions = {}): Promise<ExternalizedDetails> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/externalListings"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Ingest listing data from an external Bloom instance
+   */
+  ingest(
+    params: {
+      /** requestBody */
+      body?: IngestParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/externalListings/ingest"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 /** SuccessDTO */
 export interface SuccessDTO {
   /**  */
@@ -3512,9 +3549,6 @@ export interface ListingFilterParams {
 
   /**  */
   city?: string
-
-  /**  */
-  counties?: string[]
 
   /**  */
   homeTypes?: HomeTypeEnum[]
@@ -8482,6 +8516,9 @@ export interface PublicAppsViewResponse {
   applicationsCount: PublicAppsCount
 }
 
+/** StreamableFile */
+export interface StreamableFile {}
+
 /** ApplicationSelectionOptionCreate */
 export interface ApplicationSelectionOptionCreate {
   /**  */
@@ -10438,6 +10475,54 @@ export interface PaginatedAgency {
   meta: PaginationMeta
 }
 
+/** ExternalizedListing */
+export interface ExternalizedListing {
+  /**  */
+  id: string
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal?: number
+
+  /**  */
+  contentUpdatedAt: Date
+
+  /**  */
+  jurisdictionId: string
+}
+
+/** ExternalizedDetails */
+export interface ExternalizedDetails {
+  /**  */
+  jurisdictions: IdDTO[]
+
+  /**  */
+  listings: ExternalizedListing[]
+
+  /**  */
+  reservedCommunityTypes: IdDTO[]
+
+  /**  */
+  unitRentTypes: IdDTO[]
+
+  /**  */
+  unitTypes: IdDTO[]
+}
+
+/** IngestParams */
+export interface IngestParams {
+  /**  */
+  externalURL: string
+
+  /**  */
+  jurisdictionId: string
+
+  /**  */
+  targetName: string
+}
+
 export enum FilterAvailabilityEnum {
   "closedWaitlist" = "closedWaitlist",
   "comingSoon" = "comingSoon",
@@ -10538,7 +10623,6 @@ export enum ListingFilterKeys {
   "bedroomTypes" = "bedroomTypes",
   "city" = "city",
   "configurableRegions" = "configurableRegions",
-  "counties" = "counties",
   "homeTypes" = "homeTypes",
   "ids" = "ids",
   "includeExternal" = "includeExternal",
@@ -10883,13 +10967,15 @@ export enum FeatureFlagEnum {
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableApplicationStatus" = "enableApplicationStatus",
+  "enableAutoOpenDate" = "enableAutoOpenDate",
   "enableAutopublish" = "enableAutopublish",
   "enableCompanyWebsite" = "enableCompanyWebsite",
-  "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
+  "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableFaq" = "enableFaq",
   "enableFilterByBathroom" = "enableFilterByBathroom",
+  "enableFilterByCounty" = "enableFilterByCounty",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGenderQuestion" = "enableGenderQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",

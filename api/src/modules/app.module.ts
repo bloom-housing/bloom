@@ -8,6 +8,7 @@ import { AppService } from '../services/app.service';
 import { AssetModule } from './asset.module';
 import { AuthModule } from './auth.module';
 import { CronJobModule } from './cron-job.module';
+import { ExternalListingModule } from './external-listing.module';
 import { FeatureFlagModule } from './feature-flag.module';
 import { JurisdictionModule } from './jurisdiction.module';
 import { ListingModule } from './listing.module';
@@ -52,6 +53,7 @@ import { BackgroundJobsModule } from './background-jobs.module';
     PropertyModule,
     AgencyModule,
     SnapshotCreateModule,
+    ExternalListingModule,
     ThrottlerModule.forRoot([
       {
         ttl: Number(process.env.THROTTLE_TTL),
@@ -91,6 +93,7 @@ import { BackgroundJobsModule } from './background-jobs.module';
     LotteryModule,
     FeatureFlagModule,
     SnapshotCreateModule,
+    ExternalListingModule,
   ],
 })
 export class AppModule {}
