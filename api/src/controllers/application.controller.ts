@@ -55,6 +55,7 @@ import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
 import { ApplicationBulkUploadService } from '../services/application-bulk-upload.service';
 import { ApplicationBulkUpload } from '../dtos/applications/application-bulk-upload.dto';
+import { ApplicationBulkUrl } from '../dtos/applications/application-bulk-url.dto';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -335,6 +336,7 @@ export class ApplicationController {
   })
   @ApiOkResponse({ type: Boolean })
   async uploadBulkUpdate(@Body() dto: ApplicationBulkUpload): Promise<boolean> {
+    @Body() dto: ApplicationBulkUrl,
     return this.applicationBulkUploadService.uploadUrl(dto);
   }
 

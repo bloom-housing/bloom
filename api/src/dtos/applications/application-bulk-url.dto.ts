@@ -3,7 +3,7 @@ import { Expose } from 'class-transformer';
 import { IsDefined, MinLength, IsString, IsUUID } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
-export class ApplicationBulkUpload {
+export class ApplicationBulkUrl {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MinLength(1, { groups: [ValidationsGroupsEnum.default] })
