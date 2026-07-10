@@ -5,7 +5,6 @@ import {
   ListingsMapContext,
   ListingsMapContextValue,
 } from "../../../../src/components/browse/map/ListingsMapContext"
-import { ListingSearchParams } from "../../../../src/lib/listings/search"
 import {
   getListingStackedGroupTableData,
   getListingStackedTableData,
@@ -44,7 +43,6 @@ describe("MapListingCard", () => {
     bathrooms: [],
     jurisdictions: [],
     multiselectData: [],
-    searchFilter: {} as ListingSearchParams,
     searchResults: { listings: [], markers: [], currentPage: 1, lastPage: 1, totalItems: 0 },
     listView: false,
     setListView: jest.fn(),
