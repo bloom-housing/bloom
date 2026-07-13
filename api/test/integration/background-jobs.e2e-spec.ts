@@ -312,7 +312,9 @@ describe('Background Jobs Controller Tests', () => {
         .set('Cookie', cookies)
         .expect(200);
 
-      expect(res.body).toBe(true);
+      expect(res.body).toBe({
+        success: true,
+      });
     });
 
     it('should return false when no active jobs exists in the database', async () => {
@@ -327,7 +329,9 @@ describe('Background Jobs Controller Tests', () => {
         .set('Cookie', cookies)
         .expect(200);
 
-      expect(res.body).toBe(false);
+      expect(res.body).toBe({
+        success: false,
+      });
     });
   });
 });
