@@ -264,7 +264,7 @@ describe('Background Jobs Controller Tests', () => {
     });
   });
 
-  describe('GET /jobs/active', async () => {
+  describe('GET /jobs/active', () => {
     let seededJobId: string;
 
     beforeAll(async () => {
