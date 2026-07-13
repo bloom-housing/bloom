@@ -1054,7 +1054,11 @@ export class EmailService {
     listingUnitsSummary: ListingUnitsSummary,
     variant: ListingNotificationVariant = 'standard',
   ): { label: string; value: string | number }[] {
-    const listingDetails: { label: string; value: string | number }[] = [];
+    const listingDetails: {
+      label: string;
+      value: string | number;
+      bolded?: boolean;
+    }[] = [];
 
     if (listing?.reservedCommunityTypes?.name) {
       listingDetails.push({
@@ -1076,10 +1080,10 @@ export class EmailService {
     } else if (listing?.applicationDueDate) {
       listingDetails.push({
         label: this.polyglot.t('rentalOpportunity.applicationsDue'),
-        value: this.formatLocalDate(
-          listing.applicationDueDate,
-          'MMMM DD, YYYY',
-        ),
+        value: dayjs(listing.applicationDueDate)
+          .tz(process.env.TIME_ZONE)
+          .format('MMMM D, YYYY [at] h:mma z'),
+        bolded: true,
       });
     }
 
@@ -1371,7 +1375,9 @@ export class EmailService {
           tableRows: listingDetails,
           languageUrls: emailButtons,
           accessibleMarketingFlyerUrl: listing.accessibleMarketingFlyer,
-          disclaimerText: this.polyglot.t('rentalOpportunity.disclaimer'),
+          disclaimerText: this.polyglot.has('rentalOpportunity.disclaimer')
+            ? this.polyglot.t('rentalOpportunity.disclaimer')
+            : undefined,
         }),
       });
     } catch (err) {
