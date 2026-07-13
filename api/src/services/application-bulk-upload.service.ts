@@ -23,13 +23,9 @@ import { ApplicationBulkUrl } from '../dtos/applications/application-bulk-url.dt
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
+import { ApplicationBulkPresignedUrl } from '../dtos/applications/application-bulk-presigned-url.dto';
 
 const NUMBER_TO_PAGINATE_BY = 500;
-
-export type ApplicationBulkPresignedUrl = {
-  key: string;
-  presignedUrl: string;
-};
 
 @Injectable()
 export class ApplicationBulkUploadService {
