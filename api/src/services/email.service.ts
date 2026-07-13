@@ -46,6 +46,8 @@ type listingInfo = {
   juris: string;
 };
 
+export type ListingNotificationVariant = 'standard' | 'comingSoon';
+
 @Injectable()
 export class EmailService {
   polyglot: Polyglot;
@@ -660,6 +662,7 @@ export class EmailService {
   public async requestApproval(
     jurisdictionId: IdDTO,
     listingInfo: IdDTO,
+    listingFileNumber: string,
     emails: string[],
     appUrl: string,
   ) {
@@ -669,12 +672,17 @@ export class EmailService {
       this.logger.log(
         `Sending request approval email for listing ${listingInfo.name} to ${emails.length} emails`,
       );
+      const appOptions = {
+        listingName: listingInfo.name,
+        listingFileNumber,
+      };
       await this.send(
         emails,
         jurisdiction.emailFromAddress,
-        this.polyglot.t('requestApproval.header'),
+        `${this.polyglot.t('requestApproval.header')} - ${listingInfo.name}`,
         this.template('request-approval')({
-          appOptions: { listingName: listingInfo.name },
+          appOptions,
+          listingFileNumber,
           appUrl: appUrl,
           listingUrl: `${appUrl}/listings/${listingInfo.id}`,
         }),
@@ -1042,6 +1050,7 @@ export class EmailService {
     listing: Listing,
     priorityTypes: UnitAccessibilityPriorityTypeEnum[],
     listingUnitsSummary: ListingUnitsSummary,
+    variant: ListingNotificationVariant = 'standard',
   ): { label: string; value: string | number }[] {
     const listingDetails: { label: string; value: string | number }[] = [];
 
@@ -1054,7 +1063,15 @@ export class EmailService {
       });
     }
 
-    if (listing?.applicationDueDate) {
+    if (variant === 'comingSoon' && listing?.scheduledApplicationOpenAt) {
+      listingDetails.push({
+        label: this.polyglot.t('rentalOpportunity.applicationsOpen'),
+        value: this.formatLocalDate(
+          listing.scheduledApplicationOpenAt,
+          'MMMM DD, YYYY',
+        ),
+      });
+    } else if (listing?.applicationDueDate) {
       listingDetails.push({
         label: this.polyglot.t('rentalOpportunity.applicationsDue'),
         value: this.formatLocalDate(
@@ -1228,10 +1245,19 @@ export class EmailService {
     listing: Listing,
     priorityTypes: UnitAccessibilityPriorityTypeEnum[],
     emails: { [key: string]: string[] },
+    variant: ListingNotificationVariant = 'standard',
   ) {
     try {
       const jurisdiction = await this.getJurisdiction([jurisdictionId]);
       const listingUnitsSummary = summarizeListingUnitsByType(listing.units);
+      const subjectKey =
+        variant === 'comingSoon'
+          ? 'rentalOpportunity.comingSoon.subject'
+          : 'rentalOpportunity.subject';
+      const introKey =
+        variant === 'comingSoon'
+          ? 'rentalOpportunity.comingSoon.intro'
+          : 'rentalOpportunity.intro';
 
       for (const language in emails) {
         if (!emails[language].length) {
@@ -1251,6 +1277,7 @@ export class EmailService {
           listing,
           priorityTypes,
           listingUnitsSummary,
+          variant,
         );
 
         const emailButtons = jurisdiction.languages.map((code) => ({
@@ -1261,11 +1288,12 @@ export class EmailService {
         await this.send(
           emails[language],
           jurisdiction.emailFromAddress,
-          this.polyglot.t(`rentalOpportunity.subject`, {
+          this.polyglot.t(subjectKey, {
             listingName: listing.name,
           }),
           this.template('listing-opportunity')({
             listingName: listing.name,
+            introKey,
             tableRows: listingDetails,
             languageUrls: emailButtons,
             accessibleMarketingFlyerUrl: listing.accessibleMarketingFlyer,

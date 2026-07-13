@@ -2395,6 +2395,7 @@ enum ListingsStatusEnum {
 enum ListingTypeEnum {
   regulated
   nonRegulated
+  landUse
 
   @@map("listing_type_enum")
 }
