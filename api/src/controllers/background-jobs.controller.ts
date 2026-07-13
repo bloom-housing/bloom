@@ -27,7 +27,7 @@ import { BackgroundJob } from '../dtos/background-jobs/background-job.dto';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
-import { SuccessDTO } from 'src/dtos/shared/success.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
 
 @Controller('jobs')
 @ApiTags('jobs')

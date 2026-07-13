@@ -12,7 +12,7 @@ import { User } from '../dtos/users/user.dto';
 import { BackgroundJobCreate } from '../dtos/background-jobs/background-job-create.dto';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { SuccessDTO } from 'src/dtos/shared/success.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
 
 @Injectable()
 export class BackgroundJobsService {
