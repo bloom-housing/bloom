@@ -47,11 +47,20 @@
           </td>
         </tr>
       {{/if}}
-      <tr>
-        <td align="center">
-          <a href="{{emailSettingsUrl}}" target="_blank">{{t "rentalOpportunity.footer.unsubscribeAndEmailSettings"}}</a>
-        </td>
-      </tr>
+      {{#if disclaimerText}}
+        <tr>
+          <td align="center">
+            <p align="center">{{disclaimerText}}</p>
+          </td>
+        </tr>
+      {{/if}}
+      {{#if emailSettingsUrl}}
+        <tr>
+          <td align="center">
+            <a href="{{emailSettingsUrl}}" target="_blank">{{t "rentalOpportunity.footer.unsubscribeAndEmailSettings"}}</a>
+          </td>
+        </tr>
+      {{/if}}
     </tbody>
   </table>
 {{/layout_default }}

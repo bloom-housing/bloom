@@ -36,6 +36,7 @@ import {
 } from '../utilities/listing-data-formatters';
 import { unitTypeMapping } from '../../prisma/seed-helpers/unit-type-factory';
 import { UnitAccessibilityPriorityTypeEnum } from '../enums/units/accessibility-priority-type-enum';
+import { GovDeliveryService } from './gov-delivery.service';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
@@ -56,6 +57,7 @@ export class EmailService {
     private readonly emailProvider: EmailProvider,
     private readonly translationService: TranslationService,
     private readonly jurisdictionService: JurisdictionService,
+    private readonly govDeliveryService: GovDeliveryService,
     @Inject(Logger)
     private logger = new Logger(EmailService.name),
   ) {
@@ -1302,7 +1304,78 @@ export class EmailService {
         );
       }
     } catch (err) {
-      console.log('listing approval email failed', err);
+      console.log('rental opportunity email failed', err);
+      throw new HttpException('email failed', 500);
+    }
+  }
+
+  public async listingPublishNotificationViaGovDelivery(
+    jurisdictionId: IdDTO,
+    listing: Listing,
+    priorityTypes: UnitAccessibilityPriorityTypeEnum[],
+    variant: ListingNotificationVariant = 'standard',
+  ) {
+    try {
+      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      const listingUnitsSummary = summarizeListingUnitsByType(listing.units);
+      const subjectKey =
+        variant === 'comingSoon'
+          ? 'rentalOpportunity.comingSoon.subject'
+          : 'rentalOpportunity.subject';
+      const introKey =
+        variant === 'comingSoon'
+          ? 'rentalOpportunity.comingSoon.intro'
+          : 'rentalOpportunity.intro';
+
+      void (await this.loadTranslations(jurisdiction, 'en'));
+
+      this.logger.log(
+        `Sending lottery published govDelivery email for listing ${listing.name}`,
+      );
+
+      const listingDetails = this.buildListingDetails(
+        listing,
+        priorityTypes,
+        listingUnitsSummary,
+        variant,
+      );
+
+      const emailButtons = jurisdiction.languages.map((code) => ({
+        name: this.polyglot.t(`rentalOpportunity.viewButton.${code}`),
+        url: `${jurisdiction.publicUrl}/${code}/listing/${listing.id}/${listing.urlSlug}`,
+      }));
+
+      // TODO: dynamically add these footer links
+      // const footerLinks = [
+      //   {
+      //     text: 'Learn about a 50% transit discount with ',
+      //     name: 'Clipper START',
+      //     url: 'https://links-2.govdelivery.com/CL0/https:%2F%2Fwww.clipperstartcard.com%2Fs%2F%3Futm_source=doorway%26utm_medium=email%26utm_campaign=rental_notifs/1/0101019c8c58330c-36ebe110-1890-40c9-8035-93b4e884f4d8-000000/cGX47-6Dds1b9elbgto4-GN0ACidbVNrlspsoMqHRY4=445',
+      //   },
+      //   {
+      //     text: 'Learn about a 50% express lane toll discount with ',
+      //     name: 'Express Lanes START',
+      //     url: 'https://links-2.govdelivery.com/CL0/https:%2F%2Fwww.expresslanesstart.org%2Fs%2F%3Futm_source=doorway%26utm_medium=email%26utm_campaign=rental_notifs/1/0101019c8c58330c-36ebe110-1890-40c9-8035-93b4e884f4d8-000000/o9zPBFhzhDDt8lRnAjYw6fTuWto9D62FuBOlTK29NGY=445',
+      //   },
+      // ];
+
+      await this.govDeliveryService.send({
+        to: [],
+        from: process.env.GOVDELIVERY_FROM_EMAIL_ID,
+        subject: this.polyglot.t(subjectKey, {
+          listingName: listing.name,
+        }),
+        body: this.template('listing-opportunity')({
+          listingName: listing.name,
+          introKey,
+          tableRows: listingDetails,
+          languageUrls: emailButtons,
+          accessibleMarketingFlyerUrl: listing.accessibleMarketingFlyer,
+          disclaimerText: this.polyglot.t('rentalOpportunity.disclaimer'),
+        }),
+      });
+    } catch (err) {
+      console.log('govDelivery rental opportunity email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
