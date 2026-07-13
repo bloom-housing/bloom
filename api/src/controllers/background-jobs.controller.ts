@@ -53,21 +53,16 @@ export class BackgroundJobsController {
       mapTo(User, req['user']),
     );
   }
-
-  @Get()
+  @Get('active')
   @ApiOperation({
-    summary: 'Get an active background job for a listing',
-    operationId: 'findActiveJobForListing',
+    summary: 'Get info if any jobs are currently running',
+    operationId: 'activeJobStatus',
   })
-  @ApiOkResponse({ type: BackgroundJob })
-  public async getListingActiveJob(
+  @ApiOkResponse({ type: Boolean })
+  public async activeJobStatus(
     @Request() req: ExpressRequest,
-    @Query('listingId', new ParseUUIDPipe({ version: '4' })) listingId: string,
-  ): Promise<BackgroundJob | null> {
-    return await this.backgroundJobsService.findActiveForListing(
-      listingId,
-      mapTo(User, req['user']),
-    );
+  ): Promise<boolean> {
+    return this.backgroundJobsService.findActiveJob(mapTo(User, req['user']));
   }
 
   @Get(':jobId')
@@ -86,15 +81,19 @@ export class BackgroundJobsController {
     );
   }
 
-  @Get('active')
+  @Get()
   @ApiOperation({
-    summary: 'Get info if any jobs are currently running',
-    operationId: 'activeJobStatus',
+    summary: 'Get an active background job for a listing',
+    operationId: 'findActiveJobForListing',
   })
-  @ApiOkResponse({ type: Boolean })
-  public async activeJobStatus(
+  @ApiOkResponse({ type: BackgroundJob })
+  public async getListingActiveJob(
     @Request() req: ExpressRequest,
-  ): Promise<boolean> {
-    return this.backgroundJobsService.findActiveJob(mapTo(User, req['user']));
+    @Query('listingId', new ParseUUIDPipe({ version: '4' })) listingId: string,
+  ): Promise<BackgroundJob | null> {
+    return await this.backgroundJobsService.findActiveForListing(
+      listingId,
+      mapTo(User, req['user']),
+    );
   }
 }
