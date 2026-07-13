@@ -339,16 +339,19 @@ describe("filter drawer helpers", () => {
     })
     it("should return correct BE filters for bathrooms count", () => {
       const filterData: FilterData = {
-        [ListingFilterKeys.bathrooms]: {
-          "1": false,
-          "2": true,
-          "3": true,
-          "4": false,
-        },
+        [ListingFilterKeys.bathrooms]: "2",
       }
 
       const backendFilters = encodeFilterDataToBackendFilters(filterData)
-      expect(backendFilters).toStrictEqual([{ $comparison: "IN", bathrooms: [2, 3] }])
+      expect(backendFilters).toStrictEqual([{ $comparison: ">=", bathrooms: 2 }])
+    })
+    it("should return no BE filters when bathrooms selection is 'Any' (empty string)", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.bathrooms]: "",
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([])
     })
     it("should return correct BE filters for all comparison types combined", () => {
       const filterData: FilterData = {
@@ -506,6 +509,12 @@ describe("filter drawer helpers", () => {
       }
       expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual("name=Listing Name")
     })
+    it("should return correct filter query with bathrooms filter", () => {
+      const partialFormObject: FilterData = {
+        [ListingFilterKeys.bathrooms]: "2",
+      }
+      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual("bathrooms=2")
+    })
     it("should return correct filter query with all filtering types", () => {
       const partialFormObject: FilterData = {
         [ListingFilterKeys.isVerified]: true,
@@ -609,6 +618,11 @@ describe("filter drawer helpers", () => {
     it("should return correct filter data with search by name filter query", () => {
       expect(decodeQueryToFilterData({ name: "Listing Name" })).toStrictEqual({
         [ListingFilterKeys.name]: "Listing Name",
+      })
+    })
+    it("should return correct filter data with bathrooms filter query", () => {
+      expect(decodeQueryToFilterData({ bathrooms: "2" })).toStrictEqual({
+        [ListingFilterKeys.bathrooms]: "2",
       })
     })
     it("should return correct filter data with query with all filtering types", () => {
@@ -721,6 +735,26 @@ describe("filter drawer helpers", () => {
         },
         [ListingFilterKeys.monthlyRent]: { minRent: "500.00", maxRent: "900.00" },
         [ListingFilterKeys.name]: "Listing Name",
+      })
+    })
+
+    it("should not include bathrooms when the selection is 'Any' (empty string)", () => {
+      const fullFormObject: FilterData = {
+        ...emptyFormData,
+        [ListingFilterKeys.bathrooms]: "",
+      }
+
+      expect(removeUnselectedFilterData(fullFormObject)).toStrictEqual({})
+    })
+
+    it("should include bathrooms when a specific count is selected", () => {
+      const fullFormObject: FilterData = {
+        ...emptyFormData,
+        [ListingFilterKeys.bathrooms]: "2",
+      }
+
+      expect(removeUnselectedFilterData(fullFormObject)).toStrictEqual({
+        [ListingFilterKeys.bathrooms]: "2",
       })
     })
 

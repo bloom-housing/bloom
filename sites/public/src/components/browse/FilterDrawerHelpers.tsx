@@ -40,7 +40,7 @@ export interface FilterData {
   monthlyRent?: { [K in "maxRent" | "minRent"]?: string }
   regions?: { [K in RegionEnum]: BooleanOrBooleanString }
   configurableRegions?: string
-  bathrooms?: { [K in "1" | "2" | "3" | "4"]?: BooleanOrBooleanString }
+  bathrooms?: string
   jurisdictions?: { [K in string]?: BooleanOrBooleanString }
   section8Acceptance?: BooleanOrBooleanString
   reservedCommunityTypes?: { [K in ReservedCommunityTypes]?: BooleanOrBooleanString }
@@ -62,6 +62,18 @@ export interface CheckboxGroupProps {
   register: UseFormMethods["register"]
   customColumnNumber?: number
   optionalSubNote?: string
+}
+
+export interface RadioField extends FilterField {
+  value: string
+}
+
+export interface RadioGroupProps {
+  groupLabel: string
+  name: string
+  fields: RadioField[]
+  register: UseFormMethods["register"]
+  customColumnNumber?: number
 }
 
 export interface RentSectionProps {
@@ -88,7 +100,6 @@ export interface AccessibilitySectionProps {
 
 const arrayFilters: ListingFilterKeys[] = [
   ListingFilterKeys.bedroomTypes,
-  ListingFilterKeys.bathrooms,
   ListingFilterKeys.homeTypes,
   ListingFilterKeys.listingFeatures,
   ListingFilterKeys.regions,
@@ -234,6 +245,33 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
           <Markdown>{props.optionalSubNote}</Markdown>
         </div>
       )}
+    </fieldset>
+  )
+}
+
+export const RadioGroup = (props: RadioGroupProps) => {
+  return (
+    <fieldset className={styles["filter-section"]}>
+      <legend className={styles["filter-section-label"]}>{props.groupLabel}</legend>
+      <Grid spacing="sm">
+        <div className={styles["radio-row"]}>
+          {props.fields?.map((field) => {
+            return (
+              <Grid.Cell key={`${field.key}-cell`}>
+                <Field
+                  id={field.key}
+                  name={props.name}
+                  label={field.label}
+                  labelClassName={styles["filter-checkbox-label"]}
+                  type="radio"
+                  register={props.register}
+                  inputProps={{ value: field.value, defaultChecked: field.defaultChecked }}
+                />
+              </Grid.Cell>
+            )
+          })}
+        </div>
+      </Grid>
     </fieldset>
   )
 }
@@ -417,8 +455,6 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
         if (field[1]) {
           if (filterType === ListingFilterKeys.bedroomTypes) {
             selectedFields.push(unitTypeMapping[field[0]]?.value)
-          } else if (filterType === ListingFilterKeys.bathrooms) {
-            selectedFields.push(parseInt(field[0]))
           } else {
             selectedFields.push(field[0])
           }
@@ -457,6 +493,12 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
         filter[ListingFilterKeys.monthlyRent] = userSelections["maxRent"]?.replace(",", "")
         filters.push(filter)
       }
+    } else if (filterType === ListingFilterKeys.bathrooms && userSelections) {
+      const filter = {
+        $comparison: EnumListingFilterParamsComparison[">="],
+      }
+      filter[ListingFilterKeys.bathrooms] = parseInt(userSelections as string)
+      filters.push(filter)
     } else if (filterType === ListingFilterKeys.name) {
       const filter = {
         $comparison: EnumListingFilterParamsComparison["LIKE"],
@@ -515,6 +557,9 @@ export const encodeFilterDataToQuery = (data: FilterData): string => {
         "-"
       )}`
       queryArr.push(rentParam)
+    } else if (filterType === ListingFilterKeys.bathrooms) {
+      const bathroomsParam = `${ListingFilterKeys[filterType]}=${userSelections}`
+      queryArr.push(bathroomsParam)
     } else if (filterType === ListingFilterKeys.name) {
       const nameParam = `${ListingFilterKeys[filterType]}=${userSelections}`
       queryArr.push(nameParam)

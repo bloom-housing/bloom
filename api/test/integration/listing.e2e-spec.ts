@@ -1267,8 +1267,8 @@ describe('Listing Controller Tests', () => {
         view: ListingViews.base,
         filter: [
           {
-            $comparison: Compare['IN'],
-            bathrooms: [1],
+            $comparison: Compare['>='],
+            bathrooms: 1,
           },
           {
             $comparison: Compare['='],
