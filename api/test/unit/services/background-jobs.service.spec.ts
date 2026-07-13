@@ -122,15 +122,13 @@ describe('Background Jobs Service Tests', () => {
       expect(result).toBeInstanceOf(BackgroundJob);
       expect(result.listingId).toBe(listingId);
       expect(result.status).toBe(BackgroundJobStatusEnum.processing);
-      expect(prisma.backgroundJob.findFirstOrThrow).toHaveBeenCalledWith({
+      expect(prisma.backgroundJob.findFirst).toHaveBeenCalledWith({
         where: { id: jobId },
       });
     });
 
     it('should throw NotFoundException when the job does not exist', async () => {
-      prisma.backgroundJob.findFirstOrThrow = jest
-        .fn()
-        .mockRejectedValue(new Error('Not found'));
+      prisma.backgroundJob.findFirst = jest.fn().mockResolvedValue(null);
 
       await expect(
         service.getById('non-existent-id', requestingUser),
