@@ -2617,6 +2617,18 @@ export class JobsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Get info if any jobs are currently running
+   */
+  activeJobStatus(options: IRequestOptions = {}): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs/active"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class MapLayersService {
