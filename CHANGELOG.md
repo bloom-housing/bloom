@@ -1,5 +1,9 @@
 # Changelog
 
+**Archived.** This file was last updated in 2021 and is no longer maintained — it does not reflect changes since then. Consult git/PR history for current change information. Kept for historical reference only.
+
+---
+
 All notable changes to this project will be documented in this file. The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 (_Note:_ it our intention to improve our release process going forward by using [Semantic Versioning](https://semver.org/spec/v2.0.0.html).)
