@@ -173,7 +173,7 @@ describe('Background Jobs Service Tests', () => {
       prisma.backgroundJob.findFirst = jest.fn().mockResolvedValue(dbJobRecord);
       const result = await service.findActiveJob(requestingUser);
 
-      expect(result).toBe({
+      expect(result).toEqual({
         success: true,
       });
       expect(prisma.backgroundJob.findFirst).toHaveBeenCalledWith({
@@ -188,7 +188,7 @@ describe('Background Jobs Service Tests', () => {
       prisma.backgroundJob.findFirst = jest.fn().mockResolvedValue(null);
       const result = await service.findActiveJob(requestingUser);
 
-      expect(result).toBe({
+      expect(result).toEqual({
         success: false,
       });
     });

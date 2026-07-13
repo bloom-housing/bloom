@@ -312,7 +312,7 @@ describe('Background Jobs Controller Tests', () => {
         .set('Cookie', cookies)
         .expect(200);
 
-      expect(res.body).toBe({
+      expect(res.body).toEqual({
         success: true,
       });
     });
@@ -329,7 +329,7 @@ describe('Background Jobs Controller Tests', () => {
         .set('Cookie', cookies)
         .expect(200);
 
-      expect(res.body).toBe({
+      expect(res.body).toEqual({
         success: false,
       });
     });
