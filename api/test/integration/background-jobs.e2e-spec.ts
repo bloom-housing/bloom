@@ -263,4 +263,71 @@ describe('Background Jobs Controller Tests', () => {
       );
     });
   });
+
+  describe('GET /jobs/active', async () => {
+    let seededJobId: string;
+
+    beforeAll(async () => {
+      const seededJob = await prisma.backgroundJob.create({
+        data: {
+          listingId,
+          requestedByUserId: storedUserId,
+          inputS3Key: 'test-s3-key',
+          status: BackgroundJobStatusEnum.processing,
+        },
+      });
+      seededJobId = seededJob.id;
+    });
+
+    afterAll(async () => {
+      await prisma.backgroundJob.deleteMany({ where: { listingId } });
+    });
+
+    it('should return error when user does not have permissions', async () => {
+      const nonAdminUser = await prisma.userAccounts.create({
+        data: await userFactory({ mfaEnabled: false, confirmedAt: new Date() }),
+      });
+
+      const resLogIn = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({ email: nonAdminUser.email, password: 'Abcdef12345!' })
+        .expect(201);
+
+      const nonAdminCookies = resLogIn.headers['set-cookie'];
+
+      await request(app.getHttpServer())
+        .get('/jobs/active')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', nonAdminCookies)
+        .expect(403);
+
+      await prisma.userAccounts.delete({ where: { id: nonAdminUser.id } });
+    });
+
+    it('should return true when an active jobs exists in the database', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/jobs/active')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body).toBe(true);
+    });
+
+    it('should return false when no active jobs exists in the database', async () => {
+      await prisma.backgroundJob.update({
+        where: { id: seededJobId },
+        data: { status: BackgroundJobStatusEnum.completed },
+      });
+
+      const res = await request(app.getHttpServer())
+        .get('/jobs/active')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body).toBe(false);
+    });
+  });
 });
