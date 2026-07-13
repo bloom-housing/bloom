@@ -8,8 +8,8 @@ import { BackgroundJobStatusEnum } from '@prisma/client';
 import { mapTo } from '../utilities/mapTo';
 import { BackgroundJob } from '../dtos/background-jobs/background-job.dto';
 import { S3Service } from './s3.service';
-import { User } from 'src/dtos/users/user.dto';
-import { BackgroundJobCreate } from 'src/dtos/background-jobs/background-job-create.dto';
+import { User } from '../dtos/users/user.dto';
+import { BackgroundJobCreate } from '../dtos/background-jobs/background-job-create.dto';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
