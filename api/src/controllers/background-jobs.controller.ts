@@ -27,6 +27,7 @@ import { BackgroundJob } from '../dtos/background-jobs/background-job.dto';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
+import { SuccessDTO } from 'src/dtos/shared/success.dto';
 
 @Controller('jobs')
 @ApiTags('jobs')
@@ -58,10 +59,10 @@ export class BackgroundJobsController {
     summary: 'Get info if any jobs are currently running',
     operationId: 'activeJobStatus',
   })
-  @ApiOkResponse({ type: Boolean })
+  @ApiOkResponse({ type: SuccessDTO })
   public async activeJobStatus(
     @Request() req: ExpressRequest,
-  ): Promise<boolean> {
+  ): Promise<SuccessDTO> {
     return this.backgroundJobsService.findActiveJob(mapTo(User, req['user']));
   }
 
