@@ -83,17 +83,17 @@ export class BackgroundJobsService {
       permissionActions.read,
     );
 
-    try {
-      const jobData = await this.prismaService.backgroundJob.findFirstOrThrow({
-        where: {
-          id: jobId,
-        },
-      });
+    const jobData = await this.prismaService.backgroundJob.findFirst({
+      where: {
+        id: jobId,
+      },
+    });
 
-      return mapTo(BackgroundJob, jobData);
-    } catch {
+    if (!jobData) {
       throw new NotFoundException(`Job with id: ${jobId} was not found`);
     }
+
+    return mapTo(BackgroundJob, jobData);
   }
 
   /**
