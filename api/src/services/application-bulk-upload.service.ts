@@ -354,10 +354,7 @@ export class ApplicationBulkUploadService {
       );
     }
 
-    const s3KeyTemplate = `bulk-application-updates-${listingId}-${userId}-${formatLocalDate(
-      new Date(),
-      'YYYY-MM-DD-hh:mm:ss',
-    )}.csv`;
+    const s3KeyTemplate = `bulk-application-updates-${listingId}-${userId}-${new Date().toISOString()}`;
 
     return {
       key: s3KeyTemplate,
