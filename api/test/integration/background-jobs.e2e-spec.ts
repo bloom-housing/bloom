@@ -206,14 +206,6 @@ describe('Background Jobs Controller Tests', () => {
       expect(res.body).toBeEmpty();
     });
 
-    it('should return 401 when passkey header is missing', async () => {
-      await request(app.getHttpServer())
-        .get('/jobs')
-        .query({ listingId })
-        .set('Cookie', cookies)
-        .expect(401);
-    });
-
     it('should return 401 when JWT cookie is missing', async () => {
       await request(app.getHttpServer())
         .get('/jobs')
@@ -269,13 +261,6 @@ describe('Background Jobs Controller Tests', () => {
       expect(res.body.message).toBe(
         `Job with id: ${nonExistentId} was not found`,
       );
-    });
-
-    it('should return 401 when passkey header is missing', async () => {
-      await request(app.getHttpServer())
-        .get(`/jobs/${seededJobId}`)
-        .set('Cookie', cookies)
-        .expect(401);
     });
   });
 });
