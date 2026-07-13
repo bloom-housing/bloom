@@ -304,10 +304,11 @@ export class ApplicationBulkUploadService {
   async uploadUrl(
     dto: ApplicationBulkUrl,
   ): Promise<ApplicationBulkPresignedUrl> {
-    const { userId, listingId, uploadUrl } = dto;
+    const { userId, listingId } = dto;
 
     const listingData = await this.prisma.listings.findUnique({
       select: {
+        // id: true,
         jurisdictionId: true,
         jurisdictions: {
           select: {
