@@ -85,4 +85,16 @@ export class BackgroundJobsController {
       mapTo(User, req['user']),
     );
   }
+
+  @Get('active')
+  @ApiOperation({
+    summary: 'Get info if any jobs are currently running',
+    operationId: 'activeJobStatus',
+  })
+  @ApiOkResponse({ type: Boolean })
+  public async activeJobStatus(
+    @Request() req: ExpressRequest,
+  ): Promise<boolean> {
+    return this.backgroundJobsService.findActiveJob(mapTo(User, req['user']));
+  }
 }
