@@ -92,7 +92,16 @@ describe('Testing application bulk upload services', () => {
           provide: PermissionService,
           useValue: { canOrThrow: canOrThrowMock },
         },
-        S3Service,
+        {
+          provide: S3Service,
+          useValue: {
+            uploadToPrivate: jest.fn(),
+            urlForPrivate: jest.fn(),
+            uploadURLForPublic: jest.fn(),
+            uploadURLForPrivate: jest.fn(),
+            urlForPublic: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
