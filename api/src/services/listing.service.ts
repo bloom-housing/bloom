@@ -3271,6 +3271,7 @@ export class ListingService implements OnModuleInit {
     incomingListingStatus: ListingsStatusEnum,
     savedResponseId: string,
   ): Promise<void> {
+    console.log('process.env.PROXY_URL', process.env.PROXY_URL);
     if (!process.env.PROXY_URL) {
       return;
     }

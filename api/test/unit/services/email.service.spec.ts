@@ -15,6 +15,7 @@ import {
   ListingNotificationVariant,
 } from '../../../src/services/email.service';
 import { EmailProvider } from '../../../src/services/email-provider.service';
+import { GovDeliveryService } from '../../../src/services/gov-delivery.service';
 import { TranslationService } from '../../../src/services/translation.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
@@ -31,7 +32,10 @@ import {
 } from '../../../src/utilities/listing-data-formatters';
 import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/accessibility-priority-type-enum';
 
+jest.mock('juice', () => (html: string) => html);
+
 let sendMock;
+let govDeliverySendMock;
 const translationServiceMock = {
   getMergedTranslations: () => {
     return translationFactory().translations;
@@ -68,6 +72,10 @@ describe('Testing email service', () => {
           provide: JurisdictionService,
           useValue: jurisdictionServiceMock,
         },
+        {
+          provide: GovDeliveryService,
+          useValue: { send: jest.fn() },
+        },
         GoogleTranslateService,
       ],
     }).compile();
@@ -78,6 +86,10 @@ describe('Testing email service', () => {
     emailProvider = module.get<EmailProvider>(EmailProvider);
     sendMock = jest.fn();
     emailProvider.send = sendMock;
+    const govDeliveryService =
+      module.get<GovDeliveryService>(GovDeliveryService);
+    govDeliverySendMock = jest.fn();
+    govDeliveryService.send = govDeliverySendMock;
     service = await module.resolve(EmailService);
   });
 
@@ -1089,12 +1101,12 @@ describe('Testing email service', () => {
       it('includes applications due row when applicationDueDate is set', () => {
         const result = buildDetails(
           baseListing({
-            applicationDueDate: new Date(2026, 4, 19),
+            applicationDueDate: new Date(1779228000000),
           } as Partial<Listing>),
         );
         const row = findByLabel(result, LABELS.applicationsDue);
         expect(row).toBeDefined();
-        expect(row.value).toBe('May 19, 2026');
+        expect(row.value).toBe('May 19, 2026 at 3:00pm PDT');
       });
 
       it('omits applications due row when applicationDueDate is absent', () => {
@@ -1658,6 +1670,57 @@ describe('Testing email service', () => {
       expect(sendMock.mock.calls[0][0].body).toContain('Applications Open');
       expect(sendMock.mock.calls[0][0].body).toContain('July 01, 2026');
       expect(sendMock.mock.calls[0][0].body).not.toContain('Applications Due');
+    });
+  });
+
+  describe('listing publish notification via govDelivery', () => {
+    const notificationListing = {
+      id: 'listingId',
+      name: 'Test Listing',
+      urlSlug: 'test_listing',
+      units: [],
+      listingEvents: [],
+      listingsBuildingAddress: yellowstoneAddress,
+      applicationDueDate: new Date(2026, 4, 19),
+    } as unknown as Listing;
+
+    let jurisdictionSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      jurisdictionSpy = jest
+        .spyOn(jurisdictionServiceMock, 'findOne')
+        .mockReturnValue({
+          id: 'jurisdictionId',
+          name: 'Jurisdiction 1',
+          publicUrl: 'https://example.com',
+          emailFromAddress: 'no-reply@example.com',
+          languages: [LanguagesEnum.en],
+        } as unknown as ReturnType<typeof jurisdictionServiceMock.findOne>);
+    });
+
+    afterEach(() => {
+      jurisdictionSpy.mockRestore();
+    });
+
+    it('calls govDeliveryService.send with the correct subject and body for the standard variant', async () => {
+      await service.listingPublishNotificationViaGovDelivery(
+        { id: 'jurisdictionId' },
+        notificationListing,
+        [],
+      );
+      expect(govDeliverySendMock).toHaveBeenCalledTimes(1);
+      expect(govDeliverySendMock.mock.calls[0][0].subject).toEqual(
+        'New rental opportunity at Test Listing',
+      );
+      expect(govDeliverySendMock.mock.calls[0][0].body).toContain(
+        'Rental opportunity at',
+      );
+      expect(govDeliverySendMock.mock.calls[0][0].body).toContain(
+        'Applications Due',
+      );
+      expect(govDeliverySendMock.mock.calls[0][0].body).not.toContain(
+        'Applications Open',
+      );
     });
   });
 });
