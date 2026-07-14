@@ -32,8 +32,6 @@ import {
 } from '../../../src/utilities/listing-data-formatters';
 import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/accessibility-priority-type-enum';
 
-jest.mock('juice', () => (html: string) => html);
-
 let sendMock;
 let govDeliverySendMock;
 const translationServiceMock = {

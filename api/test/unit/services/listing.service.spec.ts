@@ -55,8 +55,6 @@ import { MultiselectQuestionService } from '../../../src/services/multiselect-qu
 import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/accessibility-priority-type-enum';
 import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 
-jest.mock('juice', () => (html: string) => html);
-
 /*
   generates a super simple mock listing for us to test logic with
 */

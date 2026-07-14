@@ -32,6 +32,7 @@ import { AdvocateUserUpdate } from '../../../src/dtos/users/advocate-user-update
 import { UserOrderByKeys } from '../../../src/enums/listings/order-by-enum';
 import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
 import { UserNotificationPreferences } from '../../../src/dtos/users/user-notification-preferences.dto';
+import { GovDeliveryService } from '../../../src/services/gov-delivery.service';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -109,6 +110,7 @@ describe('Testing user service', () => {
         SchedulerRegistry,
         CronJobService,
         SnapshotCreateService,
+        GovDeliveryService,
         {
           provide: EmailProvider,
           useValue: EmailProviderMock,
