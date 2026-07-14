@@ -1,5 +1,5 @@
 import { t } from "@bloom-housing/ui-components"
-import { Form } from "@bloom-housing/shared-helpers"
+import { Form, tIfExists } from "@bloom-housing/shared-helpers"
 import { Button, Drawer } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import {
@@ -12,6 +12,7 @@ import {
   ListingFeaturesConfiguration,
   ParkingTypeEnum,
   UnitAccessibilityPriorityTypeEnum,
+  IdDTO,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
 import {
@@ -38,6 +39,7 @@ export interface FilterDrawerProps {
   onClose: () => void
   onSubmit: (data: FilterData) => void
   regions?: string[]
+  subJurisdictions?: IdDTO[]
   visibleAccessibilityPriorityTypes?: UnitAccessibilityPriorityTypeEnum[]
 }
 
@@ -88,6 +90,10 @@ const FilterDrawer = (props: FilterDrawerProps) => {
 
   const enableFilterByBathroom = props.activeFeatureFlags?.some(
     (entry) => entry === FeatureFlagEnum.enableFilterByBathroom
+  )
+
+  const enableFilterByCounty = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableFilterByCounty
   )
 
   // When unit groups are off, closed waitlist has no backend signal, so hide it
@@ -231,6 +237,22 @@ const FilterDrawer = (props: FilterDrawerProps) => {
                   }
                 })}
                 register={register}
+              />
+            )}
+            {enableFilterByCounty && props.subJurisdictions?.length > 0 && (
+              <CheckboxGroup
+                groupLabel={t("t.county")}
+                fields={props.subJurisdictions?.map((county) => {
+                  return {
+                    key: `${ListingFilterKeys.jurisdictions}.${county.id}`,
+                    label: county.name,
+                    defaultChecked: isTrue(
+                      props.filterState?.[ListingFilterKeys.jurisdictions]?.[county.id]
+                    ),
+                  }
+                })}
+                register={register}
+                optionalSubNote={tIfExists("listingFilters.countyFilterNote") ?? undefined}
               />
             )}
             {props.visibleAccessibilityPriorityTypes?.length > 0 && (
