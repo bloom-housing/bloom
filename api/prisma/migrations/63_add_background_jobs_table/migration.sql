@@ -20,3 +20,6 @@ CREATE TABLE "background_job" (
 
 -- CreateIndex
 CREATE INDEX "background_job_listing_id_status_idx" ON "background_job"("listing_id", "status");
+
+-- AddForeignKey
+ALTER TABLE "background_job" ADD CONSTRAINT "background_job_requested_by_user_id_fkey" FOREIGN KEY ("requested_by_user_id") REFERENCES "user_accounts"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

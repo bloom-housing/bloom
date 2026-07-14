@@ -2090,6 +2090,7 @@ model UserAccounts {
   jurisdictions             Jurisdictions[]
   lastUpdatedListingsByUser Listings[]                   @relation("last_updated_by_user")
   listings                  Listings[]
+  backgroundJobs            BackgroundJob[]
   notificationPreferences   UserNotificationPreferences?
   requestedChangesListings  Listings[]                   @relation("requested_changes_user")
   userPreferences           UserPreferences?
@@ -2244,6 +2245,7 @@ model BackgroundJob {
   id                String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   listingId         String                  @map("listing_id") @db.Uuid
   requestedByUserId String                  @map("requested_by_user_id") @db.Uuid
+  requestedBy       UserAccounts            @relation(fields: [requestedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   status            BackgroundJobStatusEnum
   totalRecords      Int?                    @map("total_records")
   inputS3Key        String                  @map("input_s3_key")
