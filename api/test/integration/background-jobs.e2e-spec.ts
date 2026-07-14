@@ -159,7 +159,7 @@ describe('Background Jobs Controller Tests', () => {
       await prisma.backgroundJob.deleteMany({ where: { listingId } });
     });
 
-    it('should return the active job for a listing', async () => {
+    it('should return an array with the active job for a listing', async () => {
       const res = await request(app.getHttpServer())
         .get('/jobs')
         .query({ listingId })
@@ -167,7 +167,8 @@ describe('Background Jobs Controller Tests', () => {
         .set('Cookie', cookies)
         .expect(200);
 
-      expect(res.body).toMatchObject({
+      expect(res.body).toHaveLength(1);
+      expect(res.body[0]).toMatchObject({
         id: seededJobId,
         listingId,
         status: BackgroundJobStatusEnum.processing,
@@ -175,7 +176,7 @@ describe('Background Jobs Controller Tests', () => {
       });
     });
 
-    it('should return null when no active job exists for the listing', async () => {
+    it('should return empty array when no active job exists for the listing', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma);
       const newListing = await prisma.listings.create({ data: listingData });
 
@@ -203,7 +204,7 @@ describe('Background Jobs Controller Tests', () => {
         .set('Cookie', cookies)
         .expect(200);
 
-      expect(res.body).toBeEmpty();
+      expect(res.body).toHaveLength(0);
     });
 
     it('should return 401 when JWT cookie is missing', async () => {
