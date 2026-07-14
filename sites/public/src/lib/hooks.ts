@@ -250,6 +250,10 @@ export async function fetchOpenListings(
           $comparison: EnumListingFilterParamsComparison["="],
           status: ListingsStatusEnum.active,
         },
+        {
+          $comparison: EnumListingFilterParamsComparison["="],
+          includeExternal: true,
+        },
         ...additionalFilters,
       ],
       orderBy: [
