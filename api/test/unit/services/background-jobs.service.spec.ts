@@ -139,17 +139,20 @@ describe('Background Jobs Service Tests', () => {
   });
 
   describe('findActiveForListing', () => {
-    it('should return a BackgroundJob when an active processing job exists', async () => {
-      prisma.backgroundJob.findFirst = jest.fn().mockResolvedValue(dbJobRecord);
+    it('should return a BackgroundJob array when an active processing job exists', async () => {
+      prisma.backgroundJob.findMany = jest
+        .fn()
+        .mockResolvedValue([dbJobRecord]);
       const result = await service.findActiveForListing(
         listingId,
         requestingUser,
       );
 
-      expect(result).toBeInstanceOf(BackgroundJob);
-      expect(result?.listingId).toBe(listingId);
-      expect(result?.status).toBe(BackgroundJobStatusEnum.processing);
-      expect(prisma.backgroundJob.findFirst).toHaveBeenCalledWith({
+      expect(result).toHaveLength(1);
+      expect(result[0]).toBeInstanceOf(BackgroundJob);
+      expect(result[0]?.listingId).toBe(listingId);
+      expect(result[0]?.status).toBe(BackgroundJobStatusEnum.processing);
+      expect(prisma.backgroundJob.findMany).toHaveBeenCalledWith({
         where: {
           listingId,
           status: BackgroundJobStatusEnum.processing,
@@ -157,14 +160,14 @@ describe('Background Jobs Service Tests', () => {
       });
     });
 
-    it('should return null when no active processing job exists for the listing', async () => {
-      prisma.backgroundJob.findFirst = jest.fn().mockResolvedValue(null);
+    it('should return an empty array when no active processing job exists for the listing', async () => {
+      prisma.backgroundJob.findMany = jest.fn().mockResolvedValue([]);
       const result = await service.findActiveForListing(
         listingId,
         requestingUser,
       );
 
-      expect(result).toBeNull();
+      expect(result).toHaveLength(0);
     });
   });
 
