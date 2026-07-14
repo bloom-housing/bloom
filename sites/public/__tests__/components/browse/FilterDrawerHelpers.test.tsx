@@ -388,6 +388,18 @@ describe("filter drawer helpers", () => {
         { $comparison: "IN", accessibilityPriorityTypes: ["mobility"] },
       ])
     })
+    it("should return correct backend filters for jurisdictions", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.jurisdictions]: {
+          "123": true,
+          "234": true,
+          "345": false,
+        },
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([{ $comparison: "IN", jurisdictions: ["123", "234"] }])
+    })
     it("should return correct backend filters for accessibilityPriorityTypes with multiple types", () => {
       const filterData: FilterData = {
         [ListingFilterKeys.accessibilityPriorityTypes]: {

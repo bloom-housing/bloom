@@ -2403,6 +2403,7 @@ const featureFlags = [
   FeatureFlagEnum.disableEthnicityQuestion,
   FeatureFlagEnum.disableWorkInRegion,
   FeatureFlagEnum.enableFilterByBathroom,
+  FeatureFlagEnum.enableFilterByCounty,
   FeatureFlagEnum.enableGeocodingPreferences,
   FeatureFlagEnum.enableGeocodingRadiusMethod,
   FeatureFlagEnum.enableGenderQuestion,
