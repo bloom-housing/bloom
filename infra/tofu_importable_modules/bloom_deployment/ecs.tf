@@ -135,7 +135,7 @@ locals {
           {
             Action   = "sms-voice:SendTextMessage"
             Effect   = "Allow"
-            Resource = "*"
+            Resource = "arn:aws:sms-voice:${var.aws_region}:${var.aws_account_number}:phone-number/*"
           },
         ]
       })
