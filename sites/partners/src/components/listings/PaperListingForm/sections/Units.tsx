@@ -19,7 +19,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
-import { useAmiChartList, useJurisdiction, useUnitTypeList } from "../../../../lib/hooks"
+import { useAmiChartList, useUnitTypeList } from "../../../../lib/hooks"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit, TempUnitGroup } from "../../../../lib/listings/formTypes"
 import { defaultFieldProps, fieldHasError, fieldMessage, getLabel } from "../../../../lib/helpers"
