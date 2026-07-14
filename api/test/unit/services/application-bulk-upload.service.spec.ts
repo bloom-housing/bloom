@@ -18,6 +18,7 @@ import { ApplicationBulkUploadService } from '../../../src/services/application-
 import { ListingService } from '../../../src/services/listing.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
+import { S3Service } from '../../../src/services/s3.service';
 
 const mockApplication = ({
   markedAsDuplicate = false,
@@ -91,6 +92,7 @@ describe('Testing application bulk upload services', () => {
           provide: PermissionService,
           useValue: { canOrThrow: canOrThrowMock },
         },
+        S3Service,
       ],
     }).compile();
 
