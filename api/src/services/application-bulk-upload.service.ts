@@ -24,6 +24,7 @@ import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-util
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { ApplicationBulkPresignedUrl } from '../dtos/applications/application-bulk-presigned-url.dto';
+import { S3Service } from './s3.service';
 
 const NUMBER_TO_PAGINATE_BY = 500;
 
@@ -35,6 +36,7 @@ export class ApplicationBulkUploadService {
     private prisma: PrismaService,
     private listingService: ListingService,
     private permissionService: PermissionService,
+    private s3Service: S3Service,
   ) {}
 
   private formatApplicationStatus(statusEnum: ApplicationStatusEnum): string {
@@ -355,10 +357,13 @@ export class ApplicationBulkUploadService {
     }
 
     const s3KeyTemplate = `bulk-application-updates-${listingId}-${userId}-${new Date().toISOString()}`;
+    const presignedUrl = await this.s3Service.uploadURLForPrivate(
+      s3KeyTemplate,
+    );
 
     return {
       key: s3KeyTemplate,
-      presignedUrl: '', // TODO: Yazeed - Add S3 generated presigned URL
+      presignedUrl: presignedUrl,
     };
   }
 
