@@ -87,11 +87,11 @@ export class BackgroundJobsController {
     summary: 'Get an active background job for a listing',
     operationId: 'findActiveJobForListing',
   })
-  @ApiOkResponse({ type: BackgroundJob })
+  @ApiOkResponse({ type: Array<BackgroundJob> })
   public async getListingActiveJob(
     @Request() req: ExpressRequest,
     @Query('listingId', new ParseUUIDPipe({ version: '4' })) listingId: string,
-  ): Promise<BackgroundJob | null> {
+  ): Promise<BackgroundJob[]> {
     return await this.backgroundJobsService.findActiveForListing(
       listingId,
       mapTo(User, req['user']),

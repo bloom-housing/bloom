@@ -105,21 +105,21 @@ export class BackgroundJobsService {
   async findActiveForListing(
     listingId: string,
     requestingUser: User,
-  ): Promise<BackgroundJob | null> {
+  ): Promise<BackgroundJob[]> {
     await this.permissionService.canOrThrow(
       requestingUser,
       'jobs',
       permissionActions.read,
     );
 
-    const activeJob = await this.prismaService.backgroundJob.findFirst({
+    const activeJobs = await this.prismaService.backgroundJob.findMany({
       where: {
         listingId: listingId,
         status: BackgroundJobStatusEnum.processing,
       },
     });
 
-    return activeJob ? mapTo(BackgroundJob, activeJob) : null;
+    return mapTo(BackgroundJob, activeJobs);
   }
 
   /**
