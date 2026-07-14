@@ -74,6 +74,7 @@ describe('Testing listing csv export service', () => {
     visibleNeighborhoodAmenities: [],
     visibleSpokenLanguages: [],
     regions: [],
+    visibleHouseholdMemberRelationships: [],
   };
 
   const mockBaseUnit: Unit = {
@@ -188,7 +189,6 @@ describe('Testing listing csv export service', () => {
     displayWaitlistSize: false,
     showWaitlist: false,
     referralApplication: null,
-    assets: [],
     applicationLotteryTotals: null,
     updatedAt: timestamp,
     marketingType: MarketingTypeEnum.comingSoon,

@@ -90,7 +90,7 @@ export const angelopolisListing: CypressListing = {
   updatedAt: new Date(),
   status: ListingsStatusEnum.pending,
   displayWaitlistSize: false,
-  assets: [],
+  assets: {},
   applicationLotteryTotals: [],
   jurisdiction: {
     id: "Angelopolis",

@@ -1581,14 +1581,7 @@ export class ListingService implements OnModuleInit {
       data: {
         ...listingData,
         displayWaitlistSize: dto.displayWaitlistSize ?? false,
-        assets: dto.assets
-          ? {
-              create: dto.assets.map((asset) => ({
-                fileId: asset.fileId,
-                label: asset.label,
-              })),
-            }
-          : Prisma.JsonNullValueInput.JsonNull,
+        assets: Prisma.JsonNullValueInput.JsonNull,
         applicationMethods: dto.applicationMethods
           ? {
               create: dto.applicationMethods.map((applicationMethod) => ({
@@ -2092,7 +2085,6 @@ export class ListingService implements OnModuleInit {
     const newListingData: ListingCreate = {
       ...mappedListing,
       applicationMethods: applicationMethods,
-      assets: [],
       listingsBuildingSelectionCriteriaFile:
         mappedListing.listingsBuildingSelectionCriteriaFile
           ? {
@@ -2576,7 +2568,6 @@ export class ListingService implements OnModuleInit {
           id: undefined,
           createdAt: undefined,
           updatedAt: undefined,
-          assets: incomingDto.assets as unknown as Prisma.InputJsonArray,
           applicationMethods: incomingDto.applicationMethods
             ? {
                 create: incomingDto.applicationMethods.map(

@@ -236,7 +236,6 @@ describe('Testing external listing service', () => {
         },
         data: {
           id: externalListingId,
-          assets: [],
           contentUpdatedAt: externalListingDate,
           displayWaitlistSize: false,
           isVerified: true,
@@ -328,7 +327,6 @@ describe('Testing external listing service', () => {
         },
         data: {
           id: externalListingId,
-          assets: [],
           contentUpdatedAt: externalListingDate,
           displayWaitlistSize: false,
           isVerified: true,
@@ -610,12 +608,6 @@ describe('Testing external listing service', () => {
         },
         data: {
           id: externalListingId,
-          assets: [
-            {
-              fileId: randomUUID(),
-              label: 'example asset',
-            },
-          ],
           contentUpdatedAt: new Date(),
           displayWaitlistSize: false,
           isVerified: true,
@@ -686,12 +678,6 @@ describe('Testing external listing service', () => {
         },
         data: {
           id: externalListingId,
-          assets: [
-            {
-              fileId: randomUUID(),
-              label: 'example asset',
-            },
-          ],
           contentUpdatedAt: new Date(),
           displayWaitlistSize: false,
           isVerified: true,
@@ -834,14 +820,7 @@ describe('Testing external listing service', () => {
           whatToExpectAdditionalText: undefined,
           yearBuilt: undefined,
 
-          assets: {
-            create: [
-              {
-                fileId: expect.anything(),
-                label: 'example asset',
-              },
-            ],
-          },
+          assets: {},
           jurisdictions: {
             connect: {
               id: internalJurisdictionId,

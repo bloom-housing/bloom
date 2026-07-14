@@ -29,7 +29,6 @@ import { ListingParkingTypeUpdate } from './listing-parking-type-update.dto';
 export class ListingUpdate extends OmitType(Listing, [
   // fields get their type changed
   'applicationMethods',
-  'assets',
   'listingEvents',
   'listingFeatures',
   'listingImages',
@@ -113,15 +112,6 @@ export class ListingUpdate extends OmitType(Listing, [
     isArray: true,
   })
   applicationMethods?: ApplicationMethodUpdate[];
-
-  @Expose()
-  @ValidateListingPublish('assets', {
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => AssetCreate)
-  @ApiPropertyOptional({ type: AssetCreate, isArray: true })
-  assets?: AssetCreate[];
 
   @Expose()
   @ValidateListingPublish('unitsSummary', {
