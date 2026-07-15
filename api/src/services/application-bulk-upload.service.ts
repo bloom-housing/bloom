@@ -20,6 +20,7 @@ import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import {
   convertApplicationDeclineReasonToReadable,
+  APPLICATION_DECLINE_REASON_MAP,
   convertReadableToApplicationDeclineReason,
 } from '../utilities/application-export-helpers';
 
@@ -46,6 +47,28 @@ const APPLICATION_STATUS_MAP: Record<ApplicationStatusEnum, string> = {
   [ApplicationStatusEnum.waitlist]: 'Wait list',
   [ApplicationStatusEnum.waitlistDeclined]: 'Wait list - Declined',
 };
+
+type CsvRow = Record<string, string>;
+
+const EXPECTED_HEADERS = Object.values(bulkUploadHeaderNames);
+
+const WAITLIST_STATUSES = [
+  APPLICATION_STATUS_MAP[ApplicationStatusEnum.waitlist],
+  APPLICATION_STATUS_MAP[ApplicationStatusEnum.waitlistDeclined],
+];
+
+const NUMERIC_COLUMNS = [
+  bulkUploadHeaderNames.lotteryPositionNumber,
+  bulkUploadHeaderNames.waitlistPositionAccessibleUnit,
+  bulkUploadHeaderNames.waitlistPositionConventionalUnit,
+];
+
+const DECLINE_REASONS_REQUIRING_DETAILS = [
+  APPLICATION_DECLINE_REASON_MAP.attemptedToContactNoResponse,
+  APPLICATION_DECLINE_REASON_MAP.applicantDeclinedUnit,
+  APPLICATION_DECLINE_REASON_MAP.other,
+];
+
 @Injectable()
 export class ApplicationBulkUploadService {
   private dateFormat = 'MM-DD-YYYY hh:mm:ssA z';
