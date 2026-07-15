@@ -368,7 +368,35 @@ export class ApplicationBulkUploadService {
     );
   }
 
+  private validateFileFormat(s3Key: string): void {
+    if (!s3Key.toLowerCase().endsWith('.csv')) {
+      throw new BadRequestException('Upload Failed: file must be a CSV format');
+    }
+  }
+
+  private validateHeaders(actualHeaders: string[]): void {
+    const expected = new Set(EXPECTED_HEADERS);
+    const actual = new Set(actualHeaders);
+    const sameSize = expected.size === actual.size;
+    const allPresent = EXPECTED_HEADERS.every((h) => actual.has(h));
+    if (!sameSize || !allPresent) {
+      throw new BadRequestException(
+        'Upload Failed: CSV has additional or missing columns',
+      );
+    }
+  }
+
+  private validateHasDataRows(rows: CsvRow[]): void {
+    if (rows.length === 0) {
+      throw new BadRequestException(
+        'Upload Failed: CSV contains no application records',
+      );
+    }
+  }
+
   async validateCSV(dto: ApplicationBulkValidate): Promise<SuccessDTO> {
+    this.validateFileFormat(dto.s3Key);
+
     let csvStream: ReadableStream;
     try {
       csvStream = await this.s3Service.downloadFromPrivate(dto.s3Key);
@@ -393,6 +421,9 @@ export class ApplicationBulkUploadService {
     const rows: CsvRow[] = dataRows.map((cells) =>
       Object.fromEntries(headers.map((h, i) => [h, cells[i] ?? ''])),
     );
+
+    this.validateHeaders(headers);
+    this.validateHasDataRows(rows);
 
     // TODO: Implement Validation pipeline
 
