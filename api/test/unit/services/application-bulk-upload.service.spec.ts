@@ -395,5 +395,60 @@ describe('Testing application bulk upload services', () => {
         );
       });
     });
+
+    describe('data rows (validateHasDataRows)', () => {
+      it('should reject a CSV with only a header row and no data rows', async () => {
+        downloadFromPrivateMock.mockResolvedValue(mockCsvResponse([]));
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: CSV contains no application records',
+          ),
+        );
+      });
+
+      it('should skip empty lines between rows so they are not counted as data records', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+        const appTwo = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Erin', lastName: 'Patsy' },
+          submissionDate: new Date(2026, 2, 15, 8, 30, 0),
+        });
+
+        prisma.applications.findMany = jest
+          .fn()
+          .mockResolvedValue([appOne, appTwo]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse(
+            [
+              {
+                applicationId: appOne.id,
+                applicantFirstName: appOne.applicant.firstName,
+                applicantLastName: appOne.applicant.lastName,
+                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                applicationStatus: 'Submitted',
+              },
+              {
+                applicationId: appTwo.id,
+                applicantFirstName: appTwo.applicant.firstName,
+                applicantLastName: appTwo.applicant.lastName,
+                applicationSubmissionDate: expectedDate(appTwo.submissionDate),
+                applicationStatus: 'Submitted',
+              },
+            ],
+            { blankLines: true },
+          ),
+        );
+
+        await expect(
+          service.validateCSV({ s3Key, listingId }),
+        ).resolves.toEqual({ success: true });
+      });
+    });
   });
 });
