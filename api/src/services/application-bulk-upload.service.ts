@@ -18,7 +18,10 @@ import { User } from '../dtos/users/user.dto';
 import { ListingService } from './listing.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { convertApplicationDeclineReasonToReadable } from '../utilities/application-export-helpers';
+import {
+  convertApplicationDeclineReasonToReadable,
+  convertReadableToApplicationDeclineReason,
+} from '../utilities/application-export-helpers';
 
 const NUMBER_TO_PAGINATE_BY = 500;
 
@@ -36,6 +39,13 @@ export const bulkUploadHeaderNames = {
   waitlistPositionConventionalUnit: 'Waitlist Position (Conventional Unit)',
 };
 
+const APPLICATION_STATUS_MAP: Record<ApplicationStatusEnum, string> = {
+  [ApplicationStatusEnum.declined]: 'Declined',
+  [ApplicationStatusEnum.receivedUnit]: 'Received a Unit',
+  [ApplicationStatusEnum.submitted]: 'Submitted',
+  [ApplicationStatusEnum.waitlist]: 'Wait list',
+  [ApplicationStatusEnum.waitlistDeclined]: 'Wait list - Declined',
+};
 @Injectable()
 export class ApplicationBulkUploadService {
   private dateFormat = 'MM-DD-YYYY hh:mm:ssA z';
@@ -46,22 +56,18 @@ export class ApplicationBulkUploadService {
     private permissionService: PermissionService,
   ) {}
 
-  private formatApplicationStatus(statusEnum: ApplicationStatusEnum): string {
-    switch (statusEnum) {
-      case ApplicationStatusEnum.declined:
-        return 'Declined';
-      case ApplicationStatusEnum.receivedUnit:
-        return 'Received a Unit';
-      case ApplicationStatusEnum.submitted:
-        return 'Submitted';
-      case ApplicationStatusEnum.waitlist:
-        return 'Wait list';
-      case ApplicationStatusEnum.waitlistDeclined:
-        return 'Wait list - Declined';
-      default:
-        return statusEnum;
-    }
+  private convertApplicationStatusToReadable(
+    statusEnum: ApplicationStatusEnum,
+  ): string {
+    return APPLICATION_STATUS_MAP[statusEnum] ?? statusEnum;
   }
+
+  private convertReadableToApplicationStatus = (
+    readable: string,
+  ): ApplicationStatusEnum | undefined =>
+    (Object.keys(APPLICATION_STATUS_MAP) as ApplicationStatusEnum[]).find(
+      (key) => APPLICATION_STATUS_MAP[key] === readable,
+    );
 
   private getBulkUploadHeaders(timeZone?: string): CsvHeader[] {
     const headers: CsvHeader[] = [
@@ -94,7 +100,7 @@ export class ApplicationBulkUploadService {
       {
         path: 'status',
         label: bulkUploadHeaderNames.applicationStatus,
-        format: (val) => this.formatApplicationStatus(val),
+        format: (val) => this.convertApplicationStatusToReadable(val),
       },
       {
         path: 'applicationDeclineReason',
