@@ -572,12 +572,12 @@ export class ApplicationBulkUploadService {
 
   private validateNumericFields(row: CsvRow, index: number): void {
     for (const col of NUMERIC_COLUMNS) {
-      const raw = row[col];
+      const raw = row[col].trim();
       if (raw === '') continue;
 
       const num = Number(raw);
 
-      if (isNaN(num) || num < 0) {
+      if (isNaN(num) || num < 0 || !Number.isInteger(num)) {
         throw new BadRequestException(
           `Upload Failed: One or more rows beginning on row ${
             index + 2
@@ -611,7 +611,7 @@ export class ApplicationBulkUploadService {
     const records: string[][] = await new Promise((resolve, reject) => {
       const results: string[][] = [];
       nodeStream
-        .pipe(parse({ skip_empty_lines: true }))
+        .pipe(parse({ skip_empty_lines: true, bom: true }))
         .on('data', (row: string[]) => results.push(row))
         .on('error', reject)
         .on('end', () => resolve(results));
