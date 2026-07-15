@@ -348,5 +348,52 @@ describe('Testing application bulk upload services', () => {
         expect(downloadFromPrivateMock).toHaveBeenCalledWith(s3Key);
       });
     });
+
+    describe('headers (validateHeaders)', () => {
+      it('should reject a CSV missing a required column', async () => {
+        const header = Object.values(bulkUploadHeaderNames)
+          .slice(1)
+          .map((h) => `"${h}"`)
+          .join(',');
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([], { header }),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: CSV has additional or missing columns',
+          ),
+        );
+      });
+
+      it('should reject a CSV with an unknown column swapped in at the correct count', async () => {
+        const headers = Object.values(bulkUploadHeaderNames);
+        headers[0] = 'Unknown';
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([{ applicationId: randomUUID() }], {
+            header: headers.map((h) => `"${h}"`).join(','),
+          }),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: CSV has additional or missing columns',
+          ),
+        );
+      });
+
+      it('should tolerate a BOM-prefixed header row and proceed past header validation', async () => {
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([], { bom: true }),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: CSV contains no application records',
+          ),
+        );
+      });
+    });
   });
 });
