@@ -430,7 +430,6 @@ export class ApplicationBulkUploadService {
           } contain duplicate application IDs`,
         );
       }
-
       seenIds.add(id);
     });
   }
@@ -485,8 +484,11 @@ export class ApplicationBulkUploadService {
   }
 
   private validateStatus(row: CsvRow, index: number): void {
-    const status = row[bulkUploadHeaderNames.applicationStatus];
-    if (this.convertReadableToApplicationStatus(status) === undefined) {
+    if (
+      this.convertReadableToApplicationStatus(
+        row[bulkUploadHeaderNames.applicationStatus],
+      ) === undefined
+    ) {
       throw new BadRequestException(
         `Upload Failed: Could not match one or more application status inputs beginning on row ${
           index + 2
