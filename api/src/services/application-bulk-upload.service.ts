@@ -22,6 +22,20 @@ import { convertApplicationDeclineReasonToReadable } from '../utilities/applicat
 
 const NUMBER_TO_PAGINATE_BY = 500;
 
+export const bulkUploadHeaderNames = {
+  applicationId: 'Application Id',
+  applicantFirstName: 'Applicant First Name',
+  applicantLastName: 'Applicant Last Name',
+  applicationSubmissionDate: 'Application Submission Date',
+  lotteryPositionNumber: 'Lottery Position Number',
+  applicationStatus: 'Application Status',
+  applicationDeclineReason: 'Application Decline Reason',
+  applicationDeclineReasonAdditionalDetails:
+    'Application Decline Reason Additional Details',
+  waitlistPositionAccessibleUnit: 'Waitlist Position (Accessible Unit)',
+  waitlistPositionConventionalUnit: 'Waitlist Position (Conventional Unit)',
+};
+
 @Injectable()
 export class ApplicationBulkUploadService {
   private dateFormat = 'MM-DD-YYYY hh:mm:ssA z';
@@ -53,19 +67,19 @@ export class ApplicationBulkUploadService {
     const headers: CsvHeader[] = [
       {
         path: 'id',
-        label: 'Application Id',
+        label: bulkUploadHeaderNames.applicationId,
       },
       {
         path: 'applicant.firstName',
-        label: 'Applicant First Name',
+        label: bulkUploadHeaderNames.applicantFirstName,
       },
       {
         path: 'applicant.lastName',
-        label: 'Applicant Last Name',
+        label: bulkUploadHeaderNames.applicantLastName,
       },
       {
         path: 'submissionDate',
-        label: 'Application Submission Date',
+        label: bulkUploadHeaderNames.applicationSubmissionDate,
         format: (val: string): string =>
           formatLocalDate(
             val,
@@ -75,29 +89,29 @@ export class ApplicationBulkUploadService {
       },
       {
         path: 'manualLotteryPositionNumber',
-        label: 'Lottery Position Number',
+        label: bulkUploadHeaderNames.lotteryPositionNumber,
       },
       {
         path: 'status',
-        label: 'Application Status',
+        label: bulkUploadHeaderNames.applicationStatus,
         format: (val) => this.formatApplicationStatus(val),
       },
       {
         path: 'applicationDeclineReason',
-        label: 'Application Decline Reason',
+        label: bulkUploadHeaderNames.applicationDeclineReason,
         format: (val) => convertApplicationDeclineReasonToReadable(val),
       },
       {
         path: 'applicationDeclineReasonAdditionalDetails',
-        label: 'Application Decline Reason Additional Details',
+        label: bulkUploadHeaderNames.applicationDeclineReasonAdditionalDetails,
       },
       {
         path: 'accessibleUnitWaitlistNumber',
-        label: 'Waitlist Position (Accessible Unit)',
+        label: bulkUploadHeaderNames.waitlistPositionAccessibleUnit,
       },
       {
         path: 'conventionalUnitWaitlistNumber',
-        label: 'Waitlist Position (Conventional Unit)',
+        label: bulkUploadHeaderNames.waitlistPositionConventionalUnit,
       },
     ];
 
