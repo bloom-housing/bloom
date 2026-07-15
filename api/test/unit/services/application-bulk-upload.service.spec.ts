@@ -1,5 +1,9 @@
 import fs from 'fs';
-import { ForbiddenException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   ApplicationDeclineReasonEnum,
@@ -7,6 +11,7 @@ import {
   ApplicationSubmissionTypeEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
+import { Readable } from 'stream';
 import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { Address } from '../../../src/dtos/addresses/address.dto';
 import { Accessibility } from '../../../src/dtos/applications/accessibility.dto';
@@ -14,10 +19,16 @@ import { AlternateContact } from '../../../src/dtos/applications/alternate-conta
 import { Applicant } from '../../../src/dtos/applications/applicant.dto';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { Demographic } from '../../../src/dtos/applications/demographic.dto';
-import { ApplicationBulkUploadService } from '../../../src/services/application-bulk-upload.service';
+import {
+  ApplicationBulkUploadService,
+  ApplicationContextFields,
+  bulkUploadHeaderNames,
+} from '../../../src/services/application-bulk-upload.service';
 import { ListingService } from '../../../src/services/listing.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
+import { S3Service } from '../../../src/services/s3.service';
+import { formatLocalDate } from '../../../src/utilities/format-local-date';
 
 const mockApplication = ({
   markedAsDuplicate = false,
@@ -75,6 +86,48 @@ const mockApplication = ({
 
 const canOrThrowMock = jest.fn();
 const listingServiceMock = { getJurisdictionIdByListingId: jest.fn() };
+const downloadFromPrivateMock = jest.fn();
+
+const DATE_FORMAT = 'MM-DD-YYYY hh:mm:ssA z';
+
+const expectedDate = (d: Date): string =>
+  formatLocalDate(d.toISOString(), DATE_FORMAT, process.env.TIME_ZONE);
+
+type RowOverrides = Partial<Record<keyof typeof bulkUploadHeaderNames, string>>;
+
+const mockCsvResponse = (
+  rows: RowOverrides[] = [],
+  options: { header?: string; bom?: boolean; blankLines?: boolean } = {},
+): ReadableStream => {
+  const cell = (value: string): string =>
+    `"${(value ?? '').replace(/"/g, '""')}"`;
+
+  const line = (row: RowOverrides): string =>
+    Object.keys(bulkUploadHeaderNames)
+      .map((key) => cell(row[key] ?? ''))
+      .join(',');
+
+  let header =
+    options.header ?? Object.values(bulkUploadHeaderNames).map(cell).join(',');
+  if (options.bom) header = `﻿${header}`;
+
+  const dataLines = rows.flatMap((row, i) =>
+    options.blankLines && i > 0 ? ['', line(row)] : [line(row)],
+  );
+
+  const csv = [header, ...dataLines].join('\n');
+  return Readable.toWeb(Readable.from([Buffer.from(csv, 'utf8')]));
+};
+
+const dbContext = ({
+  id,
+  applicant: { firstName = 'Andrew', lastName = 'Rust' },
+  submissionDate = new Date(),
+}: Partial<ApplicationContextFields>): ApplicationContextFields => ({
+  id,
+  applicant: { firstName, lastName },
+  submissionDate,
+});
 
 describe('Testing application bulk upload services', () => {
   let service: ApplicationBulkUploadService;
@@ -90,6 +143,10 @@ describe('Testing application bulk upload services', () => {
         {
           provide: PermissionService,
           useValue: { canOrThrow: canOrThrowMock },
+        },
+        {
+          provide: S3Service,
+          useValue: { downloadFromPrivate: downloadFromPrivateMock },
         },
       ],
     }).compile();
@@ -239,6 +296,16 @@ describe('Testing application bulk upload services', () => {
       await expect(service.authorizeExport(user, listingId)).rejects.toThrow(
         ForbiddenException,
       );
+    });
+  });
+
+  describe('validateCSV', () => {
+    const listingId = randomUUID();
+    const s3Key = 'uploads/applications.csv';
+
+    beforeEach(() => {
+      downloadFromPrivateMock.mockReset();
+      prisma.applications.findMany = jest.fn().mockResolvedValue([]);
     });
   });
 });

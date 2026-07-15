@@ -56,7 +56,10 @@ const APPLICATION_STATUS_MAP: Record<ApplicationStatusEnum, string> = {
 
 type CsvRow = Record<string, string>;
 
-type ApplicationContextFields = Pick<Application, 'submissionDate' | 'id'> & {
+export type ApplicationContextFields = Pick<
+  Application,
+  'submissionDate' | 'id'
+> & {
   applicant: Pick<Applicant, 'firstName' | 'lastName'>;
 };
 
