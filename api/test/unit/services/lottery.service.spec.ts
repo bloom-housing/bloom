@@ -1,9 +1,7 @@
-import { randomUUID } from 'crypto';
-import { Request as ExpressRequest, Response } from 'express';
+import { HttpService } from '@nestjs/axios';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
-import { of, throwError } from 'rxjs';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   ListingEventsTypeEnum,
@@ -12,10 +10,9 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
-import { S3Service } from '../../../src/services/s3.service';
-import { HttpService } from '@nestjs/axios';
-import { mockApplicationSet } from './application.service.spec';
-import { mockMultiselectQuestion } from './multiselect-question.service.spec';
+import { randomUUID } from 'crypto';
+import { Request as ExpressRequest, Response } from 'express';
+import { of, throwError } from 'rxjs';
 import { randomNoun } from '../../../prisma/seed-helpers/word-generator';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { ListingLotteryStatus } from '../../../src/dtos/listings/listing-lottery-status.dto';
@@ -34,8 +31,11 @@ import { LotteryService } from '../../../src/services/lottery.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
+import { S3Service } from '../../../src/services/s3.service';
 import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 import { TranslationService } from '../../../src/services/translation.service';
+import { mockApplicationSet } from './application.service.spec';
+import { mockMultiselectQuestion } from './multiselect-question.service.spec';
 
 const canOrThrowMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
