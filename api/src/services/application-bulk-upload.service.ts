@@ -552,6 +552,47 @@ export class ApplicationBulkUploadService {
     }
   }
 
+  private validateWaitlistConsistency(row: CsvRow, index: number): void {
+    const status = row[bulkUploadHeaderNames.applicationStatus];
+
+    const hasWaitlistPosition =
+      row[bulkUploadHeaderNames.waitlistPositionAccessibleUnit] !== '' ||
+      row[bulkUploadHeaderNames.waitlistPositionConventionalUnit] !== '';
+
+    if (hasWaitlistPosition && !WAITLIST_STATUSES.includes(status)) {
+      throw new BadRequestException(
+        `Upload Failed: One or more rows beginning on row ${
+          index + 2
+        } have a waitlist position without a waitlist status`,
+      );
+    }
+  }
+
+  private validateNumericFields(row: CsvRow, index: number): void {
+    for (const col of NUMERIC_COLUMNS) {
+      const raw = row[col];
+      if (raw === '') continue;
+
+      const num = Number(raw);
+
+      if (isNaN(num) || num < 0) {
+        throw new BadRequestException(
+          `Upload Failed: One or more rows beginning on row ${
+            index + 2
+          } have invalid numeric values`,
+        );
+      }
+
+      if (col === bulkUploadHeaderNames.lotteryPositionNumber && num === 0) {
+        throw new BadRequestException(
+          `Upload Failed: One or more rows beginning on row ${
+            index + 2
+          } have invalid numeric values`,
+        );
+      }
+    }
+  }
+
   async validateCSV(dto: ApplicationBulkValidate): Promise<SuccessDTO> {
     this.validateFileFormat(dto.s3Key);
 
@@ -597,9 +638,9 @@ export class ApplicationBulkUploadService {
       this.validateDeclineReason(row, i);
       this.validateDeclineConsistency(row, i);
       this.validateAdditionalDetails(row, i);
+      this.validateWaitlistConsistency(row, i);
+      this.validateNumericFields(row, i);
     }
-
-    // TODO: Implement Validation pipeline
 
     return { success: true };
   }
