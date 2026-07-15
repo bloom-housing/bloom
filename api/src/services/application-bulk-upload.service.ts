@@ -5,7 +5,7 @@ import {
   StreamableFile,
   NotFoundException,
 } from '@nestjs/common';
-import { ApplicationStatusEnum } from '@prisma/client';
+import { Applicant, ApplicationStatusEnum } from '@prisma/client';
 import { parse } from 'csv-parse';
 import fs, { createReadStream } from 'fs';
 import { Readable } from 'stream';
@@ -55,6 +55,10 @@ const APPLICATION_STATUS_MAP: Record<ApplicationStatusEnum, string> = {
 };
 
 type CsvRow = Record<string, string>;
+
+type ApplicationContextFields = Pick<Application, 'submissionDate' | 'id'> & {
+  applicant: Pick<Applicant, 'firstName' | 'lastName'>;
+};
 
 const EXPECTED_HEADERS = Object.values(bulkUploadHeaderNames);
 
@@ -394,6 +398,89 @@ export class ApplicationBulkUploadService {
     }
   }
 
+  private validateNoDuplicateIds(rows: CsvRow[]): void {
+    const seen = new Set<string>();
+    for (let i = 0; i < rows.length; i++) {
+      const id = rows[i][bulkUploadHeaderNames.applicationId];
+      if (seen.has(id)) {
+        throw new BadRequestException(
+          `Upload Failed: One or more rows beginning on row ${
+            i + 2
+          } contain duplicate application IDs`,
+        );
+      }
+      seen.add(id);
+    }
+  }
+
+  private async validateApplicationIds(
+    rows: CsvRow[],
+    listingId: string,
+  ): Promise<ApplicationContextFields[]> {
+    const ids = rows.map((r) => r[bulkUploadHeaderNames.applicationId]);
+
+    const dbApps = await this.prisma.applications.findMany({
+      where: { id: { in: ids }, listingId },
+      select: {
+        id: true,
+        applicant: { select: { firstName: true, lastName: true } },
+        submissionDate: true,
+      },
+    });
+
+    const foundIds = new Set(dbApps.map((a) => a.id));
+
+    ids.forEach((originalId, index) => {
+      if (!foundIds.has(originalId)) {
+        throw new BadRequestException(
+          `Upload Failed: One or more rows beginning on row ${
+            index + 2
+          } have incorrect application identification numbers`,
+        );
+      }
+    });
+
+    return dbApps;
+  }
+
+  private validateContextFields(
+    rows: CsvRow[],
+    dbApps: ApplicationContextFields[],
+  ): void {
+    const dbMap = new Map(dbApps.map((a) => [a.id, a]));
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      const dbApp = dbMap.get(row[bulkUploadHeaderNames.applicationId]);
+      if (!dbApp) continue;
+
+      const expectedDate = dbApp.submissionDate
+        ? formatLocalDate(
+            dbApp.submissionDate.toISOString(),
+            this.dateFormat,
+            process.env.TIME_ZONE,
+          )
+        : '';
+
+      const firstNameMatch =
+        row[bulkUploadHeaderNames.applicantFirstName] ===
+        (dbApp.applicant?.firstName ?? '');
+      const lastNameMatch =
+        row[bulkUploadHeaderNames.applicantLastName] ===
+        (dbApp.applicant?.lastName ?? '');
+      const dateMatch =
+        row[bulkUploadHeaderNames.applicationSubmissionDate] === expectedDate;
+
+      if (!firstNameMatch || !lastNameMatch || !dateMatch) {
+        throw new BadRequestException(
+          `Upload Failed: One or more rows beginning on row ${
+            i + 2
+          } have incorrect application identification numbers`,
+        );
+      }
+    }
+  }
+
   async validateCSV(dto: ApplicationBulkValidate): Promise<SuccessDTO> {
     this.validateFileFormat(dto.s3Key);
 
@@ -424,6 +511,10 @@ export class ApplicationBulkUploadService {
 
     this.validateHeaders(headers);
     this.validateHasDataRows(rows);
+
+    this.validateNoDuplicateIds(rows);
+    const dbApps = await this.validateApplicationIds(rows, dto.listingId);
+    this.validateContextFields(rows, dbApps);
 
     // TODO: Implement Validation pipeline
 
