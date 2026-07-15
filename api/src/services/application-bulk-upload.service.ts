@@ -398,28 +398,18 @@ export class ApplicationBulkUploadService {
     }
   }
 
-  private validateNoDuplicateIds(rows: CsvRow[]): void {
-    const seen = new Set<string>();
-    for (let i = 0; i < rows.length; i++) {
-      const id = rows[i][bulkUploadHeaderNames.applicationId];
-      if (seen.has(id)) {
-        throw new BadRequestException(
-          `Upload Failed: One or more rows beginning on row ${
-            i + 2
-          } contain duplicate application IDs`,
-        );
-      }
-      seen.add(id);
-    }
-  }
-
-  private async validateApplicationIds(
+  /**
+   * Bulk-fetches every application referenced by the CSV in a single query.
+   * Kept separate from the per-row checks so the DB is only hit once,
+   * regardless of the number of rows.
+   */
+  private async fetchDbApplications(
     rows: CsvRow[],
     listingId: string,
   ): Promise<ApplicationContextFields[]> {
     const ids = rows.map((r) => r[bulkUploadHeaderNames.applicationId]);
 
-    const dbApps = await this.prisma.applications.findMany({
+    return this.prisma.applications.findMany({
       where: { id: { in: ids }, listingId },
       select: {
         id: true,
@@ -427,57 +417,138 @@ export class ApplicationBulkUploadService {
         submissionDate: true,
       },
     });
+  }
 
-    const foundIds = new Set(dbApps.map((a) => a.id));
-
-    ids.forEach((originalId, index) => {
-      if (!foundIds.has(originalId)) {
+  private validateNoDuplicateId(rows: CsvRow[]): void {
+    const seenIds = new Set<string>();
+    rows.forEach((row, index) => {
+      const id = row[bulkUploadHeaderNames.applicationId];
+      if (seenIds.has(id)) {
         throw new BadRequestException(
           `Upload Failed: One or more rows beginning on row ${
             index + 2
-          } have incorrect application identification numbers`,
+          } contain duplicate application IDs`,
         );
       }
-    });
 
-    return dbApps;
+      seenIds.add(id);
+    });
+  }
+
+  private validateApplicationId(
+    row: CsvRow,
+    foundIds: Set<string>,
+    index: number,
+  ): void {
+    const id = row[bulkUploadHeaderNames.applicationId];
+    if (!foundIds.has(id)) {
+      throw new BadRequestException(
+        `Upload Failed: One or more rows beginning on row ${
+          index + 2
+        } have incorrect application identification numbers`,
+      );
+    }
   }
 
   private validateContextFields(
-    rows: CsvRow[],
-    dbApps: ApplicationContextFields[],
+    row: CsvRow,
+    dbMap: Map<string, ApplicationContextFields>,
+    index: number,
   ): void {
-    const dbMap = new Map(dbApps.map((a) => [a.id, a]));
+    const dbApp = dbMap.get(row[bulkUploadHeaderNames.applicationId]);
+    if (!dbApp) return;
 
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      const dbApp = dbMap.get(row[bulkUploadHeaderNames.applicationId]);
-      if (!dbApp) continue;
+    const expectedDate = dbApp.submissionDate
+      ? formatLocalDate(
+          dbApp.submissionDate.toISOString(),
+          this.dateFormat,
+          process.env.TIME_ZONE,
+        )
+      : '';
 
-      const expectedDate = dbApp.submissionDate
-        ? formatLocalDate(
-            dbApp.submissionDate.toISOString(),
-            this.dateFormat,
-            process.env.TIME_ZONE,
-          )
-        : '';
+    const firstNameMatch =
+      row[bulkUploadHeaderNames.applicantFirstName] ===
+      (dbApp.applicant?.firstName ?? '');
+    const lastNameMatch =
+      row[bulkUploadHeaderNames.applicantLastName] ===
+      (dbApp.applicant?.lastName ?? '');
+    const dateMatch =
+      row[bulkUploadHeaderNames.applicationSubmissionDate] === expectedDate;
 
-      const firstNameMatch =
-        row[bulkUploadHeaderNames.applicantFirstName] ===
-        (dbApp.applicant?.firstName ?? '');
-      const lastNameMatch =
-        row[bulkUploadHeaderNames.applicantLastName] ===
-        (dbApp.applicant?.lastName ?? '');
-      const dateMatch =
-        row[bulkUploadHeaderNames.applicationSubmissionDate] === expectedDate;
+    if (!firstNameMatch || !lastNameMatch || !dateMatch) {
+      throw new BadRequestException(
+        `Upload Failed: One or more rows beginning on row ${
+          index + 2
+        } have incorrect application identification numbers`,
+      );
+    }
+  }
 
-      if (!firstNameMatch || !lastNameMatch || !dateMatch) {
-        throw new BadRequestException(
-          `Upload Failed: One or more rows beginning on row ${
-            i + 2
-          } have incorrect application identification numbers`,
-        );
-      }
+  private validateStatus(row: CsvRow, index: number): void {
+    const status = row[bulkUploadHeaderNames.applicationStatus];
+    if (this.convertReadableToApplicationStatus(status) === undefined) {
+      throw new BadRequestException(
+        `Upload Failed: Could not match one or more application status inputs beginning on row ${
+          index + 2
+        } with accepted system options`,
+      );
+    }
+  }
+
+  private validateDeclineReason(row: CsvRow, index: number): void {
+    const reason = row[bulkUploadHeaderNames.applicationDeclineReason];
+    if (
+      reason !== '' &&
+      convertReadableToApplicationDeclineReason(reason) === undefined
+    ) {
+      throw new BadRequestException(
+        `Upload Failed: Could not match one or more application decline reason inputs beginning on row ${
+          index + 2
+        } with accepted system options`,
+      );
+    }
+  }
+
+  private validateDeclineConsistency(row: CsvRow, index: number): void {
+    const status = row[bulkUploadHeaderNames.applicationStatus];
+    const reason = row[bulkUploadHeaderNames.applicationDeclineReason];
+
+    if (status === 'Declined' && reason === '') {
+      throw new BadRequestException(
+        `Upload Failed: One or more rows beginning on row ${
+          index + 2
+        } have a declined status without a decline reason`,
+      );
+    }
+
+    if (reason !== '' && status !== 'Declined') {
+      throw new BadRequestException(
+        `Upload Failed: One or more rows beginning on row ${
+          index + 2
+        } have a decline reason without a declined status`,
+      );
+    }
+  }
+
+  private validateAdditionalDetails(row: CsvRow, index: number): void {
+    const reason = row[bulkUploadHeaderNames.applicationDeclineReason];
+    const details =
+      row[bulkUploadHeaderNames.applicationDeclineReasonAdditionalDetails];
+
+    if (DECLINE_REASONS_REQUIRING_DETAILS.includes(reason) && details === '') {
+      throw new BadRequestException(
+        `Upload Failed: One or more rows beginning on row ${
+          index + 2
+        } require additional details for the provided decline reason`,
+      );
+    }
+
+    if (details.length > 2000) {
+      throw new BadRequestException(
+        `Upload Failed: One or more rows beginning on row ${
+          index + 2
+        } have application decline reason additional details exceeding 2000 characters`,
+      );
     }
   }
 
@@ -512,9 +583,21 @@ export class ApplicationBulkUploadService {
     this.validateHeaders(headers);
     this.validateHasDataRows(rows);
 
-    this.validateNoDuplicateIds(rows);
-    const dbApps = await this.validateApplicationIds(rows, dto.listingId);
-    this.validateContextFields(rows, dbApps);
+    const dbApps = await this.fetchDbApplications(rows, dto.listingId);
+    const foundIds = new Set(dbApps.map((a) => a.id));
+    const dbMap = new Map(dbApps.map((a) => [a.id, a]));
+
+    this.validateNoDuplicateId(rows);
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      this.validateApplicationId(row, foundIds, i);
+      this.validateContextFields(row, dbMap, i);
+      this.validateStatus(row, i);
+      this.validateDeclineReason(row, i);
+      this.validateDeclineConsistency(row, i);
+      this.validateAdditionalDetails(row, i);
+    }
 
     // TODO: Implement Validation pipeline
 
