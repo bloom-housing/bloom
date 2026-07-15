@@ -2,11 +2,15 @@ import {
   AmiChart,
   Prisma,
   PrismaClient,
+  UnitRentTypeEnum,
   UnitTypeEnum,
   UnitTypes,
 } from '@prisma/client';
 import { unitTypeFactorySingle } from './unit-type-factory';
-import { unitRentTypeFactory } from './unit-rent-type-factory';
+import {
+  unitRentTypeFactory,
+  unitRentTypeFactorySingle,
+} from './unit-rent-type-factory';
 import { randomInt } from 'crypto';
 import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessibility-priority-type-enum';
 
@@ -71,6 +75,11 @@ export const unitFactoryMany = async (
       unitTypes[randomInt(unitTypes.length)],
     );
 
+    const unitRentType = await unitRentTypeFactorySingle(
+      prismaClient,
+      UnitRentTypeEnum.fixed,
+    );
+
     const accessibilityPriorityType =
       optionalParams?.randomizePriorityType && Math.random() > 0.9
         ? unitAccessibilityPriorityTypeValues[
@@ -80,6 +89,7 @@ export const unitFactoryMany = async (
 
     return unitFactorySingle(unitType, {
       ...optionalParams,
+      unitRentTypeId: unitRentType.id,
       otherFields: {
         accessibilityPriorityType,
         numBathrooms: index,

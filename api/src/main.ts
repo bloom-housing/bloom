@@ -112,7 +112,12 @@ async function bootstrap() {
       ];
     });
   });
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      tagsSorter: 'alpha',
+      operationsSorter: 'alpha',
+    },
+  });
   const configService: ConfigService = app.get(ConfigService);
 
   await app.listen(configService.get<number>('PORT'));

@@ -44,15 +44,23 @@ export const ListingCard = ({
 }: ListingCardProps) => {
   const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
-  const listingTags = getListingTags(
-    listing,
-    true,
-    !showHomeType,
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.disableAccessibilityFeaturesTag),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitAccessibilityTypeTags),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
-  )
+  const listingTags = getListingTags(listing, {
+    hideReviewTags: true,
+    hideHomeTypeTag: !showHomeType,
+    hideAccessibilityFeaturesTag: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.disableAccessibilityFeaturesTag
+    ),
+    enableUnitAccessibilityTypeTags: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.enableUnitAccessibilityTypeTags
+    ),
+    enableIsVerified: isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
+    swapCommunityTypeWithPrograms: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.swapCommunityTypeWithPrograms
+    ),
+  })
   const status = getListingApplicationStatus(listing, true, true)
   const actions = []
 

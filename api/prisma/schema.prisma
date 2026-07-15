@@ -48,7 +48,7 @@ model AccessibilitySnapshot {
   @@map("accessibility_snapshot")
 }
 
-// AcivityLog Section
+// ActivityLog Section
 model ActivityLog {
   id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
@@ -1793,7 +1793,7 @@ model UnitGroup {
   totalAvailable            Int?                               @map("total_available")
   totalCount                Int?                               @map("total_count")
 
-  listings           Listings?            @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings           Listings?            @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   unitGroupAmiLevels UnitGroupAmiLevels[]
   unitTypes          UnitTypes[]
 
@@ -1846,7 +1846,7 @@ model UnitGroupAmiLevels {
   percentageOfIncomeValue      Decimal?                         @map("percentage_of_income_value") @db.Decimal
   unitGroupId                  String?                          @map("unit_group_id") @db.Uuid
 
-  unitGroup UnitGroup? @relation(fields: [unitGroupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  unitGroup UnitGroup? @relation(fields: [unitGroupId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   amiChart  AmiChart?  @relation(fields: [amiChartId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("unit_group_ami_levels")
@@ -2378,6 +2378,7 @@ enum ListingsStatusEnum {
 enum ListingTypeEnum {
   regulated
   nonRegulated
+  landUse
 
   @@map("listing_type_enum")
 }

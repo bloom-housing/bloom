@@ -2,7 +2,6 @@ import {
   EnumListingFilterParamsComparison,
   FilterAvailabilityEnum,
   HomeTypeEnum,
-  IdDTO,
   ListingFeatures,
   ListingFeaturesConfiguration,
   ListingFilterKeys,

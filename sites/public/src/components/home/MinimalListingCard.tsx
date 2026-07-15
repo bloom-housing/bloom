@@ -17,15 +17,23 @@ interface MinimalListingCardProps {
 }
 
 export const MinimalListingCard = ({ listing, jurisdiction }: MinimalListingCardProps) => {
-  const listingTags = getListingTags(
-    listing,
-    true,
-    !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableHomeType),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.disableAccessibilityFeaturesTag),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitAccessibilityTypeTags),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
-  )
+  const listingTags = getListingTags(listing, {
+    hideReviewTags: true,
+    hideHomeTypeTag: !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableHomeType),
+    hideAccessibilityFeaturesTag: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.disableAccessibilityFeaturesTag
+    ),
+    enableUnitAccessibilityTypeTags: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.enableUnitAccessibilityTypeTags
+    ),
+    enableIsVerified: isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
+    swapCommunityTypeWithPrograms: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.swapCommunityTypeWithPrograms
+    ),
+  })
 
   return (
     <ClickableCard

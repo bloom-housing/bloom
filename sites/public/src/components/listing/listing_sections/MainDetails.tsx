@@ -42,16 +42,18 @@ type ListingTag = {
 
 export const getListingTags = (
   listing: Listing,
-  hideReviewTags?: boolean,
-  hideHomeTypeTag?: boolean,
-  hideAccessibilityFeaturesTag?: boolean,
-  enableUnitAccessibilityTypeTags?: boolean,
-  enableIsVerified?: boolean,
-  swapCommunityTypeWithPrograms?: boolean
+  enabledFeatures: {
+    hideReviewTags?: boolean
+    hideHomeTypeTag?: boolean
+    hideAccessibilityFeaturesTag?: boolean
+    enableUnitAccessibilityTypeTags?: boolean
+    enableIsVerified?: boolean
+    swapCommunityTypeWithPrograms?: boolean
+  }
 ): ListingTag[] => {
   const listingTags: ListingTag[] = []
 
-  if (enableIsVerified && listing.isVerified) {
+  if (enabledFeatures.enableIsVerified && listing.isVerified) {
     listingTags.push({
       title: t("listings.verifiedListing"),
       variant: "warn-inverse",
@@ -59,14 +61,14 @@ export const getListingTags = (
     })
   }
 
-  if (!hideHomeTypeTag && listing.homeType) {
+  if (!enabledFeatures.hideHomeTypeTag && listing.homeType) {
     listingTags.push({
       title: t(`listings.homeType.${listing.homeType}`),
       variant: "highlight-cool",
     })
   }
 
-  if (swapCommunityTypeWithPrograms) {
+  if (enabledFeatures.swapCommunityTypeWithPrograms) {
     listing.listingMultiselectQuestions
       .filter(
         (question) =>
@@ -88,7 +90,7 @@ export const getListingTags = (
     })
   }
 
-  if (!hideReviewTags) {
+  if (!enabledFeatures.hideReviewTags) {
     if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
       listingTags.push({
         title: t("listings.waitlist.open"),
@@ -109,7 +111,7 @@ export const getListingTags = (
     }
   }
 
-  if (enableUnitAccessibilityTypeTags) {
+  if (enabledFeatures.enableUnitAccessibilityTypeTags) {
     listing?.unitsSummarized?.priorityTypes?.forEach((priorityType) => {
       listingTags.push({
         title: `${t(`listings.unit.accessibilityType.${priorityType}`)} ${t("t.units")}`,
@@ -119,7 +121,7 @@ export const getListingTags = (
   }
 
   if (
-    !hideAccessibilityFeaturesTag &&
+    !enabledFeatures.hideAccessibilityFeaturesTag &&
     listing.listingFeatures &&
     Object.values(listing.listingFeatures).some((feature) => feature)
   ) {
@@ -146,15 +148,23 @@ export const MainDetails = ({
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
-  const listingTags = getListingTags(
-    listing,
-    true,
-    !showHomeType,
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.disableAccessibilityFeaturesTag),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitAccessibilityTypeTags),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
-  )
+  const listingTags = getListingTags(listing, {
+    hideReviewTags: true,
+    hideHomeTypeTag: !showHomeType,
+    hideAccessibilityFeaturesTag: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.disableAccessibilityFeaturesTag
+    ),
+    enableUnitAccessibilityTypeTags: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.enableUnitAccessibilityTypeTags
+    ),
+    enableIsVerified: isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
+    swapCommunityTypeWithPrograms: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.swapCommunityTypeWithPrograms
+    ),
+  })
   return (
     <div>
       <ImageCard

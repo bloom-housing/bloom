@@ -41,12 +41,14 @@ export const createBloomingtonJurisdiction = async (
   {
     jurisdictionName,
     publicSiteBaseURL,
+    unitRentTypes,
     unitTypes,
     partnerUser,
     msqV2,
   }: {
     jurisdictionName: string;
     publicSiteBaseURL: string;
+    unitRentTypes: { id: string }[];
     unitTypes: { id: string }[];
     partnerUser: { id: string };
     msqV2: boolean;
@@ -290,6 +292,7 @@ export const createBloomingtonJurisdiction = async (
     sqFeet: '750.00',
     amiChart: { connect: { id: amiChart.id } },
     unitTypes: { connect: { id: unitTypes[1].id } },
+    unitRentTypes: { connect: { id: unitRentTypes[0].id } },
   };
 
   const listingsToCreate = [
@@ -310,6 +313,7 @@ export const createBloomingtonJurisdiction = async (
           number: '',
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: { connect: { id: unitTypes[2].id } },
+          unitRentTypes: { connect: { id: unitRentTypes[0].id } },
         },
         {
           amiPercentage: '30',
@@ -324,6 +328,7 @@ export const createBloomingtonJurisdiction = async (
           number: '',
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: { connect: { id: unitTypes[2].id } },
+          unitRentTypes: { connect: { id: unitRentTypes[0].id } },
         },
         {
           amiPercentage: '30',
@@ -337,6 +342,7 @@ export const createBloomingtonJurisdiction = async (
           numBedrooms: 2,
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: { connect: { id: unitTypes[2].id } },
+          unitRentTypes: { connect: { id: unitRentTypes[0].id } },
         },
       ],
       multiselectQuestions: [cityEmployeeQuestion],

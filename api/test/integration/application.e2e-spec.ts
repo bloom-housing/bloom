@@ -797,6 +797,7 @@ describe('Application Controller Tests', () => {
         data: {
           listings: { connect: { id: listing2.id } },
           confirmationCode: randomUUID(),
+          incomeVouchers: [],
           preferences: [],
           submissionType: ApplicationSubmissionTypeEnum.electronical,
           status: ApplicationStatusEnum.submitted,
@@ -808,6 +809,7 @@ describe('Application Controller Tests', () => {
         data: {
           listings: { connect: { id: listing2.id } },
           confirmationCode: randomUUID(),
+          incomeVouchers: [],
           preferences: [],
           submissionType: ApplicationSubmissionTypeEnum.electronical,
           status: ApplicationStatusEnum.submitted,
@@ -1215,6 +1217,7 @@ describe('Application Controller Tests', () => {
         data: {
           listings: { connect: { id: listing2.id } },
           confirmationCode: randomUUID(),
+          incomeVouchers: [],
           preferences: [],
           submissionType: ApplicationSubmissionTypeEnum.electronical,
           status: ApplicationStatusEnum.submitted,
@@ -1226,6 +1229,7 @@ describe('Application Controller Tests', () => {
         data: {
           listings: { connect: { id: listing2.id } },
           confirmationCode: randomUUID(),
+          incomeVouchers: [],
           preferences: [],
           submissionType: ApplicationSubmissionTypeEnum.electronical,
           status: ApplicationStatusEnum.submitted,

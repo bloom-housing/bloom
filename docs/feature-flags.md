@@ -57,6 +57,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableHousingBasics](./feature-flags/enableHousingBasics.md) | When true, a link to the housing basics page is displayed on the get assistance page |
 | [enableHousingDeveloperOwner](./feature-flags/enableHousingDeveloperOwner.md) | When true, the 'Housing developer' field label becomes 'Housing developer / owner' |
 | [enableIsVerified](./feature-flags/enableIsVerified.md) | When true, the listing can ba have its contents manually verified by a user |
+| [enableLandUse](./feature-flags/enableLandUse.md) | When true, land use listings are displayed in listing creation/edit and public listing view |
 | [enableLeasingAgentAltText](./feature-flags/enableLeasingAgentAltText.md) | When true, shows alternative text for LA users |
 | [enableLimitedHowDidYouHear](./feature-flags/enableLimitedHowDidYouHear.md) | When true, the Radio Ad and Bus Ad options are removed from the how did you hear section. |
 | [enableListingFavoriting](./feature-flags/enableListingFavoriting.md) | When true, a Favorite button is shown for public listings and users can view their favorited listings |

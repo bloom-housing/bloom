@@ -1,26 +1,21 @@
-import React from "react"
+import { ClickableCard, imageUrlFromListing, oneLineAddress } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
-  Jurisdiction,
   Listing,
   MarketingTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { imageUrlFromListing, oneLineAddress, ClickableCard } from "@bloom-housing/shared-helpers"
 import { StackedTable, t } from "@bloom-housing/ui-components"
-import { Card, Heading, Link, Tag, Icon } from "@bloom-housing/ui-seeds"
-import {
-  getListingStackedGroupTableData,
-  getListingStackedTableData,
-  isFeatureFlagOn,
-} from "../../../lib/helpers"
+import { Card, Heading, Icon, Link, Tag } from "@bloom-housing/ui-seeds"
+import React, { useRef } from "react"
+import { getListingStackedGroupTableData, getListingStackedTableData } from "../../../lib/helpers"
 import { getListingTags } from "../../listing/listing_sections/MainDetails"
+import { useListingsMapContext } from "./ListingsMapContext"
 import styles from "./MapListingCard.module.scss"
 
 export interface MapListingCardProps {
   listing: Listing
   index: number
-  jurisdiction: Jurisdiction
   showHomeType?: boolean
   forceMobileView?: boolean
   onClose?: () => void
@@ -28,24 +23,29 @@ export interface MapListingCardProps {
 
 export const MapListingCard = ({
   listing,
-  jurisdiction,
   showHomeType,
   index,
   forceMobileView,
   onClose,
 }: MapListingCardProps) => {
-  const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
+  const { activeFeatureFlags } = useListingsMapContext()
+  const enableUnitGroups = activeFeatureFlags?.includes(FeatureFlagEnum.enableUnitGroups)
 
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
-  const listingTags = getListingTags(
-    listing,
-    true,
-    !showHomeType,
-    !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
-  )
-  const actions = []
+  const listingTags = getListingTags(listing, {
+    hideReviewTags: true,
+    hideHomeTypeTag: !showHomeType,
+    hideAccessibilityFeaturesTag: activeFeatureFlags?.includes(
+      FeatureFlagEnum.disableAccessibilityFeaturesTag
+    ),
+    enableUnitAccessibilityTypeTags: activeFeatureFlags?.includes(
+      FeatureFlagEnum.enableUnitAccessibilityTypeTags
+    ),
+    enableIsVerified: activeFeatureFlags?.includes(FeatureFlagEnum.enableIsVerified),
+    swapCommunityTypeWithPrograms: activeFeatureFlags?.includes(
+      FeatureFlagEnum.swapCommunityTypeWithPrograms
+    ),
+  })
 
   const unitsPreviewTable = (() => {
     const hasData = listing.unitGroups?.length || listing.units?.length
@@ -90,7 +90,10 @@ export const MapListingCard = ({
       key={index}
       data-testid={`listing-card-component`}
     >
-      <ClickableCard className={styles["listing-card-container"]}>
+      <ClickableCard
+        className={styles["listing-card-container"]}
+        containerClassName={styles["listing-card-outer-container"]}
+      >
         <Card.Section>
           <div className={styles["listing-card-content"]}>
             <div className={styles["details"]}>
@@ -105,7 +108,8 @@ export const MapListingCard = ({
               </Link>
 
               <div className={styles["address"]}>
-                {oneLineAddress(listing.listingsBuildingAddress)}
+                {/* TODO: make the county display conditional on if the county filter is enabled */}
+                {oneLineAddress(listing.listingsBuildingAddress, true)}
               </div>
               {listingTags.length > 0 && (
                 <div className={`${styles["tags"]}`}>
@@ -124,11 +128,8 @@ export const MapListingCard = ({
               <div className={`${styles["unit-table"]} styled-stacked-table`}>
                 {unitsPreviewTable}
               </div>
-              {actions.length > 0 && (
-                <div className={styles["action-container"]}>{actions.map((action) => action)}</div>
-              )}
             </div>
-            <div className={styles["image"]}>
+            <div className={`${styles["image"]} ${!forceMobileView ? styles["image-side"] : ""}`}>
               {forceMobileView && onClose && (
                 <button
                   type="button"
@@ -157,4 +158,10 @@ export const MapListingCard = ({
       </ClickableCard>
     </li>
   )
+}
+
+export const MapListingCardList = ({ children }: { children: React.ReactNode }) => {
+  const listRef = useRef<HTMLUListElement>(null)
+
+  return <ul ref={listRef}>{children}</ul>
 }

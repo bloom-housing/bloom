@@ -32,6 +32,7 @@ export enum FeatureFlagEnum {
   enableHousingBasics = 'enableHousingBasics',
   enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
   enableIsVerified = 'enableIsVerified',
+  enableLandUse = 'enableLandUse',
   enableLeasingAgentAltText = 'enableLeasingAgentAltText',
   enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
   enableListingFavoriting = 'enableListingFavoriting',
@@ -231,6 +232,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableIsVerified,
     description:
       'When true, the listing can ba have its contents manually verified by a user',
+  },
+  {
+    name: FeatureFlagEnum.enableLandUse,
+    description:
+      'When true, land use listings are displayed in listing creation/edit and public listing view',
   },
   {
     name: FeatureFlagEnum.enableLimitedHowDidYouHear,

@@ -8,11 +8,11 @@ interface AddressProps {
   getDirections?: boolean
 }
 
-export const oneLineAddress = (address: AddressType) => {
+export const oneLineAddress = (address: AddressType, displayCounty = false) => {
   if (!address) return ""
   return `${address.street}${address.street2 ? `, ${address.street2}` : ""}, ${address.city}, ${
-    address.state
-  } ${address.zipCode}`
+    displayCounty && address.county ? `${address.county}, ` : ""
+  }${address.state} ${address.zipCode}`
 }
 
 export const multiLineAddress = (address: AddressType) => {

@@ -84,6 +84,9 @@ yarn-error.log
 .vscode
 *.code-workspace
 
+# Personal Claude Code settings (shared config lives in .claude/settings.json)
+.claude/settings.local.json
+
 # VS code debugger config
 launch.json
 

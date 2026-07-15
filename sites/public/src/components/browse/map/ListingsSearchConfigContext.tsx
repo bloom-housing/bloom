@@ -26,6 +26,7 @@ export type ListingsSearchConfig = {
   regions?: string[]
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
   subJurisdictions?: IdDTO[]
+  notificationsSignUpUrl?: string
 }
 
 const ListingsSearchConfigContext = createContext<ListingsSearchConfig | null>(null)

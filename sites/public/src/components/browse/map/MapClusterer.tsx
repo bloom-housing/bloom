@@ -4,7 +4,7 @@ import { InfoWindow, useMap } from "@vis.gl/react-google-maps"
 import { MarkerClusterer, SuperClusterAlgorithm } from "@googlemaps/markerclusterer"
 import { useRouter } from "next/router"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { Jurisdiction, ListingViews } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ListingViews } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import { getBoundsZoomLevel } from "../../../lib/helpers"
 import { MapMarkerData } from "./ListingsMap"
@@ -67,6 +67,7 @@ const animateZoom = (
   if (currentZoom === null || currentZoom >= targetZoom) return
   if (currentZoom !== targetZoom) {
     google.maps.event.addListenerOnce(map, "zoom_changed", () => {
+      ;``
       animateZoom(map, targetZoom)
     })
     if (panTo) map.setCenter(panTo)
@@ -303,7 +304,6 @@ export const MapClusterer = ({
             <MapListingCard
               listing={response}
               index={markerKey}
-              jurisdiction={response.jurisdictions as Jurisdiction}
               forceMobileView={true}
               onClose={() => {
                 setInfoWindowContent(null)

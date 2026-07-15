@@ -10,7 +10,10 @@ import {
   ReviewOrderTypeEnum,
   UnitTypeEnum,
 } from '@prisma/client';
-import { EmailService } from '../../../src/services/email.service';
+import {
+  EmailService,
+  ListingNotificationVariant,
+} from '../../../src/services/email.service';
 import { EmailProvider } from '../../../src/services/email-provider.service';
 import { TranslationService } from '../../../src/services/translation.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
@@ -514,6 +517,7 @@ describe('Testing email service', () => {
       await service.requestApproval(
         { name: 'test', id: '1234' },
         { name: 'listing name', id: 'listingId' },
+        undefined,
         emailArr,
         'http://localhost:3001',
       );
@@ -521,7 +525,9 @@ describe('Testing email service', () => {
       expect(sendMock).toHaveBeenCalled();
       const emailMock = sendMock.mock.calls[0][0];
       expect(emailMock.to).toEqual(emailArr);
-      expect(emailMock.subject).toEqual('Listing approval requested');
+      expect(emailMock.subject).toEqual(
+        'Listing approval requested - listing name',
+      );
       expect(emailMock.body).toMatch(
         `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" />`,
       );
@@ -531,6 +537,7 @@ describe('Testing email service', () => {
       expect(emailMock.body).toMatch(
         `A Partner has submitted an approval request to publish the listing name listing.`,
       );
+      expect(emailMock.body).not.toMatch('The listing file number is');
       expect(emailMock.body).toMatch('Please log into the');
       expect(emailMock.body).toMatch('Partners Portal');
       expect(emailMock.body).toMatch(/http:\/\/localhost:3001/);
@@ -546,6 +553,24 @@ describe('Testing email service', () => {
       );
       expect(emailMock.body).toMatch('Thank you,');
       expect(emailMock.body).toMatch('Bloom Housing Portal');
+    });
+
+    it('should include the listing file number when present', async () => {
+      const emailArr = ['testOne@xample.com'];
+      const service = await module.resolve(EmailService);
+      await service.requestApproval(
+        { name: 'test', id: '1234' },
+        { name: 'listing name', id: 'listingId' },
+        'ABC-123',
+        emailArr,
+        'http://localhost:3001',
+      );
+
+      expect(sendMock).toHaveBeenCalled();
+      const emailMock = sendMock.mock.calls[0][0];
+      expect(emailMock.body).toMatch(
+        'A Partner has submitted an approval request to publish the listing name listing. The listing file number is ABC-123.',
+      );
     });
   });
 
@@ -975,6 +1000,7 @@ describe('Testing email service', () => {
     const LABELS = {
       community: 'Community',
       applicationsDue: 'Applications Due',
+      applicationsOpen: 'Applications Open',
       address: 'Address',
       neighborhood: 'Neighborhood',
       unitType: 'Available accessible units',
@@ -1014,7 +1040,8 @@ describe('Testing email service', () => {
       listing: Listing,
       priorityTypes: UnitAccessibilityPriorityTypeEnum[] = [],
       summary: ListingUnitsSummary = emptySummary(),
-    ) => service.buildListingDetails(listing, priorityTypes, summary);
+      variant?: ListingNotificationVariant,
+    ) => service.buildListingDetails(listing, priorityTypes, summary, variant);
 
     beforeEach(() => {
       service.polyglot.replace(translationFactory().translations);
@@ -1495,6 +1522,131 @@ describe('Testing email service', () => {
           LABELS.rent,
         ]);
       });
+    });
+
+    describe('coming soon variant', () => {
+      it('shows applications open row with the scheduled open date instead of applications due', () => {
+        const result = buildDetails(
+          baseListing({
+            applicationDueDate: new Date(2026, 4, 19),
+            scheduledApplicationOpenAt: new Date(2026, 6, 1),
+          } as Partial<Listing>),
+          [],
+          emptySummary(),
+          'comingSoon',
+        );
+        const row = findByLabel(result, LABELS.applicationsOpen);
+        expect(row).toBeDefined();
+        expect(row.value).toBe('July 01, 2026');
+        expect(findByLabel(result, LABELS.applicationsDue)).toBeUndefined();
+      });
+
+      it('keeps the open date row in the due date row position', () => {
+        const result = buildDetails(
+          baseListing({
+            reservedCommunityTypes: { name: 'veteran' },
+            applicationDueDate: new Date(2026, 4, 19),
+            scheduledApplicationOpenAt: new Date(2026, 6, 1),
+          } as Partial<Listing>),
+          [],
+          emptySummary(),
+          'comingSoon',
+        );
+        expect(result.map((r) => r.label)).toEqual([
+          LABELS.community,
+          LABELS.applicationsOpen,
+          LABELS.address,
+        ]);
+      });
+
+      it('falls back to the applications due row when the open date is missing', () => {
+        const result = buildDetails(
+          baseListing({
+            applicationDueDate: new Date(2026, 4, 19),
+          } as Partial<Listing>),
+          [],
+          emptySummary(),
+          'comingSoon',
+        );
+        expect(findByLabel(result, LABELS.applicationsDue)).toBeDefined();
+        expect(findByLabel(result, LABELS.applicationsOpen)).toBeUndefined();
+      });
+
+      it('standard variant ignores the scheduled open date', () => {
+        const result = buildDetails(
+          baseListing({
+            applicationDueDate: new Date(2026, 4, 19),
+            scheduledApplicationOpenAt: new Date(2026, 6, 1),
+          } as Partial<Listing>),
+        );
+        expect(findByLabel(result, LABELS.applicationsDue)).toBeDefined();
+        expect(findByLabel(result, LABELS.applicationsOpen)).toBeUndefined();
+      });
+    });
+  });
+
+  describe('listing publish notification', () => {
+    const notificationListing = {
+      id: 'listingId',
+      name: 'Test Listing',
+      urlSlug: 'test_listing',
+      units: [],
+      listingEvents: [],
+      listingsBuildingAddress: yellowstoneAddress,
+      applicationDueDate: new Date(2026, 4, 19),
+      scheduledApplicationOpenAt: new Date(2026, 6, 1),
+    } as unknown as Listing;
+
+    let jurisdictionSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      jurisdictionSpy = jest
+        .spyOn(jurisdictionServiceMock, 'findOne')
+        .mockReturnValue({
+          id: 'jurisdictionId',
+          name: 'Jurisdiction 1',
+          publicUrl: 'https://example.com',
+          emailFromAddress: 'no-reply@example.com',
+          languages: [LanguagesEnum.en],
+        } as unknown as ReturnType<typeof jurisdictionServiceMock.findOne>);
+    });
+
+    afterEach(() => {
+      jurisdictionSpy.mockRestore();
+    });
+
+    it('sends the standard email by default', async () => {
+      await service.listingPublishNotification(
+        { id: 'jurisdictionId' },
+        notificationListing,
+        [],
+        { en: ['user@example.com'] },
+      );
+      expect(sendMock).toHaveBeenCalled();
+      expect(sendMock.mock.calls[0][0].subject).toEqual(
+        'New rental opportunity at Test Listing',
+      );
+      expect(sendMock.mock.calls[0][0].body).toContain('Rental opportunity at');
+      expect(sendMock.mock.calls[0][0].body).toContain('Applications Due');
+      expect(sendMock.mock.calls[0][0].body).not.toContain('Applications Open');
+    });
+
+    it('sends the coming soon email for the comingSoon variant', async () => {
+      await service.listingPublishNotification(
+        { id: 'jurisdictionId' },
+        notificationListing,
+        [],
+        { en: ['user@example.com'] },
+        'comingSoon',
+      );
+      expect(sendMock).toHaveBeenCalled();
+      expect(sendMock.mock.calls[0][0].subject).toEqual(
+        'Coming soon - Test Listing',
+      );
+      expect(sendMock.mock.calls[0][0].body).toContain('Coming soon');
+      expect(sendMock.mock.calls[0][0].body).toContain('Applications Open');
+      expect(sendMock.mock.calls[0][0].body).toContain('July 01, 2026');
+      expect(sendMock.mock.calls[0][0].body).not.toContain('Applications Due');
     });
   });
 });
