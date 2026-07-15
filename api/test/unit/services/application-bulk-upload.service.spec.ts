@@ -307,5 +307,32 @@ describe('Testing application bulk upload services', () => {
       downloadFromPrivateMock.mockReset();
       prisma.applications.findMany = jest.fn().mockResolvedValue([]);
     });
+
+    describe('file format (validateFileFormat)', () => {
+      it('should reject a non-CSV s3Key before attempting any download', async () => {
+        await expect(
+          service.validateCSV({ s3Key: 'uploads/applications.txt', listingId }),
+        ).rejects.toThrow(
+          new BadRequestException('Upload Failed: file must be a CSV format'),
+        );
+
+        expect(downloadFromPrivateMock).not.toHaveBeenCalled();
+      });
+
+      it('should accept a .csv key regardless of case and proceed past the format gate', async () => {
+        const s3KeyUpperCase = 'uploads/applications.CSV';
+        downloadFromPrivateMock.mockRejectedValue(new Error('boom'));
+
+        await expect(
+          service.validateCSV({ s3Key: s3KeyUpperCase, listingId }),
+        ).rejects.toThrow(
+          new NotFoundException(
+            'The CSV file could not be retrieved from the S3 bucket',
+          ),
+        );
+
+        expect(downloadFromPrivateMock).toHaveBeenCalledWith(s3KeyUpperCase);
+      });
+    });
   });
 });
