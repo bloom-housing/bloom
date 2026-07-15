@@ -1,11 +1,14 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   StreamableFile,
   NotFoundException,
 } from '@nestjs/common';
 import { ApplicationStatusEnum } from '@prisma/client';
+import { parse } from 'csv-parse';
 import fs, { createReadStream } from 'fs';
+import { Readable } from 'stream';
 import dayjs from 'dayjs';
 import { join } from 'path';
 import { PrismaService } from './prisma.service';
@@ -23,6 +26,9 @@ import {
   APPLICATION_DECLINE_REASON_MAP,
   convertReadableToApplicationDeclineReason,
 } from '../utilities/application-export-helpers';
+import { ApplicationBulkValidate } from '../dtos/applications/application-bulk-validate.dto';
+import { S3Service } from './s3.service';
+import { SuccessDTO } from '../dtos/shared/success.dto';
 
 const NUMBER_TO_PAGINATE_BY = 500;
 
@@ -77,6 +83,7 @@ export class ApplicationBulkUploadService {
     private prisma: PrismaService,
     private listingService: ListingService,
     private permissionService: PermissionService,
+    private s3Service: S3Service,
   ) {}
 
   private convertApplicationStatusToReadable(
@@ -359,5 +366,36 @@ export class ApplicationBulkUploadService {
         jurisdictionId,
       },
     );
+  }
+
+  async validateCSV(dto: ApplicationBulkValidate): Promise<SuccessDTO> {
+    let csvStream: ReadableStream;
+    try {
+      csvStream = await this.s3Service.downloadFromPrivate(dto.s3Key);
+    } catch {
+      throw new NotFoundException(
+        'The CSV file could not be retrieved from the S3 bucket',
+      );
+    }
+
+    const nodeStream = Readable.fromWeb(csvStream as any);
+    const records: string[][] = await new Promise((resolve, reject) => {
+      const results: string[][] = [];
+      nodeStream
+        .pipe(parse({ skip_empty_lines: true }))
+        .on('data', (row: string[]) => results.push(row))
+        .on('error', reject)
+        .on('end', () => resolve(results));
+    });
+
+    const [headerRow, ...dataRows] = records;
+    const headers: string[] = headerRow ?? [];
+    const rows: CsvRow[] = dataRows.map((cells) =>
+      Object.fromEntries(headers.map((h, i) => [h, cells[i] ?? ''])),
+    );
+
+    // TODO: Implement Validation pipeline
+
+    return { success: true };
   }
 }
