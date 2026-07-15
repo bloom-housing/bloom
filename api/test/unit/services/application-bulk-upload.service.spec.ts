@@ -334,5 +334,19 @@ describe('Testing application bulk upload services', () => {
         expect(downloadFromPrivateMock).toHaveBeenCalledWith(s3KeyUpperCase);
       });
     });
+
+    describe('S3 retrieval', () => {
+      it('should throw NotFoundException when downloadFromPrivate rejects', async () => {
+        downloadFromPrivateMock.mockRejectedValue(new Error('boom'));
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new NotFoundException(
+            'The CSV file could not be retrieved from the S3 bucket',
+          ),
+        );
+
+        expect(downloadFromPrivateMock).toHaveBeenCalledWith(s3Key);
+      });
+    });
   });
 });
