@@ -1098,5 +1098,95 @@ describe('Testing application bulk upload services', () => {
         );
       });
     });
+
+    describe('waitlist consistency (validateWaitlistConsistency)', () => {
+      it('should reject a row with an accessible waitlist position but a non-waitlist status', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+              waitlistPositionAccessibleUnit: '2',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 2 have a waitlist position without a waitlist status',
+          ),
+        );
+      });
+
+      it('should reject a row with a conventional waitlist position but a non-waitlist status', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+              waitlistPositionConventionalUnit: '5',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 2 have a waitlist position without a waitlist status',
+          ),
+        );
+      });
+
+      it.each(['Wait list', 'Wait list - Declined'])(
+        'should pass a row with a waitlist position and the "%s" status',
+        async (status) => {
+          const appOne = dbContext({
+            id: randomUUID(),
+            applicant: { firstName: 'Andrew', lastName: 'Rust' },
+            submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+          });
+
+          prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+          downloadFromPrivateMock.mockResolvedValue(
+            mockCsvResponse([
+              {
+                applicationId: appOne.id,
+                applicantFirstName: appOne.applicant.firstName,
+                applicantLastName: appOne.applicant.lastName,
+                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                applicationStatus: status,
+                waitlistPositionAccessibleUnit: '2',
+              },
+            ]),
+          );
+
+          await expect(
+            service.validateCSV({ s3Key, listingId }),
+          ).resolves.toEqual({ success: true });
+        },
+      );
+    });
   });
 });
