@@ -539,5 +539,197 @@ describe('Testing application bulk upload services', () => {
         );
       });
     });
+
+    describe('context fields (validateContextFields)', () => {
+      it('should reject a row whose first name does not match the DB applicant', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: 'Mismatch',
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 2 have incorrect application details (Applicant first name, last name or submission date)',
+          ),
+        );
+      });
+
+      it('should reject a row whose last name does not match the DB applicant', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: 'Mismatch',
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 2 have incorrect application details (Applicant first name, last name or submission date)',
+          ),
+        );
+      });
+
+      it('should reject a row whose submission date does not match the DB record', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(new Date(2026, 5, 20)),
+              applicationStatus: 'Submitted',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 2 have incorrect application details (Applicant first name, last name or submission date)',
+          ),
+        );
+      });
+
+      it('should pass when first name, last name, and submission date all match', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+            },
+          ]),
+        );
+
+        await expect(
+          service.validateCSV({ s3Key, listingId }),
+        ).resolves.toEqual({ success: true });
+      });
+
+      it('should treat null DB applicant names with empty CSV name cells as a match', async () => {
+        const appOne = {
+          id: randomUUID(),
+          applicant: { firstName: null, lastName: null },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        } as unknown as ApplicationContextFields;
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: '',
+              applicantLastName: '',
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+            },
+          ]),
+        );
+
+        await expect(
+          service.validateCSV({ s3Key, listingId }),
+        ).resolves.toEqual({ success: true });
+      });
+
+      it('should treat a null DB submission date with an empty CSV date cell as a match', async () => {
+        const appOne = {
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: null,
+        } as unknown as ApplicationContextFields;
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: '',
+              applicationStatus: 'Submitted',
+            },
+          ]),
+        );
+
+        await expect(
+          service.validateCSV({ s3Key, listingId }),
+        ).resolves.toEqual({ success: true });
+      });
+
+      it('should reject a non-empty CSV date when the DB submission date is null', async () => {
+        const appOne = {
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: null,
+        } as unknown as ApplicationContextFields;
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(new Date(2026, 0, 1)),
+              applicationStatus: 'Submitted',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 2 have incorrect application details (Applicant first name, last name or submission date)',
+          ),
+        );
+      });
+    });
   });
 });
