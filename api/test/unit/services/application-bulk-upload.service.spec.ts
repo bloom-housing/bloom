@@ -29,6 +29,8 @@ import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { S3Service } from '../../../src/services/s3.service';
 import { formatLocalDate } from '../../../src/utilities/format-local-date';
+import { BackgroundJobsService } from '../../../src/services/background-jobs.service';
+import { User } from '../../../src/dtos/users/user.dto';
 
 const mockApplication = ({
   markedAsDuplicate = false,
@@ -85,8 +87,9 @@ const mockApplication = ({
 };
 
 const canOrThrowMock = jest.fn();
-const listingServiceMock = { getJurisdictionIdByListingId: jest.fn() };
 const downloadFromPrivateMock = jest.fn();
+const backgroundJobCreateMock = jest.fn();
+const listingServiceMock = { getJurisdictionIdByListingId: jest.fn() };
 
 const DATE_FORMAT = 'MM-DD-YYYY hh:mm:ssA z';
 
@@ -147,6 +150,12 @@ describe('Testing application bulk upload services', () => {
         {
           provide: S3Service,
           useValue: { downloadFromPrivate: downloadFromPrivateMock },
+        },
+        {
+          provide: BackgroundJobsService,
+          useValue: {
+            create: backgroundJobCreateMock,
+          },
         },
       ],
     }).compile();
@@ -252,6 +261,7 @@ describe('Testing application bulk upload services', () => {
 
     afterEach(() => {
       listingServiceMock.getJurisdictionIdByListingId.mockReset();
+      backgroundJobCreateMock.mockReset();
       canOrThrowMock.mockReset();
     });
 
@@ -301,17 +311,28 @@ describe('Testing application bulk upload services', () => {
 
   describe('validateCSV', () => {
     const listingId = randomUUID();
+    const backgroundJobId = randomUUID();
     const s3Key = 'uploads/applications.csv';
+    const mockRequestingUser = {
+      userRoles: { isLimitedJurisdictionalAdmin: false },
+    } as User;
 
     beforeEach(() => {
       downloadFromPrivateMock.mockReset();
+      backgroundJobCreateMock.mockReset();
       prisma.applications.findMany = jest.fn().mockResolvedValue([]);
     });
 
     describe('file format (validateFileFormat)', () => {
       it('should reject a non-CSV s3Key before attempting any download', async () => {
         await expect(
-          service.validateCSV({ s3Key: 'uploads/applications.txt', listingId }),
+          service.validateCSV(
+            {
+              s3Key: 'uploads/applications.txt',
+              listingId,
+            },
+            mockRequestingUser,
+          ),
         ).rejects.toThrow(
           new BadRequestException('Upload Failed: file must be a CSV format'),
         );
@@ -321,10 +342,13 @@ describe('Testing application bulk upload services', () => {
 
       it('should accept a .csv key regardless of case and proceed past the format gate', async () => {
         const s3KeyUpperCase = 'uploads/applications.CSV';
-        downloadFromPrivateMock.mockRejectedValue(new Error('boom'));
+        downloadFromPrivateMock.mockRejectedValue(new Error('error'));
 
         await expect(
-          service.validateCSV({ s3Key: s3KeyUpperCase, listingId }),
+          service.validateCSV(
+            { s3Key: s3KeyUpperCase, listingId },
+            mockRequestingUser,
+          ),
         ).rejects.toThrow(
           new NotFoundException(
             'The CSV file could not be retrieved from the S3 bucket',
@@ -337,9 +361,11 @@ describe('Testing application bulk upload services', () => {
 
     describe('S3 retrieval', () => {
       it('should throw NotFoundException when downloadFromPrivate rejects', async () => {
-        downloadFromPrivateMock.mockRejectedValue(new Error('boom'));
+        downloadFromPrivateMock.mockRejectedValue(new Error('error'));
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new NotFoundException(
             'The CSV file could not be retrieved from the S3 bucket',
           ),
@@ -359,7 +385,9 @@ describe('Testing application bulk upload services', () => {
           mockCsvResponse([], { header }),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: CSV has additional or missing columns',
           ),
@@ -376,7 +404,9 @@ describe('Testing application bulk upload services', () => {
           }),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: CSV has additional or missing columns',
           ),
@@ -388,7 +418,9 @@ describe('Testing application bulk upload services', () => {
           mockCsvResponse([], { bom: true }),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: CSV contains no application records',
           ),
@@ -399,8 +431,11 @@ describe('Testing application bulk upload services', () => {
     describe('data rows (validateHasDataRows)', () => {
       it('should reject a CSV with only a header row and no data rows', async () => {
         downloadFromPrivateMock.mockResolvedValue(mockCsvResponse([]));
+        backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: CSV contains no application records',
           ),
@@ -423,6 +458,7 @@ describe('Testing application bulk upload services', () => {
           .fn()
           .mockResolvedValue([appOne, appTwo]);
 
+        backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
         downloadFromPrivateMock.mockResolvedValue(
           mockCsvResponse(
             [
@@ -446,8 +482,8 @@ describe('Testing application bulk upload services', () => {
         );
 
         await expect(
-          service.validateCSV({ s3Key, listingId }),
-        ).resolves.toEqual({ success: true });
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).resolves.toEqual(backgroundJobId);
       });
     });
 
@@ -463,7 +499,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 4 contain duplicate application IDs',
           ),
@@ -500,7 +538,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 3 have incorrect application identification numbers or belong to a different listing',
           ),
@@ -525,7 +565,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 2 have incorrect application identification numbers or belong to a different listing',
           ),
@@ -562,7 +604,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 2 have incorrect application details (Applicant first name, last name or submission date)',
           ),
@@ -590,7 +634,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 2 have incorrect application details (Applicant first name, last name or submission date)',
           ),
@@ -618,7 +664,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 2 have incorrect application details (Applicant first name, last name or submission date)',
           ),
@@ -634,6 +682,7 @@ describe('Testing application bulk upload services', () => {
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
+        backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
         downloadFromPrivateMock.mockResolvedValue(
           mockCsvResponse([
             {
@@ -647,8 +696,8 @@ describe('Testing application bulk upload services', () => {
         );
 
         await expect(
-          service.validateCSV({ s3Key, listingId }),
-        ).resolves.toEqual({ success: true });
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).resolves.toEqual(backgroundJobId);
       });
 
       it('should treat null DB applicant names with empty CSV name cells as a match', async () => {
@@ -660,6 +709,7 @@ describe('Testing application bulk upload services', () => {
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
+        backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
         downloadFromPrivateMock.mockResolvedValue(
           mockCsvResponse([
             {
@@ -673,8 +723,8 @@ describe('Testing application bulk upload services', () => {
         );
 
         await expect(
-          service.validateCSV({ s3Key, listingId }),
-        ).resolves.toEqual({ success: true });
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).resolves.toEqual(backgroundJobId);
       });
 
       it('should treat a null DB submission date with an empty CSV date cell as a match', async () => {
@@ -686,6 +736,7 @@ describe('Testing application bulk upload services', () => {
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
+        backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
         downloadFromPrivateMock.mockResolvedValue(
           mockCsvResponse([
             {
@@ -699,8 +750,8 @@ describe('Testing application bulk upload services', () => {
         );
 
         await expect(
-          service.validateCSV({ s3Key, listingId }),
-        ).resolves.toEqual({ success: true });
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).resolves.toEqual(backgroundJobId);
       });
 
       it('should reject a non-empty CSV date when the DB submission date is null', async () => {
@@ -724,7 +775,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 2 have incorrect application details (Applicant first name, last name or submission date)',
           ),
@@ -754,7 +807,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: Could not match one or more application status inputs beginning on row 2 with accepted system options',
           ),
@@ -778,6 +833,7 @@ describe('Testing application bulk upload services', () => {
 
           prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
+          backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
           downloadFromPrivateMock.mockResolvedValue(
             mockCsvResponse([
               {
@@ -792,8 +848,8 @@ describe('Testing application bulk upload services', () => {
           );
 
           await expect(
-            service.validateCSV({ s3Key, listingId }),
-          ).resolves.toEqual({ success: true });
+            service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+          ).resolves.toEqual(backgroundJobId);
         },
       );
     });
@@ -821,7 +877,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: Could not match one or more application decline reason inputs beginning on row 2 with accepted system options',
           ),
@@ -837,6 +895,7 @@ describe('Testing application bulk upload services', () => {
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
+        backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
         downloadFromPrivateMock.mockResolvedValue(
           mockCsvResponse([
             {
@@ -851,8 +910,8 @@ describe('Testing application bulk upload services', () => {
         );
 
         await expect(
-          service.validateCSV({ s3Key, listingId }),
-        ).resolves.toEqual({ success: true });
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).resolves.toEqual(backgroundJobId);
       });
     });
 
@@ -879,7 +938,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 2 have a declined status without a decline reason',
           ),
@@ -908,7 +969,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 2 have a decline reason without a declined status',
           ),
@@ -924,6 +987,7 @@ describe('Testing application bulk upload services', () => {
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
+        backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
         downloadFromPrivateMock.mockResolvedValue(
           mockCsvResponse([
             {
@@ -938,8 +1002,8 @@ describe('Testing application bulk upload services', () => {
         );
 
         await expect(
-          service.validateCSV({ s3Key, listingId }),
-        ).resolves.toEqual({ success: true });
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).resolves.toEqual(backgroundJobId);
       });
     });
 
@@ -974,7 +1038,7 @@ describe('Testing application bulk upload services', () => {
           );
 
           await expect(
-            service.validateCSV({ s3Key, listingId }),
+            service.validateCSV({ s3Key, listingId }, mockRequestingUser),
           ).rejects.toThrow(
             new BadRequestException(
               'Upload Failed: One or more rows beginning on row 2 require additional details for the provided decline reason',
@@ -992,6 +1056,7 @@ describe('Testing application bulk upload services', () => {
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
+        backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
         downloadFromPrivateMock.mockResolvedValue(
           mockCsvResponse([
             {
@@ -1008,8 +1073,8 @@ describe('Testing application bulk upload services', () => {
         );
 
         await expect(
-          service.validateCSV({ s3Key, listingId }),
-        ).resolves.toEqual({ success: true });
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).resolves.toEqual(backgroundJobId);
       });
 
       it('should pass when a decline reason that does not require details has empty details', async () => {
@@ -1021,6 +1086,7 @@ describe('Testing application bulk upload services', () => {
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
+        backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
         downloadFromPrivateMock.mockResolvedValue(
           mockCsvResponse([
             {
@@ -1036,8 +1102,8 @@ describe('Testing application bulk upload services', () => {
         );
 
         await expect(
-          service.validateCSV({ s3Key, listingId }),
-        ).resolves.toEqual({ success: true });
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).resolves.toEqual(backgroundJobId);
       });
 
       it('should pass when additional details are exactly 2000 characters', async () => {
@@ -1049,6 +1115,7 @@ describe('Testing application bulk upload services', () => {
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
+        backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
         downloadFromPrivateMock.mockResolvedValue(
           mockCsvResponse([
             {
@@ -1064,8 +1131,8 @@ describe('Testing application bulk upload services', () => {
         );
 
         await expect(
-          service.validateCSV({ s3Key, listingId }),
-        ).resolves.toEqual({ success: true });
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).resolves.toEqual(backgroundJobId);
       });
 
       it('should reject a row whose additional details exceed 2000 characters', async () => {
@@ -1091,7 +1158,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 2 have application decline reason additional details exceeding 2000 characters',
           ),
@@ -1122,7 +1191,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 2 have a waitlist position without a waitlist status',
           ),
@@ -1151,7 +1222,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 2 have a waitlist position without a waitlist status',
           ),
@@ -1169,6 +1242,7 @@ describe('Testing application bulk upload services', () => {
 
           prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
+          backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
           downloadFromPrivateMock.mockResolvedValue(
             mockCsvResponse([
               {
@@ -1183,8 +1257,8 @@ describe('Testing application bulk upload services', () => {
           );
 
           await expect(
-            service.validateCSV({ s3Key, listingId }),
-          ).resolves.toEqual({ success: true });
+            service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+          ).resolves.toEqual(backgroundJobId);
         },
       );
     });
@@ -1212,7 +1286,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 2 have invalid numeric values',
           ),
@@ -1241,7 +1317,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 2 have invalid numeric values',
           ),
@@ -1270,7 +1348,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 2 have invalid numeric values',
           ),
@@ -1286,6 +1366,7 @@ describe('Testing application bulk upload services', () => {
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
+        backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
         downloadFromPrivateMock.mockResolvedValue(
           mockCsvResponse([
             {
@@ -1300,8 +1381,8 @@ describe('Testing application bulk upload services', () => {
         );
 
         await expect(
-          service.validateCSV({ s3Key, listingId }),
-        ).resolves.toEqual({ success: true });
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).resolves.toEqual(backgroundJobId);
       });
 
       it('should reject a fractional numeric value (integer rule)', async () => {
@@ -1326,7 +1407,9 @@ describe('Testing application bulk upload services', () => {
           ]),
         );
 
-        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+        await expect(
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: One or more rows beginning on row 2 have invalid numeric values',
           ),
@@ -1342,6 +1425,7 @@ describe('Testing application bulk upload services', () => {
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
+        backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
         downloadFromPrivateMock.mockResolvedValue(
           mockCsvResponse([
             {
@@ -1356,8 +1440,8 @@ describe('Testing application bulk upload services', () => {
         );
 
         await expect(
-          service.validateCSV({ s3Key, listingId }),
-        ).resolves.toEqual({ success: true });
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).resolves.toEqual(backgroundJobId);
       });
 
       it('should pass when all numeric cells are empty', async () => {
@@ -1369,6 +1453,7 @@ describe('Testing application bulk upload services', () => {
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
+        backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
         downloadFromPrivateMock.mockResolvedValue(
           mockCsvResponse([
             {
@@ -1385,74 +1470,69 @@ describe('Testing application bulk upload services', () => {
         );
 
         await expect(
-          service.validateCSV({ s3Key, listingId }),
-        ).resolves.toEqual({ success: true });
+          service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+        ).resolves.toEqual(backgroundJobId);
       });
     });
 
-    describe('Full successful CSV validation pipeline', () => {
-      it('should resolve to { success: true } for a fully valid multi-row CSV mixing statuses', async () => {
-        const submittedApp = dbContext({
-          id: randomUUID(),
-          applicant: { firstName: 'Andrew', lastName: 'Rust' },
-          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
-        });
-        const declinedApp = dbContext({
-          id: randomUUID(),
-          applicant: { firstName: 'Colleen', lastName: 'Tawnee' },
-          submissionDate: new Date(2026, 3, 2, 10, 0, 0),
-        });
-        const waitlistApp = dbContext({
-          id: randomUUID(),
-          applicant: { firstName: 'Nanny', lastName: 'Hayley' },
-          submissionDate: new Date(2026, 6, 23, 15, 30, 0),
-        });
-
-        prisma.applications.findMany = jest
-          .fn()
-          .mockResolvedValue([submittedApp, declinedApp, waitlistApp]);
-
-        downloadFromPrivateMock.mockResolvedValue(
-          mockCsvResponse([
-            {
-              applicationId: submittedApp.id,
-              applicantFirstName: submittedApp.applicant.firstName,
-              applicantLastName: submittedApp.applicant.lastName,
-              applicationSubmissionDate: expectedDate(
-                submittedApp.submissionDate,
-              ),
-              applicationStatus: 'Submitted',
-            },
-            {
-              applicationId: declinedApp.id,
-              applicantFirstName: declinedApp.applicant.firstName,
-              applicantLastName: declinedApp.applicant.lastName,
-              applicationSubmissionDate: expectedDate(
-                declinedApp.submissionDate,
-              ),
-              applicationStatus: 'Declined',
-              applicationDeclineReason: 'Other',
-              applicationDeclineReasonAdditionalDetails:
-                'Some additional details',
-            },
-            {
-              applicationId: waitlistApp.id,
-              applicantFirstName: waitlistApp.applicant.firstName,
-              applicantLastName: waitlistApp.applicant.lastName,
-              applicationSubmissionDate: expectedDate(
-                waitlistApp.submissionDate,
-              ),
-              applicationStatus: 'Wait list',
-              waitlistPositionAccessibleUnit: '2',
-              waitlistPositionConventionalUnit: '5',
-            },
-          ]),
-        );
-
-        await expect(
-          service.validateCSV({ s3Key, listingId }),
-        ).resolves.toEqual({ success: true });
+    it('should resolve as success for a fully valid multi-row CSV mixing statuses', async () => {
+      const submittedApp = dbContext({
+        id: randomUUID(),
+        applicant: { firstName: 'Andrew', lastName: 'Rust' },
+        submissionDate: new Date(2026, 0, 1, 10, 0, 0),
       });
+      const declinedApp = dbContext({
+        id: randomUUID(),
+        applicant: { firstName: 'Colleen', lastName: 'Tawnee' },
+        submissionDate: new Date(2026, 3, 2, 10, 0, 0),
+      });
+      const waitlistApp = dbContext({
+        id: randomUUID(),
+        applicant: { firstName: 'Nanny', lastName: 'Hayley' },
+        submissionDate: new Date(2026, 6, 23, 15, 30, 0),
+      });
+
+      prisma.applications.findMany = jest
+        .fn()
+        .mockResolvedValue([submittedApp, declinedApp, waitlistApp]);
+
+      backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
+      downloadFromPrivateMock.mockResolvedValue(
+        mockCsvResponse([
+          {
+            applicationId: submittedApp.id,
+            applicantFirstName: submittedApp.applicant.firstName,
+            applicantLastName: submittedApp.applicant.lastName,
+            applicationSubmissionDate: expectedDate(
+              submittedApp.submissionDate,
+            ),
+            applicationStatus: 'Submitted',
+          },
+          {
+            applicationId: declinedApp.id,
+            applicantFirstName: declinedApp.applicant.firstName,
+            applicantLastName: declinedApp.applicant.lastName,
+            applicationSubmissionDate: expectedDate(declinedApp.submissionDate),
+            applicationStatus: 'Declined',
+            applicationDeclineReason: 'Other',
+            applicationDeclineReasonAdditionalDetails:
+              'Some additional details',
+          },
+          {
+            applicationId: waitlistApp.id,
+            applicantFirstName: waitlistApp.applicant.firstName,
+            applicantLastName: waitlistApp.applicant.lastName,
+            applicationSubmissionDate: expectedDate(waitlistApp.submissionDate),
+            applicationStatus: 'Wait list',
+            waitlistPositionAccessibleUnit: '2',
+            waitlistPositionConventionalUnit: '5',
+          },
+        ]),
+      );
+
+      await expect(
+        service.validateCSV({ s3Key, listingId }, mockRequestingUser),
+      ).resolves.toEqual(backgroundJobId);
     });
   });
 });
