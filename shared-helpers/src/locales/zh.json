@@ -880,6 +880,7 @@
   "listings.apply.applicationSeason": "居民应申请",
   "listings.apply.applicationWillBeAvailableOn": "申請表將可供下載，亦可在 %{openDate} 領取",
   "listings.apply.applyOnline": "在线申请",
+  "listings.apply.applyOnlineMessage": "* 此按钮将带您进入外部网站，您可以在其中创建帐户并申请此列表。",
   "listings.apply.downloadApplication": "下载应用程序",
   "listings.apply.dropOffApplication": "投递申请",
   "listings.apply.dropOffApplicationOrMail": "投递申请或通过美国邮政寄送",

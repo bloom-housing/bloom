@@ -880,6 +880,7 @@
   "listings.apply.applicationSeason": "বাসিন্দাদের আবেদন করতে হবে",
   "listings.apply.applicationWillBeAvailableOn": "%{openDate} এ ডাউনলোড এবং পিক -আপের জন্য আবেদন পাওয়া যাবে",
   "listings.apply.applyOnline": "অনলাইনে আবেদন করুন",
+  "listings.apply.applyOnlineMessage": "* এই বোতামটি আপনাকে একটি বাহ্যিক ওয়েবসাইটে নিয়ে যাবে, যেখানে আপনি একটি অ্যাকাউন্ট তৈরি করে এই তালিকাভুক্তির জন্য আবেদন করতে পারবেন।",
   "listings.apply.downloadApplication": "অ্যাপ্লিকেশন ডাউনলোড করুন",
   "listings.apply.dropOffApplication": "আবেদনপত্র জমা দিন",
   "listings.apply.dropOffApplicationOrMail": "আবেদনপত্র জমা দিন অথবা মার্কিন ডাকযোগে পাঠান",

@@ -880,6 +880,7 @@
   "listings.apply.applicationSeason": "Dapat mag-apply ang mga residente sa",
   "listings.apply.applicationWillBeAvailableOn": "Magiging available ang application para i-download at kunin sa %{openDate}",
   "listings.apply.applyOnline": "Mag-apply online",
+  "listings.apply.applyOnlineMessage": "* Dinadala ka ng button na ito sa isang panlabas na website kung saan maaari kang lumikha ng isang account at mag-apply para sa listahang ito.",
   "listings.apply.downloadApplication": "I-download ang application",
   "listings.apply.dropOffApplication": "I-drop off ang application",
   "listings.apply.dropOffApplicationOrMail": "Ihulog ang application o ipadala sa US Mail",

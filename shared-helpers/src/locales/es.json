@@ -880,6 +880,7 @@
   "listings.apply.applicationSeason": "Los residentes deben aplicar en",
   "listings.apply.applicationWillBeAvailableOn": "La solicitud podrá ser descargada y recogida el %{openDate}",
   "listings.apply.applyOnline": "Haga su solicitud por internet",
+  "listings.apply.applyOnlineMessage": "*Este botón te lleva a un sitio web externo donde puedes crear una cuenta y solicitar este listado.",
   "listings.apply.downloadApplication": "Descargar la solicitud",
   "listings.apply.dropOffApplication": "Lleve la solicitud",
   "listings.apply.dropOffApplicationOrMail": "Lleve la solicitud o envíela por correo a través del Servicio Postal de los EE.UU.",

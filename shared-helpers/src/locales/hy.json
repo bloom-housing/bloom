@@ -877,6 +877,7 @@
   "listings.apply.applicationSeason": "Բնակիչները պետք է դիմեն",
   "listings.apply.applicationWillBeAvailableOn": "Դիմումը հասանելի կլինի ներբեռնման և վերցման համար %{openDate}-ին։",
   "listings.apply.applyOnline": "Դիմել առցանց",
+  "listings.apply.applyOnlineMessage": "* Այս կոճակը ձեզ կտանի արտաքին կայք, որտեղ կարող եք ստեղծել հաշիվ և դիմել այս ցուցակի համար։",
   "listings.apply.downloadApplication": "Ներբեռնել ծրագիրը",
   "listings.apply.dropOffApplication": "Դիմումի ներկայացում",
   "listings.apply.dropOffApplicationOrMail": "Դիմումը թողեք կամ ուղարկեք ԱՄՆ փոստով",

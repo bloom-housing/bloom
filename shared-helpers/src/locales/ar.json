@@ -880,6 +880,7 @@
   "listings.apply.applicationSeason": "يجب على السكان التقديم في",
   "listings.apply.applicationWillBeAvailableOn": "سيكون التطبيق متاحًا للتنزيل والاستلام في %{openDate}",
   "listings.apply.applyOnline": "تقديم الطلب عبر الإنترنت",
+  "listings.apply.applyOnlineMessage": "* ينقلك هذا الزر إلى موقع إلكتروني خارجي، حيث يمكنك إنشاء حساب والتقدم بطلب لهذا الإعلان.",
   "listings.apply.downloadApplication": "تنزيل التطبيق",
   "listings.apply.dropOffApplication": "طلب الاستلام",
   "listings.apply.dropOffApplicationOrMail": "تسليم الطلب أو إرساله عبر البريد الأمريكي",
