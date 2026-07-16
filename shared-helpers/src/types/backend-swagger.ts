@@ -10990,6 +10990,7 @@ export enum FeatureFlagEnum {
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableFaq" = "enableFaq",
+  "enableFaqResourceCard" = "enableFaqResourceCard",
   "enableFilterByBathroom" = "enableFilterByBathroom",
   "enableFilterByCounty" = "enableFilterByCounty",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",

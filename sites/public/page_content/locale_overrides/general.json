@@ -26,5 +26,6 @@
   "resources.housingProgramsTitle": "Bloomington's Housing & Community Development housing programs",
   "resources.additionalResourcesLink": "/housing-basics",
   "resources.additionalResourcesTitle": "Get more information about the Accessible Housing Program (AcHP), including a list of covered housing projects, tenant resources, policies, and how to file a grievance.",
-  "t.nonProdBanner": "This site is for testing purposes only. Applications will not be considered. Please visit the <a href='https://www.example.com/' target='_blank'>official site</a> to apply for housing."
+  "t.nonProdBanner": "This site is for testing purposes only. Applications will not be considered. Please visit the <a href='https://www.example.com/' target='_blank'>official site</a> to apply for housing.",
+  "welcome.faqSubtitle": ""
 }
