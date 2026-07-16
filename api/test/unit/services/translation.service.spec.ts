@@ -53,7 +53,6 @@ const mockListing = (): Listing => {
 
     applicationLotteryTotals: [],
     applicationMethods: [],
-    assets: [],
     jurisdictions: {
       id: 'jurisdiction id 1',
       name: 'jurisdiction',

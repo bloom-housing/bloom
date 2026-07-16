@@ -49,7 +49,7 @@ export const bloomingtonListing: CypressListing = {
   updatedAt: new Date(),
   status: ListingsStatusEnum.pending,
   displayWaitlistSize: false,
-  assets: [],
+  assets: {},
   applicationLotteryTotals: [],
   jurisdiction: {
     id: "Bloomington",

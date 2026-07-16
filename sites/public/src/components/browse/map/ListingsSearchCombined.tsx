@@ -131,12 +131,11 @@ function ListingsSearchCombined() {
       return
     }
 
+    const genericQb = new ListingQueryBuilder()
     // All searches should only look for "active" listings
-    const genericQb = new ListingQueryBuilder().addFilter(
-      "status",
-      EnumListingFilterParamsComparison["="],
-      "active"
-    )
+    genericQb.whereEqual("status", "active")
+    // Include external listings
+    genericQb.whereEqual("includeExternal", true)
 
     let newListings = null
     let newMeta
