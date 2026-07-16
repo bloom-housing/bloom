@@ -1,13 +1,12 @@
 import { t } from "@bloom-housing/ui-components"
-import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
+import { Card, Heading, Link } from "@bloom-housing/ui-seeds"
 import Layout from "../../layouts/application"
-import styles from "./Resources.module.scss"
-import sectionStyles from "./ResourceSection.module.scss"
-import { getJurisdictionResourcesContent } from "../../static_content/jurisdiction_resources_content"
+import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
 import { getGenericResourcesContent } from "../../static_content/generic_resources_content"
-import { Card, Grid, Heading, Link } from "@bloom-housing/ui-seeds"
+import { getJurisdictionResourcesContent } from "../../static_content/jurisdiction_resources_content"
+import styles from "./Resources.module.scss"
 import ResourceSection from "./ResourceSection"
-import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
+import sectionStyles from "./ResourceSection.module.scss"
 
 export type ResourceCards = {
   contactCard?: {
@@ -18,7 +17,8 @@ export type ResourceCards = {
   resourceSections: {
     sectionTitle: string
     sectionSubtitle?: string
-    cards: React.ReactNode[]
+    cards?: React.ReactNode[]
+    cardsWithTitles?: { cards: React.ReactNode[]; title: string }[]
   }[]
 }
 
@@ -83,11 +83,9 @@ const Resources = () => {
               <ResourceSection
                 sectionTitle={section.sectionTitle}
                 sectionSubtitle={section.sectionSubtitle}
-              >
-                <Grid spacing="sm">
-                  <GridRow columns={3}>{section.cards}</GridRow>
-                </Grid>
-              </ResourceSection>
+                cards={section.cards}
+                cardsWithTitles={section.cardsWithTitles}
+              />
             </div>
           ))}
         </article>
