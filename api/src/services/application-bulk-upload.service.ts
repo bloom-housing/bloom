@@ -4,6 +4,7 @@ import {
   Injectable,
   StreamableFile,
   NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { Applicant, ApplicationStatusEnum } from '@prisma/client';
 import { parse } from 'csv-parse';
@@ -29,6 +30,7 @@ import {
 import { ApplicationBulkValidate } from '../dtos/applications/application-bulk-validate.dto';
 import { S3Service } from './s3.service';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { BackgroundJobsService } from './background-jobs.service';
 
 const NUMBER_TO_PAGINATE_BY = 500;
 
@@ -91,6 +93,7 @@ export class ApplicationBulkUploadService {
     private listingService: ListingService,
     private permissionService: PermissionService,
     private s3Service: S3Service,
+    private backgroundJobsService: BackgroundJobsService,
   ) {}
 
   private convertApplicationStatusToReadable(
@@ -598,7 +601,10 @@ export class ApplicationBulkUploadService {
     }
   }
 
-  async validateCSV(dto: ApplicationBulkValidate): Promise<SuccessDTO> {
+  async validateCSV(
+    dto: ApplicationBulkValidate,
+    requestingUser: User,
+  ): Promise<string> {
     this.validateFileFormat(dto.s3Key);
 
     let csvStream: ReadableStream;
@@ -647,6 +653,20 @@ export class ApplicationBulkUploadService {
       this.validateNumericFields(row, i);
     }
 
-    return { success: true };
+    const backgroundJob = await this.backgroundJobsService.create(
+      {
+        listingId: dto.listingId,
+        inputS3Key: dto.s3Key,
+      },
+      requestingUser,
+    );
+
+    if (!backgroundJob) {
+      throw new InternalServerErrorException(
+        'Failed to create a background job for bulk application update',
+      );
+    }
+
+    return backgroundJob.id;
   }
 }
