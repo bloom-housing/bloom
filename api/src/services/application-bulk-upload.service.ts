@@ -29,7 +29,6 @@ import {
 } from '../utilities/application-export-helpers';
 import { ApplicationBulkValidate } from '../dtos/applications/application-bulk-validate.dto';
 import { S3Service } from './s3.service';
-import { SuccessDTO } from '../dtos/shared/success.dto';
 import { BackgroundJobsService } from './background-jobs.service';
 
 const NUMBER_TO_PAGINATE_BY = 500;
