@@ -8,6 +8,7 @@ import { GovDeliveryService } from '../services/gov-delivery.service';
 import { JurisdictionService } from '../services/jurisdiction.service';
 import { SendGridService } from '../services/sendgrid.service';
 import { TranslationService } from '../services/translation.service';
+import { HttpModule, HttpService } from '@nestjs/axios';
 
 const emailProvider = {
   provide: EmailProvider,
@@ -15,7 +16,7 @@ const emailProvider = {
 };
 
 @Module({
-  imports: [],
+  imports: [HttpModule],
   controllers: [],
   providers: [
     EmailService,

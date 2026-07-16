@@ -1,16 +1,12 @@
 import { HttpService } from '@nestjs/axios';
-import { ConfigService } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
 import juice from 'juice';
 import { firstValueFrom } from 'rxjs';
-import { EmailProvider, SendEmailInput } from './email-provider.service';
+import { SendEmailInput } from './email-provider.service';
 
-export class GovDeliveryService extends EmailProvider {
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly httpService: HttpService,
-  ) {
-    super();
-  }
+@Injectable()
+export class GovDeliveryService {
+  constructor(private readonly httpService: HttpService) {}
 
   async send(input: SendEmailInput): Promise<unknown> {
     const {
@@ -32,8 +28,7 @@ export class GovDeliveryService extends EmailProvider {
     }
 
     // If there is no from email address configured, govDelivery will use the default email address associated with the account
-    const fromEmailAddress =
-      this.configService.get<string>('GOVDELIVERY_FROM_EMAIL_ID') || '';
+    const fromEmailAddress = process.env.GOVDELIVERY_FROM_EMAIL_ID || '';
 
     // juice inlines css to allow for email styling
     const inlineHtml = juice(input.body);
