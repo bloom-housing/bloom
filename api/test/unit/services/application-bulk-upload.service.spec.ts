@@ -797,5 +797,306 @@ describe('Testing application bulk upload services', () => {
         },
       );
     });
+
+    describe('decline reason (validateDeclineReason)', () => {
+      it('should reject a row with a non-empty unrecognised decline reason', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Declined',
+              applicationDeclineReason: 'Not a real reason',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: Could not match one or more application decline reason inputs beginning on row 2 with accepted system options',
+          ),
+        );
+      });
+
+      it('should allow an empty decline reason', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+              applicationDeclineReason: '',
+            },
+          ]),
+        );
+
+        await expect(
+          service.validateCSV({ s3Key, listingId }),
+        ).resolves.toEqual({ success: true });
+      });
+    });
+
+    describe('decline consistency (validateDeclineConsistency)', () => {
+      it('should reject a row with a declined status but an empty decline reason', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Declined',
+              applicationDeclineReason: '',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 2 have a declined status without a decline reason',
+          ),
+        );
+      });
+
+      it('should reject a row with a decline reason but a non-declined status', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+              applicationDeclineReason: 'Household size too large',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 2 have a decline reason without a declined status',
+          ),
+        );
+      });
+
+      it('should pass when a declined status is paired with a valid decline reason', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Declined',
+              applicationDeclineReason: 'Household size too large',
+            },
+          ]),
+        );
+
+        await expect(
+          service.validateCSV({ s3Key, listingId }),
+        ).resolves.toEqual({ success: true });
+      });
+    });
+
+    describe('additional details (validateAdditionalDetails)', () => {
+      it.each([
+        'Attempted to contact; no response',
+        'Applicant declined unit',
+        'Other',
+      ])(
+        'should reject a row whose decline reason "%s" requires additional details when details are empty',
+        async (declineReason) => {
+          const appOne = dbContext({
+            id: randomUUID(),
+            applicant: { firstName: 'Andrew', lastName: 'Rust' },
+            submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+          });
+
+          prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+          downloadFromPrivateMock.mockResolvedValue(
+            mockCsvResponse([
+              {
+                applicationId: appOne.id,
+                applicantFirstName: appOne.applicant.firstName,
+                applicantLastName: appOne.applicant.lastName,
+                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                applicationStatus: 'Declined',
+                applicationDeclineReason: declineReason,
+                applicationDeclineReasonAdditionalDetails: '',
+              },
+            ]),
+          );
+
+          await expect(
+            service.validateCSV({ s3Key, listingId }),
+          ).rejects.toThrow(
+            new BadRequestException(
+              'Upload Failed: One or more rows beginning on row 2 require additional details for the provided decline reason',
+            ),
+          );
+        },
+      );
+
+      it('should pass when a decline reason requiring additional details is provided with details', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Declined',
+              applicationDeclineReason: 'Other',
+              applicationDeclineReasonAdditionalDetails:
+                'Some additional details',
+            },
+          ]),
+        );
+
+        await expect(
+          service.validateCSV({ s3Key, listingId }),
+        ).resolves.toEqual({ success: true });
+      });
+
+      it('should pass when a decline reason that does not require details has empty details', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Declined',
+              applicationDeclineReason: 'Household size too large',
+              applicationDeclineReasonAdditionalDetails: '',
+            },
+          ]),
+        );
+
+        await expect(
+          service.validateCSV({ s3Key, listingId }),
+        ).resolves.toEqual({ success: true });
+      });
+
+      it('should pass when additional details are exactly 2000 characters', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Declined',
+              applicationDeclineReason: 'Other',
+              applicationDeclineReasonAdditionalDetails: 'a'.repeat(2000),
+            },
+          ]),
+        );
+
+        await expect(
+          service.validateCSV({ s3Key, listingId }),
+        ).resolves.toEqual({ success: true });
+      });
+
+      it('should reject a row whose additional details exceed 2000 characters', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Declined',
+              applicationDeclineReason: 'Other',
+              applicationDeclineReasonAdditionalDetails: 'a'.repeat(2001),
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 2 have application decline reason additional details exceeding 2000 characters',
+          ),
+        );
+      });
+    });
   });
 });
