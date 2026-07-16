@@ -731,5 +731,71 @@ describe('Testing application bulk upload services', () => {
         );
       });
     });
+
+    describe('status (validateStatus)', () => {
+      it('should reject a row with an unrecognised status string', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Approved',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: Could not match one or more application status inputs beginning on row 2 with accepted system options',
+          ),
+        );
+      });
+
+      it.each([
+        { status: 'Declined', declineReason: 'Household size too large' },
+        { status: 'Received a Unit' },
+        { status: 'Submitted' },
+        { status: 'Wait list' },
+        { status: 'Wait list - Declined' },
+      ])(
+        'should accept the valid status "$status"',
+        async ({ status, declineReason }) => {
+          const appOne = dbContext({
+            id: randomUUID(),
+            applicant: { firstName: 'Andrew', lastName: 'Rust' },
+            submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+          });
+
+          prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+          downloadFromPrivateMock.mockResolvedValue(
+            mockCsvResponse([
+              {
+                applicationId: appOne.id,
+                applicantFirstName: appOne.applicant.firstName,
+                applicantLastName: appOne.applicant.lastName,
+                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                applicationStatus: status,
+                applicationDeclineReason: declineReason ?? '',
+              },
+            ]),
+          );
+
+          await expect(
+            service.validateCSV({ s3Key, listingId }),
+          ).resolves.toEqual({ success: true });
+        },
+      );
+    });
   });
 });
