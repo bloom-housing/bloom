@@ -1188,5 +1188,206 @@ describe('Testing application bulk upload services', () => {
         },
       );
     });
+
+    describe('numeric fields (validateNumericFields)', () => {
+      it('should reject a row with a non-numeric value in a numeric column', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+              lotteryPositionNumber: 'abc',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 2 have invalid numeric values',
+          ),
+        );
+      });
+
+      it('should reject a row with a negative numeric value', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+              lotteryPositionNumber: '-1',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 2 have invalid numeric values',
+          ),
+        );
+      });
+
+      it('should reject a lottery position of 0 (minimum is 1)', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+              lotteryPositionNumber: '0',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 2 have invalid numeric values',
+          ),
+        );
+      });
+
+      it('should allow a waitlist position of 0 (only lottery rejects 0)', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Wait list',
+              waitlistPositionAccessibleUnit: '0',
+            },
+          ]),
+        );
+
+        await expect(
+          service.validateCSV({ s3Key, listingId }),
+        ).resolves.toEqual({ success: true });
+      });
+
+      it('should reject a fractional numeric value (integer rule)', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+              lotteryPositionNumber: '1.5',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 2 have invalid numeric values',
+          ),
+        );
+      });
+
+      it('should treat a whitespace-only lottery cell as empty and not coerce it to 0', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+              lotteryPositionNumber: ' ',
+            },
+          ]),
+        );
+
+        await expect(
+          service.validateCSV({ s3Key, listingId }),
+        ).resolves.toEqual({ success: true });
+      });
+
+      it('should pass when all numeric cells are empty', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+              lotteryPositionNumber: '',
+              waitlistPositionAccessibleUnit: '',
+              waitlistPositionConventionalUnit: '',
+            },
+          ]),
+        );
+
+        await expect(
+          service.validateCSV({ s3Key, listingId }),
+        ).resolves.toEqual({ success: true });
+      });
+    });
   });
 });
