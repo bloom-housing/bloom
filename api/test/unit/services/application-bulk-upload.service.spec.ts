@@ -450,5 +450,25 @@ describe('Testing application bulk upload services', () => {
         ).resolves.toEqual({ success: true });
       });
     });
+
+    describe('duplicate IDs (validateNoDuplicateId)', () => {
+      it('should report the row of the second occurrence when duplicates are non-adjacent (rows 2 & 4 → row 4)', async () => {
+        const duplicateId = randomUUID();
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            { applicationId: duplicateId },
+            { applicationId: randomUUID() },
+            { applicationId: duplicateId },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 4 contain duplicate application IDs',
+          ),
+        );
+      });
+    });
   });
 });
