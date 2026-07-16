@@ -470,5 +470,74 @@ describe('Testing application bulk upload services', () => {
         );
       });
     });
+
+    describe('application id existence / listing (fetchDbApplications + validateApplicationId)', () => {
+      it('should report the row of the first unknown id when an id is not present in the DB result', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: appOne.id,
+              applicantFirstName: appOne.applicant.firstName,
+              applicantLastName: appOne.applicant.lastName,
+              applicationSubmissionDate: expectedDate(appOne.submissionDate),
+              applicationStatus: 'Submitted',
+            },
+            {
+              applicationId: randomUUID(),
+              applicantFirstName: 'Erin',
+              applicantLastName: 'Patsy',
+              applicationSubmissionDate: expectedDate(new Date(2026, 2, 15)),
+              applicationStatus: 'Submitted',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 3 have incorrect application identification numbers',
+          ),
+        );
+      });
+
+      it('should reject and query the DB once with the listing-scoped where clause when the id belongs to a different listing', async () => {
+        const applicationId = randomUUID();
+
+        const findManyMock = jest.fn().mockResolvedValue([]);
+        prisma.applications.findMany = findManyMock;
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId,
+              applicantFirstName: 'Andrew',
+              applicantLastName: 'Rust',
+              applicationSubmissionDate: expectedDate(new Date(2026, 0, 1)),
+              applicationStatus: 'Submitted',
+            },
+          ]),
+        );
+
+        await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: One or more rows beginning on row 2 have incorrect application identification numbers',
+          ),
+        );
+
+        expect(findManyMock).toHaveBeenCalledTimes(1);
+        expect(findManyMock).toHaveBeenCalledWith(
+          expect.objectContaining({
+            where: { id: { in: [applicationId] }, listingId },
+          }),
+        );
+      });
+    });
   });
 });
