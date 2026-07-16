@@ -502,7 +502,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
           new BadRequestException(
-            'Upload Failed: One or more rows beginning on row 3 have incorrect application identification numbers',
+            'Upload Failed: One or more rows beginning on row 3 have incorrect application identification numbers or belong to a different listing',
           ),
         );
       });
@@ -527,7 +527,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(service.validateCSV({ s3Key, listingId })).rejects.toThrow(
           new BadRequestException(
-            'Upload Failed: One or more rows beginning on row 2 have incorrect application identification numbers',
+            'Upload Failed: One or more rows beginning on row 2 have incorrect application identification numbers or belong to a different listing',
           ),
         );
 
