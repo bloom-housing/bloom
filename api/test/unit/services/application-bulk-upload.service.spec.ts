@@ -1389,5 +1389,70 @@ describe('Testing application bulk upload services', () => {
         ).resolves.toEqual({ success: true });
       });
     });
+
+    describe('Full successful CSV validation pipeline', () => {
+      it('should resolve to { success: true } for a fully valid multi-row CSV mixing statuses', async () => {
+        const submittedApp = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        });
+        const declinedApp = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Colleen', lastName: 'Tawnee' },
+          submissionDate: new Date(2026, 3, 2, 10, 0, 0),
+        });
+        const waitlistApp = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Nanny', lastName: 'Hayley' },
+          submissionDate: new Date(2026, 6, 23, 15, 30, 0),
+        });
+
+        prisma.applications.findMany = jest
+          .fn()
+          .mockResolvedValue([submittedApp, declinedApp, waitlistApp]);
+
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([
+            {
+              applicationId: submittedApp.id,
+              applicantFirstName: submittedApp.applicant.firstName,
+              applicantLastName: submittedApp.applicant.lastName,
+              applicationSubmissionDate: expectedDate(
+                submittedApp.submissionDate,
+              ),
+              applicationStatus: 'Submitted',
+            },
+            {
+              applicationId: declinedApp.id,
+              applicantFirstName: declinedApp.applicant.firstName,
+              applicantLastName: declinedApp.applicant.lastName,
+              applicationSubmissionDate: expectedDate(
+                declinedApp.submissionDate,
+              ),
+              applicationStatus: 'Declined',
+              applicationDeclineReason: 'Other',
+              applicationDeclineReasonAdditionalDetails:
+                'Some additional details',
+            },
+            {
+              applicationId: waitlistApp.id,
+              applicantFirstName: waitlistApp.applicant.firstName,
+              applicantLastName: waitlistApp.applicant.lastName,
+              applicationSubmissionDate: expectedDate(
+                waitlistApp.submissionDate,
+              ),
+              applicationStatus: 'Wait list',
+              waitlistPositionAccessibleUnit: '2',
+              waitlistPositionConventionalUnit: '5',
+            },
+          ]),
+        );
+
+        await expect(
+          service.validateCSV({ s3Key, listingId }),
+        ).resolves.toEqual({ success: true });
+      });
+    });
   });
 });
