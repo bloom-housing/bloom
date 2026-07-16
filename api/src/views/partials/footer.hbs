@@ -19,6 +19,16 @@
                 <br /><span class="apple-link">{{t "footer.line2"}}</span>
               </td>
             </tr>
+            {{#if footerLinks}}
+              <tr>
+                <td class="content-block">
+                  {{#each footerLinks}}
+                    <span>{{this.text}}<a href="{{this.url}}" target="_blank">{{this.name}}</a></span>
+                    <br />
+                  {{/each}}
+                </td>
+              </tr>
+            {{/if}}
           </table>
         </div>
         <!-- END FOOTER -->

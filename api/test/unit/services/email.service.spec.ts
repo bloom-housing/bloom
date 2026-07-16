@@ -34,10 +34,11 @@ import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/acce
 
 let sendMock;
 let govDeliverySendMock;
+const getMergedTranslationsMock = jest
+  .fn()
+  .mockReturnValue(translationFactory().translations);
 const translationServiceMock = {
-  getMergedTranslations: () => {
-    return translationFactory().translations;
-  },
+  getMergedTranslations: getMergedTranslationsMock,
 };
 
 const jurisdictionServiceMock = {
@@ -89,6 +90,9 @@ describe('Testing email service', () => {
     govDeliverySendMock = jest.fn();
     govDeliveryService.send = govDeliverySendMock;
     service = await module.resolve(EmailService);
+    getMergedTranslationsMock
+      .mockClear()
+      .mockReturnValue(translationFactory().translations);
   });
 
   const user = {
@@ -1718,6 +1722,37 @@ describe('Testing email service', () => {
       );
       expect(govDeliverySendMock.mock.calls[0][0].body).not.toContain(
         'Applications Open',
+      );
+    });
+
+    it('calls govDeliveryService.send with the footer links if exist', async () => {
+      getMergedTranslationsMock.mockReturnValue({
+        rentalOpportunity: {
+          footer: {
+            additionalLink0: {
+              text: 'explore more at',
+              name: 'Test Link',
+              url: 'https://example.com',
+            },
+            additionalLink1: {
+              text: 'explore even more at',
+              name: 'Test Link 2',
+              url: 'https://example.com',
+            },
+          },
+        },
+      });
+      await service.listingPublishNotificationViaGovDelivery(
+        { id: 'jurisdictionId' },
+        notificationListing,
+        [],
+      );
+      expect(govDeliverySendMock).toHaveBeenCalledTimes(1);
+      expect(govDeliverySendMock.mock.calls[0][0].body).toContain(
+        'explore more at<a href="https://example.com" target="_blank">Test Link</a>',
+      );
+      expect(govDeliverySendMock.mock.calls[0][0].body).toContain(
+        'explore even more at<a href="https://example.com" target="_blank">Test Link 2</a>',
       );
     });
   });
