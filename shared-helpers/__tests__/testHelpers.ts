@@ -755,6 +755,7 @@ export const jurisdiction: Jurisdiction = {
   ],
   regions: [],
   visibleSpokenLanguages: [],
+  visibleHouseholdMemberRelationships: [],
 }
 
 export const listing: Listing = {
@@ -868,22 +869,12 @@ export const listing: Listing = {
     },
   ],
   applicationOrganization: "98 Archer Street",
-  assets: [
-    {
-      id: "1234",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      label: "building",
-      fileId:
-        "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
-    },
-  ],
   buildingSelectionCriteria:
     "Tenant Selection Criteria will be available to all applicants upon request.",
   costsNotIncluded:
     "Resident responsible for PG&E, internet and phone.  Owner pays for water, trash, and sewage.  Residents encouraged to obtain renter's insurance but this is not a requirement.  Rent is due by the 5th of each month. Late fee $35 and returned check fee is $35 additional.",
   creditHistory:
-    "Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency.  All applicants are expected have a passing acore of 70 points out of 100 to be considered for housing.  Applicants with no credit history will receive a maximum of 80 points to fairly outweigh positive and/or negative trades as would an applicant with established credit history. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
+    "Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant performance information provided to the credit reporting agency.  All applicants are expected have a passing score of 70 points out of 100 to be considered for housing.  Applicants with no credit history will receive a maximum of 80 points to fairly outweigh positive and/or negative trades as would an applicant with established credit history. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
   depositMin: "1140.0",
   specialNotes: "Special notes description",
   programRules:
@@ -1024,7 +1015,7 @@ export const listing: Listing = {
   ],
   rentalAssistance: "Custom rental assistance",
   rentalHistory:
-    "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
+    "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed through the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
   householdSizeMin: 2,
   householdSizeMax: 3,
   smokingPolicy: "Non-smoking building",
@@ -1306,6 +1297,7 @@ export const mockBaseJurisdiction: Jurisdiction = {
   visibleApplicationAccessibilityFeatures: [],
   regions: [],
   visibleSpokenLanguages: [],
+  visibleHouseholdMemberRelationships: [],
 }
 
 export const mockUser: User = {

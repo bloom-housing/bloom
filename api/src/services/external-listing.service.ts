@@ -393,14 +393,7 @@ export class ExternalListingService {
         whatToExpectAdditionalText: data.whatToExpectAdditionalText,
         yearBuilt: data.yearBuilt,
 
-        assets: data.assets
-          ? {
-              create: data.assets.map((asset) => ({
-                fileId: asset.fileId,
-                label: asset.label,
-              })),
-            }
-          : Prisma.JsonNullValueInput.JsonNull,
+        assets: Prisma.JsonNullValueInput.JsonNull,
         jurisdictions: {
           connect: {
             id: jurisdictionId,

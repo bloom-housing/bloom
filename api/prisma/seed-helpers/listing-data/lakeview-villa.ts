@@ -21,7 +21,7 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
   },
   paperApplication: false,
   referralOpportunity: false,
-  assets: [],
+  assets: {},
   accessibility: null,
   amenities: null,
   buildingTotalUnits: 0,

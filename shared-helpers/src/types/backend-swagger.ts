@@ -4889,9 +4889,6 @@ export interface Listing {
   applicationPickUpAddressType?: ApplicationAddressTypeEnum
 
   /**  */
-  assets: Asset[]
-
-  /**  */
   buildingSelectionCriteria?: string
 
   /**  */
@@ -5276,18 +5273,6 @@ export interface ListingMapMarker {
   lng: number
 }
 
-/** AssetCreate */
-export interface AssetCreate {
-  /**  */
-  fileId: string
-
-  /**  */
-  label: string
-
-  /**  */
-  id?: string
-}
-
 /** UnitsSummaryCreate */
 export interface UnitsSummaryCreate {
   /**  */
@@ -5349,6 +5334,18 @@ export interface UnitsSummaryCreate {
 
   /**  */
   monthlyRent?: number
+}
+
+/** AssetCreate */
+export interface AssetCreate {
+  /**  */
+  fileId: string
+
+  /**  */
+  label: string
+
+  /**  */
+  id?: string
 }
 
 /** ListingImageCreate */
@@ -6120,9 +6117,6 @@ export interface ListingCreate {
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
-
-  /**  */
-  assets?: AssetCreate[]
 
   /**  */
   unitsSummary: UnitsSummaryCreate[]
@@ -7005,9 +6999,6 @@ export interface ListingUpdate {
 
   /**  */
   applicationMethods?: ApplicationMethodUpdate[]
-
-  /**  */
-  assets?: AssetCreate[]
 
   /**  */
   unitsSummary: UnitsSummaryCreate[]

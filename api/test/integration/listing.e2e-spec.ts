@@ -238,7 +238,6 @@ describe('Listing Controller Tests', () => {
 
     return {
       id: listingId ?? undefined,
-      assets: [exampleAsset],
       listingsBuildingAddress: exampleAddress,
       depositMin: '1000',
       depositMax: '5000',
