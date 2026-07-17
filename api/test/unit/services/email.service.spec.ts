@@ -239,7 +239,7 @@ describe('Testing email service', () => {
       displayWaitlistSize: false,
       showWaitlist: false,
       applicationMethods: [],
-      assets: [],
+      assets: {},
       listingEvents: [],
       units: [],
       referralApplication: undefined,
@@ -579,7 +579,18 @@ describe('Testing email service', () => {
       const emailArr = ['testOne@xample.com', 'testTwo@example.com'];
       const service = await module.resolve(EmailService);
       await service.changesRequested(
-        { name: 'test', id: '1234' },
+        {
+          id: '1234',
+          passwordUpdatedAt: undefined,
+          passwordValidForDays: 0,
+          email: '',
+          firstName: '',
+          lastName: '',
+          jurisdictions: [],
+          agreedToTermsOfService: false,
+          createdAt: undefined,
+          updatedAt: undefined,
+        },
         { name: 'listing name', id: 'listingId', juris: 'jurisId' },
         emailArr,
         'http://localhost:3001',

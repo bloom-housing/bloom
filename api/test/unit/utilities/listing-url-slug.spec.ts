@@ -11,7 +11,6 @@ const baseListingFields = {
   showWaitlist: false,
   applicationMethods: [],
   referralApplication: undefined,
-  assets: [],
   listingEvents: [],
   listingsBuildingAddress: undefined,
   jurisdictions: {
@@ -30,6 +29,7 @@ describe('Testing listing url slug builder', () => {
       listingUrlSlug({
         name: 'ExampLe namE @ 17',
         ...baseListingFields,
+        applicationLotteryTotals: [],
       }),
     ).toEqual('examp_le_nam_e_17');
   });
@@ -41,13 +41,12 @@ describe('Testing listing url slug builder', () => {
         name: 'ExampLe namE @ 17',
         listingsBuildingAddress: {
           id: randomUUID(),
-          createdAt: new Date(),
-          updatedAt: new Date(),
           street: '11th Street',
           city: 'Phoenix',
           state: 'Az',
           zipCode: '87511',
         },
+        applicationLotteryTotals: [],
       }),
     ).toEqual('examp_le_nam_e_17_11_th_street_phoenix_az');
   });

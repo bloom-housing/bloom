@@ -136,7 +136,6 @@ export const formDefaults: FormListing = {
   listingsApplicationMailingAddress: null,
   listingsApplicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
-  assets: [],
   buildingSelectionCriteria: "",
   listingsBuildingSelectionCriteriaFile: null,
   criteriaAttachType: "",
