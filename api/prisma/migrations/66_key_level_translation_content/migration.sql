@@ -40,9 +40,6 @@ CREATE TABLE "translation_strings" (
 CREATE UNIQUE INDEX "jurisdiction_content_jurisdiction_id_language_key" ON "jurisdiction_content"("jurisdiction_id", "language");
 
 -- CreateIndex
-CREATE INDEX "translation_strings_jurisdiction_id_language_site_idx" ON "translation_strings"("jurisdiction_id", "language", "site");
-
--- CreateIndex
 -- NULLS NOT DISTINCT (hand-added; Prisma cannot express it in the schema) so base rows (null
 -- jurisdiction_id and site) and global Partners rows (null jurisdiction_id) cannot be duplicated.
 -- Requires Postgres 15+.

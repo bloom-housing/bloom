@@ -1764,8 +1764,8 @@ model TranslationStrings {
 
   jurisdictions Jurisdictions? @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
+  // The unique index is NULLS NOT DISTINCT; set in the migration, as Prisma cannot express it here.
   @@unique([jurisdictionId, language, site, key])
-  @@index([jurisdictionId, language, site])
   @@map("translation_strings")
 }
 
