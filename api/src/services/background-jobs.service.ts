@@ -19,7 +19,7 @@ import { CronJobService } from './cron-job.service';
 
 const BACKGROUND_JOBS_RECOVERY_JOB_NAME =
   'BACKGROUND_JOBS_RECOVERY_CRON_STRING';
-const BACKGROUND_JOB_STALE_TIME_IN_MINUTES = 30;
+export const BACKGROUND_JOB_STALE_TIME_IN_MINUTES = 30;
 @Injectable()
 export class BackgroundJobsService {
   constructor(
@@ -162,7 +162,7 @@ export class BackgroundJobsService {
     };
   }
 
-  private async recoverStuckJobCronJob(): Promise<SuccessDTO> {
+  async recoverStuckJobCronJob(): Promise<SuccessDTO> {
     const logName = 'recoverStuckJobCron';
     this.logger.warn(`${logName} job running`);
     const currentTime = new Date();
