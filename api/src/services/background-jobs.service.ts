@@ -17,8 +17,7 @@ import { permissionActions } from '../enums/permissions/permission-actions-enum'
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { CronJobService } from './cron-job.service';
 
-const BACKGROUND_JOBS_RECOVERY_JOB_NAME =
-  'BACKGROUND_JOBS_RECOVERY_CRON_STRING';
+const BACKGROUND_JOBS_RECOVERY_JOB_NAME = 'BACKGROUND_JOBS_RECOVERY_CRON_JOB';
 export const BACKGROUND_JOB_STALE_TIME_IN_MINUTES = 30;
 @Injectable()
 export class BackgroundJobsService {
