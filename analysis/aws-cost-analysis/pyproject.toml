@@ -1,0 +1,8 @@
+[project]
+name = "aws-gcp-cost-analysis"
+version = "1"
+readme = "../README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "marimo>=0.14.12",
+]
