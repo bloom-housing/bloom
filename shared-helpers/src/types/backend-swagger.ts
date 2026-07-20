@@ -2556,6 +2556,81 @@ export class AuthService {
   }
 }
 
+export class JobsService {
+  /**
+   * Creates a new background job record in the database
+   */
+  createBackgroundJob(
+    params: {
+      /** requestBody */
+      body?: BackgroundJobCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<BackgroundJob> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get an active background job for a listing
+   */
+  findActiveJobForListing(
+    params: {
+      /**  */
+      listingId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<BackgroundJob> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { listingId: params["listingId"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a background job data by its ID
+   */
+  getBackgroundJob(
+    params: {
+      /**  */
+      jobId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<BackgroundJob> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs/{jobId}"
+      url = url.replace("{jobId}", params["jobId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get info if any jobs are currently running
+   */
+  activeJobStatus(options: IRequestOptions = {}): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs/active"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class MapLayersService {
   /**
    * List map layers
@@ -4814,9 +4889,6 @@ export interface Listing {
   applicationPickUpAddressType?: ApplicationAddressTypeEnum
 
   /**  */
-  assets: Asset[]
-
-  /**  */
   buildingSelectionCriteria?: string
 
   /**  */
@@ -5201,18 +5273,6 @@ export interface ListingMapMarker {
   lng: number
 }
 
-/** AssetCreate */
-export interface AssetCreate {
-  /**  */
-  fileId: string
-
-  /**  */
-  label: string
-
-  /**  */
-  id?: string
-}
-
 /** UnitsSummaryCreate */
 export interface UnitsSummaryCreate {
   /**  */
@@ -5274,6 +5334,18 @@ export interface UnitsSummaryCreate {
 
   /**  */
   monthlyRent?: number
+}
+
+/** AssetCreate */
+export interface AssetCreate {
+  /**  */
+  fileId: string
+
+  /**  */
+  label: string
+
+  /**  */
+  id?: string
 }
 
 /** ListingImageCreate */
@@ -6045,9 +6117,6 @@ export interface ListingCreate {
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
-
-  /**  */
-  assets?: AssetCreate[]
 
   /**  */
   unitsSummary: UnitsSummaryCreate[]
@@ -6930,9 +6999,6 @@ export interface ListingUpdate {
 
   /**  */
   applicationMethods?: ApplicationMethodUpdate[]
-
-  /**  */
-  assets?: AssetCreate[]
 
   /**  */
   unitsSummary: UnitsSummaryCreate[]
@@ -10076,6 +10142,51 @@ export interface Confirm {
   password?: string
 }
 
+/** BackgroundJob */
+export interface BackgroundJob {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  listingId: string
+
+  /**  */
+  requestedByUserId: string
+
+  /**  */
+  status: BackgroundJobStatusEnum
+
+  /**  */
+  totalRecords?: number
+
+  /**  */
+  inputS3Key: string
+
+  /**  */
+  errorMessage?: string
+
+  /**  */
+  errorRow?: number
+
+  /**  */
+  completedAt?: Date
+}
+
+/** BackgroundJobCreate */
+export interface BackgroundJobCreate {
+  /**  */
+  listingId: string
+
+  /**  */
+  inputS3Key: string
+}
+
 /** MapLayer */
 export interface MapLayer {
   /**  */
@@ -10965,6 +11076,12 @@ export enum ModificationEnum {
 export enum MfaType {
   "sms" = "sms",
   "email" = "email",
+}
+
+export enum BackgroundJobStatusEnum {
+  "processing" = "processing",
+  "completed" = "completed",
+  "failed" = "failed",
 }
 export enum EnumPropertyFilterParamsComparison {
   "=" = "=",

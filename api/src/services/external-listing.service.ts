@@ -93,11 +93,17 @@ export class ExternalListingService {
       throw new HttpException('Target jurisdiction not found', 500);
     }
 
-    let listingIdsToDelete = [];
+    const buildingAddressIdsToDelete = [];
+    const listingIdsToDelete = [];
 
     // query for existing external listings within the system
     const currentExternalListings = await this.prisma.listings.findMany({
-      select: { id: true, contentUpdatedAt: true, externalListingId: true },
+      select: {
+        id: true,
+        buildingAddressId: true,
+        contentUpdatedAt: true,
+        externalListingId: true,
+      },
       where: {
         externalJurisdictionId: externalJurisdiction.id,
         jurisdictionId: jurisdictionId,
@@ -105,7 +111,10 @@ export class ExternalListingService {
     });
 
     if (listings.length === 0) {
-      listingIdsToDelete = currentExternalListings.map((listing) => listing.id);
+      currentExternalListings.forEach((listing) => {
+        buildingAddressIdsToDelete.push(listing.buildingAddressId);
+        listingIdsToDelete.push(listing.id);
+      });
     } else {
       // query and compare reserved community types
       const internalReservedCommunityTypes =
@@ -183,6 +192,10 @@ export class ExternalListingService {
             await this.prisma.listings.delete({
               where: { id: existingListing.id },
             });
+            await this.prisma.address.delete({
+              where: { id: existingListing.buildingAddressId },
+            });
+
             // recreate with updated data
             this.createExternalListing(
               combinedRCTs,
@@ -198,6 +211,7 @@ export class ExternalListingService {
           }
         } else {
           // add to list for deletion
+          buildingAddressIdsToDelete.push(existingListing.buildingAddressId);
           listingIdsToDelete.push(existingListing.id);
         }
       }
@@ -229,6 +243,14 @@ export class ExternalListingService {
         where: {
           id: {
             in: listingIdsToDelete,
+          },
+        },
+      });
+
+      await this.prisma.address.deleteMany({
+        where: {
+          id: {
+            in: buildingAddressIdsToDelete,
           },
         },
       });
@@ -371,14 +393,7 @@ export class ExternalListingService {
         whatToExpectAdditionalText: data.whatToExpectAdditionalText,
         yearBuilt: data.yearBuilt,
 
-        assets: data.assets
-          ? {
-              create: data.assets.map((asset) => ({
-                fileId: asset.fileId,
-                label: asset.label,
-              })),
-            }
-          : Prisma.JsonNullValueInput.JsonNull,
+        assets: Prisma.JsonNullValueInput.JsonNull,
         jurisdictions: {
           connect: {
             id: jurisdictionId,

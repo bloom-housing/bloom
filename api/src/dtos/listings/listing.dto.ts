@@ -252,16 +252,6 @@ class Listing extends AbstractDTO {
   })
   applicationPickUpAddressType?: ApplicationAddressTypeEnum;
 
-  // This is no longer needed and should be removed https://github.com/bloom-housing/bloom/issues/3747
-  @Expose()
-  @ValidateListingPublish('assets', {
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => Asset)
-  @ApiProperty({ type: Asset, isArray: true })
-  assets: Asset[] = [];
-
   @Expose()
   @ValidateListingPublish('buildingSelectionCriteria', {
     groups: [ValidationsGroupsEnum.default],

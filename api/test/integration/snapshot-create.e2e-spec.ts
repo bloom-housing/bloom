@@ -206,7 +206,7 @@ describe('Snapshot Create Controller Tests', () => {
       const listingA = await prisma.listings.create({
         data: {
           name: 'createUserSnapshot listing 1',
-          assets: [],
+          assets: {},
           displayWaitlistSize: false,
           jurisdictions: {
             connect: {
@@ -221,7 +221,7 @@ describe('Snapshot Create Controller Tests', () => {
       const listingB = await prisma.listings.create({
         data: {
           name: 'createUserSnapshot listing 2',
-          assets: [],
+          assets: {},
           displayWaitlistSize: false,
           jurisdictions: {
             connect: {
@@ -534,7 +534,7 @@ describe('Snapshot Create Controller Tests', () => {
           applicationPickUpAddressOfficeHours:
             'example applicationPickUpAddressOfficeHours',
           applicationPickUpAddressType: ApplicationAddressTypeEnum.leasingAgent,
-          assets: '[]',
+          assets: {},
           buildingSelectionCriteria: 'example buildingSelectionCriteria',
           buildingTotalUnits: 10,
           closedAt: new Date(),
@@ -775,7 +775,7 @@ describe('Snapshot Create Controller Tests', () => {
           applicationPickUpAddressOfficeHours:
             'example applicationPickUpAddressOfficeHours',
           applicationPickUpAddressType: ApplicationAddressTypeEnum.leasingAgent,
-          assets: '[]',
+          assets: {},
           buildingSelectionCriteria: 'example buildingSelectionCriteria',
           buildingTotalUnits: 10,
           closedAt: new Date(),
@@ -1806,7 +1806,7 @@ describe('Snapshot Create Controller Tests', () => {
       const listingA = await prisma.listings.create({
         data: {
           name: 'createUserSnapshot listing 1',
-          assets: [],
+          assets: {},
           displayWaitlistSize: false,
           jurisdictions: {
             connect: {

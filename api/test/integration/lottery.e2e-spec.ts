@@ -1145,6 +1145,7 @@ describe('Lottery Controller Tests', () => {
         lotteryStatus: LotteryStatusEnum.releasedToPartners,
         applications: [
           {
+            incomeVouchers: [],
             preferences: [],
             status: ApplicationStatusEnum.submitted,
             confirmationCode: 'ABCD1234',
@@ -1160,6 +1161,7 @@ describe('Lottery Controller Tests', () => {
             },
           },
           {
+            incomeVouchers: [],
             preferences: [],
             status: ApplicationStatusEnum.submitted,
             confirmationCode: 'EFGH5678',
@@ -1175,6 +1177,7 @@ describe('Lottery Controller Tests', () => {
             },
           },
           {
+            incomeVouchers: [],
             preferences: [],
             status: ApplicationStatusEnum.submitted,
             confirmationCode: 'IJKL9012',
@@ -1190,6 +1193,7 @@ describe('Lottery Controller Tests', () => {
             },
           },
           {
+            incomeVouchers: [],
             preferences: [],
             status: ApplicationStatusEnum.submitted,
             confirmationCode: 'ABC678',
@@ -1205,6 +1209,7 @@ describe('Lottery Controller Tests', () => {
             },
           },
           {
+            incomeVouchers: [],
             preferences: [],
             status: ApplicationStatusEnum.submitted,
             confirmationCode: 'MNOP3456',

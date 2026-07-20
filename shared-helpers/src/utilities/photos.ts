@@ -29,9 +29,8 @@ export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
     imageAssets = listing.listingImages
       .sort((imageA, imageB) => (imageA.ordinal ?? 10) - (imageB?.ordinal ?? 10))
       .map((imageObj) => imageObj.assets)
-  } else if (Array.isArray(listing?.assets)) {
-    imageAssets = listing.assets
   }
+
   const cloudinaryCloudName: string | undefined =
     process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME
 

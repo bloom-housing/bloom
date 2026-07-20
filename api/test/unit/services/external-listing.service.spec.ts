@@ -14,7 +14,7 @@ describe('Testing external listing service', () => {
   let httpService: HttpService;
   let prisma: PrismaService;
   let service: ExternalListingService;
-  const externalURL = 'example.com';
+  const externalURL = 'https://www.example.com';
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -153,7 +153,7 @@ describe('Testing external listing service', () => {
 
       await expect(
         service.ingest({
-          externalURL: 'example.com',
+          externalURL: externalURL,
           jurisdictionId: randomUUID(),
           targetName: 'mismatch',
         }),
@@ -187,7 +187,7 @@ describe('Testing external listing service', () => {
 
       await expect(
         service.ingest({
-          externalURL: 'example.com',
+          externalURL: externalURL,
           jurisdictionId: randomUUID(),
           targetName: 'mismatch',
         }),
@@ -199,7 +199,6 @@ describe('Testing external listing service', () => {
       const externalListingDate = new Date();
       const externalListingId = randomUUID();
       const externalRCTId = randomUUID();
-      const externalURL = 'example.com';
       const externalURTId = randomUUID();
       const externalUTId = randomUUID();
 
@@ -217,7 +216,7 @@ describe('Testing external listing service', () => {
           listings: [
             {
               id: externalListingId,
-              contentUpdateAt: externalListingDate,
+              contentUpdatedAt: externalListingDate,
               jurisdictionId: externalJurisdictionId,
             },
           ],
@@ -237,7 +236,6 @@ describe('Testing external listing service', () => {
         },
         data: {
           id: externalListingId,
-          assets: [],
           contentUpdatedAt: externalListingDate,
           displayWaitlistSize: false,
           isVerified: true,
@@ -309,7 +307,7 @@ describe('Testing external listing service', () => {
           listings: [
             {
               id: externalListingId,
-              contentUpdateAt: externalListingDate,
+              contentUpdatedAt: externalListingDate,
               jurisdictionId: externalJurisdictionId,
             },
           ],
@@ -329,7 +327,6 @@ describe('Testing external listing service', () => {
         },
         data: {
           id: externalListingId,
-          assets: [],
           contentUpdatedAt: externalListingDate,
           displayWaitlistSize: false,
           isVerified: true,
@@ -349,6 +346,7 @@ describe('Testing external listing service', () => {
         .mockImplementationOnce(() => of(mockExternalDetailsResponse))
         .mockImplementationOnce(() => of(mockExternalListingResponse));
 
+      const internalBuildingAddressId = randomUUID();
       const internalJurisdictionId = randomUUID();
       const internalListingDate = dayjs(new Date())
         .subtract(1, 'days')
@@ -358,11 +356,13 @@ describe('Testing external listing service', () => {
       const internalURTId = randomUUID();
       const internalUTId = randomUUID();
 
+      prisma.address.delete = jest.fn().mockResolvedValue(undefined);
       prisma.listings.create = jest.fn().mockResolvedValue({});
       prisma.listings.delete = jest.fn().mockResolvedValue(undefined);
       prisma.listings.findMany = jest.fn().mockResolvedValue([
         {
           id: internalListingId,
+          buildingAddressId: internalBuildingAddressId,
           contentUpdatedAt: internalListingDate,
           externalListingId,
         },
@@ -387,6 +387,9 @@ describe('Testing external listing service', () => {
 
       expect(response.success).toEqual(true);
 
+      expect(prisma.address.delete).toHaveBeenCalledWith({
+        where: { id: internalBuildingAddressId },
+      });
       expect(prisma.listings.delete).toHaveBeenCalledWith({
         where: { id: internalListingId },
       });
@@ -398,7 +401,6 @@ describe('Testing external listing service', () => {
       const externalListingDate = new Date();
       const externalListingId = randomUUID();
       const externalRCTId = randomUUID();
-      const externalURL = 'example.com';
       const externalURTId = randomUUID();
       const externalUTId = randomUUID();
 
@@ -416,7 +418,7 @@ describe('Testing external listing service', () => {
           listings: [
             {
               id: externalListingId,
-              contentUpdateAt: externalListingDate,
+              contentUpdatedAt: externalListingDate,
               jurisdictionId: externalJurisdictionId,
             },
           ],
@@ -432,6 +434,7 @@ describe('Testing external listing service', () => {
         .spyOn(httpService, 'get')
         .mockImplementationOnce(() => of(mockExternalDetailsResponse));
 
+      const internalBuildingAddressId = randomUUID();
       const internalJurisdictionId = randomUUID();
       const internalListingId = randomUUID();
       const internalRCTId = randomUUID();
@@ -442,6 +445,7 @@ describe('Testing external listing service', () => {
       prisma.listings.findMany = jest.fn().mockResolvedValue([
         {
           id: internalListingId,
+          buildingAddressId: internalBuildingAddressId,
           contentUpdatedAt: externalListingDate,
           externalListingId,
         },
@@ -467,7 +471,12 @@ describe('Testing external listing service', () => {
       expect(response.success).toEqual(true);
 
       expect(prisma.listings.findMany).toHaveBeenCalledExactlyOnceWith({
-        select: { id: true, contentUpdatedAt: true, externalListingId: true },
+        select: {
+          id: true,
+          buildingAddressId: true,
+          contentUpdatedAt: true,
+          externalListingId: true,
+        },
         where: {
           externalJurisdictionId: externalJurisdictionId,
           jurisdictionId: internalJurisdictionId,
@@ -490,7 +499,6 @@ describe('Testing external listing service', () => {
     it('should delete a listing if no longer returned from external system', async () => {
       const externalJurisdictionId = randomUUID();
       const externalRCTId = randomUUID();
-      const externalURL = 'example.com';
       const externalURTId = randomUUID();
       const externalUTId = randomUUID();
 
@@ -518,13 +526,16 @@ describe('Testing external listing service', () => {
         .spyOn(httpService, 'get')
         .mockImplementationOnce(() => of(mockExternalDetailsResponse));
 
+      const internalBuildingAddressId = randomUUID();
       const internalJurisdictionId = randomUUID();
       const internalListingId = randomUUID();
 
+      prisma.address.deleteMany = jest.fn().mockResolvedValue(undefined);
       prisma.listings.deleteMany = jest.fn().mockResolvedValue(undefined);
       prisma.listings.findMany = jest.fn().mockResolvedValue([
         {
           id: internalListingId,
+          buildingAddressId: internalBuildingAddressId,
           contentUpdatedAt: new Date(),
           externalListingId: randomUUID(),
         },
@@ -545,6 +556,9 @@ describe('Testing external listing service', () => {
       expect(prisma.unitRentTypes.findMany).not.toHaveBeenCalled();
       expect(prisma.unitTypes.findMany).not.toHaveBeenCalled();
 
+      expect(prisma.address.deleteMany).toHaveBeenCalledWith({
+        where: { id: { in: [internalBuildingAddressId] } },
+      });
       expect(prisma.listings.deleteMany).toHaveBeenCalledWith({
         where: { id: { in: [internalListingId] } },
       });
@@ -594,12 +608,6 @@ describe('Testing external listing service', () => {
         },
         data: {
           id: externalListingId,
-          assets: [
-            {
-              fileId: randomUUID(),
-              label: 'example asset',
-            },
-          ],
           contentUpdatedAt: new Date(),
           displayWaitlistSize: false,
           isVerified: true,
@@ -670,12 +678,6 @@ describe('Testing external listing service', () => {
         },
         data: {
           id: externalListingId,
-          assets: [
-            {
-              fileId: randomUUID(),
-              label: 'example asset',
-            },
-          ],
           contentUpdatedAt: new Date(),
           displayWaitlistSize: false,
           isVerified: true,
@@ -818,14 +820,7 @@ describe('Testing external listing service', () => {
           whatToExpectAdditionalText: undefined,
           yearBuilt: undefined,
 
-          assets: {
-            create: [
-              {
-                fileId: expect.anything(),
-                label: 'example asset',
-              },
-            ],
-          },
+          assets: {},
           jurisdictions: {
             connect: {
               id: internalJurisdictionId,
