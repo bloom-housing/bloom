@@ -2,16 +2,22 @@ import { Test, TestingModule } from '@nestjs/testing';
 import {
   ConflictException,
   ForbiddenException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { BackgroundJobStatusEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
-import { BackgroundJobsService } from '../../../src/services/background-jobs.service';
+import {
+  BACKGROUND_JOB_STALE_TIME_IN_MINUTES,
+  BackgroundJobsService,
+} from '../../../src/services/background-jobs.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { S3Service } from '../../../src/services/s3.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { BackgroundJob } from '../../../src/dtos/background-jobs/background-job.dto';
 import { UserRoleEnum } from '../../../src/enums/permissions/user-role-enum';
+import { CronJobService } from '../../../src/services/cron-job.service';
 
 const listingId = randomUUID();
 const jobId = randomUUID();
@@ -48,6 +54,9 @@ describe('Background Jobs Service Tests', () => {
       providers: [
         BackgroundJobsService,
         PrismaService,
+        Logger,
+        SchedulerRegistry,
+        CronJobService,
         { provide: S3Service, useValue: {} },
         {
           provide: PermissionService,
@@ -193,6 +202,55 @@ describe('Background Jobs Service Tests', () => {
 
       expect(result).toEqual({
         success: false,
+      });
+    });
+  });
+
+  describe('recoverStuckJobCronJob', () => {
+    it(`should delete only jobs running fro more than ${BACKGROUND_JOB_STALE_TIME_IN_MINUTES} minutes`, async () => {
+      const runningValidJobId = randomUUID();
+      const runningStaleJobId = randomUUID();
+
+      prisma.cronJob.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+      prisma.backgroundJob.findMany = jest.fn().mockReturnValue([
+        {
+          id: runningValidJobId,
+          updatedAt: new Date(),
+        },
+        {
+          id: runningStaleJobId,
+          updatedAt: new Date(
+            new Date().getTime() -
+              (BACKGROUND_JOB_STALE_TIME_IN_MINUTES + 1) * 60000,
+          ),
+        },
+      ]);
+      prisma.backgroundJob.deleteMany = jest.fn().mockResolvedValue({
+        count: 1,
+      });
+
+      await service.recoverStuckJobCronJob();
+
+      expect(prisma.backgroundJob.findMany).toHaveBeenCalledTimes(1);
+      expect(prisma.backgroundJob.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          updatedAt: true,
+        },
+        where: {
+          status: BackgroundJobStatusEnum.processing,
+        },
+      });
+      expect(prisma.backgroundJob.deleteMany).toHaveBeenCalledTimes(1);
+      expect(prisma.backgroundJob.deleteMany).toHaveBeenCalledWith({
+        where: {
+          id: {
+            in: [runningStaleJobId],
+          },
+        },
       });
     });
   });
