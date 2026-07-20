@@ -986,10 +986,10 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/ui-components@14.0.2":
-  version "14.0.2"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-14.0.2.tgz#89df6a2672faf33621e2755adaf4162f3ce70e60"
-  integrity sha512-RhNtz8lyh8f5LwUpiPFYClowgZBPNDh+K3GU5ZDoSIF0TGfec63BpB3GjwvyUSCeJCdsRoSX0q+RRtcfnj6BWQ==
+"@bloom-housing/ui-components@14.1.0":
+  version "14.1.0"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-14.1.0.tgz#be687f4dd08bf5116cadaef32c0e8b77e3ba9acd"
+  integrity sha512-FQUpI1YTLgBhN0SDM9vk52B65HugIRnMt7vjViZH+DSnA4BLdmJUuSMLw6NEWHkVaF08touxEClch/Ijh9/fxQ==
   dependencies:
     "@dnd-kit/react" "^0.3.2"
     "@fortawesome/fontawesome-svg-core" "^6.1.1"
@@ -4610,6 +4610,13 @@ brace-expansion@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-2.0.2.tgz#54fc53237a613d854c7bd37463aad17df87214e7"
   integrity sha512-Jt0vHyM+jmUBqojB7E1NIYadt0vI0Qxjxd2TErW94wDz+E2LAm5vKMXXwg6ZZBTHPuUlDgQHKXvjGBdfcF1ZDQ==
+  dependencies:
+    balanced-match "^1.0.0"
+
+brace-expansion@^2.0.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-2.1.2.tgz#0bba2271feb7d458b0d31ad13625aaa4754431e2"
+  integrity sha512-w5JZcKgdhDOgOwm8H+KgbosopHMuGcl6qbulwjtz3SM7I7P3yW1eAjzMPLrIE+NQ9vjgANKHWeMHnrT0OXW1oA==
   dependencies:
     balanced-match "^1.0.0"
 
@@ -9267,7 +9274,7 @@ minimatch@^9.0.4:
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-9.0.9.tgz#9b0cb9fcb78087f6fd7eababe2511c4d3d60574e"
   integrity sha512-OBwBN9AL4dqmETlpS2zasx+vTeWclWzkblfZk7KTA5j3jeOONz/tRCnZomUyvNg83wL5Zv9Ss6HMJXAgL8R2Yg==
   dependencies:
-    brace-expansion "^2.0.1"
+    brace-expansion "^2.0.2"
 
 minimist-options@4.1.0, minimist-options@^4.0.2:
   version "4.1.0"
