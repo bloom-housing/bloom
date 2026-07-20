@@ -1153,6 +1153,15 @@ describe('Testing multiselect question service', () => {
           ),
         ).rejects.toThrowError();
       });
+      it('should error when moving visible to draft and is attached to listings', () => {
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.visible,
+            MultiselectQuestionsStatusEnum.draft,
+            [{ listingId: 'listingId' }],
+          ),
+        ).rejects.toThrowError();
+      });
     });
 
     describe('active transitions', () => {
