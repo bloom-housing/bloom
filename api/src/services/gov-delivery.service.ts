@@ -1,12 +1,16 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import juice from 'juice';
 import { firstValueFrom } from 'rxjs';
 import { SendEmailInput } from './email-provider.service';
 
 @Injectable()
 export class GovDeliveryService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    @Inject(Logger)
+    private logger = new Logger(GovDeliveryService.name),
+  ) {}
 
   async send(input: SendEmailInput): Promise<unknown> {
     const {
@@ -21,13 +25,14 @@ export class GovDeliveryService {
       !!GOVDELIVERY_PASSWORD &&
       !!GOVDELIVERY_TOPIC;
     if (!isGovConfigured) {
-      console.warn(
+      this.logger.warn(
         'failed to configure Govdelivery, ensure that all env variables are provided',
       );
       return;
     }
 
-    // If there is no from email address configured, govDelivery will use the default email address associated with the account
+    // in govDelivery you can override the from email address for any send and if no id is passed in the default will be used.
+    // This ID should match the override email address ID in the GovDelivery system. If there is a mismatch the email send will fail.
     const fromEmailAddress = process.env.GOVDELIVERY_FROM_EMAIL_ID || '';
 
     // juice inlines css to allow for email styling

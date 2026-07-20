@@ -1,3 +1,4 @@
+import { HttpModule } from '@nestjs/axios';
 import { Logger, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AwsSesService } from '../services/aws-ses.service';
@@ -8,7 +9,6 @@ import { GovDeliveryService } from '../services/gov-delivery.service';
 import { JurisdictionService } from '../services/jurisdiction.service';
 import { SendGridService } from '../services/sendgrid.service';
 import { TranslationService } from '../services/translation.service';
-import { HttpModule, HttpService } from '@nestjs/axios';
 
 const emailProvider = {
   provide: EmailProvider,

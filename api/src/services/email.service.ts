@@ -690,7 +690,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
-      console.log('Request approval email failed', err);
+      this.logger.log('Request approval email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -720,7 +720,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
-      console.log('changes requested email failed', err);
+      this.logger.log('changes requested email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -749,7 +749,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
-      console.log('listing approval email failed', err);
+      this.logger.log('listing approval email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -783,7 +783,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
-      console.log('listing scheduled email failed', err);
+      this.logger.log('listing scheduled email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -812,7 +812,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
-      console.log('listing published email failed', err);
+      this.logger.log('listing published email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -912,7 +912,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
-      console.log('lottery released email failed', err);
+      this.logger.log('lottery released email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -941,7 +941,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
-      console.log('lottery published admin email failed', err);
+      this.logger.log('lottery published admin email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -986,7 +986,7 @@ export class EmailService {
         );
       }
     } catch (err) {
-      console.log('lottery published applicant email failed', err);
+      this.logger.log('lottery published applicant email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -1308,7 +1308,7 @@ export class EmailService {
         );
       }
     } catch (err) {
-      console.log('rental opportunity email failed', err);
+      this.logger.log('rental opportunity email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -1392,7 +1392,7 @@ export class EmailService {
         }),
       });
     } catch (err) {
-      console.log('govDelivery rental opportunity email failed', err);
+      this.logger.log('govDelivery rental opportunity email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
