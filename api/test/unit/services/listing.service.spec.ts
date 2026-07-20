@@ -1239,12 +1239,12 @@ describe('Testing listing service', () => {
       expect(res.items[0].unitsSummarized).toEqual({
         byUnitTypeAndRent: [
           {
-            areaRange: { min: 0, max: 7 },
-            minIncomeRange: { min: '$0', max: '$7' },
-            occupancyRange: { min: 0, max: 7 },
-            rentRange: { min: '$0', max: '$7' },
+            areaRange: { min: 0, max: 0 },
+            minIncomeRange: { min: '$0', max: '$0' },
+            occupancyRange: { min: 0, max: 0 },
+            rentRange: { min: '$0', max: '$0' },
             rentAsPercentIncomeRange: { min: 0, max: 0 },
-            floorRange: { min: 0, max: 7 },
+            floorRange: { min: 0, max: 0 },
             unitTypes: {
               id: 'unitType 0',
               createdAt: date,
@@ -1252,13 +1252,13 @@ describe('Testing listing service', () => {
               name: 'SRO',
               numBedrooms: 0,
             },
-            totalAvailable: 2,
+            totalAvailable: 1,
           },
           {
-            areaRange: { min: 1, max: 8 },
-            minIncomeRange: { min: '$1', max: '$8' },
-            occupancyRange: { min: 1, max: 8 },
-            rentRange: { min: '$1', max: '$8' },
+            areaRange: { min: 1, max: 1 },
+            minIncomeRange: { min: '$1', max: '$1' },
+            occupancyRange: { min: 1, max: 1 },
+            rentRange: { min: '$1', max: '$1' },
             rentAsPercentIncomeRange: { min: 1, max: 1 },
             floorRange: { min: 1, max: 1 },
             unitTypes: {

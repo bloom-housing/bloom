@@ -893,7 +893,7 @@ describe('Testing application export helpers', () => {
         'One Bedroom',
         'Two Bedroom',
         'Three Bedroom',
-        'Four+ Bedroom',
+        'Four Bedroom',
         'Five Bedroom',
         'Six Bedroom',
         'Seven+ Bedroom',
