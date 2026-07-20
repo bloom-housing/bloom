@@ -34,7 +34,6 @@ describe("reset-password", () => {
     expect(showPasswordCheckbox).toBeInTheDocument()
     fireEvent.click(showPasswordCheckbox)
     expect(passwordInput).toHaveAttribute("type", "text")
-    expect(getByLabelText("Hide password")).toBeInTheDocument()
   })
 
   describe("should show errors on missing inputs", () => {

@@ -326,7 +326,7 @@ describe("EditPublicAccount", () => {
 
       const passwordInput = screen.getByLabelText(/^new password$/i, { selector: "input" })
       expect(passwordInput).toHaveAttribute("type", "password")
-      await userEvent.click(screen.getByLabelText(/show password/i))
+      await userEvent.click(document.getElementById("password-show-password"))
       expect(passwordInput).toHaveAttribute("type", "text")
     })
 
