@@ -345,7 +345,6 @@ describe('Testing listing service', () => {
   ): ListingCreate | ListingUpdate => {
     return {
       id: listingId ?? undefined,
-      assets: [exampleAsset],
       listingsBuildingAddress: exampleAddress,
       depositMin: '1000',
       depositMax: '5000',
@@ -3763,12 +3762,6 @@ describe('Testing listing service', () => {
         {
           name: 'example listing name',
           depositMin: '5',
-          assets: [
-            {
-              fileId: randomUUID(),
-              label: 'example asset',
-            },
-          ],
           jurisdictions: {
             id: randomUUID(),
           },
@@ -3876,14 +3869,7 @@ describe('Testing listing service', () => {
             },
           },
           depositMin: '5',
-          assets: {
-            create: [
-              {
-                fileId: expect.anything(),
-                label: 'example asset',
-              },
-            ],
-          },
+          assets: {},
           jurisdictions: {
             connect: {
               id: expect.anything(),
@@ -4017,9 +4003,7 @@ describe('Testing listing service', () => {
             },
           },
           publishedAt: expect.anything(),
-          assets: {
-            create: [exampleAsset],
-          },
+          assets: {},
           applicationMethods: {
             create: [
               {
@@ -4298,12 +4282,6 @@ describe('Testing listing service', () => {
         {
           name: 'example listing name',
           depositMin: '5',
-          assets: [
-            {
-              fileId: randomUUID(),
-              label: 'example asset',
-            },
-          ],
           jurisdictions: {
             id: randomUUID(),
           },
@@ -4412,14 +4390,7 @@ describe('Testing listing service', () => {
               id: user.id,
             },
           },
-          assets: {
-            create: [
-              {
-                fileId: expect.anything(),
-                label: 'example asset',
-              },
-            ],
-          },
+          assets: {},
           jurisdictions: {
             connect: {
               id: expect.anything(),
@@ -4565,9 +4536,7 @@ describe('Testing listing service', () => {
             connect: { id: user.id },
           },
           publishedAt: expect.anything(),
-          assets: {
-            create: [exampleAsset],
-          },
+          assets: {},
           applicationMethods: {
             create: [
               {
@@ -4932,9 +4901,7 @@ describe('Testing listing service', () => {
             },
           },
           publishedAt: expect.anything(),
-          assets: {
-            create: [exampleAsset],
-          },
+          assets: {},
           applicationMethods: {
             create: [
               {
@@ -5234,7 +5201,6 @@ describe('Testing listing service', () => {
         {
           name: 'listing name',
           depositMin: '5',
-          assets: [],
           jurisdictions: { id: 'jurisdiction-id' },
           status: ListingsStatusEnum.active,
           displayWaitlistSize: false,
@@ -5735,7 +5701,6 @@ describe('Testing listing service', () => {
       expect(updateCall.data.unitsAvailable).toBe(calculatedUnitsAvailable);
       expect(updateCall.data.publishedAt).toBeInstanceOf(Date);
       expect(updateCall.data.contentUpdatedAt).toBeInstanceOf(Date);
-      expect(updateCall.data.assets).toEqual([exampleAsset]);
       expect(updateCall.data.section8Acceptance).toBe(true);
       expect(updateCall.data.isVerified).toBe(true);
 
@@ -5812,7 +5777,6 @@ describe('Testing listing service', () => {
             {
               name: 'listing name',
               depositMin: '5',
-              assets: [],
               jurisdictions: { id: randomUUID() },
               status: ListingsStatusEnum.pending,
               displayWaitlistSize: false,
@@ -5846,7 +5810,6 @@ describe('Testing listing service', () => {
             {
               name: 'listing name',
               depositMin: '5',
-              assets: [],
               jurisdictions: { id: randomUUID() },
               status: ListingsStatusEnum.pending,
               displayWaitlistSize: false,
@@ -5876,7 +5839,6 @@ describe('Testing listing service', () => {
             {
               name: 'listing name',
               depositMin: '5',
-              assets: [],
               jurisdictions: { id: randomUUID() },
               status: ListingsStatusEnum.pending,
               displayWaitlistSize: false,
@@ -5916,7 +5878,6 @@ describe('Testing listing service', () => {
             {
               name: 'listing name',
               depositMin: '5',
-              assets: [],
               jurisdictions: { id: randomUUID() },
               status: ListingsStatusEnum.pending,
               displayWaitlistSize: false,
@@ -6122,12 +6083,6 @@ describe('Testing listing service', () => {
           id: randomUUID(),
           name: 'example listing name',
           depositMin: '5',
-          assets: [
-            {
-              fileId: randomUUID(),
-              label: 'example asset',
-            },
-          ],
           jurisdictions: {
             id: randomUUID(),
           },
@@ -6235,13 +6190,6 @@ describe('Testing listing service', () => {
             },
           },
           depositMin: '5',
-          assets: [
-            {
-              fileId: expect.anything(),
-              label: 'example asset',
-            },
-          ],
-
           jurisdictions: {
             connect: {
               id: expect.anything(),
@@ -6368,12 +6316,6 @@ describe('Testing listing service', () => {
           id: randomUUID(),
           name: 'example listing name',
           depositMin: '5',
-          assets: [
-            {
-              fileId: randomUUID(),
-              label: 'example asset',
-            },
-          ],
           jurisdictions: {
             id: randomUUID(),
           },
@@ -6419,12 +6361,6 @@ describe('Testing listing service', () => {
           scheduledPublishAt: null,
           scheduledApplicationOpenAt: null,
           depositMin: '5',
-          assets: [
-            {
-              fileId: expect.anything(),
-              label: 'example asset',
-            },
-          ],
           jurisdictions: {
             connect: {
               id: expect.anything(),
@@ -6585,12 +6521,6 @@ describe('Testing listing service', () => {
           id: listingId,
           name: 'example listing name',
           depositMin: '5',
-          assets: [
-            {
-              fileId: randomUUID(),
-              label: 'example asset',
-            },
-          ],
           jurisdictions: {
             id: randomUUID(),
           },
@@ -6688,12 +6618,6 @@ describe('Testing listing service', () => {
           id: randomUUID(),
           name: 'example listing name',
           depositMin: '5',
-          assets: [
-            {
-              fileId: randomUUID(),
-              label: 'example asset',
-            },
-          ],
           jurisdictions: {
             id: randomUUID(),
           },
@@ -6807,13 +6731,6 @@ describe('Testing listing service', () => {
             },
           },
           depositMin: '5',
-          assets: [
-            {
-              fileId: expect.anything(),
-              label: 'example asset',
-            },
-          ],
-
           jurisdictions: {
             connect: {
               id: expect.anything(),
@@ -6981,12 +6898,6 @@ describe('Testing listing service', () => {
           id: randomUUID(),
           name: 'example listing name',
           depositMin: '5',
-          assets: [
-            {
-              fileId: randomUUID(),
-              label: 'example asset',
-            },
-          ],
           jurisdictions: {
             id: randomUUID(),
           },
@@ -7102,13 +7013,6 @@ describe('Testing listing service', () => {
             },
           },
           depositMin: '5',
-          assets: [
-            {
-              fileId: expect.anything(),
-              label: 'example asset',
-            },
-          ],
-
           jurisdictions: {
             connect: {
               id: expect.anything(),
@@ -7217,7 +7121,6 @@ describe('Testing listing service', () => {
           id: 'listing-id',
           name: 'listing name',
           depositMin: '5',
-          assets: [],
           jurisdictions: { id: 'jurisdiction-id' },
           status: incomingStatus,
           displayWaitlistSize: false,
@@ -7595,7 +7498,6 @@ describe('Testing listing service', () => {
           id: 'listing-id',
           name: 'listing name',
           depositMin: '5',
-          assets: [],
           jurisdictions: { id: 'jurisdiction-id' },
           status: ListingsStatusEnum.active,
           displayWaitlistSize: false,
