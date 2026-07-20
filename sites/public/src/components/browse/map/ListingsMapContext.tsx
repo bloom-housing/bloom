@@ -7,8 +7,8 @@ import type {
   ListingMapMarker,
   MultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import type { FormOption, ListingSearchParams } from "../../../lib/listings/search"
 import type { MapMarkerData } from "./ListingsMap"
+import { FormOption } from "./ListingsSearchConfigContext"
 
 export type ListingsSearchResults = {
   listings: Listing[]
@@ -30,7 +30,6 @@ export type ListingsMapContextValue = {
   multiselectData: MultiselectQuestion[]
   regions?: string[]
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
-  searchFilter: ListingSearchParams
   searchResults: ListingsSearchResults
   listView: boolean
   setListView: React.Dispatch<React.SetStateAction<boolean>>
@@ -46,6 +45,7 @@ export type ListingsMapContextValue = {
   onPageChange: (page: number) => void
   infoWindowIndex: number | null
   setInfoWindowIndex: React.Dispatch<React.SetStateAction<number | null>>
+  notificationsSignUpUrl?: string
 }
 
 export const ListingsMapContext = createContext<ListingsMapContextValue | null>(null)

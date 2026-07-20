@@ -8,6 +8,7 @@ import { AppService } from '../services/app.service';
 import { AssetModule } from './asset.module';
 import { AuthModule } from './auth.module';
 import { CronJobModule } from './cron-job.module';
+import { ExternalListingModule } from './external-listing.module';
 import { FeatureFlagModule } from './feature-flag.module';
 import { JurisdictionModule } from './jurisdiction.module';
 import { ListingModule } from './listing.module';
@@ -26,6 +27,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { UnitRentTypeModule } from './unit-rent-type.module';
 import { UnitTypeModule } from './unit-type.module';
 import { UserModule } from './user.module';
+import { BackgroundJobsModule } from './background-jobs.module';
 
 @Module({
   imports: [
@@ -41,6 +43,7 @@ import { UserModule } from './user.module';
     UserModule,
     PrismaModule,
     AuthModule,
+    BackgroundJobsModule,
     ApplicationFlaggedSetModule,
     MapLayerModule,
     ScriptRunnerModule,
@@ -50,6 +53,7 @@ import { UserModule } from './user.module';
     PropertyModule,
     AgencyModule,
     SnapshotCreateModule,
+    ExternalListingModule,
     ThrottlerModule.forRoot([
       {
         ttl: Number(process.env.THROTTLE_TTL),
@@ -82,12 +86,14 @@ import { UserModule } from './user.module';
     UserModule,
     PrismaModule,
     AuthModule,
+    BackgroundJobsModule,
     ApplicationFlaggedSetModule,
     MapLayerModule,
     ScriptRunnerModule,
     LotteryModule,
     FeatureFlagModule,
     SnapshotCreateModule,
+    ExternalListingModule,
   ],
 })
 export class AppModule {}

@@ -740,7 +740,7 @@ describe("listing data", () => {
         expect(
           // Look only for part of the text to verify that content rendered properly
           screen.getByText(
-            /Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency./
+            /Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant performance information provided to the credit reporting agency./
           )
         ).toBeInTheDocument()
         expect(screen.getByText("Rental history")).toBeInTheDocument()
@@ -1677,6 +1677,34 @@ describe("listing data", () => {
         expect(screen.getByText("file_id.pdf")).toBeInTheDocument()
         expect(screen.getByText("Accessible marketing flyer")).toBeInTheDocument()
         expect(screen.getByText("file_id_2.pdf")).toBeInTheDocument()
+      })
+
+      it("should display scheduled application open date only when enableAutoOpenDate is enabled", () => {
+        render(
+          <AuthContext.Provider
+            value={{
+              profile: { ...user, jurisdictions: [], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                featureFlag === FeatureFlagEnum.enableAutoOpenDate,
+              getJurisdiction: () => jurisdiction,
+            }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                applicationDueDate: new Date(2024, 11, 20, 15, 30),
+                scheduledApplicationOpenAt: new Date("2030-06-16T00:00:00.000Z"),
+                listingEvents: [],
+              }}
+            >
+              <DetailApplicationDates />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        expect(screen.queryByText("Scheduled listing publish date")).not.toBeInTheDocument()
+        expect(screen.getByText("Scheduled application open date")).toBeInTheDocument()
+        expect(screen.getByText("06/16/2030")).toBeInTheDocument()
       })
     })
 

@@ -54,10 +54,12 @@ export const ListingMap = (props: ListingBrowseProps) => {
     multiselectData: props.multiselectData,
     regions: props.jurisdiction?.regions,
     listingFeaturesConfiguration: props.jurisdiction?.listingFeaturesConfiguration,
+    notificationsSignUpUrl: props.jurisdiction?.notificationsSignUpUrl,
     jurisdictions: [
       { id: props.jurisdiction?.id, name: props.jurisdiction?.name },
       ...props.jurisdiction.subJurisdictions,
     ],
+    subJurisdictions: props.jurisdiction.subJurisdictions,
   }
 
   return (

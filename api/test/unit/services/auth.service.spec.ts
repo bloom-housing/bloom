@@ -36,7 +36,6 @@ import {
   passwordToHash,
 } from '../../../src/utilities/password-helpers';
 import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
-import { last } from 'lodash';
 
 jest.mock('@google-cloud/recaptcha-enterprise');
 const mockedRecaptcha =

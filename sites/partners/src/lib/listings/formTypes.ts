@@ -136,7 +136,6 @@ export const formDefaults: FormListing = {
   listingsApplicationMailingAddress: null,
   listingsApplicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
-  assets: [],
   buildingSelectionCriteria: "",
   listingsBuildingSelectionCriteriaFile: null,
   criteriaAttachType: "",
@@ -250,4 +249,6 @@ export type FormMetadata = {
   latLong: LatitudeLongitude
   customMapPositionChosen: boolean
   enableUnitGroups: boolean
+  enableAutopublish?: boolean
+  enableAutoOpenDate?: boolean
 }

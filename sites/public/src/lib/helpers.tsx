@@ -1,5 +1,7 @@
 import React, { ReactElement } from "react"
 import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+import timezone from "dayjs/plugin/timezone"
 import { useRouter } from "next/router"
 import InfoIcon from "@heroicons/react/20/solid/InformationCircleIcon"
 import LockClosedIcon from "@heroicons/react/20/solid/LockClosedIcon"
@@ -39,8 +41,25 @@ import {
 import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import { Icon, Message } from "@bloom-housing/ui-seeds"
 import { ApplicationFormConfig } from "./applications/configInterfaces"
-import { MapListingCard } from "../components/browse/map/MapListingCard"
+import { MapListingCard, MapListingCardList } from "../components/browse/map/MapListingCard"
 import styles from "./helpers.module.scss"
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+const defaultAppTimeZone = "America/Los_Angeles"
+
+const formatDateInConfiguredTimeZone = (date: Date, hideTime?: boolean): string => {
+  const configuredTimeZone = process.env.timeZone || defaultAppTimeZone
+  const zonedDate = dayjs(date).tz(configuredTimeZone)
+  const formattedDate = zonedDate.format("MMM DD, YYYY")
+
+  if (hideTime) {
+    return formattedDate
+  }
+
+  return `${formattedDate} ${t("t.at")} ${zonedDate.format("h:mmA")}`
+}
 
 export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
@@ -120,8 +139,7 @@ export const getListingApplicationStatus = (
 
   if (openInFuture(listing)) {
     const date = listing.applicationOpenDate
-    const openDate = dayjs(date)
-    formattedDate = openDate.format("MMM D, YYYY")
+    formattedDate = formatDateInConfiguredTimeZone(date, false)
     content = t("listings.applicationOpenPeriod")
   } else {
     if (listing.status === ListingsStatusEnum.closed) {
@@ -217,12 +235,23 @@ export const getListingStatusMessageContent = (
   marketingSeason: MarketingSeasonEnum,
   marketingMonth: MonthEnum,
   marketingYear: number,
-  hideTime?: boolean
+  hideTime?: boolean,
+  scheduledApplicationOpenAt?: Date,
+  useShortScheduledOpenCopy?: boolean
 ) => {
   let content = ""
   let formattedDate = ""
+  let hasScheduledApplicationOpenMessage = false
   if (status !== ListingsStatusEnum.closed) {
-    if (applicationDueDate) {
+    if (scheduledApplicationOpenAt && dayjs() < dayjs(scheduledApplicationOpenAt)) {
+      formattedDate = formatDateInConfiguredTimeZone(scheduledApplicationOpenAt, false)
+      content = useShortScheduledOpenCopy
+        ? `${t("listings.applicationOpenPeriod")}: ${formattedDate}`
+        : t("listings.scheduledApplicationOpen", {
+            openDate: formattedDate,
+          })
+      hasScheduledApplicationOpenMessage = true
+    } else if (applicationDueDate) {
       const dueDate = dayjs(applicationDueDate)
       formattedDate = dueDate.format("MMM DD, YYYY")
       formattedDate = !hideTime
@@ -237,7 +266,7 @@ export const getListingStatusMessageContent = (
       content = t("listings.applicationOpenPeriod")
     }
 
-    if (formattedDate !== "") {
+    if (formattedDate !== "" && !hasScheduledApplicationOpenMessage) {
       content = content + `${formattedDate}`
     }
 
@@ -321,7 +350,9 @@ export const getListingStatusMessage = (
                 listing.marketingSeason,
                 listing.marketingMonth,
                 listing.marketingYear,
-                hideTime
+                hideTime,
+                listing.scheduledApplicationOpenAt,
+                true
               )}
             </div>
           )}
@@ -423,18 +454,11 @@ export const getListings = (listings) => {
 
 export const getMapListings = (listings: Listing[]) => {
   return (
-    <ul>
+    <MapListingCardList>
       {listings.map((listing, index) => {
-        return (
-          <MapListingCard
-            key={index}
-            listing={listing}
-            index={index}
-            jurisdiction={listing.jurisdictions as Jurisdiction}
-          />
-        )
+        return <MapListingCard key={index} listing={listing} index={index} />
       })}
-    </ul>
+    </MapListingCardList>
   )
 }
 

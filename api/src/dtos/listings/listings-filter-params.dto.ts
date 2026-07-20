@@ -88,14 +88,6 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiPropertyOptional({
-    type: Array,
-    example: ['Santa Clara'],
-  })
-  @IsArray({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.counties]?: string[];
-
-  @Expose()
-  @ApiPropertyOptional({
     enum: HomeTypeEnum,
     enumName: 'HomeTypeEnum',
     isArray: true,

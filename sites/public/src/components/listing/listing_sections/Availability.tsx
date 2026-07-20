@@ -16,7 +16,6 @@ import {
   isFeatureFlagOn,
   scheduledApplicationOpenInFuture,
 } from "../../../lib/helpers"
-import { getDateString } from "../ListingViewSeedsHelpers"
 import styles from "./Availability.module.scss"
 
 type AvailabilityProps = {
@@ -228,9 +227,18 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
   const scheduledOpenContent = getCardSection(
     t("listings.availability.comingSoon"),
     undefined,
-    t("listings.scheduledApplicationOpen", {
-      openDate: getDateString(listing.scheduledApplicationOpenAt, "MM/DD/YYYY"),
-    })
+    getListingStatusMessageContent(
+      listing.status,
+      listing.applicationDueDate,
+      enableMarketingStatus,
+      enableMarketingStatusMonths,
+      listing.marketingType,
+      listing.marketingSeason,
+      listing.marketingMonth,
+      listing.marketingYear,
+      false,
+      listing.scheduledApplicationOpenAt
+    )
   )
 
   const getSections = () => {

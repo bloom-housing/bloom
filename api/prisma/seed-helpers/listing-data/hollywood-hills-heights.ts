@@ -14,7 +14,7 @@ export const hollywoodHillsHeights: Prisma.ListingsCreateInput = {
   commonDigitalApplication: true,
   paperApplication: false,
   referralOpportunity: false,
-  assets: [],
+  assets: {},
   accessibility: null,
   amenities: null,
   listingFileNumber: 'A-12345',

@@ -552,7 +552,6 @@ export const constructFullListingData = async (
 
   return {
     id: listingId ?? undefined,
-    assets: [exampleAsset],
     listingsBuildingAddress: exampleAddress,
     depositMin: '1000',
     depositMax: '5000',

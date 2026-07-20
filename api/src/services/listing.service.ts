@@ -26,7 +26,7 @@ import tz from 'dayjs/plugin/timezone';
 import { firstValueFrom } from 'rxjs';
 import { ApplicationFlaggedSetService } from './application-flagged-set.service';
 import { CronJobService } from './cron-job.service';
-import { EmailService } from './email.service';
+import { EmailService, ListingNotificationVariant } from './email.service';
 import { MultiselectQuestionService } from './multiselect-question.service';
 import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
@@ -124,8 +124,12 @@ selectViews.map = {
     select: {
       monthlyRent: true,
       unitTypes: {
-        select: { numBedrooms: true, name: true },
+        select: {
+          numBedrooms: true,
+          name: true,
+        },
       },
+      accessibilityPriorityType: true,
     },
   },
 };
@@ -160,8 +164,9 @@ includeViews.base = {
   listingNeighborhoodAmenities: true,
   units: {
     include: {
-      unitTypes: true,
       unitAmiChartOverrides: true,
+      unitRentTypes: true,
+      unitTypes: true,
     },
   },
   unitGroups: {
@@ -242,7 +247,9 @@ includeViews.full = {
 
 const LISTING_CRON_JOB_NAME = 'LISTING_CRON_JOB';
 const LISTING_SCHEDULED_PUBLISH_CRON_JOB_NAME =
-  'LISTING_SCHEDULED_PUBLISH_CRON_STRING';
+  'LISTING_SCHEDULED_PUBLISH_CRON_JOB';
+const LISTING_OPEN_DATE_NOTIFICATION_CRON_JOB_NAME =
+  'LISTING_OPEN_DATE_NOTIFICATION_CRON_JOB';
 /*
   this is the service for listings
   it handles all the backend's business logic for reading in listing(s)
@@ -274,6 +281,11 @@ export class ListingService implements OnModuleInit {
       LISTING_SCHEDULED_PUBLISH_CRON_JOB_NAME,
       process.env.LISTING_SCHEDULED_PUBLISH_CRON_STRING,
       this.publishScheduledListingsCronJob.bind(this),
+    );
+    this.cronJobService.startCronJob(
+      LISTING_OPEN_DATE_NOTIFICATION_CRON_JOB_NAME,
+      process.env.LISTING_OPEN_DATE_NOTIFICATION_CRON_STRING,
+      this.sendApplicationOpenNotificationsCronJob.bind(this),
     );
   }
 
@@ -417,6 +429,7 @@ export class ListingService implements OnModuleInit {
   public async listingApprovalNotify(params: {
     user: User;
     listingInfo: IdDTO;
+    listingFileNumber?: string;
     status: ListingsStatusEnum;
     approvingRoles: UserRoleEnum[];
     previousStatus?: ListingsStatusEnum;
@@ -441,6 +454,7 @@ export class ListingService implements OnModuleInit {
       await this.emailService.requestApproval(
         { id: params.jurisId },
         { id: params.listingInfo.id, name: params.listingInfo.name },
+        params.listingFileNumber,
         userInfo.emails,
         this.configService.get('PARTNERS_PORTAL_URL'),
       );
@@ -948,21 +962,6 @@ export class ListingService implements OnModuleInit {
             OR: builtFilter.map((filt) => ({
               listingsBuildingAddress: {
                 city: filt,
-              },
-            })),
-          });
-        }
-        if (filter[ListingFilterKeys.counties]) {
-          const builtFilter = buildFilter({
-            $comparison: filter.$comparison,
-            $include_nulls: false,
-            value: filter[ListingFilterKeys.counties],
-            key: ListingFilterKeys.counties,
-          });
-          filters.push({
-            OR: builtFilter.map((filt) => ({
-              listingsBuildingAddress: {
-                county: filt,
               },
             })),
           });
@@ -1504,8 +1503,16 @@ export class ListingService implements OnModuleInit {
       FeatureFlagEnum.enableAutopublish,
     );
 
+    const enableAutoOpenDate = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as unknown as Jurisdiction,
+      FeatureFlagEnum.enableAutoOpenDate,
+    );
+
     if (!enableAutopublish) {
       dto.scheduledPublishAt = null;
+    }
+
+    if (!enableAutoOpenDate) {
       dto.scheduledApplicationOpenAt = null;
     }
 
@@ -1519,7 +1526,7 @@ export class ListingService implements OnModuleInit {
       );
     }
 
-    if (enableAutopublish && dto.scheduledApplicationOpenAt) {
+    if (enableAutoOpenDate && dto.scheduledApplicationOpenAt) {
       dto.scheduledApplicationOpenAt = this.normalizeScheduledApplicationOpenAt(
         dto.scheduledApplicationOpenAt,
       );
@@ -1574,14 +1581,7 @@ export class ListingService implements OnModuleInit {
       data: {
         ...listingData,
         displayWaitlistSize: dto.displayWaitlistSize ?? false,
-        assets: dto.assets
-          ? {
-              create: dto.assets.map((asset) => ({
-                fileId: asset.fileId,
-                label: asset.label,
-              })),
-            }
-          : Prisma.JsonNullValueInput.JsonNull,
+        assets: Prisma.JsonNullValueInput.JsonNull,
         applicationMethods: dto.applicationMethods
           ? {
               create: dto.applicationMethods.map((applicationMethod) => ({
@@ -1903,6 +1903,7 @@ export class ListingService implements OnModuleInit {
       await this.listingApprovalNotify({
         user: requestingUser,
         listingInfo: { id: mappedListing.id, name: mappedListing.name },
+        listingFileNumber: mappedListing.listingFileNumber,
         status: mappedListing.status,
         approvingRoles: rawJurisdiction.listingApprovalPermissions,
         jurisId: rawJurisdiction.id,
@@ -2084,7 +2085,6 @@ export class ListingService implements OnModuleInit {
     const newListingData: ListingCreate = {
       ...mappedListing,
       applicationMethods: applicationMethods,
-      assets: [],
       listingsBuildingSelectionCriteriaFile:
         mappedListing.listingsBuildingSelectionCriteriaFile
           ? {
@@ -2356,8 +2356,16 @@ export class ListingService implements OnModuleInit {
       FeatureFlagEnum.enableAutopublish,
     );
 
+    const enableAutoOpenDate = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableAutoOpenDate,
+    );
+
     if (!enableAutopublish) {
       incomingDto.scheduledPublishAt = null;
+    }
+
+    if (!enableAutoOpenDate) {
       incomingDto.scheduledApplicationOpenAt = null;
     }
 
@@ -2381,20 +2389,21 @@ export class ListingService implements OnModuleInit {
           'scheduledPublishAt',
         );
       }
+    }
 
-      if (incomingDto.scheduledApplicationOpenAt) {
+    if (enableAutoOpenDate && incomingDto.scheduledApplicationOpenAt) {
+      incomingDto.scheduledApplicationOpenAt =
         this.normalizeScheduledApplicationOpenAt(
           incomingDto.scheduledApplicationOpenAt,
         );
-        this.checkScheduledDateIsInFuture(
-          incomingDto.scheduledApplicationOpenAt,
-          'scheduledApplicationOpenAt',
-        );
-        this.checkScheduledApplicationOpenAtIsAfterPublish(
-          incomingDto.scheduledApplicationOpenAt,
-          incomingDto.scheduledPublishAt,
-        );
-      }
+      this.checkScheduledDateIsInFuture(
+        incomingDto.scheduledApplicationOpenAt,
+        'scheduledApplicationOpenAt',
+      );
+      this.checkScheduledApplicationOpenAtIsAfterPublish(
+        incomingDto.scheduledApplicationOpenAt,
+        incomingDto.scheduledPublishAt,
+      );
     }
 
     if (
@@ -2559,7 +2568,6 @@ export class ListingService implements OnModuleInit {
           id: undefined,
           createdAt: undefined,
           updatedAt: undefined,
-          assets: incomingDto.assets as unknown as Prisma.InputJsonArray,
           applicationMethods: incomingDto.applicationMethods
             ? {
                 create: incomingDto.applicationMethods.map(
@@ -2926,11 +2934,11 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
-          publishedAt:
-            storedListing.status !== ListingsStatusEnum.active &&
-            incomingDto.status === ListingsStatusEnum.active
-              ? new Date()
-              : storedListing.publishedAt,
+          publishedAt: ListingService.resolvePublishedAt(
+            incomingDto.status,
+            storedListing.status,
+            storedListing.publishedAt,
+          ),
           closedAt:
             storedListing.status !== ListingsStatusEnum.closed &&
             incomingDto.status === ListingsStatusEnum.closed
@@ -3026,6 +3034,7 @@ export class ListingService implements OnModuleInit {
       await this.listingApprovalNotify({
         user: requestingUser,
         listingInfo: { id: mappedListing.id, name: mappedListing.name },
+        listingFileNumber: mappedListing.listingFileNumber,
         approvingRoles: listingApprovalPermissions,
         status: incomingDto.status,
         previousStatus: storedListing.status,
@@ -3060,7 +3069,13 @@ export class ListingService implements OnModuleInit {
     }
 
     if (sendPublishNotificationEmail) {
-      await this.sendListingPublishNotification(mappedListing);
+      const useComingSoon =
+        !!mappedListing.scheduledApplicationOpenAt &&
+        dayjs(mappedListing.scheduledApplicationOpenAt).isAfter(new Date());
+      await this.sendListingPublishNotification(
+        mappedListing,
+        useComingSoon ? 'comingSoon' : 'standard',
+      );
     }
 
     if (enableV2MSQ && mappedListing.status === ListingsStatusEnum.active) {
@@ -3097,7 +3112,33 @@ export class ListingService implements OnModuleInit {
   /**
    * When listing is published, notify users with declared approval for example
    */
-  async sendListingPublishNotification(listing: Listing): Promise<void> {
+  async sendListingPublishNotification(
+    listing: Listing,
+    variant: ListingNotificationVariant = 'standard',
+  ): Promise<void> {
+    const jurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        id: true,
+        featureFlags: true,
+        publicUrl: true,
+      },
+      where: {
+        id: listing.jurisdictions.id,
+      },
+    });
+
+    if (
+      !doJurisdictionHaveFeatureFlagSet(
+        jurisdiction as Jurisdiction,
+        FeatureFlagEnum.enableCustomListingNotifications,
+      )
+    ) {
+      this.logger.log(
+        `Skipping publish notification for listing ${listing.id}: enableCustomListingNotifications flag is off for jurisdiction ${jurisdiction?.id}`,
+      );
+      return;
+    }
+
     const priorityTypes = Array.from(
       new Set(
         (listing.units || [])
@@ -3184,21 +3225,12 @@ export class ListingService implements OnModuleInit {
         ...noLanguageIndicated,
       ];
 
-    const jurisdiction = await this.prisma.jurisdictions.findUnique({
-      select: {
-        id: true,
-        publicUrl: true,
-      },
-      where: {
-        id: listing.jurisdictions.id,
-      },
-    });
-
     await this.emailService.listingPublishNotification(
       { id: jurisdiction.id },
       listing,
       priorityTypes,
       emailByLanguage,
+      variant,
     );
   }
 
@@ -3350,9 +3382,26 @@ export class ListingService implements OnModuleInit {
   };
 
   normalizeScheduledPublishAt(scheduledPublishAt: Date): Date {
-    const appTimezone = process.env.TIME_ZONE;
+    const appTimezone = process.env.TIME_ZONE || 'America/Los_Angeles';
     const dateStr = dayjs.utc(scheduledPublishAt).format('YYYY-MM-DD');
-    return dayjs.tz(dateStr, 'YYYY-MM-DD', appTimezone).startOf('day').toDate();
+    return dayjs.tz(`${dateStr}T00:00:00`, appTimezone).toDate();
+  }
+
+  private static resolvePublishedAt(
+    incomingStatus: ListingsStatusEnum,
+    storedStatus: ListingsStatusEnum,
+    storedPublishedAt: Date | null,
+  ): Date | null {
+    if (
+      incomingStatus === ListingsStatusEnum.active &&
+      storedStatus !== ListingsStatusEnum.active
+    ) {
+      return new Date();
+    }
+    if (incomingStatus === ListingsStatusEnum.pending) {
+      return null;
+    }
+    return storedPublishedAt ?? null;
   }
 
   private checkScheduledDateIsInFuture(date: Date, fieldName: string): void {
@@ -3365,14 +3414,10 @@ export class ListingService implements OnModuleInit {
   }
 
   normalizeScheduledApplicationOpenAt(scheduledApplicationOpenAt: Date): Date {
-    const appTimezone = process.env.TIME_ZONE;
+    const appTimezone = process.env.TIME_ZONE || 'America/Los_Angeles';
     const dateStr = dayjs.utc(scheduledApplicationOpenAt).format('YYYY-MM-DD');
     // Applications open at 9:00 AM in the app timezone
-    return dayjs
-      .tz(dateStr, 'YYYY-MM-DD', appTimezone)
-      .startOf('day')
-      .add(9, 'hour')
-      .toDate();
+    return dayjs.tz(`${dateStr}T00:00:00`, appTimezone).add(9, 'hour').toDate();
   }
 
   private checkScheduledApplicationOpenAtIsAfterPublish(
@@ -3530,6 +3575,7 @@ export class ListingService implements OnModuleInit {
         id: true,
         name: true,
         jurisdictionId: true,
+        scheduledApplicationOpenAt: true,
         jurisdictions: {
           select: {
             publicUrl: true,
@@ -3619,6 +3665,74 @@ export class ListingService implements OnModuleInit {
           `${logName} failed to send published email for listing ${listing.id}`,
           err,
         );
+      }
+
+      const notifyUserAboutScheduledApplicationOpenAt =
+        !!listing.scheduledApplicationOpenAt &&
+        dayjs(listing.scheduledApplicationOpenAt).isAfter(new Date());
+      if (notifyUserAboutScheduledApplicationOpenAt) {
+        const fullListing = await this.findOne(listing.id);
+        await this.sendListingPublishNotification(fullListing, 'comingSoon');
+      }
+    }
+
+    return { success: true };
+  }
+
+  /**
+    runs daily to notify opted-in users that applications opened for active
+    listings whose scheduledApplicationOpenAt was reached since the previous
+    run; sends the standard notification email and never modifies the listing
+  */
+  async sendApplicationOpenNotificationsCronJob(): Promise<SuccessDTO> {
+    const logName = 'sendApplicationOpenNotificationsCron';
+    this.logger.warn(`${logName} job running`);
+
+    // previous run date is the dedupe window lower bound, so read it before
+    // marking the job as started (which overwrites it)
+    const previousRun = await this.prisma.cronJob.findFirst({
+      where: { name: LISTING_OPEN_DATE_NOTIFICATION_CRON_JOB_NAME },
+    });
+    await this.cronJobService.markCronJobAsStarted(
+      LISTING_OPEN_DATE_NOTIFICATION_CRON_JOB_NAME,
+    );
+
+    const now = new Date();
+    const windowStart =
+      previousRun?.lastRunDate ?? dayjs(now).subtract(1, 'day').toDate();
+
+    const listings = await this.prisma.listings.findMany({
+      select: { id: true },
+      where: {
+        status: ListingsStatusEnum.active,
+        AND: [
+          { scheduledApplicationOpenAt: { not: null } },
+          { scheduledApplicationOpenAt: { gt: windowStart } },
+          { scheduledApplicationOpenAt: { lte: now } },
+          {
+            OR: [
+              { publishedAt: null },
+              {
+                publishedAt: {
+                  lt: this.prisma.listings.fields.scheduledApplicationOpenAt,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    this.logger.warn(
+      `${logName} found ${listings.length} listing(s) with applications newly open`,
+    );
+
+    for (const { id } of listings) {
+      try {
+        const listing = await this.findOne(id);
+        await this.sendListingPublishNotification(listing, 'standard');
+      } catch (e) {
+        this.logger.error(`${logName} failed for listing ${id}: ${e}`);
       }
     }
 
