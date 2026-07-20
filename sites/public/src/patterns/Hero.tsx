@@ -1,7 +1,9 @@
 import React from "react"
-import { Heading } from "@bloom-housing/ui-seeds"
+import { Heading, Card } from "@bloom-housing/ui-seeds"
 import MaxWidthLayout from "../layouts/max-width"
 import styles from "./Hero.module.scss"
+
+import { BloomCard } from "@bloom-housing/shared-helpers"
 
 export interface HeroProps {
   /** A clear call to action, most typically a button */
