@@ -1,7 +1,12 @@
 import { AxiosError } from "axios"
 import React, { useContext, useState } from "react"
 import { useSWRConfig } from "swr"
-import { AuthContext, MessageContext, useMutate } from "@bloom-housing/shared-helpers"
+import {
+  AuthContext,
+  CatchNetworkError,
+  MessageContext,
+  useMutate,
+} from "@bloom-housing/shared-helpers"
 import {
   MultiselectQuestion,
   MultiselectQuestionCreate,
@@ -81,7 +86,7 @@ const EditMultiselectQuestion = ({
             )
             addToast(t("settings.preferenceAlertUpdated"), { variant: "success" })
           })
-          .catch((e: AxiosError) => {
+          .catch((e: AxiosError<CatchNetworkError>) => {
             if (
               e?.response?.data?.message ===
               "status 'visible' can not return to 'draft' when attached to a listing"

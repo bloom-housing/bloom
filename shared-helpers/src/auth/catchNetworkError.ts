@@ -12,7 +12,7 @@ export type NetworkStatusType = AlertTypes
 
 export type NetworkStatusError = AxiosError
 
-type CatchNetworkError = {
+export type CatchNetworkError = {
   failureCountRemaining?: number
   message?: string
 }
