@@ -833,6 +833,7 @@ describe('Testing multiselect question service', () => {
       expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdiction: true,
+          listings: true,
           multiselectOptions: true,
         },
         where: {
@@ -937,6 +938,7 @@ describe('Testing multiselect question service', () => {
       expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdiction: true,
+          listings: true,
           multiselectOptions: true,
         },
         where: {
@@ -990,6 +992,7 @@ describe('Testing multiselect question service', () => {
       expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdiction: true,
+          listings: true,
           multiselectOptions: true,
         },
         where: {
