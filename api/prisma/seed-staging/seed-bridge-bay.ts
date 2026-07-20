@@ -2409,6 +2409,7 @@ const featureFlags = [
   FeatureFlagEnum.enableGeocodingPreferences,
   FeatureFlagEnum.enableGeocodingRadiusMethod,
   FeatureFlagEnum.enableGenderQuestion,
+  FeatureFlagEnum.enableHomePageSearchHero,
   FeatureFlagEnum.enableLeasingAgentAltText,
   FeatureFlagEnum.enableListingFiltering,
   FeatureFlagEnum.enableListingMap,
