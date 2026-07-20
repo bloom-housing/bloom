@@ -1,6 +1,8 @@
 import {
   ConflictException,
+  Inject,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
@@ -13,14 +15,28 @@ import { BackgroundJobCreate } from '../dtos/background-jobs/background-job-crea
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { CronJobService } from './cron-job.service';
 
+const BACKGROUND_JOBS_RECOVERY_JOB_NAME = 'BACKGROUND_JOBS_RECOVERY_CRON_JOB';
+export const BACKGROUND_JOB_STALE_TIME_IN_MINUTES = 30;
 @Injectable()
 export class BackgroundJobsService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly s3Service: S3Service,
+    private readonly cronJobService: CronJobService,
     private readonly permissionService: PermissionService,
+    @Inject(Logger)
+    private logger = new Logger(BackgroundJobsService.name),
   ) {}
+
+  onModuleInit() {
+    this.cronJobService.startCronJob(
+      BACKGROUND_JOBS_RECOVERY_JOB_NAME,
+      process.env.BACKGROUND_JOBS_RECOVERY_CRON_STRING,
+      this.recoverStuckJobCronJob.bind(this),
+    );
+  }
 
   /**
    * Creates an instance of a background job runner for a listing
@@ -142,6 +158,63 @@ export class BackgroundJobsService {
 
     return {
       success: !!activeJob,
+    };
+  }
+
+  async recoverStuckJobCronJob(): Promise<SuccessDTO> {
+    const logName = 'recoverStuckJobCron';
+    this.logger.warn(`${logName} job running`);
+    const currentTime = new Date();
+
+    this.cronJobService.markCronJobAsStarted(BACKGROUND_JOBS_RECOVERY_JOB_NAME);
+
+    const runningJobs = await this.prismaService.backgroundJob.findMany({
+      select: {
+        id: true,
+        updatedAt: true,
+      },
+      where: {
+        status: BackgroundJobStatusEnum.processing,
+      },
+    });
+
+    if (!runningJobs.length) {
+      this.logger.warn('No jobs are currently running');
+      return {
+        success: true,
+      };
+    }
+
+    const markedForDeletion = [];
+    runningJobs.forEach((job) => {
+      if (
+        (currentTime.getTime() - job.updatedAt.getTime()) / 60000 >
+        BACKGROUND_JOB_STALE_TIME_IN_MINUTES
+      ) {
+        markedForDeletion.push(job.id);
+      }
+    });
+
+    this.logger.warn(
+      `${markedForDeletion.length} running jobs have been marked for deletion`,
+    );
+
+    const deletedJobs = await this.prismaService.backgroundJob.deleteMany({
+      where: {
+        id: {
+          in: markedForDeletion,
+        },
+      },
+    });
+
+    if (deletedJobs.count !== markedForDeletion.length) {
+      this.logger.error(
+        `Failed to delete all the marked jobs (${deletedJobs.count}/${markedForDeletion.length} jobs deleted)`,
+      );
+    }
+
+    return {
+      success: true,
     };
   }
 }
