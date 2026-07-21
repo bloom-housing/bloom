@@ -119,4 +119,11 @@ describe('Translation Controller Tests', () => {
 
     expect(res.body['partners.brand']).toEqual('Bloom');
   });
+
+  it('rejects a jurisdiction read that omits the site', async () => {
+    await request(app.getHttpServer())
+      .get(`/jurisdictions/${jurisdictionId}/translations?language=en`)
+      .set(passkey)
+      .expect(400);
+  });
 });
