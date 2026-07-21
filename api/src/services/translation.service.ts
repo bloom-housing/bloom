@@ -5,6 +5,13 @@ import { GoogleTranslateService } from './google-translate.service';
 import { PrismaService } from './prisma.service';
 import { Listing } from '../dtos/listings/listing.dto';
 
+// Key segments that would let a translation key reach Object.prototype.
+const RESERVED_KEY_SEGMENTS = new Set([
+  '__proto__',
+  'constructor',
+  'prototype',
+]);
+
 @Injectable()
 export class TranslationService {
   constructor(
@@ -100,10 +107,28 @@ export class TranslationService {
   private keyRowsToNested(
     rows: { key: string; value: string }[],
   ): Record<string, unknown> {
-    return rows.reduce<Record<string, unknown>>((acc, row) => {
-      lodash.set(acc, row.key, row.value);
-      return acc;
-    }, {});
+    const root: Record<string, unknown> = {};
+    for (const { key, value } of rows) {
+      const segments = key.split('.');
+      if (segments.some((segment) => RESERVED_KEY_SEGMENTS.has(segment))) {
+        continue;
+      }
+      let node = root;
+      for (let i = 0; i < segments.length - 1; i++) {
+        const segment = segments[i];
+        // Build plain objects only (never arrays), and let a branch replace a leaf so the
+        // result is independent of row order.
+        if (typeof node[segment] !== 'object' || node[segment] === null) {
+          node[segment] = {};
+        }
+        node = node[segment] as Record<string, unknown>;
+      }
+      const leaf = segments[segments.length - 1];
+      if (typeof node[leaf] !== 'object' || node[leaf] === null) {
+        node[leaf] = value;
+      }
+    }
+    return root;
   }
 
   public async getJurisdictionOverrides(

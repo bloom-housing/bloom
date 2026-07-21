@@ -267,6 +267,35 @@ describe('Testing translations service', () => {
       });
     });
 
+    it('handles branch/leaf collisions and skips reserved key segments', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          jurisdictionId: null,
+          language: LanguagesEnum.en,
+          key: 'footer',
+          value: 'scalar',
+        },
+        {
+          jurisdictionId: null,
+          language: LanguagesEnum.en,
+          key: 'footer.line1',
+          value: 'nested',
+        },
+        {
+          jurisdictionId: null,
+          language: LanguagesEnum.en,
+          key: '__proto__.polluted',
+          value: 'x',
+        },
+      ]);
+
+      const result = await service.getMergedTranslations(null);
+
+      // The nested branch wins over the scalar sibling, and the reserved key is ignored.
+      expect(result).toEqual({ footer: { line1: 'nested' } });
+      expect(({} as Record<string, unknown>).polluted).toBeUndefined();
+    });
+
     it('merges the four scopes in precedence order from one query', async () => {
       const jurisdictionId = randomUUID();
       prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
