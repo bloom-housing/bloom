@@ -4,13 +4,7 @@ import * as lodash from 'lodash';
 import { GoogleTranslateService } from './google-translate.service';
 import { PrismaService } from './prisma.service';
 import { Listing } from '../dtos/listings/listing.dto';
-
-// Key segments that would let a translation key reach Object.prototype.
-const RESERVED_KEY_SEGMENTS = new Set([
-  '__proto__',
-  'constructor',
-  'prototype',
-]);
+import { flattenTranslationRows } from '../utilities/translation-merge';
 
 @Injectable()
 export class TranslationService {
@@ -51,20 +45,17 @@ export class TranslationService {
       return this.getLegacyMergedTranslations(jurisdictionId, language);
     }
 
-    const scope = (id: string | null, lang: LanguagesEnum) =>
-      this.keyRowsToNested(
-        rows.filter(
-          (row) => row.jurisdictionId === id && row.language === lang,
-        ),
-      );
+    const scopeRows = (id: string | null, lang: LanguagesEnum) =>
+      rows.filter((row) => row.jurisdictionId === id && row.language === lang);
 
-    return lodash.merge(
-      {},
-      scope(null, LanguagesEnum.en),
-      useLanguage ? scope(null, language) : null,
-      jurisdictionId ? scope(jurisdictionId, LanguagesEnum.en) : null,
-      jurisdictionId && useLanguage ? scope(jurisdictionId, language) : null,
-    );
+    return flattenTranslationRows([
+      scopeRows(null, LanguagesEnum.en),
+      ...(useLanguage ? [scopeRows(null, language)] : []),
+      ...(jurisdictionId ? [scopeRows(jurisdictionId, LanguagesEnum.en)] : []),
+      ...(jurisdictionId && useLanguage
+        ? [scopeRows(jurisdictionId, language)]
+        : []),
+    ]);
   }
 
   private async getLegacyMergedTranslations(
@@ -102,33 +93,6 @@ export class TranslationService {
     );
   }
 
-  private keyRowsToNested(
-    rows: { key: string; value: string }[],
-  ): Record<string, unknown> {
-    const root: Record<string, unknown> = {};
-    for (const { key, value } of rows) {
-      const segments = key.split('.');
-      if (segments.some((segment) => RESERVED_KEY_SEGMENTS.has(segment))) {
-        continue;
-      }
-      let node = root;
-      for (let i = 0; i < segments.length - 1; i++) {
-        const segment = segments[i];
-        // Build plain objects only (never arrays), and let a branch replace a leaf so the
-        // result is independent of row order.
-        if (typeof node[segment] !== 'object' || node[segment] === null) {
-          node[segment] = {};
-        }
-        node = node[segment] as Record<string, unknown>;
-      }
-      const leaf = segments[segments.length - 1];
-      if (typeof node[leaf] !== 'object' || node[leaf] === null) {
-        node[leaf] = value;
-      }
-    }
-    return root;
-  }
-
   private languagesToRead(language?: LanguagesEnum): LanguagesEnum[] {
     return !!language && language !== LanguagesEnum.en
       ? [LanguagesEnum.en, language]
@@ -148,17 +112,13 @@ export class TranslationService {
       select: { language: true, key: true, value: true },
     });
 
-    // English default first, then the requested language layered on top.
-    const flat: Record<string, string> = {};
-    for (const row of rows) {
-      if (row.language === LanguagesEnum.en) flat[row.key] = row.value;
-    }
-    if (useLanguage) {
-      for (const row of rows) {
-        if (row.language === language) flat[row.key] = row.value;
-      }
-    }
-    return flat;
+    const byLanguage = (lang: LanguagesEnum) =>
+      rows.filter((row) => row.language === lang);
+
+    return flattenTranslationRows([
+      byLanguage(LanguagesEnum.en),
+      ...(useLanguage ? [byLanguage(language)] : []),
+    ]);
   }
 
   public async getJurisdictionOverridesById(
