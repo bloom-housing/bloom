@@ -2667,6 +2667,8 @@ enum UnitTypeEnum {
   fourBdrm
   SRO
   fiveBdrm
+  sixBdrm
+  sevenBdrm
 
   @@map("unit_type_enum")
 }
