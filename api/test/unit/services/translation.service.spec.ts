@@ -237,6 +237,20 @@ describe('Testing translations service', () => {
       const result = await service.getMergedTranslations(null);
 
       expect(prisma.translationStrings.findMany).toBeCalledTimes(1);
+      // The merge reads only site-null base rows, so public/partners overrides never leak in.
+      expect(prisma.translationStrings.findMany).toHaveBeenCalledWith({
+        where: {
+          site: null,
+          language: { in: [LanguagesEnum.en] },
+          OR: [{ jurisdictionId: null }],
+        },
+        select: {
+          jurisdictionId: true,
+          language: true,
+          key: true,
+          value: true,
+        },
+      });
       expect(prisma.translations.findFirst).not.toHaveBeenCalled();
       expect(result).toEqual({
         value: 'null jurisdiction',
@@ -359,6 +373,30 @@ describe('Testing translations service', () => {
       expect(prisma.translations.findFirst).toBeCalledTimes(1);
       expect(result).toEqual({ value: 'legacy blob' });
     });
+
+    it('builds from present scopes without resurrecting legacy for empty ones', async () => {
+      const jurisdictionId = randomUUID();
+      // Only the generic-default (en) base is migrated; the requested es and
+      // jurisdictional scopes have no rows.
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          jurisdictionId: null,
+          language: LanguagesEnum.en,
+          key: 'region.name',
+          value: 'Base',
+        },
+      ]);
+      prisma.translations.findFirst = jest.fn();
+
+      const result = await service.getMergedTranslations(
+        jurisdictionId,
+        LanguagesEnum.es,
+      );
+
+      // migrated is true, so empty scopes contribute nothing and no legacy read happens.
+      expect(prisma.translations.findFirst).not.toHaveBeenCalled();
+      expect(result).toEqual({ 'region.name': 'Base' });
+    });
   });
 
   describe('getJurisdictionOverrides', () => {
@@ -441,6 +479,29 @@ describe('Testing translations service', () => {
         select: { language: true, key: true, value: true },
       });
       expect(result).toEqual({ 'partners.brand': 'Bloom' });
+    });
+
+    it('layers the requested language over english for the global Partners layer', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        { language: LanguagesEnum.en, key: 'partners.brand', value: 'Bloom' },
+        { language: LanguagesEnum.en, key: 'partners.tag', value: 'EN tag' },
+        {
+          language: LanguagesEnum.es,
+          key: 'partners.brand',
+          value: 'Bloom ES',
+        },
+      ]);
+
+      const result = await service.getJurisdictionOverrides(
+        null,
+        LanguagesEnum.es,
+        SiteEnum.partners,
+      );
+
+      expect(result).toEqual({
+        'partners.brand': 'Bloom ES',
+        'partners.tag': 'EN tag',
+      });
     });
   });
 
