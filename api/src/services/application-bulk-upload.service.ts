@@ -634,22 +634,29 @@ export class ApplicationBulkUploadService {
     this.validateHeaders(headers);
     this.validateHasDataRows(rows);
 
-    const dbApps = await this.fetchDbApplications(rows, dto.listingId);
-    const foundIds = new Set(dbApps.map((a) => a.id));
-    const dbMap = new Map(dbApps.map((a) => [a.id, a]));
+    for (let i = 0; i < rows.length; i += NUMBER_TO_PAGINATE_BY) {
+      const currentChunk = rows.slice(i, NUMBER_TO_PAGINATE_BY);
 
-    this.validateNoDuplicateId(rows);
+      const dbApps = await this.fetchDbApplications(
+        currentChunk.map((entry) => entry),
+        dto.listingId,
+      );
+      const foundIds = new Set(dbApps.map((a) => a.id));
+      const dbMap = new Map(dbApps.map((a) => [a.id, a]));
 
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      this.validateApplicationId(row, foundIds, i);
-      this.validateContextFields(row, dbMap, i);
-      this.validateStatus(row, i);
-      this.validateDeclineReason(row, i);
-      this.validateDeclineConsistency(row, i);
-      this.validateAdditionalDetails(row, i);
-      this.validateWaitlistConsistency(row, i);
-      this.validateNumericFields(row, i);
+      this.validateNoDuplicateId(rows);
+
+      for (let i = 0; i < currentChunk.length; i++) {
+        const entry = currentChunk[i];
+        this.validateApplicationId(entry, foundIds, i);
+        this.validateContextFields(entry, dbMap, i);
+        this.validateStatus(entry, i);
+        this.validateDeclineReason(entry, i);
+        this.validateDeclineConsistency(entry, i);
+        this.validateAdditionalDetails(entry, i);
+        this.validateWaitlistConsistency(entry, i);
+        this.validateNumericFields(entry, i);
+      }
     }
 
     const backgroundJob = await this.backgroundJobsService.create(
