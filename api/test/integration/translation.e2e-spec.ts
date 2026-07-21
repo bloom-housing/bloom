@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { LanguagesEnum, SiteEnum } from '@prisma/client';
+import { randomUUID } from 'crypto';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { AppModule } from '../../src/modules/app.module';
@@ -125,5 +126,14 @@ describe('Translation Controller Tests', () => {
       .get(`/jurisdictions/${jurisdictionId}/translations?language=en`)
       .set(passkey)
       .expect(400);
+  });
+
+  it('returns 404 for an unknown jurisdiction id', async () => {
+    await request(app.getHttpServer())
+      .get(
+        `/jurisdictions/${randomUUID()}/translations?site=public&language=en`,
+      )
+      .set(passkey)
+      .expect(404);
   });
 });

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { LanguagesEnum, SiteEnum, Translations } from '@prisma/client';
+import { LanguagesEnum, Prisma, SiteEnum, Translations } from '@prisma/client';
 import * as lodash from 'lodash';
 import { GoogleTranslateService } from './google-translate.service';
 import { PrismaService } from './prisma.service';
@@ -161,21 +161,43 @@ export class TranslationService {
     return flat;
   }
 
+  public async getJurisdictionOverridesById(
+    jurisdictionId: string,
+    language: LanguagesEnum,
+    site: SiteEnum,
+  ): Promise<Record<string, string>> {
+    await this.resolveJurisdictionId({ id: jurisdictionId }, jurisdictionId);
+    return this.getJurisdictionOverrides(jurisdictionId, language, site);
+  }
+
   public async getJurisdictionOverridesByName(
     jurisdictionName: string,
     language: LanguagesEnum,
     site: SiteEnum,
   ): Promise<Record<string, string>> {
+    const jurisdictionId = await this.resolveJurisdictionId(
+      { name: jurisdictionName },
+      jurisdictionName,
+    );
+    return this.getJurisdictionOverrides(jurisdictionId, language, site);
+  }
+
+  // Resolves and asserts a jurisdiction exists, matching the 404 the other jurisdiction
+  // reads return for an unknown id or name.
+  private async resolveJurisdictionId(
+    where: Prisma.JurisdictionsWhereInput,
+    label: string,
+  ): Promise<string> {
     const jurisdiction = await this.prisma.jurisdictions.findFirst({
-      where: { name: jurisdictionName },
+      where,
       select: { id: true },
     });
     if (!jurisdiction) {
       throw new NotFoundException(
-        `jurisdiction ${jurisdictionName} was requested but not found`,
+        `jurisdiction ${label} was requested but not found`,
       );
     }
-    return this.getJurisdictionOverrides(jurisdiction.id, language, site);
+    return jurisdiction.id;
   }
 
   public async getTranslationByLanguageAndJurisdiction(

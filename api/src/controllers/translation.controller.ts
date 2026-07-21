@@ -51,7 +51,7 @@ export class TranslationController {
     jurisdictionId: string,
     @Query() queryParams: TranslationsQueryParams,
   ): Promise<Record<string, string>> {
-    return this.translationService.getJurisdictionOverrides(
+    return this.translationService.getJurisdictionOverridesById(
       jurisdictionId,
       queryParams.language ?? LanguagesEnum.en,
       queryParams.site,

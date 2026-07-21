@@ -472,6 +472,46 @@ describe('Testing translations service', () => {
     });
   });
 
+  describe('getJurisdictionOverridesById', () => {
+    it('reads overrides when the jurisdiction exists', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: jurisdictionId });
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValue([
+        {
+          language: LanguagesEnum.en,
+          key: 'region.name',
+          value: 'Bloomington',
+        },
+      ]);
+
+      const result = await service.getJurisdictionOverridesById(
+        jurisdictionId,
+        LanguagesEnum.en,
+        SiteEnum.public,
+      );
+
+      expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+        where: { id: jurisdictionId },
+        select: { id: true },
+      });
+      expect(result).toEqual({ 'region.name': 'Bloomington' });
+    });
+
+    it('throws when the jurisdiction is not found', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValueOnce(null);
+
+      await expect(
+        service.getJurisdictionOverridesById(
+          randomUUID(),
+          LanguagesEnum.en,
+          SiteEnum.public,
+        ),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
   describe('getJurisdictionOverridesByName', () => {
     it('resolves the jurisdiction id then reads its overrides', async () => {
       const jurisdictionId = randomUUID();
