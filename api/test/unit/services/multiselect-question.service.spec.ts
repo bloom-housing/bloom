@@ -833,6 +833,7 @@ describe('Testing multiselect question service', () => {
       expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdiction: true,
+          listings: true,
           multiselectOptions: true,
         },
         where: {
@@ -937,6 +938,7 @@ describe('Testing multiselect question service', () => {
       expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdiction: true,
+          listings: true,
           multiselectOptions: true,
         },
         where: {
@@ -990,6 +992,7 @@ describe('Testing multiselect question service', () => {
       expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdiction: true,
+          listings: true,
           multiselectOptions: true,
         },
         where: {
@@ -1150,6 +1153,15 @@ describe('Testing multiselect question service', () => {
           service.validateStatusStateTransition(
             MultiselectQuestionsStatusEnum.retired,
             MultiselectQuestionsStatusEnum.retired,
+          ),
+        ).rejects.toThrowError();
+      });
+      it('should error when moving visible to draft and is attached to listings', () => {
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.visible,
+            MultiselectQuestionsStatusEnum.draft,
+            [{ listingId: 'listingId' }],
           ),
         ).rejects.toThrowError();
       });

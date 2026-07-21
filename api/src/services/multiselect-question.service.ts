@@ -208,12 +208,32 @@ export class MultiselectQuestionService {
   }
 
   /*
-    this will return 1 multiselect question or error
+    this will return 1 mapped multiselect question or error
   */
   async findOne(
     multiselectQuestionId: string,
     view: MultiselectQuestionViews = MultiselectQuestionViews.fundamentals,
   ): Promise<MultiselectQuestion> {
+    const rawMultiselectQuestion = await this.findOrThrow(
+      multiselectQuestionId,
+      view,
+    );
+
+    // TODO: Can be removed after MSQ refactor
+    rawMultiselectQuestion['jurisdictions'] = [
+      rawMultiselectQuestion.jurisdiction,
+    ];
+
+    return mapTo(MultiselectQuestion, rawMultiselectQuestion);
+  }
+
+  /*
+    this will return 1 multiselect question or error
+  */
+  async findOrThrow(
+    multiselectQuestionId: string,
+    view: MultiselectQuestionViews = MultiselectQuestionViews.fundamentals,
+  ) {
     const rawMultiselectQuestion =
       await this.prisma.multiselectQuestions.findUnique({
         include: includeViews[view],
@@ -227,13 +247,7 @@ export class MultiselectQuestionService {
         `multiselectQuestionId ${multiselectQuestionId} was requested but not found`,
       );
     }
-
-    // TODO: Can be removed after MSQ refactor
-    rawMultiselectQuestion['jurisdictions'] = [
-      rawMultiselectQuestion.jurisdiction,
-    ];
-
-    return mapTo(MultiselectQuestion, rawMultiselectQuestion);
+    return rawMultiselectQuestion;
   }
 
   /*
@@ -368,7 +382,10 @@ export class MultiselectQuestionService {
       ...updateData
     } = incomingData;
 
-    const currentMultiselectQuestion = await this.findOne(id);
+    const currentMultiselectQuestion = await this.findOrThrow(
+      id,
+      MultiselectQuestionViews.base,
+    );
 
     const rawJurisdiction = await this.prisma.jurisdictions.findFirstOrThrow({
       select: {
@@ -403,6 +420,7 @@ export class MultiselectQuestionService {
       this.validateStatusStateTransition(
         currentMultiselectQuestion.status,
         status,
+        currentMultiselectQuestion.listings,
       );
     }
 
@@ -546,6 +564,7 @@ export class MultiselectQuestionService {
   validateStatusStateTransition(
     currentState: MultiselectQuestionsStatusEnum,
     nextState: MultiselectQuestionsStatusEnum,
+    listings = [],
   ) {
     if (currentState === nextState) {
       if (
@@ -575,6 +594,13 @@ export class MultiselectQuestionService {
         ) {
           throw new BadRequestException(
             "status 'visible' can only change to 'draft' or 'active'",
+          );
+        } else if (
+          nextState === MultiselectQuestionsStatusEnum.draft &&
+          listings.length > 0
+        ) {
+          throw new BadRequestException(
+            "status 'visible' can not return to 'draft' when attached to a listing",
           );
         }
         break;
