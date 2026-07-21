@@ -338,7 +338,7 @@ export class ApplicationController {
   async uploadBulkUpdate(
     @Body() dto: ApplicationBulkUrl,
   ): Promise<ApplicationBulkPresignedUrl> {
-    return this.applicationBulkUploadService.uploadUrl(dto);
+    return await this.applicationBulkUploadService.uploadUrl(dto);
   }
 
   @Delete()
