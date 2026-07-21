@@ -10759,6 +10759,8 @@ export enum UnitTypeEnum {
   "fourBdrm" = "fourBdrm",
   "SRO" = "SRO",
   "fiveBdrm" = "fiveBdrm",
+  "sixBdrm" = "sixBdrm",
+  "sevenBdrm" = "sevenBdrm",
 }
 
 export enum UnitRentTypeEnum {
