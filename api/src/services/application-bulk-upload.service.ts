@@ -95,13 +95,13 @@ export class ApplicationBulkUploadService {
     private backgroundJobsService: BackgroundJobsService,
   ) {}
 
-  private convertApplicationStatusToReadable(
+  convertApplicationStatusToReadable(
     statusEnum: ApplicationStatusEnum,
   ): string {
     return APPLICATION_STATUS_MAP[statusEnum] ?? statusEnum;
   }
 
-  private convertReadableToApplicationStatus = (
+  convertReadableToApplicationStatus = (
     readable: string,
   ): ApplicationStatusEnum | undefined =>
     (Object.keys(APPLICATION_STATUS_MAP) as ApplicationStatusEnum[]).find(
@@ -377,13 +377,13 @@ export class ApplicationBulkUploadService {
     );
   }
 
-  private validateFileFormat(s3Key: string): void {
+  validateFileFormat(s3Key: string): void {
     if (!s3Key.toLowerCase().endsWith('.csv')) {
       throw new BadRequestException('Upload Failed: file must be a CSV format');
     }
   }
 
-  private validateHeaders(actualHeaders: string[]): void {
+  validateHeaders(actualHeaders: string[]): void {
     const expected = new Set(EXPECTED_HEADERS);
     const actual = new Set(actualHeaders);
     const sameSize = expected.size === actual.size;
