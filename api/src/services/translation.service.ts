@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { LanguagesEnum, Translations } from '@prisma/client';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { LanguagesEnum, SiteEnum, Translations } from '@prisma/client';
 import * as lodash from 'lodash';
 import { GoogleTranslateService } from './google-translate.service';
 import { PrismaService } from './prisma.service';
@@ -16,52 +16,109 @@ export class TranslationService {
     jurisdictionId: string | null,
     language?: LanguagesEnum,
   ) {
-    let jurisdictionalTranslations: Promise<Translations | null>,
-      genericTranslations: Promise<Translations | null>,
-      jurisdictionalDefaultTranslations: Promise<Translations | null>;
-
-    if (language && language !== LanguagesEnum.en) {
-      if (jurisdictionId) {
-        jurisdictionalTranslations =
-          this.getTranslationByLanguageAndJurisdiction(
-            language,
-            jurisdictionId,
-          );
-      }
-      genericTranslations = this.getTranslationByLanguageAndJurisdiction(
-        language,
-        null,
-      );
-    }
-
-    if (jurisdictionId) {
-      jurisdictionalDefaultTranslations =
-        this.getTranslationByLanguageAndJurisdiction(
-          LanguagesEnum.en,
-          jurisdictionId,
-        );
-    }
-
-    const genericDefaultTranslations =
-      this.getTranslationByLanguageAndJurisdiction(LanguagesEnum.en, null);
+    const useLanguage = !!language && language !== LanguagesEnum.en;
 
     const [genericDefault, generic, jurisdictionalDefault, jurisdictional] =
       await Promise.all([
-        genericDefaultTranslations,
-        genericTranslations,
-        jurisdictionalDefaultTranslations,
-        jurisdictionalTranslations,
+        this.getBaseTranslations(null, LanguagesEnum.en),
+        useLanguage
+          ? this.getBaseTranslations(null, language)
+          : Promise.resolve(null),
+        jurisdictionId
+          ? this.getBaseTranslations(jurisdictionId, LanguagesEnum.en)
+          : Promise.resolve(null),
+        jurisdictionId && useLanguage
+          ? this.getBaseTranslations(jurisdictionId, language)
+          : Promise.resolve(null),
       ]);
 
-    // Deep merge
-    const translations = lodash.merge(
-      genericDefault?.translations,
-      generic?.translations,
-      jurisdictionalDefault?.translations,
-      jurisdictional?.translations,
+    return lodash.merge(
+      {},
+      genericDefault,
+      generic,
+      jurisdictionalDefault,
+      jurisdictional,
     );
+  }
 
-    return translations;
+  // Falls back to the legacy translations blob for the scope until the key rows are
+  // backfilled (#6519), so the email path keeps working on an un-migrated environment.
+  private async getBaseTranslations(
+    jurisdictionId: string | null,
+    language: LanguagesEnum,
+  ): Promise<Record<string, unknown> | null> {
+    const rows = await this.prisma.translationStrings.findMany({
+      where: { jurisdictionId, language, site: null },
+      select: { key: true, value: true },
+    });
+
+    if (rows.length) {
+      return this.keyRowsToNested(rows);
+    }
+
+    const legacy = await this.getTranslationByLanguageAndJurisdiction(
+      language,
+      jurisdictionId,
+    );
+    return (legacy?.translations as Record<string, unknown>) ?? null;
+  }
+
+  private keyRowsToNested(
+    rows: { key: string; value: string }[],
+  ): Record<string, unknown> {
+    return rows.reduce<Record<string, unknown>>((acc, row) => {
+      lodash.set(acc, row.key, row.value);
+      return acc;
+    }, {});
+  }
+
+  public async getJurisdictionOverrides(
+    jurisdictionId: string | null,
+    language: LanguagesEnum,
+    site: SiteEnum,
+  ): Promise<Record<string, string>> {
+    const useLanguage = !!language && language !== LanguagesEnum.en;
+
+    const [defaultOverrides, languageOverrides] = await Promise.all([
+      this.getSiteOverrides(jurisdictionId, LanguagesEnum.en, site),
+      useLanguage
+        ? this.getSiteOverrides(jurisdictionId, language, site)
+        : Promise.resolve({}),
+    ]);
+
+    return { ...defaultOverrides, ...languageOverrides };
+  }
+
+  public async getJurisdictionOverridesByName(
+    jurisdictionName: string,
+    language: LanguagesEnum,
+    site: SiteEnum,
+  ): Promise<Record<string, string>> {
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      where: { name: jurisdictionName },
+      select: { id: true },
+    });
+    if (!jurisdiction) {
+      throw new NotFoundException(
+        `Jurisdiction ${jurisdictionName} was not found`,
+      );
+    }
+    return this.getJurisdictionOverrides(jurisdiction.id, language, site);
+  }
+
+  private async getSiteOverrides(
+    jurisdictionId: string | null,
+    language: LanguagesEnum,
+    site: SiteEnum,
+  ): Promise<Record<string, string>> {
+    const rows = await this.prisma.translationStrings.findMany({
+      where: { jurisdictionId, language, site },
+      select: { key: true, value: true },
+    });
+    return rows.reduce<Record<string, string>>((acc, row) => {
+      acc[row.key] = row.value;
+      return acc;
+    }, {});
   }
 
   public async getTranslationByLanguageAndJurisdiction(
