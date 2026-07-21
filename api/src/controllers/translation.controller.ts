@@ -28,6 +28,8 @@ const OVERRIDES_OK_RESPONSE = {
   },
 } as const;
 
+// Overrides are public, non-sensitive content that changes only on an admin edit, so a
+// shared cache may reuse them across callers (TDD 4.1, 8).
 const CACHE_CONTROL = 'public, s-maxage=300, stale-while-revalidate=600';
 
 @Controller()

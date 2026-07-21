@@ -24,9 +24,7 @@ export class TranslationService {
     language?: LanguagesEnum,
   ) {
     const useLanguage = !!language && language !== LanguagesEnum.en;
-    const languages = useLanguage
-      ? [LanguagesEnum.en, language]
-      : [LanguagesEnum.en];
+    const languages = this.languagesToRead(language);
 
     const rows = await this.prisma.translationStrings.findMany({
       where: {
@@ -131,15 +129,19 @@ export class TranslationService {
     return root;
   }
 
+  private languagesToRead(language?: LanguagesEnum): LanguagesEnum[] {
+    return !!language && language !== LanguagesEnum.en
+      ? [LanguagesEnum.en, language]
+      : [LanguagesEnum.en];
+  }
+
   public async getJurisdictionOverrides(
     jurisdictionId: string | null,
     language: LanguagesEnum,
     site: SiteEnum,
   ): Promise<Record<string, string>> {
     const useLanguage = !!language && language !== LanguagesEnum.en;
-    const languages = useLanguage
-      ? [LanguagesEnum.en, language]
-      : [LanguagesEnum.en];
+    const languages = this.languagesToRead(language);
 
     const rows = await this.prisma.translationStrings.findMany({
       where: { jurisdictionId, site, language: { in: languages } },
@@ -170,7 +172,7 @@ export class TranslationService {
     });
     if (!jurisdiction) {
       throw new NotFoundException(
-        `Jurisdiction ${jurisdictionName} was not found`,
+        `jurisdiction ${jurisdictionName} was requested but not found`,
       );
     }
     return this.getJurisdictionOverrides(jurisdiction.id, language, site);
