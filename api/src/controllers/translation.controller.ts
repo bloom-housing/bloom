@@ -20,7 +20,6 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { OptionalAuthGuard } from '../guards/optional.guard';
 
-// Overrides are a flat key/value dictionary the caller layers over its bundled base.
 const OVERRIDES_OK_RESPONSE = {
   schema: {
     type: 'object',
@@ -28,8 +27,6 @@ const OVERRIDES_OK_RESPONSE = {
   },
 } as const;
 
-// Overrides are public, non-sensitive content that changes only on an admin edit, so a
-// shared cache may reuse them across callers (TDD 4.1, 8).
 const CACHE_CONTROL = 'public, s-maxage=300, stale-while-revalidate=600';
 
 @Controller()
