@@ -17,50 +17,84 @@ export class TranslationService {
     language?: LanguagesEnum,
   ) {
     const useLanguage = !!language && language !== LanguagesEnum.en;
+    const languages = useLanguage
+      ? [LanguagesEnum.en, language]
+      : [LanguagesEnum.en];
+
+    const rows = await this.prisma.translationStrings.findMany({
+      where: {
+        site: null,
+        language: { in: languages },
+        OR: jurisdictionId
+          ? [{ jurisdictionId: null }, { jurisdictionId }]
+          : [{ jurisdictionId: null }],
+      },
+      select: {
+        jurisdictionId: true,
+        language: true,
+        key: true,
+        value: true,
+      },
+    });
+
+    // Until the base rows are backfilled (#6519), read the legacy blob. Keyed on the
+    // generic-default scope so a migrated environment never falls back per scope.
+    const migrated = rows.some(
+      (row) => row.jurisdictionId === null && row.language === LanguagesEnum.en,
+    );
+    if (!migrated) {
+      return this.getLegacyMergedTranslations(jurisdictionId, language);
+    }
+
+    const scope = (id: string | null, lang: LanguagesEnum) =>
+      this.keyRowsToNested(
+        rows.filter(
+          (row) => row.jurisdictionId === id && row.language === lang,
+        ),
+      );
+
+    return lodash.merge(
+      {},
+      scope(null, LanguagesEnum.en),
+      useLanguage ? scope(null, language) : null,
+      jurisdictionId ? scope(jurisdictionId, LanguagesEnum.en) : null,
+      jurisdictionId && useLanguage ? scope(jurisdictionId, language) : null,
+    );
+  }
+
+  private async getLegacyMergedTranslations(
+    jurisdictionId: string | null,
+    language?: LanguagesEnum,
+  ) {
+    const useLanguage = !!language && language !== LanguagesEnum.en;
 
     const [genericDefault, generic, jurisdictionalDefault, jurisdictional] =
       await Promise.all([
-        this.getBaseTranslations(null, LanguagesEnum.en),
+        this.getTranslationByLanguageAndJurisdiction(LanguagesEnum.en, null),
         useLanguage
-          ? this.getBaseTranslations(null, language)
+          ? this.getTranslationByLanguageAndJurisdiction(language, null)
           : Promise.resolve(null),
         jurisdictionId
-          ? this.getBaseTranslations(jurisdictionId, LanguagesEnum.en)
+          ? this.getTranslationByLanguageAndJurisdiction(
+              LanguagesEnum.en,
+              jurisdictionId,
+            )
           : Promise.resolve(null),
         jurisdictionId && useLanguage
-          ? this.getBaseTranslations(jurisdictionId, language)
+          ? this.getTranslationByLanguageAndJurisdiction(
+              language,
+              jurisdictionId,
+            )
           : Promise.resolve(null),
       ]);
 
     return lodash.merge(
       {},
-      genericDefault,
-      generic,
-      jurisdictionalDefault,
-      jurisdictional,
+      genericDefault?.translations,
+      generic?.translations,
+      jurisdictionalDefault?.translations,
+      jurisdictional?.translations,
     );
-  }
-
-  // Falls back to the legacy translations blob for the scope until the key rows are
-  // backfilled (#6519), so the email path keeps working on an un-migrated environment.
-  private async getBaseTranslations(
-    jurisdictionId: string | null,
-    language: LanguagesEnum,
-  ): Promise<Record<string, unknown> | null> {
-    const rows = await this.prisma.translationStrings.findMany({
-      where: { jurisdictionId, language, site: null },
-      select: { key: true, value: true },
-    });
-
-    if (rows.length) {
-      return this.keyRowsToNested(rows);
-    }
-
-    const legacy = await this.getTranslationByLanguageAndJurisdiction(
-      language,
-      jurisdictionId,
-    );
-    return (legacy?.translations as Record<string, unknown>) ?? null;
   }
 
   private keyRowsToNested(
@@ -78,15 +112,26 @@ export class TranslationService {
     site: SiteEnum,
   ): Promise<Record<string, string>> {
     const useLanguage = !!language && language !== LanguagesEnum.en;
+    const languages = useLanguage
+      ? [LanguagesEnum.en, language]
+      : [LanguagesEnum.en];
 
-    const [defaultOverrides, languageOverrides] = await Promise.all([
-      this.getSiteOverrides(jurisdictionId, LanguagesEnum.en, site),
-      useLanguage
-        ? this.getSiteOverrides(jurisdictionId, language, site)
-        : Promise.resolve({}),
-    ]);
+    const rows = await this.prisma.translationStrings.findMany({
+      where: { jurisdictionId, site, language: { in: languages } },
+      select: { language: true, key: true, value: true },
+    });
 
-    return { ...defaultOverrides, ...languageOverrides };
+    // English default first, then the requested language layered on top.
+    const flat: Record<string, string> = {};
+    for (const row of rows) {
+      if (row.language === LanguagesEnum.en) flat[row.key] = row.value;
+    }
+    if (useLanguage) {
+      for (const row of rows) {
+        if (row.language === language) flat[row.key] = row.value;
+      }
+    }
+    return flat;
   }
 
   public async getJurisdictionOverridesByName(
@@ -104,21 +149,6 @@ export class TranslationService {
       );
     }
     return this.getJurisdictionOverrides(jurisdiction.id, language, site);
-  }
-
-  private async getSiteOverrides(
-    jurisdictionId: string | null,
-    language: LanguagesEnum,
-    site: SiteEnum,
-  ): Promise<Record<string, string>> {
-    const rows = await this.prisma.translationStrings.findMany({
-      where: { jurisdictionId, language, site },
-      select: { key: true, value: true },
-    });
-    return rows.reduce<Record<string, string>>((acc, row) => {
-      acc[row.key] = row.value;
-      return acc;
-    }, {});
   }
 
   public async getTranslationByLanguageAndJurisdiction(
