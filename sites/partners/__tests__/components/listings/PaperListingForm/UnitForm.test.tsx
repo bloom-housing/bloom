@@ -93,7 +93,7 @@ describe("UnitForm", () => {
     // Unit type dropdown selector
     const unitTypeSelector = screen.getByRole("combobox", { name: /unit type/i })
     expect(unitTypeSelector).toBeInTheDocument()
-    expect(within(unitTypeSelector).getAllByRole("option")).toHaveLength(8)
+    expect(within(unitTypeSelector).getAllByRole("option")).toHaveLength(10)
     expect(within(unitTypeSelector).getByRole("option", { name: /unit type/i })).toBeInTheDocument()
     expect(within(unitTypeSelector).getByRole("option", { name: "Studio" })).toBeInTheDocument()
     expect(within(unitTypeSelector).getByRole("option", { name: "SRO" })).toBeInTheDocument()
