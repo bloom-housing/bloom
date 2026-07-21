@@ -151,7 +151,9 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
         {hasPrimaryApplicationMethod && (
           <>
             {onlineApplicationUrl ? ApplyOnlineButton : DownloadApplicationButton}
-            {listing.externalURL && t("listings.apply.applyOnlineMessage")}
+            <div className={"seeds-m-bs-content"}>
+              {listing.externalURL && t("listings.apply.applyOnlineMessage")}
+            </div>
           </>
         )}
       </Card.Section>
