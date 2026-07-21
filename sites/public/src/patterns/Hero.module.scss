@@ -35,4 +35,31 @@
       font-size: var(--seeds-type-heading-size-xl);
     }
   }
+
+  .hero-with-image {
+    max-width: none;
+    display: grid;
+    @media (--md-and-up) {
+      grid-template-columns: 1fr fit-content(324px);
+      gap: var(--seeds-spacer-section);
+    }
+
+    .heading {
+      font-size: var(--seeds-font-size-4xl);
+      @media (--sm-only) {
+        font-size: var(--seeds-font-size-3xl);
+      }
+      margin-block-end: var(--seeds-spacer-content);
+    }
+
+    .hero-image {
+      margin-block-start: auto;
+      @media (--md-down) {
+        display: none;
+      }
+      img {
+        border-radius: var(--seeds-rounded-2xl);
+      }
+    }
+  }
 }

@@ -55,7 +55,11 @@ export const Home = (props: HomeProps) => {
     <Layout metaDescription={metaDescription}>
       <div className={styles["home-page"]}>
         {enableHomePageSearchHero && (
-          <Hero title={heroTitle} action={<HomeSearch jurisdiction={props.jurisdiction} />} />
+          <Hero
+            title={heroTitle}
+            action={<HomeSearch jurisdiction={props.jurisdiction} />}
+            image={"/images/hero-image.jpg"}
+          />
         )}
         {!enableHomePageSearchHero && (
           <Hero
