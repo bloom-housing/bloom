@@ -9,6 +9,7 @@ import { GovDeliveryService } from '../services/gov-delivery.service';
 import { JurisdictionService } from '../services/jurisdiction.service';
 import { SendGridService } from '../services/sendgrid.service';
 import { TranslationService } from '../services/translation.service';
+import { PermissionModule } from './permission.module';
 
 const emailProvider = {
   provide: EmailProvider,
@@ -16,7 +17,7 @@ const emailProvider = {
 };
 
 @Module({
-  imports: [HttpModule],
+  imports: [HttpModule, PermissionModule],
   controllers: [],
   providers: [
     EmailService,

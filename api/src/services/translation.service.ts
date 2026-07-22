@@ -1,16 +1,35 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { LanguagesEnum, Prisma, SiteEnum, Translations } from '@prisma/client';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import {
+  LanguagesEnum,
+  Prisma,
+  SiteEnum,
+  Translations,
+  TranslationOrigin,
+} from '@prisma/client';
 import * as lodash from 'lodash';
 import { GoogleTranslateService } from './google-translate.service';
 import { PrismaService } from './prisma.service';
+import { PermissionService } from './permission.service';
 import { Listing } from '../dtos/listings/listing.dto';
+import { User } from '../dtos/users/user.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+import { TranslationUpdate } from '../dtos/translations/translation-update.dto';
+import { TranslationRawKey } from '../dtos/translations/translation-raw-key.dto';
+import { TranslationOverrideRow } from '../dtos/translations/translation-override-row.dto';
 import { flattenTranslationRows } from '../utilities/translation-merge';
+import { sourceHash } from '../utilities/translation-source-hash';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
 @Injectable()
 export class TranslationService {
   constructor(
     private prisma: PrismaService,
     private readonly googleTranslateService: GoogleTranslateService,
+    private readonly permissionService: PermissionService,
   ) {}
 
   public async getMergedTranslations(
@@ -158,6 +177,226 @@ export class TranslationService {
       );
     }
     return jurisdiction.id;
+  }
+
+  // Admin CRUD over a jurisdiction's per-key overrides (Partners translation editor).
+
+  public async listRawOverrides(
+    jurisdictionId: string,
+    user: User,
+  ): Promise<TranslationOverrideRow[]> {
+    await this.permissionService.canOrThrow(
+      user,
+      'translation',
+      permissionActions.read,
+      { jurisdictionId },
+    );
+    return this.prisma.translationStrings.findMany({
+      where: { jurisdictionId },
+      select: {
+        key: true,
+        site: true,
+        language: true,
+        value: true,
+        updatedAt: true,
+        origin: true,
+      },
+      orderBy: [{ site: 'asc' }, { language: 'asc' }, { key: 'asc' }],
+    });
+  }
+
+  public async getRawOverrides(
+    jurisdictionId: string,
+    site: SiteEnum,
+    language: LanguagesEnum,
+    user: User,
+  ): Promise<TranslationRawKey[]> {
+    await this.permissionService.canOrThrow(
+      user,
+      'translation',
+      permissionActions.read,
+      { jurisdictionId },
+    );
+
+    const rows = await this.prisma.translationStrings.findMany({
+      where: { jurisdictionId, site, language },
+      select: {
+        key: true,
+        value: true,
+        updatedAt: true,
+        origin: true,
+        sourceHash: true,
+      },
+    });
+
+    const englishHashes =
+      language === LanguagesEnum.en
+        ? new Map<string, string>()
+        : await this.englishSourceHashes(
+            jurisdictionId,
+            site,
+            rows.map((row) => row.key),
+          );
+
+    return rows.map((row) => {
+      const currentEnglish = englishHashes.get(row.key);
+      return {
+        key: row.key,
+        value: row.value,
+        updatedAt: row.updatedAt,
+        origin: row.origin,
+        // Stale when the English source recorded at save time no longer matches the
+        // current English source.
+        stale:
+          language !== LanguagesEnum.en &&
+          row.sourceHash != null &&
+          currentEnglish != null &&
+          row.sourceHash !== currentEnglish,
+      };
+    });
+  }
+
+  public async updateOverrides(
+    jurisdictionId: string,
+    site: SiteEnum,
+    language: LanguagesEnum,
+    dto: TranslationUpdate,
+    user: User,
+  ): Promise<SuccessDTO> {
+    await this.permissionService.canOrThrow(
+      user,
+      'translation',
+      permissionActions.update,
+      { jurisdictionId },
+    );
+
+    const isEnglish = language === LanguagesEnum.en;
+    const englishHashes = isEnglish
+      ? new Map<string, string>()
+      : await this.englishSourceHashes(
+          jurisdictionId,
+          site,
+          dto.edits.map((edit) => edit.key),
+        );
+
+    // A stale per-key lock is reported without discarding the non-conflicting edits, so the
+    // batch is intentionally not wrapped in a transaction.
+    const conflicts: string[] = [];
+    for (const edit of dto.edits) {
+      const where = { jurisdictionId, language, site, key: edit.key };
+      const data = {
+        value: edit.value,
+        origin: TranslationOrigin.human,
+        sourceHash: isEnglish ? null : englishHashes.get(edit.key) ?? null,
+      };
+
+      if (edit.lastUpdatedAt) {
+        const result = await this.prisma.translationStrings.updateMany({
+          where: { ...where, updatedAt: edit.lastUpdatedAt },
+          data,
+        });
+        if (result.count === 0) {
+          if (await this.prisma.translationStrings.findFirst({ where })) {
+            conflicts.push(edit.key);
+          } else {
+            await this.prisma.translationStrings.create({
+              data: { ...where, ...data },
+            });
+          }
+        }
+      } else {
+        try {
+          await this.prisma.translationStrings.create({
+            data: { ...where, ...data },
+          });
+        } catch (error) {
+          if (
+            error instanceof Prisma.PrismaClientKnownRequestError &&
+            error.code === 'P2002'
+          ) {
+            conflicts.push(edit.key);
+          } else {
+            throw error;
+          }
+        }
+      }
+    }
+
+    if (conflicts.length) {
+      throw new ConflictException({
+        message: 'translationConflict',
+        conflicts,
+      });
+    }
+    return { success: true };
+  }
+
+  public async deleteOverride(
+    jurisdictionId: string,
+    site: SiteEnum,
+    language: LanguagesEnum,
+    key: string,
+    user: User,
+  ): Promise<SuccessDTO> {
+    await this.permissionService.canOrThrow(
+      user,
+      'translation',
+      permissionActions.delete,
+      { jurisdictionId },
+    );
+    await this.prisma.translationStrings.deleteMany({
+      where: { jurisdictionId, language, site, key },
+    });
+    return { success: true };
+  }
+
+  // English source hash per key, resolved by the same precedence the reads use:
+  // (jurisdictionId, en, site) then (null, en, site) then (null, en, null).
+  private async englishSourceHashes(
+    jurisdictionId: string | null,
+    site: SiteEnum | null,
+    keys: string[],
+  ): Promise<Map<string, string>> {
+    if (!keys.length) {
+      return new Map();
+    }
+    const rows = await this.prisma.translationStrings.findMany({
+      where: {
+        language: LanguagesEnum.en,
+        key: { in: keys },
+        OR: [
+          { jurisdictionId, site },
+          { jurisdictionId: null, site },
+          { jurisdictionId: null, site: null },
+        ],
+      },
+      select: { jurisdictionId: true, site: true, key: true, value: true },
+    });
+
+    const rank = (row: {
+      jurisdictionId: string | null;
+      site: SiteEnum | null;
+    }) =>
+      row.jurisdictionId === jurisdictionId && row.site === site
+        ? 0
+        : row.jurisdictionId === null && row.site === site
+        ? 1
+        : 2;
+
+    const best = new Map<string, { rank: number; value: string }>();
+    for (const row of rows) {
+      const current = best.get(row.key);
+      const rowRank = rank(row);
+      if (!current || rowRank < current.rank) {
+        best.set(row.key, { rank: rowRank, value: row.value });
+      }
+    }
+
+    const hashes = new Map<string, string>();
+    for (const [key, { value }] of best) {
+      hashes.set(key, sourceHash(value));
+    }
+    return hashes;
   }
 
   public async getTranslationByLanguageAndJurisdiction(
