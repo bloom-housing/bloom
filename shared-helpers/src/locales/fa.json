@@ -879,6 +879,7 @@
   "listings.apply.applicationSeason": "ساکنین باید درخواست دهند",
   "listings.apply.applicationWillBeAvailableOn": "برنامه برای دانلود و دریافت در %{openDate} در دسترس خواهد بود.",
   "listings.apply.applyOnline": "درخواست آنلاین",
+  "listings.apply.applyOnlineMessage": "* این دکمه شما را به یک وب‌سایت خارجی هدایت می‌کند که در آن می‌توانید یک حساب کاربری ایجاد کنید و برای این آگهی درخواست دهید.",
   "listings.apply.downloadApplication": "دانلود اپلیکیشن",
   "listings.apply.dropOffApplication": "درخواست ترخیص",
   "listings.apply.dropOffApplicationOrMail": "درخواست را تحویل دهید یا از طریق پست ایالات متحده ارسال کنید",
