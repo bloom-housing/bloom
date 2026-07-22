@@ -29,14 +29,14 @@ const OVERRIDES_OK_RESPONSE = {
 
 const CACHE_CONTROL = 'public, s-maxage=300, stale-while-revalidate=600';
 
-@Controller()
+@Controller('translations')
 @ApiTags('translations')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @UseGuards(ApiKeyGuard, OptionalAuthGuard)
 export class TranslationController {
   constructor(private readonly translationService: TranslationService) {}
 
-  @Get('jurisdictions/:jurisdictionId/translations')
+  @Get('jurisdictions/:jurisdictionId')
   @ApiOperation({
     summary: "Get a jurisdiction's site translation overrides",
     operationId: 'jurisdictionOverrides',
@@ -55,7 +55,7 @@ export class TranslationController {
     );
   }
 
-  @Get('jurisdictions/byName/:jurisdictionName/translations')
+  @Get('byName/:jurisdictionName')
   @ApiOperation({
     summary: "Get a jurisdiction's site translation overrides by name",
     operationId: 'jurisdictionOverridesByName',
@@ -73,7 +73,7 @@ export class TranslationController {
     );
   }
 
-  @Get('translations')
+  @Get()
   @ApiOperation({
     summary: 'Get the global Partners translation overrides',
     operationId: 'partnersOverrides',

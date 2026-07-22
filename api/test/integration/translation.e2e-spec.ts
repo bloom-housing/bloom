@@ -77,7 +77,7 @@ describe('Translation Controller Tests', () => {
   it('returns the public overrides for a jurisdiction and caches the response', async () => {
     const res = await request(app.getHttpServer())
       .get(
-        `/jurisdictions/${jurisdictionId}/translations?site=public&language=en`,
+        `/translations/jurisdictions/${jurisdictionId}?site=public&language=en`,
       )
       .set(passkey)
       .expect(200);
@@ -93,7 +93,7 @@ describe('Translation Controller Tests', () => {
   it('layers the requested language over the English default', async () => {
     const res = await request(app.getHttpServer())
       .get(
-        `/jurisdictions/${jurisdictionId}/translations?site=public&language=es`,
+        `/translations/jurisdictions/${jurisdictionId}?site=public&language=es`,
       )
       .set(passkey)
       .expect(200);
@@ -103,9 +103,7 @@ describe('Translation Controller Tests', () => {
 
   it('resolves overrides by jurisdiction name', async () => {
     const res = await request(app.getHttpServer())
-      .get(
-        `/jurisdictions/byName/${jurisdictionName}/translations?site=public&language=en`,
-      )
+      .get(`/translations/byName/${jurisdictionName}?site=public&language=en`)
       .set(passkey)
       .expect(200);
 
@@ -123,7 +121,7 @@ describe('Translation Controller Tests', () => {
 
   it('rejects a jurisdiction read that omits the site', async () => {
     await request(app.getHttpServer())
-      .get(`/jurisdictions/${jurisdictionId}/translations?language=en`)
+      .get(`/translations/jurisdictions/${jurisdictionId}?language=en`)
       .set(passkey)
       .expect(400);
   });
@@ -131,7 +129,7 @@ describe('Translation Controller Tests', () => {
   it('returns 404 for an unknown jurisdiction id', async () => {
     await request(app.getHttpServer())
       .get(
-        `/jurisdictions/${randomUUID()}/translations?site=public&language=en`,
+        `/translations/jurisdictions/${randomUUID()}?site=public&language=en`,
       )
       .set(passkey)
       .expect(404);
