@@ -2588,12 +2588,24 @@ export class JobsService {
       listingId: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<BackgroundJob> {
+  ): Promise<BackgroundJob[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/jobs"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { listingId: params["listingId"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get info if any jobs are currently running
+   */
+  activeJobStatus(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs/active"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       axios(configs, resolve, reject)
     })
@@ -2611,18 +2623,6 @@ export class JobsService {
     return new Promise((resolve, reject) => {
       let url = basePath + "/jobs/{jobId}"
       url = url.replace("{jobId}", params["jobId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get info if any jobs are currently running
-   */
-  activeJobStatus(options: IRequestOptions = {}): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/jobs/active"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
