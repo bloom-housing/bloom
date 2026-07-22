@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { useRouter } from "next/router"
-import axios from "axios"
+import axios, { AxiosResponse } from "axios"
 import { t } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
@@ -99,7 +99,7 @@ export const getStaticProps: GetStaticProps = async (context: {
   params: Record<string, string>
   locale: string
 }) => {
-  let response
+  let response: AxiosResponse
   try {
     response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
       headers: {
@@ -111,6 +111,20 @@ export const getStaticProps: GetStaticProps = async (context: {
     return { notFound: true }
   }
   const jurisdiction = fetchJurisdictionByName()
+
+  if (response.data.externalURL) {
+    try {
+      response = await axios.get(
+        `${response.data.externalURL}/listings/external/${response.data.externalListingId}`,
+        { headers: { language: context.locale } }
+      )
+      // re-setting the externalURL field with the publicUrl if we need to redirect to the external site
+      response.data.externalURL = response.data.jurisdiction.publicUrl
+    } catch (e) {
+      console.error(`Error fetching external listing data: ${e}`)
+      return { notFound: true }
+    }
+  }
 
   return {
     props: { listing: response.data, jurisdiction: await jurisdiction },
