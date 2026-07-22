@@ -17,6 +17,7 @@ import {
   TranslationsQueryParams,
 } from '../dtos/translations/translations-query-params.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
+import { PUBLIC_CACHE_CONTROL } from '../utilities/cache-control';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { OptionalAuthGuard } from '../guards/optional.guard';
 
@@ -26,8 +27,6 @@ const OVERRIDES_OK_RESPONSE = {
     additionalProperties: { type: 'string' },
   },
 } as const;
-
-const CACHE_CONTROL = 'public, s-maxage=300, stale-while-revalidate=600';
 
 @Controller('translations')
 @ApiTags('translations')
@@ -42,7 +41,7 @@ export class TranslationController {
     operationId: 'jurisdictionOverrides',
   })
   @ApiOkResponse(OVERRIDES_OK_RESPONSE)
-  @Header('Cache-Control', CACHE_CONTROL)
+  @Header('Cache-Control', PUBLIC_CACHE_CONTROL)
   async jurisdictionOverrides(
     @Param('jurisdictionId', new ParseUUIDPipe({ version: '4' }))
     jurisdictionId: string,
@@ -61,7 +60,7 @@ export class TranslationController {
     operationId: 'jurisdictionOverridesByName',
   })
   @ApiOkResponse(OVERRIDES_OK_RESPONSE)
-  @Header('Cache-Control', CACHE_CONTROL)
+  @Header('Cache-Control', PUBLIC_CACHE_CONTROL)
   async jurisdictionOverridesByName(
     @Param('jurisdictionName') jurisdictionName: string,
     @Query() queryParams: TranslationsQueryParams,
@@ -79,7 +78,7 @@ export class TranslationController {
     operationId: 'partnersOverrides',
   })
   @ApiOkResponse(OVERRIDES_OK_RESPONSE)
-  @Header('Cache-Control', CACHE_CONTROL)
+  @Header('Cache-Control', PUBLIC_CACHE_CONTROL)
   async partnersOverrides(
     @Query() queryParams: PartnersTranslationsQueryParams,
   ): Promise<Record<string, string>> {
