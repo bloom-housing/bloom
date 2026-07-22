@@ -125,6 +125,8 @@ const FormUnits = ({
   const showNonRegulated =
     enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated
 
+  const isLandUse = listingType === EnumListingListingType.landUse
+
   const homeTypes = [
     "",
     ...Object.values(HomeTypeEnum).map((val) => {
@@ -563,6 +565,7 @@ const FormUnits = ({
             unitTypes={unitTypes}
             unitTypesLoading={unitTypesLoading}
             jurisdictionId={jurisdiction}
+            isLandUse={isLandUse}
             onSubmit={(unit) => {
               saveUnit(unit)
             }}
