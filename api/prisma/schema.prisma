@@ -779,6 +779,27 @@ model HouseholdMemberSnapshot {
 }
 
 // Jurisdiction Section
+model JurisdictionContent {
+  id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  jurisdictionId String        @map("jurisdiction_id") @db.Uuid
+  language       LanguagesEnum
+
+  // Typed JSON documents; rich-text bodies are sanitized HTML.
+  footer      Json?
+  faq         Json?
+  resources   Json?
+  disclaimers Json?
+  contact     Json?
+
+  jurisdictions Jurisdictions @relation(fields: [jurisdictionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([jurisdictionId, language])
+  @@map("jurisdiction_content")
+}
+
 model Jurisdictions {
   id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
@@ -818,12 +839,14 @@ model Jurisdictions {
   agency                 Agency[]
   amiCharts              AmiChart[]
   featureFlags           FeatureFlags[]
+  jurisdictionContent    JurisdictionContent[]
   listings               Listings[]
   listingSnapshots       ListingSnapshot[]
   multiselectQuestions   MultiselectQuestions[]
   properties             Properties[]
   reservedCommunityTypes ReservedCommunityTypes[]
   translations           Translations[]
+  translationStrings     TranslationStrings[]
   user_accounts          UserAccounts[]
   userAccountSnapshot    UserAccountSnapshot[]
 
@@ -1726,6 +1749,26 @@ model ScriptRuns {
 }
 
 // Translation Section
+model TranslationStrings {
+  id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  jurisdictionId String?            @map("jurisdiction_id") @db.Uuid
+  language       LanguagesEnum
+  site           SiteEnum?
+  key            String
+  value          String
+  sourceHash     String?            @map("source_hash")
+  origin         TranslationOrigin?
+
+  jurisdictions Jurisdictions? @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  // The unique index is NULLS NOT DISTINCT; set in the migration, as Prisma cannot express it here.
+  @@unique([jurisdictionId, language, site, key])
+  @@map("translation_strings")
+}
+
 model Translations {
   id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
@@ -2375,6 +2418,20 @@ enum LanguagesEnum {
   @@map("languages_enum")
 }
 
+enum SiteEnum {
+  public
+  partners
+
+  @@map("site_enum")
+}
+
+enum TranslationOrigin {
+  machine
+  human
+
+  @@map("translation_origin")
+}
+
 enum ListingEventsTypeEnum {
   openHouse
   publicLottery
@@ -2610,6 +2667,8 @@ enum UnitTypeEnum {
   fourBdrm
   SRO
   fiveBdrm
+  sixBdrm
+  sevenBdrm
 
   @@map("unit_type_enum")
 }

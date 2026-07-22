@@ -62,11 +62,13 @@ describe('UnitType Controller Tests', () => {
       .set('Cookie', cookies)
       .expect(200);
     // all unit types are returned
-    expect(res.body.length).toBeGreaterThanOrEqual(7);
+    expect(res.body.length).toBeGreaterThanOrEqual(9);
     // check for random unit types
     const unitTypeNames = res.body.map((value) => value.name);
     expect(unitTypeNames).toContain(UnitTypeEnum.SRO);
     expect(unitTypeNames).toContain(UnitTypeEnum.threeBdrm);
+    expect(unitTypeNames).toContain(UnitTypeEnum.sixBdrm);
+    expect(unitTypeNames).toContain(UnitTypeEnum.sevenBdrm);
   });
 
   it("retrieve endpoint with id that doesn't exist should error", async () => {

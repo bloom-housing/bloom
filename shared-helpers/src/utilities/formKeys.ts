@@ -225,6 +225,8 @@ export const bedroomKeys = [
   "threeBdrm",
   "fourBdrm",
   "fiveBdrm",
+  "sixBdrm",
+  "sevenBdrm",
 ]
 
 export type ListingFeaturesValues = keyof Omit<ListingFeatures, "id" | "createdAt" | "updatedAt">
