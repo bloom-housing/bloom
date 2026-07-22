@@ -77,6 +77,7 @@
   "account.settings.alerts.passwordSuccess": "Cập nhật mật khẩu thành công",
   "account.settings.confirmNewPassword": "Xác nhận mật khẩu mới",
   "account.settings.currentPassword": "Mật khẩu hiện tại",
+  "account.settings.disclaimer": "Bạn có thể liên hệ với Bloomington để yêu cầu xóa thông tin tài khoản và dữ liệu liên quan bất cứ lúc nào. Để làm vậy, vui lòng liên hệ với %{contactEmail}.",
   "account.settings.myNotification": "Thông báo của tôi",
   "account.settings.myProfile": "Hồ sơ của tôi",
   "account.settings.newPassword": "Mật khẩu mới",
