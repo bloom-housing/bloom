@@ -346,6 +346,8 @@
   "listings.isDigitalApplication": "Is there a digital application?",
   "listings.isPaperApplication": "Is there a paper application?",
   "listings.isReferralOpportunity": "Is there a referral opportunity?",
+  "listings.landUseTitle": "Is this a land use property?",
+  "listings.landUse": "Land use",
   "listings.latitude": "Latitude",
   "listings.leasingAgentAddress": "Leasing agent address",
   "listings.leasingAgentAddressManagerProp": "Leasing agent or property manager address",

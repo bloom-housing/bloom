@@ -180,4 +180,45 @@ describe("ListingIntro", () => {
       })
     ).toBeInTheDocument()
   })
+
+  it("should render the ListingIntro section with land use FieldValue when enableLandUse is on and listing is land use", () => {
+    render(
+      <FormProviderWrapper>
+        <ListingIntro
+          requiredFields={[]}
+          enableNonRegulatedListings={false}
+          enableLandUse={true}
+          enableHousingDeveloperOwner={false}
+          enableListingFileNumber={false}
+          jurisdictionName={"JurisdictionA"}
+          listingId={"1234"}
+          listingType={EnumListingListingType.landUse}
+          properties={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.getByRole("heading", { level: 2, name: "Listing intro" })).toBeInTheDocument()
+    expect(screen.getByText("What kind of listing is this?")).toBeInTheDocument()
+    expect(screen.getByText("Land use")).toBeInTheDocument()
+  })
+
+  it("should not render the FieldValue when both enableNonRegulatedListings and enableLandUse are off", () => {
+    render(
+      <FormProviderWrapper>
+        <ListingIntro
+          requiredFields={[]}
+          enableNonRegulatedListings={false}
+          enableLandUse={false}
+          enableHousingDeveloperOwner={false}
+          enableListingFileNumber={false}
+          jurisdictionName={"JurisdictionA"}
+          listingId={"1234"}
+          properties={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.queryAllByText("What kind of listing is this?")).toHaveLength(0)
+  })
 })
