@@ -8,7 +8,7 @@ import {
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t, Field, Select } from "@bloom-housing/ui-components"
-import { Button, Card, Grid, Tabs } from "@bloom-housing/ui-seeds"
+import { Button, Tabs } from "@bloom-housing/ui-seeds"
 import { Form, BloomCard } from "@bloom-housing/shared-helpers"
 import { isFeatureFlagOn } from "../../lib/helpers"
 import { encodeFilterDataToQuery, FilterData } from "../browse/FilterDrawerHelpers"
@@ -86,10 +86,10 @@ export const HomeSearch = (props: HomeSearchProps) => {
     <BloomCard>
       <Tabs>
         <Tabs.TabList>
-          <Tabs.Tab>Search by Filters</Tabs.Tab>
-          <Tabs.Tab>Search by Property Name</Tabs.Tab>
+          <Tabs.Tab className={styles["borderless-tab"]}>Search by Filters</Tabs.Tab>
+          <Tabs.Tab className={styles["borderless-tab"]}>Search by Property Name</Tabs.Tab>
         </Tabs.TabList>
-        <Tabs.TabPanel>
+        <Tabs.TabPanel className={styles["borderless-tab"]}>
           <Form onSubmit={handleFiltersSubmit(onFiltersSubmit)}>
             <div className={styles["hero-search"]}>
               <div className={styles["hero-filter-flex"]}>
@@ -152,7 +152,7 @@ export const HomeSearch = (props: HomeSearchProps) => {
             </div>
           </Form>
         </Tabs.TabPanel>
-        <Tabs.TabPanel>
+        <Tabs.TabPanel className={styles["borderless-tab"]}>
           <Form onSubmit={handlePropertyNameSubmit(onPropertyNameSubmit)}>
             <div className={styles["hero-search"]}>
               <div>

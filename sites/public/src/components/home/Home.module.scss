@@ -64,6 +64,14 @@
       }
     }
   }
+  .borderless-tab {
+    border: none;
+    &[aria-selected="true"],
+    &[data-active="true"] {
+      border-bottom: var(--tab-active-indicator-width) solid var(--tab-active-indicator-color);
+      z-index: 1;
+    }
+  }
   .hero-search {
     color: var(--seeds-text-color-darker);
     display: grid;
