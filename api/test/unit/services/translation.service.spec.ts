@@ -8,6 +8,7 @@ import {
   LanguagesEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  Prisma,
   SiteEnum,
   TranslationOrigin,
 } from '@prisma/client';
@@ -225,6 +226,10 @@ describe('Testing translations service', () => {
 
     service = module.get<TranslationService>(TranslationService);
     prisma = module.get<PrismaService>(PrismaService);
+    // The admin methods assert the jurisdiction exists; default it to found.
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: 'jurisdiction' });
   });
 
   afterEach(() => {
@@ -452,6 +457,57 @@ describe('Testing translations service', () => {
           sourceHash: sourceHash('Bloomington'),
         },
       });
+    });
+
+    it('reports a conflict when a concurrent create races the lock-miss path', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 0 });
+      // The row was deleted since the client read it, so we try to re-create it...
+      prisma.translationStrings.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce(null);
+      // ...but another writer created it first.
+      prisma.translationStrings.create = jest.fn().mockRejectedValueOnce(
+        new Prisma.PrismaClientKnownRequestError('unique violation', {
+          code: 'P2002',
+          clientVersion: 'test',
+        }),
+      );
+
+      let caught: ConflictException;
+      try {
+        await service.updateOverrides(
+          jurisdictionId,
+          SiteEnum.public,
+          LanguagesEnum.en,
+          { edits: [{ key: 'a', value: 'A', lastUpdatedAt: new Date() }] },
+          adminUser,
+        );
+      } catch (error) {
+        caught = error;
+      }
+
+      expect(caught).toBeInstanceOf(ConflictException);
+      expect(caught.getResponse()).toEqual({
+        message: 'translationConflict',
+        conflicts: ['a'],
+      });
+    });
+
+    it('throws a 404 when the jurisdiction does not exist', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValueOnce(null);
+
+      await expect(
+        service.updateOverrides(
+          randomUUID(),
+          SiteEnum.public,
+          LanguagesEnum.en,
+          { edits: [{ key: 'a', value: 'A' }] },
+          adminUser,
+        ),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 

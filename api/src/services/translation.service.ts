@@ -185,11 +185,10 @@ export class TranslationService {
     jurisdictionId: string,
     user: User,
   ): Promise<TranslationOverrideRow[]> {
-    await this.permissionService.canOrThrow(
+    await this.authorizeJurisdiction(
       user,
-      'translation',
+      jurisdictionId,
       permissionActions.read,
-      { jurisdictionId },
     );
     return this.prisma.translationStrings.findMany({
       where: { jurisdictionId },
@@ -211,11 +210,10 @@ export class TranslationService {
     language: LanguagesEnum,
     user: User,
   ): Promise<TranslationRawKey[]> {
-    await this.permissionService.canOrThrow(
+    await this.authorizeJurisdiction(
       user,
-      'translation',
+      jurisdictionId,
       permissionActions.read,
-      { jurisdictionId },
     );
 
     const rows = await this.prisma.translationStrings.findMany({
@@ -263,11 +261,10 @@ export class TranslationService {
     dto: TranslationUpdate,
     user: User,
   ): Promise<SuccessDTO> {
-    await this.permissionService.canOrThrow(
+    await this.authorizeJurisdiction(
       user,
-      'translation',
+      jurisdictionId,
       permissionActions.update,
-      { jurisdictionId },
     );
 
     const isEnglish = language === LanguagesEnum.en;
@@ -291,34 +288,26 @@ export class TranslationService {
       };
 
       if (edit.lastUpdatedAt) {
+        // The lock matches updatedAt exactly, so it needs millisecond precision (what
+        // Prisma's @updatedAt writes). The #6519 backfill must also write ms-precision
+        // updated_at, or a saved key with sub-millisecond microseconds always false-conflicts.
         const result = await this.prisma.translationStrings.updateMany({
           where: { ...where, updatedAt: edit.lastUpdatedAt },
           data,
         });
         if (result.count === 0) {
-          if (await this.prisma.translationStrings.findFirst({ where })) {
-            conflicts.push(edit.key);
-          } else {
-            await this.prisma.translationStrings.create({
-              data: { ...where, ...data },
-            });
-          }
-        }
-      } else {
-        try {
-          await this.prisma.translationStrings.create({
-            data: { ...where, ...data },
+          // The row either changed since the client read it (a conflict) or was deleted; in
+          // the latter case re-create it, treating a concurrent create as a conflict too.
+          const exists = await this.prisma.translationStrings.findFirst({
+            where,
+            select: { id: true },
           });
-        } catch (error) {
-          if (
-            error instanceof Prisma.PrismaClientKnownRequestError &&
-            error.code === 'P2002'
-          ) {
+          if (exists || !(await this.createOverrideIfAbsent(where, data))) {
             conflicts.push(edit.key);
-          } else {
-            throw error;
           }
         }
+      } else if (!(await this.createOverrideIfAbsent(where, data))) {
+        conflicts.push(edit.key);
       }
     }
 
@@ -338,16 +327,58 @@ export class TranslationService {
     key: string,
     user: User,
   ): Promise<SuccessDTO> {
-    await this.permissionService.canOrThrow(
+    await this.authorizeJurisdiction(
       user,
-      'translation',
+      jurisdictionId,
       permissionActions.delete,
-      { jurisdictionId },
     );
     await this.prisma.translationStrings.deleteMany({
       where: { jurisdictionId, language, site, key },
     });
     return { success: true };
+  }
+
+  // Verifies the caller may act on the jurisdiction and that it exists, so an unknown
+  // jurisdiction returns the same 404 the other jurisdiction reads return.
+  private async authorizeJurisdiction(
+    user: User,
+    jurisdictionId: string,
+    action: permissionActions,
+  ): Promise<void> {
+    await this.permissionService.canOrThrow(user, 'translation', action, {
+      jurisdictionId,
+    });
+    await this.resolveJurisdictionId({ id: jurisdictionId }, jurisdictionId);
+  }
+
+  // Creates an override row, returning false if another writer created the same key first.
+  private async createOverrideIfAbsent(
+    where: {
+      jurisdictionId: string;
+      language: LanguagesEnum;
+      site: SiteEnum;
+      key: string;
+    },
+    data: {
+      value: string;
+      origin: TranslationOrigin;
+      sourceHash: string | null;
+    },
+  ): Promise<boolean> {
+    try {
+      await this.prisma.translationStrings.create({
+        data: { ...where, ...data },
+      });
+      return true;
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        return false;
+      }
+      throw error;
+    }
   }
 
   // English source hash per key, resolved by the same precedence the reads use:
