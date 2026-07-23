@@ -26,11 +26,7 @@ describe("Public Reset Password Page", () => {
     const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
     expect(passwordInput).toBeInTheDocument()
     expect(passwordInput).toHaveAttribute("type", "password")
-    const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
-      selector: "input",
-    })
-    expect(confirmPasswordInput).toBeInTheDocument()
-    expect(confirmPasswordInput).toHaveAttribute("type", "password")
+    expect(screen.getByLabelText(/show password/i)).toBeInTheDocument()
     expect(screen.getByRole("button", { name: /change password/i })).toBeInTheDocument()
   })
 
@@ -39,42 +35,17 @@ describe("Public Reset Password Page", () => {
       render(<ResetPassword />)
       expect(screen.getByLabelText(/^password$/i, { selector: "input" })).toBeValid()
       expect(screen.queryByText("Please enter new login password")).not.toBeInTheDocument()
-      expect(screen.getByLabelText(/password confirmation/i, { selector: "input" })).toBeValid()
-      expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
     })
 
     it("show missing password on empty input", async () => {
       render(<ResetPassword />)
 
       const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
-      const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
-        selector: "input",
-      })
 
       await userEvent.click(screen.getByRole("button", { name: /change password/i }))
 
       expect(passwordInput).toBeInvalid()
-      expect(confirmPasswordInput).toBeValid()
       expect(await screen.findByText("Please enter new login password")).toBeInTheDocument()
-      expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
-    })
-
-    it("show not matching password error on empty password confirmation input", async () => {
-      render(<ResetPassword />)
-
-      const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
-      const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
-        selector: "input",
-      })
-
-      await userEvent.type(passwordInput, "Password_1")
-      await userEvent.type(confirmPasswordInput, "Password_2")
-      await userEvent.click(screen.getByRole("button", { name: /change password/i }))
-
-      expect(passwordInput).toBeValid()
-      expect(confirmPasswordInput).toBeInvalid()
-      expect(screen.queryByText("Please enter new login password")).not.toBeInTheDocument()
-      expect(await screen.findByText("The passwords do not match")).toBeInTheDocument()
     })
   })
 
@@ -126,12 +97,8 @@ describe("Public Reset Password Page", () => {
       render(<ResetPassword />)
 
       const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
-      const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
-        selector: "input",
-      })
 
       await userEvent.type(passwordInput, "Password")
-      await userEvent.type(confirmPasswordInput, "Password")
       await userEvent.click(screen.getByRole("button", { name: /change password/i }))
 
       expect(await screen.findByText(value)).toBeInTheDocument()
@@ -148,12 +115,8 @@ describe("Public Reset Password Page", () => {
       render(<ResetPassword />)
 
       const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
-      const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
-        selector: "input",
-      })
 
       await userEvent.type(passwordInput, "Password")
-      await userEvent.type(confirmPasswordInput, "Password")
       await userEvent.click(screen.getByRole("button", { name: /change password/i }))
 
       expect(
@@ -183,16 +146,11 @@ describe("Public Reset Password Page", () => {
     render(<ResetPassword />)
 
     const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
-    const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
-      selector: "input",
-    })
 
     await userEvent.type(passwordInput, "Password")
-    await userEvent.type(confirmPasswordInput, "Password")
     await userEvent.click(screen.getByRole("button", { name: /change password/i }))
 
     expect(screen.queryByText("Please enter new login password")).not.toBeInTheDocument()
-    expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
 
     expect(await screen.findByText("Welcome back, John!"))
     await waitFor(() => {
@@ -224,10 +182,6 @@ describe("Public Reset Password Page", () => {
 
     const submitForm = async () => {
       await userEvent.type(screen.getByLabelText(/^password$/i, { selector: "input" }), "Password")
-      await userEvent.type(
-        screen.getByLabelText(/password confirmation/i, { selector: "input" }),
-        "Password"
-      )
       await userEvent.click(screen.getByRole("button", { name: /change password/i }))
     }
 

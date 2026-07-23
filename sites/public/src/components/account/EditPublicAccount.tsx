@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { t } from "@bloom-housing/ui-components"
 import { LoadingState } from "@bloom-housing/ui-seeds"
@@ -48,7 +48,6 @@ export const EditPublicAccount = () => {
     register: pwdRegister,
     formState: { errors: pwdErrors },
     handleSubmit: pwdHandleSubmit,
-    watch: pwdWatch,
   } = useForm()
 
   const { profile, userService } = useContext(AuthContext)
@@ -64,8 +63,6 @@ export const EditPublicAccount = () => {
   const [loading, setLoading] = useState(true)
 
   const MIN_PASSWORD_LENGTH = 12
-  const password = useRef({})
-  password.current = pwdWatch("password", "")
 
   useEffect(() => {
     if (profile) {
@@ -185,7 +182,7 @@ export const EditPublicAccount = () => {
               "authentication.createAccount.password"
             )}`}
           >
-            {passwordFields(pwdErrors, pwdRegister, password, MIN_PASSWORD_LENGTH)}
+            {passwordFields(pwdErrors, pwdRegister, MIN_PASSWORD_LENGTH)}
           </AccountSection>
         </LoadingState>
       </div>

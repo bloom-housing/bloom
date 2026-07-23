@@ -1,7 +1,7 @@
 import React from "react"
 import { useRouter } from "next/router"
 import type { UseFormMethods } from "react-hook-form"
-import { Field, t } from "@bloom-housing/ui-components"
+import { Field, PasswordField, t } from "@bloom-housing/ui-components"
 import { Button, Link } from "@bloom-housing/ui-seeds"
 import { Form } from "../forms/Form"
 import { getListingRedirectUrl } from "../../utilities/getListingRedirectUrl"
@@ -50,7 +50,7 @@ const FormSignInDefault = ({
         dataTestId="sign-in-email-field"
       />
       <div className={styles["password-grid"]}>
-        <Field
+        <PasswordField
           className={styles["sign-in-password-input"]}
           name="password"
           label={t("authentication.createAccount.password")}
@@ -59,7 +59,6 @@ const FormSignInDefault = ({
           error={errors.password}
           errorMessage={t("authentication.signIn.enterLoginPassword")}
           register={register}
-          type={"password"}
           dataTestId="sign-in-password-field"
         />
         <div className={styles["forgot-password-wrapper"]}>

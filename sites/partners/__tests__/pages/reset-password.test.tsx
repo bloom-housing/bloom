@@ -25,11 +25,15 @@ describe("reset-password", () => {
     const { getByText, getByLabelText } = render(<ResetPassword />)
 
     expect(getByText("Change password", { selector: "h1" })).toBeInTheDocument()
-    expect(getByLabelText("Password")).toBeInTheDocument()
-    const passwordInput = getByLabelText("Password confirmation")
+    const passwordInput = getByLabelText("Password")
     expect(passwordInput).toBeInTheDocument()
     expect(passwordInput).toHaveAttribute("type", "password")
     expect(getByText("Change password", { selector: "button" })).toBeInTheDocument()
+
+    const showPasswordCheckbox = getByLabelText("Show password")
+    expect(showPasswordCheckbox).toBeInTheDocument()
+    fireEvent.click(showPasswordCheckbox)
+    expect(passwordInput).toHaveAttribute("type", "text")
   })
 
   describe("should show errors on missing inputs", () => {
@@ -37,7 +41,6 @@ describe("reset-password", () => {
     it("should not show error messages at start", () => {
       const { queryByText } = render(<ResetPassword />)
       expect(queryByText("Please enter new login password")).not.toBeInTheDocument()
-      expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
       expect(
         queryByText(
           "There was an error. Please try again, or contact support at email@email.com for help."
@@ -67,55 +70,10 @@ describe("reset-password", () => {
       await waitFor(() => fireEvent.click(submitButton))
       const passwordErrorMessage = await findByText("Please enter new login password")
       expect(passwordErrorMessage).toBeInTheDocument()
-      expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
 
       //Should hide password input error after input
       await waitFor(() => userEvent.type(passwordInput, "abcd"))
       expect(queryByText("Please enter new login password")).not.toBeInTheDocument()
-      expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
-    })
-
-    it("should show only confirmation error", async () => {
-      const { getByLabelText, getByText, queryByText, findByText } = render(<ResetPassword />)
-
-      const passwordInput = getByLabelText("Password")
-      const submitButton = getByText("Change password", { selector: "button" })
-
-      await waitFor(async () => {
-        await userEvent.type(passwordInput, "abcd")
-        fireEvent.click(submitButton)
-      })
-
-      const passwordConfirmErrorMessage = await findByText("The passwords do not match")
-      expect(queryByText("Please enter new login password")).not.toBeInTheDocument()
-      expect(passwordConfirmErrorMessage).toBeInTheDocument()
-    })
-
-    it("should show confirmation error on missmatching passwords", async () => {
-      const { getByLabelText, getByText, queryByText, findByText } = render(<ResetPassword />)
-
-      const passwordInput = getByLabelText("Password")
-      const passwordConfirmInput = getByLabelText("Password confirmation")
-      const submitButton = getByText("Change password", { selector: "button" })
-
-      await waitFor(async () => {
-        await userEvent.type(passwordInput, "abcd")
-        await userEvent.type(passwordConfirmInput, "efgh")
-        fireEvent.click(submitButton)
-      })
-
-      const passwordConfirmErrorMessage = await findByText("The passwords do not match")
-      expect(queryByText("Please enter new login password")).not.toBeInTheDocument()
-      expect(passwordConfirmErrorMessage).toBeInTheDocument()
-
-      //should disappear on matching passwords
-      await waitFor(async () => {
-        await userEvent.clear(passwordConfirmInput)
-        await userEvent.type(passwordConfirmInput, "abcd")
-      })
-
-      expect(queryByText("Please enter new login password")).not.toBeInTheDocument()
-      expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
     })
   })
 
@@ -134,12 +92,10 @@ describe("reset-password", () => {
     const { getByLabelText, getByText } = render(<ResetPassword />)
 
     const passwordInput = getByLabelText("Password")
-    const passwordConfirmInput = getByLabelText("Password confirmation")
     const submitButton = getByText("Change password", { selector: "button" })
 
     await waitFor(async () => {
       await userEvent.type(passwordInput, "abcd")
-      await userEvent.type(passwordConfirmInput, "abcd")
       fireEvent.click(submitButton)
       expect(pushMock).toHaveBeenCalledWith("/")
     })
@@ -162,12 +118,10 @@ describe("reset-password", () => {
     const { getByLabelText, getByText } = render(<ResetPassword />)
 
     const passwordInput = getByLabelText("Password")
-    const passwordConfirmInput = getByLabelText("Password confirmation")
     const submitButton = getByText("Change password", { selector: "button" })
 
     await waitFor(async () => {
       await userEvent.type(passwordInput, "abcd")
-      await userEvent.type(passwordConfirmInput, "abcd")
       fireEvent.click(submitButton)
     })
 
@@ -221,12 +175,10 @@ describe("reset-password", () => {
       const { getByLabelText, getByText } = render(<ResetPassword />)
 
       const passwordInput = getByLabelText("Password")
-      const passwordConfirmInput = getByLabelText("Password confirmation")
       const submitButton = getByText("Change password", { selector: "button" })
 
       await waitFor(async () => {
         await userEvent.type(passwordInput, "abcd")
-        await userEvent.type(passwordConfirmInput, "abcd")
         fireEvent.click(submitButton)
       })
 
@@ -240,12 +192,10 @@ describe("reset-password", () => {
       const { getByLabelText, getByText } = render(<ResetPassword />)
 
       const passwordInput = getByLabelText("Password")
-      const passwordConfirmInput = getByLabelText("Password confirmation")
       const submitButton = getByText("Change password", { selector: "button" })
 
       await waitFor(async () => {
         await userEvent.type(passwordInput, "abcd")
-        await userEvent.type(passwordConfirmInput, "abcd")
         fireEvent.click(submitButton)
       })
 
@@ -259,12 +209,10 @@ describe("reset-password", () => {
       const { getByLabelText, getByText } = render(<ResetPassword />)
 
       const passwordInput = getByLabelText("Password")
-      const passwordConfirmInput = getByLabelText("Password confirmation")
       const submitButton = getByText("Change password", { selector: "button" })
 
       await waitFor(async () => {
         await userEvent.type(passwordInput, "abcd")
-        await userEvent.type(passwordConfirmInput, "abcd")
         fireEvent.click(submitButton)
       })
 
@@ -278,12 +226,10 @@ describe("reset-password", () => {
       const { getByLabelText, getByText } = render(<ResetPassword />)
 
       const passwordInput = getByLabelText("Password")
-      const passwordConfirmInput = getByLabelText("Password confirmation")
       const submitButton = getByText("Change password", { selector: "button" })
 
       await waitFor(async () => {
         await userEvent.type(passwordInput, "abcd")
-        await userEvent.type(passwordConfirmInput, "abcd")
         fireEvent.click(submitButton)
       })
 

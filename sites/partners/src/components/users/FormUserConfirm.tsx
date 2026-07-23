@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { Button, Dialog, Card } from "@bloom-housing/ui-seeds"
@@ -9,13 +9,12 @@ import {
   MessageContext,
   passwordRegex,
 } from "@bloom-housing/shared-helpers"
-import { t, Field, useMutate, AlertBox } from "@bloom-housing/ui-components"
+import { t, PasswordField, useMutate, AlertBox } from "@bloom-housing/ui-components"
 import { ReRequestConfirmation } from "./ReRequestConfirmation"
 import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type FormUserConfirmFields = {
   password: string
-  passwordConfirmation: string
   agree: boolean
 }
 
@@ -23,7 +22,7 @@ const MIN_PASSWORD_LENGTH = 12
 
 const FormUserConfirm = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, handleSubmit, watch } = useForm<FormUserConfirmFields>()
+  const { register, errors, handleSubmit } = useForm<FormUserConfirmFields>()
   const router = useRouter()
   const {
     mutate,
@@ -34,9 +33,6 @@ const FormUserConfirm = () => {
   const { userService, loadProfile, loading, authService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   const token = router.query?.token as string
-
-  const password = useRef({})
-  password.current = watch("password", "")
 
   const [isSubmitting, setSubmitting] = useState(false)
   const [rerequestModalOpen, setRerequestModalOpen] = useState(false)
@@ -128,8 +124,7 @@ const FormUserConfirm = () => {
               <p className="field-note">{t("users.makeNote")}</p>
 
               <div className="mt-5">
-                <Field
-                  type="password"
+                <PasswordField
                   name="password"
                   label={t("account.settings.newPassword")}
                   note={t("authentication.createAccount.passwordInfo")}
@@ -140,27 +135,6 @@ const FormUserConfirm = () => {
                   }}
                   error={!!errors?.password}
                   errorMessage={t("authentication.signIn.passwordError")}
-                  register={register}
-                  className={"mb-1"}
-                  inputProps={{
-                    autoComplete: "off",
-                  }}
-                />
-              </div>
-
-              <div className="mt-5">
-                <Field
-                  type="password"
-                  name="passwordConfirmation"
-                  label={t("account.settings.confirmNewPassword")}
-                  validation={{
-                    required: true,
-                    validate: (value) =>
-                      value === password.current ||
-                      t("authentication.createAccount.errors.passwordMismatch"),
-                  }}
-                  error={!!errors?.passwordConfirmation}
-                  errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
                   register={register}
                   className={"mb-1"}
                   inputProps={{

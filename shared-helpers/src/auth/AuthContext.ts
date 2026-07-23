@@ -68,11 +68,7 @@ type ContextProps = {
     forPartners?: boolean,
     reCaptchaToken?: string
   ) => Promise<User | undefined>
-  resetPassword: (
-    token: string,
-    password: string,
-    passwordConfirmation: string
-  ) => Promise<User | undefined>
+  resetPassword: (token: string, password: string) => Promise<User | undefined>
   signOut: () => Promise<void>
   confirmAccount: (token: string) => Promise<User | undefined>
   forgotPassword: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
@@ -311,14 +307,13 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       dispatch(saveProfile(null))
       dispatch(signOut())
     },
-    resetPassword: async (token, password, passwordConfirmation) => {
+    resetPassword: async (token, password) => {
       dispatch(startLoading())
       try {
         const response = await authService?.updatePassword({
           body: {
             token,
             password,
-            passwordConfirmation,
           },
         })
         if (response) {
