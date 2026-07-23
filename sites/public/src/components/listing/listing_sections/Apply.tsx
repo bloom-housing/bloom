@@ -31,11 +31,11 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
   const { initialStateLoaded, profile } = useContext(AuthContext)
 
   const applicationsClosed = dayjs() > dayjs(listing.applicationDueDate)
-
   const onlineApplicationURLInfo = getOnlineApplicationURL(
     listing.applicationMethods,
     listing.id,
-    preview
+    preview,
+    listing.externalURL
   )
 
   const redirectIfLogInRequired = () =>
@@ -43,6 +43,7 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
     initialStateLoaded &&
     !profile &&
     onlineApplicationURLInfo.isCommonApp &&
+    !listing.externalURL &&
     //previewing applications should not require admin to login
     !preview
 
@@ -148,7 +149,12 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
           {t("listings.apply.howToApply")}
         </Heading>
         {hasPrimaryApplicationMethod && (
-          <>{onlineApplicationUrl ? ApplyOnlineButton : DownloadApplicationButton}</>
+          <>
+            {onlineApplicationUrl ? ApplyOnlineButton : DownloadApplicationButton}
+            <div className={"seeds-m-bs-content"}>
+              {listing.externalURL && t("listings.apply.applyOnlineMessage")}
+            </div>
+          </>
         )}
       </Card.Section>
       {showSecondarySection && (
