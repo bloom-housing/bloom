@@ -18,6 +18,7 @@ import { Listing } from '../dtos/listings/listing.dto';
 import { User } from '../dtos/users/user.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { TranslationUpdate } from '../dtos/translations/translation-update.dto';
+import { TranslationKeyEdit } from '../dtos/translations/translation-key-edit.dto';
 import { TranslationRawKey } from '../dtos/translations/translation-raw-key.dto';
 import { TranslationOverrideRow } from '../dtos/translations/translation-override-row.dto';
 import { flattenTranslationRows } from '../utilities/translation-merge';
@@ -280,40 +281,19 @@ export class TranslationService {
           dto.edits.map((edit) => edit.key),
         );
 
-    // A stale per-key lock is reported without discarding the non-conflicting edits, so the
-    // batch is intentionally not wrapped in a transaction.
-    const conflicts: string[] = [];
-    for (const edit of dto.edits) {
-      const where = { jurisdictionId, language, site, key: edit.key };
-      const data = {
-        value: edit.value,
-        origin: TranslationOrigin.human,
-        sourceHash: isEnglish ? null : englishHashes.get(edit.key) ?? null,
-      };
-
-      if (edit.lastUpdatedAt) {
-        // The lock matches updatedAt exactly, so it needs millisecond precision (what
-        // Prisma's @updatedAt writes). The #6519 backfill must also write ms-precision
-        // updated_at, or a saved key with sub-millisecond microseconds always false-conflicts.
-        const result = await this.prisma.translationStrings.updateMany({
-          where: { ...where, updatedAt: edit.lastUpdatedAt },
-          data,
-        });
-        if (result.count === 0) {
-          // The row either changed since the client read it (a conflict) or was deleted; in
-          // the latter case re-create it, treating a concurrent create as a conflict too.
-          const exists = await this.prisma.translationStrings.findFirst({
-            where,
-            select: { id: true },
-          });
-          if (exists || !(await this.createOverrideIfAbsent(where, data))) {
-            conflicts.push(edit.key);
-          }
-        }
-      } else if (!(await this.createOverrideIfAbsent(where, data))) {
-        conflicts.push(edit.key);
-      }
-    }
+    // Edits are independent per key, so apply them concurrently. A stale per-key lock is
+    // reported without discarding the others, so the batch is intentionally not a transaction.
+    const results = await Promise.all(
+      dto.edits.map((edit) =>
+        this.applyEdit(
+          { jurisdictionId, language, site },
+          edit,
+          englishHashes,
+          isEnglish,
+        ),
+      ),
+    );
+    const conflicts = results.filter((key): key is string => key !== null);
 
     if (conflicts.length) {
       throw new ConflictException({
@@ -322,6 +302,47 @@ export class TranslationService {
       });
     }
     return { success: true };
+  }
+
+  // Applies one edit under a per-key optimistic lock; returns the key if another writer
+  // changed or created it first, else null.
+  private async applyEdit(
+    scope: {
+      jurisdictionId: string;
+      language: LanguagesEnum;
+      site: SiteEnum;
+    },
+    edit: TranslationKeyEdit,
+    englishHashes: Map<string, string>,
+    isEnglish: boolean,
+  ): Promise<string | null> {
+    const where = { ...scope, key: edit.key };
+    const data = {
+      value: edit.value,
+      origin: TranslationOrigin.human,
+      sourceHash: isEnglish ? null : englishHashes.get(edit.key) ?? null,
+    };
+
+    if (edit.lastUpdatedAt) {
+      const result = await this.prisma.translationStrings.updateMany({
+        where: { ...where, updatedAt: edit.lastUpdatedAt },
+        data,
+      });
+      if (result.count === 0) {
+        // The row either changed since the client read it (a conflict) or was deleted; in the
+        // latter case re-create it, treating a concurrent create as a conflict too.
+        const exists = await this.prisma.translationStrings.findFirst({
+          where,
+          select: { id: true },
+        });
+        if (exists || !(await this.createOverrideIfAbsent(where, data))) {
+          return edit.key;
+        }
+      }
+      return null;
+    }
+
+    return (await this.createOverrideIfAbsent(where, data)) ? null : edit.key;
   }
 
   public async deleteOverride(
