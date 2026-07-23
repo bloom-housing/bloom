@@ -93,14 +93,9 @@ describe("Public Reset Password Page", () => {
           "Password is too weak. Must be at least 12 characters and include at least one lowercase letter, one uppercase letter, one number, and one special character (#?!@$%^&*-).",
       },
       {
-        title: "Expired Token",
-        message: "tokenExpired",
-        value: "Reset password token expired. Please request for a new one.",
-      },
-      {
         title: "Missing Token",
         message: "tokenMissing",
-        value: "Token not found. Please request for a new one.",
+        value: "Reset password link is malformed. Please request a new one.",
       },
     ].map((entry) =>
       Object.assign(entry, {
@@ -121,6 +116,14 @@ describe("Public Reset Password Page", () => {
               message: message,
             })
           )
+        }),
+        rest.put("http://localhost/api/adapter/user/is-reset-token-valid", (_req, res, ctx) => {
+          return res(
+            ctx.status(200),
+            ctx.json({
+              message: message,
+            })
+          )
         })
       )
       render(<ResetPassword />)
@@ -137,12 +140,48 @@ describe("Public Reset Password Page", () => {
       expect(await screen.findByText(value)).toBeInTheDocument()
     })
 
+    it("should show Expired Token error", async () => {
+      const message = "tokenExpired"
+      const value = "Reset password link expired. Please request a new one."
+
+      server.use(
+        rest.put("http://localhost/api/adapter/auth/update-password", (_req, res, ctx) => {
+          return res(
+            ctx.status(400),
+            ctx.json({
+              message: message,
+            })
+          )
+        }),
+        rest.put("http://localhost/api/adapter/user/is-reset-token-valid", (_req, res, ctx) => {
+          return res(
+            ctx.status(200),
+            ctx.json({
+              message: message,
+            })
+          )
+        })
+      )
+      render(<ResetPassword />)
+
+      const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
+      const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
+        selector: "input",
+      })
+
+      await userEvent.type(passwordInput, "Password")
+      await userEvent.type(confirmPasswordInput, "Password")
+      await userEvent.click(screen.getByRole("button", { name: /change password/i }))
+
+      expect(await screen.findAllByText(value))
+    })
+
     it("should show generic error message", async () => {
       // Hide the console.error statment in the component submit handler
       jest.spyOn(console, "error").mockImplementation()
       server.use(
         rest.put("http://localhost/api/adapter/auth/update-password", (_req, res, ctx) => {
-          return res(ctx.status(401))
+          return res(ctx.status(500))
         })
       )
       render(<ResetPassword />)
