@@ -89,10 +89,23 @@ data "aws_iam_policy_document" "deployer" {
       "servicediscovery:Discover*",
       "servicediscovery:Get*",
       "servicediscovery:List*",
+      "sms-voice:DescribePhoneNumbers",
       "sso:Get*",
       "sso:List*",
     ]
     resources = ["*"]
+  }
+  statement {
+    # Allow managing the Pinpoint SMS Voice V2 phone number used for SMS MFA.
+    actions = [
+      "sms-voice:ListTagsForResource",
+      "sms-voice:ReleasePhoneNumber",
+      "sms-voice:RequestPhoneNumber",
+      "sms-voice:TagResource",
+      "sms-voice:UntagResource",
+      "sms-voice:UpdatePhoneNumber",
+    ]
+    resources = ["arn:aws:sms-voice:${local.region_account}:phone-number/*"]
   }
   statement {
     # Allow any cloudshell action.

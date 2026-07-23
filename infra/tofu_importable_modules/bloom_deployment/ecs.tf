@@ -132,6 +132,11 @@ locals {
             Effect   = "Allow"
             Resource = aws_prometheus_workspace.bloom.arn
           },
+          {
+            Action   = "sms-voice:SendTextMessage"
+            Effect   = "Allow"
+            Resource = "arn:aws:sms-voice:${var.aws_region}:${var.aws_account_number}:phone-number/*"
+          },
         ]
       })
     }

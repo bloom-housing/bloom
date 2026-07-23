@@ -281,6 +281,21 @@ variable "grafana_editor_group_ids" {
   default     = []
 }
 
+variable "bloom_api_sms_config" {
+  description = "SMS configuration for the Bloom API using AWS Pinpoint SMS Voice V2. When set, provisions a phone number and configures the API to send SMS via AWS."
+  type = object({
+    number_type = optional(string, "LONG_CODE")
+  })
+  default = null
+  validation {
+    condition = var.bloom_api_sms_config == null || contains(
+      ["LONG_CODE", "TOLL_FREE", "SHORT_CODE", "TEN_DLC"],
+      var.bloom_api_sms_config.number_type
+    )
+    error_message = "number_type must be one of: LONG_CODE, TOLL_FREE, SHORT_CODE, TEN_DLC."
+  }
+}
+
 # Create a CloudTrail data store so that audit events are query-able in SQL.
 resource "aws_cloudtrail_event_data_store" "audit" {
   count = local.is_prod ? 1 : 0
