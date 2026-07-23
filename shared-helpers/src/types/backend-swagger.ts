@@ -10706,12 +10706,6 @@ export interface TranslationOverrideRow {
   key: string
 
   /**  */
-  site: SiteEnum
-
-  /**  */
-  language: LanguagesEnum
-
-  /**  */
   value: string
 
   /**  */
@@ -10719,6 +10713,12 @@ export interface TranslationOverrideRow {
 
   /**  */
   origin: TranslationOrigin
+
+  /**  */
+  site: SiteEnum
+
+  /**  */
+  language: LanguagesEnum
 }
 
 /** TranslationRawKey */

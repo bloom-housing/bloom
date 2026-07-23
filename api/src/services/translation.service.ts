@@ -385,11 +385,12 @@ export class TranslationService {
     }
   }
 
-  // English source hash per key, resolved by the same precedence the reads use:
-  // (jurisdictionId, en, site) then (null, en, site) then (null, en, null).
+  // English source hash per key: the effective English value resolved by the same
+  // precedence the reads use, low to high: base (null, null), global-site (null, site),
+  // then the jurisdiction's own (jurisdictionId, site).
   private async englishSourceHashes(
-    jurisdictionId: string | null,
-    site: SiteEnum | null,
+    jurisdictionId: string,
+    site: SiteEnum,
     keys: string[],
   ): Promise<Map<string, string>> {
     if (!keys.length) {
@@ -408,27 +409,16 @@ export class TranslationService {
       select: { jurisdictionId: true, site: true, key: true, value: true },
     });
 
-    const rank = (row: {
-      jurisdictionId: string | null;
-      site: SiteEnum | null;
-    }) =>
-      row.jurisdictionId === jurisdictionId && row.site === site
-        ? 0
-        : row.jurisdictionId === null && row.site === site
-        ? 1
-        : 2;
-
-    const best = new Map<string, { rank: number; value: string }>();
-    for (const row of rows) {
-      const current = best.get(row.key);
-      const rowRank = rank(row);
-      if (!current || rowRank < current.rank) {
-        best.set(row.key, { rank: rowRank, value: row.value });
-      }
-    }
+    const inScope = (id: string | null, scopeSite: SiteEnum | null) =>
+      rows.filter((row) => row.jurisdictionId === id && row.site === scopeSite);
+    const english = flattenTranslationRows([
+      inScope(null, null),
+      inScope(null, site),
+      inScope(jurisdictionId, site),
+    ]);
 
     const hashes = new Map<string, string>();
-    for (const [key, { value }] of best) {
+    for (const [key, value] of Object.entries(english)) {
       hashes.set(key, sourceHash(value));
     }
     return hashes;
