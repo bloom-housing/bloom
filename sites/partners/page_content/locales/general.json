@@ -345,6 +345,7 @@
   "listings.housingDeveloperOwner": "Housing developer / owner",
   "listings.includeCommunityDisclaimer": "Do you want to include a community type disclaimer as the first page of the application?",
   "listings.isDigitalApplication": "Is there a digital application?",
+  "listings.isLeasingAgentApplication": "Is the application through leasing agent contact only?",
   "listings.isPaperApplication": "Is there a paper application?",
   "listings.isReferralOpportunity": "Is there a referral opportunity?",
   "listings.latitude": "Latitude",
