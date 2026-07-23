@@ -4,6 +4,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   PrismaClient,
+  ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
 import { randomInt } from 'crypto';
@@ -2665,11 +2666,24 @@ export const createBridgeBayJurisdictions = async (
     const listings = Object.values(realisticAddressesForActive)
       .filter((address) => address.county === subJurisdiction)
       .map((addr, index) => {
+        const reviewOrderType =
+          Object.values(ReviewOrderTypeEnum)[
+            randomInt(0, Object.values(ReviewOrderTypeEnum).length - 1)
+          ];
         return {
           numberOfUnits:
             Math.random() < 0.9 ? randomInt(1, 10) : randomInt(10, 200),
           digitalApp: !!(index % 2),
           status: ListingsStatusEnum.active,
+          reviewOrderType: reviewOrderType,
+          unitsAvailable: (
+            [
+              ReviewOrderTypeEnum.waitlist,
+              ReviewOrderTypeEnum.waitlistLottery,
+            ] as ReviewOrderTypeEnum[]
+          ).includes(reviewOrderType)
+            ? 0
+            : null,
           address: addr,
           multiselectQuestions: randomBoolean() ? [preferenceQuestion] : [],
           publishedAt: dayjs(new Date())

@@ -5,8 +5,8 @@ import {
   Listing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { Button, Card } from "@bloom-housing/ui-seeds"
-import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
+import { Button } from "@bloom-housing/ui-seeds"
+import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import { ConfirmationModal } from "../../components/account/ConfirmationModal"
@@ -57,6 +57,7 @@ export const Home = (props: HomeProps) => {
         {enableHomePageSearchHero && (
           <Hero
             title={heroTitle}
+            titleSize="4xl"
             action={<HomeSearch jurisdiction={props.jurisdiction} />}
             image={"/images/hero-image.jpg"}
           />
