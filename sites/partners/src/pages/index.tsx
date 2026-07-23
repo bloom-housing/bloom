@@ -117,6 +117,7 @@ export default function ListingsList() {
 
   const [listingSelectModal, setListingSelectModal] = useState(false)
   const [isNonRegulatedEnabled, setIsNonRegulatedEnabled] = useState(false)
+  const [isLandUseEnabled, setIsLandUseEnabled] = useState(false)
 
   const defaultJurisdiction =
     profile?.jurisdictions?.length === 1 ? profile.jurisdictions[0].id : null
@@ -154,8 +155,16 @@ export default function ListingsList() {
     true
   )
 
+  const showForLandUse = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLandUse,
+    undefined,
+    true
+  )
+
   useEffect(() => {
     if (defaultJurisdiction) {
+      const landUseEnabled = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableLandUse)
+      setIsLandUseEnabled(landUseEnabled)
       setIsNonRegulatedEnabled(
         doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableNonRegulatedListings)
       )
@@ -165,6 +174,7 @@ export default function ListingsList() {
   const onModalClose = () => {
     setListingSelectModal(false)
     setIsNonRegulatedEnabled(showForNonRegulated)
+    setIsLandUseEnabled(showForLandUse)
   }
 
   const columnDefs = useMemo(() => {
@@ -355,7 +365,9 @@ export default function ListingsList() {
     const query = {
       jurisdictionId: data.jurisdiction,
     }
-    if (data.listingType === ListingTypeEnum.nonRegulated) {
+    if (data.listingType === ListingTypeEnum.landUse) {
+      query["landUse"] = true
+    } else if (data.listingType === ListingTypeEnum.nonRegulated) {
       query["nonRegulated"] = true
     }
     void router.push({
@@ -405,7 +417,7 @@ export default function ListingsList() {
                       size="sm"
                       variant="primary"
                       onClick={() => {
-                        if (defaultJurisdiction && !isNonRegulatedEnabled) {
+                        if (defaultJurisdiction && !isNonRegulatedEnabled && !isLandUseEnabled) {
                           void router.push({
                             pathname: "/listings/add",
                             query: { jurisdictionId: defaultJurisdiction },
@@ -474,11 +486,20 @@ export default function ListingsList() {
                       validation={{ required: !defaultJurisdiction }}
                       inputProps={{
                         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                          const selectedJurisdictionId = e.target?.value
+                          const landUseEnabled =
+                            !!selectedJurisdictionId &&
+                            doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableLandUse,
+                              selectedJurisdictionId
+                            )
+                          setIsLandUseEnabled(landUseEnabled)
                           setIsNonRegulatedEnabled(
-                            e.target?.value &&
+                            !landUseEnabled &&
+                              !!selectedJurisdictionId &&
                               doJurisdictionsHaveFeatureFlagOn(
                                 FeatureFlagEnum.enableNonRegulatedListings,
-                                e.target?.value
+                                selectedJurisdictionId
                               )
                           )
                           clearErrors("jurisdiction")
@@ -509,7 +530,46 @@ export default function ListingsList() {
                   </Grid.Cell>
                 </Grid.Row>
               )}
-              {isNonRegulatedEnabled && (
+              {isLandUseEnabled && (
+                <div aria-live="polite">
+                  <fieldset>
+                    <legend className={`text__caps-spaced`}>{t("listings.landUseTitle")}</legend>
+                    <Grid.Row columns={4}>
+                      <Grid.Cell className={"seeds-grid-span-2"}>
+                        <div className="pb-4 sm:pb-0">
+                          <Field
+                            name="listingType"
+                            type="radio"
+                            className="mr-4"
+                            register={register}
+                            id={EnumListingListingType.landUse}
+                            label={t("t.yes")}
+                            inputProps={{
+                              value: EnumListingListingType.landUse,
+                            }}
+                          />
+                        </div>
+                      </Grid.Cell>
+                      <Grid.Cell className={"seeds-grid-span-2"}>
+                        <div>
+                          <Field
+                            name="listingType"
+                            type="radio"
+                            register={register}
+                            id="landUseNo"
+                            label={t("t.no")}
+                            inputProps={{
+                              value: EnumListingListingType.regulated,
+                              defaultChecked: true,
+                            }}
+                          />
+                        </div>
+                      </Grid.Cell>
+                    </Grid.Row>
+                  </fieldset>
+                </div>
+              )}
+              {isNonRegulatedEnabled && !isLandUseEnabled && (
                 <div aria-live="polite">
                   <fieldset>
                     <legend className={`text__caps-spaced`}>

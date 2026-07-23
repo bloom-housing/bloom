@@ -11,6 +11,7 @@ const NewListing = () => {
   const router = useRouter()
   const selectedJurisdiction = router.query.jurisdictionId as string
   const isNonRegulated = !!router.query.nonRegulated
+  const isLandUse = !!router.query.landUse
 
   useEffect(() => {
     if (!selectedJurisdiction) {
@@ -36,7 +37,11 @@ const NewListing = () => {
             </Breadcrumbs>
           }
         />
-        <PaperListingForm jurisdictionId={selectedJurisdiction} isNonRegulated={isNonRegulated} />
+        <PaperListingForm
+          jurisdictionId={selectedJurisdiction}
+          isNonRegulated={isNonRegulated}
+          isLandUse={isLandUse}
+        />
       </Layout>
     </ListingGuard>
   )

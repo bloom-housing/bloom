@@ -19,6 +19,7 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 interface ListingIntroProps {
   enableHousingDeveloperOwner?: boolean
   enableListingFileNumber?: boolean
+  enableLandUse?: boolean
   enableNonRegulatedListings?: boolean
   enableProperties?: boolean
   jurisdictionName: string
@@ -39,6 +40,15 @@ const getDeveloperLabel = (
     return t("listings.propertyManager")
   }
   return t("listings.developer")
+}
+
+const getListingTypeLabel = (listingType: EnumListingListingType) => {
+  if (listingType === EnumListingListingType.landUse) {
+    return t("listings.landUse")
+  } else if (listingType === EnumListingListingType.nonRegulated) {
+    return t("listings.nonRegulated")
+  }
+  return t("listings.regulated")
 }
 
 const ListingIntro = (props: ListingIntroProps) => {
@@ -71,13 +81,11 @@ const ListingIntro = (props: ListingIntroProps) => {
         heading={t("listings.sections.introTitle")}
         subheading={t("listings.sections.introSubtitle")}
       >
-        {props.enableNonRegulatedListings && (
+        {(props.enableNonRegulatedListings || props.enableLandUse) && (
           <Grid.Row columns={1}>
             <Grid.Cell>
               <FieldValue id="listingType" label={t("listings.listingTypeTitle")}>
-                {props.listingType === EnumListingListingType.nonRegulated
-                  ? t("listings.nonRegulated")
-                  : t("listings.regulated")}
+                {getListingTypeLabel(props.listingType)}
               </FieldValue>
             </Grid.Cell>
           </Grid.Row>
