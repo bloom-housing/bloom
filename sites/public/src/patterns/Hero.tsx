@@ -4,6 +4,7 @@ import Image from "next/image"
 
 import MaxWidthLayout from "../layouts/max-width"
 import styles from "./Hero.module.scss"
+import { HeadingSize } from "@bloom-housing/ui-seeds/src/text/Heading"
 
 export interface HeroProps {
   /** A clear call to action, most typically a button */
@@ -18,10 +19,12 @@ export interface HeroProps {
   subtitle?: string
   /** Main heading text */
   title: string
+  titleSize?: HeadingSize
 }
 
 export const Hero = (props: HeroProps) => {
   const [imageExists, setImageExists] = useState(true)
+  const headingSize = props.titleSize || ("6xl" as HeadingSize)
 
   return (
     <MaxWidthLayout className={styles["hero-container"]} fullHeight={props.fullHeight}>
@@ -32,7 +35,7 @@ export const Hero = (props: HeroProps) => {
       >
         <div>
           {props.note && <p className={styles["note"]}>{props.note}</p>}
-          <Heading priority={1} className={styles["heading"]}>
+          <Heading priority={1} size={headingSize} className={styles["heading"]}>
             {props.title}
           </Heading>
           {props.subtitle && <p className={styles["subtitle"]}>{props.subtitle}</p>}

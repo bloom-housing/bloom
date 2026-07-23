@@ -64,42 +64,48 @@
       }
     }
   }
-  .borderless-tab {
-    border: none;
-    &[aria-selected="true"],
-    &[data-active="true"] {
-      border-bottom: var(--tab-active-indicator-width) solid var(--tab-active-indicator-color);
-      z-index: 1;
-    }
+  .hero-search-subNote {
+    margin-block-start: var(--seeds-s4);
   }
-  .hero-search {
-    color: var(--seeds-text-color-darker);
-    display: grid;
-    grid-template-columns: 1fr fit-content(200px);
-    @media (--sm-only) {
-      grid-template-columns: 1fr;
+  .hero-search-card {
+    --card-content-padding-block: var(--seeds-s2);
+    --card-content-padding-inline: var(--seeds-s6);
+    .hero-search-tabs {
+      --tab-panel-padding: none;
+      --tab-font-size: var(--seeds-font-size-sm);
+      --tab-border-color: var(--seeds-color-on-inverse);
     }
-    column-gap: var(--seeds-s4);
-
-    .hero-flex-grow {
-      flex-grow: 1;
-    }
-
-    .hero-filter-flex {
-      @media (--sm-and-up) {
-        display: flex;
+    .hero-search {
+      color: var(--seeds-text-color-darker);
+      display: grid;
+      grid-template-columns: 1fr fit-content(200px);
+      @media (--sm-only) {
+        grid-template-columns: 1fr;
       }
-    }
+      column-gap: var(--seeds-s4);
+      margin-block-start: var(--seeds-s4);
 
-    .hero-submit-button {
-      margin-block-end: var(--seeds-s8);
-    }
+      // .hero-flex-grow {
+      //   flex-grow: 1;
+      // }
 
-    .hero-last-checkbox {
-      @media (--sm-and-up) {
-        order: 99;
-        grid-column: span 2;
-        justify-self: end;
+      .hero-filter-flex {
+        @media (--sm-and-up) {
+          display: flex;
+          gap: var(--seeds-s4);
+        }
+      }
+
+      // The filter checkbox should be below the view listing button on desktop but still read before the button
+      .hero-last-checkbox {
+        margin-block-start: var(--seeds-s4);
+        margin-block-end: 0;
+        @media (--sm-and-up) {
+          margin-block-start: 0;
+          grid-column: span 2;
+          justify-self: end;
+          order: 99;
+        }
       }
     }
   }

@@ -61,6 +61,7 @@ export const listingFactory = async (
     status?: ListingsStatusEnum;
     unitGroups?: Prisma.UnitGroupCreateWithoutListingsInput[];
     units?: Prisma.UnitsCreateWithoutListingsInput[];
+    unitsAvailable?: number;
     userAccounts?: Prisma.UserAccountsWhereUniqueInput[];
     requiredDocumentsList?: Prisma.ListingDocumentsCreateInput;
   },
@@ -85,6 +86,11 @@ export const listingFactory = async (
       0,
     );
   }
+  // Allow to override the unitsAvailable if provided in optionalParams, otherwise use the calculated value
+  unitsAvailable =
+    optionalParams?.unitsAvailable != null
+      ? optionalParams.unitsAvailable
+      : unitsAvailable;
 
   let reservedCommunityType: ReservedCommunityTypes;
   if (
