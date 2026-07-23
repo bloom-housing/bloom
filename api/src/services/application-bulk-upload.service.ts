@@ -1,11 +1,15 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   StreamableFile,
   NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
-import { ApplicationStatusEnum } from '@prisma/client';
+import { Applicant, ApplicationStatusEnum } from '@prisma/client';
+import { parse } from 'csv-parse';
 import fs, { createReadStream } from 'fs';
+import { Readable } from 'stream';
 import dayjs from 'dayjs';
 import { join } from 'path';
 import { PrismaService } from './prisma.service';
@@ -18,9 +22,66 @@ import { User } from '../dtos/users/user.dto';
 import { ListingService } from './listing.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { convertApplicationDeclineReasonToReadable } from '../utilities/application-export-helpers';
+import {
+  convertApplicationDeclineReasonToReadable,
+  APPLICATION_DECLINE_REASON_MAP,
+  convertReadableToApplicationDeclineReason,
+} from '../utilities/application-export-helpers';
+import { ApplicationBulkValidate } from '../dtos/applications/application-bulk-validate.dto';
+import { S3Service } from './s3.service';
+import { BackgroundJobsService } from './background-jobs.service';
 
 const NUMBER_TO_PAGINATE_BY = 500;
+
+export const bulkUploadHeaderNames = {
+  applicationId: 'Application Id',
+  applicantFirstName: 'Applicant First Name',
+  applicantLastName: 'Applicant Last Name',
+  applicationSubmissionDate: 'Application Submission Date',
+  lotteryPositionNumber: 'Lottery Position Number',
+  applicationStatus: 'Application Status',
+  applicationDeclineReason: 'Application Decline Reason',
+  applicationDeclineReasonAdditionalDetails:
+    'Application Decline Reason Additional Details',
+  waitlistPositionAccessibleUnit: 'Waitlist Position (Accessible Unit)',
+  waitlistPositionConventionalUnit: 'Waitlist Position (Conventional Unit)',
+};
+
+const APPLICATION_STATUS_MAP: Record<ApplicationStatusEnum, string> = {
+  [ApplicationStatusEnum.declined]: 'Declined',
+  [ApplicationStatusEnum.receivedUnit]: 'Received a Unit',
+  [ApplicationStatusEnum.submitted]: 'Submitted',
+  [ApplicationStatusEnum.waitlist]: 'Wait list',
+  [ApplicationStatusEnum.waitlistDeclined]: 'Wait list - Declined',
+};
+
+type CsvRow = Record<string, string>;
+
+export type ApplicationContextFields = Pick<
+  Application,
+  'submissionDate' | 'id'
+> & {
+  applicant: Pick<Applicant, 'firstName' | 'lastName'>;
+};
+
+const EXPECTED_HEADERS = Object.values(bulkUploadHeaderNames);
+
+const WAITLIST_STATUSES = [
+  APPLICATION_STATUS_MAP[ApplicationStatusEnum.waitlist],
+  APPLICATION_STATUS_MAP[ApplicationStatusEnum.waitlistDeclined],
+];
+
+const NUMERIC_COLUMNS = [
+  bulkUploadHeaderNames.lotteryPositionNumber,
+  bulkUploadHeaderNames.waitlistPositionAccessibleUnit,
+  bulkUploadHeaderNames.waitlistPositionConventionalUnit,
+];
+
+const DECLINE_REASONS_REQUIRING_DETAILS = [
+  APPLICATION_DECLINE_REASON_MAP.attemptedToContactNoResponse,
+  APPLICATION_DECLINE_REASON_MAP.applicantDeclinedUnit,
+  APPLICATION_DECLINE_REASON_MAP.other,
+];
 
 @Injectable()
 export class ApplicationBulkUploadService {
@@ -30,42 +91,40 @@ export class ApplicationBulkUploadService {
     private prisma: PrismaService,
     private listingService: ListingService,
     private permissionService: PermissionService,
+    private s3Service: S3Service,
+    private backgroundJobsService: BackgroundJobsService,
   ) {}
 
-  private formatApplicationStatus(statusEnum: ApplicationStatusEnum): string {
-    switch (statusEnum) {
-      case ApplicationStatusEnum.declined:
-        return 'Declined';
-      case ApplicationStatusEnum.receivedUnit:
-        return 'Received a Unit';
-      case ApplicationStatusEnum.submitted:
-        return 'Submitted';
-      case ApplicationStatusEnum.waitlist:
-        return 'Wait list';
-      case ApplicationStatusEnum.waitlistDeclined:
-        return 'Wait list - Declined';
-      default:
-        return statusEnum;
-    }
+  convertApplicationStatusToReadable(
+    statusEnum: ApplicationStatusEnum,
+  ): string {
+    return APPLICATION_STATUS_MAP[statusEnum] ?? statusEnum;
   }
+
+  convertReadableToApplicationStatus = (
+    readable: string,
+  ): ApplicationStatusEnum | undefined =>
+    (Object.keys(APPLICATION_STATUS_MAP) as ApplicationStatusEnum[]).find(
+      (key) => APPLICATION_STATUS_MAP[key] === readable,
+    );
 
   private getBulkUploadHeaders(timeZone?: string): CsvHeader[] {
     const headers: CsvHeader[] = [
       {
         path: 'id',
-        label: 'Application Id',
+        label: bulkUploadHeaderNames.applicationId,
       },
       {
         path: 'applicant.firstName',
-        label: 'Applicant First Name',
+        label: bulkUploadHeaderNames.applicantFirstName,
       },
       {
         path: 'applicant.lastName',
-        label: 'Applicant Last Name',
+        label: bulkUploadHeaderNames.applicantLastName,
       },
       {
         path: 'submissionDate',
-        label: 'Application Submission Date',
+        label: bulkUploadHeaderNames.applicationSubmissionDate,
         format: (val: string): string =>
           formatLocalDate(
             val,
@@ -75,29 +134,29 @@ export class ApplicationBulkUploadService {
       },
       {
         path: 'manualLotteryPositionNumber',
-        label: 'Lottery Position Number',
+        label: bulkUploadHeaderNames.lotteryPositionNumber,
       },
       {
         path: 'status',
-        label: 'Application Status',
-        format: (val) => this.formatApplicationStatus(val),
+        label: bulkUploadHeaderNames.applicationStatus,
+        format: (val) => this.convertApplicationStatusToReadable(val),
       },
       {
         path: 'applicationDeclineReason',
-        label: 'Application Decline Reason',
+        label: bulkUploadHeaderNames.applicationDeclineReason,
         format: (val) => convertApplicationDeclineReasonToReadable(val),
       },
       {
         path: 'applicationDeclineReasonAdditionalDetails',
-        label: 'Application Decline Reason Additional Details',
+        label: bulkUploadHeaderNames.applicationDeclineReasonAdditionalDetails,
       },
       {
         path: 'accessibleUnitWaitlistNumber',
-        label: 'Waitlist Position (Accessible Unit)',
+        label: bulkUploadHeaderNames.waitlistPositionAccessibleUnit,
       },
       {
         path: 'conventionalUnitWaitlistNumber',
-        label: 'Waitlist Position (Conventional Unit)',
+        label: bulkUploadHeaderNames.waitlistPositionConventionalUnit,
       },
     ];
 
@@ -316,5 +375,304 @@ export class ApplicationBulkUploadService {
         jurisdictionId,
       },
     );
+  }
+
+  validateFileFormat(s3Key: string): void {
+    if (!s3Key.toLowerCase().endsWith('.csv')) {
+      throw new BadRequestException('Upload Failed: file must be a CSV format');
+    }
+  }
+
+  validateHeaders(actualHeaders: string[]): void {
+    const expected = new Set(EXPECTED_HEADERS);
+    const actual = new Set(actualHeaders);
+    const sameSize = expected.size === actual.size;
+    const allPresent = EXPECTED_HEADERS.every((h) => actual.has(h));
+    if (!sameSize || !allPresent) {
+      throw new BadRequestException(
+        'Upload Failed: CSV has additional or missing columns',
+      );
+    }
+  }
+
+  private validateHasDataRows(rows: CsvRow[]): void {
+    if (rows.length === 0) {
+      throw new BadRequestException(
+        'Upload Failed: CSV contains no application records',
+      );
+    }
+  }
+
+  /**
+   * Bulk-fetches every application referenced by the CSV in a single query.
+   * Kept separate from the per-row checks so the DB is only hit once,
+   * regardless of the number of rows.
+   */
+  private async fetchDbApplications(
+    rows: CsvRow[],
+    listingId: string,
+  ): Promise<ApplicationContextFields[]> {
+    const ids = rows.map((r) => r[bulkUploadHeaderNames.applicationId]);
+
+    return this.prisma.applications.findMany({
+      where: { id: { in: ids }, listingId },
+      select: {
+        id: true,
+        applicant: { select: { firstName: true, lastName: true } },
+        submissionDate: true,
+      },
+    });
+  }
+
+  private validateNoDuplicateId(rows: CsvRow[]): void {
+    const seenIds = new Set<string>();
+    rows.forEach((row, index) => {
+      const id = row[bulkUploadHeaderNames.applicationId];
+      if (seenIds.has(id)) {
+        throw new BadRequestException(
+          `Upload Failed: One or more rows beginning on row ${
+            index + 2
+          } contain duplicate application IDs`,
+        );
+      }
+      seenIds.add(id);
+    });
+  }
+
+  private validateApplicationId(
+    row: CsvRow,
+    foundIds: Set<string>,
+    index: number,
+  ): void {
+    const id = row[bulkUploadHeaderNames.applicationId];
+    if (!foundIds.has(id)) {
+      throw new BadRequestException(
+        `Upload Failed: One or more rows beginning on row ${
+          index + 2
+        } have incorrect application identification numbers or belong to a different listing`,
+      );
+    }
+  }
+
+  private validateContextFields(
+    row: CsvRow,
+    dbMap: Map<string, ApplicationContextFields>,
+    index: number,
+  ): void {
+    const dbApp = dbMap.get(row[bulkUploadHeaderNames.applicationId]);
+    if (!dbApp) return;
+
+    const expectedDate = dbApp.submissionDate
+      ? formatLocalDate(
+          dbApp.submissionDate.toISOString(),
+          this.dateFormat,
+          process.env.TIME_ZONE,
+        )
+      : '';
+
+    const firstNameMatch =
+      row[bulkUploadHeaderNames.applicantFirstName] ===
+      (dbApp.applicant?.firstName ?? '');
+    const lastNameMatch =
+      row[bulkUploadHeaderNames.applicantLastName] ===
+      (dbApp.applicant?.lastName ?? '');
+    const dateMatch =
+      row[bulkUploadHeaderNames.applicationSubmissionDate] === expectedDate;
+
+    if (!firstNameMatch || !lastNameMatch || !dateMatch) {
+      throw new BadRequestException(
+        `Upload Failed: One or more rows beginning on row ${
+          index + 2
+        } have incorrect application details (Applicant first name, last name or submission date)`,
+      );
+    }
+  }
+
+  private validateStatus(row: CsvRow, index: number): void {
+    if (
+      this.convertReadableToApplicationStatus(
+        row[bulkUploadHeaderNames.applicationStatus],
+      ) === undefined
+    ) {
+      throw new BadRequestException(
+        `Upload Failed: Could not match one or more application status inputs beginning on row ${
+          index + 2
+        } with accepted system options`,
+      );
+    }
+  }
+
+  private validateDeclineReason(row: CsvRow, index: number): void {
+    const reason = row[bulkUploadHeaderNames.applicationDeclineReason];
+    if (
+      reason !== '' &&
+      convertReadableToApplicationDeclineReason(reason) === undefined
+    ) {
+      throw new BadRequestException(
+        `Upload Failed: Could not match one or more application decline reason inputs beginning on row ${
+          index + 2
+        } with accepted system options`,
+      );
+    }
+  }
+
+  private validateDeclineConsistency(row: CsvRow, index: number): void {
+    const status = row[bulkUploadHeaderNames.applicationStatus];
+    const reason = row[bulkUploadHeaderNames.applicationDeclineReason];
+
+    if (status === 'Declined' && reason === '') {
+      throw new BadRequestException(
+        `Upload Failed: One or more rows beginning on row ${
+          index + 2
+        } have a declined status without a decline reason`,
+      );
+    }
+
+    if (reason !== '' && status !== 'Declined') {
+      throw new BadRequestException(
+        `Upload Failed: One or more rows beginning on row ${
+          index + 2
+        } have a decline reason without a declined status`,
+      );
+    }
+  }
+
+  private validateAdditionalDetails(row: CsvRow, index: number): void {
+    const reason = row[bulkUploadHeaderNames.applicationDeclineReason];
+    const details =
+      row[bulkUploadHeaderNames.applicationDeclineReasonAdditionalDetails];
+
+    if (DECLINE_REASONS_REQUIRING_DETAILS.includes(reason) && details === '') {
+      throw new BadRequestException(
+        `Upload Failed: One or more rows beginning on row ${
+          index + 2
+        } require additional details for the provided decline reason`,
+      );
+    }
+
+    if (details.length > 2000) {
+      throw new BadRequestException(
+        `Upload Failed: One or more rows beginning on row ${
+          index + 2
+        } have application decline reason additional details exceeding 2000 characters`,
+      );
+    }
+  }
+
+  private validateWaitlistConsistency(row: CsvRow, index: number): void {
+    const status = row[bulkUploadHeaderNames.applicationStatus];
+
+    const hasWaitlistPosition =
+      row[bulkUploadHeaderNames.waitlistPositionAccessibleUnit] !== '' ||
+      row[bulkUploadHeaderNames.waitlistPositionConventionalUnit] !== '';
+
+    if (hasWaitlistPosition && !WAITLIST_STATUSES.includes(status)) {
+      throw new BadRequestException(
+        `Upload Failed: One or more rows beginning on row ${
+          index + 2
+        } have a waitlist position without a waitlist status`,
+      );
+    }
+  }
+
+  private validateNumericFields(row: CsvRow, index: number): void {
+    for (const col of NUMERIC_COLUMNS) {
+      const raw = row[col].trim();
+      if (raw === '') continue;
+
+      const num = Number(raw);
+
+      if (isNaN(num) || num < 0 || !Number.isInteger(num)) {
+        throw new BadRequestException(
+          `Upload Failed: One or more rows beginning on row ${
+            index + 2
+          } have invalid numeric values`,
+        );
+      }
+
+      if (col === bulkUploadHeaderNames.lotteryPositionNumber && num === 0) {
+        throw new BadRequestException(
+          `Upload Failed: One or more rows beginning on row ${
+            index + 2
+          } have invalid numeric values`,
+        );
+      }
+    }
+  }
+
+  async validateCSV(
+    dto: ApplicationBulkValidate,
+    requestingUser: User,
+  ): Promise<string> {
+    this.validateFileFormat(dto.s3Key);
+
+    let csvStream: ReadableStream;
+    try {
+      csvStream = await this.s3Service.downloadFromPrivate(dto.s3Key);
+    } catch {
+      throw new NotFoundException(
+        'The CSV file could not be retrieved from the S3 bucket',
+      );
+    }
+
+    const nodeStream = Readable.fromWeb(csvStream as any);
+    const records: string[][] = await new Promise((resolve, reject) => {
+      const results: string[][] = [];
+      nodeStream
+        .pipe(parse({ skip_empty_lines: true, bom: true }))
+        .on('data', (row: string[]) => results.push(row))
+        .on('error', reject)
+        .on('end', () => resolve(results));
+    });
+
+    const [headerRow, ...dataRows] = records;
+    const headers: string[] = headerRow ?? [];
+    const rows: CsvRow[] = dataRows.map((cells) =>
+      Object.fromEntries(headers.map((h, i) => [h, cells[i] ?? ''])),
+    );
+
+    this.validateHeaders(headers);
+    this.validateHasDataRows(rows);
+
+    for (let i = 0; i < rows.length; i += NUMBER_TO_PAGINATE_BY) {
+      const currentChunk = rows.slice(i, NUMBER_TO_PAGINATE_BY);
+
+      const dbApps = await this.fetchDbApplications(
+        currentChunk.map((entry) => entry),
+        dto.listingId,
+      );
+      const foundIds = new Set(dbApps.map((a) => a.id));
+      const dbMap = new Map(dbApps.map((a) => [a.id, a]));
+
+      this.validateNoDuplicateId(rows);
+
+      for (let i = 0; i < currentChunk.length; i++) {
+        const entry = currentChunk[i];
+        this.validateApplicationId(entry, foundIds, i);
+        this.validateContextFields(entry, dbMap, i);
+        this.validateStatus(entry, i);
+        this.validateDeclineReason(entry, i);
+        this.validateDeclineConsistency(entry, i);
+        this.validateAdditionalDetails(entry, i);
+        this.validateWaitlistConsistency(entry, i);
+        this.validateNumericFields(entry, i);
+      }
+    }
+
+    const backgroundJob = await this.backgroundJobsService.create(
+      {
+        listingId: dto.listingId,
+        inputS3Key: dto.s3Key,
+      },
+      requestingUser,
+    );
+
+    if (!backgroundJob) {
+      throw new InternalServerErrorException(
+        'Failed to create a background job for bulk application update',
+      );
+    }
+
+    return backgroundJob.id;
   }
 }
