@@ -111,12 +111,15 @@ export const getPaperApplications = (applicationMethods: ApplicationMethod[]) =>
 export const getOnlineApplicationURL = (
   applicationMethods: ApplicationMethod[],
   listingId: string,
-  preview: boolean
+  preview: boolean,
+  externalURL = ""
 ) => {
   let onlineApplicationURL
   let isCommonApp = false
   if (hasMethod(applicationMethods, ApplicationMethodsTypeEnum.Internal)) {
-    onlineApplicationURL = `/applications/start/choose-language?listingId=${listingId}`
+    onlineApplicationURL = `${
+      externalURL ? externalURL : ""
+    }/applications/start/choose-language?listingId=${listingId}`
     onlineApplicationURL += `${preview ? "&preview=true" : ""}`
     isCommonApp = true
   } else if (hasMethod(applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)) {

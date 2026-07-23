@@ -145,6 +145,45 @@ describe("<Apply>", () => {
     expect(screen.queryByText("Download application")).not.toBeInTheDocument()
   })
 
+  it("shows apply online button for internal online application for external listing", () => {
+    render(
+      <Apply
+        listing={{
+          ...listing,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          applicationMethods: [
+            {
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              type: ApplicationMethodsTypeEnum.Internal,
+              acceptsPostmarkedApplications: null,
+              externalReference: null,
+              paperApplications: [],
+              phoneNumber: null,
+            },
+          ],
+          externalURL: "www.externalURL.com",
+        }}
+        preview={false}
+        setShowDownloadModal={() => null}
+      />
+    )
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByText("Apply online")).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        "* This button brings you to an external website where you can create an account and apply for this listing."
+      )
+    ).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Apply online" })).toHaveAttribute(
+      "href",
+      `www.externalURL.com/applications/start/choose-language?listingId=${listing.id}`
+    )
+
+    expect(screen.queryByText("Download application")).not.toBeInTheDocument()
+  })
+
   it("shows redirected apply online button for internal online application with mandated accounts on while signed out", () => {
     process.env.showMandatedAccounts = "TRUE"
     render(

@@ -879,6 +879,7 @@
   "listings.apply.applicationSeason": "주민들은 다음 주소로 신청해야 합니다.",
   "listings.apply.applicationWillBeAvailableOn": "신청서는 %{openDate}부터 다운로드 및 수령 가능합니다.",
   "listings.apply.applyOnline": "온라인으로 지원하세요",
+  "listings.apply.applyOnlineMessage": "* 이 버튼을 누르면 계정을 생성하고 해당 공고에 지원할 수 있는 외부 웹사이트로 이동합니다.",
   "listings.apply.downloadApplication": "애플리케이션 다운로드",
   "listings.apply.dropOffApplication": "신청서 제출",
   "listings.apply.dropOffApplicationOrMail": "신청서를 직접 제출하거나 우편으로 보내주세요.",
