@@ -319,6 +319,14 @@ describe('Testing translations service', () => {
             origin: TranslationOrigin.human,
             sourceHash: sourceHash('b english'),
           },
+          {
+            // orphaned: has a source hash but its english source no longer exists
+            key: 'c',
+            value: 'C es',
+            updatedAt: new Date(),
+            origin: TranslationOrigin.human,
+            sourceHash: sourceHash('deleted english'),
+          },
         ])
         // the english source rows
         .mockResolvedValueOnce([
@@ -345,6 +353,8 @@ describe('Testing translations service', () => {
 
       expect(result.find((row) => row.key === 'a').stale).toBe(true);
       expect(result.find((row) => row.key === 'b').stale).toBe(false);
+      // orphaned: english source gone -> stale
+      expect(result.find((row) => row.key === 'c').stale).toBe(true);
     });
   });
 

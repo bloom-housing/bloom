@@ -22,6 +22,7 @@ import { TranslationRawKey } from '../dtos/translations/translation-raw-key.dto'
 import { TranslationOverrideRow } from '../dtos/translations/translation-override-row.dto';
 import { flattenTranslationRows } from '../utilities/translation-merge';
 import { sourceHash } from '../utilities/translation-source-hash';
+import { mapTo } from '../utilities/mapTo';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
 @Injectable()
@@ -190,7 +191,7 @@ export class TranslationService {
       jurisdictionId,
       permissionActions.read,
     );
-    return this.prisma.translationStrings.findMany({
+    const rows = await this.prisma.translationStrings.findMany({
       where: { jurisdictionId },
       select: {
         key: true,
@@ -202,6 +203,7 @@ export class TranslationService {
       },
       orderBy: [{ site: 'asc' }, { language: 'asc' }, { key: 'asc' }],
     });
+    return mapTo(TranslationOverrideRow, rows);
   }
 
   public async getRawOverrides(
@@ -236,22 +238,24 @@ export class TranslationService {
             rows.map((row) => row.key),
           );
 
-    return rows.map((row) => {
-      const currentEnglish = englishHashes.get(row.key);
-      return {
-        key: row.key,
-        value: row.value,
-        updatedAt: row.updatedAt,
-        origin: row.origin,
-        // Stale when the English source recorded at save time no longer matches the
-        // current English source.
-        stale:
-          language !== LanguagesEnum.en &&
-          row.sourceHash != null &&
-          currentEnglish != null &&
-          row.sourceHash !== currentEnglish,
-      };
-    });
+    return mapTo(
+      TranslationRawKey,
+      rows.map((row) => {
+        const currentEnglish = englishHashes.get(row.key);
+        return {
+          key: row.key,
+          value: row.value,
+          updatedAt: row.updatedAt,
+          origin: row.origin,
+          // Stale when the English source recorded at save time no longer matches the
+          // current English source, including when that source no longer exists.
+          stale:
+            language !== LanguagesEnum.en &&
+            row.sourceHash != null &&
+            row.sourceHash !== currentEnglish,
+        };
+      }),
+    );
   }
 
   public async updateOverrides(
