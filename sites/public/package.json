@@ -12,6 +12,7 @@
   },
   "scripts": {
     "dev": "next dev -p 3000",
+    "dev:watch": "nodemon --watch .env --exec \"next dev -p 3000\"",
     "build": "next build",
     "test": "concurrently \"yarn dev\" \"cypress open\"",
     "test:headless": "concurrently \"yarn dev\" \"cypress run\"",
@@ -75,6 +76,7 @@
     "cypress": "^15.18.0",
     "jest": "^26.5.3",
     "msw": "^1.3.4",
+    "nodemon": "^3.1.7",
     "nyc": "^15.1.0",
     "postcss": "^8.5.3",
     "postcss-custom-media": "^10.0.0",
