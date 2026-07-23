@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { TranslationOrigin } from '@prisma/client';
 import { IsDate, IsEnum, IsString } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
@@ -18,6 +18,7 @@ export class TranslationRowBase {
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
   @ApiProperty()
   updatedAt: Date;
 
