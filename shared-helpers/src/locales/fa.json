@@ -1487,6 +1487,7 @@
   "welcome.findRentalsForYou": "برای خودتان خانه‌های اجاره‌ای پیدا کنید",
   "welcome.learnMore": "بیشتر بدانید",
   "welcome.resources": "منابع",
+  "welcome.search.availabilityFilter": "فقط نمایش واحدهای موجود (پنهان کردن لیست‌های انتظار)",
   "welcome.search.byFilter": "جستجو بر اساس فیلتر",
   "welcome.search.byProperty": "جستجو بر اساس ملک",
   "welcome.searchSubNote": "برای مشاهده لیست‌های بیشتر، به <a className='lined' href='https://www.exygy.com/' target='_blank'>Exygy</a> مراجعه کنید",

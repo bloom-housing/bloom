@@ -1483,6 +1483,7 @@
   "welcome.findRentalsForYou": "Encuentra alquileres para ti",
   "welcome.learnMore": "Obtener más información",
   "welcome.resources": "Recursos",
+  "welcome.search.availabilityFilter": "Mostrar solo las unidades disponibles (ocultar las listas de espera)",
   "welcome.search.byFilter": "Buscar por filtro",
   "welcome.search.byProperty": "Búsqueda por propiedad",
   "welcome.searchSubNote": "Para ver más listados, visite <a className='lined' href='https://www.exygy.com/' target='_blank'>Exygy.</a>",

@@ -72,22 +72,19 @@
     --card-content-padding-inline: var(--seeds-s6);
     .hero-search-tabs {
       --tab-panel-padding: none;
+      --tab-padding-block: var(--seeds-s3);
       --tab-font-size: var(--seeds-font-size-sm);
       --tab-border-color: var(--seeds-color-on-inverse);
     }
     .hero-search {
       color: var(--seeds-text-color-darker);
       display: grid;
-      grid-template-columns: 1fr fit-content(200px);
+      grid-template-columns: 1fr auto;
       @media (--sm-only) {
         grid-template-columns: 1fr;
       }
       column-gap: var(--seeds-s4);
       margin-block-start: var(--seeds-s4);
-
-      // .hero-flex-grow {
-      //   flex-grow: 1;
-      // }
 
       .hero-filter-flex {
         @media (--sm-and-up) {
@@ -96,7 +93,7 @@
         }
       }
 
-      // The filter checkbox should be below the view listing button on desktop but still read before the button
+      // The filter checkbox should be below the view listing button on desktop but still be before the button in tab order
       .hero-last-checkbox {
         margin-block-start: var(--seeds-s4);
         margin-block-end: 0;

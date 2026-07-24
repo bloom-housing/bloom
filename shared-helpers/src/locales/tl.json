@@ -1483,6 +1483,7 @@
   "welcome.findRentalsForYou": "Maghanap ng mga rental para sa iyo",
   "welcome.learnMore": "Matuto pa",
   "welcome.resources": "Mga mapagkukunan",
+  "welcome.search.availabilityFilter": "Ipakita lamang ang mga available na unit (itago ang mga waitlist)",
   "welcome.search.byFilter": "Maghanap ayon sa filter",
   "welcome.search.byProperty": "Maghanap ayon sa ari-arian",
   "welcome.searchSubNote": "Para sa karagdagang mga listahan, pumunta sa <a className='lined' href='https://www.exygy.com/' target='_blank'>Exygy</a>",

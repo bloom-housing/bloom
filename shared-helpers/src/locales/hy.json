@@ -1487,6 +1487,7 @@
   "welcome.findRentalsForYou": "Գտեք ձեզ համար վարձակալվող տարածքներ",
   "welcome.learnMore": "Իմանալ ավելին",
   "welcome.resources": "Ռեսուրսներ",
+  "welcome.search.availabilityFilter": "Ցուցադրել միայն հասանելի միավորները (թաքցնել սպասման ցուցակները)",
   "welcome.search.byFilter": "Որոնել ֆիլտրով",
   "welcome.search.byProperty": "Որոնել ըստ գույքի",
   "welcome.searchSubNote": "Լրացուցիչ ցուցակների համար այցելեք <a className='lined' href='https://www.exygy.com/' target='_blank'>Exygy կայքը</a>",

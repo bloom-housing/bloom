@@ -1483,6 +1483,7 @@
   "welcome.findRentalsForYou": "ابحث عن الإيجارات المناسبة لك",
   "welcome.learnMore": "معرفة المزيد",
   "welcome.resources": "موارد",
+  "welcome.search.availabilityFilter": "عرض الوحدات المتاحة فقط (إخفاء قوائم الانتظار)",
   "welcome.search.byFilter": "البحث باستخدام الفلتر",
   "welcome.search.byProperty": "البحث حسب العقار",
   "welcome.searchSubNote": "للاطلاع على قوائم إضافية، تفضل بزيارة <a className='lined' href='https://www.exygy.com/' target='_blank'>Exygy</a>",

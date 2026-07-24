@@ -28,12 +28,8 @@ export const Hero = (props: HeroProps) => {
 
   return (
     <MaxWidthLayout className={styles["hero-container"]} fullHeight={props.fullHeight}>
-      <div
-        className={`${styles["hero"]} ${
-          props.image && imageExists ? styles["hero-with-image"] : ""
-        }`}
-      >
-        <div>
+      <div className={styles["hero-with-image"]}>
+        <div className={`${styles["hero"]}`}>
           {props.note && <p className={styles["note"]}>{props.note}</p>}
           <Heading priority={1} size={headingSize} className={styles["heading"]}>
             {props.title}
@@ -41,17 +37,20 @@ export const Hero = (props: HeroProps) => {
           {props.subtitle && <p className={styles["subtitle"]}>{props.subtitle}</p>}
           <div className={styles["hero-buttons"]}>{props.action}</div>
         </div>
-        {imageExists && props.image && (
-          <div className={styles["hero-image"]}>
+        <div className={styles["hero-image"]}>
+          {imageExists && props.image && (
             <Image
               src={props.image}
               alt={props.imageAlt || "hero image"}
               width={500}
               height={500}
-              onError={() => setImageExists(false)} // Hides component if 404 occurs
+              onError={() => {
+                // Hides component if image doesn't exist (404 occurs)
+                setImageExists(false)
+              }}
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </MaxWidthLayout>
   )

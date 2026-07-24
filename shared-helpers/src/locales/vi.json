@@ -1483,6 +1483,7 @@
   "welcome.findRentalsForYou": "Tìm chỗ cho thuê phù hợp với bạn",
   "welcome.learnMore": "Tìm hiểu thêm",
   "welcome.resources": "Tài nguyên",
+  "welcome.search.availabilityFilter": "Chỉ hiển thị các căn hộ còn trống (ẩn danh sách chờ)",
   "welcome.search.byFilter": "Tìm kiếm theo bộ lọc",
   "welcome.search.byProperty": "Tìm kiếm theo thuộc tính",
   "welcome.searchSubNote": "Để xem thêm các tin rao khác, hãy truy cập <a className='lined' href='https://www.exygy.com/' target='_blank'>Exygy.</a>",

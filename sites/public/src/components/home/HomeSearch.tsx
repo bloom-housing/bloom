@@ -84,7 +84,7 @@ export const HomeSearch = (props: HomeSearchProps) => {
   }
 
   return (
-    <>
+    <div className={styles["hero-search-card"]}>
       <BloomCard className={styles["hero-search-card"]}>
         <Card.Section>
           <Tabs className={styles["hero-search-tabs"]}>
@@ -114,21 +114,23 @@ export const HomeSearch = (props: HomeSearchProps) => {
                     <Select
                       name={ListingFilterKeys.bedroomTypes}
                       label={t("t.bedrooms")}
-                      placeholder="Any"
+                      placeholder={t("t.any")}
                       register={registerFilters}
                       controlClassName="control"
                       options={[
-                        { label: "1 Bedroom", value: UnitTypeEnum.oneBdrm },
-                        { label: "2 Bedrooms", value: UnitTypeEnum.twoBdrm },
-                        { label: "3 Bedrooms", value: UnitTypeEnum.threeBdrm },
-                        { label: "4 Bedrooms", value: UnitTypeEnum.fourBdrm },
-                        { label: "5 Bedrooms", value: UnitTypeEnum.fiveBdrm },
+                        { label: t("listings.unitTypes.studio"), value: UnitTypeEnum.studio },
+                        { label: t("listings.unitTypes.oneBdrm"), value: UnitTypeEnum.oneBdrm },
+                        { label: t("listings.unitTypes.twoBdrm"), value: UnitTypeEnum.twoBdrm },
+                        { label: t("listings.unitTypes.threeBdrm"), value: UnitTypeEnum.threeBdrm },
+                        { label: t("listings.unitTypes.fourBdrm"), value: UnitTypeEnum.fourBdrm },
+                        { label: t("listings.unitTypes.fiveBdrm"), value: UnitTypeEnum.fiveBdrm },
                       ]}
                     />
+                    {/* TODO: limit to numberic input */}
                     <Field
                       name={`${ListingFilterKeys.monthlyRent}.maxRent`}
                       label={t("listings.maxRent")}
-                      placeholder="Any"
+                      placeholder={t("t.any")}
                       type="currency"
                       prepend="$"
                       register={registerFilters}
@@ -138,7 +140,7 @@ export const HomeSearch = (props: HomeSearchProps) => {
                     <Field
                       name={ListingFilterKeys.availabilities}
                       type="checkbox"
-                      label="Show available units only (hide waitlists)"
+                      label={t("welcome.search.availabilityFilter")}
                       register={registerFilters}
                     />
                   </div>
@@ -156,14 +158,14 @@ export const HomeSearch = (props: HomeSearchProps) => {
                   <Field
                     name={ListingFilterKeys.name}
                     label={t("t.listingName")}
-                    placeholder="Any"
+                    placeholder={t("t.any")}
                     register={registerPropertyName}
                     className={styles["hero-flex-grow"]}
                   />
                   <Field
                     name={ListingFilterKeys.availabilities}
                     type="checkbox"
-                    label="Show available units only (hide waitlists)"
+                    label={t("welcome.search.availabilityFilter")}
                     register={registerPropertyName}
                     className={styles["hero-last-checkbox"]}
                   />
@@ -183,6 +185,6 @@ export const HomeSearch = (props: HomeSearchProps) => {
           <Markdown>{t("welcome.searchSubNote")}</Markdown>
         </div>
       )}
-    </>
+    </div>
   )
 }

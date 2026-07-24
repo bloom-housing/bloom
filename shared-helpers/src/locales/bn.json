@@ -1483,6 +1483,7 @@
   "welcome.findRentalsForYou": "আপনার জন্য ভাড়া খুঁজুন",
   "welcome.learnMore": "আরও জেনে নিন",
   "welcome.resources": "রিসোর্স",
+  "welcome.search.availabilityFilter": "শুধুমাত্র উপলব্ধ ইউনিটগুলি দেখান (অপেক্ষমান তালিকা লুকান)",
   "welcome.search.byFilter": "ফিল্টার দ্বারা অনুসন্ধান করুন",
   "welcome.search.byProperty": "সম্পত্তি দ্বারা অনুসন্ধান করুন",
   "welcome.searchSubNote": "আরও তালিকার জন্য, <a className='lined' href='https://www.exygy.com/' target='_blank'>Exygy-</a> তে যান।",
