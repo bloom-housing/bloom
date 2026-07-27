@@ -10,10 +10,12 @@ import { PrismaModule } from './prisma.module';
 import { ListingController } from '../controllers/listing.controller';
 import { ListingService } from '../services/listing.service';
 import { ListingCsvExporterService } from '../services/listing-csv-export.service';
+import { ListingCsvImportService } from '../services/listing-csv-import.service';
 import { GoogleTranslateService } from '../services/google-translate.service';
 import { TranslationService } from '../services/translation.service';
 import { SnapshotCreateModule } from './snapshot-create.module';
 import { S3Module } from './s3.module';
+import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
 
 @Module({
   imports: [
@@ -33,6 +35,8 @@ import { S3Module } from './s3.module';
     GoogleTranslateService,
     ListingService,
     ListingCsvExporterService,
+    ListingCreateUpdateValidationPipe,
+    ListingCsvImportService,
     Logger,
     TranslationService,
   ],

@@ -34,6 +34,8 @@ import Listing from '../dtos/listings/listing.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { ListingDuplicate } from '../dtos/listings/listing-duplicate.dto';
 import { ListingCsvQueryParams } from '../dtos/listings/listing-csv-query-params.dto';
+import { ListingCsvUpload } from '../dtos/listings/listing-csv-upload.dto';
+import { ListingCsvUploadResult } from '../dtos/listings/listing-csv-upload-result.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
 import { ListingMapMarker } from '../dtos/listings/listing-map-marker.dto';
 import { ListingsQueryBody } from '../dtos/listings/listings-query-body.dto';
@@ -46,6 +48,7 @@ import { PaginationAllowsAllQueryParams } from '../dtos/shared/pagination.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { SuperAdminGuard } from '../guards/admin.guard';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { OptionalAuthGuard } from '../guards/optional.guard';
@@ -54,6 +57,7 @@ import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ListingService } from '../services/listing.service';
 import { ListingCsvExporterService } from '../services/listing-csv-export.service';
+import { ListingCsvImportService } from '../services/listing-csv-import.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { mapTo } from '../utilities/mapTo';
 import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
@@ -78,6 +82,7 @@ export class ListingController {
   constructor(
     private readonly listingService: ListingService,
     private readonly listingCsvExportService: ListingCsvExporterService,
+    private readonly listingCsvImportService: ListingCsvImportService,
   ) {}
 
   @Get()
@@ -136,6 +141,26 @@ export class ListingController {
     queryParams: ListingCsvQueryParams,
   ): Promise<string> {
     return await this.listingCsvExportService.exporterSecure(req, queryParams);
+  }
+
+  @Post('csvBulkUpload')
+  @ApiOperation({
+    summary: 'Bulk create listings from a CSV file',
+    operationId: 'csvBulkUpload',
+  })
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOkResponse({ type: ListingCsvUploadResult })
+  @UseGuards(ApiKeyGuard, OptionalAuthGuard, SuperAdminGuard)
+  async csvBulkUpload(
+    @Request() req: ExpressRequest,
+    @Body() dto: ListingCsvUpload,
+  ): Promise<ListingCsvUploadResult> {
+    return await this.listingCsvImportService.importCsv(
+      dto.csvData,
+      mapTo(User, req['user']),
+      dto.jurisdictionId,
+    );
   }
 
   @Post('mapMarkers')
