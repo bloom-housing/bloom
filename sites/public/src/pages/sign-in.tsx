@@ -91,7 +91,10 @@ const SignIn = (props: SignInProps) => {
       const rawRedirectUrl = router.query?.redirectUrl as string
       const redirectUrl =
         rawRedirectUrl && isInternalLink(rawRedirectUrl) ? rawRedirectUrl : "/account/dashboard"
-      void router.push(redirectUrl)
+      const queryParams = router.query?.listingId
+        ? { listingId: router.query.listingId as string }
+        : {}
+      void router.push({ pathname: redirectUrl, query: queryParams })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialStateLoaded, profile])
