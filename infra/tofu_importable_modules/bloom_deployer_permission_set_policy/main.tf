@@ -96,7 +96,7 @@ data "aws_iam_policy_document" "deployer" {
     resources = ["*"]
   }
   statement {
-    # Allow managing the Pinpoint SMS Voice V2 phone number used for SMS MFA.
+    # Allow managing the Pinpoint SMS Voice V2 phone number used for SMS functionality.
     actions = [
       "sms-voice:ListTagsForResource",
       "sms-voice:ReleasePhoneNumber",
