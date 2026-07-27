@@ -11,6 +11,7 @@ const baseConfig: Cypress.ConfigOptions<any> = {
   video: true,
   numTestsKeptInMemory: 0,
   viewportHeight: 1500,
+  allowCypressEnv: false,
   env: {
     codeCoverage: {
       url: "/api/__coverage__",
