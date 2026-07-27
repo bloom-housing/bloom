@@ -887,6 +887,7 @@
   "listings.apply.howToApply": "چگونه درخواست دهیم",
   "listings.apply.paperApplicationsMustBeMailed": "درخواست‌های کاغذی باید از طریق پست ایالات متحده ارسال شوند و نمی‌توانند حضوری ارائه شوند.",
   "listings.apply.pickUpAnApplication": "یک برنامه کاربردی بردارید",
+  "listings.apply.referToLeasingAgentContact": "برای درخواست، به بخش تماس با نماینده اجاره یا مدیر املاک در زیر مراجعه کنید.",
   "listings.apply.sendByUsMail": "ارسال درخواست از طریق پست ایالات متحده",
   "listings.apply.submitAPaperApplication": "ارسال درخواست کاغذی",
   "listings.apply.submitPaperDueDateNoPostMark": "درخواست‌ها باید تا مهلت مقرر دریافت شوند. در صورت ارسال از طریق پست ایالات متحده، درخواست باید توسط %{applicationDueDate} دریافت شود. %{developer} مسئولیتی در قبال گم شدن یا تأخیر در ارسال ندارد.",

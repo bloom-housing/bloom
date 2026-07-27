@@ -887,6 +887,7 @@
   "listings.apply.howToApply": "신청 방법",
   "listings.apply.paperApplicationsMustBeMailed": "서류 신청서는 반드시 미국 우편으로 보내야 하며, 직접 제출할 수 없습니다.",
   "listings.apply.pickUpAnApplication": "신청서를 가져가세요",
+  "listings.apply.referToLeasingAgentContact": "신청하시려면 아래의 임대 담당자 또는 부동산 관리자 연락처를 참조하십시오.",
   "listings.apply.sendByUsMail": "미국 우편으로 신청서를 보내주세요.",
   "listings.apply.submitAPaperApplication": "서면 신청서를 제출하세요.",
   "listings.apply.submitPaperDueDateNoPostMark": "신청서는 마감일까지 접수되어야 합니다. 우편으로 제출하는 경우, 신청서는 %{applicationDueDate}까지 도착해야 합니다. %{developer}는 분실 또는 지연된 우편물에 대해 책임지지 않습니다.",

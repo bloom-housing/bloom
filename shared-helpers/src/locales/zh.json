@@ -890,6 +890,7 @@
   "listings.apply.howToApply": "如何申请",
   "listings.apply.paperApplicationsMustBeMailed": "紙本申請表必須經由美國郵政寄回，並且不能親自提交。",
   "listings.apply.pickUpAnApplication": "領取申請表",
+  "listings.apply.referToLeasingAgentContact": "如需申请，请参阅下方租赁代理或物业经理联系方式部分。",
   "listings.apply.sendByUsMail": "通过美国邮政发送申请",
   "listings.apply.submitAPaperApplication": "提交纸质申请",
   "listings.apply.submitPaperDueDateNoPostMark": "申請必須在截止日期前收到。如果透過美國郵政寄送，則必須在 %{applicationDueDate} 之前收到申請。 %{developer} 對遺失或延遲的郵件不承擔責任。",

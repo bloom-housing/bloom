@@ -886,6 +886,7 @@
   "listings.apply.howToApply": "How to apply",
   "listings.apply.paperApplicationsMustBeMailed": "Paper applications must be sent by US Mail and cannot be submitted in person.",
   "listings.apply.pickUpAnApplication": "Pick up an application",
+  "listings.apply.referToLeasingAgentContact": "Refer to the leasing agent or property manager contact section below to apply.",
   "listings.apply.sendByUsMail": "Send application by US Mail",
   "listings.apply.submitAPaperApplication": "Submit a paper application",
   "listings.apply.submitPaperDueDateNoPostMark": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be received by %{applicationDueDate}. %{developer} is not responsible for lost or delayed mail.",

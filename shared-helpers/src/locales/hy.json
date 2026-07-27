@@ -887,6 +887,7 @@
   "listings.apply.howToApply": "Ինչպես դիմել",
   "listings.apply.paperApplicationsMustBeMailed": "Թղթային դիմումները պետք է ուղարկվեն ԱՄՆ փոստով և չեն կարող անձամբ ներկայացվել։",
   "listings.apply.pickUpAnApplication": "Վերցրեք դիմում",
+  "listings.apply.referToLeasingAgentContact": "Դիմելու համար դիմեք ստորև բերված վարձակալության գործակալի կամ գույքի կառավարչի կոնտակտային բաժնին։",
   "listings.apply.sendByUsMail": "Դիմումը ուղարկեք ԱՄՆ փոստով",
   "listings.apply.submitAPaperApplication": "Ներկայացրեք թղթային դիմում",
   "listings.apply.submitPaperDueDateNoPostMark": "Դիմումները պետք է ստացվեն վերջնաժամկետին համապատասխան։ Եթե ուղարկվում են ԱՄՆ փոստով, դիմումը պետք է ստացվի մինչև %{applicationDueDate}: %{developer}-ը պատասխանատվություն չի կրում կորած կամ ուշացած փոստի համար։",

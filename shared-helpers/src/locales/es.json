@@ -890,6 +890,7 @@
   "listings.apply.howToApply": "Cómo presentar una solicitud",
   "listings.apply.paperApplicationsMustBeMailed": "Las solicitudes impresas deben ser enviadas a través del Servicio Postal de los EE.UU. y no pueden ser entregadas en persona.",
   "listings.apply.pickUpAnApplication": "Recoja una solicitud.",
+  "listings.apply.referToLeasingAgentContact": "Para presentar su solicitud, consulte la sección de contacto del agente de arrendamiento o del administrador de la propiedad que aparece a continuación.",
   "listings.apply.sendByUsMail": "Enviar la solicitud a través del Servicio Postal de los EE.UU.",
   "listings.apply.submitAPaperApplication": "Envíe una solicitud impresa",
   "listings.apply.submitPaperDueDateNoPostMark": "Las solicitudes deben recibirse antes de la fecha límite. Si se envían por correo postal, deben recibirse antes del %{applicationDueDate}. %{developer} no se responsabiliza por la pérdida o el retraso del correo.",
