@@ -97,7 +97,7 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
 
 Cypress.Commands.add("beginApplicationSignedIn", (listingName, autofill) => {
   cy.visit("/listings")
-  cy.env("showSeedsDesign").then((showSeedsDesign) => {
+  cy.env(["showSeedsDesign"]).then(({ showSeedsDesign }) => {
     if (showSeedsDesign) {
       cy.getByID("listing-seeds-link").contains(listingName).parent().click()
     } else {
@@ -326,7 +326,9 @@ Cypress.Commands.add("step7AddHouseholdMembers", (application, autofill) => {
     if (!autofill) {
       cy.getByTestId("app-household-member-first-name").type(householdMember.firstName)
       cy.getByTestId("app-household-member-middle-name").type(householdMember.middleName)
-      cy.getByTestId("app-household-member-last-name").type(householdMember.lastName)
+      cy.getByTestId("app-household-member-last-name").type(householdMember.lastName, {
+        force: true,
+      })
       cy.getByTestId("dob-field-month").type(householdMember.birthMonth)
       cy.getByTestId("dob-field-day").type(householdMember.birthDay)
       cy.getByTestId("dob-field-year").type(householdMember.birthYear)
