@@ -16,22 +16,24 @@ Cypress.Commands.add("signIn", (email, password) => {
 
 Cypress.Commands.add("signOut", () => {
   // TODO: once the favorites feature is being tested, this is Sign out-4:
-  if (Cypress.env("showSeedsDesign")) {
-    cy.get(`[data-testid="My account"]`).trigger("click")
-    cy.contains("button", "Sign out", { timeout: 10000 }).click({ force: true })
-  } else {
-    // data-testid for SiteHeader in this path is set in ui-components
-    // See https://github.com/bloom-housing/ui-components/blob/c35c094554e8199f202d67a405272035189060ec/src/headers/SiteHeader.tsx#L175
-    // Use keypress instead of mouseover: the span's onKeyPress(Enter) sets activeMenu state
-    // and there's no keyboard-based close mechanism, keeping the dropdown open reliably.
-    cy.get(`[data-testid="My account-2"]`).trigger("keypress", {
-      key: "Enter",
-      keyCode: 13,
-      charCode: 13,
-      which: 13,
-    })
-    cy.contains("button", "Sign out", { timeout: 10000 }).click({ force: true })
-  }
+  cy.env(["showSeedsDesign"]).then(({ showSeedsDesign }) => {
+    if (showSeedsDesign) {
+      cy.get(`[data-testid="My account"]`).trigger("click")
+      cy.contains("button", "Sign out", { timeout: 10000 }).click({ force: true })
+    } else {
+      // data-testid for SiteHeader in this path is set in ui-components
+      // See https://github.com/bloom-housing/ui-components/blob/c35c094554e8199f202d67a405272035189060ec/src/headers/SiteHeader.tsx#L175
+      // Use keypress instead of mouseover: the span's onKeyPress(Enter) sets activeMenu state
+      // and there's no keyboard-based close mechanism, keeping the dropdown open reliably.
+      cy.get(`[data-testid="My account-2"]`).trigger("keypress", {
+        key: "Enter",
+        keyCode: 13,
+        charCode: 13,
+        which: 13,
+      })
+      cy.contains("button", "Sign out", { timeout: 10000 }).click({ force: true })
+    }
+  })
 })
 
 Cypress.Commands.add("goNext", () => {
@@ -65,11 +67,14 @@ Cypress.Commands.add("checkErrorMessages", (command) => {
 
 Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.visit("/listings")
-  if (Cypress.env("showSeedsDesign")) {
-    cy.getByID("listing-seeds-link").contains(listingName).parent().click()
-  } else {
-    cy.get(".is-card-link").contains(listingName).parent().click()
-  }
+
+  cy.env(["showSeedsDesign"]).then(({ showSeedsDesign }) => {
+    if (showSeedsDesign) {
+      cy.getByID("listing-seeds-link").contains(listingName).parent().click()
+    } else {
+      cy.get(".is-card-link").contains(listingName).parent().click()
+    }
+  })
   cy.getByID("listing-view-apply-button").eq(1).click()
   cy.getByID("app-choose-language-sign-in-button").click()
   cy.get("[data-testid=sign-in-email-field]").type("admin@example.com")
@@ -754,10 +759,12 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
       })
   }
 
-  if (!Cypress.env("showSeedsDesign")) {
-    pushMultiselect("preferences")
-    pushMultiselect("programs")
-  }
+  cy.env(["showSeedsDesign"]).then(({ showSeedsDesign }) => {
+    if (!showSeedsDesign) {
+      pushMultiselect("preferences")
+      pushMultiselect("programs")
+    }
+  })
 
   if (verify) {
     fields.forEach(({ id, fieldValue }) => {
