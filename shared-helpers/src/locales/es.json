@@ -75,6 +75,7 @@
   "account.settings.alerts.passwordEmpty": "Los campos de contraseña no pueden estar vacíos",
   "account.settings.alerts.passwordSuccess": "La contraseña se ha actualizado de manera exitosa",
   "account.settings.currentPassword": "Contraseña actual",
+  "account.settings.disclaimer": "Puedes ponerte en contacto con Bloomington para solicitar la eliminación de la información de tu cuenta y los datos asociados en cualquier momento. Para ello, escribe a %{contactEmail}.",
   "account.settings.myNotification": "Mis notificaciones",
   "account.settings.myProfile": "Mi perfil",
   "account.settings.newPassword": "Nueva contraseña",

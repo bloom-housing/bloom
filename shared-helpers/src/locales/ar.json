@@ -75,6 +75,7 @@
   "account.settings.alerts.passwordEmpty": "لا يجوز أن تكون حقول كلمة المرور فارغة",
   "account.settings.alerts.passwordSuccess": "تم تحديث كلمة المرور بنجاح",
   "account.settings.currentPassword": "كلمة المرور الحالي",
+  "account.settings.disclaimer": "يمكنك التواصل مع بلومنجتون لحذف معلومات حسابك والبيانات المرتبطة به في أي وقت. للقيام بذلك، يرجى التواصل عبر البريد الإلكتروني التالي: %{contactEmail}.",
   "account.settings.myNotification": "إشعاراتي",
   "account.settings.myProfile": "ملفي الشخصي",
   "account.settings.newPassword": "كلمة المرور الجديدة",
