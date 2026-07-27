@@ -32,6 +32,8 @@ import { AdvocateUserUpdate } from '../../../src/dtos/users/advocate-user-update
 import { UserOrderByKeys } from '../../../src/enums/listings/order-by-enum';
 import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
 import { UserNotificationPreferences } from '../../../src/dtos/users/user-notification-preferences.dto';
+import { GovDeliveryService } from '../../../src/services/gov-delivery.service';
+import { HttpService } from '@nestjs/axios';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -90,6 +92,9 @@ describe('Testing user service', () => {
     warn: jest.fn(),
     error: jest.fn(),
   };
+  const HttpServiceMock = {
+    post: jest.fn(),
+  };
 
   const canOrThrowMock = jest.fn();
 
@@ -109,9 +114,14 @@ describe('Testing user service', () => {
         SchedulerRegistry,
         CronJobService,
         SnapshotCreateService,
+        GovDeliveryService,
         {
           provide: EmailProvider,
           useValue: EmailProviderMock,
+        },
+        {
+          provide: HttpService,
+          useValue: HttpServiceMock,
         },
         {
           provide: GoogleTranslateService,

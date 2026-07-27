@@ -129,7 +129,7 @@ describe('Testing application bulk upload services', () => {
       mockApplication({
         id: randomUUID(),
         position: 1,
-        submissionDate: new Date(2026, 4, 19, 22, 0, 0),
+        submissionDate: new Date(1779228000000),
         applicant: {
           firstName: 'Colleen',
           lastName: 'Tawnee',
@@ -143,7 +143,7 @@ describe('Testing application bulk upload services', () => {
       mockApplication({
         id: randomUUID(),
         position: 2,
-        submissionDate: new Date(2026, 3, 2, 10, 0, 0),
+        submissionDate: new Date(1775124000000),
         applicant: {
           firstName: 'Erin',
           lastName: 'Patsy',
@@ -154,7 +154,7 @@ describe('Testing application bulk upload services', () => {
       mockApplication({
         id: randomUUID(),
         position: 3,
-        submissionDate: new Date(2026, 6, 23, 15, 30, 0),
+        submissionDate: new Date(1784820600000),
         applicant: {
           firstName: 'Nanny',
           lastName: 'Hayley',

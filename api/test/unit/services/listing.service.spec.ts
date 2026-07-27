@@ -222,6 +222,7 @@ const lotteryReleasedMock = jest.fn();
 const lotteryPublishedAdminMock = jest.fn();
 const lotteryPublishedApplicantMock = jest.fn();
 const listingPublishNotificationMock = jest.fn();
+const listingPublishNotificationViaGovDeliveryMock = jest.fn();
 
 const canOrThrowMock = jest.fn();
 
@@ -291,6 +292,8 @@ describe('Testing listing service', () => {
             lotteryPublishedAdmin: lotteryPublishedAdminMock,
             lotteryPublishedApplicant: lotteryPublishedApplicantMock,
             listingPublishNotification: listingPublishNotificationMock,
+            listingPublishNotificationViaGovDelivery:
+              listingPublishNotificationViaGovDeliveryMock,
           },
         },
         {
@@ -7320,6 +7323,73 @@ describe('Testing listing service', () => {
         );
         jest.useRealTimers();
       });
+    });
+
+    it('should call listingPublishNotificationViaGovDelivery when enableListingOpportunity flag is on', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        publicUrl: 'public.housing.gov',
+        featureFlags: [
+          { name: FeatureFlagEnum.enableListingOpportunity, active: true },
+        ],
+        listingApprovalPermissions: [],
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.pending,
+        jurisdictionId: 'jurisdiction-id',
+        listingMultiselectQuestions: [],
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.active,
+        listingMultiselectQuestions: [],
+        units: [],
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'snapshot-id' });
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        {
+          id: 'listing-id',
+          name: 'listing name',
+          status: ListingsStatusEnum.active,
+          listingMultiselectQuestions: [],
+          units: [],
+        },
+      ]);
+      jest
+        .spyOn(service, 'getUserEmailInfo')
+        .mockResolvedValueOnce({ emails: ['partner@email.com'] });
+      jest
+        .spyOn(service, 'sendListingPublishNotification')
+        .mockResolvedValueOnce(undefined);
+
+      await service.update(
+        {
+          id: 'listing-id',
+          name: 'listing name',
+          depositMin: '5',
+          assets: [],
+          jurisdictions: { id: 'jurisdiction-id' },
+          status: ListingsStatusEnum.active,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+          lastUpdatedByUser: user,
+        } as ListingUpdate,
+        user,
+      );
+
+      expect(listingPublishNotificationViaGovDeliveryMock).toHaveBeenCalledWith(
+        { id: 'jurisdiction-id' },
+        expect.objectContaining({ id: 'listing-id' }),
+        [],
+        'standard',
+      );
     });
   });
 
