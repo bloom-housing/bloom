@@ -14,6 +14,9 @@ locals {
     S3_PRIVATE_BUCKET           = aws_s3_bucket.private.id
     S3_PUBLIC_BUCKET            = aws_s3_bucket.public.id
     OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317"
+    SMS_PROVIDER                = var.bloom_api_sms_config == null ? "" : "aws"
+    AWS_SMS_REGION              = var.bloom_api_sms_config == null ? "" : var.aws_region
+    AWS_SMS_ORIGINATION_NUMBER  = var.bloom_api_sms_config == null ? "" : aws_pinpointsmsvoicev2_phone_number.api_sms[0].phone_number
   }
 }
 resource "aws_ecs_task_definition" "bloom_api" {
