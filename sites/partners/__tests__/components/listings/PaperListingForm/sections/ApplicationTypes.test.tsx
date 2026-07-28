@@ -4,7 +4,10 @@ import { screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { jurisdiction, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  EnumListingListingType,
+  LanguagesEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ApplicationTypes from "../../../../../src/components/listings/PaperListingForm/sections/ApplicationTypes"
 import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 
@@ -346,5 +349,104 @@ describe("ApplicationTypes", () => {
     const textBox = await screen.findByRole("textbox", { name: /referral summary/i })
     expect(textBox).toBeInTheDocument()
     expect(textBox).toHaveValue("Test default referral summary text")
+  })
+
+  it("should not show the leasing agent question for a non-land-use listing", () => {
+    render(
+      <FormProviderWrapper>
+        <ApplicationTypes
+          disableCommonApplication={false}
+          enableReferralQuestionUnits={false}
+          jurisdiction={jurisdiction.id}
+          listing={listing}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(
+      screen.queryByRole("group", {
+        name: "Is the application through leasing agent contact only?",
+      })
+    ).not.toBeInTheDocument()
+  })
+
+  it("should show the leasing agent question first for a land-use listing, defaulting to No", () => {
+    render(
+      <FormProviderWrapper values={{ listingType: EnumListingListingType.landUse }}>
+        <ApplicationTypes
+          disableCommonApplication={false}
+          enableReferralQuestionUnits={false}
+          jurisdiction={jurisdiction.id}
+          listing={{ ...listing, listingType: EnumListingListingType.landUse }}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    const fieldsetGroups = screen.getAllByRole("group").filter((g) => g.tagName === "FIELDSET")
+    expect(fieldsetGroups[0]).toHaveAccessibleName(
+      "Is the application through leasing agent contact only?"
+    )
+
+    const leasingAgentFieldset = screen.getByRole("group", {
+      name: "Is the application through leasing agent contact only?",
+    })
+    expect(within(leasingAgentFieldset).getByRole("radio", { name: /no/i })).toBeChecked()
+    expect(within(leasingAgentFieldset).getByRole("radio", { name: /yes/i })).not.toBeChecked()
+  })
+
+  it("should hide digital/paper questions and clear their choices when leasing agent is selected", async () => {
+    render(
+      <FormProviderWrapper values={{ listingType: EnumListingListingType.landUse }}>
+        <ApplicationTypes
+          disableCommonApplication={false}
+          enableReferralQuestionUnits={false}
+          jurisdiction={jurisdiction.id}
+          listing={{ ...listing, listingType: EnumListingListingType.landUse }}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    const leasingAgentFieldset = screen.getByRole("group", {
+      name: "Is the application through leasing agent contact only?",
+    })
+    await userEvent.click(within(leasingAgentFieldset).getByRole("radio", { name: /yes/i }))
+
+    expect(
+      screen.queryByRole("group", { name: "Is there a digital application?" })
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("group", { name: "Is there a paper application?" })
+    ).not.toBeInTheDocument()
+    expect(
+      screen.getByRole("group", { name: "Is there a referral opportunity?" })
+    ).toBeInTheDocument()
+  })
+
+  it("should restore digital/paper questions when leasing agent is switched back to No", async () => {
+    render(
+      <FormProviderWrapper values={{ listingType: EnumListingListingType.landUse }}>
+        <ApplicationTypes
+          disableCommonApplication={false}
+          enableReferralQuestionUnits={false}
+          jurisdiction={jurisdiction.id}
+          listing={{ ...listing, listingType: EnumListingListingType.landUse }}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    const leasingAgentFieldset = screen.getByRole("group", {
+      name: "Is the application through leasing agent contact only?",
+    })
+    await userEvent.click(within(leasingAgentFieldset).getByRole("radio", { name: /yes/i }))
+    await userEvent.click(within(leasingAgentFieldset).getByRole("radio", { name: /no/i }))
+
+    expect(
+      screen.getByRole("group", { name: "Is there a digital application?" })
+    ).toBeInTheDocument()
+    expect(screen.getByRole("group", { name: "Is there a paper application?" })).toBeInTheDocument()
   })
 })
