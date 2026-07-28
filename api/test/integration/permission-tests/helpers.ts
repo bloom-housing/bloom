@@ -290,7 +290,6 @@ export const buildUserCreateMock = (
     firstName: 'Public User firstName',
     lastName: 'Public User lastName',
     password: 'Abcdef12345!',
-    passwordConfirmation: 'Abcdef12345!',
     dob: new Date(),
     agreedToTermsOfService: true,
     email,

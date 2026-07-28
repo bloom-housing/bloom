@@ -2,7 +2,7 @@ import React from "react"
 import userEvent from "@testing-library/user-event"
 import { useRouter } from "next/router"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, tIfExists } from "@bloom-housing/shared-helpers"
 import { User, UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Edit from "../../../src/pages/account/edit"
 import { render, screen, waitFor } from "../../testUtils"
@@ -10,6 +10,14 @@ import { render, screen, waitFor } from "../../testUtils"
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }))
+
+jest.mock("@bloom-housing/shared-helpers", () => {
+  const actual = jest.requireActual("@bloom-housing/shared-helpers")
+  return {
+    ...actual,
+    tIfExists: jest.fn(actual.tIfExists),
+  }
+})
 
 const mockUserService = {
   retrieve: jest.fn(),
@@ -316,43 +324,18 @@ describe("EditPublicAccount", () => {
 
       const currentPasswordField = screen.getByLabelText(/current password/i, { selector: "input" })
       const newPasswordField = screen.getByLabelText(/^new password$/i, { selector: "input" })
-      const confirmPasswordField = screen.getByLabelText(/^confirm new password$/i, {
-        selector: "input",
-      })
       const updateButton = document.getElementById("account-submit-password")
 
       await userEvent.type(currentPasswordField, "currentPassword123!")
       await userEvent.type(newPasswordField, "newPassword123!")
-      await userEvent.type(confirmPasswordField, "newPassword123!")
       await userEvent.click(updateButton)
 
       expect(mockUserService.updatePublic).toHaveBeenCalled()
-    })
 
-    it("should show error when passwords don't match", async () => {
-      renderEditPage()
-
-      await waitFor(() => {
-        expect(
-          screen.getByLabelText(/current password/i, { selector: "input" })
-        ).toBeInTheDocument()
-      })
-
-      const currentPasswordField = screen.getByLabelText(/current password/i, { selector: "input" })
-      const newPasswordField = screen.getByLabelText(/^new password$/i, { selector: "input" })
-      const confirmPasswordField = screen.getByLabelText(/^confirm new password$/i, {
-        selector: "input",
-      })
-      const updateButton = document.getElementById("account-submit-password")
-
-      await userEvent.type(currentPasswordField, "currentPassword123!")
-      await userEvent.type(newPasswordField, "newPassword123!")
-      await userEvent.type(confirmPasswordField, "differentPassword123!")
-      await userEvent.click(updateButton)
-
-      await waitFor(() => {
-        expect(screen.getByText(/The passwords do not match/i)).toBeInTheDocument()
-      })
+      const passwordInput = screen.getByLabelText(/^new password$/i, { selector: "input" })
+      expect(passwordInput).toHaveAttribute("type", "password")
+      await userEvent.click(document.getElementById("password-show-password"))
+      expect(passwordInput).toHaveAttribute("type", "text")
     })
 
     it("should show error when password fields are empty", async () => {
@@ -388,14 +371,10 @@ describe("EditPublicAccount", () => {
 
       const currentPasswordField = screen.getByLabelText(/current password/i, { selector: "input" })
       const newPasswordField = screen.getByLabelText(/^new password$/i, { selector: "input" })
-      const confirmPasswordField = screen.getByLabelText(/^confirm new password$/i, {
-        selector: "input",
-      })
       const updateButton = document.getElementById("account-submit-password")
 
       await userEvent.type(currentPasswordField, "wrongPassword")
       await userEvent.type(newPasswordField, "newPassword123!")
-      await userEvent.type(confirmPasswordField, "newPassword123!")
 
       await userEvent.click(updateButton)
 
@@ -404,6 +383,36 @@ describe("EditPublicAccount", () => {
       })
 
       expect(consoleWarnSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe("Disclaimer section", () => {
+    beforeEach(() => {
+      ;(tIfExists as jest.Mock).mockReset()
+    })
+
+    it("renders disclaimer when account.settings.disclaimer string exists", async () => {
+      ;(tIfExists as jest.Mock).mockReturnValue("Disclaimer text")
+
+      renderEditPage()
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue("First")).toBeInTheDocument()
+      })
+
+      expect(screen.getByText(/You can contact Bloomington/i)).toBeInTheDocument()
+    })
+
+    it("does not render disclaimer when account.settings.disclaimer string does not exist", async () => {
+      ;(tIfExists as jest.Mock).mockReturnValue(null)
+
+      renderEditPage()
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue("First")).toBeInTheDocument()
+      })
+
+      expect(screen.queryByText(/You can contact Bloomington/i)).not.toBeInTheDocument()
     })
   })
 })

@@ -1935,6 +1935,19 @@ export class ListingService implements OnModuleInit {
         rawJurisdiction.publicUrl || '',
       );
       await this.sendListingPublishNotification(mappedListing);
+      if (
+        doJurisdictionHaveFeatureFlagSet(
+          rawJurisdiction as unknown as Jurisdiction,
+          FeatureFlagEnum.enableListingOpportunity,
+        )
+      ) {
+        await this.emailService.listingPublishNotificationViaGovDelivery(
+          { id: rawJurisdiction.id },
+          mappedListing,
+          [],
+          'standard',
+        );
+      }
     }
     await this.cachePurge(undefined, dto.status, mappedListing.id);
     return mappedListing;
@@ -3076,6 +3089,19 @@ export class ListingService implements OnModuleInit {
         mappedListing,
         useComingSoon ? 'comingSoon' : 'standard',
       );
+      if (
+        doJurisdictionHaveFeatureFlagSet(
+          rawJurisdiction as unknown as Jurisdiction,
+          FeatureFlagEnum.enableListingOpportunity,
+        )
+      ) {
+        await this.emailService.listingPublishNotificationViaGovDelivery(
+          { id: rawJurisdiction.id },
+          mappedListing,
+          [],
+          useComingSoon ? 'comingSoon' : 'standard',
+        );
+      }
     }
 
     if (enableV2MSQ && mappedListing.status === ListingsStatusEnum.active) {

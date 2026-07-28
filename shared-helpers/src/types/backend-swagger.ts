@@ -3533,6 +3533,76 @@ export class ExternalListingsService {
   }
 }
 
+export class TranslationsService {
+  /**
+   * Get a jurisdiction's site translation overrides
+   */
+  jurisdictionOverrides(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /**  */
+      language?: LanguagesEnum
+      /**  */
+      site: SiteEnum
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/jurisdictions/{jurisdictionId}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { language: params["language"], site: params["site"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a jurisdiction's site translation overrides by name
+   */
+  jurisdictionOverridesByName(
+    params: {
+      /**  */
+      jurisdictionName: string
+      /**  */
+      language?: LanguagesEnum
+      /**  */
+      site: SiteEnum
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/byName/{jurisdictionName}"
+      url = url.replace("{jurisdictionName}", params["jurisdictionName"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { language: params["language"], site: params["site"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get the global Partners translation overrides
+   */
+  partnersOverrides(
+    params: {
+      /**  */
+      language?: LanguagesEnum
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { language: params["language"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 /** SuccessDTO */
 export interface SuccessDTO {
   /**  */
@@ -9386,9 +9456,6 @@ export interface PublicUserCreate {
   password: string
 
   /**  */
-  passwordConfirmation: string
-
-  /**  */
   emailConfirmation?: string
 }
 
@@ -10125,9 +10192,6 @@ export interface RequestMfaCodeResponse {
 export interface UpdatePassword {
   /**  */
   password: string
-
-  /**  */
-  passwordConfirmation: string
 
   /**  */
   token: string
@@ -11100,4 +11164,8 @@ export enum EnumAgencyFilterParamsComparison {
   "<=" = "<=",
   "LIKE" = "LIKE",
   "NA" = "NA",
+}
+export enum SiteEnum {
+  "public" = "public",
+  "partners" = "partners",
 }
