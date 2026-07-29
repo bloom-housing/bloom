@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { LanguagesEnum, Translations } from '@prisma/client';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { LanguagesEnum, Prisma, SiteEnum, Translations } from '@prisma/client';
 import * as lodash from 'lodash';
 import { GoogleTranslateService } from './google-translate.service';
 import { PrismaService } from './prisma.service';
 import { Listing } from '../dtos/listings/listing.dto';
+import { flattenTranslationRows } from '../utilities/translation-merge';
 
 @Injectable()
 export class TranslationService {
@@ -16,52 +17,147 @@ export class TranslationService {
     jurisdictionId: string | null,
     language?: LanguagesEnum,
   ) {
-    let jurisdictionalTranslations: Promise<Translations | null>,
-      genericTranslations: Promise<Translations | null>,
-      jurisdictionalDefaultTranslations: Promise<Translations | null>;
+    const useLanguage = !!language && language !== LanguagesEnum.en;
+    const languages = this.languagesToRead(language);
 
-    if (language && language !== LanguagesEnum.en) {
-      if (jurisdictionId) {
-        jurisdictionalTranslations =
-          this.getTranslationByLanguageAndJurisdiction(
-            language,
-            jurisdictionId,
-          );
-      }
-      genericTranslations = this.getTranslationByLanguageAndJurisdiction(
-        language,
-        null,
-      );
+    const rows = await this.prisma.translationStrings.findMany({
+      where: {
+        site: null,
+        language: { in: languages },
+        OR: jurisdictionId
+          ? [{ jurisdictionId: null }, { jurisdictionId }]
+          : [{ jurisdictionId: null }],
+      },
+      select: {
+        jurisdictionId: true,
+        language: true,
+        key: true,
+        value: true,
+      },
+    });
+
+    // Until the base rows are backfilled (#6519), read the legacy blob. Keyed on the
+    // generic-default scope so a migrated environment never falls back per scope.
+    const migrated = rows.some(
+      (row) => row.jurisdictionId === null && row.language === LanguagesEnum.en,
+    );
+    if (!migrated) {
+      return this.getLegacyMergedTranslations(jurisdictionId, language);
     }
 
-    if (jurisdictionId) {
-      jurisdictionalDefaultTranslations =
-        this.getTranslationByLanguageAndJurisdiction(
-          LanguagesEnum.en,
-          jurisdictionId,
-        );
-    }
+    const scopeRows = (id: string | null, lang: LanguagesEnum) =>
+      rows.filter((row) => row.jurisdictionId === id && row.language === lang);
 
-    const genericDefaultTranslations =
-      this.getTranslationByLanguageAndJurisdiction(LanguagesEnum.en, null);
+    return flattenTranslationRows([
+      scopeRows(null, LanguagesEnum.en),
+      ...(useLanguage ? [scopeRows(null, language)] : []),
+      ...(jurisdictionId ? [scopeRows(jurisdictionId, LanguagesEnum.en)] : []),
+      ...(jurisdictionId && useLanguage
+        ? [scopeRows(jurisdictionId, language)]
+        : []),
+    ]);
+  }
+
+  private async getLegacyMergedTranslations(
+    jurisdictionId: string | null,
+    language?: LanguagesEnum,
+  ) {
+    const useLanguage = !!language && language !== LanguagesEnum.en;
 
     const [genericDefault, generic, jurisdictionalDefault, jurisdictional] =
       await Promise.all([
-        genericDefaultTranslations,
-        genericTranslations,
-        jurisdictionalDefaultTranslations,
-        jurisdictionalTranslations,
+        this.getTranslationByLanguageAndJurisdiction(LanguagesEnum.en, null),
+        useLanguage
+          ? this.getTranslationByLanguageAndJurisdiction(language, null)
+          : Promise.resolve(null),
+        jurisdictionId
+          ? this.getTranslationByLanguageAndJurisdiction(
+              LanguagesEnum.en,
+              jurisdictionId,
+            )
+          : Promise.resolve(null),
+        jurisdictionId && useLanguage
+          ? this.getTranslationByLanguageAndJurisdiction(
+              language,
+              jurisdictionId,
+            )
+          : Promise.resolve(null),
       ]);
 
-    // Deep merge
-    const translations = lodash.merge(
+    return lodash.merge(
+      {},
       genericDefault?.translations,
       generic?.translations,
       jurisdictionalDefault?.translations,
       jurisdictional?.translations,
     );
+  }
 
-    return translations;
+  private languagesToRead(language?: LanguagesEnum): LanguagesEnum[] {
+    return !!language && language !== LanguagesEnum.en
+      ? [LanguagesEnum.en, language]
+      : [LanguagesEnum.en];
+  }
+
+  public async getJurisdictionOverrides(
+    jurisdictionId: string | null,
+    language: LanguagesEnum,
+    site: SiteEnum,
+  ): Promise<Record<string, string>> {
+    const useLanguage = !!language && language !== LanguagesEnum.en;
+    const languages = this.languagesToRead(language);
+
+    const rows = await this.prisma.translationStrings.findMany({
+      where: { jurisdictionId, site, language: { in: languages } },
+      select: { language: true, key: true, value: true },
+    });
+
+    const byLanguage = (lang: LanguagesEnum) =>
+      rows.filter((row) => row.language === lang);
+
+    return flattenTranslationRows([
+      byLanguage(LanguagesEnum.en),
+      ...(useLanguage ? [byLanguage(language)] : []),
+    ]);
+  }
+
+  public async getJurisdictionOverridesById(
+    jurisdictionId: string,
+    language: LanguagesEnum,
+    site: SiteEnum,
+  ): Promise<Record<string, string>> {
+    await this.resolveJurisdictionId({ id: jurisdictionId }, jurisdictionId);
+    return this.getJurisdictionOverrides(jurisdictionId, language, site);
+  }
+
+  public async getJurisdictionOverridesByName(
+    jurisdictionName: string,
+    language: LanguagesEnum,
+    site: SiteEnum,
+  ): Promise<Record<string, string>> {
+    const jurisdictionId = await this.resolveJurisdictionId(
+      { name: jurisdictionName },
+      jurisdictionName,
+    );
+    return this.getJurisdictionOverrides(jurisdictionId, language, site);
+  }
+
+  // Resolves and asserts a jurisdiction exists, matching the 404 the other jurisdiction
+  // reads return for an unknown id or name.
+  private async resolveJurisdictionId(
+    where: Prisma.JurisdictionsWhereInput,
+    label: string,
+  ): Promise<string> {
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      where,
+      select: { id: true },
+    });
+    if (!jurisdiction) {
+      throw new NotFoundException(
+        `jurisdiction ${label} was requested but not found`,
+      );
+    }
+    return jurisdiction.id;
   }
 
   public async getTranslationByLanguageAndJurisdiction(

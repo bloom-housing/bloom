@@ -266,7 +266,7 @@ describe("CompleteAdvocateAccount page", () => {
 
       // Password section
       expect(screen.getByLabelText("Password")).toBeInTheDocument()
-      expect(screen.getByLabelText("Re-enter your password")).toBeInTheDocument()
+      expect(screen.getByLabelText(/show password/i)).toBeInTheDocument()
     })
 
     it("shows required validation errors when submit is clicked without filling required address fields", async () => {

@@ -55,6 +55,8 @@ describe("filter drawer helpers", () => {
       [UnitTypeEnum.threeBdrm]: false,
       [UnitTypeEnum.fourBdrm]: false,
       [UnitTypeEnum.fiveBdrm]: false,
+      [UnitTypeEnum.sixBdrm]: false,
+      [UnitTypeEnum.sevenBdrm]: false,
     },
     [ListingFilterKeys.monthlyRent]: {
       minRent: "",
@@ -659,6 +661,8 @@ describe("filter drawer helpers", () => {
           threeBdrm: false,
           fourBdrm: false,
           fiveBdrm: false,
+          sixBdrm: false,
+          sevenBdrm: false,
         },
         monthlyRent: {
           minRent: "",

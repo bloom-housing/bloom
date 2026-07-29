@@ -49,7 +49,7 @@ export const bloomingtonListing: CypressListing = {
   updatedAt: new Date(),
   status: ListingsStatusEnum.pending,
   displayWaitlistSize: false,
-  assets: [],
+  assets: {},
   applicationLotteryTotals: [],
   jurisdiction: {
     id: "Bloomington",
@@ -73,7 +73,7 @@ export const bloomingtonListing: CypressListing = {
   neighborhood: "Basic Test Neighborhood",
   yearBuilt: 2021,
   reservedCommunityTypes: {
-    id: "Seniors",
+    id: "Test community type",
   },
   listingMultiselectQuestions: [
     {

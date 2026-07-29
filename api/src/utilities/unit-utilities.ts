@@ -26,6 +26,8 @@ export const UnitTypeSort = [
   UnitTypeEnum.threeBdrm,
   UnitTypeEnum.fourBdrm,
   UnitTypeEnum.fiveBdrm,
+  UnitTypeEnum.sixBdrm,
+  UnitTypeEnum.sevenBdrm,
 ];
 
 export const usd = new Intl.NumberFormat('en-US', {
@@ -176,6 +178,9 @@ export const generateHmiData = (
     'listings.unitTypes.twoBdrm',
     'listings.unitTypes.threeBdrm',
     'listings.unitTypes.fourBdrm',
+    'listings.unitTypes.fiveBdrm',
+    'listings.unitTypes.sixBdrm',
+    'listings.unitTypes.sevenBdrm',
   ];
   // this is to map currentHouseholdSize to a units max occupancy
   const unitOccupancy = [];

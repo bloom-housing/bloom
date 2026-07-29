@@ -84,7 +84,7 @@ describe('External Listings Controller Tests', () => {
               },
             ],
             reservedCommunityTypes: [
-              { id: 'externalRCTId', name: 'senior' },
+              { id: 'externalRCTId', name: 'senior55' },
               { id: randomUUID(), name: 'fake' },
             ],
             unitRentTypes: [
@@ -126,7 +126,7 @@ describe('External Listings Controller Tests', () => {
               },
             ],
             name: 'example listing name',
-            reservedCommunityTypes: { id: 'externalRCTId', name: 'senior' },
+            reservedCommunityTypes: { id: 'externalRCTId', name: 'senior55' },
             status: ListingsStatusEnum.active,
             units: [
               {

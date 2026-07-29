@@ -13,7 +13,7 @@ export const littleVillageApartments: Prisma.ListingsCreateInput = {
   commonDigitalApplication: false,
   paperApplication: false,
   referralOpportunity: false,
-  assets: [],
+  assets: {},
   accessibility: null,
   amenities: null,
   buildingTotalUnits: 0,

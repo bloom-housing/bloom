@@ -9,6 +9,8 @@ import {
   Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
 import {
   ApplicationSubmissionTypeEnum,
   LanguagesEnum,
@@ -69,6 +71,7 @@ export class LotteryService {
     private permissionService: PermissionService,
     private cronJobService: CronJobService,
     private snapshotCreateService: SnapshotCreateService,
+    private httpService: HttpService,
   ) {}
 
   onModuleInit() {
@@ -185,6 +188,20 @@ export class LotteryService {
         },
         user,
       );
+
+      // Trigger automated audit if the lottery audit endpoint is configured
+      const auditEndpoint = this.configService.get<string>(
+        'LOTTERY_AUDIT_ENDPOINT',
+      );
+      if (auditEndpoint) {
+        this.triggerLotteryAudit(listingId, auditEndpoint).catch(
+          (auditError) => {
+            this.logger.error(
+              `Automated lottery audit failed to trigger for listing ${listingId}: ${auditError.message}`,
+            );
+          },
+        );
+      }
     } catch (e) {
       console.error(e);
       await this.lotteryStatus(
@@ -902,5 +919,39 @@ export class LotteryService {
     });
 
     return results;
+  }
+
+  async triggerLotteryAudit(
+    listingId: string,
+    endpoint: string,
+  ): Promise<void> {
+    this.logger.warn(`Triggering lottery audit for listing ${listingId}`);
+    try {
+      await firstValueFrom(
+        this.httpService.post(
+          endpoint,
+          { ListingId: listingId },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        ),
+      );
+    } catch (error) {
+      this.logger.error(
+        `Failed to trigger lottery audit for listing ${listingId}: ${error?.message}`,
+      );
+      if (error?.response) {
+        throw new HttpException(
+          error.response?.data || 'Failed to start lottery audit',
+          error.response?.status || 500,
+        );
+      }
+      throw new HttpException(
+        error?.message || 'Failed to start lottery audit',
+        500,
+      );
+    }
   }
 }

@@ -21,6 +21,8 @@ export const UnitTypeSort: string[] = [
   UnitTypeEnum.threeBdrm,
   UnitTypeEnum.fourBdrm,
   UnitTypeEnum.fiveBdrm,
+  UnitTypeEnum.sixBdrm,
+  UnitTypeEnum.sevenBdrm,
 ]
 
 export const UnitGroupTypeSort: string[] = [

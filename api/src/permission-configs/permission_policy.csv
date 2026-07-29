@@ -95,6 +95,11 @@ p, jurisdictionAdmin, unitRentType, true, read
 p, limitedJurisdictionAdmin, unitRentType, true, read
 p, partner, unitRentType, true, read
 
+p, admin, jobs, true, .*
+p, supportAdmin, jobs, true, .*
+p, jurisdictionAdmin, jobs, true, .*
+p, limitedJurisdictionAdmin, jobs, true, .*
+p, partner, jobs, true, .*
 
 p, admin, applicationMethod, true, .*
 p, supportAdmin, applicationMethod, true, .*

@@ -4,6 +4,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   PrismaClient,
+  UserRoleEnum,
 } from '@prisma/client';
 import { randomInt } from 'crypto';
 import dayjs from 'dayjs';
@@ -2585,6 +2586,7 @@ export const createBridgeBayJurisdictions = async (
       publicSiteBaseURL,
       featureFlags: [...optionalV2MSQ, ...featureFlags],
       languages: languages,
+      listingApprovalPermissions: [UserRoleEnum.admin],
       listingFeaturesConfiguration: defaultListingFeatureConfiguration,
       raceEthnicityConfiguration: raceEthnicityConfiguration,
       visibleSpokenLanguages: visibleSpokenLanguages,

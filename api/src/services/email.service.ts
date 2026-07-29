@@ -36,6 +36,7 @@ import {
 } from '../utilities/listing-data-formatters';
 import { unitTypeMapping } from '../../prisma/seed-helpers/unit-type-factory';
 import { UnitAccessibilityPriorityTypeEnum } from '../enums/units/accessibility-priority-type-enum';
+import { GovDeliveryService } from './gov-delivery.service';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
@@ -56,6 +57,7 @@ export class EmailService {
     private readonly emailProvider: EmailProvider,
     private readonly translationService: TranslationService,
     private readonly jurisdictionService: JurisdictionService,
+    private readonly govDeliveryService: GovDeliveryService,
     @Inject(Logger)
     private logger = new Logger(EmailService.name),
   ) {
@@ -688,7 +690,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
-      console.log('Request approval email failed', err);
+      this.logger.error('Request approval email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -718,7 +720,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
-      console.log('changes requested email failed', err);
+      this.logger.error('changes requested email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -747,7 +749,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
-      console.log('listing approval email failed', err);
+      this.logger.error('listing approval email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -781,7 +783,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
-      console.log('listing scheduled email failed', err);
+      this.logger.error('listing scheduled email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -810,7 +812,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
-      console.log('listing published email failed', err);
+      this.logger.error('listing published email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -910,7 +912,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
-      console.log('lottery released email failed', err);
+      this.logger.error('lottery released email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -939,7 +941,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
-      console.log('lottery published admin email failed', err);
+      this.logger.error('lottery published admin email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -984,7 +986,7 @@ export class EmailService {
         );
       }
     } catch (err) {
-      console.log('lottery published applicant email failed', err);
+      this.logger.error('lottery published applicant email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -1052,7 +1054,11 @@ export class EmailService {
     listingUnitsSummary: ListingUnitsSummary,
     variant: ListingNotificationVariant = 'standard',
   ): { label: string; value: string | number }[] {
-    const listingDetails: { label: string; value: string | number }[] = [];
+    const listingDetails: {
+      label: string;
+      value: string | number;
+      bolded?: boolean;
+    }[] = [];
 
     if (listing?.reservedCommunityTypes?.name) {
       listingDetails.push({
@@ -1074,10 +1080,10 @@ export class EmailService {
     } else if (listing?.applicationDueDate) {
       listingDetails.push({
         label: this.polyglot.t('rentalOpportunity.applicationsDue'),
-        value: this.formatLocalDate(
-          listing.applicationDueDate,
-          'MMMM DD, YYYY',
-        ),
+        value: dayjs(listing.applicationDueDate)
+          .tz(process.env.TIME_ZONE)
+          .format('MMMM D, YYYY [at] h:mma z'),
+        bolded: true,
       });
     }
 
@@ -1302,7 +1308,91 @@ export class EmailService {
         );
       }
     } catch (err) {
-      console.log('listing approval email failed', err);
+      this.logger.error('rental opportunity email failed', err);
+      throw new HttpException('email failed', 500);
+    }
+  }
+
+  public async listingPublishNotificationViaGovDelivery(
+    jurisdictionId: IdDTO,
+    listing: Listing,
+    priorityTypes: UnitAccessibilityPriorityTypeEnum[],
+    variant: ListingNotificationVariant = 'standard',
+  ) {
+    try {
+      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      const listingUnitsSummary = summarizeListingUnitsByType(listing.units);
+      const subjectKey =
+        variant === 'comingSoon'
+          ? 'rentalOpportunity.comingSoon.subject'
+          : 'rentalOpportunity.subject';
+      const introKey =
+        variant === 'comingSoon'
+          ? 'rentalOpportunity.comingSoon.intro'
+          : 'rentalOpportunity.intro';
+
+      void (await this.loadTranslations(jurisdiction, 'en'));
+
+      this.logger.log(
+        `Sending lottery published govDelivery email for listing ${listing.name}`,
+      );
+
+      const listingDetails = this.buildListingDetails(
+        listing,
+        priorityTypes,
+        listingUnitsSummary,
+        variant,
+      );
+
+      const emailButtons = jurisdiction.languages.map((code) => ({
+        name: this.polyglot.t(`rentalOpportunity.viewButton.${code}`),
+        url: `${jurisdiction.publicUrl}/${code}/listing/${listing.id}/${listing.urlSlug}`,
+      }));
+
+      const footerLinks = [];
+      let hasFooterLinks = true;
+      while (hasFooterLinks) {
+        if (
+          this.polyglot.has(
+            `rentalOpportunity.footer.additionalLink${footerLinks.length}.text`,
+          )
+        ) {
+          footerLinks.push({
+            text: this.polyglot.t(
+              `rentalOpportunity.footer.additionalLink${footerLinks.length}.text`,
+            ),
+            name: this.polyglot.t(
+              `rentalOpportunity.footer.additionalLink${footerLinks.length}.name`,
+            ),
+            url: this.polyglot.t(
+              `rentalOpportunity.footer.additionalLink${footerLinks.length}.url`,
+            ),
+          });
+        } else {
+          hasFooterLinks = false;
+        }
+      }
+
+      await this.govDeliveryService.send({
+        to: [],
+        from: process.env.GOVDELIVERY_FROM_EMAIL_ID,
+        subject: this.polyglot.t(subjectKey, {
+          listingName: listing.name,
+        }),
+        body: this.template('listing-opportunity')({
+          listingName: listing.name,
+          introKey,
+          tableRows: listingDetails,
+          languageUrls: emailButtons,
+          accessibleMarketingFlyerUrl: listing.accessibleMarketingFlyer,
+          disclaimerText: this.polyglot.has('rentalOpportunity.disclaimer')
+            ? this.polyglot.t('rentalOpportunity.disclaimer')
+            : undefined,
+          footerLinks,
+        }),
+      });
+    } catch (err) {
+      this.logger.error('govDelivery rental opportunity email failed', err);
       throw new HttpException('email failed', 500);
     }
   }

@@ -25,7 +25,7 @@ export const elmVillage: Prisma.ListingsCreateInput = {
   commonDigitalApplication: true,
   paperApplication: false,
   referralOpportunity: false,
-  assets: [],
+  assets: {},
   accessibility: null,
   amenities: null,
   buildingTotalUnits: 25,

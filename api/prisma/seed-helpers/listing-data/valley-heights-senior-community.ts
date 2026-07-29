@@ -13,7 +13,7 @@ export const valleyHeightsSeniorCommunity: Prisma.ListingsCreateInput = {
   commonDigitalApplication: true,
   paperApplication: false,
   referralOpportunity: false,
-  assets: [],
+  assets: {},
   accessibility: null,
   amenities: 'Includes handicap accessible entry and parking spots. ',
   buildingTotalUnits: 17,

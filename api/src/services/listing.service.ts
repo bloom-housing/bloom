@@ -1304,7 +1304,7 @@ export class ListingService implements OnModuleInit {
       result = await this.translationService.translateListing(result, lang);
     }
 
-    if (result.unitGroups.length > 0) {
+    if (result.unitGroups?.length > 0) {
       addUnitGroupsSummarized(result);
     } else {
       await this.addUnitsSummarized(result);
@@ -1581,14 +1581,7 @@ export class ListingService implements OnModuleInit {
       data: {
         ...listingData,
         displayWaitlistSize: dto.displayWaitlistSize ?? false,
-        assets: dto.assets
-          ? {
-              create: dto.assets.map((asset) => ({
-                fileId: asset.fileId,
-                label: asset.label,
-              })),
-            }
-          : Prisma.JsonNullValueInput.JsonNull,
+        assets: Prisma.JsonNullValueInput.JsonNull,
         applicationMethods: dto.applicationMethods
           ? {
               create: dto.applicationMethods.map((applicationMethod) => ({
@@ -1942,6 +1935,19 @@ export class ListingService implements OnModuleInit {
         rawJurisdiction.publicUrl || '',
       );
       await this.sendListingPublishNotification(mappedListing);
+      if (
+        doJurisdictionHaveFeatureFlagSet(
+          rawJurisdiction as unknown as Jurisdiction,
+          FeatureFlagEnum.enableListingOpportunity,
+        )
+      ) {
+        await this.emailService.listingPublishNotificationViaGovDelivery(
+          { id: rawJurisdiction.id },
+          mappedListing,
+          [],
+          'standard',
+        );
+      }
     }
     await this.cachePurge(undefined, dto.status, mappedListing.id);
     return mappedListing;
@@ -2092,7 +2098,6 @@ export class ListingService implements OnModuleInit {
     const newListingData: ListingCreate = {
       ...mappedListing,
       applicationMethods: applicationMethods,
-      assets: [],
       listingsBuildingSelectionCriteriaFile:
         mappedListing.listingsBuildingSelectionCriteriaFile
           ? {
@@ -2576,7 +2581,6 @@ export class ListingService implements OnModuleInit {
           id: undefined,
           createdAt: undefined,
           updatedAt: undefined,
-          assets: incomingDto.assets as unknown as Prisma.InputJsonArray,
           applicationMethods: incomingDto.applicationMethods
             ? {
                 create: incomingDto.applicationMethods.map(
@@ -3085,6 +3089,19 @@ export class ListingService implements OnModuleInit {
         mappedListing,
         useComingSoon ? 'comingSoon' : 'standard',
       );
+      if (
+        doJurisdictionHaveFeatureFlagSet(
+          rawJurisdiction as unknown as Jurisdiction,
+          FeatureFlagEnum.enableListingOpportunity,
+        )
+      ) {
+        await this.emailService.listingPublishNotificationViaGovDelivery(
+          { id: rawJurisdiction.id },
+          mappedListing,
+          [],
+          useComingSoon ? 'comingSoon' : 'standard',
+        );
+      }
     }
 
     if (enableV2MSQ && mappedListing.status === ListingsStatusEnum.active) {
