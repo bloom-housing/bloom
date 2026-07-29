@@ -253,7 +253,6 @@ describe('Auth Controller Tests', () => {
       .send({
         email: storedUser.email,
         password: 'Abcdef12345!',
-        passwordConfirmation: 'Abcdef12345!',
         token,
       } as UpdatePassword)
       .expect(200);

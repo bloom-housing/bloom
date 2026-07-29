@@ -20,6 +20,11 @@ const reservedCommunityTypeOptions: { name: string; description?: string }[] = [
   { name: 'farmworkerHousing' },
   { name: 'housingVoucher' },
   { name: 'referralOnly' },
+  { name: 'testCommunityType' },
+  {
+    name: 'testCommunityTypeWithDescription',
+    description: 'This is a test community type with a description.',
+  },
 ];
 
 export const reservedCommunityTypeFactory = (

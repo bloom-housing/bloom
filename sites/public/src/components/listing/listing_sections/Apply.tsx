@@ -17,6 +17,7 @@ import {
   getMethod,
   getOnlineApplicationURL,
   getPaperApplications,
+  hasMethod,
 } from "../ListingViewSeedsHelpers"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./Apply.module.scss"
@@ -117,6 +118,11 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
 
   const hasPrimaryApplicationMethod = onlineApplicationUrl || hasPaperApplication
 
+  const hasLeasingAgentMethod = hasMethod(
+    listing.applicationMethods,
+    ApplicationMethodsTypeEnum.LeasingAgent
+  )
+
   const shouldShowApplyButton = getHasNonReferralMethods(listing)
 
   const showSection =
@@ -130,10 +136,11 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
     !scheduledApplicationOpenInFuture(listing)
 
   const showSecondarySection =
-    (hasPaperApplication && onlineApplicationUrl) ||
-    applicationMailingAddress ||
-    applicationPickUpAddress ||
-    applicationDropOffAddress
+    !hasLeasingAgentMethod &&
+    ((hasPaperApplication && onlineApplicationUrl) ||
+      applicationMailingAddress ||
+      applicationPickUpAddress ||
+      applicationDropOffAddress)
 
   if (!showSection) return <></>
 
@@ -143,18 +150,31 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
     >
       <Card.Section
         divider="flush"
-        className={`${hasPrimaryApplicationMethod ? styles["card-section-background"] : null}`}
+        className={`${
+          !hasLeasingAgentMethod && hasPrimaryApplicationMethod
+            ? styles["card-section-background"]
+            : null
+        }`}
       >
         <Heading priority={2} size={"lg"} className={"seeds-m-be-header"}>
           {t("listings.apply.howToApply")}
         </Heading>
-        {hasPrimaryApplicationMethod && (
+        {hasLeasingAgentMethod ? (
           <>
-            {onlineApplicationUrl ? ApplyOnlineButton : DownloadApplicationButton}
-            <div className={"seeds-m-bs-content"}>
-              {listing.externalURL && t("listings.apply.applyOnlineMessage")}
-            </div>
+            <Heading priority={3} size={"md"} className={"seeds-m-be-header"}>
+              {t("leasingAgent.contactManagerProp")}
+            </Heading>
+            <p>{t("listings.apply.referToLeasingAgentContact")}</p>
           </>
+        ) : (
+          hasPrimaryApplicationMethod && (
+            <>
+              {onlineApplicationUrl ? ApplyOnlineButton : DownloadApplicationButton}
+              <div className={"seeds-m-bs-content"}>
+                {listing.externalURL && t("listings.apply.applyOnlineMessage")}
+              </div>
+            </>
+          )
         )}
       </Card.Section>
       {showSecondarySection && (

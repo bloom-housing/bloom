@@ -45,9 +45,6 @@ const CreateAdvocateAccount = ({ agencies }: CreateAdvocateAccountProps) => {
 
   const token = router.query.token as string
 
-  const password = useRef({})
-  password.current = watch("password", "")
-
   const isPOBoxSelected = watch("isPOBox", "no") === "yes"
   const hasAdditionalPhone = watch("hasAdditionalPhone", false)
 
@@ -192,9 +189,7 @@ const CreateAdvocateAccount = ({ agencies }: CreateAdvocateAccountProps) => {
             divider={"inset"}
             className={accountCardStyles["account-card-settings-section"]}
           >
-            <div className={"seeds-m-be-6"}>
-              {createAccountPasswordFields(errors, register, password)}
-            </div>
+            <div className={"seeds-m-be-6"}>{createAccountPasswordFields(errors, register)}</div>
             <Button
               type="submit"
               variant="primary"
