@@ -29,6 +29,8 @@ export const stagingSeed = async (
     jurisdiction?: string;
   },
 ) => {
+  // Clear all existing reserved community types before any are added
+  await prismaClient.reservedCommunityTypes.deleteMany();
   // Seed feature flags
   await createAllFeatureFlags(prismaClient);
 

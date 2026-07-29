@@ -895,7 +895,6 @@ describe('User Controller Tests', () => {
           firstName: 'Public First Name',
           lastName: 'Public Last Name',
           password: 'Abcdef12345!',
-          passwordConfirmation: 'Abcdef12345!',
           email: 'publicUser@email.com',
           emailConfirmation: 'publicUser@email.com',
           language: LanguagesEnum.es,
