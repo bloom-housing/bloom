@@ -102,11 +102,7 @@ describe("Create Account Page", () => {
         "Must be at least 12 characters and include at least one lowercase letter, one uppercase letter, one number, and one special character (#?!@$%^&*-)."
       )
     ).toBeInTheDocument()
-    const passwordConfirmInput = screen.getByLabelText(/re-enter your password/i, {
-      selector: "input",
-    })
-    verifyInitialInput(passwordConfirmInput)
-    expect(passwordConfirmInput).toHaveAttribute("type", "password")
+    expect(screen.getByLabelText(/show password/i)).toBeInTheDocument()
 
     const createAccountButton = screen.getByRole("button", { name: /create account/i })
     expect(createAccountButton).toBeInTheDocument()
@@ -315,29 +311,6 @@ describe("Create Account Page", () => {
         }
       })
     })
-
-    it("show error on password on missmatching passwords", async () => {
-      render(<CreateAccount />)
-
-      const createAccountButton = screen.getByRole("button", { name: /create account/i })
-      const passwordInput = screen.getByLabelText(/^password/i, { selector: "input" })
-      const passwordConfirmInput = screen.getByLabelText(/re-enter your password/i, {
-        selector: "input",
-      })
-
-      expect(passwordInput).toBeInTheDocument()
-      expect(passwordConfirmInput).toBeInTheDocument()
-      expect(createAccountButton).toBeInTheDocument()
-
-      await userEvent.type(passwordInput, "P@ssw0rd#123")
-      await userEvent.type(passwordConfirmInput, "Test")
-      await userEvent.click(createAccountButton)
-
-      expect(passwordInput).toBeValid()
-      expect(passwordConfirmInput).toBeInvalid()
-      expect(screen.queryByText("Please enter a valid password")).not.toBeInTheDocument()
-      expect(await screen.findByText("The passwords do not match")).toBeInTheDocument()
-    })
   })
 
   describe("shoud show proper API call error responses", () => {
@@ -366,12 +339,6 @@ describe("Create Account Page", () => {
         message: "errorSaving",
         value:
           /Oops! Looks like something went wrong. Please try again. Contact your housing department if you're still experiencing issues./i,
-      },
-      {
-        title: "Password mismatch",
-        status: 400,
-        message: "passwordMismatch",
-        value: "The passwords do not match",
       },
       {
         title: "To weak password",
@@ -438,12 +405,6 @@ describe("Create Account Page", () => {
         screen.getByLabelText(/^password/i, { selector: "input" }),
         "P@ssw0rd#123"
       )
-      await userEvent.type(
-        screen.getByLabelText(/re-enter your password/i, {
-          selector: "input",
-        }),
-        "P@ssw0rd#123"
-      )
 
       const createAccountButton = screen.getByRole("button", { name: /create account/i })
       expect(createAccountButton).toBeInTheDocument()
@@ -473,12 +434,6 @@ describe("Create Account Page", () => {
     await userEvent.type(screen.getByRole("textbox", { name: /year/i }), "2000")
     await userEvent.type(screen.getByRole("textbox", { name: /email/i }), "johndoe@example.com")
     await userEvent.type(screen.getByLabelText(/^password/i, { selector: "input" }), "P@ssw0rd#123")
-    await userEvent.type(
-      screen.getByLabelText(/re-enter your password/i, {
-        selector: "input",
-      }),
-      "P@ssw0rd#123"
-    )
 
     const createAccountButton = screen.getByRole("button", { name: /create account/i })
     expect(createAccountButton).toBeInTheDocument()

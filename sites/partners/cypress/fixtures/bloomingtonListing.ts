@@ -73,7 +73,7 @@ export const bloomingtonListing: CypressListing = {
   neighborhood: "Basic Test Neighborhood",
   yearBuilt: 2021,
   reservedCommunityTypes: {
-    id: "Seniors",
+    id: "Test community type",
   },
   listingMultiselectQuestions: [
     {

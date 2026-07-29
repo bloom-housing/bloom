@@ -44,9 +44,7 @@ const CreateAccount = () => {
   const language = router.locale
   const listingId = router.query?.listingId as string
   const email = useRef({})
-  const password = useRef({})
   email.current = watch("email", "")
-  password.current = watch("password", "")
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -171,13 +169,7 @@ const CreateAccount = () => {
                   className={accountCardStyles["account-card-settings-section"]}
                 >
                   <div className={"seeds-m-be-6"}>
-                    {createAccountPasswordFields(
-                      errors,
-                      register,
-                      password,
-                      styles["create-account-input"],
-                      styles["create-account-field"]
-                    )}
+                    {createAccountPasswordFields(errors, register, styles["create-account-input"])}
                   </div>
                   <Button
                     type="submit"
