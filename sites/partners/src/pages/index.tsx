@@ -95,6 +95,11 @@ export const getFlagInAllJurisdictions = (
   }
 }
 
+export const LISTING_TYPE_FEATURE_FLAGS = [
+  FeatureFlagEnum.enableNonRegulatedListings,
+  FeatureFlagEnum.enableLandUse,
+]
+
 type CreateListingFormFields = {
   jurisdiction: string
   listingType: ListingTypeEnum
@@ -161,6 +166,10 @@ export default function ListingsList() {
     true
   )
 
+  const showListingTypeColumn = LISTING_TYPE_FEATURE_FLAGS.some((flag) =>
+    doJurisdictionsHaveFeatureFlagOn(flag, undefined, true)
+  )
+
   useEffect(() => {
     if (defaultJurisdiction) {
       const landUseEnabled = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableLandUse)
@@ -192,7 +201,7 @@ export default function ListingsList() {
       },
     ]
 
-    if (showForNonRegulated) {
+    if (showListingTypeColumn) {
       columns.push({
         headerName: t("listings.listingType"),
         field: "listingType",
