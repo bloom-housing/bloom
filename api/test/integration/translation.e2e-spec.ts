@@ -202,10 +202,14 @@ describe('Translation Controller Tests', () => {
         .set(passkey)
         .expect(200);
 
-      const row = res.body.find((r) => r.key === 'footer.title');
-      expect(row.value).toEqual('Footer Title');
-      expect(row.origin).toEqual('human');
-      expect(row.stale).toBe(false);
+      expect(res.body).toContainEqual(
+        expect.objectContaining({
+          key: 'footer.title',
+          value: 'Footer Title',
+          origin: 'human',
+          stale: false,
+        }),
+      );
     });
 
     it('reports only the stale-lock key as a 409 and writes the rest', async () => {
