@@ -21,6 +21,11 @@ describe('Translation Controller Tests', () => {
 
   const passkey = { passkey: process.env.API_PASS_KEY || '' };
 
+  const enScope = () =>
+    `/translations/jurisdictions/${jurisdictionId}/raw/public/en`;
+  const esScope = () =>
+    `/translations/jurisdictions/${jurisdictionId}/raw/public/es`;
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -115,73 +120,74 @@ describe('Translation Controller Tests', () => {
     await app.close();
   });
 
-  it('returns the public overrides for a jurisdiction and caches the response', async () => {
-    const res = await request(app.getHttpServer())
-      .get(
-        `/translations/jurisdictions/${jurisdictionId}?site=public&language=en`,
-      )
-      .set(passkey)
-      .expect(200);
+  describe('GET /translations/jurisdictions/:jurisdictionId', () => {
+    it('returns the public overrides for a jurisdiction and caches the response', async () => {
+      const res = await request(app.getHttpServer())
+        .get(
+          `/translations/jurisdictions/${jurisdictionId}?site=public&language=en`,
+        )
+        .set(passkey)
+        .expect(200);
 
-    expect(res.body).toEqual({ 'region.name': 'Bloomington' });
-    // Scope isolation: the partner-only key must not leak into a public response.
-    expect(res.body['partners.only']).toBeUndefined();
-    expect(res.headers['cache-control']).toEqual(
-      'public, s-maxage=300, stale-while-revalidate=600',
-    );
+      expect(res.body).toEqual({ 'region.name': 'Bloomington' });
+      // Scope isolation: the partner-only key must not leak into a public response.
+      expect(res.body['partners.only']).toBeUndefined();
+      expect(res.headers['cache-control']).toEqual(
+        'public, s-maxage=300, stale-while-revalidate=600',
+      );
+    });
+
+    it('layers the requested language over the English default', async () => {
+      const res = await request(app.getHttpServer())
+        .get(
+          `/translations/jurisdictions/${jurisdictionId}?site=public&language=es`,
+        )
+        .set(passkey)
+        .expect(200);
+
+      expect(res.body).toEqual({ 'region.name': 'Bloomington ES' });
+    });
+
+    it('rejects a jurisdiction read that omits the site', async () => {
+      await request(app.getHttpServer())
+        .get(`/translations/jurisdictions/${jurisdictionId}?language=en`)
+        .set(passkey)
+        .expect(400);
+    });
+
+    it('returns 404 for an unknown jurisdiction id', async () => {
+      await request(app.getHttpServer())
+        .get(
+          `/translations/jurisdictions/${randomUUID()}?site=public&language=en`,
+        )
+        .set(passkey)
+        .expect(404);
+    });
   });
 
-  it('layers the requested language over the English default', async () => {
-    const res = await request(app.getHttpServer())
-      .get(
-        `/translations/jurisdictions/${jurisdictionId}?site=public&language=es`,
-      )
-      .set(passkey)
-      .expect(200);
+  describe('GET /translations/byName/:jurisdictionName', () => {
+    it('resolves overrides by jurisdiction name', async () => {
+      const res = await request(app.getHttpServer())
+        .get(`/translations/byName/${jurisdictionName}?site=public&language=en`)
+        .set(passkey)
+        .expect(200);
 
-    expect(res.body).toEqual({ 'region.name': 'Bloomington ES' });
+      expect(res.body).toEqual({ 'region.name': 'Bloomington' });
+    });
   });
 
-  it('resolves overrides by jurisdiction name', async () => {
-    const res = await request(app.getHttpServer())
-      .get(`/translations/byName/${jurisdictionName}?site=public&language=en`)
-      .set(passkey)
-      .expect(200);
+  describe('GET /translations', () => {
+    it('returns the global Partners overrides', async () => {
+      const res = await request(app.getHttpServer())
+        .get(`/translations?language=en`)
+        .set(passkey)
+        .expect(200);
 
-    expect(res.body).toEqual({ 'region.name': 'Bloomington' });
+      expect(res.body['partners.brand']).toEqual('Bloom');
+    });
   });
 
-  it('returns the global Partners overrides', async () => {
-    const res = await request(app.getHttpServer())
-      .get(`/translations?language=en`)
-      .set(passkey)
-      .expect(200);
-
-    expect(res.body['partners.brand']).toEqual('Bloom');
-  });
-
-  it('rejects a jurisdiction read that omits the site', async () => {
-    await request(app.getHttpServer())
-      .get(`/translations/jurisdictions/${jurisdictionId}?language=en`)
-      .set(passkey)
-      .expect(400);
-  });
-
-  it('returns 404 for an unknown jurisdiction id', async () => {
-    await request(app.getHttpServer())
-      .get(
-        `/translations/jurisdictions/${randomUUID()}?site=public&language=en`,
-      )
-      .set(passkey)
-      .expect(404);
-  });
-
-  describe('admin raw CRUD', () => {
-    const enScope = () =>
-      `/translations/jurisdictions/${jurisdictionId}/raw/public/en`;
-    const esScope = () =>
-      `/translations/jurisdictions/${jurisdictionId}/raw/public/es`;
-
+  describe('PUT /translations/jurisdictions/:jurisdictionId/raw/:site/:language', () => {
     it('upserts keys and returns them with origin via the raw get', async () => {
       await request(app.getHttpServer())
         .put(enScope())
@@ -196,10 +202,14 @@ describe('Translation Controller Tests', () => {
         .set(passkey)
         .expect(200);
 
-      const row = res.body.find((r) => r.key === 'footer.title');
-      expect(row.value).toEqual('Footer Title');
-      expect(row.origin).toEqual('human');
-      expect(row.stale).toBe(false);
+      expect(res.body).toContainEqual(
+        expect.objectContaining({
+          key: 'footer.title',
+          value: 'Footer Title',
+          origin: 'human',
+          stale: false,
+        }),
+      );
     });
 
     it('reports only the stale-lock key as a 409 and writes the rest', async () => {
@@ -233,29 +243,6 @@ describe('Translation Controller Tests', () => {
       expect(getRes.body.find((r) => r.key === 'region.name').value).toEqual(
         'Bloomington',
       );
-    });
-
-    it('deletes a key override', async () => {
-      await request(app.getHttpServer())
-        .put(enScope())
-        .set('Cookie', adminCookies)
-        .set(passkey)
-        .send({ edits: [{ key: 'temp.key', value: 'Temp' }] })
-        .expect(200);
-      await request(app.getHttpServer())
-        .delete(
-          `/translations/jurisdictions/${jurisdictionId}/raw/public/en/temp.key`,
-        )
-        .set('Cookie', adminCookies)
-        .set(passkey)
-        .expect(200);
-
-      const res = await request(app.getHttpServer())
-        .get(enScope())
-        .set('Cookie', adminCookies)
-        .set(passkey)
-        .expect(200);
-      expect(res.body.find((r) => r.key === 'temp.key')).toBeUndefined();
     });
 
     it('tracks staleness across an english edit and a re-save', async () => {
@@ -338,13 +325,15 @@ describe('Translation Controller Tests', () => {
       expect(es.find((r) => r.key === 'greeting').stale).toBe(false);
     });
 
-    it('lets a jurisdictional admin write its own jurisdiction but not another', async () => {
+    it('forbids a jurisdictional admin from writing translations', async () => {
+      // Writing is admin-only for now; jurisdictional-admin access is added later, gated by the
+      // enableDbDrivenContent flag. Both its own jurisdiction and another are denied.
       await request(app.getHttpServer())
         .put(enScope())
         .set('Cookie', jurisAdminCookies)
         .set(passkey)
         .send({ edits: [{ key: 'juris.ok', value: 'ok' }] })
-        .expect(200);
+        .expect(403);
 
       await request(app.getHttpServer())
         .put(`/translations/jurisdictions/${jurisdictionBId}/raw/public/en`)
@@ -352,6 +341,31 @@ describe('Translation Controller Tests', () => {
         .set(passkey)
         .send({ edits: [{ key: 'juris.bad', value: 'bad' }] })
         .expect(403);
+    });
+  });
+
+  describe('DELETE /translations/jurisdictions/:jurisdictionId/raw/:site/:language/:key', () => {
+    it('deletes a key override', async () => {
+      await request(app.getHttpServer())
+        .put(enScope())
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ edits: [{ key: 'temp.key', value: 'Temp' }] })
+        .expect(200);
+      await request(app.getHttpServer())
+        .delete(
+          `/translations/jurisdictions/${jurisdictionId}/raw/public/en/temp.key`,
+        )
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+
+      const res = await request(app.getHttpServer())
+        .get(enScope())
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(res.body.find((r) => r.key === 'temp.key')).toBeUndefined();
     });
   });
 });
