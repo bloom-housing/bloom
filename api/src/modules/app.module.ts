@@ -27,6 +27,8 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { UnitRentTypeModule } from './unit-rent-type.module';
 import { UnitTypeModule } from './unit-type.module';
 import { UserModule } from './user.module';
+import { BackgroundJobsModule } from './background-jobs.module';
+import { TranslationModule } from './translation.module';
 
 @Module({
   imports: [
@@ -42,6 +44,7 @@ import { UserModule } from './user.module';
     UserModule,
     PrismaModule,
     AuthModule,
+    BackgroundJobsModule,
     ApplicationFlaggedSetModule,
     MapLayerModule,
     ScriptRunnerModule,
@@ -52,6 +55,7 @@ import { UserModule } from './user.module';
     AgencyModule,
     SnapshotCreateModule,
     ExternalListingModule,
+    TranslationModule,
     ThrottlerModule.forRoot([
       {
         ttl: Number(process.env.THROTTLE_TTL),
@@ -84,6 +88,7 @@ import { UserModule } from './user.module';
     UserModule,
     PrismaModule,
     AuthModule,
+    BackgroundJobsModule,
     ApplicationFlaggedSetModule,
     MapLayerModule,
     ScriptRunnerModule,
@@ -91,6 +96,7 @@ import { UserModule } from './user.module';
     FeatureFlagModule,
     SnapshotCreateModule,
     ExternalListingModule,
+    TranslationModule,
   ],
 })
 export class AppModule {}

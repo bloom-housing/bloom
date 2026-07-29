@@ -108,7 +108,7 @@ export const listingFactory = async (
     applicationDueDate:
       optionalParams?.applicationDueDate ??
       dayjs(new Date()).add(30, 'days').toDate(),
-    assets: [],
+    assets: {},
     closedAt: optionalParams?.closedAt
       ? optionalParams?.closedAt
       : optionalParams?.status === ListingsStatusEnum.closed

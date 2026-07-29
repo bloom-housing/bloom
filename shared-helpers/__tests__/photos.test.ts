@@ -57,21 +57,6 @@ describe("photos helper", () => {
     )
   })
 
-  it("should return correct id when falling back to old field", () => {
-    process.env.CLOUDINARY_CLOUD_NAME = "exygy"
-
-    const testListing = {
-      assets: [
-        {
-          fileId: "5678",
-          label: "building",
-        },
-      ],
-    } as Listing
-
-    expect(imageUrlFromListing(testListing)[0]).toBe("5678")
-  })
-
   it("should return building asset from listingImages when cloudinary env is set", () => {
     process.env.CLOUDINARY_CLOUD_NAME = "exygy"
 

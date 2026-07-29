@@ -1089,8 +1089,10 @@ export const typeMap = {
   oneBdrm: 'One Bedroom',
   twoBdrm: 'Two Bedroom',
   threeBdrm: 'Three Bedroom',
-  fourBdrm: 'Four+ Bedroom',
+  fourBdrm: 'Four Bedroom',
   fiveBdrm: 'Five Bedroom',
+  sixBdrm: 'Six Bedroom',
+  sevenBdrm: 'Seven+ Bedroom',
 };
 
 /**

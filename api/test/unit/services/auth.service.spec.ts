@@ -50,10 +50,12 @@ describe('Testing auth service', () => {
   process.env.MFA_CODE_VALID = '60000';
   process.env.TWILIO_PHONE_NUMBER = '5555555555';
   process.env.GOOGLE_API_KEY = 'GOOGLE_API_KEY';
+  process.env.SMS_PROVIDER = 'twilio';
   let authService: AuthService;
   let smsService: SmsService;
   let prisma: PrismaService;
   const sendMfaCodeMock = jest.fn();
+  const sendMfaCodeMockSMS = jest.fn();
   let emailService: EmailService;
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -76,6 +78,12 @@ describe('Testing auth service', () => {
         SendGridService,
         TranslationService,
         JurisdictionService,
+        {
+          provide: SmsService,
+          useValue: {
+            sendMfaCode: sendMfaCodeMockSMS,
+          },
+        },
         SmsService,
         MailService,
         GoogleTranslateService,
@@ -975,7 +983,6 @@ describe('Testing auth service', () => {
     await authService.updatePassword(
       {
         password: 'Abcdef12345!',
-        passwordConfirmation: 'Abcdef12345!',
         token,
       },
       response as unknown as Response,
@@ -1056,7 +1063,6 @@ describe('Testing auth service', () => {
         await authService.updatePassword(
           {
             password: 'Abcdef12345!',
-            passwordConfirmation: 'Abcdef12345!',
             token,
           },
           response as unknown as Response,

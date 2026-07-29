@@ -21,6 +21,8 @@ describe("unit type: sortUnitTypes helper", () => {
         { id: "twoBdrm", name: "twoBdrm" },
         { id: "threeBdrm", name: "threeBdrm" },
         { id: "fourBdrm", name: "fourBdrm" },
+        { id: "sixBdrm", name: "sixBdrm" },
+        { id: "sevenBdrm", name: "sevenBdrm" },
       ])
     ).toStrictEqual([
       { id: "SRO", name: "sro" },
@@ -29,14 +31,18 @@ describe("unit type: sortUnitTypes helper", () => {
       { id: "twoBdrm", name: "twoBdrm" },
       { id: "threeBdrm", name: "threeBdrm" },
       { id: "fourBdrm", name: "fourBdrm" },
+      { id: "sixBdrm", name: "sixBdrm" },
+      { id: "sevenBdrm", name: "sevenBdrm" },
     ])
     expect(
       sortUnitTypes([
+        { id: "sevenBdrm", name: "sevenBdrm" },
         { id: "fourBdrm", name: "fourBdrm" },
         { id: "studio", name: "studio" },
         { id: "oneBdrm", name: "oneBdrm" },
         { id: "twoBdrm", name: "twoBdrm" },
         { id: "threeBdrm", name: "threeBdrm" },
+        { id: "sixBdrm", name: "sixBdrm" },
         { id: "SRO", name: "sro" },
       ])
     ).toStrictEqual([
@@ -46,6 +52,8 @@ describe("unit type: sortUnitTypes helper", () => {
       { id: "twoBdrm", name: "twoBdrm" },
       { id: "threeBdrm", name: "threeBdrm" },
       { id: "fourBdrm", name: "fourBdrm" },
+      { id: "sixBdrm", name: "sixBdrm" },
+      { id: "sevenBdrm", name: "sevenBdrm" },
     ])
   })
   it("should sort complex arrays", () => {

@@ -47,7 +47,7 @@ jest.mock("../../../../src/lib/hooks", () => ({
 
 jest.mock("../../../../src/lib/listings/listing-query-builder", () => ({
   ListingQueryBuilder: jest.fn().mockImplementation(() => ({
-    addFilter: jest.fn().mockReturnThis(),
+    whereEqual: jest.fn().mockReturnThis(),
     getFilterParams: jest.fn().mockReturnValue([]),
   })),
 }))

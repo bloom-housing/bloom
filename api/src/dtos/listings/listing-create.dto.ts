@@ -7,7 +7,7 @@ import { ListingEventCreate } from './listing-event-create.dto';
 import { ListingFeaturesCreate } from './listing-feature-create.dto';
 import { ListingNeighborhoodAmenitiesCreate } from './listing-neighborhood-amenities-create.dto';
 import { ListingUpdate } from './listing-update.dto';
-import { ListingUtilitiesCreate } from './listing-utiliity-create.dto';
+import { ListingUtilitiesCreate } from './listing-utility-create.dto';
 import { LotteryDateParamValidator } from '../../utilities/lottery-date-validator';
 import { UnitCreate } from '../units/unit-create.dto';
 import { UnitGroupCreate } from '../unit-groups/unit-group-create.dto';

@@ -269,6 +269,21 @@ describe("ListingViewSeedsHelpers", () => {
       expect(result.isCommonApp).toBe(true)
     })
 
+    it("should return online application URL from Internal method with external URL", () => {
+      const methods: ApplicationMethod[] = [
+        {
+          type: ApplicationMethodsTypeEnum.Internal,
+          externalReference: "",
+        } as ApplicationMethod,
+      ]
+
+      const result = getOnlineApplicationURL(methods, "123", false, "www.externalURL.com")
+      expect(result.url).toBe(
+        "www.externalURL.com/applications/start/choose-language?listingId=123"
+      )
+      expect(result.isCommonApp).toBe(true)
+    })
+
     it("should include preview parameter when preview is true", () => {
       const methods: ApplicationMethod[] = [
         {

@@ -1,4 +1,6 @@
 {
+  "account.create.initialDisclaimer": "",
+  "account.settings.disclaimer": "Puede ponerse en contacto con BAHFA en cualquier momento para solicitar la eliminación de la información de su cuenta y de los datos asociados. Para ello, por favor escriba a %{contactEmail}.",
   "advocateAccount.agencyNotListed": "<a href='mailto:%{contactEmail}'>Comuníquese con el soporte</a> si su agencia no está en la lista",
   "application.confirmation.expiredDetailsWarning": "Si los detalles de su hogar han cambiado desde que envió su solicitud, comuníquese directamente con la propiedad. Es común que los detalles del hogar cambien con el tiempo, y la información que ya no está vigente no se usará en su contra. La capacidad de editar una solicitud después de enviarla está actualmente en desarrollo y podrá realizar cambios en una solicitud existente en una fecha posterior.",
   "advocateAccount.resendLinkSuccess": "Si hay una cuenta de defensor aprobada con ese correo electrónico, recibirá un correo electrónico con un nuevo enlace para confirmar su cuenta. Tenga en cuenta que el enlace expirará en 24 horas. Si no recibe un correo electrónico, es posible que no tenga una cuenta con ese correo electrónico y necesitaría solicitar una. Si tiene alguna pregunta mientras tanto, comuníquese con example@email.com.",
@@ -192,7 +194,6 @@
   "listings.unitTypes.studio": "Estudio",
   "listings.unitTypes.threeBdrm": "3 hab",
   "listings.unitTypes.twoBdrm": "2 hab",
-  "nav.listings": "Ver anuncios",
   "pageDescription.faq": "Encuentre respuestas a preguntas comunes sobre viviendas asequibles en Bloomington.",
   "pageTitle.bahfaNonDiscriminationStatement": "Declaración de No Discriminación de BAHFA",
   "pageTitle.getAssistance": "Centro de ayuda",

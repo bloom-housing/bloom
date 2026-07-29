@@ -60,8 +60,6 @@ export default class BooleansFormatter extends Formatter {
         })
       },
     })
-    // assets are no longer needed and should be removed https://github.com/bloom-housing/bloom/issues/3747
-    this.data.assets = []
     this.processBoolean("digitalApplication", {
       when: this.data.digitalApplicationChoice === YesNoEnum.yes,
       falseCase: () => (this.data.digitalApplicationChoice === YesNoEnum.no ? false : null),

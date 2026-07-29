@@ -740,7 +740,7 @@ describe("listing data", () => {
         expect(
           // Look only for part of the text to verify that content rendered properly
           screen.getByText(
-            /Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency./
+            /Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant performance information provided to the credit reporting agency./
           )
         ).toBeInTheDocument()
         expect(screen.getByText("Rental history")).toBeInTheDocument()

@@ -652,7 +652,7 @@ describe('Testing snapshot create service', () => {
         applicationPickUpAddressOfficeHours:
           'example applicationPickUpAddressOfficeHours',
         applicationPickUpAddressType: ApplicationAddressTypeEnum.leasingAgent,
-        assets: '[]',
+        assets: {},
         buildingSelectionCriteria: 'example buildingSelectionCriteria',
         buildingTotalUnits: 10,
         closedAt: new Date(),
@@ -1289,7 +1289,7 @@ describe('Testing snapshot create service', () => {
           applicationPickUpAddressOfficeHours:
             'example applicationPickUpAddressOfficeHours',
           applicationPickUpAddressType: ApplicationAddressTypeEnum.leasingAgent,
-          assets: '[]',
+          assets: {},
           buildingSelectionCriteria: 'example buildingSelectionCriteria',
           buildingTotalUnits: 10,
           closedAt: expect.anything(),
@@ -1410,7 +1410,7 @@ describe('Testing snapshot create service', () => {
         applicationPickUpAddressOfficeHours:
           'example applicationPickUpAddressOfficeHours',
         applicationPickUpAddressType: ApplicationAddressTypeEnum.leasingAgent,
-        assets: '[]',
+        assets: {},
         buildingSelectionCriteria: 'example buildingSelectionCriteria',
         buildingTotalUnits: 10,
         closedAt: new Date(),
@@ -2534,7 +2534,7 @@ describe('Testing snapshot create service', () => {
           applicationPickUpAddressOfficeHours:
             'example applicationPickUpAddressOfficeHours',
           applicationPickUpAddressType: ApplicationAddressTypeEnum.leasingAgent,
-          assets: '[]',
+          assets: {},
           buildingSelectionCriteria: 'example buildingSelectionCriteria',
           buildingTotalUnits: 10,
           closedAt: expect.anything(),

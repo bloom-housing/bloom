@@ -11,6 +11,8 @@ const baseConfig: Cypress.ConfigOptions<any> = {
   video: true,
   numTestsKeptInMemory: 0,
   viewportHeight: 1500,
+  // TODO: migrate off of Cypress.env() everywhere https://docs.cypress.io/app/references/migration-guide
+  allowCypressEnv: true,
   env: {
     codeCoverage: {
       url: "/api/__coverage__",

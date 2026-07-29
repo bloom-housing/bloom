@@ -24,21 +24,17 @@ export class ListingQueryBuilder {
   addFilter(
     field: string,
     comparison: EnumListingFilterParamsComparison,
-    value: string | string[]
+    value: string | string[] | boolean
   ) {
     this.filters.push(new Filter(field, comparison, value))
     return this
   }
 
-  // We use these convenience methods to keep from polluting files with references
-  // to EnumCombinedListingFilterParamsComparison, which will likely change once
-  // external listings are no longer required.
-
-  whereEqual(field: string, value: string) {
+  whereEqual(field: string, value: string | boolean) {
     return this.addFilter(field, EnumListingFilterParamsComparison["="], value)
   }
 
-  whereNotEqual(field: string, value: string) {
+  whereNotEqual(field: string, value: string | boolean) {
     return this.addFilter(field, EnumListingFilterParamsComparison["<>"], value)
   }
 
@@ -94,12 +90,12 @@ export class ListingQueryBuilder {
 class Filter {
   field: string
   comparison: EnumListingFilterParamsComparison
-  value: string | string[]
+  value: string | string[] | boolean
 
   constructor(
     field: string,
     comparison: EnumListingFilterParamsComparison,
-    value: string[] | string
+    value: string[] | string | boolean
   ) {
     this.field = field
     this.comparison = comparison
