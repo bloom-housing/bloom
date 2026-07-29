@@ -134,6 +134,10 @@ export const getHasNonReferralMethods = (listing: Listing) => {
   const nonReferralMethods = listing.applicationMethods.filter(
     (method) => method.type !== ApplicationMethodsTypeEnum.Referral
   )
+
+  if (hasMethod(nonReferralMethods, ApplicationMethodsTypeEnum.LeasingAgent)) {
+    return nonReferralMethods.length
+  }
   if (
     nonReferralMethods.length === 1 &&
     nonReferralMethods[0].type === ApplicationMethodsTypeEnum.FileDownload &&

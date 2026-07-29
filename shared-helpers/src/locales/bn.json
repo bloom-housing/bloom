@@ -885,6 +885,7 @@
   "listings.apply.howToApply": "কিভাবে আবেদন করবেন",
   "listings.apply.paperApplicationsMustBeMailed": "কাগজের আবেদনগুলি অবশ্যই ইউএস মেইল ​​দ্বারা পাঠানো উচিত এবং ব্যক্তিগতভাবে জমা দেওয়া যাবে না।",
   "listings.apply.pickUpAnApplication": "একটি আবেদন সংগ্রহ করুন",
+  "listings.apply.referToLeasingAgentContact": "আবেদন করার জন্য নিচের লিজ এজেন্ট বা প্রপার্টি ম্যানেজারের যোগাযোগ বিভাগটি দেখুন।",
   "listings.apply.sendByUsMail": "ইউএস মেইলের মাধ্যমে আবেদন পাঠান",
   "listings.apply.submitAPaperApplication": "একটি কাগজের আবেদন জমা দিন",
   "listings.apply.submitPaperDueDateNoPostMark": "আবেদনপত্র নির্ধারিত সময়সীমার মধ্যে গ্রহণ করতে হবে। যদি মার্কিন মেইলের মাধ্যমে পাঠানো হয়, তাহলে আবেদনপত্রটি %{applicationDueDate} এর মধ্যে গ্রহণ করতে হবে। হারিয়ে যাওয়া বা বিলম্বিত মেইলের জন্য %{developer} দায়ী নয়।",
