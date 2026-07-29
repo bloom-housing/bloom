@@ -95,11 +95,6 @@ export const getFlagInAllJurisdictions = (
   }
 }
 
-export const LISTING_TYPE_FEATURE_FLAGS = [
-  FeatureFlagEnum.enableNonRegulatedListings,
-  FeatureFlagEnum.enableLandUse,
-]
-
 type CreateListingFormFields = {
   jurisdiction: string
   listingType: ListingTypeEnum
@@ -166,9 +161,7 @@ export default function ListingsList() {
     true
   )
 
-  const showListingTypeColumn = LISTING_TYPE_FEATURE_FLAGS.some((flag) =>
-    doJurisdictionsHaveFeatureFlagOn(flag, undefined, true)
-  )
+  const showListingTypeColumn = showForNonRegulated || showForLandUse
 
   useEffect(() => {
     if (defaultJurisdiction) {
