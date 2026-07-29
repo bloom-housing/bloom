@@ -325,13 +325,15 @@ describe('Translation Controller Tests', () => {
       expect(es.find((r) => r.key === 'greeting').stale).toBe(false);
     });
 
-    it('lets a jurisdictional admin write its own jurisdiction but not another', async () => {
+    it('forbids a jurisdictional admin from writing translations', async () => {
+      // Writing is admin-only for now; jurisdictional-admin access is added later, gated by the
+      // enableDbDrivenContent flag. Both its own jurisdiction and another are denied.
       await request(app.getHttpServer())
         .put(enScope())
         .set('Cookie', jurisAdminCookies)
         .set(passkey)
         .send({ edits: [{ key: 'juris.ok', value: 'ok' }] })
-        .expect(200);
+        .expect(403);
 
       await request(app.getHttpServer())
         .put(`/translations/jurisdictions/${jurisdictionBId}/raw/public/en`)
