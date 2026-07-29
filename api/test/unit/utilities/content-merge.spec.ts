@@ -200,6 +200,67 @@ describe('mergeContent', () => {
     ]);
   });
 
+  it('returns the language content when there is no English row', () => {
+    const merged = mergeContent({}, { contact: { phone: '555-0100' } });
+
+    expect(merged).toEqual({ contact: { phone: '555-0100' } });
+  });
+
+  it('keeps a field present only in the language row', () => {
+    const merged = mergeContent(
+      { footer: { textSectionsHtml: ['<p>EN</p>'] } },
+      { resources: { contactCard: { email: 'help@bloom.gov' } } },
+    );
+
+    expect(merged).toEqual({
+      footer: { textSectionsHtml: ['<p>EN</p>'] },
+      resources: { contactCard: { email: 'help@bloom.gov' } },
+    });
+  });
+
+  it('merges resources by section id and card id, and tombstones a card', () => {
+    const merged = mergeContent(
+      {
+        resources: {
+          resourceSections: [
+            {
+              id: 's1',
+              sectionTitle: 'Section 1',
+              cards: [
+                { id: 'c1', title: 'C1', contentHtml: '<p>EN 1</p>' },
+                { id: 'c2', title: 'C2', contentHtml: '<p>EN 2</p>' },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        resources: {
+          resourceSections: [
+            {
+              id: 's1',
+              // sectionTitle left unset -> falls back to English
+              cards: [
+                { id: 'c1', contentHtml: '<p>ES 1</p>' },
+                { id: 'c2', _deleted: true },
+              ],
+            },
+          ],
+        },
+      },
+    );
+
+    expect(merged.resources).toEqual({
+      resourceSections: [
+        {
+          id: 's1',
+          sectionTitle: 'Section 1',
+          cards: [{ id: 'c1', title: 'C1', contentHtml: '<p>ES 1</p>' }],
+        },
+      ],
+    });
+  });
+
   it('does not pollute Object.prototype via a __proto__ key in stored content', () => {
     const merged = mergeContent(
       { contact: { phone: '555-0100' } },

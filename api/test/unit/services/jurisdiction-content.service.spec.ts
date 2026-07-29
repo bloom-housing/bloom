@@ -165,6 +165,42 @@ describe('Testing jurisdiction content service', () => {
     });
   });
 
+  describe('getMergedContentByName', () => {
+    it('resolves the jurisdiction by name and returns its merged content', async () => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: 'jurisdiction' });
+      prisma.jurisdictionContent.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          { language: LanguagesEnum.en, contact: { phone: '555-0100' } },
+        ]);
+
+      const merged = await service.getMergedContentByName(
+        'Bloomington',
+        LanguagesEnum.en,
+      );
+
+      expect(merged.contact).toEqual(
+        expect.objectContaining({ phone: '555-0100' }),
+      );
+      expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+        where: { name: 'Bloomington' },
+        select: { id: true },
+      });
+    });
+
+    it('throws a 404 for an unknown jurisdiction name', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValueOnce(null);
+      prisma.jurisdictionContent.findMany = jest.fn();
+
+      await expect(
+        service.getMergedContentByName('Nowhere', LanguagesEnum.en),
+      ).rejects.toThrow(NotFoundException);
+      expect(prisma.jurisdictionContent.findMany).not.toHaveBeenCalled();
+    });
+  });
+
   describe('getContent', () => {
     it('returns the row after a permission check', async () => {
       const jurisdictionId = randomUUID();

@@ -19,6 +19,7 @@ describe('Jurisdiction Content Controller Tests', () => {
   let jurisdictionBId: string;
   let adminCookies = '';
   let jurisAdminCookies = '';
+  let publicUserCookies = '';
 
   const passkey = { passkey: process.env.API_PASS_KEY || '' };
 
@@ -97,6 +98,21 @@ describe('Jurisdiction Content Controller Tests', () => {
         .post('/auth/login')
         .set(passkey)
         .send({ email: jurisAdmin.email, password: 'Abcdef12345!' } as Login)
+        .expect(201)
+    ).headers['set-cookie'];
+
+    // A logged-in user with no admin role, for the authorization boundary.
+    const publicUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    publicUserCookies = (
+      await request(app.getHttpServer())
+        .post('/auth/login')
+        .set(passkey)
+        .send({ email: publicUser.email, password: 'Abcdef12345!' } as Login)
         .expect(201)
     ).headers['set-cookie'];
   });
@@ -298,6 +314,150 @@ describe('Jurisdiction Content Controller Tests', () => {
         .set(passkey)
         .send({ contact: { phone: '555-0000' } })
         .expect(403);
+    });
+
+    it('forbids an anonymous request to the admin routes', async () => {
+      await request(app.getHttpServer())
+        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin`)
+        .set(passkey)
+        .expect(403);
+
+      await request(app.getHttpServer())
+        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/en`)
+        .set(passkey)
+        .send({ contact: { phone: '555-0000' } })
+        .expect(403);
+    });
+
+    it('forbids a logged-in non-admin user from the admin routes', async () => {
+      await request(app.getHttpServer())
+        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin`)
+        .set('Cookie', publicUserCookies)
+        .set(passkey)
+        .expect(403);
+    });
+
+    it('returns 204 from the admin read when that language has no row', async () => {
+      await request(app.getHttpServer())
+        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/bn`)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(204);
+    });
+
+    it('sanitizes rich-text HTML on write, stripping disallowed tags', async () => {
+      await request(app.getHttpServer())
+        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/zh`)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          footer: {
+            textSectionsHtml: ['<script>alert(1)</script><p>keep</p>'],
+          },
+          faq: {
+            categories: [
+              {
+                id: 'c1',
+                items: [
+                  {
+                    id: 'i1',
+                    question: 'Q?',
+                    answerHtml: '<h1>drop</h1><strong>keep</strong>',
+                  },
+                ],
+              },
+            ],
+          },
+        })
+        .expect(200);
+
+      const res = await request(app.getHttpServer())
+        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/zh`)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+
+      expect(res.body.footer.textSectionsHtml[0]).toEqual('<p>keep</p>');
+      expect(res.body.faq.categories[0].items[0].answerHtml).toEqual(
+        'drop<strong>keep</strong>',
+      );
+    });
+
+    it('clears fields omitted from a PUT (full-row replace)', async () => {
+      await request(app.getHttpServer())
+        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ar`)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          footer: { links: [{ id: 'l1', text: 'Home', href: '/' }] },
+          contact: { phone: '555-0100' },
+        })
+        .expect(200);
+
+      const created = (
+        await request(app.getHttpServer())
+          .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ar`)
+          .set('Cookie', adminCookies)
+          .set(passkey)
+          .expect(200)
+      ).body;
+      expect(created.footer).not.toBeNull();
+
+      await request(app.getHttpServer())
+        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ar`)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          lastUpdatedAt: created.updatedAt,
+          contact: { phone: '555-0199' },
+        })
+        .expect(200);
+
+      const res = await request(app.getHttpServer())
+        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ar`)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(res.body.contact.phone).toEqual('555-0199');
+      // footer was omitted from the second PUT, so it is cleared.
+      expect(res.body.footer).toBeNull();
+    });
+
+    it('rejects other malformed payloads (missing id, wrong types)', async () => {
+      // A FAQ item missing its required id.
+      await request(app.getHttpServer())
+        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ko`)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          faq: { categories: [{ id: 'c1', items: [{ question: 'no id' }] }] },
+        })
+        .expect(400);
+
+      // A non-string question.
+      await request(app.getHttpServer())
+        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ko`)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          faq: {
+            categories: [
+              {
+                id: 'c1',
+                items: [{ id: 'i1', question: 42, answerHtml: '<p>A</p>' }],
+              },
+            ],
+          },
+        })
+        .expect(400);
+
+      // A non-Date lastUpdatedAt.
+      await request(app.getHttpServer())
+        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ko`)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ lastUpdatedAt: 'not-a-date', contact: { phone: '555' } })
+        .expect(400);
     });
   });
 });
