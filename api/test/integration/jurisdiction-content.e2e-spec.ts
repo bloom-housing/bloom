@@ -252,6 +252,38 @@ describe('Jurisdiction Content Controller Tests', () => {
         .expect(400);
     });
 
+    it('rejects an unsafe URL scheme in a link href', async () => {
+      await request(app.getHttpServer())
+        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ko`)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          footer: {
+            links: [
+              {
+                id: 'l1',
+                text: 'Evil',
+                href: 'javascript:alert(document.cookie)',
+              },
+            ],
+          },
+        })
+        .expect(400);
+    });
+
+    it('rejects a content list that exceeds the size cap', async () => {
+      const categories = Array.from({ length: 257 }, (_, i) => ({
+        id: `c${i}`,
+        title: 'Category',
+      }));
+      await request(app.getHttpServer())
+        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ko`)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ faq: { categories } })
+        .expect(400);
+    });
+
     it('lets a jurisdictional admin write its own jurisdiction but not another', async () => {
       await request(app.getHttpServer())
         .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/tl`)

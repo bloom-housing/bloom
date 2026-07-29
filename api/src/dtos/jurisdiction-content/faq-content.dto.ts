@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import {
+  ArrayMaxSize,
   IsArray,
   IsBoolean,
   IsDefined,
@@ -53,6 +54,7 @@ export class FaqCategoryDTO {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => FaqItemDTO)
   @ApiPropertyOptional({ type: FaqItemDTO, isArray: true })
@@ -69,6 +71,7 @@ export class FaqContentDTO {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => FaqCategoryDTO)
   @ApiPropertyOptional({ type: FaqCategoryDTO, isArray: true })

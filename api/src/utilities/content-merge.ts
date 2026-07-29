@@ -4,7 +4,7 @@
 // wins, and anything the language row leaves unset falls back to the English value. Object fields
 // recurse. Lists of objects with a stable `id` merge by identity (mergeListById) so partial
 // item-level translation, reorders, and explicit deletions (tombstones) work; lists of primitives
-// (e.g. footer.textSectionsHtml) stay positional and are replaced wholesale by the language value.
+// (e.g. footer.textSectionsHtml) stay positional and are fully replaced by the language value.
 
 type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
 
@@ -97,7 +97,7 @@ function mergeValue(base: unknown, override: unknown): unknown {
     );
   }
 
-  // Positional lists (primitives, or objects without ids) are replaced wholesale by the override.
+  // Positional lists (primitives, or objects without ids) are fully replaced by the override.
   if (Array.isArray(override) || Array.isArray(base)) {
     return override;
   }

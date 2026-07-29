@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import {
+  ArrayMaxSize,
   IsArray,
   IsBoolean,
   IsDefined,
@@ -10,6 +11,7 @@ import {
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { SanitizeHtml } from '../../decorators/sanitize-html.decorator';
+import { IsSafeUrl } from '../../decorators/is-safe-url.decorator';
 
 export class ContactCardDTO {
   @Expose()
@@ -46,6 +48,7 @@ export class ResourceCardDTO {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsSafeUrl({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   href?: string;
 
@@ -84,6 +87,7 @@ export class ResourceSectionDTO {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ResourceCardDTO)
   @ApiPropertyOptional({ type: ResourceCardDTO, isArray: true })
@@ -107,6 +111,7 @@ export class ResourcesContentDTO {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ResourceSectionDTO)
   @ApiPropertyOptional({ type: ResourceSectionDTO, isArray: true })
