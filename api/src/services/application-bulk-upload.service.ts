@@ -108,7 +108,7 @@ export class ApplicationBulkUploadService {
       (key) => APPLICATION_STATUS_MAP[key] === readable,
     );
 
-  private getBulkUploadHeaders(timeZone?: string): CsvHeader[] {
+  getBulkUploadHeaders(timeZone?: string): CsvHeader[] {
     const headers: CsvHeader[] = [
       {
         path: 'id',
@@ -395,7 +395,7 @@ export class ApplicationBulkUploadService {
     }
   }
 
-  private validateHasDataRows(rows: CsvRow[]): void {
+  validateHasDataRows(rows: CsvRow[]): void {
     if (rows.length === 0) {
       throw new BadRequestException(
         'Upload Failed: CSV contains no application records',
@@ -408,7 +408,7 @@ export class ApplicationBulkUploadService {
    * Kept separate from the per-row checks so the DB is only hit once,
    * regardless of the number of rows.
    */
-  private async fetchDbApplications(
+  async fetchDbApplications(
     rows: CsvRow[],
     listingId: string,
   ): Promise<ApplicationContextFields[]> {
@@ -424,7 +424,7 @@ export class ApplicationBulkUploadService {
     });
   }
 
-  private validateNoDuplicateId(rows: CsvRow[]): void {
+  validateNoDuplicateId(rows: CsvRow[]): void {
     const seenIds = new Set<string>();
     rows.forEach((row, index) => {
       const id = row[bulkUploadHeaderNames.applicationId];
@@ -439,7 +439,7 @@ export class ApplicationBulkUploadService {
     });
   }
 
-  private validateApplicationId(
+  validateApplicationId(
     row: CsvRow,
     foundIds: Set<string>,
     index: number,
@@ -454,7 +454,7 @@ export class ApplicationBulkUploadService {
     }
   }
 
-  private validateContextFields(
+  validateContextFields(
     row: CsvRow,
     dbMap: Map<string, ApplicationContextFields>,
     index: number,
@@ -488,7 +488,7 @@ export class ApplicationBulkUploadService {
     }
   }
 
-  private validateStatus(row: CsvRow, index: number): void {
+  validateStatus(row: CsvRow, index: number): void {
     if (
       this.convertReadableToApplicationStatus(
         row[bulkUploadHeaderNames.applicationStatus],
@@ -502,7 +502,7 @@ export class ApplicationBulkUploadService {
     }
   }
 
-  private validateDeclineReason(row: CsvRow, index: number): void {
+  validateDeclineReason(row: CsvRow, index: number): void {
     const reason = row[bulkUploadHeaderNames.applicationDeclineReason];
     if (
       reason !== '' &&
@@ -516,7 +516,7 @@ export class ApplicationBulkUploadService {
     }
   }
 
-  private validateDeclineConsistency(row: CsvRow, index: number): void {
+  validateDeclineConsistency(row: CsvRow, index: number): void {
     const status = row[bulkUploadHeaderNames.applicationStatus];
     const reason = row[bulkUploadHeaderNames.applicationDeclineReason];
 
@@ -537,7 +537,7 @@ export class ApplicationBulkUploadService {
     }
   }
 
-  private validateAdditionalDetails(row: CsvRow, index: number): void {
+  validateAdditionalDetails(row: CsvRow, index: number): void {
     const reason = row[bulkUploadHeaderNames.applicationDeclineReason];
     const details =
       row[bulkUploadHeaderNames.applicationDeclineReasonAdditionalDetails];
@@ -559,7 +559,7 @@ export class ApplicationBulkUploadService {
     }
   }
 
-  private validateWaitlistConsistency(row: CsvRow, index: number): void {
+  validateWaitlistConsistency(row: CsvRow, index: number): void {
     const status = row[bulkUploadHeaderNames.applicationStatus];
 
     const hasWaitlistPosition =
@@ -575,7 +575,7 @@ export class ApplicationBulkUploadService {
     }
   }
 
-  private validateNumericFields(row: CsvRow, index: number): void {
+  validateNumericFields(row: CsvRow, index: number): void {
     for (const col of NUMERIC_COLUMNS) {
       const raw = row[col].trim();
       if (raw === '') continue;
