@@ -163,6 +163,43 @@ describe('mergeContent', () => {
     expect(fallback.footer).toEqual({ textSectionsHtml: ['<p>EN 1</p>'] });
   });
 
+  it('preserves an id-less item in a mixed list rather than dropping it', () => {
+    // Only reachable via a malformed/hand-edited row; degrade gracefully by keeping the item.
+    const merged = mergeListById(
+      [{ id: 'a', text: 'EN A' }, { text: 'legacy, no id' }],
+      [{ id: 'a', text: 'ES A' }],
+    );
+
+    expect(merged).toEqual([
+      { id: 'a', text: 'ES A' },
+      { text: 'legacy, no id' },
+    ]);
+  });
+
+  it('emits a duplicated English id only once', () => {
+    const merged = mergeListById(
+      [
+        { id: 'a', text: 'EN A' },
+        { id: 'a', text: 'EN A dup' },
+      ],
+      [{ id: 'a', text: 'ES A' }],
+    );
+
+    expect(merged).toEqual([{ id: 'a', text: 'ES A' }]);
+  });
+
+  it('appends an id-less language item after the English items', () => {
+    const merged = mergeListById(
+      [{ id: 'a', text: 'EN A' }],
+      [{ text: 'ES extra, no id' }],
+    );
+
+    expect(merged).toEqual([
+      { id: 'a', text: 'EN A' },
+      { text: 'ES extra, no id' },
+    ]);
+  });
+
   it('does not pollute Object.prototype via a __proto__ key in stored content', () => {
     const merged = mergeContent(
       { contact: { phone: '555-0100' } },

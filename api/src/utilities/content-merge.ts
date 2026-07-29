@@ -30,53 +30,68 @@ const withoutTombstone = (item: Record<string, unknown>) => {
   return rest;
 };
 
+const hasId = (item: IdItem): boolean => isPlainObject(item) && item.id != null;
+
 // Correlates two lists by item id: English items keep their order, a matching language item merges
 // over the English item, a tombstone (`_deleted`) drops the id, and language-only items append after
-// the English-derived items.
+// the English-derived items. A valid stored item always carries an id (the DTOs require it), so the
+// id-less cases below only arise from a hand-edited or malformed row; they are preserved (not
+// dropped) so a bad row degrades gracefully rather than losing content silently.
 export function mergeListById(
   englishItems: IdItem[],
   languageItems: IdItem[],
 ): Record<string, unknown>[] {
   const overridesById = new Map<unknown, IdItem>();
   for (const item of languageItems) {
-    if (isPlainObject(item) && 'id' in item) {
+    if (hasId(item)) {
       overridesById.set(item.id, item);
     }
   }
 
   const consumed = new Set<unknown>();
+  const emitted = new Set<unknown>();
   const merged: Record<string, unknown>[] = [];
 
+  // Emits an item once (a repeated id is not duplicated) and never emits a tombstone.
+  const emit = (item: IdItem) => {
+    if (!isPlainObject(item) || item._deleted) {
+      return;
+    }
+    if (item.id != null) {
+      if (emitted.has(item.id)) {
+        return;
+      }
+      emitted.add(item.id);
+    }
+    merged.push(withoutTombstone(item));
+  };
+
   for (const englishItem of englishItems) {
-    if (!isPlainObject(englishItem) || !('id' in englishItem)) {
+    if (!isPlainObject(englishItem)) {
       continue;
     }
-    const override = overridesById.get(englishItem.id);
+    const override = hasId(englishItem)
+      ? overridesById.get(englishItem.id)
+      : undefined;
     if (override) {
       consumed.add(englishItem.id);
       if (override._deleted) {
         continue;
       }
-      merged.push(
-        withoutTombstone(
-          mergeValue(englishItem, override) as Record<string, unknown>,
-        ),
-      );
+      emit(mergeValue(englishItem, override) as IdItem);
     } else {
-      merged.push(withoutTombstone(englishItem));
+      // No override, an id-less English item, or an id with no language match: keep as-is.
+      emit(englishItem);
     }
   }
 
-  // Items added only in the language row (ids absent from English) append after the English items;
-  // a tombstone for an id English never had is a no-op.
+  // Language items not consumed above append after the English-derived items: ids absent from
+  // English, plus any id-less additions. A tombstone for an id English never had is a no-op.
   for (const item of languageItems) {
-    if (!isPlainObject(item) || !('id' in item) || consumed.has(item.id)) {
+    if (isPlainObject(item) && item.id != null && consumed.has(item.id)) {
       continue;
     }
-    if (item._deleted) {
-      continue;
-    }
-    merged.push(withoutTombstone(item));
+    emit(item);
   }
 
   return merged;

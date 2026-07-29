@@ -51,8 +51,20 @@ export class JurisdictionContentService {
       return null;
     }
 
-    const contentFor = (lang: LanguagesEnum): MergeableContent =>
-      (rows.find((row) => row.language === lang) as MergeableContent) ?? {};
+    // Return only the content fields for a language row (not `language`), so the merge folds the
+    // documents and nothing else.
+    const contentFor = (lang: LanguagesEnum): MergeableContent => {
+      const match = rows.find((row) => row.language === lang);
+      return match
+        ? ({
+            footer: match.footer,
+            faq: match.faq,
+            resources: match.resources,
+            disclaimers: match.disclaimers,
+            contact: match.contact,
+          } as MergeableContent)
+        : {};
+    };
 
     const merged = mergeContent(
       contentFor(LanguagesEnum.en),
@@ -148,6 +160,11 @@ export class JurisdictionContentService {
     }
 
     const row = await this.prisma.jurisdictionContent.findFirst({ where });
+    if (!row) {
+      // The row was written just above but is gone now: a concurrent delete of the row or its
+      // jurisdiction. Report a conflict rather than returning an empty body.
+      throw new ConflictException({ message: 'jurisdictionContentConflict' });
+    }
     return mapTo(JurisdictionContent, row);
   }
 

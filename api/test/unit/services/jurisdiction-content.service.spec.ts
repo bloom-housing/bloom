@@ -293,6 +293,26 @@ describe('Testing jurisdiction content service', () => {
         ),
       ).rejects.toThrow(ConflictException);
     });
+
+    it('throws a 409 when the row is deleted between the write and the re-read', async () => {
+      const lastUpdatedAt = new Date('2026-01-01');
+      prisma.jurisdictionContent.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+      // The post-write re-read finds nothing: a concurrent delete landed in between.
+      prisma.jurisdictionContent.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce(null);
+
+      await expect(
+        service.updateContent(
+          randomUUID(),
+          LanguagesEnum.es,
+          { lastUpdatedAt, contact: { phone: '555-0000' } },
+          adminUser,
+        ),
+      ).rejects.toThrow(ConflictException);
+    });
   });
 
   describe('listContent', () => {
