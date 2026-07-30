@@ -983,7 +983,6 @@ describe('Testing auth service', () => {
     await authService.updatePassword(
       {
         password: 'Abcdef12345!',
-        passwordConfirmation: 'Abcdef12345!',
         token,
       },
       response as unknown as Response,
@@ -1064,7 +1063,6 @@ describe('Testing auth service', () => {
         await authService.updatePassword(
           {
             password: 'Abcdef12345!',
-            passwordConfirmation: 'Abcdef12345!',
             token,
           },
           response as unknown as Response,

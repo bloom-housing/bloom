@@ -5,6 +5,5 @@
   "middleName": "Admin",
   "lastName": "MFA",
   "dob": "1980-01-01",
-  "password": "Abcdef12345!",
-  "passwordConfirmation": "Abcdef12345!"
+  "password": "Abcdef12345!"
 }

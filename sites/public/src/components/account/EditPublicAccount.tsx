@@ -1,9 +1,15 @@
-import React, { useContext, useEffect, useState, useRef } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { t } from "@bloom-housing/ui-components"
-import { LoadingState } from "@bloom-housing/ui-seeds"
+import { Card, LoadingState } from "@bloom-housing/ui-seeds"
 import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
+import {
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  BloomCard,
+  tIfExists,
+} from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import {
   accountNameFields,
@@ -17,6 +23,7 @@ import {
   createPasswordSubmitHandler,
   AlertMessage,
 } from "./AccountFieldHelpers"
+import styles from "./EditAccountView.module.scss"
 
 export const EditPublicAccount = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -48,7 +55,6 @@ export const EditPublicAccount = () => {
     register: pwdRegister,
     formState: { errors: pwdErrors },
     handleSubmit: pwdHandleSubmit,
-    watch: pwdWatch,
   } = useForm()
 
   const { profile, userService } = useContext(AuthContext)
@@ -64,8 +70,6 @@ export const EditPublicAccount = () => {
   const [loading, setLoading] = useState(true)
 
   const MIN_PASSWORD_LENGTH = 12
-  const password = useRef({})
-  password.current = pwdWatch("password", "")
 
   useEffect(() => {
     if (profile) {
@@ -185,8 +189,15 @@ export const EditPublicAccount = () => {
               "authentication.createAccount.password"
             )}`}
           >
-            {passwordFields(pwdErrors, pwdRegister, password, MIN_PASSWORD_LENGTH)}
+            {passwordFields(pwdErrors, pwdRegister, MIN_PASSWORD_LENGTH)}
           </AccountSection>
+          {tIfExists("account.settings.disclaimer") && (
+            <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
+              <p className={styles["account-settings-disclaimer"]}>
+                {t("account.settings.disclaimer", { contactEmail: t("resources.contactEmail") })}
+              </p>
+            </Card.Section>
+          )}
         </LoadingState>
       </div>
     </BloomCard>

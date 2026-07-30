@@ -28,6 +28,11 @@ const DetailListingIntro = () => {
     listing.jurisdictions.id
   )
 
+  const enableLandUse = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLandUse,
+    listing.jurisdictions.id
+  )
+
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableProperties,
     listing.jurisdictions.id
@@ -36,13 +41,19 @@ const DetailListingIntro = () => {
   let developerFieldTitle = t("listings.developer")
   if (enableHousingDeveloperOwner) {
     developerFieldTitle = t("listings.housingDeveloperOwner")
-  } else if (
-    listing.listingType === EnumListingListingType.regulated ||
-    !enableNonRegulatedListings
-  ) {
-    developerFieldTitle = t("listings.developer")
-  } else {
+  } else if (listing.listingType === EnumListingListingType.nonRegulated) {
     developerFieldTitle = t("listings.propertyManager")
+  } else {
+    developerFieldTitle = t("listings.developer")
+  }
+
+  const getListingTypeLabel = () => {
+    if (listing.listingType === EnumListingListingType.landUse) {
+      return t("listings.landUse")
+    } else if (listing.listingType === EnumListingListingType.nonRegulated) {
+      return t("listings.nonRegulated")
+    }
+    return t("listings.regulated")
   }
 
   return (
@@ -56,13 +67,11 @@ const DetailListingIntro = () => {
           </Grid.Cell>
         </Grid.Row>
       )}
-      {enableNonRegulatedListings && (
+      {(enableNonRegulatedListings || enableLandUse) && (
         <Grid.Row>
           <Grid.Cell>
             <FieldValue id="listingType" label={t("listings.listingTypeTitle")}>
-              {listing.listingType === EnumListingListingType.regulated
-                ? t("listings.regulated")
-                : t("listings.nonRegulated")}
+              {getListingTypeLabel()}
             </FieldValue>
           </Grid.Cell>
         </Grid.Row>
