@@ -300,13 +300,15 @@ describe('Jurisdiction Content Controller Tests', () => {
         .expect(400);
     });
 
-    it('lets a jurisdictional admin write its own jurisdiction but not another', async () => {
+    it('forbids a jurisdictional admin from writing content', async () => {
+      // Writing is admin-only for now; jurisdictional-admin access is added later, gated by the
+      // enableDbDrivenContent flag. Both its own jurisdiction and another are denied.
       await request(app.getHttpServer())
         .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/tl`)
         .set('Cookie', jurisAdminCookies)
         .set(passkey)
         .send({ contact: { phone: '555-0000' } })
-        .expect(200);
+        .expect(403);
 
       await request(app.getHttpServer())
         .put(`/jurisdictionContent/jurisdictions/${jurisdictionBId}/admin/tl`)
