@@ -891,19 +891,22 @@ const translations = (
         applicationBulk: {
           viewApplications: '신청서 보기',
           success: {
-            subject: '%{listingName}에 대한 일괄 신청서 업데이트가 완료되었습니다',
+            subject:
+              '%{listingName}에 대한 일괄 신청서 업데이트가 완료되었습니다',
             message: '일괄 업데이트가 성공적으로 처리되었습니다.',
             count: '%{updateCount}개의 신청서 기록이 업데이트되었습니다.',
           },
           successWithError: {
-            subject: '%{listingName}에 대한 일괄 신청서 업데이트가 완료되었습니다',
+            subject:
+              '%{listingName}에 대한 일괄 신청서 업데이트가 완료되었습니다',
             message:
               '일괄 업데이트가 성공적으로 처리되었습니다. 그러나 %{failedEmailsCount}개의 신청자 알림 이메일을 보낼 수 없었습니다.',
             errors:
               '%{updateCount}개의 신청서 기록이 업데이트되었습니다. 알림 문제 해결을 위한 다음 단계에 대해서는 기술팀에 문의하세요.',
           },
           failure: {
-            subject: '%{listingName}에 대한 일괄 신청서 업데이트를 완료할 수 없습니다',
+            subject:
+              '%{listingName}에 대한 일괄 신청서 업데이트를 완료할 수 없습니다',
             message: '일괄 업데이트 중 오류가 발생하여 완료할 수 없었습니다.',
             help: '실패한 행 이전의 기록은 업데이트되었습니다. 파일을 다시 업로드해도 문제가 해결되지 않으면 지원팀에 문의하세요.',
           },
@@ -1156,8 +1159,7 @@ const translations = (
           failure: {
             subject:
               'به‌روزرسانی گروهی درخواست شما برای %{listingName} قابل تکمیل نبود',
-            message:
-              'به‌روزرسانی گروهی شما با خطا مواجه شد و قابل تکمیل نبود.',
+            message: 'به‌روزرسانی گروهی شما با خطا مواجه شد و قابل تکمیل نبود.',
             help: 'سوابق پیش از ردیف ناموفق به‌روزرسانی شده‌اند. اگر بارگذاری مجدد فایل شما مشکل را برطرف نکرد، لطفاً با تیم پشتیبانی تماس بگیرید.',
           },
         },
