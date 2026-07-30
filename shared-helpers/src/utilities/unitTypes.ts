@@ -33,6 +33,22 @@ export const UnitGroupTypeSort: string[] = [
   UnitTypeEnum.fourBdrm,
 ]
 
+// sevenBdrm is intentionally absent: 7+ bedroom units are an unusual case and
+// stay editable rather than being prefilled.
+export const landUseMinOccupancy: Partial<Record<UnitTypeEnum, number>> = {
+  [UnitTypeEnum.SRO]: 1,
+  [UnitTypeEnum.studio]: 1,
+  [UnitTypeEnum.oneBdrm]: 1,
+  [UnitTypeEnum.twoBdrm]: 2,
+  [UnitTypeEnum.threeBdrm]: 4,
+  [UnitTypeEnum.fourBdrm]: 6,
+  [UnitTypeEnum.fiveBdrm]: 8,
+  [UnitTypeEnum.sixBdrm]: 10,
+}
+
+export const getLandUseMinOccupancy = (unitTypeName?: string): number | undefined =>
+  unitTypeName ? landUseMinOccupancy[unitTypeName as UnitTypeEnum] : undefined
+
 export const sortUnitTypes = (units: UnitType[] | GetUnitTypeNamesReturn[]) => {
   if (!units) return []
 
