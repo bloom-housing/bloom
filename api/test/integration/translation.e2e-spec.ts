@@ -42,6 +42,13 @@ describe('Translation Controller Tests', () => {
     jurisdictionId = jurisdiction.id;
     jurisdictionName = jurisdiction.name;
 
+    // Clear the global (null-jurisdiction) fixture a prior local run may have left. Its
+    // NULLS NOT DISTINCT unique index collides on re-run; the jurisdiction-scoped rows below use a
+    // fresh jurisdiction each run and do not.
+    await prisma.translationStrings.deleteMany({
+      where: { jurisdictionId: null, key: 'partners.brand' },
+    });
+
     await prisma.translationStrings.createMany({
       data: [
         // Public overrides for this jurisdiction (English default + Spanish).
