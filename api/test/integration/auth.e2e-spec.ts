@@ -27,6 +27,7 @@ describe('Auth Controller Tests', () => {
   beforeAll(async () => {
     process.env.TWILIO_ACCOUNT_SID = 'AC.SID';
     process.env.TWILIO_AUTH_TOKEN = 'TOKEN';
+    process.env.SMS_PROVIDER = 'twilio';
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -252,7 +253,6 @@ describe('Auth Controller Tests', () => {
       .send({
         email: storedUser.email,
         password: 'Abcdef12345!',
-        passwordConfirmation: 'Abcdef12345!',
         token,
       } as UpdatePassword)
       .expect(200);

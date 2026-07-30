@@ -142,7 +142,7 @@ const ApplicationChooseLanguage = () => {
     }
   }, [listing, router, toastyRef])
 
-  const imageUrl = listing?.assets
+  const imageUrl = listing?.listingImages
     ? imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
     : ""
 

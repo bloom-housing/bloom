@@ -222,6 +222,7 @@ const lotteryReleasedMock = jest.fn();
 const lotteryPublishedAdminMock = jest.fn();
 const lotteryPublishedApplicantMock = jest.fn();
 const listingPublishNotificationMock = jest.fn();
+const listingPublishNotificationViaGovDeliveryMock = jest.fn();
 
 const canOrThrowMock = jest.fn();
 
@@ -291,6 +292,8 @@ describe('Testing listing service', () => {
             lotteryPublishedAdmin: lotteryPublishedAdminMock,
             lotteryPublishedApplicant: lotteryPublishedApplicantMock,
             listingPublishNotification: listingPublishNotificationMock,
+            listingPublishNotificationViaGovDelivery:
+              listingPublishNotificationViaGovDeliveryMock,
           },
         },
         {
@@ -1239,12 +1242,12 @@ describe('Testing listing service', () => {
       expect(res.items[0].unitsSummarized).toEqual({
         byUnitTypeAndRent: [
           {
-            areaRange: { min: 0, max: 7 },
-            minIncomeRange: { min: '$0', max: '$7' },
-            occupancyRange: { min: 0, max: 7 },
-            rentRange: { min: '$0', max: '$7' },
+            areaRange: { min: 0, max: 0 },
+            minIncomeRange: { min: '$0', max: '$0' },
+            occupancyRange: { min: 0, max: 0 },
+            rentRange: { min: '$0', max: '$0' },
             rentAsPercentIncomeRange: { min: 0, max: 0 },
-            floorRange: { min: 0, max: 7 },
+            floorRange: { min: 0, max: 0 },
             unitTypes: {
               id: 'unitType 0',
               createdAt: date,
@@ -1252,15 +1255,15 @@ describe('Testing listing service', () => {
               name: 'SRO',
               numBedrooms: 0,
             },
-            totalAvailable: 2,
+            totalAvailable: 1,
           },
           {
-            areaRange: { min: 1, max: 8 },
-            minIncomeRange: { min: '$1', max: '$8' },
-            occupancyRange: { min: 1, max: 8 },
-            rentRange: { min: '$1', max: '$8' },
+            areaRange: { min: 1, max: 1 },
+            minIncomeRange: { min: '$1', max: '$1' },
+            occupancyRange: { min: 1, max: 1 },
+            rentRange: { min: '$1', max: '$1' },
             rentAsPercentIncomeRange: { min: 1, max: 1 },
-            floorRange: { min: 1, max: 8 },
+            floorRange: { min: 1, max: 1 },
             unitTypes: {
               id: 'unitType 1',
               createdAt: date,
@@ -1268,7 +1271,7 @@ describe('Testing listing service', () => {
               name: 'studio',
               numBedrooms: 1,
             },
-            totalAvailable: 2,
+            totalAvailable: 1,
           },
           {
             areaRange: { min: 2, max: 2 },
@@ -1347,6 +1350,38 @@ describe('Testing listing service', () => {
               updatedAt: date,
               name: 'fiveBdrm',
               numBedrooms: 6,
+            },
+            totalAvailable: 1,
+          },
+          {
+            areaRange: { min: 7, max: 7 },
+            minIncomeRange: { min: '$7', max: '$7' },
+            occupancyRange: { min: 7, max: 7 },
+            rentRange: { min: '$7', max: '$7' },
+            rentAsPercentIncomeRange: { min: 7, max: 7 },
+            floorRange: { min: 7, max: 7 },
+            unitTypes: {
+              id: 'unitType 7',
+              createdAt: date,
+              updatedAt: date,
+              name: 'sixBdrm',
+              numBedrooms: 7,
+            },
+            totalAvailable: 1,
+          },
+          {
+            areaRange: { min: 8, max: 8 },
+            minIncomeRange: { min: '$8', max: '$8' },
+            occupancyRange: { min: 8, max: 8 },
+            rentRange: { min: '$8', max: '$8' },
+            rentAsPercentIncomeRange: { min: 8, max: 8 },
+            floorRange: { min: 8, max: 8 },
+            unitTypes: {
+              id: 'unitType 8',
+              createdAt: date,
+              updatedAt: date,
+              name: 'sevenBdrm',
+              numBedrooms: 8,
             },
             totalAvailable: 1,
           },
@@ -3237,13 +3272,13 @@ describe('Testing listing service', () => {
               minIncomeRange: { min: '$7', max: '$7' },
               occupancyRange: { min: 7, max: 7 },
               rentRange: { min: '$7', max: '$7' },
-              rentAsPercentIncomeRange: { min: 0, max: 0 },
+              rentAsPercentIncomeRange: { min: 7, max: 7 },
               floorRange: { min: 7, max: 7 },
               unitTypes: {
                 id: 'unitType 7',
                 createdAt: date,
                 updatedAt: date,
-                name: 'SRO',
+                name: 'sixBdrm',
                 numBedrooms: 7,
               },
               totalAvailable: 1,
@@ -3258,13 +3293,13 @@ describe('Testing listing service', () => {
               minIncomeRange: { min: '$8', max: '$8' },
               occupancyRange: { min: 8, max: 8 },
               rentRange: { min: '$8', max: '$8' },
-              rentAsPercentIncomeRange: { min: 1, max: 1 },
+              rentAsPercentIncomeRange: { min: 8, max: 8 },
               floorRange: { min: 8, max: 8 },
               unitTypes: {
                 id: 'unitType 8',
                 createdAt: date,
                 updatedAt: date,
-                name: 'studio',
+                name: 'sevenBdrm',
                 numBedrooms: 8,
               },
               totalAvailable: 1,
@@ -3279,13 +3314,13 @@ describe('Testing listing service', () => {
               minIncomeRange: { min: '$9', max: '$9' },
               occupancyRange: { min: 9, max: 9 },
               rentRange: { min: '$9', max: '$9' },
-              rentAsPercentIncomeRange: { min: 2, max: 2 },
+              rentAsPercentIncomeRange: { min: 0, max: 0 },
               floorRange: { min: 9, max: 9 },
               unitTypes: {
                 id: 'unitType 9',
                 createdAt: date,
                 updatedAt: date,
-                name: 'oneBdrm',
+                name: 'SRO',
                 numBedrooms: 9,
               },
               totalAvailable: 1,
@@ -3346,21 +3381,21 @@ describe('Testing listing service', () => {
         {
           createdAt: date,
           id: 'unitType 7',
-          name: 'SRO',
+          name: 'sixBdrm',
           numBedrooms: 7,
           updatedAt: date,
         },
         {
           createdAt: date,
           id: 'unitType 8',
-          name: 'studio',
+          name: 'sevenBdrm',
           numBedrooms: 8,
           updatedAt: date,
         },
         {
           createdAt: date,
           id: 'unitType 9',
-          name: 'oneBdrm',
+          name: 'SRO',
           numBedrooms: 9,
           updatedAt: date,
         },
@@ -7288,6 +7323,73 @@ describe('Testing listing service', () => {
         );
         jest.useRealTimers();
       });
+    });
+
+    it('should call listingPublishNotificationViaGovDelivery when enableListingOpportunity flag is on', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        publicUrl: 'public.housing.gov',
+        featureFlags: [
+          { name: FeatureFlagEnum.enableListingOpportunity, active: true },
+        ],
+        listingApprovalPermissions: [],
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.pending,
+        jurisdictionId: 'jurisdiction-id',
+        listingMultiselectQuestions: [],
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.active,
+        listingMultiselectQuestions: [],
+        units: [],
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'snapshot-id' });
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        {
+          id: 'listing-id',
+          name: 'listing name',
+          status: ListingsStatusEnum.active,
+          listingMultiselectQuestions: [],
+          units: [],
+        },
+      ]);
+      jest
+        .spyOn(service, 'getUserEmailInfo')
+        .mockResolvedValueOnce({ emails: ['partner@email.com'] });
+      jest
+        .spyOn(service, 'sendListingPublishNotification')
+        .mockResolvedValueOnce(undefined);
+
+      await service.update(
+        {
+          id: 'listing-id',
+          name: 'listing name',
+          depositMin: '5',
+          assets: [],
+          jurisdictions: { id: 'jurisdiction-id' },
+          status: ListingsStatusEnum.active,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+          lastUpdatedByUser: user,
+        } as ListingUpdate,
+        user,
+      );
+
+      expect(listingPublishNotificationViaGovDeliveryMock).toHaveBeenCalledWith(
+        { id: 'jurisdiction-id' },
+        expect.objectContaining({ id: 'listing-id' }),
+        [],
+        'standard',
+      );
     });
   });
 

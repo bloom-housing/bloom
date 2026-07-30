@@ -19,6 +19,12 @@ import { ListingService } from './listing.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { convertApplicationDeclineReasonToReadable } from '../utilities/application-export-helpers';
+import { ApplicationBulkUrl } from '../dtos/applications/application-bulk-url.dto';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
+import { ApplicationBulkPresignedUrl } from '../dtos/applications/application-bulk-presigned-url.dto';
+import { S3Service } from './s3.service';
 
 const NUMBER_TO_PAGINATE_BY = 500;
 
@@ -30,6 +36,7 @@ export class ApplicationBulkUploadService {
     private prisma: PrismaService,
     private listingService: ListingService,
     private permissionService: PermissionService,
+    private s3Service: S3Service,
   ) {}
 
   private formatApplicationStatus(statusEnum: ApplicationStatusEnum): string {
@@ -293,6 +300,71 @@ export class ApplicationBulkUploadService {
       }
     });
     return stringData;
+  }
+
+  // TODO Yazeed - Integrate the uploadUrl method with S3 presigned URL generation logic
+  async uploadUrl(
+    dto: ApplicationBulkUrl,
+  ): Promise<ApplicationBulkPresignedUrl> {
+    const { userId, listingId } = dto;
+
+    const listingData = await this.prisma.listings.findUnique({
+      select: {
+        // id: true,
+        jurisdictionId: true,
+        jurisdictions: {
+          select: {
+            featureFlags: true,
+          },
+        },
+      },
+      where: {
+        id: listingId,
+      },
+    });
+
+    if (!listingData) {
+      throw new NotFoundException(
+        `Listing with id: ${listingId} can not be found`,
+      );
+    }
+
+    const requestingUser = await this.prisma.userAccounts.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+
+    await this.permissionService.canOrThrow(
+      mapTo(User, requestingUser),
+      'listing',
+      permissionActions.update,
+      {
+        id: listingId,
+        jurisdictionId: listingData.jurisdictionId,
+      },
+    );
+
+    if (
+      !doJurisdictionHaveFeatureFlagSet(
+        mapTo(Jurisdiction, listingData.jurisdictions),
+        FeatureFlagEnum.enableApplicationStatus,
+      )
+    ) {
+      throw new ForbiddenException(
+        `Jurisdiction with id: ${listingData.jurisdictionId} does not have the enableApplicationStatus flag enabled`,
+      );
+    }
+
+    const s3KeyTemplate = `bulk-application-updates-${listingId}-${userId}-${new Date().toISOString()}`;
+    const presignedUrl = await this.s3Service.uploadURLForPrivate(
+      s3KeyTemplate,
+    );
+
+    return {
+      key: s3KeyTemplate,
+      presignedUrl: presignedUrl,
+    };
   }
 
   async authorizeExport(user, listingId): Promise<void> {

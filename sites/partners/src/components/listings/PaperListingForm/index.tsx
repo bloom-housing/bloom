@@ -81,6 +81,7 @@ type ListingFormProps = {
   listing?: FormListing
   editMode?: boolean
   isNonRegulated?: boolean
+  isLandUse?: boolean
   setListingName?: React.Dispatch<React.SetStateAction<string>>
   updateListing?: (updatedListing: Listing) => void
 }
@@ -121,6 +122,7 @@ const ListingForm = ({
   setListingName,
   updateListing,
   isNonRegulated,
+  isLandUse,
 }: ListingFormProps) => {
   const rawDefaultValues = editMode ? listing : formDefaults
 
@@ -277,6 +279,11 @@ const ListingForm = ({
     jurisdictionId
   )
 
+  const enableLandUse = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLandUse,
+    jurisdictionId
+  )
+
   const enableListingImageAltText = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableListingImageAltText,
     jurisdictionId
@@ -295,13 +302,22 @@ const ListingForm = ({
   )
 
   useEffect(() => {
-    if (enableNonRegulatedListings && !listing?.listingType) {
+    if (enableLandUse && !listing?.listingType) {
+      setValue("listingType", isLandUse ? EnumListingListingType.landUse : undefined)
+    } else if (enableNonRegulatedListings && !listing?.listingType) {
       setValue(
         "listingType",
         isNonRegulated ? EnumListingListingType.nonRegulated : EnumListingListingType.regulated
       )
     }
-  }, [enableNonRegulatedListings, isNonRegulated, listing?.listingType, setValue])
+  }, [
+    enableLandUse,
+    enableNonRegulatedListings,
+    isLandUse,
+    isNonRegulated,
+    listing?.listingType,
+    setValue,
+  ])
 
   useEffect(() => {
     if (listing && listing.listingFeatures && accessibilityFeatures === null) {
@@ -410,7 +426,7 @@ const ListingForm = ({
             formData.listingSection8Acceptance = YesNoEnum.no
           }
 
-          if (!enableNonRegulatedListings) {
+          if (!enableNonRegulatedListings && !enableLandUse) {
             formData.listingType = undefined
           }
 
@@ -613,6 +629,7 @@ const ListingForm = ({
                           />
                           <ListingIntro
                             enableNonRegulatedListings={enableNonRegulatedListings}
+                            enableLandUse={enableLandUse}
                             enableHousingDeveloperOwner={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableHousingDeveloperOwner,
                               jurisdictionId
@@ -638,6 +655,7 @@ const ListingForm = ({
                             listingId={listing?.id}
                             listingType={
                               listing?.listingType ||
+                              (isLandUse && enableLandUse && EnumListingListingType.landUse) ||
                               (isNonRegulated &&
                                 enableNonRegulatedListings &&
                                 EnumListingListingType.nonRegulated)

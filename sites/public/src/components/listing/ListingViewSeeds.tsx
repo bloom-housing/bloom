@@ -227,7 +227,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
       />
       {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableNonRegulatedListings) &&
         listing.listingType === EnumListingListingType.nonRegulated && (
-          <OtherFeatures hasEbllClearence={listing.hasHudEbllClearance} />
+          <OtherFeatures hasEbllClearance={listing.hasHudEbllClearance} />
         )}
     </>
   )

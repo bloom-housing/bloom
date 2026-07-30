@@ -145,6 +145,118 @@ describe("<Apply>", () => {
     expect(screen.queryByText("Download application")).not.toBeInTheDocument()
   })
 
+  it("shows leasing agent contact referral instead of apply button when a LeasingAgent method exists", () => {
+    render(
+      <Apply
+        listing={{
+          ...listing,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          applicationMethods: [
+            {
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              type: ApplicationMethodsTypeEnum.LeasingAgent,
+              acceptsPostmarkedApplications: null,
+              externalReference: null,
+              paperApplications: [],
+              phoneNumber: null,
+            },
+          ],
+          listingsApplicationPickUpAddress: {
+            id: "id",
+            city: "Pick up address city",
+            street: "Pick up address street",
+            street2: "Pick up address unit",
+            zipCode: "67890",
+            state: "CA",
+            latitude: 1,
+            longitude: 2,
+          },
+          listingsApplicationMailingAddress: {
+            id: "id",
+            city: "Mailing address city",
+            street: "Mailing address street",
+            street2: "Mailing address unit",
+            zipCode: "12345",
+            state: "CO",
+            latitude: 1,
+            longitude: 2,
+          },
+          listingsApplicationDropOffAddress: {
+            id: "id",
+            city: "Drop off address city",
+            street: "Drop off address street",
+            street2: "Drop off address unit",
+            zipCode: "45678",
+            state: "CT",
+            latitude: 1,
+            longitude: 2,
+          },
+        }}
+        preview={false}
+        setShowDownloadModal={() => null}
+      />
+    )
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Contact leasing agent or property manager" })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        "Refer to the leasing agent or property manager contact section below to apply."
+      )
+    ).toBeInTheDocument()
+    expect(screen.queryByText("Apply online")).not.toBeInTheDocument()
+    expect(screen.queryByText("Download application")).not.toBeInTheDocument()
+    expect(screen.queryByText("Get a paper application")).not.toBeInTheDocument()
+    expect(screen.queryByText("Pick up an application")).not.toBeInTheDocument()
+    expect(screen.queryByText("Submit a paper application")).not.toBeInTheDocument()
+    expect(screen.queryByText("Drop off application")).not.toBeInTheDocument()
+    expect(
+      screen.queryByText("Mailing address street, Mailing address unit")
+    ).not.toBeInTheDocument()
+  })
+
+  it("shows apply online button for internal online application for external listing", () => {
+    render(
+      <Apply
+        listing={{
+          ...listing,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          applicationMethods: [
+            {
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              type: ApplicationMethodsTypeEnum.Internal,
+              acceptsPostmarkedApplications: null,
+              externalReference: null,
+              paperApplications: [],
+              phoneNumber: null,
+            },
+          ],
+          externalURL: "www.externalURL.com",
+        }}
+        preview={false}
+        setShowDownloadModal={() => null}
+      />
+    )
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByText("Apply online")).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        "* This button brings you to an external website where you can create an account and apply for this listing."
+      )
+    ).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Apply online" })).toHaveAttribute(
+      "href",
+      `www.externalURL.com/applications/start/choose-language?listingId=${listing.id}`
+    )
+
+    expect(screen.queryByText("Download application")).not.toBeInTheDocument()
+  })
+
   it("shows redirected apply online button for internal online application with mandated accounts on while signed out", () => {
     process.env.showMandatedAccounts = "TRUE"
     render(

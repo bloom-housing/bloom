@@ -484,6 +484,20 @@ export const unitTypes: UnitType[] = [
     name: UnitTypeEnum.fiveBdrm,
     numBedrooms: 5,
   },
+  {
+    id: "b3f2a6b1-3c4d-4e5f-8a9b-0c1d2e3f4a5b",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.sixBdrm,
+    numBedrooms: 6,
+  },
+  {
+    id: "c4a3b7c2-4d5e-4f60-9b0c-1d2e3f4a5b6c",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.sevenBdrm,
+    numBedrooms: 7,
+  },
 ]
 
 export const unitGroup: UnitGroup = {

@@ -18,6 +18,7 @@ import { ApplicationBulkUploadService } from '../../../src/services/application-
 import { ListingService } from '../../../src/services/listing.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
+import { S3Service } from '../../../src/services/s3.service';
 
 const mockApplication = ({
   markedAsDuplicate = false,
@@ -91,6 +92,16 @@ describe('Testing application bulk upload services', () => {
           provide: PermissionService,
           useValue: { canOrThrow: canOrThrowMock },
         },
+        {
+          provide: S3Service,
+          useValue: {
+            uploadToPrivate: jest.fn(),
+            urlForPrivate: jest.fn(),
+            uploadURLForPublic: jest.fn(),
+            uploadURLForPrivate: jest.fn(),
+            urlForPublic: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -118,7 +129,7 @@ describe('Testing application bulk upload services', () => {
       mockApplication({
         id: randomUUID(),
         position: 1,
-        submissionDate: new Date(2026, 4, 19, 22, 0, 0),
+        submissionDate: new Date(1779228000000),
         applicant: {
           firstName: 'Colleen',
           lastName: 'Tawnee',
@@ -132,7 +143,7 @@ describe('Testing application bulk upload services', () => {
       mockApplication({
         id: randomUUID(),
         position: 2,
-        submissionDate: new Date(2026, 3, 2, 10, 0, 0),
+        submissionDate: new Date(1775124000000),
         applicant: {
           firstName: 'Erin',
           lastName: 'Patsy',
@@ -143,7 +154,7 @@ describe('Testing application bulk upload services', () => {
       mockApplication({
         id: randomUUID(),
         position: 3,
-        submissionDate: new Date(2026, 6, 23, 15, 30, 0),
+        submissionDate: new Date(1784820600000),
         applicant: {
           firstName: 'Nanny',
           lastName: 'Hayley',

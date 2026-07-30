@@ -43,4 +43,6 @@ export const unitTypeMapping = {
   [UnitTypeEnum.threeBdrm]: 3,
   [UnitTypeEnum.fourBdrm]: 4,
   [UnitTypeEnum.fiveBdrm]: 5,
+  [UnitTypeEnum.sixBdrm]: 6,
+  [UnitTypeEnum.sevenBdrm]: 7,
 };

@@ -57,7 +57,10 @@ export class ExternalListingService {
   }
 
   async ingest(ingestParams: IngestParams) {
-    const { externalURL, jurisdictionId, targetName } = ingestParams;
+    const { jurisdictionId, targetName } = ingestParams;
+    const externalURL = ingestParams.externalURL.endsWith('/')
+      ? ingestParams.externalURL.slice(0, -1)
+      : ingestParams.externalURL;
 
     // fetch the externalized data from the external system
     const { data } = await firstValueFrom(
@@ -306,203 +309,210 @@ export class ExternalListingService {
       }
     }
 
-    await this.prisma.listings.create({
-      data: {
-        accessibility: data.accessibility,
-        additionalApplicationSubmissionNotes:
-          data.additionalApplicationSubmissionNotes,
-        allowsCats: data.allowsCats,
-        allowsDogs: data.allowsDogs,
-        amenities: data.amenities,
-        applicationDueDate: data.applicationDueDate,
-        applicationFee: data.applicationFee,
-        applicationOpenDate: data.applicationOpenDate,
-        applicationOrganization: data.applicationOrganization,
-        buildingTotalUnits: data.buildingTotalUnits,
-        cocInfo: data.cocInfo,
-        commonDigitalApplication: data.commonDigitalApplication,
-        communityDisclaimerDescription: data.communityDisclaimerDescription,
-        communityDisclaimerTitle: data.communityDisclaimerTitle,
-        configurableRegion: data.configurableRegion,
-        contentUpdatedAt: data.contentUpdatedAt,
-        costsNotIncluded: data.costsNotIncluded,
-        creditHistory: data.creditHistory,
-        creditScreeningFee: data.creditScreeningFee,
-        criminalBackground: data.criminalBackground,
-        customMapPin: data.customMapPin,
-        depositHelperText: data.depositHelperText,
-        depositMax: data.depositMax,
-        depositMin: data.depositMin,
-        depositType: data.depositType,
-        depositValue: data.depositValue,
-        developer: data.developer,
-        digitalApplication: data.digitalApplication,
-        disableUnitsAccordion: data.disableUnitsAccordion,
-        displayWaitlistSize: data.displayWaitlistSize,
-        externalJurisdictionId: externalJurisdiction.id,
-        externalListingId: externalListing.id,
-        externalURL: externalURL,
-        hasHudEbllClearance: data.hasHudEbllClearance,
-        homeType: data.homeType,
-        householdSizeMax: data.householdSizeMax,
-        householdSizeMin: data.householdSizeMin,
-        includeCommunityDisclaimer: data.includeCommunityDisclaimer,
-        isVerified: data.isVerified,
-        isWaitlistOpen: data.isWaitlistOpen,
-        leasingAgentEmail: data.leasingAgentEmail,
-        leasingAgentName: data.leasingAgentName,
-        leasingAgentOfficeHours: data.leasingAgentOfficeHours,
-        leasingAgentPhone: data.leasingAgentPhone,
-        leasingAgentTitle: data.leasingAgentTitle,
-        listingFileNumber: data.listingFileNumber,
-        listingType: data.listingType,
-        lotteryOptIn: data.lotteryOptIn,
-        managementWebsite: data.managementWebsite,
-        marketingMonth: data.marketingMonth,
-        marketingSeason: data.marketingSeason,
-        marketingType: data.marketingType,
-        marketingYear: data.marketingYear,
-        name: data.name,
-        neighborhood: data.neighborhood,
-        paperApplication: data.paperApplication,
-        parkingFee: data.parkingFee,
-        petPolicy: data.petPolicy,
-        postmarkedApplicationsReceivedByDate:
-          data.postmarkedApplicationsReceivedByDate,
-        programRules: data.programRules,
-        publishedAt: data.publishedAt,
-        referralOpportunity: data.referralOpportunity,
-        rentalAssistance: data.rentalAssistance,
-        rentalHistory: data.rentalHistory,
-        reservedCommunityDescription: data.reservedCommunityDescription,
-        reservedCommunityMinAge: data.reservedCommunityMinAge,
-        reviewOrderType: data.reviewOrderType,
-        scheduledPublishAt: data.scheduledPublishAt,
-        scheduledApplicationOpenAt: data.scheduledApplicationOpenAt,
-        section8Acceptance: data.section8Acceptance,
-        servicesOffered: data.servicesOffered,
-        smokingPolicy: data.smokingPolicy,
-        specialNotes: data.specialNotes,
-        status: data.status,
-        unitAmenities: data.unitAmenities,
-        unitsAvailable: data.unitsAvailable,
-        waitlistCurrentSize: data.waitlistCurrentSize,
-        waitlistMaxSize: data.waitlistMaxSize,
-        waitlistOpenSpots: data.waitlistOpenSpots,
-        whatToExpect: data.whatToExpect,
-        whatToExpectAdditionalText: data.whatToExpectAdditionalText,
-        yearBuilt: data.yearBuilt,
+    try {
+      await this.prisma.listings.create({
+        data: {
+          accessibility: data.accessibility,
+          additionalApplicationSubmissionNotes:
+            data.additionalApplicationSubmissionNotes,
+          allowsCats: data.allowsCats,
+          allowsDogs: data.allowsDogs,
+          amenities: data.amenities,
+          applicationDueDate: data.applicationDueDate,
+          applicationFee: data.applicationFee,
+          applicationOpenDate: data.applicationOpenDate,
+          applicationOrganization: data.applicationOrganization,
+          buildingTotalUnits: data.buildingTotalUnits,
+          cocInfo: data.cocInfo,
+          commonDigitalApplication: data.commonDigitalApplication,
+          communityDisclaimerDescription: data.communityDisclaimerDescription,
+          communityDisclaimerTitle: data.communityDisclaimerTitle,
+          configurableRegion: data.configurableRegion,
+          contentUpdatedAt: data.contentUpdatedAt,
+          costsNotIncluded: data.costsNotIncluded,
+          creditHistory: data.creditHistory,
+          creditScreeningFee: data.creditScreeningFee,
+          criminalBackground: data.criminalBackground,
+          customMapPin: data.customMapPin,
+          depositHelperText: data.depositHelperText,
+          depositMax: data.depositMax,
+          depositMin: data.depositMin,
+          depositType: data.depositType,
+          depositValue: data.depositValue,
+          developer: data.developer,
+          digitalApplication: data.digitalApplication,
+          disableUnitsAccordion: data.disableUnitsAccordion,
+          displayWaitlistSize: data.displayWaitlistSize,
+          externalJurisdictionId: externalJurisdiction.id,
+          externalListingId: externalListing.id,
+          externalURL: externalURL,
+          hasHudEbllClearance: data.hasHudEbllClearance,
+          homeType: data.homeType,
+          householdSizeMax: data.householdSizeMax,
+          householdSizeMin: data.householdSizeMin,
+          includeCommunityDisclaimer: data.includeCommunityDisclaimer,
+          isVerified: data.isVerified,
+          isWaitlistOpen: data.isWaitlistOpen,
+          leasingAgentEmail: data.leasingAgentEmail,
+          leasingAgentName: data.leasingAgentName,
+          leasingAgentOfficeHours: data.leasingAgentOfficeHours,
+          leasingAgentPhone: data.leasingAgentPhone,
+          leasingAgentTitle: data.leasingAgentTitle,
+          listingFileNumber: data.listingFileNumber,
+          listingType: data.listingType,
+          lotteryOptIn: data.lotteryOptIn,
+          managementWebsite: data.managementWebsite,
+          marketingMonth: data.marketingMonth,
+          marketingSeason: data.marketingSeason,
+          marketingType: data.marketingType,
+          marketingYear: data.marketingYear,
+          name: data.name,
+          neighborhood: data.neighborhood,
+          paperApplication: data.paperApplication,
+          parkingFee: data.parkingFee,
+          petPolicy: data.petPolicy,
+          postmarkedApplicationsReceivedByDate:
+            data.postmarkedApplicationsReceivedByDate,
+          programRules: data.programRules,
+          publishedAt: data.publishedAt,
+          referralOpportunity: data.referralOpportunity,
+          rentalAssistance: data.rentalAssistance,
+          rentalHistory: data.rentalHistory,
+          reservedCommunityDescription: data.reservedCommunityDescription,
+          reservedCommunityMinAge: data.reservedCommunityMinAge,
+          reviewOrderType: data.reviewOrderType,
+          scheduledPublishAt: data.scheduledPublishAt,
+          scheduledApplicationOpenAt: data.scheduledApplicationOpenAt,
+          section8Acceptance: data.section8Acceptance,
+          servicesOffered: data.servicesOffered,
+          smokingPolicy: data.smokingPolicy,
+          specialNotes: data.specialNotes,
+          status: data.status,
+          unitAmenities: data.unitAmenities,
+          unitsAvailable: data.unitsAvailable,
+          waitlistCurrentSize: data.waitlistCurrentSize,
+          waitlistMaxSize: data.waitlistMaxSize,
+          waitlistOpenSpots: data.waitlistOpenSpots,
+          whatToExpect: data.whatToExpect,
+          whatToExpectAdditionalText: data.whatToExpectAdditionalText,
+          yearBuilt: data.yearBuilt,
 
-        assets: Prisma.JsonNullValueInput.JsonNull,
-        jurisdictions: {
-          connect: {
-            id: jurisdictionId,
+          assets: Prisma.JsonNullValueInput.JsonNull,
+          jurisdictions: {
+            connect: {
+              id: jurisdictionId,
+            },
           },
-        },
-        listingImages: data.listingImages
-          ? {
-              create: data.listingImages.map((image) => ({
-                assets: {
-                  create: {
-                    fileId: image.assets.fileId,
-                    label: image.assets.label,
+          listingImages: data.listingImages
+            ? {
+                create: data.listingImages.map((image) => ({
+                  assets: {
+                    create: {
+                      fileId: image.assets.fileId,
+                      label: image.assets.label,
+                    },
                   },
+                  ordinal: image.ordinal,
+                  description: image.description,
+                })),
+              }
+            : undefined,
+          listingsBuildingAddress: data.listingsBuildingAddress
+            ? {
+                create: {
+                  ...data.listingsBuildingAddress,
+                  id: undefined,
                 },
-                ordinal: image.ordinal,
-                description: image.description,
-              })),
-            }
-          : undefined,
-        listingsBuildingAddress: data.listingsBuildingAddress
-          ? {
-              create: {
-                ...data.listingsBuildingAddress,
-                id: undefined,
-              },
-            }
-          : undefined,
-        reservedCommunityTypes: reservedCommunityTypeId
-          ? {
-              connect: {
-                id: reservedCommunityTypeId,
-              },
-            }
-          : undefined,
-        unitGroups: data.unitGroups
-          ? {
-              create: data.unitGroups.map((group) => ({
-                bathroomMax: group.bathroomMax,
-                bathroomMin: group.bathroomMin,
-                floorMax: group.floorMax,
-                floorMin: group.floorMin,
-                maxOccupancy: group.maxOccupancy,
-                minOccupancy: group.minOccupancy,
-                openWaitlist: group.openWaitlist,
-                sqFeetMax: group.sqFeetMax,
-                sqFeetMin: group.sqFeetMin,
-                rentType: group.rentType,
-                flatRentValueFrom: group.flatRentValueFrom,
-                flatRentValueTo: group.flatRentValueTo,
-                monthlyRent: group.monthlyRent,
-                totalAvailable: group.totalAvailable,
-                totalCount: group.totalCount,
-                accessibilityPriorityType: group.accessibilityPriorityType,
-                unitGroupAmiLevels: undefined,
-                unitTypes: {
-                  connect: group.unitTypes.map((type) => ({
-                    id: combinedUTs.find(
-                      (unitType) => unitType.externalId === type.id,
-                    )?.internalId,
-                  })),
+              }
+            : undefined,
+          reservedCommunityTypes: reservedCommunityTypeId
+            ? {
+                connect: {
+                  id: reservedCommunityTypeId,
                 },
-              })),
-            }
-          : undefined,
-        units: data.units
-          ? {
-              create: data.units.map((unit) => ({
-                accessibilityPriorityType: unit.accessibilityPriorityType,
-                amiPercentage: unit.amiPercentage,
-                annualIncomeMax: unit.annualIncomeMax,
-                annualIncomeMin: unit.annualIncomeMin,
-                bmrProgramChart: unit.bmrProgramChart,
-                floor: unit.floor,
-                maxOccupancy: unit.maxOccupancy,
-                minOccupancy: unit.minOccupancy,
-                monthlyIncomeMin: unit.monthlyIncomeMin,
-                monthlyRent: unit.monthlyRent,
-                monthlyRentAsPercentOfIncome: unit.monthlyRentAsPercentOfIncome,
-                numBedrooms: unit.numBedrooms,
-                numBathrooms: unit.numBathrooms,
-                number: unit.number,
-                sqFeet: unit.sqFeet,
+              }
+            : undefined,
+          unitGroups: data.unitGroups
+            ? {
+                create: data.unitGroups.map((group) => ({
+                  bathroomMax: group.bathroomMax,
+                  bathroomMin: group.bathroomMin,
+                  floorMax: group.floorMax,
+                  floorMin: group.floorMin,
+                  maxOccupancy: group.maxOccupancy,
+                  minOccupancy: group.minOccupancy,
+                  openWaitlist: group.openWaitlist,
+                  sqFeetMax: group.sqFeetMax,
+                  sqFeetMin: group.sqFeetMin,
+                  rentType: group.rentType,
+                  flatRentValueFrom: group.flatRentValueFrom,
+                  flatRentValueTo: group.flatRentValueTo,
+                  monthlyRent: group.monthlyRent,
+                  totalAvailable: group.totalAvailable,
+                  totalCount: group.totalCount,
+                  accessibilityPriorityType: group.accessibilityPriorityType,
+                  unitGroupAmiLevels: undefined,
+                  unitTypes: {
+                    connect: group.unitTypes.map((type) => ({
+                      id: combinedUTs.find(
+                        (unitType) => unitType.externalId === type.id,
+                      )?.internalId,
+                    })),
+                  },
+                })),
+              }
+            : undefined,
+          units: data.units
+            ? {
+                create: data.units.map((unit) => ({
+                  accessibilityPriorityType: unit.accessibilityPriorityType,
+                  amiPercentage: unit.amiPercentage,
+                  annualIncomeMax: unit.annualIncomeMax,
+                  annualIncomeMin: unit.annualIncomeMin,
+                  bmrProgramChart: unit.bmrProgramChart,
+                  floor: unit.floor,
+                  maxOccupancy: unit.maxOccupancy,
+                  minOccupancy: unit.minOccupancy,
+                  monthlyIncomeMin: unit.monthlyIncomeMin,
+                  monthlyRent: unit.monthlyRent,
+                  monthlyRentAsPercentOfIncome:
+                    unit.monthlyRentAsPercentOfIncome,
+                  numBedrooms: unit.numBedrooms,
+                  numBathrooms: unit.numBathrooms,
+                  number: unit.number,
+                  sqFeet: unit.sqFeet,
 
-                amiChart: undefined,
-                unitAmiChartOverrides: undefined,
-                unitRentTypes: unit.unitRentTypes
-                  ? {
-                      connect: {
-                        id: combinedURTs.find(
-                          (unitRentType) =>
-                            unitRentType.externalId === unit.unitRentTypes.id,
-                        )?.internalId,
-                      },
-                    }
-                  : undefined,
-                unitTypes: unit.unitTypes
-                  ? {
-                      connect: {
-                        id: combinedUTs.find(
-                          (unitType) =>
-                            unitType.externalId === unit.unitTypes.id,
-                        )?.internalId,
-                      },
-                    }
-                  : undefined,
-              })),
-            }
-          : undefined,
-      },
-    });
+                  amiChart: undefined,
+                  unitAmiChartOverrides: undefined,
+                  unitRentTypes: unit.unitRentTypes
+                    ? {
+                        connect: {
+                          id: combinedURTs.find(
+                            (unitRentType) =>
+                              unitRentType.externalId === unit.unitRentTypes.id,
+                          )?.internalId,
+                        },
+                      }
+                    : undefined,
+                  unitTypes: unit.unitTypes
+                    ? {
+                        connect: {
+                          id: combinedUTs.find(
+                            (unitType) =>
+                              unitType.externalId === unit.unitTypes.id,
+                          )?.internalId,
+                        },
+                      }
+                    : undefined,
+                })),
+              }
+            : undefined,
+        },
+      });
+    } catch (error) {
+      console.error(
+        `Error creating external listing with id ${externalListing.id} and name ${externalListing.name}\n ${error}`,
+      );
+    }
   }
 }

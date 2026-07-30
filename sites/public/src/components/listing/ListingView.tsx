@@ -76,10 +76,10 @@ interface ListingProps {
 }
 
 const getUnhiddenMultiselectQuestions = (
-  arrayToSeach: ListingMultiselectQuestion[],
+  arrayToSearch: ListingMultiselectQuestion[],
   section: MultiselectQuestionsApplicationSectionEnum
 ): ListingMultiselectQuestion[] => {
-  return arrayToSeach.filter(
+  return arrayToSearch.filter(
     (elem) =>
       elem.multiselectQuestions.applicationSection === section &&
       !elem.multiselectQuestions.hideFromListing
@@ -376,7 +376,7 @@ export const ListingView = (props: ListingProps) => {
     let onlineApplicationURL
     let isCommonApp = false
     if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.Internal)) {
-      onlineApplicationURL = `/applications/start/choose-language?listingId=${listing.id}`
+      onlineApplicationURL = `${listing.externalURL}/applications/start/choose-language?listingId=${listing.id}`
       onlineApplicationURL += `${props.preview ? "&preview=true" : ""}`
       isCommonApp = true
     } else if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)) {
@@ -435,6 +435,7 @@ export const ListingView = (props: ListingProps) => {
     initialStateLoaded &&
     !profile &&
     onlineApplicationURLInfo.isCommonApp &&
+    !listing.externalURL &&
     //previewing applications should not require admin to login
     !props.preview
 
@@ -462,6 +463,7 @@ export const ListingView = (props: ListingProps) => {
         listingName={listing.name}
         listingId={listing.id}
         listingStatus={listing.status}
+        isExternal={!listing.externalURL}
       />
       {listing.status !== ListingsStatusEnum.closed && submissionAddressExists && (
         <SubmitApplication
