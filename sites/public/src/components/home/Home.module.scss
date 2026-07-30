@@ -68,13 +68,13 @@
     margin-block-start: var(--seeds-s4);
   }
   .hero-search-card {
-    --card-content-padding-block: var(--seeds-s2);
-    --card-content-padding-inline: var(--seeds-s6);
+    padding-block: var(--seeds-s6);
     .hero-search-tabs {
-      --tab-panel-padding: none;
-      --tab-padding-block: var(--seeds-s3);
-      --tab-font-size: var(--seeds-font-size-sm);
-      --tab-border-color: var(--seeds-color-on-inverse);
+      --tab-panel-padding: var(--seeds-s6);
+      border-radius: var(--seeds-rounded-lg);
+      .hero-search-tab-panel {
+        border-radius: 0 var(--seeds-rounded-lg) var(--seeds-rounded-lg);
+      }
     }
     .hero-search {
       color: var(--seeds-text-color-darker);

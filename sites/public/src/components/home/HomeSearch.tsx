@@ -8,8 +8,8 @@ import {
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t, Field, Select } from "@bloom-housing/ui-components"
-import { Button, Card, Tabs } from "@bloom-housing/ui-seeds"
-import { Form, BloomCard, tIfExists } from "@bloom-housing/shared-helpers"
+import { Button, Tabs } from "@bloom-housing/ui-seeds"
+import { Form, tIfExists } from "@bloom-housing/shared-helpers"
 import { isFeatureFlagOn } from "../../lib/helpers"
 import { encodeFilterDataToQuery, FilterData } from "../browse/FilterDrawerHelpers"
 import styles from "./Home.module.scss"
@@ -85,101 +85,97 @@ export const HomeSearch = (props: HomeSearchProps) => {
 
   return (
     <div className={styles["hero-search-card"]}>
-      <BloomCard className={styles["hero-search-card"]}>
-        <Card.Section>
-          <Tabs className={styles["hero-search-tabs"]}>
-            <Tabs.TabList>
-              <Tabs.Tab>{t("welcome.search.byFilter")}</Tabs.Tab>
-              <Tabs.Tab>{t("welcome.search.byProperty")}</Tabs.Tab>
-            </Tabs.TabList>
-            <Tabs.TabPanel>
-              <Form onSubmit={handleFiltersSubmit(onFiltersSubmit)}>
-                <div className={styles["hero-search"]}>
-                  <div className={styles["hero-filter-flex"]}>
-                    {enableFilterByCounty && props.jurisdiction.subJurisdictions?.length > 0 && (
-                      <Select
-                        name="county"
-                        label={t("t.county")}
-                        placeholder="All Counties"
-                        register={registerFilters}
-                        controlClassName="control"
-                        options={props.jurisdiction.subJurisdictions?.map((county) => {
-                          return {
-                            label: county.name,
-                            value: county.id,
-                          }
-                        })}
-                      />
-                    )}
-                    <Select
-                      name={ListingFilterKeys.bedroomTypes}
-                      label={t("t.bedrooms")}
-                      placeholder={t("t.any")}
-                      register={registerFilters}
-                      controlClassName="control"
-                      options={[
-                        { label: t("listings.unitTypes.studio"), value: UnitTypeEnum.studio },
-                        { label: t("listings.unitTypes.oneBdrm"), value: UnitTypeEnum.oneBdrm },
-                        { label: t("listings.unitTypes.twoBdrm"), value: UnitTypeEnum.twoBdrm },
-                        { label: t("listings.unitTypes.threeBdrm"), value: UnitTypeEnum.threeBdrm },
-                        { label: t("listings.unitTypes.fourBdrm"), value: UnitTypeEnum.fourBdrm },
-                        { label: t("listings.unitTypes.fiveBdrm"), value: UnitTypeEnum.fiveBdrm },
-                      ]}
-                    />
-                    {/* TODO: limit to numberic input */}
-                    <Field
-                      name={`${ListingFilterKeys.monthlyRent}.maxRent`}
-                      label={t("listings.maxRent")}
-                      placeholder={t("t.any")}
-                      type="currency"
-                      prepend="$"
-                      register={registerFilters}
-                    />
-                  </div>
-                  <div className={styles["hero-last-checkbox"]}>
-                    <Field
-                      name={ListingFilterKeys.availabilities}
-                      type="checkbox"
-                      label={t("welcome.search.availabilityFilter")}
-                      register={registerFilters}
-                    />
-                  </div>
-                  <div>
-                    <Button type="submit" variant="primary" size="sm">
-                      {t("nav.viewListings")}
-                    </Button>
-                  </div>
-                </div>
-              </Form>
-            </Tabs.TabPanel>
-            <Tabs.TabPanel>
-              <Form onSubmit={handlePropertyNameSubmit(onPropertyNameSubmit)}>
-                <div className={styles["hero-search"]}>
-                  <Field
-                    name={ListingFilterKeys.name}
-                    label={t("t.listingName")}
-                    placeholder={t("t.any")}
-                    register={registerPropertyName}
-                    className={styles["hero-flex-grow"]}
+      <Tabs className={styles["hero-search-tabs"]}>
+        <Tabs.TabList>
+          <Tabs.Tab>{t("welcome.search.byFilter")}</Tabs.Tab>
+          <Tabs.Tab>{t("welcome.search.byProperty")}</Tabs.Tab>
+        </Tabs.TabList>
+        <Tabs.TabPanel className={styles["hero-search-tab-panel"]}>
+          <Form onSubmit={handleFiltersSubmit(onFiltersSubmit)}>
+            <div className={styles["hero-search"]}>
+              <div className={styles["hero-filter-flex"]}>
+                {enableFilterByCounty && props.jurisdiction.subJurisdictions?.length > 0 && (
+                  <Select
+                    name="county"
+                    label={t("t.county")}
+                    placeholder="All Counties"
+                    register={registerFilters}
+                    controlClassName="control"
+                    options={props.jurisdiction.subJurisdictions?.map((county) => {
+                      return {
+                        label: county.name,
+                        value: county.id,
+                      }
+                    })}
                   />
-                  <Field
-                    name={ListingFilterKeys.availabilities}
-                    type="checkbox"
-                    label={t("welcome.search.availabilityFilter")}
-                    register={registerPropertyName}
-                    className={styles["hero-last-checkbox"]}
-                  />
-                  <div>
-                    <Button type="submit" variant="primary" size="sm">
-                      {t("nav.viewListings")}
-                    </Button>
-                  </div>
-                </div>
-              </Form>
-            </Tabs.TabPanel>
-          </Tabs>
-        </Card.Section>
-      </BloomCard>
+                )}
+                <Select
+                  name={ListingFilterKeys.bedroomTypes}
+                  label={t("t.bedrooms")}
+                  placeholder={t("t.any")}
+                  register={registerFilters}
+                  controlClassName="control"
+                  options={[
+                    { label: t("listings.unitTypes.studio"), value: UnitTypeEnum.studio },
+                    { label: t("listings.unitTypes.oneBdrm"), value: UnitTypeEnum.oneBdrm },
+                    { label: t("listings.unitTypes.twoBdrm"), value: UnitTypeEnum.twoBdrm },
+                    { label: t("listings.unitTypes.threeBdrm"), value: UnitTypeEnum.threeBdrm },
+                    { label: t("listings.unitTypes.fourBdrm"), value: UnitTypeEnum.fourBdrm },
+                    { label: t("listings.unitTypes.fiveBdrm"), value: UnitTypeEnum.fiveBdrm },
+                  ]}
+                />
+                {/* TODO: limit to numeric input */}
+                <Field
+                  name={`${ListingFilterKeys.monthlyRent}.maxRent`}
+                  label={t("listings.maxRent")}
+                  placeholder={t("t.any")}
+                  type="currency"
+                  prepend="$"
+                  register={registerFilters}
+                />
+              </div>
+              <div className={styles["hero-last-checkbox"]}>
+                <Field
+                  name={ListingFilterKeys.availabilities}
+                  type="checkbox"
+                  label={t("welcome.search.availabilityFilter")}
+                  register={registerFilters}
+                />
+              </div>
+              <div>
+                <Button type="submit" variant="primary" size="sm">
+                  {t("nav.viewListings")}
+                </Button>
+              </div>
+            </div>
+          </Form>
+        </Tabs.TabPanel>
+        <Tabs.TabPanel className={styles["hero-search-tab-panel"]}>
+          <Form onSubmit={handlePropertyNameSubmit(onPropertyNameSubmit)}>
+            <div className={styles["hero-search"]}>
+              <Field
+                name={ListingFilterKeys.name}
+                label={t("t.listingName")}
+                placeholder={t("t.any")}
+                register={registerPropertyName}
+                className={styles["hero-flex-grow"]}
+              />
+              <Field
+                name={ListingFilterKeys.availabilities}
+                type="checkbox"
+                label={t("welcome.search.availabilityFilter")}
+                register={registerPropertyName}
+                className={styles["hero-last-checkbox"]}
+              />
+              <div>
+                <Button type="submit" variant="primary" size="sm">
+                  {t("nav.viewListings")}
+                </Button>
+              </div>
+            </div>
+          </Form>
+        </Tabs.TabPanel>
+      </Tabs>
       {tIfExists("welcome.searchSubNote") && (
         <div className={styles["hero-search-subNote"]}>
           <Markdown>{t("welcome.searchSubNote")}</Markdown>

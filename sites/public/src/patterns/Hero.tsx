@@ -1,7 +1,5 @@
-import React, { useState } from "react"
+import React from "react"
 import { Heading } from "@bloom-housing/ui-seeds"
-import Image from "next/image"
-
 import MaxWidthLayout from "../layouts/max-width"
 import styles from "./Hero.module.scss"
 import { HeadingSize } from "@bloom-housing/ui-seeds/src/text/Heading"
@@ -23,7 +21,6 @@ export interface HeroProps {
 }
 
 export const Hero = (props: HeroProps) => {
-  const [imageExists, setImageExists] = useState(true)
   const headingSize = props.titleSize || ("6xl" as HeadingSize)
 
   return (
@@ -37,20 +34,11 @@ export const Hero = (props: HeroProps) => {
           {props.subtitle && <p className={styles["subtitle"]}>{props.subtitle}</p>}
           <div className={styles["hero-buttons"]}>{props.action}</div>
         </div>
-        <div className={styles["hero-image"]}>
-          {imageExists && props.image && (
-            <Image
-              src={props.image}
-              alt={props.imageAlt || "hero image"}
-              width={500}
-              height={500}
-              onError={() => {
-                // Hides component if image doesn't exist (404 occurs)
-                setImageExists(false)
-              }}
-            />
-          )}
-        </div>
+        {props.image && (
+          <div className={styles["hero-image"]}>
+            <img src={props.image} alt={props.imageAlt || "hero image"} />
+          </div>
+        )}
       </div>
     </MaxWidthLayout>
   )

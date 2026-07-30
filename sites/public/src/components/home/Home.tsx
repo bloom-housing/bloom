@@ -22,6 +22,7 @@ import { HomeSearch } from "./HomeSearch"
 interface HomeProps {
   jurisdiction: Jurisdiction
   underConstructionListings: Listing[]
+  heroImage?: string
 }
 
 export const Home = (props: HomeProps) => {
@@ -59,7 +60,7 @@ export const Home = (props: HomeProps) => {
             title={heroTitle}
             titleSize="4xl"
             action={<HomeSearch jurisdiction={props.jurisdiction} />}
-            image={"/images/hero-image.jpg"}
+            image={props.heroImage ? `/images/${props.heroImage}` : undefined}
           />
         )}
         {!enableHomePageSearchHero && (
