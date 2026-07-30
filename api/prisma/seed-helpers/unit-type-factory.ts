@@ -22,17 +22,20 @@ export const unitTypeFactorySingle = async (
 export const unitTypeFactoryAll = async (
   prismaClient: PrismaClient,
 ): Promise<UnitTypes[]> => {
-  const all = await prismaClient.unitTypes.findMany({});
   const unitTypes = Object.values(UnitTypeEnum);
+  const all = await prismaClient.unitTypes.findMany({});
   if (all.length !== unitTypes.length) {
     await prismaClient.unitTypes.createMany({
-      data: Object.values(UnitTypeEnum).map((value) => ({
+      data: unitTypes.map((value) => ({
         name: value,
         numBedrooms: unitTypeMapping[value],
       })),
     });
   }
-  return await prismaClient.unitTypes.findMany({});
+  const created = await prismaClient.unitTypes.findMany({});
+  return unitTypes.map((value) =>
+    created.find((unitType) => unitType.name === value),
+  );
 };
 
 export const unitTypeMapping = {
