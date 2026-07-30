@@ -55,6 +55,7 @@ export type FormListing = Omit<
   commonDigitalApplicationChoice?: YesNoEnum
   paperApplicationChoice?: YesNoEnum
   referralOpportunityChoice?: YesNoEnum
+  leasingAgentApplicationChoice?: YesNoEnum
   criteriaAttachType?: string
   marketingFlyerAttachType?: "upload" | "url"
   accessibleMarketingFlyerAttachType?: "upload" | "url"

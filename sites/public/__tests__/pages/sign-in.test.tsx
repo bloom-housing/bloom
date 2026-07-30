@@ -157,6 +157,47 @@ describe("Sign In Page", () => {
     })
   })
 
+  it("redirects to the correct page on successful login", async () => {
+    const mockUser = { firstName: "User", id: "user-123" }
+    const mockLogin = jest.fn().mockResolvedValue(mockUser)
+    const mockAddToast = jest.fn()
+    const mockRouter = {
+      query: { redirectUrl: "/applications/start/choose-language", listingId: "12345" },
+      push: jest.fn(),
+    }
+    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+    const { getByLabelText, getByRole } = render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: undefined,
+          login: mockLogin,
+        }}
+      >
+        <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
+          <SignInComponent jurisdiction={jurisdiction} />
+        </MessageContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    // Complete login
+    fireEvent.change(getByLabelText("Email"), { target: { value: "user@example.com" } })
+    fireEvent.change(getByLabelText("Password"), { target: { value: "password123" } })
+    fireEvent.click(getByRole("button", { name: /sign in/i }))
+
+    // Verify toast is shown with the correct message
+    await waitFor(() => {
+      expect(mockAddToast).toHaveBeenCalledWith("Welcome back, User!", {
+        variant: "success",
+      })
+      expect(mockRouter.push).toHaveBeenCalledWith({
+        pathname: "/applications/start/choose-language",
+        query: { listingId: "12345" },
+      })
+    })
+  })
+
   it("allows logging in by pressing the Enter key", async () => {
     const mockUser = { firstName: "User", id: "user-123" }
     const mockLogin = jest.fn().mockResolvedValue(mockUser)
@@ -242,21 +283,6 @@ describe("Sign In Page", () => {
     })
   })
 
-  describe("User not logged in", () => {
-    it("shows the sign-in form", () => {
-      const { getByLabelText, getByText } = render(
-        <AuthContext.Provider value={{ initialStateLoaded, profile }}>
-          <MessageContext.Provider value={TOAST_MESSAGE}>
-            <SignInComponent jurisdiction={jurisdiction} />
-          </MessageContext.Provider>
-        </AuthContext.Provider>
-      )
-      expect(getByText("Sign in", { selector: "h1" })).toBeInTheDocument()
-      expect(getByLabelText("Email")).toBeInTheDocument()
-      expect(getByLabelText("Password")).toBeInTheDocument()
-    })
-  })
-
   describe("User already logged in", () => {
     it("redirects to redirectUrl when already authenticated", async () => {
       const mockRouter = { query: { redirectUrl: "/account/notifications" }, push: jest.fn() }
@@ -276,7 +302,10 @@ describe("Sign In Page", () => {
       )
 
       await waitFor(() => {
-        expect(mockRouter.push).toHaveBeenCalledWith("/account/notifications")
+        expect(mockRouter.push).toHaveBeenCalledWith({
+          pathname: "/account/notifications",
+          query: {},
+        })
       })
     })
 
@@ -298,7 +327,7 @@ describe("Sign In Page", () => {
       )
 
       await waitFor(() => {
-        expect(mockRouter.push).toHaveBeenCalledWith("/account/dashboard")
+        expect(mockRouter.push).toHaveBeenCalledWith({ pathname: "/account/dashboard", query: {} })
       })
     })
 
@@ -323,7 +352,7 @@ describe("Sign In Page", () => {
       )
 
       await waitFor(() => {
-        expect(mockRouter.push).toHaveBeenCalledWith("/account/dashboard")
+        expect(mockRouter.push).toHaveBeenCalledWith({ pathname: "/account/dashboard", query: {} })
       })
     })
   })
@@ -529,15 +558,15 @@ describe("Mandated accounts", () => {
 
   describe("Desktop view", () => {
     it("shows sign-in form", () => {
-      const { getByText, getByLabelText, getByRole } = renderSignInWithMandatedAccounts()
+      const { getByLabelText, getByRole } = renderSignInWithMandatedAccounts()
 
-      expect(getByText("Sign in", { selector: "h1" })).toBeInTheDocument()
+      expect(getByRole("heading", { name: "Sign in", level: 1 })).toBeInTheDocument()
       expect(getByLabelText("Email")).toBeInTheDocument()
       expect(getByLabelText("Password")).toBeInTheDocument()
       expect(getByRole("button", { name: /sign in/i })).toBeInTheDocument()
       expect(getByRole("link", { name: /forgot password/i })).toBeInTheDocument()
 
-      expect(getByText("Don't have an account?", { selector: "h2" })).toBeInTheDocument()
+      expect(getByRole("heading", { name: "Don't have an account?", level: 2 })).toBeInTheDocument()
       expect(getByRole("button", { name: /create account/i })).toBeInTheDocument()
     })
 

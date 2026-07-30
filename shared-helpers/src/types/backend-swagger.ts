@@ -9560,9 +9560,6 @@ export interface PublicUserCreate {
   password: string
 
   /**  */
-  passwordConfirmation: string
-
-  /**  */
   emailConfirmation?: string
 }
 
@@ -10299,9 +10296,6 @@ export interface RequestMfaCodeResponse {
 export interface UpdatePassword {
   /**  */
   password: string
-
-  /**  */
-  passwordConfirmation: string
 
   /**  */
   token: string

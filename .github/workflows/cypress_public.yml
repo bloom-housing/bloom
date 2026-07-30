@@ -30,10 +30,11 @@ env:
   AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS: '5'
   API_PASS_KEY: "some-key-here"
   DB_NO_SSL: 'TRUE'
-  SHOW_PUBLIC_LOTTERY: "TRUE"
+  SHOW_PUBLIC_LOTTERY: 'TRUE'
   GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
   GOOGLE_MAPS_MAP_ID: ${{ secrets.GOOGLE_MAPS_MAP_ID }}
   HOUSING_COUNSELOR_SERVICE_URL: "/get-assistance"
+  SHOW_NEW_SEEDS_DESIGNS: 'TRUE'
 
 jobs:
   public-cypress:
@@ -88,7 +89,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           working-directory: ./sites/public
-          spec: cypress/e2e/default/*.spec.ts
+          spec: cypress/e2e/default/**/*.spec.ts
           build: yarn build
           start: yarn dev:new-backend, yarn start
           wait-on: 'http://localhost:3100/jurisdictions'
