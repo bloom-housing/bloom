@@ -959,6 +959,93 @@ describe('Testing email service', () => {
     });
   });
 
+  describe('bulk application email notifications', () => {
+    const jurisdictionId = { id: 'jurisdictionId' };
+    const applicationsUrl = 'http://localhost:3000/application-bulk-upload';
+
+    describe('applicationsBulkSuccess', () => {
+      it('should send a bulk success email with interpolated listing name and update count', async () => {
+        await service.applicationsBulkSuccess(
+          user,
+          jurisdictionId,
+          applicationsUrl,
+          { updateCount: 5 },
+          'Example Listing',
+        );
+
+        expect(sendMock).toHaveBeenCalledTimes(1);
+        const emailMock = sendMock.mock.calls[0][0];
+        expect(emailMock.to).toEqual(user.email);
+        expect(emailMock.subject).toEqual(
+          'Your bulk application update for Example Listing is complete',
+        );
+        expect(emailMock.body).toContain(
+          'Your bulk update has been processed successfully.',
+        );
+        expect(emailMock.body).toContain('5 application records were updated.');
+        expect(emailMock.body).toContain(`href="${applicationsUrl}"`);
+        expect(emailMock.body).toContain('View Applications');
+      });
+    });
+
+    describe('applicationsBulkSuccessWithErrors', () => {
+      it('should send a bulk success-with-errors email with interpolated counts', async () => {
+        await service.applicationsBulkSuccessWithErrors(
+          user,
+          jurisdictionId,
+          applicationsUrl,
+          { updateCount: 5, failedEmailsCount: 2 },
+          'Example Listing',
+        );
+
+        expect(sendMock).toHaveBeenCalledTimes(1);
+        const emailMock = sendMock.mock.calls[0][0];
+        expect(emailMock.to).toEqual(user.email);
+        expect(emailMock.subject).toEqual(
+          'Your bulk application update for Example Listing is complete',
+        );
+        expect(emailMock.body).toContain(
+          'Your bulk update has been processed successfully. However, 2 applicant notification email(s) could not be sent.',
+        );
+        expect(emailMock.body).toContain(
+          '5 application records were updated. Please contact your technical team for next steps on notifications resolution.',
+        );
+        expect(emailMock.body).toContain(`href="${applicationsUrl}"`);
+        expect(emailMock.body).toContain('View Applications');
+      });
+    });
+
+    describe('applicationsBulkFailure', () => {
+      it('should send a bulk failure email with the raw error message', async () => {
+        await service.applicationsBulkFailure(
+          user,
+          jurisdictionId,
+          applicationsUrl,
+          'Row 12 is missing a required field',
+          'Example Listing',
+        );
+
+        expect(sendMock).toHaveBeenCalledTimes(1);
+        const emailMock = sendMock.mock.calls[0][0];
+        expect(emailMock.to).toEqual(user.email);
+        expect(emailMock.subject).toEqual(
+          'Your bulk application update for Example Listing could not be completed',
+        );
+        expect(emailMock.body).toContain(
+          'Your bulk update encountered an error and could not be completed.',
+        );
+        expect(emailMock.body).toContain(
+          '[errorMessage] Row 12 is missing a required field',
+        );
+        expect(emailMock.body).toContain(
+          'Records before the failed row have been updated. If a re-upload of your file does not fix the issue, please reach out to the support team.',
+        );
+        expect(emailMock.body).toContain(`href="${applicationsUrl}"`);
+        expect(emailMock.body).toContain('View Applications');
+      });
+    });
+  });
+
   describe('lottery published for applicant', () => {
     it('should generate html body', async () => {
       const emailArr = ['testOne@xample.com', 'testTwo@example.com'];
