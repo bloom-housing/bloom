@@ -40,8 +40,6 @@
     gap: var(--seeds-spacer-section);
 
     .hero-image {
-      //TODO: Open question - determine the max/min image size
-      max-width: 324px;
       margin-block: auto;
       display: none;
       @media (--lg-and-up) {
@@ -49,6 +47,7 @@
       }
       img {
         border-radius: var(--seeds-rounded-xl);
+        max-width: 324px;
       }
     }
   }
