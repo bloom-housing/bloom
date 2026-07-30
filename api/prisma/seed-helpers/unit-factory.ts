@@ -30,6 +30,8 @@ export const unitFactorySingle = (
   },
 ): Prisma.UnitsCreateWithoutListingsInput => {
   const bedrooms = unitType.numBedrooms || randomInt(6);
+  const randomRent =
+    randomInt(2500) * (bedrooms || 1) + (randomInt(10) === 1 ? 0.5 : 0);
   return {
     amiChart: optionalParams?.amiChart
       ? { connect: { id: optionalParams.amiChart.id } }
@@ -48,7 +50,7 @@ export const unitFactorySingle = (
     minOccupancy: bedrooms,
     maxOccupancy: bedrooms + 2,
     monthlyIncomeMin: randomInt(3500).toString(),
-    monthlyRent: (randomInt(2500) * (bedrooms || 1)).toString(),
+    monthlyRent: randomRent,
     unitRentTypes: optionalParams?.unitRentTypeId
       ? { connect: { id: optionalParams?.unitRentTypeId } }
       : {
