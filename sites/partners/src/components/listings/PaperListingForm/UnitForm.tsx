@@ -318,8 +318,6 @@ const UnitForm = ({
       delete data.unitTypes
     }
 
-    // A disabled select is not a reliable source for the submitted value, so write the
-    // derived land use minimum occupancy explicitly rather than trusting the field.
     if (minOccupancyLocked) {
       data.minOccupancy = derivedMinOccupancy.toString()
     }
