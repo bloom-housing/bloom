@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState, useEffect } from "react"
+import { useCallback, useContext, useState, useEffect, useRef } from "react"
 import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
@@ -66,6 +66,37 @@ type UseListingsDataProps = PaginationProps & {
 type UsePropertiesListProps = PaginationProps & {
   search?: string
   jurisdictions?: string
+}
+
+type UseAgenciesListProps = PaginationProps & {
+  search?: string
+  jurisdictions?: string
+}
+
+interface MSQTableSettings {
+  sort?: ColumnOrder[]
+  search?: string
+  page?: number
+  limit?: number
+}
+
+export type UseSSEOptions = {
+  url: string
+  withCredentials?: boolean
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onMessage?: (data: any) => void
+  onError?: (error: Event) => void
+  onOpen?: () => void
+  eventTypes?: string[]
+  parseJson?: boolean
+}
+
+export type UseSSEReturn<T> = {
+  data: T | null
+  error: Event | null
+  isConnected: boolean
+  reconnect: () => void
+  close: () => void
 }
 
 export function useSingleListingData(listingId: string) {
@@ -413,13 +444,6 @@ export function useMultiselectQuestionList() {
     loading: !error && !data,
     error,
   }
-}
-
-interface MSQTableSettings {
-  sort?: ColumnOrder[]
-  search?: string
-  page?: number
-  limit?: number
 }
 
 export function useJurisdictionalMultiselectQuestionList(
@@ -786,11 +810,6 @@ export function useWatchOnFormNumberFieldsChange(
   }, [fieldToTriggerWatch.join(","), fieldValuesToWatch.join(","), trigger])
 }
 
-type UseAgenciesListProps = PaginationProps & {
-  search?: string
-  jurisdictions?: string
-}
-
 export function useAgenciesList({ page, limit, search, jurisdictions }: UseAgenciesListProps) {
   const filter: AgencyFilterParams[] = []
   const params = {
@@ -863,5 +882,100 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
     data,
     loading: !error && !data,
     error,
+  }
+}
+
+export function useSSE<T>(options: UseSSEOptions): UseSSEReturn<T> {
+  const {
+    url,
+    withCredentials = false,
+    onMessage,
+    onError,
+    onOpen,
+    eventTypes = [],
+    parseJson = true,
+  } = options
+
+  const [data, setData] = useState<T | null>(null)
+  const [error, setError] = useState<Event | null>(null)
+  const [isConnected, setIsConnected] = useState(false)
+
+  const eventSourceRef = useRef<EventSource | null>(null)
+  const onMessageRef = useRef(onMessage)
+  const onErrorRef = useRef(onError)
+  const onOpenRef = useRef(onOpen)
+
+  useEffect(() => {
+    onMessageRef.current = onMessage
+    onErrorRef.current = onError
+    onOpenRef.current = onOpen
+  }, [onMessage, onError, onOpen])
+
+  const connect = useCallback(() => {
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close()
+    }
+
+    const eventSource = new EventSource(url, { withCredentials })
+    eventSourceRef.current = eventSource
+
+    eventSource.onopen = () => {
+      setIsConnected(true)
+      setError(null)
+      onOpenRef.current?.()
+    }
+
+    eventSource.onerror = (event) => {
+      setIsConnected(false)
+      setError(event)
+      onErrorRef.current?.(event)
+    }
+
+    const handleData = (event: MessageEvent) => {
+      try {
+        const parsedData = parseJson ? JSON.parse(event.data) : event.data
+        setData(parsedData)
+        onMessageRef.current?.(parsedData)
+      } catch (err) {
+        console.error("Failed to parse SSE data:", err)
+      }
+    }
+
+    eventSource.onmessage = handleData
+
+    eventTypes.forEach((eventType) => {
+      eventSource.addEventListener(eventType, handleData as EventListener)
+    })
+
+    return eventSource
+  }, [url, withCredentials, parseJson, eventTypes])
+
+  const close = useCallback(() => {
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close()
+      eventSourceRef.current = null
+      setIsConnected(false)
+    }
+  }, [])
+
+  const reconnect = useCallback(() => {
+    close()
+    connect()
+  }, [close, connect])
+
+  useEffect(() => {
+    const eventSource = connect()
+
+    return () => {
+      eventSource.close()
+    }
+  }, [connect])
+
+  return {
+    data,
+    error,
+    isConnected,
+    reconnect,
+    close,
   }
 }
