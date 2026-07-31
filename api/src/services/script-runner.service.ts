@@ -858,7 +858,6 @@ export class ScriptRunnerService {
         }
         let multiselectQuestion;
         if (multiselectQuestionId) {
-          console.log('multiselectQuestionId', multiselectQuestionId);
           multiselectQuestion =
             await this.prisma.multiselectQuestions.findFirst({
               include: { multiselectOptions: true },
