@@ -284,22 +284,22 @@ describe('Script Runner Controller Tests', () => {
             multiselectQuestion: {
               applicationSection:
                 MultiselectQuestionsApplicationSectionEnum.preferences,
-              description: 'Employees of the local city.',
+              description: 'description of msq migration preference',
               multiselectOptions: {
                 createMany: {
                   data: [
                     {
-                      name: 'At least one member of my household is a city employee',
+                      name: 'msq migration preference option 1',
                       ordinal: 1,
                     },
                     {
-                      name: 'At least one member of my household is a city citizen',
+                      name: 'msq migration preference option 2',
                       ordinal: 2,
                     },
                   ],
                 },
               },
-              text: 'City Employees test migration',
+              text: 'msq migration preference text',
             },
           },
           true,
@@ -332,11 +332,11 @@ describe('Script Runner Controller Tests', () => {
           preferences: [
             {
               multiselectQuestionId: preference1.id,
-              key: 'City Employees test migration',
+              key: 'msq migration preference text',
               claimed: true,
               options: [
                 {
-                  key: 'At least one member of my household is a city employee',
+                  key: 'msq migration preference option 1',
                   checked: true,
                   extraData: [],
                 },
@@ -369,7 +369,7 @@ describe('Script Runner Controller Tests', () => {
       );
       expect(
         updatedMultiselectData[0].selections[0].multiselectOption.name,
-      ).toEqual('At least one member of my household is a city employee');
+      ).toEqual('msq migration preference option 1');
     });
   });
 });
