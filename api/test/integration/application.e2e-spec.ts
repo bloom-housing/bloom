@@ -2576,7 +2576,7 @@ describe('Application Controller Tests', () => {
         reviewStatus: ApplicationReviewStatusEnum.valid,
         programs: [
           {
-            multiselectQuestionId: multiselectQuestionProgram.id,
+            multiselectQuestionId: multiselectQuestionProgram,
             key: 'example key',
             claimed: true,
             options: [
