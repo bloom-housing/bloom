@@ -478,6 +478,45 @@ describe('Testing permission service', () => {
     ).toEqual(true);
   });
 
+  it('should let only an admin write translations', async () => {
+    // Editing translations and structured content stays with the admin role, which in a
+    // single-jurisdiction deployment is the jurisdiction's own staff. A jurisdictional admin is
+    // denied both its own jurisdiction and the global Partners layer, which is stored with no
+    // jurisdiction and so matches no object rule.
+    const jurisdictionalAdmin = {
+      id: 'juris admin id',
+      userRoles: { isJurisdictionalAdmin: true },
+      jurisdictions: [{ id: 'juris id' }],
+    } as User;
+
+    expect(
+      await service.can(
+        jurisdictionalAdmin,
+        'translation',
+        permissionActions.update,
+        { jurisdictionId: 'juris id' },
+      ),
+    ).toEqual(false);
+
+    expect(
+      await service.can(
+        jurisdictionalAdmin,
+        'translation',
+        permissionActions.update,
+        {},
+      ),
+    ).toEqual(false);
+
+    const admin = {
+      id: 'admin id',
+      userRoles: { isAdmin: true },
+    } as User;
+
+    expect(
+      await service.can(admin, 'translation', permissionActions.update, {}),
+    ).toEqual(true);
+  });
+
   it('should allow anonymous to read listings', async () => {
     expect(
       await service.canOrThrow(undefined, 'listing', permissionActions.read),

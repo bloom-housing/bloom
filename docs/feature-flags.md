@@ -45,6 +45,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableConfigurableRegions](./feature-flags/enableConfigurableRegions.md) | When true, allows for configurable regions per jurisdiction enabled on partners and public |
 | [enableCreditScreeningFee](./feature-flags/enableCreditScreeningFee.md) | When true, credit screening fee is enabled for listings |
 | [enableCustomListingNotifications](./feature-flags/enableCustomListingNotifications.md) | When true, users have access to custom notification settings |
+| [enableDbDrivenContent](./feature-flags/enableDbDrivenContent.md) | When true, the jurisdiction reads its translations and structured content from the database instead of the bundled override files |
 | [enableFaq](./feature-flags/enableFaq.md) | When true, a link to the FAQ page is displayed on the get assistance page |
 | [enableFilterByBathroom](./feature-flags/enableFilterByBathroom.md) | When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms |
 | [enableFilterByCounty](./feature-flags/enableFilterByCounty.md) | When true, the filter drawer on the public site includes the option to filter listings by county |
