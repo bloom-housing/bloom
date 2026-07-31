@@ -264,6 +264,8 @@ describe('Script Runner Controller Tests', () => {
 
   describe('migrateMultiselectApplicationDataToRefactor endpoint', () => {
     it('should only migrate programs/preferences with data', async () => {
+      // Remove all applications to ensure only testing the applications created here
+      await prisma.applications.deleteMany({});
       const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
 
       const jurisdiction = await prisma.jurisdictions.create({
