@@ -301,8 +301,8 @@ describe('Jurisdiction Content Controller Tests', () => {
     });
 
     it('forbids a jurisdictional admin from writing content', async () => {
-      // Writing is admin-only for now; jurisdictional-admin access is added later, gated by the
-      // enableDbDrivenContent flag. Both its own jurisdiction and another are denied.
+      // Editing content is limited to the admin role, which has access to every jurisdiction in
+      // the system. A jurisdictional admin is denied its own jurisdiction and any other.
       await request(app.getHttpServer())
         .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/tl`)
         .set('Cookie', jurisAdminCookies)

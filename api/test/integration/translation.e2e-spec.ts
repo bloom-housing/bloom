@@ -333,8 +333,8 @@ describe('Translation Controller Tests', () => {
     });
 
     it('forbids a jurisdictional admin from writing translations', async () => {
-      // Writing is admin-only for now; jurisdictional-admin access is added later, gated by the
-      // enableDbDrivenContent flag. Both its own jurisdiction and another are denied.
+      // Editing translations is limited to the admin role, which has access to every jurisdiction
+      // in the system. A jurisdictional admin is denied its own jurisdiction and any other.
       await request(app.getHttpServer())
         .put(enScope())
         .set('Cookie', jurisAdminCookies)
