@@ -8127,6 +8127,9 @@ export interface JurisdictionCreate {
   requiredListingFields: []
 
   /**  */
+  enabledStopLightRuleKeys: string[]
+
+  /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 
   /**  */
@@ -8215,6 +8218,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   requiredListingFields: []
+
+  /**  */
+  enabledStopLightRuleKeys: string[]
 
   /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
@@ -8341,6 +8347,9 @@ export interface Jurisdiction {
 
   /**  */
   requiredListingFields: []
+
+  /**  */
+  enabledStopLightRuleKeys: string[]
 
   /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
@@ -11092,6 +11101,7 @@ export enum FeatureFlagEnum {
   "enableSingleUseCode" = "enableSingleUseCode",
   "enableSmokingPolicyRadio" = "enableSmokingPolicyRadio",
   "enableSpokenLanguage" = "enableSpokenLanguage",
+  "enableStopLights" = "enableStopLights",
   "enableSupportAdmin" = "enableSupportAdmin",
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitAccessibilityTypeTags" = "enableUnitAccessibilityTypeTags",
