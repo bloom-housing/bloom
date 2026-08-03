@@ -2404,11 +2404,13 @@ export const realisticAddressesForOtherStatuses = [
 const featureFlags = [
   FeatureFlagEnum.disableEthnicityQuestion,
   FeatureFlagEnum.disableWorkInRegion,
+  FeatureFlagEnum.enableFaq,
   FeatureFlagEnum.enableFilterByBathroom,
   FeatureFlagEnum.enableFilterByCounty,
   FeatureFlagEnum.enableGeocodingPreferences,
   FeatureFlagEnum.enableGeocodingRadiusMethod,
   FeatureFlagEnum.enableGenderQuestion,
+  FeatureFlagEnum.enableHousingBasics,
   FeatureFlagEnum.enableLeasingAgentAltText,
   FeatureFlagEnum.enableListingFiltering,
   FeatureFlagEnum.enableListingMap,
@@ -2418,6 +2420,7 @@ const featureFlags = [
   FeatureFlagEnum.enablePartnerDemographics,
   FeatureFlagEnum.enablePartnerSettings,
   FeatureFlagEnum.enableReceivedAtAndByFields,
+  FeatureFlagEnum.enableResources,
   FeatureFlagEnum.enableSexualOrientationQuestion,
   FeatureFlagEnum.enableSupportAdmin,
 ];
