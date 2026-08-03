@@ -81,7 +81,7 @@ export const createAngelopolisJurisdiction = async (
   }: {
     publicSiteBaseURL: string;
     unitRentTypes: { id: string }[];
-    unitTypes: { id: string }[];
+    unitTypes: { id: string; name?: string }[];
     partnerUser: { id: string };
     msqV2: boolean;
     jurisdictionName?: string;
@@ -280,9 +280,71 @@ export const createAngelopolisJurisdiction = async (
   const angelopolisAmiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(8, jurisdiction.id, null, jurisdiction.name),
   });
-  await prismaClient.amiChart.create({
+  const angelopolisFullAmiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(10, jurisdiction.id, 2, jurisdiction.name),
   });
+  // Same 10% - 100% levels as the chart above, but shifted incomes, so a listing
+  // using both charts renders "$min - $max" ranges in the household income table
+  const angelopolisSecondFullAmiChart = await prismaClient.amiChart.create({
+    data: amiChartFactory(10, jurisdiction.id, 7, jurisdiction.name),
+  });
+
+  // Irregular AMI levels (not the usual 10% steps) with a pair of charts used by one
+  // listing. The two charts agree on the incomes for some levels and disagree on
+  // others, so the public site's household income table mixes single values with
+  // "$min - $max" ranges. 73% only disagrees for household sizes 1 - 4, so a single
+  // column shows both shapes.
+  const irregularAmiLevels = [10, 15, 32, 45, 58, 73, 96];
+  const rangedAmiLevels = [15, 45, 96];
+  const partiallyRangedAmiLevel = 73;
+  // Household sizes left out of BOTH charts, so those cells render empty. 15%, 45%,
+  // 73% and 96% cover every household size, so rows 1 - 8 all still exist.
+  const missingHouseholdSizesByAmiLevel: Record<number, number[]> = {
+    10: [5, 6, 7, 8],
+    32: [7, 8],
+    58: [1, 2],
+  };
+  const irregularAmiChartItems = (incomeOffset: number) =>
+    irregularAmiLevels.flatMap((percentOfAmi) =>
+      [...Array(8)]
+        .map((_, index) => {
+          const householdSize = index + 1;
+          const isRanged =
+            rangedAmiLevels.includes(percentOfAmi) ||
+            (percentOfAmi === partiallyRangedAmiLevel && householdSize <= 4);
+          return {
+            percentOfAmi,
+            householdSize,
+            income:
+              12_000 +
+              percentOfAmi * 400 +
+              index * 6_000 +
+              (isRanged ? incomeOffset : 0),
+          };
+        })
+        .filter(
+          (item) =>
+            !missingHouseholdSizesByAmiLevel[percentOfAmi]?.includes(
+              item.householdSize,
+            ),
+        ),
+    );
+  const angelopolisIrregularAmiChart = await prismaClient.amiChart.create({
+    data: {
+      name: `Irregular AMI Levels A - ${jurisdiction.name}`,
+      items: irregularAmiChartItems(0),
+      jurisdictions: { connect: { id: jurisdiction.id } },
+    },
+  });
+  const angelopolisSecondIrregularAmiChart = await prismaClient.amiChart.create(
+    {
+      data: {
+        name: `Irregular AMI Levels B - ${jurisdiction.name}`,
+        items: irregularAmiChartItems(9_500),
+        jurisdictions: { connect: { id: jurisdiction.id } },
+      },
+    },
+  );
 
   const angelopolisProperty1 = await prismaClient.properties.create({
     data: propertyFactory(jurisdiction.name, jurisdiction.id),
@@ -429,42 +491,86 @@ export const createAngelopolisJurisdiction = async (
       ),
     });
 
+  // Widest-case matrix for QA of the Rent / Household maximum income tables:
+  // every unit type (studio through 7BR) at every AMI level (10% - 100%).
+  const unitTypesByBedrooms = [
+    'studio',
+    'oneBdrm',
+    'twoBdrm',
+    'threeBdrm',
+    'fourBdrm',
+    'fiveBdrm',
+    'sixBdrm',
+    'sevenBdrm',
+  ]
+    .map((name) => unitTypes.find((unitType) => unitType.name === name))
+    .filter(Boolean);
+  const allAmiLevels = [...Array(10)].map((_, index) => (index + 1) * 10);
+  const wideUnitMatrix = (amiChartId: string, rentOffset = 0) =>
+    unitTypesByBedrooms.flatMap((unitType, bedrooms) =>
+      allAmiLevels.map((amiPercentage) => ({
+        amiPercentage: `${amiPercentage}`,
+        monthlyIncomeMin: `${2000 + amiPercentage * 10 + rentOffset * 3}`,
+        floor: 1,
+        maxOccupancy: Math.min(bedrooms + 2, 8),
+        minOccupancy: 1,
+        monthlyRent: `${
+          1200 + bedrooms * 250 + amiPercentage * 5 + rentOffset
+        }`,
+        numBathrooms: 1,
+        numBedrooms: bedrooms,
+        number: `${bedrooms}${amiPercentage}${rentOffset ? 'b' : 'a'}`,
+        sqFeet: `${500 + bedrooms * 150}.00`,
+        amiChart: { connect: { id: amiChartId } },
+        unitTypes: { connect: { id: unitType.id } },
+        unitRentTypes: { connect: { id: unitRentTypes[0].id } },
+      })),
+    );
+
+  // Sparse, non-contiguous bedroom counts at irregular AMI levels, so the public
+  // tables have to render gappy rows instead of studio-through-7BR. 7BR ("Seven+")
+  // is the largest unit type available, so it stands in for the 8 bedroom case.
+  const sparseBedroomCounts = [
+    { name: 'twoBdrm', bedrooms: 2 },
+    { name: 'fiveBdrm', bedrooms: 5 },
+    { name: 'sixBdrm', bedrooms: 6 },
+    { name: 'sevenBdrm', bedrooms: 7 },
+  ];
+  const sparseUnitMatrix = (
+    amiChartId: string,
+    numberSuffix: string,
+    rentOffset = 0,
+  ) =>
+    sparseBedroomCounts.flatMap(({ name, bedrooms }) => {
+      const unitType = unitTypes.find((type) => type.name === name);
+      if (!unitType) return [];
+      return irregularAmiLevels.map((amiPercentage) => {
+        // Only shift the rent where the charts also disagree, so the rent column
+        // shows a single value for the levels the income column does too
+        const offset = rangedAmiLevels.includes(amiPercentage) ? rentOffset : 0;
+        return {
+          amiPercentage: `${amiPercentage}`,
+          monthlyIncomeMin: `${2000 + amiPercentage * 12 + offset * 3}`,
+          floor: 1,
+          maxOccupancy: Math.min(bedrooms + 2, 8),
+          minOccupancy: 1,
+          monthlyRent: `${1300 + bedrooms * 275 + amiPercentage * 6 + offset}`,
+          numBathrooms: bedrooms > 4 ? 2 : 1,
+          numBedrooms: bedrooms,
+          number: `${bedrooms}-${amiPercentage}${numberSuffix}`,
+          sqFeet: `${600 + bedrooms * 175}.00`,
+          amiChart: { connect: { id: amiChartId } },
+          unitTypes: { connect: { id: unitType.id } },
+          unitRentTypes: { connect: { id: unitRentTypes[0].id } },
+        };
+      });
+    });
+
   const listingsToCreate = [
     {
       listing: hollywoodHillsHeights,
       propertyId: angelopolisProperty1.id,
-      units: [
-        {
-          amiPercentage: '30',
-          monthlyIncomeMin: '2000',
-          floor: 1,
-          maxOccupancy: 3,
-          minOccupancy: 1,
-          monthlyRent: '1200',
-          numBathrooms: 1,
-          numBedrooms: 0,
-          number: '101',
-          sqFeet: '750.00',
-          amiChart: { connect: { id: angelopolisAmiChart.id } },
-          unitTypes: { connect: { id: unitTypes[0].id } },
-          unitRentTypes: { connect: { id: unitRentTypes[0].id } },
-        },
-        {
-          amiPercentage: '30',
-          monthlyIncomeMin: '2000',
-          floor: 1,
-          maxOccupancy: 3,
-          minOccupancy: 1,
-          monthlyRent: '1200',
-          numBathrooms: 1,
-          numBedrooms: 1,
-          number: '101',
-          sqFeet: '750.00',
-          amiChart: { connect: { id: angelopolisAmiChart.id } },
-          unitTypes: { connect: { id: unitTypes[1].id } },
-          unitRentTypes: { connect: { id: unitRentTypes[0].id } },
-        },
-      ],
+      units: wideUnitMatrix(angelopolisFullAmiChart.id),
       multiselectQuestions: [
         hearingVisionAccessibilityNeedsProgramQuestion,
         housingSituationProgramQuestion,
@@ -478,6 +584,53 @@ export const createAngelopolisJurisdiction = async (
           raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
           userId: advocate.id,
         })),
+      ],
+      userAccounts: [{ id: partnerUser.id }],
+      optionalFeatures: { carpetInUnit: true },
+      enableListingFeaturesAndUtilities: true,
+    },
+    {
+      listing: {
+        ...hollywoodHillsHeights,
+        name: 'Hollywood Hills Heights - Multiple AMI Charts',
+      },
+      propertyId: angelopolisProperty1.id,
+      units: [
+        ...wideUnitMatrix(angelopolisFullAmiChart.id),
+        ...wideUnitMatrix(angelopolisSecondFullAmiChart.id, 175),
+      ],
+      multiselectQuestions: [
+        hearingVisionAccessibilityNeedsProgramQuestion,
+        housingSituationProgramQuestion,
+        mobilityAccessibilityNeedsProgramQuestion,
+      ],
+      applications: [
+        await applicationFactory({
+          raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
+        }),
+      ],
+      userAccounts: [{ id: partnerUser.id }],
+      optionalFeatures: { carpetInUnit: true },
+      enableListingFeaturesAndUtilities: true,
+    },
+    {
+      listing: {
+        ...hollywoodHillsHeights,
+        name: 'Hollywood Hills Heights - Irregular AMI Charts',
+      },
+      propertyId: angelopolisProperty1.id,
+      units: [
+        ...sparseUnitMatrix(angelopolisIrregularAmiChart.id, 'a'),
+        ...sparseUnitMatrix(angelopolisSecondIrregularAmiChart.id, 'b', 225),
+      ],
+      multiselectQuestions: [
+        hearingVisionAccessibilityNeedsProgramQuestion,
+        housingSituationProgramQuestion,
+      ],
+      applications: [
+        await applicationFactory({
+          raceEthnicityConfiguration: angelopolisRaceEthnicityConfiguration,
+        }),
       ],
       userAccounts: [{ id: partnerUser.id }],
       optionalFeatures: { carpetInUnit: true },
