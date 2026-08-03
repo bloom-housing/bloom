@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react"
+import React, { useContext, useEffect, useMemo, useState } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
@@ -20,7 +20,7 @@ import { getUsersTabs, UsersIndexEnum } from "../../components/users/UsersViewHe
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 
 type UserDrawerValue = {
-  type: "add" | "edit"
+  type: "add" | "edit" | "view"
   user?: User
 }
 
@@ -28,7 +28,26 @@ const Users = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const { mutate } = useSWRConfig()
   const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)
+  const [userDrawerTitle, setUserDrawerTitle] = useState(t("users.addUser"))
   const [errorAlert, setErrorAlert] = useState(false)
+
+  let enableOnlyAdminCanManageUsers
+  if (profile?.userRoles?.isJurisdictionalAdmin) {
+    enableOnlyAdminCanManageUsers = doJurisdictionsHaveFeatureFlagOn(
+      FeatureFlagEnum.enableOnlyAdminCanManageUsers,
+      profile?.jurisdictions[0].id
+    )
+  }
+
+  useEffect(() => {
+    if (userDrawer?.type === "add") {
+      setUserDrawerTitle(t("users.addUser"))
+    } else if (userDrawer?.type === "edit") {
+      setUserDrawerTitle(t("users.editUser"))
+    } else if (userDrawer?.type === "view") {
+      setUserDrawerTitle(t("users.viewUser"))
+    }
+  }, [userDrawer])
 
   const tableOptions = useAgTable()
 
@@ -50,7 +69,13 @@ const Users = () => {
           return (
             <button
               className="text-blue-700 underline"
-              onClick={() => setUserDrawer({ type: "edit", user })}
+              onClick={() =>
+                profile?.userRoles?.isAdmin ||
+                profile.id == user.id ||
+                !enableOnlyAdminCanManageUsers
+                  ? setUserDrawer({ type: "edit", user })
+                  : setUserDrawer({ type: "view", user })
+              }
               id={`user-link-${user.email}`}
             >
               {params.value}
@@ -188,33 +213,33 @@ const Users = () => {
               }}
               headerContent={
                 <div className="flex gap-2 items-center">
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={() => setUserDrawer({ type: "add" })}
-                    disabled={!listingDtos}
-                    id={"add-user"}
-                  >
-                    {t("users.addUser")}
-                  </Button>
-                  {(profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin) && (
+                  {!enableOnlyAdminCanManageUsers && (
                     <Button
-                      variant="primary-outlined"
+                      variant="primary"
                       size="sm"
-                      leadIcon={
-                        !csvExportLoading ? (
-                          <Icon>
-                            <DocumentArrowDownIcon />
-                          </Icon>
-                        ) : null
-                      }
-                      onClick={() => onExport()}
-                      loadingMessage={csvExportLoading && t("t.formSubmitted")}
-                      id={"export-users"}
+                      onClick={() => setUserDrawer({ type: "add" })}
+                      disabled={!listingDtos}
+                      id={"add-user"}
                     >
-                      {t("t.exportToCSV")}
+                      {t("users.addUser")}
                     </Button>
                   )}
+                  <Button
+                    variant="primary-outlined"
+                    size="sm"
+                    leadIcon={
+                      !csvExportLoading ? (
+                        <Icon>
+                          <DocumentArrowDownIcon />
+                        </Icon>
+                      ) : null
+                    }
+                    onClick={() => onExport()}
+                    loadingMessage={csvExportLoading && t("t.formSubmitted")}
+                    id={"export-users"}
+                  >
+                    {t("t.exportToCSV")}
+                  </Button>
                 </div>
               }
             />
@@ -225,7 +250,7 @@ const Users = () => {
       {userDrawer && (
         <FormUserManage
           isOpen={!!userDrawer}
-          title={userDrawer?.type === "add" ? t("users.addUser") : t("users.editUser")}
+          title={userDrawerTitle}
           mode={userDrawer?.type}
           user={userDrawer?.user}
           listings={listingDtos?.items}

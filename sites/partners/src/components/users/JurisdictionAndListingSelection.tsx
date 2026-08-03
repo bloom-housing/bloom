@@ -56,7 +56,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
     }
   }
 
-  const ListingSection = (renderTitle = false) => {
+  const ListingSection = (renderTitle = false, disableFields = false) => {
     return Object.keys(listingsOptions).map((key) => {
       if (!selectedJurisdictions.includes(key)) {
         return null
@@ -88,6 +88,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
                       onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                         updateAllCheckboxes(e, key),
                     }}
+                    disabled={disableFields}
                     dataTestId={`listings-all-${jurisdictionLabel}`}
                   />
 
@@ -182,7 +183,15 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
       )
     }
   } else if (profile?.userRoles?.isJurisdictionalAdmin) {
-    if (selectedRoles === RoleOption.Partner && selectedJurisdictions) {
+    const enableOnlyAdminCanManageUsers = doJurisdictionsHaveFeatureFlagOn(
+      FeatureFlagEnum.enableOnlyAdminCanManageUsers,
+      selectedJurisdictions[0]?.id
+    )
+    if (
+      !enableOnlyAdminCanManageUsers &&
+      selectedRoles === RoleOption.Partner &&
+      selectedJurisdictions
+    ) {
       return (
         <SectionWithGrid heading={t("nav.listings")}>
           <Grid.Row columns={1}>{ListingSection()}</Grid.Row>
