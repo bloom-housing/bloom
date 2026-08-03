@@ -1,5 +1,5 @@
 import { AuthProvider, ConfigProvider, MessageProvider } from "@bloom-housing/shared-helpers"
-import { fireEvent, render } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
 import React from "react"
@@ -44,6 +44,8 @@ describe("users", () => {
   })
 
   it("should render user table when data is returned", async () => {
+    // set a logged in token
+    document.cookie = "access-token-available=True"
     server.use(
       rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
         return res(ctx.json([]))
@@ -56,9 +58,14 @@ describe("users", () => {
       }),
       rest.get("http://localhost/api/adapter/user/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      // set logged in user as admin
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true } }))
       })
     )
-    const { findByText, getByText, queryAllByText } = render(
+
+    render(
       <ConfigProvider apiUrl={"http://localhost:3100"}>
         <AuthProvider>
           <Users />
@@ -66,19 +73,19 @@ describe("users", () => {
       </ConfigProvider>
     )
 
-    const header = await findByText("Partners Portal")
+    const header = await screen.findByText("Partners Portal")
     expect(header).toBeInTheDocument()
-    expect(getByText("Users")).toBeInTheDocument()
-    expect(getByText("Filter")).toBeInTheDocument()
-    expect(getByText("Add user")).toBeInTheDocument()
-    expect(queryAllByText("Export to CSV")).toHaveLength(0)
+    expect(screen.getByText("Users")).toBeInTheDocument()
+    expect(screen.getByText("Filter")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Add user" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Export to CSV" })).toBeInTheDocument()
 
-    const name = await findByText("First Last")
+    const name = await screen.findByText("First Last")
     expect(name).toBeInTheDocument()
-    expect(getByText("first.last@bloom.com")).toBeInTheDocument()
-    expect(getByText("Administrator")).toBeInTheDocument()
-    expect(getByText("09/04/2022")).toBeInTheDocument()
-    expect(getByText("Confirmed")).toBeInTheDocument()
+    expect(screen.getByText("first.last@bloom.com")).toBeInTheDocument()
+    expect(screen.getByText("Administrator")).toBeInTheDocument()
+    expect(screen.getByText("09/04/2022")).toBeInTheDocument()
+    expect(screen.getByText("Confirmed")).toBeInTheDocument()
   })
 
   // Skipping for now until the CSV endpoints are created

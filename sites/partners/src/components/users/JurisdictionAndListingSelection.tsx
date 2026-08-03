@@ -185,7 +185,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
   } else if (profile?.userRoles?.isJurisdictionalAdmin) {
     const enableOnlyAdminCanManageUsers = doJurisdictionsHaveFeatureFlagOn(
       FeatureFlagEnum.enableOnlyAdminCanManageUsers,
-      selectedJurisdictions[0]?.id
+      profile.jurisdictions[0]?.id
     )
     if (
       !enableOnlyAdminCanManageUsers &&
