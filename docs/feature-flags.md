@@ -75,8 +75,8 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableNeighborhoodAmenities](./feature-flags/enableNeighborhoodAmenities.md) | When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view |
 | [enableNeighborhoodAmenitiesDropdown](./feature-flags/enableNeighborhoodAmenitiesDropdown.md) | When true, neighborhood amenities inputs render as dropdowns with distance options instead of textareas |
 | [enableNonRegulatedListings](./feature-flags/enableNonRegulatedListings.md) | When true, non-regulated listings are displayed in listing creation/edit and public listing view |
-| [enableOnlyAdminCanAddAppsAfterClose](./feature-flags/enableOnlyAdminCanAddAppsAfterClose.md) | When true, only admins and admin(support) are allowed to add paper apps after the listing has closed |
-| [enableOnlyAdminCanEditListingDates](./feature-flags/enableOnlyAdminCanEditListingDates.md) | When true, only admins can edit the application close and lottery dates on a published listing |
+| [enableOnlyAdminCanAddAppsAfterClose](./feature-flags/enableOnlyAdminCanAddAppsAfterClose.md) | When true, only admin level users are allowed to add paper apps after a listing has closed |
+| [enableOnlyAdminCanEditListingDates](./feature-flags/enableOnlyAdminCanEditListingDates.md) | When true, only admins level users can edit the application close dates, the review order type or the lottery run date on a published listing |
 | [enableOnlyAdminCanManageUsers](./feature-flags/enableOnlyAdminCanManageUsers.md) | When true, only admins can add/edit users on the partner site. Jurisdictional admins can view but not cannot create or edit users other than themselves |
 | [enableParkingFee](./feature-flags/enableParkingFee.md) | When true, the parking fee field should be visible |
 | [enableParkingType](./feature-flags/enableParkingType.md) | When true, the parking type field is visible in the listing form |

@@ -325,12 +325,12 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableOnlyAdminCanAddAppsAfterClose,
     description:
-      'When true, only admins and admin(support) are allowed to add paper apps after the listing has closed',
+      'When true, only admin level users are allowed to add paper apps after a listing has closed',
   },
   {
     name: FeatureFlagEnum.enableOnlyAdminCanEditListingDates,
     description:
-      'When true, only admins can edit the application close and lottery dates on a published listing',
+      'When true, only admins level users can edit the application close dates, the review order type or the lottery run date on a published listing',
   },
   {
     name: FeatureFlagEnum.enableOnlyAdminCanManageUsers,
