@@ -1021,6 +1021,28 @@ describe('Testing script runner service', () => {
           },
         },
       },
+      where: {
+        OR: [
+          {
+            AND: [
+              { preferences: { not: null } },
+              { preferences: { not: {} } },
+              { preferences: { not: [] } },
+              { preferences: { not: '{}' } },
+              { preferences: { not: '[]' } },
+            ],
+          },
+          {
+            AND: [
+              { programs: { not: null } },
+              { programs: { not: {} } },
+              { programs: { not: [] } },
+              { programs: { not: '{}' } },
+              { programs: { not: '[]' } },
+            ],
+          },
+        ],
+      },
       skip: 0,
       take: 5_000,
       orderBy: { createdAt: 'asc' },
