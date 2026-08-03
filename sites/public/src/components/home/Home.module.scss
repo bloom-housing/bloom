@@ -95,7 +95,7 @@
 
       // The filter checkbox should be below the view listing button on desktop but still be before the button in tab order
       .hero-last-checkbox {
-        margin-block-start: var(--seeds-s4);
+        margin-block-start: var(--seeds-s6);
         margin-block-end: 0;
         @media (--sm-and-up) {
           margin-block-start: 0;

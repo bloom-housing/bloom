@@ -21,7 +21,7 @@ interface HomeSearchProps {
 
 interface FiltersFormValues {
   county?: string
-  bedrooms?: string
+  bedroomTypes?: string
   monthlyRent?: {
     maxRent?: string
   }
@@ -32,6 +32,17 @@ interface PropertyNameFormValues {
   [ListingFilterKeys.name]?: string
   availabilities?: boolean
 }
+
+const bedroomTypes = [
+  { label: t("listings.unitTypes.studio"), value: UnitTypeEnum.studio },
+  { label: t("listings.unitTypes.oneBdrm"), value: UnitTypeEnum.oneBdrm },
+  { label: t("listings.unitTypes.twoBdrm"), value: UnitTypeEnum.twoBdrm },
+  { label: t("listings.unitTypes.threeBdrm"), value: UnitTypeEnum.threeBdrm },
+  { label: t("listings.unitTypes.fourBdrm"), value: UnitTypeEnum.fourBdrm },
+  { label: t("listings.unitTypes.fiveBdrm"), value: UnitTypeEnum.fiveBdrm },
+  { label: t("listings.unitTypes.sixBdrm"), value: UnitTypeEnum.sixBdrm },
+  { label: t("listings.unitTypes.sevenBdrm"), value: UnitTypeEnum.sevenBdrm },
+]
 
 const navigateToListings = (router: ReturnType<typeof useRouter>, filterData: FilterData) => {
   const query = encodeFilterDataToQuery(filterData)
@@ -47,8 +58,11 @@ export const HomeSearch = (props: HomeSearchProps) => {
   )
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register: registerFilters, handleSubmit: handleFiltersSubmit } =
-    useForm<FiltersFormValues>()
+  const {
+    register: registerFilters,
+    handleSubmit: handleFiltersSubmit,
+    setValue,
+  } = useForm<FiltersFormValues>()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register: registerPropertyName, handleSubmit: handlePropertyNameSubmit } =
@@ -59,8 +73,17 @@ export const HomeSearch = (props: HomeSearchProps) => {
     if (data.county) {
       filterData.jurisdictions = { [data.county]: true }
     }
-    if (data.bedrooms) {
-      filterData.bedroomTypes = { [data.bedrooms]: true }
+    if (data.bedroomTypes) {
+      // Bedroom filter should select that bedroom type and all larger bedroom types
+      const selectedBedroomTypeIndex = bedroomTypes.findIndex(
+        (type) => type.value === data.bedroomTypes
+      )
+      filterData.bedroomTypes = bedroomTypes.reduce((previous, current, index) => {
+        if (index >= selectedBedroomTypeIndex) {
+          previous[current.value] = true
+        }
+        return previous
+      }, {} as Record<string, boolean>)
     }
     if (data.monthlyRent?.maxRent) {
       filterData.monthlyRent = { minRent: "", maxRent: data.monthlyRent.maxRent }
@@ -115,16 +138,8 @@ export const HomeSearch = (props: HomeSearchProps) => {
                   placeholder={t("t.any")}
                   register={registerFilters}
                   controlClassName="control"
-                  options={[
-                    { label: t("listings.unitTypes.studio"), value: UnitTypeEnum.studio },
-                    { label: t("listings.unitTypes.oneBdrm"), value: UnitTypeEnum.oneBdrm },
-                    { label: t("listings.unitTypes.twoBdrm"), value: UnitTypeEnum.twoBdrm },
-                    { label: t("listings.unitTypes.threeBdrm"), value: UnitTypeEnum.threeBdrm },
-                    { label: t("listings.unitTypes.fourBdrm"), value: UnitTypeEnum.fourBdrm },
-                    { label: t("listings.unitTypes.fiveBdrm"), value: UnitTypeEnum.fiveBdrm },
-                  ]}
+                  options={bedroomTypes}
                 />
-                {/* TODO: limit to numeric input */}
                 <Field
                   name={`${ListingFilterKeys.monthlyRent}.maxRent`}
                   label={t("listings.maxRent")}
@@ -132,6 +147,7 @@ export const HomeSearch = (props: HomeSearchProps) => {
                   type="currency"
                   prepend="$"
                   register={registerFilters}
+                  setValue={setValue}
                 />
               </div>
               <div className={styles["hero-last-checkbox"]}>
@@ -160,13 +176,14 @@ export const HomeSearch = (props: HomeSearchProps) => {
                 register={registerPropertyName}
                 className={styles["hero-flex-grow"]}
               />
-              <Field
-                name={ListingFilterKeys.availabilities}
-                type="checkbox"
-                label={t("welcome.search.availabilityFilter")}
-                register={registerPropertyName}
-                className={styles["hero-last-checkbox"]}
-              />
+              <div className={styles["hero-last-checkbox"]}>
+                <Field
+                  name={ListingFilterKeys.availabilities}
+                  type="checkbox"
+                  label={t("welcome.search.availabilityFilter")}
+                  register={registerPropertyName}
+                />
+              </div>
               <div>
                 <Button type="submit" variant="primary" size="sm">
                   {t("nav.viewListings")}
