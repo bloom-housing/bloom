@@ -259,6 +259,12 @@ export class Jurisdiction extends AbstractDTO {
   regions: string[];
 
   @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ type: String, isArray: true })
+  enabledStopLightRuleKeys: string[];
+
+  @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ListingFeaturesConfiguration)
   @ApiPropertyOptional({ type: ListingFeaturesConfiguration })
