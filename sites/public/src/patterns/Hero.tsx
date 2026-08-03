@@ -36,7 +36,7 @@ export const Hero = (props: HeroProps) => {
         </div>
         {props.image && (
           <div className={styles["hero-image"]}>
-            <img src={props.image} alt={props.imageAlt || "hero image"} />
+            <img src={props.image} alt={props.imageAlt} />
           </div>
         )}
       </div>
