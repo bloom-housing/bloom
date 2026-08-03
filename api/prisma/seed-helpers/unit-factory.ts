@@ -27,11 +27,14 @@ export const unitFactorySingle = (
     unitRentTypeId?: string;
     otherFields?: Prisma.UnitsCreateWithoutListingsInput;
     accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum;
+    canBePercentageOfIncome?: boolean;
   },
 ): Prisma.UnitsCreateWithoutListingsInput => {
   const bedrooms = unitType.numBedrooms || randomInt(6);
   const randomRent =
     randomInt(2500) * (bedrooms || 1) + (randomInt(10) === 1 ? 0.5 : 0);
+  const isPercentageOfIncome =
+    optionalParams?.canBePercentageOfIncome && Math.random() > 0.75;
   return {
     amiChart: optionalParams?.amiChart
       ? { connect: { id: optionalParams.amiChart.id } }
@@ -50,7 +53,10 @@ export const unitFactorySingle = (
     minOccupancy: bedrooms,
     maxOccupancy: bedrooms + 2,
     monthlyIncomeMin: randomInt(3500).toString(),
-    monthlyRent: randomRent,
+    monthlyRent: !isPercentageOfIncome ? randomRent : undefined,
+    monthlyRentAsPercentOfIncome: isPercentageOfIncome
+      ? randomInt(80)
+      : undefined,
     unitRentTypes: optionalParams?.unitRentTypeId
       ? { connect: { id: optionalParams?.unitRentTypeId } }
       : {
@@ -67,6 +73,7 @@ export const unitFactoryMany = async (
     randomizePriorityType?: boolean;
     amiChart?: AmiChart;
     accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum;
+    canBePercentageOfIncome?: boolean;
   },
 ): Promise<Prisma.UnitsCreateWithoutListingsInput[]> => {
   const createArray: Promise<Prisma.UnitsCreateWithoutListingsInput>[] = [

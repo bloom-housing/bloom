@@ -279,7 +279,7 @@ export const MapClusterer = ({
         return listingsService.retrieve(
           {
             id: listingId,
-            view: ListingViews.base,
+            view: ListingViews.map,
           },
           options
         )

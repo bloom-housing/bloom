@@ -73,6 +73,7 @@ export const listingFactory = async (
     units = await unitFactoryMany(optionalParams.numberOfUnits, prismaClient, {
       randomizePriorityType: true,
       amiChart: optionalParams?.amiChart,
+      canBePercentageOfIncome: true,
     });
   }
 
