@@ -1485,6 +1485,7 @@
   "welcome.allApplicationClosed": "در حال حاضر همه درخواست‌ها بسته شده‌اند، اما می‌توانید لیست‌های بسته شده را مشاهده کنید.",
   "welcome.cityRegions": "مناطق شهری",
   "welcome.findRentalsForYou": "برای خودتان خانه‌های اجاره‌ای پیدا کنید",
+  "welcome.heroAltText": "قهرمان",
   "welcome.learnMore": "بیشتر بدانید",
   "welcome.resources": "منابع",
   "welcome.search.availabilityFilter": "فقط نمایش واحدهای موجود (پنهان کردن لیست‌های انتظار)",

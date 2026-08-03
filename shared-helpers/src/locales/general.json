@@ -1477,6 +1477,7 @@
   "welcome.allApplicationClosed": "All applications are currently closed, but you can view closed listings.",
   "welcome.cityRegions": "City regions",
   "welcome.findRentalsForYou": "Find rentals for you",
+  "welcome.heroAltText": "Hero",
   "welcome.learnMore": "Learn more",
   "welcome.resources": "Resources",
   "welcome.searchSubNote": "For additional listings, go to <a className='lined' href='https://www.exygy.com/' target='_blank'>Exygy</a>",
