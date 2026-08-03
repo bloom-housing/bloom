@@ -1485,6 +1485,7 @@
   "welcome.allApplicationClosed": "Բոլոր դիմումները ներկայումս փակ են, բայց դուք կարող եք դիտել փակված ցուցակները։",
   "welcome.cityRegions": "Քաղաքային շրջաններ",
   "welcome.findRentalsForYou": "Գտեք ձեզ համար վարձակալվող տարածքներ",
+  "welcome.heroAltText": "Հերոս",
   "welcome.learnMore": "Իմանալ ավելին",
   "welcome.resources": "Ռեսուրսներ",
   "welcome.search.availabilityFilter": "Ցուցադրել միայն հասանելի միավորները (թաքցնել սպասման ցուցակները)",

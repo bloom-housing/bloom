@@ -1481,6 +1481,7 @@
   "welcome.allApplicationClosed": "Ang lahat ng mga application ay kasalukuyang sarado, ngunit maaari mong tingnan ang mga sarado nang listahan.",
   "welcome.cityRegions": "Mga rehiyon ng lungsod",
   "welcome.findRentalsForYou": "Maghanap ng mga rental para sa iyo",
+  "welcome.heroAltText": "Bayani",
   "welcome.learnMore": "Matuto pa",
   "welcome.resources": "Mga mapagkukunan",
   "welcome.search.availabilityFilter": "Ipakita lamang ang mga available na unit (itago ang mga waitlist)",

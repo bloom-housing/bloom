@@ -1481,6 +1481,7 @@
   "welcome.allApplicationClosed": "Todas las solicitudes están cerradas actualmente pero puede ver listados cerrados.",
   "welcome.cityRegions": "Regiones urbanas",
   "welcome.findRentalsForYou": "Encuentra alquileres para ti",
+  "welcome.heroAltText": "Héroe",
   "welcome.learnMore": "Obtener más información",
   "welcome.resources": "Recursos",
   "welcome.search.availabilityFilter": "Mostrar solo las unidades disponibles (ocultar las listas de espera)",

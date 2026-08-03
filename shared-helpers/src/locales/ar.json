@@ -1481,6 +1481,7 @@
   "welcome.allApplicationClosed": "جميع التطبيقات مغلقة حاليًا ، ولكن يمكنك عرض القوائم المغلقة.",
   "welcome.cityRegions": "مناطق المدن",
   "welcome.findRentalsForYou": "ابحث عن الإيجارات المناسبة لك",
+  "welcome.heroAltText": "بطل",
   "welcome.learnMore": "معرفة المزيد",
   "welcome.resources": "موارد",
   "welcome.search.availabilityFilter": "عرض الوحدات المتاحة فقط (إخفاء قوائم الانتظار)",
