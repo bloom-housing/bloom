@@ -3,8 +3,9 @@ import {
   Injectable,
   StreamableFile,
   NotFoundException,
+  OnModuleDestroy,
 } from '@nestjs/common';
-import { ApplicationStatusEnum } from '@prisma/client';
+import { ApplicationStatusEnum, BackgroundJobStatusEnum } from '@prisma/client';
 import fs, { createReadStream } from 'fs';
 import dayjs from 'dayjs';
 import { join } from 'path';
@@ -25,19 +26,47 @@ import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { ApplicationBulkPresignedUrl } from '../dtos/applications/application-bulk-presigned-url.dto';
 import { S3Service } from './s3.service';
+import {
+  catchError,
+  defer,
+  distinctUntilChanged,
+  filter,
+  from,
+  map,
+  merge,
+  Observable,
+  of,
+  Subject,
+  takeWhile,
+} from 'rxjs';
+import { BackgroundJobsService } from './background-jobs.service';
+import { BulkUploadJobNotification } from '../types/ServerSideEvents';
+import { BackgroundJob } from '../dtos/background-jobs/background-job.dto';
 
 const NUMBER_TO_PAGINATE_BY = 500;
 
 @Injectable()
-export class ApplicationBulkUploadService {
+export class ApplicationBulkUploadService implements OnModuleDestroy {
   private dateFormat = 'MM-DD-YYYY hh:mm:ssA z';
+
+  /**
+   * TODO: Method responsible for invoking and processing the background job
+   * needs to use the notifications$ subject ot perform and observable call to
+   * send the notification to the SSE handler.
+   */
+  private readonly notifications$ = new Subject<BulkUploadJobNotification>();
 
   constructor(
     private prisma: PrismaService,
     private listingService: ListingService,
     private permissionService: PermissionService,
+    private backgroundJobService: BackgroundJobsService,
     private s3Service: S3Service,
   ) {}
+
+  onModuleDestroy() {
+    this.notifications$.complete();
+  }
 
   private formatApplicationStatus(statusEnum: ApplicationStatusEnum): string {
     switch (statusEnum) {
@@ -387,6 +416,79 @@ export class ApplicationBulkUploadService {
         id: listingId,
         jurisdictionId,
       },
+    );
+  }
+
+  /**
+   * Builds the notification payload sent for a job's current state
+   * @param jobId - Id of the job the stream was opened for
+   * @param job - The stored job, or null when no job carries that id
+   * @returns A notification describing the job, or an error notification when it is missing
+   */
+  private mapJobToNotification(
+    jobId: string,
+    job: BackgroundJob | null,
+  ): BulkUploadJobNotification {
+    if (!job) {
+      return {
+        jobId,
+        status: BackgroundJobStatusEnum.failed,
+        errorMessage: `Job with id: ${jobId} was not found`,
+      };
+    }
+
+    return {
+      jobId: job.id,
+      status: job.status,
+      totalRecords: job.totalRecords ?? null,
+      errorMessage: job.errorMessage ?? null,
+      errorRow: job.errorRow ?? null,
+      completedAt: job.completedAt ? job.completedAt.toISOString() : null,
+    };
+  }
+
+  /**
+   * Streams status changes for a single bulk upload job.
+   * @param jobId - Id of the job to report on
+   * @param user - The subscribing user
+   * @returns A stream of the job's status changes, completed once it is terminal
+   */
+  getUploadJobNotification(
+    // TODO(#6428): authorize the subscriber before streaming (jobs/read, or
+    // listing/update scoped to the job's listingId) once the authentication
+    // story for server side events is settled - EventSource cannot send the
+    // passkey header the rest of this controller relies on.
+    jobId: string,
+  ): Observable<BulkUploadJobNotification> {
+    const currentState$ = defer(() =>
+      from(this.backgroundJobService.findById(jobId)),
+    ).pipe(map((job) => this.mapJobToNotification(jobId, job)));
+
+    const updates$ = this.notifications$.pipe(
+      filter((notification) => notification.jobId === jobId),
+    );
+
+    return merge(currentState$, updates$).pipe(
+      distinctUntilChanged(
+        (previous, current) =>
+          previous.status === current.status &&
+          previous.totalRecords === current.totalRecords,
+      ),
+      takeWhile(
+        (notification) =>
+          notification.status === BackgroundJobStatusEnum.processing,
+        true,
+      ),
+      catchError((error) =>
+        of({
+          jobId,
+          status: BackgroundJobStatusEnum.failed,
+          errorMessage:
+            error instanceof Error
+              ? error.message
+              : `Failed to read the status of job with id: ${jobId}`,
+        }),
+      ),
     );
   }
 }
