@@ -23,6 +23,9 @@ describe('Jurisdiction Content Controller Tests', () => {
 
   const passkey = { passkey: process.env.API_PASS_KEY || '' };
 
+  const adminScope = (language: string) =>
+    `/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/${language}`;
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -122,61 +125,103 @@ describe('Jurisdiction Content Controller Tests', () => {
     await app.close();
   });
 
-  it('returns the English content and caches the response', async () => {
-    const res = await request(app.getHttpServer())
-      .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}?language=en`)
-      .set(passkey)
-      .expect(200);
+  describe('GET /jurisdictionContent/jurisdictions/:jurisdictionId', () => {
+    it('returns the English content and caches the response', async () => {
+      const res = await request(app.getHttpServer())
+        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}?language=en`)
+        .set(passkey)
+        .expect(200);
 
-    expect(res.body.footer.links[0].text).toEqual('Home');
-    expect(res.body.footer.textSectionsHtml).toEqual(['<p>EN footer</p>']);
-    expect(res.body.contact.phone).toEqual('555-0100');
-    expect(res.headers['cache-control']).toEqual(
-      'public, s-maxage=300, stale-while-revalidate=600',
-    );
-  });
+      expect(res.body.footer.links[0].text).toEqual('Home');
+      expect(res.body.footer.textSectionsHtml).toEqual(['<p>EN footer</p>']);
+      expect(res.body.contact.phone).toEqual('555-0100');
+      expect(res.headers['cache-control']).toEqual(
+        'public, s-maxage=300, stale-while-revalidate=600',
+      );
+    });
 
-  it('folds the language row over the English default field by field', async () => {
-    const res = await request(app.getHttpServer())
-      .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}?language=es`)
-      .set(passkey)
-      .expect(200);
+    it('folds the language row over the English default field by field', async () => {
+      const res = await request(app.getHttpServer())
+        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}?language=es`)
+        .set(passkey)
+        .expect(200);
 
-    // Translated where set, English fallback where not.
-    expect(res.body.footer.links[0].text).toEqual('Inicio');
-    expect(res.body.footer.textSectionsHtml).toEqual(['<p>EN footer</p>']);
-    expect(res.body.contact.phone).toEqual('555-0100');
-  });
+      // Translated where set, English fallback where not.
+      expect(res.body.footer.links[0].text).toEqual('Inicio');
+      expect(res.body.footer.textSectionsHtml).toEqual(['<p>EN footer</p>']);
+      expect(res.body.contact.phone).toEqual('555-0100');
+    });
 
-  it('resolves content by jurisdiction name', async () => {
-    const res = await request(app.getHttpServer())
-      .get(`/jurisdictionContent/byName/${jurisdictionName}?language=en`)
-      .set(passkey)
-      .expect(200);
-
-    expect(res.body.footer.links[0].text).toEqual('Home');
-  });
-
-  it('returns 204 when the jurisdiction has no content row', async () => {
-    await request(app.getHttpServer())
-      .get(
-        `/jurisdictionContent/jurisdictions/${emptyJurisdictionId}?language=en`,
-      )
-      .set(passkey)
-      .expect(204);
-  });
-
-  it('returns 404 for an unknown jurisdiction id', async () => {
-    await request(app.getHttpServer())
-      .get(`/jurisdictionContent/jurisdictions/${randomUUID()}?language=en`)
-      .set(passkey)
-      .expect(404);
-  });
-
-  describe('admin CRUD', () => {
-    it('creates a language row via PUT and reads it back', async () => {
+    it('returns 204 when the jurisdiction has no content row', async () => {
       await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/vi`)
+        .get(
+          `/jurisdictionContent/jurisdictions/${emptyJurisdictionId}?language=en`,
+        )
+        .set(passkey)
+        .expect(204);
+    });
+
+    it('returns 404 for an unknown jurisdiction id', async () => {
+      await request(app.getHttpServer())
+        .get(`/jurisdictionContent/jurisdictions/${randomUUID()}?language=en`)
+        .set(passkey)
+        .expect(404);
+    });
+  });
+
+  describe('GET /jurisdictionContent/byName/:jurisdictionName', () => {
+    it('resolves content by jurisdiction name', async () => {
+      const res = await request(app.getHttpServer())
+        .get(`/jurisdictionContent/byName/${jurisdictionName}?language=en`)
+        .set(passkey)
+        .expect(200);
+
+      expect(res.body.footer.links[0].text).toEqual('Home');
+    });
+  });
+
+  describe('GET /jurisdictionContent/jurisdictions/:jurisdictionId/admin', () => {
+    it('lists the jurisdiction content rows across languages', async () => {
+      const res = await request(app.getHttpServer())
+        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin`)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+
+      const languages = res.body.map((row) => row.language);
+      expect(languages).toEqual(expect.arrayContaining(['en', 'es']));
+    });
+
+    it('forbids an anonymous request', async () => {
+      await request(app.getHttpServer())
+        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin`)
+        .set(passkey)
+        .expect(403);
+    });
+
+    it('forbids a logged-in non-admin user', async () => {
+      await request(app.getHttpServer())
+        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin`)
+        .set('Cookie', publicUserCookies)
+        .set(passkey)
+        .expect(403);
+    });
+  });
+
+  describe('GET /jurisdictionContent/jurisdictions/:jurisdictionId/admin/:language', () => {
+    it('returns 204 when that language has no row', async () => {
+      await request(app.getHttpServer())
+        .get(adminScope('bn'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(204);
+    });
+  });
+
+  describe('PUT /jurisdictionContent/jurisdictions/:jurisdictionId/admin/:language', () => {
+    it('creates a language row and reads it back', async () => {
+      await request(app.getHttpServer())
+        .put(adminScope('vi'))
         .set('Cookie', adminCookies)
         .set(passkey)
         .send({
@@ -199,7 +244,7 @@ describe('Jurisdiction Content Controller Tests', () => {
         .expect(200);
 
       const res = await request(app.getHttpServer())
-        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/vi`)
+        .get(adminScope('vi'))
         .set('Cookie', adminCookies)
         .set(passkey)
         .expect(200);
@@ -211,28 +256,17 @@ describe('Jurisdiction Content Controller Tests', () => {
       expect(res.body.updatedAt).toBeDefined();
     });
 
-    it('lists the jurisdiction content rows across languages', async () => {
-      const res = await request(app.getHttpServer())
-        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin`)
-        .set('Cookie', adminCookies)
-        .set(passkey)
-        .expect(200);
-
-      const languages = res.body.map((row) => row.language);
-      expect(languages).toEqual(expect.arrayContaining(['en', 'es', 'vi']));
-    });
-
     it('rejects a stale optimistic lock with a 409 and accepts a current one', async () => {
       const current = (
         await request(app.getHttpServer())
-          .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/en`)
+          .get(adminScope('en'))
           .set('Cookie', adminCookies)
           .set(passkey)
           .expect(200)
       ).body;
 
       await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/en`)
+        .put(adminScope('en'))
         .set('Cookie', adminCookies)
         .set(passkey)
         .send({
@@ -242,7 +276,7 @@ describe('Jurisdiction Content Controller Tests', () => {
         .expect(409);
 
       await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/en`)
+        .put(adminScope('en'))
         .set('Cookie', adminCookies)
         .set(passkey)
         .send({
@@ -252,7 +286,7 @@ describe('Jurisdiction Content Controller Tests', () => {
         .expect(200);
 
       const res = await request(app.getHttpServer())
-        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/en`)
+        .get(adminScope('en'))
         .set('Cookie', adminCookies)
         .set(passkey)
         .expect(200);
@@ -261,7 +295,7 @@ describe('Jurisdiction Content Controller Tests', () => {
 
     it('rejects a malformed content payload', async () => {
       await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ko`)
+        .put(adminScope('ko'))
         .set('Cookie', adminCookies)
         .set(passkey)
         .send({ faq: { categories: 'not-an-array' } })
@@ -270,7 +304,7 @@ describe('Jurisdiction Content Controller Tests', () => {
 
     it('rejects an unsafe URL scheme in a link href', async () => {
       await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ko`)
+        .put(adminScope('ko'))
         .set('Cookie', adminCookies)
         .set(passkey)
         .send({
@@ -293,63 +327,53 @@ describe('Jurisdiction Content Controller Tests', () => {
         title: 'Category',
       }));
       await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ko`)
+        .put(adminScope('ko'))
         .set('Cookie', adminCookies)
         .set(passkey)
         .send({ faq: { categories } })
         .expect(400);
     });
 
-    it('forbids a jurisdictional admin from writing content', async () => {
-      // Editing content is limited to the admin role, which has access to every jurisdiction in
-      // the system. A jurisdictional admin is denied its own jurisdiction and any other.
+    it('rejects other malformed payloads (missing id, wrong types)', async () => {
+      // A FAQ item missing its required id.
       await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/tl`)
-        .set('Cookie', jurisAdminCookies)
-        .set(passkey)
-        .send({ contact: { phone: '555-0000' } })
-        .expect(403);
-
-      await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionBId}/admin/tl`)
-        .set('Cookie', jurisAdminCookies)
-        .set(passkey)
-        .send({ contact: { phone: '555-0000' } })
-        .expect(403);
-    });
-
-    it('forbids an anonymous request to the admin routes', async () => {
-      await request(app.getHttpServer())
-        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin`)
-        .set(passkey)
-        .expect(403);
-
-      await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/en`)
-        .set(passkey)
-        .send({ contact: { phone: '555-0000' } })
-        .expect(403);
-    });
-
-    it('forbids a logged-in non-admin user from the admin routes', async () => {
-      await request(app.getHttpServer())
-        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin`)
-        .set('Cookie', publicUserCookies)
-        .set(passkey)
-        .expect(403);
-    });
-
-    it('returns 204 from the admin read when that language has no row', async () => {
-      await request(app.getHttpServer())
-        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/bn`)
+        .put(adminScope('ko'))
         .set('Cookie', adminCookies)
         .set(passkey)
-        .expect(204);
+        .send({
+          faq: { categories: [{ id: 'c1', items: [{ question: 'no id' }] }] },
+        })
+        .expect(400);
+
+      // A non-string question.
+      await request(app.getHttpServer())
+        .put(adminScope('ko'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          faq: {
+            categories: [
+              {
+                id: 'c1',
+                items: [{ id: 'i1', question: 42, answerHtml: '<p>A</p>' }],
+              },
+            ],
+          },
+        })
+        .expect(400);
+
+      // A non-Date lastUpdatedAt.
+      await request(app.getHttpServer())
+        .put(adminScope('ko'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ lastUpdatedAt: 'not-a-date', contact: { phone: '555' } })
+        .expect(400);
     });
 
     it('sanitizes rich-text HTML on write, stripping disallowed tags', async () => {
       await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/zh`)
+        .put(adminScope('zh'))
         .set('Cookie', adminCookies)
         .set(passkey)
         .send({
@@ -374,7 +398,7 @@ describe('Jurisdiction Content Controller Tests', () => {
         .expect(200);
 
       const res = await request(app.getHttpServer())
-        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/zh`)
+        .get(adminScope('zh'))
         .set('Cookie', adminCookies)
         .set(passkey)
         .expect(200);
@@ -387,7 +411,7 @@ describe('Jurisdiction Content Controller Tests', () => {
 
     it('clears fields omitted from a PUT (full-row replace)', async () => {
       await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ar`)
+        .put(adminScope('ar'))
         .set('Cookie', adminCookies)
         .set(passkey)
         .send({
@@ -398,7 +422,7 @@ describe('Jurisdiction Content Controller Tests', () => {
 
       const created = (
         await request(app.getHttpServer())
-          .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ar`)
+          .get(adminScope('ar'))
           .set('Cookie', adminCookies)
           .set(passkey)
           .expect(200)
@@ -406,7 +430,7 @@ describe('Jurisdiction Content Controller Tests', () => {
       expect(created.footer).not.toBeNull();
 
       await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ar`)
+        .put(adminScope('ar'))
         .set('Cookie', adminCookies)
         .set(passkey)
         .send({
@@ -416,7 +440,7 @@ describe('Jurisdiction Content Controller Tests', () => {
         .expect(200);
 
       const res = await request(app.getHttpServer())
-        .get(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ar`)
+        .get(adminScope('ar'))
         .set('Cookie', adminCookies)
         .set(passkey)
         .expect(200);
@@ -425,41 +449,30 @@ describe('Jurisdiction Content Controller Tests', () => {
       expect(res.body.footer).toBeNull();
     });
 
-    it('rejects other malformed payloads (missing id, wrong types)', async () => {
-      // A FAQ item missing its required id.
+    it('forbids a jurisdictional admin', async () => {
+      // Editing content is limited to the admin role, which has access to every jurisdiction in
+      // the system. A jurisdictional admin is denied its own jurisdiction and any other.
       await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ko`)
-        .set('Cookie', adminCookies)
+        .put(adminScope('tl'))
+        .set('Cookie', jurisAdminCookies)
         .set(passkey)
-        .send({
-          faq: { categories: [{ id: 'c1', items: [{ question: 'no id' }] }] },
-        })
-        .expect(400);
+        .send({ contact: { phone: '555-0000' } })
+        .expect(403);
 
-      // A non-string question.
       await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ko`)
-        .set('Cookie', adminCookies)
+        .put(`/jurisdictionContent/jurisdictions/${jurisdictionBId}/admin/tl`)
+        .set('Cookie', jurisAdminCookies)
         .set(passkey)
-        .send({
-          faq: {
-            categories: [
-              {
-                id: 'c1',
-                items: [{ id: 'i1', question: 42, answerHtml: '<p>A</p>' }],
-              },
-            ],
-          },
-        })
-        .expect(400);
+        .send({ contact: { phone: '555-0000' } })
+        .expect(403);
+    });
 
-      // A non-Date lastUpdatedAt.
+    it('forbids an anonymous request', async () => {
       await request(app.getHttpServer())
-        .put(`/jurisdictionContent/jurisdictions/${jurisdictionId}/admin/ko`)
-        .set('Cookie', adminCookies)
+        .put(adminScope('en'))
         .set(passkey)
-        .send({ lastUpdatedAt: 'not-a-date', contact: { phone: '555' } })
-        .expect(400);
+        .send({ contact: { phone: '555-0000' } })
+        .expect(403);
     });
   });
 });
