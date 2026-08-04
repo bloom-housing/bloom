@@ -16,13 +16,15 @@ import { mapTo } from '../utilities/mapTo';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
 
-const CONTENT_SELECT = {
+// Validated against the model so an invalid field is a compile error, while keeping the exact
+// selected-field type on the rows the read path works with.
+const CONTENT_SELECT = Prisma.validator<Prisma.JurisdictionContentSelect>()({
   footer: true,
   faq: true,
   resources: true,
   disclaimers: true,
   contact: true,
-} as const;
+});
 
 @Injectable()
 export class JurisdictionContentService {
@@ -56,13 +58,13 @@ export class JurisdictionContentService {
     const contentFor = (lang: LanguagesEnum): MergeableContent => {
       const match = rows.find((row) => row.language === lang);
       return match
-        ? ({
+        ? {
             footer: match.footer,
             faq: match.faq,
             resources: match.resources,
             disclaimers: match.disclaimers,
             contact: match.contact,
-          } as MergeableContent)
+          }
         : {};
     };
 
