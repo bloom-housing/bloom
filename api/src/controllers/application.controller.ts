@@ -4,12 +4,14 @@ import {
   Delete,
   Get,
   Header,
+  MessageEvent,
   Param,
   Post,
   Put,
   Query,
   Request,
   Res,
+  Sse,
   StreamableFile,
   UseGuards,
   UseInterceptors,
@@ -23,6 +25,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Request as ExpressRequest, Response } from 'express';
+import { map, Observable } from 'rxjs';
 import { ApplicationService } from '../services/application.service';
 import { Application } from '../dtos/applications/application.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
@@ -349,5 +352,19 @@ export class ApplicationController {
       dto.id,
       mapTo(User, req['user']),
     );
+  }
+
+  @Sse('bulk-update/notifications')
+  @ApiOperation({
+    summary:
+      'Subscribed for server side events notifications from the application processes',
+    operationId: 'uploadBulkNotifications',
+  })
+  applicationNotifications(
+    @Query('jobId') jobId: string,
+  ): Observable<MessageEvent> {
+    return this.applicationBulkUploadService
+      .getUploadJobNotification(jobId)
+      .pipe(map((notification) => ({ data: notification })));
   }
 }
