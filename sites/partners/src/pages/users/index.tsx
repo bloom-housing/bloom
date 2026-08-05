@@ -31,7 +31,7 @@ const Users = () => {
   const [userDrawerTitle, setUserDrawerTitle] = useState(t("users.addUser"))
   const [errorAlert, setErrorAlert] = useState(false)
 
-  let enableOnlyAdminCanManageUsers
+  let enableOnlyAdminCanManageUsers: boolean
   if (profile?.userRoles?.isJurisdictionalAdmin) {
     enableOnlyAdminCanManageUsers = doJurisdictionsHaveFeatureFlagOn(
       FeatureFlagEnum.enableOnlyAdminCanManageUsers,

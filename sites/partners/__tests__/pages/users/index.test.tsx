@@ -6,6 +6,10 @@ import React from "react"
 import Users from "../../../src/pages/users"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter } from "../../testUtils"
+import {
+  FeatureFlag,
+  FeatureFlagEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
 
@@ -61,7 +65,7 @@ describe("users", () => {
       }),
       // set logged in user as admin
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true } }))
+        return res(ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true } }))
       })
     )
 
@@ -75,9 +79,128 @@ describe("users", () => {
 
     const header = await screen.findByText("Partners Portal")
     expect(header).toBeInTheDocument()
-    expect(screen.getByText("Users")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Users" })).toBeInTheDocument()
     expect(screen.getByText("Filter")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Add user" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Export to CSV" })).toBeInTheDocument()
+
+    const name = await screen.findByText("First Last")
+    expect(name).toBeInTheDocument()
+    expect(screen.getByText("first.last@bloom.com")).toBeInTheDocument()
+    expect(screen.getByText("Administrator")).toBeInTheDocument()
+    expect(screen.getByText("09/04/2022")).toBeInTheDocument()
+    expect(screen.getByText("Confirmed")).toBeInTheDocument()
+  })
+
+  it("should render user table when data is returned and user is a jurisdictional admin", async () => {
+    // set a logged in token
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json([]))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json([]))
+      }),
+      rest.get("http://localhost:3100/user/list", (_req, res, ctx) => {
+        return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user/list", (_req, res, ctx) => {
+        return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      // set logged in user as jurisdictional admin
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            jurisdictions: [
+              {
+                id: "id",
+                name: "Bloomington",
+                featureFlags: [],
+              },
+            ],
+            userRoles: { id: "user1", isAdmin: false, isJurisdictionalAdmin: true },
+          })
+        )
+      })
+    )
+
+    render(
+      <ConfigProvider apiUrl={"http://localhost:3100"}>
+        <AuthProvider>
+          <Users />
+        </AuthProvider>
+      </ConfigProvider>
+    )
+
+    const header = await screen.findByText("Partners Portal")
+    expect(header).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Users" })).toBeInTheDocument()
+    expect(screen.getByText("Filter")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Add user" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Export to CSV" })).toBeInTheDocument()
+
+    const name = await screen.findByText("First Last")
+    expect(name).toBeInTheDocument()
+    expect(screen.getByText("first.last@bloom.com")).toBeInTheDocument()
+    expect(screen.getByText("Administrator")).toBeInTheDocument()
+    expect(screen.getByText("09/04/2022")).toBeInTheDocument()
+    expect(screen.getByText("Confirmed")).toBeInTheDocument()
+  })
+
+  it("should render user table but not add button when data is returned, user is jurisdictional admin and enableOnlyAdminCanManageUsers is true", async () => {
+    // set a logged in token
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json([]))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json([]))
+      }),
+      rest.get("http://localhost:3100/user/list", (_req, res, ctx) => {
+        return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user/list", (_req, res, ctx) => {
+        return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      // set logged in user as jurisdictional admin
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            jurisdictions: [
+              {
+                id: "id",
+                name: "Bloomington",
+                featureFlags: [
+                  {
+                    name: FeatureFlagEnum.enableOnlyAdminCanManageUsers,
+                    active: true,
+                  } as FeatureFlag,
+                ],
+              },
+            ],
+            userRoles: { id: "user1", isAdmin: false, isJurisdictionalAdmin: true },
+          })
+        )
+      })
+    )
+
+    const result = render(
+      <ConfigProvider apiUrl={"http://localhost:3100"}>
+        <AuthProvider>
+          <Users />
+        </AuthProvider>
+      </ConfigProvider>
+    )
+
+    const header = await screen.findByText("Partners Portal")
+    expect(header).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Users" })).toBeInTheDocument()
+    expect(screen.getByText("Filter")).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Add user" })).not.toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Export to CSV" })).toBeInTheDocument()
 
     const name = await screen.findByText("First Last")
@@ -102,7 +225,7 @@ describe("users", () => {
       }),
       // set logged in user as admin
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true } }))
+        return res(ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true } }))
       }),
       rest.get("http://localhost/api/adapter/user/csv", (_req, res, ctx) => {
         return res(ctx.json(""))
@@ -145,7 +268,7 @@ describe("users", () => {
       }),
       // set logged in user as admin
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true } }))
+        return res(ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true } }))
       }),
       rest.get("http://localhost/api/adapter/user/csv", (_req, res, ctx) => {
         return res(ctx.status(500), ctx.json(""))
