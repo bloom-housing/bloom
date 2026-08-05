@@ -1,4 +1,5 @@
 import {
+  TranslationKeyEdit,
   TranslationOrigin,
   TranslationRawKey,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -65,3 +66,26 @@ export const buildTranslationRows = ({
 /** The value the public site renders: the override when one exists, otherwise the base. */
 export const effectiveValue = (row: TranslationEditorRow): string | null =>
   row.overrideValue ?? row.baseValue
+
+/** True when the entered value differs from what the site renders today. */
+export const isChanged = (row: TranslationEditorRow, value: string): boolean =>
+  value !== (effectiveValue(row) ?? "")
+
+/**
+ * Turns the edited values into the batch the PUT takes.
+ *
+ * `lastUpdatedAt` is the per-key optimistic lock and is sent only for keys that already have an
+ * override row. A key being overridden for the first time has no prior version to lock against,
+ * and sending one would make the API treat it as a conflict.
+ */
+export const buildEdits = (
+  editedValues: Record<string, string>,
+  rows: TranslationEditorRow[]
+): TranslationKeyEdit[] => {
+  const rowsByKey = new Map(rows.map((row) => [row.key, row]))
+
+  return Object.entries(editedValues).map(([key, value]) => {
+    const updatedAt = rowsByKey.get(key)?.updatedAt
+    return updatedAt ? { key, value, lastUpdatedAt: updatedAt } : { key, value }
+  })
+}

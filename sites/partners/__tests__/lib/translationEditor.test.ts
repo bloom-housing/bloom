@@ -1,5 +1,10 @@
 import { TranslationOrigin } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { buildTranslationRows, effectiveValue } from "../../src/lib/translationEditor"
+import {
+  buildEdits,
+  buildTranslationRows,
+  effectiveValue,
+  isChanged,
+} from "../../src/lib/translationEditor"
 
 const override = (key: string, value: string, extra = {}) => ({
   key,
@@ -122,5 +127,74 @@ describe("effectiveValue", () => {
     })
 
     expect(effectiveValue(row)).toEqual("Base")
+  })
+})
+
+describe("isChanged", () => {
+  const rowFor = (base: string | null, overrides = []) =>
+    buildTranslationRows({
+      englishBase: base === null ? {} : { "a.key": base },
+      overrides,
+    })[0]
+
+  it("compares against the override when one exists", () => {
+    const row = rowFor("Base", [override("a.key", "Override")])
+    expect(isChanged(row, "Override")).toBe(false)
+    expect(isChanged(row, "Base")).toBe(true)
+  })
+
+  it("compares against the base when there is no override", () => {
+    const row = rowFor("Base")
+    expect(isChanged(row, "Base")).toBe(false)
+    expect(isChanged(row, "Changed")).toBe(true)
+  })
+
+  it("treats an empty entry as a change when the key currently renders something", () => {
+    expect(isChanged(rowFor("Base"), "")).toBe(true)
+  })
+
+  it("treats an empty entry as unchanged when the key renders nothing", () => {
+    const row = rowFor(null, [override("a.key", "")])
+    expect(isChanged(row, "")).toBe(false)
+  })
+})
+
+describe("buildEdits", () => {
+  it("sends the lock for a key that already has an override", () => {
+    const rows = buildTranslationRows({
+      englishBase: { "a.key": "Base" },
+      overrides: [override("a.key", "Override")],
+    })
+
+    expect(buildEdits({ "a.key": "New" }, rows)).toEqual([
+      { key: "a.key", value: "New", lastUpdatedAt: new Date("2026-01-01") },
+    ])
+  })
+
+  it("omits the lock for a key being overridden for the first time", () => {
+    const rows = buildTranslationRows({ englishBase: { "a.key": "Base" }, overrides: [] })
+
+    expect(buildEdits({ "a.key": "New" }, rows)).toEqual([{ key: "a.key", value: "New" }])
+  })
+
+  it("omits the lock for a key that is not in the row set at all", () => {
+    expect(buildEdits({ "unknown.key": "New" }, [])).toEqual([{ key: "unknown.key", value: "New" }])
+  })
+
+  it("builds one edit per changed key and leaves the rest out", () => {
+    const rows = buildTranslationRows({
+      englishBase: { "a.one": "One", "b.two": "Two", "c.three": "Three" },
+      overrides: [],
+    })
+
+    expect(buildEdits({ "a.one": "Uno", "c.three": "Tres" }, rows).map((edit) => edit.key)).toEqual(
+      ["a.one", "c.three"]
+    )
+  })
+
+  it("keeps an empty value, which is how a section is hidden", () => {
+    const rows = buildTranslationRows({ englishBase: { "a.key": "Base" }, overrides: [] })
+
+    expect(buildEdits({ "a.key": "" }, rows)).toEqual([{ key: "a.key", value: "" }])
   })
 })

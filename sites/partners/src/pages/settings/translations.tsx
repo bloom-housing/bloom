@@ -1,9 +1,11 @@
-import React, { useContext, useMemo, useState } from "react"
+import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { Select, t } from "@bloom-housing/ui-components"
+import { Select, t, useMutate } from "@bloom-housing/ui-components"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { Button } from "@bloom-housing/ui-seeds"
+import { useSWRConfig } from "swr"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   LanguagesEnum,
@@ -22,15 +24,21 @@ import {
 import { useRawTranslations } from "../../lib/hooks"
 import { translations } from "../../lib/translations"
 import {
+  buildEdits,
   buildTranslationRows,
   effectiveValue,
+  isChanged,
   TranslationEditorRow,
 } from "../../lib/translationEditor"
 
 const SettingsTranslations = () => {
   const router = useRouter()
   const tableOptions = useAgTable()
-  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { mutate } = useSWRConfig()
+  const { addToast } = useContext(MessageContext)
+  const { mutate: saveOverrides, isLoading: isSaving } = useMutate()
+  const { mutate: revertOverride, isLoading: isReverting } = useMutate()
+  const { profile, translationsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
   const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
@@ -62,11 +70,20 @@ const SettingsTranslations = () => {
   )
   const activeJurisdictionId = selectedJurisdiction?.id ?? ""
 
-  const { data: overrides, loading } = useRawTranslations({
+  const {
+    data: overrides,
+    loading,
+    cacheKey,
+  } = useRawTranslations({
     jurisdictionId: activeJurisdictionId,
     site: SiteEnum.public,
     language,
   })
+
+  // Values the admin has typed but not saved, keyed by translation key.
+  const [editedValues, setEditedValues] = useState<Record<string, string>>({})
+  const [revertKey, setRevertKey] = useState<string | null>(null)
+  const hasUnsavedChanges = Object.keys(editedValues).length > 0
 
   const rows = useMemo(
     () =>
@@ -117,19 +134,116 @@ const SettingsTranslations = () => {
         headerName: t("translations.currentValue"),
         minWidth: 220,
         flex: 2,
-        valueGetter: ({ data }: { data: TranslationEditorRow }) => effectiveValue(data) ?? "",
+        editable: true,
+        // Many values are full paragraphs, so the single-line editor is not enough.
+        cellEditor: "agLargeTextCellEditor",
+        cellEditorParams: { maxLength: 5000 },
+        valueGetter: ({ data }: { data: TranslationEditorRow }) =>
+          editedValues[data.key] ?? effectiveValue(data) ?? "",
+        // ag-grid has no grid-level change callback through AgTable, so the setter is where an
+        // edit is captured. Returning true tells the grid the value was accepted.
+        valueSetter: ({ data, newValue }: { data: TranslationEditorRow; newValue: string }) => {
+          const value = newValue ?? ""
+          setEditedValues((previous) => {
+            const next = { ...previous }
+            if (isChanged(data, value)) {
+              next[data.key] = value
+            } else {
+              delete next[data.key]
+            }
+            return next
+          })
+          return true
+        },
       },
       {
         headerName: t("t.status"),
         minWidth: 140,
         valueGetter: ({ data }: { data: TranslationEditorRow }) => {
+          if (editedValues[data.key] !== undefined) return t("translations.statusEdited")
           if (data.overrideValue === null) return t("translations.statusFallback")
           return data.stale ? t("translations.statusStale") : t("translations.statusOverridden")
         },
       },
+      {
+        headerName: t("t.actions"),
+        pinned: "right",
+        maxWidth: 140,
+        resizable: false,
+        cellRendererFramework: ({ data }: { data: TranslationEditorRow }) =>
+          data.overrideValue === null ? null : (
+            <Button
+              variant="text"
+              size="sm"
+              disabled={isReverting}
+              // Records the key rather than calling the delete, so this memoized renderer never
+              // closes over the scope selectors and cannot revert against a stale language.
+              onClick={() => setRevertKey(data.key)}
+              id={`revert-${data.key}`}
+            >
+              {t("translations.revert")}
+            </Button>
+          ),
+      },
     ],
-    []
+    [editedValues, isReverting]
   )
+
+  const handleSave = () => {
+    void saveOverrides(() =>
+      translationsService
+        .updateRawTranslations({
+          jurisdictionId: activeJurisdictionId,
+          site: SiteEnum.public,
+          language,
+          body: { edits: buildEdits(editedValues, rows) },
+        })
+        .then(() => {
+          setEditedValues({})
+          addToast(t("translations.alertSaved"), { variant: "success" })
+        })
+        .catch((error) => {
+          // Per-key conflict resolution for a 409 is not built yet.
+          addToast(t("errors.alert.badRequest"), { variant: "alert" })
+          console.log(error)
+        })
+        .finally(() => {
+          void mutate(cacheKey)
+        })
+    )
+  }
+
+  // Runs the delete for whichever key the revert button recorded, using the current scope.
+  useEffect(() => {
+    if (!revertKey) return
+
+    void revertOverride(() =>
+      translationsService
+        .deleteRawTranslation({
+          jurisdictionId: activeJurisdictionId,
+          site: SiteEnum.public,
+          language,
+          key: revertKey,
+        })
+        .then(() => {
+          setEditedValues((previous) => {
+            const next = { ...previous }
+            delete next[revertKey]
+            return next
+          })
+          addToast(t("translations.alertReverted"), { variant: "success" })
+        })
+        .catch((error) => {
+          addToast(t("errors.alert.badRequest"), { variant: "alert" })
+          console.log(error)
+        })
+        .finally(() => {
+          setRevertKey(null)
+          void mutate(cacheKey)
+        })
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [revertKey])
 
   const languageOptions = useMemo(
     () =>
@@ -178,13 +292,16 @@ const SettingsTranslations = () => {
             setSearch: tableOptions.filter.setFilterValue,
           }}
           headerContent={
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-end">
               {jurisdictions.length > 1 && (
                 <Select
                   id="translationsJurisdiction"
                   name="translationsJurisdiction"
                   label={t("t.jurisdiction")}
                   defaultValue={activeJurisdictionId}
+                  // Changing scope with unsaved edits would discard them silently, and the
+                  // edited values belong to the scope they were typed in.
+                  disabled={hasUnsavedChanges}
                   options={jurisdictions.map((jurisdiction) => ({
                     value: jurisdiction.id,
                     label: jurisdiction.name,
@@ -202,6 +319,7 @@ const SettingsTranslations = () => {
                 name="translationsLanguage"
                 label={t("t.language")}
                 defaultValue={language}
+                disabled={hasUnsavedChanges}
                 options={languageOptions}
                 inputProps={{
                   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -210,6 +328,30 @@ const SettingsTranslations = () => {
                   },
                 }}
               />
+              {hasUnsavedChanges && (
+                <>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    disabled={isSaving}
+                    onClick={handleSave}
+                    id="saveTranslations"
+                  >
+                    {t("translations.saveCount", {
+                      count: Object.keys(editedValues).length,
+                    })}
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    disabled={isSaving}
+                    onClick={() => setEditedValues({})}
+                    id="discardTranslations"
+                  >
+                    {t("t.cancel")}
+                  </Button>
+                </>
+              )}
             </div>
           }
         />
