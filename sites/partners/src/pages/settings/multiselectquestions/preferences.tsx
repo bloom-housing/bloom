@@ -30,10 +30,12 @@ const MultiselectQuestionsPreferences = () => {
   const tableOptions = useAgTable()
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
   const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
+  const enableTranslations = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableDbDrivenContent)
   const settingsTabsFeatureFlags = {
     enablePreferences: true,
     enableProperties,
     enableAgencies,
+    enableTranslations,
   }
 
   const [multiselectQuestionDrawerOpen, setMultiselectQuestionDrawerOpen] =

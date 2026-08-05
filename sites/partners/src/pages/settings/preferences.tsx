@@ -62,10 +62,12 @@ const SettingsPreferences = () => {
   )
   const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
   const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
+  const enableTranslations = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableDbDrivenContent)
   const settingsTabsFeatureFlags = {
     enablePreferences: atLeastOneJurisdictionEnablesPreferences,
     enableProperties,
     enableAgencies,
+    enableTranslations,
   }
 
   const tableData = useMemo(() => {
