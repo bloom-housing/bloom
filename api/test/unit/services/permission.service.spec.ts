@@ -478,45 +478,67 @@ describe('Testing permission service', () => {
     ).toEqual(true);
   });
 
-  // Editing translations and structured content is limited to the admin role. The policy file has
-  // a row for admin only, and no per-user object rule is installed for either resource, so the
-  // roles below admin are denied whatever jurisdiction the request names.
-  const contentResources = ['translation', 'jurisdictionContent'];
-  const contentActions = [
-    permissionActions.read,
-    permissionActions.update,
-    permissionActions.delete,
+  // Editing both resources is limited to the admin role. Each check names the user's own
+  // jurisdiction: no policy consults `r.obj` today, but that is the request a per-user object rule
+  // would wrongly allow if one were added. Only the actions each resource exposes are listed.
+  const contentPermissions: [string, permissionActions][] = [
+    ['translation', permissionActions.read],
+    ['translation', permissionActions.update],
+    ['translation', permissionActions.delete],
+    ['jurisdictionContent', permissionActions.read],
+    ['jurisdictionContent', permissionActions.update],
   ];
+
+  // Labelled per permission so a failure names the combination and reports all of them.
+  const contentAccessFor = async (user?: User) =>
+    Promise.all(
+      contentPermissions.map(
+        async ([type, action]) =>
+          `${type}.${action}=${await service.can(user, type, action, {
+            jurisdictionId: 'juris id',
+          })}`,
+      ),
+    );
 
   it.each([
     {
       role: 'a jurisdictional admin',
-      userRoles: { isJurisdictionalAdmin: true },
-    },
-    { role: 'a support admin', userRoles: { isSupportAdmin: true } },
-    {
-      role: 'a limited jurisdictional admin',
-      userRoles: { isLimitedJurisdictionalAdmin: true },
-    },
-  ])(
-    'should not let $role edit translations or jurisdiction content',
-    async ({ userRoles }) => {
-      const user = {
-        id: 'non admin id',
-        userRoles,
+      user: {
+        id: 'juris admin id',
+        userRoles: { isJurisdictionalAdmin: true },
         jurisdictions: [{ id: 'juris id' }],
         listings: [],
-      } as User;
-
-      for (const type of contentResources) {
-        for (const action of contentActions) {
-          expect(
-            await service.can(user, type, action, {
-              jurisdictionId: 'juris id',
-            }),
-          ).toEqual(false);
-        }
-      }
+      } as User,
+    },
+    {
+      role: 'a support admin',
+      user: {
+        id: 'support admin id',
+        userRoles: { isSupportAdmin: true },
+        jurisdictions: [{ id: 'juris id' }],
+        listings: [],
+      } as User,
+    },
+    {
+      role: 'a limited jurisdictional admin',
+      user: {
+        id: 'limited juris admin id',
+        userRoles: { isLimitedJurisdictionalAdmin: true },
+        jurisdictions: [{ id: 'juris id' }],
+        listings: [],
+      } as User,
+    },
+    { role: 'an anonymous request', user: undefined },
+  ])(
+    'should not let $role edit translations or jurisdiction content',
+    async ({ user }) => {
+      expect(await contentAccessFor(user)).toEqual([
+        'translation.read=false',
+        'translation.update=false',
+        'translation.delete=false',
+        'jurisdictionContent.read=false',
+        'jurisdictionContent.update=false',
+      ]);
     },
   );
 
@@ -524,19 +546,17 @@ describe('Testing permission service', () => {
     const admin = {
       id: 'admin id',
       userRoles: { isAdmin: true },
-      jurisdictions: [],
+      jurisdictions: [{ id: 'juris id' }],
       listings: [],
     } as User;
 
-    for (const type of contentResources) {
-      for (const action of contentActions) {
-        expect(
-          await service.can(admin, type, action, {
-            jurisdictionId: 'juris id',
-          }),
-        ).toEqual(true);
-      }
-    }
+    expect(await contentAccessFor(admin)).toEqual([
+      'translation.read=true',
+      'translation.update=true',
+      'translation.delete=true',
+      'jurisdictionContent.read=true',
+      'jurisdictionContent.update=true',
+    ]);
   });
 
   it('should allow anonymous to read listings', async () => {
