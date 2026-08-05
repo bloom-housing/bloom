@@ -149,7 +149,14 @@ describe('Testing application bulk upload services', () => {
         },
         {
           provide: S3Service,
-          useValue: { downloadFromPrivate: downloadFromPrivateMock },
+          useValue: {
+            downloadFromPrivate: downloadFromPrivateMock,
+            uploadToPrivate: jest.fn(),
+            urlForPrivate: jest.fn(),
+            uploadURLForPublic: jest.fn(),
+            uploadURLForPrivate: jest.fn(),
+            urlForPublic: jest.fn(),
+          },
         },
         {
           provide: BackgroundJobsService,

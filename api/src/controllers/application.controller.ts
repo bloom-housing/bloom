@@ -55,6 +55,8 @@ import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
 import { ApplicationBulkUploadService } from '../services/application-bulk-upload.service';
 import { ApplicationBulkValidate } from '../dtos/applications/application-bulk-validate.dto';
+import { ApplicationBulkUrl } from '../dtos/applications/application-bulk-url.dto';
+import { ApplicationBulkPresignedUrl } from '../dtos/applications/application-bulk-presigned-url.dto';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -341,6 +343,18 @@ export class ApplicationController {
       dto,
       mapTo(User, req['user']),
     );
+  }
+
+  @Post('bulk-update/upload-url')
+  @ApiOperation({
+    summary: 'Generates an presigned URL link to a private S3 bucket',
+    operationId: 'uploadBulkUpdate',
+  })
+  @ApiOkResponse({ type: ApplicationBulkPresignedUrl })
+  async uploadBulkUpdate(
+    @Body() dto: ApplicationBulkUrl,
+  ): Promise<ApplicationBulkPresignedUrl> {
+    return await this.applicationBulkUploadService.uploadUrl(dto);
   }
 
   @Delete()

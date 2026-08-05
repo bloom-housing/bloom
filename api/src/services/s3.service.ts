@@ -105,6 +105,30 @@ export class S3Service {
     return getSignedUrl(this.s3Client, command);
   }
 
+  async uploadURLForPrivate(
+    key: string,
+    metadata?: CreateS3UploadMetadata,
+    expiresIn: number = 60 * 5,
+  ): Promise<string> {
+    const input: PutObjectCommandInput = {
+      Bucket: this.privateBucket,
+      Key: key,
+    };
+
+    if (metadata?.contentDisposition) {
+      input.ContentDisposition = metadata.contentDisposition;
+    }
+    if (metadata?.contentType) {
+      input.ContentType = metadata.contentType;
+    }
+
+    const command = new PutObjectCommand(input);
+
+    return getSignedUrl(this.s3Client, command, {
+      expiresIn,
+    });
+  }
+
   async downloadFromPrivate(key: string): Promise<ReadableStream> {
     try {
       const command = new GetObjectCommand({
