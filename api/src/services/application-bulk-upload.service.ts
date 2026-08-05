@@ -302,11 +302,11 @@ export class ApplicationBulkUploadService {
     return stringData;
   }
 
-  // TODO Yazeed - Integrate the uploadUrl method with S3 presigned URL generation logic
   async uploadUrl(
     dto: ApplicationBulkUrl,
+    user: User,
   ): Promise<ApplicationBulkPresignedUrl> {
-    const { userId, listingId } = dto;
+    const { listingId } = dto;
 
     const listingData = await this.prisma.listings.findUnique({
       select: {
@@ -329,14 +329,8 @@ export class ApplicationBulkUploadService {
       );
     }
 
-    const requestingUser = await this.prisma.userAccounts.findFirst({
-      where: {
-        id: userId,
-      },
-    });
-
     await this.permissionService.canOrThrow(
-      mapTo(User, requestingUser),
+      user,
       'listing',
       permissionActions.update,
       {
@@ -356,7 +350,9 @@ export class ApplicationBulkUploadService {
       );
     }
 
-    const s3KeyTemplate = `bulk-application-updates-${listingId}-${userId}-${new Date().toISOString()}`;
+    const s3KeyTemplate = `bulk-application-updates-${listingId}-${
+      user.id
+    }-${new Date().toISOString()}`;
     const presignedUrl = await this.s3Service.uploadURLForPrivate(
       s3KeyTemplate,
     );
