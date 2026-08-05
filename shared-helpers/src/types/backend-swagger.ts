@@ -9281,9 +9281,6 @@ export interface ApplicationUpdateEmail {
 export interface ApplicationBulkUrl {
   /**  */
   listingId: string
-
-  /**  */
-  userId: string
 }
 
 /** ApplicationBulkPresignedUrl */
