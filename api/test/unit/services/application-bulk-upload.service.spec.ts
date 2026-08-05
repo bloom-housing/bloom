@@ -5,8 +5,10 @@ import {
   ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
+  BackgroundJobStatusEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
+import { lastValueFrom, toArray } from 'rxjs';
 import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { Address } from '../../../src/dtos/addresses/address.dto';
 import { Accessibility } from '../../../src/dtos/applications/accessibility.dto';
@@ -19,6 +21,9 @@ import { ListingService } from '../../../src/services/listing.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { S3Service } from '../../../src/services/s3.service';
+import { BackgroundJobsService } from '../../../src/services/background-jobs.service';
+import { BackgroundJob } from '../../../src/dtos/background-jobs/background-job.dto';
+import { BulkUploadJobNotification } from '../../../src/types/ServerSideEvents';
 
 const mockApplication = ({
   markedAsDuplicate = false,
@@ -76,6 +81,7 @@ const mockApplication = ({
 
 const canOrThrowMock = jest.fn();
 const listingServiceMock = { getJurisdictionIdByListingId: jest.fn() };
+const backgroundJobServiceMock = { findById: jest.fn() };
 
 describe('Testing application bulk upload services', () => {
   let service: ApplicationBulkUploadService;
@@ -91,6 +97,10 @@ describe('Testing application bulk upload services', () => {
         {
           provide: PermissionService,
           useValue: { canOrThrow: canOrThrowMock },
+        },
+        {
+          provide: BackgroundJobsService,
+          useValue: backgroundJobServiceMock,
         },
         {
           provide: S3Service,
@@ -250,6 +260,182 @@ describe('Testing application bulk upload services', () => {
       await expect(service.authorizeExport(user, listingId)).rejects.toThrow(
         ForbiddenException,
       );
+    });
+  });
+
+  describe('getUploadJobNotification', () => {
+    const jobId = randomUUID();
+
+    const storedJob = (overrides: Partial<BackgroundJob>): BackgroundJob =>
+      ({
+        id: jobId,
+        status: BackgroundJobStatusEnum.processing,
+        totalRecords: null,
+        errorMessage: null,
+        errorRow: null,
+        completedAt: null,
+        ...overrides,
+      } as BackgroundJob);
+
+    afterEach(() => {
+      backgroundJobServiceMock.findById.mockReset();
+    });
+
+    it('should emit a single error notification and complete when the job does not exist', async () => {
+      backgroundJobServiceMock.findById.mockResolvedValue(null);
+
+      const notifications = await lastValueFrom(
+        service.getUploadJobNotification(jobId).pipe(toArray()),
+      );
+
+      expect(notifications).toEqual([
+        {
+          jobId,
+          status: BackgroundJobStatusEnum.failed,
+          errorMessage: `Job with id: ${jobId} was not found`,
+        },
+      ]);
+      expect(backgroundJobServiceMock.findById).toHaveBeenCalledWith(jobId);
+    });
+
+    it('should emit the stored completed state and complete when the job already finished', async () => {
+      const completedAt = new Date();
+      backgroundJobServiceMock.findById.mockResolvedValue(
+        storedJob({
+          status: BackgroundJobStatusEnum.completed,
+          totalRecords: 42,
+          completedAt,
+        }),
+      );
+
+      const notifications = await lastValueFrom(
+        service.getUploadJobNotification(jobId).pipe(toArray()),
+      );
+
+      expect(notifications).toEqual([
+        {
+          jobId,
+          status: BackgroundJobStatusEnum.completed,
+          totalRecords: 42,
+          errorMessage: null,
+          errorRow: null,
+          completedAt: completedAt.toISOString(),
+        },
+      ]);
+    });
+
+    it('should emit the stored failure details and complete when the job already failed', async () => {
+      backgroundJobServiceMock.findById.mockResolvedValue(
+        storedJob({
+          status: BackgroundJobStatusEnum.failed,
+          errorMessage: 'Malformed row',
+          errorRow: 7,
+        }),
+      );
+
+      const notifications = await lastValueFrom(
+        service.getUploadJobNotification(jobId).pipe(toArray()),
+      );
+
+      expect(notifications).toEqual([
+        {
+          jobId,
+          status: BackgroundJobStatusEnum.failed,
+          totalRecords: null,
+          errorMessage: 'Malformed row',
+          errorRow: 7,
+          completedAt: null,
+        },
+      ]);
+    });
+
+    it('should emit the pending state, stay open, then complete on a terminal notification', async () => {
+      backgroundJobServiceMock.findById.mockResolvedValue(
+        storedJob({
+          status: BackgroundJobStatusEnum.processing,
+        }),
+      );
+
+      const collected = lastValueFrom(
+        service.getUploadJobNotification(jobId).pipe(toArray()),
+      );
+
+      await Promise.resolve();
+
+      const completion = {
+        jobId,
+        status: BackgroundJobStatusEnum.completed,
+        totalRecords: 10,
+        errorMessage: null,
+        errorRow: null,
+        completedAt: new Date().toISOString(),
+      };
+      service['notifications$'].next(completion);
+
+      await expect(collected).resolves.toEqual([
+        {
+          jobId,
+          status: BackgroundJobStatusEnum.processing,
+          totalRecords: null,
+          errorMessage: null,
+          errorRow: null,
+          completedAt: null,
+        },
+        completion,
+      ]);
+    });
+
+    it('should ignore notifications belonging to a different job', async () => {
+      backgroundJobServiceMock.findById.mockResolvedValue(storedJob({}));
+
+      const received: BulkUploadJobNotification[] = [];
+      const subscription = service
+        .getUploadJobNotification(jobId)
+        .subscribe((notification) => received.push(notification));
+
+      await Promise.resolve();
+
+      service['notifications$'].next({
+        jobId: randomUUID(),
+        status: BackgroundJobStatusEnum.completed,
+      });
+
+      // only the pending notification for this job, and the stream is still open
+      expect(received).toHaveLength(1);
+      expect(received[0].status).toBe(BackgroundJobStatusEnum.processing);
+      expect(subscription.closed).toBe(false);
+
+      subscription.unsubscribe();
+    });
+
+    it('should emit an error notification and complete when the job lookup fails', async () => {
+      backgroundJobServiceMock.findById.mockRejectedValue(
+        new Error('Invalid uuid'),
+      );
+
+      const notifications = await lastValueFrom(
+        service.getUploadJobNotification(jobId).pipe(toArray()),
+      );
+
+      expect(notifications).toEqual([
+        {
+          jobId,
+          status: BackgroundJobStatusEnum.failed,
+          errorMessage: 'Invalid uuid',
+        },
+      ]);
+    });
+
+    it('should detach from the notifications subject once a subscriber goes away', async () => {
+      backgroundJobServiceMock.findById.mockResolvedValue(storedJob({}));
+
+      const subscription = service.getUploadJobNotification(jobId).subscribe();
+
+      expect(service['notifications$'].observed).toBe(true);
+
+      subscription.unsubscribe();
+
+      expect(service['notifications$'].observed).toBe(false);
     });
   });
 });
