@@ -200,7 +200,7 @@ export const fileUploader = async ({
   if (process.env.useS3FileStorage === "TRUE") {
     const resp = await applicationService.uploadBulkUpdate({
       body: {
-        listingId: "bc1e8fac-4f3d-4135-b9d1-efa1a9dc42d3",
+        listingId: "cc52d648-1026-40d4-af37-7e468977263d",
       },
     })
     const { presignedUrl } = resp
