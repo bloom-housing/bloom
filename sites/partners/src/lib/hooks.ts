@@ -865,3 +865,31 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
     error,
   }
 }
+
+export function useRawTranslations({
+  jurisdictionId,
+  site,
+  language,
+}: {
+  jurisdictionId: string
+  site: string
+  language: string
+}) {
+  const { translationsService } = useContext(AuthContext)
+
+  const fetcher = () => translationsService.getRawTranslations({ jurisdictionId, site, language })
+
+  // Null key so SWR skips the request until a scope is chosen.
+  const cacheKey = jurisdictionId
+    ? `/api/adapter/translations/jurisdictions/${jurisdictionId}/raw/${site}/${language}`
+    : null
+
+  const { data, error } = useSWR(cacheKey, fetcher)
+
+  return {
+    cacheKey,
+    data,
+    loading: !!cacheKey && !error && !data,
+    error,
+  }
+}
