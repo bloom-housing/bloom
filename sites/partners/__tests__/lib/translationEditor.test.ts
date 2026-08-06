@@ -6,6 +6,9 @@ import {
   editsForKeys,
   effectiveValue,
   isChanged,
+  keysThatHideSections,
+  validateEdits,
+  validateValue,
 } from "../../src/lib/translationEditor"
 
 const override = (key: string, value: string, extra = {}) => ({
@@ -251,5 +254,119 @@ describe("editsForKeys", () => {
 
   it("keeps an empty edited value", () => {
     expect(editsForKeys({ "a.one": "" }, ["a.one"])).toEqual({ "a.one": "" })
+  })
+})
+
+describe("validateValue", () => {
+  const rowFor = (english: string) =>
+    buildTranslationRows({ englishBase: { "a.key": english }, overrides: [] })[0]
+
+  it("accepts a value that keeps every token", () => {
+    expect(
+      validateValue(rowFor("Hello %{name}, you have %{count}"), "Hola %{name}: %{count}")
+    ).toBe(null)
+  })
+
+  it("accepts a value with no tokens when English has none", () => {
+    expect(validateValue(rowFor("Hello"), "Hola")).toBe(null)
+  })
+
+  it("reports a dropped token", () => {
+    expect(validateValue(rowFor("Hello %{name}"), "Hola")).toEqual({
+      key: "a.key",
+      missingTokens: ["name"],
+      missingPluralForms: false,
+    })
+  })
+
+  it("reports every dropped token, not just the first", () => {
+    expect(validateValue(rowFor("%{a} and %{b} and %{c}"), "%{b}").missingTokens).toEqual([
+      "a",
+      "c",
+    ])
+  })
+
+  it("ignores token order and repetition", () => {
+    expect(validateValue(rowFor("%{a} %{b}"), "%{b} %{a} %{a}")).toBe(null)
+  })
+
+  it("reports dropped smart_count pluralization", () => {
+    const row = rowFor("%{smart_count} unit |||| %{smart_count} units")
+    expect(validateValue(row, "%{smart_count} unidades")).toEqual({
+      key: "a.key",
+      missingTokens: [],
+      missingPluralForms: true,
+    })
+  })
+
+  it("allows a different number of plural forms, since plural rules vary by language", () => {
+    const row = rowFor("%{smart_count} unit |||| %{smart_count} units")
+    expect(
+      validateValue(row, "%{smart_count} form |||| %{smart_count} form |||| %{smart_count} form")
+    ).toBe(null)
+  })
+
+  it("reports a dropped smart_count token and its forms together", () => {
+    const row = rowFor("%{smart_count} unit |||| %{smart_count} units")
+    expect(validateValue(row, "unidades")).toEqual({
+      key: "a.key",
+      missingTokens: ["smart_count"],
+      missingPluralForms: true,
+    })
+  })
+
+  it("skips validation for a key with no English source", () => {
+    const [row] = buildTranslationRows({
+      englishBase: {},
+      overrides: [override("fork.only", "Anything")],
+    })
+    expect(validateValue(row, "")).toBe(null)
+  })
+
+  it("treats an emptied value as dropping the tokens it should have kept", () => {
+    expect(validateValue(rowFor("Hello %{name}"), "").missingTokens).toEqual(["name"])
+  })
+})
+
+describe("validateEdits", () => {
+  it("reports only the entries that break, keyed for the message", () => {
+    const rows = buildTranslationRows({
+      englishBase: { "a.ok": "Hello %{name}", "b.broken": "Bye %{name}", "c.plain": "Plain" },
+      overrides: [],
+    })
+
+    expect(
+      validateEdits({ "a.ok": "Hola %{name}", "b.broken": "Adios", "c.plain": "Simple" }, rows).map(
+        (issue) => issue.key
+      )
+    ).toEqual(["b.broken"])
+  })
+
+  it("ignores an edited key with no matching row", () => {
+    expect(validateEdits({ "gone.key": "" }, [])).toEqual([])
+  })
+})
+
+describe("keysThatHideSections", () => {
+  const rows = () =>
+    buildTranslationRows({
+      englishBase: { "has.base": "Shown" },
+      overrides: [override("no.base", "Optional content")],
+    })
+
+  it("names a key with no base being emptied", () => {
+    expect(keysThatHideSections({ "no.base": "" }, rows())).toEqual(["no.base"])
+  })
+
+  it("treats a whitespace-only value as empty", () => {
+    expect(keysThatHideSections({ "no.base": "   " }, rows())).toEqual(["no.base"])
+  })
+
+  it("ignores a key with no base that is being given a value", () => {
+    expect(keysThatHideSections({ "no.base": "Something" }, rows())).toEqual([])
+  })
+
+  it("ignores an emptied key that has a base to fall back to", () => {
+    expect(keysThatHideSections({ "has.base": "" }, rows())).toEqual([])
   })
 })

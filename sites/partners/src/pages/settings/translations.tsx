@@ -30,12 +30,15 @@ import {
   editsForKeys,
   effectiveValue,
   isChanged,
+  keysThatHideSections,
   TranslationEditorRow,
+  validateEdits,
 } from "../../lib/translationEditor"
 import {
   ConflictChoice,
   TranslationConflictDialog,
 } from "../../components/settings/TranslationConflictDialog"
+import { TranslationHideSectionDialog } from "../../components/settings/TranslationHideSectionDialog"
 
 const SettingsTranslations = () => {
   const router = useRouter()
@@ -88,6 +91,8 @@ const SettingsTranslations = () => {
 
   // Values the admin has typed but not saved, keyed by translation key.
   const [editedValues, setEditedValues] = useState<Record<string, string>>({})
+  // A revert waits here until it is either confirmed or found not to need confirming.
+  const [pendingRevertKey, setPendingRevertKey] = useState<string | null>(null)
   const [revertKey, setRevertKey] = useState<string | null>(null)
   // Keys a save could not write because someone changed them first.
   const [conflictKeys, setConflictKeys] = useState<string[]>([])
@@ -186,7 +191,7 @@ const SettingsTranslations = () => {
               disabled={isReverting}
               // Records the key rather than calling the delete, so this memoized renderer never
               // closes over the scope selectors and cannot revert against a stale language.
-              onClick={() => setRevertKey(data.key)}
+              onClick={() => setPendingRevertKey(data.key)}
               id={`revert-${data.key}`}
             >
               {t("translations.revert")}
@@ -228,7 +233,27 @@ const SettingsTranslations = () => {
         })
     )
 
+  // Keys awaiting confirmation because saving or reverting them would remove a section.
+  const [hidingKeys, setHidingKeys] = useState<string[]>([])
+
   const handleSave = () => {
+    const issues = validateEdits(editedValues, rows)
+    if (issues.length) {
+      addToast(
+        t("translations.alertTokenError", {
+          keys: issues.map((issue) => issue.key).join(", "),
+        }),
+        { variant: "alert" }
+      )
+      return
+    }
+
+    const hiding = keysThatHideSections(editedValues, rows)
+    if (hiding.length) {
+      setHidingKeys(hiding)
+      return
+    }
+
     void saveEdits(editedValues)
   }
 
@@ -260,7 +285,19 @@ const SettingsTranslations = () => {
     void saveEdits(kept)
   }
 
-  // Runs the delete for whichever key the revert button recorded, using the current scope.
+  // Reverting a key with no base takes its section off the site, so that case is confirmed first.
+  useEffect(() => {
+    if (!pendingRevertKey) return
+
+    if (rows.find((row) => row.key === pendingRevertKey && !row.hasBase)) {
+      setHidingKeys([pendingRevertKey])
+      return
+    }
+    setRevertKey(pendingRevertKey)
+    setPendingRevertKey(null)
+  }, [pendingRevertKey, rows])
+
+  // Runs the delete for whichever key was confirmed, using the current scope.
   useEffect(() => {
     if (!revertKey) return
 
@@ -409,6 +446,25 @@ const SettingsTranslations = () => {
           isLoading={isSaving}
           onClose={() => setConflictKeys([])}
           onResolve={handleResolveConflicts}
+        />
+      )}
+      {hidingKeys.length > 0 && (
+        <TranslationHideSectionDialog
+          keys={hidingKeys}
+          isLoading={isSaving || isReverting}
+          onClose={() => {
+            setHidingKeys([])
+            setPendingRevertKey(null)
+          }}
+          onConfirm={() => {
+            setHidingKeys([])
+            if (pendingRevertKey) {
+              setRevertKey(pendingRevertKey)
+              setPendingRevertKey(null)
+              return
+            }
+            void saveEdits(editedValues)
+          }}
         />
       )}
     </Layout>

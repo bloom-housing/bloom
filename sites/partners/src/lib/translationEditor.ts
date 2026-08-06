@@ -107,6 +107,78 @@ export const conflictKeysFrom = (error: unknown): string[] => {
   return response.data.conflicts.filter((key): key is string => typeof key === "string")
 }
 
+export type TranslationIssue = {
+  key: string
+  /** Interpolation tokens the English source has that the entered value does not. */
+  missingTokens: string[]
+  /** True when English pluralizes with `||||` and the entered value does not. */
+  missingPluralForms: boolean
+}
+
+const INTERPOLATION_TOKEN = /%\{([^}]+)\}/g
+
+const tokensIn = (value: string): Set<string> =>
+  new Set(Array.from(value.matchAll(INTERPOLATION_TOKEN), (match) => match[1].trim()))
+
+/**
+ * Compares an entered value against its English source for the structure polyglot needs.
+ *
+ * A dropped `%{token}` renders the placeholder literally or loses the interpolated data, and a
+ * dropped `||||` breaks `smart_count` pluralization. The number of plural forms is not compared,
+ * because plural rules are per language: English has two forms where other languages have more.
+ *
+ * Returns null when the value is sound, or when the key has no English source to compare against.
+ */
+export const validateValue = (
+  row: TranslationEditorRow,
+  value: string
+): TranslationIssue | null => {
+  if (row.englishValue === null) return null
+
+  const englishTokens = tokensIn(row.englishValue)
+  const valueTokens = tokensIn(value)
+  const missingTokens = [...englishTokens].filter((token) => !valueTokens.has(token))
+  const missingPluralForms = row.englishValue.includes("||||") && !value.includes("||||")
+
+  if (!missingTokens.length && !missingPluralForms) return null
+  return { key: row.key, missingTokens, missingPluralForms }
+}
+
+/** Every entered value that would break interpolation or pluralization. */
+export const validateEdits = (
+  editedValues: Record<string, string>,
+  rows: TranslationEditorRow[]
+): TranslationIssue[] => {
+  const rowsByKey = new Map(rows.map((row) => [row.key, row]))
+
+  return Object.entries(editedValues)
+    .map(([key, value]) => {
+      const row = rowsByKey.get(key)
+      return row ? validateValue(row, value) : null
+    })
+    .filter((issue): issue is TranslationIssue => issue !== null)
+}
+
+/**
+ * Keys whose save or revert would remove a section from the site.
+ *
+ * A key with no base value renders only when an override supplies it, so emptying or reverting one
+ * takes its section away. A key with a base falls back instead, and nothing disappears.
+ */
+export const keysThatHideSections = (
+  editedValues: Record<string, string>,
+  rows: TranslationEditorRow[]
+): string[] => {
+  const rowsByKey = new Map(rows.map((row) => [row.key, row]))
+
+  return Object.entries(editedValues)
+    .filter(([key, value]) => {
+      const row = rowsByKey.get(key)
+      return !!row && !row.hasBase && value.trim() === ""
+    })
+    .map(([key]) => key)
+}
+
 /** Narrows pending edits to the keys still unresolved, dropping the ones the save wrote. */
 export const editsForKeys = (
   editedValues: Record<string, string>,
