@@ -26,10 +26,16 @@ import { translations } from "../../lib/translations"
 import {
   buildEdits,
   buildTranslationRows,
+  conflictKeysFrom,
+  editsForKeys,
   effectiveValue,
   isChanged,
   TranslationEditorRow,
 } from "../../lib/translationEditor"
+import {
+  ConflictChoice,
+  TranslationConflictDialog,
+} from "../../components/settings/TranslationConflictDialog"
 
 const SettingsTranslations = () => {
   const router = useRouter()
@@ -83,6 +89,8 @@ const SettingsTranslations = () => {
   // Values the admin has typed but not saved, keyed by translation key.
   const [editedValues, setEditedValues] = useState<Record<string, string>>({})
   const [revertKey, setRevertKey] = useState<string | null>(null)
+  // Keys a save could not write because someone changed them first.
+  const [conflictKeys, setConflictKeys] = useState<string[]>([])
   const hasUnsavedChanges = Object.keys(editedValues).length > 0
 
   const rows = useMemo(
@@ -189,21 +197,29 @@ const SettingsTranslations = () => {
     [editedValues, isReverting]
   )
 
-  const handleSave = () => {
-    void saveOverrides(() =>
+  const saveEdits = (values: Record<string, string>) =>
+    saveOverrides(() =>
       translationsService
         .updateRawTranslations({
           jurisdictionId: activeJurisdictionId,
           site: SiteEnum.public,
           language,
-          body: { edits: buildEdits(editedValues, rows) },
+          body: { edits: buildEdits(values, rows) },
         })
         .then(() => {
           setEditedValues({})
+          setConflictKeys([])
           addToast(t("translations.alertSaved"), { variant: "success" })
         })
         .catch((error) => {
-          // Per-key conflict resolution for a 409 is not built yet.
+          const conflicts = conflictKeysFrom(error)
+          if (conflicts.length) {
+            // The rest of the batch was written, so only the named keys stay pending. The
+            // refetch below brings in the values they now hold, for the resolution dialog.
+            setEditedValues(editsForKeys(values, conflicts))
+            setConflictKeys(conflicts)
+            return
+          }
           addToast(t("errors.alert.badRequest"), { variant: "alert" })
           console.log(error)
         })
@@ -211,6 +227,37 @@ const SettingsTranslations = () => {
           void mutate(cacheKey)
         })
     )
+
+  const handleSave = () => {
+    void saveEdits(editedValues)
+  }
+
+  const conflicts = useMemo(() => {
+    const rowsByKey = new Map(rows.map((row) => [row.key, row]))
+    return conflictKeys.map((key) => {
+      const row = rowsByKey.get(key)
+      return {
+        key,
+        mine: editedValues[key] ?? "",
+        theirs: row ? effectiveValue(row) ?? "" : "",
+      }
+    })
+  }, [conflictKeys, editedValues, rows])
+
+  const handleResolveConflicts = (choices: Record<string, ConflictChoice>) => {
+    const kept = Object.fromEntries(
+      Object.entries(editedValues).filter(([key]) => choices[key] !== "theirs")
+    )
+
+    setConflictKeys([])
+    if (!Object.keys(kept).length) {
+      // Every conflict resolved in favor of the stored value, so there is nothing left to write.
+      setEditedValues({})
+      return
+    }
+    // Re-saving now picks up each key's current `updatedAt` from the refetched rows, so the
+    // second attempt locks against what the other admin left behind.
+    void saveEdits(kept)
   }
 
   // Runs the delete for whichever key the revert button recorded, using the current scope.
@@ -356,6 +403,14 @@ const SettingsTranslations = () => {
           }
         />
       </TabView>
+      {conflicts.length > 0 && (
+        <TranslationConflictDialog
+          conflicts={conflicts}
+          isLoading={isSaving}
+          onClose={() => setConflictKeys([])}
+          onResolve={handleResolveConflicts}
+        />
+      )}
     </Layout>
   )
 }

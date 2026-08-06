@@ -2,6 +2,8 @@ import { TranslationOrigin } from "@bloom-housing/shared-helpers/src/types/backe
 import {
   buildEdits,
   buildTranslationRows,
+  conflictKeysFrom,
+  editsForKeys,
   effectiveValue,
   isChanged,
 } from "../../src/lib/translationEditor"
@@ -196,5 +198,58 @@ describe("buildEdits", () => {
     const rows = buildTranslationRows({ englishBase: { "a.key": "Base" }, overrides: [] })
 
     expect(buildEdits({ "a.key": "" }, rows)).toEqual([{ key: "a.key", value: "" }])
+  })
+})
+
+describe("conflictKeysFrom", () => {
+  const conflictError = (conflicts: unknown, status = 409) => ({
+    response: { status, data: { message: "translationConflict", conflicts } },
+  })
+
+  it("reads the keys a 409 names", () => {
+    expect(conflictKeysFrom(conflictError(["a.one", "b.two"]))).toEqual(["a.one", "b.two"])
+  })
+
+  it("returns nothing for a non-409 response", () => {
+    expect(conflictKeysFrom(conflictError(["a.one"], 400))).toEqual([])
+    expect(conflictKeysFrom(conflictError(["a.one"], 500))).toEqual([])
+  })
+
+  it("returns nothing when the error has no response at all", () => {
+    expect(conflictKeysFrom(new Error("network down"))).toEqual([])
+    expect(conflictKeysFrom(undefined)).toEqual([])
+    expect(conflictKeysFrom(null)).toEqual([])
+  })
+
+  it("returns nothing when a 409 carries no usable conflicts list", () => {
+    expect(conflictKeysFrom(conflictError(undefined))).toEqual([])
+    expect(conflictKeysFrom(conflictError("a.one"))).toEqual([])
+  })
+
+  it("drops non-string entries rather than passing them through", () => {
+    expect(conflictKeysFrom(conflictError(["a.one", 42, null, "b.two"]))).toEqual([
+      "a.one",
+      "b.two",
+    ])
+  })
+})
+
+describe("editsForKeys", () => {
+  it("keeps only the named keys, which are the ones still unresolved", () => {
+    expect(editsForKeys({ "a.one": "1", "b.two": "2", "c.three": "3" }, ["b.two"])).toEqual({
+      "b.two": "2",
+    })
+  })
+
+  it("ignores a named key that has no pending edit", () => {
+    expect(editsForKeys({ "a.one": "1" }, ["a.one", "gone.key"])).toEqual({ "a.one": "1" })
+  })
+
+  it("returns nothing when no keys are named, which is the fully saved case", () => {
+    expect(editsForKeys({ "a.one": "1" }, [])).toEqual({})
+  })
+
+  it("keeps an empty edited value", () => {
+    expect(editsForKeys({ "a.one": "" }, ["a.one"])).toEqual({ "a.one": "" })
   })
 })

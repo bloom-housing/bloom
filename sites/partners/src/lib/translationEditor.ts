@@ -89,3 +89,32 @@ export const buildEdits = (
     return updatedAt ? { key, value, lastUpdatedAt: updatedAt } : { key, value }
   })
 }
+
+/**
+ * The keys a batch save rejected because someone else changed them first.
+ *
+ * The API answers a partial save with a 409 naming only those keys; every other edit in the batch
+ * was written. Any other failure returns an empty list, so the caller falls back to a plain error.
+ */
+export const conflictKeysFrom = (error: unknown): string[] => {
+  const response = (error as { response?: { status?: number; data?: { conflicts?: unknown } } })
+    ?.response
+
+  if (response?.status !== 409 || !Array.isArray(response.data?.conflicts)) {
+    return []
+  }
+
+  return response.data.conflicts.filter((key): key is string => typeof key === "string")
+}
+
+/** Narrows pending edits to the keys still unresolved, dropping the ones the save wrote. */
+export const editsForKeys = (
+  editedValues: Record<string, string>,
+  keys: string[]
+): Record<string, string> =>
+  keys.reduce((remaining, key) => {
+    if (key in editedValues) {
+      remaining[key] = editedValues[key]
+    }
+    return remaining
+  }, {} as Record<string, string>)
