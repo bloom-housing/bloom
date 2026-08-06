@@ -11,3 +11,15 @@ When true, only admins can add/edit users on the partner site. Jurisdictional ad
 ## Additional Information
 
 ## Images
+
+With feature flag not turned on
+
+![image.png](./images/image%2079.png)
+
+![image.png](./images/image%2080.png)
+
+With feature flag enabled
+
+![image.png](./images/image%2077.png)
+
+![image.png](./images/image%2078.png)
