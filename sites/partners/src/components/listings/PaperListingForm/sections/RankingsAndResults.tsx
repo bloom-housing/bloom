@@ -19,6 +19,7 @@ import styles from "../ListingForm.module.scss"
 import { FormListing } from "../../../../lib/listings/formTypes"
 
 type RankingsAndResultsProps = {
+  disableDueDates?: boolean
   enableUnitGroups?: boolean
   enableWaitlistAdditionalFields?: boolean
   enableWaitlistLottery?: boolean
@@ -31,6 +32,7 @@ type RankingsAndResultsProps = {
 }
 
 const RankingsAndResults = ({
+  disableDueDates,
   enableUnitGroups,
   enableWaitlistAdditionalFields,
   enableWaitlistLottery,
@@ -72,12 +74,10 @@ const RankingsAndResults = ({
     name: "listingAvailabilityQuestion",
   })
 
-  const showFSFCLotterySection =
-    (enableWaitlistLottery && waitlistOpen) || availabilityQuestion !== "openWaitlist"
+  const showFCFSLotterySection = enableWaitlistLottery || availabilityQuestion !== "openWaitlist"
 
-  // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
-    (showFSFCLotterySection || enableUnitGroups) && reviewOrder === "reviewOrderLottery"
+    (showFCFSLotterySection || enableUnitGroups) && reviewOrder === "reviewOrderLottery"
 
   const yesNoRadioOptions = [
     {
@@ -96,7 +96,7 @@ const RankingsAndResults = ({
         heading={t("listings.sections.rankingsResultsTitle")}
         subheading={t("listings.sections.rankingsResultsSubtitle")}
       >
-        {(showFSFCLotterySection || enableUnitGroups) && (
+        {(showFCFSLotterySection || enableUnitGroups) && (
           <Grid.Row columns={2} className={"flex items-center"}>
             <Grid.Cell>
               <FieldGroup
@@ -110,18 +110,27 @@ const RankingsAndResults = ({
                     label: t("listings.firstComeFirstServe"),
                     value: "reviewOrderFCFS",
                     id: "reviewOrderFCFS",
+                    disabled:
+                      disableDueDates &&
+                      (listing?.reviewOrderType === ReviewOrderTypeEnum.lottery ||
+                        listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery),
                     defaultChecked:
                       listing?.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe ||
                       listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
                       !listing?.reviewOrderType,
+                    dataTestId: "review-order-fcfs",
                   },
                   {
                     label: t("listings.lotteryTitle"),
                     value: "reviewOrderLottery",
                     id: "reviewOrderLottery",
+                    disabled:
+                      disableDueDates &&
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe,
                     defaultChecked:
                       listing?.reviewOrderType === ReviewOrderTypeEnum.lottery ||
                       listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery,
+                    dataTestId: "review-order-lottery",
                   },
                 ]}
               />
@@ -184,6 +193,7 @@ const RankingsAndResults = ({
                   required
                   setValue={setValue}
                   watch={watch}
+                  disabled={disableDueDates}
                   error={
                     errors?.lotteryDate
                       ? {
@@ -221,6 +231,7 @@ const RankingsAndResults = ({
                   required
                   setValue={setValue}
                   watch={watch}
+                  disabled={disableDueDates}
                   error={errors?.lotteryStartTime ? true : false}
                   strings={{
                     timeError: errors?.lotteryStartTime ? t("errors.timeError") : null,
@@ -253,6 +264,7 @@ const RankingsAndResults = ({
                   required
                   setValue={setValue}
                   watch={watch}
+                  disabled={disableDueDates}
                   error={errors?.lotteryEndTime ? true : false}
                   strings={{
                     timeError: errors?.lotteryEndTime ? t("errors.timeError") : null,
