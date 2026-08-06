@@ -118,6 +118,7 @@ const RankingsAndResults = ({
                       listing?.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe ||
                       listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
                       !listing?.reviewOrderType,
+                    dataTestId: "review-order-fcfs",
                   },
                   {
                     label: t("listings.lotteryTitle"),
@@ -129,6 +130,7 @@ const RankingsAndResults = ({
                     defaultChecked:
                       listing?.reviewOrderType === ReviewOrderTypeEnum.lottery ||
                       listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery,
+                    dataTestId: "review-order-lottery",
                   },
                 ]}
               />
