@@ -11,4 +11,14 @@ export class ApplicationBulkUrl {
   @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
   @ApiProperty()
   listingId: string;
+
+  @Expose()
+  @ApiProperty()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  contentType: string;
+
+  @Expose()
+  @ApiProperty()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  contentDisposition: string;
 }

@@ -352,9 +352,13 @@ export class ApplicationBulkUploadService {
 
     const s3KeyTemplate = `bulk-application-updates-${listingId}-${
       user.id
-    }-${new Date().toISOString()}`;
+    }-${new Date().toISOString()}.csv`;
     const presignedUrl = await this.s3Service.uploadURLForPrivate(
       s3KeyTemplate,
+      {
+        contentDisposition: dto.contentDisposition,
+        contentType: dto.contentType,
+      },
     );
 
     return {
