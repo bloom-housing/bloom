@@ -45,10 +45,12 @@ const SettingsAgencies = () => {
     true
   )
   const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
+  const enableTranslations = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableDbDrivenContent)
   const settingsTabsFeatureFlags = {
     enablePreferences: atLeastOneJurisdictionEnablesPreferences,
     enableProperties,
     enableAgencies,
+    enableTranslations,
   }
 
   if (

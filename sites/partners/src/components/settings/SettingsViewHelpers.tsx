@@ -6,31 +6,40 @@ export enum SettingsIndexEnum {
   preferences = 0,
   properties,
   agencies,
+  translations,
 }
 
 type SettingsTabsFeatureFlags = {
   enablePreferences: boolean
   enableProperties: boolean
   enableAgencies?: boolean
+  enableTranslations?: boolean
 }
 
 export const getEnabledSettingsTabCount = ({
   enablePreferences,
   enableProperties,
   enableAgencies,
+  enableTranslations,
 }: SettingsTabsFeatureFlags) =>
-  [enablePreferences, enableProperties, enableAgencies].filter(Boolean).length
+  [enablePreferences, enableProperties, enableAgencies, enableTranslations].filter(Boolean).length
 
 export const getSettingsTabs = (
   selectedIndex: SettingsIndexEnum,
   enableV2MSQ: boolean,
-  { enablePreferences, enableProperties, enableAgencies }: SettingsTabsFeatureFlags
+  {
+    enablePreferences,
+    enableProperties,
+    enableAgencies,
+    enableTranslations,
+  }: SettingsTabsFeatureFlags
 ) => {
   const baseUrl = "/settings/"
   const enabledTabs: SettingsIndexEnum[] = []
   if (enablePreferences) enabledTabs.push(SettingsIndexEnum.preferences)
   if (enableProperties) enabledTabs.push(SettingsIndexEnum.properties)
   if (enableAgencies) enabledTabs.push(SettingsIndexEnum.agencies)
+  if (enableTranslations) enabledTabs.push(SettingsIndexEnum.translations)
 
   return (
     <Tabs
@@ -67,6 +76,15 @@ export const getSettingsTabs = (
             active={selectedIndex === SettingsIndexEnum.agencies}
           >
             <span>{t("settings.agencies")}</span>
+          </Tabs.Tab>
+        )}
+        {enableTranslations && (
+          <Tabs.Tab
+            href={`${baseUrl}/translations`}
+            data-testid="translations-tab"
+            active={selectedIndex === SettingsIndexEnum.translations}
+          >
+            <span>{t("settings.translations")}</span>
           </Tabs.Tab>
         )}
       </Tabs.TabList>
