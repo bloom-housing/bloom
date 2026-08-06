@@ -16,6 +16,7 @@ export enum FeatureFlagEnum {
   enableApplicationStatus = 'enableApplicationStatus',
   enableAutoOpenDate = 'enableAutoOpenDate',
   enableAutopublish = 'enableAutopublish',
+  enableBulkCsvIntake = 'enableBulkCsvIntake',
   enableCompanyWebsite = 'enableCompanyWebsite',
   enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
@@ -159,6 +160,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableAutopublish,
     description:
       'When true, partners can set an optional scheduled listing publish date',
+  },
+  {
+    name: FeatureFlagEnum.enableBulkCsvIntake,
+    description:
+      'When true, allows for the bulk uptake of application statuses',
   },
   {
     name: FeatureFlagEnum.enableCompanyWebsite,
