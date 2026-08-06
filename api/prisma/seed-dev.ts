@@ -9,6 +9,7 @@ import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
 import { listingFactory } from './seed-helpers/listing-factory';
+import { unitRentTypeFactoryAll } from './seed-helpers/unit-rent-type-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { randomName } from './seed-helpers/word-generator';
 import { randomInt } from 'node:crypto';
@@ -131,6 +132,8 @@ export const devSeeding = async (
     }),
   );
   const unitTypes = await unitTypeFactoryAll(prismaClient);
+  // Units are created with a rent type, so the lookup table has to exist first.
+  await unitRentTypeFactoryAll(prismaClient);
   const amiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(10, jurisdiction.id, null, jurisdiction.name),
   });
