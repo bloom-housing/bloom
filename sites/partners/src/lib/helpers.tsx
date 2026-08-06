@@ -18,7 +18,6 @@ import {
   Application,
   AssetsService,
   IncomePeriodEnum,
-  ApplicationsService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import * as styles from "../components/listings/PaperListingForm/ListingForm.module.scss"
 
@@ -194,29 +193,29 @@ export const fileUploader = async ({
   }
 
   const assetsService = new AssetsService()
-  const applicationService = new ApplicationsService()
   setProgressValue(1)
 
   if (process.env.useS3FileStorage === "TRUE") {
-    const resp = await applicationService.uploadBulkUpdate({
+    const resp = await assetsService.createS3UploadUrl({
       body: {
-        listingId: "cc52d648-1026-40d4-af37-7e468977263d",
+        contentType: contentType || "",
+        contentDisposition: contentDisposition || "",
       },
     })
-    const { presignedUrl } = resp
+    const { uploadUrl, publicUrl } = resp
     setProgressValue(3)
 
     void S3Upload({
       file,
-      uploadUrl: presignedUrl,
+      uploadUrl,
       onUploadProgress,
       contentType,
       contentDisposition,
     }).then((_) => {
       setProgressValue(100)
       setFileUploadData({
-        id: presignedUrl,
-        url: presignedUrl,
+        id: publicUrl,
+        url: publicUrl,
       })
     })
   } else {

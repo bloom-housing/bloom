@@ -9281,6 +9281,12 @@ export interface ApplicationUpdateEmail {
 export interface ApplicationBulkUrl {
   /**  */
   listingId: string
+
+  /**  */
+  contentType: string
+
+  /**  */
+  contentDisposition: string
 }
 
 /** ApplicationBulkPresignedUrl */
