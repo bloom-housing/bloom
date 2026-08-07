@@ -154,6 +154,13 @@ const translations = (
             'Si cree que esta decisión fue un error o tiene preguntas sobre la elegibilidad, comuníquese con nosotros en',
           rejectionInfoEnd: 'para obtener más información.',
         },
+        forgotPassword: {
+          subject: '¿Restablecer su contraseña?',
+          resetRequest:
+            'Recibimos una solicitud para restablecer la contraseña de su cuenta del Portal de Vivienda Bloom. Debe hacer clic en el siguiente enlace para completar el restablecimiento:',
+          ignoreRequest:
+            'Este restablecimiento de contraseña solo es válido durante la próxima hora. Si usted no hizo esta solicitud, ignore este correo electrónico.',
+        },
         rentalOpportunity: {
           subject: 'Nueva oportunidad de alquiler en %{listingName}',
           intro: 'Oportunidad de alquiler en',
@@ -259,6 +266,13 @@ const translations = (
             'Nếu bạn tin rằng quyết định này được đưa ra do sai sót hoặc có câu hỏi về đủ điều kiện, vui lòng liên hệ với chúng tôi tại',
           rejectionInfoEnd: 'để biết thêm thông tin.',
         },
+        forgotPassword: {
+          subject: 'Đặt lại mật khẩu của bạn?',
+          resetRequest:
+            'Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản Cổng thông tin Nhà ở Bloom của bạn. Bạn phải nhấp vào liên kết sau để hoàn tất việc đặt lại:',
+          ignoreRequest:
+            'Việc đặt lại mật khẩu này chỉ có hiệu lực trong một giờ tới. Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.',
+        },
         rentalOpportunity: {
           subject: 'Cơ hội thuê nhà mới tại %{listingName}',
           intro: 'Cơ hội thuê nhà tại',
@@ -358,6 +372,13 @@ const translations = (
           rejectionInfoStart:
             '如果您认为这个决定是错误的或对资格有疑问，请通过以下方式与我们联系',
           rejectionInfoEnd: '获取更多信息。',
+        },
+        forgotPassword: {
+          subject: '重置您的密码？',
+          resetRequest:
+            '我们收到了重置您的 Bloom 住房门户账户密码的请求。您必须点击以下链接才能完成重置：',
+          ignoreRequest:
+            '此密码重置仅在接下来的一小时内有效。如果您没有提出此请求，请忽略此电子邮件。',
         },
         rentalOpportunity: {
           subject: '新租赁机会：%{listingName}',
@@ -461,6 +482,13 @@ const translations = (
           rejectionInfoStart:
             'Kung naniniwala ka na ang desisyon na ito ay nagawa sa error o mayroon kang mga tanong tungkol sa eligibility, mangyaring makipag-ugnayan sa amin sa',
           rejectionInfoEnd: 'para sa higit pang impormasyon.',
+        },
+        forgotPassword: {
+          subject: 'I-reset ang iyong password?',
+          resetRequest:
+            'Nakatanggap kami ng kahilingan na i-reset ang password ng iyong account sa Bloom Housing Portal. Kailangan mong i-click ang sumusunod na link upang makumpleto ang pag-reset:',
+          ignoreRequest:
+            'Ang pag-reset ng password na ito ay may bisa lamang sa loob ng susunod na isang oras. Kung hindi ikaw ang gumawa ng kahilingang ito, mangyaring huwag pansinin ang email na ito.',
         },
         rentalOpportunity: {
           subject: 'Bagong pagkakataon sa pag-upa sa %{listingName}',
@@ -567,6 +595,13 @@ const translations = (
             'যদি আপনি বিশ্বাস করেন যে এই সিদ্ধান্তটি ত্রুটিতে নেওয়া হয়েছে বা যোগ্যতা সম্পর্কে প্রশ্ন থাকে, দয়া করে আমাদের সাথে যোগাযোগ করুন',
           rejectionInfoEnd: 'আরও তথ্যের জন্য।',
         },
+        forgotPassword: {
+          subject: 'আপনার পাসওয়ার্ড রিসেট করবেন?',
+          resetRequest:
+            'আমরা আপনার Bloom হাউজিং পোর্টাল অ্যাকাউন্টের পাসওয়ার্ড রিসেট করার একটি অনুরোধ পেয়েছি। রিসেট সম্পূর্ণ করতে আপনাকে অবশ্যই নিচের লিঙ্কে ক্লিক করতে হবে:',
+          ignoreRequest:
+            'এই পাসওয়ার্ড রিসেটটি শুধুমাত্র পরবর্তী এক ঘণ্টার জন্য বৈধ। আপনি যদি এই অনুরোধটি না করে থাকেন, তাহলে অনুগ্রহ করে এই ইমেলটি উপেক্ষা করুন।',
+        },
         rentalOpportunity: {
           subject: '%{listingName}-এ নতুন ভাড়ার সুযোগ',
           intro: 'ভাড়ার সুযোগ:',
@@ -667,6 +702,13 @@ const translations = (
           rejectionInfoStart:
             'إذا كنت تعتقد أن هذا القرار تم اتخاذه بالخطأ أو لديك أسئلة حول الأهلية، يرجى الاتصال بنا على',
           rejectionInfoEnd: 'للحصول على مزيد من المعلومات.',
+        },
+        forgotPassword: {
+          subject: 'إعادة تعيين كلمة المرور الخاصة بك؟',
+          resetRequest:
+            'لقد تلقينا طلباً لإعادة تعيين كلمة المرور لحسابك في بوابة Bloom للإسكان. يجب النقر على الرابط التالي لإكمال إعادة التعيين:',
+          ignoreRequest:
+            'إعادة تعيين كلمة المرور هذه صالحة للساعة القادمة فقط. إذا لم تقم بتقديم هذا الطلب، فيرجى تجاهل هذا البريد الإلكتروني.',
         },
         rentalOpportunity: {
           subject: 'فرصة إيجار جديدة في %{listingName}',
@@ -770,6 +812,13 @@ const translations = (
             '이 결정이 오류로 인해 결정되었다고 생각하거나 자격 요건에 대해 질문이 있으면 다음 주소로 문의하세요',
           rejectionInfoEnd: '자세한 내용은',
         },
+        forgotPassword: {
+          subject: '비밀번호를 재설정하시겠습니까?',
+          resetRequest:
+            'Bloom 주택 포털 계정의 비밀번호 재설정 요청을 받았습니다. 재설정을 완료하려면 다음 링크를 클릭해야 합니다:',
+          ignoreRequest:
+            '이 비밀번호 재설정은 앞으로 1시간 동안만 유효합니다. 이 요청을 하지 않으셨다면 이 이메일을 무시하세요.',
+        },
         rentalOpportunity: {
           subject: '%{listingName}의 새로운 임대 기회',
           intro: '임대 기회 위치:',
@@ -871,6 +920,13 @@ const translations = (
           rejectionInfoStart:
             'Եթե Դուք կարծում եք, որ այս որոշումը սխալ է կամ ունեք հարցեր պատկանելիության վերաբերյալ, խնդրում ենք մեզ հետ կապ հաստատել',
           rejectionInfoEnd: 'ավելի շատ տեղեկատվության համար:',
+        },
+        forgotPassword: {
+          subject: 'Վերականգնե՞լ ձեր գաղտնաբառը:',
+          resetRequest:
+            'Մենք ստացել ենք ձեր Bloom բնակարանային պորտալի հաշվի գաղտնաբառը վերականգնելու հարցում: Վերականգնումն ավարտելու համար դուք պետք է սեղմեք հետևյալ հղումը.',
+          ignoreRequest:
+            'Գաղտնաբառի այս վերականգնումը վավեր է միայն հաջորդ մեկ ժամվա ընթացքում: Եթե դուք չեք կատարել այս հարցումը, խնդրում ենք անտեսել այս նամակը:',
         },
         rentalOpportunity: {
           subject: 'Նոր վարձակալության հնարավորություն՝ %{listingName}',
@@ -976,6 +1032,13 @@ const translations = (
           rejectionInfoStart:
             'اگر فکر می‌کنید این تصمیم اشتباهی است یا سؤالاتی درباره واجدین شرایط دارید، لطفاً با ما تماس بگیرید',
           rejectionInfoEnd: 'برای اطلاعات بیشتر.',
+        },
+        forgotPassword: {
+          subject: 'بازنشانی رمز عبور شما؟',
+          resetRequest:
+            'ما درخواستی برای بازنشانی رمز عبور حساب پورتال مسکن Bloom شما دریافت کردیم. برای تکمیل بازنشانی باید روی پیوند زیر کلیک کنید:',
+          ignoreRequest:
+            'این بازنشانی رمز عبور فقط تا یک ساعت آینده معتبر است. اگر شما این درخواست را ثبت نکرده‌اید، لطفاً این ایمیل را نادیده بگیرید.',
         },
         rentalOpportunity: {
           subject: 'فرصت اجاره جدید در %{listingName}',
@@ -1222,16 +1285,11 @@ const translations = (
           mfaCode: 'Your access code is: %{singleUseCode}',
         },
         forgotPassword: {
-          subject: 'Forgot your password?',
-          callToAction:
-            'If you did make this request, please click on the link below to reset your password:',
-          passwordInfo:
-            "Your password won't change until you access the link above and create a new one.",
+          subject: 'Reset your password?',
           resetRequest:
-            'A request to reset your Bloom Housing Portal website password for %{appUrl} has recently been made.',
+            'We received a request to reset your password for your Bloom Housing Portal account. You must click the following link to complete the reset:',
           ignoreRequest:
-            "If you didn't request this, please ignore this email.",
-          changePassword: 'Change my password',
+            'This password reset is only valid for the next hour. If you didn’t make this request, please ignore this email.',
         },
         requestApproval: {
           header: 'Listing approval requested',
