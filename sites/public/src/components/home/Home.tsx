@@ -64,7 +64,7 @@ export const Home = (props: HomeProps) => {
             )}
             <Hero
               title={heroTitle}
-              titleSize="4xl"
+              titleSize="md"
               action={<HomeSearch jurisdiction={props.jurisdiction} />}
               image={props.heroImage ? `/images/${props.heroImage}` : undefined}
               imageAlt={t("welcome.heroAltText")}

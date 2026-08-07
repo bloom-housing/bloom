@@ -17,18 +17,21 @@ export interface HeroProps {
   subtitle?: string
   /** Main heading text */
   title: string
-  titleSize?: HeadingSize
+  titleSize?: "sm" | "md" | "lg"
 }
 
 export const Hero = (props: HeroProps) => {
-  const headingSize = props.titleSize || ("6xl" as HeadingSize)
+  const titleSize = props.titleSize || "lg"
 
   return (
     <MaxWidthLayout className={styles["hero-container"]} fullHeight={props.fullHeight}>
       <div className={styles["hero-with-image"]}>
         <div className={`${styles["hero"]}`}>
           {props.note && <p className={styles["note"]}>{props.note}</p>}
-          <Heading priority={1} size={headingSize} className={styles["heading"]}>
+          <Heading
+            priority={1}
+            className={`${styles["heading"]} ${styles[`heading-${titleSize}`]}`}
+          >
             {props.title}
           </Heading>
           {props.subtitle && <p className={styles["subtitle"]}>{props.subtitle}</p>}

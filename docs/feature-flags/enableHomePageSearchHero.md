@@ -14,7 +14,7 @@ The view of the form change depending on additional configuration:
 
 - "County" filter only appears if the `enableFilterByCounty` feature flag is enabled
 - Adding the "welcome.searchSubNote" translation string adds a subnote below the search form
-- Adding an image titled `hero-image.jpg` to the `sites/public/public/images` directory displays an image to the side of the form in desktop mode
+- Adding an image titled `hero-image.jpg` to the `sites/public/public/images` directory displays an image to the side of the form in desktop mode and above in mobile (no image in tablet view). If an image is added make sure to update the "welcome.heroAltText" translation string so the image is accessible.
 
 ## Images
 
