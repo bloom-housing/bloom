@@ -33,17 +33,6 @@ interface PropertyNameFormValues {
   availabilities?: boolean
 }
 
-const bedroomTypes = [
-  { label: t("listings.unitTypes.studio"), value: UnitTypeEnum.studio },
-  { label: t("listings.unitTypes.oneBdrm"), value: UnitTypeEnum.oneBdrm },
-  { label: t("listings.unitTypes.twoBdrm"), value: UnitTypeEnum.twoBdrm },
-  { label: t("listings.unitTypes.threeBdrm"), value: UnitTypeEnum.threeBdrm },
-  { label: t("listings.unitTypes.fourBdrm"), value: UnitTypeEnum.fourBdrm },
-  { label: t("listings.unitTypes.fiveBdrm"), value: UnitTypeEnum.fiveBdrm },
-  { label: t("listings.unitTypes.sixBdrm"), value: UnitTypeEnum.sixBdrm },
-  { label: t("listings.unitTypes.sevenBdrm"), value: UnitTypeEnum.sevenBdrm },
-]
-
 const navigateToListings = (router: ReturnType<typeof useRouter>, filterData: FilterData) => {
   const query = encodeFilterDataToQuery(filterData)
   void router.push(`/listings${query ? `?${query}` : ""}`)
@@ -68,12 +57,24 @@ export const HomeSearch = (props: HomeSearchProps) => {
   const { register: registerPropertyName, handleSubmit: handlePropertyNameSubmit } =
     useForm<PropertyNameFormValues>()
 
+  const bedroomTypes = [
+    { label: t("t.any"), value: "any" },
+    { label: t("listings.unitTypes.studio"), value: UnitTypeEnum.studio },
+    { label: t("listings.unitTypes.oneBdrm"), value: UnitTypeEnum.oneBdrm },
+    { label: t("listings.unitTypes.twoBdrm"), value: UnitTypeEnum.twoBdrm },
+    { label: t("listings.unitTypes.threeBdrm"), value: UnitTypeEnum.threeBdrm },
+    { label: t("listings.unitTypes.fourBdrm"), value: UnitTypeEnum.fourBdrm },
+    { label: t("listings.unitTypes.fiveBdrm"), value: UnitTypeEnum.fiveBdrm },
+    { label: t("listings.unitTypes.sixBdrm"), value: UnitTypeEnum.sixBdrm },
+    { label: t("listings.unitTypes.sevenBdrm"), value: UnitTypeEnum.sevenBdrm },
+  ]
+
   const onFiltersSubmit = (data: FiltersFormValues) => {
     const filterData: FilterData = {}
-    if (data.county) {
+    if (data.county && data.county !== "any") {
       filterData.jurisdictions = { [data.county]: true }
     }
-    if (data.bedroomTypes) {
+    if (data.bedroomTypes && data.bedroomTypes !== "any") {
       // Bedroom filter should select that bedroom type and all larger bedroom types
       const selectedBedroomTypeIndex = bedroomTypes.findIndex(
         (type) => type.value === data.bedroomTypes
@@ -118,24 +119,27 @@ export const HomeSearch = (props: HomeSearchProps) => {
             <div className={styles["hero-search"]}>
               <div className={styles["hero-filter-flex"]}>
                 {enableFilterByCounty && props.jurisdiction.subJurisdictions?.length > 0 && (
-                  <Select
-                    name="county"
-                    label={t("t.county")}
-                    placeholder="All Counties"
-                    register={registerFilters}
-                    controlClassName="control"
-                    options={props.jurisdiction.subJurisdictions?.map((county) => {
-                      return {
-                        label: county.name,
-                        value: county.id,
-                      }
-                    })}
-                  />
+                  <div className={styles["hero-filter-county"]}>
+                    <Select
+                      name="county"
+                      label={t("t.county")}
+                      register={registerFilters}
+                      controlClassName="control"
+                      options={[
+                        { label: t("welcome.search.allCounties"), value: "any" },
+                        ...props.jurisdiction.subJurisdictions.map((county) => {
+                          return {
+                            label: county.name,
+                            value: county.id,
+                          }
+                        }),
+                      ]}
+                    />
+                  </div>
                 )}
                 <Select
                   name={ListingFilterKeys.bedroomTypes}
                   label={t("t.bedrooms")}
-                  placeholder={t("t.any")}
                   register={registerFilters}
                   controlClassName="control"
                   options={bedroomTypes}

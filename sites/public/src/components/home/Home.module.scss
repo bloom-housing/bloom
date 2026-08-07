@@ -66,6 +66,9 @@
   }
   .hero-search-subNote {
     margin-block-start: var(--seeds-s4);
+    a {
+      color: var(--seeds-color-on-inverse);
+    }
   }
   .hero-search-card {
     padding-block: var(--seeds-s6);
@@ -91,6 +94,10 @@
           display: flex;
           gap: var(--seeds-s4);
         }
+      }
+
+      .hero-filter-county {
+        min-width: 180px;
       }
 
       // The filter checkbox should be below the view listing button on desktop but still be before the button in tab order

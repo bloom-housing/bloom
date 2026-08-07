@@ -11,9 +11,21 @@
       font-family: var(--seeds-font-alt-sans);
       color: var(--seeds-color-on-inverse);
       font-weight: var(--seeds-font-weight-semibold);
+    }
+    .heading-lg {
+      font-size: var(--seeds-font-size-6xl);
       @media (--sm-only) {
         font-size: var(--seeds-font-size-3xl);
       }
+    }
+    .heading-md {
+      font-size: var(--seeds-font-size-4xl);
+      @media (--sm-only) {
+        font-size: var(--seeds-font-size-2xl);
+      }
+    }
+    .heading-sm {
+      font-size: var(--seeds-font-size-2xl);
     }
     .subtitle {
       margin-block-start: var(--seeds-spacer-content);

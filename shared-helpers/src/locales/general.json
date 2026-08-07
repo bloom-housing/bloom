@@ -1481,6 +1481,7 @@
   "welcome.learnMore": "Learn more",
   "welcome.resources": "Resources",
   "welcome.searchSubNote": "For additional listings, go to <a className='lined' href='https://www.exygy.com/' target='_blank'>Exygy</a>",
+  "welcome.search.allCounties": "All counties",
   "welcome.search.byFilter": "Search by filter",
   "welcome.search.byProperty": "Search by property",
   "welcome.search.availabilityFilter": "Show available units only (hide waitlists)",
