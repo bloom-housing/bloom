@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { Select, t, useMutate } from "@bloom-housing/ui-components"
+import { Field, Select, t, useMutate } from "@bloom-housing/ui-components"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { Button } from "@bloom-housing/ui-seeds"
 import { useSWRConfig } from "swr"
@@ -13,7 +13,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { flattenTranslations } from "@bloom-housing/shared-helpers/src/utilities/flattenTranslations"
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
-import { ColDef, ColGroupDef } from "ag-grid-community"
+import { ColDef, ColGroupDef, Column } from "ag-grid-community"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import {
@@ -23,6 +23,7 @@ import {
 } from "../../components/settings/SettingsViewHelpers"
 import { useRawTranslations } from "../../lib/hooks"
 import { translations } from "../../lib/translations"
+import styles from "./translations.module.scss"
 import {
   buildEdits,
   buildTranslationRows,
@@ -39,6 +40,12 @@ import {
   TranslationConflictDialog,
 } from "../../components/settings/TranslationConflictDialog"
 import { TranslationHideSectionDialog } from "../../components/settings/TranslationHideSectionDialog"
+
+// Used to guess whether a value is being cut off, so a truncated cell opens the larger editor.
+// Approximations rather than measurements: being one character out changes which editor opens.
+const APPROXIMATE_CHARACTER_WIDTH = 7
+const CELL_PADDING = 34
+const DEFAULT_VALUE_COLUMN_WIDTH = 220
 
 const SettingsTranslations = () => {
   const router = useRouter()
@@ -148,9 +155,24 @@ const SettingsTranslations = () => {
         minWidth: 220,
         flex: 2,
         editable: true,
-        // Many values are full paragraphs, so the single-line editor is not enough.
-        cellEditor: "agLargeTextCellEditor",
-        cellEditorParams: { maxLength: 5000 },
+        // One click opens the editor. The default double-click gives no hint that a cell is
+        // editable.
+        singleClickEdit: true,
+        cellClass: ({ data }: { data: TranslationEditorRow }) =>
+          editedValues[data.key] !== undefined
+            ? `${styles["editable-cell"]} ${styles["edited-cell"]}`
+            : styles["editable-cell"],
+        // A value the column is wide enough to show gets the inline editor, where Enter commits.
+        // Anything the cell truncates, or that spans lines, gets the popup textarea.
+        cellEditorSelector: ({ value, column }: { value: string; column?: Column }) => {
+          const text = value ?? ""
+          const width = column?.getActualWidth?.() ?? DEFAULT_VALUE_COLUMN_WIDTH
+          const visibleCharacters = (width - CELL_PADDING) / APPROXIMATE_CHARACTER_WIDTH
+
+          return text.length > visibleCharacters || text.includes("\n")
+            ? { component: "agLargeTextCellEditor", params: { maxLength: 5000 } }
+            : { component: "agTextCellEditor" }
+        },
         valueGetter: ({ data }: { data: TranslationEditorRow }) =>
           editedValues[data.key] ?? effectiveValue(data) ?? "",
         // ag-grid has no grid-level change callback through AgTable, so the setter is where an
@@ -354,6 +376,83 @@ const SettingsTranslations = () => {
           settingsTabsFeatureFlags
         )}
       >
+        <div className={styles["toolbar"]}>
+          <div className={styles["scope-controls"]}>
+            {jurisdictions.length > 1 && (
+              <Select
+                id="translationsJurisdiction"
+                name="translationsJurisdiction"
+                label={t("t.jurisdiction")}
+                defaultValue={activeJurisdictionId}
+                // Changing scope with unsaved edits would discard them silently, and the edited
+                // values belong to the scope they were typed in.
+                disabled={hasUnsavedChanges}
+                options={jurisdictions.map((jurisdiction) => ({
+                  value: jurisdiction.id,
+                  label: jurisdiction.name,
+                }))}
+                inputProps={{
+                  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
+                    setJurisdictionId(event.target.value)
+                    tableOptions.pagination.setCurrentPage(1)
+                  },
+                }}
+              />
+            )}
+            <Select
+              id="translationsLanguage"
+              name="translationsLanguage"
+              label={t("t.language")}
+              defaultValue={language}
+              disabled={hasUnsavedChanges}
+              options={languageOptions}
+              inputProps={{
+                onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
+                  setLanguage(event.target.value as LanguagesEnum)
+                  tableOptions.pagination.setCurrentPage(1)
+                },
+              }}
+            />
+          </div>
+          <div className={styles["actions"]}>
+            <Button
+              variant="primary"
+              size="sm"
+              disabled={!hasUnsavedChanges || isSaving}
+              onClick={handleSave}
+              id="saveTranslations"
+            >
+              {hasUnsavedChanges
+                ? t("translations.saveCount", { count: Object.keys(editedValues).length })
+                : t("t.save")}
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              disabled={!hasUnsavedChanges || isSaving}
+              onClick={() => setEditedValues({})}
+              id="discardTranslations"
+            >
+              {t("t.cancel")}
+            </Button>
+          </div>
+        </div>
+        {/* AgTable renders its own filter immediately above the grid, which puts the hint further
+            from the table than it should be. Its search is turned off below and rendered here so
+            the hint sits directly above the table. */}
+        <div className={styles["filter"]}>
+          <Field
+            name="translationsFilter"
+            label={t("t.filter")}
+            readerOnly={true}
+            placeholder={t("t.filter")}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              tableOptions.filter.setFilterValue(event.target.value)
+              tableOptions.pagination.setCurrentPage(1)
+            }}
+          />
+        </div>
+        <p className={styles["editing-hint"]}>{t("translations.editingHint")}</p>
         <AgTable
           id="translations-table"
           pagination={{
@@ -374,70 +473,8 @@ const SettingsTranslations = () => {
           }}
           search={{
             setSearch: tableOptions.filter.setFilterValue,
+            showSearch: false,
           }}
-          headerContent={
-            <div className="flex gap-4 items-end">
-              {jurisdictions.length > 1 && (
-                <Select
-                  id="translationsJurisdiction"
-                  name="translationsJurisdiction"
-                  label={t("t.jurisdiction")}
-                  defaultValue={activeJurisdictionId}
-                  // Changing scope with unsaved edits would discard them silently, and the
-                  // edited values belong to the scope they were typed in.
-                  disabled={hasUnsavedChanges}
-                  options={jurisdictions.map((jurisdiction) => ({
-                    value: jurisdiction.id,
-                    label: jurisdiction.name,
-                  }))}
-                  inputProps={{
-                    onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
-                      setJurisdictionId(event.target.value)
-                      tableOptions.pagination.setCurrentPage(1)
-                    },
-                  }}
-                />
-              )}
-              <Select
-                id="translationsLanguage"
-                name="translationsLanguage"
-                label={t("t.language")}
-                defaultValue={language}
-                disabled={hasUnsavedChanges}
-                options={languageOptions}
-                inputProps={{
-                  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
-                    setLanguage(event.target.value as LanguagesEnum)
-                    tableOptions.pagination.setCurrentPage(1)
-                  },
-                }}
-              />
-              {hasUnsavedChanges && (
-                <>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    disabled={isSaving}
-                    onClick={handleSave}
-                    id="saveTranslations"
-                  >
-                    {t("translations.saveCount", {
-                      count: Object.keys(editedValues).length,
-                    })}
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    disabled={isSaving}
-                    onClick={() => setEditedValues({})}
-                    id="discardTranslations"
-                  >
-                    {t("t.cancel")}
-                  </Button>
-                </>
-              )}
-            </div>
-          }
         />
       </TabView>
       {conflicts.length > 0 && (

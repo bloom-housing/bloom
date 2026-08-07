@@ -1,0 +1,61 @@
+// The value column is editable, which ag-grid gives no affordance for on its own. Styling the
+// cell like a form field is what tells an admin it can be clicked.
+.editable-cell {
+  border: 1px solid var(--seeds-color-gray-450);
+  border-radius: var(--seeds-border-radius);
+  background-color: var(--seeds-color-white);
+  cursor: text;
+
+  &:hover {
+    border-color: var(--seeds-color-primary);
+  }
+}
+
+.edited-cell {
+  border-color: var(--seeds-color-primary);
+  background-color: var(--seeds-color-primary-lighter);
+}
+
+// Scope on the left, actions on the right. The actions keep their place whether or not there are
+// unsaved changes, so the row does not shift as an admin starts editing.
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--seeds-s4);
+  margin-block-end: var(--seeds-s3);
+}
+
+.scope-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--seeds-s4);
+
+  // The shared Field wrapper carries a bottom margin that would break the baseline here.
+  :global(.field) {
+    margin-bottom: 0;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--seeds-s2);
+}
+
+.editing-hint {
+  color: var(--seeds-text-color-secondary);
+  font-size: var(--seeds-font-size-sm);
+  margin-block-end: var(--seeds-s3);
+}
+
+.filter {
+  max-width: var(--seeds-s56);
+  margin-block-end: var(--seeds-s3);
+
+  :global(.field) {
+    margin-bottom: 0;
+  }
+}
