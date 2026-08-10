@@ -2,7 +2,7 @@
 
 ## Name
 
-`enableBulkCsvIntake`
+`enableApplicationBulkCSVUpdates`
 
 ## Description
 

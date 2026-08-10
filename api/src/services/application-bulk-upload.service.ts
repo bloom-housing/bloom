@@ -342,11 +342,11 @@ export class ApplicationBulkUploadService {
     if (
       !doJurisdictionHaveFeatureFlagSet(
         mapTo(Jurisdiction, listingData.jurisdictions),
-        FeatureFlagEnum.enableBulkCsvIntake,
+        FeatureFlagEnum.enableApplicationBulkCSVUpdates,
       )
     ) {
       throw new ForbiddenException(
-        `Jurisdiction with id: ${listingData.jurisdictionId} does not have the enableBulkCsvIntake flag enabled`,
+        `Jurisdiction with id: ${listingData.jurisdictionId} does not have the enableApplicationBulkCSVUpdates flag enabled`,
       );
     }
 
