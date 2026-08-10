@@ -1,6 +1,7 @@
 import React from "react"
 import { t } from "@bloom-housing/ui-components"
 import { Tabs } from "@bloom-housing/ui-seeds"
+import { UserRole } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export enum SettingsIndexEnum {
   preferences = 0,
@@ -16,24 +17,49 @@ type SettingsTabsFeatureFlags = {
   enableTranslations?: boolean
 }
 
-export const getEnabledSettingsTabCount = ({
-  enablePreferences,
-  enableProperties,
-  enableAgencies,
-  enableTranslations,
-}: SettingsTabsFeatureFlags) =>
-  [enablePreferences, enableProperties, enableAgencies, enableTranslations].filter(Boolean).length
-
-export const getSettingsTabs = (
-  selectedIndex: SettingsIndexEnum,
-  enableV2MSQ: boolean,
+/**
+ * Which tabs a role can open, matching the redirect each settings page applies to itself. A tab
+ * shown to a role its page turns away is a link to /unauthorized.
+ */
+export const getVisibleSettingsTabs = (
   {
     enablePreferences,
     enableProperties,
     enableAgencies,
     enableTranslations,
-  }: SettingsTabsFeatureFlags
+  }: SettingsTabsFeatureFlags,
+  userRoles?: UserRole
 ) => {
+  const isPartnerOrSupport = !!userRoles?.isPartner || !!userRoles?.isSupportAdmin
+  const isLimited = !!userRoles?.isLimitedJurisdictionalAdmin
+
+  return {
+    preferences: !!enablePreferences && !isPartnerOrSupport,
+    properties: !!enableProperties && !isPartnerOrSupport && !isLimited,
+    agencies: !!enableAgencies && !isPartnerOrSupport && !isLimited,
+    // Editing translations spans every jurisdiction, so it is limited to the admin role.
+    translations: !!enableTranslations && !!userRoles?.isAdmin,
+  }
+}
+
+export const getEnabledSettingsTabCount = (
+  featureFlags: SettingsTabsFeatureFlags,
+  userRoles?: UserRole
+) => Object.values(getVisibleSettingsTabs(featureFlags, userRoles)).filter(Boolean).length
+
+export const getSettingsTabs = (
+  selectedIndex: SettingsIndexEnum,
+  enableV2MSQ: boolean,
+  featureFlags: SettingsTabsFeatureFlags,
+  userRoles?: UserRole
+) => {
+  const {
+    preferences: enablePreferences,
+    properties: enableProperties,
+    agencies: enableAgencies,
+    translations: enableTranslations,
+  } = getVisibleSettingsTabs(featureFlags, userRoles)
+
   const baseUrl = "/settings/"
   const enabledTabs: SettingsIndexEnum[] = []
   if (enablePreferences) enabledTabs.push(SettingsIndexEnum.preferences)

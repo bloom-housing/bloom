@@ -382,11 +382,12 @@ const SettingsTranslations = () => {
       </Head>
       <NavigationHeader className="relative" title={t("t.settings")} />
       <TabView
-        hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags) <= 1}
+        hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags, profile?.userRoles) <= 1}
         tabs={getSettingsTabs(
           SettingsIndexEnum.translations,
           v2Preferences,
-          settingsTabsFeatureFlags
+          settingsTabsFeatureFlags,
+          profile?.userRoles
         )}
       >
         <div className={styles["toolbar"]}>

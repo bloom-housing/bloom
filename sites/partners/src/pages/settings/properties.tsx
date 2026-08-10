@@ -194,11 +194,12 @@ const SettingsProperties = () => {
         </Head>
         <NavigationHeader className="relative" title={t("t.settings")} />
         <TabView
-          hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags) <= 1}
+          hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags, profile?.userRoles) <= 1}
           tabs={getSettingsTabs(
             SettingsIndexEnum.properties,
             v2Preferences,
-            settingsTabsFeatureFlags
+            settingsTabsFeatureFlags,
+            profile?.userRoles
           )}
         >
           <AgTable
