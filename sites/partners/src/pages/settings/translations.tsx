@@ -1,7 +1,7 @@
-import React, { useCallback, useContext, useMemo, useState } from "react"
+import React, { useCallback, useContext, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { AlertBox, Field, Select, t, useMutate } from "@bloom-housing/ui-components"
+import { AlertBox, debounce, Field, Select, t, useMutate } from "@bloom-housing/ui-components"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { Button } from "@bloom-housing/ui-seeds"
 import { useSWRConfig } from "swr"
@@ -46,6 +46,9 @@ import { TranslationHideSectionDialog } from "../../components/settings/Translat
 
 // Above this the inline editor is too cramped to work in, so the textarea opens instead.
 const INLINE_EDITOR_MAX_CHARACTERS = 60
+// Matches AgTable, so the two filter fields in Partners behave the same way.
+const MINIMUM_FILTER_CHARACTERS = 2
+const FILTER_DEBOUNCE_MS = 500
 
 const SettingsTranslations = () => {
   const router = useRouter()
@@ -86,6 +89,21 @@ const SettingsTranslations = () => {
   )
   const activeJurisdictionId = selectedJurisdiction?.id ?? ""
 
+  const languageOptions = useMemo(
+    () =>
+      (selectedJurisdiction?.languages ?? [LanguagesEnum.en]).map((value) => ({
+        value,
+        label: t(`languages.${value}`),
+      })),
+    [selectedJurisdiction?.languages]
+  )
+
+  // Languages are per jurisdiction, so switching to one that does not offer the selected language
+  // has to fall back rather than keep editing a language the jurisdiction has no option for.
+  const activeLanguage = languageOptions.some((option) => option.value === language)
+    ? language
+    : languageOptions[0]?.value ?? LanguagesEnum.en
+
   const {
     data: overrides,
     loading,
@@ -94,7 +112,7 @@ const SettingsTranslations = () => {
   } = useRawTranslations({
     jurisdictionId: activeJurisdictionId,
     site: SiteEnum.public,
-    language,
+    language: activeLanguage,
   })
 
   // Before these load every row looks unoverridden, so an edit would send a create and conflict.
@@ -108,6 +126,16 @@ const SettingsTranslations = () => {
   const [hidingKeys, setHidingKeys] = useState<string[]>([])
   // Set alongside hidingKeys when the confirmation is for a revert rather than a save.
   const [hidingRevertKey, setHidingRevertKey] = useState<string | null>(null)
+  // What is typed in the filter field, which lags the value the rows are filtered by.
+  const [filterInput, setFilterInput] = useState("")
+
+  // Filtering scans every key in the base, so it waits for a pause rather than running per keystroke.
+  const applyFilter = useRef(
+    debounce((value: string) => {
+      tableOptions.filter.setFilterValue(value)
+      tableOptions.pagination.setCurrentPage(1)
+    }, FILTER_DEBOUNCE_MS)
+  )
   const editCount = Object.keys(edits).length
   const hasUnsavedChanges = editCount > 0
 
@@ -120,10 +148,12 @@ const SettingsTranslations = () => {
         englishBase: flattenTranslations(translations.general),
         // English is the base itself, so it has no separate language file to layer.
         languageBase:
-          language === LanguagesEnum.en ? undefined : flattenTranslations(translations[language]),
+          activeLanguage === LanguagesEnum.en
+            ? undefined
+            : flattenTranslations(translations[activeLanguage]),
         overrides: overrides ?? [],
       }),
-    [language, overrides]
+    [activeLanguage, overrides]
   )
 
   // Every row is already in the browser, so search and pagination are local rather than a refetch.
@@ -154,7 +184,7 @@ const SettingsTranslations = () => {
           .deleteRawTranslation({
             jurisdictionId: activeJurisdictionId,
             site: SiteEnum.public,
-            language,
+            language: activeLanguage,
             key,
           })
           .then(() => {
@@ -175,9 +205,9 @@ const SettingsTranslations = () => {
       ),
     [
       activeJurisdictionId,
+      activeLanguage,
       addToast,
       cacheKey,
-      language,
       mutate,
       revertOverride,
       translationsService,
@@ -276,7 +306,7 @@ const SettingsTranslations = () => {
         .updateRawTranslations({
           jurisdictionId: activeJurisdictionId,
           site: SiteEnum.public,
-          language,
+          language: activeLanguage,
           body: { edits: buildEdits(pending) },
         })
         .then(() => {
@@ -343,15 +373,6 @@ const SettingsTranslations = () => {
     }
   }
 
-  const languageOptions = useMemo(
-    () =>
-      (selectedJurisdiction?.languages ?? [LanguagesEnum.en]).map((value) => ({
-        value,
-        label: t(`languages.${value}`),
-      })),
-    [selectedJurisdiction?.languages]
-  )
-
   return (
     <Layout>
       <Head>
@@ -393,7 +414,11 @@ const SettingsTranslations = () => {
               id="translationsLanguage"
               name="translationsLanguage"
               label={t("t.language")}
-              defaultValue={language}
+              // Select is uncontrolled and always renders defaultValue, so remounting is what
+              // reapplies it. Without this a jurisdiction that drops the selected language leaves
+              // the box showing English while the edits still go to the old language.
+              key={activeJurisdictionId}
+              defaultValue={activeLanguage}
               disabled={hasUnsavedChanges}
               options={languageOptions}
               inputProps={{
@@ -438,17 +463,28 @@ const SettingsTranslations = () => {
             readerOnly={true}
             placeholder={t("t.filter")}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              tableOptions.filter.setFilterValue(event.target.value)
-              tableOptions.pagination.setCurrentPage(1)
+              const value = event.target.value
+              setFilterInput(value)
+              applyFilter.current(value.length > MINIMUM_FILTER_CHARACTERS ? value : "")
             }}
           />
+          {filterInput.length > 0 && filterInput.length <= MINIMUM_FILTER_CHARACTERS && (
+            <AlertBox className={styles["filter-error"]} type="notice">
+              {t("applications.table.searchError")}
+            </AlertBox>
+          )}
         </div>
         <p className={styles["editing-hint"]}>{t("translations.editingHint")}</p>
         <AgTable
           id="translations-table"
           pagination={{
             perPage,
-            setPerPage: tableOptions.pagination.setItemsPerPage,
+            // AgPagination changes the page size without resetting the page, and the slice is
+            // local, so a high page number would land past the end and render nothing.
+            setPerPage: (value: React.SetStateAction<number>) => {
+              tableOptions.pagination.setItemsPerPage(value)
+              tableOptions.pagination.setCurrentPage(1)
+            },
             currentPage,
             setCurrentPage: tableOptions.pagination.setCurrentPage,
           }}
@@ -463,7 +499,9 @@ const SettingsTranslations = () => {
             totalItemsLabel: t("translations.total"),
           }}
           search={{
-            setSearch: tableOptions.filter.setFilterValue,
+            // AgTable registers its filter input even when hidden and clears it on mount, so
+            // handing it the page's setter would wipe whatever was typed 500ms in.
+            setSearch: () => undefined,
             showSearch: false,
           }}
         />
