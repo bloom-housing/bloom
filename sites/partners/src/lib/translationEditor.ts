@@ -103,6 +103,30 @@ export const buildEdits = (edits: PendingEdits): TranslationKeyEdit[] =>
   )
 
 /**
+ * Records an entered value against its row, or drops the entry when the value matches what the
+ * site renders today.
+ *
+ * The version comes from the row only on the first edit of a key. Later edits keep the version
+ * already captured, so a refetch between two edits cannot widen the lock.
+ */
+export const applyEdit = (
+  edits: PendingEdits,
+  row: TranslationEditorRow,
+  value: string
+): PendingEdits => {
+  const next = { ...edits }
+
+  if (!isChanged(row, value)) {
+    delete next[row.key]
+    return next
+  }
+
+  const existing = edits[row.key]
+  next[row.key] = { value, version: existing ? existing.version : row.updatedAt }
+  return next
+}
+
+/**
  * The keys a batch save rejected because someone else changed them first.
  *
  * The API answers a partial save with a 409 naming only those keys; every other edit in the batch
@@ -117,6 +141,56 @@ export const conflictKeysFrom = (error: unknown): string[] => {
   }
 
   return response.data.conflicts.filter((key): key is string => typeof key === "string")
+}
+
+export type TranslationConflict = {
+  key: string
+  /** What the admin typed, which the save could not write. */
+  mine: string
+  /** What the key holds now, after whoever changed it first. */
+  theirs: string
+}
+
+export type ConflictChoice = "mine" | "theirs"
+
+/** Pairs each rejected key's pending value with the value its row holds now, for the dialog. */
+export const buildConflicts = (
+  conflictKeys: string[],
+  edits: PendingEdits,
+  rows: TranslationEditorRow[]
+): TranslationConflict[] => {
+  const rowsByKey = new Map(rows.map((row) => [row.key, row]))
+
+  return conflictKeys.map((key) => {
+    const row = rowsByKey.get(key)
+    return {
+      key,
+      mine: edits[key]?.value ?? "",
+      theirs: row ? effectiveValue(row) ?? "" : "",
+    }
+  })
+}
+
+/**
+ * Keeps the edits resolved in the admin's favor and drops the rest.
+ *
+ * A kept edit is re-locked against the version its row holds now. The admin has seen the other
+ * write and chosen to replace it, so the retry must not conflict on the same key again. This is
+ * the one place the version moves after the first edit.
+ */
+export const applyConflictChoices = (
+  edits: PendingEdits,
+  choices: Record<string, ConflictChoice>,
+  rows: TranslationEditorRow[]
+): PendingEdits => {
+  const rowsByKey = new Map(rows.map((row) => [row.key, row]))
+
+  return Object.entries(edits).reduce((kept, [key, edit]) => {
+    if (choices[key] !== "theirs") {
+      kept[key] = { value: edit.value, version: rowsByKey.get(key)?.updatedAt ?? null }
+    }
+    return kept
+  }, {} as PendingEdits)
 }
 
 export type TranslationIssue = {

@@ -25,21 +25,21 @@ import { useRawTranslations, useUnsavedChangesWarning } from "../../lib/hooks"
 import { translations } from "../../lib/translations"
 import styles from "./translations.module.scss"
 import {
+  applyConflictChoices,
+  applyEdit,
+  buildConflicts,
   buildEdits,
   buildTranslationRows,
+  ConflictChoice,
   conflictKeysFrom,
   editsForKeys,
   effectiveValue,
-  isChanged,
   keysThatHideSections,
   PendingEdits,
   TranslationEditorRow,
   validateEdits,
 } from "../../lib/translationEditor"
-import {
-  ConflictChoice,
-  TranslationConflictDialog,
-} from "../../components/settings/TranslationConflictDialog"
+import { TranslationConflictDialog } from "../../components/settings/TranslationConflictDialog"
 import { TranslationHideSectionDialog } from "../../components/settings/TranslationHideSectionDialog"
 
 // Rough: one character out only changes which editor opens.
@@ -183,19 +183,7 @@ const SettingsTranslations = () => {
           edits[data.key]?.value ?? effectiveValue(data) ?? "",
         // AgTable exposes no grid-level change callback, so edits are captured here.
         valueSetter: ({ data, newValue }: { data: TranslationEditorRow; newValue: string }) => {
-          const value = newValue ?? ""
-
-          setEdits((previous) => {
-            const next = { ...previous }
-            if (!isChanged(data, value)) {
-              delete next[data.key]
-            } else {
-              // First edit wins on the version, so a later refresh cannot widen the lock.
-              const existing = previous[data.key]
-              next[data.key] = { value, version: existing ? existing.version : data.updatedAt }
-            }
-            return next
-          })
+          setEdits((previous) => applyEdit(previous, data, newValue ?? ""))
           return true
         },
       },
@@ -286,28 +274,13 @@ const SettingsTranslations = () => {
     void saveEdits(edits)
   }
 
-  const conflicts = useMemo(() => {
-    const rowsByKey = new Map(rows.map((row) => [row.key, row]))
-    return conflictKeys.map((key) => {
-      const row = rowsByKey.get(key)
-      return {
-        key,
-        mine: edits[key]?.value ?? "",
-        theirs: row ? effectiveValue(row) ?? "" : "",
-      }
-    })
-  }, [conflictKeys, edits, rows])
+  const conflicts = useMemo(
+    () => buildConflicts(conflictKeys, edits, rows),
+    [conflictKeys, edits, rows]
+  )
 
   const handleResolveConflicts = (choices: Record<string, ConflictChoice>) => {
-    // They have seen the other write and chosen to replace it, so re-lock against the version the
-    // row holds now. Anything resolved the other way is dropped, leaving the stored value alone.
-    const rowsByKey = new Map(rows.map((row) => [row.key, row]))
-    const kept = Object.entries(edits).reduce((remaining, [key, edit]) => {
-      if (choices[key] !== "theirs") {
-        remaining[key] = { value: edit.value, version: rowsByKey.get(key)?.updatedAt ?? null }
-      }
-      return remaining
-    }, {} as PendingEdits)
+    const kept = applyConflictChoices(edits, choices, rows)
 
     setConflictKeys([])
     setEdits(kept)

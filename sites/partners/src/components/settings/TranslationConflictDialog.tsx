@@ -1,16 +1,7 @@
 import React, { useState } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
-
-export type TranslationConflict = {
-  key: string
-  /** What the admin typed, which the save could not write. */
-  mine: string
-  /** What the key holds now, after whoever changed it first. */
-  theirs: string
-}
-
-export type ConflictChoice = "mine" | "theirs"
+import { ConflictChoice, TranslationConflict } from "../../lib/translationEditor"
 
 type TranslationConflictDialogProps = {
   conflicts: TranslationConflict[]

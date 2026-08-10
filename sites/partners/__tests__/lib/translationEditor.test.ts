@@ -1,5 +1,8 @@
 import { TranslationOrigin } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
+  applyConflictChoices,
+  applyEdit,
+  buildConflicts,
   buildEdits,
   buildTranslationRows,
   conflictKeysFrom,
@@ -199,6 +202,58 @@ describe("buildEdits", () => {
   })
 })
 
+describe("applyEdit", () => {
+  const overriddenRow = () =>
+    buildTranslationRows({
+      englishBase: { "a.key": "Base" },
+      overrides: [override("a.key", "Override")],
+    })[0]
+
+  const plainRow = () =>
+    buildTranslationRows({ englishBase: { "a.key": "Base" }, overrides: [] })[0]
+
+  it("records the entered value against the version the row holds", () => {
+    expect(applyEdit({}, overriddenRow(), "New")).toEqual({
+      "a.key": { value: "New", version: new Date("2026-01-01") },
+    })
+  })
+
+  it("captures no version for a key that has no override to lock against", () => {
+    expect(applyEdit({}, plainRow(), "New")).toEqual({ "a.key": { value: "New", version: null } })
+  })
+
+  it("drops the entry when the value returns to what the site renders", () => {
+    const edits = applyEdit({}, overriddenRow(), "New")
+    expect(applyEdit(edits, overriddenRow(), "Override")).toEqual({})
+  })
+
+  it("keeps the version captured on the first edit through later ones", () => {
+    const firstEdit = new Date("2025-06-01")
+    expect(applyEdit({ "a.key": edit("First", firstEdit) }, overriddenRow(), "Second")).toEqual({
+      "a.key": { value: "Second", version: firstEdit },
+    })
+  })
+
+  it("keeps a captured absent version absent, rather than adopting the row's", () => {
+    // The key had no override when it was first edited, so the save must still attempt a create.
+    expect(applyEdit({ "a.key": edit("First") }, overriddenRow(), "Second")).toEqual({
+      "a.key": { value: "Second", version: null },
+    })
+  })
+
+  it("treats emptying a key that renders something as a change", () => {
+    expect(applyEdit({}, overriddenRow(), "")).toEqual({
+      "a.key": { value: "", version: new Date("2026-01-01") },
+    })
+  })
+
+  it("leaves other keys alone", () => {
+    expect(
+      Object.keys(applyEdit({ "b.other": edit("Kept") }, overriddenRow(), "New")).sort()
+    ).toEqual(["a.key", "b.other"])
+  })
+})
+
 describe("conflictKeysFrom", () => {
   const conflictError = (conflicts: unknown, status = 409) => ({
     response: { status, data: { message: "translationConflict", conflicts } },
@@ -229,6 +284,94 @@ describe("conflictKeysFrom", () => {
       "a.one",
       "b.two",
     ])
+  })
+})
+
+describe("buildConflicts", () => {
+  const rows = () =>
+    buildTranslationRows({
+      englishBase: { "a.key": "Base" },
+      overrides: [override("a.key", "Theirs")],
+    })
+
+  it("pairs the pending value with what the key holds now", () => {
+    expect(buildConflicts(["a.key"], { "a.key": edit("Mine") }, rows())).toEqual([
+      { key: "a.key", mine: "Mine", theirs: "Theirs" },
+    ])
+  })
+
+  it("falls the stored value back to the base when there is no override", () => {
+    const withoutOverride = buildTranslationRows({
+      englishBase: { "a.key": "Base" },
+      overrides: [],
+    })
+    expect(buildConflicts(["a.key"], { "a.key": edit("Mine") }, withoutOverride)[0].theirs).toEqual(
+      "Base"
+    )
+  })
+
+  it("uses empty strings for a named key with no row and no pending edit", () => {
+    expect(buildConflicts(["gone.key"], {}, rows())).toEqual([
+      { key: "gone.key", mine: "", theirs: "" },
+    ])
+  })
+
+  it("returns one entry per named key, in the order given", () => {
+    const many = buildTranslationRows({
+      englishBase: { "a.one": "1", "b.two": "2" },
+      overrides: [],
+    })
+    expect(
+      buildConflicts(["b.two", "a.one"], { "a.one": edit("x"), "b.two": edit("y") }, many).map(
+        (conflict) => conflict.key
+      )
+    ).toEqual(["b.two", "a.one"])
+  })
+
+  it("returns nothing when no keys conflicted", () => {
+    expect(buildConflicts([], { "a.key": edit("Mine") }, rows())).toEqual([])
+  })
+})
+
+describe("applyConflictChoices", () => {
+  const rows = () =>
+    buildTranslationRows({
+      englishBase: { "a.one": "1", "b.two": "2" },
+      overrides: [
+        override("a.one", "Theirs one", { updatedAt: new Date("2026-05-05") }),
+        override("b.two", "Theirs two", { updatedAt: new Date("2026-06-06") }),
+      ],
+    })
+
+  const edits = () => ({
+    "a.one": edit("Mine one", new Date("2026-01-01")),
+    "b.two": edit("Mine two", new Date("2026-01-01")),
+  })
+
+  it("keeps the edits resolved as mine and drops the ones resolved as theirs", () => {
+    expect(
+      Object.keys(applyConflictChoices(edits(), { "a.one": "mine", "b.two": "theirs" }, rows()))
+    ).toEqual(["a.one"])
+  })
+
+  it("re-locks a kept edit against the version its row holds now", () => {
+    const kept = applyConflictChoices(edits(), { "a.one": "mine", "b.two": "theirs" }, rows())
+    expect(kept["a.one"]).toEqual({ value: "Mine one", version: new Date("2026-05-05") })
+  })
+
+  it("returns nothing when every key is resolved as theirs", () => {
+    expect(applyConflictChoices(edits(), { "a.one": "theirs", "b.two": "theirs" }, rows())).toEqual(
+      {}
+    )
+  })
+
+  it("keeps an edit with no recorded choice, so a dismissal never discards typed work", () => {
+    expect(Object.keys(applyConflictChoices(edits(), {}, rows()))).toEqual(["a.one", "b.two"])
+  })
+
+  it("locks against nothing when a kept key no longer has a row", () => {
+    expect(applyConflictChoices({ "gone.key": edit("Mine", new Date("2026-01-01")) }, {}, rows())) //
+      .toEqual({ "gone.key": { value: "Mine", version: null } })
   })
 })
 
