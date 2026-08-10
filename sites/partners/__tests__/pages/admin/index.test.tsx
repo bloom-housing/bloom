@@ -85,7 +85,7 @@ describe("admin", () => {
     server.use(
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(
-          ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true, isPartner: false } })
+          ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true, isPartner: false } })
         )
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {

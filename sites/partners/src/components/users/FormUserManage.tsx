@@ -23,7 +23,7 @@ import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelecti
 type FormUserManageProps = {
   isOpen: boolean
   title: string
-  mode: "add" | "edit"
+  mode: "add" | "edit" | "view"
   user?: User
   listings: Listing[]
   onCancel: () => void
@@ -67,6 +67,7 @@ const FormUserManage = ({
   const jurisdictionList = profile?.jurisdictions
 
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false)
+  let enableOnlyAdminCanManageUsers
 
   const possibleUserRoles = [RoleOption.Partner]
   if (
@@ -85,8 +86,15 @@ const FormUserManage = ({
     }
   }
 
+  if (profile?.userRoles?.isJurisdictionalAdmin) {
+    enableOnlyAdminCanManageUsers = doJurisdictionsHaveFeatureFlagOn(
+      FeatureFlagEnum.enableOnlyAdminCanManageUsers,
+      profile?.jurisdictions[0].id
+    )
+  }
+
   let defaultValues: FormUserManageValues = {}
-  if (mode === "edit") {
+  if (mode === "edit" || mode === "view") {
     defaultValues = {
       firstName: user.firstName,
       lastName: user.lastName,
@@ -96,7 +104,7 @@ const FormUserManage = ({
       jurisdiction_all: jurisdictionList?.length === user.jurisdictions.length,
       jurisdictions: user.jurisdictions.map((elem) => elem.id),
     }
-  } else if (profile?.userRoles?.isJurisdictionalAdmin) {
+  } else if (profile?.userRoles?.isJurisdictionalAdmin && !enableOnlyAdminCanManageUsers) {
     defaultValues = {
       jurisdictions: [jurisdictionList[0].id],
     }
@@ -350,7 +358,7 @@ const FormUserManage = ({
                       <div className="flex content-center">
                         <span>{t("users.userDetails")}</span>
 
-                        {mode === "edit" && (
+                        {(mode === "edit" || mode === "view") && (
                           <div className="ml-2 mt-1 flex items-center justify-center">
                             <Tag
                               className="tag-full-width"
@@ -374,6 +382,7 @@ const FormUserManage = ({
                           errorMessage={t("errors.requiredFieldError")}
                           validation={{ required: true }}
                           register={register}
+                          disabled={mode === "view"}
                           type="text"
                         />
                       </Grid.Cell>
@@ -388,6 +397,7 @@ const FormUserManage = ({
                           errorMessage={t("errors.requiredFieldError")}
                           validation={{ required: true }}
                           register={register}
+                          disabled={mode === "view"}
                           type="text"
                         />
                       </Grid.Cell>
@@ -402,6 +412,7 @@ const FormUserManage = ({
                           errorMessage={t("authentication.signIn.loginError")}
                           validation={{ required: true, pattern: emailRegex }}
                           register={register}
+                          disabled={mode === "view"}
                           type="email"
                         />
                       </Grid.Cell>
@@ -418,6 +429,7 @@ const FormUserManage = ({
                           options={possibleUserRoles.sort((a, b) => (a < b ? -1 : 1))}
                           error={!!errors?.userRoles}
                           errorMessage={t("errors.requiredFieldError")}
+                          disabled={mode === "view"}
                           validation={{ required: true }}
                         />
                       </Grid.Cell>

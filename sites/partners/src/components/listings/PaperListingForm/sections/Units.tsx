@@ -29,6 +29,7 @@ import UnitGroupForm from "../UnitGroupForm"
 import styles from "../ListingForm.module.scss"
 
 type UnitProps = {
+  disableListingAvailability?: boolean
   disableUnitsAccordion: boolean
   requiredFields: string[]
   setUnitGroups: (unitGroups: TempUnitGroup[]) => void
@@ -67,6 +68,7 @@ const getTableActionItems = ({ onEdit, onDelete }: getTableActionItemsProps) => 
 )
 
 const FormUnits = ({
+  disableListingAvailability,
   disableUnitsAccordion,
   requiredFields,
   setUnitGroups,
@@ -88,6 +90,9 @@ const FormUnits = ({
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, clearErrors, getValues, control, setValue } = formMethods
   const listing = getValues()
+  const isListingWaitlist =
+    listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
+    listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
 
   const homeTypeEnabled = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableHomeType,
@@ -426,18 +431,16 @@ const FormUnits = ({
                     value: "availableUnits",
                     id: "availableUnits",
                     dataTestId: "listingAvailability.availableUnits",
-                    defaultChecked:
-                      listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&
-                      listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlistLottery,
+                    disabled: disableListingAvailability && isListingWaitlist,
+                    defaultChecked: !isListingWaitlist,
                   },
                   {
                     label: t("listings.waitlist.open"),
                     value: "openWaitlist",
                     id: "openWaitlist",
                     dataTestId: "listingAvailability.openWaitlist",
-                    defaultChecked:
-                      listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
-                      listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery,
+                    disabled: disableListingAvailability && !isListingWaitlist,
+                    defaultChecked: isListingWaitlist,
                   },
                 ]}
               />

@@ -75,6 +75,9 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableNeighborhoodAmenities](./feature-flags/enableNeighborhoodAmenities.md) | When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view |
 | [enableNeighborhoodAmenitiesDropdown](./feature-flags/enableNeighborhoodAmenitiesDropdown.md) | When true, neighborhood amenities inputs render as dropdowns with distance options instead of textareas |
 | [enableNonRegulatedListings](./feature-flags/enableNonRegulatedListings.md) | When true, non-regulated listings are displayed in listing creation/edit and public listing view |
+| [enableOnlyAdminCanAddAppsAfterClose](./feature-flags/enableOnlyAdminCanAddAppsAfterClose.md) | When true, only admin level users are allowed to add paper apps after a listing has closed |
+| [enableOnlyAdminCanEditListingDates](./feature-flags/enableOnlyAdminCanEditListingDates.md) | When true, only admins level users can edit the application close dates, the review order type or the lottery run date on a published listing |
+| [enableOnlyAdminCanManageUsers](./feature-flags/enableOnlyAdminCanManageUsers.md) | When true, only admins can add/edit users on the partner site. Jurisdictional admins can view but not cannot create or edit users other than themselves |
 | [enableParkingFee](./feature-flags/enableParkingFee.md) | When true, the parking fee field should be visible |
 | [enableParkingType](./feature-flags/enableParkingType.md) | When true, the parking type field is visible in the listing form |
 | [enablePartnerDemographics](./feature-flags/enablePartnerDemographics.md) | When true, demographics data is included in application or lottery exports for partners |
@@ -96,7 +99,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableUnitAccessibilityTypeTags](./feature-flags/enableUnitAccessibilityTypeTags.md) | When true, unit accessibility type tags (for example, 'Mobility units') are displayed on listing cards and details |
 | [enableUnitGroups](./feature-flags/enableUnitGroups.md) | When true, uses unit groups instead of units |
 | [enableUtilitiesIncluded](./feature-flags/enableUtilitiesIncluded.md) | When true, the 'utilities included' section is displayed in listing creation/edit and the public listing view |
-| [enableV2MSQ](./feature-flags/enableV2MSQ.md) | When true, the new mutliselect question logic will be used. |
+| [enableV2MSQ](./feature-flags/enableV2MSQ.md) | When true, the new multiselect question logic will be used. |
 | [enableVerifyIncome](./feature-flags/enableVerifyIncome.md) | When true, the income question on the application will be validated against the income limits for the listing and an error message will be shown if income is outside limits |
 | [enableWaitlistAdditionalFields](./feature-flags/enableWaitlistAdditionalFields.md) | When true, the waitlist additional fields are displayed in the waitlist section of the listing form |
 | [enableWaitlistLottery](./feature-flags/enableWaitlistLottery.md) | When true, jurisdiction supports lotteries for waitlist opportunities |
