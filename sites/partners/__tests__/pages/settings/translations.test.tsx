@@ -82,14 +82,17 @@ describe("<SettingsTranslations>", () => {
     expect(screen.getByRole("option", { name: "Español" })).toBeInTheDocument()
   })
 
-  it("hides the jurisdiction selector when the admin has only one", async () => {
+  it("names the jurisdiction being edited even when the admin has only one", async () => {
     renderPage()
 
-    await screen.findByRole("heading", { level: 1, name: "Settings" })
-    expect(screen.queryByLabelText("Jurisdiction")).not.toBeInTheDocument()
+    // Which jurisdiction is being edited cannot be inferred from anything else on the page.
+    const jurisdictionSelect = await screen.findByLabelText("Jurisdiction")
+    expect(jurisdictionSelect).toBeInTheDocument()
+    expect(jurisdictionSelect).toBeDisabled()
+    expect(screen.getByRole("option", { name: "Bloomington" })).toBeInTheDocument()
   })
 
-  it("shows the jurisdiction selector when the admin spans several", async () => {
+  it("lets the admin switch jurisdiction when they span several", async () => {
     renderPage({
       jurisdictions: [
         { id: "jurisdiction1", name: "Bloomington", languages: [LanguagesEnum.en] },
@@ -97,7 +100,9 @@ describe("<SettingsTranslations>", () => {
       ],
     })
 
-    expect(await screen.findByLabelText("Jurisdiction")).toBeInTheDocument()
+    const jurisdictionSelect = await screen.findByLabelText("Jurisdiction")
+    expect(jurisdictionSelect).toBeEnabled()
+    expect(screen.getByRole("option", { name: "Shelbyville" })).toBeInTheDocument()
   })
 
   it("redirects when the db driven content flag is off for every jurisdiction", () => {

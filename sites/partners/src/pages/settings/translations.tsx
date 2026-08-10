@@ -409,26 +409,25 @@ const SettingsTranslations = () => {
       >
         <div className={styles["toolbar"]}>
           <div className={styles["scope-controls"]}>
-            {jurisdictions.length > 1 && (
-              <Select
-                id="translationsJurisdiction"
-                name="translationsJurisdiction"
-                label={t("t.jurisdiction")}
-                defaultValue={activeJurisdictionId}
-                // Switching scope would silently discard edits typed against the old one.
-                disabled={hasUnsavedChanges}
-                options={jurisdictions.map((jurisdiction) => ({
-                  value: jurisdiction.id,
-                  label: jurisdiction.name,
-                }))}
-                inputProps={{
-                  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
-                    setJurisdictionId(event.target.value)
-                    tableOptions.pagination.setCurrentPage(1)
-                  },
-                }}
-              />
-            )}
+            {/* Always shown, since the jurisdiction being edited cannot be inferred otherwise. */}
+            <Select
+              id="translationsJurisdiction"
+              name="translationsJurisdiction"
+              label={t("t.jurisdiction")}
+              defaultValue={activeJurisdictionId}
+              // Switching scope would silently discard edits typed against the old one.
+              disabled={jurisdictions.length < 2 || hasUnsavedChanges}
+              options={jurisdictions.map((jurisdiction) => ({
+                value: jurisdiction.id,
+                label: jurisdiction.name,
+              }))}
+              inputProps={{
+                onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
+                  setJurisdictionId(event.target.value)
+                  tableOptions.pagination.setCurrentPage(1)
+                },
+              }}
+            />
             <Select
               id="translationsLanguage"
               name="translationsLanguage"
