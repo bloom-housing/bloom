@@ -165,42 +165,41 @@ describe("isChanged", () => {
 })
 
 describe("buildEdits", () => {
-  it("sends the lock for a key that already has an override", () => {
-    const rows = buildTranslationRows({
-      englishBase: { "a.key": "Base" },
-      overrides: [override("a.key", "Override")],
-    })
+  const editedAt = new Date("2026-01-01")
 
-    expect(buildEdits({ "a.key": "New" }, rows)).toEqual([
-      { key: "a.key", value: "New", lastUpdatedAt: new Date("2026-01-01") },
+  it("sends the version captured when the key was edited", () => {
+    expect(buildEdits({ "a.key": "New" }, { "a.key": editedAt })).toEqual([
+      { key: "a.key", value: "New", lastUpdatedAt: editedAt },
     ])
   })
 
-  it("omits the lock for a key being overridden for the first time", () => {
-    const rows = buildTranslationRows({ englishBase: { "a.key": "Base" }, overrides: [] })
-
-    expect(buildEdits({ "a.key": "New" }, rows)).toEqual([{ key: "a.key", value: "New" }])
+  it("omits the lock for a key that had no override when it was edited", () => {
+    expect(buildEdits({ "a.key": "New" }, { "a.key": null })).toEqual([
+      { key: "a.key", value: "New" },
+    ])
   })
 
-  it("omits the lock for a key that is not in the row set at all", () => {
-    expect(buildEdits({ "unknown.key": "New" }, [])).toEqual([{ key: "unknown.key", value: "New" }])
+  it("omits the lock for a key with no captured version at all", () => {
+    expect(buildEdits({ "unknown.key": "New" }, {})).toEqual([{ key: "unknown.key", value: "New" }])
   })
 
   it("builds one edit per changed key and leaves the rest out", () => {
-    const rows = buildTranslationRows({
-      englishBase: { "a.one": "One", "b.two": "Two", "c.three": "Three" },
-      overrides: [],
-    })
-
-    expect(buildEdits({ "a.one": "Uno", "c.three": "Tres" }, rows).map((edit) => edit.key)).toEqual(
-      ["a.one", "c.three"]
-    )
+    expect(
+      buildEdits({ "a.one": "Uno", "c.three": "Tres" }, { "a.one": editedAt }).map(
+        (edit) => edit.key
+      )
+    ).toEqual(["a.one", "c.three"])
   })
 
   it("keeps an empty value, which is how a section is hidden", () => {
-    const rows = buildTranslationRows({ englishBase: { "a.key": "Base" }, overrides: [] })
+    expect(buildEdits({ "a.key": "" }, { "a.key": null })).toEqual([{ key: "a.key", value: "" }])
+  })
 
-    expect(buildEdits({ "a.key": "" }, rows)).toEqual([{ key: "a.key", value: "" }])
+  it("locks against the captured version rather than a later one", () => {
+    // Rows revalidate on window focus, so by save time the stored row may carry a newer
+    // updatedAt. Sending that would overwrite the other admin instead of conflicting.
+    const [edit] = buildEdits({ "a.key": "New" }, { "a.key": editedAt })
+    expect(edit.lastUpdatedAt).toEqual(editedAt)
   })
 })
 

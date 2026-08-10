@@ -1,4 +1,5 @@
 import { useCallback, useContext, useState, useEffect } from "react"
+import { useRouter } from "next/router"
 import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
@@ -884,7 +885,11 @@ export function useRawTranslations({
     ? `/api/adapter/translations/jurisdictions/${jurisdictionId}/raw/${site}/${language}`
     : null
 
-  const { data, error } = useSWR(cacheKey, fetcher)
+  // Writes call `mutate` on this key; refreshing on focus would move data under an in-progress edit.
+  const { data, error } = useSWR(cacheKey, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
 
   return {
     cacheKey,
@@ -892,4 +897,39 @@ export function useRawTranslations({
     loading: !!cacheKey && !error && !data,
     error,
   }
+}
+
+/**
+ * Warns before unsaved work is lost, covering both ways out of a page: an in-app route change and
+ * the browser closing, reloading, or going back.
+ *
+ * The browser prompt uses its own wording, so `message` reaches the admin only on an in-app
+ * navigation. Next has no API for cancelling a route change, so aborting means throwing, which is
+ * the documented workaround rather than an error worth reporting.
+ */
+export function useUnsavedChangesWarning(hasUnsavedChanges: boolean, message: string) {
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!hasUnsavedChanges) return
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault()
+      event.returnValue = ""
+    }
+
+    const handleRouteChange = () => {
+      if (window.confirm(message)) return
+      router.events.emit("routeChangeError")
+      throw "Route change cancelled: the page has unsaved changes"
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload)
+    router.events.on("routeChangeStart", handleRouteChange)
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload)
+      router.events.off("routeChangeStart", handleRouteChange)
+    }
+  }, [hasUnsavedChanges, message, router.events])
 }

@@ -74,21 +74,23 @@ export const isChanged = (row: TranslationEditorRow, value: string): boolean =>
 /**
  * Turns the edited values into the batch the PUT takes.
  *
- * `lastUpdatedAt` is the per-key optimistic lock and is sent only for keys that already have an
- * override row. A key being overridden for the first time has no prior version to lock against,
- * and sending one would make the API treat it as a conflict.
+ * `lastUpdatedAt` is the per-key optimistic lock, and it comes from `editedVersions`, captured when
+ * the admin first edited each key, rather than from the current rows. Those rows revalidate on
+ * window focus, so reading the lock at save time would send whatever another admin had just
+ * written and overwrite them without ever reporting a conflict.
+ *
+ * A key with no override when it was edited has no prior version to lock against, so no
+ * `lastUpdatedAt` is sent. The API then attempts a create, which conflicts if someone has since
+ * added that key.
  */
 export const buildEdits = (
   editedValues: Record<string, string>,
-  rows: TranslationEditorRow[]
-): TranslationKeyEdit[] => {
-  const rowsByKey = new Map(rows.map((row) => [row.key, row]))
-
-  return Object.entries(editedValues).map(([key, value]) => {
-    const updatedAt = rowsByKey.get(key)?.updatedAt
-    return updatedAt ? { key, value, lastUpdatedAt: updatedAt } : { key, value }
+  editedVersions: Record<string, Date | null>
+): TranslationKeyEdit[] =>
+  Object.entries(editedValues).map(([key, value]) => {
+    const lastUpdatedAt = editedVersions[key]
+    return lastUpdatedAt ? { key, value, lastUpdatedAt } : { key, value }
   })
-}
 
 /**
  * The keys a batch save rejected because someone else changed them first.
@@ -179,14 +181,14 @@ export const keysThatHideSections = (
     .map(([key]) => key)
 }
 
-/** Narrows pending edits to the keys still unresolved, dropping the ones the save wrote. */
-export const editsForKeys = (
-  editedValues: Record<string, string>,
-  keys: string[]
-): Record<string, string> =>
+/**
+ * Narrows a per-key map to the keys still unresolved, dropping the ones the save wrote. Used for
+ * both the edited values and the versions they were locked against, so the two stay in step.
+ */
+export const editsForKeys = <T>(edited: Record<string, T>, keys: string[]): Record<string, T> =>
   keys.reduce((remaining, key) => {
-    if (key in editedValues) {
-      remaining[key] = editedValues[key]
+    if (key in edited) {
+      remaining[key] = edited[key]
     }
     return remaining
-  }, {} as Record<string, string>)
+  }, {} as Record<string, T>)

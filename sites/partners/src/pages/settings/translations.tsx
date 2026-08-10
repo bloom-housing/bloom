@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { Field, Select, t, useMutate } from "@bloom-housing/ui-components"
+import { AlertBox, Field, Select, t, useMutate } from "@bloom-housing/ui-components"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { Button } from "@bloom-housing/ui-seeds"
 import { useSWRConfig } from "swr"
@@ -21,7 +21,7 @@ import {
   getSettingsTabs,
   SettingsIndexEnum,
 } from "../../components/settings/SettingsViewHelpers"
-import { useRawTranslations } from "../../lib/hooks"
+import { useRawTranslations, useUnsavedChangesWarning } from "../../lib/hooks"
 import { translations } from "../../lib/translations"
 import styles from "./translations.module.scss"
 import {
@@ -41,8 +41,7 @@ import {
 } from "../../components/settings/TranslationConflictDialog"
 import { TranslationHideSectionDialog } from "../../components/settings/TranslationHideSectionDialog"
 
-// Used to guess whether a value is being cut off, so a truncated cell opens the larger editor.
-// Approximations rather than measurements: being one character out changes which editor opens.
+// Rough: one character out only changes which editor opens.
 const APPROXIMATE_CHARACTER_WIDTH = 7
 const CELL_PADDING = 34
 const DEFAULT_VALUE_COLUMN_WIDTH = 220
@@ -89,6 +88,7 @@ const SettingsTranslations = () => {
   const {
     data: overrides,
     loading,
+    error,
     cacheKey,
   } = useRawTranslations({
     jurisdictionId: activeJurisdictionId,
@@ -96,14 +96,22 @@ const SettingsTranslations = () => {
     language,
   })
 
+  // Before these load every row looks unoverridden, so an edit would send a create and conflict.
+  const overridesLoaded = overrides !== undefined
+
   // Values the admin has typed but not saved, keyed by translation key.
   const [editedValues, setEditedValues] = useState<Record<string, string>>({})
+  // The version each key held when first edited, which is what the save locks against.
+  const [editedVersions, setEditedVersions] = useState<Record<string, Date | null>>({})
   // A revert waits here until it is either confirmed or found not to need confirming.
   const [pendingRevertKey, setPendingRevertKey] = useState<string | null>(null)
   const [revertKey, setRevertKey] = useState<string | null>(null)
   // Keys a save could not write because someone changed them first.
   const [conflictKeys, setConflictKeys] = useState<string[]>([])
   const hasUnsavedChanges = Object.keys(editedValues).length > 0
+
+  // Edits live only in component state until saved, so leaving the page discards them.
+  useUnsavedChangesWarning(hasUnsavedChanges, t("translations.unsavedChangesWarning"))
 
   const rows = useMemo(
     () =>
@@ -154,16 +162,14 @@ const SettingsTranslations = () => {
         headerName: t("translations.currentValue"),
         minWidth: 220,
         flex: 2,
-        editable: true,
-        // One click opens the editor. The default double-click gives no hint that a cell is
-        // editable.
+        editable: overridesLoaded,
+        // The default double-click gives no hint the cell is editable.
         singleClickEdit: true,
         cellClass: ({ data }: { data: TranslationEditorRow }) =>
           editedValues[data.key] !== undefined
             ? `${styles["editable-cell"]} ${styles["edited-cell"]}`
             : styles["editable-cell"],
-        // A value the column is wide enough to show gets the inline editor, where Enter commits.
-        // Anything the cell truncates, or that spans lines, gets the popup textarea.
+        // Inline editor commits on Enter; a truncated or multi-line value needs the textarea.
         cellEditorSelector: ({ value, column }: { value: string; column?: Column }) => {
           const text = value ?? ""
           const width = column?.getActualWidth?.() ?? DEFAULT_VALUE_COLUMN_WIDTH
@@ -175,16 +181,27 @@ const SettingsTranslations = () => {
         },
         valueGetter: ({ data }: { data: TranslationEditorRow }) =>
           editedValues[data.key] ?? effectiveValue(data) ?? "",
-        // ag-grid has no grid-level change callback through AgTable, so the setter is where an
-        // edit is captured. Returning true tells the grid the value was accepted.
+        // AgTable exposes no grid-level change callback, so edits are captured here.
         valueSetter: ({ data, newValue }: { data: TranslationEditorRow; newValue: string }) => {
           const value = newValue ?? ""
+          const changed = isChanged(data, value)
+
           setEditedValues((previous) => {
             const next = { ...previous }
-            if (isChanged(data, value)) {
+            if (changed) {
               next[data.key] = value
             } else {
               delete next[data.key]
+            }
+            return next
+          })
+          setEditedVersions((previous) => {
+            const next = { ...previous }
+            if (!changed) {
+              delete next[data.key]
+            } else if (!(data.key in next)) {
+              // First edit wins, so a later refresh cannot widen the lock.
+              next[data.key] = data.updatedAt
             }
             return next
           })
@@ -211,8 +228,7 @@ const SettingsTranslations = () => {
               variant="text"
               size="sm"
               disabled={isReverting}
-              // Records the key rather than calling the delete, so this memoized renderer never
-              // closes over the scope selectors and cannot revert against a stale language.
+              // Recorded rather than deleted here, so this memo cannot capture a stale language.
               onClick={() => setPendingRevertKey(data.key)}
               id={`revert-${data.key}`}
             >
@@ -221,20 +237,21 @@ const SettingsTranslations = () => {
           ),
       },
     ],
-    [editedValues, isReverting]
+    [editedValues, isReverting, overridesLoaded]
   )
 
-  const saveEdits = (values: Record<string, string>) =>
+  const saveEdits = (values: Record<string, string>, versions: Record<string, Date | null>) =>
     saveOverrides(() =>
       translationsService
         .updateRawTranslations({
           jurisdictionId: activeJurisdictionId,
           site: SiteEnum.public,
           language,
-          body: { edits: buildEdits(values, rows) },
+          body: { edits: buildEdits(values, versions) },
         })
         .then(() => {
           setEditedValues({})
+          setEditedVersions({})
           setConflictKeys([])
           addToast(t("translations.alertSaved"), { variant: "success" })
         })
@@ -244,6 +261,7 @@ const SettingsTranslations = () => {
             // The rest of the batch was written, so only the named keys stay pending. The
             // refetch below brings in the values they now hold, for the resolution dialog.
             setEditedValues(editsForKeys(values, conflicts))
+            setEditedVersions(editsForKeys(versions, conflicts))
             setConflictKeys(conflicts)
             return
           }
@@ -276,7 +294,7 @@ const SettingsTranslations = () => {
       return
     }
 
-    void saveEdits(editedValues)
+    void saveEdits(editedValues, editedVersions)
   }
 
   const conflicts = useMemo(() => {
@@ -300,11 +318,19 @@ const SettingsTranslations = () => {
     if (!Object.keys(kept).length) {
       // Every conflict resolved in favor of the stored value, so there is nothing left to write.
       setEditedValues({})
+      setEditedVersions({})
       return
     }
-    // Re-saving now picks up each key's current `updatedAt` from the refetched rows, so the
-    // second attempt locks against what the other admin left behind.
-    void saveEdits(kept)
+
+    // They have seen the other write and chosen to replace it, so lock against the current versions.
+    const rowsByKey = new Map(rows.map((row) => [row.key, row]))
+    const currentVersions = Object.keys(kept).reduce((versions, key) => {
+      versions[key] = rowsByKey.get(key)?.updatedAt ?? null
+      return versions
+    }, {} as Record<string, Date | null>)
+
+    setEditedVersions(currentVersions)
+    void saveEdits(kept, currentVersions)
   }
 
   // Reverting a key with no base takes its section off the site, so that case is confirmed first.
@@ -333,6 +359,11 @@ const SettingsTranslations = () => {
         })
         .then(() => {
           setEditedValues((previous) => {
+            const next = { ...previous }
+            delete next[revertKey]
+            return next
+          })
+          setEditedVersions((previous) => {
             const next = { ...previous }
             delete next[revertKey]
             return next
@@ -384,8 +415,7 @@ const SettingsTranslations = () => {
                 name="translationsJurisdiction"
                 label={t("t.jurisdiction")}
                 defaultValue={activeJurisdictionId}
-                // Changing scope with unsaved edits would discard them silently, and the edited
-                // values belong to the scope they were typed in.
+                // Switching scope would silently discard edits typed against the old one.
                 disabled={hasUnsavedChanges}
                 options={jurisdictions.map((jurisdiction) => ({
                   value: jurisdiction.id,
@@ -430,16 +460,22 @@ const SettingsTranslations = () => {
               variant="secondary"
               size="sm"
               disabled={!hasUnsavedChanges || isSaving}
-              onClick={() => setEditedValues({})}
+              onClick={() => {
+                setEditedValues({})
+                setEditedVersions({})
+              }}
               id="discardTranslations"
             >
               {t("t.cancel")}
             </Button>
           </div>
         </div>
-        {/* AgTable renders its own filter immediately above the grid, which puts the hint further
-            from the table than it should be. Its search is turned off below and rendered here so
-            the hint sits directly above the table. */}
+        {error && (
+          <AlertBox className="mb-4" type="alert">
+            {t("translations.alertLoadFailed")}
+          </AlertBox>
+        )}
+        {/* AgTable's own filter would sit between the hint and the grid, so it is disabled below. */}
         <div className={styles["filter"]}>
           <Field
             name="translationsFilter"
@@ -500,7 +536,7 @@ const SettingsTranslations = () => {
               setPendingRevertKey(null)
               return
             }
-            void saveEdits(editedValues)
+            void saveEdits(editedValues, editedVersions)
           }}
         />
       )}
