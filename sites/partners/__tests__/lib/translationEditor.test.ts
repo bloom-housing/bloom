@@ -12,6 +12,7 @@ import {
   keysThatHideSections,
   validateEdits,
   validateValue,
+  withPendingEdits,
 } from "../../src/lib/translationEditor"
 
 const override = (key: string, value: string, extra = {}) => ({
@@ -199,6 +200,41 @@ describe("buildEdits", () => {
     // updatedAt. Sending that would overwrite the other admin instead of conflicting.
     const [built] = buildEdits({ "a.key": edit("New", editedAt) })
     expect(built.lastUpdatedAt).toEqual(editedAt)
+  })
+})
+
+describe("withPendingEdits", () => {
+  const rows = () =>
+    buildTranslationRows({
+      englishBase: { "a.one": "One", "b.two": "Two" },
+      overrides: [override("a.one", "Override one")],
+    })
+
+  it("attaches the pending value to its row", () => {
+    const [first, second] = withPendingEdits(rows(), { "a.one": edit("Typed") })
+    expect(first.editedValue).toEqual("Typed")
+    expect(second.editedValue).toBeNull()
+  })
+
+  it("attaches an empty pending value, which is how a section is hidden", () => {
+    expect(withPendingEdits(rows(), { "a.one": edit("") })[0].editedValue).toEqual("")
+  })
+
+  it("gives every row a null value when nothing is pending", () => {
+    expect(withPendingEdits(rows(), {}).map((row) => row.editedValue)).toEqual([null, null])
+  })
+
+  it("keeps the rest of the row intact", () => {
+    expect(withPendingEdits(rows(), { "a.one": edit("Typed") })[0]).toMatchObject({
+      key: "a.one",
+      baseValue: "One",
+      overrideValue: "Override one",
+      hasBase: true,
+    })
+  })
+
+  it("ignores a pending edit whose key is not on this page", () => {
+    expect(withPendingEdits(rows(), { "z.elsewhere": edit("Typed") })).toHaveLength(2)
   })
 })
 

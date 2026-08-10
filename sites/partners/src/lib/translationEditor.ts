@@ -102,6 +102,26 @@ export const buildEdits = (edits: PendingEdits): TranslationKeyEdit[] =>
     version ? { key, value, lastUpdatedAt: version } : { key, value }
   )
 
+export type TranslationGridRow = TranslationEditorRow & {
+  /** The unsaved value for this key, or null when nothing is pending. An edit may be empty. */
+  editedValue: string | null
+}
+
+/**
+ * Attaches each row's pending edit to the row itself.
+ *
+ * The grid callbacks read the edit from the row rather than closing over the edits map, so a
+ * committed edit does not force ag-grid to rebuild every column definition.
+ */
+export const withPendingEdits = (
+  rows: TranslationEditorRow[],
+  edits: PendingEdits
+): TranslationGridRow[] =>
+  rows.map((row) => {
+    const edit = edits[row.key]
+    return { ...row, editedValue: edit ? edit.value : null }
+  })
+
 /**
  * Records an entered value against its row, or drops the entry when the value matches what the
  * site renders today.

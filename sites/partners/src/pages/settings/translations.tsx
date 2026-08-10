@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import { AlertBox, Field, Select, t, useMutate } from "@bloom-housing/ui-components"
@@ -13,7 +13,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { flattenTranslations } from "@bloom-housing/shared-helpers/src/utilities/flattenTranslations"
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
-import { ColDef, ColGroupDef, Column } from "ag-grid-community"
+import { ColDef, ColGroupDef } from "ag-grid-community"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import {
@@ -36,16 +36,15 @@ import {
   effectiveValue,
   keysThatHideSections,
   PendingEdits,
-  TranslationEditorRow,
+  TranslationGridRow,
   validateEdits,
+  withPendingEdits,
 } from "../../lib/translationEditor"
 import { TranslationConflictDialog } from "../../components/settings/TranslationConflictDialog"
 import { TranslationHideSectionDialog } from "../../components/settings/TranslationHideSectionDialog"
 
-// Rough: one character out only changes which editor opens.
-const APPROXIMATE_CHARACTER_WIDTH = 7
-const CELL_PADDING = 34
-const DEFAULT_VALUE_COLUMN_WIDTH = 220
+// Above this the inline editor is too cramped to work in, so the textarea opens instead.
+const INLINE_EDITOR_MAX_CHARACTERS = 60
 
 const SettingsTranslations = () => {
   const router = useRouter()
@@ -102,11 +101,12 @@ const SettingsTranslations = () => {
 
   // What the admin has typed but not saved, with the version each edit locks against.
   const [edits, setEdits] = useState<PendingEdits>({})
-  // A revert waits here until it is either confirmed or found not to need confirming.
-  const [pendingRevertKey, setPendingRevertKey] = useState<string | null>(null)
-  const [revertKey, setRevertKey] = useState<string | null>(null)
   // Keys a save could not write because someone changed them first.
   const [conflictKeys, setConflictKeys] = useState<string[]>([])
+  // Keys awaiting confirmation because saving or reverting them would remove a section.
+  const [hidingKeys, setHidingKeys] = useState<string[]>([])
+  // Set alongside hidingKeys when the confirmation is for a revert rather than a save.
+  const [hidingRevertKey, setHidingRevertKey] = useState<string | null>(null)
   const editCount = Object.keys(edits).length
   const hasUnsavedChanges = editCount > 0
 
@@ -143,6 +143,46 @@ const SettingsTranslations = () => {
     [filteredRows, currentPage, perPage]
   )
 
+  // Only the page on screen is merged, so an edit re-maps a handful of rows rather than all of them.
+  const gridRows = useMemo(() => withPendingEdits(pagedRows, edits), [pagedRows, edits])
+
+  const runRevert = useCallback(
+    (key: string) =>
+      revertOverride(() =>
+        translationsService
+          .deleteRawTranslation({
+            jurisdictionId: activeJurisdictionId,
+            site: SiteEnum.public,
+            language,
+            key,
+          })
+          .then(() => {
+            setEdits((previous) => {
+              const next = { ...previous }
+              delete next[key]
+              return next
+            })
+            addToast(t("translations.alertReverted"), { variant: "success" })
+          })
+          .catch((error) => {
+            addToast(t("errors.alert.badRequest"), { variant: "alert" })
+            console.log(error)
+          })
+          .finally(() => {
+            void mutate(cacheKey)
+          })
+      ),
+    [
+      activeJurisdictionId,
+      addToast,
+      cacheKey,
+      language,
+      mutate,
+      revertOverride,
+      translationsService,
+    ]
+  )
+
   const columnDefs: (ColDef | ColGroupDef)[] = useMemo(
     () => [
       {
@@ -165,24 +205,22 @@ const SettingsTranslations = () => {
         editable: overridesLoaded,
         // The default double-click gives no hint the cell is editable.
         singleClickEdit: true,
-        cellClass: ({ data }: { data: TranslationEditorRow }) =>
-          edits[data.key] !== undefined
+        cellClass: ({ data }: { data: TranslationGridRow }) =>
+          data.editedValue !== null
             ? `${styles["editable-cell"]} ${styles["edited-cell"]}`
             : styles["editable-cell"],
-        // Inline editor commits on Enter; a truncated or multi-line value needs the textarea.
-        cellEditorSelector: ({ value, column }: { value: string; column?: Column }) => {
+        // Inline editor commits on Enter; a long or multi-line value needs the textarea instead.
+        cellEditorSelector: ({ value }: { value: string }) => {
           const text = value ?? ""
-          const width = column?.getActualWidth?.() ?? DEFAULT_VALUE_COLUMN_WIDTH
-          const visibleCharacters = (width - CELL_PADDING) / APPROXIMATE_CHARACTER_WIDTH
 
-          return text.length > visibleCharacters || text.includes("\n")
+          return text.length > INLINE_EDITOR_MAX_CHARACTERS || text.includes("\n")
             ? { component: "agLargeTextCellEditor", params: { maxLength: 5000 } }
             : { component: "agTextCellEditor" }
         },
-        valueGetter: ({ data }: { data: TranslationEditorRow }) =>
-          edits[data.key]?.value ?? effectiveValue(data) ?? "",
+        valueGetter: ({ data }: { data: TranslationGridRow }) =>
+          data.editedValue ?? effectiveValue(data) ?? "",
         // AgTable exposes no grid-level change callback, so edits are captured here.
-        valueSetter: ({ data, newValue }: { data: TranslationEditorRow; newValue: string }) => {
+        valueSetter: ({ data, newValue }: { data: TranslationGridRow; newValue: string }) => {
           setEdits((previous) => applyEdit(previous, data, newValue ?? ""))
           return true
         },
@@ -190,8 +228,8 @@ const SettingsTranslations = () => {
       {
         headerName: t("t.status"),
         minWidth: 140,
-        valueGetter: ({ data }: { data: TranslationEditorRow }) => {
-          if (edits[data.key] !== undefined) return t("translations.statusEdited")
+        valueGetter: ({ data }: { data: TranslationGridRow }) => {
+          if (data.editedValue !== null) return t("translations.statusEdited")
           if (data.overrideValue === null) return t("translations.statusFallback")
           return data.stale ? t("translations.statusStale") : t("translations.statusOverridden")
         },
@@ -201,14 +239,22 @@ const SettingsTranslations = () => {
         pinned: "right",
         maxWidth: 140,
         resizable: false,
-        cellRendererFramework: ({ data }: { data: TranslationEditorRow }) =>
+        cellRendererFramework: ({ data }: { data: TranslationGridRow }) =>
           data.overrideValue === null ? null : (
             <Button
               variant="text"
               size="sm"
               disabled={isReverting}
-              // Recorded rather than deleted here, so this memo cannot capture a stale language.
-              onClick={() => setPendingRevertKey(data.key)}
+              onClick={() => {
+                // A key with no base renders only from its override, so removing it takes the
+                // section off the site and is confirmed first.
+                if (data.hasBase) {
+                  void runRevert(data.key)
+                  return
+                }
+                setHidingKeys([data.key])
+                setHidingRevertKey(data.key)
+              }}
               id={`revert-${data.key}`}
             >
               {t("translations.revert")}
@@ -216,7 +262,7 @@ const SettingsTranslations = () => {
           ),
       },
     ],
-    [edits, isReverting, overridesLoaded]
+    [isReverting, overridesLoaded, runRevert]
   )
 
   const saveEdits = (pending: PendingEdits) =>
@@ -249,9 +295,6 @@ const SettingsTranslations = () => {
           void mutate(cacheKey)
         })
     )
-
-  // Keys awaiting confirmation because saving or reverting them would remove a section.
-  const [hidingKeys, setHidingKeys] = useState<string[]>([])
 
   const handleSave = () => {
     const issues = validateEdits(edits, rows)
@@ -288,50 +331,6 @@ const SettingsTranslations = () => {
       void saveEdits(kept)
     }
   }
-
-  // Reverting a key with no base takes its section off the site, so that case is confirmed first.
-  useEffect(() => {
-    if (!pendingRevertKey) return
-
-    if (rows.find((row) => row.key === pendingRevertKey && !row.hasBase)) {
-      setHidingKeys([pendingRevertKey])
-      return
-    }
-    setRevertKey(pendingRevertKey)
-    setPendingRevertKey(null)
-  }, [pendingRevertKey, rows])
-
-  // Runs the delete for whichever key was confirmed, using the current scope.
-  useEffect(() => {
-    if (!revertKey) return
-
-    void revertOverride(() =>
-      translationsService
-        .deleteRawTranslation({
-          jurisdictionId: activeJurisdictionId,
-          site: SiteEnum.public,
-          language,
-          key: revertKey,
-        })
-        .then(() => {
-          setEdits((previous) => {
-            const next = { ...previous }
-            delete next[revertKey]
-            return next
-          })
-          addToast(t("translations.alertReverted"), { variant: "success" })
-        })
-        .catch((error) => {
-          addToast(t("errors.alert.badRequest"), { variant: "alert" })
-          console.log(error)
-        })
-        .finally(() => {
-          setRevertKey(null)
-          void mutate(cacheKey)
-        })
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [revertKey])
 
   const languageOptions = useMemo(
     () =>
@@ -443,7 +442,7 @@ const SettingsTranslations = () => {
             setCurrentPage: tableOptions.pagination.setCurrentPage,
           }}
           data={{
-            items: pagedRows,
+            items: gridRows,
             loading,
             totalItems: filteredRows.length,
             totalPages: Math.max(Math.ceil(filteredRows.length / perPage), 1),
@@ -472,13 +471,13 @@ const SettingsTranslations = () => {
           isLoading={isSaving || isReverting}
           onClose={() => {
             setHidingKeys([])
-            setPendingRevertKey(null)
+            setHidingRevertKey(null)
           }}
           onConfirm={() => {
             setHidingKeys([])
-            if (pendingRevertKey) {
-              setRevertKey(pendingRevertKey)
-              setPendingRevertKey(null)
+            if (hidingRevertKey) {
+              setHidingRevertKey(null)
+              void runRevert(hidingRevertKey)
               return
             }
             void saveEdits(edits)
