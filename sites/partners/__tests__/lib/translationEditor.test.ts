@@ -7,6 +7,7 @@ import {
   buildTranslationRows,
   conflictKeysFrom,
   editsForKeys,
+  editsWithoutKeys,
   effectiveValue,
   isChanged,
   keysThatHideSections,
@@ -437,6 +438,33 @@ describe("editsForKeys", () => {
     expect(editsForKeys({ "a.one": edit("1", editedAt) }, ["a.one"])["a.one"].version).toEqual(
       editedAt
     )
+  })
+})
+
+describe("editsWithoutKeys", () => {
+  it("drops the named keys and keeps the rest", () => {
+    expect(editsWithoutKeys({ "a.one": edit("1"), "b.two": edit("2") }, ["a.one"])).toEqual({
+      "b.two": edit("2"),
+    })
+  })
+
+  it("keeps an edit made while the save was in flight, since it was not sent", () => {
+    const duringSave = { "a.sent": edit("Sent"), "b.typed": edit("Typed") }
+    expect(Object.keys(editsWithoutKeys(duringSave, ["a.sent"]))).toEqual(["b.typed"])
+  })
+
+  it("ignores a named key that is not pending", () => {
+    expect(editsWithoutKeys({ "a.one": edit("1") }, ["gone.key"])).toEqual({ "a.one": edit("1") })
+  })
+
+  it("returns everything when no keys are named", () => {
+    expect(editsWithoutKeys({ "a.one": edit("1") }, [])).toEqual({ "a.one": edit("1") })
+  })
+
+  it("leaves the original untouched", () => {
+    const original = { "a.one": edit("1") }
+    editsWithoutKeys(original, ["a.one"])
+    expect(original).toEqual({ "a.one": edit("1") })
   })
 })
 

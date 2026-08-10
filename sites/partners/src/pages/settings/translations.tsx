@@ -33,6 +33,7 @@ import {
   ConflictChoice,
   conflictKeysFrom,
   editsForKeys,
+  editsWithoutKeys,
   effectiveValue,
   keysThatHideSections,
   PendingEdits,
@@ -202,7 +203,8 @@ const SettingsTranslations = () => {
         headerName: t("translations.currentValue"),
         minWidth: 220,
         flex: 2,
-        editable: overridesLoaded,
+        // Locked during a save, since an edit made mid-request is written against a stale version.
+        editable: overridesLoaded && !isSaving,
         // The default double-click gives no hint the cell is editable.
         singleClickEdit: true,
         cellClass: ({ data }: { data: TranslationGridRow }) =>
@@ -244,7 +246,8 @@ const SettingsTranslations = () => {
             <Button
               variant="text"
               size="sm"
-              disabled={isReverting}
+              // A revert racing a save on the same key leaves whichever refetch lands last.
+              disabled={isReverting || isSaving}
               onClick={() => {
                 // A key with no base renders only from its override, so removing it takes the
                 // section off the site and is confirmed first.
@@ -262,11 +265,13 @@ const SettingsTranslations = () => {
           ),
       },
     ],
-    [isReverting, overridesLoaded, runRevert]
+    [isReverting, isSaving, overridesLoaded, runRevert]
   )
 
-  const saveEdits = (pending: PendingEdits) =>
-    saveOverrides(() =>
+  const saveEdits = (pending: PendingEdits) => {
+    const sentKeys = Object.keys(pending)
+
+    return saveOverrides(() =>
       translationsService
         .updateRawTranslations({
           jurisdictionId: activeJurisdictionId,
@@ -275,7 +280,9 @@ const SettingsTranslations = () => {
           body: { edits: buildEdits(pending) },
         })
         .then(() => {
-          setEdits({})
+          // Only the keys that were sent are cleared. A cell that committed while the request was
+          // in flight is not among them, so that edit survives instead of being discarded.
+          setEdits((previous) => editsWithoutKeys(previous, sentKeys))
           setConflictKeys([])
           addToast(t("translations.alertSaved"), { variant: "success" })
         })
@@ -284,7 +291,10 @@ const SettingsTranslations = () => {
           if (conflicts.length) {
             // The rest of the batch was written, so only the named keys stay pending. The
             // refetch below brings in the values they now hold, for the resolution dialog.
-            setEdits(editsForKeys(pending, conflicts))
+            setEdits((previous) => ({
+              ...editsWithoutKeys(previous, sentKeys),
+              ...editsForKeys(pending, conflicts),
+            }))
             setConflictKeys(conflicts)
             return
           }
@@ -295,6 +305,7 @@ const SettingsTranslations = () => {
           void mutate(cacheKey)
         })
     )
+  }
 
   const handleSave = () => {
     const issues = validateEdits(edits, rows)

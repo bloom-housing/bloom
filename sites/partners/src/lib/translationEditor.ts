@@ -293,3 +293,15 @@ export const editsForKeys = (edits: PendingEdits, keys: string[]): PendingEdits 
     }
     return remaining
   }, {} as PendingEdits)
+
+/**
+ * Drops the named keys and keeps the rest.
+ *
+ * A save clears the keys it sent rather than clearing everything, so a cell that committed while
+ * the request was in flight is still pending when it returns.
+ */
+export const editsWithoutKeys = (edits: PendingEdits, keys: string[]): PendingEdits => {
+  const remaining = { ...edits }
+  keys.forEach((key) => delete remaining[key])
+  return remaining
+}
