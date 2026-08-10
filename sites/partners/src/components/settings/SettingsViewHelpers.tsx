@@ -60,7 +60,7 @@ export const getSettingsTabs = (
     translations: enableTranslations,
   } = getVisibleSettingsTabs(featureFlags, userRoles)
 
-  const baseUrl = "/settings/"
+  const baseUrl = "/settings"
   const enabledTabs: SettingsIndexEnum[] = []
   if (enablePreferences) enabledTabs.push(SettingsIndexEnum.preferences)
   if (enableProperties) enabledTabs.push(SettingsIndexEnum.properties)

@@ -29,6 +29,11 @@ export type TranslationEditorRow = {
  * The key set is the union of the two: the base supplies the keys an admin can override, and an
  * override with no base is a fork-specific key that only exists in the database.
  */
+// Translation keys come from data, so a key named `constructor` or `toString` would otherwise read
+// an inherited function off the prototype rather than reporting the key as absent.
+const hasKey = (source: Record<string, unknown>, key: string) =>
+  Object.prototype.hasOwnProperty.call(source, key)
+
 export const buildTranslationRows = ({
   englishBase,
   languageBase,
@@ -47,8 +52,8 @@ export const buildTranslationRows = ({
 
   return [...keys].sort().map((key) => {
     const override = overridesByKey.get(key)
-    const englishValue = key in englishBase ? englishBase[key] : null
-    const languageValue = languageBase && key in languageBase ? languageBase[key] : null
+    const englishValue = hasKey(englishBase, key) ? englishBase[key] : null
+    const languageValue = languageBase && hasKey(languageBase, key) ? languageBase[key] : null
 
     return {
       key,
@@ -117,10 +122,10 @@ export const withPendingEdits = (
   rows: TranslationEditorRow[],
   edits: PendingEdits
 ): TranslationGridRow[] =>
-  rows.map((row) => {
-    const edit = edits[row.key]
-    return { ...row, editedValue: edit ? edit.value : null }
-  })
+  rows.map((row) => ({
+    ...row,
+    editedValue: hasKey(edits, row.key) ? edits[row.key].value : null,
+  }))
 
 /**
  * Records an entered value against its row, or drops the entry when the value matches what the
@@ -141,8 +146,8 @@ export const applyEdit = (
     return next
   }
 
-  const existing = edits[row.key]
-  next[row.key] = { value, version: existing ? existing.version : row.updatedAt }
+  const version = hasKey(edits, row.key) ? edits[row.key].version : row.updatedAt
+  next[row.key] = { value, version }
   return next
 }
 
@@ -185,7 +190,7 @@ export const buildConflicts = (
     const row = rowsByKey.get(key)
     return {
       key,
-      mine: edits[key]?.value ?? "",
+      mine: hasKey(edits, key) ? edits[key].value : "",
       theirs: row ? effectiveValue(row) ?? "" : "",
     }
   })
@@ -206,7 +211,7 @@ export const applyConflictChoices = (
   const rowsByKey = new Map(rows.map((row) => [row.key, row]))
 
   return Object.entries(edits).reduce((kept, [key, edit]) => {
-    if (choices[key] !== "theirs") {
+    if (!hasKey(choices, key) || choices[key] !== "theirs") {
       kept[key] = { value: edit.value, version: rowsByKey.get(key)?.updatedAt ?? null }
     }
     return kept
@@ -288,7 +293,7 @@ export const keysThatHideSections = (
 /** Narrows the pending edits to the keys still unresolved, dropping the ones the save wrote. */
 export const editsForKeys = (edits: PendingEdits, keys: string[]): PendingEdits =>
   keys.reduce((remaining, key) => {
-    if (key in edits) {
+    if (hasKey(edits, key)) {
       remaining[key] = edits[key]
     }
     return remaining

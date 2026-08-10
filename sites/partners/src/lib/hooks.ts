@@ -900,12 +900,16 @@ export function useRawTranslations({
 }
 
 /**
- * Warns before unsaved work is lost, covering both ways out of a page: an in-app route change and
- * the browser closing, reloading, or going back.
+ * Warns before unsaved work is lost, on an in-app route change and on the browser closing or
+ * reloading.
  *
  * The browser prompt uses its own wording, so `message` reaches the admin only on an in-app
  * navigation. Next has no API for cancelling a route change, so aborting means throwing, which is
  * the documented workaround rather than an error worth reporting.
+ *
+ * Going back is only partly covered: `beforeunload` does not fire for it, and the history entry is
+ * already popped by the time this runs, so cancelling keeps the edits but leaves the address bar
+ * on the previous URL.
  */
 export function useUnsavedChangesWarning(hasUnsavedChanges: boolean, message: string) {
   const router = useRouter()

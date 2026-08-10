@@ -111,6 +111,30 @@ describe("buildTranslationRows", () => {
     expect(absent.overrideValue).toBeNull()
   })
 
+  it("treats a key named after an Object prototype member as having no base", () => {
+    // The key set comes from data, so a lookup walking the prototype chain would report the
+    // inherited function as a base value and skip the hide-section confirmation.
+    const rows = buildTranslationRows({
+      englishBase: {},
+      overrides: [override("constructor", "Fork only"), override("toString", "Fork only")],
+    })
+
+    expect(rows.map((row) => [row.key, row.englishValue, row.hasBase])).toEqual([
+      ["constructor", null, false],
+      ["toString", null, false],
+    ])
+  })
+
+  it("falls a prototype-named key back to English rather than an inherited function", () => {
+    const [row] = buildTranslationRows({
+      englishBase: { valueOf: "Real value" },
+      languageBase: {},
+      overrides: [],
+    })
+
+    expect(row.baseValue).toEqual("Real value")
+  })
+
   it("does not duplicate a key present in the base, the language file, and the overrides", () => {
     const rows = buildTranslationRows({
       englishBase: { "t.hello": "Hello" },
@@ -236,6 +260,15 @@ describe("withPendingEdits", () => {
 
   it("ignores a pending edit whose key is not on this page", () => {
     expect(withPendingEdits(rows(), { "z.elsewhere": edit("Typed") })).toHaveLength(2)
+  })
+
+  it("reports no pending edit for a key named after an Object prototype member", () => {
+    const [row] = buildTranslationRows({
+      englishBase: {},
+      overrides: [override("constructor", "Fork only")],
+    })
+
+    expect(withPendingEdits([row], {})[0].editedValue).toBeNull()
   })
 })
 
