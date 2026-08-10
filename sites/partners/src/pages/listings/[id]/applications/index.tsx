@@ -58,6 +58,10 @@ const ApplicationsList = () => {
     FeatureFlagEnum.enableApplicationStatus,
     listingDto?.jurisdictions.id
   )
+  const enableApplicationBulkCSVUpdates = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableApplicationBulkCSVUpdates,
+    listingDto?.jurisdictions.id
+  )
   const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableHousingAdvocate,
     listingDto?.jurisdictions.id
@@ -271,7 +275,7 @@ const ApplicationsList = () => {
                             {t("t.export")}
                           </Button>
 
-                          {enableApplicationStatus && (
+                          {enableApplicationBulkCSVUpdates && (
                             <Button
                               variant="primary-outlined"
                               size="sm"

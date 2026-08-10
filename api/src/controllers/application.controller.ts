@@ -337,8 +337,12 @@ export class ApplicationController {
   @ApiOkResponse({ type: ApplicationBulkPresignedUrl })
   async uploadBulkUpdate(
     @Body() dto: ApplicationBulkUrl,
+    @Request() req: ExpressRequest,
   ): Promise<ApplicationBulkPresignedUrl> {
-    return await this.applicationBulkUploadService.uploadUrl(dto);
+    return await this.applicationBulkUploadService.uploadUrl(
+      dto,
+      mapTo(User, req['user']),
+    );
   }
 
   @Delete()

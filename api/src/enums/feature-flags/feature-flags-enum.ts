@@ -13,6 +13,7 @@ export enum FeatureFlagEnum {
   disableWorkInRegion = 'disableWorkInRegion',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
   enableAdditionalResources = 'enableAdditionalResources',
+  enableApplicationBulkCSVUpdates = 'enableApplicationBulkCSVUpdates',
   enableApplicationStatus = 'enableApplicationStatus',
   enableAutoOpenDate = 'enableAutoOpenDate',
   enableAutopublish = 'enableAutopublish',
@@ -159,6 +160,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableAutopublish,
     description:
       'When true, partners can set an optional scheduled listing publish date',
+  },
+  {
+    name: FeatureFlagEnum.enableApplicationBulkCSVUpdates,
+    description:
+      'When true, allows for the bulk uptake of application statuses',
   },
   {
     name: FeatureFlagEnum.enableCompanyWebsite,

@@ -9283,7 +9283,10 @@ export interface ApplicationBulkUrl {
   listingId: string
 
   /**  */
-  userId: string
+  contentType: string
+
+  /**  */
+  contentDisposition: string
 }
 
 /** ApplicationBulkPresignedUrl */
@@ -11079,6 +11082,7 @@ export enum FeatureFlagEnum {
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableAdditionalResources" = "enableAdditionalResources",
+  "enableApplicationBulkCSVUpdates" = "enableApplicationBulkCSVUpdates",
   "enableApplicationStatus" = "enableApplicationStatus",
   "enableAutoOpenDate" = "enableAutoOpenDate",
   "enableAutopublish" = "enableAutopublish",
