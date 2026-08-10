@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { FunctionComponent, useEffect, useMemo, useState } from "react"
 import Head from "next/head"
 import { SWRConfig } from "swr"
 import type { AppProps } from "next/app"
@@ -7,7 +7,14 @@ import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"
 import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
 import "@bloom-housing/ui-seeds/src/global/app-css.scss"
-import { addTranslation, NavigationContext, GenericRouter } from "@bloom-housing/ui-components"
+import {
+  addTranslation,
+  NavigationContext as UICNavigationContext,
+  GenericRouter,
+} from "@bloom-housing/ui-components"
+import { NavigationContext } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
+import type { LinkProps as UICLinkProps } from "@bloom-housing/ui-components/src/config/NavigationContext"
+import type { LinkProps as SeedsLinkProps } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
 import {
   AuthProvider,
   ConfigProvider,
@@ -85,19 +92,25 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
           },
         }}
       >
+        {/* Seeds and UI-Components each have their own NavigationContext; both are needed so
+            internal links use Next's router instead of a full page load. */}
         <NavigationContext.Provider
-          value={{
-            LinkComponent: LinkComponent,
-            router: router as GenericRouter,
-          }}
+          value={{ LinkComponent: LinkComponent as FunctionComponent<SeedsLinkProps> }}
         >
-          {process.env.reCaptchaKey ? (
-            <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
-              {pageContent}
-            </GoogleReCaptchaProvider>
-          ) : (
-            pageContent
-          )}
+          <UICNavigationContext.Provider
+            value={{
+              LinkComponent: LinkComponent as FunctionComponent<UICLinkProps>,
+              router: router as GenericRouter,
+            }}
+          >
+            {process.env.reCaptchaKey ? (
+              <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
+                {pageContent}
+              </GoogleReCaptchaProvider>
+            ) : (
+              pageContent
+            )}
+          </UICNavigationContext.Provider>
         </NavigationContext.Provider>
       </SWRConfig>
     </>
