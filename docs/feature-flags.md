@@ -38,6 +38,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [disableWorkInRegion](./feature-flags/disableWorkInRegion.md) | When true the "Work in Region" question will be removed from the application process |
 | [enableAccessibilityFeatures](./feature-flags/enableAccessibilityFeatures.md) | When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view |
 | [enableAdditionalResources](./feature-flags/enableAdditionalResources.md) | When true, the 'learn more' section is displayed on the home page |
+| [enableApplicationBulkCSVUpdates](./feature-flags/enableApplicationBulkCSVUpdates.md) | When true, allows for the bulk uptake of application statuses |
 | [enableApplicationStatus](./feature-flags/enableApplicationStatus.md) | When true, the application status and notifications feature is enabled on public and partners |
 | [enableAutoOpenDate](./feature-flags/enableAutoOpenDate.md) | When true, partners can set an optional scheduled listing applications open date |
 | [enableAutopublish](./feature-flags/enableAutopublish.md) | When true, partners can set an optional scheduled listing publish date |

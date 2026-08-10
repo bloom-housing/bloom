@@ -15,6 +15,18 @@ resource "aws_s3_bucket_lifecycle_configuration" "private" {
     }
   }
 }
+
+resource "aws_s3_bucket_cors_configuration" "private" {
+  region = var.aws_region
+  bucket = aws_s3_bucket.private.id
+  cors_rule {
+    allowed_methods = ["PUT"]
+    allowed_origins = [
+      "https://partners.${var.domain_name}",
+    ]
+    allowed_headers = ["Content-Type", "Content-Disposition"]
+  }
+}
 resource "aws_s3_bucket_policy" "private" {
   region = var.aws_region
   bucket = aws_s3_bucket.private.id
