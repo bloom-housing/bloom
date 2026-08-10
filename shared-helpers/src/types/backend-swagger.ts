@@ -11090,6 +11090,7 @@ export enum FeatureFlagEnum {
   "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableCustomListingNotifications" = "enableCustomListingNotifications",
+  "enableExportTerms" = "enableExportTerms",
   "enableFaq" = "enableFaq",
   "enableFilterByBathroom" = "enableFilterByBathroom",
   "enableFilterByCounty" = "enableFilterByCounty",

@@ -22,11 +22,13 @@ import {
 import Layout from "../../../../layouts"
 import { getColDefs } from "../../../../components/applications/ApplicationsColDefs"
 import { ApplicationsSideNav } from "../../../../components/applications/ApplicationsSideNav"
-import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
-import ListingGuard from "../../../../components/shared/ListingGuard"
-import { StatusBar } from "../../../../components/shared/StatusBar"
-import { getListingStatusTag } from "../../../../components/listings/helpers"
 import BulkUpdateDrawer from "../../../../components/applications/BulkUpdateDrawer"
+import { getListingStatusTag } from "../../../../components/listings/helpers"
+import { ExportTermsDialog } from "../../../../components/shared/ExportTermsDialog"
+import styles from "../../../../components/shared/ExportTermsDialog.module.scss"
+import ListingGuard from "../../../../components/shared/ListingGuard"
+import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
+import { StatusBar } from "../../../../components/shared/StatusBar"
 
 const ApplicationsList = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -37,6 +39,7 @@ const ApplicationsList = () => {
   const [applicationConfirmAddPostLotteryModal, setApplicationConfirmAddPostLotteryModal] =
     useState(false)
   const [bulkUpdateModalOpen, setBulkUpdateModalOpen] = useState(false)
+  const [isTermsOpen, setIsTermsOpen] = useState(false)
 
   const tableOptions = useAgTable()
 
@@ -46,20 +49,24 @@ const ApplicationsList = () => {
   const listingJurisdiction = profile?.jurisdictions.find(
     (jurisdiction) => jurisdiction.id === listingDto?.jurisdictions.id
   )
-  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableFullTimeStudentQuestion,
-    listingDto?.jurisdictions.id
-  )
   const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableWorkInRegion,
+    listingDto?.jurisdictions.id
+  )
+  const enableApplicationBulkCSVUpdates = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableApplicationBulkCSVUpdates,
     listingDto?.jurisdictions.id
   )
   const enableApplicationStatus = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableApplicationStatus,
     listingDto?.jurisdictions.id
   )
-  const enableApplicationBulkCSVUpdates = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableApplicationBulkCSVUpdates,
+  const enableExportTerms = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableExportTerms,
+    listingDto?.jurisdictions.id
+  )
+  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
     listingDto?.jurisdictions.id
   )
   const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
@@ -104,6 +111,16 @@ const ApplicationsList = () => {
     tableOptions.sort.sortOptions?.[0]?.orderBy as ApplicationOrderByKeys,
     tableOptions.sort.sortOptions?.[0]?.orderDir as OrderByEnum
   )
+
+  const onSubmit = async () => {
+    try {
+      await onExport()
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setIsTermsOpen(false)
+    }
+  }
 
   class formatLinkCell {
     linkWithId: HTMLSpanElement
@@ -269,7 +286,7 @@ const ApplicationsList = () => {
                           <Button
                             variant="primary-outlined"
                             size="sm"
-                            onClick={() => onExport()}
+                            onClick={() => (enableExportTerms ? setIsTermsOpen(true) : onExport())}
                             loadingMessage={exportLoading && t("t.formSubmitted")}
                           >
                             {t("t.export")}
@@ -287,6 +304,29 @@ const ApplicationsList = () => {
                         </div>
                       }
                     />
+                    <ExportTermsDialog
+                      dialogHeader={t("applications.export.dialogHeader")}
+                      id="applications"
+                      isOpen={isTermsOpen}
+                      onClose={() => setIsTermsOpen(false)}
+                      onSubmit={onSubmit}
+                    >
+                      <p>{t("applications.export.dialogSubheader")}</p>
+                      <h2 className={styles["terms-of-use-text"]}>
+                        {t("applications.export.termsOfUse")}
+                      </h2>
+                      <span>
+                        {t("applications.export.termsBodyOne")}
+                        <a href={t("applications.export.termsOfUseWebsite")} target="_blank">
+                          {t("applications.export.termsOfUse")}
+                        </a>
+                        {t("applications.export.termsBodyTwo")}
+                        <a href={t("applications.export.partnersManualWebsite")} target="_blank">
+                          {t("applications.export.partnersManual")}
+                        </a>
+                        {t("applications.export.termsBodyThree")}
+                      </span>
+                    </ExportTermsDialog>
                   </>
                 )}
               </article>

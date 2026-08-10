@@ -2404,6 +2404,7 @@ export const realisticAddressesForOtherStatuses = [
 const featureFlags = [
   FeatureFlagEnum.disableEthnicityQuestion,
   FeatureFlagEnum.disableWorkInRegion,
+  FeatureFlagEnum.enableExportTerms,
   FeatureFlagEnum.enableFilterByBathroom,
   FeatureFlagEnum.enableFilterByCounty,
   FeatureFlagEnum.enableGeocodingPreferences,
