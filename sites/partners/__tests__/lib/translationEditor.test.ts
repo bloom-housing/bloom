@@ -20,6 +20,8 @@ const override = (key: string, value: string, extra = {}) => ({
   ...extra,
 })
 
+const edit = (value: string, version: Date | null = null) => ({ value, version })
+
 describe("buildTranslationRows", () => {
   it("returns one row per base key, sorted, with no override", () => {
     const rows = buildTranslationRows({
@@ -168,38 +170,32 @@ describe("buildEdits", () => {
   const editedAt = new Date("2026-01-01")
 
   it("sends the version captured when the key was edited", () => {
-    expect(buildEdits({ "a.key": "New" }, { "a.key": editedAt })).toEqual([
+    expect(buildEdits({ "a.key": edit("New", editedAt) })).toEqual([
       { key: "a.key", value: "New", lastUpdatedAt: editedAt },
     ])
   })
 
   it("omits the lock for a key that had no override when it was edited", () => {
-    expect(buildEdits({ "a.key": "New" }, { "a.key": null })).toEqual([
-      { key: "a.key", value: "New" },
-    ])
-  })
-
-  it("omits the lock for a key with no captured version at all", () => {
-    expect(buildEdits({ "unknown.key": "New" }, {})).toEqual([{ key: "unknown.key", value: "New" }])
+    expect(buildEdits({ "a.key": edit("New") })).toEqual([{ key: "a.key", value: "New" }])
   })
 
   it("builds one edit per changed key and leaves the rest out", () => {
     expect(
-      buildEdits({ "a.one": "Uno", "c.three": "Tres" }, { "a.one": editedAt }).map(
-        (edit) => edit.key
+      buildEdits({ "a.one": edit("Uno", editedAt), "c.three": edit("Tres") }).map(
+        (built) => built.key
       )
     ).toEqual(["a.one", "c.three"])
   })
 
   it("keeps an empty value, which is how a section is hidden", () => {
-    expect(buildEdits({ "a.key": "" }, { "a.key": null })).toEqual([{ key: "a.key", value: "" }])
+    expect(buildEdits({ "a.key": edit("") })).toEqual([{ key: "a.key", value: "" }])
   })
 
   it("locks against the captured version rather than a later one", () => {
-    // Rows revalidate on window focus, so by save time the stored row may carry a newer
+    // A save or revert refetches the rows, so by save time the stored row may hold a newer
     // updatedAt. Sending that would overwrite the other admin instead of conflicting.
-    const [edit] = buildEdits({ "a.key": "New" }, { "a.key": editedAt })
-    expect(edit.lastUpdatedAt).toEqual(editedAt)
+    const [built] = buildEdits({ "a.key": edit("New", editedAt) })
+    expect(built.lastUpdatedAt).toEqual(editedAt)
   })
 })
 
@@ -238,21 +234,30 @@ describe("conflictKeysFrom", () => {
 
 describe("editsForKeys", () => {
   it("keeps only the named keys, which are the ones still unresolved", () => {
-    expect(editsForKeys({ "a.one": "1", "b.two": "2", "c.three": "3" }, ["b.two"])).toEqual({
-      "b.two": "2",
-    })
+    expect(
+      editsForKeys({ "a.one": edit("1"), "b.two": edit("2"), "c.three": edit("3") }, ["b.two"])
+    ).toEqual({ "b.two": edit("2") })
   })
 
   it("ignores a named key that has no pending edit", () => {
-    expect(editsForKeys({ "a.one": "1" }, ["a.one", "gone.key"])).toEqual({ "a.one": "1" })
+    expect(editsForKeys({ "a.one": edit("1") }, ["a.one", "gone.key"])).toEqual({
+      "a.one": edit("1"),
+    })
   })
 
   it("returns nothing when no keys are named, which is the fully saved case", () => {
-    expect(editsForKeys({ "a.one": "1" }, [])).toEqual({})
+    expect(editsForKeys({ "a.one": edit("1") }, [])).toEqual({})
   })
 
   it("keeps an empty edited value", () => {
-    expect(editsForKeys({ "a.one": "" }, ["a.one"])).toEqual({ "a.one": "" })
+    expect(editsForKeys({ "a.one": edit("") }, ["a.one"])).toEqual({ "a.one": edit("") })
+  })
+
+  it("keeps the value and its version together", () => {
+    const editedAt = new Date("2026-01-01")
+    expect(editsForKeys({ "a.one": edit("1", editedAt) }, ["a.one"])["a.one"].version).toEqual(
+      editedAt
+    )
   })
 })
 
@@ -335,14 +340,15 @@ describe("validateEdits", () => {
     })
 
     expect(
-      validateEdits({ "a.ok": "Hola %{name}", "b.broken": "Adios", "c.plain": "Simple" }, rows).map(
-        (issue) => issue.key
-      )
+      validateEdits(
+        { "a.ok": edit("Hola %{name}"), "b.broken": edit("Adios"), "c.plain": edit("Simple") },
+        rows
+      ).map((issue) => issue.key)
     ).toEqual(["b.broken"])
   })
 
   it("ignores an edited key with no matching row", () => {
-    expect(validateEdits({ "gone.key": "" }, [])).toEqual([])
+    expect(validateEdits({ "gone.key": edit("") }, [])).toEqual([])
   })
 })
 
@@ -354,18 +360,18 @@ describe("keysThatHideSections", () => {
     })
 
   it("names a key with no base being emptied", () => {
-    expect(keysThatHideSections({ "no.base": "" }, rows())).toEqual(["no.base"])
+    expect(keysThatHideSections({ "no.base": edit("") }, rows())).toEqual(["no.base"])
   })
 
   it("treats a whitespace-only value as empty", () => {
-    expect(keysThatHideSections({ "no.base": "   " }, rows())).toEqual(["no.base"])
+    expect(keysThatHideSections({ "no.base": edit("   ") }, rows())).toEqual(["no.base"])
   })
 
   it("ignores a key with no base that is being given a value", () => {
-    expect(keysThatHideSections({ "no.base": "Something" }, rows())).toEqual([])
+    expect(keysThatHideSections({ "no.base": edit("Something") }, rows())).toEqual([])
   })
 
   it("ignores an emptied key that has a base to fall back to", () => {
-    expect(keysThatHideSections({ "has.base": "" }, rows())).toEqual([])
+    expect(keysThatHideSections({ "has.base": edit("") }, rows())).toEqual([])
   })
 })

@@ -72,25 +72,35 @@ export const isChanged = (row: TranslationEditorRow, value: string): boolean =>
   value !== (effectiveValue(row) ?? "")
 
 /**
- * Turns the edited values into the batch the PUT takes.
+ * One unsaved edit: what the admin typed, and the version it is locked against.
  *
- * `lastUpdatedAt` is the per-key optimistic lock, and it comes from `editedVersions`, captured when
- * the admin first edited each key, rather than from the current rows. Those rows revalidate on
- * window focus, so reading the lock at save time would send whatever another admin had just
- * written and overwrite them without ever reporting a conflict.
+ * The two are one object so they cannot be updated apart. Resolving a conflict rewrites both, and
+ * an edit reverted back to its original value drops both.
+ */
+export type PendingEdit = {
+  value: string
+  /** Null when the key had no override at edit time, so there is nothing to lock against. */
+  version: Date | null
+}
+
+export type PendingEdits = Record<string, PendingEdit>
+
+/**
+ * Turns the pending edits into the batch the PUT takes.
+ *
+ * `lastUpdatedAt` is the per-key optimistic lock, and it is the version captured when the admin
+ * first edited each key rather than the version the row holds now. A save or revert refetches the
+ * rows, so reading the lock at save time would send whatever another admin had written in the
+ * meantime and overwrite them without ever reporting a conflict.
  *
  * A key with no override when it was edited has no prior version to lock against, so no
  * `lastUpdatedAt` is sent. The API then attempts a create, which conflicts if someone has since
  * added that key.
  */
-export const buildEdits = (
-  editedValues: Record<string, string>,
-  editedVersions: Record<string, Date | null>
-): TranslationKeyEdit[] =>
-  Object.entries(editedValues).map(([key, value]) => {
-    const lastUpdatedAt = editedVersions[key]
-    return lastUpdatedAt ? { key, value, lastUpdatedAt } : { key, value }
-  })
+export const buildEdits = (edits: PendingEdits): TranslationKeyEdit[] =>
+  Object.entries(edits).map(([key, { value, version }]) =>
+    version ? { key, value, lastUpdatedAt: version } : { key, value }
+  )
 
 /**
  * The keys a batch save rejected because someone else changed them first.
@@ -148,13 +158,13 @@ export const validateValue = (
 
 /** Every entered value that would break interpolation or pluralization. */
 export const validateEdits = (
-  editedValues: Record<string, string>,
+  edits: PendingEdits,
   rows: TranslationEditorRow[]
 ): TranslationIssue[] => {
   const rowsByKey = new Map(rows.map((row) => [row.key, row]))
 
-  return Object.entries(editedValues)
-    .map(([key, value]) => {
+  return Object.entries(edits)
+    .map(([key, { value }]) => {
       const row = rowsByKey.get(key)
       return row ? validateValue(row, value) : null
     })
@@ -168,27 +178,24 @@ export const validateEdits = (
  * takes its section away. A key with a base falls back instead, and nothing disappears.
  */
 export const keysThatHideSections = (
-  editedValues: Record<string, string>,
+  edits: PendingEdits,
   rows: TranslationEditorRow[]
 ): string[] => {
   const rowsByKey = new Map(rows.map((row) => [row.key, row]))
 
-  return Object.entries(editedValues)
-    .filter(([key, value]) => {
+  return Object.entries(edits)
+    .filter(([key, { value }]) => {
       const row = rowsByKey.get(key)
       return !!row && !row.hasBase && value.trim() === ""
     })
     .map(([key]) => key)
 }
 
-/**
- * Narrows a per-key map to the keys still unresolved, dropping the ones the save wrote. Used for
- * both the edited values and the versions they were locked against, so the two stay in step.
- */
-export const editsForKeys = <T>(edited: Record<string, T>, keys: string[]): Record<string, T> =>
+/** Narrows the pending edits to the keys still unresolved, dropping the ones the save wrote. */
+export const editsForKeys = (edits: PendingEdits, keys: string[]): PendingEdits =>
   keys.reduce((remaining, key) => {
-    if (key in edited) {
-      remaining[key] = edited[key]
+    if (key in edits) {
+      remaining[key] = edits[key]
     }
     return remaining
-  }, {} as Record<string, T>)
+  }, {} as PendingEdits)

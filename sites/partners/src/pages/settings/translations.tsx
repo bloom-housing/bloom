@@ -32,6 +32,7 @@ import {
   effectiveValue,
   isChanged,
   keysThatHideSections,
+  PendingEdits,
   TranslationEditorRow,
   validateEdits,
 } from "../../lib/translationEditor"
@@ -99,16 +100,15 @@ const SettingsTranslations = () => {
   // Before these load every row looks unoverridden, so an edit would send a create and conflict.
   const overridesLoaded = overrides !== undefined
 
-  // Values the admin has typed but not saved, keyed by translation key.
-  const [editedValues, setEditedValues] = useState<Record<string, string>>({})
-  // The version each key held when first edited, which is what the save locks against.
-  const [editedVersions, setEditedVersions] = useState<Record<string, Date | null>>({})
+  // What the admin has typed but not saved, with the version each edit locks against.
+  const [edits, setEdits] = useState<PendingEdits>({})
   // A revert waits here until it is either confirmed or found not to need confirming.
   const [pendingRevertKey, setPendingRevertKey] = useState<string | null>(null)
   const [revertKey, setRevertKey] = useState<string | null>(null)
   // Keys a save could not write because someone changed them first.
   const [conflictKeys, setConflictKeys] = useState<string[]>([])
-  const hasUnsavedChanges = Object.keys(editedValues).length > 0
+  const editCount = Object.keys(edits).length
+  const hasUnsavedChanges = editCount > 0
 
   // Edits live only in component state until saved, so leaving the page discards them.
   useUnsavedChangesWarning(hasUnsavedChanges, t("translations.unsavedChangesWarning"))
@@ -166,7 +166,7 @@ const SettingsTranslations = () => {
         // The default double-click gives no hint the cell is editable.
         singleClickEdit: true,
         cellClass: ({ data }: { data: TranslationEditorRow }) =>
-          editedValues[data.key] !== undefined
+          edits[data.key] !== undefined
             ? `${styles["editable-cell"]} ${styles["edited-cell"]}`
             : styles["editable-cell"],
         // Inline editor commits on Enter; a truncated or multi-line value needs the textarea.
@@ -180,28 +180,19 @@ const SettingsTranslations = () => {
             : { component: "agTextCellEditor" }
         },
         valueGetter: ({ data }: { data: TranslationEditorRow }) =>
-          editedValues[data.key] ?? effectiveValue(data) ?? "",
+          edits[data.key]?.value ?? effectiveValue(data) ?? "",
         // AgTable exposes no grid-level change callback, so edits are captured here.
         valueSetter: ({ data, newValue }: { data: TranslationEditorRow; newValue: string }) => {
           const value = newValue ?? ""
-          const changed = isChanged(data, value)
 
-          setEditedValues((previous) => {
+          setEdits((previous) => {
             const next = { ...previous }
-            if (changed) {
-              next[data.key] = value
+            if (!isChanged(data, value)) {
+              delete next[data.key]
             } else {
-              delete next[data.key]
-            }
-            return next
-          })
-          setEditedVersions((previous) => {
-            const next = { ...previous }
-            if (!changed) {
-              delete next[data.key]
-            } else if (!(data.key in next)) {
-              // First edit wins, so a later refresh cannot widen the lock.
-              next[data.key] = data.updatedAt
+              // First edit wins on the version, so a later refresh cannot widen the lock.
+              const existing = previous[data.key]
+              next[data.key] = { value, version: existing ? existing.version : data.updatedAt }
             }
             return next
           })
@@ -212,7 +203,7 @@ const SettingsTranslations = () => {
         headerName: t("t.status"),
         minWidth: 140,
         valueGetter: ({ data }: { data: TranslationEditorRow }) => {
-          if (editedValues[data.key] !== undefined) return t("translations.statusEdited")
+          if (edits[data.key] !== undefined) return t("translations.statusEdited")
           if (data.overrideValue === null) return t("translations.statusFallback")
           return data.stale ? t("translations.statusStale") : t("translations.statusOverridden")
         },
@@ -237,21 +228,20 @@ const SettingsTranslations = () => {
           ),
       },
     ],
-    [editedValues, isReverting, overridesLoaded]
+    [edits, isReverting, overridesLoaded]
   )
 
-  const saveEdits = (values: Record<string, string>, versions: Record<string, Date | null>) =>
+  const saveEdits = (pending: PendingEdits) =>
     saveOverrides(() =>
       translationsService
         .updateRawTranslations({
           jurisdictionId: activeJurisdictionId,
           site: SiteEnum.public,
           language,
-          body: { edits: buildEdits(values, versions) },
+          body: { edits: buildEdits(pending) },
         })
         .then(() => {
-          setEditedValues({})
-          setEditedVersions({})
+          setEdits({})
           setConflictKeys([])
           addToast(t("translations.alertSaved"), { variant: "success" })
         })
@@ -260,8 +250,7 @@ const SettingsTranslations = () => {
           if (conflicts.length) {
             // The rest of the batch was written, so only the named keys stay pending. The
             // refetch below brings in the values they now hold, for the resolution dialog.
-            setEditedValues(editsForKeys(values, conflicts))
-            setEditedVersions(editsForKeys(versions, conflicts))
+            setEdits(editsForKeys(pending, conflicts))
             setConflictKeys(conflicts)
             return
           }
@@ -277,7 +266,7 @@ const SettingsTranslations = () => {
   const [hidingKeys, setHidingKeys] = useState<string[]>([])
 
   const handleSave = () => {
-    const issues = validateEdits(editedValues, rows)
+    const issues = validateEdits(edits, rows)
     if (issues.length) {
       addToast(
         t("translations.alertTokenError", {
@@ -288,13 +277,13 @@ const SettingsTranslations = () => {
       return
     }
 
-    const hiding = keysThatHideSections(editedValues, rows)
+    const hiding = keysThatHideSections(edits, rows)
     if (hiding.length) {
       setHidingKeys(hiding)
       return
     }
 
-    void saveEdits(editedValues, editedVersions)
+    void saveEdits(edits)
   }
 
   const conflicts = useMemo(() => {
@@ -303,34 +292,28 @@ const SettingsTranslations = () => {
       const row = rowsByKey.get(key)
       return {
         key,
-        mine: editedValues[key] ?? "",
+        mine: edits[key]?.value ?? "",
         theirs: row ? effectiveValue(row) ?? "" : "",
       }
     })
-  }, [conflictKeys, editedValues, rows])
+  }, [conflictKeys, edits, rows])
 
   const handleResolveConflicts = (choices: Record<string, ConflictChoice>) => {
-    const kept = Object.fromEntries(
-      Object.entries(editedValues).filter(([key]) => choices[key] !== "theirs")
-    )
+    // They have seen the other write and chosen to replace it, so re-lock against the version the
+    // row holds now. Anything resolved the other way is dropped, leaving the stored value alone.
+    const rowsByKey = new Map(rows.map((row) => [row.key, row]))
+    const kept = Object.entries(edits).reduce((remaining, [key, edit]) => {
+      if (choices[key] !== "theirs") {
+        remaining[key] = { value: edit.value, version: rowsByKey.get(key)?.updatedAt ?? null }
+      }
+      return remaining
+    }, {} as PendingEdits)
 
     setConflictKeys([])
-    if (!Object.keys(kept).length) {
-      // Every conflict resolved in favor of the stored value, so there is nothing left to write.
-      setEditedValues({})
-      setEditedVersions({})
-      return
+    setEdits(kept)
+    if (Object.keys(kept).length) {
+      void saveEdits(kept)
     }
-
-    // They have seen the other write and chosen to replace it, so lock against the current versions.
-    const rowsByKey = new Map(rows.map((row) => [row.key, row]))
-    const currentVersions = Object.keys(kept).reduce((versions, key) => {
-      versions[key] = rowsByKey.get(key)?.updatedAt ?? null
-      return versions
-    }, {} as Record<string, Date | null>)
-
-    setEditedVersions(currentVersions)
-    void saveEdits(kept, currentVersions)
   }
 
   // Reverting a key with no base takes its section off the site, so that case is confirmed first.
@@ -358,12 +341,7 @@ const SettingsTranslations = () => {
           key: revertKey,
         })
         .then(() => {
-          setEditedValues((previous) => {
-            const next = { ...previous }
-            delete next[revertKey]
-            return next
-          })
-          setEditedVersions((previous) => {
+          setEdits((previous) => {
             const next = { ...previous }
             delete next[revertKey]
             return next
@@ -451,18 +429,13 @@ const SettingsTranslations = () => {
               onClick={handleSave}
               id="saveTranslations"
             >
-              {hasUnsavedChanges
-                ? t("translations.saveCount", { count: Object.keys(editedValues).length })
-                : t("t.save")}
+              {hasUnsavedChanges ? t("translations.saveCount", { count: editCount }) : t("t.save")}
             </Button>
             <Button
               variant="secondary"
               size="sm"
               disabled={!hasUnsavedChanges || isSaving}
-              onClick={() => {
-                setEditedValues({})
-                setEditedVersions({})
-              }}
+              onClick={() => setEdits({})}
               id="discardTranslations"
             >
               {t("t.cancel")}
@@ -535,7 +508,7 @@ const SettingsTranslations = () => {
               setPendingRevertKey(null)
               return
             }
-            void saveEdits(editedValues, editedVersions)
+            void saveEdits(edits)
           }}
         />
       )}
