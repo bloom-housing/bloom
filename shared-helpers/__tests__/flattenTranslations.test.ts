@@ -39,4 +39,21 @@ describe("flattenTranslations", () => {
       d: "x",
     })
   })
+
+  it("produces no key for an empty nested object, since it holds no value to edit", () => {
+    expect(flattenTranslations({ a: {}, b: { c: {} } })).toEqual({})
+  })
+
+  it("gives a dotted key and its nested equivalent the same flattened path", () => {
+    // Both spellings address the same value in polyglot, so the editor shows one row either way.
+    expect(flattenTranslations({ "a.b": "Dotted" })).toEqual({ "a.b": "Dotted" })
+    expect(flattenTranslations({ a: { b: "Nested" } })).toEqual({ "a.b": "Nested" })
+  })
+
+  it("keeps a key named after an Object prototype member as an ordinary key", () => {
+    expect(flattenTranslations({ t: { constructor: "Builder", toString: "Label" } })).toEqual({
+      "t.constructor": "Builder",
+      "t.toString": "Label",
+    })
+  })
 })

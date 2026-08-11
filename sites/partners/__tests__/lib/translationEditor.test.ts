@@ -91,6 +91,18 @@ describe("buildTranslationRows", () => {
     })
   })
 
+  it("treats a key supplied only by the language file as having a base", () => {
+    // Four keys are in es.json with no English counterpart. Emptying an override on one falls back
+    // to the Spanish base, so it must not warn that a section will disappear.
+    const [row] = buildTranslationRows({
+      englishBase: {},
+      languageBase: { "application.review.terms.fcfs.text": "Texto" },
+      overrides: [],
+    })
+
+    expect(row).toMatchObject({ baseValue: "Texto", englishValue: null, hasBase: true })
+  })
+
   it("treats an empty base value as present, since empty hides a section rather than meaning absent", () => {
     const [row] = buildTranslationRows({
       englishBase: { "account.disclaimer": "" },
@@ -221,7 +233,7 @@ describe("buildEdits", () => {
   })
 
   it("locks against the captured version rather than a later one", () => {
-    // A save or revert refetches the rows, so by save time the stored row may hold a newer
+    // A save or revert refetches the rows, so by save time the stored row may have a newer
     // updatedAt. Sending that would overwrite the other admin instead of conflicting.
     const [built] = buildEdits({ "a.key": edit("New", editedAt) })
     expect(built.lastUpdatedAt).toEqual(editedAt)
@@ -282,7 +294,7 @@ describe("applyEdit", () => {
   const plainRow = () =>
     buildTranslationRows({ englishBase: { "a.key": "Base" }, overrides: [] })[0]
 
-  it("records the entered value against the version the row holds", () => {
+  it("records the entered value against the version on the row", () => {
     expect(applyEdit({}, overriddenRow(), "New")).toEqual({
       "a.key": { value: "New", version: new Date("2026-01-01") },
     })
@@ -344,7 +356,7 @@ describe("conflictKeysFrom", () => {
     expect(conflictKeysFrom(null)).toEqual([])
   })
 
-  it("returns nothing when a 409 carries no usable conflicts list", () => {
+  it("returns nothing when a 409 has no usable conflicts list", () => {
     expect(conflictKeysFrom(conflictError(undefined))).toEqual([])
     expect(conflictKeysFrom(conflictError("a.one"))).toEqual([])
   })
@@ -364,7 +376,7 @@ describe("buildConflicts", () => {
       overrides: [override("a.key", "Theirs")],
     })
 
-  it("pairs the pending value with what the key holds now", () => {
+  it("pairs the pending value with the key's current value", () => {
     expect(buildConflicts(["a.key"], { "a.key": edit("Mine") }, rows())).toEqual([
       { key: "a.key", mine: "Mine", theirs: "Theirs" },
     ])
@@ -424,7 +436,7 @@ describe("applyConflictChoices", () => {
     ).toEqual(["a.one"])
   })
 
-  it("re-locks a kept edit against the version its row holds now", () => {
+  it("re-locks a kept edit against the current version on its row", () => {
     const kept = applyConflictChoices(edits(), { "a.one": "mine", "b.two": "theirs" }, rows())
     expect(kept["a.one"]).toEqual({ value: "Mine one", version: new Date("2026-05-05") })
   })
@@ -570,6 +582,19 @@ describe("validateValue", () => {
   it("treats an emptied value as dropping the tokens it should have kept", () => {
     expect(validateValue(rowFor("Hello %{name}"), "").missingTokens).toEqual(["name"])
   })
+
+  it("allows a value to add a token English does not have", () => {
+    // The comparison runs one way only. A translation may need a token the source does not.
+    expect(validateValue(rowFor("Hello"), "Hola %{name}")).toBe(null)
+  })
+
+  it("ignores whitespace inside a token's braces", () => {
+    expect(validateValue(rowFor("Hello %{name}"), "Hola %{ name }")).toBe(null)
+  })
+
+  it("treats a token differing only in case as missing, since polyglot keys are exact", () => {
+    expect(validateValue(rowFor("Hello %{name}"), "Hola %{Name}").missingTokens).toEqual(["name"])
+  })
 })
 
 describe("validateEdits", () => {
@@ -613,5 +638,21 @@ describe("keysThatHideSections", () => {
 
   it("ignores an emptied key that has a base to fall back to", () => {
     expect(keysThatHideSections({ "has.base": edit("") }, rows())).toEqual([])
+  })
+
+  it("ignores an edited key with no matching row", () => {
+    expect(keysThatHideSections({ "gone.key": edit("") }, rows())).toEqual([])
+  })
+
+  it("names every emptied key with no base, not just the first", () => {
+    const manyRows = buildTranslationRows({
+      englishBase: {},
+      overrides: [override("a.one", "One"), override("b.two", "Two")],
+    })
+
+    expect(keysThatHideSections({ "a.one": edit(""), "b.two": edit("  ") }, manyRows)).toEqual([
+      "a.one",
+      "b.two",
+    ])
   })
 })

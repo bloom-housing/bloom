@@ -460,6 +460,8 @@ const SettingsTranslations = () => {
         <div className={styles["filter"]}>
           <Field
             name="translationsFilter"
+            // AgTable renders a second field with the same label and placeholder, hidden.
+            dataTestId="translations-filter"
             label={t("t.filter")}
             readerOnly={true}
             placeholder={t("t.filter")}

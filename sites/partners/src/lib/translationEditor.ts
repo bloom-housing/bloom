@@ -16,12 +16,17 @@ export type TranslationEditorRow = {
   origin: TranslationOrigin | null
   stale: boolean
   /**
-   * False when the key has no English base value. `tIfExists` is used only for keys that may not
-   * exist in every fork, so those keys are the ones whose presence decides whether a section
-   * renders, and clearing or reverting one needs a warning.
+   * False when no locale file supplies this key, so only an override makes it render. `tIfExists`
+   * is used for keys that may not exist in every fork, so those are the keys whose presence
+   * decides whether a section renders, and clearing or reverting one needs a warning.
    */
   hasBase: boolean
 }
+
+// Translation keys come from data, so a key named `constructor` or `toString` would otherwise read
+// an inherited function off the prototype rather than reporting the key as absent.
+const hasKey = (source: Record<string, unknown>, key: string) =>
+  Object.prototype.hasOwnProperty.call(source, key)
 
 /**
  * Builds one row per key from the bundled locale files and the jurisdiction's override rows.
@@ -29,11 +34,6 @@ export type TranslationEditorRow = {
  * The key set is the union of the two: the base supplies the keys an admin can override, and an
  * override with no base is a fork-specific key that only exists in the database.
  */
-// Translation keys come from data, so a key named `constructor` or `toString` would otherwise read
-// an inherited function off the prototype rather than reporting the key as absent.
-const hasKey = (source: Record<string, unknown>, key: string) =>
-  Object.prototype.hasOwnProperty.call(source, key)
-
 export const buildTranslationRows = ({
   englishBase,
   languageBase,
@@ -54,16 +54,17 @@ export const buildTranslationRows = ({
     const override = overridesByKey.get(key)
     const englishValue = hasKey(englishBase, key) ? englishBase[key] : null
     const languageValue = languageBase && hasKey(languageBase, key) ? languageBase[key] : null
+    const baseValue = languageValue ?? englishValue
 
     return {
       key,
-      baseValue: languageValue ?? englishValue,
+      baseValue,
       englishValue,
       overrideValue: override ? override.value : null,
       updatedAt: override ? override.updatedAt : null,
       origin: override ? override.origin : null,
       stale: override ? override.stale : false,
-      hasBase: englishValue !== null,
+      hasBase: baseValue !== null,
     }
   })
 }
@@ -94,7 +95,7 @@ export type PendingEdits = Record<string, PendingEdit>
  * Turns the pending edits into the batch the PUT takes.
  *
  * `lastUpdatedAt` is the per-key optimistic lock, and it is the version captured when the admin
- * first edited each key rather than the version the row holds now. A save or revert refetches the
+ * first edited each key rather than the version on the row now. A save or revert refetches the
  * rows, so reading the lock at save time would send whatever another admin had written in the
  * meantime and overwrite them without ever reporting a conflict.
  *
@@ -172,13 +173,13 @@ export type TranslationConflict = {
   key: string
   /** What the admin typed, which the save could not write. */
   mine: string
-  /** What the key holds now, after whoever changed it first. */
+  /** The key's current value, after whoever changed it first. */
   theirs: string
 }
 
 export type ConflictChoice = "mine" | "theirs"
 
-/** Pairs each rejected key's pending value with the value its row holds now, for the dialog. */
+/** Pairs each rejected key's pending value with its row's current value, for the dialog. */
 export const buildConflicts = (
   conflictKeys: string[],
   edits: PendingEdits,
@@ -199,7 +200,7 @@ export const buildConflicts = (
 /**
  * Keeps the edits resolved in the admin's favor and drops the rest.
  *
- * A kept edit is re-locked against the version its row holds now. The admin has seen the other
+ * A kept edit is re-locked against the current version on its row. The admin has seen the other
  * write and chosen to replace it, so the retry must not conflict on the same key again. This is
  * the one place the version moves after the first edit.
  */

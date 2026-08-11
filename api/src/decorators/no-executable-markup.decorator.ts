@@ -11,8 +11,8 @@ import {
 // executes or loads by existing is the way a stored value can run. Handler attributes and
 // script-bearing URLs are already dropped further down the render path.
 //
-// Named as a refusal rather than an allowlist because base values legitimately hold <a>, <strong>,
-// and <span class>, and several carry a <REGION> placeholder that an allowlist would reject.
+// Named as a refusal rather than an allowlist because base values legitimately include <a>, <strong>,
+// and <span class>, and several include a <REGION> placeholder that an allowlist would reject.
 const BLOCKED_TAGS = [
   'script',
   'style',
