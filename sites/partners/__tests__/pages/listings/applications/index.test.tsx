@@ -8,7 +8,7 @@ import {
   ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { application, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { fireEvent, screen } from "@testing-library/react"
+import { act, fireEvent, screen, within } from "@testing-library/react"
 import { mockNextRouter, render } from "../../../testUtils"
 import ApplicationsList from "../../../../src/pages/listings/[id]/applications/index"
 
@@ -312,6 +312,7 @@ describe("applications", () => {
 
   it("should show export with terms modal when enableExportTerms is true", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
 
     server.use(
@@ -347,6 +348,9 @@ describe("applications", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 1 }))
+      }),
+      rest.get("http://localhost/api/adapter/applications/csv", (_req, res, ctx) => {
+        return res(ctx.json(""))
       })
     )
     render(
@@ -362,12 +366,49 @@ describe("applications", () => {
 
     const exportButton = screen.getByRole("button", { name: "Export" })
     expect(exportButton).toBeInTheDocument()
-    fireEvent.click(exportButton)
+    act(() => {
+      fireEvent.click(exportButton)
+    })
 
     expect(
       screen.getByText("You must accept the Terms of Use before exporting this data.")
     ).toBeInTheDocument()
 
-    expect(screen.getAllByText("Export")).toHaveLength(2)
+    const acceptTermsButton = within(
+      screen.getByRole("dialog", { name: "Export application data" })
+    ).getByRole("checkbox", {
+      name: "I have reviewed, understand and agree to the Terms of Use.",
+    })
+    const nestedExportButton = within(
+      screen.getByRole("dialog", { name: "Export application data" })
+    ).getByRole("button", {
+      name: "Export",
+    })
+    expect(acceptTermsButton).toBeInTheDocument()
+    expect(nestedExportButton).toBeInTheDocument()
+
+    // click export without accepting terms, should trigger an error
+    act(() => {
+      fireEvent.click(nestedExportButton)
+    })
+    const errorMessage = await screen.findByText("You must agree to the terms in order to continue")
+    expect(errorMessage).toBeInTheDocument()
+
+    // click export after accepting terms, should close the dialog
+    act(() => {
+      fireEvent.click(acceptTermsButton)
+    })
+
+    expect(
+      await screen.findByText("You must agree to the terms in order to continue")
+    ).not.toBeInTheDocument()
+
+    act(() => {
+      fireEvent.click(nestedExportButton)
+    })
+
+    expect(
+      await screen.findByRole("dialog", { name: "Export application data" })
+    ).not.toBeInTheDocument()
   })
 })

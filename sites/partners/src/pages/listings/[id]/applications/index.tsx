@@ -1,4 +1,5 @@
 import React, { useContext, useMemo, useState } from "react"
+import Markdown from "markdown-to-jsx"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
@@ -315,19 +316,9 @@ const ApplicationsList = () => {
                     >
                       <p>{t("applications.export.dialogSubheader")}</p>
                       <h2 className={styles["terms-of-use-text"]}>
-                        {t("applications.export.termsOfUse")}
+                        {t("authentication.terms.termsOfUse")}
                       </h2>
-                      <span>
-                        {t("applications.export.termsBodyOne")}
-                        <a href={t("applications.export.termsOfUseWebsite")} target="_blank">
-                          {t("applications.export.termsOfUse")}
-                        </a>
-                        {t("applications.export.termsBodyTwo")}
-                        <a href={t("applications.export.partnersManualWebsite")} target="_blank">
-                          {t("applications.export.partnersManual")}
-                        </a>
-                        {t("applications.export.termsBodyThree")}
-                      </span>
+                      <Markdown>{t("applications.export.termsBody")}</Markdown>
                     </ExportTermsDialog>
                   </>
                 )}

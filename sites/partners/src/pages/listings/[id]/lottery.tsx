@@ -779,7 +779,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               <h2 className={styles["terms-of-use-header"]}>
                 {t("authentication.terms.termsOfUse")}
               </h2>
-              <Markdown>{t("listings.lottery.terms")}</Markdown>
+              <Markdown>{t("listings.lottery.termsBody")}</Markdown>
             </ExportTermsDialog>
           )}
           {!enableExportTerms && (
