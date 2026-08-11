@@ -139,7 +139,7 @@
   "applications.duplicatesAlertDate": "Preview applications that are pending review. Duplicates can be resolved when applications close on %{date}.",
   "applications.email": "Email",
   "applications.export.dialogHeader": "Export application data",
-  "applications.export.dialogSubheader": "You must accept Terms of Use before exporting this data.",
+  "applications.export.dialogSubheader": "You must accept the Terms of Use before exporting this data.",
   "applications.export.partnersManual": "Bloom Partners Manual",
   "applications.export.partnersManualWebsite": "https://exygy.com",
   "applications.export.termsBodyOne": "I acknowledge that downloading and using the information contained in the Application(s), Excel or CSV files is subject to the ",

@@ -31,7 +31,7 @@ import { NavigationHeader } from "../../../../components/shared/NavigationHeader
 import { StatusBar } from "../../../../components/shared/StatusBar"
 
 const ApplicationsList = () => {
-  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn, getJurisdiction } = useContext(AuthContext)
   const router = useRouter()
   const listingId = router.query.id as string
 
@@ -46,39 +46,39 @@ const ApplicationsList = () => {
   /* Data Fetching */
   const { listingDto, listingLoading } = useSingleListingData(listingId)
 
-  const listingJurisdiction = profile?.jurisdictions.find(
-    (jurisdiction) => jurisdiction.id === listingDto?.jurisdictions.id
-  )
+  const jurisdictionData = getJurisdiction(listingDto?.jurisdictions?.id)
+
   const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableWorkInRegion,
-    listingDto?.jurisdictions.id
+    jurisdictionData?.id
   )
   const enableApplicationBulkCSVUpdates = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableApplicationBulkCSVUpdates,
-    listingDto?.jurisdictions.id
+    jurisdictionData?.id
   )
   const enableApplicationStatus = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableApplicationStatus,
-    listingDto?.jurisdictions.id
+    jurisdictionData?.id
   )
   const enableExportTerms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableExportTerms,
-    listingDto?.jurisdictions.id
+    jurisdictionData?.id
   )
   const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableFullTimeStudentQuestion,
-    listingDto?.jurisdictions.id
+    jurisdictionData?.id
   )
   const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableHousingAdvocate,
-    listingDto?.jurisdictions.id
+    jurisdictionData?.id
   )
   const enableOnlyAdminCanAddAppsAfterClose = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableOnlyAdminCanAddAppsAfterClose,
-    listingDto?.jurisdictions.id
+    jurisdictionData?.id
   )
   const includeDemographicsPartner =
-    profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
+    profile?.userRoles?.isPartner && jurisdictionData?.enablePartnerDemographics
+
   const { onExport, exportLoading } = useZipExport(
     listingId,
     (profile?.userRoles?.isAdmin ||
@@ -284,6 +284,7 @@ const ApplicationsList = () => {
                           )}
 
                           <Button
+                            id={"applicationExportButton"}
                             variant="primary-outlined"
                             size="sm"
                             onClick={() => (enableExportTerms ? setIsTermsOpen(true) : onExport())}
@@ -294,6 +295,7 @@ const ApplicationsList = () => {
 
                           {enableApplicationBulkCSVUpdates && (
                             <Button
+                              id={"applicationBulkUpdateButton"}
                               variant="primary-outlined"
                               size="sm"
                               onClick={() => setBulkUpdateModalOpen(true)}
@@ -306,7 +308,7 @@ const ApplicationsList = () => {
                     />
                     <ExportTermsDialog
                       dialogHeader={t("applications.export.dialogHeader")}
-                      id="applications"
+                      id="applicationExportTermsDialog"
                       isOpen={isTermsOpen}
                       onClose={() => setIsTermsOpen(false)}
                       onSubmit={onSubmit}

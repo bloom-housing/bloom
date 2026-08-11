@@ -48,19 +48,18 @@ const Lottery = (props: { listing: Listing | undefined }) => {
   const [newApplicationsModal, setNewApplicationsModal] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const { doJurisdictionsHaveFeatureFlagOn, lotteryService, profile } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn, getJurisdiction, lotteryService, profile } =
+    useContext(AuthContext)
 
-  const listingJurisdiction = profile?.jurisdictions?.find(
-    (jurisdiction) => jurisdiction.id === listing?.jurisdictions.id
-  )
+  const jurisdictionData = getJurisdiction(listing?.jurisdictions?.id)
 
   const enableExportTerms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableExportTerms,
-    listingJurisdiction.id
+    jurisdictionData?.id
   )
 
   const includeDemographicsPartner =
-    profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
+    profile?.userRoles?.isPartner && jurisdictionData?.enablePartnerDemographics
 
   const { onExport, exportLoading } = useZipExport(
     listing?.id,
