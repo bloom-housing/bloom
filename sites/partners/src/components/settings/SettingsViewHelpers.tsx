@@ -17,10 +17,6 @@ type SettingsTabsFeatureFlags = {
   enableTranslations?: boolean
 }
 
-/**
- * Which tabs a role can open, matching the redirect each settings page applies to itself. A tab
- * shown to a role its page turns away is a link to /unauthorized.
- */
 export const getVisibleSettingsTabs = (
   {
     enablePreferences,

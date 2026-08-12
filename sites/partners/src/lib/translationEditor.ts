@@ -23,8 +23,6 @@ export type TranslationEditorRow = {
   hasBase: boolean
 }
 
-// Translation keys come from data, so a key named `constructor` or `toString` would otherwise read
-// an inherited function off the prototype rather than reporting the key as absent.
 const hasKey = (source: Record<string, unknown>, key: string) =>
   Object.prototype.hasOwnProperty.call(source, key)
 
@@ -69,56 +67,31 @@ export const buildTranslationRows = ({
   })
 }
 
-/** The value the public site renders: the override when one exists, otherwise the base. */
+// The value the public site renders: the override when one exists, otherwise the base.
 export const effectiveValue = (row: TranslationEditorRow): string | null =>
   row.overrideValue ?? row.baseValue
 
-/** True when the entered value differs from what the site renders today. */
+// True when the entered value differs from what the site renders today.
 export const isChanged = (row: TranslationEditorRow, value: string): boolean =>
   value !== (effectiveValue(row) ?? "")
 
-/**
- * One unsaved edit: what the admin typed, and the version it is locked against.
- *
- * The two are one object so they cannot be updated apart. Resolving a conflict rewrites both, and
- * an edit reverted back to its original value drops both.
- */
 export type PendingEdit = {
   value: string
-  /** Null when the key had no override at edit time, so there is nothing to lock against. */
   version: Date | null
 }
 
 export type PendingEdits = Record<string, PendingEdit>
 
-/**
- * Turns the pending edits into the batch the PUT takes.
- *
- * `lastUpdatedAt` is the per-key optimistic lock, and it is the version captured when the admin
- * first edited each key rather than the version on the row now. A save or revert refetches the
- * rows, so reading the lock at save time would send whatever another admin had written in the
- * meantime and overwrite them without ever reporting a conflict.
- *
- * A key with no override when it was edited has no prior version to lock against, so no
- * `lastUpdatedAt` is sent. The API then attempts a create, which conflicts if someone has since
- * added that key.
- */
 export const buildEdits = (edits: PendingEdits): TranslationKeyEdit[] =>
   Object.entries(edits).map(([key, { value, version }]) =>
     version ? { key, value, lastUpdatedAt: version } : { key, value }
   )
 
 export type TranslationGridRow = TranslationEditorRow & {
-  /** The unsaved value for this key, or null when nothing is pending. An edit may be empty. */
   editedValue: string | null
 }
 
-/**
- * Attaches each row's pending edit to the row itself.
- *
- * The grid callbacks read the edit from the row rather than closing over the edits map, so a
- * committed edit does not force ag-grid to rebuild every column definition.
- */
+// Attaches each row's pending edit to the row itself.
 export const withPendingEdits = (
   rows: TranslationEditorRow[],
   edits: PendingEdits
@@ -133,7 +106,7 @@ export const withPendingEdits = (
  * site renders today.
  *
  * The version comes from the row only on the first edit of a key. Later edits keep the version
- * already captured, so a refetch between two edits cannot widen the lock.
+ * already captured.
  */
 export const applyEdit = (
   edits: PendingEdits,
@@ -156,7 +129,7 @@ export const applyEdit = (
  * The keys a batch save rejected because someone else changed them first.
  *
  * The API answers a partial save with a 409 naming only those keys; every other edit in the batch
- * was written. Any other failure returns an empty list, so the caller falls back to a plain error.
+ * was written. Any other failure returns an empty list.
  */
 export const conflictKeysFrom = (error: unknown): string[] => {
   const response = (error as { response?: { status?: number; data?: { conflicts?: unknown } } })
@@ -171,15 +144,13 @@ export const conflictKeysFrom = (error: unknown): string[] => {
 
 export type TranslationConflict = {
   key: string
-  /** What the admin typed, which the save could not write. */
   mine: string
-  /** The key's current value, after whoever changed it first. */
   theirs: string
 }
 
 export type ConflictChoice = "mine" | "theirs"
 
-/** Pairs each rejected key's pending value with its row's current value, for the dialog. */
+// Pairs each rejected key's pending value with its row's current value, for the dialog.
 export const buildConflicts = (
   conflictKeys: string[],
   edits: PendingEdits,
@@ -197,13 +168,7 @@ export const buildConflicts = (
   })
 }
 
-/**
- * Keeps the edits resolved in the admin's favor and drops the rest.
- *
- * A kept edit is re-locked against the current version on its row. The admin has seen the other
- * write and chosen to replace it, so the retry must not conflict on the same key again. This is
- * the one place the version moves after the first edit.
- */
+// Keeps the edits resolved in the admin's favor and drops the rest.
 export const applyConflictChoices = (
   edits: PendingEdits,
   choices: Record<string, ConflictChoice>,
@@ -221,9 +186,7 @@ export const applyConflictChoices = (
 
 export type TranslationIssue = {
   key: string
-  /** Interpolation tokens the English source has that the entered value does not. */
   missingTokens: string[]
-  /** True when English pluralizes with `||||` and the entered value does not. */
   missingPluralForms: boolean
 }
 
@@ -256,7 +219,7 @@ export const validateValue = (
   return { key: row.key, missingTokens, missingPluralForms }
 }
 
-/** Every entered value that would break interpolation or pluralization. */
+// Every entered value that would break interpolation or pluralization.
 export const validateEdits = (
   edits: PendingEdits,
   rows: TranslationEditorRow[]
@@ -291,7 +254,7 @@ export const keysThatHideSections = (
     .map(([key]) => key)
 }
 
-/** Narrows the pending edits to the keys still unresolved, dropping the ones the save wrote. */
+// Narrows the pending edits to the keys still unresolved, dropping the ones the save wrote.
 export const editsForKeys = (edits: PendingEdits, keys: string[]): PendingEdits =>
   keys.reduce((remaining, key) => {
     if (hasKey(edits, key)) {
@@ -300,12 +263,7 @@ export const editsForKeys = (edits: PendingEdits, keys: string[]): PendingEdits 
     return remaining
   }, {} as PendingEdits)
 
-/**
- * Drops the named keys and keeps the rest.
- *
- * A save clears the keys it sent rather than clearing everything, so a cell that committed while
- * the request was in flight is still pending when it returns.
- */
+// Drops the named keys and keeps the rest.
 export const editsWithoutKeys = (edits: PendingEdits, keys: string[]): PendingEdits => {
   const remaining = { ...edits }
   keys.forEach((key) => delete remaining[key])

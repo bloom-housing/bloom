@@ -132,7 +132,6 @@ export const devSeeding = async (
     }),
   );
   const unitTypes = await unitTypeFactoryAll(prismaClient);
-  // Units are created with a rent type, so the lookup table has to exist first.
   await unitRentTypeFactoryAll(prismaClient);
   const amiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(10, jurisdiction.id, null, jurisdiction.name),

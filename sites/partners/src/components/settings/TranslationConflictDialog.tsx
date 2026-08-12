@@ -10,18 +10,12 @@ type TranslationConflictDialogProps = {
   onResolve: (choices: Record<string, ConflictChoice>) => void
 }
 
-/**
- * Per-key resolution for a partially saved batch. The edits not named here were already written,
- * so this covers only the keys someone else changed first.
- */
 export const TranslationConflictDialog = ({
   conflicts,
   isLoading,
   onClose,
   onResolve,
 }: TranslationConflictDialogProps) => {
-  // Defaults to keeping the admin's work, so dismissing without a deliberate choice never
-  // discards what they typed.
   const [choices, setChoices] = useState<Record<string, ConflictChoice>>(
     Object.fromEntries(conflicts.map((conflict) => [conflict.key, "mine" as ConflictChoice]))
   )

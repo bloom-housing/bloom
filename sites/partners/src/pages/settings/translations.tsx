@@ -75,7 +75,6 @@ const SettingsTranslations = () => {
     enableTranslations,
   }
 
-  // Editing is limited to the admin role, which spans every jurisdiction in the system.
   if (!enableTranslations || !profile?.userRoles?.isAdmin) {
     void router.push("/unauthorized")
   }
@@ -129,7 +128,6 @@ const SettingsTranslations = () => {
   // What is typed in the filter field, which lags the value the rows are filtered by.
   const [filterInput, setFilterInput] = useState("")
 
-  // Filtering scans every key in the base, so it waits for a pause rather than running per keystroke.
   const applyFilter = useRef(
     debounce((value: string) => {
       tableOptions.filter.setFilterValue(value)
@@ -146,7 +144,6 @@ const SettingsTranslations = () => {
     () =>
       buildTranslationRows({
         englishBase: flattenTranslations(translations.general),
-        // English is the base itself, so it has no separate language file to layer.
         languageBase:
           activeLanguage === LanguagesEnum.en
             ? undefined
@@ -241,7 +238,6 @@ const SettingsTranslations = () => {
           data.editedValue !== null
             ? `${styles["editable-cell"]} ${styles["edited-cell"]}`
             : styles["editable-cell"],
-        // Inline editor commits on Enter; a long or multi-line value needs the textarea instead.
         cellEditorSelector: ({ value }: { value: string }) => {
           const text = value ?? ""
 
@@ -392,13 +388,11 @@ const SettingsTranslations = () => {
       >
         <div className={styles["toolbar"]}>
           <div className={styles["scope-controls"]}>
-            {/* Always shown, since the jurisdiction being edited cannot be inferred otherwise. */}
             <Select
               id="translationsJurisdiction"
               name="translationsJurisdiction"
               label={t("t.jurisdiction")}
               defaultValue={activeJurisdictionId}
-              // Switching scope would silently discard edits typed against the old one.
               disabled={jurisdictions.length < 2 || hasUnsavedChanges}
               options={jurisdictions.map((jurisdiction) => ({
                 value: jurisdiction.id,
@@ -415,9 +409,6 @@ const SettingsTranslations = () => {
               id="translationsLanguage"
               name="translationsLanguage"
               label={t("t.language")}
-              // Select is uncontrolled and always renders defaultValue, so remounting is what
-              // reapplies it. Without this a jurisdiction that drops the selected language leaves
-              // the box showing English while the edits still go to the old language.
               key={activeJurisdictionId}
               defaultValue={activeLanguage}
               disabled={hasUnsavedChanges}
@@ -482,8 +473,6 @@ const SettingsTranslations = () => {
           id="translations-table"
           pagination={{
             perPage,
-            // AgPagination changes the page size without resetting the page, and the slice is
-            // local, so a high page number would land past the end and render nothing.
             setPerPage: (value: React.SetStateAction<number>) => {
               tableOptions.pagination.setItemsPerPage(value)
               tableOptions.pagination.setCurrentPage(1)
@@ -502,8 +491,6 @@ const SettingsTranslations = () => {
             totalItemsLabel: t("translations.total"),
           }}
           search={{
-            // AgTable registers its filter input even when hidden and clears it on mount, so
-            // handing it the page's setter would wipe whatever was typed 500ms in.
             setSearch: () => undefined,
             showSearch: false,
           }}

@@ -6,13 +6,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-// Tags refused in stored translation values. These reach the public site through a markdown
-// renderer that parses raw HTML and builds each element from the tag name as written, so a tag that
-// executes or loads by existing is the way a stored value can run. Handler attributes and
-// script-bearing URLs are already dropped further down the render path.
-//
-// Named as a refusal rather than an allowlist because base values legitimately include <a>, <strong>,
-// and <span class>, and several include a <REGION> placeholder that an allowlist would reject.
+// Tags refused in stored translation values.
 const BLOCKED_TAGS = [
   'script',
   'style',
@@ -55,8 +49,6 @@ export class NoExecutableMarkupConstraint
     if (typeof value !== 'string') {
       return true;
     }
-    // Both forms are checked. The value as written catches a tag followed by an attribute, and the
-    // stripped form catches a tag name broken up by characters a browser ignores.
     return (
       !BLOCKED_TAG_PATTERN.test(value) &&
       !BLOCKED_TAG_PATTERN.test(value.replace(CONTROL_AND_SPACE, ''))
