@@ -1,6 +1,9 @@
 import { INestApplication, Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ListingsStatusEnum } from '@prisma/client';
+import {
+  ListingsStatusEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+} from '@prisma/client';
 import cookieParser from 'cookie-parser';
 import request from 'supertest';
 import { PrismaService } from '../../src/services/prisma.service';
@@ -12,6 +15,7 @@ import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-fact
 import { reservedCommunityTypeFactoryAll } from '../../prisma/seed-helpers/reserved-community-type-factory';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
 import dayjs from 'dayjs';
+import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
 
 describe('Script Runner Controller Tests', () => {
   let app: INestApplication;
@@ -255,6 +259,117 @@ describe('Script Runner Controller Tests', () => {
           })
         ).isNewest,
       ).toEqual(true);
+    });
+  });
+
+  describe('migrateMultiselectApplicationDataToRefactor endpoint', () => {
+    it('should only migrate programs/preferences with data', async () => {
+      // const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
+
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
+      const listingData = await listingFactory(jurisdiction.id, prisma, {
+        status: ListingsStatusEnum.active,
+        closedAt: undefined,
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+      const preference1 = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(
+          jurisdiction.id,
+          {
+            multiselectQuestion: {
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.preferences,
+              description: 'description of msq migration preference',
+              multiselectOptions: {
+                createMany: {
+                  data: [
+                    {
+                      name: 'msq migration preference option 1',
+                      ordinal: 1,
+                    },
+                    {
+                      name: 'msq migration preference option 2',
+                      ordinal: 2,
+                    },
+                  ],
+                },
+              },
+              text: 'msq migration preference text',
+            },
+          },
+          true,
+        ),
+      });
+      const app1 = await applicationFactory();
+      await prisma.applications.create({
+        data: { ...app1, preferences: [], programs: [] },
+      });
+      const app2 = await applicationFactory();
+      await prisma.applications.create({
+        data: { ...app2, preferences: '{}', programs: '[]' },
+      });
+      const app3 = await applicationFactory();
+      await prisma.applications.create({
+        data: { ...app3, preferences: [], programs: null },
+      });
+      const app4 = await applicationFactory({
+        listingId: listing.id,
+      });
+      const createdApp4 = await prisma.applications.create({
+        data: {
+          ...app4,
+        },
+      });
+      await prisma.applications.update({
+        where: { id: createdApp4.id },
+        data: {
+          programs: {},
+          preferences: [
+            {
+              multiselectQuestionId: preference1.id,
+              key: 'msq migration preference text',
+              claimed: true,
+              options: [
+                {
+                  key: 'msq migration preference option 1',
+                  checked: true,
+                  extraData: [],
+                },
+              ],
+            },
+          ],
+        },
+      });
+
+      await request(app.getHttpServer())
+        .put(`/scriptRunner/migrateMultiselectApplicationDataToRefactor`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      // Only the one application is fetched from the database
+      // expect(mockConsoleLog).toHaveBeenCalledWith(
+      // "updating 1 application's multiselect data",
+      // );
+      const updatedMultiselectData =
+        await prisma.applicationSelections.findMany({
+          include: {
+            selections: { include: { multiselectOption: true } },
+          },
+          where: { applicationId: createdApp4.id },
+        });
+      expect(updatedMultiselectData.length).toEqual(1);
+      expect(updatedMultiselectData[0].multiselectQuestionId).toEqual(
+        preference1.id,
+      );
+      expect(
+        updatedMultiselectData[0].selections[0].multiselectOption.name,
+      ).toEqual('msq migration preference option 1');
     });
   });
 });

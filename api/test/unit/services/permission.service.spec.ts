@@ -48,7 +48,7 @@ describe('Testing permission service', () => {
     ).toEqual(true);
   });
 
-  it('should add jurisdictional admin user role for user', async () => {
+  it('should add jurisdictional admin user role for user when enableOnlyAdminCanManageUsers is false', async () => {
     const e = await newEnforcer(
       path.join(
         __dirname,
@@ -105,7 +105,75 @@ describe('Testing permission service', () => {
         'example id',
         'user',
         `r.obj.jurisdictionId == 'juris id'`,
-        `(${permissionActions.read}|${permissionActions.invitePartner}|${permissionActions.inviteJurisdictionalAdmin}|${permissionActions.update}|${permissionActions.delete})`,
+        `(${permissionActions.read}|${permissionActions.invite}|${permissionActions.update}|${permissionActions.delete})`,
+      ),
+    ).toEqual(true);
+  });
+
+  it('should add jurisdictional admin user role for user when enableOnlyAdminCanManageUsers is true', async () => {
+    const e = await newEnforcer(
+      path.join(
+        __dirname,
+        '../../../src/permission-configs',
+        'permission_model.conf',
+      ),
+      path.join(
+        __dirname,
+        '../../../src/permission-configs',
+        'permission_policy.csv',
+      ),
+    );
+
+    const user = {
+      id: 'example id',
+      userRoles: {
+        isJurisdictionalAdmin: true,
+      },
+      jurisdictions: [
+        {
+          id: 'juris id',
+          featureFlags: [
+            {
+              name: FeatureFlagEnum.enableOnlyAdminCanManageUsers,
+              active: true,
+            },
+          ],
+        },
+      ],
+    } as User;
+
+    const enforcer = await service.addUserPermissions(e, user);
+    expect(
+      await enforcer.hasRoleForUser(
+        'example id',
+        UserRoleEnum.jurisdictionAdmin,
+      ),
+    ).toEqual(true);
+
+    expect(
+      await enforcer.hasPermissionForUser(
+        'example id',
+        'application',
+        `r.obj.jurisdictionId == 'juris id'`,
+        `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
+      ),
+    ).toEqual(true);
+
+    expect(
+      await enforcer.hasPermissionForUser(
+        'example id',
+        'listing',
+        `r.obj.jurisdictionId == 'juris id'`,
+        `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
+      ),
+    ).toEqual(true);
+
+    expect(
+      await enforcer.hasPermissionForUser(
+        'example id',
+        'user',
+        `r.obj.jurisdictionId == 'juris id'`,
+        `(${permissionActions.read})`,
       ),
     ).toEqual(true);
   });
