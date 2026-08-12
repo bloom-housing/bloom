@@ -1837,6 +1837,28 @@ export class ApplicationsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Generates an presigned URL link to a private S3 bucket
+   */
+  uploadBulkUpdate(
+    params: {
+      /** requestBody */
+      body?: ApplicationBulkUrl
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationBulkPresignedUrl> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/bulk-update/upload-url"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class AssetsService {
@@ -8127,9 +8149,6 @@ export interface JurisdictionCreate {
   requiredListingFields: []
 
   /**  */
-  enabledStopLightRuleKeys: string[]
-
-  /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 
   /**  */
@@ -8146,6 +8165,9 @@ export interface JurisdictionCreate {
 
   /**  */
   regions: []
+
+  /**  */
+  enabledStopLightRuleKeys: string[]
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
@@ -8220,9 +8242,6 @@ export interface JurisdictionUpdate {
   requiredListingFields: []
 
   /**  */
-  enabledStopLightRuleKeys: string[]
-
-  /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 
   /**  */
@@ -8239,6 +8258,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   regions: []
+
+  /**  */
+  enabledStopLightRuleKeys: string[]
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
@@ -8349,9 +8371,6 @@ export interface Jurisdiction {
   requiredListingFields: []
 
   /**  */
-  enabledStopLightRuleKeys: string[]
-
-  /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 
   /**  */
@@ -8368,6 +8387,9 @@ export interface Jurisdiction {
 
   /**  */
   regions: []
+
+  /**  */
+  enabledStopLightRuleKeys: string[]
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
@@ -9262,6 +9284,24 @@ export interface ApplicationUpdateEmail {
 
   /**  */
   previousConventionalUnitWaitlistNumber?: number
+}
+
+/** ApplicationBulkUrl */
+export interface ApplicationBulkUrl {
+  /**  */
+  listingId: string
+
+  /**  */
+  userId: string
+}
+
+/** ApplicationBulkPresignedUrl */
+export interface ApplicationBulkPresignedUrl {
+  /**  */
+  key: string
+
+  /**  */
+  presignedUrl: string
 }
 
 /** CreatePresignedUploadMetadata */
