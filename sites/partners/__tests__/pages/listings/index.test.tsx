@@ -116,7 +116,7 @@ describe("listings", () => {
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(
-          ctx.json({ id: "user1", roles: { id: "user1", isAdmin: false, isPartner: true } })
+          ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: false, isPartner: true } })
         )
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
@@ -145,7 +145,7 @@ describe("listings", () => {
         return res(
           ctx.json({
             id: "user1",
-            roles: { id: "user1", isAdmin: false, isPartner: true },
+            userRoles: { id: "user1", isAdmin: false, isPartner: true },
           })
         )
       }),
@@ -196,7 +196,7 @@ describe("listings", () => {
         return res(
           ctx.json({
             id: "user1",
-            roles: { id: "user1", isAdmin: false, isPartner: true },
+            userRoles: { id: "user1", isAdmin: false, isPartner: true },
           })
         )
       }),
@@ -248,7 +248,7 @@ describe("listings", () => {
         return res(
           ctx.json({
             id: "user1",
-            roles: { id: "user1", isAdmin: false, isPartner: true },
+            userRoles: { id: "user1", isAdmin: false, isPartner: true },
           })
         )
       }),
@@ -300,7 +300,7 @@ describe("listings", () => {
         return res(
           ctx.json({
             id: "user1",
-            roles: { id: "user1", isAdmin: false, isPartner: true },
+            userRoles: { id: "user1", isAdmin: false, isPartner: true },
           })
         )
       }),
@@ -351,7 +351,7 @@ describe("listings", () => {
         return res(
           ctx.json({
             id: "user1",
-            roles: { id: "user1", isAdmin: false, isPartner: true },
+            userRoles: { id: "user1", isAdmin: false, isPartner: true },
           })
         )
       }),
@@ -402,7 +402,7 @@ describe("listings", () => {
         return res(
           ctx.json({
             id: "user1",
-            roles: { id: "user1", isAdmin: false, isPartner: true },
+            userRoles: { id: "user1", isAdmin: false, isPartner: true },
           })
         )
       }),
@@ -453,7 +453,7 @@ describe("listings", () => {
         return res(ctx.status(500), ctx.json(""))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true } }))
+        return res(ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true } }))
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
@@ -495,7 +495,7 @@ describe("listings", () => {
         return res(ctx.json({ listingCSV: "", unitCSV: "" }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true } }))
+        return res(ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true } }))
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))

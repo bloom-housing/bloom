@@ -58,8 +58,16 @@ const ApplicationsList = () => {
     FeatureFlagEnum.enableApplicationStatus,
     listingDto?.jurisdictions.id
   )
+  const enableApplicationBulkCSVUpdates = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableApplicationBulkCSVUpdates,
+    listingDto?.jurisdictions.id
+  )
   const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableHousingAdvocate,
+    listingDto?.jurisdictions.id
+  )
+  const enableOnlyAdminCanAddAppsAfterClose = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableOnlyAdminCanAddAppsAfterClose,
     listingDto?.jurisdictions.id
   )
   const includeDemographicsPartner =
@@ -77,6 +85,11 @@ const ApplicationsList = () => {
 
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
+  const allowNewApps = !(
+    listingDto?.status === "closed" &&
+    enableOnlyAdminCanAddAppsAfterClose &&
+    (!profile.userRoles?.isAdmin || !profile.userRoles?.isSuperAdmin)
+  )
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
     page: 1,
@@ -227,28 +240,31 @@ const ApplicationsList = () => {
                       }}
                       headerContent={
                         <div className="flex gap-2 items-center">
-                          <Button
-                            onClick={() => {
-                              if (
-                                process.env.showLottery &&
-                                (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
-                                  listingDto.lotteryStatus ===
-                                    LotteryStatusEnum.releasedToPartners ||
-                                  listingDto.lotteryStatus === LotteryStatusEnum.publishedToPublic)
-                              ) {
-                                setApplicationConfirmAddPostLotteryModal(true)
-                              } else if (listingDto.status === ListingsStatusEnum.closed) {
-                                setApplicationConfirmAddModal(true)
-                              } else {
-                                void router.push(`/listings/${listingId}/applications/add`)
-                              }
-                            }}
-                            variant="primary-outlined"
-                            size="sm"
-                            id={"addApplicationButton"}
-                          >
-                            {t("applications.addApplication")}
-                          </Button>
+                          {allowNewApps && (
+                            <Button
+                              onClick={() => {
+                                if (
+                                  process.env.showLottery &&
+                                  (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
+                                    listingDto.lotteryStatus ===
+                                      LotteryStatusEnum.releasedToPartners ||
+                                    listingDto.lotteryStatus ===
+                                      LotteryStatusEnum.publishedToPublic)
+                                ) {
+                                  setApplicationConfirmAddPostLotteryModal(true)
+                                } else if (listingDto.status === ListingsStatusEnum.closed) {
+                                  setApplicationConfirmAddModal(true)
+                                } else {
+                                  void router.push(`/listings/${listingId}/applications/add`)
+                                }
+                              }}
+                              variant="primary-outlined"
+                              size="sm"
+                              id={"addApplicationButton"}
+                            >
+                              {t("applications.addApplication")}
+                            </Button>
+                          )}
 
                           <Button
                             variant="primary-outlined"
@@ -259,7 +275,7 @@ const ApplicationsList = () => {
                             {t("t.export")}
                           </Button>
 
-                          {enableApplicationStatus && (
+                          {enableApplicationBulkCSVUpdates && (
                             <Button
                               variant="primary-outlined"
                               size="sm"
