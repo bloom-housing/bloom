@@ -899,6 +899,35 @@ export function useRawTranslations({
   }
 }
 
+export function usePartnersOverrides(locale?: string) {
+  const [overrides, setOverrides] = useState<Record<string, string> | undefined>()
+  const [settled, setSettled] = useState(false)
+
+  useEffect(() => {
+    const controller = new AbortController()
+    const language = locale || "en"
+    setSettled(false)
+
+    const load = async () => {
+      try {
+        const response = await fetch(`/api/adapter/translations?language=${language}`, {
+          signal: controller.signal,
+        })
+        setOverrides(response.ok ? await response.json() : undefined)
+      } catch {
+        if (controller.signal.aborted) return
+        setOverrides(undefined)
+      }
+      setSettled(true)
+    }
+
+    void load()
+    return () => controller.abort()
+  }, [locale])
+
+  return { overrides, settled }
+}
+
 /**
  * Warns before unsaved work is lost, on an in-app route change and on the browser closing or
  * reloading.
