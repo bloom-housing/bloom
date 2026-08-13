@@ -8167,7 +8167,7 @@ export interface JurisdictionCreate {
   regions: []
 
   /**  */
-  enabledStopLightRuleKeys: string[]
+  enabledStopLightRuleKeys?: string[]
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
@@ -8260,7 +8260,7 @@ export interface JurisdictionUpdate {
   regions: []
 
   /**  */
-  enabledStopLightRuleKeys: string[]
+  enabledStopLightRuleKeys?: string[]
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
@@ -8389,7 +8389,7 @@ export interface Jurisdiction {
   regions: []
 
   /**  */
-  enabledStopLightRuleKeys: string[]
+  enabledStopLightRuleKeys?: string[]
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
