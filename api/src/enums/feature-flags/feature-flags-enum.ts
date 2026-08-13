@@ -24,6 +24,7 @@ export enum FeatureFlagEnum {
   enableDbDrivenContent = 'enableDbDrivenContent',
   enableExportTerms = 'enableExportTerms',
   enableFaq = 'enableFaq',
+  enableFaqResourceCard = 'enableFaqResourceCard',
   enableFilterByBathroom = 'enableFilterByBathroom',
   enableFilterByCounty = 'enableFilterByCounty',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
@@ -200,6 +201,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableFaq,
     description:
       'When true, a link to the FAQ page is displayed on the get assistance page',
+  },
+  {
+    name: FeatureFlagEnum.enableFaqResourceCard,
+    description:
+      'When true, the FAQ resource card is displayed on the home page',
   },
   {
     name: FeatureFlagEnum.enableFilterByBathroom,

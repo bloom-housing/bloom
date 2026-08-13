@@ -49,6 +49,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableDbDrivenContent](./feature-flags/enableDbDrivenContent.md) | When true, the jurisdiction reads its translations and structured content from the database instead of the bundled override files |
 | [enableExportTerms](./feature-flags/enableExportTerms.md) | When true, display terms of use before exporting applications and lotteries from the partner site |
 | [enableFaq](./feature-flags/enableFaq.md) | When true, a link to the FAQ page is displayed on the get assistance page |
+| [enableFaqResourceCard](./feature-flags/enableFaqResourceCard.md) | When true, the FAQ resource card is displayed on the home page |
 | [enableFilterByBathroom](./feature-flags/enableFilterByBathroom.md) | When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms |
 | [enableFilterByCounty](./feature-flags/enableFilterByCounty.md) | When true, the filter drawer on the public site includes the option to filter listings by county |
 | [enableFullTimeStudentQuestion](./feature-flags/enableFullTimeStudentQuestion.md) | When true, the full time student question is displayed in the application form |

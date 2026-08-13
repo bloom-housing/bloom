@@ -11598,6 +11598,7 @@ export enum FeatureFlagEnum {
   "enableDbDrivenContent" = "enableDbDrivenContent",
   "enableExportTerms" = "enableExportTerms",
   "enableFaq" = "enableFaq",
+  "enableFaqResourceCard" = "enableFaqResourceCard",
   "enableFilterByBathroom" = "enableFilterByBathroom",
   "enableFilterByCounty" = "enableFilterByCounty",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
