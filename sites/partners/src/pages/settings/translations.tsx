@@ -46,6 +46,8 @@ import { TranslationHideSectionDialog } from "../../components/settings/Translat
 
 // Above this the inline editor is too cramped to work in, so the textarea opens instead.
 const INLINE_EDITOR_MAX_CHARACTERS = 60
+// Matches the cap the API enforces on a translation value.
+const MAX_VALUE_LENGTH = 5000
 // Matches AgTable, so the two filter fields in Partners behave the same way.
 const MINIMUM_FILTER_CHARACTERS = 2
 const FILTER_DEBOUNCE_MS = 500
@@ -75,11 +77,17 @@ const SettingsTranslations = () => {
     enableTranslations,
   }
 
-  if (!enableTranslations || !profile?.userRoles?.isAdmin) {
-    void router.push("/unauthorized")
-  }
+  const authorized = enableTranslations && !!profile?.userRoles?.isAdmin
 
-  const jurisdictions = useMemo(() => profile?.jurisdictions ?? [], [profile?.jurisdictions])
+  const jurisdictions = useMemo(
+    () =>
+      (profile?.jurisdictions ?? []).filter((jurisdiction) =>
+        jurisdiction.featureFlags?.some(
+          (flag) => flag.name === FeatureFlagEnum.enableDbDrivenContent && flag.active
+        )
+      ),
+    [profile?.jurisdictions]
+  )
   const [jurisdictionId, setJurisdictionId] = useState("")
   const [language, setLanguage] = useState<LanguagesEnum>(LanguagesEnum.en)
 
@@ -109,7 +117,7 @@ const SettingsTranslations = () => {
     error,
     cacheKey,
   } = useRawTranslations({
-    jurisdictionId: activeJurisdictionId,
+    jurisdictionId: authorized ? activeJurisdictionId : "",
     site: SiteEnum.public,
     language: activeLanguage,
   })
@@ -242,8 +250,8 @@ const SettingsTranslations = () => {
           const text = value ?? ""
 
           return text.length > INLINE_EDITOR_MAX_CHARACTERS || text.includes("\n")
-            ? { component: "agLargeTextCellEditor", params: { maxLength: 5000 } }
-            : { component: "agTextCellEditor" }
+            ? { component: "agLargeTextCellEditor", params: { maxLength: MAX_VALUE_LENGTH } }
+            : { component: "agTextCellEditor", params: { maxLength: MAX_VALUE_LENGTH } }
         },
         valueGetter: ({ data }: { data: TranslationGridRow }) =>
           data.editedValue ?? effectiveValue(data) ?? "",
@@ -367,6 +375,11 @@ const SettingsTranslations = () => {
     if (Object.keys(kept).length) {
       void saveEdits(kept)
     }
+  }
+
+  if (!authorized) {
+    void router.push("/unauthorized")
+    return null
   }
 
   return (

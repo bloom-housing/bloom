@@ -60,10 +60,22 @@ afterEach(() => server.resetHandlers())
 
 afterAll(() => server.close())
 
+const jurisdiction = (
+  id: string,
+  name: string,
+  languages = [LanguagesEnum.en],
+  dbDriven = true
+) => ({
+  id,
+  name,
+  languages,
+  featureFlags: [{ name: FeatureFlagEnum.enableDbDrivenContent, active: dbDriven }],
+})
+
 const adminProfile = {
   ...user,
   userRoles: { isAdmin: true },
-  jurisdictions: [{ id: "jurisdiction1", name: "Bloomington", languages: [LanguagesEnum.en] }],
+  jurisdictions: [jurisdiction("jurisdiction1", "Bloomington")],
   listings: [],
 }
 
@@ -121,11 +133,7 @@ describe("<SettingsTranslations>", () => {
     it("offers the jurisdiction's languages", async () => {
       renderPage({
         jurisdictions: [
-          {
-            id: "jurisdiction1",
-            name: "Bloomington",
-            languages: [LanguagesEnum.en, LanguagesEnum.es],
-          },
+          jurisdiction("jurisdiction1", "Bloomington", [LanguagesEnum.en, LanguagesEnum.es]),
         ],
       })
 
@@ -145,11 +153,24 @@ describe("<SettingsTranslations>", () => {
       expect(screen.getByRole("option", { name: "Bloomington" })).toBeInTheDocument()
     })
 
+    it("leaves out a jurisdiction that does not read its content from the database", async () => {
+      renderPage({
+        jurisdictions: [
+          jurisdiction("jurisdiction1", "Bloomington"),
+          jurisdiction("jurisdiction2", "Shelbyville", [LanguagesEnum.en], false),
+        ],
+      })
+
+      await screen.findByLabelText("Jurisdiction")
+      expect(screen.getByRole("option", { name: "Bloomington" })).toBeInTheDocument()
+      expect(screen.queryByRole("option", { name: "Shelbyville" })).toBeNull()
+    })
+
     it("lets the admin switch jurisdiction when they span several", async () => {
       renderPage({
         jurisdictions: [
-          { id: "jurisdiction1", name: "Bloomington", languages: [LanguagesEnum.en] },
-          { id: "jurisdiction2", name: "Shelbyville", languages: [LanguagesEnum.en] },
+          jurisdiction("jurisdiction1", "Bloomington"),
+          jurisdiction("jurisdiction2", "Shelbyville"),
         ],
       })
 
