@@ -53,6 +53,8 @@ const MAX_VALUE_LENGTH = 5000
 // Matches AgTable, so the two filter fields in Partners behave the same way.
 const MINIMUM_FILTER_CHARACTERS = 2
 const FILTER_DEBOUNCE_MS = 500
+// AgTable re-runs its debounced filter effect, which resets to page one, whenever this changes.
+const ignoreAgTableSearch = () => undefined
 
 const SettingsTranslations = () => {
   const router = useRouter()
@@ -505,7 +507,7 @@ const SettingsTranslations = () => {
             totalItemsLabel: t("translations.total"),
           }}
           search={{
-            setSearch: () => undefined,
+            setSearch: ignoreAgTableSearch,
             showSearch: false,
           }}
         />

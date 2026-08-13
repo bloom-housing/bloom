@@ -290,6 +290,40 @@ describe("<SettingsTranslations>", () => {
     })
   })
 
+  describe("paging", () => {
+    // AgTable's debounced filter effect resets to page one. It must run at mount only, not on
+    // every render, or paging snaps back half a second after each click.
+    it("stays on the page after AgTable's filter debounce settles", async () => {
+      renderPage()
+
+      const jumpTo = () => screen.getByLabelText("Jump to")
+
+      await screen.findByText(FIRST_BASE_KEY)
+      await waitFor(() => expect(jumpTo()).toHaveValue("1"))
+      // AgTable schedules one page reset at mount; wait it out so the click is what is measured.
+      await new Promise((resolve) => setTimeout(resolve, 900))
+
+      await userEvent.click(screen.getByRole("button", { name: "Next" }))
+      await waitFor(() => expect(jumpTo()).toHaveValue("2"))
+
+      await new Promise((resolve) => setTimeout(resolve, 900))
+      expect(jumpTo()).toHaveValue("2")
+    }, 20000)
+
+    it("keeps a filter typed straight after load", async () => {
+      renderPage()
+
+      await screen.findByText(FIRST_BASE_KEY)
+      await userEvent.type(screen.getByTestId("translations-filter"), "lottery")
+
+      await waitFor(() => expect(screen.queryByText(FIRST_BASE_KEY)).toBeNull())
+
+      await new Promise((resolve) => setTimeout(resolve, 900))
+      expect(screen.getByTestId("translations-filter")).toHaveValue("lottery")
+      expect(screen.queryByText(FIRST_BASE_KEY)).toBeNull()
+    }, 20000)
+  })
+
   describe("save actions", () => {
     it("saves nothing while there is nothing edited", async () => {
       renderPage()
