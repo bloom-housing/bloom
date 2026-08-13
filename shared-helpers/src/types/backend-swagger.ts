@@ -3623,6 +3623,226 @@ export class TranslationsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * List a jurisdiction's override keys
+   */
+  listRawTranslations(
+    params: {
+      /**  */
+      jurisdictionId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<TranslationOverrideRow[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/jurisdictions/{jurisdictionId}/raw"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a scope's editable override keys with staleness
+   */
+  getRawTranslations(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /**  */
+      site: string
+      /**  */
+      language: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<TranslationRawKey[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/jurisdictions/{jurisdictionId}/raw/{site}/{language}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+      url = url.replace("{site}", params["site"] + "")
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Upsert a scope's override keys with per-key optimistic locking
+   */
+  updateRawTranslations(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /**  */
+      site: string
+      /**  */
+      language: string
+      /** requestBody */
+      body?: TranslationUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/jurisdictions/{jurisdictionId}/raw/{site}/{language}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+      url = url.replace("{site}", params["site"] + "")
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete one override key (revert to base)
+   */
+  deleteRawTranslation(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /**  */
+      site: string
+      /**  */
+      language: string
+      /**  */
+      key: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url =
+        basePath + "/translations/jurisdictions/{jurisdictionId}/raw/{site}/{language}/{key}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+      url = url.replace("{site}", params["site"] + "")
+      url = url.replace("{language}", params["language"] + "")
+      url = url.replace("{key}", params["key"] + "")
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class JurisdictionContentService {
+  /**
+   * Get a jurisdiction's merged structured content
+   */
+  jurisdictionContent(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /**  */
+      language?: LanguagesEnum
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<JurisdictionContentFields> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictionContent/jurisdictions/{jurisdictionId}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { language: params["language"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a jurisdiction's merged structured content by name
+   */
+  jurisdictionContentByName(
+    params: {
+      /**  */
+      jurisdictionName: string
+      /**  */
+      language?: LanguagesEnum
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<JurisdictionContentFields> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictionContent/byName/{jurisdictionName}"
+      url = url.replace("{jurisdictionName}", params["jurisdictionName"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { language: params["language"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * List a jurisdiction's content rows across languages
+   */
+  listJurisdictionContent(
+    params: {
+      /**  */
+      jurisdictionId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<JurisdictionContent[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictionContent/jurisdictions/{jurisdictionId}/admin"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get one language's content row for editing
+   */
+  getJurisdictionContent(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /**  */
+      language: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<JurisdictionContent> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictionContent/jurisdictions/{jurisdictionId}/admin/{language}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Upsert one language's content row with an optimistic-lock check
+   */
+  updateJurisdictionContent(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /**  */
+      language: string
+      /** requestBody */
+      body?: JurisdictionContentUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<JurisdictionContent> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictionContent/jurisdictions/{jurisdictionId}/admin/{language}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 /** SuccessDTO */
@@ -10633,6 +10853,291 @@ export interface IngestParams {
   targetName: string
 }
 
+/** TranslationOverrideRow */
+export interface TranslationOverrideRow {
+  /**  */
+  key: string
+
+  /**  */
+  value: string
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  origin: TranslationOrigin
+
+  /**  */
+  site: SiteEnum
+
+  /**  */
+  language: LanguagesEnum
+}
+
+/** TranslationRawKey */
+export interface TranslationRawKey {
+  /**  */
+  key: string
+
+  /**  */
+  value: string
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  origin: TranslationOrigin
+
+  /**  */
+  stale: boolean
+}
+
+/** TranslationKeyEdit */
+export interface TranslationKeyEdit {
+  /**  */
+  key: string
+
+  /**  */
+  value: string
+
+  /**  */
+  lastUpdatedAt?: Date
+}
+
+/** TranslationUpdate */
+export interface TranslationUpdate {
+  /**  */
+  edits: TranslationKeyEdit[]
+}
+
+/** FooterLinkDTO */
+export interface FooterLinkDTO {
+  /**  */
+  id: string
+
+  /**  */
+  text: string
+
+  /**  */
+  href: string
+
+  /**  */
+  _deleted?: boolean
+}
+
+/** FooterLogoDTO */
+export interface FooterLogoDTO {
+  /**  */
+  logoSrc: string
+
+  /**  */
+  logoAltText?: string
+
+  /**  */
+  logoUrl?: string
+}
+
+/** FooterContentDTO */
+export interface FooterContentDTO {
+  /**  */
+  textSectionsHtml?: string[]
+
+  /**  */
+  links?: FooterLinkDTO[]
+
+  /**  */
+  logo?: FooterLogoDTO
+}
+
+/** FaqItemDTO */
+export interface FaqItemDTO {
+  /**  */
+  id: string
+
+  /**  */
+  question: string
+
+  /**  */
+  answerHtml: string
+
+  /**  */
+  _deleted?: boolean
+}
+
+/** FaqCategoryDTO */
+export interface FaqCategoryDTO {
+  /**  */
+  id: string
+
+  /**  */
+  title?: string
+
+  /**  */
+  items?: FaqItemDTO[]
+
+  /**  */
+  _deleted?: boolean
+}
+
+/** FaqContentDTO */
+export interface FaqContentDTO {
+  /**  */
+  categories?: FaqCategoryDTO[]
+}
+
+/** ContactCardDTO */
+export interface ContactCardDTO {
+  /**  */
+  departmentTitle?: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  email?: string
+}
+
+/** ResourceCardDTO */
+export interface ResourceCardDTO {
+  /**  */
+  id: string
+
+  /**  */
+  title: string
+
+  /**  */
+  href?: string
+
+  /**  */
+  contentHtml: string
+
+  /**  */
+  _deleted?: boolean
+}
+
+/** ResourceSectionDTO */
+export interface ResourceSectionDTO {
+  /**  */
+  id: string
+
+  /**  */
+  sectionTitle: string
+
+  /**  */
+  sectionSubtitle?: string
+
+  /**  */
+  cards?: ResourceCardDTO[]
+
+  /**  */
+  _deleted?: boolean
+}
+
+/** ResourcesContentDTO */
+export interface ResourcesContentDTO {
+  /**  */
+  contactCard?: ContactCardDTO
+
+  /**  */
+  resourceSections?: ResourceSectionDTO[]
+}
+
+/** DisclaimersContentDTO */
+export interface DisclaimersContentDTO {
+  /**  */
+  privacyHtml?: string
+
+  /**  */
+  disclaimerHtml?: string
+}
+
+/** ContactContentDTO */
+export interface ContactContentDTO {
+  /**  */
+  phone?: string
+
+  /**  */
+  email?: string
+
+  /**  */
+  addressHtml?: string
+
+  /**  */
+  hours?: string
+}
+
+/** JurisdictionContentFields */
+export interface JurisdictionContentFields {
+  /**  */
+  footer?: FooterContentDTO
+
+  /**  */
+  faq?: FaqContentDTO
+
+  /**  */
+  resources?: ResourcesContentDTO
+
+  /**  */
+  disclaimers?: DisclaimersContentDTO
+
+  /**  */
+  contact?: ContactContentDTO
+}
+
+/** JurisdictionContent */
+export interface JurisdictionContent {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  footer?: FooterContentDTO
+
+  /**  */
+  faq?: FaqContentDTO
+
+  /**  */
+  resources?: ResourcesContentDTO
+
+  /**  */
+  disclaimers?: DisclaimersContentDTO
+
+  /**  */
+  contact?: ContactContentDTO
+
+  /**  */
+  jurisdictionId: string
+
+  /**  */
+  language: LanguagesEnum
+}
+
+/** JurisdictionContentUpdate */
+export interface JurisdictionContentUpdate {
+  /**  */
+  footer?: FooterContentDTO
+
+  /**  */
+  faq?: FaqContentDTO
+
+  /**  */
+  resources?: ResourcesContentDTO
+
+  /**  */
+  disclaimers?: DisclaimersContentDTO
+
+  /**  */
+  contact?: ContactContentDTO
+
+  /**  */
+  lastUpdatedAt?: Date
+}
+
 export enum FilterAvailabilityEnum {
   "closedWaitlist" = "closedWaitlist",
   "comingSoon" = "comingSoon",
@@ -11090,6 +11595,7 @@ export enum FeatureFlagEnum {
   "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableCustomListingNotifications" = "enableCustomListingNotifications",
+  "enableDbDrivenContent" = "enableDbDrivenContent",
   "enableExportTerms" = "enableExportTerms",
   "enableFaq" = "enableFaq",
   "enableFilterByBathroom" = "enableFilterByBathroom",
@@ -11216,4 +11722,9 @@ export enum EnumAgencyFilterParamsComparison {
 export enum SiteEnum {
   "public" = "public",
   "partners" = "partners",
+}
+
+export enum TranslationOrigin {
+  "machine" = "machine",
+  "human" = "human",
 }
