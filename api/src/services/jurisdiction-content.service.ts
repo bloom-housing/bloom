@@ -18,13 +18,13 @@ import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
 
 // Validated against the model so an invalid field is a compile error, while keeping the exact
 // selected-field type on the rows the read path works with.
-const CONTENT_SELECT = Prisma.validator<Prisma.JurisdictionContentSelect>()({
+const CONTENT_SELECT = {
   footer: true,
   faq: true,
   resources: true,
   disclaimers: true,
   contact: true,
-});
+} satisfies Prisma.JurisdictionContentSelect;
 
 @Injectable()
 export class JurisdictionContentService {
