@@ -134,6 +134,10 @@ export const getHasNonReferralMethods = (listing: Listing) => {
   const nonReferralMethods = listing.applicationMethods.filter(
     (method) => method.type !== ApplicationMethodsTypeEnum.Referral
   )
+
+  if (hasMethod(nonReferralMethods, ApplicationMethodsTypeEnum.LeasingAgent)) {
+    return nonReferralMethods.length
+  }
   if (
     nonReferralMethods.length === 1 &&
     nonReferralMethods[0].type === ApplicationMethodsTypeEnum.FileDownload &&
@@ -618,6 +622,8 @@ export const getEligibilitySections = (
             return {
               heading: enableV2MSQ
                 ? question.multiselectQuestions.name
+                  ? question.multiselectQuestions.name
+                  : question.multiselectQuestions.text
                 : question.multiselectQuestions.text,
               description: question.multiselectQuestions.description,
             }
@@ -646,6 +652,8 @@ export const getEligibilitySections = (
                   return {
                     heading: enableV2MSQ
                       ? question.multiselectQuestions.name
+                        ? question.multiselectQuestions.name
+                        : question.multiselectQuestions.text
                       : question.multiselectQuestions.text,
                     description: question.multiselectQuestions.description,
                   }

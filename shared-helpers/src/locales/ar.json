@@ -885,6 +885,7 @@
   "listings.apply.howToApply": "كيفية التقديم",
   "listings.apply.paperApplicationsMustBeMailed": "يجب إرسال الطلبات الورقية عن طريق البريد الأمريكي ولا يمكن تقديمها شخصيًا.",
   "listings.apply.pickUpAnApplication": "التقط طلبًا",
+  "listings.apply.referToLeasingAgentContact": "يرجى الرجوع إلى قسم الاتصال بوكيل التأجير أو مدير العقار أدناه لتقديم الطلب.",
   "listings.apply.sendByUsMail": "إرسال الطلب عبر البريد الأمريكي",
   "listings.apply.submitAPaperApplication": "تقديم طلب ورقي",
   "listings.apply.submitPaperDueDateNoPostMark": "يجب استلام الطلبات قبل الموعد النهائي. في حال الإرسال عبر البريد الأمريكي، يجب استلام الطلب قبل %{applicationDueDate}. %{developer} غير مسؤول عن البريد المفقود أو المتأخر.",

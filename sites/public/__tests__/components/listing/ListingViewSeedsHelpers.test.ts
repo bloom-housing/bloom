@@ -335,6 +335,20 @@ describe("ListingViewSeedsHelpers", () => {
       const result = getHasNonReferralMethods(mockListing)
       expect(result).toBe(0)
     })
+
+    it("should return true if listing has only a leasing agent application method", () => {
+      const mockListing: Listing = {
+        ...listing,
+        applicationMethods: [
+          {
+            type: ApplicationMethodsTypeEnum.LeasingAgent,
+          } as ApplicationMethod,
+        ],
+      }
+
+      const result = getHasNonReferralMethods(mockListing)
+      expect(result).toBe(1)
+    })
   })
 
   describe("getAccessibilityFeatures", () => {
