@@ -885,6 +885,7 @@
   "listings.apply.howToApply": "Cách nộp đơn",
   "listings.apply.paperApplicationsMustBeMailed": "Mẫu đơn ghi danh Giấy phải được gửi thư bưu điện Hoa Kỳ và không thể nộp trực tiếp.",
   "listings.apply.pickUpAnApplication": "Nhận đơn ghi danh",
+  "listings.apply.referToLeasingAgentContact": "Vui lòng tham khảo phần liên hệ của người đại diện cho thuê hoặc quản lý bất động sản bên dưới để nộp đơn.",
   "listings.apply.sendByUsMail": "Gửi đơn qua Bưu điện Hoa Kỳ",
   "listings.apply.submitAPaperApplication": "Nộp đơn xin giấy tờ",
   "listings.apply.submitPaperDueDateNoPostMark": "Đơn phải được nhận trước thời hạn. Nếu gửi qua Bưu điện Hoa Kỳ, đơn phải được nhận trước ngày %{applicationDueDate}. %{developer} không chịu trách nhiệm về thư bị mất hoặc bị chậm trễ.",

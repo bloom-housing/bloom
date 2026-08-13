@@ -831,6 +831,12 @@ export class ApplicationService {
       FeatureFlagEnum.enableV2MSQ,
     );
 
+    const enableOnlyAdminCanAddAppsAfterClose =
+      doJurisdictionHaveFeatureFlagSet(
+        listing?.jurisdictions as unknown as Jurisdiction,
+        FeatureFlagEnum.enableOnlyAdminCanAddAppsAfterClose,
+      );
+
     if (enableV2MSQ) {
       const listingMultiselectIds = listing.listingMultiselectQuestions.map(
         (msq) => {
@@ -863,6 +869,20 @@ export class ApplicationService {
           `Listing is not open for application submission`,
         );
       }
+    }
+
+    if (
+      listing?.status === 'closed' &&
+      enableOnlyAdminCanAddAppsAfterClose &&
+      !(
+        requestingUser.userRoles?.isAdmin ||
+        requestingUser.userRoles?.isSuperAdmin ||
+        requestingUser.userRoles?.isSupportAdmin
+      )
+    ) {
+      throw new BadRequestException(
+        `Non-administrators cannot submit applications to closed listings`,
+      );
     }
 
     // If a new application comes in after close and PII needs to be deleted

@@ -885,6 +885,7 @@
   "listings.apply.howToApply": "Paano mag-apply",
   "listings.apply.paperApplicationsMustBeMailed": "Ang mga papel na application ay dapat ipadala sa pamamagitan ng US Mail at hindi maaaring isumite nang personal.",
   "listings.apply.pickUpAnApplication": "Pick-up-in ang application",
+  "listings.apply.referToLeasingAgentContact": "Sumangguni sa seksyong pangkontak para sa ahente ng pagpapaupa o tagapamahala ng ari-arian sa ibaba upang mag-aplay.",
   "listings.apply.sendByUsMail": "Magpadala application sa US Mail",
   "listings.apply.submitAPaperApplication": "Magsumite ng aplikasyon sa papel",
   "listings.apply.submitPaperDueDateNoPostMark": "Ang mga aplikasyon ay dapat matanggap bago ang deadline. Kung nagpapadala sa pamamagitan ng U.S. Mail, ang aplikasyon ay dapat matanggap bago ang %{applicationDueDate}. Ang %{developer} ay hindi mananagot para sa nawala o naantalang mail.",
