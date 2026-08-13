@@ -875,5 +875,6 @@
   "users.tabPartners": "Partners",
   "users.totalUsers": "total users",
   "users.unconfirmed": "Unconfirmed",
-  "users.userDetails": "User details"
+  "users.userDetails": "User details",
+  "users.viewUser": "View user"
 }

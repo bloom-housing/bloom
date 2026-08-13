@@ -29,18 +29,20 @@ import { fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
 type ApplicationDatesProps = {
+  disableDueDate?: boolean
   enableMarketingFlyer?: boolean
   enableMarketingStatus?: boolean
   enableMarketingStatusMonths?: boolean
   enableAutoOpenDate?: boolean
   enableAutopublish?: boolean
+  listing?: FormListing
   openHouseEvents: TempEvent[]
   requiredFields: string[]
-  listing?: FormListing
   setOpenHouseEvents: (events: TempEvent[]) => void
 }
 
 const ApplicationDates = ({
+  disableDueDate,
   enableMarketingFlyer,
   enableMarketingStatus,
   enableMarketingStatusMonths,
@@ -244,6 +246,7 @@ const ApplicationDates = ({
               register={register}
               setValue={setValue}
               watch={watch}
+              disabled={disableDueDate}
               error={
                 hasDueDateError && {
                   month: hasDueDateError,
@@ -281,6 +284,7 @@ const ApplicationDates = ({
               register={register}
               setValue={setValue}
               watch={watch}
+              disabled={disableDueDate}
               error={errors?.applicationDueDate || errors?.applicationDueTimeField}
               defaultValues={{
                 hours: listing?.applicationDueDate

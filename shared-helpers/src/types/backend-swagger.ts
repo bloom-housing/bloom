@@ -9503,7 +9503,10 @@ export interface ApplicationBulkUrl {
   listingId: string
 
   /**  */
-  userId: string
+  contentType: string
+
+  /**  */
+  contentDisposition: string
 }
 
 /** ApplicationBulkPresignedUrl */
@@ -11584,6 +11587,7 @@ export enum FeatureFlagEnum {
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableAdditionalResources" = "enableAdditionalResources",
+  "enableApplicationBulkCSVUpdates" = "enableApplicationBulkCSVUpdates",
   "enableApplicationStatus" = "enableApplicationStatus",
   "enableAutoOpenDate" = "enableAutoOpenDate",
   "enableAutopublish" = "enableAutopublish",
@@ -11622,6 +11626,9 @@ export enum FeatureFlagEnum {
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "enableNeighborhoodAmenitiesDropdown" = "enableNeighborhoodAmenitiesDropdown",
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
+  "enableOnlyAdminCanAddAppsAfterClose" = "enableOnlyAdminCanAddAppsAfterClose",
+  "enableOnlyAdminCanEditListingDates" = "enableOnlyAdminCanEditListingDates",
+  "enableOnlyAdminCanManageUsers" = "enableOnlyAdminCanManageUsers",
   "enableParkingFee" = "enableParkingFee",
   "enableParkingType" = "enableParkingType",
   "enablePartnerDemographics" = "enablePartnerDemographics",

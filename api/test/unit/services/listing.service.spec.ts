@@ -518,7 +518,7 @@ describe('Testing listing service', () => {
       householdSizeMin: 1,
       neighborhood: 'neighborhood string',
       petPolicy: 'we love pets',
-      smokingPolicy: 'smokeing policy string',
+      smokingPolicy: 'smoking policy string',
       unitsAvailable: 15,
       unitAmenities: 'unit amenity string',
       servicesOffered: 'services offered string',
