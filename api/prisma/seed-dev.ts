@@ -17,6 +17,10 @@ import {
   translationFactory,
   upsertTranslation,
 } from './seed-helpers/translation-factory';
+import {
+  jurisdictionContentFactory,
+  upsertJurisdictionContent,
+} from './seed-helpers/jurisdiction-content-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
 import { APPLICATIONS_PER_LISTINGS, LISTINGS_TO_SEED } from './constants';
@@ -112,6 +116,20 @@ export const devSeeding = async (
     translationFactory({ language: LanguagesEnum.es }),
   );
   await upsertTranslation(prismaClient, translationFactory());
+
+  // add structured content, English plus a partial Spanish row
+  const contentJurisdiction = { id: jurisdiction.id, name: jurisdiction.name };
+  await upsertJurisdictionContent(
+    prismaClient,
+    jurisdictionContentFactory({ jurisdiction: contentJurisdiction }),
+  );
+  await upsertJurisdictionContent(
+    prismaClient,
+    jurisdictionContentFactory({
+      jurisdiction: contentJurisdiction,
+      language: LanguagesEnum.es,
+    }),
+  );
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   const amiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(10, jurisdiction.id, null, jurisdiction.name),

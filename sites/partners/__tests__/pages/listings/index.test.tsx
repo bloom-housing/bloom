@@ -53,7 +53,9 @@ function mockJurisdictionsHaveFeatureFlagOn(
   enableListingUpdatedAt = true,
   enableUnitGroups = false,
   enableHomeType = true,
-  enableSection8Question = true
+  enableSection8Question = true,
+  enableLandUse = true,
+  enableNonRegulatedListings = true
 ) {
   switch (featureFlag) {
     case FeatureFlagEnum.enableHomeType:
@@ -66,6 +68,10 @@ function mockJurisdictionsHaveFeatureFlagOn(
       return enableIsVerified
     case FeatureFlagEnum.enableListingUpdatedAt:
       return enableListingUpdatedAt
+    case FeatureFlagEnum.enableLandUse:
+      return enableLandUse
+    case FeatureFlagEnum.enableNonRegulatedListings:
+      return enableNonRegulatedListings
     default:
       return true
   }
@@ -438,6 +444,131 @@ describe("listings", () => {
     )
     expect(screen.getByText("Last updated")).toBeDefined()
   })
+
+  it("should show listing type column if only the land use feature flag is on", () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            roles: { id: "user1", isAdmin: false, isPartner: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
+    )
+
+    render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: {
+            ...mockUser,
+            jurisdictions: [
+              {
+                id: "id1",
+                featureFlags: [
+                  {
+                    name: FeatureFlagEnum.enableLandUse,
+                    active: true,
+                  } as FeatureFlag,
+                ],
+              } as Jurisdiction,
+            ],
+          },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(
+              featureFlag,
+              false,
+              true,
+              false,
+              true,
+              true,
+              true,
+              false
+            ),
+        }}
+      >
+        <ListingsList />
+      </AuthContext.Provider>
+    )
+    expect(screen.getByText("Listing Type")).toBeDefined()
+  })
+
+  it("should not show listing type column if no listing type feature flag is on", () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            roles: { id: "user1", isAdmin: false, isPartner: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
+    )
+
+    render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: {
+            ...mockUser,
+            jurisdictions: [
+              {
+                id: "id1",
+                featureFlags: [
+                  {
+                    name: FeatureFlagEnum.enableLandUse,
+                    active: false,
+                  } as FeatureFlag,
+                  {
+                    name: FeatureFlagEnum.enableNonRegulatedListings,
+                    active: false,
+                  } as FeatureFlag,
+                ],
+              } as Jurisdiction,
+            ],
+          },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(
+              featureFlag,
+              false,
+              true,
+              false,
+              true,
+              true,
+              false,
+              false
+            ),
+        }}
+      >
+        <ListingsList />
+      </AuthContext.Provider>
+    )
+    expect(screen.queryByText("Listing Type")).toBeNull()
+  })
+
   // Skipping for now until the CSV endpoints are created
   it.skip("should render the error text when listings csv api call fails", async () => {
     window.URL.createObjectURL = jest.fn()
