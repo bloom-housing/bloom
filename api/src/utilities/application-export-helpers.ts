@@ -1027,30 +1027,38 @@ export const convertDemographicLanguageToReadable = (type: string): string => {
   return typeMap[rootKey] ?? rootKey;
 };
 
+export const APPLICATION_DECLINE_REASON_MAP: Record<string, string> = {
+  householdIncomeTooHigh: 'Household income too high',
+  householdIncomeTooLow: 'Household income too low',
+  householdSizeTooLarge: 'Household size too large',
+  householdSizeTooSmall: 'Household size too small',
+  attemptedToContactNoResponse: 'Attempted to contact; no response',
+  applicantDeclinedUnit: 'Applicant declined unit',
+  doesNotMeetSeniorBuildingRequirement:
+    'Does not meet senior building requirement',
+  householdDoesNotNeedAccessibleUnit:
+    'Household does not need accessible unit features',
+  other: 'Other',
+};
+
 /**
- *
  * @param type takes in the decline reason enum key
  * @returns outputs the readable version of the string
  */
 export const convertApplicationDeclineReasonToReadable = (
   type: string,
-): string => {
-  const typeMap = {
-    householdIncomeTooHigh: 'Household income too high',
-    householdIncomeTooLow: 'Household income too low',
-    householdSizeTooLarge: 'Household size too large',
-    householdSizeTooSmall: 'Household size too small',
-    attemptedToContactNoResponse: 'Attempted to contact; no response',
-    applicantDeclinedUnit: 'Applicant declined unit',
-    doesNotMeetSeniorBuildingRequirement:
-      'Does not meet senior building requirement',
-    householdDoesNotNeedAccessibleUnit:
-      'Household does not need accessible unit features',
-    other: 'Other',
-  };
+): string => APPLICATION_DECLINE_REASON_MAP[type] ?? type;
 
-  return typeMap[type] ?? type;
-};
+/**
+ * @param readable takes in the decline reason as human readable string
+ * @returns outputs the enum key version of the matching readable string
+ */
+export const convertReadableToApplicationDeclineReason = (
+  readable: string,
+): string | undefined =>
+  Object.keys(APPLICATION_DECLINE_REASON_MAP).find(
+    (key) => APPLICATION_DECLINE_REASON_MAP[key] === readable,
+  );
 
 /**
  *
