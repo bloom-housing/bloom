@@ -37,12 +37,14 @@ import {
   effectiveValue,
   keysThatHideSections,
   PendingEdits,
+  rejectedValueKeys,
   TranslationGridRow,
+  TranslationIssue,
   validateEdits,
   withPendingEdits,
 } from "../../lib/translationEditor"
 import { TranslationConflictDialog } from "../../components/settings/TranslationConflictDialog"
-import { TranslationHideSectionDialog } from "../../components/settings/TranslationHideSectionDialog"
+import { TranslationWarningDialog } from "../../components/settings/TranslationWarningDialog"
 
 // Above this the inline editor is too cramped to work in, so the textarea opens instead.
 const INLINE_EDITOR_MAX_CHARACTERS = 60
@@ -129,10 +131,11 @@ const SettingsTranslations = () => {
   const [edits, setEdits] = useState<PendingEdits>({})
   // Keys a save could not write because someone changed them first.
   const [conflictKeys, setConflictKeys] = useState<string[]>([])
-  // Keys awaiting confirmation because saving or reverting them would remove a section.
-  const [hidingKeys, setHidingKeys] = useState<string[]>([])
-  // Set alongside hidingKeys when the confirmation is for a revert rather than a save.
-  const [hidingRevertKey, setHidingRevertKey] = useState<string | null>(null)
+  const [warnings, setWarnings] = useState<{
+    hidingKeys: string[]
+    tokenIssues: TranslationIssue[]
+  }>({ hidingKeys: [], tokenIssues: [] })
+  const [warningRevertKey, setWarningRevertKey] = useState<string | null>(null)
   // What is typed in the filter field, which lags the value the rows are filtered by.
   const [filterInput, setFilterInput] = useState("")
 
@@ -289,8 +292,8 @@ const SettingsTranslations = () => {
                   void runRevert(data.key)
                   return
                 }
-                setHidingKeys([data.key])
-                setHidingRevertKey(data.key)
+                setWarnings({ hidingKeys: [data.key], tokenIssues: [] })
+                setWarningRevertKey(data.key)
               }}
               id={`revert-${data.key}`}
             >
@@ -332,6 +335,13 @@ const SettingsTranslations = () => {
             setConflictKeys(conflicts)
             return
           }
+          const rejected = rejectedValueKeys(error, sentKeys)
+          if (rejected.length) {
+            addToast(t("translations.alertValueRejected", { keys: rejected.join(", ") }), {
+              variant: "alert",
+            })
+            return
+          }
           addToast(t("errors.alert.badRequest"), { variant: "alert" })
           console.log(error)
         })
@@ -342,20 +352,11 @@ const SettingsTranslations = () => {
   }
 
   const handleSave = () => {
-    const issues = validateEdits(edits, rows)
-    if (issues.length) {
-      addToast(
-        t("translations.alertTokenError", {
-          keys: issues.map((issue) => issue.key).join(", "),
-        }),
-        { variant: "alert" }
-      )
-      return
-    }
+    const tokenIssues = validateEdits(edits, rows)
+    const hidingKeys = keysThatHideSections(edits, rows)
 
-    const hiding = keysThatHideSections(edits, rows)
-    if (hiding.length) {
-      setHidingKeys(hiding)
+    if (tokenIssues.length || hidingKeys.length) {
+      setWarnings({ hidingKeys, tokenIssues })
       return
     }
 
@@ -517,25 +518,24 @@ const SettingsTranslations = () => {
           onResolve={handleResolveConflicts}
         />
       )}
-      {hidingKeys.length > 0 && (
-        <TranslationHideSectionDialog
-          keys={hidingKeys}
-          isLoading={isSaving || isReverting}
-          onClose={() => {
-            setHidingKeys([])
-            setHidingRevertKey(null)
-          }}
-          onConfirm={() => {
-            setHidingKeys([])
-            if (hidingRevertKey) {
-              setHidingRevertKey(null)
-              void runRevert(hidingRevertKey)
-              return
-            }
-            void saveEdits(edits)
-          }}
-        />
-      )}
+      <TranslationWarningDialog
+        hidingKeys={warnings.hidingKeys}
+        tokenIssues={warnings.tokenIssues}
+        isLoading={isSaving || isReverting}
+        onClose={() => {
+          setWarnings({ hidingKeys: [], tokenIssues: [] })
+          setWarningRevertKey(null)
+        }}
+        onConfirm={() => {
+          setWarnings({ hidingKeys: [], tokenIssues: [] })
+          if (warningRevertKey) {
+            setWarningRevertKey(null)
+            void runRevert(warningRevertKey)
+            return
+          }
+          void saveEdits(edits)
+        }}
+      />
     </Layout>
   )
 }
