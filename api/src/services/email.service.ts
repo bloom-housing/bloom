@@ -661,6 +661,68 @@ export class EmailService {
     }
   }
 
+  public async applicationsBulkSuccess(
+    user: User,
+    jurisdictionId: IdDTO,
+    applicationsUrl: string,
+    bulkResults: { updateCount: number },
+    listingName: string,
+  ) {
+    const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+    await this.loadTranslations(jurisdiction, user.language);
+    await this.send(
+      user.email,
+      jurisdiction.emailFromAddress,
+      this.polyglot.t('applicationBulk.success.subject', { listingName }),
+      this.template('applications-bulk-success')({
+        bulkResults,
+        applicationsUrl,
+      }),
+    );
+  }
+
+  public async applicationsBulkSuccessWithErrors(
+    user: User,
+    jurisdictionId: IdDTO,
+    applicationsUrl: string,
+    bulkResults: { updateCount: number; failedEmailsCount: number },
+    listingName: string,
+  ) {
+    const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+    await this.loadTranslations(jurisdiction, user.language);
+    await this.send(
+      user.email,
+      jurisdiction.emailFromAddress,
+      this.polyglot.t('applicationBulk.successWithError.subject', {
+        listingName,
+      }),
+      this.template('applications-bulk-success-with-errors')({
+        bulkResults,
+        applicationsUrl,
+      }),
+    );
+  }
+
+  public async applicationsBulkFailure(
+    user: User,
+    jurisdictionId: IdDTO,
+    applicationsUrl: string,
+    errorMessage: string,
+    listingName: string,
+  ) {
+    const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+    await this.loadTranslations(jurisdiction, user.language);
+    await this.send(
+      user.email,
+      jurisdiction.emailFromAddress,
+      this.polyglot.t('applicationBulk.failure.subject', { listingName }),
+      this.template('applications-bulk-failure')({
+        errorMessage,
+        applicationsUrl,
+      }),
+    );
+  }
+
   public async requestApproval(
     jurisdictionId: IdDTO,
     listingInfo: IdDTO,

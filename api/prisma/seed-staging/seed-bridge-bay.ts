@@ -2404,6 +2404,7 @@ export const realisticAddressesForOtherStatuses = [
 const featureFlags = [
   FeatureFlagEnum.disableEthnicityQuestion,
   FeatureFlagEnum.disableWorkInRegion,
+  FeatureFlagEnum.enableExportTerms,
   FeatureFlagEnum.enableFilterByBathroom,
   FeatureFlagEnum.enableFilterByCounty,
   FeatureFlagEnum.enableGeocodingPreferences,
@@ -2415,11 +2416,15 @@ const featureFlags = [
   FeatureFlagEnum.enableListingOpportunity,
   FeatureFlagEnum.enableListingPagination,
   FeatureFlagEnum.enableMultiselectVoucherQuestion,
+  FeatureFlagEnum.enableOnlyAdminCanAddAppsAfterClose,
+  FeatureFlagEnum.enableOnlyAdminCanEditListingDates,
+  FeatureFlagEnum.enableOnlyAdminCanManageUsers,
   FeatureFlagEnum.enablePartnerDemographics,
   FeatureFlagEnum.enablePartnerSettings,
   FeatureFlagEnum.enableReceivedAtAndByFields,
   FeatureFlagEnum.enableSexualOrientationQuestion,
   FeatureFlagEnum.enableSupportAdmin,
+  FeatureFlagEnum.enableWaitlistLottery,
 ];
 
 const raceEthnicityConfiguration = {

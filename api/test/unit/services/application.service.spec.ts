@@ -2415,7 +2415,7 @@ describe('Testing application service', () => {
       );
     });
 
-    it('should create an application from partner site when listing is closed', async () => {
+    it('should create an application from partner site when listing is closed and enableOnlyAdminCanAddAppsAfterClose is false', async () => {
       process.env.APPLICATION_DAYS_TILL_EXPIRY = '60';
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: randomUUID(),
@@ -2423,6 +2423,87 @@ describe('Testing application service', () => {
         closedAt: new Date('2024-04-28 00:00 -08:00'),
         jurisdictions: {
           id: randomUUID(),
+        },
+      });
+      prisma.applications.create = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        // update previous applications
+        jest.fn().mockResolvedValue({
+          id: randomUUID(),
+        }),
+        // application create mock
+        jest.fn().mockResolvedValue({
+          id: randomUUID(),
+        }),
+      ]);
+
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto = mockCreateApplicationData(exampleAddress, new Date());
+
+      await service.create(dto, false, {
+        id: 'requestingUser id',
+        userRoles: { isJurisdictionalAdmin: true },
+      } as unknown as User);
+
+      expect(prisma.applications.create).toHaveBeenCalledWith({
+        include: {
+          ...detailView,
+        },
+        data: {
+          isNewest: false,
+          expireAfter: new Date('2024-06-27T08:00:00.000Z'),
+          confirmationCode: expect.anything(),
+          ...buildExpectedApplicationData({
+            exampleAddress,
+            dto,
+            submissionDate: expect.anything(),
+          }),
+          userAccounts: {
+            connect: {
+              id: 'requestingUser id',
+            },
+          },
+        },
+      });
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        {
+          id: 'requestingUser id',
+          userRoles: { isJurisdictionalAdmin: true },
+        } as unknown as User,
+        'application',
+        permissionActions.create,
+        {
+          listingId: dto.listings.id,
+          jurisdictionId: expect.anything(),
+        },
+      );
+      process.env.APPLICATION_DAYS_TILL_EXPIRY = null;
+    });
+
+    it('should create an application from partner site as admin when listing is closed and enableOnlyAdminCanAddAppsAfterClose is true', async () => {
+      process.env.APPLICATION_DAYS_TILL_EXPIRY = '60';
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+        status: ListingsStatusEnum.closed,
+        closedAt: new Date('2024-04-28 00:00 -08:00'),
+        jurisdictions: {
+          id: randomUUID(),
+          featureFlags: [
+            {
+              name: FeatureFlagEnum.enableOnlyAdminCanAddAppsAfterClose,
+              active: true,
+            },
+          ],
         },
       });
       prisma.applications.create = jest.fn().mockResolvedValue({
@@ -2488,6 +2569,55 @@ describe('Testing application service', () => {
         },
       );
       process.env.APPLICATION_DAYS_TILL_EXPIRY = null;
+    });
+
+    it('should error while creating an application as a non-admin user for a closed listing when enableOnlyAdminCanAddAppsAfterClose is true', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+        status: ListingsStatusEnum.closed,
+        closedAt: new Date('2024-04-28 00:00 -08:00'),
+        jurisdictions: {
+          id: randomUUID(),
+          featureFlags: [
+            {
+              name: FeatureFlagEnum.enableOnlyAdminCanAddAppsAfterClose,
+              active: true,
+            },
+          ],
+        },
+      });
+
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto = mockCreateApplicationData(exampleAddress, new Date());
+
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      await expect(
+        async () =>
+          await service.create(dto, false, {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: false },
+          } as unknown as User),
+      ).rejects.toThrowError(
+        'Non-administrators cannot submit applications to closed listings',
+      );
+
+      expect(prisma.applications.create).not.toHaveBeenCalled();
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: false },
+        } as unknown as User,
+        'application',
+        permissionActions.create,
+        {
+          listingId: dto.listings.id,
+          jurisdictionId: expect.anything(),
+        },
+      );
     });
   });
 

@@ -161,6 +161,8 @@ export default function ListingsList() {
     true
   )
 
+  const showListingTypeColumn = showForNonRegulated || showForLandUse
+
   useEffect(() => {
     if (defaultJurisdiction) {
       const landUseEnabled = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableLandUse)
@@ -192,7 +194,7 @@ export default function ListingsList() {
       },
     ]
 
-    if (showForNonRegulated) {
+    if (showListingTypeColumn) {
       columns.push({
         headerName: t("listings.listingType"),
         field: "listingType",
