@@ -60,6 +60,9 @@
       img {
         border-radius: var(--seeds-rounded-xl);
         max-width: 324px;
+        height: 287px;
+        object-fit: cover;
+        object-position: center;
       }
     }
   }
