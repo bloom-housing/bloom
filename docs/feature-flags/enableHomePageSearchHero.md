@@ -20,12 +20,12 @@ The view of the form change depending on additional configuration:
 
 ### Default view
 
-![image.png](./images/image%2077.png)
+![image.png](./images/image%2082.png)
 
 ### With image and subnote
 
-![image.png](./images/image%2078.png)
+![image.png](./images/image%2083.png)
 
 ### With `enableFilterByCounty` not turned on
 
-![image.png](./images/image%2079.png)
+![image.png](./images/image%2084.png)

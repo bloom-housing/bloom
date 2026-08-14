@@ -147,7 +147,6 @@ export const HomeSearch = (props: HomeSearchProps) => {
                 <Field
                   name={`${ListingFilterKeys.monthlyRent}.maxRent`}
                   label={t("listings.maxRent")}
-                  placeholder={t("t.any")}
                   type="currency"
                   prepend="$"
                   register={registerFilters}
@@ -176,7 +175,6 @@ export const HomeSearch = (props: HomeSearchProps) => {
               <Field
                 name={ListingFilterKeys.name}
                 label={t("t.listingName")}
-                placeholder={t("t.any")}
                 register={registerPropertyName}
                 className={styles["hero-flex-grow"]}
               />
