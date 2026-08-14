@@ -111,6 +111,20 @@
           padding: var(--seeds-s8);
         }
 
+        .truncate-cell {
+          max-width: 0;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+
+          :global(.seeds-link) {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+
         .error-cell {
           color: var(--seeds-color-alert);
         }

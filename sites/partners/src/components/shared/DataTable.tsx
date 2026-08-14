@@ -30,6 +30,9 @@ export type MetaType = {
   enabled?: boolean
   // If using filtering or sorting on a column, this field will support generating accessible labels
   plaintextName?: string
+  // Cell content is truncated with an ellipsis instead of wrapping to multiple lines by default.
+  // Set to true to allow this column's content to wrap instead.
+  disableTruncate?: boolean
 }
 
 export interface TableData {
@@ -269,7 +272,7 @@ export const DataTable = (props: DataTableProps) => {
     </thead>
   )
 
-  const APPROX_ROW_HEIGHT = 55
+  const APPROX_ROW_HEIGHT = 58
 
   const getTableContent = () => {
     if (dataQuery.data?.errorMessage) {
@@ -334,12 +337,16 @@ export const DataTable = (props: DataTableProps) => {
               return (
                 <tr key={row.id}>
                   {row.getVisibleCells().map((cell) => {
+                    const truncate = !(cell.column.columnDef.meta as MetaType)?.disableTruncate
+                    const value = cell.getValue()
                     return (
                       <td
                         key={cell.id}
                         style={{
                           width: cell.column.getSize(),
                         }}
+                        className={truncate ? styles["truncate-cell"] : undefined}
+                        title={truncate && typeof value === "string" ? value : undefined}
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>
