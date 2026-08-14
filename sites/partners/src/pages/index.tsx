@@ -204,13 +204,13 @@ export default function ListingsList() {
       columnHelper.accessor("listingFileNumber", {
         id: "listingFileNumber",
         cell: (props) => props.getValue() ?? t("t.none"),
-        header: () => t("listings.listingFileNumber"),
+        header: () => t("listings.listingFileNumberShort"),
         footer: (props) => props.column.id,
         enableColumnFilter: false,
         enableSorting: false,
         minSize: 160,
         meta: {
-          plaintextName: t("listings.listingFileNumber"),
+          plaintextName: t("listings.listingFileNumberShort"),
           enabled: doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableListingFileNumber),
         },
       }),
@@ -233,13 +233,13 @@ export default function ListingsList() {
           props.getValue()
             ? dayjs.utc(props.getValue() as string).format("MM/DD/YYYY")
             : t("t.none"),
-        header: () => t("listings.scheduledListingPublishDate"),
+        header: () => t("listings.scheduledListingPublishDateShort"),
         footer: (props) => props.column.id,
         enableColumnFilter: false,
         enableSorting: false,
-        minSize: 180,
+        minSize: 140,
         meta: {
-          plaintextName: t("listings.scheduledListingPublishDate"),
+          plaintextName: t("listings.scheduledListingPublishDateShort"),
           enabled: doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableAutopublish),
         },
       }),
