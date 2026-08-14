@@ -18,7 +18,6 @@
     .hero {
       max-width: var(--seeds-screen-md);
       color: var(--seeds-color-on-inverse);
-      color: red;
 
       .heading {
         font-family: var(--seeds-font-alt-sans);
@@ -77,39 +76,52 @@
       border-radius: var(--seeds-rounded-lg);
       .hero-search-tab-panel {
         border-radius: 0 var(--seeds-rounded-lg) var(--seeds-rounded-lg);
+        @media (--sm-only) {
+          border-radius: var(--seeds-rounded-lg);
+        }
+
+        @media (--sm-and-up) {
+          width: fit-content;
+        }
       }
     }
-    .hero-search {
+
+    .hero-search-filters {
       color: var(--seeds-text-color-darker);
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: auto auto;
       @media (--sm-only) {
         grid-template-columns: 1fr;
       }
       column-gap: var(--seeds-s4);
       margin-block-start: var(--seeds-s4);
+    }
 
-      .hero-filter-flex {
-        @media (--sm-and-up) {
-          display: flex;
-          gap: var(--seeds-s4);
-        }
+    .hero-filter-flex {
+      @media (--sm-and-up) {
+        display: flex;
+        gap: var(--seeds-s4);
       }
+    }
 
-      .hero-filter-county {
-        min-width: 180px;
+    .hero-filter-county {
+      min-width: 180px;
+    }
+
+    .hero-property-name {
+      @media (--sm-and-up) {
+        min-width: 370px;
       }
+    }
 
-      // The filter checkbox should be below the view listing button on desktop but still be before the button in tab order
-      .hero-last-checkbox {
-        margin-block-start: var(--seeds-s6);
-        margin-block-end: 0;
-        @media (--sm-and-up) {
-          margin-block-start: 0;
-          grid-column: span 2;
-          justify-self: end;
-          order: 99;
-        }
+    .hero-last-checkbox {
+      margin-block-start: 0;
+      margin-block-end: 0;
+
+      @media (--sm-and-up) {
+        grid-column: span 2;
+        justify-self: end;
+        order: 99;
       }
     }
   }
