@@ -35,7 +35,7 @@ describe("useRawTranslations", () => {
     getRawTranslations.mockResolvedValue([])
   })
 
-  it("issues no request until a jurisdiction is chosen", async () => {
+  it("issues no request until a jurisdiction is chosen", () => {
     const { result } = renderRawTranslations("")
 
     expect(result.current.cacheKey).toBeNull()
