@@ -116,7 +116,7 @@ export const HomeSearch = (props: HomeSearchProps) => {
         </Tabs.TabList>
         <Tabs.TabPanel className={styles["hero-search-tab-panel"]}>
           <Form onSubmit={handleFiltersSubmit(onFiltersSubmit)}>
-            <div className={styles["hero-search"]}>
+            <div className={styles["hero-search-filters"]}>
               <div className={styles["hero-filter-flex"]}>
                 {enableFilterByCounty && props.jurisdiction.subJurisdictions?.length > 0 && (
                   <div className={styles["hero-filter-county"]}>
@@ -124,7 +124,7 @@ export const HomeSearch = (props: HomeSearchProps) => {
                       name="county"
                       label={t("t.county")}
                       register={registerFilters}
-                      controlClassName="control"
+                      controlClassName="control seeds-m-be-6"
                       options={[
                         { label: t("welcome.search.allCounties"), value: "any" },
                         ...props.jurisdiction.subJurisdictions.map((county) => {
@@ -151,6 +151,7 @@ export const HomeSearch = (props: HomeSearchProps) => {
                   prepend="$"
                   register={registerFilters}
                   setValue={setValue}
+                  controlClassName="seeds-m-be-6"
                 />
               </div>
               <div className={styles["hero-last-checkbox"]}>
@@ -171,12 +172,12 @@ export const HomeSearch = (props: HomeSearchProps) => {
         </Tabs.TabPanel>
         <Tabs.TabPanel className={styles["hero-search-tab-panel"]}>
           <Form onSubmit={handlePropertyNameSubmit(onPropertyNameSubmit)}>
-            <div className={styles["hero-search"]}>
+            <div className={styles["hero-search-filters"]}>
               <Field
                 name={ListingFilterKeys.name}
                 label={t("t.listingName")}
                 register={registerPropertyName}
-                className={styles["hero-flex-grow"]}
+                className={styles["hero-property-name"]}
               />
               <div className={styles["hero-last-checkbox"]}>
                 <Field
