@@ -13,7 +13,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { flattenTranslations } from "@bloom-housing/shared-helpers/src/utilities/flattenTranslations"
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
-import { ColDef, ColGroupDef } from "ag-grid-community"
+import { ColDef, ColGroupDef, GridApi } from "ag-grid-community"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import {
@@ -55,6 +55,7 @@ const MINIMUM_FILTER_CHARACTERS = 2
 const FILTER_DEBOUNCE_MS = 500
 // AgTable re-runs its debounced filter effect, which resets to page one, whenever this changes.
 const ignoreAgTableSearch = () => undefined
+const ignoreAgTableSelection = () => undefined
 
 const SettingsTranslations = () => {
   const router = useRouter()
@@ -140,6 +141,10 @@ const SettingsTranslations = () => {
   const [warningRevertKey, setWarningRevertKey] = useState<string | null>(null)
   // What is typed in the filter field, which lags the value the rows are filtered by.
   const [filterInput, setFilterInput] = useState("")
+  const gridApi = useRef<GridApi | null>(null)
+  const captureGridApi = useCallback((api: React.SetStateAction<GridApi | null>) => {
+    gridApi.current = typeof api === "function" ? api(gridApi.current) : api
+  }, [])
 
   const applyFilter = useRef(
     debounce((value: string) => {
@@ -474,6 +479,8 @@ const SettingsTranslations = () => {
             placeholder={t("t.filter")}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               const value = event.target.value
+              // Commits an open cell editor: ag-grid throws if the rows change under one.
+              gridApi.current?.stopEditing()
               setFilterInput(value)
               applyFilter.current(value.length > MINIMUM_FILTER_CHARACTERS ? value : "")
             }}
@@ -509,6 +516,10 @@ const SettingsTranslations = () => {
           search={{
             setSearch: ignoreAgTableSearch,
             showSearch: false,
+          }}
+          selectConfig={{
+            setGridApi: captureGridApi,
+            updateSelectedValues: ignoreAgTableSelection,
           }}
         />
       </TabView>
