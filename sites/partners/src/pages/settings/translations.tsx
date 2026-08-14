@@ -146,10 +146,37 @@ const SettingsTranslations = () => {
     gridApi.current = typeof api === "function" ? api(gridApi.current) : api
   }, [])
 
+  const updateEdits = useCallback((next: React.SetStateAction<PendingEdits>) => {
+    gridApi.current?.stopEditing()
+    setEdits(next)
+  }, [])
+
+  // Every path that changes which rows are on screen goes through here. ag-grid throws if the
+  // rows change under an open cell editor, so the edit is committed first.
+  const { setCurrentPage: setPage, setItemsPerPage } = tableOptions.pagination
+  const goToPage = useCallback(
+    (value: React.SetStateAction<number>) => {
+      gridApi.current?.stopEditing()
+      setPage(value)
+    },
+    [setPage]
+  )
+
+  // A value typed against the old scope is discarded rather than committed, since edits cannot
+  // be taken across a jurisdiction or language change.
+  const changeScope = useCallback(
+    (apply: () => void) => {
+      gridApi.current?.stopEditing(true)
+      apply()
+      setPage(1)
+    },
+    [setPage]
+  )
+
   const applyFilter = useRef(
     debounce((value: string) => {
       tableOptions.filter.setFilterValue(value)
-      tableOptions.pagination.setCurrentPage(1)
+      goToPage(1)
     }, FILTER_DEBOUNCE_MS)
   )
   const editCount = Object.keys(edits).length
@@ -203,7 +230,7 @@ const SettingsTranslations = () => {
             key,
           })
           .then(() => {
-            setEdits((previous) => {
+            updateEdits((previous) => {
               const next = { ...previous }
               delete next[key]
               return next
@@ -226,6 +253,7 @@ const SettingsTranslations = () => {
       mutate,
       revertOverride,
       translationsService,
+      updateEdits,
     ]
   )
 
@@ -326,7 +354,7 @@ const SettingsTranslations = () => {
         .then(() => {
           // Only the keys that were sent are cleared. A cell that committed while the request was
           // in flight is not among them, so that edit survives instead of being discarded.
-          setEdits((previous) => editsWithoutKeys(previous, sentKeys))
+          updateEdits((previous) => editsWithoutKeys(previous, sentKeys))
           setConflictKeys([])
           addToast(t("translations.alertSaved"), { variant: "success" })
         })
@@ -335,7 +363,7 @@ const SettingsTranslations = () => {
           if (conflicts.length) {
             // The rest of the batch was written, so only the named keys stay pending. The
             // refetch below brings in the values they now hold, for the resolution dialog.
-            setEdits((previous) => ({
+            updateEdits((previous) => ({
               ...editsWithoutKeys(previous, sentKeys),
               ...editsForKeys(pending, conflicts),
             }))
@@ -379,7 +407,7 @@ const SettingsTranslations = () => {
     const kept = applyConflictChoices(edits, choices, rows)
 
     setConflictKeys([])
-    setEdits(kept)
+    updateEdits(kept)
     if (Object.keys(kept).length) {
       void saveEdits(kept)
     }
@@ -421,8 +449,7 @@ const SettingsTranslations = () => {
               }))}
               inputProps={{
                 onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
-                  setJurisdictionId(event.target.value)
-                  tableOptions.pagination.setCurrentPage(1)
+                  changeScope(() => setJurisdictionId(event.target.value))
                 },
               }}
             />
@@ -436,8 +463,7 @@ const SettingsTranslations = () => {
               options={languageOptions}
               inputProps={{
                 onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
-                  setLanguage(event.target.value as LanguagesEnum)
-                  tableOptions.pagination.setCurrentPage(1)
+                  changeScope(() => setLanguage(event.target.value as LanguagesEnum))
                 },
               }}
             />
@@ -456,7 +482,7 @@ const SettingsTranslations = () => {
               variant="secondary"
               size="sm"
               disabled={!hasUnsavedChanges || isSaving}
-              onClick={() => setEdits({})}
+              onClick={() => updateEdits({})}
               id="discardTranslations"
             >
               {t("t.cancel")}
@@ -497,11 +523,11 @@ const SettingsTranslations = () => {
           pagination={{
             perPage,
             setPerPage: (value: React.SetStateAction<number>) => {
-              tableOptions.pagination.setItemsPerPage(value)
-              tableOptions.pagination.setCurrentPage(1)
+              setItemsPerPage(value)
+              goToPage(1)
             },
             currentPage,
-            setCurrentPage: tableOptions.pagination.setCurrentPage,
+            setCurrentPage: goToPage,
           }}
           data={{
             items: gridRows,
