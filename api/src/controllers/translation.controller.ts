@@ -36,7 +36,10 @@ import { OptionalAuthGuard } from '../guards/optional.guard';
 const OVERRIDES_OK_RESPONSE = {
   schema: {
     type: 'object',
-    additionalProperties: { type: 'string' },
+    additionalProperties: {
+      type: 'object',
+      additionalProperties: { type: 'string' },
+    },
   },
 } as const;
 
@@ -58,7 +61,7 @@ export class TranslationController {
     @Param('jurisdictionId', new ParseUUIDPipe({ version: '4' }))
     jurisdictionId: string,
     @Query() queryParams: TranslationsQueryParams,
-  ): Promise<Record<string, string>> {
+  ): Promise<Record<string, Record<string, string>>> {
     return this.translationService.getJurisdictionOverridesById(
       jurisdictionId,
       queryParams.language ?? LanguagesEnum.en,
@@ -76,7 +79,7 @@ export class TranslationController {
   async jurisdictionOverridesByName(
     @Param('jurisdictionName') jurisdictionName: string,
     @Query() queryParams: TranslationsQueryParams,
-  ): Promise<Record<string, string>> {
+  ): Promise<Record<string, Record<string, string>>> {
     return this.translationService.getJurisdictionOverridesByName(
       jurisdictionName,
       queryParams.language ?? LanguagesEnum.en,
@@ -93,7 +96,7 @@ export class TranslationController {
   @Header('Cache-Control', PUBLIC_CACHE_CONTROL)
   async partnersOverrides(
     @Query() queryParams: PartnersTranslationsQueryParams,
-  ): Promise<Record<string, string>> {
+  ): Promise<Record<string, Record<string, string>>> {
     return this.translationService.getJurisdictionOverrides(
       null,
       queryParams.language ?? LanguagesEnum.en,

@@ -2,11 +2,12 @@ import { t } from "@bloom-housing/ui-components"
 import { applyTranslations, overrideTranslations, translations } from "../../src/lib/translations"
 
 describe("applyTranslations", () => {
-  // A key the bundled override file supplies, so the layering below it can be checked.
-  const OVERRIDDEN_KEY = "nav.siteTitlePartners"
-  const BUNDLED_VALUE = overrideTranslations.en[OVERRIDDEN_KEY]
-  // Supplied only by the shared base, so neither Partners file masks it.
-  const BASE_ONLY_KEY = "t.accessibility"
+  // Supplied by the bundled Partners override file and by neither shared locale file, so a
+  // non-English reader has no translation of it to fall back to.
+  const PARTNERS_ONLY_KEY = "nav.siteTitlePartners"
+  const BUNDLED_VALUE = overrideTranslations.en[PARTNERS_ONLY_KEY]
+  // Supplied by both shared locale files with different values, so precedence is visible.
+  const TRANSLATED_KEY = "t.accessibility"
 
   afterEach(() => applyTranslations("en"))
 
@@ -14,52 +15,65 @@ describe("applyTranslations", () => {
     applyTranslations("en")
 
     expect(BUNDLED_VALUE).toBeTruthy()
-    expect(t(OVERRIDDEN_KEY)).toEqual(BUNDLED_VALUE)
+    expect(t(PARTNERS_ONLY_KEY)).toEqual(BUNDLED_VALUE)
   })
 
   it("keeps base keys the overrides do not touch", () => {
     applyTranslations("en")
 
-    expect(t(BASE_ONLY_KEY)).toEqual(translations.general[BASE_ONLY_KEY])
+    expect(t(TRANSLATED_KEY)).toEqual(translations.general[TRANSLATED_KEY])
   })
 
   it("lets a stored override win over the bundled one", () => {
-    applyTranslations("en", { [OVERRIDDEN_KEY]: "From the database" })
+    applyTranslations("en", { en: { [PARTNERS_ONLY_KEY]: "From the database" } })
 
-    expect(t(OVERRIDDEN_KEY)).toEqual("From the database")
+    expect(t(PARTNERS_ONLY_KEY)).toEqual("From the database")
   })
 
   it("keeps bundled keys that have no stored override", () => {
-    applyTranslations("en", { [BASE_ONLY_KEY]: "Stored value" })
+    applyTranslations("en", { en: { [TRANSLATED_KEY]: "Stored value" } })
 
-    expect(t(BASE_ONLY_KEY)).toEqual("Stored value")
-    expect(t(OVERRIDDEN_KEY)).toEqual(BUNDLED_VALUE)
-  })
-
-  it("reproduces the bundled result when there are no stored overrides", () => {
-    applyTranslations("en", {})
-    const withEmpty = t(OVERRIDDEN_KEY)
-
-    applyTranslations("en")
-    expect(t(OVERRIDDEN_KEY)).toEqual(withEmpty)
+    expect(t(TRANSLATED_KEY)).toEqual("Stored value")
+    expect(t(PARTNERS_ONLY_KEY)).toEqual(BUNDLED_VALUE)
   })
 
   it("applies the locale base for a non-English locale", () => {
     applyTranslations("es")
 
-    expect(t(BASE_ONLY_KEY)).toEqual(translations.es[BASE_ONLY_KEY])
+    expect(translations.es[TRANSLATED_KEY]).not.toEqual(translations.general[TRANSLATED_KEY])
+    expect(t(TRANSLATED_KEY)).toEqual(translations.es[TRANSLATED_KEY])
   })
 
-  it("lets a stored override win over a locale base value", () => {
-    applyTranslations("es", { [BASE_ONLY_KEY]: "Desde la base de datos" })
+  // The point of returning the layers apart. Editing the English wording must not take a reader's
+  // translation away from them.
+  it("keeps a translation when only the English value is overridden", () => {
+    applyTranslations("es", { en: { [TRANSLATED_KEY]: "Reworded in English" } })
 
-    expect(t(BASE_ONLY_KEY)).toEqual("Desde la base de datos")
+    expect(t(TRANSLATED_KEY)).toEqual(translations.es[TRANSLATED_KEY])
+  })
+
+  it("lets a stored override for the locale win over its base", () => {
+    applyTranslations("es", {
+      en: { [TRANSLATED_KEY]: "Reworded in English" },
+      es: { [TRANSLATED_KEY]: "Desde la base de datos" },
+    })
+
+    expect(t(TRANSLATED_KEY)).toEqual("Desde la base de datos")
+  })
+
+  // The English layers still sit under the locale ones, so a key with nothing to fall back to
+  // reads the English override rather than nothing.
+  it("uses an English override for a key the locale does not translate", () => {
+    applyTranslations("es", { en: { [PARTNERS_ONLY_KEY]: "From the database" } })
+
+    expect(translations.es[PARTNERS_ONLY_KEY]).toBeUndefined()
+    expect(t(PARTNERS_ONLY_KEY)).toEqual("From the database")
   })
 
   it("resets between calls rather than accumulating", () => {
-    applyTranslations("en", { [OVERRIDDEN_KEY]: "From the database" })
+    applyTranslations("en", { en: { [PARTNERS_ONLY_KEY]: "From the database" } })
     applyTranslations("en")
 
-    expect(t(OVERRIDDEN_KEY)).toEqual(BUNDLED_VALUE)
+    expect(t(PARTNERS_ONLY_KEY)).toEqual(BUNDLED_VALUE)
   })
 })

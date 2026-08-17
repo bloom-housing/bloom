@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 export const OVERRIDES_TIMEOUT_MS = 5000
 
 export function usePartnersOverrides(locale?: string) {
-  const [overrides, setOverrides] = useState<Record<string, string> | undefined>()
+  const [overrides, setOverrides] = useState<Record<string, Record<string, string>> | undefined>()
   const [settled, setSettled] = useState(false)
 
   useEffect(() => {

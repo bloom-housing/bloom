@@ -979,7 +979,7 @@ describe('Testing translations service', () => {
   });
 
   describe('getJurisdictionOverrides', () => {
-    it('returns a flat two-level (language over default) override object', async () => {
+    it('returns one map per language, kept apart rather than merged', async () => {
       const jurisdictionId = randomUUID();
       prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
         {
@@ -1006,9 +1006,14 @@ describe('Testing translations service', () => {
       );
 
       expect(prisma.translationStrings.findMany).toBeCalledTimes(1);
+      // footer.programQuestions stays under `en` rather than filling in under `es`, so a consumer
+      // can place it below its own Spanish base instead of above it.
       expect(result).toEqual({
-        'region.name': 'Bloomington ES',
-        'footer.programQuestions': 'Call default',
+        en: {
+          'region.name': 'Bloomington',
+          'footer.programQuestions': 'Call default',
+        },
+        es: { 'region.name': 'Bloomington ES' },
       });
     });
 
@@ -1057,10 +1062,10 @@ describe('Testing translations service', () => {
         },
         select: { language: true, key: true, value: true },
       });
-      expect(result).toEqual({ 'partners.brand': 'Bloom' });
+      expect(result).toEqual({ en: { 'partners.brand': 'Bloom' } });
     });
 
-    it('layers the requested language over english for the global Partners layer', async () => {
+    it('returns both languages for the global Partners layer', async () => {
       prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
         { language: LanguagesEnum.en, key: 'partners.brand', value: 'Bloom' },
         { language: LanguagesEnum.en, key: 'partners.tag', value: 'EN tag' },
@@ -1078,8 +1083,8 @@ describe('Testing translations service', () => {
       );
 
       expect(result).toEqual({
-        'partners.brand': 'Bloom ES',
-        'partners.tag': 'EN tag',
+        en: { 'partners.brand': 'Bloom', 'partners.tag': 'EN tag' },
+        es: { 'partners.brand': 'Bloom ES' },
       });
     });
   });
@@ -1108,7 +1113,7 @@ describe('Testing translations service', () => {
         where: { id: jurisdictionId },
         select: { id: true },
       });
-      expect(result).toEqual({ 'region.name': 'Bloomington' });
+      expect(result).toEqual({ en: { 'region.name': 'Bloomington' } });
     });
 
     it('throws when the jurisdiction is not found', async () => {
@@ -1148,7 +1153,7 @@ describe('Testing translations service', () => {
         where: { name: 'Bloomington' },
         select: { id: true },
       });
-      expect(result).toEqual({ 'region.name': 'Bloomington' });
+      expect(result).toEqual({ en: { 'region.name': 'Bloomington' } });
     });
 
     it('throws when the jurisdiction is not found', async () => {

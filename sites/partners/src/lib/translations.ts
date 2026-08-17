@@ -32,17 +32,31 @@ export const overrideTranslations = {
 } as Record<string, any>
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-// Loads the polyglot layers in precedence order, lowest first.
-export const applyTranslations = (locale?: string, storedOverrides?: Record<string, string>) => {
+/**
+ * Loads the polyglot layers in precedence order, lowest first.
+ *
+ * English layers sit below layers for the selected locale, so an override written in
+ * English doesn't replace a translation that already exists for that locale.
+ */
+export const applyTranslations = (
+  locale?: string,
+  storedOverrides?: Record<string, Record<string, string>>
+) => {
   addTranslation(translations.general, true)
-  if (locale && locale !== "en" && translations[locale]) {
+  addTranslation(overrideTranslations.en)
+  if (storedOverrides?.en) {
+    addTranslation(storedOverrides.en)
+  }
+
+  if (!locale || locale === "en") return
+
+  if (translations[locale]) {
     addTranslation(translations[locale])
   }
-  addTranslation(overrideTranslations.en)
   if (overrideTranslations[locale]) {
     addTranslation(overrideTranslations[locale])
   }
-  if (storedOverrides) {
-    addTranslation(storedOverrides)
+  if (storedOverrides?.[locale]) {
+    addTranslation(storedOverrides[locale])
   }
 }

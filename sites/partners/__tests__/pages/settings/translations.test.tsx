@@ -574,6 +574,44 @@ describe("<SettingsTranslations>", () => {
 
       expect(await screen.findByText("English changed")).toBeInTheDocument()
     })
+
+    // The API cannot flag this one: there is no row in the edited language to carry the flag, so
+    // without the derived check the key reads as "Using base" while the English has moved on.
+    it("marks a key overridden in English but not in the language being edited", async () => {
+      server.use(
+        ...RAW_PATHS.map((path) =>
+          rest.get(path, (req, res, ctx) =>
+            res(
+              ctx.json(
+                req.params.language === "en" ? [override(FIRST_BASE_KEY, "Your settings")] : []
+              )
+            )
+          )
+        )
+      )
+      renderPage({
+        jurisdictions: [
+          jurisdiction("jurisdiction1", "Bloomington", [LanguagesEnum.en, LanguagesEnum.es]),
+        ],
+      })
+
+      await selectLanguage("Español")
+
+      expect(await screen.findByText("English changed")).toBeInTheDocument()
+    })
+
+    it("leaves a key alone when neither language overrides it", async () => {
+      renderPage({
+        jurisdictions: [
+          jurisdiction("jurisdiction1", "Bloomington", [LanguagesEnum.en, LanguagesEnum.es]),
+        ],
+      })
+
+      await selectLanguage("Español")
+
+      await waitFor(() => expect(screen.getAllByText("Using base").length).toBeGreaterThan(0))
+      expect(screen.queryByText("English changed")).toBeNull()
+    })
   })
 
   describe("revert", () => {
