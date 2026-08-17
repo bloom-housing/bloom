@@ -1776,6 +1776,28 @@ export class ApplicationsService {
     })
   }
   /**
+   * allows user to update applications in bulk using a CSV file
+   */
+  bulkUpdateApplications(
+    params: {
+      /** requestBody */
+      body?: ApplicationBulkValidate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/bulk-update"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * trigger the remove PII cron job
    */
   removePiiCronJob(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -1855,6 +1877,81 @@ export class ApplicationsService {
       let data = params.body
 
       configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class JobsService {
+  /**
+   * Creates a new background job record in the database
+   */
+  createBackgroundJob(
+    params: {
+      /** requestBody */
+      body?: BackgroundJobCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<BackgroundJob> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get an active background job for a listing
+   */
+  findActiveJobForListing(
+    params: {
+      /**  */
+      listingId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<BackgroundJob[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { listingId: params["listingId"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get info if any jobs are currently running
+   */
+  activeJobStatus(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs/active"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a background job data by its ID
+   */
+  getBackgroundJob(
+    params: {
+      /**  */
+      jobId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<BackgroundJob> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs/{jobId}"
+      url = url.replace("{jobId}", params["jobId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       axios(configs, resolve, reject)
     })
@@ -2572,81 +2669,6 @@ export class AuthService {
       let data = params.body
 
       configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class JobsService {
-  /**
-   * Creates a new background job record in the database
-   */
-  createBackgroundJob(
-    params: {
-      /** requestBody */
-      body?: BackgroundJobCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<BackgroundJob> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/jobs"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get an active background job for a listing
-   */
-  findActiveJobForListing(
-    params: {
-      /**  */
-      listingId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<BackgroundJob[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/jobs"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { listingId: params["listingId"] }
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get info if any jobs are currently running
-   */
-  activeJobStatus(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/jobs/active"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get a background job data by its ID
-   */
-  getBackgroundJob(
-    params: {
-      /**  */
-      jobId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<BackgroundJob> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/jobs/{jobId}"
-      url = url.replace("{jobId}", params["jobId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       axios(configs, resolve, reject)
     })
@@ -3643,7 +3665,7 @@ export class TranslationsService {
     })
   }
   /**
-   * Get a scope's editable override keys with staleness
+   * Get a scope's editable override keys. stale = true, if its English source changed since it was translated
    */
   getRawTranslations(
     params: {
@@ -3719,6 +3741,72 @@ export class TranslationsService {
         basePath + "/translations/jurisdictions/{jurisdictionId}/raw/{site}/{language}/{key}"
       url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
       url = url.replace("{site}", params["site"] + "")
+      url = url.replace("{language}", params["language"] + "")
+      url = url.replace("{key}", params["key"] + "")
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get the global Partners override keys. stale = true, if its English source changed since it was translated
+   */
+  getRawPartnersTranslations(
+    params: {
+      /**  */
+      language: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<TranslationRawKey[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/partners/raw/{language}"
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Upsert the global Partners override keys with per-key optimistic locking
+   */
+  updateRawPartnersTranslations(
+    params: {
+      /**  */
+      language: string
+      /** requestBody */
+      body?: TranslationUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/partners/raw/{language}"
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete one global Partners override key (revert to base)
+   */
+  deleteRawPartnersTranslation(
+    params: {
+      /**  */
+      language: string
+      /**  */
+      key: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/partners/raw/{language}/{key}"
       url = url.replace("{language}", params["language"] + "")
       url = url.replace("{key}", params["key"] + "")
 
@@ -9146,6 +9234,15 @@ export interface ApplicationCreate {
   householdMember: HouseholdMemberCreate[]
 }
 
+/** ApplicationBulkValidate */
+export interface ApplicationBulkValidate {
+  /**  */
+  s3Key: string
+
+  /**  */
+  listingId: string
+}
+
 /** AccessibilityUpdate */
 export interface AccessibilityUpdate {
   /**  */
@@ -9503,7 +9600,10 @@ export interface ApplicationBulkUrl {
   listingId: string
 
   /**  */
-  userId: string
+  contentType: string
+
+  /**  */
+  contentDisposition: string
 }
 
 /** ApplicationBulkPresignedUrl */
@@ -9513,6 +9613,51 @@ export interface ApplicationBulkPresignedUrl {
 
   /**  */
   presignedUrl: string
+}
+
+/** BackgroundJob */
+export interface BackgroundJob {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  listingId: string
+
+  /**  */
+  requestedByUserId: string
+
+  /**  */
+  status: BackgroundJobStatusEnum
+
+  /**  */
+  totalRecords?: number
+
+  /**  */
+  inputS3Key: string
+
+  /**  */
+  errorMessage?: string
+
+  /**  */
+  errorRow?: number
+
+  /**  */
+  completedAt?: Date
+}
+
+/** BackgroundJobCreate */
+export interface BackgroundJobCreate {
+  /**  */
+  listingId: string
+
+  /**  */
+  inputS3Key: string
 }
 
 /** CreatePresignedUploadMetadata */
@@ -10464,51 +10609,6 @@ export interface Confirm {
 
   /**  */
   password?: string
-}
-
-/** BackgroundJob */
-export interface BackgroundJob {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  listingId: string
-
-  /**  */
-  requestedByUserId: string
-
-  /**  */
-  status: BackgroundJobStatusEnum
-
-  /**  */
-  totalRecords?: number
-
-  /**  */
-  inputS3Key: string
-
-  /**  */
-  errorMessage?: string
-
-  /**  */
-  errorRow?: number
-
-  /**  */
-  completedAt?: Date
-}
-
-/** BackgroundJobCreate */
-export interface BackgroundJobCreate {
-  /**  */
-  listingId: string
-
-  /**  */
-  inputS3Key: string
 }
 
 /** MapLayer */
@@ -11584,6 +11684,7 @@ export enum FeatureFlagEnum {
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableAdditionalResources" = "enableAdditionalResources",
+  "enableApplicationBulkCSVUpdates" = "enableApplicationBulkCSVUpdates",
   "enableApplicationStatus" = "enableApplicationStatus",
   "enableAutoOpenDate" = "enableAutoOpenDate",
   "enableAutopublish" = "enableAutopublish",
@@ -11592,6 +11693,7 @@ export enum FeatureFlagEnum {
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableDbDrivenContent" = "enableDbDrivenContent",
+  "enableExportTerms" = "enableExportTerms",
   "enableFaq" = "enableFaq",
   "enableFilterByBathroom" = "enableFilterByBathroom",
   "enableFilterByCounty" = "enableFilterByCounty",
@@ -11622,6 +11724,9 @@ export enum FeatureFlagEnum {
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "enableNeighborhoodAmenitiesDropdown" = "enableNeighborhoodAmenitiesDropdown",
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
+  "enableOnlyAdminCanAddAppsAfterClose" = "enableOnlyAdminCanAddAppsAfterClose",
+  "enableOnlyAdminCanEditListingDates" = "enableOnlyAdminCanEditListingDates",
+  "enableOnlyAdminCanManageUsers" = "enableOnlyAdminCanManageUsers",
   "enableParkingFee" = "enableParkingFee",
   "enableParkingType" = "enableParkingType",
   "enablePartnerDemographics" = "enablePartnerDemographics",
@@ -11674,6 +11779,12 @@ export enum ApplicationsFilterEnum {
   "open" = "open",
 }
 
+export enum BackgroundJobStatusEnum {
+  "processing" = "processing",
+  "completed" = "completed",
+  "failed" = "failed",
+}
+
 export enum UserOrderByKeys {
   "isApproved" = "isApproved",
 }
@@ -11686,12 +11797,6 @@ export enum ModificationEnum {
 export enum MfaType {
   "sms" = "sms",
   "email" = "email",
-}
-
-export enum BackgroundJobStatusEnum {
-  "processing" = "processing",
-  "completed" = "completed",
-  "failed" = "failed",
 }
 export enum EnumPropertyFilterParamsComparison {
   "=" = "=",

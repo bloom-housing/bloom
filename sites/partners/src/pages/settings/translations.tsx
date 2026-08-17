@@ -10,10 +10,11 @@ import {
   FeatureFlagEnum,
   LanguagesEnum,
   SiteEnum,
+  TranslationUpdate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { flattenTranslations } from "@bloom-housing/shared-helpers/src/utilities/flattenTranslations"
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
-import { ColDef, ColGroupDef } from "ag-grid-community"
+import { ColDef, ColGroupDef, GridApi } from "ag-grid-community"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import {
@@ -22,7 +23,8 @@ import {
   SettingsIndexEnum,
 } from "../../components/settings/SettingsViewHelpers"
 import { useRawTranslations, useUnsavedChangesWarning } from "../../lib/hooks"
-import { translations } from "../../lib/translations"
+import { overrideTranslations, translations } from "../../lib/translations"
+import { publicOverrideTranslations } from "../../lib/publicTranslations"
 import styles from "./translations.module.scss"
 import {
   applyConflictChoices,
@@ -37,18 +39,25 @@ import {
   effectiveValue,
   keysThatHideSections,
   PendingEdits,
+  rejectedValueKeys,
   TranslationGridRow,
+  TranslationIssue,
   validateEdits,
   withPendingEdits,
 } from "../../lib/translationEditor"
 import { TranslationConflictDialog } from "../../components/settings/TranslationConflictDialog"
-import { TranslationHideSectionDialog } from "../../components/settings/TranslationHideSectionDialog"
+import { TranslationWarningDialog } from "../../components/settings/TranslationWarningDialog"
 
 // Above this the inline editor is too cramped to work in, so the textarea opens instead.
 const INLINE_EDITOR_MAX_CHARACTERS = 60
+// Matches the cap the API enforces on a translation value.
+const MAX_VALUE_LENGTH = 5000
 // Matches AgTable, so the two filter fields in Partners behave the same way.
 const MINIMUM_FILTER_CHARACTERS = 2
 const FILTER_DEBOUNCE_MS = 500
+// AgTable re-runs its debounced filter effect, which resets to page one, whenever this changes.
+const ignoreAgTableSearch = () => undefined
+const ignoreAgTableSelection = () => undefined
 
 const SettingsTranslations = () => {
   const router = useRouter()
@@ -75,26 +84,45 @@ const SettingsTranslations = () => {
     enableTranslations,
   }
 
-  if (!enableTranslations || !profile?.userRoles?.isAdmin) {
-    void router.push("/unauthorized")
-  }
+  const authorized = enableTranslations && !!profile?.userRoles?.isAdmin
 
-  const jurisdictions = useMemo(() => profile?.jurisdictions ?? [], [profile?.jurisdictions])
+  const jurisdictions = useMemo(
+    () =>
+      (profile?.jurisdictions ?? []).filter((jurisdiction) =>
+        jurisdiction.featureFlags?.some(
+          (flag) => flag.name === FeatureFlagEnum.enableDbDrivenContent && flag.active
+        )
+      ),
+    [profile?.jurisdictions]
+  )
   const [jurisdictionId, setJurisdictionId] = useState("")
   const [language, setLanguage] = useState<LanguagesEnum>(LanguagesEnum.en)
+  const [site, setSite] = useState<SiteEnum>(SiteEnum.public)
+
+  // The Partners rows are global
+  const isGlobal = site === SiteEnum.partners
 
   const selectedJurisdiction = jurisdictions.find(
     (jurisdiction) => jurisdiction.id === (jurisdictionId || jurisdictions[0]?.id)
   )
   const activeJurisdictionId = selectedJurisdiction?.id ?? ""
 
+  const partnersLanguages = useMemo(() => {
+    const supported = (router.locales ?? []).filter((locale): locale is LanguagesEnum =>
+      Object.values(LanguagesEnum).includes(locale as LanguagesEnum)
+    )
+    return supported.length ? supported : [LanguagesEnum.en]
+  }, [router.locales])
+
   const languageOptions = useMemo(
     () =>
-      (selectedJurisdiction?.languages ?? [LanguagesEnum.en]).map((value) => ({
-        value,
-        label: t(`languages.${value}`),
-      })),
-    [selectedJurisdiction?.languages]
+      (isGlobal ? partnersLanguages : selectedJurisdiction?.languages ?? [LanguagesEnum.en]).map(
+        (value) => ({
+          value,
+          label: t(`languages.${value}`),
+        })
+      ),
+    [isGlobal, partnersLanguages, selectedJurisdiction?.languages]
   )
 
   // Languages are per jurisdiction, so switching to one that does not offer the selected language
@@ -103,35 +131,95 @@ const SettingsTranslations = () => {
     ? language
     : languageOptions[0]?.value ?? LanguagesEnum.en
 
+  const scope = useMemo(
+    () =>
+      isGlobal
+        ? {
+            rows: { type: "global" as const },
+            baseOverrides: overrideTranslations,
+            save: (body: TranslationUpdate) =>
+              translationsService.updateRawPartnersTranslations({ language: activeLanguage, body }),
+            revert: (key: string) =>
+              translationsService.deleteRawPartnersTranslation({ language: activeLanguage, key }),
+          }
+        : {
+            rows: {
+              type: "jurisdiction" as const,
+              jurisdictionId: activeJurisdictionId,
+              site,
+            },
+            baseOverrides: publicOverrideTranslations,
+            save: (body: TranslationUpdate) =>
+              translationsService.updateRawTranslations({
+                jurisdictionId: activeJurisdictionId,
+                site,
+                language: activeLanguage,
+                body,
+              }),
+            revert: (key: string) =>
+              translationsService.deleteRawTranslation({
+                jurisdictionId: activeJurisdictionId,
+                site,
+                language: activeLanguage,
+                key,
+              }),
+          },
+    [activeJurisdictionId, activeLanguage, isGlobal, site, translationsService]
+  )
+
+  const scopeReady = authorized && (isGlobal || !!activeJurisdictionId)
+
   const {
     data: overrides,
     loading,
     error,
     cacheKey,
-  } = useRawTranslations({
-    jurisdictionId: activeJurisdictionId,
-    site: SiteEnum.public,
-    language: activeLanguage,
-  })
+  } = useRawTranslations(scopeReady ? scope.rows : null, activeLanguage)
 
-  // Before these load every row looks unoverridden, so an edit would send a create and conflict.
   const overridesLoaded = overrides !== undefined
 
-  // What the admin has typed but not saved, with the version each edit locks against.
   const [edits, setEdits] = useState<PendingEdits>({})
-  // Keys a save could not write because someone changed them first.
   const [conflictKeys, setConflictKeys] = useState<string[]>([])
-  // Keys awaiting confirmation because saving or reverting them would remove a section.
-  const [hidingKeys, setHidingKeys] = useState<string[]>([])
-  // Set alongside hidingKeys when the confirmation is for a revert rather than a save.
-  const [hidingRevertKey, setHidingRevertKey] = useState<string | null>(null)
-  // What is typed in the filter field, which lags the value the rows are filtered by.
+  const [warnings, setWarnings] = useState<{
+    hidingKeys: string[]
+    tokenIssues: TranslationIssue[]
+  }>({ hidingKeys: [], tokenIssues: [] })
+  const [warningRevertKey, setWarningRevertKey] = useState<string | null>(null)
   const [filterInput, setFilterInput] = useState("")
+  const gridApi = useRef<GridApi | null>(null)
+  const captureGridApi = useCallback((api: React.SetStateAction<GridApi | null>) => {
+    gridApi.current = typeof api === "function" ? api(gridApi.current) : api
+  }, [])
+
+  const updateEdits = useCallback((next: React.SetStateAction<PendingEdits>) => {
+    gridApi.current?.stopEditing()
+    setEdits(next)
+  }, [])
+
+  // Every path that changes which rows are on screen goes through here. ag-grid throws if the
+  // rows change under an open cell editor, so the edit is committed first.
+  const { setCurrentPage: setPage, setItemsPerPage } = tableOptions.pagination
+  const goToPage = useCallback(
+    (value: React.SetStateAction<number>) => {
+      gridApi.current?.stopEditing()
+      setPage(value)
+    },
+    [setPage]
+  )
+
+  const changeScope = useCallback(
+    (apply: () => void) => {
+      gridApi.current?.stopEditing(true)
+      apply()
+      setPage(1)
+    },
+    [setPage]
+  )
 
   const applyFilter = useRef(
     debounce((value: string) => {
       tableOptions.filter.setFilterValue(value)
-      tableOptions.pagination.setCurrentPage(1)
+      goToPage(1)
     }, FILTER_DEBOUNCE_MS)
   )
   const editCount = Object.keys(edits).length
@@ -140,18 +228,22 @@ const SettingsTranslations = () => {
   // Edits live only in component state until saved, so leaving the page discards them.
   useUnsavedChangesWarning(hasUnsavedChanges, t("translations.unsavedChangesWarning"))
 
-  const rows = useMemo(
-    () =>
-      buildTranslationRows({
-        englishBase: flattenTranslations(translations.general),
-        languageBase:
-          activeLanguage === LanguagesEnum.en
-            ? undefined
-            : flattenTranslations(translations[activeLanguage]),
-        overrides: overrides ?? [],
-      }),
-    [activeLanguage, overrides]
-  )
+  const rows = useMemo(() => {
+    const siteOverrides = scope.baseOverrides
+    const englishLayer = flattenTranslations(siteOverrides.en)
+    const languageLayer = siteOverrides[activeLanguage]
+      ? { ...englishLayer, ...flattenTranslations(siteOverrides[activeLanguage]) }
+      : englishLayer
+
+    return buildTranslationRows({
+      englishBase: { ...flattenTranslations(translations.general), ...englishLayer },
+      languageBase:
+        activeLanguage === LanguagesEnum.en
+          ? undefined
+          : { ...flattenTranslations(translations[activeLanguage]), ...languageLayer },
+      overrides: overrides ?? [],
+    })
+  }, [activeLanguage, overrides, scope])
 
   // Every row is already in the browser, so search and pagination are local rather than a refetch.
   const search = (tableOptions.filter.filterValue ?? "").trim().toLowerCase()
@@ -171,21 +263,15 @@ const SettingsTranslations = () => {
     [filteredRows, currentPage, perPage]
   )
 
-  // Only the page on screen is merged, so an edit re-maps a handful of rows rather than all of them.
   const gridRows = useMemo(() => withPendingEdits(pagedRows, edits), [pagedRows, edits])
 
   const runRevert = useCallback(
     (key: string) =>
       revertOverride(() =>
-        translationsService
-          .deleteRawTranslation({
-            jurisdictionId: activeJurisdictionId,
-            site: SiteEnum.public,
-            language: activeLanguage,
-            key,
-          })
+        scope
+          .revert(key)
           .then(() => {
-            setEdits((previous) => {
+            updateEdits((previous) => {
               const next = { ...previous }
               delete next[key]
               return next
@@ -200,15 +286,7 @@ const SettingsTranslations = () => {
             void mutate(cacheKey)
           })
       ),
-    [
-      activeJurisdictionId,
-      activeLanguage,
-      addToast,
-      cacheKey,
-      mutate,
-      revertOverride,
-      translationsService,
-    ]
+    [addToast, cacheKey, mutate, revertOverride, scope, updateEdits]
   )
 
   const columnDefs: (ColDef | ColGroupDef)[] = useMemo(
@@ -230,9 +308,7 @@ const SettingsTranslations = () => {
         headerName: t("translations.currentValue"),
         minWidth: 220,
         flex: 2,
-        // Locked during a save, since an edit made mid-request is written against a stale version.
         editable: overridesLoaded && !isSaving,
-        // The default double-click gives no hint the cell is editable.
         singleClickEdit: true,
         cellClass: ({ data }: { data: TranslationGridRow }) =>
           data.editedValue !== null
@@ -242,8 +318,8 @@ const SettingsTranslations = () => {
           const text = value ?? ""
 
           return text.length > INLINE_EDITOR_MAX_CHARACTERS || text.includes("\n")
-            ? { component: "agLargeTextCellEditor", params: { maxLength: 5000 } }
-            : { component: "agTextCellEditor" }
+            ? { component: "agLargeTextCellEditor", params: { maxLength: MAX_VALUE_LENGTH } }
+            : { component: "agTextCellEditor", params: { maxLength: MAX_VALUE_LENGTH } }
         },
         valueGetter: ({ data }: { data: TranslationGridRow }) =>
           data.editedValue ?? effectiveValue(data) ?? "",
@@ -272,17 +348,14 @@ const SettingsTranslations = () => {
             <Button
               variant="text"
               size="sm"
-              // A revert racing a save on the same key leaves whichever refetch lands last.
               disabled={isReverting || isSaving}
               onClick={() => {
-                // A key with no base renders only from its override, so removing it takes the
-                // section off the site and is confirmed first.
                 if (data.hasBase) {
                   void runRevert(data.key)
                   return
                 }
-                setHidingKeys([data.key])
-                setHidingRevertKey(data.key)
+                setWarnings({ hidingKeys: [data.key], tokenIssues: [] })
+                setWarningRevertKey(data.key)
               }}
               id={`revert-${data.key}`}
             >
@@ -297,31 +370,31 @@ const SettingsTranslations = () => {
   const saveEdits = (pending: PendingEdits) => {
     const sentKeys = Object.keys(pending)
 
+    const body = { edits: buildEdits(pending) }
+
     return saveOverrides(() =>
-      translationsService
-        .updateRawTranslations({
-          jurisdictionId: activeJurisdictionId,
-          site: SiteEnum.public,
-          language: activeLanguage,
-          body: { edits: buildEdits(pending) },
-        })
+      scope
+        .save(body)
         .then(() => {
-          // Only the keys that were sent are cleared. A cell that committed while the request was
-          // in flight is not among them, so that edit survives instead of being discarded.
-          setEdits((previous) => editsWithoutKeys(previous, sentKeys))
+          updateEdits((previous) => editsWithoutKeys(previous, sentKeys))
           setConflictKeys([])
           addToast(t("translations.alertSaved"), { variant: "success" })
         })
         .catch((error) => {
           const conflicts = conflictKeysFrom(error)
           if (conflicts.length) {
-            // The rest of the batch was written, so only the named keys stay pending. The
-            // refetch below brings in the values they now hold, for the resolution dialog.
-            setEdits((previous) => ({
+            updateEdits((previous) => ({
               ...editsWithoutKeys(previous, sentKeys),
               ...editsForKeys(pending, conflicts),
             }))
             setConflictKeys(conflicts)
+            return
+          }
+          const rejected = rejectedValueKeys(error, sentKeys)
+          if (rejected.length) {
+            addToast(t("translations.alertValueRejected", { keys: rejected.join(", ") }), {
+              variant: "alert",
+            })
             return
           }
           addToast(t("errors.alert.badRequest"), { variant: "alert" })
@@ -334,20 +407,11 @@ const SettingsTranslations = () => {
   }
 
   const handleSave = () => {
-    const issues = validateEdits(edits, rows)
-    if (issues.length) {
-      addToast(
-        t("translations.alertTokenError", {
-          keys: issues.map((issue) => issue.key).join(", "),
-        }),
-        { variant: "alert" }
-      )
-      return
-    }
+    const tokenIssues = validateEdits(edits, rows)
+    const hidingKeys = keysThatHideSections(edits, rows)
 
-    const hiding = keysThatHideSections(edits, rows)
-    if (hiding.length) {
-      setHidingKeys(hiding)
+    if (tokenIssues.length || hidingKeys.length) {
+      setWarnings({ hidingKeys, tokenIssues })
       return
     }
 
@@ -363,10 +427,15 @@ const SettingsTranslations = () => {
     const kept = applyConflictChoices(edits, choices, rows)
 
     setConflictKeys([])
-    setEdits(kept)
+    updateEdits(kept)
     if (Object.keys(kept).length) {
       void saveEdits(kept)
     }
+  }
+
+  if (!authorized) {
+    void router.push("/unauthorized")
+    return null
   }
 
   return (
@@ -389,34 +458,50 @@ const SettingsTranslations = () => {
         <div className={styles["toolbar"]}>
           <div className={styles["scope-controls"]}>
             <Select
-              id="translationsJurisdiction"
-              name="translationsJurisdiction"
-              label={t("t.jurisdiction")}
-              defaultValue={activeJurisdictionId}
-              disabled={jurisdictions.length < 2 || hasUnsavedChanges}
-              options={jurisdictions.map((jurisdiction) => ({
-                value: jurisdiction.id,
-                label: jurisdiction.name,
-              }))}
+              id="translationsSite"
+              name="translationsSite"
+              label={t("translations.site")}
+              defaultValue={site}
+              disabled={hasUnsavedChanges}
+              options={[
+                { value: SiteEnum.public, label: t("translations.sitePublic") },
+                { value: SiteEnum.partners, label: t("translations.sitePartners") },
+              ]}
               inputProps={{
                 onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
-                  setJurisdictionId(event.target.value)
-                  tableOptions.pagination.setCurrentPage(1)
+                  changeScope(() => setSite(event.target.value as SiteEnum))
                 },
               }}
             />
+            {!isGlobal && (
+              <Select
+                id="translationsJurisdiction"
+                name="translationsJurisdiction"
+                label={t("t.jurisdiction")}
+                defaultValue={activeJurisdictionId}
+                disabled={jurisdictions.length < 2 || hasUnsavedChanges}
+                options={jurisdictions.map((jurisdiction) => ({
+                  value: jurisdiction.id,
+                  label: jurisdiction.name,
+                }))}
+                inputProps={{
+                  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
+                    changeScope(() => setJurisdictionId(event.target.value))
+                  },
+                }}
+              />
+            )}
             <Select
               id="translationsLanguage"
               name="translationsLanguage"
               label={t("t.language")}
-              key={activeJurisdictionId}
+              key={`${site}-${activeJurisdictionId}`}
               defaultValue={activeLanguage}
               disabled={hasUnsavedChanges}
               options={languageOptions}
               inputProps={{
                 onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
-                  setLanguage(event.target.value as LanguagesEnum)
-                  tableOptions.pagination.setCurrentPage(1)
+                  changeScope(() => setLanguage(event.target.value as LanguagesEnum))
                 },
               }}
             />
@@ -435,7 +520,7 @@ const SettingsTranslations = () => {
               variant="secondary"
               size="sm"
               disabled={!hasUnsavedChanges || isSaving}
-              onClick={() => setEdits({})}
+              onClick={() => updateEdits({})}
               id="discardTranslations"
             >
               {t("t.cancel")}
@@ -458,6 +543,8 @@ const SettingsTranslations = () => {
             placeholder={t("t.filter")}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               const value = event.target.value
+              // Commits an open cell editor: ag-grid throws if the rows change under one.
+              gridApi.current?.stopEditing()
               setFilterInput(value)
               applyFilter.current(value.length > MINIMUM_FILTER_CHARACTERS ? value : "")
             }}
@@ -474,11 +561,11 @@ const SettingsTranslations = () => {
           pagination={{
             perPage,
             setPerPage: (value: React.SetStateAction<number>) => {
-              tableOptions.pagination.setItemsPerPage(value)
-              tableOptions.pagination.setCurrentPage(1)
+              setItemsPerPage(value)
+              goToPage(1)
             },
             currentPage,
-            setCurrentPage: tableOptions.pagination.setCurrentPage,
+            setCurrentPage: goToPage,
           }}
           data={{
             items: gridRows,
@@ -491,8 +578,12 @@ const SettingsTranslations = () => {
             totalItemsLabel: t("translations.total"),
           }}
           search={{
-            setSearch: () => undefined,
+            setSearch: ignoreAgTableSearch,
             showSearch: false,
+          }}
+          selectConfig={{
+            setGridApi: captureGridApi,
+            updateSelectedValues: ignoreAgTableSelection,
           }}
         />
       </TabView>
@@ -504,25 +595,24 @@ const SettingsTranslations = () => {
           onResolve={handleResolveConflicts}
         />
       )}
-      {hidingKeys.length > 0 && (
-        <TranslationHideSectionDialog
-          keys={hidingKeys}
-          isLoading={isSaving || isReverting}
-          onClose={() => {
-            setHidingKeys([])
-            setHidingRevertKey(null)
-          }}
-          onConfirm={() => {
-            setHidingKeys([])
-            if (hidingRevertKey) {
-              setHidingRevertKey(null)
-              void runRevert(hidingRevertKey)
-              return
-            }
-            void saveEdits(edits)
-          }}
-        />
-      )}
+      <TranslationWarningDialog
+        hidingKeys={warnings.hidingKeys}
+        tokenIssues={warnings.tokenIssues}
+        isLoading={isSaving || isReverting}
+        onClose={() => {
+          setWarnings({ hidingKeys: [], tokenIssues: [] })
+          setWarningRevertKey(null)
+        }}
+        onConfirm={() => {
+          setWarnings({ hidingKeys: [], tokenIssues: [] })
+          if (warningRevertKey) {
+            setWarningRevertKey(null)
+            void runRevert(warningRevertKey)
+            return
+          }
+          void saveEdits(edits)
+        }}
+      />
     </Layout>
   )
 }

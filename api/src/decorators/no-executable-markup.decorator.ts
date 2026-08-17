@@ -17,6 +17,8 @@ const BLOCKED_TAGS = [
   'meta',
   'base',
   'form',
+  'img',
+  'svg',
 ];
 
 const BLOCKED_TAG_PATTERN = new RegExp(

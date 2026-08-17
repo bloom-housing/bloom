@@ -9,7 +9,7 @@ describe("usePartnersOverrides", () => {
     global.fetch = fetchMock as unknown as typeof fetch
     fetchMock.mockResolvedValue({
       ok: true,
-      json: async () => ({ "nav.title": "From the database" }),
+      json: () => Promise.resolve({ "nav.title": "From the database" }),
     })
   })
 
@@ -51,7 +51,7 @@ describe("usePartnersOverrides", () => {
   })
 
   it("settles with no overrides when the request is not ok", async () => {
-    fetchMock.mockResolvedValue({ ok: false, json: async () => ({}) })
+    fetchMock.mockResolvedValue({ ok: false, json: () => Promise.resolve({}) })
     const { result } = renderHook(() => usePartnersOverrides("en"))
 
     await waitFor(() => expect(result.current.settled).toBe(true))

@@ -142,6 +142,24 @@ export const conflictKeysFrom = (error: unknown): string[] => {
   return response.data.conflicts.filter((key): key is string => typeof key === "string")
 }
 
+export const rejectedValueKeys = (error: unknown, sentKeys: string[]): string[] => {
+  const response = (error as { response?: { status?: number; data?: { message?: unknown } } })
+    ?.response
+
+  if (response?.status !== 400 || !Array.isArray(response.data?.message)) {
+    return []
+  }
+
+  const rejected = response.data.message
+    .filter((entry): entry is string => typeof entry === "string")
+    .map((entry) => /^edits\.(\d+)\.value\b/.exec(entry)?.[1])
+    .filter((position): position is string => position !== undefined)
+    .map((position) => sentKeys[Number(position)])
+    .filter((key): key is string => key !== undefined)
+
+  return [...new Set(rejected)]
+}
+
 export type TranslationConflict = {
   key: string
   mine: string

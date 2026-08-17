@@ -245,7 +245,7 @@ export const listingFactory = async (
     ...additionalEligibilityRules(optionalParams?.includeEligibilityRules),
     ...buildingFeatures(optionalParams?.includeBuildingFeatures),
     ...(optionalParams?.enableListingFeaturesAndUtilities
-      ? featuresAndUtilites(
+      ? featuresAndUtilities(
           optionalParams?.optionalFeatures,
           optionalParams?.optionalUtilities,
         )
@@ -303,7 +303,7 @@ export const listingsRequiredDocuments = (
   },
 });
 
-export const featuresAndUtilites = (
+export const featuresAndUtilities = (
   optionalFeatures?: Prisma.ListingFeaturesCreateInput,
   optionalUtilities?: Prisma.ListingUtilitiesCreateInput,
 ): {

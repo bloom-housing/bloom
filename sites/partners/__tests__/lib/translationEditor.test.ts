@@ -11,6 +11,7 @@ import {
   effectiveValue,
   isChanged,
   keysThatHideSections,
+  rejectedValueKeys,
   validateEdits,
   validateValue,
   withPendingEdits,
@@ -366,6 +367,69 @@ describe("conflictKeysFrom", () => {
       "a.one",
       "b.two",
     ])
+  })
+})
+
+describe("rejectedValueKeys", () => {
+  const badRequest = (message: unknown, status = 400) => ({
+    response: { status, data: { message } },
+  })
+
+  const sent = ["a.first", "b.second", "c.third"]
+
+  it("names the key at the position the API rejected", () => {
+    expect(
+      rejectedValueKeys(
+        badRequest([
+          "edits.1.value must not contain any of these tags: script, style, iframe, object, embed, link, meta, base, form, img, svg",
+        ]),
+        sent
+      )
+    ).toEqual(["b.second"])
+  })
+
+  it("names every rejected key, whatever the rule", () => {
+    expect(
+      rejectedValueKeys(
+        badRequest([
+          "edits.0.value must not contain any of these tags: script",
+          "edits.2.value must be shorter than or equal to 5000 characters",
+        ]),
+        sent
+      )
+    ).toEqual(["a.first", "c.third"])
+  })
+
+  it("names a key once even when it breaks several rules", () => {
+    expect(
+      rejectedValueKeys(
+        badRequest([
+          "edits.1.value must not contain any of these tags: script",
+          "edits.1.value must be shorter than or equal to 5000 characters",
+        ]),
+        sent
+      )
+    ).toEqual(["b.second"])
+  })
+
+  it("ignores messages about anything other than a value", () => {
+    expect(rejectedValueKeys(badRequest(["edits.0.key should not be empty"]), sent)).toEqual([])
+  })
+
+  it("returns nothing for a status other than 400", () => {
+    expect(
+      rejectedValueKeys(badRequest(["edits.0.value must not contain any of these tags"], 409), sent)
+    ).toEqual([])
+  })
+
+  it("returns nothing when the error has no usable message list", () => {
+    expect(rejectedValueKeys(badRequest("a string"), sent)).toEqual([])
+    expect(rejectedValueKeys(new Error("network down"), sent)).toEqual([])
+    expect(rejectedValueKeys(undefined, sent)).toEqual([])
+  })
+
+  it("ignores a position the batch does not have", () => {
+    expect(rejectedValueKeys(badRequest(["edits.9.value must be shorter"]), sent)).toEqual([])
   })
 })
 

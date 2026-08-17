@@ -43,6 +43,8 @@ describe('NoExecutableMarkupConstraint', () => {
     ).toBe(false);
     expect(isAllowed('<base href="//evil">')).toBe(false);
     expect(isAllowed('<form action="//evil"></form>')).toBe(false);
+    expect(isAllowed('<img src=x onerror=alert(1)>')).toBe(false);
+    expect(isAllowed('<svg onload=alert(1)></svg>')).toBe(false);
   });
 
   it('rejects a tag name split by characters a browser ignores', () => {

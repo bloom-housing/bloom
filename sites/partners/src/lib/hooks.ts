@@ -867,23 +867,30 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
   }
 }
 
-export function useRawTranslations({
-  jurisdictionId,
-  site,
-  language,
-}: {
-  jurisdictionId: string
-  site: string
-  language: string
-}) {
+/** Which rows the editor is reading. The global scope has no jurisdiction to name. */
+export type TranslationScope =
+  | { type: "global" }
+  | { type: "jurisdiction"; jurisdictionId: string; site: string }
+
+/** Reads one editable translation scope. A null scope skips the request. */
+export function useRawTranslations(scope: TranslationScope | null, language: string) {
   const { translationsService } = useContext(AuthContext)
 
-  const fetcher = () => translationsService.getRawTranslations({ jurisdictionId, site, language })
+  const fetcher = () =>
+    scope &&
+    (scope.type === "global"
+      ? translationsService.getRawPartnersTranslations({ language })
+      : translationsService.getRawTranslations({
+          jurisdictionId: scope.jurisdictionId,
+          site: scope.site,
+          language,
+        }))
 
-  // Null key so SWR skips the request until a scope is chosen.
-  const cacheKey = jurisdictionId
-    ? `/api/adapter/translations/jurisdictions/${jurisdictionId}/raw/${site}/${language}`
-    : null
+  const cacheKey = !scope
+    ? null
+    : scope.type === "global"
+    ? `/api/adapter/translations/partners/raw/${language}`
+    : `/api/adapter/translations/jurisdictions/${scope.jurisdictionId}/raw/${scope.site}/${language}`
 
   // Writes call `mutate` on this key; refreshing on focus would move data under an in-progress edit.
   const { data, error } = useSWR(cacheKey, fetcher, {

@@ -25,6 +25,22 @@ describe('Translation Controller Tests', () => {
     `/translations/jurisdictions/${jurisdictionId}/raw/public/en`;
   const esScope = () =>
     `/translations/jurisdictions/${jurisdictionId}/raw/public/es`;
+  const globalScope = '/translations/partners/raw/en';
+  const GLOBAL_TEST_KEY_PREFIX = 'e2e.partners.';
+
+  // Global rows have no jurisdiction, so unlike the jurisdiction-scoped fixtures they are not
+  // isolated by a fresh jurisdiction each run. They would otherwise collide on the NULLS NOT
+  // DISTINCT unique index on a re-run, and stay in the database a dev server reads.
+  const clearGlobalRows = () =>
+    prisma.translationStrings.deleteMany({
+      where: {
+        jurisdictionId: null,
+        OR: [
+          { key: 'partners.brand' },
+          { key: { startsWith: GLOBAL_TEST_KEY_PREFIX } },
+        ],
+      },
+    });
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -42,12 +58,7 @@ describe('Translation Controller Tests', () => {
     jurisdictionId = jurisdiction.id;
     jurisdictionName = jurisdiction.name;
 
-    // Clear the global (null-jurisdiction) fixture a prior local run may have left. Its
-    // NULLS NOT DISTINCT unique index collides on re-run; the jurisdiction-scoped rows below use a
-    // fresh jurisdiction each run and do not.
-    await prisma.translationStrings.deleteMany({
-      where: { jurisdictionId: null, key: 'partners.brand' },
-    });
+    await clearGlobalRows();
 
     await prisma.translationStrings.createMany({
       data: [
@@ -123,6 +134,7 @@ describe('Translation Controller Tests', () => {
   });
 
   afterAll(async () => {
+    await clearGlobalRows();
     await prisma.$disconnect();
     await app.close();
   });
@@ -373,6 +385,262 @@ describe('Translation Controller Tests', () => {
         .set(passkey)
         .expect(200);
       expect(res.body.find((r) => r.key === 'temp.key')).toBeUndefined();
+    });
+  });
+
+  describe('PUT /translations/partners/raw/:language', () => {
+    it('upserts global keys and returns them via the raw get', async () => {
+      await request(app.getHttpServer())
+        .put(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          edits: [
+            {
+              key: `${GLOBAL_TEST_KEY_PREFIX}title`,
+              value: 'Partners Portal',
+            },
+          ],
+        })
+        .expect(200);
+
+      const res = await request(app.getHttpServer())
+        .get(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+
+      expect(res.body).toContainEqual(
+        expect.objectContaining({
+          key: `${GLOBAL_TEST_KEY_PREFIX}title`,
+          value: 'Partners Portal',
+          origin: 'human',
+          stale: false,
+        }),
+      );
+    });
+
+    it('reports only the stale-lock key as a 409 and writes the rest', async () => {
+      await request(app.getHttpServer())
+        .put(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          edits: [
+            { key: `${GLOBAL_TEST_KEY_PREFIX}locked`, value: 'Original' },
+          ],
+        })
+        .expect(200);
+
+      const res = await request(app.getHttpServer())
+        .put(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          edits: [
+            {
+              key: `${GLOBAL_TEST_KEY_PREFIX}locked`,
+              value: 'Changed',
+              lastUpdatedAt: new Date('2000-01-01').toISOString(),
+            },
+            { key: `${GLOBAL_TEST_KEY_PREFIX}fresh`, value: 'New Value' },
+          ],
+        })
+        .expect(409);
+
+      expect(res.body.conflicts).toEqual([`${GLOBAL_TEST_KEY_PREFIX}locked`]);
+
+      const getRes = await request(app.getHttpServer())
+        .get(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(
+        getRes.body.find((r) => r.key === `${GLOBAL_TEST_KEY_PREFIX}fresh`)
+          .value,
+      ).toEqual('New Value');
+      // the stale write did not land
+      expect(
+        getRes.body.find((r) => r.key === `${GLOBAL_TEST_KEY_PREFIX}locked`)
+          .value,
+      ).toEqual('Original');
+    });
+
+    it('applies to every jurisdiction through the public read', async () => {
+      await request(app.getHttpServer())
+        .put(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          edits: [
+            { key: `${GLOBAL_TEST_KEY_PREFIX}shared`, value: 'Every Juris' },
+          ],
+        })
+        .expect(200);
+
+      const res = await request(app.getHttpServer())
+        .get('/translations?language=en')
+        .set(passkey)
+        .expect(200);
+
+      expect(res.body[`${GLOBAL_TEST_KEY_PREFIX}shared`]).toEqual(
+        'Every Juris',
+      );
+    });
+
+    it('forbids a jurisdictional admin from writing the global scope', async () => {
+      await request(app.getHttpServer())
+        .get(globalScope)
+        .set('Cookie', jurisAdminCookies)
+        .set(passkey)
+        .expect(403);
+
+      await request(app.getHttpServer())
+        .put(globalScope)
+        .set('Cookie', jurisAdminCookies)
+        .set(passkey)
+        .send({
+          edits: [{ key: `${GLOBAL_TEST_KEY_PREFIX}blocked`, value: 'bad' }],
+        })
+        .expect(403);
+    });
+
+    it('refuses an anonymous write, passkey alone is not enough', async () => {
+      await request(app.getHttpServer())
+        .put(globalScope)
+        .set(passkey)
+        .send({
+          edits: [{ key: `${GLOBAL_TEST_KEY_PREFIX}anon`, value: 'bad' }],
+        })
+        .expect(403);
+    });
+
+    it('rejects a key longer than the column index allows', async () => {
+      await request(app.getHttpServer())
+        .put(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ edits: [{ key: 'k'.repeat(256), value: 'Too long a key' }] })
+        .expect(400);
+    });
+
+    it('rejects a language outside the supported set', async () => {
+      await request(app.getHttpServer())
+        .put('/translations/partners/raw/xx')
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          edits: [{ key: `${GLOBAL_TEST_KEY_PREFIX}badlang`, value: 'x' }],
+        })
+        .expect(400);
+    });
+
+    it('tracks staleness in the global scope across an english edit', async () => {
+      const key = `${GLOBAL_TEST_KEY_PREFIX}stale`;
+      const englishScope = globalScope;
+      const spanishScope = '/translations/partners/raw/es';
+
+      await request(app.getHttpServer())
+        .put(englishScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ edits: [{ key, value: 'Original English' }] })
+        .expect(200);
+
+      await request(app.getHttpServer())
+        .put(spanishScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ edits: [{ key, value: 'Original Spanish' }] })
+        .expect(200);
+
+      const beforeEdit = await request(app.getHttpServer())
+        .get(spanishScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(beforeEdit.body.find((r) => r.key === key).stale).toBe(false);
+
+      const english = await request(app.getHttpServer())
+        .get(englishScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      await request(app.getHttpServer())
+        .put(englishScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          edits: [
+            {
+              key,
+              value: 'Changed English',
+              lastUpdatedAt: english.body.find((r) => r.key === key).updatedAt,
+            },
+          ],
+        })
+        .expect(200);
+
+      const afterEdit = await request(app.getHttpServer())
+        .get(spanishScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(afterEdit.body.find((r) => r.key === key).stale).toBe(true);
+    });
+  });
+
+  describe('DELETE /translations/partners/raw/:language/:key', () => {
+    it('deletes a global key override', async () => {
+      await request(app.getHttpServer())
+        .put(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          edits: [{ key: `${GLOBAL_TEST_KEY_PREFIX}temp`, value: 'Temp' }],
+        })
+        .expect(200);
+      await request(app.getHttpServer())
+        .delete(`${globalScope}/${GLOBAL_TEST_KEY_PREFIX}temp`)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+
+      const res = await request(app.getHttpServer())
+        .get(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(
+        res.body.find((r) => r.key === `${GLOBAL_TEST_KEY_PREFIX}temp`),
+      ).toBeUndefined();
+    });
+
+    it('forbids a jurisdictional admin from deleting a global key', async () => {
+      await request(app.getHttpServer())
+        .put(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          edits: [{ key: `${GLOBAL_TEST_KEY_PREFIX}guarded`, value: 'Keep' }],
+        })
+        .expect(200);
+
+      await request(app.getHttpServer())
+        .delete(`${globalScope}/${GLOBAL_TEST_KEY_PREFIX}guarded`)
+        .set('Cookie', jurisAdminCookies)
+        .set(passkey)
+        .expect(403);
+
+      const res = await request(app.getHttpServer())
+        .get(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(
+        res.body.find((r) => r.key === `${GLOBAL_TEST_KEY_PREFIX}guarded`)
+          .value,
+      ).toEqual('Keep');
     });
   });
 });
