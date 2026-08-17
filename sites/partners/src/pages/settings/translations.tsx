@@ -10,6 +10,7 @@ import {
   FeatureFlagEnum,
   LanguagesEnum,
   SiteEnum,
+  TranslationUpdate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { flattenTranslations } from "@bloom-housing/shared-helpers/src/utilities/flattenTranslations"
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
@@ -130,16 +131,51 @@ const SettingsTranslations = () => {
     ? language
     : languageOptions[0]?.value ?? LanguagesEnum.en
 
+  const scope = useMemo(
+    () =>
+      isGlobal
+        ? {
+          rows: { type: "global" as const },
+          baseOverrides: overrideTranslations,
+          save: (body: TranslationUpdate) =>
+            translationsService.updateRawPartnersTranslations({ language: activeLanguage, body }),
+          revert: (key: string) =>
+            translationsService.deleteRawPartnersTranslation({ language: activeLanguage, key }),
+        }
+        : {
+          rows: {
+            type: "jurisdiction" as const,
+            jurisdictionId: activeJurisdictionId,
+            site,
+          },
+          baseOverrides: publicOverrideTranslations,
+          save: (body: TranslationUpdate) =>
+            translationsService.updateRawTranslations({
+              jurisdictionId: activeJurisdictionId,
+              site,
+              language: activeLanguage,
+              body,
+            }),
+          revert: (key: string) =>
+            translationsService.deleteRawTranslation({
+              jurisdictionId: activeJurisdictionId,
+              site,
+              language: activeLanguage,
+              key,
+            }),
+        },
+    [activeJurisdictionId, activeLanguage, isGlobal, site, translationsService]
+  )
+
+  // The global scope needs no jurisdiction; the public scope cannot read until one is chosen.
+  const scopeReady = authorized && (isGlobal || !!activeJurisdictionId)
+
   const {
     data: overrides,
     loading,
     error,
     cacheKey,
-  } = useRawTranslations({
-    jurisdictionId: !authorized ? "" : isGlobal ? null : activeJurisdictionId,
-    site,
-    language: activeLanguage,
-  })
+  } = useRawTranslations(scopeReady ? scope.rows : null, activeLanguage)
 
   // Before these load every row looks unoverridden, so an edit would send a create and conflict.
   const overridesLoaded = overrides !== undefined
@@ -200,7 +236,7 @@ const SettingsTranslations = () => {
   useUnsavedChangesWarning(hasUnsavedChanges, t("translations.unsavedChangesWarning"))
 
   const rows = useMemo(() => {
-    const siteOverrides = isGlobal ? overrideTranslations : publicOverrideTranslations
+    const siteOverrides = scope.baseOverrides
     const englishLayer = flattenTranslations(siteOverrides.en)
     const languageLayer = siteOverrides[activeLanguage]
       ? { ...englishLayer, ...flattenTranslations(siteOverrides[activeLanguage]) }
@@ -214,7 +250,7 @@ const SettingsTranslations = () => {
           : { ...flattenTranslations(translations[activeLanguage]), ...languageLayer },
       overrides: overrides ?? [],
     })
-  }, [activeLanguage, isGlobal, overrides])
+  }, [activeLanguage, overrides, scope])
 
   // Every row is already in the browser, so search and pagination are local rather than a refetch.
   const search = (tableOptions.filter.filterValue ?? "").trim().toLowerCase()
@@ -240,15 +276,8 @@ const SettingsTranslations = () => {
   const runRevert = useCallback(
     (key: string) =>
       revertOverride(() =>
-        (isGlobal
-          ? translationsService.deleteRawPartnersTranslation({ language: activeLanguage, key })
-          : translationsService.deleteRawTranslation({
-              jurisdictionId: activeJurisdictionId,
-              site,
-              language: activeLanguage,
-              key,
-            })
-        )
+        scope
+          .revert(key)
           .then(() => {
             updateEdits((previous) => {
               const next = { ...previous }
@@ -265,18 +294,7 @@ const SettingsTranslations = () => {
             void mutate(cacheKey)
           })
       ),
-    [
-      activeJurisdictionId,
-      activeLanguage,
-      addToast,
-      cacheKey,
-      isGlobal,
-      mutate,
-      revertOverride,
-      site,
-      translationsService,
-      updateEdits,
-    ]
+    [addToast, cacheKey, mutate, revertOverride, scope, updateEdits]
   )
 
   const columnDefs: (ColDef | ColGroupDef)[] = useMemo(
@@ -368,15 +386,8 @@ const SettingsTranslations = () => {
     const body = { edits: buildEdits(pending) }
 
     return saveOverrides(() =>
-      (isGlobal
-        ? translationsService.updateRawPartnersTranslations({ language: activeLanguage, body })
-        : translationsService.updateRawTranslations({
-            jurisdictionId: activeJurisdictionId,
-            site,
-            language: activeLanguage,
-            body,
-          })
-      )
+      scope
+        .save(body)
         .then(() => {
           // Only the keys that were sent are cleared. A cell that committed while the request was
           // in flight is not among them, so that edit survives instead of being discarded.

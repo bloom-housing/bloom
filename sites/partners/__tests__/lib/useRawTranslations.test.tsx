@@ -3,7 +3,7 @@ import { renderHook, waitFor } from "@testing-library/react"
 import { SWRConfig } from "swr"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { LanguagesEnum, SiteEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { useRawTranslations } from "../../src/lib/hooks"
+import { TranslationScope, useRawTranslations } from "../../src/lib/hooks"
 
 const getRawTranslations = jest.fn()
 const getRawPartnersTranslations = jest.fn()
@@ -19,16 +19,13 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
   </SWRConfig>
 )
 
-const renderRawTranslations = (jurisdictionId: string | null, site = SiteEnum.public) =>
-  renderHook(
-    () =>
-      useRawTranslations({
-        jurisdictionId,
-        site,
-        language: LanguagesEnum.en,
-      }),
-    { wrapper }
-  )
+const jurisdictionScope = (jurisdictionId: string, site = SiteEnum.public) =>
+  ({ type: "jurisdiction", jurisdictionId, site } as const)
+
+const globalScope = { type: "global" } as const
+
+const renderRawTranslations = (scope: TranslationScope | null) =>
+  renderHook(() => useRawTranslations(scope, LanguagesEnum.en), { wrapper })
 
 describe("useRawTranslations", () => {
   beforeEach(() => {
@@ -37,17 +34,17 @@ describe("useRawTranslations", () => {
     getRawPartnersTranslations.mockResolvedValue([])
   })
 
-  it("issues no request until a jurisdiction is chosen", () => {
-    const { result } = renderRawTranslations("")
+  it("issues no request until a scope is chosen", () => {
+    const { result } = renderRawTranslations(null)
 
     expect(result.current.cacheKey).toBeNull()
     expect(getRawTranslations).not.toHaveBeenCalled()
-    // Without the null key the first render would fetch under an empty jurisdiction.
+    expect(getRawPartnersTranslations).not.toHaveBeenCalled()
     expect(result.current.loading).toBe(false)
   })
 
   it("keys the cache by jurisdiction, site, and language, so each scope is fetched separately", async () => {
-    const { result } = renderRawTranslations("jurisdiction1")
+    const { result } = renderRawTranslations(jurisdictionScope("jurisdiction1"))
 
     expect(result.current.cacheKey).toEqual(
       "/api/adapter/translations/jurisdictions/jurisdiction1/raw/public/en"
@@ -56,7 +53,7 @@ describe("useRawTranslations", () => {
   })
 
   it("reports loading until the overrides arrive, which is what keeps the grid uneditable", async () => {
-    const { result } = renderRawTranslations("jurisdiction1")
+    const { result } = renderRawTranslations(jurisdictionScope("jurisdiction1"))
 
     expect(result.current.loading).toBe(true)
     expect(result.current.data).toBeUndefined()
@@ -67,7 +64,7 @@ describe("useRawTranslations", () => {
 
   it("stops reporting loading when the request fails", async () => {
     getRawTranslations.mockRejectedValue(new Error("boom"))
-    const { result } = renderRawTranslations("jurisdiction1")
+    const { result } = renderRawTranslations(jurisdictionScope("jurisdiction1"))
 
     await waitFor(() => expect(result.current.error).toBeDefined())
     expect(result.current.loading).toBe(false)
@@ -76,17 +73,17 @@ describe("useRawTranslations", () => {
 
   it("returns the overrides the service supplies", async () => {
     getRawTranslations.mockResolvedValue([{ key: "a.key", value: "Override" }])
-    const { result } = renderRawTranslations("jurisdiction1")
+    const { result } = renderRawTranslations(jurisdictionScope("jurisdiction1"))
 
     await waitFor(() => expect(result.current.data).toHaveLength(1))
     expect(result.current.data[0].key).toEqual("a.key")
   })
 
-  it("reads the global Partners scope when there is no jurisdiction", async () => {
+  it("reads the global Partners scope, which names no jurisdiction", async () => {
     getRawPartnersTranslations.mockResolvedValue([
       { key: "nav.siteTitlePartners", value: "Portal" },
     ])
-    const { result } = renderRawTranslations(null, SiteEnum.partners)
+    const { result } = renderRawTranslations(globalScope)
 
     expect(result.current.cacheKey).toEqual("/api/adapter/translations/partners/raw/en")
     await waitFor(() => expect(result.current.data).toHaveLength(1))
@@ -96,8 +93,8 @@ describe("useRawTranslations", () => {
   })
 
   it("keys the global scope apart from a jurisdiction's, so switching refetches", async () => {
-    const { result: global } = renderRawTranslations(null, SiteEnum.partners)
-    const { result: jurisdictional } = renderRawTranslations("jurisdiction1")
+    const { result: global } = renderRawTranslations(globalScope)
+    const { result: jurisdictional } = renderRawTranslations(jurisdictionScope("jurisdiction1"))
 
     expect(global.current.cacheKey).not.toEqual(jurisdictional.current.cacheKey)
     await waitFor(() => expect(getRawPartnersTranslations).toHaveBeenCalledTimes(1))
@@ -105,7 +102,7 @@ describe("useRawTranslations", () => {
   })
 
   it("does not refetch on window focus or reconnect, which would move data under an edit", async () => {
-    const { result } = renderRawTranslations("jurisdiction1")
+    const { result } = renderRawTranslations(jurisdictionScope("jurisdiction1"))
     await waitFor(() => expect(getRawTranslations).toHaveBeenCalledTimes(1))
 
     window.dispatchEvent(new Event("focus"))

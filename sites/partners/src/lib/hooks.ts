@@ -867,34 +867,30 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
   }
 }
 
-/**
- * Reads one editable translation scope.
- *
- * A null `jurisdictionId` is the global Partners scope, which has no jurisdiction.
- * An empty string is no scope chosen yet, which skips the request.
- */
-export function useRawTranslations({
-  jurisdictionId,
-  site,
-  language,
-}: {
-  jurisdictionId: string | null
-  site: string
-  language: string
-}) {
+/** Which rows the editor is reading. The global scope has no jurisdiction to name. */
+export type TranslationScope =
+  | { type: "global" }
+  | { type: "jurisdiction"; jurisdictionId: string; site: string }
+
+/** Reads one editable translation scope. A null scope skips the request. */
+export function useRawTranslations(scope: TranslationScope | null, language: string) {
   const { translationsService } = useContext(AuthContext)
-  const isGlobal = jurisdictionId === null
 
   const fetcher = () =>
-    isGlobal
+    scope &&
+    (scope.type === "global"
       ? translationsService.getRawPartnersTranslations({ language })
-      : translationsService.getRawTranslations({ jurisdictionId, site, language })
+      : translationsService.getRawTranslations({
+          jurisdictionId: scope.jurisdictionId,
+          site: scope.site,
+          language,
+        }))
 
-  const cacheKey = isGlobal
+  const cacheKey = !scope
+    ? null
+    : scope.type === "global"
     ? `/api/adapter/translations/partners/raw/${language}`
-    : jurisdictionId
-    ? `/api/adapter/translations/jurisdictions/${jurisdictionId}/raw/${site}/${language}`
-    : null
+    : `/api/adapter/translations/jurisdictions/${scope.jurisdictionId}/raw/${scope.site}/${language}`
 
   // Writes call `mutate` on this key; refreshing on focus would move data under an in-progress edit.
   const { data, error } = useSWR(cacheKey, fetcher, {
