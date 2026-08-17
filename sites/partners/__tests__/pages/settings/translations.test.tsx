@@ -31,6 +31,9 @@ const FIRST_BASE_KEY = "account.accountSettings"
 const FIRST_BASE_VALUE = "Account settings"
 // Sorts ahead of every bundled key, and has no base, so reverting it would remove its section.
 const FORK_ONLY_KEY = "aaa.forkOnly"
+// The Partners base adds keys the shared base does not have, and this one sorts ahead of them all.
+const FIRST_PARTNERS_BASE_KEY = "accessibility.categoryTitle.bathroomFeatures"
+const FIRST_PARTNERS_BASE_VALUE = "Bathroom features"
 
 // The first fetch goes straight to the API; once AuthProvider has configured axios the rest go
 // through the adapter path, so both are answered.
@@ -39,9 +42,19 @@ const RAW_PATHS = [
   "http://localhost/api/adapter/translations/jurisdictions/:jurisdictionId/raw/:site/:language",
 ]
 
+const GLOBAL_RAW_PATHS = [
+  "http://localhost:3100/translations/partners/raw/:language",
+  "http://localhost/api/adapter/translations/partners/raw/:language",
+]
+
 const respondWithOverrides = (overrides: ReturnType<typeof override>[]) =>
   server.use(
     ...RAW_PATHS.map((path) => rest.get(path, (_req, res, ctx) => res(ctx.json(overrides))))
+  )
+
+const respondWithGlobalOverrides = (overrides: ReturnType<typeof override>[]) =>
+  server.use(
+    ...GLOBAL_RAW_PATHS.map((path) => rest.get(path, (_req, res, ctx) => res(ctx.json(overrides))))
   )
 
 beforeAll(() => {
@@ -52,7 +65,9 @@ beforeEach(() => {
   pushMock = mockNextRouter().pushMock
   server.use(
     rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => res(ctx.json(user))),
-    ...RAW_PATHS.map((path) => rest.get(path, (_req, res, ctx) => res(ctx.json([]))))
+    ...[...RAW_PATHS, ...GLOBAL_RAW_PATHS].map((path) =>
+      rest.get(path, (_req, res, ctx) => res(ctx.json([])))
+    )
   )
 })
 
@@ -177,6 +192,108 @@ describe("<SettingsTranslations>", () => {
       const jurisdictionSelect = await screen.findByLabelText("Jurisdiction")
       expect(jurisdictionSelect).toBeEnabled()
       expect(screen.getByRole("option", { name: "Shelbyville" })).toBeInTheDocument()
+    })
+  })
+
+  describe("site scope", () => {
+    const selectPartnersScope = async () =>
+      userEvent.selectOptions(await screen.findByLabelText("Site"), "partners")
+
+    it("offers the public site and the global Partners scope", async () => {
+      renderPage()
+
+      await screen.findByLabelText("Site")
+      expect(screen.getByRole("option", { name: "Public site" })).toBeInTheDocument()
+      expect(
+        screen.getByRole("option", { name: "Partners portal (applies to every jurisdiction)" })
+      ).toBeInTheDocument()
+    })
+
+    it("drops the jurisdiction selector in the global scope, since the rows apply to all", async () => {
+      renderPage({
+        jurisdictions: [
+          jurisdiction("jurisdiction1", "Bloomington"),
+          jurisdiction("jurisdiction2", "Shelbyville"),
+        ],
+      })
+
+      expect(await screen.findByLabelText("Jurisdiction")).toBeInTheDocument()
+      await selectPartnersScope()
+
+      expect(screen.queryByLabelText("Jurisdiction")).toBeNull()
+    })
+
+    it("reads the global endpoint rather than a jurisdiction's", async () => {
+      const requested: string[] = []
+      server.use(
+        ...[...RAW_PATHS, ...GLOBAL_RAW_PATHS].map((path) =>
+          rest.get(path, (req, res, ctx) => {
+            requested.push(req.url.pathname)
+            return res(ctx.json([]))
+          })
+        )
+      )
+      renderPage()
+
+      await screen.findByText(FIRST_BASE_KEY)
+      await selectPartnersScope()
+
+      await waitFor(() => expect(requested).toContain("/api/adapter/translations/partners/raw/en"))
+    })
+
+    it("compares against the Partners base rather than the shared one", async () => {
+      renderPage()
+
+      // The shared base starts here; the Partners base adds keys that sort ahead of it.
+      await screen.findByText(FIRST_BASE_KEY)
+      expect(screen.queryByText(FIRST_PARTNERS_BASE_KEY)).toBeNull()
+
+      await selectPartnersScope()
+
+      await waitFor(() =>
+        expect(screen.getAllByText(FIRST_PARTNERS_BASE_KEY).length).toBeGreaterThan(0)
+      )
+      expect(screen.getAllByText(FIRST_PARTNERS_BASE_VALUE).length).toBeGreaterThan(0)
+    })
+
+    it("reverts a global key through the Partners endpoint", async () => {
+      let deleted: Record<string, string> = null
+      respondWithGlobalOverrides([override(FIRST_PARTNERS_BASE_KEY, "Bathrooms")])
+      server.use(
+        rest.delete(
+          "http://localhost/api/adapter/translations/partners/raw/:language/:key",
+          (req, res, ctx) => {
+            deleted = req.params as Record<string, string>
+            return res(ctx.json({ success: true }))
+          }
+        )
+      )
+      renderPage()
+
+      await selectPartnersScope()
+      await userEvent.click(await screen.findByRole("button", { name: "Revert" }))
+
+      await waitFor(() => expect(deleted).toEqual({ language: "en", key: FIRST_PARTNERS_BASE_KEY }))
+    })
+
+    it("offers the locales the Partners site is configured for", async () => {
+      const { useRouter } = mockNextRouter()
+      useRouter.mockImplementation(() => ({
+        pathname: "/",
+        query: "",
+        push: pushMock,
+        back: jest.fn(),
+        locales: ["en", "es"],
+      }))
+      // The jurisdiction offers English only, so Spanish can only come from the site's locales.
+      renderPage()
+
+      await screen.findByLabelText("Language")
+      expect(screen.queryByRole("option", { name: "Español" })).toBeNull()
+
+      await selectPartnersScope()
+
+      expect(await screen.findByRole("option", { name: "Español" })).toBeInTheDocument()
     })
   })
 

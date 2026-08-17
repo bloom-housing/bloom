@@ -22,7 +22,7 @@ import {
   SettingsIndexEnum,
 } from "../../components/settings/SettingsViewHelpers"
 import { useRawTranslations, useUnsavedChangesWarning } from "../../lib/hooks"
-import { translations } from "../../lib/translations"
+import { overrideTranslations, translations } from "../../lib/translations"
 import styles from "./translations.module.scss"
 import {
   applyConflictChoices,
@@ -95,19 +95,32 @@ const SettingsTranslations = () => {
   )
   const [jurisdictionId, setJurisdictionId] = useState("")
   const [language, setLanguage] = useState<LanguagesEnum>(LanguagesEnum.en)
+  const [site, setSite] = useState<SiteEnum>(SiteEnum.public)
+
+  // The Partners rows are global
+  const isGlobal = site === SiteEnum.partners
 
   const selectedJurisdiction = jurisdictions.find(
     (jurisdiction) => jurisdiction.id === (jurisdictionId || jurisdictions[0]?.id)
   )
   const activeJurisdictionId = selectedJurisdiction?.id ?? ""
 
+  const partnersLanguages = useMemo(() => {
+    const supported = (router.locales ?? []).filter((locale): locale is LanguagesEnum =>
+      Object.values(LanguagesEnum).includes(locale as LanguagesEnum)
+    )
+    return supported.length ? supported : [LanguagesEnum.en]
+  }, [router.locales])
+
   const languageOptions = useMemo(
     () =>
-      (selectedJurisdiction?.languages ?? [LanguagesEnum.en]).map((value) => ({
-        value,
-        label: t(`languages.${value}`),
-      })),
-    [selectedJurisdiction?.languages]
+      (isGlobal ? partnersLanguages : selectedJurisdiction?.languages ?? [LanguagesEnum.en]).map(
+        (value) => ({
+          value,
+          label: t(`languages.${value}`),
+        })
+      ),
+    [isGlobal, partnersLanguages, selectedJurisdiction?.languages]
   )
 
   // Languages are per jurisdiction, so switching to one that does not offer the selected language
@@ -122,8 +135,8 @@ const SettingsTranslations = () => {
     error,
     cacheKey,
   } = useRawTranslations({
-    jurisdictionId: authorized ? activeJurisdictionId : "",
-    site: SiteEnum.public,
+    jurisdictionId: !authorized ? "" : isGlobal ? null : activeJurisdictionId,
+    site,
     language: activeLanguage,
   })
 
@@ -185,18 +198,18 @@ const SettingsTranslations = () => {
   // Edits live only in component state until saved, so leaving the page discards them.
   useUnsavedChangesWarning(hasUnsavedChanges, t("translations.unsavedChangesWarning"))
 
-  const rows = useMemo(
-    () =>
-      buildTranslationRows({
-        englishBase: flattenTranslations(translations.general),
-        languageBase:
-          activeLanguage === LanguagesEnum.en
-            ? undefined
-            : flattenTranslations(translations[activeLanguage]),
-        overrides: overrides ?? [],
-      }),
-    [activeLanguage, overrides]
-  )
+  const rows = useMemo(() => {
+    const partnersLayer = isGlobal ? flattenTranslations(overrideTranslations.en) : {}
+
+    return buildTranslationRows({
+      englishBase: { ...flattenTranslations(translations.general), ...partnersLayer },
+      languageBase:
+        activeLanguage === LanguagesEnum.en
+          ? undefined
+          : { ...flattenTranslations(translations[activeLanguage]), ...partnersLayer },
+      overrides: overrides ?? [],
+    })
+  }, [activeLanguage, isGlobal, overrides])
 
   // Every row is already in the browser, so search and pagination are local rather than a refetch.
   const search = (tableOptions.filter.filterValue ?? "").trim().toLowerCase()
@@ -222,13 +235,15 @@ const SettingsTranslations = () => {
   const runRevert = useCallback(
     (key: string) =>
       revertOverride(() =>
-        translationsService
-          .deleteRawTranslation({
-            jurisdictionId: activeJurisdictionId,
-            site: SiteEnum.public,
-            language: activeLanguage,
-            key,
-          })
+        (isGlobal
+          ? translationsService.deleteRawPartnersTranslation({ language: activeLanguage, key })
+          : translationsService.deleteRawTranslation({
+              jurisdictionId: activeJurisdictionId,
+              site,
+              language: activeLanguage,
+              key,
+            })
+        )
           .then(() => {
             updateEdits((previous) => {
               const next = { ...previous }
@@ -250,8 +265,10 @@ const SettingsTranslations = () => {
       activeLanguage,
       addToast,
       cacheKey,
+      isGlobal,
       mutate,
       revertOverride,
+      site,
       translationsService,
       updateEdits,
     ]
@@ -343,14 +360,18 @@ const SettingsTranslations = () => {
   const saveEdits = (pending: PendingEdits) => {
     const sentKeys = Object.keys(pending)
 
+    const body = { edits: buildEdits(pending) }
+
     return saveOverrides(() =>
-      translationsService
-        .updateRawTranslations({
-          jurisdictionId: activeJurisdictionId,
-          site: SiteEnum.public,
-          language: activeLanguage,
-          body: { edits: buildEdits(pending) },
-        })
+      (isGlobal
+        ? translationsService.updateRawPartnersTranslations({ language: activeLanguage, body })
+        : translationsService.updateRawTranslations({
+            jurisdictionId: activeJurisdictionId,
+            site,
+            language: activeLanguage,
+            body,
+          })
+      )
         .then(() => {
           // Only the keys that were sent are cleared. A cell that committed while the request was
           // in flight is not among them, so that edit survives instead of being discarded.
@@ -438,26 +459,44 @@ const SettingsTranslations = () => {
         <div className={styles["toolbar"]}>
           <div className={styles["scope-controls"]}>
             <Select
-              id="translationsJurisdiction"
-              name="translationsJurisdiction"
-              label={t("t.jurisdiction")}
-              defaultValue={activeJurisdictionId}
-              disabled={jurisdictions.length < 2 || hasUnsavedChanges}
-              options={jurisdictions.map((jurisdiction) => ({
-                value: jurisdiction.id,
-                label: jurisdiction.name,
-              }))}
+              id="translationsSite"
+              name="translationsSite"
+              label={t("translations.site")}
+              defaultValue={site}
+              disabled={hasUnsavedChanges}
+              options={[
+                { value: SiteEnum.public, label: t("translations.sitePublic") },
+                { value: SiteEnum.partners, label: t("translations.sitePartners") },
+              ]}
               inputProps={{
                 onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
-                  changeScope(() => setJurisdictionId(event.target.value))
+                  changeScope(() => setSite(event.target.value as SiteEnum))
                 },
               }}
             />
+            {!isGlobal && (
+              <Select
+                id="translationsJurisdiction"
+                name="translationsJurisdiction"
+                label={t("t.jurisdiction")}
+                defaultValue={activeJurisdictionId}
+                disabled={jurisdictions.length < 2 || hasUnsavedChanges}
+                options={jurisdictions.map((jurisdiction) => ({
+                  value: jurisdiction.id,
+                  label: jurisdiction.name,
+                }))}
+                inputProps={{
+                  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
+                    changeScope(() => setJurisdictionId(event.target.value))
+                  },
+                }}
+              />
+            )}
             <Select
               id="translationsLanguage"
               name="translationsLanguage"
               label={t("t.language")}
-              key={activeJurisdictionId}
+              key={`${site}-${activeJurisdictionId}`}
               defaultValue={activeLanguage}
               disabled={hasUnsavedChanges}
               options={languageOptions}

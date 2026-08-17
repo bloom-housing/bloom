@@ -6,24 +6,25 @@ import { LanguagesEnum, SiteEnum } from "@bloom-housing/shared-helpers/src/types
 import { useRawTranslations } from "../../src/lib/hooks"
 
 const getRawTranslations = jest.fn()
+const getRawPartnersTranslations = jest.fn()
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0 }}>
     <AuthContext.Provider
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      value={{ translationsService: { getRawTranslations } as any }}
+      value={{ translationsService: { getRawTranslations, getRawPartnersTranslations } as any }}
     >
       {children}
     </AuthContext.Provider>
   </SWRConfig>
 )
 
-const renderRawTranslations = (jurisdictionId: string) =>
+const renderRawTranslations = (jurisdictionId: string | null, site = SiteEnum.public) =>
   renderHook(
     () =>
       useRawTranslations({
         jurisdictionId,
-        site: SiteEnum.public,
+        site,
         language: LanguagesEnum.en,
       }),
     { wrapper }
@@ -33,6 +34,7 @@ describe("useRawTranslations", () => {
   beforeEach(() => {
     jest.clearAllMocks()
     getRawTranslations.mockResolvedValue([])
+    getRawPartnersTranslations.mockResolvedValue([])
   })
 
   it("issues no request until a jurisdiction is chosen", () => {
@@ -78,6 +80,28 @@ describe("useRawTranslations", () => {
 
     await waitFor(() => expect(result.current.data).toHaveLength(1))
     expect(result.current.data[0].key).toEqual("a.key")
+  })
+
+  it("reads the global Partners scope when there is no jurisdiction", async () => {
+    getRawPartnersTranslations.mockResolvedValue([
+      { key: "nav.siteTitlePartners", value: "Portal" },
+    ])
+    const { result } = renderRawTranslations(null, SiteEnum.partners)
+
+    expect(result.current.cacheKey).toEqual("/api/adapter/translations/partners/raw/en")
+    await waitFor(() => expect(result.current.data).toHaveLength(1))
+    expect(getRawPartnersTranslations).toHaveBeenCalledWith({ language: LanguagesEnum.en })
+    // The jurisdiction endpoint has no scope to name here, so it must not be the one called.
+    expect(getRawTranslations).not.toHaveBeenCalled()
+  })
+
+  it("keys the global scope apart from a jurisdiction's, so switching refetches", async () => {
+    const { result: global } = renderRawTranslations(null, SiteEnum.partners)
+    const { result: jurisdictional } = renderRawTranslations("jurisdiction1")
+
+    expect(global.current.cacheKey).not.toEqual(jurisdictional.current.cacheKey)
+    await waitFor(() => expect(getRawPartnersTranslations).toHaveBeenCalledTimes(1))
+    expect(getRawTranslations).toHaveBeenCalledTimes(1)
   })
 
   it("does not refetch on window focus or reconnect, which would move data under an edit", async () => {

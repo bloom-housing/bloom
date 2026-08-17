@@ -867,21 +867,32 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
   }
 }
 
+/**
+ * Reads one editable translation scope.
+ *
+ * A null `jurisdictionId` is the global Partners scope, which has no jurisdiction.
+ * An empty string is no scope chosen yet, which skips the request.
+ */
 export function useRawTranslations({
   jurisdictionId,
   site,
   language,
 }: {
-  jurisdictionId: string
+  jurisdictionId: string | null
   site: string
   language: string
 }) {
   const { translationsService } = useContext(AuthContext)
+  const isGlobal = jurisdictionId === null
 
-  const fetcher = () => translationsService.getRawTranslations({ jurisdictionId, site, language })
+  const fetcher = () =>
+    isGlobal
+      ? translationsService.getRawPartnersTranslations({ language })
+      : translationsService.getRawTranslations({ jurisdictionId, site, language })
 
-  // Null key so SWR skips the request until a scope is chosen.
-  const cacheKey = jurisdictionId
+  const cacheKey = isGlobal
+    ? `/api/adapter/translations/partners/raw/${language}`
+    : jurisdictionId
     ? `/api/adapter/translations/jurisdictions/${jurisdictionId}/raw/${site}/${language}`
     : null
 
