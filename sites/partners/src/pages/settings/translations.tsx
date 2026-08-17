@@ -135,39 +135,38 @@ const SettingsTranslations = () => {
     () =>
       isGlobal
         ? {
-          rows: { type: "global" as const },
-          baseOverrides: overrideTranslations,
-          save: (body: TranslationUpdate) =>
-            translationsService.updateRawPartnersTranslations({ language: activeLanguage, body }),
-          revert: (key: string) =>
-            translationsService.deleteRawPartnersTranslation({ language: activeLanguage, key }),
-        }
+            rows: { type: "global" as const },
+            baseOverrides: overrideTranslations,
+            save: (body: TranslationUpdate) =>
+              translationsService.updateRawPartnersTranslations({ language: activeLanguage, body }),
+            revert: (key: string) =>
+              translationsService.deleteRawPartnersTranslation({ language: activeLanguage, key }),
+          }
         : {
-          rows: {
-            type: "jurisdiction" as const,
-            jurisdictionId: activeJurisdictionId,
-            site,
+            rows: {
+              type: "jurisdiction" as const,
+              jurisdictionId: activeJurisdictionId,
+              site,
+            },
+            baseOverrides: publicOverrideTranslations,
+            save: (body: TranslationUpdate) =>
+              translationsService.updateRawTranslations({
+                jurisdictionId: activeJurisdictionId,
+                site,
+                language: activeLanguage,
+                body,
+              }),
+            revert: (key: string) =>
+              translationsService.deleteRawTranslation({
+                jurisdictionId: activeJurisdictionId,
+                site,
+                language: activeLanguage,
+                key,
+              }),
           },
-          baseOverrides: publicOverrideTranslations,
-          save: (body: TranslationUpdate) =>
-            translationsService.updateRawTranslations({
-              jurisdictionId: activeJurisdictionId,
-              site,
-              language: activeLanguage,
-              body,
-            }),
-          revert: (key: string) =>
-            translationsService.deleteRawTranslation({
-              jurisdictionId: activeJurisdictionId,
-              site,
-              language: activeLanguage,
-              key,
-            }),
-        },
     [activeJurisdictionId, activeLanguage, isGlobal, site, translationsService]
   )
 
-  // The global scope needs no jurisdiction; the public scope cannot read until one is chosen.
   const scopeReady = authorized && (isGlobal || !!activeJurisdictionId)
 
   const {
@@ -177,19 +176,15 @@ const SettingsTranslations = () => {
     cacheKey,
   } = useRawTranslations(scopeReady ? scope.rows : null, activeLanguage)
 
-  // Before these load every row looks unoverridden, so an edit would send a create and conflict.
   const overridesLoaded = overrides !== undefined
 
-  // What the admin has typed but not saved, with the version each edit locks against.
   const [edits, setEdits] = useState<PendingEdits>({})
-  // Keys a save could not write because someone changed them first.
   const [conflictKeys, setConflictKeys] = useState<string[]>([])
   const [warnings, setWarnings] = useState<{
     hidingKeys: string[]
     tokenIssues: TranslationIssue[]
   }>({ hidingKeys: [], tokenIssues: [] })
   const [warningRevertKey, setWarningRevertKey] = useState<string | null>(null)
-  // What is typed in the filter field, which lags the value the rows are filtered by.
   const [filterInput, setFilterInput] = useState("")
   const gridApi = useRef<GridApi | null>(null)
   const captureGridApi = useCallback((api: React.SetStateAction<GridApi | null>) => {
@@ -212,8 +207,6 @@ const SettingsTranslations = () => {
     [setPage]
   )
 
-  // A value typed against the old scope is discarded rather than committed, since edits cannot
-  // be taken across a jurisdiction or language change.
   const changeScope = useCallback(
     (apply: () => void) => {
       gridApi.current?.stopEditing(true)
@@ -270,7 +263,6 @@ const SettingsTranslations = () => {
     [filteredRows, currentPage, perPage]
   )
 
-  // Only the page on screen is merged, so an edit re-maps a handful of rows rather than all of them.
   const gridRows = useMemo(() => withPendingEdits(pagedRows, edits), [pagedRows, edits])
 
   const runRevert = useCallback(
@@ -316,9 +308,7 @@ const SettingsTranslations = () => {
         headerName: t("translations.currentValue"),
         minWidth: 220,
         flex: 2,
-        // Locked during a save, since an edit made mid-request is written against a stale version.
         editable: overridesLoaded && !isSaving,
-        // The default double-click gives no hint the cell is editable.
         singleClickEdit: true,
         cellClass: ({ data }: { data: TranslationGridRow }) =>
           data.editedValue !== null
@@ -358,11 +348,8 @@ const SettingsTranslations = () => {
             <Button
               variant="text"
               size="sm"
-              // A revert racing a save on the same key leaves whichever refetch lands last.
               disabled={isReverting || isSaving}
               onClick={() => {
-                // A key with no base renders only from its override, so removing it takes the
-                // section off the site and is confirmed first.
                 if (data.hasBase) {
                   void runRevert(data.key)
                   return
@@ -389,8 +376,6 @@ const SettingsTranslations = () => {
       scope
         .save(body)
         .then(() => {
-          // Only the keys that were sent are cleared. A cell that committed while the request was
-          // in flight is not among them, so that edit survives instead of being discarded.
           updateEdits((previous) => editsWithoutKeys(previous, sentKeys))
           setConflictKeys([])
           addToast(t("translations.alertSaved"), { variant: "success" })
@@ -398,8 +383,6 @@ const SettingsTranslations = () => {
         .catch((error) => {
           const conflicts = conflictKeysFrom(error)
           if (conflicts.length) {
-            // The rest of the batch was written, so only the named keys stay pending. The
-            // refetch below brings in the values they now hold, for the resolution dialog.
             updateEdits((previous) => ({
               ...editsWithoutKeys(previous, sentKeys),
               ...editsForKeys(pending, conflicts),

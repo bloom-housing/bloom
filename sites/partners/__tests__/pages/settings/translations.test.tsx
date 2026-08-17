@@ -9,8 +9,12 @@ import {
   LanguagesEnum,
   TranslationsService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { flattenTranslations } from "@bloom-housing/shared-helpers/src/utilities/flattenTranslations"
+import sharedGeneral from "@bloom-housing/shared-helpers/src/locales/general.json"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, render } from "../../testUtils"
+import { overrideTranslations } from "../../../src/lib/translations"
+import { publicOverrideTranslations } from "../../../src/lib/publicTranslations"
 import SettingsTranslations from "../../../src/pages/settings/translations"
 
 const server = setupServer()
@@ -31,9 +35,31 @@ const FIRST_BASE_KEY = "account.accountSettings"
 const FIRST_BASE_VALUE = "Account settings"
 // Sorts ahead of every bundled key, and has no base, so reverting it would remove its section.
 const FORK_ONLY_KEY = "aaa.forkOnly"
-// The Partners base adds keys the shared base does not have, and this one sorts ahead of them all.
-const FIRST_PARTNERS_BASE_KEY = "accessibility.categoryTitle.bathroomFeatures"
-const FIRST_PARTNERS_BASE_VALUE = "Bathroom features"
+
+// Each site layers its own bundled content over the shared file. A fork rewrites that content, so
+// these are derived rather than written down; hardcoding them would break on a copy edit.
+const sharedBase = flattenTranslations(sharedGeneral)
+const partnersLayer = flattenTranslations(overrideTranslations.en)
+const publicLayer = flattenTranslations(publicOverrideTranslations.en)
+const publicSpanishLayer = flattenTranslations(publicOverrideTranslations.es)
+
+const addedBy = (layer: Record<string, string>) =>
+  Object.keys(layer)
+    .filter((key) => !(key in sharedBase))
+    .sort()
+
+// Sorts ahead of every shared key, so it lands on page one without filtering.
+const FIRST_PARTNERS_BASE_KEY = addedBy(partnersLayer)[0]
+const FIRST_PARTNERS_BASE_VALUE = partnersLayer[FIRST_PARTNERS_BASE_KEY]
+const PUBLIC_ONLY_KEY = addedBy(publicLayer)[0]
+// A key the public site rewrites rather than adds, so its base differs from the shared value.
+const PUBLIC_OVERRIDDEN_KEY = Object.keys(publicLayer).find(
+  (key) => key in sharedBase && publicLayer[key] && publicLayer[key] !== sharedBase[key]
+)
+// A key whose Spanish public value differs from its English one, so the language layer is visible.
+const PUBLIC_SPANISH_KEY = Object.keys(publicSpanishLayer).find(
+  (key) => publicSpanishLayer[key] && publicSpanishLayer[key] !== publicLayer[key]
+)
 
 // The first fetch goes straight to the API; once AuthProvider has configured axios the rest go
 // through the adapter path, so both are answered.
@@ -107,6 +133,36 @@ const renderPage = (profileOverrides = {}, flagOn = true) =>
       <SettingsTranslations />
     </AuthContext.Provider>
   )
+
+const selectSite = async (site: "public" | "partners") =>
+  userEvent.selectOptions(await screen.findByLabelText("Site"), site)
+
+const selectLanguage = async (label: string) =>
+  userEvent.selectOptions(await screen.findByLabelText("Language"), label)
+
+// Types into the first editable cell and commits, which is what puts the page in the edited state.
+const editFirstValue = async (value: string) => {
+  await waitFor(() => expect(document.querySelector(".editable-cell")).toBeInTheDocument())
+  await userEvent.click(document.querySelector<HTMLElement>(".editable-cell"))
+
+  const input = document.querySelector<HTMLInputElement>(".editable-cell input")
+  await userEvent.clear(input)
+  await userEvent.type(input, `${value}{Enter}`)
+
+  await waitFor(() => expect(screen.getByRole("button", { name: /Save/ })).toBeEnabled())
+}
+
+// Rows are filtered in the browser, behind a debounce, so this waits the current page out. The
+// anchor is a key on page one before filtering, which differs per scope.
+const filterFor = async (text: string, anchor = FIRST_BASE_KEY) => {
+  await screen.findByText(anchor)
+  await userEvent.type(screen.getByTestId("translations-filter"), text)
+  await waitFor(() => expect(screen.queryByText(anchor)).toBeNull())
+}
+
+// The base column and the current-value column both show the base when nothing overrides it.
+const expectBaseShown = async (value: string) =>
+  waitFor(() => expect(screen.getAllByText(value).length).toBeGreaterThan(0))
 
 describe("<SettingsTranslations>", () => {
   describe("page access", () => {
@@ -196,8 +252,7 @@ describe("<SettingsTranslations>", () => {
   })
 
   describe("site scope", () => {
-    const selectPartnersScope = async () =>
-      userEvent.selectOptions(await screen.findByLabelText("Site"), "partners")
+    const selectPartnersScope = async () => selectSite("partners")
 
     it("offers the public site and the global Partners scope", async () => {
       renderPage()
@@ -277,14 +332,7 @@ describe("<SettingsTranslations>", () => {
     })
 
     it("offers the locales the Partners site is configured for", async () => {
-      const { useRouter } = mockNextRouter()
-      useRouter.mockImplementation(() => ({
-        pathname: "/",
-        query: "",
-        push: pushMock,
-        back: jest.fn(),
-        locales: ["en", "es"],
-      }))
+      mockNextRouter(undefined, { locales: ["en", "es"] })
       // The jurisdiction offers English only, so Spanish can only come from the site's locales.
       renderPage()
 
@@ -295,41 +343,208 @@ describe("<SettingsTranslations>", () => {
 
       expect(await screen.findByRole("option", { name: "Español" })).toBeInTheDocument()
     })
+
+    it("restores the jurisdiction scope on the way back", async () => {
+      const requested: string[] = []
+      server.use(
+        ...[...RAW_PATHS, ...GLOBAL_RAW_PATHS].map((path) =>
+          rest.get(path, (req, res, ctx) => {
+            requested.push(req.url.pathname)
+            return res(ctx.json([]))
+          })
+        )
+      )
+      renderPage()
+
+      await selectPartnersScope()
+      await waitFor(() => expect(screen.queryByLabelText("Jurisdiction")).toBeNull())
+
+      await selectSite("public")
+
+      expect(await screen.findByLabelText("Jurisdiction")).toBeInTheDocument()
+      await waitFor(() =>
+        expect(requested).toContain(
+          "/api/adapter/translations/jurisdictions/jurisdiction1/raw/public/en"
+        )
+      )
+    })
+
+    it("saves through the Partners endpoint in the global scope", async () => {
+      let written: { path: string; body: unknown } = null
+      server.use(
+        rest.put(
+          "http://localhost/api/adapter/translations/partners/raw/:language",
+          async (req, res, ctx) => {
+            written = { path: req.url.pathname, body: await req.json() }
+            return res(ctx.json({ success: true }))
+          }
+        )
+      )
+      renderPage()
+
+      await selectPartnersScope()
+      await editFirstValue("Partners edit")
+      await userEvent.click(screen.getByRole("button", { name: /Save/ }))
+
+      await waitFor(() => expect(written).not.toBeNull())
+      expect(written.path).toEqual("/api/adapter/translations/partners/raw/en")
+      expect(written.body).toEqual({
+        edits: [{ key: FIRST_PARTNERS_BASE_KEY, value: "Partners edit" }],
+      })
+    }, 20000)
+
+    it("saves through the jurisdiction endpoint in the public scope", async () => {
+      let written: string = null
+      server.use(
+        rest.put(
+          "http://localhost/api/adapter/translations/jurisdictions/:jurisdictionId/raw/:site/:language",
+          (req, res, ctx) => {
+            written = req.url.pathname
+            return res(ctx.json({ success: true }))
+          }
+        )
+      )
+      renderPage()
+
+      await editFirstValue("Public edit")
+      await userEvent.click(screen.getByRole("button", { name: /Save/ }))
+
+      // The scope comes from the selector, so the site segment must not be hardcoded elsewhere.
+      await waitFor(() =>
+        expect(written).toEqual(
+          "/api/adapter/translations/jurisdictions/jurisdiction1/raw/public/en"
+        )
+      )
+    }, 20000)
+
+    it("locks every scope selector while an edit is unsaved", async () => {
+      mockNextRouter(undefined, { locales: ["en", "es"] })
+      renderPage({
+        jurisdictions: [
+          jurisdiction("jurisdiction1", "Bloomington"),
+          jurisdiction("jurisdiction2", "Shelbyville"),
+        ],
+      })
+
+      expect(await screen.findByLabelText("Site")).toBeEnabled()
+      expect(screen.getByLabelText("Jurisdiction")).toBeEnabled()
+
+      await editFirstValue("Unsaved")
+
+      // An edit is held against one scope, so it must not be carried into another.
+      expect(screen.getByLabelText("Site")).toBeDisabled()
+      expect(screen.getByLabelText("Jurisdiction")).toBeDisabled()
+      expect(screen.getByLabelText("Language")).toBeDisabled()
+    }, 20000)
+  })
+
+  describe("global scope failures", () => {
+    const editAndSave = async () => {
+      await selectSite("partners")
+      await editFirstValue("Attempted")
+      await userEvent.click(screen.getByRole("button", { name: /Save/ }))
+    }
+
+    it("reports a failure to load the global overrides", async () => {
+      server.use(
+        ...GLOBAL_RAW_PATHS.map((path) => rest.get(path, (_req, res, ctx) => res(ctx.status(500))))
+      )
+      renderPage()
+
+      await selectSite("partners")
+
+      expect(
+        await screen.findByText("The current translations could not be loaded", { exact: false })
+      ).toBeInTheDocument()
+    })
+
+    it("opens the conflict dialog when someone else changed a global key first", async () => {
+      server.use(
+        rest.put(
+          "http://localhost/api/adapter/translations/partners/raw/:language",
+          (_r, res, ctx) =>
+            res(
+              ctx.status(409),
+              ctx.json({ message: "translationConflict", conflicts: [FIRST_PARTNERS_BASE_KEY] })
+            )
+        )
+      )
+      renderPage()
+      await editAndSave()
+
+      const dialog = await screen.findByRole("dialog")
+      expect(within(dialog).getByText(FIRST_PARTNERS_BASE_KEY)).toBeInTheDocument()
+    }, 20000)
+
+    it("names the keys the API refused in the global scope", async () => {
+      server.use(
+        rest.put(
+          "http://localhost/api/adapter/translations/partners/raw/:language",
+          (_r, res, ctx) =>
+            res(ctx.status(400), ctx.json({ message: ["edits.0.value must be shorter"] }))
+        )
+      )
+      renderPage()
+      await editAndSave()
+
+      expect(await screen.findByText(FIRST_PARTNERS_BASE_KEY, { exact: false })).toBeInTheDocument()
+    }, 20000)
   })
 
   // The public site layers page_content/locale_overrides over the shared file, so the editor has to
   // compare against that rather than the shared file alone.
   describe("public scope base", () => {
-    const filterFor = async (text: string) => {
-      await screen.findByText(FIRST_BASE_KEY)
-      await userEvent.type(screen.getByTestId("translations-filter"), text)
-      await waitFor(() => expect(screen.queryByText(FIRST_BASE_KEY)).toBeNull())
-    }
-
     it("includes the keys the public site adds on top of the shared file", async () => {
       renderPage()
 
-      await filterFor("initialDisclaimer")
+      await filterFor(PUBLIC_ONLY_KEY)
 
-      expect(await screen.findByText("account.create.initialDisclaimer")).toBeInTheDocument()
+      expect(await screen.findByText(PUBLIC_ONLY_KEY)).toBeInTheDocument()
     }, 20000)
 
     it("shows the value the public site renders where it overrides a shared key", async () => {
       renderPage()
 
-      await filterFor("pageDescription.faq")
+      await filterFor(PUBLIC_OVERRIDDEN_KEY)
 
-      // The base column and the current-value column both show it, since nothing overrides it.
-      await waitFor(() =>
-        expect(
-          screen.getAllByText(
-            "Find answers to common questions about affordable housing in Bloomington."
-          ).length
-        ).toBeGreaterThan(0)
-      )
-      expect(
-        screen.queryByText("Find answers to common questions about affordable housing.")
-      ).toBeNull()
+      await expectBaseShown(publicLayer[PUBLIC_OVERRIDDEN_KEY])
+      expect(screen.queryByText(sharedBase[PUBLIC_OVERRIDDEN_KEY])).toBeNull()
+    }, 20000)
+
+    it("layers the public site's own translation of a key over its English one", async () => {
+      renderPage({
+        jurisdictions: [
+          jurisdiction("jurisdiction1", "Bloomington", [LanguagesEnum.en, LanguagesEnum.es]),
+        ],
+      })
+
+      await selectLanguage("Español")
+      await filterFor(PUBLIC_SPANISH_KEY)
+
+      await expectBaseShown(publicSpanishLayer[PUBLIC_SPANISH_KEY])
+      expect(screen.queryByText(publicLayer[PUBLIC_SPANISH_KEY])).toBeNull()
+    }, 20000)
+
+    it("keeps the public site's added keys out of the Partners base", async () => {
+      renderPage()
+
+      await selectSite("partners")
+      await filterFor(PUBLIC_ONLY_KEY, FIRST_PARTNERS_BASE_KEY)
+
+      // Merging both bundles would leave every existing assertion passing, so state the converse.
+      expect(screen.queryByText(PUBLIC_ONLY_KEY)).toBeNull()
+    }, 20000)
+
+    it("falls back to English for a Partners key, which has no other translation", async () => {
+      mockNextRouter(undefined, { locales: ["en", "es"] })
+      renderPage()
+
+      await selectSite("partners")
+      await selectLanguage("Español")
+
+      // overrideTranslations supplies English only, which is what the portal renders in every
+      // language, so the base has to read the same way.
+      await expectBaseShown(FIRST_PARTNERS_BASE_VALUE)
     }, 20000)
   })
 
