@@ -705,6 +705,94 @@ describe('Testing translations service', () => {
         ),
       ).rejects.toThrow(ForbiddenException);
     });
+
+    it('records the english source hash from the global rows on a non-english save', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          jurisdictionId: null,
+          site: SiteEnum.partners,
+          key: 'nav.siteTitlePartners',
+          value: 'Partners Portal',
+        },
+      ]);
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+
+      await service.updateOverrides(
+        null,
+        SiteEnum.partners,
+        LanguagesEnum.es,
+        {
+          edits: [
+            {
+              key: 'nav.siteTitlePartners',
+              value: 'Portal de Socios',
+              lastUpdatedAt: new Date(),
+            },
+          ],
+        },
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            language: LanguagesEnum.en,
+            OR: [
+              { jurisdictionId: null, site: SiteEnum.partners },
+              { jurisdictionId: null, site: SiteEnum.partners },
+              { jurisdictionId: null, site: null },
+            ],
+          }),
+        }),
+      );
+      expect(prisma.translationStrings.updateMany).toHaveBeenCalledWith({
+        where: expect.objectContaining({
+          jurisdictionId: null,
+          language: LanguagesEnum.es,
+          site: SiteEnum.partners,
+        }),
+        data: {
+          value: 'Portal de Socios',
+          origin: TranslationOrigin.human,
+          sourceHash: sourceHash('Partners Portal'),
+        },
+      });
+    });
+
+    /**
+     * The English a key falls back to lives in the bundled locale files, not the database, so a
+     * global key with no English row records no source hash and never reports stale. #6519 decides
+     * which of those files it seeds, which is what settles whether this stays true.
+     */
+    it('records no source hash for a key with no english row', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+
+      await service.updateOverrides(
+        null,
+        SiteEnum.partners,
+        LanguagesEnum.es,
+        {
+          edits: [
+            {
+              key: 'nav.siteTitlePartners',
+              value: 'Portal de Socios',
+              lastUpdatedAt: new Date(),
+            },
+          ],
+        },
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.updateMany).toHaveBeenCalledWith({
+        where: expect.anything(),
+        data: expect.objectContaining({ sourceHash: null }),
+      });
+    });
   });
 
   describe('getMergedTranslations', () => {

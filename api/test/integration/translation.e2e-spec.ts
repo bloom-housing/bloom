@@ -504,6 +504,90 @@ describe('Translation Controller Tests', () => {
         })
         .expect(403);
     });
+
+    it('refuses an anonymous write, passkey alone is not enough', async () => {
+      await request(app.getHttpServer())
+        .put(globalScope)
+        .set(passkey)
+        .send({
+          edits: [{ key: `${GLOBAL_TEST_KEY_PREFIX}anon`, value: 'bad' }],
+        })
+        .expect(403);
+    });
+
+    it('rejects a key longer than the column index allows', async () => {
+      await request(app.getHttpServer())
+        .put(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ edits: [{ key: 'k'.repeat(256), value: 'Too long a key' }] })
+        .expect(400);
+    });
+
+    it('rejects a language outside the supported set', async () => {
+      await request(app.getHttpServer())
+        .put('/translations/partners/raw/xx')
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          edits: [{ key: `${GLOBAL_TEST_KEY_PREFIX}badlang`, value: 'x' }],
+        })
+        .expect(400);
+    });
+
+    it('tracks staleness in the global scope across an english edit', async () => {
+      const key = `${GLOBAL_TEST_KEY_PREFIX}stale`;
+      const englishScope = globalScope;
+      const spanishScope = '/translations/partners/raw/es';
+
+      await request(app.getHttpServer())
+        .put(englishScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ edits: [{ key, value: 'Original English' }] })
+        .expect(200);
+
+      await request(app.getHttpServer())
+        .put(spanishScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ edits: [{ key, value: 'Original Spanish' }] })
+        .expect(200);
+
+      const beforeEdit = await request(app.getHttpServer())
+        .get(spanishScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(beforeEdit.body.find((r) => r.key === key).stale).toBe(false);
+
+      const english = await request(app.getHttpServer())
+        .get(englishScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      await request(app.getHttpServer())
+        .put(englishScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          edits: [
+            {
+              key,
+              value: 'Changed English',
+              lastUpdatedAt: english.body.find((r) => r.key === key).updatedAt,
+            },
+          ],
+        })
+        .expect(200);
+
+      const afterEdit = await request(app.getHttpServer())
+        .get(spanishScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(afterEdit.body.find((r) => r.key === key).stale).toBe(true);
+    });
   });
 
   describe('DELETE /translations/partners/raw/:language/:key', () => {
@@ -530,6 +614,33 @@ describe('Translation Controller Tests', () => {
       expect(
         res.body.find((r) => r.key === `${GLOBAL_TEST_KEY_PREFIX}temp`),
       ).toBeUndefined();
+    });
+
+    it('forbids a jurisdictional admin from deleting a global key', async () => {
+      await request(app.getHttpServer())
+        .put(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          edits: [{ key: `${GLOBAL_TEST_KEY_PREFIX}guarded`, value: 'Keep' }],
+        })
+        .expect(200);
+
+      await request(app.getHttpServer())
+        .delete(`${globalScope}/${GLOBAL_TEST_KEY_PREFIX}guarded`)
+        .set('Cookie', jurisAdminCookies)
+        .set(passkey)
+        .expect(403);
+
+      const res = await request(app.getHttpServer())
+        .get(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(
+        res.body.find((r) => r.key === `${GLOBAL_TEST_KEY_PREFIX}guarded`)
+          .value,
+      ).toEqual('Keep');
     });
   });
 });
