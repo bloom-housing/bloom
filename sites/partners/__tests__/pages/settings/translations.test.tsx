@@ -205,7 +205,7 @@ describe("<SettingsTranslations>", () => {
       await screen.findByLabelText("Site")
       expect(screen.getByRole("option", { name: "Public site" })).toBeInTheDocument()
       expect(
-        screen.getByRole("option", { name: "Partners portal (applies to every jurisdiction)" })
+        screen.getByRole("option", { name: "Partners portal (all jurisdictions)" })
       ).toBeInTheDocument()
     })
 
@@ -295,6 +295,42 @@ describe("<SettingsTranslations>", () => {
 
       expect(await screen.findByRole("option", { name: "Español" })).toBeInTheDocument()
     })
+  })
+
+  // The public site layers page_content/locale_overrides over the shared file, so the editor has to
+  // compare against that rather than the shared file alone.
+  describe("public scope base", () => {
+    const filterFor = async (text: string) => {
+      await screen.findByText(FIRST_BASE_KEY)
+      await userEvent.type(screen.getByTestId("translations-filter"), text)
+      await waitFor(() => expect(screen.queryByText(FIRST_BASE_KEY)).toBeNull())
+    }
+
+    it("includes the keys the public site adds on top of the shared file", async () => {
+      renderPage()
+
+      await filterFor("initialDisclaimer")
+
+      expect(await screen.findByText("account.create.initialDisclaimer")).toBeInTheDocument()
+    }, 20000)
+
+    it("shows the value the public site renders where it overrides a shared key", async () => {
+      renderPage()
+
+      await filterFor("pageDescription.faq")
+
+      // The base column and the current-value column both show it, since nothing overrides it.
+      await waitFor(() =>
+        expect(
+          screen.getAllByText(
+            "Find answers to common questions about affordable housing in Bloomington."
+          ).length
+        ).toBeGreaterThan(0)
+      )
+      expect(
+        screen.queryByText("Find answers to common questions about affordable housing.")
+      ).toBeNull()
+    }, 20000)
   })
 
   describe("rows", () => {

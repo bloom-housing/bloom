@@ -22,7 +22,11 @@ import {
   SettingsIndexEnum,
 } from "../../components/settings/SettingsViewHelpers"
 import { useRawTranslations, useUnsavedChangesWarning } from "../../lib/hooks"
-import { overrideTranslations, translations } from "../../lib/translations"
+import {
+  overrideTranslations,
+  publicOverrideTranslations,
+  translations,
+} from "../../lib/translations"
 import styles from "./translations.module.scss"
 import {
   applyConflictChoices,
@@ -199,14 +203,18 @@ const SettingsTranslations = () => {
   useUnsavedChangesWarning(hasUnsavedChanges, t("translations.unsavedChangesWarning"))
 
   const rows = useMemo(() => {
-    const partnersLayer = isGlobal ? flattenTranslations(overrideTranslations.en) : {}
+    const siteOverrides = isGlobal ? overrideTranslations : publicOverrideTranslations
+    const englishLayer = flattenTranslations(siteOverrides.en)
+    const languageLayer = siteOverrides[activeLanguage]
+      ? { ...englishLayer, ...flattenTranslations(siteOverrides[activeLanguage]) }
+      : englishLayer
 
     return buildTranslationRows({
-      englishBase: { ...flattenTranslations(translations.general), ...partnersLayer },
+      englishBase: { ...flattenTranslations(translations.general), ...englishLayer },
       languageBase:
         activeLanguage === LanguagesEnum.en
           ? undefined
-          : { ...flattenTranslations(translations[activeLanguage]), ...partnersLayer },
+          : { ...flattenTranslations(translations[activeLanguage]), ...languageLayer },
       overrides: overrides ?? [],
     })
   }, [activeLanguage, isGlobal, overrides])
@@ -238,11 +246,11 @@ const SettingsTranslations = () => {
         (isGlobal
           ? translationsService.deleteRawPartnersTranslation({ language: activeLanguage, key })
           : translationsService.deleteRawTranslation({
-              jurisdictionId: activeJurisdictionId,
-              site,
-              language: activeLanguage,
-              key,
-            })
+            jurisdictionId: activeJurisdictionId,
+            site,
+            language: activeLanguage,
+            key,
+          })
         )
           .then(() => {
             updateEdits((previous) => {
@@ -366,11 +374,11 @@ const SettingsTranslations = () => {
       (isGlobal
         ? translationsService.updateRawPartnersTranslations({ language: activeLanguage, body })
         : translationsService.updateRawTranslations({
-            jurisdictionId: activeJurisdictionId,
-            site,
-            language: activeLanguage,
-            body,
-          })
+          jurisdictionId: activeJurisdictionId,
+          site,
+          language: activeLanguage,
+          body,
+        })
       )
         .then(() => {
           // Only the keys that were sent are cleared. A cell that committed while the request was
