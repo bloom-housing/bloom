@@ -22,11 +22,8 @@ import {
   SettingsIndexEnum,
 } from "../../components/settings/SettingsViewHelpers"
 import { useRawTranslations, useUnsavedChangesWarning } from "../../lib/hooks"
-import {
-  overrideTranslations,
-  publicOverrideTranslations,
-  translations,
-} from "../../lib/translations"
+import { overrideTranslations, translations } from "../../lib/translations"
+import { publicOverrideTranslations } from "../../lib/publicTranslations"
 import styles from "./translations.module.scss"
 import {
   applyConflictChoices,
@@ -246,11 +243,11 @@ const SettingsTranslations = () => {
         (isGlobal
           ? translationsService.deleteRawPartnersTranslation({ language: activeLanguage, key })
           : translationsService.deleteRawTranslation({
-            jurisdictionId: activeJurisdictionId,
-            site,
-            language: activeLanguage,
-            key,
-          })
+              jurisdictionId: activeJurisdictionId,
+              site,
+              language: activeLanguage,
+              key,
+            })
         )
           .then(() => {
             updateEdits((previous) => {
@@ -374,11 +371,11 @@ const SettingsTranslations = () => {
       (isGlobal
         ? translationsService.updateRawPartnersTranslations({ language: activeLanguage, body })
         : translationsService.updateRawTranslations({
-          jurisdictionId: activeJurisdictionId,
-          site,
-          language: activeLanguage,
-          body,
-        })
+            jurisdictionId: activeJurisdictionId,
+            site,
+            language: activeLanguage,
+            body,
+          })
       )
         .then(() => {
           // Only the keys that were sent are cleared. A cell that committed while the request was
