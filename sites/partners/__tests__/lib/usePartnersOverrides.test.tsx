@@ -1,5 +1,5 @@
 import { act, renderHook, waitFor } from "@testing-library/react"
-import { OVERRIDES_TIMEOUT_MS, usePartnersOverrides } from "../../src/lib/hooks"
+import { OVERRIDES_TIMEOUT_MS, usePartnersOverrides } from "../../src/lib/partnersOverrides"
 
 const fetchMock = jest.fn()
 const realFetch = global.fetch

@@ -603,37 +603,37 @@ export const useZipExport = (
       if (isLottery) {
         content = useSecurePathway
           ? await lotteryService.lotteryResultsSecure({
-            id: listingId,
-            includeDemographics,
-            timeZone: dayjs.tz.guess(),
-          })
+              id: listingId,
+              includeDemographics,
+              timeZone: dayjs.tz.guess(),
+            })
           : await lotteryService.lotteryResults(
-            { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
-            { responseType: "arraybuffer" }
-          )
+              { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
+              { responseType: "arraybuffer" }
+            )
       } else {
         if (isSpreadsheet) {
           content = useSecurePathway
             ? await applicationsService.listAsSpreadsheetSecure({
-              id: listingId,
-              includeDemographics,
-              timeZone: dayjs.tz.guess(),
-            })
+                id: listingId,
+                includeDemographics,
+                timeZone: dayjs.tz.guess(),
+              })
             : await applicationsService.listAsSpreadsheet(
-              { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
-              { responseType: "arraybuffer" }
-            )
+                { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
+                { responseType: "arraybuffer" }
+              )
         } else {
           content = useSecurePathway
             ? await applicationsService.listAsCsvSecure({
-              id: listingId,
-              includeDemographics,
-              timeZone: dayjs.tz.guess(),
-            })
+                id: listingId,
+                includeDemographics,
+                timeZone: dayjs.tz.guess(),
+              })
             : await applicationsService.listAsCsv(
-              { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
-              { responseType: "arraybuffer" }
-            )
+                { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
+                { responseType: "arraybuffer" }
+              )
         }
       }
 
@@ -881,16 +881,16 @@ export function useRawTranslations(scope: TranslationScope | null, language: str
     (scope.type === "global"
       ? translationsService.getRawPartnersTranslations({ language })
       : translationsService.getRawTranslations({
-        jurisdictionId: scope.jurisdictionId,
-        site: scope.site,
-        language,
-      }))
+          jurisdictionId: scope.jurisdictionId,
+          site: scope.site,
+          language,
+        }))
 
   const cacheKey = !scope
     ? null
     : scope.type === "global"
-      ? `/api/adapter/translations/partners/raw/${language}`
-      : `/api/adapter/translations/jurisdictions/${scope.jurisdictionId}/raw/${scope.site}/${language}`
+    ? `/api/adapter/translations/partners/raw/${language}`
+    : `/api/adapter/translations/jurisdictions/${scope.jurisdictionId}/raw/${scope.site}/${language}`
 
   // Writes call `mutate` on this key; refreshing on focus would move data under an in-progress edit.
   const { data, error } = useSWR(cacheKey, fetcher, {
@@ -904,48 +904,6 @@ export function useRawTranslations(scope: TranslationScope | null, language: str
     loading: !!cacheKey && !error && !data,
     error,
   }
-}
-
-// The first paint waits on this request, so it has to fail rather than hang.
-export const OVERRIDES_TIMEOUT_MS = 5000
-
-export function usePartnersOverrides(locale?: string) {
-  const [overrides, setOverrides] = useState<Record<string, string> | undefined>()
-  const [settled, setSettled] = useState(false)
-
-  useEffect(() => {
-    const controller = new AbortController()
-    const language = locale || "en"
-    // Superseded by a later locale, rather than aborted by the timeout below, which must settle.
-    let superseded = false
-    const timeout = setTimeout(() => controller.abort(), OVERRIDES_TIMEOUT_MS)
-
-    const load = async () => {
-      try {
-        const response = await fetch(`/api/adapter/translations?language=${language}`, {
-          signal: controller.signal,
-        })
-        const next = response.ok ? await response.json() : undefined
-        if (superseded) return
-        setOverrides(next)
-      } catch {
-        if (superseded) return
-        setOverrides(undefined)
-      } finally {
-        clearTimeout(timeout)
-      }
-      setSettled(true)
-    }
-
-    void load()
-    return () => {
-      superseded = true
-      clearTimeout(timeout)
-      controller.abort()
-    }
-  }, [locale])
-
-  return { overrides, settled }
 }
 
 /**

@@ -21,7 +21,7 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css"
 
 import LinkComponent from "../components/core/LinkComponent"
 import { applyTranslations } from "../lib/translations"
-import { usePartnersOverrides } from "../lib/hooks"
+import { usePartnersOverrides } from "../lib/partnersOverrides"
 
 import "../../styles/overrides.scss"
 
