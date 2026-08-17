@@ -568,7 +568,21 @@ describe('Testing permission service', () => {
       ),
     );
 
-  it.each([
+  // The global Partners translation scope resolves no jurisdiction, so it reaches the policy with
+  // an undefined id. Jurisdiction content has no global scope and is left out.
+  const globalTranslationAccessFor = async (user?: User) =>
+    Promise.all(
+      contentPermissions
+        .filter(([type]) => type === 'translation')
+        .map(
+          async ([type, action]) =>
+            `${type}.${action}=${await service.can(user, type, action, {
+              jurisdictionId: undefined,
+            })}`,
+        ),
+    );
+
+  const rolesBelowAdmin = [
     {
       role: 'a jurisdictional admin',
       user: {
@@ -597,7 +611,16 @@ describe('Testing permission service', () => {
       } as User,
     },
     { role: 'an anonymous request', user: undefined },
-  ])(
+  ];
+
+  const admin = {
+    id: 'admin id',
+    userRoles: { isAdmin: true },
+    jurisdictions: [{ id: 'juris id' }],
+    listings: [],
+  } as User;
+
+  it.each(rolesBelowAdmin)(
     'should not let $role edit translations or jurisdiction content',
     async ({ user }) => {
       expect(await contentAccessFor(user)).toEqual([
@@ -611,19 +634,31 @@ describe('Testing permission service', () => {
   );
 
   it('should let an admin edit translations and jurisdiction content', async () => {
-    const admin = {
-      id: 'admin id',
-      userRoles: { isAdmin: true },
-      jurisdictions: [{ id: 'juris id' }],
-      listings: [],
-    } as User;
-
     expect(await contentAccessFor(admin)).toEqual([
       'translation.read=true',
       'translation.update=true',
       'translation.delete=true',
       'jurisdictionContent.read=true',
       'jurisdictionContent.update=true',
+    ]);
+  });
+
+  it.each(rolesBelowAdmin)(
+    'should not let $role edit the global Partners translations',
+    async ({ user }) => {
+      expect(await globalTranslationAccessFor(user)).toEqual([
+        'translation.read=false',
+        'translation.update=false',
+        'translation.delete=false',
+      ]);
+    },
+  );
+
+  it('should let an admin edit the global Partners translations', async () => {
+    expect(await globalTranslationAccessFor(admin)).toEqual([
+      'translation.read=true',
+      'translation.update=true',
+      'translation.delete=true',
     ]);
   });
 
