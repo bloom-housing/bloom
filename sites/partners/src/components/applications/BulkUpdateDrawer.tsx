@@ -1,19 +1,19 @@
 import React from "react"
 import { Button, Card, Drawer, Heading } from "@bloom-housing/ui-seeds"
 import { Dropzone, t } from "@bloom-housing/ui-components"
+import { useBulkApplicationTemplateExport } from "../../lib/hooks"
 
 interface BulkUpdateDrawerProps {
   isOpen: boolean
+  listingId: string
   onClose: () => void
 }
 
-const BulkUpdateDrawer = ({ isOpen, onClose }: BulkUpdateDrawerProps) => {
+const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps) => {
+  const { onExport } = useBulkApplicationTemplateExport(listingId)
+
   const csvUploader = (file: File) => {
     console.log(file)
-  }
-
-  const downloadTemplate = () => {
-    console.log("download template")
   }
 
   return (
@@ -32,7 +32,7 @@ const BulkUpdateDrawer = ({ isOpen, onClose }: BulkUpdateDrawerProps) => {
               {t("applications.bulkUpdateStep1Title")}
             </Heading>
             <p className="seeds-m-be-content">{t("applications.bulkUpdateStep1Body")}</p>
-            <Button variant="primary-outlined" onClick={downloadTemplate}>
+            <Button variant="primary-outlined" onClick={() => onExport()}>
               {t("applications.bulkUpdateDownloadTemplate")}
             </Button>
           </Card.Section>

@@ -3,9 +3,10 @@ import {
   Injectable,
   StreamableFile,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApplicationStatusEnum } from '@prisma/client';
-import fs, { createReadStream } from 'fs';
+import fs, { createReadStream, ReadStream } from 'fs';
 import dayjs from 'dayjs';
 import { join } from 'path';
 import { PrismaService } from './prisma.service';
@@ -137,25 +138,27 @@ export class ApplicationBulkUploadService {
     const now = new Date();
     const dateString = dayjs(now).format('YYYY-MM-DD_HH-mm');
 
+    const readStream = await this.csvTemplateExport(listingId, applications);
+
     const zipFilename = `listing-${listingId}-applications-${
       user.id
     }-${now.getTime()}`;
+    const filename = `applications-${listingId}-${dateString}`;
 
-    const filename = join(process.cwd(), `src/temp/${zipFilename}.csv`);
+    return await zipExport(readStream, zipFilename, filename, false);
+  }
 
-    await this.csvExportHelper(
-      filename,
-      listingId,
-      mapTo(Application, applications),
+  async csvTemplateExport(
+    listingId: string,
+    applications: Pick<Application, 'id'>[],
+  ): Promise<ReadStream> {
+    const filename = join(
+      process.cwd(),
+      `src/temp/listing-${listingId}-applications-bulk-${new Date().getTime()}.csv`,
     );
-    const readStream = createReadStream(filename);
 
-    return await zipExport(
-      readStream,
-      zipFilename,
-      `applications-${listingId}-${dateString}`,
-      false,
-    );
+    await this.csvExportHelper(filename, listingId, applications);
+    return createReadStream(filename);
   }
 
   csvExportHelper(
@@ -367,7 +370,7 @@ export class ApplicationBulkUploadService {
     };
   }
 
-  async authorizeExport(user, listingId): Promise<void> {
+  async authorizeExport(user: User, listingId: string): Promise<void> {
     /**
      * Checking authorization for each application is very expensive.
      * By making listingId required, we can check if the user has update permissions for the listing, since right now if a user has that
@@ -378,6 +381,33 @@ export class ApplicationBulkUploadService {
 
     const jurisdictionId =
       await this.listingService.getJurisdictionIdByListingId(listingId);
+
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      select: {
+        featureFlags: true,
+        visibleApplicationAccessibilityFeatures: true,
+      },
+      where: {
+        id: jurisdictionId,
+      },
+    });
+
+    if (!jurisdiction) {
+      throw new BadRequestException(
+        `Failed to retrieve jurisdiction with id: ${jurisdictionId}`,
+      );
+    }
+
+    if (
+      !doJurisdictionHaveFeatureFlagSet(
+        jurisdiction as Jurisdiction,
+        FeatureFlagEnum.enableApplicationBulkCSVUpdates,
+      )
+    ) {
+      throw new BadRequestException(
+        `Jurisdiction with id: ${jurisdictionId} does not have the enableApplicationBulkCSVUpdates feature flag set`,
+      );
+    }
 
     await this.permissionService.canOrThrow(
       user,

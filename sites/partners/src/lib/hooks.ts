@@ -186,6 +186,7 @@ export const useListingExport = (useSecurePathway = false) => {
     }
 
     setCsvExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {
@@ -667,6 +668,49 @@ export const useZipExport = (
       )
     }
     setExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  return {
+    onExport,
+    exportLoading,
+  }
+}
+
+export const useBulkApplicationTemplateExport = (listingId: string) => {
+  const { applicationsService } = useContext(AuthContext)
+  const [exportLoading, setExportLoading] = useState(false)
+  const { addToast } = useContext(MessageContext)
+
+  const onExport = useCallback(async () => {
+    setExportLoading(true)
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const content: any = await applicationsService.downloadBulkUpdateTemplate({
+        listingId: listingId,
+      })
+
+      const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
+      const url = window.URL.createObjectURL(blob)
+
+      const link = document.createElement("a")
+      link.href = url
+      link.setAttribute("download", `applications-bulk-templates}.zip`)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode.removeChild(link)
+      addToast(t("t.exportSuccess"), { variant: "success" })
+    } catch (err) {
+      console.log(err)
+      addToast(
+        t("account.settings.alerts.genericError", { contactEmail: t("resources.contactEmail") }),
+        {
+          variant: "alert",
+        }
+      )
+    }
+    setExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {
@@ -723,6 +767,7 @@ const useCsvExport = (
     }
 
     setCsvExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endpoint, fileName, addToast])
 
   return {
