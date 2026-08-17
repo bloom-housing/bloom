@@ -28,6 +28,20 @@ describe('Translation Controller Tests', () => {
   const globalScope = '/translations/partners/raw/en';
   const GLOBAL_TEST_KEY_PREFIX = 'e2e.partners.';
 
+  // Global rows have no jurisdiction, so unlike the jurisdiction-scoped fixtures they are not
+  // isolated by a fresh jurisdiction each run. They would otherwise collide on the NULLS NOT
+  // DISTINCT unique index on a re-run, and stay in the database a dev server reads.
+  const clearGlobalRows = () =>
+    prisma.translationStrings.deleteMany({
+      where: {
+        jurisdictionId: null,
+        OR: [
+          { key: 'partners.brand' },
+          { key: { startsWith: GLOBAL_TEST_KEY_PREFIX } },
+        ],
+      },
+    });
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -44,18 +58,7 @@ describe('Translation Controller Tests', () => {
     jurisdictionId = jurisdiction.id;
     jurisdictionName = jurisdiction.name;
 
-    // Clear the global (null-jurisdiction) rows a prior local run may have left, both the fixture
-    // below and anything the global scope tests wrote. Their NULLS NOT DISTINCT unique index
-    // collides on re-run; the jurisdiction-scoped rows use a fresh jurisdiction each run and do not.
-    await prisma.translationStrings.deleteMany({
-      where: {
-        jurisdictionId: null,
-        OR: [
-          { key: 'partners.brand' },
-          { key: { startsWith: GLOBAL_TEST_KEY_PREFIX } },
-        ],
-      },
-    });
+    await clearGlobalRows();
 
     await prisma.translationStrings.createMany({
       data: [
@@ -131,6 +134,7 @@ describe('Translation Controller Tests', () => {
   });
 
   afterAll(async () => {
+    await clearGlobalRows();
     await prisma.$disconnect();
     await app.close();
   });
