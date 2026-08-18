@@ -69,7 +69,7 @@ export async function getServerSideProps(context: {
   }
 
   const jurisdiction = fetchJurisdictionByName(context.req)
-  const publicOverrides = fetchPublicOverrides(context.locale)
+  const publicOverrides = fetchPublicOverrides(context.locale, context.req)
 
   return {
     props: {

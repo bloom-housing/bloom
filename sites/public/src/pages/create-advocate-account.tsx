@@ -137,7 +137,7 @@ export default CreateAdvocateAccount
 export async function getServerSideProps(context: { req: any; query: any; locale?: string }) {
   const [jurisdiction, publicOverrides] = await Promise.all([
     fetchJurisdictionByName(context.req),
-    fetchPublicOverrides(context.locale),
+    fetchPublicOverrides(context.locale, context.req),
   ])
   const agencies = await fetchAgencies(context.req, jurisdiction?.id)
 

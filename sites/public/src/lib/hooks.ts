@@ -343,20 +343,25 @@ export async function fetchJurisdictionByName(req?: any) {
   return jurisdiction
 }
 
-const publicOverridesByLanguage = new Map<string, Record<string, Record<string, string>> | null>()
+const publicOverridesByLanguage = new Map<string, Record<string, Record<string, string>>>()
 
-export async function fetchPublicOverrides(language?: string) {
+export const OVERRIDES_TIMEOUT_MS = 5000
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchPublicOverrides(language?: string, req?: any) {
   const key = language ?? "en"
+  // Build-only: a build prerenders every page in every locale, more than the API allows in an
+  // hour.
   const duringBuild = process.env.NEXT_PHASE === "phase-production-build"
   if (duringBuild && publicOverridesByLanguage.has(key)) {
     return publicOverridesByLanguage.get(key)
   }
 
-  const remember = (value: Record<string, Record<string, string>> | null) => {
-    if (duringBuild) {
-      publicOverridesByLanguage.set(key, value)
-    }
-    return value
+  const headers = {
+    passkey: process.env.API_PASS_KEY,
+  }
+  if (req) {
+    headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
   }
 
   try {
@@ -364,13 +369,18 @@ export async function fetchPublicOverrides(language?: string) {
       `${process.env.backendApiBase}/translations/byName/${process.env.jurisdictionName}`,
       {
         params: { site: "public", language: key },
-        headers: { passkey: process.env.API_PASS_KEY },
+        headers,
+        timeout: OVERRIDES_TIMEOUT_MS,
       }
     )
-    return remember((response?.data ?? null) as Record<string, Record<string, string>> | null)
+    const overrides = (response?.data ?? null) as Record<string, Record<string, string>> | null
+    if (duringBuild && overrides) {
+      publicOverridesByLanguage.set(key, overrides)
+    }
+    return overrides
   } catch (error) {
-    console.log("error fetching public translation overrides = ", error)
-    return remember(null)
+    console.log("error fetching public translation overrides = ", error.message)
+    return null
   }
 }
 

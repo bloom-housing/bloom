@@ -24,11 +24,13 @@ describe("getStaticProps on the overridable pages", () => {
     expect(result.revalidate).toEqual(30)
   })
 
-  // Rendered per request rather than generated, so it takes the overrides but no revalidate.
+  // Rendered per request rather than generated, so it takes the overrides but no revalidate. It
+  // also forwards the request, which is what the API rate-limits on.
   it("a server-rendered page takes the overrides without a revalidate", async () => {
-    const result = await notificationsProps({ req: {}, query: {}, locale: "es" })
+    const req = { headers: {}, socket: {} }
+    const result = await notificationsProps({ req, query: {}, locale: "es" })
 
-    expect(hooks.fetchPublicOverrides).toHaveBeenCalledWith("es")
+    expect(hooks.fetchPublicOverrides).toHaveBeenCalledWith("es", req)
     expect(result.props.publicOverrides).toEqual(overrides)
     expect(result).not.toHaveProperty("revalidate")
   })

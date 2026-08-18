@@ -65,7 +65,7 @@ export default Notifications
 export async function getServerSideProps(context: { req: any; query: any; locale?: string }) {
   const [jurisdiction, publicOverrides] = await Promise.all([
     fetchJurisdictionByName(context.req),
-    fetchPublicOverrides(context.locale),
+    fetchPublicOverrides(context.locale, context.req),
   ])
 
   return {
