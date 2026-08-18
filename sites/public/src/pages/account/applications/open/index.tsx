@@ -7,7 +7,7 @@ import {
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { isFeatureFlagOn } from "../../../../lib/helpers"
-import { fetchJurisdictionByName } from "../../../../lib/hooks"
+import { fetchJurisdictionByName, fetchPublicOverrides } from "../../../../lib/hooks"
 
 const OpenApplications = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
   return (
@@ -23,10 +23,14 @@ const OpenApplications = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
 
 export default OpenApplications
 
-export async function getStaticProps() {
-  const jurisdiction = await fetchJurisdictionByName()
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const [jurisdiction, publicOverrides] = await Promise.all([
+    fetchJurisdictionByName(),
+    fetchPublicOverrides(locale),
+  ])
 
   return {
-    props: { jurisdiction },
+    props: { jurisdiction, publicOverrides },
+    revalidate: Number(process.env.cacheRevalidate),
   }
 }

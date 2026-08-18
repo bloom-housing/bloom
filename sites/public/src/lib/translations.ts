@@ -51,7 +51,7 @@ export const overrideTranslations = {
 
 export const applyTranslations = (
   locale?: string,
-  publicOverrides?: Record<string, Record<string, string>>
+  publicOverrides?: Record<string, Record<string, string>> | null
 ) => {
   addTranslation(translations.general, true)
   addTranslation(overrideTranslations.en)

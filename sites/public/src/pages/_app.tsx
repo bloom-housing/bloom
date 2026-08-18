@@ -47,6 +47,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
 
   const publicOverrides = pageProps?.publicOverrides as
     | Record<string, Record<string, string>>
+    | null
     | undefined
 
   useMemo(() => {

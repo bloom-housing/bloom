@@ -343,19 +343,34 @@ export async function fetchJurisdictionByName(req?: any) {
   return jurisdiction
 }
 
+const publicOverridesByLanguage = new Map<string, Record<string, Record<string, string>> | null>()
+
 export async function fetchPublicOverrides(language?: string) {
+  const key = language ?? "en"
+  const duringBuild = process.env.NEXT_PHASE === "phase-production-build"
+  if (duringBuild && publicOverridesByLanguage.has(key)) {
+    return publicOverridesByLanguage.get(key)
+  }
+
+  const remember = (value: Record<string, Record<string, string>> | null) => {
+    if (duringBuild) {
+      publicOverridesByLanguage.set(key, value)
+    }
+    return value
+  }
+
   try {
     const response = await axios.get(
       `${process.env.backendApiBase}/translations/byName/${process.env.jurisdictionName}`,
       {
-        params: { site: "public", language: language ?? "en" },
+        params: { site: "public", language: key },
         headers: { passkey: process.env.API_PASS_KEY },
       }
     )
-    return response?.data as Record<string, Record<string, string>>
+    return remember((response?.data ?? null) as Record<string, Record<string, string>> | null)
   } catch (error) {
     console.log("error fetching public translation overrides = ", error)
-    return undefined
+    return remember(null)
   }
 }
 
