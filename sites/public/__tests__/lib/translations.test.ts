@@ -1,4 +1,5 @@
 import { t } from "@bloom-housing/ui-components"
+import { tIfExists } from "@bloom-housing/shared-helpers"
 import { applyTranslations, overrideTranslations, translations } from "../../src/lib/translations"
 
 describe("applyTranslations", () => {
@@ -67,5 +68,46 @@ describe("applyTranslations", () => {
     applyTranslations("en")
 
     expect(t(OVERRIDE_ONLY_KEY)).toEqual(BUNDLED_VALUE)
+  })
+})
+
+// The three states an overridable section can be in, reached through the override layers rather
+// than through addTranslation directly.
+describe("tIfExists against the layered overrides", () => {
+  // Called with tIfExists in the public site and supplied by no bundled layer.
+  const UNSUPPLIED_KEY = "listingFilters.countyFilterNote"
+  // Called with tIfExists and supplied by the bundled public override file.
+  const BUNDLED_KEY = "account.create.initialDisclaimer"
+
+  afterEach(() => applyTranslations("en"))
+
+  it("hides a section no layer supplies", () => {
+    applyTranslations("en")
+
+    expect(tIfExists(UNSUPPLIED_KEY)).toBeNull()
+  })
+
+  it("shows a section a stored override adds", () => {
+    applyTranslations("en", { en: { [UNSUPPLIED_KEY]: "Only in the database" } })
+
+    expect(tIfExists(UNSUPPLIED_KEY)).toEqual("Only in the database")
+  })
+
+  it("hides a bundled section when a stored override empties it", () => {
+    expect(tIfExists(BUNDLED_KEY)).toBeTruthy()
+
+    applyTranslations("en", { en: { [BUNDLED_KEY]: "" } })
+
+    expect(tIfExists(BUNDLED_KEY)).toBeNull()
+  })
+
+  it("shows the section again once the override is reverted", () => {
+    applyTranslations("en", { en: { [BUNDLED_KEY]: "" } })
+    expect(tIfExists(BUNDLED_KEY)).toBeNull()
+
+    // Reverting deletes the row, so the next generation reads no override for the key.
+    applyTranslations("en")
+
+    expect(tIfExists(BUNDLED_KEY)).toEqual(overrideTranslations.en[BUNDLED_KEY])
   })
 })
