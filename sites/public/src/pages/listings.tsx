@@ -18,6 +18,7 @@ import {
   fetchJurisdictionByName,
   fetchMultiselectProgramData,
   fetchOpenListings,
+  fetchPublicOverrides,
 } from "../lib/hooks"
 import { ListingMap } from "../components/browse/map/ListingMap"
 
@@ -70,13 +71,16 @@ export default function ListingsPage(props: ListingsProps) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getServerSideProps(context: { req: any; query: any }) {
+export async function getServerSideProps(context: { req: any; query: any; locale?: string }) {
   let openListings
   let closedListings
   let areFiltersActive = false
   const isUsingNewSeedsDesign = Boolean(process.env.showNewSeedsDesigns)
 
-  const jurisdiction = await fetchJurisdictionByName(context.req)
+  const [jurisdiction, publicOverrides] = await Promise.all([
+    fetchJurisdictionByName(context.req),
+    fetchPublicOverrides(context.locale),
+  ])
   const enableMap = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableListingMap)
 
   // Map mode fetches listings client-side, so we keep SSR props minimal to avoid large page-data payloads
@@ -96,6 +100,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
         jurisdiction: jurisdiction,
         multiselectData: multiselectData,
         areFiltersActive,
+        publicOverrides,
       },
     }
   }
@@ -126,6 +131,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
       jurisdiction: jurisdiction,
       multiselectData: multiselectData,
       areFiltersActive,
+      publicOverrides,
     },
   }
 }

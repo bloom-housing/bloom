@@ -1,6 +1,7 @@
 import * as hooks from "../../src/lib/hooks"
 import { getStaticProps as faqProps } from "../../src/pages/faq"
 import { getStaticProps as resourcesProps } from "../../src/pages/additional-resources"
+import { getServerSideProps as notificationsProps } from "../../src/pages/account/notifications"
 
 describe("getStaticProps on the overridable pages", () => {
   const overrides = { en: { "a.key": "Override" } }
@@ -21,6 +22,15 @@ describe("getStaticProps on the overridable pages", () => {
     expect(hooks.fetchPublicOverrides).toHaveBeenCalledWith("es")
     expect(result.props.publicOverrides).toEqual(overrides)
     expect(result.revalidate).toEqual(30)
+  })
+
+  // Rendered per request rather than generated, so it takes the overrides but no revalidate.
+  it("a server-rendered page takes the overrides without a revalidate", async () => {
+    const result = await notificationsProps({ req: {}, query: {}, locale: "es" })
+
+    expect(hooks.fetchPublicOverrides).toHaveBeenCalledWith("es")
+    expect(result.props.publicOverrides).toEqual(overrides)
+    expect(result).not.toHaveProperty("revalidate")
   })
 
   // The page must still build when the API is unreachable.

@@ -1,6 +1,6 @@
 import React from "react"
 import { RequireLogin } from "@bloom-housing/shared-helpers"
-import { fetchAgencies, fetchJurisdictionByName } from "../../lib/hooks"
+import { fetchAgencies, fetchJurisdictionByName, fetchPublicOverrides } from "../../lib/hooks"
 import {
   Agency,
   FeatureFlagEnum,
@@ -56,11 +56,14 @@ const Edit = (props: EditProps) => {
 export default Edit
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getServerSideProps(context: { req: any; query: any }) {
-  const jurisdiction = await fetchJurisdictionByName(context.req)
+export async function getServerSideProps(context: { req: any; query: any; locale?: string }) {
+  const [jurisdiction, publicOverrides] = await Promise.all([
+    fetchJurisdictionByName(context.req),
+    fetchPublicOverrides(context.locale),
+  ])
   const agencies = await fetchAgencies(context.req, jurisdiction?.id)
 
   return {
-    props: { jurisdiction, agencies: agencies?.items || [] },
+    props: { jurisdiction, agencies: agencies?.items || [], publicOverrides },
   }
 }

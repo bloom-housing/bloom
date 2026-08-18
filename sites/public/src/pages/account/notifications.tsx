@@ -7,7 +7,7 @@ import {
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { isFeatureFlagOn } from "../../lib/helpers"
-import { fetchJurisdictionByName } from "../../lib/hooks"
+import { fetchJurisdictionByName, fetchPublicOverrides } from "../../lib/hooks"
 import { NotificationPreferences } from "../../components/account/NotificationPreferences"
 import MaxWidthLayout from "../../layouts/max-width"
 import Layout from "../../layouts/application"
@@ -62,10 +62,13 @@ const Notifications = (props: NotificationProps) => {
 export default Notifications
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getServerSideProps(context: { req: any; query: any }) {
-  const jurisdiction = await fetchJurisdictionByName(context.req)
+export async function getServerSideProps(context: { req: any; query: any; locale?: string }) {
+  const [jurisdiction, publicOverrides] = await Promise.all([
+    fetchJurisdictionByName(context.req),
+    fetchPublicOverrides(context.locale),
+  ])
 
   return {
-    props: { jurisdiction },
+    props: { jurisdiction, publicOverrides },
   }
 }

@@ -12,6 +12,7 @@ import {
   fetchClosedListings,
   fetchJurisdictionByName,
   fetchMultiselectProgramData,
+  fetchPublicOverrides,
 } from "../lib/hooks"
 import { ListingsProps } from "./listings"
 
@@ -32,7 +33,7 @@ export default function ListingsPageClosed(props: ListingsProps) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getServerSideProps(context: { req: any; query: any }) {
+export async function getServerSideProps(context: { req: any; query: any; locale?: string }) {
   let closedListings
   let areFiltersActive = false
 
@@ -48,7 +49,10 @@ export async function getServerSideProps(context: { req: any; query: any }) {
   } else {
     closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
   }
-  const jurisdiction = await fetchJurisdictionByName(context.req)
+  const [jurisdiction, publicOverrides] = await Promise.all([
+    fetchJurisdictionByName(context.req),
+    fetchPublicOverrides(context.locale),
+  ])
   const multiselectData = isFeatureFlagOn(
     jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
@@ -63,6 +67,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
       jurisdiction: jurisdiction,
       multiselectData: multiselectData,
       areFiltersActive,
+      publicOverrides,
     },
   }
 }
