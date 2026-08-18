@@ -34,6 +34,9 @@ const intersectionObserverMock = () => ({
 window.IntersectionObserver = jest.fn().mockImplementation(intersectionObserverMock)
 
 process.env.backendApiBase = "http://localhost:3100"
+// _app reads both of these outside a test's control, the first at module load.
+process.env.rtlLanguages = "ar,fa"
+process.env.jurisdictionName = "Bloomington"
 
 global.beforeEach(() => {
   serviceOptions.axios = axios.create({

@@ -9,8 +9,10 @@ describe("applyTranslations", () => {
   const BUNDLED_VALUE = overrideTranslations.en[OVERRIDE_ONLY_KEY]
   // Supplied by both shared locale files with different values, so precedence is visible.
   const TRANSLATED_KEY = "t.accessibility"
+  // Supplied by both bundled public override files, with a different value in each.
+  const BUNDLED_LOCALE_KEY = "account.create.initialDisclaimer"
 
-  afterEach(() => applyTranslations("en"))
+  beforeEach(() => applyTranslations("en"))
 
   it("layers the bundled overrides over the shared base", () => {
     applyTranslations("en")
@@ -54,6 +56,21 @@ describe("applyTranslations", () => {
     expect(t(TRANSLATED_KEY)).toEqual("Desde la base de datos")
   })
 
+  // BUNDLED_LOCALE_KEY is supplied by locale_overrides/es.json, so this is the only assertion
+  // that fails if that layer stops loading.
+  it("applies the site's own bundled file for the locale", () => {
+    applyTranslations("es")
+
+    expect(overrideTranslations.es[BUNDLED_LOCALE_KEY]).toBeTruthy()
+    expect(t(BUNDLED_LOCALE_KEY)).toEqual(overrideTranslations.es[BUNDLED_LOCALE_KEY])
+  })
+
+  it("lets a stored override for the locale win over that bundled file", () => {
+    applyTranslations("es", { es: { [BUNDLED_LOCALE_KEY]: "Desde la base de datos" } })
+
+    expect(t(BUNDLED_LOCALE_KEY)).toEqual("Desde la base de datos")
+  })
+
   // The English layers stay under the locale ones, so a key with nothing to fall back to still
   // reads the English override.
   it("uses an English override for a key the locale does not translate", () => {
@@ -79,7 +96,7 @@ describe("tIfExists against the layered overrides", () => {
   // Called with tIfExists and supplied by the bundled public override file.
   const BUNDLED_KEY = "account.create.initialDisclaimer"
 
-  afterEach(() => applyTranslations("en"))
+  beforeEach(() => applyTranslations("en"))
 
   it("hides a section no layer supplies", () => {
     applyTranslations("en")
