@@ -5,7 +5,6 @@ import React, { FunctionComponent, useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"
 import {
-  addTranslation,
   GenericRouter,
   NavigationContext as UICNavigationContext,
 } from "@bloom-housing/ui-components"
@@ -25,7 +24,7 @@ import ApplicationConductor, {
   loadApplicationFromAutosave,
   loadSavedListing,
 } from "../lib/applications/ApplicationConductor"
-import { translations, overrideTranslations } from "../lib/translations"
+import { applyTranslations } from "../lib/translations"
 import LinkComponent from "../components/core/LinkComponent"
 
 import "../../styles/overrides.scss"
@@ -46,16 +45,13 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     return new ApplicationConductor(application, savedListing)
   }, [application, savedListing])
 
+  const publicOverrides = pageProps?.publicOverrides as
+    | Record<string, Record<string, string>>
+    | undefined
+
   useMemo(() => {
-    addTranslation(translations.general, true)
-    if (locale && locale !== "en" && translations[locale]) {
-      addTranslation(translations[locale])
-    }
-    addTranslation(overrideTranslations.en)
-    if (overrideTranslations[locale]) {
-      addTranslation(overrideTranslations[locale])
-    }
-  }, [locale])
+    applyTranslations(locale, publicOverrides)
+  }, [locale, publicOverrides])
 
   useEffect(() => {
     if (!document.body.dataset.customScriptsLoaded) {

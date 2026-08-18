@@ -343,6 +343,22 @@ export async function fetchJurisdictionByName(req?: any) {
   return jurisdiction
 }
 
+export async function fetchPublicOverrides(language?: string) {
+  try {
+    const response = await axios.get(
+      `${process.env.backendApiBase}/translations/byName/${process.env.jurisdictionName}`,
+      {
+        params: { site: "public", language: language ?? "en" },
+        headers: { passkey: process.env.API_PASS_KEY },
+      }
+    )
+    return response?.data as Record<string, Record<string, string>>
+  } catch (error) {
+    console.log("error fetching public translation overrides = ", error)
+    return undefined
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchMultiselectProgramData(req: any, jurisdictionId: string) {
   try {

@@ -1,3 +1,4 @@
+import { addTranslation } from "@bloom-housing/ui-components"
 import generalTranslations from "@bloom-housing/shared-helpers/src/locales/general.json"
 import spanishTranslations from "@bloom-housing/shared-helpers/src/locales/es.json"
 import chineseTranslations from "@bloom-housing/shared-helpers/src/locales/zh.json"
@@ -20,6 +21,7 @@ import additionalKoreanTranslations from "../../page_content/locale_overrides/ko
 import additionalArmenianTranslations from "../../page_content/locale_overrides/hy.json"
 import additionalFarsiTranslations from "../../page_content/locale_overrides/fa.json"
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const translations = {
   general: generalTranslations,
   es: spanishTranslations,
@@ -45,3 +47,27 @@ export const overrideTranslations = {
   hy: additionalArmenianTranslations,
   fa: additionalFarsiTranslations,
 } as Record<string, any>
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+export const applyTranslations = (
+  locale?: string,
+  publicOverrides?: Record<string, Record<string, string>>
+) => {
+  addTranslation(translations.general, true)
+  addTranslation(overrideTranslations.en)
+  if (publicOverrides?.en) {
+    addTranslation(publicOverrides.en)
+  }
+
+  if (!locale || locale === "en") return
+
+  if (translations[locale]) {
+    addTranslation(translations[locale])
+  }
+  if (overrideTranslations[locale]) {
+    addTranslation(overrideTranslations[locale])
+  }
+  if (publicOverrides?.[locale]) {
+    addTranslation(publicOverrides[locale])
+  }
+}
