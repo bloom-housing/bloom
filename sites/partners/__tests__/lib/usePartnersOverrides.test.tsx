@@ -153,6 +153,28 @@ describe("usePartnersOverrides", () => {
     expect(result.current.overrides).toEqual({ "nav.title": "Desde la base de datos" })
   })
 
+  // The request outlives the component, so the abort is what stops it settling into nothing.
+  it("abandons a request in flight when the component goes away", async () => {
+    const pending = deferred<Response>()
+    let aborted = false
+    fetchMock.mockImplementation((_url, init: RequestInit) => {
+      init.signal.addEventListener("abort", () => (aborted = true))
+      return pending.promise
+    })
+    const { result, unmount } = renderHook(() => usePartnersOverrides("en"))
+
+    expect(result.current.settled).toBe(false)
+    unmount()
+
+    expect(aborted).toBe(true)
+
+    await act(async () => {
+      pending.resolve(okResponse({ "nav.title": "Too late" }) as unknown as Response)
+      await Promise.resolve()
+    })
+    expect(result.current.settled).toBe(false)
+  })
+
   it("ignores a superseded response that lands after a newer one", async () => {
     const first = deferred<Response>()
     fetchMock.mockReturnValueOnce(first.promise)
