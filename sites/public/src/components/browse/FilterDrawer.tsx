@@ -1,5 +1,5 @@
 import { t } from "@bloom-housing/ui-components"
-import { Form, tIfExists } from "@bloom-housing/shared-helpers"
+import { Form, MAX_BATHROOMS, tIfExists } from "@bloom-housing/shared-helpers"
 import { Button, Drawer } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import {
@@ -21,6 +21,7 @@ import {
   CheckboxGroup,
   FilterData,
   getAvailabilityValues,
+  RadioGroup,
   RentSection,
   SearchSection,
   unitTypeMapping,
@@ -184,18 +185,20 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               register={register}
             />
             {enableFilterByBathroom && (
-              <CheckboxGroup
+              <RadioGroup
                 groupLabel={t("t.bathrooms")}
-                fields={["0", "1", "2", "3", "4", "5"].map((bathroomCount) => {
-                  return {
-                    key: `${ListingFilterKeys.bathrooms}.${bathroomCount}`,
-                    label:
-                      bathroomCount === "0" ? t("listings.unit.sharedBathroom") : bathroomCount,
-                    defaultChecked: isTrue(
-                      props.filterState?.[ListingFilterKeys.bathrooms]?.[bathroomCount]
-                    ),
+                name={ListingFilterKeys.bathrooms}
+                fields={["", ...Array.from({ length: MAX_BATHROOMS }, (_, i) => `${i + 1}`)].map(
+                  (bathroomCount) => {
+                    return {
+                      key: `${ListingFilterKeys.bathrooms}.${bathroomCount || "any"}`,
+                      value: bathroomCount,
+                      label: bathroomCount ? `${bathroomCount}+` : t("t.any"),
+                      defaultChecked:
+                        (props.filterState?.[ListingFilterKeys.bathrooms] ?? "") === bathroomCount,
+                    }
                   }
-                })}
+                )}
                 register={register}
               />
             )}
