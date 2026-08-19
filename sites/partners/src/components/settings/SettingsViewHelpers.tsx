@@ -26,7 +26,7 @@ export const getSettingsTabs = (
   enableV2MSQ: boolean,
   { enablePreferences, enableProperties, enableAgencies }: SettingsTabsFeatureFlags
 ) => {
-  const baseUrl = "/settings/"
+  const baseUrl = "/settings"
   const enabledTabs: SettingsIndexEnum[] = []
   if (enablePreferences) enabledTabs.push(SettingsIndexEnum.preferences)
   if (enableProperties) enabledTabs.push(SettingsIndexEnum.properties)
