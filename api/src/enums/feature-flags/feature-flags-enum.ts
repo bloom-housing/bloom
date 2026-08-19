@@ -72,6 +72,7 @@ export enum FeatureFlagEnum {
   enableSingleUseCode = 'enableSingleUseCode',
   enableSmokingPolicyRadio = 'enableSmokingPolicyRadio',
   enableSpokenLanguage = 'enableSpokenLanguage',
+  enableStopLights = 'enableStopLights',
   enableSupportAdmin = 'enableSupportAdmin',
   enableUnderConstructionHome = 'enableUnderConstructionHome',
   enableUnitAccessibilityTypeTags = 'enableUnitAccessibilityTypeTags',
@@ -424,6 +425,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableSpokenLanguage,
     description:
       'When true, the application demographics section displays a spoken language question with options configured on the jurisdiction',
+  },
+  {
+    name: FeatureFlagEnum.enableStopLights,
+    description:
+      'When true, Stop Light eligibility rules enabled for the jurisdiction are evaluated on the public application, blocking (red) or warning (yellow) the applicant',
   },
   {
     name: FeatureFlagEnum.enableSupportAdmin,

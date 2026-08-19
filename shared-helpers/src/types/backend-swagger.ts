@@ -8387,6 +8387,9 @@ export interface JurisdictionCreate {
   regions: []
 
   /**  */
+  enabledStopLightRuleKeys?: string[]
+
+  /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
 
   /**  */
@@ -8475,6 +8478,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   regions: []
+
+  /**  */
+  enabledStopLightRuleKeys?: string[]
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
@@ -8601,6 +8607,9 @@ export interface Jurisdiction {
 
   /**  */
   regions: []
+
+  /**  */
+  enabledStopLightRuleKeys?: string[]
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
@@ -11646,6 +11655,7 @@ export enum FeatureFlagEnum {
   "enableSingleUseCode" = "enableSingleUseCode",
   "enableSmokingPolicyRadio" = "enableSmokingPolicyRadio",
   "enableSpokenLanguage" = "enableSpokenLanguage",
+  "enableStopLights" = "enableStopLights",
   "enableSupportAdmin" = "enableSupportAdmin",
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitAccessibilityTypeTags" = "enableUnitAccessibilityTypeTags",

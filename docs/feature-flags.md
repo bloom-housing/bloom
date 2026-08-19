@@ -97,6 +97,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableSingleUseCode](./feature-flags/enableSingleUseCode.md) | When true, the backend allows for logging into this jurisdiction using the single use code flow |
 | [enableSmokingPolicyRadio](./feature-flags/enableSmokingPolicyRadio.md) | When true, the listing 'Smoking policy' field is a radio group |
 | [enableSpokenLanguage](./feature-flags/enableSpokenLanguage.md) | When true, the application demographics section displays a spoken language question with options configured on the jurisdiction |
+| [enableStopLights](./feature-flags/enableStopLights.md) | When true, Stop Light eligibility rules enabled for the jurisdiction are evaluated on the public application, blocking (red) or warning (yellow) the applicant |
 | [enableSupportAdmin](./feature-flags/enableSupportAdmin.md) | When true, support admins can be created |
 | [enableUnderConstructionHome](./feature-flags/enableUnderConstructionHome.md) | When true, the 'under construction' section is displayed on the home page |
 | [enableUnitAccessibilityTypeTags](./feature-flags/enableUnitAccessibilityTypeTags.md) | When true, unit accessibility type tags (for example, 'Mobility units') are displayed on listing cards and details |
