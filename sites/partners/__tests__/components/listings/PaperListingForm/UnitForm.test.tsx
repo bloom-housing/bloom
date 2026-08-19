@@ -10,9 +10,11 @@ import {
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   AmiChart,
+  EnumListingListingType,
   Jurisdiction,
   UnitAccessibilityPriorityTypeEnum,
   UnitType,
+  UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter, render, screen, waitFor, within } from "../../../testUtils"
 import UnitForm from "../../../../src/components/listings/PaperListingForm/UnitForm"
@@ -426,6 +428,188 @@ describe("UnitForm", () => {
 
     expect(screen.getByRole("button", { name: "Make a copy" })).toBeInTheDocument()
     expect(screen.queryByRole("button", { name: "Save" })).not.toBeInTheDocument()
+  })
+
+  describe("land use minimum occupancy", () => {
+    const unitTypeByName = (name: UnitTypeEnum) => unitTypes.find((type) => type.name === name)
+
+    const renderLandUseUnitForm = (defaultUnit: TempUnit | undefined, onSubmit = jest.fn()) =>
+      render(
+        <UnitForm
+          {...defaultUnitFormProps}
+          onClose={jest.fn()}
+          onSubmit={onSubmit}
+          draft={true}
+          nextId={1}
+          defaultUnit={defaultUnit}
+          jurisdictionId={"123"}
+          listingType={EnumListingListingType.landUse}
+        />
+      )
+
+    it.each([
+      [UnitTypeEnum.SRO, "1"],
+      [UnitTypeEnum.twoBdrm, "2"],
+      [UnitTypeEnum.sixBdrm, "10"],
+    ])("should derive and lock minimum occupancy for %s", async (unitTypeName, expected) => {
+      renderLandUseUnitForm({
+        ...tempUnit,
+        unitTypes: unitTypeByName(unitTypeName),
+      } as TempUnit)
+
+      await waitForFormLoad()
+
+      const minOccupancySelector = screen.getByRole("combobox", { name: "Minimum occupancy" })
+      await waitFor(() => expect(minOccupancySelector).toHaveValue(expected))
+      expect(minOccupancySelector).toBeDisabled()
+      expect(screen.getByRole("combobox", { name: "Max occupancy" })).not.toBeDisabled()
+    })
+
+    it("should leave minimum occupancy editable and empty for seven bedroom units", async () => {
+      renderLandUseUnitForm({
+        ...tempUnit,
+        minOccupancy: undefined,
+        unitTypes: unitTypeByName(UnitTypeEnum.sevenBdrm),
+      } as TempUnit)
+
+      await waitForFormLoad()
+
+      const minOccupancySelector = screen.getByRole("combobox", { name: "Minimum occupancy" })
+      await waitFor(() =>
+        expect(screen.getByRole("combobox", { name: /unit type/i })).toHaveValue(
+          unitTypeByName(UnitTypeEnum.sevenBdrm).id
+        )
+      )
+      expect(minOccupancySelector).not.toBeDisabled()
+      expect(minOccupancySelector).toHaveValue("")
+    })
+
+    it("should correct a saved minimum occupancy that does not match the mapping", async () => {
+      renderLandUseUnitForm({
+        ...tempUnit,
+        minOccupancy: 5,
+        maxOccupancy: 8,
+        unitTypes: unitTypeByName(UnitTypeEnum.threeBdrm),
+      } as TempUnit)
+
+      await waitForFormLoad()
+
+      await waitFor(() =>
+        expect(screen.getByRole("combobox", { name: "Minimum occupancy" })).toHaveValue("4")
+      )
+    })
+
+    it("should update the derived value when the unit type changes", async () => {
+      renderLandUseUnitForm({
+        ...tempUnit,
+        unitTypes: unitTypeByName(UnitTypeEnum.twoBdrm),
+      } as TempUnit)
+
+      await waitForFormLoad()
+
+      const minOccupancySelector = screen.getByRole("combobox", { name: "Minimum occupancy" })
+      await waitFor(() => expect(minOccupancySelector).toHaveValue("2"))
+
+      await userEvent.selectOptions(
+        screen.getByRole("combobox", { name: /unit type/i }),
+        unitTypeByName(UnitTypeEnum.fourBdrm).id
+      )
+
+      await waitFor(() => expect(minOccupancySelector).toHaveValue("6"))
+      expect(minOccupancySelector).toBeDisabled()
+    })
+
+    it("should unlock the field when switching to a seven bedroom unit", async () => {
+      renderLandUseUnitForm({
+        ...tempUnit,
+        unitTypes: unitTypeByName(UnitTypeEnum.twoBdrm),
+      } as TempUnit)
+
+      await waitForFormLoad()
+
+      const minOccupancySelector = screen.getByRole("combobox", { name: "Minimum occupancy" })
+      await waitFor(() => expect(minOccupancySelector).toHaveValue("2"))
+
+      await userEvent.selectOptions(
+        screen.getByRole("combobox", { name: /unit type/i }),
+        unitTypeByName(UnitTypeEnum.sevenBdrm).id
+      )
+
+      await waitFor(() => expect(minOccupancySelector).not.toBeDisabled())
+      // the previously derived value stays as an editable starting point
+      expect(minOccupancySelector).toHaveValue("2")
+    })
+
+    it("should save the derived minimum occupancy", async () => {
+      const onSubmit = jest.fn()
+      renderLandUseUnitForm(
+        {
+          ...tempUnit,
+          minOccupancy: 5,
+          maxOccupancy: 8,
+          unitTypes: unitTypeByName(UnitTypeEnum.twoBdrm),
+        } as TempUnit,
+        onSubmit
+      )
+
+      await waitForFormLoad()
+
+      await waitFor(() =>
+        expect(screen.getByRole("combobox", { name: "Minimum occupancy" })).toHaveValue("2")
+      )
+
+      // AMI chart and percentage are required for the form to submit
+      await userEvent.selectOptions(
+        screen.getByRole("combobox", { name: /ami chart/i }),
+        "Mock AMI"
+      )
+      await screen.findByRole("option", { name: "30" })
+      await userEvent.selectOptions(
+        screen.getByRole("combobox", { name: /percentage of ami/i }),
+        "20"
+      )
+      // the fixture chart only covers household sizes 1-5, the rest are required too
+      const minIncomeInputs = screen.getAllByRole("spinbutton", { name: "Minimum income" })
+      for (const input of minIncomeInputs.slice(5)) {
+        await userEvent.type(input, "84000")
+      }
+
+      await userEvent.click(screen.getByRole("button", { name: "Save & exit" }))
+
+      await waitFor(() => expect(onSubmit).toHaveBeenCalled())
+      expect(onSubmit.mock.calls[0][0].minOccupancy).toBe("2")
+    })
+
+    it("should leave minimum occupancy editable for non land use listings", async () => {
+      render(
+        <UnitForm
+          {...defaultUnitFormProps}
+          onClose={jest.fn()}
+          onSubmit={jest.fn()}
+          draft={true}
+          nextId={1}
+          defaultUnit={
+            {
+              ...tempUnit,
+              minOccupancy: undefined,
+              unitTypes: unitTypeByName(UnitTypeEnum.twoBdrm),
+            } as TempUnit
+          }
+          jurisdictionId={"123"}
+        />
+      )
+
+      await waitForFormLoad()
+
+      await waitFor(() =>
+        expect(screen.getByRole("combobox", { name: /unit type/i })).toHaveValue(
+          unitTypeByName(UnitTypeEnum.twoBdrm).id
+        )
+      )
+      const minOccupancySelector = screen.getByRole("combobox", { name: "Minimum occupancy" })
+      expect(minOccupancySelector).not.toBeDisabled()
+      expect(minOccupancySelector).toHaveValue("")
+    })
   })
 
   it("should retain copied data when reopened as draft", async () => {
