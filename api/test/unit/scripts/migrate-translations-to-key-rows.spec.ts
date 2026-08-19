@@ -54,6 +54,25 @@ describe('parseArgs', () => {
     );
   });
 
+  it('rejects an unrecognized argument rather than dropping it', () => {
+    // A misspelled --skip-existing would otherwise replace admin edits with the bundled values.
+    expect(() => parseArgs(['--skip-exsiting', '--commit'])).toThrow(
+      'Unrecognized argument: --skip-exsiting',
+    );
+    expect(() => parseArgs(['Bloomington'])).toThrow(
+      'Unrecognized argument: Bloomington',
+    );
+  });
+
+  it('rejects --languages with no value', () => {
+    expect(() => parseArgs(['--languages'])).toThrow(
+      'Missing value for --languages',
+    );
+    expect(() => parseArgs(['--languages', ' , '])).toThrow(
+      'Missing value for --languages',
+    );
+  });
+
   it('rejects an unknown language', () => {
     expect(() => parseArgs(['--languages', 'es,klingon'])).toThrow(
       'Unsupported language code: klingon',
@@ -195,6 +214,44 @@ describe('withSourceHashes', () => {
     ]);
 
     expect(rows[1].sourceHash).toEqual(sourceHash('English'));
+  });
+
+  it('falls back to the English value at the blob scope', () => {
+    // The three sections are hashed together, so a public row can resolve its source from the
+    // rows the blob migration produced, the way englishSourceHashes does at edit time.
+    const rows = withSourceHashes([
+      row({ key: 'a.b', value: 'From the blob' }),
+      row({
+        jurisdictionId: 'juris-1',
+        language: LanguagesEnum.es,
+        site: SiteEnum.public,
+        key: 'a.b',
+        value: 'Espanol',
+      }),
+    ]);
+
+    expect(rows[1].sourceHash).toEqual(sourceHash('From the blob'));
+  });
+
+  it('prefers the English value in the row own scope over a wider one', () => {
+    const rows = withSourceHashes([
+      row({ key: 'a.b', value: 'From the blob' }),
+      row({
+        jurisdictionId: 'juris-1',
+        site: SiteEnum.public,
+        key: 'a.b',
+        value: 'From the public file',
+      }),
+      row({
+        jurisdictionId: 'juris-1',
+        language: LanguagesEnum.es,
+        site: SiteEnum.public,
+        key: 'a.b',
+        value: 'Espanol',
+      }),
+    ]);
+
+    expect(rows[2].sourceHash).toEqual(sourceHash('From the public file'));
   });
 
   it('leaves the hash null when no English row supplies the source', () => {

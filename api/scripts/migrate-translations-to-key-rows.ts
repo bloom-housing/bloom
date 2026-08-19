@@ -24,6 +24,8 @@ const PUBLIC_OVERRIDES_DIR = path.join(
   'page_content',
   'locale_overrides',
 );
+const BLOB_TRANSACTION_TIMEOUT_MS = 120_000;
+
 const PARTNERS_OVERRIDES_DIR = path.join(
   '..',
   'sites',
@@ -85,11 +87,16 @@ export const parseArgs = (argv: string[]): CliOptions => {
     }
 
     if (arg === '--languages') {
-      const raw = argv[index + 1] || '';
-      const languages = raw
+      const raw = argv[index + 1];
+      const languages = (raw ?? '')
         .split(',')
         .map((language) => language.trim())
         .filter(Boolean);
+      if (!languages.length) {
+        throw new Error(
+          'Missing value for --languages. Example: --languages es,zh',
+        );
+      }
       languages.forEach((language) => {
         if (!LANGUAGES.includes(language as LanguagesEnum)) {
           throw new Error(`Unsupported language code: ${language}`);
@@ -109,6 +116,8 @@ export const parseArgs = (argv: string[]): CliOptions => {
       options.skipExisting = true;
       continue;
     }
+
+    throw new Error(`Unrecognized argument: ${arg}`);
   }
 
   return options;
@@ -333,9 +342,10 @@ const writeRows = async (
   }
 };
 
+// jurisdictionId is left out for the blob scope, where every jurisdiction's rows are read at once.
 const existingFor = async (
   prisma: PrismaService,
-  where: { jurisdictionId: string | null; site: SiteEnum | null },
+  where: { jurisdictionId?: string | null; site: SiteEnum | null },
 ): Promise<ExistingRow[]> =>
   prisma.translationStrings.findMany({
     where,
@@ -355,42 +365,7 @@ async function main() {
   const sections: Array<{ label: string; diff: RowDiff }> = [];
 
   try {
-    const blobs = await prisma.translations.findMany({
-      select: { jurisdictionId: true, language: true, translations: true },
-    });
-    const blobRows = withSourceHashes(buildBlobRows(blobs));
-    const blobScopes = [...new Set(blobRows.map((row) => row.jurisdictionId))];
-    const existingBlobRows = (
-      await Promise.all(
-        blobScopes.map((jurisdictionId) =>
-          existingFor(prisma, { jurisdictionId, site: null }),
-        ),
-      )
-    ).flat();
-    const blobDiff = diffRows(existingBlobRows, blobRows, options.skipExisting);
-    sections.push({ label: scopeLabel(null), diff: blobDiff });
-
-    const partnersRows = withSourceHashes(
-      buildOverrideRows({
-        files: readOverrideFiles(PARTNERS_OVERRIDES_DIR, options.languages),
-        jurisdictionId: null,
-        site: SiteEnum.partners,
-      }),
-    );
-    const partnersDiff = diffRows(
-      await existingFor(prisma, {
-        jurisdictionId: null,
-        site: SiteEnum.partners,
-      }),
-      partnersRows,
-      options.skipExisting,
-    );
-    sections.push({
-      label: scopeLabel(SiteEnum.partners),
-      diff: partnersDiff,
-    });
-
-    let publicDiff: RowDiff | null = null;
+    let jurisdictionId: string | null = null;
     if (options.jurisdiction) {
       const jurisdiction = await prisma.jurisdictions.findFirst({
         where: { name: options.jurisdiction },
@@ -399,36 +374,76 @@ async function main() {
       if (!jurisdiction) {
         throw new Error(`Jurisdiction not found: ${options.jurisdiction}`);
       }
-
-      const publicRows = withSourceHashes(
-        buildOverrideRows({
-          files: readOverrideFiles(PUBLIC_OVERRIDES_DIR, options.languages),
-          jurisdictionId: jurisdiction.id,
-          site: SiteEnum.public,
-        }),
-      );
-      publicDiff = diffRows(
-        await existingFor(prisma, {
-          jurisdictionId: jurisdiction.id,
-          site: SiteEnum.public,
-        }),
-        publicRows,
-        options.skipExisting,
-      );
-      sections.push({
-        label: scopeLabel(SiteEnum.public, options.jurisdiction),
-        diff: publicDiff,
-      });
+      jurisdictionId = jurisdiction.id;
     } else {
       console.warn(
         'No --jurisdiction given, so the public overrides are not migrated.',
       );
     }
 
+    const blobs = await prisma.translations.findMany({
+      select: { jurisdictionId: true, language: true, translations: true },
+    });
+
+    // Hashed together rather than per scope, so a translated override can resolve its English
+    // source from a wider scope the way englishSourceHashes does at edit time.
+    const allRows = withSourceHashes([
+      ...buildBlobRows(blobs),
+      ...buildOverrideRows({
+        files: readOverrideFiles(PARTNERS_OVERRIDES_DIR, options.languages),
+        jurisdictionId: null,
+        site: SiteEnum.partners,
+      }),
+      ...(jurisdictionId
+        ? buildOverrideRows({
+            files: readOverrideFiles(PUBLIC_OVERRIDES_DIR, options.languages),
+            jurisdictionId,
+            site: SiteEnum.public,
+          })
+        : []),
+    ]);
+    const rowsForSite = (site: SiteEnum | null) =>
+      allRows.filter((row) => row.site === site);
+
+    const blobDiff = diffRows(
+      await existingFor(prisma, { site: null }),
+      rowsForSite(null),
+      options.skipExisting,
+    );
+    sections.push({ label: scopeLabel(null), diff: blobDiff });
+
+    const partnersDiff = diffRows(
+      await existingFor(prisma, {
+        jurisdictionId: null,
+        site: SiteEnum.partners,
+      }),
+      rowsForSite(SiteEnum.partners),
+      options.skipExisting,
+    );
+    sections.push({
+      label: scopeLabel(SiteEnum.partners),
+      diff: partnersDiff,
+    });
+
+    let publicDiff: RowDiff | null = null;
+    if (jurisdictionId) {
+      publicDiff = diffRows(
+        await existingFor(prisma, { jurisdictionId, site: SiteEnum.public }),
+        rowsForSite(SiteEnum.public),
+        options.skipExisting,
+      );
+      sections.push({
+        label: scopeLabel(SiteEnum.public, options.jurisdiction),
+        diff: publicDiff,
+      });
+    }
+
     console.log(formatReport(sections, options.commit));
 
     if (options.commit) {
-      await prisma.$transaction((tx) => writeRows(tx, blobDiff));
+      await prisma.$transaction((tx) => writeRows(tx, blobDiff), {
+        timeout: BLOB_TRANSACTION_TIMEOUT_MS,
+      });
       await writeRows(prisma, partnersDiff);
       if (publicDiff) {
         await writeRows(prisma, publicDiff);
