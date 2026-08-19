@@ -54,18 +54,20 @@ export type RowDiff = {
   create: DesiredRow[];
   update: DesiredRow[];
   unchanged: number;
+  skipped: number;
 };
 
 export type CliOptions = {
   jurisdiction?: string;
   commit: boolean;
   languages?: LanguagesEnum[];
+  skipExisting: boolean;
 };
 
 const LANGUAGES = Object.values(LanguagesEnum);
 
 export const parseArgs = (argv: string[]): CliOptions => {
-  const options: CliOptions = { commit: false };
+  const options: CliOptions = { commit: false, skipExisting: false };
 
   for (let index = 0; index < argv.length; index++) {
     const arg = argv[index];
@@ -100,6 +102,11 @@ export const parseArgs = (argv: string[]): CliOptions => {
 
     if (arg === '--commit') {
       options.commit = true;
+      continue;
+    }
+
+    if (arg === '--skip-existing') {
+      options.skipExisting = true;
       continue;
     }
   }
@@ -187,12 +194,13 @@ export const withSourceHashes = (rows: DesiredRow[]): DesiredRow[] => {
 export const diffRows = (
   existing: ExistingRow[],
   desired: DesiredRow[],
+  skipExisting = false,
 ): RowDiff => {
   const existingByKey = new Map(
     existing.map((row) => [scopeKey(row, row.key) + `|${row.language}`, row]),
   );
 
-  const diff: RowDiff = { create: [], update: [], unchanged: 0 };
+  const diff: RowDiff = { create: [], update: [], unchanged: 0, skipped: 0 };
 
   desired.forEach((row) => {
     const match = existingByKey.get(
@@ -204,7 +212,11 @@ export const diffRows = (
       match.value !== row.value ||
       match.sourceHash !== row.sourceHash
     ) {
-      diff.update.push(row);
+      if (skipExisting) {
+        diff.skipped++;
+      } else {
+        diff.update.push(row);
+      }
     } else {
       diff.unchanged++;
     }
@@ -223,8 +235,9 @@ export const formatReport = (
   ];
 
   sections.forEach(({ label, diff }) => {
+    const skipped = diff.skipped ? `, ${diff.skipped} left as they are` : '';
     lines.push(
-      `${label}: ${diff.create.length} to create, ${diff.update.length} to update, ${diff.unchanged} unchanged`,
+      `${label}: ${diff.create.length} to create, ${diff.update.length} to update, ${diff.unchanged} unchanged${skipped}`,
     );
     diff.create
       .slice(0, 5)
@@ -354,7 +367,7 @@ async function main() {
         ),
       )
     ).flat();
-    const blobDiff = diffRows(existingBlobRows, blobRows);
+    const blobDiff = diffRows(existingBlobRows, blobRows, options.skipExisting);
     sections.push({ label: scopeLabel(null), diff: blobDiff });
 
     const partnersRows = withSourceHashes(
@@ -370,6 +383,7 @@ async function main() {
         site: SiteEnum.partners,
       }),
       partnersRows,
+      options.skipExisting,
     );
     sections.push({
       label: scopeLabel(SiteEnum.partners),
@@ -399,6 +413,7 @@ async function main() {
           site: SiteEnum.public,
         }),
         publicRows,
+        options.skipExisting,
       );
       sections.push({
         label: scopeLabel(SiteEnum.public, options.jurisdiction),

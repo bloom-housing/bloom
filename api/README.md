@@ -98,7 +98,8 @@ Run it again after a migration that patches the `translations` blob deploys, so 
 
 Notes:
 
-- A re-run rewrites any row whose value differs from its source. An admin edit made through the editor differs by definition, so re-running with `--jurisdiction` puts the bundled file's value back over it. Pass `--jurisdiction` only when replacing the public overrides is what you want.
+- A re-run rewrites any row whose value differs from its source. An admin edit made through the editor differs by definition, so re-running with `--jurisdiction` puts the bundled file's value back over it unless `--skip-existing` is passed.
+- `--skip-existing` writes only rows that do not exist yet, so a re-run adds new keys and leaves every value already in the database alone. Use it when re-running against an environment whose overrides an admin has edited.
 - Without `--jurisdiction`, the public overrides are skipped and the rest still runs.
 - `--languages es,zh` limits which override files are read. English is always read, because it is the source the other languages are hashed against.
 - The bundled override files stay in the repository. The sites keep rendering them when the API is unreachable.

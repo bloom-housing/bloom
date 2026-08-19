@@ -28,7 +28,7 @@ const row = (overrides: Partial<DesiredRow> = {}): DesiredRow => ({
 
 describe('parseArgs', () => {
   it('defaults to a dry run', () => {
-    expect(parseArgs([])).toEqual({ commit: false });
+    expect(parseArgs([])).toEqual({ commit: false, skipExisting: false });
   });
 
   it('reads the jurisdiction, commit flag, and languages', () => {
@@ -43,6 +43,7 @@ describe('parseArgs', () => {
     ).toEqual({
       jurisdiction: 'Bloomington',
       commit: true,
+      skipExisting: false,
       languages: [LanguagesEnum.es, LanguagesEnum.zh],
     });
   });
@@ -279,6 +280,27 @@ describe('diffRows', () => {
 
     expect(diffRows([existing], [desired]).create).toEqual([desired]);
   });
+
+  it('leaves an existing row alone under skipExisting', () => {
+    const changed = row({ key: 'changed', value: 'New' });
+    const fresh = row({ key: 'fresh', value: 'Fresh' });
+
+    const diff = diffRows(
+      [{ ...changed, value: 'Old' }],
+      [changed, fresh],
+      true,
+    );
+
+    expect(diff.update).toEqual([]);
+    expect(diff.skipped).toEqual(1);
+    expect(diff.create).toEqual([fresh]);
+  });
+});
+
+describe('parseArgs skip flag', () => {
+  it('reads --skip-existing', () => {
+    expect(parseArgs(['--skip-existing']).skipExisting).toBe(true);
+  });
 });
 
 describe('formatReport', () => {
@@ -287,7 +309,7 @@ describe('formatReport', () => {
       [
         {
           label: 'public overrides',
-          diff: { create: [], update: [], unchanged: 3 },
+          diff: { create: [], update: [], unchanged: 3, skipped: 0 },
         },
       ],
       false,
@@ -305,7 +327,12 @@ describe('formatReport', () => {
     );
 
     const report = formatReport(
-      [{ label: 'blob', diff: { create, update: [], unchanged: 0 } }],
+      [
+        {
+          label: 'blob',
+          diff: { create, update: [], unchanged: 0, skipped: 0 },
+        },
+      ],
       true,
     );
 
