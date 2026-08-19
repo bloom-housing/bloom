@@ -1,4 +1,5 @@
 import { useCallback, useContext, useState, useEffect } from "react"
+import { useRouter } from "next/router"
 import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
@@ -864,4 +865,71 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
     loading: !error && !data,
     error,
   }
+}
+
+export function useRawTranslations({
+  jurisdictionId,
+  site,
+  language,
+}: {
+  jurisdictionId: string
+  site: string
+  language: string
+}) {
+  const { translationsService } = useContext(AuthContext)
+
+  const fetcher = () => translationsService.getRawTranslations({ jurisdictionId, site, language })
+
+  // Null key so SWR skips the request until a scope is chosen.
+  const cacheKey = jurisdictionId
+    ? `/api/adapter/translations/jurisdictions/${jurisdictionId}/raw/${site}/${language}`
+    : null
+
+  // Writes call `mutate` on this key; refreshing on focus would move data under an in-progress edit.
+  const { data, error } = useSWR(cacheKey, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
+
+  return {
+    cacheKey,
+    data,
+    loading: !!cacheKey && !error && !data,
+    error,
+  }
+}
+
+/**
+ * Warns before unsaved work is lost, on an in-app route change and on the browser closing or
+ * reloading.
+ *
+ * Going back is only partly covered: `beforeunload` does not fire for it, and the history entry is
+ * already popped by the time this runs, so cancelling keeps the edits but leaves the address bar
+ * on the previous URL.
+ */
+export function useUnsavedChangesWarning(hasUnsavedChanges: boolean, message: string) {
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!hasUnsavedChanges) return
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault()
+      event.returnValue = ""
+    }
+
+    const handleRouteChange = () => {
+      if (window.confirm(message)) return
+      router.events.emit("routeChangeError")
+      throw "Route change cancelled: the page has unsaved changes"
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload)
+    router.events.on("routeChangeStart", handleRouteChange)
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload)
+      router.events.off("routeChangeStart", handleRouteChange)
+    }
+  }, [hasUnsavedChanges, message, router.events])
 }

@@ -2,6 +2,7 @@ import React from "react"
 import { screen, waitFor } from "@testing-library/react"
 import {
   FeatureFlagEnum,
+  Jurisdiction,
   Listing,
   User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -20,7 +21,11 @@ const mockUser: User = {
   dob: new Date("2020-01-01"),
   createdAt: new Date("2020-01-01"),
   updatedAt: new Date("2020-01-01"),
-  jurisdictions: [],
+  jurisdictions: [
+    {
+      id: "jurisdiction id",
+    } as unknown as Jurisdiction,
+  ],
   mfaEnabled: false,
   passwordUpdatedAt: new Date("2020-01-01"),
   passwordValidForDays: 180,

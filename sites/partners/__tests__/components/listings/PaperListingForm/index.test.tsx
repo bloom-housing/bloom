@@ -112,7 +112,7 @@ describe("PaperListingForm", () => {
             ctx.json({
               id: "user1",
               userRoles: { id: "user1", isAdmin: true, isPartner: false },
-              roles: { id: "user1", isAdmin: true, isPartner: false },
+              userRoles: { id: "user1", isAdmin: true, isPartner: false },
               jurisdictions,
             })
           )
@@ -219,7 +219,7 @@ describe("PaperListingForm", () => {
             ctx.json({
               id: "user1",
               userRoles: { id: "user1", isAdmin: true, isPartner: false },
-              roles: { id: "user1", isAdmin: true, isPartner: false },
+              userRoles: { id: "user1", isAdmin: true, isPartner: false },
               jurisdictions,
             })
           )

@@ -1,6 +1,10 @@
 import { LanguagesEnum, PrismaClient } from '@prisma/client';
 import { createAllFeatureFlags } from './seed-helpers/feature-flag-factory';
 import {
+  jurisdictionContentFactory,
+  upsertJurisdictionContent,
+} from './seed-helpers/jurisdiction-content-factory';
+import {
   translationFactory,
   upsertTranslation,
 } from './seed-helpers/translation-factory';
@@ -29,6 +33,8 @@ export const stagingSeed = async (
     jurisdiction?: string;
   },
 ) => {
+  // Clear all existing reserved community types before any are added
+  await prismaClient.reservedCommunityTypes.deleteMany();
   // Seed feature flags
   await createAllFeatureFlags(prismaClient);
 
@@ -258,4 +264,21 @@ export const stagingSeed = async (
     translationFactory({ language: LanguagesEnum.es }),
   );
   await upsertTranslation(prismaClient, translationFactory());
+
+  // add structured content for the main jurisdiction, English plus a partial Spanish row
+  const contentJurisdiction = {
+    id: mainJurisdiction.id,
+    name: mainJurisdiction.name,
+  };
+  await upsertJurisdictionContent(
+    prismaClient,
+    jurisdictionContentFactory({ jurisdiction: contentJurisdiction }),
+  );
+  await upsertJurisdictionContent(
+    prismaClient,
+    jurisdictionContentFactory({
+      jurisdiction: contentJurisdiction,
+      language: LanguagesEnum.es,
+    }),
+  );
 };

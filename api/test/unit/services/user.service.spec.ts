@@ -32,6 +32,8 @@ import { AdvocateUserUpdate } from '../../../src/dtos/users/advocate-user-update
 import { UserOrderByKeys } from '../../../src/enums/listings/order-by-enum';
 import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
 import { UserNotificationPreferences } from '../../../src/dtos/users/user-notification-preferences.dto';
+import { GovDeliveryService } from '../../../src/services/gov-delivery.service';
+import { HttpService } from '@nestjs/axios';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -90,6 +92,9 @@ describe('Testing user service', () => {
     warn: jest.fn(),
     error: jest.fn(),
   };
+  const HttpServiceMock = {
+    post: jest.fn(),
+  };
 
   const canOrThrowMock = jest.fn();
 
@@ -109,9 +114,14 @@ describe('Testing user service', () => {
         SchedulerRegistry,
         CronJobService,
         SnapshotCreateService,
+        GovDeliveryService,
         {
           provide: EmailProvider,
           useValue: EmailProviderMock,
+        },
+        {
+          provide: HttpService,
+          useValue: HttpServiceMock,
         },
         {
           provide: GoogleTranslateService,
@@ -708,7 +718,7 @@ describe('Testing user service', () => {
   });
 
   describe('jurisdictionMismatch', () => {
-    it('should verify that there is a jurisdiciton mismatch', () => {
+    it('should verify that there is a jurisdiction mismatch', () => {
       const res = service.jurisdictionMismatch(
         [{ id: 'id a' }],
         [{ id: 'id 1' }],
@@ -716,7 +726,7 @@ describe('Testing user service', () => {
       expect(res).toEqual(true);
     });
 
-    it('should verify that there is not a jurisdiciton mismatch', () => {
+    it('should verify that there is not a jurisdiction mismatch', () => {
       const res = service.jurisdictionMismatch(
         [{ id: 'id a' }, { id: 'id b' }],
         [{ id: 'id b' }, { id: 'id a' }],
@@ -2661,7 +2671,7 @@ describe('Testing user service', () => {
           userRoles: { isAdmin: true },
         } as unknown as User,
         'user',
-        permissionActions.confirm,
+        permissionActions.invite,
         {
           id: undefined,
         },
@@ -2755,7 +2765,7 @@ describe('Testing user service', () => {
           userRoles: { isAdmin: true },
         } as unknown as User,
         'user',
-        permissionActions.confirm,
+        permissionActions.invite,
         {
           id: undefined,
         },
@@ -2831,7 +2841,7 @@ describe('Testing user service', () => {
           userRoles: { isAdmin: true },
         },
         'user',
-        permissionActions.confirm,
+        permissionActions.invite,
         {
           id: undefined,
         },
@@ -2869,7 +2879,6 @@ describe('Testing user service', () => {
           firstName: 'public User firstName',
           lastName: 'public User lastName',
           password: 'Abcdef12345!',
-          passwordConfirmation: 'Abcdef12345!',
           agreedToTermsOfService: true,
           dob: new Date('2000-01-01'),
           email: 'publicUser@email.com',
@@ -2996,7 +3005,6 @@ describe('Testing user service', () => {
           firstName: 'public User firstName',
           lastName: 'public User lastName',
           password: 'Abcdef12345!',
-          passwordConfirmation: 'Abcdef12345!',
           agreedToTermsOfService: true,
           dob: new Date('2000-01-01'),
           email: 'publicUser@email.com',
@@ -3044,7 +3052,7 @@ describe('Testing user service', () => {
         .fn()
         .mockResolvedValue({ id: randomUUID() });
 
-      const mockAdress = addressFactory();
+      const mockAddress = addressFactory();
 
       await service.createAdvocateUser(
         {
@@ -3054,7 +3062,7 @@ describe('Testing user service', () => {
           dob: new Date('2000-01-01'),
           email: 'advocateUser@email.com',
           jurisdictions: [{ id: jurisId } as any],
-          address: mockAdress as AddressUpdate,
+          address: mockAddress as AddressUpdate,
           agency: {
             id: 'test_agency_id',
           },
@@ -3623,7 +3631,7 @@ describe('Testing user service', () => {
             },
             { headers: { jurisdictionname: 'juris 1' } } as unknown as Request,
           ),
-      ).rejects.toThrowError('Jurisidiction juris 1 does not exists');
+      ).rejects.toThrowError('Jurisdiction juris 1 does not exists');
 
       expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
         where: {
@@ -4325,6 +4333,164 @@ describe('Testing user service', () => {
           userId: requestingUser.id,
         },
       });
+    });
+  });
+
+  describe('authorizeAction', () => {
+    it('should error when requestingUser is not signed in', async () => {
+      expect(
+        async () =>
+          await service.authorizeAction(
+            undefined,
+            {
+              id: 'targetUser id',
+            } as unknown as User,
+            permissionActions.invite,
+          ),
+      ).rejects.toThrowError('User attempted invite without being signed in');
+      expect(canOrThrowMock).not.toHaveBeenCalled();
+    });
+
+    it('should call canOrThrow when a admin attempts an action', async () => {
+      await service.authorizeAction(
+        {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User,
+        {
+          id: 'targetUser id',
+        } as unknown as User,
+        permissionActions.invite,
+      );
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User,
+        'user',
+        permissionActions.invite,
+        {
+          id: 'targetUser id',
+        },
+      );
+    });
+
+    it('should call canOrThrow when a partner attempts an action', async () => {
+      await service.authorizeAction(
+        {
+          id: 'requestingUser id',
+          userRoles: { isPartner: true },
+        } as unknown as User,
+        {
+          id: 'targetUser id',
+        } as unknown as User,
+        permissionActions.invite,
+      );
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        {
+          id: 'requestingUser id',
+          userRoles: { isPartner: true },
+        } as unknown as User,
+        'user',
+        permissionActions.invite,
+        {
+          id: 'targetUser id',
+        },
+      );
+    });
+
+    it('should call canOrThrow when a user attempts an action', async () => {
+      await service.authorizeAction(
+        {
+          id: 'requestingUser id',
+          userRoles: {},
+        } as unknown as User,
+        {
+          id: 'targetUser id',
+        } as unknown as User,
+        permissionActions.invite,
+      );
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        {
+          id: 'requestingUser id',
+          userRoles: {},
+        } as unknown as User,
+        'user',
+        permissionActions.invite,
+        {
+          id: 'targetUser id',
+        },
+      );
+    });
+
+    it('should call canOrThrow when a jurisdictionalAdmin attempts an action in their jurisdiction', async () => {
+      await service.authorizeAction(
+        {
+          id: 'requestingUser id',
+          jurisdictions: [{ id: 'juris 1' }],
+          userRoles: { isJurisdictionalAdmin: true },
+        } as unknown as User,
+        {
+          id: 'targetUser id',
+          jurisdictions: [{ id: 'juris 1' }],
+        } as unknown as User,
+        permissionActions.invite,
+      );
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        {
+          id: 'requestingUser id',
+          jurisdictions: [{ id: 'juris 1' }],
+          userRoles: { isJurisdictionalAdmin: true },
+        } as unknown as User,
+        'user',
+        permissionActions.invite,
+        {
+          id: 'targetUser id',
+          jurisdictionId: 'juris 1',
+        },
+      );
+    });
+
+    it('should error when a jurisdictionalAdmin attempts an action on an admin', async () => {
+      expect(
+        async () =>
+          await service.authorizeAction(
+            {
+              id: 'requestingUser id',
+              jurisdictions: [{ id: 'juris 1' }],
+              userRoles: { isJurisdictionalAdmin: true },
+            } as unknown as User,
+            {
+              id: 'targetUser id',
+              userRoles: { isAdmin: true },
+            } as unknown as User,
+            permissionActions.invite,
+          ),
+      ).rejects.toThrowError(
+        'a jurisdictional admin is attempting to invite an admin user',
+      );
+      expect(canOrThrowMock).not.toHaveBeenCalled();
+    });
+
+    it('should error when a jurisdictionalAdmin attempts an action outside their jurisdiction', async () => {
+      expect(
+        async () =>
+          await service.authorizeAction(
+            {
+              id: 'requestingUser id',
+              jurisdictions: [{ id: 'juris 1' }],
+              userRoles: { isJurisdictionalAdmin: true },
+            } as unknown as User,
+            {
+              id: 'targetUser id',
+              jurisdictions: [{ id: 'juris 2' }],
+            } as unknown as User,
+            permissionActions.invite,
+          ),
+      ).rejects.toThrowError(
+        'a jurisdictional admin is attempting to invite a user they do not share a jurisdiction with',
+      );
+      expect(canOrThrowMock).not.toHaveBeenCalled();
     });
   });
 });

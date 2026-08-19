@@ -9,6 +9,7 @@ import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
 import { listingFactory } from './seed-helpers/listing-factory';
+import { unitRentTypeFactoryAll } from './seed-helpers/unit-rent-type-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { randomName } from './seed-helpers/word-generator';
 import { randomInt } from 'node:crypto';
@@ -17,6 +18,10 @@ import {
   translationFactory,
   upsertTranslation,
 } from './seed-helpers/translation-factory';
+import {
+  jurisdictionContentFactory,
+  upsertJurisdictionContent,
+} from './seed-helpers/jurisdiction-content-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
 import { APPLICATIONS_PER_LISTINGS, LISTINGS_TO_SEED } from './constants';
@@ -112,7 +117,22 @@ export const devSeeding = async (
     translationFactory({ language: LanguagesEnum.es }),
   );
   await upsertTranslation(prismaClient, translationFactory());
+
+  // add structured content, English plus a partial Spanish row
+  const contentJurisdiction = { id: jurisdiction.id, name: jurisdiction.name };
+  await upsertJurisdictionContent(
+    prismaClient,
+    jurisdictionContentFactory({ jurisdiction: contentJurisdiction }),
+  );
+  await upsertJurisdictionContent(
+    prismaClient,
+    jurisdictionContentFactory({
+      jurisdiction: contentJurisdiction,
+      language: LanguagesEnum.es,
+    }),
+  );
   const unitTypes = await unitTypeFactoryAll(prismaClient);
+  await unitRentTypeFactoryAll(prismaClient);
   const amiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(10, jurisdiction.id, null, jurisdiction.name),
   });

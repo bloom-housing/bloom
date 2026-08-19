@@ -30,6 +30,7 @@ import { EmailService, ListingNotificationVariant } from './email.service';
 import { MultiselectQuestionService } from './multiselect-question.service';
 import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
+import { SnapshotCreateService } from './snapshot-create.service';
 import { TranslationService } from './translation.service';
 import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
@@ -38,6 +39,7 @@ import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { ListingDuplicate } from '../dtos/listings/listing-duplicate.dto';
 import { ListingMapMarker } from '../dtos/listings/listing-map-marker.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
+import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
 import { ListingsQueryBody } from '../dtos/listings/listings-query-body.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
@@ -52,22 +54,21 @@ import { ListingFilterKeys } from '../enums/listings/filter-key-enum';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { buildFilter } from '../utilities/build-filter';
 import { buildOrderByForListings } from '../utilities/build-order-by';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
+import { checkIfDatesOrReviewOrderChanged } from '../utilities/listings-utilities';
 import { mapTo } from '../utilities/mapTo';
+import { fillModelStringFields } from '../utilities/model-fields';
 import {
   buildPaginationMetaInfo,
   calculateSkip,
   calculateTake,
 } from '../utilities/pagination-helpers';
+import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 import {
   summarizeUnitsByTypeAndRent,
   summarizeUnits,
   summarizeByPriorityType,
 } from '../utilities/unit-utilities';
-import { fillModelStringFields } from '../utilities/model-fields';
-import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
-import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
-import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
-import { SnapshotCreateService } from './snapshot-create.service';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -1304,7 +1305,7 @@ export class ListingService implements OnModuleInit {
       result = await this.translationService.translateListing(result, lang);
     }
 
-    if (result.unitGroups.length > 0) {
+    if (result.unitGroups?.length > 0) {
       addUnitGroupsSummarized(result);
     } else {
       await this.addUnitsSummarized(result);
@@ -1935,6 +1936,19 @@ export class ListingService implements OnModuleInit {
         rawJurisdiction.publicUrl || '',
       );
       await this.sendListingPublishNotification(mappedListing);
+      if (
+        doJurisdictionHaveFeatureFlagSet(
+          rawJurisdiction as unknown as Jurisdiction,
+          FeatureFlagEnum.enableListingOpportunity,
+        )
+      ) {
+        await this.emailService.listingPublishNotificationViaGovDelivery(
+          { id: rawJurisdiction.id },
+          mappedListing,
+          [],
+          'standard',
+        );
+      }
     }
     await this.cachePurge(undefined, dto.status, mappedListing.id);
     return mappedListing;
@@ -2361,6 +2375,41 @@ export class ListingService implements OnModuleInit {
       FeatureFlagEnum.enableAutoOpenDate,
     );
 
+    const enableOnlyAdminCanEditListingDates = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableOnlyAdminCanEditListingDates,
+    );
+    const isActiveListing = dto.status === ListingsStatusEnum.active;
+
+    //check if the user has permission to edit dates
+    if (
+      enableOnlyAdminCanEditListingDates &&
+      isActiveListing &&
+      !(
+        requestingUser.userRoles?.isAdmin ||
+        requestingUser.userRoles?.isSuperAdmin ||
+        requestingUser.userRoles?.isSupportAdmin
+      )
+    ) {
+      const storedLotteryEvent = storedListing.listingEvents?.find(
+        (event) => event?.type === ListingEventsTypeEnum.publicLottery,
+      );
+
+      if (
+        checkIfDatesOrReviewOrderChanged(
+          dto,
+          this.logger,
+          storedListing.applicationDueDate?.toISOString(),
+          storedLotteryEvent,
+          storedListing.reviewOrderType,
+        )
+      ) {
+        throw new HttpException(
+          'You do not have permission to edit dates or review order type',
+          403,
+        );
+      }
+    }
     if (!enableAutopublish) {
       incomingDto.scheduledPublishAt = null;
     }
@@ -3076,6 +3125,19 @@ export class ListingService implements OnModuleInit {
         mappedListing,
         useComingSoon ? 'comingSoon' : 'standard',
       );
+      if (
+        doJurisdictionHaveFeatureFlagSet(
+          rawJurisdiction as unknown as Jurisdiction,
+          FeatureFlagEnum.enableListingOpportunity,
+        )
+      ) {
+        await this.emailService.listingPublishNotificationViaGovDelivery(
+          { id: rawJurisdiction.id },
+          mappedListing,
+          [],
+          useComingSoon ? 'comingSoon' : 'standard',
+        );
+      }
     }
 
     if (enableV2MSQ && mappedListing.status === ListingsStatusEnum.active) {

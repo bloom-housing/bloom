@@ -290,7 +290,6 @@ export const buildUserCreateMock = (
     firstName: 'Public User firstName',
     lastName: 'Public User lastName',
     password: 'Abcdef12345!',
-    passwordConfirmation: 'Abcdef12345!',
     dob: new Date(),
     agreedToTermsOfService: true,
     email,
@@ -301,6 +300,7 @@ export const buildUserCreateMock = (
 export const buildUserInviteMock = (
   jurisId: string,
   email: string,
+  isAdmin = true,
 ): PartnerUserCreate => {
   return {
     firstName: 'Partner User firstName',
@@ -309,7 +309,8 @@ export const buildUserInviteMock = (
     jurisdictions: [{ id: jurisId }],
     agreedToTermsOfService: true,
     userRoles: {
-      isAdmin: true,
+      isAdmin: isAdmin,
+      isJurisdictionalAdmin: !isAdmin,
     },
   };
 };

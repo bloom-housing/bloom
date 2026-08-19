@@ -4,6 +4,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   PrismaClient,
+  UserRoleEnum,
 } from '@prisma/client';
 import { randomInt } from 'crypto';
 import dayjs from 'dayjs';
@@ -2403,6 +2404,7 @@ export const realisticAddressesForOtherStatuses = [
 const featureFlags = [
   FeatureFlagEnum.disableEthnicityQuestion,
   FeatureFlagEnum.disableWorkInRegion,
+  FeatureFlagEnum.enableExportTerms,
   FeatureFlagEnum.enableFilterByBathroom,
   FeatureFlagEnum.enableFilterByCounty,
   FeatureFlagEnum.enableGeocodingPreferences,
@@ -2414,11 +2416,15 @@ const featureFlags = [
   FeatureFlagEnum.enableListingOpportunity,
   FeatureFlagEnum.enableListingPagination,
   FeatureFlagEnum.enableMultiselectVoucherQuestion,
+  FeatureFlagEnum.enableOnlyAdminCanAddAppsAfterClose,
+  FeatureFlagEnum.enableOnlyAdminCanEditListingDates,
+  FeatureFlagEnum.enableOnlyAdminCanManageUsers,
   FeatureFlagEnum.enablePartnerDemographics,
   FeatureFlagEnum.enablePartnerSettings,
   FeatureFlagEnum.enableReceivedAtAndByFields,
   FeatureFlagEnum.enableSexualOrientationQuestion,
   FeatureFlagEnum.enableSupportAdmin,
+  FeatureFlagEnum.enableWaitlistLottery,
 ];
 
 const raceEthnicityConfiguration = {
@@ -2585,6 +2591,7 @@ export const createBridgeBayJurisdictions = async (
       publicSiteBaseURL,
       featureFlags: [...optionalV2MSQ, ...featureFlags],
       languages: languages,
+      listingApprovalPermissions: [UserRoleEnum.admin],
       listingFeaturesConfiguration: defaultListingFeatureConfiguration,
       raceEthnicityConfiguration: raceEthnicityConfiguration,
       visibleSpokenLanguages: visibleSpokenLanguages,

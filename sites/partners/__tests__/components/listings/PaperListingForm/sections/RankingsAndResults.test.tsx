@@ -1,12 +1,13 @@
 import {
   Listing,
+  ListingsStatusEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { setupServer } from "msw/node"
 import RankingsAndResults from "../../../../../src/components/listings/PaperListingForm/sections/RankingsAndResults"
-import { formDefaults } from "../../../../../src/lib/listings/formTypes"
+import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import {
   FormProviderWrapper,
   mockNextRouter,
@@ -282,6 +283,76 @@ describe("RankingsAndResults", () => {
       const lotteryRadio = await screen.findByRole("radio", { name: "Lottery" })
       await userEvent.click(lotteryRadio)
       expect(screen.getByText("Will the lottery be run in the partner portal?")).toBeInTheDocument()
+    })
+  })
+
+  describe("disableDueDates is true", () => {
+    it("should disable lottery dates when lottery is selected", () => {
+      render(
+        <FormProviderWrapper
+          values={{
+            ...formDefaults,
+            jurisdictions: { id: "jurisdiction1" },
+            listingAvailabilityQuestion: "openWaitlist",
+          }}
+        >
+          <RankingsAndResults
+            disableDueDates={true}
+            enableUnitGroups={false}
+            enableWaitlistAdditionalFields={false}
+            enableWaitlistLottery={true}
+            enableWhatToExpectAdditionalField={false}
+            listing={
+              {
+                reviewOrderType: ReviewOrderTypeEnum.lottery,
+                status: ListingsStatusEnum.active,
+              } as unknown as FormListing
+            }
+            requiredFields={[]}
+            whatToExpectEditor={null}
+            whatToExpectAdditionalTextEditor={null}
+          />
+        </FormProviderWrapper>
+      )
+
+      expect(screen.getByTestId("lottery-start-date-month")).toBeDisabled()
+      expect(screen.getByTestId("lottery-start-date-day")).toBeDisabled()
+      expect(screen.getByTestId("lottery-start-time-hours")).toBeDisabled()
+      expect(screen.getByTestId("lottery-start-time-minutes")).toBeDisabled()
+      expect(screen.getByTestId("lottery-end-time-hours")).toBeDisabled()
+      expect(screen.getByTestId("lottery-end-time-minutes")).toBeDisabled()
+    })
+
+    it("should disable changing review order type", () => {
+      render(
+        <FormProviderWrapper
+          values={{
+            ...formDefaults,
+            jurisdictions: { id: "jurisdiction1" },
+            listingAvailabilityQuestion: "openWaitlist",
+          }}
+        >
+          <RankingsAndResults
+            disableDueDates={true}
+            enableUnitGroups={false}
+            enableWaitlistAdditionalFields={false}
+            enableWaitlistLottery={true}
+            enableWhatToExpectAdditionalField={false}
+            listing={
+              {
+                reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+                status: ListingsStatusEnum.active,
+              } as unknown as FormListing
+            }
+            requiredFields={[]}
+            whatToExpectEditor={null}
+            whatToExpectAdditionalTextEditor={null}
+          />
+        </FormProviderWrapper>
+      )
+
+      expect(screen.getByTestId("review-order-fcfs")).not.toBeDisabled()
+      expect(screen.getByTestId("review-order-lottery")).toBeDisabled()
     })
   })
 })

@@ -28,6 +28,8 @@ import { UnitRentTypeModule } from './unit-rent-type.module';
 import { UnitTypeModule } from './unit-type.module';
 import { UserModule } from './user.module';
 import { BackgroundJobsModule } from './background-jobs.module';
+import { TranslationModule } from './translation.module';
+import { JurisdictionContentModule } from './jurisdiction-content.module';
 
 @Module({
   imports: [
@@ -54,6 +56,8 @@ import { BackgroundJobsModule } from './background-jobs.module';
     AgencyModule,
     SnapshotCreateModule,
     ExternalListingModule,
+    TranslationModule,
+    JurisdictionContentModule,
     ThrottlerModule.forRoot([
       {
         ttl: Number(process.env.THROTTLE_TTL),
@@ -94,6 +98,8 @@ import { BackgroundJobsModule } from './background-jobs.module';
     FeatureFlagModule,
     SnapshotCreateModule,
     ExternalListingModule,
+    TranslationModule,
+    JurisdictionContentModule,
   ],
 })
 export class AppModule {}

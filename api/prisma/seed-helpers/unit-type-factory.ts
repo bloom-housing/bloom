@@ -26,13 +26,16 @@ export const unitTypeFactoryAll = async (
   const unitTypes = Object.values(UnitTypeEnum);
   if (all.length !== unitTypes.length) {
     await prismaClient.unitTypes.createMany({
-      data: Object.values(UnitTypeEnum).map((value) => ({
+      data: unitTypes.map((value) => ({
         name: value,
         numBedrooms: unitTypeMapping[value],
       })),
     });
   }
-  return await prismaClient.unitTypes.findMany({});
+  const created = await prismaClient.unitTypes.findMany({});
+  return unitTypes.map((value) =>
+    created.find((unitType) => unitType.name === value),
+  );
 };
 
 export const unitTypeMapping = {

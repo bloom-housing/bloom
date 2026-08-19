@@ -53,7 +53,9 @@ function mockJurisdictionsHaveFeatureFlagOn(
   enableListingUpdatedAt = true,
   enableUnitGroups = false,
   enableHomeType = true,
-  enableSection8Question = true
+  enableSection8Question = true,
+  enableLandUse = true,
+  enableNonRegulatedListings = true
 ) {
   switch (featureFlag) {
     case FeatureFlagEnum.enableHomeType:
@@ -66,6 +68,10 @@ function mockJurisdictionsHaveFeatureFlagOn(
       return enableIsVerified
     case FeatureFlagEnum.enableListingUpdatedAt:
       return enableListingUpdatedAt
+    case FeatureFlagEnum.enableLandUse:
+      return enableLandUse
+    case FeatureFlagEnum.enableNonRegulatedListings:
+      return enableNonRegulatedListings
     default:
       return true
   }
@@ -116,7 +122,7 @@ describe("listings", () => {
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(
-          ctx.json({ id: "user1", roles: { id: "user1", isAdmin: false, isPartner: true } })
+          ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: false, isPartner: true } })
         )
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
@@ -145,7 +151,7 @@ describe("listings", () => {
         return res(
           ctx.json({
             id: "user1",
-            roles: { id: "user1", isAdmin: false, isPartner: true },
+            userRoles: { id: "user1", isAdmin: false, isPartner: true },
           })
         )
       }),
@@ -196,7 +202,7 @@ describe("listings", () => {
         return res(
           ctx.json({
             id: "user1",
-            roles: { id: "user1", isAdmin: false, isPartner: true },
+            userRoles: { id: "user1", isAdmin: false, isPartner: true },
           })
         )
       }),
@@ -248,7 +254,7 @@ describe("listings", () => {
         return res(
           ctx.json({
             id: "user1",
-            roles: { id: "user1", isAdmin: false, isPartner: true },
+            userRoles: { id: "user1", isAdmin: false, isPartner: true },
           })
         )
       }),
@@ -300,7 +306,7 @@ describe("listings", () => {
         return res(
           ctx.json({
             id: "user1",
-            roles: { id: "user1", isAdmin: false, isPartner: true },
+            userRoles: { id: "user1", isAdmin: false, isPartner: true },
           })
         )
       }),
@@ -351,7 +357,7 @@ describe("listings", () => {
         return res(
           ctx.json({
             id: "user1",
-            roles: { id: "user1", isAdmin: false, isPartner: true },
+            userRoles: { id: "user1", isAdmin: false, isPartner: true },
           })
         )
       }),
@@ -402,7 +408,7 @@ describe("listings", () => {
         return res(
           ctx.json({
             id: "user1",
-            roles: { id: "user1", isAdmin: false, isPartner: true },
+            userRoles: { id: "user1", isAdmin: false, isPartner: true },
           })
         )
       }),
@@ -438,6 +444,131 @@ describe("listings", () => {
     )
     expect(screen.getByText("Last updated")).toBeDefined()
   })
+
+  it("should show listing type column if only the land use feature flag is on", () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            roles: { id: "user1", isAdmin: false, isPartner: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
+    )
+
+    render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: {
+            ...mockUser,
+            jurisdictions: [
+              {
+                id: "id1",
+                featureFlags: [
+                  {
+                    name: FeatureFlagEnum.enableLandUse,
+                    active: true,
+                  } as FeatureFlag,
+                ],
+              } as Jurisdiction,
+            ],
+          },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(
+              featureFlag,
+              false,
+              true,
+              false,
+              true,
+              true,
+              true,
+              false
+            ),
+        }}
+      >
+        <ListingsList />
+      </AuthContext.Provider>
+    )
+    expect(screen.getByText("Listing Type")).toBeDefined()
+  })
+
+  it("should not show listing type column if no listing type feature flag is on", () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            roles: { id: "user1", isAdmin: false, isPartner: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
+    )
+
+    render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: {
+            ...mockUser,
+            jurisdictions: [
+              {
+                id: "id1",
+                featureFlags: [
+                  {
+                    name: FeatureFlagEnum.enableLandUse,
+                    active: false,
+                  } as FeatureFlag,
+                  {
+                    name: FeatureFlagEnum.enableNonRegulatedListings,
+                    active: false,
+                  } as FeatureFlag,
+                ],
+              } as Jurisdiction,
+            ],
+          },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(
+              featureFlag,
+              false,
+              true,
+              false,
+              true,
+              true,
+              false,
+              false
+            ),
+        }}
+      >
+        <ListingsList />
+      </AuthContext.Provider>
+    )
+    expect(screen.queryByText("Listing Type")).toBeNull()
+  })
+
   // Skipping for now until the CSV endpoints are created
   it.skip("should render the error text when listings csv api call fails", async () => {
     window.URL.createObjectURL = jest.fn()
@@ -453,7 +584,7 @@ describe("listings", () => {
         return res(ctx.status(500), ctx.json(""))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true } }))
+        return res(ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true } }))
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
@@ -495,7 +626,7 @@ describe("listings", () => {
         return res(ctx.json({ listingCSV: "", unitCSV: "" }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true } }))
+        return res(ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true } }))
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
@@ -741,6 +872,131 @@ describe("listings", () => {
       expect(pushMock).toHaveBeenCalledWith({
         pathname: "/listings/add",
         query: { jurisdictionId: "id2" },
+      })
+    })
+  })
+
+  it("should open add listing modal if user has access to one jurisdiction and enableLandUse", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    const { pushMock } = mockNextRouter()
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { id: "user1", isAdmin: true, isPartner: false },
+            jurisdictions: [
+              {
+                id: "id1",
+                name: "JurisdictionA",
+                featureFlags: [
+                  {
+                    id: "id_1",
+                    name: FeatureFlagEnum.enableLandUse,
+                    active: true,
+                  },
+                ],
+              } as Jurisdiction,
+            ],
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
+    )
+
+    render(<ListingsList />)
+
+    const addListingButton = await screen.findByRole("button", { name: "Add listing" })
+    expect(addListingButton).toBeInTheDocument()
+    await userEvent.click(addListingButton)
+
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Select Listing Type" })
+    ).toBeInTheDocument()
+
+    const landUseRadioGroup = screen.getByRole("group", {
+      name: "Is this a land use property?",
+    })
+    expect(landUseRadioGroup).toBeInTheDocument()
+    expect(within(landUseRadioGroup).getByRole("radio", { name: "Yes" })).toBeInTheDocument()
+    expect(within(landUseRadioGroup).getByRole("radio", { name: "No" })).toBeInTheDocument()
+    expect(screen.queryAllByRole("group", { name: "What kind of listing is this?" })).toHaveLength(
+      0
+    )
+
+    await userEvent.click(within(landUseRadioGroup).getByRole("radio", { name: "Yes" }))
+    await userEvent.click(screen.getByRole("button", { name: "Get started" }))
+
+    await waitFor(() => {
+      expect(pushMock).toHaveBeenCalledWith({
+        pathname: "/listings/add",
+        query: { jurisdictionId: "id1", landUse: true },
+      })
+    })
+  })
+
+  it("should default to 'No' and omit landUse from the query when not selected", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    const { pushMock } = mockNextRouter()
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { id: "user1", isAdmin: true, isPartner: false },
+            jurisdictions: [
+              {
+                id: "id1",
+                name: "JurisdictionA",
+                featureFlags: [
+                  {
+                    id: "id_1",
+                    name: FeatureFlagEnum.enableLandUse,
+                    active: true,
+                  },
+                ],
+              } as Jurisdiction,
+            ],
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
+    )
+
+    render(<ListingsList />)
+
+    const addListingButton = await screen.findByRole("button", { name: "Add listing" })
+    await userEvent.click(addListingButton)
+
+    const landUseRadioGroup = screen.getByRole("group", {
+      name: "Is this a land use property?",
+    })
+    expect(within(landUseRadioGroup).getByRole("radio", { name: "No" })).toBeChecked()
+
+    await userEvent.click(screen.getByRole("button", { name: "Get started" }))
+
+    await waitFor(() => {
+      expect(pushMock).toHaveBeenCalledWith({
+        pathname: "/listings/add",
+        query: { jurisdictionId: "id1" },
       })
     })
   })
