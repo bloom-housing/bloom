@@ -593,10 +593,10 @@ describe("FilterDrawer", () => {
     )
 
     expect(screen.queryByRole("group", { name: "Bathrooms" })).not.toBeInTheDocument()
-    expect(screen.queryByRole("checkbox", { name: "1" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("radio", { name: "1+" })).not.toBeInTheDocument()
   })
 
-  it("should show bathrooms section with unchecked checkboxes when flag is on and no filter state", () => {
+  it("should show bathrooms section with 'Any' selected when flag is on and no filter state", () => {
     render(
       <FilterDrawer
         isOpen={true}
@@ -611,20 +611,17 @@ describe("FilterDrawer", () => {
     )
 
     expect(screen.getByRole("group", { name: "Bathrooms" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "1" })).not.toBeChecked()
-    expect(screen.getByRole("checkbox", { name: "2" })).not.toBeChecked()
-    expect(screen.getByRole("checkbox", { name: "3" })).not.toBeChecked()
-    expect(screen.getByRole("checkbox", { name: "4" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "Any" })).toBeChecked()
+    expect(screen.getByRole("radio", { name: "1+" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "2+" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "3+" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "4+" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "5+" })).not.toBeChecked()
   })
 
-  it("should show bathrooms checkboxes as checked when filterState has selections", () => {
+  it("should show the matching bathrooms radio as checked when filterState has a selection", () => {
     const filterState: FilterData = {
-      [ListingFilterKeys.bathrooms]: {
-        "1": true,
-        "2": false,
-        "3": true,
-        "4": false,
-      },
+      [ListingFilterKeys.bathrooms]: "3",
     }
 
     render(
@@ -640,10 +637,10 @@ describe("FilterDrawer", () => {
       />
     )
 
-    expect(screen.getByRole("checkbox", { name: "1" })).toBeChecked()
-    expect(screen.getByRole("checkbox", { name: "2" })).not.toBeChecked()
-    expect(screen.getByRole("checkbox", { name: "3" })).toBeChecked()
-    expect(screen.getByRole("checkbox", { name: "4" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "Any" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "2+" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "3+" })).toBeChecked()
+    expect(screen.getByRole("radio", { name: "4+" })).not.toBeChecked()
   })
 
   it("should not show counties section when enableFilterByCounty flag is off", () => {

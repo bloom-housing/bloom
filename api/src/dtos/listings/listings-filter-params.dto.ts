@@ -10,8 +10,11 @@ import {
   IsArray,
   IsBoolean,
   IsEnum,
+  IsInt,
   IsNumber,
   IsNumberString,
+  Max,
+  Min,
   IsString,
   IsUUID,
 } from 'class-validator';
@@ -22,6 +25,8 @@ import { ListingFilterKeys } from '../../enums/listings/filter-key-enum';
 import { FixLargeObjectArray } from '../../decorators/fix-large-object-array';
 import { ParkingTypeEnum } from '../../enums/listings/filter-parking-type-enum';
 import { UnitAccessibilityPriorityTypeEnum } from '../../enums/units/accessibility-priority-type-enum';
+
+const MAX_BATHROOMS = 5;
 
 export class ListingFilterParams extends BaseFilter {
   @Expose()
@@ -52,13 +57,13 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiPropertyOptional({
-    isArray: true,
-    example: [1],
-    default: [1],
+    example: 1,
   })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default], each: true })
-  @IsArray({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.bathrooms]?: number[];
+  @IsInt({ groups: [ValidationsGroupsEnum.default] })
+  @Min(1, { groups: [ValidationsGroupsEnum.default] })
+  @Max(MAX_BATHROOMS, { groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Number)
+  [ListingFilterKeys.bathrooms]?: number;
 
   @Expose()
   @ApiPropertyOptional({
