@@ -1723,10 +1723,10 @@ export class ApplicationsService {
     options: IRequestOptions = {}
   ): Promise<StreamableFile> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/bulk-update/template/{listingId}"
-      url = url.replace("{listingId}", params["listingId"] + "")
+      let url = basePath + "/applications/bulk-update/template"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { listingId: params["listingId"] }
 
       axios(configs, resolve, reject)
     })

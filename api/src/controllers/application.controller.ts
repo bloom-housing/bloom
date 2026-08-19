@@ -208,7 +208,7 @@ export class ApplicationController {
     return this.applicationService.findOne(applicationId, req);
   }
 
-  @Get('bulk-update/template/:listingId')
+  @Get('bulk-update/template')
   @ApiOperation({
     summary:
       'Download a template CSV for bulk updating applications for a listing',
@@ -219,7 +219,7 @@ export class ApplicationController {
   @ApiOkResponse({ type: StreamableFile })
   async downloadBulkUpdateTemplate(
     @Request() req: ExpressRequest,
-    @Param('listingId') listingId: string,
+    @Query('listingId') listingId: string,
   ): Promise<StreamableFile> {
     return await this.applicationBulkUploadService.downloadBulkUpdateTemplate(
       listingId,
