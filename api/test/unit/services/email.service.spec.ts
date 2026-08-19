@@ -31,6 +31,7 @@ import {
   oneLineAddress,
 } from '../../../src/utilities/listing-data-formatters';
 import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/accessibility-priority-type-enum';
+import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 
 let sendMock;
 let govDeliverySendMock;
@@ -275,6 +276,7 @@ describe('Testing email service', () => {
         emailAddress: 'advocate.email@example.com',
       },
     } as Application;
+
     it('Test first come first serve', async () => {
       await service.applicationConfirmation(
         listing,
@@ -305,7 +307,8 @@ describe('Testing email service', () => {
         'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents',
       );
     });
-    it('Test lottery', async () => {
+
+    it('Test lottery when enableDuplicatesDetailsInEmail is false', async () => {
       await service.applicationConfirmation(
         { ...listing, reviewOrderType: ReviewOrderTypeEnum.lottery },
         application,
@@ -338,6 +341,53 @@ describe('Testing email service', () => {
         'If you need to update information on your application, do not apply again. Instead, contact the agent for this listing',
       );
     });
+
+    it('Test lottery when enableDuplicatesDetailsInEmail is true', async () => {
+      jest.spyOn(jurisdictionServiceMock, 'findOne').mockReturnValue({
+        id: 'jurisdictionId',
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableDuplicatesDetailsInEmail,
+            active: true,
+          },
+        ],
+        name: 'Jurisdiction 1',
+        publicUrl: 'https://example.com',
+      } as unknown as ReturnType<typeof jurisdictionServiceMock.findOne>);
+
+      await service.applicationConfirmation(
+        { ...listing, reviewOrderType: ReviewOrderTypeEnum.lottery },
+        application,
+        'http://localhost:3001',
+      );
+      expect(sendMock).toHaveBeenCalled();
+      expect(sendMock.mock.calls[0][0].to).toEqual(
+        'applicant.email@example.com',
+      );
+      expect(sendMock.mock.calls[0][0].subject).toEqual(
+        'Your Application Confirmation',
+      );
+      expect(sendMock.mock.calls[0][0].body).toContain(
+        '<td class="step step-complete"><img src="https://res.cloudinary.com/exygy/image/upload/v1652459517/core/step-left-active_vo3fnq.png" alt="indication of step completed" /></td>',
+      );
+      expect(sendMock.mock.calls[0][0].body).toContain(
+        '<td class="step step-complete"><span class="step-label" aria-current="true">Application <br />received</span></td>',
+      );
+      expect(sendMock.mock.calls[0][0].body).toContain('What happens next?');
+      expect(sendMock.mock.calls[0][0].body).toContain(
+        'Once the application period closes, eligible applicants will be placed in order based on lottery rank order.',
+      );
+      expect(sendMock.mock.calls[0][0].body).toContain(
+        'Housing preferences, if applicable, will affect lottery rank order.',
+      );
+      expect(sendMock.mock.calls[0][0].body).toContain(
+        'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents',
+      );
+      expect(sendMock.mock.calls[0][0].body).toContain(
+        'If you need to update information on your application, do not apply again. Instead, contact the agent for this listing',
+      );
+    });
+
     it('Test waitlist', async () => {
       await service.applicationConfirmation(
         { ...listing, reviewOrderType: ReviewOrderTypeEnum.waitlist },
@@ -371,6 +421,7 @@ describe('Testing email service', () => {
         'You may be contacted while on the waitlist to confirm that you wish to remain on the waitlist',
       );
     });
+
     it('Test waitlistLottery', async () => {
       await service.applicationConfirmation(
         { ...listing, reviewOrderType: ReviewOrderTypeEnum.waitlistLottery },
@@ -537,7 +588,7 @@ describe('Testing email service', () => {
         'Listing approval requested - listing name',
       );
       expect(emailMock.body).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" />`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" class="header-image"/>`,
       );
 
       expect(emailMock.body).toMatch('Hello,');
@@ -609,7 +660,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('Listing changes requested');
       expect(emailMock.body).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" />`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" class="header-image"/>`,
       );
       expect(emailMock.body).toMatch('Listing changes requested');
       expect(emailMock.body).toMatch('Hello,');
@@ -654,7 +705,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('New published listing - listing name');
       expect(emailMock.body).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" />`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" class="header-image"/>`,
       );
       expect(emailMock.body).toMatch('New published listing');
       expect(emailMock.body).toMatch('Hello,');

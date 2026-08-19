@@ -38,6 +38,9 @@
             {{#if interviewText}}
               <li>{{interviewText}}</li>
             {{/if}}
+            {{#if termsUrl}}
+              <li>{{t "lotteryAvailable.duplicatesDetails"}} <a href="{{ termsUrl }}" target="_blank">{{t "lotteryAvailable.termsOfUse"}}</a>.</li>
+            {{/if}}
             {{#if contactText}}
               <li>{{contactText}}</li>
             {{/if}}
@@ -58,15 +61,22 @@
             {{/if}}
 
             <h2>{{contactSectionHeader}}</h2>
+            {{#if duplicateText}}
+              <ul>
+                <li>{{t "confirmation.submitAnotherApplication"}}</li>
+                <li>{{t "confirmation.otherChanges"}}</li>
+              </ul>
+            {{else}}
             <p>{{contactSectionBody}}</p>
-            {{#if (or listing.leasingAgentName listing.leasingAgentTitle listing.leasingAgentPhone listing.leasingAgentEmail)}}
-            <h3>{{t "leasingAgent.propertyManager"}}</h3>
-            <p>
-              {{#if listing.leasingAgentName}}{{listing.leasingAgentName}}<br />{{/if}}
-              {{#if listing.leasingAgentTitle}}{{listing.leasingAgentTitle}}<br />{{/if}}
-              {{#if listing.leasingAgentPhone}}{{listing.leasingAgentPhone}}<br />{{/if}}
-              {{#if listing.leasingAgentEmail}}{{listing.leasingAgentEmail}}<br />{{/if}}
-            </p>
+              {{#if (or listing.leasingAgentName listing.leasingAgentTitle listing.leasingAgentPhone listing.leasingAgentEmail)}}
+              <h3>{{t "leasingAgent.propertyManager"}}</h3>
+              <p>
+                {{#if listing.leasingAgentName}}{{listing.leasingAgentName}}<br />{{/if}}
+                {{#if listing.leasingAgentTitle}}{{listing.leasingAgentTitle}}<br />{{/if}}
+                {{#if listing.leasingAgentPhone}}{{listing.leasingAgentPhone}}<br />{{/if}}
+                {{#if listing.leasingAgentEmail}}{{listing.leasingAgentEmail}}<br />{{/if}}
+              </p>
+              {{/if}}
             {{/if}}
             {{#if listing.leasingAgentOfficeHours}}
             <h3>{{t "leasingAgent.officeHours"}}</h3>

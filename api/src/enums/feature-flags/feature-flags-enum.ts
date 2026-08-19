@@ -22,6 +22,7 @@ export enum FeatureFlagEnum {
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableCustomListingNotifications = 'enableCustomListingNotifications',
   enableDbDrivenContent = 'enableDbDrivenContent',
+  enableDuplicatesDetailsInEmail = 'enableDuplicatesDetailsInEmail',
   enableExportTerms = 'enableExportTerms',
   enableFaq = 'enableFaq',
   enableFilterByBathroom = 'enableFilterByBathroom',
@@ -190,6 +191,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableDbDrivenContent,
     description:
       'When true, the jurisdiction reads its translations and structured content from the database instead of the bundled override files',
+  },
+  {
+    name: FeatureFlagEnum.enableDuplicatesDetailsInEmail,
+    description:
+      'When true, lottery published applicant email contains duplicates details section',
   },
   {
     name: FeatureFlagEnum.enableExportTerms,
