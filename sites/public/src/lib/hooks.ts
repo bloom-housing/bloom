@@ -350,8 +350,6 @@ export const OVERRIDES_TIMEOUT_MS = 5000
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchPublicOverrides(language?: string, req?: any) {
   const key = language ?? "en"
-  // Build-only: a build prerenders every page in every locale, more than the API allows in an
-  // hour.
   const duringBuild = process.env.NEXT_PHASE === "phase-production-build"
   if (duringBuild && publicOverridesByLanguage.has(key)) {
     return publicOverridesByLanguage.get(key)
