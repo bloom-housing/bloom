@@ -403,8 +403,7 @@ export const DataTable = (props: DataTableProps) => {
               className={styles["show-select"]}
               id={"show-numbers"}
             >
-              {/* TODO: Remove 3 before merge, just for easier pagination testing purposes */}
-              {[3, 8, 25, 50, 100].map((pageSize) => (
+              {[8, 25, 50, 100].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>
                   {pageSize}
                 </option>
