@@ -35,7 +35,8 @@
     "setup:region": "yarn install && yarn prisma generate && yarn build && yarn db:setup:staging-region",
     "db:migration:skip": "yarn prisma migrate resolve --applied ",
     "setup:dev": "yarn install && yarn prisma generate && yarn build && yarn db:setup",
-    "translations:sql": "ts-node scripts/generate-db-translation-sql.ts"
+    "translations:sql": "ts-node scripts/generate-db-translation-sql.ts",
+    "translations:migrate": "ts-node scripts/migrate-translations-to-key-rows.ts"
   },
   "dependencies": {
     "@aws-sdk/client-pinpoint-sms-voice-v2": "^3.1003.0",

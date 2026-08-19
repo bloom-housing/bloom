@@ -80,6 +80,30 @@ Examples:
 
 By default the script generates for `en, es, tl, vi, zh, ar, bn, ko, hy, fa` and machine-translates missing non-English values using the same Google env vars used by other translation scripts.
 
+## Moving translations into key rows
+
+`yarn translations:migrate` moves an environment's existing translation data into the `translation_strings` table, which the editor and the sites read. Run it once per environment, from this repository, with `DATABASE_URL` pointing at the target. It reads the bundled override files, which a deployed API does not have access to, so it cannot run as a script-runner command.
+
+```
+yarn translations:migrate --jurisdiction "Bloomington"          # reports what it would do
+yarn translations:migrate --jurisdiction "Bloomington" --commit # writes
+```
+
+It does two things:
+
+- Explodes each `translations` blob row into one row per key at the same jurisdiction and language, with no site. This is what the email path reads. It runs in a single transaction, because that path switches from the blob to these rows as soon as the first one exists.
+- Loads `sites/public/page_content/locale_overrides/*.json` into rows for the named jurisdiction, and `sites/partners/page_content/overrides/general.json` into rows shared by every jurisdiction.
+
+Run it again after a migration that patches the `translations` blob deploys, so the new copy updates the rows the email path reads.
+
+Notes:
+
+- A re-run rewrites any row whose value differs from its source. An admin edit made through the editor differs by definition, so re-running with `--jurisdiction` puts the bundled file's value back over it unless `--skip-existing` is passed.
+- `--skip-existing` writes only rows that do not exist yet, so a re-run adds new keys and leaves every value already in the database alone. Use it when re-running against an environment whose overrides an admin has edited.
+- Without `--jurisdiction`, the public overrides are skipped and the rest still runs.
+- `--languages es,zh` limits which override files are read. English is always read, because it is the source the other languages are hashed against.
+- The bundled override files stay in the repository. The sites keep rendering them when the API is unreachable.
+
 ## Modifying the Schema
 
 If you're using VSCode, you can install the [Prisma extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) to add syntax highlighting and formatting to Prisma schema files.
