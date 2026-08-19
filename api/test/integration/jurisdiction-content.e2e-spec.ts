@@ -409,6 +409,82 @@ describe('Jurisdiction Content Controller Tests', () => {
       );
     });
 
+    it('records what a translation was translated from and flags it when the source changes', async () => {
+      // Its own jurisdiction, so each write below is the first for its language and needs no lock.
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      const scope = (language: string) =>
+        `/jurisdictionContent/jurisdictions/${jurisdiction.id}/admin/${language}`;
+      const faqFor = (answerHtml: string) => ({
+        faq: {
+          categories: [
+            {
+              id: 'applying',
+              title: 'Applying',
+              items: [{ id: 'how', question: 'How?', answerHtml }],
+            },
+          ],
+        },
+      });
+
+      await request(app.getHttpServer())
+        .put(scope('en'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send(faqFor('<p>Apply online.</p>'))
+        .expect(200);
+
+      await request(app.getHttpServer())
+        .put(scope('vi'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send(faqFor('<p>Nop don truc tuyen.</p>'))
+        .expect(200);
+
+      const beforeChange = await request(app.getHttpServer())
+        .get(scope('vi'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(beforeChange.body.staleFields).toEqual([]);
+      // The hashes are storage, not part of the response.
+      expect(JSON.stringify(beforeChange.body)).not.toContain('_sourceHashes');
+
+      const english = await request(app.getHttpServer())
+        .get(scope('en'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+
+      await request(app.getHttpServer())
+        .put(scope('en'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          ...faqFor('<p>Apply online or by mail.</p>'),
+          lastUpdatedAt: english.body.updatedAt,
+        })
+        .expect(200);
+
+      const afterChange = await request(app.getHttpServer())
+        .get(scope('vi'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(afterChange.body.staleFields).toEqual([
+        'faq.categories[applying].items[how].answerHtml',
+      ]);
+
+      const publicRead = await request(app.getHttpServer())
+        .get(
+          `/jurisdictionContent/jurisdictions/${jurisdiction.id}?language=vi`,
+        )
+        .set(passkey)
+        .expect(200);
+      expect(JSON.stringify(publicRead.body)).not.toContain('_sourceHashes');
+    });
+
     it('clears fields omitted from a PUT (full-row replace)', async () => {
       await request(app.getHttpServer())
         .put(adminScope('ar'))

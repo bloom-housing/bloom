@@ -11146,6 +11146,9 @@ export interface JurisdictionContent {
 
   /**  */
   language: LanguagesEnum
+
+  /**  */
+  staleFields: string[]
 }
 
 /** JurisdictionContentUpdate */

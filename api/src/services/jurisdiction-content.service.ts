@@ -12,12 +12,24 @@ import { JurisdictionContent } from '../dtos/jurisdiction-content/jurisdiction-c
 import { JurisdictionContentFields } from '../dtos/jurisdiction-content/jurisdiction-content-fields.dto';
 import { JurisdictionContentUpdate } from '../dtos/jurisdiction-content/jurisdiction-content-update.dto';
 import { mergeContent, MergeableContent } from '../utilities/content-merge';
+import {
+  stampSourceHashes,
+  staleFieldPaths,
+} from '../utilities/content-source-hash';
 import { mapTo } from '../utilities/mapTo';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
 
 // Validated against the model so an invalid field is a compile error, while keeping the exact
 // selected-field type on the rows the read path works with.
+const CONTENT_FIELDS = [
+  'footer',
+  'faq',
+  'resources',
+  'disclaimers',
+  'contact',
+] as const;
+
 const CONTENT_SELECT = {
   footer: true,
   faq: true,
@@ -102,7 +114,11 @@ export class JurisdictionContentService {
       where: { jurisdictionId },
       orderBy: { language: 'asc' },
     });
-    return mapTo(JurisdictionContent, rows);
+    const english = rows.find((row) => row.language === LanguagesEnum.en);
+    return mapTo(
+      JurisdictionContent,
+      rows.map((row) => this.withStaleFields(row, english)),
+    );
   }
 
   // Admin: one language's row
@@ -119,7 +135,16 @@ export class JurisdictionContentService {
     const row = await this.prisma.jurisdictionContent.findFirst({
       where: { jurisdictionId, language },
     });
-    return row ? mapTo(JurisdictionContent, row) : null;
+    if (!row) {
+      return null;
+    }
+    const english =
+      language === LanguagesEnum.en
+        ? row
+        : await this.prisma.jurisdictionContent.findFirst({
+            where: { jurisdictionId, language: LanguagesEnum.en },
+          });
+    return mapTo(JurisdictionContent, this.withStaleFields(row, english));
   }
 
   // Admin: upsert one (jurisdiction, language) row
@@ -136,7 +161,14 @@ export class JurisdictionContentService {
     );
 
     const where = { jurisdictionId, language };
-    const data = this.contentData(dto);
+    const english =
+      language === LanguagesEnum.en
+        ? null
+        : await this.prisma.jurisdictionContent.findFirst({
+            where: { jurisdictionId, language: LanguagesEnum.en },
+            select: CONTENT_SELECT,
+          });
+    const data = this.contentData(dto, english);
 
     if (dto.lastUpdatedAt) {
       const result = await this.prisma.jurisdictionContent.updateMany({
@@ -167,22 +199,45 @@ export class JurisdictionContentService {
       // jurisdiction. Report a conflict rather than returning an empty body.
       throw new ConflictException({ message: 'jurisdictionContentConflict' });
     }
-    return mapTo(JurisdictionContent, row);
+    return mapTo(
+      JurisdictionContent,
+      this.withStaleFields(row, language === LanguagesEnum.en ? row : english),
+    );
+  }
+
+  // Derived on read rather than stored.
+  private withStaleFields(
+    row: MergeableContent & Record<string, unknown>,
+    english?: MergeableContent | null,
+  ) {
+    const staleFields = english
+      ? CONTENT_FIELDS.flatMap((field) =>
+          staleFieldPaths(english[field], row[field]).map(
+            (path) => `${field}.${path}`,
+          ),
+        )
+      : [];
+    return { ...row, staleFields };
   }
 
   private contentData(
     dto: JurisdictionContentUpdate,
+    english?: MergeableContent | null,
   ): Prisma.JurisdictionContentUncheckedUpdateManyInput {
     const asJson = (value: unknown) =>
       value == null
         ? Prisma.DbNull
         : (JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue);
+    // A language row records what each translated value was translated from, so a later English
+    // edit can be flagged. Stamped before serializing, while the value is still a plain object.
+    const stamped = (field: (typeof CONTENT_FIELDS)[number]) =>
+      english ? stampSourceHashes(english[field], dto[field]) : dto[field];
     return {
-      footer: asJson(dto.footer),
-      faq: asJson(dto.faq),
-      resources: asJson(dto.resources),
-      disclaimers: asJson(dto.disclaimers),
-      contact: asJson(dto.contact),
+      footer: asJson(stamped('footer')),
+      faq: asJson(stamped('faq')),
+      resources: asJson(stamped('resources')),
+      disclaimers: asJson(stamped('disclaimers')),
+      contact: asJson(stamped('contact')),
     };
   }
 
