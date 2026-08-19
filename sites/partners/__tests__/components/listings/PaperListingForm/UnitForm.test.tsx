@@ -233,6 +233,44 @@ describe("UnitForm", () => {
     expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
   })
 
+  it("should not require AMI household size minimum income fields when isLandUse is true", async () => {
+    const onClose = jest.fn()
+    const onSubmit = jest.fn()
+
+    render(
+      <UnitForm
+        {...defaultUnitFormProps}
+        onClose={onClose}
+        onSubmit={onSubmit}
+        draft={true}
+        nextId={1}
+        defaultUnit={tempUnit}
+        jurisdictionId={"123"}
+        isLandUse={true}
+      />
+    )
+
+    await waitForFormLoad()
+
+    // Selecting an AMI chart (without a percentage) leaves unitTypes.id and
+    // amiPercentage required-but-empty when the household size minimum
+    // income fields are correctly not required.
+    const amiChartSelector = screen.getByRole("combobox", { name: /ami chart/i })
+    await userEvent.selectOptions(amiChartSelector, "Mock AMI")
+    await screen.findByRole("option", { name: "30" })
+
+    const minimumIncomeInputs = screen.getAllByRole("spinbutton", { name: "Minimum income" })
+    expect(minimumIncomeInputs).toHaveLength(8)
+
+    await userEvent.click(screen.getByRole("button", { name: "Save & exit" }))
+
+    expect(onSubmit).not.toHaveBeenCalled()
+    // Only unitTypes.id and amiPercentage should be flagged as required - the
+    // household size minimum income fields must not add any additional
+    // required errors.
+    expect(screen.getAllByText("This field is required")).toHaveLength(2)
+  })
+
   it("should render the AMI chart options after AMI chart selection", async () => {
     render(
       <UnitForm

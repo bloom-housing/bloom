@@ -19,6 +19,7 @@ type UnitFormProps = {
   amiChartsLoading: boolean
   defaultUnit: TempUnit | undefined
   draft: boolean
+  isLandUse?: boolean
   jurisdictionId: string
   nextId: number
   onClose: (openNextUnit: boolean, openCurrentUnit: boolean, defaultUnit: TempUnit) => void
@@ -32,6 +33,7 @@ const UnitForm = ({
   amiChartsLoading,
   defaultUnit,
   draft,
+  isLandUse,
   jurisdictionId,
   nextId,
   onClose,
@@ -134,7 +136,7 @@ const UnitForm = ({
           className={errors[fieldName] ? "error" : ""}
           error={errors[fieldName]}
           errorMessage={t("errors.requiredFieldError")}
-          validation={{ required: !!amiChartID }}
+          validation={{ required: !isLandUse && !!amiChartID }}
           inputProps={{
             onChange: () => {
               clearErrors(fieldName)
