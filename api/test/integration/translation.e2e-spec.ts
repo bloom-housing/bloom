@@ -148,15 +148,15 @@ describe('Translation Controller Tests', () => {
         .set(passkey)
         .expect(200);
 
-      expect(res.body).toEqual({ 'region.name': 'Bloomington' });
+      expect(res.body).toEqual({ en: { 'region.name': 'Bloomington' } });
       // Scope isolation: the partner-only key must not leak into a public response.
-      expect(res.body['partners.only']).toBeUndefined();
+      expect(res.body.en['partners.only']).toBeUndefined();
       expect(res.headers['cache-control']).toEqual(
         'public, s-maxage=300, stale-while-revalidate=600',
       );
     });
 
-    it('layers the requested language over the English default', async () => {
+    it('returns each language apart, so a consumer can layer them itself', async () => {
       const res = await request(app.getHttpServer())
         .get(
           `/translations/jurisdictions/${jurisdictionId}?site=public&language=es`,
@@ -164,7 +164,10 @@ describe('Translation Controller Tests', () => {
         .set(passkey)
         .expect(200);
 
-      expect(res.body).toEqual({ 'region.name': 'Bloomington ES' });
+      expect(res.body).toEqual({
+        en: { 'region.name': 'Bloomington' },
+        es: { 'region.name': 'Bloomington ES' },
+      });
     });
 
     it('rejects a jurisdiction read that omits the site', async () => {
@@ -191,7 +194,7 @@ describe('Translation Controller Tests', () => {
         .set(passkey)
         .expect(200);
 
-      expect(res.body).toEqual({ 'region.name': 'Bloomington' });
+      expect(res.body).toEqual({ en: { 'region.name': 'Bloomington' } });
     });
   });
 
@@ -202,7 +205,7 @@ describe('Translation Controller Tests', () => {
         .set(passkey)
         .expect(200);
 
-      expect(res.body['partners.brand']).toEqual('Bloom');
+      expect(res.body.en['partners.brand']).toEqual('Bloom');
     });
   });
 
@@ -483,7 +486,7 @@ describe('Translation Controller Tests', () => {
         .set(passkey)
         .expect(200);
 
-      expect(res.body[`${GLOBAL_TEST_KEY_PREFIX}shared`]).toEqual(
+      expect(res.body.en[`${GLOBAL_TEST_KEY_PREFIX}shared`]).toEqual(
         'Every Juris',
       );
     });

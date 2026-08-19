@@ -176,6 +176,16 @@ const SettingsTranslations = () => {
     cacheKey,
   } = useRawTranslations(scopeReady ? scope.rows : null, activeLanguage)
 
+  const isEnglishScope = activeLanguage === LanguagesEnum.en
+  const { data: englishOverrides } = useRawTranslations(
+    scopeReady && !isEnglishScope ? scope.rows : null,
+    LanguagesEnum.en
+  )
+  const englishOverrideKeys = useMemo(
+    () => new Set((englishOverrides ?? []).map((override) => override.key)),
+    [englishOverrides]
+  )
+
   const overridesLoaded = overrides !== undefined
 
   const [edits, setEdits] = useState<PendingEdits>({})
@@ -242,8 +252,9 @@ const SettingsTranslations = () => {
           ? undefined
           : { ...flattenTranslations(translations[activeLanguage]), ...languageLayer },
       overrides: overrides ?? [],
+      englishOverrideKeys,
     })
-  }, [activeLanguage, overrides, scope])
+  }, [activeLanguage, englishOverrideKeys, overrides, scope])
 
   // Every row is already in the browser, so search and pagination are local rather than a refetch.
   const search = (tableOptions.filter.filterValue ?? "").trim().toLowerCase()
@@ -334,8 +345,9 @@ const SettingsTranslations = () => {
         minWidth: 140,
         valueGetter: ({ data }: { data: TranslationGridRow }) => {
           if (data.editedValue !== null) return t("translations.statusEdited")
+          if (data.stale) return t("translations.statusStale")
           if (data.overrideValue === null) return t("translations.statusFallback")
-          return data.stale ? t("translations.statusStale") : t("translations.statusOverridden")
+          return t("translations.statusOverridden")
         },
       },
       {

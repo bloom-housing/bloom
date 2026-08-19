@@ -1,3 +1,4 @@
+import { addTranslation } from "@bloom-housing/ui-components"
 import generalTranslations from "@bloom-housing/shared-helpers/src/locales/general.json"
 import spanishTranslations from "@bloom-housing/shared-helpers/src/locales/es.json"
 import chineseTranslations from "@bloom-housing/shared-helpers/src/locales/zh.json"
@@ -30,3 +31,32 @@ export const overrideTranslations = {
   en: { ...additionalGeneralTranslations, ...localeOverrides },
 } as Record<string, any>
 /* eslint-enable @typescript-eslint/no-explicit-any */
+
+/**
+ * Loads the polyglot layers in precedence order, lowest first.
+ *
+ * English layers sit below layers for the selected locale, so an override written in
+ * English doesn't replace a translation that already exists for that locale.
+ */
+export const applyTranslations = (
+  locale?: string,
+  storedOverrides?: Record<string, Record<string, string>>
+) => {
+  addTranslation(translations.general, true)
+  addTranslation(overrideTranslations.en)
+  if (storedOverrides?.en) {
+    addTranslation(storedOverrides.en)
+  }
+
+  if (!locale || locale === "en") return
+
+  if (translations[locale]) {
+    addTranslation(translations[locale])
+  }
+  if (overrideTranslations[locale]) {
+    addTranslation(overrideTranslations[locale])
+  }
+  if (storedOverrides?.[locale]) {
+    addTranslation(storedOverrides[locale])
+  }
+}
