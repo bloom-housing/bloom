@@ -21,6 +21,8 @@ export enum FeatureFlagEnum {
   enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableCustomListingNotifications = 'enableCustomListingNotifications',
+  enableDbDrivenContent = 'enableDbDrivenContent',
+  enableExportTerms = 'enableExportTerms',
   enableFaq = 'enableFaq',
   enableFilterByBathroom = 'enableFilterByBathroom',
   enableFilterByCounty = 'enableFilterByCounty',
@@ -183,6 +185,16 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableCreditScreeningFee,
     description: 'When true, credit screening fee is enabled for listings',
+  },
+  {
+    name: FeatureFlagEnum.enableDbDrivenContent,
+    description:
+      'When true, the jurisdiction reads its translations and structured content from the database instead of the bundled override files',
+  },
+  {
+    name: FeatureFlagEnum.enableExportTerms,
+    description:
+      'When true, display terms of use before exporting applications and lotteries from the partner site',
   },
   {
     name: FeatureFlagEnum.enableFaq,
