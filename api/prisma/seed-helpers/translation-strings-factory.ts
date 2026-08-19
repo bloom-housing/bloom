@@ -10,7 +10,7 @@ import { sourceHash } from '../../src/utilities/translation-source-hash';
 const FORK_ONLY_KEY = 'listingFilters.countyFilterNote';
 const FORK_ONLY_ENGLISH =
   'Select a county to see the listings available there.';
-const OVERRIDDEN_KEY = 'listings.additionalFeesDisclaimer';
+const OVERRIDDEN_KEY = 't.getDirections';
 
 export const translationStringsFactory = (jurisdictionId: string) => {
   const rows: Prisma.TranslationStringsUncheckedCreateInput[] = [
@@ -36,7 +36,7 @@ export const translationStringsFactory = (jurisdictionId: string) => {
       language: LanguagesEnum.en,
       site: SiteEnum.public,
       key: OVERRIDDEN_KEY,
-      value: 'Fees are estimates and may change before move-in.',
+      value: 'Get travel directions',
       origin: TranslationOrigin.human,
     },
   ];
