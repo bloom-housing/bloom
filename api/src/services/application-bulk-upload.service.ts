@@ -140,9 +140,7 @@ export class ApplicationBulkUploadService {
 
     const readStream = await this.csvTemplateExport(listingId, applications);
 
-    const zipFilename = `listing-${listingId}-applications-${
-      user.id
-    }-${now.getTime()}`;
+    const zipFilename = `listing-${listingId}-applications-bulk-update-template`;
     const filename = `applications-${listingId}-${dateString}`;
 
     return await zipExport(readStream, zipFilename, filename, false);
@@ -154,7 +152,7 @@ export class ApplicationBulkUploadService {
   ): Promise<ReadStream> {
     const filename = join(
       process.cwd(),
-      `src/temp/listing-${listingId}-applications-bulk-${new Date().getTime()}.csv`,
+      `src/temp/listing-${listingId}-applications-bulk-update-template.csv`,
     );
 
     await this.csvExportHelper(filename, listingId, applications);

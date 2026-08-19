@@ -700,7 +700,7 @@ export const useBulkApplicationTemplateExport = (listingId: string) => {
 
       const link = document.createElement("a")
       link.href = url
-      link.setAttribute("download", `applications-bulk-templates}.zip`)
+      link.setAttribute("download", `listing-${listingId}-applications-bulk-templates.zip`)
       document.body.appendChild(link)
       link.click()
       link.parentNode.removeChild(link)
