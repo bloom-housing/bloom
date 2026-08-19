@@ -22,6 +22,10 @@ import {
   jurisdictionContentFactory,
   upsertJurisdictionContent,
 } from './seed-helpers/jurisdiction-content-factory';
+import {
+  translationStringsFactory,
+  upsertTranslationStrings,
+} from './seed-helpers/translation-strings-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
 import { APPLICATIONS_PER_LISTINGS, LISTINGS_TO_SEED } from './constants';
@@ -130,6 +134,11 @@ export const devSeeding = async (
       jurisdiction: contentJurisdiction,
       language: LanguagesEnum.es,
     }),
+  );
+
+  await upsertTranslationStrings(
+    prismaClient,
+    translationStringsFactory(jurisdiction.id),
   );
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await unitRentTypeFactoryAll(prismaClient);

@@ -5,6 +5,10 @@ import {
   upsertJurisdictionContent,
 } from './seed-helpers/jurisdiction-content-factory';
 import {
+  translationStringsFactory,
+  upsertTranslationStrings,
+} from './seed-helpers/translation-strings-factory';
+import {
   translationFactory,
   upsertTranslation,
 } from './seed-helpers/translation-factory';
@@ -280,5 +284,10 @@ export const stagingSeed = async (
       jurisdiction: contentJurisdiction,
       language: LanguagesEnum.es,
     }),
+  );
+
+  await upsertTranslationStrings(
+    prismaClient,
+    translationStringsFactory(mainJurisdiction.id),
   );
 };
