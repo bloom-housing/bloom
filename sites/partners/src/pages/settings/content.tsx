@@ -20,6 +20,8 @@ import {
 } from "../../components/settings/SettingsViewHelpers"
 import { useJurisdictionContent, useUnsavedChangesWarning } from "../../lib/hooks"
 import {
+  addListItem,
+  addTextSection,
   buildUpdate,
   clearValueAt,
   ContentDocument,
@@ -30,18 +32,48 @@ import {
   isConflict,
   isStale,
   pathsThatHideContent,
+  newItemId,
+  removeListItem,
+  removeTextSection,
+  restoreListItem,
   rowFor,
   setValueAt,
+  textSections,
+  tombstoneListItem,
   valueAt,
 } from "../../lib/contentEditor"
 import { ContentConflictDialog } from "../../components/settings/ContentConflictDialog"
+import { ContentItemDrawer, ItemField } from "../../components/settings/ContentItemDrawer"
+import { ContentList } from "../../components/settings/ContentList"
 import { ContentWarningDialog } from "../../components/settings/ContentWarningDialog"
 import { EditorExtensions, TextEditor, TextEditorContent } from "../../components/shared/TextEditor"
 import styles from "./content.module.scss"
 
 type FieldConfig = { path: string; labelKey: string; type: "text" | "html" }
 
-const DOCUMENTS: { key: ContentDocument; fields: FieldConfig[] }[] = [
+type ListConfig = {
+  listPath: string
+  labelKey: string
+  addLabelKey: string
+  item: { titleKey: string; displayField: string; fields: ItemField[] }
+  /** A list each item holds, such as the questions inside a FAQ category. */
+  nested?: {
+    field: string
+    labelKey: string
+    addLabelKey: string
+    item: { titleKey: string; displayField: string; fields: ItemField[] }
+  }
+}
+
+type DocumentConfig = {
+  key: ContentDocument
+  fields?: FieldConfig[]
+  lists?: ListConfig[]
+  /** Positional rich text, which a language row replaces whole rather than merging by id. */
+  textSections?: { path: string; labelKey: string; addLabelKey: string }
+}
+
+const DOCUMENTS: DocumentConfig[] = [
   {
     key: "disclaimers",
     fields: [
@@ -56,6 +88,107 @@ const DOCUMENTS: { key: ContentDocument; fields: FieldConfig[] }[] = [
       { path: "contact.email", labelKey: "content.contactEmail", type: "text" },
       { path: "contact.addressHtml", labelKey: "content.contactAddress", type: "html" },
       { path: "contact.hours", labelKey: "content.contactHours", type: "text" },
+    ],
+  },
+  {
+    key: "faq",
+    lists: [
+      {
+        listPath: "faq.categories",
+        labelKey: "content.faqCategories",
+        addLabelKey: "content.addCategory",
+        item: {
+          titleKey: "content.faqCategory",
+          displayField: "title",
+          fields: [{ name: "title", labelKey: "content.faqCategoryTitle", type: "text" }],
+        },
+        nested: {
+          field: "items",
+          labelKey: "content.faqItems",
+          addLabelKey: "content.addQuestion",
+          item: {
+            titleKey: "content.faqItem",
+            displayField: "question",
+            fields: [
+              { name: "question", labelKey: "content.faqQuestion", type: "text" },
+              { name: "answerHtml", labelKey: "content.faqAnswer", type: "html" },
+            ],
+          },
+        },
+      },
+    ],
+  },
+  {
+    key: "resources",
+    fields: [
+      {
+        path: "resources.contactCard.departmentTitle",
+        labelKey: "content.resourcesDepartment",
+        type: "text",
+      },
+      {
+        path: "resources.contactCard.description",
+        labelKey: "content.resourcesDescription",
+        type: "text",
+      },
+      { path: "resources.contactCard.email", labelKey: "content.resourcesEmail", type: "text" },
+    ],
+    lists: [
+      {
+        listPath: "resources.resourceSections",
+        labelKey: "content.resourceSections",
+        addLabelKey: "content.addSection",
+        item: {
+          titleKey: "content.resourceSection",
+          displayField: "sectionTitle",
+          fields: [
+            { name: "sectionTitle", labelKey: "content.sectionTitle", type: "text" },
+            { name: "sectionSubtitle", labelKey: "content.sectionSubtitle", type: "text" },
+          ],
+        },
+        nested: {
+          field: "cards",
+          labelKey: "content.resourceCards",
+          addLabelKey: "content.addCard",
+          item: {
+            titleKey: "content.resourceCard",
+            displayField: "title",
+            fields: [
+              { name: "title", labelKey: "content.cardTitle", type: "text" },
+              { name: "href", labelKey: "content.cardLink", type: "text" },
+              { name: "contentHtml", labelKey: "content.cardContent", type: "html" },
+            ],
+          },
+        },
+      },
+    ],
+  },
+  {
+    key: "footer",
+    textSections: {
+      path: "footer.textSectionsHtml",
+      labelKey: "content.footerTextSections",
+      addLabelKey: "content.addTextSection",
+    },
+    fields: [
+      { path: "footer.logo.logoSrc", labelKey: "content.logoSrc", type: "text" },
+      { path: "footer.logo.logoAltText", labelKey: "content.logoAlt", type: "text" },
+      { path: "footer.logo.logoUrl", labelKey: "content.logoUrl", type: "text" },
+    ],
+    lists: [
+      {
+        listPath: "footer.links",
+        labelKey: "content.footerLinks",
+        addLabelKey: "content.addLink",
+        item: {
+          titleKey: "content.footerLink",
+          displayField: "text",
+          fields: [
+            { name: "text", labelKey: "content.linkText", type: "text" },
+            { name: "href", labelKey: "content.linkHref", type: "text" },
+          ],
+        },
+      },
     ],
   },
 ]
@@ -206,6 +339,28 @@ const SettingsContent = () => {
     setDraft((current) => setValueAt(current, path, value))
   }
 
+  const [drawer, setDrawer] = useState<{
+    basePath: string
+    titleKey: string
+    fields: ItemField[]
+  } | null>(null)
+
+  const addItem = (listPath: string, item: { titleKey: string; fields: ItemField[] }) => {
+    const id = newItemId()
+    setDraft((current) => addListItem(current, listPath, { id }))
+    setDrawer({ basePath: `${listPath}[${id}]`, titleKey: item.titleKey, fields: item.fields })
+  }
+
+  const removeItem = (listPath: string, id: string) => {
+    setDraft((current) =>
+      isEnglish ? removeListItem(current, listPath, id) : tombstoneListItem(current, listPath, id)
+    )
+  }
+
+  const restoreItem = (listPath: string, id: string) => {
+    setDraft((current) => restoreListItem(current, listPath, id))
+  }
+
   const runSave = (toSave: ContentDraft) =>
     saveContent(() =>
       jurisdictionContentService
@@ -232,7 +387,7 @@ const SettingsContent = () => {
     )
 
   const handleSave = () => {
-    const paths = DOCUMENTS.flatMap((entry) => entry.fields.map((field) => field.path))
+    const paths = DOCUMENTS.flatMap((entry) => (entry.fields ?? []).map((field) => field.path))
     const hiding = pathsThatHideContent(draft, englishDraft, paths)
     if (hiding.length) {
       setHidingPaths(hiding)
@@ -246,7 +401,8 @@ const SettingsContent = () => {
     return null
   }
 
-  const activeFields = DOCUMENTS.find((entry) => entry.key === document)?.fields ?? []
+  const activeDocument = DOCUMENTS.find((entry) => entry.key === document)
+  const activeFields = activeDocument?.fields ?? []
 
   return (
     <Layout>
@@ -404,7 +560,138 @@ const SettingsContent = () => {
               </Card>
             )
           })}
+        {!loading &&
+          activeDocument?.textSections &&
+          (() => {
+            const config = activeDocument.textSections
+            const sections = textSections(valueAt(draft, config.path))
+
+            return (
+              <Card className={styles["field-card"]}>
+                <Card.Section>
+                  <div className={styles["field-header"]}>
+                    <span className={styles["field-label"]}>{t(config.labelKey)}</span>
+                    <Button
+                      variant="primary-outlined"
+                      size="sm"
+                      onClick={() => setDraft((current) => addTextSection(current, config.path))}
+                    >
+                      {t(config.addLabelKey)}
+                    </Button>
+                  </div>
+                  {!isEnglish && (
+                    <p className={styles["note"]}>{t("content.positionalListNote")}</p>
+                  )}
+                  {sections.length === 0 && <p>{t("content.emptyList")}</p>}
+                  {sections.map((section, index) => (
+                    <div key={index} className={styles["section-row"]} dir={direction}>
+                      <TextEditorContent content={section} />
+                      <div>
+                        <Button
+                          variant="text"
+                          size="sm"
+                          onClick={() =>
+                            setDrawer({
+                              basePath: config.path,
+                              titleKey: config.labelKey,
+                              fields: [
+                                {
+                                  name: String(index),
+                                  labelKey: "content.textSection",
+                                  type: "html",
+                                },
+                              ],
+                            })
+                          }
+                        >
+                          {t("t.edit")}
+                        </Button>
+                        <Button
+                          variant="text"
+                          size="sm"
+                          onClick={() =>
+                            setDraft((current) => removeTextSection(current, config.path, index))
+                          }
+                        >
+                          {t("t.delete")}
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </Card.Section>
+              </Card>
+            )
+          })()}
+
+        {!loading &&
+          (activeDocument?.lists ?? []).map((list) => (
+            <ContentList
+              key={list.listPath}
+              listPath={list.listPath}
+              labelKey={list.labelKey}
+              addLabelKey={list.addLabelKey}
+              displayField={list.item.displayField}
+              draft={draft}
+              englishDraft={englishDraft}
+              isEnglish={isEnglish}
+              staleFields={languageRow?.staleFields}
+              onEdit={(itemPath) =>
+                setDrawer({
+                  basePath: itemPath,
+                  titleKey: list.item.titleKey,
+                  fields: list.item.fields,
+                })
+              }
+              onAdd={() => addItem(list.listPath, list.item)}
+              onRemove={(id) => removeItem(list.listPath, id)}
+              onRestore={(id) => restoreItem(list.listPath, id)}
+            >
+              {list.nested
+                ? (row) => {
+                  const nested = list.nested
+                  const nestedPath = `${list.listPath}[${row.id}].${nested.field}`
+                  return (
+                    <div className={styles["nested-list"]}>
+                      <ContentList
+                        listPath={nestedPath}
+                        labelKey={nested.labelKey}
+                        addLabelKey={nested.addLabelKey}
+                        displayField={nested.item.displayField}
+                        draft={draft}
+                        englishDraft={englishDraft}
+                        isEnglish={isEnglish}
+                        staleFields={languageRow?.staleFields}
+                        onEdit={(itemPath) =>
+                          setDrawer({
+                            basePath: itemPath,
+                            titleKey: nested.item.titleKey,
+                            fields: nested.item.fields,
+                          })
+                        }
+                        onAdd={() => addItem(nestedPath, nested.item)}
+                        onRemove={(id) => removeItem(nestedPath, id)}
+                        onRestore={(id) => restoreItem(nestedPath, id)}
+                      />
+                    </div>
+                  )
+                }
+                : undefined}
+            </ContentList>
+          ))}
       </TabView>
+
+      <ContentItemDrawer
+        basePath={drawer?.basePath ?? null}
+        titleKey={drawer?.titleKey ?? "content.document"}
+        fields={drawer?.fields ?? []}
+        draft={draft}
+        englishDraft={englishDraft}
+        isEnglish={isEnglish}
+        staleFields={languageRow?.staleFields}
+        direction={direction}
+        onChange={(next) => setDraft(() => next)}
+        onClose={() => setDrawer(null)}
+      />
 
       <ContentConflictDialog
         isOpen={conflict}

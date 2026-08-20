@@ -48,3 +48,22 @@
   width: 100%;
   padding-top: var(--seeds-s2);
 }
+
+.note {
+  color: var(--seeds-text-color-secondary);
+  padding-bottom: var(--seeds-s2);
+}
+
+.section-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--seeds-s4);
+  padding: var(--seeds-s2) 0;
+  border-top: 1px solid var(--seeds-color-gray-450);
+}
+
+.nested-list {
+  flex-basis: 100%;
+  padding-left: var(--seeds-s6);
+}

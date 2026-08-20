@@ -1,0 +1,22 @@
+.field {
+  padding-bottom: var(--seeds-s6);
+}
+
+.field-header {
+  display: flex;
+  align-items: center;
+  gap: var(--seeds-s2);
+  padding-bottom: var(--seeds-s2);
+}
+
+.field-label {
+  font-weight: 600;
+}
+
+.field-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--seeds-s2);
+  align-items: flex-start;
+  padding-top: var(--seeds-s2);
+}

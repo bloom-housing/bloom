@@ -141,6 +141,102 @@ describe("<SettingsContent>", () => {
       expect(await screen.findByText("English changed")).toBeInTheDocument()
     })
 
+    it("lists FAQ categories and the questions inside them", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          faq: {
+            categories: [
+              {
+                id: "applying",
+                title: "Applying",
+                items: [{ id: "how", question: "How do I apply?", answerHtml: "<p>Online.</p>" }],
+              },
+            ],
+          },
+        }),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "faq")
+
+      expect(await screen.findByText("Applying")).toBeInTheDocument()
+      expect(screen.getByText("How do I apply?")).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Add category" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Add question" })).toBeInTheDocument()
+    })
+
+    it("offers to remove an English item for one language rather than delete it", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          footer: { links: [{ id: "about", text: "About", href: "/about" }] },
+        }),
+        row(LanguagesEnum.es),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      expect(await screen.findByRole("button", { name: "Delete" })).toBeInTheDocument()
+
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+
+      expect(
+        await screen.findByRole("button", { name: "Remove for this language" })
+      ).toBeInTheDocument()
+    })
+
+    it("marks a tombstoned item as removed and offers to restore it", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          footer: { links: [{ id: "about", text: "About", href: "/about" }] },
+        }),
+        row(LanguagesEnum.es, { footer: { links: [{ id: "about", _deleted: true }] } }),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+
+      expect(await screen.findByText("Removed for this language")).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Restore" })).toBeInTheDocument()
+    })
+
+    it("opens a drawer to edit an item", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          footer: { links: [{ id: "about", text: "About", href: "/about" }] },
+        }),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.click(await screen.findByRole("button", { name: "Edit" }))
+
+      expect(await screen.findByText("Footer link")).toBeInTheDocument()
+      expect(screen.getByLabelText("Link text")).toHaveValue("About")
+    })
+
+    it("says that footer text sections are replaced as a set for a language", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, { footer: { textSectionsHtml: ["<p>A section</p>"] } }),
+        row(LanguagesEnum.es),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+
+      expect(
+        await screen.findByText(
+          "Text sections are replaced as a set for this language, so translating one means translating all of them."
+        )
+      ).toBeInTheDocument()
+    })
+
     it("switches documents", async () => {
       respondWithRows([row(LanguagesEnum.en)])
       renderPage()
