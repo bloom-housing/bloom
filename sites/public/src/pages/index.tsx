@@ -6,6 +6,7 @@ import { HomeDeprecated } from "../components/home/HomeDeprecated"
 import {
   fetchJurisdictionByName,
   fetchLimitedUnderConstructionListings,
+  fetchJurisdictionContent,
   fetchPublicOverrides,
 } from "../lib/hooks"
 
@@ -30,17 +31,20 @@ export default function HomePage(props: HomePageProps) {
 }
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const [underConstructionListings, jurisdiction, publicOverrides] = await Promise.all([
-    fetchLimitedUnderConstructionListings(undefined, 3),
-    fetchJurisdictionByName(),
-    fetchPublicOverrides(locale),
-  ])
+  const [underConstructionListings, jurisdiction, publicOverrides, jurisdictionContent] =
+    await Promise.all([
+      fetchLimitedUnderConstructionListings(undefined, 3),
+      fetchJurisdictionByName(),
+      fetchPublicOverrides(locale),
+      fetchJurisdictionContent(locale),
+    ])
 
   return {
     props: {
       underConstructionListings: underConstructionListings?.items || [],
       jurisdiction: jurisdiction,
       publicOverrides,
+      jurisdictionContent,
     },
     revalidate: Number(process.env.cacheRevalidate),
   }

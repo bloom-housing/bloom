@@ -3,7 +3,11 @@ import { AuthContext, PageView, pushGtmEvent } from "@bloom-housing/shared-helpe
 import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { UserStatus } from "../lib/constants"
 import Assistance from "../components/assistance/Assistance"
-import { fetchJurisdictionByName, fetchPublicOverrides } from "../lib/hooks"
+import {
+  fetchJurisdictionByName,
+  fetchJurisdictionContent,
+  fetchPublicOverrides,
+} from "../lib/hooks"
 
 const GetAssistance = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
   const { profile } = useContext(AuthContext)
@@ -23,13 +27,14 @@ export default GetAssistance
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getStaticProps({ locale }: { locale?: string }) {
-  const [jurisdiction, publicOverrides] = await Promise.all([
+  const [jurisdiction, publicOverrides, jurisdictionContent] = await Promise.all([
     fetchJurisdictionByName(),
     fetchPublicOverrides(locale),
+    fetchJurisdictionContent(locale),
   ])
 
   return {
-    props: { jurisdiction, publicOverrides },
+    props: { jurisdiction, publicOverrides, jurisdictionContent },
     revalidate: Number(process.env.cacheRevalidate),
   }
 }

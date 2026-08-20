@@ -24,7 +24,9 @@ import ApplicationConductor, {
   loadApplicationFromAutosave,
   loadSavedListing,
 } from "../lib/applications/ApplicationConductor"
+import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { applyTranslations } from "../lib/translations"
+import { JurisdictionContentProvider } from "../lib/JurisdictionContentContext"
 import LinkComponent from "../components/core/LinkComponent"
 
 import "../../styles/overrides.scss"
@@ -49,6 +51,9 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     | Record<string, Record<string, string>>
     | null
     | undefined
+
+  const jurisdictionContent = (pageProps?.jurisdictionContent ??
+    null) as JurisdictionContentFields | null
 
   useMemo(() => {
     applyTranslations(locale, publicOverrides)
@@ -93,10 +98,12 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     <ConfigProvider apiUrl={process.env.backendApiBase}>
       <AuthProvider>
         <MessageProvider>
-          <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-          <div className={jurisdictionClassname}>
-            <Component {...pageProps} />
-          </div>
+          <JurisdictionContentProvider content={jurisdictionContent}>
+            <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+            <div className={jurisdictionClassname}>
+              <Component {...pageProps} />
+            </div>
+          </JurisdictionContentProvider>
         </MessageProvider>
       </AuthProvider>
     </ConfigProvider>

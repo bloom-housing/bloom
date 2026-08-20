@@ -12,6 +12,7 @@ import {
   fetchClosedListings,
   fetchJurisdictionByName,
   fetchMultiselectProgramData,
+  fetchJurisdictionContent,
   fetchPublicOverrides,
 } from "../lib/hooks"
 import { ListingsProps } from "./listings"
@@ -49,9 +50,10 @@ export async function getServerSideProps(context: { req: any; query: any; locale
   } else {
     closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
   }
-  const [jurisdiction, publicOverrides] = await Promise.all([
+  const [jurisdiction, publicOverrides, jurisdictionContent] = await Promise.all([
     fetchJurisdictionByName(context.req),
     fetchPublicOverrides(context.locale, context.req),
+    fetchJurisdictionContent(context.locale, context.req),
   ])
   const multiselectData = isFeatureFlagOn(
     jurisdiction,
@@ -68,6 +70,7 @@ export async function getServerSideProps(context: { req: any; query: any; locale
       multiselectData: multiselectData,
       areFiltersActive,
       publicOverrides,
+      jurisdictionContent,
     },
   }
 }

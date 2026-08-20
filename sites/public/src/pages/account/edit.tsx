@@ -1,6 +1,11 @@
 import React from "react"
 import { RequireLogin } from "@bloom-housing/shared-helpers"
-import { fetchAgencies, fetchJurisdictionByName, fetchPublicOverrides } from "../../lib/hooks"
+import {
+  fetchAgencies,
+  fetchJurisdictionByName,
+  fetchJurisdictionContent,
+  fetchPublicOverrides,
+} from "../../lib/hooks"
 import {
   Agency,
   FeatureFlagEnum,
@@ -57,13 +62,14 @@ export default Edit
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: { req: any; query: any; locale?: string }) {
-  const [jurisdiction, publicOverrides] = await Promise.all([
+  const [jurisdiction, publicOverrides, jurisdictionContent] = await Promise.all([
     fetchJurisdictionByName(context.req),
     fetchPublicOverrides(context.locale, context.req),
+    fetchJurisdictionContent(context.locale, context.req),
   ])
   const agencies = await fetchAgencies(context.req, jurisdiction?.id)
 
   return {
-    props: { jurisdiction, agencies: agencies?.items || [], publicOverrides },
+    props: { jurisdiction, agencies: agencies?.items || [], publicOverrides, jurisdictionContent },
   }
 }

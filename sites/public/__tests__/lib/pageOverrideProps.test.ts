@@ -33,6 +33,7 @@ const PER_REQUEST = [
 ]
 
 const overrides = { en: { "a.key": "Override" } }
+const content = { contact: { phone: "555-0100" } }
 
 const context = {
   req: { headers: {}, socket: {} },
@@ -50,6 +51,7 @@ describe("pages pass the stored overrides through", () => {
     process.env.cacheRevalidate = "30"
     jest.spyOn(hooks, "fetchJurisdictionByName").mockResolvedValue({} as never)
     jest.spyOn(hooks, "fetchPublicOverrides").mockResolvedValue(overrides)
+    jest.spyOn(hooks, "fetchJurisdictionContent").mockResolvedValue(content as never)
     jest.spyOn(hooks, "fetchLimitedUnderConstructionListings").mockResolvedValue({} as never)
     jest.spyOn(hooks, "fetchOpenListings").mockResolvedValue({} as never)
     jest.spyOn(hooks, "fetchClosedListings").mockResolvedValue({} as never)
@@ -61,6 +63,7 @@ describe("pages pass the stored overrides through", () => {
     const result = await load(page).getStaticProps(context)
 
     expect(result.props.publicOverrides).toEqual(overrides)
+    expect(result.props.jurisdictionContent).toEqual(content)
     expect(Number.isFinite(result.revalidate)).toBe(true)
   })
 
@@ -68,6 +71,7 @@ describe("pages pass the stored overrides through", () => {
     const result = await load(page).getServerSideProps(context)
 
     expect(result.props.publicOverrides).toEqual(overrides)
+    expect(result.props.jurisdictionContent).toEqual(content)
     // Generated pages regenerate on a timer; these do not and must not claim to.
     expect(result).not.toHaveProperty("revalidate")
   })
@@ -77,6 +81,7 @@ describe("pages pass the stored overrides through", () => {
 
     // A generated page has no visitor request to forward, so it passes the locale alone.
     expect(hooks.fetchPublicOverrides).toHaveBeenCalledWith("es")
+    expect(hooks.fetchJurisdictionContent).toHaveBeenCalledWith("es")
   })
 
   // The API rate-limits on the forwarded address, so a per-request page has to pass its request.
@@ -84,6 +89,7 @@ describe("pages pass the stored overrides through", () => {
     await load(page).getServerSideProps(context)
 
     expect(hooks.fetchPublicOverrides).toHaveBeenCalledWith("es", context.req)
+    expect(hooks.fetchJurisdictionContent).toHaveBeenCalledWith("es", context.req)
   })
 
   it("still returns props when the overrides cannot be fetched", async () => {
@@ -92,5 +98,13 @@ describe("pages pass the stored overrides through", () => {
     const result = await load("faq").getStaticProps(context)
 
     expect(result.props.publicOverrides).toBeNull()
+  })
+
+  it("still returns props when the content cannot be fetched", async () => {
+    jest.spyOn(hooks, "fetchJurisdictionContent").mockResolvedValue(null)
+
+    const result = await load("faq").getStaticProps(context)
+
+    expect(result.props.jurisdictionContent).toBeNull()
   })
 })

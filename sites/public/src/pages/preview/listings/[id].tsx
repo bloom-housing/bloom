@@ -6,7 +6,11 @@ import { AuthContext, imageUrlFromListing } from "@bloom-housing/shared-helpers"
 import Layout from "../../../layouts/application"
 import { ListingViewSeeds } from "../../../components/listing/ListingViewSeeds"
 import { ListingView } from "../../../components/listing/ListingView"
-import { fetchJurisdictionByName, fetchPublicOverrides } from "../../../lib/hooks"
+import {
+  fetchJurisdictionByName,
+  fetchJurisdictionContent,
+  fetchPublicOverrides,
+} from "../../../lib/hooks"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Alert } from "@bloom-housing/ui-seeds"
 
@@ -70,12 +74,14 @@ export async function getServerSideProps(context: {
 
   const jurisdiction = fetchJurisdictionByName(context.req)
   const publicOverrides = fetchPublicOverrides(context.locale, context.req)
+  const jurisdictionContent = fetchJurisdictionContent(context.locale, context.req)
 
   return {
     props: {
       listing: response.data,
       jurisdiction: await jurisdiction,
       publicOverrides: await publicOverrides,
+      jurisdictionContent: await jurisdictionContent,
     },
   }
 }

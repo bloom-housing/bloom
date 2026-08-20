@@ -18,6 +18,7 @@ import {
   fetchJurisdictionByName,
   fetchMultiselectProgramData,
   fetchOpenListings,
+  fetchJurisdictionContent,
   fetchPublicOverrides,
 } from "../lib/hooks"
 import { ListingMap } from "../components/browse/map/ListingMap"
@@ -77,9 +78,10 @@ export async function getServerSideProps(context: { req: any; query: any; locale
   let areFiltersActive = false
   const isUsingNewSeedsDesign = Boolean(process.env.showNewSeedsDesigns)
 
-  const [jurisdiction, publicOverrides] = await Promise.all([
+  const [jurisdiction, publicOverrides, jurisdictionContent] = await Promise.all([
     fetchJurisdictionByName(context.req),
     fetchPublicOverrides(context.locale, context.req),
+    fetchJurisdictionContent(context.locale, context.req),
   ])
   const enableMap = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableListingMap)
 
@@ -101,6 +103,7 @@ export async function getServerSideProps(context: { req: any; query: any; locale
         multiselectData: multiselectData,
         areFiltersActive,
         publicOverrides,
+        jurisdictionContent,
       },
     }
   }
@@ -132,6 +135,7 @@ export async function getServerSideProps(context: { req: any; query: any; locale
       multiselectData: multiselectData,
       areFiltersActive,
       publicOverrides,
+      jurisdictionContent,
     },
   }
 }

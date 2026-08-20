@@ -9,6 +9,7 @@ import Layout from "../layouts/application"
 import {
   fetchJurisdictionByName,
   fetchMultiselectProgramData,
+  fetchJurisdictionContent,
   fetchPublicOverrides,
 } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
@@ -41,9 +42,10 @@ export default function Finder(props: FinderProps) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getStaticProps(context: { req: any; query: any; locale?: string }) {
-  const [jurisdiction, publicOverrides] = await Promise.all([
+  const [jurisdiction, publicOverrides, jurisdictionContent] = await Promise.all([
     fetchJurisdictionByName(),
     fetchPublicOverrides(context.locale),
+    fetchJurisdictionContent(context.locale),
   ])
 
   const multiselectData = isFeatureFlagOn(
@@ -58,6 +60,7 @@ export async function getStaticProps(context: { req: any; query: any; locale?: s
       jurisdiction: jurisdiction,
       multiselectData,
       publicOverrides,
+      jurisdictionContent,
     },
     revalidate: Number(process.env.cacheRevalidate),
   }

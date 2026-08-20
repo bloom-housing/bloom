@@ -14,7 +14,11 @@ import FrequentlyAskedQuestions from "../patterns/FrequentlyAskedQuestions"
 import { getGenericFaqContent } from "../static_content/generic_faq_content"
 import pageStyles from "../components/content-pages/FaqPage.module.scss"
 import styles from "../patterns/PageHeaderLayout.module.scss"
-import { fetchJurisdictionByName, fetchPublicOverrides } from "../lib/hooks"
+import {
+  fetchJurisdictionByName,
+  fetchJurisdictionContent,
+  fetchPublicOverrides,
+} from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
 import { getJurisdictionFaqContent } from "../static_content/jurisdiction_faq_content"
 
@@ -72,13 +76,14 @@ export default FaqPage
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getStaticProps({ locale }: { locale?: string }) {
-  const [jurisdiction, publicOverrides] = await Promise.all([
+  const [jurisdiction, publicOverrides, jurisdictionContent] = await Promise.all([
     fetchJurisdictionByName(),
     fetchPublicOverrides(locale),
+    fetchJurisdictionContent(locale),
   ])
 
   return {
-    props: { jurisdiction, publicOverrides },
+    props: { jurisdiction, publicOverrides, jurisdictionContent },
     revalidate: Number(process.env.cacheRevalidate),
   }
 }

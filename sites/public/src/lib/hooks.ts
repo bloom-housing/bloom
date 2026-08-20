@@ -8,6 +8,7 @@ import {
   FeatureFlagEnum,
   FilterAvailabilityEnum,
   Jurisdiction,
+  JurisdictionContentFields,
   Listing,
   ListingFilterParams,
   ListingOrderByKeys,
@@ -378,6 +379,43 @@ export async function fetchPublicOverrides(language?: string, req?: any) {
     return overrides
   } catch (error) {
     console.log("error fetching public translation overrides = ", error.message)
+    return null
+  }
+}
+
+const jurisdictionContentByLanguage = new Map<string, JurisdictionContentFields>()
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchJurisdictionContent(language?: string, req?: any) {
+  const key = language ?? "en"
+  const duringBuild = process.env.NEXT_PHASE === "phase-production-build"
+  if (duringBuild && jurisdictionContentByLanguage.has(key)) {
+    return jurisdictionContentByLanguage.get(key)
+  }
+
+  const headers = {
+    passkey: process.env.API_PASS_KEY,
+  }
+  if (req) {
+    headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
+  }
+
+  try {
+    const response = await axios.get(
+      `${process.env.backendApiBase}/jurisdictionContent/byName/${process.env.jurisdictionName}`,
+      {
+        params: { language: key },
+        headers,
+        timeout: OVERRIDES_TIMEOUT_MS,
+      }
+    )
+    const content = (response?.data || null) as JurisdictionContentFields | null
+    if (duringBuild && content) {
+      jurisdictionContentByLanguage.set(key, content)
+    }
+    return content
+  } catch (error) {
+    console.log("error fetching jurisdiction content = ", error.message)
     return null
   }
 }
