@@ -817,8 +817,8 @@ export const useBulkApplicationCsvUpload = () => {
   const [fileUploadData, setFileUploadData] = useState<{
     id: string
     url: string
+    s3Key: string
   } | null>(null)
-  // } | null>({ id: "test", url: " this is a test url" })
   const contentType = "text/csv"
   const contentDisposition = "inline"
 
@@ -828,7 +828,7 @@ export const useBulkApplicationCsvUpload = () => {
 
   const uploadToS3 = useCallback(
     async (file: File, listingId: string) => {
-      const { presignedUrl } = await applicationsService.uploadBulkUpdate({
+      const { presignedUrl, key } = await applicationsService.uploadBulkUpdate({
         body: {
           listingId,
           contentType,
@@ -848,6 +848,7 @@ export const useBulkApplicationCsvUpload = () => {
         setFileUploadData({
           id: file.name,
           url: presignedUrl,
+          s3Key: key,
         })
       })
     },
