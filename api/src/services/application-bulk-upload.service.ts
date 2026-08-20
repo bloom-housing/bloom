@@ -27,7 +27,7 @@ import {
   APPLICATION_DECLINE_REASON_MAP,
   convertReadableToApplicationDeclineReason,
 } from '../utilities/application-export-helpers';
-import { ApplicationBulkValidate } from '../dtos/applications/application-bulk-validate.dto';
+import { ApplicationBulkUpdate } from '../dtos/applications/application-bulk-update.dto';
 import { S3Service } from './s3.service';
 import { BackgroundJobsService } from './background-jobs.service';
 import { ApplicationBulkUrl } from '../dtos/applications/application-bulk-url.dto';
@@ -697,10 +697,43 @@ export class ApplicationBulkUploadService {
     }
   }
 
-  async validateCSV(
-    dto: ApplicationBulkValidate,
-    requestingUser: User,
-  ): Promise<string> {
+  async validateCSV(csvData: string[][], listingId: string): Promise<void> {
+    const [headerRow, ...dataRows] = csvData;
+    const headers: string[] = headerRow ?? [];
+    const rows: CsvRow[] = dataRows.map((cells) =>
+      Object.fromEntries(headers.map((h, i) => [h, cells[i] ?? ''])),
+    );
+
+    this.validateHeaders(headers);
+    this.validateHasDataRows(rows);
+
+    for (let i = 0; i < rows.length; i += NUMBER_TO_PAGINATE_BY) {
+      const currentChunk = rows.slice(i, NUMBER_TO_PAGINATE_BY);
+
+      const dbApps = await this.fetchDbApplications(
+        currentChunk.map((entry) => entry),
+        listingId,
+      );
+      const foundIds = new Set(dbApps.map((a) => a.id));
+      const dbMap = new Map(dbApps.map((a) => [a.id, a]));
+
+      this.validateNoDuplicateId(rows);
+
+      for (let i = 0; i < currentChunk.length; i++) {
+        const entry = currentChunk[i];
+        this.validateApplicationId(entry, foundIds, i);
+        this.validateContextFields(entry, dbMap, i);
+        this.validateStatus(entry, i);
+        this.validateDeclineReason(entry, i);
+        this.validateDeclineConsistency(entry, i);
+        this.validateAdditionalDetails(entry, i);
+        this.validateWaitlistConsistency(entry, i);
+        this.validateNumericFields(entry, i);
+      }
+    }
+  }
+
+  async processBulkUpload(dto: ApplicationBulkUpdate, requestingUser: User) {
     this.validateFileFormat(dto.s3Key);
 
     let csvStream: ReadableStream;
@@ -722,39 +755,7 @@ export class ApplicationBulkUploadService {
         .on('end', () => resolve(results));
     });
 
-    const [headerRow, ...dataRows] = records;
-    const headers: string[] = headerRow ?? [];
-    const rows: CsvRow[] = dataRows.map((cells) =>
-      Object.fromEntries(headers.map((h, i) => [h, cells[i] ?? ''])),
-    );
-
-    this.validateHeaders(headers);
-    this.validateHasDataRows(rows);
-
-    for (let i = 0; i < rows.length; i += NUMBER_TO_PAGINATE_BY) {
-      const currentChunk = rows.slice(i, NUMBER_TO_PAGINATE_BY);
-
-      const dbApps = await this.fetchDbApplications(
-        currentChunk.map((entry) => entry),
-        dto.listingId,
-      );
-      const foundIds = new Set(dbApps.map((a) => a.id));
-      const dbMap = new Map(dbApps.map((a) => [a.id, a]));
-
-      this.validateNoDuplicateId(rows);
-
-      for (let i = 0; i < currentChunk.length; i++) {
-        const entry = currentChunk[i];
-        this.validateApplicationId(entry, foundIds, i);
-        this.validateContextFields(entry, dbMap, i);
-        this.validateStatus(entry, i);
-        this.validateDeclineReason(entry, i);
-        this.validateDeclineConsistency(entry, i);
-        this.validateAdditionalDetails(entry, i);
-        this.validateWaitlistConsistency(entry, i);
-        this.validateNumericFields(entry, i);
-      }
-    }
+    await this.validateCSV(records, dto.listingId);
 
     const backgroundJob = await this.backgroundJobsService.create(
       {
