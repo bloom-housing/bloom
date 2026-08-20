@@ -52,19 +52,22 @@ const translations = (
             'Si tiene preguntas sobre esta aplicación, comuníquese con el agente de este listado.',
         },
         lotteryAvailable: {
+          duplicatesDetails:
+            'Bloom generalmente no acepta solicitudes duplicadas. Una solicitud duplicada es aquella en la que aparece una persona que también aparece en otra solicitud para la misma oportunidad de vivienda. Para obtener información más detallada sobre cómo manejamos las solicitudes duplicadas, consulte nuestro',
           header: 'Nuevos resultados de la lotería de vivienda disponibles',
-          resultsAvailable:
-            'Los resultados están disponibles para una lotería de vivienda para %{listingName}. Consulte su cuenta del portal de vivienda para obtener más información.',
-          signIn: 'Inicie sesión para ver sus resultados',
-          whatHappensHeader: '¿Qué pasa después?',
-          whatHappensContent:
-            'El administrador de la propiedad comenzará a comunicarse con los solicitantes en el orden de clasificación de la lotería, dentro de cada preferencia de la lotería. Cuando todas las unidades estén ocupadas, el administrador de la propiedad dejará de comunicarse con los solicitantes. Es posible que todas las unidades estén ocupadas antes de que el administrador de la propiedad alcance su clasificación. Si esto sucede, no se comunicarán con usted.',
           otherOpportunities1:
             'Para ver otras oportunidades de vivienda, visite %{appUrl}. Puede registrarse para recibir notificaciones de nuevas oportunidades de solicitud',
           otherOpportunities2: 'aquí',
           otherOpportunities3:
             'Si desea obtener información sobre cómo funcionan las loterías, consulte la sección de lotería del',
           otherOpportunities4: 'Housing Portal Centro de ayuda',
+          resultsAvailable:
+            'Los resultados están disponibles para una lotería de vivienda para %{listingName}. Consulte su cuenta del portal de vivienda para obtener más información.',
+          signIn: 'Inicie sesión para ver sus resultados',
+          termsOfUse: 'Términos de uso',
+          whatHappensHeader: '¿Qué pasa después?',
+          whatHappensContent:
+            'El administrador de la propiedad comenzará a comunicarse con los solicitantes en el orden de clasificación de la lotería, dentro de cada preferencia de la lotería. Cuando todas las unidades estén ocupadas, el administrador de la propiedad dejará de comunicarse con los solicitantes. Es posible que todas las unidades estén ocupadas antes de que el administrador de la propiedad alcance su clasificación. Si esto sucede, no se comunicarán con usted.',
         },
         accountRemoval: {
           subject:
@@ -1607,18 +1610,21 @@ const translations = (
         },
         lotteryAvailable: {
           header: 'New Housing Lottery Results Available',
-          resultsAvailable:
-            'Results are available for a housing lottery for %{listingName}. See your housing portal account for more information.',
-          signIn: 'Sign In to View Your Results',
-          whatHappensHeader: 'What happens next?',
-          whatHappensContent:
-            'The property manager will begin to contact applicants in the order of lottery rank, within each lottery preference. When the units are all filled, the property manager will stop contacting applicants. All the units could be filled before the property manager reaches your rank. If this happens, you will not be contacted.',
+          duplicatesDetails:
+            'Bloom generally does not accept duplicate applications. A duplicate application is one that has someone who also appears on another application for the same housing opportunity. For more detailed information on how we handle duplicates, see our',
           otherOpportunities1:
             'To view other housing opportunities, please visit %{appUrl}. You can sign up to receive notifications of new application opportunities',
           otherOpportunities2: 'here',
           otherOpportunities3:
             'If you want to learn about how lotteries work, please see the lottery section of the',
           otherOpportunities4: 'Housing Portal Help Center',
+          resultsAvailable:
+            'Results are available for a housing lottery for %{listingName}. See your housing portal account for more information.',
+          signIn: 'Sign In to View Your Results',
+          termsOfUse: 'Terms of Use',
+          whatHappensHeader: 'What happens next?',
+          whatHappensContent:
+            'The property manager will begin to contact applicants in the order of lottery rank, within each lottery preference. When the units are all filled, the property manager will stop contacting applicants. All the units could be filled before the property manager reaches your rank. If this happens, you will not be contacted.',
         },
         accountRemoval: {
           subject: 'Bloom Housing Scheduled Account Removal Due to Inactivity',

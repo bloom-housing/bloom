@@ -348,6 +348,10 @@ export class EmailService {
     isAdvocate = false,
   ) {
     const jurisdiction = await this.getJurisdiction([listing.jurisdictions]);
+    const enableDuplicatesDetails = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction,
+      FeatureFlagEnum.enableDuplicatesDetailsInEmail,
+    );
     const enableUnitGroups = doJurisdictionHaveFeatureFlagSet(
       jurisdiction,
       FeatureFlagEnum.enableUnitGroups,
@@ -362,6 +366,7 @@ export class EmailService {
       let eligibleText: string = null;
       let preferenceText: string = null;
       let contactText: string = null;
+
       const waitlistContactKey =
         isAdvocate && !isAdvocateClient
           ? 'confirmation.eligible.waitlistContactAdvocate'
@@ -434,9 +439,9 @@ export class EmailService {
       }
 
       return {
+        contactText,
         eligibleText,
         preferenceText,
-        contactText,
       };
     };
 
@@ -452,7 +457,7 @@ export class EmailService {
       isAdvocateClient = false,
     ) => {
       await this.loadTranslations(jurisdiction, language);
-      const { eligibleText, preferenceText, contactText } =
+      const { contactText, eligibleText, preferenceText } =
         buildEligibilityCopy(isAdvocate, isAdvocateClient);
       const nextStepsUrl = this.polyglot.t('confirmation.nextStepsUrl');
 
@@ -466,34 +471,36 @@ export class EmailService {
             logoTitle: this.polyglot.t('header.logoTitle'),
             logoUrl: this.polyglot.t('header.logoUrl'),
           },
-          listing,
-          listingUrl,
           application,
-          preferenceText,
-          interviewText: this.polyglot.t(
-            isAdvocate && !isAdvocateClient
-              ? 'confirmation.interviewAdvocate'
-              : 'confirmation.interview',
+          contactSectionBody: this.polyglot.t(
+            isAdvocateClient
+              ? 'leasingAgent.contactAgentForQuestions'
+              : 'leasingAgent.contactAgentToUpdateInfo',
           ),
-          eligibleText,
-          contactText,
-          nextStepsUrl:
-            nextStepsUrl != 'confirmation.nextStepsUrl' ? nextStepsUrl : null,
           contactSectionHeader: this.polyglot.t(
             isAdvocateClient
               ? 'confirmation.questions'
               : 'confirmation.needToMakeUpdates',
           ),
-          contactSectionBody: this.polyglot.t(
-            isAdvocateClient
-              ? 'leasingAgent.contactAgentForQuestions'
-              : 'leasingAgent.contactAgentToUpdateInfo',
+          contactText,
+          eligibleText,
+          interviewText: this.polyglot.t(
+            isAdvocate && !isAdvocateClient
+              ? 'confirmation.interviewAdvocate'
+              : 'confirmation.interview',
           ),
           introText: this.polyglot.t(
             isAdvocateClient
               ? 'confirmation.gotYourConfirmationNumberOnYourBehalf'
               : 'confirmation.gotYourConfirmationNumber',
           ),
+          listing,
+          listingUrl,
+          nextStepsUrl:
+            nextStepsUrl != 'confirmation.nextStepsUrl' ? nextStepsUrl : null,
+          preferenceText,
+          // This URL is placeholders and must be updated per jurisdiction
+          termsUrl: enableDuplicatesDetails ? 'https://www.exygy.com' : null,
           user,
         }),
       );
@@ -905,7 +912,7 @@ export class EmailService {
 
   /**
    *
-   * @param jurisdictionIds the set of jurisdicitons for the user (sent as IdDTO[]
+   * @param jurisdictionIds the set of jurisdictions for the user (sent as IdDTO[]
    * @param user the user that should received the csv export
    * @param csvData the data that makes up the content of the csv to be sent as an attachment
    * @param exportEmailTitle the title of the email ('User Export' is an example)
@@ -1020,6 +1027,10 @@ export class EmailService {
       const jurisdiction = await this.getJurisdiction([
         { id: listingInfo.juris },
       ]);
+      const enableDuplicatesDetails = doJurisdictionHaveFeatureFlagSet(
+        jurisdiction,
+        FeatureFlagEnum.enableDuplicatesDetailsInEmail,
+      );
 
       for (const language in emails) {
         void (await this.loadTranslations(
@@ -1041,9 +1052,10 @@ export class EmailService {
               appUrl: jurisdiction.publicUrl,
             },
             signInUrl: `${jurisdiction.publicUrl}/${language}/sign-in`,
-            // These two URLs are placeholders and must be updated per jurisdiction
-            notificationsUrl: 'https://www.exygy.com',
+            // These three URLs are placeholders and must be updated per jurisdiction
             helpCenterUrl: 'https://www.exygy.com',
+            notificationsUrl: 'https://www.exygy.com',
+            termsUrl: enableDuplicatesDetails ? 'https://www.exygy.com' : '',
           }),
         );
       }
