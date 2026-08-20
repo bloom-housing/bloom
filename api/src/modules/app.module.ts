@@ -29,6 +29,7 @@ import { UnitTypeModule } from './unit-type.module';
 import { UserModule } from './user.module';
 import { BackgroundJobsModule } from './background-jobs.module';
 import { TranslationModule } from './translation.module';
+import { JurisdictionContentModule } from './jurisdiction-content.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { TranslationModule } from './translation.module';
     SnapshotCreateModule,
     ExternalListingModule,
     TranslationModule,
+    JurisdictionContentModule,
     ThrottlerModule.forRoot([
       {
         ttl: Number(process.env.THROTTLE_TTL),
@@ -97,6 +99,7 @@ import { TranslationModule } from './translation.module';
     SnapshotCreateModule,
     ExternalListingModule,
     TranslationModule,
+    JurisdictionContentModule,
   ],
 })
 export class AppModule {}

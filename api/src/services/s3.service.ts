@@ -129,6 +129,20 @@ export class S3Service {
     });
   }
 
+  async downloadFromPrivate(key: string): Promise<ReadableStream> {
+    try {
+      const command = new GetObjectCommand({
+        Bucket: this.privateBucket,
+        Key: key,
+      });
+
+      const response = await this.s3Client.send(command);
+      return response.Body.transformToWebStream();
+    } catch (e) {
+      throw new InternalServerErrorException(e);
+    }
+  }
+
   urlForPublic(key: string): string {
     return `https://${this.publicBucket}.s3.${this.region}.amazonaws.com/${key}`;
   }
