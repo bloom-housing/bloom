@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react"
+import React, { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import { Field, Select, t, useMutate } from "@bloom-housing/ui-components"
@@ -240,6 +240,7 @@ const SettingsContent = () => {
   const [document, setDocument] = useState<ContentDocument>("disclaimers")
   const [draftState, setDraftState] = useState<{ scope: string; draft: ContentDraft } | null>(null)
   const [conflict, setConflict] = useState(false)
+  const [resetCount, setResetCount] = useState(0)
   const [hidingPaths, setHidingPaths] = useState<string[]>([])
 
   const selectedJurisdiction = jurisdictions.find(
@@ -283,40 +284,59 @@ const SettingsContent = () => {
   const hasUnsavedChanges = hasDraftChanges(draft, savedDraft)
   useUnsavedChangesWarning(hasUnsavedChanges, t("content.unsavedChangesWarning"))
 
-  const privacyEditor = useEditor({
-    extensions: EditorExtensions,
-    immediatelyRender: false,
-    onUpdate: ({ editor }) =>
-      editField("disclaimers.privacyHtml", normalizeRichText(editor.getHTML())),
-  })
-  const disclaimerEditor = useEditor({
-    extensions: EditorExtensions,
-    immediatelyRender: false,
-    onUpdate: ({ editor }) =>
-      editField("disclaimers.disclaimerHtml", normalizeRichText(editor.getHTML())),
-  })
-  const addressEditor = useEditor({
-    extensions: EditorExtensions,
-    immediatelyRender: false,
-    onUpdate: ({ editor }) => editField("contact.addressHtml", normalizeRichText(editor.getHTML())),
-  })
-  const editors: Record<string, Editor | null> = {
-    "disclaimers.privacyHtml": privacyEditor,
-    "disclaimers.disclaimerHtml": disclaimerEditor,
-    "contact.addressHtml": addressEditor,
+  // The editor is rebuilt with its content rather than having content set afterwards, so the
+  // character count reads the loaded value instead of an empty document. The key changes only when
+  // a field switches between falling back and holding a value.
+  const seedKeyFor = (path: string) =>
+    `${scope}|${resetCount}|${
+      fieldState(valueAt(draft, path)) === "fallback" ? "fallback" : "value"
+    }`
+  const contentFor = (path: string) => {
+    const value = valueAt(draft, path)
+    return typeof value === "string" ? value : ""
   }
 
-  // Loading a scope, reverting a field, or discarding a conflict all replace what the editor should
-  // show.
-  useEffect(() => {
-    Object.entries(editors).forEach(([path, editor]) => {
-      const value = valueAt(draft, path)
-      if (editor && typeof value === "string" && value !== editor.getHTML()) {
-        editor.commands.setContent(value, { emitUpdate: false })
-      }
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [draft, activeJurisdictionId, activeLanguage])
+  const privacySeed = seedKeyFor("disclaimers.privacyHtml")
+  const privacyEditor = useEditor(
+    {
+      extensions: EditorExtensions,
+      immediatelyRender: false,
+      content: contentFor("disclaimers.privacyHtml"),
+      onUpdate: ({ editor }) =>
+        editField("disclaimers.privacyHtml", normalizeRichText(editor.getHTML())),
+    },
+    [privacySeed]
+  )
+
+  const disclaimerSeed = seedKeyFor("disclaimers.disclaimerHtml")
+  const disclaimerEditor = useEditor(
+    {
+      extensions: EditorExtensions,
+      immediatelyRender: false,
+      content: contentFor("disclaimers.disclaimerHtml"),
+      onUpdate: ({ editor }) =>
+        editField("disclaimers.disclaimerHtml", normalizeRichText(editor.getHTML())),
+    },
+    [disclaimerSeed]
+  )
+
+  const addressSeed = seedKeyFor("contact.addressHtml")
+  const addressEditor = useEditor(
+    {
+      extensions: EditorExtensions,
+      immediatelyRender: false,
+      content: contentFor("contact.addressHtml"),
+      onUpdate: ({ editor }) =>
+        editField("contact.addressHtml", normalizeRichText(editor.getHTML())),
+    },
+    [addressSeed]
+  )
+
+  const editors: Record<string, { editor: Editor | null; seed: string }> = {
+    "disclaimers.privacyHtml": { editor: privacyEditor, seed: privacySeed },
+    "disclaimers.disclaimerHtml": { editor: disclaimerEditor, seed: disclaimerSeed },
+    "contact.addressHtml": { editor: addressEditor, seed: addressSeed },
+  }
 
   const changeScope = (apply: () => void) => {
     apply()
@@ -472,14 +492,27 @@ const SettingsContent = () => {
               }}
             />
           </div>
-          <Button
-            variant="primary"
-            disabled={!hasUnsavedChanges || loading}
-            loadingMessage={isSaving && t("t.loading")}
-            onClick={handleSave}
-          >
-            {t("t.save")}
-          </Button>
+          <div className={styles["actions"]}>
+            <Button
+              variant="primary-outlined"
+              disabled={!hasUnsavedChanges || isSaving}
+              onClick={() => {
+                setDraftState(null)
+                setDrawer(null)
+                setResetCount((count) => count + 1)
+              }}
+            >
+              {t("content.discardChanges")}
+            </Button>
+            <Button
+              variant="primary"
+              disabled={!hasUnsavedChanges || loading}
+              loadingMessage={isSaving && t("t.loading")}
+              onClick={handleSave}
+            >
+              {t("t.save")}
+            </Button>
+          </div>
         </div>
 
         {loading && <p className={styles["status"]}>{t("t.loading")}</p>}
@@ -490,7 +523,7 @@ const SettingsContent = () => {
             const state = fieldState(value)
             const englishValue = valueAt(englishDraft, field.path)
             const stale = isStale(languageRow?.staleFields, field.path)
-            const editor = editors[field.path]
+            const editorEntry = editors[field.path]
 
             return (
               <Card key={field.path} className={styles["field-card"]}>
@@ -528,10 +561,11 @@ const SettingsContent = () => {
                     </Button>
                   ) : (
                     <div className={styles["field-editor"]} dir={direction}>
-                      {field.type === "html" && editor ? (
+                      {field.type === "html" && editorEntry?.editor ? (
                         <>
                           <TextEditor
-                            editor={editor}
+                            key={editorEntry.seed}
+                            editor={editorEntry.editor}
                             label={t(field.labelKey)}
                             editorId={field.path}
                           />
@@ -543,7 +577,7 @@ const SettingsContent = () => {
                         </>
                       ) : (
                         <Field
-                          key={`${activeJurisdictionId}-${activeLanguage}-${field.path}`}
+                          key={`${activeJurisdictionId}-${activeLanguage}-${resetCount}-${field.path}`}
                           id={field.path}
                           name={field.path}
                           label={t(field.labelKey)}
@@ -703,6 +737,7 @@ const SettingsContent = () => {
         onDiscard={() => {
           setConflict(false)
           setDraftState(null)
+          setResetCount((count) => count + 1)
           void mutate(cacheKey)
         }}
         onOverwrite={() => {

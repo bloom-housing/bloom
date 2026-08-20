@@ -119,6 +119,10 @@ describe("normalizeRichText", () => {
     expect(normalizeRichText("<p>Something</p>")).toEqual("<p>Something</p>")
   })
 
+  it("keeps the empty paragraph Enter opens in a document that has content", () => {
+    expect(normalizeRichText("<p>one</p><p></p>")).toEqual("<p>one</p><p></p>")
+  })
+
   it("reads as hidden once normalized, which is what fires the confirmation", () => {
     expect(fieldState(normalizeRichText("<p></p>"))).toEqual("hidden")
   })

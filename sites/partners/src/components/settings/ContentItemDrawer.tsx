@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Field, t } from "@bloom-housing/ui-components"
 import { Button, Drawer, FieldValue, Tag } from "@bloom-housing/ui-seeds"
 import { useEditor } from "@tiptap/react"
@@ -51,22 +51,21 @@ export const ContentItemDrawer = ({
   const htmlPath = basePath && htmlField ? `${basePath}.${htmlField.name}` : null
   const htmlValue = htmlPath ? valueAt(draft, htmlPath) : undefined
 
-  const editor = useEditor({
-    extensions: EditorExtensions,
-    immediatelyRender: false,
-    onUpdate: ({ editor: instance }) => {
-      if (htmlPath) onChange(setValueAt(draft, htmlPath, normalizeRichText(instance.getHTML())))
+  // Rebuilt with its content rather than seeded afterwards, so the character count reads the value
+  // being edited. The key changes when the drawer opens on another item, or when the field switches
+  // between falling back and holding a value.
+  const seed = `${basePath ?? ""}|${htmlValue === undefined ? "fallback" : "value"}`
+  const editor = useEditor(
+    {
+      extensions: EditorExtensions,
+      immediatelyRender: false,
+      content: typeof htmlValue === "string" ? htmlValue : "",
+      onUpdate: ({ editor: instance }) => {
+        if (htmlPath) onChange(setValueAt(draft, htmlPath, normalizeRichText(instance.getHTML())))
+      },
     },
-  })
-
-  useEffect(() => {
-    if (!editor) return
-    const next = typeof htmlValue === "string" ? htmlValue : ""
-    if (next !== editor.getHTML()) {
-      editor.commands.setContent(next, { emitUpdate: false })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [basePath, htmlValue === undefined])
+    [seed]
+  )
 
   if (!basePath) return null
 
@@ -125,7 +124,12 @@ export const ContentItemDrawer = ({
                 <div className={styles["field-editor"]} dir={direction}>
                   {field.type === "html" && editor ? (
                     <>
-                      <TextEditor editor={editor} label={t(field.labelKey)} editorId={path} />
+                      <TextEditor
+                        key={seed}
+                        editor={editor}
+                        label={t(field.labelKey)}
+                        editorId={path}
+                      />
                       <FieldValue label={t("content.preview")}>
                         <TextEditorContent content={(value as string) ?? ""} />
                       </FieldValue>

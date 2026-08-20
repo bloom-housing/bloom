@@ -1,6 +1,6 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { screen, waitFor, within } from "@testing-library/react"
+import { fireEvent, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { rest } from "msw"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
@@ -10,7 +10,7 @@ import {
   LanguagesEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { mockNextRouter, render } from "../../testUtils"
+import { mockNextRouter, mockTipTapEditor, render } from "../../testUtils"
 import SettingsContent from "../../../src/pages/settings/content"
 
 const server = setupServer()
@@ -45,6 +45,7 @@ beforeAll(() => server.listen())
 
 beforeEach(() => {
   toasts = []
+  mockTipTapEditor()
   pushMock = mockNextRouter().pushMock
   server.use(
     rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => res(ctx.json(user))),
@@ -270,6 +271,36 @@ describe("<SettingsContent>", () => {
     })
   })
 
+  describe("rich text", () => {
+    it("counts the loaded content before anything is typed", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, { disclaimers: { privacyHtml: "<p>Twelve chars</p>" } }),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+
+      // Building the editor empty and setting content afterwards left this at the full limit until
+      // the first keystroke.
+      expect(await screen.findByText("You have 988 characters remaining")).toBeInTheDocument()
+    })
+
+    it("opens a new paragraph on Enter", async () => {
+      respondWithRows([row(LanguagesEnum.en, { disclaimers: { privacyHtml: "<p>one</p>" } })])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      const host = await screen.findByTestId("disclaimers.privacyHtml")
+      const editable = host.querySelector('[contenteditable="true"]')
+      ;(editable as HTMLElement).focus()
+      fireEvent.keyDown(editable, { key: "Enter", code: "Enter", keyCode: 13 })
+
+      // Re-seeding the editor from the stored value would take this paragraph away again, which is
+      // what made Enter look like it did nothing.
+      expect(editable.querySelectorAll("p")).toHaveLength(2)
+    })
+  })
+
   describe("saving", () => {
     const englishRow = () =>
       row(LanguagesEnum.en, {
@@ -305,6 +336,21 @@ describe("<SettingsContent>", () => {
         })
       )
       await waitFor(() => expect(toasts).toContain("Content saved"))
+    })
+
+    it("discards pending edits without a reload", async () => {
+      respondWithRows([englishRow()])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
+      await userEvent.type(await screen.findByLabelText("Phone"), "9")
+      expect(screen.getByLabelText("Phone")).toHaveValue("555-01009")
+
+      await userEvent.click(screen.getByRole("button", { name: "Discard changes" }))
+
+      expect(await screen.findByLabelText("Phone")).toHaveValue("555-0100")
+      expect(screen.getByRole("button", { name: "Discard changes" })).toBeDisabled()
     })
 
     it("offers to overwrite or discard when the row changed underneath", async () => {
