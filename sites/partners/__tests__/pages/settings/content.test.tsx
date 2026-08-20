@@ -1,9 +1,9 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { screen } from "@testing-library/react"
+import { screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { rest } from "msw"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   JurisdictionContentService,
@@ -24,6 +24,8 @@ const CONTENT_PATHS = [
   "http://localhost/api/adapter/jurisdictionContent/jurisdictions/:jurisdictionId/admin",
 ]
 
+const SAVE_PATHS = CONTENT_PATHS.map((path) => `${path}/:language`)
+
 const row = (language: LanguagesEnum, extra = {}) => ({
   id: `row-${language}`,
   createdAt: new Date("2026-01-01").toISOString(),
@@ -42,6 +44,7 @@ const respondWithRows = (rows: ReturnType<typeof row>[]) =>
 beforeAll(() => server.listen())
 
 beforeEach(() => {
+  toasts = []
   pushMock = mockNextRouter().pushMock
   server.use(
     rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => res(ctx.json(user))),
@@ -66,18 +69,29 @@ const adminProfile = {
   listings: [],
 }
 
+let toasts: string[] = []
+
 const renderPage = (profileOverrides = {}, flagOn = true) =>
   render(
-    <AuthContext.Provider
+    <MessageContext.Provider
       value={{
-        profile: { ...adminProfile, ...profileOverrides },
-        jurisdictionContentService: new JurisdictionContentService(),
-        doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-          flagOn && featureFlag === FeatureFlagEnum.enableDbDrivenContent,
+        toastMessagesRef: { current: [] },
+        addToast: (message: string) => {
+          toasts.push(message)
+        },
       }}
     >
-      <SettingsContent />
-    </AuthContext.Provider>
+      <AuthContext.Provider
+        value={{
+          profile: { ...adminProfile, ...profileOverrides },
+          jurisdictionContentService: new JurisdictionContentService(),
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            flagOn && featureFlag === FeatureFlagEnum.enableDbDrivenContent,
+        }}
+      >
+        <SettingsContent />
+      </AuthContext.Provider>
+    </MessageContext.Provider>
   )
 
 describe("<SettingsContent>", () => {
@@ -246,6 +260,95 @@ describe("<SettingsContent>", () => {
 
       expect(await screen.findByText("Phone")).toBeInTheDocument()
       expect(screen.getByText("Hours")).toBeInTheDocument()
+    })
+  })
+
+  describe("saving", () => {
+    const englishRow = () =>
+      row(LanguagesEnum.en, {
+        contact: { phone: "555-0100" },
+        disclaimers: { privacyHtml: "<p>Privacy</p>" },
+      })
+
+    it("sends every document for the language, not only the one on screen", async () => {
+      const bodies: Record<string, unknown>[] = []
+      respondWithRows([englishRow()])
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, async (req, res, ctx) => {
+            bodies.push(await req.json())
+            return res(ctx.json({}))
+          })
+        )
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
+      await userEvent.type(await screen.findByLabelText("Phone"), "9")
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await waitFor(() => expect(bodies).toHaveLength(1))
+      // A save replaces the row, so the untouched documents have to travel with it.
+      expect(bodies[0]).toEqual(
+        expect.objectContaining({
+          contact: { phone: "555-01009" },
+          disclaimers: { privacyHtml: "<p>Privacy</p>" },
+          lastUpdatedAt: new Date("2026-01-01").toISOString(),
+        })
+      )
+      await waitFor(() => expect(toasts).toContain("Content saved"))
+    })
+
+    it("offers to overwrite or discard when the row changed underneath", async () => {
+      respondWithRows([englishRow()])
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, (_req, res, ctx) =>
+            res(ctx.status(409), ctx.json({ message: "jurisdictionContentConflict" }))
+          )
+        )
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
+      await userEvent.type(await screen.findByLabelText("Phone"), "9")
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      expect(
+        await screen.findByText("This content changed while you were editing")
+      ).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Save mine" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Discard mine" })).toBeInTheDocument()
+    })
+
+    it("confirms before a save takes content off the site", async () => {
+      const bodies: Record<string, unknown>[] = []
+      respondWithRows([englishRow(), row(LanguagesEnum.es, { contact: { phone: "555-0199" } })])
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, async (req, res, ctx) => {
+            bodies.push(await req.json())
+            return res(ctx.json({}))
+          })
+        )
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+      await userEvent.clear(await screen.findByLabelText("Phone"))
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      expect(await screen.findByText("This will hide content")).toBeInTheDocument()
+      expect(bodies).toHaveLength(0)
+
+      const dialog = screen.getByRole("dialog")
+      await userEvent.click(within(dialog).getByRole("button", { name: "Save" }))
+
+      await waitFor(() => expect(bodies).toHaveLength(1))
     })
   })
 })

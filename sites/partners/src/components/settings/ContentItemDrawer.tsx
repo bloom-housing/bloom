@@ -7,6 +7,7 @@ import {
   clearValueAt,
   fieldState,
   isStale,
+  normalizeRichText,
   setValueAt,
   valueAt,
 } from "../../lib/contentEditor"
@@ -54,7 +55,7 @@ export const ContentItemDrawer = ({
     extensions: EditorExtensions,
     immediatelyRender: false,
     onUpdate: ({ editor: instance }) => {
-      if (htmlPath) onChange(setValueAt(draft, htmlPath, instance.getHTML()))
+      if (htmlPath) onChange(setValueAt(draft, htmlPath, normalizeRichText(instance.getHTML())))
     },
   })
 

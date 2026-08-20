@@ -112,6 +112,13 @@ export const clearValueAt = (draft: ContentDraft, path: string): ContentDraft =>
     delete parent[field]
   })
 
+/**
+ * An emptied rich-text editor reports `<p></p>` rather than an empty string. Storing that would
+ * render an empty paragraph instead of hiding the field.
+ */
+export const normalizeRichText = (html: string): string =>
+  html.replace(/<p>(\s|&nbsp;|<br\s*\/?>)*<\/p>/gi, "").trim()
+
 export const fieldState = (value: unknown): FieldState => {
   if (value === undefined || value === null) return "fallback"
   return value === "" ? "hidden" : "overridden"

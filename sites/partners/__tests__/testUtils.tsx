@@ -39,14 +39,17 @@ export const mockNextRouter = (query?: any) => {
   const useRouter = jest.spyOn(require("next/router"), "useRouter")
   const pushMock = jest.fn()
   const backMock = jest.fn()
+  // The real router always has these, and a page that guards unsaved changes subscribes to them.
+  const events = { on: jest.fn(), off: jest.fn(), emit: jest.fn() }
   useRouter.mockImplementation(() => ({
     pathname: "/",
     query: query ?? "",
     push: pushMock,
     back: backMock,
+    events,
   }))
 
-  return { useRouter, pushMock, backMock }
+  return { useRouter, pushMock, backMock, events }
 }
 
 export const mockTipTapEditor = () => {

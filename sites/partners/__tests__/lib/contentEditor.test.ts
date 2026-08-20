@@ -3,6 +3,7 @@ import {
   clearValueAt,
   fieldState,
   listRows,
+  normalizeRichText,
   parsePath,
   pathsThatHideContent,
   removeListItem,
@@ -104,6 +105,22 @@ describe("fieldState", () => {
     expect(fieldState(null)).toEqual("fallback")
     expect(fieldState("")).toEqual("hidden")
     expect(fieldState("<p>Something</p>")).toEqual("overridden")
+  })
+})
+
+describe("normalizeRichText", () => {
+  it("treats an emptied editor as empty rather than as an empty paragraph", () => {
+    expect(normalizeRichText("<p></p>")).toEqual("")
+    expect(normalizeRichText("<p><br></p>")).toEqual("")
+    expect(normalizeRichText("<p>&nbsp;</p>")).toEqual("")
+  })
+
+  it("leaves real content alone", () => {
+    expect(normalizeRichText("<p>Something</p>")).toEqual("<p>Something</p>")
+  })
+
+  it("reads as hidden once normalized, which is what fires the confirmation", () => {
+    expect(fieldState(normalizeRichText("<p></p>"))).toEqual("hidden")
   })
 })
 

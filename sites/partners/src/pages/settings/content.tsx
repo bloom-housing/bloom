@@ -33,6 +33,7 @@ import {
   isStale,
   pathsThatHideContent,
   newItemId,
+  normalizeRichText,
   removeListItem,
   removeTextSection,
   restoreListItem,
@@ -285,17 +286,19 @@ const SettingsContent = () => {
   const privacyEditor = useEditor({
     extensions: EditorExtensions,
     immediatelyRender: false,
-    onUpdate: ({ editor }) => editField("disclaimers.privacyHtml", editor.getHTML()),
+    onUpdate: ({ editor }) =>
+      editField("disclaimers.privacyHtml", normalizeRichText(editor.getHTML())),
   })
   const disclaimerEditor = useEditor({
     extensions: EditorExtensions,
     immediatelyRender: false,
-    onUpdate: ({ editor }) => editField("disclaimers.disclaimerHtml", editor.getHTML()),
+    onUpdate: ({ editor }) =>
+      editField("disclaimers.disclaimerHtml", normalizeRichText(editor.getHTML())),
   })
   const addressEditor = useEditor({
     extensions: EditorExtensions,
     immediatelyRender: false,
-    onUpdate: ({ editor }) => editField("contact.addressHtml", editor.getHTML()),
+    onUpdate: ({ editor }) => editField("contact.addressHtml", normalizeRichText(editor.getHTML())),
   })
   const editors: Record<string, Editor | null> = {
     "disclaimers.privacyHtml": privacyEditor,
@@ -648,33 +651,33 @@ const SettingsContent = () => {
             >
               {list.nested
                 ? (row) => {
-                  const nested = list.nested
-                  const nestedPath = `${list.listPath}[${row.id}].${nested.field}`
-                  return (
-                    <div className={styles["nested-list"]}>
-                      <ContentList
-                        listPath={nestedPath}
-                        labelKey={nested.labelKey}
-                        addLabelKey={nested.addLabelKey}
-                        displayField={nested.item.displayField}
-                        draft={draft}
-                        englishDraft={englishDraft}
-                        isEnglish={isEnglish}
-                        staleFields={languageRow?.staleFields}
-                        onEdit={(itemPath) =>
-                          setDrawer({
-                            basePath: itemPath,
-                            titleKey: nested.item.titleKey,
-                            fields: nested.item.fields,
-                          })
-                        }
-                        onAdd={() => addItem(nestedPath, nested.item)}
-                        onRemove={(id) => removeItem(nestedPath, id)}
-                        onRestore={(id) => restoreItem(nestedPath, id)}
-                      />
-                    </div>
-                  )
-                }
+                    const nested = list.nested
+                    const nestedPath = `${list.listPath}[${row.id}].${nested.field}`
+                    return (
+                      <div className={styles["nested-list"]}>
+                        <ContentList
+                          listPath={nestedPath}
+                          labelKey={nested.labelKey}
+                          addLabelKey={nested.addLabelKey}
+                          displayField={nested.item.displayField}
+                          draft={draft}
+                          englishDraft={englishDraft}
+                          isEnglish={isEnglish}
+                          staleFields={languageRow?.staleFields}
+                          onEdit={(itemPath) =>
+                            setDrawer({
+                              basePath: itemPath,
+                              titleKey: nested.item.titleKey,
+                              fields: nested.item.fields,
+                            })
+                          }
+                          onAdd={() => addItem(nestedPath, nested.item)}
+                          onRemove={(id) => removeItem(nestedPath, id)}
+                          onRestore={(id) => restoreItem(nestedPath, id)}
+                        />
+                      </div>
+                    )
+                  }
                 : undefined}
             </ContentList>
           ))}
