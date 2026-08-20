@@ -36,6 +36,7 @@ const MultiselectQuestionsPreferences = () => {
     enableProperties,
     enableAgencies,
     enableTranslations,
+    enableContent: enableTranslations,
   }
 
   const [multiselectQuestionDrawerOpen, setMultiselectQuestionDrawerOpen] =

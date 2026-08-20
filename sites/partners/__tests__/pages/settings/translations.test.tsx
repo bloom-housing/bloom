@@ -103,6 +103,13 @@ describe("<SettingsTranslations>", () => {
       expect(screen.getByRole("link", { name: "Translations" })).toBeInTheDocument()
     })
 
+    it("shows the content tab alongside it, since both ride the same flag", async () => {
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      expect(screen.getByRole("link", { name: "Content" })).toBeInTheDocument()
+    })
+
     it("redirects when the db driven content flag is off for every jurisdiction", () => {
       renderPage({}, false)
 

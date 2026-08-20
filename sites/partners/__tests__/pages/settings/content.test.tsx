@@ -109,6 +109,13 @@ describe("<SettingsContent>", () => {
       expect(pushMock).toHaveBeenCalledWith("/unauthorized")
     })
 
+    it("shows the translations tab alongside it, since both ride the same flag", async () => {
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      expect(screen.getByRole("link", { name: "Translations" })).toBeInTheDocument()
+    })
+
     it("redirects a jurisdictional admin, since editing is limited to admins", () => {
       renderPage({ userRoles: { isJurisdictionalAdmin: true } })
 

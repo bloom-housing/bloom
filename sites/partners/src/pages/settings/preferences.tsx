@@ -68,6 +68,7 @@ const SettingsPreferences = () => {
     enableProperties,
     enableAgencies,
     enableTranslations,
+    enableContent: enableTranslations,
   }
 
   const tableData = useMemo(() => {

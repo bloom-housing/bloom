@@ -80,6 +80,7 @@ const SettingsTranslations = () => {
     enableProperties,
     enableAgencies,
     enableTranslations,
+    enableContent: enableTranslations,
   }
 
   const authorized = enableTranslations && !!profile?.userRoles?.isAdmin

@@ -51,6 +51,7 @@ const SettingsProperties = () => {
     enableProperties,
     enableAgencies,
     enableTranslations,
+    enableContent: enableTranslations,
   }
 
   if (
