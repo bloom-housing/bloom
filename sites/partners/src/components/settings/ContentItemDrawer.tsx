@@ -1,6 +1,6 @@
 import React from "react"
 import { Field, t } from "@bloom-housing/ui-components"
-import { Button, Drawer, FieldValue, Tag } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, FieldValue, Tag } from "@bloom-housing/ui-seeds"
 import { useEditor } from "@tiptap/react"
 import {
   ContentDraft,
@@ -80,83 +80,89 @@ export const ContentItemDrawer = ({
           const state = fieldState(value)
 
           return (
-            <div key={field.name} className={styles["field"]}>
-              <div className={styles["field-header"]}>
-                <span className={styles["field-label"]}>{t(field.labelKey)}</span>
-                {state === "fallback" && (
-                  <Tag variant="secondary">
-                    {isEnglish ? t("content.notSet") : t("content.usingEnglish")}
-                  </Tag>
-                )}
-                {state === "hidden" && <Tag variant="secondary">{t("content.hidden")}</Tag>}
-                {isStale(staleFields, path) && (
-                  <Tag variant="highlight-warm">{t("content.stale")}</Tag>
-                )}
-              </div>
-
-              {!isEnglish && (
-                <FieldValue label={t("content.englishSource")}>
-                  {field.type === "html" && typeof englishValue === "string" ? (
-                    <TextEditorContent content={englishValue} />
-                  ) : (
-                    <span>{(englishValue as string) ?? t("content.notSet")}</span>
+            <Card key={field.name} className={styles["field"]}>
+              <Card.Section>
+                <div className={styles["field-header"]}>
+                  {state === "fallback" && (
+                    <span className={styles["field-label"]}>{t(field.labelKey)}</span>
                   )}
-                </FieldValue>
-              )}
-
-              {state === "fallback" ? (
-                <Button
-                  variant="primary-outlined"
-                  size="sm"
-                  onClick={() =>
-                    onChange(
-                      setValueAt(
-                        draft,
-                        path,
-                        isEnglish || typeof englishValue !== "string" ? "" : englishValue
-                      )
-                    )
-                  }
-                >
-                  {isEnglish ? t("content.setValue") : t("content.override")}
-                </Button>
-              ) : (
-                <div className={styles["field-editor"]} dir={direction}>
-                  {field.type === "html" && editor ? (
-                    <>
-                      <TextEditor
-                        key={seed}
-                        editor={editor}
-                        label={t(field.labelKey)}
-                        editorId={path}
-                      />
-                      <FieldValue label={t("content.preview")}>
-                        <TextEditorContent content={(value as string) ?? ""} />
-                      </FieldValue>
-                    </>
-                  ) : (
-                    <Field
-                      key={path}
-                      id={path}
-                      name={path}
-                      label={t(field.labelKey)}
-                      defaultValue={(value as string) ?? ""}
-                      inputProps={{
-                        onChange: (event: React.ChangeEvent<HTMLInputElement>) =>
-                          onChange(setValueAt(draft, path, event.target.value)),
-                      }}
-                    />
+                  {state === "fallback" && (
+                    <Tag variant="secondary">
+                      {isEnglish ? t("content.notSet") : t("content.usingEnglish")}
+                    </Tag>
                   )}
-                  <Button
-                    variant="text"
-                    size="sm"
-                    onClick={() => onChange(clearValueAt(draft, path))}
-                  >
-                    {isEnglish ? t("content.clear") : t("content.revertToEnglish")}
-                  </Button>
+                  {state === "hidden" && <Tag variant="secondary">{t("content.hidden")}</Tag>}
+                  {isStale(staleFields, path) && (
+                    <Tag variant="highlight-warm">{t("content.stale")}</Tag>
+                  )}
                 </div>
-              )}
-            </div>
+
+                {!isEnglish && (
+                  <div className={styles["english-source"]}>
+                    <FieldValue label={t("content.englishSource")}>
+                      {field.type === "html" && typeof englishValue === "string" ? (
+                        <TextEditorContent content={englishValue} />
+                      ) : (
+                        <span>{(englishValue as string) ?? t("content.notSet")}</span>
+                      )}
+                    </FieldValue>
+                  </div>
+                )}
+
+                {state === "fallback" ? (
+                  <Button
+                    variant="primary-outlined"
+                    size="sm"
+                    onClick={() =>
+                      onChange(
+                        setValueAt(
+                          draft,
+                          path,
+                          isEnglish || typeof englishValue !== "string" ? "" : englishValue
+                        )
+                      )
+                    }
+                  >
+                    {isEnglish ? t("content.setValue") : t("content.override")}
+                  </Button>
+                ) : (
+                  <div className={styles["field-editor"]} dir={direction}>
+                    {field.type === "html" && editor ? (
+                      <>
+                        <TextEditor
+                          key={seed}
+                          editor={editor}
+                          label={t(field.labelKey)}
+                          editorId={path}
+                        />
+                        <FieldValue label={t("content.preview")}>
+                          <TextEditorContent content={(value as string) ?? ""} />
+                        </FieldValue>
+                      </>
+                    ) : (
+                      <Field
+                        key={path}
+                        id={path}
+                        name={path}
+                        label={t(field.labelKey)}
+                        defaultValue={(value as string) ?? ""}
+                        inputProps={{
+                          onChange: (event: React.ChangeEvent<HTMLInputElement>) =>
+                            onChange(setValueAt(draft, path, event.target.value)),
+                        }}
+                      />
+                    )}
+                    <Button
+                      variant="text"
+                      size="sm"
+                      onClick={() => onChange(clearValueAt(draft, path))}
+                    >
+                      {isEnglish ? t("content.clear") : t("content.revertToEnglish")}
+                    </Button>
+                  </div>
+                )}
+              </Card.Section>
+            </Card>
           )
         })}
       </Drawer.Content>

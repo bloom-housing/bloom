@@ -1,12 +1,11 @@
 .field {
-  padding-bottom: var(--seeds-s6);
+  margin-bottom: var(--seeds-s6);
 }
 
 .field-header {
   display: flex;
   align-items: center;
   gap: var(--seeds-s2);
-  padding-bottom: var(--seeds-s2);
 }
 
 .field-label {
@@ -16,11 +15,14 @@
 .field-editor {
   display: flex;
   flex-direction: column;
-  gap: var(--seeds-s2);
+  gap: var(--seeds-s4);
   align-items: stretch;
-  padding-top: var(--seeds-s2);
 
   button {
     align-self: flex-start;
   }
+}
+
+.english-source {
+  padding-bottom: var(--seeds-s4);
 }

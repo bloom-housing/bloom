@@ -288,8 +288,7 @@ const SettingsContent = () => {
   // character count reads the loaded value instead of an empty document. The key changes only when
   // a field switches between falling back and holding a value.
   const seedKeyFor = (path: string) =>
-    `${scope}|${resetCount}|${
-      fieldState(valueAt(draft, path)) === "fallback" ? "fallback" : "value"
+    `${scope}|${resetCount}|${fieldState(valueAt(draft, path)) === "fallback" ? "fallback" : "value"
     }`
   const contentFor = (path: string) => {
     const value = valueAt(draft, path)
@@ -529,7 +528,9 @@ const SettingsContent = () => {
               <Card key={field.path} className={styles["field-card"]}>
                 <Card.Section>
                   <div className={styles["field-header"]}>
-                    <span className={styles["field-label"]}>{t(field.labelKey)}</span>
+                    {state === "fallback" && (
+                      <span className={styles["field-label"]}>{t(field.labelKey)}</span>
+                    )}
                     {state === "fallback" && (
                       <Tag variant="secondary">
                         {isEnglish ? t("content.notSet") : t("content.usingEnglish")}
@@ -685,33 +686,33 @@ const SettingsContent = () => {
             >
               {list.nested
                 ? (row) => {
-                    const nested = list.nested
-                    const nestedPath = `${list.listPath}[${row.id}].${nested.field}`
-                    return (
-                      <div className={styles["nested-list"]}>
-                        <ContentList
-                          listPath={nestedPath}
-                          labelKey={nested.labelKey}
-                          addLabelKey={nested.addLabelKey}
-                          displayField={nested.item.displayField}
-                          draft={draft}
-                          englishDraft={englishDraft}
-                          isEnglish={isEnglish}
-                          staleFields={languageRow?.staleFields}
-                          onEdit={(itemPath) =>
-                            setDrawer({
-                              basePath: itemPath,
-                              titleKey: nested.item.titleKey,
-                              fields: nested.item.fields,
-                            })
-                          }
-                          onAdd={() => addItem(nestedPath, nested.item)}
-                          onRemove={(id) => removeItem(nestedPath, id)}
-                          onRestore={(id) => restoreItem(nestedPath, id)}
-                        />
-                      </div>
-                    )
-                  }
+                  const nested = list.nested
+                  const nestedPath = `${list.listPath}[${row.id}].${nested.field}`
+                  return (
+                    <div className={styles["nested-list"]}>
+                      <ContentList
+                        listPath={nestedPath}
+                        labelKey={nested.labelKey}
+                        addLabelKey={nested.addLabelKey}
+                        displayField={nested.item.displayField}
+                        draft={draft}
+                        englishDraft={englishDraft}
+                        isEnglish={isEnglish}
+                        staleFields={languageRow?.staleFields}
+                        onEdit={(itemPath) =>
+                          setDrawer({
+                            basePath: itemPath,
+                            titleKey: nested.item.titleKey,
+                            fields: nested.item.fields,
+                          })
+                        }
+                        onAdd={() => addItem(nestedPath, nested.item)}
+                        onRemove={(id) => removeItem(nestedPath, id)}
+                        onRestore={(id) => restoreItem(nestedPath, id)}
+                      />
+                    </div>
+                  )
+                }
                 : undefined}
             </ContentList>
           ))}
