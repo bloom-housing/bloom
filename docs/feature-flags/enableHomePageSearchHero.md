@@ -20,7 +20,7 @@ The view of the form change depending on additional configuration:
 
 ### Default view
 
-![image.png](./images/image%2082.png)
+![image.png](./images/image%2085.png)
 
 ### With image and subnote
 
