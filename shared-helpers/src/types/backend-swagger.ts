@@ -3885,7 +3885,7 @@ export interface ListingFilterParams {
   availability?: FilterAvailabilityEnum
 
   /**  */
-  bathrooms?: []
+  bathrooms?: number
 
   /**  */
   bedrooms?: number

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useContext, useMemo } from "react"
 import { t, Field, Select, FieldGroup, numberOptions } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, LoadingState } from "@bloom-housing/ui-seeds"
-import { AuthContext, Form } from "@bloom-housing/shared-helpers"
+import { AuthContext, Form, MAX_BATHROOMS } from "@bloom-housing/shared-helpers"
 import { useWatch, useForm } from "react-hook-form"
 import { TempUnit } from "../../../lib/listings/formTypes"
 import {
@@ -466,7 +466,7 @@ const UnitForm = ({
                       options={[
                         { value: "", label: t("t.selectOne") },
                         { label: t("listings.unit.sharedBathroom"), value: "0" },
-                        ...numberOptions(5),
+                        ...numberOptions(MAX_BATHROOMS),
                       ]}
                     />
                   </Grid.Cell>
