@@ -21,9 +21,11 @@ import {
 } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
 import { getJurisdictionFaqContent } from "../static_content/jurisdiction_faq_content"
+import { useJurisdictionContent } from "../lib/JurisdictionContentContext"
 
 const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
   const { profile } = useContext(AuthContext)
+  const jurisdictionContent = useJurisdictionContent()
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -33,7 +35,7 @@ const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
     })
   }, [profile])
 
-  const content = getJurisdictionFaqContent() || getGenericFaqContent()
+  const content = getJurisdictionFaqContent(jurisdictionContent) || getGenericFaqContent()
 
   const enableResources = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableResources)
 
