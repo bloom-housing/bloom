@@ -29,6 +29,8 @@ import {
   PaginationMeta,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { S3Upload } from "./helpers"
+import { AxiosProgressEvent } from "axios"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -806,6 +808,62 @@ export const useBulkApplicationTemplateExport = (listingId: string) => {
   return {
     onExport,
     exportLoading,
+  }
+}
+
+export const useBulkApplicationCsvUpload = () => {
+  const { applicationsService } = useContext(AuthContext)
+  const [progressValue, setProgressValue] = useState<number>()
+  const [fileUploadData, setFileUploadData] = useState<{
+    id: string
+    url: string
+  } | null>(null)
+  // } | null>({ id: "test", url: " this is a test url" })
+  const contentType = "text/csv"
+  const contentDisposition = "inline"
+
+  const onUploadProgress = useCallback((p: AxiosProgressEvent) => {
+    setProgressValue(parseInt(((p.loaded / p.total) * 100).toFixed(0), 10))
+  }, [])
+
+  const uploadToS3 = useCallback(
+    async (file: File, listingId: string) => {
+      const { presignedUrl } = await applicationsService.uploadBulkUpdate({
+        body: {
+          listingId,
+          contentType,
+          contentDisposition,
+        },
+      })
+      setProgressValue(3)
+
+      void S3Upload({
+        file,
+        uploadUrl: presignedUrl,
+        onUploadProgress,
+        contentType: "",
+        contentDisposition,
+      }).then((_) => {
+        setProgressValue(100)
+        setFileUploadData({
+          id: file.name,
+          url: presignedUrl,
+        })
+      })
+    },
+    [applicationsService, onUploadProgress]
+  )
+
+  const resetUpload = useCallback(() => {
+    setProgressValue(0)
+    setFileUploadData(null)
+  }, [])
+
+  return {
+    progressValue,
+    fileUploadData,
+    uploadToS3,
+    resetUpload,
   }
 }
 

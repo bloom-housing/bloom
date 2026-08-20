@@ -1,7 +1,7 @@
 import React from "react"
 import { Button, Card, Drawer, Heading } from "@bloom-housing/ui-seeds"
-import { Dropzone, t } from "@bloom-housing/ui-components"
-import { useBulkApplicationTemplateExport } from "../../lib/hooks"
+import { Dropzone, MinimalTable, StandardTableData, t } from "@bloom-housing/ui-components"
+import { useBulkApplicationCsvUpload, useBulkApplicationTemplateExport } from "../../lib/hooks"
 
 interface BulkUpdateDrawerProps {
   isOpen: boolean
@@ -11,9 +11,35 @@ interface BulkUpdateDrawerProps {
 
 const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps) => {
   const { onExport } = useBulkApplicationTemplateExport(listingId)
+  const { uploadToS3, resetUpload, fileUploadData, progressValue } = useBulkApplicationCsvUpload()
 
-  const csvUploader = (file: File) => {
-    console.log(file)
+  const csvUploader = async (file: File) => {
+    await uploadToS3(file, listingId)
+  }
+
+  const bulkApplicationHeaders = {
+    fileName: "t.fileName",
+    actions: "",
+  }
+
+  const bulkApplicationTableRows: StandardTableData = []
+  if (fileUploadData && fileUploadData.url !== "") {
+    bulkApplicationTableRows.push({
+      fileName: { content: `${fileUploadData.id}` },
+      actions: {
+        content: (
+          <Button
+            type="button"
+            size="sm"
+            className="font-semibold text-alert"
+            onClick={resetUpload}
+            variant="text"
+          >
+            {t("t.delete")}
+          </Button>
+        ),
+      },
+    })
   }
 
   return (
@@ -47,18 +73,26 @@ const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps)
               {t("applications.bulkUpdateStep3Title")}
             </Heading>
             <p className="seeds-m-be-content">{t("applications.bulkUpdateStep3Body")}</p>
-            <Dropzone
-              id="bulk-update-upload"
-              uploader={csvUploader}
-              label={t("applications.bulkUpdateStep3DropzoneLabel")}
-              accept=".csv"
-            />
+            {!fileUploadData ? (
+              <Dropzone
+                id="bulk-update-upload"
+                uploader={csvUploader}
+                label={t("applications.bulkUpdateStep3DropzoneLabel")}
+                accept=".csv"
+                progress={progressValue}
+              />
+            ) : (
+              <MinimalTable headers={bulkApplicationHeaders} data={bulkApplicationTableRows} />
+            )}
           </Card.Section>
         </Card>
       </Drawer.Content>
       <Drawer.Footer>
         <Button variant="primary-outlined" onClick={onClose}>
           {t("t.close")}
+        </Button>
+        <Button disabled={!fileUploadData} variant="primary">
+          {t("t.uploadFile")}
         </Button>
       </Drawer.Footer>
     </Drawer>
