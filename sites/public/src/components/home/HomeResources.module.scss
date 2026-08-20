@@ -10,6 +10,13 @@
     font-size: var(--seeds-font-size-xl);
   }
 
+  .resource-text {
+    --card-content-padding-block: var(--seeds-s4);
+    font-size: var(--seeds-font-size-md);
+    color: var(--seeds-color-gray-750);
+    height: 100%;
+  }
+
   .resource-icon {
     color: var(--seeds-color-primary);
     background-color: var(--seeds-bg-color-surface-primary);
