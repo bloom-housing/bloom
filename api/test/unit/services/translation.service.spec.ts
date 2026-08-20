@@ -554,6 +554,247 @@ describe('Testing translations service', () => {
     });
   });
 
+  // The global Partners rows have no jurisdiction, so the same admin methods run with a null id.
+  describe('the global Partners scope', () => {
+    it('reads the null-jurisdiction rows without resolving a jurisdiction', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          key: 'nav.siteTitlePartners',
+          value: 'Partners Portal',
+          updatedAt: new Date(),
+          origin: TranslationOrigin.human,
+          sourceHash: null,
+        },
+      ]);
+
+      const result = await service.getRawOverrides(
+        null,
+        SiteEnum.partners,
+        LanguagesEnum.en,
+        adminUser,
+      );
+
+      expect(permissionServiceMock.canOrThrow).toHaveBeenCalledWith(
+        adminUser,
+        'translation',
+        'read',
+        { jurisdictionId: undefined },
+      );
+      expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
+      expect(prisma.translationStrings.findMany).toHaveBeenCalledWith({
+        where: {
+          jurisdictionId: null,
+          site: SiteEnum.partners,
+          language: LanguagesEnum.en,
+        },
+        select: {
+          key: true,
+          value: true,
+          updatedAt: true,
+          origin: true,
+          sourceHash: true,
+        },
+      });
+      expect(result[0].key).toEqual('nav.siteTitlePartners');
+    });
+
+    it('creates a key with a null jurisdiction', async () => {
+      prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
+
+      await service.updateOverrides(
+        null,
+        SiteEnum.partners,
+        LanguagesEnum.en,
+        { edits: [{ key: 'nav.siteTitlePartners', value: 'Partners Portal' }] },
+        adminUser,
+      );
+
+      expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
+      expect(prisma.translationStrings.create).toHaveBeenCalledWith({
+        data: {
+          jurisdictionId: null,
+          language: LanguagesEnum.en,
+          site: SiteEnum.partners,
+          key: 'nav.siteTitlePartners',
+          value: 'Partners Portal',
+          origin: TranslationOrigin.human,
+          sourceHash: null,
+        },
+      });
+    });
+
+    it('reports a stale lock as a conflict', async () => {
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 0 });
+      prisma.translationStrings.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: 'existing-row' });
+
+      let caught: ConflictException;
+      try {
+        await service.updateOverrides(
+          null,
+          SiteEnum.partners,
+          LanguagesEnum.en,
+          {
+            edits: [
+              {
+                key: 'nav.siteTitlePartners',
+                value: 'Partners Portal',
+                lastUpdatedAt: new Date(),
+              },
+            ],
+          },
+          adminUser,
+        );
+      } catch (error) {
+        caught = error;
+      }
+
+      expect(caught).toBeInstanceOf(ConflictException);
+      expect(caught.getResponse()).toEqual({
+        message: 'translationConflict',
+        conflicts: ['nav.siteTitlePartners'],
+      });
+    });
+
+    it('deletes a key with a null jurisdiction', async () => {
+      prisma.translationStrings.deleteMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+
+      const result = await service.deleteOverride(
+        null,
+        SiteEnum.partners,
+        LanguagesEnum.en,
+        'nav.siteTitlePartners',
+        adminUser,
+      );
+
+      expect(permissionServiceMock.canOrThrow).toHaveBeenCalledWith(
+        adminUser,
+        'translation',
+        'delete',
+        { jurisdictionId: undefined },
+      );
+      expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
+      expect(prisma.translationStrings.deleteMany).toHaveBeenCalledWith({
+        where: {
+          jurisdictionId: null,
+          language: LanguagesEnum.en,
+          site: SiteEnum.partners,
+          key: 'nav.siteTitlePartners',
+        },
+      });
+      expect(result).toEqual({ success: true });
+    });
+
+    it('rejects when the permission check fails', async () => {
+      permissionServiceMock.canOrThrow.mockRejectedValueOnce(
+        new ForbiddenException(),
+      );
+
+      await expect(
+        service.updateOverrides(
+          null,
+          SiteEnum.partners,
+          LanguagesEnum.en,
+          { edits: [{ key: 'nav.siteTitlePartners', value: 'Blocked' }] },
+          adminUser,
+        ),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('records the english source hash from the global rows on a non-english save', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          jurisdictionId: null,
+          site: SiteEnum.partners,
+          key: 'nav.siteTitlePartners',
+          value: 'Partners Portal',
+        },
+      ]);
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+
+      await service.updateOverrides(
+        null,
+        SiteEnum.partners,
+        LanguagesEnum.es,
+        {
+          edits: [
+            {
+              key: 'nav.siteTitlePartners',
+              value: 'Portal de Socios',
+              lastUpdatedAt: new Date(),
+            },
+          ],
+        },
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            language: LanguagesEnum.en,
+            OR: [
+              { jurisdictionId: null, site: SiteEnum.partners },
+              { jurisdictionId: null, site: SiteEnum.partners },
+              { jurisdictionId: null, site: null },
+            ],
+          }),
+        }),
+      );
+      expect(prisma.translationStrings.updateMany).toHaveBeenCalledWith({
+        where: expect.objectContaining({
+          jurisdictionId: null,
+          language: LanguagesEnum.es,
+          site: SiteEnum.partners,
+        }),
+        data: {
+          value: 'Portal de Socios',
+          origin: TranslationOrigin.human,
+          sourceHash: sourceHash('Partners Portal'),
+        },
+      });
+    });
+
+    /**
+     * The English a key falls back to lives in the bundled locale files, not the database, so a
+     * global key with no English row records no source hash and never reports stale. #6519 decides
+     * which of those files it seeds, which is what settles whether this stays true.
+     */
+    it('records no source hash for a key with no english row', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+
+      await service.updateOverrides(
+        null,
+        SiteEnum.partners,
+        LanguagesEnum.es,
+        {
+          edits: [
+            {
+              key: 'nav.siteTitlePartners',
+              value: 'Portal de Socios',
+              lastUpdatedAt: new Date(),
+            },
+          ],
+        },
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.updateMany).toHaveBeenCalledWith({
+        where: expect.anything(),
+        data: expect.objectContaining({ sourceHash: null }),
+      });
+    });
+  });
+
   describe('getMergedTranslations', () => {
     it('assembles english null-jurisdiction translations from key rows', async () => {
       prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([

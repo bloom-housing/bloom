@@ -10,6 +10,7 @@ import {
   FeatureFlagEnum,
   LanguagesEnum,
   SiteEnum,
+  TranslationUpdate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { flattenTranslations } from "@bloom-housing/shared-helpers/src/utilities/flattenTranslations"
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
@@ -22,7 +23,8 @@ import {
   SettingsIndexEnum,
 } from "../../components/settings/SettingsViewHelpers"
 import { useRawTranslations, useUnsavedChangesWarning } from "../../lib/hooks"
-import { translations } from "../../lib/translations"
+import { overrideTranslations, translations } from "../../lib/translations"
+import { publicOverrideTranslations } from "../../lib/publicTranslations"
 import styles from "./translations.module.scss"
 import {
   applyConflictChoices,
@@ -95,19 +97,32 @@ const SettingsTranslations = () => {
   )
   const [jurisdictionId, setJurisdictionId] = useState("")
   const [language, setLanguage] = useState<LanguagesEnum>(LanguagesEnum.en)
+  const [site, setSite] = useState<SiteEnum>(SiteEnum.public)
+
+  // The Partners rows are global
+  const isGlobal = site === SiteEnum.partners
 
   const selectedJurisdiction = jurisdictions.find(
     (jurisdiction) => jurisdiction.id === (jurisdictionId || jurisdictions[0]?.id)
   )
   const activeJurisdictionId = selectedJurisdiction?.id ?? ""
 
+  const partnersLanguages = useMemo(() => {
+    const supported = (router.locales ?? []).filter((locale): locale is LanguagesEnum =>
+      Object.values(LanguagesEnum).includes(locale as LanguagesEnum)
+    )
+    return supported.length ? supported : [LanguagesEnum.en]
+  }, [router.locales])
+
   const languageOptions = useMemo(
     () =>
-      (selectedJurisdiction?.languages ?? [LanguagesEnum.en]).map((value) => ({
-        value,
-        label: t(`languages.${value}`),
-      })),
-    [selectedJurisdiction?.languages]
+      (isGlobal ? partnersLanguages : selectedJurisdiction?.languages ?? [LanguagesEnum.en]).map(
+        (value) => ({
+          value,
+          label: t(`languages.${value}`),
+        })
+      ),
+    [isGlobal, partnersLanguages, selectedJurisdiction?.languages]
   )
 
   // Languages are per jurisdiction, so switching to one that does not offer the selected language
@@ -116,30 +131,60 @@ const SettingsTranslations = () => {
     ? language
     : languageOptions[0]?.value ?? LanguagesEnum.en
 
+  const scope = useMemo(
+    () =>
+      isGlobal
+        ? {
+            rows: { type: "global" as const },
+            baseOverrides: overrideTranslations,
+            save: (body: TranslationUpdate) =>
+              translationsService.updateRawPartnersTranslations({ language: activeLanguage, body }),
+            revert: (key: string) =>
+              translationsService.deleteRawPartnersTranslation({ language: activeLanguage, key }),
+          }
+        : {
+            rows: {
+              type: "jurisdiction" as const,
+              jurisdictionId: activeJurisdictionId,
+              site,
+            },
+            baseOverrides: publicOverrideTranslations,
+            save: (body: TranslationUpdate) =>
+              translationsService.updateRawTranslations({
+                jurisdictionId: activeJurisdictionId,
+                site,
+                language: activeLanguage,
+                body,
+              }),
+            revert: (key: string) =>
+              translationsService.deleteRawTranslation({
+                jurisdictionId: activeJurisdictionId,
+                site,
+                language: activeLanguage,
+                key,
+              }),
+          },
+    [activeJurisdictionId, activeLanguage, isGlobal, site, translationsService]
+  )
+
+  const scopeReady = authorized && (isGlobal || !!activeJurisdictionId)
+
   const {
     data: overrides,
     loading,
     error,
     cacheKey,
-  } = useRawTranslations({
-    jurisdictionId: authorized ? activeJurisdictionId : "",
-    site: SiteEnum.public,
-    language: activeLanguage,
-  })
+  } = useRawTranslations(scopeReady ? scope.rows : null, activeLanguage)
 
-  // Before these load every row looks unoverridden, so an edit would send a create and conflict.
   const overridesLoaded = overrides !== undefined
 
-  // What the admin has typed but not saved, with the version each edit locks against.
   const [edits, setEdits] = useState<PendingEdits>({})
-  // Keys a save could not write because someone changed them first.
   const [conflictKeys, setConflictKeys] = useState<string[]>([])
   const [warnings, setWarnings] = useState<{
     hidingKeys: string[]
     tokenIssues: TranslationIssue[]
   }>({ hidingKeys: [], tokenIssues: [] })
   const [warningRevertKey, setWarningRevertKey] = useState<string | null>(null)
-  // What is typed in the filter field, which lags the value the rows are filtered by.
   const [filterInput, setFilterInput] = useState("")
   const gridApi = useRef<GridApi | null>(null)
   const captureGridApi = useCallback((api: React.SetStateAction<GridApi | null>) => {
@@ -162,8 +207,6 @@ const SettingsTranslations = () => {
     [setPage]
   )
 
-  // A value typed against the old scope is discarded rather than committed, since edits cannot
-  // be taken across a jurisdiction or language change.
   const changeScope = useCallback(
     (apply: () => void) => {
       gridApi.current?.stopEditing(true)
@@ -185,18 +228,22 @@ const SettingsTranslations = () => {
   // Edits live only in component state until saved, so leaving the page discards them.
   useUnsavedChangesWarning(hasUnsavedChanges, t("translations.unsavedChangesWarning"))
 
-  const rows = useMemo(
-    () =>
-      buildTranslationRows({
-        englishBase: flattenTranslations(translations.general),
-        languageBase:
-          activeLanguage === LanguagesEnum.en
-            ? undefined
-            : flattenTranslations(translations[activeLanguage]),
-        overrides: overrides ?? [],
-      }),
-    [activeLanguage, overrides]
-  )
+  const rows = useMemo(() => {
+    const siteOverrides = scope.baseOverrides
+    const englishLayer = flattenTranslations(siteOverrides.en)
+    const languageLayer = siteOverrides[activeLanguage]
+      ? { ...englishLayer, ...flattenTranslations(siteOverrides[activeLanguage]) }
+      : englishLayer
+
+    return buildTranslationRows({
+      englishBase: { ...flattenTranslations(translations.general), ...englishLayer },
+      languageBase:
+        activeLanguage === LanguagesEnum.en
+          ? undefined
+          : { ...flattenTranslations(translations[activeLanguage]), ...languageLayer },
+      overrides: overrides ?? [],
+    })
+  }, [activeLanguage, overrides, scope])
 
   // Every row is already in the browser, so search and pagination are local rather than a refetch.
   const search = (tableOptions.filter.filterValue ?? "").trim().toLowerCase()
@@ -216,19 +263,13 @@ const SettingsTranslations = () => {
     [filteredRows, currentPage, perPage]
   )
 
-  // Only the page on screen is merged, so an edit re-maps a handful of rows rather than all of them.
   const gridRows = useMemo(() => withPendingEdits(pagedRows, edits), [pagedRows, edits])
 
   const runRevert = useCallback(
     (key: string) =>
       revertOverride(() =>
-        translationsService
-          .deleteRawTranslation({
-            jurisdictionId: activeJurisdictionId,
-            site: SiteEnum.public,
-            language: activeLanguage,
-            key,
-          })
+        scope
+          .revert(key)
           .then(() => {
             updateEdits((previous) => {
               const next = { ...previous }
@@ -245,16 +286,7 @@ const SettingsTranslations = () => {
             void mutate(cacheKey)
           })
       ),
-    [
-      activeJurisdictionId,
-      activeLanguage,
-      addToast,
-      cacheKey,
-      mutate,
-      revertOverride,
-      translationsService,
-      updateEdits,
-    ]
+    [addToast, cacheKey, mutate, revertOverride, scope, updateEdits]
   )
 
   const columnDefs: (ColDef | ColGroupDef)[] = useMemo(
@@ -276,9 +308,7 @@ const SettingsTranslations = () => {
         headerName: t("translations.currentValue"),
         minWidth: 220,
         flex: 2,
-        // Locked during a save, since an edit made mid-request is written against a stale version.
         editable: overridesLoaded && !isSaving,
-        // The default double-click gives no hint the cell is editable.
         singleClickEdit: true,
         cellClass: ({ data }: { data: TranslationGridRow }) =>
           data.editedValue !== null
@@ -318,11 +348,8 @@ const SettingsTranslations = () => {
             <Button
               variant="text"
               size="sm"
-              // A revert racing a save on the same key leaves whichever refetch lands last.
               disabled={isReverting || isSaving}
               onClick={() => {
-                // A key with no base renders only from its override, so removing it takes the
-                // section off the site and is confirmed first.
                 if (data.hasBase) {
                   void runRevert(data.key)
                   return
@@ -343,17 +370,12 @@ const SettingsTranslations = () => {
   const saveEdits = (pending: PendingEdits) => {
     const sentKeys = Object.keys(pending)
 
+    const body = { edits: buildEdits(pending) }
+
     return saveOverrides(() =>
-      translationsService
-        .updateRawTranslations({
-          jurisdictionId: activeJurisdictionId,
-          site: SiteEnum.public,
-          language: activeLanguage,
-          body: { edits: buildEdits(pending) },
-        })
+      scope
+        .save(body)
         .then(() => {
-          // Only the keys that were sent are cleared. A cell that committed while the request was
-          // in flight is not among them, so that edit survives instead of being discarded.
           updateEdits((previous) => editsWithoutKeys(previous, sentKeys))
           setConflictKeys([])
           addToast(t("translations.alertSaved"), { variant: "success" })
@@ -361,8 +383,6 @@ const SettingsTranslations = () => {
         .catch((error) => {
           const conflicts = conflictKeysFrom(error)
           if (conflicts.length) {
-            // The rest of the batch was written, so only the named keys stay pending. The
-            // refetch below brings in the values they now hold, for the resolution dialog.
             updateEdits((previous) => ({
               ...editsWithoutKeys(previous, sentKeys),
               ...editsForKeys(pending, conflicts),
@@ -438,26 +458,44 @@ const SettingsTranslations = () => {
         <div className={styles["toolbar"]}>
           <div className={styles["scope-controls"]}>
             <Select
-              id="translationsJurisdiction"
-              name="translationsJurisdiction"
-              label={t("t.jurisdiction")}
-              defaultValue={activeJurisdictionId}
-              disabled={jurisdictions.length < 2 || hasUnsavedChanges}
-              options={jurisdictions.map((jurisdiction) => ({
-                value: jurisdiction.id,
-                label: jurisdiction.name,
-              }))}
+              id="translationsSite"
+              name="translationsSite"
+              label={t("translations.site")}
+              defaultValue={site}
+              disabled={hasUnsavedChanges}
+              options={[
+                { value: SiteEnum.public, label: t("translations.sitePublic") },
+                { value: SiteEnum.partners, label: t("translations.sitePartners") },
+              ]}
               inputProps={{
                 onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
-                  changeScope(() => setJurisdictionId(event.target.value))
+                  changeScope(() => setSite(event.target.value as SiteEnum))
                 },
               }}
             />
+            {!isGlobal && (
+              <Select
+                id="translationsJurisdiction"
+                name="translationsJurisdiction"
+                label={t("t.jurisdiction")}
+                defaultValue={activeJurisdictionId}
+                disabled={jurisdictions.length < 2 || hasUnsavedChanges}
+                options={jurisdictions.map((jurisdiction) => ({
+                  value: jurisdiction.id,
+                  label: jurisdiction.name,
+                }))}
+                inputProps={{
+                  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
+                    changeScope(() => setJurisdictionId(event.target.value))
+                  },
+                }}
+              />
+            )}
             <Select
               id="translationsLanguage"
               name="translationsLanguage"
               label={t("t.language")}
-              key={activeJurisdictionId}
+              key={`${site}-${activeJurisdictionId}`}
               defaultValue={activeLanguage}
               disabled={hasUnsavedChanges}
               options={languageOptions}
