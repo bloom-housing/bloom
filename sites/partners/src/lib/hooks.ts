@@ -899,6 +899,28 @@ export function useRawTranslations({
   }
 }
 
+export function useJurisdictionContent(jurisdictionId: string) {
+  const { jurisdictionContentService } = useContext(AuthContext)
+
+  const fetcher = () => jurisdictionContentService.listJurisdictionContent({ jurisdictionId })
+
+  const cacheKey = jurisdictionId
+    ? `/api/adapter/jurisdictionContent/jurisdictions/${jurisdictionId}/admin`
+    : null
+
+  const { data, error } = useSWR(cacheKey, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
+
+  return {
+    cacheKey,
+    data,
+    loading: !!cacheKey && !error && !data,
+    error,
+  }
+}
+
 /**
  * Warns before unsaved work is lost, on an in-app route change and on the browser closing or
  * reloading.

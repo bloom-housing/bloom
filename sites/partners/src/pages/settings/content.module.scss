@@ -1,0 +1,50 @@
+.toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--seeds-s4);
+  padding-bottom: var(--seeds-s4);
+  flex-wrap: wrap;
+}
+
+.scope-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--seeds-s4);
+  flex-wrap: wrap;
+}
+
+.status {
+  padding: var(--seeds-s4) 0;
+}
+
+.field-card {
+  margin-bottom: var(--seeds-s4);
+}
+
+.field-label {
+  font-weight: 600;
+}
+
+.field-header {
+  display: flex;
+  align-items: center;
+  gap: var(--seeds-s2);
+  padding-bottom: var(--seeds-s2);
+}
+
+.english-source {
+  padding-bottom: var(--seeds-s3);
+}
+
+.field-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--seeds-s2);
+  align-items: flex-start;
+}
+
+.preview {
+  width: 100%;
+  padding-top: var(--seeds-s2);
+}

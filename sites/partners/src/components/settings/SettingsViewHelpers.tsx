@@ -8,6 +8,7 @@ export enum SettingsIndexEnum {
   properties,
   agencies,
   translations,
+  content,
 }
 
 type SettingsTabsFeatureFlags = {
@@ -15,6 +16,7 @@ type SettingsTabsFeatureFlags = {
   enableProperties: boolean
   enableAgencies?: boolean
   enableTranslations?: boolean
+  enableContent?: boolean
 }
 
 export const getVisibleSettingsTabs = (
@@ -23,6 +25,7 @@ export const getVisibleSettingsTabs = (
     enableProperties,
     enableAgencies,
     enableTranslations,
+    enableContent,
   }: SettingsTabsFeatureFlags,
   userRoles?: UserRole
 ) => {
@@ -35,6 +38,7 @@ export const getVisibleSettingsTabs = (
     agencies: !!enableAgencies && !isPartnerOrSupport && !isLimited,
     // Editing translations spans every jurisdiction, so it is limited to the admin role.
     translations: !!enableTranslations && !!userRoles?.isAdmin,
+    content: !!enableContent && !!userRoles?.isAdmin,
   }
 }
 
@@ -54,6 +58,7 @@ export const getSettingsTabs = (
     properties: enableProperties,
     agencies: enableAgencies,
     translations: enableTranslations,
+    content: enableContent,
   } = getVisibleSettingsTabs(featureFlags, userRoles)
 
   const baseUrl = "/settings"
@@ -62,6 +67,7 @@ export const getSettingsTabs = (
   if (enableProperties) enabledTabs.push(SettingsIndexEnum.properties)
   if (enableAgencies) enabledTabs.push(SettingsIndexEnum.agencies)
   if (enableTranslations) enabledTabs.push(SettingsIndexEnum.translations)
+  if (enableContent) enabledTabs.push(SettingsIndexEnum.content)
 
   return (
     <Tabs
@@ -107,6 +113,15 @@ export const getSettingsTabs = (
             active={selectedIndex === SettingsIndexEnum.translations}
           >
             <span>{t("settings.translations")}</span>
+          </Tabs.Tab>
+        )}
+        {enableContent && (
+          <Tabs.Tab
+            href={`${baseUrl}/content`}
+            data-testid="content-tab"
+            active={selectedIndex === SettingsIndexEnum.content}
+          >
+            <span>{t("settings.content")}</span>
           </Tabs.Tab>
         )}
       </Tabs.TabList>
