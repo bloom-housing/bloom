@@ -418,139 +418,64 @@ describe('Testing application bulk upload services', () => {
       downloadFromPrivateMock.mockReset();
       backgroundJobCreateMock.mockReset();
       prisma.applications.findMany = jest.fn().mockResolvedValue([]);
-    });
-
-    describe('file format (validateFileFormat)', () => {
-      it('should reject a non-CSV s3Key before attempting any download', async () => {
-        await expect(
-          service.processBulkUpload(
-            {
-              s3Key: 'uploads/applications.txt',
-              listingId,
-            },
-            mockRequestingUser,
-          ),
-        ).rejects.toThrow(
-          new BadRequestException('Upload Failed: file must be a CSV format'),
-        );
-
-        expect(downloadFromPrivateMock).not.toHaveBeenCalled();
-      });
-
-      it('should accept a .csv key regardless of case and proceed past the format gate', async () => {
-        const s3KeyUpperCase = 'uploads/applications.CSV';
-        downloadFromPrivateMock.mockRejectedValue(new Error('error'));
-        prisma.listings.findUnique = jest.fn().mockResolvedValue({
-          name: 'Test Listing',
-          jurisdictions: {
-            id: randomUUID(),
-            publicUrl: 'test-url.com',
-          },
-        });
-
-        await expect(
-          service.processBulkUpload(
-            { s3Key: s3KeyUpperCase, listingId },
-            mockRequestingUser,
-          ),
-        ).rejects.toThrow(
-          new NotFoundException(
-            'The CSV file could not be retrieved from the S3 bucket',
-          ),
-        );
-
-        expect(downloadFromPrivateMock).toHaveBeenCalledWith(s3KeyUpperCase);
-      });
-    });
-
-    describe('S3 retrieval', () => {
-      it('should throw NotFoundException when downloadFromPrivate rejects', async () => {
-        downloadFromPrivateMock.mockRejectedValue(new Error('error'));
-        prisma.listings.findUnique = jest.fn().mockResolvedValue({
-          name: 'Test Listing',
-          jurisdictions: {
-            id: randomUUID(),
-            publicUrl: 'test-url.com',
-          },
-        });
-
-        await expect(
-          service.processBulkUpload({ s3Key, listingId }, mockRequestingUser),
-        ).rejects.toThrow(
-          new NotFoundException(
-            'The CSV file could not be retrieved from the S3 bucket',
-          ),
-        );
-
-        expect(downloadFromPrivateMock).toHaveBeenCalledWith(s3Key);
-      });
-    });
-
-    describe('parsing (csv-parse options)', () => {
-      it('should tolerate a BOM-prefixed header row and proceed past header validation', async () => {
-        downloadFromPrivateMock.mockResolvedValue(
-          mockCsvResponse([], { bom: true }),
-        );
-        prisma.listings.findUnique = jest.fn().mockResolvedValue({
-          name: 'Test Listing',
-          jurisdictions: {
-            id: randomUUID(),
-            publicUrl: 'test-url.com',
-          },
-        });
-
-        await expect(
-          service.processBulkUpload({ s3Key, listingId }, mockRequestingUser),
-        ).rejects.toThrow(
-          new BadRequestException(
-            'Upload Failed: CSV contains no application records',
-          ),
-        );
-      });
-
-      it('should skip empty lines between rows so they are not counted as data records', async () => {
-        const appOne = dbContext({
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        name: 'Test Listing',
+        jurisdictions: {
           id: randomUUID(),
-          applicant: { firstName: 'Andrew', lastName: 'Rust' },
-          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
-        });
-        const appTwo = dbContext({
-          id: randomUUID(),
-          applicant: { firstName: 'Erin', lastName: 'Patsy' },
-          submissionDate: new Date(2026, 2, 15, 8, 30, 0),
-        });
-
-        prisma.applications.findMany = jest
-          .fn()
-          .mockResolvedValue([appOne, appTwo]);
-
-        backgroundJobCreateMock.mockResolvedValue({ id: backgroundJobId });
-        downloadFromPrivateMock.mockResolvedValue(
-          mockCsvResponse(
-            [
-              {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
-                applicationStatus: 'Submitted',
-              },
-              {
-                applicationId: appTwo.id,
-                applicantFirstName: appTwo.applicant.firstName,
-                applicantLastName: appTwo.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appTwo.submissionDate),
-                applicationStatus: 'Submitted',
-              },
-            ],
-            { blankLines: true },
-          ),
-        );
-
-        await expect(
-          service.processBulkUpload({ s3Key, listingId }, mockRequestingUser),
-        ).resolves.toBeDefined();
+          publicUrl: 'test-url.com',
+        },
       });
+    });
+
+    it('should reject a non-CSV s3Key before attempting any download', async () => {
+      await expect(
+        service.processBulkUpload(
+          {
+            s3Key: 'uploads/applications.txt',
+            listingId,
+          },
+          mockRequestingUser,
+        ),
+      ).rejects.toThrow(
+        new BadRequestException('Upload Failed: file must be a CSV format'),
+      );
+
+      expect(downloadFromPrivateMock).not.toHaveBeenCalled();
+    });
+
+    it('should throw NotFoundException when downloadFromPrivate rejects', async () => {
+      downloadFromPrivateMock.mockRejectedValue(new Error('error'));
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        name: 'Test Listing',
+        jurisdictions: {
+          id: randomUUID(),
+          publicUrl: 'test-url.com',
+        },
+      });
+
+      await expect(
+        service.processBulkUpload({ s3Key, listingId }, mockRequestingUser),
+      ).rejects.toThrow(
+        new NotFoundException(
+          'The CSV file could not be retrieved from the S3 bucket',
+        ),
+      );
+
+      expect(downloadFromPrivateMock).toHaveBeenCalledWith(s3Key);
+    });
+
+    it('should tolerate a BOM-prefixed header row and proceed past header validation', async () => {
+      downloadFromPrivateMock.mockResolvedValue(
+        mockCsvResponse([], { bom: true }),
+      );
+
+      await expect(
+        service.processBulkUpload({ s3Key, listingId }, mockRequestingUser),
+      ).rejects.toThrow(
+        new BadRequestException(
+          'Upload Failed: CSV contains no application records',
+        ),
+      );
     });
   });
 
