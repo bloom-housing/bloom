@@ -1,6 +1,12 @@
-import React, { useCallback, useContext } from "react"
+import React, { useCallback, useContext, useState } from "react"
 import { Button, Card, Drawer, Heading } from "@bloom-housing/ui-seeds"
-import { Dropzone, MinimalTable, StandardTableData, t } from "@bloom-housing/ui-components"
+import {
+  AlertBox,
+  Dropzone,
+  MinimalTable,
+  StandardTableData,
+  t,
+} from "@bloom-housing/ui-components"
 import { useBulkApplicationCsvUpload, useBulkApplicationTemplateExport } from "../../lib/hooks"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 
@@ -12,8 +18,8 @@ interface BulkUpdateDrawerProps {
 
 const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps) => {
   const { applicationsService } = useContext(AuthContext)
-  const { addToast } = useContext(MessageContext)
   const { onExport } = useBulkApplicationTemplateExport(listingId)
+  const [csvError, setCsvError] = useState<string>("")
   const { uploadToS3, resetUpload, fileUploadData, progressValue } = useBulkApplicationCsvUpload()
 
   const csvUploader = useCallback(
@@ -34,14 +40,12 @@ const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps)
           },
         })
       } catch (e) {
-        addToast(e?.response?.data?.message ?? t("applications.bulkUpdateModalProcessingError"), {
-          variant: "warn",
-        })
+        setCsvError(e?.response?.data?.message ?? t("applications.bulkUpdateModalProcessingError"))
       }
 
       console.log(JSON.stringify(jobId, null, 2))
     }
-  }, [applicationsService, fileUploadData, listingId, addToast])
+  }, [applicationsService, fileUploadData, listingId])
 
   const bulkApplicationHeaders = {
     fileName: "t.fileName",
@@ -108,7 +112,10 @@ const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps)
                 progress={progressValue}
               />
             ) : (
-              <MinimalTable headers={bulkApplicationHeaders} data={bulkApplicationTableRows} />
+              <div className="flex flex-col gap-1">
+                <MinimalTable headers={bulkApplicationHeaders} data={bulkApplicationTableRows} />
+                {csvError && <AlertBox type="alert">{csvError}</AlertBox>}
+              </div>
             )}
           </Card.Section>
         </Card>
@@ -117,7 +124,7 @@ const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps)
         <Button variant="primary-outlined" onClick={onClose}>
           {t("t.close")}
         </Button>
-        <Button disabled={!fileUploadData} variant="primary" onClick={processBulkCsv}>
+        <Button disabled={!fileUploadData || !!csvError} variant="primary" onClick={processBulkCsv}>
           {t("t.uploadFile")}
         </Button>
       </Drawer.Footer>
