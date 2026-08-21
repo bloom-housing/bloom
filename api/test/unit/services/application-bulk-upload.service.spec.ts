@@ -94,6 +94,7 @@ const mockApplication = ({
 const canOrThrowMock = jest.fn();
 const downloadFromPrivateMock = jest.fn();
 const backgroundJobCreateMock = jest.fn();
+const backgroundJobUpdateMock = jest.fn();
 const listingServiceMock = { getJurisdictionIdByListingId: jest.fn() };
 
 const DATE_FORMAT = 'MM-DD-YYYY hh:mm:ssA z';
@@ -185,6 +186,7 @@ describe('Testing application bulk upload services', () => {
           provide: BackgroundJobsService,
           useValue: {
             create: backgroundJobCreateMock,
+            update: backgroundJobUpdateMock,
           },
         },
         {
@@ -311,6 +313,7 @@ describe('Testing application bulk upload services', () => {
     afterEach(() => {
       listingServiceMock.getJurisdictionIdByListingId.mockReset();
       backgroundJobCreateMock.mockReset();
+      backgroundJobUpdateMock.mockReset();
       canOrThrowMock.mockReset();
     });
 
