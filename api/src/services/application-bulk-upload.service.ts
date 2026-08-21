@@ -706,7 +706,7 @@ export class ApplicationBulkUploadService {
     this.validateHasDataRows(rows);
 
     for (let i = 0; i < rows.length; i += NUMBER_TO_PAGINATE_BY) {
-      const currentChunk = rows.slice(i, NUMBER_TO_PAGINATE_BY);
+      const currentChunk = rows.slice(i, i + NUMBER_TO_PAGINATE_BY);
 
       const dbApps = await this.fetchDbApplications(
         currentChunk.map((entry) => entry),
@@ -717,16 +717,16 @@ export class ApplicationBulkUploadService {
 
       this.validateNoDuplicateId(rows);
 
-      for (let i = 0; i < currentChunk.length; i++) {
-        const entry = currentChunk[i];
-        this.validateApplicationId(entry, foundIds, i);
-        this.validateContextFields(entry, dbMap, i);
-        this.validateStatus(entry, i);
-        this.validateDeclineReason(entry, i);
-        this.validateDeclineConsistency(entry, i);
-        this.validateAdditionalDetails(entry, i);
-        this.validateWaitlistConsistency(entry, i);
-        this.validateNumericFields(entry, i);
+      for (let j = 0; j < currentChunk.length; j++) {
+        const entry = currentChunk[j];
+        this.validateApplicationId(entry, foundIds, i + j);
+        this.validateContextFields(entry, dbMap, i + j);
+        this.validateStatus(entry, i + j);
+        this.validateDeclineReason(entry, i + j);
+        this.validateDeclineConsistency(entry, i + j);
+        this.validateAdditionalDetails(entry, i + j);
+        this.validateWaitlistConsistency(entry, i + j);
+        this.validateNumericFields(entry, i + j);
       }
     }
   }
