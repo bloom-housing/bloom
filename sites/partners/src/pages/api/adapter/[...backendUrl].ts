@@ -5,6 +5,12 @@ import { wrapper } from "axios-cookiejar-support"
 import { getConfigs } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { maskAxiosResponse } from "@bloom-housing/shared-helpers"
 
+/*
+  This file exists as per https://nextjs.org/docs/api-routes/dynamic-api-routes  
+  it serves as an adapter between the front end making api requests and those requests being sent to the backend api
+  This file functionally works as a proxy to work in the new cookie paradigm
+*/
+
 // all endpoints that return a zip file
 const zipEndpoints = [
   "listings/csv",
@@ -30,6 +36,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
   )
   try {
+    // set up request to backend from request to next api
     // eslint-disable-next-line prefer-const
     let { backendUrl, ...rest } = req.query
     if (Array.isArray(backendUrl)) {
@@ -44,6 +51,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     configs.params = rest
     configs.data = req.body || {}
 
+    // send request to backend
+    // the zip endpoints also require a responseType of arraybuffer
     const response = await axios.request({
       ...configs,
       // Remove adapter prefix and query params from the url
@@ -51,6 +60,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         ? "arraybuffer"
         : undefined,
     })
+    // set up response from next api based on response from backend
+    // The "Set-Cookie" response header needs to be forwarded to the front-end
     const responseHeaders = response["headers"]
     const cookiesFromHeaders = responseHeaders?.["set-cookie"] || []
     res.setHeader("Set-Cookie", cookiesFromHeaders)
