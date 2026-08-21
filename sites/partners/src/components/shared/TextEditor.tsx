@@ -268,6 +268,7 @@ export const TextEditor = ({
     editor?.view.setProps({
       attributes: { "aria-labelledby": labelId, role: "textbox" },
     })
+    setCharacterCount(editor?.storage?.characterCount?.characters() ?? 0)
   })
   const overLimit = characterCount > characterLimit
 
