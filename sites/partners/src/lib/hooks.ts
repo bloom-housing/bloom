@@ -1,7 +1,7 @@
 import { useCallback, useContext, useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import useSWR from "swr"
-import axios, { AxiosError } from "axios"
+import axios, { AxiosError, AxiosProgressEvent } from "axios"
 import qs from "qs"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
@@ -29,6 +29,7 @@ import {
   PaginationMeta,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { S3Upload } from "./helpers"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -271,6 +272,7 @@ export const useListingExport = (useSecurePathway = false) => {
     }
 
     setCsvExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {
@@ -752,11 +754,116 @@ export const useZipExport = (
       )
     }
     setExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {
     onExport,
     exportLoading,
+  }
+}
+
+export const useBulkApplicationTemplateExport = (listingId: string) => {
+  const { applicationsService } = useContext(AuthContext)
+  const [exportLoading, setExportLoading] = useState(false)
+  const { addToast } = useContext(MessageContext)
+
+  const onExport = useCallback(async () => {
+    setExportLoading(true)
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const content: any = await applicationsService.downloadBulkUpdateTemplate(
+        {
+          listingId: listingId,
+        },
+        {
+          responseType: "arraybuffer",
+        }
+      )
+
+      const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
+      const url = window.URL.createObjectURL(blob)
+
+      const link = document.createElement("a")
+      link.href = url
+      link.setAttribute("download", `listing-${listingId}-applications-bulk-templates.zip`)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode.removeChild(link)
+      addToast(t("t.exportSuccess"), { variant: "success" })
+    } catch (err) {
+      console.log(err)
+      addToast(
+        t("account.settings.alerts.genericError", { contactEmail: t("resources.contactEmail") }),
+        {
+          variant: "alert",
+        }
+      )
+    }
+    setExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  return {
+    onExport,
+    exportLoading,
+  }
+}
+
+export const useBulkApplicationCsvUpload = () => {
+  const { applicationsService } = useContext(AuthContext)
+  const [progressValue, setProgressValue] = useState<number>()
+  const [fileUploadData, setFileUploadData] = useState<{
+    id: string
+    url: string
+    s3Key: string
+  } | null>(null)
+  const contentType = "text/csv"
+  const contentDisposition = "inline"
+
+  const onUploadProgress = useCallback((p: AxiosProgressEvent) => {
+    setProgressValue(parseInt(((p.loaded / p.total) * 100).toFixed(0), 10))
+  }, [])
+
+  const uploadToS3 = useCallback(
+    async (file: File, listingId: string) => {
+      const { presignedUrl, key } = await applicationsService.uploadBulkUpdate({
+        body: {
+          listingId,
+          contentType,
+          contentDisposition,
+        },
+      })
+      setProgressValue(3)
+
+      void S3Upload({
+        file,
+        uploadUrl: presignedUrl,
+        onUploadProgress,
+        contentType: "",
+        contentDisposition,
+      }).then((_) => {
+        setProgressValue(100)
+        setFileUploadData({
+          id: file.name,
+          url: presignedUrl,
+          s3Key: key,
+        })
+      })
+    },
+    [applicationsService, onUploadProgress]
+  )
+
+  const resetUpload = useCallback(() => {
+    setProgressValue(0)
+    setFileUploadData(null)
+  }, [])
+
+  return {
+    progressValue,
+    fileUploadData,
+    uploadToS3,
+    resetUpload,
   }
 }
 
@@ -808,6 +915,7 @@ const useCsvExport = (
     }
 
     setCsvExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endpoint, fileName, addToast])
 
   return {

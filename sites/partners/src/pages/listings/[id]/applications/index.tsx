@@ -396,6 +396,7 @@ const ApplicationsList = () => {
         <BulkUpdateDrawer
           isOpen={bulkUpdateModalOpen}
           onClose={() => setBulkUpdateModalOpen(false)}
+          listingId={listingId}
         />
       </Layout>
     </ListingGuard>

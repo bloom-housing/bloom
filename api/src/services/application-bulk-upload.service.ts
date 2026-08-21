@@ -6,9 +6,13 @@ import {
   NotFoundException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Applicant, ApplicationStatusEnum } from '@prisma/client';
+import {
+  Applicant,
+  ApplicationStatusEnum,
+  BackgroundJobStatusEnum,
+} from '@prisma/client';
 import { parse } from 'csv-parse';
-import fs, { createReadStream } from 'fs';
+import fs, { createReadStream, ReadStream } from 'fs';
 import { Readable } from 'stream';
 import dayjs from 'dayjs';
 import { join } from 'path';
@@ -27,7 +31,7 @@ import {
   APPLICATION_DECLINE_REASON_MAP,
   convertReadableToApplicationDeclineReason,
 } from '../utilities/application-export-helpers';
-import { ApplicationBulkValidate } from '../dtos/applications/application-bulk-validate.dto';
+import { ApplicationBulkUpdate } from '../dtos/applications/application-bulk-update.dto';
 import { S3Service } from './s3.service';
 import { BackgroundJobsService } from './background-jobs.service';
 import { ApplicationBulkUrl } from '../dtos/applications/application-bulk-url.dto';
@@ -35,6 +39,10 @@ import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-util
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { ApplicationBulkPresignedUrl } from '../dtos/applications/application-bulk-presigned-url.dto';
+import { SnapshotCreateService } from './snapshot-create.service';
+import { EmailService } from './email.service';
+import { buildApplicationStatusChanges } from '../utilities/applicationStatusChanges';
+import { ConfigService } from '@nestjs/config';
 
 const NUMBER_TO_PAGINATE_BY = 500;
 
@@ -60,7 +68,7 @@ const APPLICATION_STATUS_MAP: Record<ApplicationStatusEnum, string> = {
   [ApplicationStatusEnum.waitlistDeclined]: 'Wait list - Declined',
 };
 
-type CsvRow = Record<string, string>;
+export type CsvRow = Record<string, string>;
 
 export type ApplicationContextFields = Pick<
   Application,
@@ -98,6 +106,9 @@ export class ApplicationBulkUploadService {
     private permissionService: PermissionService,
     private s3Service: S3Service,
     private backgroundJobsService: BackgroundJobsService,
+    private snapshotService: SnapshotCreateService,
+    private emailService: EmailService,
+    private configService: ConfigService,
   ) {}
 
   convertApplicationStatusToReadable(
@@ -194,25 +205,25 @@ export class ApplicationBulkUploadService {
     const now = new Date();
     const dateString = dayjs(now).format('YYYY-MM-DD_HH-mm');
 
-    const zipFilename = `listing-${listingId}-applications-${
-      user.id
-    }-${now.getTime()}`;
+    const readStream = await this.csvTemplateExport(listingId, applications);
 
-    const filename = join(process.cwd(), `src/temp/${zipFilename}.csv`);
+    const zipFilename = `listing-${listingId}-applications-bulk-update-template`;
+    const filename = `applications-${listingId}-${dateString}`;
 
-    await this.csvExportHelper(
-      filename,
-      listingId,
-      mapTo(Application, applications),
+    return await zipExport(readStream, zipFilename, filename, false);
+  }
+
+  async csvTemplateExport(
+    listingId: string,
+    applications: Pick<Application, 'id'>[],
+  ): Promise<ReadStream> {
+    const filename = join(
+      process.cwd(),
+      `src/temp/listing-${listingId}-applications-bulk-update-template.csv`,
     );
-    const readStream = createReadStream(filename);
 
-    return await zipExport(
-      readStream,
-      zipFilename,
-      `applications-${listingId}-${dateString}`,
-      false,
-    );
+    await this.csvExportHelper(filename, listingId, applications);
+    return createReadStream(filename);
   }
 
   csvExportHelper(
@@ -424,7 +435,7 @@ export class ApplicationBulkUploadService {
     };
   }
 
-  async authorizeExport(user, listingId): Promise<void> {
+  async authorizeExport(user: User, listingId: string): Promise<void> {
     /**
      * Checking authorization for each application is very expensive.
      * By making listingId required, we can check if the user has update permissions for the listing, since right now if a user has that
@@ -435,6 +446,33 @@ export class ApplicationBulkUploadService {
 
     const jurisdictionId =
       await this.listingService.getJurisdictionIdByListingId(listingId);
+
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      select: {
+        featureFlags: true,
+        visibleApplicationAccessibilityFeatures: true,
+      },
+      where: {
+        id: jurisdictionId,
+      },
+    });
+
+    if (!jurisdiction) {
+      throw new BadRequestException(
+        `Failed to retrieve jurisdiction with id: ${jurisdictionId}`,
+      );
+    }
+
+    if (
+      !doJurisdictionHaveFeatureFlagSet(
+        jurisdiction as Jurisdiction,
+        FeatureFlagEnum.enableApplicationBulkCSVUpdates,
+      )
+    ) {
+      throw new BadRequestException(
+        `Jurisdiction with id: ${jurisdictionId} does not have the enableApplicationBulkCSVUpdates feature flag set`,
+      );
+    }
 
     await this.permissionService.canOrThrow(
       user,
@@ -671,10 +709,225 @@ export class ApplicationBulkUploadService {
   }
 
   async validateCSV(
-    dto: ApplicationBulkValidate,
-    requestingUser: User,
-  ): Promise<string> {
+    headers: string[],
+    rows: CsvRow[],
+    listingId: string,
+  ): Promise<void> {
+    this.validateHeaders(headers);
+    this.validateHasDataRows(rows);
+
+    for (let i = 0; i < rows.length; i += NUMBER_TO_PAGINATE_BY) {
+      const currentChunk = rows.slice(i, i + NUMBER_TO_PAGINATE_BY);
+
+      const dbApps = await this.fetchDbApplications(
+        currentChunk.map((entry) => entry),
+        listingId,
+      );
+      const foundIds = new Set(dbApps.map((a) => a.id));
+      const dbMap = new Map(dbApps.map((a) => [a.id, a]));
+
+      this.validateNoDuplicateId(currentChunk);
+
+      for (let j = 0; j < currentChunk.length; j++) {
+        const entry = currentChunk[j];
+        this.validateApplicationId(entry, foundIds, i + j);
+        this.validateContextFields(entry, dbMap, i + j);
+        this.validateStatus(entry, i + j);
+        this.validateDeclineReason(entry, i + j);
+        this.validateDeclineConsistency(entry, i + j);
+        this.validateAdditionalDetails(entry, i + j);
+        this.validateWaitlistConsistency(entry, i + j);
+        this.validateNumericFields(entry, i + j);
+      }
+    }
+  }
+
+  async bulkUpdateApplications(
+    rows: CsvRow[],
+    listingData: {
+      id: string;
+      name: string;
+      jurisdictionId: string;
+      appUrl: string;
+    },
+  ): Promise<{
+    totalRecords: number;
+    failedEmailsCount: number;
+  }> {
+    let currentRow = 2;
+    let updateCount = 0;
+    let failedEmailsCount = 0;
+    try {
+      for (let i = 0; i < rows.length; i += NUMBER_TO_PAGINATE_BY) {
+        const currentChunk = rows.slice(i, i + NUMBER_TO_PAGINATE_BY);
+
+        for (let j = 0; j < currentChunk.length; j++) {
+          currentRow++;
+          const entry = currentChunk[j];
+          const applicationId = entry[bulkUploadHeaderNames.applicationId];
+
+          const currentApplicationData =
+            await this.prisma.applications.findUnique({
+              select: {
+                userAccounts: true,
+                applicant: {
+                  select: {
+                    firstName: true,
+                    lastName: true,
+                    emailAddress: true,
+                  },
+                },
+                alternateContact: {
+                  select: {
+                    firstName: true,
+                    lastName: true,
+                  },
+                },
+                status: true,
+                applicationDeclineReason: true,
+                applicationDeclineReasonAdditionalDetails: true,
+                accessibleUnitWaitlistNumber: true,
+                conventionalUnitWaitlistNumber: true,
+                manualLotteryPositionNumber: true,
+              },
+              where: {
+                id: applicationId,
+                listingId: listingData.id,
+              },
+            });
+
+          const applicationChanges = buildApplicationStatusChanges({
+            initialStatus: currentApplicationData.status,
+            initialApplicationDeclineReason:
+              currentApplicationData.applicationDeclineReason,
+            initialApplicationDeclineReasonAdditionalDetails:
+              currentApplicationData.applicationDeclineReasonAdditionalDetails,
+            initialAccessibleUnitWaitlistNumber:
+              currentApplicationData.accessibleUnitWaitlistNumber,
+            initialConventionalUnitWaitlistNumber:
+              currentApplicationData.conventionalUnitWaitlistNumber,
+            initialManualLotteryPositionNumber:
+              currentApplicationData.manualLotteryPositionNumber,
+            nextStatus: this.convertReadableToApplicationStatus(
+              entry[bulkUploadHeaderNames.applicationStatus],
+            ),
+            nextApplicationDeclineReason:
+              convertReadableToApplicationDeclineReason(
+                entry[bulkUploadHeaderNames.applicationDeclineReason],
+              ),
+            nextApplicationDeclineReasonAdditionalDetails:
+              entry[
+                bulkUploadHeaderNames.applicationDeclineReasonAdditionalDetails
+              ],
+            nextAccessibleUnitWaitlistNumber:
+              entry[bulkUploadHeaderNames.waitlistPositionAccessibleUnit],
+            nextConventionalUnitWaitlistNumber:
+              entry[bulkUploadHeaderNames.waitlistPositionConventionalUnit],
+            nextManualLotteryPositionNumber:
+              entry[bulkUploadHeaderNames.lotteryPositionNumber],
+          });
+
+          if (!applicationChanges.length) {
+            continue;
+          }
+
+          const fieldsToUpdate = {};
+          applicationChanges.forEach((change) => {
+            switch (change.type) {
+              case 'status':
+                fieldsToUpdate['status'] = change.to;
+                break;
+              case 'declineReason':
+                fieldsToUpdate['applicationDeclineReason'] = change.value;
+                break;
+              case 'declineReasonDetails':
+                fieldsToUpdate['applicationDeclineReasonAdditionalDetails'] =
+                  change.value;
+                break;
+              case 'accessibleWaitlist':
+                fieldsToUpdate['accessibleUnitWaitlistNumber'] = Number(
+                  change.value,
+                );
+                break;
+              case 'conventionalWaitlist':
+                fieldsToUpdate['conventionalUnitWaitlistNumber'] = Number(
+                  change.value,
+                );
+                break;
+              case 'lotteryPosition':
+                fieldsToUpdate['manualLotteryPositionNumber'] = Number(
+                  change.value,
+                );
+                break;
+            }
+          });
+
+          this.snapshotService.createApplicationSnapshot(applicationId);
+          await this.prisma.applications.update({
+            where: {
+              id: applicationId,
+              listingId: listingData.id,
+            },
+            data: {
+              ...fieldsToUpdate,
+            },
+          });
+
+          try {
+            await this.emailService.applicationUpdateEmail(
+              listingData.name,
+              {
+                id: listingData.jurisdictionId,
+              },
+              // We are using only applicant data which is not being updated so we
+              // can used fetch data from before the update
+              mapTo(Application, currentApplicationData),
+              applicationChanges,
+              listingData.appUrl,
+            );
+          } catch {
+            console.error('failed to send an email');
+            failedEmailsCount++;
+          }
+          updateCount++;
+        }
+      }
+    } catch (e) {
+      throw new InternalServerErrorException({
+        row: currentRow,
+        error: e,
+      });
+    }
+
+    return {
+      totalRecords: updateCount,
+      failedEmailsCount,
+    };
+  }
+
+  async processBulkUpload(dto: ApplicationBulkUpdate, requestingUser: User) {
     this.validateFileFormat(dto.s3Key);
+
+    const listingData = await this.prisma.listings.findUnique({
+      select: {
+        name: true,
+        jurisdictions: {
+          select: {
+            id: true,
+            publicUrl: true,
+          },
+        },
+      },
+      where: {
+        id: dto.listingId,
+      },
+    });
+
+    if (!listingData) {
+      throw new NotFoundException(
+        `Failed to retrieve data for listing with id: ${dto.listingId}`,
+      );
+    }
 
     let csvStream: ReadableStream;
     try {
@@ -701,33 +954,7 @@ export class ApplicationBulkUploadService {
       Object.fromEntries(headers.map((h, i) => [h, cells[i] ?? ''])),
     );
 
-    this.validateHeaders(headers);
-    this.validateHasDataRows(rows);
-
-    for (let i = 0; i < rows.length; i += NUMBER_TO_PAGINATE_BY) {
-      const currentChunk = rows.slice(i, NUMBER_TO_PAGINATE_BY);
-
-      const dbApps = await this.fetchDbApplications(
-        currentChunk.map((entry) => entry),
-        dto.listingId,
-      );
-      const foundIds = new Set(dbApps.map((a) => a.id));
-      const dbMap = new Map(dbApps.map((a) => [a.id, a]));
-
-      this.validateNoDuplicateId(rows);
-
-      for (let i = 0; i < currentChunk.length; i++) {
-        const entry = currentChunk[i];
-        this.validateApplicationId(entry, foundIds, i);
-        this.validateContextFields(entry, dbMap, i);
-        this.validateStatus(entry, i);
-        this.validateDeclineReason(entry, i);
-        this.validateDeclineConsistency(entry, i);
-        this.validateAdditionalDetails(entry, i);
-        this.validateWaitlistConsistency(entry, i);
-        this.validateNumericFields(entry, i);
-      }
-    }
+    await this.validateCSV(headerRow, rows, dto.listingId);
 
     const backgroundJob = await this.backgroundJobsService.create(
       {
@@ -742,6 +969,75 @@ export class ApplicationBulkUploadService {
         'Failed to create a background job for bulk application update',
       );
     }
+
+    const applicationsLink = `${this.configService.get(
+      'PARTNERS_PORTAL_URL',
+    )}/listings/${dto.listingId}/applications`;
+
+    this.bulkUpdateApplications(rows, {
+      id: dto.listingId,
+      name: listingData.name,
+      jurisdictionId: listingData.jurisdictions.id,
+      appUrl: listingData.jurisdictions.publicUrl,
+    })
+      .then(async ({ totalRecords, failedEmailsCount }) => {
+        await this.prisma.backgroundJob.update({
+          data: {
+            status: BackgroundJobStatusEnum.completed,
+            totalRecords: totalRecords,
+          },
+          where: {
+            id: backgroundJob.id,
+          },
+        });
+        if (failedEmailsCount > 0) {
+          await this.emailService.applicationsBulkSuccessWithErrors(
+            requestingUser,
+            {
+              id: listingData.jurisdictions.id,
+            },
+            applicationsLink,
+            {
+              updateCount: totalRecords,
+              failedEmailsCount,
+            },
+            listingData.name,
+          );
+        } else {
+          await this.emailService.applicationsBulkSuccess(
+            requestingUser,
+            {
+              id: listingData.jurisdictions.id,
+            },
+            applicationsLink,
+            {
+              updateCount: totalRecords,
+            },
+            listingData.name,
+          );
+        }
+      })
+      .catch(async (e) => {
+        await this.prisma.backgroundJob.update({
+          data: {
+            status: BackgroundJobStatusEnum.failed,
+            errorMessage: e.error,
+            errorRow: e.row,
+          },
+          where: {
+            id: backgroundJob.id,
+          },
+        });
+        await this.emailService.applicationsBulkFailure(
+          requestingUser,
+          {
+            id: listingData.jurisdictions.id,
+          },
+          listingData.jurisdictions.publicUrl,
+          `${e}`,
+          listingData.name,
+        );
+      });
 
     return backgroundJob.id;
   }

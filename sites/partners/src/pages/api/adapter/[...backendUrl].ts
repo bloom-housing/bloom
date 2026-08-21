@@ -17,6 +17,7 @@ const zipEndpoints = [
   "lottery/getLotteryResults",
   "applications/spreadsheet",
   "applications/csv",
+  "applications/bulk-update/template"
 ]
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

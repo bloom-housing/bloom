@@ -54,7 +54,7 @@ import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
 import { ApplicationBulkUploadService } from '../services/application-bulk-upload.service';
-import { ApplicationBulkValidate } from '../dtos/applications/application-bulk-validate.dto';
+import { ApplicationBulkUpdate } from '../dtos/applications/application-bulk-update.dto';
 import { ApplicationBulkUrl } from '../dtos/applications/application-bulk-url.dto';
 import { ApplicationBulkPresignedUrl } from '../dtos/applications/application-bulk-presigned-url.dto';
 
@@ -209,7 +209,7 @@ export class ApplicationController {
     return this.applicationService.findOne(applicationId, req);
   }
 
-  @Get('bulk-update/template/:listingId')
+  @Get('bulk-update/template')
   @ApiOperation({
     summary:
       'Download a template CSV for bulk updating applications for a listing',
@@ -220,7 +220,7 @@ export class ApplicationController {
   @ApiOkResponse({ type: StreamableFile })
   async downloadBulkUpdateTemplate(
     @Request() req: ExpressRequest,
-    @Param('listingId') listingId: string,
+    @Query('listingId') listingId: string,
   ): Promise<StreamableFile> {
     return await this.applicationBulkUploadService.downloadBulkUpdateTemplate(
       listingId,
@@ -297,10 +297,10 @@ export class ApplicationController {
     operationId: 'bulkUpdateApplications',
   })
   async bulkUpdateApplications(
-    @Body() dto: ApplicationBulkValidate,
+    @Body() dto: ApplicationBulkUpdate,
     @Request() req: ExpressRequest,
   ) {
-    return this.applicationBulkUploadService.validateCSV(
+    return this.applicationBulkUploadService.processBulkUpload(
       dto,
       mapTo(User, req['user']),
     );
