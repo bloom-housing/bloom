@@ -36,7 +36,6 @@ import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-
 import { EmailService } from '../../../src/services/email.service';
 import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 import { ConfigService } from '@nestjs/config';
-import { listingFactory } from '../../../prisma/seed-helpers/listing-factory';
 
 const mockApplication = ({
   markedAsDuplicate = false,
@@ -438,8 +437,13 @@ describe('Testing application bulk upload services', () => {
       it('should accept a .csv key regardless of case and proceed past the format gate', async () => {
         const s3KeyUpperCase = 'uploads/applications.CSV';
         downloadFromPrivateMock.mockRejectedValue(new Error('error'));
-        const mockListing = await listingFactory(randomUUID(), prisma);
-        prisma.listings.findUnique = jest.fn().mockResolvedValue(mockListing);
+        prisma.listings.findUnique = jest.fn().mockResolvedValue({
+          name: 'Test Listing',
+          jurisdictions: {
+            id: randomUUID(),
+            publicUrl: 'test-url.com',
+          },
+        });
 
         await expect(
           service.processBulkUpload(
@@ -459,8 +463,13 @@ describe('Testing application bulk upload services', () => {
     describe('S3 retrieval', () => {
       it('should throw NotFoundException when downloadFromPrivate rejects', async () => {
         downloadFromPrivateMock.mockRejectedValue(new Error('error'));
-        const mockListing = await listingFactory(randomUUID(), prisma);
-        prisma.listings.findUnique = jest.fn().mockResolvedValue(mockListing);
+        prisma.listings.findUnique = jest.fn().mockResolvedValue({
+          name: 'Test Listing',
+          jurisdictions: {
+            id: randomUUID(),
+            publicUrl: 'test-url.com',
+          },
+        });
 
         await expect(
           service.processBulkUpload({ s3Key, listingId }, mockRequestingUser),
@@ -479,8 +488,13 @@ describe('Testing application bulk upload services', () => {
         downloadFromPrivateMock.mockResolvedValue(
           mockCsvResponse([], { bom: true }),
         );
-        const mockListing = await listingFactory(randomUUID(), prisma);
-        prisma.listings.findUnique = jest.fn().mockResolvedValue(mockListing);
+        prisma.listings.findUnique = jest.fn().mockResolvedValue({
+          name: 'Test Listing',
+          jurisdictions: {
+            id: randomUUID(),
+            publicUrl: 'test-url.com',
+          },
+        });
 
         await expect(
           service.processBulkUpload({ s3Key, listingId }, mockRequestingUser),
