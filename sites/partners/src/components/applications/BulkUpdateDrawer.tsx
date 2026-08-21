@@ -20,6 +20,7 @@ const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps)
   const { applicationsService } = useContext(AuthContext)
   const { onExport } = useBulkApplicationTemplateExport(listingId)
   const [csvError, setCsvError] = useState<string>("")
+  const [jobId, setJobId] = useState<string>("")
   const { uploadToS3, resetUpload, fileUploadData, progressValue } = useBulkApplicationCsvUpload()
 
   const csvUploader = useCallback(
@@ -39,11 +40,11 @@ const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps)
             listingId: listingId,
           },
         })
+
+        setJobId(jobId)
       } catch (e) {
         setCsvError(e?.response?.data?.message ?? t("applications.bulkUpdateModalProcessingError"))
       }
-
-      console.log(JSON.stringify(jobId, null, 2))
     }
   }, [applicationsService, fileUploadData, listingId])
 
@@ -61,6 +62,7 @@ const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps)
           <Button
             type="button"
             size="sm"
+            disabled={!!jobId}
             className="font-semibold text-alert"
             onClick={() => {
               resetUpload()
@@ -118,6 +120,11 @@ const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps)
               <div className="flex flex-col gap-1">
                 <MinimalTable headers={bulkApplicationHeaders} data={bulkApplicationTableRows} />
                 {csvError && <AlertBox type="alert">{csvError}</AlertBox>}
+                {jobId && (
+                  <AlertBox type="notice">
+                    {t("applications.bulkUpdateModalProcessingNotice")}
+                  </AlertBox>
+                )}
               </div>
             )}
           </Card.Section>
@@ -127,7 +134,11 @@ const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps)
         <Button variant="primary-outlined" onClick={onClose}>
           {t("t.close")}
         </Button>
-        <Button disabled={!fileUploadData || !!csvError} variant="primary" onClick={processBulkCsv}>
+        <Button
+          disabled={!fileUploadData || !!csvError || !!jobId}
+          variant="primary"
+          onClick={processBulkCsv}
+        >
           {t("t.uploadFile")}
         </Button>
       </Drawer.Footer>

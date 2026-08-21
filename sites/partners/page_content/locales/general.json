@@ -126,6 +126,7 @@
   "applications.bulkUpdateStep3Title": "Step 3: Upload your file",
   "applications.bulkUpdateTemplateDownloadError": "En error has occurred while downloading the template. Please try again or contact support",
   "applications.bulkUpdateModalProcessingError": "En error has occurred during the processing of the CSV file",
+  "applications.bulkUpdateModalProcessingNotice": "Your file has been validated and is being processed...",
   "applications.combination": "Combination",
   "applications.duplicate": "Duplicate",
   "applications.duplicates.duplicateApplications": "Duplicate applications",
