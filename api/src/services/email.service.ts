@@ -572,11 +572,13 @@ export class EmailService {
             }),
           );
         }
-        return new Handlebars.SafeString(
-          this.polyglot.t('applicationUpdate.conventionalWaitListChange', {
-            value: `<strong>${change.value}</strong>`,
-          }),
-        );
+        if (change.type === 'conventionalWaitlist') {
+          return new Handlebars.SafeString(
+            this.polyglot.t('applicationUpdate.conventionalWaitListChange', {
+              value: `<strong>${change.value}</strong>`,
+            }),
+          );
+        }
       });
 
     const subjectForCurrentLanguage = () =>
