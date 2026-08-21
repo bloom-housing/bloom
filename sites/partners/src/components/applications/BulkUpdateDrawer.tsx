@@ -62,7 +62,10 @@ const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps)
             type="button"
             size="sm"
             className="font-semibold text-alert"
-            onClick={resetUpload}
+            onClick={() => {
+              resetUpload()
+              setCsvError(null)
+            }}
             variant="text"
           >
             {t("t.delete")}
