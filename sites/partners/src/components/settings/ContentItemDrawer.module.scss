@@ -1,28 +1,3 @@
 .field {
   margin-bottom: var(--seeds-s6);
 }
-
-.field-header {
-  display: flex;
-  align-items: center;
-  gap: var(--seeds-s2);
-}
-
-.field-label {
-  font-weight: 600;
-}
-
-.field-editor {
-  display: flex;
-  flex-direction: column;
-  gap: var(--seeds-s4);
-  align-items: stretch;
-
-  button {
-    align-self: flex-start;
-  }
-}
-
-.english-source {
-  padding-bottom: var(--seeds-s4);
-}

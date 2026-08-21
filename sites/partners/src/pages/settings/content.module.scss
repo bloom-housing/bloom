@@ -44,27 +44,6 @@
   padding-bottom: var(--seeds-s2);
 }
 
-.english-source {
-  padding-bottom: var(--seeds-s3);
-}
-
-.field-editor {
-  display: flex;
-  flex-direction: column;
-  gap: var(--seeds-s2);
-  align-items: stretch;
-  max-width: 42rem;
-
-  button {
-    align-self: flex-start;
-  }
-}
-
-.preview {
-  width: 100%;
-  padding-top: var(--seeds-s2);
-}
-
 .note {
   color: var(--seeds-text-color-secondary);
   padding-bottom: var(--seeds-s2);

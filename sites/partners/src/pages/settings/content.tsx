@@ -1,9 +1,8 @@
 import React, { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { Field, Select, t, useMutate } from "@bloom-housing/ui-components"
-import { Button, Card, FieldValue, Tag } from "@bloom-housing/ui-seeds"
-import { Editor, useEditor } from "@tiptap/react"
+import { Select, t, useMutate } from "@bloom-housing/ui-components"
+import { Button, Card } from "@bloom-housing/ui-seeds"
 import { useSWRConfig } from "swr"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
@@ -23,31 +22,28 @@ import {
   addListItem,
   addTextSection,
   buildUpdate,
-  clearValueAt,
   ContentDocument,
   ContentDraft,
   draftFromRow,
-  fieldState,
   hasDraftChanges,
   isConflict,
   isStale,
   pathsThatHideContent,
   newItemId,
-  normalizeRichText,
   removeListItem,
   removeTextSection,
   restoreListItem,
   rowFor,
-  setValueAt,
   textSections,
   tombstoneListItem,
   valueAt,
 } from "../../lib/contentEditor"
 import { ContentConflictDialog } from "../../components/settings/ContentConflictDialog"
+import { ContentFieldCard } from "../../components/settings/ContentFieldCard"
 import { ContentItemDrawer, ItemField } from "../../components/settings/ContentItemDrawer"
 import { ContentList } from "../../components/settings/ContentList"
 import { ContentWarningDialog } from "../../components/settings/ContentWarningDialog"
-import { EditorExtensions, TextEditor, TextEditorContent } from "../../components/shared/TextEditor"
+import { TextEditorContent } from "../../components/shared/TextEditor"
 import styles from "./content.module.scss"
 
 type FieldConfig = { path: string; labelKey: string; type: "text" | "html" }
@@ -284,81 +280,9 @@ const SettingsContent = () => {
   const hasUnsavedChanges = hasDraftChanges(draft, savedDraft)
   useUnsavedChangesWarning(hasUnsavedChanges, t("content.unsavedChangesWarning"))
 
-  // The editor is rebuilt with its content rather than having content set afterwards, so the
-  // character count reads the loaded value instead of an empty document. The key changes only when
-  // a field switches between falling back and holding a value.
-  const seedKeyFor = (path: string) =>
-    `${scope}|${resetCount}|${fieldState(valueAt(draft, path)) === "fallback" ? "fallback" : "value"
-    }`
-  const contentFor = (path: string) => {
-    const value = valueAt(draft, path)
-    return typeof value === "string" ? value : ""
-  }
-
-  const privacySeed = seedKeyFor("disclaimers.privacyHtml")
-  const privacyEditor = useEditor(
-    {
-      extensions: EditorExtensions,
-      immediatelyRender: false,
-      content: contentFor("disclaimers.privacyHtml"),
-      onUpdate: ({ editor }) =>
-        editField("disclaimers.privacyHtml", normalizeRichText(editor.getHTML())),
-    },
-    [privacySeed]
-  )
-
-  const disclaimerSeed = seedKeyFor("disclaimers.disclaimerHtml")
-  const disclaimerEditor = useEditor(
-    {
-      extensions: EditorExtensions,
-      immediatelyRender: false,
-      content: contentFor("disclaimers.disclaimerHtml"),
-      onUpdate: ({ editor }) =>
-        editField("disclaimers.disclaimerHtml", normalizeRichText(editor.getHTML())),
-    },
-    [disclaimerSeed]
-  )
-
-  const addressSeed = seedKeyFor("contact.addressHtml")
-  const addressEditor = useEditor(
-    {
-      extensions: EditorExtensions,
-      immediatelyRender: false,
-      content: contentFor("contact.addressHtml"),
-      onUpdate: ({ editor }) =>
-        editField("contact.addressHtml", normalizeRichText(editor.getHTML())),
-    },
-    [addressSeed]
-  )
-
-  const editors: Record<string, { editor: Editor | null; seed: string }> = {
-    "disclaimers.privacyHtml": { editor: privacyEditor, seed: privacySeed },
-    "disclaimers.disclaimerHtml": { editor: disclaimerEditor, seed: disclaimerSeed },
-    "contact.addressHtml": { editor: addressEditor, seed: addressSeed },
-  }
-
   const changeScope = (apply: () => void) => {
     apply()
     setConflict(false)
-  }
-
-  const overrideField = (path: string) => {
-    const englishValue = valueAt(englishDraft, path)
-    setDraft((current) =>
-      setValueAt(
-        current ?? {},
-        path,
-        isEnglish || typeof englishValue !== "string" ? "" : englishValue
-      )
-    )
-  }
-
-  const revertField = (path: string) => {
-    setDraft((current) => clearValueAt(current, path))
-  }
-
-  const editField = (path: string, value: string) => {
-    setDraft((current) => setValueAt(current, path, value))
   }
 
   const [drawer, setDrawer] = useState<{
@@ -517,87 +441,22 @@ const SettingsContent = () => {
         {loading && <p className={styles["status"]}>{t("t.loading")}</p>}
 
         {!loading &&
-          activeFields.map((field) => {
-            const value = valueAt(draft, field.path)
-            const state = fieldState(value)
-            const englishValue = valueAt(englishDraft, field.path)
-            const stale = isStale(languageRow?.staleFields, field.path)
-            const editorEntry = editors[field.path]
-
-            return (
-              <Card key={field.path} className={styles["field-card"]}>
-                <Card.Section>
-                  <div className={styles["field-header"]}>
-                    {state === "fallback" && (
-                      <span className={styles["field-label"]}>{t(field.labelKey)}</span>
-                    )}
-                    {state === "fallback" && (
-                      <Tag variant="secondary">
-                        {isEnglish ? t("content.notSet") : t("content.usingEnglish")}
-                      </Tag>
-                    )}
-                    {state === "hidden" && <Tag variant="secondary">{t("content.hidden")}</Tag>}
-                    {stale && <Tag variant="highlight-warm">{t("content.stale")}</Tag>}
-                  </div>
-
-                  {!isEnglish && (
-                    <div className={styles["english-source"]}>
-                      <FieldValue label={t("content.englishSource")}>
-                        {field.type === "html" && typeof englishValue === "string" ? (
-                          <TextEditorContent content={englishValue} />
-                        ) : (
-                          <span>{(englishValue as string) ?? t("content.notSet")}</span>
-                        )}
-                      </FieldValue>
-                    </div>
-                  )}
-
-                  {state === "fallback" ? (
-                    <Button
-                      variant="primary-outlined"
-                      size="sm"
-                      onClick={() => overrideField(field.path)}
-                    >
-                      {isEnglish ? t("content.setValue") : t("content.override")}
-                    </Button>
-                  ) : (
-                    <div className={styles["field-editor"]} dir={direction}>
-                      {field.type === "html" && editorEntry?.editor ? (
-                        <>
-                          <TextEditor
-                            key={editorEntry.seed}
-                            editor={editorEntry.editor}
-                            label={t(field.labelKey)}
-                            editorId={field.path}
-                          />
-                          <div className={styles["preview"]}>
-                            <FieldValue label={t("content.preview")}>
-                              <TextEditorContent content={(value as string) ?? ""} />
-                            </FieldValue>
-                          </div>
-                        </>
-                      ) : (
-                        <Field
-                          key={`${activeJurisdictionId}-${activeLanguage}-${resetCount}-${field.path}`}
-                          id={field.path}
-                          name={field.path}
-                          label={t(field.labelKey)}
-                          defaultValue={(value as string) ?? ""}
-                          inputProps={{
-                            onChange: (event: React.ChangeEvent<HTMLInputElement>) =>
-                              editField(field.path, event.target.value),
-                          }}
-                        />
-                      )}
-                      <Button variant="text" size="sm" onClick={() => revertField(field.path)}>
-                        {isEnglish ? t("content.clear") : t("content.revertToEnglish")}
-                      </Button>
-                    </div>
-                  )}
-                </Card.Section>
-              </Card>
-            )
-          })}
+          activeFields.map((field) => (
+            <ContentFieldCard
+              key={field.path}
+              className={styles["field-card"]}
+              path={field.path}
+              labelKey={field.labelKey}
+              type={field.type}
+              draft={draft}
+              englishDraft={englishDraft}
+              isEnglish={isEnglish}
+              stale={isStale(languageRow?.staleFields, field.path)}
+              direction={direction}
+              resetKey={`${scope}|${resetCount}`}
+              onChange={(next) => setDraft(() => next)}
+            />
+          ))}
         {!loading &&
           activeDocument?.textSections &&
           (() => {
@@ -686,33 +545,33 @@ const SettingsContent = () => {
             >
               {list.nested
                 ? (row) => {
-                  const nested = list.nested
-                  const nestedPath = `${list.listPath}[${row.id}].${nested.field}`
-                  return (
-                    <div className={styles["nested-list"]}>
-                      <ContentList
-                        listPath={nestedPath}
-                        labelKey={nested.labelKey}
-                        addLabelKey={nested.addLabelKey}
-                        displayField={nested.item.displayField}
-                        draft={draft}
-                        englishDraft={englishDraft}
-                        isEnglish={isEnglish}
-                        staleFields={languageRow?.staleFields}
-                        onEdit={(itemPath) =>
-                          setDrawer({
-                            basePath: itemPath,
-                            titleKey: nested.item.titleKey,
-                            fields: nested.item.fields,
-                          })
-                        }
-                        onAdd={() => addItem(nestedPath, nested.item)}
-                        onRemove={(id) => removeItem(nestedPath, id)}
-                        onRestore={(id) => restoreItem(nestedPath, id)}
-                      />
-                    </div>
-                  )
-                }
+                    const nested = list.nested
+                    const nestedPath = `${list.listPath}[${row.id}].${nested.field}`
+                    return (
+                      <div className={styles["nested-list"]}>
+                        <ContentList
+                          listPath={nestedPath}
+                          labelKey={nested.labelKey}
+                          addLabelKey={nested.addLabelKey}
+                          displayField={nested.item.displayField}
+                          draft={draft}
+                          englishDraft={englishDraft}
+                          isEnglish={isEnglish}
+                          staleFields={languageRow?.staleFields}
+                          onEdit={(itemPath) =>
+                            setDrawer({
+                              basePath: itemPath,
+                              titleKey: nested.item.titleKey,
+                              fields: nested.item.fields,
+                            })
+                          }
+                          onAdd={() => addItem(nestedPath, nested.item)}
+                          onRemove={(id) => removeItem(nestedPath, id)}
+                          onRestore={(id) => restoreItem(nestedPath, id)}
+                        />
+                      </div>
+                    )
+                  }
                 : undefined}
             </ContentList>
           ))}
