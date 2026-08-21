@@ -20,23 +20,20 @@ import { mapTo } from '../utilities/mapTo';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
 
-// Validated against the model so an invalid field is a compile error, while keeping the exact
-// selected-field type on the rows the read path works with.
 const CONTENT_FIELDS = [
   'footer',
   'faq',
   'resources',
   'disclaimers',
   'contact',
-] as const;
+] as const satisfies readonly (keyof MergeableContent &
+  keyof Prisma.JurisdictionContentSelect)[];
 
-const CONTENT_SELECT = {
-  footer: true,
-  faq: true,
-  resources: true,
-  disclaimers: true,
-  contact: true,
-} satisfies Prisma.JurisdictionContentSelect;
+type ContentField = (typeof CONTENT_FIELDS)[number];
+
+const CONTENT_SELECT = Object.fromEntries(
+  CONTENT_FIELDS.map((field) => [field, true] as const),
+) as Record<ContentField, true> satisfies Prisma.JurisdictionContentSelect;
 
 @Injectable()
 export class JurisdictionContentService {
@@ -70,13 +67,9 @@ export class JurisdictionContentService {
     const contentFor = (lang: LanguagesEnum): MergeableContent => {
       const match = rows.find((row) => row.language === lang);
       return match
-        ? {
-            footer: match.footer,
-            faq: match.faq,
-            resources: match.resources,
-            disclaimers: match.disclaimers,
-            contact: match.contact,
-          }
+        ? Object.fromEntries(
+            CONTENT_FIELDS.map((field) => [field, match[field]] as const),
+          )
         : {};
     };
 
@@ -195,8 +188,6 @@ export class JurisdictionContentService {
 
     const row = await this.prisma.jurisdictionContent.findFirst({ where });
     if (!row) {
-      // The row was written just above but is gone now: a concurrent delete of the row or its
-      // jurisdiction. Report a conflict rather than returning an empty body.
       throw new ConflictException({ message: 'jurisdictionContentConflict' });
     }
     return mapTo(
@@ -228,17 +219,11 @@ export class JurisdictionContentService {
       value == null
         ? Prisma.DbNull
         : (JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue);
-    // A language row records what each translated value was translated from, so a later English
-    // edit can be flagged. Stamped before serializing, while the value is still a plain object.
-    const stamped = (field: (typeof CONTENT_FIELDS)[number]) =>
+    const stamped = (field: ContentField) =>
       english ? stampSourceHashes(english[field], dto[field]) : dto[field];
-    return {
-      footer: asJson(stamped('footer')),
-      faq: asJson(stamped('faq')),
-      resources: asJson(stamped('resources')),
-      disclaimers: asJson(stamped('disclaimers')),
-      contact: asJson(stamped('contact')),
-    };
+    return Object.fromEntries(
+      CONTENT_FIELDS.map((field) => [field, asJson(stamped(field))] as const),
+    );
   }
 
   // Creates the row, returning false if another writer created the same (jurisdiction, language)
@@ -298,9 +283,6 @@ export class JurisdictionContentService {
     return jurisdiction.id;
   }
 
-  // Read-time guard: content is stored as unconstrained JSON, so a hand-edited or malformed row can
-  // drift from the DTO shape. Log a warning rather than throw, so a bad row degrades to a warning
-  // instead of a broken page.
   private async warnOnShapeMismatch(
     content: JurisdictionContentFields,
     jurisdictionId: string,
