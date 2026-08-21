@@ -3,7 +3,11 @@ import { GetStaticProps } from "next"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Home } from "../components/home/Home"
 import { HomeDeprecated } from "../components/home/HomeDeprecated"
-import { fetchJurisdictionByName, fetchLimitedUnderConstructionListings } from "../lib/hooks"
+import {
+  fetchJurisdictionByName,
+  fetchLimitedUnderConstructionListings,
+  fetchPublicOverrides,
+} from "../lib/hooks"
 
 interface HomePageProps {
   jurisdiction: Jurisdiction
@@ -25,14 +29,18 @@ export default function HomePage(props: HomePageProps) {
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const underConstructionListings = await fetchLimitedUnderConstructionListings(undefined, 3)
-  const jurisdiction = await fetchJurisdictionByName()
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const [underConstructionListings, jurisdiction, publicOverrides] = await Promise.all([
+    fetchLimitedUnderConstructionListings(undefined, 3),
+    fetchJurisdictionByName(),
+    fetchPublicOverrides(locale),
+  ])
 
   return {
     props: {
       underConstructionListings: underConstructionListings?.items || [],
       jurisdiction: jurisdiction,
+      publicOverrides,
     },
     revalidate: Number(process.env.cacheRevalidate),
   }
