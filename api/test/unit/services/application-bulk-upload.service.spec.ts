@@ -1575,5 +1575,39 @@ describe('Testing application bulk upload services', () => {
         ),
       ).resolves.toBeUndefined();
     });
+
+    it('should validate rows past the first 500-row chunk and report their absolute row number', async () => {
+      const apps = Array.from({ length: 501 }, (_, i) =>
+        dbContext({
+          id: randomUUID(),
+          applicant: { firstName: `First${i}`, lastName: `Last${i}` },
+          submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        }),
+      );
+
+      const findManyMock = jest.fn().mockResolvedValue(apps);
+      prisma.applications.findMany = findManyMock;
+
+      await expect(
+        service.validateCSV(
+          ...mockCsvInput(
+            apps.map((app, i) => ({
+              applicationId: app.id,
+              applicantFirstName: app.applicant.firstName,
+              applicantLastName: app.applicant.lastName,
+              applicationSubmissionDate: expectedDate(app.submissionDate),
+              applicationStatus: i === 500 ? 'Approved' : 'Submitted',
+            })),
+          ),
+          listingId,
+        ),
+      ).rejects.toThrow(
+        new BadRequestException(
+          'Upload Failed: Could not match one or more application status inputs beginning on row 502 with accepted system options',
+        ),
+      );
+
+      expect(findManyMock).toHaveBeenCalledTimes(2);
+    });
   });
 });
