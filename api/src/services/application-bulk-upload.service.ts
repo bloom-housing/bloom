@@ -6,7 +6,11 @@ import {
   NotFoundException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Applicant, ApplicationStatusEnum } from '@prisma/client';
+import {
+  Applicant,
+  ApplicationStatusEnum,
+  BackgroundJobStatusEnum,
+} from '@prisma/client';
 import { parse } from 'csv-parse';
 import fs, { createReadStream, ReadStream } from 'fs';
 import { Readable } from 'stream';
@@ -35,6 +39,8 @@ import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-util
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { ApplicationBulkPresignedUrl } from '../dtos/applications/application-bulk-presigned-url.dto';
+import { SnapshotCreateService } from './snapshot-create.service';
+import { buildApplicationStatusChanges } from 'src/utilities/applicationStatusChanges';
 
 const NUMBER_TO_PAGINATE_BY = 500;
 
@@ -98,6 +104,7 @@ export class ApplicationBulkUploadService {
     private permissionService: PermissionService,
     private s3Service: S3Service,
     private backgroundJobsService: BackgroundJobsService,
+    private snapshotService: SnapshotCreateService,
   ) {}
 
   convertApplicationStatusToReadable(
@@ -731,6 +738,147 @@ export class ApplicationBulkUploadService {
     }
   }
 
+  async bulkUpdateApplications(
+    rows: CsvRow[],
+    listingData: {
+      id: string;
+      name: string;
+      jurisdictionId: string;
+      appUrl: string;
+    },
+  ): Promise<{
+    totalRecords: number;
+    failedEmailsCount: number;
+  }> {
+    let currentRow = 2;
+    let updateCount = 0;
+    const failedEmailsCount = 0;
+    try {
+      for (let i = 0; i < rows.length; i += NUMBER_TO_PAGINATE_BY) {
+        const currentChunk = rows.slice(i, i + NUMBER_TO_PAGINATE_BY);
+
+        for (let j = 0; j < currentChunk.length; j++) {
+          currentRow++;
+          const entry = currentChunk[j];
+          const applicationId = entry[bulkUploadHeaderNames.applicationId];
+
+          const currentApplicationData =
+            await this.prisma.applications.findUnique({
+              select: {
+                userAccounts: true,
+                status: true,
+                applicationDeclineReason: true,
+                applicationDeclineReasonAdditionalDetails: true,
+                accessibleUnitWaitlistNumber: true,
+                conventionalUnitWaitlistNumber: true,
+                manualLotteryPositionNumber: true,
+              },
+              where: {
+                id: applicationId,
+                listingId: listingData.id,
+              },
+            });
+
+          console.log(currentApplicationData);
+          console.log(entry);
+
+          const applicationChanges = buildApplicationStatusChanges({
+            initialStatus: currentApplicationData.status,
+            initialApplicationDeclineReason:
+              currentApplicationData.applicationDeclineReason,
+            initialApplicationDeclineReasonAdditionalDetails:
+              currentApplicationData.applicationDeclineReasonAdditionalDetails,
+            initialAccessibleUnitWaitlistNumber:
+              currentApplicationData.accessibleUnitWaitlistNumber,
+            initialConventionalUnitWaitlistNumber:
+              currentApplicationData.conventionalUnitWaitlistNumber,
+            initialManualLotteryPositionNumber:
+              currentApplicationData.manualLotteryPositionNumber,
+            nextStatus: this.convertReadableToApplicationStatus(
+              entry[bulkUploadHeaderNames.applicationStatus],
+            ),
+            nextApplicationDeclineReason:
+              convertReadableToApplicationDeclineReason(
+                entry[bulkUploadHeaderNames.applicationDeclineReason],
+              ),
+            nextApplicationDeclineReasonAdditionalDetails:
+              entry[
+                bulkUploadHeaderNames.applicationDeclineReasonAdditionalDetails
+              ],
+            nextAccessibleUnitWaitlistNumber:
+              entry[bulkUploadHeaderNames.waitlistPositionAccessibleUnit],
+            nextConventionalUnitWaitlistNumber:
+              entry[bulkUploadHeaderNames.waitlistPositionConventionalUnit],
+            nextManualLotteryPositionNumber:
+              entry[bulkUploadHeaderNames.lotteryPositionNumber],
+          });
+
+          if (!applicationChanges.length) {
+            continue;
+          }
+
+          const fieldsToUpdate = {};
+          applicationChanges.forEach((change) => {
+            switch (change.type) {
+              case 'status':
+                fieldsToUpdate['status'] = change.to;
+                break;
+              case 'declineReason':
+                fieldsToUpdate['applicationDeclineReason'] = change.value;
+                break;
+              case 'declineReasonDetails':
+                fieldsToUpdate['applicationDeclineReasonAdditionalDetails'] =
+                  change.value;
+                break;
+              case 'accessibleWaitlist':
+                fieldsToUpdate['accessibleUnitWaitlistNumber'] = Number(
+                  change.value,
+                );
+                break;
+              case 'conventionalWaitlist':
+                fieldsToUpdate['conventionalUnitWaitlistNumber'] = Number(
+                  change.value,
+                );
+                break;
+              case 'lotteryPosition':
+                fieldsToUpdate['manualLotteryPositionNumber'] = Number(
+                  change.value,
+                );
+                break;
+            }
+          });
+
+          console.log(
+            'Filed updates: ',
+            JSON.stringify(fieldsToUpdate, null, 2),
+          );
+
+          this.snapshotService.createApplicationSnapshot(applicationId);
+          const updatedApplication = await this.prisma.applications.update({
+            where: {
+              id: applicationId,
+              listingId: listingData.id,
+            },
+            data: {
+              ...fieldsToUpdate,
+            },
+          });
+          updateCount++;
+        }
+      }
+    } catch (e) {
+      throw new InternalServerErrorException({
+        row: currentRow,
+        error: e,
+      });
+    }
+
+    return {
+      totalRecords: updateCount,
+      failedEmailsCount,
+    };
+  }
+
   async processBulkUpload(dto: ApplicationBulkUpdate, requestingUser: User) {
     this.validateFileFormat(dto.s3Key);
 
@@ -774,6 +922,36 @@ export class ApplicationBulkUploadService {
         'Failed to create a background job for bulk application update',
       );
     }
+
+    this.bulkUpdateApplications(rows, {
+      id: dto.listingId,
+      name: listingData.name,
+      jurisdictionId: listingData.jurisdictions.id,
+      appUrl: listingData.jurisdictions.publicUrl,
+    })
+      .then(async ({ totalRecords, failedEmailsCount }) => {
+        await this.prisma.backgroundJob.update({
+          data: {
+            status: BackgroundJobStatusEnum.completed,
+            totalRecords: totalRecords,
+          },
+          where: {
+            id: backgroundJob.id,
+          },
+        });
+      })
+      .catch(async (e) => {
+        await this.prisma.backgroundJob.update({
+          data: {
+            status: BackgroundJobStatusEnum.failed,
+            errorMessage: e.error,
+            errorRow: e.row,
+          },
+          where: {
+            id: backgroundJob.id,
+          },
+        });
+      });
 
     return backgroundJob.id;
   }

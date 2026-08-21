@@ -5,6 +5,7 @@ import { ListingModule } from './listing.module';
 import { PermissionModule } from './permission.module';
 import { S3Module } from './s3.module';
 import { BackgroundJobsModule } from './background-jobs.module';
+import { SnapshotCreateModule } from './snapshot-create.module';
 
 @Global()
 @Module({
@@ -14,6 +15,7 @@ import { BackgroundJobsModule } from './background-jobs.module';
     PermissionModule,
     S3Module,
     BackgroundJobsModule,
+    SnapshotCreateModule,
   ],
   providers: [ApplicationBulkUploadService],
   exports: [ApplicationBulkUploadService],
