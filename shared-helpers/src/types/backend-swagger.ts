@@ -1781,7 +1781,7 @@ export class ApplicationsService {
   bulkUpdateApplications(
     params: {
       /** requestBody */
-      body?: ApplicationBulkValidate
+      body?: ApplicationBulkUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
@@ -9168,8 +9168,8 @@ export interface ApplicationCreate {
   householdMember: HouseholdMemberCreate[]
 }
 
-/** ApplicationBulkValidate */
-export interface ApplicationBulkValidate {
+/** ApplicationBulkUpdate */
+export interface ApplicationBulkUpdate {
   /**  */
   s3Key: string
 
