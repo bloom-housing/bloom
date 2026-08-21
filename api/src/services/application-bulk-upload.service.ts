@@ -722,7 +722,7 @@ export class ApplicationBulkUploadService {
       const foundIds = new Set(dbApps.map((a) => a.id));
       const dbMap = new Map(dbApps.map((a) => [a.id, a]));
 
-      this.validateNoDuplicateId(rows);
+      this.validateNoDuplicateId(currentChunk);
 
       for (let j = 0; j < currentChunk.length; j++) {
         const entry = currentChunk[j];
