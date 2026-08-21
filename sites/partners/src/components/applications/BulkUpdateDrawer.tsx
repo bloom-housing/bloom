@@ -8,7 +8,7 @@ import {
   t,
 } from "@bloom-housing/ui-components"
 import { useBulkApplicationCsvUpload, useBulkApplicationTemplateExport } from "../../lib/hooks"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 interface BulkUpdateDrawerProps {
   isOpen: boolean

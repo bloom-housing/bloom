@@ -41,7 +41,7 @@ import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { ApplicationBulkPresignedUrl } from '../dtos/applications/application-bulk-presigned-url.dto';
 import { SnapshotCreateService } from './snapshot-create.service';
 import { EmailService } from './email.service';
-import { buildApplicationStatusChanges } from 'src/utilities/applicationStatusChanges';
+import { buildApplicationStatusChanges } from '../utilities/applicationStatusChanges';
 import { ConfigService } from '@nestjs/config';
 
 const NUMBER_TO_PAGINATE_BY = 500;
