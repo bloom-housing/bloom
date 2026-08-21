@@ -779,9 +779,6 @@ export class ApplicationBulkUploadService {
               },
             });
 
-          console.log(currentApplicationData);
-          console.log(entry);
-
           const applicationChanges = buildApplicationStatusChanges({
             initialStatus: currentApplicationData.status,
             initialApplicationDeclineReason:
@@ -847,11 +844,6 @@ export class ApplicationBulkUploadService {
                 break;
             }
           });
-
-          console.log(
-            'Filed updates: ',
-            JSON.stringify(fieldsToUpdate, null, 2),
-          );
 
           this.snapshotService.createApplicationSnapshot(applicationId);
           const updatedApplication = await this.prisma.applications.update({
