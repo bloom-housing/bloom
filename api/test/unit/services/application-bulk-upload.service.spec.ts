@@ -23,6 +23,7 @@ import {
   ApplicationBulkUploadService,
   ApplicationContextFields,
   bulkUploadHeaderNames,
+  CsvRow,
 } from '../../../src/services/application-bulk-upload.service';
 import { ListingService } from '../../../src/services/listing.service';
 import { PermissionService } from '../../../src/services/permission.service';
@@ -99,15 +100,24 @@ const expectedDate = (d: Date): string =>
 
 type RowOverrides = Partial<Record<keyof typeof bulkUploadHeaderNames, string>>;
 
-const mockCsvRecords = (
+const mockCsvInput = (
   rows: RowOverrides[] = [],
   options: { header?: string[] } = {},
-): string[][] => [
-  options.header ?? Object.values(bulkUploadHeaderNames),
-  ...rows.map((row) =>
-    Object.keys(bulkUploadHeaderNames).map((key) => row[key] ?? ''),
-  ),
-];
+): [string[], CsvRow[]] => {
+  const headerRow = options.header ?? Object.values(bulkUploadHeaderNames);
+
+  return [
+    headerRow,
+    rows.map((row) => {
+      const cells = Object.keys(bulkUploadHeaderNames).map(
+        (key) => row[key] ?? '',
+      );
+      return Object.fromEntries(
+        headerRow.map((label, i) => [label, cells[i] ?? '']),
+      );
+    }),
+  ];
+};
 
 const mockCsvResponse = (
   rows: RowOverrides[] = [],
@@ -118,16 +128,15 @@ const mockCsvResponse = (
 
   const line = (cells: string[]): string => cells.map(cell).join(',');
 
-  const [headerRow, ...dataRows] = mockCsvRecords(rows, {
-    header: options.header,
-  });
+  const [headerRow, dataRows] = mockCsvInput(rows, { header: options.header });
 
   let header = line(headerRow);
   if (options.bom) header = `﻿${header}`;
 
-  const dataLines = dataRows.flatMap((cells, i) =>
-    options.blankLines && i > 0 ? ['', line(cells)] : [line(cells)],
-  );
+  const dataLines = dataRows.flatMap((row, i) => {
+    const rowLine = line(headerRow.map((label) => row[label]));
+    return options.blankLines && i > 0 ? ['', rowLine] : [rowLine];
+  });
 
   const csv = [header, ...dataLines].join('\n');
   return Readable.toWeb(Readable.from([Buffer.from(csv, 'utf8')]));
@@ -519,7 +528,7 @@ describe('Testing application bulk upload services', () => {
         const header = Object.values(bulkUploadHeaderNames).slice(1);
 
         await expect(
-          service.validateCSV(mockCsvRecords([], { header }), listingId),
+          service.validateCSV(...mockCsvInput([], { header }), listingId),
         ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: CSV has additional or missing columns',
@@ -533,7 +542,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([{ applicationId: randomUUID() }], { header }),
+            ...mockCsvInput([{ applicationId: randomUUID() }], { header }),
             listingId,
           ),
         ).rejects.toThrow(
@@ -547,7 +556,7 @@ describe('Testing application bulk upload services', () => {
     describe('data rows (validateHasDataRows)', () => {
       it('should reject a CSV with only a header row and no data rows', async () => {
         await expect(
-          service.validateCSV(mockCsvRecords([]), listingId),
+          service.validateCSV(...mockCsvInput([]), listingId),
         ).rejects.toThrow(
           new BadRequestException(
             'Upload Failed: CSV contains no application records',
@@ -562,7 +571,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               { applicationId: duplicateId },
               { applicationId: randomUUID() },
               { applicationId: duplicateId },
@@ -589,7 +598,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -622,7 +631,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId,
                 applicantFirstName: 'Andrew',
@@ -660,7 +669,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: 'Mismatch',
@@ -689,7 +698,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -718,7 +727,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -747,7 +756,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -772,7 +781,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: '',
@@ -797,7 +806,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -822,7 +831,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -853,7 +862,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -890,7 +899,7 @@ describe('Testing application bulk upload services', () => {
 
           await expect(
             service.validateCSV(
-              mockCsvRecords([
+              ...mockCsvInput([
                 {
                   applicationId: appOne.id,
                   applicantFirstName: appOne.applicant.firstName,
@@ -921,7 +930,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -951,7 +960,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -979,7 +988,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1009,7 +1018,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1039,7 +1048,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1073,7 +1082,7 @@ describe('Testing application bulk upload services', () => {
 
           await expect(
             service.validateCSV(
-              mockCsvRecords([
+              ...mockCsvInput([
                 {
                   applicationId: appOne.id,
                   applicantFirstName: appOne.applicant.firstName,
@@ -1107,7 +1116,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1135,7 +1144,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1162,7 +1171,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1189,7 +1198,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1222,7 +1231,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1252,7 +1261,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1284,7 +1293,7 @@ describe('Testing application bulk upload services', () => {
 
           await expect(
             service.validateCSV(
-              mockCsvRecords([
+              ...mockCsvInput([
                 {
                   applicationId: appOne.id,
                   applicantFirstName: appOne.applicant.firstName,
@@ -1315,7 +1324,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1345,7 +1354,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1375,7 +1384,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1405,7 +1414,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1431,7 +1440,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1461,7 +1470,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1487,7 +1496,7 @@ describe('Testing application bulk upload services', () => {
 
         await expect(
           service.validateCSV(
-            mockCsvRecords([
+            ...mockCsvInput([
               {
                 applicationId: appOne.id,
                 applicantFirstName: appOne.applicant.firstName,
@@ -1528,7 +1537,7 @@ describe('Testing application bulk upload services', () => {
 
       await expect(
         service.validateCSV(
-          mockCsvRecords([
+          ...mockCsvInput([
             {
               applicationId: submittedApp.id,
               applicantFirstName: submittedApp.applicant.firstName,

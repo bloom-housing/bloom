@@ -60,7 +60,7 @@ const APPLICATION_STATUS_MAP: Record<ApplicationStatusEnum, string> = {
   [ApplicationStatusEnum.waitlistDeclined]: 'Wait list - Declined',
 };
 
-type CsvRow = Record<string, string>;
+export type CsvRow = Record<string, string>;
 
 export type ApplicationContextFields = Pick<
   Application,
@@ -697,13 +697,11 @@ export class ApplicationBulkUploadService {
     }
   }
 
-  async validateCSV(csvData: string[][], listingId: string): Promise<void> {
-    const [headerRow, ...dataRows] = csvData;
-    const headers: string[] = headerRow ?? [];
-    const rows: CsvRow[] = dataRows.map((cells) =>
-      Object.fromEntries(headers.map((h, i) => [h, cells[i] ?? ''])),
-    );
-
+  async validateCSV(
+    headers: string[],
+    rows: CsvRow[],
+    listingId: string,
+  ): Promise<void> {
     this.validateHeaders(headers);
     this.validateHasDataRows(rows);
 
@@ -755,7 +753,13 @@ export class ApplicationBulkUploadService {
         .on('end', () => resolve(results));
     });
 
-    await this.validateCSV(records, dto.listingId);
+    const [headerRow, ...dataRows] = records;
+    const headers: string[] = headerRow ?? [];
+    const rows: CsvRow[] = dataRows.map((cells) =>
+      Object.fromEntries(headers.map((h, i) => [h, cells[i] ?? ''])),
+    );
+
+    await this.validateCSV(headerRow, rows, dto.listingId);
 
     const backgroundJob = await this.backgroundJobsService.create(
       {
