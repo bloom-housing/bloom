@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { Tabs } from "@bloom-housing/ui-seeds"
-import { UserRole } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum, UserRole } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export enum SettingsIndexEnum {
   preferences = 0,
@@ -127,4 +128,31 @@ export const getSettingsTabs = (
       </Tabs.TabList>
     </Tabs>
   )
+}
+
+export const useSettingsTabs = (selectedIndex: SettingsIndexEnum) => {
+  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const enableDbDrivenContent = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableDbDrivenContent
+  )
+  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
+  const featureFlags: SettingsTabsFeatureFlags = {
+    enablePreferences: !doJurisdictionsHaveFeatureFlagOn(
+      FeatureFlagEnum.disableListingPreferences,
+      null,
+      true
+    ),
+    enableProperties: doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties),
+    enableAgencies: doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate),
+    enableTranslations: enableDbDrivenContent,
+    enableContent: enableDbDrivenContent,
+  }
+
+  return {
+    ...featureFlags,
+    enableV2MSQ,
+    hideTabs: getEnabledSettingsTabCount(featureFlags, profile?.userRoles) <= 1,
+    tabs: getSettingsTabs(selectedIndex, enableV2MSQ, featureFlags, profile?.userRoles),
+  }
 }

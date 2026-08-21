@@ -7,7 +7,6 @@ import { MinimalTable, StandardCard, t } from "@bloom-housing/ui-components"
 import { Button, Dialog, LoadingState } from "@bloom-housing/ui-seeds"
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import {
-  FeatureFlagEnum,
   MultiselectQuestion,
   MultiselectQuestionCreate,
   MultiselectQuestionUpdate,
@@ -21,11 +20,7 @@ import ManageIconSection from "../../components/settings/ManageIconSection"
 import { PreferenceDeleteModal } from "../../components/settings/PreferenceDeleteModal"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import { PreferenceEditModal } from "../../components/settings/PreferenceEditModal"
-import {
-  getEnabledSettingsTabCount,
-  getSettingsTabs,
-  SettingsIndexEnum,
-} from "../../components/settings/SettingsViewHelpers"
+import { useSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
 
 export type DrawerType = "add" | "edit"
 
@@ -33,8 +28,10 @@ const SettingsPreferences = () => {
   const { mutate } = useSWRConfig()
   const router = useRouter()
 
-  const { profile, multiselectQuestionsService, doJurisdictionsHaveFeatureFlagOn } =
-    useContext(AuthContext)
+  const { profile, multiselectQuestionsService } = useContext(AuthContext)
+  const { enablePreferences, enableV2MSQ, hideTabs, tabs } = useSettingsTabs(
+    SettingsIndexEnum.preferences
+  )
   const { addToast } = useContext(MessageContext)
 
   const { mutate: updateQuestion, isLoading: isUpdateLoading } = useMutate()
@@ -53,23 +50,6 @@ const SettingsPreferences = () => {
     profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
     MultiselectQuestionsApplicationSectionEnum.preferences
   )
-
-  const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
-  const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.disableListingPreferences,
-    null,
-    true
-  )
-  const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
-  const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
-  const enableTranslations = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableDbDrivenContent)
-  const settingsTabsFeatureFlags = {
-    enablePreferences: atLeastOneJurisdictionEnablesPreferences,
-    enableProperties,
-    enableAgencies,
-    enableTranslations,
-    enableContent: enableTranslations,
-  }
 
   const tableData = useMemo(() => {
     return data?.items
@@ -190,14 +170,10 @@ const SettingsPreferences = () => {
       </>
     )
   }
-  if (
-    profile?.userRoles?.isPartner ||
-    profile?.userRoles?.isSupportAdmin ||
-    !atLeastOneJurisdictionEnablesPreferences
-  ) {
+  if (profile?.userRoles?.isPartner || profile?.userRoles?.isSupportAdmin || !enablePreferences) {
     void router.push("/unauthorized")
   }
-  if (v2Preferences) void router.push("/settings/multiselectquestions/preferences")
+  if (enableV2MSQ) void router.push("/settings/multiselectquestions/preferences")
 
   return (
     <>
@@ -206,16 +182,8 @@ const SettingsPreferences = () => {
           <title>{`Settings - Preferences - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <NavigationHeader className="relative" title={t("t.settings")} />
-        {!v2Preferences && (
-          <TabView
-            hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags, profile?.userRoles) <= 1}
-            tabs={getSettingsTabs(
-              SettingsIndexEnum.preferences,
-              v2Preferences,
-              settingsTabsFeatureFlags,
-              profile?.userRoles
-            )}
-          >
+        {!enableV2MSQ && (
+          <TabView hideTabs={hideTabs} tabs={tabs}>
             <LoadingState loading={loading}>
               <StandardCard
                 title={t("t.preferences")}

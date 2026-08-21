@@ -12,11 +12,7 @@ import {
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
-import {
-  getEnabledSettingsTabCount,
-  getSettingsTabs,
-  SettingsIndexEnum,
-} from "../../components/settings/SettingsViewHelpers"
+import { useSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
 import { useJurisdictionContent, useUnsavedChangesWarning } from "../../lib/hooks"
 import {
   addListItem,
@@ -197,29 +193,10 @@ const SettingsContent = () => {
   const { mutate } = useSWRConfig()
   const { addToast } = useContext(MessageContext)
   const { mutate: saveContent, isLoading: isSaving } = useMutate()
-  const { profile, jurisdictionContentService, doJurisdictionsHaveFeatureFlagOn } =
-    useContext(AuthContext)
+  const { profile, jurisdictionContentService } = useContext(AuthContext)
+  const { enableContent, hideTabs, tabs } = useSettingsTabs(SettingsIndexEnum.content)
 
-  const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
-  const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.disableListingPreferences,
-    null,
-    true
-  )
-  const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
-  const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
-  const enableDbDrivenContent = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableDbDrivenContent
-  )
-  const settingsTabsFeatureFlags = {
-    enablePreferences: atLeastOneJurisdictionEnablesPreferences,
-    enableProperties,
-    enableAgencies,
-    enableTranslations: enableDbDrivenContent,
-    enableContent: enableDbDrivenContent,
-  }
-
-  const authorized = enableDbDrivenContent && !!profile?.userRoles?.isAdmin
+  const authorized = enableContent && !!profile?.userRoles?.isAdmin
 
   const jurisdictions = useMemo(
     () =>
@@ -358,15 +335,7 @@ const SettingsContent = () => {
         </title>
       </Head>
       <NavigationHeader className="relative" title={t("t.settings")} />
-      <TabView
-        hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags, profile?.userRoles) <= 1}
-        tabs={getSettingsTabs(
-          SettingsIndexEnum.content,
-          v2Preferences,
-          settingsTabsFeatureFlags,
-          profile?.userRoles
-        )}
-      >
+      <TabView hideTabs={hideTabs} tabs={tabs}>
         <div className={styles["toolbar"]}>
           <div className={styles["scope-controls"]}>
             <Select

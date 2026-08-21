@@ -1,7 +1,6 @@
 import React, { useContext, useMemo, useState } from "react"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
-  FeatureFlagEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
@@ -15,8 +14,7 @@ import EditMultiselectQuestion, {
   DrawerType,
 } from "../../../components/settings/MultiselectQuestions/EditMultiselectQuestion"
 import {
-  getEnabledSettingsTabCount,
-  getSettingsTabs,
+  useSettingsTabs,
   SettingsIndexEnum,
 } from "../../../components/settings/SettingsViewHelpers"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
@@ -26,18 +24,9 @@ import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 import styles from "./preferences.module.scss"
 
 const MultiselectQuestionsPreferences = () => {
-  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { profile } = useContext(AuthContext)
+  const { hideTabs, tabs } = useSettingsTabs(SettingsIndexEnum.preferences)
   const tableOptions = useAgTable()
-  const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
-  const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
-  const enableTranslations = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableDbDrivenContent)
-  const settingsTabsFeatureFlags = {
-    enablePreferences: true,
-    enableProperties,
-    enableAgencies,
-    enableTranslations,
-    enableContent: enableTranslations,
-  }
 
   const [multiselectQuestionDrawerOpen, setMultiselectQuestionDrawerOpen] =
     useState<DrawerType | null>(null)
@@ -181,15 +170,7 @@ const MultiselectQuestionsPreferences = () => {
           <title>{`Preferences - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <NavigationHeader className="relative" title={t("settings.preferences")} />
-        <TabView
-          hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags, profile?.userRoles) <= 1}
-          tabs={getSettingsTabs(
-            SettingsIndexEnum.preferences,
-            true,
-            settingsTabsFeatureFlags,
-            profile?.userRoles
-          )}
-        >
+        <TabView hideTabs={hideTabs} tabs={tabs}>
           <section className={styles["preferences-section"]}>
             <div className={styles["table-wrapper"]}>
               <AgTable
