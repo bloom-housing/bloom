@@ -1,7 +1,7 @@
 import { useCallback, useContext, useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import useSWR from "swr"
-import axios, { AxiosError } from "axios"
+import axios, { AxiosError, AxiosProgressEvent } from "axios"
 import qs from "qs"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
@@ -30,7 +30,6 @@ import {
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { S3Upload } from "./helpers"
-import { AxiosProgressEvent } from "axios"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
