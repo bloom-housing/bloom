@@ -40,7 +40,9 @@ import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { ApplicationBulkPresignedUrl } from '../dtos/applications/application-bulk-presigned-url.dto';
 import { SnapshotCreateService } from './snapshot-create.service';
+import { EmailService } from './email.service';
 import { buildApplicationStatusChanges } from 'src/utilities/applicationStatusChanges';
+import { ConfigService } from '@nestjs/config';
 
 const NUMBER_TO_PAGINATE_BY = 500;
 
@@ -105,6 +107,8 @@ export class ApplicationBulkUploadService {
     private s3Service: S3Service,
     private backgroundJobsService: BackgroundJobsService,
     private snapshotService: SnapshotCreateService,
+    private emailService: EmailService,
+    private configService: ConfigService,
   ) {}
 
   convertApplicationStatusToReadable(
@@ -752,7 +756,7 @@ export class ApplicationBulkUploadService {
   }> {
     let currentRow = 2;
     let updateCount = 0;
-    const failedEmailsCount = 0;
+    let failedEmailsCount = 0;
     try {
       for (let i = 0; i < rows.length; i += NUMBER_TO_PAGINATE_BY) {
         const currentChunk = rows.slice(i, i + NUMBER_TO_PAGINATE_BY);
@@ -766,6 +770,19 @@ export class ApplicationBulkUploadService {
             await this.prisma.applications.findUnique({
               select: {
                 userAccounts: true,
+                applicant: {
+                  select: {
+                    firstName: true,
+                    lastName: true,
+                    emailAddress: true,
+                  },
+                },
+                alternateContact: {
+                  select: {
+                    firstName: true,
+                    lastName: true,
+                  },
+                },
                 status: true,
                 applicationDeclineReason: true,
                 applicationDeclineReasonAdditionalDetails: true,
@@ -846,7 +863,7 @@ export class ApplicationBulkUploadService {
           });
 
           this.snapshotService.createApplicationSnapshot(applicationId);
-          const updatedApplication = await this.prisma.applications.update({
+          await this.prisma.applications.update({
             where: {
               id: applicationId,
               listingId: listingData.id,
@@ -855,6 +872,23 @@ export class ApplicationBulkUploadService {
               ...fieldsToUpdate,
             },
           });
+
+          try {
+            await this.emailService.applicationUpdateEmail(
+              listingData.name,
+              {
+                id: listingData.jurisdictionId,
+              },
+              // We are using only applicant data which is not being updated so we
+              // can used fetch data from before the update
+              mapTo(Application, currentApplicationData),
+              applicationChanges,
+              listingData.appUrl,
+            );
+          } catch {
+            console.error('failed to send an email');
+            failedEmailsCount++;
+          }
           updateCount++;
         }
       }
@@ -873,6 +907,27 @@ export class ApplicationBulkUploadService {
 
   async processBulkUpload(dto: ApplicationBulkUpdate, requestingUser: User) {
     this.validateFileFormat(dto.s3Key);
+
+    const listingData = await this.prisma.listings.findUnique({
+      select: {
+        name: true,
+        jurisdictions: {
+          select: {
+            id: true,
+            publicUrl: true,
+          },
+        },
+      },
+      where: {
+        id: dto.listingId,
+      },
+    });
+
+    if (!listingData) {
+      throw new NotFoundException(
+        `Failed to retrieve data for listing with id: ${dto.listingId}`,
+      );
+    }
 
     let csvStream: ReadableStream;
     try {
@@ -915,6 +970,10 @@ export class ApplicationBulkUploadService {
       );
     }
 
+    const applicationsLink = `${this.configService.get(
+      'PARTNERS_PORTAL_URL',
+    )}/listings/${dto.listingId}/applications`;
+
     this.bulkUpdateApplications(rows, {
       id: dto.listingId,
       name: listingData.name,
@@ -931,6 +990,32 @@ export class ApplicationBulkUploadService {
             id: backgroundJob.id,
           },
         });
+        if (failedEmailsCount > 0) {
+          await this.emailService.applicationsBulkSuccessWithErrors(
+            requestingUser,
+            {
+              id: listingData.jurisdictions.id,
+            },
+            applicationsLink,
+            {
+              updateCount: totalRecords,
+              failedEmailsCount,
+            },
+            listingData.name,
+          );
+        } else {
+          await this.emailService.applicationsBulkSuccess(
+            requestingUser,
+            {
+              id: listingData.jurisdictions.id,
+            },
+            applicationsLink,
+            {
+              updateCount: totalRecords,
+            },
+            listingData.name,
+          );
+        }
       })
       .catch(async (e) => {
         await this.prisma.backgroundJob.update({
@@ -943,6 +1028,15 @@ export class ApplicationBulkUploadService {
             id: backgroundJob.id,
           },
         });
+        await this.emailService.applicationsBulkFailure(
+          requestingUser,
+          {
+            id: listingData.jurisdictions.id,
+          },
+          listingData.jurisdictions.publicUrl,
+          `${e}`,
+          listingData.name,
+        );
       });
 
     return backgroundJob.id;
