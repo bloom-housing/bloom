@@ -186,6 +186,21 @@ describe("getStoredFooterTextContent", () => {
     expect(screen.getByText("A section")).toBeInTheDocument()
   })
 
+  it("drops the logo when its image was emptied, whatever the other logo fields say", () => {
+    const result = getStoredFooterTextContent(
+      content({
+        footer: {
+          textSectionsHtml: ["<p>A section</p>"],
+          logo: { logoSrc: "", logoAltText: "Logo", logoUrl: "/" },
+        },
+      })
+    )
+
+    // The key is still set, so the field is hidden rather than falling back to the bundled logo.
+    expect(result).toHaveProperty("logo")
+    expect(result.logo).toBeUndefined()
+  })
+
   it("drops an emptied section", () => {
     const result = getStoredFooterTextContent(
       content({ footer: { textSectionsHtml: ["", "<p>Kept</p>"] } })
@@ -326,6 +341,23 @@ describe("getStoredResourcesContent", () => {
 
     expect(result.contactCard).toBeUndefined()
     expect(result.resourceSections).toHaveLength(1)
+  })
+
+  it("keeps a contact card that has no sections beside it", () => {
+    const result = getStoredResourcesContent(
+      content({
+        resources: {
+          contactCard: { departmentTitle: "Housing office", email: "help@example.gov" },
+        },
+      })
+    )
+
+    expect(result.contactCard).toEqual({
+      departmentTitle: "Housing office",
+      description: undefined,
+      email: "help@example.gov",
+    })
+    expect(result).not.toHaveProperty("resourceSections")
   })
 
   it("sets no key for a field the document leaves alone, so that field falls back", () => {
