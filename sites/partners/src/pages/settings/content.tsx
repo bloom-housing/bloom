@@ -487,7 +487,7 @@ const SettingsContent = () => {
                   {sections.length === 0 && <p>{t("content.emptyList")}</p>}
                   {sections.map((section, index) => (
                     <div key={index} className={styles["section-row"]} dir={direction}>
-                      <TextEditorContent content={section} />
+                      <TextEditorContent content={section} asHtml />
                       <div>
                         <Button
                           variant="text"

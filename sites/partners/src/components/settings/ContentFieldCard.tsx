@@ -37,7 +37,7 @@ const RichTextControl = ({ path, labelKey, value, onEdit }: RichTextControlProps
       <TextEditor editor={editor} label={t(labelKey)} editorId={path} />
       <div className={styles["preview"]}>
         <FieldValue label={t("content.preview")}>
-          <TextEditorContent content={value} />
+          <TextEditorContent content={value} asHtml />
         </FieldValue>
       </div>
     </>
@@ -95,7 +95,7 @@ export const ContentFieldCard = ({
           <div className={styles["english-source"]}>
             <FieldValue label={t("content.englishSource")}>
               {type === "html" && typeof englishValue === "string" ? (
-                <TextEditorContent content={englishValue} />
+                <TextEditorContent content={englishValue} asHtml />
               ) : (
                 <span>{(englishValue as string) ?? t("content.notSet")}</span>
               )}
