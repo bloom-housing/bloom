@@ -21,6 +21,7 @@ import {
 } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
 import { getJurisdictionFaqContent } from "../static_content/jurisdiction_faq_content"
+import { getStoredFaqContent } from "../static_content/stored_content"
 import { useJurisdictionContent } from "../lib/JurisdictionContentContext"
 
 const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
@@ -35,7 +36,10 @@ const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
     })
   }, [profile])
 
-  const content = getJurisdictionFaqContent(jurisdictionContent) || getGenericFaqContent()
+  const content =
+    getStoredFaqContent(jurisdictionContent) ||
+    getJurisdictionFaqContent() ||
+    getGenericFaqContent()
 
   const enableResources = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableResources)
 

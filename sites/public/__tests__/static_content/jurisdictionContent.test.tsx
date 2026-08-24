@@ -1,17 +1,17 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { getJurisdictionFaqContent } from "../../src/static_content/jurisdiction_faq_content"
 import {
-  getJurisdictionFooterLinksContent,
-  getJurisdictionFooterTextContent,
-} from "../../src/static_content/jurisdiction_footer_content"
-import { getJurisdictionResourcesContent } from "../../src/static_content/jurisdiction_resources_content"
+  getStoredFaqContent,
+  getStoredFooterLinksContent,
+  getStoredFooterTextContent,
+  getStoredResourcesContent,
+} from "../../src/static_content/stored_content"
 
 const content = (fields: Partial<JurisdictionContentFields>): JurisdictionContentFields =>
   fields as JurisdictionContentFields
 
-describe("getJurisdictionFaqContent", () => {
+describe("getStoredFaqContent", () => {
   const faq = content({
     faq: {
       categories: [
@@ -25,7 +25,7 @@ describe("getJurisdictionFaqContent", () => {
   })
 
   it("maps categories and renders the answer as rich text", () => {
-    const result = getJurisdictionFaqContent(faq)
+    const result = getStoredFaqContent(faq)
 
     expect(result.categories).toHaveLength(1)
     expect(result.categories[0].title).toEqual("Applying")
@@ -36,7 +36,7 @@ describe("getJurisdictionFaqContent", () => {
   })
 
   it("renders stored HTML as written, without markdown rules rewriting it", () => {
-    const result = getJurisdictionFaqContent(
+    const result = getStoredFaqContent(
       content({
         faq: {
           categories: [
@@ -72,7 +72,7 @@ describe("getJurisdictionFaqContent", () => {
   })
 
   it("does not turn a markdown image in stored text into a request for it", () => {
-    const result = getJurisdictionFaqContent(
+    const result = getStoredFaqContent(
       content({
         faq: {
           categories: [
@@ -99,7 +99,7 @@ describe("getJurisdictionFaqContent", () => {
   })
 
   it("hides an item when either of its required fields was emptied", () => {
-    const emptied = getJurisdictionFaqContent(
+    const emptied = getStoredFaqContent(
       content({
         faq: {
           categories: [
@@ -121,7 +121,7 @@ describe("getJurisdictionFaqContent", () => {
   })
 
   it("drops a category once every item in it is hidden", () => {
-    const result = getJurisdictionFaqContent(
+    const result = getStoredFaqContent(
       content({
         faq: {
           categories: [
@@ -135,19 +135,22 @@ describe("getJurisdictionFaqContent", () => {
       })
     )
 
-    expect(result).toBeNull()
+    expect(result.categories).toEqual([])
   })
 
-  it("steps over a document whose lists are not lists", () => {
+  it("falls back when the stored lists are not lists", () => {
     const malformed = content({ faq: { categories: "not a list" } } as never)
 
-    expect(getJurisdictionFaqContent(malformed)).toBeNull()
+    expect(getStoredFaqContent(malformed)).toBeNull()
   })
 
-  it("returns null when there is nothing to show, so the bundled content stands", () => {
-    expect(getJurisdictionFaqContent(null)).toBeNull()
-    expect(getJurisdictionFaqContent(content({}))).toBeNull()
-    expect(getJurisdictionFaqContent(content({ faq: { categories: [] } }))).toBeNull()
+  it("falls back when the document sets no FAQ at all", () => {
+    expect(getStoredFaqContent(null)).toBeNull()
+    expect(getStoredFaqContent(content({}))).toBeNull()
+  })
+
+  it("shows an empty FAQ when the jurisdiction emptied the list, rather than falling back", () => {
+    expect(getStoredFaqContent(content({ faq: { categories: [] } }))).toEqual({ categories: [] })
   })
 
   it("drops a category whose questions were all emptied", () => {
@@ -163,13 +166,13 @@ describe("getJurisdictionFaqContent", () => {
       },
     })
 
-    expect(getJurisdictionFaqContent(emptied)).toBeNull()
+    expect(getStoredFaqContent(emptied).categories).toEqual([])
   })
 })
 
-describe("getJurisdictionFooterTextContent", () => {
+describe("getStoredFooterTextContent", () => {
   it("renders each text section and keeps the logo", () => {
-    const result = getJurisdictionFooterTextContent(
+    const result = getStoredFooterTextContent(
       content({
         footer: {
           textSectionsHtml: ["<p>A section</p>"],
@@ -184,37 +187,36 @@ describe("getJurisdictionFooterTextContent", () => {
   })
 
   it("drops an emptied section", () => {
-    const result = getJurisdictionFooterTextContent(
+    const result = getStoredFooterTextContent(
       content({ footer: { textSectionsHtml: ["", "<p>Kept</p>"] } })
     )
 
     expect(result.textSections).toHaveLength(1)
   })
 
-  it("returns null without sections or a logo", () => {
-    expect(getJurisdictionFooterTextContent(content({ footer: { links: [] } }))).toBeNull()
-    expect(getJurisdictionFooterTextContent(null)).toBeNull()
+  it("sets no key for a field the document leaves alone, so that field falls back", () => {
+    expect(getStoredFooterTextContent(content({ footer: { links: [] } }))).toEqual({})
+    expect(getStoredFooterTextContent(null)).toEqual({})
   })
 
-  it("steps over a text sections field that is not a list", () => {
+  it("falls back when the text sections field is not a list", () => {
     const malformed = content({ footer: { textSectionsHtml: "<p>Hi</p>" } } as never)
 
-    expect(getJurisdictionFooterTextContent(malformed)).toBeNull()
+    expect(getStoredFooterTextContent(malformed)).toEqual({})
   })
 })
 
-describe("getJurisdictionFooterLinksContent", () => {
-  it("maps links and keeps the copyright line, which the document does not carry", () => {
-    const result = getJurisdictionFooterLinksContent(
+describe("getStoredFooterLinksContent", () => {
+  it("maps links", () => {
+    const result = getStoredFooterLinksContent(
       content({ footer: { links: [{ id: "about", text: "About", href: "/about" }] } })
     )
 
     expect(result.links).toEqual([{ text: "About", href: "/about" }])
-    expect(result.cityString).toBeTruthy()
   })
 
   it("drops a link missing its text or address", () => {
-    const result = getJurisdictionFooterLinksContent(
+    const result = getStoredFooterLinksContent(
       content({
         footer: {
           links: [
@@ -229,12 +231,12 @@ describe("getJurisdictionFooterLinksContent", () => {
     expect(result.links).toEqual([{ text: "C", href: "/c" }])
   })
 
-  it("returns null when no link survives", () => {
-    expect(getJurisdictionFooterLinksContent(content({ footer: { links: [] } }))).toBeNull()
+  it("shows no links when the jurisdiction emptied the list, rather than falling back", () => {
+    expect(getStoredFooterLinksContent(content({ footer: { links: [] } }))).toEqual({ links: [] })
   })
 })
 
-describe("getJurisdictionResourcesContent", () => {
+describe("getStoredResourcesContent", () => {
   const sections = [
     {
       id: "immediate",
@@ -245,7 +247,7 @@ describe("getJurisdictionResourcesContent", () => {
   ]
 
   it("hides a card when either of its required fields was emptied", () => {
-    const result = getJurisdictionResourcesContent(
+    const result = getStoredResourcesContent(
       content({
         resources: {
           resourceSections: [
@@ -267,7 +269,7 @@ describe("getJurisdictionResourcesContent", () => {
   })
 
   it("drops a section once every card in it is hidden, rather than leaving a heading alone", () => {
-    const result = getJurisdictionResourcesContent(
+    const result = getStoredResourcesContent(
       content({
         resources: {
           resourceSections: [
@@ -281,17 +283,17 @@ describe("getJurisdictionResourcesContent", () => {
       })
     )
 
-    expect(result).toBeNull()
+    expect(result.resourceSections).toEqual([])
   })
 
-  it("steps over a document whose lists are not lists", () => {
+  it("falls back when the stored lists are not lists", () => {
     const malformed = content({ resources: { resourceSections: "not a list" } } as never)
 
-    expect(getJurisdictionResourcesContent(malformed)).toBeNull()
+    expect(getStoredResourcesContent(malformed)).toEqual({})
   })
 
   it("maps sections and renders each card", () => {
-    const result = getJurisdictionResourcesContent(
+    const result = getStoredResourcesContent(
       content({
         resources: {
           contactCard: {
@@ -313,7 +315,7 @@ describe("getJurisdictionResourcesContent", () => {
   })
 
   it("leaves out a contact card whose fields were emptied", () => {
-    const result = getJurisdictionResourcesContent(
+    const result = getStoredResourcesContent(
       content({
         resources: {
           contactCard: { departmentTitle: "", description: "", email: "" },
@@ -326,8 +328,8 @@ describe("getJurisdictionResourcesContent", () => {
     expect(result.resourceSections).toHaveLength(1)
   })
 
-  it("returns null with no sections and no contact card", () => {
-    expect(getJurisdictionResourcesContent(content({ resources: {} }))).toBeNull()
-    expect(getJurisdictionResourcesContent(null)).toBeNull()
+  it("sets no key for a field the document leaves alone, so that field falls back", () => {
+    expect(getStoredResourcesContent(content({ resources: {} }))).toEqual({})
+    expect(getStoredResourcesContent(null)).toEqual({})
   })
 })

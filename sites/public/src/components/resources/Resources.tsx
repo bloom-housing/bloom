@@ -8,6 +8,7 @@ import { getGenericResourcesContent } from "../../static_content/generic_resourc
 import { Card, Grid, Heading, Link } from "@bloom-housing/ui-seeds"
 import ResourceSection from "./ResourceSection"
 import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
+import { getStoredResourcesContent } from "../../static_content/stored_content"
 import { useJurisdictionContent } from "../../lib/JurisdictionContentContext"
 
 export type ResourceCards = {
@@ -27,10 +28,11 @@ const Resources = () => {
   const pageTitle = t("pageTitle.additionalResources")
 
   const jurisdictionContent = useJurisdictionContent()
-  const content: ResourceCards | null =
-    getJurisdictionResourcesContent(jurisdictionContent) || getGenericResourcesContent()
-
-  if (!content) return <></>
+  const content: ResourceCards = {
+    ...getGenericResourcesContent(),
+    ...getJurisdictionResourcesContent(),
+    ...getStoredResourcesContent(jurisdictionContent),
+  }
 
   const showContactCard =
     content.contactCard?.description ||

@@ -11,6 +11,10 @@ import {
   getJurisdictionFooterLinksContent,
   getJurisdictionFooterTextContent,
 } from "../../static_content/jurisdiction_footer_content"
+import {
+  getStoredFooterLinksContent,
+  getStoredFooterTextContent,
+} from "../../static_content/stored_content"
 import { useJurisdictionContent } from "../../lib/JurisdictionContentContext"
 import styles from "./CustomSiteFooter.module.scss"
 
@@ -18,10 +22,16 @@ const CustomSiteFooter = () => {
   // Null on a page with no data function, where the bundled content stands (#6594).
   const jurisdictionContent = useJurisdictionContent()
 
-  const textContent: FooterContent | null =
-    getJurisdictionFooterTextContent(jurisdictionContent) || getGenericFooterTextContent()
-  const footerLinksContent: FooterLinks | null =
-    getJurisdictionFooterLinksContent(jurisdictionContent) || getGenericFooterLinksContent()
+  const textContent: FooterContent = {
+    ...getGenericFooterTextContent(),
+    ...getJurisdictionFooterTextContent(),
+    ...getStoredFooterTextContent(jurisdictionContent),
+  }
+  const footerLinksContent: FooterLinks = {
+    ...getGenericFooterLinksContent(),
+    ...getJurisdictionFooterLinksContent(),
+    ...getStoredFooterLinksContent(jurisdictionContent),
+  }
 
   const showContentFooter = textContent.logo || textContent.textSections?.length > 0
   const showLinksFooter = footerLinksContent.links?.length > 0 || footerLinksContent.cityString
