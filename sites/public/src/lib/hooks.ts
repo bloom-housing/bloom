@@ -344,16 +344,36 @@ export async function fetchJurisdictionByName(req?: any) {
   return jurisdiction
 }
 
-const publicOverridesByLanguage = new Map<string, Record<string, Record<string, string>>>()
+type Cached<T> = { value: T; until: number; phase?: string }
+
+const publicOverridesByLanguage = new Map<string, Cached<Record<string, Record<string, string>>>>()
+const jurisdictionContentByLanguage = new Map<string, Cached<JurisdictionContentFields>>()
 
 export const OVERRIDES_TIMEOUT_MS = 5000
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchPublicOverrides(language?: string, req?: any) {
+// The documents the public site renders. The endpoint returns all five.
+const RENDERED_DOCUMENTS = ["footer", "faq", "resources"] as const
+
+const cacheWindowMs = (phase?: string) => {
+  if (phase === "phase-production-build") return Number.POSITIVE_INFINITY
+  const revalidate = Number(process.env.cacheRevalidate)
+  return Number.isFinite(revalidate) && revalidate > 0 ? revalidate * 1000 : 30000
+}
+
+const fetchJurisdictionScoped = async <T>(
+  path: string,
+  params: Record<string, string>,
+  cache: Map<string, Cached<T>>,
+  label: string,
+  language?: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  req?: any
+): Promise<T | null> => {
   const key = language ?? "en"
-  const duringBuild = process.env.NEXT_PHASE === "phase-production-build"
-  if (duringBuild && publicOverridesByLanguage.has(key)) {
-    return publicOverridesByLanguage.get(key)
+  const phase = process.env.NEXT_PHASE
+  const cached = cache.get(key)
+  if (cached && cached.phase === phase && cached.until > Date.now()) {
+    return cached.value
   }
 
   const headers = {
@@ -364,60 +384,72 @@ export async function fetchPublicOverrides(language?: string, req?: any) {
   }
 
   try {
-    const response = await axios.get(
-      `${process.env.backendApiBase}/translations/byName/${process.env.jurisdictionName}`,
-      {
-        params: { site: "public", language: key },
-        headers,
-        timeout: OVERRIDES_TIMEOUT_MS,
-      }
-    )
-    const overrides = (response?.data ?? null) as Record<string, Record<string, string>> | null
-    if (duringBuild && overrides) {
-      publicOverridesByLanguage.set(key, overrides)
+    const response = await axios.get(`${process.env.backendApiBase}${path}`, {
+      params: { ...params, language: key },
+      headers,
+      timeout: OVERRIDES_TIMEOUT_MS,
+    })
+    const value = (response?.data ?? null) as T | null
+    if (value) {
+      cache.set(key, { value, until: Date.now() + cacheWindowMs(phase), phase })
     }
-    return overrides
+    return value
   } catch (error) {
-    console.log("error fetching public translation overrides = ", error.message)
+    console.log(`error fetching ${label} = `, error.message)
     return null
   }
 }
 
-const jurisdictionContentByLanguage = new Map<string, JurisdictionContentFields>()
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchPublicOverrides(language?: string, req?: any) {
+  return fetchJurisdictionScoped<Record<string, Record<string, string>>>(
+    `/translations/byName/${process.env.jurisdictionName}`,
+    { site: "public" },
+    publicOverridesByLanguage,
+    "public translation overrides",
+    language,
+    req
+  )
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchJurisdictionContent(language?: string, req?: any) {
-  const key = language ?? "en"
-  const duringBuild = process.env.NEXT_PHASE === "phase-production-build"
-  if (duringBuild && jurisdictionContentByLanguage.has(key)) {
-    return jurisdictionContentByLanguage.get(key)
-  }
+  const content = await fetchJurisdictionScoped<JurisdictionContentFields>(
+    `/jurisdictionContent/byName/${process.env.jurisdictionName}`,
+    {},
+    jurisdictionContentByLanguage,
+    "jurisdiction content",
+    language,
+    req
+  )
+  if (!content) return null
 
-  const headers = {
-    passkey: process.env.API_PASS_KEY,
-  }
-  if (req) {
-    headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
-  }
+  return Object.fromEntries(
+    RENDERED_DOCUMENTS.filter((document) => content[document] != null).map((document) => [
+      document,
+      content[document],
+    ])
+  ) as JurisdictionContentFields
+}
 
-  try {
-    const response = await axios.get(
-      `${process.env.backendApiBase}/jurisdictionContent/byName/${process.env.jurisdictionName}`,
-      {
-        params: { language: key },
-        headers,
-        timeout: OVERRIDES_TIMEOUT_MS,
-      }
-    )
-    const content = (response?.data || null) as JurisdictionContentFields | null
-    if (duringBuild && content) {
-      jurisdictionContentByLanguage.set(key, content)
-    }
-    return content
-  } catch (error) {
-    console.log("error fetching jurisdiction content = ", error.message)
-    return null
-  }
+/**
+ * The props every public page passes down: the jurisdiction, its translation overrides, and its
+ * stored content. Reading the flag here means a jurisdiction can be taken off stored content
+ * without deleting its rows.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchSharedPageProps(language?: string, req?: any) {
+  const jurisdiction = await fetchJurisdictionByName(req)
+  const storedContentOn = jurisdiction?.featureFlags?.some(
+    (flag) => flag.name === FeatureFlagEnum.enableDbDrivenContent && flag.active
+  )
+
+  const [publicOverrides, jurisdictionContent] = await Promise.all([
+    fetchPublicOverrides(language, req),
+    storedContentOn ? fetchJurisdictionContent(language, req) : null,
+  ])
+
+  return { jurisdiction, publicOverrides, jurisdictionContent }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

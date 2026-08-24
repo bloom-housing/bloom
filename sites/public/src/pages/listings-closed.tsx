@@ -10,10 +10,8 @@ import { ListingBrowse, TabsIndexEnum } from "../components/browse/ListingBrowse
 import { isFeatureFlagOn } from "../lib/helpers"
 import {
   fetchClosedListings,
-  fetchJurisdictionByName,
   fetchMultiselectProgramData,
-  fetchJurisdictionContent,
-  fetchPublicOverrides,
+  fetchSharedPageProps,
 } from "../lib/hooks"
 import { ListingsProps } from "./listings"
 
@@ -50,27 +48,21 @@ export async function getServerSideProps(context: { req: any; query: any; locale
   } else {
     closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
   }
-  const [jurisdiction, publicOverrides, jurisdictionContent] = await Promise.all([
-    fetchJurisdictionByName(context.req),
-    fetchPublicOverrides(context.locale, context.req),
-    fetchJurisdictionContent(context.locale, context.req),
-  ])
+  const shared = await fetchSharedPageProps(context.locale, context.req)
   const multiselectData = isFeatureFlagOn(
-    jurisdiction,
+    shared.jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
-    ? await fetchMultiselectProgramData(context.req, jurisdiction?.id)
+    ? await fetchMultiselectProgramData(context.req, shared.jurisdiction?.id)
     : null
 
   return {
     props: {
       closedListings: closedListings?.items || [],
       paginationData: closedListings?.items?.length ? closedListings.meta : null,
-      jurisdiction: jurisdiction,
+      ...shared,
       multiselectData: multiselectData,
       areFiltersActive,
-      publicOverrides,
-      jurisdictionContent,
     },
   }
 }

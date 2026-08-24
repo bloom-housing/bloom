@@ -33,7 +33,8 @@ const PER_REQUEST = [
 ]
 
 const overrides = { en: { "a.key": "Override" } }
-const content = { contact: { phone: "555-0100" } }
+const content = { faq: { categories: [] } }
+const shared = { jurisdiction: {}, publicOverrides: overrides, jurisdictionContent: content }
 
 const context = {
   req: { headers: {}, socket: {} },
@@ -49,9 +50,7 @@ describe("pages pass the stored overrides through", () => {
   beforeEach(() => {
     jest.restoreAllMocks()
     process.env.cacheRevalidate = "30"
-    jest.spyOn(hooks, "fetchJurisdictionByName").mockResolvedValue({} as never)
-    jest.spyOn(hooks, "fetchPublicOverrides").mockResolvedValue(overrides)
-    jest.spyOn(hooks, "fetchJurisdictionContent").mockResolvedValue(content as never)
+    jest.spyOn(hooks, "fetchSharedPageProps").mockResolvedValue(shared as never)
     jest.spyOn(hooks, "fetchLimitedUnderConstructionListings").mockResolvedValue({} as never)
     jest.spyOn(hooks, "fetchOpenListings").mockResolvedValue({} as never)
     jest.spyOn(hooks, "fetchClosedListings").mockResolvedValue({} as never)
@@ -80,31 +79,24 @@ describe("pages pass the stored overrides through", () => {
     await load(page).getStaticProps(context)
 
     // A generated page has no visitor request to forward, so it passes the locale alone.
-    expect(hooks.fetchPublicOverrides).toHaveBeenCalledWith("es")
-    expect(hooks.fetchJurisdictionContent).toHaveBeenCalledWith("es")
+    expect(hooks.fetchSharedPageProps).toHaveBeenCalledWith("es")
   })
 
   // The API rate-limits on the forwarded address, so a per-request page has to pass its request.
   it.each(PER_REQUEST)("%s forwards its request", async (page) => {
     await load(page).getServerSideProps(context)
 
-    expect(hooks.fetchPublicOverrides).toHaveBeenCalledWith("es", context.req)
-    expect(hooks.fetchJurisdictionContent).toHaveBeenCalledWith("es", context.req)
+    expect(hooks.fetchSharedPageProps).toHaveBeenCalledWith("es", context.req)
   })
 
-  it("still returns props when the overrides cannot be fetched", async () => {
-    jest.spyOn(hooks, "fetchPublicOverrides").mockResolvedValue(null)
+  it("still returns props when neither can be fetched", async () => {
+    jest
+      .spyOn(hooks, "fetchSharedPageProps")
+      .mockResolvedValue({ jurisdiction: null, publicOverrides: null, jurisdictionContent: null })
 
     const result = await load("faq").getStaticProps(context)
 
     expect(result.props.publicOverrides).toBeNull()
-  })
-
-  it("still returns props when the content cannot be fetched", async () => {
-    jest.spyOn(hooks, "fetchJurisdictionContent").mockResolvedValue(null)
-
-    const result = await load("faq").getStaticProps(context)
-
     expect(result.props.jurisdictionContent).toBeNull()
   })
 })

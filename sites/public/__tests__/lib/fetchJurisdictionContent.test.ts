@@ -1,13 +1,21 @@
-import axios from "axios"
-import { fetchJurisdictionContent, OVERRIDES_TIMEOUT_MS } from "../../src/lib/hooks"
+import type axiosType from "axios"
 
-const mockedGet = jest.spyOn(axios, "get")
+// The fetch caches per language, so each case gets a fresh module registry, and the spy has to be
+// taken from the same one the module under test will import.
+type Hooks = typeof import("../../src/lib/hooks")
+
+let mockedGet: jest.SpyInstance
+let fetchJurisdictionContent: Hooks["fetchJurisdictionContent"]
+let OVERRIDES_TIMEOUT_MS: number
 
 describe("fetchJurisdictionContent", () => {
-  afterAll(() => mockedGet.mockRestore())
-
   beforeEach(() => {
-    jest.clearAllMocks()
+    jest.resetModules()
+    const axios = require("axios") as typeof axiosType
+    mockedGet = jest.spyOn(axios, "get")
+    const hooks = require("../../src/lib/hooks") as Hooks
+    fetchJurisdictionContent = hooks.fetchJurisdictionContent
+    OVERRIDES_TIMEOUT_MS = hooks.OVERRIDES_TIMEOUT_MS
     process.env.backendApiBase = "http://localhost:3100"
     process.env.jurisdictionName = "Bloomington"
     process.env.API_PASS_KEY = "test-passkey"
@@ -71,5 +79,55 @@ describe("fetchJurisdictionContent", () => {
     await fetchJurisdictionContent("vi")
 
     expect(mockedGet).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe("fetchSharedPageProps", () => {
+  const flagOn = {
+    featureFlags: [{ name: "enableDbDrivenContent", active: true }],
+  }
+  const flagOff = {
+    featureFlags: [{ name: "enableDbDrivenContent", active: false }],
+  }
+
+  let fetchSharedPageProps: Hooks["fetchSharedPageProps"]
+  let hooks: Hooks
+
+  beforeEach(() => {
+    jest.resetModules()
+    const axios = require("axios") as typeof axiosType
+    mockedGet = jest.spyOn(axios, "get")
+    hooks = require("../../src/lib/hooks") as Hooks
+    fetchSharedPageProps = hooks.fetchSharedPageProps
+    process.env.backendApiBase = "http://localhost:3100"
+    process.env.jurisdictionName = "Bloomington"
+    process.env.API_PASS_KEY = "test-passkey"
+    process.env.cacheRevalidate = "30"
+  })
+
+  it("reads the stored content when the jurisdiction has the flag on", async () => {
+    mockedGet.mockImplementation((url: string) =>
+      Promise.resolve({
+        data: url.includes("/jurisdictions/byName/") ? flagOn : { faq: { categories: [] } },
+      })
+    )
+
+    const props = await fetchSharedPageProps("en")
+
+    expect(props.jurisdictionContent).toEqual({ faq: { categories: [] } })
+  })
+
+  // Deleting the rows is otherwise the only way to take a jurisdiction back off stored content.
+  it("leaves the content unread when the flag is off", async () => {
+    mockedGet.mockImplementation((url: string) =>
+      Promise.resolve({ data: url.includes("/jurisdictions/byName/") ? flagOff : {} })
+    )
+
+    const props = await fetchSharedPageProps("en")
+
+    expect(props.jurisdictionContent).toBeNull()
+    expect(
+      mockedGet.mock.calls.some(([url]) => String(url).includes("/jurisdictionContent/"))
+    ).toBe(false)
   })
 })

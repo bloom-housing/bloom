@@ -2,13 +2,13 @@ import React from "react"
 import { render, screen } from "@testing-library/react"
 import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import CustomSiteFooter from "../../../src/components/shared/CustomSiteFooter"
-import { JurisdictionContentProvider } from "../../../src/lib/JurisdictionContentContext"
+import { JurisdictionContentContext } from "../../../src/lib/JurisdictionContentContext"
 
 const renderFooter = (content: JurisdictionContentFields | null) =>
   render(
-    <JurisdictionContentProvider content={content}>
+    <JurisdictionContentContext.Provider value={content}>
       <CustomSiteFooter />
-    </JurisdictionContentProvider>
+    </JurisdictionContentContext.Provider>
   )
 
 describe("<CustomSiteFooter>", () => {

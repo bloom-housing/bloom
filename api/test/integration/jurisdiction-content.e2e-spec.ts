@@ -321,6 +321,45 @@ describe('Jurisdiction Content Controller Tests', () => {
         .expect(400);
     });
 
+    it('rejects a protocol-relative URL, which loads from another host', async () => {
+      await request(app.getHttpServer())
+        .put(adminScope('ko'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          footer: {
+            logo: { logoSrc: '//evil.example/logo.png' },
+          },
+        })
+        .expect(400);
+    });
+
+    it('rejects a stored string longer than the field allows', async () => {
+      await request(app.getHttpServer())
+        .put(adminScope('ko'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ contact: { phone: 'x'.repeat(257) } })
+        .expect(400);
+
+      await request(app.getHttpServer())
+        .put(adminScope('ko'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          faq: { categories: [] },
+          contact: { addressHtml: 'x'.repeat(4097) },
+        })
+        .expect(400);
+
+      await request(app.getHttpServer())
+        .put(adminScope('ko'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ disclaimers: { privacyHtml: 'x'.repeat(20001) } })
+        .expect(400);
+    });
+
     it('rejects a content list that exceeds the size cap', async () => {
       const categories = Array.from({ length: 257 }, (_, i) => ({
         id: `c${i}`,

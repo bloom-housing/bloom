@@ -26,7 +26,7 @@ import ApplicationConductor, {
 } from "../lib/applications/ApplicationConductor"
 import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { applyTranslations } from "../lib/translations"
-import { JurisdictionContentProvider } from "../lib/JurisdictionContentContext"
+import { JurisdictionContentContext } from "../lib/JurisdictionContentContext"
 import LinkComponent from "../components/core/LinkComponent"
 
 import "../../styles/overrides.scss"
@@ -98,12 +98,12 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     <ConfigProvider apiUrl={process.env.backendApiBase}>
       <AuthProvider>
         <MessageProvider>
-          <JurisdictionContentProvider content={jurisdictionContent}>
+          <JurisdictionContentContext.Provider value={jurisdictionContent}>
             <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
             <div className={jurisdictionClassname}>
               <Component {...pageProps} />
             </div>
-          </JurisdictionContentProvider>
+          </JurisdictionContentContext.Provider>
         </MessageProvider>
       </AuthProvider>
     </ConfigProvider>

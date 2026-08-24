@@ -7,11 +7,7 @@ import {
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { isFeatureFlagOn } from "../../lib/helpers"
-import {
-  fetchJurisdictionByName,
-  fetchJurisdictionContent,
-  fetchPublicOverrides,
-} from "../../lib/hooks"
+import { fetchSharedPageProps } from "../../lib/hooks"
 import { NotificationPreferences } from "../../components/account/NotificationPreferences"
 import MaxWidthLayout from "../../layouts/max-width"
 import Layout from "../../layouts/application"
@@ -67,13 +63,9 @@ export default Notifications
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: { req: any; query: any; locale?: string }) {
-  const [jurisdiction, publicOverrides, jurisdictionContent] = await Promise.all([
-    fetchJurisdictionByName(context.req),
-    fetchPublicOverrides(context.locale, context.req),
-    fetchJurisdictionContent(context.locale, context.req),
-  ])
+  const shared = await fetchSharedPageProps(context.locale, context.req)
 
   return {
-    props: { jurisdiction, publicOverrides, jurisdictionContent },
+    props: { ...shared },
   }
 }
