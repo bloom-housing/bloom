@@ -9,8 +9,6 @@ import { sourceHash } from './translation-source-hash';
 
 const HASHES = '_sourceHashes';
 
-const STRUCTURAL_FIELDS = new Set(['id', 'href', 'logoSrc', 'logoUrl']);
-
 const isPlainObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
@@ -19,7 +17,7 @@ const isIdList = (value: unknown): value is Record<string, unknown>[] =>
   value.some((item) => isPlainObject(item) && 'id' in item);
 
 const isTranslatable = (field: string) =>
-  !field.startsWith('_') && !STRUCTURAL_FIELDS.has(field);
+  !field.startsWith('_') && field !== 'id';
 
 // A positional list is replaced whole by a language row, so it is hashed as one value.
 const hashOf = (value: unknown): string | null => {
@@ -58,29 +56,41 @@ const walkPairs = (
   ) => void,
   path = '',
 ): void => {
-  if (!isPlainObject(english) || !isPlainObject(language)) {
+  if (!isPlainObject(language)) {
     return;
   }
+  const englishObject = isPlainObject(english) ? english : undefined;
 
   for (const [field, languageValue] of Object.entries(language)) {
     if (!isTranslatable(field)) {
       continue;
     }
-    const englishValue = english[field];
+    const englishValue = englishObject?.[field];
     const fieldPath = path ? `${path}.${field}` : field;
 
-    if (isIdList(languageValue) && isIdList(englishValue)) {
-      const englishItems = byId(englishValue);
+    const keyedById =
+      Array.isArray(languageValue) &&
+      (isIdList(languageValue) || isIdList(englishValue));
+
+    if (keyedById) {
+      const englishItems = isIdList(englishValue)
+        ? byId(englishValue)
+        : new Map<unknown, Record<string, unknown>>();
       for (const item of languageValue) {
-        const match = item.id == null ? undefined : englishItems.get(item.id);
-        if (match) {
-          walkPairs(match, item, visit, `${fieldPath}[${String(item.id)}]`);
+        if (!isPlainObject(item) || item.id == null) {
+          continue;
         }
+        walkPairs(
+          englishItems.get(item.id),
+          item,
+          visit,
+          `${fieldPath}[${String(item.id)}]`,
+        );
       }
       continue;
     }
 
-    if (isPlainObject(languageValue) && isPlainObject(englishValue)) {
+    if (isPlainObject(languageValue)) {
       walkPairs(englishValue, languageValue, visit, fieldPath);
       continue;
     }

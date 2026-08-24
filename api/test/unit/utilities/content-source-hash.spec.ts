@@ -59,14 +59,16 @@ describe('stampSourceHashes', () => {
     ).toBeUndefined();
   });
 
-  it('skips fields that address rather than say something', () => {
+  it('skips the id, which pairs an item rather than saying something', () => {
     const stamped = stampSourceHashes(
       { links: [{ id: 'about', text: 'About', href: '/about' }] },
       { links: [{ id: 'about', text: 'Acerca de', href: '/acerca' }] },
     ) as { links: Record<string, unknown>[] };
 
+    // A link address is editable per language, so a change to the English one is worth reporting.
     expect(stamped.links[0]._sourceHashes).toEqual({
       text: sourceHash('About'),
+      href: sourceHash('/about'),
     });
   });
 
@@ -182,6 +184,60 @@ describe('stampSourceHashes', () => {
     expect(staleFieldPaths(englishNow, stamped)).toEqual([
       'categories[applying].items[how].answerHtml',
     ]);
+  });
+
+  it('steps over a list entry that is not an object', () => {
+    const stamped = stampSourceHashes(
+      { links: [{ id: 'about', text: 'About' }] },
+      { links: [null, { id: 'about', text: 'Acerca de' }] },
+    ) as { links: (Record<string, unknown> | null)[] };
+
+    expect(stamped.links[0]).toBeNull();
+    expect(stamped.links[1]?._sourceHashes).toEqual({
+      text: sourceHash('About'),
+    });
+  });
+});
+
+describe('a translated item whose English original is gone', () => {
+  const stored = stampSourceHashes(englishFaq, spanishFaq);
+
+  it('reports its fields, since there is nothing left to have translated them from', () => {
+    const englishWithoutTheItem = {
+      categories: [{ id: 'applying', title: 'Applying', items: [] }],
+    };
+
+    expect(staleFieldPaths(englishWithoutTheItem, stored)).toEqual([
+      'categories[applying].items[how].answerHtml',
+    ]);
+  });
+
+  it('reports them when the whole English category is gone', () => {
+    expect(staleFieldPaths({ categories: [] }, stored)).toEqual([
+      'categories[applying].items[how].answerHtml',
+    ]);
+  });
+
+  it('says nothing about an item this language added on its own', () => {
+    const added = {
+      categories: [
+        {
+          id: 'applying',
+          items: [{ id: 'local', answerHtml: '<p>Solo aqui.</p>' }],
+        },
+      ],
+    };
+
+    expect(staleFieldPaths(englishFaq, added)).toEqual([]);
+  });
+
+  it('does not hash an English list that is empty as one positional value', () => {
+    const stamped = stampSourceHashes(
+      { categories: [] },
+      { categories: [{ id: 'applying', title: 'Solicitar' }] },
+    ) as Record<string, unknown>;
+
+    expect(stamped._sourceHashes).toBeUndefined();
   });
 });
 

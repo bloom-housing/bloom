@@ -241,6 +241,59 @@ describe("<SettingsContent>", () => {
       expect(screen.getByLabelText("Link text")).toHaveValue("About")
     })
 
+    it("marks footer text sections when the English ones changed", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, { footer: { textSectionsHtml: ["<p>A section</p>"] } }),
+        row(LanguagesEnum.es, {
+          footer: { textSectionsHtml: ["<p>Una seccion</p>"] },
+          staleFields: ["footer.textSectionsHtml"],
+        }),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+
+      expect(await screen.findByText("English changed")).toBeInTheDocument()
+    })
+
+    it("does not mark a category when only a question inside it changed", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          faq: {
+            categories: [
+              {
+                id: "applying",
+                title: "Applying",
+                items: [{ id: "how", question: "How do I apply?", answerHtml: "<p>Online.</p>" }],
+              },
+            ],
+          },
+        }),
+        row(LanguagesEnum.es, {
+          faq: {
+            categories: [
+              {
+                id: "applying",
+                title: "Solicitar",
+                items: [{ id: "how", question: "Como solicito?" }],
+              },
+            ],
+          },
+          staleFields: ["faq.categories[applying].items[how].question"],
+        }),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "faq")
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+
+      await screen.findByText("Solicitar")
+      expect(screen.getAllByText("English changed")).toHaveLength(1)
+    })
+
     it("says that footer text sections are replaced as a set for a language", async () => {
       respondWithRows([
         row(LanguagesEnum.en, { footer: { textSectionsHtml: ["<p>A section</p>"] } }),

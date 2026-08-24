@@ -2,7 +2,7 @@ import React, { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import { AlertBox, Select, t, useMutate } from "@bloom-housing/ui-components"
-import { Button, Card } from "@bloom-housing/ui-seeds"
+import { Button, Card, Tag } from "@bloom-housing/ui-seeds"
 import { useSWRConfig } from "swr"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
@@ -470,6 +470,9 @@ const SettingsContent = () => {
                 <Card.Section>
                   <div className={styles["field-header"]}>
                     <span className={styles["field-label"]}>{t(config.labelKey)}</span>
+                    {isStale(languageRow?.staleFields, config.path) && (
+                      <Tag variant="highlight-warm">{t("content.stale")}</Tag>
+                    )}
                     <Button
                       variant="primary-outlined"
                       size="sm"

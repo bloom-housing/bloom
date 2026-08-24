@@ -3,6 +3,7 @@ import {
   addTextSection,
   clearValueAt,
   fieldState,
+  isStaleWithin,
   listRows,
   normalizeRichText,
   parsePath,
@@ -277,6 +278,25 @@ describe("text sections", () => {
     const next = addTextSection({}, path)
 
     expect(textSections(valueAt(next, path))).toEqual([""])
+  })
+})
+
+describe("isStaleWithin", () => {
+  const stale = [
+    "faq.categories[applying].title",
+    "faq.categories[eligibility].items[income].answerHtml",
+  ]
+
+  it("marks a category whose own field changed", () => {
+    expect(isStaleWithin(stale, "faq.categories[applying]")).toBe(true)
+  })
+
+  it("leaves a category alone when only a question inside it changed", () => {
+    expect(isStaleWithin(stale, "faq.categories[eligibility]")).toBe(false)
+  })
+
+  it("marks the question itself", () => {
+    expect(isStaleWithin(stale, "faq.categories[eligibility].items[income]")).toBe(true)
   })
 })
 

@@ -1,7 +1,7 @@
 import React from "react"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Card, Heading, Tag } from "@bloom-housing/ui-seeds"
-import { ContentDraft, ListRow, listRows, valueAt } from "../../lib/contentEditor"
+import { ContentDraft, ListRow, isStaleWithin, listRows, valueAt } from "../../lib/contentEditor"
 import styles from "./ContentList.module.scss"
 
 export type ContentListProps = {
@@ -60,7 +60,7 @@ export const ContentList = ({
 
         {rows.map((row) => {
           const itemPath = `${listPath}[${row.id}]`
-          const stale = (staleFields ?? []).some((path) => path.startsWith(itemPath))
+          const stale = isStaleWithin(staleFields, itemPath)
 
           return (
             <div key={row.id} className={styles["row"]}>

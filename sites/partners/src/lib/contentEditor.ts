@@ -133,6 +133,11 @@ export const fieldState = (value: unknown): FieldState => {
 export const isStale = (staleFields: string[] | undefined, path: string) =>
   (staleFields ?? []).includes(path)
 
+export const isStaleWithin = (staleFields: string[] | undefined, itemPath: string) =>
+  (staleFields ?? []).some(
+    (path) => path.startsWith(`${itemPath}.`) && !path.slice(itemPath.length + 1).includes("[")
+  )
+
 /**
  * Paths the admin has emptied where English has something to show, so saving would remove that
  * section for this language. The page confirms these before saving.
