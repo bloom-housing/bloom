@@ -109,6 +109,10 @@ export const setValueAt = (draft: ContentDraft, path: string, value: string): Co
 // Clearing a field is not the same as emptying it: an absent field falls back to English.
 export const clearValueAt = (draft: ContentDraft, path: string): ContentDraft =>
   withValueAt(draft, path, (parent, field) => {
+    if (Array.isArray(parent) && /^\d+$/.test(field)) {
+      parent.splice(Number(field), 1)
+      return
+    }
     delete parent[field]
   })
 
@@ -194,26 +198,10 @@ const withList = (
   draft: ContentDraft,
   listPath: string,
   apply: (list: ListItem[]) => ListItem[]
-): ContentDraft => {
-  const next = JSON.parse(JSON.stringify(draft ?? {})) as ContentDraft
-  const current = asList(valueAt(next, listPath))
-  return setListAt(next, listPath, apply(current))
-}
-
-const setListAt = (draft: ContentDraft, listPath: string, list: ListItem[]): ContentDraft => {
-  const parts = parsePath(listPath)
-  const last = parts[parts.length - 1]
-  if (!last || "id" in last) return draft
-
-  const parentPath = listPath.slice(0, listPath.length - last.field.length - 1)
-  const next = JSON.parse(JSON.stringify(draft ?? {})) as ContentDraft
-  const parent = parentPath ? valueAt(next, parentPath) : next
-
-  if (parent && typeof parent === "object") {
-    ;(parent as Record<string, unknown>)[last.field] = list
-  }
-  return next
-}
+): ContentDraft =>
+  withValueAt(draft, listPath, (parent, field) => {
+    parent[field] = apply(asList(parent[field]))
+  })
 
 export const addListItem = (draft: ContentDraft, listPath: string, item: ListItem): ContentDraft =>
   withList(draft, listPath, (list) => [...list, item])
@@ -260,11 +248,7 @@ export const removeTextSection = (
   index: number
 ): ContentDraft => {
   const kept = asStrings(valueAt(draft, path)).filter((_, position) => position !== index)
-  const cleared = clearValueAt(draft, path)
-  return kept.length
-    ? kept.reduce(
-        (current, value, position) => setValueAt(current, `${path}.${position}`, value),
-        cleared
-      )
-    : cleared
+  return withValueAt(draft, path, (parent, field) => {
+    parent[field] = kept
+  })
 }

@@ -470,6 +470,38 @@ describe("<SettingsContent>", () => {
       expect(screen.getByRole("button", { name: "Save" })).toBeDisabled()
     })
 
+    it("confirms before a save empties a field inside a list", async () => {
+      const bodies: Record<string, unknown>[] = []
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          footer: { links: [{ id: "about", text: "About", href: "/about" }] },
+        }),
+        row(LanguagesEnum.es, {
+          footer: { links: [{ id: "about", text: "Acerca de", href: "/acerca" }] },
+        }),
+      ])
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, async (req, res, ctx) => {
+            bodies.push(await req.json())
+            return res(ctx.json({}))
+          })
+        )
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+      await userEvent.click(await screen.findByRole("button", { name: "Edit" }))
+      await userEvent.clear(await screen.findByLabelText("Link text"))
+      await userEvent.click(screen.getByRole("button", { name: "Done" }))
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      expect(await screen.findByText("This will hide content")).toBeInTheDocument()
+      expect(bodies).toHaveLength(0)
+    })
+
     it("confirms before a save takes content off the site", async () => {
       const bodies: Record<string, unknown>[] = []
       respondWithRows([englishRow(), row(LanguagesEnum.es, { contact: { phone: "555-0199" } })])

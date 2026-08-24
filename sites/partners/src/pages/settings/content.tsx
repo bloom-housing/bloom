@@ -24,6 +24,7 @@ import {
   hasDraftChanges,
   isConflict,
   isStale,
+  listRows,
   pathsThatHideContent,
   newItemId,
   removeListItem,
@@ -188,6 +189,31 @@ const DOCUMENTS: DocumentConfig[] = [
 
 const RIGHT_TO_LEFT_LANGUAGES = [LanguagesEnum.ar, LanguagesEnum.fa]
 
+const hidablePaths = (draft: ContentDraft, englishDraft: ContentDraft): string[] => {
+  const itemPaths = (listPath: string, fields: ItemField[]) =>
+    listRows(valueAt(englishDraft, listPath), valueAt(draft, listPath))
+      .map((row) => `${listPath}[${row.id}]`)
+      .flatMap((itemPath) => fields.map((field) => `${itemPath}.${field.name}`))
+
+  return DOCUMENTS.flatMap((entry) => [
+    ...(entry.fields ?? []).map((field) => field.path),
+    ...(entry.lists ?? []).flatMap((list) => [
+      ...itemPaths(list.listPath, list.item.fields),
+      ...(list.nested
+        ? listRows(valueAt(englishDraft, list.listPath), valueAt(draft, list.listPath)).flatMap(
+            (row) =>
+              itemPaths(`${list.listPath}[${row.id}].${list.nested.field}`, list.nested.item.fields)
+          )
+        : []),
+    ]),
+    ...(entry.textSections
+      ? textSections(valueAt(draft, entry.textSections.path)).map(
+          (_value, index) => `${entry.textSections?.path}.${index}`
+        )
+      : []),
+  ])
+}
+
 const SettingsContent = () => {
   const router = useRouter()
   const { mutate } = useSWRConfig()
@@ -310,8 +336,7 @@ const SettingsContent = () => {
     })
 
   const handleSave = () => {
-    const paths = DOCUMENTS.flatMap((entry) => (entry.fields ?? []).map((field) => field.path))
-    const hiding = pathsThatHideContent(draft, englishDraft, paths)
+    const hiding = pathsThatHideContent(draft, englishDraft, hidablePaths(draft, englishDraft))
     if (hiding.length) {
       setHidingPaths(hiding)
       return

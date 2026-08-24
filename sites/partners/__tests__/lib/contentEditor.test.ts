@@ -1,5 +1,6 @@
 import {
   addListItem,
+  addTextSection,
   clearValueAt,
   fieldState,
   listRows,
@@ -7,8 +8,10 @@ import {
   parsePath,
   pathsThatHideContent,
   removeListItem,
+  removeTextSection,
   restoreListItem,
   setValueAt,
+  textSections,
   tombstoneListItem,
   valueAt,
 } from "../../src/lib/contentEditor"
@@ -217,6 +220,63 @@ describe("list edits", () => {
       id: "how",
       answerHtml: "<p>Solicite.</p>",
     })
+  })
+})
+
+describe("list edits on a document the language row has not started", () => {
+  it("adds an item, building the containers the path needs", () => {
+    const next = addListItem({}, "faq.categories[applying].items", { id: "q1" })
+
+    expect(valueAt(next, "faq.categories[applying].items[q1]")).toEqual({ id: "q1" })
+  })
+
+  it("records a removal rather than dropping it", () => {
+    const next = tombstoneListItem({ footer: undefined }, "footer.links", "about")
+
+    expect(valueAt(next, "footer.links[about]")).toEqual({ id: "about", _deleted: true })
+  })
+
+  it("records a removal under a category the language row has not overridden", () => {
+    const spanish = { faq: { categories: [{ id: "applying", title: "Solicitar" }] } }
+
+    const next = tombstoneListItem(spanish, "faq.categories[eligibility].items", "how")
+
+    expect(valueAt(next, "faq.categories[eligibility].items[how]")).toEqual({
+      id: "how",
+      _deleted: true,
+    })
+  })
+})
+
+describe("text sections", () => {
+  const path = "footer.textSectionsHtml"
+  const footer = { footer: { textSectionsHtml: ["<p>Uno</p>", "<p>Dos</p>"] } }
+
+  it("removes one section and closes the gap", () => {
+    const next = removeTextSection(footer, path, 0)
+
+    expect(valueAt(next, path)).toEqual(["<p>Dos</p>"])
+  })
+
+  it("leaves an empty list rather than falling back to English", () => {
+    const next = removeTextSection({ footer: { textSectionsHtml: ["<p>Uno</p>"] } }, path, 0)
+
+    expect(valueAt(next, path)).toEqual([])
+  })
+
+  it("clears one section without leaving a hole the API rejects", () => {
+    const next = clearValueAt(footer, `${path}.0`)
+
+    expect(valueAt(next, path)).toEqual(["<p>Dos</p>"])
+    expect(JSON.parse(JSON.stringify(next))).toEqual({
+      footer: { textSectionsHtml: ["<p>Dos</p>"] },
+    })
+  })
+
+  it("adds a section to a document that has none", () => {
+    const next = addTextSection({}, path)
+
+    expect(textSections(valueAt(next, path))).toEqual([""])
   })
 })
 
