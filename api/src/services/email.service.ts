@@ -499,8 +499,9 @@ export class EmailService {
           nextStepsUrl:
             nextStepsUrl != 'confirmation.nextStepsUrl' ? nextStepsUrl : null,
           preferenceText,
-          // This URL is placeholders and must be updated per jurisdiction
-          termsUrl: enableDuplicatesDetails ? 'https://www.exygy.com' : null,
+          termsUrl: enableDuplicatesDetails
+            ? this.polyglot.t('lotteryAvailable.termsUrl')
+            : '',
           user,
         }),
       );
@@ -1051,11 +1052,14 @@ export class EmailService {
               listingName: listingInfo.name,
               appUrl: jurisdiction.publicUrl,
             },
+            helpCenterUrl: this.polyglot.t('lotteryAvailable.helpCenterUrl'),
+            notificationsUrl: this.polyglot.t(
+              'lotteryAvailable.notificationsUrl',
+            ),
             signInUrl: `${jurisdiction.publicUrl}/${language}/sign-in`,
-            // These three URLs are placeholders and must be updated per jurisdiction
-            helpCenterUrl: 'https://www.exygy.com',
-            notificationsUrl: 'https://www.exygy.com',
-            termsUrl: enableDuplicatesDetails ? 'https://www.exygy.com' : '',
+            termsUrl: enableDuplicatesDetails
+              ? this.polyglot.t('lotteryAvailable.termsUrl')
+              : '',
           }),
         );
       }
