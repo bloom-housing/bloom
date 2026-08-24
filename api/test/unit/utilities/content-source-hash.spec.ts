@@ -111,6 +111,78 @@ describe('stampSourceHashes', () => {
 
     expect(stamped.contact._sourceHashes).toBeUndefined();
   });
+
+  it('keeps the baseline of a field this write does not change', () => {
+    const englishBefore = { phone: '(415) 555-0100', hours: 'Nine to five' };
+    const englishNow = { phone: '(415) 555-0199', hours: 'Nine to five' };
+    const stored = stampSourceHashes(englishBefore, {
+      phone: '(415) 555-0100 ext 2',
+      hours: 'Nueve a cinco',
+    });
+
+    const stamped = stampSourceHashes(
+      englishNow,
+      { phone: '(415) 555-0100 ext 2', hours: 'De nueve a cinco' },
+      stored,
+    ) as Record<string, unknown>;
+
+    expect(stamped._sourceHashes).toEqual({
+      phone: sourceHash('(415) 555-0100'),
+      hours: sourceHash('Nine to five'),
+    });
+    expect(staleFieldPaths(englishNow, stamped)).toEqual(['phone']);
+  });
+
+  it('takes a new baseline for a field this write does change', () => {
+    const englishBefore = { phone: '(415) 555-0100' };
+    const englishNow = { phone: '(415) 555-0199' };
+    const stored = stampSourceHashes(englishBefore, { phone: 'Antes' });
+
+    const stamped = stampSourceHashes(englishNow, { phone: 'Ahora' }, stored);
+
+    expect(staleFieldPaths(englishNow, stamped)).toEqual([]);
+  });
+
+  it('takes a baseline for a field the stored document did not have', () => {
+    const stored = stampSourceHashes({ phone: 'Call us' }, {});
+
+    const stamped = stampSourceHashes(
+      { phone: 'Call us' },
+      { phone: 'Llamenos' },
+      stored,
+    ) as Record<string, unknown>;
+
+    expect(stamped._sourceHashes).toEqual({ phone: sourceHash('Call us') });
+  });
+
+  it('keeps the baseline of an unchanged field nested in a list item', () => {
+    const englishNow = {
+      categories: [
+        {
+          id: 'applying',
+          title: 'Applying',
+          items: [
+            {
+              id: 'how',
+              question: 'How?',
+              answerHtml: '<p>Apply by mail.</p>',
+            },
+          ],
+        },
+      ],
+    };
+    const stored = stampSourceHashes(englishFaq, spanishFaq);
+
+    const stamped = stampSourceHashes(
+      englishNow,
+      JSON.parse(JSON.stringify(spanishFaq)),
+      stored,
+    );
+
+    expect(staleFieldPaths(englishNow, stamped)).toEqual([
+      'categories[applying].items[how].answerHtml',
+    ]);
+  });
 });
 
 describe('staleFieldPaths', () => {

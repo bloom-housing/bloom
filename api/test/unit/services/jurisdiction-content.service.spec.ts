@@ -276,8 +276,10 @@ describe('Testing jurisdiction content service', () => {
         .mockResolvedValueOnce({ count: 1 });
       prisma.jurisdictionContent.findFirst = jest
         .fn()
-        // The English row a non-English write stamps its source hashes against, then the row itself.
+        // The English row a non-English write stamps against, the row as stored, then the row
+        // itself.
         .mockResolvedValueOnce({ contact: { phone: '555-0100' } })
+        .mockResolvedValueOnce({ contact: { phone: '555-0199' } })
         .mockResolvedValueOnce({ id: 'row' });
       prisma.jurisdictionContent.create = jest.fn();
 
@@ -303,6 +305,7 @@ describe('Testing jurisdiction content service', () => {
       prisma.jurisdictionContent.findFirst = jest
         .fn()
         .mockResolvedValueOnce({ contact: { phone: '555-0100' } })
+        .mockResolvedValueOnce({ contact: {} })
         .mockResolvedValueOnce({ id: 'row' });
       prisma.jurisdictionContent.create = jest.fn();
 
@@ -370,6 +373,7 @@ describe('Testing jurisdiction content service', () => {
             ],
           },
         })
+        .mockResolvedValueOnce(null)
         .mockResolvedValueOnce({ id: 'row' });
       prisma.jurisdictionContent.create = jest.fn().mockResolvedValue({});
 
@@ -393,6 +397,47 @@ describe('Testing jurisdiction content service', () => {
         .calls[0][0].data.faq;
       expect(written.categories[0].items[0]._sourceHashes).toEqual({
         answerHtml: sourceHash('<p>Apply online.</p>'),
+      });
+    });
+
+    it('keeps the baseline of a field the write leaves alone', async () => {
+      prisma.jurisdictionContent.findFirst = jest
+        .fn()
+        // English as it stands now: the phone changed since the Spanish row was translated.
+        .mockResolvedValueOnce({
+          contact: { phone: '(415) 555-0199', email: 'apply@example.gov' },
+        })
+        // The Spanish row as stored, translated from the earlier English.
+        .mockResolvedValueOnce({
+          contact: {
+            phone: 'Telefono antiguo',
+            email: 'solicitar@example.gov',
+            _sourceHashes: {
+              phone: sourceHash('(415) 555-0100'),
+              email: sourceHash('solicitudes@example.gov'),
+            },
+          },
+        })
+        .mockResolvedValueOnce({ id: 'row' });
+      prisma.jurisdictionContent.create = jest.fn().mockResolvedValue({});
+
+      await service.updateContent(
+        randomUUID(),
+        LanguagesEnum.es,
+        {
+          contact: {
+            phone: 'Telefono antiguo',
+            email: 'nueva@example.gov',
+          },
+        } as JurisdictionContentUpdate,
+        adminUser,
+      );
+
+      const written = (prisma.jurisdictionContent.create as jest.Mock).mock
+        .calls[0][0].data.contact;
+      expect(written._sourceHashes).toEqual({
+        phone: sourceHash('(415) 555-0100'),
+        email: sourceHash('apply@example.gov'),
       });
     });
 

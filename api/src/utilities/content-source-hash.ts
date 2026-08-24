@@ -94,14 +94,34 @@ const walkPairs = (
  * the English value it was translated from. A field with no English counterpart has no baseline and
  * is left without one.
  */
-export const stampSourceHashes = <T>(english: unknown, language: T): T => {
+export const stampSourceHashes = <T>(
+  english: unknown,
+  language: T,
+  stored?: unknown,
+): T => {
   if (!isPlainObject(language)) {
     return language;
   }
 
+  const priorHashes = new Map<string, unknown>();
+  const priorValues = new Map<string, unknown>();
+  walkPairs(english, stored, (storedObject, field, _englishValue, path) => {
+    const hashes = storedObject[HASHES];
+    if (isPlainObject(hashes)) {
+      priorHashes.set(path, hashes[field]);
+    }
+    priorValues.set(path, storedObject[field]);
+  });
+
   const stamped = JSON.parse(JSON.stringify(language)) as T;
-  walkPairs(english, stamped, (languageObject, field, englishValue) => {
-    const hash = hashOf(englishValue);
+  walkPairs(english, stamped, (languageObject, field, englishValue, path) => {
+    const prior = priorHashes.get(path);
+    const unchanged =
+      priorValues.has(path) &&
+      JSON.stringify(priorValues.get(path)) ===
+        JSON.stringify(languageObject[field]);
+    const hash =
+      unchanged && typeof prior === 'string' ? prior : hashOf(englishValue);
     const hashes = isPlainObject(languageObject[HASHES])
       ? (languageObject[HASHES] as Record<string, unknown>)
       : {};

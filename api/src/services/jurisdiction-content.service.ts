@@ -161,7 +161,13 @@ export class JurisdictionContentService {
             where: { jurisdictionId, language: LanguagesEnum.en },
             select: CONTENT_SELECT,
           });
-    const data = this.contentData(dto, english);
+    const storedRow = english
+      ? await this.prisma.jurisdictionContent.findFirst({
+          where,
+          select: CONTENT_SELECT,
+        })
+      : null;
+    const data = this.contentData(dto, english, storedRow);
 
     if (dto.lastUpdatedAt) {
       const result = await this.prisma.jurisdictionContent.updateMany({
@@ -214,13 +220,16 @@ export class JurisdictionContentService {
   private contentData(
     dto: JurisdictionContentUpdate,
     english?: MergeableContent | null,
+    stored?: MergeableContent | null,
   ): Prisma.JurisdictionContentUncheckedUpdateManyInput {
     const asJson = (value: unknown) =>
       value == null
         ? Prisma.DbNull
         : (JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue);
     const stamped = (field: ContentField) =>
-      english ? stampSourceHashes(english[field], dto[field]) : dto[field];
+      english
+        ? stampSourceHashes(english[field], dto[field], stored?.[field])
+        : dto[field];
     return Object.fromEntries(
       CONTENT_FIELDS.map((field) => [field, asJson(stamped(field))] as const),
     );
