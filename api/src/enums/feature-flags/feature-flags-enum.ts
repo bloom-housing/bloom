@@ -32,6 +32,7 @@ export enum FeatureFlagEnum {
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
+  enableHomePageSearchHero = 'enableHomePageSearchHero',
   enableHousingAdvocate = 'enableHousingAdvocate',
   enableHousingBasics = 'enableHousingBasics',
   enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
@@ -240,6 +241,10 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableHomeType,
     description: 'When true, home type feature is turned on',
+  },
+  {
+    name: FeatureFlagEnum.enableHomePageSearchHero,
+    description: 'When true, the home page hero has a search form',
   },
   {
     name: FeatureFlagEnum.enableHousingAdvocate,

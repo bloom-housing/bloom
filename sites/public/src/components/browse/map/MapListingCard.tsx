@@ -30,6 +30,7 @@ export const MapListingCard = ({
 }: MapListingCardProps) => {
   const { activeFeatureFlags } = useListingsMapContext()
   const enableUnitGroups = activeFeatureFlags?.includes(FeatureFlagEnum.enableUnitGroups)
+  const enableFilterByCounty = activeFeatureFlags?.includes(FeatureFlagEnum.enableFilterByCounty)
 
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
   const listingTags = getListingTags(listing, {
@@ -108,8 +109,7 @@ export const MapListingCard = ({
               </Link>
 
               <div className={styles["address"]}>
-                {/* TODO: make the county display conditional on if the county filter is enabled */}
-                {oneLineAddress(listing.listingsBuildingAddress, true)}
+                {oneLineAddress(listing.listingsBuildingAddress, enableFilterByCounty)}
               </div>
               {listingTags.length > 0 && (
                 <div className={`${styles["tags"]}`}>
