@@ -1,6 +1,6 @@
-import Markdown from "markdown-to-jsx"
 import { t } from "@bloom-housing/ui-components"
 import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { StoredHtml } from "../components/shared/StoredHtml"
 import { FooterContent, FooterLinks } from "./generic_footer_content"
 
 const hasText = (value?: string | null) => !!value?.trim()
@@ -11,7 +11,7 @@ export const getJurisdictionFooterTextContent = (
   const footer = content?.footer
   const textSections = (footer?.textSectionsHtml ?? [])
     .filter(hasText)
-    .map((section, index) => <Markdown key={index}>{section}</Markdown>)
+    .map((section, index) => <StoredHtml key={index} html={section} />)
 
   // A logo is the image; without one there is nothing to show, whatever the other fields say.
   const logo = hasText(footer?.logo?.logoSrc)

@@ -35,6 +35,69 @@ describe("getJurisdictionFaqContent", () => {
     expect(screen.getByText("Apply online.")).toBeInTheDocument()
   })
 
+  it("renders stored HTML as written, without markdown rules rewriting it", () => {
+    const result = getJurisdictionFaqContent(
+      content({
+        faq: {
+          categories: [
+            {
+              id: "applying",
+              title: "Applying",
+              items: [
+                {
+                  id: "a",
+                  question: "Priority?",
+                  answerHtml: "<p>#1 priority is applying early</p>",
+                },
+                { id: "b", question: "Form?", answerHtml: "<p>Use form HUD-52517_rev_2</p>" },
+              ],
+            },
+          ],
+        },
+      })
+    )
+
+    const { container } = render(
+      <div>
+        {result.categories[0].faqs.map((faq, index) => (
+          <div key={index}>{faq.answer}</div>
+        ))}
+      </div>
+    )
+
+    expect(screen.getByText("#1 priority is applying early")).toBeInTheDocument()
+    expect(screen.getByText("Use form HUD-52517_rev_2")).toBeInTheDocument()
+    expect(container.querySelector("h1")).toBeNull()
+    expect(container.querySelector("em")).toBeNull()
+  })
+
+  it("does not turn a markdown image in stored text into a request for it", () => {
+    const result = getJurisdictionFaqContent(
+      content({
+        faq: {
+          categories: [
+            {
+              id: "applying",
+              title: "Applying",
+              items: [
+                {
+                  id: "how",
+                  question: "How?",
+                  answerHtml: "<p>Apply ![](https://example.test/p.png) online</p>",
+                },
+              ],
+            },
+          ],
+        },
+      })
+    )
+
+    const { container } = render(<div>{result.categories[0].faqs[0].answer}</div>)
+
+    expect(container.querySelector("img")).toBeNull()
+    expect(container.querySelector("link")).toBeNull()
+  })
+
   it("returns null when there is nothing to show, so the bundled content stands", () => {
     expect(getJurisdictionFaqContent(null)).toBeNull()
     expect(getJurisdictionFaqContent(content({}))).toBeNull()

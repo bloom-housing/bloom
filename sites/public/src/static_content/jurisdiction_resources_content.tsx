@@ -1,7 +1,7 @@
-import Markdown from "markdown-to-jsx"
 import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ResourceCards } from "../components/resources/Resources"
 import ResourceCard from "../components/resources/ResourceCard"
+import { StoredHtml } from "../components/shared/StoredHtml"
 
 const hasText = (value?: string | null) => !!value?.trim()
 
@@ -22,7 +22,7 @@ export const getJurisdictionResourcesContent = (
             key={card.id}
             title={card.title}
             href={hasText(card.href) ? card.href : undefined}
-            content={hasText(card.contentHtml) ? <Markdown>{card.contentHtml}</Markdown> : ""}
+            content={hasText(card.contentHtml) ? <StoredHtml html={card.contentHtml} /> : ""}
           />
         )),
     }))
