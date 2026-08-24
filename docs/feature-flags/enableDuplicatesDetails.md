@@ -14,4 +14,4 @@ The url for the terms of use link is set in the db translations and must be chan
 
 ## Images
 
-![image.png](./images/image%2083.png)
+![image.png](./images/image%2087.png)
