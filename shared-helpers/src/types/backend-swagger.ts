@@ -3951,7 +3951,7 @@ export interface ListingFilterParams {
   availability?: FilterAvailabilityEnum
 
   /**  */
-  bathrooms?: []
+  bathrooms?: number
 
   /**  */
   bedrooms?: number
@@ -11702,6 +11702,7 @@ export enum FeatureFlagEnum {
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
+  "enableHomePageSearchHero" = "enableHomePageSearchHero",
   "enableHousingAdvocate" = "enableHousingAdvocate",
   "enableHousingBasics" = "enableHousingBasics",
   "enableHousingDeveloperOwner" = "enableHousingDeveloperOwner",
