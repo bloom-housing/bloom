@@ -138,8 +138,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
-  console.log("enableMultiselectVoucherQuestion", enableMultiselectVoucherQuestion)
-
   const units = listingDto?.units
 
   const defaultValues = editMode ? mapApiToForm(application, listingDto, enableV2MSQ) : {}
