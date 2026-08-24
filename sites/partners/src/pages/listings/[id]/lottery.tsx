@@ -58,6 +58,11 @@ const Lottery = (props: { listing: Listing | undefined }) => {
     jurisdictionData?.id
   )
 
+  const enableNonAdminLotteries = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNonAdminLotteries,
+    jurisdictionData?.id
+  )
+
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && jurisdictionData?.enablePartnerDemographics
 
@@ -305,7 +310,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                 {t("listings.lottery.reRun")}
               </Button>
             )}
-            {listing.lotteryStatus === LotteryStatusEnum.ran && (
+            {listing.lotteryStatus === LotteryStatusEnum.ran && !enableNonAdminLotteries && (
               <Button
                 className={styles["action"]}
                 onClick={() => {
