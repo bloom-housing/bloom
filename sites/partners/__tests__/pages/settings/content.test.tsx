@@ -523,6 +523,170 @@ describe("<SettingsContent>", () => {
       expect(screen.getByRole("button", { name: "Save" })).toBeDisabled()
     })
 
+    it("carries a drawer edit through to the save", async () => {
+      const bodies: Record<string, unknown>[] = []
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          footer: { links: [{ id: "about", text: "About", href: "/about" }] },
+        }),
+      ])
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, async (req, res, ctx) => {
+            bodies.push(await req.json())
+            return res(ctx.json({}))
+          })
+        )
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.click(await screen.findByRole("button", { name: "Edit" }))
+
+      await userEvent.clear(await screen.findByLabelText("Link text"))
+      await userEvent.type(screen.getByLabelText("Link text"), "About us")
+      await userEvent.clear(screen.getByLabelText("Link address"))
+      await userEvent.type(screen.getByLabelText("Link address"), "/about-us")
+      await userEvent.click(screen.getByRole("button", { name: "Done" }))
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await waitFor(() => expect(bodies).toHaveLength(1))
+      expect(bodies[0].footer).toEqual({
+        links: [{ id: "about", text: "About us", href: "/about-us" }],
+      })
+    })
+
+    it("adds a category through the drawer it opens", async () => {
+      const bodies: Record<string, unknown>[] = []
+      respondWithRows([row(LanguagesEnum.en)])
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, async (req, res, ctx) => {
+            bodies.push(await req.json())
+            return res(ctx.json({}))
+          })
+        )
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "faq")
+      await userEvent.click(await screen.findByRole("button", { name: "Add category" }))
+
+      await userEvent.click(await screen.findByRole("button", { name: "Add a value" }))
+      await userEvent.type(await screen.findByLabelText("Category title"), "Applying")
+      await userEvent.click(screen.getByRole("button", { name: "Done" }))
+
+      expect(await screen.findByText("Applying")).toBeInTheDocument()
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await waitFor(() => expect(bodies).toHaveLength(1))
+      const categories = (bodies[0].faq as { categories: { id: string; title: string }[] })
+        .categories
+      expect(categories).toHaveLength(1)
+      expect(categories[0].title).toBe("Applying")
+      expect(categories[0].id).toEqual(expect.any(String))
+    })
+
+    it("adds a question to the category it was opened from", async () => {
+      const bodies: Record<string, unknown>[] = []
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          faq: { categories: [{ id: "applying", title: "Applying", items: [] }] },
+        }),
+      ])
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, async (req, res, ctx) => {
+            bodies.push(await req.json())
+            return res(ctx.json({}))
+          })
+        )
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "faq")
+      await userEvent.click(await screen.findByRole("button", { name: "Add question" }))
+
+      const starters = await screen.findAllByRole("button", { name: "Add a value" })
+      await userEvent.click(starters[0])
+      await userEvent.type(
+        await screen.findByLabelText("Question", { selector: "input" }),
+        "How do I apply?"
+      )
+      await userEvent.click(screen.getByRole("button", { name: "Done" }))
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await waitFor(() => expect(bodies).toHaveLength(1))
+      const categories = (bodies[0].faq as { categories: { items: { question: string }[] }[] })
+        .categories
+      expect(categories[0].items).toHaveLength(1)
+      expect(categories[0].items[0].question).toBe("How do I apply?")
+    })
+
+    it("starts a translation from the English value and gives it back", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          contact: {
+            phone: "555-0100",
+            email: "apply@example.gov",
+            hours: "Nine to five",
+            addressHtml: "<p>1 Main St</p>",
+          },
+        }),
+        row(LanguagesEnum.es, {
+          contact: {
+            email: "solicitar@example.gov",
+            hours: "Nueve a cinco",
+            addressHtml: "<p>1 Calle Mayor</p>",
+          },
+        }),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+
+      await userEvent.click(await screen.findByRole("button", { name: "Translate this" }))
+
+      expect(await screen.findByLabelText("Phone")).toHaveValue("555-0100")
+
+      const phoneEditor = screen.getByLabelText("Phone").closest(".field-editor")
+      await userEvent.click(within(phoneEditor).getByRole("button", { name: "Use English" }))
+
+      expect(await screen.findByRole("button", { name: "Translate this" })).toBeInTheDocument()
+      expect(screen.queryByLabelText("Phone")).toBeNull()
+    })
+
+    it("reloads the stored row when the admin discards after a conflict", async () => {
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, (_req, res, ctx) =>
+            res(ctx.status(409), ctx.json({ message: "jurisdictionContentConflict" }))
+          )
+        )
+      )
+      respondWithRows([englishRow()])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
+      await userEvent.type(await screen.findByLabelText("Phone"), "9")
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await screen.findByText("This content changed while you were editing")
+      await userEvent.click(screen.getByRole("button", { name: "Discard mine" }))
+
+      await waitFor(() =>
+        expect(screen.queryByText("This content changed while you were editing")).toBeNull()
+      )
+      expect(await screen.findByLabelText("Phone")).toHaveValue("555-0100")
+      expect(screen.getByRole("button", { name: "Discard changes" })).toBeDisabled()
+    })
+
     it("confirms before a save empties a field inside a list", async () => {
       const bodies: Record<string, unknown>[] = []
       respondWithRows([
