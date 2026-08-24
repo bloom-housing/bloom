@@ -77,6 +77,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableMultiselectVoucherQuestion](./feature-flags/enableMultiselectVoucherQuestion.md) | When true, the vouchers question on the application form becomes a multi-select checkbox experience with Section 8, rental assistance, and none of the above as options |
 | [enableNeighborhoodAmenities](./feature-flags/enableNeighborhoodAmenities.md) | When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view |
 | [enableNeighborhoodAmenitiesDropdown](./feature-flags/enableNeighborhoodAmenitiesDropdown.md) | When true, neighborhood amenities inputs render as dropdowns with distance options instead of textareas |
+| [enableNonAdminLotteries](./feature-flags/enableNonAdminLotteries.md) | When true, the lotteries can be published without the admin confirmation |
 | [enableNonRegulatedListings](./feature-flags/enableNonRegulatedListings.md) | When true, non-regulated listings are displayed in listing creation/edit and public listing view |
 | [enableOnlyAdminCanAddAppsAfterClose](./feature-flags/enableOnlyAdminCanAddAppsAfterClose.md) | When true, only admin level users are allowed to add paper apps after a listing has closed |
 | [enableOnlyAdminCanEditListingDates](./feature-flags/enableOnlyAdminCanEditListingDates.md) | When true, only admins level users can edit the application close dates, the review order type or the lottery run date on a published listing |

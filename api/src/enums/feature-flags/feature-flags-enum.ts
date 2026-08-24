@@ -52,6 +52,7 @@ export enum FeatureFlagEnum {
   enableMultiselectVoucherQuestion = 'enableMultiselectVoucherQuestion',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enableNeighborhoodAmenitiesDropdown = 'enableNeighborhoodAmenitiesDropdown',
+  enableNonAdminLotteries = 'enableNonAdminLotteries',
   enableNonRegulatedListings = 'enableNonRegulatedListings',
   enableOnlyAdminCanAddAppsAfterClose = 'enableOnlyAdminCanAddAppsAfterClose',
   enableOnlyAdminCanEditListingDates = 'enableOnlyAdminCanEditListingDates',
@@ -334,6 +335,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown,
     description:
       'When true, neighborhood amenities inputs render as dropdowns with distance options instead of textareas',
+  },
+  {
+    name: FeatureFlagEnum.enableNonAdminLotteries,
+    description:
+      'When true, the lotteries can be published without the admin confirmation',
   },
   {
     name: FeatureFlagEnum.enableNonRegulatedListings,
