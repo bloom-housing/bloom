@@ -2,8 +2,7 @@ import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/typ
 import { ResourceCards } from "../components/resources/Resources"
 import ResourceCard from "../components/resources/ResourceCard"
 import { StoredHtml } from "../components/shared/StoredHtml"
-
-const hasText = (value?: string | null) => !!value?.trim()
+import { asList, hasText } from "./contentHelpers"
 
 export const getJurisdictionResourcesContent = (
   content?: JurisdictionContentFields | null
@@ -11,22 +10,22 @@ export const getJurisdictionResourcesContent = (
   const resources = content?.resources
   if (!resources) return null
 
-  const resourceSections = (resources.resourceSections ?? [])
+  const resourceSections = asList(resources.resourceSections)
     .map((section) => ({
       sectionTitle: section.sectionTitle,
       sectionSubtitle: section.sectionSubtitle,
-      cards: (section.cards ?? [])
-        .filter((card) => hasText(card.title) || hasText(card.contentHtml))
+      cards: asList(section.cards)
+        .filter((card) => hasText(card.title) && hasText(card.contentHtml))
         .map((card) => (
           <ResourceCard
             key={card.id}
             title={card.title}
             href={hasText(card.href) ? card.href : undefined}
-            content={hasText(card.contentHtml) ? <StoredHtml html={card.contentHtml} /> : ""}
+            content={<StoredHtml html={card.contentHtml} />}
           />
         )),
     }))
-    .filter((section) => section.cards.length > 0 || hasText(section.sectionTitle))
+    .filter((section) => section.cards.length > 0)
 
   const contactCard = {
     departmentTitle: hasText(resources.contactCard?.departmentTitle)

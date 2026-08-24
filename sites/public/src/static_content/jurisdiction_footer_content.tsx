@@ -1,15 +1,14 @@
 import { t } from "@bloom-housing/ui-components"
 import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { StoredHtml } from "../components/shared/StoredHtml"
+import { asList, hasText } from "./contentHelpers"
 import { FooterContent, FooterLinks } from "./generic_footer_content"
-
-const hasText = (value?: string | null) => !!value?.trim()
 
 export const getJurisdictionFooterTextContent = (
   content?: JurisdictionContentFields | null
 ): FooterContent | null => {
   const footer = content?.footer
-  const textSections = (footer?.textSectionsHtml ?? [])
+  const textSections = asList(footer?.textSectionsHtml)
     .filter(hasText)
     .map((section, index) => <StoredHtml key={index} html={section} />)
 
@@ -30,7 +29,7 @@ export const getJurisdictionFooterTextContent = (
 export const getJurisdictionFooterLinksContent = (
   content?: JurisdictionContentFields | null
 ): FooterLinks | null => {
-  const links = (content?.footer?.links ?? [])
+  const links = asList(content?.footer?.links)
     .filter((link) => hasText(link.text) && hasText(link.href))
     .map((link) => ({ text: link.text, href: link.href }))
 

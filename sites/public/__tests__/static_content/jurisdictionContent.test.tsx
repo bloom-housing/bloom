@@ -98,6 +98,52 @@ describe("getJurisdictionFaqContent", () => {
     expect(container.querySelector("link")).toBeNull()
   })
 
+  it("hides an item when either of its required fields was emptied", () => {
+    const emptied = getJurisdictionFaqContent(
+      content({
+        faq: {
+          categories: [
+            {
+              id: "applying",
+              title: "Applying",
+              items: [
+                { id: "a", question: "", answerHtml: "<p>Apply online.</p>" },
+                { id: "b", question: "When?", answerHtml: "" },
+                { id: "c", question: "Where?", answerHtml: "<p>Anywhere.</p>" },
+              ],
+            },
+          ],
+        },
+      })
+    )
+
+    expect(emptied.categories[0].faqs.map((faq) => faq.question)).toEqual(["Where?"])
+  })
+
+  it("drops a category once every item in it is hidden", () => {
+    const result = getJurisdictionFaqContent(
+      content({
+        faq: {
+          categories: [
+            {
+              id: "applying",
+              title: "Applying",
+              items: [{ id: "a", question: "How?", answerHtml: "" }],
+            },
+          ],
+        },
+      })
+    )
+
+    expect(result).toBeNull()
+  })
+
+  it("steps over a document whose lists are not lists", () => {
+    const malformed = content({ faq: { categories: "not a list" } } as never)
+
+    expect(getJurisdictionFaqContent(malformed)).toBeNull()
+  })
+
   it("returns null when there is nothing to show, so the bundled content stands", () => {
     expect(getJurisdictionFaqContent(null)).toBeNull()
     expect(getJurisdictionFaqContent(content({}))).toBeNull()
@@ -149,6 +195,12 @@ describe("getJurisdictionFooterTextContent", () => {
     expect(getJurisdictionFooterTextContent(content({ footer: { links: [] } }))).toBeNull()
     expect(getJurisdictionFooterTextContent(null)).toBeNull()
   })
+
+  it("steps over a text sections field that is not a list", () => {
+    const malformed = content({ footer: { textSectionsHtml: "<p>Hi</p>" } } as never)
+
+    expect(getJurisdictionFooterTextContent(malformed)).toBeNull()
+  })
 })
 
 describe("getJurisdictionFooterLinksContent", () => {
@@ -191,6 +243,52 @@ describe("getJurisdictionResourcesContent", () => {
       cards: [{ id: "shelter", title: "Shelter", href: "/shelter", contentHtml: "<p>Beds</p>" }],
     },
   ]
+
+  it("hides a card when either of its required fields was emptied", () => {
+    const result = getJurisdictionResourcesContent(
+      content({
+        resources: {
+          resourceSections: [
+            {
+              id: "immediate",
+              sectionTitle: "Immediate help",
+              cards: [
+                { id: "a", title: "", href: "/a", contentHtml: "<p>Beds</p>" },
+                { id: "b", title: "Food", href: "/b", contentHtml: "" },
+                { id: "c", title: "Shelter", href: "/c", contentHtml: "<p>Beds</p>" },
+              ],
+            },
+          ],
+        },
+      })
+    )
+
+    expect(result.resourceSections[0].cards).toHaveLength(1)
+  })
+
+  it("drops a section once every card in it is hidden, rather than leaving a heading alone", () => {
+    const result = getJurisdictionResourcesContent(
+      content({
+        resources: {
+          resourceSections: [
+            {
+              id: "immediate",
+              sectionTitle: "Immediate help",
+              cards: [{ id: "a", title: "Shelter", href: "/a", contentHtml: "" }],
+            },
+          ],
+        },
+      })
+    )
+
+    expect(result).toBeNull()
+  })
+
+  it("steps over a document whose lists are not lists", () => {
+    const malformed = content({ resources: { resourceSections: "not a list" } } as never)
+
+    expect(getJurisdictionResourcesContent(malformed)).toBeNull()
+  })
 
   it("maps sections and renders each card", () => {
     const result = getJurisdictionResourcesContent(
