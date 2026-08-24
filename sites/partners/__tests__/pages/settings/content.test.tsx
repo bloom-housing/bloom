@@ -376,6 +376,100 @@ describe("<SettingsContent>", () => {
       expect(screen.getByRole("button", { name: "Discard mine" })).toBeInTheDocument()
     })
 
+    it("saves the admin's edits when they overwrite, not the row that arrived meanwhile", async () => {
+      const bodies: Record<string, unknown>[] = []
+      let reads = 0
+      let conflicted = false
+      server.use(
+        ...CONTENT_PATHS.map((path) =>
+          rest.get(path, (_req, res, ctx) => {
+            reads += 1
+            return res(
+              ctx.json([
+                conflicted
+                  ? row(LanguagesEnum.en, {
+                      contact: { phone: "555-0200" },
+                      disclaimers: { privacyHtml: "<p>Privacy</p>" },
+                      updatedAt: new Date("2026-02-02").toISOString(),
+                    })
+                  : englishRow(),
+              ])
+            )
+          })
+        ),
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, async (req, res, ctx) => {
+            if (!conflicted) {
+              conflicted = true
+              return res(ctx.status(409), ctx.json({ message: "jurisdictionContentConflict" }))
+            }
+            bodies.push(await req.json())
+            return res(ctx.json({}))
+          })
+        )
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
+      await userEvent.type(await screen.findByLabelText("Phone"), "9")
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await screen.findByText("This content changed while you were editing")
+      const readsBeforeOverwrite = reads
+      await waitFor(() => expect(reads).toBeGreaterThan(readsBeforeOverwrite - 1))
+      expect(screen.getByLabelText("Phone")).toHaveValue("555-01009")
+
+      await userEvent.click(screen.getByRole("button", { name: "Save mine" }))
+
+      await waitFor(() => expect(bodies).toHaveLength(1))
+      expect(bodies[0]).toEqual(
+        expect.objectContaining({
+          contact: { phone: "555-01009" },
+          lastUpdatedAt: new Date("2026-02-02").toISOString(),
+        })
+      )
+      await waitFor(() => expect(toasts).toContain("Content saved"))
+    })
+
+    it("reports a save that fails for a reason other than a conflict", async () => {
+      respondWithRows([englishRow()])
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, (_req, res, ctx) => res(ctx.status(400), ctx.json({ message: "bad" })))
+        )
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
+      await userEvent.type(await screen.findByLabelText("Phone"), "9")
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await waitFor(() =>
+        expect(toasts.some((toast) => toast.startsWith("Looks like something went wrong"))).toBe(
+          true
+        )
+      )
+      expect(screen.queryByText("This content changed while you were editing")).toBeNull()
+    })
+
+    it("says the content could not be loaded rather than showing it as unset", async () => {
+      server.use(
+        ...CONTENT_PATHS.map((path) => rest.get(path, (_req, res, ctx) => res(ctx.status(500))))
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      expect(
+        await screen.findByText(
+          "The stored content could not be loaded, so editing is unavailable. Reload to try again."
+        )
+      ).toBeInTheDocument()
+      expect(screen.queryByText("Not set")).toBeNull()
+      expect(screen.getByRole("button", { name: "Save" })).toBeDisabled()
+    })
+
     it("confirms before a save takes content off the site", async () => {
       const bodies: Record<string, unknown>[] = []
       respondWithRows([englishRow(), row(LanguagesEnum.es, { contact: { phone: "555-0199" } })])

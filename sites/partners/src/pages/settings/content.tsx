@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { Select, t, useMutate } from "@bloom-housing/ui-components"
+import { AlertBox, Select, t, useMutate } from "@bloom-housing/ui-components"
 import { Button, Card } from "@bloom-housing/ui-seeds"
 import { useSWRConfig } from "swr"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
@@ -237,6 +237,7 @@ const SettingsContent = () => {
   const {
     data: rows,
     loading,
+    error: loadError,
     cacheKey,
   } = useJurisdictionContent(authorized ? activeJurisdictionId : "")
 
@@ -246,7 +247,7 @@ const SettingsContent = () => {
   const englishDraft = useMemo(() => draftFromRow(englishRow), [englishRow])
   const isEnglish = activeLanguage === LanguagesEnum.en
   const direction = RIGHT_TO_LEFT_LANGUAGES.includes(activeLanguage) ? "rtl" : "ltr"
-  const scope = `${activeJurisdictionId}|${activeLanguage}|${String(languageRow?.updatedAt ?? "")}`
+  const scope = `${activeJurisdictionId}|${activeLanguage}`
   const draft = draftState?.scope === scope ? draftState.draft : savedDraft
   const setDraft = (apply: (current: ContentDraft) => ContentDraft) =>
     setDraftState((current) => ({
@@ -285,29 +286,28 @@ const SettingsContent = () => {
   }
 
   const runSave = (toSave: ContentDraft) =>
-    saveContent(() =>
-      jurisdictionContentService
-        .updateJurisdictionContent({
+    saveContent(async () => {
+      try {
+        await jurisdictionContentService.updateJurisdictionContent({
           jurisdictionId: activeJurisdictionId,
           language: activeLanguage,
           body: buildUpdate(toSave, languageRow?.updatedAt),
         })
-        .then(() => {
-          setConflict(false)
-          addToast(t("content.alertSaved"), { variant: "success" })
-        })
-        .catch((error) => {
-          if (isConflict(error)) {
-            setConflict(true)
-            return
-          }
+        setConflict(false)
+        setDraftState(null)
+        setResetCount((count) => count + 1)
+        addToast(t("content.alertSaved"), { variant: "success" })
+      } catch (error) {
+        if (isConflict(error)) {
+          setConflict(true)
+        } else {
           addToast(t("errors.alert.badRequest"), { variant: "alert" })
           console.log(error)
-        })
-        .finally(() => {
-          void mutate(cacheKey)
-        })
-    )
+        }
+      } finally {
+        await mutate(cacheKey)
+      }
+    })
 
   const handleSave = () => {
     const paths = DOCUMENTS.flatMap((entry) => (entry.fields ?? []).map((field) => field.path))
@@ -409,7 +409,14 @@ const SettingsContent = () => {
 
         {loading && <p className={styles["status"]}>{t("t.loading")}</p>}
 
+        {!!loadError && (
+          <AlertBox className="mb-4" type="alert">
+            {t("content.alertLoadFailed")}
+          </AlertBox>
+        )}
+
         {!loading &&
+          !loadError &&
           activeFields.map((field) => (
             <ContentFieldCard
               key={field.path}
@@ -427,6 +434,7 @@ const SettingsContent = () => {
             />
           ))}
         {!loading &&
+          !loadError &&
           activeDocument?.textSections &&
           (() => {
             const config = activeDocument.textSections
@@ -490,6 +498,7 @@ const SettingsContent = () => {
           })()}
 
         {!loading &&
+          !loadError &&
           (activeDocument?.lists ?? []).map((list) => (
             <ContentList
               key={list.listPath}

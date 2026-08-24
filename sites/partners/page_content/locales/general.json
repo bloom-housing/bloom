@@ -231,6 +231,7 @@
   "content.sectionTitle": "Section title",
   "content.textSection": "Text section",
   "content.untitledItem": "Untitled",
+  "content.alertLoadFailed": "The stored content could not be loaded, so editing is unavailable. Reload to try again.",
   "content.alertSaved": "Content saved",
   "content.clear": "Clear",
   "content.conflictDescription": "Someone else saved this language after you opened it. Save your version over theirs, or discard your changes and load what is stored.",
