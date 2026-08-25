@@ -1,10 +1,12 @@
 import { useCallback, useContext, useState, useEffect } from "react"
+import { useRouter } from "next/router"
 import useSWR from "swr"
+import axios, { AxiosError } from "axios"
 import qs from "qs"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, CatchNetworkError, MessageContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import {
   AgencyFilterParams,
@@ -13,6 +15,9 @@ import {
   EnumListingFilterParamsComparison,
   EnumMultiselectQuestionFilterParamsComparison,
   EnumPropertyFilterParamsComparison,
+  Listing,
+  ListingFilterParams,
+  ListingOrderByKeys,
   ListingViews,
   MultiselectQuestionFilterParams,
   MultiselectQuestionOrderByKeys,
@@ -21,6 +26,7 @@ import {
   OrderByEnum,
   UserFilterParams,
   UserOrderByKeys,
+  PaginationMeta,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
@@ -59,7 +65,7 @@ type UseListingsDataProps = PaginationProps & {
   search?: string
   sort?: ColumnOrder[]
   roles?: UserRole
-  userJurisidctionIds?: string[]
+  userJurisdictionIds?: string[]
   view?: ListingViews
 }
 
@@ -81,6 +87,85 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
+interface BaseListingData {
+  filter?: ListingFilterParams[]
+  limit?: number | "all"
+  orderBy?: ListingOrderByKeys[]
+  orderDir?: OrderByEnum[]
+  page?: number
+  roles?: UserRole
+  search?: string
+  userId?: string
+  userJurisdictionIds?: string[]
+  view?: ListingViews
+}
+
+export async function fetchBaseListingData({
+  filter = [],
+  limit,
+  orderBy,
+  orderDir,
+  page,
+  roles,
+  search = "",
+  userId,
+  userJurisdictionIds,
+  view,
+}: BaseListingData): Promise<{
+  items: Listing[] | null
+  meta: PaginationMeta | null
+  error: AxiosError<CatchNetworkError> | null
+}> {
+  let listings: Listing[] = []
+  let pagination: PaginationMeta | null = null
+  try {
+    const params: BaseListingData = {
+      filter,
+      limit: limit || "all",
+      orderBy: orderBy || [ListingOrderByKeys.status],
+      orderDir: orderDir || [OrderByEnum.asc],
+      search: search || null,
+      roles: roles || null,
+      page: page || 1,
+      userId: userId || null,
+      userJurisdictionIds: userJurisdictionIds || null,
+      view: view || ListingViews.fundamentals,
+    }
+
+    // filter if logged user is an agent
+    if (roles?.isPartner) {
+      params.filter.push({
+        $comparison: EnumListingFilterParamsComparison["="],
+        leasingAgent: userId,
+      })
+    } else if (roles?.isJurisdictionalAdmin || roles?.isLimitedJurisdictionalAdmin) {
+      params.filter.push({
+        $comparison: EnumListingFilterParamsComparison.IN,
+        jurisdiction: userJurisdictionIds[0],
+      })
+    }
+
+    const response = await axios.post(`/api/adapter/listings/list`, params)
+
+    listings = response.data.items
+    pagination = response.data.meta || null
+  } catch (e) {
+    console.log("fetchBaseListingData error: ", e)
+
+    return {
+      items: null,
+      meta: null,
+      error: e,
+    }
+  }
+
+  return {
+    items: listings,
+    meta: pagination,
+    error: null,
+  }
+}
+
 export function useListingsData({
   page,
   limit,
@@ -88,7 +173,7 @@ export function useListingsData({
   search = "",
   sort,
   roles,
-  userJurisidctionIds,
+  userJurisdictionIds,
   view,
 }: UseListingsDataProps) {
   const params = {
@@ -116,7 +201,7 @@ export function useListingsData({
   } else if (roles?.isJurisdictionalAdmin || roles?.isLimitedJurisdictionalAdmin) {
     params.filter.push({
       $comparison: EnumListingFilterParamsComparison.IN,
-      jurisdiction: userJurisidctionIds[0],
+      jurisdiction: userJurisdictionIds[0],
     })
   }
 
@@ -864,4 +949,71 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
     loading: !error && !data,
     error,
   }
+}
+
+export function useRawTranslations({
+  jurisdictionId,
+  site,
+  language,
+}: {
+  jurisdictionId: string
+  site: string
+  language: string
+}) {
+  const { translationsService } = useContext(AuthContext)
+
+  const fetcher = () => translationsService.getRawTranslations({ jurisdictionId, site, language })
+
+  // Null key so SWR skips the request until a scope is chosen.
+  const cacheKey = jurisdictionId
+    ? `/api/adapter/translations/jurisdictions/${jurisdictionId}/raw/${site}/${language}`
+    : null
+
+  // Writes call `mutate` on this key; refreshing on focus would move data under an in-progress edit.
+  const { data, error } = useSWR(cacheKey, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
+
+  return {
+    cacheKey,
+    data,
+    loading: !!cacheKey && !error && !data,
+    error,
+  }
+}
+
+/**
+ * Warns before unsaved work is lost, on an in-app route change and on the browser closing or
+ * reloading.
+ *
+ * Going back is only partly covered: `beforeunload` does not fire for it, and the history entry is
+ * already popped by the time this runs, so cancelling keeps the edits but leaves the address bar
+ * on the previous URL.
+ */
+export function useUnsavedChangesWarning(hasUnsavedChanges: boolean, message: string) {
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!hasUnsavedChanges) return
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault()
+      event.returnValue = ""
+    }
+
+    const handleRouteChange = () => {
+      if (window.confirm(message)) return
+      router.events.emit("routeChangeError")
+      throw "Route change cancelled: the page has unsaved changes"
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload)
+    router.events.on("routeChangeStart", handleRouteChange)
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload)
+      router.events.off("routeChangeStart", handleRouteChange)
+    }
+  }, [hasUnsavedChanges, message, router.events])
 }

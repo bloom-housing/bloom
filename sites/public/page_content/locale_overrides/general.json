@@ -281,7 +281,7 @@
   "help.housingHelp.vouchers.title": "Section 8 Housing Vouchers and Units",
   "help.housingHelp.vouchers.vacavilleHA": "City of Vacaville Housing Authority",
   "help.housingHelp.vouchers.vallejoHA": "Housing Authority of the City of Vallejo",
-  "listingFilters.countyFilterNote": "(For San Francisco listings, go to <a className='lined' href='https://housing.sfgov.org/' target='_blank'>DAHLIA</a>)",
+  "listingFilters.countyFilterNote": "For San Francisco listings, go to <a className='lined' href='https://housing.sfgov.org/' target='_blank'>DAHLIA</a>",
   "listings.additionalFeesDisclaimer": "Fees are not charged for reasonable accommodations needed due to disability, such as emotional support animals. Fees are also not charged for aids and services needed for effective communication due to a disability. With respect to credit checks, applicants receiving government rent subsidies have the option to provide \"lawful, verifiable alternative evidence\" of their ability to pay rent, instead of relying on their credit history.",
   "listings.petPolicyDescription": "Service dogs and emotional support animals are not pets and are permitted as required by law. Pets may also be required to be allowed in certain types of housing, such as publicly financed housing developments.",
   "listingResource.additionalCard1.title": "Looking for housing in San Francisco?",
@@ -341,5 +341,12 @@
   "welcome.viewAdditionalHousingTruncated": "View opportunities and resources",
   "welcome.viewCountyMap": "View County Map",
   "welcome.whatDoesAffordableMean": "What does “affordable” mean?",
-  "welcome.whatHappens": "What happens after I apply?"
+  "welcome.whatHappens": "What happens after I apply?",
+  "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "resources.contactEmail": "email@email.com",
+  "resources.contactInfo": "Bloomington's Housing & Community Development Department",
+  "resources.housingProgramsTitle": "Bloomington's Housing & Community Development housing programs",
+  "resources.additionalResourcesLink": "/housing-basics",
+  "resources.additionalResourcesTitle": "Get more information about the Accessible Housing Program (AcHP), including a list of covered housing projects, tenant resources, policies, and how to file a grievance.",
+  "welcome.searchSubNote": ""
 }
