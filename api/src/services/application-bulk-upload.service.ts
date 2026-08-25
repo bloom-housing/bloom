@@ -425,7 +425,7 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
    * @param job - The stored job, or null when no job carries that id
    * @returns A notification describing the job, or an error notification when it is missing
    */
-  private mapJobToNotification(
+  mapJobToNotification(
     jobId: string,
     job: BackgroundJob | null,
   ): BulkUploadJobNotification {
