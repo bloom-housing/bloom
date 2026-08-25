@@ -11693,6 +11693,7 @@ export enum FeatureFlagEnum {
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableDbDrivenContent" = "enableDbDrivenContent",
+  "enableDuplicatesDetails" = "enableDuplicatesDetails",
   "enableExportTerms" = "enableExportTerms",
   "enableFaq" = "enableFaq",
   "enableFilterByBathroom" = "enableFilterByBathroom",
