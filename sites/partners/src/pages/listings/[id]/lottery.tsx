@@ -454,7 +454,17 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                     await lotteryService.lotteryGenerate({ body: { id: listing.id } })
                     setLoading(false)
                     setRunModal(false)
-                    addToast(t("listings.lottery.toast.run"), { variant: "success" })
+                    if (enableNonAdminLotteries) {
+                      await lotteryService.lotteryStatus({
+                        body: {
+                          id: listing.id,
+                          lotteryStatus: LotteryStatusEnum.releasedToPartners,
+                        },
+                      })
+                      addToast(t("listings.lottery.toast.released"), { variant: "success" })
+                    } else {
+                      addToast(t("listings.lottery.toast.run"), { variant: "success" })
+                    }
                     await router.push(`/listings/${listing.id}/lottery`)
                   } catch (err) {
                     console.log(err)
