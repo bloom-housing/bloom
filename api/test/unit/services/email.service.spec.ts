@@ -588,7 +588,7 @@ describe('Testing email service', () => {
         'Listing approval requested - listing name',
       );
       expect(emailMock.body).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" class="header-image"/>`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto"/>`,
       );
 
       expect(emailMock.body).toMatch('Hello,');
@@ -660,7 +660,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('Listing changes requested');
       expect(emailMock.body).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" class="header-image"/>`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto"/>`,
       );
       expect(emailMock.body).toMatch('Listing changes requested');
       expect(emailMock.body).toMatch('Hello,');
@@ -705,7 +705,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('New published listing - listing name');
       expect(emailMock.body).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" class="header-image"/>`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto"/>`,
       );
       expect(emailMock.body).toMatch('New published listing');
       expect(emailMock.body).toMatch('Hello,');
