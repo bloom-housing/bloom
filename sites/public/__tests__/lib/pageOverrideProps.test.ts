@@ -31,6 +31,8 @@ const GENERATED = [
 ]
 
 const PER_REQUEST = [
+  "account/application/[id]/index",
+  "account/application/[id]/lottery-results",
   "account/edit",
   "account/notifications",
   "complete-advocate-account",

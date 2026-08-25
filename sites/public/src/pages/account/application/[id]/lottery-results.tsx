@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react"
 import { useRouter } from "next/router"
+import Markdown from "markdown-to-jsx"
 import { t } from "@bloom-housing/ui-components"
 import { AuthContext, BloomCard, CustomIconMap, RequireLogin } from "@bloom-housing/shared-helpers"
 import {
@@ -17,7 +18,7 @@ import {
   ApplicationListingCard,
 } from "../../../../components/account/ApplicationCards"
 import styles from "../../../../../styles/lottery-results.module.scss"
-import Markdown from "markdown-to-jsx"
+import { fetchSharedPageProps } from "../../../../lib/hooks"
 
 const LotteryResults = () => {
   const router = useRouter()
@@ -251,3 +252,12 @@ const LotteryResults = () => {
 }
 
 export default LotteryResults
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getServerSideProps(context: { req: any; query: any; locale?: string }) {
+  const shared = await fetchSharedPageProps(context.locale, context.req)
+
+  return {
+    props: { ...shared },
+  }
+}
