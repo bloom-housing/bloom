@@ -15,7 +15,7 @@ import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
 import { UserStatus } from "../../../lib/constants"
 import { useForm } from "react-hook-form"
-import { useFormConductor } from "../../../lib/hooks"
+import { fetchSharedPageProps, useFormConductor } from "../../../lib/hooks"
 
 const ApplicationCommunityDisclaimer = () => {
   const { profile } = useContext(AuthContext)
@@ -73,3 +73,12 @@ const ApplicationCommunityDisclaimer = () => {
 }
 
 export default ApplicationCommunityDisclaimer
+
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const shared = await fetchSharedPageProps(locale)
+
+  return {
+    props: { ...shared },
+    revalidate: Number(process.env.cacheRevalidate),
+  }
+}

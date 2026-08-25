@@ -29,6 +29,7 @@ import { UserStatus } from "../../../lib/constants"
 import { getListingStatusMessage, isFeatureFlagOn } from "../../../lib/helpers"
 import { AccountTypeDialog } from "../../../components/account/AccountTypeDialog"
 import styles from "../../../layouts/application-form.module.scss"
+import { fetchSharedPageProps } from "../../../lib/hooks"
 
 const loadListing = async (
   listingId,
@@ -278,3 +279,12 @@ const ApplicationChooseLanguage = () => {
 }
 
 export default ApplicationChooseLanguage
+
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const shared = await fetchSharedPageProps(locale)
+
+  return {
+    props: { ...shared },
+    revalidate: Number(process.env.cacheRevalidate),
+  }
+}

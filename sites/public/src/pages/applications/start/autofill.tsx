@@ -14,7 +14,7 @@ import {
 import { Button, LoadingState } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
-import { useFormConductor } from "../../../lib/hooks"
+import { fetchSharedPageProps, useFormConductor } from "../../../lib/hooks"
 import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import AutofillCleaner from "../../../lib/applications/appAutofill"
 import { UserStatus } from "../../../lib/constants"
@@ -191,3 +191,12 @@ const Autofill = () => {
 }
 
 export default Autofill
+
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const shared = await fetchSharedPageProps(locale)
+
+  return {
+    props: { ...shared },
+    revalidate: Number(process.env.cacheRevalidate),
+  }
+}

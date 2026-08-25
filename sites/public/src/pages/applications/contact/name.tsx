@@ -11,7 +11,7 @@ import {
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
-import { useFormConductor } from "../../../lib/hooks"
+import { fetchSharedPageProps, useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
@@ -221,3 +221,12 @@ const ApplicationName = () => {
 }
 
 export default ApplicationName
+
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const shared = await fetchSharedPageProps(locale)
+
+  return {
+    props: { ...shared },
+    revalidate: Number(process.env.cacheRevalidate),
+  }
+}

@@ -21,6 +21,7 @@ import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionCon
 import { UserStatus } from "../../../lib/constants"
 import { isFeatureFlagOn, isUnitGroupAppBase, isUnitGroupAppWaitlist } from "../../../lib/helpers"
 import { AccountTypeDialog } from "../../../components/account/AccountTypeDialog"
+import { fetchSharedPageProps } from "../../../lib/hooks"
 
 const ApplicationConfirmation = () => {
   const { application, listing, conductor } = useContext(AppSubmissionContext)
@@ -190,3 +191,12 @@ const ApplicationConfirmation = () => {
 }
 
 export default ApplicationConfirmation
+
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const shared = await fetchSharedPageProps(locale)
+
+  return {
+    props: { ...shared },
+    revalidate: Number(process.env.cacheRevalidate),
+  }
+}

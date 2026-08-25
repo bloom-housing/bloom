@@ -35,6 +35,7 @@ import ApplicationFormLayout, {
 } from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 import { isFeatureFlagOn } from "../../../lib/helpers"
+import { fetchSharedPageProps } from "../../../lib/hooks"
 
 export class Member implements HouseholdMemberUpdate {
   constructor(orderId: number) {
@@ -589,3 +590,12 @@ const ApplicationMember = () => {
 }
 
 export default ApplicationMember
+
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const shared = await fetchSharedPageProps(locale)
+
+  return {
+    props: { ...shared },
+    revalidate: Number(process.env.cacheRevalidate),
+  }
+}

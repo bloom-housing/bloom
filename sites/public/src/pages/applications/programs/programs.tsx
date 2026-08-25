@@ -5,7 +5,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ApplicationMultiselectQuestionStep from "../../../components/applications/ApplicationMultiselectQuestionStep"
 import { isFeatureFlagOn } from "../../../lib/helpers"
-import { useFormConductor } from "../../../lib/hooks"
+import { fetchSharedPageProps, useFormConductor } from "../../../lib/hooks"
 
 const ApplicationPrograms = () => {
   const { conductor } = useFormConductor("programs")
@@ -29,3 +29,12 @@ const ApplicationPrograms = () => {
 }
 
 export default ApplicationPrograms
+
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const shared = await fetchSharedPageProps(locale)
+
+  return {
+    props: { ...shared },
+    revalidate: Number(process.env.cacheRevalidate),
+  }
+}
