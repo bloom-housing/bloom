@@ -313,6 +313,8 @@ export async function fetchLimitedUnderConstructionListings(req?: any, limit?: n
   )
 }
 
+export const API_TIMEOUT_MS = 5000
+
 let jurisdiction: Jurisdiction | null = null
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -334,11 +336,12 @@ export async function fetchJurisdictionByName(req?: any) {
       `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
       {
         headers,
+        timeout: API_TIMEOUT_MS,
       }
     )
     jurisdiction = jurisdictionRes?.data
   } catch (error) {
-    console.log("error = ", error)
+    console.log("error fetching jurisdiction = ", error.message)
   }
 
   return jurisdiction
@@ -348,8 +351,6 @@ type Cached<T> = { value: T; until: number; phase?: string }
 
 const publicOverridesByLanguage = new Map<string, Cached<Record<string, Record<string, string>>>>()
 const jurisdictionContentByLanguage = new Map<string, Cached<JurisdictionContentFields>>()
-
-export const OVERRIDES_TIMEOUT_MS = 5000
 
 // The documents the public site renders. The endpoint returns all five.
 const RENDERED_DOCUMENTS = ["footer", "faq", "resources"] as const
@@ -387,7 +388,7 @@ const fetchJurisdictionScoped = async <T>(
     const response = await axios.get(`${process.env.backendApiBase}${path}`, {
       params: { ...params, language: key },
       headers,
-      timeout: OVERRIDES_TIMEOUT_MS,
+      timeout: API_TIMEOUT_MS,
     })
     const value = (response?.data ?? null) as T | null
     if (value) {
