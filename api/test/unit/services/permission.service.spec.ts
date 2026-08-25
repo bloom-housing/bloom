@@ -48,7 +48,7 @@ describe('Testing permission service', () => {
     ).toEqual(true);
   });
 
-  it('should add jurisdictional admin user role for user', async () => {
+  it('should add jurisdictional admin user role for user when enableOnlyAdminCanManageUsers is false', async () => {
     const e = await newEnforcer(
       path.join(
         __dirname,
@@ -105,7 +105,75 @@ describe('Testing permission service', () => {
         'example id',
         'user',
         `r.obj.jurisdictionId == 'juris id'`,
-        `(${permissionActions.read}|${permissionActions.invitePartner}|${permissionActions.inviteJurisdictionalAdmin}|${permissionActions.update}|${permissionActions.delete})`,
+        `(${permissionActions.read}|${permissionActions.invite}|${permissionActions.update}|${permissionActions.delete})`,
+      ),
+    ).toEqual(true);
+  });
+
+  it('should add jurisdictional admin user role for user when enableOnlyAdminCanManageUsers is true', async () => {
+    const e = await newEnforcer(
+      path.join(
+        __dirname,
+        '../../../src/permission-configs',
+        'permission_model.conf',
+      ),
+      path.join(
+        __dirname,
+        '../../../src/permission-configs',
+        'permission_policy.csv',
+      ),
+    );
+
+    const user = {
+      id: 'example id',
+      userRoles: {
+        isJurisdictionalAdmin: true,
+      },
+      jurisdictions: [
+        {
+          id: 'juris id',
+          featureFlags: [
+            {
+              name: FeatureFlagEnum.enableOnlyAdminCanManageUsers,
+              active: true,
+            },
+          ],
+        },
+      ],
+    } as User;
+
+    const enforcer = await service.addUserPermissions(e, user);
+    expect(
+      await enforcer.hasRoleForUser(
+        'example id',
+        UserRoleEnum.jurisdictionAdmin,
+      ),
+    ).toEqual(true);
+
+    expect(
+      await enforcer.hasPermissionForUser(
+        'example id',
+        'application',
+        `r.obj.jurisdictionId == 'juris id'`,
+        `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
+      ),
+    ).toEqual(true);
+
+    expect(
+      await enforcer.hasPermissionForUser(
+        'example id',
+        'listing',
+        `r.obj.jurisdictionId == 'juris id'`,
+        `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
+      ),
+    ).toEqual(true);
+
+    expect(
+      await enforcer.hasPermissionForUser(
+        'example id',
+        'user',
+        `r.obj.jurisdictionId == 'juris id'`,
+        `(${permissionActions.read})`,
       ),
     ).toEqual(true);
   });
@@ -476,6 +544,87 @@ describe('Testing permission service', () => {
         `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
       ),
     ).toEqual(true);
+  });
+
+  // Editing both resources is limited to the admin role. Each check names the user's own
+  // jurisdiction: no policy consults `r.obj` today, but that is the request a per-user object rule
+  // would wrongly allow if one were added. Only the actions each resource exposes are listed.
+  const contentPermissions: [string, permissionActions][] = [
+    ['translation', permissionActions.read],
+    ['translation', permissionActions.update],
+    ['translation', permissionActions.delete],
+    ['jurisdictionContent', permissionActions.read],
+    ['jurisdictionContent', permissionActions.update],
+  ];
+
+  // Labelled per permission so a failure names the combination and reports all of them.
+  const contentAccessFor = async (user?: User) =>
+    Promise.all(
+      contentPermissions.map(
+        async ([type, action]) =>
+          `${type}.${action}=${await service.can(user, type, action, {
+            jurisdictionId: 'juris id',
+          })}`,
+      ),
+    );
+
+  it.each([
+    {
+      role: 'a jurisdictional admin',
+      user: {
+        id: 'juris admin id',
+        userRoles: { isJurisdictionalAdmin: true },
+        jurisdictions: [{ id: 'juris id' }],
+        listings: [],
+      } as User,
+    },
+    {
+      role: 'a support admin',
+      user: {
+        id: 'support admin id',
+        userRoles: { isSupportAdmin: true },
+        jurisdictions: [{ id: 'juris id' }],
+        listings: [],
+      } as User,
+    },
+    {
+      role: 'a limited jurisdictional admin',
+      user: {
+        id: 'limited juris admin id',
+        userRoles: { isLimitedJurisdictionalAdmin: true },
+        jurisdictions: [{ id: 'juris id' }],
+        listings: [],
+      } as User,
+    },
+    { role: 'an anonymous request', user: undefined },
+  ])(
+    'should not let $role edit translations or jurisdiction content',
+    async ({ user }) => {
+      expect(await contentAccessFor(user)).toEqual([
+        'translation.read=false',
+        'translation.update=false',
+        'translation.delete=false',
+        'jurisdictionContent.read=false',
+        'jurisdictionContent.update=false',
+      ]);
+    },
+  );
+
+  it('should let an admin edit translations and jurisdiction content', async () => {
+    const admin = {
+      id: 'admin id',
+      userRoles: { isAdmin: true },
+      jurisdictions: [{ id: 'juris id' }],
+      listings: [],
+    } as User;
+
+    expect(await contentAccessFor(admin)).toEqual([
+      'translation.read=true',
+      'translation.update=true',
+      'translation.delete=true',
+      'jurisdictionContent.read=true',
+      'jurisdictionContent.update=true',
+    ]);
   });
 
   it('should allow anonymous to read listings', async () => {

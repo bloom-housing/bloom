@@ -1,4 +1,5 @@
 import React, { useContext, useMemo, useState } from "react"
+import Markdown from "markdown-to-jsx"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
@@ -22,14 +23,16 @@ import {
 import Layout from "../../../../layouts"
 import { getColDefs } from "../../../../components/applications/ApplicationsColDefs"
 import { ApplicationsSideNav } from "../../../../components/applications/ApplicationsSideNav"
-import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
-import ListingGuard from "../../../../components/shared/ListingGuard"
-import { StatusBar } from "../../../../components/shared/StatusBar"
-import { getListingStatusTag } from "../../../../components/listings/helpers"
 import BulkUpdateDrawer from "../../../../components/applications/BulkUpdateDrawer"
+import { getListingStatusTag } from "../../../../components/listings/helpers"
+import { ExportTermsDialog } from "../../../../components/shared/ExportTermsDialog"
+import styles from "../../../../components/shared/ExportTermsDialog.module.scss"
+import ListingGuard from "../../../../components/shared/ListingGuard"
+import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
+import { StatusBar } from "../../../../components/shared/StatusBar"
 
 const ApplicationsList = () => {
-  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn, getJurisdiction } = useContext(AuthContext)
   const router = useRouter()
   const listingId = router.query.id as string
 
@@ -37,33 +40,46 @@ const ApplicationsList = () => {
   const [applicationConfirmAddPostLotteryModal, setApplicationConfirmAddPostLotteryModal] =
     useState(false)
   const [bulkUpdateModalOpen, setBulkUpdateModalOpen] = useState(false)
+  const [isTermsOpen, setIsTermsOpen] = useState(false)
 
   const tableOptions = useAgTable()
 
   /* Data Fetching */
   const { listingDto, listingLoading } = useSingleListingData(listingId)
 
-  const listingJurisdiction = profile?.jurisdictions.find(
-    (jurisdiction) => jurisdiction.id === listingDto?.jurisdictions.id
-  )
-  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableFullTimeStudentQuestion,
-    listingDto?.jurisdictions.id
-  )
+  const jurisdictionData = getJurisdiction(listingDto?.jurisdictions?.id)
+
   const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableWorkInRegion,
-    listingDto?.jurisdictions.id
+    jurisdictionData?.id
+  )
+  const enableApplicationBulkCSVUpdates = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableApplicationBulkCSVUpdates,
+    jurisdictionData?.id
   )
   const enableApplicationStatus = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableApplicationStatus,
-    listingDto?.jurisdictions.id
+    jurisdictionData?.id
+  )
+  const enableExportTerms = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableExportTerms,
+    jurisdictionData?.id
+  )
+  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
+    jurisdictionData?.id
   )
   const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableHousingAdvocate,
-    listingDto?.jurisdictions.id
+    jurisdictionData?.id
+  )
+  const enableOnlyAdminCanAddAppsAfterClose = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableOnlyAdminCanAddAppsAfterClose,
+    jurisdictionData?.id
   )
   const includeDemographicsPartner =
-    profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
+    profile?.userRoles?.isPartner && jurisdictionData?.enablePartnerDemographics
+
   const { onExport, exportLoading } = useZipExport(
     listingId,
     (profile?.userRoles?.isAdmin ||
@@ -77,6 +93,11 @@ const ApplicationsList = () => {
 
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
+  const allowNewApps = !(
+    listingDto?.status === "closed" &&
+    enableOnlyAdminCanAddAppsAfterClose &&
+    (!profile.userRoles?.isAdmin || !profile.userRoles?.isSuperAdmin)
+  )
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
     page: 1,
@@ -91,6 +112,16 @@ const ApplicationsList = () => {
     tableOptions.sort.sortOptions?.[0]?.orderBy as ApplicationOrderByKeys,
     tableOptions.sort.sortOptions?.[0]?.orderDir as OrderByEnum
   )
+
+  const onSubmit = async () => {
+    try {
+      await onExport()
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setIsTermsOpen(false)
+    }
+  }
 
   class formatLinkCell {
     linkWithId: HTMLSpanElement
@@ -227,40 +258,45 @@ const ApplicationsList = () => {
                       }}
                       headerContent={
                         <div className="flex gap-2 items-center">
-                          <Button
-                            onClick={() => {
-                              if (
-                                process.env.showLottery &&
-                                (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
-                                  listingDto.lotteryStatus ===
-                                    LotteryStatusEnum.releasedToPartners ||
-                                  listingDto.lotteryStatus === LotteryStatusEnum.publishedToPublic)
-                              ) {
-                                setApplicationConfirmAddPostLotteryModal(true)
-                              } else if (listingDto.status === ListingsStatusEnum.closed) {
-                                setApplicationConfirmAddModal(true)
-                              } else {
-                                void router.push(`/listings/${listingId}/applications/add`)
-                              }
-                            }}
-                            variant="primary-outlined"
-                            size="sm"
-                            id={"addApplicationButton"}
-                          >
-                            {t("applications.addApplication")}
-                          </Button>
+                          {allowNewApps && (
+                            <Button
+                              onClick={() => {
+                                if (
+                                  process.env.showLottery &&
+                                  (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
+                                    listingDto.lotteryStatus ===
+                                      LotteryStatusEnum.releasedToPartners ||
+                                    listingDto.lotteryStatus ===
+                                      LotteryStatusEnum.publishedToPublic)
+                                ) {
+                                  setApplicationConfirmAddPostLotteryModal(true)
+                                } else if (listingDto.status === ListingsStatusEnum.closed) {
+                                  setApplicationConfirmAddModal(true)
+                                } else {
+                                  void router.push(`/listings/${listingId}/applications/add`)
+                                }
+                              }}
+                              variant="primary-outlined"
+                              size="sm"
+                              id={"addApplicationButton"}
+                            >
+                              {t("applications.addApplication")}
+                            </Button>
+                          )}
 
                           <Button
+                            id={"applicationExportButton"}
                             variant="primary-outlined"
                             size="sm"
-                            onClick={() => onExport()}
+                            onClick={() => (enableExportTerms ? setIsTermsOpen(true) : onExport())}
                             loadingMessage={exportLoading && t("t.formSubmitted")}
                           >
                             {t("t.export")}
                           </Button>
 
-                          {enableApplicationStatus && (
+                          {enableApplicationBulkCSVUpdates && (
                             <Button
+                              id={"applicationBulkUpdateButton"}
                               variant="primary-outlined"
                               size="sm"
                               onClick={() => setBulkUpdateModalOpen(true)}
@@ -271,6 +307,19 @@ const ApplicationsList = () => {
                         </div>
                       }
                     />
+                    <ExportTermsDialog
+                      dialogHeader={t("applications.export.dialogHeader")}
+                      id="applicationExportTermsDialog"
+                      isOpen={isTermsOpen}
+                      onClose={() => setIsTermsOpen(false)}
+                      onSubmit={onSubmit}
+                    >
+                      <p>{t("applications.export.dialogSubheader")}</p>
+                      <h2 className={styles["terms-of-use-text"]}>
+                        {t("authentication.terms.termsOfUse")}
+                      </h2>
+                      <Markdown>{t("applications.export.termsBody")}</Markdown>
+                    </ExportTermsDialog>
                   </>
                 )}
               </article>

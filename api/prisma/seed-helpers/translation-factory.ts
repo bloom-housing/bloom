@@ -134,6 +134,30 @@ const translations = (
             other: 'Otro',
           },
         },
+        applicationBulk: {
+          viewApplications: 'Ver solicitudes',
+          success: {
+            subject:
+              'Su actualización masiva de solicitudes para %{listingName} se ha completado',
+            message: 'Su actualización masiva se ha procesado correctamente.',
+            count: 'Se actualizaron %{updateCount} registros de solicitudes.',
+          },
+          successWithError: {
+            subject:
+              'Su actualización masiva de solicitudes para %{listingName} se ha completado',
+            message:
+              'Su actualización masiva se ha procesado correctamente. Sin embargo, no se pudieron enviar %{failedEmailsCount} correo(s) de notificación a los solicitantes.',
+            errors:
+              'Se actualizaron %{updateCount} registros de solicitudes. Comuníquese con su equipo técnico para conocer los próximos pasos para resolver las notificaciones.',
+          },
+          failure: {
+            subject:
+              'No se pudo completar su actualización masiva de solicitudes para %{listingName}',
+            message:
+              'Su actualización masiva encontró un error y no se pudo completar.',
+            help: 'Los registros anteriores a la fila con error se han actualizado. Si volver a cargar el archivo no soluciona el problema, comuníquese con el equipo de soporte.',
+          },
+        },
         advocateApproved: {
           subject: 'Su cuenta ha sido aprobada',
           hello: 'Hola',
@@ -153,6 +177,14 @@ const translations = (
           rejectionInfoStart:
             'Si cree que esta decisión fue un error o tiene preguntas sobre la elegibilidad, comuníquese con nosotros en',
           rejectionInfoEnd: 'para obtener más información.',
+        },
+        forgotPassword: {
+          subject: '¿Restablecer su contraseña?',
+          resetRequest:
+            'Recibimos una solicitud para restablecer la contraseña de su cuenta del Portal de Vivienda Bloom. Debe hacer clic en el siguiente enlace para completar el restablecimiento:',
+          ignoreRequest:
+            'Este restablecimiento de contraseña solo es válido durante la próxima hora. Si usted no hizo esta solicitud, ignore este correo electrónico.',
+          changePassword: 'Cambiar mi contraseña',
         },
         rentalOpportunity: {
           subject: 'Nueva oportunidad de alquiler en %{listingName}',
@@ -238,6 +270,30 @@ const translations = (
       };
     case LanguagesEnum.vi:
       return {
+        applicationBulk: {
+          viewApplications: 'Xem đơn đăng ký',
+          success: {
+            subject:
+              'Cập nhật hàng loạt đơn đăng ký của bạn cho %{listingName} đã hoàn tất',
+            message: 'Cập nhật hàng loạt của bạn đã được xử lý thành công.',
+            count: 'Đã cập nhật %{updateCount} hồ sơ đơn đăng ký.',
+          },
+          successWithError: {
+            subject:
+              'Cập nhật hàng loạt đơn đăng ký của bạn cho %{listingName} đã hoàn tất',
+            message:
+              'Cập nhật hàng loạt của bạn đã được xử lý thành công. Tuy nhiên, không thể gửi %{failedEmailsCount} email thông báo cho người nộp đơn.',
+            errors:
+              'Đã cập nhật %{updateCount} hồ sơ đơn đăng ký. Vui lòng liên hệ với nhóm kỹ thuật của bạn để biết các bước tiếp theo về việc xử lý thông báo.',
+          },
+          failure: {
+            subject:
+              'Không thể hoàn tất cập nhật hàng loạt đơn đăng ký của bạn cho %{listingName}',
+            message:
+              'Cập nhật hàng loạt của bạn gặp lỗi và không thể hoàn tất.',
+            help: 'Các hồ sơ trước dòng bị lỗi đã được cập nhật. Nếu tải lại tệp của bạn không khắc phục được sự cố, vui lòng liên hệ với nhóm hỗ trợ.',
+          },
+        },
         advocateApproved: {
           subject: 'Tài khoản của bạn đã được phê duyệt',
           hello: 'Xin chào',
@@ -258,6 +314,14 @@ const translations = (
           rejectionInfoStart:
             'Nếu bạn tin rằng quyết định này được đưa ra do sai sót hoặc có câu hỏi về đủ điều kiện, vui lòng liên hệ với chúng tôi tại',
           rejectionInfoEnd: 'để biết thêm thông tin.',
+        },
+        forgotPassword: {
+          subject: 'Đặt lại mật khẩu của bạn?',
+          resetRequest:
+            'Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản Cổng thông tin Nhà ở Bloom của bạn. Bạn phải nhấp vào liên kết sau để hoàn tất việc đặt lại:',
+          ignoreRequest:
+            'Việc đặt lại mật khẩu này chỉ có hiệu lực trong một giờ tới. Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.',
+          changePassword: 'Thay đổi mật khẩu của tôi',
         },
         rentalOpportunity: {
           subject: 'Cơ hội thuê nhà mới tại %{listingName}',
@@ -341,6 +405,26 @@ const translations = (
       };
     case LanguagesEnum.zh:
       return {
+        applicationBulk: {
+          viewApplications: '查看申请',
+          success: {
+            subject: '您针对 %{listingName} 的批量申请更新已完成',
+            message: '您的批量更新已成功处理。',
+            count: '已更新 %{updateCount} 条申请记录。',
+          },
+          successWithError: {
+            subject: '您针对 %{listingName} 的批量申请更新已完成',
+            message:
+              '您的批量更新已成功处理。但是，有 %{failedEmailsCount} 封申请人通知电子邮件无法发送。',
+            errors:
+              '已更新 %{updateCount} 条申请记录。请联系您的技术团队，了解解决通知问题的后续步骤。',
+          },
+          failure: {
+            subject: '您针对 %{listingName} 的批量申请更新无法完成',
+            message: '您的批量更新遇到错误，无法完成。',
+            help: '失败行之前的记录已更新。如果重新上传文件仍无法解决问题，请联系支持团队。',
+          },
+        },
         advocateApproved: {
           subject: '您的账户已被批准',
           hello: '您好',
@@ -358,6 +442,14 @@ const translations = (
           rejectionInfoStart:
             '如果您认为这个决定是错误的或对资格有疑问，请通过以下方式与我们联系',
           rejectionInfoEnd: '获取更多信息。',
+        },
+        forgotPassword: {
+          subject: '重置您的密码？',
+          resetRequest:
+            '我们收到了重置您的 Bloom 住房门户账户密码的请求。您必须点击以下链接才能完成重置：',
+          ignoreRequest:
+            '此密码重置仅在接下来的一小时内有效。如果您没有提出此请求，请忽略此电子邮件。',
+          changePassword: '更改我的密码',
         },
         rentalOpportunity: {
           subject: '新租赁机会：%{listingName}',
@@ -441,6 +533,30 @@ const translations = (
       };
     case LanguagesEnum.tl:
       return {
+        applicationBulk: {
+          viewApplications: 'Tingnan ang mga Aplikasyon',
+          success: {
+            subject:
+              'Kumpleto na ang iyong bulk na pag-update ng aplikasyon para sa %{listingName}',
+            message: 'Matagumpay na naproseso ang iyong bulk na pag-update.',
+            count: '%{updateCount} na talaan ng aplikasyon ang na-update.',
+          },
+          successWithError: {
+            subject:
+              'Kumpleto na ang iyong bulk na pag-update ng aplikasyon para sa %{listingName}',
+            message:
+              'Matagumpay na naproseso ang iyong bulk na pag-update. Gayunpaman, %{failedEmailsCount} na email ng abiso sa aplikante ang hindi naipadala.',
+            errors:
+              '%{updateCount} na talaan ng aplikasyon ang na-update. Mangyaring makipag-ugnayan sa iyong teknikal na koponan para sa mga susunod na hakbang sa paglutas ng mga abiso.',
+          },
+          failure: {
+            subject:
+              'Hindi makumpleto ang iyong bulk na pag-update ng aplikasyon para sa %{listingName}',
+            message:
+              'Nakaranas ng error ang iyong bulk na pag-update at hindi ito makumpleto.',
+            help: 'Ang mga talaan bago ang row na nabigo ay na-update na. Kung hindi maaayos ng muling pag-upload ng iyong file ang isyu, mangyaring makipag-ugnayan sa support team.',
+          },
+        },
         advocateApproved: {
           subject: 'Ang iyong account ay na-apruba na',
           hello: 'Kamusta',
@@ -461,6 +577,14 @@ const translations = (
           rejectionInfoStart:
             'Kung naniniwala ka na ang desisyon na ito ay nagawa sa error o mayroon kang mga tanong tungkol sa eligibility, mangyaring makipag-ugnayan sa amin sa',
           rejectionInfoEnd: 'para sa higit pang impormasyon.',
+        },
+        forgotPassword: {
+          subject: 'I-reset ang iyong password?',
+          resetRequest:
+            'Nakatanggap kami ng kahilingan na i-reset ang password ng iyong account sa Bloom Housing Portal. Kailangan mong i-click ang sumusunod na link upang makumpleto ang pag-reset:',
+          ignoreRequest:
+            'Ang pag-reset ng password na ito ay may bisa lamang sa loob ng susunod na isang oras. Kung hindi ikaw ang gumawa ng kahilingang ito, mangyaring huwag pansinin ang email na ito.',
+          changePassword: 'Baguhin ang aking password',
         },
         rentalOpportunity: {
           subject: 'Bagong pagkakataon sa pag-upa sa %{listingName}',
@@ -546,6 +670,30 @@ const translations = (
       };
     case LanguagesEnum.bn:
       return {
+        applicationBulk: {
+          viewApplications: 'আবেদনগুলো দেখুন',
+          success: {
+            subject:
+              '%{listingName}-এর জন্য আপনার বাল্ক আবেদন আপডেট সম্পন্ন হয়েছে',
+            message: 'আপনার বাল্ক আপডেট সফলভাবে প্রক্রিয়া করা হয়েছে।',
+            count: '%{updateCount}টি আবেদন রেকর্ড আপডেট করা হয়েছে।',
+          },
+          successWithError: {
+            subject:
+              '%{listingName}-এর জন্য আপনার বাল্ক আবেদন আপডেট সম্পন্ন হয়েছে',
+            message:
+              'আপনার বাল্ক আপডেট সফলভাবে প্রক্রিয়া করা হয়েছে। তবে, %{failedEmailsCount}টি আবেদনকারীর বিজ্ঞপ্তি ইমেল পাঠানো যায়নি।',
+            errors:
+              '%{updateCount}টি আবেদন রেকর্ড আপডেট করা হয়েছে। বিজ্ঞপ্তি সমাধানের পরবর্তী পদক্ষেপের জন্য অনুগ্রহ করে আপনার প্রযুক্তিগত দলের সাথে যোগাযোগ করুন।',
+          },
+          failure: {
+            subject:
+              '%{listingName}-এর জন্য আপনার বাল্ক আবেদন আপডেট সম্পন্ন করা যায়নি',
+            message:
+              'আপনার বাল্ক আপডেটে একটি ত্রুটি দেখা দিয়েছে এবং এটি সম্পন্ন করা যায়নি।',
+            help: 'ব্যর্থ সারির আগের রেকর্ডগুলো আপডেট করা হয়েছে। আপনার ফাইল পুনরায় আপলোড করলে সমস্যাটি সমাধান না হলে, অনুগ্রহ করে সহায়তা দলের সাথে যোগাযোগ করুন।',
+          },
+        },
         advocateApproved: {
           subject: 'আপনার অ্যাকাউন্ট অনুমোদিত হয়েছে',
           hello: 'হ্যালো',
@@ -566,6 +714,14 @@ const translations = (
           rejectionInfoStart:
             'যদি আপনি বিশ্বাস করেন যে এই সিদ্ধান্তটি ত্রুটিতে নেওয়া হয়েছে বা যোগ্যতা সম্পর্কে প্রশ্ন থাকে, দয়া করে আমাদের সাথে যোগাযোগ করুন',
           rejectionInfoEnd: 'আরও তথ্যের জন্য।',
+        },
+        forgotPassword: {
+          subject: 'আপনার পাসওয়ার্ড রিসেট করবেন?',
+          resetRequest:
+            'আমরা আপনার Bloom হাউজিং পোর্টাল অ্যাকাউন্টের পাসওয়ার্ড রিসেট করার একটি অনুরোধ পেয়েছি। রিসেট সম্পূর্ণ করতে আপনাকে অবশ্যই নিচের লিঙ্কে ক্লিক করতে হবে:',
+          ignoreRequest:
+            'এই পাসওয়ার্ড রিসেটটি শুধুমাত্র পরবর্তী এক ঘণ্টার জন্য বৈধ। আপনি যদি এই অনুরোধটি না করে থাকেন, তাহলে অনুগ্রহ করে এই ইমেলটি উপেক্ষা করুন।',
+          changePassword: 'আমার পাসওয়ার্ড পরিবর্তন করুন',
         },
         rentalOpportunity: {
           subject: '%{listingName}-এ নতুন ভাড়ার সুযোগ',
@@ -650,6 +806,27 @@ const translations = (
       };
     case LanguagesEnum.ar:
       return {
+        applicationBulk: {
+          viewApplications: 'عرض الطلبات',
+          success: {
+            subject: 'اكتمل التحديث المجمّع لطلبك الخاص بـ %{listingName}',
+            message: 'تمت معالجة التحديث المجمّع الخاص بك بنجاح.',
+            count: 'تم تحديث %{updateCount} من سجلات الطلبات.',
+          },
+          successWithError: {
+            subject: 'اكتمل التحديث المجمّع لطلبك الخاص بـ %{listingName}',
+            message:
+              'تمت معالجة التحديث المجمّع الخاص بك بنجاح. ومع ذلك، تعذّر إرسال %{failedEmailsCount} من رسائل إشعار مقدّمي الطلبات.',
+            errors:
+              'تم تحديث %{updateCount} من سجلات الطلبات. يُرجى التواصل مع فريقك التقني لمعرفة الخطوات التالية لحل مشكلة الإشعارات.',
+          },
+          failure: {
+            subject:
+              'تعذّر إكمال التحديث المجمّع لطلبك الخاص بـ %{listingName}',
+            message: 'واجه التحديث المجمّع الخاص بك خطأً وتعذّر إكماله.',
+            help: 'تم تحديث السجلات السابقة للصف الذي فشل. إذا لم تؤدِّ إعادة رفع الملف إلى حل المشكلة، فيُرجى التواصل مع فريق الدعم.',
+          },
+        },
         advocateApproved: {
           subject: 'تم الموافقة على حسابك',
           hello: 'مرحبا',
@@ -667,6 +844,14 @@ const translations = (
           rejectionInfoStart:
             'إذا كنت تعتقد أن هذا القرار تم اتخاذه بالخطأ أو لديك أسئلة حول الأهلية، يرجى الاتصال بنا على',
           rejectionInfoEnd: 'للحصول على مزيد من المعلومات.',
+        },
+        forgotPassword: {
+          subject: 'إعادة تعيين كلمة المرور الخاصة بك؟',
+          resetRequest:
+            'لقد تلقينا طلباً لإعادة تعيين كلمة المرور لحسابك في بوابة Bloom للإسكان. يجب النقر على الرابط التالي لإكمال إعادة التعيين:',
+          ignoreRequest:
+            'إعادة تعيين كلمة المرور هذه صالحة للساعة القادمة فقط. إذا لم تقم بتقديم هذا الطلب، فيرجى تجاهل هذا البريد الإلكتروني.',
+          changePassword: 'تغيير كلمة المرور الخاصة بي',
         },
         rentalOpportunity: {
           subject: 'فرصة إيجار جديدة في %{listingName}',
@@ -751,6 +936,29 @@ const translations = (
       };
     case LanguagesEnum.ko:
       return {
+        applicationBulk: {
+          viewApplications: '신청서 보기',
+          success: {
+            subject:
+              '%{listingName}에 대한 일괄 신청서 업데이트가 완료되었습니다',
+            message: '일괄 업데이트가 성공적으로 처리되었습니다.',
+            count: '%{updateCount}개의 신청서 기록이 업데이트되었습니다.',
+          },
+          successWithError: {
+            subject:
+              '%{listingName}에 대한 일괄 신청서 업데이트가 완료되었습니다',
+            message:
+              '일괄 업데이트가 성공적으로 처리되었습니다. 그러나 %{failedEmailsCount}개의 신청자 알림 이메일을 보낼 수 없었습니다.',
+            errors:
+              '%{updateCount}개의 신청서 기록이 업데이트되었습니다. 알림 문제 해결을 위한 다음 단계에 대해서는 기술팀에 문의하세요.',
+          },
+          failure: {
+            subject:
+              '%{listingName}에 대한 일괄 신청서 업데이트를 완료할 수 없습니다',
+            message: '일괄 업데이트 중 오류가 발생하여 완료할 수 없었습니다.',
+            help: '실패한 행 이전의 기록은 업데이트되었습니다. 파일을 다시 업로드해도 문제가 해결되지 않으면 지원팀에 문의하세요.',
+          },
+        },
         advocateApproved: {
           subject: '계정이 승인되었습니다',
           hello: '안녕하세요',
@@ -769,6 +977,14 @@ const translations = (
           rejectionInfoStart:
             '이 결정이 오류로 인해 결정되었다고 생각하거나 자격 요건에 대해 질문이 있으면 다음 주소로 문의하세요',
           rejectionInfoEnd: '자세한 내용은',
+        },
+        forgotPassword: {
+          subject: '비밀번호를 재설정하시겠습니까?',
+          resetRequest:
+            'Bloom 주택 포털 계정의 비밀번호 재설정 요청을 받았습니다. 재설정을 완료하려면 다음 링크를 클릭해야 합니다:',
+          ignoreRequest:
+            '이 비밀번호 재설정은 앞으로 1시간 동안만 유효합니다. 이 요청을 하지 않으셨다면 이 이메일을 무시하세요.',
+          changePassword: '내 비밀번호 변경',
         },
         rentalOpportunity: {
           subject: '%{listingName}의 새로운 임대 기회',
@@ -852,6 +1068,30 @@ const translations = (
       };
     case LanguagesEnum.hy:
       return {
+        applicationBulk: {
+          viewApplications: 'Դիտել դիմումները',
+          success: {
+            subject:
+              '%{listingName}-ի համար Ձեր դիմումների զանգվածային թարմացումն ավարտված է',
+            message: 'Ձեր զանգվածային թարմացումը հաջողությամբ մշակվել է։',
+            count: 'Թարմացվել է դիմումների %{updateCount} գրառում։',
+          },
+          successWithError: {
+            subject:
+              '%{listingName}-ի համար Ձեր դիմումների զանգվածային թարմացումն ավարտված է',
+            message:
+              'Ձեր զանգվածային թարմացումը հաջողությամբ մշակվել է։ Այնուամենայնիվ, %{failedEmailsCount} դիմորդի ծանուցման նամակ չհաջողվեց ուղարկել։',
+            errors:
+              'Թարմացվել է դիմումների %{updateCount} գրառում։ Ծանուցումների լուծման հաջորդ քայլերի համար խնդրում ենք կապվել Ձեր տեխնիկական թիմի հետ։',
+          },
+          failure: {
+            subject:
+              '%{listingName}-ի համար Ձեր դիմումների զանգվածային թարմացումը չհաջողվեց ավարտել',
+            message:
+              'Ձեր զանգվածային թարմացումը հանդիպեց սխալի և չհաջողվեց ավարտել։',
+            help: 'Ձախողված տողից առաջ գրառումները թարմացվել են։ Եթե Ձեր ֆայլի կրկնակի վերբեռնումը չլուծի խնդիրը, խնդրում ենք կապվել աջակցման թիմի հետ։',
+          },
+        },
         advocateApproved: {
           subject: 'Ձեր հաշիվը հաստատվել է',
           hello: 'Բարեւ',
@@ -871,6 +1111,14 @@ const translations = (
           rejectionInfoStart:
             'Եթե Դուք կարծում եք, որ այս որոշումը սխալ է կամ ունեք հարցեր պատկանելիության վերաբերյալ, խնդրում ենք մեզ հետ կապ հաստատել',
           rejectionInfoEnd: 'ավելի շատ տեղեկատվության համար:',
+        },
+        forgotPassword: {
+          subject: 'Վերականգնե՞լ ձեր գաղտնաբառը:',
+          resetRequest:
+            'Մենք ստացել ենք ձեր Bloom բնակարանային պորտալի հաշվի գաղտնաբառը վերականգնելու հարցում: Վերականգնումն ավարտելու համար դուք պետք է սեղմեք հետևյալ հղումը.',
+          ignoreRequest:
+            'Գաղտնաբառի այս վերականգնումը վավեր է միայն հաջորդ մեկ ժամվա ընթացքում: Եթե դուք չեք կատարել այս հարցումը, խնդրում ենք անտեսել այս նամակը:',
+          changePassword: 'Փոխել իմ գաղտնաբառը',
         },
         rentalOpportunity: {
           subject: 'Նոր վարձակալության հնարավորություն՝ %{listingName}',
@@ -956,6 +1204,29 @@ const translations = (
       };
     case LanguagesEnum.fa:
       return {
+        applicationBulk: {
+          viewApplications: 'مشاهده درخواست‌ها',
+          success: {
+            subject:
+              'به‌روزرسانی گروهی درخواست شما برای %{listingName} کامل شد',
+            message: 'به‌روزرسانی گروهی شما با موفقیت پردازش شد.',
+            count: '%{updateCount} سابقه درخواست به‌روزرسانی شد.',
+          },
+          successWithError: {
+            subject:
+              'به‌روزرسانی گروهی درخواست شما برای %{listingName} کامل شد',
+            message:
+              'به‌روزرسانی گروهی شما با موفقیت پردازش شد. با این حال، %{failedEmailsCount} ایمیل اطلاع‌رسانی به متقاضیان ارسال نشد.',
+            errors:
+              '%{updateCount} سابقه درخواست به‌روزرسانی شد. لطفاً برای مراحل بعدی جهت رفع مشکل اطلاع‌رسانی‌ها با تیم فنی خود تماس بگیرید.',
+          },
+          failure: {
+            subject:
+              'به‌روزرسانی گروهی درخواست شما برای %{listingName} قابل تکمیل نبود',
+            message: 'به‌روزرسانی گروهی شما با خطا مواجه شد و قابل تکمیل نبود.',
+            help: 'سوابق پیش از ردیف ناموفق به‌روزرسانی شده‌اند. اگر بارگذاری مجدد فایل شما مشکل را برطرف نکرد، لطفاً با تیم پشتیبانی تماس بگیرید.',
+          },
+        },
         advocateApproved: {
           subject: 'حساب شما تأیید شد',
           hello: 'سلام',
@@ -976,6 +1247,14 @@ const translations = (
           rejectionInfoStart:
             'اگر فکر می‌کنید این تصمیم اشتباهی است یا سؤالاتی درباره واجدین شرایط دارید، لطفاً با ما تماس بگیرید',
           rejectionInfoEnd: 'برای اطلاعات بیشتر.',
+        },
+        forgotPassword: {
+          subject: 'بازنشانی رمز عبور شما؟',
+          resetRequest:
+            'ما درخواستی برای بازنشانی رمز عبور حساب پورتال مسکن Bloom شما دریافت کردیم. برای تکمیل بازنشانی باید روی پیوند زیر کلیک کنید:',
+          ignoreRequest:
+            'این بازنشانی رمز عبور فقط تا یک ساعت آینده معتبر است. اگر شما این درخواست را ثبت نکرده‌اید، لطفاً این ایمیل را نادیده بگیرید.',
+          changePassword: 'تغییر رمز عبور من',
         },
         rentalOpportunity: {
           subject: 'فرصت اجاره جدید در %{listingName}',
@@ -1147,6 +1426,30 @@ const translations = (
             other: 'Other',
           },
         },
+        applicationBulk: {
+          viewApplications: 'View Applications',
+          success: {
+            subject:
+              'Your bulk application update for %{listingName} is complete',
+            message: 'Your bulk update has been processed successfully.',
+            count: '%{updateCount} application records were updated.',
+          },
+          successWithError: {
+            subject:
+              'Your bulk application update for %{listingName} is complete',
+            message:
+              'Your bulk update has been processed successfully. However, %{failedEmailsCount} applicant notification email(s) could not be sent.',
+            errors:
+              '%{updateCount} application records were updated. Please contact your technical team for next steps on notifications resolution.',
+          },
+          failure: {
+            subject:
+              'Your bulk application update for %{listingName} could not be completed',
+            message:
+              'Your bulk update encountered an error and could not be completed.',
+            help: 'Records before the failed row have been updated. If a re-upload of your file does not fix the issue, please reach out to the support team.',
+          },
+        },
         confirmation: {
           subject: 'Your Application Confirmation',
           eligible: {
@@ -1222,15 +1525,11 @@ const translations = (
           mfaCode: 'Your access code is: %{singleUseCode}',
         },
         forgotPassword: {
-          subject: 'Forgot your password?',
-          callToAction:
-            'If you did make this request, please click on the link below to reset your password:',
-          passwordInfo:
-            "Your password won't change until you access the link above and create a new one.",
+          subject: 'Reset your password?',
           resetRequest:
-            'A request to reset your Bloom Housing Portal website password for %{appUrl} has recently been made.',
+            'We received a request to reset your password for your Bloom Housing Portal account. You must click the following link to complete the reset:',
           ignoreRequest:
-            "If you didn't request this, please ignore this email.",
+            'This password reset is only valid for the next hour. If you didn’t make this request, please ignore this email.',
           changePassword: 'Change my password',
         },
         requestApproval: {

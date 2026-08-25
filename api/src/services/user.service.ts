@@ -1001,7 +1001,7 @@ export class UserService {
     await this.authorizeAction(
       requestingUser,
       mapTo(User, dto),
-      permissionActions.confirm,
+      permissionActions.invite,
     );
 
     const recreatedUser = await this.handleExistingUser(dto);
@@ -1349,23 +1349,22 @@ export class UserService {
         `a jurisdictional admin is attempting to ${action} an admin user`,
       );
     } else {
-      // jurisdictional admins should only be allowed to perform an action on a user if they share a jurisdiction
-      const requesterJurisdictions = requestingUser.jurisdictions?.map(
-        (juris) => juris.id,
-      );
+      // jurisdictional admins should only be allowed to perform an action on a user if they share a jurisdiction and the jurisdiction allows it
+      const requesterJurisdictionId = requestingUser.jurisdictions[0]?.id;
       const targetJurisdictions = targetUser.jurisdictions?.map(
         (juris) => juris.id,
       );
 
-      if (
-        !requesterJurisdictions.some((juris) =>
-          targetJurisdictions.includes(juris),
-        )
-      ) {
+      if (!targetJurisdictions.includes(requesterJurisdictionId)) {
         throw new ForbiddenException(
           `a jurisdictional admin is attempting to ${action} a user they do not share a jurisdiction with`,
         );
       }
+
+      await this.permissionService.canOrThrow(requestingUser, 'user', action, {
+        id: targetUser.id,
+        jurisdictionId: requesterJurisdictionId,
+      });
     }
   }
 
@@ -1484,7 +1483,7 @@ export class UserService {
 
     if (!juris) {
       throw new BadRequestException(
-        `Jurisidiction ${jurisdictionName} does not exists`,
+        `Jurisdiction ${jurisdictionName} does not exists`,
       );
     }
 

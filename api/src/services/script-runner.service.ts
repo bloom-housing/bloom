@@ -807,10 +807,36 @@ export class ScriptRunnerService {
           },
         },
       },
+      where: {
+        OR: [
+          {
+            AND: [
+              { preferences: { not: null } },
+              { preferences: { not: {} } },
+              { preferences: { not: [] } },
+              { preferences: { not: '{}' } },
+              { preferences: { not: '[]' } },
+            ],
+          },
+          {
+            AND: [
+              { programs: { not: null } },
+              { programs: { not: {} } },
+              { programs: { not: [] } },
+              { programs: { not: '{}' } },
+              { programs: { not: '[]' } },
+            ],
+          },
+        ],
+      },
       skip: skip,
       take: take,
       orderBy: { createdAt: 'asc' },
     });
+
+    console.log(
+      `updating ${applications.length} application's multiselect data`,
+    );
 
     for (const { id, listings, preferences, programs } of applications) {
       const preferencesAndPrograms = (

@@ -141,7 +141,7 @@ const ListingForm = ({
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset, watch, setValue } = formMethods
-
+  const isListingActive = listing?.status === ListingsStatusEnum.active
   const marketingTypeChoice = watch("marketingType")
   const scheduledListingPublishDateField = watch("scheduledListingPublishDateField")
   const scheduledPublishAtFromForm = createDate(scheduledListingPublishDateField, true)
@@ -258,24 +258,18 @@ const ListingForm = ({
     whatToExpectAdditionalDetailsEditor,
   ])
 
-  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableUnitGroups,
-    jurisdictionId
-  )
-
   const disableListingPreferences = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableListingPreferences,
     jurisdictionId
   )
 
-  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.swapCommunityTypeWithPrograms,
-    jurisdictionId,
-    !jurisdictionId
+  const enableAutoOpenDate = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAutoOpenDate,
+    jurisdictionId
   )
 
-  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableNonRegulatedListings,
+  const enableAutopublish = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAutopublish,
     jurisdictionId
   )
 
@@ -289,16 +283,27 @@ const ListingForm = ({
     jurisdictionId
   )
 
-  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ, jurisdictionId)
-
-  const enableAutopublish = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableAutopublish,
+  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNonRegulatedListings,
     jurisdictionId
   )
 
-  const enableAutoOpenDate = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableAutoOpenDate,
+  const enableOnlyAdminCanEditListingDates = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableOnlyAdminCanEditListingDates,
     jurisdictionId
+  )
+
+  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ, jurisdictionId)
+
+  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUnitGroups,
+    jurisdictionId
+  )
+
+  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.swapCommunityTypeWithPrograms,
+    jurisdictionId,
+    !jurisdictionId
   )
 
   useEffect(() => {
@@ -377,7 +382,7 @@ const ListingForm = ({
 
   const triggerSubmitWithStatus: SubmitFunction = (action, status, newData) => {
     if (action !== "redirect" && status === ListingsStatusEnum.active) {
-      if (listing?.status === ListingsStatusEnum.active) {
+      if (isListingActive) {
         setListingIsAlreadyLiveDialog(true)
       } else {
         setPublishDialog(true)
@@ -696,6 +701,11 @@ const ListingForm = ({
                             requiredFields={requiredFields}
                           />
                           <Units
+                            disableListingAvailability={
+                              isListingActive &&
+                              enableOnlyAdminCanEditListingDates &&
+                              !profile.userRoles.isAdmin
+                            }
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                             jurisdiction={jurisdictionId}
                             requiredFields={requiredFields}
@@ -816,6 +826,11 @@ const ListingForm = ({
                             {t("listings.requiredToPublishAsterisk")}
                           </p>
                           <RankingsAndResults
+                            disableDueDates={
+                              isListingActive &&
+                              enableOnlyAdminCanEditListingDates &&
+                              !profile.userRoles.isAdmin
+                            }
                             enableUnitGroups={enableUnitGroups}
                             enableWaitlistAdditionalFields={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableWaitlistAdditionalFields,
@@ -830,10 +845,10 @@ const ListingForm = ({
                               jurisdictionId
                             )}
                             isAdmin={profile?.userRoles.isAdmin}
+                            listing={listing}
                             requiredFields={requiredFields}
                             whatToExpectAdditionalTextEditor={whatToExpectAdditionalDetailsEditor}
                             whatToExpectEditor={whatToExpectEditor}
-                            listing={listing}
                           />
                           <LeasingAgent
                             enableCompanyWebsite={doJurisdictionsHaveFeatureFlagOn(
@@ -858,6 +873,11 @@ const ListingForm = ({
                           />
                           <ApplicationAddress requiredFields={requiredFields} listing={listing} />
                           <ApplicationDates
+                            disableDueDate={
+                              isListingActive &&
+                              enableOnlyAdminCanEditListingDates &&
+                              !profile.userRoles.isAdmin
+                            }
                             enableMarketingFlyer={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableMarketingFlyer,
                               jurisdictionId

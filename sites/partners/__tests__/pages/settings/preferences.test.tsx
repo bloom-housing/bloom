@@ -101,7 +101,7 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              roles: { id: "user1", isAdmin: false, isPartner: true },
+              userRoles: { id: "user1", isJurisdictionalAdmin: true },
               jurisdictions: [
                 {
                   id: "jurisdiction1",
@@ -156,7 +156,7 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              roles: { id: "user1", isAdmin: false, isPartner: true },
+              userRoles: { id: "user1", isAdmin: false, isPartner: true },
               jurisdictions: [
                 {
                   id: "jurisdiction1",
@@ -211,7 +211,7 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              roles: { id: "user1", isAdmin: false, isPartner: true },
+              userRoles: { id: "user1", isAdmin: false, isPartner: true },
               jurisdictions: [
                 {
                   id: "jurisdiction1",
@@ -257,7 +257,7 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              roles: { id: "user1", isAdmin: true, isPartner: false },
+              userRoles: { id: "user1", isAdmin: true, isPartner: false },
               jurisdictions: [{ id: "id1" }],
             })
           )
@@ -337,7 +337,7 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              roles: { id: "user1", isAdmin: true, isPartner: false },
+              userRoles: { id: "user1", isAdmin: true, isPartner: false },
               jurisdictions: [{ id: "id1" }],
             })
           )
@@ -399,7 +399,7 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              roles: { id: "user1", isAdmin: true, isPartner: false },
+              userRoles: { id: "user1", isAdmin: true, isPartner: false },
               jurisdictions: [{ id: "id1" }],
             })
           )
@@ -474,7 +474,7 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              roles: { id: "user1", isAdmin: false, isPartner: true },
+              userRoles: { id: "user1", isAdmin: false, isPartner: true },
               jurisdictions: [
                 { id: "jurisdiction1", enableGeocodingPreferences: true, name: "jurisdiction 1" },
               ],

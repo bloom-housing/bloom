@@ -1,14 +1,15 @@
-import { Injectable, ForbiddenException } from '@nestjs/common';
 import { Enforcer, newEnforcer } from 'casbin';
 import path from 'path';
-import { UserRoleEnum } from '../enums/permissions/user-role-enum';
-import { User } from '../dtos/users/user.dto';
+import { Injectable, ForbiddenException } from '@nestjs/common';
+import { ListingsStatusEnum } from '@prisma/client';
 import { PrismaService } from './prisma.service';
-import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { Listing } from '../dtos/listings/listing.dto';
+import { User } from '../dtos/users/user.dto';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
-import { ListingsStatusEnum } from '@prisma/client';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { UserRoleEnum } from '../enums/permissions/user-role-enum';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 
 export type permissionCheckingObj = {
   jurisdictionId?: string;
@@ -88,6 +89,11 @@ export class PermissionService {
 
       await Promise.all(
         user.jurisdictions.map(async (adminInJurisdiction: Jurisdiction) => {
+          const enableOnlyAdminCanManageUsers =
+            doJurisdictionHaveFeatureFlagSet(
+              adminInJurisdiction,
+              FeatureFlagEnum.enableOnlyAdminCanManageUsers,
+            );
           await enforcer.addPermissionForUser(
             user.id,
             'application',
@@ -118,11 +124,15 @@ export class PermissionService {
             `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
             `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
           );
+
+          const usersPermissions = enableOnlyAdminCanManageUsers
+            ? `(${permissionActions.read})`
+            : `(${permissionActions.read}|${permissionActions.invite}|${permissionActions.update}|${permissionActions.delete})`;
           await enforcer.addPermissionForUser(
             user.id,
             'user',
             `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-            `(${permissionActions.read}|${permissionActions.invitePartner}|${permissionActions.inviteJurisdictionalAdmin}|${permissionActions.update}|${permissionActions.delete})`,
+            usersPermissions,
           );
         }),
       );

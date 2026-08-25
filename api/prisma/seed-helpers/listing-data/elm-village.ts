@@ -6,7 +6,7 @@ import {
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
-import { featuresAndUtilites } from '../listing-factory';
+import { featuresAndUtilities } from '../listing-factory';
 import { assetFileId } from '../asset-file-id-helper';
 
 export const elmVillage: Prisma.ListingsCreateInput = {
@@ -96,7 +96,7 @@ export const elmVillage: Prisma.ListingsCreateInput = {
   listingsApplicationPickUpAddress: undefined,
   listingsApplicationDropOffAddress: undefined,
   reservedCommunityTypes: undefined,
-  ...featuresAndUtilites(),
+  ...featuresAndUtilities(),
   listingImages: {
     create: [
       {

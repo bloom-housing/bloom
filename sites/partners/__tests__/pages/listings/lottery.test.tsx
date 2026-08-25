@@ -1,15 +1,16 @@
 import React from "react"
-import { fireEvent } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
-import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import Lottery from "../../../src/pages/listings/[id]/lottery"
-import { mockNextRouter, render } from "../../testUtils"
 import {
+  FeatureFlagEnum,
   ListingMultiselectQuestion,
   ListingsStatusEnum,
   LotteryStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { fireEvent, screen } from "@testing-library/react"
+import { mockNextRouter, render } from "../../testUtils"
+import Lottery from "../../../src/pages/listings/[id]/lottery"
 
 const server = setupServer()
 const closedListing = {
@@ -56,9 +57,9 @@ describe("lottery", () => {
       )
     )
 
-    const { findByText } = render(<Lottery listing={undefined} />)
+    render(<Lottery listing={undefined} />)
 
-    const error = await findByText("An error has occurred.")
+    const error = await screen.findByText("An error has occurred.")
     expect(error).toBeInTheDocument()
   })
 
@@ -83,12 +84,12 @@ describe("lottery", () => {
       )
     )
 
-    const { getAllByText, findByText } = render(<Lottery listing={closedListing} />)
+    render(<Lottery listing={closedListing} />)
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    expect(getAllByText(closedListing.name).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(closedListing.name).length).toBeGreaterThan(0)
   })
 
   it("should render page if user is a jurisdictional admin", async () => {
@@ -112,12 +113,12 @@ describe("lottery", () => {
       )
     )
 
-    const { getAllByText, findByText } = render(<Lottery listing={closedListing} />)
+    render(<Lottery listing={closedListing} />)
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    expect(getAllByText(closedListing.name).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(closedListing.name).length).toBeGreaterThan(0)
   })
 
   it("should render page if user is a partner with access to this listing", async () => {
@@ -147,12 +148,12 @@ describe("lottery", () => {
       )
     )
 
-    const { getAllByText, findByText } = render(<Lottery listing={closedListing} />)
+    render(<Lottery listing={closedListing} />)
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    expect(getAllByText(closedListing.name).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(closedListing.name).length).toBeGreaterThan(0)
   })
 
   it("should not render page if user is a partner without access to this listing", () => {
@@ -182,11 +183,11 @@ describe("lottery", () => {
       )
     )
 
-    const { queryAllByText, queryByText } = render(<Lottery listing={closedListing} />)
+    render(<Lottery listing={closedListing} />)
 
-    const header = queryByText("Lottery")
+    const header = screen.queryByText("Lottery")
     expect(header).not.toBeInTheDocument()
-    expect(queryAllByText(closedListing.name).length).toBe(0)
+    expect(screen.queryAllByText(closedListing.name).length).toBe(0)
   })
 
   it("should show no lottery run state if user is an admin and lottery has not been run", async () => {
@@ -215,17 +216,17 @@ describe("lottery", () => {
       )
     )
 
-    const { getByText, findByText } = render(<Lottery listing={closedListing} />)
+    render(<Lottery listing={closedListing} />)
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    expect(getByText("No lottery data")).toBeInTheDocument()
+    expect(screen.getByText("No lottery data")).toBeInTheDocument()
     expect(
-      getByText("It looks like you haven't run a lottery for this listing yet.")
+      screen.getByText("It looks like you haven't run a lottery for this listing yet.")
     ).toBeInTheDocument()
-    expect(getByText("History")).toBeInTheDocument()
-    expect(getByText("Run lottery")).toBeInTheDocument()
+    expect(screen.getByText("History")).toBeInTheDocument()
+    expect(screen.getByText("Run lottery")).toBeInTheDocument()
   })
 
   it("should show export state if user is an admin and lottery has been run", async () => {
@@ -254,7 +255,7 @@ describe("lottery", () => {
       )
     )
 
-    const { getByText, findByText } = render(
+    render(
       <Lottery
         listing={{
           ...closedListing,
@@ -265,15 +266,15 @@ describe("lottery", () => {
       />
     )
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    expect(getByText("Export lottery data")).toBeInTheDocument()
+    expect(screen.getByText("Export lottery data")).toBeInTheDocument()
     expect(
-      getByText("This file includes the lottery raw rank for all applications.")
+      screen.getByText("This file includes the lottery raw rank for all applications.")
     ).toBeInTheDocument()
-    expect(getByText("Re-run lottery")).toBeInTheDocument()
-    expect(getByText("Release lottery")).toBeInTheDocument()
+    expect(screen.getByText("Re-run lottery")).toBeInTheDocument()
+    expect(screen.getByText("Release lottery")).toBeInTheDocument()
   })
 
   it("should show re-run modal if user clicks on re-run", async () => {
@@ -302,7 +303,7 @@ describe("lottery", () => {
       )
     )
 
-    const { getByText, findByText } = render(
+    render(
       <Lottery
         listing={{
           ...closedListing,
@@ -312,12 +313,12 @@ describe("lottery", () => {
       />
     )
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    fireEvent.click(getByText("Re-run lottery"))
-    expect(await findByText("Are you sure?")).toBeInTheDocument()
-    expect(getByText("I understand, re-run lottery")).toBeInTheDocument()
+    fireEvent.click(screen.getByText("Re-run lottery"))
+    expect(await screen.findByText("Are you sure?")).toBeInTheDocument()
+    expect(screen.getByText("I understand, re-run lottery")).toBeInTheDocument()
   })
 
   it("should show release modal if user clicks on release", async () => {
@@ -346,7 +347,7 @@ describe("lottery", () => {
       )
     )
 
-    const { getByText, findByText } = render(
+    render(
       <Lottery
         listing={{
           ...closedListing,
@@ -356,13 +357,13 @@ describe("lottery", () => {
       />
     )
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    fireEvent.click(getByText("Release lottery"))
-    expect(await findByText("Are you sure?")).toBeInTheDocument()
+    fireEvent.click(screen.getByText("Release lottery"))
+    expect(await screen.findByText("Are you sure?")).toBeInTheDocument()
     expect(
-      getByText(
+      screen.getByText(
         "Releasing the lottery will give Partner users access to the lottery data, including the ability to publish results to applicants."
       )
     ).toBeInTheDocument()
@@ -396,7 +397,7 @@ describe("lottery", () => {
 
     const lotteryLastRan = new Date()
     lotteryLastRan.setDate(lotteryLastRan.getDate() - 1)
-    const { getByText, findByText } = render(
+    render(
       <Lottery
         listing={{
           ...listing,
@@ -407,16 +408,16 @@ describe("lottery", () => {
       />
     )
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    fireEvent.click(getByText("Release lottery"))
-    expect(await findByText("Action required")).toBeInTheDocument()
+    fireEvent.click(screen.getByText("Release lottery"))
+    expect(await screen.findByText("Action required")).toBeInTheDocument()
     expect(
-      getByText("You have added or updated applications without re-running the lottery.")
+      screen.getByText("You have added or updated applications without re-running the lottery.")
     ).toBeInTheDocument()
     expect(
-      getByText("You must re-run the lottery before releasing the lottery data.")
+      screen.getByText("You must re-run the lottery before releasing the lottery data.")
     ).toBeInTheDocument()
   })
 
@@ -446,7 +447,7 @@ describe("lottery", () => {
       )
     )
 
-    const { getByText, findByText } = render(
+    render(
       <Lottery
         listing={{
           ...listing,
@@ -456,13 +457,13 @@ describe("lottery", () => {
       />
     )
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    fireEvent.click(getByText("Retract lottery"))
-    expect(await findByText("Are you sure?")).toBeInTheDocument()
+    fireEvent.click(screen.getByText("Retract lottery"))
+    expect(await screen.findByText("Are you sure?")).toBeInTheDocument()
     expect(
-      getByText(
+      screen.getByText(
         "Retracting the lottery will revoke Partner users' access to the lottery data, including their ability to publish results to applicants."
       )
     ).toBeInTheDocument()
@@ -494,15 +495,15 @@ describe("lottery", () => {
       )
     )
 
-    const { getByText, findByText } = render(<Lottery listing={closedListing} />)
+    render(<Lottery listing={closedListing} />)
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    fireEvent.click(getByText("Run lottery"))
-    expect(await findByText("Confirmation needed")).toBeInTheDocument()
+    fireEvent.click(screen.getByText("Run lottery"))
+    expect(await screen.findByText("Confirmation needed")).toBeInTheDocument()
     expect(
-      getByText("Make sure to add all paper applications before running the lottery.")
+      screen.getByText("Make sure to add all paper applications before running the lottery.")
     ).toBeInTheDocument()
   })
 
@@ -532,15 +533,15 @@ describe("lottery", () => {
       )
     )
 
-    const { getByText, findByText } = render(<Lottery listing={closedListing} />)
+    render(<Lottery listing={closedListing} />)
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    fireEvent.click(getByText("Run lottery"))
-    expect(await findByText("Confirmation needed")).toBeInTheDocument()
-    expect(getByText("5 unresolved duplicate sets.")).toBeInTheDocument()
-    expect(getByText("Run lottery without resolving duplicates")).toBeInTheDocument()
+    fireEvent.click(screen.getByText("Run lottery"))
+    expect(await screen.findByText("Confirmation needed")).toBeInTheDocument()
+    expect(screen.getByText("5 unresolved duplicate sets.")).toBeInTheDocument()
+    expect(screen.getByText("Run lottery without resolving duplicates")).toBeInTheDocument()
   })
 
   it("should show export modal if lottery has been run with no preference text", async () => {
@@ -574,26 +575,27 @@ describe("lottery", () => {
       lotteryLastRunAt: new Date("September 6, 2025 8:15:00"),
       listingMultiselectQuestions: [],
     }
-    const { getByText, findByText, findAllByText, getAllByText } = render(
-      <Lottery listing={updatedListing} />
-    )
+    render(<Lottery listing={updatedListing} />)
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     expect(
-      getByText("This file includes the lottery raw rank for all applications.")
+      screen.getByText("This file includes the lottery raw rank for all applications.")
     ).toBeInTheDocument()
 
-    fireEvent.click(getByText("Export"))
-    expect(await findAllByText("Export lottery data")).toHaveLength(2)
+    fireEvent.click(screen.getByText("Export"))
+    expect(await screen.findAllByText("Export lottery data")).toHaveLength(2)
 
     expect(
-      getByText("This data was generated from the lottery that was run on 09/06/2025 at 8:15 am.", {
-        exact: false,
-      })
+      screen.getByText(
+        "This data was generated from the lottery that was run on 09/06/2025 at 8:15 am.",
+        {
+          exact: false,
+        }
+      )
     ).toBeInTheDocument()
-    expect(getAllByText("Export")).toHaveLength(2)
+    expect(screen.getAllByText("Export")).toHaveLength(2)
   })
 
   it("should show export modal if lottery has been run with preference text", async () => {
@@ -627,31 +629,32 @@ describe("lottery", () => {
       lotteryLastRunAt: new Date("September 6, 2025 8:15:00"),
       listingMultiselectQuestions: [{ multiselectQuestions: {} } as ListingMultiselectQuestion],
     }
-    const { getByText, findByText, findAllByText, getAllByText } = render(
-      <Lottery listing={updatedListing} />
-    )
+    render(<Lottery listing={updatedListing} />)
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     expect(
-      getByText(
+      screen.getByText(
         "This file includes the lottery raw rank and preferences data for all applications."
       )
     ).toBeInTheDocument()
 
-    fireEvent.click(getByText("Export"))
-    expect(await findAllByText("Export lottery data")).toHaveLength(2)
+    fireEvent.click(screen.getByText("Export"))
+    expect(await screen.findAllByText("Export lottery data")).toHaveLength(2)
 
     expect(
-      getByText("This data was generated from the lottery that was run on 09/06/2025 at 8:15 am.", {
-        exact: false,
-      })
+      screen.getByText(
+        "This data was generated from the lottery that was run on 09/06/2025 at 8:15 am.",
+        {
+          exact: false,
+        }
+      )
     ).toBeInTheDocument()
-    expect(getAllByText("Export")).toHaveLength(2)
+    expect(screen.getAllByText("Export")).toHaveLength(2)
   })
 
-  it("should show export with terms modal if user is a partner", async () => {
+  it("should show export with info modal if user is a partner", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
     document.cookie = "access-token-available=True"
     server.use(
@@ -683,23 +686,87 @@ describe("lottery", () => {
       lotteryLastRunAt: new Date("September 6, 2025 8:15:00"),
       lotteryStatus: LotteryStatusEnum.publishedToPublic,
     }
-    const { getByText, findByText, findAllByText, getAllByText } = render(
-      <Lottery listing={updatedListing} />
-    )
+    render(<Lottery listing={updatedListing} />)
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    fireEvent.click(getByText("Export"))
-    expect(await findAllByText("Export lottery data")).toHaveLength(2)
+    fireEvent.click(screen.getByText("Export"))
+    expect(await screen.findAllByText("Export lottery data")).toHaveLength(2)
 
     expect(
-      getByText("This data was generated from the lottery that was run on 09/06/2025 at 8:15 am.", {
-        exact: false,
-      })
+      screen.getByText(
+        "This data was generated from the lottery that was run on 09/06/2025 at 8:15 am.",
+        {
+          exact: false,
+        }
+      )
     ).toBeInTheDocument()
 
-    expect(getAllByText("Export")).toHaveLength(2)
+    expect(screen.getAllByText("Export")).toHaveLength(2)
+  })
+
+  it("should show export with terms modal if user is a partner when enableExportTerms is true", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: false, isPartner: true },
+            listings: [{ id: "Uvbk5qurpB2WI9V6WnNdH" }],
+            jurisdictions: [
+              {
+                id: "id",
+                name: "Bloomington",
+                featureFlags: [{ name: FeatureFlagEnum.enableExportTerms, active: true }],
+              },
+            ],
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
+      }),
+      rest.get(
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
+    )
+
+    const updatedListing = {
+      ...listing,
+      lotteryLastRunAt: new Date("September 6, 2025 8:15:00"),
+      lotteryStatus: LotteryStatusEnum.publishedToPublic,
+    }
+    render(<Lottery listing={updatedListing} />)
+
+    const header = await screen.findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    fireEvent.click(screen.getByText("Export"))
+    expect(await screen.findAllByText("Export lottery data")).toHaveLength(2)
+
+    expect(
+      screen.getByText(
+        "This data was generated from the lottery that was run on 09/06/2025 at 8:15 am.",
+        {
+          exact: false,
+        }
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByText("You must accept the Terms of Use before exporting this data.")
+    ).toBeInTheDocument()
+
+    expect(screen.getAllByText("Export")).toHaveLength(2)
   })
 
   it("should show no lottery released state as a partner", async () => {
@@ -733,15 +800,15 @@ describe("lottery", () => {
       lotteryStatus: LotteryStatusEnum.ran,
     }
 
-    const { getByText, findByText, queryByText } = render(<Lottery listing={updatedListing} />)
+    render(<Lottery listing={updatedListing} />)
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    expect(getByText("No lottery data")).toBeInTheDocument()
-    expect(queryByText("Publish")).not.toBeInTheDocument()
-    expect(queryByText("Run lottery")).not.toBeInTheDocument()
-    expect(queryByText("Release lottery")).not.toBeInTheDocument()
+    expect(screen.getByText("No lottery data")).toBeInTheDocument()
+    expect(screen.queryByText("Publish")).not.toBeInTheDocument()
+    expect(screen.queryByText("Run lottery")).not.toBeInTheDocument()
+    expect(screen.queryByText("Release lottery")).not.toBeInTheDocument()
   })
 
   it("should not show publish button if in released to partners state as a jurisdictional admin", async () => {
@@ -775,15 +842,15 @@ describe("lottery", () => {
       lotteryStatus: LotteryStatusEnum.releasedToPartners,
     }
 
-    const { getByText, findByText, queryByText } = render(<Lottery listing={updatedListing} />)
+    render(<Lottery listing={updatedListing} />)
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
-    expect(getByText("Publish lottery data")).toBeInTheDocument()
-    expect(queryByText("Publish")).not.toBeInTheDocument()
+    expect(screen.getByText("Publish lottery data")).toBeInTheDocument()
+    expect(screen.queryByText("Publish")).not.toBeInTheDocument()
   })
 
-  it("should show export if in published to public state as a parter", async () => {
+  it("should show export if in published to public state as a partner", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
     document.cookie = "access-token-available=True"
     server.use(
@@ -814,13 +881,13 @@ describe("lottery", () => {
       lotteryStatus: LotteryStatusEnum.publishedToPublic,
     }
 
-    const { getByText, findByText } = render(<Lottery listing={updatedListing} />)
+    render(<Lottery listing={updatedListing} />)
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    expect(getByText("Export lottery data")).toBeInTheDocument()
-    expect(getByText("Export")).toBeInTheDocument()
+    expect(screen.getByText("Export lottery data")).toBeInTheDocument()
+    expect(screen.getByText("Export")).toBeInTheDocument()
   })
 
   it("should show lottery expired state as a partner", async () => {
@@ -854,18 +921,20 @@ describe("lottery", () => {
       lotteryStatus: LotteryStatusEnum.expired,
     }
 
-    const { getByText, findByText, queryByText } = render(<Lottery listing={updatedListing} />)
+    render(<Lottery listing={updatedListing} />)
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    expect(getByText("No lottery data")).toBeInTheDocument()
+    expect(screen.getByText("No lottery data")).toBeInTheDocument()
     expect(
-      getByText("Lottery data has expired for this listing and is no longer available for export.")
+      screen.getByText(
+        "Lottery data has expired for this listing and is no longer available for export."
+      )
     ).toBeInTheDocument()
-    expect(queryByText("Publish")).not.toBeInTheDocument()
-    expect(queryByText("Run lottery")).not.toBeInTheDocument()
-    expect(queryByText("Release lottery")).not.toBeInTheDocument()
+    expect(screen.queryByText("Publish")).not.toBeInTheDocument()
+    expect(screen.queryByText("Run lottery")).not.toBeInTheDocument()
+    expect(screen.queryByText("Release lottery")).not.toBeInTheDocument()
   })
 
   it("should show history log", async () => {
@@ -929,30 +998,30 @@ describe("lottery", () => {
       lotteryStatus: LotteryStatusEnum.ran,
     }
 
-    const { getByText, findByText, getAllByText } = render(<Lottery listing={updatedListing} />)
+    render(<Lottery listing={updatedListing} />)
 
-    const header = await findByText("Lottery")
+    const header = await screen.findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    expect(getByText("Listing closed")).toBeInTheDocument()
-    expect(getByText("by property")).toBeInTheDocument()
-    expect(getByText("September 6th, 2025 at 8:15 am")).toBeInTheDocument()
-    expect(getByText("Lottery was run")).toBeInTheDocument()
-    expect(getByText("by Admin One")).toBeInTheDocument()
-    expect(getByText("September 6th, 2025 at 9:00 am")).toBeInTheDocument()
-    expect(getByText("Lottery was re-run")).toBeInTheDocument()
-    expect(getByText("by Admin Two")).toBeInTheDocument()
-    expect(getByText("September 6th, 2025 at 9:30 am")).toBeInTheDocument()
-    expect(getAllByText("Lottery results released")).toHaveLength(2)
-    expect(getByText("by Admin Three")).toBeInTheDocument()
-    expect(getByText("September 7th, 2025 at 1:00 pm")).toBeInTheDocument()
-    expect(getByText("Lottery retracted")).toBeInTheDocument()
-    expect(getByText("by Admin Four")).toBeInTheDocument()
-    expect(getByText("September 7th, 2025 at 2:00 pm")).toBeInTheDocument()
-    expect(getByText("by Admin Five")).toBeInTheDocument()
-    expect(getByText("September 7th, 2025 at 3:00 pm")).toBeInTheDocument()
-    expect(getByText("Lottery results published to public")).toBeInTheDocument()
-    expect(getByText("by Partner One")).toBeInTheDocument()
-    expect(getByText("September 8th, 2025 at 9:00 am")).toBeInTheDocument()
+    expect(screen.getByText("Listing closed")).toBeInTheDocument()
+    expect(screen.getByText("by property")).toBeInTheDocument()
+    expect(screen.getByText("September 6th, 2025 at 8:15 am")).toBeInTheDocument()
+    expect(screen.getByText("Lottery was run")).toBeInTheDocument()
+    expect(screen.getByText("by Admin One")).toBeInTheDocument()
+    expect(screen.getByText("September 6th, 2025 at 9:00 am")).toBeInTheDocument()
+    expect(screen.getByText("Lottery was re-run")).toBeInTheDocument()
+    expect(screen.getByText("by Admin Two")).toBeInTheDocument()
+    expect(screen.getByText("September 6th, 2025 at 9:30 am")).toBeInTheDocument()
+    expect(screen.getAllByText("Lottery results released")).toHaveLength(2)
+    expect(screen.getByText("by Admin Three")).toBeInTheDocument()
+    expect(screen.getByText("September 7th, 2025 at 1:00 pm")).toBeInTheDocument()
+    expect(screen.getByText("Lottery retracted")).toBeInTheDocument()
+    expect(screen.getByText("by Admin Four")).toBeInTheDocument()
+    expect(screen.getByText("September 7th, 2025 at 2:00 pm")).toBeInTheDocument()
+    expect(screen.getByText("by Admin Five")).toBeInTheDocument()
+    expect(screen.getByText("September 7th, 2025 at 3:00 pm")).toBeInTheDocument()
+    expect(screen.getByText("Lottery results published to public")).toBeInTheDocument()
+    expect(screen.getByText("by Partner One")).toBeInTheDocument()
+    expect(screen.getByText("September 8th, 2025 at 9:00 am")).toBeInTheDocument()
   })
 })

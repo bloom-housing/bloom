@@ -13,6 +13,7 @@ export enum FeatureFlagEnum {
   disableWorkInRegion = 'disableWorkInRegion',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
   enableAdditionalResources = 'enableAdditionalResources',
+  enableApplicationBulkCSVUpdates = 'enableApplicationBulkCSVUpdates',
   enableApplicationStatus = 'enableApplicationStatus',
   enableAutoOpenDate = 'enableAutoOpenDate',
   enableAutopublish = 'enableAutopublish',
@@ -20,6 +21,8 @@ export enum FeatureFlagEnum {
   enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableCustomListingNotifications = 'enableCustomListingNotifications',
+  enableDbDrivenContent = 'enableDbDrivenContent',
+  enableExportTerms = 'enableExportTerms',
   enableFaq = 'enableFaq',
   enableFilterByBathroom = 'enableFilterByBathroom',
   enableFilterByCounty = 'enableFilterByCounty',
@@ -28,6 +31,7 @@ export enum FeatureFlagEnum {
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
+  enableHomePageSearchHero = 'enableHomePageSearchHero',
   enableHousingAdvocate = 'enableHousingAdvocate',
   enableHousingBasics = 'enableHousingBasics',
   enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
@@ -50,6 +54,9 @@ export enum FeatureFlagEnum {
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enableNeighborhoodAmenitiesDropdown = 'enableNeighborhoodAmenitiesDropdown',
   enableNonRegulatedListings = 'enableNonRegulatedListings',
+  enableOnlyAdminCanAddAppsAfterClose = 'enableOnlyAdminCanAddAppsAfterClose',
+  enableOnlyAdminCanEditListingDates = 'enableOnlyAdminCanEditListingDates',
+  enableOnlyAdminCanManageUsers = 'enableOnlyAdminCanManageUsers',
   enableParkingFee = 'enableParkingFee',
   enableParkingType = 'enableParkingType',
   enablePartnerDemographics = 'enablePartnerDemographics',
@@ -158,6 +165,11 @@ export const featureFlagMap: {
       'When true, partners can set an optional scheduled listing publish date',
   },
   {
+    name: FeatureFlagEnum.enableApplicationBulkCSVUpdates,
+    description:
+      'When true, allows for the bulk uptake of application statuses',
+  },
+  {
     name: FeatureFlagEnum.enableCompanyWebsite,
     description:
       'When true, allows partners to add company website information',
@@ -174,6 +186,16 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableCreditScreeningFee,
     description: 'When true, credit screening fee is enabled for listings',
+  },
+  {
+    name: FeatureFlagEnum.enableDbDrivenContent,
+    description:
+      'When true, the jurisdiction reads its translations and structured content from the database instead of the bundled override files',
+  },
+  {
+    name: FeatureFlagEnum.enableExportTerms,
+    description:
+      'When true, display terms of use before exporting applications and lotteries from the partner site',
   },
   {
     name: FeatureFlagEnum.enableFaq,
@@ -213,6 +235,10 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableHomeType,
     description: 'When true, home type feature is turned on',
+  },
+  {
+    name: FeatureFlagEnum.enableHomePageSearchHero,
+    description: 'When true, the home page hero has a search form',
   },
   {
     name: FeatureFlagEnum.enableHousingAdvocate,
@@ -318,6 +344,21 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableNonRegulatedListings,
     description:
       'When true, non-regulated listings are displayed in listing creation/edit and public listing view',
+  },
+  {
+    name: FeatureFlagEnum.enableOnlyAdminCanAddAppsAfterClose,
+    description:
+      'When true, only admin level users are allowed to add paper apps after a listing has closed',
+  },
+  {
+    name: FeatureFlagEnum.enableOnlyAdminCanEditListingDates,
+    description:
+      'When true, only admins level users can edit the application close dates, the review order type or the lottery run date on a published listing',
+  },
+  {
+    name: FeatureFlagEnum.enableOnlyAdminCanManageUsers,
+    description:
+      'When true, only admins can add/edit users on the partner site. Jurisdictional admins can view but not cannot create or edit users other than themselves',
   },
   {
     name: FeatureFlagEnum.enableParkingFee,
@@ -439,7 +480,7 @@ export const featureFlagMap: {
   },
   {
     name: FeatureFlagEnum.enableV2MSQ,
-    description: 'When true, the new mutliselect question logic will be used.',
+    description: 'When true, the new multiselect question logic will be used.',
   },
   {
     name: FeatureFlagEnum.hideCloseListingButton,

@@ -177,18 +177,15 @@ describe('Testing email service', () => {
     );
     expect(sendMock).toHaveBeenCalled();
     expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
-    expect(sendMock.mock.calls[0][0].subject).toEqual('Forgot your password?');
+    expect(sendMock.mock.calls[0][0].subject).toEqual('Reset your password?');
     expect(sendMock.mock.calls[0][0].body).toContain(
-      'A request to reset your Bloom Housing Portal website password for http://localhost:3001 has recently been made.',
-    );
-    expect(sendMock.mock.calls[0][0].body).toContain(
-      'If you did make this request, please click on the link below to reset your password:',
+      ' We received a request to reset your password for your Bloom Housing Portal account. You must click the following link to complete the reset:',
     );
     expect(sendMock.mock.calls[0][0].body).toContain(
       '<a href="http://localhost:3001/reset-password?token&#x3D;resetToken">Change my password</a>',
     );
     expect(sendMock.mock.calls[0][0].body).toContain(
-      'Your password won&#x27;t change until you access the link above and create a new one.',
+      'This password reset is only valid for the next hour. If you didn’t make this request, please ignore this email.',
     );
   });
 
@@ -205,18 +202,15 @@ describe('Testing email service', () => {
     );
     expect(sendMock).toHaveBeenCalled();
     expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
-    expect(sendMock.mock.calls[0][0].subject).toEqual('Forgot your password?');
+    expect(sendMock.mock.calls[0][0].subject).toEqual('Reset your password?');
     expect(sendMock.mock.calls[0][0].body).toContain(
-      'A request to reset your Bloom Housing Portal website password for http://localhost:3001 has recently been made.',
-    );
-    expect(sendMock.mock.calls[0][0].body).toContain(
-      'If you did make this request, please click on the link below to reset your password:',
+      'We received a request to reset your password for your Bloom Housing Portal account. You must click the following link to complete the reset:',
     );
     expect(sendMock.mock.calls[0][0].body).toContain(
       '<a href="http://localhost:3001/reset-password?token&#x3D;resetToken&amp;redirectUrl&#x3D;redirect&amp;listingId&#x3D;123">Change my password</a>',
     );
     expect(sendMock.mock.calls[0][0].body).toContain(
-      'Your password won&#x27;t change until you access the link above and create a new one.',
+      'This password reset is only valid for the next hour. If you didn’t make this request, please ignore this email.',
     );
   });
 
@@ -970,6 +964,93 @@ describe('Testing email service', () => {
       expect(applicantEmailMock.body).toContain(
         'Your application decline reason is <strong>Household income too high</strong>',
       );
+    });
+  });
+
+  describe('bulk application email notifications', () => {
+    const jurisdictionId = { id: 'jurisdictionId' };
+    const applicationsUrl = 'http://localhost:3000/application-bulk-upload';
+
+    describe('applicationsBulkSuccess', () => {
+      it('should send a bulk success email with interpolated listing name and update count', async () => {
+        await service.applicationsBulkSuccess(
+          user,
+          jurisdictionId,
+          applicationsUrl,
+          { updateCount: 5 },
+          'Example Listing',
+        );
+
+        expect(sendMock).toHaveBeenCalledTimes(1);
+        const emailMock = sendMock.mock.calls[0][0];
+        expect(emailMock.to).toEqual(user.email);
+        expect(emailMock.subject).toEqual(
+          'Your bulk application update for Example Listing is complete',
+        );
+        expect(emailMock.body).toContain(
+          'Your bulk update has been processed successfully.',
+        );
+        expect(emailMock.body).toContain('5 application records were updated.');
+        expect(emailMock.body).toContain(`href="${applicationsUrl}"`);
+        expect(emailMock.body).toContain('View Applications');
+      });
+    });
+
+    describe('applicationsBulkSuccessWithErrors', () => {
+      it('should send a bulk success-with-errors email with interpolated counts', async () => {
+        await service.applicationsBulkSuccessWithErrors(
+          user,
+          jurisdictionId,
+          applicationsUrl,
+          { updateCount: 5, failedEmailsCount: 2 },
+          'Example Listing',
+        );
+
+        expect(sendMock).toHaveBeenCalledTimes(1);
+        const emailMock = sendMock.mock.calls[0][0];
+        expect(emailMock.to).toEqual(user.email);
+        expect(emailMock.subject).toEqual(
+          'Your bulk application update for Example Listing is complete',
+        );
+        expect(emailMock.body).toContain(
+          'Your bulk update has been processed successfully. However, 2 applicant notification email(s) could not be sent.',
+        );
+        expect(emailMock.body).toContain(
+          '5 application records were updated. Please contact your technical team for next steps on notifications resolution.',
+        );
+        expect(emailMock.body).toContain(`href="${applicationsUrl}"`);
+        expect(emailMock.body).toContain('View Applications');
+      });
+    });
+
+    describe('applicationsBulkFailure', () => {
+      it('should send a bulk failure email with the raw error message', async () => {
+        await service.applicationsBulkFailure(
+          user,
+          jurisdictionId,
+          applicationsUrl,
+          'Row 12 is missing a required field',
+          'Example Listing',
+        );
+
+        expect(sendMock).toHaveBeenCalledTimes(1);
+        const emailMock = sendMock.mock.calls[0][0];
+        expect(emailMock.to).toEqual(user.email);
+        expect(emailMock.subject).toEqual(
+          'Your bulk application update for Example Listing could not be completed',
+        );
+        expect(emailMock.body).toContain(
+          'Your bulk update encountered an error and could not be completed.',
+        );
+        expect(emailMock.body).toContain(
+          '[errorMessage] Row 12 is missing a required field',
+        );
+        expect(emailMock.body).toContain(
+          'Records before the failed row have been updated. If a re-upload of your file does not fix the issue, please reach out to the support team.',
+        );
+        expect(emailMock.body).toContain(`href="${applicationsUrl}"`);
+        expect(emailMock.body).toContain('View Applications');
+      });
     });
   });
 
