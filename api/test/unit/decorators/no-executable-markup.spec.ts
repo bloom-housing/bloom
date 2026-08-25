@@ -58,6 +58,42 @@ describe('NoExecutableMarkupConstraint', () => {
     expect(isAllowed('See the <formal> notice')).toBe(true);
   });
 
+  it('rejects an inline event handler on an allowed tag', () => {
+    expect(isAllowed('<a href="/x" onclick="alert(1)">go</a>')).toBe(false);
+    expect(isAllowed('<b ONMOUSEOVER=alert(1)>hover</b>')).toBe(false);
+    expect(isAllowed('<a\tonclick=alert(1)>go</a>')).toBe(false);
+  });
+
+  // Nothing downstream strips this, and it is enough to cover a dialog with an overlay.
+  it('rejects a style attribute on an allowed tag', () => {
+    expect(
+      isAllowed('<div style="position:fixed;inset:0;z-index:9999">x</div>'),
+    ).toBe(false);
+    expect(isAllowed('<span STYLE=color:red>x</span>')).toBe(false);
+  });
+
+  it('rejects a url that executes rather than navigates', () => {
+    expect(isAllowed('<a href="javascript:alert(1)">go</a>')).toBe(false);
+    expect(isAllowed('<a href="JaVaScRiPt:alert(1)">go</a>')).toBe(false);
+    expect(isAllowed('<a href="vbscript:msgbox(1)">go</a>')).toBe(false);
+  });
+
+  // The img tag is blocked to stop remote loads; markdown reaches the same sink without one.
+  it('rejects a markdown image, which renders an img without the tag', () => {
+    expect(isAllowed('![x](https://evil.example/beacon.png)')).toBe(false);
+    expect(isAllowed('text ![](//evil.example/b.gif) more')).toBe(false);
+  });
+
+  it('allows a markdown link, which loads nothing on render', () => {
+    expect(isAllowed('[the office](https://example.com)')).toBe(true);
+    expect(isAllowed('A price drop of 50! [see more](/listings)')).toBe(true);
+  });
+
+  it('allows text that resembles a blocked attribute but is not one', () => {
+    expect(isAllowed('Turn the style on before you save')).toBe(true);
+    expect(isAllowed('Only one option: pick a style')).toBe(true);
+  });
+
   it('leaves type checking to IsString', () => {
     expect(isAllowed(undefined)).toBe(true);
     expect(isAllowed(null)).toBe(true);

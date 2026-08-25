@@ -124,7 +124,7 @@ export class TranslationService {
     jurisdictionId: string | null,
     language: LanguagesEnum,
     site: SiteEnum,
-  ): Promise<Record<string, string>> {
+  ): Promise<Record<string, Record<string, string>>> {
     const useLanguage = !!language && language !== LanguagesEnum.en;
     const languages = this.languagesToRead(language);
 
@@ -134,19 +134,19 @@ export class TranslationService {
     });
 
     const byLanguage = (lang: LanguagesEnum) =>
-      rows.filter((row) => row.language === lang);
+      flattenTranslationRows([rows.filter((row) => row.language === lang)]);
 
-    return flattenTranslationRows([
-      byLanguage(LanguagesEnum.en),
-      ...(useLanguage ? [byLanguage(language)] : []),
-    ]);
+    return {
+      [LanguagesEnum.en]: byLanguage(LanguagesEnum.en),
+      ...(useLanguage ? { [language]: byLanguage(language) } : {}),
+    };
   }
 
   public async getJurisdictionOverridesById(
     jurisdictionId: string,
     language: LanguagesEnum,
     site: SiteEnum,
-  ): Promise<Record<string, string>> {
+  ): Promise<Record<string, Record<string, string>>> {
     await this.resolveJurisdictionId({ id: jurisdictionId }, jurisdictionId);
     return this.getJurisdictionOverrides(jurisdictionId, language, site);
   }
@@ -155,7 +155,7 @@ export class TranslationService {
     jurisdictionName: string,
     language: LanguagesEnum,
     site: SiteEnum,
-  ): Promise<Record<string, string>> {
+  ): Promise<Record<string, Record<string, string>>> {
     const jurisdictionId = await this.resolveJurisdictionId(
       { name: jurisdictionName },
       jurisdictionName,
