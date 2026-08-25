@@ -146,6 +146,45 @@ describe('Testing jurisdiction content service', () => {
       expect(prisma.jurisdictionContent.findMany).not.toHaveBeenCalled();
     });
 
+    it('sanitizes stored html on read, whatever wrote the row', async () => {
+      prisma.jurisdictionContent.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          language: LanguagesEnum.en,
+          disclaimers: {
+            disclaimerHtml:
+              '<p onclick="alert(1)">Notice</p><script>alert(2)</script>',
+          },
+          footer: {
+            textSectionsHtml: ['<a href="javascript:alert(3)">Link</a>'],
+          },
+          faq: {
+            categories: [
+              {
+                id: 'general',
+                items: [
+                  {
+                    id: 'a',
+                    question: 'What?',
+                    answerHtml: '<img src="x" onerror="alert(4)"><b>Answer</b>',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ]);
+
+      const merged = await service.getMergedContent(
+        randomUUID(),
+        LanguagesEnum.en,
+      );
+
+      expect(merged.disclaimers.disclaimerHtml).toEqual('<p>Notice</p>');
+      expect(merged.footer.textSectionsHtml).toEqual(['<a>Link</a>']);
+      expect(merged.faq.categories[0].items[0].answerHtml).toEqual(
+        '<b>Answer</b>',
+      );
+    });
     it('logs a warning without throwing when a stored row is malformed', async () => {
       prisma.jurisdictionContent.findMany = jest.fn().mockResolvedValueOnce([
         {
@@ -221,6 +260,23 @@ describe('Testing jurisdiction content service', () => {
         'read',
         { jurisdictionId },
       );
+    });
+
+    it('sanitizes stored html on read', async () => {
+      prisma.jurisdictionContent.findFirst = jest.fn().mockResolvedValueOnce({
+        id: 'row',
+        jurisdictionId: 'jurisdiction',
+        language: 'en',
+        disclaimers: { privacyHtml: '<p onclick="alert(1)">Privacy</p>' },
+      });
+
+      const row = await service.getContent(
+        randomUUID(),
+        LanguagesEnum.en,
+        adminUser,
+      );
+
+      expect(row.disclaimers.privacyHtml).toEqual('<p>Privacy</p>');
     });
 
     it('returns null when no row exists for that language', async () => {
