@@ -1,4 +1,4 @@
-import { BloomCard } from "@bloom-housing/shared-helpers"
+import { BloomCard, tIfExists } from "@bloom-housing/shared-helpers"
 import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import {
@@ -42,20 +42,27 @@ export const HomeResources = (props: HomeResourcesProps) => {
               className={styles["resource"]}
               iconClass={"card-icon"}
             >
-              <Card.Section>
-                <Button
-                  key={"sign-up"}
-                  href={
-                    enableCustomListingNotifications
-                      ? "/account/notifications"
-                      : props.jurisdiction.notificationsSignUpUrl
-                  }
-                  variant="primary-outlined"
-                  size={"sm"}
-                >
-                  {t("welcome.signUpToday")}
-                </Button>
-              </Card.Section>
+              <>
+                {tIfExists("welcome.signUpText") && (
+                  <Card.Section className={styles["resource-text"]}>
+                    {t("welcome.signUpText")}
+                  </Card.Section>
+                )}
+                <Card.Section>
+                  <Button
+                    key={"sign-up"}
+                    href={
+                      enableCustomListingNotifications
+                        ? "/account/notifications"
+                        : props.jurisdiction.notificationsSignUpUrl
+                    }
+                    variant="primary-outlined"
+                    size={"sm"}
+                  >
+                    {t("welcome.signUpToday")}
+                  </Button>
+                </Card.Section>
+              </>
             </BloomCard>
           </Grid.Cell>
         )}
@@ -69,16 +76,23 @@ export const HomeResources = (props: HomeResourcesProps) => {
               className={styles["resource"]}
               iconClass={"card-icon"}
             >
-              <Card.Section>
-                <Button
-                  key={"additional-resources"}
-                  href="/additional-resources"
-                  variant="primary-outlined"
-                  size={"sm"}
-                >
-                  {t("welcome.viewAdditionalHousingTruncated")}
-                </Button>
-              </Card.Section>
+              <>
+                {tIfExists("welcome.viewAdditionalHousingText") && (
+                  <Card.Section className={styles["resource-text"]}>
+                    {t("welcome.viewAdditionalHousingText")}
+                  </Card.Section>
+                )}
+                <Card.Section>
+                  <Button
+                    key={"additional-resources"}
+                    href="/additional-resources"
+                    variant="primary-outlined"
+                    size={"sm"}
+                  >
+                    {t("welcome.viewAdditionalHousingTruncated")}
+                  </Button>
+                </Card.Section>
+              </>
             </BloomCard>
           </Grid.Cell>
         )}
@@ -92,16 +106,23 @@ export const HomeResources = (props: HomeResourcesProps) => {
               className={styles["resource"]}
               iconClass={styles["resource-icon"]}
             >
-              <Card.Section>
-                <Button
-                  key={"learn-more"}
-                  href={t("resources.additionalResourcesLink")}
-                  variant="primary-outlined"
-                  size={"sm"}
-                >
-                  {t("welcome.learnMore")}
-                </Button>
-              </Card.Section>
+              <>
+                {tIfExists("resources.additionalResourcesText") && (
+                  <Card.Section className={styles["resource-text"]}>
+                    {t("resources.additionalResourcesText")}
+                  </Card.Section>
+                )}
+                <Card.Section>
+                  <Button
+                    key={"learn-more"}
+                    href={t("resources.additionalResourcesLink")}
+                    variant="primary-outlined"
+                    size={"sm"}
+                  >
+                    {t("welcome.learnMore")}
+                  </Button>
+                </Card.Section>
+              </>
             </BloomCard>
           </Grid.Cell>
         )}
