@@ -21,7 +21,8 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
-import { fetchSharedPageProps, useRedirectToPrevPage } from "../lib/hooks"
+import { useRedirectToPrevPage } from "../lib/hooks"
+import { sharedGetStaticProps } from "../lib/sharedPageProps"
 import styles from "../../styles/verify.module.scss"
 
 const Verify = () => {
@@ -211,11 +212,4 @@ const Verify = () => {
 
 export { Verify as default, Verify }
 
-export async function getStaticProps({ locale }: { locale?: string }) {
-  const shared = await fetchSharedPageProps(locale)
-
-  return {
-    props: { ...shared },
-    revalidate: Number(process.env.cacheRevalidate),
-  }
-}
+export const getStaticProps = sharedGetStaticProps

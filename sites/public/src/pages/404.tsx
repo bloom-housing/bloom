@@ -5,7 +5,7 @@ import Layout from "../layouts/application"
 import { Content404 } from "../components/page/Content404"
 import { Content404Deprecated } from "../components/page/Content404Deprecated"
 import { UserStatus } from "../lib/constants"
-import { fetchSharedPageProps } from "../lib/hooks"
+import { sharedGetStaticProps } from "../lib/sharedPageProps"
 
 const ErrorPage = () => {
   const { profile } = useContext(AuthContext)
@@ -27,11 +27,4 @@ const ErrorPage = () => {
 
 export { ErrorPage as default, ErrorPage }
 
-export async function getStaticProps({ locale }: { locale?: string }) {
-  const shared = await fetchSharedPageProps(locale)
-
-  return {
-    props: { ...shared },
-    revalidate: Number(process.env.cacheRevalidate),
-  }
-}
+export const getStaticProps = sharedGetStaticProps

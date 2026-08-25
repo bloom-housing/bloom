@@ -14,7 +14,8 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { isFeatureFlagOn } from "../../../lib/helpers"
-import { fetchSharedPageProps, useFormConductor } from "../../../lib/hooks"
+import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
@@ -120,11 +121,4 @@ const ApplicationPreferredUnits = () => {
 
 export default ApplicationPreferredUnits
 
-export async function getStaticProps({ locale }: { locale?: string }) {
-  const shared = await fetchSharedPageProps(locale)
-
-  return {
-    props: { ...shared },
-    revalidate: Number(process.env.cacheRevalidate),
-  }
-}
+export const getStaticProps = sharedGetStaticProps

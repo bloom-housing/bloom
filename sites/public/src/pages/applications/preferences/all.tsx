@@ -7,7 +7,8 @@ import {
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import ApplicationMultiselectQuestionStep from "../../../components/applications/ApplicationMultiselectQuestionStep"
 import { isFeatureFlagOn } from "../../../lib/helpers"
-import { fetchSharedPageProps, useFormConductor } from "../../../lib/hooks"
+import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const ApplicationPreferencesAll = () => {
   const { conductor, listing } = useFormConductor("preferences")
@@ -36,11 +37,4 @@ const ApplicationPreferencesAll = () => {
 
 export default ApplicationPreferencesAll
 
-export async function getStaticProps({ locale }: { locale?: string }) {
-  const shared = await fetchSharedPageProps(locale)
-
-  return {
-    props: { ...shared },
-    revalidate: Number(process.env.cacheRevalidate),
-  }
-}
+export const getStaticProps = sharedGetStaticProps

@@ -12,7 +12,7 @@ import {
 import { SubmittedApplicationView } from "../../../../components/applications/SubmittedApplicationView"
 import { ApplicationError } from "../../../../components/account/ApplicationCards"
 import FormsLayout from "../../../../layouts/forms"
-import { fetchSharedPageProps } from "../../../../lib/hooks"
+import { sharedGetServerSideProps } from "../../../../lib/sharedPageProps"
 
 const AccountApplication = () => {
   const router = useRouter()
@@ -118,11 +118,4 @@ const AccountApplication = () => {
 
 export default AccountApplication
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getServerSideProps(context: { req: any; query: any; locale?: string }) {
-  const shared = await fetchSharedPageProps(context.locale, context.req)
-
-  return {
-    props: { ...shared },
-  }
-}
+export const getServerSideProps = sharedGetServerSideProps

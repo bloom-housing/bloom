@@ -10,7 +10,7 @@ import { pushGtmEvent, PageView, AuthContext } from "@bloom-housing/shared-helpe
 import { UserStatus } from "../../lib/constants"
 import { SubmittedApplicationView } from "../../components/applications/SubmittedApplicationView"
 import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { fetchSharedPageProps } from "../../lib/hooks"
+import { sharedGetStaticProps } from "../../lib/sharedPageProps"
 
 const ApplicationView = () => {
   const { application, listing } = useContext(AppSubmissionContext)
@@ -51,11 +51,4 @@ const ApplicationView = () => {
 
 export default ApplicationView
 
-export async function getStaticProps({ locale }: { locale?: string }) {
-  const shared = await fetchSharedPageProps(locale)
-
-  return {
-    props: { ...shared },
-    revalidate: Number(process.env.cacheRevalidate),
-  }
-}
+export const getStaticProps = sharedGetStaticProps

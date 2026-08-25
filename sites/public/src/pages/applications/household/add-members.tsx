@@ -14,7 +14,8 @@ import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
 import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
 import { HouseholdMemberForm } from "../../../components/applications/HouseholdMemberForm"
-import { fetchSharedPageProps, useFormConductor } from "../../../lib/hooks"
+import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 
@@ -145,11 +146,4 @@ const ApplicationAddMembers = () => {
 
 export default ApplicationAddMembers
 
-export async function getStaticProps({ locale }: { locale?: string }) {
-  const shared = await fetchSharedPageProps(locale)
-
-  return {
-    props: { ...shared },
-    revalidate: Number(process.env.cacheRevalidate),
-  }
-}
+export const getStaticProps = sharedGetStaticProps
