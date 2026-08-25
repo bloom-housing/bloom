@@ -1,5 +1,5 @@
 import axios from "axios"
-import { fetchPublicOverrides, OVERRIDES_TIMEOUT_MS } from "../../src/lib/hooks"
+import { fetchPublicOverrides, OVERRIDES_TIMEOUT_MS } from "../../../src/lib/hooks"
 
 const mockedGet = jest.spyOn(axios, "get")
 

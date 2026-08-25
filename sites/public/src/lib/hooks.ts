@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import axios from "axios"
 import { useRouter } from "next/router"
+import { PHASE_PRODUCTION_BUILD } from "next/constants"
 import qs from "qs"
 import {
   EnumListingFilterParamsComparison,
@@ -350,7 +351,7 @@ export const OVERRIDES_TIMEOUT_MS = 5000
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchPublicOverrides(language?: string, req?: any) {
   const key = language ?? "en"
-  const duringBuild = process.env.NEXT_PHASE === "phase-production-build"
+  const duringBuild = process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD
   if (duringBuild && publicOverridesByLanguage.has(key)) {
     return publicOverridesByLanguage.get(key)
   }
