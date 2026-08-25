@@ -6,7 +6,7 @@ type Hooks = typeof import("../../src/lib/hooks")
 
 let mockedGet: jest.SpyInstance
 let fetchJurisdictionContent: Hooks["fetchJurisdictionContent"]
-let OVERRIDES_TIMEOUT_MS: number
+let API_TIMEOUT_MS: number
 
 describe("fetchJurisdictionContent", () => {
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe("fetchJurisdictionContent", () => {
     mockedGet = jest.spyOn(axios, "get")
     const hooks = require("../../src/lib/hooks") as Hooks
     fetchJurisdictionContent = hooks.fetchJurisdictionContent
-    OVERRIDES_TIMEOUT_MS = hooks.OVERRIDES_TIMEOUT_MS
+    API_TIMEOUT_MS = hooks.API_TIMEOUT_MS
     process.env.backendApiBase = "http://localhost:3100"
     process.env.jurisdictionName = "Bloomington"
     process.env.API_PASS_KEY = "test-passkey"
@@ -31,7 +31,7 @@ describe("fetchJurisdictionContent", () => {
       {
         params: { language: "es" },
         headers: { passkey: process.env.API_PASS_KEY },
-        timeout: OVERRIDES_TIMEOUT_MS,
+        timeout: API_TIMEOUT_MS,
       }
     )
   })
