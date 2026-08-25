@@ -177,18 +177,15 @@ describe('Testing email service', () => {
     );
     expect(sendMock).toHaveBeenCalled();
     expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
-    expect(sendMock.mock.calls[0][0].subject).toEqual('Forgot your password?');
+    expect(sendMock.mock.calls[0][0].subject).toEqual('Reset your password?');
     expect(sendMock.mock.calls[0][0].body).toContain(
-      'A request to reset your Bloom Housing Portal website password for http://localhost:3001 has recently been made.',
-    );
-    expect(sendMock.mock.calls[0][0].body).toContain(
-      'If you did make this request, please click on the link below to reset your password:',
+      ' We received a request to reset your password for your Bloom Housing Portal account. You must click the following link to complete the reset:',
     );
     expect(sendMock.mock.calls[0][0].body).toContain(
       '<a href="http://localhost:3001/reset-password?token&#x3D;resetToken">Change my password</a>',
     );
     expect(sendMock.mock.calls[0][0].body).toContain(
-      'Your password won&#x27;t change until you access the link above and create a new one.',
+      'This password reset is only valid for the next hour. If you didn’t make this request, please ignore this email.',
     );
   });
 
@@ -205,18 +202,15 @@ describe('Testing email service', () => {
     );
     expect(sendMock).toHaveBeenCalled();
     expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
-    expect(sendMock.mock.calls[0][0].subject).toEqual('Forgot your password?');
+    expect(sendMock.mock.calls[0][0].subject).toEqual('Reset your password?');
     expect(sendMock.mock.calls[0][0].body).toContain(
-      'A request to reset your Bloom Housing Portal website password for http://localhost:3001 has recently been made.',
-    );
-    expect(sendMock.mock.calls[0][0].body).toContain(
-      'If you did make this request, please click on the link below to reset your password:',
+      'We received a request to reset your password for your Bloom Housing Portal account. You must click the following link to complete the reset:',
     );
     expect(sendMock.mock.calls[0][0].body).toContain(
       '<a href="http://localhost:3001/reset-password?token&#x3D;resetToken&amp;redirectUrl&#x3D;redirect&amp;listingId&#x3D;123">Change my password</a>',
     );
     expect(sendMock.mock.calls[0][0].body).toContain(
-      'Your password won&#x27;t change until you access the link above and create a new one.',
+      'This password reset is only valid for the next hour. If you didn’t make this request, please ignore this email.',
     );
   });
 
