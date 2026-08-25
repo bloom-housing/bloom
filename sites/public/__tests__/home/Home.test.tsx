@@ -93,6 +93,10 @@ describe("<Home>", () => {
     )
     expect(screen.queryByText(/Under Construction/i)).not.toBeInTheDocument()
   })
+  it("shows the resources section", () => {
+    render(<Home underConstructionListings={[]} jurisdiction={jurisdiction} />)
+    expect(screen.getByRole("heading", { level: 2, name: /Resources/i })).toBeInTheDocument()
+  })
   describe("enableHomePageSearchHero", () => {
     it("shows the search hero and hides the default hero button when toggled on", () => {
       render(
