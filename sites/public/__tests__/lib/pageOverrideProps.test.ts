@@ -7,6 +7,7 @@ jest.mock("axios")
 // Every page with a data function has to pass the overrides through, or its strings silently stay
 // on the bundled values. Listing them here rather than testing a sample keeps that honest.
 const GENERATED = [
+  "404",
   "account/applications/closed/index",
   "account/applications/index",
   "account/applications/lottery/index",
@@ -18,8 +19,15 @@ const GENERATED = [
   "finder",
   "get-assistance",
   "index",
+  "create-account",
+  "create-advocate-account-confirmation",
+  "disclaimer",
+  "forgot-password",
   "listing/[id]/[slug]",
+  "privacy",
+  "reset-password",
   "sign-in",
+  "verify",
 ]
 
 const PER_REQUEST = [

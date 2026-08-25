@@ -15,6 +15,7 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
+import { fetchSharedPageProps } from "../lib/hooks"
 
 const ResetPassword = () => {
   const router = useRouter()
@@ -114,3 +115,12 @@ const ResetPassword = () => {
 }
 
 export { ResetPassword as default, ResetPassword }
+
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const shared = await fetchSharedPageProps(locale)
+
+  return {
+    props: { ...shared },
+    revalidate: Number(process.env.cacheRevalidate),
+  }
+}

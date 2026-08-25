@@ -29,6 +29,7 @@ import styles from "../../styles/create-account.module.scss"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefits from "../components/account/SignUpBenefits"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
+import { fetchSharedPageProps } from "../lib/hooks"
 
 const CreateAccount = () => {
   const { createPublicUser, resendConfirmation } = useContext(AuthContext)
@@ -254,3 +255,12 @@ const CreateAccount = () => {
 }
 
 export default CreateAccount
+
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const shared = await fetchSharedPageProps(locale)
+
+  return {
+    props: { ...shared },
+    revalidate: Number(process.env.cacheRevalidate),
+  }
+}
