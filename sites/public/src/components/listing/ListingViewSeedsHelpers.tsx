@@ -622,6 +622,8 @@ export const getEligibilitySections = (
             return {
               heading: enableV2MSQ
                 ? question.multiselectQuestions.name
+                  ? question.multiselectQuestions.name
+                  : question.multiselectQuestions.text
                 : question.multiselectQuestions.text,
               description: question.multiselectQuestions.description,
             }
@@ -650,6 +652,8 @@ export const getEligibilitySections = (
                   return {
                     heading: enableV2MSQ
                       ? question.multiselectQuestions.name
+                        ? question.multiselectQuestions.name
+                        : question.multiselectQuestions.text
                       : question.multiselectQuestions.text,
                     description: question.multiselectQuestions.description,
                   }

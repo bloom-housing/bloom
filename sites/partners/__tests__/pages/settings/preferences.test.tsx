@@ -101,7 +101,7 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              userRoles: { id: "user1", isAdmin: false, isPartner: true },
+              userRoles: { id: "user1", isJurisdictionalAdmin: true },
               jurisdictions: [
                 {
                   id: "jurisdiction1",

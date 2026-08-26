@@ -47,6 +47,8 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableCreditScreeningFee](./feature-flags/enableCreditScreeningFee.md) | When true, credit screening fee is enabled for listings |
 | [enableCustomListingNotifications](./feature-flags/enableCustomListingNotifications.md) | When true, users have access to custom notification settings |
 | [enableDbDrivenContent](./feature-flags/enableDbDrivenContent.md) | When true, the jurisdiction reads its translations and structured content from the database instead of the bundled override files |
+| [enableDuplicatesDetails](./feature-flags/enableDuplicatesDetails.md) | When true, lottery published applicant email contains duplicates details section |
+| [enableExportTerms](./feature-flags/enableExportTerms.md) | When true, display terms of use before exporting applications and lotteries from the partner site |
 | [enableFaq](./feature-flags/enableFaq.md) | When true, a link to the FAQ page is displayed on the get assistance page |
 | [enableFilterByBathroom](./feature-flags/enableFilterByBathroom.md) | When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms |
 | [enableFilterByCounty](./feature-flags/enableFilterByCounty.md) | When true, the filter drawer on the public site includes the option to filter listings by county |
@@ -54,6 +56,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableGenderQuestion](./feature-flags/enableGenderQuestion.md) | When true, the gender identity question is displayed in the public and partner application demographics section |
 | [enableGeocodingPreferences](./feature-flags/enableGeocodingPreferences.md) | When true, preferences can be created with geocoding functionality and when an application is created/updated on a listing that is geocoding then the application gets geocoded |
 | [enableGeocodingRadiusMethod](./feature-flags/enableGeocodingRadiusMethod.md) | When true, preferences can be created with geocoding functionality that verifies via a mile radius |
+| [enableHomePageSearchHero](./feature-flags/enableHomePageSearchHero.md) | When true, the home page hero has a search form |
 | [enableHomeType](./feature-flags/enableHomeType.md) | When true, home type feature is turned on |
 | [enableHousingAdvocate](./feature-flags/enableHousingAdvocate.md) | When true, partners can view housing advocate users |
 | [enableHousingBasics](./feature-flags/enableHousingBasics.md) | When true, a link to the housing basics page is displayed on the get assistance page |
