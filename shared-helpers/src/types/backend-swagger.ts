@@ -1721,7 +1721,7 @@ export class ApplicationsService {
       listingId: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<StreamableFile> {
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/applications/bulk-update/template"
 
@@ -8919,9 +8919,6 @@ export interface PublicAppsViewResponse {
   applicationsCount: PublicAppsCount
 }
 
-/** StreamableFile */
-export interface StreamableFile {}
-
 /** ApplicationSelectionOptionCreate */
 export interface ApplicationSelectionOptionCreate {
   /**  */
@@ -11693,7 +11690,7 @@ export enum FeatureFlagEnum {
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableDbDrivenContent" = "enableDbDrivenContent",
-  "enableDuplicatesDetails" = "enableDuplicatesDetails",
+  "enableDuplicatesDetailsInEmail" = "enableDuplicatesDetailsInEmail",
   "enableExportTerms" = "enableExportTerms",
   "enableFaq" = "enableFaq",
   "enableFilterByBathroom" = "enableFilterByBathroom",
