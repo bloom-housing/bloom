@@ -81,11 +81,13 @@ export const ContentFieldCard = ({
     <Card className={className}>
       <Card.Section>
         <div className={styles["field-header"]}>
-          {state === "fallback" && <span className={styles["field-label"]}>{t(labelKey)}</span>}
           {state === "fallback" && (
-            <Tag variant="secondary">
-              {isEnglish ? t("content.notSet") : t("content.usingEnglish")}
-            </Tag>
+            <>
+              <span className={styles["field-label"]}>{t(labelKey)}</span>
+              <Tag variant="secondary">
+                {isEnglish ? t("content.notSet") : t("content.usingEnglish")}
+              </Tag>
+            </>
           )}
           {state === "hidden" && <Tag variant="secondary">{t("content.hidden")}</Tag>}
           {stale && <Tag variant="highlight-warm">{t("content.stale")}</Tag>}
