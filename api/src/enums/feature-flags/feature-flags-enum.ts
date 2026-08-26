@@ -22,6 +22,7 @@ export enum FeatureFlagEnum {
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableCustomListingNotifications = 'enableCustomListingNotifications',
   enableDbDrivenContent = 'enableDbDrivenContent',
+  enableDuplicatesDetailsInEmail = 'enableDuplicatesDetailsInEmail',
   enableExportTerms = 'enableExportTerms',
   enableFaq = 'enableFaq',
   enableFilterByBathroom = 'enableFilterByBathroom',
@@ -31,6 +32,7 @@ export enum FeatureFlagEnum {
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
+  enableHomePageSearchHero = 'enableHomePageSearchHero',
   enableHousingAdvocate = 'enableHousingAdvocate',
   enableHousingBasics = 'enableHousingBasics',
   enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
@@ -72,6 +74,7 @@ export enum FeatureFlagEnum {
   enableSingleUseCode = 'enableSingleUseCode',
   enableSmokingPolicyRadio = 'enableSmokingPolicyRadio',
   enableSpokenLanguage = 'enableSpokenLanguage',
+  enableStopLights = 'enableStopLights',
   enableSupportAdmin = 'enableSupportAdmin',
   enableUnderConstructionHome = 'enableUnderConstructionHome',
   enableUnitAccessibilityTypeTags = 'enableUnitAccessibilityTypeTags',
@@ -192,6 +195,11 @@ export const featureFlagMap: {
       'When true, the jurisdiction reads its translations and structured content from the database instead of the bundled override files',
   },
   {
+    name: FeatureFlagEnum.enableDuplicatesDetailsInEmail,
+    description:
+      'When true, lottery published applicant email contains duplicates details section',
+  },
+  {
     name: FeatureFlagEnum.enableExportTerms,
     description:
       'When true, display terms of use before exporting applications and lotteries from the partner site',
@@ -234,6 +242,10 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableHomeType,
     description: 'When true, home type feature is turned on',
+  },
+  {
+    name: FeatureFlagEnum.enableHomePageSearchHero,
+    description: 'When true, the home page hero has a search form',
   },
   {
     name: FeatureFlagEnum.enableHousingAdvocate,
@@ -424,6 +436,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableSpokenLanguage,
     description:
       'When true, the application demographics section displays a spoken language question with options configured on the jurisdiction',
+  },
+  {
+    name: FeatureFlagEnum.enableStopLights,
+    description:
+      'When true, Stop Light eligibility rules enabled for the jurisdiction are evaluated on the public application, blocking (red) or warning (yellow) the applicant',
   },
   {
     name: FeatureFlagEnum.enableSupportAdmin,
