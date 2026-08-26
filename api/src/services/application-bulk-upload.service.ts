@@ -21,7 +21,7 @@ import { CsvHeader } from '../types/CsvExportInterface';
 import { formatLocalDate } from '../utilities/format-local-date';
 import { Application } from '../dtos/applications/application.dto';
 import { mapTo } from '../utilities/mapTo';
-import { zipExport } from '../utilities/zip-export';
+import { zipExportSecure } from '../utilities/zip-export';
 import { User } from '../dtos/users/user.dto';
 import { ListingService } from './listing.service';
 import { PermissionService } from './permission.service';
@@ -182,7 +182,7 @@ export class ApplicationBulkUploadService {
   async downloadBulkUpdateTemplate(
     listingId: string,
     user: User,
-  ): Promise<StreamableFile> {
+  ): Promise<string> {
     await this.authorizeExport(user, listingId);
 
     const applications = await this.prisma.applications.findMany({
@@ -210,7 +210,16 @@ export class ApplicationBulkUploadService {
     const zipFilename = `listing-${listingId}-applications-bulk-update-template`;
     const filename = `applications-${listingId}-${dateString}`;
 
-    return await zipExport(readStream, zipFilename, filename, false);
+    const path = await zipExportSecure(
+      readStream,
+      zipFilename,
+      filename,
+      false,
+    );
+
+    const s3Key = `bulk_template_export_${now.getTime()}.zip`;
+    await this.s3Service.uploadToPrivate(s3Key, path);
+    return await this.s3Service.urlForPrivate(s3Key);
   }
 
   async csvTemplateExport(

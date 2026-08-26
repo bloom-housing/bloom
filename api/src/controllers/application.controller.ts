@@ -217,11 +217,11 @@ export class ApplicationController {
   })
   @Header('Content-Type', 'application/zip')
   @UseInterceptors(ExportLogInterceptor)
-  @ApiOkResponse({ type: StreamableFile })
+  @ApiOkResponse({ type: String })
   async downloadBulkUpdateTemplate(
     @Request() req: ExpressRequest,
     @Query('listingId') listingId: string,
-  ): Promise<StreamableFile> {
+  ): Promise<string> {
     return await this.applicationBulkUploadService.downloadBulkUpdateTemplate(
       listingId,
       mapTo(User, req['user']),
