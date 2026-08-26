@@ -1,3 +1,5 @@
+import fs from "fs"
+import path from "path"
 import axios from "axios"
 import * as hooks from "../../src/lib/hooks"
 
@@ -71,6 +73,20 @@ const PER_REQUEST = [
   "preview/listings/[id]",
 ]
 
+// These render a meta refresh and nothing else, so they have no strings to override.
+const NO_SHARED_PROPS = ["listing/[id]", "redirect"]
+
+const pagesDir = path.join(__dirname, "../../src/pages")
+
+const pagesOnDisk = (dir: string = pagesDir): string[] =>
+  fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const full = path.join(dir, entry.name)
+    if (entry.isDirectory()) return entry.name === "api" ? [] : pagesOnDisk(full)
+    if (!entry.name.endsWith(".tsx")) return []
+    const name = path.relative(pagesDir, full).replace(/\.tsx$/, "")
+    return ["_app", "_document", "_error"].includes(name) ? [] : [name]
+  })
+
 const overrides = { en: { "a.key": "Override" } }
 const content = { faq: { categories: [] } }
 const shared = { jurisdiction: {}, publicOverrides: overrides, jurisdictionContent: content }
@@ -88,7 +104,8 @@ const load = (page: string): any => require(`../../src/pages/${page}`)
 describe("pages pass the stored overrides through", () => {
   beforeEach(() => {
     jest.restoreAllMocks()
-    process.env.cacheRevalidate = "30"
+    // Not the 30 second default, so a page that hardcoded the default would fail below.
+    process.env.cacheRevalidate = "45"
     jest.spyOn(hooks, "fetchSharedPageProps").mockResolvedValue(shared as never)
     jest.spyOn(hooks, "fetchLimitedUnderConstructionListings").mockResolvedValue({} as never)
     jest.spyOn(hooks, "fetchOpenListings").mockResolvedValue({} as never)
@@ -97,17 +114,24 @@ describe("pages pass the stored overrides through", () => {
     ;(axios.get as unknown as jest.Mock).mockResolvedValue({ data: {} })
   })
 
+  // Listing the pages here only keeps the suite honest if the list matches what is on disk.
+  it("lists every page", () => {
+    expect(pagesOnDisk().sort()).toEqual([...GENERATED, ...PER_REQUEST, ...NO_SHARED_PROPS].sort())
+  })
+
   it.each(GENERATED)("%s is generated with the overrides and a revalidate", async (page) => {
     const result = await load(page).getStaticProps(context)
 
+    expect(result.props.jurisdiction).toEqual(shared.jurisdiction)
     expect(result.props.publicOverrides).toEqual(overrides)
     expect(result.props.jurisdictionContent).toEqual(content)
-    expect(Number.isFinite(result.revalidate)).toBe(true)
+    expect(result.revalidate).toEqual(45)
   })
 
   it.each(PER_REQUEST)("%s is rendered per request with the overrides", async (page) => {
     const result = await load(page).getServerSideProps(context)
 
+    expect(result.props.jurisdiction).toEqual(shared.jurisdiction)
     expect(result.props.publicOverrides).toEqual(overrides)
     expect(result.props.jurisdictionContent).toEqual(content)
     // Generated pages regenerate on a timer; these do not and must not claim to.
