@@ -45,10 +45,12 @@ const SettingsAgencies = () => {
     true
   )
   const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
+  const enableTranslations = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableDbDrivenContent)
   const settingsTabsFeatureFlags = {
     enablePreferences: atLeastOneJurisdictionEnablesPreferences,
     enableProperties,
     enableAgencies,
+    enableTranslations,
   }
 
   if (
@@ -174,11 +176,12 @@ const SettingsAgencies = () => {
         </Head>
         <NavigationHeader className="relative" title={t("t.settings")} />
         <TabView
-          hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags) <= 1}
+          hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags, profile?.userRoles) <= 1}
           tabs={getSettingsTabs(
             SettingsIndexEnum.agencies,
             v2Preferences,
-            settingsTabsFeatureFlags
+            settingsTabsFeatureFlags,
+            profile?.userRoles
           )}
         >
           <AgTable

@@ -22,6 +22,17 @@
     padding-bottom: 0;
   }
 
+  .radio-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--seeds-spacer-content);
+    align-items: center;
+
+    > * {
+      flex: 0 0 auto;
+    }
+  }
+
   .accessibility-category-groups {
     .filter-section {
       border-block-end-width: 0;

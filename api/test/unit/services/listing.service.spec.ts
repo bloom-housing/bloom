@@ -1603,6 +1603,7 @@ describe('Testing listing service', () => {
             },
           },
           listingsBuildingAddress: true,
+          listingFeatures: true,
           listingImages: {
             include: {
               assets: true,
@@ -1612,6 +1613,7 @@ describe('Testing listing service', () => {
           units: {
             select: {
               monthlyRent: true,
+              monthlyRentAsPercentOfIncome: true,
               unitTypes: {
                 select: { numBedrooms: true, name: true },
               },
@@ -2097,7 +2099,7 @@ describe('Testing listing service', () => {
 
     it('should return a where clause for filter bathrooms', () => {
       const filter = [
-        { $comparison: 'IN', bathrooms: [2] } as ListingFilterParams,
+        { $comparison: '>=', bathrooms: 2 } as ListingFilterParams,
       ];
       const whereClause = service.buildWhereClause(filter, '');
 
@@ -2114,7 +2116,7 @@ describe('Testing listing service', () => {
                 units: {
                   some: {
                     numBathrooms: {
-                      in: [2],
+                      gte: 2,
                     },
                   },
                 },

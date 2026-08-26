@@ -1,24 +1,29 @@
 import React, { FC, ReactElement } from "react"
 import { render, RenderOptions } from "@testing-library/react"
 import { SWRConfig } from "swr"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { AuthProvider, ConfigProvider } from "@bloom-housing/shared-helpers"
 import { formDefaults, FormListing } from "../src/lib/listings/formTypes"
 import { FormProvider, useForm } from "react-hook-form"
 
 const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => {
+  const queryClient = new QueryClient()
+
   return (
-    <SWRConfig
-      value={{
-        provider: () => new Map(),
-        dedupingInterval: 0,
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
-      }}
-    >
-      <ConfigProvider apiUrl={"http://localhost:3100"}>
-        <AuthProvider>{children}</AuthProvider>
-      </ConfigProvider>
-    </SWRConfig>
+    <QueryClientProvider client={queryClient}>
+      <SWRConfig
+        value={{
+          provider: () => new Map(),
+          dedupingInterval: 0,
+          revalidateOnFocus: false,
+          revalidateOnReconnect: false,
+        }}
+      >
+        <ConfigProvider apiUrl={"http://localhost:3100"}>
+          <AuthProvider>{children}</AuthProvider>
+        </ConfigProvider>
+      </SWRConfig>
+    </QueryClientProvider>
   )
 }
 

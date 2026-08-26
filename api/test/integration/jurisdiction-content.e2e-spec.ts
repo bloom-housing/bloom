@@ -161,6 +161,35 @@ describe('Jurisdiction Content Controller Tests', () => {
         .expect(204);
     });
 
+    it('sanitizes a row written straight to the database', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await prisma.jurisdictionContent.create({
+        data: {
+          jurisdictionId: jurisdiction.id,
+          language: LanguagesEnum.en,
+          disclaimers: {
+            disclaimerHtml:
+              '<p onclick="alert(1)">Notice</p><script>alert(2)</script>',
+          },
+          footer: {
+            textSectionsHtml: ['<a href="javascript:alert(3)">Link</a>'],
+          },
+        },
+      });
+
+      const res = await request(app.getHttpServer())
+        .get(
+          `/jurisdictionContent/jurisdictions/${jurisdiction.id}?language=en`,
+        )
+        .set(passkey)
+        .expect(200);
+
+      expect(res.body.disclaimers.disclaimerHtml).toEqual('<p>Notice</p>');
+      expect(res.body.footer.textSectionsHtml).toEqual(['<a>Link</a>']);
+    });
+
     it('returns 404 for an unknown jurisdiction id', async () => {
       await request(app.getHttpServer())
         .get(`/jurisdictionContent/jurisdictions/${randomUUID()}?language=en`)
@@ -371,7 +400,7 @@ describe('Jurisdiction Content Controller Tests', () => {
         .expect(400);
     });
 
-    it('sanitizes rich-text HTML on write, stripping disallowed tags', async () => {
+    it('sanitizes rich-text HTML on write', async () => {
       await request(app.getHttpServer())
         .put(adminScope('zh'))
         .set('Cookie', adminCookies)
@@ -379,6 +408,10 @@ describe('Jurisdiction Content Controller Tests', () => {
         .send({
           footer: {
             textSectionsHtml: ['<script>alert(1)</script><p>keep</p>'],
+          },
+          disclaimers: {
+            disclaimerHtml:
+              '<p onclick="alert(1)">keep</p><a href="javascript:alert(2)">link</a>',
           },
           faq: {
             categories: [
@@ -397,14 +430,18 @@ describe('Jurisdiction Content Controller Tests', () => {
         })
         .expect(200);
 
-      const res = await request(app.getHttpServer())
-        .get(adminScope('zh'))
-        .set('Cookie', adminCookies)
-        .set(passkey)
-        .expect(200);
+      // Read the row rather than the endpoint: the response is sanitized on its way out, so a
+      // check through the API would pass even if nothing sanitized the value before it was stored.
+      const stored = await prisma.jurisdictionContent.findFirst({
+        where: { jurisdictionId, language: LanguagesEnum.zh },
+        select: { footer: true, disclaimers: true, faq: true },
+      });
 
-      expect(res.body.footer.textSectionsHtml[0]).toEqual('<p>keep</p>');
-      expect(res.body.faq.categories[0].items[0].answerHtml).toEqual(
+      expect(stored.footer['textSectionsHtml'][0]).toEqual('<p>keep</p>');
+      expect(stored.disclaimers['disclaimerHtml']).toEqual(
+        '<p>keep</p><a>link</a>',
+      );
+      expect(stored.faq['categories'][0].items[0].answerHtml).toEqual(
         'drop<strong>keep</strong>',
       );
     });

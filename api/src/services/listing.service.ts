@@ -121,9 +121,11 @@ selectViews.map = {
     },
   },
   reservedCommunityTypes: true,
+  listingFeatures: true,
   units: {
     select: {
       monthlyRent: true,
+      monthlyRentAsPercentOfIncome: true,
       unitTypes: {
         select: {
           numBedrooms: true,
