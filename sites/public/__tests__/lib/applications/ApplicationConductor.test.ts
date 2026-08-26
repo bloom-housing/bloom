@@ -133,11 +133,13 @@ describe("deciding whether to skip a step", () => {
   // This step writes. It reads config, so the value never differs.
   it("sets an advocate's alternate contact type and nothing else", () => {
     const conductor = buildConductor({ isAdvocate: true })
-    const before = { ...conductor.application, alternateContact: null }
+    const exceptAlternateContact = () =>
+      JSON.stringify({ ...conductor.application, alternateContact: null })
+    const before = exceptAlternateContact()
 
     askEveryStepWhetherToSkip(conductor)
 
-    expect({ ...conductor.application, alternateContact: null }).toEqual(before)
+    expect(exceptAlternateContact()).toEqual(before)
     expect(conductor.application.alternateContact).toEqual({
       ...blankApplication.alternateContact,
       type: "caseManager",

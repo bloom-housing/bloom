@@ -79,13 +79,19 @@ const NO_SHARED_PROPS = ["listing/[id]", "redirect"]
 
 const pagesDir = path.join(__dirname, "../../src/pages")
 
+// Next's defaults, which next.config.js does not narrow. A page added as .js is still a route.
+const PAGE_EXTENSION = /\.(tsx|ts|jsx|js)$/
+
+// _app and _error cannot take a data function. The Sentry route's copy is hardcoded English.
+const NOT_OVERRIDABLE = ["_app", "_document", "_error", "sentry-example-page"]
+
 const pagesOnDisk = (dir: string = pagesDir): string[] =>
   fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const full = path.join(dir, entry.name)
     if (entry.isDirectory()) return entry.name === "api" ? [] : pagesOnDisk(full)
-    if (!entry.name.endsWith(".tsx")) return []
-    const name = path.relative(pagesDir, full).replace(/\.tsx$/, "")
-    return ["_app", "_document", "_error"].includes(name) ? [] : [name]
+    if (!PAGE_EXTENSION.test(entry.name)) return []
+    const name = path.relative(pagesDir, full).replace(PAGE_EXTENSION, "")
+    return NOT_OVERRIDABLE.includes(name) ? [] : [name]
   })
 
 const overrides = { en: { "a.key": "Override" } }
