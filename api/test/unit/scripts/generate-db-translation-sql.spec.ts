@@ -107,6 +107,55 @@ describe('generate-db-translation-sql helpers', () => {
     );
   });
 
+  it('upserts a row per key, which is what email reads once the base rows exist', () => {
+    const sql = buildSql(
+      {
+        en: [
+          { path: ['footer', 'line1'], value: 'Bloom' },
+          {
+            path: ['applicationUpdate', 'applicationStatus', 'submitted'],
+            value: 'Submitted',
+          },
+        ],
+      } as any,
+      ['en'],
+    );
+
+    expect(sql).toContain(
+      'INSERT INTO translation_strings ("jurisdiction_id", "language", "site", "key", "value", "created_at", "updated_at")',
+    );
+    expect(sql).toContain("(NULL, 'en', NULL, 'footer.line1', 'Bloom'");
+    // The rows are flat, so a nested path becomes one dotted key rather than a subtree.
+    expect(sql).toContain(
+      "'applicationUpdate.applicationStatus.submitted', 'Submitted'",
+    );
+    expect(sql).toContain(
+      'ON CONFLICT ("jurisdiction_id", "language", "site", "key")',
+    );
+    expect(sql).toContain('DO UPDATE SET "value" = EXCLUDED."value"');
+  });
+
+  it('escapes quotes in a row value', () => {
+    const sql = buildSql(
+      { en: [{ path: ['footer', 'line1'], value: "Bloom's" }] } as any,
+      ['en'],
+    );
+
+    expect(sql).toContain("'footer.line1', 'Bloom''s'");
+  });
+
+  it('names the jurisdiction in the row upsert too', () => {
+    const sql = buildSql(
+      { en: [{ path: ['footer', 'line1'], value: 'Bloom' }] } as any,
+      ['en'],
+      'Bloomington',
+    );
+
+    expect(sql).toContain(
+      "((SELECT id FROM jurisdictions WHERE name = 'Bloomington' LIMIT 1), 'en', NULL, 'footer.line1'",
+    );
+  });
+
   it('targets default generic translations with null jurisdiction', () => {
     const sql = buildSql(
       {

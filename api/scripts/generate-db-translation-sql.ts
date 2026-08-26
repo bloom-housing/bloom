@@ -336,6 +336,32 @@ export const buildLanguagePatchMap = async (
   return result;
 };
 
+// The read path email uses once the base rows exist. Keys are the dotted paths polyglot addresses.
+export const buildTranslationRowUpsert = (
+  language: LanguageCode,
+  patch: Array<{ path: string[]; value: string }>,
+  jurisdictionIdExpression: string,
+): string => {
+  const values = patch
+    .map(
+      (entry) =>
+        `  (${jurisdictionIdExpression}, '${language}', NULL, '${escapeSqlLiteral(
+          entry.path.join('.'),
+        )}', '${escapeSqlLiteral(
+          entry.value,
+        )}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+    )
+    .join(',\n');
+
+  return [
+    'INSERT INTO translation_strings ("jurisdiction_id", "language", "site", "key", "value", "created_at", "updated_at")',
+    'VALUES',
+    values,
+    'ON CONFLICT ("jurisdiction_id", "language", "site", "key")',
+    'DO UPDATE SET "value" = EXCLUDED."value", "updated_at" = CURRENT_TIMESTAMP;',
+  ].join('\n');
+};
+
 export const buildSql = (
   languagePatchMap: Record<
     LanguageCode,
@@ -420,7 +446,15 @@ export const buildSql = (
       ? `language = '${language}' AND jurisdiction_id = ${jurisdictionIdExpression}`
       : `language = '${language}' AND jurisdiction_id IS NULL`;
 
-    return `-- ${language}\nWITH updated AS (\n  UPDATE translations\n  SET translations = ${updateExpression}\n  WHERE ${updateWhereClause}\n  RETURNING 1\n)\nINSERT INTO translations ("language", "translations", "jurisdiction_id", "created_at", "updated_at")\nSELECT\n  '${language}',\n  ${insertPayloadLiteral},\n  ${jurisdictionIdExpression},\n  CURRENT_TIMESTAMP,\n  CURRENT_TIMESTAMP\nWHERE NOT EXISTS (SELECT 1 FROM updated);`;
+    const blobStatement = `WITH updated AS (\n  UPDATE translations\n  SET translations = ${updateExpression}\n  WHERE ${updateWhereClause}\n  RETURNING 1\n)\nINSERT INTO translations ("language", "translations", "jurisdiction_id", "created_at", "updated_at")\nSELECT\n  '${language}',\n  ${insertPayloadLiteral},\n  ${jurisdictionIdExpression},\n  CURRENT_TIMESTAMP,\n  CURRENT_TIMESTAMP\nWHERE NOT EXISTS (SELECT 1 FROM updated);`;
+
+    // Until every environment has the base rows the blob is still what email reads there.
+    // TODO: #6519 backfills the rows; once it has run everywhere, drop the blob statement.
+    return [
+      `-- ${language}`,
+      buildTranslationRowUpsert(language, patch, jurisdictionIdExpression),
+      blobStatement,
+    ].join('\n');
   });
 
   return [...preludeStatements, ...statements, ''].join('\n');
