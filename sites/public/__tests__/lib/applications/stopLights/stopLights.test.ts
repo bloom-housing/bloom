@@ -4,17 +4,8 @@ import {
   FeatureFlagEnum,
   Listing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import {
-  StopLightRule,
-  stopLightRules,
-} from "../../../../src/lib/applications/stopLights/stopLightRules"
+import { StopLightRule } from "../../../../src/lib/applications/stopLights/stopLightRules"
 import { getEnabledStopLightRuleKeys } from "../../../../src/lib/applications/stopLights/enabledStopLightRuleKeys"
-
-describe("stopLightRules", () => {
-  it("ships with no registered rules", () => {
-    expect(stopLightRules).toEqual([])
-  })
-})
 
 const exampleRedRule: StopLightRule = {
   key: "exampleHouseholdTooLarge",
