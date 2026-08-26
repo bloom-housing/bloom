@@ -1,7 +1,8 @@
 import { GetServerSidePropsContext, GetStaticPropsContext } from "next"
 import { fetchSharedPageProps } from "./hooks"
 
-// Pages re-export these, so the props shape and the revalidate policy stay in one place.
+// Pages re-export these rather than repeating the block. Pages that return props of their own
+// still write their own data function and spread the same shape.
 
 export async function sharedGetStaticProps({ locale }: GetStaticPropsContext) {
   const shared = await fetchSharedPageProps(locale)

@@ -96,7 +96,9 @@ const pagesOnDisk = (dir: string = pagesDir): string[] =>
 
 const overrides = { en: { "a.key": "Override" } }
 const content = { faq: { categories: [] } }
-const shared = { jurisdiction: {}, publicOverrides: overrides, jurisdictionContent: content }
+// Identifiable rather than empty, so a page returning its own bare object fails the assertions.
+const jurisdiction = { id: "jurisdiction-id", name: "Bloomington" }
+const shared = { jurisdiction, publicOverrides: overrides, jurisdictionContent: content }
 
 const context = {
   req: { headers: {}, socket: {} },

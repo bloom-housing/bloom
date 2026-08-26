@@ -274,7 +274,7 @@ export default class ApplicationConductor {
       }
     } catch (error) {
       // Runs on mount, where a throw would take the step down, not just the navigation.
-      console.warn("could not prefetch the next step = ", error.message)
+      console.warn("could not prefetch the next step = ", String(error))
     }
   }
 
