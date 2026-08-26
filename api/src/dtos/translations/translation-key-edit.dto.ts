@@ -6,11 +6,13 @@ import { NoExecutableMarkup } from '../../decorators/no-executable-markup.decora
 
 // Matches the editor's textarea limit, and sits well above the longest bundled base value.
 const MAX_VALUE_LENGTH = 5000;
+const MAX_KEY_LENGTH = 255;
 
 export class TranslationKeyEdit {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(MAX_KEY_LENGTH, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   key: string;
 
