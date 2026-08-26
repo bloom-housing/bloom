@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
 import "@bloom-housing/ui-seeds/src/global/app-css.scss"
-import { addTranslation, NavigationContext, GenericRouter } from "@bloom-housing/ui-components"
+import { NavigationContext, GenericRouter } from "@bloom-housing/ui-components"
 import {
   AuthProvider,
   ConfigProvider,
@@ -21,7 +21,8 @@ import "ag-grid-community/dist/styles/ag-grid.css"
 import "ag-grid-community/dist/styles/ag-theme-alpine.css"
 
 import LinkComponent from "../components/core/LinkComponent"
-import { translations, overrideTranslations } from "../lib/translations"
+import { applyTranslations } from "../lib/translations"
+import { usePartnersOverrides } from "../lib/partnersOverrides"
 
 import "../../styles/overrides.scss"
 
@@ -43,16 +44,11 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     setHasMounted(true)
   }, [])
 
+  const { overrides, settled } = usePartnersOverrides(locale)
+
   useMemo(() => {
-    addTranslation(translations.general, true)
-    if (locale && locale !== "en" && translations[locale]) {
-      addTranslation(translations[locale])
-    }
-    addTranslation(overrideTranslations.en)
-    if (overrideTranslations[locale]) {
-      addTranslation(overrideTranslations[locale])
-    }
-  }, [locale])
+    applyTranslations(locale, overrides)
+  }, [locale, overrides])
 
   const queryClient = new QueryClient()
 
@@ -66,7 +62,9 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
             signInMessage={signInMessage}
             skipForRoutes={skipLoginRoutes}
           >
-            <MessageProvider>{hasMounted && <Component {...pageProps} />}</MessageProvider>
+            <MessageProvider>
+              {hasMounted && settled && <Component {...pageProps} />}
+            </MessageProvider>
           </RequireLogin>
         </AuthProvider>
       </ConfigProvider>
