@@ -130,7 +130,7 @@ describe("deciding whether to skip a step", () => {
     }
   })
 
-  // This step writes. It reads config, so the value doesn't differs.
+  // This step writes. It reads config, so the value never differs.
   it("sets an advocate's alternate contact type and nothing else", () => {
     const conductor = buildConductor({ isAdvocate: true })
     const before = { ...conductor.application, alternateContact: null }
