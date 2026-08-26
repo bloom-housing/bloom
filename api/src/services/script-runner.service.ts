@@ -34,6 +34,12 @@ import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-quest
 import { MultiselectOption } from '../dtos/multiselect-questions/multiselect-option.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
+import {
+  emailTranslationScope,
+  flattenTranslationTree,
+  hasMigratedTranslations,
+  writeTranslationRows,
+} from '../utilities/translation-write';
 
 /**
   this is the service for running scripts
@@ -249,7 +255,7 @@ export class ScriptRunnerService {
   async addLotteryTranslations(req: ExpressRequest): Promise<SuccessDTO> {
     const requestingUser = mapTo(User, req['user']);
     await this.markScriptAsRunStart('add lottery translations', requestingUser);
-    this.addLotteryTranslationsHelper(true);
+    await this.addLotteryTranslationsHelper(true);
     await this.markScriptAsComplete('add lottery translations', requestingUser);
 
     return { success: true };
@@ -270,7 +276,7 @@ export class ScriptRunnerService {
       'add lottery translations create if empty',
       requestingUser,
     );
-    this.addLotteryTranslationsHelper(true);
+    await this.addLotteryTranslationsHelper(true);
     await this.markScriptAsComplete(
       'add lottery translations create if empty',
       requestingUser,
@@ -363,26 +369,34 @@ export class ScriptRunnerService {
       requestingUser,
     );
 
-    const translations = await this.prisma.translations.findFirst({
-      where: { language: 'en', jurisdictionId: null },
-    });
-    const translationsJSON =
-      translations.translations as unknown as Prisma.JsonArray;
+    const singleUseCodeEmail = {
+      greeting: 'Hi',
+      message:
+        'Use the following code to sign in to your %{jurisdictionName} account. This code will be valid for 10 minutes. Never share this code.',
+      singleUseCode: '%{singleUseCode}',
+    };
 
-    await this.prisma.translations.update({
-      where: { id: translations.id },
-      data: {
-        translations: {
-          ...translationsJSON,
-          singleUseCodeEmail: {
-            greeting: 'Hi',
-            message:
-              'Use the following code to sign in to your %{jurisdictionName} account. This code will be valid for 10 minutes. Never share this code.',
-            singleUseCode: '%{singleUseCode}',
-          },
+    await writeTranslationRows(
+      this.prisma,
+      emailTranslationScope(LanguagesEnum.en),
+      flattenTranslationTree({ singleUseCodeEmail }),
+    );
+
+    // Until the base rows exist the blob is still what email reads, so it has to stay current.
+    if (!(await hasMigratedTranslations(this.prisma))) {
+      const translations = await this.prisma.translations.findFirst({
+        where: { language: 'en', jurisdictionId: null },
+      });
+      const translationsJSON =
+        translations.translations as unknown as Prisma.JsonArray;
+
+      await this.prisma.translations.update({
+        where: { id: translations.id },
+        data: {
+          translations: { ...translationsJSON, singleUseCodeEmail },
         },
-      },
-    });
+      });
+    }
 
     await this.markScriptAsComplete(
       'update code expiration translations',
@@ -1126,6 +1140,17 @@ export class ScriptRunnerService {
     newTranslations: Record<string, any>,
     createIfMissing?: boolean,
   ) {
+    await writeTranslationRows(
+      this.prisma,
+      emailTranslationScope(language),
+      flattenTranslationTree(newTranslations),
+    );
+
+    // Until the base rows exist the blob is still what email reads, so it has to stay current.
+    if (await hasMigratedTranslations(this.prisma)) {
+      return;
+    }
+
     let translations;
     translations = await this.prisma.translations.findMany({
       where: { language },

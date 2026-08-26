@@ -79,6 +79,11 @@ describe('Testing script runner service', () => {
     prisma.translations.update = jest.fn().mockResolvedValue(null);
     prisma.jurisdictions.findMany = jest.fn().mockResolvedValue([]);
     prisma.translations.create = jest.fn().mockResolvedValue(null);
+    prisma.translationStrings.count = jest.fn().mockResolvedValue(0);
+    prisma.translationStrings.updateMany = jest
+      .fn()
+      .mockResolvedValue({ count: 0 });
+    prisma.translationStrings.create = jest.fn().mockResolvedValue(null);
 
     const id = randomUUID();
     const scriptName = 'add lottery translations';
@@ -111,6 +116,37 @@ describe('Testing script runner service', () => {
         scriptName,
       },
     });
+
+    // The read path email uses, once the base rows exist.
+    expect(prisma.translationStrings.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        jurisdictionId: null,
+        site: null,
+        key: expect.stringContaining('.'),
+      }),
+    });
+  });
+
+  it('writes only the rows once the base rows exist', async () => {
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.translations.findMany = jest.fn().mockResolvedValue([]);
+    prisma.translations.update = jest.fn().mockResolvedValue(null);
+    prisma.translations.create = jest.fn().mockResolvedValue(null);
+    prisma.translationStrings.count = jest.fn().mockResolvedValue(1);
+    prisma.translationStrings.updateMany = jest
+      .fn()
+      .mockResolvedValue({ count: 1 });
+    prisma.translationStrings.create = jest.fn().mockResolvedValue(null);
+
+    await service.addLotteryTranslations({
+      user: { id: randomUUID() },
+    } as unknown as ExpressRequest);
+
+    expect(prisma.translationStrings.updateMany).toHaveBeenCalled();
+    expect(prisma.translations.update).not.toHaveBeenCalled();
+    expect(prisma.translations.create).not.toHaveBeenCalled();
   });
 
   it('should add lottery translations and create if empty', async () => {
@@ -124,6 +160,11 @@ describe('Testing script runner service', () => {
       translations: {},
       jurisdictions: undefined,
     });
+    prisma.translationStrings.count = jest.fn().mockResolvedValue(0);
+    prisma.translationStrings.updateMany = jest
+      .fn()
+      .mockResolvedValue({ count: 0 });
+    prisma.translationStrings.create = jest.fn().mockResolvedValue(null);
 
     const id = randomUUID();
     const scriptName = 'add lottery translations create if empty';

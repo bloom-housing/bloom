@@ -19,6 +19,29 @@ export const emailTranslationScope = (
   site: EMAIL_TRANSLATION_SITE,
 });
 
+// The blob nests values; rows key them by the dotted path polyglot addresses.
+export const flattenTranslationTree = (
+  tree: Record<string, unknown>,
+  prefix = '',
+): Record<string, string> => {
+  const flat: Record<string, string> = {};
+
+  for (const [key, value] of Object.entries(tree ?? {})) {
+    const path = prefix ? `${prefix}.${key}` : key;
+
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      Object.assign(
+        flat,
+        flattenTranslationTree(value as Record<string, unknown>, path),
+      );
+    } else {
+      flat[path] = String(value);
+    }
+  }
+
+  return flat;
+};
+
 export type TranslationRowWriter = {
   translationStrings: {
     count: (args: unknown) => Promise<number>;
