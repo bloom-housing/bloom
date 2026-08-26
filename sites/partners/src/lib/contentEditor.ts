@@ -242,6 +242,23 @@ const asStrings = (value: unknown): string[] =>
 
 export const textSections = (value: unknown): string[] => asStrings(value)
 
+// A positional list replaces the English one outright, so an entry the draft does not cover is
+// dropped rather than falling back. A deleted entry leaves no value, so fieldState cannot see it.
+export const textSectionsThatHide = (
+  draft: ContentDraft,
+  english: ContentDraft | undefined,
+  path: string
+): string[] => {
+  const drafted = valueAt(draft, path)
+  if (drafted === undefined || drafted === null) return []
+
+  const overrides = asStrings(drafted)
+  return asStrings(valueAt(english, path))
+    .map((value, index) => ({ value, index }))
+    .filter(({ value, index }) => !!value.trim() && !overrides[index]?.trim())
+    .map(({ index }) => `${path}.${index}`)
+}
+
 export const addTextSection = (draft: ContentDraft, path: string): ContentDraft => {
   const next = JSON.parse(JSON.stringify(draft ?? {})) as ContentDraft
   return setValueAt(next, `${path}.${asStrings(valueAt(next, path)).length}`, "")

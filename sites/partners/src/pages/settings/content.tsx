@@ -32,6 +32,7 @@ import {
   restoreListItem,
   rowFor,
   textSections,
+  textSectionsThatHide,
   tombstoneListItem,
   valueAt,
 } from "../../lib/contentEditor"
@@ -206,13 +207,14 @@ const hidablePaths = (draft: ContentDraft, englishDraft: ContentDraft): string[]
           )
         : []),
     ]),
-    ...(entry.textSections
-      ? textSections(valueAt(draft, entry.textSections.path)).map(
-          (_value, index) => `${entry.textSections?.path}.${index}`
-        )
-      : []),
   ])
 }
+
+// Positional sections are checked separately, since a deleted one leaves no value behind.
+const hiddenTextSections = (draft: ContentDraft, englishDraft: ContentDraft): string[] =>
+  DOCUMENTS.flatMap((entry) =>
+    entry.textSections ? textSectionsThatHide(draft, englishDraft, entry.textSections.path) : []
+  )
 
 const SettingsContent = () => {
   const router = useRouter()
@@ -336,7 +338,10 @@ const SettingsContent = () => {
     })
 
   const handleSave = () => {
-    const hiding = pathsThatHideContent(draft, englishDraft, hidablePaths(draft, englishDraft))
+    const hiding = [
+      ...pathsThatHideContent(draft, englishDraft, hidablePaths(draft, englishDraft)),
+      ...hiddenTextSections(draft, englishDraft),
+    ]
     if (hiding.length) {
       setHidingPaths(hiding)
       return

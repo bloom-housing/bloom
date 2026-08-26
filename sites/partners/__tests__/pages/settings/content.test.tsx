@@ -391,6 +391,30 @@ describe("<SettingsContent>", () => {
       await waitFor(() => expect(toasts).toContain("Content saved"))
     })
 
+    // Deleting a section and emptying one both drop it from the public site, since a positional
+    // list replaces the English one outright.
+    it("confirms before saving a translation that deleted a footer section", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          footer: { textSectionsHtml: ["<p>One</p>", "<p>Two</p>"] },
+        }),
+        row(LanguagesEnum.es, {
+          footer: { textSectionsHtml: ["<p>Uno</p>", "<p>Dos</p>"] },
+        }),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+
+      const deletes = await screen.findAllByRole("button", { name: "Delete" })
+      await userEvent.click(deletes[deletes.length - 1])
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      expect(await screen.findByText("This will hide content")).toBeInTheDocument()
+    })
+
     it("discards pending edits without a reload", async () => {
       respondWithRows([englishRow()])
       renderPage()

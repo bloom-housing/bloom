@@ -13,6 +13,7 @@ import {
   restoreListItem,
   setValueAt,
   textSections,
+  textSectionsThatHide,
   tombstoneListItem,
   valueAt,
 } from "../../src/lib/contentEditor"
@@ -317,5 +318,40 @@ describe("pathsThatHideContent", () => {
     const spanish = setValueAt({}, "disclaimers.privacyHtml", "")
 
     expect(pathsThatHideContent(spanish, {}, ["disclaimers.privacyHtml"])).toEqual([])
+  })
+})
+
+describe("textSectionsThatHide", () => {
+  const path = "footer.textSectionsHtml"
+  const english = { footer: { textSectionsHtml: ["<p>One</p>", "<p>Two</p>", "<p>Three</p>"] } }
+
+  it("reports a section the translation deleted", () => {
+    const spanish = { footer: { textSectionsHtml: ["<p>Uno</p>", "<p>Dos</p>"] } }
+
+    expect(textSectionsThatHide(spanish, english, path)).toEqual([`${path}.2`])
+  })
+
+  it("reports a section the translation emptied", () => {
+    const spanish = { footer: { textSectionsHtml: ["<p>Uno</p>", "", "<p>Tres</p>"] } }
+
+    expect(textSectionsThatHide(spanish, english, path)).toEqual([`${path}.1`])
+  })
+
+  // Without its own array the translation shows every English section, which is not hiding.
+  it("says nothing when the translation has no sections of its own", () => {
+    expect(textSectionsThatHide({}, english, path)).toEqual([])
+  })
+
+  it("says nothing when the translation covers every English section", () => {
+    const spanish = { footer: { textSectionsHtml: ["<p>Uno</p>", "<p>Dos</p>", "<p>Tres</p>"] } }
+
+    expect(textSectionsThatHide(spanish, english, path)).toEqual([])
+  })
+
+  it("says nothing about an English section that is itself empty", () => {
+    const sparse = { footer: { textSectionsHtml: ["<p>One</p>", "   "] } }
+    const spanish = { footer: { textSectionsHtml: ["<p>Uno</p>"] } }
+
+    expect(textSectionsThatHide(spanish, sparse, path)).toEqual([])
   })
 })
