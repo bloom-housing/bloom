@@ -29,7 +29,7 @@ const GoogleMapSurface = (props: GoogleMapSurfaceProps) => {
       <GoogleMap
         mapId={props.mapId}
         style={containerStyle}
-        gestureHandling="greedy"
+        gestureHandling="cooperative"
         disableDefaultUI={true}
         clickableIcons={false}
         defaultZoom={14}
