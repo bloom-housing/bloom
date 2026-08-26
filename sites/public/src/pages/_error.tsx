@@ -10,7 +10,7 @@ const ErrorPage = () => {
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
-      pageTitle: "Page Not Found",
+      pageTitle: "Error",
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])
