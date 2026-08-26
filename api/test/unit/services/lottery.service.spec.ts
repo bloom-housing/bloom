@@ -36,6 +36,7 @@ import { SnapshotCreateService } from '../../../src/services/snapshot-create.ser
 import { TranslationService } from '../../../src/services/translation.service';
 import { mockApplicationSet } from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';
+import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 
 const canOrThrowMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
@@ -1114,6 +1115,86 @@ describe('Testing lottery service', () => {
       );
 
       expect(prisma.listings.update).not.toHaveBeenCalled();
+    });
+
+    it('should update status to releasedToPartners if user is not an admin users when `enableNonAdminLotteries` flag enabled', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.ran,
+        jurisdictionId: 'jurisId',
+        jurisdictions: {
+          id: 'jurisId',
+          featureFlags: [
+            {
+              name: FeatureFlagEnum.enableNonAdminLotteries,
+              active: true,
+            },
+          ],
+        },
+      });
+
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        jurisdictionId: 'jurisId',
+      });
+
+      jest.spyOn(listingService, 'getUserEmailInfo').mockResolvedValueOnce({
+        emails: ['admin@email.com', 'partner@email.com'],
+      });
+
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
+      });
+
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
+
+      await service.lotteryStatus(
+        {
+          id: randomUUID(),
+          lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        } as ListingLotteryStatus,
+        partnerUser,
+      );
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        partnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+          jurisdictionId: 'jurisId',
+        },
+      );
+
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        data: {
+          lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        },
+        where: {
+          id: expect.anything(),
+        },
+      });
+
+      expect(listingService.getUserEmailInfo).toBeCalledWith(
+        ['admin', 'jurisdictionAdmin', 'partner', 'supportAdmin'],
+        'example id',
+        'jurisId',
+      );
+
+      expect(lotteryReleasedMock).toBeCalledWith(
+        { id: 'example id', juris: 'jurisId', name: 'example name' },
+        ['admin@email.com', 'partner@email.com'],
+        config.get('PARTNERS_PORTAL_URL'),
+      );
+
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
 
     it('should update status to publishedToPublic from releasedToPartners', async () => {

@@ -499,6 +499,11 @@ export class LotteryService {
       ListingViews.full,
     );
 
+    const enableNonAdminLotteries = doJurisdictionHaveFeatureFlagSet(
+      mapTo(Jurisdiction, storedListing.jurisdictions),
+      FeatureFlagEnum.enableNonAdminLotteries,
+    );
+
     await this.permissionService.canOrThrow(
       requestingUser,
       'listing',
@@ -534,7 +539,12 @@ export class LotteryService {
         break;
       }
       case LotteryStatusEnum.releasedToPartners: {
-        if (!isAdmin) {
+        if (
+          !(
+            isAdmin ||
+            (enableNonAdminLotteries && (isPartner || isJurisdictionalAdmin))
+          )
+        ) {
           throw new ForbiddenException();
         }
         if (currentStatus !== LotteryStatusEnum.ran) {
