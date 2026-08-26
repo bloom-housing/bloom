@@ -124,7 +124,7 @@ export class TranslationService {
     jurisdictionId: string | null,
     language: LanguagesEnum,
     site: SiteEnum,
-  ): Promise<Record<string, string>> {
+  ): Promise<Record<string, Record<string, string>>> {
     const useLanguage = !!language && language !== LanguagesEnum.en;
     const languages = this.languagesToRead(language);
 
@@ -134,19 +134,19 @@ export class TranslationService {
     });
 
     const byLanguage = (lang: LanguagesEnum) =>
-      rows.filter((row) => row.language === lang);
+      flattenTranslationRows([rows.filter((row) => row.language === lang)]);
 
-    return flattenTranslationRows([
-      byLanguage(LanguagesEnum.en),
-      ...(useLanguage ? [byLanguage(language)] : []),
-    ]);
+    return {
+      [LanguagesEnum.en]: byLanguage(LanguagesEnum.en),
+      ...(useLanguage ? { [language]: byLanguage(language) } : {}),
+    };
   }
 
   public async getJurisdictionOverridesById(
     jurisdictionId: string,
     language: LanguagesEnum,
     site: SiteEnum,
-  ): Promise<Record<string, string>> {
+  ): Promise<Record<string, Record<string, string>>> {
     await this.resolveJurisdictionId({ id: jurisdictionId }, jurisdictionId);
     return this.getJurisdictionOverrides(jurisdictionId, language, site);
   }
@@ -155,7 +155,7 @@ export class TranslationService {
     jurisdictionName: string,
     language: LanguagesEnum,
     site: SiteEnum,
-  ): Promise<Record<string, string>> {
+  ): Promise<Record<string, Record<string, string>>> {
     const jurisdictionId = await this.resolveJurisdictionId(
       { name: jurisdictionName },
       jurisdictionName,
@@ -208,7 +208,7 @@ export class TranslationService {
   }
 
   public async getRawOverrides(
-    jurisdictionId: string,
+    jurisdictionId: string | null,
     site: SiteEnum,
     language: LanguagesEnum,
     user: User,
@@ -260,7 +260,7 @@ export class TranslationService {
   }
 
   public async updateOverrides(
-    jurisdictionId: string,
+    jurisdictionId: string | null,
     site: SiteEnum,
     language: LanguagesEnum,
     dto: TranslationUpdate,
@@ -308,7 +308,7 @@ export class TranslationService {
   // changed or created it first, else null.
   private async applyEdit(
     scope: {
-      jurisdictionId: string;
+      jurisdictionId: string | null;
       language: LanguagesEnum;
       site: SiteEnum;
     },
@@ -346,7 +346,7 @@ export class TranslationService {
   }
 
   public async deleteOverride(
-    jurisdictionId: string,
+    jurisdictionId: string | null,
     site: SiteEnum,
     language: LanguagesEnum,
     key: string,
@@ -364,22 +364,25 @@ export class TranslationService {
   }
 
   // Verifies the caller may act on the jurisdiction and that it exists, so an unknown
-  // jurisdiction returns the same 404 the other jurisdiction reads return.
+  // jurisdiction returns the same 404 the other jurisdiction reads return. The global
+  // scope resolves no jurisdiction, so only the permission check applies there.
   private async authorizeJurisdiction(
     user: User,
-    jurisdictionId: string,
+    jurisdictionId: string | null,
     action: permissionActions,
   ): Promise<void> {
     await this.permissionService.canOrThrow(user, 'translation', action, {
-      jurisdictionId,
+      jurisdictionId: jurisdictionId ?? undefined,
     });
-    await this.resolveJurisdictionId({ id: jurisdictionId }, jurisdictionId);
+    if (jurisdictionId) {
+      await this.resolveJurisdictionId({ id: jurisdictionId }, jurisdictionId);
+    }
   }
 
   // Creates an override row, returning false if another writer created the same key first.
   private async createOverrideIfAbsent(
     where: {
-      jurisdictionId: string;
+      jurisdictionId: string | null;
       language: LanguagesEnum;
       site: SiteEnum;
       key: string;
@@ -410,7 +413,7 @@ export class TranslationService {
   // precedence the reads use, low to high: base (null, null), global-site (null, site),
   // then the jurisdiction's own (jurisdictionId, site).
   private async englishSourceHashes(
-    jurisdictionId: string,
+    jurisdictionId: string | null,
     site: SiteEnum,
     keys: string[],
   ): Promise<Map<string, string>> {

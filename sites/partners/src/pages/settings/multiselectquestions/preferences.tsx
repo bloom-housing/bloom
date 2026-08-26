@@ -30,10 +30,12 @@ const MultiselectQuestionsPreferences = () => {
   const tableOptions = useAgTable()
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
   const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
+  const enableTranslations = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableDbDrivenContent)
   const settingsTabsFeatureFlags = {
     enablePreferences: true,
     enableProperties,
     enableAgencies,
+    enableTranslations,
   }
 
   const [multiselectQuestionDrawerOpen, setMultiselectQuestionDrawerOpen] =
@@ -179,8 +181,13 @@ const MultiselectQuestionsPreferences = () => {
         </Head>
         <NavigationHeader className="relative" title={t("settings.preferences")} />
         <TabView
-          hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags) <= 1}
-          tabs={getSettingsTabs(SettingsIndexEnum.preferences, true, settingsTabsFeatureFlags)}
+          hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags, profile?.userRoles) <= 1}
+          tabs={getSettingsTabs(
+            SettingsIndexEnum.preferences,
+            true,
+            settingsTabsFeatureFlags,
+            profile?.userRoles
+          )}
         >
           <section className={styles["preferences-section"]}>
             <div className={styles["table-wrapper"]}>
