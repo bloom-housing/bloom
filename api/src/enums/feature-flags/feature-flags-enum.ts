@@ -22,6 +22,7 @@ export enum FeatureFlagEnum {
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableCustomListingNotifications = 'enableCustomListingNotifications',
   enableDbDrivenContent = 'enableDbDrivenContent',
+  enableDuplicatesDetailsInEmail = 'enableDuplicatesDetailsInEmail',
   enableExportTerms = 'enableExportTerms',
   enableFaq = 'enableFaq',
   enableFilterByBathroom = 'enableFilterByBathroom',
@@ -31,6 +32,7 @@ export enum FeatureFlagEnum {
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
+  enableHomePageSearchHero = 'enableHomePageSearchHero',
   enableHousingAdvocate = 'enableHousingAdvocate',
   enableHousingBasics = 'enableHousingBasics',
   enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
@@ -193,6 +195,11 @@ export const featureFlagMap: {
       'When true, the jurisdiction reads its translations and structured content from the database instead of the bundled override files',
   },
   {
+    name: FeatureFlagEnum.enableDuplicatesDetailsInEmail,
+    description:
+      'When true, lottery published applicant email contains duplicates details section',
+  },
+  {
     name: FeatureFlagEnum.enableExportTerms,
     description:
       'When true, display terms of use before exporting applications and lotteries from the partner site',
@@ -235,6 +242,10 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableHomeType,
     description: 'When true, home type feature is turned on',
+  },
+  {
+    name: FeatureFlagEnum.enableHomePageSearchHero,
+    description: 'When true, the home page hero has a search form',
   },
   {
     name: FeatureFlagEnum.enableHousingAdvocate,

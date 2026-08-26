@@ -17,10 +17,12 @@ import { HomeRegions } from "./HomeRegions"
 import { HomeResources } from "./HomeResources"
 import { HomeUnderConstruction } from "./HomeUnderConstruction"
 import styles from "./Home.module.scss"
+import { HomeSearch } from "./HomeSearch"
 
 interface HomeProps {
   jurisdiction: Jurisdiction
   underConstructionListings: Listing[]
+  heroImage?: string
 }
 
 export const Home = (props: HomeProps) => {
@@ -38,6 +40,11 @@ export const Home = (props: HomeProps) => {
 
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
+  const enableHomePageSearchHero = isFeatureFlagOn(
+    props.jurisdiction,
+    FeatureFlagEnum.enableHomePageSearchHero
+  )
+
   const enableRegions = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableRegions)
 
   const enableUnderConstruction = isFeatureFlagOn(
@@ -48,15 +55,33 @@ export const Home = (props: HomeProps) => {
   return (
     <Layout metaDescription={metaDescription}>
       <div className={styles["home-page"]}>
-        <Hero
-          title={heroTitle}
-          subtitle={t("welcome.subtitle")}
-          action={
-            <Button href="/listings" variant="primary-outlined">
-              {t("welcome.seeRentalListings")}
-            </Button>
-          }
-        />
+        {enableHomePageSearchHero && (
+          <>
+            {props.heroImage && (
+              <div className={styles["hero-image-mobile"]}>
+                <img src={`/images/${props.heroImage}`} alt={t("welcome.heroAltText")} />
+              </div>
+            )}
+            <Hero
+              title={heroTitle}
+              titleSize="md"
+              action={<HomeSearch jurisdiction={props.jurisdiction} />}
+              image={props.heroImage ? `/images/${props.heroImage}` : undefined}
+              imageAlt={t("welcome.heroAltText")}
+            />
+          </>
+        )}
+        {!enableHomePageSearchHero && (
+          <Hero
+            title={heroTitle}
+            subtitle={t("welcome.subtitle")}
+            action={
+              <Button href="/listings" variant="primary-outlined">
+                {t("welcome.seeRentalListings")}
+              </Button>
+            }
+          />
+        )}
         {enableUnderConstruction && props.underConstructionListings.length > 0 && (
           <HomeSection
             sectionTitle={t("listings.underConstruction")}

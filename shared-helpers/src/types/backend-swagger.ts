@@ -3665,7 +3665,7 @@ export class TranslationsService {
     })
   }
   /**
-   * Get a scope's editable override keys with staleness
+   * Get a scope's editable override keys. stale = true, if its English source changed since it was translated
    */
   getRawTranslations(
     params: {
@@ -3741,6 +3741,72 @@ export class TranslationsService {
         basePath + "/translations/jurisdictions/{jurisdictionId}/raw/{site}/{language}/{key}"
       url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
       url = url.replace("{site}", params["site"] + "")
+      url = url.replace("{language}", params["language"] + "")
+      url = url.replace("{key}", params["key"] + "")
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get the global Partners override keys. stale = true, if its English source changed since it was translated
+   */
+  getRawPartnersTranslations(
+    params: {
+      /**  */
+      language: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<TranslationRawKey[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/partners/raw/{language}"
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Upsert the global Partners override keys with per-key optimistic locking
+   */
+  updateRawPartnersTranslations(
+    params: {
+      /**  */
+      language: string
+      /** requestBody */
+      body?: TranslationUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/partners/raw/{language}"
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete one global Partners override key (revert to base)
+   */
+  deleteRawPartnersTranslation(
+    params: {
+      /**  */
+      language: string
+      /**  */
+      key: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/partners/raw/{language}/{key}"
       url = url.replace("{language}", params["language"] + "")
       url = url.replace("{key}", params["key"] + "")
 
@@ -3885,7 +3951,7 @@ export interface ListingFilterParams {
   availability?: FilterAvailabilityEnum
 
   /**  */
-  bathrooms?: []
+  bathrooms?: number
 
   /**  */
   bedrooms?: number
@@ -11627,6 +11693,7 @@ export enum FeatureFlagEnum {
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableDbDrivenContent" = "enableDbDrivenContent",
+  "enableDuplicatesDetails" = "enableDuplicatesDetails",
   "enableExportTerms" = "enableExportTerms",
   "enableFaq" = "enableFaq",
   "enableFilterByBathroom" = "enableFilterByBathroom",
@@ -11636,6 +11703,7 @@ export enum FeatureFlagEnum {
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
+  "enableHomePageSearchHero" = "enableHomePageSearchHero",
   "enableHousingAdvocate" = "enableHousingAdvocate",
   "enableHousingBasics" = "enableHousingBasics",
   "enableHousingDeveloperOwner" = "enableHousingDeveloperOwner",

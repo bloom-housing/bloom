@@ -86,6 +86,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (e.response) {
       res.statusMessage = e.response.statusText
       res.status(e.response.status).json(e.response.data)
+    } else {
+      res.status(502).json({ message: "Bad Gateway" })
     }
   }
 }
