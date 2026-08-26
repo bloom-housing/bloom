@@ -772,7 +772,7 @@ export const useBulkApplicationTemplateExport = (listingId: string) => {
     setExportLoading(true)
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const content: any = await applicationsService.downloadBulkUpdateTemplate(
+      const url = await applicationsService.downloadBulkUpdateTemplate(
         {
           listingId: listingId,
         },
@@ -780,9 +780,6 @@ export const useBulkApplicationTemplateExport = (listingId: string) => {
           responseType: "arraybuffer",
         }
       )
-
-      const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
-      const url = window.URL.createObjectURL(blob)
 
       const link = document.createElement("a")
       link.href = url
