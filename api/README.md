@@ -50,11 +50,16 @@ To start the application run: `yarn dev`.
 
 ## Translation migration helper
 
-Use `yarn translations:sql --input scripts/db-translation-input.example.json` to generate SQL for translation updates/inserts in the `translations` table.
+Use `yarn translations:sql --input scripts/db-translation-input.example.json` to generate SQL for translation updates/inserts.
 
-By default, updates target generic translation rows where `jurisdiction_id IS NULL` for each language.
+Email reads `translation_strings`, one row per key, once the base rows exist. Until they do it reads the older `translations` blob. The generated SQL writes both, so a migration lands whichever source the environment is on:
 
-If a target row does not exist, the generated SQL creates it with:
+- an upsert per key into `translation_strings`, keyed by the dotted path (`footer.line1`), at `site IS NULL`
+- the matching patch to the `translations` blob
+
+By default, both target generic rows where `jurisdiction_id IS NULL` for each language.
+
+If a target blob row does not exist, the generated SQL creates it with:
 
 - `language` set to the target language
 - `jurisdiction_id` set to `NULL` (default mode), or to the matching jurisdiction id when `--jurisdiction` is used
@@ -79,6 +84,8 @@ Examples:
 - Jurisdiction-specific rows: `yarn translations:sql --input scripts/db-translation-input.example.json --jurisdiction "Bloomington" --output 55_bloomington_translation_update`
 
 By default the script generates for `en, es, tl, vi, zh, ar, bn, ko, hy, fa` and machine-translates missing non-English values using the same Google env vars used by other translation scripts.
+
+If you change email copy any other way, write `translation_strings` rather than the blob. Patching the blob alone changes nothing once the base rows exist, and the API logs a warning on its first merged read when it finds the blob newer than the rows.
 
 ## Modifying the Schema
 
