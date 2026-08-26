@@ -26,6 +26,7 @@ export const useTranslationScope = ({
   const [language, setLanguage] = useState<LanguagesEnum>(LanguagesEnum.en)
   const [site, setSite] = useState<SiteEnum>(SiteEnum.public)
 
+  // The Partners rows are global
   const isGlobal = site === SiteEnum.partners
 
   const selectedJurisdiction = jurisdictions.find(
@@ -51,6 +52,8 @@ export const useTranslationScope = ({
     [isGlobal, partnersLanguages, selectedJurisdiction?.languages]
   )
 
+  // Languages are per jurisdiction, so switching to one that does not offer the selected language
+  // has to fall back rather than keep editing a language the jurisdiction has no option for.
   const activeLanguage = languageOptions.some((option) => option.value === language)
     ? language
     : languageOptions[0]?.value ?? LanguagesEnum.en
