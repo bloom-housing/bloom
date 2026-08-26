@@ -1,6 +1,8 @@
 import {
   ConflictException,
+  Inject,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import {
@@ -32,7 +34,39 @@ export class TranslationService {
     private prisma: PrismaService,
     private readonly googleTranslateService: GoogleTranslateService,
     private readonly permissionService: PermissionService,
+    @Inject(Logger)
+    private logger = new Logger(TranslationService.name),
   ) {}
+
+  private checkedForBlobDrift = false;
+
+  // Nothing reads the blob once the rows exist, so a migration that still patches it goes unseen.
+  private async warnIfBlobIsNewerThanRows(): Promise<void> {
+    if (this.checkedForBlobDrift) {
+      return;
+    }
+    this.checkedForBlobDrift = true;
+
+    const [blobs, rows] = await Promise.all([
+      this.prisma.translations.aggregate({
+        where: { language: LanguagesEnum.en, jurisdictionId: null },
+        _max: { updatedAt: true },
+      }),
+      this.prisma.translationStrings.aggregate({
+        where: { jurisdictionId: null, site: null },
+        _max: { updatedAt: true },
+      }),
+    ]);
+
+    const blob = blobs._max.updatedAt;
+    const newestRow = rows._max.updatedAt;
+
+    if (blob && newestRow && blob > newestRow) {
+      this.logger.warn(
+        `The translations blob was updated at ${blob.toISOString()}, after the newest translation_strings row at ${newestRow.toISOString()}. Email reads the rows, so that change is not in sent email. Re-run yarn translations:migrate --commit, or write the rows instead.`,
+      );
+    }
+  }
 
   public async getMergedTranslations(
     jurisdictionId: string | null,
@@ -65,6 +99,8 @@ export class TranslationService {
     if (!migrated) {
       return this.getLegacyMergedTranslations(jurisdictionId, language);
     }
+
+    await this.warnIfBlobIsNewerThanRows();
 
     const scopeRows = (id: string | null, lang: LanguagesEnum) =>
       rows.filter((row) => row.jurisdictionId === id && row.language === lang);

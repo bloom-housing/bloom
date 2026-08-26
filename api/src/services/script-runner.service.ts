@@ -382,7 +382,6 @@ export class ScriptRunnerService {
       flattenTranslationTree({ singleUseCodeEmail }),
     );
 
-    // Until the base rows exist the blob is still what email reads, so it has to stay current.
     if (!(await hasMigratedTranslations(this.prisma))) {
       const translations = await this.prisma.translations.findFirst({
         where: { language: 'en', jurisdictionId: null },
@@ -1146,7 +1145,6 @@ export class ScriptRunnerService {
       flattenTranslationTree(newTranslations),
     );
 
-    // Until the base rows exist the blob is still what email reads, so it has to stay current.
     if (await hasMigratedTranslations(this.prisma)) {
       return;
     }

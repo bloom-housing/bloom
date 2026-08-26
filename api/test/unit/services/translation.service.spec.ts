@@ -1,6 +1,7 @@
 import {
   ConflictException,
   ForbiddenException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -221,6 +222,7 @@ describe('Testing translations service', () => {
           provide: PermissionService,
           useValue: permissionServiceMock,
         },
+        Logger,
       ],
     }).compile();
 
@@ -792,6 +794,77 @@ describe('Testing translations service', () => {
         where: expect.anything(),
         data: expect.objectContaining({ sourceHash: null }),
       });
+    });
+  });
+
+  describe('warns when the blob is edited after the rows', () => {
+    const migratedRows = () => [
+      {
+        jurisdictionId: null,
+        language: LanguagesEnum.en,
+        key: 'value',
+        value: 'from the rows',
+      },
+    ];
+
+    const withTimestamps = (blob: Date | null, row: Date | null) => {
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValue(migratedRows());
+      prisma.translations.aggregate = jest
+        .fn()
+        .mockResolvedValue({ _max: { updatedAt: blob } });
+      prisma.translationStrings.aggregate = jest
+        .fn()
+        .mockResolvedValue({ _max: { updatedAt: row } });
+      return jest.spyOn(service['logger'], 'warn').mockImplementation();
+    };
+
+    it('says so when a migration patched the blob after the rows were written', async () => {
+      const warn = withTimestamps(
+        new Date('2026-02-01'),
+        new Date('2026-01-01'),
+      );
+
+      await service.getMergedTranslations(null);
+
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining('Email reads the rows'),
+      );
+    });
+
+    it('stays quiet when the rows are current', async () => {
+      const warn = withTimestamps(
+        new Date('2026-01-01'),
+        new Date('2026-02-01'),
+      );
+
+      await service.getMergedTranslations(null);
+
+      expect(warn).not.toHaveBeenCalled();
+    });
+
+    // A generated migration writes both in one transaction, so the timestamps match.
+    it('stays quiet when both were written together', async () => {
+      const together = new Date('2026-01-01');
+      const warn = withTimestamps(together, together);
+
+      await service.getMergedTranslations(null);
+
+      expect(warn).not.toHaveBeenCalled();
+    });
+
+    it('asks only once per process, since email reads on every send', async () => {
+      const warn = withTimestamps(
+        new Date('2026-02-01'),
+        new Date('2026-01-01'),
+      );
+
+      await service.getMergedTranslations(null);
+      await service.getMergedTranslations(null);
+
+      expect(prisma.translations.aggregate).toHaveBeenCalledTimes(1);
+      expect(warn).toHaveBeenCalledTimes(1);
     });
   });
 

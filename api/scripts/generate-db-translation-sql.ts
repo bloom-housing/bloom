@@ -448,7 +448,6 @@ export const buildSql = (
 
     const blobStatement = `WITH updated AS (\n  UPDATE translations\n  SET translations = ${updateExpression}\n  WHERE ${updateWhereClause}\n  RETURNING 1\n)\nINSERT INTO translations ("language", "translations", "jurisdiction_id", "created_at", "updated_at")\nSELECT\n  '${language}',\n  ${insertPayloadLiteral},\n  ${jurisdictionIdExpression},\n  CURRENT_TIMESTAMP,\n  CURRENT_TIMESTAMP\nWHERE NOT EXISTS (SELECT 1 FROM updated);`;
 
-    // Until every environment has the base rows the blob is still what email reads there.
     // TODO: #6519 backfills the rows; once it has run everywhere, drop the blob statement.
     return [
       `-- ${language}`,
