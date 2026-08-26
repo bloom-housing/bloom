@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { MapboxMapSurface } from "./MapboxMapSurface"
 import { GoogleMapSurface } from "./GoogleMapSurface"
 import { useIntersect } from "../../.."
@@ -34,7 +34,9 @@ const Map = (props: MapProps) => {
     rootMargin: `${global.innerHeight || 0}px`,
   })
   const [hasIntersected, setHasIntersected] = useState(false)
-  if (intersecting && !hasIntersected) setHasIntersected(true)
+  useEffect(() => {
+    if (intersecting) setHasIntersected(true)
+  }, [intersecting])
 
   const { address } = props
 
