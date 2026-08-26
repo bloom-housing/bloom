@@ -10,6 +10,7 @@ jest.mock("axios")
 // on the bundled values. Listing them here rather than testing a sample keeps that honest.
 const GENERATED = [
   "404",
+  "500",
   "applications/community-types/community-types",
   "applications/contact/address",
   "applications/contact/alternate-contact-contact",
