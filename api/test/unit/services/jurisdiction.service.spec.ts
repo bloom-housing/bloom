@@ -61,6 +61,7 @@ describe('Testing jurisdiction service', () => {
         allowSingleUseCodeLogin: true,
         duplicateListingPermissions: true,
         emailFromAddress: true,
+        enabledStopLightRuleKeys: true,
         enableGeocodingPreferences: true,
         enablePartnerDemographics: true,
         enablePartnerSettings: true,
@@ -116,6 +117,7 @@ describe('Testing jurisdiction service', () => {
         },
       },
       select: {
+        enabledStopLightRuleKeys: true,
         featureFlags: {
           select: {
             active: true,
@@ -157,6 +159,7 @@ describe('Testing jurisdiction service', () => {
         },
       },
       select: {
+        enabledStopLightRuleKeys: true,
         featureFlags: {
           select: {
             active: true,
@@ -198,6 +201,7 @@ describe('Testing jurisdiction service', () => {
         },
       },
       select: {
+        enabledStopLightRuleKeys: true,
         featureFlags: {
           select: {
             active: true,
