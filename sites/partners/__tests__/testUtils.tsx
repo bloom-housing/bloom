@@ -39,19 +39,24 @@ export * from "@testing-library/react"
 export { customRender as render }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const mockNextRouter = (query?: any) => {
+export const mockNextRouter = (query?: any, overrides?: Record<string, unknown>) => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const useRouter = jest.spyOn(require("next/router"), "useRouter")
   const pushMock = jest.fn()
   const backMock = jest.fn()
+  // The real router always exposes `events`. Without it any component subscribing to a route
+  // change throws on mount rather than being testable.
+  const events = { on: jest.fn(), off: jest.fn(), emit: jest.fn() }
   useRouter.mockImplementation(() => ({
     pathname: "/",
     query: query ?? "",
     push: pushMock,
     back: backMock,
+    events,
+    ...overrides,
   }))
 
-  return { useRouter, pushMock, backMock }
+  return { useRouter, pushMock, backMock, events }
 }
 
 export const mockTipTapEditor = () => {
