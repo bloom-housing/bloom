@@ -23,12 +23,12 @@ export const SiteEyebrow = () => {
               </a>
             )}
 
-            {tIfExists("nav.eyebrow.text") && (
+            {(tIfExists("nav.eyebrow.text") || tIfExists("nav.eyebrow.url")) && (
               <div className={styles["content-container"]}>
-                {t("nav.eyebrow.text")}
-                {tIfExists("nav.eyebrow.link") && (
+                {tIfExists("nav.eyebrow.text") && t("nav.eyebrow.text")}
+                {tIfExists("nav.eyebrow.url") && (
                   <Link className={styles["eyebrow-link"]} href={t("nav.eyebrow.url")}>
-                    {t("nav.eyebrow.link")}
+                    {tIfExists("nav.eyebrow.link") ? t("nav.eyebrow.link") : t("nav.eyebrow.url")}
                   </Link>
                 )}
               </div>
