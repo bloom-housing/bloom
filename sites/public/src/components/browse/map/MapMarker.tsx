@@ -25,7 +25,6 @@ export const MapMarker = (props: MapMarkerProp) => {
           background={"var(--seeds-color-primary-darker)"}
           borderColor={"white"}
           glyphColor={"white"}
-          // data-testid={`marker-id-${props.marker.id}`}
         ></Pin>
       </span>
     </AdvancedMarker>
