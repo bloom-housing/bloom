@@ -9,6 +9,7 @@ import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/
 import LinkComponent from "../components/core/LinkComponent"
 import MaxWidthLayout from "../layouts/max-width"
 import styles from "./SiteHeader.module.scss"
+import { SiteEyebrow } from "./SiteEyebrow"
 
 /** Sets focus on the first submenu link */
 const setFocusToFirstElement = () => {
@@ -446,6 +447,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
           ))}
         </div>
       )}
+      {<SiteEyebrow />}
       {!props.languageDropdown && props.languages?.length > 0 && (
         <HeadingWrapper className={styles["language-wrapper"]}>
           <div className={styles["language-container"]}>

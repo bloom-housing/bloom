@@ -103,6 +103,38 @@
     }
   }
 
+  .eyebrow-wrapper {
+    background-color: var(--seeds-color-primary-dark);
+    padding: var(--seeds-s2) 0;
+
+    .eyebrow-container {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      .content-container {
+        color: var(--seeds-color-white);
+        display: flex;
+        font-size: var(--seeds-type-label-size);
+        gap: var(--seeds-s1);
+        justify-content: flex-end;
+        margin-inline-start: auto;
+        padding: var(--seeds-s1);
+        padding-inline: var(--seeds-s2);
+
+        .eyebrow-link {
+          color: var(--seeds-color-white);
+          text-decoration: underline;
+        }
+      }
+
+      img {
+        max-height: var(--seeds-s10);
+      }
+    }
+  }
+
   .navigation-wrapper {
     background-color: var(--seeds-bg-color-surface);
     border-block-end: var(--site-header-block-end-border);
