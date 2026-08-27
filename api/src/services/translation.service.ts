@@ -48,24 +48,28 @@ export class TranslationService {
     }
     this.checkedForBlobDrift = true;
 
-    const [blobs, rows] = await Promise.all([
-      this.prisma.translations.aggregate({
-        where: { language: LanguagesEnum.en, jurisdictionId: null },
-        _max: { updatedAt: true },
-      }),
-      this.prisma.translationStrings.aggregate({
-        where: { jurisdictionId: null, site: null },
-        _max: { updatedAt: true },
-      }),
-    ]);
+    try {
+      const [blobs, rows] = await Promise.all([
+        this.prisma.translations.aggregate({
+          where: { language: LanguagesEnum.en, jurisdictionId: null },
+          _max: { updatedAt: true },
+        }),
+        this.prisma.translationStrings.aggregate({
+          where: { jurisdictionId: null, site: null },
+          _max: { updatedAt: true },
+        }),
+      ]);
 
-    const blob = blobs._max.updatedAt;
-    const newestRow = rows._max.updatedAt;
+      const blob = blobs._max.updatedAt;
+      const newestRow = rows._max.updatedAt;
 
-    if (blob && newestRow && blob > newestRow) {
-      this.logger.warn(
-        `The translations blob was updated at ${blob.toISOString()}, after the newest translation_strings row at ${newestRow.toISOString()}. Email reads the rows, so that change is not in sent email. Re-run yarn translations:migrate --commit, or write the rows instead.`,
-      );
+      if (blob && newestRow && blob > newestRow) {
+        this.logger.warn(
+          `The translations blob was updated at ${blob.toISOString()}, after the newest translation_strings row at ${newestRow.toISOString()}. Email reads the rows, so that change is not in sent email. Re-run yarn translations:migrate --commit, or write the rows instead.`,
+        );
+      }
+    } catch (error) {
+      this.logger.warn(`Could not compare the translation sources: ${error}`);
     }
   }
 

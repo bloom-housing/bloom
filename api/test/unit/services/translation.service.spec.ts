@@ -240,6 +240,13 @@ describe('Testing translations service', () => {
     prisma.jurisdictions.findFirst = jest
       .fn()
       .mockResolvedValue({ id: 'jurisdiction' });
+    // The migrated read compares the two sources; default both to nothing to report.
+    prisma.translations.aggregate = jest
+      .fn()
+      .mockResolvedValue({ _max: { updatedAt: null } });
+    prisma.translationStrings.aggregate = jest
+      .fn()
+      .mockResolvedValue({ _max: { updatedAt: null } });
   });
 
   afterEach(() => {
@@ -861,6 +868,28 @@ describe('Testing translations service', () => {
       await service.getMergedTranslations(null);
 
       expect(warn).not.toHaveBeenCalled();
+    });
+
+    it('stays quiet when there is no blob left to compare', async () => {
+      const warn = withTimestamps(null, new Date('2026-01-01'));
+
+      await service.getMergedTranslations(null);
+
+      expect(warn).not.toHaveBeenCalled();
+    });
+
+    it('still returns the translations when the comparison itself fails', async () => {
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValue(migratedRows());
+      prisma.translations.aggregate = jest
+        .fn()
+        .mockRejectedValue(new Error('connection lost'));
+      jest.spyOn(service['logger'], 'warn').mockImplementation();
+
+      expect(await service.getMergedTranslations(null)).toEqual({
+        value: 'from the rows',
+      });
     });
 
     it('asks only once per process, since email reads on every send', async () => {
