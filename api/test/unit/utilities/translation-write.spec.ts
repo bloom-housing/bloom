@@ -1,6 +1,8 @@
 import { LanguagesEnum, Prisma } from '@prisma/client';
+import { PrismaService } from '../../../src/services/prisma.service';
 import {
   emailTranslationScope,
+  flattenTranslationTree,
   hasMigratedTranslations,
   TRANSLATION_BACKFILL_MARKER_KEY,
   writeTranslationRows,
@@ -12,14 +14,15 @@ const conflict = () =>
     clientVersion: 'test',
   });
 
-const prismaMock = (overrides = {}) => ({
-  translationStrings: {
-    count: jest.fn().mockResolvedValue(0),
-    updateMany: jest.fn().mockResolvedValue({ count: 0 }),
-    create: jest.fn().mockResolvedValue({}),
-    ...overrides,
-  },
-});
+const prismaMock = (overrides = {}) =>
+  ({
+    translationStrings: {
+      count: jest.fn().mockResolvedValue(0),
+      updateMany: jest.fn().mockResolvedValue({ count: 0 }),
+      create: jest.fn().mockResolvedValue({}),
+      ...overrides,
+    },
+  } as unknown as PrismaService);
 
 describe('emailTranslationScope', () => {
   it('writes at the generic scope, which every jurisdiction reads through', () => {
@@ -28,6 +31,42 @@ describe('emailTranslationScope', () => {
       language: LanguagesEnum.es,
       site: null,
     });
+  });
+});
+
+describe('flattenTranslationTree', () => {
+  it('joins nested keys into the dotted path polyglot addresses', () => {
+    expect(
+      flattenTranslationTree({
+        footer: { line1: 'Bloom', nested: { deep: 'Deep' } },
+        top: 'Top',
+      }),
+    ).toEqual({
+      'footer.line1': 'Bloom',
+      'footer.nested.deep': 'Deep',
+      top: 'Top',
+    });
+  });
+
+  it('keeps an empty string, which is a value rather than an absence', () => {
+    expect(flattenTranslationTree({ footer: { line1: '' } })).toEqual({
+      'footer.line1': '',
+    });
+  });
+
+  it('has nothing to say about an empty tree', () => {
+    expect(flattenTranslationTree({})).toEqual({});
+  });
+
+  // These are what the payloads are, so anything else is a caller mistake worth seeing.
+  it.each([
+    ['an array', { a: ['x', 'y'] }],
+    ['a number', { a: 1 }],
+    ['a boolean', { a: true }],
+    ['null', { a: null }],
+    ['undefined', { a: undefined }],
+  ])('rejects %s, rather than storing it stringified', (_name, tree) => {
+    expect(() => flattenTranslationTree(tree)).toThrow(/a/);
   });
 });
 

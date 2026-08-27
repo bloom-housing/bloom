@@ -376,7 +376,6 @@ export class ScriptRunnerService {
       singleUseCode: '%{singleUseCode}',
     };
 
-    // Writing rows before the backfill would leave email reading a table holding only these keys.
     if (await hasMigratedTranslations(this.prisma)) {
       await writeTranslationRows(
         this.prisma,
@@ -1140,7 +1139,6 @@ export class ScriptRunnerService {
     newTranslations: Record<string, any>,
     createIfMissing?: boolean,
   ) {
-    // Writing rows before the backfill would leave email reading a table holding only these keys.
     if (await hasMigratedTranslations(this.prisma)) {
       await writeTranslationRows(
         this.prisma,

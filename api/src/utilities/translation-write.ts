@@ -1,4 +1,5 @@
 import { LanguagesEnum, Prisma, SiteEnum } from '@prisma/client';
+import { PrismaService } from '../services/prisma.service';
 
 // Email copy has no site of its own, so it lives where getMergedTranslations reads.
 // TODO: #6632 moves these onto their own SiteEnum value, changing this and the read's filter.
@@ -33,30 +34,26 @@ export const flattenTranslationTree = (
   for (const [key, value] of Object.entries(tree ?? {})) {
     const path = prefix ? `${prefix}.${key}` : key;
 
-    if (value && typeof value === 'object' && !Array.isArray(value)) {
+    if (typeof value === 'string') {
+      flat[path] = value;
+    } else if (value && typeof value === 'object' && !Array.isArray(value)) {
       Object.assign(
         flat,
         flattenTranslationTree(value as Record<string, unknown>, path),
       );
     } else {
-      flat[path] = String(value);
+      throw new Error(
+        `Invalid translation value at ${path}. Values must be strings or nested objects.`,
+      );
     }
   }
 
   return flat;
 };
 
-export type TranslationRowWriter = {
-  translationStrings: {
-    count: (args: unknown) => Promise<number>;
-    updateMany: (args: unknown) => Promise<{ count: number }>;
-    create: (args: unknown) => Promise<unknown>;
-  };
-};
-
 // What getMergedTranslations switches on. Until it is set the blob is still the read path.
 export const hasMigratedTranslations = async (
-  prisma: TranslationRowWriter,
+  prisma: PrismaService,
 ): Promise<boolean> =>
   (await prisma.translationStrings.count({
     where: {
@@ -69,7 +66,7 @@ export const hasMigratedTranslations = async (
 
 // Prisma cannot upsert on the rows' compound unique, since it includes nullable columns.
 export const writeTranslationRows = async (
-  prisma: TranslationRowWriter,
+  prisma: PrismaService,
   scope: TranslationWriteScope,
   values: Record<string, string>,
 ): Promise<number> => {
