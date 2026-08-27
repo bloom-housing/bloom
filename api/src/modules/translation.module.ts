@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TranslationController } from '../controllers/translation.controller';
 import { TranslationService } from '../services/translation.service';
 import { GoogleTranslateService } from '../services/google-translate.service';
@@ -8,7 +8,7 @@ import { PermissionModule } from './permission.module';
 @Module({
   imports: [PrismaModule, PermissionModule],
   controllers: [TranslationController],
-  providers: [TranslationService, GoogleTranslateService],
+  providers: [TranslationService, GoogleTranslateService, Logger],
   exports: [TranslationService],
 })
 export class TranslationModule {}
