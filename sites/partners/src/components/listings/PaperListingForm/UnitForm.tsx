@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState, useContext, useMemo } from "react"
 import { t, Field, Select, FieldGroup, numberOptions } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, LoadingState } from "@bloom-housing/ui-seeds"
-import { AuthContext, Form } from "@bloom-housing/shared-helpers"
+import { AuthContext, Form, MAX_BATHROOMS } from "@bloom-housing/shared-helpers"
+import { getLandUseMinOccupancy } from "@bloom-housing/shared-helpers/src/utilities/unitTypes"
 import { useWatch, useForm } from "react-hook-form"
 import { TempUnit } from "../../../lib/listings/formTypes"
 import {
   AmiChart,
   AmiChartItem,
+  EnumListingListingType,
   UnitType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useWatchOnFormNumberFieldsChange } from "../../../lib/hooks"
@@ -21,6 +23,7 @@ type UnitFormProps = {
   draft: boolean
   isLandUse?: boolean
   jurisdictionId: string
+  listingType?: EnumListingListingType
   nextId: number
   onClose: (openNextUnit: boolean, openCurrentUnit: boolean, defaultUnit: TempUnit) => void
   onSubmit: (unit: TempUnit) => void
@@ -35,6 +38,7 @@ const UnitForm = ({
   draft,
   isLandUse,
   jurisdictionId,
+  listingType,
   nextId,
   onClose,
   onSubmit,
@@ -107,6 +111,11 @@ const UnitForm = ({
     name: "minOccupancy",
   })
 
+  const unitTypeId: string = useWatch({
+    control,
+    name: "unitTypes.id",
+  })
+
   const maxOccupancy: number = useWatch({
     control,
     name: "maxOccupancy",
@@ -117,6 +126,20 @@ const UnitForm = ({
   const fieldsToTriggerWatch = ["minOccupancy", "maxOccupancy"]
 
   useWatchOnFormNumberFieldsChange(fieldsValuesToWatch, fieldsToTriggerWatch, trigger)
+
+  // Land use listings derive minimum occupancy from the unit type instead of letting partners pick
+  const derivedMinOccupancy = useMemo(
+    () => getLandUseMinOccupancy(unitTypes?.find((type) => type.id === unitTypeId)?.name),
+    [unitTypes, unitTypeId]
+  )
+  const minOccupancyLocked =
+    listingType === EnumListingListingType.landUse && derivedMinOccupancy !== undefined
+
+  useEffect(() => {
+    if (minOccupancyLocked) {
+      setValue("minOccupancy", derivedMinOccupancy.toString())
+    }
+  }, [minOccupancyLocked, derivedMinOccupancy, setValue])
 
   const maxAmiHouseholdSize = 8
 
@@ -297,6 +320,10 @@ const UnitForm = ({
       delete data.unitTypes
     }
 
+    if (minOccupancyLocked) {
+      data.minOccupancy = derivedMinOccupancy.toString()
+    }
+
     if (currentAmiChart) {
       // Only keep overrides so we're not duplicating existing ami data
       ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
@@ -468,7 +495,7 @@ const UnitForm = ({
                       options={[
                         { value: "", label: t("t.selectOne") },
                         { label: t("listings.unit.sharedBathroom"), value: "0" },
-                        ...numberOptions(5),
+                        ...numberOptions(MAX_BATHROOMS),
                       ]}
                     />
                   </Grid.Cell>
@@ -506,6 +533,7 @@ const UnitForm = ({
                       error={fieldHasError(errors?.minOccupancy)}
                       errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
                       validation={{ max: maxOccupancy || numberOccupancyOptions }}
+                      disabled={minOccupancyLocked}
                     />
                   </Grid.Cell>
                   <Grid.Cell>

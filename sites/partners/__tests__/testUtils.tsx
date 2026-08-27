@@ -1,24 +1,29 @@
 import React, { FC, ReactElement } from "react"
 import { render, RenderOptions } from "@testing-library/react"
 import { SWRConfig } from "swr"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { AuthProvider, ConfigProvider } from "@bloom-housing/shared-helpers"
 import { formDefaults, FormListing } from "../src/lib/listings/formTypes"
 import { FormProvider, useForm } from "react-hook-form"
 
 const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => {
+  const queryClient = new QueryClient()
+
   return (
-    <SWRConfig
-      value={{
-        provider: () => new Map(),
-        dedupingInterval: 0,
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
-      }}
-    >
-      <ConfigProvider apiUrl={"http://localhost:3100"}>
-        <AuthProvider>{children}</AuthProvider>
-      </ConfigProvider>
-    </SWRConfig>
+    <QueryClientProvider client={queryClient}>
+      <SWRConfig
+        value={{
+          provider: () => new Map(),
+          dedupingInterval: 0,
+          revalidateOnFocus: false,
+          revalidateOnReconnect: false,
+        }}
+      >
+        <ConfigProvider apiUrl={"http://localhost:3100"}>
+          <AuthProvider>{children}</AuthProvider>
+        </ConfigProvider>
+      </SWRConfig>
+    </QueryClientProvider>
   )
 }
 
@@ -34,19 +39,24 @@ export * from "@testing-library/react"
 export { customRender as render }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const mockNextRouter = (query?: any) => {
+export const mockNextRouter = (query?: any, overrides?: Record<string, unknown>) => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const useRouter = jest.spyOn(require("next/router"), "useRouter")
   const pushMock = jest.fn()
   const backMock = jest.fn()
+  // The real router always exposes `events`. Without it any component subscribing to a route
+  // change throws on mount rather than being testable.
+  const events = { on: jest.fn(), off: jest.fn(), emit: jest.fn() }
   useRouter.mockImplementation(() => ({
     pathname: "/",
     query: query ?? "",
     push: pushMock,
     back: backMock,
+    events,
+    ...overrides,
   }))
 
-  return { useRouter, pushMock, backMock }
+  return { useRouter, pushMock, backMock, events }
 }
 
 export const mockTipTapEditor = () => {

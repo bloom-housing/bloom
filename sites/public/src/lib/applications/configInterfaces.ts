@@ -26,4 +26,5 @@ export interface ApplicationFormConfig {
   visibleSpokenLanguages?: string[]
   visibleApplicationAccessibilityFeatures?: ApplicationAccessibilityFeatureEnum[]
   visibleHouseholdMemberRelationships?: HouseholdMemberRelationship[]
+  enabledStopLightRuleKeys?: string[]
 }

@@ -122,7 +122,7 @@ const FormUnits = ({
     name: "listingAvailabilityQuestion",
   })
 
-  const listingType = useWatch({
+  const listingType: EnumListingListingType = useWatch({
     control,
     name: "listingType",
   })
@@ -569,6 +569,7 @@ const FormUnits = ({
             unitTypesLoading={unitTypesLoading}
             jurisdictionId={jurisdiction}
             isLandUse={isLandUse}
+            listingType={listingType}
             onSubmit={(unit) => {
               saveUnit(unit)
             }}
