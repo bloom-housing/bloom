@@ -1,6 +1,5 @@
 import React, { useCallback } from "react"
-import { AdvancedMarker } from "@vis.gl/react-google-maps"
-import { t } from "@bloom-housing/ui-components"
+import { AdvancedMarker, Pin } from "@vis.gl/react-google-maps"
 import { MapMarkerData } from "./ListingsMap"
 
 export type MapMarkerProp = {
@@ -22,11 +21,12 @@ export const MapMarker = (props: MapMarkerProp) => {
   return (
     <AdvancedMarker position={marker.coordinate} onClick={handleClick} ref={ref}>
       <span>
-        <img
-          src="/images/map-pin.svg"
-          alt={t("listings.map.pinLabel")}
+        <Pin
+          background={"var(--seeds-color-primary-darker)"}
+          borderColor={"white"}
+          glyphColor={"white"}
           id={`marker-id-${props.marker.id}`}
-        />
+        ></Pin>
       </span>
     </AdvancedMarker>
   )

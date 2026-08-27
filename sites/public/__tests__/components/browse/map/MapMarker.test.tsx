@@ -17,6 +17,7 @@ jest.mock("@vis.gl/react-google-maps", () => {
         </button>
       )
     }),
+    Pin: ({ id }) => <img alt="Listing pin" id={id} data-testid="pin" />,
   }
 })
 
