@@ -107,7 +107,7 @@ describe('generate-db-translation-sql helpers', () => {
     );
   });
 
-  it('upserts a row per key, which is what email reads once the base rows exist', () => {
+  it('upserts a row per key, which email reads once the backfill has run', () => {
     const sql = buildSql(
       {
         en: [
@@ -127,7 +127,7 @@ describe('generate-db-translation-sql helpers', () => {
     expect(sql).toContain(
       "(NULL::uuid, 'en'::languages_enum, NULL::site_enum, 'footer.line1', 'Bloom'",
     );
-    // A row write before the backfill would switch email onto a table holding only these keys.
+    // Before the backfill, writing rows would make email read a table holding only these keys.
     expect(sql).toContain('AND "key" = \'_backfill.completedAt\')');
     // The rows are flat, so a nested path becomes one dotted key rather than a subtree.
     expect(sql).toContain(

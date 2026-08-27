@@ -25,7 +25,7 @@ const prismaMock = (overrides = {}) =>
   } as unknown as PrismaService);
 
 describe('emailTranslationScope', () => {
-  it('writes at the generic scope, which every jurisdiction reads through', () => {
+  it('writes with no jurisdiction, so every jurisdiction gets the value', () => {
     expect(emailTranslationScope(LanguagesEnum.es)).toEqual({
       jurisdictionId: null,
       language: LanguagesEnum.es,
@@ -54,11 +54,11 @@ describe('flattenTranslationTree', () => {
     });
   });
 
-  it('has nothing to say about an empty tree', () => {
+  it('returns nothing for an empty tree', () => {
     expect(flattenTranslationTree({})).toEqual({});
   });
 
-  // These are what the payloads are, so anything else is a caller mistake worth seeing.
+  // Payloads are strings and nested objects; anything else is a caller mistake.
   it.each([
     ['an array', { a: ['x', 'y'] }],
     ['a number', { a: 1 }],
@@ -71,7 +71,7 @@ describe('flattenTranslationTree', () => {
 });
 
 describe('hasMigratedTranslations', () => {
-  it('is false while only the blob holds the base strings', async () => {
+  it('is false before the backfill has run', async () => {
     const prisma = prismaMock();
 
     expect(await hasMigratedTranslations(prisma)).toBe(false);
@@ -144,7 +144,7 @@ describe('writeTranslationRows', () => {
     expect(updateMany).toHaveBeenCalledTimes(2);
   });
 
-  it('raises anything that is not a duplicate key', async () => {
+  it('rethrows an error that is not a duplicate key', async () => {
     const prisma = prismaMock({
       create: jest.fn().mockRejectedValue(new Error('connection lost')),
     });

@@ -240,7 +240,7 @@ describe('Testing translations service', () => {
     prisma.jurisdictions.findFirst = jest
       .fn()
       .mockResolvedValue({ id: 'jurisdiction' });
-    // The migrated read compares the two sources; default both to nothing to report.
+    // The read compares the two tables; default both to nothing to report.
     prisma.translations.aggregate = jest
       .fn()
       .mockResolvedValue({ _max: { updatedAt: null } });
@@ -812,7 +812,7 @@ describe('Testing translations service', () => {
     });
   });
 
-  describe('warns when the blob is edited after the rows', () => {
+  describe('warns when the translations table is edited after the rows', () => {
     const migratedRows = () => [
       backfillMarker,
       {
@@ -836,7 +836,7 @@ describe('Testing translations service', () => {
       return jest.spyOn(service['logger'], 'warn').mockImplementation();
     };
 
-    it('says so when a migration patched the blob after the rows were written', async () => {
+    it('warns when a migration updated the translations table after the rows', async () => {
       const warn = withTimestamps(
         new Date('2026-02-01'),
         new Date('2026-01-01'),
@@ -870,7 +870,7 @@ describe('Testing translations service', () => {
       expect(warn).not.toHaveBeenCalled();
     });
 
-    it('stays quiet when there is no blob left to compare', async () => {
+    it('stays quiet when the translations table is empty', async () => {
       const warn = withTimestamps(null, new Date('2026-01-01'));
 
       await service.getMergedTranslations(null);
@@ -892,7 +892,7 @@ describe('Testing translations service', () => {
       });
     });
 
-    it('asks only once per process, since email reads on every send', async () => {
+    it('checks only once per process', async () => {
       const warn = withTimestamps(
         new Date('2026-02-01'),
         new Date('2026-01-01'),

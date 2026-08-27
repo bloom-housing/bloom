@@ -337,7 +337,7 @@ export const buildLanguagePatchMap = async (
   return result;
 };
 
-// The read path email uses once the backfill has run.
+// Email reads these rows once the backfill has run.
 export const buildTranslationRowUpsert = (
   language: LanguageCode,
   patch: Array<{ path: string[]; value: string }>,
@@ -357,7 +357,7 @@ export const buildTranslationRowUpsert = (
     })
     .join(',\n');
 
-  // Before the backfill the blob is still the read path, and adding rows would switch it over.
+  // Before the backfill, email still reads the translations table; adding rows would change that.
   return [
     'INSERT INTO translation_strings ("jurisdiction_id", "language", "site", "key", "value", "created_at", "updated_at")',
     'SELECT * FROM (VALUES',
@@ -454,7 +454,7 @@ export const buildSql = (
 
     const blobStatement = `WITH updated AS (\n  UPDATE translations\n  SET translations = ${updateExpression}\n  WHERE ${updateWhereClause}\n  RETURNING 1\n)\nINSERT INTO translations ("language", "translations", "jurisdiction_id", "created_at", "updated_at")\nSELECT\n  '${language}',\n  ${insertPayloadLiteral},\n  ${jurisdictionIdExpression},\n  CURRENT_TIMESTAMP,\n  CURRENT_TIMESTAMP\nWHERE NOT EXISTS (SELECT 1 FROM updated);`;
 
-    // TODO: #6519 backfills the rows; once it has run everywhere, drop the blob statement.
+    // TODO: #6519 backfills the rows; once it has run everywhere, drop the translations-table statement.
     return [
       `-- ${language}`,
       buildTranslationRowUpsert(language, patch, jurisdictionIdExpression),

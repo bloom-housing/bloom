@@ -41,7 +41,7 @@ export class TranslationService {
 
   private checkedForBlobDrift = false;
 
-  // Nothing reads the blob once the rows exist, so a migration that still patches it goes unseen.
+  // Once the rows exist nothing reads the translations table, so a migration that updates it has no effect.
   private async warnIfBlobIsNewerThanRows(): Promise<void> {
     if (this.checkedForBlobDrift) {
       return;
@@ -96,7 +96,7 @@ export class TranslationService {
       },
     });
 
-    // Only the backfill writes the marker, so a partial write cannot switch the read over.
+    // Only the backfill writes the marker, so a script that writes a few keys cannot make this true.
     const migrated = rows.some(
       (row) =>
         row.jurisdictionId === null &&

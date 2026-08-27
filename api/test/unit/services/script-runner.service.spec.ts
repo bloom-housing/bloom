@@ -117,7 +117,7 @@ describe('Testing script runner service', () => {
       },
     });
 
-    // Rows written before the backfill would switch email onto a table holding only these keys.
+    // Before the backfill, writing rows would make email read a table holding only these keys.
     expect(prisma.translationStrings.create).not.toHaveBeenCalled();
     expect(prisma.translations.update).toHaveBeenCalled();
   });
@@ -202,6 +202,67 @@ describe('Testing script runner service', () => {
     });
 
     expect(prisma.translations.create).toHaveBeenCalled();
+  });
+
+  describe('updateCodeExpirationTranslations', () => {
+    const setup = (migrated: boolean) => {
+      prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+      prisma.translations.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID(), translations: { t: 'kept' } });
+      prisma.translations.update = jest.fn().mockResolvedValue(null);
+      prisma.translationStrings.count = jest
+        .fn()
+        .mockResolvedValue(migrated ? 1 : 0);
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValue({ count: migrated ? 1 : 0 });
+      prisma.translationStrings.create = jest.fn().mockResolvedValue(null);
+    };
+
+    it('writes the rows once the backfill has run', async () => {
+      setup(true);
+
+      const res = await service.updateCodeExpirationTranslations({
+        user: { id: randomUUID() },
+      } as unknown as ExpressRequest);
+
+      expect(res.success).toBe(true);
+      expect(prisma.translationStrings.updateMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            jurisdictionId: null,
+            site: null,
+            key: 'singleUseCodeEmail.greeting',
+          }),
+        }),
+      );
+      expect(prisma.translations.update).not.toHaveBeenCalled();
+    });
+
+    it('updates the translations table until the backfill has run', async () => {
+      setup(false);
+
+      const res = await service.updateCodeExpirationTranslations({
+        user: { id: randomUUID() },
+      } as unknown as ExpressRequest);
+
+      expect(res.success).toBe(true);
+      expect(prisma.translationStrings.updateMany).not.toHaveBeenCalled();
+      // The update merges into the existing translations rather than replacing them.
+      expect(prisma.translations.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: {
+            translations: expect.objectContaining({
+              t: 'kept',
+              singleUseCodeEmail: expect.objectContaining({ greeting: 'Hi' }),
+            }),
+          },
+        }),
+      );
+    });
   });
 
   it('should bulk resend application confirmations', async () => {

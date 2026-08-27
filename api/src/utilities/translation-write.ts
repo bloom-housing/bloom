@@ -1,12 +1,12 @@
 import { LanguagesEnum, Prisma, SiteEnum } from '@prisma/client';
 import { PrismaService } from '../services/prisma.service';
 
-// Email copy has no site of its own, so it lives where getMergedTranslations reads.
-// TODO: #6632 moves these onto their own SiteEnum value, changing this and the read's filter.
+// Email copy has no site of its own, and getMergedTranslations reads rows with no site.
+// TODO: #6632 moves these onto their own SiteEnum value, changing this and getMergedTranslations.
 export const EMAIL_TRANSLATION_SITE: SiteEnum | null = null;
 
-// Only the backfill may write this; any other writer would switch email to a half-filled table.
-// TODO: #6519's backfill writes it. Until then no environment reads the key rows for email.
+// Only the backfill may write this. If anything else did, email would read a table holding only that writer's keys.
+// TODO: #6519's backfill writes it. Until then email always reads the translations table.
 export const TRANSLATION_BACKFILL_MARKER_KEY = '_backfill.completedAt';
 
 export type TranslationWriteScope = {
@@ -15,7 +15,7 @@ export type TranslationWriteScope = {
   site: SiteEnum | null;
 };
 
-// Generic scope, so a jurisdiction that has not overridden a key follows the base.
+// Written with no jurisdiction, so a jurisdiction that has not overridden a key gets this value.
 export const emailTranslationScope = (
   language: LanguagesEnum,
 ): TranslationWriteScope => ({
@@ -24,7 +24,7 @@ export const emailTranslationScope = (
   site: EMAIL_TRANSLATION_SITE,
 });
 
-// The blob nests values; rows key them by the dotted path polyglot addresses.
+// The translations table nests values; rows use the dotted key polyglot looks up.
 export const flattenTranslationTree = (
   tree: Record<string, unknown>,
   prefix = '',
@@ -51,7 +51,7 @@ export const flattenTranslationTree = (
   return flat;
 };
 
-// What getMergedTranslations switches on. Until it is set the blob is still the read path.
+// getMergedTranslations checks this. Until it is set, email reads the translations table.
 export const hasMigratedTranslations = async (
   prisma: PrismaService,
 ): Promise<boolean> =>
