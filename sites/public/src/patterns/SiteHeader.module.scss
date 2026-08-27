@@ -116,6 +116,8 @@
       .content-container {
         color: var(--seeds-color-white);
         display: flex;
+        flex-wrap: wrap;
+
         font-size: var(--seeds-type-label-size);
         gap: var(--seeds-s1);
         justify-content: flex-end;
@@ -130,7 +132,7 @@
       }
 
       img {
-        max-height: var(--seeds-s10);
+        max-height: var(--seeds-s6);
       }
     }
   }

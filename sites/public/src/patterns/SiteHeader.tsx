@@ -447,7 +447,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
           ))}
         </div>
       )}
-      {<SiteEyebrow />}
+      <SiteEyebrow />
       {!props.languageDropdown && props.languages?.length > 0 && (
         <HeadingWrapper className={styles["language-wrapper"]}>
           <div className={styles["language-container"]}>

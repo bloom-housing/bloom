@@ -11,31 +11,29 @@ export const SiteEyebrow = () => {
 
   if (tIfExists("nav.eyebrow.text") || imageContent.logoSrc) {
     return (
-      <div className={styles["eyebrow-wrapper"]}>
-        <MaxWidthLayout>
-          <div className={styles["eyebrow-container"]}>
-            {imageContent.logoSrc && (
-              <a href={imageContent.logoUrl || "/"} className={styles["logo"]}>
-                <img
-                  src={imageContent.logoSrc}
-                  alt={imageContent.logoAltText || "Jurisdiction Logo"}
-                />
-              </a>
-            )}
+      <MaxWidthLayout className={styles["eyebrow-wrapper"]}>
+        <div className={styles["eyebrow-container"]}>
+          {imageContent.logoSrc && (
+            <a href={imageContent.logoUrl || "/"} className={styles["logo"]}>
+              <img
+                src={imageContent.logoSrc}
+                alt={imageContent.logoAltText || "Jurisdiction Logo"}
+              />
+            </a>
+          )}
 
-            {(tIfExists("nav.eyebrow.text") || tIfExists("nav.eyebrow.url")) && (
-              <div className={styles["content-container"]}>
-                {tIfExists("nav.eyebrow.text") && t("nav.eyebrow.text")}
-                {tIfExists("nav.eyebrow.url") && (
-                  <Link className={styles["eyebrow-link"]} href={t("nav.eyebrow.url")}>
-                    {tIfExists("nav.eyebrow.link") ? t("nav.eyebrow.link") : t("nav.eyebrow.url")}
-                  </Link>
-                )}
-              </div>
-            )}
-          </div>
-        </MaxWidthLayout>
-      </div>
+          {(tIfExists("nav.eyebrow.text") || tIfExists("nav.eyebrow.url")) && (
+            <div className={styles["content-container"]}>
+              {tIfExists("nav.eyebrow.text") && t("nav.eyebrow.text")}
+              {tIfExists("nav.eyebrow.url") && (
+                <Link className={styles["eyebrow-link"]} href={t("nav.eyebrow.url")}>
+                  {tIfExists("nav.eyebrow.link") ? t("nav.eyebrow.link") : t("nav.eyebrow.url")}
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
+      </MaxWidthLayout>
     )
   } else return null
 }
