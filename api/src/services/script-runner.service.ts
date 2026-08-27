@@ -376,13 +376,14 @@ export class ScriptRunnerService {
       singleUseCode: '%{singleUseCode}',
     };
 
-    await writeTranslationRows(
-      this.prisma,
-      emailTranslationScope(LanguagesEnum.en),
-      flattenTranslationTree({ singleUseCodeEmail }),
-    );
-
-    if (!(await hasMigratedTranslations(this.prisma))) {
+    // Writing rows before the backfill would leave email reading a table holding only these keys.
+    if (await hasMigratedTranslations(this.prisma)) {
+      await writeTranslationRows(
+        this.prisma,
+        emailTranslationScope(LanguagesEnum.en),
+        flattenTranslationTree({ singleUseCodeEmail }),
+      );
+    } else {
       const translations = await this.prisma.translations.findFirst({
         where: { language: 'en', jurisdictionId: null },
       });
@@ -1139,13 +1140,13 @@ export class ScriptRunnerService {
     newTranslations: Record<string, any>,
     createIfMissing?: boolean,
   ) {
-    await writeTranslationRows(
-      this.prisma,
-      emailTranslationScope(language),
-      flattenTranslationTree(newTranslations),
-    );
-
+    // Writing rows before the backfill would leave email reading a table holding only these keys.
     if (await hasMigratedTranslations(this.prisma)) {
+      await writeTranslationRows(
+        this.prisma,
+        emailTranslationScope(language),
+        flattenTranslationTree(newTranslations),
+      );
       return;
     }
 
@@ -1173,7 +1174,7 @@ export class ScriptRunnerService {
     }
 
     for (const translation of translations) {
-      if (translation?.translation) {
+      if (translation?.translations) {
         const translationsJSON =
           (translation?.translations as Prisma.JsonObject) || {};
 

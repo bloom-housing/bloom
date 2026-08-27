@@ -75,7 +75,7 @@ describe('Testing script runner service', () => {
       .mockResolvedValue({ id: randomUUID(), translations: {} });
     prisma.translations.findMany = jest
       .fn()
-      .mockResolvedValue({ id: randomUUID(), translations: {} });
+      .mockResolvedValue([{ id: randomUUID(), translations: {} }]);
     prisma.translations.update = jest.fn().mockResolvedValue(null);
     prisma.jurisdictions.findMany = jest.fn().mockResolvedValue([]);
     prisma.translations.create = jest.fn().mockResolvedValue(null);
@@ -117,17 +117,12 @@ describe('Testing script runner service', () => {
       },
     });
 
-    // The read path email uses, once the base rows exist.
-    expect(prisma.translationStrings.create).toHaveBeenCalledWith({
-      data: expect.objectContaining({
-        jurisdictionId: null,
-        site: null,
-        key: expect.stringContaining('.'),
-      }),
-    });
+    // Rows written before the backfill would switch email onto a table holding only these keys.
+    expect(prisma.translationStrings.create).not.toHaveBeenCalled();
+    expect(prisma.translations.update).toHaveBeenCalled();
   });
 
-  it('writes only the rows once the base rows exist', async () => {
+  it('writes only the rows once the backfill has run', async () => {
     prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
@@ -144,7 +139,15 @@ describe('Testing script runner service', () => {
       user: { id: randomUUID() },
     } as unknown as ExpressRequest);
 
-    expect(prisma.translationStrings.updateMany).toHaveBeenCalled();
+    expect(prisma.translationStrings.updateMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          jurisdictionId: null,
+          site: null,
+          key: expect.stringContaining('.'),
+        }),
+      }),
+    );
     expect(prisma.translations.update).not.toHaveBeenCalled();
     expect(prisma.translations.create).not.toHaveBeenCalled();
   });

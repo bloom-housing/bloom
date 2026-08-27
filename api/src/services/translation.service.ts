@@ -24,6 +24,7 @@ import { TranslationKeyEdit } from '../dtos/translations/translation-key-edit.dt
 import { TranslationRawKey } from '../dtos/translations/translation-raw-key.dto';
 import { TranslationOverrideRow } from '../dtos/translations/translation-override-row.dto';
 import { flattenTranslationRows } from '../utilities/translation-merge';
+import { TRANSLATION_BACKFILL_MARKER_KEY } from '../utilities/translation-write';
 import { sourceHash } from '../utilities/translation-source-hash';
 import { mapTo } from '../utilities/mapTo';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
@@ -91,10 +92,12 @@ export class TranslationService {
       },
     });
 
-    // Until the base rows are backfilled (#6519), read the legacy blob. Keyed on the
-    // generic-default scope so a migrated environment never falls back per scope.
+    // Only the backfill writes the marker, so a partial write cannot switch the read over.
     const migrated = rows.some(
-      (row) => row.jurisdictionId === null && row.language === LanguagesEnum.en,
+      (row) =>
+        row.jurisdictionId === null &&
+        row.language === LanguagesEnum.en &&
+        row.key === TRANSLATION_BACKFILL_MARKER_KEY,
     );
     if (!migrated) {
       return this.getLegacyMergedTranslations(jurisdictionId, language);
@@ -103,7 +106,12 @@ export class TranslationService {
     await this.warnIfBlobIsNewerThanRows();
 
     const scopeRows = (id: string | null, lang: LanguagesEnum) =>
-      rows.filter((row) => row.jurisdictionId === id && row.language === lang);
+      rows.filter(
+        (row) =>
+          row.jurisdictionId === id &&
+          row.language === lang &&
+          row.key !== TRANSLATION_BACKFILL_MARKER_KEY,
+      );
 
     return flattenTranslationRows([
       scopeRows(null, LanguagesEnum.en),

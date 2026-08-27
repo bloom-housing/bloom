@@ -4,6 +4,10 @@ import { LanguagesEnum, Prisma, SiteEnum } from '@prisma/client';
 // TODO: #6632 moves these onto their own SiteEnum value, changing this and the read's filter.
 export const EMAIL_TRANSLATION_SITE: SiteEnum | null = null;
 
+// Only the backfill may write this; any other writer would switch email to a half-filled table.
+// TODO: #6519's backfill writes it. Until then no environment reads the key rows for email.
+export const TRANSLATION_BACKFILL_MARKER_KEY = '_backfill.completedAt';
+
 export type TranslationWriteScope = {
   jurisdictionId: string | null;
   language: LanguagesEnum;
@@ -50,7 +54,7 @@ export type TranslationRowWriter = {
   };
 };
 
-// The base row getMergedTranslations switches on. Until it exists the blob is still the read path.
+// What getMergedTranslations switches on. Until it is set the blob is still the read path.
 export const hasMigratedTranslations = async (
   prisma: TranslationRowWriter,
 ): Promise<boolean> =>
@@ -59,6 +63,7 @@ export const hasMigratedTranslations = async (
       jurisdictionId: null,
       language: LanguagesEnum.en,
       site: EMAIL_TRANSLATION_SITE,
+      key: TRANSLATION_BACKFILL_MARKER_KEY,
     },
   })) > 0;
 

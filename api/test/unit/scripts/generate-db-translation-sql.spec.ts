@@ -124,7 +124,11 @@ describe('generate-db-translation-sql helpers', () => {
     expect(sql).toContain(
       'INSERT INTO translation_strings ("jurisdiction_id", "language", "site", "key", "value", "created_at", "updated_at")',
     );
-    expect(sql).toContain("(NULL, 'en', NULL, 'footer.line1', 'Bloom'");
+    expect(sql).toContain(
+      "(NULL::uuid, 'en'::languages_enum, NULL::site_enum, 'footer.line1', 'Bloom'",
+    );
+    // A row write before the backfill would switch email onto a table holding only these keys.
+    expect(sql).toContain('AND "key" = \'_backfill.completedAt\')');
     // The rows are flat, so a nested path becomes one dotted key rather than a subtree.
     expect(sql).toContain(
       "'applicationUpdate.applicationStatus.submitted', 'Submitted'",
@@ -152,7 +156,7 @@ describe('generate-db-translation-sql helpers', () => {
     );
 
     expect(sql).toContain(
-      "((SELECT id FROM jurisdictions WHERE name = 'Bloomington' LIMIT 1), 'en', NULL, 'footer.line1'",
+      "((SELECT id FROM jurisdictions WHERE name = 'Bloomington' LIMIT 1)::uuid, 'en'::languages_enum, NULL::site_enum, 'footer.line1'",
     );
   });
 

@@ -2,6 +2,7 @@ import { LanguagesEnum, Prisma } from '@prisma/client';
 import {
   emailTranslationScope,
   hasMigratedTranslations,
+  TRANSLATION_BACKFILL_MARKER_KEY,
   writeTranslationRows,
 } from '../../../src/utilities/translation-write';
 
@@ -37,12 +38,18 @@ describe('hasMigratedTranslations', () => {
     expect(await hasMigratedTranslations(prisma)).toBe(false);
   });
 
-  it('is true once the English base rows exist', async () => {
+  // Only the backfill writes the marker, so a script's own rows cannot make this true.
+  it('is true once the backfill has left its marker', async () => {
     const prisma = prismaMock({ count: jest.fn().mockResolvedValue(1) });
 
     expect(await hasMigratedTranslations(prisma)).toBe(true);
     expect(prisma.translationStrings.count).toHaveBeenCalledWith({
-      where: { jurisdictionId: null, language: LanguagesEnum.en, site: null },
+      where: {
+        jurisdictionId: null,
+        language: LanguagesEnum.en,
+        site: null,
+        key: TRANSLATION_BACKFILL_MARKER_KEY,
+      },
     });
   });
 });

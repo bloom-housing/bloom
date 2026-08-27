@@ -4,6 +4,7 @@ import { Translate } from '@google-cloud/translate/build/src/v2';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
+import { TRANSLATION_BACKFILL_MARKER_KEY } from '../src/utilities/translation-write';
 
 dotenv.config({ quiet: true });
 
@@ -336,27 +337,32 @@ export const buildLanguagePatchMap = async (
   return result;
 };
 
-// The read path email uses once the base rows exist. Keys are the dotted paths polyglot addresses.
+// The read path email uses once the backfill has run.
 export const buildTranslationRowUpsert = (
   language: LanguageCode,
   patch: Array<{ path: string[]; value: string }>,
   jurisdictionIdExpression: string,
 ): string => {
+  // Selecting from VALUES loses the types the insert target would have supplied, so cast here.
   const values = patch
-    .map(
-      (entry) =>
-        `  (${jurisdictionIdExpression}, '${language}', NULL, '${escapeSqlLiteral(
-          entry.path.join('.'),
-        )}', '${escapeSqlLiteral(
-          entry.value,
-        )}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
-    )
+    .map((entry, index) => {
+      const cast = index === 0 ? '::uuid' : '';
+      const languageCast = index === 0 ? '::languages_enum' : '';
+      const siteCast = index === 0 ? '::site_enum' : '';
+      return `  (${jurisdictionIdExpression}${cast}, '${language}'${languageCast}, NULL${siteCast}, '${escapeSqlLiteral(
+        entry.path.join('.'),
+      )}', '${escapeSqlLiteral(
+        entry.value,
+      )}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`;
+    })
     .join(',\n');
 
+  // Before the backfill the blob is still the read path, and adding rows would switch it over.
   return [
     'INSERT INTO translation_strings ("jurisdiction_id", "language", "site", "key", "value", "created_at", "updated_at")',
-    'VALUES',
+    'SELECT * FROM (VALUES',
     values,
+    `) AS incoming WHERE EXISTS (SELECT 1 FROM translation_strings WHERE "jurisdiction_id" IS NULL AND "language" = 'en' AND "site" IS NULL AND "key" = '${TRANSLATION_BACKFILL_MARKER_KEY}')`,
     'ON CONFLICT ("jurisdiction_id", "language", "site", "key")',
     'DO UPDATE SET "value" = EXCLUDED."value", "updated_at" = CURRENT_TIMESTAMP;',
   ].join('\n');

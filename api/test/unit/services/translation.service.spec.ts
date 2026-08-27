@@ -14,6 +14,7 @@ import {
   TranslationOrigin,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
+import { TRANSLATION_BACKFILL_MARKER_KEY } from '../../../src/utilities/translation-write';
 import dayjs from 'dayjs';
 import { Listing } from '../../../src/dtos/listings/listing.dto';
 import { User } from '../../../src/dtos/users/user.dto';
@@ -193,6 +194,13 @@ const translatedStrings = (enableV2MSQ?: boolean) => {
     !enableV2MSQ ? 'translated multiselectOption description' : null,
     !enableV2MSQ ? 'translated multiselect opt out text' : null,
   ];
+};
+
+const backfillMarker = {
+  jurisdictionId: null,
+  language: LanguagesEnum.en,
+  key: TRANSLATION_BACKFILL_MARKER_KEY,
+  value: '2026-01-01T00:00:00.000Z',
 };
 
 describe('Testing translations service', () => {
@@ -799,6 +807,7 @@ describe('Testing translations service', () => {
 
   describe('warns when the blob is edited after the rows', () => {
     const migratedRows = () => [
+      backfillMarker,
       {
         jurisdictionId: null,
         language: LanguagesEnum.en,
@@ -871,6 +880,7 @@ describe('Testing translations service', () => {
   describe('getMergedTranslations', () => {
     it('assembles english null-jurisdiction translations from key rows', async () => {
       prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        backfillMarker,
         {
           jurisdictionId: null,
           language: LanguagesEnum.en,
@@ -912,6 +922,7 @@ describe('Testing translations service', () => {
 
     it('keeps dot-path keys flat', async () => {
       prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        backfillMarker,
         {
           jurisdictionId: null,
           language: LanguagesEnum.en,
@@ -937,6 +948,7 @@ describe('Testing translations service', () => {
     it('merges the four scopes in precedence order from one query', async () => {
       const jurisdictionId = randomUUID();
       prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        backfillMarker,
         {
           jurisdictionId: null,
           language: LanguagesEnum.en,
@@ -984,6 +996,7 @@ describe('Testing translations service', () => {
     it('merges the generic and jurisdictional english scopes when no language is given', async () => {
       const jurisdictionId = randomUUID();
       prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        backfillMarker,
         {
           jurisdictionId: null,
           language: LanguagesEnum.en,
@@ -1028,9 +1041,9 @@ describe('Testing translations service', () => {
 
     it('builds from present scopes without resurrecting legacy for empty ones', async () => {
       const jurisdictionId = randomUUID();
-      // Only the generic-default (en) base is migrated; the requested es and
-      // jurisdictional scopes have no rows.
+      // The backfill has run; the requested es and jurisdictional scopes have no rows.
       prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        backfillMarker,
         {
           jurisdictionId: null,
           language: LanguagesEnum.en,
