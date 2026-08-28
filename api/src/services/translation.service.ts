@@ -22,6 +22,7 @@ import { TranslationKeyEdit } from '../dtos/translations/translation-key-edit.dt
 import { TranslationRawKey } from '../dtos/translations/translation-raw-key.dto';
 import { TranslationOverrideRow } from '../dtos/translations/translation-override-row.dto';
 import { flattenTranslationRows } from '../utilities/translation-merge';
+import { baseTranslationRows } from '../locales/email-translations';
 import { sourceHash } from '../utilities/translation-source-hash';
 import { mapTo } from '../utilities/mapTo';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
@@ -43,7 +44,7 @@ export class TranslationService {
 
     const rows = await this.prisma.translationStrings.findMany({
       where: {
-        site: null,
+        site: SiteEnum.email,
         language: { in: languages },
         OR: jurisdictionId
           ? [{ jurisdictionId: null }, { jurisdictionId }]
@@ -57,19 +58,12 @@ export class TranslationService {
       },
     });
 
-    // Until the base rows are backfilled (#6519), read the legacy blob. Keyed on the
-    // generic-default scope so a migrated environment never falls back per scope.
-    const migrated = rows.some(
-      (row) => row.jurisdictionId === null && row.language === LanguagesEnum.en,
-    );
-    if (!migrated) {
-      return this.getLegacyMergedTranslations(jurisdictionId, language);
-    }
-
     const scopeRows = (id: string | null, lang: LanguagesEnum) =>
       rows.filter((row) => row.jurisdictionId === id && row.language === lang);
 
     return flattenTranslationRows([
+      baseTranslationRows(LanguagesEnum.en),
+      ...(useLanguage ? [baseTranslationRows(language)] : []),
       scopeRows(null, LanguagesEnum.en),
       ...(useLanguage ? [scopeRows(null, language)] : []),
       ...(jurisdictionId ? [scopeRows(jurisdictionId, LanguagesEnum.en)] : []),
@@ -77,41 +71,6 @@ export class TranslationService {
         ? [scopeRows(jurisdictionId, language)]
         : []),
     ]);
-  }
-
-  private async getLegacyMergedTranslations(
-    jurisdictionId: string | null,
-    language?: LanguagesEnum,
-  ) {
-    const useLanguage = !!language && language !== LanguagesEnum.en;
-
-    const [genericDefault, generic, jurisdictionalDefault, jurisdictional] =
-      await Promise.all([
-        this.getTranslationByLanguageAndJurisdiction(LanguagesEnum.en, null),
-        useLanguage
-          ? this.getTranslationByLanguageAndJurisdiction(language, null)
-          : Promise.resolve(null),
-        jurisdictionId
-          ? this.getTranslationByLanguageAndJurisdiction(
-              LanguagesEnum.en,
-              jurisdictionId,
-            )
-          : Promise.resolve(null),
-        jurisdictionId && useLanguage
-          ? this.getTranslationByLanguageAndJurisdiction(
-              language,
-              jurisdictionId,
-            )
-          : Promise.resolve(null),
-      ]);
-
-    return lodash.merge(
-      {},
-      genericDefault?.translations,
-      generic?.translations,
-      jurisdictionalDefault?.translations,
-      jurisdictional?.translations,
-    );
   }
 
   private languagesToRead(language?: LanguagesEnum): LanguagesEnum[] {

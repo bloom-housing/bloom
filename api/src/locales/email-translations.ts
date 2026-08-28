@@ -1,4 +1,5 @@
 import { LanguagesEnum } from '@prisma/client';
+import { TranslationRow } from '../utilities/translation-merge';
 
 // The base email strings. Read at runtime as the layer beneath any database override, and used
 // by the seed.
@@ -1741,3 +1742,20 @@ export const translations = (
       };
   }
 };
+
+const flatten = (
+  tree: Record<string, unknown>,
+  prefix = '',
+): TranslationRow[] =>
+  Object.entries(tree ?? {}).flatMap(([key, value]) => {
+    const path = prefix ? `${prefix}.${key}` : key;
+    return value && typeof value === 'object'
+      ? flatten(value as Record<string, unknown>, path)
+      : [{ key: path, value: String(value) }];
+  });
+
+// Only English is complete; every other language fills in the subset it has translated.
+export const baseTranslationRows = (
+  language: LanguagesEnum,
+): TranslationRow[] =>
+  flatten(translations(undefined, language) as Record<string, unknown>);
