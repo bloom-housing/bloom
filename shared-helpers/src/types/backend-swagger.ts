@@ -1881,6 +1881,25 @@ export class ApplicationsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Subscribed for server side events notifications from the application processes
+   */
+  uploadBulkNotifications(
+    params: {
+      /**  */
+      jobId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/bulk-update/notifications"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { jobId: params["jobId"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class JobsService {
@@ -11702,7 +11721,7 @@ export enum FeatureFlagEnum {
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableDbDrivenContent" = "enableDbDrivenContent",
-  "enableDuplicatesDetails" = "enableDuplicatesDetails",
+  "enableDuplicatesDetailsInEmail" = "enableDuplicatesDetailsInEmail",
   "enableExportTerms" = "enableExportTerms",
   "enableFaq" = "enableFaq",
   "enableFilterByBathroom" = "enableFilterByBathroom",
@@ -11831,6 +11850,7 @@ export enum EnumAgencyFilterParamsComparison {
 export enum SiteEnum {
   "public" = "public",
   "partners" = "partners",
+  "email" = "email",
 }
 
 export enum TranslationOrigin {
