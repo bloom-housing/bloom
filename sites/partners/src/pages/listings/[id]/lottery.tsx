@@ -165,7 +165,10 @@ const Lottery = (props: { listing: Listing | undefined }) => {
       </CardSection>
     )
 
-    if (profile?.userRoles?.isAdmin) {
+    if (
+      profile?.userRoles?.isAdmin ||
+      (profile?.userRoles?.isSupportAdmin && !!listing.lotteryLastRunAt)
+    ) {
       if (listing.lotteryLastRunAt) {
         return exportCard
       } else {
