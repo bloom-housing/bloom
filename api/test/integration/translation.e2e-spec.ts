@@ -209,6 +209,37 @@ describe('Translation Controller Tests', () => {
     });
   });
 
+  describe('email overrides are not served by the public reads', () => {
+    it('rejects site=email on the jurisdiction read', async () => {
+      await request(app.getHttpServer())
+        .get(
+          `/translations/jurisdictions/${jurisdictionId}?site=email&language=en`,
+        )
+        .set(passkey)
+        .expect(400);
+    });
+
+    it('rejects site=email on the byName read', async () => {
+      await request(app.getHttpServer())
+        .get(
+          `/translations/byName/${encodeURIComponent(
+            jurisdictionName,
+          )}?site=email&language=en`,
+        )
+        .set(passkey)
+        .expect(400);
+    });
+
+    it('still serves the site scopes', async () => {
+      await request(app.getHttpServer())
+        .get(
+          `/translations/jurisdictions/${jurisdictionId}?site=public&language=en`,
+        )
+        .set(passkey)
+        .expect(200);
+    });
+  });
+
   describe('GET /translations/base/email/:language', () => {
     it('returns the english strings shipped with the api', async () => {
       const res = await request(app.getHttpServer())
