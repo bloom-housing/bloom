@@ -73,6 +73,18 @@ const GLOBAL_RAW_PATHS = [
   "http://localhost/api/adapter/translations/partners/raw/:language",
 ]
 
+const EMAIL_BASE_PATHS = [
+  "http://localhost:3100/translations/base/email/:language",
+  "http://localhost/api/adapter/translations/base/email/:language",
+]
+
+// Email keys ship with the api rather than the site, so the base is served rather than bundled.
+const EMAIL_ANCHOR_KEY = "aaa.emailAnchor"
+const EMAIL_BASE = {
+  en: { "t.hello": "Hello", [EMAIL_ANCHOR_KEY]: "Anchor" },
+  es: { "t.hello": "Hola" },
+}
+
 const respondWithOverrides = (overrides: ReturnType<typeof override>[]) =>
   server.use(
     ...RAW_PATHS.map((path) => rest.get(path, (_req, res, ctx) => res(ctx.json(overrides))))
@@ -93,6 +105,11 @@ beforeEach(() => {
     rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => res(ctx.json(user))),
     ...[...RAW_PATHS, ...GLOBAL_RAW_PATHS].map((path) =>
       rest.get(path, (_req, res, ctx) => res(ctx.json([])))
+    ),
+    ...EMAIL_BASE_PATHS.map((path) =>
+      rest.get(path, (req, res, ctx) =>
+        res(ctx.json(EMAIL_BASE[req.params.language as string] ?? {}))
+      )
     )
   )
 })
@@ -134,7 +151,7 @@ const renderPage = (profileOverrides = {}, flagOn = true) =>
     </AuthContext.Provider>
   )
 
-const selectSite = async (site: "public" | "partners") =>
+const selectSite = async (site: "public" | "partners" | "email") =>
   userEvent.selectOptions(await screen.findByLabelText("Site"), site)
 
 const selectLanguage = async (label: string) =>
@@ -493,6 +510,55 @@ describe("<SettingsTranslations>", () => {
 
   // The public site layers page_content/locale_overrides over the shared file, so the editor has to
   // compare against that rather than the shared file alone.
+  describe("email scope base", () => {
+    it("shows the strings served by the api, not the bundled site files", async () => {
+      renderPage()
+
+      await selectSite("email")
+      await filterFor("t.hello", EMAIL_ANCHOR_KEY)
+
+      await expectBaseShown("Hello")
+      // The bundled bases are not layered in, so a key only they define is absent.
+      expect(screen.queryByText(PUBLIC_ONLY_KEY)).toBeNull()
+    }, 20000)
+
+    it("layers the served translation over the served English", async () => {
+      renderPage({
+        jurisdictions: [
+          jurisdiction("jurisdiction1", "Bloomington", [LanguagesEnum.en, LanguagesEnum.es]),
+        ],
+      })
+
+      await selectSite("email")
+      await selectLanguage("Español")
+      await filterFor("t.hello", EMAIL_ANCHOR_KEY)
+
+      await expectBaseShown("Hola")
+      expect(screen.queryByText("Hello")).toBeNull()
+    }, 20000)
+
+    it("reads and writes the email scope through the jurisdiction endpoints", async () => {
+      const requested: string[] = []
+      server.use(
+        ...RAW_PATHS.map((path) =>
+          rest.get(path, (req, res, ctx) => {
+            requested.push(req.url.pathname)
+            return res(ctx.json([]))
+          })
+        )
+      )
+      renderPage()
+
+      await selectSite("email")
+
+      await waitFor(() =>
+        expect(requested).toContain(
+          "/api/adapter/translations/jurisdictions/jurisdiction1/raw/email/en"
+        )
+      )
+    }, 20000)
+  })
+
   describe("public scope base", () => {
     it("includes the keys the public site adds on top of the shared file", async () => {
       renderPage()

@@ -100,11 +100,13 @@ const SettingsTranslations = () => {
     setJurisdictionId,
     setLanguage,
     isGlobal,
+    isEmail,
     activeJurisdictionId,
     activeLanguage,
     languageOptions,
     scope,
     englishOverrideKeys,
+    emailBase,
     overrides,
     loading,
     error,
@@ -164,6 +166,16 @@ const SettingsTranslations = () => {
   useUnsavedChangesWarning(hasUnsavedChanges, t("translations.unsavedChangesWarning"))
 
   const rows = useMemo(() => {
+    // Email keys arrive flat from the api, so they skip the locale-file layering the sites need.
+    if (isEmail) {
+      return buildTranslationRows({
+        englishBase: emailBase?.english ?? {},
+        languageBase: activeLanguage === LanguagesEnum.en ? undefined : emailBase?.language ?? {},
+        overrides: overrides ?? [],
+        englishOverrideKeys,
+      })
+    }
+
     const siteOverrides = scope.baseOverrides
     const englishLayer = flattenTranslations(siteOverrides.en)
     const languageLayer = siteOverrides[activeLanguage]
@@ -179,7 +191,7 @@ const SettingsTranslations = () => {
       overrides: overrides ?? [],
       englishOverrideKeys,
     })
-  }, [activeLanguage, englishOverrideKeys, overrides, scope])
+  }, [activeLanguage, emailBase, englishOverrideKeys, isEmail, overrides, scope])
 
   // Every row is already in the browser, so search and pagination are local rather than a refetch.
   const search = (tableOptions.filter.filterValue ?? "").trim().toLowerCase()
@@ -403,6 +415,7 @@ const SettingsTranslations = () => {
               options={[
                 { value: SiteEnum.public, label: t("translations.sitePublic") },
                 { value: SiteEnum.partners, label: t("translations.sitePartners") },
+                { value: SiteEnum.email, label: t("translations.siteEmail") },
               ]}
               inputProps={{
                 onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {

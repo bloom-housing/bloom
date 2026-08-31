@@ -883,6 +883,7 @@
   "translations.revert": "Revert",
   "translations.saveCount": "Save %{count} changes",
   "translations.site": "Site",
+  "translations.siteEmail": "Email",
   "translations.sitePartners": "Partners portal (all jurisdictions)",
   "translations.sitePublic": "Public site",
   "translations.statusEdited": "Edited",
