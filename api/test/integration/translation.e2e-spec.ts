@@ -209,6 +209,35 @@ describe('Translation Controller Tests', () => {
     });
   });
 
+  describe('GET /translations/base/email/:language', () => {
+    it('returns the english strings shipped with the api', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/translations/base/email/en')
+        .set(passkey)
+        .expect(200);
+
+      expect(res.body['t.hello']).toEqual('Hello');
+      expect(res.body['footer.thankYou']).toEqual('Thank you');
+    });
+
+    it('returns only what the language translates', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/translations/base/email/es')
+        .set(passkey)
+        .expect(200);
+
+      expect(res.body['t.hello']).toEqual('Hola');
+      expect(res.body['t.partnersPortal']).toBeUndefined();
+    });
+
+    it('rejects a language outside the enum', async () => {
+      await request(app.getHttpServer())
+        .get('/translations/base/email/klingon')
+        .set(passkey)
+        .expect(400);
+    });
+  });
+
   describe('PUT /translations/jurisdictions/:jurisdictionId/raw/:site/:language', () => {
     it('upserts keys and returns them with origin via the raw get', async () => {
       await request(app.getHttpServer())

@@ -60,11 +60,14 @@ export class TranslationService {
     const scopeRows = (id: string | null, lang: LanguagesEnum) =>
       rows.filter((row) => row.jurisdictionId === id && row.language === lang);
 
+    // A language sits above english within its own scope, so editing an english string
+    // does not displace a translation of it.
     return flattenTranslationRows([
       baseTranslationRows(LanguagesEnum.en),
-      ...(useLanguage ? [baseTranslationRows(language)] : []),
       scopeRows(null, LanguagesEnum.en),
-      ...(useLanguage ? [scopeRows(null, language)] : []),
+      ...(useLanguage
+        ? [baseTranslationRows(language), scopeRows(null, language)]
+        : []),
       ...(jurisdictionId ? [scopeRows(jurisdictionId, LanguagesEnum.en)] : []),
       ...(jurisdictionId && useLanguage
         ? [scopeRows(jurisdictionId, language)]

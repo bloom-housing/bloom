@@ -917,6 +917,40 @@ describe('Testing translations service', () => {
       expect(result['t.hello']).toEqual('Hola');
     });
 
+    it('keeps a translation when only the english it came from is edited', async () => {
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.en, 't.hello', 'edited english'),
+          row(null, LanguagesEnum.en, 't.partnersPortal', 'edited english'),
+        ]);
+
+      const result = await service.getMergedTranslations(
+        null,
+        LanguagesEnum.es,
+      );
+
+      expect(result['t.hello']).toEqual('Hola');
+      expect(result['t.partnersPortal']).toEqual('edited english');
+    });
+
+    it("keeps a jurisdiction's translation when its english is edited", async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(jurisdictionId, LanguagesEnum.es, 't.hello', 'jurisdiction es'),
+          row(jurisdictionId, LanguagesEnum.en, 't.hello', 'jurisdiction en'),
+        ]);
+
+      const result = await service.getMergedTranslations(
+        jurisdictionId,
+        LanguagesEnum.es,
+      );
+
+      expect(result['t.hello']).toEqual('jurisdiction es');
+    });
+
     it('keeps dot-path keys flat', async () => {
       prisma.translationStrings.findMany = jest
         .fn()
