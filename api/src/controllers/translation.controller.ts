@@ -104,6 +104,21 @@ export class TranslationController {
     );
   }
 
+  @Get('base/email/:language')
+  @ApiOperation({
+    summary: 'Get the email strings shipped with the api',
+    operationId: 'emailBaseTranslations',
+  })
+  @ApiOkResponse({
+    schema: { type: 'object', additionalProperties: { type: 'string' } },
+  })
+  emailBaseTranslations(
+    @Param('language', new ParseEnumPipe(LanguagesEnum))
+    language: LanguagesEnum,
+  ): Record<string, string> {
+    return this.translationService.getBaseEmailTranslations(language);
+  }
+
   @Get('jurisdictions/:jurisdictionId/raw')
   @ApiOperation({
     summary: "List a jurisdiction's override keys",

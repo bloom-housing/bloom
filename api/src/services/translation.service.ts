@@ -73,6 +73,12 @@ export class TranslationService {
     ]);
   }
 
+  public getBaseEmailTranslations(
+    language: LanguagesEnum,
+  ): Record<string, string> {
+    return flattenTranslationRows([baseTranslationRows(language)]);
+  }
+
   private languagesToRead(language?: LanguagesEnum): LanguagesEnum[] {
     return !!language && language !== LanguagesEnum.en
       ? [LanguagesEnum.en, language]

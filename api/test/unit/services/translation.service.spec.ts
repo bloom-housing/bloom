@@ -795,6 +795,33 @@ describe('Testing translations service', () => {
     });
   });
 
+  describe('getBaseEmailTranslations', () => {
+    it('returns the strings shipped with the api, flat', () => {
+      const result = service.getBaseEmailTranslations(LanguagesEnum.en);
+
+      expect(result['t.hello']).toEqual('Hello');
+      expect(result['footer.thankYou']).toEqual('Thank you');
+    });
+
+    it('returns only what the language translates', () => {
+      const spanish = service.getBaseEmailTranslations(LanguagesEnum.es);
+      const english = service.getBaseEmailTranslations(LanguagesEnum.en);
+
+      expect(spanish['t.hello']).toEqual('Hola');
+      expect(Object.keys(spanish).length).toBeLessThan(
+        Object.keys(english).length,
+      );
+    });
+
+    it('reads nothing from the database', () => {
+      prisma.translationStrings.findMany = jest.fn();
+
+      service.getBaseEmailTranslations(LanguagesEnum.en);
+
+      expect(prisma.translationStrings.findMany).not.toHaveBeenCalled();
+    });
+  });
+
   describe('getMergedTranslations', () => {
     const row = (
       jurisdictionId: string | null,
