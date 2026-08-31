@@ -524,6 +524,43 @@ describe("<SettingsTranslations>", () => {
       await waitFor(() => expect(screen.queryByText("t.hello")).toBeNull())
     }, 20000)
 
+    it("saves an email override through the jurisdiction endpoint", async () => {
+      let written: string = null
+      server.use(
+        rest.put(
+          "http://localhost/api/adapter/translations/jurisdictions/:jurisdictionId/raw/:site/:language",
+          (req, res, ctx) => {
+            written = req.url.pathname
+            return res(ctx.json({ success: true }))
+          }
+        )
+      )
+      renderPage()
+
+      await selectSite("email")
+      await editFirstValue("Email edit")
+      await userEvent.click(screen.getByRole("button", { name: /Save/ }))
+
+      await waitFor(() =>
+        expect(written).toEqual(
+          "/api/adapter/translations/jurisdictions/jurisdiction1/raw/email/en"
+        )
+      )
+    }, 20000)
+
+    it("shows a stored email override in place of the served base", async () => {
+      respondWithOverrides([override("t.hello", "Our greeting")])
+      renderPage()
+
+      await selectSite("email")
+      await filterFor("t.hello", EMAIL_ANCHOR_KEY)
+
+      expect(await screen.findByText("Our greeting")).toBeInTheDocument()
+      // The served base stays visible in the base column alongside the override.
+      await expectBaseShown("Hello")
+      expect(await screen.findByRole("button", { name: "Revert" })).toBeInTheDocument()
+    }, 20000)
+
     it("shows the strings served by the api, not the bundled site files", async () => {
       renderPage()
 
