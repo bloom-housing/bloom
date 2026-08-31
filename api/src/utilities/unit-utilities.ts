@@ -8,6 +8,7 @@ import { MinMax } from '../dtos/shared/min-max.dto';
 import { UnitsSummarized } from '../dtos/units/unit-summarized.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { AmiChartItem } from '../dtos/units/ami-chart-item.dto';
+import { AmiChartOverrideItem } from '../dtos/units/ami-chart-override-item.dto';
 import { UnitAmiChartOverride } from '../dtos/units/ami-chart-override.dto';
 import { isEmpty } from 'class-validator';
 import UnitGroupAmiLevel from '../dtos/unit-groups/unit-group-ami-level.dto';
@@ -71,7 +72,9 @@ export const yearlyCurrencyStringToMonthly = (currency: string) => {
   );
 };
 
-export const getAmiChartItemUniqueKey = (amiChartItem: AmiChartItem) => {
+export const getAmiChartItemUniqueKey = (
+  amiChartItem: Pick<AmiChartItem, 'householdSize' | 'percentOfAmi'>,
+) => {
   return (
     amiChartItem.householdSize.toString() +
     '-' +
@@ -83,7 +86,7 @@ export const mergeAmiChartWithOverrides = (
   amiChart: AmiChart,
   override: UnitAmiChartOverride,
 ) => {
-  const householdAmiPercentageOverrideMap: Map<string, AmiChartItem> =
+  const householdAmiPercentageOverrideMap: Map<string, AmiChartOverrideItem> =
     override.items?.reduce((acc, amiChartItem) => {
       acc.set(getAmiChartItemUniqueKey(amiChartItem), amiChartItem);
       return acc;

@@ -21,7 +21,6 @@ type UnitFormProps = {
   amiChartsLoading: boolean
   defaultUnit: TempUnit | undefined
   draft: boolean
-  isLandUse?: boolean
   jurisdictionId: string
   listingType?: EnumListingListingType
   nextId: number
@@ -36,7 +35,6 @@ const UnitForm = ({
   amiChartsLoading,
   defaultUnit,
   draft,
-  isLandUse,
   jurisdictionId,
   listingType,
   nextId,
@@ -132,8 +130,8 @@ const UnitForm = ({
     () => getLandUseMinOccupancy(unitTypes?.find((type) => type.id === unitTypeId)?.name),
     [unitTypes, unitTypeId]
   )
-  const minOccupancyLocked =
-    listingType === EnumListingListingType.landUse && derivedMinOccupancy !== undefined
+  const isLandUse = listingType === EnumListingListingType.landUse
+  const minOccupancyLocked = isLandUse && derivedMinOccupancy !== undefined
 
   useEffect(() => {
     if (minOccupancyLocked) {

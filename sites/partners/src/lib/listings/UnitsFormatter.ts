@@ -35,25 +35,42 @@ export default class UnitsFormatter extends Formatter {
           unit.numBedrooms = 0
       }
 
+      const percentOfAmi = parseInt(unit.amiPercentage)
+      const overrideItems = []
+
       Object.keys(unit).forEach((key) => {
         if (key.indexOf("maxIncomeHouseholdSize") >= 0) {
-          if (parseInt(unit[key])) {
-            if (!unit.unitAmiChartOverrides) {
-              unit.unitAmiChartOverrides = {
-                id: undefined,
-                createdAt: undefined,
-                updatedAt: undefined,
-                items: [],
-              }
-            }
-            unit.unitAmiChartOverrides.items.push({
-              percentOfAmi: parseInt(unit.amiPercentage),
-              householdSize: parseInt(key[key.length - 1]),
-              income: parseInt(unit[key]),
+          const householdSize = parseInt(key[key.length - 1])
+          const overrideIncome = parseInt(unit[key])
+
+          if (overrideIncome) {
+            overrideItems.push({
+              percentOfAmi,
+              householdSize,
+              income: overrideIncome,
+            })
+          } else if (
+            unit.amiChart?.items?.some(
+              (item) => item.householdSize === householdSize && item.percentOfAmi === percentOfAmi
+            )
+          ) {
+            overrideItems.push({
+              percentOfAmi,
+              householdSize,
+              income: null,
             })
           }
         }
       })
+
+      unit.unitAmiChartOverrides = overrideItems.length
+        ? {
+            id: undefined,
+            createdAt: undefined,
+            updatedAt: undefined,
+            items: overrideItems,
+          }
+        : undefined
 
       unit.floor = stringToNumber(unit.floor)
       unit.maxOccupancy = stringToNumber(unit.maxOccupancy)
