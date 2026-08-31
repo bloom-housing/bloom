@@ -282,4 +282,62 @@ describe("useTranslationScope", () => {
     await waitFor(() => expect(translationsService.emailBaseTranslations).toHaveBeenCalledTimes(1))
     expect(translationsService.emailBaseTranslations).toHaveBeenCalledWith({ language: "en" })
   })
+  it("does not report the base ready while it is still being fetched", async () => {
+    let resolveBase: (value: Record<string, string>) => void
+    translationsService.emailBaseTranslations.mockImplementation(
+      () => new Promise((resolve) => (resolveBase = resolve))
+    )
+    const { result } = renderScope([jurisdiction("first")])
+
+    act(() => result.current.setSite(SiteEnum.email))
+
+    expect(result.current.baseReady).toBe(false)
+    await act(() => {
+      resolveBase({ "t.hello": "Hello" })
+      return Promise.resolve()
+    })
+    await waitFor(() => expect(result.current.baseReady).toBe(true))
+  })
+
+  it("does not report the base ready when the fetch fails", async () => {
+    translationsService.emailBaseTranslations.mockRejectedValue(new Error("boom"))
+    const { result } = renderScope([jurisdiction("first")])
+
+    act(() => result.current.setSite(SiteEnum.email))
+
+    await waitFor(() => expect(result.current.error).toBeDefined())
+    expect(result.current.loading).toBe(false)
+    expect(result.current.baseReady).toBe(false)
+  })
+
+  it("waits for the language base too, so english is never shown as the translation", async () => {
+    translationsService.emailBaseTranslations.mockImplementation(({ language }) =>
+      language === "en" ? Promise.resolve({ "t.hello": "Hello" }) : new Promise(() => undefined)
+    )
+    const { result } = renderScope([jurisdiction("first", [LanguagesEnum.en, LanguagesEnum.es])])
+
+    act(() => result.current.setSite(SiteEnum.email))
+    act(() => result.current.setLanguage(LanguagesEnum.es))
+
+    await waitFor(() => expect(result.current.emailBase?.english).toBeDefined())
+    expect(result.current.baseReady).toBe(false)
+  })
+
+  it("keeps emailBase stable across renders so the caller can memoize on it", async () => {
+    const { result, rerender } = renderScope([jurisdiction("first")])
+
+    act(() => result.current.setSite(SiteEnum.email))
+    await waitFor(() => expect(result.current.baseReady).toBe(true))
+
+    const first = result.current.emailBase
+    rerender()
+
+    expect(result.current.emailBase).toBe(first)
+  })
+
+  it("reports the base ready for the scopes that bundle it", () => {
+    const { result } = renderScope([jurisdiction("first")])
+
+    expect(result.current.baseReady).toBe(true)
+  })
 })

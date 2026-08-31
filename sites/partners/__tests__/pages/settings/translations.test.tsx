@@ -511,6 +511,19 @@ describe("<SettingsTranslations>", () => {
   // The public site layers page_content/locale_overrides over the shared file, so the editor has to
   // compare against that rather than the shared file alone.
   describe("email scope base", () => {
+    it("shows no rows when the served base fails to load", async () => {
+      server.use(
+        ...EMAIL_BASE_PATHS.map((path) => rest.get(path, (_req, res, ctx) => res(ctx.status(500))))
+      )
+      renderPage()
+
+      await selectSite("email")
+
+      expect(await screen.findByText(/could not be loaded/)).toBeInTheDocument()
+      // An empty base must not render as a catalog of keys with no base value.
+      await waitFor(() => expect(screen.queryByText("t.hello")).toBeNull())
+    }, 20000)
+
     it("shows the strings served by the api, not the bundled site files", async () => {
       renderPage()
 
