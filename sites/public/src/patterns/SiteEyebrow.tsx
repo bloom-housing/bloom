@@ -4,12 +4,15 @@ import { t } from "@bloom-housing/ui-components"
 import { Link } from "@bloom-housing/ui-seeds"
 import styles from "./SiteHeader.module.scss"
 import MaxWidthLayout from "../layouts/max-width"
-import { getJurisdictionEyebrowImageContent } from "../static_content/jurisdiction_eyebrow_image"
+import {
+  getJurisdictionEyebrowImageContent,
+  LogoContent,
+} from "../static_content/jurisdiction_eyebrow_image"
 
 export const SiteEyebrow = () => {
-  const imageContent = getJurisdictionEyebrowImageContent()
+  const imageContent: LogoContent | null = getJurisdictionEyebrowImageContent()
 
-  if (tIfExists("nav.eyebrow.text") || imageContent.logoSrc) {
+  if (tIfExists("nav.eyebrow.text") || tIfExists("nav.eyebrow.url") || imageContent.logoSrc) {
     return (
       <MaxWidthLayout className={styles["eyebrow-wrapper"]}>
         <div className={styles["eyebrow-container"]}>
@@ -17,7 +20,7 @@ export const SiteEyebrow = () => {
             <a href={imageContent.logoUrl || "/"} className={styles["logo"]}>
               <img
                 src={imageContent.logoSrc}
-                alt={imageContent.logoAltText || "Jurisdiction Logo"}
+                alt={imageContent.logoAltText || "Jurisdiction logo"}
               />
             </a>
           )}
