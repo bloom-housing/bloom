@@ -14,10 +14,7 @@ import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { randomName } from './seed-helpers/word-generator';
 import { randomInt } from 'node:crypto';
 import { applicationFactoryMany } from './seed-helpers/application-factory';
-import {
-  translationFactory,
-  upsertTranslation,
-} from './seed-helpers/translation-factory';
+import { upsertEmailTranslations } from './seed-helpers/translation-factory';
 import {
   jurisdictionContentFactory,
   upsertJurisdictionContent,
@@ -105,18 +102,11 @@ export const devSeeding = async (
       acceptedTerms: true,
     }),
   });
-  // add jurisdiction specific translations and default ones
-  await upsertTranslation(
-    prismaClient,
-    translationFactory({
-      jurisdiction: { id: jurisdiction.id, name: jurisdiction.name },
-    }),
-  );
-  await upsertTranslation(
-    prismaClient,
-    translationFactory({ language: LanguagesEnum.es }),
-  );
-  await upsertTranslation(prismaClient, translationFactory());
+  // add jurisdiction specific translations
+  await upsertEmailTranslations(prismaClient, {
+    id: jurisdiction.id,
+    name: jurisdiction.name,
+  });
 
   // add structured content, English plus a partial Spanish row
   const contentJurisdiction = { id: jurisdiction.id, name: jurisdiction.name };

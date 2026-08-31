@@ -1,6 +1,41 @@
-import { LanguagesEnum, Prisma, PrismaClient } from '@prisma/client';
+import { LanguagesEnum, Prisma, PrismaClient, SiteEnum } from '@prisma/client';
 import * as lodash from 'lodash';
-import { translations } from '../../src/locales/email-translations';
+import {
+  jurisdictionTranslationRows,
+  translations,
+} from '../../src/locales/email-translations';
+
+// Only a jurisdiction's own strings are seeded. The generic values are read from
+// src/locales/email-translations.ts rather than stored.
+export async function upsertEmailTranslations(
+  prisma: PrismaClient,
+  jurisdiction: { id: string; name: string },
+  language: LanguagesEnum = LanguagesEnum.en,
+): Promise<void> {
+  for (const { key, value } of jurisdictionTranslationRows(
+    jurisdiction,
+    language,
+  )) {
+    await prisma.translationStrings.upsert({
+      where: {
+        jurisdictionId_language_site_key: {
+          jurisdictionId: jurisdiction.id,
+          language,
+          site: SiteEnum.email,
+          key,
+        },
+      },
+      create: {
+        jurisdictionId: jurisdiction.id,
+        language,
+        site: SiteEnum.email,
+        key,
+        value,
+      },
+      update: { value },
+    });
+  }
+}
 
 export async function upsertTranslation(
   prisma: PrismaClient,

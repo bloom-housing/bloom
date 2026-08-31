@@ -2284,3 +2284,9 @@ export const baseTranslationRows = (
   language: LanguagesEnum,
 ): TranslationRow[] =>
   flatten(translations(undefined, language) as Record<string, unknown>);
+
+export const jurisdictionTranslationRows = (
+  jurisdiction: { id: string; name: string },
+  language?: LanguagesEnum,
+): TranslationRow[] =>
+  flatten(translations(jurisdiction, language) as Record<string, unknown>);
