@@ -1,6 +1,5 @@
--- A jurisdiction's rows in `translations` are its email overrides: nothing else reads that table.
--- Flatten them to the dotted keys the rows use, so Partners can edit them on the email scope.
--- Generic rows are not moved; those values now ship in api/src/locales/email-translations.ts.
+-- Earlier migrations wrote base content into every row, so a jurisdiction's blob is mostly a copy of
+-- the generic row. Only the keys that differ from it are that jurisdiction's own.
 WITH RECURSIVE flattened AS (
   SELECT
     t."jurisdiction_id",
@@ -9,7 +8,6 @@ WITH RECURSIVE flattened AS (
     entry.value
   FROM "translations" t
   CROSS JOIN LATERAL jsonb_each(t."translations") entry
-  WHERE t."jurisdiction_id" IS NOT NULL
 
   UNION ALL
 
@@ -21,16 +19,34 @@ WITH RECURSIVE flattened AS (
   FROM flattened f
   CROSS JOIN LATERAL jsonb_each(f.value) entry
   WHERE jsonb_typeof(f.value) = 'object'
+),
+leaves AS (
+  SELECT
+    "jurisdiction_id",
+    "language",
+    path,
+    CASE WHEN jsonb_typeof(value) = 'null' THEN '' ELSE value #>> '{}' END AS value
+  FROM flattened
+  WHERE jsonb_typeof(value) IN ('string', 'null')
+),
+generic AS (
+  SELECT "language", path, value
+  FROM leaves
+  WHERE "jurisdiction_id" IS NULL
 )
 INSERT INTO "translation_strings" ("jurisdiction_id", "language", "site", "key", "value", "created_at", "updated_at")
 SELECT
-  "jurisdiction_id",
-  "language",
+  j."jurisdiction_id",
+  j."language",
   'email'::"site_enum",
-  path,
-  value #>> '{}',
+  j.path,
+  j.value,
   now() AT TIME ZONE 'UTC',
   now() AT TIME ZONE 'UTC'
-FROM flattened
-WHERE jsonb_typeof(value) = 'string'
+FROM leaves j
+LEFT JOIN generic g
+  ON g."language" = j."language"
+  AND g.path = j.path
+WHERE j."jurisdiction_id" IS NOT NULL
+  AND g.value IS DISTINCT FROM j.value
 ON CONFLICT ("jurisdiction_id", "language", "site", "key") DO NOTHING;
