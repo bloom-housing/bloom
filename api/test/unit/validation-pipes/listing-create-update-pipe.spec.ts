@@ -134,6 +134,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
         ...value,
         listingFeaturesConfiguration: null,
         minimumImagesRequired: 0,
+        publishesToClosed: false,
         units: [],
         unitGroups: [],
         requiredFields: ['name', 'listingsBuildingAddress'],
@@ -148,6 +149,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
           listingFeaturesConfiguration: true,
           requiredListingFields: true,
           minimumListingPublishImagesRequired: true,
+          featureFlags: true,
         },
       });
 
@@ -187,6 +189,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
       const expectedTransformedValue = {
         ...value,
         minimumImagesRequired: 0,
+        publishesToClosed: false,
         units: [],
         unitGroups: [],
         listingFeaturesConfiguration: null,
@@ -233,6 +236,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
         ...value,
         listingFeaturesConfiguration: null,
         minimumImagesRequired: 0,
+        publishesToClosed: false,
         units: [],
         unitGroups: [],
         requiredFields: expectedDefaultFields,
@@ -276,6 +280,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
         ...value,
         listingFeaturesConfiguration: null,
         minimumImagesRequired: 0,
+        publishesToClosed: false,
         units: [],
         unitGroups: [],
         requiredFields: expectedDefaultFields,
@@ -315,6 +320,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
         ...value,
         listingFeaturesConfiguration: null,
         minimumImagesRequired: 0,
+        publishesToClosed: false,
         units: [],
         unitGroups: [],
         requiredFields: ['name', 'leasingAgentEmail', 'digitalApplication'],
@@ -384,6 +390,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
         ...value,
         listingFeaturesConfiguration: null,
         minimumImagesRequired: 0,
+        publishesToClosed: false,
         units: [{ id: 'id1' }],
         unitGroups: [],
         requiredFields: ['name'],
@@ -422,6 +429,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
         unitGroups: [{ id: 'id1' }],
         listingFeaturesConfiguration: null,
         minimumImagesRequired: 0,
+        publishesToClosed: false,
         requiredFields: ['name'],
       };
       mockSuperTransform.mockResolvedValue(expectedTransformedValue);

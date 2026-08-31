@@ -84,11 +84,14 @@ export function ValidateAtLeastOneUnit(validationOptions?: ValidationOptions) {
       validator: {
         async validate(value: unknown[], args: ValidationArguments) {
           const object = args.object as ListingUpdate;
-          // At least 1 unit or unit group is only required if publishing the listing
+          // At least 1 unit or unit group is only required if publishing the listing. A land use
+          // listing can go live as closed rather than active, which the pipe flags as a publish.
           if (
             !(
               ListingsStatusEnum.active === object.status ||
-              ListingsStatusEnum.pendingReview === object.status
+              ListingsStatusEnum.pendingReview === object.status ||
+              (ListingsStatusEnum.closed === object.status &&
+                object.publishesToClosed === true)
             )
           ) {
             return true;
