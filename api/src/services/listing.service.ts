@@ -3465,6 +3465,22 @@ export class ListingService implements OnModuleInit {
     if (incomingStatus === ListingsStatusEnum.pending) {
       return null;
     }
+    // A listing can go live as closed without ever being active (land use listings published with
+    // no scheduled publish date), so entering closed from a never-published status is a publish.
+    if (
+      incomingStatus === ListingsStatusEnum.closed &&
+      !storedPublishedAt &&
+      (
+        [
+          ListingsStatusEnum.pending,
+          ListingsStatusEnum.pendingReview,
+          ListingsStatusEnum.changesRequested,
+          ListingsStatusEnum.scheduled,
+        ] as ListingsStatusEnum[]
+      ).includes(storedStatus)
+    ) {
+      return new Date();
+    }
     return storedPublishedAt ?? null;
   }
 

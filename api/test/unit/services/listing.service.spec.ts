@@ -7620,6 +7620,209 @@ describe('Testing listing service', () => {
       );
       expect(service.sendListingPublishNotification).toHaveBeenCalled();
     });
+
+    it('should send no emails and stamp publishedAt when publishing straight to closed with no approval permissions', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        publicUrl: 'public.housing.gov',
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableListingOpportunity,
+            active: true,
+          },
+        ],
+        listingApprovalPermissions: [],
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.pending,
+        jurisdictionId: 'jurisdiction-id',
+        listingMultiselectQuestions: [],
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.closed,
+        listingMultiselectQuestions: [],
+        units: [],
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'snapshot-id' });
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        {
+          id: 'listing-id',
+          name: 'listing name',
+          status: ListingsStatusEnum.closed,
+          listingMultiselectQuestions: [],
+          units: [],
+        },
+      ]);
+      jest
+        .spyOn(service, 'sendListingPublishNotification')
+        .mockResolvedValueOnce(undefined);
+
+      await service.update(
+        {
+          id: 'listing-id',
+          name: 'listing name',
+          depositMin: '5',
+          jurisdictions: { id: 'jurisdiction-id' },
+          status: ListingsStatusEnum.closed,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+          lastUpdatedByUser: user,
+        } as ListingUpdate,
+        user,
+      );
+
+      expect(listingPublishedMock).not.toHaveBeenCalled();
+      expect(service.sendListingPublishNotification).not.toHaveBeenCalled();
+      expect(
+        listingPublishNotificationViaGovDeliveryMock,
+      ).not.toHaveBeenCalled();
+      expect(afsMock.processDuplicates).not.toHaveBeenCalled();
+
+      const updateCall = (prisma.listings.update as jest.Mock).mock.calls[0][0];
+      expect(updateCall.data.publishedAt).toBeInstanceOf(Date);
+      expect(updateCall.data.closedAt).toBeInstanceOf(Date);
+    });
+
+    it('should send no emails and stamp publishedAt when saving a scheduled listing straight to closed', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        publicUrl: 'public.housing.gov',
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableListingOpportunity,
+            active: true,
+          },
+        ],
+        listingApprovalPermissions: [],
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.scheduled,
+        jurisdictionId: 'jurisdiction-id',
+        listingMultiselectQuestions: [],
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.closed,
+        listingMultiselectQuestions: [],
+        units: [],
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'snapshot-id' });
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        {
+          id: 'listing-id',
+          name: 'listing name',
+          status: ListingsStatusEnum.closed,
+          listingMultiselectQuestions: [],
+          units: [],
+        },
+      ]);
+      jest
+        .spyOn(service, 'sendListingPublishNotification')
+        .mockResolvedValueOnce(undefined);
+
+      await service.update(
+        {
+          id: 'listing-id',
+          name: 'listing name',
+          depositMin: '5',
+          jurisdictions: { id: 'jurisdiction-id' },
+          status: ListingsStatusEnum.closed,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+          lastUpdatedByUser: user,
+        } as ListingUpdate,
+        user,
+      );
+
+      expect(listingPublishedMock).not.toHaveBeenCalled();
+      expect(service.sendListingPublishNotification).not.toHaveBeenCalled();
+      expect(
+        listingPublishNotificationViaGovDeliveryMock,
+      ).not.toHaveBeenCalled();
+      expect(afsMock.processDuplicates).not.toHaveBeenCalled();
+
+      const updateCall = (prisma.listings.update as jest.Mock).mock.calls[0][0];
+      expect(updateCall.data.publishedAt).toBeInstanceOf(Date);
+      expect(updateCall.data.closedAt).toBeInstanceOf(Date);
+    });
+
+    it('should send no approval emails when approving straight to closed', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        publicUrl: 'public.housing.gov',
+        featureFlags: [],
+        listingApprovalPermissions: [UserRoleEnum.admin],
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.pendingReview,
+        jurisdictionId: 'jurisdiction-id',
+        listingMultiselectQuestions: [],
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'listing-id',
+        name: 'listing name',
+        status: ListingsStatusEnum.closed,
+        listingMultiselectQuestions: [],
+        units: [],
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'snapshot-id' });
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        {
+          id: 'listing-id',
+          name: 'listing name',
+          status: ListingsStatusEnum.closed,
+          listingMultiselectQuestions: [],
+          units: [],
+        },
+      ]);
+      jest.spyOn(service, 'getUserEmailInfo');
+      jest
+        .spyOn(service, 'sendListingPublishNotification')
+        .mockResolvedValueOnce(undefined);
+
+      await service.update(
+        {
+          id: 'listing-id',
+          name: 'listing name',
+          depositMin: '5',
+          jurisdictions: { id: 'jurisdiction-id' },
+          status: ListingsStatusEnum.closed,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+          lastUpdatedByUser: user,
+        } as ListingUpdate,
+        user,
+      );
+
+      expect(service.getUserEmailInfo).not.toHaveBeenCalled();
+      expect(listingApprovedMock).not.toHaveBeenCalled();
+      expect(listingScheduledMock).not.toHaveBeenCalled();
+      expect(requestApprovalMock).not.toHaveBeenCalled();
+      expect(changesRequestedMock).not.toHaveBeenCalled();
+      expect(listingPublishedMock).not.toHaveBeenCalled();
+      expect(service.sendListingPublishNotification).not.toHaveBeenCalled();
+    });
   });
 
   describe('Test cachePurge endpoint', () => {
@@ -8640,6 +8843,60 @@ describe('Testing listing service', () => {
         null,
       );
       expect(result).toBeInstanceOf(Date);
+    });
+
+    it('pending → closed: returns a new Date (published straight to closed)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.closed,
+        ListingsStatusEnum.pending,
+        null,
+      );
+      expect(result).toBeInstanceOf(Date);
+    });
+
+    it('pendingReview → closed: returns a new Date (approved straight to closed)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.closed,
+        ListingsStatusEnum.pendingReview,
+        null,
+      );
+      expect(result).toBeInstanceOf(Date);
+    });
+
+    it('changesRequested → closed: returns a new Date', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.closed,
+        ListingsStatusEnum.changesRequested,
+        null,
+      );
+      expect(result).toBeInstanceOf(Date);
+    });
+
+    it('scheduled → closed: returns a new Date (approved listing whose scheduled date was cleared)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.closed,
+        ListingsStatusEnum.scheduled,
+        null,
+      );
+      expect(result).toBeInstanceOf(Date);
+    });
+
+    it('pending → closed with a stored publishedAt: returns the stored value', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.closed,
+        ListingsStatusEnum.pending,
+        storedDate,
+      );
+      expect(result).toBe(storedDate);
+    });
+
+    it('closed → closed: returns stored value (no re-stamp)', () => {
+      const result = ListingService['resolvePublishedAt'](
+        ListingsStatusEnum.closed,
+        ListingsStatusEnum.closed,
+        storedDate,
+      );
+      expect(result).toBe(storedDate);
     });
   });
 });
