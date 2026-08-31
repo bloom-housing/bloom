@@ -152,6 +152,7 @@ export const HomeSearch = (props: HomeSearchProps) => {
                   register={registerFilters}
                   setValue={setValue}
                   controlClassName="seeds-m-be-6"
+                  className={styles["hero-max-rent"]}
                 />
               </div>
               <div className={styles["hero-last-checkbox"]}>

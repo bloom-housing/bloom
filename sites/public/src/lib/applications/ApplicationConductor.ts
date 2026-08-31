@@ -151,6 +151,7 @@ export default class ApplicationConductor {
     visibleSpokenLanguages: [],
     visibleApplicationAccessibilityFeatures: [],
     visibleHouseholdMemberRelationships: [],
+    enabledStopLightRuleKeys: [],
   }
   private _listing: Listing
 
