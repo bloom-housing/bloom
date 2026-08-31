@@ -1721,12 +1721,12 @@ export class ApplicationsService {
       listingId: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<StreamableFile> {
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/bulk-update/template/{listingId}"
-      url = url.replace("{listingId}", params["listingId"] + "")
+      let url = basePath + "/applications/bulk-update/template"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { listingId: params["listingId"] }
 
       axios(configs, resolve, reject)
     })
@@ -1781,7 +1781,7 @@ export class ApplicationsService {
   bulkUpdateApplications(
     params: {
       /** requestBody */
-      body?: ApplicationBulkValidate
+      body?: ApplicationBulkUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
@@ -8918,9 +8918,6 @@ export interface PublicAppsViewResponse {
   applicationsCount: PublicAppsCount
 }
 
-/** StreamableFile */
-export interface StreamableFile {}
-
 /** ApplicationSelectionOptionCreate */
 export interface ApplicationSelectionOptionCreate {
   /**  */
@@ -9233,8 +9230,8 @@ export interface ApplicationCreate {
   householdMember: HouseholdMemberCreate[]
 }
 
-/** ApplicationBulkValidate */
-export interface ApplicationBulkValidate {
+/** ApplicationBulkUpdate */
+export interface ApplicationBulkUpdate {
   /**  */
   s3Key: string
 
