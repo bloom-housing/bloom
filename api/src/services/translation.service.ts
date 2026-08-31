@@ -402,7 +402,16 @@ export class TranslationService {
 
     const inScope = (id: string | null, scopeSite: SiteEnum | null) =>
       rows.filter((row) => row.jurisdictionId === id && row.site === scopeSite);
+    const requested = new Set(keys);
     const english = flattenTranslationRows([
+      // Email's english base ships with the api rather than being stored
+      ...(site === SiteEnum.email
+        ? [
+            baseTranslationRows(LanguagesEnum.en).filter((row) =>
+              requested.has(row.key),
+            ),
+          ]
+        : []),
       inScope(null, null),
       inScope(null, site),
       inScope(jurisdictionId, site),

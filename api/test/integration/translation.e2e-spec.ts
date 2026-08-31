@@ -209,6 +209,44 @@ describe('Translation Controller Tests', () => {
     });
   });
 
+  describe('staleness on the email scope', () => {
+    const emailEs = () =>
+      `/translations/jurisdictions/${jurisdictionId}/raw/email/es`;
+    const emailEn = () =>
+      `/translations/jurisdictions/${jurisdictionId}/raw/email/en`;
+
+    it('marks a translation stale once the english it came from changes', async () => {
+      // t.hello ships as "Hello", so the spanish row records that as its source.
+      await request(app.getHttpServer())
+        .put(emailEs())
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ edits: [{ key: 't.hello', value: 'Hola' }] })
+        .expect(200);
+
+      const fresh = await request(app.getHttpServer())
+        .get(emailEs())
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(fresh.body.find((row) => row.key === 't.hello').stale).toBe(false);
+
+      await request(app.getHttpServer())
+        .put(emailEn())
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ edits: [{ key: 't.hello', value: 'Howdy' }] })
+        .expect(200);
+
+      const after = await request(app.getHttpServer())
+        .get(emailEs())
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(after.body.find((row) => row.key === 't.hello').stale).toBe(true);
+    });
+  });
+
   describe('email overrides are not served by the public reads', () => {
     it('rejects site=email on the jurisdiction read', async () => {
       await request(app.getHttpServer())

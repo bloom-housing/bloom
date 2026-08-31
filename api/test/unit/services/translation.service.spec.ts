@@ -399,6 +399,53 @@ describe('Testing translations service', () => {
       expect(prisma.translationStrings.create).not.toHaveBeenCalled();
     });
 
+    it('records the shipped english as the source for an email translation', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
+      prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
+
+      await service.updateOverrides(
+        jurisdictionId,
+        SiteEnum.email,
+        LanguagesEnum.es,
+        { edits: [{ key: 't.hello', value: 'Hola' }] },
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ sourceHash: sourceHash('Hello') }),
+        }),
+      );
+    });
+
+    it('prefers a stored english override over the shipped one as the source', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          jurisdictionId,
+          site: SiteEnum.email,
+          key: 't.hello',
+          value: 'Howdy',
+        },
+      ]);
+      prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
+
+      await service.updateOverrides(
+        jurisdictionId,
+        SiteEnum.email,
+        LanguagesEnum.es,
+        { edits: [{ key: 't.hello', value: 'Hola' }] },
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ sourceHash: sourceHash('Howdy') }),
+        }),
+      );
+    });
+
     it('creates a new key when no lastUpdatedAt is provided', async () => {
       const jurisdictionId = randomUUID();
       prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
