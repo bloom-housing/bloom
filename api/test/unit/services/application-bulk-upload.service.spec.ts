@@ -414,7 +414,6 @@ describe('Testing application bulk upload services', () => {
 
   describe('processBulkUpload', () => {
     const listingId = randomUUID();
-    const backgroundJobId = randomUUID();
     const s3Key = 'uploads/applications.csv';
     const mockRequestingUser = {
       userRoles: { isLimitedJurisdictionalAdmin: false },

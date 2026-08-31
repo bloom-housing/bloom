@@ -33,7 +33,6 @@ import {
   convertReadableToApplicationDeclineReason,
 } from '../utilities/application-export-helpers';
 import { ApplicationBulkUpdate } from '../dtos/applications/application-bulk-update.dto';
-import { ApplicationBulkValidate } from '../dtos/applications/application-bulk-validate.dto';
 import { S3Service } from './s3.service';
 import { BackgroundJobsService } from './background-jobs.service';
 import { ApplicationBulkUrl } from '../dtos/applications/application-bulk-url.dto';
