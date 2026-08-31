@@ -7,7 +7,6 @@ import {
   LanguagesEnum,
   Prisma,
   SiteEnum,
-  Translations,
   TranslationOrigin,
 } from '@prisma/client';
 import * as lodash from 'lodash';
@@ -411,15 +410,6 @@ export class TranslationService {
       hashes.set(key, sourceHash(value));
     }
     return hashes;
-  }
-
-  public async getTranslationByLanguageAndJurisdiction(
-    language: LanguagesEnum,
-    jurisdictionId: string | null,
-  ): Promise<Translations | null> {
-    return await this.prisma.translations.findFirst({
-      where: { AND: [{ language: language }, { jurisdictionId }] },
-    });
   }
 
   public async translateListing(listing: Listing, language: LanguagesEnum) {

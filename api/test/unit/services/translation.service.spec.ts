@@ -1120,37 +1120,6 @@ describe('Testing translations service', () => {
     });
   });
 
-  describe('getTranslationByLanguageAndJurisdiction', () => {
-    it('Should get unique translations by language and jurisdiction', async () => {
-      const jurisdictionId = randomUUID();
-      const translations = {
-        id: 'translations id 1',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        language: LanguagesEnum.en,
-        jurisdictionId: jurisdictionId,
-        translations: {
-          translation1: 'translation 1',
-          translation2: 'translation 2',
-        },
-      };
-      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
-        id: jurisdictionId,
-      });
-      prisma.translations.findFirst = jest
-        .fn()
-        .mockResolvedValueOnce(translations);
-
-      const result = await service.getTranslationByLanguageAndJurisdiction(
-        LanguagesEnum.es,
-        jurisdictionId,
-      );
-
-      expect(result).toEqual(translations);
-      expect(prisma.translations.findFirst).toHaveBeenCalledTimes(1);
-    });
-  });
-
   describe('translateListing', () => {
     it('Should fetch translations and translate listing if not in db', async () => {
       googleTranslateServiceMock.fetch.mockResolvedValueOnce([
