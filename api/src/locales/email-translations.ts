@@ -55,7 +55,7 @@ export const translations = (
         },
         lotteryAvailable: {
           duplicatesDetails:
-            'Bloom generalmente no acepta solicitudes duplicadas. Una solicitud duplicada es aquella en la que aparece una persona que también aparece en otra solicitud para la misma oportunidad de vivienda. Para obtener información más detallada sobre cómo manejamos las solicitudes duplicadas, consulte nuestro',
+            'Bloom generalmente no acepta solicitudes duplicadas. Una solicitud duplicada es aquella en la que aparece una persona que también aparece en otra solicitud para la misma oportunidad de vivienda. Para obtener información más detallada sobre cómo manejamos las solicitudes duplicadas, consulte nuestros',
           header: 'Nuevos resultados de la lotería de vivienda disponibles',
           otherOpportunities1:
             'Para ver otras oportunidades de vivienda, visite %{appUrl}. Puede registrarse para recibir notificaciones de nuevas oportunidades de solicitud',
@@ -70,6 +70,9 @@ export const translations = (
           whatHappensHeader: '¿Qué pasa después?',
           whatHappensContent:
             'El administrador de la propiedad comenzará a comunicarse con los solicitantes en el orden de clasificación de la lotería, dentro de cada preferencia de la lotería. Cuando todas las unidades estén ocupadas, el administrador de la propiedad dejará de comunicarse con los solicitantes. Es posible que todas las unidades estén ocupadas antes de que el administrador de la propiedad alcance su clasificación. Si esto sucede, no se comunicarán con usted.',
+          termsUrl: 'https://www.exygy.com',
+          helpCenterUrl: 'https://www.exygy.com',
+          notificationsUrl: 'https://www.exygy.com',
         },
         accountRemoval: {
           subject:
@@ -102,7 +105,7 @@ export const translations = (
           statusChange:
             'El estado de su solicitud ha cambiado de %{from} a %{to}',
           declineReasonChange:
-            'El motivo de rechazo de su solicitud es %{value}',
+            'El motivo del rechazo de su solicitud es %{value}',
           accessibleWaitListChange:
             'Su número de lista de espera accesible es %{value}',
           conventionalWaitListChange:
@@ -126,16 +129,21 @@ export const translations = (
             waitlistDeclined: 'Lista de espera - Rechazada',
           },
           declineReason: {
-            householdIncomeTooHigh: 'Ingresos del hogar demasiado altos',
-            householdIncomeTooLow: 'Ingresos del hogar demasiado bajos',
-            householdSizeTooLarge: 'Tamaño del hogar demasiado grande',
-            householdSizeTooSmall: 'Tamaño del hogar demasiado pequeño',
-            attemptedToContactNoResponse: 'Intento de contacto; sin respuesta',
-            applicantDeclinedUnit: 'El solicitante rechazó la unidad',
+            householdIncomeTooHigh:
+              'Los ingresos familiares son demasiado altos.',
+            householdIncomeTooLow:
+              'Los ingresos familiares son demasiado bajos.',
+            householdSizeTooLarge:
+              'El tamaño de la vivienda es demasiado grande.',
+            householdSizeTooSmall:
+              'El tamaño de la vivienda es demasiado pequeño',
+            attemptedToContactNoResponse:
+              'Se intentó contactar; no hubo respuesta.',
+            applicantDeclinedUnit: 'El solicitante rechazó la unidad.',
             doesNotMeetSeniorBuildingRequirement:
               'No cumple con los requisitos del edificio para personas mayores',
             householdDoesNotNeedAccessibleUnit:
-              'El hogar no necesita características de unidad accesible',
+              'El hogar no necesita características de accesibilidad en la unidad.',
             other: 'Otro',
           },
         },
@@ -407,6 +415,73 @@ export const translations = (
             unsubscribeAndEmailSettings: 'Hủy đăng ký và quản lý cài đặt email',
           },
         },
+        accountRemoval: {
+          signIn: 'Đăng nhập vào Bloom Housing',
+          subject: 'Bloom Housing đã lên lịch xóa tài khoản do không hoạt động',
+          courtesyText1:
+            'Đây là một email thông báo rằng vì tài khoản Bloom Housing Portal của bạn đã không hoạt động trong 3 năm, tài khoản của bạn sẽ bị xóa trong vòng 30 ngày theo chính sách của chúng tôi.',
+          courtesyText2:
+            'Nếu bạn muốn giữ tài khoản của mình, vui lòng đăng nhập bất cứ lúc nào trong tháng tới và chúng tôi sẽ coi tài khoản của bạn là hoạt động trở lại.',
+          privacyPolicy: 'Chính sách bảo mật',
+          privacyPolicyUrl: 'localhost:3000/privacy-policy',
+        },
+        lotteryAvailable: {
+          termsUrl: 'https://www.exygy.com',
+          termsOfUse: 'Điều khoản sử dụng',
+          helpCenterUrl: 'https://www.exygy.com',
+          notificationsUrl: 'https://www.exygy.com',
+          duplicatesDetails:
+            'Bloom thường không chấp nhận các đơn xin trùng lặp. Một đơn xin trùng lặp là đơn xin có người cũng xuất hiện trên một đơn xin khác cho cùng một cơ hội nhà ở. Để biết thông tin chi tiết hơn về cách chúng tôi xử lý các đơn xin trùng lặp, hãy xem của chúng tôi',
+        },
+        applicationUpdate: {
+          title: 'Ứng dụng của bạn đã được cập nhật cho %{listingName}',
+          subject: 'Cập nhật ứng dụng cho %{listingName}',
+          greeting: 'Xin chào',
+          viewLink: 'Xem đơn đăng ký của tôi',
+          viewPrompt:
+            'Để xem hồ sơ ứng tuyển của bạn, vui lòng nhấp vào liên kết bên dưới:',
+          statusLabel: 'Trạng thái ứng dụng',
+          statusChange:
+            'Trạng thái hồ sơ của bạn đã thay đổi từ %{from} thành %{to}',
+          summaryTitle: 'Tóm tắt các thay đổi:',
+          updateNotice:
+            'Đã có bản cập nhật cho đơn đăng ký nhà ở của bạn tại %{listingName}.',
+          contactNotice:
+            'Hiện tại không cần thực hiện thêm bất kỳ hành động nào. Nếu bạn có thắc mắc về bản cập nhật này, vui lòng liên hệ theo địa chỉ sau:',
+          declineReason: {
+            other: 'Khác',
+            applicantDeclinedUnit: 'Người nộp đơn đã từ chối căn hộ.',
+            householdIncomeTooLow: 'Thu nhập hộ gia đình quá thấp',
+            householdSizeTooLarge: 'Quy mô hộ gia đình quá lớn',
+            householdSizeTooSmall: 'Quy mô hộ gia đình quá nhỏ',
+            householdIncomeTooHigh: 'Thu nhập hộ gia đình quá cao',
+            attemptedToContactNoResponse:
+              'Đã cố gắng liên lạc; không nhận được phản hồi.',
+            householdDoesNotNeedAccessibleUnit:
+              'Hộ gia đình không cần các tiện nghi dành cho người khuyết tật.',
+            doesNotMeetSeniorBuildingRequirement:
+              'Không đáp ứng yêu cầu của tòa nhà dành cho người cao tuổi.',
+          },
+          advocateViewLink: 'Xem ứng dụng',
+          applicationStatus: {
+            declined: 'Đã từ chối',
+            waitlist: 'Danh sách chờ',
+            submitted: 'Đã gửi',
+            receivedUnit: 'Đã nhận đơn vị',
+            waitlistDeclined: 'Danh sách chờ - Đã từ chối',
+          },
+          advocateViewPrompt:
+            'Để xem hồ sơ ứng tuyển của khách hàng, vui lòng nhấp vào liên kết bên dưới:',
+          declineReasonChange: 'Lý do từ chối đơn đăng ký của bạn là %{value}',
+          advocateUpdateNotice:
+            'Đã có bản cập nhật cho đơn xin nhà ở mà bạn đã nộp thay mặt cho %{applicantName} tại %{listingName}.',
+          applicantContactNotice:
+            'Nếu bạn có thắc mắc về bản cập nhật này, vui lòng liên hệ theo địa chỉ sau:',
+          accessibleWaitListChange:
+            'Số thứ tự trong danh sách chờ dành cho người khuyết tật của bạn là %{value}',
+          conventionalWaitListChange:
+            'Số thứ tự trong danh sách chờ thông thường của bạn là %{value}',
+        },
       };
     case LanguagesEnum.zh:
       return {
@@ -534,6 +609,63 @@ export const translations = (
             accessibleMarketingFlyer: '无障碍营销传单',
             unsubscribeAndEmailSettings: '取消订阅并管理电子邮件设置',
           },
+        },
+        accountRemoval: {
+          signIn: '登入 Bloom Housing',
+          subject: 'Bloom Housing 因帳戶長期不活躍，計劃刪除您的帳戶',
+          courtesyText1:
+            '這是一封禮貌性郵件，通知您由於您的 Bloom Housing Portal 帳戶已閒置 3 年，根據我們的政策，您的帳戶將在 30 天後被刪除。',
+          courtesyText2:
+            '如果您想保留您的帳戶，請在下個月內隨時登錄，我們將視您的帳戶為已重新啟用。',
+          privacyPolicy: '隱私權政策',
+          privacyPolicyUrl: 'localhost:3000/privacy-policy',
+        },
+        lotteryAvailable: {
+          termsUrl: 'https://www.exygy.com',
+          termsOfUse: '使用条款',
+          helpCenterUrl: 'https://www.exygy.com',
+          notificationsUrl: 'https://www.exygy.com',
+          duplicatesDetails:
+            'Bloom 一般不接受重复申请。重复申请是指申请者与另一份申请者有相同的住房机会。有关我们如何处理重复申请的更多详细信息，请参阅我们的',
+        },
+        applicationUpdate: {
+          title: '您的申请已更新至 %{listingName}',
+          subject: '%{listingName} 的应用程序更新',
+          greeting: '你好',
+          viewLink: '查看我的申请',
+          viewPrompt: '要查看您的申请，请点击以下链接：',
+          statusLabel: '应用程序状态',
+          statusChange: '您的申请状态已从 %{from} 更改为 %{to}',
+          summaryTitle: '变更摘要：',
+          updateNotice: '您的房屋申请（房源名称：%{listingName}）已更新。',
+          contactNotice:
+            '目前无需采取任何进一步行动。如果您对此更新有任何疑问，请联系我们。',
+          declineReason: {
+            other: '其他',
+            applicantDeclinedUnit: '申请人拒绝了该单元',
+            householdIncomeTooLow: '家庭收入过低',
+            householdSizeTooLarge: '家庭规模过大',
+            householdSizeTooSmall: '家庭规模太小',
+            householdIncomeTooHigh: '家庭收入过高',
+            attemptedToContactNoResponse: '尝试联系，但未收到回复',
+            householdDoesNotNeedAccessibleUnit: '家庭不需要无障碍单元功能',
+            doesNotMeetSeniorBuildingRequirement: '不符合高级建筑要求',
+          },
+          advocateViewLink: '查看应用程序',
+          applicationStatus: {
+            declined: '已拒絕',
+            waitlist: '候補名單',
+            submitted: '已提交',
+            receivedUnit: '已獲配單位',
+            waitlistDeclined: '候補名單 - 已拒絕',
+          },
+          advocateViewPrompt: '要查看您客户的申请，请点击以下链接：',
+          declineReasonChange: '您的申请被拒原因是 %{value}',
+          advocateUpdateNotice:
+            '您代表 %{applicantName} 提交的关于 %{listingName} 的住房申请已更新。',
+          applicantContactNotice: '如果您对本次更新有任何疑问，请联系我们。',
+          accessibleWaitListChange: '您的无障碍候补名单编号为 %{value}',
+          conventionalWaitListChange: '您的常规候补名单编号为 %{value}',
         },
       };
     case LanguagesEnum.tl:
@@ -672,6 +804,75 @@ export const translations = (
               'Mag-unsubscribe at pamahalaan ang mga settings ng email',
           },
         },
+        accountRemoval: {
+          signIn: 'Mag-sign in sa Bloom Housing',
+          subject:
+            'Bloom Housing Scheduled Account Removal Dahil sa Kawalan ng Aktibidad',
+          courtesyText1:
+            'Ito ay isang courtesy email upang ipaalam sa iyo na dahil ang iyong Bloom Housing Portal account ay hindi aktibo sa loob ng 3 taon, ang iyong account ay buburahin sa loob ng 30 araw ayon sa aming',
+          courtesyText2:
+            'Kung nais mong panatilihin ang iyong account, mangyaring mag-log in anumang oras sa susunod na buwan at ituturing naming aktibo muli ang iyong account.',
+          privacyPolicy: 'Patakaran sa Pagkapribado',
+          privacyPolicyUrl: 'localhost:3000/privacy-policy',
+        },
+        lotteryAvailable: {
+          termsUrl: 'https://www.exygy.com',
+          termsOfUse: 'Mga Tuntunin ng Paggamit',
+          helpCenterUrl: 'https://www.exygy.com',
+          notificationsUrl: 'https://www.exygy.com',
+          duplicatesDetails:
+            'Ang Bloom sa pangkalahatan ay hindi tumatanggap ng mga duplicate na aplikasyon. Ang isang duplicate na aplikasyon ay isa na mayroong isang tao na lumilitaw din sa isa pang aplikasyon para sa parehong pagkakataon sa pabahay. Para sa mas detalyadong impormasyon sa kung paano namin pinangangasiwaan ang mga duplicate, tingnan ang aming',
+        },
+        applicationUpdate: {
+          title: 'Na-update na ang iyong aplikasyon para sa %{listingName}',
+          subject: 'Pag-update ng aplikasyon para sa %{listingName}',
+          greeting: 'Kumusta',
+          viewLink: 'Tingnan ang aking aplikasyon',
+          viewPrompt:
+            'Para makita ang iyong aplikasyon, paki-click ang link sa ibaba:',
+          statusLabel: 'Katayuan ng aplikasyon',
+          statusChange:
+            'Nagbago ang katayuan ng iyong aplikasyon mula %{from} patungong %{to}',
+          summaryTitle: 'Buod ng mga pagbabago:',
+          updateNotice:
+            'May ginawang update sa iyong aplikasyon sa pabahay para sa %{listingName}.',
+          contactNotice:
+            'Wala nang karagdagang aksyon na kinakailangan sa ngayon. Kung mayroon kang mga katanungan tungkol sa update na ito, mangyaring makipag-ugnayan sa',
+          declineReason: {
+            other: 'Iba pa',
+            applicantDeclinedUnit: 'Yunit na tinanggihan ng aplikante',
+            householdIncomeTooLow: 'Masyadong mababa ang kita ng sambahayan',
+            householdSizeTooLarge: 'Masyadong malaki ang laki ng sambahayan',
+            householdSizeTooSmall: 'Masyadong maliit ang laki ng sambahayan',
+            householdIncomeTooHigh: 'Masyadong mataas ang kita ng sambahayan',
+            attemptedToContactNoResponse:
+              'Sinubukan kong kontakin; walang tugon',
+            householdDoesNotNeedAccessibleUnit:
+              'Hindi kailangan ng sambahayan ang mga accessible unit features',
+            doesNotMeetSeniorBuildingRequirement:
+              'Hindi nakakatugon sa kinakailangan sa gusali para sa mga matatanda',
+          },
+          advocateViewLink: 'Tingnan ang aplikasyon',
+          applicationStatus: {
+            declined: 'Tinanggihan',
+            waitlist: 'Waitlist',
+            submitted: 'Isinumite',
+            receivedUnit: 'Nakatanggap ng unit',
+            waitlistDeclined: 'Waitlist - Tinanggihan',
+          },
+          advocateViewPrompt:
+            'Para makita ang aplikasyon ng inyong kliyente, paki-click ang link sa ibaba:',
+          declineReasonChange:
+            'Ang dahilan ng pagtanggi sa iyong aplikasyon ay %{value}',
+          advocateUpdateNotice:
+            'May ginawang update sa aplikasyon para sa pabahay na isinumite mo sa ngalan ni %{applicantName} para sa %{listingName}.',
+          applicantContactNotice:
+            'Kung mayroon kayong mga katanungan tungkol sa update na ito, mangyaring makipag-ugnayan sa',
+          accessibleWaitListChange:
+            'Ang numero ng iyong wait list sa Accessible ay %{value}',
+          conventionalWaitListChange:
+            'Ang iyong karaniwang numero ng wait list ay %{value}',
+        },
       };
     case LanguagesEnum.bn:
       return {
@@ -808,6 +1009,64 @@ export const translations = (
               'আনসাবস্ক্রাইব করুন এবং ইমেইল সেটিংস পরিচালনা করুন',
           },
         },
+        lotteryAvailable: {
+          termsUrl: 'https://www.exygy.com',
+          termsOfUse: 'ব্যবহারের শর্তাবলি',
+          helpCenterUrl: 'https://www.exygy.com',
+          notificationsUrl: 'https://www.exygy.com',
+          duplicatesDetails:
+            'ব্লুম সাধারণত একই আবাসন সুবিধার জন্য একাধিক আবেদনে একই ব্যক্তির নাম থাকলে—অর্থাৎ দ্বৈত আবেদন—তা গ্রহণ করে না। দ্বৈত আবেদনের বিষয়টি আমরা কীভাবে পরিচালনা করি সে সম্পর্কে বিস্তারিত তথ্যের জন্য আমাদের',
+        },
+        applicationUpdate: {
+          title:
+            'আপনার অ্যাপ্লিকেশনটি %{listingName} এর জন্য আপডেট করা হয়েছে।',
+          subject: '%{listingName} এর জন্য অ্যাপ্লিকেশন আপডেট',
+          greeting: 'হ্যালো',
+          viewLink: 'আমার আবেদন দেখুন',
+          viewPrompt:
+            'আপনার আবেদনপত্রটি দেখতে, অনুগ্রহ করে নীচের লিঙ্কে ক্লিক করুন:',
+          statusLabel: 'আবেদনের স্থিতি',
+          statusChange:
+            'আপনার আবেদনের স্থিতি %{from} থেকে %{to} এ পরিবর্তিত হয়েছে।',
+          summaryTitle: 'পরিবর্তনের সারসংক্ষেপ:',
+          updateNotice:
+            '%{listingName} এর জন্য আপনার আবাসন আবেদনে একটি আপডেট করা হয়েছে।',
+          contactNotice:
+            'এই মুহূর্তে আর কোনও পদক্ষেপ নেওয়ার প্রয়োজন নেই। এই আপডেট সম্পর্কে আপনার যদি কোনও প্রশ্ন থাকে, তাহলে অনুগ্রহ করে যোগাযোগ করুন:',
+          declineReason: {
+            other: 'অন্যান্য',
+            applicantDeclinedUnit: 'আবেদনকারী ইউনিটটি প্রত্যাখ্যান করেছেন',
+            householdIncomeTooLow: 'পারিবারিক আয় খুব কম',
+            householdSizeTooLarge: 'পরিবারের আকার খুব বড়',
+            householdSizeTooSmall: 'পরিবারের আকার খুব ছোট',
+            householdIncomeTooHigh: 'পারিবারিক আয় খুব বেশি',
+            attemptedToContactNoResponse:
+              'যোগাযোগের চেষ্টা করা হয়েছে; কোনো সাড়া পাওয়া যায়নি।',
+            householdDoesNotNeedAccessibleUnit:
+              'পরিবারের জন্য প্রবেশযোগ্য ইউনিটের বৈশিষ্ট্যের প্রয়োজন নেই।',
+            doesNotMeetSeniorBuildingRequirement:
+              'সিনিয়র বিল্ডিংয়ের প্রয়োজনীয়তা পূরণ করে না',
+          },
+          advocateViewLink: 'আবেদন দেখুন',
+          applicationStatus: {
+            declined: 'প্রত্যাখ্যান করা হয়েছে',
+            waitlist: 'অপেক্ষা তালিকা',
+            submitted: 'জমা দেওয়া হয়েছে',
+            receivedUnit: 'একটি ইউনিট পেয়েছি',
+            waitlistDeclined: 'অপেক্ষা তালিকা - প্রত্যাখ্যান করা হয়েছে',
+          },
+          advocateViewPrompt:
+            'আপনার ক্লায়েন্টের আবেদন দেখতে, অনুগ্রহ করে নীচের লিঙ্কে ক্লিক করুন:',
+          declineReasonChange: 'আপনার আবেদন প্রত্যাখ্যানের কারণ হল %{value}',
+          advocateUpdateNotice:
+            '%{applicantName} এর পক্ষ থেকে %{listingName} এর জন্য আপনার জমা দেওয়া আবাসন আবেদনের একটি আপডেট করা হয়েছে।',
+          applicantContactNotice:
+            'এই আপডেট সম্পর্কে আপনার যদি কোন প্রশ্ন থাকে, তাহলে অনুগ্রহ করে যোগাযোগ করুন',
+          accessibleWaitListChange:
+            'আপনার অ্যাক্সেসযোগ্য অপেক্ষা তালিকার নম্বর হল %{value}',
+          conventionalWaitListChange:
+            'আপনার প্রচলিত অপেক্ষা তালিকার নম্বর হল %{value}',
+        },
       };
     case LanguagesEnum.ar:
       return {
@@ -937,6 +1196,59 @@ export const translations = (
             unsubscribeAndEmailSettings:
               'إلغاء الاشتراك وإدارة إعدادات البريد الإلكتروني',
           },
+        },
+        lotteryAvailable: {
+          termsUrl: 'https://www.exygy.com',
+          termsOfUse: 'شروط الاستخدام',
+          helpCenterUrl: 'https://www.exygy.com',
+          notificationsUrl: 'https://www.exygy.com',
+          duplicatesDetails:
+            'بشكل عام، لا تقبل Bloom الطلبات المكررة. ويُقصد بالطلب المكرر ذلك الطلب الذي يتضمن شخصاً يظهر أيضاً في طلب آخر لنفس فرصة السكن. لمزيد من التفاصيل حول كيفية تعاملنا مع الطلبات المكررة، يرجى الاطلاع على',
+        },
+        applicationUpdate: {
+          title: 'تم تحديث طلبك لـ %{listingName}',
+          subject: 'تحديث الطلب لـ %{listingName}',
+          greeting: 'مرحبًا',
+          viewLink: 'اطلع على طلبي',
+          viewPrompt: 'للاطلاع على طلبك، يرجى النقر على الرابط أدناه:',
+          statusLabel: 'حالة الطلب',
+          statusChange: 'لقد تغيرت حالة طلبك من %{from} إلى %{to}',
+          summaryTitle: 'ملخص التغييرات:',
+          updateNotice: 'تم تحديث طلب السكن الخاص بك لـ %{listingName}.',
+          contactNotice:
+            'لا يلزم اتخاذ أي إجراء إضافي في الوقت الحالي. إذا كانت لديكم أي استفسارات بخصوص هذا التحديث، يُرجى التواصل معنا على',
+          declineReason: {
+            other: 'آخر',
+            applicantDeclinedUnit: 'رفض مقدم الطلب الوحدة',
+            householdIncomeTooLow: 'دخل الأسرة منخفض للغاية',
+            householdSizeTooLarge: 'حجم الأسرة كبير جدًا',
+            householdSizeTooSmall: 'حجم الأسرة صغير جدًا',
+            householdIncomeTooHigh: 'دخل الأسرة مرتفع للغاية',
+            attemptedToContactNoResponse: 'تمت محاولة الاتصال؛ لم يتم الرد',
+            householdDoesNotNeedAccessibleUnit:
+              'لا يحتاج المنزل إلى ميزات وحدة يسهل الوصول إليها',
+            doesNotMeetSeniorBuildingRequirement:
+              'لا يفي بمتطلبات المباني لكبار السن',
+          },
+          advocateViewLink: 'عرض الطلب',
+          applicationStatus: {
+            declined: 'مرفوض',
+            waitlist: 'قائمة الانتظار',
+            submitted: 'تم التقديم',
+            receivedUnit: 'استلم وحدة',
+            waitlistDeclined: 'قائمة الانتظار - مرفوض',
+          },
+          advocateViewPrompt:
+            'للاطلاع على طلب عميلك، يرجى النقر على الرابط أدناه:',
+          declineReasonChange: 'سبب رفض طلبك هو %{value}',
+          advocateUpdateNotice:
+            'تم تحديث طلب السكن الذي قدمته نيابة عن %{applicantName} لـ %{listingName}.',
+          applicantContactNotice:
+            'إذا كانت لديكم أي استفسارات بخصوص هذا التحديث، يرجى التواصل معنا على',
+          accessibleWaitListChange:
+            'رقمك في قائمة انتظار ذوي الاحتياجات الخاصة هو %{value}',
+          conventionalWaitListChange:
+            'رقمك في قائمة الانتظار التقليدية هو %{value}',
         },
       };
     case LanguagesEnum.ko:
@@ -1069,6 +1381,76 @@ export const translations = (
             accessibleMarketingFlyer: '접근 가능한 마케팅 전단지',
             unsubscribeAndEmailSettings: '구독 취소 및 이메일 설정 관리',
           },
+        },
+        confirmation: {
+          eligible: {
+            waitlistContactAdvocate:
+              '대기자 명단에 있는 고객에게 연락하여 대기자 명단에 계속 남아 있기를 원하는지 확인하는 절차를 거칠 수 있습니다.',
+          },
+          questions: '질문?',
+          interviewAdvocate:
+            '의뢰인이 인터뷰 요청을 받게 되면, 보다 자세한 신청서를 작성하고 관련 서류를 제출해야 합니다.',
+          gotYourConfirmationNumberOnYourBehalf:
+            '저희는 귀하를 대신하여 신청서를 접수했습니다.',
+        },
+        leasingAgent: {
+          contactAgentForQuestions:
+            '본 신청서와 관련하여 궁금한 사항이 있으시면 해당 매물 담당자에게 문의해 주십시오.',
+        },
+        lotteryAvailable: {
+          termsUrl: 'https://www.exygy.com',
+          termsOfUse: '이용 약관',
+          helpCenterUrl: 'https://www.exygy.com',
+          notificationsUrl: 'https://www.exygy.com',
+          duplicatesDetails:
+            'Bloom은 일반적으로 중복 신청을 허용하지 않습니다. 중복 신청이란 동일한 주택 공급 건에 대해 다른 신청서에도 이름이 올라가 있는 지원자가 포함된 경우를 의미합니다. 중복 신청 처리 방식에 대한 자세한 내용은 다음을 참조하십시오',
+        },
+        applicationUpdate: {
+          title: '귀하의 신청서가 %{listingName}에 대해 업데이트되었습니다.',
+          subject: '%{listingName}에 대한 애플리케이션 업데이트',
+          greeting: '안녕하세요',
+          viewLink: '내 지원서를 봐주세요',
+          viewPrompt: '신청서를 보시려면 아래 링크를 클릭하세요.',
+          statusLabel: '신청 상태',
+          statusChange: '신청 상태가 %{from}에서 %{to}로 변경되었습니다.',
+          summaryTitle: '변경 사항 요약:',
+          updateNotice:
+            '%{listingName}에 대한 주택 신청서가 업데이트되었습니다.',
+          contactNotice:
+            '현재로서는 추가 조치가 필요하지 않습니다. 이번 업데이트와 관련하여 궁금한 사항이 있으시면 문의해 주세요.',
+          declineReason: {
+            other: '다른',
+            applicantDeclinedUnit: '지원자가 해당 부서를 거부했습니다.',
+            householdIncomeTooLow: '가계 소득이 너무 낮음',
+            householdSizeTooLarge: '가구 규모가 너무 큽니다',
+            householdSizeTooSmall: '가구 규모가 너무 작습니다',
+            householdIncomeTooHigh: '가계 소득이 너무 높음',
+            attemptedToContactNoResponse:
+              '연락을 시도했으나 응답이 없었습니다.',
+            householdDoesNotNeedAccessibleUnit:
+              '해당 가구는 장애인 편의시설이 필요한 주택이 아닙니다.',
+            doesNotMeetSeniorBuildingRequirement:
+              '노인 주거 시설 요건을 충족하지 않습니다.',
+          },
+          advocateViewLink: '지원서 보기',
+          applicationStatus: {
+            declined: '거절됨',
+            waitlist: '대기자 명단',
+            submitted: '제출된',
+            receivedUnit: '유닛을 받았습니다',
+            waitlistDeclined: '대기자 명단 - 거절됨',
+          },
+          advocateViewPrompt:
+            '고객님의 신청서를 보시려면 아래 링크를 클릭하십시오.',
+          declineReasonChange: '귀하의 지원서가 거절된 이유는 %{value}입니다.',
+          advocateUpdateNotice:
+            '귀하께서 %{applicantName} 님을 대신하여 %{listingName}에 제출하신 주택 신청서가 업데이트되었습니다.',
+          applicantContactNotice:
+            '이번 업데이트와 관련하여 궁금한 사항이 있으시면 언제든지 문의해 주세요.',
+          accessibleWaitListChange:
+            '귀하의 장애인 대기자 명단 순번은 %{value}입니다.',
+          conventionalWaitListChange:
+            '귀하의 일반 대기자 명단 순번은 %{value}입니다.',
         },
       };
     case LanguagesEnum.hy:
@@ -1206,6 +1588,77 @@ export const translations = (
               'Դադարեցնել բաժանորդագրությունը և կառավարել էլ. փոստի կարգավորումները',
           },
         },
+        confirmation: {
+          eligible: {
+            waitlistContactAdvocate:
+              'Ձեր հաճախորդի հետ կարող են կապ հաստատել սպասման ցուցակում գտնվելու ընթացքում՝ հաստատելու համար, որ նա ցանկանում է մնալ սպասման ցուցակում։',
+          },
+          questions: 'Հարցեր՞',
+          interviewAdvocate:
+            'Եթե ձեր հաճախորդի հետ կապ հաստատեն հարցազրույցի համար, նրան կխնդրեն լրացնել ավելի մանրամասն դիմում և տրամադրել հիմնավորող փաստաթղթեր։',
+          gotYourConfirmationNumberOnYourBehalf:
+            'Մենք Ձեր անունից դիմում ենք ստացել',
+        },
+        leasingAgent: {
+          contactAgentForQuestions:
+            'Եթե ունեք հարցեր այս դիմումի վերաբերյալ, խնդրում ենք կապվել այս ցուցակի գործակալի հետ։',
+        },
+        lotteryAvailable: {
+          termsUrl: 'https://www.exygy.com',
+          termsOfUse: 'Օգտագործման պայմաններ',
+          helpCenterUrl: 'https://www.exygy.com',
+          notificationsUrl: 'https://www.exygy.com',
+          duplicatesDetails:
+            'Bloom-ը, որպես կանոն, չի ընդունում կրկնօրինակ դիմումներ: Կրկնօրինակ դիմումը այն դիմումն է, որի դեպքում անձը նույնպես նշված է նույն բնակարանային հնարավորության համար նախատեսված մեկ այլ դիմումում: Կրկնօրինակ դիմումների հետ վարվելու վերաբերյալ ավելի մանրամասն տեղեկությունների համար տե՛ս մեր',
+        },
+        applicationUpdate: {
+          title: 'Ձեր ծրագիրը թարմացվել է %{listingName}-ի համար',
+          subject: '%{listingName} ծրագրի թարմացում',
+          greeting: 'Բարև',
+          viewLink: 'Դիտել իմ դիմումը',
+          viewPrompt:
+            'Ձեր դիմումը դիտելու համար, խնդրում ենք սեղմել ստորև նշված հղումը՝',
+          statusLabel: 'Դիմումի կարգավիճակը',
+          statusChange:
+            'Ձեր դիմումի կարգավիճակը փոխվել է %{from}-ից մինչև %{to}',
+          summaryTitle: 'Փոփոխությունների ամփոփում.',
+          updateNotice:
+            'Ձեր %{listingName}-ի բնակարանային դիմումը թարմացվել է։',
+          contactNotice:
+            'Այս պահին որևէ հետագա գործողություն անհրաժեշտ չէ: Եթե ունեք հարցեր այս թարմացման վերաբերյալ, խնդրում ենք կապվել հետևյալ հասցեով՝',
+          declineReason: {
+            other: 'Այլ',
+            applicantDeclinedUnit: 'Դիմորդը մերժեց միավորը',
+            householdIncomeTooLow: 'Ընտանեկան եկամուտը չափազանց ցածր է',
+            householdSizeTooLarge: 'Տնային տնտեսության չափը չափազանց մեծ է',
+            householdSizeTooSmall: 'Տնային տնտեսության չափը չափազանց փոքր է',
+            householdIncomeTooHigh: 'Ընտանեկան եկամուտը չափազանց բարձր է',
+            attemptedToContactNoResponse: 'Փորձեցի կապ հաստատել, պատասխան չկա',
+            householdDoesNotNeedAccessibleUnit:
+              'Տնային տնտեսությունը կարիք չունի հասանելի միավորի հատկանիշների',
+            doesNotMeetSeniorBuildingRequirement:
+              'Չի համապատասխանում ավագ շենքի պահանջներին',
+          },
+          advocateViewLink: 'Դիտել դիմումը',
+          applicationStatus: {
+            declined: 'Մերժված է',
+            waitlist: 'Սպասման ցուցակ',
+            submitted: 'Ուղարկված է',
+            receivedUnit: 'Ստացել է միավոր',
+            waitlistDeclined: 'Սպասման ցուցակ - Մերժված է',
+          },
+          advocateViewPrompt:
+            'Ձեր հաճախորդի դիմումը դիտելու համար, խնդրում ենք սեղմել ստորև նշված հղումը.',
+          declineReasonChange: 'Ձեր դիմումի մերժման պատճառը %{value} է',
+          advocateUpdateNotice:
+            '%{applicantName}-ի անունից %{listingName}-ի համար ձեր ներկայացրած բնակարանային դիմումը թարմացվել է։',
+          applicantContactNotice:
+            'Եթե ունեք հարցեր այս թարմացման վերաբերյալ, խնդրում ենք կապվել հետևյալ հասցեով.',
+          accessibleWaitListChange:
+            'Ձեր հասանելի սպասման ցուցակի համարը %{value} է',
+          conventionalWaitListChange:
+            'Ձեր սովորական սպասման ցուցակի համարը %{value} է',
+        },
       };
     case LanguagesEnum.fa:
       return {
@@ -1327,6 +1780,75 @@ export const translations = (
             accessibleMarketingFlyer: 'بروشور بازاریابی قابل دسترس',
             unsubscribeAndEmailSettings: 'لغو اشتراک و مدیریت تنظیمات ایمیل',
           },
+        },
+        confirmation: {
+          eligible: {
+            waitlistContactAdvocate:
+              'ممکن است در زمان حضور در لیست انتظار، با موکل شما تماس گرفته شود تا تأیید شود که مایل به ماندن در لیست انتظار است.',
+          },
+          questions: 'سوالات؟',
+          interviewAdvocate:
+            'اگر با موکل شما برای مصاحبه تماس گرفته شود، از او خواسته می‌شود فرم درخواست دقیق‌تری را پر کند و مدارک پشتیبان را ارائه دهد.',
+          gotYourConfirmationNumberOnYourBehalf:
+            'ما از طرف شما درخواستی دریافت کردیم برای',
+        },
+        leasingAgent: {
+          contactAgentForQuestions:
+            'اگر در مورد این درخواست سوالی دارید، لطفاً با نماینده این آگهی تماس بگیرید.',
+        },
+        lotteryAvailable: {
+          termsUrl: 'https://www.exygy.com',
+          termsOfUse: 'شرایط استفاده',
+          helpCenterUrl: 'https://www.exygy.com',
+          notificationsUrl: 'https://www.exygy.com',
+          duplicatesDetails:
+            'بلوم عموماً درخواست‌های تکراری را نمی‌پذیرد. درخواست تکراری، درخواستی است که در آن شخصی در درخواست دیگری برای همان فرصت مسکن نیز حضور دارد. برای اطلاعات بیشتر در مورد نحوه رسیدگی ما به درخواست‌های تکراری، به وب‌سایت ما مراجعه کنید',
+        },
+        applicationUpdate: {
+          title: 'برنامه شما برای %{listingName} به‌روزرسانی شده است.',
+          subject: 'به‌روزرسانی برنامه برای %{listingName}',
+          greeting: 'سلام',
+          viewLink: 'مشاهده درخواست من',
+          viewPrompt: 'برای مشاهده درخواست خود، لطفاً روی لینک زیر کلیک کنید:',
+          statusLabel: 'وضعیت درخواست',
+          statusChange: 'وضعیت درخواست شما از %{from} به %{to} تغییر کرده است.',
+          summaryTitle: 'خلاصه تغییرات:',
+          updateNotice:
+            'به‌روزرسانی در درخواست مسکن شما برای %{listingName} انجام شد.',
+          contactNotice:
+            'در حال حاضر هیچ اقدام دیگری لازم نیست. اگر در مورد این به‌روزرسانی سؤالی دارید، لطفاً با ما تماس بگیرید.',
+          declineReason: {
+            other: 'دیگر',
+            applicantDeclinedUnit: 'متقاضی واحد را رد کرد',
+            householdIncomeTooLow: 'درآمد خانوار خیلی پایین است',
+            householdSizeTooLarge: 'اندازه خانه خیلی بزرگ است',
+            householdSizeTooSmall: 'اندازه خانه خیلی کوچک است',
+            householdIncomeTooHigh: 'درآمد خانوار خیلی بالاست',
+            attemptedToContactNoResponse: 'تلاش برای تماس؛ بدون پاسخ',
+            householdDoesNotNeedAccessibleUnit:
+              'خانوار به ویژگی‌های واحد قابل دسترس نیاز ندارد',
+            doesNotMeetSeniorBuildingRequirement:
+              'الزامات ساختمان‌های قدیمی را برآورده نمی‌کند',
+          },
+          advocateViewLink: 'مشاهده برنامه',
+          applicationStatus: {
+            declined: 'رد شد',
+            waitlist: 'لیست انتظار',
+            submitted: 'ارسال شده',
+            receivedUnit: 'واحد دریافت شد',
+            waitlistDeclined: 'لیست انتظار - رد شد',
+          },
+          advocateViewPrompt:
+            'برای مشاهده درخواست مشتری خود، لطفاً روی لینک زیر کلیک کنید:',
+          declineReasonChange: 'دلیل رد درخواست شما %{value} است.',
+          advocateUpdateNotice:
+            'درخواست مسکنی که از طرف %{applicantName} برای %{listingName} ارسال کرده بودید، به‌روزرسانی شد.',
+          applicantContactNotice:
+            'اگر در مورد این به‌روزرسانی سؤالی دارید، لطفاً با ما تماس بگیرید',
+          accessibleWaitListChange:
+            'شماره لیست انتظار قابل دسترس شما %{value} است.',
+          conventionalWaitListChange:
+            'شماره لیست انتظار متعارف شما %{value} است.',
         },
       };
     default: // This also handles LanguagesEnum.en
@@ -1569,7 +2091,7 @@ export const translations = (
             'The %{listingName} listing has been approved by an administrator and is scheduled to be automatically published on %{date} between 12:00 AM and 2:00 AM. If you have questions or require changes, please contact an administrator.',
         },
         listingPublished: {
-          header: 'New published listing - %{listingName}',
+          header: 'New published listing',
           subject: 'New published listing - %{listingName}',
           autoPublished:
             'The %{listingName} listing has been automatically published.',
@@ -1627,6 +2149,9 @@ export const translations = (
           whatHappensHeader: 'What happens next?',
           whatHappensContent:
             'The property manager will begin to contact applicants in the order of lottery rank, within each lottery preference. When the units are all filled, the property manager will stop contacting applicants. All the units could be filled before the property manager reaches your rank. If this happens, you will not be contacted.',
+          termsUrl: 'https://www.exygy.com',
+          helpCenterUrl: 'https://www.exygy.com',
+          notificationsUrl: 'https://www.exygy.com',
         },
         accountRemoval: {
           subject: 'Bloom Housing Scheduled Account Removal Due to Inactivity',
