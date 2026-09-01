@@ -39,6 +39,7 @@ import { MultiselectOption } from '../dtos/multiselect-questions/multiselect-opt
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { TranslationOverrideMigrationDTO } from '../dtos/script-runner/translation-override-migration.dto';
 import {
+  assertStorableValues,
   buildOverrideRows,
   DEFAULT_GIT_REF,
   DEFAULT_REPOSITORY_URL,
@@ -1065,12 +1066,9 @@ export class ScriptRunnerService {
     const missing: string[] = [];
 
     for (const file of overrideFiles({ languages, repositoryUrl, gitRef })) {
+      let translations: Record<string, unknown>;
       try {
-        files.push({
-          language: file.language,
-          site: file.site,
-          translations: await this.getTranslationFile(file.url),
-        });
+        translations = await this.getTranslationFile(file.url);
       } catch (error) {
         // Partners ships english only, and a fork need not translate every language.
         const absent = error.message?.includes('status code 404');
@@ -1078,7 +1076,20 @@ export class ScriptRunnerService {
           throw new BadRequestException(error.message);
         }
         missing.push(file.url);
+        continue;
       }
+
+      try {
+        assertStorableValues({ url: file.url, translations });
+      } catch (error) {
+        throw new BadRequestException(error.message);
+      }
+
+      files.push({
+        language: file.language,
+        site: file.site,
+        translations,
+      });
     }
 
     return { files, missing };

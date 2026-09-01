@@ -1,5 +1,10 @@
 import { LanguagesEnum, SiteEnum } from '@prisma/client';
 import { sourceHash } from './translation-source-hash';
+import { NoExecutableMarkupConstraint } from '../decorators/no-executable-markup.decorator';
+import {
+  MAX_KEY_LENGTH,
+  MAX_VALUE_LENGTH,
+} from '../dtos/translations/translation-key-edit.dto';
 
 export type Scope = {
   jurisdictionId: string | null;
@@ -87,6 +92,31 @@ export const flattenToKeyValues = (
       )}. Values must be strings or nested objects.`,
     );
   });
+
+export const assertStorableValues = ({
+  url,
+  translations,
+}: {
+  url: string;
+  translations: Record<string, unknown>;
+}): void => {
+  const markup = new NoExecutableMarkupConstraint();
+
+  for (const { key, value } of flattenToKeyValues(translations)) {
+    const reason =
+      key.length > MAX_KEY_LENGTH
+        ? `key is longer than ${MAX_KEY_LENGTH} characters`
+        : value.length > MAX_VALUE_LENGTH
+        ? `value is longer than ${MAX_VALUE_LENGTH} characters`
+        : markup.validate(value)
+        ? null
+        : 'value contains executable markup';
+
+    if (reason) {
+      throw new Error(`${url} cannot be stored: ${key} ${reason}`);
+    }
+  }
+};
 
 export const buildOverrideRows = ({
   files,

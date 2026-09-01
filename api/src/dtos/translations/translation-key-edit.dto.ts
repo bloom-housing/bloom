@@ -5,8 +5,8 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 import { NoExecutableMarkup } from '../../decorators/no-executable-markup.decorator';
 
 // Matches the editor's textarea limit, and sits well above the longest bundled base value.
-const MAX_VALUE_LENGTH = 5000;
-const MAX_KEY_LENGTH = 255;
+export const MAX_VALUE_LENGTH = 5000;
+export const MAX_KEY_LENGTH = 255;
 
 export class TranslationKeyEdit {
   @Expose()

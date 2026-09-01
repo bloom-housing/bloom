@@ -1,5 +1,6 @@
 import { LanguagesEnum, SiteEnum } from '@prisma/client';
 import {
+  assertStorableValues,
   buildOverrideRows,
   diffRows,
   DesiredRow,
@@ -98,6 +99,48 @@ describe('flattenToKeyValues', () => {
 
   it('rejects an empty key', () => {
     expect(() => flattenToKeyValues({ ' ': 'Value' })).toThrow('empty key');
+  });
+});
+
+describe('assertStorableValues', () => {
+  const url = 'https://raw.githubusercontent.com/acme/fork/main/es.json';
+
+  it('accepts a value the editor accepts', () => {
+    expect(() =>
+      assertStorableValues({
+        url,
+        translations: { t: { welcome: 'Bienvenido a <b>Bloomington</b>' } },
+      }),
+    ).not.toThrow();
+  });
+
+  it('rejects a value longer than the editor allows', () => {
+    expect(() =>
+      assertStorableValues({
+        url,
+        translations: { t: { welcome: 'a'.repeat(5001) } },
+      }),
+    ).toThrow(`${url} cannot be stored: t.welcome value is longer than 5000`);
+  });
+
+  it('rejects a key longer than the editor allows', () => {
+    expect(() =>
+      assertStorableValues({
+        url,
+        translations: { ['k'.repeat(256)]: 'short' },
+      }),
+    ).toThrow(`key is longer than 255`);
+  });
+
+  it('rejects a value the markup constraint refuses', () => {
+    expect(() =>
+      assertStorableValues({
+        url,
+        translations: { t: { welcome: '<script>alert(1)</script>' } },
+      }),
+    ).toThrow(
+      `${url} cannot be stored: t.welcome value contains executable markup`,
+    );
   });
 });
 

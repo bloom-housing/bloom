@@ -1210,6 +1210,25 @@ describe('Testing script runner service', () => {
       ).rejects.toThrow('404');
     });
 
+    it('stops on a value the editor would refuse, rather than treating it as missing', async () => {
+      jest
+        .spyOn(service, 'getTranslationFile')
+        .mockImplementation((url: string) =>
+          Promise.resolve(
+            url.endsWith('es.json')
+              ? { 'region.name': '<script>alert(1)</script>' }
+              : { 'region.name': 'Bloomington' },
+          ),
+        );
+
+      await expect(
+        service.migrateTranslationOverridesToKeyRows(
+          request(),
+          body({ languages: [LanguagesEnum.es] }),
+        ),
+      ).rejects.toThrow('region.name value contains executable markup');
+    });
+
     it('stops before writing when a fetch fails outright', async () => {
       jest
         .spyOn(service, 'getTranslationFile')
