@@ -1029,6 +1029,86 @@ describe('Testing script runner service', () => {
         .mockResolvedValue({ 'region.name': 'Bloomington' });
     });
 
+    it('updates a stored row whose value differs', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValue([
+        {
+          jurisdictionId,
+          language: LanguagesEnum.en,
+          site: SiteEnum.public,
+          key: 'region.name',
+          value: 'Something else',
+          sourceHash: null,
+        },
+      ]);
+
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({ commit: true }),
+      );
+
+      expect(prisma.translationStrings.updateMany).toHaveBeenCalledWith({
+        where: {
+          jurisdictionId,
+          language: LanguagesEnum.en,
+          site: SiteEnum.public,
+          key: 'region.name',
+        },
+        data: { value: 'Bloomington', sourceHash: null },
+      });
+    });
+
+    it('reads each section against its own scope', async () => {
+      await service.migrateTranslationOverridesToKeyRows(request(), body());
+
+      expect(prisma.translationStrings.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { jurisdictionId: null, site: SiteEnum.partners },
+        }),
+      );
+      expect(prisma.translationStrings.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { jurisdictionId, site: SiteEnum.public },
+        }),
+      );
+    });
+
+    it('fetches from the repository and ref it was given', async () => {
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({
+          repositoryUrl: 'https://raw.githubusercontent.com/acme/fork',
+          gitRef: 'abc123',
+        }),
+      );
+
+      const urls = (service.getTranslationFile as jest.Mock).mock.calls.map(
+        (call) => call[0],
+      );
+      expect(urls).toEqual([
+        'https://raw.githubusercontent.com/acme/fork/abc123/sites/public/page_content/locale_overrides/general.json',
+        'https://raw.githubusercontent.com/acme/fork/abc123/sites/partners/page_content/overrides/general.json',
+      ]);
+    });
+
+    it('names a tolerated missing file in the report', async () => {
+      const log = jest.spyOn(service['logger'], 'log').mockImplementation();
+      jest
+        .spyOn(service, 'getTranslationFile')
+        .mockImplementation((url: string) =>
+          url.endsWith('es.json')
+            ? Promise.reject(new Error('failed fetching x: status code 404'))
+            : Promise.resolve({ 'region.name': 'Bloomington' }),
+        );
+
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({ languages: [LanguagesEnum.es] }),
+      );
+
+      expect(log.mock.calls[0][0]).toContain('no file at');
+      expect(log.mock.calls[0][0]).toContain('es.json');
+    });
+
     it('rejects an unknown jurisdiction without consuming the script name', async () => {
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
 
@@ -1149,6 +1229,102 @@ describe('Testing script runner service', () => {
   });
 
   // | ---------- HELPER TESTS BELOW ---------- | //
+  it('should mark script run as started if no script run present in db', async () => {
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+
+    const id = randomUUID();
+    const scriptName = 'new run attempt';
+
+    await service.markScriptAsRunStart(scriptName, {
+      id,
+    } as unknown as User);
+
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+      data: {
+        scriptName,
+        triggeringUser: id,
+      },
+    });
+  });
+
+  it('should error if script run is in progress or failed', async () => {
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      didScriptRun: false,
+    });
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+
+    const id = randomUUID();
+    const scriptName = 'new run attempt 2';
+
+    await expect(
+      async () =>
+        await service.markScriptAsRunStart(scriptName, {
+          id,
+        } as unknown as User),
+    ).rejects.toThrowError(
+      `${scriptName} has an attempted run and it failed, or is in progress. If it failed, please delete the db entry and try again`,
+    );
+
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).not.toHaveBeenCalled();
+  });
+
+  it('should error if script run already succeeded', async () => {
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      didScriptRun: true,
+    });
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+
+    const id = randomUUID();
+    const scriptName = 'new run attempt 3';
+
+    await expect(
+      async () =>
+        await service.markScriptAsRunStart(scriptName, {
+          id,
+        } as unknown as User),
+    ).rejects.toThrowError(`${scriptName} has already been run and succeeded`);
+
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).not.toHaveBeenCalled();
+  });
+
+  it('should mark script run as started if no script run present in db', async () => {
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+
+    const id = randomUUID();
+    const scriptName = 'new run attempt 4';
+
+    await service.markScriptAsComplete(scriptName, {
+      id,
+    } as unknown as User);
+
+    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+      data: {
+        didScriptRun: true,
+        triggeringUser: id,
+      },
+      where: {
+        scriptName,
+      },
+    });
+  });
 
   describe('getTranslationFile', () => {
     const respondWith = (data: unknown) => {
