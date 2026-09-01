@@ -250,7 +250,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
         )
       } else if (
         listing.lotteryStatus === LotteryStatusEnum.publishedToPublic ||
-        enablePartnerLotteryExport
+        (listing.lotteryLastRunAt && enablePartnerLotteryExport)
       ) {
         return exportCard
       }
