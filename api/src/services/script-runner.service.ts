@@ -6,11 +6,14 @@ import {
   Logger,
 } from '@nestjs/common';
 import {
+  LanguagesEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   Prisma,
   ReviewOrderTypeEnum,
+  SiteEnum,
+  TranslationOrigin,
 } from '@prisma/client';
 import { AxiosError } from 'axios';
 import { HttpService } from '@nestjs/axios';
@@ -34,6 +37,19 @@ import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
 import { MultiselectOption } from '../dtos/multiselect-questions/multiselect-option.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
+import { TranslationOverrideMigrationDTO } from '../dtos/script-runner/translation-override-migration.dto';
+import {
+  buildOverrideRows,
+  DEFAULT_GIT_REF,
+  DEFAULT_REPOSITORY_URL,
+  DesiredRow,
+  diffRows,
+  ExistingRow,
+  formatReport,
+  overrideFiles,
+  RowDiff,
+  withSourceHashes,
+} from '../utilities/translation-override-migration';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
 
 const TRANSLATION_FETCH_TIMEOUT_MS = 30_000;
@@ -327,6 +343,105 @@ export class ScriptRunnerService {
       },
     });
     await this.markScriptAsComplete('hideProgramsFromListings', requestingUser);
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @param dto which jurisdiction to write, and where to read the override files from
+   * @returns successDTO
+   * @description loads the bundled site override files into translation_strings
+   */
+  async migrateTranslationOverridesToKeyRows(
+    req: ExpressRequest,
+    dto: TranslationOverrideMigrationDTO,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    const scriptName = `migrate translation overrides to key rows for ${dto.jurisdictionName}`;
+
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      select: { id: true },
+      where: { name: dto.jurisdictionName },
+    });
+    if (!jurisdiction) {
+      throw new BadRequestException(
+        `Jurisdiction ${dto.jurisdictionName} does not exist`,
+      );
+    }
+
+    const repositoryUrl = dto.repositoryUrl ?? DEFAULT_REPOSITORY_URL;
+    const gitRef = dto.gitRef ?? DEFAULT_GIT_REF;
+    const { files, missing } = await this.readOverrideFiles({
+      languages: dto.languages,
+      repositoryUrl,
+      gitRef,
+    });
+
+    const bySite = (site: SiteEnum) =>
+      files
+        .filter((file) => file.site === site)
+        .map(({ language, translations }) => ({ language, translations }));
+
+    const desired = withSourceHashes([
+      ...buildOverrideRows({
+        files: bySite(SiteEnum.partners),
+        jurisdictionId: null,
+        site: SiteEnum.partners,
+      }),
+      ...buildOverrideRows({
+        files: bySite(SiteEnum.public),
+        jurisdictionId: jurisdiction.id,
+        site: SiteEnum.public,
+      }),
+    ]);
+
+    const sections = [
+      {
+        label: 'partners overrides (all jurisdictions)',
+        scope: { jurisdictionId: null, site: SiteEnum.partners },
+      },
+      {
+        label: `public overrides for ${dto.jurisdictionName}`,
+        scope: { jurisdictionId: jurisdiction.id, site: SiteEnum.public },
+      },
+    ];
+
+    const diffs: Array<{ label: string; diff: RowDiff }> = [];
+    for (const { label, scope } of sections) {
+      const rows = desired.filter(
+        (row) =>
+          row.jurisdictionId === scope.jurisdictionId &&
+          row.site === scope.site,
+      );
+      diffs.push({
+        label,
+        diff: diffRows(
+          await this.existingOverrides(scope),
+          rows,
+          dto.skipExisting,
+        ),
+      });
+    }
+
+    this.logger.log(
+      formatReport({
+        sections: diffs,
+        commit: dto.commit,
+        repositoryUrl,
+        gitRef,
+        missing,
+      }),
+    );
+
+    if (dto.commit) {
+      await this.markScriptAsRunStart(scriptName, requestingUser);
+      for (const { diff } of diffs) {
+        await this.writeOverrideRows(diff);
+      }
+      await this.markScriptAsComplete(scriptName, requestingUser);
+    }
+
     return { success: true };
   }
 
@@ -929,6 +1044,87 @@ export class ScriptRunnerService {
   }
 
   // |------------------ HELPERS GO BELOW ------------------ | //
+
+  private async readOverrideFiles({
+    languages,
+    repositoryUrl,
+    gitRef,
+  }: {
+    languages?: LanguagesEnum[];
+    repositoryUrl: string;
+    gitRef: string;
+  }): Promise<{
+    files: Array<{
+      language: LanguagesEnum;
+      site: SiteEnum;
+      translations: Record<string, unknown>;
+    }>;
+    missing: string[];
+  }> {
+    const files = [];
+    const missing: string[] = [];
+
+    for (const file of overrideFiles({ languages, repositoryUrl, gitRef })) {
+      try {
+        files.push({
+          language: file.language,
+          site: file.site,
+          translations: await this.getTranslationFile(file.url),
+        });
+      } catch (error) {
+        // Partners ships english only, and a fork need not translate every language.
+        const absent = error.message?.includes('status code 404');
+        if (!absent || file.language === LanguagesEnum.en) {
+          throw new BadRequestException(error.message);
+        }
+        missing.push(file.url);
+      }
+    }
+
+    return { files, missing };
+  }
+
+  private async existingOverrides(scope: {
+    jurisdictionId: string | null;
+    site: SiteEnum;
+  }): Promise<ExistingRow[]> {
+    return await this.prisma.translationStrings.findMany({
+      select: {
+        jurisdictionId: true,
+        language: true,
+        site: true,
+        key: true,
+        value: true,
+        sourceHash: true,
+      },
+      where: scope,
+    });
+  }
+
+  private async writeOverrideRows(diff: RowDiff): Promise<void> {
+    if (diff.create.length) {
+      await this.prisma.translationStrings.createMany({
+        data: diff.create.map((row: DesiredRow) => ({
+          ...row,
+          origin: TranslationOrigin.human,
+        })),
+      });
+    }
+
+    // updateMany, because the unique index is NULLS NOT DISTINCT and Prisma's compound
+    // unique input cannot express a null jurisdictionId or site.
+    for (const row of diff.update) {
+      await this.prisma.translationStrings.updateMany({
+        where: {
+          jurisdictionId: row.jurisdictionId,
+          language: row.language,
+          site: row.site,
+          key: row.key,
+        },
+        data: { value: row.value, sourceHash: row.sourceHash },
+      });
+    }
+  }
 
   /**
    *

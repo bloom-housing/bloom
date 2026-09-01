@@ -19,6 +19,7 @@ import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { CommunityTypeDTO } from '../dtos/script-runner/community-type.dto';
 import { PaginationDTO } from '../dtos/script-runner/pagination.dto';
+import { TranslationOverrideMigrationDTO } from '../dtos/script-runner/translation-override-migration.dto';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 
 @Controller('scriptRunner')
@@ -130,6 +131,23 @@ export class ScriptRunnerController {
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.hideProgramsFromListings(req);
+  }
+
+  @Put('migrateTranslationOverridesToKeyRows')
+  @ApiOperation({
+    summary:
+      'A script that loads the bundled site override files into translation_strings',
+    operationId: 'migrateTranslationOverridesToKeyRows',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async migrateTranslationOverridesToKeyRows(
+    @Body() body: TranslationOverrideMigrationDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.migrateTranslationOverridesToKeyRows(
+      req,
+      body,
+    );
   }
 
   @Put('addFeatureFlags')

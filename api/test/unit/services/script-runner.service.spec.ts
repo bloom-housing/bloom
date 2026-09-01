@@ -4,9 +4,12 @@ import { HttpService } from '@nestjs/axios';
 import { of, throwError } from 'rxjs';
 import { AxiosError } from 'axios';
 import {
+  LanguagesEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   ReviewOrderTypeEnum,
+  SiteEnum,
+  TranslationOrigin,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { Request as ExpressRequest } from 'express';
@@ -989,6 +992,159 @@ describe('Testing script runner service', () => {
           },
         },
       },
+    });
+  });
+
+  describe('migrateTranslationOverridesToKeyRows', () => {
+    const jurisdictionId = randomUUID();
+    const userId = randomUUID();
+    const scriptName =
+      'migrate translation overrides to key rows for Bloomington';
+
+    const request = () =>
+      ({
+        user: { id: userId } as unknown as User,
+      } as unknown as ExpressRequest);
+
+    const body = (overrides = {}) => ({
+      jurisdictionName: 'Bloomington',
+      commit: false,
+      skipExisting: false,
+      languages: [LanguagesEnum.en],
+      ...overrides,
+    });
+
+    beforeEach(() => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: jurisdictionId });
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValue([]);
+      prisma.translationStrings.createMany = jest.fn().mockResolvedValue(null);
+      prisma.translationStrings.updateMany = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+      jest
+        .spyOn(service, 'getTranslationFile')
+        .mockResolvedValue({ 'region.name': 'Bloomington' });
+    });
+
+    it('rejects an unknown jurisdiction without consuming the script name', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+
+      await expect(
+        service.migrateTranslationOverridesToKeyRows(request(), body()),
+      ).rejects.toThrow('Jurisdiction Bloomington does not exist');
+      expect(prisma.scriptRuns.create).not.toHaveBeenCalled();
+    });
+
+    it('writes partners rows for every jurisdiction and public rows for the named one', async () => {
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({ commit: true }),
+      );
+
+      const written = (
+        prisma.translationStrings.createMany as jest.Mock
+      ).mock.calls.flatMap((call) => call[0].data);
+
+      expect(
+        written.find((row) => row.site === SiteEnum.partners).jurisdictionId,
+      ).toBeNull();
+      expect(
+        written.find((row) => row.site === SiteEnum.public).jurisdictionId,
+      ).toEqual(jurisdictionId);
+      expect(
+        written.every((row) => row.origin === TranslationOrigin.human),
+      ).toBe(true);
+    });
+
+    it('records the run only once it writes', async () => {
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({ commit: true }),
+      );
+
+      expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+        where: { scriptName },
+      });
+      expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+        data: { scriptName, triggeringUser: userId },
+      });
+      expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+        data: { didScriptRun: true, triggeringUser: userId },
+        where: { scriptName },
+      });
+    });
+
+    it('writes nothing and records nothing on a dry run', async () => {
+      await service.migrateTranslationOverridesToKeyRows(request(), body());
+
+      expect(prisma.translationStrings.createMany).not.toHaveBeenCalled();
+      expect(prisma.translationStrings.updateMany).not.toHaveBeenCalled();
+      expect(prisma.scriptRuns.create).not.toHaveBeenCalled();
+    });
+
+    it('leaves an existing row alone when asked to', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValue([
+        {
+          jurisdictionId,
+          language: LanguagesEnum.en,
+          site: SiteEnum.public,
+          key: 'region.name',
+          value: 'Edited by an admin',
+          sourceHash: null,
+        },
+      ]);
+
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({ commit: true, skipExisting: true }),
+      );
+
+      expect(prisma.translationStrings.updateMany).not.toHaveBeenCalled();
+    });
+
+    it('tolerates a missing translation, and stops on a missing english file', async () => {
+      jest
+        .spyOn(service, 'getTranslationFile')
+        .mockImplementation((url: string) =>
+          url.endsWith('es.json')
+            ? Promise.reject(new Error('failed fetching x: status code 404'))
+            : Promise.resolve({ 'region.name': 'Bloomington' }),
+        );
+
+      await expect(
+        service.migrateTranslationOverridesToKeyRows(
+          request(),
+          body({ languages: [LanguagesEnum.es] }),
+        ),
+      ).resolves.toEqual({ success: true });
+
+      jest
+        .spyOn(service, 'getTranslationFile')
+        .mockRejectedValue(new Error('failed fetching x: status code 404'));
+
+      await expect(
+        service.migrateTranslationOverridesToKeyRows(request(), body()),
+      ).rejects.toThrow('404');
+    });
+
+    it('stops before writing when a fetch fails outright', async () => {
+      jest
+        .spyOn(service, 'getTranslationFile')
+        .mockRejectedValue(
+          new Error('failed fetching x: timed out after 30ms'),
+        );
+
+      await expect(
+        service.migrateTranslationOverridesToKeyRows(
+          request(),
+          body({ commit: true }),
+        ),
+      ).rejects.toThrow('timed out');
+      expect(prisma.translationStrings.createMany).not.toHaveBeenCalled();
+      expect(prisma.scriptRuns.create).not.toHaveBeenCalled();
     });
   });
 
