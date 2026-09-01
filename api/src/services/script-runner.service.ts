@@ -1405,7 +1405,11 @@ export class ScriptRunnerService {
   ): Promise<Record<string, unknown>> {
     const { data } = await firstValueFrom(
       this.httpService
-        .get(url, { signal: AbortSignal.timeout(timeoutMs) })
+        // The host allowlist applies to the requested url, so a redirect must not move off it.
+        .get(url, {
+          signal: AbortSignal.timeout(timeoutMs),
+          maxRedirects: 0,
+        })
         .pipe(
           catchError((error: AxiosError) => {
             throw new Error(

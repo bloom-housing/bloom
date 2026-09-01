@@ -1350,6 +1350,7 @@ describe('Testing script runner service', () => {
 
       expect(httpServiceMock.get).toHaveBeenCalledWith('https://x/f.json', {
         signal: expect.any(AbortSignal),
+        maxRedirects: 0,
       });
     });
 
@@ -1359,6 +1360,14 @@ describe('Testing script runner service', () => {
       await expect(
         service.getTranslationFile('https://x/f.json'),
       ).rejects.toThrow(/failed fetching https:\/\/x\/f\.json.*404/);
+    });
+
+    it('does not treat a redirect as a missing file', async () => {
+      failWith({ message: 'Request failed with status code 302' });
+
+      await expect(
+        service.getTranslationFile('https://x/f.json'),
+      ).rejects.toThrow(/failed fetching https:\/\/x\/f\.json.*302/);
     });
 
     it('rejects when the response is cut short', async () => {
