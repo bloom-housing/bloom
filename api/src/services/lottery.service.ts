@@ -499,15 +499,22 @@ export class LotteryService {
       ListingViews.full,
     );
 
-    await this.permissionService.canOrThrow(
-      requestingUser,
-      'listing',
-      permissionActions.update,
-      {
-        id: storedListing.id,
-        jurisdictionId: storedListing.jurisdictionId,
-      },
+    const enableNonAdminLotteries = doJurisdictionHaveFeatureFlagSet(
+      mapTo(Jurisdiction, storedListing.jurisdictions),
+      FeatureFlagEnum.enableNonAdminLotteries,
     );
+
+    if (!enableNonAdminLotteries) {
+      await this.permissionService.canOrThrow(
+        requestingUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: storedListing.id,
+          jurisdictionId: storedListing.jurisdictionId,
+        },
+      );
+    }
 
     if (storedListing.status !== ListingsStatusEnum.closed) {
       throw new BadRequestException(
