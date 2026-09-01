@@ -106,6 +106,31 @@ describe('Script Runner Controller Tests', () => {
       expect(JSON.stringify(res.body.message)).toContain('skipExisting');
     });
 
+    it('rejects a git ref that climbs out of the repository', async () => {
+      await call({
+        ...valid,
+        gitRef: 'main/../../../attacker/bloom-fork/main',
+      }).expect(400);
+    });
+
+    it('rejects a repository url off the allowed host', async () => {
+      await call({ ...valid, repositoryUrl: 'https://169.254.169.254' }).expect(
+        400,
+      );
+    });
+
+    it('rejects a language list that is a bare string', async () => {
+      await call({ ...valid, languages: 'es' }).expect(400);
+    });
+
+    it('rejects an empty language list', async () => {
+      await call({ ...valid, languages: [] }).expect(400);
+    });
+
+    it('rejects a missing jurisdiction name', async () => {
+      await call({ commit: false, skipExisting: false }).expect(400);
+    });
+
     it('rejects a language outside the enum', async () => {
       await call({ ...valid, languages: ['klingon'] }).expect(400);
     });

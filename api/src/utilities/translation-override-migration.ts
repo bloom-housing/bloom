@@ -47,7 +47,7 @@ export const overrideFiles = ({
   repositoryUrl?: string;
   gitRef?: string;
 }): OverrideFile[] => {
-  const wanted = languages?.length
+  const wanted = languages
     ? Array.from(new Set([LanguagesEnum.en, ...languages]))
     : Object.values(LanguagesEnum);
 

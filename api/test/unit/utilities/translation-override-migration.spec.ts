@@ -48,6 +48,14 @@ describe('overrideFiles', () => {
     expect(languages).toEqual([LanguagesEnum.en, LanguagesEnum.vi]);
   });
 
+  it('reads english only when given an empty list', () => {
+    const languages = overrideFiles({ languages: [] })
+      .filter((file) => file.site === SiteEnum.public)
+      .map((file) => file.language);
+
+    expect(languages).toEqual([LanguagesEnum.en]);
+  });
+
   it('reads every language when none is given', () => {
     const languages = overrideFiles({})
       .filter((file) => file.site === SiteEnum.public)
