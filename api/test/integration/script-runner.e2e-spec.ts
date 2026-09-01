@@ -86,6 +86,39 @@ describe('Script Runner Controller Tests', () => {
       skipExisting: false,
     };
 
+    it('refuses a jurisdictional admin, who has no grant on translations', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      const jurisAdmin = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: { isJurisdictionalAdmin: true },
+          jurisdictionIds: [jurisdiction.id],
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+      const logIn = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: jurisAdmin.email,
+          password: 'Abcdef12345!',
+        } as Login)
+        .expect(201);
+
+      await request(app.getHttpServer())
+        .put('/scriptRunner/migrateTranslationOverridesToKeyRows')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', logIn.headers['set-cookie'])
+        .send({
+          jurisdictionName: jurisdiction.name,
+          commit: false,
+          skipExisting: false,
+        })
+        .expect(403);
+    });
+
     it('rejects a body with commit missing', async () => {
       // The validation pipe drops unknown properties, so a misspelled field must not
       // fall through to a default.

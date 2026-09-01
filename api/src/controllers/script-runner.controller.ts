@@ -21,6 +21,8 @@ import { CommunityTypeDTO } from '../dtos/script-runner/community-type.dto';
 import { PaginationDTO } from '../dtos/script-runner/pagination.dto';
 import { TranslationOverrideMigrationDTO } from '../dtos/script-runner/translation-override-migration.dto';
 import { ApiKeyGuard } from '../guards/api-key.guard';
+import { PermissionGuard } from '../guards/permission.guard';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 
 @Controller('scriptRunner')
 @ApiTags('scriptRunner')
@@ -134,6 +136,8 @@ export class ScriptRunnerController {
   }
 
   @Put('migrateTranslationOverridesToKeyRows')
+  @UseGuards(PermissionGuard)
+  @PermissionTypeDecorator('translation')
   @ApiOperation({
     summary:
       'A script that loads the bundled site override files into translation_strings',
