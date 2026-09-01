@@ -1,19 +1,80 @@
-import React from "react"
+import React, { useCallback, useContext, useState } from "react"
 import { Button, Card, Drawer, Heading } from "@bloom-housing/ui-seeds"
-import { Dropzone, t } from "@bloom-housing/ui-components"
+import {
+  AlertBox,
+  Dropzone,
+  MinimalTable,
+  StandardTableData,
+  t,
+} from "@bloom-housing/ui-components"
+import { useBulkApplicationCsvUpload, useBulkApplicationTemplateExport } from "../../lib/hooks"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 interface BulkUpdateDrawerProps {
   isOpen: boolean
+  listingId: string
   onClose: () => void
 }
 
-const BulkUpdateDrawer = ({ isOpen, onClose }: BulkUpdateDrawerProps) => {
-  const csvUploader = (file: File) => {
-    console.log(file)
+const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps) => {
+  const { applicationsService } = useContext(AuthContext)
+  const { onExport } = useBulkApplicationTemplateExport(listingId)
+  const [csvError, setCsvError] = useState<string>("")
+  const [jobId, setJobId] = useState<string>("")
+  const { uploadToS3, resetUpload, fileUploadData, progressValue } = useBulkApplicationCsvUpload()
+
+  const csvUploader = useCallback(
+    async (file: File) => {
+      await uploadToS3(file, listingId)
+    },
+    [uploadToS3, listingId]
+  )
+
+  const processBulkCsv = useCallback(async () => {
+    if (fileUploadData && fileUploadData.s3Key) {
+      let jobId: string
+      try {
+        jobId = await applicationsService.bulkUpdateApplications({
+          body: {
+            s3Key: fileUploadData.s3Key,
+            listingId: listingId,
+          },
+        })
+
+        setJobId(jobId)
+      } catch (e) {
+        setCsvError(e?.response?.data?.message ?? t("applications.bulkUpdateModalProcessingError"))
+      }
+    }
+  }, [applicationsService, fileUploadData, listingId])
+
+  const bulkApplicationHeaders = {
+    fileName: "t.fileName",
+    actions: "",
   }
 
-  const downloadTemplate = () => {
-    console.log("download template")
+  const bulkApplicationTableRows: StandardTableData = []
+  if (fileUploadData && fileUploadData.url !== "") {
+    bulkApplicationTableRows.push({
+      fileName: { content: `${fileUploadData.id}` },
+      actions: {
+        content: (
+          <Button
+            type="button"
+            size="sm"
+            disabled={!!jobId}
+            className="font-semibold text-alert"
+            onClick={() => {
+              resetUpload()
+              setCsvError(null)
+            }}
+            variant="text"
+          >
+            {t("t.delete")}
+          </Button>
+        ),
+      },
+    })
   }
 
   return (
@@ -32,7 +93,7 @@ const BulkUpdateDrawer = ({ isOpen, onClose }: BulkUpdateDrawerProps) => {
               {t("applications.bulkUpdateStep1Title")}
             </Heading>
             <p className="seeds-m-be-content">{t("applications.bulkUpdateStep1Body")}</p>
-            <Button variant="primary-outlined" onClick={downloadTemplate}>
+            <Button variant="primary-outlined" onClick={() => onExport()}>
               {t("applications.bulkUpdateDownloadTemplate")}
             </Button>
           </Card.Section>
@@ -47,18 +108,38 @@ const BulkUpdateDrawer = ({ isOpen, onClose }: BulkUpdateDrawerProps) => {
               {t("applications.bulkUpdateStep3Title")}
             </Heading>
             <p className="seeds-m-be-content">{t("applications.bulkUpdateStep3Body")}</p>
-            <Dropzone
-              id="bulk-update-upload"
-              uploader={csvUploader}
-              label={t("applications.bulkUpdateStep3DropzoneLabel")}
-              accept=".csv"
-            />
+            {!fileUploadData ? (
+              <Dropzone
+                id="bulk-update-upload"
+                uploader={csvUploader}
+                label={t("applications.bulkUpdateStep3DropzoneLabel")}
+                accept=".csv"
+                progress={progressValue}
+              />
+            ) : (
+              <div className="flex flex-col gap-1">
+                <MinimalTable headers={bulkApplicationHeaders} data={bulkApplicationTableRows} />
+                {csvError && <AlertBox type="alert">{csvError}</AlertBox>}
+                {jobId && (
+                  <AlertBox type="notice">
+                    {t("applications.bulkUpdateModalProcessingNotice")}
+                  </AlertBox>
+                )}
+              </div>
+            )}
           </Card.Section>
         </Card>
       </Drawer.Content>
       <Drawer.Footer>
         <Button variant="primary-outlined" onClick={onClose}>
           {t("t.close")}
+        </Button>
+        <Button
+          disabled={!fileUploadData || !!csvError || !!jobId}
+          variant="primary"
+          onClick={processBulkCsv}
+        >
+          {t("t.uploadFile")}
         </Button>
       </Drawer.Footer>
     </Drawer>

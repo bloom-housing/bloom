@@ -27,6 +27,7 @@ import {
 } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
 import { getListingStatusMessage, isFeatureFlagOn } from "../../../lib/helpers"
+import { getEnabledStopLightRuleKeys } from "../../../lib/applications/stopLights/enabledStopLightRuleKeys"
 import { AccountTypeDialog } from "../../../components/account/AccountTypeDialog"
 import styles from "../../../layouts/application-form.module.scss"
 
@@ -66,6 +67,7 @@ const loadListing = async (
       jurisdictionResponse.visibleApplicationAccessibilityFeatures,
     visibleHouseholdMemberRelationships: jurisdictionResponse.visibleHouseholdMemberRelationships,
     raceEthnicityConfiguration: jurisdictionResponse.raceEthnicityConfiguration,
+    enabledStopLightRuleKeys: getEnabledStopLightRuleKeys(jurisdictionResponse),
   }
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)

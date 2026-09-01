@@ -37,7 +37,7 @@ describe("<TranslationWarningDialog>", () => {
       renderDialog()
 
       expect(
-        screen.getByText(/sections they fill will stop appearing on the public site/i)
+        screen.getByText(/sections they fill will stop appearing on the site/i)
       ).toBeInTheDocument()
     })
   })

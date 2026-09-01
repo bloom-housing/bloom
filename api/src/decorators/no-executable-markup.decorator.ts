@@ -30,6 +30,17 @@ const BLOCKED_TAG_PATTERN = new RegExp(
 // "<scr\tipt" still opens a script element. Stripped before the tag name is read.
 const CONTROL_AND_SPACE = /[\u0000-\u0020]/g;
 
+const BLOCKED_PATTERNS: { label: string; pattern: RegExp }[] = [
+  { label: 'an inline event handler', pattern: /<[^>]*\son[a-z]+\s*=/i },
+  { label: 'a style attribute', pattern: /<[^>]*\sstyle\s*=/i },
+  {
+    label: 'a javascript: or vbscript: url',
+    pattern: /(javascript|vbscript)\s*:/i,
+  },
+  // Loads remote content on render, which is why img is blocked above.
+  { label: 'a markdown image', pattern: /!\[[^\]]*\]\([^)]*\)/ },
+];
+
 export function NoExecutableMarkup(validationOptions?: ValidationOptions) {
   return function (object: unknown, propertyName: string) {
     registerDecorator({
@@ -53,13 +64,14 @@ export class NoExecutableMarkupConstraint
     }
     return (
       !BLOCKED_TAG_PATTERN.test(value) &&
-      !BLOCKED_TAG_PATTERN.test(value.replace(CONTROL_AND_SPACE, ''))
+      !BLOCKED_TAG_PATTERN.test(value.replace(CONTROL_AND_SPACE, '')) &&
+      !BLOCKED_PATTERNS.some(({ pattern }) => pattern.test(value))
     );
   }
 
   defaultMessage(args: ValidationArguments) {
-    return `${
-      args.property
-    } must not contain any of these tags: ${BLOCKED_TAGS.join(', ')}`;
+    return `${args.property} must not contain ${BLOCKED_PATTERNS.map(
+      ({ label }) => label,
+    ).join(', ')}, or any of these tags: ${BLOCKED_TAGS.join(', ')}`;
   }
 }

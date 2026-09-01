@@ -5,7 +5,7 @@ import {
   FeatureFlagEnum,
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { fetchJurisdictionByName } from "../../../lib/hooks"
+import { fetchJurisdictionByName, fetchPublicOverrides } from "../../../lib/hooks"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 
 interface FavoritesProps {
@@ -28,10 +28,14 @@ const Favorites = ({ jurisdiction }: FavoritesProps) => {
 export default Favorites
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getStaticProps() {
-  const jurisdiction = await fetchJurisdictionByName()
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const [jurisdiction, publicOverrides] = await Promise.all([
+    fetchJurisdictionByName(),
+    fetchPublicOverrides(locale),
+  ])
 
   return {
-    props: { jurisdiction },
+    props: { jurisdiction, publicOverrides },
+    revalidate: Number(process.env.cacheRevalidate),
   }
 }
