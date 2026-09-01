@@ -377,6 +377,64 @@ describe('Translation Controller Tests', () => {
   });
 
   describe('GET /translations/base/email/:language', () => {
+    it.each(Object.values(LanguagesEnum))(
+      'serves a flat map of strings for %s',
+      async (language) => {
+        const res = await request(app.getHttpServer())
+          .get(`/translations/base/email/${language}`)
+          .set(passkey)
+          .expect(200);
+
+        expect(typeof res.body).toEqual('object');
+        const entries = Object.entries(res.body);
+        expect(entries.length).toBeGreaterThan(0);
+        entries.forEach(([key, value]) => {
+          expect(typeof value).toEqual('string');
+          expect(key).not.toContain(' ');
+        });
+      },
+    );
+
+    it('rejects a language outside the enum', async () => {
+      await request(app.getHttpServer())
+        .get('/translations/base/email/klingon')
+        .set(passkey)
+        .expect(400);
+    });
+  });
+
+  describe('email overrides are not served by the public reads', () => {
+    it('rejects site=email on the jurisdiction read', async () => {
+      await request(app.getHttpServer())
+        .get(
+          `/translations/jurisdictions/${jurisdictionId}?site=email&language=en`,
+        )
+        .set(passkey)
+        .expect(400);
+    });
+
+    it('rejects site=email on the byName read', async () => {
+      await request(app.getHttpServer())
+        .get(
+          `/translations/byName/${encodeURIComponent(
+            jurisdictionName,
+          )}?site=email&language=en`,
+        )
+        .set(passkey)
+        .expect(400);
+    });
+
+    it('still serves the site scopes', async () => {
+      await request(app.getHttpServer())
+        .get(
+          `/translations/jurisdictions/${jurisdictionId}?site=public&language=en`,
+        )
+        .set(passkey)
+        .expect(200);
+    });
+  });
+
+  describe('GET /translations/base/email/:language', () => {
     // Derived from the shipped strings, so a copy edit does not fail these.
     const shipped = (language: LanguagesEnum) =>
       Object.fromEntries(
