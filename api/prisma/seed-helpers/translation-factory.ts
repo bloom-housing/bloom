@@ -1,5 +1,4 @@
 import { LanguagesEnum, Prisma, PrismaClient, SiteEnum } from '@prisma/client';
-import * as lodash from 'lodash';
 import {
   jurisdictionTranslationRows,
   translations,
@@ -10,12 +9,9 @@ import {
 export async function upsertEmailTranslations(
   prisma: PrismaClient,
   jurisdiction: { id: string; name: string },
-  language: LanguagesEnum = LanguagesEnum.en,
 ): Promise<void> {
-  for (const { key, value } of jurisdictionTranslationRows(
-    jurisdiction,
-    language,
-  )) {
+  const language = LanguagesEnum.en;
+  for (const { key, value } of jurisdictionTranslationRows(jurisdiction)) {
     await prisma.translationStrings.upsert({
       where: {
         jurisdictionId_language_site_key: {
@@ -35,34 +31,6 @@ export async function upsertEmailTranslations(
       update: { value },
     });
   }
-}
-
-export async function upsertTranslation(
-  prisma: PrismaClient,
-  data: Prisma.TranslationsCreateInput,
-): Promise<void> {
-  const jurisdictionId = data.jurisdictions?.connect?.id ?? null;
-  const { language } = data;
-
-  const existing = await prisma.translations.findFirst({
-    where: { language, jurisdictionId },
-  });
-
-  if (!existing) {
-    await prisma.translations.create({ data });
-    return;
-  }
-
-  const merged = lodash.merge(
-    {},
-    existing.translations as Record<string, unknown>,
-    data.translations as Record<string, unknown>,
-  );
-
-  await prisma.translations.update({
-    where: { id: existing.id },
-    data: { translations: merged as Prisma.InputJsonValue },
-  });
 }
 
 export const translationFactory = (optionalParams?: {

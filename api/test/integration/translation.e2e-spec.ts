@@ -3,12 +3,15 @@ import { INestApplication } from '@nestjs/common';
 import { LanguagesEnum, SiteEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import request from 'supertest';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import cookieParser from 'cookie-parser';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
+import { baseTranslationRows } from '../../src/locales/email-translations';
 
 describe('Translation Controller Tests', () => {
   let app: INestApplication;
@@ -209,25 +212,203 @@ describe('Translation Controller Tests', () => {
     });
   });
 
-  describe('GET /translations/base/email/:language', () => {
-    it('returns the english strings shipped with the api', async () => {
-      const res = await request(app.getHttpServer())
-        .get('/translations/base/email/en')
-        .set(passkey)
-        .expect(200);
+  describe('migration 71, moving legacy email overrides', () => {
+    const migrationSql = readFileSync(
+      join(
+        __dirname,
+        '../../prisma/migrations/71_move_jurisdiction_email_translations/migration.sql',
+      ),
+      'utf8',
+    );
 
-      expect(res.body['t.hello']).toEqual('Hello');
-      expect(res.body['footer.thankYou']).toEqual('Thank you');
+    let legacyJurisdictionId: string;
+    let legacyGenericId: string;
+
+    beforeAll(async () => {
+      const legacy = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      legacyJurisdictionId = legacy.id;
+
+      const generic = await prisma.translations.create({
+        data: {
+          jurisdictionId: null,
+          language: LanguagesEnum.en,
+          translations: {
+            footer: { line1: 'Bloom', thankYou: 'Thank you' },
+            confirmation: { subject: 'Shared subject' },
+          },
+        },
+      });
+      legacyGenericId = generic.id;
+      await prisma.translations.create({
+        data: {
+          jurisdictionId: legacyJurisdictionId,
+          language: LanguagesEnum.en,
+          translations: {
+            // Same as the generic row, so these are not this jurisdiction's own.
+            footer: { line1: 'Bloom', thankYou: 'Thank you' },
+            // Differs, so it is.
+            confirmation: { subject: 'Their subject' },
+            // Absent from the generic row, so it is theirs too.
+            lotteryAvailable: { header: 'Their header' },
+          },
+        },
+      });
+
+      await prisma.$executeRawUnsafe(migrationSql);
     });
 
-    it('returns only what the language translates', async () => {
+    afterAll(async () => {
+      await prisma.translationStrings.deleteMany({
+        where: { jurisdictionId: legacyJurisdictionId },
+      });
+      await prisma.translations.deleteMany({
+        where: { jurisdictionId: legacyJurisdictionId },
+      });
+      await prisma.translations.delete({ where: { id: legacyGenericId } });
+      await prisma.jurisdictions.delete({
+        where: { id: legacyJurisdictionId },
+      });
+    });
+
+    it('moves only the keys that differ from the generic row', async () => {
+      const rows = await prisma.translationStrings.findMany({
+        where: { jurisdictionId: legacyJurisdictionId, site: SiteEnum.email },
+        select: { key: true, value: true },
+        orderBy: { key: 'asc' },
+      });
+
+      expect(rows).toEqual([
+        { key: 'confirmation.subject', value: 'Their subject' },
+        { key: 'lotteryAvailable.header', value: 'Their header' },
+      ]);
+    });
+
+    it('leaves the generic rows in place and off the email scope', async () => {
+      const generic = await prisma.translationStrings.findMany({
+        where: { jurisdictionId: null, site: SiteEnum.email },
+      });
+      expect(generic).toEqual([]);
+
+      const legacyGeneric = await prisma.translations.findFirst({
+        where: { id: legacyGenericId },
+      });
+      expect(legacyGeneric).not.toBeNull();
+    });
+
+    it('is safe to run twice', async () => {
+      await prisma.$executeRawUnsafe(migrationSql);
+
+      const rows = await prisma.translationStrings.findMany({
+        where: { jurisdictionId: legacyJurisdictionId, site: SiteEnum.email },
+      });
+      expect(rows).toHaveLength(2);
+    });
+  });
+
+  describe('staleness on the email scope', () => {
+    const emailEs = () =>
+      `/translations/jurisdictions/${jurisdictionId}/raw/email/es`;
+    const emailEn = () =>
+      `/translations/jurisdictions/${jurisdictionId}/raw/email/en`;
+
+    it('marks a translation stale once the english it came from changes', async () => {
+      // t.hello ships as "Hello", so the spanish row records that as its source.
+      await request(app.getHttpServer())
+        .put(emailEs())
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ edits: [{ key: 't.hello', value: 'Hola' }] })
+        .expect(200);
+
+      const fresh = await request(app.getHttpServer())
+        .get(emailEs())
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(fresh.body.find((row) => row.key === 't.hello').stale).toBe(false);
+
+      await request(app.getHttpServer())
+        .put(emailEn())
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ edits: [{ key: 't.hello', value: 'Howdy' }] })
+        .expect(200);
+
+      const after = await request(app.getHttpServer())
+        .get(emailEs())
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(after.body.find((row) => row.key === 't.hello').stale).toBe(true);
+    });
+  });
+
+  describe('email overrides are not served by the public reads', () => {
+    it('rejects site=email on the jurisdiction read', async () => {
+      await request(app.getHttpServer())
+        .get(
+          `/translations/jurisdictions/${jurisdictionId}?site=email&language=en`,
+        )
+        .set(passkey)
+        .expect(400);
+    });
+
+    it('rejects site=email on the byName read', async () => {
+      await request(app.getHttpServer())
+        .get(
+          `/translations/byName/${encodeURIComponent(
+            jurisdictionName,
+          )}?site=email&language=en`,
+        )
+        .set(passkey)
+        .expect(400);
+    });
+
+    it('still serves the site scopes', async () => {
+      await request(app.getHttpServer())
+        .get(
+          `/translations/jurisdictions/${jurisdictionId}?site=public&language=en`,
+        )
+        .set(passkey)
+        .expect(200);
+    });
+  });
+
+  describe('GET /translations/base/email/:language', () => {
+    // Derived from the shipped strings, so a copy edit does not fail these.
+    const shipped = (language: LanguagesEnum) =>
+      Object.fromEntries(
+        baseTranslationRows(language).map((row) => [row.key, row.value]),
+      );
+
+    it.each(Object.values(LanguagesEnum))(
+      'serves the strings shipped for %s',
+      async (language) => {
+        const res = await request(app.getHttpServer())
+          .get(`/translations/base/email/${language}`)
+          .set(passkey)
+          .expect(200);
+
+        expect(res.body).toEqual(shipped(language));
+      },
+    );
+
+    it('omits a key the language does not translate, rather than serving english', async () => {
+      const english = shipped(LanguagesEnum.en);
+      const spanish = shipped(LanguagesEnum.es);
+      const untranslated = Object.keys(english).find(
+        (key) => spanish[key] === undefined,
+      );
+      expect(untranslated).toBeDefined();
+
       const res = await request(app.getHttpServer())
         .get('/translations/base/email/es')
         .set(passkey)
         .expect(200);
 
-      expect(res.body['t.hello']).toEqual('Hola');
-      expect(res.body['t.partnersPortal']).toBeUndefined();
+      expect(res.body[untranslated]).toBeUndefined();
     });
 
     it('rejects a language outside the enum', async () => {

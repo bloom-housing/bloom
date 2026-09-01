@@ -102,6 +102,18 @@ export const useTranslationScope = ({
     ready && isEmail && activeLanguage !== LanguagesEnum.en ? activeLanguage : null
   )
 
+  const emailBase = useMemo(
+    () =>
+      isEmail ? { english: emailEnglishBase.data, language: emailLanguageBase.data } : undefined,
+    [isEmail, emailEnglishBase.data, emailLanguageBase.data]
+  )
+
+  // The email base is fetched rather than bundled, so it can be absent where the other scopes' is
+  // not. Callers must not treat that as an empty base.
+  const baseReady =
+    !isEmail ||
+    (!!emailBase?.english && (activeLanguage === LanguagesEnum.en || !!emailBase?.language))
+
   const read = useRawTranslations(ready ? scope.rows : null, activeLanguage)
 
   const { data: englishOverrides } = useRawTranslations(
@@ -125,9 +137,8 @@ export const useTranslationScope = ({
     languageOptions,
     scope,
     englishOverrideKeys,
-    emailBase: isEmail
-      ? { english: emailEnglishBase.data, language: emailLanguageBase.data }
-      : undefined,
+    emailBase,
+    baseReady,
     overrides: read.data,
     loading: read.loading || emailEnglishBase.loading || emailLanguageBase.loading,
     error: read.error ?? emailEnglishBase.error ?? emailLanguageBase.error,

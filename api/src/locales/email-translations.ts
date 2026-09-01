@@ -2279,14 +2279,27 @@ const flatten = (
       : [{ key: path, value: String(value) }];
   });
 
+const baseRows = new Map<LanguagesEnum, TranslationRow[]>();
+
 // Only English is complete; every other language fills in the subset it has translated.
+// Cached because every email sent rebuilds this.
 export const baseTranslationRows = (
   language: LanguagesEnum,
-): TranslationRow[] =>
-  flatten(translations(undefined, language) as Record<string, unknown>);
+): TranslationRow[] => {
+  const cached = baseRows.get(language);
+  if (cached) {
+    return cached;
+  }
+  const rows = flatten(
+    translations(undefined, language) as Record<string, unknown>,
+  );
+  baseRows.set(language, rows);
+  return rows;
+};
 
-export const jurisdictionTranslationRows = (
-  jurisdiction: { id: string; name: string },
-  language?: LanguagesEnum,
-): TranslationRow[] =>
-  flatten(translations(jurisdiction, language) as Record<string, unknown>);
+// Only the footer differs per jurisdiction, and it is not translated.
+export const jurisdictionTranslationRows = (jurisdiction: {
+  id: string;
+  name: string;
+}): TranslationRow[] =>
+  flatten(translations(jurisdiction) as Record<string, unknown>);
