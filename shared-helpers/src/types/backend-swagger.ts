@@ -2842,6 +2842,28 @@ export class ScriptRunnerService {
     })
   }
   /**
+   * A script that loads the bundled site override files into translation_strings
+   */
+  migrateTranslationOverridesToKeyRows(
+    params: {
+      /** requestBody */
+      body?: TranslationOverrideMigrationDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/migrateTranslationOverridesToKeyRows"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * A script that adds existing feature flags into the feature flag table
    */
   addFeatureFlags(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -10656,6 +10678,27 @@ export interface CommunityTypeDTO {
 
   /**  */
   description?: string
+}
+
+/** TranslationOverrideMigrationDTO */
+export interface TranslationOverrideMigrationDTO {
+  /**  */
+  jurisdictionName: string
+
+  /**  */
+  commit: boolean
+
+  /**  */
+  skipExisting: boolean
+
+  /**  */
+  languages?: LanguagesEnum[]
+
+  /**  */
+  repositoryUrl?: string
+
+  /**  */
+  gitRef?: string
 }
 
 /** PaginationDTO */

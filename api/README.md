@@ -48,6 +48,50 @@ If you're using VSCode, you can install [the Postgres explorer extension](https:
 
 To start the application run: `yarn dev`.
 
+## Moving site overrides into the database
+
+This is for the sites that predate database-managed content. A new deployment seeds its content
+into the database from the start and does not run this.
+
+`PUT /scriptRunner/migrateTranslationOverridesToKeyRows` reads the bundled override files from
+GitHub and writes them into `translation_strings`, which the editor and the sites read. Run it once
+per jurisdiction, as an admin:
+
+```bash
+curl -X PUT http://localhost:3100/scriptRunner/migrateTranslationOverridesToKeyRows \
+  -H "Content-Type: application/json" \
+  -H "passkey: $API_PASS_KEY" \
+  -b "access-token=$YOUR_SESSION_COOKIE" \
+  -d '{
+    "jurisdictionName": "Bloomington",
+    "commit": false,
+    "skipExisting": false,
+    "gitRef": "a1b2c3d"
+  }'
+```
+
+Body fields:
+
+- `jurisdictionName` names the jurisdiction the public overrides are written for. The partners rows
+  are stored with no jurisdiction, so they are shared by all of them.
+- `commit` is required. With `false` nothing is written and nothing is recorded, so a dry run can be
+  repeated.
+- `skipExisting` is required. Pass `true` when re-running against an environment whose overrides an
+  admin has already edited, since a row edited in the editor differs from the file by definition and
+  would otherwise be overwritten.
+- `languages` limits which files are read. English is always read, because it is the source the
+  other languages are hashed against.
+- `repositoryUrl` and `gitRef` say where to read from. Pin `gitRef` to a commit sha rather than a
+  branch, so the dry run and the run that writes read the same files.
+
+The report is written to the api log, not the response.
+
+A committing run is recorded per jurisdiction, so a second one is refused. Delete that row from
+`script_runs` to run it again.
+
+The bundled override files stay in the repository. The sites keep rendering them when the api is
+unreachable.
+
 ## Modifying the Schema
 
 If you're using VSCode, you can install the [Prisma extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) to add syntax highlighting and formatting to Prisma schema files.

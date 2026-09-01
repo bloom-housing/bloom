@@ -21,6 +21,7 @@ describe('Script Runner Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let cookies = '';
+  let adminUserId: string;
   let logger: Logger;
 
   beforeEach(() => {
@@ -63,11 +64,94 @@ describe('Script Runner Controller Tests', () => {
       .expect(201);
 
     cookies = resLogIn.headers['set-cookie'];
+    adminUserId = storedUser.id;
   });
 
   afterAll(async () => {
     await prisma.$disconnect();
     await app.close();
+  });
+
+  describe('migrateTranslationOverridesToKeyRows endpoint', () => {
+    const call = (body: Record<string, unknown>) =>
+      request(app.getHttpServer())
+        .put('/scriptRunner/migrateTranslationOverridesToKeyRows')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .send(body);
+
+    const valid = {
+      jurisdictionName: 'nonexistent jurisdiction for this spec',
+      commit: false,
+      skipExisting: false,
+    };
+
+    it('rejects a body with commit missing', async () => {
+      // The validation pipe drops unknown properties, so a misspelled field must not
+      // fall through to a default.
+      const res = await call({
+        jurisdictionName: 'Bloomington',
+        skipExisting: false,
+      }).expect(400);
+
+      expect(JSON.stringify(res.body.message)).toContain('commit');
+    });
+
+    it('rejects a body with skipExisting missing', async () => {
+      const res = await call({
+        jurisdictionName: 'Bloomington',
+        commit: false,
+      }).expect(400);
+
+      expect(JSON.stringify(res.body.message)).toContain('skipExisting');
+    });
+
+    it('rejects a language outside the enum', async () => {
+      await call({ ...valid, languages: ['klingon'] }).expect(400);
+    });
+
+    it('rejects a git ref that is not a ref', async () => {
+      await call({ ...valid, gitRef: 'main; rm -rf /' }).expect(400);
+    });
+
+    it('rejects a repository url that is not https', async () => {
+      await call({ ...valid, repositoryUrl: 'http://example.com/x' }).expect(
+        400,
+      );
+    });
+
+    it('rejects an unknown jurisdiction, without recording a run', async () => {
+      const res = await call(valid).expect(400);
+
+      expect(res.body.message).toContain('does not exist');
+      const recorded = await prisma.scriptRuns.findUnique({
+        where: {
+          scriptName: `migrate translation overrides to key rows for ${valid.jurisdictionName}`,
+        },
+      });
+      expect(recorded).toBeNull();
+    });
+
+    it('refuses a jurisdiction whose run already succeeded', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await prisma.scriptRuns.create({
+        data: {
+          scriptName: `migrate translation overrides to key rows for ${jurisdiction.name}`,
+          didScriptRun: true,
+          triggeringUser: adminUserId,
+        },
+      });
+
+      const res = await call({
+        ...valid,
+        jurisdictionName: jurisdiction.name,
+        commit: true,
+      }).expect(400);
+
+      expect(res.body.message).toContain('already been run');
+    });
   });
 
   describe('setInitialExpireAfterValues endpoint', () => {
