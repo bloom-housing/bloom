@@ -13,9 +13,11 @@ import {
   Prisma,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
+import { AxiosError } from 'axios';
+import { HttpService } from '@nestjs/axios';
+import { catchError, firstValueFrom } from 'rxjs';
 import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
-import https from 'https';
 import { AmiChartService } from './ami-chart.service';
 import { EmailService } from './email.service';
 import { FeatureFlagService } from './feature-flag.service';
@@ -49,6 +51,7 @@ export class ScriptRunnerService {
     private featureFlagService: FeatureFlagService,
     private multiselectQuestionService: MultiselectQuestionService,
     private prisma: PrismaService,
+    private httpService: HttpService,
     @Inject(Logger)
     private logger = new Logger(ScriptRunnerService.name),
   ) {}
@@ -1519,35 +1522,29 @@ export class ScriptRunnerService {
     return 'no translation';
   }
 
-  getTranslationFile(url: string, timeoutMs = TRANSLATION_FETCH_TIMEOUT_MS) {
-    return new Promise((resolve, reject) => {
-      const request = https.get(url, (res) => {
-        let body = '';
+  async getTranslationFile(
+    url: string,
+    timeoutMs = TRANSLATION_FETCH_TIMEOUT_MS,
+  ): Promise<Record<string, unknown>> {
+    const { data } = await firstValueFrom(
+      this.httpService
+        .get(url, { signal: AbortSignal.timeout(timeoutMs) })
+        .pipe(
+          catchError((error: AxiosError) => {
+            throw new Error(
+              `failed fetching ${url}: ${
+                error.code === 'ERR_CANCELED'
+                  ? `timed out after ${timeoutMs}ms`
+                  : error.message
+              }`,
+            );
+          }),
+        ),
+    );
 
-        res.on('data', (chunk) => {
-          body += chunk;
-        });
-
-        res.on('end', () => {
-          if (res.statusCode !== 200) {
-            reject(new Error(`${res.statusCode} fetching ${url}`));
-            return;
-          }
-          try {
-            resolve(JSON.parse(body));
-          } catch (error) {
-            reject(new Error(`invalid json at ${url}: ${body.slice(0, 120)}`));
-          }
-        });
-      });
-
-      request.setTimeout(timeoutMs, () => {
-        request.destroy(new Error(`timed out fetching ${url}`));
-      });
-
-      request.on('error', (error) => {
-        reject(new Error(`failed fetching ${url}: ${error.message}`));
-      });
-    });
+    if (!data || typeof data !== 'object') {
+      throw new Error(`${url} did not return json`);
+    }
+    return data as Record<string, unknown>;
   }
 }

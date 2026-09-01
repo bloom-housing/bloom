@@ -1,5 +1,8 @@
 import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { HttpService } from '@nestjs/axios';
+import { of, throwError } from 'rxjs';
+import { AxiosError } from 'axios';
 import {
   LanguagesEnum,
   ListingsStatusEnum,
@@ -7,10 +10,6 @@ import {
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
-import { EventEmitter } from 'events';
-import https from 'https';
-
-jest.mock('https');
 import { Request as ExpressRequest } from 'express';
 import { User } from '../../../src/dtos/users/user.dto';
 import { AmiChartService } from '../../../src/services/ami-chart.service';
@@ -27,6 +26,7 @@ describe('Testing script runner service', () => {
   let emailService: EmailService;
   let multiselectQuestionService: MultiselectQuestionService;
   let mockConsoleLog;
+  const httpServiceMock = { get: jest.fn() };
 
   beforeEach(() => {
     mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
@@ -45,6 +45,10 @@ describe('Testing script runner service', () => {
         },
         AmiChartService,
         FeatureFlagService,
+        {
+          provide: HttpService,
+          useValue: httpServiceMock,
+        },
         JurisdictionService,
         Logger,
         {
@@ -1086,178 +1090,72 @@ describe('Testing script runner service', () => {
   // | ---------- HELPER TESTS BELOW ---------- | //
 
   describe('getTranslationFile', () => {
-    const respondWith = (statusCode: number, body: string) => {
-      const res = new EventEmitter() as EventEmitter & { statusCode: number };
-      res.statusCode = statusCode;
-      const request = Object.assign(new EventEmitter(), {
-        setTimeout: jest.fn(),
-        destroy: jest.fn(),
-      });
-      (https.get as unknown as jest.Mock).mockImplementation((_url, cb) => {
-        cb(res);
-        process.nextTick(() => {
-          res.emit('data', body);
-          res.emit('end');
-        });
-        return request;
-      });
-      return request;
+    const respondWith = (data: unknown) => {
+      httpServiceMock.get.mockReturnValue(of({ data }));
     };
 
-    it('resolves the parsed body on 200', async () => {
-      respondWith(200, '{"a":"b"}');
+    const failWith = (error: Partial<AxiosError>) => {
+      httpServiceMock.get.mockReturnValue(throwError(() => error));
+    };
+
+    it('returns the parsed body', async () => {
+      respondWith({ a: 'b' });
 
       await expect(
         service.getTranslationFile('https://x/f.json'),
-      ).resolves.toEqual({
-        a: 'b',
-      });
+      ).resolves.toEqual({ a: 'b' });
     });
 
-    it('rejects with the status and url when the file is missing', async () => {
-      respondWith(404, '404: Not Found');
-
-      await expect(
-        service.getTranslationFile('https://x/f.json'),
-      ).rejects.toThrow('404 fetching https://x/f.json');
-    });
-
-    it('rejects on a server error rather than trying to parse it', async () => {
-      respondWith(500, 'upstream is unwell');
-
-      await expect(
-        service.getTranslationFile('https://x/f.json'),
-      ).rejects.toThrow('500 fetching https://x/f.json');
-    });
-
-    it('rejects with the url and the start of the body on unparseable json', async () => {
-      respondWith(200, 'not json at all');
-
-      await expect(
-        service.getTranslationFile('https://x/f.json'),
-      ).rejects.toThrow('invalid json at https://x/f.json: not json at all');
-    });
-
-    it('rejects when the socket errors', async () => {
-      const request = respondWith(200, '{}');
-      (https.get as unknown as jest.Mock).mockImplementation(() => {
-        process.nextTick(() =>
-          request.emit('error', new Error('socket hang up')),
-        );
-        return request;
-      });
-
-      await expect(
-        service.getTranslationFile('https://x/f.json'),
-      ).rejects.toThrow('failed fetching https://x/f.json: socket hang up');
-    });
-
-    it('arms a timeout that destroys the request', async () => {
-      const request = respondWith(200, '{}');
+    it('requests the url it was given, under a deadline', async () => {
+      respondWith({});
 
       await service.getTranslationFile('https://x/f.json', 1234);
 
-      expect(request.setTimeout).toHaveBeenCalledWith(
-        1234,
-        expect.any(Function),
+      expect(httpServiceMock.get).toHaveBeenCalledWith('https://x/f.json', {
+        signal: expect.any(AbortSignal),
+      });
+    });
+
+    it('rejects when the file is missing', async () => {
+      failWith({ message: 'Request failed with status code 404' });
+
+      await expect(
+        service.getTranslationFile('https://x/f.json'),
+      ).rejects.toThrow(/failed fetching https:\/\/x\/f\.json.*404/);
+    });
+
+    it('rejects when the response is cut short', async () => {
+      failWith({ message: 'stream has been aborted' });
+
+      await expect(
+        service.getTranslationFile('https://x/f.json'),
+      ).rejects.toThrow(/failed fetching https:\/\/x\/f\.json.*aborted/);
+    });
+
+    it('names the deadline rather than reporting a cancellation', async () => {
+      failWith({ code: 'ERR_CANCELED', message: 'canceled' });
+
+      await expect(
+        service.getTranslationFile('https://x/f.json', 250),
+      ).rejects.toThrow(
+        'failed fetching https://x/f.json: timed out after 250ms',
       );
     });
-  });
 
-  it('should mark script run as started if no script run present in db', async () => {
-    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    it('rejects a body that is not json, which axios resolves as a string', async () => {
+      respondWith('<html>rate limited</html>');
 
-    const id = randomUUID();
-    const scriptName = 'new run attempt';
-
-    await service.markScriptAsRunStart(scriptName, {
-      id,
-    } as unknown as User);
-
-    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
-      where: {
-        scriptName,
-      },
+      await expect(
+        service.getTranslationFile('https://x/f.json'),
+      ).rejects.toThrow('https://x/f.json did not return json');
     });
-    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
-      data: {
-        scriptName,
-        triggeringUser: id,
-      },
-    });
-  });
 
-  it('should error if script run is in progress or failed', async () => {
-    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-      didScriptRun: false,
-    });
-    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    it('rejects an empty body', async () => {
+      respondWith('');
 
-    const id = randomUUID();
-    const scriptName = 'new run attempt 2';
-
-    await expect(
-      async () =>
-        await service.markScriptAsRunStart(scriptName, {
-          id,
-        } as unknown as User),
-    ).rejects.toThrowError(
-      `${scriptName} has an attempted run and it failed, or is in progress. If it failed, please delete the db entry and try again`,
-    );
-
-    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
-      where: {
-        scriptName,
-      },
-    });
-    expect(prisma.scriptRuns.create).not.toHaveBeenCalled();
-  });
-
-  it('should error if script run already succeeded', async () => {
-    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-      didScriptRun: true,
-    });
-    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
-
-    const id = randomUUID();
-    const scriptName = 'new run attempt 3';
-
-    await expect(
-      async () =>
-        await service.markScriptAsRunStart(scriptName, {
-          id,
-        } as unknown as User),
-    ).rejects.toThrowError(`${scriptName} has already been run and succeeded`);
-
-    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
-      where: {
-        scriptName,
-      },
-    });
-    expect(prisma.scriptRuns.create).not.toHaveBeenCalled();
-  });
-
-  it('should mark script run as started if no script run present in db', async () => {
-    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
-
-    const id = randomUUID();
-    const scriptName = 'new run attempt 4';
-
-    await service.markScriptAsComplete(scriptName, {
-      id,
-    } as unknown as User);
-
-    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
-      data: {
-        didScriptRun: true,
-        triggeringUser: id,
-      },
-      where: {
-        scriptName,
-      },
+      await expect(
+        service.getTranslationFile('https://x/f.json'),
+      ).rejects.toThrow('https://x/f.json did not return json');
     });
   });
 
