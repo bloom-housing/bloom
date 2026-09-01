@@ -35,6 +35,8 @@ import { MultiselectOption } from '../dtos/multiselect-questions/multiselect-opt
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
 
+const TRANSLATION_FETCH_TIMEOUT_MS = 30_000;
+
 /**
   this is the service for running scripts
   most functions in here will be unique, but each function should only be allowed to fire once
@@ -1517,30 +1519,35 @@ export class ScriptRunnerService {
     return 'no translation';
   }
 
-  getTranslationFile(url) {
-    return new Promise((resolve, reject) =>
-      https
-        .get(url, (res) => {
-          let body = '';
+  getTranslationFile(url: string, timeoutMs = TRANSLATION_FETCH_TIMEOUT_MS) {
+    return new Promise((resolve, reject) => {
+      const request = https.get(url, (res) => {
+        let body = '';
 
-          res.on('data', (chunk) => {
-            body += chunk;
-          });
+        res.on('data', (chunk) => {
+          body += chunk;
+        });
 
-          res.on('end', () => {
-            try {
-              const json = JSON.parse(body);
-              resolve(json);
-            } catch (error) {
-              console.error('on end error:', error.message);
-              reject(`parsing broke: ${url}`);
-            }
-          });
-        })
-        .on('error', (error) => {
-          console.error('on error error:', error.message);
-          reject(`getting broke: ${url}`);
-        }),
-    );
+        res.on('end', () => {
+          if (res.statusCode !== 200) {
+            reject(new Error(`${res.statusCode} fetching ${url}`));
+            return;
+          }
+          try {
+            resolve(JSON.parse(body));
+          } catch (error) {
+            reject(new Error(`invalid json at ${url}: ${body.slice(0, 120)}`));
+          }
+        });
+      });
+
+      request.setTimeout(timeoutMs, () => {
+        request.destroy(new Error(`timed out fetching ${url}`));
+      });
+
+      request.on('error', (error) => {
+        reject(new Error(`failed fetching ${url}: ${error.message}`));
+      });
+    });
   }
 }

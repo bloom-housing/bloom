@@ -7,6 +7,10 @@ import {
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
+import { EventEmitter } from 'events';
+import https from 'https';
+
+jest.mock('https');
 import { Request as ExpressRequest } from 'express';
 import { User } from '../../../src/dtos/users/user.dto';
 import { AmiChartService } from '../../../src/services/ami-chart.service';
@@ -64,6 +68,7 @@ describe('Testing script runner service', () => {
 
   afterEach(() => {
     mockConsoleLog.mockRestore();
+    jest.restoreAllMocks();
   });
 
   it('should add lottery translations', async () => {
@@ -791,6 +796,9 @@ describe('Testing script runner service', () => {
     });
     prisma.listings.update = jest.fn().mockResolvedValue(null);
 
+    // The command fetches six override files; stub them so the suite stays off the network.
+    jest.spyOn(service, 'getTranslationFile').mockResolvedValue({});
+
     const res = await service.migrateDetroitToMultiselectQuestions({
       user: {
         id,
@@ -834,7 +842,7 @@ describe('Testing script runner service', () => {
         id: 'example listing_id',
       },
     });
-  }, 100000);
+  });
 
   it('should migrate multiselect data to refactored schema', async () => {
     const id = randomUUID();
@@ -1076,6 +1084,86 @@ describe('Testing script runner service', () => {
   });
 
   // | ---------- HELPER TESTS BELOW ---------- | //
+
+  describe('getTranslationFile', () => {
+    const respondWith = (statusCode: number, body: string) => {
+      const res = new EventEmitter() as EventEmitter & { statusCode: number };
+      res.statusCode = statusCode;
+      const request = Object.assign(new EventEmitter(), {
+        setTimeout: jest.fn(),
+        destroy: jest.fn(),
+      });
+      (https.get as unknown as jest.Mock).mockImplementation((_url, cb) => {
+        cb(res);
+        process.nextTick(() => {
+          res.emit('data', body);
+          res.emit('end');
+        });
+        return request;
+      });
+      return request;
+    };
+
+    it('resolves the parsed body on 200', async () => {
+      respondWith(200, '{"a":"b"}');
+
+      await expect(
+        service.getTranslationFile('https://x/f.json'),
+      ).resolves.toEqual({
+        a: 'b',
+      });
+    });
+
+    it('rejects with the status and url when the file is missing', async () => {
+      respondWith(404, '404: Not Found');
+
+      await expect(
+        service.getTranslationFile('https://x/f.json'),
+      ).rejects.toThrow('404 fetching https://x/f.json');
+    });
+
+    it('rejects on a server error rather than trying to parse it', async () => {
+      respondWith(500, 'upstream is unwell');
+
+      await expect(
+        service.getTranslationFile('https://x/f.json'),
+      ).rejects.toThrow('500 fetching https://x/f.json');
+    });
+
+    it('rejects with the url and the start of the body on unparseable json', async () => {
+      respondWith(200, 'not json at all');
+
+      await expect(
+        service.getTranslationFile('https://x/f.json'),
+      ).rejects.toThrow('invalid json at https://x/f.json: not json at all');
+    });
+
+    it('rejects when the socket errors', async () => {
+      const request = respondWith(200, '{}');
+      (https.get as unknown as jest.Mock).mockImplementation(() => {
+        process.nextTick(() =>
+          request.emit('error', new Error('socket hang up')),
+        );
+        return request;
+      });
+
+      await expect(
+        service.getTranslationFile('https://x/f.json'),
+      ).rejects.toThrow('failed fetching https://x/f.json: socket hang up');
+    });
+
+    it('arms a timeout that destroys the request', async () => {
+      const request = respondWith(200, '{}');
+
+      await service.getTranslationFile('https://x/f.json', 1234);
+
+      expect(request.setTimeout).toHaveBeenCalledWith(
+        1234,
+        expect.any(Function),
+      );
+    });
+  });
+
   it('should mark script run as started if no script run present in db', async () => {
     prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
