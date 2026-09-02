@@ -3,6 +3,7 @@ import { setupServer } from "msw/lib/node"
 import { fireEvent, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { rest } from "msw"
+import { addTranslation } from "@bloom-housing/ui-components"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
@@ -12,6 +13,42 @@ import {
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, mockTipTapEditor, render } from "../../testUtils"
 import SettingsContent from "../../../src/pages/settings/content"
+
+// The suite supplies the strings it asserts on, so editing the shipped copy cannot break it.
+const CONTENT_STRINGS = {
+  "content.setValue": "test:setValue",
+  "content.addCategory": "test:addCategory",
+  "content.addLink": "test:addLink",
+  "content.addQuestion": "test:addQuestion",
+  "content.addTextSection": "test:addTextSection",
+  "content.discardChanges": "test:discardChanges",
+  "content.conflictDiscard": "test:conflictDiscard",
+  "content.conflictOverwrite": "test:conflictOverwrite",
+  "content.conflictTitle": "test:conflictTitle",
+  "content.hideWarningTitle": "test:hideWarningTitle",
+  "content.removeForLanguage": "test:removeForLanguage",
+  "content.removedForLanguage": "test:removedForLanguage",
+  "content.restore": "test:restore",
+  "content.override": "test:override",
+  "content.revertToEnglish": "test:revertToEnglish",
+  "content.document": "test:document",
+  "content.linkHref": "test:linkHref",
+  "content.linkText": "test:linkText",
+  "content.contactPhone": "test:contactPhone",
+  "content.contactHours": "test:contactHours",
+  "content.alertSaved": "test:alertSaved",
+  "content.stale": "test:stale",
+  "content.footerLink": "test:footerLink",
+  "content.notSet": "test:notSet",
+  "content.textSection": "test:textSection",
+  "content.usingEnglish": "test:usingEnglish",
+  "content.faqCategoryTitle": "test:faqCategoryTitle",
+  "content.faqQuestion": "test:faqQuestion",
+  "content.alertLoadFailed": "test:alertLoadFailed",
+  "content.positionalListNote": "test:positionalListNote",
+}
+
+addTranslation(CONTENT_STRINGS)
 
 const server = setupServer()
 
@@ -131,8 +168,8 @@ describe("<SettingsContent>", () => {
       respondWithRows([row(LanguagesEnum.en)])
       renderPage()
 
-      expect(await screen.findAllByText("Not set")).toHaveLength(2)
-      expect(screen.getAllByRole("button", { name: "Add a value" })).toHaveLength(2)
+      expect(await screen.findAllByText("test:notSet")).toHaveLength(2)
+      expect(screen.getAllByRole("button", { name: "test:setValue" })).toHaveLength(2)
     })
 
     it("marks a field that falls back to English and offers to translate it", async () => {
@@ -145,8 +182,8 @@ describe("<SettingsContent>", () => {
       await screen.findByRole("heading", { level: 1, name: "Settings" })
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
-      expect(await screen.findAllByText("Using English")).toHaveLength(2)
-      expect(screen.getAllByRole("button", { name: "Translate this" })).toHaveLength(2)
+      expect(await screen.findAllByText("test:usingEnglish")).toHaveLength(2)
+      expect(screen.getAllByRole("button", { name: "test:override" })).toHaveLength(2)
     })
 
     it("flags a field the API reports as stale", async () => {
@@ -162,7 +199,7 @@ describe("<SettingsContent>", () => {
       await screen.findByRole("heading", { level: 1, name: "Settings" })
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
-      expect(await screen.findByText("English changed")).toBeInTheDocument()
+      expect(await screen.findByText("test:stale")).toBeInTheDocument()
     })
 
     it("lists FAQ categories and the questions inside them", async () => {
@@ -182,12 +219,12 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "faq")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "faq")
 
       expect(await screen.findByText("Applying")).toBeInTheDocument()
       expect(screen.getByText("How do I apply?")).toBeInTheDocument()
-      expect(screen.getByRole("button", { name: "Add category" })).toBeInTheDocument()
-      expect(screen.getByRole("button", { name: "Add question" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "test:addCategory" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "test:addQuestion" })).toBeInTheDocument()
     })
 
     it("offers to remove an English item for one language rather than delete it", async () => {
@@ -200,13 +237,13 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       expect(await screen.findByRole("button", { name: "Delete" })).toBeInTheDocument()
 
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
       expect(
-        await screen.findByRole("button", { name: "Remove for this language" })
+        await screen.findByRole("button", { name: "test:removeForLanguage" })
       ).toBeInTheDocument()
     })
 
@@ -219,7 +256,7 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       expect(await screen.findByText("About")).toBeInTheDocument()
 
       await userEvent.click(screen.getByRole("button", { name: "Delete" }))
@@ -237,11 +274,11 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
-      expect(await screen.findByText("Removed for this language")).toBeInTheDocument()
-      expect(screen.getByRole("button", { name: "Restore" })).toBeInTheDocument()
+      expect(await screen.findByText("test:removedForLanguage")).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "test:restore" })).toBeInTheDocument()
     })
 
     it("opens a drawer to edit an item", async () => {
@@ -253,11 +290,11 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.click(await screen.findByRole("button", { name: "Edit" }))
 
-      expect(await screen.findByText("Footer link")).toBeInTheDocument()
-      expect(screen.getByLabelText("Link text")).toHaveValue("About")
+      expect(await screen.findByText("test:footerLink")).toBeInTheDocument()
+      expect(screen.getByLabelText("test:linkText")).toHaveValue("About")
     })
 
     it("marks footer text sections when the English ones changed", async () => {
@@ -271,10 +308,10 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
-      expect(await screen.findByText("English changed")).toBeInTheDocument()
+      expect(await screen.findByText("test:stale")).toBeInTheDocument()
     })
 
     it("does not mark a category when only a question inside it changed", async () => {
@@ -306,11 +343,11 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "faq")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "faq")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
       await screen.findByText("Solicitar")
-      expect(screen.getAllByText("English changed")).toHaveLength(1)
+      expect(screen.getAllByText("test:stale")).toHaveLength(1)
     })
 
     it("opens the editor on a text section as soon as it is added", async () => {
@@ -318,12 +355,12 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await screen.findByText("First")
 
-      await userEvent.click(screen.getByRole("button", { name: "Add text section" }))
+      await userEvent.click(screen.getByRole("button", { name: "test:addTextSection" }))
 
-      expect(await screen.findByText("Text section")).toBeInTheDocument()
+      expect(await screen.findByText("test:textSection")).toBeInTheDocument()
       expect(document.querySelectorAll(".section-row")).toHaveLength(2)
     })
 
@@ -337,14 +374,16 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
       await screen.findByText("Traducida")
       const englishSection = sectionRow("Added in English")
 
-      expect(within(englishSection).getByText("Using English")).toBeInTheDocument()
-      expect(within(sectionRow("Traducida")).queryByText("Using English")).not.toBeInTheDocument()
+      expect(within(englishSection).getByText("test:usingEnglish")).toBeInTheDocument()
+      expect(
+        within(sectionRow("Traducida")).queryByText("test:usingEnglish")
+      ).not.toBeInTheDocument()
     })
 
     it("adds a language section after the English ones rather than onto one", async () => {
@@ -357,17 +396,17 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
       await screen.findByText("Added in English")
 
       expect(document.querySelectorAll(".section-row")).toHaveLength(2)
 
-      await userEvent.click(screen.getByRole("button", { name: "Add text section" }))
+      await userEvent.click(screen.getByRole("button", { name: "test:addTextSection" }))
 
       await waitFor(() => expect(document.querySelectorAll(".section-row")).toHaveLength(3))
       expect(screen.getByText("Added in English")).toBeInTheDocument()
-      expect(within(sectionRow("Added in English")).queryByText("Using English")).toBeNull()
+      expect(within(sectionRow("Added in English")).queryByText("test:usingEnglish")).toBeNull()
     })
 
     it("says that footer text sections are replaced as a set for a language", async () => {
@@ -378,14 +417,10 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
-      expect(
-        await screen.findByText(
-          "Text sections are replaced as a set for this language, so translating one means translating all of them."
-        )
-      ).toBeInTheDocument()
+      expect(await screen.findByText("test:positionalListNote")).toBeInTheDocument()
     })
 
     it("switches documents", async () => {
@@ -393,10 +428,10 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
 
-      expect(await screen.findByText("Phone")).toBeInTheDocument()
-      expect(screen.getByText("Hours")).toBeInTheDocument()
+      expect(await screen.findByText("test:contactPhone")).toBeInTheDocument()
+      expect(screen.getByText("test:contactHours")).toBeInTheDocument()
     })
   })
 
@@ -451,8 +486,8 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
-      await userEvent.type(await screen.findByLabelText("Phone"), "9")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
+      await userEvent.type(await screen.findByLabelText("test:contactPhone"), "9")
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
 
       await waitFor(() => expect(bodies).toHaveLength(1))
@@ -464,7 +499,7 @@ describe("<SettingsContent>", () => {
           lastUpdatedAt: new Date("2026-01-01").toISOString(),
         })
       )
-      await waitFor(() => expect(toasts).toContain("Content saved"))
+      await waitFor(() => expect(toasts).toContain("test:alertSaved"))
     })
 
     // Deleting a section and emptying one both drop it from the public site, since a positional
@@ -482,13 +517,13 @@ describe("<SettingsContent>", () => {
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
 
       const deletes = await screen.findAllByRole("button", { name: "Delete" })
       await userEvent.click(deletes[deletes.length - 1])
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
 
-      expect(await screen.findByText("This will hide content")).toBeInTheDocument()
+      expect(await screen.findByText("test:hideWarningTitle")).toBeInTheDocument()
     })
 
     it("discards pending edits without a reload", async () => {
@@ -496,14 +531,14 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
-      await userEvent.type(await screen.findByLabelText("Phone"), "9")
-      expect(screen.getByLabelText("Phone")).toHaveValue("555-01009")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
+      await userEvent.type(await screen.findByLabelText("test:contactPhone"), "9")
+      expect(screen.getByLabelText("test:contactPhone")).toHaveValue("555-01009")
 
-      await userEvent.click(screen.getByRole("button", { name: "Discard changes" }))
+      await userEvent.click(screen.getByRole("button", { name: "test:discardChanges" }))
 
-      expect(await screen.findByLabelText("Phone")).toHaveValue("555-0100")
-      expect(screen.getByRole("button", { name: "Discard changes" })).toBeDisabled()
+      expect(await screen.findByLabelText("test:contactPhone")).toHaveValue("555-0100")
+      expect(screen.getByRole("button", { name: "test:discardChanges" })).toBeDisabled()
     })
 
     it("offers to overwrite or discard when the row changed underneath", async () => {
@@ -518,15 +553,13 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
-      await userEvent.type(await screen.findByLabelText("Phone"), "9")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
+      await userEvent.type(await screen.findByLabelText("test:contactPhone"), "9")
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
 
-      expect(
-        await screen.findByText("This content changed while you were editing")
-      ).toBeInTheDocument()
-      expect(screen.getByRole("button", { name: "Save mine" })).toBeInTheDocument()
-      expect(screen.getByRole("button", { name: "Discard mine" })).toBeInTheDocument()
+      expect(await screen.findByText("test:conflictTitle")).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "test:conflictOverwrite" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "test:conflictDiscard" })).toBeInTheDocument()
     })
 
     it("saves the admin's edits when they overwrite, not the row that arrived meanwhile", async () => {
@@ -564,16 +597,16 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
-      await userEvent.type(await screen.findByLabelText("Phone"), "9")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
+      await userEvent.type(await screen.findByLabelText("test:contactPhone"), "9")
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
 
-      await screen.findByText("This content changed while you were editing")
+      await screen.findByText("test:conflictTitle")
       const readsBeforeOverwrite = reads
       await waitFor(() => expect(reads).toBeGreaterThan(readsBeforeOverwrite - 1))
-      expect(screen.getByLabelText("Phone")).toHaveValue("555-01009")
+      expect(screen.getByLabelText("test:contactPhone")).toHaveValue("555-01009")
 
-      await userEvent.click(screen.getByRole("button", { name: "Save mine" }))
+      await userEvent.click(screen.getByRole("button", { name: "test:conflictOverwrite" }))
 
       await waitFor(() => expect(bodies).toHaveLength(1))
       expect(bodies[0]).toEqual(
@@ -582,7 +615,7 @@ describe("<SettingsContent>", () => {
           lastUpdatedAt: new Date("2026-02-02").toISOString(),
         })
       )
-      await waitFor(() => expect(toasts).toContain("Content saved"))
+      await waitFor(() => expect(toasts).toContain("test:alertSaved"))
     })
 
     it("leaves an item with nothing in it out of the save", async () => {
@@ -603,8 +636,8 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
-      await userEvent.click(await screen.findByRole("button", { name: "Add link" }))
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
+      await userEvent.click(await screen.findByRole("button", { name: "test:addLink" }))
       await userEvent.click(await screen.findByRole("button", { name: "Close" }))
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
 
@@ -624,8 +657,8 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
-      await userEvent.type(await screen.findByLabelText("Phone"), "9")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
+      await userEvent.type(await screen.findByLabelText("test:contactPhone"), "9")
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
 
       await waitFor(() =>
@@ -633,7 +666,7 @@ describe("<SettingsContent>", () => {
           true
         )
       )
-      expect(screen.queryByText("This content changed while you were editing")).toBeNull()
+      expect(screen.queryByText("test:conflictTitle")).toBeNull()
     })
 
     it("says the content could not be loaded rather than showing it as unset", async () => {
@@ -643,12 +676,8 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      expect(
-        await screen.findByText(
-          "The stored content could not be loaded, so editing is unavailable. Reload to try again."
-        )
-      ).toBeInTheDocument()
-      expect(screen.queryByText("Not set")).toBeNull()
+      expect(await screen.findByText("test:alertLoadFailed")).toBeInTheDocument()
+      expect(screen.queryByText("test:notSet")).toBeNull()
       expect(screen.getByRole("button", { name: "Save" })).toBeDisabled()
     })
 
@@ -670,13 +699,13 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.click(await screen.findByRole("button", { name: "Edit" }))
 
-      await userEvent.clear(await screen.findByLabelText("Link text"))
-      await userEvent.type(screen.getByLabelText("Link text"), "About us")
-      await userEvent.clear(screen.getByLabelText("Link address"))
-      await userEvent.type(screen.getByLabelText("Link address"), "/about-us")
+      await userEvent.clear(await screen.findByLabelText("test:linkText"))
+      await userEvent.type(screen.getByLabelText("test:linkText"), "About us")
+      await userEvent.clear(screen.getByLabelText("test:linkHref"))
+      await userEvent.type(screen.getByLabelText("test:linkHref"), "/about-us")
       await userEvent.click(screen.getByRole("button", { name: "Done" }))
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
 
@@ -700,11 +729,11 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "faq")
-      await userEvent.click(await screen.findByRole("button", { name: "Add category" }))
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "faq")
+      await userEvent.click(await screen.findByRole("button", { name: "test:addCategory" }))
 
-      await userEvent.click(await screen.findByRole("button", { name: "Add a value" }))
-      await userEvent.type(await screen.findByLabelText("Category title"), "Applying")
+      await userEvent.click(await screen.findByRole("button", { name: "test:setValue" }))
+      await userEvent.type(await screen.findByLabelText("test:faqCategoryTitle"), "Applying")
       await userEvent.click(screen.getByRole("button", { name: "Done" }))
 
       expect(await screen.findByText("Applying")).toBeInTheDocument()
@@ -736,13 +765,13 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "faq")
-      await userEvent.click(await screen.findByRole("button", { name: "Add question" }))
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "faq")
+      await userEvent.click(await screen.findByRole("button", { name: "test:addQuestion" }))
 
-      const starters = await screen.findAllByRole("button", { name: "Add a value" })
+      const starters = await screen.findAllByRole("button", { name: "test:setValue" })
       await userEvent.click(starters[0])
       await userEvent.type(
-        await screen.findByLabelText("Question", { selector: "input" }),
+        await screen.findByLabelText("test:faqQuestion", { selector: "input" }),
         "How do I apply?"
       )
       await userEvent.click(screen.getByRole("button", { name: "Done" }))
@@ -776,18 +805,20 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
-      await userEvent.click(await screen.findByRole("button", { name: "Translate this" }))
+      await userEvent.click(await screen.findByRole("button", { name: "test:override" }))
 
-      expect(await screen.findByLabelText("Phone")).toHaveValue("555-0100")
+      expect(await screen.findByLabelText("test:contactPhone")).toHaveValue("555-0100")
 
-      const phoneEditor = screen.getByLabelText("Phone").closest(".field-editor")
-      await userEvent.click(within(phoneEditor).getByRole("button", { name: "Use English" }))
+      const phoneEditor = screen.getByLabelText("test:contactPhone").closest(".field-editor")
+      await userEvent.click(
+        within(phoneEditor).getByRole("button", { name: "test:revertToEnglish" })
+      )
 
-      expect(await screen.findByRole("button", { name: "Translate this" })).toBeInTheDocument()
-      expect(screen.queryByLabelText("Phone")).toBeNull()
+      expect(await screen.findByRole("button", { name: "test:override" })).toBeInTheDocument()
+      expect(screen.queryByLabelText("test:contactPhone")).toBeNull()
     })
 
     it("reloads the stored row when the admin discards after a conflict", async () => {
@@ -802,18 +833,16 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
-      await userEvent.type(await screen.findByLabelText("Phone"), "9")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
+      await userEvent.type(await screen.findByLabelText("test:contactPhone"), "9")
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
 
-      await screen.findByText("This content changed while you were editing")
-      await userEvent.click(screen.getByRole("button", { name: "Discard mine" }))
+      await screen.findByText("test:conflictTitle")
+      await userEvent.click(screen.getByRole("button", { name: "test:conflictDiscard" }))
 
-      await waitFor(() =>
-        expect(screen.queryByText("This content changed while you were editing")).toBeNull()
-      )
-      expect(await screen.findByLabelText("Phone")).toHaveValue("555-0100")
-      expect(screen.getByRole("button", { name: "Discard changes" })).toBeDisabled()
+      await waitFor(() => expect(screen.queryByText("test:conflictTitle")).toBeNull())
+      expect(await screen.findByLabelText("test:contactPhone")).toHaveValue("555-0100")
+      expect(screen.getByRole("button", { name: "test:discardChanges" })).toBeDisabled()
     })
 
     it("confirms before a save empties a field inside a list", async () => {
@@ -837,14 +866,14 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
       await userEvent.click(await screen.findByRole("button", { name: "Edit" }))
-      await userEvent.clear(await screen.findByLabelText("Link text"))
+      await userEvent.clear(await screen.findByLabelText("test:linkText"))
       await userEvent.click(screen.getByRole("button", { name: "Done" }))
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
 
-      expect(await screen.findByText("This will hide content")).toBeInTheDocument()
+      expect(await screen.findByText("test:hideWarningTitle")).toBeInTheDocument()
       expect(bodies).toHaveLength(0)
     })
 
@@ -862,12 +891,12 @@ describe("<SettingsContent>", () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Settings" })
-      await userEvent.selectOptions(screen.getByLabelText("Content type"), "contact")
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
-      await userEvent.clear(await screen.findByLabelText("Phone"))
+      await userEvent.clear(await screen.findByLabelText("test:contactPhone"))
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
 
-      expect(await screen.findByText("This will hide content")).toBeInTheDocument()
+      expect(await screen.findByText("test:hideWarningTitle")).toBeInTheDocument()
       expect(bodies).toHaveLength(0)
 
       const dialog = screen.getByRole("dialog")
