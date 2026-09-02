@@ -131,6 +131,7 @@ export const createAngelopolisJurisdiction = async (
         FeatureFlagEnum.enableResources,
         FeatureFlagEnum.enableSmokingPolicyRadio,
         FeatureFlagEnum.enableSpokenLanguage,
+        FeatureFlagEnum.enableStopLights,
         FeatureFlagEnum.enableUnitAccessibilityTypeTags,
       ],
       visibleNeighborhoodAmenities: [

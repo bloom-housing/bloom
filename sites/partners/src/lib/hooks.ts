@@ -1,7 +1,7 @@
-import { useCallback, useContext, useState, useEffect } from "react"
+import { useCallback, useContext, useState, useEffect, useRef } from "react"
 import { useRouter } from "next/router"
 import useSWR from "swr"
-import axios, { AxiosError } from "axios"
+import axios, { AxiosError, AxiosProgressEvent } from "axios"
 import qs from "qs"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
@@ -29,6 +29,7 @@ import {
   PaginationMeta,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { S3Upload } from "./helpers"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -72,6 +73,37 @@ type UseListingsDataProps = PaginationProps & {
 type UsePropertiesListProps = PaginationProps & {
   search?: string
   jurisdictions?: string
+}
+
+type UseAgenciesListProps = PaginationProps & {
+  search?: string
+  jurisdictions?: string
+}
+
+interface MSQTableSettings {
+  sort?: ColumnOrder[]
+  search?: string
+  page?: number
+  limit?: number
+}
+
+export type UseSSEOptions = {
+  url: string
+  withCredentials?: boolean
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onMessage?: (data: any) => void
+  onError?: (error: Event) => void
+  onOpen?: () => void
+  eventTypes?: string[]
+  parseJson?: boolean
+}
+
+export type UseSSEReturn<T> = {
+  data: T | null
+  error: Event | null
+  isConnected: boolean
+  reconnect: () => void
+  close: () => void
 }
 
 export function useSingleListingData(listingId: string) {
@@ -271,6 +303,7 @@ export const useListingExport = (useSecurePathway = false) => {
     }
 
     setCsvExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {
@@ -498,13 +531,6 @@ export function useMultiselectQuestionList() {
     loading: !error && !data,
     error,
   }
-}
-
-interface MSQTableSettings {
-  sort?: ColumnOrder[]
-  search?: string
-  page?: number
-  limit?: number
 }
 
 export function useJurisdictionalMultiselectQuestionList(
@@ -752,11 +778,113 @@ export const useZipExport = (
       )
     }
     setExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {
     onExport,
     exportLoading,
+  }
+}
+
+export const useBulkApplicationTemplateExport = (listingId: string) => {
+  const { applicationsService } = useContext(AuthContext)
+  const [exportLoading, setExportLoading] = useState(false)
+  const { addToast } = useContext(MessageContext)
+
+  const onExport = useCallback(async () => {
+    setExportLoading(true)
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const url = await applicationsService.downloadBulkUpdateTemplate(
+        {
+          listingId: listingId,
+        },
+        {
+          responseType: "arraybuffer",
+        }
+      )
+
+      const link = document.createElement("a")
+      link.href = url
+      link.setAttribute("download", `listing-${listingId}-applications-bulk-templates.zip`)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode.removeChild(link)
+      addToast(t("t.exportSuccess"), { variant: "success" })
+    } catch (err) {
+      console.log(err)
+      addToast(
+        t("account.settings.alerts.genericError", { contactEmail: t("resources.contactEmail") }),
+        {
+          variant: "alert",
+        }
+      )
+    }
+    setExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  return {
+    onExport,
+    exportLoading,
+  }
+}
+
+export const useBulkApplicationCsvUpload = () => {
+  const { applicationsService } = useContext(AuthContext)
+  const [progressValue, setProgressValue] = useState<number>()
+  const [fileUploadData, setFileUploadData] = useState<{
+    id: string
+    url: string
+    s3Key: string
+  } | null>(null)
+  const contentType = "text/csv"
+  const contentDisposition = "inline"
+
+  const onUploadProgress = useCallback((p: AxiosProgressEvent) => {
+    setProgressValue(parseInt(((p.loaded / p.total) * 100).toFixed(0), 10))
+  }, [])
+
+  const uploadToS3 = useCallback(
+    async (file: File, listingId: string) => {
+      const { presignedUrl, key } = await applicationsService.uploadBulkUpdate({
+        body: {
+          listingId,
+          contentType,
+          contentDisposition,
+        },
+      })
+      setProgressValue(3)
+
+      void S3Upload({
+        file,
+        uploadUrl: presignedUrl,
+        onUploadProgress,
+        contentType: "",
+        contentDisposition,
+      }).then((_) => {
+        setProgressValue(100)
+        setFileUploadData({
+          id: file.name,
+          url: presignedUrl,
+          s3Key: key,
+        })
+      })
+    },
+    [applicationsService, onUploadProgress]
+  )
+
+  const resetUpload = useCallback(() => {
+    setProgressValue(0)
+    setFileUploadData(null)
+  }, [])
+
+  return {
+    progressValue,
+    fileUploadData,
+    uploadToS3,
+    resetUpload,
   }
 }
 
@@ -808,6 +936,7 @@ const useCsvExport = (
     }
 
     setCsvExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endpoint, fileName, addToast])
 
   return {
@@ -869,11 +998,6 @@ export function useWatchOnFormNumberFieldsChange(
     return () => clearTimeout(timeoutId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldToTriggerWatch.join(","), fieldValuesToWatch.join(","), trigger])
-}
-
-type UseAgenciesListProps = PaginationProps & {
-  search?: string
-  jurisdictions?: string
 }
 
 export function useAgenciesList({ page, limit, search, jurisdictions }: UseAgenciesListProps) {
@@ -951,23 +1075,30 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
   }
 }
 
-export function useRawTranslations({
-  jurisdictionId,
-  site,
-  language,
-}: {
-  jurisdictionId: string
-  site: string
-  language: string
-}) {
+/** Which rows the editor is reading. The global scope has no jurisdiction to name. */
+export type TranslationScope =
+  | { type: "global" }
+  | { type: "jurisdiction"; jurisdictionId: string; site: string }
+
+/** Reads one editable translation scope. A null scope skips the request. */
+export function useRawTranslations(scope: TranslationScope | null, language: string) {
   const { translationsService } = useContext(AuthContext)
 
-  const fetcher = () => translationsService.getRawTranslations({ jurisdictionId, site, language })
+  const fetcher = () =>
+    scope &&
+    (scope.type === "global"
+      ? translationsService.getRawPartnersTranslations({ language })
+      : translationsService.getRawTranslations({
+          jurisdictionId: scope.jurisdictionId,
+          site: scope.site,
+          language,
+        }))
 
-  // Null key so SWR skips the request until a scope is chosen.
-  const cacheKey = jurisdictionId
-    ? `/api/adapter/translations/jurisdictions/${jurisdictionId}/raw/${site}/${language}`
-    : null
+  const cacheKey = !scope
+    ? null
+    : scope.type === "global"
+    ? `/api/adapter/translations/partners/raw/${language}`
+    : `/api/adapter/translations/jurisdictions/${scope.jurisdictionId}/raw/${scope.site}/${language}`
 
   // Writes call `mutate` on this key; refreshing on focus would move data under an in-progress edit.
   const { data, error } = useSWR(cacheKey, fetcher, {
@@ -1016,4 +1147,99 @@ export function useUnsavedChangesWarning(hasUnsavedChanges: boolean, message: st
       router.events.off("routeChangeStart", handleRouteChange)
     }
   }, [hasUnsavedChanges, message, router.events])
+}
+
+export function useSSE<T>(options: UseSSEOptions): UseSSEReturn<T> {
+  const {
+    url,
+    withCredentials = false,
+    onMessage,
+    onError,
+    onOpen,
+    eventTypes = [],
+    parseJson = true,
+  } = options
+
+  const [data, setData] = useState<T | null>(null)
+  const [error, setError] = useState<Event | null>(null)
+  const [isConnected, setIsConnected] = useState(false)
+
+  const eventSourceRef = useRef<EventSource | null>(null)
+  const onMessageRef = useRef(onMessage)
+  const onErrorRef = useRef(onError)
+  const onOpenRef = useRef(onOpen)
+
+  useEffect(() => {
+    onMessageRef.current = onMessage
+    onErrorRef.current = onError
+    onOpenRef.current = onOpen
+  }, [onMessage, onError, onOpen])
+
+  const connect = useCallback(() => {
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close()
+    }
+
+    const eventSource = new EventSource(url, { withCredentials })
+    eventSourceRef.current = eventSource
+
+    eventSource.onopen = () => {
+      setIsConnected(true)
+      setError(null)
+      onOpenRef.current?.()
+    }
+
+    eventSource.onerror = (event) => {
+      setIsConnected(false)
+      setError(event)
+      onErrorRef.current?.(event)
+    }
+
+    const handleData = (event: MessageEvent) => {
+      try {
+        const parsedData = parseJson ? JSON.parse(event.data) : event.data
+        setData(parsedData)
+        onMessageRef.current?.(parsedData)
+      } catch (err) {
+        console.error("Failed to parse SSE data:", err)
+      }
+    }
+
+    eventSource.onmessage = handleData
+
+    eventTypes.forEach((eventType) => {
+      eventSource.addEventListener(eventType, handleData as EventListener)
+    })
+
+    return eventSource
+  }, [url, withCredentials, parseJson, eventTypes])
+
+  const close = useCallback(() => {
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close()
+      eventSourceRef.current = null
+      setIsConnected(false)
+    }
+  }, [])
+
+  const reconnect = useCallback(() => {
+    close()
+    connect()
+  }, [close, connect])
+
+  useEffect(() => {
+    const eventSource = connect()
+
+    return () => {
+      eventSource.close()
+    }
+  }, [connect])
+
+  return {
+    data,
+    error,
+    isConnected,
+    reconnect,
+    close,
+  }
 }

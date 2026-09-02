@@ -1603,6 +1603,7 @@ describe('Testing listing service', () => {
             },
           },
           listingsBuildingAddress: true,
+          listingFeatures: true,
           listingImages: {
             include: {
               assets: true,
@@ -1612,6 +1613,7 @@ describe('Testing listing service', () => {
           units: {
             select: {
               monthlyRent: true,
+              monthlyRentAsPercentOfIncome: true,
               unitTypes: {
                 select: { numBedrooms: true, name: true },
               },
