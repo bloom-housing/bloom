@@ -427,6 +427,7 @@ const SettingsTranslations = () => {
             />
             {site !== SiteEnum.partners && (
               <Select
+                key={site}
                 id="translationsJurisdiction"
                 name="translationsJurisdiction"
                 label={t("t.jurisdiction")}

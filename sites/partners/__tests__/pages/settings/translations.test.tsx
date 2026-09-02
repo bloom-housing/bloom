@@ -529,6 +529,18 @@ describe("<SettingsTranslations>", () => {
       await waitFor(() => expect(screen.queryByText("t.hello")).toBeNull())
     }, 20000)
 
+    it("shows the default selected when the site changes to email", async () => {
+      renderPage()
+
+      await screen.findByLabelText("Site")
+      await selectSite("public")
+      expect(await screen.findByLabelText("Jurisdiction")).toHaveValue("jurisdiction1")
+
+      await selectSite("email")
+
+      expect(await screen.findByLabelText("Jurisdiction")).toHaveValue("none")
+    }, 20000)
+
     it("reads the email rows for everyone when all jurisdictions is chosen", async () => {
       const requested: string[] = []
       server.use(
