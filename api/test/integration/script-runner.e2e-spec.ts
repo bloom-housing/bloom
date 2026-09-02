@@ -1,4 +1,6 @@
 import { INestApplication, Logger } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { of, throwError } from 'rxjs';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   ListingsStatusEnum,
@@ -23,6 +25,7 @@ describe('Script Runner Controller Tests', () => {
   let cookies = '';
   let adminUserId: string;
   let logger: Logger;
+  const httpServiceMock = { get: jest.fn() };
 
   beforeEach(() => {
     jest.resetAllMocks();
@@ -32,6 +35,8 @@ describe('Script Runner Controller Tests', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
+      .overrideProvider(HttpService)
+      .useValue(httpServiceMock)
       .overrideProvider(Logger)
       .useValue({
         log: jest.fn(),
@@ -117,6 +122,86 @@ describe('Script Runner Controller Tests', () => {
           skipExisting: false,
         })
         .expect(403);
+    });
+
+    const KEY_PREFIX = 'spec.migration';
+
+    const serveOverrides = (hero: string, title: string) =>
+      httpServiceMock.get.mockImplementation((url: string) => {
+        if (url.includes('locale_overrides/general.json')) {
+          return of({ data: { [KEY_PREFIX]: { hero } } });
+        }
+        if (url.includes('overrides/general.json')) {
+          return of({ data: { [KEY_PREFIX]: { title } } });
+        }
+        return throwError(
+          () => new Error('Request failed with status code 404'),
+        );
+      });
+
+    const storedRows = async () =>
+      await prisma.translationStrings.findMany({
+        where: { key: { startsWith: `${KEY_PREFIX}.` } },
+        select: { jurisdictionId: true, site: true, key: true, value: true },
+      });
+
+    beforeEach(() => {
+      serveOverrides('First hero', 'First title');
+    });
+
+    afterAll(async () => {
+      await prisma.translationStrings.deleteMany({
+        where: { key: { startsWith: `${KEY_PREFIX}.` } },
+      });
+    });
+
+    it('writes the rows, then updates them on a second run', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      const scriptName = `migrate translation overrides to key rows for ${jurisdiction.name}`;
+      serveOverrides('First hero', 'First title');
+
+      await call({
+        jurisdictionName: jurisdiction.name,
+        commit: true,
+        skipExisting: false,
+        languages: ['es'],
+      }).expect(200);
+
+      expect(await storedRows()).toEqual(
+        expect.arrayContaining([
+          {
+            jurisdictionId: jurisdiction.id,
+            site: 'public',
+            key: `${KEY_PREFIX}.hero`,
+            value: 'First hero',
+          },
+          {
+            jurisdictionId: null,
+            site: 'partners',
+            key: `${KEY_PREFIX}.title`,
+            value: 'First title',
+          },
+        ]),
+      );
+
+      await prisma.scriptRuns.delete({ where: { scriptName } });
+      serveOverrides('Second hero', 'Second title');
+
+      await call({
+        jurisdictionName: jurisdiction.name,
+        commit: true,
+        skipExisting: false,
+        languages: ['es'],
+      }).expect(200);
+
+      const rows = await storedRows();
+      expect(rows).toHaveLength(2);
+      expect(rows.map((row) => row.value).sort()).toEqual([
+        'Second hero',
+        'Second title',
+      ]);
     });
 
     it('rejects a body with commit missing', async () => {
