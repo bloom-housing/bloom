@@ -191,8 +191,13 @@ describe('Testing jurisdiction content service', () => {
       prisma.jurisdictionContent.findMany = jest.fn().mockResolvedValueOnce([
         {
           language: LanguagesEnum.en,
-          // answerHtml missing -> read-time shape guard warns
-          faq: { categories: [{ id: 'general', items: [{ id: 'a' }] }] },
+          // answerHtml missing -> read-time shape guard warns. The item needs a question so it
+          // is not dropped as empty before the guard sees it.
+          faq: {
+            categories: [
+              { id: 'general', items: [{ id: 'a', question: 'How?' }] },
+            ],
+          },
         },
       ]);
 
