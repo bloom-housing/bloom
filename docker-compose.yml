@@ -317,7 +317,7 @@ services:
         condition: service_completed_successfully
 
   otel-collector:
-    profiles: ["observability"]
+    profiles: []
     build:
       context: ./infra/aws-otel-collector
       dockerfile: Dockerfile
@@ -332,7 +332,7 @@ services:
         condition: service_started
 
   prometheus:
-    profiles: ["observability"]
+    profiles: []
     image: docker.io/prom/prometheus:v3
     restart: no
     ports:
@@ -345,7 +345,7 @@ services:
       - "--web.enable-remote-write-receiver"
 
   grafana:
-    profiles: ["observability"]
+    profiles: []
     image: docker.io/grafana/grafana:11.6.0
     restart: no
     ports:
@@ -362,7 +362,7 @@ services:
         condition: service_started
 
   grafana-sync:
-    profiles: ["observability"]
+    profiles: []
     image: docker.io/python:3.13-alpine
     restart: no
     volumes:
