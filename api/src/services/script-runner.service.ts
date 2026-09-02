@@ -377,6 +377,8 @@ export class ScriptRunnerService {
       languages: dto.languages,
       repositoryUrl,
       gitRef,
+      publicPath: dto.publicPath,
+      partnersPath: dto.partnersPath,
     });
 
     const bySite = (site: SiteEnum) =>
@@ -1048,10 +1050,14 @@ export class ScriptRunnerService {
     languages,
     repositoryUrl,
     gitRef,
+    publicPath,
+    partnersPath,
   }: {
     languages?: LanguagesEnum[];
     repositoryUrl: string;
     gitRef: string;
+    publicPath?: string;
+    partnersPath?: string;
   }): Promise<{
     files: Array<{
       language: LanguagesEnum;
@@ -1063,7 +1069,13 @@ export class ScriptRunnerService {
     const files = [];
     const missing: string[] = [];
 
-    for (const file of overrideFiles({ languages, repositoryUrl, gitRef })) {
+    for (const file of overrideFiles({
+      languages,
+      repositoryUrl,
+      gitRef,
+      publicPath,
+      partnersPath,
+    })) {
       let translations: Record<string, unknown>;
       try {
         translations = await this.getTranslationFile(file.url);

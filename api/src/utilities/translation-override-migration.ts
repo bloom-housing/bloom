@@ -33,12 +33,11 @@ export type OverrideFile = {
   url: string;
 };
 
-const PUBLIC_OVERRIDES_PATH = 'sites/public/page_content/locale_overrides';
-const PARTNERS_OVERRIDES_PATH = 'sites/partners/page_content/overrides';
-
 export const DEFAULT_REPOSITORY_URL =
   'https://raw.githubusercontent.com/bloom-housing/bloom';
 export const DEFAULT_GIT_REF = 'main';
+export const DEFAULT_PUBLIC_PATH = 'sites/public/page_content/locale_overrides';
+export const DEFAULT_PARTNERS_PATH = 'sites/partners/page_content/overrides';
 
 const fileFor = (language: LanguagesEnum) =>
   language === LanguagesEnum.en ? 'general.json' : `${language}.json`;
@@ -47,24 +46,29 @@ export const overrideFiles = ({
   languages,
   repositoryUrl = DEFAULT_REPOSITORY_URL,
   gitRef = DEFAULT_GIT_REF,
+  publicPath = DEFAULT_PUBLIC_PATH,
+  partnersPath = DEFAULT_PARTNERS_PATH,
 }: {
   languages?: LanguagesEnum[];
   repositoryUrl?: string;
   gitRef?: string;
+  publicPath?: string;
+  partnersPath?: string;
 }): OverrideFile[] => {
   const wanted = languages
     ? Array.from(new Set([LanguagesEnum.en, ...languages]))
     : Object.values(LanguagesEnum);
 
-  return [PUBLIC_OVERRIDES_PATH, PARTNERS_OVERRIDES_PATH].flatMap((path) => {
-    const site =
-      path === PUBLIC_OVERRIDES_PATH ? SiteEnum.public : SiteEnum.partners;
-    return wanted.map((language) => ({
+  return [
+    { site: SiteEnum.public, path: publicPath },
+    { site: SiteEnum.partners, path: partnersPath },
+  ].flatMap(({ site, path }) =>
+    wanted.map((language) => ({
       language,
       site,
       url: `${repositoryUrl}/${gitRef}/${path}/${fileFor(language)}`,
-    }));
-  });
+    })),
+  );
 };
 
 export const flattenToKeyValues = (
@@ -242,6 +246,13 @@ export const formatReport = ({
       lines.push(`  ...and ${diff.update.length - 5} more`);
     }
   });
+
+  if (commit && missing.length) {
+    lines.push(
+      '',
+      `Recorded as complete with ${missing.length} file(s) missing. Delete the script_runs row to run it again once they are in place.`,
+    );
+  }
 
   return lines.join('\n');
 };

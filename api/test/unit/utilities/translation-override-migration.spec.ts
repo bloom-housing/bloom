@@ -76,6 +76,19 @@ describe('overrideFiles', () => {
       'https://raw.githubusercontent.com/acme/fork/abc123/sites/public/page_content/locale_overrides/general.json',
     );
   });
+
+  it('takes the override paths from its caller, for a fork laid out differently', () => {
+    const files = overrideFiles({
+      languages: [LanguagesEnum.en],
+      publicPath: 'sites/public/src/page_content/locale_overrides',
+      partnersPath: 'sites/partners/src/page_content/locale_overrides',
+    });
+
+    expect(files.map((file) => file.url)).toEqual([
+      'https://raw.githubusercontent.com/bloom-housing/bloom/main/sites/public/src/page_content/locale_overrides/general.json',
+      'https://raw.githubusercontent.com/bloom-housing/bloom/main/sites/partners/src/page_content/locale_overrides/general.json',
+    ]);
+  });
 });
 
 describe('flattenToKeyValues', () => {
@@ -346,6 +359,23 @@ describe('formatReport', () => {
   it('names the files that were not there', () => {
     expect(report({ missing: ['https://x/repo/main/es.json'] })).toContain(
       'no file at https://x/repo/main/es.json',
+    );
+  });
+
+  it('says a committed run with missing files needs its script_runs row deleted', () => {
+    const text = report({
+      commit: true,
+      missing: ['https://x/repo/main/es.json'],
+    });
+
+    expect(text).toContain(
+      'Recorded as complete with 1 file(s) missing. Delete the script_runs row to run it again once they are in place.',
+    );
+  });
+
+  it('leaves that line off a dry run', () => {
+    expect(report({ missing: ['https://x/repo/main/es.json'] })).not.toContain(
+      'Recorded as complete',
     );
   });
 

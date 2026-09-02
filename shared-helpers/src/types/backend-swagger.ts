@@ -10699,6 +10699,12 @@ export interface TranslationOverrideMigrationDTO {
 
   /**  */
   gitRef?: string
+
+  /**  */
+  publicPath?: string
+
+  /**  */
+  partnersPath?: string
 }
 
 /** PaginationDTO */

@@ -15,6 +15,8 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsTranslationSourceUrl } from '../../decorators/is-translation-source-url.decorator';
 
+const SAFE_PATH = /^(?!.*\.\.)[\w][\w.\-/]*$/;
+
 export class TranslationOverrideMigrationDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -70,13 +72,31 @@ export class TranslationOverrideMigrationDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Matches(/^(?!.*\.\.)[\w][\w.\-/]*$/, {
-    groups: [ValidationsGroupsEnum.default],
-  })
+  @Matches(SAFE_PATH, { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(255, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     type: String,
     example: 'main',
   })
   gitRef?: string;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @Matches(SAFE_PATH, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(255, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({
+    type: String,
+    example: 'sites/public/page_content/locale_overrides',
+  })
+  publicPath?: string;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @Matches(SAFE_PATH, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(255, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({
+    type: String,
+    example: 'sites/partners/page_content/overrides',
+  })
+  partnersPath?: string;
 }

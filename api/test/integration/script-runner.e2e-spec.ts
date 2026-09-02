@@ -224,43 +224,65 @@ describe('Script Runner Controller Tests', () => {
       expect(JSON.stringify(res.body.message)).toContain('skipExisting');
     });
 
+    // A body naming a jurisdiction that does not exist also answers 400, so each of these
+    // asserts the field the pipe complained about.
+    const rejects = async (body: Record<string, unknown>, field: string) => {
+      const res = await call({ ...valid, ...body }).expect(400);
+
+      expect(JSON.stringify(res.body.message)).toContain(field);
+    };
+
     it('rejects a git ref that climbs out of the repository', async () => {
-      await call({
-        ...valid,
-        gitRef: 'main/../../../attacker/bloom-fork/main',
-      }).expect(400);
-    });
-
-    it('rejects a repository url off the allowed host', async () => {
-      await call({ ...valid, repositoryUrl: 'https://169.254.169.254' }).expect(
-        400,
+      await rejects(
+        { gitRef: 'main/../../../attacker/bloom-fork/main' },
+        'gitRef',
       );
-    });
-
-    it('rejects a language list that is a bare string', async () => {
-      await call({ ...valid, languages: 'es' }).expect(400);
-    });
-
-    it('rejects an empty language list', async () => {
-      await call({ ...valid, languages: [] }).expect(400);
-    });
-
-    it('rejects a missing jurisdiction name', async () => {
-      await call({ commit: false, skipExisting: false }).expect(400);
-    });
-
-    it('rejects a language outside the enum', async () => {
-      await call({ ...valid, languages: ['klingon'] }).expect(400);
     });
 
     it('rejects a git ref that is not a ref', async () => {
-      await call({ ...valid, gitRef: 'main; rm -rf /' }).expect(400);
+      await rejects({ gitRef: 'main; rm -rf /' }, 'gitRef');
+    });
+
+    it('rejects an override path that climbs out of the repository', async () => {
+      await rejects(
+        { publicPath: 'sites/public/../../../attacker/overrides' },
+        'publicPath',
+      );
+    });
+
+    it('rejects an override path that is absolute', async () => {
+      await rejects({ partnersPath: '/etc/passwd' }, 'partnersPath');
+    });
+
+    it('rejects a repository url off the allowed host', async () => {
+      await rejects(
+        { repositoryUrl: 'https://169.254.169.254' },
+        'repositoryUrl',
+      );
     });
 
     it('rejects a repository url that is not https', async () => {
-      await call({ ...valid, repositoryUrl: 'http://example.com/x' }).expect(
+      await rejects({ repositoryUrl: 'http://example.com/x' }, 'repositoryUrl');
+    });
+
+    it('rejects a language list that is a bare string', async () => {
+      await rejects({ languages: 'es' }, 'languages');
+    });
+
+    it('rejects an empty language list', async () => {
+      await rejects({ languages: [] }, 'languages');
+    });
+
+    it('rejects a language outside the enum', async () => {
+      await rejects({ languages: ['klingon'] }, 'languages');
+    });
+
+    it('rejects a missing jurisdiction name', async () => {
+      const res = await call({ commit: false, skipExisting: false }).expect(
         400,
       );
+
+      expect(JSON.stringify(res.body.message)).toContain('jurisdictionName');
     });
 
     it('rejects an unknown jurisdiction, without recording a run', async () => {
