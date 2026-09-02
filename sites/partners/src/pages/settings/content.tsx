@@ -514,7 +514,7 @@ const SettingsContent = () => {
                     <div key={index} className={styles["section-row"]} dir={direction}>
                       <TextEditorContent content={value} asHtml />
                       {usingEnglish && <Tag variant="secondary">{t("content.usingEnglish")}</Tag>}
-                      <div>
+                      <div className={styles["section-actions"]}>
                         <Button
                           variant="text"
                           size="sm"

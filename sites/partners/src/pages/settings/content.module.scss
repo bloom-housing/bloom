@@ -58,6 +58,11 @@
   border-top: 1px solid var(--seeds-color-gray-450);
 }
 
+.section-actions {
+  display: flex;
+  gap: var(--seeds-s2);
+}
+
 .nested-list {
   flex-basis: 100%;
   padding-left: var(--seeds-s6);
