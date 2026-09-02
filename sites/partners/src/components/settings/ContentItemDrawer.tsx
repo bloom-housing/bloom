@@ -17,7 +17,9 @@ type ContentItemDrawerProps = {
   isEnglish: boolean
   staleFields?: string[]
   direction: "ltr" | "rtl"
+  confirmDisabled?: boolean
   onChange: (draft: ContentDraft) => void
+  onConfirm: () => void
   onClose: () => void
 }
 
@@ -30,7 +32,9 @@ export const ContentItemDrawer = ({
   isEnglish,
   staleFields,
   direction,
+  confirmDisabled,
   onChange,
+  onConfirm,
   onClose,
 }: ContentItemDrawerProps) => {
   if (!basePath) return null
@@ -61,7 +65,7 @@ export const ContentItemDrawer = ({
         })}
       </Drawer.Content>
       <Drawer.Footer>
-        <Button variant="primary" onClick={onClose}>
+        <Button variant="primary" disabled={confirmDisabled} onClick={onConfirm}>
           {t("t.done")}
         </Button>
       </Drawer.Footer>

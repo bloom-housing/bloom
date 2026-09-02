@@ -25,7 +25,6 @@ import {
   isStale,
   listRows,
   pathsThatHideContent,
-  pruneEmptyItems,
   newItemId,
   removeListItem,
   setTextSections,
@@ -297,10 +296,24 @@ const SettingsContent = () => {
     fields: ItemField[]
   } | null>(null)
 
+  // A new item lives in the drawer until Done, so closing the drawer adds nothing.
+  const [pending, setPending] = useState<{ start: ContentDraft; draft: ContentDraft } | null>(null)
+
+  const openPending = (
+    next: ContentDraft,
+    opened: { basePath: string; titleKey: string; fields: ItemField[] }
+  ) => {
+    setPending({ start: next, draft: next })
+    setDrawer(opened)
+  }
+
   const addItem = (listPath: string, item: { titleKey: string; fields: ItemField[] }) => {
     const id = newItemId()
-    setDraft((current) => addListItem(current, listPath, { id }))
-    setDrawer({ basePath: `${listPath}[${id}]`, titleKey: item.titleKey, fields: item.fields })
+    openPending(addListItem(draft, listPath, { id }), {
+      basePath: `${listPath}[${id}]`,
+      titleKey: item.titleKey,
+      fields: item.fields,
+    })
   }
 
   const removeItem = (listPath: string, id: string) => {
@@ -319,7 +332,7 @@ const SettingsContent = () => {
         await jurisdictionContentService.updateJurisdictionContent({
           jurisdictionId: activeJurisdictionId,
           language: activeLanguage,
-          body: buildUpdate(pruneEmptyItems(toSave), languageRow?.updatedAt),
+          body: buildUpdate(toSave, languageRow?.updatedAt),
         })
         setConflict(false)
         setDraftState(null)
@@ -486,11 +499,8 @@ const SettingsContent = () => {
                     <Button
                       variant="primary-outlined"
                       size="sm"
-                      onClick={() => {
-                        setDraft((current) =>
-                          setTextSections(current, config.path, [...sectionValues, ""])
-                        )
-                        setDrawer({
+                      onClick={() =>
+                        openPending(setTextSections(draft, config.path, [...sectionValues, ""]), {
                           basePath: config.path,
                           titleKey: config.labelKey,
                           fields: [
@@ -501,7 +511,7 @@ const SettingsContent = () => {
                             },
                           ],
                         })
-                      }}
+                      }
                     >
                       {t(config.addLabelKey)}
                     </Button>
@@ -619,13 +629,24 @@ const SettingsContent = () => {
         basePath={drawer?.basePath ?? null}
         titleKey={drawer?.titleKey ?? "content.document"}
         fields={drawer?.fields ?? []}
-        draft={draft}
+        draft={pending?.draft ?? draft}
         englishDraft={englishDraft}
         isEnglish={isEnglish}
         staleFields={languageRow?.staleFields}
         direction={direction}
-        onChange={(next) => setDraft(() => next)}
-        onClose={() => setDrawer(null)}
+        confirmDisabled={!!pending && !hasDraftChanges(pending.draft, pending.start)}
+        onChange={(next) =>
+          pending ? setPending({ ...pending, draft: next }) : setDraft(() => next)
+        }
+        onConfirm={() => {
+          if (pending) setDraft(() => pending.draft)
+          setPending(null)
+          setDrawer(null)
+        }}
+        onClose={() => {
+          setPending(null)
+          setDrawer(null)
+        }}
       />
 
       <ContentConflictDialog

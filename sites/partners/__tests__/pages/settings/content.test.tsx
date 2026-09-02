@@ -111,6 +111,12 @@ let toasts: string[] = []
 
 const sectionRow = (text: string) => screen.getByText(text).closest(".section-row")
 
+const typeInEditor = async (testId: string, text: string) => {
+  const editable = (await screen.findByTestId(testId)).querySelector('[contenteditable="true"]')
+  ;(editable as HTMLElement).focus()
+  fireEvent.input(editable as HTMLElement, { target: { innerHTML: `<p>${text}</p>` } })
+}
+
 const renderPage = (profileOverrides = {}, flagOn = true) =>
   render(
     <MessageContext.Provider
@@ -361,7 +367,9 @@ describe("<SettingsContent>", () => {
       await userEvent.click(screen.getByRole("button", { name: "test:addTextSection" }))
 
       expect(await screen.findByText("test:textSection")).toBeInTheDocument()
-      expect(document.querySelectorAll(".section-row")).toHaveLength(2)
+      // The section itself waits for Done, so closing the drawer leaves the list as it was.
+      expect(document.querySelectorAll(".section-row")).toHaveLength(1)
+      expect(screen.getByRole("button", { name: "Done" })).toBeDisabled()
     })
 
     it("shows an English footer section the language row does not reach", async () => {
@@ -403,6 +411,8 @@ describe("<SettingsContent>", () => {
       expect(document.querySelectorAll(".section-row")).toHaveLength(2)
 
       await userEvent.click(screen.getByRole("button", { name: "test:addTextSection" }))
+      await typeInEditor("footer.textSectionsHtml.2", "Nueva")
+      await userEvent.click(screen.getByRole("button", { name: "Done" }))
 
       await waitFor(() => expect(document.querySelectorAll(".section-row")).toHaveLength(3))
       expect(screen.getByText("Added in English")).toBeInTheDocument()
@@ -618,10 +628,11 @@ describe("<SettingsContent>", () => {
       await waitFor(() => expect(toasts).toContain("test:alertSaved"))
     })
 
-    it("leaves an item with nothing in it out of the save", async () => {
+    it("adds nothing when the drawer for a new item is closed", async () => {
       const bodies: Record<string, unknown>[] = []
       respondWithRows([
         row(LanguagesEnum.en, {
+          contact: { phone: "555-0100" },
           footer: { links: [{ id: "about", text: "About", href: "/about" }] },
         }),
       ])
@@ -639,6 +650,9 @@ describe("<SettingsContent>", () => {
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.click(await screen.findByRole("button", { name: "test:addLink" }))
       await userEvent.click(await screen.findByRole("button", { name: "Close" }))
+
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
+      await userEvent.type(await screen.findByLabelText("test:contactPhone"), "9")
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
 
       await waitFor(() => expect(bodies).toHaveLength(1))
