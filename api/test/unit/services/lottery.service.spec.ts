@@ -967,6 +967,7 @@ describe('Testing lottery service', () => {
         {
           id: 'example id',
         },
+        { isLotteryStatusUpdate: true },
       );
 
       expect(prisma.listings.update).not.toHaveBeenCalled();
@@ -1004,6 +1005,7 @@ describe('Testing lottery service', () => {
         {
           id: 'example id',
         },
+        { isLotteryStatusUpdate: true },
       );
 
       expect(prisma.listings.update).not.toHaveBeenCalled();
@@ -1054,6 +1056,7 @@ describe('Testing lottery service', () => {
           id: 'example id',
           jurisdictionId: 'jurisId',
         },
+        { isLotteryStatusUpdate: true },
       );
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
@@ -1111,6 +1114,7 @@ describe('Testing lottery service', () => {
         {
           id: 'example id',
         },
+        { isLotteryStatusUpdate: true },
       );
 
       expect(prisma.listings.update).not.toHaveBeenCalled();
@@ -1154,6 +1158,7 @@ describe('Testing lottery service', () => {
         {
           id: 'example id',
         },
+        { isLotteryStatusUpdate: true },
       );
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
@@ -1195,6 +1200,7 @@ describe('Testing lottery service', () => {
         {
           id: 'example id',
         },
+        { isLotteryStatusUpdate: true },
       );
 
       expect(prisma.listings.update).not.toHaveBeenCalled();
@@ -1227,6 +1233,7 @@ describe('Testing lottery service', () => {
         {
           id: 'example id',
         },
+        { isLotteryStatusUpdate: true },
       );
 
       expect(prisma.listings.update).not.toHaveBeenCalled();
@@ -1272,6 +1279,7 @@ describe('Testing lottery service', () => {
         {
           id: 'example id',
         },
+        { isLotteryStatusUpdate: true },
       );
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
