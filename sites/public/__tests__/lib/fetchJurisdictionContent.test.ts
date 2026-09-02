@@ -43,6 +43,7 @@ describe("fetchJurisdictionContent", () => {
         faq: { categories: [] },
         resources: { resourceSections: [] },
         disclaimers: { privacyHtml: "<p>Ours</p>" },
+        contact: { email: "housing@example.gov" },
         somethingElse: { ignored: true },
       },
     })
@@ -54,6 +55,7 @@ describe("fetchJurisdictionContent", () => {
       faq: { categories: [] },
       resources: { resourceSections: [] },
       disclaimers: { privacyHtml: "<p>Ours</p>" },
+      contact: { email: "housing@example.gov" },
     })
   })
 

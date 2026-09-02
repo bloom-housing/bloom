@@ -2,6 +2,7 @@ import React from "react"
 import { render, screen } from "@testing-library/react"
 import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
+  getStoredContactContent,
   getStoredDisclaimersContent,
   getStoredFaqContent,
   getStoredFooterLinksContent,
@@ -395,5 +396,41 @@ describe("getStoredDisclaimersContent", () => {
     expect(getStoredDisclaimersContent(content({}), "privacyHtml")).toEqual({})
     expect(getStoredDisclaimersContent(content(), "privacyHtml")).toEqual({})
     expect(getStoredDisclaimersContent(null, "privacyHtml")).toEqual({})
+  })
+})
+
+describe("getStoredContactContent", () => {
+  const content = (contact?: Record<string, string>) => ({ contact } as JurisdictionContentFields)
+
+  it("gives back the fields the jurisdiction set", () => {
+    const stored = getStoredContactContent(
+      content({ email: "housing@example.gov", phone: "555-0100", hours: "Mon to Fri" })
+    )
+
+    expect(stored.email).toEqual("housing@example.gov")
+    expect(stored.phone).toEqual("555-0100")
+    expect(stored.hours).toEqual("Mon to Fri")
+  })
+
+  it("renders the address as markup rather than text", () => {
+    const { address } = getStoredContactContent(content({ addressHtml: "<p>123 Main St</p>" }))
+    render(<>{address}</>)
+
+    expect(screen.getByText("123 Main St")).toBeInTheDocument()
+  })
+
+  it("sets a key to undefined when the field was emptied, which hides it", () => {
+    const stored = getStoredContactContent(content({ email: "", addressHtml: "" }))
+
+    expect("email" in stored).toBe(true)
+    expect(stored.email).toBeUndefined()
+    expect("address" in stored).toBe(true)
+    expect(stored.address).toBeUndefined()
+  })
+
+  it("leaves out the fields the document does not mention", () => {
+    expect(getStoredContactContent(content({ email: "a@b.gov" }))).toEqual({ email: "a@b.gov" })
+    expect(getStoredContactContent(content())).toEqual({})
+    expect(getStoredContactContent(null)).toEqual({})
   })
 })

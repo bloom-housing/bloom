@@ -11,6 +11,8 @@ import Layout from "../../layouts/application"
 import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
 import styles from "./Assistance.module.scss"
 import { isFeatureFlagOn } from "../../lib/helpers"
+import { getStoredContactContent } from "../../static_content/stored_content"
+import { useJurisdictionContent } from "../../lib/JurisdictionContentContext"
 
 interface AssistanceProps {
   jurisdiction: Jurisdiction
@@ -23,6 +25,11 @@ const Assistance = (props: AssistanceProps) => {
     FeatureFlagEnum.enableHousingBasics
   )
   const enableFaq = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableFaq)
+
+  const contact = {
+    email: t("resources.contactEmail"),
+    ...getStoredContactContent(useJurisdictionContent()),
+  }
 
   return (
     <Layout
@@ -101,9 +108,10 @@ const Assistance = (props: AssistanceProps) => {
               </div>
               <div className={styles["contact-card-subsection"]}>
                 <p className={styles["contact-card-info"]}>{t("resources.contactInfo")}</p>
-                <Link href={`mailto:${t("resources.contactEmail")}`}>
-                  {t("resources.contactEmail")}
-                </Link>
+                {contact.email && <Link href={`mailto:${contact.email}`}>{contact.email}</Link>}
+                {contact.phone && <Link href={`tel:${contact.phone}`}>{contact.phone}</Link>}
+                {contact.address}
+                {contact.hours && <p className={styles["contact-card-info"]}>{contact.hours}</p>}
               </div>
             </Card>
           </aside>

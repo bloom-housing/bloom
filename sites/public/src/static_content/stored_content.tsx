@@ -115,3 +115,29 @@ export const getStoredDisclaimersContent = (
   const html = disclaimers[field]
   return { body: hasText(html) ? <StoredHtml html={html} /> : undefined }
 }
+
+export type ContactDetails = {
+  email?: string
+  phone?: string
+  address?: React.ReactNode
+  hours?: string
+}
+
+export const getStoredContactContent = (
+  content?: JurisdictionContentFields | null
+): Partial<ContactDetails> => {
+  const contact = content?.contact
+  if (!contact) return {}
+
+  const stored: Partial<ContactDetails> = {}
+  if ("email" in contact) stored.email = hasText(contact.email) ? contact.email : undefined
+  if ("phone" in contact) stored.phone = hasText(contact.phone) ? contact.phone : undefined
+  if ("hours" in contact) stored.hours = hasText(contact.hours) ? contact.hours : undefined
+  if ("addressHtml" in contact) {
+    stored.address = hasText(contact.addressHtml) ? (
+      <StoredHtml html={contact.addressHtml} />
+    ) : undefined
+  }
+
+  return stored
+}

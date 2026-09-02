@@ -354,7 +354,7 @@ const publicOverridesByLanguage = new Map<string, Cached<Record<string, Record<s
 const jurisdictionContentByLanguage = new Map<string, Cached<JurisdictionContentFields>>()
 
 // The documents the public site renders. The endpoint returns all five.
-const RENDERED_DOCUMENTS = ["footer", "faq", "resources", "disclaimers"] as const
+const RENDERED_DOCUMENTS = ["footer", "faq", "resources", "disclaimers", "contact"] as const
 
 const cacheWindowMs = (phase?: string) => {
   if (phase === "phase-production-build") return Number.POSITIVE_INFINITY
