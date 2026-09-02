@@ -99,9 +99,7 @@ export class LotteryService {
     queryParams: QueryParams,
   ): Promise<SuccessDTO> {
     const user = mapTo(User, req['user']);
-    if (!user?.userRoles?.isAdmin) {
-      throw new ForbiddenException();
-    }
+
     const listingId = queryParams.id;
     const listing = await this.prisma.listings.findUnique({
       select: {
@@ -113,6 +111,26 @@ export class LotteryService {
         id: listingId,
       },
     });
+
+    const enablePartnerLotteryRun = doJurisdictionHaveFeatureFlagSet(
+      mapTo(Jurisdiction, listing.jurisdictions),
+      FeatureFlagEnum.enablePartnerLotteryRun,
+    );
+
+    const isUserAssignedToListing = user?.listings?.some(
+      (entry) => entry.id === listingId,
+    );
+
+    if (
+      !(
+        user?.userRoles?.isAdmin ||
+        (enablePartnerLotteryRun &&
+          user?.userRoles?.isPartner &&
+          isUserAssignedToListing)
+      )
+    ) {
+      throw new ForbiddenException();
+    }
 
     if (listing?.lotteryStatus) {
       // If a lottery has already been run we should delete all of the existing lottery values so that we start from fresh.
@@ -499,21 +517,20 @@ export class LotteryService {
       ListingViews.full,
     );
 
-    await this.permissionService.canOrThrow(
-      requestingUser,
-      'listing',
-      permissionActions.update,
-      {
-        id: storedListing.id,
-        jurisdictionId: storedListing.jurisdictionId,
-      },
-    );
-
     if (storedListing.status !== ListingsStatusEnum.closed) {
       throw new BadRequestException(
         'Lottery status cannot be changed until listing is closed.',
       );
     }
+
+    const jurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        featureFlags: true,
+      },
+      where: {
+        id: storedListing.jurisdictionId,
+      },
+    });
 
     const isAdmin = requestingUser.userRoles?.isAdmin;
     const isJurisdictionalAdmin =
@@ -521,9 +538,23 @@ export class LotteryService {
     const isPartner = requestingUser.userRoles?.isPartner;
     const currentStatus = storedListing.lotteryStatus;
 
+    const enablePartnerLotteryRun = doJurisdictionHaveFeatureFlagSet(
+      mapTo(Jurisdiction, jurisdiction),
+      FeatureFlagEnum.enablePartnerLotteryRun,
+    );
+
+    const isUserAssignedToListing = requestingUser?.listings?.some(
+      (entry) => entry.id === storedListing.id,
+    );
+
     switch (dto?.lotteryStatus) {
       case LotteryStatusEnum.ran: {
-        if (!isAdmin) {
+        if (
+          !(
+            isAdmin ||
+            (enablePartnerLotteryRun && isUserAssignedToListing && isPartner)
+          )
+        ) {
           throw new ForbiddenException();
         }
         await this.updateLotteryStatus(dto.id, dto?.lotteryStatus);
