@@ -31,7 +31,7 @@ import {
   useToastyRef,
 } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
-import { fetchFavoriteListingIds } from "./helpers"
+import { fetchFavoriteListingIds, isFeatureFlagOn } from "./helpers"
 
 import { ListingQueryBuilder } from "./listings/listing-query-builder"
 
@@ -442,9 +442,8 @@ export async function fetchJurisdictionContent(language?: string, req?: any) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchSharedPageProps(language?: string, req?: any) {
   const jurisdiction = await fetchJurisdictionByName(req)
-  const storedContentOn = jurisdiction?.featureFlags?.some(
-    (flag) => flag.name === FeatureFlagEnum.enableDbDrivenContent && flag.active
-  )
+  const storedContentOn =
+    !!jurisdiction && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableDbDrivenContent)
 
   const [publicOverrides, jurisdictionContent] = await Promise.all([
     fetchPublicOverrides(language, req),

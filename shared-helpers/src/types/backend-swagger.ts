@@ -1721,12 +1721,12 @@ export class ApplicationsService {
       listingId: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<StreamableFile> {
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/bulk-update/template/{listingId}"
-      url = url.replace("{listingId}", params["listingId"] + "")
+      let url = basePath + "/applications/bulk-update/template"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { listingId: params["listingId"] }
 
       axios(configs, resolve, reject)
     })
@@ -1781,7 +1781,7 @@ export class ApplicationsService {
   bulkUpdateApplications(
     params: {
       /** requestBody */
-      body?: ApplicationBulkValidate
+      body?: ApplicationBulkUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
@@ -1877,6 +1877,25 @@ export class ApplicationsService {
       let data = params.body
 
       configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Subscribed for server side events notifications from the application processes
+   */
+  uploadBulkNotifications(
+    params: {
+      /**  */
+      jobId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/bulk-update/notifications"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { jobId: params["jobId"] }
 
       axios(configs, resolve, reject)
     })
@@ -3951,7 +3970,7 @@ export interface ListingFilterParams {
   availability?: FilterAvailabilityEnum
 
   /**  */
-  bathrooms?: []
+  bathrooms?: number
 
   /**  */
   bedrooms?: number
@@ -8475,6 +8494,9 @@ export interface JurisdictionCreate {
   regions: []
 
   /**  */
+  enabledStopLightRuleKeys?: string[]
+
+  /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
 
   /**  */
@@ -8563,6 +8585,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   regions: []
+
+  /**  */
+  enabledStopLightRuleKeys?: string[]
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
@@ -8689,6 +8714,9 @@ export interface Jurisdiction {
 
   /**  */
   regions: []
+
+  /**  */
+  enabledStopLightRuleKeys?: string[]
 
   /**  */
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
@@ -8918,9 +8946,6 @@ export interface PublicAppsViewResponse {
   /**  */
   applicationsCount: PublicAppsCount
 }
-
-/** StreamableFile */
-export interface StreamableFile {}
 
 /** ApplicationSelectionOptionCreate */
 export interface ApplicationSelectionOptionCreate {
@@ -9234,8 +9259,8 @@ export interface ApplicationCreate {
   householdMember: HouseholdMemberCreate[]
 }
 
-/** ApplicationBulkValidate */
-export interface ApplicationBulkValidate {
+/** ApplicationBulkUpdate */
+export interface ApplicationBulkUpdate {
   /**  */
   s3Key: string
 
@@ -11693,6 +11718,7 @@ export enum FeatureFlagEnum {
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableCustomListingNotifications" = "enableCustomListingNotifications",
   "enableDbDrivenContent" = "enableDbDrivenContent",
+  "enableDuplicatesDetailsInEmail" = "enableDuplicatesDetailsInEmail",
   "enableExportTerms" = "enableExportTerms",
   "enableFaq" = "enableFaq",
   "enableFilterByBathroom" = "enableFilterByBathroom",
@@ -11702,6 +11728,7 @@ export enum FeatureFlagEnum {
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
+  "enableHomePageSearchHero" = "enableHomePageSearchHero",
   "enableHousingAdvocate" = "enableHousingAdvocate",
   "enableHousingBasics" = "enableHousingBasics",
   "enableHousingDeveloperOwner" = "enableHousingDeveloperOwner",
@@ -11730,6 +11757,7 @@ export enum FeatureFlagEnum {
   "enableParkingFee" = "enableParkingFee",
   "enableParkingType" = "enableParkingType",
   "enablePartnerDemographics" = "enablePartnerDemographics",
+  "enablePartnerLotteryExport" = "enablePartnerLotteryExport",
   "enablePartnerSettings" = "enablePartnerSettings",
   "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProperties" = "enableProperties",
@@ -11743,6 +11771,7 @@ export enum FeatureFlagEnum {
   "enableSingleUseCode" = "enableSingleUseCode",
   "enableSmokingPolicyRadio" = "enableSmokingPolicyRadio",
   "enableSpokenLanguage" = "enableSpokenLanguage",
+  "enableStopLights" = "enableStopLights",
   "enableSupportAdmin" = "enableSupportAdmin",
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitAccessibilityTypeTags" = "enableUnitAccessibilityTypeTags",

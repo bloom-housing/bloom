@@ -10,7 +10,6 @@ import {
   FeatureFlagEnum,
   LanguagesEnum,
   SiteEnum,
-  TranslationUpdate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { flattenTranslations } from "@bloom-housing/shared-helpers/src/utilities/flattenTranslations"
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
@@ -22,9 +21,9 @@ import {
   getSettingsTabs,
   SettingsIndexEnum,
 } from "../../components/settings/SettingsViewHelpers"
-import { useRawTranslations, useUnsavedChangesWarning } from "../../lib/hooks"
-import { overrideTranslations, translations } from "../../lib/translations"
-import { publicOverrideTranslations } from "../../lib/publicTranslations"
+import { useUnsavedChangesWarning } from "../../lib/hooks"
+import { translations } from "../../lib/translations"
+import { useTranslationScope } from "../../lib/useTranslationScope"
 import styles from "./translations.module.scss"
 import {
   applyConflictChoices,
@@ -66,7 +65,7 @@ const SettingsTranslations = () => {
   const { addToast } = useContext(MessageContext)
   const { mutate: saveOverrides, isLoading: isSaving } = useMutate()
   const { mutate: revertOverride, isLoading: isReverting } = useMutate()
-  const { profile, translationsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
   const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
@@ -95,96 +94,22 @@ const SettingsTranslations = () => {
       ),
     [profile?.jurisdictions]
   )
-  const [jurisdictionId, setJurisdictionId] = useState("")
-  const [language, setLanguage] = useState<LanguagesEnum>(LanguagesEnum.en)
-  const [site, setSite] = useState<SiteEnum>(SiteEnum.public)
-
-  // The Partners rows are global
-  const isGlobal = site === SiteEnum.partners
-
-  const selectedJurisdiction = jurisdictions.find(
-    (jurisdiction) => jurisdiction.id === (jurisdictionId || jurisdictions[0]?.id)
-  )
-  const activeJurisdictionId = selectedJurisdiction?.id ?? ""
-
-  const partnersLanguages = useMemo(() => {
-    const supported = (router.locales ?? []).filter((locale): locale is LanguagesEnum =>
-      Object.values(LanguagesEnum).includes(locale as LanguagesEnum)
-    )
-    return supported.length ? supported : [LanguagesEnum.en]
-  }, [router.locales])
-
-  const languageOptions = useMemo(
-    () =>
-      (isGlobal ? partnersLanguages : selectedJurisdiction?.languages ?? [LanguagesEnum.en]).map(
-        (value) => ({
-          value,
-          label: t(`languages.${value}`),
-        })
-      ),
-    [isGlobal, partnersLanguages, selectedJurisdiction?.languages]
-  )
-
-  // Languages are per jurisdiction, so switching to one that does not offer the selected language
-  // has to fall back rather than keep editing a language the jurisdiction has no option for.
-  const activeLanguage = languageOptions.some((option) => option.value === language)
-    ? language
-    : languageOptions[0]?.value ?? LanguagesEnum.en
-
-  const scope = useMemo(
-    () =>
-      isGlobal
-        ? {
-            rows: { type: "global" as const },
-            baseOverrides: overrideTranslations,
-            save: (body: TranslationUpdate) =>
-              translationsService.updateRawPartnersTranslations({ language: activeLanguage, body }),
-            revert: (key: string) =>
-              translationsService.deleteRawPartnersTranslation({ language: activeLanguage, key }),
-          }
-        : {
-            rows: {
-              type: "jurisdiction" as const,
-              jurisdictionId: activeJurisdictionId,
-              site,
-            },
-            baseOverrides: publicOverrideTranslations,
-            save: (body: TranslationUpdate) =>
-              translationsService.updateRawTranslations({
-                jurisdictionId: activeJurisdictionId,
-                site,
-                language: activeLanguage,
-                body,
-              }),
-            revert: (key: string) =>
-              translationsService.deleteRawTranslation({
-                jurisdictionId: activeJurisdictionId,
-                site,
-                language: activeLanguage,
-                key,
-              }),
-          },
-    [activeJurisdictionId, activeLanguage, isGlobal, site, translationsService]
-  )
-
-  const scopeReady = authorized && (isGlobal || !!activeJurisdictionId)
-
   const {
-    data: overrides,
+    site,
+    setSite,
+    setJurisdictionId,
+    setLanguage,
+    isGlobal,
+    activeJurisdictionId,
+    activeLanguage,
+    languageOptions,
+    scope,
+    englishOverrideKeys,
+    overrides,
     loading,
     error,
     cacheKey,
-  } = useRawTranslations(scopeReady ? scope.rows : null, activeLanguage)
-
-  const isEnglishScope = activeLanguage === LanguagesEnum.en
-  const { data: englishOverrides } = useRawTranslations(
-    scopeReady && !isEnglishScope ? scope.rows : null,
-    LanguagesEnum.en
-  )
-  const englishOverrideKeys = useMemo(
-    () => new Set((englishOverrides ?? []).map((override) => override.key)),
-    [englishOverrides]
-  )
+  } = useTranslationScope({ jurisdictions, enabled: authorized })
 
   const overridesLoaded = overrides !== undefined
 

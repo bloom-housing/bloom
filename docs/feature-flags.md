@@ -47,6 +47,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableCreditScreeningFee](./feature-flags/enableCreditScreeningFee.md) | When true, credit screening fee is enabled for listings |
 | [enableCustomListingNotifications](./feature-flags/enableCustomListingNotifications.md) | When true, users have access to custom notification settings |
 | [enableDbDrivenContent](./feature-flags/enableDbDrivenContent.md) | When true, the jurisdiction reads its translations and structured content from the database instead of the bundled override files |
+| [enableDuplicatesDetailsInEmail](./feature-flags/enableDuplicatesDetailsInEmail.md) | When true, lottery published applicant email contains duplicates details section |
 | [enableExportTerms](./feature-flags/enableExportTerms.md) | When true, display terms of use before exporting applications and lotteries from the partner site |
 | [enableFaq](./feature-flags/enableFaq.md) | When true, a link to the FAQ page is displayed on the get assistance page |
 | [enableFilterByBathroom](./feature-flags/enableFilterByBathroom.md) | When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms |
@@ -55,6 +56,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableGenderQuestion](./feature-flags/enableGenderQuestion.md) | When true, the gender identity question is displayed in the public and partner application demographics section |
 | [enableGeocodingPreferences](./feature-flags/enableGeocodingPreferences.md) | When true, preferences can be created with geocoding functionality and when an application is created/updated on a listing that is geocoding then the application gets geocoded |
 | [enableGeocodingRadiusMethod](./feature-flags/enableGeocodingRadiusMethod.md) | When true, preferences can be created with geocoding functionality that verifies via a mile radius |
+| [enableHomePageSearchHero](./feature-flags/enableHomePageSearchHero.md) | When true, the home page hero has a search form |
 | [enableHomeType](./feature-flags/enableHomeType.md) | When true, home type feature is turned on |
 | [enableHousingAdvocate](./feature-flags/enableHousingAdvocate.md) | When true, partners can view housing advocate users |
 | [enableHousingBasics](./feature-flags/enableHousingBasics.md) | When true, a link to the housing basics page is displayed on the get assistance page |
@@ -84,6 +86,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableParkingFee](./feature-flags/enableParkingFee.md) | When true, the parking fee field should be visible |
 | [enableParkingType](./feature-flags/enableParkingType.md) | When true, the parking type field is visible in the listing form |
 | [enablePartnerDemographics](./feature-flags/enablePartnerDemographics.md) | When true, demographics data is included in application or lottery exports for partners |
+| [enablePartnerLotteryExport](./feature-flags/enablePartnerLotteryExport.md) | When true, partner can export lottery immediately after it is run. |
 | [enablePartnerSettings](./feature-flags/enablePartnerSettings.md) | When true, the 'settings' tab in the partner site is visible |
 | [enablePetPolicyCheckbox](./feature-flags/enablePetPolicyCheckbox.md) | When true, the pet policy field in the listing form is displayed as checkboxes instead of a text area |
 | [enableProperties](./feature-flags/enableProperties.md) | When true, the properties feature is enabled |
@@ -97,6 +100,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableSingleUseCode](./feature-flags/enableSingleUseCode.md) | When true, the backend allows for logging into this jurisdiction using the single use code flow |
 | [enableSmokingPolicyRadio](./feature-flags/enableSmokingPolicyRadio.md) | When true, the listing 'Smoking policy' field is a radio group |
 | [enableSpokenLanguage](./feature-flags/enableSpokenLanguage.md) | When true, the application demographics section displays a spoken language question with options configured on the jurisdiction |
+| [enableStopLights](./feature-flags/enableStopLights.md) | When true, Stop Light eligibility rules enabled for the jurisdiction are evaluated on the public application, blocking (red) or warning (yellow) the applicant |
 | [enableSupportAdmin](./feature-flags/enableSupportAdmin.md) | When true, support admins can be created |
 | [enableUnderConstructionHome](./feature-flags/enableUnderConstructionHome.md) | When true, the 'under construction' section is displayed on the home page |
 | [enableUnitAccessibilityTypeTags](./feature-flags/enableUnitAccessibilityTypeTags.md) | When true, unit accessibility type tags (for example, 'Mobility units') are displayed on listing cards and details |

@@ -1,3 +1,10 @@
+// Synthetic fixture for the bundled English override layer, so this suite verifies that
+// _app applies the fetched overrides rather than depending on today's real override content
+// (a key's presence/value there can change during normal content edits).
+const TEST_OVERRIDE_EN = { "test.bundledKey": "Bundled English override" }
+
+jest.mock("../../page_content/locale_overrides/general.json", () => TEST_OVERRIDE_EN)
+
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import { t } from "@bloom-housing/ui-components"
@@ -6,8 +13,8 @@ import BloomApp from "../../src/pages/_app"
 import { useJurisdictionContent } from "../../src/lib/JurisdictionContentContext"
 import { overrideTranslations } from "../../src/lib/translations"
 
-// Supplied by the bundled English override file, so a stored override has something to beat.
-const BUNDLED_KEY = "account.create.initialDisclaimer"
+// Supplied by the mocked bundled English override file, so a stored override has something to beat.
+const BUNDLED_KEY = "test.bundledKey"
 
 const Page = () => <div>{t(BUNDLED_KEY)}</div>
 
