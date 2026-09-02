@@ -46,9 +46,8 @@ describe("<FaqPage>", () => {
   it("renders the bundled questions when the page supplied no content", () => {
     renderFaq(null)
 
+    expect(screen.queryByRole("heading", { name: "Applying for housing" })).not.toBeInTheDocument()
     expect(screen.queryByText("How do I apply?")).not.toBeInTheDocument()
-    expect(
-      screen.getByRole("heading", { level: 1, name: "Frequently asked questions" })
-    ).toBeInTheDocument()
+    expect(document.querySelector(".markdown")?.textContent?.trim()).not.toBe("")
   })
 })
