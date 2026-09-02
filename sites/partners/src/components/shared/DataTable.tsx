@@ -48,30 +48,42 @@ export interface TableData {
   itemsPerPage?: number
 }
 
-interface DataTableProps {
+type FetchDataFn = (
+  pagination?: PaginationState,
+  search?: ColumnFiltersState,
+  sort?: SortingState
+) => Promise<TableData>
+
+interface DataTableBaseProps {
   // A description of the table for screen readers
   description: string
   // The columns to display in the table
   columns: ColumnDef<TableDataRow>[]
+  // Client-side data. Skips the fetchData function.
+  data?: TableDataRow[]
   // The default number of items to show per page
   defaultItemsPerPage?: number
+  // Renders every row and hides the pagination footer
+  disablePagination?: boolean
   // Whether to enable horizontal scrolling for wide tables, or autofit columns within the container
   enableHorizontalScroll?: boolean
-  // The type of filtering to use: global search or per-column filters
-  filterType: "global" | "per-column"
+  // The type of filtering to use: global search, per-column filters, or omit for neither
+  filterType?: "global" | "per-column"
   // Function to fetch data for the table based on pagination, search, and sort parameters
-  fetchData: (
-    pagination?: PaginationState,
-    search?: ColumnFiltersState,
-    sort?: SortingState
-  ) => Promise<TableData>
+  fetchData?: FetchDataFn
   // Optional content to display in the header on the right side
   headerRightContent?: React.ReactNode
   // Initial sort state for the table
   initialSort?: SortingState
   // Minimum number of characters required to trigger filtering
   minSearchCharacters?: number
+  // Additional class name(s) applied to the <table> element, e.g. for a per-instance font-size override
+  tableClassName?: string
 }
+
+// Exactly one of `data` or `fetchData` is required
+type DataTableProps = DataTableBaseProps &
+  ({ data: TableDataRow[]; fetchData?: never } | { fetchData: FetchDataFn; data?: never })
 
 // Returns appropriate aria-label for sortable headers based on current sort state
 const getHeaderAriaLabel = (header: Header<TableDataRow, unknown>) => {
@@ -106,10 +118,13 @@ export const DataTable = (props: DataTableProps) => {
 
   const searchFilters = props.filterType === "global" ? globalFilter : columnFilters
 
+  const isClientSide = props.data !== undefined
+
   const dataQuery = useQuery({
     queryKey: ["data", pagination, searchFilters, sorting],
-    queryFn: () => props.fetchData(pagination, searchFilters, sorting),
+    queryFn: () => props.fetchData?.(pagination, searchFilters, sorting),
     placeholderData: keepPreviousData,
+    enabled: !isClientSide,
   })
 
   // Slightly delay loading state to prevent flickering on fast fetches
@@ -139,25 +154,33 @@ export const DataTable = (props: DataTableProps) => {
 
   const defaultData = React.useMemo(() => [], [])
 
+  const rows = isClientSide ? props.data : dataQuery.data?.items ?? defaultData
+
+  const scrollToTableTop = () =>
+    document
+      .getElementById("data-table-wrapper")
+      ?.scrollIntoView({ behavior: "auto", block: "start" })
+
   const table = useReactTable({
     columns: props.columns,
-    data: dataQuery.data?.items ?? defaultData,
+    data: rows,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getPaginationRowModel: props.disablePagination ? undefined : getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    manualFiltering: true,
-    manualPagination: true,
-    manualSorting: true,
+    autoResetPageIndex: false,
+    manualFiltering: !isClientSide,
+    manualPagination: !isClientSide,
+    manualSorting: !isClientSide,
     onColumnFiltersChange: (props) => {
       setColumnFilters(props)
     },
     onColumnVisibilityChange: setColumnVisibility,
-    onPaginationChange: (props) => {
-      setPagination(props)
-      document
-        .getElementById("data-table-wrapper")
-        ?.scrollIntoView({ behavior: "auto", block: "start" })
+    onPaginationChange: (updater) => {
+      setPagination(updater)
+      if (!isClientSide) {
+        scrollToTableTop()
+      }
     },
     onSortingChange: (sorting) => {
       setPagination((prev) => ({ ...prev, pageIndex: 0 }))
@@ -179,7 +202,7 @@ export const DataTable = (props: DataTableProps) => {
     },
   })
 
-  const showLoadingState = delayedLoading || dataQuery.data === undefined
+  const showLoadingState = !isClientSide && (delayedLoading || dataQuery.data === undefined)
 
   const tableHeaders = (
     <thead>
@@ -209,6 +232,7 @@ export const DataTable = (props: DataTableProps) => {
                       {...{
                         onClick: header.column.getToggleSortingHandler(),
                       }}
+                      type="button"
                       aria-description={getHeaderAriaLabel(header)}
                       data-testid={`sort-button-${header.id}`}
                     >
@@ -291,7 +315,7 @@ export const DataTable = (props: DataTableProps) => {
           </tbody>
         </>
       )
-    } else if (delayedLoading || dataQuery.data === undefined) {
+    } else if (showLoadingState) {
       return (
         <tbody>
           <tr className={styles["loading-row"]}>
@@ -312,7 +336,7 @@ export const DataTable = (props: DataTableProps) => {
           </tr>
         </tbody>
       )
-    } else if (dataQuery.data?.items?.length === 0) {
+    } else if (rows.length === 0) {
       return (
         <>
           {tableHeaders}
@@ -361,6 +385,7 @@ export const DataTable = (props: DataTableProps) => {
     }
   }
 
+  // Just in server-side mode. Client-side callers pass disablePagination.
   const Pagination = (
     <div
       className={styles["pagination"]}
@@ -455,11 +480,15 @@ export const DataTable = (props: DataTableProps) => {
           </div>
         )}
       </div>
-      <div className={styles["data-table-container"]}>
+      <div
+        className={`${styles["data-table-container"]} ${
+          props.disablePagination ? styles["no-pagination"] : ""
+        }`}
+      >
         <table
           className={`${styles["data-table"]} ${
             props.enableHorizontalScroll ? styles["enable-scroll"] : ""
-          } ${showLoadingState ? styles["table-loading"] : ""}`}
+          } ${showLoadingState ? styles["table-loading"] : ""} ${props.tableClassName || ""}`}
           id="data-table"
           aria-label={props.description}
           aria-live={"polite"}
@@ -467,7 +496,7 @@ export const DataTable = (props: DataTableProps) => {
           {getTableContent()}
         </table>
       </div>
-      {Pagination}
+      {!props.disablePagination && Pagination}
     </div>
   )
 }
