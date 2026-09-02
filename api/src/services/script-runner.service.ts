@@ -6,15 +6,20 @@ import {
   Logger,
 } from '@nestjs/common';
 import {
+  LanguagesEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   Prisma,
   ReviewOrderTypeEnum,
+  SiteEnum,
+  TranslationOrigin,
 } from '@prisma/client';
+import { AxiosError } from 'axios';
+import { HttpService } from '@nestjs/axios';
+import { catchError, firstValueFrom } from 'rxjs';
 import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
-import https from 'https';
 import { AmiChartService } from './ami-chart.service';
 import { EmailService } from './email.service';
 import { FeatureFlagService } from './feature-flag.service';
@@ -32,7 +37,23 @@ import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
 import { MultiselectOption } from '../dtos/multiselect-questions/multiselect-option.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
+import { TranslationOverrideMigrationDTO } from '../dtos/script-runner/translation-override-migration.dto';
+import {
+  assertStorableValues,
+  buildOverrideRows,
+  DEFAULT_GIT_REF,
+  DEFAULT_REPOSITORY_URL,
+  DesiredRow,
+  diffRows,
+  ExistingRow,
+  formatReport,
+  overrideFiles,
+  RowDiff,
+  withSourceHashes,
+} from '../utilities/translation-override-migration';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
+
+const TRANSLATION_FETCH_TIMEOUT_MS = 30_000;
 
 /**
   this is the service for running scripts
@@ -46,6 +67,7 @@ export class ScriptRunnerService {
     private featureFlagService: FeatureFlagService,
     private multiselectQuestionService: MultiselectQuestionService,
     private prisma: PrismaService,
+    private httpService: HttpService,
     @Inject(Logger)
     private logger = new Logger(ScriptRunnerService.name),
   ) {}
@@ -322,6 +344,105 @@ export class ScriptRunnerService {
       },
     });
     await this.markScriptAsComplete('hideProgramsFromListings', requestingUser);
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @param dto which jurisdiction to write, and where to read the override files from
+   * @returns successDTO
+   * @description loads the bundled site override files into translation_strings
+   */
+  async migrateTranslationOverridesToKeyRows(
+    req: ExpressRequest,
+    dto: TranslationOverrideMigrationDTO,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    const scriptName = `migrate translation overrides to key rows for ${dto.jurisdictionName}`;
+
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      select: { id: true },
+      where: { name: dto.jurisdictionName },
+    });
+    if (!jurisdiction) {
+      throw new BadRequestException(
+        `Jurisdiction ${dto.jurisdictionName} does not exist`,
+      );
+    }
+
+    const repositoryUrl = dto.repositoryUrl ?? DEFAULT_REPOSITORY_URL;
+    const gitRef = dto.gitRef ?? DEFAULT_GIT_REF;
+    const { files, missing } = await this.readOverrideFiles({
+      languages: dto.languages,
+      repositoryUrl,
+      gitRef,
+      publicPath: dto.publicPath,
+      partnersPath: dto.partnersPath,
+    });
+
+    const bySite = (site: SiteEnum) =>
+      files
+        .filter((file) => file.site === site)
+        .map(({ language, translations }) => ({ language, translations }));
+
+    const desired = withSourceHashes([
+      ...buildOverrideRows({
+        files: bySite(SiteEnum.partners),
+        jurisdictionId: null,
+        site: SiteEnum.partners,
+      }),
+      ...buildOverrideRows({
+        files: bySite(SiteEnum.public),
+        jurisdictionId: jurisdiction.id,
+        site: SiteEnum.public,
+      }),
+    ]);
+
+    const sections = [
+      {
+        label: 'partners overrides (all jurisdictions)',
+        scope: { jurisdictionId: null, site: SiteEnum.partners },
+      },
+      {
+        label: `public overrides for ${dto.jurisdictionName}`,
+        scope: { jurisdictionId: jurisdiction.id, site: SiteEnum.public },
+      },
+    ];
+
+    const diffs: Array<{ label: string; diff: RowDiff }> = [];
+    for (const { label, scope } of sections) {
+      const rows = desired.filter(
+        (row) =>
+          row.jurisdictionId === scope.jurisdictionId &&
+          row.site === scope.site,
+      );
+      diffs.push({
+        label,
+        diff: diffRows(
+          await this.existingOverrides(scope),
+          rows,
+          dto.skipExisting,
+        ),
+      });
+    }
+
+    this.logger.log(
+      formatReport({
+        sections: diffs,
+        commit: dto.commit,
+        repositoryUrl,
+        gitRef,
+        missing,
+      }),
+    );
+
+    if (dto.commit) {
+      await this.markScriptAsRunStart(scriptName, requestingUser);
+      await this.writeOverrideRows(diffs.map(({ diff }) => diff));
+      await this.markScriptAsComplete(scriptName, requestingUser);
+    }
+
     return { success: true };
   }
 
@@ -925,6 +1046,121 @@ export class ScriptRunnerService {
 
   // |------------------ HELPERS GO BELOW ------------------ | //
 
+  private async readOverrideFiles({
+    languages,
+    repositoryUrl,
+    gitRef,
+    publicPath,
+    partnersPath,
+  }: {
+    languages?: LanguagesEnum[];
+    repositoryUrl: string;
+    gitRef: string;
+    publicPath?: string;
+    partnersPath?: string;
+  }): Promise<{
+    files: Array<{
+      language: LanguagesEnum;
+      site: SiteEnum;
+      translations: Record<string, unknown>;
+    }>;
+    missing: string[];
+  }> {
+    const files = [];
+    const missing: string[] = [];
+
+    for (const file of overrideFiles({
+      languages,
+      repositoryUrl,
+      gitRef,
+      publicPath,
+      partnersPath,
+    })) {
+      let translations: Record<string, unknown>;
+      try {
+        translations = await this.getTranslationFile(file.url);
+      } catch (error) {
+        // Partners ships english only, and a fork need not translate every language.
+        const absent = error.message?.includes('status code 404');
+        if (!absent || file.language === LanguagesEnum.en) {
+          throw new BadRequestException(error.message);
+        }
+        missing.push(file.url);
+        continue;
+      }
+
+      try {
+        assertStorableValues({ url: file.url, translations });
+      } catch (error) {
+        throw new BadRequestException(error.message);
+      }
+
+      files.push({
+        language: file.language,
+        site: file.site,
+        translations,
+      });
+    }
+
+    return { files, missing };
+  }
+
+  private async existingOverrides(scope: {
+    jurisdictionId: string | null;
+    site: SiteEnum;
+  }): Promise<ExistingRow[]> {
+    return await this.prisma.translationStrings.findMany({
+      select: {
+        jurisdictionId: true,
+        language: true,
+        site: true,
+        key: true,
+        value: true,
+        sourceHash: true,
+      },
+      where: scope,
+    });
+  }
+
+  private async writeOverrideRows(diffs: RowDiff[]): Promise<void> {
+    const create = diffs.flatMap((diff) => diff.create);
+    const update = diffs.flatMap((diff) => diff.update);
+    const writes = [];
+
+    if (create.length) {
+      writes.push(
+        this.prisma.translationStrings.createMany({
+          data: create.map((row: DesiredRow) => ({
+            ...row,
+            origin: TranslationOrigin.human,
+          })),
+          // A row an admin added between the diff and here is left as they set it.
+          skipDuplicates: true,
+        }),
+      );
+    }
+
+    // updateMany, because the unique index is NULLS NOT DISTINCT and Prisma's compound
+    // unique input cannot express a null jurisdictionId or site.
+    for (const row of update) {
+      writes.push(
+        this.prisma.translationStrings.updateMany({
+          where: {
+            jurisdictionId: row.jurisdictionId,
+            language: row.language,
+            site: row.site,
+            key: row.key,
+          },
+          data: { value: row.value, sourceHash: row.sourceHash },
+        }),
+      );
+    }
+
+    if (writes.length) {
+      await this.prisma.$transaction(writes);
+    }
+  }
+
   /**
    *
    * @param scriptName the name of the script that is going to be run
@@ -1198,30 +1434,33 @@ export class ScriptRunnerService {
     return 'no translation';
   }
 
-  getTranslationFile(url) {
-    return new Promise((resolve, reject) =>
-      https
-        .get(url, (res) => {
-          let body = '';
-
-          res.on('data', (chunk) => {
-            body += chunk;
-          });
-
-          res.on('end', () => {
-            try {
-              const json = JSON.parse(body);
-              resolve(json);
-            } catch (error) {
-              console.error('on end error:', error.message);
-              reject(`parsing broke: ${url}`);
-            }
-          });
+  async getTranslationFile(
+    url: string,
+    timeoutMs = TRANSLATION_FETCH_TIMEOUT_MS,
+  ): Promise<Record<string, unknown>> {
+    const { data } = await firstValueFrom(
+      this.httpService
+        // The host allowlist applies to the requested url, so a redirect must not move off it.
+        .get(url, {
+          signal: AbortSignal.timeout(timeoutMs),
+          maxRedirects: 0,
         })
-        .on('error', (error) => {
-          console.error('on error error:', error.message);
-          reject(`getting broke: ${url}`);
-        }),
+        .pipe(
+          catchError((error: AxiosError) => {
+            throw new Error(
+              `failed fetching ${url}: ${
+                error.code === 'ERR_CANCELED'
+                  ? `timed out after ${timeoutMs}ms`
+                  : error.message
+              }`,
+            );
+          }),
+        ),
     );
+
+    if (!data || typeof data !== 'object') {
+      throw new Error(`${url} did not return json`);
+    }
+    return data as Record<string, unknown>;
   }
 }

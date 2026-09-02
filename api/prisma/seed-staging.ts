@@ -5,6 +5,10 @@ import {
   upsertJurisdictionContent,
 } from './seed-helpers/jurisdiction-content-factory';
 import { upsertEmailTranslations } from './seed-helpers/translation-factory';
+import {
+  translationStringsFactory,
+  upsertTranslationStrings,
+} from './seed-helpers/translation-strings-factory';
 import { unitRentTypeFactoryAll } from './seed-helpers/unit-rent-type-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { userFactory } from './seed-helpers/user-factory';
@@ -254,6 +258,13 @@ export const stagingSeed = async (
     id: mainJurisdiction.id,
     name: mainJurisdiction.name,
   });
+  await upsertTranslationStrings(
+    prismaClient,
+    translationStringsFactory({
+      id: mainJurisdiction.id,
+      name: mainJurisdiction.name,
+    }),
+  );
 
   // add structured content for the main jurisdiction, English plus a partial Spanish row
   const contentJurisdiction = {

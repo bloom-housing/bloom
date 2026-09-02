@@ -16,6 +16,10 @@ import { randomInt } from 'node:crypto';
 import { applicationFactoryMany } from './seed-helpers/application-factory';
 import { upsertEmailTranslations } from './seed-helpers/translation-factory';
 import {
+  translationStringsFactory,
+  upsertTranslationStrings,
+} from './seed-helpers/translation-strings-factory';
+import {
   jurisdictionContentFactory,
   upsertJurisdictionContent,
 } from './seed-helpers/jurisdiction-content-factory';
@@ -111,6 +115,10 @@ export const devSeeding = async (
     id: jurisdiction.id,
     name: jurisdiction.name,
   });
+  await upsertTranslationStrings(
+    prismaClient,
+    translationStringsFactory({ id: jurisdiction.id, name: jurisdiction.name }),
+  );
 
   // add structured content, English plus a partial Spanish row
   const contentJurisdiction = { id: jurisdiction.id, name: jurisdiction.name };
