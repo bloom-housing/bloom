@@ -151,6 +151,9 @@ const renderPage = (profileOverrides = {}, flagOn = true) =>
     </AuthContext.Provider>
   )
 
+const selectJurisdiction = async (id: string) =>
+  userEvent.selectOptions(await screen.findByLabelText("Jurisdiction"), id)
+
 const selectSite = async (site: "public" | "partners" | "email") =>
   userEvent.selectOptions(await screen.findByLabelText("Site"), site)
 
@@ -540,7 +543,7 @@ describe("<SettingsTranslations>", () => {
 
       await selectSite("email")
       // Selecting by value rather than by label, so the option's wording is not what is under test.
-      await userEvent.selectOptions(screen.getByLabelText("Jurisdiction"), "all")
+      await userEvent.selectOptions(screen.getByLabelText("Jurisdiction"), "none")
 
       await waitFor(() =>
         expect(requested).toContain("/api/adapter/translations/global/raw/email/en")
@@ -561,6 +564,7 @@ describe("<SettingsTranslations>", () => {
       renderPage()
 
       await selectSite("email")
+      await selectJurisdiction("jurisdiction1")
       await editFirstValue("Email edit")
       await userEvent.click(screen.getByRole("button", { name: /Save/ }))
 
@@ -576,6 +580,7 @@ describe("<SettingsTranslations>", () => {
       renderPage()
 
       await selectSite("email")
+      await selectJurisdiction("jurisdiction1")
       await filterFor("t.hello", EMAIL_ANCHOR_KEY)
 
       expect(await screen.findByText("Our greeting")).toBeInTheDocument()
@@ -603,6 +608,7 @@ describe("<SettingsTranslations>", () => {
       })
 
       await selectSite("email")
+      await selectJurisdiction("jurisdiction1")
       await selectLanguage("Español")
       await filterFor("t.hello", EMAIL_ANCHOR_KEY)
 
@@ -623,6 +629,7 @@ describe("<SettingsTranslations>", () => {
       renderPage()
 
       await selectSite("email")
+      await selectJurisdiction("jurisdiction1")
 
       await waitFor(() =>
         expect(requested).toContain(

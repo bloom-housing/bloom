@@ -23,7 +23,7 @@ import {
 } from "../../components/settings/SettingsViewHelpers"
 import { useUnsavedChangesWarning } from "../../lib/hooks"
 import { translations } from "../../lib/translations"
-import { ALL_JURISDICTIONS, useTranslationScope } from "../../lib/useTranslationScope"
+import { NO_JURISDICTION, useTranslationScope } from "../../lib/useTranslationScope"
 import styles from "./translations.module.scss"
 import {
   applyConflictChoices,
@@ -430,13 +430,13 @@ const SettingsTranslations = () => {
                 id="translationsJurisdiction"
                 name="translationsJurisdiction"
                 label={t("t.jurisdiction")}
-                defaultValue={isGlobal ? ALL_JURISDICTIONS : activeJurisdictionId}
+                defaultValue={isGlobal ? NO_JURISDICTION : activeJurisdictionId}
                 disabled={
                   (jurisdictions.length < 2 && site !== SiteEnum.email) || hasUnsavedChanges
                 }
                 options={[
                   ...(site === SiteEnum.email
-                    ? [{ value: ALL_JURISDICTIONS, label: t("translations.allJurisdictions") }]
+                    ? [{ value: NO_JURISDICTION, label: t("translations.defaultNoJurisdiction") }]
                     : []),
                   ...jurisdictions.map((jurisdiction) => ({
                     value: jurisdiction.id,
