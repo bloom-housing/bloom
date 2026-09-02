@@ -1,3 +1,5 @@
+import fs from "fs"
+import path from "path"
 import React from "react"
 import { GetStaticProps } from "next"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -8,6 +10,7 @@ import { fetchLimitedUnderConstructionListings, fetchSharedPageProps } from "../
 interface HomePageProps {
   jurisdiction: Jurisdiction
   underConstructionListings: Listing[]
+  heroImage?: string
 }
 
 export default function HomePage(props: HomePageProps) {
@@ -17,6 +20,7 @@ export default function HomePage(props: HomePageProps) {
         <Home
           jurisdiction={props.jurisdiction}
           underConstructionListings={props.underConstructionListings}
+          heroImage={props.heroImage}
         />
       ) : (
         <HomeDeprecated jurisdiction={props.jurisdiction} />
@@ -31,10 +35,16 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
     fetchSharedPageProps(locale),
   ])
 
+  // hero image is optional so checking server side if the file exists to prevent rerenders on the client
+  const fileName = "hero-image.jpg"
+  const filePath = path.join(process.cwd(), "public", "images", fileName)
+  const imageExists = fs.existsSync(filePath)
+
   return {
     props: {
       underConstructionListings: underConstructionListings?.items || [],
       ...shared,
+      heroImage: imageExists ? fileName : "",
     },
     revalidate: Number(process.env.cacheRevalidate),
   }
