@@ -485,11 +485,22 @@ const SettingsContent = () => {
                     <Button
                       variant="primary-outlined"
                       size="sm"
-                      onClick={() =>
+                      onClick={() => {
                         setDraft((current) =>
                           setTextSections(current, config.path, [...sectionValues, ""])
                         )
-                      }
+                        setDrawer({
+                          basePath: config.path,
+                          titleKey: config.labelKey,
+                          fields: [
+                            {
+                              name: String(sectionValues.length),
+                              labelKey: "content.textSection",
+                              type: "html",
+                            },
+                          ],
+                        })
+                      }}
                     >
                       {t(config.addLabelKey)}
                     </Button>

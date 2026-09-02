@@ -313,6 +313,20 @@ describe("<SettingsContent>", () => {
       expect(screen.getAllByText("English changed")).toHaveLength(1)
     })
 
+    it("opens the editor on a text section as soon as it is added", async () => {
+      respondWithRows([row(LanguagesEnum.en, { footer: { textSectionsHtml: ["<p>First</p>"] } })])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await screen.findByText("First")
+
+      await userEvent.click(screen.getByRole("button", { name: "Add text section" }))
+
+      expect(await screen.findByText("Text section")).toBeInTheDocument()
+      expect(document.querySelectorAll(".section-row")).toHaveLength(2)
+    })
+
     it("shows an English footer section the language row does not reach", async () => {
       respondWithRows([
         row(LanguagesEnum.en, {
