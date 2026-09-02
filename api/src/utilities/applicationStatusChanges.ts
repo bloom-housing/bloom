@@ -3,10 +3,14 @@ type ApplicationStatusChangeInput = {
   nextStatus?: string | null;
   initialApplicationDeclineReason?: string | null;
   nextApplicationDeclineReason?: string | null;
+  initialApplicationDeclineReasonAdditionalDetails?: string | null;
+  nextApplicationDeclineReasonAdditionalDetails?: string | null;
   initialAccessibleUnitWaitlistNumber?: string | number | null;
   nextAccessibleUnitWaitlistNumber?: string | number | null;
   initialConventionalUnitWaitlistNumber?: string | number | null;
   nextConventionalUnitWaitlistNumber?: string | number | null;
+  initialManualLotteryPositionNumber?: string | number | null;
+  nextManualLotteryPositionNumber?: string | number | null;
 };
 
 export type ApplicationStatusChangeItem =
@@ -20,11 +24,19 @@ export type ApplicationStatusChangeItem =
       value: string;
     }
   | {
+      type: 'declineReasonDetails';
+      value: string;
+    }
+  | {
       type: 'accessibleWaitlist';
       value: string;
     }
   | {
       type: 'conventionalWaitlist';
+      value: string;
+    }
+  | {
+      type: 'lotteryPosition';
       value: string;
     };
 
@@ -50,16 +62,29 @@ export const buildApplicationStatusChanges = (
   );
   const nextDeclineReason = normalizeValue(input.nextApplicationDeclineReason);
 
+  const initialDeclineReasonDetails = normalizeValue(
+    input.initialApplicationDeclineReasonAdditionalDetails,
+  );
+  const nextDeclineReasonDetails = normalizeValue(
+    input.nextApplicationDeclineReasonAdditionalDetails,
+  );
+
   const initialAccessible = normalizeValue(
     input.initialAccessibleUnitWaitlistNumber,
   );
   const nextAccessible = normalizeValue(input.nextAccessibleUnitWaitlistNumber);
+
   const initialConventional = normalizeValue(
     input.initialConventionalUnitWaitlistNumber,
   );
   const nextConventional = normalizeValue(
     input.nextConventionalUnitWaitlistNumber,
   );
+
+  const initialLottery = normalizeValue(
+    input.initialManualLotteryPositionNumber,
+  );
+  const nextLottery = normalizeValue(input.nextManualLotteryPositionNumber);
 
   const statusChanged = !!nextStatus && nextStatus !== initialStatus;
   const nextIsDeclined = nextStatus === 'declined';
@@ -86,6 +111,17 @@ export const buildApplicationStatusChanges = (
     });
   }
 
+  if (
+    nextDeclineReasonDetails &&
+    nextDeclineReasonDetails !== initialDeclineReasonDetails &&
+    hasValue(nextDeclineReasonDetails)
+  ) {
+    changes.push({
+      type: 'declineReasonDetails',
+      value: nextDeclineReasonDetails,
+    });
+  }
+
   if (nextIsWaitlist) {
     if (nextAccessible !== initialAccessible && hasValue(nextAccessible)) {
       changes.push({
@@ -102,6 +138,13 @@ export const buildApplicationStatusChanges = (
         value: nextConventional,
       });
     }
+  }
+
+  if (nextLottery !== initialLottery && hasValue(nextLottery)) {
+    changes.push({
+      type: 'lotteryPosition',
+      value: nextLottery,
+    });
   }
 
   return changes;

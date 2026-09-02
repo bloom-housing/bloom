@@ -21,6 +21,9 @@ RUN yarn install --frozen-lockfile
 COPY --chown=2002:2002 tsconfig.json /app/tsconfig.json
 COPY --chown=2002:2002 sites/partners .
 COPY --chown=2002:2002 sites/middleware.ts /app/sites/partners/src/middleware.ts
+# The translation editor compares its public scope against what the public site renders, so it
+# reads that site's locale overrides. src/lib/publicTranslations.ts is the only thing that needs them.
+COPY --chown=2002:2002 sites/public/page_content/locale_overrides /app/sites/public/page_content/locale_overrides
 
 ENV NEXT_TELEMETRY_DISABLED=1
 CMD [ "/bin/bash", "-c", "NODE_OPTIONS='--max-semi-space-size=64 --max-old-space-size=2048' yarn build && yarn start" ]

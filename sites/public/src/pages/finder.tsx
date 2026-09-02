@@ -6,7 +6,11 @@ import {
 import { t } from "@bloom-housing/ui-components"
 import RentalsFinder from "../components/finder/RentalsFinder"
 import Layout from "../layouts/application"
-import { fetchJurisdictionByName, fetchMultiselectProgramData } from "../lib/hooks"
+import {
+  fetchJurisdictionByName,
+  fetchMultiselectProgramData,
+  fetchPublicOverrides,
+} from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
 
 export interface FinderProps {
@@ -36,8 +40,11 @@ export default function Finder(props: FinderProps) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getStaticProps(context: { req: any; query: any }) {
-  const jurisdiction = await fetchJurisdictionByName()
+export async function getStaticProps(context: { req: any; query: any; locale?: string }) {
+  const [jurisdiction, publicOverrides] = await Promise.all([
+    fetchJurisdictionByName(),
+    fetchPublicOverrides(context.locale),
+  ])
 
   const multiselectData = isFeatureFlagOn(
     jurisdiction,
@@ -50,6 +57,7 @@ export async function getStaticProps(context: { req: any; query: any }) {
     props: {
       jurisdiction: jurisdiction,
       multiselectData,
+      publicOverrides,
     },
     revalidate: Number(process.env.cacheRevalidate),
   }

@@ -22,6 +22,7 @@ const selectViews: Partial<
   Record<JurisdictionViews, Prisma.JurisdictionsSelect>
 > = {
   [JurisdictionViews.public]: {
+    enabledStopLightRuleKeys: true,
     featureFlags: {
       select: {
         id: true,

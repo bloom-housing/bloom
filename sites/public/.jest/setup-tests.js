@@ -34,6 +34,8 @@ const intersectionObserverMock = () => ({
 window.IntersectionObserver = jest.fn().mockImplementation(intersectionObserverMock)
 
 process.env.backendApiBase = "http://localhost:3100"
+process.env.rtlLanguages = "ar,fa"
+process.env.jurisdictionName = "Bloomington"
 
 global.beforeEach(() => {
   serviceOptions.axios = axios.create({

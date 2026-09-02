@@ -36,10 +36,12 @@ export const buildTranslationRows = ({
   englishBase,
   languageBase,
   overrides,
+  englishOverrideKeys,
 }: {
   englishBase: FlatTranslations
   languageBase?: FlatTranslations
   overrides: TranslationRawKey[]
+  englishOverrideKeys?: Set<string>
 }): TranslationEditorRow[] => {
   const overridesByKey = new Map(overrides.map((override) => [override.key, override]))
   const keys = new Set([
@@ -61,7 +63,7 @@ export const buildTranslationRows = ({
       overrideValue: override ? override.value : null,
       updatedAt: override ? override.updatedAt : null,
       origin: override ? override.origin : null,
-      stale: override ? override.stale : false,
+      stale: override ? override.stale : !!englishOverrideKeys?.has(key),
       hasBase: baseValue !== null,
     }
   })
