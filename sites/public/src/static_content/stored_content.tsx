@@ -1,3 +1,4 @@
+import React from "react"
 import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ResourceCards } from "../components/resources/Resources"
 import ResourceCard from "../components/resources/ResourceCard"
@@ -100,4 +101,17 @@ export const getStoredResourcesContent = (
   }
 
   return stored
+}
+
+export type PageBody = { body?: React.ReactNode }
+
+export const getStoredDisclaimersContent = (
+  content: JurisdictionContentFields | null | undefined,
+  field: "privacyHtml" | "disclaimerHtml"
+): PageBody => {
+  const disclaimers = content?.disclaimers
+  if (!disclaimers || !(field in disclaimers)) return {}
+
+  const html = disclaimers[field]
+  return { body: hasText(html) ? <StoredHtml html={html} /> : undefined }
 }

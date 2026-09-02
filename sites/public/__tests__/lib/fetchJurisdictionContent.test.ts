@@ -36,6 +36,27 @@ describe("fetchJurisdictionContent", () => {
     )
   })
 
+  it("passes on the documents the site renders, and drops the rest", async () => {
+    mockedGet.mockResolvedValue({
+      data: {
+        footer: { textSectionsHtml: [] },
+        faq: { categories: [] },
+        resources: { resourceSections: [] },
+        disclaimers: { privacyHtml: "<p>Ours</p>" },
+        somethingElse: { ignored: true },
+      },
+    })
+
+    const content = await fetchJurisdictionContent()
+
+    expect(content).toEqual({
+      footer: { textSectionsHtml: [] },
+      faq: { categories: [] },
+      resources: { resourceSections: [] },
+      disclaimers: { privacyHtml: "<p>Ours</p>" },
+    })
+  })
+
   it("defaults to English when no language is given", async () => {
     await fetchJurisdictionContent()
 

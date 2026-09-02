@@ -2,6 +2,7 @@ import React from "react"
 import { render, screen } from "@testing-library/react"
 import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
+  getStoredDisclaimersContent,
   getStoredFaqContent,
   getStoredFooterLinksContent,
   getStoredFooterTextContent,
@@ -363,5 +364,36 @@ describe("getStoredResourcesContent", () => {
   it("sets no key for a field the document leaves alone, so that field falls back", () => {
     expect(getStoredResourcesContent(content({ resources: {} }))).toEqual({})
     expect(getStoredResourcesContent(null)).toEqual({})
+  })
+})
+
+describe("getStoredDisclaimersContent", () => {
+  const content = (disclaimers?: Record<string, string>) =>
+    ({ disclaimers } as JurisdictionContentFields)
+
+  it("gives back the stored text as markup", () => {
+    const { body } = getStoredDisclaimersContent(
+      content({ privacyHtml: "<p>Ours</p>" }),
+      "privacyHtml"
+    )
+    render(<>{body}</>)
+
+    expect(screen.getByText("Ours")).toBeInTheDocument()
+  })
+
+  it("sets the key to undefined when the field was emptied, which hides it", () => {
+    const stored = getStoredDisclaimersContent(content({ privacyHtml: "" }), "privacyHtml")
+
+    expect("body" in stored).toBe(true)
+    expect(stored.body).toBeUndefined()
+  })
+
+  it("leaves the key out when the document does not mention the field", () => {
+    expect(
+      getStoredDisclaimersContent(content({ disclaimerHtml: "<p>Ours</p>" }), "privacyHtml")
+    ).toEqual({})
+    expect(getStoredDisclaimersContent(content({}), "privacyHtml")).toEqual({})
+    expect(getStoredDisclaimersContent(content(), "privacyHtml")).toEqual({})
+    expect(getStoredDisclaimersContent(null, "privacyHtml")).toEqual({})
   })
 })
