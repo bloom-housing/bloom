@@ -73,6 +73,8 @@ interface DataTableBaseProps {
   fetchData?: FetchDataFn
   // Optional content to display in the header on the right side
   headerRightContent?: React.ReactNode
+  // Overrides the default id on the <table> element, e.g. so a page with more than one table keeps unique ids
+  id?: string
   // Initial sort state for the table
   initialSort?: SortingState
   // Minimum number of characters required to trigger filtering
@@ -204,6 +206,8 @@ export const DataTable = (props: DataTableProps) => {
 
   const showLoadingState = !isClientSide && (delayedLoading || dataQuery.data === undefined)
 
+  const tableId = props.id ?? "data-table"
+
   const tableHeaders = (
     <thead>
       {table.getHeaderGroups().map((headerGroup) => (
@@ -325,7 +329,7 @@ export const DataTable = (props: DataTableProps) => {
                 height: `${
                   dataQuery.data === undefined
                     ? APPROX_ROW_HEIGHT * ((props.defaultItemsPerPage || 8) + 1)
-                    : document.getElementById("data-table")?.offsetHeight
+                    : document.getElementById(tableId)?.offsetHeight
                 }px`,
               }}
             >
@@ -489,7 +493,7 @@ export const DataTable = (props: DataTableProps) => {
           className={`${styles["data-table"]} ${
             props.enableHorizontalScroll ? styles["enable-scroll"] : ""
           } ${showLoadingState ? styles["table-loading"] : ""} ${props.tableClassName || ""}`}
-          id="data-table"
+          id={tableId}
           aria-label={props.description}
           aria-live={"polite"}
         >

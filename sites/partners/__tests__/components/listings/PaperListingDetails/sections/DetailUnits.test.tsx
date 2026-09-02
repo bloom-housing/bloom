@@ -112,6 +112,7 @@ describe("DetailUnits", () => {
 
     // Table
     const table = screen.getByRole("table")
+    expect(table).toHaveAttribute("id", "unitTable")
     const headAndBody = within(table).getAllByRole("rowgroup")
     expect(headAndBody).toHaveLength(2)
     const [head, body] = headAndBody

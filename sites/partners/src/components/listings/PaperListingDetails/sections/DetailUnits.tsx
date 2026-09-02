@@ -129,6 +129,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
               columns={unitColumns}
               data={unitRows}
               disablePagination
+              id={"unitTable"}
               tableClassName={unitTableStyles["unit-table"]}
             />
           ) : (
