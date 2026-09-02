@@ -1,9 +1,11 @@
 import { ArgumentMetadata, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { ListingsStatusEnum, ListingTypeEnum } from '@prisma/client';
 import { ListingCreateUpdateValidationPipe } from '../../../src/validation-pipes/listing-create-update-pipe';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { ListingCreate } from '../../../src/dtos/listings/listing-create.dto';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
+import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 import { randomUUID } from 'crypto';
 
 describe('ListingCreateUpdateValidationPipe', () => {
@@ -14,6 +16,9 @@ describe('ListingCreateUpdateValidationPipe', () => {
   const mockPrisma = {
     jurisdictions: {
       findFirst: jest.fn(),
+    },
+    listings: {
+      findUnique: jest.fn(),
     },
   };
 
@@ -443,6 +448,102 @@ describe('ListingCreateUpdateValidationPipe', () => {
           metatype: ListingUpdate,
         },
       );
+    });
+
+    describe('publishesToClosed', () => {
+      const landUseJurisdiction = {
+        requiredListingFields: ['name'],
+        featureFlags: [{ name: FeatureFlagEnum.enableLandUse, active: true }],
+      };
+
+      const getPublishesToClosed = async (
+        value: Record<string, unknown>,
+      ): Promise<boolean> => {
+        mockSuperTransform.mockResolvedValue(value);
+        await pipe.transform(value, metadata);
+        return mockSuperTransform.mock.calls[0][0].publishesToClosed;
+      };
+
+      const landUseValue = (overrides: Record<string, unknown> = {}) => ({
+        name: 'Test Listing',
+        jurisdictions: { id: randomUUID() },
+        listingType: ListingTypeEnum.landUse,
+        status: ListingsStatusEnum.closed,
+        ...overrides,
+      });
+
+      it('should be true when creating a land use listing directly as closed', async () => {
+        mockPrisma.jurisdictions.findFirst.mockResolvedValue(
+          landUseJurisdiction,
+        );
+
+        expect(await getPublishesToClosed(landUseValue())).toBe(true);
+        expect(mockPrisma.listings.findUnique).not.toHaveBeenCalled();
+      });
+
+      it('should be true when editing a land use listing that is already closed', async () => {
+        mockPrisma.jurisdictions.findFirst.mockResolvedValue(
+          landUseJurisdiction,
+        );
+        mockPrisma.listings.findUnique.mockResolvedValue({
+          status: ListingsStatusEnum.closed,
+        });
+
+        expect(
+          await getPublishesToClosed(landUseValue({ id: randomUUID() })),
+        ).toBe(true);
+      });
+
+      it('should be false when closing a land use listing that is already active', async () => {
+        mockPrisma.jurisdictions.findFirst.mockResolvedValue(
+          landUseJurisdiction,
+        );
+        mockPrisma.listings.findUnique.mockResolvedValue({
+          status: ListingsStatusEnum.active,
+        });
+
+        expect(
+          await getPublishesToClosed(landUseValue({ id: randomUUID() })),
+        ).toBe(false);
+      });
+
+      it('should be false when the land use feature flag is not active', async () => {
+        mockPrisma.jurisdictions.findFirst.mockResolvedValue({
+          ...landUseJurisdiction,
+          featureFlags: [
+            { name: FeatureFlagEnum.enableLandUse, active: false },
+          ],
+        });
+
+        expect(await getPublishesToClosed(landUseValue())).toBe(false);
+        expect(mockPrisma.listings.findUnique).not.toHaveBeenCalled();
+      });
+
+      it('should be false when the listing is not a land use listing', async () => {
+        mockPrisma.jurisdictions.findFirst.mockResolvedValue(
+          landUseJurisdiction,
+        );
+
+        expect(
+          await getPublishesToClosed(
+            landUseValue({ listingType: ListingTypeEnum.regulated }),
+          ),
+        ).toBe(false);
+        expect(mockPrisma.listings.findUnique).not.toHaveBeenCalled();
+      });
+
+      it('should be false when the listing is not being saved as closed', async () => {
+        mockPrisma.jurisdictions.findFirst.mockResolvedValue(
+          landUseJurisdiction,
+        );
+
+        expect(
+          await getPublishesToClosed(
+            landUseValue({ status: ListingsStatusEnum.active }),
+          ),
+        ).toBe(false);
+        expect(mockPrisma.listings.findUnique).not.toHaveBeenCalled();
+      });
     });
   });
 });
