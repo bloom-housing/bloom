@@ -437,9 +437,7 @@ export class ScriptRunnerService {
 
     if (dto.commit) {
       await this.markScriptAsRunStart(scriptName, requestingUser);
-      for (const { diff } of diffs) {
-        await this.writeOverrideRows(diff);
-      }
+      await this.writeOverrideRows(diffs.map(({ diff }) => diff));
       await this.markScriptAsComplete(scriptName, requestingUser);
     }
 
@@ -1112,28 +1110,42 @@ export class ScriptRunnerService {
     });
   }
 
-  private async writeOverrideRows(diff: RowDiff): Promise<void> {
-    if (diff.create.length) {
-      await this.prisma.translationStrings.createMany({
-        data: diff.create.map((row: DesiredRow) => ({
-          ...row,
-          origin: TranslationOrigin.human,
-        })),
-      });
+  private async writeOverrideRows(diffs: RowDiff[]): Promise<void> {
+    const create = diffs.flatMap((diff) => diff.create);
+    const update = diffs.flatMap((diff) => diff.update);
+    const writes = [];
+
+    if (create.length) {
+      writes.push(
+        this.prisma.translationStrings.createMany({
+          data: create.map((row: DesiredRow) => ({
+            ...row,
+            origin: TranslationOrigin.human,
+          })),
+          // A row an admin added between the diff and here is left as they set it.
+          skipDuplicates: true,
+        }),
+      );
     }
 
     // updateMany, because the unique index is NULLS NOT DISTINCT and Prisma's compound
     // unique input cannot express a null jurisdictionId or site.
-    for (const row of diff.update) {
-      await this.prisma.translationStrings.updateMany({
-        where: {
-          jurisdictionId: row.jurisdictionId,
-          language: row.language,
-          site: row.site,
-          key: row.key,
-        },
-        data: { value: row.value, sourceHash: row.sourceHash },
-      });
+    for (const row of update) {
+      writes.push(
+        this.prisma.translationStrings.updateMany({
+          where: {
+            jurisdictionId: row.jurisdictionId,
+            language: row.language,
+            site: row.site,
+            key: row.key,
+          },
+          data: { value: row.value, sourceHash: row.sourceHash },
+        }),
+      );
+    }
+
+    if (writes.length) {
+      await this.prisma.$transaction(writes);
     }
   }
 

@@ -1021,6 +1021,7 @@ describe('Testing script runner service', () => {
       prisma.translationStrings.findMany = jest.fn().mockResolvedValue([]);
       prisma.translationStrings.createMany = jest.fn().mockResolvedValue(null);
       prisma.translationStrings.updateMany = jest.fn().mockResolvedValue(null);
+      prisma.$transaction = jest.fn().mockResolvedValue([]);
       prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
       prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
       prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
@@ -1055,6 +1056,45 @@ describe('Testing script runner service', () => {
         },
         data: { value: 'Bloomington', sourceHash: null },
       });
+    });
+
+    it('leaves a row added since the diff as it was set', async () => {
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({ commit: true }),
+      );
+
+      expect(prisma.translationStrings.createMany).toHaveBeenCalledWith(
+        expect.objectContaining({ skipDuplicates: true }),
+      );
+    });
+
+    it('issues the create and the updates as one transaction', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValue([
+        {
+          jurisdictionId,
+          language: LanguagesEnum.en,
+          site: SiteEnum.public,
+          key: 'region.name',
+          value: 'Something else',
+          sourceHash: null,
+        },
+      ]);
+
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({ commit: true }),
+      );
+
+      const issued =
+        (prisma.translationStrings.createMany as jest.Mock).mock.calls.length +
+        (prisma.translationStrings.updateMany as jest.Mock).mock.calls.length;
+
+      expect(issued).toBe(2);
+      expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+      expect((prisma.$transaction as jest.Mock).mock.calls[0][0]).toHaveLength(
+        issued,
+      );
     });
 
     it('reads each section against its own scope', async () => {
