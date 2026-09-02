@@ -1,6 +1,5 @@
 import {
   addListItem,
-  addTextSection,
   clearValueAt,
   fieldState,
   isStaleWithin,
@@ -9,9 +8,10 @@ import {
   parsePath,
   pathsThatHideContent,
   removeListItem,
-  removeTextSection,
+  setTextSections,
   restoreListItem,
   setValueAt,
+  textSectionRows,
   textSections,
   textSectionsThatHide,
   tombstoneListItem,
@@ -254,14 +254,14 @@ describe("text sections", () => {
   const path = "footer.textSectionsHtml"
   const footer = { footer: { textSectionsHtml: ["<p>Uno</p>", "<p>Dos</p>"] } }
 
-  it("removes one section and closes the gap", () => {
-    const next = removeTextSection(footer, path, 0)
+  it("writes the list whole rather than leaving a hole a language row would hide", () => {
+    const next = setTextSections(footer, path, ["<p>Uno</p>", "<p>Dos</p>", ""])
 
-    expect(valueAt(next, path)).toEqual(["<p>Dos</p>"])
+    expect(valueAt(next, path)).toEqual(["<p>Uno</p>", "<p>Dos</p>", ""])
   })
 
   it("leaves an empty list rather than falling back to English", () => {
-    const next = removeTextSection({ footer: { textSectionsHtml: ["<p>Uno</p>"] } }, path, 0)
+    const next = setTextSections({ footer: { textSectionsHtml: ["<p>Uno</p>"] } }, path, [])
 
     expect(valueAt(next, path)).toEqual([])
   })
@@ -276,9 +276,54 @@ describe("text sections", () => {
   })
 
   it("adds a section to a document that has none", () => {
-    const next = addTextSection({}, path)
+    const next = setTextSections({}, path, [""])
 
     expect(textSections(valueAt(next, path))).toEqual([""])
+  })
+})
+
+describe("textSectionRows", () => {
+  const path = "footer.textSectionsHtml"
+  const english = { footer: { textSectionsHtml: ["<p>One</p>", "<p>Two</p>"] } }
+
+  it("draws only the drafted sections on the English page", () => {
+    const rows = textSectionRows(valueAt(english, path), valueAt(english, path), true)
+
+    expect(rows).toEqual([
+      { index: 0, value: "<p>One</p>", usingEnglish: false },
+      { index: 1, value: "<p>Two</p>", usingEnglish: false },
+    ])
+  })
+
+  it("shows an English section the language row does not reach", () => {
+    const spanish = { footer: { textSectionsHtml: ["<p>Uno</p>"] } }
+    const rows = textSectionRows(valueAt(english, path), valueAt(spanish, path), false)
+
+    expect(rows).toEqual([
+      { index: 0, value: "<p>Uno</p>", usingEnglish: false },
+      { index: 1, value: "<p>Two</p>", usingEnglish: true },
+    ])
+  })
+
+  it("treats a section the language row emptied as its own, not as English", () => {
+    const spanish = { footer: { textSectionsHtml: ["<p>Uno</p>", ""] } }
+    const rows = textSectionRows(valueAt(english, path), valueAt(spanish, path), false)
+
+    expect(rows[1]).toEqual({ index: 1, value: "", usingEnglish: false })
+  })
+
+  it("keeps a language section English never had", () => {
+    const spanish = { footer: { textSectionsHtml: ["<p>Uno</p>", "<p>Dos</p>", "<p>Tres</p>"] } }
+    const rows = textSectionRows(valueAt(english, path), valueAt(spanish, path), false)
+
+    expect(rows).toHaveLength(3)
+    expect(rows[2]).toEqual({ index: 2, value: "<p>Tres</p>", usingEnglish: false })
+  })
+
+  it("falls back to every English section when the language row has none", () => {
+    const rows = textSectionRows(valueAt(english, path), undefined, false)
+
+    expect(rows.map((row) => row.usingEnglish)).toEqual([true, true])
   })
 })
 

@@ -16,7 +16,6 @@ import { useSettingsTabs, SettingsIndexEnum } from "../../components/settings/Se
 import { useJurisdictionContent, useUnsavedChangesWarning } from "../../lib/hooks"
 import {
   addListItem,
-  addTextSection,
   buildUpdate,
   ContentDocument,
   ContentDraft,
@@ -28,10 +27,10 @@ import {
   pathsThatHideContent,
   newItemId,
   removeListItem,
-  removeTextSection,
+  setTextSections,
   restoreListItem,
   rowFor,
-  textSections,
+  textSectionRows,
   textSectionsThatHide,
   tombstoneListItem,
   valueAt,
@@ -468,7 +467,12 @@ const SettingsContent = () => {
           activeDocument?.textSections &&
           (() => {
             const config = activeDocument.textSections
-            const sections = textSections(valueAt(draft, config.path))
+            const sections = textSectionRows(
+              valueAt(englishDraft, config.path),
+              valueAt(draft, config.path),
+              isEnglish
+            )
+            const sectionValues = sections.map((section) => section.value)
 
             return (
               <Card className={styles["field-card"]}>
@@ -481,7 +485,11 @@ const SettingsContent = () => {
                     <Button
                       variant="primary-outlined"
                       size="sm"
-                      onClick={() => setDraft((current) => addTextSection(current, config.path))}
+                      onClick={() =>
+                        setDraft((current) =>
+                          setTextSections(current, config.path, [...sectionValues, ""])
+                        )
+                      }
                     >
                       {t(config.addLabelKey)}
                     </Button>
@@ -490,9 +498,10 @@ const SettingsContent = () => {
                     <p className={styles["note"]}>{t("content.positionalListNote")}</p>
                   )}
                   {sections.length === 0 && <p>{t("content.emptyList")}</p>}
-                  {sections.map((section, index) => (
+                  {sections.map(({ index, value, usingEnglish }) => (
                     <div key={index} className={styles["section-row"]} dir={direction}>
-                      <TextEditorContent content={section} asHtml />
+                      <TextEditorContent content={value} asHtml />
+                      {usingEnglish && <Tag variant="secondary">{t("content.usingEnglish")}</Tag>}
                       <div>
                         <Button
                           variant="text"
@@ -517,7 +526,13 @@ const SettingsContent = () => {
                           variant="text"
                           size="sm"
                           onClick={() =>
-                            setDraft((current) => removeTextSection(current, config.path, index))
+                            setDraft((current) =>
+                              setTextSections(
+                                current,
+                                config.path,
+                                sectionValues.filter((_, position) => position !== index)
+                              )
+                            )
                           }
                         >
                           {t("t.delete")}

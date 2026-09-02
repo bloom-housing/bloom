@@ -72,6 +72,8 @@ const adminProfile = {
 
 let toasts: string[] = []
 
+const sectionRow = (text: string) => screen.getByText(text).closest(".section-row")
+
 const renderPage = (profileOverrides = {}, flagOn = true) =>
   render(
     <MessageContext.Provider
@@ -309,6 +311,49 @@ describe("<SettingsContent>", () => {
 
       await screen.findByText("Solicitar")
       expect(screen.getAllByText("English changed")).toHaveLength(1)
+    })
+
+    it("shows an English footer section the language row does not reach", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          footer: { textSectionsHtml: ["<p>Translated one</p>", "<p>Added in English</p>"] },
+        }),
+        row(LanguagesEnum.es, { footer: { textSectionsHtml: ["<p>Traducida</p>"] } }),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+
+      await screen.findByText("Traducida")
+      const englishSection = sectionRow("Added in English")
+
+      expect(within(englishSection).getByText("Using English")).toBeInTheDocument()
+      expect(within(sectionRow("Traducida")).queryByText("Using English")).not.toBeInTheDocument()
+    })
+
+    it("adds a language section after the English ones rather than onto one", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          footer: { textSectionsHtml: ["<p>Translated one</p>", "<p>Added in English</p>"] },
+        }),
+        row(LanguagesEnum.es, { footer: { textSectionsHtml: ["<p>Traducida</p>"] } }),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+      await screen.findByText("Added in English")
+
+      expect(document.querySelectorAll(".section-row")).toHaveLength(2)
+
+      await userEvent.click(screen.getByRole("button", { name: "Add text section" }))
+
+      await waitFor(() => expect(document.querySelectorAll(".section-row")).toHaveLength(3))
+      expect(screen.getByText("Added in English")).toBeInTheDocument()
+      expect(within(sectionRow("Added in English")).queryByText("Using English")).toBeNull()
     })
 
     it("says that footer text sections are replaced as a set for a language", async () => {

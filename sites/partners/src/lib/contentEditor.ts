@@ -242,6 +242,28 @@ const asStrings = (value: unknown): string[] =>
 
 export const textSections = (value: unknown): string[] => asStrings(value)
 
+export type TextSectionRow = { index: number; value: string; usingEnglish: boolean }
+
+export const textSectionRows = (
+  englishValue: unknown,
+  languageValue: unknown,
+  isEnglish: boolean
+): TextSectionRow[] => {
+  const overrides = asStrings(languageValue)
+  if (isEnglish) {
+    return overrides.map((value, index) => ({ index, value, usingEnglish: false }))
+  }
+
+  const english = asStrings(englishValue)
+  const covered = Array.isArray(languageValue) ? languageValue.length : 0
+
+  return Array.from({ length: Math.max(english.length, overrides.length) }, (_, index) => ({
+    index,
+    value: index < covered ? overrides[index] : english[index] ?? "",
+    usingEnglish: index >= covered,
+  }))
+}
+
 // A positional list replaces the English one outright, so an entry the draft does not cover is
 // dropped rather than falling back. A deleted entry leaves no value, so fieldState cannot see it.
 export const textSectionsThatHide = (
@@ -259,18 +281,13 @@ export const textSectionsThatHide = (
     .map(({ index }) => `${path}.${index}`)
 }
 
-export const addTextSection = (draft: ContentDraft, path: string): ContentDraft => {
-  const next = JSON.parse(JSON.stringify(draft ?? {})) as ContentDraft
-  return setValueAt(next, `${path}.${asStrings(valueAt(next, path)).length}`, "")
-}
-
-export const removeTextSection = (
+// Writes the list whole. A language row replaces the English list outright, so a position it leaves
+// out is a position it hides.
+export const setTextSections = (
   draft: ContentDraft,
   path: string,
-  index: number
-): ContentDraft => {
-  const kept = asStrings(valueAt(draft, path)).filter((_, position) => position !== index)
-  return withValueAt(draft, path, (parent, field) => {
-    parent[field] = kept
+  values: string[]
+): ContentDraft =>
+  withValueAt(draft, path, (parent, field) => {
+    parent[field] = values
   })
-}
