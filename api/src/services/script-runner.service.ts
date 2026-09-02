@@ -13,9 +13,11 @@ import {
   Prisma,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
+import { AxiosError } from 'axios';
+import { HttpService } from '@nestjs/axios';
+import { catchError, firstValueFrom } from 'rxjs';
 import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
-import https from 'https';
 import { AmiChartService } from './ami-chart.service';
 import { EmailService } from './email.service';
 import { FeatureFlagService } from './feature-flag.service';
@@ -35,6 +37,8 @@ import { MultiselectOption } from '../dtos/multiselect-questions/multiselect-opt
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
 
+const TRANSLATION_FETCH_TIMEOUT_MS = 30_000;
+
 /**
   this is the service for running scripts
   most functions in here will be unique, but each function should only be allowed to fire once
@@ -47,6 +51,7 @@ export class ScriptRunnerService {
     private featureFlagService: FeatureFlagService,
     private multiselectQuestionService: MultiselectQuestionService,
     private prisma: PrismaService,
+    private httpService: HttpService,
     @Inject(Logger)
     private logger = new Logger(ScriptRunnerService.name),
   ) {}
@@ -1517,30 +1522,29 @@ export class ScriptRunnerService {
     return 'no translation';
   }
 
-  getTranslationFile(url) {
-    return new Promise((resolve, reject) =>
-      https
-        .get(url, (res) => {
-          let body = '';
-
-          res.on('data', (chunk) => {
-            body += chunk;
-          });
-
-          res.on('end', () => {
-            try {
-              const json = JSON.parse(body);
-              resolve(json);
-            } catch (error) {
-              console.error('on end error:', error.message);
-              reject(`parsing broke: ${url}`);
-            }
-          });
-        })
-        .on('error', (error) => {
-          console.error('on error error:', error.message);
-          reject(`getting broke: ${url}`);
-        }),
+  async getTranslationFile(
+    url: string,
+    timeoutMs = TRANSLATION_FETCH_TIMEOUT_MS,
+  ): Promise<Record<string, unknown>> {
+    const { data } = await firstValueFrom(
+      this.httpService
+        .get(url, { signal: AbortSignal.timeout(timeoutMs) })
+        .pipe(
+          catchError((error: AxiosError) => {
+            throw new Error(
+              `failed fetching ${url}: ${
+                error.code === 'ERR_CANCELED'
+                  ? `timed out after ${timeoutMs}ms`
+                  : error.message
+              }`,
+            );
+          }),
+        ),
     );
+
+    if (!data || typeof data !== 'object') {
+      throw new Error(`${url} did not return json`);
+    }
+    return data as Record<string, unknown>;
   }
 }
