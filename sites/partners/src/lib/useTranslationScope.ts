@@ -62,12 +62,20 @@ export const useTranslationScope = ({
     () =>
       isGlobal
         ? {
-            rows: { type: "global" as const },
+            rows: { type: "global" as const, site },
             baseOverrides: overrideTranslations,
             save: (body: TranslationUpdate) =>
-              translationsService.updateRawPartnersTranslations({ language: activeLanguage, body }),
+              translationsService.updateRawGlobalTranslations({
+                site,
+                language: activeLanguage,
+                body,
+              }),
             revert: (key: string) =>
-              translationsService.deleteRawPartnersTranslation({ language: activeLanguage, key }),
+              translationsService.deleteRawGlobalTranslation({
+                site,
+                language: activeLanguage,
+                key,
+              }),
           }
         : {
             rows: {

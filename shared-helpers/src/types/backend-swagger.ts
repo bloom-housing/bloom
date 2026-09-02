@@ -3740,17 +3740,20 @@ export class TranslationsService {
     })
   }
   /**
-   * Get the global Partners override keys. stale = true, if its English source changed since it was translated
+   * Get the global override keys for a site. stale = true, if its English source changed since it was translated
    */
-  getRawPartnersTranslations(
+  getRawGlobalTranslations(
     params: {
+      /**  */
+      site: string
       /**  */
       language: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<TranslationRawKey[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/translations/partners/raw/{language}"
+      let url = basePath + "/translations/global/raw/{site}/{language}"
+      url = url.replace("{site}", params["site"] + "")
       url = url.replace("{language}", params["language"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
@@ -3759,10 +3762,12 @@ export class TranslationsService {
     })
   }
   /**
-   * Upsert the global Partners override keys with per-key optimistic locking
+   * Upsert the global override keys for a site with per-key optimistic locking
    */
-  updateRawPartnersTranslations(
+  updateRawGlobalTranslations(
     params: {
+      /**  */
+      site: string
       /**  */
       language: string
       /** requestBody */
@@ -3771,7 +3776,8 @@ export class TranslationsService {
     options: IRequestOptions = {}
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/translations/partners/raw/{language}"
+      let url = basePath + "/translations/global/raw/{site}/{language}"
+      url = url.replace("{site}", params["site"] + "")
       url = url.replace("{language}", params["language"] + "")
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
@@ -3784,10 +3790,12 @@ export class TranslationsService {
     })
   }
   /**
-   * Delete one global Partners override key (revert to base)
+   * Delete one global override key for a site (revert to base)
    */
-  deleteRawPartnersTranslation(
+  deleteRawGlobalTranslation(
     params: {
+      /**  */
+      site: string
       /**  */
       language: string
       /**  */
@@ -3796,7 +3804,8 @@ export class TranslationsService {
     options: IRequestOptions = {}
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/translations/partners/raw/{language}/{key}"
+      let url = basePath + "/translations/global/raw/{site}/{language}/{key}"
+      url = url.replace("{site}", params["site"] + "")
       url = url.replace("{language}", params["language"] + "")
       url = url.replace("{key}", params["key"] + "")
 

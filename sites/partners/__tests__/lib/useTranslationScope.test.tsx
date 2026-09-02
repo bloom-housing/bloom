@@ -12,11 +12,11 @@ import { useTranslationScope } from "../../src/lib/useTranslationScope"
 
 const translationsService = {
   getRawTranslations: jest.fn(),
-  getRawPartnersTranslations: jest.fn(),
+  getRawGlobalTranslations: jest.fn(),
   updateRawTranslations: jest.fn(),
-  updateRawPartnersTranslations: jest.fn(),
+  updateRawGlobalTranslations: jest.fn(),
   deleteRawTranslation: jest.fn(),
-  deleteRawPartnersTranslation: jest.fn(),
+  deleteRawGlobalTranslation: jest.fn(),
   emailBaseTranslations: jest.fn(),
 }
 
@@ -38,7 +38,7 @@ describe("useTranslationScope", () => {
     jest.clearAllMocks()
     mockNextRouter()
     translationsService.getRawTranslations.mockResolvedValue([])
-    translationsService.getRawPartnersTranslations.mockResolvedValue([])
+    translationsService.getRawGlobalTranslations.mockResolvedValue([])
     translationsService.emailBaseTranslations.mockResolvedValue({})
   })
 
@@ -70,7 +70,7 @@ describe("useTranslationScope", () => {
     act(() => result.current.setSite(SiteEnum.partners))
 
     expect(result.current.isGlobal).toBe(true)
-    expect(result.current.cacheKey).toEqual("/api/adapter/translations/partners/raw/en")
+    expect(result.current.cacheKey).toEqual("/api/adapter/translations/global/raw/partners/en")
   })
 
   it("holds the read until a jurisdiction exists in the public scope", () => {
@@ -85,7 +85,7 @@ describe("useTranslationScope", () => {
 
     act(() => result.current.setSite(SiteEnum.partners))
 
-    expect(result.current.cacheKey).toEqual("/api/adapter/translations/partners/raw/en")
+    expect(result.current.cacheKey).toEqual("/api/adapter/translations/global/raw/partners/en")
   })
 
   it("holds every read while the page is not authorized", () => {
@@ -102,7 +102,7 @@ describe("useTranslationScope", () => {
 
     // The global scope needs no jurisdiction, so authorization is the only thing holding it.
     expect(result.current.cacheKey).toBeNull()
-    expect(translationsService.getRawPartnersTranslations).not.toHaveBeenCalled()
+    expect(translationsService.getRawGlobalTranslations).not.toHaveBeenCalled()
   })
 
   it("offers the jurisdiction's languages in the public scope", () => {
@@ -188,11 +188,13 @@ describe("useTranslationScope", () => {
     void result.current.scope.save({ edits: [{ key: "a", value: "b" }] })
     void result.current.scope.revert("a")
 
-    expect(translationsService.updateRawPartnersTranslations).toHaveBeenCalledWith({
+    expect(translationsService.updateRawGlobalTranslations).toHaveBeenCalledWith({
+      site: SiteEnum.partners,
       language: LanguagesEnum.en,
       body: { edits: [{ key: "a", value: "b" }] },
     })
-    expect(translationsService.deleteRawPartnersTranslation).toHaveBeenCalledWith({
+    expect(translationsService.deleteRawGlobalTranslation).toHaveBeenCalledWith({
+      site: SiteEnum.partners,
       language: LanguagesEnum.en,
       key: "a",
     })

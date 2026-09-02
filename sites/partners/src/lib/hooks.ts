@@ -24,6 +24,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   OrderByEnum,
+  SiteEnum,
   UserFilterParams,
   UserOrderByKeys,
   PaginationMeta,
@@ -1077,7 +1078,7 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
 
 /** Which rows the editor is reading. The global scope has no jurisdiction to name. */
 export type TranslationScope =
-  | { type: "global" }
+  | { type: "global"; site: SiteEnum }
   | { type: "jurisdiction"; jurisdictionId: string; site: string }
 
 /** Reads one editable translation scope. A null scope skips the request. */
@@ -1087,7 +1088,7 @@ export function useRawTranslations(scope: TranslationScope | null, language: str
   const fetcher = () =>
     scope &&
     (scope.type === "global"
-      ? translationsService.getRawPartnersTranslations({ language })
+      ? translationsService.getRawGlobalTranslations({ site: scope.site, language })
       : translationsService.getRawTranslations({
           jurisdictionId: scope.jurisdictionId,
           site: scope.site,
@@ -1097,7 +1098,7 @@ export function useRawTranslations(scope: TranslationScope | null, language: str
   const cacheKey = !scope
     ? null
     : scope.type === "global"
-    ? `/api/adapter/translations/partners/raw/${language}`
+    ? `/api/adapter/translations/global/raw/${scope.site}/${language}`
     : `/api/adapter/translations/jurisdictions/${scope.jurisdictionId}/raw/${scope.site}/${language}`
 
   // Writes call `mutate` on this key; refreshing on focus would move data under an in-progress edit.

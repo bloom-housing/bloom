@@ -69,8 +69,8 @@ const RAW_PATHS = [
 ]
 
 const GLOBAL_RAW_PATHS = [
-  "http://localhost:3100/translations/partners/raw/:language",
-  "http://localhost/api/adapter/translations/partners/raw/:language",
+  "http://localhost:3100/translations/global/raw/partners/:language",
+  "http://localhost/api/adapter/translations/global/raw/partners/:language",
 ]
 
 const EMAIL_BASE_PATHS = [
@@ -310,7 +310,9 @@ describe("<SettingsTranslations>", () => {
       await screen.findByText(FIRST_BASE_KEY)
       await selectPartnersScope()
 
-      await waitFor(() => expect(requested).toContain("/api/adapter/translations/partners/raw/en"))
+      await waitFor(() =>
+        expect(requested).toContain("/api/adapter/translations/global/raw/partners/en")
+      )
     })
 
     it("compares against the Partners base rather than the shared one", async () => {
@@ -333,7 +335,7 @@ describe("<SettingsTranslations>", () => {
       respondWithGlobalOverrides([override(FIRST_PARTNERS_BASE_KEY, "Bathrooms")])
       server.use(
         rest.delete(
-          "http://localhost/api/adapter/translations/partners/raw/:language/:key",
+          "http://localhost/api/adapter/translations/global/raw/partners/:language/:key",
           (req, res, ctx) => {
             deleted = req.params as Record<string, string>
             return res(ctx.json({ success: true }))
@@ -390,7 +392,7 @@ describe("<SettingsTranslations>", () => {
       let written: { path: string; body: unknown } = null
       server.use(
         rest.put(
-          "http://localhost/api/adapter/translations/partners/raw/:language",
+          "http://localhost/api/adapter/translations/global/raw/partners/:language",
           async (req, res, ctx) => {
             written = { path: req.url.pathname, body: await req.json() }
             return res(ctx.json({ success: true }))
@@ -404,7 +406,7 @@ describe("<SettingsTranslations>", () => {
       await userEvent.click(screen.getByRole("button", { name: /Save/ }))
 
       await waitFor(() => expect(written).not.toBeNull())
-      expect(written.path).toEqual("/api/adapter/translations/partners/raw/en")
+      expect(written.path).toEqual("/api/adapter/translations/global/raw/partners/en")
       expect(written.body).toEqual({
         edits: [{ key: FIRST_PARTNERS_BASE_KEY, value: "Partners edit" }],
       })
@@ -478,7 +480,7 @@ describe("<SettingsTranslations>", () => {
     it("opens the conflict dialog when someone else changed a global key first", async () => {
       server.use(
         rest.put(
-          "http://localhost/api/adapter/translations/partners/raw/:language",
+          "http://localhost/api/adapter/translations/global/raw/partners/:language",
           (_r, res, ctx) =>
             res(
               ctx.status(409),
@@ -496,7 +498,7 @@ describe("<SettingsTranslations>", () => {
     it("names the keys the API refused in the global scope", async () => {
       server.use(
         rest.put(
-          "http://localhost/api/adapter/translations/partners/raw/:language",
+          "http://localhost/api/adapter/translations/global/raw/partners/:language",
           (_r, res, ctx) =>
             res(ctx.status(400), ctx.json({ message: ["edits.0.value must be shorter"] }))
         )
