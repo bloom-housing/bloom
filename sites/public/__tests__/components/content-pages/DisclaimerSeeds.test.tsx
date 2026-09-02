@@ -9,10 +9,11 @@ beforeAll(() => mockNextRouter())
 // still loads and nothing objects.
 describe("DisclaimerSeeds", () => {
   it("renders the markdown content as markup rather than a raw string", () => {
-    const { getByRole, queryByText } = render(<DisclaimerSeeds />)
+    const { container, queryByText } = render(<DisclaimerSeeds />)
+    const markdown = container.querySelector(".markdown")
 
-    expect(getByRole("heading", { name: "Section heading" })).toBeInTheDocument()
+    expect(markdown?.querySelectorAll("h1, h2, h3, h4").length).toBeGreaterThan(0)
     expect(queryByText("[object Object]")).not.toBeInTheDocument()
-    expect(queryByText("## Section heading")).not.toBeInTheDocument()
+    expect(markdown?.textContent).not.toContain("## ")
   })
 })

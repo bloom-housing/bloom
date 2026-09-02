@@ -1,4 +1,5 @@
 import React from "react"
+import { t } from "@bloom-housing/ui-components"
 import { setupServer } from "msw/lib/node"
 import { render, screen, mockNextRouter } from "../testUtils"
 import ServerError from "../../src/pages/500"
@@ -27,8 +28,8 @@ describe("500 page", () => {
     render(<ContentError />)
 
     expect(
-      screen.getByRole("heading", { name: "Oops! Looks like something went wrong." })
+      screen.getByRole("heading", { name: t("errors.somethingWentWrong") })
     ).toBeInTheDocument()
-    expect(screen.queryByText("Page not found")).not.toBeInTheDocument()
+    expect(screen.queryByText(t("errors.notFound.title"))).not.toBeInTheDocument()
   })
 })
