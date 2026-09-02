@@ -208,6 +208,23 @@ describe("<SettingsContent>", () => {
       ).toBeInTheDocument()
     })
 
+    it("takes a saved item off the English page when it is deleted", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          footer: { links: [{ id: "about", text: "About", href: "/about" }] },
+        }),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      expect(await screen.findByText("About")).toBeInTheDocument()
+
+      await userEvent.click(screen.getByRole("button", { name: "Delete" }))
+
+      await waitFor(() => expect(screen.queryByText("About")).not.toBeInTheDocument())
+    })
+
     it("marks a tombstoned item as removed and offers to restore it", async () => {
       respondWithRows([
         row(LanguagesEnum.en, {

@@ -44,7 +44,11 @@ export const ContentList = ({
   onRestore,
   children,
 }: ContentListProps) => {
-  const rows = listRows(valueAt(englishDraft, listPath), valueAt(draft, listPath))
+  // English has no row to fall back to, so a deletion has to leave the list it is drawn from.
+  const rows = listRows(
+    valueAt(isEnglish ? draft : englishDraft, listPath),
+    valueAt(draft, listPath)
+  )
 
   return (
     <Card className={styles["list"]}>
