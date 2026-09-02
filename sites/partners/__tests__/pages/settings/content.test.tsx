@@ -585,6 +585,35 @@ describe("<SettingsContent>", () => {
       await waitFor(() => expect(toasts).toContain("Content saved"))
     })
 
+    it("leaves an item with nothing in it out of the save", async () => {
+      const bodies: Record<string, unknown>[] = []
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          footer: { links: [{ id: "about", text: "About", href: "/about" }] },
+        }),
+      ])
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, async (req, res, ctx) => {
+            bodies.push(await req.json())
+            return res(ctx.json({}))
+          })
+        )
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Content type"), "footer")
+      await userEvent.click(await screen.findByRole("button", { name: "Add link" }))
+      await userEvent.click(await screen.findByRole("button", { name: "Close" }))
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await waitFor(() => expect(bodies).toHaveLength(1))
+      expect(bodies[0].footer).toEqual({
+        links: [{ id: "about", text: "About", href: "/about" }],
+      })
+    })
+
     it("reports a save that fails for a reason other than a conflict", async () => {
       respondWithRows([englishRow()])
       server.use(

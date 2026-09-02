@@ -237,6 +237,34 @@ export const restoreListItem = (draft: ContentDraft, listPath: string, id: strin
       .filter((item) => Object.keys(item).length > 1)
   )
 
+const isPlainObject = (value: unknown): value is Record<string, unknown> =>
+  !!value && typeof value === "object" && !Array.isArray(value)
+
+// An empty string is not empty here: in a language row it is how an admin hides a field.
+const isInertItem = (item: Record<string, unknown>) =>
+  Object.entries(item).every(
+    ([key, value]) =>
+      key === "id" ||
+      value === undefined ||
+      value === null ||
+      (Array.isArray(value) && value.length === 0)
+  )
+
+const pruned = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    const items = value.map(pruned)
+    return items.some((item) => isPlainObject(item) && "id" in item)
+      ? items.filter((item) => !(isPlainObject(item) && isInertItem(item)))
+      : items
+  }
+  if (isPlainObject(value)) {
+    return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, pruned(entry)]))
+  }
+  return value
+}
+
+export const pruneEmptyItems = (draft: ContentDraft): ContentDraft => pruned(draft) as ContentDraft
+
 const asStrings = (value: unknown): string[] =>
   Array.isArray(value) ? value.map((entry) => (typeof entry === "string" ? entry : "")) : []
 

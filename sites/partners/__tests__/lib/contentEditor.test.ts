@@ -6,6 +6,7 @@ import {
   listRows,
   normalizeRichText,
   parsePath,
+  pruneEmptyItems,
   pathsThatHideContent,
   removeListItem,
   setTextSections,
@@ -324,6 +325,50 @@ describe("textSectionRows", () => {
     const rows = textSectionRows(valueAt(english, path), undefined, false)
 
     expect(rows.map((row) => row.usingEnglish)).toEqual([true, true])
+  })
+})
+
+describe("pruneEmptyItems", () => {
+  const section = (extra = {}) => ({
+    resources: { resourceSections: [{ id: "help", sectionTitle: "Help", ...extra }] },
+  })
+
+  it("drops an item that was added and never filled in", () => {
+    const draft = { footer: { links: [{ id: "about", text: "About" }, { id: "new" }] } }
+
+    expect(pruneEmptyItems(draft)).toEqual({
+      footer: { links: [{ id: "about", text: "About" }] },
+    })
+  })
+
+  it("keeps a tombstone, which is the whole point of that item", () => {
+    const draft = { footer: { links: [{ id: "about", _deleted: true }] } }
+
+    expect(pruneEmptyItems(draft)).toEqual(draft)
+  })
+
+  it("keeps a field an admin emptied to hide it for one language", () => {
+    const draft = { footer: { links: [{ id: "about", text: "" }] } }
+
+    expect(pruneEmptyItems(draft)).toEqual(draft)
+  })
+
+  it("drops an item left holding nothing but an empty list", () => {
+    const draft = { resources: { resourceSections: [{ id: "help", cards: [] }] } }
+
+    expect(pruneEmptyItems(draft)).toEqual({ resources: { resourceSections: [] } })
+  })
+
+  it("drops an empty card without dropping the section around it", () => {
+    expect(
+      pruneEmptyItems(section({ cards: [{ id: "one", title: "One" }, { id: "two" }] }))
+    ).toEqual(section({ cards: [{ id: "one", title: "One" }] }))
+  })
+
+  it("leaves positional text sections alone", () => {
+    const draft = { footer: { textSectionsHtml: ["<p>Uno</p>", ""] } }
+
+    expect(pruneEmptyItems(draft)).toEqual(draft)
   })
 })
 

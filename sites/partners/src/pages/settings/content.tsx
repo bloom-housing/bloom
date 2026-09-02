@@ -25,6 +25,7 @@ import {
   isStale,
   listRows,
   pathsThatHideContent,
+  pruneEmptyItems,
   newItemId,
   removeListItem,
   setTextSections,
@@ -318,7 +319,7 @@ const SettingsContent = () => {
         await jurisdictionContentService.updateJurisdictionContent({
           jurisdictionId: activeJurisdictionId,
           language: activeLanguage,
-          body: buildUpdate(toSave, languageRow?.updatedAt),
+          body: buildUpdate(pruneEmptyItems(toSave), languageRow?.updatedAt),
         })
         setConflict(false)
         setDraftState(null)
