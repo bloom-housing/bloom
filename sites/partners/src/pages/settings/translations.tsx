@@ -23,7 +23,7 @@ import {
 } from "../../components/settings/SettingsViewHelpers"
 import { useUnsavedChangesWarning } from "../../lib/hooks"
 import { translations } from "../../lib/translations"
-import { useTranslationScope } from "../../lib/useTranslationScope"
+import { ALL_JURISDICTIONS, useTranslationScope } from "../../lib/useTranslationScope"
 import styles from "./translations.module.scss"
 import {
   applyConflictChoices,
@@ -425,17 +425,24 @@ const SettingsTranslations = () => {
                 },
               }}
             />
-            {!isGlobal && (
+            {site !== SiteEnum.partners && (
               <Select
                 id="translationsJurisdiction"
                 name="translationsJurisdiction"
                 label={t("t.jurisdiction")}
-                defaultValue={activeJurisdictionId}
-                disabled={jurisdictions.length < 2 || hasUnsavedChanges}
-                options={jurisdictions.map((jurisdiction) => ({
-                  value: jurisdiction.id,
-                  label: jurisdiction.name,
-                }))}
+                defaultValue={isGlobal ? ALL_JURISDICTIONS : activeJurisdictionId}
+                disabled={
+                  (jurisdictions.length < 2 && site !== SiteEnum.email) || hasUnsavedChanges
+                }
+                options={[
+                  ...(site === SiteEnum.email
+                    ? [{ value: ALL_JURISDICTIONS, label: t("translations.allJurisdictions") }]
+                    : []),
+                  ...jurisdictions.map((jurisdiction) => ({
+                    value: jurisdiction.id,
+                    label: jurisdiction.name,
+                  })),
+                ]}
                 inputProps={{
                   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
                     changeScope(() => setJurisdictionId(event.target.value))

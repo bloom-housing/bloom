@@ -12,6 +12,9 @@ import { useEmailBaseTranslations, useRawTranslations } from "./hooks"
 import { overrideTranslations } from "./translations"
 import { publicOverrideTranslations } from "./publicTranslations"
 
+// Stands in for a jurisdiction in the select, so the email scope can be edited for everyone.
+export const ALL_JURISDICTIONS = "all"
+
 export const useTranslationScope = ({
   jurisdictions,
   enabled,
@@ -26,11 +29,15 @@ export const useTranslationScope = ({
   const [language, setLanguage] = useState<LanguagesEnum>(LanguagesEnum.en)
   const [site, setSite] = useState<SiteEnum>(SiteEnum.public)
 
-  // The Partners rows are global
-  const isGlobal = site === SiteEnum.partners
+  // Partners rows are always global. Email rows have a generic layer too,
+  // for users who belong to more than one jurisdiction
+  const isGlobal =
+    site === SiteEnum.partners || (site === SiteEnum.email && jurisdictionId === ALL_JURISDICTIONS)
 
   const selectedJurisdiction = jurisdictions.find(
-    (jurisdiction) => jurisdiction.id === (jurisdictionId || jurisdictions[0]?.id)
+    (jurisdiction) =>
+      jurisdiction.id ===
+      ((jurisdictionId !== ALL_JURISDICTIONS && jurisdictionId) || jurisdictions[0]?.id)
   )
   const activeJurisdictionId = selectedJurisdiction?.id ?? ""
 

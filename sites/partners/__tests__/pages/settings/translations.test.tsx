@@ -69,8 +69,8 @@ const RAW_PATHS = [
 ]
 
 const GLOBAL_RAW_PATHS = [
-  "http://localhost:3100/translations/global/raw/partners/:language",
-  "http://localhost/api/adapter/translations/global/raw/partners/:language",
+  "http://localhost:3100/translations/global/raw/:site/:language",
+  "http://localhost/api/adapter/translations/global/raw/:site/:language",
 ]
 
 const EMAIL_BASE_PATHS = [
@@ -524,6 +524,27 @@ describe("<SettingsTranslations>", () => {
       expect(await screen.findByText(/could not be loaded/)).toBeInTheDocument()
       // An empty base must not render as a catalog of keys with no base value.
       await waitFor(() => expect(screen.queryByText("t.hello")).toBeNull())
+    }, 20000)
+
+    it("reads the email rows for everyone when all jurisdictions is chosen", async () => {
+      const requested: string[] = []
+      server.use(
+        ...[...RAW_PATHS, ...GLOBAL_RAW_PATHS].map((path) =>
+          rest.get(path, (req, res, ctx) => {
+            requested.push(req.url.pathname)
+            return res(ctx.json([]))
+          })
+        )
+      )
+      renderPage()
+
+      await selectSite("email")
+      // Selecting by value rather than by label, so the option's wording is not what is under test.
+      await userEvent.selectOptions(screen.getByLabelText("Jurisdiction"), "all")
+
+      await waitFor(() =>
+        expect(requested).toContain("/api/adapter/translations/global/raw/email/en")
+      )
     }, 20000)
 
     it("saves an email override through the jurisdiction endpoint", async () => {

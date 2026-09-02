@@ -8,7 +8,7 @@ import {
   SiteEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter } from "../testUtils"
-import { useTranslationScope } from "../../src/lib/useTranslationScope"
+import { ALL_JURISDICTIONS, useTranslationScope } from "../../src/lib/useTranslationScope"
 
 const translationsService = {
   getRawTranslations: jest.fn(),
@@ -40,6 +40,53 @@ describe("useTranslationScope", () => {
     translationsService.getRawTranslations.mockResolvedValue([])
     translationsService.getRawGlobalTranslations.mockResolvedValue([])
     translationsService.emailBaseTranslations.mockResolvedValue({})
+  })
+
+  it("edits the email scope for everyone when all jurisdictions is chosen", async () => {
+    const { result } = renderScope([jurisdiction("one"), jurisdiction("two")])
+
+    act(() => result.current.setSite(SiteEnum.email))
+    act(() => result.current.setJurisdictionId(ALL_JURISDICTIONS))
+
+    expect(result.current.isGlobal).toBe(true)
+    await waitFor(() =>
+      expect(result.current.cacheKey).toEqual("/api/adapter/translations/global/raw/email/en")
+    )
+
+    void result.current.scope.save({ edits: [{ key: "a", value: "b" }] })
+
+    expect(translationsService.updateRawGlobalTranslations).toHaveBeenCalledWith({
+      site: SiteEnum.email,
+      language: LanguagesEnum.en,
+      body: { edits: [{ key: "a", value: "b" }] },
+    })
+    expect(translationsService.updateRawTranslations).not.toHaveBeenCalled()
+  })
+
+  it("goes back to one jurisdiction's email rows when one is chosen again", async () => {
+    const { result } = renderScope([jurisdiction("one"), jurisdiction("two")])
+
+    act(() => result.current.setSite(SiteEnum.email))
+    act(() => result.current.setJurisdictionId(ALL_JURISDICTIONS))
+    act(() => result.current.setJurisdictionId("two"))
+
+    expect(result.current.isGlobal).toBe(false)
+    await waitFor(() =>
+      expect(result.current.cacheKey).toEqual(
+        "/api/adapter/translations/jurisdictions/two/raw/email/en"
+      )
+    )
+  })
+
+  it("falls back to a real jurisdiction when the site no longer offers all of them", () => {
+    const { result } = renderScope([jurisdiction("one"), jurisdiction("two")])
+
+    act(() => result.current.setSite(SiteEnum.email))
+    act(() => result.current.setJurisdictionId(ALL_JURISDICTIONS))
+    act(() => result.current.setSite(SiteEnum.public))
+
+    expect(result.current.isGlobal).toBe(false)
+    expect(result.current.activeJurisdictionId).toEqual("one")
   })
 
   it("starts on the public site and the admin's first jurisdiction", () => {
