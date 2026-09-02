@@ -109,8 +109,17 @@
     }
 
     .hero-property-name {
+      input {
+        height: 3rem;
+      }
       @media (--sm-and-up) {
         min-width: 370px;
+      }
+    }
+
+    .hero-max-rent {
+      input {
+        height: 3rem;
       }
     }
 

@@ -58,6 +58,11 @@ const Lottery = (props: { listing: Listing | undefined }) => {
     jurisdictionData?.id
   )
 
+  const enablePartnerLotteryExport = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enablePartnerLotteryExport,
+    jurisdictionData?.id
+  )
+
   const enableNonAdminLotteries = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableNonAdminLotteries,
     jurisdictionData?.id
@@ -248,7 +253,10 @@ const Lottery = (props: { listing: Listing | undefined }) => {
             )}
           </CardSection>
         )
-      } else if (listing.lotteryStatus === LotteryStatusEnum.publishedToPublic) {
+      } else if (
+        listing.lotteryStatus === LotteryStatusEnum.publishedToPublic ||
+        (listing.lotteryLastRunAt && enablePartnerLotteryExport)
+      ) {
         return exportCard
       }
       if (listing.lotteryStatus === LotteryStatusEnum.expired) {

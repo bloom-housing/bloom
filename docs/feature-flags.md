@@ -47,7 +47,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableCreditScreeningFee](./feature-flags/enableCreditScreeningFee.md) | When true, credit screening fee is enabled for listings |
 | [enableCustomListingNotifications](./feature-flags/enableCustomListingNotifications.md) | When true, users have access to custom notification settings |
 | [enableDbDrivenContent](./feature-flags/enableDbDrivenContent.md) | When true, the jurisdiction reads its translations and structured content from the database instead of the bundled override files |
-| [enableDuplicatesDetails](./feature-flags/enableDuplicatesDetails.md) | When true, lottery published applicant email contains duplicates details section |
+| [enableDuplicatesDetailsInEmail](./feature-flags/enableDuplicatesDetailsInEmail.md) | When true, lottery published applicant email contains duplicates details section |
 | [enableExportTerms](./feature-flags/enableExportTerms.md) | When true, display terms of use before exporting applications and lotteries from the partner site |
 | [enableFaq](./feature-flags/enableFaq.md) | When true, a link to the FAQ page is displayed on the get assistance page |
 | [enableFilterByBathroom](./feature-flags/enableFilterByBathroom.md) | When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms |
@@ -87,6 +87,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableParkingFee](./feature-flags/enableParkingFee.md) | When true, the parking fee field should be visible |
 | [enableParkingType](./feature-flags/enableParkingType.md) | When true, the parking type field is visible in the listing form |
 | [enablePartnerDemographics](./feature-flags/enablePartnerDemographics.md) | When true, demographics data is included in application or lottery exports for partners |
+| [enablePartnerLotteryExport](./feature-flags/enablePartnerLotteryExport.md) | When true, partner can export lottery immediately after it is run. |
 | [enablePartnerSettings](./feature-flags/enablePartnerSettings.md) | When true, the 'settings' tab in the partner site is visible |
 | [enablePetPolicyCheckbox](./feature-flags/enablePetPolicyCheckbox.md) | When true, the pet policy field in the listing form is displayed as checkboxes instead of a text area |
 | [enableProperties](./feature-flags/enableProperties.md) | When true, the properties feature is enabled |
