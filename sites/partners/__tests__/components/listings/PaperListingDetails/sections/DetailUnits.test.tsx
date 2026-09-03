@@ -9,7 +9,6 @@ import {
   HomeTypeEnum,
   RentTypeEnum,
   ReviewOrderTypeEnum,
-  UnitAccessibilityPriorityTypeEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"

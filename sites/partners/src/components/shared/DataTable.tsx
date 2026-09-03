@@ -124,7 +124,8 @@ export const DataTable = (props: DataTableProps) => {
 
   const dataQuery = useQuery({
     queryKey: ["data", pagination, searchFilters, sorting],
-    queryFn: () => props.fetchData?.(pagination, searchFilters, sorting),
+    queryFn: (): Promise<TableData> =>
+      props.fetchData?.(pagination, searchFilters, sorting) ?? Promise.resolve({ items: [] }),
     placeholderData: keepPreviousData,
     enabled: !isClientSide,
   })
@@ -158,10 +159,11 @@ export const DataTable = (props: DataTableProps) => {
 
   const rows = isClientSide ? props.data : dataQuery.data?.items ?? defaultData
 
+  const tableId = props.id ?? "data-table"
+  const wrapperId = `${tableId}-wrapper`
+
   const scrollToTableTop = () =>
-    document
-      .getElementById("data-table-wrapper")
-      ?.scrollIntoView({ behavior: "auto", block: "start" })
+    document.getElementById(wrapperId)?.scrollIntoView({ behavior: "auto", block: "start" })
 
   const table = useReactTable({
     columns: props.columns,
@@ -205,8 +207,6 @@ export const DataTable = (props: DataTableProps) => {
   })
 
   const showLoadingState = !isClientSide && (delayedLoading || dataQuery.data === undefined)
-
-  const tableId = props.id ?? "data-table"
 
   const tableHeaders = (
     <thead>
@@ -393,7 +393,7 @@ export const DataTable = (props: DataTableProps) => {
   const Pagination = (
     <div
       className={styles["pagination"]}
-      id={"data-table-pagination"}
+      id={`${tableId}-pagination`}
       aria-hidden={showLoadingState}
     >
       <Button
@@ -455,7 +455,7 @@ export const DataTable = (props: DataTableProps) => {
   )
 
   return (
-    <div className={styles["data-table-wrapper"]} id="data-table-wrapper">
+    <div className={styles["data-table-wrapper"]} id={wrapperId}>
       <div className={styles["header-container"]}>
         {props.filterType === "global" && (
           <div className={styles["header-left-content"]}>

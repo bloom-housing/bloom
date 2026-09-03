@@ -1,5 +1,5 @@
 import React from "react"
-import { render, cleanup, screen, within, fireEvent, act } from "@testing-library/react"
+import { render, cleanup, screen, within, fireEvent } from "@testing-library/react"
 import { DataTable, TableDataRow } from "../../../src/components/shared/DataTable"
 import { createColumnHelper } from "@tanstack/react-table"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"

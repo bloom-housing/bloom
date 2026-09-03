@@ -359,7 +359,7 @@ const FormUnits = ({
               ? getLabel("unitGroups", requiredFields, "Unit groups")
               : getLabel("units", requiredFields, "Units")}
           </div>
-          <Grid.Cell className="grid-inset-section">
+          <Grid.Cell>
             {(enableUnitGroups ? !!unitGroups.length : !!units.length) && (
               <div className="mb-5">
                 <DataTable
