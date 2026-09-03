@@ -18,6 +18,10 @@ export type permissionCheckingObj = {
   userId?: string;
 };
 
+export type permissionCheckingContext = {
+  isLotteryStatusUpdate?: boolean;
+};
+
 @Injectable()
 export class PermissionService {
   constructor(private prisma: PrismaService) {}
@@ -31,12 +35,15 @@ export class PermissionService {
     @param obj Optional resource object to check request against. If provided this can be used by the rule to perform
     ABAC logic. Note that a limitation in casbin seems to only allows for property retrieval one level deep on this
     object (e.g. obj.prop.value wouldn't work).
+    @param context Optional extra request context. This is not visible to the permission rules, it
+    only influences which permissions are granted to the user for this particular check.
   */
   async can(
     user: User | undefined,
     type: string,
     action: string,
     obj?: permissionCheckingObj,
+    context?: permissionCheckingContext,
   ): Promise<boolean> {
     let e = await newEnforcer(
       path.join(__dirname, '../permission-configs', 'permission_model.conf'),
@@ -44,7 +51,7 @@ export class PermissionService {
     );
 
     if (user) {
-      e = await this.addUserPermissions(e, user);
+      e = await this.addUserPermissions(e, user, context);
 
       if (type === 'user' && obj?.id) {
         const accessedUser = await this.prisma.userAccounts.findUnique({
@@ -77,7 +84,11 @@ export class PermissionService {
     adds permissions for users
     Casbin doesn't support our permissioning requirements for jurisdictionalAdmin or partners so we custom build the permission set here
   */
-  async addUserPermissions(enforcer: Enforcer, user: User): Promise<Enforcer> {
+  async addUserPermissions(
+    enforcer: Enforcer,
+    user: User,
+    context?: permissionCheckingContext,
+  ): Promise<Enforcer> {
     await enforcer.addRoleForUser(user.id, UserRoleEnum.user);
 
     if (user.userRoles?.isAdmin) {
@@ -172,6 +183,14 @@ export class PermissionService {
                     name: FeatureFlagEnum.disablePartnerPublicListingEdits,
                     active: true,
                   },
+                  ...(context?.isLotteryStatusUpdate
+                    ? {
+                        none: {
+                          name: FeatureFlagEnum.enablePartnerLotteryRun,
+                          active: true,
+                        },
+                      }
+                    : {}),
                 },
               },
             },
@@ -211,8 +230,9 @@ export class PermissionService {
     type: string,
     action: string,
     obj?: permissionCheckingObj,
+    context?: permissionCheckingContext,
   ): Promise<void> {
-    if (!(await this.can(user, type, action, obj))) {
+    if (!(await this.can(user, type, action, obj, context))) {
       throw new ForbiddenException();
     }
   }
