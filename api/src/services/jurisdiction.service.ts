@@ -11,6 +11,7 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { Prisma } from '@prisma/client';
 import { JurisdictionUpdate } from '../dtos/jurisdictions/jurisdiction-update.dto';
 import { JurisdictionViews } from '../enums/jurisdictions/view-enum';
+import { BrandDTO } from '../dtos/jurisdictions/brand.dto';
 
 // TODO: convert this to the selectViews
 const view: Prisma.JurisdictionsInclude = {
@@ -68,6 +69,25 @@ selectViews[JurisdictionViews.full] = {
   whatToExpectAdditionalText: true,
   whatToExpectUnderConstruction: true,
 };
+
+// The brand JSON stores only what the admin sets: the url fields are built from the asset foreign
+// keys at read time.
+const storableBrand = (
+  brand?: BrandDTO,
+): Prisma.InputJsonObject | undefined => {
+  if (!brand) return undefined;
+  const { logoUrl, faviconUrl, ...rest } = brand;
+  void logoUrl;
+  void faviconUrl;
+  return rest as unknown as Prisma.InputJsonObject;
+};
+
+const brandAssetConnect = (assetId?: string) =>
+  assetId === undefined
+    ? undefined
+    : assetId
+    ? { connect: { id: assetId } }
+    : { disconnect: true };
 
 /**
   this is the service for jurisdictions
@@ -145,13 +165,18 @@ export class JurisdictionService {
     this will create a jurisdiction
   */
   async create(incomingData: JurisdictionCreate): Promise<Jurisdiction> {
+    const { brandLogoAssetId, brandFaviconAssetId, ...jurisdictionData } =
+      incomingData;
     const rawResult = await this.prisma.jurisdictions.create({
       data: {
-        ...incomingData,
+        ...jurisdictionData,
         listingFeaturesConfiguration:
           incomingData.listingFeaturesConfiguration as unknown as Prisma.JsonArray,
         raceEthnicityConfiguration:
           incomingData.raceEthnicityConfiguration as unknown as Prisma.JsonArray,
+        brand: storableBrand(incomingData.brand),
+        brandLogo: brandAssetConnect(brandLogoAssetId),
+        brandFavicon: brandAssetConnect(brandFaviconAssetId),
       },
       include: view,
     });
@@ -166,14 +191,19 @@ export class JurisdictionService {
   async update(incomingData: JurisdictionUpdate): Promise<Jurisdiction> {
     await this.findOrThrow(incomingData.id);
 
+    const { brandLogoAssetId, brandFaviconAssetId, ...jurisdictionData } =
+      incomingData;
     const rawResults = await this.prisma.jurisdictions.update({
       data: {
-        ...incomingData,
+        ...jurisdictionData,
         id: undefined,
         listingFeaturesConfiguration:
           incomingData.listingFeaturesConfiguration as unknown as Prisma.JsonArray,
         raceEthnicityConfiguration:
           incomingData.raceEthnicityConfiguration as unknown as Prisma.JsonArray,
+        brand: storableBrand(incomingData.brand),
+        brandLogo: brandAssetConnect(brandLogoAssetId),
+        brandFavicon: brandAssetConnect(brandFaviconAssetId),
       },
       where: {
         id: incomingData.id,

@@ -64,8 +64,8 @@ describe('Jurisdiction Controller Tests', () => {
       data: {
         ...jurisdictionFactory(),
         brand: { primary: { base: '#773E98' } },
-        brandLogoAssetId: logo.id,
-        brandFaviconAssetId: favicon.id,
+        brandLogo: { connect: { id: logo.id } },
+        brandFavicon: { connect: { id: favicon.id } },
       },
     });
 
