@@ -133,6 +133,10 @@ describe("Assistance stored contact details", () => {
     renderWithContact()
 
     expect(screen.getByRole("link", { name: t("resources.contactEmail") })).toBeInTheDocument()
+    // The card had no phone, address or hours before a jurisdiction could store them.
+    expect(screen.queryByRole("link", { name: /^tel:/ })).not.toBeInTheDocument()
+    expect(document.querySelectorAll('a[href^="tel:"]')).toHaveLength(0)
+    expect(document.querySelector(".stored-html")).toBeNull()
   })
 
   it("uses the jurisdiction's email in place of the bundled one", () => {
@@ -155,6 +159,13 @@ describe("Assistance stored contact details", () => {
     expect(screen.getByRole("link", { name: "555-0100" })).toHaveAttribute("href", "tel:555-0100")
     expect(screen.getByText("123 Main St")).toBeInTheDocument()
     expect(screen.getByText("Mon to Fri")).toBeInTheDocument()
+  })
+
+  it("hides a field the jurisdiction set to null", () => {
+    renderWithContact({ email: null, hours: null } as unknown as Record<string, string>)
+
+    expect(screen.queryByText(t("resources.contactEmail"))).not.toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: /@/ })).not.toBeInTheDocument()
   })
 
   it("hides the email when the jurisdiction emptied it", () => {

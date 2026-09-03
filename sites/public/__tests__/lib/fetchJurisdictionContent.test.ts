@@ -36,15 +36,14 @@ describe("fetchJurisdictionContent", () => {
     )
   })
 
-  it("passes on the documents the site renders, and drops the rest", async () => {
+  it("passes on every document, and leaves out the ones with no row", async () => {
     mockedGet.mockResolvedValue({
       data: {
         footer: { textSectionsHtml: [] },
         faq: { categories: [] },
         resources: { resourceSections: [] },
         disclaimers: { privacyHtml: "<p>Ours</p>" },
-        contact: { email: "housing@example.gov" },
-        somethingElse: { ignored: true },
+        contact: null,
       },
     })
 
@@ -55,7 +54,6 @@ describe("fetchJurisdictionContent", () => {
       faq: { categories: [] },
       resources: { resourceSections: [] },
       disclaimers: { privacyHtml: "<p>Ours</p>" },
-      contact: { email: "housing@example.gov" },
     })
   })
 

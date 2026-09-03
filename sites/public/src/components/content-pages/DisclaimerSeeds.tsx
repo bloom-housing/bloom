@@ -5,7 +5,7 @@ import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpe
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import pageContent from "../../static_content/generic_content.md"
-import { getStoredDisclaimersContent } from "../../static_content/stored_content"
+import { storedPageBody } from "../../static_content/stored_content"
 import { useJurisdictionContent } from "../../lib/JurisdictionContentContext"
 import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
 import styles from "../../patterns/PageHeaderLayout.module.scss"
@@ -13,10 +13,11 @@ import styles from "../../patterns/PageHeaderLayout.module.scss"
 const DisclaimerSeeds = () => {
   const { profile } = useContext(AuthContext)
   const jurisdictionContent = useJurisdictionContent()
-  const { body } = {
-    body: <Markdown className={styles["markdown"]}>{pageContent.toString()}</Markdown>,
-    ...getStoredDisclaimersContent(jurisdictionContent, "disclaimerHtml"),
-  }
+  const body = storedPageBody(
+    jurisdictionContent,
+    "disclaimerHtml",
+    <Markdown className={styles["markdown"]}>{pageContent.toString()}</Markdown>
+  )
 
   useEffect(() => {
     pushGtmEvent<PageView>({

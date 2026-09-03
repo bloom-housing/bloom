@@ -26,9 +26,10 @@ const Assistance = (props: AssistanceProps) => {
   )
   const enableFaq = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableFaq)
 
+  const jurisdictionContent = useJurisdictionContent()
   const contact = {
     email: t("resources.contactEmail"),
-    ...getStoredContactContent(useJurisdictionContent()),
+    ...getStoredContactContent(jurisdictionContent),
   }
 
   return (
