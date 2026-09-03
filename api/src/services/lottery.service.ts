@@ -517,6 +517,17 @@ export class LotteryService {
       ListingViews.full,
     );
 
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.update,
+      {
+        id: storedListing.id,
+        jurisdictionId: storedListing.jurisdictionId,
+      },
+      { isLotteryStatusUpdate: true },
+    );
+
     if (storedListing.status !== ListingsStatusEnum.closed) {
       throw new BadRequestException(
         'Lottery status cannot be changed until listing is closed.',
