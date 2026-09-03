@@ -10,9 +10,10 @@ import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
-import CustomSiteFooter from "../components/shared/CustomSiteFooter"
-import { HeaderLink, SiteHeader } from "../patterns/SiteHeader"
 import styles from "./application.module.scss"
+import CustomSiteFooter from "../components/shared/CustomSiteFooter"
+import { isFeatureFlagOn } from "../lib/helpers"
+import { HeaderLink, SiteHeader } from "../patterns/SiteHeader"
 
 const isMessageActive = (windowEnv: string) => {
   let isActive = false

@@ -11760,6 +11760,7 @@ export enum FeatureFlagEnum {
   "enablePartnerLotteryExport" = "enablePartnerLotteryExport",
   "enablePartnerSettings" = "enablePartnerSettings",
   "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
+  "enableProfessionalPartnersPage" = "enableProfessionalPartnersPage",
   "enableProperties" = "enableProperties",
   "enableReasonableAccommodations" = "enableReasonableAccommodations",
   "enableReceivedAtAndByFields" = "enableReceivedAtAndByFields",

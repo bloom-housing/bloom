@@ -2426,6 +2426,7 @@ const featureFlags = [
   FeatureFlagEnum.enableOnlyAdminCanManageUsers,
   FeatureFlagEnum.enablePartnerDemographics,
   FeatureFlagEnum.enablePartnerSettings,
+  FeatureFlagEnum.enableProfessionalPartnersPage,
   FeatureFlagEnum.enableReceivedAtAndByFields,
   FeatureFlagEnum.enableResources,
   FeatureFlagEnum.enableSexualOrientationQuestion,
