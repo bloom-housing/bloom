@@ -36,6 +36,7 @@ import { TranslationService } from '../../../src/services/translation.service';
 import { mockApplicationSet } from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';
 import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
+import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 
 const canOrThrowMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
@@ -1167,6 +1168,7 @@ describe('Testing lottery service', () => {
     } as unknown as User;
 
     beforeEach(() => {
+      canOrThrowMock.mockClear();
       prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
         featureFlags: [],
       });
@@ -1191,6 +1193,16 @@ describe('Testing lottery service', () => {
           ),
       ).rejects.toThrowError(
         'Lottery status cannot be changed until listing is closed.',
+      );
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        user,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+        { isLotteryStatusUpdate: true },
       );
 
       expect(prisma.listings.update).not.toHaveBeenCalled();
@@ -1220,6 +1232,16 @@ describe('Testing lottery service', () => {
             partnerUser,
           ),
       ).rejects.toThrowError();
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        partnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+        { isLotteryStatusUpdate: true },
+      );
 
       expect(prisma.listings.update).not.toHaveBeenCalled();
     });
@@ -1256,6 +1278,16 @@ describe('Testing lottery service', () => {
       );
 
       expect(result).toEqual({ success: true });
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        assignedPartnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+          jurisdictionId: 'jurisId',
+        },
+        { isLotteryStatusUpdate: true },
+      );
       expect(prisma.jurisdictions.findUnique).toHaveBeenCalledWith({
         select: {
           featureFlags: true,
@@ -1308,6 +1340,16 @@ describe('Testing lottery service', () => {
       );
 
       expect(result).toEqual({ success: true });
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        assignedPartnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+          jurisdictionId: 'jurisId',
+        },
+        { isLotteryStatusUpdate: true },
+      );
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
           lotteryLastRunAt: expect.anything(),
@@ -1346,6 +1388,16 @@ describe('Testing lottery service', () => {
           ),
       ).rejects.toThrowError(ForbiddenException);
 
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        unassignedPartnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+          jurisdictionId: 'jurisId',
+        },
+        { isLotteryStatusUpdate: true },
+      );
       expect(prisma.listings.update).not.toHaveBeenCalled();
       expect(prisma.listingSnapshot.create).not.toHaveBeenCalled();
     });
@@ -1376,6 +1428,16 @@ describe('Testing lottery service', () => {
           ),
       ).rejects.toThrowError(ForbiddenException);
 
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        assignedNonPartnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+          jurisdictionId: 'jurisId',
+        },
+        { isLotteryStatusUpdate: true },
+      );
       expect(prisma.listings.update).not.toHaveBeenCalled();
     });
 
@@ -1400,6 +1462,16 @@ describe('Testing lottery service', () => {
           ),
       ).rejects.toThrowError(ForbiddenException);
 
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        assignedPartnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+          jurisdictionId: 'jurisId',
+        },
+        { isLotteryStatusUpdate: true },
+      );
       expect(prisma.listings.update).not.toHaveBeenCalled();
     });
 
@@ -1440,6 +1512,16 @@ describe('Testing lottery service', () => {
         adminUser,
       );
 
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        adminUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+          jurisdictionId: 'jurisId',
+        },
+        { isLotteryStatusUpdate: true },
+      );
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
           lotteryStatus: LotteryStatusEnum.releasedToPartners,
@@ -1489,6 +1571,16 @@ describe('Testing lottery service', () => {
           ),
       ).rejects.toThrowError();
 
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        partnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+        { isLotteryStatusUpdate: true },
+      );
+
       expect(prisma.listings.update).not.toHaveBeenCalled();
     });
 
@@ -1523,6 +1615,15 @@ describe('Testing lottery service', () => {
         partnerUser,
       );
 
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        partnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+        { isLotteryStatusUpdate: true },
+      );
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
           lotteryStatus: LotteryStatusEnum.publishedToPublic,
@@ -1556,6 +1657,16 @@ describe('Testing lottery service', () => {
           ),
       ).rejects.toThrowError();
 
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        partnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+        { isLotteryStatusUpdate: true },
+      );
+
       expect(prisma.listings.update).not.toHaveBeenCalled();
     });
 
@@ -1578,6 +1689,16 @@ describe('Testing lottery service', () => {
             publicUser,
           ),
       ).rejects.toThrowError();
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        publicUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+        { isLotteryStatusUpdate: true },
+      );
 
       expect(prisma.listings.update).not.toHaveBeenCalled();
     });
@@ -1613,6 +1734,16 @@ describe('Testing lottery service', () => {
           lotteryStatus: LotteryStatusEnum.ran,
         } as ListingLotteryStatus,
         adminUser,
+      );
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        adminUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+        { isLotteryStatusUpdate: true },
       );
 
       expect(prisma.listings.update).toHaveBeenCalledWith({
