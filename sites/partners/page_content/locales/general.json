@@ -127,6 +127,7 @@
   "applications.bulkUpdateTemplateDownloadError": "An error has occurred while downloading the template. Please try again or contact support",
   "applications.bulkUpdateModalProcessingError": "An error has occurred during the processing of the CSV file",
   "applications.bulkUpdateModalProcessingNotice": "Your file has been validated and is being processed...",
+  "applications.bulkUpdateModalProcessingSuccess": "Your file has been processed successfully.",
   "applications.combination": "Combination",
   "applications.duplicate": "Duplicate",
   "applications.duplicates.duplicateApplications": "Duplicate applications",
