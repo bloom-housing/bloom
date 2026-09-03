@@ -50,6 +50,7 @@ const GENERATED = [
   "faq",
   "finder",
   "get-assistance",
+  "housing-basics",
   "index",
   "create-account",
   "create-advocate-account-confirmation",
