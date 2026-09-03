@@ -53,6 +53,29 @@ describe('Jurisdiction Controller Tests', () => {
     await app.close();
   });
 
+  it('nulls the branding asset references when the asset is deleted', async () => {
+    const asset = await prisma.assets.create({
+      data: { fileId: 'brand-logo-file', label: 'brandLogo' },
+    });
+    const jurisdiction = await prisma.jurisdictions.create({
+      data: {
+        ...jurisdictionFactory(),
+        brand: { primary: { base: '#773E98' } },
+        brandLogoAssetId: asset.id,
+        brandFaviconAssetId: asset.id,
+      },
+    });
+
+    await prisma.assets.delete({ where: { id: asset.id } });
+
+    const stored = await prisma.jurisdictions.findUnique({
+      where: { id: jurisdiction.id },
+    });
+    expect(stored.brandLogoAssetId).toBeNull();
+    expect(stored.brandFaviconAssetId).toBeNull();
+    expect(stored.brand).toEqual({ primary: { base: '#773E98' } });
+  });
+
   it('testing list endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
