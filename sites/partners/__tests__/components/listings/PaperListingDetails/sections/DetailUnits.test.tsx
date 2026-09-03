@@ -1,5 +1,6 @@
 import React from "react"
 import { fireEvent, render, screen, within } from "@testing-library/react"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { listing, unit } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   EnumListingListingType,
@@ -34,24 +35,32 @@ function mockJurisdictionsHaveFeatureFlagOn(
 }
 
 describe("DetailUnits", () => {
+  const queryClient = new QueryClient()
+
+  beforeEach(() => {
+    queryClient.clear()
+  })
+
   it("should render the detail units when no units exist", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false),
-        }}
-      >
-        <ListingContext.Provider
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider
           value={{
-            ...listing,
-            reviewOrderType: ReviewOrderTypeEnum.waitlist,
-            units: [],
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag, false),
           }}
         >
-          <DetailUnits setUnitDrawer={jest.fn()} />
-        </ListingContext.Provider>
-      </AuthContext.Provider>
+          <ListingContext.Provider
+            value={{
+              ...listing,
+              reviewOrderType: ReviewOrderTypeEnum.waitlist,
+              units: [],
+            }}
+          >
+            <DetailUnits setUnitDrawer={jest.fn()} />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
+      </QueryClientProvider>
     )
 
     // Above the table
@@ -71,22 +80,24 @@ describe("DetailUnits", () => {
   it("should render the detail units", () => {
     const callUnitDrawer = jest.fn()
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false),
-        }}
-      >
-        <ListingContext.Provider
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider
           value={{
-            ...listing,
-            reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
-            disableUnitsAccordion: true,
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false),
           }}
         >
-          <DetailUnits setUnitDrawer={callUnitDrawer} />
-        </ListingContext.Provider>
-      </AuthContext.Provider>
+          <ListingContext.Provider
+            value={{
+              ...listing,
+              reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+              disableUnitsAccordion: true,
+            }}
+          >
+            <DetailUnits setUnitDrawer={callUnitDrawer} />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
+      </QueryClientProvider>
     )
 
     // Above the table
@@ -100,6 +111,7 @@ describe("DetailUnits", () => {
 
     // Table
     const table = screen.getByRole("table")
+    expect(table).toHaveAttribute("id", "unitTable")
     const headAndBody = within(table).getAllByRole("rowgroup")
     expect(headAndBody).toHaveLength(2)
     const [head, body] = headAndBody
@@ -120,23 +132,25 @@ describe("DetailUnits", () => {
 
   it("should render the detail units when no unit groups exist", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, true, false),
-        }}
-      >
-        <ListingContext.Provider
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider
           value={{
-            ...listing,
-            reviewOrderType: ReviewOrderTypeEnum.waitlist,
-            units: [],
-            unitGroups: [],
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, true, false),
           }}
         >
-          <DetailUnits setUnitDrawer={jest.fn()} />
-        </ListingContext.Provider>
-      </AuthContext.Provider>
+          <ListingContext.Provider
+            value={{
+              ...listing,
+              reviewOrderType: ReviewOrderTypeEnum.waitlist,
+              units: [],
+              unitGroups: [],
+            }}
+          >
+            <DetailUnits setUnitDrawer={jest.fn()} />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
+      </QueryClientProvider>
     )
 
     // Above the table
@@ -155,90 +169,92 @@ describe("DetailUnits", () => {
 
   it("should render the detail units with unit groups for regulated listing", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, true, true),
-        }}
-      >
-        <ListingContext.Provider
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider
           value={{
-            ...listing,
-            reviewOrderType: ReviewOrderTypeEnum.waitlist,
-            units: [],
-            unitGroups: [
-              {
-                id: "caae49d5-028f-4da3-a97b-6a79246816e9",
-                createdAt: new Date(2025, 4, 8),
-                updatedAt: new Date(2025, 4, 8),
-                unitTypes: [
-                  {
-                    id: "test_id_1",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    name: UnitTypeEnum.twoBdrm,
-                    numBedrooms: 2,
-                  },
-                  {
-                    id: "test_id_1",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    name: UnitTypeEnum.SRO,
-                    numBedrooms: 5,
-                  },
-                ],
-                totalCount: 2,
-                minOccupancy: 1,
-                maxOccupancy: 4,
-                sqFeetMin: 20,
-                sqFeetMax: 64,
-                bathroomMin: 1,
-                bathroomMax: 2,
-                unitGroupAmiLevels: [
-                  {
-                    id: "test_ami_id_1",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    amiPercentage: 25,
-                    monthlyRentDeterminationType:
-                      EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent,
-                    flatRentValue: 1500,
-                  },
-                  {
-                    id: "test_ami_id_2",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    amiPercentage: 25,
-                    monthlyRentDeterminationType:
-                      EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent,
-                    flatRentValue: 2400,
-                  },
-                  {
-                    id: "test_ami_id_3",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    amiPercentage: 30,
-                    monthlyRentDeterminationType:
-                      EnumUnitGroupAmiLevelMonthlyRentDeterminationType.percentageOfIncome,
-                    percentageOfIncomeValue: 10,
-                  },
-                  {
-                    id: "test_ami_id_4",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    amiPercentage: 30,
-                    monthlyRentDeterminationType:
-                      EnumUnitGroupAmiLevelMonthlyRentDeterminationType.percentageOfIncome,
-                    percentageOfIncomeValue: 20,
-                  },
-                ],
-              },
-            ],
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, true, true),
           }}
         >
-          <DetailUnits setUnitDrawer={jest.fn()} />
-        </ListingContext.Provider>
-      </AuthContext.Provider>
+          <ListingContext.Provider
+            value={{
+              ...listing,
+              reviewOrderType: ReviewOrderTypeEnum.waitlist,
+              units: [],
+              unitGroups: [
+                {
+                  id: "caae49d5-028f-4da3-a97b-6a79246816e9",
+                  createdAt: new Date(2025, 4, 8),
+                  updatedAt: new Date(2025, 4, 8),
+                  unitTypes: [
+                    {
+                      id: "test_id_1",
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                      name: UnitTypeEnum.twoBdrm,
+                      numBedrooms: 2,
+                    },
+                    {
+                      id: "test_id_1",
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                      name: UnitTypeEnum.SRO,
+                      numBedrooms: 5,
+                    },
+                  ],
+                  totalCount: 2,
+                  minOccupancy: 1,
+                  maxOccupancy: 4,
+                  sqFeetMin: 20,
+                  sqFeetMax: 64,
+                  bathroomMin: 1,
+                  bathroomMax: 2,
+                  unitGroupAmiLevels: [
+                    {
+                      id: "test_ami_id_1",
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                      amiPercentage: 25,
+                      monthlyRentDeterminationType:
+                        EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent,
+                      flatRentValue: 1500,
+                    },
+                    {
+                      id: "test_ami_id_2",
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                      amiPercentage: 25,
+                      monthlyRentDeterminationType:
+                        EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent,
+                      flatRentValue: 2400,
+                    },
+                    {
+                      id: "test_ami_id_3",
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                      amiPercentage: 30,
+                      monthlyRentDeterminationType:
+                        EnumUnitGroupAmiLevelMonthlyRentDeterminationType.percentageOfIncome,
+                      percentageOfIncomeValue: 10,
+                    },
+                    {
+                      id: "test_ami_id_4",
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                      amiPercentage: 30,
+                      monthlyRentDeterminationType:
+                        EnumUnitGroupAmiLevelMonthlyRentDeterminationType.percentageOfIncome,
+                      percentageOfIncomeValue: 20,
+                    },
+                  ],
+                },
+              ],
+            }}
+          >
+            <DetailUnits setUnitDrawer={jest.fn()} />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
+      </QueryClientProvider>
     )
 
     // Above the table
@@ -265,7 +281,7 @@ describe("DetailUnits", () => {
     expect(columnHeaders[2]).toHaveTextContent("AMI")
     expect(columnHeaders[3]).toHaveTextContent("Rent")
     expect(columnHeaders[4]).toHaveTextContent("Occupancy")
-    expect(columnHeaders[5]).toHaveTextContent("SQ FT")
+    expect(columnHeaders[5]).toHaveTextContent("Sq ft")
     expect(columnHeaders[6]).toHaveTextContent("Bath")
 
     const rows = within(body).getAllByRole("row")
@@ -286,75 +302,77 @@ describe("DetailUnits", () => {
 
   it("should render the detail units with unit groups for non-regulated listing", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, true, true, true),
-        }}
-      >
-        <ListingContext.Provider
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider
           value={{
-            ...listing,
-            listingType: EnumListingListingType.nonRegulated,
-            reviewOrderType: ReviewOrderTypeEnum.waitlist,
-            units: [],
-            unitGroups: [
-              {
-                id: "test_unit_group_id_1",
-                createdAt: new Date(2025, 4, 8),
-                updatedAt: new Date(2025, 4, 8),
-                rentType: RentTypeEnum.fixedRent,
-                monthlyRent: 2000,
-                unitTypes: [
-                  {
-                    id: "test_id_1",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    name: UnitTypeEnum.twoBdrm,
-                    numBedrooms: 2,
-                  },
-                  {
-                    id: "test_id_2",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    name: UnitTypeEnum.SRO,
-                    numBedrooms: 5,
-                  },
-                ],
-                totalCount: 2,
-                minOccupancy: 1,
-                maxOccupancy: 4,
-                bathroomMin: 1,
-                bathroomMax: 2,
-              },
-              {
-                id: "test_unit_group_id_2",
-                createdAt: new Date(2025, 4, 8),
-                updatedAt: new Date(2025, 4, 8),
-                rentType: RentTypeEnum.rentRange,
-                flatRentValueFrom: 1250,
-                flatRentValueTo: 1750,
-                unitTypes: [
-                  {
-                    id: "test_id_3",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    name: UnitTypeEnum.fourBdrm,
-                    numBedrooms: 2,
-                  },
-                ],
-                totalCount: 1,
-                minOccupancy: 2,
-                maxOccupancy: 5,
-                bathroomMin: 2,
-                bathroomMax: 2,
-              },
-            ],
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, true, true, true),
           }}
         >
-          <DetailUnits setUnitDrawer={jest.fn()} />
-        </ListingContext.Provider>
-      </AuthContext.Provider>
+          <ListingContext.Provider
+            value={{
+              ...listing,
+              listingType: EnumListingListingType.nonRegulated,
+              reviewOrderType: ReviewOrderTypeEnum.waitlist,
+              units: [],
+              unitGroups: [
+                {
+                  id: "test_unit_group_id_1",
+                  createdAt: new Date(2025, 4, 8),
+                  updatedAt: new Date(2025, 4, 8),
+                  rentType: RentTypeEnum.fixedRent,
+                  monthlyRent: 2000,
+                  unitTypes: [
+                    {
+                      id: "test_id_1",
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                      name: UnitTypeEnum.twoBdrm,
+                      numBedrooms: 2,
+                    },
+                    {
+                      id: "test_id_2",
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                      name: UnitTypeEnum.SRO,
+                      numBedrooms: 5,
+                    },
+                  ],
+                  totalCount: 2,
+                  minOccupancy: 1,
+                  maxOccupancy: 4,
+                  bathroomMin: 1,
+                  bathroomMax: 2,
+                },
+                {
+                  id: "test_unit_group_id_2",
+                  createdAt: new Date(2025, 4, 8),
+                  updatedAt: new Date(2025, 4, 8),
+                  rentType: RentTypeEnum.rentRange,
+                  flatRentValueFrom: 1250,
+                  flatRentValueTo: 1750,
+                  unitTypes: [
+                    {
+                      id: "test_id_3",
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                      name: UnitTypeEnum.fourBdrm,
+                      numBedrooms: 2,
+                    },
+                  ],
+                  totalCount: 1,
+                  minOccupancy: 2,
+                  maxOccupancy: 5,
+                  bathroomMin: 2,
+                  bathroomMax: 2,
+                },
+              ],
+            }}
+          >
+            <DetailUnits setUnitDrawer={jest.fn()} />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
+      </QueryClientProvider>
     )
 
     // Above the table
@@ -409,22 +427,24 @@ describe("DetailUnits", () => {
   describe("Listing availability text", () => {
     it("should render 'Open waitlist' for waitlistLottery review order type", () => {
       render(
-        <AuthContext.Provider
-          value={{
-            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-              mockJurisdictionsHaveFeatureFlagOn(featureFlag, false),
-          }}
-        >
-          <ListingContext.Provider
+        <QueryClientProvider client={queryClient}>
+          <AuthContext.Provider
             value={{
-              ...listing,
-              reviewOrderType: ReviewOrderTypeEnum.waitlistLottery,
-              units: [],
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag, false),
             }}
           >
-            <DetailUnits setUnitDrawer={jest.fn()} />
-          </ListingContext.Provider>
-        </AuthContext.Provider>
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                reviewOrderType: ReviewOrderTypeEnum.waitlistLottery,
+                units: [],
+              }}
+            >
+              <DetailUnits setUnitDrawer={jest.fn()} />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        </QueryClientProvider>
       )
 
       expect(screen.getByText("What is the listing availability?")).toBeInTheDocument()
@@ -433,22 +453,24 @@ describe("DetailUnits", () => {
 
     it("should render 'Available units' for lottery review order type", () => {
       render(
-        <AuthContext.Provider
-          value={{
-            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-              mockJurisdictionsHaveFeatureFlagOn(featureFlag, false),
-          }}
-        >
-          <ListingContext.Provider
+        <QueryClientProvider client={queryClient}>
+          <AuthContext.Provider
             value={{
-              ...listing,
-              reviewOrderType: ReviewOrderTypeEnum.lottery,
-              disableUnitsAccordion: true,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag, false),
             }}
           >
-            <DetailUnits setUnitDrawer={jest.fn()} />
-          </ListingContext.Provider>
-        </AuthContext.Provider>
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                reviewOrderType: ReviewOrderTypeEnum.lottery,
+                disableUnitsAccordion: true,
+              }}
+            >
+              <DetailUnits setUnitDrawer={jest.fn()} />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        </QueryClientProvider>
       )
 
       expect(screen.getByText("What is the listing availability?")).toBeInTheDocument()
@@ -460,23 +482,25 @@ describe("DetailUnits", () => {
     it("should render the home type if enabled", () => {
       const callUnitDrawer = jest.fn()
       render(
-        <AuthContext.Provider
-          value={{
-            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
-          }}
-        >
-          <ListingContext.Provider
+        <QueryClientProvider client={queryClient}>
+          <AuthContext.Provider
             value={{
-              ...listing,
-              reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
-              disableUnitsAccordion: true,
-              homeType: HomeTypeEnum.apartment,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
             }}
           >
-            <DetailUnits setUnitDrawer={callUnitDrawer} />
-          </ListingContext.Provider>
-        </AuthContext.Provider>
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+                disableUnitsAccordion: true,
+                homeType: HomeTypeEnum.apartment,
+              }}
+            >
+              <DetailUnits setUnitDrawer={callUnitDrawer} />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        </QueryClientProvider>
       )
 
       expect(screen.getByRole("heading", { level: 2, name: /listing units/i })).toBeInTheDocument()
@@ -486,22 +510,24 @@ describe("DetailUnits", () => {
     it("should render 'none' home type if enabled and no home type set", () => {
       const callUnitDrawer = jest.fn()
       render(
-        <AuthContext.Provider
-          value={{
-            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
-          }}
-        >
-          <ListingContext.Provider
+        <QueryClientProvider client={queryClient}>
+          <AuthContext.Provider
             value={{
-              ...listing,
-              reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
-              disableUnitsAccordion: true,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
             }}
           >
-            <DetailUnits setUnitDrawer={callUnitDrawer} />
-          </ListingContext.Provider>
-        </AuthContext.Provider>
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+                disableUnitsAccordion: true,
+              }}
+            >
+              <DetailUnits setUnitDrawer={callUnitDrawer} />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        </QueryClientProvider>
       )
 
       expect(screen.getByRole("heading", { level: 2, name: /listing units/i })).toBeInTheDocument()
