@@ -59,6 +59,11 @@ describe('Testing jurisdiction service', () => {
     expect(prisma.jurisdictions.findMany).toHaveBeenCalledWith({
       select: {
         allowSingleUseCodeLogin: true,
+        brand: true,
+        brandLogoAssetId: true,
+        brandFaviconAssetId: true,
+        brandLogo: { select: { fileId: true } },
+        brandFavicon: { select: { fileId: true } },
         duplicateListingPermissions: true,
         emailFromAddress: true,
         enabledStopLightRuleKeys: true,
@@ -128,6 +133,11 @@ describe('Testing jurisdiction service', () => {
         id: true,
         languages: true,
         listingFeaturesConfiguration: true,
+        brand: true,
+        brandLogoAssetId: true,
+        brandFaviconAssetId: true,
+        brandLogo: { select: { fileId: true } },
+        brandFavicon: { select: { fileId: true } },
         notificationsSignUpUrl: true,
         raceEthnicityConfiguration: true,
         name: true,
@@ -170,6 +180,11 @@ describe('Testing jurisdiction service', () => {
         id: true,
         languages: true,
         listingFeaturesConfiguration: true,
+        brand: true,
+        brandLogoAssetId: true,
+        brandFaviconAssetId: true,
+        brandLogo: { select: { fileId: true } },
+        brandFavicon: { select: { fileId: true } },
         notificationsSignUpUrl: true,
         raceEthnicityConfiguration: true,
         name: true,
@@ -212,6 +227,11 @@ describe('Testing jurisdiction service', () => {
         id: true,
         languages: true,
         listingFeaturesConfiguration: true,
+        brand: true,
+        brandLogoAssetId: true,
+        brandFaviconAssetId: true,
+        brandLogo: { select: { fileId: true } },
+        brandFavicon: { select: { fileId: true } },
         notificationsSignUpUrl: true,
         raceEthnicityConfiguration: true,
         name: true,
@@ -307,6 +327,8 @@ describe('Testing jurisdiction service', () => {
       include: {
         featureFlags: true,
         multiselectQuestions: true,
+        brandLogo: { select: { fileId: true } },
+        brandFavicon: { select: { fileId: true } },
       },
     });
   });
@@ -442,6 +464,8 @@ describe('Testing jurisdiction service', () => {
       include: {
         featureFlags: true,
         multiselectQuestions: true,
+        brandLogo: { select: { fileId: true } },
+        brandFavicon: { select: { fileId: true } },
       },
     });
   });
@@ -515,6 +539,157 @@ describe('Testing jurisdiction service', () => {
       where: {
         id: 'example Id',
       },
+    });
+  });
+
+  describe('brand', () => {
+    const jurisdictionId = randomUUID();
+    const row = (extra = {}) => ({
+      ...mockJurisdiction(7, new Date()),
+      id: jurisdictionId,
+      brand: null,
+      brandLogo: null,
+      brandFavicon: null,
+      ...extra,
+    });
+
+    beforeEach(() => {
+      process.env.CLOUDINARY_CLOUD_NAME = 'exygy';
+      delete process.env.USE_S3_FILE_STORAGE;
+    });
+
+    it('derives the missing ramp values at read time', async () => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue(row({ brand: { primary: { base: '#773E98' } } }));
+
+      const result = await service.findOne({ jurisdictionId });
+
+      expect(result.brand.primary).toEqual({
+        base: '#773E98',
+        dark: '#693786',
+        darker: '#4C2861',
+        light: '#EFE6F5',
+        lighter: '#F8F4FB',
+      });
+      expect(result.brand.secondary).toBeUndefined();
+    });
+
+    it('returns explicit ramp values as stored', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(
+        row({
+          brand: {
+            primary: { base: '#773E98', dark: '#6E2598' },
+            secondary: { base: '#0077DA' },
+          },
+        }),
+      );
+
+      const result = await service.findOne({ jurisdictionId });
+
+      expect(result.brand.primary.dark).toEqual('#6E2598');
+      expect(result.brand.primary.darker).toEqual('#4C2861');
+      expect(result.brand.secondary.base).toEqual('#0077DA');
+      expect(result.brand.secondary.dark).toEqual('#0069C0');
+    });
+
+    it('builds the asset urls from the related file ids', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(
+        row({
+          brand: { primary: { base: '#773E98' } },
+          brandLogo: { fileId: 'logo-id' },
+          brandFavicon: { fileId: 'favicon-id' },
+        }),
+      );
+
+      const result = await service.findOne({ jurisdictionId });
+
+      expect(result.brand.logoUrl).toEqual(
+        'https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_90,f_png/logo-id',
+      );
+      expect(result.brand.faviconUrl).toEqual(
+        'https://res.cloudinary.com/exygy/image/upload/w_64,c_limit,q_90,f_png/favicon-id',
+      );
+    });
+
+    it('builds S3 urls when that backend is configured', async () => {
+      process.env.USE_S3_FILE_STORAGE = 'TRUE';
+      process.env.S3_PUBLIC_BUCKET = 'bloom-public';
+      process.env.S3_REGION = 'us-west-2';
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(
+        row({
+          brand: { primary: { base: '#773E98' } },
+          brandLogo: { fileId: 'logo-key' },
+        }),
+      );
+
+      const result = await service.findOne({ jurisdictionId });
+
+      expect(result.brand.logoUrl).toEqual(
+        'https://bloom-public.s3.us-west-2.amazonaws.com/logo-key',
+      );
+      expect(result.brand.faviconUrl).toBeUndefined();
+    });
+
+    it('carries the urls without colors when only an asset is set', async () => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue(row({ brandLogo: { fileId: 'logo-id' } }));
+
+      const result = await service.findOne({ jurisdictionId });
+
+      expect(result.brand.logoUrl).toContain('logo-id');
+      expect(result.brand.primary).toBeUndefined();
+    });
+
+    it('returns no brand when nothing is set', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(row());
+
+      const result = await service.findOne({ jurisdictionId });
+
+      expect(result.brand).toBeFalsy();
+    });
+
+    it('stores the brand without its url fields', async () => {
+      prisma.jurisdictions.update = jest.fn().mockResolvedValue(row());
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue(row())
+        .mockResolvedValueOnce({ id: jurisdictionId });
+      prisma.assets.findMany = jest.fn().mockResolvedValue([]);
+
+      await service.update({
+        id: jurisdictionId,
+        name: 'Branded',
+        brand: {
+          primary: { base: '#773E98' },
+          logoUrl: 'https://stale.example/logo.png',
+          faviconUrl: 'https://stale.example/favicon.png',
+        },
+      } as JurisdictionUpdate);
+
+      const written = (prisma.jurisdictions.update as jest.Mock).mock
+        .calls[0][0].data;
+      expect(written.brand).toEqual({ primary: { base: '#773E98' } });
+      expect(written.brandLogo).toBeUndefined();
+    });
+
+    it('rejects a branding asset id that does not exist', async () => {
+      const missing = randomUUID();
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: jurisdictionId });
+      prisma.assets.findMany = jest.fn().mockResolvedValue([]);
+      prisma.jurisdictions.update = jest.fn();
+
+      await expect(
+        service.update({
+          id: jurisdictionId,
+          name: 'Branded',
+          brandLogoAssetId: missing,
+        } as JurisdictionUpdate),
+      ).rejects.toThrow(`assets ${missing} do not exist`);
+      expect(prisma.jurisdictions.update).not.toHaveBeenCalled();
     });
   });
 });
