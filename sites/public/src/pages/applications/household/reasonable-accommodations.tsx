@@ -11,6 +11,7 @@ import {
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 
@@ -83,3 +84,5 @@ const ApplicationReasonableAccommodations = () => {
 }
 
 export default ApplicationReasonableAccommodations
+
+export const getStaticProps = sharedGetStaticProps

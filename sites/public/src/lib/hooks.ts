@@ -101,6 +101,7 @@ export const useFormConductor = (stepName: string) => {
 
   useEffect(() => {
     conductor.skipCurrentStepIfNeeded()
+    conductor.prefetchNextUrl()
   }, [conductor])
   return context
 }

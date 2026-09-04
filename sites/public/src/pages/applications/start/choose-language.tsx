@@ -30,6 +30,7 @@ import { getListingStatusMessage, isFeatureFlagOn } from "../../../lib/helpers"
 import { getEnabledStopLightRuleKeys } from "../../../lib/applications/stopLights/enabledStopLightRuleKeys"
 import { AccountTypeDialog } from "../../../components/account/AccountTypeDialog"
 import styles from "../../../layouts/application-form.module.scss"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const loadListing = async (
   listingId,
@@ -280,3 +281,5 @@ const ApplicationChooseLanguage = () => {
 }
 
 export default ApplicationChooseLanguage
+
+export const getStaticProps = sharedGetStaticProps

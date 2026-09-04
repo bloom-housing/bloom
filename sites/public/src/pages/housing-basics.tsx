@@ -9,6 +9,7 @@ import { PageHeaderLayout } from "../patterns/PageHeaderLayout"
 import styles from "../patterns/PageHeaderLayout.module.scss"
 import { getGenericHousingBasicsContent } from "../static_content/generic_housing_basics_content"
 import { getHousingBasicsContent } from "../static_content/jurisdiction_housing_basics_content"
+import { sharedGetStaticProps } from "../lib/sharedPageProps"
 
 const HousingBasicsPage = () => {
   const { profile } = useContext(AuthContext)
@@ -44,3 +45,5 @@ const HousingBasicsPage = () => {
 }
 
 export default HousingBasicsPage
+
+export const getStaticProps = sharedGetStaticProps

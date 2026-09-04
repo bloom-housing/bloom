@@ -18,6 +18,7 @@ import {
 } from "../../../../components/account/ApplicationCards"
 import styles from "../../../../../styles/lottery-results.module.scss"
 import Markdown from "markdown-to-jsx"
+import { sharedGetServerSideProps } from "../../../../lib/sharedPageProps"
 
 const LotteryResults = () => {
   const router = useRouter()
@@ -251,3 +252,5 @@ const LotteryResults = () => {
 }
 
 export default LotteryResults
+
+export const getServerSideProps = sharedGetServerSideProps

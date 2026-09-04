@@ -15,6 +15,7 @@ import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend
 import FormsLayout from "../../../layouts/forms"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
@@ -157,3 +158,5 @@ const ApplicationAlternateContactType = () => {
 }
 
 export default ApplicationAlternateContactType
+
+export const getStaticProps = sharedGetStaticProps

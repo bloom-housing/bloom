@@ -26,6 +26,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 
@@ -316,3 +317,5 @@ const ApplicationDemographics = () => {
 }
 
 export default ApplicationDemographics
+
+export const getStaticProps = sharedGetStaticProps

@@ -12,6 +12,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
@@ -135,3 +136,5 @@ const ApplicationLiveAlone = () => {
 }
 
 export default ApplicationLiveAlone
+
+export const getStaticProps = sharedGetStaticProps
