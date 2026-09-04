@@ -156,6 +156,43 @@ function mergeValue(base: unknown, override: unknown): unknown {
   return override;
 }
 
+const isEmptyForRender = (value: unknown): boolean => {
+  if (value === undefined || value === null) {
+    return true;
+  }
+  if (typeof value === 'string') {
+    return value.trim() === '';
+  }
+  if (Array.isArray(value)) {
+    return value.length === 0;
+  }
+  if (isPlainObject(value)) {
+    return Object.entries(value).every(
+      ([key, entry]) => key === 'id' || isEmptyForRender(entry),
+    );
+  }
+  return false;
+};
+
+// An item an admin left blank, or emptied to hide it for one language, is dropped from a list here
+// so the render path has nothing to draw for it. Fields keep their empty values.
+const withoutEmptyItems = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value
+      .map(withoutEmptyItems)
+      .filter((item) => !isEmptyForRender(item));
+  }
+  if (isPlainObject(value)) {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [
+        key,
+        withoutEmptyItems(entry),
+      ]),
+    );
+  }
+  return value;
+};
+
 export interface MergeableContent {
   footer?: Json;
   faq?: Json;
@@ -170,8 +207,7 @@ export function mergeContent(
   englishContent: MergeableContent,
   languageContent?: MergeableContent,
 ): MergeableContent {
-  return mergeValue(
-    englishContent ?? {},
-    languageContent ?? {},
+  return withoutEmptyItems(
+    mergeValue(englishContent ?? {}, languageContent ?? {}),
   ) as MergeableContent;
 }

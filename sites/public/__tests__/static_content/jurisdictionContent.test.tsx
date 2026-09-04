@@ -12,6 +12,28 @@ const content = (fields: Partial<JurisdictionContentFields>): JurisdictionConten
   fields as JurisdictionContentFields
 
 describe("getStoredFaqContent", () => {
+  it("drops a category whose title is blank, which would render an empty heading", () => {
+    const stored = getStoredFaqContent({
+      faq: {
+        categories: [
+          {
+            id: "blank",
+            title: "   ",
+            items: [{ id: "q", question: "Q?", answerHtml: "<p>A</p>" }],
+          },
+          {
+            id: "titled",
+            title: "Applying",
+            items: [{ id: "q2", question: "Q2?", answerHtml: "<p>A2</p>" }],
+          },
+        ],
+      },
+    } as JurisdictionContentFields)
+
+    expect(stored.categories).toHaveLength(1)
+    expect(stored.categories[0].title).toEqual("Applying")
+  })
+
   const faq = content({
     faq: {
       categories: [
@@ -252,6 +274,31 @@ describe("getStoredFooterLinksContent", () => {
 })
 
 describe("getStoredResourcesContent", () => {
+  it("drops a card without an id and a section without a title", () => {
+    const stored = getStoredResourcesContent({
+      resources: {
+        resourceSections: [
+          {
+            id: "titled",
+            sectionTitle: "Help",
+            cards: [
+              { id: "kept", title: "Kept", contentHtml: "<p>x</p>" },
+              { id: "", title: "No id", contentHtml: "<p>x</p>" },
+            ],
+          },
+          {
+            id: "untitled",
+            sectionTitle: "",
+            cards: [{ id: "c", title: "Card", contentHtml: "<p>x</p>" }],
+          },
+        ],
+      },
+    } as JurisdictionContentFields)
+
+    expect(stored.resourceSections).toHaveLength(1)
+    expect(stored.resourceSections[0].cards).toHaveLength(1)
+  })
+
   const sections = [
     {
       id: "immediate",

@@ -16,11 +16,7 @@ import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabV
 import { ColDef, ColGroupDef, GridApi } from "ag-grid-community"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
-import {
-  getEnabledSettingsTabCount,
-  getSettingsTabs,
-  SettingsIndexEnum,
-} from "../../components/settings/SettingsViewHelpers"
+import { useSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
 import { useUnsavedChangesWarning } from "../../lib/hooks"
 import { translations } from "../../lib/translations"
 import { useTranslationScope } from "../../lib/useTranslationScope"
@@ -65,23 +61,8 @@ const SettingsTranslations = () => {
   const { addToast } = useContext(MessageContext)
   const { mutate: saveOverrides, isLoading: isSaving } = useMutate()
   const { mutate: revertOverride, isLoading: isReverting } = useMutate()
-  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
-
-  const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
-  const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.disableListingPreferences,
-    null,
-    true
-  )
-  const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
-  const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
-  const enableTranslations = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableDbDrivenContent)
-  const settingsTabsFeatureFlags = {
-    enablePreferences: atLeastOneJurisdictionEnablesPreferences,
-    enableProperties,
-    enableAgencies,
-    enableTranslations,
-  }
+  const { profile } = useContext(AuthContext)
+  const { enableTranslations, hideTabs, tabs } = useSettingsTabs(SettingsIndexEnum.translations)
 
   const authorized = enableTranslations && !!profile?.userRoles?.isAdmin
 
@@ -383,15 +364,7 @@ const SettingsTranslations = () => {
         </title>
       </Head>
       <NavigationHeader className="relative" title={t("t.settings")} />
-      <TabView
-        hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags, profile?.userRoles) <= 1}
-        tabs={getSettingsTabs(
-          SettingsIndexEnum.translations,
-          v2Preferences,
-          settingsTabsFeatureFlags,
-          profile?.userRoles
-        )}
-      >
+      <TabView hideTabs={hideTabs} tabs={tabs}>
         <div className={styles["toolbar"]}>
           <div className={styles["scope-controls"]}>
             <Select
