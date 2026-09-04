@@ -56,6 +56,18 @@ describe('BrandDTO', () => {
     ).not.toHaveLength(0);
   });
 
+  // The derivation and the CSS variables handle only these two forms, so the looser shapes the
+  // generic hex-color check would pass are refused.
+  it('accepts only 3- or 6-digit hex with a leading hash', async () => {
+    expect(await errorsOf({ primary: { base: '#FFF' } })).toHaveLength(0);
+
+    expect(await errorsOf({ primary: { base: '773E98' } })).not.toHaveLength(0);
+    expect(await errorsOf({ primary: { base: '#F0F8' } })).not.toHaveLength(0);
+    expect(await errorsOf({ primary: { base: '#AABBCCDD' } })).not.toHaveLength(
+      0,
+    );
+  });
+
   it('rejects a font url that is not a url', async () => {
     expect(
       await errorsOf({ primary: { base: '#773E98' }, fontUrl: 'not a url' }),

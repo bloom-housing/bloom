@@ -3,7 +3,7 @@ import { PrismaService } from '../../../src/services/prisma.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
 import { JurisdictionCreate } from '../../../src/dtos/jurisdictions/jurisdiction-create.dto';
 import { JurisdictionUpdate } from '../../../src/dtos/jurisdictions/jurisdiction-update.dto';
-import { LanguagesEnum } from '@prisma/client';
+import { LanguagesEnum, Prisma } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { ApplicationAccessibilityFeatureEnum } from '../../../src/enums/applications/application-accessibility-feature-enum';
 import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
@@ -672,6 +672,54 @@ describe('Testing jurisdiction service', () => {
         .calls[0][0].data;
       expect(written.brand).toEqual({ primary: { base: '#773E98' } });
       expect(written.brandLogo).toBeUndefined();
+    });
+
+    it('returns a malformed stored ramp as stored rather than failing the read', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(
+        row({
+          brand: { primary: { dark: '#693786' }, fontFamily: 'Inter' },
+        }),
+      );
+
+      const result = await service.findOne({ jurisdictionId });
+
+      expect(result.brand.primary).toEqual({ dark: '#693786' });
+      expect(result.brand.fontFamily).toEqual('Inter');
+    });
+
+    it('clears the stored brand when null is sent', async () => {
+      prisma.jurisdictions.update = jest.fn().mockResolvedValue(row());
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: jurisdictionId });
+
+      await service.update({
+        id: jurisdictionId,
+        name: 'Unbranded',
+        brand: null,
+      } as unknown as JurisdictionUpdate);
+
+      const written = (prisma.jurisdictions.update as jest.Mock).mock
+        .calls[0][0].data;
+      expect(written.brand).toEqual(Prisma.DbNull);
+    });
+
+    it('disconnects an asset when its id is sent as null', async () => {
+      prisma.jurisdictions.update = jest.fn().mockResolvedValue(row());
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: jurisdictionId });
+
+      await service.update({
+        id: jurisdictionId,
+        name: 'Unbranded',
+        brandLogoAssetId: null,
+      } as unknown as JurisdictionUpdate);
+
+      const written = (prisma.jurisdictions.update as jest.Mock).mock
+        .calls[0][0].data;
+      expect(written.brandLogo).toEqual({ disconnect: true });
+      expect(written.brandFavicon).toBeUndefined();
     });
 
     it('rejects a branding asset id that does not exist', async () => {

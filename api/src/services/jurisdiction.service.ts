@@ -82,8 +82,10 @@ selectViews[JurisdictionViews.full] = {
 // The brand JSON stores only what the admin sets: the url fields are built from the asset foreign
 // keys at read time.
 const storableBrand = (
-  brand?: BrandDTO,
-): Prisma.InputJsonObject | undefined => {
+  brand?: BrandDTO | null,
+): Prisma.InputJsonObject | typeof Prisma.DbNull | undefined => {
+  // Null clears the stored brand, matching how a null asset id disconnects that asset.
+  if (brand === null) return Prisma.DbNull;
   if (!brand) return undefined;
   const { logoUrl, faviconUrl, ...rest } = brand;
   void logoUrl;
@@ -97,6 +99,11 @@ type BrandRow = {
   brandFavicon?: { fileId: string } | null;
 };
 
+// A stored ramp is only derivable when it has a base; a malformed row is returned as stored
+// rather than failing the whole jurisdiction read.
+const hasDerivableBase = (ramp?: { base?: unknown }): boolean =>
+  typeof ramp?.base === 'string' && ramp.base.length > 0;
+
 const withResponseBrand = <T extends BrandRow>(raw: T): T => {
   const stored = raw.brand as unknown as BrandDTO | null;
   const logoUrl = brandAssetUrl(raw.brandLogo?.fileId, 'logo');
@@ -109,8 +116,10 @@ const withResponseBrand = <T extends BrandRow>(raw: T): T => {
     ...raw,
     brand: {
       ...(stored ?? {}),
-      ...(stored?.primary ? { primary: completeRamp(stored.primary) } : {}),
-      ...(stored?.secondary
+      ...(hasDerivableBase(stored?.primary)
+        ? { primary: completeRamp(stored.primary) }
+        : {}),
+      ...(hasDerivableBase(stored?.secondary)
         ? { secondary: completeRamp(stored.secondary) }
         : {}),
       logoUrl,
