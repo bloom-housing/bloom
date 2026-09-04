@@ -2796,30 +2796,6 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * A script that adds lottery translations to the db
-   */
-  lotteryTranslations(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/lotteryTranslations"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * A script that adds lottery translations to the db and creates them if it does not exist
-   */
-  lotteryTranslations1(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/lotteryTranslationsCreateIfEmpty"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * A script that opts out existing lottery listings
    */
   optOutExistingLotteries(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -2854,35 +2830,11 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * A script that updates single use code translations to show extended expiration time
-   */
-  updateCodeExpirationTranslations(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/updateCodeExpirationTranslations"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * A script that hides program multiselect questions from the public detail page
    */
   hideProgramsFromListings(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/scriptRunner/hideProgramsFromListings"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * A script that updates the "what happens next" content in lottery email
-   */
-  updatesWhatHappensInLotteryEmail(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/updatesWhatHappensInLotteryEmail"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -3660,6 +3612,25 @@ export class TranslationsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { language: params["language"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get the email strings shipped with the api
+   */
+  emailBaseTranslations(
+    params: {
+      /**  */
+      language: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/base/email/{language}"
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       axios(configs, resolve, reject)
     })
@@ -11849,6 +11820,7 @@ export enum EnumAgencyFilterParamsComparison {
 export enum SiteEnum {
   "public" = "public",
   "partners" = "partners",
+  "email" = "email",
 }
 
 export enum TranslationOrigin {

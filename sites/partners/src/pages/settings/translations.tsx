@@ -100,18 +100,21 @@ const SettingsTranslations = () => {
     setJurisdictionId,
     setLanguage,
     isGlobal,
+    isEmail,
     activeJurisdictionId,
     activeLanguage,
     languageOptions,
     scope,
     englishOverrideKeys,
+    emailBase,
+    baseReady,
     overrides,
     loading,
     error,
     cacheKey,
   } = useTranslationScope({ jurisdictions, enabled: authorized })
 
-  const overridesLoaded = overrides !== undefined
+  const dataLoaded = overrides !== undefined && baseReady
 
   const [edits, setEdits] = useState<PendingEdits>({})
   const [conflictKeys, setConflictKeys] = useState<string[]>([])
@@ -164,6 +167,17 @@ const SettingsTranslations = () => {
   useUnsavedChangesWarning(hasUnsavedChanges, t("translations.unsavedChangesWarning"))
 
   const rows = useMemo(() => {
+    // Email keys arrive flat from the api, so they skip the locale-file layering the sites need.
+    if (isEmail) {
+      if (!baseReady) return []
+      return buildTranslationRows({
+        englishBase: emailBase.english,
+        languageBase: activeLanguage === LanguagesEnum.en ? undefined : emailBase.language,
+        overrides: overrides ?? [],
+        englishOverrideKeys,
+      })
+    }
+
     const siteOverrides = scope.baseOverrides
     const englishLayer = flattenTranslations(siteOverrides.en)
     const languageLayer = siteOverrides[activeLanguage]
@@ -179,7 +193,7 @@ const SettingsTranslations = () => {
       overrides: overrides ?? [],
       englishOverrideKeys,
     })
-  }, [activeLanguage, englishOverrideKeys, overrides, scope])
+  }, [activeLanguage, baseReady, emailBase, englishOverrideKeys, isEmail, overrides, scope])
 
   // Every row is already in the browser, so search and pagination are local rather than a refetch.
   const search = (tableOptions.filter.filterValue ?? "").trim().toLowerCase()
@@ -244,7 +258,7 @@ const SettingsTranslations = () => {
         headerName: t("translations.currentValue"),
         minWidth: 220,
         flex: 2,
-        editable: overridesLoaded && !isSaving,
+        editable: dataLoaded && !isSaving,
         singleClickEdit: true,
         cellClass: ({ data }: { data: TranslationGridRow }) =>
           data.editedValue !== null
@@ -301,7 +315,7 @@ const SettingsTranslations = () => {
           ),
       },
     ],
-    [isReverting, isSaving, overridesLoaded, runRevert]
+    [dataLoaded, isReverting, isSaving, runRevert]
   )
 
   const saveEdits = (pending: PendingEdits) => {
@@ -403,6 +417,7 @@ const SettingsTranslations = () => {
               options={[
                 { value: SiteEnum.public, label: t("translations.sitePublic") },
                 { value: SiteEnum.partners, label: t("translations.sitePartners") },
+                { value: SiteEnum.email, label: t("translations.siteEmail") },
               ]}
               inputProps={{
                 onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {

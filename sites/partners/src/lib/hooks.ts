@@ -1120,6 +1120,29 @@ export function useRawTranslations(scope: TranslationScope | null, language: str
 }
 
 /**
+ * Reads the email base strings. Public and Partners bundle their base into the site, but the email
+ * strings ship with the api, so they are fetched. A null language skips the request.
+ */
+export function useEmailBaseTranslations(language: string | null) {
+  const { translationsService } = useContext(AuthContext)
+
+  const cacheKey = language ? `/api/adapter/translations/base/email/${language}` : null
+
+  const { data, error } = useSWR(
+    cacheKey,
+    () =>
+      translationsService.emailBaseTranslations({ language }) as Promise<Record<string, string>>,
+    { revalidateOnFocus: false, revalidateOnReconnect: false }
+  )
+
+  return {
+    data,
+    loading: !!cacheKey && !error && !data,
+    error,
+  }
+}
+
+/**
  * Warns before unsaved work is lost, on an in-app route change and on the browser closing or
  * reloading.
  *

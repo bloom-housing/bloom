@@ -7,7 +7,6 @@ import {
   LanguagesEnum,
   Prisma,
   SiteEnum,
-  Translations,
   TranslationOrigin,
 } from '@prisma/client';
 import * as lodash from 'lodash';
@@ -22,6 +21,7 @@ import { TranslationKeyEdit } from '../dtos/translations/translation-key-edit.dt
 import { TranslationRawKey } from '../dtos/translations/translation-raw-key.dto';
 import { TranslationOverrideRow } from '../dtos/translations/translation-override-row.dto';
 import { flattenTranslationRows } from '../utilities/translation-merge';
+import { baseTranslationRows } from '../locales/email-translations';
 import { sourceHash } from '../utilities/translation-source-hash';
 import { mapTo } from '../utilities/mapTo';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
@@ -43,7 +43,7 @@ export class TranslationService {
 
     const rows = await this.prisma.translationStrings.findMany({
       where: {
-        site: null,
+        site: SiteEnum.email,
         language: { in: languages },
         OR: jurisdictionId
           ? [{ jurisdictionId: null }, { jurisdictionId }]
@@ -57,21 +57,17 @@ export class TranslationService {
       },
     });
 
-    // Until the base rows are backfilled (#6519), read the legacy blob. Keyed on the
-    // generic-default scope so a migrated environment never falls back per scope.
-    const migrated = rows.some(
-      (row) => row.jurisdictionId === null && row.language === LanguagesEnum.en,
-    );
-    if (!migrated) {
-      return this.getLegacyMergedTranslations(jurisdictionId, language);
-    }
-
     const scopeRows = (id: string | null, lang: LanguagesEnum) =>
       rows.filter((row) => row.jurisdictionId === id && row.language === lang);
 
+    // A language sits above english within its own scope, so editing an english string
+    // does not displace a translation of it.
     return flattenTranslationRows([
+      baseTranslationRows(LanguagesEnum.en),
       scopeRows(null, LanguagesEnum.en),
-      ...(useLanguage ? [scopeRows(null, language)] : []),
+      ...(useLanguage
+        ? [baseTranslationRows(language), scopeRows(null, language)]
+        : []),
       ...(jurisdictionId ? [scopeRows(jurisdictionId, LanguagesEnum.en)] : []),
       ...(jurisdictionId && useLanguage
         ? [scopeRows(jurisdictionId, language)]
@@ -79,39 +75,10 @@ export class TranslationService {
     ]);
   }
 
-  private async getLegacyMergedTranslations(
-    jurisdictionId: string | null,
-    language?: LanguagesEnum,
-  ) {
-    const useLanguage = !!language && language !== LanguagesEnum.en;
-
-    const [genericDefault, generic, jurisdictionalDefault, jurisdictional] =
-      await Promise.all([
-        this.getTranslationByLanguageAndJurisdiction(LanguagesEnum.en, null),
-        useLanguage
-          ? this.getTranslationByLanguageAndJurisdiction(language, null)
-          : Promise.resolve(null),
-        jurisdictionId
-          ? this.getTranslationByLanguageAndJurisdiction(
-              LanguagesEnum.en,
-              jurisdictionId,
-            )
-          : Promise.resolve(null),
-        jurisdictionId && useLanguage
-          ? this.getTranslationByLanguageAndJurisdiction(
-              language,
-              jurisdictionId,
-            )
-          : Promise.resolve(null),
-      ]);
-
-    return lodash.merge(
-      {},
-      genericDefault?.translations,
-      generic?.translations,
-      jurisdictionalDefault?.translations,
-      jurisdictional?.translations,
-    );
+  public getBaseEmailTranslations(
+    language: LanguagesEnum,
+  ): Record<string, string> {
+    return flattenTranslationRows([baseTranslationRows(language)]);
   }
 
   private languagesToRead(language?: LanguagesEnum): LanguagesEnum[] {
@@ -435,7 +402,16 @@ export class TranslationService {
 
     const inScope = (id: string | null, scopeSite: SiteEnum | null) =>
       rows.filter((row) => row.jurisdictionId === id && row.site === scopeSite);
+    const requested = new Set(keys);
     const english = flattenTranslationRows([
+      // Email's english base ships with the api rather than being stored
+      ...(site === SiteEnum.email
+        ? [
+            baseTranslationRows(LanguagesEnum.en).filter((row) =>
+              requested.has(row.key),
+            ),
+          ]
+        : []),
       inScope(null, null),
       inScope(null, site),
       inScope(jurisdictionId, site),
@@ -446,15 +422,6 @@ export class TranslationService {
       hashes.set(key, sourceHash(value));
     }
     return hashes;
-  }
-
-  public async getTranslationByLanguageAndJurisdiction(
-    language: LanguagesEnum,
-    jurisdictionId: string | null,
-  ): Promise<Translations | null> {
-    return await this.prisma.translations.findFirst({
-      where: { AND: [{ language: language }, { jurisdictionId }] },
-    });
   }
 
   public async translateListing(listing: Listing, language: LanguagesEnum) {
