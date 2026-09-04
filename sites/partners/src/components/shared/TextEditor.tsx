@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from "react"
 import Markdown from "markdown-to-jsx"
+import React, { useCallback, useState } from "react"
 import { EditorContent, Editor } from "@tiptap/react"
 import { StarterKit } from "@tiptap/starter-kit"
 import { CharacterCount } from "@tiptap/extension-character-count"
@@ -268,6 +268,7 @@ export const TextEditor = ({
     editor?.view.setProps({
       attributes: { "aria-labelledby": labelId, role: "textbox" },
     })
+    setCharacterCount(editor?.storage?.characterCount?.characters() ?? 0)
   })
   const overLimit = characterCount > characterLimit
 
@@ -297,11 +298,20 @@ export const TextEditor = ({
 type TextEditorContentProps = {
   content: string
   contentId?: string
+  asHtml?: boolean
 }
 
-export const TextEditorContent = ({ content, contentId }: TextEditorContentProps) => {
+export const TextEditorContent = ({ content, contentId, asHtml }: TextEditorContentProps) => {
+  const className = `${styles["editor"]} ${styles["editor-text"]}`
+
+  if (asHtml) {
+    return (
+      <div className={className} id={contentId} dangerouslySetInnerHTML={{ __html: content }} />
+    )
+  }
+
   return (
-    <div className={`${styles["editor"]} ${styles["editor-text"]}`} id={contentId}>
+    <div className={className} id={contentId}>
       <Markdown>{content}</Markdown>
     </div>
   )

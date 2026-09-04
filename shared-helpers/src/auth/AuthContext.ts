@@ -26,6 +26,7 @@ import {
   RequestMfaCodeResponse,
   ReservedCommunityTypesService,
   TranslationsService,
+  JurisdictionContentService,
   UnitTypesService,
   User,
   UserService,
@@ -61,6 +62,7 @@ type ContextProps = {
   lotteryService: LotteryService
   agencyService: AgencyService
   translationsService: TranslationsService
+  jurisdictionContentService: JurisdictionContentService
   loadProfile: (redirect?: string) => void
   login: (
     email: string,
@@ -248,6 +250,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     featureFlagService: new FeatureFlagsService(),
     agencyService: new AgencyService(),
     translationsService: new TranslationsService(),
+    jurisdictionContentService: new JurisdictionContentService(),
     loading: state?.loading,
     initialStateLoaded: state?.initialStateLoaded,
     profile: state?.profile,
