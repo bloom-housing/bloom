@@ -891,6 +891,58 @@ describe("lottery", () => {
     expect(screen.getByText("Export")).toBeInTheDocument()
   })
 
+  it("should show export if ran without publish to public state flag is on as a partner if the enablePartnerLotteryExport", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: {
+              isAdmin: false,
+              isPartner: true,
+            },
+            listings: [{ id: "Uvbk5qurpB2WI9V6WnNdH" }],
+            jurisdictions: [
+              {
+                id: "id",
+                name: "Bloomington",
+                featureFlags: [{ name: FeatureFlagEnum.enablePartnerLotteryExport, active: true }],
+              },
+            ],
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
+      }),
+      rest.get(
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
+    )
+
+    const updatedListing = {
+      ...closedListing,
+      lotteryLastRunAt: new Date("September 6, 2025 8:15:00"),
+      lotteryStatus: LotteryStatusEnum.ran,
+    }
+
+    render(<Lottery listing={updatedListing} />)
+
+    const header = await screen.findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    expect(screen.getByText("Export lottery data")).toBeInTheDocument()
+    expect(screen.getByText("Export")).toBeInTheDocument()
+  })
+
   it("should show run section for partner user when enablePartnerLotteryRun flag is on", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
     document.cookie = "access-token-available=True"

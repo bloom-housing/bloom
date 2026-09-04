@@ -58,6 +58,16 @@ const Lottery = (props: { listing: Listing | undefined }) => {
     jurisdictionData?.id
   )
 
+  const enablePartnerLotteryExport = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enablePartnerLotteryExport,
+    jurisdictionData?.id
+  )
+
+  const enableNonAdminLotteries = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNonAdminLotteries,
+    jurisdictionData?.id
+  )
+
   const enablePartnerLotteryRun = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enablePartnerLotteryRun,
     jurisdictionData?.id
@@ -275,7 +285,10 @@ const Lottery = (props: { listing: Listing | undefined }) => {
             )}
           </CardSection>
         )
-      } else if (listing.lotteryStatus === LotteryStatusEnum.publishedToPublic) {
+      } else if (
+        listing.lotteryStatus === LotteryStatusEnum.publishedToPublic ||
+        (listing.lotteryLastRunAt && enablePartnerLotteryExport)
+      ) {
         return exportCard
       }
       if (listing.lotteryStatus === LotteryStatusEnum.expired) {
@@ -337,7 +350,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                 {t("listings.lottery.reRun")}
               </Button>
             )}
-            {listing.lotteryStatus === LotteryStatusEnum.ran && (
+            {listing.lotteryStatus === LotteryStatusEnum.ran && !enableNonAdminLotteries && (
               <Button
                 className={styles["action"]}
                 onClick={() => {
@@ -481,7 +494,17 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                     await lotteryService.lotteryGenerate({ body: { id: listing.id } })
                     setLoading(false)
                     setRunModal(false)
-                    addToast(t("listings.lottery.toast.run"), { variant: "success" })
+                    if (enableNonAdminLotteries) {
+                      await lotteryService.lotteryStatus({
+                        body: {
+                          id: listing.id,
+                          lotteryStatus: LotteryStatusEnum.releasedToPartners,
+                        },
+                      })
+                      addToast(t("listings.lottery.toast.released"), { variant: "success" })
+                    } else {
+                      addToast(t("listings.lottery.toast.run"), { variant: "success" })
+                    }
                     await router.push(`/listings/${listing.id}/lottery`)
                   } catch (err) {
                     console.log(err)
