@@ -266,6 +266,19 @@ export default class ApplicationConductor {
     }
   }
 
+  // Steps are generated pages, so the router blocks each transition on the next step's page data.
+  prefetchNextUrl() {
+    try {
+      const url = this.nextOrReturnUrl()
+      if (url) {
+        void Router.prefetch(url).catch(() => undefined)
+      }
+    } catch (error) {
+      // Runs on mount, where a throw would take the step down, not just the navigation.
+      console.warn("could not prefetch the next step = ", String(error))
+    }
+  }
+
   determineNextUrl() {
     let i = this.currentStepIndex + 1
     let nextUrl = ""

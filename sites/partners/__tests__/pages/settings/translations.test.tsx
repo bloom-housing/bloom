@@ -141,15 +141,34 @@ const selectLanguage = async (label: string) =>
   userEvent.selectOptions(await screen.findByLabelText("Language"), label)
 
 // Types into the first editable cell and commits, which is what puts the page in the edited state.
+// AgTable redraws the grid shortly after first render, which cancels a cell edit in progress.
+// Under CI load the click can land inside that window, so the user actions retry; the assertion
+// that Save must enable is unchanged.
 const editFirstValue = async (value: string) => {
-  await waitFor(() => expect(document.querySelector(".editable-cell")).toBeInTheDocument())
-  await userEvent.click(document.querySelector<HTMLElement>(".editable-cell"))
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await waitFor(() => expect(document.querySelector(".editable-cell")).toBeInTheDocument(), {
+      timeout: 8000,
+    })
+    await userEvent.click(document.querySelector<HTMLElement>(".editable-cell"))
 
-  const input = document.querySelector<HTMLInputElement>(".editable-cell input")
-  await userEvent.clear(input)
-  await userEvent.type(input, `${value}{Enter}`)
+    const input = document.querySelector<HTMLInputElement>(".editable-cell input")
+    if (!input) continue
+    await userEvent.clear(input)
+    await userEvent.type(input, `${value}{Enter}`)
 
-  await waitFor(() => expect(screen.getByRole("button", { name: /Save/ })).toBeEnabled())
+    try {
+      await waitFor(() => expect(screen.getByRole("button", { name: /Save/ })).toBeEnabled(), {
+        timeout: 3000,
+      })
+      return
+    } catch {
+      // The edit was cancelled by a grid redraw; run the actions again.
+    }
+  }
+
+  await waitFor(() => expect(screen.getByRole("button", { name: /Save/ })).toBeEnabled(), {
+    timeout: 8000,
+  })
 }
 
 // Rows are filtered in the browser, behind a debounce, so this waits the current page out. The

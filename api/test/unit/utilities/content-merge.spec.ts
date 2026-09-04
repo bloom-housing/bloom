@@ -118,6 +118,51 @@ describe('mergeContent', () => {
     expect(merged).toEqual([{ id: 'a', text: 'EN A' }]);
   });
 
+  it('applies a deletion recorded on the English row when there is no language row', () => {
+    const english = {
+      footer: {
+        links: [
+          { id: 'about', text: 'About', href: '/about' },
+          { id: 'old', text: 'Old page', href: '/old', _deleted: true },
+        ],
+      },
+    };
+
+    expect(mergeContent(english).footer).toEqual({
+      links: [{ id: 'about', text: 'About', href: '/about' }],
+    });
+  });
+
+  it('applies a deletion nested under a list the language row does not override', () => {
+    const english = {
+      faq: {
+        categories: [
+          {
+            id: 'applying',
+            title: 'Applying',
+            items: [
+              { id: 'how', question: 'How?', answerHtml: '<p>Online.</p>' },
+              {
+                id: 'gone',
+                question: 'Gone?',
+                answerHtml: '<p>Yes.</p>',
+                _deleted: true,
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    const merged = mergeContent(english, { footer: {} }) as {
+      faq: { categories: { items: { id: string }[] }[] };
+    };
+
+    expect(merged.faq.categories[0].items.map((item) => item.id)).toEqual([
+      'how',
+    ]);
+  });
+
   it('appends items added only in the language row after the English-derived items', () => {
     const merged = mergeListById(
       [{ id: 'a', text: 'EN A' }],

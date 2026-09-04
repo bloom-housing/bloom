@@ -15,6 +15,7 @@ import {
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
@@ -119,3 +120,5 @@ const ApplicationPreferredUnits = () => {
 }
 
 export default ApplicationPreferredUnits
+
+export const getStaticProps = sharedGetStaticProps

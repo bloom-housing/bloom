@@ -12,6 +12,7 @@ import {
   stateKeys,
 } from "@bloom-housing/shared-helpers"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
@@ -230,3 +231,5 @@ const ApplicationAlternateContactContact = () => {
 }
 
 export default ApplicationAlternateContactContact
+
+export const getStaticProps = sharedGetStaticProps

@@ -7,6 +7,7 @@ import {
   IsDefined,
   IsOptional,
   IsString,
+  MaxLength,
   ValidateNested,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
@@ -18,18 +19,21 @@ export class ContactCardDTO {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   departmentTitle?: string;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   description?: string;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   email?: string;
 }
 
@@ -38,11 +42,13 @@ export class ResourceCardDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   id: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   title: string;
 
   @Expose()
@@ -50,12 +56,14 @@ export class ResourceCardDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsSafeUrl({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   href?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @SanitizeHtml()
   @ApiProperty()
+  @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   contentHtml: string;
 
   // Tombstone: a non-English row sets this to drop the English card from the merge.
@@ -71,17 +79,20 @@ export class ResourceSectionDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   id: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   sectionTitle: string;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   sectionSubtitle?: string;
 
   @Expose()

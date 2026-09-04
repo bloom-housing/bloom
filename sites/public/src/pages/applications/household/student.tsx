@@ -12,6 +12,7 @@ import {
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import ApplicationFormLayout, {
@@ -126,3 +127,5 @@ const ApplicationHouseholdStudent = () => {
 }
 
 export default ApplicationHouseholdStudent
+
+export const getStaticProps = sharedGetStaticProps
