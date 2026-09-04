@@ -11750,6 +11750,7 @@ export enum FeatureFlagEnum {
   "enableMultiselectVoucherQuestion" = "enableMultiselectVoucherQuestion",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "enableNeighborhoodAmenitiesDropdown" = "enableNeighborhoodAmenitiesDropdown",
+  "enableNonAdminLotteries" = "enableNonAdminLotteries",
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
   "enableOnlyAdminCanAddAppsAfterClose" = "enableOnlyAdminCanAddAppsAfterClose",
   "enableOnlyAdminCanEditListingDates" = "enableOnlyAdminCanEditListingDates",
