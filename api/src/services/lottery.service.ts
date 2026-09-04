@@ -507,6 +507,7 @@ export class LotteryService {
         id: storedListing.id,
         jurisdictionId: storedListing.jurisdictionId,
       },
+      { isLotteryStatusUpdate: true },
     );
 
     if (storedListing.status !== ListingsStatusEnum.closed) {
