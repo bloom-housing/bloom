@@ -190,6 +190,23 @@ describe('Jurisdiction Controller Tests', () => {
       expect(res.body.message).toContain(missing);
     });
 
+    it('clears the brand when null is sent', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: {
+          ...jurisdictionFactory(),
+          brand: { primary: { base: '#773E98' } },
+        },
+      });
+
+      await put(jurisdiction.id, { brand: null }).expect(200);
+
+      const stored = await prisma.jurisdictions.findUnique({
+        where: { id: jurisdiction.id },
+        select: { brand: true },
+      });
+      expect(stored.brand).toBeNull();
+    });
+
     it('returns a null brand for a jurisdiction that has none', async () => {
       const jurisdiction = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),

@@ -10,7 +10,15 @@ export const brandAssetUrl = (
   if (!fileId) return undefined;
 
   if (process.env.USE_S3_FILE_STORAGE === 'TRUE') {
-    return `https://${process.env.S3_PUBLIC_BUCKET}.s3.${process.env.S3_REGION}.amazonaws.com/${fileId}`;
+    const bucket = process.env.S3_PUBLIC_BUCKET;
+    const region = process.env.S3_REGION;
+    if (!bucket || !region) {
+      console.error(
+        'USE_S3_FILE_STORAGE is TRUE but S3_PUBLIC_BUCKET or S3_REGION is not set',
+      );
+      return undefined;
+    }
+    return `https://${bucket}.s3.${region}.amazonaws.com/${fileId}`;
   }
 
   return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/w_${WIDTH[kind]},c_limit,q_90,f_png/${fileId}`;
