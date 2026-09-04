@@ -76,4 +76,42 @@ describe("AdminListingApprovalDialog", () => {
       )
     ).toBeInTheDocument()
   })
+
+  it("renders land use copy when publishesToClosed is true", () => {
+    render(
+      <AdminListingApprovalDialog
+        isOpen={true}
+        onClose={jest.fn()}
+        onConfirm={jest.fn()}
+        scheduledPublishAt={null}
+        publishesToClosed={true}
+      />
+    )
+
+    expect(
+      screen.getByText(
+        "This is a land use listing without a scheduled publish date. Without an entered scheduled publish date, land use listings are published straight to Closed status. No notifications will be sent to applicants or partners. To publish as Open status, first add a scheduled publish date."
+      )
+    ).toBeInTheDocument()
+  })
+
+  it("keeps the past-date copy when publishesToClosed is true and a past date is entered", () => {
+    jest.setSystemTime(new Date("2026-06-15T00:00:01"))
+
+    render(
+      <AdminListingApprovalDialog
+        isOpen={true}
+        onClose={jest.fn()}
+        onConfirm={jest.fn()}
+        scheduledPublishAt={"2026-06-15T00:00:00.000Z"}
+        publishesToClosed={true}
+      />
+    )
+
+    expect(
+      screen.getByText(
+        "The scheduled publish date entered on the listing has passed. Approving this listing will publish it immediately. To delay publication, update the scheduled publish date before approving."
+      )
+    ).toBeInTheDocument()
+  })
 })

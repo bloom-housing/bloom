@@ -4,7 +4,11 @@ import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 import { t } from "@bloom-housing/ui-components"
 import { Tag } from "@bloom-housing/ui-seeds"
-import { ListingsStatusEnum, MinMax } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  EnumListingListingType,
+  ListingsStatusEnum,
+  MinMax,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export const getListingStatusTag = (listingStatus: ListingsStatusEnum) => {
   switch (listingStatus) {
@@ -119,6 +123,25 @@ export function getValidFutureScheduledDate(
     return scheduledAt.format("MM/DD/YYYY")
   }
   return false
+}
+
+export function publishesLandUseToClosed({
+  listingType,
+  enableLandUse,
+  enableAutopublish,
+  scheduledPublishAt,
+}: {
+  listingType?: EnumListingListingType
+  enableLandUse?: boolean
+  enableAutopublish?: boolean
+  scheduledPublishAt?: Date | string | null
+}): boolean {
+  return (
+    listingType === EnumListingListingType.landUse &&
+    !!enableLandUse &&
+    !!enableAutopublish &&
+    scheduledPublishAt == null
+  )
 }
 
 export function formatRentRange(rent: MinMax, percent: MinMax): string {

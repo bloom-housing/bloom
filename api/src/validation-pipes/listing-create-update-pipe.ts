@@ -1,8 +1,12 @@
 import { ArgumentMetadata, Injectable, ValidationPipe } from '@nestjs/common';
+import { ListingsStatusEnum, ListingTypeEnum } from '@prisma/client';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { PrismaService } from '../services/prisma.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 
 /**
  * Validation pipe for creating or editing a listing
@@ -32,6 +36,38 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
     });
   }
 
+  /**
+   * A land use listing with no scheduled publish date goes live as `closed` rather than `active`,
+   */
+  private async publishesToClosed(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any,
+    jurisdiction: unknown,
+  ): Promise<boolean> {
+    if (
+      value.status !== ListingsStatusEnum.closed ||
+      value.listingType !== ListingTypeEnum.landUse ||
+      !doJurisdictionHaveFeatureFlagSet(
+        jurisdiction as Jurisdiction,
+        FeatureFlagEnum.enableLandUse,
+      )
+    ) {
+      return false;
+    }
+
+    // A listing created directly as closed has no stored status to compare against
+    if (!value.id) {
+      return true;
+    }
+
+    const storedListing = await this.prisma.listings.findUnique({
+      where: { id: value.id },
+      select: { status: true },
+    });
+
+    return storedListing?.status !== ListingsStatusEnum.active;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async transform(value: any, metadata: ArgumentMetadata): Promise<any> {
     if (metadata.type !== 'body') {
@@ -53,6 +89,7 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
         requiredListingFields: true,
         minimumListingPublishImagesRequired: true,
         listingFeaturesConfiguration: true,
+        featureFlags: true,
       },
     });
 
@@ -75,6 +112,7 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
       requiredFields,
       minimumImagesRequired,
       listingFeaturesConfiguration,
+      publishesToClosed: await this.publishesToClosed(value, jurisdiction),
     };
 
     // Check for nested required fields
