@@ -11,11 +11,16 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { Prisma } from '@prisma/client';
 import { JurisdictionUpdate } from '../dtos/jurisdictions/jurisdiction-update.dto';
 import { JurisdictionViews } from '../enums/jurisdictions/view-enum';
+import { BrandDTO } from '../dtos/jurisdictions/brand.dto';
+import { brandAssetUrl } from '../utilities/brand-asset-url';
+import { completeRamp } from '../utilities/brand-ramp';
 
 // TODO: convert this to the selectViews
 const view: Prisma.JurisdictionsInclude = {
   featureFlags: true,
   multiselectQuestions: true,
+  brandLogo: { select: { fileId: true } },
+  brandFavicon: { select: { fileId: true } },
 };
 
 const selectViews: Partial<
@@ -40,6 +45,11 @@ const selectViews: Partial<
       select: { id: true, name: true },
     },
     listingFeaturesConfiguration: true,
+    brand: true,
+    brandLogoAssetId: true,
+    brandFaviconAssetId: true,
+    brandLogo: { select: { fileId: true } },
+    brandFavicon: { select: { fileId: true } },
     visibleAccessibilityPriorityTypes: true,
     visibleApplicationAccessibilityFeatures: true,
     visibleHouseholdMemberRelationships: true,
@@ -69,6 +79,62 @@ selectViews[JurisdictionViews.full] = {
   whatToExpectUnderConstruction: true,
 };
 
+// The brand JSON stores only what the admin sets: the url fields are built from the asset foreign
+// keys at read time.
+const storableBrand = (
+  brand?: BrandDTO | null,
+): Prisma.InputJsonObject | typeof Prisma.DbNull | undefined => {
+  // Null clears the stored brand, matching how a null asset id disconnects that asset.
+  if (brand === null) return Prisma.DbNull;
+  if (!brand) return undefined;
+  const { logoUrl, faviconUrl, ...rest } = brand;
+  void logoUrl;
+  void faviconUrl;
+  return rest as unknown as Prisma.InputJsonObject;
+};
+
+type BrandRow = {
+  brand?: Prisma.JsonValue | null;
+  brandLogo?: { fileId: string } | null;
+  brandFavicon?: { fileId: string } | null;
+};
+
+// A stored ramp is only derivable when it has a base; a malformed row is returned as stored
+// rather than failing the whole jurisdiction read.
+const hasDerivableBase = (ramp?: { base?: unknown }): boolean =>
+  typeof ramp?.base === 'string' && ramp.base.length > 0;
+
+const withResponseBrand = <T extends BrandRow>(raw: T): T => {
+  const stored = raw.brand as unknown as BrandDTO | null;
+  const logoUrl = brandAssetUrl(raw.brandLogo?.fileId, 'logo');
+  const faviconUrl = brandAssetUrl(raw.brandFavicon?.fileId, 'favicon');
+  if (!stored && !logoUrl && !faviconUrl) {
+    return raw;
+  }
+
+  return {
+    ...raw,
+    brand: {
+      ...(stored ?? {}),
+      ...(hasDerivableBase(stored?.primary)
+        ? { primary: completeRamp(stored.primary) }
+        : {}),
+      ...(hasDerivableBase(stored?.secondary)
+        ? { secondary: completeRamp(stored.secondary) }
+        : {}),
+      logoUrl,
+      faviconUrl,
+    },
+  };
+};
+
+const brandAssetConnect = (assetId?: string) =>
+  assetId === undefined
+    ? undefined
+    : assetId
+    ? { connect: { id: assetId } }
+    : { disconnect: true };
+
 /**
   this is the service for jurisdictions
   it handles all the backend's business logic for reading/writing/deleting jurisdiction data
@@ -84,7 +150,7 @@ export class JurisdictionService {
     const rawJurisdictions = await this.prisma.jurisdictions.findMany({
       select: view ? selectViews[view] : selectViews[JurisdictionViews.full],
     });
-    return mapTo(Jurisdiction, rawJurisdictions);
+    return mapTo(Jurisdiction, rawJurisdictions.map(withResponseBrand));
   }
 
   /*
@@ -138,25 +204,31 @@ export class JurisdictionService {
       );
     }
 
-    return mapTo(Jurisdiction, rawJurisdiction);
+    return mapTo(Jurisdiction, withResponseBrand(rawJurisdiction));
   }
 
   /*
     this will create a jurisdiction
   */
   async create(incomingData: JurisdictionCreate): Promise<Jurisdiction> {
+    const { brandLogoAssetId, brandFaviconAssetId, ...jurisdictionData } =
+      incomingData;
+    await this.assertAssetsExist([brandLogoAssetId, brandFaviconAssetId]);
     const rawResult = await this.prisma.jurisdictions.create({
       data: {
-        ...incomingData,
+        ...jurisdictionData,
         listingFeaturesConfiguration:
           incomingData.listingFeaturesConfiguration as unknown as Prisma.JsonArray,
         raceEthnicityConfiguration:
           incomingData.raceEthnicityConfiguration as unknown as Prisma.JsonArray,
+        brand: storableBrand(incomingData.brand),
+        brandLogo: brandAssetConnect(brandLogoAssetId),
+        brandFavicon: brandAssetConnect(brandFaviconAssetId),
       },
       include: view,
     });
 
-    return mapTo(Jurisdiction, rawResult);
+    return mapTo(Jurisdiction, withResponseBrand(rawResult));
   }
 
   /*
@@ -166,21 +238,45 @@ export class JurisdictionService {
   async update(incomingData: JurisdictionUpdate): Promise<Jurisdiction> {
     await this.findOrThrow(incomingData.id);
 
+    const { brandLogoAssetId, brandFaviconAssetId, ...jurisdictionData } =
+      incomingData;
+    await this.assertAssetsExist([brandLogoAssetId, brandFaviconAssetId]);
     const rawResults = await this.prisma.jurisdictions.update({
       data: {
-        ...incomingData,
+        ...jurisdictionData,
         id: undefined,
         listingFeaturesConfiguration:
           incomingData.listingFeaturesConfiguration as unknown as Prisma.JsonArray,
         raceEthnicityConfiguration:
           incomingData.raceEthnicityConfiguration as unknown as Prisma.JsonArray,
+        brand: storableBrand(incomingData.brand),
+        brandLogo: brandAssetConnect(brandLogoAssetId),
+        brandFavicon: brandAssetConnect(brandFaviconAssetId),
       },
       where: {
         id: incomingData.id,
       },
       include: view,
     });
-    return mapTo(Jurisdiction, rawResults);
+    return mapTo(Jurisdiction, withResponseBrand(rawResults));
+  }
+
+  private async assertAssetsExist(ids: (string | undefined)[]): Promise<void> {
+    const wanted = [...new Set(ids.filter((id): id is string => !!id))];
+    if (!wanted.length) return;
+
+    const found = await this.prisma.assets.findMany({
+      where: { id: { in: wanted } },
+      select: { id: true },
+    });
+    const missing = wanted.filter(
+      (id) => !found.some((asset) => asset.id === id),
+    );
+    if (missing.length) {
+      throw new BadRequestException(
+        `assets ${missing.join(', ')} do not exist`,
+      );
+    }
   }
 
   /*
