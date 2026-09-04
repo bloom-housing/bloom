@@ -186,7 +186,12 @@ export class PermissionService {
                   ...(context?.isLotteryStatusUpdate
                     ? {
                         none: {
-                          name: FeatureFlagEnum.enableNonAdminLotteries,
+                          name: {
+                            in: [
+                              FeatureFlagEnum.enableNonAdminLotteries,
+                              FeatureFlagEnum.enablePartnerLotteryRun,
+                            ],
+                          },
                           active: true,
                         },
                       }
