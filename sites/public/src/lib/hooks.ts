@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import axios from "axios"
 import { useRouter } from "next/router"
-import { PHASE_PRODUCTION_BUILD } from "next/constants"
 import qs from "qs"
 import {
   EnumListingFilterParamsComparison,
@@ -9,6 +8,7 @@ import {
   FeatureFlagEnum,
   FilterAvailabilityEnum,
   Jurisdiction,
+  JurisdictionContentFields,
   Listing,
   ListingFilterParams,
   ListingOrderByKeys,
@@ -31,7 +31,7 @@ import {
   useToastyRef,
 } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
-import { fetchFavoriteListingIds } from "./helpers"
+import { fetchFavoriteListingIds, isFeatureFlagOn } from "./helpers"
 
 import { ListingQueryBuilder } from "./listings/listing-query-builder"
 
@@ -313,6 +313,8 @@ export async function fetchLimitedUnderConstructionListings(req?: any, limit?: n
   )
 }
 
+export const API_TIMEOUT_MS = 5000
+
 let jurisdiction: Jurisdiction | null = null
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -334,26 +336,45 @@ export async function fetchJurisdictionByName(req?: any) {
       `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
       {
         headers,
+        timeout: API_TIMEOUT_MS,
       }
     )
     jurisdiction = jurisdictionRes?.data
   } catch (error) {
-    console.log("error = ", error)
+    console.log("error fetching jurisdiction = ", error.message)
   }
 
   return jurisdiction
 }
 
-const publicOverridesByLanguage = new Map<string, Record<string, Record<string, string>>>()
+type Cached<T> = { value: T; until: number; phase?: string }
 
-export const OVERRIDES_TIMEOUT_MS = 5000
+const publicOverridesByLanguage = new Map<string, Cached<Record<string, Record<string, string>>>>()
+const jurisdictionContentByLanguage = new Map<string, Cached<JurisdictionContentFields>>()
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchPublicOverrides(language?: string, req?: any) {
+// The documents the public site renders. The endpoint returns all five.
+const RENDERED_DOCUMENTS = ["footer", "faq", "resources"] as const
+
+const cacheWindowMs = (phase?: string) => {
+  if (phase === "phase-production-build") return Number.POSITIVE_INFINITY
+  const revalidate = Number(process.env.cacheRevalidate)
+  return Number.isFinite(revalidate) && revalidate > 0 ? revalidate * 1000 : 30000
+}
+
+const fetchJurisdictionScoped = async <T>(
+  path: string,
+  params: Record<string, string>,
+  cache: Map<string, Cached<T>>,
+  label: string,
+  language?: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  req?: any
+): Promise<T | null> => {
   const key = language ?? "en"
-  const duringBuild = process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD
-  if (duringBuild && publicOverridesByLanguage.has(key)) {
-    return publicOverridesByLanguage.get(key)
+  const phase = process.env.NEXT_PHASE
+  const cached = cache.get(key)
+  if (cached && cached.phase === phase && cached.until > Date.now()) {
+    return cached.value
   }
 
   const headers = {
@@ -364,23 +385,71 @@ export async function fetchPublicOverrides(language?: string, req?: any) {
   }
 
   try {
-    const response = await axios.get(
-      `${process.env.backendApiBase}/translations/byName/${process.env.jurisdictionName}`,
-      {
-        params: { site: "public", language: key },
-        headers,
-        timeout: OVERRIDES_TIMEOUT_MS,
-      }
-    )
-    const overrides = (response?.data ?? null) as Record<string, Record<string, string>> | null
-    if (duringBuild && overrides) {
-      publicOverridesByLanguage.set(key, overrides)
+    const response = await axios.get(`${process.env.backendApiBase}${path}`, {
+      params: { ...params, language: key },
+      headers,
+      timeout: API_TIMEOUT_MS,
+    })
+    const value = (response?.data ?? null) as T | null
+    if (value) {
+      cache.set(key, { value, until: Date.now() + cacheWindowMs(phase), phase })
     }
-    return overrides
+    return value
   } catch (error) {
-    console.log("error fetching public translation overrides = ", error.message)
+    console.log(`error fetching ${label} = `, error.message)
     return null
   }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchPublicOverrides(language?: string, req?: any) {
+  return fetchJurisdictionScoped<Record<string, Record<string, string>>>(
+    `/translations/byName/${process.env.jurisdictionName}`,
+    { site: "public" },
+    publicOverridesByLanguage,
+    "public translation overrides",
+    language,
+    req
+  )
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchJurisdictionContent(language?: string, req?: any) {
+  const content = await fetchJurisdictionScoped<JurisdictionContentFields>(
+    `/jurisdictionContent/byName/${process.env.jurisdictionName}`,
+    {},
+    jurisdictionContentByLanguage,
+    "jurisdiction content",
+    language,
+    req
+  )
+  if (!content) return null
+
+  return Object.fromEntries(
+    RENDERED_DOCUMENTS.filter((document) => content[document] != null).map((document) => [
+      document,
+      content[document],
+    ])
+  ) as JurisdictionContentFields
+}
+
+/**
+ * The props every public page passes down: the jurisdiction, its translation overrides, and its
+ * stored content. Reading the flag here means a jurisdiction can be taken off stored content
+ * without deleting its rows.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchSharedPageProps(language?: string, req?: any) {
+  const jurisdiction = await fetchJurisdictionByName(req)
+  const storedContentOn =
+    !!jurisdiction && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableDbDrivenContent)
+
+  const [publicOverrides, jurisdictionContent] = await Promise.all([
+    fetchPublicOverrides(language, req),
+    storedContentOn ? fetchJurisdictionContent(language, req) : null,
+  ])
+
+  return { jurisdiction, publicOverrides, jurisdictionContent }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

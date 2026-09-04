@@ -4,7 +4,7 @@ import { GoogleReCaptcha } from "react-google-recaptcha-v3"
 import { t } from "@bloom-housing/ui-components"
 import { useRouter } from "next/router"
 import FormsLayout from "../layouts/forms"
-import { fetchJurisdictionByName, fetchPublicOverrides, useRedirectToPrevPage } from "../lib/hooks"
+import { fetchSharedPageProps, useRedirectToPrevPage } from "../lib/hooks"
 import {
   PageView,
   pushGtmEvent,
@@ -404,13 +404,10 @@ export { SignIn as default, SignIn }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getStaticProps({ locale }: { locale?: string }) {
-  const [jurisdiction, publicOverrides] = await Promise.all([
-    fetchJurisdictionByName(),
-    fetchPublicOverrides(locale),
-  ])
+  const shared = await fetchSharedPageProps(locale)
 
   return {
-    props: { jurisdiction, publicOverrides },
+    props: { ...shared },
     revalidate: Number(process.env.cacheRevalidate),
   }
 }

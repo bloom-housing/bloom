@@ -32,6 +32,25 @@ const withoutTombstone = (item: Record<string, unknown>) => {
 
 const hasId = (item: IdItem): boolean => isPlainObject(item) && item.id != null;
 
+// Removes deleted items and the tombstone flag from a value no language row overrides, so a
+// deletion recorded on the English row takes effect for English readers too.
+function withoutDeleted(value: unknown): unknown {
+  if (isIdList(value)) {
+    return mergeListById(value, []);
+  }
+  if (Array.isArray(value)) {
+    return value;
+  }
+  if (isPlainObject(value)) {
+    const result: Record<string, unknown> = {};
+    for (const key of Object.keys(value)) {
+      result[key] = withoutDeleted(value[key]);
+    }
+    return result;
+  }
+  return value;
+}
+
 // Correlates two lists by item id: English items keep their order, a matching language item merges
 // over the English item, a tombstone (`_deleted`) drops the id, and language-only items append after
 // the English-derived items. A valid stored item always carries an id (the DTOs require it), so the
@@ -63,7 +82,9 @@ export function mergeListById(
       }
       emitted.add(item.id);
     }
-    merged.push(withoutTombstone(item));
+    merged.push(
+      withoutDeleted(withoutTombstone(item)) as Record<string, unknown>,
+    );
   };
 
   for (const englishItem of englishItems) {
@@ -102,7 +123,7 @@ function mergeValue(base: unknown, override: unknown): unknown {
   // An unset override (including the null the sanitizer writes for an absent optional field) falls
   // back to the base value.
   if (override === undefined || override === null) {
-    return base;
+    return withoutDeleted(base);
   }
 
   if (isIdList(override) || isIdList(base)) {
@@ -181,7 +202,7 @@ export interface MergeableContent {
 }
 
 // Merges a language content document over the English default, field by field. Passing an
-// undefined/empty language document returns the English content unchanged (the English-only case).
+// undefined/empty language document returns the English content with its deletions applied.
 export function mergeContent(
   englishContent: MergeableContent,
   languageContent?: MergeableContent,

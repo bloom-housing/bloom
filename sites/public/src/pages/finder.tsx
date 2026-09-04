@@ -6,11 +6,7 @@ import {
 import { t } from "@bloom-housing/ui-components"
 import RentalsFinder from "../components/finder/RentalsFinder"
 import Layout from "../layouts/application"
-import {
-  fetchJurisdictionByName,
-  fetchMultiselectProgramData,
-  fetchPublicOverrides,
-} from "../lib/hooks"
+import { fetchMultiselectProgramData, fetchSharedPageProps } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
 
 export interface FinderProps {
@@ -41,23 +37,19 @@ export default function Finder(props: FinderProps) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getStaticProps(context: { req: any; query: any; locale?: string }) {
-  const [jurisdiction, publicOverrides] = await Promise.all([
-    fetchJurisdictionByName(),
-    fetchPublicOverrides(context.locale),
-  ])
+  const shared = await fetchSharedPageProps(context.locale)
 
   const multiselectData = isFeatureFlagOn(
-    jurisdiction,
+    shared.jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
-    ? await fetchMultiselectProgramData(context.req, jurisdiction?.id)
+    ? await fetchMultiselectProgramData(context.req, shared.jurisdiction?.id)
     : null
 
   return {
     props: {
-      jurisdiction: jurisdiction,
+      ...shared,
       multiselectData,
-      publicOverrides,
     },
     revalidate: Number(process.env.cacheRevalidate),
   }
