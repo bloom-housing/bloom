@@ -5,8 +5,11 @@ import {
   FeatureFlag,
   FeatureFlagEnum,
   Jurisdiction,
+  JurisdictionContentFields,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Assistance from "../../../src/components/assistance/Assistance"
+import { JurisdictionContentContext } from "../../../src/lib/JurisdictionContentContext"
+import { t } from "@bloom-housing/ui-components"
 import { setupServer } from "msw/lib/node"
 
 const server = setupServer()
@@ -113,5 +116,62 @@ describe("Assistance", () => {
         level: 2,
       })
     ).toBeInTheDocument()
+  })
+})
+
+describe("Assistance stored contact details", () => {
+  const renderWithContact = (contact?: Record<string, string>) =>
+    render(
+      <JurisdictionContentContext.Provider
+        value={(contact ? { contact } : null) as JurisdictionContentFields | null}
+      >
+        <Assistance jurisdiction={{ id: "id1", featureFlags: [] } as Jurisdiction} />
+      </JurisdictionContentContext.Provider>
+    )
+
+  it("keeps the bundled contact details when the jurisdiction stored none", () => {
+    renderWithContact()
+
+    expect(screen.getByRole("link", { name: t("resources.contactEmail") })).toBeInTheDocument()
+    // The card had no phone, address or hours before a jurisdiction could store them.
+    expect(screen.queryByRole("link", { name: /^tel:/ })).not.toBeInTheDocument()
+    expect(document.querySelectorAll('a[href^="tel:"]')).toHaveLength(0)
+    expect(document.querySelector(".stored-html")).toBeNull()
+  })
+
+  it("uses the jurisdiction's email in place of the bundled one", () => {
+    renderWithContact({ email: "housing@example.gov" })
+
+    expect(screen.getByRole("link", { name: "housing@example.gov" })).toHaveAttribute(
+      "href",
+      "mailto:housing@example.gov"
+    )
+    expect(screen.queryByText(t("resources.contactEmail"))).not.toBeInTheDocument()
+  })
+
+  it("shows a phone, address and hours only once the jurisdiction stores them", () => {
+    renderWithContact({
+      phone: "555-0100",
+      addressHtml: "<p>123 Main St</p>",
+      hours: "Mon to Fri",
+    })
+
+    expect(screen.getByRole("link", { name: "555-0100" })).toHaveAttribute("href", "tel:555-0100")
+    expect(screen.getByText("123 Main St")).toBeInTheDocument()
+    expect(screen.getByText("Mon to Fri")).toBeInTheDocument()
+  })
+
+  it("hides a field the jurisdiction set to null", () => {
+    renderWithContact({ email: null, hours: null } as unknown as Record<string, string>)
+
+    expect(screen.queryByText(t("resources.contactEmail"))).not.toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: /@/ })).not.toBeInTheDocument()
+  })
+
+  it("hides the email when the jurisdiction emptied it", () => {
+    renderWithContact({ email: "" })
+
+    expect(screen.queryByText(t("resources.contactEmail"))).not.toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: /@/ })).not.toBeInTheDocument()
   })
 })

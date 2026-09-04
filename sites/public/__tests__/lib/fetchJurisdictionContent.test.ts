@@ -36,6 +36,27 @@ describe("fetchJurisdictionContent", () => {
     )
   })
 
+  it("passes on every document, and leaves out the ones with no row", async () => {
+    mockedGet.mockResolvedValue({
+      data: {
+        footer: { textSectionsHtml: [] },
+        faq: { categories: [] },
+        resources: { resourceSections: [] },
+        disclaimers: { privacyHtml: "<p>Ours</p>" },
+        contact: null,
+      },
+    })
+
+    const content = await fetchJurisdictionContent()
+
+    expect(content).toEqual({
+      footer: { textSectionsHtml: [] },
+      faq: { categories: [] },
+      resources: { resourceSections: [] },
+      disclaimers: { privacyHtml: "<p>Ours</p>" },
+    })
+  })
+
   it("defaults to English when no language is given", async () => {
     await fetchJurisdictionContent()
 

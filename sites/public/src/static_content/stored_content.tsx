@@ -1,3 +1,4 @@
+import React from "react"
 import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ResourceCards } from "../components/resources/Resources"
 import ResourceCard from "../components/resources/ResourceCard"
@@ -97,6 +98,46 @@ export const getStoredResourcesContent = (
       email: hasText(card.email) ? card.email : undefined,
     }
     stored.contactCard = Object.values(contactCard).some(Boolean) ? contactCard : undefined
+  }
+
+  return stored
+}
+
+// A field the document leaves out falls back to the bundled page. A field it sets and empties
+// renders nothing, which is how a jurisdiction removes the page for one language.
+export const storedPageBody = (
+  content: JurisdictionContentFields | null | undefined,
+  field: "privacyHtml" | "disclaimerHtml",
+  bundled: React.ReactNode
+): React.ReactNode => {
+  const disclaimers = content?.disclaimers
+  if (!disclaimers || !(field in disclaimers)) return bundled
+
+  const html = disclaimers[field]
+  return hasText(html) ? <StoredHtml html={html} /> : null
+}
+
+export type ContactDetails = {
+  email?: string
+  phone?: string
+  address?: React.ReactNode
+  hours?: string
+}
+
+export const getStoredContactContent = (
+  content?: JurisdictionContentFields | null
+): Partial<ContactDetails> => {
+  const contact = content?.contact
+  if (!contact) return {}
+
+  const stored: Partial<ContactDetails> = {}
+  if ("email" in contact) stored.email = hasText(contact.email) ? contact.email : undefined
+  if ("phone" in contact) stored.phone = hasText(contact.phone) ? contact.phone : undefined
+  if ("hours" in contact) stored.hours = hasText(contact.hours) ? contact.hours : undefined
+  if ("addressHtml" in contact) {
+    stored.address = hasText(contact.addressHtml) ? (
+      <StoredHtml html={contact.addressHtml} />
+    ) : undefined
   }
 
   return stored

@@ -2,6 +2,8 @@ import React from "react"
 import { render, screen } from "@testing-library/react"
 import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
+  getStoredContactContent,
+  storedPageBody,
   getStoredFaqContent,
   getStoredFooterLinksContent,
   getStoredFooterTextContent,
@@ -410,5 +412,84 @@ describe("getStoredResourcesContent", () => {
   it("sets no key for a field the document leaves alone, so that field falls back", () => {
     expect(getStoredResourcesContent(content({ resources: {} }))).toEqual({})
     expect(getStoredResourcesContent(null)).toEqual({})
+  })
+})
+
+describe("storedPageBody", () => {
+  const content = (disclaimers?: Record<string, string | null>) =>
+    ({ disclaimers } as JurisdictionContentFields)
+  const bundled = <p>Bundled page</p>
+
+  it("renders the stored text in place of the bundled page", () => {
+    render(<>{storedPageBody(content({ privacyHtml: "<p>Ours</p>" }), "privacyHtml", bundled)}</>)
+
+    expect(screen.getByText("Ours")).toBeInTheDocument()
+    expect(screen.queryByText("Bundled page")).not.toBeInTheDocument()
+  })
+
+  it("renders nothing when the field was emptied", () => {
+    expect(storedPageBody(content({ privacyHtml: "" }), "privacyHtml", bundled)).toBeNull()
+    expect(storedPageBody(content({ privacyHtml: "   " }), "privacyHtml", bundled)).toBeNull()
+  })
+
+  // The seed stores an untranslated field this way, so it is the shape a language row really has.
+  it("renders nothing when the field is null", () => {
+    expect(storedPageBody(content({ privacyHtml: null }), "privacyHtml", bundled)).toBeNull()
+  })
+
+  it("falls back to the bundled page when the document leaves the field out", () => {
+    expect(
+      storedPageBody(content({ disclaimerHtml: "<p>Ours</p>" }), "privacyHtml", bundled)
+    ).toEqual(bundled)
+    expect(storedPageBody(content({}), "privacyHtml", bundled)).toEqual(bundled)
+    expect(storedPageBody(content(), "privacyHtml", bundled)).toEqual(bundled)
+    expect(storedPageBody(null, "privacyHtml", bundled)).toEqual(bundled)
+  })
+})
+
+describe("getStoredContactContent", () => {
+  const content = (contact?: Record<string, string>) => ({ contact } as JurisdictionContentFields)
+
+  it("gives back the fields the jurisdiction set", () => {
+    const stored = getStoredContactContent(
+      content({ email: "housing@example.gov", phone: "555-0100", hours: "Mon to Fri" })
+    )
+
+    expect(stored.email).toEqual("housing@example.gov")
+    expect(stored.phone).toEqual("555-0100")
+    expect(stored.hours).toEqual("Mon to Fri")
+  })
+
+  it("renders the address as markup rather than text", () => {
+    const { address } = getStoredContactContent(content({ addressHtml: "<p>123 Main St</p>" }))
+    render(<>{address}</>)
+
+    expect(screen.getByText("123 Main St")).toBeInTheDocument()
+  })
+
+  it("sets a key to undefined when the field was emptied, which hides it", () => {
+    const stored = getStoredContactContent(content({ email: "", addressHtml: "" }))
+
+    expect("email" in stored).toBe(true)
+    expect(stored.email).toBeUndefined()
+    expect("address" in stored).toBe(true)
+    expect(stored.address).toBeUndefined()
+  })
+
+  // The seed stores an untranslated field this way, so it is the shape a language row really has.
+  it("hides a field the document set to null", () => {
+    const stored = getStoredContactContent(
+      content({ email: null, addressHtml: null } as unknown as Record<string, string>)
+    )
+
+    expect("email" in stored).toBe(true)
+    expect(stored.email).toBeUndefined()
+    expect(stored.address).toBeUndefined()
+  })
+
+  it("leaves out the fields the document does not mention", () => {
+    expect(getStoredContactContent(content({ email: "a@b.gov" }))).toEqual({ email: "a@b.gov" })
+    expect(getStoredContactContent(content())).toEqual({})
+    expect(getStoredContactContent(null)).toEqual({})
   })
 })
