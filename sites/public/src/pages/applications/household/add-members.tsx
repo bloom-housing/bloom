@@ -15,6 +15,7 @@ import FormsLayout from "../../../layouts/forms"
 import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
 import { HouseholdMemberForm } from "../../../components/applications/HouseholdMemberForm"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 
@@ -144,3 +145,5 @@ const ApplicationAddMembers = () => {
 }
 
 export default ApplicationAddMembers
+
+export const getStaticProps = sharedGetStaticProps
