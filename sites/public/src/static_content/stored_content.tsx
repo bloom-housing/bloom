@@ -22,7 +22,7 @@ export const getStoredFaqContent = (
           answer: <StoredHtml html={item.answerHtml} />,
         })),
     }))
-    .filter((category) => category.faqs.length > 0)
+    .filter((category) => hasText(category.title) && category.faqs.length > 0)
 
   return { categories }
 }
@@ -77,7 +77,7 @@ export const getStoredResourcesContent = (
         sectionTitle: section.sectionTitle,
         sectionSubtitle: section.sectionSubtitle,
         cards: asList(section.cards)
-          .filter((card) => hasText(card.title) && hasText(card.contentHtml))
+          .filter((card) => hasText(card.id) && hasText(card.title) && hasText(card.contentHtml))
           .map((card) => (
             <ResourceCard
               key={card.id}
@@ -87,7 +87,7 @@ export const getStoredResourcesContent = (
             />
           )),
       }))
-      .filter((section) => section.cards.length > 0)
+      .filter((section) => hasText(section.sectionTitle) && section.cards.length > 0)
   }
 
   if (resources?.contactCard) {

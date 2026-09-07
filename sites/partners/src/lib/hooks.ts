@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState, useEffect, useRef } from "react"
+import { useCallback, useContext, useState, useEffect, useRef, useMemo } from "react"
 import { useRouter } from "next/router"
 import useSWR from "swr"
 import axios, { AxiosError, AxiosProgressEvent } from "axios"
@@ -88,14 +88,24 @@ interface MSQTableSettings {
 }
 
 export type UseSSEOptions = {
-  url: string
+  path: string
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  params?: Record<string, any>
   withCredentials?: boolean
+  enabled?: boolean
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   onMessage?: (data: any) => void
   onError?: (error: Event) => void
   onOpen?: () => void
   eventTypes?: string[]
   parseJson?: boolean
+  /**
+   * EventSource reconnects indefinitely on its own. Once this many consecutive connection attempts
+   * have failed the connection is closed for good, so a backend that is down does not get polled
+   * forever.
+   */
+  maxRetries?: number
+  onRetriesExhausted?: () => void
 }
 
 export type UseSSEReturn<T> = {
@@ -795,15 +805,10 @@ export const useBulkApplicationTemplateExport = (listingId: string) => {
   const onExport = useCallback(async () => {
     setExportLoading(true)
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const url = await applicationsService.downloadBulkUpdateTemplate(
-        {
-          listingId: listingId,
-        },
-        {
-          responseType: "arraybuffer",
-        }
-      )
+      // Returns a short lived presigned S3 url rather than the zip itself
+      const url = await applicationsService.downloadBulkUpdateTemplate({
+        listingId: listingId,
+      })
 
       const link = document.createElement("a")
       link.href = url
@@ -1114,6 +1119,28 @@ export function useRawTranslations(scope: TranslationScope | null, language: str
   }
 }
 
+export function useJurisdictionContent(jurisdictionId: string) {
+  const { jurisdictionContentService } = useContext(AuthContext)
+
+  const fetcher = () => jurisdictionContentService.listJurisdictionContent({ jurisdictionId })
+
+  const cacheKey = jurisdictionId
+    ? `/api/adapter/jurisdictionContent/jurisdictions/${jurisdictionId}/admin`
+    : null
+
+  const { data, error } = useSWR(cacheKey, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
+
+  return {
+    cacheKey,
+    data,
+    loading: !!cacheKey && !error && !data,
+    error,
+  }
+}
+
 /**
  * Warns before unsaved work is lost, on an in-app route change and on the browser closing or
  * reloading.
@@ -1149,41 +1176,57 @@ export function useUnsavedChangesWarning(hasUnsavedChanges: boolean, message: st
   }, [hasUnsavedChanges, message, router.events])
 }
 
+const EMPTY_EVENT_TYPES: string[] = []
+
 export function useSSE<T>(options: UseSSEOptions): UseSSEReturn<T> {
   const {
-    url,
-    withCredentials = false,
+    path,
+    params,
+    withCredentials = true,
+    enabled = true,
     onMessage,
     onError,
     onOpen,
-    eventTypes = [],
+    eventTypes = EMPTY_EVENT_TYPES,
     parseJson = true,
+    maxRetries = 3,
+    onRetriesExhausted,
   } = options
+
+  // Callers pass `params` as an inline object, so key the url off the serialized query rather than
+  // the object identity - otherwise this memo recomputes on every render.
+  const query = params ? qs.stringify(params) : ""
+  const url = useMemo(() => `/api/adapter-sse/${path}${query ? `?${query}` : ""}`, [path, query])
 
   const [data, setData] = useState<T | null>(null)
   const [error, setError] = useState<Event | null>(null)
   const [isConnected, setIsConnected] = useState(false)
 
   const eventSourceRef = useRef<EventSource | null>(null)
+  const failedAttemptsRef = useRef(0)
   const onMessageRef = useRef(onMessage)
   const onErrorRef = useRef(onError)
   const onOpenRef = useRef(onOpen)
+  const onRetriesExhaustedRef = useRef(onRetriesExhausted)
 
   useEffect(() => {
     onMessageRef.current = onMessage
     onErrorRef.current = onError
     onOpenRef.current = onOpen
-  }, [onMessage, onError, onOpen])
+    onRetriesExhaustedRef.current = onRetriesExhausted
+  }, [onMessage, onError, onOpen, onRetriesExhausted])
 
   const connect = useCallback(() => {
     if (eventSourceRef.current) {
       eventSourceRef.current.close()
     }
 
+    failedAttemptsRef.current = 0
     const eventSource = new EventSource(url, { withCredentials })
     eventSourceRef.current = eventSource
 
     eventSource.onopen = () => {
+      failedAttemptsRef.current = 0
       setIsConnected(true)
       setError(null)
       onOpenRef.current?.()
@@ -1193,6 +1236,17 @@ export function useSSE<T>(options: UseSSEOptions): UseSSEReturn<T> {
       setIsConnected(false)
       setError(event)
       onErrorRef.current?.(event)
+
+      // EventSource retries on its own every few seconds and never gives up, so stop it explicitly
+      // once the backend has failed to answer enough times in a row.
+      failedAttemptsRef.current += 1
+      if (failedAttemptsRef.current > maxRetries) {
+        eventSource.close()
+        if (eventSourceRef.current === eventSource) {
+          eventSourceRef.current = null
+        }
+        onRetriesExhaustedRef.current?.()
+      }
     }
 
     const handleData = (event: MessageEvent) => {
@@ -1212,14 +1266,14 @@ export function useSSE<T>(options: UseSSEOptions): UseSSEReturn<T> {
     })
 
     return eventSource
-  }, [url, withCredentials, parseJson, eventTypes])
+  }, [url, withCredentials, parseJson, eventTypes, maxRetries])
 
   const close = useCallback(() => {
     if (eventSourceRef.current) {
       eventSourceRef.current.close()
       eventSourceRef.current = null
-      setIsConnected(false)
     }
+    setIsConnected(false)
   }, [])
 
   const reconnect = useCallback(() => {
@@ -1228,12 +1282,14 @@ export function useSSE<T>(options: UseSSEOptions): UseSSEReturn<T> {
   }, [close, connect])
 
   useEffect(() => {
-    const eventSource = connect()
+    if (!enabled) return
 
-    return () => {
-      eventSource.close()
-    }
-  }, [connect])
+    connect()
+
+    // Closing through `close` (rather than the EventSource directly) also clears the ref, so an
+    // unmount or a disabled hook does not leave a stale connection behind it.
+    return close
+  }, [connect, close, enabled])
 
   return {
     data,

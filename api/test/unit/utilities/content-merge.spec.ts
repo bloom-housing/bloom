@@ -306,6 +306,78 @@ describe('mergeContent', () => {
     });
   });
 
+  it('drops a card an admin added but never filled in', () => {
+    const merged = mergeContent({
+      resources: {
+        resourceSections: [
+          {
+            id: 'help',
+            sectionTitle: 'Help',
+            cards: [{ id: 'one', title: 'One' }, { id: 'blank' }],
+          },
+        ],
+      },
+    });
+
+    expect(merged.resources).toEqual({
+      resourceSections: [
+        {
+          id: 'help',
+          sectionTitle: 'Help',
+          cards: [{ id: 'one', title: 'One' }],
+        },
+      ],
+    });
+  });
+
+  it('drops an item a language row emptied to hide it', () => {
+    const merged = mergeContent(
+      { footer: { links: [{ id: 'about', text: 'About', href: '/about' }] } },
+      { footer: { links: [{ id: 'about', text: '', href: '' }] } },
+    );
+
+    expect(merged.footer).toEqual({ links: [] });
+  });
+
+  it('drops a text section a language row emptied, rather than rendering a blank one', () => {
+    const merged = mergeContent(
+      { footer: { textSectionsHtml: ['<p>EN 1</p>', '<p>EN 2</p>'] } },
+      { footer: { textSectionsHtml: ['<p>ES 1</p>', ''] } },
+    );
+
+    expect(merged.footer).toEqual({ textSectionsHtml: ['<p>ES 1</p>'] });
+  });
+
+  it('keeps a section that has no title of its own but still has cards', () => {
+    const merged = mergeContent({
+      resources: {
+        resourceSections: [
+          {
+            id: 'help',
+            sectionTitle: '',
+            cards: [{ id: 'one', title: 'One' }],
+          },
+        ],
+      },
+    });
+
+    expect(merged.resources).toEqual({
+      resourceSections: [
+        { id: 'help', sectionTitle: '', cards: [{ id: 'one', title: 'One' }] },
+      ],
+    });
+  });
+
+  it('drops a section once the only card inside it is blank', () => {
+    const merged = mergeContent({
+      resources: {
+        resourceSections: [{ id: 'help', cards: [{ id: 'blank' }] }],
+      },
+    });
+
+    expect(merged.resources).toEqual({ resourceSections: [] });
+  });
+
   it('does not pollute Object.prototype via a __proto__ key in stored content', () => {
     const merged = mergeContent(
       { contact: { phone: '555-0100' } },
