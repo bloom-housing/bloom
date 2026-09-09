@@ -1,10 +1,9 @@
 import { t } from "@bloom-housing/ui-components"
-import { FooterContent, FooterLinks } from "./generic_footer_content"
 import Markdown from "markdown-to-jsx"
+import { FooterContent, FooterLinks } from "./generic_footer_content"
 
 export const getJurisdictionFooterTextContent = (): FooterContent => {
   return {
-    // todo: figure out how to
     textSections: [
       <div>
         <Markdown>{t("footer.address1")}</Markdown>

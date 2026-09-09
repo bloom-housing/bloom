@@ -1,7 +1,7 @@
-import Markdown from "markdown-to-jsx"
-import { FaqCategory, FaqContent } from "../patterns/FrequentlyAskedQuestions"
 import { t } from "@bloom-housing/ui-components"
+import Markdown from "markdown-to-jsx"
 import Link from "next/link"
+import { FaqCategory, FaqContent } from "../patterns/FrequentlyAskedQuestions"
 
 export const getJurisdictionFaqContent = (): FaqContent => {
   const howToPrepare: FaqCategory = {

@@ -712,7 +712,7 @@
   "properties.propertyDeleteError": "This property is currently added to listings and needs to be removed before being deleted.",
   "properties.propertyEditError": "This property is already attached to a listing and needs to be removed before it can be edited.",
   "properties.total": "Total properties",
-  "resources.contactEmail": "email@email.com",
+  "resources.contactEmail": "doorway@bayareametro.gov",
   "settings.agencies": "Agencies",
   "settings.createCopy": "Make a copy",
   "settings.createCopyDescription": "Create a copy of your preference.",

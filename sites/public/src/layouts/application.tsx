@@ -266,7 +266,7 @@ const Layout = (props: LayoutProps) => {
               titleLink={"/"}
               logo={
                 <Icon size={"lg"} className={styles["jurisdiction-icon"]}>
-                  <img src="/images/doorway-logo.png" alt={t("footer.logoAlt")} />
+                  <img src="/images/doorway-logo.png" alt={t("nav.logoAlt")} />
                 </Icon>
               }
               mainContentId="main-content"

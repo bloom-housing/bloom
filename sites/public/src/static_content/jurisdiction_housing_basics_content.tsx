@@ -1,6 +1,5 @@
 import { t } from "@bloom-housing/ui-components"
 import Markdown from "markdown-to-jsx"
-import Link from "next/link"
 import { FaqCategory, FaqContent } from "../patterns/FrequentlyAskedQuestions"
 
 export const getHousingBasicsContent = (): FaqContent => {
@@ -115,6 +114,6 @@ export const getHousingBasicsContent = (): FaqContent => {
   }
 
   return {
-    categories: [howDoIGetStarted],
+    categories: [howDoIGetStarted, howFindApply],
   }
 }
