@@ -89,33 +89,6 @@ export class ScriptRunnerController {
     );
   }
 
-  @Put('lotteryTranslations')
-  @ApiOperation({
-    summary: 'A script that adds lottery translations to the db',
-    operationId: 'lotteryTranslations',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  async lotteryTranslations(
-    @Request() req: ExpressRequest,
-  ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.addLotteryTranslations(req);
-  }
-
-  @Put('lotteryTranslationsCreateIfEmpty')
-  @ApiOperation({
-    summary:
-      'A script that adds lottery translations to the db and creates them if it does not exist',
-    operationId: 'lotteryTranslations',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  async lotteryTranslationsCreateIfEmpty(
-    @Request() req: ExpressRequest,
-  ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.addLotteryTranslationsCreateIfEmpty(
-      req,
-    );
-  }
-
   @Put('optOutExistingLotteries')
   @ApiOperation({
     summary: 'A script that opts out existing lottery listings',
@@ -146,19 +119,6 @@ export class ScriptRunnerController {
     );
   }
 
-  @Put('updateCodeExpirationTranslations')
-  @ApiOperation({
-    summary:
-      'A script that updates single use code translations to show extended expiration time',
-    operationId: 'updateCodeExpirationTranslations',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  async updateCodeExpirationTranslations(
-    @Request() req: ExpressRequest,
-  ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.updateCodeExpirationTranslations(req);
-  }
-
   @Put('hideProgramsFromListings')
   @ApiOperation({
     summary:
@@ -170,19 +130,6 @@ export class ScriptRunnerController {
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.hideProgramsFromListings(req);
-  }
-
-  @Put('updatesWhatHappensInLotteryEmail')
-  @ApiOperation({
-    summary:
-      'A script that updates the "what happens next" content in lottery email',
-    operationId: 'updatesWhatHappensInLotteryEmail',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  async updatesWhatHappensInLotteryEmail(
-    @Request() req: ExpressRequest,
-  ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.updatesWhatHappensInLotteryEmail(req);
   }
 
   @Put('addFeatureFlags')
