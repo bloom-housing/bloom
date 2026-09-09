@@ -11783,6 +11783,7 @@ export enum FeatureFlagEnum {
   "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableCustomListingNotifications" = "enableCustomListingNotifications",
+  "enableDbDrivenBranding" = "enableDbDrivenBranding",
   "enableDbDrivenContent" = "enableDbDrivenContent",
   "enableDuplicatesDetailsInEmail" = "enableDuplicatesDetailsInEmail",
   "enableExportTerms" = "enableExportTerms",
