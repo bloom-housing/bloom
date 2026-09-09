@@ -34,6 +34,7 @@ module.exports = {
   },
   transform: {
     "^.+\\.[t|j]sx?$": "ts-jest",
+    "^.+\\.md$": "<rootDir>/.jest/markdown-transform.js",
   },
   transformIgnorePatterns: ["node_modules/?!(@bloom-housing/ui-components)"],
   setupFiles: ["dotenv/config"],

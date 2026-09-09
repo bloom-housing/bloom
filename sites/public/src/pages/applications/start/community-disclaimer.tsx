@@ -16,6 +16,7 @@ import FormsLayout from "../../../layouts/forms"
 import { UserStatus } from "../../../lib/constants"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const ApplicationCommunityDisclaimer = () => {
   const { profile } = useContext(AuthContext)
@@ -73,3 +74,5 @@ const ApplicationCommunityDisclaimer = () => {
 }
 
 export default ApplicationCommunityDisclaimer
+
+export const getStaticProps = sharedGetStaticProps
