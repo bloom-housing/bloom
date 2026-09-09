@@ -48,6 +48,64 @@ If you're using VSCode, you can install [the Postgres explorer extension](https:
 
 To start the application run: `yarn dev`.
 
+## Moving site overrides into the database
+
+This is for the sites that predate database-managed content. A new deployment seeds its content
+into the database from the start and does not run this.
+
+`PUT /scriptRunner/migrateTranslationOverridesToKeyRows` reads the bundled override files from
+GitHub and writes them into `translation_strings`, which the editor and the sites read. Run it once
+per jurisdiction. Only a full admin can run it: a jurisdictional admin reaches the other scripts but
+is refused this one.
+
+```bash
+curl -X PUT http://localhost:3100/scriptRunner/migrateTranslationOverridesToKeyRows \
+  -H "Content-Type: application/json" \
+  -H "passkey: $API_PASS_KEY" \
+  -b "access-token=$YOUR_SESSION_COOKIE" \
+  -d '{
+    "jurisdictionName": "Bloomington",
+    "commit": false,
+    "skipExisting": false,
+    "gitRef": "a1b2c3d"
+  }'
+```
+
+Body fields:
+
+- `jurisdictionName` names the jurisdiction the public overrides are written for. The partners rows
+  are stored with no jurisdiction, so they are shared by all of them. This means the last run sets
+  the partners rows for every jurisdiction. Pass `skipExisting: true` on the second and later runs
+  to leave them as the first run set them.
+- `commit` is required. With `false` nothing is written and nothing is recorded, so a dry run can be
+  repeated.
+- `skipExisting` is required. Pass `true` when re-running against an environment whose overrides an
+  admin has already edited, since a row edited in the editor differs from the file by definition and
+  would otherwise be overwritten.
+- `languages` limits which files are read. English is always read, because it is the source the
+  other languages are hashed against.
+- `repositoryUrl` and `gitRef` say where to read from. The url must be on
+  `raw.githubusercontent.com`, with no port, credentials, query or fragment. Pin `gitRef` to a
+  commit sha rather than a branch, so the dry run and the run that writes read the same files.
+- `publicPath` and `partnersPath` are the directories the files sit in under the ref. They default
+  to `sites/public/page_content/locale_overrides` and `sites/partners/page_content/overrides`. Forks
+  laid out differently set them: a fork with the older layout uses
+  `sites/public/src/page_content/locale_overrides` and
+  `sites/partners/src/page_content/locale_overrides`. A wrong path fails on the missing English
+  file, and the error names the url that was requested.
+
+A value that the translation editor would refuse, on length or on markup, stops the run before
+anything is written. The message names the file and the key.
+
+The report is written to the api log, not the response.
+
+A committing run is recorded per jurisdiction, so a second one is refused. Delete that row from
+`script_runs` to run it again. A missing non-English file does not stop the run, so a run that
+recorded itself as complete may still be short some languages. The report says so when that happens.
+
+The bundled override files stay in the repository. The sites keep rendering them when the api is
+unreachable.
+
 ## Modifying the Schema
 
 If you're using VSCode, you can install the [Prisma extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) to add syntax highlighting and formatting to Prisma schema files.
