@@ -2,7 +2,6 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
-  StreamableFile,
   NotFoundException,
   InternalServerErrorException,
   OnModuleDestroy,
@@ -56,11 +55,13 @@ import {
   of,
   Subject,
   takeWhile,
+  timeout,
 } from 'rxjs';
 import { BulkUploadJobNotification } from '../types/ServerSideEvents';
 import { BackgroundJob } from '../dtos/background-jobs/background-job.dto';
 
 const NUMBER_TO_PAGINATE_BY = 500;
+const SSE_STREAM_TIMEOUT = 30 * 60 * 1000;
 
 export const bulkUploadHeaderNames = {
   applicationId: 'Application Id',
@@ -1034,53 +1035,70 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
       appUrl: listingData.jurisdictions.publicUrl,
     })
       .then(async ({ totalRecords, failedEmailsCount }) => {
-        await this.prisma.backgroundJob.update({
+        const job = await this.prisma.backgroundJob.update({
           data: {
             status: BackgroundJobStatusEnum.completed,
             totalRecords: totalRecords,
+            completedAt: new Date(),
           },
           where: {
             id: backgroundJob.id,
           },
         });
-        if (failedEmailsCount > 0) {
-          await this.emailService.applicationsBulkSuccessWithErrors(
-            requestingUser,
-            {
-              id: listingData.jurisdictions.id,
-            },
-            applicationsLink,
-            {
-              updateCount: totalRecords,
-              failedEmailsCount,
-            },
-            listingData.name,
-          );
-        } else {
-          await this.emailService.applicationsBulkSuccess(
-            requestingUser,
-            {
-              id: listingData.jurisdictions.id,
-            },
-            applicationsLink,
-            {
-              updateCount: totalRecords,
-            },
-            listingData.name,
+        this.notifications$.next(
+          this.mapJobToNotification(backgroundJob.id, job),
+        );
+
+        try {
+          if (failedEmailsCount > 0) {
+            await this.emailService.applicationsBulkSuccessWithErrors(
+              requestingUser,
+              {
+                id: listingData.jurisdictions.id,
+              },
+              applicationsLink,
+              {
+                updateCount: totalRecords,
+                failedEmailsCount,
+              },
+              listingData.name,
+            );
+          } else {
+            await this.emailService.applicationsBulkSuccess(
+              requestingUser,
+              {
+                id: listingData.jurisdictions.id,
+              },
+              applicationsLink,
+              {
+                updateCount: totalRecords,
+              },
+              listingData.name,
+            );
+          }
+        } catch (e) {
+          console.error(
+            `Failed to send the bulk update summary email for job ${backgroundJob.id}:`,
+            e,
           );
         }
       })
       .catch(async (e) => {
-        await this.prisma.backgroundJob.update({
+        const job = await this.prisma.backgroundJob.update({
           data: {
             status: BackgroundJobStatusEnum.failed,
-            errorMessage: e.error,
-            errorRow: e.row,
+            // Validation errors carry the row they failed on, anything else only has a message
+            errorMessage: e?.error ?? `${e}`,
+            errorRow: e?.row ?? null,
+            completedAt: new Date(),
           },
           where: {
             id: backgroundJob.id,
           },
         });
+        this.notifications$.next(
+          this.mapJobToNotification(backgroundJob.id, job),
+        );
         await this.emailService.applicationsBulkFailure(
           requestingUser,
           {
@@ -1126,14 +1144,9 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
   /**
    * Streams status changes for a single bulk upload job.
    * @param jobId - Id of the job to report on
-   * @param user - The subscribing user
    * @returns A stream of the job's status changes, completed once it is terminal
    */
   getUploadJobNotification(
-    // TODO(#6428): authorize the subscriber before streaming (jobs/read, or
-    // listing/update scoped to the job's listingId) once the authentication
-    // story for server side events is settled - EventSource cannot send the
-    // passkey header the rest of this controller relies on.
     jobId: string,
   ): Observable<BulkUploadJobNotification> {
     const currentState$ = defer(() =>
@@ -1155,6 +1168,7 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
           notification.status === BackgroundJobStatusEnum.processing,
         true,
       ),
+      timeout({ first: SSE_STREAM_TIMEOUT, each: SSE_STREAM_TIMEOUT }),
       catchError((error) =>
         of({
           jobId,

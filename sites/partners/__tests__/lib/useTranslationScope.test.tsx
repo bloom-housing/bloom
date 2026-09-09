@@ -8,15 +8,15 @@ import {
   SiteEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter } from "../testUtils"
-import { useTranslationScope } from "../../src/lib/useTranslationScope"
+import { NO_JURISDICTION, useTranslationScope } from "../../src/lib/useTranslationScope"
 
 const translationsService = {
   getRawTranslations: jest.fn(),
-  getRawPartnersTranslations: jest.fn(),
+  getRawGlobalTranslations: jest.fn(),
   updateRawTranslations: jest.fn(),
-  updateRawPartnersTranslations: jest.fn(),
+  updateRawGlobalTranslations: jest.fn(),
   deleteRawTranslation: jest.fn(),
-  deleteRawPartnersTranslation: jest.fn(),
+  deleteRawGlobalTranslation: jest.fn(),
   emailBaseTranslations: jest.fn(),
 }
 
@@ -38,8 +38,95 @@ describe("useTranslationScope", () => {
     jest.clearAllMocks()
     mockNextRouter()
     translationsService.getRawTranslations.mockResolvedValue([])
-    translationsService.getRawPartnersTranslations.mockResolvedValue([])
+    translationsService.getRawGlobalTranslations.mockResolvedValue([])
     translationsService.emailBaseTranslations.mockResolvedValue({})
+  })
+
+  it("shows a generic email value as the base a jurisdiction falls back to", async () => {
+    translationsService.emailBaseTranslations.mockResolvedValue({ "t.hello": "Shipped" })
+    translationsService.getRawGlobalTranslations.mockResolvedValue([
+      { key: "t.hello", value: "Set for everyone" },
+    ])
+    translationsService.getRawTranslations.mockResolvedValue([])
+    const { result } = renderScope([jurisdiction("first")])
+
+    act(() => result.current.setSite(SiteEnum.email))
+    act(() => result.current.setJurisdictionId(result.current.activeJurisdictionId))
+
+    await waitFor(() =>
+      expect(result.current.emailBase?.english).toEqual({ "t.hello": "Set for everyone" })
+    )
+  })
+
+  it("leaves the shipped value as the base where nothing generic replaces it", async () => {
+    translationsService.emailBaseTranslations.mockResolvedValue({ "t.hello": "Shipped" })
+    translationsService.getRawGlobalTranslations.mockResolvedValue([])
+    translationsService.getRawTranslations.mockResolvedValue([])
+    const { result } = renderScope([jurisdiction("first")])
+
+    act(() => result.current.setSite(SiteEnum.email))
+    act(() => result.current.setJurisdictionId(result.current.activeJurisdictionId))
+
+    await waitFor(() => expect(result.current.baseReady).toBe(true))
+    expect(result.current.emailBase?.english).toEqual({ "t.hello": "Shipped" })
+  })
+
+  it("opens the email site on the generic scope rather than a jurisdiction", async () => {
+    const { result } = renderScope([jurisdiction("one"), jurisdiction("two")])
+
+    act(() => result.current.setSite(SiteEnum.email))
+
+    expect(result.current.isGlobal).toBe(true)
+    await waitFor(() =>
+      expect(result.current.cacheKey).toEqual("/api/adapter/translations/global/raw/email/en")
+    )
+  })
+
+  it("edits the email scope for everyone when all jurisdictions is chosen", async () => {
+    const { result } = renderScope([jurisdiction("one"), jurisdiction("two")])
+
+    act(() => result.current.setSite(SiteEnum.email))
+    act(() => result.current.setJurisdictionId(NO_JURISDICTION))
+
+    expect(result.current.isGlobal).toBe(true)
+    await waitFor(() =>
+      expect(result.current.cacheKey).toEqual("/api/adapter/translations/global/raw/email/en")
+    )
+
+    void result.current.scope.save({ edits: [{ key: "a", value: "b" }] })
+
+    expect(translationsService.updateRawGlobalTranslations).toHaveBeenCalledWith({
+      site: SiteEnum.email,
+      language: LanguagesEnum.en,
+      body: { edits: [{ key: "a", value: "b" }] },
+    })
+    expect(translationsService.updateRawTranslations).not.toHaveBeenCalled()
+  })
+
+  it("goes back to one jurisdiction's email rows when one is chosen again", async () => {
+    const { result } = renderScope([jurisdiction("one"), jurisdiction("two")])
+
+    act(() => result.current.setSite(SiteEnum.email))
+    act(() => result.current.setJurisdictionId(NO_JURISDICTION))
+    act(() => result.current.setJurisdictionId("two"))
+
+    expect(result.current.isGlobal).toBe(false)
+    await waitFor(() =>
+      expect(result.current.cacheKey).toEqual(
+        "/api/adapter/translations/jurisdictions/two/raw/email/en"
+      )
+    )
+  })
+
+  it("falls back to a real jurisdiction when the site no longer offers all of them", () => {
+    const { result } = renderScope([jurisdiction("one"), jurisdiction("two")])
+
+    act(() => result.current.setSite(SiteEnum.email))
+    act(() => result.current.setJurisdictionId(NO_JURISDICTION))
+    act(() => result.current.setSite(SiteEnum.public))
+
+    expect(result.current.isGlobal).toBe(false)
+    expect(result.current.activeJurisdictionId).toEqual("one")
   })
 
   it("starts on the public site and the admin's first jurisdiction", () => {
@@ -70,7 +157,7 @@ describe("useTranslationScope", () => {
     act(() => result.current.setSite(SiteEnum.partners))
 
     expect(result.current.isGlobal).toBe(true)
-    expect(result.current.cacheKey).toEqual("/api/adapter/translations/partners/raw/en")
+    expect(result.current.cacheKey).toEqual("/api/adapter/translations/global/raw/partners/en")
   })
 
   it("holds the read until a jurisdiction exists in the public scope", () => {
@@ -85,7 +172,7 @@ describe("useTranslationScope", () => {
 
     act(() => result.current.setSite(SiteEnum.partners))
 
-    expect(result.current.cacheKey).toEqual("/api/adapter/translations/partners/raw/en")
+    expect(result.current.cacheKey).toEqual("/api/adapter/translations/global/raw/partners/en")
   })
 
   it("holds every read while the page is not authorized", () => {
@@ -102,7 +189,7 @@ describe("useTranslationScope", () => {
 
     // The global scope needs no jurisdiction, so authorization is the only thing holding it.
     expect(result.current.cacheKey).toBeNull()
-    expect(translationsService.getRawPartnersTranslations).not.toHaveBeenCalled()
+    expect(translationsService.getRawGlobalTranslations).not.toHaveBeenCalled()
   })
 
   it("offers the jurisdiction's languages in the public scope", () => {
@@ -188,11 +275,13 @@ describe("useTranslationScope", () => {
     void result.current.scope.save({ edits: [{ key: "a", value: "b" }] })
     void result.current.scope.revert("a")
 
-    expect(translationsService.updateRawPartnersTranslations).toHaveBeenCalledWith({
+    expect(translationsService.updateRawGlobalTranslations).toHaveBeenCalledWith({
+      site: SiteEnum.partners,
       language: LanguagesEnum.en,
       body: { edits: [{ key: "a", value: "b" }] },
     })
-    expect(translationsService.deleteRawPartnersTranslation).toHaveBeenCalledWith({
+    expect(translationsService.deleteRawGlobalTranslation).toHaveBeenCalledWith({
+      site: SiteEnum.partners,
       language: LanguagesEnum.en,
       key: "a",
     })
@@ -231,6 +320,7 @@ describe("useTranslationScope", () => {
     const { result } = renderScope([jurisdiction("first")])
 
     act(() => result.current.setSite(SiteEnum.email))
+    act(() => result.current.setJurisdictionId(result.current.activeJurisdictionId))
 
     expect(result.current.isEmail).toBe(true)
     expect(result.current.isGlobal).toBe(false)
@@ -243,6 +333,7 @@ describe("useTranslationScope", () => {
     const { result } = renderScope([jurisdiction("first")])
 
     act(() => result.current.setSite(SiteEnum.email))
+    act(() => result.current.setJurisdictionId(result.current.activeJurisdictionId))
     void result.current.scope.save({ edits: [{ key: "t.hello", value: "Hi" }] })
     void result.current.scope.revert("t.hello")
 
@@ -261,6 +352,7 @@ describe("useTranslationScope", () => {
     const { result } = renderScope([jurisdiction("first", [LanguagesEnum.en, LanguagesEnum.es])])
 
     act(() => result.current.setSite(SiteEnum.email))
+    act(() => result.current.setJurisdictionId(result.current.activeJurisdictionId))
     act(() => result.current.setLanguage(LanguagesEnum.es))
 
     await waitFor(() => expect(result.current.emailBase?.language).toEqual({ "t.hello": "Hola" }))
@@ -278,6 +370,7 @@ describe("useTranslationScope", () => {
     const { result } = renderScope([jurisdiction("first", [LanguagesEnum.en, LanguagesEnum.es])])
 
     act(() => result.current.setSite(SiteEnum.email))
+    act(() => result.current.setJurisdictionId(result.current.activeJurisdictionId))
 
     await waitFor(() => expect(translationsService.emailBaseTranslations).toHaveBeenCalledTimes(1))
     expect(translationsService.emailBaseTranslations).toHaveBeenCalledWith({ language: "en" })
@@ -317,6 +410,7 @@ describe("useTranslationScope", () => {
     const { result } = renderScope([jurisdiction("first", [LanguagesEnum.en, LanguagesEnum.es])])
 
     act(() => result.current.setSite(SiteEnum.email))
+    act(() => result.current.setJurisdictionId(result.current.activeJurisdictionId))
     act(() => result.current.setLanguage(LanguagesEnum.es))
 
     await waitFor(() => expect(result.current.emailBase?.english).toBeDefined())

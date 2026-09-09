@@ -69,8 +69,8 @@ const RAW_PATHS = [
 ]
 
 const GLOBAL_RAW_PATHS = [
-  "http://localhost:3100/translations/partners/raw/:language",
-  "http://localhost/api/adapter/translations/partners/raw/:language",
+  "http://localhost:3100/translations/global/raw/:site/:language",
+  "http://localhost/api/adapter/translations/global/raw/:site/:language",
 ]
 
 const EMAIL_BASE_PATHS = [
@@ -151,6 +151,9 @@ const renderPage = (profileOverrides = {}, flagOn = true) =>
     </AuthContext.Provider>
   )
 
+const selectJurisdiction = async (id: string) =>
+  userEvent.selectOptions(await screen.findByLabelText("Jurisdiction"), id)
+
 const selectSite = async (site: "public" | "partners" | "email") =>
   userEvent.selectOptions(await screen.findByLabelText("Site"), site)
 
@@ -158,15 +161,34 @@ const selectLanguage = async (label: string) =>
   userEvent.selectOptions(await screen.findByLabelText("Language"), label)
 
 // Types into the first editable cell and commits, which is what puts the page in the edited state.
+// AgTable redraws the grid shortly after first render, which cancels a cell edit in progress.
+// Under CI load the click can land inside that window, so the user actions retry; the assertion
+// that Save must enable is unchanged.
 const editFirstValue = async (value: string) => {
-  await waitFor(() => expect(document.querySelector(".editable-cell")).toBeInTheDocument())
-  await userEvent.click(document.querySelector<HTMLElement>(".editable-cell"))
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await waitFor(() => expect(document.querySelector(".editable-cell")).toBeInTheDocument(), {
+      timeout: 8000,
+    })
+    await userEvent.click(document.querySelector<HTMLElement>(".editable-cell"))
 
-  const input = document.querySelector<HTMLInputElement>(".editable-cell input")
-  await userEvent.clear(input)
-  await userEvent.type(input, `${value}{Enter}`)
+    const input = document.querySelector<HTMLInputElement>(".editable-cell input")
+    if (!input) continue
+    await userEvent.clear(input)
+    await userEvent.type(input, `${value}{Enter}`)
 
-  await waitFor(() => expect(screen.getByRole("button", { name: /Save/ })).toBeEnabled())
+    try {
+      await waitFor(() => expect(screen.getByRole("button", { name: /Save/ })).toBeEnabled(), {
+        timeout: 3000,
+      })
+      return
+    } catch {
+      // The edit was cancelled by a grid redraw; run the actions again.
+    }
+  }
+
+  await waitFor(() => expect(screen.getByRole("button", { name: /Save/ })).toBeEnabled(), {
+    timeout: 8000,
+  })
 }
 
 // Rows are filtered in the browser, behind a debounce, so this waits the current page out. The
@@ -189,6 +211,13 @@ describe("<SettingsTranslations>", () => {
       expect(await screen.findByRole("heading", { level: 1, name: "Settings" })).toBeInTheDocument()
       // The settings tabs render as navigation links rather than ARIA tabs.
       expect(screen.getByRole("link", { name: "Translations" })).toBeInTheDocument()
+    })
+
+    it("shows the content tab alongside it, since both ride the same flag", async () => {
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      expect(screen.getByRole("link", { name: "Content" })).toBeInTheDocument()
     })
 
     it("redirects when the db driven content flag is off for every jurisdiction", () => {
@@ -310,7 +339,9 @@ describe("<SettingsTranslations>", () => {
       await screen.findByText(FIRST_BASE_KEY)
       await selectPartnersScope()
 
-      await waitFor(() => expect(requested).toContain("/api/adapter/translations/partners/raw/en"))
+      await waitFor(() =>
+        expect(requested).toContain("/api/adapter/translations/global/raw/partners/en")
+      )
     })
 
     it("compares against the Partners base rather than the shared one", async () => {
@@ -333,7 +364,7 @@ describe("<SettingsTranslations>", () => {
       respondWithGlobalOverrides([override(FIRST_PARTNERS_BASE_KEY, "Bathrooms")])
       server.use(
         rest.delete(
-          "http://localhost/api/adapter/translations/partners/raw/:language/:key",
+          "http://localhost/api/adapter/translations/global/raw/partners/:language/:key",
           (req, res, ctx) => {
             deleted = req.params as Record<string, string>
             return res(ctx.json({ success: true }))
@@ -390,7 +421,7 @@ describe("<SettingsTranslations>", () => {
       let written: { path: string; body: unknown } = null
       server.use(
         rest.put(
-          "http://localhost/api/adapter/translations/partners/raw/:language",
+          "http://localhost/api/adapter/translations/global/raw/partners/:language",
           async (req, res, ctx) => {
             written = { path: req.url.pathname, body: await req.json() }
             return res(ctx.json({ success: true }))
@@ -404,7 +435,7 @@ describe("<SettingsTranslations>", () => {
       await userEvent.click(screen.getByRole("button", { name: /Save/ }))
 
       await waitFor(() => expect(written).not.toBeNull())
-      expect(written.path).toEqual("/api/adapter/translations/partners/raw/en")
+      expect(written.path).toEqual("/api/adapter/translations/global/raw/partners/en")
       expect(written.body).toEqual({
         edits: [{ key: FIRST_PARTNERS_BASE_KEY, value: "Partners edit" }],
       })
@@ -478,7 +509,7 @@ describe("<SettingsTranslations>", () => {
     it("opens the conflict dialog when someone else changed a global key first", async () => {
       server.use(
         rest.put(
-          "http://localhost/api/adapter/translations/partners/raw/:language",
+          "http://localhost/api/adapter/translations/global/raw/partners/:language",
           (_r, res, ctx) =>
             res(
               ctx.status(409),
@@ -496,7 +527,7 @@ describe("<SettingsTranslations>", () => {
     it("names the keys the API refused in the global scope", async () => {
       server.use(
         rest.put(
-          "http://localhost/api/adapter/translations/partners/raw/:language",
+          "http://localhost/api/adapter/translations/global/raw/partners/:language",
           (_r, res, ctx) =>
             res(ctx.status(400), ctx.json({ message: ["edits.0.value must be shorter"] }))
         )
@@ -524,6 +555,39 @@ describe("<SettingsTranslations>", () => {
       await waitFor(() => expect(screen.queryByText("t.hello")).toBeNull())
     }, 20000)
 
+    it("shows the default selected when the site changes to email", async () => {
+      renderPage()
+
+      await screen.findByLabelText("Site")
+      await selectSite("public")
+      expect(await screen.findByLabelText("Jurisdiction")).toHaveValue("jurisdiction1")
+
+      await selectSite("email")
+
+      expect(await screen.findByLabelText("Jurisdiction")).toHaveValue("none")
+    }, 20000)
+
+    it("reads the email rows for everyone when all jurisdictions is chosen", async () => {
+      const requested: string[] = []
+      server.use(
+        ...[...RAW_PATHS, ...GLOBAL_RAW_PATHS].map((path) =>
+          rest.get(path, (req, res, ctx) => {
+            requested.push(req.url.pathname)
+            return res(ctx.json([]))
+          })
+        )
+      )
+      renderPage()
+
+      await selectSite("email")
+      // Selecting by value rather than by label, so the option's wording is not what is under test.
+      await userEvent.selectOptions(screen.getByLabelText("Jurisdiction"), "none")
+
+      await waitFor(() =>
+        expect(requested).toContain("/api/adapter/translations/global/raw/email/en")
+      )
+    }, 20000)
+
     it("saves an email override through the jurisdiction endpoint", async () => {
       let written: string = null
       server.use(
@@ -538,6 +602,7 @@ describe("<SettingsTranslations>", () => {
       renderPage()
 
       await selectSite("email")
+      await selectJurisdiction("jurisdiction1")
       await editFirstValue("Email edit")
       await userEvent.click(screen.getByRole("button", { name: /Save/ }))
 
@@ -553,6 +618,7 @@ describe("<SettingsTranslations>", () => {
       renderPage()
 
       await selectSite("email")
+      await selectJurisdiction("jurisdiction1")
       await filterFor("t.hello", EMAIL_ANCHOR_KEY)
 
       expect(await screen.findByText("Our greeting")).toBeInTheDocument()
@@ -580,6 +646,7 @@ describe("<SettingsTranslations>", () => {
       })
 
       await selectSite("email")
+      await selectJurisdiction("jurisdiction1")
       await selectLanguage("Español")
       await filterFor("t.hello", EMAIL_ANCHOR_KEY)
 
@@ -600,6 +667,7 @@ describe("<SettingsTranslations>", () => {
       renderPage()
 
       await selectSite("email")
+      await selectJurisdiction("jurisdiction1")
 
       await waitFor(() =>
         expect(requested).toContain(

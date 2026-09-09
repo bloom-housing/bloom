@@ -13,6 +13,7 @@ import {
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
@@ -168,3 +169,5 @@ const ApplicationAda = () => {
 }
 
 export default ApplicationAda
+
+export const getStaticProps = sharedGetStaticProps

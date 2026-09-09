@@ -28,7 +28,7 @@ describe('Translation Controller Tests', () => {
     `/translations/jurisdictions/${jurisdictionId}/raw/public/en`;
   const esScope = () =>
     `/translations/jurisdictions/${jurisdictionId}/raw/public/es`;
-  const globalScope = '/translations/partners/raw/en';
+  const globalScope = '/translations/global/raw/partners/en';
   const GLOBAL_TEST_KEY_PREFIX = 'e2e.partners.';
 
   // Global rows have no jurisdiction, so unlike the jurisdiction-scoped fixtures they are not
@@ -659,7 +659,43 @@ describe('Translation Controller Tests', () => {
     });
   });
 
-  describe('PUT /translations/partners/raw/:language', () => {
+  describe('the global scope for email', () => {
+    const emailScope = '/translations/global/raw/email/en';
+
+    it('stores an email override with no jurisdiction, which is what a multi-jurisdiction user gets', async () => {
+      await request(app.getHttpServer())
+        .put(emailScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          edits: [{ key: `${GLOBAL_TEST_KEY_PREFIX}invite`, value: 'Join us' }],
+        })
+        .expect(200);
+
+      const res = await request(app.getHttpServer())
+        .get(emailScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+
+      expect(res.body).toContainEqual(
+        expect.objectContaining({
+          key: `${GLOBAL_TEST_KEY_PREFIX}invite`,
+          value: 'Join us',
+        }),
+      );
+    });
+
+    it('refuses a site with no generic layer to read it', async () => {
+      await request(app.getHttpServer())
+        .get('/translations/global/raw/public/en')
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(400);
+    });
+  });
+
+  describe('PUT /translations/global/raw/partners/:language', () => {
     it('upserts global keys and returns them via the raw get', async () => {
       await request(app.getHttpServer())
         .put(globalScope)
@@ -797,7 +833,7 @@ describe('Translation Controller Tests', () => {
 
     it('rejects a language outside the supported set', async () => {
       await request(app.getHttpServer())
-        .put('/translations/partners/raw/xx')
+        .put('/translations/global/raw/partners/xx')
         .set('Cookie', adminCookies)
         .set(passkey)
         .send({
@@ -809,7 +845,7 @@ describe('Translation Controller Tests', () => {
     it('tracks staleness in the global scope across an english edit', async () => {
       const key = `${GLOBAL_TEST_KEY_PREFIX}stale`;
       const englishScope = globalScope;
-      const spanishScope = '/translations/partners/raw/es';
+      const spanishScope = '/translations/global/raw/partners/es';
 
       await request(app.getHttpServer())
         .put(englishScope)
@@ -861,7 +897,7 @@ describe('Translation Controller Tests', () => {
     });
   });
 
-  describe('DELETE /translations/partners/raw/:language/:key', () => {
+  describe('DELETE /translations/global/raw/partners/:language/:key', () => {
     it('deletes a global key override', async () => {
       await request(app.getHttpServer())
         .put(globalScope)

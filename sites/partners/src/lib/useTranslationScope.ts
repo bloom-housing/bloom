@@ -6,11 +6,16 @@ import {
   Jurisdiction,
   LanguagesEnum,
   SiteEnum,
+  TranslationRawKey,
   TranslationUpdate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useEmailBaseTranslations, useRawTranslations } from "./hooks"
 import { overrideTranslations } from "./translations"
 import { publicOverrideTranslations } from "./publicTranslations"
+
+// Stands in for a jurisdiction in the select. The row it writes has none, so it is the value an
+// email with no jurisdiction uses, and what a jurisdiction falls back to.
+export const NO_JURISDICTION = "none"
 
 export const useTranslationScope = ({
   jurisdictions,
@@ -24,13 +29,26 @@ export const useTranslationScope = ({
 
   const [jurisdictionId, setJurisdictionId] = useState("")
   const [language, setLanguage] = useState<LanguagesEnum>(LanguagesEnum.en)
-  const [site, setSite] = useState<SiteEnum>(SiteEnum.public)
+  const [site, setSiteState] = useState<SiteEnum>(SiteEnum.public)
 
-  // The Partners rows are global
-  const isGlobal = site === SiteEnum.partners
+  // Email opens on the generic layer, which is the one that reaches every jurisdiction and the only
+  // one an email with no jurisdiction reads.
+  const setSite = (next: SiteEnum) => {
+    setSiteState(next)
+    if (next === SiteEnum.email) {
+      setJurisdictionId(NO_JURISDICTION)
+    }
+  }
+
+  // Partners rows are always global. Email rows have a generic layer too,
+  // for users who belong to more than one jurisdiction
+  const isGlobal =
+    site === SiteEnum.partners || (site === SiteEnum.email && jurisdictionId === NO_JURISDICTION)
 
   const selectedJurisdiction = jurisdictions.find(
-    (jurisdiction) => jurisdiction.id === (jurisdictionId || jurisdictions[0]?.id)
+    (jurisdiction) =>
+      jurisdiction.id ===
+      ((jurisdictionId !== NO_JURISDICTION && jurisdictionId) || jurisdictions[0]?.id)
   )
   const activeJurisdictionId = selectedJurisdiction?.id ?? ""
 
@@ -62,12 +80,20 @@ export const useTranslationScope = ({
     () =>
       isGlobal
         ? {
-            rows: { type: "global" as const },
+            rows: { type: "global" as const, site },
             baseOverrides: overrideTranslations,
             save: (body: TranslationUpdate) =>
-              translationsService.updateRawPartnersTranslations({ language: activeLanguage, body }),
+              translationsService.updateRawGlobalTranslations({
+                site,
+                language: activeLanguage,
+                body,
+              }),
             revert: (key: string) =>
-              translationsService.deleteRawPartnersTranslation({ language: activeLanguage, key }),
+              translationsService.deleteRawGlobalTranslation({
+                site,
+                language: activeLanguage,
+                key,
+              }),
           }
         : {
             rows: {
@@ -102,17 +128,49 @@ export const useTranslationScope = ({
     ready && isEmail && activeLanguage !== LanguagesEnum.en ? activeLanguage : null
   )
 
-  const emailBase = useMemo(
-    () =>
-      isEmail ? { english: emailEnglishBase.data, language: emailLanguageBase.data } : undefined,
-    [isEmail, emailEnglishBase.data, emailLanguageBase.data]
+  // A jurisdiction's email rows sit on top of the generic ones at send time, so the generic values
+  // are part of the base the editor compares against.
+  const genericEmailScope = useMemo(() => ({ type: "global" as const, site: SiteEnum.email }), [])
+  const scopedEmail = ready && isEmail && !isGlobal
+  const genericLanguage = useRawTranslations(scopedEmail ? genericEmailScope : null, activeLanguage)
+  const genericEnglish = useRawTranslations(
+    scopedEmail && activeLanguage !== LanguagesEnum.en ? genericEmailScope : null,
+    LanguagesEnum.en
   )
+
+  const emailBase = useMemo(() => {
+    if (!isEmail) return undefined
+
+    const flatten = (rows?: TranslationRawKey[]) =>
+      Object.fromEntries((rows ?? []).map((row) => [row.key, row.value]))
+    const english = activeLanguage === LanguagesEnum.en ? genericLanguage.data : genericEnglish.data
+
+    return {
+      english: emailEnglishBase.data && {
+        ...emailEnglishBase.data,
+        ...flatten(english),
+      },
+      language: emailLanguageBase.data && {
+        ...emailLanguageBase.data,
+        ...flatten(genericLanguage.data),
+      },
+    }
+  }, [
+    activeLanguage,
+    emailEnglishBase.data,
+    emailLanguageBase.data,
+    genericEnglish.data,
+    genericLanguage.data,
+    isEmail,
+  ])
 
   // The email base is fetched rather than bundled, so it can be absent where the other scopes' is
   // not. Callers must not treat that as an empty base.
   const baseReady =
     !isEmail ||
-    (!!emailBase?.english && (activeLanguage === LanguagesEnum.en || !!emailBase?.language))
+    (!!emailBase?.english &&
+      (activeLanguage === LanguagesEnum.en || !!emailBase?.language) &&
+      (!scopedEmail || (!genericLanguage.loading && !genericEnglish.loading)))
 
   const read = useRawTranslations(ready ? scope.rows : null, activeLanguage)
 

@@ -6,6 +6,8 @@ import { getGenericResourcesContent } from "../../static_content/generic_resourc
 import { getJurisdictionResourcesContent } from "../../static_content/jurisdiction_resources_content"
 import styles from "./Resources.module.scss"
 import ResourceSection from "./ResourceSection"
+import { getStoredResourcesContent } from "../../static_content/stored_content"
+import { useJurisdictionContent } from "../../lib/JurisdictionContentContext"
 import sectionStyles from "./ResourceSection.module.scss"
 
 export type ResourceCards = {
@@ -25,10 +27,12 @@ export type ResourceCards = {
 const Resources = () => {
   const pageTitle = t("pageTitle.additionalResources")
 
-  const content: ResourceCards | null =
-    getJurisdictionResourcesContent() || getGenericResourcesContent()
-
-  if (!content) return <></>
+  const jurisdictionContent = useJurisdictionContent()
+  const content: ResourceCards = {
+    ...getGenericResourcesContent(),
+    ...getJurisdictionResourcesContent(),
+    ...getStoredResourcesContent(jurisdictionContent),
+  }
 
   const showContactCard =
     content.contactCard?.description ||

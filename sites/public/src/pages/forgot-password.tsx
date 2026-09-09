@@ -12,6 +12,7 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
+import { sharedGetStaticProps } from "../lib/sharedPageProps"
 
 const ForgotPassword = () => {
   const router = useRouter()
@@ -70,3 +71,5 @@ const ForgotPassword = () => {
 }
 
 export { ForgotPassword as default, ForgotPassword }
+
+export const getStaticProps = sharedGetStaticProps
