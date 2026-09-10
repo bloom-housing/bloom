@@ -24,6 +24,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   OrderByEnum,
+  SiteEnum,
   UserFilterParams,
   UserOrderByKeys,
   PaginationMeta,
@@ -1082,7 +1083,7 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
 
 /** Which rows the editor is reading. The global scope has no jurisdiction to name. */
 export type TranslationScope =
-  | { type: "global" }
+  | { type: "global"; site: SiteEnum }
   | { type: "jurisdiction"; jurisdictionId: string; site: string }
 
 /** Reads one editable translation scope. A null scope skips the request. */
@@ -1092,7 +1093,7 @@ export function useRawTranslations(scope: TranslationScope | null, language: str
   const fetcher = () =>
     scope &&
     (scope.type === "global"
-      ? translationsService.getRawPartnersTranslations({ language })
+      ? translationsService.getRawGlobalTranslations({ site: scope.site, language })
       : translationsService.getRawTranslations({
           jurisdictionId: scope.jurisdictionId,
           site: scope.site,
@@ -1102,7 +1103,7 @@ export function useRawTranslations(scope: TranslationScope | null, language: str
   const cacheKey = !scope
     ? null
     : scope.type === "global"
-    ? `/api/adapter/translations/partners/raw/${language}`
+    ? `/api/adapter/translations/global/raw/${scope.site}/${language}`
     : `/api/adapter/translations/jurisdictions/${scope.jurisdictionId}/raw/${scope.site}/${language}`
 
   // Writes call `mutate` on this key; refreshing on focus would move data under an in-progress edit.
@@ -1135,6 +1136,29 @@ export function useJurisdictionContent(jurisdictionId: string) {
 
   return {
     cacheKey,
+    data,
+    loading: !!cacheKey && !error && !data,
+    error,
+  }
+}
+
+/**
+ * Reads the email base strings. Public and Partners bundle their base into the site, but the email
+ * strings ship with the api, so they are fetched. A null language skips the request.
+ */
+export function useEmailBaseTranslations(language: string | null) {
+  const { translationsService } = useContext(AuthContext)
+
+  const cacheKey = language ? `/api/adapter/translations/base/email/${language}` : null
+
+  const { data, error } = useSWR(
+    cacheKey,
+    () =>
+      translationsService.emailBaseTranslations({ language }) as Promise<Record<string, string>>,
+    { revalidateOnFocus: false, revalidateOnReconnect: false }
+  )
+
+  return {
     data,
     loading: !!cacheKey && !error && !data,
     error,
