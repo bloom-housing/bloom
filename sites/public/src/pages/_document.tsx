@@ -1,18 +1,15 @@
 import React from "react"
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  BrandRampDTO,
+  FeatureFlagEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { fetchJurisdictionByName } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
 
 const HEX_COLOR = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/
 
-type BrandRamp = {
-  base?: string
-  dark?: string
-  darker?: string
-  light?: string
-  lighter?: string
-}
+type BrandRamp = Partial<BrandRampDTO>
 
 interface BrandDocumentProps {
   primary: BrandRamp | null
@@ -60,8 +57,10 @@ export const brandStyleBlock = ({ primary, secondary }: BrandDocumentProps): str
 
 export default class BloomDocument extends Document<BrandDocumentProps> {
   static async getInitialProps(ctx: DocumentContext) {
-    const initialProps = await Document.getInitialProps(ctx)
-    const jurisdiction = await fetchJurisdictionByName(ctx.req)
+    const [initialProps, jurisdiction] = await Promise.all([
+      Document.getInitialProps(ctx),
+      fetchJurisdictionByName(ctx.req),
+    ])
     const brand =
       jurisdiction && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableDbDrivenBranding)
         ? jurisdiction.brand
