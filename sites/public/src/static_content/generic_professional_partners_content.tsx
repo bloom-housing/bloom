@@ -1,6 +1,7 @@
 import { t } from "@bloom-housing/ui-components"
+import { Link } from "@bloom-housing/ui-seeds"
 import Markdown from "markdown-to-jsx"
-import Link from "next/link"
+import { ContactCardProps } from "../components/shared/ContactCard"
 import { FaqCategory, FaqContent } from "../patterns/FrequentlyAskedQuestions"
 
 export const getGenericProfessionalPartnersContent = (): FaqContent => {
@@ -41,5 +42,22 @@ export const getGenericProfessionalPartnersContent = (): FaqContent => {
 
   return {
     categories: [faqContentSection, faqContentSection],
+  }
+}
+
+export const getGenericProfessionalPartnersContactContent = (): ContactCardProps => {
+  const contactDescription = t("resources.contactDescription")
+  const contactInfo = t("resources.contactInfo")
+  const email = t("resources.contactEmail")
+  const heading = t("footer.contact")
+
+  return {
+    address: undefined,
+    contactDescription: contactDescription,
+    contactInfo: contactInfo,
+    email: email,
+    heading: heading,
+    hours: undefined,
+    phone: undefined,
   }
 }

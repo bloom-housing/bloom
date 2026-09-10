@@ -1,18 +1,17 @@
-import Link from "next/link"
-import Markdown from "markdown-to-jsx"
 import { t } from "@bloom-housing/ui-components"
-import { Heading, Card } from "@bloom-housing/ui-seeds"
 import { BloomCard } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import Layout from "../../layouts/application"
-import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
+import { Card, Link } from "@bloom-housing/ui-seeds"
 import styles from "./Assistance.module.scss"
+import ContactCard from "../shared/ContactCard"
+import Layout from "../../layouts/application"
 import { isFeatureFlagOn } from "../../lib/helpers"
-import { getStoredContactContent } from "../../static_content/stored_content"
 import { useJurisdictionContent } from "../../lib/JurisdictionContentContext"
+import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
+import { getStoredContactContent } from "../../static_content/stored_content"
 
 interface AssistanceProps {
   jurisdiction: Jurisdiction
@@ -98,23 +97,15 @@ const Assistance = (props: AssistanceProps) => {
             )}
           </div>
           <aside className={styles["aside-section"]}>
-            <Card className={styles["contact-card"]}>
-              <div className={styles["contact-card-subsection"]}>
-                <Heading size="xl" priority={2}>
-                  {t("footer.contact")}
-                </Heading>
-                <div className={styles["contact-card-description"]}>
-                  <Markdown>{t("resources.contactDescription")}</Markdown>
-                </div>
-              </div>
-              <div className={styles["contact-card-subsection"]}>
-                <p className={styles["contact-card-info"]}>{t("resources.contactInfo")}</p>
-                {contact.email && <Link href={`mailto:${contact.email}`}>{contact.email}</Link>}
-                {contact.phone && <Link href={`tel:${contact.phone}`}>{contact.phone}</Link>}
-                {contact.address}
-                {contact.hours && <p className={styles["contact-card-info"]}>{contact.hours}</p>}
-              </div>
-            </Card>
+            <ContactCard
+              address={contact.address}
+              contactDescription={t("resources.contactDescription")}
+              contactInfo={t("resources.contactInfo")}
+              email={contact.email}
+              heading={t("footer.contact")}
+              hours={contact.hours}
+              phone={contact.phone}
+            />
           </aside>
         </article>
       </PageHeaderLayout>
