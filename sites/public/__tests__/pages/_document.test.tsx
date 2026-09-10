@@ -59,7 +59,8 @@ describe("_document", () => {
     expect(style).toContain("--seeds-color-primary-lighter: #F9F4FA;")
     expect(style).toContain("--bloom-color-primary: #773E98;")
     expect(style).toContain("--bloom-color-primary-lighter: #F9F4FA;")
-    expect(style.startsWith(":root {")).toBe(true)
+    // Doubled so the block outranks the ui-seeds stylesheet that loads after it.
+    expect(style.startsWith(":root:root {")).toBe(true)
   })
 
   it("emits the secondary ramp only when one is stored", async () => {

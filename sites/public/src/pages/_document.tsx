@@ -53,7 +53,9 @@ export const brandStyleBlock = ({ primary, secondary }: BrandDocumentProps): str
     .filter(Boolean)
     .join("\n")
 
-  return `:root {\n${variables}\n}`
+  // Doubled selector: ui-seeds sets these same tokens on :root in a stylesheet that loads after
+  // this block, and a single :root would lose the tie on document order.
+  return `:root:root {\n${variables}\n}`
 }
 
 export default class BloomDocument extends Document<BrandDocumentProps> {
