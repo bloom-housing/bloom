@@ -13,7 +13,7 @@ import { JurisdictionUpdate } from '../dtos/jurisdictions/jurisdiction-update.dt
 import { JurisdictionViews } from '../enums/jurisdictions/view-enum';
 import { BrandDTO } from '../dtos/jurisdictions/brand.dto';
 import { brandAssetUrl } from '../utilities/brand-asset-url';
-import { completeRamp } from '../utilities/brand-ramp';
+import { completeRamp, HEX_COLOR } from '../utilities/brand-ramp';
 
 // TODO: convert this to the selectViews
 const view: Prisma.JurisdictionsInclude = {
@@ -101,8 +101,10 @@ type BrandRow = {
 
 // A stored ramp is only derivable when it has a base; a malformed row is returned as stored
 // rather than failing the whole jurisdiction read.
+// A row written outside the API, by a seed or a migration, can hold anything. Deriving from a
+// base that is not hex yields "#NANNANNAN" for every shade.
 const hasDerivableBase = (ramp?: { base?: unknown }): boolean =>
-  typeof ramp?.base === 'string' && ramp.base.length > 0;
+  typeof ramp?.base === 'string' && HEX_COLOR.test(ramp.base);
 
 const withResponseBrand = <T extends BrandRow>(raw: T): T => {
   const stored = raw.brand as unknown as BrandDTO | null;

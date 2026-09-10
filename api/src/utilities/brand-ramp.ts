@@ -1,6 +1,8 @@
 // Derives the missing shade-ramp values from a ramp's base color. The proportional lightness
 // deltas match the spacing of the existing ui-seeds jurisdiction ramps.
 
+export const HEX_COLOR = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
+
 type Hsl = { h: number; s: number; l: number };
 
 export type BrandRamp = {
