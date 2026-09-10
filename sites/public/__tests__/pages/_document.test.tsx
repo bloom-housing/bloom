@@ -1,4 +1,5 @@
-import Document from "next/document"
+import React from "react"
+import Document, { Head } from "next/document"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -35,10 +36,23 @@ const mockedFetch = jest.spyOn(hooks, "fetchJurisdictionByName")
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const context = { req: { headers: {}, socket: {} } } as any
 
-const styleFor = async (jurisdiction: Jurisdiction | null) => {
+const propsFor = async (jurisdiction: Jurisdiction | null) => {
   mockedFetch.mockResolvedValue(jurisdiction)
-  const props = await BloomDocument.getInitialProps(context)
-  return brandStyleBlock(props)
+  return await BloomDocument.getInitialProps(context)
+}
+
+const styleFor = async (jurisdiction: Jurisdiction | null) =>
+  brandStyleBlock(await propsFor(jurisdiction))
+
+// The document cannot be rendered in jsdom, so the returned element tree is walked instead.
+const headChildrenFor = async (jurisdiction: Jurisdiction | null) => {
+  const props = await propsFor(jurisdiction)
+  const tree = new BloomDocument(props as never).render()
+  const head = React.Children.toArray(tree.props.children).find(
+    (child) => React.isValidElement(child) && child.type === Head
+  ) as React.ReactElement
+
+  return { props, children: React.Children.toArray(head.props.children) }
 }
 
 describe("_document", () => {
@@ -97,6 +111,54 @@ describe("_document", () => {
     )
 
     expect(style).toEqual("")
+  })
+
+  it("puts the style block in the document head", async () => {
+    const { props, children } = await headChildrenFor(jurisdictionWith({ primary }))
+
+    const style = children.find(
+      (child) => React.isValidElement(child) && child.props.id === "brand-vars"
+    ) as React.ReactElement
+
+    expect(style.type).toEqual("style")
+    expect(style.props.dangerouslySetInnerHTML.__html).toEqual(brandStyleBlock(props))
+  })
+
+  it("puts no style block in the head when there is no brand", async () => {
+    const { children } = await headChildrenFor(jurisdictionWith(null))
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.id === "brand-vars")
+    ).toBe(false)
+  })
+
+  it("drops the secondary ramp when its base is not hex, keeping the primary", async () => {
+    const style = await styleFor(
+      jurisdictionWith({ primary, secondary: { ...secondary, base: "teal" } })
+    )
+
+    expect(style).toContain("--seeds-color-primary: #773E98;")
+    expect(style).not.toContain("--seeds-color-secondary")
+  })
+
+  it("drops only the bad shade of an otherwise valid secondary", async () => {
+    const style = await styleFor(
+      jurisdictionWith({ primary, secondary: { ...secondary, light: "papayawhip" } })
+    )
+
+    expect(style).toContain("--seeds-color-secondary: #1E7B8C;")
+    expect(style).not.toContain("--seeds-color-secondary-light:")
+  })
+
+  it("emits nothing when a secondary is stored without a primary", async () => {
+    expect(await styleFor(jurisdictionWith({ secondary }))).toEqual("")
+  })
+
+  it("accepts the three digit hex form", async () => {
+    const style = await styleFor(jurisdictionWith({ primary: { base: "#ABC" } }))
+
+    expect(style).toContain("--seeds-color-primary: #ABC;")
+    expect(style).toContain("--bloom-color-primary: #ABC;")
   })
 
   it("forwards the request so the API sees the visitor's address", async () => {
