@@ -328,6 +328,13 @@ export const JURISDICTION_RETRY_MS = 5000
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchJurisdictionByName(req?: any) {
   try {
+    // A build renders every page against one jurisdiction state; expiring mid-build would bake
+    // two different brands into the output.
+    const duringBuild = process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD
+    if (jurisdiction && duringBuild) {
+      return jurisdiction
+    }
+
     if (Date.now() < jurisdictionFetchAfter) {
       return jurisdiction
     }

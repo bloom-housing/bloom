@@ -89,6 +89,19 @@ describe("fetchJurisdictionByName", () => {
     expect(result).toEqual({ id: "jurisdiction-id", name: "Bloomington" })
   })
 
+  it("holds one jurisdiction for the whole production build", async () => {
+    process.env.NEXT_PHASE = "phase-production-build"
+    const hooks = loadHooks()
+    await hooks.fetchJurisdictionByName()
+
+    const now = jest.spyOn(Date, "now").mockReturnValue(Date.now() + 31000)
+    await hooks.fetchJurisdictionByName()
+    now.mockRestore()
+    delete process.env.NEXT_PHASE
+
+    expect(mockedGet).toHaveBeenCalledTimes(1)
+  })
+
   it("forwards the visitor's address when a request is given", async () => {
     await loadHooks().fetchJurisdictionByName({
       headers: { "x-forwarded-for": "203.0.113.9" },
