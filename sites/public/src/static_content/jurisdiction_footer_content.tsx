@@ -1,21 +1,30 @@
 import { t } from "@bloom-housing/ui-components"
-import Markdown from "markdown-to-jsx"
 import { FooterContent, FooterLinks } from "./generic_footer_content"
+import { Link } from "@bloom-housing/ui-seeds"
 
 export const getJurisdictionFooterTextContent = (): FooterContent => {
   return {
     textSections: [
-      <div>
-        <Markdown>{t("footer.address1")}</Markdown>
-        <br />
-        <Markdown>{t("footer.address2")}</Markdown>
-        <br />
-        <Markdown>{t("footer.mondayToFriday")}</Markdown>
-        <br />
-        <a href="mailto: doorway@bayareametro.gov" className="underline">
-          doorway@bayareametro.gov
-        </a>
-      </div>,
+      <>
+        <div style={{ color: "white" }}>{t("footer.content.projectOf")}</div>
+        <div>{t("footer.content.bahfa")}</div>
+      </>,
+      <Link href={"https://mtc.ca.gov/contact-doorway"}>{t("footer.content.contact")}</Link>,
+      <Link href={"https://mtc.ca.gov/doorway-housing-portal-privacy-policy"}>
+        {t("pageTitle.privacy")}
+      </Link>,
+      <Link href={"https://mtc.ca.gov/doorway-housing-portal-terms-use"}>
+        {t("pageTitle.termsOfUse")}
+      </Link>,
+      <Link href={"https://mtc.ca.gov/bahfa-non-discrimination-statement"}>
+        {t("pageTitle.bahfaNonDiscriminationStatement")}
+      </Link>,
+      <Link href={"https://mtc.ca.gov/about-mtc/public-participation/language-assistance"}>
+        {t("pageTitle.languageAssistance")}
+      </Link>,
+      <Link href={"https://mtc.ca.gov/doorway-housing-portal-accessibility-statement"}>
+        {t("pageTitle.accessibilityStatement")}
+      </Link>,
     ],
     logo: {
       logoSrc: "/images/bahfa-logo.png",
@@ -28,28 +37,7 @@ export const getJurisdictionFooterTextContent = (): FooterContent => {
 export const getJurisdictionFooterLinksContent = (): FooterLinks => {
   const currentYear = new Date().getFullYear()
   return {
-    links: [
-      {
-        text: t("pageTitle.privacy"),
-        href: "https://mtc.ca.gov/doorway-housing-portal-privacy-policy",
-      },
-      {
-        text: t("pageTitle.termsOfUse"),
-        href: "https://mtc.ca.gov/doorway-housing-portal-terms-use",
-      },
-      {
-        text: t("pageTitle.bahfaNonDiscriminationStatement"),
-        href: "https://mtc.ca.gov/bahfa-non-discrimination-statement",
-      },
-      {
-        text: t("pageTitle.languageAssistance"),
-        href: "https://mtc.ca.gov/about-mtc/public-participation/language-assistance",
-      },
-      {
-        text: t("pageTitle.accessibilityStatement"),
-        href: "https://mtc.ca.gov/doorway-housing-portal-accessibility-statement",
-      },
-    ],
+    links: [],
     cityString: t("footer.copyright", { year: currentYear }),
   }
 }
