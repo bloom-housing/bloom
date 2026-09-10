@@ -4,10 +4,7 @@ import {
   jurisdictionContentFactory,
   upsertJurisdictionContent,
 } from './seed-helpers/jurisdiction-content-factory';
-import {
-  translationFactory,
-  upsertTranslation,
-} from './seed-helpers/translation-factory';
+import { upsertEmailTranslations } from './seed-helpers/translation-factory';
 import { unitRentTypeFactoryAll } from './seed-helpers/unit-rent-type-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { userFactory } from './seed-helpers/user-factory';
@@ -252,18 +249,11 @@ export const stagingSeed = async (
     }),
   });
 
-  // add jurisdiction specific translations and default ones
-  await upsertTranslation(
-    prismaClient,
-    translationFactory({
-      jurisdiction: { id: mainJurisdiction.id, name: mainJurisdiction.name },
-    }),
-  );
-  await upsertTranslation(
-    prismaClient,
-    translationFactory({ language: LanguagesEnum.es }),
-  );
-  await upsertTranslation(prismaClient, translationFactory());
+  // add jurisdiction specific translations
+  await upsertEmailTranslations(prismaClient, {
+    id: mainJurisdiction.id,
+    name: mainJurisdiction.name,
+  });
 
   // add structured content for the main jurisdiction, English plus a partial Spanish row
   const contentJurisdiction = {

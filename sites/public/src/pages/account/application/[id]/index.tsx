@@ -12,6 +12,7 @@ import {
 import { SubmittedApplicationView } from "../../../../components/applications/SubmittedApplicationView"
 import { ApplicationError } from "../../../../components/account/ApplicationCards"
 import FormsLayout from "../../../../layouts/forms"
+import { sharedGetServerSideProps } from "../../../../lib/sharedPageProps"
 
 const AccountApplication = () => {
   const router = useRouter()
@@ -116,3 +117,5 @@ const AccountApplication = () => {
 }
 
 export default AccountApplication
+
+export const getServerSideProps = sharedGetServerSideProps
