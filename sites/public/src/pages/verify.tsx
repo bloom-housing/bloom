@@ -22,6 +22,7 @@ import {
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
+import { sharedGetStaticProps } from "../lib/sharedPageProps"
 import styles from "../../styles/verify.module.scss"
 
 const Verify = () => {
@@ -210,3 +211,5 @@ const Verify = () => {
 }
 
 export { Verify as default, Verify }
+
+export const getStaticProps = sharedGetStaticProps

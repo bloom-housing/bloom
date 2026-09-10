@@ -16,6 +16,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
@@ -241,3 +242,5 @@ const ApplicationVouchers = () => {
 }
 
 export default ApplicationVouchers
+
+export const getStaticProps = sharedGetStaticProps

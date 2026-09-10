@@ -1,13 +1,21 @@
-import axios from "axios"
-import { fetchPublicOverrides, OVERRIDES_TIMEOUT_MS } from "../../../src/lib/hooks"
+import type axiosType from "axios"
 
-const mockedGet = jest.spyOn(axios, "get")
+// The fetch caches per language, so each case gets a fresh module registry, and the spy has to be
+// taken from the same one the module under test will import.
+type Hooks = typeof import("../../src/lib/hooks")
+
+let mockedGet: jest.SpyInstance
+let fetchPublicOverrides: Hooks["fetchPublicOverrides"]
+let API_TIMEOUT_MS: number
 
 describe("fetchPublicOverrides", () => {
-  afterAll(() => mockedGet.mockRestore())
-
   beforeEach(() => {
-    jest.clearAllMocks()
+    jest.resetModules()
+    const axios = require("axios") as typeof axiosType
+    mockedGet = jest.spyOn(axios, "get")
+    const hooks = require("../../src/lib/hooks") as Hooks
+    fetchPublicOverrides = hooks.fetchPublicOverrides
+    API_TIMEOUT_MS = hooks.API_TIMEOUT_MS
     process.env.backendApiBase = "http://localhost:3100"
     process.env.jurisdictionName = "Bloomington"
     process.env.API_PASS_KEY = "test-passkey"
@@ -22,7 +30,7 @@ describe("fetchPublicOverrides", () => {
       {
         params: { site: "public", language: "es" },
         headers: { passkey: process.env.API_PASS_KEY },
-        timeout: OVERRIDES_TIMEOUT_MS,
+        timeout: API_TIMEOUT_MS,
       }
     )
   })
@@ -72,9 +80,25 @@ describe("fetchPublicOverrides", () => {
   })
 
   // A cached result would survive an ISR regeneration and hide an edit made since the last one.
-  it("asks again on every call outside a build", async () => {
+  it("reuses one answer within the revalidate window at runtime", async () => {
+    process.env.cacheRevalidate = "30"
+
     await fetchPublicOverrides("en")
     await fetchPublicOverrides("en")
+
+    expect(mockedGet).toHaveBeenCalledTimes(1)
+  })
+
+  it("asks again once the window has passed", async () => {
+    process.env.cacheRevalidate = "30"
+    const realNow = Date.now
+    try {
+      await fetchPublicOverrides("en")
+      Date.now = () => realNow() + 31_000
+      await fetchPublicOverrides("en")
+    } finally {
+      Date.now = realNow
+    }
 
     expect(mockedGet).toHaveBeenCalledTimes(2)
   })
