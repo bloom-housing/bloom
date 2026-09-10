@@ -1,3 +1,17 @@
+// Synthetic base strings, so these cases verify the merge contract rather than today's shipped
+// copy, which a fork edits.
+const TEST_BASE: Record<string, Array<{ key: string; value: string }>> = {
+  en: [
+    { key: 'test.translated', value: 'Base english' },
+    { key: 'test.englishOnly', value: 'Base english only' },
+  ],
+  es: [{ key: 'test.translated', value: 'Base spanish' }],
+};
+
+jest.mock('../../../src/locales/email-translations', () => ({
+  baseTranslationRows: (language: string) => TEST_BASE[language] ?? [],
+}));
+
 import {
   ConflictException,
   ForbiddenException,
@@ -399,6 +413,55 @@ describe('Testing translations service', () => {
       expect(prisma.translationStrings.create).not.toHaveBeenCalled();
     });
 
+    it('records the shipped english as the source for an email translation', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
+      prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
+
+      await service.updateOverrides(
+        jurisdictionId,
+        SiteEnum.email,
+        LanguagesEnum.es,
+        { edits: [{ key: 'test.translated', value: 'Hola' }] },
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            sourceHash: sourceHash('Base english'),
+          }),
+        }),
+      );
+    });
+
+    it('prefers a stored english override over the shipped one as the source', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          jurisdictionId,
+          site: SiteEnum.email,
+          key: 't.hello',
+          value: 'Howdy',
+        },
+      ]);
+      prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
+
+      await service.updateOverrides(
+        jurisdictionId,
+        SiteEnum.email,
+        LanguagesEnum.es,
+        { edits: [{ key: 't.hello', value: 'Hola' }] },
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ sourceHash: sourceHash('Howdy') }),
+        }),
+      );
+    });
+
     it('creates a new key when no lastUpdatedAt is provided', async () => {
       const jurisdictionId = randomUUID();
       prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
@@ -795,31 +858,50 @@ describe('Testing translations service', () => {
     });
   });
 
+  describe('getBaseEmailTranslations', () => {
+    it('returns the strings shipped with the api, flat', () => {
+      const result = service.getBaseEmailTranslations(LanguagesEnum.en);
+
+      expect(result['test.translated']).toEqual('Base english');
+      expect(result['test.englishOnly']).toEqual('Base english only');
+    });
+
+    it('returns only what the language translates', () => {
+      const spanish = service.getBaseEmailTranslations(LanguagesEnum.es);
+      const english = service.getBaseEmailTranslations(LanguagesEnum.en);
+
+      expect(spanish['test.translated']).toEqual('Base spanish');
+      expect(spanish['test.englishOnly']).toBeUndefined();
+      expect(Object.keys(spanish).length).toBeLessThan(
+        Object.keys(english).length,
+      );
+    });
+
+    it('reads nothing from the database', () => {
+      prisma.translationStrings.findMany = jest.fn();
+
+      service.getBaseEmailTranslations(LanguagesEnum.en);
+
+      expect(prisma.translationStrings.findMany).not.toHaveBeenCalled();
+    });
+  });
+
   describe('getMergedTranslations', () => {
-    it('assembles english null-jurisdiction translations from key rows', async () => {
-      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
-        {
-          jurisdictionId: null,
-          language: LanguagesEnum.en,
-          key: 'value',
-          value: 'null jurisdiction',
-        },
-        {
-          jurisdictionId: null,
-          language: LanguagesEnum.en,
-          key: 'extraValue',
-          value: 'extra value',
-        },
-      ]);
-      prisma.translations.findFirst = jest.fn();
+    const row = (
+      jurisdictionId: string | null,
+      language: LanguagesEnum,
+      key: string,
+      value: string,
+    ) => ({ jurisdictionId, language, key, value });
 
-      const result = await service.getMergedTranslations(null);
+    it('reads the email scope, so public and partners overrides never leak in', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
 
-      expect(prisma.translationStrings.findMany).toBeCalledTimes(1);
-      // The merge reads only site-null base rows, so public/partners overrides never leak in.
+      await service.getMergedTranslations(null);
+
       expect(prisma.translationStrings.findMany).toHaveBeenCalledWith({
         where: {
-          site: null,
+          site: SiteEnum.email,
           language: { in: [LanguagesEnum.en] },
           OR: [{ jurisdictionId: null }],
         },
@@ -830,154 +912,163 @@ describe('Testing translations service', () => {
           value: true,
         },
       });
-      expect(prisma.translations.findFirst).not.toHaveBeenCalled();
-      expect(result).toEqual({
-        value: 'null jurisdiction',
-        extraValue: 'extra value',
-      });
     });
 
-    it('keeps dot-path keys flat', async () => {
-      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
-        {
-          jurisdictionId: null,
-          language: LanguagesEnum.en,
-          key: 'footer.line1',
-          value: 'Bloom',
-        },
-        {
-          jurisdictionId: null,
-          language: LanguagesEnum.en,
-          key: 'footer.thankYou',
-          value: 'Thank you',
-        },
-      ]);
+    it('returns the strings shipped with the code when nothing is stored', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
 
       const result = await service.getMergedTranslations(null);
 
-      expect(result).toEqual({
-        'footer.line1': 'Bloom',
-        'footer.thankYou': 'Thank you',
-      });
+      expect(result['test.translated']).toEqual('Base english');
+      expect(result['test.englishOnly']).toEqual('Base english only');
     });
 
-    it('merges the four scopes in precedence order from one query', async () => {
-      const jurisdictionId = randomUUID();
-      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
-        {
-          jurisdictionId: null,
-          language: LanguagesEnum.en,
-          key: 'value',
-          value: 'generic en',
-        },
-        {
-          jurisdictionId: null,
-          language: LanguagesEnum.en,
-          key: 'extraValue',
-          value: 'extra en',
-        },
-        {
-          jurisdictionId: null,
-          language: LanguagesEnum.es,
-          key: 'value',
-          value: 'generic es',
-        },
-        {
-          jurisdictionId,
-          language: LanguagesEnum.en,
-          key: 'value',
-          value: 'jurisdiction en',
-        },
-        {
-          jurisdictionId,
-          language: LanguagesEnum.es,
-          key: 'value',
-          value: 'jurisdiction es',
-        },
-      ]);
+    it('lets a stored value replace the one shipped with the code', async () => {
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.en, 'test.translated', 'Howdy'),
+        ]);
 
-      const result = await service.getMergedTranslations(
-        jurisdictionId,
-        LanguagesEnum.es,
-      );
+      const result = await service.getMergedTranslations(null);
 
-      expect(prisma.translationStrings.findMany).toBeCalledTimes(1);
-      expect(result).toEqual({
-        value: 'jurisdiction es',
-        extraValue: 'extra en',
-      });
+      expect(result['test.translated']).toEqual('Howdy');
     });
 
-    it('merges the generic and jurisdictional english scopes when no language is given', async () => {
+    it("lets a jurisdiction's value replace the one stored for everyone", async () => {
       const jurisdictionId = randomUUID();
-      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
-        {
-          jurisdictionId: null,
-          language: LanguagesEnum.en,
-          key: 'value',
-          value: 'generic en',
-        },
-        {
-          jurisdictionId: null,
-          language: LanguagesEnum.en,
-          key: 'extraValue',
-          value: 'extra en',
-        },
-        {
-          jurisdictionId,
-          language: LanguagesEnum.en,
-          key: 'value',
-          value: 'jurisdiction en',
-        },
-      ]);
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.en, 'test.translated', 'Everyone'),
+          row(jurisdictionId, LanguagesEnum.en, 'test.translated', 'Just us'),
+        ]);
 
       const result = await service.getMergedTranslations(jurisdictionId);
 
-      expect(prisma.translationStrings.findMany).toBeCalledTimes(1);
-      expect(result).toEqual({
-        value: 'jurisdiction en',
-        extraValue: 'extra en',
-      });
+      expect(result['test.translated']).toEqual('Just us');
     });
 
-    it('falls back to the legacy blob when the base key rows are absent', async () => {
-      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
-      prisma.translations.findFirst = jest
-        .fn()
-        .mockResolvedValueOnce({ translations: { value: 'legacy blob' } });
-
-      const result = await service.getMergedTranslations(null);
-
-      expect(prisma.translationStrings.findMany).toBeCalledTimes(1);
-      expect(prisma.translations.findFirst).toBeCalledTimes(1);
-      expect(result).toEqual({ value: 'legacy blob' });
-    });
-
-    it('builds from present scopes without resurrecting legacy for empty ones', async () => {
+    it('reads a language over english, in one query', async () => {
       const jurisdictionId = randomUUID();
-      // Only the generic-default (en) base is migrated; the requested es and
-      // jurisdictional scopes have no rows.
-      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
-        {
-          jurisdictionId: null,
-          language: LanguagesEnum.en,
-          key: 'region.name',
-          value: 'Base',
-        },
-      ]);
-      prisma.translations.findFirst = jest.fn();
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.en, 'test.translated', 'generic en'),
+          row(null, LanguagesEnum.es, 'test.translated', 'generic es'),
+          row(
+            jurisdictionId,
+            LanguagesEnum.es,
+            'test.translated',
+            'jurisdiction es',
+          ),
+        ]);
 
       const result = await service.getMergedTranslations(
         jurisdictionId,
         LanguagesEnum.es,
       );
 
-      // migrated is true, so empty scopes contribute nothing and no legacy read happens.
-      expect(prisma.translations.findFirst).not.toHaveBeenCalled();
-      expect(result).toEqual({ 'region.name': 'Base' });
+      expect(prisma.translationStrings.findMany).toBeCalledTimes(1);
+      expect(result['test.translated']).toEqual('jurisdiction es');
+    });
+
+    // Only english is complete, so a language the base does not translate falls through to it.
+    it('falls through to english for a key the language does not translate', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
+
+      const result = await service.getMergedTranslations(
+        null,
+        LanguagesEnum.es,
+      );
+
+      expect(result['test.englishOnly']).toEqual('Base english only');
+      expect(result['test.translated']).toEqual('Base spanish');
+    });
+
+    it('lets a stored translation replace the shipped one for that language', async () => {
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.es, 'test.translated', 'stored spanish'),
+        ]);
+
+      const result = await service.getMergedTranslations(
+        null,
+        LanguagesEnum.es,
+      );
+
+      expect(result['test.translated']).toEqual('stored spanish');
+    });
+
+    it("puts a jurisdiction's english above a translation stored for everyone", async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.es, 'test.translated', 'generic spanish'),
+          row(
+            jurisdictionId,
+            LanguagesEnum.en,
+            'test.translated',
+            'jurisdiction english',
+          ),
+        ]);
+
+      const result = await service.getMergedTranslations(
+        jurisdictionId,
+        LanguagesEnum.es,
+      );
+
+      expect(result['test.translated']).toEqual('jurisdiction english');
+    });
+
+    it('keeps a translation when only the english it came from is edited', async () => {
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.en, 'test.translated', 'edited english'),
+          row(null, LanguagesEnum.en, 'test.englishOnly', 'edited english'),
+        ]);
+
+      const result = await service.getMergedTranslations(
+        null,
+        LanguagesEnum.es,
+      );
+
+      expect(result['test.translated']).toEqual('Base spanish');
+      expect(result['test.englishOnly']).toEqual('edited english');
+    });
+
+    it("keeps a jurisdiction's translation when its english is edited", async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(jurisdictionId, LanguagesEnum.es, 't.hello', 'jurisdiction es'),
+          row(jurisdictionId, LanguagesEnum.en, 't.hello', 'jurisdiction en'),
+        ]);
+
+      const result = await service.getMergedTranslations(
+        jurisdictionId,
+        LanguagesEnum.es,
+      );
+
+      expect(result['t.hello']).toEqual('jurisdiction es');
+    });
+
+    it('keeps dot-path keys flat', async () => {
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.en, 'footer.line1', 'Bloom'),
+        ]);
+
+      const result = await service.getMergedTranslations(null);
+
+      expect(result['footer.line1']).toEqual('Bloom');
     });
   });
-
   describe('getJurisdictionOverrides', () => {
     it('returns one map per language, kept apart rather than merged', async () => {
       const jurisdictionId = randomUUID();
@@ -1166,37 +1257,6 @@ describe('Testing translations service', () => {
           SiteEnum.public,
         ),
       ).rejects.toThrow(NotFoundException);
-    });
-  });
-
-  describe('getTranslationByLanguageAndJurisdiction', () => {
-    it('Should get unique translations by language and jurisdiction', async () => {
-      const jurisdictionId = randomUUID();
-      const translations = {
-        id: 'translations id 1',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        language: LanguagesEnum.en,
-        jurisdictionId: jurisdictionId,
-        translations: {
-          translation1: 'translation 1',
-          translation2: 'translation 2',
-        },
-      };
-      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
-        id: jurisdictionId,
-      });
-      prisma.translations.findFirst = jest
-        .fn()
-        .mockResolvedValueOnce(translations);
-
-      const result = await service.getTranslationByLanguageAndJurisdiction(
-        LanguagesEnum.es,
-        jurisdictionId,
-      );
-
-      expect(result).toEqual(translations);
-      expect(prisma.translations.findFirst).toHaveBeenCalledTimes(1);
     });
   });
 

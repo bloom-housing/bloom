@@ -2429,6 +2429,7 @@ enum LanguagesEnum {
 enum SiteEnum {
   public
   partners
+  email
 
   @@map("site_enum")
 }
