@@ -314,16 +314,21 @@ export async function fetchLimitedUnderConstructionListings(req?: any, limit?: n
 }
 
 let jurisdiction: Jurisdiction | null = null
-let jurisdictionFetchedAt = 0
+let jurisdictionFetchAfter = 0
 
 // Branding and feature flags are read from this response, so the cache expires on the same
 // schedule as page revalidation.
 export const jurisdictionCacheTtlMs = () => Number(process.env.cacheRevalidate) * 1000
 
+export const JURISDICTION_TIMEOUT_MS = 5000
+
+// A failed read is held for this long so an unreachable API is not re-hit on every render.
+export const JURISDICTION_RETRY_MS = 5000
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchJurisdictionByName(req?: any) {
   try {
-    if (jurisdiction && Date.now() - jurisdictionFetchedAt < jurisdictionCacheTtlMs()) {
+    if (Date.now() < jurisdictionFetchAfter) {
       return jurisdiction
     }
 
@@ -339,12 +344,14 @@ export async function fetchJurisdictionByName(req?: any) {
       `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
       {
         headers,
+        timeout: JURISDICTION_TIMEOUT_MS,
       }
     )
     jurisdiction = jurisdictionRes?.data
-    jurisdictionFetchedAt = Date.now()
+    jurisdictionFetchAfter = Date.now() + jurisdictionCacheTtlMs()
   } catch (error) {
     console.log("error = ", error)
+    jurisdictionFetchAfter = Date.now() + JURISDICTION_RETRY_MS
   }
 
   return jurisdiction

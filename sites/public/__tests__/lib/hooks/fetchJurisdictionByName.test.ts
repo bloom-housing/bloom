@@ -27,7 +27,7 @@ describe("fetchJurisdictionByName", () => {
 
     expect(mockedGet).toHaveBeenCalledWith(
       "http://localhost:3100/jurisdictions/byName/Bloomington",
-      { headers: { passkey: "test-passkey" } }
+      { headers: { passkey: "test-passkey" }, timeout: 5000 }
     )
   })
 
@@ -51,15 +51,42 @@ describe("fetchJurisdictionByName", () => {
     expect(mockedGet).toHaveBeenCalledTimes(2)
   })
 
-  it("retries after a failed fetch rather than caching the failure", async () => {
-    mockedGet.mockRejectedValueOnce(new Error("api down"))
+  it("holds a failed read briefly instead of retrying on every call", async () => {
+    jest.spyOn(console, "log").mockImplementation()
+    mockedGet.mockRejectedValue(new Error("api down"))
     const hooks = loadHooks()
 
     expect(await hooks.fetchJurisdictionByName()).toBeNull()
-    expect(await hooks.fetchJurisdictionByName()).toEqual({
-      id: "jurisdiction-id",
-      name: "Bloomington",
-    })
+    expect(await hooks.fetchJurisdictionByName()).toBeNull()
+
+    expect(mockedGet).toHaveBeenCalledTimes(1)
+  })
+
+  it("retries once the failure window has passed", async () => {
+    jest.spyOn(console, "log").mockImplementation()
+    mockedGet.mockRejectedValueOnce(new Error("api down"))
+    const hooks = loadHooks()
+    await hooks.fetchJurisdictionByName()
+
+    const now = jest.spyOn(Date, "now").mockReturnValue(Date.now() + 5001)
+    const result = await hooks.fetchJurisdictionByName()
+    now.mockRestore()
+
+    expect(result).toEqual({ id: "jurisdiction-id", name: "Bloomington" })
+    expect(mockedGet).toHaveBeenCalledTimes(2)
+  })
+
+  it("serves the last good jurisdiction while the api is failing", async () => {
+    jest.spyOn(console, "log").mockImplementation()
+    const hooks = loadHooks()
+    await hooks.fetchJurisdictionByName()
+
+    mockedGet.mockRejectedValue(new Error("api down"))
+    const now = jest.spyOn(Date, "now").mockReturnValue(Date.now() + 31000)
+    const result = await hooks.fetchJurisdictionByName()
+    now.mockRestore()
+
+    expect(result).toEqual({ id: "jurisdiction-id", name: "Bloomington" })
   })
 
   it("forwards the visitor's address when a request is given", async () => {
