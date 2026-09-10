@@ -9,11 +9,10 @@ import {
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { HEX_COLOR } from '../../utilities/brand-ramp';
 
 const toUpperHex = ({ value }: { value: unknown }) =>
   typeof value === 'string' ? value.toUpperCase() : value;
-
-const HEX_COLOR = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
 
 export class BrandRampDTO {
   @Expose()

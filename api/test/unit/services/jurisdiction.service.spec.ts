@@ -687,6 +687,19 @@ describe('Testing jurisdiction service', () => {
       expect(result.brand.fontFamily).toEqual('Inter');
     });
 
+    it('returns a non-hex base as stored rather than deriving from it', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(
+        row({
+          brand: { primary: { base: 'rebeccapurple' } },
+        }),
+      );
+
+      const result = await service.findOne({ jurisdictionId });
+
+      // Uppercased by the DTO transform; the point is that no shades were derived from it.
+      expect(result.brand.primary).toEqual({ base: 'REBECCAPURPLE' });
+    });
+
     it('clears the stored brand when null is sent', async () => {
       prisma.jurisdictions.update = jest.fn().mockResolvedValue(row());
       prisma.jurisdictions.findFirst = jest
