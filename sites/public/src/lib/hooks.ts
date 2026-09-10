@@ -314,11 +314,16 @@ export async function fetchLimitedUnderConstructionListings(req?: any, limit?: n
 }
 
 let jurisdiction: Jurisdiction | null = null
+let jurisdictionFetchedAt = 0
+
+// Branding and feature flags are read from this response, so the cache expires on the same
+// schedule as page revalidation.
+export const jurisdictionCacheTtlMs = () => Number(process.env.cacheRevalidate) * 1000
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchJurisdictionByName(req?: any) {
   try {
-    if (jurisdiction) {
+    if (jurisdiction && Date.now() - jurisdictionFetchedAt < jurisdictionCacheTtlMs()) {
       return jurisdiction
     }
 
@@ -337,6 +342,7 @@ export async function fetchJurisdictionByName(req?: any) {
       }
     )
     jurisdiction = jurisdictionRes?.data
+    jurisdictionFetchedAt = Date.now()
   } catch (error) {
     console.log("error = ", error)
   }
