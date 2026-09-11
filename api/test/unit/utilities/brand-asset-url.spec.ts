@@ -16,6 +16,28 @@ describe('brandAssetUrl', () => {
     );
   });
 
+  it.each([
+    [
+      '../../../../attackercloud/image/upload/evil.png',
+      'traversal to another account',
+    ],
+    ['..', 'a bare traversal segment'],
+    ['logo?x=1', 'a query string'],
+    ['logo#frag', 'a fragment'],
+    ['logo\\evil', 'a backslash'],
+    ['logo evil', 'a space'],
+  ])('refuses %s, which is %s', (fileId) => {
+    jest.spyOn(console, 'error').mockImplementation();
+
+    expect(brandAssetUrl(fileId, 'logo')).toBeUndefined();
+  });
+
+  it('allows the slashes and dots a real storage key contains', () => {
+    expect(brandAssetUrl('dev/bloom_logo.v2.png', 'logo')).toEqual(
+      'https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_90,f_png/dev/bloom_logo.v2.png',
+    );
+  });
+
   it('builds an S3 url when that backend is configured', () => {
     process.env.USE_S3_FILE_STORAGE = 'TRUE';
     process.env.S3_PUBLIC_BUCKET = 'bloom-public';
