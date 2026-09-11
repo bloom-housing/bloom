@@ -871,6 +871,7 @@ export class ApplicationExporterService {
         id: listingId,
         jurisdictionId,
       },
+      { isLotteryStatusUpdate: true },
     );
   }
 
