@@ -10,6 +10,7 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
+  Header,
 } from '@nestjs/common';
 import {
   ApiExtraModels,
@@ -28,6 +29,7 @@ import { PermissionTypeDecorator } from '../decorators/permission-type.decorator
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { PermissionGuard } from '../guards/permission.guard';
 import { ApiKeyGuard } from '../guards/api-key.guard';
+import { PUBLIC_CACHE_CONTROL } from '../utilities/cache-control';
 
 @Controller('jurisdictions')
 @ApiTags('jurisdictions')
@@ -46,6 +48,7 @@ export class JurisdictionController {
   }
 
   @Get(`:jurisdictionId`)
+  @Header('Cache-Control', PUBLIC_CACHE_CONTROL)
   @ApiOperation({
     summary: 'Get jurisdiction by id',
     operationId: 'retrieve',
@@ -60,6 +63,7 @@ export class JurisdictionController {
   }
 
   @Get(`byName/:jurisdictionName`)
+  @Header('Cache-Control', PUBLIC_CACHE_CONTROL)
   @ApiOperation({
     summary: 'Get jurisdiction by name',
     operationId: 'retrieveByName',
