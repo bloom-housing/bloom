@@ -24,9 +24,15 @@ import ApplicationConductor, {
   loadApplicationFromAutosave,
   loadSavedListing,
 } from "../lib/applications/ApplicationConductor"
-import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+  JurisdictionContentFields,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { applyTranslations } from "../lib/translations"
 import { JurisdictionContentContext } from "../lib/JurisdictionContentContext"
+import { BrandContext } from "../lib/BrandContext"
+import { isFeatureFlagOn } from "../lib/helpers"
 import LinkComponent from "../components/core/LinkComponent"
 
 import "../../styles/overrides.scss"
@@ -54,6 +60,12 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
 
   const jurisdictionContent = (pageProps?.jurisdictionContent ??
     null) as JurisdictionContentFields | null
+
+  const jurisdiction = pageProps?.jurisdiction as Jurisdiction | undefined
+  const brand =
+    jurisdiction && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableDbDrivenBranding)
+      ? jurisdiction.brand ?? null
+      : null
 
   useMemo(() => {
     applyTranslations(locale, publicOverrides)
@@ -99,10 +111,12 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
       <AuthProvider>
         <MessageProvider>
           <JurisdictionContentContext.Provider value={jurisdictionContent}>
-            <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-            <div className={jurisdictionClassname}>
-              <Component {...pageProps} />
-            </div>
+            <BrandContext.Provider value={brand}>
+              <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+              <div className={jurisdictionClassname}>
+                <Component {...pageProps} />
+              </div>
+            </BrandContext.Provider>
           </JurisdictionContentContext.Provider>
         </MessageProvider>
       </AuthProvider>

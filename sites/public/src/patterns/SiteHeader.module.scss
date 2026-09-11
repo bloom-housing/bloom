@@ -164,6 +164,8 @@
           color: var(--seeds-color-primary);
           img {
             max-height: var(--seeds-s16);
+            max-width: var(--seeds-s48);
+            object-fit: contain;
           }
           @media (--sm-only) {
             font-size: var(--seeds-font-size-sm);
