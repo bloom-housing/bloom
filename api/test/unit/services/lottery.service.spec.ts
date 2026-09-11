@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Logger } from '@nestjs/common';
+import { ForbiddenException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -19,7 +19,6 @@ import { ListingLotteryStatus } from '../../../src/dtos/listings/listing-lottery
 import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
 import { User } from '../../../src/dtos/users/user.dto';
 import { ValidationMethod } from '../../../src/enums/multiselect-questions/validation-method-enum';
-import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { ApplicationExporterService } from '../../../src/services/application-exporter.service';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
@@ -37,6 +36,7 @@ import { TranslationService } from '../../../src/services/translation.service';
 import { mockApplicationSet } from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';
 import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
+import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 
 const canOrThrowMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
@@ -583,7 +583,17 @@ describe('Testing lottery service', () => {
         userRoles: { isAdmin: false },
       } as unknown as User;
 
-      prisma.listings.findUnique = jest.fn();
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: listingId,
+        jurisdictions: {
+          featureFlags: [],
+        },
+        lotteryStatus: null,
+      });
+      prisma.applications.findMany = jest.fn();
+      prisma.applicationLotteryPositions.createMany = jest.fn();
+      prisma.applicationLotteryTotal.create = jest.fn();
+      prisma.listings.update = jest.fn();
 
       await expect(
         async () =>
@@ -592,9 +602,14 @@ describe('Testing lottery service', () => {
             {} as unknown as Response,
             { id: listingId },
           ),
-      ).rejects.toThrowError();
+      ).rejects.toThrowError(ForbiddenException);
 
-      expect(prisma.listings.findUnique).not.toHaveBeenCalled();
+      expect(prisma.listings.findUnique).toHaveBeenCalled();
+      expect(prisma.applications.findMany).not.toHaveBeenCalled();
+      expect(
+        prisma.applicationLotteryPositions.createMany,
+      ).not.toHaveBeenCalled();
+      expect(prisma.listings.update).not.toHaveBeenCalled();
     });
 
     it('should build lottery when no prior lottery has been ran', async () => {
@@ -603,19 +618,23 @@ describe('Testing lottery service', () => {
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [{ id: 'juris id' }],
+        jurisdictions: [{ id: 'jurisId' }],
         userRoles: { isAdmin: true },
       } as unknown as User;
 
       canOrThrowMock.mockResolvedValue(true);
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: listingId,
+        jurisdictionId: 'jurisId',
         jurisdictions: {
           featureFlags: [],
         },
         lotteryLastRunAt: null,
         lotteryStatus: null,
         status: ListingsStatusEnum.closed,
+      });
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [],
       });
       const applications = mockApplicationSet(5, new Date());
       prisma.applications.findMany = jest.fn().mockReturnValue(applications);
@@ -731,19 +750,23 @@ describe('Testing lottery service', () => {
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [{ id: 'juris id' }],
+        jurisdictions: [{ id: 'jurisId' }],
         userRoles: { isAdmin: true },
       } as unknown as User;
 
       canOrThrowMock.mockResolvedValue(true);
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: listingId,
+        jurisdictionId: 'jurisId',
         jurisdictions: {
           featureFlags: [],
         },
         lotteryLastRunAt: new Date(),
         lotteryStatus: LotteryStatusEnum.ran,
         status: ListingsStatusEnum.closed,
+      });
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [],
       });
       const applications = mockApplicationSet(5, new Date());
       prisma.applications.findMany = jest.fn().mockReturnValue(applications);
@@ -823,6 +846,177 @@ describe('Testing lottery service', () => {
       expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
 
+    it('should generate lottery when an assigned partner runs it with enablePartnerLotteryRun flag on', async () => {
+      const listingId = randomUUID();
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [{ id: 'jurisId' }],
+        listings: [{ id: listingId }],
+        userRoles: { isAdmin: false, isPartner: true },
+      } as unknown as User;
+
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: listingId,
+        name: 'example name',
+        jurisdictionId: 'jurisId',
+        jurisdictions: {
+          featureFlags: [
+            { name: FeatureFlagEnum.enablePartnerLotteryRun, active: true },
+          ],
+        },
+        lotteryLastRunAt: null,
+        lotteryStatus: null,
+        status: ListingsStatusEnum.closed,
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+        lotteryOptIn: true,
+      });
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [
+          { name: FeatureFlagEnum.enablePartnerLotteryRun, active: true },
+        ],
+      });
+      prisma.applications.findMany = jest
+        .fn()
+        .mockResolvedValue(mockApplicationSet(5, new Date()));
+      prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([]);
+      prisma.applicationLotteryPositions.deleteMany = jest.fn();
+      prisma.applicationLotteryPositions.createMany = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.applicationLotteryTotal.deleteMany = jest.fn();
+      prisma.applicationLotteryTotal.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: listingId,
+        lotteryLastRunAt: new Date(),
+        lotteryStatus: LotteryStatusEnum.ran,
+      });
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
+
+      const result = await service.lotteryGenerate(
+        { user: requestingUser } as unknown as ExpressRequest,
+        {} as unknown as Response,
+        { id: listingId },
+      );
+
+      expect(result).toEqual({ success: true });
+      expect(
+        prisma.applicationLotteryPositions.deleteMany,
+      ).not.toHaveBeenCalled();
+      expect(prisma.applicationLotteryPositions.createMany).toHaveBeenCalled();
+      expect(prisma.applicationLotteryTotal.create).toHaveBeenCalled();
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        data: {
+          lotteryLastRunAt: expect.anything(),
+          lotteryStatus: LotteryStatusEnum.ran,
+        },
+        where: {
+          id: listingId,
+        },
+      });
+    });
+
+    it('should error if a partner is not assigned to the listing even when enablePartnerLotteryRun is on', async () => {
+      const listingId = randomUUID();
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [{ id: 'jurisId' }],
+        listings: [{ id: randomUUID() }],
+        userRoles: { isAdmin: false, isPartner: true },
+      } as unknown as User;
+
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: listingId,
+        jurisdictionId: 'jurisId',
+        jurisdictions: {
+          featureFlags: [
+            { name: FeatureFlagEnum.enablePartnerLotteryRun, active: true },
+          ],
+        },
+        lotteryLastRunAt: null,
+        lotteryStatus: null,
+        status: ListingsStatusEnum.closed,
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+        lotteryOptIn: true,
+      });
+      prisma.applications.findMany = jest.fn();
+      prisma.applicationLotteryPositions.deleteMany = jest.fn();
+      prisma.applicationLotteryPositions.createMany = jest.fn();
+      prisma.applicationLotteryTotal.deleteMany = jest.fn();
+      prisma.applicationLotteryTotal.create = jest.fn();
+      prisma.listings.update = jest.fn();
+
+      await expect(
+        async () =>
+          await service.lotteryGenerate(
+            { user: requestingUser } as unknown as ExpressRequest,
+            {} as unknown as Response,
+            { id: listingId },
+          ),
+      ).rejects.toThrowError(ForbiddenException);
+
+      // the gate now sits after the listing read, so assert nothing was written
+      expect(prisma.applications.findMany).not.toHaveBeenCalled();
+      expect(
+        prisma.applicationLotteryPositions.deleteMany,
+      ).not.toHaveBeenCalled();
+      expect(
+        prisma.applicationLotteryPositions.createMany,
+      ).not.toHaveBeenCalled();
+      expect(prisma.applicationLotteryTotal.create).not.toHaveBeenCalled();
+      expect(prisma.listings.update).not.toHaveBeenCalled();
+    });
+
+    it('should error if an assigned partner runs it while enablePartnerLotteryRun is off', async () => {
+      const listingId = randomUUID();
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [{ id: 'jurisId' }],
+        listings: [{ id: listingId }],
+        userRoles: { isAdmin: false, isPartner: true },
+      } as unknown as User;
+
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: listingId,
+        jurisdictionId: 'jurisId',
+        jurisdictions: {
+          featureFlags: [],
+        },
+        lotteryLastRunAt: null,
+        lotteryStatus: null,
+        status: ListingsStatusEnum.closed,
+      });
+      prisma.applications.findMany = jest.fn();
+      prisma.applicationLotteryPositions.createMany = jest.fn();
+      prisma.applicationLotteryTotal.create = jest.fn();
+      prisma.listings.update = jest.fn();
+
+      await expect(
+        async () =>
+          await service.lotteryGenerate(
+            { user: requestingUser } as unknown as ExpressRequest,
+            {} as unknown as Response,
+            { id: listingId },
+          ),
+      ).rejects.toThrowError(ForbiddenException);
+
+      expect(prisma.applications.findMany).not.toHaveBeenCalled();
+      expect(
+        prisma.applicationLotteryPositions.createMany,
+      ).not.toHaveBeenCalled();
+      expect(prisma.listings.update).not.toHaveBeenCalled();
+    });
+
     it('should trigger lottery audit if env variable is set', async () => {
       const mockEndpoint = 'https://example.com/audit';
       config.get = jest.fn().mockImplementation((key: string) => {
@@ -849,12 +1043,18 @@ describe('Testing lottery service', () => {
       canOrThrowMock.mockResolvedValue(true);
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: listingId,
+        jurisdictionId: 'juris id',
         jurisdictions: {
           featureFlags: [],
         },
         lotteryLastRunAt: null,
         lotteryStatus: null,
         status: ListingsStatusEnum.closed,
+      });
+      // read by the nested lotteryStatus() call to evaluate the
+      // enablePartnerLotteryRun flag
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [],
       });
       const applications = mockApplicationSet(5, new Date());
       prisma.applications.findMany = jest.fn().mockReturnValue(applications);
@@ -940,6 +1140,40 @@ describe('Testing lottery service', () => {
       },
     } as User;
 
+    const assignedPartnerUser = {
+      id: 'partner id',
+      listings: [{ id: 'example id' }],
+      userRoles: {
+        isAdmin: false,
+        isPartner: true,
+      },
+    } as unknown as User;
+
+    const unassignedPartnerUser = {
+      id: 'partner id',
+      listings: [{ id: 'a different listing id' }],
+      userRoles: {
+        isAdmin: false,
+        isPartner: true,
+      },
+    } as unknown as User;
+
+    const assignedNonPartnerUser = {
+      id: 'public id',
+      listings: [{ id: 'example id' }],
+      userRoles: {
+        isAdmin: false,
+        isPartner: false,
+      },
+    } as unknown as User;
+
+    beforeEach(() => {
+      canOrThrowMock.mockClear();
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [],
+      });
+    });
+
     it('should error when listing is not closed', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: 'example id',
@@ -1009,6 +1243,235 @@ describe('Testing lottery service', () => {
         { isLotteryStatusUpdate: true },
       );
 
+      expect(prisma.listings.update).not.toHaveBeenCalled();
+    });
+
+    it('should update status to ran when an assigned partner requests it and enablePartnerLotteryRun is on', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: null,
+        jurisdictionId: 'jurisId',
+      });
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [
+          { name: FeatureFlagEnum.enablePartnerLotteryRun, active: true },
+        ],
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.ran,
+      });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
+
+      const result = await service.lotteryStatus(
+        {
+          id: randomUUID(),
+          lotteryStatus: LotteryStatusEnum.ran,
+        } as ListingLotteryStatus,
+        assignedPartnerUser,
+      );
+
+      expect(result).toEqual({ success: true });
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        assignedPartnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+          jurisdictionId: 'jurisId',
+        },
+        { isLotteryStatusUpdate: true },
+      );
+      expect(prisma.jurisdictions.findUnique).toHaveBeenCalledWith({
+        select: {
+          featureFlags: true,
+        },
+        where: {
+          id: 'jurisId',
+        },
+      });
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        data: {
+          lotteryLastRunAt: expect.anything(),
+          lotteryStatus: LotteryStatusEnum.ran,
+        },
+        where: {
+          id: expect.anything(),
+        },
+      });
+    });
+
+    it('should re-run status to ran when an assigned partner requests it and a lottery has already been run', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.ran,
+        lotteryLastRunAt: new Date(),
+        jurisdictionId: 'jurisId',
+      });
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [
+          { name: FeatureFlagEnum.enablePartnerLotteryRun, active: true },
+        ],
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.ran,
+      });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
+
+      const result = await service.lotteryStatus(
+        {
+          id: randomUUID(),
+          lotteryStatus: LotteryStatusEnum.ran,
+        } as ListingLotteryStatus,
+        assignedPartnerUser,
+      );
+
+      expect(result).toEqual({ success: true });
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        assignedPartnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+          jurisdictionId: 'jurisId',
+        },
+        { isLotteryStatusUpdate: true },
+      );
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        data: {
+          lotteryLastRunAt: expect.anything(),
+          lotteryStatus: LotteryStatusEnum.ran,
+        },
+        where: {
+          id: expect.anything(),
+        },
+      });
+    });
+
+    it('should not update status to ran when a partner is not assigned to the listing even if enablePartnerLotteryRun is on', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: null,
+        jurisdictionId: 'jurisId',
+      });
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [
+          { name: FeatureFlagEnum.enablePartnerLotteryRun, active: true },
+        ],
+      });
+      prisma.listings.update = jest.fn();
+      prisma.listingSnapshot.create = jest.fn();
+
+      await expect(
+        async () =>
+          await service.lotteryStatus(
+            {
+              id: randomUUID(),
+              lotteryStatus: LotteryStatusEnum.ran,
+            } as ListingLotteryStatus,
+            unassignedPartnerUser,
+          ),
+      ).rejects.toThrowError(ForbiddenException);
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        unassignedPartnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+          jurisdictionId: 'jurisId',
+        },
+        { isLotteryStatusUpdate: true },
+      );
+      expect(prisma.listings.update).not.toHaveBeenCalled();
+      expect(prisma.listingSnapshot.create).not.toHaveBeenCalled();
+    });
+
+    it('should not update status to ran when an assigned user is not a partner even if enablePartnerLotteryRun is on', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: null,
+        jurisdictionId: 'jurisId',
+      });
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [
+          { name: FeatureFlagEnum.enablePartnerLotteryRun, active: true },
+        ],
+      });
+      prisma.listings.update = jest.fn();
+
+      await expect(
+        async () =>
+          await service.lotteryStatus(
+            {
+              id: randomUUID(),
+              lotteryStatus: LotteryStatusEnum.ran,
+            } as ListingLotteryStatus,
+            assignedNonPartnerUser,
+          ),
+      ).rejects.toThrowError(ForbiddenException);
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        assignedNonPartnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+          jurisdictionId: 'jurisId',
+        },
+        { isLotteryStatusUpdate: true },
+      );
+      expect(prisma.listings.update).not.toHaveBeenCalled();
+    });
+
+    it('should not update status to ran when an assigned partner requests it but enablePartnerLotteryRun is off', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: null,
+        jurisdictionId: 'jurisId',
+      });
+      prisma.listings.update = jest.fn();
+
+      await expect(
+        async () =>
+          await service.lotteryStatus(
+            {
+              id: randomUUID(),
+              lotteryStatus: LotteryStatusEnum.ran,
+            } as ListingLotteryStatus,
+            assignedPartnerUser,
+          ),
+      ).rejects.toThrowError(ForbiddenException);
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        assignedPartnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+          jurisdictionId: 'jurisId',
+        },
+        { isLotteryStatusUpdate: true },
+      );
       expect(prisma.listings.update).not.toHaveBeenCalled();
     });
 
@@ -1282,6 +1745,7 @@ describe('Testing lottery service', () => {
         },
         { isLotteryStatusUpdate: true },
       );
+
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
           lotteryLastRunAt: expect.anything(),
