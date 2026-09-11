@@ -91,6 +91,9 @@ const CustomSiteFooter = () => {
                   {link.text}
                 </Link>
               ))}
+              {footerLinksContent.equalHousingOpportunity && (
+                <img src={`/images/logo-eho.svg`} alt={t(`footer.alt.equalHousingOpportunity`)} />
+              )}
             </div>
           </div>
         </MaxWidthLayout>

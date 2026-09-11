@@ -85,5 +85,6 @@ export const getGenericFooterLinksContent = (): FooterLinks => {
       { text: t("pageTitle.disclaimer"), href: "/disclaimer" },
     ],
     cityString: t("footer.copyright"),
+    equalHousingOpportunity: false,
   }
 }
