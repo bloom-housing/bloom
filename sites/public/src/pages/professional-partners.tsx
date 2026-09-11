@@ -1,11 +1,14 @@
 import { AuthContext, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
+import { useRouter } from "next/router"
 import { useContext, useEffect } from "react"
 import pageStyles from "../components/assistance/Assistance.module.scss"
 import ContactCard from "../components/shared/ContactCard"
 import Layout from "../layouts/application"
 import { UserStatus } from "../lib/constants"
 import { fetchSharedPageProps } from "../lib/hooks"
+import { useJurisdictionFeatureFlags } from "../lib/JurisdictionFeatureFlagsContext"
 import FrequentlyAskedQuestions from "../patterns/FrequentlyAskedQuestions"
 import { PageHeaderLayout } from "../patterns/PageHeaderLayout"
 import styles from "../patterns/PageHeaderLayout.module.scss"
@@ -20,6 +23,12 @@ import {
 
 const ProfessionalPartners = () => {
   const { profile } = useContext(AuthContext)
+  const router = useRouter()
+  const featureFlags = useJurisdictionFeatureFlags()
+
+  const enableProfessionalPartnersPage = featureFlags?.some(
+    (flag) => flag.name === FeatureFlagEnum.enableProfessionalPartnersPage
+  )
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -28,6 +37,12 @@ const ProfessionalPartners = () => {
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])
+
+  useEffect(() => {
+    if (!enableProfessionalPartnersPage) {
+      void router.push("/404")
+    }
+  }, [enableProfessionalPartnersPage, router])
 
   const content = getProfessionalPartnersContent() || getGenericProfessionalPartnersContent()
   const contactContent =

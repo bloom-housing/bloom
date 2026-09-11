@@ -16,7 +16,6 @@ import {
 import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
 import styles from "./application.module.scss"
 import CustomSiteFooter from "../components/shared/CustomSiteFooter"
-import { isFeatureFlagOn } from "../lib/helpers"
 import { HeaderLink, SiteHeader } from "../patterns/SiteHeader"
 import { useJurisdictionFeatureFlags } from "../lib/JurisdictionFeatureFlagsContext"
 

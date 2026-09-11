@@ -402,7 +402,7 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableProfessionalPartnersPage,
     description:
-      'When true, the professional partners page will appear in the nav header of the public site',
+      'When true, the professional partners page will appear in the nav header of the public site and page will be reachable',
   },
   {
     name: FeatureFlagEnum.enableProperties,
