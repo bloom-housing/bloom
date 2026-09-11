@@ -1,14 +1,15 @@
 import { t } from "@bloom-housing/ui-components"
 import { Link } from "@bloom-housing/ui-seeds"
 import Markdown from "markdown-to-jsx"
+import { ContactCardProps } from "../components/shared/ContactCard"
 import { FaqCategory, FaqContent } from "../patterns/FrequentlyAskedQuestions"
 
-export const getGenericHousingBasicsContent = (): FaqContent => {
+export const getGenericProfessionalPartnersContent = (): FaqContent => {
   const faqContentSection: FaqCategory = {
-    title: t("housingBasics.genericHeading"),
+    title: t("professionalPartners.genericHeading"),
     faqs: [
       {
-        question: t("housingBasics.getStarted"),
+        question: t("professionalPartners.whatIsHousingPortal"),
         answer: (
           <Markdown>{`${t("content.genericParagraph")} ${t("content.genericParagraph")} ${t(
             "content.genericParagraph"
@@ -16,7 +17,7 @@ export const getGenericHousingBasicsContent = (): FaqContent => {
         ),
       },
       {
-        question: t("housingBasics.applyForHousing"),
+        question: t("professionalPartners.whatIsTheRole"),
         answer: (
           <>
             {t("content.genericParagraph")}
@@ -41,5 +42,22 @@ export const getGenericHousingBasicsContent = (): FaqContent => {
 
   return {
     categories: [faqContentSection, faqContentSection],
+  }
+}
+
+export const getGenericProfessionalPartnersContactContent = (): ContactCardProps => {
+  const contactDescription = t("resources.contactDescription")
+  const contactInfo = t("resources.contactInfo")
+  const email = t("resources.contactEmail")
+  const heading = t("footer.contact")
+
+  return {
+    address: undefined,
+    contactDescription: contactDescription,
+    contactInfo: contactInfo,
+    email: email,
+    heading: heading,
+    hours: undefined,
+    phone: undefined,
   }
 }
