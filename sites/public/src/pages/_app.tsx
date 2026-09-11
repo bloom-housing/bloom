@@ -18,25 +18,21 @@ import {
   AuthProvider,
   MessageProvider,
 } from "@bloom-housing/shared-helpers"
-import { pageChangeHandler, gaLoadScript, gaCaptureScript, uaScript } from "../lib/customScripts"
-import { AppSubmissionContext } from "../lib/applications/AppSubmissionContext"
-import ApplicationConductor, {
-  loadApplicationFromAutosave,
-  loadSavedListing,
-} from "../lib/applications/ApplicationConductor"
 import {
   FeatureFlag,
   JurisdictionContentFields,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { applyTranslations } from "../lib/translations"
-import { JurisdictionContentContext } from "../lib/JurisdictionContentContext"
 import LinkComponent from "../components/core/LinkComponent"
-
+import ApplicationConductor, {
+  loadApplicationFromAutosave,
+  loadSavedListing,
+} from "../lib/applications/ApplicationConductor"
+import { AppSubmissionContext } from "../lib/applications/AppSubmissionContext"
+import { pageChangeHandler, gaLoadScript, gaCaptureScript, uaScript } from "../lib/customScripts"
+import { JurisdictionContentContext } from "../lib/JurisdictionContentContext"
+import { JurisdictionFeatureFlagsContext } from "../lib/JurisdictionFeatureFlagsContext"
+import { applyTranslations } from "../lib/translations"
 import "../../styles/overrides.scss"
-import {
-  JurisdictionFeatureFlags,
-  JurisdictionFeatureFlagsContext,
-} from "../lib/JurisdictionFeatureFlagsContext"
 
 const rtlLocales = process.env.rtlLanguages.split(",")
 
