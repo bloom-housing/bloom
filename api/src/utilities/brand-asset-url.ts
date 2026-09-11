@@ -3,11 +3,21 @@
 
 const WIDTH = { logo: 400, favicon: 64 } as const;
 
+const SAFE_FILE_ID = /^[A-Za-z0-9._\-/]+$/;
+
+const escapesThePath = (fileId: string): boolean =>
+  !SAFE_FILE_ID.test(fileId) || fileId.split('/').includes('..');
+
 export const brandAssetUrl = (
   fileId: string | null | undefined,
   kind: keyof typeof WIDTH,
 ): string | undefined => {
   if (!fileId) return undefined;
+
+  if (escapesThePath(fileId)) {
+    console.error(`asset file id ${fileId} is not a usable storage key`);
+    return undefined;
+  }
 
   if (process.env.USE_S3_FILE_STORAGE === 'TRUE') {
     const bucket = process.env.S3_PUBLIC_BUCKET;
