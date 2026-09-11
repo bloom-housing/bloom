@@ -11,6 +11,7 @@ import { t } from "@bloom-housing/ui-components"
 import { mockNextRouter } from "../testUtils"
 import BloomApp from "../../src/pages/_app"
 import { useJurisdictionContent } from "../../src/lib/JurisdictionContentContext"
+import { useBrand } from "../../src/lib/BrandContext"
 import { overrideTranslations } from "../../src/lib/translations"
 
 // Supplied by the mocked bundled English override file, so a stored override has something to beat.
@@ -23,6 +24,18 @@ const ContentReader = () => {
   const content = useJurisdictionContent()
   return <div>{content?.contact?.phone ?? "no content"}</div>
 }
+
+// The layout reads the brand this way to pick the header logo.
+const BrandReader = () => {
+  const brand = useBrand()
+  return <div>{brand?.logoUrl ?? "no brand"}</div>
+}
+
+const jurisdictionWith = (flagOn: boolean) => ({
+  id: "jurisdiction-id",
+  brand: { logoUrl: "https://example.test/logo.png" },
+  featureFlags: [{ name: "enableDbDrivenBranding", active: flagOn }],
+})
 
 const renderApp = (
   pageProps: Record<string, unknown>,
@@ -68,6 +81,24 @@ describe("<BloomApp>", () => {
     renderApp({}, "en", ContentReader)
 
     expect(screen.getByText("no content")).toBeInTheDocument()
+  })
+
+  it("provides the brand when the flag is on for the jurisdiction", () => {
+    renderApp({ jurisdiction: jurisdictionWith(true) }, "en", BrandReader)
+
+    expect(screen.getByText("https://example.test/logo.png")).toBeInTheDocument()
+  })
+
+  it("provides no brand when the flag is off", () => {
+    renderApp({ jurisdiction: jurisdictionWith(false) }, "en", BrandReader)
+
+    expect(screen.getByText("no brand")).toBeInTheDocument()
+  })
+
+  it("provides no brand when a page supplies no jurisdiction", () => {
+    renderApp({}, "en", BrandReader)
+
+    expect(screen.getByText("no brand")).toBeInTheDocument()
   })
 
   it("renders the bundled value when a page supplies none", () => {
