@@ -1,5 +1,5 @@
 import React from "react"
-import { cleanup, screen } from "@testing-library/react"
+import { cleanup, screen, within } from "@testing-library/react"
 import { mockNextRouter, render } from "../../testUtils"
 import {
   FeatureFlag,
@@ -164,14 +164,18 @@ describe("Assistance stored contact details", () => {
   it("hides a field the jurisdiction set to null", () => {
     renderWithContact({ email: null, hours: null } as unknown as Record<string, string>)
 
-    expect(screen.queryByText(t("resources.contactEmail"))).not.toBeInTheDocument()
-    expect(screen.queryByRole("link", { name: /@/ })).not.toBeInTheDocument()
+    const contactHeading = screen.getByRole("heading", { name: "Contact", level: 2 })
+    expect(contactHeading).toBeInTheDocument()
+    expect(within(contactHeading).queryByText(t("resources.contactEmail"))).not.toBeInTheDocument()
+    expect(within(contactHeading).queryByRole("link", { name: /@/ })).not.toBeInTheDocument()
   })
 
   it("hides the email when the jurisdiction emptied it", () => {
     renderWithContact({ email: "" })
 
-    expect(screen.queryByText(t("resources.contactEmail"))).not.toBeInTheDocument()
-    expect(screen.queryByRole("link", { name: /@/ })).not.toBeInTheDocument()
+    const contactHeading = screen.getByRole("heading", { name: "Contact", level: 2 })
+    expect(contactHeading).toBeInTheDocument()
+    expect(within(contactHeading).queryByText(t("resources.contactEmail"))).not.toBeInTheDocument()
+    expect(within(contactHeading).queryByRole("link", { name: /@/ })).not.toBeInTheDocument()
   })
 })
