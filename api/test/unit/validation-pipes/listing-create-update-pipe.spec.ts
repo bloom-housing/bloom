@@ -332,6 +332,89 @@ describe('ListingCreateUpdateValidationPipe', () => {
       );
     });
 
+    it('should exclude land-use-inapplicable fields from a configured requiredFields list when listingType is landUse', async () => {
+      const jurisdictionId = randomUUID();
+      const value = {
+        name: 'Test Listing',
+        listingType: 'landUse',
+        jurisdictions: { id: jurisdictionId },
+      };
+
+      mockPrisma.jurisdictions.findFirst.mockResolvedValue({
+        requiredListingFields: [
+          'name',
+          'developer',
+          'listingsLeasingAgentAddress',
+          'reservedCommunityTypes',
+          'reservedCommunityDescription',
+          'leasingAgentEmail',
+        ],
+      });
+
+      const expectedTransformedValue = {
+        ...value,
+        listingFeaturesConfiguration: null,
+        minimumImagesRequired: 0,
+        units: [],
+        unitGroups: [],
+        requiredFields: ['name', 'leasingAgentEmail'],
+      };
+      mockSuperTransform.mockResolvedValue(expectedTransformedValue);
+
+      await pipe.transform(value, metadata);
+
+      expect(mockSuperTransform).toHaveBeenCalledWith(
+        expectedTransformedValue,
+        {
+          ...metadata,
+          metatype: ListingCreate,
+        },
+      );
+    });
+
+    it('should not exclude any fields when listingType is not landUse', async () => {
+      const jurisdictionId = randomUUID();
+      const value = {
+        name: 'Test Listing',
+        listingType: 'regulated',
+        jurisdictions: { id: jurisdictionId },
+      };
+
+      mockPrisma.jurisdictions.findFirst.mockResolvedValue({
+        requiredListingFields: [
+          'name',
+          'developer',
+          'reservedCommunityTypes',
+          'reservedCommunityDescription',
+        ],
+      });
+
+      const expectedTransformedValue = {
+        ...value,
+        listingFeaturesConfiguration: null,
+        minimumImagesRequired: 0,
+        units: [],
+        unitGroups: [],
+        requiredFields: [
+          'name',
+          'developer',
+          'reservedCommunityTypes',
+          'reservedCommunityDescription',
+        ],
+      };
+      mockSuperTransform.mockResolvedValue(expectedTransformedValue);
+
+      await pipe.transform(value, metadata);
+
+      expect(mockSuperTransform).toHaveBeenCalledWith(
+        expectedTransformedValue,
+        {
+          ...metadata,
+          metatype: ListingCreate,
+        },
+      );
+    });
+
     it('should handle jurisdiction with undefined id gracefully', async () => {
       const value = {
         name: 'Test Listing',

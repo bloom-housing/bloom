@@ -15,6 +15,7 @@ import {
   Jurisdiction,
   JurisdictionsService,
   LanguagesEnum,
+  EnumListingListingType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ListingForm from "../../../../src/components/listings/PaperListingForm"
 import { mockNextRouter, mockTipTapEditor, render } from "../../../testUtils"
@@ -645,5 +646,55 @@ describe("PaperListingForm", () => {
       const query = screen.getAllByText(fieldName)
       expect(query[0]).toHaveTextContent(`${fieldName} *`)
     })
+  })
+
+  it("hides asterisks on land-use-inapplicable fields and hides Preferences for landUse listings", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { id: "user1", isAdmin: true, isPartner: false },
+            roles: { id: "user1", isAdmin: true, isPartner: false },
+            jurisdictions,
+          })
+        )
+      }),
+      rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
+        return res(ctx.json([]))
+      }),
+      rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+        return res(ctx.json([]))
+      }),
+      rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
+        return res(ctx.json([]))
+      })
+    )
+
+    render(
+      <ListingForm
+        jurisdictionId={"Bloomington"}
+        listing={{ ...listing, listingType: EnumListingListingType.landUse }}
+      />
+    )
+
+    await screen.findByRole("heading", { level: 2, name: "Listing intro" })
+
+    const excludedFields = [
+      "Housing developer",
+      "Street address or PO box",
+      "Reserved community type",
+      "Reserved community description",
+    ]
+    excludedFields.forEach((fieldName) => {
+      const query = screen.getAllByText(fieldName)
+      expect(query[0].textContent).not.toContain("*")
+    })
+
+    expect(
+      screen.queryByRole("heading", { level: 2, name: /preferences/i })
+    ).not.toBeInTheDocument()
   })
 })
