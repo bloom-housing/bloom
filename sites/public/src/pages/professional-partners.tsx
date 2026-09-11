@@ -45,7 +45,7 @@ const ProfessionalPartners = () => {
         className={pageStyles["site-layout"]}
       >
         <article className={pageStyles["site-content"]}>
-          <div className={pageStyles["item-wrapper"]}>
+          <div className={pageStyles["items-wrapper"]}>
             <div className={styles["markdown"]}>
               {/* Using the faq component now as we currently only support content in that format */}
               <FrequentlyAskedQuestions content={content} />
