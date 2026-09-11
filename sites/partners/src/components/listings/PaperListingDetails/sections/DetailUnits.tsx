@@ -1,18 +1,17 @@
 import React, { useContext, useMemo } from "react"
-import { t, MinimalTable } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import { Button, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
-  EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   FeatureFlagEnum,
-  MinMax,
-  RentTypeEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
-import { formatRange, formatRentRange, minMaxFinder } from "../../helpers"
+import { DataTable } from "../../../shared/DataTable"
+import { getUnitColumns, unitGroupToRow, unitToRow } from "../../UnitTableColDefs"
+import unitTableStyles from "../../UnitTableColDefs.module.scss"
 import { UnitDrawer } from "../DetailsUnitDrawer"
 
 type DetailUnitsProps = {
@@ -46,118 +45,35 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   const showNonRegulated =
     enableNonRegulatedListings && listing.listingType === EnumListingListingType.nonRegulated
 
-  const unitTableHeaders = enableUnitGroups
-    ? {
-        unitType: "listings.unit.type",
-        number: "listings.unit.totalCount",
-        ...(!showNonRegulated ? { amiPercentage: "t.ami" } : {}),
-        monthlyRent: "listings.unit.rent",
-        occupancy: "listings.unit.occupancy",
-        ...(!showNonRegulated ? { sqFeet: "listings.unit.sqft" } : {}),
-        bath: "listings.unit.bath",
-      }
-    : {
-        number: "listings.unit.number",
-        unitType: "listings.unit.type",
-        amiPercentage: "t.ami",
-        monthlyRent: "listings.unit.rent",
-        sqFeet: "listings.unit.sqft",
-        accessibilityPriorityType: "listings.unit.accessibilityPriorityType",
-        action: "",
-      }
+  const unitColumns = useMemo(
+    () =>
+      getUnitColumns({
+        enableUnitGroups,
+        showNonRegulated,
+        disableSorting: true,
+        actionsCell: enableUnitGroups
+          ? undefined
+          : (row) => (
+              <Button
+                type="button"
+                variant="text"
+                size="sm"
+                className={"font-semibold darker-link"}
+                onClick={() => setUnitDrawer(listing.units.find((unit) => unit.id === row.id))}
+              >
+                {t("t.view")}
+              </Button>
+            ),
+      }),
+    [enableUnitGroups, showNonRegulated, listing.units, setUnitDrawer]
+  )
 
-  const unitTableData = useMemo(() => {
+  const unitRows = useMemo(() => {
     if (enableUnitGroups) {
-      if (showNonRegulated) {
-        return listing.unitGroups.map((unitGroup) => {
-          const rentValue =
-            unitGroup.rentType === RentTypeEnum.fixedRent
-              ? unitGroup.monthlyRent
-              : formatRange(unitGroup.flatRentValueFrom, unitGroup.flatRentValueTo)
-
-          return {
-            unitType: {
-              content:
-                unitGroup?.unitTypes
-                  .map((unitType) => t(`listings.unitTypes.${unitType.name}`))
-                  .join(", ") || "",
-            },
-            number: { content: unitGroup.totalCount },
-            monthlyRent: { content: rentValue },
-            occupancy: { content: formatRange(unitGroup.minOccupancy, unitGroup.maxOccupancy) },
-            bath: { content: formatRange(unitGroup.bathroomMin, unitGroup.bathroomMax) },
-          }
-        })
-      } else {
-        return listing.unitGroups.map((unitGroup) => {
-          let amiRange: MinMax, rentRange: MinMax, percentIncomeRange: MinMax
-
-          unitGroup.unitGroupAmiLevels.forEach((ami) => {
-            if (ami.amiPercentage) {
-              amiRange = minMaxFinder(amiRange, ami.amiPercentage)
-            }
-            if (
-              ami.flatRentValue &&
-              ami.monthlyRentDeterminationType ===
-                EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent
-            ) {
-              rentRange = minMaxFinder(rentRange, ami.flatRentValue)
-            }
-            if (
-              ami.percentageOfIncomeValue &&
-              ami.monthlyRentDeterminationType ===
-                EnumUnitGroupAmiLevelMonthlyRentDeterminationType.percentageOfIncome
-            ) {
-              percentIncomeRange = minMaxFinder(percentIncomeRange, ami.percentageOfIncomeValue)
-            }
-          })
-
-          return {
-            unitType: {
-              content:
-                unitGroup?.unitTypes
-                  .map((unitType) => t(`listings.unitTypes.${unitType.name}`))
-                  .join(", ") || "",
-            },
-            number: { content: unitGroup.totalCount },
-            amiPercentage: {
-              content: amiRange && formatRange(amiRange.min, amiRange.max, "", "%"),
-            },
-            monthlyRent: { content: formatRentRange(rentRange, percentIncomeRange) },
-            occupancy: { content: formatRange(unitGroup.minOccupancy, unitGroup.maxOccupancy) },
-            sqFeet: { content: formatRange(unitGroup.sqFeetMin, unitGroup.sqFeetMax) },
-            bath: { content: formatRange(unitGroup.bathroomMin, unitGroup.bathroomMax) },
-          }
-        })
-      }
-    } else {
-      return listing.units.map((unit) => ({
-        number: { content: unit.number },
-        unitType: { content: unit.unitTypes && t(`listings.unitTypes.${unit.unitTypes.name}`) },
-        amiPercentage: { content: unit.amiPercentage },
-        monthlyRent: { content: unit.monthlyRent },
-        sqFeet: { content: unit.sqFeet },
-        accessibilityPriorityType: {
-          content: unit.accessibilityPriorityType
-            ? t(`listings.unit.accessibilityType.${unit.accessibilityPriorityType}`)
-            : t("t.n/a"),
-        },
-        action: {
-          content: (
-            <Button
-              type="button"
-              variant="text"
-              size="sm"
-              className={"font-semibold darker-link"}
-              onClick={() => setUnitDrawer(unit)}
-            >
-              {t("t.view")}
-            </Button>
-          ),
-        },
-      }))
+      return listing.unitGroups.map((unitGroup) => unitGroupToRow(unitGroup, showNonRegulated))
     }
-  }, [listing.units, listing.unitGroups, enableUnitGroups, showNonRegulated, setUnitDrawer])
+    return listing.units.map(unitToRow)
+  }, [listing.units, listing.unitGroups, enableUnitGroups, showNonRegulated])
 
   const listingAvailabilityText = useMemo(() => {
     switch (listing?.reviewOrderType) {
@@ -208,7 +124,14 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
       <Grid.Row>
         <Grid.Cell>
           {(enableUnitGroups ? !!listing.unitGroups : !!listing.units.length) ? (
-            <MinimalTable id="unitTable" headers={unitTableHeaders} data={unitTableData} />
+            <DataTable
+              description={t("listings.units")}
+              columns={unitColumns}
+              data={unitRows}
+              disablePagination
+              id={"unitTable"}
+              tableClassName={unitTableStyles["unit-table"]}
+            />
           ) : (
             <>
               <hr className="spacer-header" />

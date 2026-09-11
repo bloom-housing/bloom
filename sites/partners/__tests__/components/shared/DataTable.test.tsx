@@ -706,4 +706,84 @@ describe("DataTable", () => {
     expect(mockFetch).toHaveBeenCalledWith({ pageIndex: 0, pageSize: 25 }, [], [])
     expect(await screen.findByText("Page 1 of 1")).toBeInTheDocument()
   })
+
+  it("should render rows from the data prop without fetching", async () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <DataTable
+          columns={defaultColumns}
+          data={[
+            { firstName: "ClientFirst", lastName: "ClientLast" },
+            { firstName: "OtherFirst", lastName: "OtherLast" },
+          ]}
+          description={"Table caption"}
+        />
+      </QueryClientProvider>
+    )
+
+    expect(await screen.findByRole("cell", { name: "ClientFirst" })).toBeInTheDocument()
+    expect(screen.getByRole("cell", { name: "OtherFirst" })).toBeInTheDocument()
+    expect(within(screen.getAllByRole("rowgroup")[1]).getAllByRole("row")).toHaveLength(2)
+  })
+
+  it("should show the no data message when client-side data is empty", async () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <DataTable columns={defaultColumns} data={[]} description={"Table caption"} />
+      </QueryClientProvider>
+    )
+
+    expect(await screen.findByText("No data available")).toBeInTheDocument()
+  })
+
+  it("should sort client-side data when a sort header is clicked", async () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <DataTable
+          columns={defaultColumns}
+          data={[
+            { firstName: "Bravo", lastName: "Two" },
+            { firstName: "Alpha", lastName: "One" },
+          ]}
+          description={"Table caption"}
+        />
+      </QueryClientProvider>
+    )
+
+    expect(await screen.findByRole("cell", { name: "Bravo" })).toBeInTheDocument()
+
+    const bodyBefore = within(screen.getAllByRole("rowgroup")[1]).getAllByRole("row")
+    expect(within(bodyBefore[0]).getAllByRole("cell")[0]).toHaveTextContent("Bravo")
+
+    fireEvent.click(screen.getByTestId("sort-button-firstName"))
+
+    const bodyAfter = within(screen.getAllByRole("rowgroup")[1]).getAllByRole("row")
+    expect(within(bodyAfter[0]).getAllByRole("cell")[0]).toHaveTextContent("Alpha")
+  })
+
+  it("should render every row and no pagination footer when pagination is disabled", async () => {
+    const manyRows = Array.from({ length: 12 }, (_, index) => ({
+      firstName: `First${index}`,
+      lastName: `Last${index}`,
+    }))
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <DataTable
+          columns={defaultColumns}
+          data={manyRows}
+          disablePagination
+          description={"Table caption"}
+        />
+      </QueryClientProvider>
+    )
+
+    expect(await screen.findByRole("cell", { name: "First0" })).toBeInTheDocument()
+    // 12 rows exceeds the default page size of 8, so all 12 prove pagination is off
+    expect(within(screen.getAllByRole("rowgroup")[1]).getAllByRole("row")).toHaveLength(12)
+    expect(screen.getByRole("cell", { name: "First11" })).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Next" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Previous" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("combobox", { name: "Show" })).not.toBeInTheDocument()
+  })
 })
