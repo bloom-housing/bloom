@@ -360,6 +360,7 @@
   "listings.approval.approve": "Approve",
   "listings.approval.approveAndPublish": "Approve & publish",
   "listings.approval.changeRequestSummary": "Change request summary",
+  "listings.approval.landUseNoScheduledDate": "This is a land use listing without a scheduled publish date. Without an entered scheduled publish date, land use listings are published straight to Closed status. No notifications will be sent to applicants or partners. To publish as Open status, first add a scheduled publish date.",
   "listings.approval.listingClosed": "Listing closed",
   "listings.approval.listingNotes": "Listing notes",
   "listings.approval.listingPublished": "Listing published",

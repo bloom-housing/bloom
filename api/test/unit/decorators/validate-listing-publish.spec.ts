@@ -5,6 +5,7 @@ import { ValidateListingPublish } from '../../../src/decorators/validate-listing
 class ListingPublishValidationTestDto {
   status?: ListingsStatusEnum;
   requiredFields?: string[];
+  publishesToClosed?: boolean;
 
   @ValidateListingPublish('units')
   units?: unknown[];
@@ -39,6 +40,42 @@ describe('ValidateListingPublish', () => {
     dto.status = ListingsStatusEnum.scheduled;
     dto.requiredFields = ['buildingAddress'];
     dto.units = undefined;
+
+    const errors = validateSync(dto);
+
+    expect(errors).toHaveLength(0);
+  });
+
+  it('should not require fields for closed status by default', () => {
+    const dto = new ListingPublishValidationTestDto();
+    dto.status = ListingsStatusEnum.closed;
+    dto.requiredFields = ['units'];
+    dto.units = undefined;
+
+    const errors = validateSync(dto);
+
+    expect(errors).toHaveLength(0);
+  });
+
+  it('should require fields for closed status when the update publishes to closed', () => {
+    const dto = new ListingPublishValidationTestDto();
+    dto.status = ListingsStatusEnum.closed;
+    dto.requiredFields = ['units'];
+    dto.publishesToClosed = true;
+    dto.units = undefined;
+
+    const errors = validateSync(dto);
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0].property).toBe('units');
+  });
+
+  it('should pass for a publish to closed when the required field is present', () => {
+    const dto = new ListingPublishValidationTestDto();
+    dto.status = ListingsStatusEnum.closed;
+    dto.requiredFields = ['units'];
+    dto.publishesToClosed = true;
+    dto.units = [{ id: 'unit-1' }];
 
     const errors = validateSync(dto);
 
