@@ -6,7 +6,7 @@ import { Agency } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { PageView, pushGtmEvent, AuthContext, BloomCard, Form } from "@bloom-housing/shared-helpers"
-import { fetchAgencies, fetchJurisdictionByName, fetchPublicOverrides } from "../lib/hooks"
+import { fetchAgencies, fetchSharedPageProps } from "../lib/hooks"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 import {
@@ -135,13 +135,10 @@ export default CreateAdvocateAccount
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: { req: any; query: any; locale?: string }) {
-  const [jurisdiction, publicOverrides] = await Promise.all([
-    fetchJurisdictionByName(context.req),
-    fetchPublicOverrides(context.locale, context.req),
-  ])
-  const agencies = await fetchAgencies(context.req, jurisdiction?.id)
+  const shared = await fetchSharedPageProps(context.locale, context.req)
+  const agencies = await fetchAgencies(context.req, shared.jurisdiction?.id)
 
   return {
-    props: { jurisdiction, agencies: agencies?.items || [], publicOverrides },
+    props: { ...shared, agencies: agencies?.items || [] },
   }
 }

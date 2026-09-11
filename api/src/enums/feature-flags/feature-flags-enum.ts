@@ -54,6 +54,7 @@ export enum FeatureFlagEnum {
   enableMultiselectVoucherQuestion = 'enableMultiselectVoucherQuestion',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enableNeighborhoodAmenitiesDropdown = 'enableNeighborhoodAmenitiesDropdown',
+  enableNonAdminLotteries = 'enableNonAdminLotteries',
   enableNonRegulatedListings = 'enableNonRegulatedListings',
   enableOnlyAdminCanAddAppsAfterClose = 'enableOnlyAdminCanAddAppsAfterClose',
   enableOnlyAdminCanEditListingDates = 'enableOnlyAdminCanEditListingDates',
@@ -61,6 +62,7 @@ export enum FeatureFlagEnum {
   enableParkingFee = 'enableParkingFee',
   enableParkingType = 'enableParkingType',
   enablePartnerDemographics = 'enablePartnerDemographics',
+  enablePartnerLotteryExport = 'enablePartnerLotteryExport',
   enablePartnerSettings = 'enablePartnerSettings',
   enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
   enableProperties = 'enableProperties',
@@ -348,6 +350,11 @@ export const featureFlagMap: {
       'When true, neighborhood amenities inputs render as dropdowns with distance options instead of textareas',
   },
   {
+    name: FeatureFlagEnum.enableNonAdminLotteries,
+    description:
+      'When true, the lotteries can be published without the admin confirmation',
+  },
+  {
     name: FeatureFlagEnum.enableNonRegulatedListings,
     description:
       'When true, non-regulated listings are displayed in listing creation/edit and public listing view',
@@ -375,6 +382,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enablePartnerDemographics,
     description:
       'When true, demographics data is included in application or lottery exports for partners',
+  },
+  {
+    name: FeatureFlagEnum.enablePartnerLotteryExport,
+    description:
+      'When true, partner can export lottery immediately after it is run.',
   },
   {
     name: FeatureFlagEnum.enablePartnerSettings,

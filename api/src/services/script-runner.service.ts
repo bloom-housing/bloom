@@ -12,10 +12,14 @@ import {
   MultiselectQuestionsStatusEnum,
   Prisma,
   ReviewOrderTypeEnum,
+  SiteEnum,
+  TranslationOrigin,
 } from '@prisma/client';
+import { AxiosError } from 'axios';
+import { HttpService } from '@nestjs/axios';
+import { catchError, firstValueFrom } from 'rxjs';
 import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
-import https from 'https';
 import { AmiChartService } from './ami-chart.service';
 import { EmailService } from './email.service';
 import { FeatureFlagService } from './feature-flag.service';
@@ -33,7 +37,23 @@ import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
 import { MultiselectOption } from '../dtos/multiselect-questions/multiselect-option.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
+import { TranslationOverrideMigrationDTO } from '../dtos/script-runner/translation-override-migration.dto';
+import {
+  assertStorableValues,
+  buildOverrideRows,
+  DEFAULT_GIT_REF,
+  DEFAULT_REPOSITORY_URL,
+  DesiredRow,
+  diffRows,
+  ExistingRow,
+  formatReport,
+  overrideFiles,
+  RowDiff,
+  withSourceHashes,
+} from '../utilities/translation-override-migration';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
+
+const TRANSLATION_FETCH_TIMEOUT_MS = 30_000;
 
 /**
   this is the service for running scripts
@@ -47,6 +67,7 @@ export class ScriptRunnerService {
     private featureFlagService: FeatureFlagService,
     private multiselectQuestionService: MultiselectQuestionService,
     private prisma: PrismaService,
+    private httpService: HttpService,
     @Inject(Logger)
     private logger = new Logger(ScriptRunnerService.name),
   ) {}
@@ -242,46 +263,6 @@ export class ScriptRunnerService {
   /**
    *
    * @param req incoming request object
-   * @param jurisdiction should contain jurisdiction id
-   * @returns successDTO
-   * @description adds lottery translations to the database
-   */
-  async addLotteryTranslations(req: ExpressRequest): Promise<SuccessDTO> {
-    const requestingUser = mapTo(User, req['user']);
-    await this.markScriptAsRunStart('add lottery translations', requestingUser);
-    this.addLotteryTranslationsHelper(true);
-    await this.markScriptAsComplete('add lottery translations', requestingUser);
-
-    return { success: true };
-  }
-
-  /**
-   *
-   * @param req incoming request object
-   * @param jurisdiction should contain jurisdiction id
-   * @returns successDTO
-   * @description adds lottery translations to the database and create if does not exist
-   */
-  async addLotteryTranslationsCreateIfEmpty(
-    req: ExpressRequest,
-  ): Promise<SuccessDTO> {
-    const requestingUser = mapTo(User, req['user']);
-    await this.markScriptAsRunStart(
-      'add lottery translations create if empty',
-      requestingUser,
-    );
-    this.addLotteryTranslationsHelper(true);
-    await this.markScriptAsComplete(
-      'add lottery translations create if empty',
-      requestingUser,
-    );
-
-    return { success: true };
-  }
-
-  /**
-   *
-   * @param req incoming request object
    * @returns successDTO
    * @description opts out existing lottery listings
    */
@@ -349,49 +330,6 @@ export class ScriptRunnerService {
   }
 
   /**
-   *
-   * @param req incoming request object
-   * @returns successDTO
-   * @description updates single use code translations to show extended expiration time
-   */
-  async updateCodeExpirationTranslations(
-    req: ExpressRequest,
-  ): Promise<SuccessDTO> {
-    const requestingUser = mapTo(User, req['user']);
-    await this.markScriptAsRunStart(
-      'update code expiration translations',
-      requestingUser,
-    );
-
-    const translations = await this.prisma.translations.findFirst({
-      where: { language: 'en', jurisdictionId: null },
-    });
-    const translationsJSON =
-      translations.translations as unknown as Prisma.JsonArray;
-
-    await this.prisma.translations.update({
-      where: { id: translations.id },
-      data: {
-        translations: {
-          ...translationsJSON,
-          singleUseCodeEmail: {
-            greeting: 'Hi',
-            message:
-              'Use the following code to sign in to your %{jurisdictionName} account. This code will be valid for 10 minutes. Never share this code.',
-            singleUseCode: '%{singleUseCode}',
-          },
-        },
-      },
-    });
-
-    await this.markScriptAsComplete(
-      'update code expiration translations',
-      requestingUser,
-    );
-    return { success: true };
-  }
-
-  /**
     Marks all program multiselect questions as hidden from listings so they don't show on the public site details page
   */
   async hideProgramsFromListings(req: ExpressRequest): Promise<SuccessDTO> {
@@ -412,53 +350,99 @@ export class ScriptRunnerService {
   /**
    *
    * @param req incoming request object
+   * @param dto which jurisdiction to write, and where to read the override files from
    * @returns successDTO
-   * @description updates the "what happens next" content in lottery email
+   * @description loads the bundled site override files into translation_strings
    */
-  async updatesWhatHappensInLotteryEmail(
+  async migrateTranslationOverridesToKeyRows(
     req: ExpressRequest,
+    dto: TranslationOverrideMigrationDTO,
   ): Promise<SuccessDTO> {
     const requestingUser = mapTo(User, req['user']);
-    await this.markScriptAsRunStart(
-      'update what happens next content in lottery email',
-      requestingUser,
-    );
+    const scriptName = `migrate translation overrides to key rows for ${dto.jurisdictionName}`;
 
-    await this.updateTranslationsForLanguage(LanguagesEnum.en, {
-      lotteryAvailable: {
-        whatHappensContent:
-          'The property manager will begin to contact applicants in the order of lottery rank, within each lottery preference. When the units are all filled, the property manager will stop contacting applicants. All the units could be filled before the property manager reaches your rank. If this happens, you will not be contacted.',
-      },
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      select: { id: true },
+      where: { name: dto.jurisdictionName },
     });
-    await this.updateTranslationsForLanguage(LanguagesEnum.es, {
-      lotteryAvailable: {
-        whatHappensContent:
-          'El administrador de la propiedad comenzará a comunicarse con los solicitantes en el orden de clasificación de la lotería, dentro de cada preferencia de la lotería. Cuando todas las unidades estén ocupadas, el administrador de la propiedad dejará de comunicarse con los solicitantes. Es posible que todas las unidades estén ocupadas antes de que el administrador de la propiedad alcance su clasificación. Si esto sucede, no se comunicarán con usted.',
-      },
-    });
-    await this.updateTranslationsForLanguage(LanguagesEnum.tl, {
-      lotteryAvailable: {
-        whatHappensContent:
-          'Ang tagapamahala ng ari-arian ay magsisimulang makipag-ugnayan sa mga aplikante sa pagkakasunud-sunod ng ranggo ng lottery, sa loob ng bawat kagustuhan sa lottery. Kapag napuno na ang lahat ng unit, hihinto na ang property manager sa pakikipag-ugnayan sa mga aplikante. Maaaring mapunan ang lahat ng unit bago maabot ng property manager ang iyong ranggo. Kung mangyari ito, hindi ka makontak.',
-      },
-    });
-    await this.updateTranslationsForLanguage(LanguagesEnum.vi, {
-      lotteryAvailable: {
-        whatHappensContent:
-          'Người quản lý bất động sản sẽ bắt đầu liên hệ với người nộp đơn theo thứ hạng xổ số, trong mỗi sở thích xổ số. Khi tất cả các đơn vị đã được lấp đầy, người quản lý bất động sản sẽ ngừng liên hệ với người nộp đơn. Tất cả các đơn vị có thể được lấp đầy trước khi người quản lý bất động sản đạt đến thứ hạng của bạn. Nếu điều này xảy ra, bạn sẽ không được liên hệ.',
-      },
-    });
-    await this.updateTranslationsForLanguage(LanguagesEnum.zh, {
-      lotteryAvailable: {
-        whatHappensContent:
-          '物业经理将按照抽签顺序开始联系申请人，每个抽签偏好内都是如此。当所有单元都已满时，物业经理将停止联系申请人。在物业经理达到您的排名之前，所有单元都可能已满。如果发生这种情况，您将不会被联系。',
-      },
+    if (!jurisdiction) {
+      throw new BadRequestException(
+        `Jurisdiction ${dto.jurisdictionName} does not exist`,
+      );
+    }
+
+    const repositoryUrl = dto.repositoryUrl ?? DEFAULT_REPOSITORY_URL;
+    const gitRef = dto.gitRef ?? DEFAULT_GIT_REF;
+    const { files, missing } = await this.readOverrideFiles({
+      languages: dto.languages,
+      repositoryUrl,
+      gitRef,
+      publicPath: dto.publicPath,
+      partnersPath: dto.partnersPath,
     });
 
-    await this.markScriptAsComplete(
-      'update what happens next content in lottery email',
-      requestingUser,
+    const bySite = (site: SiteEnum) =>
+      files
+        .filter((file) => file.site === site)
+        .map(({ language, translations }) => ({ language, translations }));
+
+    const desired = withSourceHashes([
+      ...buildOverrideRows({
+        files: bySite(SiteEnum.partners),
+        jurisdictionId: null,
+        site: SiteEnum.partners,
+      }),
+      ...buildOverrideRows({
+        files: bySite(SiteEnum.public),
+        jurisdictionId: jurisdiction.id,
+        site: SiteEnum.public,
+      }),
+    ]);
+
+    const sections = [
+      {
+        label: 'partners overrides (all jurisdictions)',
+        scope: { jurisdictionId: null, site: SiteEnum.partners },
+      },
+      {
+        label: `public overrides for ${dto.jurisdictionName}`,
+        scope: { jurisdictionId: jurisdiction.id, site: SiteEnum.public },
+      },
+    ];
+
+    const diffs: Array<{ label: string; diff: RowDiff }> = [];
+    for (const { label, scope } of sections) {
+      const rows = desired.filter(
+        (row) =>
+          row.jurisdictionId === scope.jurisdictionId &&
+          row.site === scope.site,
+      );
+      diffs.push({
+        label,
+        diff: diffRows(
+          await this.existingOverrides(scope),
+          rows,
+          dto.skipExisting,
+        ),
+      });
+    }
+
+    this.logger.log(
+      formatReport({
+        sections: diffs,
+        commit: dto.commit,
+        repositoryUrl,
+        gitRef,
+        missing,
+      }),
     );
+
+    if (dto.commit) {
+      await this.markScriptAsRunStart(scriptName, requestingUser);
+      await this.writeOverrideRows(diffs.map(({ diff }) => diff));
+      await this.markScriptAsComplete(scriptName, requestingUser);
+    }
+
     return { success: true };
   }
 
@@ -1062,6 +1046,121 @@ export class ScriptRunnerService {
 
   // |------------------ HELPERS GO BELOW ------------------ | //
 
+  private async readOverrideFiles({
+    languages,
+    repositoryUrl,
+    gitRef,
+    publicPath,
+    partnersPath,
+  }: {
+    languages?: LanguagesEnum[];
+    repositoryUrl: string;
+    gitRef: string;
+    publicPath?: string;
+    partnersPath?: string;
+  }): Promise<{
+    files: Array<{
+      language: LanguagesEnum;
+      site: SiteEnum;
+      translations: Record<string, unknown>;
+    }>;
+    missing: string[];
+  }> {
+    const files = [];
+    const missing: string[] = [];
+
+    for (const file of overrideFiles({
+      languages,
+      repositoryUrl,
+      gitRef,
+      publicPath,
+      partnersPath,
+    })) {
+      let translations: Record<string, unknown>;
+      try {
+        translations = await this.getTranslationFile(file.url);
+      } catch (error) {
+        // Partners ships english only, and a fork need not translate every language.
+        const absent = error.message?.includes('status code 404');
+        if (!absent || file.language === LanguagesEnum.en) {
+          throw new BadRequestException(error.message);
+        }
+        missing.push(file.url);
+        continue;
+      }
+
+      try {
+        assertStorableValues({ url: file.url, translations });
+      } catch (error) {
+        throw new BadRequestException(error.message);
+      }
+
+      files.push({
+        language: file.language,
+        site: file.site,
+        translations,
+      });
+    }
+
+    return { files, missing };
+  }
+
+  private async existingOverrides(scope: {
+    jurisdictionId: string | null;
+    site: SiteEnum;
+  }): Promise<ExistingRow[]> {
+    return await this.prisma.translationStrings.findMany({
+      select: {
+        jurisdictionId: true,
+        language: true,
+        site: true,
+        key: true,
+        value: true,
+        sourceHash: true,
+      },
+      where: scope,
+    });
+  }
+
+  private async writeOverrideRows(diffs: RowDiff[]): Promise<void> {
+    const create = diffs.flatMap((diff) => diff.create);
+    const update = diffs.flatMap((diff) => diff.update);
+    const writes = [];
+
+    if (create.length) {
+      writes.push(
+        this.prisma.translationStrings.createMany({
+          data: create.map((row: DesiredRow) => ({
+            ...row,
+            origin: TranslationOrigin.human,
+          })),
+          // A row an admin added between the diff and here is left as they set it.
+          skipDuplicates: true,
+        }),
+      );
+    }
+
+    // updateMany, because the unique index is NULLS NOT DISTINCT and Prisma's compound
+    // unique input cannot express a null jurisdictionId or site.
+    for (const row of update) {
+      writes.push(
+        this.prisma.translationStrings.updateMany({
+          where: {
+            jurisdictionId: row.jurisdictionId,
+            language: row.language,
+            site: row.site,
+            key: row.key,
+          },
+          data: { value: row.value, sourceHash: row.sourceHash },
+        }),
+      );
+    }
+
+    if (writes.length) {
+      await this.prisma.$transaction(writes);
+    }
+  }
+
   /**
    *
    * @param scriptName the name of the script that is going to be run
@@ -1119,188 +1218,6 @@ export class ScriptRunnerService {
         scriptName,
       },
     });
-  }
-
-  async updateTranslationsForLanguage(
-    language: LanguagesEnum,
-    newTranslations: Record<string, any>,
-    createIfMissing?: boolean,
-  ) {
-    let translations;
-    translations = await this.prisma.translations.findMany({
-      where: { language },
-    });
-
-    if (!translations?.length) {
-      if (createIfMissing) {
-        const createdTranslations = await this.prisma.translations.create({
-          data: {
-            language: language,
-            translations: {},
-            jurisdictions: undefined,
-          },
-        });
-        translations = [createdTranslations];
-      } else {
-        console.log(
-          `Translations for ${language} don't exist in Bloom database`,
-        );
-        return;
-      }
-    }
-
-    for (const translation of translations) {
-      if (translation?.translation) {
-        const translationsJSON =
-          (translation?.translations as Prisma.JsonObject) || {};
-
-        Object.keys(newTranslations).forEach((key) => {
-          translationsJSON[key] = {
-            ...((translationsJSON[key] || {}) as Prisma.JsonObject),
-            ...newTranslations[key],
-          };
-        });
-
-        // technique taken from
-        // https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types/working-with-json-fields#advanced-example-update-a-nested-json-key-value
-        const dataClause = Prisma.validator<Prisma.TranslationsUpdateInput>()({
-          translations: translationsJSON,
-        });
-
-        await this.prisma.translations.update({
-          where: { id: translation.id },
-          data: dataClause,
-        });
-      }
-    }
-  }
-
-  async addLotteryTranslationsHelper(createIfMissing?: boolean) {
-    const enKeys = {
-      lotteryReleased: {
-        header: 'Lottery results for %{listingName} are ready to be published',
-        adminApprovedStart:
-          'Lottery results for %{listingName} have been released for publication. Please go to the listing view in your',
-        adminApprovedEnd:
-          'to view the lottery tab and release the lottery results.',
-      },
-      lotteryPublished: {
-        header: 'Lottery results have been published for %{listingName}',
-        resultsPublished:
-          'Lottery results for %{listingName} have been published to applicant accounts.',
-      },
-      lotteryAvailable: {
-        header: 'New Housing Lottery Results Available',
-        resultsAvailable:
-          'Results are available for a housing lottery for %{listingName}. See your housing portal account for more information.',
-        signIn: 'Sign In to View Your Results',
-        whatHappensHeader: 'What happens next?',
-        whatHappensContent:
-          'The property manager will begin to contact applicants by their preferred contact method. They will do so in the order of lottery rank, within each lottery preference. When the units are all filled, the property manager will stop contacting applicants. All the units could be filled before the property manager reaches your rank. If this happens, you will not be contacted.',
-        otherOpportunities1:
-          'To view other housing opportunities, please visit %{appUrl}. You can sign up to receive notifications of new application opportunities',
-        otherOpportunities2: 'here',
-        otherOpportunities3:
-          'If you want to learn about how lotteries work, please see the lottery section of the',
-        otherOpportunities4: 'Housing Portal Help Center',
-      },
-    };
-
-    const esKeys = {
-      lotteryAvailable: {
-        header: 'Nuevos resultados de la lotería de vivienda disponibles',
-        resultsAvailable:
-          'Los resultados están disponibles para una lotería de vivienda para %{listingName}. Consulte su cuenta del portal de vivienda para obtener más información.',
-        signIn: 'Inicie sesión para ver sus resultados',
-        whatHappensHeader: '¿Qué pasa después?',
-        whatHappensContent:
-          'El administrador de la propiedad comenzará a comunicarse con los solicitantes mediante su método de contacto preferido. Lo harán en el orden de clasificación de la lotería, dentro de cada preferencia de lotería. Cuando todas las unidades estén ocupadas, el administrador de la propiedad dejará de comunicarse con los solicitantes. Todas las unidades podrían llenarse antes de que el administrador de la propiedad alcance su rango. Si esto sucede, no lo contactaremos.',
-        otherOpportunities1:
-          'Para ver otras oportunidades de vivienda, visite %{appUrl}. Puede registrarse para recibir notificaciones de nuevas oportunidades de solicitud',
-        otherOpportunities2: 'aquí',
-        otherOpportunities3:
-          'Si desea obtener información sobre cómo funcionan las loterías, consulte la sección de lotería del',
-        otherOpportunities4: 'Housing Portal Centro de ayuda',
-      },
-    };
-
-    const tlKeys = {
-      lotteryAvailable: {
-        header: 'Bagong Housing Lottery Resulta Available',
-        resultsAvailable:
-          'Available ang mga resulta para sa isang housing lottery para sa %{listingName}. Tingnan ang iyong housing portal account para sa higit pang impormasyon.',
-        signIn: 'Mag-sign In upang Tingnan ang Iyong Mga Resulta',
-        whatHappensHeader: 'Anong mangyayari sa susunod?',
-        whatHappensContent:
-          'Magsisimulang makipag-ugnayan ang property manager sa mga aplikante sa pamamagitan ng kanilang gustong paraan ng pakikipag-ugnayan. Gagawin nila ito sa pagkakasunud-sunod ng ranggo ng lottery, sa loob ng bawat kagustuhan sa lottery. Kapag napuno na ang lahat ng unit, hihinto na ang property manager sa pakikipag-ugnayan sa mga aplikante. Maaaring mapunan ang lahat ng unit bago maabot ng property manager ang iyong ranggo. Kung mangyari ito, hindi ka makontak.',
-        otherOpportunities1:
-          'Upang tingnan ang iba pang pagkakataon sa pabahay, pakibisita ang %{appUrl}. Maaari kang mag-sign up upang makatanggap ng mga abiso ng mga bagong pagkakataon sa aplikasyon',
-        otherOpportunities2: 'dito',
-        otherOpportunities3:
-          'Kung gusto mong malaman kung paano gumagana ang mga lottery, pakitingnan ang seksyon ng lottery ng',
-        otherOpportunities4: 'Housing Portal Help Center',
-      },
-    };
-
-    const viKeys = {
-      lotteryAvailable: {
-        header: 'Đã có kết quả xổ số nhà ở mới',
-        resultsAvailable:
-          'Đã có kết quả xổ số nhà ở cho %{listingName}. Xem tài khoản cổng thông tin nhà ở của bạn để biết thêm thông tin.',
-        signIn: 'Đăng nhập để xem kết quả của bạn',
-        whatHappensHeader: 'Chuyện gì xảy ra tiếp theo?',
-        whatHappensContent:
-          'Người quản lý tài sản sẽ bắt đầu liên hệ với người nộp đơn bằng phương thức liên hệ ưa thích của họ. Họ sẽ làm như vậy theo thứ tự xếp hạng xổ số, trong mỗi ưu tiên xổ số. Khi các căn hộ đã được lấp đầy, người quản lý tài sản sẽ ngừng liên hệ với người nộp đơn. Tất cả các đơn vị có thể được lấp đầy trước khi người quản lý tài sản đạt đến cấp bậc của bạn. Nếu điều này xảy ra, bạn sẽ không được liên lạc.',
-        otherOpportunities1:
-          'Để xem các cơ hội nhà ở khác, vui lòng truy cập %{appUrl}. Bạn có thể đăng ký để nhận thông báo về các cơ hội ứng tuyển mới',
-        otherOpportunities2: 'đây',
-        otherOpportunities3:
-          'Nếu bạn muốn tìm hiểu về cách hoạt động của xổ số, vui lòng xem phần xổ số của',
-        otherOpportunities4: 'Housing Portal Trung tâm trợ giúp',
-      },
-    };
-
-    const zhKeys = {
-      lotteryAvailable: {
-        header: '新住房抽籤結果公佈',
-        resultsAvailable:
-          '%{listingName} 的住房抽籤結果可用。請參閱您的住房入口網站帳戶以獲取更多資訊。',
-        signIn: '登入查看您的結果',
-        whatHappensHeader: '接下來發生什麼事？',
-        whatHappensContent:
-          '物業經理將開始透過申請人首選的聯絡方式與申請人聯繫。他們將按照每個彩票偏好中的彩票排名順序進行操作。當單位全部住滿後，物業經理將停止聯絡申請人。在物業經理達到您的等級之前，所有單位都可以被填滿。如果發生這種情況，我們將不會與您聯繫。',
-        otherOpportunities1:
-          '要查看其他住房機會，請訪問 %{appUrl}。您可以註冊接收新申請機會的通知',
-        otherOpportunities2: '這裡',
-        otherOpportunities3: '如果您想了解彩票的運作方式，請參閱網站的彩票部分',
-        otherOpportunities4: 'Housing Portal 幫助中心',
-      },
-    };
-    await this.updateTranslationsForLanguage(
-      LanguagesEnum.en,
-      enKeys,
-      createIfMissing,
-    );
-    await this.updateTranslationsForLanguage(
-      LanguagesEnum.es,
-      esKeys,
-      createIfMissing,
-    );
-    await this.updateTranslationsForLanguage(
-      LanguagesEnum.tl,
-      tlKeys,
-      createIfMissing,
-    );
-    await this.updateTranslationsForLanguage(
-      LanguagesEnum.vi,
-      viKeys,
-      createIfMissing,
-    );
-    await this.updateTranslationsForLanguage(
-      LanguagesEnum.zh,
-      zhKeys,
-      createIfMissing,
-    );
   }
 
   featureFlags = [
@@ -1517,30 +1434,33 @@ export class ScriptRunnerService {
     return 'no translation';
   }
 
-  getTranslationFile(url) {
-    return new Promise((resolve, reject) =>
-      https
-        .get(url, (res) => {
-          let body = '';
-
-          res.on('data', (chunk) => {
-            body += chunk;
-          });
-
-          res.on('end', () => {
-            try {
-              const json = JSON.parse(body);
-              resolve(json);
-            } catch (error) {
-              console.error('on end error:', error.message);
-              reject(`parsing broke: ${url}`);
-            }
-          });
+  async getTranslationFile(
+    url: string,
+    timeoutMs = TRANSLATION_FETCH_TIMEOUT_MS,
+  ): Promise<Record<string, unknown>> {
+    const { data } = await firstValueFrom(
+      this.httpService
+        // The host allowlist applies to the requested url, so a redirect must not move off it.
+        .get(url, {
+          signal: AbortSignal.timeout(timeoutMs),
+          maxRedirects: 0,
         })
-        .on('error', (error) => {
-          console.error('on error error:', error.message);
-          reject(`getting broke: ${url}`);
-        }),
+        .pipe(
+          catchError((error: AxiosError) => {
+            throw new Error(
+              `failed fetching ${url}: ${
+                error.code === 'ERR_CANCELED'
+                  ? `timed out after ${timeoutMs}ms`
+                  : error.message
+              }`,
+            );
+          }),
+        ),
     );
+
+    if (!data || typeof data !== 'object') {
+      throw new Error(`${url} did not return json`);
+    }
+    return data as Record<string, unknown>;
   }
 }

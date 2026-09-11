@@ -1881,6 +1881,25 @@ export class ApplicationsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Subscribed for server side events notifications from the application processes
+   */
+  uploadBulkNotifications(
+    params: {
+      /**  */
+      jobId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/bulk-update/notifications"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { jobId: params["jobId"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class JobsService {
@@ -2777,30 +2796,6 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * A script that adds lottery translations to the db
-   */
-  lotteryTranslations(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/lotteryTranslations"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * A script that adds lottery translations to the db and creates them if it does not exist
-   */
-  lotteryTranslations1(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/lotteryTranslationsCreateIfEmpty"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * A script that opts out existing lottery listings
    */
   optOutExistingLotteries(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -2835,18 +2830,6 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * A script that updates single use code translations to show extended expiration time
-   */
-  updateCodeExpirationTranslations(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/updateCodeExpirationTranslations"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * A script that hides program multiselect questions from the public detail page
    */
   hideProgramsFromListings(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -2859,13 +2842,23 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * A script that updates the "what happens next" content in lottery email
+   * A script that loads the bundled site override files into translation_strings
    */
-  updatesWhatHappensInLotteryEmail(options: IRequestOptions = {}): Promise<SuccessDTO> {
+  migrateTranslationOverridesToKeyRows(
+    params: {
+      /** requestBody */
+      body?: TranslationOverrideMigrationDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/updatesWhatHappensInLotteryEmail"
+      let url = basePath + "/scriptRunner/migrateTranslationOverridesToKeyRows"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -3646,6 +3639,25 @@ export class TranslationsService {
     })
   }
   /**
+   * Get the email strings shipped with the api
+   */
+  emailBaseTranslations(
+    params: {
+      /**  */
+      language: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/base/email/{language}"
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * List a jurisdiction's override keys
    */
   listRawTranslations(
@@ -3750,17 +3762,20 @@ export class TranslationsService {
     })
   }
   /**
-   * Get the global Partners override keys. stale = true, if its English source changed since it was translated
+   * Get the global override keys for a site. stale = true, if its English source changed since it was translated
    */
-  getRawPartnersTranslations(
+  getRawGlobalTranslations(
     params: {
+      /**  */
+      site: string
       /**  */
       language: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<TranslationRawKey[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/translations/partners/raw/{language}"
+      let url = basePath + "/translations/global/raw/{site}/{language}"
+      url = url.replace("{site}", params["site"] + "")
       url = url.replace("{language}", params["language"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
@@ -3769,10 +3784,12 @@ export class TranslationsService {
     })
   }
   /**
-   * Upsert the global Partners override keys with per-key optimistic locking
+   * Upsert the global override keys for a site with per-key optimistic locking
    */
-  updateRawPartnersTranslations(
+  updateRawGlobalTranslations(
     params: {
+      /**  */
+      site: string
       /**  */
       language: string
       /** requestBody */
@@ -3781,7 +3798,8 @@ export class TranslationsService {
     options: IRequestOptions = {}
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/translations/partners/raw/{language}"
+      let url = basePath + "/translations/global/raw/{site}/{language}"
+      url = url.replace("{site}", params["site"] + "")
       url = url.replace("{language}", params["language"] + "")
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
@@ -3794,10 +3812,12 @@ export class TranslationsService {
     })
   }
   /**
-   * Delete one global Partners override key (revert to base)
+   * Delete one global override key for a site (revert to base)
    */
-  deleteRawPartnersTranslation(
+  deleteRawGlobalTranslation(
     params: {
+      /**  */
+      site: string
       /**  */
       language: string
       /**  */
@@ -3806,7 +3826,8 @@ export class TranslationsService {
     options: IRequestOptions = {}
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/translations/partners/raw/{language}/{key}"
+      let url = basePath + "/translations/global/raw/{site}/{language}/{key}"
+      url = url.replace("{site}", params["site"] + "")
       url = url.replace("{language}", params["language"] + "")
       url = url.replace("{key}", params["key"] + "")
 
@@ -10668,6 +10689,33 @@ export interface CommunityTypeDTO {
   description?: string
 }
 
+/** TranslationOverrideMigrationDTO */
+export interface TranslationOverrideMigrationDTO {
+  /**  */
+  jurisdictionName: string
+
+  /**  */
+  commit: boolean
+
+  /**  */
+  skipExisting: boolean
+
+  /**  */
+  languages?: LanguagesEnum[]
+
+  /**  */
+  repositoryUrl?: string
+
+  /**  */
+  gitRef?: string
+
+  /**  */
+  publicPath?: string
+
+  /**  */
+  partnersPath?: string
+}
+
 /** PaginationDTO */
 export interface PaginationDTO {
   /**  */
@@ -11218,6 +11266,9 @@ export interface JurisdictionContent {
 
   /**  */
   language: LanguagesEnum
+
+  /**  */
+  staleFields: string[]
 }
 
 /** JurisdictionContentUpdate */
@@ -11731,6 +11782,7 @@ export enum FeatureFlagEnum {
   "enableMultiselectVoucherQuestion" = "enableMultiselectVoucherQuestion",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "enableNeighborhoodAmenitiesDropdown" = "enableNeighborhoodAmenitiesDropdown",
+  "enableNonAdminLotteries" = "enableNonAdminLotteries",
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
   "enableOnlyAdminCanAddAppsAfterClose" = "enableOnlyAdminCanAddAppsAfterClose",
   "enableOnlyAdminCanEditListingDates" = "enableOnlyAdminCanEditListingDates",
@@ -11738,6 +11790,7 @@ export enum FeatureFlagEnum {
   "enableParkingFee" = "enableParkingFee",
   "enableParkingType" = "enableParkingType",
   "enablePartnerDemographics" = "enablePartnerDemographics",
+  "enablePartnerLotteryExport" = "enablePartnerLotteryExport",
   "enablePartnerSettings" = "enablePartnerSettings",
   "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProperties" = "enableProperties",
@@ -11828,6 +11881,7 @@ export enum EnumAgencyFilterParamsComparison {
 export enum SiteEnum {
   "public" = "public",
   "partners" = "partners",
+  "email" = "email",
 }
 
 export enum TranslationOrigin {

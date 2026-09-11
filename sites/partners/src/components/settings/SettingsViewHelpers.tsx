@@ -1,13 +1,15 @@
-import React from "react"
+import React, { useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { Tabs } from "@bloom-housing/ui-seeds"
-import { UserRole } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum, UserRole } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export enum SettingsIndexEnum {
   preferences = 0,
   properties,
   agencies,
   translations,
+  content,
 }
 
 type SettingsTabsFeatureFlags = {
@@ -15,6 +17,7 @@ type SettingsTabsFeatureFlags = {
   enableProperties: boolean
   enableAgencies?: boolean
   enableTranslations?: boolean
+  enableContent?: boolean
 }
 
 export const getVisibleSettingsTabs = (
@@ -23,6 +26,7 @@ export const getVisibleSettingsTabs = (
     enableProperties,
     enableAgencies,
     enableTranslations,
+    enableContent,
   }: SettingsTabsFeatureFlags,
   userRoles?: UserRole
 ) => {
@@ -35,6 +39,7 @@ export const getVisibleSettingsTabs = (
     agencies: !!enableAgencies && !isPartnerOrSupport && !isLimited,
     // Editing translations spans every jurisdiction, so it is limited to the admin role.
     translations: !!enableTranslations && !!userRoles?.isAdmin,
+    content: !!enableContent && !!userRoles?.isAdmin,
   }
 }
 
@@ -54,6 +59,7 @@ export const getSettingsTabs = (
     properties: enableProperties,
     agencies: enableAgencies,
     translations: enableTranslations,
+    content: enableContent,
   } = getVisibleSettingsTabs(featureFlags, userRoles)
 
   const baseUrl = "/settings"
@@ -62,6 +68,7 @@ export const getSettingsTabs = (
   if (enableProperties) enabledTabs.push(SettingsIndexEnum.properties)
   if (enableAgencies) enabledTabs.push(SettingsIndexEnum.agencies)
   if (enableTranslations) enabledTabs.push(SettingsIndexEnum.translations)
+  if (enableContent) enabledTabs.push(SettingsIndexEnum.content)
 
   return (
     <Tabs
@@ -109,7 +116,43 @@ export const getSettingsTabs = (
             <span>{t("settings.translations")}</span>
           </Tabs.Tab>
         )}
+        {enableContent && (
+          <Tabs.Tab
+            href={`${baseUrl}/content`}
+            data-testid="content-tab"
+            active={selectedIndex === SettingsIndexEnum.content}
+          >
+            <span>{t("settings.content")}</span>
+          </Tabs.Tab>
+        )}
       </Tabs.TabList>
     </Tabs>
   )
+}
+
+export const useSettingsTabs = (selectedIndex: SettingsIndexEnum) => {
+  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const enableDbDrivenContent = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableDbDrivenContent
+  )
+  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
+  const featureFlags: SettingsTabsFeatureFlags = {
+    enablePreferences: !doJurisdictionsHaveFeatureFlagOn(
+      FeatureFlagEnum.disableListingPreferences,
+      null,
+      true
+    ),
+    enableProperties: doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties),
+    enableAgencies: doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate),
+    enableTranslations: enableDbDrivenContent,
+    enableContent: enableDbDrivenContent,
+  }
+
+  return {
+    ...featureFlags,
+    enableV2MSQ,
+    hideTabs: getEnabledSettingsTabCount(featureFlags, profile?.userRoles) <= 1,
+    tabs: getSettingsTabs(selectedIndex, enableV2MSQ, featureFlags, profile?.userRoles),
+  }
 }

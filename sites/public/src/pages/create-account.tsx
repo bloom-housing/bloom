@@ -29,6 +29,7 @@ import styles from "../../styles/create-account.module.scss"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefits from "../components/account/SignUpBenefits"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
+import { sharedGetStaticProps } from "../lib/sharedPageProps"
 
 const CreateAccount = () => {
   const { createPublicUser, resendConfirmation } = useContext(AuthContext)
@@ -254,3 +255,5 @@ const CreateAccount = () => {
 }
 
 export default CreateAccount
+
+export const getStaticProps = sharedGetStaticProps
