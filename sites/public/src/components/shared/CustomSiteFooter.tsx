@@ -17,9 +17,9 @@ import {
 } from "../../static_content/stored_content"
 import { useJurisdictionContent } from "../../lib/JurisdictionContentContext"
 import styles from "./CustomSiteFooter.module.scss"
+import { t } from "@bloom-housing/ui-components"
 
 const CustomSiteFooter = () => {
-  // Null on a page with no data function, where the bundled content stands (#6594).
   const jurisdictionContent = useJurisdictionContent()
 
   const textContent: FooterContent = {
@@ -33,8 +33,12 @@ const CustomSiteFooter = () => {
     ...getStoredFooterLinksContent(jurisdictionContent),
   }
 
-  const showContentFooter = textContent.logo || textContent.textSections?.length > 0
-  const showLinksFooter = footerLinksContent.links?.length > 0 || footerLinksContent.cityString
+  const showContentFooter =
+    textContent.logo || textContent.textSections?.length > 0 || textContent.socialLinks?.length > 0
+  const showLinksFooter =
+    footerLinksContent.links?.length > 0 ||
+    footerLinksContent.cityString ||
+    footerLinksContent.equalHousingOpportunity
 
   if (!showContentFooter && !showLinksFooter) return <></>
 
@@ -59,6 +63,18 @@ const CustomSiteFooter = () => {
                   {section}
                 </div>
               ))}
+              {textContent.socialLinks?.length > 0 && (
+                <div className={styles["icon-container"]}>
+                  {textContent.socialLinks.map((social) => (
+                    <a href={social.href} target="_blank" key={social.icon}>
+                      <img
+                        src={`/images/logo-${social.icon}.svg`}
+                        alt={t(`footer.alt.${social.icon}`)}
+                      />
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </MaxWidthLayout>

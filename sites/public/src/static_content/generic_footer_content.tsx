@@ -1,6 +1,19 @@
 import { Link } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 
+export enum SocialLinkType {
+  Facebook = "facebook",
+  X = "x",
+  LinkedIn = "linkedin",
+  YouTube = "youtube",
+  Instagram = "instagram",
+}
+
+export type SocialLink = {
+  icon: SocialLinkType
+  href: string
+}
+
 export type FooterContent = {
   textSections: React.ReactNode[]
   logo?: {
@@ -8,6 +21,7 @@ export type FooterContent = {
     logoAltText?: string
     logoUrl?: string
   }
+  socialLinks?: SocialLink[]
 }
 
 export type FooterLinks = {
@@ -16,6 +30,7 @@ export type FooterLinks = {
     href: string
   }[]
   cityString?: string
+  equalHousingOpportunity?: boolean
 }
 
 export const getGenericFooterTextContent = (): FooterContent => {
@@ -35,6 +50,29 @@ export const getGenericFooterTextContent = (): FooterContent => {
       logoAltText: "Jurisdiction Logo",
       logoUrl: "/",
     },
+    socialLinks: [
+      // Examples of social links
+      // {
+      //   icon: SocialLinkType.LinkedIn,
+      //   href: "https://www.exygy.com",
+      // },
+      // {
+      //   icon: SocialLinkType.Facebook,
+      //   href: "https://www.exygy.com",
+      // },
+      // {
+      //   icon: SocialLinkType.X,
+      //   href: "https://www.exygy.com",
+      // },
+      // {
+      //   icon: SocialLinkType.Instagram,
+      //   href: "https://www.exygy.com",
+      // },
+      // {
+      //   icon: SocialLinkType.YouTube,
+      //   href: "https://www.exygy.com",
+      // },
+    ],
   }
 }
 
