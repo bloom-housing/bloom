@@ -53,6 +53,39 @@ describe('Jurisdiction Controller Tests', () => {
     await app.close();
   });
 
+  it('nulls only the reference whose asset was deleted', async () => {
+    const logo = await prisma.assets.create({
+      data: { fileId: 'brand-logo-file', label: 'brandLogo' },
+    });
+    const favicon = await prisma.assets.create({
+      data: { fileId: 'brand-favicon-file', label: 'brandFavicon' },
+    });
+    const jurisdiction = await prisma.jurisdictions.create({
+      data: {
+        ...jurisdictionFactory(),
+        brand: { primary: { base: '#773E98' } },
+        brandLogoAssetId: logo.id,
+        brandFaviconAssetId: favicon.id,
+      },
+    });
+
+    await prisma.assets.delete({ where: { id: logo.id } });
+
+    const afterLogoDelete = await prisma.jurisdictions.findUnique({
+      where: { id: jurisdiction.id },
+    });
+    expect(afterLogoDelete.brandLogoAssetId).toBeNull();
+    expect(afterLogoDelete.brandFaviconAssetId).toEqual(favicon.id);
+
+    await prisma.assets.delete({ where: { id: favicon.id } });
+
+    const afterBothDeletes = await prisma.jurisdictions.findUnique({
+      where: { id: jurisdiction.id },
+    });
+    expect(afterBothDeletes.brandFaviconAssetId).toBeNull();
+    expect(afterBothDeletes.brand).toEqual({ primary: { base: '#773E98' } });
+  });
+
   it('testing list endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
