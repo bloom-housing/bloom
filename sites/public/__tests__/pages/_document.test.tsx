@@ -105,6 +105,24 @@ describe("_document", () => {
     expect(style).not.toContain("display: none")
   })
 
+  it("drops a stored value that cannot be turned into a string", async () => {
+    // JSON can hold this, and a regex test against it throws rather than returning false.
+    const hostile = { toString: "not a function" }
+
+    const style = await styleFor(jurisdictionWith({ primary: { ...primary, dark: hostile } }))
+
+    expect(style).toContain("--seeds-color-primary: #773E98;")
+    expect(style).not.toContain("--seeds-color-primary-dark:")
+  })
+
+  it("emits nothing when the base color cannot be turned into a string", async () => {
+    const style = await styleFor(
+      jurisdictionWith({ primary: { ...primary, base: { toString: "not a function" } } })
+    )
+
+    expect(style).toEqual("")
+  })
+
   it("emits nothing when the base color is not hex", async () => {
     const style = await styleFor(
       jurisdictionWith({ primary: { ...primary, base: "rebeccapurple" } })

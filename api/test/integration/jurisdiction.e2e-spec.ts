@@ -175,6 +175,10 @@ describe('Jurisdiction Controller Tests', () => {
       await put(jurisdiction.id, { brand: { fontFamily: 'Inter' } }).expect(
         400,
       );
+      await put(jurisdiction.id, { brand: { primary: {} } }).expect(400);
+      await put(jurisdiction.id, {
+        brand: { primary: { base: '#773E98' }, secondary: {} },
+      }).expect(400);
     });
 
     it('rejects a branding asset id with no asset', async () => {

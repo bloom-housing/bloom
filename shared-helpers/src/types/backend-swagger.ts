@@ -8544,7 +8544,7 @@ export interface JurisdictionCreate {
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
 
   /**  */
-  brand?: BrandDTO
+  brand?: CombinedBrandTypes
 
   /**  */
   brandLogoAssetId?: string
@@ -8646,7 +8646,7 @@ export interface JurisdictionUpdate {
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
 
   /**  */
-  brand?: BrandDTO
+  brand?: CombinedBrandTypes
 
   /**  */
   brandLogoAssetId?: string
@@ -8787,7 +8787,7 @@ export interface Jurisdiction {
   subJurisdictions?: IdDTO[]
 
   /**  */
-  brand?: BrandDTO
+  brand?: CombinedBrandTypes
 
   /**  */
   brandLogoAssetId?: string
@@ -11794,7 +11794,7 @@ export enum ApplicationAccessibilityFeatureEnum {
   "other" = "other",
   "vision" = "vision",
 }
-
+export type CombinedBrandTypes = BrandDTO
 export enum FeatureFlagEnum {
   "disableAccessibilityFeaturesTag" = "disableAccessibilityFeaturesTag",
   "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
