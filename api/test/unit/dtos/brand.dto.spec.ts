@@ -2,12 +2,18 @@ import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
 import { BrandDTO } from '../../../src/dtos/jurisdictions/brand.dto';
 import { ValidationsGroupsEnum } from '../../../src/enums/shared/validation-groups-enum';
+import { defaultValidationPipeOptions } from '../../../src/utilities/default-validation-pipe-options';
 
 const toBrand = (input: unknown): BrandDTO =>
   plainToClass(BrandDTO, input, { excludeExtraneousValues: true });
 
+// Mirrors the pipe: skipMissingProperties changes which decorators run on an absent value.
 const errorsOf = async (input: unknown) =>
-  validate(toBrand(input), { groups: [ValidationsGroupsEnum.default] });
+  validate(toBrand(input), {
+    groups: [ValidationsGroupsEnum.default],
+    skipMissingProperties: defaultValidationPipeOptions.skipMissingProperties,
+    forbidUnknownValues: defaultValidationPipeOptions.forbidUnknownValues,
+  });
 
 describe('BrandDTO', () => {
   it('accepts a base-only brand', async () => {
@@ -45,6 +51,13 @@ describe('BrandDTO', () => {
     expect(await errorsOf({ secondary: { base: '#0077DA' } })).not.toHaveLength(
       0,
     );
+  });
+
+  it('rejects a ramp with no base color', async () => {
+    expect(await errorsOf({ primary: {} })).not.toHaveLength(0);
+    expect(
+      await errorsOf({ primary: { base: '#773E98' }, secondary: {} }),
+    ).not.toHaveLength(0);
   });
 
   it('rejects a value that is not a hex color', async () => {

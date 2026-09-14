@@ -17,6 +17,7 @@ const toUpperHex = ({ value }: { value: unknown }) =>
 export class BrandRampDTO {
   @Expose()
   @Transform(toUpperHex)
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Matches(HEX_COLOR, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ example: '#773E98' })
   base: string;
