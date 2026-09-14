@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
-import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { DOBField, Field, t } from "@bloom-housing/ui-components"
-import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   AuthContext,
@@ -20,43 +18,11 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
-import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
-import type { StopLightRule } from "../../../lib/applications/stopLights/stopLightRules"
-
-// DEMO ONLY. Ticket #2 threads these off the jurisdiction as
-// conductor.config.enabledStopLightRuleKeys; hardcoded here so the demo needs
-// no feature flag or jurisdiction setup. The registry's own
-// seniorBuildingMinimumAge example stays inert because its key is not listed.
-const DEMO_STOP_LIGHT_RULE_KEYS = ["demoSeniorMinimumAge", "demoSeniorPreferredAge"]
-
-// DEMO ONLY. Ticket #5 builds RedLightModal/YellowLightModal and renders them
-// once inside ApplicationFormLayout off a `stopLights` prop. Until then the
-// page renders them itself, from the same packet the layout will consume.
-const StopLightRuleList = ({ rules }: { rules: StopLightRule[] }) => (
-  <>
-    {rules.map((rule) => (
-      <div key={rule.key} className={"mb-4"}>
-        <p className={"text__medium-normal"}>{rule.heading}</p>
-        <p className={"pt-2"}>{rule.body}</p>
-      </div>
-    ))}
-  </>
-)
 
 const ApplicationName = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("primaryApplicantName")
-  const router = useRouter()
   const [autofilled, setAutofilled] = useState(false)
-
-  // DEMO ONLY. This is the ticket #6 wiring, minus the ApplicationFormLayout prop.
-  const { guardSubmit, stopLights } = useStopLightGate(
-    "primaryApplicantName",
-    application,
-    listing,
-    DEMO_STOP_LIGHT_RULE_KEYS,
-    router.query.blockedRule as string | undefined
-  )
   const isAdvocate = conductor?.config?.isAdvocate
 
   const currentPageSection = 1
@@ -75,13 +41,9 @@ const ApplicationName = () => {
     const validation = await trigger()
     if (!validation) return
 
-    // This step owns part of applicant, so pendingSave rebuilds that sub-object.
-    // Nothing is saved or routed unless guardSubmit decides to run proceed.
-    const pendingSave = { applicant: { ...application.applicant, ...data.applicant } }
-    guardSubmit(pendingSave, () => {
-      conductor.currentStep.save(pendingSave)
-      conductor.routeToNextOrReturnUrl()
-    })
+    conductor.currentStep.save({ applicant: { ...application.applicant, ...data.applicant } })
+
+    conductor.routeToNextOrReturnUrl()
   }
 
   const onError = () => {
@@ -127,22 +89,6 @@ const ApplicationName = () => {
           conductor={conductor}
         >
           <ApplicationAlertBox errors={errors} />
-          {/* DEMO ONLY. Cheat sheet for triggering the demo rules by hand. */}
-          <CardSection divider={"inset"}>
-            <div className={"bg-gray-100 p-4"}>
-              <p className={"text__medium-normal"}>Stop Light demo — date of birth</p>
-              <ul className={"pt-2"}>
-                <li>Birth year 1990 → red light, blocked (nothing saves, no routing)</li>
-                <li>Birth year 1966 → yellow light, continues once acknowledged</li>
-                <li>Birth year 1950 → no light, saves and routes as usual</li>
-              </ul>
-              <p className={"pt-2"}>
-                Both buttons below run the same gate. Deep link check: reload with
-                <span className={"font-semibold"}> ?blockedRule=demoSeniorMinimumAge</span> after
-                saving a 1990 birth year.
-              </p>
-            </div>
-          </CardSection>
           <CardSection divider={"inset"}>
             <div id={"application-initial-page"}>
               <fieldset>
@@ -271,65 +217,6 @@ const ApplicationName = () => {
           </CardSection>
         </ApplicationFormLayout>
       </Form>
-
-      {/* DEMO ONLY. Ticket #5 moves both of these into ApplicationFormLayout.
-          Rendered outside <Form> on purpose: a portalled Dialog still bubbles
-          React events up the component tree, so a button inside the form would
-          re-submit it. */}
-      <Dialog
-        isOpen={stopLights.redRules.length > 0}
-        onClose={stopLights.onEditRed}
-        ariaLabelledBy="demo-red-light-header"
-      >
-        <Dialog.Header id="demo-red-light-header">You can&apos;t continue</Dialog.Header>
-        <Dialog.Content>
-          <StopLightRuleList rules={stopLights.redRules} />
-        </Dialog.Content>
-        <Dialog.Footer>
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => {
-              const anchor = stopLights.redRules[0]?.editFieldAnchor
-              stopLights.onEditRed()
-              const target = anchor ? document.getElementById(anchor) : null
-              const input =
-                target instanceof HTMLInputElement ? target : target?.querySelector("input")
-              input?.focus()
-            }}
-          >
-            Edit
-          </Button>
-          <Button
-            variant="primary-outlined"
-            size="sm"
-            onClick={() => {
-              void router.push(`/${router.locale}/listing/${listing?.id}/${listing?.urlSlug}`)
-            }}
-          >
-            Return to Listings
-          </Button>
-        </Dialog.Footer>
-      </Dialog>
-
-      <Dialog
-        isOpen={stopLights.yellowRules.length > 0}
-        onClose={stopLights.onCancelYellow}
-        ariaLabelledBy="demo-yellow-light-header"
-      >
-        <Dialog.Header id="demo-yellow-light-header">Before you continue</Dialog.Header>
-        <Dialog.Content>
-          <StopLightRuleList rules={stopLights.yellowRules} />
-        </Dialog.Content>
-        <Dialog.Footer>
-          <Button variant="primary" size="sm" onClick={stopLights.onAcknowledgeYellow}>
-            I Understand, Continue
-          </Button>
-          <Button variant="primary-outlined" size="sm" onClick={stopLights.onCancelYellow}>
-            Cancel
-          </Button>
-        </Dialog.Footer>
-      </Dialog>
     </FormsLayout>
   )
 }
