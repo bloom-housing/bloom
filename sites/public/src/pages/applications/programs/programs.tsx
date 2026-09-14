@@ -6,6 +6,7 @@ import {
 import ApplicationMultiselectQuestionStep from "../../../components/applications/ApplicationMultiselectQuestionStep"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const ApplicationPrograms = () => {
   const { conductor } = useFormConductor("programs")
@@ -29,3 +30,5 @@ const ApplicationPrograms = () => {
 }
 
 export default ApplicationPrograms
+
+export const getStaticProps = sharedGetStaticProps

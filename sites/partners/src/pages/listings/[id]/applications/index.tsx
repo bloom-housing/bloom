@@ -1,13 +1,14 @@
-import React, { useContext, useMemo, useState } from "react"
+import React, { useContext, useEffect, useMemo, useState } from "react"
 import Markdown from "markdown-to-jsx"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { Button, Dialog, LoadingState } from "@bloom-housing/ui-seeds"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationOrderByKeys,
+  BackgroundJobStatusEnum,
   FeatureFlagEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
@@ -19,6 +20,7 @@ import {
   useFlaggedApplicationsList,
   useApplicationsData,
   useZipExport,
+  useSSE,
 } from "../../../../lib/hooks"
 import Layout from "../../../../layouts"
 import { getColDefs } from "../../../../components/applications/ApplicationsColDefs"
@@ -31,8 +33,18 @@ import ListingGuard from "../../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
 import { StatusBar } from "../../../../components/shared/StatusBar"
 
+interface BulkUploadJobNotification {
+  jobId: string
+  status: BackgroundJobStatusEnum
+  totalRecords?: number | null
+  errorMessage?: string | null
+  errorRow?: number | null
+  completedAt?: string | null
+}
+
 const ApplicationsList = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn, getJurisdiction } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const router = useRouter()
   const listingId = router.query.id as string
 
@@ -41,6 +53,33 @@ const ApplicationsList = () => {
     useState(false)
   const [bulkUpdateModalOpen, setBulkUpdateModalOpen] = useState(false)
   const [isTermsOpen, setIsTermsOpen] = useState(false)
+  const [jobId, setJobId] = useState<string | null>(null)
+  const [jobResult, setJobResult] = useState<BulkUploadJobNotification | null>(null)
+
+  const { close: closeNotifications } = useSSE<BulkUploadJobNotification>({
+    path: "applications/bulk-update/notifications",
+    params: { jobId },
+    enabled: !!jobId,
+    onMessage: setJobResult,
+    onRetriesExhausted: () => {
+      addToast(t("applications.bulkUpdateModalProcessingError"), { variant: "alert" })
+      setJobId(null)
+    },
+  })
+
+  useEffect(() => {
+    if (jobResult && jobResult.status !== BackgroundJobStatusEnum.processing) {
+      if (jobResult.status === BackgroundJobStatusEnum.completed) {
+        addToast(t("applications.bulkUpdateModalProcessingSuccess"), { variant: "success" })
+      } else if (jobResult.status === BackgroundJobStatusEnum.failed) {
+        addToast(jobResult.errorMessage ?? t("applications.bulkUpdateModalProcessingError"), {
+          variant: "alert",
+        })
+      }
+      closeNotifications()
+      setJobResult(null)
+    }
+  }, [closeNotifications, addToast, jobResult])
 
   const tableOptions = useAgTable()
 
@@ -395,8 +434,14 @@ const ApplicationsList = () => {
 
         <BulkUpdateDrawer
           isOpen={bulkUpdateModalOpen}
-          onClose={() => setBulkUpdateModalOpen(false)}
+          onClose={() => {
+            setBulkUpdateModalOpen(false)
+            setJobResult(null)
+          }}
+          jobStatus={jobResult?.status ?? null}
           listingId={listingId}
+          jobId={jobId}
+          setJobId={setJobId}
         />
       </Layout>
     </ListingGuard>

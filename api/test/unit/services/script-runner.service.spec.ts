@@ -8,6 +8,8 @@ import {
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   ReviewOrderTypeEnum,
+  SiteEnum,
+  TranslationOrigin,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { Request as ExpressRequest } from 'express';
@@ -73,100 +75,6 @@ describe('Testing script runner service', () => {
   afterEach(() => {
     mockConsoleLog.mockRestore();
     jest.restoreAllMocks();
-  });
-
-  it('should add lottery translations', async () => {
-    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
-    prisma.translations.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID(), translations: {} });
-    prisma.translations.findMany = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID(), translations: {} });
-    prisma.translations.update = jest.fn().mockResolvedValue(null);
-    prisma.jurisdictions.findMany = jest.fn().mockResolvedValue([]);
-    prisma.translations.create = jest.fn().mockResolvedValue(null);
-
-    const id = randomUUID();
-    const scriptName = 'add lottery translations';
-
-    const res = await service.addLotteryTranslations({
-      user: {
-        id,
-      } as unknown as User,
-    } as unknown as ExpressRequest);
-
-    expect(res.success).toBe(true);
-
-    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
-      where: {
-        scriptName,
-      },
-    });
-    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
-      data: {
-        scriptName,
-        triggeringUser: id,
-      },
-    });
-    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
-      data: {
-        didScriptRun: true,
-        triggeringUser: id,
-      },
-      where: {
-        scriptName,
-      },
-    });
-  });
-
-  it('should add lottery translations and create if empty', async () => {
-    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
-    prisma.translations.findMany = jest.fn().mockResolvedValue(undefined);
-    prisma.translations.update = jest.fn().mockResolvedValue(null);
-    prisma.translations.create = jest.fn().mockReturnValue({
-      language: LanguagesEnum.en,
-      translations: {},
-      jurisdictions: undefined,
-    });
-
-    const id = randomUUID();
-    const scriptName = 'add lottery translations create if empty';
-
-    const res = await service.addLotteryTranslationsCreateIfEmpty({
-      user: {
-        id,
-      } as unknown as User,
-    } as unknown as ExpressRequest);
-
-    expect(res.success).toBe(true);
-
-    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
-      where: {
-        scriptName,
-      },
-    });
-    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
-      data: {
-        scriptName,
-        triggeringUser: id,
-      },
-    });
-    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
-      data: {
-        didScriptRun: true,
-        triggeringUser: id,
-      },
-      where: {
-        scriptName,
-      },
-    });
-
-    expect(prisma.translations.create).toHaveBeenCalled();
   });
 
   it('should bulk resend application confirmations', async () => {
@@ -1087,6 +995,298 @@ describe('Testing script runner service', () => {
     });
   });
 
+  describe('migrateTranslationOverridesToKeyRows', () => {
+    const jurisdictionId = randomUUID();
+    const userId = randomUUID();
+    const scriptName =
+      'migrate translation overrides to key rows for Bloomington';
+
+    const request = () =>
+      ({
+        user: { id: userId } as unknown as User,
+      } as unknown as ExpressRequest);
+
+    const body = (overrides = {}) => ({
+      jurisdictionName: 'Bloomington',
+      commit: false,
+      skipExisting: false,
+      languages: [LanguagesEnum.en],
+      ...overrides,
+    });
+
+    beforeEach(() => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: jurisdictionId });
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValue([]);
+      prisma.translationStrings.createMany = jest.fn().mockResolvedValue(null);
+      prisma.translationStrings.updateMany = jest.fn().mockResolvedValue(null);
+      prisma.$transaction = jest.fn().mockResolvedValue([]);
+      prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+      jest
+        .spyOn(service, 'getTranslationFile')
+        .mockResolvedValue({ 'region.name': 'Bloomington' });
+    });
+
+    it('updates a stored row whose value differs', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValue([
+        {
+          jurisdictionId,
+          language: LanguagesEnum.en,
+          site: SiteEnum.public,
+          key: 'region.name',
+          value: 'Something else',
+          sourceHash: null,
+        },
+      ]);
+
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({ commit: true }),
+      );
+
+      expect(prisma.translationStrings.updateMany).toHaveBeenCalledWith({
+        where: {
+          jurisdictionId,
+          language: LanguagesEnum.en,
+          site: SiteEnum.public,
+          key: 'region.name',
+        },
+        data: { value: 'Bloomington', sourceHash: null },
+      });
+    });
+
+    it('leaves a row added since the diff as it was set', async () => {
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({ commit: true }),
+      );
+
+      expect(prisma.translationStrings.createMany).toHaveBeenCalledWith(
+        expect.objectContaining({ skipDuplicates: true }),
+      );
+    });
+
+    it('issues the create and the updates as one transaction', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValue([
+        {
+          jurisdictionId,
+          language: LanguagesEnum.en,
+          site: SiteEnum.public,
+          key: 'region.name',
+          value: 'Something else',
+          sourceHash: null,
+        },
+      ]);
+
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({ commit: true }),
+      );
+
+      const issued =
+        (prisma.translationStrings.createMany as jest.Mock).mock.calls.length +
+        (prisma.translationStrings.updateMany as jest.Mock).mock.calls.length;
+
+      expect(issued).toBe(2);
+      expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+      expect((prisma.$transaction as jest.Mock).mock.calls[0][0]).toHaveLength(
+        issued,
+      );
+    });
+
+    it('reads each section against its own scope', async () => {
+      await service.migrateTranslationOverridesToKeyRows(request(), body());
+
+      expect(prisma.translationStrings.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { jurisdictionId: null, site: SiteEnum.partners },
+        }),
+      );
+      expect(prisma.translationStrings.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { jurisdictionId, site: SiteEnum.public },
+        }),
+      );
+    });
+
+    it('fetches from the repository and ref it was given', async () => {
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({
+          repositoryUrl: 'https://raw.githubusercontent.com/acme/fork',
+          gitRef: 'abc123',
+        }),
+      );
+
+      const urls = (service.getTranslationFile as jest.Mock).mock.calls.map(
+        (call) => call[0],
+      );
+      expect(urls).toEqual([
+        'https://raw.githubusercontent.com/acme/fork/abc123/sites/public/page_content/locale_overrides/general.json',
+        'https://raw.githubusercontent.com/acme/fork/abc123/sites/partners/page_content/overrides/general.json',
+      ]);
+    });
+
+    it('names a tolerated missing file in the report', async () => {
+      const log = jest.spyOn(service['logger'], 'log').mockImplementation();
+      jest
+        .spyOn(service, 'getTranslationFile')
+        .mockImplementation((url: string) =>
+          url.endsWith('es.json')
+            ? Promise.reject(new Error('failed fetching x: status code 404'))
+            : Promise.resolve({ 'region.name': 'Bloomington' }),
+        );
+
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({ languages: [LanguagesEnum.es] }),
+      );
+
+      expect(log.mock.calls[0][0]).toContain('no file at');
+      expect(log.mock.calls[0][0]).toContain('es.json');
+    });
+
+    it('rejects an unknown jurisdiction without consuming the script name', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+
+      await expect(
+        service.migrateTranslationOverridesToKeyRows(request(), body()),
+      ).rejects.toThrow('Jurisdiction Bloomington does not exist');
+      expect(prisma.scriptRuns.create).not.toHaveBeenCalled();
+    });
+
+    it('writes partners rows for every jurisdiction and public rows for the named one', async () => {
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({ commit: true }),
+      );
+
+      const written = (
+        prisma.translationStrings.createMany as jest.Mock
+      ).mock.calls.flatMap((call) => call[0].data);
+
+      expect(
+        written.find((row) => row.site === SiteEnum.partners).jurisdictionId,
+      ).toBeNull();
+      expect(
+        written.find((row) => row.site === SiteEnum.public).jurisdictionId,
+      ).toEqual(jurisdictionId);
+      expect(
+        written.every((row) => row.origin === TranslationOrigin.human),
+      ).toBe(true);
+    });
+
+    it('records the run only once it writes', async () => {
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({ commit: true }),
+      );
+
+      expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+        where: { scriptName },
+      });
+      expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+        data: { scriptName, triggeringUser: userId },
+      });
+      expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+        data: { didScriptRun: true, triggeringUser: userId },
+        where: { scriptName },
+      });
+    });
+
+    it('writes nothing and records nothing on a dry run', async () => {
+      await service.migrateTranslationOverridesToKeyRows(request(), body());
+
+      expect(prisma.translationStrings.createMany).not.toHaveBeenCalled();
+      expect(prisma.translationStrings.updateMany).not.toHaveBeenCalled();
+      expect(prisma.scriptRuns.create).not.toHaveBeenCalled();
+    });
+
+    it('leaves an existing row alone when asked to', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValue([
+        {
+          jurisdictionId,
+          language: LanguagesEnum.en,
+          site: SiteEnum.public,
+          key: 'region.name',
+          value: 'Edited by an admin',
+          sourceHash: null,
+        },
+      ]);
+
+      await service.migrateTranslationOverridesToKeyRows(
+        request(),
+        body({ commit: true, skipExisting: true }),
+      );
+
+      expect(prisma.translationStrings.updateMany).not.toHaveBeenCalled();
+    });
+
+    it('tolerates a missing translation, and stops on a missing english file', async () => {
+      jest
+        .spyOn(service, 'getTranslationFile')
+        .mockImplementation((url: string) =>
+          url.endsWith('es.json')
+            ? Promise.reject(new Error('failed fetching x: status code 404'))
+            : Promise.resolve({ 'region.name': 'Bloomington' }),
+        );
+
+      await expect(
+        service.migrateTranslationOverridesToKeyRows(
+          request(),
+          body({ languages: [LanguagesEnum.es] }),
+        ),
+      ).resolves.toEqual({ success: true });
+
+      jest
+        .spyOn(service, 'getTranslationFile')
+        .mockRejectedValue(new Error('failed fetching x: status code 404'));
+
+      await expect(
+        service.migrateTranslationOverridesToKeyRows(request(), body()),
+      ).rejects.toThrow('404');
+    });
+
+    it('stops on a value the editor would refuse, rather than treating it as missing', async () => {
+      jest
+        .spyOn(service, 'getTranslationFile')
+        .mockImplementation((url: string) =>
+          Promise.resolve(
+            url.endsWith('es.json')
+              ? { 'region.name': '<script>alert(1)</script>' }
+              : { 'region.name': 'Bloomington' },
+          ),
+        );
+
+      await expect(
+        service.migrateTranslationOverridesToKeyRows(
+          request(),
+          body({ languages: [LanguagesEnum.es] }),
+        ),
+      ).rejects.toThrow('region.name value contains executable markup');
+    });
+
+    it('stops before writing when a fetch fails outright', async () => {
+      jest
+        .spyOn(service, 'getTranslationFile')
+        .mockRejectedValue(
+          new Error('failed fetching x: timed out after 30ms'),
+        );
+
+      await expect(
+        service.migrateTranslationOverridesToKeyRows(
+          request(),
+          body({ commit: true }),
+        ),
+      ).rejects.toThrow('timed out');
+      expect(prisma.translationStrings.createMany).not.toHaveBeenCalled();
+      expect(prisma.scriptRuns.create).not.toHaveBeenCalled();
+    });
+  });
+
   // | ---------- HELPER TESTS BELOW ---------- | //
 
   describe('getTranslationFile', () => {
@@ -1113,6 +1313,7 @@ describe('Testing script runner service', () => {
 
       expect(httpServiceMock.get).toHaveBeenCalledWith('https://x/f.json', {
         signal: expect.any(AbortSignal),
+        maxRedirects: 0,
       });
     });
 
@@ -1122,6 +1323,14 @@ describe('Testing script runner service', () => {
       await expect(
         service.getTranslationFile('https://x/f.json'),
       ).rejects.toThrow(/failed fetching https:\/\/x\/f\.json.*404/);
+    });
+
+    it('does not treat a redirect as a missing file', async () => {
+      failWith({ message: 'Request failed with status code 302' });
+
+      await expect(
+        service.getTranslationFile('https://x/f.json'),
+      ).rejects.toThrow(/failed fetching https:\/\/x\/f\.json.*302/);
     });
 
     it('rejects when the response is cut short', async () => {

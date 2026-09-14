@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react"
+import React, { useCallback, useContext, useState, useEffect } from "react"
 import { Button, Card, Drawer, Heading } from "@bloom-housing/ui-seeds"
 import {
   AlertBox,
@@ -7,21 +7,39 @@ import {
   StandardTableData,
   t,
 } from "@bloom-housing/ui-components"
+import { BackgroundJobStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useBulkApplicationCsvUpload, useBulkApplicationTemplateExport } from "../../lib/hooks"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 
 interface BulkUpdateDrawerProps {
   isOpen: boolean
   listingId: string
+  jobId: string | null
+  jobStatus?: BackgroundJobStatusEnum | null
+  setJobId: (jobId: string | null) => void
   onClose: () => void
 }
 
-const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps) => {
+const BulkUpdateDrawer = ({
+  isOpen,
+  jobId,
+  jobStatus,
+  listingId,
+  onClose,
+  setJobId,
+}: BulkUpdateDrawerProps) => {
   const { applicationsService } = useContext(AuthContext)
   const { onExport } = useBulkApplicationTemplateExport(listingId)
   const [csvError, setCsvError] = useState<string>("")
-  const [jobId, setJobId] = useState<string>("")
   const { uploadToS3, resetUpload, fileUploadData, progressValue } = useBulkApplicationCsvUpload()
+
+  useEffect(() => {
+    if (jobStatus !== BackgroundJobStatusEnum.processing) {
+      resetUpload()
+      setCsvError("")
+      setJobId(null)
+    }
+  }, [jobStatus, resetUpload, setJobId])
 
   const csvUploader = useCallback(
     async (file: File) => {
@@ -46,7 +64,7 @@ const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps)
         setCsvError(e?.response?.data?.message ?? t("applications.bulkUpdateModalProcessingError"))
       }
     }
-  }, [applicationsService, fileUploadData, listingId])
+  }, [applicationsService, fileUploadData, listingId, setJobId])
 
   const bulkApplicationHeaders = {
     fileName: "t.fileName",
@@ -126,6 +144,17 @@ const BulkUpdateDrawer = ({ isOpen, onClose, listingId }: BulkUpdateDrawerProps)
                   </AlertBox>
                 )}
               </div>
+            )}
+            {/* The toast lives behind the drawer overlay, so repeat the outcome in place */}
+            {jobStatus === BackgroundJobStatusEnum.completed && (
+              <AlertBox type="success" className="seeds-m-bs-content">
+                {t("applications.bulkUpdateModalProcessingSuccess")}
+              </AlertBox>
+            )}
+            {jobStatus === BackgroundJobStatusEnum.failed && (
+              <AlertBox type="alert" className="seeds-m-bs-content">
+                {t("applications.bulkUpdateModalProcessingError")}
+              </AlertBox>
             )}
           </Card.Section>
         </Card>
