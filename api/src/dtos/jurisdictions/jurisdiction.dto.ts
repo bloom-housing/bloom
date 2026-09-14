@@ -287,18 +287,18 @@ export class Jurisdiction extends AbstractDTO {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => BrandDTO)
-  @ApiPropertyOptional({ type: BrandDTO })
-  brand?: BrandDTO;
+  @ApiPropertyOptional({ type: BrandDTO, nullable: true })
+  brand?: BrandDTO | null;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  brandLogoAssetId?: string;
+  @ApiPropertyOptional({ nullable: true })
+  brandLogoAssetId?: string | null;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  brandFaviconAssetId?: string;
+  @ApiPropertyOptional({ nullable: true })
+  brandFaviconAssetId?: string | null;
 }
