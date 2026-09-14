@@ -6,6 +6,7 @@ import Card from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { BloomCard } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../layouts/forms"
 import styles from "../../styles/create-account.module.scss"
+import { sharedGetStaticProps } from "../lib/sharedPageProps"
 
 const CreateAdvocateAccountConfirmation = () => {
   const router = useRouter()
@@ -39,3 +40,5 @@ const CreateAdvocateAccountConfirmation = () => {
 }
 
 export { CreateAdvocateAccountConfirmation as default, CreateAdvocateAccountConfirmation }
+
+export const getStaticProps = sharedGetStaticProps

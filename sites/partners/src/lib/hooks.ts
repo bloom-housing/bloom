@@ -1,7 +1,7 @@
-import { useCallback, useContext, useState, useEffect, useRef } from "react"
+import { useCallback, useContext, useState, useEffect, useRef, useMemo } from "react"
 import { useRouter } from "next/router"
 import useSWR from "swr"
-import axios, { AxiosError } from "axios"
+import axios, { AxiosError, AxiosProgressEvent } from "axios"
 import qs from "qs"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
@@ -24,11 +24,13 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   OrderByEnum,
+  SiteEnum,
   UserFilterParams,
   UserOrderByKeys,
   PaginationMeta,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { S3Upload } from "./helpers"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -87,14 +89,24 @@ interface MSQTableSettings {
 }
 
 export type UseSSEOptions = {
-  url: string
+  path: string
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  params?: Record<string, any>
   withCredentials?: boolean
+  enabled?: boolean
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   onMessage?: (data: any) => void
   onError?: (error: Event) => void
   onOpen?: () => void
   eventTypes?: string[]
   parseJson?: boolean
+  /**
+   * EventSource reconnects indefinitely on its own. Once this many consecutive connection attempts
+   * have failed the connection is closed for good, so a backend that is down does not get polled
+   * forever.
+   */
+  maxRetries?: number
+  onRetriesExhausted?: () => void
 }
 
 export type UseSSEReturn<T> = {
@@ -302,6 +314,7 @@ export const useListingExport = (useSecurePathway = false) => {
     }
 
     setCsvExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {
@@ -776,11 +789,108 @@ export const useZipExport = (
       )
     }
     setExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {
     onExport,
     exportLoading,
+  }
+}
+
+export const useBulkApplicationTemplateExport = (listingId: string) => {
+  const { applicationsService } = useContext(AuthContext)
+  const [exportLoading, setExportLoading] = useState(false)
+  const { addToast } = useContext(MessageContext)
+
+  const onExport = useCallback(async () => {
+    setExportLoading(true)
+    try {
+      // Returns a short lived presigned S3 url rather than the zip itself
+      const url = await applicationsService.downloadBulkUpdateTemplate({
+        listingId: listingId,
+      })
+
+      const link = document.createElement("a")
+      link.href = url
+      link.setAttribute("download", `listing-${listingId}-applications-bulk-templates.zip`)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode.removeChild(link)
+      addToast(t("t.exportSuccess"), { variant: "success" })
+    } catch (err) {
+      console.log(err)
+      addToast(
+        t("account.settings.alerts.genericError", { contactEmail: t("resources.contactEmail") }),
+        {
+          variant: "alert",
+        }
+      )
+    }
+    setExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  return {
+    onExport,
+    exportLoading,
+  }
+}
+
+export const useBulkApplicationCsvUpload = () => {
+  const { applicationsService } = useContext(AuthContext)
+  const [progressValue, setProgressValue] = useState<number>()
+  const [fileUploadData, setFileUploadData] = useState<{
+    id: string
+    url: string
+    s3Key: string
+  } | null>(null)
+  const contentType = "text/csv"
+  const contentDisposition = "inline"
+
+  const onUploadProgress = useCallback((p: AxiosProgressEvent) => {
+    setProgressValue(parseInt(((p.loaded / p.total) * 100).toFixed(0), 10))
+  }, [])
+
+  const uploadToS3 = useCallback(
+    async (file: File, listingId: string) => {
+      const { presignedUrl, key } = await applicationsService.uploadBulkUpdate({
+        body: {
+          listingId,
+          contentType,
+          contentDisposition,
+        },
+      })
+      setProgressValue(3)
+
+      void S3Upload({
+        file,
+        uploadUrl: presignedUrl,
+        onUploadProgress,
+        contentType: "",
+        contentDisposition,
+      }).then((_) => {
+        setProgressValue(100)
+        setFileUploadData({
+          id: file.name,
+          url: presignedUrl,
+          s3Key: key,
+        })
+      })
+    },
+    [applicationsService, onUploadProgress]
+  )
+
+  const resetUpload = useCallback(() => {
+    setProgressValue(0)
+    setFileUploadData(null)
+  }, [])
+
+  return {
+    progressValue,
+    fileUploadData,
+    uploadToS3,
+    resetUpload,
   }
 }
 
@@ -832,6 +942,7 @@ const useCsvExport = (
     }
 
     setCsvExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endpoint, fileName, addToast])
 
   return {
@@ -972,7 +1083,7 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
 
 /** Which rows the editor is reading. The global scope has no jurisdiction to name. */
 export type TranslationScope =
-  | { type: "global" }
+  | { type: "global"; site: SiteEnum }
   | { type: "jurisdiction"; jurisdictionId: string; site: string }
 
 /** Reads one editable translation scope. A null scope skips the request. */
@@ -982,7 +1093,7 @@ export function useRawTranslations(scope: TranslationScope | null, language: str
   const fetcher = () =>
     scope &&
     (scope.type === "global"
-      ? translationsService.getRawPartnersTranslations({ language })
+      ? translationsService.getRawGlobalTranslations({ site: scope.site, language })
       : translationsService.getRawTranslations({
           jurisdictionId: scope.jurisdictionId,
           site: scope.site,
@@ -992,7 +1103,7 @@ export function useRawTranslations(scope: TranslationScope | null, language: str
   const cacheKey = !scope
     ? null
     : scope.type === "global"
-    ? `/api/adapter/translations/partners/raw/${language}`
+    ? `/api/adapter/translations/global/raw/${scope.site}/${language}`
     : `/api/adapter/translations/jurisdictions/${scope.jurisdictionId}/raw/${scope.site}/${language}`
 
   // Writes call `mutate` on this key; refreshing on focus would move data under an in-progress edit.
@@ -1003,6 +1114,51 @@ export function useRawTranslations(scope: TranslationScope | null, language: str
 
   return {
     cacheKey,
+    data,
+    loading: !!cacheKey && !error && !data,
+    error,
+  }
+}
+
+export function useJurisdictionContent(jurisdictionId: string) {
+  const { jurisdictionContentService } = useContext(AuthContext)
+
+  const fetcher = () => jurisdictionContentService.listJurisdictionContent({ jurisdictionId })
+
+  const cacheKey = jurisdictionId
+    ? `/api/adapter/jurisdictionContent/jurisdictions/${jurisdictionId}/admin`
+    : null
+
+  const { data, error } = useSWR(cacheKey, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
+
+  return {
+    cacheKey,
+    data,
+    loading: !!cacheKey && !error && !data,
+    error,
+  }
+}
+
+/**
+ * Reads the email base strings. Public and Partners bundle their base into the site, but the email
+ * strings ship with the api, so they are fetched. A null language skips the request.
+ */
+export function useEmailBaseTranslations(language: string | null) {
+  const { translationsService } = useContext(AuthContext)
+
+  const cacheKey = language ? `/api/adapter/translations/base/email/${language}` : null
+
+  const { data, error } = useSWR(
+    cacheKey,
+    () =>
+      translationsService.emailBaseTranslations({ language }) as Promise<Record<string, string>>,
+    { revalidateOnFocus: false, revalidateOnReconnect: false }
+  )
+
+  return {
     data,
     loading: !!cacheKey && !error && !data,
     error,
@@ -1044,41 +1200,57 @@ export function useUnsavedChangesWarning(hasUnsavedChanges: boolean, message: st
   }, [hasUnsavedChanges, message, router.events])
 }
 
+const EMPTY_EVENT_TYPES: string[] = []
+
 export function useSSE<T>(options: UseSSEOptions): UseSSEReturn<T> {
   const {
-    url,
-    withCredentials = false,
+    path,
+    params,
+    withCredentials = true,
+    enabled = true,
     onMessage,
     onError,
     onOpen,
-    eventTypes = [],
+    eventTypes = EMPTY_EVENT_TYPES,
     parseJson = true,
+    maxRetries = 3,
+    onRetriesExhausted,
   } = options
+
+  // Callers pass `params` as an inline object, so key the url off the serialized query rather than
+  // the object identity - otherwise this memo recomputes on every render.
+  const query = params ? qs.stringify(params) : ""
+  const url = useMemo(() => `/api/adapter-sse/${path}${query ? `?${query}` : ""}`, [path, query])
 
   const [data, setData] = useState<T | null>(null)
   const [error, setError] = useState<Event | null>(null)
   const [isConnected, setIsConnected] = useState(false)
 
   const eventSourceRef = useRef<EventSource | null>(null)
+  const failedAttemptsRef = useRef(0)
   const onMessageRef = useRef(onMessage)
   const onErrorRef = useRef(onError)
   const onOpenRef = useRef(onOpen)
+  const onRetriesExhaustedRef = useRef(onRetriesExhausted)
 
   useEffect(() => {
     onMessageRef.current = onMessage
     onErrorRef.current = onError
     onOpenRef.current = onOpen
-  }, [onMessage, onError, onOpen])
+    onRetriesExhaustedRef.current = onRetriesExhausted
+  }, [onMessage, onError, onOpen, onRetriesExhausted])
 
   const connect = useCallback(() => {
     if (eventSourceRef.current) {
       eventSourceRef.current.close()
     }
 
+    failedAttemptsRef.current = 0
     const eventSource = new EventSource(url, { withCredentials })
     eventSourceRef.current = eventSource
 
     eventSource.onopen = () => {
+      failedAttemptsRef.current = 0
       setIsConnected(true)
       setError(null)
       onOpenRef.current?.()
@@ -1088,6 +1260,17 @@ export function useSSE<T>(options: UseSSEOptions): UseSSEReturn<T> {
       setIsConnected(false)
       setError(event)
       onErrorRef.current?.(event)
+
+      // EventSource retries on its own every few seconds and never gives up, so stop it explicitly
+      // once the backend has failed to answer enough times in a row.
+      failedAttemptsRef.current += 1
+      if (failedAttemptsRef.current > maxRetries) {
+        eventSource.close()
+        if (eventSourceRef.current === eventSource) {
+          eventSourceRef.current = null
+        }
+        onRetriesExhaustedRef.current?.()
+      }
     }
 
     const handleData = (event: MessageEvent) => {
@@ -1107,14 +1290,14 @@ export function useSSE<T>(options: UseSSEOptions): UseSSEReturn<T> {
     })
 
     return eventSource
-  }, [url, withCredentials, parseJson, eventTypes])
+  }, [url, withCredentials, parseJson, eventTypes, maxRetries])
 
   const close = useCallback(() => {
     if (eventSourceRef.current) {
       eventSourceRef.current.close()
       eventSourceRef.current = null
-      setIsConnected(false)
     }
+    setIsConnected(false)
   }, [])
 
   const reconnect = useCallback(() => {
@@ -1123,12 +1306,14 @@ export function useSSE<T>(options: UseSSEOptions): UseSSEReturn<T> {
   }, [close, connect])
 
   useEffect(() => {
-    const eventSource = connect()
+    if (!enabled) return
 
-    return () => {
-      eventSource.close()
-    }
-  }, [connect])
+    connect()
+
+    // Closing through `close` (rather than the EventSource directly) also clears the ref, so an
+    // unmount or a disabled hook does not leave a stale connection behind it.
+    return close
+  }, [connect, close, enabled])
 
   return {
     data,

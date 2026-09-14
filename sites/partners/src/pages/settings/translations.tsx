@@ -10,21 +10,16 @@ import {
   FeatureFlagEnum,
   LanguagesEnum,
   SiteEnum,
-  TranslationUpdate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { flattenTranslations } from "@bloom-housing/shared-helpers/src/utilities/flattenTranslations"
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import { ColDef, ColGroupDef, GridApi } from "ag-grid-community"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
-import {
-  getEnabledSettingsTabCount,
-  getSettingsTabs,
-  SettingsIndexEnum,
-} from "../../components/settings/SettingsViewHelpers"
-import { useRawTranslations, useUnsavedChangesWarning } from "../../lib/hooks"
-import { overrideTranslations, translations } from "../../lib/translations"
-import { publicOverrideTranslations } from "../../lib/publicTranslations"
+import { useSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
+import { useUnsavedChangesWarning } from "../../lib/hooks"
+import { translations } from "../../lib/translations"
+import { NO_JURISDICTION, useTranslationScope } from "../../lib/useTranslationScope"
 import styles from "./translations.module.scss"
 import {
   applyConflictChoices,
@@ -66,23 +61,8 @@ const SettingsTranslations = () => {
   const { addToast } = useContext(MessageContext)
   const { mutate: saveOverrides, isLoading: isSaving } = useMutate()
   const { mutate: revertOverride, isLoading: isReverting } = useMutate()
-  const { profile, translationsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
-
-  const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
-  const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.disableListingPreferences,
-    null,
-    true
-  )
-  const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
-  const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
-  const enableTranslations = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableDbDrivenContent)
-  const settingsTabsFeatureFlags = {
-    enablePreferences: atLeastOneJurisdictionEnablesPreferences,
-    enableProperties,
-    enableAgencies,
-    enableTranslations,
-  }
+  const { profile } = useContext(AuthContext)
+  const { enableTranslations, hideTabs, tabs } = useSettingsTabs(SettingsIndexEnum.translations)
 
   const authorized = enableTranslations && !!profile?.userRoles?.isAdmin
 
@@ -95,98 +75,27 @@ const SettingsTranslations = () => {
       ),
     [profile?.jurisdictions]
   )
-  const [jurisdictionId, setJurisdictionId] = useState("")
-  const [language, setLanguage] = useState<LanguagesEnum>(LanguagesEnum.en)
-  const [site, setSite] = useState<SiteEnum>(SiteEnum.public)
-
-  // The Partners rows are global
-  const isGlobal = site === SiteEnum.partners
-
-  const selectedJurisdiction = jurisdictions.find(
-    (jurisdiction) => jurisdiction.id === (jurisdictionId || jurisdictions[0]?.id)
-  )
-  const activeJurisdictionId = selectedJurisdiction?.id ?? ""
-
-  const partnersLanguages = useMemo(() => {
-    const supported = (router.locales ?? []).filter((locale): locale is LanguagesEnum =>
-      Object.values(LanguagesEnum).includes(locale as LanguagesEnum)
-    )
-    return supported.length ? supported : [LanguagesEnum.en]
-  }, [router.locales])
-
-  const languageOptions = useMemo(
-    () =>
-      (isGlobal ? partnersLanguages : selectedJurisdiction?.languages ?? [LanguagesEnum.en]).map(
-        (value) => ({
-          value,
-          label: t(`languages.${value}`),
-        })
-      ),
-    [isGlobal, partnersLanguages, selectedJurisdiction?.languages]
-  )
-
-  // Languages are per jurisdiction, so switching to one that does not offer the selected language
-  // has to fall back rather than keep editing a language the jurisdiction has no option for.
-  const activeLanguage = languageOptions.some((option) => option.value === language)
-    ? language
-    : languageOptions[0]?.value ?? LanguagesEnum.en
-
-  const scope = useMemo(
-    () =>
-      isGlobal
-        ? {
-            rows: { type: "global" as const },
-            baseOverrides: overrideTranslations,
-            save: (body: TranslationUpdate) =>
-              translationsService.updateRawPartnersTranslations({ language: activeLanguage, body }),
-            revert: (key: string) =>
-              translationsService.deleteRawPartnersTranslation({ language: activeLanguage, key }),
-          }
-        : {
-            rows: {
-              type: "jurisdiction" as const,
-              jurisdictionId: activeJurisdictionId,
-              site,
-            },
-            baseOverrides: publicOverrideTranslations,
-            save: (body: TranslationUpdate) =>
-              translationsService.updateRawTranslations({
-                jurisdictionId: activeJurisdictionId,
-                site,
-                language: activeLanguage,
-                body,
-              }),
-            revert: (key: string) =>
-              translationsService.deleteRawTranslation({
-                jurisdictionId: activeJurisdictionId,
-                site,
-                language: activeLanguage,
-                key,
-              }),
-          },
-    [activeJurisdictionId, activeLanguage, isGlobal, site, translationsService]
-  )
-
-  const scopeReady = authorized && (isGlobal || !!activeJurisdictionId)
-
   const {
-    data: overrides,
+    site,
+    setSite,
+    setJurisdictionId,
+    setLanguage,
+    isGlobal,
+    isEmail,
+    activeJurisdictionId,
+    activeLanguage,
+    languageOptions,
+    scope,
+    englishOverrideKeys,
+    emailBase,
+    baseReady,
+    overrides,
     loading,
     error,
     cacheKey,
-  } = useRawTranslations(scopeReady ? scope.rows : null, activeLanguage)
+  } = useTranslationScope({ jurisdictions, enabled: authorized })
 
-  const isEnglishScope = activeLanguage === LanguagesEnum.en
-  const { data: englishOverrides } = useRawTranslations(
-    scopeReady && !isEnglishScope ? scope.rows : null,
-    LanguagesEnum.en
-  )
-  const englishOverrideKeys = useMemo(
-    () => new Set((englishOverrides ?? []).map((override) => override.key)),
-    [englishOverrides]
-  )
-
-  const overridesLoaded = overrides !== undefined
+  const dataLoaded = overrides !== undefined && baseReady
 
   const [edits, setEdits] = useState<PendingEdits>({})
   const [conflictKeys, setConflictKeys] = useState<string[]>([])
@@ -239,6 +148,17 @@ const SettingsTranslations = () => {
   useUnsavedChangesWarning(hasUnsavedChanges, t("translations.unsavedChangesWarning"))
 
   const rows = useMemo(() => {
+    // Email keys arrive flat from the api, so they skip the locale-file layering the sites need.
+    if (isEmail) {
+      if (!baseReady) return []
+      return buildTranslationRows({
+        englishBase: emailBase.english,
+        languageBase: activeLanguage === LanguagesEnum.en ? undefined : emailBase.language,
+        overrides: overrides ?? [],
+        englishOverrideKeys,
+      })
+    }
+
     const siteOverrides = scope.baseOverrides
     const englishLayer = flattenTranslations(siteOverrides.en)
     const languageLayer = siteOverrides[activeLanguage]
@@ -254,7 +174,7 @@ const SettingsTranslations = () => {
       overrides: overrides ?? [],
       englishOverrideKeys,
     })
-  }, [activeLanguage, englishOverrideKeys, overrides, scope])
+  }, [activeLanguage, baseReady, emailBase, englishOverrideKeys, isEmail, overrides, scope])
 
   // Every row is already in the browser, so search and pagination are local rather than a refetch.
   const search = (tableOptions.filter.filterValue ?? "").trim().toLowerCase()
@@ -319,7 +239,7 @@ const SettingsTranslations = () => {
         headerName: t("translations.currentValue"),
         minWidth: 220,
         flex: 2,
-        editable: overridesLoaded && !isSaving,
+        editable: dataLoaded && !isSaving,
         singleClickEdit: true,
         cellClass: ({ data }: { data: TranslationGridRow }) =>
           data.editedValue !== null
@@ -376,7 +296,7 @@ const SettingsTranslations = () => {
           ),
       },
     ],
-    [isReverting, isSaving, overridesLoaded, runRevert]
+    [dataLoaded, isReverting, isSaving, runRevert]
   )
 
   const saveEdits = (pending: PendingEdits) => {
@@ -458,15 +378,7 @@ const SettingsTranslations = () => {
         </title>
       </Head>
       <NavigationHeader className="relative" title={t("t.settings")} />
-      <TabView
-        hideTabs={getEnabledSettingsTabCount(settingsTabsFeatureFlags, profile?.userRoles) <= 1}
-        tabs={getSettingsTabs(
-          SettingsIndexEnum.translations,
-          v2Preferences,
-          settingsTabsFeatureFlags,
-          profile?.userRoles
-        )}
-      >
+      <TabView hideTabs={hideTabs} tabs={tabs}>
         <div className={styles["toolbar"]}>
           <div className={styles["scope-controls"]}>
             <Select
@@ -478,6 +390,7 @@ const SettingsTranslations = () => {
               options={[
                 { value: SiteEnum.public, label: t("translations.sitePublic") },
                 { value: SiteEnum.partners, label: t("translations.sitePartners") },
+                { value: SiteEnum.email, label: t("translations.siteEmail") },
               ]}
               inputProps={{
                 onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -485,17 +398,25 @@ const SettingsTranslations = () => {
                 },
               }}
             />
-            {!isGlobal && (
+            {site !== SiteEnum.partners && (
               <Select
+                key={site}
                 id="translationsJurisdiction"
                 name="translationsJurisdiction"
                 label={t("t.jurisdiction")}
-                defaultValue={activeJurisdictionId}
-                disabled={jurisdictions.length < 2 || hasUnsavedChanges}
-                options={jurisdictions.map((jurisdiction) => ({
-                  value: jurisdiction.id,
-                  label: jurisdiction.name,
-                }))}
+                defaultValue={isGlobal ? NO_JURISDICTION : activeJurisdictionId}
+                disabled={
+                  (jurisdictions.length < 2 && site !== SiteEnum.email) || hasUnsavedChanges
+                }
+                options={[
+                  ...(site === SiteEnum.email
+                    ? [{ value: NO_JURISDICTION, label: t("translations.defaultNoJurisdiction") }]
+                    : []),
+                  ...jurisdictions.map((jurisdiction) => ({
+                    value: jurisdiction.id,
+                    label: jurisdiction.name,
+                  })),
+                ]}
                 inputProps={{
                   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
                     changeScope(() => setJurisdictionId(event.target.value))

@@ -25,6 +25,7 @@ jest.mock("@vis.gl/react-google-maps", () => ({
       {children}
     </div>
   )),
+  Pin: ({ "data-testid": testId }) => <img alt="Listing pin" data-testid={testId} />,
   InfoWindow: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="info-window">{children}</div>
   ),

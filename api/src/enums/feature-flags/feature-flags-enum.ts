@@ -54,6 +54,7 @@ export enum FeatureFlagEnum {
   enableMultiselectVoucherQuestion = 'enableMultiselectVoucherQuestion',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enableNeighborhoodAmenitiesDropdown = 'enableNeighborhoodAmenitiesDropdown',
+  enableNonAdminLotteries = 'enableNonAdminLotteries',
   enableNonRegulatedListings = 'enableNonRegulatedListings',
   enableOnlyAdminCanAddAppsAfterClose = 'enableOnlyAdminCanAddAppsAfterClose',
   enableOnlyAdminCanEditListingDates = 'enableOnlyAdminCanEditListingDates',
@@ -61,8 +62,10 @@ export enum FeatureFlagEnum {
   enableParkingFee = 'enableParkingFee',
   enableParkingType = 'enableParkingType',
   enablePartnerDemographics = 'enablePartnerDemographics',
+  enablePartnerLotteryExport = 'enablePartnerLotteryExport',
   enablePartnerSettings = 'enablePartnerSettings',
   enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
+  enableProfessionalPartnersPage = 'enableProfessionalPartnersPage',
   enableProperties = 'enableProperties',
   enableReasonableAccommodations = 'enableReasonableAccommodations',
   enableReceivedAtAndByFields = 'enableReceivedAtAndByFields',
@@ -70,6 +73,7 @@ export enum FeatureFlagEnum {
   enableRegions = 'enableRegions',
   enableResources = 'enableResources',
   enableSection8Question = 'enableSection8Question',
+  enableSeeOurData = 'enableSeeOurData',
   enableSexualOrientationQuestion = 'enableSexualOrientationQuestion',
   enableSingleUseCode = 'enableSingleUseCode',
   enableSmokingPolicyRadio = 'enableSmokingPolicyRadio',
@@ -272,6 +276,10 @@ export const featureFlagMap: {
       'When true, land use listings are displayed in listing creation/edit and public listing view',
   },
   {
+    name: FeatureFlagEnum.enableLeasingAgentAltText,
+    description: 'When true, shows alternative text for LA users',
+  },
+  {
     name: FeatureFlagEnum.enableLimitedHowDidYouHear,
     description:
       'When true, the Radio Ad and Bus Ad options are removed from the how did you hear section.',
@@ -290,10 +298,6 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableListingFiltering,
     description:
       'When true, a filter button is shown on listings browse and users can filter with the options in the drawer',
-  },
-  {
-    name: FeatureFlagEnum.enableLeasingAgentAltText,
-    description: 'When true, shows alternative text for LA users',
   },
   {
     name: FeatureFlagEnum.enableListingImageAltText,
@@ -348,6 +352,11 @@ export const featureFlagMap: {
       'When true, neighborhood amenities inputs render as dropdowns with distance options instead of textareas',
   },
   {
+    name: FeatureFlagEnum.enableNonAdminLotteries,
+    description:
+      'When true, the lotteries can be published without the admin confirmation',
+  },
+  {
     name: FeatureFlagEnum.enableNonRegulatedListings,
     description:
       'When true, non-regulated listings are displayed in listing creation/edit and public listing view',
@@ -377,6 +386,11 @@ export const featureFlagMap: {
       'When true, demographics data is included in application or lottery exports for partners',
   },
   {
+    name: FeatureFlagEnum.enablePartnerLotteryExport,
+    description:
+      'When true, partner can export lottery immediately after it is run.',
+  },
+  {
     name: FeatureFlagEnum.enablePartnerSettings,
     description: "When true, the 'settings' tab in the partner site is visible",
   },
@@ -384,6 +398,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enablePetPolicyCheckbox,
     description:
       'When true, the pet policy field in the listing form is displayed as checkboxes instead of a text area',
+  },
+  {
+    name: FeatureFlagEnum.enableProfessionalPartnersPage,
+    description:
+      'When true, the professional partners page will appear in the nav header of the public site and page will be reachable',
   },
   {
     name: FeatureFlagEnum.enableProperties,
@@ -416,6 +435,11 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableSection8Question,
     description: 'When true, the Section 8 listing data will be visible',
+  },
+  {
+    name: FeatureFlagEnum.enableSeeOurData,
+    description:
+      'When true, a see our data card with a link on the home page is displayed',
   },
   {
     name: FeatureFlagEnum.enableSexualOrientationQuestion,
