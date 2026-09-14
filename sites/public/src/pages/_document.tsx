@@ -18,11 +18,15 @@ interface BrandDocumentProps {
 
 const rampShades: (keyof BrandRamp)[] = ["base", "dark", "darker", "light", "lighter"]
 
+// A stored row can hold any JSON, and test() throws on an object with a non-callable toString.
+const isHex = (value: unknown): value is string =>
+  typeof value === "string" && HEX_COLOR.test(value)
+
 const hexOnly = (ramp?: BrandRamp): BrandRamp | null => {
-  if (!ramp || !HEX_COLOR.test(ramp.base ?? "")) return null
+  if (!ramp || !isHex(ramp.base)) return null
 
   return rampShades.reduce((checked: BrandRamp, shade) => {
-    if (HEX_COLOR.test(ramp[shade] ?? "")) {
+    if (isHex(ramp[shade])) {
       checked[shade] = ramp[shade]
     }
     return checked
