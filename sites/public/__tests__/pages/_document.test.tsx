@@ -181,6 +181,22 @@ describe("_document", () => {
     ).toBe(false)
   })
 
+  it("links the favicon even when the colors are unusable", async () => {
+    const { children } = await headChildrenFor(
+      jurisdictionWith({
+        primary: { base: "rebeccapurple" },
+        faviconUrl: "https://example.test/favicon.png",
+      })
+    )
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "icon")
+    ).toBe(true)
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.id === "brand-vars")
+    ).toBe(false)
+  })
+
   it("links no favicon when the flag is off", async () => {
     const { children } = await headChildrenFor(
       jurisdictionWith({ primary, faviconUrl: "https://example.test/favicon.png" }, false)

@@ -28,7 +28,8 @@ const ContentReader = () => {
 // The layout reads the brand this way to pick the header logo.
 const BrandReader = () => {
   const brand = useBrand()
-  return <div>{brand?.logoUrl ?? "no brand"}</div>
+  if (brand === null) return <div>no brand</div>
+  return <div>{brand.logoUrl ?? "brand without logo"}</div>
 }
 
 const jurisdictionWith = (flagOn: boolean) => ({
@@ -99,6 +100,12 @@ describe("<BloomApp>", () => {
     renderApp({}, "en", BrandReader)
 
     expect(screen.getByText("no brand")).toBeInTheDocument()
+  })
+
+  it("provides a brand that has no logo rather than nothing", () => {
+    renderApp({ jurisdiction: { ...jurisdictionWith(true), brand: {} } }, "en", BrandReader)
+
+    expect(screen.getByText("brand without logo")).toBeInTheDocument()
   })
 
   it("renders the bundled value when a page supplies none", () => {

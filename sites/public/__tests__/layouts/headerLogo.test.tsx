@@ -24,5 +24,6 @@ describe("headerLogo", () => {
     const { container } = render(headerLogo(brandWith()))
 
     expect(container.querySelector("img")).toBeNull()
+    expect(container.querySelector("svg")).toBeInTheDocument()
   })
 })
