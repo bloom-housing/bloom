@@ -8415,6 +8415,45 @@ export interface RaceEthnicityConfiguration {
   options: RaceEthnicityOption[]
 }
 
+/** BrandRampDTO */
+export interface BrandRampDTO {
+  /**  */
+  base: string
+
+  /**  */
+  dark?: string
+
+  /**  */
+  darker?: string
+
+  /**  */
+  light?: string
+
+  /**  */
+  lighter?: string
+}
+
+/** BrandDTO */
+export interface BrandDTO {
+  /**  */
+  primary: BrandRampDTO
+
+  /**  */
+  secondary?: BrandRampDTO
+
+  /**  */
+  fontFamily?: string
+
+  /**  */
+  fontUrl?: string
+
+  /**  */
+  logoUrl?: string
+
+  /**  */
+  faviconUrl?: string
+}
+
 /** JurisdictionCreate */
 export interface JurisdictionCreate {
   /**  */
@@ -8503,6 +8542,15 @@ export interface JurisdictionCreate {
 
   /**  */
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
+
+  /**  */
+  brand?: CombinedBrandTypes
+
+  /**  */
+  brandLogoAssetId?: string
+
+  /**  */
+  brandFaviconAssetId?: string
 }
 
 /** JurisdictionUpdate */
@@ -8596,6 +8644,15 @@ export interface JurisdictionUpdate {
 
   /**  */
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
+
+  /**  */
+  brand?: CombinedBrandTypes
+
+  /**  */
+  brandLogoAssetId?: string
+
+  /**  */
+  brandFaviconAssetId?: string
 }
 
 /** FeatureFlag */
@@ -8728,6 +8785,15 @@ export interface Jurisdiction {
 
   /**  */
   subJurisdictions?: IdDTO[]
+
+  /**  */
+  brand?: CombinedBrandTypes
+
+  /**  */
+  brandLogoAssetId?: string
+
+  /**  */
+  brandFaviconAssetId?: string
 }
 
 /** AddressInput */
@@ -11728,7 +11794,7 @@ export enum ApplicationAccessibilityFeatureEnum {
   "other" = "other",
   "vision" = "vision",
 }
-
+export type CombinedBrandTypes = BrandDTO
 export enum FeatureFlagEnum {
   "disableAccessibilityFeaturesTag" = "disableAccessibilityFeaturesTag",
   "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",

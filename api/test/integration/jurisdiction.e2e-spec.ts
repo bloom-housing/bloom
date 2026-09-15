@@ -64,8 +64,8 @@ describe('Jurisdiction Controller Tests', () => {
       data: {
         ...jurisdictionFactory(),
         brand: { primary: { base: '#773E98' } },
-        brandLogoAssetId: logo.id,
-        brandFaviconAssetId: favicon.id,
+        brandLogo: { connect: { id: logo.id } },
+        brandFavicon: { connect: { id: favicon.id } },
       },
     });
 
@@ -84,6 +84,149 @@ describe('Jurisdiction Controller Tests', () => {
     });
     expect(afterBothDeletes.brandFaviconAssetId).toBeNull();
     expect(afterBothDeletes.brand).toEqual({ primary: { base: '#773E98' } });
+  });
+
+  describe('brand', () => {
+    const updateBody = (id: string, extra = {}) => ({
+      id,
+      name: `brand test ${id.slice(0, 8)}`,
+      notificationsSignUpUrl: 'url',
+      languages: [LanguagesEnum.en],
+      partnerTerms: 'terms',
+      publicUrl: 'publicUrl',
+      emailFromAddress: 'emailFromAddress',
+      rentalAssistanceDefault: 'rentalAssistanceDefault',
+      whatToExpect: 'whatToExpect',
+      whatToExpectAdditionalText: 'whatToExpectAdditionalText',
+      whatToExpectUnderConstruction: 'whatToExpectUnderConstruction',
+      enablePartnerSettings: true,
+      allowSingleUseCodeLogin: true,
+      listingApprovalPermissions: [],
+      duplicateListingPermissions: [],
+      requiredListingFields: [],
+      visibleNeighborhoodAmenities: [],
+      regions: [],
+      visibleAccessibilityPriorityTypes: [],
+      visibleApplicationAccessibilityFeatures: [],
+      visibleSpokenLanguages: [],
+      visibleHouseholdMemberRelationships: [],
+      ...extra,
+    });
+
+    const put = (id: string, extra = {}) =>
+      request(app.getHttpServer())
+        .put(`/jurisdictions/${id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .send(updateBody(id, extra));
+
+    it('completes the ramp and uppercases hex through the endpoints', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      await put(jurisdiction.id, {
+        brand: { primary: { base: '#77aa33' } },
+      }).expect(200);
+
+      const res = await request(app.getHttpServer())
+        .get(`/jurisdictions/byName/${updateBody(jurisdiction.id).name}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(200);
+
+      // Computed with python colorsys rather than with completeRamp, so the endpoint is checked
+      // against the intended deltas rather than against itself.
+      expect(res.body.brand.primary).toEqual({
+        base: '#77AA33',
+        dark: '#69962D',
+        darker: '#4C6D21',
+        light: '#EFF7E4',
+        lighter: '#F8FCF4',
+      });
+      expect(res.headers['cache-control']).toContain('s-maxage');
+
+      const stored = await prisma.jurisdictions.findUnique({
+        where: { id: jurisdiction.id },
+        select: { brand: true },
+      });
+      expect(stored.brand).toEqual({ primary: { base: '#77AA33' } });
+    });
+
+    it('returns explicit ramp values as stored', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      const res = await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98', dark: '#6E2598' },
+          secondary: { base: '#0077DA' },
+        },
+      }).expect(200);
+
+      expect(res.body.brand.primary.dark).toEqual('#6E2598');
+      expect(res.body.brand.secondary.base).toEqual('#0077DA');
+    });
+
+    it('rejects a brand that is not a brand', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      await put(jurisdiction.id, {
+        brand: { primary: { base: 'rebeccapurple' } },
+      }).expect(400);
+      await put(jurisdiction.id, { brand: { fontFamily: 'Inter' } }).expect(
+        400,
+      );
+      await put(jurisdiction.id, { brand: { primary: {} } }).expect(400);
+      await put(jurisdiction.id, {
+        brand: { primary: { base: '#773E98' }, secondary: {} },
+      }).expect(400);
+    });
+
+    it('rejects a branding asset id with no asset', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      const missing = randomUUID();
+
+      const res = await put(jurisdiction.id, {
+        brandLogoAssetId: missing,
+      }).expect(400);
+
+      expect(res.body.message).toContain(missing);
+    });
+
+    it('clears the brand when null is sent', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: {
+          ...jurisdictionFactory(),
+          brand: { primary: { base: '#773E98' } },
+        },
+      });
+
+      await put(jurisdiction.id, { brand: null }).expect(200);
+
+      const stored = await prisma.jurisdictions.findUnique({
+        where: { id: jurisdiction.id },
+        select: { brand: true },
+      });
+      expect(stored.brand).toBeNull();
+    });
+
+    it('returns a null brand for a jurisdiction that has none', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      const res = await request(app.getHttpServer())
+        .get(`/jurisdictions/${jurisdiction.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(200);
+
+      expect(res.body.brand).toBeNull();
+    });
   });
 
   it('testing list endpoint', async () => {
