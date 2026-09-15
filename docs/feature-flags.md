@@ -46,6 +46,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableConfigurableRegions](./feature-flags/enableConfigurableRegions.md) | When true, allows for configurable regions per jurisdiction enabled on partners and public |
 | [enableCreditScreeningFee](./feature-flags/enableCreditScreeningFee.md) | When true, credit screening fee is enabled for listings |
 | [enableCustomListingNotifications](./feature-flags/enableCustomListingNotifications.md) | When true, users have access to custom notification settings |
+| [enableDbDrivenBranding](./feature-flags/enableDbDrivenBranding.md) | When true, the public site renders the jurisdiction's brand colors, logo, favicon, and font from the database instead of the bundled static assets |
 | [enableDbDrivenContent](./feature-flags/enableDbDrivenContent.md) | When true, the jurisdiction reads its translations and structured content from the database instead of the bundled override files |
 | [enableDuplicatesDetailsInEmail](./feature-flags/enableDuplicatesDetailsInEmail.md) | When true, lottery published applicant email contains duplicates details section |
 | [enableExportTerms](./feature-flags/enableExportTerms.md) | When true, display terms of use before exporting applications and lotteries from the partner site |
