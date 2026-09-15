@@ -292,6 +292,13 @@ describe("_document", () => {
     expect(style).toContain(`--seeds-font-alt-sans: "Inter", system-ui, sans-serif;`)
   })
 
+  it("sets no font variable when the family has no stylesheet", async () => {
+    const style = await styleFor(jurisdictionWith({ primary, fontFamily: "Inter" }))
+
+    expect(style).not.toContain("--seeds-font-sans")
+    expect(style).toContain("--seeds-color-primary: #773E98;")
+  })
+
   it("links no font when none is stored", async () => {
     const { children } = await headChildrenFor(jurisdictionWith({ primary }))
 

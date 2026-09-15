@@ -30,7 +30,13 @@ export const assertFontIsAvailable = async (
   const families = [brand?.fontFamily, brand?.headingFontFamily].filter(
     (family): family is string => !!family,
   );
-  if (!brand?.fontUrl || !families.length) return;
+  if (!brand?.fontUrl && !families.length) return;
+
+  if (!brand?.fontUrl || !families.length) {
+    throw new BadRequestException(
+      'a brand font needs both a fontUrl and a fontFamily',
+    );
+  }
 
   if (!usableFontUrl(brand.fontUrl)) {
     throw new BadRequestException(
