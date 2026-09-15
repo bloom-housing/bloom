@@ -251,7 +251,7 @@ describe("<HomeResources>", () => {
     expect(container.querySelector("[data-columns='2']")).toBeInTheDocument()
   })
 
-  it("should have one column when there is only one card", () => {
+  it("should have two columns when there is only one card", () => {
     const { container } = render(
       <HomeResources
         jurisdiction={{
@@ -267,6 +267,6 @@ describe("<HomeResources>", () => {
     expect(screen.getByRole("link", { name: /learn more/i })).toBeInTheDocument()
 
     // 1 column for 1 card
-    expect(container.querySelector("[data-columns='1']")).toBeInTheDocument()
+    expect(container.querySelector("[data-columns='2']")).toBeInTheDocument()
   })
 })
