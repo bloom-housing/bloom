@@ -66,7 +66,8 @@ resource "aws_s3_bucket_cors_configuration" "public" {
   }
 
   cors_rule {
-    allowed_methods = ["GET", "OPTIONS"]
+    allowed_headers = ["Content-Type"]
+    allowed_methods = ["GET"]
     allowed_origins = ["https://partners.${var.domain_name}", "https://${var.domain_name}"]
   }
 }
