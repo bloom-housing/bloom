@@ -31,6 +31,8 @@ export enum FeatureFlagEnum {
   enableGenderQuestion = 'enableGenderQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
+  enableGetAssistanceCard = 'enableGetAssistanceCard',
+  enableGetAssistancePage = 'enableGetAssistancePage',
   enableHomeType = 'enableHomeType',
   enableHomePageSearchHero = 'enableHomePageSearchHero',
   enableHousingAdvocate = 'enableHousingAdvocate',
@@ -72,6 +74,7 @@ export enum FeatureFlagEnum {
   enableReferralQuestionUnits = 'enableReferralQuestionUnits',
   enableRegions = 'enableRegions',
   enableResources = 'enableResources',
+  enableResourcesCard = 'enableResourcesCard',
   enableSection8Question = 'enableSection8Question',
   enableSeeOurData = 'enableSeeOurData',
   enableSexualOrientationQuestion = 'enableSexualOrientationQuestion',
@@ -242,6 +245,16 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableGeocodingRadiusMethod,
     description:
       'When true, preferences can be created with geocoding functionality that verifies via a mile radius',
+  },
+  {
+    name: FeatureFlagEnum.enableGetAssistanceCard,
+    description:
+      'When true, a resource card will appear on the homepage to link to the get assistance page',
+  },
+  {
+    name: FeatureFlagEnum.enableGetAssistancePage,
+    description:
+      'When true, get assistance will appear in the nav header and page will be reachable',
   },
   {
     name: FeatureFlagEnum.enableHomeType,
@@ -431,6 +444,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableResources,
     description:
       'When true, the public site displays links to resources on various pages',
+  },
+  {
+    name: FeatureFlagEnum.enableResourcesCard,
+    description:
+      'When true, a resource card will appear on the homepage to link to the additional resources page',
   },
   {
     name: FeatureFlagEnum.enableSection8Question,
