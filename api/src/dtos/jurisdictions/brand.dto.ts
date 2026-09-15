@@ -87,6 +87,7 @@ export class BrandDTO {
       protocols: ['https'],
       require_protocol: true,
       host_whitelist: FONT_HOSTS,
+      disallow_auth: true,
     },
     { groups: [ValidationsGroupsEnum.default] },
   )

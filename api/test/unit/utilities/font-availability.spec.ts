@@ -97,6 +97,22 @@ describe('assertFontIsAvailable', () => {
     ).rejects.toThrow(BadRequestException);
   });
 
+  it.each([
+    ['a port', 'https://fonts.googleapis.com:1/css2?family=Inter'],
+    ['credentials', 'https://user:pass@fonts.googleapis.com/css2?family=Inter'],
+    ['another host', 'https://fonts.example.test/css2?family=Inter'],
+  ])(
+    'refuses a url carrying %s rather than fetching it',
+    async (_label, fontUrl) => {
+      const http = httpReturning("font-family: 'Inter';");
+
+      await expect(
+        assertFontIsAvailable(http, brand({ fontUrl })),
+      ).rejects.toThrow(BadRequestException);
+      expect(http.get).not.toHaveBeenCalled();
+    },
+  );
+
   it('makes no request without both a url and a family', async () => {
     const http = httpReturning('');
 

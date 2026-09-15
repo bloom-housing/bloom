@@ -2,11 +2,26 @@ import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Logger } from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { firstValueFrom } from 'rxjs';
-import { BrandDTO } from '../dtos/jurisdictions/brand.dto';
+import { BrandDTO, FONT_HOSTS } from '../dtos/jurisdictions/brand.dto';
 
 const FONT_TIMEOUT_MS = 5000;
 
 const logger = new Logger('FontAvailability');
+
+const usableFontUrl = (value: string): boolean => {
+  try {
+    const url = new URL(value);
+    return (
+      url.protocol === 'https:' &&
+      FONT_HOSTS.includes(url.hostname) &&
+      !url.port &&
+      !url.username &&
+      !url.password
+    );
+  } catch {
+    return false;
+  }
+};
 
 export const assertFontIsAvailable = async (
   http: HttpService,
@@ -16,6 +31,12 @@ export const assertFontIsAvailable = async (
     (family): family is string => !!family,
   );
   if (!brand?.fontUrl || !families.length) return;
+
+  if (!usableFontUrl(brand.fontUrl)) {
+    throw new BadRequestException(
+      `${brand.fontUrl} is not a usable google fonts url`,
+    );
+  }
 
   let css: string;
   try {
