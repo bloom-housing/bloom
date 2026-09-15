@@ -27,18 +27,17 @@ export const assertFontIsAvailable = async (
     );
     css = String(response.data);
   } catch (error) {
-    if ((error as AxiosError).response) {
+    const status = (error as AxiosError).response?.status;
+    if (status && status < 500) {
       throw new BadRequestException(
-        `${brand.fontUrl} does not serve a font: ${
-          (error as AxiosError).response.status
-        }`,
+        `${brand.fontUrl} does not serve a font: ${status}`,
       );
     }
 
     logger.warn(
-      `could not reach ${brand.fontUrl} to confirm ${families.join(' and ')}: ${
-        error.message
-      }`,
+      `could not reach ${brand.fontUrl} to confirm ${families.join(
+        ' and ',
+      )}: ${String((error as Error)?.message ?? error)}`,
     );
     return;
   }
