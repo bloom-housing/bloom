@@ -12,7 +12,10 @@ export const assertFontIsAvailable = async (
   http: HttpService,
   brand?: BrandDTO | null,
 ): Promise<void> => {
-  if (!brand?.fontUrl || !brand.fontFamily) return;
+  const families = [brand?.fontFamily, brand?.headingFontFamily].filter(
+    (family): family is string => !!family,
+  );
+  if (!brand?.fontUrl || !families.length) return;
 
   let css: string;
   try {
@@ -33,14 +36,19 @@ export const assertFontIsAvailable = async (
     }
 
     logger.warn(
-      `could not reach ${brand.fontUrl} to confirm ${brand.fontFamily}: ${error.message}`,
+      `could not reach ${brand.fontUrl} to confirm ${families.join(' and ')}: ${
+        error.message
+      }`,
     );
     return;
   }
 
-  if (!css.includes(`font-family: '${brand.fontFamily}'`)) {
+  const missing = families.filter(
+    (family) => !css.includes(`font-family: '${family}'`),
+  );
+  if (missing.length) {
     throw new BadRequestException(
-      `${brand.fontUrl} does not serve the font family ${brand.fontFamily}`,
+      `${brand.fontUrl} does not serve the font family ${missing.join(' or ')}`,
     );
   }
 };

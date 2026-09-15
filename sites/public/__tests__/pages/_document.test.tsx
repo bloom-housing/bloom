@@ -251,6 +251,47 @@ describe("_document", () => {
     expect(style).toContain(`--seeds-font-sans: "Playfair Display", system-ui, sans-serif;`)
   })
 
+  it("brands headings with the body font when no heading font is stored", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: "Inter",
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter",
+      })
+    )
+
+    expect(style).toContain(`--seeds-font-sans: "Inter", system-ui, sans-serif;`)
+    expect(style).toContain(`--seeds-font-alt-sans: "Inter", system-ui, sans-serif;`)
+  })
+
+  it("uses a stored heading font for the alt token only", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: "Inter",
+        headingFontFamily: "Playfair Display",
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter&family=Playfair+Display",
+      })
+    )
+
+    expect(style).toContain(`--seeds-font-sans: "Inter", system-ui, sans-serif;`)
+    expect(style).toContain(`--seeds-font-alt-sans: "Playfair Display", system-ui, sans-serif;`)
+  })
+
+  it("drops a heading font that could break out of the style block", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: "Inter",
+        headingFontFamily: `Inter"; } body { display: none } .x {`,
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter",
+      })
+    )
+
+    expect(style).not.toContain("display: none")
+    expect(style).toContain(`--seeds-font-alt-sans: "Inter", system-ui, sans-serif;`)
+  })
+
   it("links no font when none is stored", async () => {
     const { children } = await headChildrenFor(jurisdictionWith({ primary }))
 

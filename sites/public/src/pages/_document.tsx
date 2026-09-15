@@ -21,6 +21,7 @@ interface BrandDocumentProps {
   secondary: BrandRamp | null
   faviconUrl: string | null
   fontFamily: string | null
+  headingFontFamily: string | null
   fontUrl: string | null
 }
 
@@ -64,15 +65,25 @@ const rampVariables = (namespace: string, name: string, ramp: BrandRamp) =>
     .join("\n")
 
 // Exported for tests: <Html> cannot render outside Next's document context.
-export const brandStyleBlock = ({ primary, secondary, fontFamily }: BrandDocumentProps): string => {
-  if (!primary && !fontFamily) return ""
+const fontStack = (family: string) => `"${family}", system-ui, sans-serif`
+
+export const brandStyleBlock = ({
+  primary,
+  secondary,
+  fontFamily,
+  headingFontFamily,
+}: BrandDocumentProps): string => {
+  if (!primary && !fontFamily && !headingFontFamily) return ""
+
+  // Headings, buttons and tabs read the alt token.
+  const headingFont = headingFontFamily ?? fontFamily
 
   const variables = [
     primary ? rampVariables("seeds", "primary", primary) : "",
     primary && secondary ? rampVariables("seeds", "secondary", secondary) : "",
     primary ? rampVariables("bloom", "primary", primary) : "",
-    // The fallback stack keeps text readable while the font loads.
-    fontFamily ? `--seeds-font-sans: "${fontFamily}", system-ui, sans-serif;` : "",
+    fontFamily ? `--seeds-font-sans: ${fontStack(fontFamily)};` : "",
+    headingFont ? `--seeds-font-alt-sans: ${fontStack(headingFont)};` : "",
   ]
     .filter(Boolean)
     .join("\n")
@@ -99,6 +110,7 @@ export default class BloomDocument extends Document<BrandDocumentProps> {
       secondary: hexOnly(brand?.secondary),
       faviconUrl: brand?.faviconUrl ?? null,
       fontFamily: fontFamilyOnly(brand?.fontFamily),
+      headingFontFamily: fontFamilyOnly(brand?.headingFontFamily),
       fontUrl: googleFontUrlOnly(brand?.fontUrl),
     }
   }
