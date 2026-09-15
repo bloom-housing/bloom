@@ -19,13 +19,12 @@ export const brandAssetUrl = (
     return undefined;
   }
 
-  if (process.env.USE_S3_FILE_STORAGE === 'TRUE') {
-    const bucket = process.env.S3_PUBLIC_BUCKET;
-    const region = process.env.S3_REGION;
-    if (!bucket || !region) {
-      console.error(
-        'USE_S3_FILE_STORAGE is TRUE but S3_PUBLIC_BUCKET or S3_REGION is not set',
-      );
+  // A configured public bucket is what makes the api serve uploads from s3.
+  const bucket = process.env.S3_PUBLIC_BUCKET;
+  const region = process.env.S3_REGION;
+  if (bucket) {
+    if (!region) {
+      console.error('S3_PUBLIC_BUCKET is set but S3_REGION is not');
       return undefined;
     }
     return `https://${bucket}.s3.${region}.amazonaws.com/${fileId}`;
