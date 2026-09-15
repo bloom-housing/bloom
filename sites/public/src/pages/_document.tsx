@@ -12,7 +12,7 @@ const HEX_COLOR = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/
 // The family is interpolated into the style block, so it is held to letters, digits, spaces and
 // hyphens.
 const FONT_FAMILY = /^[A-Za-z0-9][A-Za-z0-9 -]{0,63}$/
-const FONT_HOSTS = ["fonts.googleapis.com", "fonts.gstatic.com"]
+const FONT_HOSTS = ["fonts.googleapis.com"]
 
 type BrandRamp = Partial<BrandRampDTO>
 

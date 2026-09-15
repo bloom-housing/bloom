@@ -11,7 +11,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { HEX_COLOR } from '../../utilities/brand-ramp';
 
-export const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
+export const FONT_HOSTS = ['fonts.googleapis.com'];
 
 const toUpperHex = ({ value }: { value: unknown }) =>
   typeof value === 'string' ? value.toUpperCase() : value;
