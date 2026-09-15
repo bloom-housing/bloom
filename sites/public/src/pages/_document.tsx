@@ -49,7 +49,13 @@ const googleFontUrlOnly = (value?: string): string | null => {
 
   try {
     const url = new URL(value)
-    return url.protocol === "https:" && FONT_HOSTS.includes(url.hostname) ? value : null
+    const usable =
+      url.protocol === "https:" &&
+      FONT_HOSTS.includes(url.hostname) &&
+      !url.port &&
+      !url.username &&
+      !url.password
+    return usable ? value : null
   } catch {
     return null
   }

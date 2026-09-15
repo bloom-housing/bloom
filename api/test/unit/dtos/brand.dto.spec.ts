@@ -96,6 +96,15 @@ describe('BrandDTO', () => {
     ).not.toHaveLength(0);
   });
 
+  it('rejects a font url carrying credentials', async () => {
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        fontUrl: 'https://user:pass@fonts.googleapis.com/css2?family=Inter',
+      }),
+    ).not.toHaveLength(0);
+  });
+
   it('accepts both google font hosts over https', async () => {
     expect(
       await errorsOf({

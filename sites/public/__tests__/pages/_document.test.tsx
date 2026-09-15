@@ -314,6 +314,19 @@ describe("_document", () => {
     ).toBe(false)
   })
 
+  it.each([
+    ["a port", "https://fonts.googleapis.com:8080/css2?family=Inter"],
+    ["credentials", "https://user:pass@fonts.googleapis.com/css2?family=Inter"],
+  ])("drops a font url carrying %s", async (_label, fontUrl) => {
+    const { children } = await headChildrenFor(
+      jurisdictionWith({ primary, fontFamily: "Inter", fontUrl })
+    )
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "stylesheet")
+    ).toBe(false)
+  })
+
   it("drops a family name that could break out of the style block", async () => {
     const style = await styleFor(
       jurisdictionWith({
