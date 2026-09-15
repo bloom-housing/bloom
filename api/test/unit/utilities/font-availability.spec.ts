@@ -113,16 +113,30 @@ describe('assertFontIsAvailable', () => {
     },
   );
 
-  it('makes no request without both a url and a family', async () => {
+  it('accepts a brand with no font at all', async () => {
     const http = httpReturning('');
 
-    await assertFontIsAvailable(http, brand({ fontUrl: undefined }));
     await assertFontIsAvailable(
       http,
-      brand({ fontFamily: undefined, headingFontFamily: undefined }),
+      brand({ fontUrl: undefined, fontFamily: undefined }),
     );
     await assertFontIsAvailable(http, null);
 
+    expect(http.get).not.toHaveBeenCalled();
+  });
+
+  it('rejects half a font', async () => {
+    const http = httpReturning("font-family: 'Inter';");
+
+    await expect(
+      assertFontIsAvailable(http, brand({ fontUrl: undefined })),
+    ).rejects.toThrow(BadRequestException);
+    await expect(
+      assertFontIsAvailable(
+        http,
+        brand({ fontFamily: undefined, headingFontFamily: undefined }),
+      ),
+    ).rejects.toThrow(BadRequestException);
     expect(http.get).not.toHaveBeenCalled();
   });
 });
