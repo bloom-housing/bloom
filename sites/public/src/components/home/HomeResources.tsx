@@ -39,24 +39,6 @@ export const HomeResources = (props: HomeResourcesProps) => {
     enableCustomListingNotifications ||
     (props.jurisdiction && props.jurisdiction.notificationsSignUpUrl)
 
-  const enabled = []
-
-  if (enableAdditionalResources) {
-    enabled.push(enableAdditionalResources)
-  }
-  if (enableGetAssistanceCard) {
-    enabled.push(enableGetAssistanceCard)
-  }
-  if (enableResourcesCard) {
-    enabled.push(enableResourcesCard)
-  }
-  if (enableSeeOurData) {
-    enabled.push(enableSeeOurData)
-  }
-  if (showNotificationsCard) {
-    enabled.push(showNotificationsCard)
-  }
-
   const additionalResourcesCard = (
     <Grid.Cell>
       <BloomCard
@@ -141,7 +123,7 @@ export const HomeResources = (props: HomeResourcesProps) => {
               href={
                 enableCustomListingNotifications
                   ? "/account/notifications"
-                  : props.jurisdiction.notificationsSignUpUrl
+                  : props.jurisdiction?.notificationsSignUpUrl
               }
               variant="primary-outlined"
               size={"sm"}
@@ -216,36 +198,34 @@ export const HomeResources = (props: HomeResourcesProps) => {
     </Grid.Cell>
   )
 
-  const cards = (
-    <>
-      {enableGetAssistanceCard && getAssistanceCard}
-      {showNotificationsCard && notificationsCard}
-      {enableAdditionalResources && additionalResourcesCard}
-      {enableResourcesCard && resourcesCard}
-      {enableSeeOurData && seeOurDataCard}
-    </>
-  )
+  const cards = []
+
+  // order is intentional for design purposes
+  if (enableGetAssistanceCard) {
+    cards.push(getAssistanceCard)
+  }
+  if (showNotificationsCard) {
+    cards.push(notificationsCard)
+  }
+  if (enableAdditionalResources) {
+    cards.push(additionalResourcesCard)
+  }
+  if (enableResourcesCard) {
+    cards.push(resourcesCard)
+  }
+  if (enableSeeOurData) {
+    cards.push(seeOurDataCard)
+  }
 
   let gridLayout = <></>
 
-  if (enabled.length === 1) {
+  if (cards.length > 0) {
     gridLayout = (
       <Grid spacing="lg">
-        <Grid.Row columns={1}>{cards}</Grid.Row>
-      </Grid>
-    )
-  } else if (enabled.length % 2 === 0) {
-    gridLayout = (
-      <Grid spacing="lg">
-        <Grid.Row columns={2}>{cards}</Grid.Row>
-      </Grid>
-    )
-  } else if (enabled.length > 0) {
-    gridLayout = (
-      <Grid spacing="lg">
-        <Grid.Row columns={3}>{cards}</Grid.Row>
+        <Grid.Row columns={cards.length % 2 === 0 || cards.length === 1 ? 2 : 3}>{cards}</Grid.Row>
       </Grid>
     )
   }
+
   return gridLayout
 }
