@@ -311,6 +311,16 @@ const UnitForm = ({
       delete data.accessibilityPriorityType
     }
 
+    if (!data.monthlyIncomeMin) {
+      delete data.monthlyIncomeMin
+    }
+    if (!data.monthlyRent) {
+      delete data.monthlyRent
+    }
+    if (!data.monthlyRentAsPercentOfIncome) {
+      delete data.monthlyRentAsPercentOfIncome
+    }
+
     if (data.unitTypes?.id) {
       const type = unitTypes?.find((type) => type.id === data.unitTypes.id)
       data.unitTypes = type
