@@ -555,7 +555,8 @@ describe('Testing jurisdiction service', () => {
 
     beforeEach(() => {
       process.env.CLOUDINARY_CLOUD_NAME = 'exygy';
-      delete process.env.USE_S3_FILE_STORAGE;
+      delete process.env.S3_PUBLIC_BUCKET;
+      delete process.env.S3_REGION;
     });
 
     it('derives the missing ramp values at read time', async () => {
@@ -612,8 +613,7 @@ describe('Testing jurisdiction service', () => {
       );
     });
 
-    it('builds S3 urls when that backend is configured', async () => {
-      process.env.USE_S3_FILE_STORAGE = 'TRUE';
+    it('builds S3 urls when a public bucket is configured', async () => {
       process.env.S3_PUBLIC_BUCKET = 'bloom-public';
       process.env.S3_REGION = 'us-west-2';
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(

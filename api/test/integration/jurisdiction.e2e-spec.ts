@@ -134,11 +134,15 @@ describe('Jurisdiction Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
 
-      expect(res.body.brand.primary.base).toEqual('#77AA33');
-      expect(res.body.brand.primary.dark).toMatch(/^#[0-9A-F]{6}$/);
-      expect(res.body.brand.primary.darker).toMatch(/^#[0-9A-F]{6}$/);
-      expect(res.body.brand.primary.light).toMatch(/^#[0-9A-F]{6}$/);
-      expect(res.body.brand.primary.lighter).toMatch(/^#[0-9A-F]{6}$/);
+      // Computed with python colorsys rather than with completeRamp, so the endpoint is checked
+      // against the intended deltas rather than against itself.
+      expect(res.body.brand.primary).toEqual({
+        base: '#77AA33',
+        dark: '#69962D',
+        darker: '#4C6D21',
+        light: '#EFF7E4',
+        lighter: '#F8FCF4',
+      });
       expect(res.headers['cache-control']).toContain('s-maxage');
 
       const stored = await prisma.jurisdictions.findUnique({
