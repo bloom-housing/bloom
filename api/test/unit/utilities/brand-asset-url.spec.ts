@@ -3,7 +3,8 @@ import { brandAssetUrl } from '../../../src/utilities/brand-asset-url';
 describe('brandAssetUrl', () => {
   beforeEach(() => {
     process.env.CLOUDINARY_CLOUD_NAME = 'exygy';
-    delete process.env.USE_S3_FILE_STORAGE;
+    delete process.env.S3_PUBLIC_BUCKET;
+    delete process.env.S3_REGION;
     jest.restoreAllMocks();
   });
 
@@ -38,8 +39,7 @@ describe('brandAssetUrl', () => {
     );
   });
 
-  it('builds an S3 url when that backend is configured', () => {
-    process.env.USE_S3_FILE_STORAGE = 'TRUE';
+  it('builds an S3 url when a public bucket is configured', () => {
     process.env.S3_PUBLIC_BUCKET = 'bloom-public';
     process.env.S3_REGION = 'us-west-2';
 
@@ -48,9 +48,8 @@ describe('brandAssetUrl', () => {
     );
   });
 
-  it('returns no url and logs when S3 is selected but not configured', () => {
-    process.env.USE_S3_FILE_STORAGE = 'TRUE';
-    delete process.env.S3_PUBLIC_BUCKET;
+  it('returns no url and logs when the bucket has no region', () => {
+    process.env.S3_PUBLIC_BUCKET = 'bloom-public';
     delete process.env.S3_REGION;
     const error = jest.spyOn(console, 'error').mockImplementation();
 
