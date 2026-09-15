@@ -47,6 +47,21 @@ describe('assertFontIsAvailable', () => {
     ).rejects.toThrow(BadRequestException);
   });
 
+  it('accepts when google itself is failing', async () => {
+    await expect(
+      assertFontIsAvailable(
+        httpFailing({ response: { status: 503 } }),
+        brand(),
+      ),
+    ).resolves.toBeUndefined();
+  });
+
+  it('survives an error that is not an object', async () => {
+    await expect(
+      assertFontIsAvailable(httpFailing('socket hang up'), brand()),
+    ).resolves.toBeUndefined();
+  });
+
   it('accepts when the font host cannot be reached', async () => {
     const unreachable = { message: 'getaddrinfo ENOTFOUND' };
 
