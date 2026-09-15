@@ -13,7 +13,6 @@ locals {
     S3_REGION                   = var.aws_region
     S3_PRIVATE_BUCKET           = aws_s3_bucket.private.id
     S3_PUBLIC_BUCKET            = aws_s3_bucket.public.id
-    USE_S3_FILE_STORAGE         = "TRUE"
     OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317"
     SMS_PROVIDER                = var.bloom_api_sms_config == null ? "" : "aws"
     AWS_SMS_REGION              = var.bloom_api_sms_config == null ? "" : var.aws_region
