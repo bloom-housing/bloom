@@ -81,6 +81,36 @@ describe('BrandDTO', () => {
     );
   });
 
+  it('rejects a font url that is not a google fonts host', async () => {
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        fontUrl: 'https://fonts.example.com/css2?family=Inter',
+      }),
+    ).not.toHaveLength(0);
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        fontUrl: 'http://fonts.googleapis.com/css2?family=Inter',
+      }),
+    ).not.toHaveLength(0);
+  });
+
+  it('accepts both google font hosts over https', async () => {
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        fontUrl: 'https://fonts.googleapis.com/css2?family=Inter&display=swap',
+      }),
+    ).toHaveLength(0);
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        fontUrl: 'https://fonts.gstatic.com/s/inter/v20/font.woff2',
+      }),
+    ).toHaveLength(0);
+  });
+
   it('rejects a font url that is not a url', async () => {
     expect(
       await errorsOf({ primary: { base: '#773E98' }, fontUrl: 'not a url' }),

@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import { RecaptchaEnterpriseServiceClient } from '@google-cloud/recaptcha-enterprise';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -78,6 +79,7 @@ describe('Testing auth service', () => {
         SendGridService,
         TranslationService,
         JurisdictionService,
+        { provide: HttpService, useValue: { get: jest.fn() } },
         {
           provide: SmsService,
           useValue: {

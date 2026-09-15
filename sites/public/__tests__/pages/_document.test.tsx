@@ -225,6 +225,68 @@ describe("_document", () => {
     ).toBe(false)
   })
 
+  it("preloads the font stylesheet before linking it", async () => {
+    const fontUrl = "https://fonts.googleapis.com/css2?family=Inter&display=swap"
+    const { children } = await headChildrenFor(
+      jurisdictionWith({ primary, fontFamily: "Inter", fontUrl })
+    )
+
+    const fontLinks = children.filter(
+      (child) => React.isValidElement(child) && child.props.href === fontUrl
+    ) as React.ReactElement[]
+
+    expect(fontLinks.map((link) => link.props.rel)).toEqual(["preload", "stylesheet"])
+    expect(fontLinks[0].props.as).toEqual("style")
+  })
+
+  it("sets the font family with a fallback stack", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: "Playfair Display",
+        fontUrl: "https://fonts.googleapis.com/css2?family=Playfair+Display",
+      })
+    )
+
+    expect(style).toContain(`--seeds-font-sans: "Playfair Display", system-ui, sans-serif;`)
+  })
+
+  it("links no font when none is stored", async () => {
+    const { children } = await headChildrenFor(jurisdictionWith({ primary }))
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "stylesheet")
+    ).toBe(false)
+  })
+
+  it("drops a font url that is not a google host", async () => {
+    const { children } = await headChildrenFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: "Inter",
+        fontUrl: "https://fonts.example.test/css2?family=Inter",
+      })
+    )
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "stylesheet")
+    ).toBe(false)
+  })
+
+  it("drops a family name that could break out of the style block", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: `Inter"; } body { display: none } .x {`,
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter",
+      })
+    )
+
+    expect(style).not.toContain("display: none")
+    expect(style).not.toContain("--seeds-font-sans")
+    expect(style).toContain("--seeds-color-primary: #773E98;")
+  })
+
   it("forwards the request so the API sees the visitor's address", async () => {
     await styleFor(jurisdictionWith({ primary }))
 

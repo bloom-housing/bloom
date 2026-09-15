@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
@@ -42,7 +43,11 @@ describe('Testing jurisdiction service', () => {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [JurisdictionService, PrismaService],
+      providers: [
+        JurisdictionService,
+        PrismaService,
+        { provide: HttpService, useValue: { get: jest.fn() } },
+      ],
     }).compile();
 
     service = module.get<JurisdictionService>(JurisdictionService);
