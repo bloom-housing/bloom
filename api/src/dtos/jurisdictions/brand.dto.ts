@@ -11,6 +11,8 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { HEX_COLOR } from '../../utilities/brand-ramp';
 
+export const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
+
 const toUpperHex = ({ value }: { value: unknown }) =>
   typeof value === 'string' ? value.toUpperCase() : value;
 
@@ -74,7 +76,14 @@ export class BrandDTO {
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsUrl({}, { groups: [ValidationsGroupsEnum.default] })
+  @IsUrl(
+    {
+      protocols: ['https'],
+      require_protocol: true,
+      host_whitelist: FONT_HOSTS,
+    },
+    { groups: [ValidationsGroupsEnum.default] },
+  )
   @ApiPropertyOptional({
     example: 'https://fonts.googleapis.com/css2?family=Inter&display=swap',
   })
