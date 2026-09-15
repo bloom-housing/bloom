@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { HttpService } from '@nestjs/axios';
+import { of, throwError } from 'rxjs';
 import { INestApplication } from '@nestjs/common';
 import { LanguagesEnum, NeighborhoodAmenitiesEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
@@ -21,9 +23,19 @@ describe('Jurisdiction Controller Tests', () => {
   let cookies = '';
 
   beforeAll(async () => {
+    // The font check reads css from google; the responses are stubbed so the suite makes no
+    // outbound request.
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(HttpService)
+      .useValue({
+        get: (url: string) =>
+          url.includes('NotARealFont')
+            ? throwError(() => ({ response: { status: 400 } }))
+            : of({ data: "@font-face { font-family: 'Inter'; }" }),
+      })
+      .compile();
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
@@ -113,6 +125,17 @@ describe('Jurisdiction Controller Tests', () => {
       ...extra,
     });
 
+    // The create path runs the same font and asset checks, so it is exercised too.
+    const post = (extra = {}) => {
+      const { id, ...body } = updateBody(randomUUID(), extra);
+      void id;
+      return request(app.getHttpServer())
+        .post('/jurisdictions')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .send(body);
+    };
+
     const put = (id: string, extra = {}) =>
       request(app.getHttpServer())
         .put(`/jurisdictions/${id}`)
@@ -178,6 +201,93 @@ describe('Jurisdiction Controller Tests', () => {
       await put(jurisdiction.id, { brand: { primary: {} } }).expect(400);
       await put(jurisdiction.id, {
         brand: { primary: { base: '#773E98' }, secondary: {} },
+      }).expect(400);
+    });
+
+    it('rejects a font url that is not hosted by google', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'Inter',
+          fontUrl: 'https://fonts.example.test/css2?family=Inter',
+        },
+      }).expect(400);
+      await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'Inter',
+          fontUrl: 'http://fonts.googleapis.com/css2?family=Inter',
+        },
+      }).expect(400);
+    });
+
+    it('rejects a font family google does not serve', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'NotARealFont',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=NotARealFont',
+        },
+      }).expect(400);
+    });
+
+    it('stores a google font the css confirms', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      const res = await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'Inter',
+          fontUrl:
+            'https://fonts.googleapis.com/css2?family=Inter&display=swap',
+        },
+      }).expect(200);
+
+      expect(res.body.brand.fontFamily).toEqual('Inter');
+      expect(res.body.brand.fontUrl).toEqual(
+        'https://fonts.googleapis.com/css2?family=Inter&display=swap',
+      );
+    });
+
+    it('runs the font check when creating a jurisdiction', async () => {
+      await post({
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'NotARealFont',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=NotARealFont',
+        },
+      }).expect(400);
+
+      await post({
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'Inter',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=Inter',
+        },
+      }).expect(201);
+    });
+
+    it('rejects a gstatic url, which serves font files rather than stylesheets', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'Inter',
+          fontUrl: 'https://fonts.gstatic.com/s/inter/v20/font.woff2',
+        },
       }).expect(400);
     });
 

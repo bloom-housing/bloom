@@ -11,6 +11,16 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { HEX_COLOR } from '../../utilities/brand-ramp';
 
+export const FONT_HOSTS = ['fonts.googleapis.com'];
+
+// Without a display value google's css omits font-display, so the browser hides text for up to
+// three seconds. An explicit choice is left alone.
+const withFontDisplay = ({ value }: { value: unknown }) => {
+  if (typeof value !== 'string' || /[?&]display=/.test(value)) return value;
+
+  return `${value}${value.includes('?') ? '&' : '?'}display=swap`;
+};
+
 const toUpperHex = ({ value }: { value: unknown }) =>
   typeof value === 'string' ? value.toUpperCase() : value;
 
@@ -74,7 +84,22 @@ export class BrandDTO {
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsUrl({}, { groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({ example: 'Playfair Display' })
+  headingFontFamily?: string;
+
+  @Expose()
+  @Transform(withFontDisplay)
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsUrl(
+    {
+      protocols: ['https'],
+      require_protocol: true,
+      host_whitelist: FONT_HOSTS,
+      disallow_auth: true,
+    },
+    { groups: [ValidationsGroupsEnum.default] },
+  )
   @ApiPropertyOptional({
     example: 'https://fonts.googleapis.com/css2?family=Inter&display=swap',
   })
