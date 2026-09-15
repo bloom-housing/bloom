@@ -76,6 +76,12 @@ export class BrandDTO {
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({ example: 'Playfair Display' })
+  headingFontFamily?: string;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsUrl(
     {
       protocols: ['https'],
