@@ -125,6 +125,17 @@ describe('Jurisdiction Controller Tests', () => {
       ...extra,
     });
 
+    // The create path runs the same font and asset checks, so it is exercised too.
+    const post = (extra = {}) => {
+      const { id, ...body } = updateBody(randomUUID(), extra);
+      void id;
+      return request(app.getHttpServer())
+        .post('/jurisdictions')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .send(body);
+    };
+
     const put = (id: string, extra = {}) =>
       request(app.getHttpServer())
         .put(`/jurisdictions/${id}`)
@@ -246,6 +257,38 @@ describe('Jurisdiction Controller Tests', () => {
       expect(res.body.brand.fontUrl).toEqual(
         'https://fonts.googleapis.com/css2?family=Inter&display=swap',
       );
+    });
+
+    it('runs the font check when creating a jurisdiction', async () => {
+      await post({
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'NotARealFont',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=NotARealFont',
+        },
+      }).expect(400);
+
+      await post({
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'Inter',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=Inter',
+        },
+      }).expect(201);
+    });
+
+    it('rejects a gstatic url, which serves font files rather than stylesheets', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'Inter',
+          fontUrl: 'https://fonts.gstatic.com/s/inter/v20/font.woff2',
+        },
+      }).expect(400);
     });
 
     it('rejects a branding asset id with no asset', async () => {
