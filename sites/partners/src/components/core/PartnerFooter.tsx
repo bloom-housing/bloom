@@ -30,9 +30,11 @@ const PartnersFooter = () => {
           </LocalizedLink>
         ))}
       </FooterNav>
-      <FooterSection className="bg-black" small>
-        <ExygyFooter />
-      </FooterSection>
+      {footerContent.includeExygyFooter && (
+        <FooterSection className="bg-black" small>
+          <ExygyFooter />
+        </FooterSection>
+      )}
     </SiteFooter>
   )
 }
