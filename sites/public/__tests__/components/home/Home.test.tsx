@@ -5,8 +5,8 @@ import {
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { Home } from "../../src/components/home/Home"
-import { render, screen, mockNextRouter } from "../testUtils"
+import { Home } from "../../../src/components/home/Home"
+import { render, screen, mockNextRouter } from "../../testUtils"
 
 const server = setupServer()
 
