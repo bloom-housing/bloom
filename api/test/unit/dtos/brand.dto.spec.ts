@@ -96,6 +96,27 @@ describe('BrandDTO', () => {
     ).not.toHaveLength(0);
   });
 
+  it('defaults a font url to display=swap', async () => {
+    expect(
+      toBrand({
+        primary: { base: '#773E98' },
+        fontUrl: 'https://fonts.googleapis.com/css2?family=Inter',
+      }).fontUrl,
+    ).toEqual('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+  });
+
+  it('leaves an explicit display value alone', async () => {
+    expect(
+      toBrand({
+        primary: { base: '#773E98' },
+        fontUrl:
+          'https://fonts.googleapis.com/css2?family=Inter&display=optional',
+      }).fontUrl,
+    ).toEqual(
+      'https://fonts.googleapis.com/css2?family=Inter&display=optional',
+    );
+  });
+
   it('rejects a font url carrying credentials', async () => {
     expect(
       await errorsOf({
