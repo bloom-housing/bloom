@@ -299,6 +299,36 @@ describe("_document", () => {
     expect(style).toContain("--seeds-color-primary: #773E98;")
   })
 
+  it.each([
+    ["a trailing space", "Inter "],
+    ["a leading hyphen", "-Inter"],
+    ["65 characters", "A".repeat(65)],
+    ["a non-ascii character", "Söhne"],
+  ])("drops a family name with %s", async (_label, fontFamily) => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily,
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter",
+      })
+    )
+
+    expect(style).not.toContain("--seeds-font-sans")
+  })
+
+  it("keeps a family name at the 64 character limit", async () => {
+    const fontFamily = "A".repeat(64)
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily,
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter",
+      })
+    )
+
+    expect(style).toContain(`--seeds-font-sans: "${fontFamily}", system-ui, sans-serif;`)
+  })
+
   it("links no font when none is stored", async () => {
     const { children } = await headChildrenFor(jurisdictionWith({ primary }))
 
