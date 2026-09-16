@@ -66,7 +66,10 @@ const UnitForm = ({
 
   const amiChartsOptions = useMemo(() => {
     if (!amiCharts) return []
-    return arrayToFormOptions<AmiChart>(amiCharts, "name", "id")
+    return arrayToFormOptions<AmiChart>(amiCharts, "name", "id").sort((a, b) => {
+      if (a.label < b.label) return 1
+      return -1
+    })
   }, [amiCharts])
 
   const unitTypesOptions = useMemo(() => {
