@@ -8451,6 +8451,9 @@ export interface BrandDTO {
   fontUrl?: string
 
   /**  */
+  tokens?: object
+
+  /**  */
   logoUrl?: string
 
   /**  */

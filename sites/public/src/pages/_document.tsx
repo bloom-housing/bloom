@@ -14,6 +14,15 @@ const HEX_COLOR = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/
 const FONT_FAMILY = /^[A-Za-z0-9](?:[A-Za-z0-9 -]{0,62}[A-Za-z0-9])?$/
 const FONT_HOSTS = ["fonts.googleapis.com"]
 
+// Mirrors the api allowlist: a stored token is re-checked here the way the colors are
+const LENGTH_OR_SEEDS_VAR = /^(0|[0-9]+(\.[0-9]+)?(px|rem|em|%)|var\(--seeds-[a-z0-9-]+\))$/
+const TOKEN_GRAMMARS: Record<string, RegExp> = {
+  "--button-border-radius-sm": LENGTH_OR_SEEDS_VAR,
+  "--button-border-radius-md": LENGTH_OR_SEEDS_VAR,
+  "--button-border-radius-lg": LENGTH_OR_SEEDS_VAR,
+  "--seeds-font-serif": FONT_FAMILY,
+}
+
 type BrandRamp = Partial<BrandRampDTO>
 
 interface BrandDocumentProps {
@@ -23,6 +32,7 @@ interface BrandDocumentProps {
   fontFamily: string | null
   headingFontFamily: string | null
   fontUrl: string | null
+  tokens: Record<string, string>
 }
 
 const rampShades: (keyof BrandRamp)[] = ["base", "dark", "darker", "light", "lighter"]
@@ -72,15 +82,28 @@ const rampVariables = (namespace: string, name: string, ramp: BrandRamp) =>
     .join("\n")
 
 // Exported for tests: <Html> cannot render outside Next's document context.
-const fontStack = (family: string) => `"${family}", system-ui, sans-serif`
+// The fallbacks live in overrides.scss so the stacks stay in css next to the rest of the styling.
+const fontStack = (family: string, slot: "sans" | "alt-sans" | "serif") =>
+  `"${family}", var(--brand-font-fallback-${slot})`
+
+const allowlistedTokens = (tokens?: object): Record<string, string> =>
+  Object.fromEntries(
+    Object.entries(tokens ?? {}).filter(
+      ([name, value]) => typeof value === "string" && TOKEN_GRAMMARS[name]?.test(value)
+    )
+  )
+
+const tokenValue = (name: string, value: string) =>
+  name === "--seeds-font-serif" ? fontStack(value, "serif") : value
 
 export const brandStyleBlock = ({
   primary,
   secondary,
   fontFamily,
   headingFontFamily,
+  tokens,
 }: BrandDocumentProps): string => {
-  if (!primary && !fontFamily && !headingFontFamily) return ""
+  if (!primary && !fontFamily && !headingFontFamily && !Object.keys(tokens).length) return ""
 
   // Headings, buttons and tabs read the alt token.
   const headingFont = headingFontFamily ?? fontFamily
@@ -89,8 +112,9 @@ export const brandStyleBlock = ({
     primary ? rampVariables("seeds", "primary", primary) : "",
     primary && secondary ? rampVariables("seeds", "secondary", secondary) : "",
     primary ? rampVariables("bloom", "primary", primary) : "",
-    fontFamily ? `--seeds-font-sans: ${fontStack(fontFamily)};` : "",
-    headingFont ? `--seeds-font-alt-sans: ${fontStack(headingFont)};` : "",
+    fontFamily ? `--seeds-font-sans: ${fontStack(fontFamily, "sans")};` : "",
+    headingFont ? `--seeds-font-alt-sans: ${fontStack(headingFont, "alt-sans")};` : "",
+    ...Object.entries(tokens).map(([name, value]) => `${name}: ${tokenValue(name, value)};`),
   ]
     .filter(Boolean)
     .join("\n")
@@ -120,6 +144,7 @@ export default class BloomDocument extends Document<BrandDocumentProps> {
       fontFamily: fontUrl ? fontFamilyOnly(brand?.fontFamily) : null,
       headingFontFamily: fontUrl ? fontFamilyOnly(brand?.headingFontFamily) : null,
       fontUrl,
+      tokens: allowlistedTokens(brand?.tokens),
     }
   }
 
