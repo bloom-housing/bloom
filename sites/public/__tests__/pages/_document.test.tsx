@@ -248,7 +248,9 @@ describe("_document", () => {
       })
     )
 
-    expect(style).toContain(`--seeds-font-sans: "Playfair Display", system-ui, sans-serif;`)
+    expect(style).toContain(
+      `--seeds-font-sans: "Playfair Display", var(--brand-font-fallback-sans);`
+    )
   })
 
   it("brands headings with the body font when no heading font is stored", async () => {
@@ -260,8 +262,8 @@ describe("_document", () => {
       })
     )
 
-    expect(style).toContain(`--seeds-font-sans: "Inter", system-ui, sans-serif;`)
-    expect(style).toContain(`--seeds-font-alt-sans: "Inter", system-ui, sans-serif;`)
+    expect(style).toContain(`--seeds-font-sans: "Inter", var(--brand-font-fallback-sans);`)
+    expect(style).toContain(`--seeds-font-alt-sans: "Inter", var(--brand-font-fallback-alt-sans);`)
   })
 
   it("uses a stored heading font for the alt token only", async () => {
@@ -274,8 +276,10 @@ describe("_document", () => {
       })
     )
 
-    expect(style).toContain(`--seeds-font-sans: "Inter", system-ui, sans-serif;`)
-    expect(style).toContain(`--seeds-font-alt-sans: "Playfair Display", system-ui, sans-serif;`)
+    expect(style).toContain(`--seeds-font-sans: "Inter", var(--brand-font-fallback-sans);`)
+    expect(style).toContain(
+      `--seeds-font-alt-sans: "Playfair Display", var(--brand-font-fallback-alt-sans);`
+    )
   })
 
   it("drops a heading font that could break out of the style block", async () => {
@@ -289,7 +293,7 @@ describe("_document", () => {
     )
 
     expect(style).not.toContain("display: none")
-    expect(style).toContain(`--seeds-font-alt-sans: "Inter", system-ui, sans-serif;`)
+    expect(style).toContain(`--seeds-font-alt-sans: "Inter", var(--brand-font-fallback-alt-sans);`)
   })
 
   it("sets no font variable when the family has no stylesheet", async () => {
@@ -326,7 +330,45 @@ describe("_document", () => {
       })
     )
 
-    expect(style).toContain(`--seeds-font-sans: "${fontFamily}", system-ui, sans-serif;`)
+    expect(style).toContain(`--seeds-font-sans: "${fontFamily}", var(--brand-font-fallback-sans);`)
+  })
+
+  it("emits an allowlisted token", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        tokens: { "--button-border-radius-md": "var(--seeds-rounded-3xl)" },
+      })
+    )
+
+    expect(style).toContain("--button-border-radius-md: var(--seeds-rounded-3xl);")
+  })
+
+  it("gives the serif token its own fallback stack", async () => {
+    const style = await styleFor(
+      jurisdictionWith({ primary, tokens: { "--seeds-font-serif": "Noto Serif" } })
+    )
+
+    expect(style).toContain(`--seeds-font-serif: "Noto Serif", var(--brand-font-fallback-serif);`)
+  })
+
+  it.each([
+    ["a name outside the allowlist", { "--link-text-color": "red" }],
+    ["css that closes the declaration", { "--button-border-radius-md": "0; } body { x: y" }],
+    ["a var reference outside seeds", { "--button-border-radius-md": "var(--bloom-rounded)" }],
+    ["a calc expression", { "--button-border-radius-md": "calc(1rem - 2px)" }],
+  ])("drops %s", async (_label, tokens) => {
+    const style = await styleFor(jurisdictionWith({ primary, tokens }))
+
+    expect(style).toContain("--seeds-color-primary: #773E98;")
+    expect(style).not.toContain("--link-text-color")
+    expect(style).not.toContain("--button-border-radius-md")
+  })
+
+  it("emits a token-only brand", async () => {
+    const style = await styleFor(jurisdictionWith({ tokens: { "--button-border-radius-sm": "0" } }))
+
+    expect(style).toContain("--button-border-radius-sm: 0;")
   })
 
   it("links no font when none is stored", async () => {

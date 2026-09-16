@@ -1,4 +1,10 @@
 :root {
+  // What a brand font falls back to, mirroring the ui-seeds stacks. The document references these
+  // rather than repeating a stack
+  --brand-font-fallback-sans: "Open Sans", Helvetica, Arial, Verdana, sans-serif;
+  --brand-font-fallback-alt-sans: Lato, Helvetica, Arial, Verdana, sans-serif;
+  --brand-font-fallback-serif: "Noto Serif", Georgia, Times, serif;
+
   .seeds-button {
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }

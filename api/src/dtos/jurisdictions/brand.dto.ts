@@ -5,11 +5,13 @@ import {
   IsString,
   IsUrl,
   Matches,
+  Validate,
   ValidateNested,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { HEX_COLOR } from '../../utilities/brand-ramp';
+import { AllowlistedTokens } from '../../validators/allowlisted-tokens';
 
 export const FONT_HOSTS = ['fonts.googleapis.com'];
 
@@ -104,6 +106,17 @@ export class BrandDTO {
     example: 'https://fonts.googleapis.com/css2?family=Inter&display=swap',
   })
   fontUrl?: string;
+
+  @Expose()
+  @Transform(({ obj }) => obj?.tokens)
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @Validate(AllowlistedTokens, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({
+    type: 'object',
+    additionalProperties: { type: 'string' },
+    example: { '--button-border-radius-md': 'var(--seeds-rounded-3xl)' },
+  })
+  tokens?: Record<string, string>;
 
   // Response-only: built from the asset foreign keys at read time.
   @Expose()

@@ -144,6 +144,43 @@ describe('BrandDTO', () => {
     ).not.toHaveLength(0);
   });
 
+  it('accepts an allowlisted token with a valid value', async () => {
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        tokens: {
+          '--button-border-radius-md': 'var(--seeds-rounded-3xl)',
+          '--button-border-radius-sm': '0',
+          '--seeds-font-serif': 'Noto Serif',
+        },
+      }),
+    ).toHaveLength(0);
+  });
+
+  it('rejects a token name outside the allowlist', async () => {
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        tokens: { '--link-text-color': 'var(--seeds-color-primary)' },
+      }),
+    ).not.toHaveLength(0);
+  });
+
+  it.each([
+    ['css that closes the declaration', 'red; } body { display: none } .x {'],
+    ['a var reference outside seeds', 'var(--bloom-color-primary)'],
+    ['a calc expression', 'calc(var(--seeds-s3) - 2px)'],
+    ['multi-value shorthand', 'var(--seeds-s4) var(--seeds-s3)'],
+    ['a url', 'url(https://evil.test/x.png)'],
+  ])('rejects %s as a token value', async (_label, value) => {
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        tokens: { '--button-border-radius-md': value },
+      }),
+    ).not.toHaveLength(0);
+  });
+
   it('rejects a font url that is not a url', async () => {
     expect(
       await errorsOf({ primary: { base: '#773E98' }, fontUrl: 'not a url' }),

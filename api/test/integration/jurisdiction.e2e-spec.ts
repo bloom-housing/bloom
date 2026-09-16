@@ -295,6 +295,37 @@ describe('Jurisdiction Controller Tests', () => {
       }).expect(400);
     });
 
+    it('stores an allowlisted token and rejects one outside it', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      const res = await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          tokens: { '--button-border-radius-md': 'var(--seeds-rounded-3xl)' },
+        },
+      }).expect(200);
+
+      expect(res.body.brand.tokens).toEqual({
+        '--button-border-radius-md': 'var(--seeds-rounded-3xl)',
+      });
+
+      await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          tokens: { '--link-text-color': 'var(--seeds-color-primary)' },
+        },
+      }).expect(400);
+
+      await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          tokens: { '--button-border-radius-md': 'calc(1rem - 2px)' },
+        },
+      }).expect(400);
+    });
+
     it('rejects a branding asset id with no asset', async () => {
       const jurisdiction = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
