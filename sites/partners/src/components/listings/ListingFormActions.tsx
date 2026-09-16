@@ -24,7 +24,7 @@ import { StatusAside } from "../shared/StatusAside"
 import { SubmitFunction } from "./PaperListingForm"
 import { ListingContext } from "./ListingContext"
 import { createDate } from "../../lib/helpers"
-import { getValidFutureScheduledDate } from "./helpers"
+import { getValidFutureScheduledDate, publishesLandUseToClosed } from "./helpers"
 
 export enum ListingFormActionsType {
   add = "add",
@@ -115,6 +115,24 @@ const ListingFormActions = ({
     FeatureFlagEnum.enableAutopublish,
     listingJurisdiction?.id
   )
+  const enableLandUse = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLandUse,
+    listingJurisdiction?.id
+  )
+
+  const approvalPublishesToClosed = publishesLandUseToClosed({
+    listingType: listing?.listingType,
+    enableLandUse,
+    enableAutopublish,
+    scheduledPublishAt: listing?.scheduledPublishAt,
+  })
+
+  const savePublishesToClosed = publishesLandUseToClosed({
+    listingType: listing?.listingType,
+    enableLandUse,
+    enableAutopublish,
+    scheduledPublishAt,
+  })
 
   const isEditPublicListingRestricted =
     !!profile?.userRoles?.isPartner &&
@@ -130,10 +148,14 @@ const ListingFormActions = ({
   }, [listing])
 
   const getApprovedStatus = useCallback((): ListingsStatusEnum => {
-    return getValidFutureScheduledDate(listing?.scheduledPublishAt)
-      ? ListingsStatusEnum.scheduled
-      : ListingsStatusEnum.active
-  }, [listing?.scheduledPublishAt])
+    if (getValidFutureScheduledDate(listing?.scheduledPublishAt)) {
+      return ListingsStatusEnum.scheduled
+    }
+    if (approvalPublishesToClosed) {
+      return ListingsStatusEnum.closed
+    }
+    return ListingsStatusEnum.active
+  }, [approvalPublishesToClosed, listing?.scheduledPublishAt])
 
   const approveAndSetStatus = useCallback(
     async (status: ListingsStatusEnum = ListingsStatusEnum.active) => {
@@ -156,6 +178,8 @@ const ListingFormActions = ({
           addToast(
             status === ListingsStatusEnum.scheduled
               ? t("listings.approval.listingScheduled")
+              : status === ListingsStatusEnum.closed
+              ? t("listings.approval.listingClosed")
               : t("listings.approval.listingPublished"),
             { variant: "success" }
           )
@@ -718,6 +742,7 @@ const ListingFormActions = ({
               await approveAndSetStatus(getApprovedStatus())
             }}
             scheduledPublishAt={listing?.scheduledPublishAt}
+            publishesToClosed={approvalPublishesToClosed}
           />
           <UnapproveListingDialog
             isOpen={unapproveDialogOpen}
@@ -742,11 +767,14 @@ const ListingFormActions = ({
               setSaveScheduledDialogOpen(false)
               if (getValidFutureScheduledDate(scheduledPublishAt)) {
                 submitFormWithStatus("continue", ListingsStatusEnum.scheduled)
+              } else if (savePublishesToClosed) {
+                submitFormWithStatus("redirect", ListingsStatusEnum.closed)
               } else {
                 submitFormWithStatus("redirect", ListingsStatusEnum.active)
               }
             }}
             currentScheduledPublishAt={scheduledPublishAt}
+            publishesToClosed={savePublishesToClosed}
           />
         </>
       )}

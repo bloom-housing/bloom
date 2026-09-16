@@ -1,7 +1,7 @@
 import React from "react"
-import { cleanup, screen } from "@testing-library/react"
+import { cleanup, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   listing,
   mockBaseJurisdiction,
@@ -14,7 +14,9 @@ import ListingFormActions, {
 import { mockNextRouter, render } from "../../testUtils"
 import {
   UserRoleEnum,
+  EnumListingListingType,
   Jurisdiction,
+  ListingsService,
   ListingsStatusEnum,
   User,
   FeatureFlagEnum,
@@ -1986,6 +1988,128 @@ describe("<ListingFormActions>", () => {
         expect(screen.queryByRole("link", { name: "Edit" })).not.toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
       })
+    })
+  })
+
+  describe("with enableLandUse and enableAutopublish enabled", () => {
+    const landUseCopy =
+      "This is a land use listing without a scheduled publish date. Without an entered scheduled publish date, land use listings are published straight to Closed status. No notifications will be sent to applicants or partners. To publish as Open status, first add a scheduled publish date."
+    const listingsUpdateMock = jest.fn()
+    const addToastMock = jest.fn()
+
+    const LandUseFormActionsComponent = ({
+      listingStatus,
+      formActionType,
+      listingType,
+      scheduledPublishAt,
+      submitFormWithStatus,
+    }: {
+      listingStatus: ListingsStatusEnum
+      formActionType: ListingFormActionsType
+      listingType?: EnumListingListingType
+      scheduledPublishAt?: Date | null
+      submitFormWithStatus?: () => void
+    }) => {
+      return (
+        <AuthContext.Provider
+          value={{
+            profile: adminUser,
+            doJurisdictionsHaveFeatureFlagOn,
+            listingsService: { update: listingsUpdateMock } as unknown as ListingsService,
+          }}
+        >
+          <MessageContext.Provider
+            value={{ addToast: addToastMock, toastMessagesRef: { current: [] } }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                status: listingStatus,
+                listingType: listingType,
+                scheduledPublishAt: scheduledPublishAt,
+                listingEvents: [],
+              }}
+            >
+              <ListingFormActions
+                type={formActionType}
+                submitFormWithStatus={submitFormWithStatus}
+              />
+            </ListingContext.Provider>
+          </MessageContext.Provider>
+        </AuthContext.Provider>
+      )
+    }
+
+    beforeAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = (flag) =>
+        flag === FeatureFlagEnum.enableAutopublish || flag === FeatureFlagEnum.enableLandUse
+      adminUser = { ...adminUser, jurisdictions: [mockAdminOnlyApprovalJurisdiction] }
+    })
+
+    afterAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = () => false
+    })
+
+    beforeEach(() => {
+      listingsUpdateMock.mockReset().mockResolvedValue({ id: listing.id })
+      addToastMock.mockReset()
+    })
+
+    it("approves a dateless land use listing into closed status", async () => {
+      const user = userEvent.setup()
+      render(
+        <LandUseFormActionsComponent
+          listingStatus={ListingsStatusEnum.pendingReview}
+          formActionType={ListingFormActionsType.details}
+          listingType={EnumListingListingType.landUse}
+          scheduledPublishAt={null}
+        />
+      )
+
+      await user.click(screen.getByRole("button", { name: "Approve" }))
+
+      const dialog = screen.getByRole("dialog")
+      expect(within(dialog).getByText(landUseCopy)).toBeInTheDocument()
+
+      await user.click(within(dialog).getByRole("button", { name: "Approve" }))
+
+      await waitFor(() =>
+        expect(listingsUpdateMock).toHaveBeenCalledWith(
+          expect.objectContaining({
+            id: listing.id,
+            body: expect.objectContaining({ status: ListingsStatusEnum.closed }),
+          })
+        )
+      )
+      expect(addToastMock).toHaveBeenCalledWith("Listing closed", { variant: "success" })
+    })
+
+    it("approves a land use listing with a future date into scheduled status", async () => {
+      const user = userEvent.setup()
+      render(
+        <LandUseFormActionsComponent
+          listingStatus={ListingsStatusEnum.pendingReview}
+          formActionType={ListingFormActionsType.details}
+          listingType={EnumListingListingType.landUse}
+          scheduledPublishAt={new Date("2099-12-31T00:00:00.000Z")}
+        />
+      )
+
+      await user.click(screen.getByRole("button", { name: "Approve" }))
+
+      const dialog = screen.getByRole("dialog")
+      expect(within(dialog).queryByText(landUseCopy)).not.toBeInTheDocument()
+
+      await user.click(within(dialog).getByRole("button", { name: "Approve" }))
+
+      await waitFor(() =>
+        expect(listingsUpdateMock).toHaveBeenCalledWith(
+          expect.objectContaining({
+            body: expect.objectContaining({ status: ListingsStatusEnum.scheduled }),
+          })
+        )
+      )
+      expect(addToastMock).toHaveBeenCalledWith("Listing scheduled", { variant: "success" })
     })
   })
 })
