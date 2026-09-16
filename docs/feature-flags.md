@@ -56,6 +56,8 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableGenderQuestion](./feature-flags/enableGenderQuestion.md) | When true, the gender identity question is displayed in the public and partner application demographics section |
 | [enableGeocodingPreferences](./feature-flags/enableGeocodingPreferences.md) | When true, preferences can be created with geocoding functionality and when an application is created/updated on a listing that is geocoding then the application gets geocoded |
 | [enableGeocodingRadiusMethod](./feature-flags/enableGeocodingRadiusMethod.md) | When true, preferences can be created with geocoding functionality that verifies via a mile radius |
+| [enableGetAssistanceCard](./feature-flags/enableGetAssistanceCard.md) | When true, a resource card will appear on the homepage to link to the get assistance page |
+| [enableGetAssistancePage](./feature-flags/enableGetAssistancePage.md) | When true, get assistance will appear in the nav header and page will be reachable |
 | [enableHomePageSearchHero](./feature-flags/enableHomePageSearchHero.md) | When true, the home page hero has a search form |
 | [enableHomeType](./feature-flags/enableHomeType.md) | When true, home type feature is turned on |
 | [enableHousingAdvocate](./feature-flags/enableHousingAdvocate.md) | When true, partners can view housing advocate users |
@@ -97,6 +99,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableReferralQuestionUnits](./feature-flags/enableReferralQuestionUnits.md) | when true, updates the the referral details question labels |
 | [enableRegions](./feature-flags/enableRegions.md) | When true, the region can be defined for the building address |
 | [enableResources](./feature-flags/enableResources.md) | When true, the public site displays links to resources on various pages |
+| [enableResourcesCard](./feature-flags/enableResourcesCard.md) | When true, a resource card will appear on the homepage to link to the additional resources page |
 | [enableSection8Question](./feature-flags/enableSection8Question.md) | When true, the Section 8 listing data will be visible |
 | [enableSeeOurData](./feature-flags/enableSeeOurData.md) | When true, a see our data card with a link on the home page is displayed |
 | [enableSexualOrientationQuestion](./feature-flags/enableSexualOrientationQuestion.md) | When true, the sexual orientation question is displayed in the public and partner application demographics section |
