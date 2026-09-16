@@ -79,7 +79,7 @@ const ApplicationsList = () => {
   useEffect(() => {
     if (jobResult && jobResult.status !== BackgroundJobStatusEnum.processing) {
       if (jobResult.status === BackgroundJobStatusEnum.completed) {
-        addToast(t("applications.bulkUpdateModalProcessingSuccess"), { variant: "success" })
+        addToast(t("applications.bulkUpdateModalProcessingEmail"), { variant: "success" })
       } else if (jobResult.status === BackgroundJobStatusEnum.failed) {
         addToast(jobResult.errorMessage ?? t("applications.bulkUpdateModalProcessingError"), {
           variant: "alert",
