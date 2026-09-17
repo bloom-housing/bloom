@@ -256,7 +256,7 @@ describe("<RentSummary>", () => {
           ...emptyUnitsSummarized,
           byAMI: [
             { percent: "30", byUnitType: [buildUnitSummary({ min: "t.n/a", max: "t.n/a" })] },
-            { percent: "60", byUnitType: [buildUnitSummary({ min: "", max: "" })] },
+            { percent: "60", byUnitType: [buildUnitSummary({ min: "t.n/a", max: "t.n/a" })] },
           ],
         }}
         listing={{ ...listing, listingType: EnumListingListingType.landUse }}
