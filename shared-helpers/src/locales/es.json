@@ -32,7 +32,7 @@
   "account.createAccount": "Crear una cuenta",
   "account.errorFetchingApplications": "Error al encontrar solicitudes",
   "account.haveAnAccount": "¿Ya tiene una cuenta?",
-  "account.lotteryApplications": "solicitudes de lotería",
+  "account.lotteryApplications": "Solicitudes de lotería",
   "account.lotteryApplicationsSubtitle": "Ver listados donde se completó la lotería y sus resultados están disponibles.",
   "account.lotteryDate": "Fecha de la lotería:",
   "account.lotteryPosted": "Publicados los resultados de la lotería:",

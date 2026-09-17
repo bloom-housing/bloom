@@ -46,16 +46,16 @@ const ProfessionalPartners = () => {
 
   const content = getProfessionalPartnersContent() || getGenericProfessionalPartnersContent()
   const contactContent =
-    getGenericProfessionalPartnersContactContent() || getProfessionalPartnersContactContent()
+    getProfessionalPartnersContactContent() || getGenericProfessionalPartnersContactContent()
 
   return (
     <Layout
       pageTitle={t("pageTitle.professionalPartners")}
-      metaDescription={t("pageDescription.housingBasics")}
+      metaDescription={t("pageDescription.professionalPartners")}
     >
       <PageHeaderLayout
         heading={t("pageTitle.professionalPartners")}
-        subheading={t("pageDescription.housingBasics")}
+        subheading={t("pageDescription.professionalPartners")}
         inverse
         className={pageStyles["site-layout"]}
       >

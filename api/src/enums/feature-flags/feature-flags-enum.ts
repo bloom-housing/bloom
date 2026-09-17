@@ -6,6 +6,7 @@ export enum FeatureFlagEnum {
   disableBuildingSelectionCriteria = 'disableBuildingSelectionCriteria',
   disableCommonApplication = 'disableCommonApplication',
   disableEthnicityQuestion = 'disableEthnicityQuestion',
+  disableHowToContact = 'disableHowToContact',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
   disablePartnerPublicListingEdits = 'disablePartnerPublicListingEdits',
@@ -14,6 +15,7 @@ export enum FeatureFlagEnum {
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
   enableAdditionalResources = 'enableAdditionalResources',
   enableApplicationBulkCSVUpdates = 'enableApplicationBulkCSVUpdates',
+  enableApplicationExpirationNonAdmins = 'enableApplicationExpirationNonAdmins',
   enableApplicationStatus = 'enableApplicationStatus',
   enableAutoOpenDate = 'enableAutoOpenDate',
   enableAutopublish = 'enableAutopublish',
@@ -125,13 +127,18 @@ export const featureFlagMap: {
       'When true, the ethnicity question is hidden in the application demographics section',
   },
   {
+    name: FeatureFlagEnum.disableHowToContact,
+    description:
+      'When true, the "How do you prefer to be contacted?" question will be removed from the application process',
+  },
+  {
     name: FeatureFlagEnum.disableJurisdictionalAdmin,
     description: 'When true, jurisdictional admins cannot be created',
   },
   {
     name: FeatureFlagEnum.disableListingPreferences,
     description:
-      'When true listings will no longer support preferences section',
+      'When true, listings will no longer support preferences section',
   },
   {
     name: FeatureFlagEnum.disablePartnerPublicListingEdits,
@@ -146,7 +153,7 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.disableWorkInRegion,
     description:
-      'When true the "Work in Region" question will be removed from the application process',
+      'When true, the "Work in Region" question will be removed from the application process',
   },
   {
     name: FeatureFlagEnum.enableAccessibilityFeatures,
@@ -157,6 +164,16 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableAdditionalResources,
     description:
       "When true, the 'learn more' section is displayed on the home page",
+  },
+  {
+    name: FeatureFlagEnum.enableApplicationBulkCSVUpdates,
+    description:
+      'When true, allows for the bulk uptake of application statuses',
+  },
+  {
+    name: FeatureFlagEnum.enableApplicationExpirationNonAdmins,
+    description:
+      'When true, application data in the partner site will expire for non-admin users after 45 days',
   },
   {
     name: FeatureFlagEnum.enableApplicationStatus,
@@ -172,11 +189,6 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableAutopublish,
     description:
       'When true, partners can set an optional scheduled listing publish date',
-  },
-  {
-    name: FeatureFlagEnum.enableApplicationBulkCSVUpdates,
-    description:
-      'When true, allows for the bulk uptake of application statuses',
   },
   {
     name: FeatureFlagEnum.enableCompanyWebsite,
@@ -328,7 +340,7 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableListingPagination,
     description:
-      'When true listings browser will display pagination controls section',
+      'When true, listings browser will display pagination controls section',
   },
   {
     name: FeatureFlagEnum.enableListingUpdatedAt,
