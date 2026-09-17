@@ -31,14 +31,16 @@ The following are all of the feature flags currently available in the Bloom plat
 | [disableBuildingSelectionCriteria](./feature-flags/disableBuildingSelectionCriteria.md) | When true, building selection criteria is not displayed in the listing |
 | [disableCommonApplication](./feature-flags/disableCommonApplication.md) | When true, the digital common application is not an option for listings |
 | [disableEthnicityQuestion](./feature-flags/disableEthnicityQuestion.md) | When true, the ethnicity question is hidden in the application demographics section |
+| [disableHowToContact](./feature-flags/disableHowToContact.md) | When true, the "How do you prefer to be contacted?" question will be removed from the application process |
 | [disableJurisdictionalAdmin](./feature-flags/disableJurisdictionalAdmin.md) | When true, jurisdictional admins cannot be created |
-| [disableListingPreferences](./feature-flags/disableListingPreferences.md) | When true listings will no longer support preferences section |
+| [disableListingPreferences](./feature-flags/disableListingPreferences.md) | When true, listings will no longer support preferences section |
 | [disablePartnerPublicListingEdits](./feature-flags/disablePartnerPublicListingEdits.md) | When true, partner users cannot edit open or closed listings, or unpublish open listings |
 | [disableReservedCommunityTypeEdit](./feature-flags/disableReservedCommunityTypeEdit.md) | When true, disables editing of reserved community type description in the partners site (shows as plaintext only). |
-| [disableWorkInRegion](./feature-flags/disableWorkInRegion.md) | When true the "Work in Region" question will be removed from the application process |
+| [disableWorkInRegion](./feature-flags/disableWorkInRegion.md) | When true, the "Work in Region" question will be removed from the application process |
 | [enableAccessibilityFeatures](./feature-flags/enableAccessibilityFeatures.md) | When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view |
 | [enableAdditionalResources](./feature-flags/enableAdditionalResources.md) | When true, the 'learn more' section is displayed on the home page |
 | [enableApplicationBulkCSVUpdates](./feature-flags/enableApplicationBulkCSVUpdates.md) | When true, allows for the bulk uptake of application statuses |
+| [enableApplicationExpirationNonAdmins](./feature-flags/enableApplicationExpirationNonAdmins.md) | When true, application data in the partner site will expire for non-admin users after 45 days |
 | [enableApplicationStatus](./feature-flags/enableApplicationStatus.md) | When true, the application status and notifications feature is enabled on public and partners |
 | [enableAutoOpenDate](./feature-flags/enableAutoOpenDate.md) | When true, partners can set an optional scheduled listing applications open date |
 | [enableAutopublish](./feature-flags/enableAutopublish.md) | When true, partners can set an optional scheduled listing publish date |
@@ -73,7 +75,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableListingImageAltText](./feature-flags/enableListingImageAltText.md) | When true, allows partners to add alt text to listing images |
 | [enableListingMap](./feature-flags/enableListingMap.md) | When true, a map is displayed on the listings page |
 | [enableListingOpportunity](./feature-flags/enableListingOpportunity.md) | When true, any newly published listing will send a gov delivery email to everyone that has signed up for the 'listing alerts' |
-| [enableListingPagination](./feature-flags/enableListingPagination.md) | When true listings browser will display pagination controls section |
+| [enableListingPagination](./feature-flags/enableListingPagination.md) | When true, listings browser will display pagination controls section |
 | [enableListingUpdatedAt](./feature-flags/enableListingUpdatedAt.md) | When true, listings detail will display an updated at date |
 | [enableMarketingFlyer](./feature-flags/enableMarketingFlyer.md) | When true, the 'marketing flyer' sub-section is displayed in listing creation/edit and the public listing view |
 | [enableMarketingStatus](./feature-flags/enableMarketingStatus.md) | When true, the 'marketing status' sub-section is displayed in listing creation/edit and the public listing view |
