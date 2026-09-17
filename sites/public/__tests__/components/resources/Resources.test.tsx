@@ -5,6 +5,10 @@ import { mockNextRouter, render } from "../../testUtils"
 import Resources from "../../../src/components/resources/Resources"
 import { JurisdictionContentContext } from "../../../src/lib/JurisdictionContentContext"
 
+jest.mock("../../../src/static_content/jurisdiction_resources_content", () => ({
+  getJurisdictionResourcesContent: () => null,
+}))
+
 beforeAll(() => {
   mockNextRouter()
 })
