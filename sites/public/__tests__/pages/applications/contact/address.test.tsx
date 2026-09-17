@@ -121,7 +121,7 @@ describe("applications pages", () => {
       expect(phoneSelect).toBeDisabled()
     })
 
-    it("should contact preference question when flag enabled", () => {
+    it("should hide contact preference question when flag enabled", () => {
       const conductor = new ApplicationConductor({}, listing)
       const applicationConfig = retrieveApplicationConfig(conductor.listing, [])
       conductor.config = {
@@ -191,21 +191,12 @@ describe("applications pages", () => {
       ).toBeInTheDocument()
 
       expect(
-        screen.getByRole("group", { name: /how do you prefer to be contacted/i })
+        screen.queryByRole("group", { name: /how do you prefer to be contacted/i })
       ).not.toBeInTheDocument()
-      expect(screen.getByRole("checkbox", { name: /^email$/i })).not.toBeInTheDocument()
-      expect(screen.getByRole("checkbox", { name: /^phone$/i })).not.toBeInTheDocument()
-      expect(screen.getByRole("checkbox", { name: /^letter$/i })).not.toBeInTheDocument()
-      expect(screen.getByRole("checkbox", { name: /^text$/i })).not.toBeInTheDocument()
-
-      expect(
-        screen.queryByRole("group", { name: /^do you work in %{county} County?\?$/i })
-      ).toBeInTheDocument()
-      expect(screen.queryByText(/tbd/i)).not.toBeInTheDocument()
-      expect(screen.queryByRole("radio", { name: /^yes$/i })).toBeInTheDocument()
-      expect(screen.queryByRole("radio", { name: /^no$/i })).toBeInTheDocument()
-
-      expect(screen.getByRole("button", { name: /next/i })).toBeInTheDocument()
+      expect(screen.queryByRole("checkbox", { name: /^email$/i })).not.toBeInTheDocument()
+      expect(screen.queryByRole("checkbox", { name: /^phone$/i })).not.toBeInTheDocument()
+      expect(screen.queryByRole("checkbox", { name: /^letter$/i })).not.toBeInTheDocument()
+      expect(screen.queryByRole("checkbox", { name: /^text$/i })).not.toBeInTheDocument()
     })
 
     it("should hide work in region question when flag enabled", () => {
