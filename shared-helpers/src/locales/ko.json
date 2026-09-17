@@ -56,7 +56,7 @@
   "account.pwdless.loginMessage": "%{email}로 계정을 만드신 경우 10분 이내에 인증 코드를 보내드립니다. 코드를 받지 못하신 경우 비밀번호로 로그인하시고 계정 설정에서 이메일 주소를 확인해 주세요.",
   "account.pwdless.loginReCaptchaMessage": "보안 강화를 위해 본인 확인 절차를 진행해 주시는 것입니다. 로그인을 완료하기 위해 %{email}로 인증 코드를 보내드렸습니다. 해당 코드는 10분 후에 만료되니 유의하시기 바랍니다.",
   "account.pwdless.notReceived": "코드를 받지 못하셨나요?",
-  "account.pwdless.passwordOutdatedModalContent": "비밀번호가 만료되었습니다. 비밀번호를 재설정하고 계정에 로그인하려면 &#39;계속&#39;을 클릭하세요.",
+  "account.pwdless.passwordOutdatedModalContent": "비밀번호가 만료되었습니다. 비밀번호를 재설정하고 계정에 로그인하려면 '계속'을 클릭하세요.",
   "account.pwdless.passwordOutdatedModalHeader": "비밀번호가 만료되었습니다",
   "account.pwdless.resend": "다시 보내기",
   "account.pwdless.resendCode": "코드 재전송",
