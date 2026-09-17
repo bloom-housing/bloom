@@ -21,7 +21,6 @@ type UnitFormProps = {
   amiChartsLoading: boolean
   defaultUnit: TempUnit | undefined
   draft: boolean
-  isLandUse?: boolean
   jurisdictionId: string
   listingType?: EnumListingListingType
   nextId: number
@@ -36,7 +35,6 @@ const UnitForm = ({
   amiChartsLoading,
   defaultUnit,
   draft,
-  isLandUse,
   jurisdictionId,
   listingType,
   nextId,
@@ -159,7 +157,7 @@ const UnitForm = ({
           className={errors[fieldName] ? "error" : ""}
           error={errors[fieldName]}
           errorMessage={t("errors.requiredFieldError")}
-          validation={{ required: !isLandUse && !!amiChartID }}
+          validation={{ required: !!amiChartID }}
           inputProps={{
             onChange: () => {
               clearErrors(fieldName)
@@ -204,7 +202,7 @@ const UnitForm = ({
       }
 
       values.amiPercentage = parseInt(defaultUnit["amiPercentage"])
-      values.rentType = getRentType(defaultUnit)
+      values.rentType = getRentType(defaultUnit, listingType === EnumListingListingType.landUse)
 
       reset(values)
     } else {

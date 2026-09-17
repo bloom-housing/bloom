@@ -5,10 +5,12 @@ import {
   defaultFieldProps,
   fieldIsRequired,
   getLabel,
+  getRentType,
   getRequiredSubNote,
   mergeApplicationNames,
 } from "../../src/lib/helpers"
 import { t } from "@bloom-housing/ui-components"
+import { TempUnit } from "../../src/lib/listings/formTypes"
 
 describe("helpers", () => {
   describe("mergeApplicationNames", () => {
@@ -169,6 +171,87 @@ describe("helpers", () => {
           "aria-required": true,
           onChange: expect.any(Function),
         },
+      })
+    })
+  })
+  describe("getRentType", () => {
+    describe("for non land use listings", () => {
+      it("should return fixed when both minimum income and rent are set", () => {
+        expect(getRentType({ monthlyIncomeMin: "3600", monthlyRent: "1200" } as TempUnit)).toEqual(
+          "fixed"
+        )
+      })
+      it("should return null when only rent is set", () => {
+        expect(getRentType({ monthlyRent: "1200" } as TempUnit)).toBeNull()
+      })
+      it("should return null when only minimum income is set", () => {
+        expect(getRentType({ monthlyIncomeMin: "3600" } as TempUnit)).toBeNull()
+      })
+      it("should return percentage for a percentage unit stamped with a zero minimum income", () => {
+        expect(
+          getRentType({
+            monthlyIncomeMin: "0",
+            monthlyRentAsPercentOfIncome: "30",
+          } as TempUnit)
+        ).toEqual("percentage")
+      })
+      it("should prefer fixed when both percent and fixed values are set", () => {
+        expect(
+          getRentType({
+            monthlyIncomeMin: "3600",
+            monthlyRent: "1200",
+            monthlyRentAsPercentOfIncome: "30",
+          } as TempUnit)
+        ).toEqual("fixed")
+      })
+      it("should return null when no rent fields are set", () => {
+        expect(getRentType({} as TempUnit)).toBeNull()
+      })
+      it("should return null for a missing unit", () => {
+        expect(getRentType(null as unknown as TempUnit)).toBeNull()
+      })
+    })
+
+    describe("for land use listings", () => {
+      it("should return fixed when both minimum income and rent are set", () => {
+        expect(
+          getRentType({ monthlyIncomeMin: "3600", monthlyRent: "1200" } as TempUnit, true)
+        ).toEqual("fixed")
+      })
+      it("should return fixed when only rent is set", () => {
+        expect(getRentType({ monthlyRent: "1200" } as TempUnit, true)).toEqual("fixed")
+      })
+      it("should return fixed when only minimum income is set", () => {
+        expect(getRentType({ monthlyIncomeMin: "3600" } as TempUnit, true)).toEqual("fixed")
+      })
+      it("should return percentage for a percentage unit stamped with a zero minimum income", () => {
+        expect(
+          getRentType(
+            {
+              monthlyIncomeMin: "0",
+              monthlyRentAsPercentOfIncome: "30",
+            } as TempUnit,
+            true
+          )
+        ).toEqual("percentage")
+      })
+      it("should prefer percentage when both percent and fixed values are set", () => {
+        expect(
+          getRentType(
+            {
+              monthlyIncomeMin: "3600",
+              monthlyRent: "1200",
+              monthlyRentAsPercentOfIncome: "30",
+            } as TempUnit,
+            true
+          )
+        ).toEqual("percentage")
+      })
+      it("should return null when no rent fields are set", () => {
+        expect(getRentType({} as TempUnit, true)).toBeNull()
+      })
+      it("should return null for a missing unit", () => {
+        expect(getRentType(null as unknown as TempUnit, true)).toBeNull()
       })
     })
   })

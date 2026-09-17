@@ -1,3 +1,4 @@
+import { EnumListingListingType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Formatter from "./Formatter"
 import { stringToBoolean, stringToNumber } from "../helpers"
 
@@ -62,6 +63,12 @@ export default class UnitsFormatter extends Formatter {
 
       if (!unit.sqFeet) {
         delete unit.sqFeet
+      }
+
+      if (this.data.listingType === EnumListingListingType.landUse) {
+        if (!unit.monthlyIncomeMin) {
+          delete unit.monthlyIncomeMin
+        }
       }
 
       delete unit.tempId
