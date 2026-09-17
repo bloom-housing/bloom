@@ -202,7 +202,7 @@ const UnitForm = ({
       }
 
       values.amiPercentage = parseInt(defaultUnit["amiPercentage"])
-      values.rentType = getRentType(defaultUnit)
+      values.rentType = getRentType(defaultUnit, listingType === EnumListingListingType.landUse)
 
       reset(values)
     } else {
