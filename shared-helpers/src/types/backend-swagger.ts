@@ -11795,6 +11795,7 @@ export enum FeatureFlagEnum {
   "enableParkingType" = "enableParkingType",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerLotteryExport" = "enablePartnerLotteryExport",
+  "enablePartnerLotteryRun" = "enablePartnerLotteryRun",
   "enablePartnerSettings" = "enablePartnerSettings",
   "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProfessionalPartnersPage" = "enableProfessionalPartnersPage",

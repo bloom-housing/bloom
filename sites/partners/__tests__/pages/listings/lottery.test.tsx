@@ -943,6 +943,57 @@ describe("lottery", () => {
     expect(screen.getByText("Export")).toBeInTheDocument()
   })
 
+  it("should show run section for partner user when enablePartnerLotteryRun flag is on", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: false, isPartner: true },
+            listings: [{ id: "Uvbk5qurpB2WI9V6WnNdH" }],
+            jurisdictions: [
+              {
+                id: "id",
+                name: "Bloomington",
+                featureFlags: [
+                  {
+                    name: FeatureFlagEnum.enablePartnerLotteryRun,
+                    active: true,
+                  },
+                ],
+              },
+            ],
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
+      }),
+      rest.get(
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
+    )
+
+    render(<Lottery listing={closedListing} />)
+
+    const header = await screen.findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    fireEvent.click(screen.getByText("Run lottery"))
+    expect(await screen.findByText("Confirmation needed")).toBeInTheDocument()
+    expect(
+      screen.getByText("Make sure to add all paper applications before running the lottery.")
+    ).toBeInTheDocument()
+  })
+
   it("should show lottery expired state as a partner", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
     document.cookie = "access-token-available=True"
