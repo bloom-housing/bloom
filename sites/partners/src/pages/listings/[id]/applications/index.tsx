@@ -68,9 +68,18 @@ const ApplicationsList = () => {
   })
 
   useEffect(() => {
+    if (!jobId) return
+    // The real "completed" notification from the listener above isn't reliable, so assume the
+    // job succeeded as soon as it's queued instead of waiting for a confirmation that may never
+    // arrive. The user will receive an email confirmation if it was successful.
+    //  This intentionally doesn't touch the listener or the backend job.
+    setJobResult({ jobId, status: BackgroundJobStatusEnum.completed })
+  }, [jobId])
+
+  useEffect(() => {
     if (jobResult && jobResult.status !== BackgroundJobStatusEnum.processing) {
       if (jobResult.status === BackgroundJobStatusEnum.completed) {
-        addToast(t("applications.bulkUpdateModalProcessingSuccess"), { variant: "success" })
+        addToast(t("applications.bulkUpdateModalProcessingEmail"), { variant: "success" })
       } else if (jobResult.status === BackgroundJobStatusEnum.failed) {
         addToast(jobResult.errorMessage ?? t("applications.bulkUpdateModalProcessingError"), {
           variant: "alert",

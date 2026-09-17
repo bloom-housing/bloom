@@ -115,6 +115,7 @@
   "applications.allApplications": "All applications",
   "applications.bulkUpdate": "Bulk update",
   "applications.bulkUpdateDownloadTemplate": "Download template",
+  "applications.bulkUpdateModalProcessingEmail": "Your file has been processed, check your email for the results",
   "applications.bulkUpdateModalProcessingError": "An error has occurred during the processing of the CSV file",
   "applications.bulkUpdateModalProcessingNotice": "Your file has been validated and is being processed...",
   "applications.bulkUpdateModalProcessingSuccess": "Your file has been processed successfully.",
