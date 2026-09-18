@@ -35,13 +35,12 @@ const ApplicationsList = () => {
 
   const { applicationsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
-  const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.disableWorkInRegion,
+  const disableHowToContact = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableHowToContact,
     listingDto?.jurisdictions.id
   )
-
-  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableFullTimeStudentQuestion,
+  const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableWorkInRegion,
     listingDto?.jurisdictions.id
   )
 
@@ -49,32 +48,32 @@ const ApplicationsList = () => {
     FeatureFlagEnum.enableApplicationStatus,
     listingDto?.jurisdictions.id
   )
+  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
+    listingDto?.jurisdictions.id
+  )
   const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableHousingAdvocate,
+    listingDto?.jurisdictions.id
+  )
+  const enableMultiselectVoucherQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMultiselectVoucherQuestion,
     listingDto?.jurisdictions.id
   )
   const enableReasonableAccommodations = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableReasonableAccommodations,
     listingDto?.jurisdictions.id
   )
-
-  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.swapCommunityTypeWithPrograms,
-    listingDto?.jurisdictions.id
-  )
-
-  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableV2MSQ,
-    listingDto?.jurisdictions.id
-  )
-
   const enableReceivedAtAndByFields = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableReceivedAtAndByFields,
     listingDto?.jurisdictions.id
   )
-
-  const enableMultiselectVoucherQuestion = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMultiselectVoucherQuestion,
+  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableV2MSQ,
+    listingDto?.jurisdictions.id
+  )
+  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
   )
 
@@ -155,8 +154,9 @@ const ApplicationsList = () => {
                 />
 
                 <DetailsPrimaryApplicant
-                  enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                  disableHowToContact={disableHowToContact}
                   disableWorkInRegion={disableWorkInRegion}
+                  enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                 />
 
                 <DetailsAlternateContact enableHousingAdvocate={enableHousingAdvocate} />

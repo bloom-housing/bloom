@@ -30,6 +30,8 @@ export const getExportHeaders = (
   multiSelectQuestions: MultiselectQuestion[],
   timeZone: string,
   optionalParams?: {
+    disableEthnicityQuestion?: boolean;
+    disableHowToContact?: boolean;
     disableWorkInRegion?: boolean;
     enableApplicationStatus?: boolean;
     enableFullTimeStudentQuestion?: boolean;
@@ -48,6 +50,8 @@ export const getExportHeaders = (
 ): CsvHeader[] => {
   const dateFormat = 'MM-DD-YYYY hh:mm:ssA z';
   const {
+    disableEthnicityQuestion,
+    disableHowToContact,
     disableWorkInRegion,
     enableApplicationStatus,
     enableFullTimeStudentQuestion,
@@ -208,12 +212,15 @@ export const getExportHeaders = (
         path: 'additionalPhoneNumber',
         label: 'Primary Applicant Additional Phone Number',
       },
-      {
-        path: 'contactPreferences',
-        label: 'Primary Applicant Preferred Contact Type',
-      },
     ],
   );
+
+  if (!disableHowToContact) {
+    headers.push({
+      path: 'contactPreferences',
+      label: 'Primary Applicant Preferred Contact Type',
+    });
+  }
 
   if (!disableWorkInRegion) {
     headers.push({
@@ -271,26 +278,38 @@ export const getExportHeaders = (
         path: 'applicationsMailingAddress.zipCode',
         label: `Primary Applicant Mailing Zip Code`,
       },
-      {
-        path: 'applicant.applicantWorkAddress.street',
-        label: `Primary Applicant Work Street`,
-      },
-      {
-        path: 'applicant.applicantWorkAddress.street2',
-        label: `Primary Applicant Work Street 2`,
-      },
-      {
-        path: 'applicant.applicantWorkAddress.city',
-        label: `Primary Applicant Work City`,
-      },
-      {
-        path: 'applicant.applicantWorkAddress.state',
-        label: `Primary Applicant Work State`,
-      },
-      {
-        path: 'applicant.applicantWorkAddress.zipCode',
-        label: `Primary Applicant Work Zip Code`,
-      },
+    ],
+  );
+
+  if (!disableWorkInRegion) {
+    headers.push(
+      ...[
+        {
+          path: 'applicant.applicantWorkAddress.street',
+          label: `Primary Applicant Work Street`,
+        },
+        {
+          path: 'applicant.applicantWorkAddress.street2',
+          label: `Primary Applicant Work Street 2`,
+        },
+        {
+          path: 'applicant.applicantWorkAddress.city',
+          label: `Primary Applicant Work City`,
+        },
+        {
+          path: 'applicant.applicantWorkAddress.state',
+          label: `Primary Applicant Work State`,
+        },
+        {
+          path: 'applicant.applicantWorkAddress.zipCode',
+          label: `Primary Applicant Work Zip Code`,
+        },
+      ],
+    );
+  }
+
+  headers.push(
+    ...[
       {
         path: 'alternateContact.firstName',
         label: 'Alternate Contact First Name',
@@ -499,10 +518,12 @@ export const getExportHeaders = (
   );
 
   if (includeDemographics) {
-    headers.push({
-      path: 'demographics.ethnicity',
-      label: 'Ethnicity',
-    });
+    if (!disableEthnicityQuestion) {
+      headers.push({
+        path: 'demographics.ethnicity',
+        label: 'Ethnicity',
+      });
+    }
     if (enableGenderQuestion) {
       headers.push({
         path: 'demographics.gender',
