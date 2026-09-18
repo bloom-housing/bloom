@@ -14,15 +14,6 @@ const HEX_COLOR = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/
 const FONT_FAMILY = /^[A-Za-z0-9](?:[A-Za-z0-9 -]{0,62}[A-Za-z0-9])?$/
 const FONT_HOSTS = ["fonts.googleapis.com"]
 
-// Mirrors the api allowlist: a stored token is re-checked here the way the colors are
-const LENGTH_OR_SEEDS_VAR = /^(0|[0-9]+(\.[0-9]+)?(px|rem|em|%)|var\(--seeds-[a-z0-9-]+\))$/
-const TOKEN_GRAMMARS: Record<string, RegExp> = {
-  "--button-border-radius-sm": LENGTH_OR_SEEDS_VAR,
-  "--button-border-radius-md": LENGTH_OR_SEEDS_VAR,
-  "--button-border-radius-lg": LENGTH_OR_SEEDS_VAR,
-  "--seeds-font-serif": FONT_FAMILY,
-}
-
 type BrandRamp = Partial<BrandRampDTO>
 
 interface BrandDocumentProps {
@@ -32,7 +23,8 @@ interface BrandDocumentProps {
   fontFamily: string | null
   headingFontFamily: string | null
   fontUrl: string | null
-  tokens: Record<string, string>
+  serifFontFamily: string | null
+  buttonRadius: string | null
 }
 
 const rampShades: (keyof BrandRamp)[] = ["base", "dark", "darker", "light", "lighter"]
@@ -86,42 +78,52 @@ const rampVariables = (namespace: string, name: string, ramp: BrandRamp) =>
 const fontStack = (family: string, slot: "sans" | "alt-sans" | "serif") =>
   `"${family}", var(--brand-font-fallback-${slot})`
 
-const allowlistedTokens = (tokens?: object): Record<string, string> =>
-  Object.fromEntries(
-    Object.entries(tokens ?? {}).filter(
-      ([name, value]) => typeof value === "string" && TOKEN_GRAMMARS[name]?.test(value)
-    )
-  )
+const RADIUS_STEPS = ["sm", "base", "md", "lg", "xl", "2xl", "3xl", "full"]
 
-const tokenValue = (name: string, value: string) =>
-  name === "--seeds-font-serif" ? fontStack(value, "serif") : value
+const radiusStepOnly = (value?: string): string | null =>
+  typeof value === "string" && RADIUS_STEPS.includes(value) ? value : null
+
+const radiusVariable = (step: string) =>
+  step === "base" ? "var(--seeds-rounded)" : `var(--seeds-rounded-${step})`
 
 export const brandStyleBlock = ({
   primary,
   secondary,
   fontFamily,
   headingFontFamily,
-  tokens,
+  serifFontFamily,
+  buttonRadius,
 }: BrandDocumentProps): string => {
-  if (!primary && !fontFamily && !headingFontFamily && !Object.keys(tokens).length) return ""
-
   // Headings, buttons and tabs read the alt token.
   const headingFont = headingFontFamily ?? fontFamily
 
-  const variables = [
+  const rootVariables = [
     primary ? rampVariables("seeds", "primary", primary) : "",
     primary && secondary ? rampVariables("seeds", "secondary", secondary) : "",
     primary ? rampVariables("bloom", "primary", primary) : "",
     fontFamily ? `--seeds-font-sans: ${fontStack(fontFamily, "sans")};` : "",
     headingFont ? `--seeds-font-alt-sans: ${fontStack(headingFont, "alt-sans")};` : "",
-    ...Object.entries(tokens).map(([name, value]) => `${name}: ${tokenValue(name, value)};`),
+    serifFontFamily ? `--seeds-font-serif: ${fontStack(serifFontFamily, "serif")};` : "",
   ]
     .filter(Boolean)
     .join("\n")
 
-  // Doubled selector: ui-seeds sets these same tokens on :root in a stylesheet that loads after
-  // this block, and a single :root would lose the tie on document order.
-  return `:root:root {\n${variables}\n}`
+  // ui-seeds sets the radius on .seeds-button itself, and an element's own declaration beats an
+  // inherited one, so a button radius has to be written against the same element.
+  const buttonVariables = buttonRadius
+    ? ["sm", "md", "lg"]
+        .map((size) => `--button-border-radius-${size}: ${radiusVariable(buttonRadius)};`)
+        .join("\n")
+    : ""
+
+  // Doubled selector: ui-seeds sets these same tokens in a stylesheet that loads after this
+  // block, and a single :root would lose the tie on document order.
+  return [
+    rootVariables ? `:root:root {\n${rootVariables}\n}` : "",
+    buttonVariables ? `:root:root .seeds-button {\n${buttonVariables}\n}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n")
 }
 
 export default class BloomDocument extends Document<BrandDocumentProps> {
@@ -144,7 +146,8 @@ export default class BloomDocument extends Document<BrandDocumentProps> {
       fontFamily: fontUrl ? fontFamilyOnly(brand?.fontFamily) : null,
       headingFontFamily: fontUrl ? fontFamilyOnly(brand?.headingFontFamily) : null,
       fontUrl,
-      tokens: allowlistedTokens(brand?.tokens),
+      serifFontFamily: fontUrl ? fontFamilyOnly(brand?.serifFontFamily) : null,
+      buttonRadius: radiusStepOnly(brand?.buttonRadius),
     }
   }
 

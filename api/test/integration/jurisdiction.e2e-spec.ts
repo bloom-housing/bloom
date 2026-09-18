@@ -15,6 +15,7 @@ import { IdDTO } from '../../src/dtos/shared/id.dto';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { ApplicationAccessibilityFeatureEnum } from '../../src/enums/applications/application-accessibility-feature-enum';
+import { BrandRadiusEnum } from '../../src/enums/jurisdictions/brand-radius-enum';
 import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
 
 describe('Jurisdiction Controller Tests', () => {
@@ -295,7 +296,7 @@ describe('Jurisdiction Controller Tests', () => {
       }).expect(400);
     });
 
-    it('stores an allowlisted token and rejects one outside it', async () => {
+    it('stores a serif family and a button radius', async () => {
       const jurisdiction = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
       });
@@ -303,26 +304,20 @@ describe('Jurisdiction Controller Tests', () => {
       const res = await put(jurisdiction.id, {
         brand: {
           primary: { base: '#773E98' },
-          tokens: { '--button-border-radius-md': 'var(--seeds-rounded-3xl)' },
+          serifFontFamily: 'Noto Serif',
+          buttonRadius: BrandRadiusEnum.xl3,
         },
       }).expect(200);
 
-      expect(res.body.brand.tokens).toEqual({
-        '--button-border-radius-md': 'var(--seeds-rounded-3xl)',
-      });
+      expect(res.body.brand.serifFontFamily).toEqual('Noto Serif');
+      expect(res.body.brand.buttonRadius).toEqual(BrandRadiusEnum.xl3);
 
       await put(jurisdiction.id, {
-        brand: {
-          primary: { base: '#773E98' },
-          tokens: { '--link-text-color': 'var(--seeds-color-primary)' },
-        },
+        brand: { primary: { base: '#773E98' }, buttonRadius: 'pill' },
       }).expect(400);
 
       await put(jurisdiction.id, {
-        brand: {
-          primary: { base: '#773E98' },
-          tokens: { '--button-border-radius-md': 'calc(1rem - 2px)' },
-        },
+        brand: { primary: { base: '#773E98' }, serifFontFamily: 'Noto Serif ' },
       }).expect(400);
     });
 

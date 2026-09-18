@@ -333,42 +333,61 @@ describe("_document", () => {
     expect(style).toContain(`--seeds-font-sans: "${fontFamily}", var(--brand-font-fallback-sans);`)
   })
 
-  it("emits an allowlisted token", async () => {
+  it("gives the serif family its own fallback stack", async () => {
     const style = await styleFor(
       jurisdictionWith({
         primary,
-        tokens: { "--button-border-radius-md": "var(--seeds-rounded-3xl)" },
+        serifFontFamily: "Noto Serif",
+        fontUrl: "https://fonts.googleapis.com/css2?family=Noto+Serif",
       })
-    )
-
-    expect(style).toContain("--button-border-radius-md: var(--seeds-rounded-3xl);")
-  })
-
-  it("gives the serif token its own fallback stack", async () => {
-    const style = await styleFor(
-      jurisdictionWith({ primary, tokens: { "--seeds-font-serif": "Noto Serif" } })
     )
 
     expect(style).toContain(`--seeds-font-serif: "Noto Serif", var(--brand-font-fallback-serif);`)
   })
 
-  it.each([
-    ["a name outside the allowlist", { "--link-text-color": "red" }],
-    ["css that closes the declaration", { "--button-border-radius-md": "0; } body { x: y" }],
-    ["a var reference outside seeds", { "--button-border-radius-md": "var(--bloom-rounded)" }],
-    ["a calc expression", { "--button-border-radius-md": "calc(1rem - 2px)" }],
-  ])("drops %s", async (_label, tokens) => {
-    const style = await styleFor(jurisdictionWith({ primary, tokens }))
+  it("sets no serif variable when the family has no stylesheet", async () => {
+    const style = await styleFor(jurisdictionWith({ primary, serifFontFamily: "Noto Serif" }))
 
-    expect(style).toContain("--seeds-color-primary: #773E98;")
-    expect(style).not.toContain("--link-text-color")
-    expect(style).not.toContain("--button-border-radius-md")
+    expect(style).not.toContain("--seeds-font-serif")
   })
 
-  it("emits a token-only brand", async () => {
-    const style = await styleFor(jurisdictionWith({ tokens: { "--button-border-radius-sm": "0" } }))
+  it("writes the button radius against the button element", async () => {
+    const style = await styleFor(jurisdictionWith({ primary, buttonRadius: "3xl" }))
 
-    expect(style).toContain("--button-border-radius-sm: 0;")
+    expect(style).toContain(":root:root .seeds-button {")
+    expect(style).toContain("--button-border-radius-sm: var(--seeds-rounded-3xl);")
+    expect(style).toContain("--button-border-radius-md: var(--seeds-rounded-3xl);")
+    expect(style).toContain("--button-border-radius-lg: var(--seeds-rounded-3xl);")
+  })
+
+  it("names the unsuffixed seeds variable for the base step", async () => {
+    const style = await styleFor(jurisdictionWith({ primary, buttonRadius: "base" }))
+
+    expect(style).toContain("--button-border-radius-md: var(--seeds-rounded);")
+  })
+
+  it.each([
+    ["a step the scale does not define", "pill"],
+    ["css that closes the declaration", "0; } body { display: none"],
+    ["a var reference of its own", "var(--bloom-rounded)"],
+  ])("drops %s", async (_label, buttonRadius) => {
+    const style = await styleFor(jurisdictionWith({ primary, buttonRadius }))
+
+    expect(style).toContain("--seeds-color-primary: #773E98;")
+    expect(style).not.toContain("--button-border-radius")
+    expect(style).not.toContain(".seeds-button")
+  })
+
+  it("emits a radius-only brand", async () => {
+    const style = await styleFor(jurisdictionWith({ buttonRadius: "full" }))
+
+    expect(style).toBe(
+      ":root:root .seeds-button {\n" +
+        "--button-border-radius-sm: var(--seeds-rounded-full);\n" +
+        "--button-border-radius-md: var(--seeds-rounded-full);\n" +
+        "--button-border-radius-lg: var(--seeds-rounded-full);\n" +
+        "}"
+    )
   })
 
   it("links no font when none is stored", async () => {
@@ -396,7 +415,7 @@ describe("_document", () => {
   it.each([
     ["a port", "https://fonts.googleapis.com:8080/css2?family=Inter"],
     ["credentials", "https://user:pass@fonts.googleapis.com/css2?family=Inter"],
-  ])("drops a font url carrying %s", async (_label, fontUrl) => {
+  ])("drops a font url with %s", async (_label, fontUrl) => {
     const { children } = await headChildrenFor(
       jurisdictionWith({ primary, fontFamily: "Inter", fontUrl })
     )

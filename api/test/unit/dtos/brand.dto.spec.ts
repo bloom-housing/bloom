@@ -1,6 +1,7 @@
 import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
 import { BrandDTO } from '../../../src/dtos/jurisdictions/brand.dto';
+import { BrandRadiusEnum } from '../../../src/enums/jurisdictions/brand-radius-enum';
 import { ValidationsGroupsEnum } from '../../../src/enums/shared/validation-groups-enum';
 import { defaultValidationPipeOptions } from '../../../src/utilities/default-validation-pipe-options';
 
@@ -144,40 +145,30 @@ describe('BrandDTO', () => {
     ).not.toHaveLength(0);
   });
 
-  it('accepts an allowlisted token with a valid value', async () => {
+  it('accepts a serif family and a button radius', async () => {
     expect(
       await errorsOf({
         primary: { base: '#773E98' },
-        tokens: {
-          '--button-border-radius-md': 'var(--seeds-rounded-3xl)',
-          '--button-border-radius-sm': '0',
-          '--seeds-font-serif': 'Noto Serif',
-        },
+        serifFontFamily: 'Noto Serif',
+        buttonRadius: BrandRadiusEnum.xl3,
       }),
     ).toHaveLength(0);
   });
 
-  it('rejects a token name outside the allowlist', async () => {
+  it.each([
+    ['a trailing space', 'Noto Serif '],
+    ['a leading hyphen', '-Noto'],
+    ['a non-ascii character', 'Söhne'],
+    ['css that closes the declaration', 'Noto"; } body { display: none } .x {'],
+  ])('rejects a serif family with %s', async (_label, serifFontFamily) => {
     expect(
-      await errorsOf({
-        primary: { base: '#773E98' },
-        tokens: { '--link-text-color': 'var(--seeds-color-primary)' },
-      }),
+      await errorsOf({ primary: { base: '#773E98' }, serifFontFamily }),
     ).not.toHaveLength(0);
   });
 
-  it.each([
-    ['css that closes the declaration', 'red; } body { display: none } .x {'],
-    ['a var reference outside seeds', 'var(--bloom-color-primary)'],
-    ['a calc expression', 'calc(var(--seeds-s3) - 2px)'],
-    ['multi-value shorthand', 'var(--seeds-s4) var(--seeds-s3)'],
-    ['a url', 'url(https://evil.test/x.png)'],
-  ])('rejects %s as a token value', async (_label, value) => {
+  it('rejects a button radius outside the seeds scale', async () => {
     expect(
-      await errorsOf({
-        primary: { base: '#773E98' },
-        tokens: { '--button-border-radius-md': value },
-      }),
+      await errorsOf({ primary: { base: '#773E98' }, buttonRadius: 'pill' }),
     ).not.toHaveLength(0);
   });
 

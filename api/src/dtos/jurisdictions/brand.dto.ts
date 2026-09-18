@@ -4,16 +4,20 @@ import {
   IsOptional,
   IsString,
   IsUrl,
+  IsEnum,
   Matches,
-  Validate,
   ValidateNested,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { HEX_COLOR } from '../../utilities/brand-ramp';
-import { AllowlistedTokens } from '../../validators/allowlisted-tokens';
+import { BrandRadiusEnum } from '../../enums/jurisdictions/brand-radius-enum';
 
 export const FONT_HOSTS = ['fonts.googleapis.com'];
+
+// A family name is interpolated into the style block, so it is held to letters, digits, spaces
+// and hyphens.
+export const FONT_FAMILY = /^[A-Za-z0-9](?:[A-Za-z0-9 -]{0,62}[A-Za-z0-9])?$/;
 
 // Without a display value google's css omits font-display, so the browser hides text for up to
 // three seconds. An explicit choice is left alone.
@@ -108,15 +112,20 @@ export class BrandDTO {
   fontUrl?: string;
 
   @Expose()
-  @Transform(({ obj }) => obj?.tokens)
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @Validate(AllowlistedTokens, { groups: [ValidationsGroupsEnum.default] })
+  @Matches(FONT_FAMILY, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({ example: 'Noto Serif' })
+  serifFontFamily?: string;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(BrandRadiusEnum, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
-    type: 'object',
-    additionalProperties: { type: 'string' },
-    example: { '--button-border-radius-md': 'var(--seeds-rounded-3xl)' },
+    enum: BrandRadiusEnum,
+    enumName: 'BrandRadiusEnum',
+    example: BrandRadiusEnum.xl3,
   })
-  tokens?: Record<string, string>;
+  buttonRadius?: BrandRadiusEnum;
 
   // Response-only: built from the asset foreign keys at read time.
   @Expose()
