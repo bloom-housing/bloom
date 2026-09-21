@@ -163,8 +163,16 @@ describe("brandErrorsFrom", () => {
     expect(errors.unplaced).toHaveLength(1)
   })
 
-  it("survives a response that is not a list of messages", () => {
+  it("shows a message the service raised itself, which arrives as one string", () => {
+    // assertFontIsAvailable throws a BadRequestException, so message is a string not an array.
+    const errors = brandErrorsFrom("a brand font needs both a fontUrl and a family name")
+
+    expect(errors.fields).toEqual([])
+    expect(errors.unplaced).toEqual(["a brand font needs both a fontUrl and a family name"])
+  })
+
+  it("survives a response with no usable message", () => {
     expect(brandErrorsFrom(undefined)).toEqual({ fields: [], unplaced: [] })
-    expect(brandErrorsFrom("Bad Request")).toEqual({ fields: [], unplaced: [] })
+    expect(brandErrorsFrom({ statusCode: 400 })).toEqual({ fields: [], unplaced: [] })
   })
 })

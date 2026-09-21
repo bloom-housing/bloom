@@ -1,10 +1,15 @@
+.brand-color-field__control {
+  display: flex;
+  align-items: stretch;
+  gap: var(--seeds-s2);
+}
+
 .brand-color-field__swatch {
-  margin-top: var(--seeds-s2);
-  block-size: var(--seeds-s8);
-  inline-size: var(--seeds-s8);
-  padding: 0;
-  border: 1px solid var(--seeds-color-gray-450);
+  flex: none;
+  inline-size: var(--seeds-s12);
+  padding: var(--seeds-s1);
+  border: 1px solid var(--seeds-input-border-color, var(--seeds-color-gray-550));
   border-radius: var(--seeds-rounded);
-  background-color: transparent;
+  background-color: var(--seeds-color-white);
   cursor: pointer;
 }

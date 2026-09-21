@@ -875,6 +875,7 @@
   "branding.shade.lighter": "Lighter",
   "branding.typography": "Typography",
   "branding.unsavedChangesWarning": "You have unsaved branding changes. Leave this page?",
+  "branding.colorPickerNote": "Type a hex value, or use the box beside it to pick a color",
   "branding.colorSwatchLabel": "Choose %{field}",
   "settings.branding": "Branding",
   "settings.content": "Content",

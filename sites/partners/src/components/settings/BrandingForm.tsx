@@ -93,6 +93,7 @@ const BrandingForm = ({
               name={fieldName(ramp, "base")}
               label={t("branding.baseColor")}
               value={base}
+              subNote={t("branding.colorPickerNote")}
               required={ramp === "primary"}
               register={register}
               setValue={setValue}
@@ -172,7 +173,14 @@ const BrandingForm = ({
                   subNote={t("branding.fontUrlNote")}
                   register={register}
                   error={!!errors?.fontUrl}
-                  errorMessage={errors?.fontUrl?.message}
+                  // Field registers its own https and invalid checks for type=url, and neither
+                  // sets a message. A server rejection does, so that wins.
+                  errorMessage={
+                    errors?.fontUrl?.message ||
+                    (errors?.fontUrl?.type === "https"
+                      ? t("errors.urlHttpsError")
+                      : t("errors.urlError"))
+                  }
                 />
               </Grid.Cell>
             </Grid.Row>

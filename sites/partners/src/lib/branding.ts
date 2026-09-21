@@ -146,9 +146,9 @@ export interface BrandErrors {
 }
 
 export const brandErrorsFrom = (messages: unknown): BrandErrors => {
-  const list = Array.isArray(messages)
-    ? messages.filter((m): m is string => typeof m === "string")
-    : []
+  const list = (Array.isArray(messages) ? messages : [messages]).filter(
+    (message): message is string => typeof message === "string"
+  )
 
   return list.reduce<BrandErrors>(
     (errors, message) => {

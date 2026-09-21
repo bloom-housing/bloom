@@ -9,6 +9,7 @@ interface BrandColorFieldProps {
   label: string
   value?: string
   derived?: string
+  subNote?: string
   required?: boolean
   register: UseFormMethods["register"]
   setValue: UseFormMethods["setValue"]
@@ -38,6 +39,7 @@ const BrandColorField = ({
   label,
   value,
   derived,
+  subNote,
   required,
   register,
   setValue,
@@ -51,7 +53,9 @@ const BrandColorField = ({
       id={name}
       name={name}
       label={label}
-      placeholder={derived}
+      controlClassName={styles["brand-color-field__control"]}
+      placeholder={derived || "#RRGGBB"}
+      subNote={subNote}
       register={register}
       validation={{ required, pattern: HEX_COLOR }}
       error={error}
@@ -64,7 +68,6 @@ const BrandColorField = ({
         <input
           type="color"
           className={styles["brand-color-field__swatch"]}
-          // The api uppercases on save, so matching it here keeps a reload from looking dirty.
           onChange={(event) =>
             setValue(name, event.target.value.toUpperCase(), { shouldDirty: true })
           }
