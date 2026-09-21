@@ -124,8 +124,12 @@ export const brandFromValues = (values: BrandFormValues): BrandDTO | undefined =
 
 export const brandUpdateFrom = (
   values: BrandFormValues,
-  assets: { logoFileId?: string | null; faviconFileId?: string | null }
+  assets: { logoFileId?: string | null; faviconFileId?: string | null; clearBrand?: boolean }
 ): JurisdictionBrandUpdate => {
+  if (assets.clearBrand) {
+    return { brand: null, logoFileId: null, faviconFileId: null }
+  }
+
   const update: JurisdictionBrandUpdate = { brand: brandFromValues(values) }
   if (assets.logoFileId !== undefined) update.logoFileId = assets.logoFileId
   if (assets.faviconFileId !== undefined) update.faviconFileId = assets.faviconFileId

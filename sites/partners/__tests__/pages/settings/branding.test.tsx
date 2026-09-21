@@ -25,6 +25,9 @@ addTranslation({
   "branding.alertSaved": "test:alertSaved",
   "t.save": "test:save",
   "t.discard": "test:discard",
+  "t.delete": "test:delete",
+  "branding.remove": "test:remove",
+  "branding.logo": "test:logo",
 })
 
 const server = setupServer()
@@ -186,6 +189,45 @@ describe("settings/branding", () => {
       await screen.findByText("a brand font needs both a fontUrl and a family name")
     ).toBeInTheDocument()
     expect(toasts).toHaveLength(0)
+  })
+
+  it("saves with no colors set, since a logo needs none", async () => {
+    acceptSave()
+    renderPage()
+
+    await screen.findByText("test:primary")
+    await userEvent.click(screen.getByText("test:save"))
+
+    await waitFor(() => expect(savedBody).not.toBeNull())
+    expect(savedBody).toEqual({})
+  })
+
+  it("clears the brand and both assets from the remove action", async () => {
+    respondWithBrand({ primary: { base: "#773E98" } })
+    acceptSave()
+    renderPage()
+
+    await waitFor(() => expect(screen.getAllByDisplayValue("#773E98").length).toBeGreaterThan(0))
+    await userEvent.click(screen.getByText("test:remove"))
+    // The button in the dialog, not the one that opened it.
+    const confirm = screen.getAllByText("test:remove").pop()
+    await userEvent.click(confirm)
+
+    await waitFor(() => expect(savedBody).not.toBeNull())
+    expect(savedBody).toEqual({ brand: null, logoFileId: null, faviconFileId: null })
+  })
+
+  it("disconnects a logo when the admin deletes it", async () => {
+    respondWithBrand({ primary: { base: "#773E98" }, logoUrl: "https://example.test/logo.png" })
+    acceptSave()
+    renderPage()
+
+    await waitFor(() => expect(document.getElementById("brand-logo-upload-delete")).not.toBeNull())
+    await userEvent.click(document.getElementById("brand-logo-upload-delete"))
+    await userEvent.click(screen.getByText("test:save"))
+
+    await waitFor(() => expect(savedBody).not.toBeNull())
+    expect(savedBody.logoFileId).toBeNull()
   })
 
   it("puts a server message on the field it names", async () => {

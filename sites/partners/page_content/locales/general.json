@@ -867,6 +867,8 @@
   "branding.radius.md": "Medium",
   "branding.radius.sm": "Small",
   "branding.radius.xl": "Extra large",
+  "branding.remove": "Remove branding",
+  "branding.removeDescription": "This clears the colors, fonts, logo and favicon for this jurisdiction. The public site returns to the default design.",
   "branding.secondary": "Secondary color",
   "branding.serifFontFamily": "Serif font family",
   "branding.shade.dark": "Dark",

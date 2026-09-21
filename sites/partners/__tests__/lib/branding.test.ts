@@ -125,6 +125,20 @@ describe("brandUpdateFrom", () => {
     expect("faviconFileId" in update).toBe(false)
   })
 
+  it("clears everything when the remove action asks it to", () => {
+    // The admin chose Remove branding, so the stored values are irrelevant to what is sent.
+    const update = brandUpdateFrom(valuesWith({ primaryBase: "#773E98" }), { clearBrand: true })
+
+    expect(update).toEqual({ brand: null, logoFileId: null, faviconFileId: null })
+  })
+
+  it("changes nothing when every field is emptied, since clearing is its own action", () => {
+    const update = brandUpdateFrom(valuesWith(), {})
+
+    expect(update.brand).toBeUndefined()
+    expect(JSON.stringify(update)).toEqual("{}")
+  })
+
   it("sends null to disconnect an asset", () => {
     expect(brandUpdateFrom(valuesWith(), { logoFileId: null }).logoFileId).toBeNull()
   })

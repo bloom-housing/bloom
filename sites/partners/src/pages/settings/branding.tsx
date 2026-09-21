@@ -52,7 +52,7 @@ const SettingsBranding = () => {
     setResetCount((count) => count + 1)
   }, [])
 
-  const save = ({ values, logoFileId, faviconFileId }: BrandingSubmission) => {
+  const save = ({ values, logoFileId, faviconFileId, clearBrand }: BrandingSubmission) => {
     setUnplacedErrors([])
 
     return new Promise<{ name: keyof ReturnType<typeof brandToFormValues>; message: string }[]>(
@@ -61,7 +61,7 @@ const SettingsBranding = () => {
           try {
             const updated = await jurisdictionsService.updateBrand({
               jurisdictionId: activeJurisdictionId,
-              body: brandUpdateFrom(values, { logoFileId, faviconFileId }),
+              body: brandUpdateFrom(values, { logoFileId, faviconFileId, clearBrand }),
             })
             // The read endpoint is cacheable, so the response seeds the cache rather than a refetch.
             void mutate(cacheKey, updated, false)

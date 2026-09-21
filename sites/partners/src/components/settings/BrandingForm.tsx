@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Dropzone, Field, Select, t } from "@bloom-housing/ui-components"
-import { Alert, Button, Card, Grid } from "@bloom-housing/ui-seeds"
+import { Alert, Button, Card, Dialog, Grid } from "@bloom-housing/ui-seeds"
 import { BrandRadiusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../shared/SectionWithGrid"
 import BrandColorField from "./BrandColorField"
@@ -16,12 +16,18 @@ import {
 } from "../../lib/branding"
 import styles from "./BrandingForm.module.scss"
 
-const NO_UPLOAD: FileUploadData = { id: "", url: "", fileId: "" }
+// An absent fileId means the admin did not touch the asset, a string is a new upload, and null is
+// a removal. The api reads the three the same way.
+interface AssetChange {
+  fileId?: string | null
+  url?: string
+}
 
 export interface BrandingSubmission {
   values: BrandFormValues
-  logoFileId?: string
-  faviconFileId?: string
+  logoFileId?: string | null
+  faviconFileId?: string | null
+  clearBrand?: boolean
 }
 
 interface BrandingFormProps {
@@ -51,21 +57,23 @@ const BrandingForm = ({
   const { register, handleSubmit, errors, clearErrors, setError, setValue, watch, formState } =
     useForm<BrandFormValues>({ defaultValues })
 
-  const [logo, setLogo] = useState<FileUploadData>(NO_UPLOAD)
-  const [favicon, setFavicon] = useState<FileUploadData>(NO_UPLOAD)
+  const [logo, setLogo] = useState<AssetChange>({})
+  const [favicon, setFavicon] = useState<AssetChange>({})
   const [logoProgress, setLogoProgress] = useState(0)
   const [faviconProgress, setFaviconProgress] = useState(0)
+  const [confirmingRemoval, setConfirmingRemoval] = useState(false)
 
-  const dirty = formState.isDirty || !!logo.fileId || !!favicon.fileId
+  const dirty = formState.isDirty || logo.fileId !== undefined || favicon.fileId !== undefined
   useUnsavedChangesWarning(dirty, t("branding.unsavedChangesWarning"))
   React.useEffect(() => onDirtyChange(dirty), [dirty, onDirtyChange])
 
   const uploaderFor =
-    (setData: (data: FileUploadData) => void, setProgress: (value: number) => void) =>
+    (setChange: (change: AssetChange) => void, setProgress: (value: number) => void) =>
     async (file: File) => {
       await fileUploader({
         file,
-        setFileUploadData: setData as never,
+        setFileUploadData: ((data: FileUploadData) =>
+          setChange({ fileId: data.fileId, url: data.url })) as never,
         setProgressValue: setProgress as never,
         contentType: file.type,
         contentDisposition: "inline",
@@ -75,10 +83,66 @@ const BrandingForm = ({
   const submit = async (values: BrandFormValues) => {
     const fieldErrors = await onSubmit({
       values,
-      logoFileId: logo.fileId || undefined,
-      faviconFileId: favicon.fileId || undefined,
+      logoFileId: logo.fileId,
+      faviconFileId: favicon.fileId,
     })
     fieldErrors.forEach(({ name, message }) => setError(name, { message }))
+  }
+
+  const removeBranding = async () => {
+    setConfirmingRemoval(false)
+    await onSubmit({ values: defaultValues, clearBrand: true })
+  }
+
+  const assetField = ({
+    id,
+    label,
+    helptext,
+    accept,
+    change,
+    setChange,
+    progress,
+    setProgress,
+    storedUrl,
+  }: {
+    id: string
+    label: string
+    helptext: string
+    accept: string
+    change: AssetChange
+    setChange: (change: AssetChange) => void
+    progress: number
+    setProgress: (value: number) => void
+    storedUrl?: string
+  }) => {
+    const shown = change.fileId === null ? undefined : change.url || storedUrl
+
+    return (
+      <>
+        <Dropzone
+          id={id}
+          label={label}
+          helptext={helptext}
+          uploader={uploaderFor(setChange, setProgress)}
+          accept={accept}
+          progress={progress}
+        />
+        {shown && (
+          <div className={styles["asset"]}>
+            <img className={styles["asset-preview"]} src={shown} alt={label} />
+            <Button
+              type="button"
+              variant="alert-outlined"
+              size="sm"
+              onClick={() => setChange({ fileId: null })}
+              id={`${id}-delete`}
+            >
+              {t("t.delete")}
+            </Button>
+          </div>
+        )}
+      </>
+    )
   }
 
   const rampSection = (ramp: RampName, label: string) => {
@@ -94,7 +158,6 @@ const BrandingForm = ({
               label={t("branding.baseColor")}
               value={base}
               subNote={t("branding.colorPickerNote")}
-              required={ramp === "primary"}
               register={register}
               setValue={setValue}
               errors={errors}
@@ -204,38 +267,30 @@ const BrandingForm = ({
           <SectionWithGrid heading={t("branding.assets")}>
             <Grid.Row columns={2}>
               <Grid.Cell>
-                <Dropzone
-                  id="brand-logo-upload"
-                  label={t("branding.logo")}
-                  helptext={t("branding.logoNote")}
-                  uploader={uploaderFor(setLogo, setLogoProgress)}
-                  accept="image/png,image/svg+xml,image/webp"
-                  progress={logoProgress}
-                />
-                {(logo.url || logoUrl) && (
-                  <img
-                    className={styles["asset-preview"]}
-                    src={logo.url || logoUrl}
-                    alt={t("branding.logo")}
-                  />
-                )}
+                {assetField({
+                  id: "brand-logo-upload",
+                  label: t("branding.logo"),
+                  helptext: t("branding.logoNote"),
+                  accept: "image/png,image/svg+xml,image/webp",
+                  change: logo,
+                  setChange: setLogo,
+                  progress: logoProgress,
+                  setProgress: setLogoProgress,
+                  storedUrl: logoUrl,
+                })}
               </Grid.Cell>
               <Grid.Cell>
-                <Dropzone
-                  id="brand-favicon-upload"
-                  label={t("branding.favicon")}
-                  helptext={t("branding.faviconNote")}
-                  uploader={uploaderFor(setFavicon, setFaviconProgress)}
-                  accept="image/png"
-                  progress={faviconProgress}
-                />
-                {(favicon.url || faviconUrl) && (
-                  <img
-                    className={styles["asset-preview"]}
-                    src={favicon.url || faviconUrl}
-                    alt={t("branding.favicon")}
-                  />
-                )}
+                {assetField({
+                  id: "brand-favicon-upload",
+                  label: t("branding.favicon"),
+                  helptext: t("branding.faviconNote"),
+                  accept: "image/png",
+                  change: favicon,
+                  setChange: setFavicon,
+                  progress: faviconProgress,
+                  setProgress: setFaviconProgress,
+                  storedUrl: faviconUrl,
+                })}
               </Grid.Cell>
             </Grid.Row>
           </SectionWithGrid>
@@ -249,7 +304,32 @@ const BrandingForm = ({
         <Button type="button" variant="primary-outlined" onClick={onDiscard} disabled={!dirty}>
           {t("t.discard")}
         </Button>
+        <Button
+          type="button"
+          variant="alert-outlined"
+          onClick={() => setConfirmingRemoval(true)}
+          disabled={isSaving}
+        >
+          {t("branding.remove")}
+        </Button>
       </div>
+
+      <Dialog
+        isOpen={confirmingRemoval}
+        onClose={() => setConfirmingRemoval(false)}
+        ariaLabelledBy="branding-remove-header"
+      >
+        <Dialog.Header id="branding-remove-header">{t("branding.remove")}</Dialog.Header>
+        <Dialog.Content>{t("branding.removeDescription")}</Dialog.Content>
+        <Dialog.Footer>
+          <Button variant="alert" onClick={removeBranding} size="sm">
+            {t("branding.remove")}
+          </Button>
+          <Button variant="primary-outlined" onClick={() => setConfirmingRemoval(false)} size="sm">
+            {t("t.cancel")}
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </form>
   )
 }
