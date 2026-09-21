@@ -301,16 +301,26 @@ describe('Jurisdiction Controller Tests', () => {
         data: jurisdictionFactory(),
       });
 
+      // The mocked stylesheet names Inter, so that is the only family it can serve.
       const res = await put(jurisdiction.id, {
         brand: {
           primary: { base: '#773E98' },
-          serifFontFamily: 'Noto Serif',
+          serifFontFamily: 'Inter',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=Inter',
           buttonRadius: BrandRadiusEnum.xl3,
         },
       }).expect(200);
 
-      expect(res.body.brand.serifFontFamily).toEqual('Noto Serif');
+      expect(res.body.brand.serifFontFamily).toEqual('Inter');
       expect(res.body.brand.buttonRadius).toEqual(BrandRadiusEnum.xl3);
+
+      await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          serifFontFamily: 'Noto Serif',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=Inter',
+        },
+      }).expect(400);
 
       await put(jurisdiction.id, {
         brand: { primary: { base: '#773E98' }, buttonRadius: 'pill' },

@@ -88,6 +88,34 @@ describe('assertFontIsAvailable', () => {
     ).rejects.toThrow(BadRequestException);
   });
 
+  it('checks the serif family against the stylesheet', async () => {
+    const withSerif = brand({ serifFontFamily: 'Noto Serif' });
+
+    await expect(
+      assertFontIsAvailable(
+        httpReturning("font-family: 'Inter'; font-family: 'Noto Serif';"),
+        withSerif,
+      ),
+    ).resolves.toBeUndefined();
+
+    await expect(
+      assertFontIsAvailable(httpReturning("font-family: 'Inter';"), withSerif),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('accepts a brand whose only family is the serif one', async () => {
+    await expect(
+      assertFontIsAvailable(
+        httpReturning("font-family: 'Noto Serif';"),
+        brand({
+          fontFamily: undefined,
+          serifFontFamily: 'Noto Serif',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=Noto+Serif',
+        }),
+      ),
+    ).resolves.toBeUndefined();
+  });
+
   it('checks a heading family stored without a body family', async () => {
     await expect(
       assertFontIsAvailable(
@@ -102,7 +130,7 @@ describe('assertFontIsAvailable', () => {
     ['credentials', 'https://user:pass@fonts.googleapis.com/css2?family=Inter'],
     ['another host', 'https://fonts.example.test/css2?family=Inter'],
   ])(
-    'refuses a url carrying %s rather than fetching it',
+    'refuses a url with %s rather than fetching it',
     async (_label, fontUrl) => {
       const http = httpReturning("font-family: 'Inter';");
 
