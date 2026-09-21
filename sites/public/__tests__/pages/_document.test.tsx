@@ -3,6 +3,7 @@ import { readFileSync } from "fs"
 import { resolve } from "path"
 import Document, { Head } from "next/document"
 import {
+  BrandRadiusEnum,
   FeatureFlagEnum,
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -88,6 +89,7 @@ describe("_document", () => {
 
   it("emits nothing when the flag is off", async () => {
     expect(await styleFor(jurisdictionWith({ primary }, false))).toEqual("")
+    expect(await styleFor(jurisdictionWith({ buttonRadius: "3xl" }, false))).toEqual("")
   })
 
   it("emits nothing when the jurisdiction has no brand", async () => {
@@ -393,7 +395,29 @@ describe("_document", () => {
   it("emits a radius-only brand", async () => {
     const style = await styleFor(jurisdictionWith({ buttonRadius: "full" }))
 
-    expect(style).toBe(":root:root {\n--brand-button-radius: var(--seeds-rounded-full);\n}")
+    expect(style).toContain("--brand-button-radius: var(--seeds-rounded-full);")
+    expect(style.startsWith(":root:root {")).toBe(true)
+    expect(style).not.toContain("--seeds-color")
+  })
+
+  // radiusVariable builds a name rather than looking one up, so every step has to land on a
+  // variable ui-seeds actually defines.
+  it("maps every step to a variable ui-seeds defines", async () => {
+    const tokens = readFileSync(
+      resolve(
+        __dirname,
+        "../../../../node_modules/@bloom-housing/ui-seeds/src/global/tokens/borders.scss"
+      ),
+      "utf8"
+    )
+
+    for (const step of Object.values(BrandRadiusEnum)) {
+      const style = await styleFor(jurisdictionWith({ buttonRadius: step }))
+      const variable = style.match(/var\((--seeds-rounded[\w-]*)\)/)?.[1]
+
+      expect(variable).toBeDefined()
+      expect(tokens).toContain(`${variable}:`)
+    }
   })
 
   // The document and the stylesheet agree on a name that neither side can typecheck.

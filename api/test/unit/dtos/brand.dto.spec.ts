@@ -194,6 +194,38 @@ describe('BrandDTO', () => {
     ).not.toHaveLength(0);
   });
 
+  // Submitted as literals so a change to an enum member's value shows up here.
+  it.each(['sm', 'base', 'md', 'lg', 'xl', '2xl', '3xl', 'full'])(
+    'accepts %s as a button radius',
+    async (buttonRadius) => {
+      expect(
+        await errorsOf({ primary: { base: '#773E98' }, buttonRadius }),
+      ).toHaveLength(0);
+    },
+  );
+
+  it('holds the serif family to the 64 character limit', async () => {
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        serifFontFamily: 'A'.repeat(64),
+      }),
+    ).toHaveLength(0);
+
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        serifFontFamily: 'A'.repeat(65),
+      }),
+    ).not.toHaveLength(0);
+  });
+
+  it('rejects an empty serif family, which IsOptional does not skip', async () => {
+    expect(
+      await errorsOf({ primary: { base: '#773E98' }, serifFontFamily: '' }),
+    ).not.toHaveLength(0);
+  });
+
   it('rejects a button radius outside the seeds scale', async () => {
     expect(
       await errorsOf({ primary: { base: '#773E98' }, buttonRadius: 'pill' }),
