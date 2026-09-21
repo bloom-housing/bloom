@@ -1,0 +1,10 @@
+.brand-color-field__swatch {
+  margin-top: var(--seeds-s2);
+  block-size: var(--seeds-s8);
+  inline-size: var(--seeds-s8);
+  padding: 0;
+  border: 1px solid var(--seeds-color-gray-450);
+  border-radius: var(--seeds-rounded);
+  background-color: transparent;
+  cursor: pointer;
+}
