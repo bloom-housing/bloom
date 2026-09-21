@@ -5,7 +5,9 @@ import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers"
 import { Alert, Button, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { t, ProgressNav, StepHeader } from "@bloom-housing/ui-components"
+import { StopLightModal } from "../components/applications/stopLights/StopLightModal"
 import ApplicationConductor from "../lib/applications/ApplicationConductor"
+import { StopLightsProps } from "../lib/applications/stopLights/useStopLightGate"
 import styles from "./application-form.module.scss"
 
 interface ApplicationFormLayoutProps {
@@ -26,6 +28,7 @@ interface ApplicationFormLayoutProps {
   conductor?: ApplicationConductor
   hideBorder?: boolean
   overrideIsAdvocate?: boolean
+  stopLights?: StopLightsProps
 }
 
 export const LockIcon = ({ locked }: { locked: boolean }) => {
@@ -157,6 +160,23 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
           )}
         </>
       </BloomCard>
+      {props.stopLights && (
+        <>
+          <StopLightModal
+            light="red"
+            isOpen={props.stopLights.redRules.length > 0}
+            rules={props.stopLights.redRules}
+            onEdit={props.stopLights.onEditRed}
+          />
+          <StopLightModal
+            light="yellow"
+            isOpen={props.stopLights.yellowRules.length > 0}
+            rules={props.stopLights.yellowRules}
+            onCancel={props.stopLights.onCancelYellow}
+            onAcknowledge={props.stopLights.onAcknowledgeYellow}
+          />
+        </>
+      )}
     </>
   )
 }

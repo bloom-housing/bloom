@@ -2,13 +2,26 @@ import { useEffect, useState } from "react"
 import { Application, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { StopLightRule, stopLightRules } from "./stopLightRules"
 
+export interface StopLightsProps {
+  redRules: StopLightRule[]
+  yellowRules: StopLightRule[]
+  onEditRed: () => void
+  onCancelYellow: () => void
+  onAcknowledgeYellow: () => void
+}
+
+export interface StopLightGate {
+  guardSubmit: (pendingSave: Partial<Application>, proceed: () => void) => void
+  stopLights: StopLightsProps
+}
+
 export const useStopLightGate = (
   stepName: string,
   application: Application,
   listing: Listing,
   enabledRuleKeys: string[],
   deepLinkRuleKey?: string
-) => {
+): StopLightGate => {
   const rulesForStep = stopLightRules.filter(
     (rule) => rule.step === stepName && enabledRuleKeys.includes(rule.key)
   )
@@ -48,7 +61,7 @@ export const useStopLightGate = (
     )
     if (triggeredYellow.length > 0) {
       setYellowRules(triggeredYellow)
-      setResume({ proceed }) // remember what to run once acknowledged
+      setResume({ proceed })
       return
     }
 
@@ -65,7 +78,7 @@ export const useStopLightGate = (
 
   const cancelYellow = () => {
     setYellowRules([])
-    setResume(null) // drop it, nothing proceeds, applicant stays on the page
+    setResume(null)
   }
 
   const dismissRed = () => setRedRules([])
