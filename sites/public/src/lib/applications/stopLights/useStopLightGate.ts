@@ -9,74 +9,68 @@ export const useStopLightGate = (
   enabledRuleKeys: string[],
   deepLinkRuleKey?: string
 ) => {
-  const rulesForStep = stopLightRules.filter(
-    (rule) => rule.step === stepName && enabledRuleKeys.includes(rule.key)
+  // a step has at most one rule
+  const rule = stopLightRules.find(
+    (candidate) => candidate.step === stepName && enabledRuleKeys.includes(candidate.key)
   )
 
-  const [redRules, setRedRules] = useState<StopLightRule[]>([])
-  const [yellowRules, setYellowRules] = useState<StopLightRule[]>([])
-  const [resume, setResume] = useState<{ proceed: () => void } | null>(null)
+  // the rule currently being shown and, for yellow only, what to run once it is acknowledged
+  const [triggered, setTriggered] = useState<{
+    rule: StopLightRule
+    proceed?: () => void
+  } | null>(null)
 
   useEffect(() => {
-    if (!deepLinkRuleKey) return
-    const rule = rulesForStep.find((r) => r.key === deepLinkRuleKey && r.light === "red")
-    if (rule && rule.evaluate(application, listing)) {
-      setRedRules([rule])
+    if (!deepLinkRuleKey || !rule) return
+    if (
+      rule.key === deepLinkRuleKey &&
+      rule.light === "red" &&
+      rule.evaluate(application, listing)
+    ) {
+      setTriggered({ rule })
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deepLinkRuleKey])
 
   const guardSubmit = (pendingSave: Partial<Application>, proceed: () => void) => {
-    if (rulesForStep.length === 0) {
+    if (!rule) {
       proceed()
       return
     }
 
     const draftApplication = { ...application, ...pendingSave }
 
-    const triggeredRed = rulesForStep.filter(
-      (rule) => rule.light === "red" && rule.evaluate(draftApplication, listing)
-    )
-    if (triggeredRed.length > 0) {
-      setRedRules(triggeredRed)
+    if (!rule.evaluate(draftApplication, listing)) {
+      proceed()
       return
     }
 
-    const triggeredYellow = rulesForStep.filter(
-      (rule) => rule.light === "yellow" && rule.evaluate(draftApplication, listing)
-    )
-    if (triggeredYellow.length > 0) {
-      setYellowRules(triggeredYellow)
-      setResume({ proceed }) // remember what to run once acknowledged
+    if (rule.light === "red") {
+      setTriggered({ rule })
       return
     }
 
-    proceed()
+    setTriggered({ rule, proceed }) // yellow: remember what to run once acknowledged
   }
 
   const acknowledgeYellow = () => {
-    if (!yellowRules.length || !resume) return
-    setYellowRules([])
-    const { proceed } = resume
-    setResume(null)
+    if (!triggered?.proceed) return
+    const { proceed } = triggered
+    setTriggered(null)
     proceed()
   }
 
-  const cancelYellow = () => {
-    setYellowRules([])
-    setResume(null) // drop it, nothing proceeds, applicant stays on the page
-  }
-
-  const dismissRed = () => setRedRules([])
+  // red "Edit" and yellow "Cancel" both just close the modal: nothing proceeds and the
+  // applicant stays on the page
+  const dismiss = () => setTriggered(null)
 
   return {
     guardSubmit,
     stopLights: {
-      redRules,
-      yellowRules,
-      onEditRed: dismissRed,
-      onCancelYellow: cancelYellow,
+      rule: triggered?.rule ?? null,
+      onEditRed: dismiss,
+      onCancelYellow: dismiss,
       onAcknowledgeYellow: acknowledgeYellow,
     },
   }
