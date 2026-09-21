@@ -1437,6 +1437,31 @@ export class JurisdictionsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Update a jurisdiction's branding
+   */
+  updateBrand(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /** requestBody */
+      body?: JurisdictionBrandUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions/{jurisdictionId}/brand"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class ApplicationsService {
@@ -8662,6 +8687,18 @@ export interface JurisdictionUpdate {
 
   /**  */
   brandFaviconAssetId?: string
+}
+
+/** JurisdictionBrandUpdate */
+export interface JurisdictionBrandUpdate {
+  /**  */
+  brand?: CombinedBrandTypes
+
+  /**  */
+  logoFileId?: string
+
+  /**  */
+  faviconFileId?: string
 }
 
 /** FeatureFlag */
