@@ -1,4 +1,6 @@
 // Derives the missing shade-ramp values from a ramp's base color.
+// Mirrored in shared-helpers/src/utilities/brandRamp.ts for the Partners branding form, since the
+// api cannot import shared-helpers. Change both together.
 
 export const HEX_COLOR = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
 
