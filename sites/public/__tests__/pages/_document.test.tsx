@@ -1,4 +1,6 @@
 import React from "react"
+import { readFileSync } from "fs"
+import { resolve } from "path"
 import Document, { Head } from "next/document"
 import {
   FeatureFlagEnum,
@@ -351,19 +353,18 @@ describe("_document", () => {
     expect(style).not.toContain("--seeds-font-serif")
   })
 
-  it("writes the button radius against the button element", async () => {
+  it("emits the button radius as a brand variable", async () => {
     const style = await styleFor(jurisdictionWith({ primary, buttonRadius: "3xl" }))
 
-    expect(style).toContain(":root:root .seeds-button {")
-    expect(style).toContain("--button-border-radius-sm: var(--seeds-rounded-3xl);")
-    expect(style).toContain("--button-border-radius-md: var(--seeds-rounded-3xl);")
-    expect(style).toContain("--button-border-radius-lg: var(--seeds-rounded-3xl);")
+    expect(style).toContain("--brand-button-radius: var(--seeds-rounded-3xl);")
+    // The document names no ui-seeds selector; overrides.scss decides where the value applies.
+    expect(style).not.toContain(".seeds-button")
   })
 
   it("names the unsuffixed seeds variable for the base step", async () => {
     const style = await styleFor(jurisdictionWith({ primary, buttonRadius: "base" }))
 
-    expect(style).toContain("--button-border-radius-md: var(--seeds-rounded);")
+    expect(style).toContain("--brand-button-radius: var(--seeds-rounded);")
   })
 
   it.each([
@@ -374,20 +375,35 @@ describe("_document", () => {
     const style = await styleFor(jurisdictionWith({ primary, buttonRadius }))
 
     expect(style).toContain("--seeds-color-primary: #773E98;")
-    expect(style).not.toContain("--button-border-radius")
-    expect(style).not.toContain(".seeds-button")
+    expect(style).not.toContain("--brand-button-radius")
   })
 
   it("emits a radius-only brand", async () => {
     const style = await styleFor(jurisdictionWith({ buttonRadius: "full" }))
 
-    expect(style).toBe(
-      ":root:root .seeds-button {\n" +
-        "--button-border-radius-sm: var(--seeds-rounded-full);\n" +
-        "--button-border-radius-md: var(--seeds-rounded-full);\n" +
-        "--button-border-radius-lg: var(--seeds-rounded-full);\n" +
-        "}"
+    expect(style).toBe(":root:root {\n--brand-button-radius: var(--seeds-rounded-full);\n}")
+  })
+
+  // The document and the stylesheet agree on a name that neither side can typecheck.
+  it("emits only variables overrides.scss consumes", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        buttonRadius: "3xl",
+        serifFontFamily: "Noto Serif",
+        fontFamily: "Inter",
+        headingFontFamily: "Lato",
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter",
+      })
     )
+    const stylesheet = readFileSync(resolve(__dirname, "../../styles/overrides.scss"), "utf8")
+    const declared = [...style.matchAll(/(--brand-[\w-]+):/g)].map(([, name]) => name)
+    const referenced = [...style.matchAll(/var\((--brand-[\w-]+)\)/g)].map(([, name]) => name)
+
+    expect(declared).toEqual(["--brand-button-radius"])
+    expect(referenced.length).toBeGreaterThan(0)
+    declared.forEach((name) => expect(stylesheet).toContain(`var(${name},`))
+    referenced.forEach((name) => expect(stylesheet).toContain(`${name}:`))
   })
 
   it("links no font when none is stored", async () => {

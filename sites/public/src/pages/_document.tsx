@@ -104,26 +104,14 @@ export const brandStyleBlock = ({
     fontFamily ? `--seeds-font-sans: ${fontStack(fontFamily, "sans")};` : "",
     headingFont ? `--seeds-font-alt-sans: ${fontStack(headingFont, "alt-sans")};` : "",
     serifFontFamily ? `--seeds-font-serif: ${fontStack(serifFontFamily, "serif")};` : "",
+    buttonRadius ? `--brand-button-radius: ${radiusVariable(buttonRadius)};` : "",
   ]
     .filter(Boolean)
     .join("\n")
-
-  // ui-seeds sets the radius on .seeds-button itself, and an element's own declaration beats an
-  // inherited one, so a button radius has to be written against the same element.
-  const buttonVariables = buttonRadius
-    ? ["sm", "md", "lg"]
-        .map((size) => `--button-border-radius-${size}: ${radiusVariable(buttonRadius)};`)
-        .join("\n")
-    : ""
 
   // Doubled selector: ui-seeds sets these same tokens in a stylesheet that loads after this
   // block, and a single :root would lose the tie on document order.
-  return [
-    rootVariables ? `:root:root {\n${rootVariables}\n}` : "",
-    buttonVariables ? `:root:root .seeds-button {\n${buttonVariables}\n}` : "",
-  ]
-    .filter(Boolean)
-    .join("\n")
+  return rootVariables ? `:root:root {\n${rootVariables}\n}` : ""
 }
 
 export default class BloomDocument extends Document<BrandDocumentProps> {

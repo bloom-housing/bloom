@@ -7,6 +7,10 @@
 
   .seeds-button {
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
+
+    --button-border-radius-sm: var(--brand-button-radius, var(--seeds-rounded));
+    --button-border-radius-md: var(--brand-button-radius, var(--seeds-rounded));
+    --button-border-radius-lg: var(--brand-button-radius, var(--seeds-rounded));
   }
 
   .main-container {
@@ -275,8 +279,8 @@
     --seeds-bg-color-surface-primary: var(--seeds-color-primary-lighter);
     --seeds-bg-color-surface-primary-inverse: var(--seeds-color-primary-darker);
     .seeds-button {
-      --button-border-radius-sm: var(--seeds-rounded-3xl);
-      --button-border-radius-md: var(--seeds-rounded-3xl);
+      --button-border-radius-sm: var(--brand-button-radius, var(--seeds-rounded-3xl));
+      --button-border-radius-md: var(--brand-button-radius, var(--seeds-rounded-3xl));
     }
   }
 
