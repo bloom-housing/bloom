@@ -10,9 +10,10 @@ import { mapTo } from '../utilities/mapTo';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { Prisma } from '@prisma/client';
 import { JurisdictionUpdate } from '../dtos/jurisdictions/jurisdiction-update.dto';
+import { JurisdictionBrandUpdate } from '../dtos/jurisdictions/jurisdiction-brand-update.dto';
 import { JurisdictionViews } from '../enums/jurisdictions/view-enum';
 import { BrandDTO } from '../dtos/jurisdictions/brand.dto';
-import { brandAssetUrl } from '../utilities/brand-asset-url';
+import { brandAssetUrl, isUsableFileId } from '../utilities/brand-asset-url';
 import { completeRamp, HEX_COLOR } from '../utilities/brand-ramp';
 import { assertFontIsAvailable } from '../utilities/font-availability';
 import { HttpService } from '@nestjs/axios';
@@ -137,6 +138,13 @@ const brandAssetConnect = (assetId?: string) =>
     ? undefined
     : assetId
     ? { connect: { id: assetId } }
+    : { disconnect: true };
+
+const brandAssetWrite = (fileId: string | null | undefined, label: string) =>
+  fileId === undefined
+    ? undefined
+    : fileId
+    ? { create: { fileId, label } }
     : { disconnect: true };
 
 /**
@@ -268,6 +276,44 @@ export class JurisdictionService {
       include: view,
     });
     return mapTo(Jurisdiction, withResponseBrand(rawResults));
+  }
+
+  async updateBrand(
+    jurisdictionId: string,
+    incomingData: JurisdictionBrandUpdate,
+  ): Promise<Jurisdiction> {
+    await this.findOrThrow(jurisdictionId);
+
+    this.assertFileIdsAreUsable([
+      incomingData.logoFileId,
+      incomingData.faviconFileId,
+    ]);
+    await assertFontIsAvailable(this.httpService, incomingData.brand);
+
+    const rawResult = await this.prisma.jurisdictions.update({
+      data: {
+        brand: storableBrand(incomingData.brand),
+        brandLogo: brandAssetWrite(incomingData.logoFileId, 'brandLogo'),
+        brandFavicon: brandAssetWrite(
+          incomingData.faviconFileId,
+          'brandFavicon',
+        ),
+      },
+      where: { id: jurisdictionId },
+      include: view,
+    });
+    return mapTo(Jurisdiction, withResponseBrand(rawResult));
+  }
+
+  private assertFileIdsAreUsable(fileIds: (string | null | undefined)[]): void {
+    const unusable = fileIds.filter(
+      (fileId): fileId is string => !!fileId && !isUsableFileId(fileId),
+    );
+    if (unusable.length) {
+      throw new BadRequestException(
+        `file ids ${unusable.join(', ')} are not usable storage keys`,
+      );
+    }
   }
 
   private async assertAssetsExist(ids: (string | undefined)[]): Promise<void> {
