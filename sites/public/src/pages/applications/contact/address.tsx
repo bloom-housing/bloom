@@ -19,6 +19,7 @@ import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend
 import FormsLayout from "../../../layouts/forms"
 import { disableContactFormOption, isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import {
   FoundAddress,
   findValidatedAddress,
@@ -725,3 +726,5 @@ const ApplicationAddress = () => {
 }
 
 export default ApplicationAddress
+
+export const getStaticProps = sharedGetStaticProps

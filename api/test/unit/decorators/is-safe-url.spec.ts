@@ -20,6 +20,12 @@ describe('IsSafeUrlConstraint', () => {
     expect(isSafe('tel:+15555550100')).toBe(true);
   });
 
+  it('rejects a protocol-relative URL, which addresses another host with no scheme', () => {
+    expect(isSafe('//evil.example/logo.png')).toBe(false);
+    expect(isSafe('//evil.example')).toBe(false);
+    expect(isSafe('/\u0000/evil.example/logo.png')).toBe(false);
+  });
+
   it('rejects script-executing and other disallowed schemes', () => {
     expect(isSafe('javascript:alert(1)')).toBe(false);
     expect(isSafe('JavaScript:alert(1)')).toBe(false);

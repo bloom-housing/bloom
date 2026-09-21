@@ -7,6 +7,7 @@ import {
   IsDefined,
   IsOptional,
   IsString,
+  MaxLength,
   ValidateNested,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
@@ -17,17 +18,20 @@ export class FaqItemDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   id: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   question: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @SanitizeHtml()
   @ApiProperty()
+  @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   answerHtml: string;
 
   // Tombstone: a non-English row sets this to drop the English item from the merge.
@@ -43,12 +47,14 @@ export class FaqCategoryDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   id: string;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   title?: string;
 
   @Expose()

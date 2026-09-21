@@ -7,7 +7,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Resources from "../components/resources/Resources"
 import { UserStatus } from "../lib/constants"
-import { fetchJurisdictionByName, fetchPublicOverrides } from "../lib/hooks"
+import { fetchSharedPageProps } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
 
 const AdditionalResources = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
@@ -37,13 +37,10 @@ export default AdditionalResources
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getStaticProps({ locale }: { locale?: string }) {
-  const [jurisdiction, publicOverrides] = await Promise.all([
-    fetchJurisdictionByName(),
-    fetchPublicOverrides(locale),
-  ])
+  const shared = await fetchSharedPageProps(locale)
 
   return {
-    props: { jurisdiction, publicOverrides },
+    props: { ...shared },
     revalidate: Number(process.env.cacheRevalidate),
   }
 }

@@ -19,7 +19,10 @@ import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { CommunityTypeDTO } from '../dtos/script-runner/community-type.dto';
 import { PaginationDTO } from '../dtos/script-runner/pagination.dto';
+import { TranslationOverrideMigrationDTO } from '../dtos/script-runner/translation-override-migration.dto';
 import { ApiKeyGuard } from '../guards/api-key.guard';
+import { PermissionGuard } from '../guards/permission.guard';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 
 @Controller('scriptRunner')
 @ApiTags('scriptRunner')
@@ -89,33 +92,6 @@ export class ScriptRunnerController {
     );
   }
 
-  @Put('lotteryTranslations')
-  @ApiOperation({
-    summary: 'A script that adds lottery translations to the db',
-    operationId: 'lotteryTranslations',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  async lotteryTranslations(
-    @Request() req: ExpressRequest,
-  ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.addLotteryTranslations(req);
-  }
-
-  @Put('lotteryTranslationsCreateIfEmpty')
-  @ApiOperation({
-    summary:
-      'A script that adds lottery translations to the db and creates them if it does not exist',
-    operationId: 'lotteryTranslations',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  async lotteryTranslationsCreateIfEmpty(
-    @Request() req: ExpressRequest,
-  ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.addLotteryTranslationsCreateIfEmpty(
-      req,
-    );
-  }
-
   @Put('optOutExistingLotteries')
   @ApiOperation({
     summary: 'A script that opts out existing lottery listings',
@@ -146,19 +122,6 @@ export class ScriptRunnerController {
     );
   }
 
-  @Put('updateCodeExpirationTranslations')
-  @ApiOperation({
-    summary:
-      'A script that updates single use code translations to show extended expiration time',
-    operationId: 'updateCodeExpirationTranslations',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  async updateCodeExpirationTranslations(
-    @Request() req: ExpressRequest,
-  ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.updateCodeExpirationTranslations(req);
-  }
-
   @Put('hideProgramsFromListings')
   @ApiOperation({
     summary:
@@ -172,17 +135,23 @@ export class ScriptRunnerController {
     return await this.scriptRunnerService.hideProgramsFromListings(req);
   }
 
-  @Put('updatesWhatHappensInLotteryEmail')
+  @Put('migrateTranslationOverridesToKeyRows')
+  @UseGuards(PermissionGuard)
+  @PermissionTypeDecorator('translation')
   @ApiOperation({
     summary:
-      'A script that updates the "what happens next" content in lottery email',
-    operationId: 'updatesWhatHappensInLotteryEmail',
+      'A script that loads the bundled site override files into translation_strings',
+    operationId: 'migrateTranslationOverridesToKeyRows',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async updatesWhatHappensInLotteryEmail(
+  async migrateTranslationOverridesToKeyRows(
+    @Body() body: TranslationOverrideMigrationDTO,
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.updatesWhatHappensInLotteryEmail(req);
+    return await this.scriptRunnerService.migrateTranslationOverridesToKeyRows(
+      req,
+      body,
+    );
   }
 
   @Put('addFeatureFlags')

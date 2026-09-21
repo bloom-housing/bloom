@@ -35,6 +35,7 @@ import ApplicationFormLayout, {
 } from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 import { isFeatureFlagOn } from "../../../lib/helpers"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 export class Member implements HouseholdMemberUpdate {
   constructor(orderId: number) {
@@ -589,3 +590,5 @@ const ApplicationMember = () => {
 }
 
 export default ApplicationMember
+
+export const getStaticProps = sharedGetStaticProps

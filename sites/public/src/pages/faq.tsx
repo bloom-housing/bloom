@@ -14,12 +14,15 @@ import FrequentlyAskedQuestions from "../patterns/FrequentlyAskedQuestions"
 import { getGenericFaqContent } from "../static_content/generic_faq_content"
 import pageStyles from "../components/content-pages/FaqPage.module.scss"
 import styles from "../patterns/PageHeaderLayout.module.scss"
-import { fetchJurisdictionByName, fetchPublicOverrides } from "../lib/hooks"
+import { fetchSharedPageProps } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
 import { getJurisdictionFaqContent } from "../static_content/jurisdiction_faq_content"
+import { getStoredFaqContent } from "../static_content/stored_content"
+import { useJurisdictionContent } from "../lib/JurisdictionContentContext"
 
 const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
   const { profile } = useContext(AuthContext)
+  const jurisdictionContent = useJurisdictionContent()
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -29,7 +32,10 @@ const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
     })
   }, [profile])
 
-  const content = getJurisdictionFaqContent() || getGenericFaqContent()
+  const content =
+    getStoredFaqContent(jurisdictionContent) ||
+    getJurisdictionFaqContent() ||
+    getGenericFaqContent()
 
   const enableResources = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableResources)
 
@@ -72,13 +78,10 @@ export default FaqPage
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getStaticProps({ locale }: { locale?: string }) {
-  const [jurisdiction, publicOverrides] = await Promise.all([
-    fetchJurisdictionByName(),
-    fetchPublicOverrides(locale),
-  ])
+  const shared = await fetchSharedPageProps(locale)
 
   return {
-    props: { jurisdiction, publicOverrides },
+    props: { ...shared },
     revalidate: Number(process.env.cacheRevalidate),
   }
 }

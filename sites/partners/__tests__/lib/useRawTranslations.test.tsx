@@ -6,13 +6,13 @@ import { LanguagesEnum, SiteEnum } from "@bloom-housing/shared-helpers/src/types
 import { TranslationScope, useRawTranslations } from "../../src/lib/hooks"
 
 const getRawTranslations = jest.fn()
-const getRawPartnersTranslations = jest.fn()
+const getRawGlobalTranslations = jest.fn()
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0 }}>
     <AuthContext.Provider
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      value={{ translationsService: { getRawTranslations, getRawPartnersTranslations } as any }}
+      value={{ translationsService: { getRawTranslations, getRawGlobalTranslations } as any }}
     >
       {children}
     </AuthContext.Provider>
@@ -22,7 +22,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 const jurisdictionScope = (jurisdictionId: string, site = SiteEnum.public) =>
   ({ type: "jurisdiction", jurisdictionId, site } as const)
 
-const globalScope = { type: "global" } as const
+const globalScope = { type: "global", site: SiteEnum.partners } as const
 
 const renderRawTranslations = (scope: TranslationScope | null) =>
   renderHook(() => useRawTranslations(scope, LanguagesEnum.en), { wrapper })
@@ -31,7 +31,7 @@ describe("useRawTranslations", () => {
   beforeEach(() => {
     jest.clearAllMocks()
     getRawTranslations.mockResolvedValue([])
-    getRawPartnersTranslations.mockResolvedValue([])
+    getRawGlobalTranslations.mockResolvedValue([])
   })
 
   it("issues no request until a scope is chosen", () => {
@@ -39,7 +39,7 @@ describe("useRawTranslations", () => {
 
     expect(result.current.cacheKey).toBeNull()
     expect(getRawTranslations).not.toHaveBeenCalled()
-    expect(getRawPartnersTranslations).not.toHaveBeenCalled()
+    expect(getRawGlobalTranslations).not.toHaveBeenCalled()
     expect(result.current.loading).toBe(false)
   })
 
@@ -80,14 +80,15 @@ describe("useRawTranslations", () => {
   })
 
   it("reads the global Partners scope, which names no jurisdiction", async () => {
-    getRawPartnersTranslations.mockResolvedValue([
-      { key: "nav.siteTitlePartners", value: "Portal" },
-    ])
+    getRawGlobalTranslations.mockResolvedValue([{ key: "nav.siteTitlePartners", value: "Portal" }])
     const { result } = renderRawTranslations(globalScope)
 
-    expect(result.current.cacheKey).toEqual("/api/adapter/translations/partners/raw/en")
+    expect(result.current.cacheKey).toEqual("/api/adapter/translations/global/raw/partners/en")
     await waitFor(() => expect(result.current.data).toHaveLength(1))
-    expect(getRawPartnersTranslations).toHaveBeenCalledWith({ language: LanguagesEnum.en })
+    expect(getRawGlobalTranslations).toHaveBeenCalledWith({
+      site: SiteEnum.partners,
+      language: LanguagesEnum.en,
+    })
     // The jurisdiction endpoint has no scope to name here, so it must not be the one called.
     expect(getRawTranslations).not.toHaveBeenCalled()
   })
@@ -97,7 +98,7 @@ describe("useRawTranslations", () => {
     const { result: jurisdictional } = renderRawTranslations(jurisdictionScope("jurisdiction1"))
 
     expect(global.current.cacheKey).not.toEqual(jurisdictional.current.cacheKey)
-    await waitFor(() => expect(getRawPartnersTranslations).toHaveBeenCalledTimes(1))
+    await waitFor(() => expect(getRawGlobalTranslations).toHaveBeenCalledTimes(1))
     expect(getRawTranslations).toHaveBeenCalledTimes(1)
   })
 

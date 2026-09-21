@@ -6,6 +6,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const ApplicationCommunityTypes = () => {
   const { conductor } = useFormConductor("preferences")
@@ -24,3 +25,5 @@ const ApplicationCommunityTypes = () => {
 }
 
 export default ApplicationCommunityTypes
+
+export const getStaticProps = sharedGetStaticProps

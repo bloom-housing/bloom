@@ -83,6 +83,7 @@ export const createBloomingtonJurisdiction = async (
         FeatureFlagEnum.enablePartnerSettings,
         FeatureFlagEnum.enableReceivedAtAndByFields,
         FeatureFlagEnum.enableResources,
+        FeatureFlagEnum.enableResourcesCard,
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSexualOrientationQuestion,
         FeatureFlagEnum.enableSingleUseCode,
