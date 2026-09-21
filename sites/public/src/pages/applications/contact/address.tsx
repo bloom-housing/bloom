@@ -29,13 +29,6 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
-import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
-
-// DEMO ONLY. The real wiring reads the enabled keys off the jurisdiction, as
-// conductor.config.enabledStopLightRuleKeys. Hardcoded here so the demo needs no
-// feature flag or jurisdiction setup; every other rule in the registry stays
-// inert because its key is not listed.
-const DEMO_STOP_LIGHT_RULE_KEYS = ["demoAddressOutsideServiceArea"]
 
 const ApplicationAddress = () => {
   const { profile } = useContext(AuthContext)
@@ -45,15 +38,6 @@ const ApplicationAddress = () => {
 
   const { conductor, application, listing } = useFormConductor("primaryApplicantAddress")
   const currentPageSection = 1
-
-  // DEMO ONLY. Feeds ApplicationFormLayout's `stopLights` prop, which is what renders
-  // the modal.
-  const { guardSubmit, stopLights } = useStopLightGate(
-    "primaryApplicantAddress",
-    application,
-    listing,
-    DEMO_STOP_LIGHT_RULE_KEYS
-  )
 
   const enableFullTimeStudentQuestion = isFeatureFlagOn(
     conductor.config,
@@ -84,21 +68,14 @@ const ApplicationAddress = () => {
     if (!validation) return
 
     if (!verifyAddress) {
-      // DEMO ONLY. The gate runs before address verification: there is no point
-      // normalizing an address the applicant is about to be blocked on. This step owns
-      // part of applicant, so pendingSave rebuilds that sub-object for the rule to read;
-      // nothing below runs unless guardSubmit decides to call proceed.
-      const pendingSave = { applicant: { ...application.applicant, ...data.applicant } }
-      guardSubmit(pendingSave, () => {
-        setFoundAddress({})
-        setVerifyAddress(true)
-        void findValidatedAddress(
-          data.applicant.applicantAddress,
-          setFoundAddress,
-          setNewAddressSelected
-        )
-        window.scrollTo({ top: 0 })
-      })
+      setFoundAddress({})
+      setVerifyAddress(true)
+      void findValidatedAddress(
+        data.applicant.applicantAddress,
+        setFoundAddress,
+        setNewAddressSelected
+      )
+      window.scrollTo({ top: 0 })
 
       return // Skip rest of the submit process
     }
@@ -196,7 +173,6 @@ const ApplicationAddress = () => {
               : undefined,
           }}
           conductor={conductor}
-          stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
           <div style={{ display: verifyAddress ? "none" : "block" }}>
