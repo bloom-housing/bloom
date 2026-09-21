@@ -168,9 +168,17 @@ export const createDate = (
   return parsed.toDate()
 }
 
+// fileId is the bare storage key. On s3 `id` is the full public url, which some consumers store
+// verbatim, so the key is reported separately rather than by changing `id`.
+export interface FileUploadData {
+  id: string
+  url: string
+  fileId: string
+}
+
 interface FileUploaderParams {
   file: File
-  setFileUploadData: (data: SetStateAction<{ id: string; url: string }>) => void
+  setFileUploadData: (data: SetStateAction<FileUploadData>) => void
   setProgressValue: (value: SetStateAction<number>) => void
   contentType?: string
   contentDisposition?: string
@@ -202,7 +210,7 @@ export const fileUploader = async ({
         contentDisposition: contentDisposition || "",
       },
     })
-    const { uploadUrl, publicUrl } = resp
+    const { uploadUrl, publicUrl, fileId } = resp
     setProgressValue(3)
 
     void S3Upload({
@@ -216,6 +224,7 @@ export const fileUploader = async ({
       setFileUploadData({
         id: publicUrl,
         url: publicUrl,
+        fileId,
       })
     })
   } else {
@@ -247,6 +256,7 @@ export const fileUploader = async ({
         setFileUploadData({
           id: response.data.public_id,
           url: cloudinaryUrlFromId(response.data.public_id),
+          fileId: response.data.public_id,
         })
       })
       .catch(() => {
