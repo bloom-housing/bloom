@@ -46,10 +46,10 @@ export const getGenericProfessionalPartnersContent = (): FaqContent => {
 }
 
 export const getGenericProfessionalPartnersContactContent = (): ContactCardProps => {
-  const contactDescription = t("resources.contactDescription")
-  const contactInfo = t("resources.contactInfo")
-  const email = t("resources.contactEmail")
-  const heading = t("footer.contact")
+  const contactDescription = t("professionalPartners.contactDescription")
+  const contactInfo = t("professionalPartners.contactInfo")
+  const email = t("professionalPartners.contactEmail")
+  const heading = t("resources.contactTitle")
 
   return {
     address: undefined,
