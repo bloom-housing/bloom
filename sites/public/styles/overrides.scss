@@ -1,6 +1,6 @@
 :root {
-  // What a brand font falls back to, mirroring the ui-seeds stacks. The document references these
-  // rather than repeating a stack
+  // Verbatim copies of the ui-seeds stacks, referenced by _document.tsx.
+  // TODO(ui-seeds#155): replace with var(--seeds-font-default-*) once those tokens ship.
   --brand-font-fallback-sans: "Open Sans", Helvetica, Arial, Verdana, sans-serif;
   --brand-font-fallback-alt-sans: Lato, Helvetica, Arial, Verdana, sans-serif;
   --brand-font-fallback-serif: "Noto Serif", Georgia, Times, serif;
@@ -8,6 +8,8 @@
   .seeds-button {
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
 
+    // Defaults mirror ui-seeds/src/actions/Button.scss.
+    // TODO(ui-seeds#155): drop these once .seeds-button reads --seeds-rounded-button.
     --button-border-radius-sm: var(--brand-button-radius, var(--seeds-rounded));
     --button-border-radius-md: var(--brand-button-radius, var(--seeds-rounded));
     --button-border-radius-lg: var(--brand-button-radius, var(--seeds-rounded));
