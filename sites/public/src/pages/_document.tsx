@@ -74,10 +74,10 @@ const rampVariables = (namespace: string, name: string, ramp: BrandRamp) =>
     )
     .join("\n")
 
-// Exported for tests: <Html> cannot render outside Next's document context.
-// The fallbacks live in overrides.scss so the stacks stay in css next to the rest of the styling.
+// --brand-font-fallback-* is defined in overrides.scss. A missing custom property makes the whole
+// font-family declaration invalid, so sans-serif or serif is included as a last resort.
 const fontStack = (family: string, slot: "sans" | "alt-sans" | "serif") =>
-  `"${family}", var(--brand-font-fallback-${slot})`
+  `"${family}", var(--brand-font-fallback-${slot}, ${slot === "serif" ? "serif" : "sans-serif"})`
 
 const RADIUS_STEPS: string[] = Object.values(BrandRadiusEnum)
 

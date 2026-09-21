@@ -251,7 +251,7 @@ describe("_document", () => {
     )
 
     expect(style).toContain(
-      `--seeds-font-sans: "Playfair Display", var(--brand-font-fallback-sans);`
+      `--seeds-font-sans: "Playfair Display", var(--brand-font-fallback-sans, sans-serif);`
     )
   })
 
@@ -264,8 +264,12 @@ describe("_document", () => {
       })
     )
 
-    expect(style).toContain(`--seeds-font-sans: "Inter", var(--brand-font-fallback-sans);`)
-    expect(style).toContain(`--seeds-font-alt-sans: "Inter", var(--brand-font-fallback-alt-sans);`)
+    expect(style).toContain(
+      `--seeds-font-sans: "Inter", var(--brand-font-fallback-sans, sans-serif);`
+    )
+    expect(style).toContain(
+      `--seeds-font-alt-sans: "Inter", var(--brand-font-fallback-alt-sans, sans-serif);`
+    )
   })
 
   it("uses a stored heading font for the alt token only", async () => {
@@ -278,9 +282,11 @@ describe("_document", () => {
       })
     )
 
-    expect(style).toContain(`--seeds-font-sans: "Inter", var(--brand-font-fallback-sans);`)
     expect(style).toContain(
-      `--seeds-font-alt-sans: "Playfair Display", var(--brand-font-fallback-alt-sans);`
+      `--seeds-font-sans: "Inter", var(--brand-font-fallback-sans, sans-serif);`
+    )
+    expect(style).toContain(
+      `--seeds-font-alt-sans: "Playfair Display", var(--brand-font-fallback-alt-sans, sans-serif);`
     )
   })
 
@@ -295,7 +301,9 @@ describe("_document", () => {
     )
 
     expect(style).not.toContain("display: none")
-    expect(style).toContain(`--seeds-font-alt-sans: "Inter", var(--brand-font-fallback-alt-sans);`)
+    expect(style).toContain(
+      `--seeds-font-alt-sans: "Inter", var(--brand-font-fallback-alt-sans, sans-serif);`
+    )
   })
 
   it("sets no font variable when the family has no stylesheet", async () => {
@@ -332,7 +340,9 @@ describe("_document", () => {
       })
     )
 
-    expect(style).toContain(`--seeds-font-sans: "${fontFamily}", var(--brand-font-fallback-sans);`)
+    expect(style).toContain(
+      `--seeds-font-sans: "${fontFamily}", var(--brand-font-fallback-sans, sans-serif);`
+    )
   })
 
   it("gives the serif family its own fallback stack", async () => {
@@ -344,7 +354,9 @@ describe("_document", () => {
       })
     )
 
-    expect(style).toContain(`--seeds-font-serif: "Noto Serif", var(--brand-font-fallback-serif);`)
+    expect(style).toContain(
+      `--seeds-font-serif: "Noto Serif", var(--brand-font-fallback-serif, serif);`
+    )
   })
 
   it("sets no serif variable when the family has no stylesheet", async () => {
@@ -398,7 +410,7 @@ describe("_document", () => {
     )
     const stylesheet = readFileSync(resolve(__dirname, "../../styles/overrides.scss"), "utf8")
     const declared = [...style.matchAll(/(--brand-[\w-]+):/g)].map(([, name]) => name)
-    const referenced = [...style.matchAll(/var\((--brand-[\w-]+)\)/g)].map(([, name]) => name)
+    const referenced = [...style.matchAll(/var\((--brand-[\w-]+)[,)]/g)].map(([, name]) => name)
 
     expect(declared).toEqual(["--brand-button-radius"])
     expect(referenced.length).toBeGreaterThan(0)
