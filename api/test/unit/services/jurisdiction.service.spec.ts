@@ -738,6 +738,30 @@ describe('Testing jurisdiction service', () => {
         expect(writtenData().brand).toEqual(Prisma.DbNull);
       });
 
+      it.each([
+        ['an empty string', ''],
+        ['whitespace', '   '],
+        ['null', null],
+      ])('disconnects the asset for %s', async (_label, fileId) => {
+        givenExistingJurisdiction();
+
+        await service.updateBrand(jurisdictionId, { logoFileId: fileId });
+
+        expect(writtenData().brandLogo).toEqual({ disconnect: true });
+      });
+
+      it('trims a file id before storing it', async () => {
+        givenExistingJurisdiction();
+
+        await service.updateBrand(jurisdictionId, {
+          logoFileId: '  dev/bloom_logo.png  ',
+        });
+
+        expect(writtenData().brandLogo).toEqual({
+          create: { fileId: 'dev/bloom_logo.png', label: 'brandLogo' },
+        });
+      });
+
       it('refuses a file id the read path could not turn into a url', async () => {
         givenExistingJurisdiction();
 

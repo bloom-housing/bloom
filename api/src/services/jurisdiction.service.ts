@@ -140,12 +140,12 @@ const brandAssetConnect = (assetId?: string) =>
     ? { connect: { id: assetId } }
     : { disconnect: true };
 
-const brandAssetWrite = (fileId: string | null | undefined, label: string) =>
-  fileId === undefined
-    ? undefined
-    : fileId
-    ? { create: { fileId, label } }
-    : { disconnect: true };
+const brandAssetWrite = (fileId: string | null | undefined, label: string) => {
+  if (fileId === undefined) return undefined;
+
+  const key = fileId?.trim();
+  return key ? { create: { fileId: key, label } } : { disconnect: true };
+};
 
 /**
   this is the service for jurisdictions
@@ -307,7 +307,8 @@ export class JurisdictionService {
 
   private assertFileIdsAreUsable(fileIds: (string | null | undefined)[]): void {
     const unusable = fileIds.filter(
-      (fileId): fileId is string => !!fileId && !isUsableFileId(fileId),
+      (fileId): fileId is string =>
+        !!fileId?.trim() && !isUsableFileId(fileId.trim()),
     );
     if (unusable.length) {
       throw new BadRequestException(
