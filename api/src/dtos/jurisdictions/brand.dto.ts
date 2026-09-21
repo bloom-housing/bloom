@@ -84,13 +84,13 @@ export class BrandDTO {
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @Matches(FONT_FAMILY, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ example: 'Inter' })
   fontFamily?: string;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @Matches(FONT_FAMILY, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ example: 'Playfair Display' })
   headingFontFamily?: string;
 

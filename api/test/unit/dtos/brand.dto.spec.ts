@@ -166,6 +166,34 @@ describe('BrandDTO', () => {
     ).not.toHaveLength(0);
   });
 
+  // All three reach the same interpolation in the style block, so all three take the same rule.
+  it.each(['fontFamily', 'headingFontFamily', 'serifFontFamily'])(
+    'holds %s to the family pattern',
+    async (field) => {
+      expect(
+        await errorsOf({
+          primary: { base: '#773E98' },
+          [field]: 'Inter"; } body { display: none } .x {',
+        }),
+      ).not.toHaveLength(0);
+
+      expect(
+        await errorsOf({ primary: { base: '#773E98' }, [field]: 'Inter' }),
+      ).toHaveLength(0);
+    },
+  );
+
+  it.each([
+    ['a number', 123],
+    ['a boolean', true],
+    ['an array', ['Noto Serif']],
+    ['an object', { toString: 1 }],
+  ])('rejects %s as a serif family', async (_label, serifFontFamily) => {
+    expect(
+      await errorsOf({ primary: { base: '#773E98' }, serifFontFamily }),
+    ).not.toHaveLength(0);
+  });
+
   it('rejects a button radius outside the seeds scale', async () => {
     expect(
       await errorsOf({ primary: { base: '#773E98' }, buttonRadius: 'pill' }),

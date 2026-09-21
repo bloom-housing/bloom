@@ -1,6 +1,7 @@
 import React from "react"
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document"
 import {
+  BrandRadiusEnum,
   BrandRampDTO,
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -78,13 +79,13 @@ const rampVariables = (namespace: string, name: string, ramp: BrandRamp) =>
 const fontStack = (family: string, slot: "sans" | "alt-sans" | "serif") =>
   `"${family}", var(--brand-font-fallback-${slot})`
 
-const RADIUS_STEPS = ["sm", "base", "md", "lg", "xl", "2xl", "3xl", "full"]
+const RADIUS_STEPS: string[] = Object.values(BrandRadiusEnum)
 
 const radiusStepOnly = (value?: string): string | null =>
   typeof value === "string" && RADIUS_STEPS.includes(value) ? value : null
 
 const radiusVariable = (step: string) =>
-  step === "base" ? "var(--seeds-rounded)" : `var(--seeds-rounded-${step})`
+  step === BrandRadiusEnum.base ? "var(--seeds-rounded)" : `var(--seeds-rounded-${step})`
 
 export const brandStyleBlock = ({
   primary,
