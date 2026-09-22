@@ -643,6 +643,7 @@
   "authentication.terms.acceptExtended": "شرایط استفاده را مرور کرده، متوجه شده و با آنها موافقم.",
   "authentication.terms.acceptToc": "شرایط خدمات را می‌پذیرم",
   "authentication.terms.publicAccept": "قبل از ایجاد حساب کاربری، باید شرایط استفاده را بپذیرید.",
+  "authentication.terms.publicTerms": "Lorem ipsum dolor sit amet، consectetur adipiscing elit، sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "authentication.terms.reviewToc": "لطفا شرایط خدمات را مرور کنید",
   "authentication.terms.reviewTou": "شرایط استفاده را مرور کنید",
   "authentication.terms.termsOfService": "شرایط خدمات را اینجا ببینید",

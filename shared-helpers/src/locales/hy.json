@@ -643,6 +643,7 @@
   "authentication.terms.acceptExtended": "Ես կարդացել, հասկացել և համաձայն եմ օգտագործման պայմանների հետ։",
   "authentication.terms.acceptToc": "Ես ընդունում եմ ծառայության մատուցման պայմանները",
   "authentication.terms.publicAccept": "Հաշիվ ստեղծելուց առաջ դուք պետք է ընդունեք օգտագործման պայմանները։",
+  "authentication.terms.publicTerms": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua:",
   "authentication.terms.reviewToc": "Խնդրում ենք ծանոթանալ Օգտագործման պայմաններին",
   "authentication.terms.reviewTou": "Օգտագործման պայմանների վերանայում",
   "authentication.terms.termsOfService": "Ծառայության պայմանները դիտեք այստեղ",

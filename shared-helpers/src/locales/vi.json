@@ -646,6 +646,7 @@
   "authentication.terms.acceptExtended": "Tôi đã xem xét, hiểu và đồng ý với Điều khoản sử dụng.",
   "authentication.terms.acceptToc": "Tôi chấp nhận Điều khoản Dịch vụ",
   "authentication.terms.publicAccept": "Bạn phải chấp nhận Điều khoản sử dụng trước khi tạo tài khoản.",
+  "authentication.terms.publicTerms": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labe et dolore magna aliqua.",
   "authentication.terms.reviewToc": "Xem lại Điều khoản Dịch vụ",
   "authentication.terms.reviewTou": "Xem lại Điều khoản sử dụng",
   "authentication.terms.termsOfService": "Điều khoản Dịch vụ",

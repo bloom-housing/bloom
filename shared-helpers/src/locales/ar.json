@@ -646,6 +646,7 @@
   "authentication.terms.acceptExtended": "لقد قمت بمراجعة شروط الاستخدام وفهمها والموافقة عليها.",
   "authentication.terms.acceptToc": "أوافق على شروط الخدمة",
   "authentication.terms.publicAccept": "يجب عليك قبول شروط الاستخدام قبل إنشاء حساب.",
+  "authentication.terms.publicTerms": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut Labore et dolore magna aliqua.",
   "authentication.terms.reviewToc": "يرجى مراجعة شروط الخدمة",
   "authentication.terms.reviewTou": "مراجعة شروط الاستخدام",
   "authentication.terms.termsOfService": "اطلع على شروط الخدمة هنا",

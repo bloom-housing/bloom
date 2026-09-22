@@ -646,6 +646,7 @@
   "authentication.terms.acceptExtended": "আমি ব্যবহারের শর্তাবলী পর্যালোচনা করেছি, বুঝেছি এবং সম্মত।",
   "authentication.terms.acceptToc": "আমি পরিষেবার শর্তাবলী গ্রহণ করছি।",
   "authentication.terms.publicAccept": "অ্যাকাউন্ট তৈরি করার আগে আপনাকে অবশ্যই ব্যবহারের শর্তাবলী মেনে নিতে হবে।",
+  "authentication.terms.publicTerms": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "authentication.terms.reviewToc": "অনুগ্রহ করে পরিষেবার শর্তাবলী পর্যালোচনা করুন।",
   "authentication.terms.reviewTou": "ব্যবহারের শর্তাবলী পর্যালোচনা করুন",
   "authentication.terms.termsOfService": "পরিষেবার শর্তাবলী এখানে দেখুন",

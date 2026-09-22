@@ -643,6 +643,7 @@
   "authentication.terms.acceptExtended": "본인은 이용약관을 검토하고 이해했으며, 이에 동의합니다.",
   "authentication.terms.acceptToc": "서비스 약관에 동의합니다.",
   "authentication.terms.publicAccept": "계정을 만들기 전에 이용 약관에 동의해야 합니다.",
+  "authentication.terms.publicTerms": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labe et dolore magna aliqua.",
   "authentication.terms.reviewToc": "서비스 약관을 검토해 주십시오.",
   "authentication.terms.reviewTou": "이용약관을 검토하세요",
   "authentication.terms.termsOfService": "서비스 약관은 여기에서 확인하세요.",

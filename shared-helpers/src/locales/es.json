@@ -646,6 +646,7 @@
   "authentication.terms.acceptExtended": "He revisado, entiendo y acepto los Términos de uso.",
   "authentication.terms.acceptToc": "Acepto los términos del servicio",
   "authentication.terms.publicAccept": "Debe aceptar los Términos de uso antes de crear una cuenta.",
+  "authentication.terms.publicTerms": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "authentication.terms.reviewToc": "Por favor, revise los términos de servicio",
   "authentication.terms.reviewTou": "Revisar los términos de uso",
   "authentication.terms.termsOfService": "Términos de servicio",
