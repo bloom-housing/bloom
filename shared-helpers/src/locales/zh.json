@@ -604,6 +604,7 @@
   "authentication.createAccount.resendAnEmailTo": "請傳送電子郵件至",
   "authentication.createAccount.resendEmailInfo": "請於 24 小時內按一下我們向您傳送電子郵件中的連結，以便完成帳戶建立程序。",
   "authentication.createAccount.resendTheEmail": "重新發送電子郵件",
+  "authentication.createAccount.showPassword": "显示密码",
   "authentication.forgotPassword.changePassword": "更改密码",
   "authentication.forgotPassword.enterNewLoginPassword": "请输入新的登录密码",
   "authentication.forgotPassword.errors.emailNotFound": "找不到電子郵件。請確保您以此電子郵件向我們註冊帳戶並確認完畢。",

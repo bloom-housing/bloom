@@ -604,6 +604,7 @@
   "authentication.createAccount.resendAnEmailTo": "Gửi lại email đến",
   "authentication.createAccount.resendEmailInfo": "Vui lòng nhấp vào liên kết trong email mà chúng tôi gửi cho quý vị trong vòng 24 giờ để hoàn tất việc tạo tài khoản.",
   "authentication.createAccount.resendTheEmail": "Gửi lại Email",
+  "authentication.createAccount.showPassword": "Hiển thị mật khẩu",
   "authentication.forgotPassword.changePassword": "Đổi mật khẩu",
   "authentication.forgotPassword.enterNewLoginPassword": "Vui lòng nhập mật khẩu đăng nhập mới",
   "authentication.forgotPassword.errors.emailNotFound": "Không tìm thấy email. Vui lòng đảm bảo email của quý vị có tài khoản với chúng tôi và đã được xác nhận.",

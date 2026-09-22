@@ -604,6 +604,7 @@
   "authentication.createAccount.resendAnEmailTo": "Ipadalang muli ang email sa",
   "authentication.createAccount.resendEmailInfo": "Paki-click ang link sa email na ipinadala namin sa iyo sa loob ng 24 na oras upang makumpleto ang paggawa ng account.",
   "authentication.createAccount.resendTheEmail": "Ipadalang muli ang email",
+  "authentication.createAccount.showPassword": "Ipakita ang password",
   "authentication.forgotPassword.changePassword": "Baguhin ang password",
   "authentication.forgotPassword.enterNewLoginPassword": "Mangyaring magpasok ng bagong password sa pag-login",
   "authentication.forgotPassword.errors.emailNotFound": "Hindi nahanap ang email. Pakitiyak na ang iyong email ay may account sa amin at nakumpirma.",

@@ -601,6 +601,7 @@
   "authentication.createAccount.resendAnEmailTo": "ارسال مجدد ایمیل به",
   "authentication.createAccount.resendEmailInfo": "لطفاً برای تکمیل ایجاد حساب، روی لینک موجود در ایمیلی که ظرف ۲۴ ساعت برای شما ارسال می‌کنیم کلیک کنید.",
   "authentication.createAccount.resendTheEmail": "ایمیل را دوباره ارسال کنید",
+  "authentication.createAccount.showPassword": "نمایش رمز عبور",
   "authentication.forgotPassword.changePassword": "تغییر رمز عبور",
   "authentication.forgotPassword.enterNewLoginPassword": "لطفا رمز عبور جدید ورود را وارد کنید",
   "authentication.forgotPassword.errors.emailNotFound": "ایمیل پیدا نشد. لطفاً مطمئن شوید که ایمیل شما دارای حساب کاربری در ما است و تأیید شده است.",

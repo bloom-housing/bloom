@@ -604,6 +604,7 @@
   "authentication.createAccount.resendAnEmailTo": "إعادة إرسال بريد إلكتروني إلى",
   "authentication.createAccount.resendEmailInfo": "يرجى النقر فوق الارتباط الموجود في البريد الإلكتروني الذي نرسله إليك في غضون 24 ساعة لإكمال إنشاء الحساب.",
   "authentication.createAccount.resendTheEmail": "إعادة إرسال البريد الإلكتروني",
+  "authentication.createAccount.showPassword": "إظهار كلمة المرور",
   "authentication.forgotPassword.changePassword": "تغيير كلمة المرور",
   "authentication.forgotPassword.enterNewLoginPassword": "الرجاء إدخال كلمة المرور الجديدة لتسجيل الدخول",
   "authentication.forgotPassword.errors.emailNotFound": "البريد الإلكتروني غير موجود. يرجى التأكد من أن بريدك الإلكتروني لديه حساب معنا وأنه تم تأكيده.",
