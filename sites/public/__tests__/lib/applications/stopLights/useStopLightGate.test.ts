@@ -76,8 +76,7 @@ describe("useStopLightGate passthrough", () => {
 
     expect(proceed).toHaveBeenCalledTimes(1)
     expect(otherStepRule.evaluate).not.toHaveBeenCalled()
-    expect(result.current.stopLights.redRules).toEqual([])
-    expect(result.current.stopLights.yellowRules).toEqual([])
+    expect(result.current.stopLights.rule).toBeNull()
   })
 
   it("proceeds immediately when the step's rule is not enabled for the jurisdiction", () => {
@@ -91,7 +90,7 @@ describe("useStopLightGate passthrough", () => {
 
     expect(proceed).toHaveBeenCalledTimes(1)
     expect(disabledRule.evaluate).not.toHaveBeenCalled()
-    expect(result.current.stopLights.redRules).toEqual([])
+    expect(result.current.stopLights.rule).toBeNull()
   })
 
   it("proceeds when an enabled red rule is evaluated but does not trigger", () => {
@@ -105,7 +104,24 @@ describe("useStopLightGate passthrough", () => {
 
     expect(proceed).toHaveBeenCalledTimes(1)
     expect(quietRed.evaluate).toHaveBeenCalledTimes(1)
-    expect(result.current.stopLights.redRules).toEqual([])
+    expect(result.current.stopLights.rule).toBeNull()
+  })
+
+  it("evaluates the rule against the pending save merged onto the application", () => {
+    const tooBig = buildRule(
+      "tooBig",
+      "red",
+      (candidate: Application) => candidate.householdSize > 4
+    )
+    const { result } = renderGate([tooBig], { application: { householdSize: 1 } as Application })
+    const proceed = jest.fn()
+
+    act(() => {
+      result.current.guardSubmit({ householdSize: 5 }, proceed)
+    })
+
+    expect(proceed).not.toHaveBeenCalled()
+    expect(result.current.stopLights.rule).toEqual(tooBig)
   })
 })
 
@@ -120,28 +136,28 @@ describe("useStopLightGate red light", () => {
     })
 
     expect(proceed).not.toHaveBeenCalled()
-    expect(result.current.stopLights.redRules).toEqual([redRule])
-    expect(result.current.stopLights.yellowRules).toEqual([])
+    expect(result.current.stopLights.rule).toEqual(redRule)
   })
 
-  it("collects every triggered red rule in a single pass", () => {
-    const firstRed = buildRule("firstRed", "red", true)
-    const secondRed = buildRule("secondRed", "red", true)
-    const quietRed = buildRule("quietRed", "red", false)
-    const { result } = renderGate([firstRed, secondRed, quietRed])
+  it("does not hold a submit to resume, so acknowledging does nothing", () => {
+    const redRule = buildRule("redRule", "red", true)
+    const { result } = renderGate([redRule])
     const proceed = jest.fn()
 
     act(() => {
       result.current.guardSubmit({ householdSize: 3 }, proceed)
     })
+    act(() => {
+      result.current.stopLights.onAcknowledgeYellow()
+    })
 
     expect(proceed).not.toHaveBeenCalled()
-    expect(result.current.stopLights.redRules).toEqual([firstRed, secondRed])
+    expect(result.current.stopLights.rule).toEqual(redRule)
   })
 })
 
 describe("useStopLightGate yellow light", () => {
-  it("warns without proceeding when a yellow rule triggers", () => {
+  it("warns without proceeding when the yellow rule triggers", () => {
     const yellowRule = buildRule("yellowRule", "yellow", true)
     const { result } = renderGate([yellowRule])
     const proceed = jest.fn()
@@ -151,8 +167,7 @@ describe("useStopLightGate yellow light", () => {
     })
 
     expect(proceed).not.toHaveBeenCalled()
-    expect(result.current.stopLights.yellowRules).toEqual([yellowRule])
-    expect(result.current.stopLights.redRules).toEqual([])
+    expect(result.current.stopLights.rule).toEqual(yellowRule)
   })
 
   it("runs the held submit once the warning is acknowledged", () => {
@@ -171,28 +186,25 @@ describe("useStopLightGate yellow light", () => {
     })
 
     expect(proceed).toHaveBeenCalledTimes(1)
-    expect(result.current.stopLights.yellowRules).toEqual([])
+    expect(result.current.stopLights.rule).toBeNull()
   })
 
-  it("shows every triggered yellow rule at once and clears them in one acknowledge", () => {
-    const firstYellow = buildRule("firstYellow", "yellow", true)
-    const secondYellow = buildRule("secondYellow", "yellow", true)
-    const quietYellow = buildRule("quietYellow", "yellow", false)
-    const { result } = renderGate([firstYellow, secondYellow, quietYellow])
+  it("does not run the held submit a second time on a repeat acknowledge", () => {
+    const yellowRule = buildRule("yellowRule", "yellow", true)
+    const { result } = renderGate([yellowRule])
     const proceed = jest.fn()
 
     act(() => {
       result.current.guardSubmit({ householdSize: 3 }, proceed)
     })
-
-    expect(result.current.stopLights.yellowRules).toEqual([firstYellow, secondYellow])
-
+    act(() => {
+      result.current.stopLights.onAcknowledgeYellow()
+    })
     act(() => {
       result.current.stopLights.onAcknowledgeYellow()
     })
 
     expect(proceed).toHaveBeenCalledTimes(1)
-    expect(result.current.stopLights.yellowRules).toEqual([])
   })
 
   it("proceeds when an enabled yellow rule is evaluated but does not trigger", () => {
@@ -206,7 +218,7 @@ describe("useStopLightGate yellow light", () => {
 
     expect(proceed).toHaveBeenCalledTimes(1)
     expect(quietYellow.evaluate).toHaveBeenCalledTimes(1)
-    expect(result.current.stopLights.yellowRules).toEqual([])
+    expect(result.current.stopLights.rule).toBeNull()
   })
 
   it("drops the held submit on cancel", () => {
@@ -222,30 +234,18 @@ describe("useStopLightGate yellow light", () => {
     })
 
     expect(proceed).not.toHaveBeenCalled()
-    expect(result.current.stopLights.yellowRules).toEqual([])
-  })
-})
-
-describe("useStopLightGate color precedence", () => {
-  it("shows only red when both colors trigger on the same submit", () => {
-    const redRule = buildRule("redRule", "red", true)
-    const yellowRule = buildRule("yellowRule", "yellow", true)
-    const { result } = renderGate([redRule, yellowRule])
-    const proceed = jest.fn()
+    expect(result.current.stopLights.rule).toBeNull()
 
     act(() => {
-      result.current.guardSubmit({ householdSize: 3 }, proceed)
+      result.current.stopLights.onAcknowledgeYellow()
     })
 
     expect(proceed).not.toHaveBeenCalled()
-    expect(result.current.stopLights.redRules).toEqual([redRule])
-    expect(result.current.stopLights.yellowRules).toEqual([])
-    expect(yellowRule.evaluate).not.toHaveBeenCalled()
   })
 })
 
 describe("useStopLightGate re-triggering", () => {
-  it("shows the same red rule again when the answer still trips it", () => {
+  it("shows the red rule again when the answer still trips it", () => {
     const tooBig = buildRule(
       "tooBig",
       "red",
@@ -261,47 +261,37 @@ describe("useStopLightGate re-triggering", () => {
       result.current.stopLights.onEditRed()
     })
 
-    expect(result.current.stopLights.redRules).toEqual([])
+    expect(result.current.stopLights.rule).toBeNull()
 
     act(() => {
       result.current.guardSubmit({ householdSize: 5 }, proceed)
     })
 
-    expect(result.current.stopLights.redRules).toEqual([tooBig])
+    expect(result.current.stopLights.rule).toEqual(tooBig)
     expect(proceed).not.toHaveBeenCalled()
   })
 
-  it("swaps in a different red rule rather than replaying the dismissed one", () => {
+  it("proceeds once the red answer is corrected after a dismiss", () => {
     const tooBig = buildRule(
       "tooBig",
       "red",
       (candidate: Application) => candidate.householdSize > 4
     )
-    const empty = buildRule(
-      "empty",
-      "red",
-      (candidate: Application) => candidate.householdSize === 0
-    )
-    const { result } = renderGate([tooBig, empty])
+    const { result } = renderGate([tooBig])
     const proceed = jest.fn()
 
     act(() => {
       result.current.guardSubmit({ householdSize: 5 }, proceed)
     })
-
-    expect(result.current.stopLights.redRules).toEqual([tooBig])
-
     act(() => {
       result.current.stopLights.onEditRed()
     })
-
-    expect(result.current.stopLights.redRules).toEqual([])
-
     act(() => {
-      result.current.guardSubmit({ householdSize: 0 }, proceed)
+      result.current.guardSubmit({ householdSize: 3 }, proceed)
     })
 
-    expect(result.current.stopLights.redRules).toEqual([empty])
+    expect(proceed).toHaveBeenCalledTimes(1)
+    expect(result.current.stopLights.rule).toBeNull()
   })
 
   it("re-evaluates yellow from scratch after a cancel", () => {
@@ -320,13 +310,13 @@ describe("useStopLightGate re-triggering", () => {
       result.current.stopLights.onCancelYellow()
     })
 
-    expect(result.current.stopLights.yellowRules).toEqual([])
+    expect(result.current.stopLights.rule).toBeNull()
 
     act(() => {
       result.current.guardSubmit({ householdSize: 3 }, proceed)
     })
 
-    expect(result.current.stopLights.yellowRules).toEqual([noIncome])
+    expect(result.current.stopLights.rule).toEqual(noIncome)
     expect(proceed).not.toHaveBeenCalled()
 
     act(() => {
@@ -336,36 +326,27 @@ describe("useStopLightGate re-triggering", () => {
     expect(proceed).toHaveBeenCalledTimes(1)
   })
 
-  it("surfaces a newly triggered yellow once the red answer is fixed", () => {
-    const tooBig = buildRule(
-      "tooBig",
-      "red",
-      (candidate: Application) => candidate.householdSize > 4
-    )
-    const exactlyThree = buildRule(
-      "exactlyThree",
+  it("proceeds without a warning once the yellow answer is corrected after a cancel", () => {
+    const noIncome = buildRule(
+      "noIncome",
       "yellow",
       (candidate: Application) => candidate.householdSize === 3
     )
-    const { result } = renderGate([tooBig, exactlyThree])
+    const { result } = renderGate([noIncome])
     const proceed = jest.fn()
 
     act(() => {
-      result.current.guardSubmit({ householdSize: 5 }, proceed)
-    })
-
-    expect(result.current.stopLights.redRules).toEqual([tooBig])
-
-    act(() => {
-      result.current.stopLights.onEditRed()
-    })
-    act(() => {
       result.current.guardSubmit({ householdSize: 3 }, proceed)
     })
+    act(() => {
+      result.current.stopLights.onCancelYellow()
+    })
+    act(() => {
+      result.current.guardSubmit({ householdSize: 2 }, proceed)
+    })
 
-    expect(result.current.stopLights.redRules).toEqual([])
-    expect(result.current.stopLights.yellowRules).toEqual([exactlyThree])
-    expect(proceed).not.toHaveBeenCalled()
+    expect(proceed).toHaveBeenCalledTimes(1)
+    expect(result.current.stopLights.rule).toBeNull()
   })
 })
 
@@ -374,7 +355,7 @@ describe("useStopLightGate deep link", () => {
     const blocked = buildRule("blocked", "red", true)
     const { result } = renderGate([blocked], { deepLinkRuleKey: "blocked" })
 
-    expect(result.current.stopLights.redRules).toEqual([blocked])
+    expect(result.current.stopLights.rule).toEqual(blocked)
     expect(blocked.evaluate).toHaveBeenCalledWith(baseApplication, baseListing)
   })
 
@@ -383,7 +364,7 @@ describe("useStopLightGate deep link", () => {
     const { result } = renderGate([fixed], { deepLinkRuleKey: "fixed" })
 
     expect(fixed.evaluate).toHaveBeenCalledTimes(1)
-    expect(result.current.stopLights.redRules).toEqual([])
+    expect(result.current.stopLights.rule).toBeNull()
   })
 
   it("ignores a key naming a yellow rule", () => {
@@ -391,8 +372,7 @@ describe("useStopLightGate deep link", () => {
     const { result } = renderGate([yellowRule], { deepLinkRuleKey: "yellowRule" })
 
     expect(yellowRule.evaluate).not.toHaveBeenCalled()
-    expect(result.current.stopLights.redRules).toEqual([])
-    expect(result.current.stopLights.yellowRules).toEqual([])
+    expect(result.current.stopLights.rule).toBeNull()
   })
 
   it("ignores a key the jurisdiction has not enabled", () => {
@@ -403,6 +383,14 @@ describe("useStopLightGate deep link", () => {
     })
 
     expect(disabledRule.evaluate).not.toHaveBeenCalled()
-    expect(result.current.stopLights.redRules).toEqual([])
+    expect(result.current.stopLights.rule).toBeNull()
+  })
+
+  it("ignores a key that does not match the step's rule", () => {
+    const stepRule = buildRule("stepRule", "red", true)
+    const { result } = renderGate([stepRule], { deepLinkRuleKey: "someOtherRule" })
+
+    expect(stepRule.evaluate).not.toHaveBeenCalled()
+    expect(result.current.stopLights.rule).toBeNull()
   })
 })
