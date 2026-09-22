@@ -16,7 +16,13 @@ import {
   ListingImage,
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { fileUploader, fieldHasError, fieldIsRequired, getLabel } from "../../../../lib/helpers"
+import {
+  fileUploader,
+  FileUploadData,
+  fieldHasError,
+  fieldIsRequired,
+  getLabel,
+} from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
@@ -173,9 +179,10 @@ const ListingPhotos = (props: ListingPhotosProps) => {
   const [pendingNewImage, setPendingNewImage] = useState<ListingImage | null>(null)
 
   const [progressValue, setProgressValue] = useState(0)
-  const [latestUpload, setLatestUpload] = useState({
+  const [latestUpload, setLatestUpload] = useState<FileUploadData>({
     id: "",
     url: "",
+    fileId: "",
   })
   const [drawerImages, setDrawerImages] = useState<ListingImage[]>([])
 
@@ -199,7 +206,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
       const newImages = [...drawerImages, newImage]
       setDrawerImages(newImages)
     }
-    setLatestUpload({ id: "", url: "" })
+    setLatestUpload({ id: "", url: "", fileId: "" })
     setProgressValue(0)
   }, [drawerImages, latestUpload, props.enableListingImageAltText])
 

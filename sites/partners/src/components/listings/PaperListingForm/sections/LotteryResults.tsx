@@ -14,7 +14,7 @@ import {
   ListingEventsTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Card, Drawer } from "@bloom-housing/ui-seeds"
-import { fileUploader } from "../../../../lib/helpers"
+import { fileUploader, FileUploadData } from "../../../../lib/helpers"
 
 interface LotteryResultsProps {
   submitCallback: (data: { listingEvents: ListingEvent[] }) => void
@@ -30,9 +30,10 @@ const LotteryResults = (props: LotteryResultsProps) => {
 
   const { submitCallback, drawerState, showDrawer } = props
   const [progressValue, setProgressValue] = useState(0)
-  const [fileUploadData, setFileUploadData] = useState({
+  const [fileUploadData, setFileUploadData] = useState<FileUploadData>({
     id: "",
     url: "",
+    fileId: "",
   })
 
   const listingEvents = watch("listingEvents")
@@ -45,6 +46,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
       setFileUploadData({
         url: cloudinaryUrlFromId(uploadedPDF.file?.fileId || uploadedPDF.assets?.fileId),
         id: uploadedPDF.id,
+        fileId: uploadedPDF.file?.fileId || uploadedPDF.assets?.fileId,
       })
       // Don't allow a new one to be uploaded if one already exists so setting progress to 100%
       setProgressValue(100)
@@ -114,6 +116,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
               setFileUploadData({
                 id: "",
                 url: "",
+                fileId: "",
               })
               setProgressValue(0)
             }}

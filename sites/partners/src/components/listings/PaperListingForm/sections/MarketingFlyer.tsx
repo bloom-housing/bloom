@@ -12,17 +12,12 @@ import {
 } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
-import { fileUploader } from "../../../../lib/helpers"
+import { fileUploader, FileUploadData } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
-
-type FileUploadData = {
-  id: string
-  url: string
-}
 
 type FlyerAttachType = "upload" | "url" | null
 
-const EMPTY_FILE_UPLOAD_DATA: FileUploadData = { id: "", url: "" }
+const EMPTY_FILE_UPLOAD_DATA: FileUploadData = { id: "", url: "", fileId: "" }
 const EMPTY_FILE = { fileId: "", label: "" }
 
 const getFlyerAttachType = (
@@ -46,6 +41,7 @@ const initializeFileData = (
     return {
       id: file.fileId,
       url: cloudinaryUrlFromId(file.fileId),
+      fileId: file.fileId,
     }
   }
   return EMPTY_FILE_UPLOAD_DATA

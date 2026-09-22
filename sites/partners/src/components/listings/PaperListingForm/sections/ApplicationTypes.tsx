@@ -19,7 +19,13 @@ import {
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { fileUploader, fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
+import {
+  fileUploader,
+  FileUploadData,
+  fieldMessage,
+  fieldHasError,
+  getLabel,
+} from "../../../../lib/helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
@@ -142,9 +148,10 @@ const ApplicationTypes = ({
   const [selectedLanguage, setSelectedLanguage] = useState("")
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
-  const [fileUploadData, setFileUploadData] = useState({
+  const [fileUploadData, setFileUploadData] = useState<FileUploadData>({
     id: "",
     url: "",
+    fileId: "",
   })
   const referralPhoneRef = React.useRef("")
   const resetDrawerState = () => {
@@ -152,6 +159,7 @@ const ApplicationTypes = ({
     setFileUploadData({
       id: "",
       url: "",
+      fileId: "",
     })
     setDrawerState(false)
   }
@@ -225,6 +233,7 @@ const ApplicationTypes = ({
               setFileUploadData({
                 id: "",
                 url: "",
+                fileId: "",
               })
               setProgressValue(0)
             }}
