@@ -92,6 +92,40 @@ describe("brandFromValues", () => {
     expect(brand.primary).toEqual({ base: "#773E98", dark: "#6E2598" })
   })
 
+  it("round trips a secondary ramp without moving it onto the primary", () => {
+    const stored = {
+      primary: { base: "#773E98", dark: "#6E2598" },
+      secondary: {
+        base: "#0077DA",
+        dark: "#0069C0",
+        darker: "#004C8C",
+        light: "#DCEFFF",
+        lighter: "#F0F8FF",
+      },
+    }
+
+    const brand = brandFromValues(brandToFormValues(jurisdictionWith(stored)))
+
+    // The secondary shades are all derived, so only its base survives the trip.
+    expect(brand).toEqual({
+      primary: { base: "#773E98", dark: "#6E2598" },
+      secondary: { base: "#0077DA" },
+    })
+  })
+
+  it("keeps an explicit secondary shade", () => {
+    const brand = brandFromValues(
+      brandToFormValues(
+        jurisdictionWith({
+          primary: { base: "#773E98" },
+          secondary: { base: "#0077DA", dark: "#112233" },
+        })
+      )
+    )
+
+    expect(brand.secondary).toEqual({ base: "#0077DA", dark: "#112233" })
+  })
+
   it("omits a secondary with no base", () => {
     const brand = brandFromValues(valuesWith({ primaryBase: "#773E98", secondaryDark: "#123456" }))
 
@@ -103,6 +137,13 @@ describe("brandFromValues", () => {
 
     expect(brand.primary.base).toEqual("#773E98")
     expect(brand.fontFamily).toEqual("Inter")
+  })
+
+  it("sends the button radius", () => {
+    const brand = brandFromValues(valuesWith({ buttonRadius: "3xl" }))
+
+    expect(brand.buttonRadius).toEqual("3xl")
+    expect(brand.primary).toBeUndefined()
   })
 
   it("omits the brand entirely when nothing is set", () => {
@@ -137,6 +178,15 @@ describe("brandUpdateFrom", () => {
 
     expect(update.brand).toBeUndefined()
     expect(JSON.stringify(update)).toEqual("{}")
+  })
+
+  it("sends a favicon id as well as a logo id", () => {
+    const update = brandUpdateFrom(valuesWith(), {
+      logoFileId: "dev/logo.png",
+      faviconFileId: "dev/favicon.png",
+    })
+
+    expect(update.faviconFileId).toEqual("dev/favicon.png")
   })
 
   it("sends null to disconnect an asset", () => {

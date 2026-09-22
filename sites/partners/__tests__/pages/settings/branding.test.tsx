@@ -12,7 +12,13 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, render } from "../../testUtils"
+import * as helpers from "../../../src/lib/helpers"
 import SettingsBranding from "../../../src/pages/settings/branding"
+
+jest.mock("../../../src/lib/helpers", () => ({
+  ...jest.requireActual("../../../src/lib/helpers"),
+  fileUploader: jest.fn(),
+}))
 
 // The suite supplies the strings it asserts on, so editing the shipped copy cannot break it.
 addTranslation({
@@ -28,6 +34,7 @@ addTranslation({
   "t.delete": "test:delete",
   "branding.remove": "test:remove",
   "branding.logo": "test:logo",
+  "branding.alertLoadFailed": "test:loadFailed",
 })
 
 const server = setupServer()
@@ -133,6 +140,23 @@ describe("settings/branding", () => {
     expect(pushMock).not.toHaveBeenCalledWith("/unauthorized")
   })
 
+  it("shows an alert when the jurisdiction cannot be read", async () => {
+    server.use(
+      ...READ_PATHS.map((path) => rest.get(path, (_req, res, ctx) => res(ctx.status(500))))
+    )
+    renderPage()
+
+    expect(await screen.findByText("test:loadFailed")).toBeInTheDocument()
+  })
+
+  it("renders no form for an admin with no flag-enabled jurisdiction", async () => {
+    // authorized comes from the flag across all jurisdictions, so the page opens with an empty list.
+    renderPage({ jurisdictions: [] })
+
+    await waitFor(() => expect(pushMock).not.toHaveBeenCalledWith("/unauthorized"))
+    expect(screen.queryByText("test:save")).not.toBeInTheDocument()
+  })
+
   it("leaves a derived shade out of the save, so it keeps deriving", async () => {
     // A read returns every shade whether it was stored or derived.
     respondWithBrand({
@@ -215,6 +239,33 @@ describe("settings/branding", () => {
 
     await waitFor(() => expect(savedBody).not.toBeNull())
     expect(savedBody).toEqual({ brand: null, logoFileId: null, faviconFileId: null })
+  })
+
+  it("sends the bare storage key from an upload, not the public url", async () => {
+    // The whole point of fileUploader reporting fileId: brandAssetUrl refuses a full url.
+    const uploader = helpers.fileUploader as jest.MockedFunction<typeof helpers.fileUploader>
+    uploader.mockImplementation(({ setFileUploadData }) => {
+      setFileUploadData({
+        id: "https://bloom-public.s3.us-west-2.amazonaws.com/9f1c2e3a",
+        url: "https://bloom-public.s3.us-west-2.amazonaws.com/9f1c2e3a",
+        fileId: "9f1c2e3a",
+      })
+      return Promise.resolve()
+    })
+    respondWithBrand({ primary: { base: "#773E98" } })
+    acceptSave()
+    renderPage()
+
+    await waitFor(() => expect(document.getElementById("brand-logo-upload")).not.toBeNull())
+    await userEvent.upload(
+      document.getElementById("brand-logo-upload") as HTMLInputElement,
+      new File(["x"], "logo.png", { type: "image/png" })
+    )
+    await waitFor(() => expect(uploader).toHaveBeenCalled())
+    await userEvent.click(screen.getByText("test:save"))
+
+    await waitFor(() => expect(savedBody).not.toBeNull())
+    expect(savedBody.logoFileId).toEqual("9f1c2e3a")
   })
 
   it("disconnects a logo when the admin deletes it", async () => {
