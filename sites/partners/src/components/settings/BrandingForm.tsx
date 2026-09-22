@@ -65,8 +65,6 @@ const BrandingForm = ({
 
   const dirty = formState.isDirty || logo.fileId !== undefined || favicon.fileId !== undefined
 
-  // fileUploader resolves once the presign returns, not once the file lands, so a save started in
-  // that window would send no file id at all.
   const uploading = [logoProgress, faviconProgress].some(
     (progress) => progress > 0 && progress < 100
   )
