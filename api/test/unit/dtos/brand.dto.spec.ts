@@ -105,6 +105,35 @@ describe('BrandDTO', () => {
     ).toEqual('https://fonts.googleapis.com/css2?family=Inter&display=swap');
   });
 
+  it('puts display in the query even when the url has a fragment', async () => {
+    // Appended to the whole url it would land inside the fragment and never reach google.
+    expect(
+      toBrand({
+        primary: { base: '#773E98' },
+        fontUrl: 'https://fonts.googleapis.com/css2?family=Inter#section',
+      }).fontUrl,
+    ).toEqual(
+      'https://fonts.googleapis.com/css2?family=Inter&display=swap#section',
+    );
+  });
+
+  it('keeps a multi word family readable rather than re-encoding it', async () => {
+    expect(
+      toBrand({
+        primary: { base: '#773E98' },
+        fontUrl: 'https://fonts.googleapis.com/css2?family=Noto+Serif',
+      }).fontUrl,
+    ).toEqual(
+      'https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap',
+    );
+  });
+
+  it('leaves a value that is not a url for IsUrl to reject', async () => {
+    expect(
+      toBrand({ primary: { base: '#773E98' }, fontUrl: 'not a url' }).fontUrl,
+    ).toEqual('not a url');
+  });
+
   it('leaves an explicit display value alone', async () => {
     expect(
       toBrand({
