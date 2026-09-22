@@ -126,6 +126,22 @@ describe("brandFromValues", () => {
     expect(brand.secondary).toEqual({ base: "#0077DA", dark: "#112233" })
   })
 
+  it("sends a secondary set on its own", () => {
+    const brand = brandFromValues(valuesWith({ secondaryBase: "#0077DA" }))
+
+    expect(brand).toEqual({ secondary: { base: "#0077DA" } })
+    expect("primary" in brand).toBe(false)
+  })
+
+  it.each([
+    ["a font", { fontFamily: "Inter" }],
+    ["a radius", { buttonRadius: "3xl" }],
+    ["a secondary", { secondaryBase: "#0077DA" }],
+  ])("builds no primary key for %s set on its own", (_label, overrides) => {
+    // An explicit primary: undefined would be dropped by JSON anyway, but the api reads the shape.
+    expect("primary" in brandFromValues(valuesWith(overrides))).toBe(false)
+  })
+
   it("omits a secondary with no base", () => {
     const brand = brandFromValues(valuesWith({ primaryBase: "#773E98", secondaryDark: "#123456" }))
 
@@ -195,8 +211,12 @@ describe("brandUpdateFrom", () => {
 })
 
 describe("hasBrandValues", () => {
-  it("counts a radius on its own", () => {
-    expect(hasBrandValues(valuesWith({ buttonRadius: "3xl" }))).toBe(true)
+  it.each([
+    ["a radius", { buttonRadius: "3xl" }],
+    ["a secondary base", { secondaryBase: "#0077DA" }],
+    ["a font", { fontFamily: "Inter" }],
+  ])("counts %s on its own", (_label, overrides) => {
+    expect(hasBrandValues(valuesWith(overrides))).toBe(true)
   })
 
   it("is false for untouched fields", () => {

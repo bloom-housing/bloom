@@ -64,6 +64,13 @@ const BrandingForm = ({
   const [confirmingRemoval, setConfirmingRemoval] = useState(false)
 
   const dirty = formState.isDirty || logo.fileId !== undefined || favicon.fileId !== undefined
+
+  // fileUploader resolves once the presign returns, not once the file lands, so a save started in
+  // that window would send no file id at all.
+  const uploading = [logoProgress, faviconProgress].some(
+    (progress) => progress > 0 && progress < 100
+  )
+
   useUnsavedChangesWarning(dirty, t("branding.unsavedChangesWarning"))
   React.useEffect(() => onDirtyChange(dirty), [dirty, onDirtyChange])
 
@@ -298,7 +305,7 @@ const BrandingForm = ({
       </Card>
 
       <div className={styles["actions"]}>
-        <Button type="submit" variant="primary" disabled={isSaving}>
+        <Button type="submit" variant="primary" disabled={isSaving || uploading}>
           {t("t.save")}
         </Button>
         <Button type="button" variant="primary-outlined" onClick={onDiscard} disabled={!dirty}>
@@ -308,7 +315,7 @@ const BrandingForm = ({
           type="button"
           variant="alert-outlined"
           onClick={() => setConfirmingRemoval(true)}
-          disabled={isSaving}
+          disabled={isSaving || uploading}
         >
           {t("branding.remove")}
         </Button>

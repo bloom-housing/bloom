@@ -105,13 +105,16 @@ const rampFromValues = (values: BrandFormValues, ramp: RampName): BrandRamp | un
 
 export const hasBrandValues = (values: BrandFormValues): boolean =>
   !!rampFromValues(values, "primary") ||
+  !!rampFromValues(values, "secondary") ||
   !!values.buttonRadius ||
   FONT_FIELDS.some((field) => !!values[field]?.trim())
 
 export const brandFromValues = (values: BrandFormValues): BrandDTO | undefined => {
   if (!hasBrandValues(values)) return undefined
 
-  const brand = { primary: rampFromValues(values, "primary") } as BrandDTO
+  const brand = {} as BrandDTO
+  const primary = rampFromValues(values, "primary")
+  if (primary) brand.primary = primary as BrandDTO["primary"]
   const secondary = rampFromValues(values, "secondary")
   if (secondary) brand.secondary = secondary as BrandDTO["secondary"]
   FONT_FIELDS.forEach((field) => {

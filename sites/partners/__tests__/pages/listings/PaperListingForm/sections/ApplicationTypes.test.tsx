@@ -222,6 +222,7 @@ describe("ApplicationTypes", () => {
         setFileUploadData({
           id: "test-cloudinary-id/test-file",
           url: "https://test.cloudinary.com/test-file.pdf",
+          fileId: "test-cloudinary-id/test-file",
         })
       })
 

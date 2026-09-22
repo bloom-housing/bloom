@@ -268,6 +268,27 @@ describe("settings/branding", () => {
     expect(savedBody.logoFileId).toEqual("9f1c2e3a")
   })
 
+  it("refuses to save while an upload is still in flight", async () => {
+    // fileUploader resolves after the presign, before the file lands, so progress is mid-flight.
+    const uploader = helpers.fileUploader as jest.MockedFunction<typeof helpers.fileUploader>
+    uploader.mockImplementation(({ setProgressValue }) => {
+      setProgressValue(3)
+      return Promise.resolve()
+    })
+    respondWithBrand({ primary: { base: "#773E98" } })
+    acceptSave()
+    renderPage()
+
+    await waitFor(() => expect(document.getElementById("brand-logo-upload")).not.toBeNull())
+    await userEvent.upload(
+      document.getElementById("brand-logo-upload") as HTMLInputElement,
+      new File(["x"], "logo.png", { type: "image/png" })
+    )
+
+    await waitFor(() => expect(screen.getByText("test:save").closest("button")).toBeDisabled())
+    expect(savedBody).toBeNull()
+  })
+
   it("disconnects a logo when the admin deletes it", async () => {
     respondWithBrand({ primary: { base: "#773E98" }, logoUrl: "https://example.test/logo.png" })
     acceptSave()
