@@ -2,6 +2,7 @@ import React from "react"
 import { Field, t } from "@bloom-housing/ui-components"
 import { UseFormMethods } from "react-hook-form"
 import { HEX_COLOR } from "@bloom-housing/shared-helpers/src/utilities/brandRamp"
+import { defaultFieldProps } from "../../lib/helpers"
 import * as styles from "./BrandColorField.module.scss"
 
 interface BrandColorFieldProps {
@@ -10,7 +11,6 @@ interface BrandColorFieldProps {
   value?: string
   derived?: string
   subNote?: string
-  required?: boolean
   register: UseFormMethods["register"]
   setValue: UseFormMethods["setValue"]
   errors: UseFormMethods["errors"]
@@ -40,30 +40,20 @@ const BrandColorField = ({
   value,
   derived,
   subNote,
-  required,
   register,
   setValue,
   errors,
   clearErrors,
 }: BrandColorFieldProps) => {
-  const error = !!errors?.[name]
-
   return (
     <Field
-      id={name}
-      name={name}
-      label={label}
+      {...defaultFieldProps(name, label, [], errors, clearErrors)}
       controlClassName={styles["brand-color-field__control"]}
       placeholder={derived || "#RRGGBB"}
       subNote={subNote}
       register={register}
-      validation={{ required, pattern: HEX_COLOR }}
-      error={error}
-      errorMessage={error ? t("errors.brandColorError") : undefined}
-      inputProps={{
-        onChange: () => error && clearErrors(name),
-        "aria-required": !!required,
-      }}
+      validation={{ pattern: HEX_COLOR }}
+      errorMessage={errors?.[name] ? t("errors.brandColorError") : undefined}
       postInputContent={
         <input
           type="color"

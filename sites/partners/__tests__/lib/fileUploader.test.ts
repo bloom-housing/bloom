@@ -52,6 +52,32 @@ describe("fileUploader", () => {
     expect(reported.url).toEqual(reported.id)
   })
 
+  it("tells the user when an s3 upload fails, rather than reporting nothing", async () => {
+    process.env.useS3FileStorage = "TRUE"
+    MockedAssetsService.mockImplementation(
+      () =>
+        ({
+          createS3UploadUrl: jest.fn().mockResolvedValue({
+            fileId: "9f1c2e3a",
+            uploadUrl: "https://bloom-public.s3.us-west-2.amazonaws.com/signed",
+            publicUrl: "https://bloom-public.s3.us-west-2.amazonaws.com/9f1c2e3a",
+          }),
+        } as unknown as AssetsService)
+    )
+    mockedAxios.request.mockRejectedValue(new Error("network"))
+    const alerted = jest.spyOn(window, "alert").mockImplementation()
+    const setFileUploadData = jest.fn()
+    const setProgressValue = jest.fn()
+
+    await fileUploader({ file, setFileUploadData, setProgressValue })
+    await new Promise((resolve) => process.nextTick(resolve))
+
+    expect(alerted).toHaveBeenCalled()
+    expect(setProgressValue).toHaveBeenLastCalledWith(0)
+    expect(setFileUploadData).not.toHaveBeenCalled()
+    alerted.mockRestore()
+  })
+
   it("reports the cloudinary public id as the storage key", async () => {
     MockedAssetsService.mockImplementation(
       () =>

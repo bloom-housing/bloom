@@ -219,14 +219,21 @@ export const fileUploader = async ({
       onUploadProgress,
       contentType,
       contentDisposition,
-    }).then((_) => {
-      setProgressValue(100)
-      setFileUploadData({
-        id: publicUrl,
-        url: publicUrl,
-        fileId,
-      })
     })
+      .then((_) => {
+        setProgressValue(100)
+        setFileUploadData({
+          id: publicUrl,
+          url: publicUrl,
+          fileId,
+        })
+      })
+      .catch(() => {
+        alert(
+          "Unable to upload the file. Please verify the file format is correct before retrying."
+        )
+        setProgressValue(0)
+      })
   } else {
     const timestamp = Math.round(new Date().getTime() / 1000)
     const tag = "browser_upload"
