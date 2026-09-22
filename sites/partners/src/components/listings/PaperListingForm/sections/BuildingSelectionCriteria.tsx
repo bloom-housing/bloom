@@ -11,7 +11,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
-import { fileUploader, FileUploadData } from "../../../../lib/helpers"
+import { fileUploader } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
 const BuildingSelectionCriteria = () => {
@@ -29,17 +29,15 @@ const BuildingSelectionCriteria = () => {
   */
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
-  const [fileUploadData, setFileUploadData] = useState<FileUploadData>({
+  const [fileUploadData, setFileUploadData] = useState({
     id: "",
     url: "",
-    fileId: "",
   })
   const resetDrawerState = () => {
     setProgressValue(0)
     setFileUploadData({
       id: "",
       url: "",
-      fileId: "",
     })
     setValue("criteriaAttachType", null)
     setDrawerState(false)
@@ -93,7 +91,6 @@ const BuildingSelectionCriteria = () => {
               setFileUploadData({
                 id: "",
                 url: "",
-                fileId: "",
               })
               setProgressValue(0)
             }}

@@ -77,8 +77,9 @@ const BrandingForm = ({
     async (file: File) => {
       await fileUploader({
         file,
-        setFileUploadData: ((data: FileUploadData) =>
-          setChange({ fileId: data.fileId, url: data.url })) as never,
+        setFileUploadData: ((data: FileUploadData) => {
+          if (data.fileId) setChange({ fileId: data.fileId, url: data.url })
+        }) as never,
         setProgressValue: setProgress as never,
         contentType: file.type,
         contentDisposition: "inline",

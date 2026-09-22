@@ -426,11 +426,7 @@ describe("<ListingPhotos>", () => {
         // eslint-disable-next-line @typescript-eslint/require-await
         async ({ setFileUploadData, setProgressValue }) => {
           setProgressValue(100)
-          setFileUploadData({
-            id: "new-file-id",
-            url: "http://example.com/new-file",
-            fileId: "new-file-id",
-          })
+          setFileUploadData({ id: "new-file-id", url: "http://example.com/new-file" })
         }
       )
 

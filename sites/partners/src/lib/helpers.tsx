@@ -169,11 +169,12 @@ export const createDate = (
 }
 
 // fileId is the bare storage key. On s3 `id` is the full public url, which some consumers store
-// verbatim, so the key is reported separately rather than by changing `id`.
+// verbatim, so the key is reported separately rather than by changing `id`. Optional because the
+// listing callers predate it and set only id and url.
 export interface FileUploadData {
   id: string
   url: string
-  fileId: string
+  fileId?: string
 }
 
 interface FileUploaderParams {
