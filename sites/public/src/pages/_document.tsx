@@ -125,17 +125,20 @@ export default class BloomDocument extends Document<BrandDocumentProps> {
       jurisdiction && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableDbDrivenBranding)
         ? jurisdiction.brand
         : null
-    const fontUrl = googleFontUrlOnly(brand?.fontUrl)
+    const storedFontUrl = googleFontUrlOnly(brand?.fontUrl)
+    const fontFamily = storedFontUrl ? fontFamilyOnly(brand?.fontFamily) : null
+    const headingFontFamily = storedFontUrl ? fontFamilyOnly(brand?.headingFontFamily) : null
+    const serifFontFamily = storedFontUrl ? fontFamilyOnly(brand?.serifFontFamily) : null
 
     return {
       ...initialProps,
       primary: hexOnly(brand?.primary),
       secondary: hexOnly(brand?.secondary),
       faviconUrl: brand?.faviconUrl ?? null,
-      fontFamily: fontUrl ? fontFamilyOnly(brand?.fontFamily) : null,
-      headingFontFamily: fontUrl ? fontFamilyOnly(brand?.headingFontFamily) : null,
-      fontUrl,
-      serifFontFamily: fontUrl ? fontFamilyOnly(brand?.serifFontFamily) : null,
+      fontFamily,
+      headingFontFamily,
+      serifFontFamily,
+      fontUrl: fontFamily || headingFontFamily || serifFontFamily ? storedFontUrl : null,
       buttonRadius: radiusStepOnly(brand?.buttonRadius),
     }
   }

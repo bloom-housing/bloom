@@ -22,9 +22,17 @@ export const FONT_FAMILY = /^[A-Za-z0-9](?:[A-Za-z0-9 -]{0,62}[A-Za-z0-9])?$/;
 // Without a display value google's css omits font-display, so the browser hides text for up to
 // three seconds. An explicit choice is left alone.
 const withFontDisplay = ({ value }: { value: unknown }) => {
-  if (typeof value !== 'string' || /[?&]display=/.test(value)) return value;
+  if (typeof value !== 'string') return value;
 
-  return `${value}${value.includes('?') ? '&' : '?'}display=swap`;
+  try {
+    const url = new URL(value);
+    if (url.searchParams.has('display')) return value;
+
+    url.searchParams.set('display', 'swap');
+    return url.toString();
+  } catch {
+    return value;
+  }
 };
 
 const toUpperHex = ({ value }: { value: unknown }) =>
