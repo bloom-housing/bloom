@@ -1,6 +1,7 @@
 import { ValidateNested, IsArray } from 'class-validator';
 import { Type, Expose } from 'class-transformer';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ListingFeatureCategory } from './listing-features-category.dtos';
 import { ListingFeatureField } from './listing-feature-field.dto';
 
@@ -11,9 +12,9 @@ export class ListingFeaturesConfiguration {
     isArray: true,
     description: 'Categorized features (use this or the flat list, not both)',
   })
-  @ValidateNested({ each: true })
+  @ValidateNested({ each: true, groups: [ValidationsGroupsEnum.default] })
   @Type(() => ListingFeatureCategory)
-  @IsArray()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
   categories?: ListingFeatureCategory[];
 
   @Expose()
@@ -22,8 +23,8 @@ export class ListingFeaturesConfiguration {
     isArray: true,
     description: 'Flat list of features (use this or the categories, not both)',
   })
-  @ValidateNested({ each: true })
+  @ValidateNested({ each: true, groups: [ValidationsGroupsEnum.default] })
   @Type(() => ListingFeatureField)
-  @IsArray()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
   fields?: ListingFeatureField[];
 }
