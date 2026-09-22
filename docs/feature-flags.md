@@ -96,6 +96,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enablePetPolicyCheckbox](./feature-flags/enablePetPolicyCheckbox.md) | When true, the pet policy field in the listing form is displayed as checkboxes instead of a text area |
 | [enableProfessionalPartnersPage](./feature-flags/enableProfessionalPartnersPage.md) | When true, the professional partners page will appear in the nav header of the public site and page will be reachable |
 | [enableProperties](./feature-flags/enableProperties.md) | When true, the properties feature is enabled |
+| [enablePublicTermsOfUse](./feature-flags/enablePublicTermsOfUse.md) | When true, creating a user account on the public site will require the user to review and accept terms of use |
 | [enableReasonableAccommodations](./feature-flags/enableReasonableAccommodations.md) | When true, the reasonable accommodations question is shown in the public and partner application flow |
 | [enableReceivedAtAndByFields](./feature-flags/enableReceivedAtAndByFields.md) | When true, partners can view/edit paper application received at/by fields and include them in application exports |
 | [enableReferralQuestionUnits](./feature-flags/enableReferralQuestionUnits.md) | when true, updates the the referral details question labels |
