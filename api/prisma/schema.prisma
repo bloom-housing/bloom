@@ -817,6 +817,7 @@ model Jurisdictions {
   languages                               LanguagesEnum[]                       @default([en])
   listingApprovalPermissions              UserRoleEnum[]                        @map("listing_approval_permission")
   listingFeaturesConfiguration            Json?                                 @map("listing_features_configuration")
+  lotteryAutoPublishDays                  Int?                                  @default(7) @map("lottery_auto_publish_days")
   minimumListingPublishImagesRequired     Int?                                  @default(1) @map("minimum_listing_publish_images_required")
   name                                    String                                @unique()
   notificationsSignUpUrl                  String?                               @map("notifications_sign_up_url")
