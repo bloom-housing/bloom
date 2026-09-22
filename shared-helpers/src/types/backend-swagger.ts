@@ -10582,6 +10582,9 @@ export interface Login {
 
   /**  */
   reCaptchaToken?: string
+
+  /**  */
+  agreedToTermsOfService?: boolean
 }
 
 /** LoginViaSingleUseCode */
@@ -10591,6 +10594,9 @@ export interface LoginViaSingleUseCode {
 
   /**  */
   singleUseCode: string
+
+  /**  */
+  agreedToTermsOfService?: boolean
 }
 
 /** RequestMfaCode */
@@ -10627,6 +10633,9 @@ export interface UpdatePassword {
 
   /**  */
   token: string
+
+  /**  */
+  agreedToTermsOfService?: boolean
 }
 
 /** Confirm */
@@ -11799,6 +11808,7 @@ export enum FeatureFlagEnum {
   "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProfessionalPartnersPage" = "enableProfessionalPartnersPage",
   "enableProperties" = "enableProperties",
+  "enablePublicTermsOfUse" = "enablePublicTermsOfUse",
   "enableReasonableAccommodations" = "enableReasonableAccommodations",
   "enableReceivedAtAndByFields" = "enableReceivedAtAndByFields",
   "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
