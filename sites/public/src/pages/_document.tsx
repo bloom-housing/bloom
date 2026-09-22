@@ -100,7 +100,7 @@ export const brandStyleBlock = ({
 
   const rootVariables = [
     primary ? rampVariables("seeds", "primary", primary) : "",
-    primary && secondary ? rampVariables("seeds", "secondary", secondary) : "",
+    secondary ? rampVariables("seeds", "secondary", secondary) : "",
     primary ? rampVariables("bloom", "primary", primary) : "",
     fontFamily ? `--seeds-font-sans: ${fontStack(fontFamily, "sans")};` : "",
     headingFont ? `--seeds-font-alt-sans: ${fontStack(headingFont, "alt-sans")};` : "",

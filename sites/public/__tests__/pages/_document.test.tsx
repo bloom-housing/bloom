@@ -172,8 +172,12 @@ describe("_document", () => {
     expect(style).not.toContain("--seeds-color-secondary-light:")
   })
 
-  it("emits nothing when a secondary is stored without a primary", async () => {
-    expect(await styleFor(jurisdictionWith({ secondary }))).toEqual("")
+  // ui-seeds defaults the secondary to a gray scale, so overriding it alone is a usable brand.
+  it("emits a secondary stored without a primary", async () => {
+    const style = await styleFor(jurisdictionWith({ secondary }))
+
+    expect(style).toContain("--seeds-color-secondary: #1E7B8C;")
+    expect(style).not.toContain("--seeds-color-primary")
   })
 
   it("accepts the three digit hex form", async () => {

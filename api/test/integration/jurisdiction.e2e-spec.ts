@@ -348,7 +348,7 @@ describe('Jurisdiction Controller Tests', () => {
     });
 
     describe('the brand endpoint', () => {
-      const putBrand = (id: string, body: unknown, cookie = cookies) =>
+      const putBrand = (id: string, body: object, cookie = cookies) =>
         request(app.getHttpServer())
           .put(`/jurisdictions/${id}/brand`)
           .set({ passkey: process.env.API_PASS_KEY || '' })
