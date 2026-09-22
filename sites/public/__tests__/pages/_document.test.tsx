@@ -450,6 +450,49 @@ describe("_document", () => {
     ).toBe(false)
   })
 
+  it("links no stylesheet when no family survives, so the render is not blocked for nothing", async () => {
+    // A row written outside the dto can name a usable url and a family that is not usable.
+    const { children } = await headChildrenFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: 'Inter"; } body { display: none } .x {',
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter",
+      })
+    )
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "stylesheet")
+    ).toBe(false)
+  })
+
+  it("links the stylesheet when only the serif family survives", async () => {
+    const { children } = await headChildrenFor(
+      jurisdictionWith({
+        primary,
+        serifFontFamily: "Noto Serif",
+        fontUrl: "https://fonts.googleapis.com/css2?family=Noto+Serif",
+      })
+    )
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "stylesheet")
+    ).toBe(true)
+  })
+
+  it("links the stylesheet when only the heading family survives", async () => {
+    const { children } = await headChildrenFor(
+      jurisdictionWith({
+        primary,
+        headingFontFamily: "Playfair Display",
+        fontUrl: "https://fonts.googleapis.com/css2?family=Playfair+Display",
+      })
+    )
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "stylesheet")
+    ).toBe(true)
+  })
+
   it("drops a font url that is not a google host", async () => {
     const { children } = await headChildrenFor(
       jurisdictionWith({
