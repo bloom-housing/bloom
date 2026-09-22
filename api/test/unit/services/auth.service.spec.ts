@@ -175,6 +175,11 @@ describe('Testing auth service', () => {
       const response = {
         cookie: jest.fn(),
       };
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [
+          { name: FeatureFlagEnum.enablePublicTermsOfUse, active: false },
+        ],
+      });
       prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
 
       await authService.setCredentials(response as unknown as Response, {
@@ -228,6 +233,11 @@ describe('Testing auth service', () => {
       const response = {
         cookie: jest.fn(),
       };
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [
+          { name: FeatureFlagEnum.enablePublicTermsOfUse, active: false },
+        ],
+      });
       prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
       prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
 
