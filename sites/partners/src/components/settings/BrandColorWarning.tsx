@@ -2,34 +2,55 @@ import React, { useState } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Message } from "@bloom-housing/ui-seeds"
 import { HEX_COLOR } from "@bloom-housing/shared-helpers/src/utilities/brandRamp"
-import { contrastWithWhite, isTooDark, meetsAA, suggestAccessible } from "../../lib/contrast"
+import { RampShade } from "../../lib/branding"
+import { contrast, isTooDark, meetsAA, suggestAccessible, textOn, WHITE } from "../../lib/contrast"
 import styles from "./BrandColorWarning.module.scss"
 
 interface BrandColorWarningProps {
-  base?: string
+  value?: string
+  shade: RampShade | "base"
+  fieldLabel: string
+  derived?: string
   onApply: (hex: string) => void
   testId: string
 }
 
-const BrandColorWarning = ({ base, onApply, testId }: BrandColorWarningProps) => {
+const applicable = (
+  shade: RampShade | "base",
+  value: string,
+  derived: string | undefined,
+  against: string
+): string | null => {
+  if (shade === "base") return suggestAccessible(value)
+  return derived && meetsAA(derived, against) ? derived : null
+}
+
+const BrandColorWarning = ({
+  value,
+  shade,
+  fieldLabel,
+  derived,
+  onApply,
+  testId,
+}: BrandColorWarningProps) => {
   const [dismissed, setDismissed] = useState<string | null>(null)
 
-  const value = base?.trim()
-  if (!value || !HEX_COLOR.test(value) || dismissed === value) return null
+  const color = value?.trim()
+  if (!color || !HEX_COLOR.test(color) || dismissed === color) return null
 
   const dismiss = (
     <Button
       type="button"
       variant="text"
       size="sm"
-      onClick={() => setDismissed(value)}
+      onClick={() => setDismissed(color)}
       id={`${testId}-dismiss`}
     >
       {t("t.dismiss")}
     </Button>
   )
 
-  if (isTooDark(value)) {
+  if (shade === "base" && isTooDark(color)) {
     return (
       <Message
         variant="warn"
@@ -45,9 +66,12 @@ const BrandColorWarning = ({ base, onApply, testId }: BrandColorWarningProps) =>
     )
   }
 
-  if (meetsAA(value)) return null
+  const against = textOn[shade]
+  if (meetsAA(color, against)) return null
 
-  const suggestion = suggestAccessible(value)
+  const suggestion = applicable(shade, color, derived, against)
+  const message =
+    against === WHITE ? "branding.contrastWarning" : "branding.contrastWarningBodyText"
 
   return (
     <Message
@@ -57,7 +81,7 @@ const BrandColorWarning = ({ base, onApply, testId }: BrandColorWarningProps) =>
       testId={`${testId}-contrast`}
     >
       <div className={styles["warning__body"]}>
-        <span>{t("branding.contrastWarning", { ratio: contrastWithWhite(value).toFixed(1) })}</span>
+        <span>{t(message, { field: fieldLabel, ratio: contrast(color, against).toFixed(1) })}</span>
         <div className={styles["warning__actions"]}>
           {suggestion && (
             <Button

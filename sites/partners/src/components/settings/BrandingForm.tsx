@@ -153,6 +153,9 @@ const BrandingForm = ({
     )
   }
 
+  const applyColor = (field: keyof BrandFormValues, hex: string) =>
+    setValue(field, hex, { shouldDirty: true, shouldValidate: true })
+
   const rampSection = (ramp: RampName, label: string) => {
     const base = watch(fieldName(ramp, "base"))
     const derived = derivedShades(base)
@@ -174,11 +177,11 @@ const BrandingForm = ({
           </Grid.Cell>
         </Grid.Row>
         <BrandColorWarning
-          base={base}
+          value={base}
+          shade="base"
+          fieldLabel={t("branding.baseColor")}
           testId={fieldName(ramp, "base")}
-          onApply={(hex) =>
-            setValue(fieldName(ramp, "base"), hex, { shouldDirty: true, shouldValidate: true })
-          }
+          onApply={(hex) => applyColor(fieldName(ramp, "base"), hex)}
         />
         <Grid.Row columns={4}>
           {RAMP_SHADES.map((shade) => (
@@ -196,6 +199,17 @@ const BrandingForm = ({
             </Grid.Cell>
           ))}
         </Grid.Row>
+        {RAMP_SHADES.map((shade) => (
+          <BrandColorWarning
+            key={shade}
+            value={watch(fieldName(ramp, shade))}
+            shade={shade}
+            fieldLabel={t(`branding.shade.${shade}`)}
+            derived={derived[shade]}
+            testId={fieldName(ramp, shade)}
+            onApply={(hex) => applyColor(fieldName(ramp, shade), hex)}
+          />
+        ))}
       </SectionWithGrid>
     )
   }

@@ -3,13 +3,30 @@ import {
   hslToHex,
   HEX_COLOR,
 } from "@bloom-housing/shared-helpers/src/utilities/brandRamp"
+import { RampShade } from "./branding"
 
-// ui-seeds puts white text on a primary background, so white is what a brand color is read against.
-const WHITE_LUMINANCE = 1
+export const WHITE = "#FFFFFF"
+
+// --seeds-text-color-darker, the body text ui-seeds renders on a light surface.
+export const BODY_TEXT = "#222222"
+
 export const AA_RATIO = 4.5
 
 // Below this lightness the four derived shades stop being distinguishable from each other.
 export const MIN_LIGHTNESS = 20
+
+/*
+  The text ui-seeds renders on each shade. base, dark and darker are backgrounds under
+  --seeds-color-on-inverse: primary buttons, button hover, and the home page hero band. light and
+  lighter are backgrounds under body text: tags, messages and the public site's page sections.
+*/
+export const textOn: Record<RampShade | "base", string> = {
+  base: WHITE,
+  dark: WHITE,
+  darker: WHITE,
+  light: BODY_TEXT,
+  lighter: BODY_TEXT,
+}
 
 const channel = (value: number): number => {
   const fraction = value / 255
@@ -34,10 +51,18 @@ export const relativeLuminance = (hex: string): number => {
 }
 
 /* https://www.w3.org/TR/WCAG22/#dfn-contrast-ratio */
-export const contrastWithWhite = (hex: string): number =>
-  (WHITE_LUMINANCE + 0.05) / (relativeLuminance(hex) + 0.05)
+export const contrast = (hex: string, against: string): number => {
+  const [lighter, darker] = [relativeLuminance(hex), relativeLuminance(against)].sort(
+    (a, b) => b - a
+  )
 
-export const meetsAA = (hex: string): boolean => contrastWithWhite(hex) >= AA_RATIO
+  return (lighter + 0.05) / (darker + 0.05)
+}
+
+export const contrastWithWhite = (hex: string): number => contrast(hex, WHITE)
+
+export const meetsAA = (hex: string, against: string = WHITE): boolean =>
+  contrast(hex, against) >= AA_RATIO
 
 export const isTooDark = (hex: string): boolean => hexToHsl(hex).l < MIN_LIGHTNESS
 
@@ -55,5 +80,5 @@ export const suggestAccessible = (hex: string): string | null => {
     if (meetsAA(candidate)) return candidate
   }
 
-  return "#000000"
+  return null
 }

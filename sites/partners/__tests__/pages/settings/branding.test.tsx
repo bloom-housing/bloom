@@ -25,11 +25,15 @@ addTranslation({
   "branding.primary": "test:primary",
   "branding.secondary": "test:secondary",
   "branding.baseColor": "test:base",
-  "branding.contrastWarning": "test:contrast %{ratio}",
+  "branding.contrastWarning": "test:contrast %{field} %{ratio}",
+  "branding.contrastWarningBodyText": "test:contrastBody %{field} %{ratio}",
   "branding.contrastAction": "test:use %{suggestion}",
   "branding.lightnessWarning": "test:tooDark",
   "t.dismiss": "test:dismiss",
   "branding.shade.dark": "test:dark",
+  "branding.shade.darker": "test:darker",
+  "branding.shade.light": "test:light",
+  "branding.shade.lighter": "test:lighter",
   "branding.fontFamily": "test:fontFamily",
   "branding.fontUrl": "test:fontUrl",
   "branding.alertSaved": "test:alertSaved",
@@ -39,8 +43,11 @@ addTranslation({
   "branding.remove": "test:remove",
   "branding.logo": "test:logo",
   "branding.alertLoadFailed": "test:loadFailed",
-  "branding.baseColor": "test:base",
 })
+
+const RAMP_WARNING_IDS = ["primaryDark", "primaryDarker", "primaryLight", "primaryLighter"].map(
+  (field) => `${field}-contrast`
+)
 
 const server = setupServer()
 
@@ -255,6 +262,52 @@ describe("settings/branding", () => {
 
     expect(await screen.findByTestId("secondaryBase-contrast")).toBeInTheDocument()
     expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
+  })
+
+  it("warns when an explicit dark shade is unreadable under white text", async () => {
+    // ui-seeds puts white on primary-dark for the button hover state.
+    respondWithBrand({ primary: { base: "#773E98", dark: "#FFEE00" } })
+    renderPage()
+
+    expect(await screen.findByTestId("primaryDark-contrast")).toBeInTheDocument()
+    expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
+  })
+
+  it("warns when an explicit lighter shade is unreadable under body text", async () => {
+    // primary-lighter backs whole page sections on the public site, under dark body text.
+    respondWithBrand({ primary: { base: "#773E98", lighter: "#333333" } })
+    renderPage()
+
+    expect(await screen.findByTestId("primaryLighter-contrast")).toBeInTheDocument()
+  })
+
+  it("reads a light shade against body text, not against white", async () => {
+    // A correct light shade fails against white, so checking it that way would warn on every ramp.
+    respondWithBrand({ primary: { base: "#773E98", light: "#EFE6F5" } })
+    renderPage()
+
+    await screen.findAllByLabelText("test:base")
+    expect(screen.queryByTestId("primaryLight-contrast")).not.toBeInTheDocument()
+  })
+
+  it("offers the derived value for a failing shade, so the ramp keeps its order", async () => {
+    respondWithBrand({ primary: { base: "#773E98", lighter: "#333333" } })
+    renderPage()
+
+    await waitFor(() => expect(document.getElementById("primaryLighter-apply")).not.toBeNull())
+    await userEvent.click(document.getElementById("primaryLighter-apply"))
+
+    const lighter = screen.getAllByLabelText("test:lighter")[0] as HTMLInputElement
+    await waitFor(() => expect(lighter.value).toEqual("#F8F4FB"))
+    expect(screen.queryByTestId("primaryLighter-contrast")).not.toBeInTheDocument()
+  })
+
+  it("raises no shade warning for a ramp whose shades all derive", async () => {
+    respondWithBrand({ primary: { base: "#773E98" } })
+    renderPage()
+
+    await screen.findAllByLabelText("test:base")
+    RAMP_WARNING_IDS.forEach((id) => expect(screen.queryByTestId(id)).not.toBeInTheDocument())
   })
 
   it("leaves a derived shade out of the save, so it keeps deriving", async () => {
