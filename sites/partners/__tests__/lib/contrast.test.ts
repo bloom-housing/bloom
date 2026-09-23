@@ -3,6 +3,7 @@ import {
   BODY_TEXT,
   contrast,
   contrastWithWhite,
+  displayRatio,
   isTooDark,
   meetsAA,
   relativeLuminance,
@@ -66,6 +67,23 @@ describe("textOn", () => {
 
   it.each(["light", "lighter"] as const)("reads %s against body text", (shade) => {
     expect(textOn[shade]).toEqual(BODY_TEXT)
+  })
+})
+
+describe("displayRatio", () => {
+  // #777777 is 4.4781:1 and fails. Rounded to one decimal it reads 4.5, so the message would have
+  // said a ratio of 4.5 to 1 is below the 4.5 to 1 minimum.
+  it("never shows a failing ratio as the threshold", () => {
+    expect(contrastWithWhite("#777777")).toBeLessThan(AA_RATIO)
+    expect(displayRatio(contrastWithWhite("#777777"))).toEqual("4.4")
+  })
+
+  it.each([
+    [1.4021, "1.4"],
+    [2.7697, "2.7"],
+    [4.4999, "4.4"],
+  ])("shows %s as %s", (ratio, shown) => {
+    expect(displayRatio(ratio)).toEqual(shown)
   })
 })
 

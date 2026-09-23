@@ -189,7 +189,7 @@ describe("settings/branding", () => {
   })
 
   it("warns when a color fails AA and clears the warning once it is fixed", async () => {
-    // #EEDD00 is 1.3:1 against white; #773E98 passes.
+    // #EEDD00 is 1.4:1 against white; #773E98 passes.
     respondWithBrand({ primary: { base: "#EEDD00" } })
     renderPage()
 
@@ -261,6 +261,16 @@ describe("settings/branding", () => {
 
     expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
     expect(await screen.findByTestId("primaryBase-contrast")).toBeInTheDocument()
+  })
+
+  it("shows a ratio that fell short as short, not as the threshold", async () => {
+    // #777777 is 4.4781:1. Rounded rather than floored it would read "below the 4.5 minimum" at 4.5.
+    respondWithBrand({ primary: { base: "#777777" } })
+    renderPage()
+
+    expect(await screen.findByTestId("primaryBase-contrast")).toHaveTextContent(
+      "test:contrast test:base 4.4"
+    )
   })
 
   it("announces the warning politely rather than interrupting", async () => {

@@ -64,6 +64,8 @@ export const contrastWithWhite = (hex: string): number => contrast(hex, WHITE)
 export const meetsAA = (hex: string, against: string = WHITE): boolean =>
   contrast(hex, against) >= AA_RATIO
 
+export const displayRatio = (ratio: number): string => (Math.floor(ratio * 10) / 10).toFixed(1)
+
 export const isTooDark = (hex: string): boolean => hexToHsl(hex).l < MIN_LIGHTNESS
 
 /*

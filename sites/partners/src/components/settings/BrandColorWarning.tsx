@@ -3,7 +3,15 @@ import { t } from "@bloom-housing/ui-components"
 import { Button, Message } from "@bloom-housing/ui-seeds"
 import { HEX_COLOR } from "@bloom-housing/shared-helpers/src/utilities/brandRamp"
 import { RampShade } from "../../lib/branding"
-import { contrast, isTooDark, meetsAA, suggestAccessible, textOn, WHITE } from "../../lib/contrast"
+import {
+  contrast,
+  displayRatio,
+  isTooDark,
+  meetsAA,
+  suggestAccessible,
+  textOn,
+  WHITE,
+} from "../../lib/contrast"
 import styles from "./BrandColorWarning.module.scss"
 
 interface BrandColorWarningProps {
@@ -95,7 +103,9 @@ const BrandColorWarning = ({
       testId={`${testId}-contrast`}
     >
       <div className={styles["warning__body"]}>
-        <span>{t(message, { field: fieldLabel, ratio: contrast(color, against).toFixed(1) })}</span>
+        <span>
+          {t(message, { field: fieldLabel, ratio: displayRatio(contrast(color, against)) })}
+        </span>
         <div className={styles["warning__actions"]}>
           {suggestion && (
             <Button
