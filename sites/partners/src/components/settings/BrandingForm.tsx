@@ -204,8 +204,6 @@ const BrandingForm = ({
     <form onSubmit={handleSubmit(submit)} className={styles["branding-form"]}>
       {!!unplacedErrors.length && <Alert variant="alert">{unplacedErrors.join(" ")}</Alert>}
 
-      <BrandPreview values={watch()} />
-
       <Card>
         <Card.Section>
           {rampSection("primary", t("branding.primary"))}
@@ -313,6 +311,8 @@ const BrandingForm = ({
           </SectionWithGrid>
         </Card.Section>
       </Card>
+
+      <BrandPreview values={watch()} />
 
       <div className={styles["actions"]}>
         <Button type="submit" variant="primary" disabled={isSaving || uploading}>

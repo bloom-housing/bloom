@@ -900,6 +900,7 @@
   "t.areYouSure": "Are you sure?",
   "t.automatic": "Automatic",
   "t.cancel": "Cancel",
+  "t.dismiss": "Dismiss",
   "t.character": "You have %{count} character remaining",
   "t.characterOver": "You are %{count} character over the limit",
   "t.characters": "You have %{count} characters remaining",

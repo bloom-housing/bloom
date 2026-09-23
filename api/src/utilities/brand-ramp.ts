@@ -70,7 +70,7 @@ export const completeRamp = (ramp: BrandRamp): Required<BrandRamp> => {
   const base = hexToHsl(ramp.base);
   const { l } = base;
 
-  // These proportions match the spacing of the existing ui-seeds jurisdiction ramps.
+  // Proportions fitted to the lakeview ramp in sites/public/styles/overrides.scss.
   return {
     base: ramp.base.toUpperCase(),
     darker: ramp.darker?.toUpperCase() ?? shifted(base, l * 0.64),

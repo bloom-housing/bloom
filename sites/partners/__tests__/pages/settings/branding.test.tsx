@@ -1,6 +1,6 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { screen, waitFor } from "@testing-library/react"
+import { screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { rest } from "msw"
 import { addTranslation } from "@bloom-housing/ui-components"
@@ -28,6 +28,7 @@ addTranslation({
   "branding.contrastWarning": "test:contrast %{ratio}",
   "branding.contrastAction": "test:use %{suggestion}",
   "branding.lightnessWarning": "test:tooDark",
+  "t.dismiss": "test:dismiss",
   "branding.shade.dark": "test:dark",
   "branding.fontFamily": "test:fontFamily",
   "branding.fontUrl": "test:fontUrl",
@@ -206,6 +207,38 @@ describe("settings/branding", () => {
     const base = screen.getAllByLabelText("test:base")[0] as HTMLInputElement
     await waitFor(() => expect(base.value).not.toEqual("#EEDD00"))
     expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
+  })
+
+  it("dismisses a warning without saving the form", async () => {
+    // A seeds Alert closes itself, but its close button has no type, so inside a form it submits.
+    respondWithBrand({ primary: { base: "#EEDD00" } })
+    acceptSave()
+    renderPage()
+
+    await waitFor(() => expect(document.getElementById("primaryBase-dismiss")).not.toBeNull())
+    await userEvent.click(document.getElementById("primaryBase-dismiss"))
+
+    await waitFor(() =>
+      expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
+    )
+    expect(savedBody).toBeNull()
+  })
+
+  it("warns again when the admin picks a different failing color", async () => {
+    respondWithBrand({ primary: { base: "#EEDD00" } })
+    renderPage()
+
+    await waitFor(() => expect(document.getElementById("primaryBase-dismiss")).not.toBeNull())
+    await userEvent.click(document.getElementById("primaryBase-dismiss"))
+    await waitFor(() =>
+      expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
+    )
+
+    const base = screen.getAllByLabelText("test:base")[0]
+    await userEvent.clear(base)
+    await userEvent.type(base, "#77AA33")
+
+    expect(await screen.findByTestId("primaryBase-contrast")).toBeInTheDocument()
   })
 
   it("warns when a base is too dark for its shades to differ", async () => {

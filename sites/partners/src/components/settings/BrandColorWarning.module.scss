@@ -2,6 +2,26 @@
   margin-block: var(--seeds-s3);
 }
 
-.warning__action {
-  margin-top: var(--seeds-s3);
+.warning__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--seeds-s3);
+}
+
+.warning__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--seeds-s2);
+}
+
+.warning__swatch {
+  display: inline-block;
+  inline-size: var(--seeds-s4);
+  block-size: var(--seeds-s4);
+  margin-inline-end: var(--seeds-s2);
+  border: 1px solid var(--seeds-color-gray-550);
+  border-radius: var(--seeds-rounded-sm);
+  vertical-align: text-bottom;
 }
