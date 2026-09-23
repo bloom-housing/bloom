@@ -65,6 +65,11 @@ export class Jurisdiction extends AbstractDTO {
   @Expose()
   @IsNumber()
   @ApiPropertyOptional()
+  lotteryAutoPublishDays: number;
+
+  @Expose()
+  @IsNumber()
+  @ApiPropertyOptional()
   minimumListingPublishImagesRequired?: number;
 
   @Expose()
