@@ -5,6 +5,7 @@ import {
   BrandRampDTO,
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { radiusVariable } from "@bloom-housing/shared-helpers/src/utilities/brandRadius"
 import { fetchJurisdictionByName } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
 
@@ -83,9 +84,6 @@ const RADIUS_STEPS: string[] = Object.values(BrandRadiusEnum)
 
 const radiusStepOnly = (value?: string): string | null =>
   typeof value === "string" && RADIUS_STEPS.includes(value) ? value : null
-
-const radiusVariable = (step: string) =>
-  step === BrandRadiusEnum.base ? "var(--seeds-rounded)" : `var(--seeds-rounded-${step})`
 
 export const brandStyleBlock = ({
   primary,

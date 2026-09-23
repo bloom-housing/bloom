@@ -35,6 +35,7 @@ addTranslation({
   "branding.remove": "test:remove",
   "branding.logo": "test:logo",
   "branding.alertLoadFailed": "test:loadFailed",
+  "branding.baseColor": "test:base",
 })
 
 const server = setupServer()
@@ -155,6 +156,25 @@ describe("settings/branding", () => {
 
     await waitFor(() => expect(pushMock).not.toHaveBeenCalledWith("/unauthorized"))
     expect(screen.queryByText("test:save")).not.toBeInTheDocument()
+  })
+
+  it("updates the preview as the admin types, without a save", async () => {
+    respondWithBrand(null)
+    renderPage()
+
+    const base = (await screen.findAllByLabelText("test:base"))[0]
+    await userEvent.type(base, "#773E98")
+
+    await waitFor(() =>
+      expect(screen.getByTestId("brand-preview")).toHaveStyle({
+        "--seeds-color-primary": "#773E98",
+      })
+    )
+    // The derived shades track the base without the admin entering them.
+    expect(screen.getByTestId("brand-preview")).toHaveStyle({
+      "--seeds-color-primary-dark": "#693786",
+    })
+    expect(savedBody).toBeNull()
   })
 
   it("leaves a derived shade out of the save, so it keeps deriving", async () => {

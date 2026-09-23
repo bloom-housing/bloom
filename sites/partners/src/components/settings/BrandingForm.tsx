@@ -5,6 +5,7 @@ import { Alert, Button, Card, Dialog, Grid } from "@bloom-housing/ui-seeds"
 import { BrandRadiusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../shared/SectionWithGrid"
 import BrandColorField from "./BrandColorField"
+import BrandPreview from "./BrandPreview"
 import { fileUploader, FileUploadData } from "../../lib/helpers"
 import { useUnsavedChangesWarning } from "../../lib/hooks"
 import {
@@ -194,6 +195,8 @@ const BrandingForm = ({
   return (
     <form onSubmit={handleSubmit(submit)} className={styles["branding-form"]}>
       {!!unplacedErrors.length && <Alert variant="alert">{unplacedErrors.join(" ")}</Alert>}
+
+      <BrandPreview values={watch()} />
 
       <Card>
         <Card.Section>
