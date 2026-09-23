@@ -9,17 +9,18 @@ import {
   RAMP_SHADES,
 } from "../../lib/branding"
 import { radiusVariable } from "@bloom-housing/shared-helpers/src/utilities/brandRadius"
+import { HEX_COLOR } from "@bloom-housing/shared-helpers/src/utilities/brandRamp"
 import styles from "./BrandPreview.module.scss"
 
 const rampVariables = (values: BrandFormValues, ramp: RampName): Record<string, string> => {
   const base = values[fieldName(ramp, "base")]?.trim()
-  if (!base) return {}
+  if (!base || !HEX_COLOR.test(base)) return {}
 
   const derived = derivedShades(base)
   return RAMP_SHADES.reduce(
     (variables: Record<string, string>, shade) => {
       const value = values[fieldName(ramp, shade)]?.trim() || derived[shade]
-      if (value) variables[`--seeds-color-${ramp}-${shade}`] = value
+      if (value && HEX_COLOR.test(value)) variables[`--seeds-color-${ramp}-${shade}`] = value
       return variables
     },
     { [`--seeds-color-${ramp}`]: base }

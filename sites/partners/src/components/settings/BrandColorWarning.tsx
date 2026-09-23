@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Message } from "@bloom-housing/ui-seeds"
 import { HEX_COLOR } from "@bloom-housing/shared-helpers/src/utilities/brandRamp"
@@ -13,6 +13,19 @@ interface BrandColorWarningProps {
   derived?: string
   onApply: (hex: string) => void
   testId: string
+}
+
+const SETTLE_MS = 400
+
+const useSettled = (value?: string): string | undefined => {
+  const [settled, setSettled] = useState(value)
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setSettled(value), SETTLE_MS)
+    return () => window.clearTimeout(timer)
+  }, [value])
+
+  return settled
 }
 
 const applicable = (
@@ -34,8 +47,9 @@ const BrandColorWarning = ({
   testId,
 }: BrandColorWarningProps) => {
   const [dismissed, setDismissed] = useState<string | null>(null)
+  const settled = useSettled(value)
 
-  const color = value?.trim()
+  const color = settled?.trim()
   if (!color || !HEX_COLOR.test(color) || dismissed === color) return null
 
   const dismiss = (
@@ -54,7 +68,7 @@ const BrandColorWarning = ({
     return (
       <Message
         variant="warn"
-        role="alert"
+        role="status"
         className={styles["warning"]}
         testId={`${testId}-lightness`}
       >
@@ -76,7 +90,7 @@ const BrandColorWarning = ({
   return (
     <Message
       variant="warn"
-      role="alert"
+      role="status"
       className={styles["warning"]}
       testId={`${testId}-contrast`}
     >

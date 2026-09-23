@@ -212,8 +212,10 @@ describe("settings/branding", () => {
     await userEvent.click(document.getElementById("primaryBase-apply"))
 
     const base = screen.getAllByLabelText("test:base")[0] as HTMLInputElement
-    await waitFor(() => expect(base.value).not.toEqual("#EEDD00"))
-    expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
+    await waitFor(() => expect(base.value).toEqual("#807600"))
+    await waitFor(() =>
+      expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
+    )
   })
 
   it("dismisses a warning without saving the form", async () => {
@@ -246,6 +248,26 @@ describe("settings/branding", () => {
     await userEvent.type(base, "#77AA33")
 
     expect(await screen.findByTestId("primaryBase-contrast")).toBeInTheDocument()
+  })
+
+  it("holds the warning back until typing settles", async () => {
+    // HEX_COLOR accepts three digits, so typing #0070D0 passes through #07D, which fails AA.
+    // Warning on that would announce a colour the admin never chose.
+    respondWithBrand(null)
+    renderPage()
+
+    const base = (await screen.findAllByLabelText("test:base"))[0]
+    await userEvent.type(base, "#EEDD00")
+
+    expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
+    expect(await screen.findByTestId("primaryBase-contrast")).toBeInTheDocument()
+  })
+
+  it("announces the warning politely rather than interrupting", async () => {
+    respondWithBrand({ primary: { base: "#EEDD00" } })
+    renderPage()
+
+    expect(await screen.findByTestId("primaryBase-contrast")).toHaveAttribute("role", "status")
   })
 
   it("warns when a base is too dark for its shades to differ", async () => {
@@ -299,7 +321,9 @@ describe("settings/branding", () => {
 
     const lighter = screen.getAllByLabelText("test:lighter")[0] as HTMLInputElement
     await waitFor(() => expect(lighter.value).toEqual("#F8F4FB"))
-    expect(screen.queryByTestId("primaryLighter-contrast")).not.toBeInTheDocument()
+    await waitFor(() =>
+      expect(screen.queryByTestId("primaryLighter-contrast")).not.toBeInTheDocument()
+    )
   })
 
   it("raises no shade warning for a ramp whose shades all derive", async () => {

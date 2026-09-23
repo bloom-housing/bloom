@@ -45,10 +45,21 @@ describe("previewVariables", () => {
   })
 
   it("writes nothing for a base that is not a hex color", () => {
-    const variables = previewVariables(valuesWith({ primaryBase: "rebeccapurple" }))
+    expect(previewVariables(valuesWith({ primaryBase: "rebeccapurple" }))).toEqual({})
+  })
 
-    // The base is shown as given so the admin sees their own input; the shades cannot derive.
-    expect(variables["--seeds-color-primary"]).toEqual("rebeccapurple")
+  // A partial value is a valid custom property but not a valid color, so the sample button would
+  // resolve its background to unset and disappear.
+  it.each(["#0", "#00", "#0077", "#0077D"])("writes nothing while %s is being typed", (partial) => {
+    expect(previewVariables(valuesWith({ primaryBase: partial }))).toEqual({})
+  })
+
+  it("writes nothing for a shade that is not a hex color", () => {
+    const variables = previewVariables(
+      valuesWith({ primaryBase: "#773E98", primaryDark: "rebeccapurple" })
+    )
+
+    expect(variables["--seeds-color-primary"]).toEqual("#773E98")
     expect(variables["--seeds-color-primary-dark"]).toBeUndefined()
   })
 })
