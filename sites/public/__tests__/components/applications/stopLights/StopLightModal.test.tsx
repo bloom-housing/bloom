@@ -2,9 +2,12 @@ import React, { useState } from "react"
 import userEvent from "@testing-library/user-event"
 import { addTranslation } from "@bloom-housing/ui-components"
 import { StopLightRule } from "../../../../src/lib/applications/stopLights/stopLightRules"
-import { StopLightModal } from "../../../../src/components/applications/stopLights/StopLightModal"
+import {
+  RedLightModal,
+  YellowLightModal,
+} from "../../../../src/components/applications/stopLights/StopLightModal"
 import { useRouter } from "next/router"
-import { render, screen, waitFor, within } from "../../../testUtils"
+import { render, screen, waitFor } from "../../../testUtils"
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
@@ -26,12 +29,11 @@ const yellowRuleFixture = (overrides: Partial<StopLightRule> = {}): StopLightRul
 
 const nextFrame = () => new Promise((resolve) => window.requestAnimationFrame(() => resolve(null)))
 
-const flushDeferredFocus = async () => {
-  await nextFrame()
-  await new Promise((resolve) => window.setTimeout(resolve, 0))
-}
-
-const RedHarness = (props: { rules: StopLightRule[]; onEdit: () => void }) => {
+const RedHarness = (props: {
+  rule: StopLightRule | null
+  onEdit: () => void
+  onReturnToListings?: () => void
+}) => {
   const [isOpen, setIsOpen] = useState(true)
   return (
     <>
@@ -39,30 +41,29 @@ const RedHarness = (props: { rules: StopLightRule[]; onEdit: () => void }) => {
         <legend>Your date of birth</legend>
         <input id="test.anchor" aria-label="Month" />
       </fieldset>
-      <StopLightModal
-        light="red"
+      <RedLightModal
         isOpen={isOpen}
-        rules={props.rules}
+        rule={props.rule}
         onEdit={() => {
           setIsOpen(false)
           props.onEdit()
         }}
+        onReturnToListings={props.onReturnToListings ?? jest.fn()}
       />
     </>
   )
 }
 
 const YellowHarness = (props: {
-  rules: StopLightRule[]
+  rule: StopLightRule | null
   onCancel: () => void
   onAcknowledge: () => void
 }) => {
   const [isOpen, setIsOpen] = useState(true)
   return (
-    <StopLightModal
-      light="yellow"
+    <YellowLightModal
       isOpen={isOpen}
-      rules={props.rules}
+      rule={props.rule}
       onCancel={() => {
         setIsOpen(false)
         props.onCancel()
@@ -81,27 +82,22 @@ describe("StopLightModal", () => {
       "stopLights.ruleOne.modalTitle": "Rule one modal title",
       "stopLights.ruleOne.alertTitle": "Rule one alert title",
       "stopLights.ruleOne.body": "Rule one body",
-      "stopLights.ruleTwo.modalTitle": "Rule two modal title",
-      "stopLights.ruleTwo.alertTitle": "Rule two alert title",
-      "stopLights.ruleTwo.body": "Rule two body",
       "stopLights.updateAnswer": "Update my answer",
       "stopLights.returnToListing": "Return to listings",
       "stopLights.continue": "I understand — continue",
     })
   })
 
-  const mockPush = jest.fn()
-
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useRouter as jest.Mock).mockReturnValue({ push: mockPush, locale: "en", query: {} })
+    ;(useRouter as jest.Mock).mockReturnValue({ push: jest.fn(), locale: "en", query: {} })
   })
 
   describe("red light", () => {
     const onEdit = jest.fn()
 
     it("renders the rule's modal title as the header, and its alert title and body in one alert", () => {
-      render(<RedHarness rules={[redRuleFixture()]} onEdit={onEdit} />)
+      render(<RedHarness rule={redRuleFixture()} onEdit={onEdit} />)
 
       expect(
         screen.getByRole("heading", { level: 1, name: "Rule one modal title" })
@@ -120,38 +116,19 @@ describe("StopLightModal", () => {
       expect(screen.getByRole("button", { name: "Return to listings" })).toBeInTheDocument()
     })
 
-    it("renders only the first rule and leaves the rest off the screen", () => {
-      render(
-        <RedHarness
-          rules={[
-            redRuleFixture(),
-            redRuleFixture({
-              key: "ruleTwo",
-              modalTitle: "stopLights.ruleTwo.modalTitle",
-              alertTitle: "stopLights.ruleTwo.alertTitle",
-              body: "stopLights.ruleTwo.body",
-            }),
-          ]}
-          onEdit={onEdit}
-        />
-      )
+    // the gate clears its rule on dismiss, so the layout hands the modal a null rule
+    it("renders nothing when there is no rule", () => {
+      render(<RedHarness rule={null} onEdit={onEdit} />)
 
-      expect(
-        screen.getByRole("heading", { level: 1, name: "Rule one modal title" })
-      ).toBeInTheDocument()
-      expect(screen.queryByText("Rule two modal title")).not.toBeInTheDocument()
-
-      expect(document.querySelectorAll(".seeds-message")).toHaveLength(1)
-      expect(screen.getByText("Rule one alert title")).toBeInTheDocument()
-      expect(screen.getByText("Rule one body")).toBeInTheDocument()
-      expect(screen.queryByText("Rule two alert title")).not.toBeInTheDocument()
-      expect(screen.queryByText("Rule two body")).not.toBeInTheDocument()
-      expect(screen.getAllByRole("button", { name: "Update my answer" })).toHaveLength(1)
+      expect(screen.queryByRole("heading", { level: 1 })).not.toBeInTheDocument()
+      expect(document.querySelectorAll(".seeds-message")).toHaveLength(0)
+      expect(screen.queryByRole("button", { name: "Update my answer" })).not.toBeInTheDocument()
+      expect(screen.queryByRole("button", { name: "Return to listings" })).not.toBeInTheDocument()
     })
 
     it("calls onEdit and moves focus into the anchored field when Edit is clicked", async () => {
       render(
-        <RedHarness rules={[redRuleFixture({ editFieldAnchor: "test.anchor" })]} onEdit={onEdit} />
+        <RedHarness rule={redRuleFixture({ editFieldAnchor: "test.anchor" })} onEdit={onEdit} />
       )
 
       await userEvent.click(screen.getByRole("button", { name: "Update my answer" }))
@@ -160,26 +137,8 @@ describe("StopLightModal", () => {
       await waitFor(() => expect(screen.getByLabelText("Month")).toHaveFocus())
     })
 
-    it("does not focus the anchor of a rule it did not display", async () => {
-      render(
-        <RedHarness
-          rules={[
-            redRuleFixture(),
-            redRuleFixture({ key: "ruleTwo", editFieldAnchor: "test.anchor" }),
-          ]}
-          onEdit={onEdit}
-        />
-      )
-
-      await userEvent.click(screen.getByRole("button", { name: "Update my answer" }))
-      await flushDeferredFocus()
-
-      expect(onEdit).toHaveBeenCalledTimes(1)
-      expect(screen.getByLabelText("Month")).not.toHaveFocus()
-    })
-
     it("closes without moving focus when no rule declares an anchor", async () => {
-      render(<RedHarness rules={[redRuleFixture()]} onEdit={onEdit} />)
+      render(<RedHarness rule={redRuleFixture()} onEdit={onEdit} />)
 
       await userEvent.click(screen.getByRole("button", { name: "Update my answer" }))
       await nextFrame()
@@ -188,13 +147,22 @@ describe("StopLightModal", () => {
       expect(screen.getByLabelText("Month")).not.toHaveFocus()
     })
 
-    it("routes to the listings browse page, and does not edit, on Return to listings", async () => {
-      render(<RedHarness rules={[redRuleFixture()]} onEdit={onEdit} />)
+    // where "Return to listings" actually navigates (the specific listing, or a fallback
+    // to the browse page) is decided by the layout, which owns the conductor's listing;
+    // see application-form.test.tsx
+    it("calls onReturnToListings, and not onEdit, when Return to listings is clicked", async () => {
+      const onReturnToListings = jest.fn()
+      render(
+        <RedHarness
+          rule={redRuleFixture()}
+          onEdit={onEdit}
+          onReturnToListings={onReturnToListings}
+        />
+      )
 
       await userEvent.click(screen.getByRole("button", { name: "Return to listings" }))
 
-      expect(mockPush).toHaveBeenCalledTimes(1)
-      expect(mockPush).toHaveBeenCalledWith("/en/listings")
+      expect(onReturnToListings).toHaveBeenCalledTimes(1)
       expect(onEdit).not.toHaveBeenCalled()
     })
   })
@@ -206,7 +174,7 @@ describe("StopLightModal", () => {
     it("renders the rule's modal title as the header, and its alert title and body in one alert", () => {
       render(
         <YellowHarness
-          rules={[yellowRuleFixture()]}
+          rule={yellowRuleFixture()}
           onCancel={onCancel}
           onAcknowledge={onAcknowledge}
         />
@@ -228,34 +196,46 @@ describe("StopLightModal", () => {
       expect(screen.getByRole("button", { name: "I understand — continue" })).toBeInTheDocument()
     })
 
-    it("renders only the first rule and leaves the rest off the screen", () => {
+    // the gate clears its rule on acknowledge or cancel, so the layout hands the modal a null rule
+    it("renders nothing when there is no rule", () => {
+      render(<YellowHarness rule={null} onCancel={onCancel} onAcknowledge={onAcknowledge} />)
+
+      expect(screen.queryByRole("heading", { level: 1 })).not.toBeInTheDocument()
+      expect(document.querySelectorAll(".seeds-message")).toHaveLength(0)
+      expect(screen.queryByRole("button", { name: "Update my answer" })).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole("button", { name: "I understand — continue" })
+      ).not.toBeInTheDocument()
+    })
+
+    it("calls onAcknowledge, and not onCancel, when Continue is clicked", async () => {
       render(
         <YellowHarness
-          rules={[
-            yellowRuleFixture(),
-            yellowRuleFixture({
-              key: "ruleTwo",
-              modalTitle: "stopLights.ruleTwo.modalTitle",
-              alertTitle: "stopLights.ruleTwo.alertTitle",
-              body: "stopLights.ruleTwo.body",
-            }),
-          ]}
+          rule={yellowRuleFixture()}
           onCancel={onCancel}
           onAcknowledge={onAcknowledge}
         />
       )
 
-      expect(
-        screen.getByRole("heading", { level: 1, name: "Rule one modal title" })
-      ).toBeInTheDocument()
-      expect(screen.queryByText("Rule two modal title")).not.toBeInTheDocument()
+      await userEvent.click(screen.getByRole("button", { name: "I understand — continue" }))
 
-      expect(document.querySelectorAll(".seeds-message")).toHaveLength(1)
-      expect(screen.getByText("Rule one alert title")).toBeInTheDocument()
-      expect(screen.getByText("Rule one body")).toBeInTheDocument()
-      expect(screen.queryByText("Rule two alert title")).not.toBeInTheDocument()
-      expect(screen.queryByText("Rule two body")).not.toBeInTheDocument()
-      expect(screen.getAllByRole("button", { name: "I understand — continue" })).toHaveLength(1)
+      expect(onAcknowledge).toHaveBeenCalledTimes(1)
+      expect(onCancel).not.toHaveBeenCalled()
+    })
+
+    it("calls onCancel, and not onAcknowledge, when Update my answer is clicked", async () => {
+      render(
+        <YellowHarness
+          rule={yellowRuleFixture()}
+          onCancel={onCancel}
+          onAcknowledge={onAcknowledge}
+        />
+      )
+
+      await userEvent.click(screen.getByRole("button", { name: "Update my answer" }))
+
+      expect(onCancel).toHaveBeenCalledTimes(1)
+      expect(onAcknowledge).not.toHaveBeenCalled()
     })
   })
 })
