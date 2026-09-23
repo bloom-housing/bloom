@@ -12,6 +12,7 @@ import {
 import { AuthContext, ExygyFooter, MessageContext } from "@bloom-housing/shared-helpers"
 import { Toast } from "@bloom-housing/ui-seeds"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import PartnersFooter from "../components/core/PartnerFooter"
 
 const Layout = (props) => {
   const { profile, signOut, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -85,12 +86,7 @@ const Layout = (props) => {
           ))}
           {props.children}
         </main>
-        <SiteFooter>
-          <FooterNav copyright={`© ${currentYear} • All Rights Reserved`} />
-          <FooterSection className="bg-black" small>
-            <ExygyFooter />
-          </FooterSection>
-        </SiteFooter>
+        <PartnersFooter />
       </div>
     </div>
   )

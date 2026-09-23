@@ -62,6 +62,7 @@ export const createLakeviewJurisdiction = async (
         FeatureFlagEnum.enablePartnerSettings,
         FeatureFlagEnum.enableRegions,
         FeatureFlagEnum.enableResources,
+        FeatureFlagEnum.enableResourcesCard,
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
         FeatureFlagEnum.enableUnderConstructionHome,

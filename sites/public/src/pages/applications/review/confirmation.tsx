@@ -21,6 +21,7 @@ import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionCon
 import { UserStatus } from "../../../lib/constants"
 import { isFeatureFlagOn, isUnitGroupAppBase, isUnitGroupAppWaitlist } from "../../../lib/helpers"
 import { AccountTypeDialog } from "../../../components/account/AccountTypeDialog"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const ApplicationConfirmation = () => {
   const { application, listing, conductor } = useContext(AppSubmissionContext)
@@ -190,3 +191,5 @@ const ApplicationConfirmation = () => {
 }
 
 export default ApplicationConfirmation
+
+export const getStaticProps = sharedGetStaticProps

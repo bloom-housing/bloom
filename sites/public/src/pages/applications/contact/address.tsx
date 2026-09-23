@@ -19,6 +19,7 @@ import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend
 import FormsLayout from "../../../layouts/forms"
 import { disableContactFormOption, isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import {
   FoundAddress,
   findValidatedAddress,
@@ -39,11 +40,13 @@ const ApplicationAddress = () => {
   const { conductor, application, listing } = useFormConductor("primaryApplicantAddress")
   const currentPageSection = 1
 
+  const disableHowToContact = isFeatureFlagOn(conductor.config, FeatureFlagEnum.disableHowToContact)
+  const disableWorkInRegion = isFeatureFlagOn(conductor.config, FeatureFlagEnum.disableWorkInRegion)
+
   const enableFullTimeStudentQuestion = isFeatureFlagOn(
     conductor.config,
     FeatureFlagEnum.enableFullTimeStudentQuestion
   )
-  const disableWorkInRegion = isFeatureFlagOn(conductor.config, FeatureFlagEnum.disableWorkInRegion)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { control, register, handleSubmit, setValue, watch, errors, trigger } = useForm<
@@ -488,25 +491,29 @@ const ApplicationAddress = () => {
               </CardSection>
             )}
 
-            <CardSection divider={"inset"}>
-              <fieldset>
-                <legend
-                  className={`text__caps-spaced ${errors?.contactPreferences ? "text-alert" : ""}`}
-                >
-                  {t("application.contact.contactPreference")}
-                </legend>
-                <FieldGroup
-                  name="contactPreferences"
-                  fields={contactPreferencesOptions}
-                  type="checkbox"
-                  validation={{ required: true }}
-                  error={errors?.contactPreferences}
-                  errorMessage={t("errors.selectAtLeastOne")}
-                  register={register}
-                  dataTestId={"app-primary-contact-preference"}
-                />
-              </fieldset>
-            </CardSection>
+            {!disableHowToContact && (
+              <CardSection divider={"inset"}>
+                <fieldset>
+                  <legend
+                    className={`text__caps-spaced ${
+                      errors?.contactPreferences ? "text-alert" : ""
+                    }`}
+                  >
+                    {t("application.contact.contactPreference")}
+                  </legend>
+                  <FieldGroup
+                    name="contactPreferences"
+                    fields={contactPreferencesOptions}
+                    type="checkbox"
+                    validation={{ required: true }}
+                    error={errors?.contactPreferences}
+                    errorMessage={t("errors.selectAtLeastOne")}
+                    register={register}
+                    dataTestId={"app-primary-contact-preference"}
+                  />
+                </fieldset>
+              </CardSection>
+            )}
 
             {!disableWorkInRegion && (
               <CardSection
@@ -725,3 +732,5 @@ const ApplicationAddress = () => {
 }
 
 export default ApplicationAddress
+
+export const getStaticProps = sharedGetStaticProps
