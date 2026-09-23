@@ -13,6 +13,7 @@ import {
   BrandFormValues,
   derivedShades,
   fieldName,
+  PREVIEW_FIELDS,
   RampName,
   RAMP_SHADES,
 } from "../../lib/branding"
@@ -326,7 +327,7 @@ const BrandingForm = ({
         </Card.Section>
       </Card>
 
-      <BrandPreview values={watch()} />
+      <BrandPreview values={watch(PREVIEW_FIELDS)} />
 
       <div className={styles["actions"]}>
         <Button type="submit" variant="primary" disabled={isSaving || uploading}>

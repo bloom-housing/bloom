@@ -12,7 +12,9 @@ import { radiusVariable } from "@bloom-housing/shared-helpers/src/utilities/bran
 import { HEX_COLOR } from "@bloom-housing/shared-helpers/src/utilities/brandRamp"
 import styles from "./BrandPreview.module.scss"
 
-const rampVariables = (values: BrandFormValues, ramp: RampName): Record<string, string> => {
+export type PreviewValues = Partial<BrandFormValues>
+
+const rampVariables = (values: PreviewValues, ramp: RampName): Record<string, string> => {
   const base = values[fieldName(ramp, "base")]?.trim()
   if (!base || !HEX_COLOR.test(base)) return {}
 
@@ -27,7 +29,7 @@ const rampVariables = (values: BrandFormValues, ramp: RampName): Record<string, 
   )
 }
 
-export const previewVariables = (values: BrandFormValues): Record<string, string> => {
+export const previewVariables = (values: PreviewValues): Record<string, string> => {
   const variables = {
     ...rampVariables(values, "primary"),
     ...rampVariables(values, "secondary"),
@@ -36,7 +38,7 @@ export const previewVariables = (values: BrandFormValues): Record<string, string
   return variables
 }
 
-const BrandPreview = ({ values }: { values: BrandFormValues }) => (
+const BrandPreview = ({ values }: { values: PreviewValues }) => (
   <Card className={styles["preview"]}>
     <Card.Section>
       <Heading size="lg" priority={3}>

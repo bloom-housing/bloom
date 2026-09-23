@@ -35,6 +35,17 @@ export interface BrandFormValues {
 export const fieldName = (ramp: RampName, shade: RampShade | "base"): keyof BrandFormValues =>
   `${ramp}${shade.charAt(0).toUpperCase()}${shade.slice(1)}` as keyof BrandFormValues
 
+const rampFields = (ramp: RampName): (keyof BrandFormValues)[] => [
+  fieldName(ramp, "base"),
+  ...RAMP_SHADES.map((shade) => fieldName(ramp, shade)),
+]
+
+export const PREVIEW_FIELDS: (keyof BrandFormValues)[] = [
+  ...rampFields("primary"),
+  ...rampFields("secondary"),
+  "buttonRadius",
+]
+
 const FONT_FIELDS = ["fontFamily", "headingFontFamily", "serifFontFamily", "fontUrl"] as const
 
 const blank = (): BrandFormValues => ({
