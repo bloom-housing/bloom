@@ -1296,25 +1296,77 @@ describe('Testing lottery service', () => {
   });
 
   describe('Test autoPublishResults endpoint', () => {
-    it('should call the update', async () => {
-      prisma.listings.findMany = jest.fn().mockResolvedValue([
-        {
-          id: 'example id1',
-          listingEvents: [
-            {
-              type: ListingEventsTypeEnum.publicLottery,
-            },
-          ],
-        },
-      ]);
+    const jurisAId = randomUUID();
+    const jurisBId = randomUUID();
+
+    const autoListingsWhere = () =>
+      (prisma.listings.findMany as jest.Mock).mock.calls[1][0].where;
+
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2026-03-15T12:34:56.000Z'));
+
+      prisma.jurisdictions.findMany = jest
+        .fn()
+        .mockResolvedValue([{ id: jurisAId, lotteryAutoPublishDays: 7 }]);
+
+      prisma.listings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([])
+        .mockResolvedValueOnce([]);
+      prisma.listings.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.listings.update = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
       prisma.activityLog.create = jest.fn().mockResolvedValue({});
       prisma.cronJob.findFirst = jest
         .fn()
         .mockResolvedValue({ id: randomUUID() });
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
 
+      jest
+        .spyOn(listingService, 'getUserEmailInfo')
+        .mockResolvedValue({ emails: ['admin@example.com'] });
+      jest
+        .spyOn(service, 'getPublicUserEmailInfo')
+        .mockResolvedValue({ en: ['applicant@example.com'] });
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+      jest.restoreAllMocks();
+    });
+
+    it('should call the update for releasedListings', async () => {
+      const releasedListingId = 'example id1';
+      prisma.listings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          {
+            id: releasedListingId,
+            listingEvents: [
+              {
+                type: ListingEventsTypeEnum.publicLottery,
+              },
+            ],
+          },
+        ])
+        .mockResolvedValueOnce([]);
+
+      prisma.listings.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: releasedListingId });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: releasedListingId,
+        lotteryStatus: LotteryStatusEnum.publishedToPublic,
+      });
+
       await service.autoPublishResults();
-      expect(prisma.listings.findMany).toHaveBeenCalledWith({
+      expect(prisma.listings.findMany).toHaveBeenNthCalledWith(1, {
         select: {
           id: true,
           name: true,
@@ -1331,27 +1383,210 @@ describe('Testing lottery service', () => {
               startDate: { lt: expect.anything() },
             },
           },
+          jurisdictions: {
+            featureFlags: {
+              some: {
+                name: FeatureFlagEnum.enableNonAdminLotteries,
+                active: false,
+              },
+            },
+          },
         },
       });
+      expect(prisma.listings.findMany).toHaveBeenNthCalledWith(2, {
+        select: {
+          id: true,
+          name: true,
+          lotteryLastRunAt: true,
+          jurisdictions: true,
+        },
+        where: {
+          lotteryLastPublishedAt: null,
+          lotteryStatus: LotteryStatusEnum.ran,
+          OR: [
+            {
+              jurisdictionId: { in: [jurisAId] },
+              lotteryLastRunAt: { lt: new Date('2026-03-09T00:00:00.000Z') },
+            },
+          ],
+        },
+      });
+
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
           lotteryStatus: LotteryStatusEnum.publishedToPublic,
           lotteryLastPublishedAt: expect.anything(),
         },
         where: {
-          id: 'example id1',
+          id: releasedListingId,
         },
       });
       expect(prisma.activityLog.create).toHaveBeenCalledWith({
         data: {
           module: 'lottery',
-          recordId: 'example id1',
+          recordId: releasedListingId,
           action: 'update',
           metadata: { lotteryStatus: LotteryStatusEnum.publishedToPublic },
         },
       });
       expect(prisma.cronJob.findFirst).toHaveBeenCalled();
       expect(prisma.cronJob.update).toHaveBeenCalled();
+    });
+
+    describe('autoListings auto-publish', () => {
+      it('should query only flag-enabled jurisdictions that have an auto-publish period set', async () => {
+        await service.autoPublishResults();
+
+        expect(prisma.jurisdictions.findMany).toHaveBeenCalledWith({
+          select: {
+            id: true,
+            lotteryAutoPublishDays: true,
+          },
+          where: {
+            featureFlags: {
+              some: {
+                name: FeatureFlagEnum.enableNonAdminLotteries,
+                active: true,
+              },
+            },
+            // a jurisdiction with no configured period never auto-publishes
+            lotteryAutoPublishDays: { not: null },
+          },
+        });
+      });
+
+      it('should scope the autoListings query to unpublished, already-run lotteries', async () => {
+        await service.autoPublishResults();
+
+        const [{ select, where }] = (prisma.listings.findMany as jest.Mock).mock
+          .calls[1];
+
+        expect(select).toEqual({
+          id: true,
+          name: true,
+          lotteryLastRunAt: true,
+          jurisdictions: true,
+        });
+        expect(where.lotteryLastPublishedAt).toBeNull();
+        expect(where.lotteryStatus).toEqual(LotteryStatusEnum.ran);
+      });
+
+      it.each([
+        [1, new Date('2026-03-15T00:00:00.000Z')],
+        [7, new Date('2026-03-09T00:00:00.000Z')],
+        [14, new Date('2026-03-02T00:00:00.000Z')],
+      ] as [number, Date][])(
+        'should turn lotteryAutoPublishDays=%i into a cutoff of %s',
+        async (days, expectedCutoff) => {
+          prisma.jurisdictions.findMany = jest
+            .fn()
+            .mockResolvedValue([
+              { id: jurisAId, lotteryAutoPublishDays: days },
+            ]);
+
+          await service.autoPublishResults();
+
+          expect(autoListingsWhere().OR).toEqual([
+            {
+              jurisdictionId: { in: [jurisAId] },
+              lotteryLastRunAt: { lt: expectedCutoff },
+            },
+          ]);
+        },
+      );
+
+      it('should group jurisdictions sharing an auto-publish period into one OR branch', async () => {
+        prisma.jurisdictions.findMany = jest.fn().mockResolvedValue([
+          { id: jurisAId, lotteryAutoPublishDays: 7 },
+          { id: jurisBId, lotteryAutoPublishDays: 7 },
+        ]);
+
+        await service.autoPublishResults();
+
+        expect(autoListingsWhere().OR).toEqual([
+          {
+            jurisdictionId: { in: [jurisAId, jurisBId] },
+            lotteryLastRunAt: { lt: new Date('2026-03-09T00:00:00.000Z') },
+          },
+        ]);
+      });
+
+      it('should auto-publish nothing when no jurisdiction qualifies', async () => {
+        prisma.jurisdictions.findMany = jest.fn().mockResolvedValue([]);
+
+        await service.autoPublishResults();
+        expect(autoListingsWhere().OR).toEqual([]);
+        expect(prisma.listings.update).not.toHaveBeenCalled();
+        expect(prisma.activityLog.create).not.toHaveBeenCalled();
+      });
+
+      it('should process releasedListings and autoListings together', async () => {
+        const releasedListingId = randomUUID();
+        const autoListingId = randomUUID();
+
+        prisma.listings.findMany = jest
+          .fn()
+          .mockResolvedValueOnce([
+            {
+              id: releasedListingId,
+              name: 'Released Listing',
+              listingEvents: [
+                {
+                  type: ListingEventsTypeEnum.publicLottery,
+                },
+              ],
+              jurisdictions: { id: jurisAId },
+            },
+          ])
+          .mockResolvedValueOnce([
+            {
+              id: autoListingId,
+              name: 'Auto Listing',
+              lotteryLastRunAt: new Date('2026-03-01T09:30:00.000Z'),
+              jurisdictions: { id: jurisAId },
+            },
+          ]);
+
+        await service.autoPublishResults();
+
+        expect(prisma.listings.update).toHaveBeenCalledTimes(2);
+        expect(prisma.listings.update).toHaveBeenNthCalledWith(1, {
+          data: {
+            lotteryStatus: LotteryStatusEnum.publishedToPublic,
+            lotteryLastPublishedAt: expect.anything(),
+          },
+          where: {
+            id: releasedListingId,
+          },
+        });
+        expect(prisma.listings.update).toHaveBeenNthCalledWith(2, {
+          data: {
+            lotteryStatus: LotteryStatusEnum.publishedToPublic,
+            lotteryLastPublishedAt: expect.anything(),
+          },
+          where: {
+            id: autoListingId,
+          },
+        });
+
+        expect(prisma.activityLog.create).toHaveBeenCalledTimes(2);
+        expect(prisma.activityLog.create).toHaveBeenNthCalledWith(1, {
+          data: {
+            module: 'lottery',
+            recordId: releasedListingId,
+            action: 'update',
+            metadata: { lotteryStatus: LotteryStatusEnum.publishedToPublic },
+          },
+        });
+        expect(prisma.activityLog.create).toHaveBeenNthCalledWith(2, {
+          data: {
+            module: 'lottery',
+            recordId: autoListingId,
+            action: 'update',
+            metadata: { lotteryStatus: LotteryStatusEnum.publishedToPublic },
+          },
+        });
+      });
     });
   });
 
