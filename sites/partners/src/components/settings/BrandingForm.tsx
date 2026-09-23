@@ -5,6 +5,7 @@ import { Alert, Button, Card, Dialog, Grid } from "@bloom-housing/ui-seeds"
 import { BrandRadiusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../shared/SectionWithGrid"
 import BrandColorField from "./BrandColorField"
+import BrandColorWarning from "./BrandColorWarning"
 import BrandPreview from "./BrandPreview"
 import { fileUploader, FileUploadData } from "../../lib/helpers"
 import { useUnsavedChangesWarning } from "../../lib/hooks"
@@ -172,6 +173,13 @@ const BrandingForm = ({
             />
           </Grid.Cell>
         </Grid.Row>
+        <BrandColorWarning
+          base={base}
+          testId={fieldName(ramp, "base")}
+          onApply={(hex) =>
+            setValue(fieldName(ramp, "base"), hex, { shouldDirty: true, shouldValidate: true })
+          }
+        />
         <Grid.Row columns={4}>
           {RAMP_SHADES.map((shade) => (
             <Grid.Cell key={shade}>

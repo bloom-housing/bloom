@@ -25,6 +25,9 @@ addTranslation({
   "branding.primary": "test:primary",
   "branding.secondary": "test:secondary",
   "branding.baseColor": "test:base",
+  "branding.contrastWarning": "test:contrast %{ratio}",
+  "branding.contrastAction": "test:use %{suggestion}",
+  "branding.lightnessWarning": "test:tooDark",
   "branding.shade.dark": "test:dark",
   "branding.fontFamily": "test:fontFamily",
   "branding.fontUrl": "test:fontUrl",
@@ -175,6 +178,50 @@ describe("settings/branding", () => {
       "--seeds-color-primary-dark": "#693786",
     })
     expect(savedBody).toBeNull()
+  })
+
+  it("warns when a color fails AA and clears the warning once it is fixed", async () => {
+    // #EEDD00 is 1.3:1 against white; #773E98 passes.
+    respondWithBrand({ primary: { base: "#EEDD00" } })
+    renderPage()
+
+    expect(await screen.findByTestId("primaryBase-contrast")).toBeInTheDocument()
+
+    const base = screen.getAllByLabelText("test:base")[0]
+    await userEvent.clear(base)
+    await userEvent.type(base, "#773E98")
+
+    await waitFor(() =>
+      expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
+    )
+  })
+
+  it("applies the suggested color into the base field", async () => {
+    respondWithBrand({ primary: { base: "#EEDD00" } })
+    renderPage()
+
+    await waitFor(() => expect(document.getElementById("primaryBase-apply")).not.toBeNull())
+    await userEvent.click(document.getElementById("primaryBase-apply"))
+
+    const base = screen.getAllByLabelText("test:base")[0] as HTMLInputElement
+    await waitFor(() => expect(base.value).not.toEqual("#EEDD00"))
+    expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
+  })
+
+  it("warns when a base is too dark for its shades to differ", async () => {
+    respondWithBrand({ primary: { base: "#111111" } })
+    renderPage()
+
+    expect(await screen.findByTestId("primaryBase-lightness")).toBeInTheDocument()
+    expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
+  })
+
+  it("checks the secondary base too", async () => {
+    respondWithBrand({ primary: { base: "#773E98" }, secondary: { base: "#EEDD00" } })
+    renderPage()
+
+    expect(await screen.findByTestId("secondaryBase-contrast")).toBeInTheDocument()
+    expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
   })
 
   it("leaves a derived shade out of the save, so it keeps deriving", async () => {
