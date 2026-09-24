@@ -436,25 +436,18 @@ const SignIn = (props: SignInProps) => {
       {reCaptchaEnabled && (
         <GoogleReCaptcha onVerify={onVerify} refreshReCaptcha={refreshReCaptcha} action={"login"} />
       )}
-      {process.env.showPwdless ? (
-        <TermsModal
-          control={{ register, errors, handleSubmit }}
-          notChecked={notChecked}
-          onSubmit={(data) => void onSubmitPwdless(data as FormSignInValues)}
-          openTermsModal={openTermsModal}
-          setChecked={setChecked}
-          setOpenTermsModal={setOpenTermsModal}
-        />
-      ) : (
-        <TermsModal
-          control={{ register, errors, handleSubmit }}
-          notChecked={notChecked}
-          onSubmit={(data) => void onSubmit(data as FormSignInValues)}
-          openTermsModal={openTermsModal}
-          setChecked={setChecked}
-          setOpenTermsModal={setOpenTermsModal}
-        />
-      )}
+      <TermsModal
+        control={{ register, errors, handleSubmit }}
+        notChecked={notChecked}
+        onSubmit={(data) => {
+          process.env.showPwdless
+            ? void onSubmitPwdless(data as FormSignInValues)
+            : void onSubmit(data as FormSignInValues)
+        }}
+        openTermsModal={openTermsModal}
+        setChecked={setChecked}
+        setOpenTermsModal={setOpenTermsModal}
+      />
     </>
   )
 }
