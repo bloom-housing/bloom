@@ -19,13 +19,11 @@ export const stagingSeed = async (
   {
     jurisdictionName,
     publicSiteBaseURL,
-    msqV2,
     asRegion = false,
     jurisdiction,
   }: {
     jurisdictionName: string;
     publicSiteBaseURL: string;
-    msqV2: boolean;
     asRegion: boolean;
     jurisdiction?: string;
   },
@@ -69,7 +67,6 @@ export const stagingSeed = async (
           unitRentTypes,
           unitTypes,
           partnerUser,
-          msqV2,
         });
         break;
       case 'Lakeview':
@@ -77,7 +74,6 @@ export const stagingSeed = async (
           jurisdictionName: jurisdictionName,
           publicSiteBaseURL,
           unitTypes,
-          msqV2,
         });
         break;
       case 'Angelopolis':
@@ -87,7 +83,6 @@ export const stagingSeed = async (
           unitRentTypes,
           unitTypes,
           partnerUser,
-          msqV2,
         });
         break;
       case 'NadaHill':
@@ -107,14 +102,12 @@ export const stagingSeed = async (
       unitRentTypes,
       unitTypes,
       partnerUser,
-      msqV2,
     });
     const lakeviewJurisdiction = await createLakeviewJurisdiction(
       prismaClient,
       {
         publicSiteBaseURL,
         unitTypes,
-        msqV2,
       },
     );
     const angelopolisJurisdiction = await createAngelopolisJurisdiction(
@@ -124,7 +117,6 @@ export const stagingSeed = async (
         unitRentTypes,
         unitTypes,
         partnerUser,
-        msqV2,
       },
     );
     const nadaHill = await createNadaHillJurisdiction(prismaClient, {

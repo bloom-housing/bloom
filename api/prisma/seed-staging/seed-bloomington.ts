@@ -44,23 +44,19 @@ export const createBloomingtonJurisdiction = async (
     unitRentTypes,
     unitTypes,
     partnerUser,
-    msqV2,
   }: {
     jurisdictionName: string;
     publicSiteBaseURL: string;
     unitRentTypes: { id: string }[];
     unitTypes: { id: string }[];
     partnerUser: { id: string };
-    msqV2: boolean;
   },
 ) => {
-  const optionalV2MSQ = msqV2 ? [FeatureFlagEnum.enableV2MSQ] : [];
   const jurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(jurisdictionName, {
       publicSiteBaseURL,
       listingApprovalPermissions: [UserRoleEnum.admin],
       featureFlags: [
-        ...optionalV2MSQ,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableCustomListingNotifications,
@@ -89,6 +85,7 @@ export const createBloomingtonJurisdiction = async (
         FeatureFlagEnum.enableSingleUseCode,
         FeatureFlagEnum.enableSupportAdmin,
         FeatureFlagEnum.enableUtilitiesIncluded,
+        FeatureFlagEnum.enableV2MSQ,
         FeatureFlagEnum.enableWaitlistLottery,
         FeatureFlagEnum.enableWhatToExpectAdditionalField,
       ],
@@ -139,142 +136,88 @@ export const createBloomingtonJurisdiction = async (
     data: mapLayerFactory(jurisdiction.id, 'Washington DC', simplifiedDCMap),
   });
 
-  const cityEmployeeMsqData = msqV2
-    ? {
-        applicationSection:
-          MultiselectQuestionsApplicationSectionEnum.preferences,
-        description: 'Employees of the local city.',
-        multiselectOptions: {
-          createMany: {
-            data: [
-              {
-                name: 'At least one member of my household is a city employee',
-                shouldCollectAddress: false,
-                ordinal: 1,
-              },
-            ],
-          },
-        },
-        name: 'City Employees',
-        status: MultiselectQuestionsStatusEnum.active,
-      }
-    : {
-        applicationSection:
-          MultiselectQuestionsApplicationSectionEnum.preferences,
-        description: 'Employees of the local city.',
-        options: [
+  const cityEmployeeMsqData = {
+    applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+    description: 'Employees of the local city.',
+    multiselectOptions: {
+      createMany: {
+        data: [
           {
-            text: 'At least one member of my household is a city employee',
-            collectAddress: false,
-            ordinal: 0,
+            name: 'At least one member of my household is a city employee',
+            shouldCollectAddress: false,
+            ordinal: 1,
           },
         ],
-        text: 'City Employees',
-      };
+      },
+    },
+    name: 'City Employees',
+    status: MultiselectQuestionsStatusEnum.active,
+  };
   const cityEmployeeQuestion = await prismaClient.multiselectQuestions.create({
     data: multiselectQuestionFactory(
       jurisdiction.id,
       { multiselectQuestion: cityEmployeeMsqData },
-      msqV2,
+      true,
     ),
   });
 
-  const workInCityMsqData = msqV2
-    ? {
-        applicationSection:
-          MultiselectQuestionsApplicationSectionEnum.preferences,
-        description: 'Workers in the local city.',
-        multiselectOptions: {
-          createMany: {
-            data: [
-              {
-                name: 'At least one member of my household works in the city',
-                ordinal: 1,
-                shouldCollectAddress: true,
-                shouldCollectName: true,
-                shouldCollectRelationship: true,
-                mapLayerId: mapLayer.id,
-                validationMethod: ValidationMethod.map,
-              },
-              {
-                name: 'All members of the household work in the city',
-                ordinal: 2,
-                shouldCollectAddress: true,
-              },
-            ],
-          },
-        },
-        name: 'Work in the city',
-        status: MultiselectQuestionsStatusEnum.active,
-      }
-    : {
-        applicationSection:
-          MultiselectQuestionsApplicationSectionEnum.preferences,
-        description: 'Workers in the local city.',
-        options: [
+  const workInCityMsqData = {
+    applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+    description: 'Workers in the local city.',
+    multiselectOptions: {
+      createMany: {
+        data: [
           {
-            text: 'At least one member of my household works in the city',
-            ordinal: 0,
-            collectAddress: true,
-            collectName: true,
-            collectRelationship: true,
+            name: 'At least one member of my household works in the city',
+            ordinal: 1,
+            shouldCollectAddress: true,
+            shouldCollectName: true,
+            shouldCollectRelationship: true,
             mapLayerId: mapLayer.id,
             validationMethod: ValidationMethod.map,
           },
           {
-            text: 'All members of the household work in the city',
-            ordinal: 1,
-            collectAddress: true,
-            ValidationMethod: ValidationMethod.none,
-            collectName: false,
-            collectRelationship: false,
+            name: 'All members of the household work in the city',
+            ordinal: 2,
+            shouldCollectAddress: true,
           },
         ],
-        text: 'Work in the city',
-      };
+      },
+    },
+    name: 'Work in the city',
+    status: MultiselectQuestionsStatusEnum.active,
+  };
   const workInCityQuestion = await prismaClient.multiselectQuestions.create({
     data: multiselectQuestionFactory(
       jurisdiction.id,
       { optOut: true, multiselectQuestion: workInCityMsqData },
-      msqV2,
+      true,
     ),
   });
 
-  const veteranProgramMsqData = msqV2
-    ? {
-        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        description:
-          'Have you or anyone in your household served in the US military?',
-        isExclusive: true,
-        multiselectOptions: {
-          createMany: {
-            data: [
-              { name: 'Yes', ordinal: 1 },
-              { name: 'No', ordinal: 2 },
-              { isOptOut: true, name: 'Prefer not to say', ordinal: 3 },
-            ],
-          },
-        },
-        name: 'Veterans',
-        status: MultiselectQuestionsStatusEnum.active,
-      }
-    : {
-        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        description:
-          'Have you or anyone in your household served in the US military?',
-        optOutText: 'Prefer not to say',
-        options: [
-          { text: 'Yes', exclusive: true, ordinal: 0 },
-          { text: 'No', exclusive: true, ordinal: 1 },
+  const veteranProgramMsqData = {
+    applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+    description:
+      'Have you or anyone in your household served in the US military?',
+    isExclusive: true,
+    multiselectOptions: {
+      createMany: {
+        data: [
+          { name: 'Yes', ordinal: 1 },
+          { name: 'No', ordinal: 2 },
+          { isOptOut: true, name: 'Prefer not to say', ordinal: 3 },
         ],
-        text: 'Veterans',
-      };
+      },
+    },
+    name: 'Veterans',
+    status: MultiselectQuestionsStatusEnum.active,
+  };
   const veteransProgramQuestion =
     await prismaClient.multiselectQuestions.create({
       data: multiselectQuestionFactory(
         jurisdiction.id,
         { multiselectQuestion: veteranProgramMsqData },
-        msqV2,
+        true,
       ),
     });
 
@@ -492,11 +435,11 @@ export const createBloomingtonJurisdiction = async (
       numberOfUnits: 0,
       applications: [
         await applicationFactory({
-          enableV2MSQ: msqV2,
+          enableV2MSQ: true,
           multiselectQuestions: [workInCityQuestion, cityEmployeeQuestion],
         }),
         await applicationFactory({
-          enableV2MSQ: msqV2,
+          enableV2MSQ: true,
           multiselectQuestions: [
             cityEmployeeQuestion,
             workInCityQuestion,
@@ -504,11 +447,11 @@ export const createBloomingtonJurisdiction = async (
           ],
         }),
         await applicationFactory({
-          enableV2MSQ: msqV2,
+          enableV2MSQ: true,
           multiselectQuestions: [workInCityQuestion, cityEmployeeQuestion],
         }),
         ...(await applicationFactoryMany(2, {
-          enableV2MSQ: msqV2,
+          enableV2MSQ: true,
           multiselectQuestions: [workInCityQuestion],
         })),
         await applicationFactory(),

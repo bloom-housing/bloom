@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { jurisdictionFactory } from '../seed-helpers/jurisdiction-factory';
+import { FeatureFlagEnum } from '../../src/enums/feature-flags/feature-flags-enum';
 
 export const createNadaHillJurisdiction = async (
   prismaClient: PrismaClient,
@@ -14,7 +15,7 @@ export const createNadaHillJurisdiction = async (
   return await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(jurisdictionName, {
       publicSiteBaseURL,
-      featureFlags: [],
+      featureFlags: [FeatureFlagEnum.enableV2MSQ],
       requiredListingFields: ['name'],
     }),
   });
