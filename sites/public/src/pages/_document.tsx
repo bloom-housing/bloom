@@ -19,7 +19,6 @@ interface BrandDocumentProps {
 
 const rampShades: (keyof BrandRamp)[] = ["base", "dark", "darker", "light", "lighter"]
 
-// A stored row can hold any JSON, and test() throws on an object with a non-callable toString.
 const isHex = (value: unknown): value is string =>
   typeof value === "string" && HEX_COLOR.test(value)
 
@@ -89,7 +88,6 @@ export default class BloomDocument extends Document<BrandDocumentProps> {
           {brandVariables && (
             <style id="brand-vars" dangerouslySetInnerHTML={{ __html: brandVariables }} />
           )}
-          {/* Nothing emitted without one, so the browser falls back to /favicon.ico */}
           {faviconUrl && <link rel="icon" href={faviconUrl} />}
         </Head>
         <body>
