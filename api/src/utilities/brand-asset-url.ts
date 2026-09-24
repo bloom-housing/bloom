@@ -5,8 +5,8 @@ const WIDTH = { logo: 400, favicon: 64 } as const;
 
 const SAFE_FILE_ID = /^[A-Za-z0-9._\-/]+$/;
 
-const escapesThePath = (fileId: string): boolean =>
-  !SAFE_FILE_ID.test(fileId) || fileId.split('/').includes('..');
+export const isUsableFileId = (fileId: string): boolean =>
+  SAFE_FILE_ID.test(fileId) && !fileId.split('/').includes('..');
 
 export const brandAssetUrl = (
   fileId: string | null | undefined,
@@ -14,7 +14,7 @@ export const brandAssetUrl = (
 ): string | undefined => {
   if (!fileId) return undefined;
 
-  if (escapesThePath(fileId)) {
+  if (!isUsableFileId(fileId)) {
     console.error(`asset file id ${fileId} is not a usable storage key`);
     return undefined;
   }

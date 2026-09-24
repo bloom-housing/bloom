@@ -4,6 +4,9 @@ import {
   hslToHex,
 } from '../../../src/utilities/brand-ramp';
 
+// shared-helpers/__tests__/utilities/brandRamp.test.ts asserts these same vectors against the
+// mirrored copy. Changing a proportion here means changing both files and both suites.
+
 describe('completeRamp', () => {
   // Expected values computed independently (python colorsys) from the documented deltas:
   // darker = L*0.64, dark = L*0.88, light = L+(100-L)*0.88, lighter = L+(100-L)*0.95.
