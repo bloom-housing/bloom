@@ -707,7 +707,8 @@ export class LotteryService {
 
   /**
     runs the job to automatically publish the lottery when:
-    - 
+    - the jurisdiction does NOT have enableNonAdminLotteries: the lottery has been released to partners and its public lottery event date has arrived
+    - the jurisdiction DOES have enableNonAdminLotteries: the lottery has been run and lotteryAutoPublishDays have elapsed since lotteryLastRunAt
   */
   async autoPublishResults(): Promise<SuccessDTO> {
     this.logger.warn('autoPublishLotteryResults job running');
@@ -740,9 +741,9 @@ export class LotteryService {
         },
         jurisdictions: {
           featureFlags: {
-            some: {
+            none: {
               name: FeatureFlagEnum.enableNonAdminLotteries,
-              active: false,
+              active: true,
             },
           },
         },
@@ -779,22 +780,24 @@ export class LotteryService {
       }
     });
 
-    const autoListings = await this.prisma.listings.findMany({
-      select: {
-        id: true,
-        name: true,
-        lotteryLastRunAt: true,
-        jurisdictions: true,
-      },
-      where: {
-        lotteryLastPublishedAt: null,
-        lotteryStatus: LotteryStatusEnum.ran,
-        OR: [...publishCutoffMap].map(([cutoffTime, ids]) => ({
-          jurisdictionId: { in: ids },
-          lotteryLastRunAt: { lt: new Date(cutoffTime) },
-        })),
-      },
-    });
+    const autoListings = publishCutoffMap.size
+      ? await this.prisma.listings.findMany({
+          select: {
+            id: true,
+            name: true,
+            lotteryLastRunAt: true,
+            jurisdictions: true,
+          },
+          where: {
+            lotteryLastPublishedAt: null,
+            lotteryStatus: LotteryStatusEnum.ran,
+            OR: [...publishCutoffMap].map(([cutoffTime, ids]) => ({
+              jurisdictionId: { in: ids },
+              lotteryLastRunAt: { lt: new Date(cutoffTime) },
+            })),
+          },
+        })
+      : [];
 
     const listingsToUpdate = [...releasedListings, ...autoListings];
     await Promise.all(
