@@ -1,6 +1,7 @@
 import React from "react"
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document"
 import {
+  BrandRadiusEnum,
   BrandRampDTO,
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -23,6 +24,8 @@ interface BrandDocumentProps {
   fontFamily: string | null
   headingFontFamily: string | null
   fontUrl: string | null
+  serifFontFamily: string | null
+  buttonRadius: string | null
 }
 
 const rampShades: (keyof BrandRamp)[] = ["base", "dark", "darker", "light", "lighter"]
@@ -70,33 +73,45 @@ const rampVariables = (namespace: string, name: string, ramp: BrandRamp) =>
     )
     .join("\n")
 
-// Exported for tests: <Html> cannot render outside Next's document context.
-const fontStack = (family: string) => `"${family}", system-ui, sans-serif`
+// --brand-font-fallback-* is defined in overrides.scss. A missing custom property makes the whole
+// font-family declaration invalid, so sans-serif or serif is included as a last resort.
+const fontStack = (family: string, slot: "sans" | "alt-sans" | "serif") =>
+  `"${family}", var(--brand-font-fallback-${slot}, ${slot === "serif" ? "serif" : "sans-serif"})`
+
+const RADIUS_STEPS: string[] = Object.values(BrandRadiusEnum)
+
+const radiusStepOnly = (value?: string): string | null =>
+  typeof value === "string" && RADIUS_STEPS.includes(value) ? value : null
+
+const radiusVariable = (step: string) =>
+  step === BrandRadiusEnum.base ? "var(--seeds-rounded)" : `var(--seeds-rounded-${step})`
 
 export const brandStyleBlock = ({
   primary,
   secondary,
   fontFamily,
   headingFontFamily,
+  serifFontFamily,
+  buttonRadius,
 }: BrandDocumentProps): string => {
-  if (!primary && !fontFamily && !headingFontFamily) return ""
-
   // Headings, buttons and tabs read the alt token.
   const headingFont = headingFontFamily ?? fontFamily
 
-  const variables = [
+  const rootVariables = [
     primary ? rampVariables("seeds", "primary", primary) : "",
     primary && secondary ? rampVariables("seeds", "secondary", secondary) : "",
     primary ? rampVariables("bloom", "primary", primary) : "",
-    fontFamily ? `--seeds-font-sans: ${fontStack(fontFamily)};` : "",
-    headingFont ? `--seeds-font-alt-sans: ${fontStack(headingFont)};` : "",
+    fontFamily ? `--seeds-font-sans: ${fontStack(fontFamily, "sans")};` : "",
+    headingFont ? `--seeds-font-alt-sans: ${fontStack(headingFont, "alt-sans")};` : "",
+    serifFontFamily ? `--seeds-font-serif: ${fontStack(serifFontFamily, "serif")};` : "",
+    buttonRadius ? `--brand-button-radius: ${radiusVariable(buttonRadius)};` : "",
   ]
     .filter(Boolean)
     .join("\n")
 
-  // Doubled selector: ui-seeds sets these same tokens on :root in a stylesheet that loads after
-  // this block, and a single :root would lose the tie on document order.
-  return `:root:root {\n${variables}\n}`
+  // Doubled selector: ui-seeds sets these same tokens in a stylesheet that loads after this
+  // block, and a single :root would lose the tie on document order.
+  return rootVariables ? `:root:root {\n${rootVariables}\n}` : ""
 }
 
 export default class BloomDocument extends Document<BrandDocumentProps> {
@@ -112,6 +127,7 @@ export default class BloomDocument extends Document<BrandDocumentProps> {
     const storedFontUrl = googleFontUrlOnly(brand?.fontUrl)
     const fontFamily = storedFontUrl ? fontFamilyOnly(brand?.fontFamily) : null
     const headingFontFamily = storedFontUrl ? fontFamilyOnly(brand?.headingFontFamily) : null
+    const serifFontFamily = storedFontUrl ? fontFamilyOnly(brand?.serifFontFamily) : null
 
     return {
       ...initialProps,
@@ -120,7 +136,9 @@ export default class BloomDocument extends Document<BrandDocumentProps> {
       faviconUrl: brand?.faviconUrl ?? null,
       fontFamily,
       headingFontFamily,
-      fontUrl: fontFamily || headingFontFamily ? storedFontUrl : null,
+      serifFontFamily,
+      fontUrl: fontFamily || headingFontFamily || serifFontFamily ? storedFontUrl : null,
+      buttonRadius: radiusStepOnly(brand?.buttonRadius),
     }
   }
 

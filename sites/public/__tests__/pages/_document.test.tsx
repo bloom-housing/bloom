@@ -1,6 +1,9 @@
 import React from "react"
+import { readFileSync } from "fs"
+import { resolve } from "path"
 import Document, { Head } from "next/document"
 import {
+  BrandRadiusEnum,
   FeatureFlagEnum,
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -86,6 +89,7 @@ describe("_document", () => {
 
   it("emits nothing when the flag is off", async () => {
     expect(await styleFor(jurisdictionWith({ primary }, false))).toEqual("")
+    expect(await styleFor(jurisdictionWith({ buttonRadius: "3xl" }, false))).toEqual("")
   })
 
   it("emits nothing when the jurisdiction has no brand", async () => {
@@ -248,7 +252,9 @@ describe("_document", () => {
       })
     )
 
-    expect(style).toContain(`--seeds-font-sans: "Playfair Display", system-ui, sans-serif;`)
+    expect(style).toContain(
+      `--seeds-font-sans: "Playfair Display", var(--brand-font-fallback-sans, sans-serif);`
+    )
   })
 
   it("brands headings with the body font when no heading font is stored", async () => {
@@ -260,8 +266,12 @@ describe("_document", () => {
       })
     )
 
-    expect(style).toContain(`--seeds-font-sans: "Inter", system-ui, sans-serif;`)
-    expect(style).toContain(`--seeds-font-alt-sans: "Inter", system-ui, sans-serif;`)
+    expect(style).toContain(
+      `--seeds-font-sans: "Inter", var(--brand-font-fallback-sans, sans-serif);`
+    )
+    expect(style).toContain(
+      `--seeds-font-alt-sans: "Inter", var(--brand-font-fallback-alt-sans, sans-serif);`
+    )
   })
 
   it("uses a stored heading font for the alt token only", async () => {
@@ -274,8 +284,12 @@ describe("_document", () => {
       })
     )
 
-    expect(style).toContain(`--seeds-font-sans: "Inter", system-ui, sans-serif;`)
-    expect(style).toContain(`--seeds-font-alt-sans: "Playfair Display", system-ui, sans-serif;`)
+    expect(style).toContain(
+      `--seeds-font-sans: "Inter", var(--brand-font-fallback-sans, sans-serif);`
+    )
+    expect(style).toContain(
+      `--seeds-font-alt-sans: "Playfair Display", var(--brand-font-fallback-alt-sans, sans-serif);`
+    )
   })
 
   it("drops a heading font that could break out of the style block", async () => {
@@ -289,7 +303,9 @@ describe("_document", () => {
     )
 
     expect(style).not.toContain("display: none")
-    expect(style).toContain(`--seeds-font-alt-sans: "Inter", system-ui, sans-serif;`)
+    expect(style).toContain(
+      `--seeds-font-alt-sans: "Inter", var(--brand-font-fallback-alt-sans, sans-serif);`
+    )
   })
 
   it("sets no font variable when the family has no stylesheet", async () => {
@@ -326,7 +342,104 @@ describe("_document", () => {
       })
     )
 
-    expect(style).toContain(`--seeds-font-sans: "${fontFamily}", system-ui, sans-serif;`)
+    expect(style).toContain(
+      `--seeds-font-sans: "${fontFamily}", var(--brand-font-fallback-sans, sans-serif);`
+    )
+  })
+
+  it("gives the serif family its own fallback stack", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        serifFontFamily: "Noto Serif",
+        fontUrl: "https://fonts.googleapis.com/css2?family=Noto+Serif",
+      })
+    )
+
+    expect(style).toContain(
+      `--seeds-font-serif: "Noto Serif", var(--brand-font-fallback-serif, serif);`
+    )
+  })
+
+  it("sets no serif variable when the family has no stylesheet", async () => {
+    const style = await styleFor(jurisdictionWith({ primary, serifFontFamily: "Noto Serif" }))
+
+    expect(style).not.toContain("--seeds-font-serif")
+  })
+
+  it("emits the button radius as a brand variable", async () => {
+    const style = await styleFor(jurisdictionWith({ primary, buttonRadius: "3xl" }))
+
+    expect(style).toContain("--brand-button-radius: var(--seeds-rounded-3xl);")
+    // The document names no ui-seeds selector; overrides.scss decides where the value applies.
+    expect(style).not.toContain(".seeds-button")
+  })
+
+  it("names the unsuffixed seeds variable for the base step", async () => {
+    const style = await styleFor(jurisdictionWith({ primary, buttonRadius: "base" }))
+
+    expect(style).toContain("--brand-button-radius: var(--seeds-rounded);")
+  })
+
+  it.each([
+    ["a step the scale does not define", "pill"],
+    ["css that closes the declaration", "0; } body { display: none"],
+    ["a var reference of its own", "var(--bloom-rounded)"],
+  ])("drops %s", async (_label, buttonRadius) => {
+    const style = await styleFor(jurisdictionWith({ primary, buttonRadius }))
+
+    expect(style).toContain("--seeds-color-primary: #773E98;")
+    expect(style).not.toContain("--brand-button-radius")
+  })
+
+  it("emits a radius-only brand", async () => {
+    const style = await styleFor(jurisdictionWith({ buttonRadius: "full" }))
+
+    expect(style).toContain("--brand-button-radius: var(--seeds-rounded-full);")
+    expect(style.startsWith(":root:root {")).toBe(true)
+    expect(style).not.toContain("--seeds-color")
+  })
+
+  // radiusVariable builds a name rather than looking one up, so every step has to land on a
+  // variable ui-seeds actually defines.
+  it("maps every step to a variable ui-seeds defines", async () => {
+    const tokens = readFileSync(
+      resolve(
+        __dirname,
+        "../../../../node_modules/@bloom-housing/ui-seeds/src/global/tokens/borders.scss"
+      ),
+      "utf8"
+    )
+
+    for (const step of Object.values(BrandRadiusEnum)) {
+      const style = await styleFor(jurisdictionWith({ buttonRadius: step }))
+      const variable = style.match(/var\((--seeds-rounded[\w-]*)\)/)?.[1]
+
+      expect(variable).toBeDefined()
+      expect(tokens).toContain(`${variable}:`)
+    }
+  })
+
+  // The document and the stylesheet agree on a name that neither side can typecheck.
+  it("emits only variables overrides.scss consumes", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        buttonRadius: "3xl",
+        serifFontFamily: "Noto Serif",
+        fontFamily: "Inter",
+        headingFontFamily: "Lato",
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter",
+      })
+    )
+    const stylesheet = readFileSync(resolve(__dirname, "../../styles/overrides.scss"), "utf8")
+    const declared = [...style.matchAll(/(--brand-[\w-]+):/g)].map(([, name]) => name)
+    const referenced = [...style.matchAll(/var\((--brand-[\w-]+)[,)]/g)].map(([, name]) => name)
+
+    expect(declared).toEqual(["--brand-button-radius"])
+    expect(referenced.length).toBeGreaterThan(0)
+    declared.forEach((name) => expect(stylesheet).toContain(`var(${name},`))
+    referenced.forEach((name) => expect(stylesheet).toContain(`${name}:`))
   })
 
   it("links no font when none is stored", async () => {
@@ -350,6 +463,20 @@ describe("_document", () => {
     expect(
       children.some((child) => React.isValidElement(child) && child.props.rel === "stylesheet")
     ).toBe(false)
+  })
+
+  it("links the stylesheet when only the serif family survives", async () => {
+    const { children } = await headChildrenFor(
+      jurisdictionWith({
+        primary,
+        serifFontFamily: "Noto Serif",
+        fontUrl: "https://fonts.googleapis.com/css2?family=Noto+Serif",
+      })
+    )
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "stylesheet")
+    ).toBe(true)
   })
 
   it("links the stylesheet when only the heading family survives", async () => {
@@ -383,7 +510,7 @@ describe("_document", () => {
   it.each([
     ["a port", "https://fonts.googleapis.com:8080/css2?family=Inter"],
     ["credentials", "https://user:pass@fonts.googleapis.com/css2?family=Inter"],
-  ])("drops a font url carrying %s", async (_label, fontUrl) => {
+  ])("drops a font url with %s", async (_label, fontUrl) => {
     const { children } = await headChildrenFor(
       jurisdictionWith({ primary, fontFamily: "Inter", fontUrl })
     )

@@ -4,14 +4,20 @@ import {
   IsOptional,
   IsString,
   IsUrl,
+  IsEnum,
   Matches,
   ValidateNested,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { HEX_COLOR } from '../../utilities/brand-ramp';
+import { BrandRadiusEnum } from '../../enums/jurisdictions/brand-radius-enum';
 
 export const FONT_HOSTS = ['fonts.googleapis.com'];
+
+// A family name is interpolated into the style block, so it is held to letters, digits, spaces
+// and hyphens.
+export const FONT_FAMILY = /^[A-Za-z0-9](?:[A-Za-z0-9 -]{0,62}[A-Za-z0-9])?$/;
 
 // Without a display value google's css omits font-display, so the browser hides text for up to
 // three seconds. An explicit choice is left alone.
@@ -86,13 +92,13 @@ export class BrandDTO {
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @Matches(FONT_FAMILY, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ example: 'Inter' })
   fontFamily?: string;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @Matches(FONT_FAMILY, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ example: 'Playfair Display' })
   headingFontFamily?: string;
 
@@ -112,6 +118,22 @@ export class BrandDTO {
     example: 'https://fonts.googleapis.com/css2?family=Inter&display=swap',
   })
   fontUrl?: string;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @Matches(FONT_FAMILY, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({ example: 'Noto Serif' })
+  serifFontFamily?: string;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(BrandRadiusEnum, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({
+    enum: BrandRadiusEnum,
+    enumName: 'BrandRadiusEnum',
+    example: BrandRadiusEnum.xl3,
+  })
+  buttonRadius?: BrandRadiusEnum;
 
   // Response-only: built from the asset foreign keys at read time.
   @Expose()

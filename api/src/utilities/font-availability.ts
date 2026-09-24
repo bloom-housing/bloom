@@ -27,14 +27,16 @@ export const assertFontIsAvailable = async (
   http: HttpService,
   brand?: BrandDTO | null,
 ): Promise<void> => {
-  const families = [brand?.fontFamily, brand?.headingFontFamily].filter(
-    (family): family is string => !!family,
-  );
+  const families = [
+    brand?.fontFamily,
+    brand?.headingFontFamily,
+    brand?.serifFontFamily,
+  ].filter((family): family is string => !!family);
   if (!brand?.fontUrl && !families.length) return;
 
   if (!brand?.fontUrl || !families.length) {
     throw new BadRequestException(
-      'a brand font needs both a fontUrl and a fontFamily',
+      'a brand font needs both a fontUrl and a family name',
     );
   }
 

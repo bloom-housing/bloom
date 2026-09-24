@@ -15,6 +15,7 @@ import { IdDTO } from '../../src/dtos/shared/id.dto';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { ApplicationAccessibilityFeatureEnum } from '../../src/enums/applications/application-accessibility-feature-enum';
+import { BrandRadiusEnum } from '../../src/enums/jurisdictions/brand-radius-enum';
 import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
 
 describe('Jurisdiction Controller Tests', () => {
@@ -292,6 +293,41 @@ describe('Jurisdiction Controller Tests', () => {
           fontFamily: 'Inter',
           fontUrl: 'https://fonts.gstatic.com/s/inter/v20/font.woff2',
         },
+      }).expect(400);
+    });
+
+    it('stores a serif family and a button radius', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      // The mocked stylesheet names Inter, so that is the only family it can serve.
+      const res = await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          serifFontFamily: 'Inter',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=Inter',
+          buttonRadius: BrandRadiusEnum.xl3,
+        },
+      }).expect(200);
+
+      expect(res.body.brand.serifFontFamily).toEqual('Inter');
+      expect(res.body.brand.buttonRadius).toEqual(BrandRadiusEnum.xl3);
+
+      await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          serifFontFamily: 'Noto Serif',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=Inter',
+        },
+      }).expect(400);
+
+      await put(jurisdiction.id, {
+        brand: { primary: { base: '#773E98' }, buttonRadius: 'pill' },
+      }).expect(400);
+
+      await put(jurisdiction.id, {
+        brand: { primary: { base: '#773E98' }, serifFontFamily: 'Noto Serif ' },
       }).expect(400);
     });
 
