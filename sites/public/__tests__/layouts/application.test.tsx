@@ -33,9 +33,9 @@ describe("<Layout>", () => {
   })
 
   it("keeps the in-repo icon when the jurisdiction has no brand", () => {
-    const { container } = renderLayout(null)
+    const { queryByTestId, getByTestId } = renderLayout(null)
 
-    expect(container.querySelector("header img")).toBeNull()
-    expect(container.querySelector("header svg")).toBeInTheDocument()
+    expect(queryByTestId("brand-header-logo")).toBeNull()
+    expect(getByTestId("fallback-header-logo")).toBeInTheDocument()
   })
 })
