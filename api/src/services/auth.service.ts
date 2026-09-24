@@ -217,12 +217,7 @@ export class AuthService {
         enablePublicTermsOfUse &&
         !user.agreedToTermsOfService &&
         !agreedToTermsOfService &&
-        !(
-          user.userRoles?.isAdmin ||
-          user.userRoles?.isJurisdictionalAdmin ||
-          user.userRoles?.isLimitedJurisdictionalAdmin ||
-          user.userRoles?.isPartner
-        )
+        !user.userRoles
       ) {
         throw new BadRequestException(
           `User ${user.id} has not accepted the terms of service`,
@@ -396,12 +391,7 @@ export class AuthService {
       enablePublicTermsOfUse &&
       !user.agreedToTermsOfService &&
       !dto.agreedToTermsOfService &&
-      !(
-        user.userRoles?.isAdmin ||
-        user.userRoles?.isJurisdictionalAdmin ||
-        user.userRoles?.isLimitedJurisdictionalAdmin ||
-        user.userRoles?.isPartner
-      )
+      !user.userRoles
     ) {
       throw new BadRequestException(
         `User ${user.id} has not accepted the terms of service`,
