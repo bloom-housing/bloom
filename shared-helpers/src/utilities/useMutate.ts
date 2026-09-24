@@ -2,6 +2,7 @@ import { useState } from "react"
 
 export type UseMutateOptions = {
   onSuccess?: () => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError?: (err: any) => void
 }
 

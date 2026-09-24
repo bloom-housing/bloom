@@ -10,7 +10,7 @@ import {
   useCallback,
 } from "react"
 import qs from "qs"
-import axiosStatic from "axios"
+import { create } from "axios"
 import { ConfigContext } from "./ConfigContext"
 import { createAction, createReducer } from "typesafe-actions"
 import {
@@ -152,7 +152,7 @@ const reducer = createReducer(
 )
 
 const axiosConfig = (router: GenericRouter) => {
-  return axiosStatic.create({
+  return create({
     baseURL: "/api/adapter",
     withCredentials: true,
     headers: {
