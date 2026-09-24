@@ -81,6 +81,98 @@ describe('BrandDTO', () => {
     );
   });
 
+  it('rejects a font url that is not a google fonts host', async () => {
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        fontUrl: 'https://fonts.example.com/css2?family=Inter',
+      }),
+    ).not.toHaveLength(0);
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        fontUrl: 'http://fonts.googleapis.com/css2?family=Inter',
+      }),
+    ).not.toHaveLength(0);
+  });
+
+  it('defaults a font url to display=swap', async () => {
+    expect(
+      toBrand({
+        primary: { base: '#773E98' },
+        fontUrl: 'https://fonts.googleapis.com/css2?family=Inter',
+      }).fontUrl,
+    ).toEqual('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+  });
+
+  it('puts display in the query even when the url has a fragment', async () => {
+    // Appended to the whole url it would land inside the fragment and never reach google.
+    expect(
+      toBrand({
+        primary: { base: '#773E98' },
+        fontUrl: 'https://fonts.googleapis.com/css2?family=Inter#section',
+      }).fontUrl,
+    ).toEqual(
+      'https://fonts.googleapis.com/css2?family=Inter&display=swap#section',
+    );
+  });
+
+  it('keeps a multi word family readable rather than re-encoding it', async () => {
+    expect(
+      toBrand({
+        primary: { base: '#773E98' },
+        fontUrl: 'https://fonts.googleapis.com/css2?family=Noto+Serif',
+      }).fontUrl,
+    ).toEqual(
+      'https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap',
+    );
+  });
+
+  it('leaves a value that is not a url for IsUrl to reject', async () => {
+    expect(
+      toBrand({ primary: { base: '#773E98' }, fontUrl: 'not a url' }).fontUrl,
+    ).toEqual('not a url');
+  });
+
+  it('leaves an explicit display value alone', async () => {
+    expect(
+      toBrand({
+        primary: { base: '#773E98' },
+        fontUrl:
+          'https://fonts.googleapis.com/css2?family=Inter&display=optional',
+      }).fontUrl,
+    ).toEqual(
+      'https://fonts.googleapis.com/css2?family=Inter&display=optional',
+    );
+  });
+
+  it('rejects a font url carrying credentials', async () => {
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        fontUrl: 'https://user:pass@fonts.googleapis.com/css2?family=Inter',
+      }),
+    ).not.toHaveLength(0);
+  });
+
+  it('accepts a google fonts stylesheet over https', async () => {
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        fontUrl: 'https://fonts.googleapis.com/css2?family=Inter&display=swap',
+      }),
+    ).toHaveLength(0);
+  });
+
+  it('rejects gstatic, which serves font files rather than stylesheets', async () => {
+    expect(
+      await errorsOf({
+        primary: { base: '#773E98' },
+        fontUrl: 'https://fonts.gstatic.com/s/inter/v20/font.woff2',
+      }),
+    ).not.toHaveLength(0);
+  });
+
   it('rejects a font url that is not a url', async () => {
     expect(
       await errorsOf({ primary: { base: '#773E98' }, fontUrl: 'not a url' }),

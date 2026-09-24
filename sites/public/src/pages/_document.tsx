@@ -9,12 +9,20 @@ import { isFeatureFlagOn } from "../lib/helpers"
 
 const HEX_COLOR = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/
 
+// The family is interpolated into the style block, so it is held to letters, digits, spaces and
+// hyphens.
+const FONT_FAMILY = /^[A-Za-z0-9](?:[A-Za-z0-9 -]{0,62}[A-Za-z0-9])?$/
+const FONT_HOSTS = ["fonts.googleapis.com"]
+
 type BrandRamp = Partial<BrandRampDTO>
 
 interface BrandDocumentProps {
   primary: BrandRamp | null
   secondary: BrandRamp | null
   faviconUrl: string | null
+  fontFamily: string | null
+  headingFontFamily: string | null
+  fontUrl: string | null
 }
 
 const rampShades: (keyof BrandRamp)[] = ["base", "dark", "darker", "light", "lighter"]
@@ -33,6 +41,26 @@ const hexOnly = (ramp?: BrandRamp): BrandRamp | null => {
   }, {})
 }
 
+const fontFamilyOnly = (value?: string): string | null =>
+  typeof value === "string" && FONT_FAMILY.test(value) ? value : null
+
+const googleFontUrlOnly = (value?: string): string | null => {
+  if (typeof value !== "string") return null
+
+  try {
+    const url = new URL(value)
+    const usable =
+      url.protocol === "https:" &&
+      FONT_HOSTS.includes(url.hostname) &&
+      !url.port &&
+      !url.username &&
+      !url.password
+    return usable ? value : null
+  } catch {
+    return null
+  }
+}
+
 const rampVariables = (namespace: string, name: string, ramp: BrandRamp) =>
   rampShades
     .filter((shade) => ramp[shade])
@@ -43,13 +71,25 @@ const rampVariables = (namespace: string, name: string, ramp: BrandRamp) =>
     .join("\n")
 
 // Exported for tests: <Html> cannot render outside Next's document context.
-export const brandStyleBlock = ({ primary, secondary }: BrandDocumentProps): string => {
-  if (!primary) return ""
+const fontStack = (family: string) => `"${family}", system-ui, sans-serif`
+
+export const brandStyleBlock = ({
+  primary,
+  secondary,
+  fontFamily,
+  headingFontFamily,
+}: BrandDocumentProps): string => {
+  if (!primary && !fontFamily && !headingFontFamily) return ""
+
+  // Headings, buttons and tabs read the alt token.
+  const headingFont = headingFontFamily ?? fontFamily
 
   const variables = [
-    rampVariables("seeds", "primary", primary),
-    secondary ? rampVariables("seeds", "secondary", secondary) : "",
-    rampVariables("bloom", "primary", primary),
+    primary ? rampVariables("seeds", "primary", primary) : "",
+    primary && secondary ? rampVariables("seeds", "secondary", secondary) : "",
+    primary ? rampVariables("bloom", "primary", primary) : "",
+    fontFamily ? `--seeds-font-sans: ${fontStack(fontFamily)};` : "",
+    headingFont ? `--seeds-font-alt-sans: ${fontStack(headingFont)};` : "",
   ]
     .filter(Boolean)
     .join("\n")
@@ -69,18 +109,24 @@ export default class BloomDocument extends Document<BrandDocumentProps> {
       jurisdiction && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableDbDrivenBranding)
         ? jurisdiction.brand
         : null
+    const storedFontUrl = googleFontUrlOnly(brand?.fontUrl)
+    const fontFamily = storedFontUrl ? fontFamilyOnly(brand?.fontFamily) : null
+    const headingFontFamily = storedFontUrl ? fontFamilyOnly(brand?.headingFontFamily) : null
 
     return {
       ...initialProps,
       primary: hexOnly(brand?.primary),
       secondary: hexOnly(brand?.secondary),
       faviconUrl: brand?.faviconUrl ?? null,
+      fontFamily,
+      headingFontFamily,
+      fontUrl: fontFamily || headingFontFamily ? storedFontUrl : null,
     }
   }
 
   render() {
     const brandVariables = brandStyleBlock(this.props)
-    const { faviconUrl } = this.props
+    const { faviconUrl, fontUrl } = this.props
 
     return (
       <Html>
@@ -89,6 +135,8 @@ export default class BloomDocument extends Document<BrandDocumentProps> {
             <style id="brand-vars" dangerouslySetInnerHTML={{ __html: brandVariables }} />
           )}
           {faviconUrl && <link rel="icon" href={faviconUrl} />}
+          {fontUrl && <link rel="preload" as="style" href={fontUrl} />}
+          {fontUrl && <link rel="stylesheet" href={fontUrl} />}
         </Head>
         <body>
           <Main />

@@ -8445,6 +8445,9 @@ export interface BrandDTO {
   fontFamily?: string
 
   /**  */
+  headingFontFamily?: string
+
+  /**  */
   fontUrl?: string
 
   /**  */

@@ -225,6 +225,188 @@ describe("_document", () => {
     ).toBe(false)
   })
 
+  it("preloads the font stylesheet before linking it", async () => {
+    const fontUrl = "https://fonts.googleapis.com/css2?family=Inter&display=swap"
+    const { children } = await headChildrenFor(
+      jurisdictionWith({ primary, fontFamily: "Inter", fontUrl })
+    )
+
+    const fontLinks = children.filter(
+      (child) => React.isValidElement(child) && child.props.href === fontUrl
+    ) as React.ReactElement[]
+
+    expect(fontLinks.map((link) => link.props.rel)).toEqual(["preload", "stylesheet"])
+    expect(fontLinks[0].props.as).toEqual("style")
+  })
+
+  it("sets the font family with a fallback stack", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: "Playfair Display",
+        fontUrl: "https://fonts.googleapis.com/css2?family=Playfair+Display",
+      })
+    )
+
+    expect(style).toContain(`--seeds-font-sans: "Playfair Display", system-ui, sans-serif;`)
+  })
+
+  it("brands headings with the body font when no heading font is stored", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: "Inter",
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter",
+      })
+    )
+
+    expect(style).toContain(`--seeds-font-sans: "Inter", system-ui, sans-serif;`)
+    expect(style).toContain(`--seeds-font-alt-sans: "Inter", system-ui, sans-serif;`)
+  })
+
+  it("uses a stored heading font for the alt token only", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: "Inter",
+        headingFontFamily: "Playfair Display",
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter&family=Playfair+Display",
+      })
+    )
+
+    expect(style).toContain(`--seeds-font-sans: "Inter", system-ui, sans-serif;`)
+    expect(style).toContain(`--seeds-font-alt-sans: "Playfair Display", system-ui, sans-serif;`)
+  })
+
+  it("drops a heading font that could break out of the style block", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: "Inter",
+        headingFontFamily: `Inter"; } body { display: none } .x {`,
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter",
+      })
+    )
+
+    expect(style).not.toContain("display: none")
+    expect(style).toContain(`--seeds-font-alt-sans: "Inter", system-ui, sans-serif;`)
+  })
+
+  it("sets no font variable when the family has no stylesheet", async () => {
+    const style = await styleFor(jurisdictionWith({ primary, fontFamily: "Inter" }))
+
+    expect(style).not.toContain("--seeds-font-sans")
+    expect(style).toContain("--seeds-color-primary: #773E98;")
+  })
+
+  it.each([
+    ["a trailing space", "Inter "],
+    ["a leading hyphen", "-Inter"],
+    ["65 characters", "A".repeat(65)],
+    ["a non-ascii character", "Söhne"],
+  ])("drops a family name with %s", async (_label, fontFamily) => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily,
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter",
+      })
+    )
+
+    expect(style).not.toContain("--seeds-font-sans")
+  })
+
+  it("keeps a family name at the 64 character limit", async () => {
+    const fontFamily = "A".repeat(64)
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily,
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter",
+      })
+    )
+
+    expect(style).toContain(`--seeds-font-sans: "${fontFamily}", system-ui, sans-serif;`)
+  })
+
+  it("links no font when none is stored", async () => {
+    const { children } = await headChildrenFor(jurisdictionWith({ primary }))
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "stylesheet")
+    ).toBe(false)
+  })
+
+  it("links no stylesheet when no family survives, so the render is not blocked for nothing", async () => {
+    // A row written outside the dto can name a usable url and a family that is not usable.
+    const { children } = await headChildrenFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: 'Inter"; } body { display: none } .x {',
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter",
+      })
+    )
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "stylesheet")
+    ).toBe(false)
+  })
+
+  it("links the stylesheet when only the heading family survives", async () => {
+    const { children } = await headChildrenFor(
+      jurisdictionWith({
+        primary,
+        headingFontFamily: "Playfair Display",
+        fontUrl: "https://fonts.googleapis.com/css2?family=Playfair+Display",
+      })
+    )
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "stylesheet")
+    ).toBe(true)
+  })
+
+  it("drops a font url that is not a google host", async () => {
+    const { children } = await headChildrenFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: "Inter",
+        fontUrl: "https://fonts.example.test/css2?family=Inter",
+      })
+    )
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "stylesheet")
+    ).toBe(false)
+  })
+
+  it.each([
+    ["a port", "https://fonts.googleapis.com:8080/css2?family=Inter"],
+    ["credentials", "https://user:pass@fonts.googleapis.com/css2?family=Inter"],
+  ])("drops a font url carrying %s", async (_label, fontUrl) => {
+    const { children } = await headChildrenFor(
+      jurisdictionWith({ primary, fontFamily: "Inter", fontUrl })
+    )
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "stylesheet")
+    ).toBe(false)
+  })
+
+  it("drops a family name that could break out of the style block", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: `Inter"; } body { display: none } .x {`,
+        fontUrl: "https://fonts.googleapis.com/css2?family=Inter",
+      })
+    )
+
+    expect(style).not.toContain("display: none")
+    expect(style).not.toContain("--seeds-font-sans")
+    expect(style).toContain("--seeds-color-primary: #773E98;")
+  })
+
   it("forwards the request so the API sees the visitor's address", async () => {
     await styleFor(jurisdictionWith({ primary }))
 
