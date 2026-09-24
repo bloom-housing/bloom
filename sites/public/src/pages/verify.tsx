@@ -21,7 +21,7 @@ import {
   useCatchNetworkError,
 } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import TermsModal from "../components/shared/TermsModal"
+import { TermsModal } from "../components/shared/TermsModal"
 import FormsLayout from "../layouts/forms"
 import { UserStatus } from "../lib/constants"
 import { useRedirectToPrevPage } from "../lib/hooks"

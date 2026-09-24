@@ -55,7 +55,6 @@ export const stagingSeed = async (
   if (asRegion) {
     bridgeBayJurisdictions = await createBridgeBayJurisdictions(prismaClient, {
       publicSiteBaseURL,
-      msqV2,
     });
     allJurisdictions.push(
       ...bridgeBayJurisdictions.map((jurisdiction) => jurisdiction.id),

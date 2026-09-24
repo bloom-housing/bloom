@@ -12,9 +12,6 @@ import {
 import { SignIn as SignInComponent } from "../../src/pages/sign-in"
 import { Verify } from "../../src/pages/verify"
 
-const initialStateLoaded = false
-let profile: User | undefined
-
 let originalShowPwdless
 
 const TOAST_MESSAGE = {
