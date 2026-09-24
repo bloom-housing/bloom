@@ -484,7 +484,7 @@
   "listings.lottery.noDataDescriptionPartner": "Admins will run the lottery and perform a quality check on the results before making the lottery results accessible to you on the scheduled lottery date. Before viewing the lottery results, you will be prompted to publish the lottery data, which will email a notification to applicants that results are available in their account. Please email",
   "listings.lottery.noDataDescriptionPartnerDate": "A lottery is scheduled for %{date} at %{time}.",
   "listings.lottery.noDataDescriptionPartnerEmail": "with any questions.",
-  "listings.lottery.noDataEmail": "partners@housingbayarea.org",
+  "listings.lottery.noDataEmail": "email@email.com",
   "listings.lottery.partnerPublishTimestamp": "A lottery was run and released by %{adminName} on %{date} at %{time}, but a lottery has not yet been published for this listing. By publishing the lottery, you will be posting lottery results for this listing to the %{portal}.",
   "listings.lottery.partnerPublishTimestampAdmin": "admins",
   "listings.lottery.partnerPublishTimestampPortal": "Bloom Housing Portal",
@@ -691,7 +691,7 @@
   "listings.unit.priorityType": "ADA",
   "listings.unit.rent": "Rent",
   "listings.unit.rentType": "How is rent determined?",
-  "listings.unit.sqft": "SQ FT",
+  "listings.unit.sqft": "Sq ft",
   "listings.unit.squareFootage": "Square footage",
   "listings.unit.status": "Status",
   "listings.unit.statusOptions.available": "Available",
@@ -1058,5 +1058,11 @@
   "users.totalUsers": "total users",
   "users.unconfirmed": "Unconfirmed",
   "users.userDetails": "User details",
-  "users.viewUser": "View user"
+  "users.viewUser": "View user",
+  "applications.bulkUpdateModalProcessingEmail": "Your file has been processed, check your email for the results",
+  "applications.export.dataExpiryDescription": "Application data has expired for this listing and is no longer available for export.",
+  "applications.export.dataExpiryHeader": "No application data",
+  "applications.export.dataExpiryMessage": "Application data for this listing will expire on %{date}. Please export data prior to this date.",
+  "applications.export.dialogAlert": "This data will expire on %{date}.",
+  "footer.copyright": "© %{year} • All Rights Reserved"
 }

@@ -98,7 +98,12 @@ export const booleanToString = (bool: boolean): string => {
   return bool === true ? "true" : "false"
 }
 
-export const getRentType = (unit: TempUnit): string | null => {
+export const getRentType = (unit: TempUnit, isLandUse = false): string | null => {
+  if (isLandUse) {
+    if (unit?.monthlyRentAsPercentOfIncome) return "percentage"
+    return unit?.monthlyIncomeMin || unit?.monthlyRent ? "fixed" : null
+  }
+
   return unit?.monthlyIncomeMin && unit?.monthlyRent
     ? "fixed"
     : unit?.monthlyRentAsPercentOfIncome

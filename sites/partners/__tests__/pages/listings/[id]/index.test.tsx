@@ -523,7 +523,7 @@ describe("listing data", () => {
       expect(screen.queryByText("Unit type")).not.toBeInTheDocument()
       expect(screen.queryByText("AMI")).not.toBeInTheDocument()
       expect(screen.queryByText("Rent")).not.toBeInTheDocument()
-      expect(screen.queryByText("SQ FT")).not.toBeInTheDocument()
+      expect(screen.queryByText("Sq ft")).not.toBeInTheDocument()
       expect(screen.queryByText("ADA")).not.toBeInTheDocument()
       expect(
         screen.queryByText("Do you accept Section 8 Housing Choice Vouchers?")
@@ -567,7 +567,7 @@ describe("listing data", () => {
       expect(screen.getByText("Unit type")).toBeInTheDocument()
       expect(screen.getByText("AMI")).toBeInTheDocument()
       expect(screen.getByText("Rent")).toBeInTheDocument()
-      expect(screen.getByText("SQ FT")).toBeInTheDocument()
+      expect(screen.getByText("Sq ft")).toBeInTheDocument()
       expect(screen.getByText("Accessibility priority type")).toBeInTheDocument()
 
       expect(screen.getAllByText(/#[1-9]/i)).toHaveLength(6)

@@ -1,15 +1,15 @@
-import { Enforcer, newEnforcer } from 'casbin';
-import path from 'path';
-import { Injectable, ForbiddenException } from '@nestjs/common';
-import { ListingsStatusEnum } from '@prisma/client';
-import { PrismaService } from './prisma.service';
-import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
-import { Listing } from '../dtos/listings/listing.dto';
-import { User } from '../dtos/users/user.dto';
-import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
-import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { UserRoleEnum } from '../enums/permissions/user-role-enum';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
+import { Enforcer, newEnforcer } from 'casbin';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { IdDTO } from '../dtos/shared/id.dto';
+import { Injectable, ForbiddenException } from '@nestjs/common';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
+import { ListingsStatusEnum } from '@prisma/client';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { PrismaService } from './prisma.service';
+import { User } from '../dtos/users/user.dto';
+import { UserRoleEnum } from '../enums/permissions/user-role-enum';
+import path from 'path';
 
 export type permissionCheckingObj = {
   jurisdictionId?: string;
@@ -199,7 +199,7 @@ export class PermissionService {
       );
 
       await Promise.all(
-        user?.listings.map(async (listing: Listing) => {
+        user?.listings.map(async (listing: IdDTO) => {
           await enforcer.addPermissionForUser(
             user.id,
             'application',

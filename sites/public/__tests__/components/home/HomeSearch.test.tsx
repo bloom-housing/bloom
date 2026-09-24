@@ -5,8 +5,8 @@ import {
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { HomeSearch } from "../../src/components/home/HomeSearch"
-import { render, screen, mockNextRouter, waitFor, within } from "../testUtils"
+import { HomeSearch } from "../../../src/components/home/HomeSearch"
+import { render, screen, mockNextRouter, waitFor, within } from "../../testUtils"
 
 jest.mock("@bloom-housing/shared-helpers", () => {
   const actual = jest.requireActual("@bloom-housing/shared-helpers")

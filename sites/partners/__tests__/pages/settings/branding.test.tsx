@@ -389,7 +389,7 @@ describe("settings/branding", () => {
     expect(savedBody.brand).toEqual({ primary: { base: "#773E98", dark: "#6E2598" } })
   })
 
-  it("shows a message the service raised itself rather than a generic toast", async () => {
+  it("toasts a message the service raised itself rather than a generic one", async () => {
     // The font pairing rule throws a BadRequestException, so message is a string not an array.
     server.use(
       ...SAVE_PATHS.map((path) =>
@@ -407,10 +407,13 @@ describe("settings/branding", () => {
     await waitFor(() => expect(screen.getAllByDisplayValue("#773E98").length).toBeGreaterThan(0))
     await userEvent.click(screen.getByText("test:save"))
 
+    // Floated rather than rendered above the form, where an admin scrolled down would miss it.
+    await waitFor(() =>
+      expect(toasts).toContain("a brand font needs both a fontUrl and a family name")
+    )
     expect(
-      await screen.findByText("a brand font needs both a fontUrl and a family name")
-    ).toBeInTheDocument()
-    expect(toasts).toHaveLength(0)
+      screen.queryByText("a brand font needs both a fontUrl and a family name")
+    ).not.toBeInTheDocument()
   })
 
   it("saves with no colors set, since a logo needs none", async () => {
