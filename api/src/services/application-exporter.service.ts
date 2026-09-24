@@ -205,6 +205,14 @@ export class ApplicationExporterService {
       },
     });
 
+    const disableEthnicityQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.disableEthnicityQuestion,
+    );
+    const disableHowToContact = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.disableHowToContact,
+    );
     const disableWorkInRegion = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.disableWorkInRegion,
@@ -217,37 +225,37 @@ export class ApplicationExporterService {
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableFullTimeStudentQuestion,
     );
-    const enableReasonableAccommodations = doJurisdictionHaveFeatureFlagSet(
-      jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableReasonableAccommodations,
-    );
-    const enableSpokenLanguage = doJurisdictionHaveFeatureFlagSet(
-      jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableSpokenLanguage,
-    );
     const enableGenderQuestion = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableGenderQuestion,
     );
-    const enableSexualOrientationQuestion = doJurisdictionHaveFeatureFlagSet(
+    const enableMultiselectVoucherQuestion = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableSexualOrientationQuestion,
+      FeatureFlagEnum.enableMultiselectVoucherQuestion,
     );
-    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+    const enableReasonableAccommodations = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableV2MSQ,
+      FeatureFlagEnum.enableReasonableAccommodations,
     );
     const enableReceivedAtAndByFields = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableReceivedAtAndByFields,
     );
+    const enableSexualOrientationQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableSexualOrientationQuestion,
+    );
+    const enableSpokenLanguage = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableSpokenLanguage,
+    );
+    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableV2MSQ,
+    );
     const swapCommunityTypeWithPrograms = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.swapCommunityTypeWithPrograms,
-    );
-    const enableMultiselectVoucherQuestion = doJurisdictionHaveFeatureFlagSet(
-      jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableMultiselectVoucherQuestion,
     );
 
     // get all multiselect questions for a listing to build csv headers
@@ -267,16 +275,18 @@ export class ApplicationExporterService {
       multiSelectQuestions,
       queryParams.timeZone,
       {
+        disableEthnicityQuestion,
+        disableHowToContact,
         disableWorkInRegion,
         enableApplicationStatus,
         enableFullTimeStudentQuestion,
-        enableReasonableAccommodations,
-        enableMultiselectVoucherQuestion,
-        enableSpokenLanguage,
         enableGenderQuestion,
-        enableSexualOrientationQuestion,
-        enableV2MSQ,
+        enableMultiselectVoucherQuestion,
+        enableReasonableAccommodations,
         enableReceivedAtAndByFields,
+        enableSexualOrientationQuestion,
+        enableSpokenLanguage,
+        enableV2MSQ,
         includeDemographics: queryParams.includeDemographics,
         swapCommunityTypeWithPrograms,
         visibleApplicationAccessibilityFeatures:
@@ -507,6 +517,14 @@ export class ApplicationExporterService {
       },
     });
 
+    const disableEthnicityQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.disableEthnicityQuestion,
+    );
+    const disableHowToContact = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.disableHowToContact,
+    );
     const disableWorkInRegion = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.disableWorkInRegion,
@@ -519,33 +537,37 @@ export class ApplicationExporterService {
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableFullTimeStudentQuestion,
     );
-    const enableReasonableAccommodations = doJurisdictionHaveFeatureFlagSet(
-      jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableReasonableAccommodations,
-    );
     const enableGenderQuestion = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableGenderQuestion,
     );
-    const enableSexualOrientationQuestion = doJurisdictionHaveFeatureFlagSet(
+    const enableMultiselectVoucherQuestion = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableSexualOrientationQuestion,
+      FeatureFlagEnum.enableMultiselectVoucherQuestion,
     );
-    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+    const enableReasonableAccommodations = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableV2MSQ,
+      FeatureFlagEnum.enableReasonableAccommodations,
     );
     const enableReceivedAtAndByFields = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableReceivedAtAndByFields,
     );
+    const enableSexualOrientationQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableSexualOrientationQuestion,
+    );
+    const enableSpokenLanguage = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableSpokenLanguage,
+    );
+    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableV2MSQ,
+    );
     const swapCommunityTypeWithPrograms = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.swapCommunityTypeWithPrograms,
-    );
-    const enableMultiselectVoucherQuestion = doJurisdictionHaveFeatureFlagSet(
-      jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableMultiselectVoucherQuestion,
     );
 
     // get all multiselect questions for a listing to build csv headers
@@ -565,15 +587,18 @@ export class ApplicationExporterService {
       multiSelectQuestions,
       queryParams.timeZone,
       {
+        disableEthnicityQuestion,
+        disableHowToContact,
         disableWorkInRegion,
         enableApplicationStatus,
         enableFullTimeStudentQuestion,
-        enableReasonableAccommodations,
-        enableMultiselectVoucherQuestion,
         enableGenderQuestion,
-        enableSexualOrientationQuestion,
-        enableV2MSQ,
+        enableMultiselectVoucherQuestion,
+        enableReasonableAccommodations,
         enableReceivedAtAndByFields,
+        enableSexualOrientationQuestion,
+        enableSpokenLanguage,
+        enableV2MSQ,
         forLottery,
         includeDemographics: queryParams.includeDemographics,
         swapCommunityTypeWithPrograms,
