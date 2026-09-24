@@ -62,7 +62,7 @@ const ResetPassword = () => {
         console.error(err)
         setRequestError(
           `${t("account.settings.alerts.genericError", {
-            contactEmail: t("contactEmail"),
+            contactEmail: t("t.contactEmail"),
           })}`
         )
       }

@@ -132,7 +132,7 @@ describe("Assistance stored contact details", () => {
   it("keeps the bundled contact details when the jurisdiction stored none", () => {
     renderWithContact()
 
-    expect(screen.getByRole("link", { name: t("contactEmail") })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: t("t.contactEmail") })).toBeInTheDocument()
     // The card had no phone, address or hours before a jurisdiction could store them.
     expect(screen.queryByRole("link", { name: /^tel:/ })).not.toBeInTheDocument()
     expect(document.querySelectorAll('a[href^="tel:"]')).toHaveLength(0)
@@ -146,7 +146,7 @@ describe("Assistance stored contact details", () => {
       "href",
       "mailto:housing@example.gov"
     )
-    expect(screen.queryByText(t("contactEmail"))).not.toBeInTheDocument()
+    expect(screen.queryByText(t("t.contactEmail"))).not.toBeInTheDocument()
   })
 
   it("shows a phone, address and hours only once the jurisdiction stores them", () => {
@@ -166,7 +166,7 @@ describe("Assistance stored contact details", () => {
 
     const contactHeading = screen.getByRole("heading", { name: "Contact", level: 2 })
     expect(contactHeading).toBeInTheDocument()
-    expect(within(contactHeading).queryByText(t("contactEmail"))).not.toBeInTheDocument()
+    expect(within(contactHeading).queryByText(t("t.contactEmail"))).not.toBeInTheDocument()
     expect(within(contactHeading).queryByRole("link", { name: /@/ })).not.toBeInTheDocument()
   })
 
@@ -175,7 +175,7 @@ describe("Assistance stored contact details", () => {
 
     const contactHeading = screen.getByRole("heading", { name: "Contact", level: 2 })
     expect(contactHeading).toBeInTheDocument()
-    expect(within(contactHeading).queryByText(t("contactEmail"))).not.toBeInTheDocument()
+    expect(within(contactHeading).queryByText(t("t.contactEmail"))).not.toBeInTheDocument()
     expect(within(contactHeading).queryByRole("link", { name: /@/ })).not.toBeInTheDocument()
   })
 })

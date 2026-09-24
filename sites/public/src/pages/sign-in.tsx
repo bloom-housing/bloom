@@ -255,7 +255,7 @@ const SignIn = (props: SignInProps) => {
               message: {
                 title: t("errors.somethingWentWrong"),
                 description: t("authentication.signIn.errorGenericMessage", {
-                  contactEmail: t("contactEmail"),
+                  contactEmail: t("t.contactEmail"),
                 }),
                 error: err,
               },

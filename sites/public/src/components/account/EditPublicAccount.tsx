@@ -194,7 +194,7 @@ export const EditPublicAccount = () => {
           {tIfExists("account.settings.disclaimer") && (
             <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
               <p className={styles["account-settings-disclaimer"]}>
-                {t("account.settings.disclaimer", { contactEmail: t("contactEmail") })}
+                {t("account.settings.disclaimer", { contactEmail: t("t.contactEmail") })}
               </p>
             </Card.Section>
           )}

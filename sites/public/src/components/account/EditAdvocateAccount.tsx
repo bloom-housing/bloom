@@ -154,7 +154,7 @@ export const EditAdvocateAccount = (props: EditAdvocateAccountProps) => {
       setAgencyAlert({
         type: "alert",
         message: `${t("account.settings.alerts.genericError", {
-          contactEmail: t("contactEmail"),
+          contactEmail: t("t.contactEmail"),
         })}`,
       })
       console.warn(err)
@@ -303,7 +303,7 @@ export const EditAdvocateAccount = (props: EditAdvocateAccountProps) => {
           {tIfExists("account.settings.disclaimer") && (
             <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
               <p className={styles["account-settings-disclaimer"]}>
-                {t("account.settings.disclaimer", { contactEmail: t("contactEmail") })}
+                {t("account.settings.disclaimer", { contactEmail: t("t.contactEmail") })}
               </p>
             </Card.Section>
           )}

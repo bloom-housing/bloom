@@ -8,7 +8,7 @@ export const ContentError = () => {
     <Hero
       title={t("errors.somethingWentWrong")}
       subtitle={t("authentication.signIn.errorGenericMessage", {
-        contactEmail: t("contactEmail"),
+        contactEmail: t("t.contactEmail"),
       })}
       note={"500"}
       action={
