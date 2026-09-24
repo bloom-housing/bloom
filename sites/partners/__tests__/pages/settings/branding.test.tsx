@@ -1,6 +1,6 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { screen, waitFor, within } from "@testing-library/react"
+import { screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { rest } from "msw"
 import { addTranslation } from "@bloom-housing/ui-components"
@@ -250,7 +250,7 @@ describe("settings/branding", () => {
     expect(await screen.findByTestId("primaryBase-contrast")).toBeInTheDocument()
   })
 
-  it("holds the warning back until typing settles", async () => {
+  it("defers the warning until typing settles", async () => {
     // HEX_COLOR accepts three digits, so typing #0070D0 passes through #07D, which fails AA.
     // Warning on that would announce a colour the admin never chose.
     respondWithBrand(null)
@@ -294,6 +294,17 @@ describe("settings/branding", () => {
 
     expect(await screen.findByTestId("secondaryBase-contrast")).toBeInTheDocument()
     expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
+  })
+
+  it("shows a stored radius in the preview", async () => {
+    respondWithBrand({ primary: { base: "#773E98" }, buttonRadius: "3xl" })
+    renderPage()
+
+    await waitFor(() =>
+      expect(screen.getByTestId("brand-preview")).toHaveStyle({
+        "--brand-button-radius": "var(--seeds-rounded-3xl)",
+      })
+    )
   })
 
   it("warns when an explicit dark shade is unreadable under white text", async () => {

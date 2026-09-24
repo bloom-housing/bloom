@@ -1,3 +1,4 @@
+import { hexToHsl } from "@bloom-housing/shared-helpers/src/utilities/brandRamp"
 import {
   AA_RATIO,
   BODY_TEXT,
@@ -6,6 +7,7 @@ import {
   displayRatio,
   isTooDark,
   meetsAA,
+  MIN_LIGHTNESS,
   relativeLuminance,
   suggestAccessible,
   textOn,
@@ -115,6 +117,13 @@ describe("isTooDark", () => {
   it("leaves a usable dark color alone", () => {
     expect(isTooDark("#773E98")).toBe(false)
   })
+
+  // MIN_LIGHTNESS is 20; #333333 sits just above it and #313131 just below.
+  it("straddles the floor", () => {
+    expect(hexToHsl("#333333").l).toBeGreaterThanOrEqual(MIN_LIGHTNESS)
+    expect(isTooDark("#333333")).toBe(false)
+    expect(isTooDark("#313131")).toBe(true)
+  })
 })
 
 describe("suggestAccessible", () => {
@@ -137,12 +146,23 @@ describe("suggestAccessible", () => {
     }
   )
 
-  it("keeps the hue the admin chose", () => {
-    // #EEDD00 is yellow; the suggestion should be a darker yellow rather than a different color.
-    const suggestion = suggestAccessible("#EEDD00")
+  it.each(["#EEDD00", "#77AA33", "#FF0000"])("keeps the hue and saturation of %s", (hex) => {
+    const suggestion = suggestAccessible(hex)
+    const chosen = hexToHsl(hex)
+    const suggested = hexToHsl(suggestion)
 
-    expect(contrastWithWhite(suggestion)).toBeGreaterThanOrEqual(AA_RATIO)
-    expect(suggestion.slice(1, 3) > suggestion.slice(5, 7)).toBe(true)
+    expect(suggested.h).toBeCloseTo(chosen.h, 0)
+    expect(suggested.s).toBeCloseTo(chosen.s, 0)
+    expect(suggested.l).toBeLessThan(chosen.l)
+  })
+
+  it("returns a value usable as a base, not one the lightness floor would reject", () => {
+    // A suggestion below MIN_LIGHTNESS would trade a contrast warning for a lightness one.
+    expect(isTooDark(suggestAccessible("#EEDD00"))).toBe(false)
+  })
+
+  it("accepts a three digit hex", () => {
+    expect(meetsAA(suggestAccessible("#ED0"))).toBe(true)
   })
 
   it("suggests the darkest possible value when nothing lighter passes", () => {

@@ -1,5 +1,17 @@
-import { previewVariables } from "../../../src/components/settings/BrandPreview"
+import React from "react"
+import { render, screen } from "@testing-library/react"
+import { addTranslation } from "@bloom-housing/ui-components"
+import BrandPreview, { previewVariables } from "../../../src/components/settings/BrandPreview"
 import { brandToFormValues } from "../../../src/lib/branding"
+
+// The suite supplies the strings it asserts on, so editing the shipped copy cannot break it.
+addTranslation({
+  "branding.preview": "test:preview",
+  "branding.previewNote": "test:previewNote",
+  "branding.previewPrimaryAction": "test:primaryAction",
+  "branding.previewSecondaryAction": "test:secondaryAction",
+  "branding.previewTag": "test:tag",
+})
 
 const valuesWith = (overrides = {}) => ({ ...brandToFormValues(undefined), ...overrides })
 
@@ -61,5 +73,35 @@ describe("previewVariables", () => {
 
     expect(variables["--seeds-color-primary"]).toEqual("#773E98")
     expect(variables["--seeds-color-primary-dark"]).toBeUndefined()
+  })
+})
+
+describe("BrandPreview", () => {
+  it("names every sample it renders, so a missing copy key is caught", () => {
+    render(<BrandPreview values={valuesWith({ primaryBase: "#773E98" })} />)
+
+    expect(screen.getByRole("heading", { name: "test:preview" })).toBeInTheDocument()
+    expect(screen.getByText("test:previewNote")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "test:primaryAction" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "test:secondaryAction" })).toBeInTheDocument()
+    expect(screen.getByText("test:tag")).toBeInTheDocument()
+  })
+
+  it("puts the variables on the sample container", () => {
+    render(<BrandPreview values={valuesWith({ primaryBase: "#773E98", buttonRadius: "3xl" })} />)
+
+    expect(screen.getByTestId("brand-preview")).toHaveStyle({
+      "--seeds-color-primary": "#773E98",
+      "--brand-button-radius": "var(--seeds-rounded-3xl)",
+    })
+  })
+
+  // The sample buttons sit inside the settings form, so a missing type would submit it.
+  it("renders sample buttons that cannot submit a form", () => {
+    render(<BrandPreview values={valuesWith({ primaryBase: "#773E98" })} />)
+
+    screen
+      .getAllByRole("button")
+      .forEach((button) => expect(button).toHaveAttribute("type", "button"))
   })
 })
