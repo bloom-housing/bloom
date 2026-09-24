@@ -1,0 +1,20 @@
+.branding-form {
+  padding-bottom: var(--seeds-s6);
+}
+
+.asset-preview {
+  margin-top: var(--seeds-s4);
+  max-block-size: var(--seeds-s20);
+}
+
+.actions {
+  display: flex;
+  gap: var(--seeds-s3);
+  padding-top: var(--seeds-s4);
+}
+
+.asset {
+  display: flex;
+  align-items: center;
+  gap: var(--seeds-s3);
+}

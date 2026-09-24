@@ -47,11 +47,14 @@ describe('BrandDTO', () => {
     expect(brand.primary.dark).toEqual('#5588CC');
   });
 
-  it('rejects a brand with no primary ramp', async () => {
-    expect(await errorsOf({})).not.toHaveLength(0);
-    expect(await errorsOf({ secondary: { base: '#0077DA' } })).not.toHaveLength(
-      0,
-    );
+  // Each ramp derives from its own base, so a jurisdiction can set one part of a brand alone.
+  it.each([
+    ['a secondary with no primary', { secondary: { base: '#0077DA' } }],
+    ['a font with no color', { fontFamily: 'Inter' }],
+    ['a radius with no color', { buttonRadius: BrandRadiusEnum.xl3 }],
+    ['an empty brand, which changes nothing', {}],
+  ])('accepts %s', async (_label, brand) => {
+    expect(await errorsOf(brand)).toHaveLength(0);
   });
 
   it('rejects a ramp with no base color', async () => {

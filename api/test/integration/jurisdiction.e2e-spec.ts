@@ -22,6 +22,7 @@ describe('Jurisdiction Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let cookies = '';
+  let jurisAdminCookies = '';
 
   beforeAll(async () => {
     // The font check reads css from google; the responses are stubbed so the suite makes no
@@ -59,6 +60,21 @@ describe('Jurisdiction Controller Tests', () => {
       .expect(201);
 
     cookies = resLogIn.headers['set-cookie'];
+
+    const jurisAdmin = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isJurisdictionalAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    jurisAdminCookies = (
+      await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({ email: jurisAdmin.email, password: 'Abcdef12345!' } as Login)
+        .expect(201)
+    ).headers['set-cookie'];
   });
 
   afterAll(async () => {
@@ -329,6 +345,123 @@ describe('Jurisdiction Controller Tests', () => {
       await put(jurisdiction.id, {
         brand: { primary: { base: '#773E98' }, serifFontFamily: 'Noto Serif ' },
       }).expect(400);
+    });
+
+    describe('the brand endpoint', () => {
+      const putBrand = (id: string, body: object, cookie = cookies) =>
+        request(app.getHttpServer())
+          .put(`/jurisdictions/${id}/brand`)
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .set('Cookie', cookie)
+          .send(body);
+
+      it('creates the asset rows and returns the built urls', async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: jurisdictionFactory(),
+        });
+
+        const res = await putBrand(jurisdiction.id, {
+          brand: { primary: { base: '#773E98' } },
+          logoFileId: 'dev/bloom_logo.png',
+          faviconFileId: 'dev/bloom_favicon.png',
+        }).expect(200);
+
+        expect(res.body.brand.logoUrl).toContain('dev/bloom_logo.png');
+        expect(res.body.brand.faviconUrl).toContain('dev/bloom_favicon.png');
+
+        const stored = await prisma.jurisdictions.findUnique({
+          where: { id: jurisdiction.id },
+          include: { brandLogo: true, brandFavicon: true },
+        });
+        expect(stored.brandLogo.label).toEqual('brandLogo');
+        expect(stored.brandFavicon.label).toEqual('brandFavicon');
+      });
+
+      it('changes nothing else on the jurisdiction', async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: jurisdictionFactory(),
+        });
+
+        await putBrand(jurisdiction.id, {
+          brand: { primary: { base: '#773E98' } },
+        }).expect(200);
+
+        const stored = await prisma.jurisdictions.findUnique({
+          where: { id: jurisdiction.id },
+        });
+        expect(stored.name).toEqual(jurisdiction.name);
+        expect(stored.publicUrl).toEqual(jurisdiction.publicUrl);
+      });
+
+      it('leaves an asset connected when a later save omits it', async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: jurisdictionFactory(),
+        });
+        await putBrand(jurisdiction.id, {
+          logoFileId: 'dev/bloom_logo.png',
+        }).expect(200);
+
+        const res = await putBrand(jurisdiction.id, {
+          brand: { primary: { base: '#0077DA' } },
+        }).expect(200);
+
+        expect(res.body.brand.logoUrl).toContain('dev/bloom_logo.png');
+        expect(res.body.brand.primary.base).toEqual('#0077DA');
+      });
+
+      it('disconnects an asset when its file id is null', async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: jurisdictionFactory(),
+        });
+        await putBrand(jurisdiction.id, {
+          logoFileId: 'dev/bloom_logo.png',
+        }).expect(200);
+
+        const res = await putBrand(jurisdiction.id, {
+          logoFileId: null,
+        }).expect(200);
+
+        expect(res.body.brand?.logoUrl).toBeUndefined();
+      });
+
+      it('rejects a file id the read path could not turn into a url', async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: jurisdictionFactory(),
+        });
+
+        await putBrand(jurisdiction.id, {
+          logoFileId: 'https://bloom-public.s3.us-west-2.amazonaws.com/abc',
+        }).expect(400);
+      });
+
+      it('404s for a jurisdiction that does not exist', async () => {
+        await putBrand(randomUUID(), { brand: null }).expect(404);
+      });
+
+      // Editing a brand is limited to the admin role, matching the jurisdiction resource policy.
+      it('forbids a jurisdictional admin', async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: jurisdictionFactory(),
+        });
+
+        await putBrand(
+          jurisdiction.id,
+          { brand: { primary: { base: '#773E98' } } },
+          jurisAdminCookies,
+        ).expect(403);
+      });
+
+      it('forbids an anonymous request', async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: jurisdictionFactory(),
+        });
+
+        await request(app.getHttpServer())
+          .put(`/jurisdictions/${jurisdiction.id}/brand`)
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({ brand: { primary: { base: '#773E98' } } })
+          .expect(403);
+      });
     });
 
     it('rejects a branding asset id with no asset', async () => {
