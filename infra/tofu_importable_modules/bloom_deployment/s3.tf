@@ -64,6 +64,12 @@ resource "aws_s3_bucket_cors_configuration" "public" {
     ]
     allowed_headers = ["Content-Type", "Content-Disposition"]
   }
+
+  cors_rule {
+    allowed_headers = ["Content-Type"]
+    allowed_methods = ["GET"]
+    allowed_origins = ["https://partners.${var.domain_name}", "https://${var.domain_name}"]
+  }
 }
 resource "aws_s3_bucket_public_access_block" "public" {
   region = var.aws_region
