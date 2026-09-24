@@ -1,0 +1,16 @@
+.table-of-contents {
+  .heading {
+    padding-block-end: var(--seeds-spacer-content);
+    border-block-end: 1px solid var(--seeds-border-color);
+  }
+
+  .links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .link-item {
+    margin-block-start: var(--seeds-spacer-label);
+  }
+}
