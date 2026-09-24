@@ -215,6 +215,7 @@ export class AuthService {
 
       if (
         enablePublicTermsOfUse &&
+        !user.agreedToTermsOfService &&
         !agreedToTermsOfService &&
         !(
           user.userRoles?.isAdmin ||
