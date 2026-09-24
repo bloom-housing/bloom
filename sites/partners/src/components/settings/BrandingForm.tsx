@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Dropzone, Field, Select, t } from "@bloom-housing/ui-components"
-import { Alert, Button, Card, Dialog, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Dialog, Grid } from "@bloom-housing/ui-seeds"
 import { BrandRadiusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../shared/SectionWithGrid"
 import BrandColorField from "./BrandColorField"
@@ -35,7 +35,6 @@ interface BrandingFormProps {
   logoUrl?: string
   faviconUrl?: string
   isSaving: boolean
-  unplacedErrors: string[]
   onSubmit: (
     submission: BrandingSubmission
   ) => Promise<{ name: keyof BrandFormValues; message: string }[]>
@@ -48,7 +47,6 @@ const BrandingForm = ({
   logoUrl,
   faviconUrl,
   isSaving,
-  unplacedErrors,
   onSubmit,
   onDirtyChange,
   onDiscard,
@@ -193,8 +191,6 @@ const BrandingForm = ({
 
   return (
     <form onSubmit={handleSubmit(submit)} className={styles["branding-form"]}>
-      {!!unplacedErrors.length && <Alert variant="alert">{unplacedErrors.join(" ")}</Alert>}
-
       <Card>
         <Card.Section>
           {rampSection("primary", t("branding.primary"))}

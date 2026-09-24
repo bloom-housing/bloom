@@ -38,7 +38,6 @@ const SettingsBranding = () => {
   const [jurisdictionId, setJurisdictionId] = useState("")
   const [resetCount, setResetCount] = useState(0)
   const [dirty, setDirty] = useState(false)
-  const [unplacedErrors, setUnplacedErrors] = useState<string[]>([])
 
   const activeJurisdictionId = jurisdictionId || jurisdictions[0]?.id || ""
   const {
@@ -48,13 +47,10 @@ const SettingsBranding = () => {
   } = useJurisdiction(authorized ? activeJurisdictionId : "")
 
   const discard = useCallback(() => {
-    setUnplacedErrors([])
     setResetCount((count) => count + 1)
   }, [])
 
   const save = ({ values, logoFileId, faviconFileId, clearBrand }: BrandingSubmission) => {
-    setUnplacedErrors([])
-
     return new Promise<{ name: keyof ReturnType<typeof brandToFormValues>; message: string }[]>(
       (resolve) =>
         void saveBrand(async () => {
@@ -71,8 +67,9 @@ const SettingsBranding = () => {
           } catch (caught) {
             const response = (caught as { response?: { data?: { message?: unknown } } })?.response
             const { fields, unplaced } = brandErrorsFrom(response?.data?.message)
-            setUnplacedErrors(unplaced)
-            if (!fields.length && !unplaced.length) {
+            if (unplaced.length) {
+              addToast(unplaced.join(" "), { variant: "alert" })
+            } else if (!fields.length) {
               addToast(t("errors.alert.badRequest"), { variant: "alert" })
             }
             resolve(fields)
@@ -121,7 +118,6 @@ const SettingsBranding = () => {
             logoUrl={jurisdiction.brand?.logoUrl}
             faviconUrl={jurisdiction.brand?.faviconUrl}
             isSaving={isSaving}
-            unplacedErrors={unplacedErrors}
             onSubmit={save}
             onDirtyChange={setDirty}
             onDiscard={discard}
