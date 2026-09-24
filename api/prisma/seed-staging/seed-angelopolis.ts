@@ -76,25 +76,20 @@ export const createAngelopolisJurisdiction = async (
     unitRentTypes,
     unitTypes,
     partnerUser,
-    msqV2,
     jurisdictionName = 'Angelopolis',
   }: {
     publicSiteBaseURL: string;
     unitRentTypes: { id: string }[];
     unitTypes: { id: string }[];
     partnerUser: { id: string };
-    msqV2: boolean;
     jurisdictionName?: string;
   },
 ) => {
-  const optionalV2MSQ = msqV2 ? [FeatureFlagEnum.enableV2MSQ] : [];
-
   const jurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(jurisdictionName, {
       publicSiteBaseURL,
       listingApprovalPermissions: [UserRoleEnum.admin],
       featureFlags: [
-        ...optionalV2MSQ,
         FeatureFlagEnum.disableAccessibilityFeaturesTag,
         FeatureFlagEnum.disableBuildingSelectionCriteria,
         FeatureFlagEnum.disableEthnicityQuestion,
@@ -136,6 +131,7 @@ export const createAngelopolisJurisdiction = async (
         FeatureFlagEnum.enableSpokenLanguage,
         FeatureFlagEnum.enableStopLights,
         FeatureFlagEnum.enableUnitAccessibilityTypeTags,
+        FeatureFlagEnum.enableV2MSQ,
       ],
       visibleNeighborhoodAmenities: [
         NeighborhoodAmenitiesEnum.groceryStores,
@@ -296,93 +292,59 @@ export const createAngelopolisJurisdiction = async (
     data: propertyFactory(jurisdiction.name, jurisdiction.id),
   });
 
-  const mobilityAccessibilityNeedsProgramMsqData = msqV2
-    ? {
-        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        description:
-          'Some units require at least one resident to have a mobility accessibility need',
-        isExclusive: false,
-        multiselectOptions: {
-          createMany: {
-            data: [
-              { name: 'Wheelchair', ordinal: 1 },
-              { name: 'Walker', ordinal: 2 },
-              { name: 'Power chair', ordinal: 3 },
-              { name: 'Other mobility device', ordinal: 4 },
-              { isOptOut: true, name: 'None of the above', ordinal: 5 },
-            ],
-          },
-        },
-        name: 'Mobility accessibility needs',
-        status: MultiselectQuestionsStatusEnum.active,
-      }
-    : {
-        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        description:
-          'Some units require at least one resident to have a mobility accessibility need',
-        optOutText: 'None of the above',
-        options: [
-          { text: 'Wheelchair', ordinal: 0 },
-          { text: 'Walker', ordinal: 1 },
-          { text: 'Power chair', ordinal: 2 },
-          { text: 'Other mobility device', ordinal: 3 },
+  const mobilityAccessibilityNeedsProgramMsqData = {
+    applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+    description:
+      'Some units require at least one resident to have a mobility accessibility need',
+    isExclusive: false,
+    multiselectOptions: {
+      createMany: {
+        data: [
+          { name: 'Wheelchair', ordinal: 1 },
+          { name: 'Walker', ordinal: 2 },
+          { name: 'Power chair', ordinal: 3 },
+          { name: 'Other mobility device', ordinal: 4 },
+          { isOptOut: true, name: 'None of the above', ordinal: 5 },
         ],
-        text: 'Mobility accessibility needs',
-      };
+      },
+    },
+    name: 'Mobility accessibility needs',
+    status: MultiselectQuestionsStatusEnum.active,
+  };
   const mobilityAccessibilityNeedsProgramQuestion =
     await prismaClient.multiselectQuestions.create({
       data: multiselectQuestionFactory(
         jurisdiction.id,
         { multiselectQuestion: mobilityAccessibilityNeedsProgramMsqData },
-        msqV2,
+        true,
       ),
     });
 
-  const hearingVisionAccessibilityNeedsProgramMsqData = msqV2
-    ? {
-        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        description:
-          'Some units require at least one resident to have a hearing / vision accessibility need',
-        isExclusive: false,
-        multiselectOptions: {
-          createMany: {
-            data: [
-              { name: 'Audible and visual doorbells', ordinal: 1 },
-              {
-                name: 'Fire and smoke alarms with hard wired strobes',
-                ordinal: 2,
-              },
-              {
-                name: 'Documents in screen-reader accessible format',
-                ordinal: 3,
-              },
-              { name: 'Documents in large text or braille', ordinal: 4 },
-              { isOptOut: true, name: 'None of the above', ordinal: 5 },
-            ],
-          },
-        },
-        name: 'Hearing/vision accessibility needs',
-        status: MultiselectQuestionsStatusEnum.active,
-      }
-    : {
-        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        description:
-          'Some units require at least one resident to have a hearing / vision accessibility need',
-        optOutText: 'None of the above',
-        options: [
-          { text: 'Audible and visual doorbells', ordinal: 0 },
+  const hearingVisionAccessibilityNeedsProgramMsqData = {
+    applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+    description:
+      'Some units require at least one resident to have a hearing / vision accessibility need',
+    isExclusive: false,
+    multiselectOptions: {
+      createMany: {
+        data: [
+          { name: 'Audible and visual doorbells', ordinal: 1 },
           {
-            text: 'Fire and smoke alarms with hard wired strobes',
-            ordinal: 1,
-          },
-          {
-            text: 'Documents in screen-reader accessible format',
+            name: 'Fire and smoke alarms with hard wired strobes',
             ordinal: 2,
           },
-          { text: 'Documents in large text or braille', ordinal: 3 },
+          {
+            name: 'Documents in screen-reader accessible format',
+            ordinal: 3,
+          },
+          { name: 'Documents in large text or braille', ordinal: 4 },
+          { isOptOut: true, name: 'None of the above', ordinal: 5 },
         ],
-        text: 'Hearing/vision accessibility needs',
-      };
+      },
+    },
+    name: 'Hearing/vision accessibility needs',
+    status: MultiselectQuestionsStatusEnum.active,
+  };
   const hearingVisionAccessibilityNeedsProgramQuestion =
     await prismaClient.multiselectQuestions.create({
       data: multiselectQuestionFactory(
@@ -390,47 +352,34 @@ export const createAngelopolisJurisdiction = async (
         {
           multiselectQuestion: hearingVisionAccessibilityNeedsProgramMsqData,
         },
-        msqV2,
+        true,
       ),
     });
 
-  const housingSituationProgramMsqData = msqV2
-    ? {
-        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        description:
-          'Thinking about the past 30 days, do either of these describe your housing situation?',
-        isExclusive: false,
-        multiselectOptions: {
-          createMany: {
-            data: [
-              { name: 'Not Permanent', ordinal: 1 },
-              { name: 'Homeless', ordinal: 2 },
-              { name: 'Do Not Consider', ordinal: 3 },
-              { name: 'Prefer not to say', ordinal: 4 },
-            ],
-          },
-        },
-        name: 'Housing Situation',
-        status: MultiselectQuestionsStatusEnum.active,
-      }
-    : {
-        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        description:
-          'Thinking about the past 30 days, do either of these describe your housing situation?',
-        options: [
-          { text: 'Not Permanent', ordinal: 0 },
-          { text: 'Homeless', ordinal: 1 },
-          { text: 'Do Not Consider', ordinal: 2 },
-          { text: 'Prefer not to say', ordinal: 3 },
+  const housingSituationProgramMsqData = {
+    applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+    description:
+      'Thinking about the past 30 days, do either of these describe your housing situation?',
+    isExclusive: false,
+    multiselectOptions: {
+      createMany: {
+        data: [
+          { name: 'Not Permanent', ordinal: 1 },
+          { name: 'Homeless', ordinal: 2 },
+          { name: 'Do Not Consider', ordinal: 3 },
+          { name: 'Prefer not to say', ordinal: 4 },
         ],
-        text: 'Housing Situation',
-      };
+      },
+    },
+    name: 'Housing Situation',
+    status: MultiselectQuestionsStatusEnum.active,
+  };
   const housingSituationProgramQuestion =
     await prismaClient.multiselectQuestions.create({
       data: multiselectQuestionFactory(
         jurisdiction.id,
         { multiselectQuestion: housingSituationProgramMsqData },
-        msqV2,
+        true,
       ),
     });
 
