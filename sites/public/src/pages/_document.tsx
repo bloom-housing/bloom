@@ -14,11 +14,11 @@ type BrandRamp = Partial<BrandRampDTO>
 interface BrandDocumentProps {
   primary: BrandRamp | null
   secondary: BrandRamp | null
+  faviconUrl: string | null
 }
 
 const rampShades: (keyof BrandRamp)[] = ["base", "dark", "darker", "light", "lighter"]
 
-// A stored row can hold any JSON, and test() throws on an object with a non-callable toString.
 const isHex = (value: unknown): value is string =>
   typeof value === "string" && HEX_COLOR.test(value)
 
@@ -74,11 +74,13 @@ export default class BloomDocument extends Document<BrandDocumentProps> {
       ...initialProps,
       primary: hexOnly(brand?.primary),
       secondary: hexOnly(brand?.secondary),
+      faviconUrl: brand?.faviconUrl ?? null,
     }
   }
 
   render() {
     const brandVariables = brandStyleBlock(this.props)
+    const { faviconUrl } = this.props
 
     return (
       <Html>
@@ -86,6 +88,7 @@ export default class BloomDocument extends Document<BrandDocumentProps> {
           {brandVariables && (
             <style id="brand-vars" dangerouslySetInnerHTML={{ __html: brandVariables }} />
           )}
+          {faviconUrl && <link rel="icon" href={faviconUrl} />}
         </Head>
         <body>
           <Main />

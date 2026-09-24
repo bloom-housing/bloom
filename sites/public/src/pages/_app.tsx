@@ -20,6 +20,8 @@ import {
 } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlag,
+  FeatureFlagEnum,
+  Jurisdiction,
   JurisdictionContentFields,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import LinkComponent from "../components/core/LinkComponent"
@@ -29,6 +31,8 @@ import ApplicationConductor, {
 } from "../lib/applications/ApplicationConductor"
 import { AppSubmissionContext } from "../lib/applications/AppSubmissionContext"
 import { pageChangeHandler, gaLoadScript, gaCaptureScript, uaScript } from "../lib/customScripts"
+import { BrandContext } from "../lib/BrandContext"
+import { isFeatureFlagOn } from "../lib/helpers"
 import { JurisdictionContentContext } from "../lib/JurisdictionContentContext"
 import { JurisdictionFeatureFlagsContext } from "../lib/JurisdictionFeatureFlagsContext"
 import { applyTranslations } from "../lib/translations"
@@ -61,6 +65,12 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
 
   const jurisdictionContent = (pageProps?.jurisdictionContent ??
     null) as JurisdictionContentFields | null
+
+  const jurisdiction = pageProps?.jurisdiction as Jurisdiction | undefined
+  const brand =
+    jurisdiction && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableDbDrivenBranding)
+      ? jurisdiction.brand ?? null
+      : null
 
   useMemo(() => {
     applyTranslations(locale, publicOverrides)
@@ -107,10 +117,12 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
         <MessageProvider>
           <JurisdictionFeatureFlagsContext.Provider value={jurisdictionFeatureFlags}>
             <JurisdictionContentContext.Provider value={jurisdictionContent}>
-              <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-              <div className={jurisdictionClassname}>
-                <Component {...pageProps} />
-              </div>
+              <BrandContext.Provider value={brand}>
+                <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+                <div className={jurisdictionClassname}>
+                  <Component {...pageProps} />
+                </div>
+              </BrandContext.Provider>
             </JurisdictionContentContext.Provider>
           </JurisdictionFeatureFlagsContext.Provider>
         </MessageProvider>

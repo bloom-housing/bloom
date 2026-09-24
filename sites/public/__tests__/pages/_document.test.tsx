@@ -179,6 +179,52 @@ describe("_document", () => {
     expect(style).toContain("--bloom-color-primary: #ABC;")
   })
 
+  it("links the favicon when one is stored", async () => {
+    const { children } = await headChildrenFor(
+      jurisdictionWith({ primary, faviconUrl: "https://example.test/favicon.png" })
+    )
+
+    const link = children.find(
+      (child) => React.isValidElement(child) && child.props.rel === "icon"
+    ) as React.ReactElement
+
+    expect(link.props.href).toEqual("https://example.test/favicon.png")
+  })
+
+  it("links no favicon when none is stored, leaving /favicon.ico to apply", async () => {
+    const { children } = await headChildrenFor(jurisdictionWith({ primary }))
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "icon")
+    ).toBe(false)
+  })
+
+  it("links the favicon even when the colors are unusable", async () => {
+    const { children } = await headChildrenFor(
+      jurisdictionWith({
+        primary: { base: "rebeccapurple" },
+        faviconUrl: "https://example.test/favicon.png",
+      })
+    )
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "icon")
+    ).toBe(true)
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.id === "brand-vars")
+    ).toBe(false)
+  })
+
+  it("links no favicon when the flag is off", async () => {
+    const { children } = await headChildrenFor(
+      jurisdictionWith({ primary, faviconUrl: "https://example.test/favicon.png" }, false)
+    )
+
+    expect(
+      children.some((child) => React.isValidElement(child) && child.props.rel === "icon")
+    ).toBe(false)
+  })
+
   it("forwards the request so the API sees the visitor's address", async () => {
     await styleFor(jurisdictionWith({ primary }))
 
