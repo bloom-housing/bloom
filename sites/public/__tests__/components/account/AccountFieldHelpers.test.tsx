@@ -101,7 +101,7 @@ describe("AccountFieldHelpers", () => {
       expect(setAlert).toHaveBeenCalledWith({
         type: "alert",
         message: t("account.settings.alerts.genericError", {
-          contactEmail: t("resources.contactEmail"),
+          contactEmail: t("contactEmail"),
         }),
       })
       expect(consoleWarnSpy).toHaveBeenCalled()
@@ -160,7 +160,7 @@ describe("AccountFieldHelpers", () => {
       expect(setAlert).toHaveBeenCalledWith({
         type: "alert",
         message: t("account.settings.alerts.genericError", {
-          contactEmail: t("resources.contactEmail"),
+          contactEmail: t("contactEmail"),
         }),
       })
       expect(consoleLogSpy).toHaveBeenCalled()
@@ -230,7 +230,7 @@ describe("AccountFieldHelpers", () => {
       expect(setAlert).toHaveBeenCalledWith({
         type: "alert",
         message: t("account.settings.alerts.genericError", {
-          contactEmail: t("resources.contactEmail"),
+          contactEmail: t("contactEmail"),
         }),
       })
       expect(consoleWarnSpy).toHaveBeenCalled()
@@ -321,7 +321,7 @@ describe("AccountFieldHelpers", () => {
       expect(setAlert).toHaveBeenCalledWith({
         type: "alert",
         message: t("account.settings.alerts.genericError", {
-          contactEmail: t("resources.contactEmail"),
+          contactEmail: t("contactEmail"),
         }),
       })
       expect(consoleWarnSpy).toHaveBeenCalled()
@@ -435,7 +435,7 @@ describe("AccountFieldHelpers", () => {
       expect(setAlert).toHaveBeenCalledWith({
         type: "alert",
         message: t("account.settings.alerts.genericError", {
-          contactEmail: t("resources.contactEmail"),
+          contactEmail: t("contactEmail"),
         }),
       })
       expect(consoleWarnSpy).toHaveBeenCalled()
@@ -546,7 +546,7 @@ describe("AccountFieldHelpers", () => {
       expect(setAlert).toHaveBeenCalledWith({
         type: "alert",
         message: t("account.settings.alerts.genericError", {
-          contactEmail: t("resources.contactEmail"),
+          contactEmail: t("contactEmail"),
         }),
       })
       expect(consoleWarnSpy).toHaveBeenCalled()

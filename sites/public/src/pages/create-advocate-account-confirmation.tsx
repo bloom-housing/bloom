@@ -25,7 +25,7 @@ const CreateAdvocateAccountConfirmation = () => {
         <>
           <Card.Section className={"seeds-m-be-8"}>
             {t("authentication.requestAdvocateAccount.confirmation", {
-              contactEmail: t("resources.contactEmail"),
+              contactEmail: t("contactEmail"),
             })}
           </Card.Section>
           <Card.Section className={styles["footer-card-section"]}>

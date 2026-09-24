@@ -21,7 +21,7 @@ describe("Create advocate account confirmation page", () => {
     expect(
       screen.getByText(
         t("authentication.requestAdvocateAccount.confirmation", {
-          contactEmail: t("resources.contactEmail"),
+          contactEmail: t("contactEmail"),
         })
       )
     ).toBeInTheDocument()
