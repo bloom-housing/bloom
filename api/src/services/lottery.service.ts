@@ -113,7 +113,7 @@ export class LotteryService {
     });
 
     const enablePartnerLotteryRun = doJurisdictionHaveFeatureFlagSet(
-      mapTo(Jurisdiction, listing.jurisdictions),
+      mapTo(Jurisdiction, listing?.jurisdictions),
       FeatureFlagEnum.enablePartnerLotteryRun,
     );
 
