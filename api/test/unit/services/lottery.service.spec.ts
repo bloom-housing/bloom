@@ -1385,9 +1385,9 @@ describe('Testing lottery service', () => {
           },
           jurisdictions: {
             featureFlags: {
-              some: {
+              none: {
                 name: FeatureFlagEnum.enableNonAdminLotteries,
-                active: false,
+                active: true,
               },
             },
           },
@@ -1515,9 +1515,31 @@ describe('Testing lottery service', () => {
         prisma.jurisdictions.findMany = jest.fn().mockResolvedValue([]);
 
         await service.autoPublishResults();
-        expect(autoListingsWhere().OR).toEqual([]);
+        expect(prisma.listings.findMany).toHaveBeenCalledTimes(1);
         expect(prisma.listings.update).not.toHaveBeenCalled();
         expect(prisma.activityLog.create).not.toHaveBeenCalled();
+      });
+
+      it('should scope the released and auto paths to complementary jurisdictions', async () => {
+        await service.autoPublishResults();
+
+        const releasedWhere = (prisma.listings.findMany as jest.Mock).mock
+          .calls[0][0].where;
+        const jurisdictionsWhere = (prisma.jurisdictions.findMany as jest.Mock)
+          .mock.calls[0][0].where;
+
+        expect(releasedWhere.jurisdictions.featureFlags).toEqual({
+          none: {
+            name: FeatureFlagEnum.enableNonAdminLotteries,
+            active: true,
+          },
+        });
+        expect(jurisdictionsWhere.featureFlags).toEqual({
+          some: {
+            name: FeatureFlagEnum.enableNonAdminLotteries,
+            active: true,
+          },
+        });
       });
 
       it('should process releasedListings and autoListings together', async () => {
