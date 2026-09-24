@@ -10,6 +10,7 @@ import styles from "../patterns/PageHeaderLayout.module.scss"
 import { getGenericHousingBasicsContent } from "../static_content/generic_housing_basics_content"
 import { getHousingBasicsContent } from "../static_content/jurisdiction_housing_basics_content"
 import { sharedGetStaticProps } from "../lib/sharedPageProps"
+import TableOfContents from "../patterns/TableOfContents"
 
 const HousingBasicsPage = () => {
   const { profile } = useContext(AuthContext)
@@ -35,9 +36,14 @@ const HousingBasicsPage = () => {
         inverse
         className={pageStyles["faq-page"]}
       >
-        <div className={styles["markdown"]}>
-          {/* Using the faq component now as we currently only support content in that format */}
-          <FrequentlyAskedQuestions content={content} />
+        <div className={pageStyles["grid-layout"]}>
+          <div className={pageStyles["table-of-contents"]}>
+            <TableOfContents content={content} />
+          </div>
+          <div className={styles["markdown"]}>
+            {/* Using the faq component now as we currently only support content in that format */}
+            <FrequentlyAskedQuestions content={content} />
+          </div>
         </div>
       </PageHeaderLayout>
     </Layout>
