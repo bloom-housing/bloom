@@ -4,6 +4,7 @@ import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import Clock from "@heroicons/react/24/outline/ClockIcon"
 import Cog from "@heroicons/react/24/outline/Cog8ToothIcon"
 import EnvelopeIcon from "@heroicons/react/24/outline/EnvelopeIcon"
+import ExclamationCircleIcon from "@heroicons/react/24/outline/ExclamationCircleIcon"
 import HeartIcon from "@heroicons/react/24/outline/HeartIcon"
 import HeartIconSolid from "@heroicons/react/24/solid/HeartIcon"
 import HomeModernIcon from "@heroicons/react/24/outline/HomeModernIcon"
@@ -23,6 +24,7 @@ export const CustomIconMap = {
   cog: <Cog />,
   door: Door,
   envelope: <EnvelopeIcon />,
+  exclamation: <ExclamationCircleIcon />,
   heartIcon: <HeartIcon />,
   heartIconSolid: <HeartIconSolid />,
   home: <HomeModernIcon />,
