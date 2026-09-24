@@ -262,7 +262,7 @@ export const agencyFields = (
         subNote={
           (
             <Markdown>
-              {t("advocateAccount.agencyNotListed", { contactEmail: t("resources.contactEmail") })}
+              {t("advocateAccount.agencyNotListed", { contactEmail: t("t.contactEmail") })}
             </Markdown>
           ) as unknown as string
         }
@@ -614,7 +614,7 @@ export const createNameSubmitHandler = (
       setAlert({
         type: "alert",
         message: `${t("account.settings.alerts.genericError", {
-          contactEmail: t("resources.contactEmail"),
+          contactEmail: t("t.contactEmail"),
         })}`,
       })
       console.warn(err)
@@ -652,7 +652,7 @@ export const createEmailSubmitHandler = (
       setAlert({
         type: "alert",
         message: `${t("account.settings.alerts.genericError", {
-          contactEmail: t("resources.contactEmail"),
+          contactEmail: t("t.contactEmail"),
         })}`,
       })
       console.warn(err)
@@ -700,7 +700,7 @@ export const createPasswordSubmitHandler = (
         setAlert({
           type: "alert",
           message: `${t("account.settings.alerts.genericError", {
-            contactEmail: t("resources.contactEmail"),
+            contactEmail: t("t.contactEmail"),
           })}`,
         })
       }
@@ -737,7 +737,7 @@ export const createDobSubmitHandler = (
       setAlert({
         type: "alert",
         message: `${t("account.settings.alerts.genericError", {
-          contactEmail: t("resources.contactEmail"),
+          contactEmail: t("t.contactEmail"),
         })}`,
       })
       console.warn(err)
@@ -790,7 +790,7 @@ export const createAddressSubmitHandler = (
       setAlert({
         type: "alert",
         message: `${t("account.settings.alerts.genericError", {
-          contactEmail: t("resources.contactEmail"),
+          contactEmail: t("t.contactEmail"),
         })}`,
       })
       console.warn(err)
@@ -846,7 +846,7 @@ export const createPhoneSubmitHandler = (
         setAlert({
           type: "alert",
           message: `${t("account.settings.alerts.genericError", {
-            contactEmail: t("resources.contactEmail"),
+            contactEmail: t("t.contactEmail"),
           })}`,
         })
       }
