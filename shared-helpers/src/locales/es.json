@@ -655,6 +655,7 @@
   "authentication.timeout.signOutMessage": "Su seguridad es importante para nosotros. Concluimos su sesión debido a inactividad. Sírvase iniciar sesión para continuar.",
   "authentication.timeout.text": "Para proteger su identidad, su sesión concluirá en un minuto debido a inactividad. Si decide no responder, perderá toda la información que no haya guardado y concluirá su sesión.",
   "config.routePrefix": "es",
+  "contactEmail": "email@email.com",
   "content.genericParagraph": "Un enfoque de diseño es una filosofía general que puede o no incluir una guía para métodos específicos. Algunos sirven para orientar el objetivo general del diseño. Otros, para guiar las tendencias del diseñador. Se puede utilizar una combinación de enfoques si no entran en conflicto.",
   "eligibility.accessibility.accessibleHeightToilet": "Inodoro de altura accesible",
   "eligibility.accessibility.accessibleParking": "Lugares de estacionamiento accesibles",
