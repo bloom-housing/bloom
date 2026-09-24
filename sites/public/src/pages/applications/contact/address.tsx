@@ -30,13 +30,6 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
-import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
-import { StopLightMessage } from "../../../components/applications/stopLights/StopLightMessage"
-import { RedLightModal } from "../../../compnents/applications/stopLights/StopLightModal"
-
-// DEMO ONLY. Real wiring reads conductor.config.enabledStopLightRuleKeys (jurisdiction +
-// feature flag); hardcoded here so the demo needs no DB or flag setup.
-const DEMO_STOP_LIGHT_RULE_KEYS = ["demoAddressCity"]
 
 const ApplicationAddress = () => {
   const { profile } = useContext(AuthContext)
@@ -56,7 +49,7 @@ const ApplicationAddress = () => {
   )
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { control, register, handleSubmit, setValue, watch, errors, trigger, getValues } = useForm<
+  const { control, register, handleSubmit, setValue, watch, errors, trigger } = useForm<
     Record<string, any>
   >({
     defaultValues: {
@@ -73,16 +66,6 @@ const ApplicationAddress = () => {
     },
     shouldFocusError: false,
   })
-
-  // DEMO ONLY. Evaluates the step's rule whenever focus leaves any field in the form.
-  const { onFieldBlur, banner } = useStopLightBanners(
-    "primaryApplicantAddress",
-    application,
-    listing,
-    DEMO_STOP_LIGHT_RULE_KEYS,
-    getValues
-  )
-
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
@@ -168,11 +151,7 @@ const ApplicationAddress = () => {
         "listings.apply.applyOnline"
       )} - ${listing?.name}`}
     >
-      <Form
-        id="applications-address"
-        onSubmit={handleSubmit(onSubmit, onError)}
-        onBlur={onFieldBlur}
-      >
+      <Form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={
@@ -402,7 +381,6 @@ const ApplicationAddress = () => {
                   register={register}
                   dataTestId={"app-primary-address-zip"}
                 />
-                <StopLightMessage rule={banner} className="mb-4" />
                 <Field
                   type="checkbox"
                   id="sendMailToMailingAddress"
