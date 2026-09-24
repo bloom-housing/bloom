@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { HttpService } from '@nestjs/axios';
+import { of, throwError } from 'rxjs';
 import { INestApplication } from '@nestjs/common';
 import { LanguagesEnum, NeighborhoodAmenitiesEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
@@ -13,6 +15,7 @@ import { IdDTO } from '../../src/dtos/shared/id.dto';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { ApplicationAccessibilityFeatureEnum } from '../../src/enums/applications/application-accessibility-feature-enum';
+import { BrandRadiusEnum } from '../../src/enums/jurisdictions/brand-radius-enum';
 import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
 
 describe('Jurisdiction Controller Tests', () => {
@@ -21,9 +24,19 @@ describe('Jurisdiction Controller Tests', () => {
   let cookies = '';
 
   beforeAll(async () => {
+    // The font check reads css from google; the responses are stubbed so the suite makes no
+    // outbound request.
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(HttpService)
+      .useValue({
+        get: (url: string) =>
+          url.includes('NotARealFont')
+            ? throwError(() => ({ response: { status: 400 } }))
+            : of({ data: "@font-face { font-family: 'Inter'; }" }),
+      })
+      .compile();
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
@@ -51,6 +64,315 @@ describe('Jurisdiction Controller Tests', () => {
   afterAll(async () => {
     await prisma.$disconnect();
     await app.close();
+  });
+
+  it('nulls only the reference whose asset was deleted', async () => {
+    const logo = await prisma.assets.create({
+      data: { fileId: 'brand-logo-file', label: 'brandLogo' },
+    });
+    const favicon = await prisma.assets.create({
+      data: { fileId: 'brand-favicon-file', label: 'brandFavicon' },
+    });
+    const jurisdiction = await prisma.jurisdictions.create({
+      data: {
+        ...jurisdictionFactory(),
+        brand: { primary: { base: '#773E98' } },
+        brandLogo: { connect: { id: logo.id } },
+        brandFavicon: { connect: { id: favicon.id } },
+      },
+    });
+
+    await prisma.assets.delete({ where: { id: logo.id } });
+
+    const afterLogoDelete = await prisma.jurisdictions.findUnique({
+      where: { id: jurisdiction.id },
+    });
+    expect(afterLogoDelete.brandLogoAssetId).toBeNull();
+    expect(afterLogoDelete.brandFaviconAssetId).toEqual(favicon.id);
+
+    await prisma.assets.delete({ where: { id: favicon.id } });
+
+    const afterBothDeletes = await prisma.jurisdictions.findUnique({
+      where: { id: jurisdiction.id },
+    });
+    expect(afterBothDeletes.brandFaviconAssetId).toBeNull();
+    expect(afterBothDeletes.brand).toEqual({ primary: { base: '#773E98' } });
+  });
+
+  describe('brand', () => {
+    const updateBody = (id: string, extra = {}) => ({
+      id,
+      name: `brand test ${id.slice(0, 8)}`,
+      notificationsSignUpUrl: 'url',
+      languages: [LanguagesEnum.en],
+      partnerTerms: 'terms',
+      publicUrl: 'publicUrl',
+      emailFromAddress: 'emailFromAddress',
+      rentalAssistanceDefault: 'rentalAssistanceDefault',
+      whatToExpect: 'whatToExpect',
+      whatToExpectAdditionalText: 'whatToExpectAdditionalText',
+      whatToExpectUnderConstruction: 'whatToExpectUnderConstruction',
+      enablePartnerSettings: true,
+      allowSingleUseCodeLogin: true,
+      listingApprovalPermissions: [],
+      duplicateListingPermissions: [],
+      requiredListingFields: [],
+      visibleNeighborhoodAmenities: [],
+      regions: [],
+      visibleAccessibilityPriorityTypes: [],
+      visibleApplicationAccessibilityFeatures: [],
+      visibleSpokenLanguages: [],
+      visibleHouseholdMemberRelationships: [],
+      ...extra,
+    });
+
+    // The create path runs the same font and asset checks, so it is exercised too.
+    const post = (extra = {}) => {
+      const { id, ...body } = updateBody(randomUUID(), extra);
+      void id;
+      return request(app.getHttpServer())
+        .post('/jurisdictions')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .send(body);
+    };
+
+    const put = (id: string, extra = {}) =>
+      request(app.getHttpServer())
+        .put(`/jurisdictions/${id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .send(updateBody(id, extra));
+
+    it('completes the ramp and uppercases hex through the endpoints', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      await put(jurisdiction.id, {
+        brand: { primary: { base: '#77aa33' } },
+      }).expect(200);
+
+      const res = await request(app.getHttpServer())
+        .get(`/jurisdictions/byName/${updateBody(jurisdiction.id).name}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(200);
+
+      // Computed with python colorsys rather than with completeRamp, so the endpoint is checked
+      // against the intended deltas rather than against itself.
+      expect(res.body.brand.primary).toEqual({
+        base: '#77AA33',
+        dark: '#69962D',
+        darker: '#4C6D21',
+        light: '#EFF7E4',
+        lighter: '#F8FCF4',
+      });
+      expect(res.headers['cache-control']).toContain('s-maxage');
+
+      const stored = await prisma.jurisdictions.findUnique({
+        where: { id: jurisdiction.id },
+        select: { brand: true },
+      });
+      expect(stored.brand).toEqual({ primary: { base: '#77AA33' } });
+    });
+
+    it('returns explicit ramp values as stored', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      const res = await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98', dark: '#6E2598' },
+          secondary: { base: '#0077DA' },
+        },
+      }).expect(200);
+
+      expect(res.body.brand.primary.dark).toEqual('#6E2598');
+      expect(res.body.brand.secondary.base).toEqual('#0077DA');
+    });
+
+    it('rejects a brand that is not a brand', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      await put(jurisdiction.id, {
+        brand: { primary: { base: 'rebeccapurple' } },
+      }).expect(400);
+      await put(jurisdiction.id, { brand: { fontFamily: 'Inter' } }).expect(
+        400,
+      );
+      await put(jurisdiction.id, { brand: { primary: {} } }).expect(400);
+      await put(jurisdiction.id, {
+        brand: { primary: { base: '#773E98' }, secondary: {} },
+      }).expect(400);
+    });
+
+    it('rejects a font url that is not hosted by google', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'Inter',
+          fontUrl: 'https://fonts.example.test/css2?family=Inter',
+        },
+      }).expect(400);
+      await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'Inter',
+          fontUrl: 'http://fonts.googleapis.com/css2?family=Inter',
+        },
+      }).expect(400);
+    });
+
+    it('rejects a font family google does not serve', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'NotARealFont',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=NotARealFont',
+        },
+      }).expect(400);
+    });
+
+    it('stores a google font the css confirms', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      const res = await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'Inter',
+          fontUrl:
+            'https://fonts.googleapis.com/css2?family=Inter&display=swap',
+        },
+      }).expect(200);
+
+      expect(res.body.brand.fontFamily).toEqual('Inter');
+      expect(res.body.brand.fontUrl).toEqual(
+        'https://fonts.googleapis.com/css2?family=Inter&display=swap',
+      );
+    });
+
+    it('runs the font check when creating a jurisdiction', async () => {
+      await post({
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'NotARealFont',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=NotARealFont',
+        },
+      }).expect(400);
+
+      await post({
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'Inter',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=Inter',
+        },
+      }).expect(201);
+    });
+
+    it('rejects a gstatic url, which serves font files rather than stylesheets', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          fontFamily: 'Inter',
+          fontUrl: 'https://fonts.gstatic.com/s/inter/v20/font.woff2',
+        },
+      }).expect(400);
+    });
+
+    it('stores a serif family and a button radius', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      // The mocked stylesheet names Inter, so that is the only family it can serve.
+      const res = await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          serifFontFamily: 'Inter',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=Inter',
+          buttonRadius: BrandRadiusEnum.xl3,
+        },
+      }).expect(200);
+
+      expect(res.body.brand.serifFontFamily).toEqual('Inter');
+      expect(res.body.brand.buttonRadius).toEqual(BrandRadiusEnum.xl3);
+
+      await put(jurisdiction.id, {
+        brand: {
+          primary: { base: '#773E98' },
+          serifFontFamily: 'Noto Serif',
+          fontUrl: 'https://fonts.googleapis.com/css2?family=Inter',
+        },
+      }).expect(400);
+
+      await put(jurisdiction.id, {
+        brand: { primary: { base: '#773E98' }, buttonRadius: 'pill' },
+      }).expect(400);
+
+      await put(jurisdiction.id, {
+        brand: { primary: { base: '#773E98' }, serifFontFamily: 'Noto Serif ' },
+      }).expect(400);
+    });
+
+    it('rejects a branding asset id with no asset', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      const missing = randomUUID();
+
+      const res = await put(jurisdiction.id, {
+        brandLogoAssetId: missing,
+      }).expect(400);
+
+      expect(res.body.message).toContain(missing);
+    });
+
+    it('clears the brand when null is sent', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: {
+          ...jurisdictionFactory(),
+          brand: { primary: { base: '#773E98' } },
+        },
+      });
+
+      await put(jurisdiction.id, { brand: null }).expect(200);
+
+      const stored = await prisma.jurisdictions.findUnique({
+        where: { id: jurisdiction.id },
+        select: { brand: true },
+      });
+      expect(stored.brand).toBeNull();
+    });
+
+    it('returns a null brand for a jurisdiction that has none', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      const res = await request(app.getHttpServer())
+        .get(`/jurisdictions/${jurisdiction.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(200);
+
+      expect(res.body.brand).toBeNull();
+    });
   });
 
   it('testing list endpoint', async () => {

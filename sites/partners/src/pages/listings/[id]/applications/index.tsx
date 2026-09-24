@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useMemo, useState } from "react"
+import dayjs from "dayjs"
 import Markdown from "markdown-to-jsx"
-import { useRouter } from "next/router"
 import Head from "next/head"
-import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
-import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
-import { Button, Dialog, LoadingState } from "@bloom-housing/ui-seeds"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { useRouter } from "next/router"
+import React, { useContext, useEffect, useMemo, useState } from "react"
+import { AuthContext, BloomCard, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationOrderByKeys,
   BackgroundJobStatusEnum,
@@ -15,14 +13,10 @@ import {
   OrderByEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import {
-  useSingleListingData,
-  useFlaggedApplicationsList,
-  useApplicationsData,
-  useZipExport,
-  useSSE,
-} from "../../../../lib/hooks"
-import Layout from "../../../../layouts"
+import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
+import { Button, Dialog, LoadingState, Message } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { getColDefs } from "../../../../components/applications/ApplicationsColDefs"
 import { ApplicationsSideNav } from "../../../../components/applications/ApplicationsSideNav"
 import BulkUpdateDrawer from "../../../../components/applications/BulkUpdateDrawer"
@@ -32,6 +26,14 @@ import styles from "../../../../components/shared/ExportTermsDialog.module.scss"
 import ListingGuard from "../../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
 import { StatusBar } from "../../../../components/shared/StatusBar"
+import Layout from "../../../../layouts"
+import {
+  useApplicationsData,
+  useFlaggedApplicationsList,
+  useSingleListingData,
+  useSSE,
+  useZipExport,
+} from "../../../../lib/hooks"
 
 interface BulkUploadJobNotification {
   jobId: string
@@ -109,6 +111,10 @@ const ApplicationsList = () => {
     FeatureFlagEnum.enableApplicationStatus,
     jurisdictionData?.id
   )
+  const enableApplicationExpirationNonAdmins = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableApplicationExpirationNonAdmins,
+    jurisdictionData?.id
+  )
   const enableExportTerms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableExportTerms,
     jurisdictionData?.id
@@ -127,6 +133,11 @@ const ApplicationsList = () => {
   )
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && jurisdictionData?.enablePartnerDemographics
+
+  // TODO: make days till expiration configurable
+  const shouldExpireData = enableApplicationExpirationNonAdmins && !profile?.userRoles?.isAdmin
+  const expiryDate = dayjs(listingDto?.closedAt).add(45, "day")
+  const formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
 
   const { onExport, exportLoading } = useZipExport(
     listingId,
@@ -268,110 +279,144 @@ const ApplicationsList = () => {
 
             <StatusBar>{getListingStatusTag(listingDto?.status)}</StatusBar>
 
-            <section className={"bg-gray-200 pt-4"}>
-              <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
-                {listingDto && (
-                  <>
-                    <ApplicationsSideNav
-                      className="w-full md:w-72"
-                      listingId={listingId}
-                      listingOpen={isListingOpen}
-                    />
-
-                    <AgTable
-                      className="w-full"
-                      id="applications-table"
-                      pagination={{
-                        perPage: tableOptions.pagination.itemsPerPage,
-                        setPerPage: tableOptions.pagination.setItemsPerPage,
-                        currentPage: tableOptions.pagination.currentPage,
-                        setCurrentPage: tableOptions.pagination.setCurrentPage,
-                      }}
-                      config={{
-                        gridComponents,
-                        columns: columnDefs,
-                        totalItemsLabel: t("applications.totalApplications"),
-                      }}
-                      data={{
-                        items: applications,
-                        loading: appsLoading,
-                        totalItems: appsMeta?.totalItems,
-                        totalPages: appsMeta?.totalPages,
-                      }}
-                      search={{
-                        setSearch: tableOptions.filter.setFilterValue,
-                      }}
-                      sort={{
-                        setSort: tableOptions.sort.setSortOptions,
-                      }}
-                      headerContent={
-                        <div className="flex gap-2 items-center">
-                          {allowNewApps && (
-                            <Button
-                              onClick={() => {
-                                if (
-                                  process.env.showLottery &&
-                                  (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
-                                    listingDto.lotteryStatus ===
-                                      LotteryStatusEnum.releasedToPartners ||
-                                    listingDto.lotteryStatus ===
-                                      LotteryStatusEnum.publishedToPublic)
-                                ) {
-                                  setApplicationConfirmAddPostLotteryModal(true)
-                                } else if (listingDto.status === ListingsStatusEnum.closed) {
-                                  setApplicationConfirmAddModal(true)
-                                } else {
-                                  void router.push(`/listings/${listingId}/applications/add`)
-                                }
-                              }}
-                              variant="primary-outlined"
-                              size="sm"
-                              id={"addApplicationButton"}
-                            >
-                              {t("applications.addApplication")}
-                            </Button>
-                          )}
-
-                          <Button
-                            id={"applicationExportButton"}
-                            variant="primary-outlined"
-                            size="sm"
-                            onClick={() => (enableExportTerms ? setIsTermsOpen(true) : onExport())}
-                            loadingMessage={exportLoading && t("t.formSubmitted")}
-                          >
-                            {t("t.export")}
-                          </Button>
-
-                          {enableApplicationBulkCSVUpdates && (
-                            <Button
-                              id={"applicationBulkUpdateButton"}
-                              variant="primary-outlined"
-                              size="sm"
-                              onClick={() => setBulkUpdateModalOpen(true)}
-                            >
-                              {t("applications.bulkUpdate")}
-                            </Button>
-                          )}
-                        </div>
-                      }
-                    />
-                    <ExportTermsDialog
-                      dialogHeader={t("applications.export.dialogHeader")}
-                      id="applicationExportTermsDialog"
-                      isOpen={isTermsOpen}
-                      onClose={() => setIsTermsOpen(false)}
-                      onSubmit={onSubmit}
+            {listingDto?.status === ListingsStatusEnum.closed &&
+            shouldExpireData &&
+            expiryDate <= dayjs() ? (
+              <section className="form-container">
+                <div className="mx-auto px-5 mt-5 max-w-screen-xl">
+                  <div className="md:w-9/12">
+                    <BloomCard
+                      iconSymbol="exclamation"
+                      title={t("applications.export.dataExpiryHeader")}
+                      headingPriority={2}
+                      iconClass={"card-icon"}
+                      iconOutlined={true}
+                      headingClass="seeds-large-heading"
                     >
-                      <p>{t("applications.export.dialogSubheader")}</p>
-                      <h2 className={styles["terms-of-use-text"]}>
-                        {t("authentication.terms.termsOfUse")}
-                      </h2>
-                      <Markdown>{t("applications.export.termsBody")}</Markdown>
-                    </ExportTermsDialog>
-                  </>
-                )}
-              </article>
-            </section>
+                      <CardSection>
+                        <div>{t("applications.export.dataExpiryDescription")}</div>
+                      </CardSection>
+                    </BloomCard>
+                  </div>
+                </div>
+              </section>
+            ) : (
+              <section className={"bg-gray-200 pt-4"}>
+                <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
+                  {listingDto && (
+                    <>
+                      <ApplicationsSideNav
+                        className="w-full md:w-72"
+                        listingId={listingId}
+                        listingOpen={isListingOpen}
+                      />
+                      <div className="w-full">
+                        {shouldExpireData && listingDto?.status === ListingsStatusEnum.closed && (
+                          <Message variant={"warn"} fullwidth={true} className="mb-4">
+                            {t("applications.export.dataExpiryMessage", {
+                              date: formattedExpiryDate,
+                            })}
+                          </Message>
+                        )}
+                        <AgTable
+                          className="w-full"
+                          id="applications-table"
+                          pagination={{
+                            perPage: tableOptions.pagination.itemsPerPage,
+                            setPerPage: tableOptions.pagination.setItemsPerPage,
+                            currentPage: tableOptions.pagination.currentPage,
+                            setCurrentPage: tableOptions.pagination.setCurrentPage,
+                          }}
+                          config={{
+                            gridComponents,
+                            columns: columnDefs,
+                            totalItemsLabel: t("applications.totalApplications"),
+                          }}
+                          data={{
+                            items: applications,
+                            loading: appsLoading,
+                            totalItems: appsMeta?.totalItems,
+                            totalPages: appsMeta?.totalPages,
+                          }}
+                          search={{
+                            setSearch: tableOptions.filter.setFilterValue,
+                          }}
+                          sort={{
+                            setSort: tableOptions.sort.setSortOptions,
+                          }}
+                          headerContent={
+                            <div className="flex gap-2 items-center">
+                              {allowNewApps && (
+                                <Button
+                                  onClick={() => {
+                                    if (
+                                      process.env.showLottery &&
+                                      (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
+                                        listingDto.lotteryStatus ===
+                                          LotteryStatusEnum.releasedToPartners ||
+                                        listingDto.lotteryStatus ===
+                                          LotteryStatusEnum.publishedToPublic)
+                                    ) {
+                                      setApplicationConfirmAddPostLotteryModal(true)
+                                    } else if (listingDto.status === ListingsStatusEnum.closed) {
+                                      setApplicationConfirmAddModal(true)
+                                    } else {
+                                      void router.push(`/listings/${listingId}/applications/add`)
+                                    }
+                                  }}
+                                  variant="primary-outlined"
+                                  size="sm"
+                                  id={"addApplicationButton"}
+                                >
+                                  {t("applications.addApplication")}
+                                </Button>
+                              )}
+
+                              <Button
+                                id={"applicationExportButton"}
+                                variant="primary-outlined"
+                                size="sm"
+                                onClick={() =>
+                                  enableExportTerms ? setIsTermsOpen(true) : onExport()
+                                }
+                                loadingMessage={exportLoading && t("t.formSubmitted")}
+                              >
+                                {t("t.export")}
+                              </Button>
+
+                              {enableApplicationBulkCSVUpdates && (
+                                <Button
+                                  id={"applicationBulkUpdateButton"}
+                                  variant="primary-outlined"
+                                  size="sm"
+                                  onClick={() => setBulkUpdateModalOpen(true)}
+                                >
+                                  {t("applications.bulkUpdate")}
+                                </Button>
+                              )}
+                            </div>
+                          }
+                        />
+                      </div>
+
+                      <ExportTermsDialog
+                        dialogHeader={t("applications.export.dialogHeader")}
+                        id="applicationExportTermsDialog"
+                        isOpen={isTermsOpen}
+                        onClose={() => setIsTermsOpen(false)}
+                        onSubmit={onSubmit}
+                      >
+                        <p>{t("applications.export.dialogSubheader")}</p>
+                        <h2 className={styles["terms-of-use-text"]}>
+                          {t("authentication.terms.termsOfUse")}
+                        </h2>
+                        <Markdown>{t("applications.export.termsBody")}</Markdown>
+                      </ExportTermsDialog>
+                    </>
+                  )}
+                </article>
+              </section>
+            )}
           </LoadingState>
         </div>
 

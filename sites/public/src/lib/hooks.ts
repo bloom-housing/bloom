@@ -317,11 +317,18 @@ export async function fetchLimitedUnderConstructionListings(req?: any, limit?: n
 export const API_TIMEOUT_MS = 5000
 
 let jurisdiction: Jurisdiction | null = null
+let jurisdictionUntil = 0
+let jurisdictionPhase: string | undefined
+
+// A failed read is held for this long so an unreachable API is not re-hit on every render.
+export const JURISDICTION_RETRY_MS = 5000
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchJurisdictionByName(req?: any) {
+  const phase = process.env.NEXT_PHASE
+
   try {
-    if (jurisdiction) {
+    if (jurisdictionPhase === phase && jurisdictionUntil > Date.now()) {
       return jurisdiction
     }
 
@@ -341,8 +348,12 @@ export async function fetchJurisdictionByName(req?: any) {
       }
     )
     jurisdiction = jurisdictionRes?.data
+    jurisdictionUntil = Date.now() + cacheWindowMs(phase)
+    jurisdictionPhase = phase
   } catch (error) {
     console.log("error fetching jurisdiction = ", error.message)
+    jurisdictionUntil = Date.now() + JURISDICTION_RETRY_MS
+    jurisdictionPhase = phase
   }
 
   return jurisdiction
