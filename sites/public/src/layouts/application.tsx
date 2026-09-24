@@ -9,11 +9,17 @@ import { MenuLink, t, SiteHeader as UICSiteHeader } from "@bloom-housing/ui-comp
 import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { useBrand } from "../lib/BrandContext"
-import { BrandDTO, User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  BrandDTO,
+  FeatureFlag,
+  FeatureFlagEnum,
+  User,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
+import styles from "./application.module.scss"
 import CustomSiteFooter from "../components/shared/CustomSiteFooter"
 import { HeaderLink, SiteHeader } from "../patterns/SiteHeader"
-import styles from "./application.module.scss"
+import { useJurisdictionFeatureFlags } from "../lib/JurisdictionFeatureFlagsContext"
 
 const isMessageActive = (windowEnv: string) => {
   let isActive = false
@@ -135,7 +141,8 @@ const getHeaderLinks = (
   profile: User,
   signOut: () => Promise<void>,
   addToast: (message: string, props: ToastProps) => void,
-  linksBehindFlags: Record<string, boolean>
+  loggedInFlags: Record<string, boolean>,
+  featureFlags: FeatureFlag[]
 ) => {
   const headerLinks: HeaderLink[] = [
     {
@@ -149,6 +156,12 @@ const getHeaderLinks = (
       href: process.env.housingCounselorServiceUrl,
     })
   }
+  if (featureFlags?.some((flag) => flag.name === FeatureFlagEnum.enableProfessionalPartnersPage)) {
+    headerLinks.push({
+      label: t("pageTitle.professionalPartners"),
+      href: "/professional-partners",
+    })
+  }
   if (profile) {
     headerLinks.push({
       label: t("nav.myAccount"),
@@ -157,7 +170,7 @@ const getHeaderLinks = (
           label: t("nav.myDashboard"),
           href: "/account/dashboard",
         },
-        ...(linksBehindFlags["applications"]
+        ...(loggedInFlags["applications"]
           ? [
               {
                 label: t("account.myApplications"),
@@ -165,7 +178,7 @@ const getHeaderLinks = (
               },
             ]
           : []),
-        ...(linksBehindFlags["favorites"]
+        ...(loggedInFlags["favorites"]
           ? [
               {
                 label: t("account.myFavorites"),
@@ -207,7 +220,6 @@ interface LayoutProps {
   pageTitle?: string
 }
 
-// The site title sits next to the logo, so the image is decorative and takes no alt text.
 export const headerLogo = (brand: BrandDTO | null) =>
   brand?.logoUrl ? (
     <img src={brand.logoUrl} alt="" />
@@ -222,6 +234,7 @@ const Layout = (props: LayoutProps) => {
   const brand = useBrand()
   const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
+  const featureFlags = useJurisdictionFeatureFlags()
 
   const [showFavorites, setShowFavorites] = useState(false)
   const [showApplications, setShowApplications] = useState(true)
@@ -273,10 +286,17 @@ const Layout = (props: LayoutProps) => {
                   active: t("config.routePrefix") === lang.prefix,
                 }
               })}
-              links={getHeaderLinks(router, profile, signOut, addToast, {
-                applications: showApplications,
-                favorites: showFavorites,
-              })}
+              links={getHeaderLinks(
+                router,
+                profile,
+                signOut,
+                addToast,
+                {
+                  applications: showApplications,
+                  favorites: showFavorites,
+                },
+                featureFlags
+              )}
               titleLink={"/"}
               logo={headerLogo(brand)}
               mainContentId="main-content"

@@ -1,0 +1,26 @@
+.contact-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--seeds-spacer-content);
+  margin-bottom: var(--seeds-spacer-container);
+  padding: var(--seeds-spacer-content);
+  word-wrap: break-word;
+
+  .contact-card-subsection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--seeds-s4);
+  }
+
+  .contact-card-title {
+    font-weight: var(--seeds-font-weight-semibold);
+  }
+
+  .contact-card-description {
+    color: var(--seeds-text-color-light);
+  }
+
+  .contact-card-info {
+    font-weight: var(--seeds-font-weight-bold);
+  }
+}
