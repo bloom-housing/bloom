@@ -11,6 +11,7 @@ import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { PageHeaderLayout } from "../patterns/PageHeaderLayout"
 import FrequentlyAskedQuestions from "../patterns/FrequentlyAskedQuestions"
+import TableOfContents from "../patterns/TableOfContents"
 import { getGenericFaqContent } from "../static_content/generic_faq_content"
 import pageStyles from "../components/content-pages/FaqPage.module.scss"
 import styles from "../patterns/PageHeaderLayout.module.scss"
@@ -47,28 +48,35 @@ const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
         inverse
         className={pageStyles["faq-page"]}
       >
-        <div className={styles["markdown"]}>
-          <FrequentlyAskedQuestions content={content} />
-        </div>
-        <Card className={pageStyles["faq-card"]}>
-          <Card.Header>
-            <Heading priority={2} size={"xl"}>
-              {t("faq.stillHaveQuestions")}
-            </Heading>
-          </Card.Header>
-          <Card.Section>
-            <div className={"seeds-m-be-6"}>
-              <Markdown>
-                {t("faq.stillHaveQuestionsContent", {
-                  contactEmail: t("resources.contactEmail"),
-                })}
-              </Markdown>
+        <div className={pageStyles["grid-layout"]}>
+          <div className={pageStyles["table-of-contents"]}>
+            <TableOfContents content={content} />
+          </div>
+          <div>
+            <div className={styles["markdown"]}>
+              <FrequentlyAskedQuestions content={content} />
             </div>
-            {enableResources && (
-              <Button href={"/additional-resources"}>{t("faq.viewResourcePage")}</Button>
-            )}
-          </Card.Section>
-        </Card>
+            <Card className={pageStyles["faq-card"]}>
+              <Card.Header>
+                <Heading priority={2} size={"xl"}>
+                  {t("faq.stillHaveQuestions")}
+                </Heading>
+              </Card.Header>
+              <Card.Section>
+                <div className={"seeds-m-be-6"}>
+                  <Markdown>
+                    {t("faq.stillHaveQuestionsContent", {
+                      contactEmail: t("resources.contactEmail"),
+                    })}
+                  </Markdown>
+                </div>
+                {enableResources && (
+                  <Button href={"/additional-resources"}>{t("faq.viewResourcePage")}</Button>
+                )}
+              </Card.Section>
+            </Card>
+          </div>
+        </div>
       </PageHeaderLayout>
     </Layout>
   )
