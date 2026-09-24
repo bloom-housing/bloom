@@ -22,6 +22,7 @@ import { JurisdictionService } from '../services/jurisdiction.service';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { JurisdictionCreate } from '../dtos/jurisdictions/jurisdiction-create.dto';
 import { JurisdictionUpdate } from '../dtos/jurisdictions/jurisdiction-update.dto';
+import { JurisdictionBrandUpdate } from '../dtos/jurisdictions/jurisdiction-brand-update.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
@@ -34,7 +35,12 @@ import { PUBLIC_CACHE_CONTROL } from '../utilities/cache-control';
 @Controller('jurisdictions')
 @ApiTags('jurisdictions')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-@ApiExtraModels(JurisdictionCreate, JurisdictionUpdate, IdDTO)
+@ApiExtraModels(
+  JurisdictionCreate,
+  JurisdictionUpdate,
+  JurisdictionBrandUpdate,
+  IdDTO,
+)
 @PermissionTypeDecorator('jurisdiction')
 @UseGuards(OptionalAuthGuard, PermissionGuard)
 export class JurisdictionController {
@@ -89,6 +95,24 @@ export class JurisdictionController {
     @Body() jurisdiction: JurisdictionCreate,
   ): Promise<Jurisdiction> {
     return await this.jurisdictionService.create(jurisdiction);
+  }
+
+  @Put(`:jurisdictionId/brand`)
+  @ApiOperation({
+    summary: "Update a jurisdiction's branding",
+    operationId: 'updateBrand',
+  })
+  @ApiOkResponse({ type: Jurisdiction })
+  @UseGuards(ApiKeyGuard)
+  async updateBrand(
+    @Param('jurisdictionId', new ParseUUIDPipe({ version: '4' }))
+    jurisdictionId: string,
+    @Body() brandUpdate: JurisdictionBrandUpdate,
+  ): Promise<Jurisdiction> {
+    return await this.jurisdictionService.updateBrand(
+      jurisdictionId,
+      brandUpdate,
+    );
   }
 
   @Put(`:jurisdictionId`)

@@ -10,9 +10,10 @@ import { mapTo } from '../utilities/mapTo';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { Prisma } from '@prisma/client';
 import { JurisdictionUpdate } from '../dtos/jurisdictions/jurisdiction-update.dto';
+import { JurisdictionBrandUpdate } from '../dtos/jurisdictions/jurisdiction-brand-update.dto';
 import { JurisdictionViews } from '../enums/jurisdictions/view-enum';
 import { BrandDTO } from '../dtos/jurisdictions/brand.dto';
-import { brandAssetUrl } from '../utilities/brand-asset-url';
+import { brandAssetUrl, isUsableFileId } from '../utilities/brand-asset-url';
 import { completeRamp, HEX_COLOR } from '../utilities/brand-ramp';
 import { assertFontIsAvailable } from '../utilities/font-availability';
 import { HttpService } from '@nestjs/axios';
@@ -81,12 +82,9 @@ selectViews[JurisdictionViews.full] = {
   whatToExpectUnderConstruction: true,
 };
 
-// The brand JSON stores only what the admin sets: the url fields are built from the asset foreign
-// keys at read time.
 const storableBrand = (
   brand?: BrandDTO | null,
 ): Prisma.InputJsonObject | typeof Prisma.DbNull | undefined => {
-  // Null clears the stored brand, matching how a null asset id disconnects that asset.
   if (brand === null) return Prisma.DbNull;
   if (!brand) return undefined;
   const { logoUrl, faviconUrl, ...rest } = brand;
@@ -138,6 +136,13 @@ const brandAssetConnect = (assetId?: string) =>
     : assetId
     ? { connect: { id: assetId } }
     : { disconnect: true };
+
+const brandAssetWrite = (fileId: string | null | undefined, label: string) => {
+  if (fileId === undefined) return undefined;
+
+  const key = fileId?.trim();
+  return key ? { create: { fileId: key, label } } : { disconnect: true };
+};
 
 /**
   this is the service for jurisdictions
@@ -268,6 +273,45 @@ export class JurisdictionService {
       include: view,
     });
     return mapTo(Jurisdiction, withResponseBrand(rawResults));
+  }
+
+  async updateBrand(
+    jurisdictionId: string,
+    incomingData: JurisdictionBrandUpdate,
+  ): Promise<Jurisdiction> {
+    await this.findOrThrow(jurisdictionId);
+
+    this.assertFileIdsAreUsable([
+      incomingData.logoFileId,
+      incomingData.faviconFileId,
+    ]);
+    await assertFontIsAvailable(this.httpService, incomingData.brand);
+
+    const rawResult = await this.prisma.jurisdictions.update({
+      data: {
+        brand: storableBrand(incomingData.brand),
+        brandLogo: brandAssetWrite(incomingData.logoFileId, 'brandLogo'),
+        brandFavicon: brandAssetWrite(
+          incomingData.faviconFileId,
+          'brandFavicon',
+        ),
+      },
+      where: { id: jurisdictionId },
+      include: view,
+    });
+    return mapTo(Jurisdiction, withResponseBrand(rawResult));
+  }
+
+  private assertFileIdsAreUsable(fileIds: (string | null | undefined)[]): void {
+    const unusable = fileIds.filter(
+      (fileId): fileId is string =>
+        !!fileId?.trim() && !isUsableFileId(fileId.trim()),
+    );
+    if (unusable.length) {
+      throw new BadRequestException(
+        `file ids ${unusable.join(', ')} are not usable storage keys`,
+      );
+    }
   }
 
   private async assertAssetsExist(ids: (string | undefined)[]): Promise<void> {

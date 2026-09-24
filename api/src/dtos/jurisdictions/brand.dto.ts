@@ -77,11 +77,11 @@ export class BrandRampDTO {
 
 export class BrandDTO {
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => BrandRampDTO)
-  @ApiProperty({ type: BrandRampDTO })
-  primary: BrandRampDTO;
+  @ApiPropertyOptional({ type: BrandRampDTO })
+  primary?: BrandRampDTO;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

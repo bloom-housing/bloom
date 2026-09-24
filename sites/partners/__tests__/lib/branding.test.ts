@@ -1,0 +1,262 @@
+import {
+  BrandRadiusEnum,
+  Jurisdiction,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  brandErrorsFrom,
+  brandFromValues,
+  brandToFormValues,
+  brandUpdateFrom,
+  derivedShades,
+  hasBrandValues,
+} from "../../src/lib/branding"
+
+const jurisdictionWith = (brand: unknown) => ({ brand } as unknown as Jurisdiction)
+
+const valuesWith = (overrides = {}) => ({
+  ...brandToFormValues(undefined),
+  ...overrides,
+})
+
+describe("brandToFormValues", () => {
+  it("blanks a shade the base already derives to, so it keeps deriving", () => {
+    // What a read returns: completeRamp fills every shade whether stored or not.
+    const values = brandToFormValues(
+      jurisdictionWith({
+        primary: {
+          base: "#773E98",
+          dark: "#693786",
+          darker: "#4C2861",
+          light: "#EFE6F5",
+          lighter: "#F8F4FB",
+        },
+      })
+    )
+
+    expect(values.primaryBase).toEqual("#773E98")
+    expect(values.primaryDark).toEqual("")
+    expect(values.primaryDarker).toEqual("")
+    expect(values.primaryLight).toEqual("")
+    expect(values.primaryLighter).toEqual("")
+  })
+
+  it("keeps a shade the admin set explicitly", () => {
+    const values = brandToFormValues(
+      jurisdictionWith({ primary: { base: "#773E98", dark: "#6E2598" } })
+    )
+
+    expect(values.primaryDark).toEqual("#6E2598")
+  })
+
+  it("reads the fonts and the radius", () => {
+    const values = brandToFormValues(
+      jurisdictionWith({
+        primary: { base: "#773E98" },
+        fontFamily: "Inter",
+        serifFontFamily: "Noto Serif",
+        buttonRadius: BrandRadiusEnum["3xl"],
+      })
+    )
+
+    expect(values.fontFamily).toEqual("Inter")
+    expect(values.serifFontFamily).toEqual("Noto Serif")
+    expect(values.buttonRadius).toEqual("3xl")
+  })
+
+  it("returns empty fields for a jurisdiction with no brand", () => {
+    expect(brandToFormValues(jurisdictionWith(null)).primaryBase).toEqual("")
+    expect(brandToFormValues(undefined).fontFamily).toEqual("")
+  })
+})
+
+describe("brandFromValues", () => {
+  it("round trips a derived ramp back to a base only", () => {
+    const stored = {
+      primary: {
+        base: "#773E98",
+        dark: "#693786",
+        darker: "#4C2861",
+        light: "#EFE6F5",
+        lighter: "#F8F4FB",
+      },
+    }
+
+    expect(brandFromValues(brandToFormValues(jurisdictionWith(stored)))).toEqual({
+      primary: { base: "#773E98" },
+    })
+  })
+
+  it("sends only the shades that were set", () => {
+    const brand = brandFromValues(valuesWith({ primaryBase: "#773E98", primaryDark: "#6E2598" }))
+
+    expect(brand.primary).toEqual({ base: "#773E98", dark: "#6E2598" })
+  })
+
+  it("round trips a secondary ramp without moving it onto the primary", () => {
+    const stored = {
+      primary: { base: "#773E98", dark: "#6E2598" },
+      secondary: {
+        base: "#0077DA",
+        dark: "#0069C0",
+        darker: "#004C8C",
+        light: "#DCEFFF",
+        lighter: "#F0F8FF",
+      },
+    }
+
+    const brand = brandFromValues(brandToFormValues(jurisdictionWith(stored)))
+
+    // The secondary shades are all derived, so only its base survives the trip.
+    expect(brand).toEqual({
+      primary: { base: "#773E98", dark: "#6E2598" },
+      secondary: { base: "#0077DA" },
+    })
+  })
+
+  it("keeps an explicit secondary shade", () => {
+    const brand = brandFromValues(
+      brandToFormValues(
+        jurisdictionWith({
+          primary: { base: "#773E98" },
+          secondary: { base: "#0077DA", dark: "#112233" },
+        })
+      )
+    )
+
+    expect(brand.secondary).toEqual({ base: "#0077DA", dark: "#112233" })
+  })
+
+  it("sends a secondary set on its own", () => {
+    const brand = brandFromValues(valuesWith({ secondaryBase: "#0077DA" }))
+
+    expect(brand).toEqual({ secondary: { base: "#0077DA" } })
+    expect("primary" in brand).toBe(false)
+  })
+
+  it.each([
+    ["a font", { fontFamily: "Inter" }],
+    ["a radius", { buttonRadius: "3xl" }],
+    ["a secondary", { secondaryBase: "#0077DA" }],
+  ])("builds no primary key for %s set on its own", (_label, overrides) => {
+    // An explicit primary: undefined would be dropped by JSON anyway, but the api reads the shape.
+    expect("primary" in brandFromValues(valuesWith(overrides))).toBe(false)
+  })
+
+  it("omits a secondary with no base", () => {
+    const brand = brandFromValues(valuesWith({ primaryBase: "#773E98", secondaryDark: "#123456" }))
+
+    expect(brand.secondary).toBeUndefined()
+  })
+
+  it("trims what the admin typed", () => {
+    const brand = brandFromValues(valuesWith({ primaryBase: " #773E98 ", fontFamily: " Inter " }))
+
+    expect(brand.primary.base).toEqual("#773E98")
+    expect(brand.fontFamily).toEqual("Inter")
+  })
+
+  it("sends the button radius", () => {
+    const brand = brandFromValues(valuesWith({ buttonRadius: "3xl" }))
+
+    expect(brand.buttonRadius).toEqual("3xl")
+    expect(brand.primary).toBeUndefined()
+  })
+
+  it("omits the brand entirely when nothing is set", () => {
+    expect(brandFromValues(valuesWith())).toBeUndefined()
+  })
+})
+
+describe("brandUpdateFrom", () => {
+  it("omits the brand for a logo-only save, since a logo needs no colors", () => {
+    const update = brandUpdateFrom(valuesWith(), { logoFileId: "dev/logo.png" })
+
+    expect(update.brand).toBeUndefined()
+    expect(update.logoFileId).toEqual("dev/logo.png")
+  })
+
+  it("leaves an asset out when it did not change", () => {
+    const update = brandUpdateFrom(valuesWith({ primaryBase: "#773E98" }), {})
+
+    expect("logoFileId" in update).toBe(false)
+    expect("faviconFileId" in update).toBe(false)
+  })
+
+  it("clears everything when the remove action asks it to", () => {
+    // The admin chose Remove branding, so the stored values are irrelevant to what is sent.
+    const update = brandUpdateFrom(valuesWith({ primaryBase: "#773E98" }), { clearBrand: true })
+
+    expect(update).toEqual({ brand: null, logoFileId: null, faviconFileId: null })
+  })
+
+  it("changes nothing when every field is emptied, since clearing is its own action", () => {
+    const update = brandUpdateFrom(valuesWith(), {})
+
+    expect(update.brand).toBeUndefined()
+    expect(JSON.stringify(update)).toEqual("{}")
+  })
+
+  it("sends a favicon id as well as a logo id", () => {
+    const update = brandUpdateFrom(valuesWith(), {
+      logoFileId: "dev/logo.png",
+      faviconFileId: "dev/favicon.png",
+    })
+
+    expect(update.faviconFileId).toEqual("dev/favicon.png")
+  })
+
+  it("sends null to disconnect an asset", () => {
+    expect(brandUpdateFrom(valuesWith(), { logoFileId: null }).logoFileId).toBeNull()
+  })
+})
+
+describe("hasBrandValues", () => {
+  it.each([
+    ["a radius", { buttonRadius: "3xl" }],
+    ["a secondary base", { secondaryBase: "#0077DA" }],
+    ["a font", { fontFamily: "Inter" }],
+  ])("counts %s on its own", (_label, overrides) => {
+    expect(hasBrandValues(valuesWith(overrides))).toBe(true)
+  })
+
+  it("is false for untouched fields", () => {
+    expect(hasBrandValues(valuesWith())).toBe(false)
+  })
+})
+
+describe("derivedShades", () => {
+  it("returns nothing for a base that is not hex, leaving validation to report it", () => {
+    expect(derivedShades("rebeccapurple")).toEqual({})
+    expect(derivedShades("")).toEqual({})
+  })
+})
+
+describe("brandErrorsFrom", () => {
+  it("places a message that names a top level field", () => {
+    const errors = brandErrorsFrom(["fontUrl must be a URL address"])
+
+    expect(errors.fields).toEqual([{ name: "fontUrl", message: "fontUrl must be a URL address" }])
+    expect(errors.unplaced).toEqual([])
+  })
+
+  it("shows a nested message whole rather than guessing its ramp", () => {
+    // class-validator names the nested property, so this cannot say which ramp it came from.
+    const errors = brandErrorsFrom(["base must match /^#.../ regular expression"])
+
+    expect(errors.fields).toEqual([])
+    expect(errors.unplaced).toHaveLength(1)
+  })
+
+  it("shows a message the service raised itself, which arrives as one string", () => {
+    // assertFontIsAvailable throws a BadRequestException, so message is a string not an array.
+    const errors = brandErrorsFrom("a brand font needs both a fontUrl and a family name")
+
+    expect(errors.fields).toEqual([])
+    expect(errors.unplaced).toEqual(["a brand font needs both a fontUrl and a family name"])
+  })
+
+  it("survives a response with no usable message", () => {
+    expect(brandErrorsFrom(undefined)).toEqual({ fields: [], unplaced: [] })
+    expect(brandErrorsFrom({ statusCode: 400 })).toEqual({ fields: [], unplaced: [] })
+  })
+})

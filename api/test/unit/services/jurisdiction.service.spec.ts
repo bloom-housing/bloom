@@ -1,4 +1,5 @@
 import { HttpService } from '@nestjs/axios';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
@@ -653,6 +654,134 @@ describe('Testing jurisdiction service', () => {
       const result = await service.findOne({ jurisdictionId });
 
       expect(result.brand).toBeFalsy();
+    });
+
+    describe('updateBrand', () => {
+      const givenExistingJurisdiction = () => {
+        prisma.jurisdictions.update = jest.fn().mockResolvedValue(row());
+        prisma.jurisdictions.findFirst = jest
+          .fn()
+          .mockResolvedValue({ id: jurisdictionId });
+      };
+
+      const writtenData = () =>
+        (prisma.jurisdictions.update as jest.Mock).mock.calls[0][0].data;
+
+      it('creates the asset row, since nothing else will', async () => {
+        givenExistingJurisdiction();
+
+        await service.updateBrand(jurisdictionId, {
+          logoFileId: 'dev/bloom_logo.png',
+          faviconFileId: 'dev/bloom_favicon.png',
+        });
+
+        expect(writtenData().brandLogo).toEqual({
+          create: { fileId: 'dev/bloom_logo.png', label: 'brandLogo' },
+        });
+        expect(writtenData().brandFavicon).toEqual({
+          create: { fileId: 'dev/bloom_favicon.png', label: 'brandFavicon' },
+        });
+      });
+
+      it('leaves an asset alone when its file id is absent', async () => {
+        givenExistingJurisdiction();
+
+        await service.updateBrand(jurisdictionId, {
+          brand: { primary: { base: '#773E98' } },
+        });
+
+        expect(writtenData().brandLogo).toBeUndefined();
+        expect(writtenData().brandFavicon).toBeUndefined();
+      });
+
+      it('disconnects an asset when its file id is null', async () => {
+        givenExistingJurisdiction();
+
+        await service.updateBrand(jurisdictionId, { logoFileId: null });
+
+        expect(writtenData().brandLogo).toEqual({ disconnect: true });
+      });
+
+      it('writes no jurisdiction field other than the brand and its assets', async () => {
+        givenExistingJurisdiction();
+
+        await service.updateBrand(jurisdictionId, {
+          brand: { primary: { base: '#773E98' } },
+        });
+
+        expect(Object.keys(writtenData()).sort()).toEqual([
+          'brand',
+          'brandFavicon',
+          'brandLogo',
+        ]);
+      });
+
+      it('stores the brand without its url fields', async () => {
+        givenExistingJurisdiction();
+
+        await service.updateBrand(jurisdictionId, {
+          brand: {
+            primary: { base: '#773E98' },
+            logoUrl: 'https://stale.example/logo.png',
+            faviconUrl: 'https://stale.example/favicon.png',
+          },
+        });
+
+        expect(writtenData().brand).toEqual({ primary: { base: '#773E98' } });
+      });
+
+      it('clears the brand when it is null', async () => {
+        givenExistingJurisdiction();
+
+        await service.updateBrand(jurisdictionId, { brand: null });
+
+        expect(writtenData().brand).toEqual(Prisma.DbNull);
+      });
+
+      it.each([
+        ['an empty string', ''],
+        ['whitespace', '   '],
+        ['null', null],
+      ])('disconnects the asset for %s', async (_label, fileId) => {
+        givenExistingJurisdiction();
+
+        await service.updateBrand(jurisdictionId, { logoFileId: fileId });
+
+        expect(writtenData().brandLogo).toEqual({ disconnect: true });
+      });
+
+      it('trims a file id before storing it', async () => {
+        givenExistingJurisdiction();
+
+        await service.updateBrand(jurisdictionId, {
+          logoFileId: '  dev/bloom_logo.png  ',
+        });
+
+        expect(writtenData().brandLogo).toEqual({
+          create: { fileId: 'dev/bloom_logo.png', label: 'brandLogo' },
+        });
+      });
+
+      it('refuses a file id the read path could not turn into a url', async () => {
+        givenExistingJurisdiction();
+
+        await expect(
+          service.updateBrand(jurisdictionId, {
+            logoFileId: 'https://bloom-public.s3.us-west-2.amazonaws.com/abc',
+          }),
+        ).rejects.toThrow(BadRequestException);
+        expect(prisma.jurisdictions.update).not.toHaveBeenCalled();
+      });
+
+      it('404s for a jurisdiction that does not exist', async () => {
+        prisma.jurisdictions.update = jest.fn();
+        prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+
+        await expect(
+          service.updateBrand(jurisdictionId, { brand: null }),
+        ).rejects.toThrow(NotFoundException);
+        expect(prisma.jurisdictions.update).not.toHaveBeenCalled();
+      });
     });
 
     it('stores the brand without its url fields', async () => {
