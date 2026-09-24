@@ -23,6 +23,7 @@ export enum FeatureFlagEnum {
   enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableCustomListingNotifications = 'enableCustomListingNotifications',
+  enableDbDrivenBranding = 'enableDbDrivenBranding',
   enableDbDrivenContent = 'enableDbDrivenContent',
   enableDuplicatesDetailsInEmail = 'enableDuplicatesDetailsInEmail',
   enableExportTerms = 'enableExportTerms',
@@ -207,6 +208,11 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableCreditScreeningFee,
     description: 'When true, credit screening fee is enabled for listings',
+  },
+  {
+    name: FeatureFlagEnum.enableDbDrivenBranding,
+    description:
+      "When true, the public site renders the jurisdiction's brand colors, logo, favicon, and font from the database instead of the bundled static assets",
   },
   {
     name: FeatureFlagEnum.enableDbDrivenContent,
