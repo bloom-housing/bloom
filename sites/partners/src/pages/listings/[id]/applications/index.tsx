@@ -134,6 +134,7 @@ const ApplicationsList = () => {
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && jurisdictionData?.enablePartnerDemographics
 
+  // TODO: make days till expiration configurable
   const shouldExpireData = enableApplicationExpirationNonAdmins && !profile?.userRoles?.isAdmin
   const expiryDate = dayjs(listingDto?.closedAt).add(45, "day")
   const formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
