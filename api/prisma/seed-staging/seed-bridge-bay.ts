@@ -2430,6 +2430,7 @@ const featureFlags = [
   FeatureFlagEnum.enablePartnerDemographics,
   FeatureFlagEnum.enablePartnerSettings,
   FeatureFlagEnum.enableProfessionalPartnersPage,
+  FeatureFlagEnum.enablePublicTermsOfUse,
   FeatureFlagEnum.enableReceivedAtAndByFields,
   FeatureFlagEnum.enableResources,
   FeatureFlagEnum.enableSeeOurData,
@@ -2597,6 +2598,7 @@ export const createBridgeBayJurisdictions = async (
   const bridgeBayJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Bridge Bay', {
       publicSiteBaseURL,
+      allowSingleUseCodeLogin: true,
       featureFlags: featureFlags,
       languages: languages,
       listingApprovalPermissions: [UserRoleEnum.admin],
@@ -2613,6 +2615,7 @@ export const createBridgeBayJurisdictions = async (
     const createdSubJurisdiction = await prismaClient.jurisdictions.create({
       data: jurisdictionFactory(subJurisdiction, {
         publicSiteBaseURL,
+        allowSingleUseCodeLogin: true,
         featureFlags: featureFlags,
         languages: languages,
         listingFeaturesConfiguration: defaultListingFeatureConfiguration,

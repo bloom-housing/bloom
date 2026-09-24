@@ -2913,6 +2913,7 @@ describe('Testing user service', () => {
       });
       expect(prisma.userAccounts.create).toHaveBeenCalledWith({
         data: {
+          agreedToTermsOfService: true,
           dob: expect.anything(),
           passwordHash: expect.anything(),
           email: 'publicUser@email.com',

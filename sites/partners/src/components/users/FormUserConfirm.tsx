@@ -125,9 +125,11 @@ const FormUserConfirm = () => {
 
               <div className="mt-5">
                 <PasswordField
+                  className={"mb-1"}
                   name="password"
                   label={t("account.settings.newPassword")}
                   note={t("authentication.createAccount.passwordInfo")}
+                  showPasswordLabel={t("authentication.createAccount.showPassword")}
                   validation={{
                     required: true,
                     minLength: MIN_PASSWORD_LENGTH,
@@ -136,7 +138,6 @@ const FormUserConfirm = () => {
                   error={!!errors?.password}
                   errorMessage={t("authentication.signIn.passwordError")}
                   register={register}
-                  className={"mb-1"}
                   inputProps={{
                     autoComplete: "off",
                   }}

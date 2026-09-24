@@ -62,6 +62,7 @@ const FormSignInPwdless = ({
             name="password"
             label={t("authentication.createAccount.password")}
             labelClassName="text__caps-spaced"
+            showPasswordLabel={t("authentication.createAccount.showPassword")}
             validation={{ required: useCode === false }}
             error={errors.password}
             errorMessage={t("authentication.signIn.enterLoginPassword")}

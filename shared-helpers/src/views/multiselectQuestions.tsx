@@ -434,6 +434,7 @@ export const getRadioOption = (
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function cleanRadioObject(obj: Record<string, any>): Record<string, any> {
   // Remove nulls
   let cleanedObj = Object.entries(obj).reduce((acc, [key, value]) => {
@@ -691,6 +692,7 @@ export const mapApiToMultiselectForm = (
   listingQuestions: ListingMultiselectQuestion[],
   applicationSection: MultiselectQuestionsApplicationSectionEnum
 ) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const questionsFormData = { application: { [applicationSection]: {} as Record<string, any> } }
 
   applicationSelections.forEach((selection) => {
@@ -702,6 +704,7 @@ export const mapApiToMultiselectForm = (
     // NOTE: there was some funky typing issues here…using "" as a guard but there's no real need
     const questionFieldName = cleanMultiselectString(question.name) || ""
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const options: Record<string, any> = {}
     selection.selections.forEach((optionSelection) => {
       const option = question.multiselectOptions?.find(

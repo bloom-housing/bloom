@@ -72,6 +72,7 @@ export enum FeatureFlagEnum {
   enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
   enableProfessionalPartnersPage = 'enableProfessionalPartnersPage',
   enableProperties = 'enableProperties',
+  enablePublicTermsOfUse = 'enablePublicTermsOfUse',
   enableReasonableAccommodations = 'enableReasonableAccommodations',
   enableReceivedAtAndByFields = 'enableReceivedAtAndByFields',
   enableReferralQuestionUnits = 'enableReferralQuestionUnits',
@@ -438,6 +439,11 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableProperties,
     description: 'When true, the properties feature is enabled',
+  },
+  {
+    name: FeatureFlagEnum.enablePublicTermsOfUse,
+    description:
+      'When true, creating a user account on the public site will require the user to review and accept terms of use',
   },
   {
     name: FeatureFlagEnum.enableReasonableAccommodations,
