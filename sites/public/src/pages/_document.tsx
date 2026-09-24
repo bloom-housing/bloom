@@ -5,7 +5,10 @@ import {
   BrandRampDTO,
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { radiusVariable } from "@bloom-housing/shared-helpers/src/utilities/brandRadius"
+import {
+  radiusStepOnly,
+  radiusVariable,
+} from "@bloom-housing/shared-helpers/src/utilities/brandRadius"
 import { fetchJurisdictionByName } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
 
@@ -26,7 +29,7 @@ interface BrandDocumentProps {
   headingFontFamily: string | null
   fontUrl: string | null
   serifFontFamily: string | null
-  buttonRadius: string | null
+  buttonRadius: BrandRadiusEnum | null
 }
 
 const rampShades: (keyof BrandRamp)[] = ["base", "dark", "darker", "light", "lighter"]
@@ -79,11 +82,6 @@ const rampVariables = (namespace: string, name: string, ramp: BrandRamp) =>
 // font-family declaration invalid, so sans-serif or serif is included as a last resort.
 const fontStack = (family: string, slot: "sans" | "alt-sans" | "serif") =>
   `"${family}", var(--brand-font-fallback-${slot}, ${slot === "serif" ? "serif" : "sans-serif"})`
-
-const RADIUS_STEPS: string[] = Object.values(BrandRadiusEnum)
-
-const radiusStepOnly = (value?: string): string | null =>
-  typeof value === "string" && RADIUS_STEPS.includes(value) ? value : null
 
 export const brandStyleBlock = ({
   primary,
@@ -151,7 +149,6 @@ export default class BloomDocument extends Document<BrandDocumentProps> {
           {brandVariables && (
             <style id="brand-vars" dangerouslySetInnerHTML={{ __html: brandVariables }} />
           )}
-          {/* Nothing emitted without one, so the browser falls back to /favicon.ico */}
           {faviconUrl && <link rel="icon" href={faviconUrl} />}
           {fontUrl && <link rel="preload" as="style" href={fontUrl} />}
           {fontUrl && <link rel="stylesheet" href={fontUrl} />}

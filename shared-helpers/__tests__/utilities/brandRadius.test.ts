@@ -1,5 +1,5 @@
 import { BrandRadiusEnum } from "../../src/types/backend-swagger"
-import { radiusVariable } from "../../src/utilities/brandRadius"
+import { radiusStepOnly, radiusVariable } from "../../src/utilities/brandRadius"
 
 describe("radiusVariable", () => {
   it("names the unsuffixed variable for the base step", () => {
@@ -13,4 +13,16 @@ describe("radiusVariable", () => {
       expect(radiusVariable(step)).toEqual(`var(--seeds-rounded-${step})`)
     }
   )
+})
+
+describe("radiusStepOnly", () => {
+  it.each(Object.values(BrandRadiusEnum))("keeps %s", (step) => {
+    expect(radiusStepOnly(step)).toEqual(step)
+  })
+
+  // A step the scale does not define names a variable ui-seeds never declares, so the whole
+  // border-radius declaration is invalid rather than falling back.
+  it.each(["pill", "", "  base", "BASE", null, undefined])("drops %s", (value) => {
+    expect(radiusStepOnly(value)).toBeNull()
+  })
 })

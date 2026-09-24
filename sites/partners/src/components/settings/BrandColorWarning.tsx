@@ -72,39 +72,30 @@ const BrandColorWarning = ({
     </Button>
   )
 
-  if (shade === "base" && isTooDark(color)) {
-    return (
-      <Message
-        variant="warn"
-        role="status"
-        className={styles["warning"]}
-        testId={`${testId}-lightness`}
-      >
-        <div className={styles["warning__body"]}>
-          <span>{t("branding.lightnessWarning")}</span>
-          <div className={styles["warning__actions"]}>{dismiss}</div>
-        </div>
-      </Message>
-    )
-  }
-
+  const tooDark = shade === "base" && isTooDark(color)
   const against = textOn[shade]
-  if (meetsAA(color, against)) return null
+  if (!tooDark && meetsAA(color, against)) return null
 
-  const suggestion = applicable(shade, color, derived, against)
-  const message =
-    against === WHITE ? "branding.contrastWarning" : "branding.contrastWarningBodyText"
+  const suggestion = tooDark ? null : applicable(shade, color, derived, against)
 
   return (
     <Message
       variant="warn"
       role="status"
       className={styles["warning"]}
-      testId={`${testId}-contrast`}
+      testId={`${testId}-${tooDark ? "lightness" : "contrast"}`}
     >
       <div className={styles["warning__body"]}>
         <span>
-          {t(message, { field: fieldLabel, ratio: displayRatio(contrast(color, against)) })}
+          {tooDark
+            ? t("branding.lightnessWarning")
+            : t(
+                against === WHITE ? "branding.contrastWarning" : "branding.contrastWarningBodyText",
+                {
+                  field: fieldLabel,
+                  ratio: displayRatio(contrast(color, against)),
+                }
+              )}
         </span>
         <div className={styles["warning__actions"]}>
           {suggestion && (

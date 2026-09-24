@@ -1,4 +1,5 @@
 import {
+  expandHex,
   hexToHsl,
   hslToHex,
   HEX_COLOR,
@@ -33,18 +34,9 @@ const channel = (value: number): number => {
   return fraction <= 0.03928 ? fraction / 12.92 : Math.pow((fraction + 0.055) / 1.055, 2.4)
 }
 
-const expand = (hex: string): string =>
-  hex.length === 4
-    ? `#${hex
-        .slice(1)
-        .split("")
-        .map((digit) => digit + digit)
-        .join("")}`
-    : hex
-
 /* https://www.w3.org/TR/WCAG22/#dfn-relative-luminance */
 export const relativeLuminance = (hex: string): number => {
-  const value = expand(hex).slice(1)
+  const value = expandHex(hex).slice(1)
   const [r, g, b] = [0, 2, 4].map((start) => channel(parseInt(value.slice(start, start + 2), 16)))
 
   return 0.2126 * r + 0.7152 * g + 0.0722 * b
