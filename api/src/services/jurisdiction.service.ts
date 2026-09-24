@@ -14,6 +14,8 @@ import { JurisdictionViews } from '../enums/jurisdictions/view-enum';
 import { BrandDTO } from '../dtos/jurisdictions/brand.dto';
 import { brandAssetUrl } from '../utilities/brand-asset-url';
 import { completeRamp, HEX_COLOR } from '../utilities/brand-ramp';
+import { assertFontIsAvailable } from '../utilities/font-availability';
+import { HttpService } from '@nestjs/axios';
 
 // TODO: convert this to the selectViews
 const view: Prisma.JurisdictionsInclude = {
@@ -143,7 +145,10 @@ const brandAssetConnect = (assetId?: string) =>
 */
 @Injectable()
 export class JurisdictionService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private httpService: HttpService,
+  ) {}
 
   /**
     this will get a set of jurisdictions given the params passed in
@@ -216,6 +221,7 @@ export class JurisdictionService {
     const { brandLogoAssetId, brandFaviconAssetId, ...jurisdictionData } =
       incomingData;
     await this.assertAssetsExist([brandLogoAssetId, brandFaviconAssetId]);
+    await assertFontIsAvailable(this.httpService, incomingData.brand);
     const rawResult = await this.prisma.jurisdictions.create({
       data: {
         ...jurisdictionData,
@@ -243,6 +249,7 @@ export class JurisdictionService {
     const { brandLogoAssetId, brandFaviconAssetId, ...jurisdictionData } =
       incomingData;
     await this.assertAssetsExist([brandLogoAssetId, brandFaviconAssetId]);
+    await assertFontIsAvailable(this.httpService, incomingData.brand);
     const rawResults = await this.prisma.jurisdictions.update({
       data: {
         ...jurisdictionData,

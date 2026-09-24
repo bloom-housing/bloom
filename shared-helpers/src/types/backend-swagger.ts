@@ -8445,7 +8445,16 @@ export interface BrandDTO {
   fontFamily?: string
 
   /**  */
+  headingFontFamily?: string
+
+  /**  */
   fontUrl?: string
+
+  /**  */
+  serifFontFamily?: string
+
+  /**  */
+  buttonRadius?: BrandRadiusEnum
 
   /**  */
   logoUrl?: string
@@ -11793,6 +11802,17 @@ export enum ApplicationAccessibilityFeatureEnum {
   "mobility" = "mobility",
   "other" = "other",
   "vision" = "vision",
+}
+
+export enum BrandRadiusEnum {
+  "sm" = "sm",
+  "base" = "base",
+  "md" = "md",
+  "lg" = "lg",
+  "xl" = "xl",
+  "2xl" = "2xl",
+  "3xl" = "3xl",
+  "full" = "full",
 }
 export type CombinedBrandTypes = BrandDTO
 export enum FeatureFlagEnum {
