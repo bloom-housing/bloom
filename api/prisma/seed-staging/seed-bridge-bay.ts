@@ -2590,10 +2590,8 @@ export const createBridgeBayJurisdictions = async (
   prismaClient: PrismaClient,
   {
     publicSiteBaseURL,
-    msqV2,
   }: {
     publicSiteBaseURL: string;
-    msqV2: boolean;
   },
 ) => {
   // Top level jurisdiction

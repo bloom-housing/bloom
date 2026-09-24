@@ -6,7 +6,6 @@ import {
   ListingMultiselectQuestion,
   ListingsStatusEnum,
   LotteryStatusEnum,
-  User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { fireEvent, screen } from "@testing-library/react"
