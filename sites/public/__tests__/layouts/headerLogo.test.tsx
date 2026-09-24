@@ -21,9 +21,9 @@ describe("headerLogo", () => {
   })
 
   it("falls back to the in-repo icon when the brand has no logo", () => {
-    const { container } = render(headerLogo(brandWith()))
+    const { queryByTestId, getByTestId } = render(headerLogo(brandWith()))
 
-    expect(container.querySelector("img")).toBeNull()
-    expect(container.querySelector("svg")).toBeInTheDocument()
+    expect(queryByTestId("brand-header-logo")).toBeNull()
+    expect(getByTestId("fallback-header-logo")).toBeInTheDocument()
   })
 })
