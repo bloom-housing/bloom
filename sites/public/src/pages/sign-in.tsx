@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
-import { useForm } from "react-hook-form"
-import { GoogleReCaptcha } from "react-google-recaptcha-v3"
-import { t } from "@bloom-housing/ui-components"
+import { isAxiosError } from "axios"
 import { useRouter } from "next/router"
-import FormsLayout from "../layouts/forms"
-import { fetchSharedPageProps, useRedirectToPrevPage } from "../lib/hooks"
+import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
+import { GoogleReCaptcha } from "react-google-recaptcha-v3"
+import { useForm } from "react-hook-form"
+import { t } from "@bloom-housing/ui-components"
+
 import {
   PageView,
   pushGtmEvent,
@@ -22,18 +22,21 @@ import {
   getListingRedirectUrl,
   isInternalLink,
 } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../lib/constants"
-import { PasswordExpiredModal } from "../components/account/PasswordExpiredModal"
 import {
   FeatureFlagEnum,
   Jurisdiction,
   SuccessDTO,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import SignUpBenefits from "../components/account/SignUpBenefits"
-import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
-import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
-import { isFeatureFlagOn, setFeatureFlagLocalStorage } from "../lib/helpers"
 import { AccountTypeDialog } from "../components/account/AccountTypeDialog"
+import { PasswordExpiredModal } from "../components/account/PasswordExpiredModal"
+import SignUpBenefits from "../components/account/SignUpBenefits"
+import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
+import TermsModal, { FormSignInValues } from "../components/shared/TermsModal"
+import FormsLayout from "../layouts/forms"
+import { UserStatus } from "../lib/constants"
+import { isFeatureFlagOn, setFeatureFlagLocalStorage } from "../lib/helpers"
+import { fetchSharedPageProps, useRedirectToPrevPage } from "../lib/hooks"
+import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 
 interface SignInProps {
   jurisdiction: Jurisdiction
@@ -79,6 +82,13 @@ const SignIn = (props: SignInProps) => {
   const [reCaptchaToken, setReCaptchaToken] = useState(null)
   const [refreshReCaptcha, setRefreshReCaptcha] = useState(false)
   const [passwordExpired, setPasswordExpired] = useState(false)
+  const [openTermsModal, setOpenTermsModal] = useState<boolean>(false)
+  const [notChecked, setChecked] = useState(true)
+
+  const enablePublicTermsOfUse = isFeatureFlagOn(
+    props.jurisdiction,
+    FeatureFlagEnum.enablePublicTermsOfUse
+  )
 
   const {
     mutate: mutateResendConfirmation,
@@ -182,7 +192,8 @@ const SignIn = (props: SignInProps) => {
         undefined,
         undefined,
         undefined,
-        reCaptchaEnabled ? reCaptchaToken : undefined
+        reCaptchaEnabled ? reCaptchaToken : undefined,
+        !notChecked ? true : undefined
       )
       await redirectToPage()
       addToast(t(`authentication.signIn.success`, { name: user.firstName }), { variant: "success" })
@@ -191,8 +202,22 @@ const SignIn = (props: SignInProps) => {
       if (sendToReCaptchaFlow(error.response.data.name)) {
         await singleUseCodeFlow(email, true)
       }
+      if (enablePublicTermsOfUse) {
+        setOpenTermsModal(false)
+        setChecked(true)
+      }
       const { status } = error.response || {}
-      determineNetworkError(status, error)
+      const responseMessage = isAxiosError(error) ? error.response?.data.message : ""
+
+      if (
+        enablePublicTermsOfUse &&
+        status === 400 &&
+        responseMessage?.includes("has not accepted the terms of service")
+      ) {
+        setOpenTermsModal(true)
+      } else {
+        determineNetworkError(status, error)
+      }
       setRefreshReCaptcha(!refreshReCaptcha)
     }
   }
@@ -211,7 +236,8 @@ const SignIn = (props: SignInProps) => {
           undefined,
           undefined,
           undefined,
-          reCaptchaEnabled ? reCaptchaToken : undefined
+          reCaptchaEnabled ? reCaptchaToken : undefined,
+          !notChecked ? true : undefined
         )
         addToast(t(`authentication.signIn.success`, { name: user.firstName }), {
           variant: "success",
@@ -222,8 +248,22 @@ const SignIn = (props: SignInProps) => {
         if (sendToReCaptchaFlow(error.response.data.name)) {
           await singleUseCodeFlow(email, true)
         }
+        if (enablePublicTermsOfUse) {
+          setOpenTermsModal(false)
+          setChecked(true)
+        }
         const { status } = error.response || {}
-        determineNetworkError(status, error)
+        const responseMessage = isAxiosError(error) ? error.response?.data.message : ""
+
+        if (
+          enablePublicTermsOfUse &&
+          status === 400 &&
+          responseMessage?.includes("has not accepted the terms of service")
+        ) {
+          setOpenTermsModal(true)
+        } else {
+          determineNetworkError(status, error)
+        }
         setRefreshReCaptcha(!refreshReCaptcha)
       }
     }
@@ -396,6 +436,18 @@ const SignIn = (props: SignInProps) => {
       {reCaptchaEnabled && (
         <GoogleReCaptcha onVerify={onVerify} refreshReCaptcha={refreshReCaptcha} action={"login"} />
       )}
+      <TermsModal
+        control={{ register, errors, handleSubmit }}
+        notChecked={notChecked}
+        onSubmit={(data) => {
+          process.env.showPwdless
+            ? void onSubmitPwdless(data as FormSignInValues)
+            : void onSubmit(data as FormSignInValues)
+        }}
+        openTermsModal={openTermsModal}
+        setChecked={setChecked}
+        setOpenTermsModal={setOpenTermsModal}
+      />
     </>
   )
 }

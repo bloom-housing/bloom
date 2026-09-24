@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useContext } from "react"
+import { isAxiosError } from "axios"
 import { useRouter } from "next/router"
+import React, { useEffect, useState, useContext } from "react"
 import { useForm } from "react-hook-form"
-import { PasswordField, t, AlertBox } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   PageView,
   pushGtmEvent,
@@ -13,8 +11,14 @@ import {
   MessageContext,
   isInternalLink,
 } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../lib/constants"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { PasswordField, t, AlertBox } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { TermsModal } from "../components/shared/TermsModal"
 import FormsLayout from "../layouts/forms"
+import { UserStatus } from "../lib/constants"
+import { useJurisdictionFeatureFlags } from "../lib/JurisdictionFeatureFlagsContext"
 import { sharedGetStaticProps } from "../lib/sharedPageProps"
 
 const ResetPassword = () => {
@@ -29,6 +33,13 @@ const ResetPassword = () => {
   const { register, handleSubmit, errors } = useForm()
   const [requestError, setRequestError] = useState<string>()
   const [loading, setLoading] = useState(false)
+  const [openTermsModal, setOpenTermsModal] = useState<boolean>(false)
+  const [notChecked, setChecked] = useState(true)
+
+  const featureFlags = useJurisdictionFeatureFlags()
+  const enablePublicTermsOfUse = featureFlags?.some(
+    (flag) => flag.name === FeatureFlagEnum.enablePublicTermsOfUse
+  )
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -43,7 +54,7 @@ const ResetPassword = () => {
     const { password } = data
 
     try {
-      const user = await resetPassword(token.toString(), password)
+      const user = await resetPassword(token.toString(), password, !notChecked ? true : undefined)
       const redirectUrl = router.query?.redirectUrl as string
       const listingId = router.query?.listingId as string
 
@@ -53,13 +64,25 @@ const ResetPassword = () => {
           : "/account/applications"
       addToast(t(`authentication.signIn.success`, { name: user.firstName }), { variant: "success" })
       await router.push(routerRedirectUrl)
-    } catch (err) {
+    } catch (error) {
       setLoading(false)
-      const { status, data } = err.response || {}
-      if (status === 400) {
+      if (enablePublicTermsOfUse) {
+        setOpenTermsModal(false)
+        setChecked(true)
+      }
+      const { status, data } = error.response || {}
+      const responseMessage = isAxiosError(error) ? error.response?.data.message : ""
+
+      if (
+        enablePublicTermsOfUse &&
+        status === 400 &&
+        responseMessage?.includes("has not accepted the terms of service")
+      ) {
+        setOpenTermsModal(true)
+      } else if (status === 400) {
         setRequestError(`${t(`authentication.forgotPassword.errors.${data.message}`)}`)
       } else {
-        console.error(err)
+        console.error(error)
         setRequestError(
           `${t("account.settings.alerts.genericError", {
             contactEmail: t("resources.contactEmail"),
@@ -92,11 +115,12 @@ const ResetPassword = () => {
               <PasswordField
                 name="password"
                 label={t("authentication.createAccount.password")}
+                labelClassName={"text__caps-spaced"}
+                showPasswordLabel={t("authentication.createAccount.showPassword")}
                 validation={{ required: true }}
                 error={errors.password}
                 errorMessage={t("authentication.forgotPassword.enterNewLoginPassword")}
                 register={register}
-                labelClassName={"text__caps-spaced"}
               />
 
               <Button
@@ -110,6 +134,14 @@ const ResetPassword = () => {
           </CardSection>
         </>
       </BloomCard>
+      <TermsModal
+        control={{ register, errors, handleSubmit }}
+        notChecked={notChecked}
+        onSubmit={onSubmit}
+        openTermsModal={openTermsModal}
+        setChecked={setChecked}
+        setOpenTermsModal={setOpenTermsModal}
+      />
     </FormsLayout>
   )
 }

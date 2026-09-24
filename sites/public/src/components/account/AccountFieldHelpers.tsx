@@ -167,11 +167,12 @@ export const passwordFields = (
       <p className="field-note mt-2 mb-3">{t("account.settings.passwordRemember")}</p>
       <div className={"flex flex-col"}>
         <PasswordField
+          className={"mb-1"}
           name="currentPassword"
           label={t("account.settings.currentPassword")}
+          showPasswordLabel={t("authentication.createAccount.showPassword")}
           error={pwdErrors.currentPassword}
           register={pwdRegister}
-          className={"mb-1"}
           dataTestId={"account-current-password"}
         />
         <span className="float-left text-sm font-semibold mt-2">
@@ -180,11 +181,12 @@ export const passwordFields = (
       </div>
 
       <PasswordField
+        className="mt-4"
         name="password"
         label={t("account.settings.newPassword")}
         labelClassName="mt-4"
-        className="mt-4"
         note={t("authentication.createAccount.passwordInfo")}
+        showPasswordLabel={t("authentication.createAccount.showPassword")}
         validation={{
           minLength: minLength,
           pattern: passwordRegex,
@@ -209,10 +211,11 @@ export const createAccountPasswordFields = (
         {t("authentication.createAccount.password")}
       </legend>
       <PasswordField
-        labelClassName={"sr-only"}
         name="password"
-        note={t("authentication.createAccount.passwordInfo")}
         label={t("authentication.createAccount.password")}
+        labelClassName={"sr-only"}
+        note={t("authentication.createAccount.passwordInfo")}
+        showPasswordLabel={t("authentication.createAccount.showPassword")}
         validation={{
           required: true,
           minLength: 8,
