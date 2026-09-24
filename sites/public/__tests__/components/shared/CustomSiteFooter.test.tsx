@@ -4,6 +4,11 @@ import { JurisdictionContentFields } from "@bloom-housing/shared-helpers/src/typ
 import CustomSiteFooter from "../../../src/components/shared/CustomSiteFooter"
 import { JurisdictionContentContext } from "../../../src/lib/JurisdictionContentContext"
 
+jest.mock("../../../src/static_content/jurisdiction_footer_content", () => ({
+  getJurisdictionFooterTextContent: () => null,
+  getJurisdictionFooterLinksContent: () => null,
+}))
+
 const renderFooter = (content: JurisdictionContentFields | null) =>
   render(
     <JurisdictionContentContext.Provider value={content}>

@@ -58,6 +58,7 @@ const GENERATED = [
   "forgot-password",
   "listing/[id]/[slug]",
   "privacy",
+  "professional-partners",
   "reset-password",
   "sign-in",
   "verify",

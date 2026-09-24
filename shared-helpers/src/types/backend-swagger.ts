@@ -8461,7 +8461,7 @@ export interface BrandRampDTO {
 /** BrandDTO */
 export interface BrandDTO {
   /**  */
-  primary: BrandRampDTO
+  primary?: BrandRampDTO
 
   /**  */
   secondary?: BrandRampDTO
@@ -11857,6 +11857,7 @@ export enum FeatureFlagEnum {
   "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
   "disableCommonApplication" = "disableCommonApplication",
   "disableEthnicityQuestion" = "disableEthnicityQuestion",
+  "disableHowToContact" = "disableHowToContact",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
   "disablePartnerPublicListingEdits" = "disablePartnerPublicListingEdits",
@@ -11865,6 +11866,7 @@ export enum FeatureFlagEnum {
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableApplicationBulkCSVUpdates" = "enableApplicationBulkCSVUpdates",
+  "enableApplicationExpirationNonAdmins" = "enableApplicationExpirationNonAdmins",
   "enableApplicationStatus" = "enableApplicationStatus",
   "enableAutoOpenDate" = "enableAutoOpenDate",
   "enableAutopublish" = "enableAutopublish",
@@ -11883,6 +11885,8 @@ export enum FeatureFlagEnum {
   "enableGenderQuestion" = "enableGenderQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
+  "enableGetAssistanceCard" = "enableGetAssistanceCard",
+  "enableGetAssistancePage" = "enableGetAssistancePage",
   "enableHomeType" = "enableHomeType",
   "enableHomePageSearchHero" = "enableHomePageSearchHero",
   "enableHousingAdvocate" = "enableHousingAdvocate",
@@ -11917,13 +11921,16 @@ export enum FeatureFlagEnum {
   "enablePartnerLotteryExport" = "enablePartnerLotteryExport",
   "enablePartnerSettings" = "enablePartnerSettings",
   "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
+  "enableProfessionalPartnersPage" = "enableProfessionalPartnersPage",
   "enableProperties" = "enableProperties",
   "enableReasonableAccommodations" = "enableReasonableAccommodations",
   "enableReceivedAtAndByFields" = "enableReceivedAtAndByFields",
   "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",
   "enableResources" = "enableResources",
+  "enableResourcesCard" = "enableResourcesCard",
   "enableSection8Question" = "enableSection8Question",
+  "enableSeeOurData" = "enableSeeOurData",
   "enableSexualOrientationQuestion" = "enableSexualOrientationQuestion",
   "enableSingleUseCode" = "enableSingleUseCode",
   "enableSmokingPolicyRadio" = "enableSmokingPolicyRadio",

@@ -242,8 +242,6 @@ const BrandingForm = ({
                   subNote={t("branding.fontUrlNote")}
                   register={register}
                   error={!!errors?.fontUrl}
-                  // Field registers its own https and invalid checks for type=url, and neither
-                  // sets a message. A server rejection does, so that wins.
                   errorMessage={
                     errors?.fontUrl?.message ||
                     (errors?.fontUrl?.type === "https"

@@ -18,23 +18,24 @@ import {
   AuthProvider,
   MessageProvider,
 } from "@bloom-housing/shared-helpers"
-import { pageChangeHandler, gaLoadScript, gaCaptureScript, uaScript } from "../lib/customScripts"
-import { AppSubmissionContext } from "../lib/applications/AppSubmissionContext"
-import ApplicationConductor, {
-  loadApplicationFromAutosave,
-  loadSavedListing,
-} from "../lib/applications/ApplicationConductor"
 import {
+  FeatureFlag,
   FeatureFlagEnum,
   Jurisdiction,
   JurisdictionContentFields,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { applyTranslations } from "../lib/translations"
-import { JurisdictionContentContext } from "../lib/JurisdictionContentContext"
+import LinkComponent from "../components/core/LinkComponent"
+import ApplicationConductor, {
+  loadApplicationFromAutosave,
+  loadSavedListing,
+} from "../lib/applications/ApplicationConductor"
+import { AppSubmissionContext } from "../lib/applications/AppSubmissionContext"
+import { pageChangeHandler, gaLoadScript, gaCaptureScript, uaScript } from "../lib/customScripts"
 import { BrandContext } from "../lib/BrandContext"
 import { isFeatureFlagOn } from "../lib/helpers"
-import LinkComponent from "../components/core/LinkComponent"
-
+import { JurisdictionContentContext } from "../lib/JurisdictionContentContext"
+import { JurisdictionFeatureFlagsContext } from "../lib/JurisdictionFeatureFlagsContext"
+import { applyTranslations } from "../lib/translations"
 import "../../styles/overrides.scss"
 
 const rtlLocales = process.env.rtlLanguages.split(",")
@@ -57,6 +58,10 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     | Record<string, Record<string, string>>
     | null
     | undefined
+
+  const jurisdictionFeatureFlags = (pageProps?.jurisdiction?.featureFlags ?? null) as
+    | FeatureFlag[]
+    | null
 
   const jurisdictionContent = (pageProps?.jurisdictionContent ??
     null) as JurisdictionContentFields | null
@@ -110,14 +115,16 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     <ConfigProvider apiUrl={process.env.backendApiBase}>
       <AuthProvider>
         <MessageProvider>
-          <JurisdictionContentContext.Provider value={jurisdictionContent}>
-            <BrandContext.Provider value={brand}>
-              <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-              <div className={jurisdictionClassname}>
-                <Component {...pageProps} />
-              </div>
-            </BrandContext.Provider>
-          </JurisdictionContentContext.Provider>
+          <JurisdictionFeatureFlagsContext.Provider value={jurisdictionFeatureFlags}>
+            <JurisdictionContentContext.Provider value={jurisdictionContent}>
+              <BrandContext.Provider value={brand}>
+                <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+                <div className={jurisdictionClassname}>
+                  <Component {...pageProps} />
+                </div>
+              </BrandContext.Provider>
+            </JurisdictionContentContext.Provider>
+          </JurisdictionFeatureFlagsContext.Provider>
         </MessageProvider>
       </AuthProvider>
     </ConfigProvider>

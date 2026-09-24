@@ -82,12 +82,9 @@ selectViews[JurisdictionViews.full] = {
   whatToExpectUnderConstruction: true,
 };
 
-// The brand JSON stores only what the admin sets: the url fields are built from the asset foreign
-// keys at read time.
 const storableBrand = (
   brand?: BrandDTO | null,
 ): Prisma.InputJsonObject | typeof Prisma.DbNull | undefined => {
-  // Null clears the stored brand, matching how a null asset id disconnects that asset.
   if (brand === null) return Prisma.DbNull;
   if (!brand) return undefined;
   const { logoUrl, faviconUrl, ...rest } = brand;
