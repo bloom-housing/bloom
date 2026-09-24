@@ -1,24 +1,27 @@
-import { Strategy } from 'passport-local';
 import { Request } from 'express';
-import { PassportStrategy } from '@nestjs/passport';
+import { Strategy } from 'passport-local';
 import {
   BadRequestException,
   Injectable,
   UnauthorizedException,
   ValidationPipe,
 } from '@nestjs/common';
-import { User } from '../dtos/users/user.dto';
-import { PrismaService } from '../services/prisma.service';
-import { mapTo } from '../utilities/mapTo';
-import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
+import { PassportStrategy } from '@nestjs/passport';
 import { LoginViaSingleUseCode } from '../dtos/auth/login-single-use-code.dto';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
+import { User } from '../dtos/users/user.dto';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { OrderByEnum } from '../enums/shared/order-by-enum';
+import { PrismaService } from '../services/prisma.service';
+import { SnapshotCreateService } from '../services/snapshot-create.service';
+import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
+import { mapTo } from '../utilities/mapTo';
 import {
   checkUserLockout,
   singleUseCodePresent,
   singleUseCodeInvalid,
 } from '../utilities/passport-validator-utilities';
-import { SnapshotCreateService } from '../services/snapshot-create.service';
 
 @Injectable()
 export class SingleUseCodeStrategy extends PassportStrategy(
@@ -60,6 +63,7 @@ export class SingleUseCodeStrategy extends PassportStrategy(
       select: {
         id: true,
         allowSingleUseCodeLogin: true,
+        featureFlags: true,
       },
       where: {
         name: jurisName as string,
@@ -87,6 +91,20 @@ export class SingleUseCodeStrategy extends PassportStrategy(
     if (!rawUser) {
       throw new UnauthorizedException(
         `user ${dto.email} attempted to log in, but does not exist`,
+      );
+    }
+
+    const enablePublicTermsOfUse = doJurisdictionHaveFeatureFlagSet(
+      mapTo(Jurisdiction, juris),
+      FeatureFlagEnum.enablePublicTermsOfUse,
+    );
+    if (
+      enablePublicTermsOfUse &&
+      !rawUser.agreedToTermsOfService &&
+      !dto.agreedToTermsOfService
+    ) {
+      throw new BadRequestException(
+        `User ${rawUser.id} has not accepted the terms of service`,
       );
     }
 
