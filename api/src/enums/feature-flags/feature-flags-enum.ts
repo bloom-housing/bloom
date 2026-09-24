@@ -6,6 +6,7 @@ export enum FeatureFlagEnum {
   disableBuildingSelectionCriteria = 'disableBuildingSelectionCriteria',
   disableCommonApplication = 'disableCommonApplication',
   disableEthnicityQuestion = 'disableEthnicityQuestion',
+  disableHowToContact = 'disableHowToContact',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
   disablePartnerPublicListingEdits = 'disablePartnerPublicListingEdits',
@@ -14,6 +15,7 @@ export enum FeatureFlagEnum {
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
   enableAdditionalResources = 'enableAdditionalResources',
   enableApplicationBulkCSVUpdates = 'enableApplicationBulkCSVUpdates',
+  enableApplicationExpirationNonAdmins = 'enableApplicationExpirationNonAdmins',
   enableApplicationStatus = 'enableApplicationStatus',
   enableAutoOpenDate = 'enableAutoOpenDate',
   enableAutopublish = 'enableAutopublish',
@@ -31,6 +33,8 @@ export enum FeatureFlagEnum {
   enableGenderQuestion = 'enableGenderQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
+  enableGetAssistanceCard = 'enableGetAssistanceCard',
+  enableGetAssistancePage = 'enableGetAssistancePage',
   enableHomeType = 'enableHomeType',
   enableHomePageSearchHero = 'enableHomePageSearchHero',
   enableHousingAdvocate = 'enableHousingAdvocate',
@@ -65,13 +69,16 @@ export enum FeatureFlagEnum {
   enablePartnerLotteryExport = 'enablePartnerLotteryExport',
   enablePartnerSettings = 'enablePartnerSettings',
   enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
+  enableProfessionalPartnersPage = 'enableProfessionalPartnersPage',
   enableProperties = 'enableProperties',
   enableReasonableAccommodations = 'enableReasonableAccommodations',
   enableReceivedAtAndByFields = 'enableReceivedAtAndByFields',
   enableReferralQuestionUnits = 'enableReferralQuestionUnits',
   enableRegions = 'enableRegions',
   enableResources = 'enableResources',
+  enableResourcesCard = 'enableResourcesCard',
   enableSection8Question = 'enableSection8Question',
+  enableSeeOurData = 'enableSeeOurData',
   enableSexualOrientationQuestion = 'enableSexualOrientationQuestion',
   enableSingleUseCode = 'enableSingleUseCode',
   enableSmokingPolicyRadio = 'enableSmokingPolicyRadio',
@@ -120,13 +127,18 @@ export const featureFlagMap: {
       'When true, the ethnicity question is hidden in the application demographics section',
   },
   {
+    name: FeatureFlagEnum.disableHowToContact,
+    description:
+      'When true, the "How do you prefer to be contacted?" question will be removed from the application process',
+  },
+  {
     name: FeatureFlagEnum.disableJurisdictionalAdmin,
     description: 'When true, jurisdictional admins cannot be created',
   },
   {
     name: FeatureFlagEnum.disableListingPreferences,
     description:
-      'When true listings will no longer support preferences section',
+      'When true, listings will no longer support preferences section',
   },
   {
     name: FeatureFlagEnum.disablePartnerPublicListingEdits,
@@ -141,7 +153,7 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.disableWorkInRegion,
     description:
-      'When true the "Work in Region" question will be removed from the application process',
+      'When true, the "Work in Region" question will be removed from the application process',
   },
   {
     name: FeatureFlagEnum.enableAccessibilityFeatures,
@@ -152,6 +164,16 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableAdditionalResources,
     description:
       "When true, the 'learn more' section is displayed on the home page",
+  },
+  {
+    name: FeatureFlagEnum.enableApplicationBulkCSVUpdates,
+    description:
+      'When true, allows for the bulk uptake of application statuses',
+  },
+  {
+    name: FeatureFlagEnum.enableApplicationExpirationNonAdmins,
+    description:
+      'When true, application data in the partner site will expire for non-admin users after 45 days',
   },
   {
     name: FeatureFlagEnum.enableApplicationStatus,
@@ -167,11 +189,6 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableAutopublish,
     description:
       'When true, partners can set an optional scheduled listing publish date',
-  },
-  {
-    name: FeatureFlagEnum.enableApplicationBulkCSVUpdates,
-    description:
-      'When true, allows for the bulk uptake of application statuses',
   },
   {
     name: FeatureFlagEnum.enableCompanyWebsite,
@@ -242,6 +259,16 @@ export const featureFlagMap: {
       'When true, preferences can be created with geocoding functionality that verifies via a mile radius',
   },
   {
+    name: FeatureFlagEnum.enableGetAssistanceCard,
+    description:
+      'When true, a resource card will appear on the homepage to link to the get assistance page',
+  },
+  {
+    name: FeatureFlagEnum.enableGetAssistancePage,
+    description:
+      'When true, get assistance will appear in the nav header and page will be reachable',
+  },
+  {
     name: FeatureFlagEnum.enableHomeType,
     description: 'When true, home type feature is turned on',
   },
@@ -274,6 +301,10 @@ export const featureFlagMap: {
       'When true, land use listings are displayed in listing creation/edit and public listing view',
   },
   {
+    name: FeatureFlagEnum.enableLeasingAgentAltText,
+    description: 'When true, shows alternative text for LA users',
+  },
+  {
     name: FeatureFlagEnum.enableLimitedHowDidYouHear,
     description:
       'When true, the Radio Ad and Bus Ad options are removed from the how did you hear section.',
@@ -294,10 +325,6 @@ export const featureFlagMap: {
       'When true, a filter button is shown on listings browse and users can filter with the options in the drawer',
   },
   {
-    name: FeatureFlagEnum.enableLeasingAgentAltText,
-    description: 'When true, shows alternative text for LA users',
-  },
-  {
     name: FeatureFlagEnum.enableListingImageAltText,
     description: 'When true, allows partners to add alt text to listing images',
   },
@@ -313,7 +340,7 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableListingPagination,
     description:
-      'When true listings browser will display pagination controls section',
+      'When true, listings browser will display pagination controls section',
   },
   {
     name: FeatureFlagEnum.enableListingUpdatedAt,
@@ -398,6 +425,11 @@ export const featureFlagMap: {
       'When true, the pet policy field in the listing form is displayed as checkboxes instead of a text area',
   },
   {
+    name: FeatureFlagEnum.enableProfessionalPartnersPage,
+    description:
+      'When true, the professional partners page will appear in the nav header of the public site and page will be reachable',
+  },
+  {
     name: FeatureFlagEnum.enableProperties,
     description: 'When true, the properties feature is enabled',
   },
@@ -426,8 +458,18 @@ export const featureFlagMap: {
       'When true, the public site displays links to resources on various pages',
   },
   {
+    name: FeatureFlagEnum.enableResourcesCard,
+    description:
+      'When true, a resource card will appear on the homepage to link to the additional resources page',
+  },
+  {
     name: FeatureFlagEnum.enableSection8Question,
     description: 'When true, the Section 8 listing data will be visible',
+  },
+  {
+    name: FeatureFlagEnum.enableSeeOurData,
+    description:
+      'When true, a see our data card with a link on the home page is displayed',
   },
   {
     name: FeatureFlagEnum.enableSexualOrientationQuestion,

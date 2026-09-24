@@ -58,7 +58,9 @@ describe("BulkUpdateDrawer", () => {
 
   it("reports the outcome in place once the job has completed", () => {
     render(<BulkUpdateDrawer {...defaultProps} jobStatus={BackgroundJobStatusEnum.completed} />)
-    expect(screen.getByText("Your file has been processed successfully.")).toBeInTheDocument()
+    expect(
+      screen.getByText("Your file has been processed, check your email for the results")
+    ).toBeInTheDocument()
   })
 
   it("reports a failed job in place", () => {
