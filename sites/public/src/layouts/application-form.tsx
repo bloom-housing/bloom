@@ -1,11 +1,17 @@
 import React from "react"
+import { useRouter } from "next/router"
 import Markdown from "markdown-to-jsx"
 import { UseFormMethods } from "react-hook-form"
 import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers"
 import { Alert, Button, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { t, ProgressNav, StepHeader } from "@bloom-housing/ui-components"
+import {
+  RedLightModal,
+  YellowLightModal,
+} from "../components/applications/stopLights/StopLightModal"
 import ApplicationConductor from "../lib/applications/ApplicationConductor"
+import { StopLightsProps } from "../lib/applications/stopLights/useStopLightGate"
 import styles from "./application-form.module.scss"
 
 interface ApplicationFormLayoutProps {
@@ -26,6 +32,7 @@ interface ApplicationFormLayoutProps {
   conductor?: ApplicationConductor
   hideBorder?: boolean
   overrideIsAdvocate?: boolean
+  stopLights?: StopLightsProps
 }
 
 export const LockIcon = ({ locked }: { locked: boolean }) => {
@@ -78,6 +85,8 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
       </div>
     )
   }
+
+  const router = useRouter()
 
   if (!props.progressNavProps.mounted) return
 
@@ -157,6 +166,29 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
           )}
         </>
       </BloomCard>
+      {props.stopLights && (
+        <>
+          <RedLightModal
+            isOpen={props.stopLights.rule?.light === "red"}
+            rule={props.stopLights.rule}
+            onEdit={props.stopLights.onEditRed}
+            onReturnToListings={() => {
+              const listing = props.conductor?.listing
+              void router.push(
+                listing?.id && listing?.urlSlug
+                  ? `/${router.locale}/listing/${listing.id}/${listing.urlSlug}`
+                  : `/${router.locale}/listings`
+              )
+            }}
+          />
+          <YellowLightModal
+            isOpen={props.stopLights.rule?.light === "yellow"}
+            rule={props.stopLights.rule}
+            onCancel={props.stopLights.onCancelYellow}
+            onAcknowledge={props.stopLights.onAcknowledgeYellow}
+          />
+        </>
+      )}
     </>
   )
 }

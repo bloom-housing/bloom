@@ -16,7 +16,8 @@ const exampleRedRule: StopLightRule = {
   light: "red",
   evaluate: (application: Application, listing: Listing) =>
     application.householdSize > listing.householdSizeMax,
-  heading: "stopLights.exampleHouseholdTooLarge.heading",
+  modalTitle: "stopLights.exampleHouseholdTooLarge.modalTitle",
+  alertTitle: "stopLights.exampleHouseholdTooLarge.alertTitle",
   body: "stopLights.exampleHouseholdTooLarge.body",
   editFieldAnchor: "householdSize",
 }
@@ -26,7 +27,8 @@ const exampleYellowRule: StopLightRule = {
   step: "income",
   light: "yellow",
   evaluate: (application: Application) => Number(application.income ?? 0) === 0,
-  heading: "stopLights.exampleNoIncomeReported.heading",
+  modalTitle: "stopLights.exampleNoIncomeReported.modalTitle",
+  alertTitle: "stopLights.exampleNoIncomeReported.alertTitle",
   body: "stopLights.exampleNoIncomeReported.body",
 }
 
