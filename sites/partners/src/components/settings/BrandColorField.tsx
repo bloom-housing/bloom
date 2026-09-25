@@ -1,7 +1,7 @@
 import React from "react"
 import { Field, t } from "@bloom-housing/ui-components"
 import { UseFormMethods } from "react-hook-form"
-import { HEX_COLOR } from "@bloom-housing/shared-helpers/src/utilities/brandRamp"
+import { expandHex, HEX_COLOR } from "@bloom-housing/shared-helpers/src/utilities/brandRamp"
 import { defaultFieldProps } from "../../lib/helpers"
 import * as styles from "./BrandColorField.module.scss"
 
@@ -20,15 +20,6 @@ interface BrandColorFieldProps {
 const SIX_DIGIT_HEX = /^#[0-9A-Fa-f]{6}$/
 
 // The swatch only accepts six digits, so #ABC has to be expanded.
-const expandHex = (value: string): string =>
-  /^#[0-9A-Fa-f]{3}$/.test(value)
-    ? `#${value
-        .slice(1)
-        .split("")
-        .map((digit) => digit + digit)
-        .join("")}`
-    : value
-
 export const swatchValue = (value?: string, derived?: string): string => {
   const shown = expandHex((value || derived || "").trim())
   return SIX_DIGIT_HEX.test(shown) ? shown : "#FFFFFF"

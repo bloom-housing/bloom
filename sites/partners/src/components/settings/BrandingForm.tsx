@@ -5,12 +5,15 @@ import { Button, Card, Dialog, Grid } from "@bloom-housing/ui-seeds"
 import { BrandRadiusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../shared/SectionWithGrid"
 import BrandColorField from "./BrandColorField"
+import BrandColorWarning from "./BrandColorWarning"
+import BrandPreview from "./BrandPreview"
 import { fileUploader, FileUploadData } from "../../lib/helpers"
 import { useUnsavedChangesWarning } from "../../lib/hooks"
 import {
   BrandFormValues,
   derivedShades,
   fieldName,
+  PREVIEW_FIELDS,
   RampName,
   RAMP_SHADES,
 } from "../../lib/branding"
@@ -149,6 +152,9 @@ const BrandingForm = ({
     )
   }
 
+  const applyColor = (field: keyof BrandFormValues, hex: string) =>
+    setValue(field, hex, { shouldDirty: true, shouldValidate: true })
+
   const rampSection = (ramp: RampName, label: string) => {
     const base = watch(fieldName(ramp, "base"))
     const derived = derivedShades(base)
@@ -169,6 +175,13 @@ const BrandingForm = ({
             />
           </Grid.Cell>
         </Grid.Row>
+        <BrandColorWarning
+          value={base}
+          shade="base"
+          fieldLabel={t("branding.baseColor")}
+          testId={fieldName(ramp, "base")}
+          onApply={(hex) => applyColor(fieldName(ramp, "base"), hex)}
+        />
         <Grid.Row columns={4}>
           {RAMP_SHADES.map((shade) => (
             <Grid.Cell key={shade}>
@@ -185,6 +198,17 @@ const BrandingForm = ({
             </Grid.Cell>
           ))}
         </Grid.Row>
+        {RAMP_SHADES.map((shade) => (
+          <BrandColorWarning
+            key={shade}
+            value={watch(fieldName(ramp, shade))}
+            shade={shade}
+            fieldLabel={t(`branding.shade.${shade}`)}
+            derived={derived[shade]}
+            testId={fieldName(ramp, shade)}
+            onApply={(hex) => applyColor(fieldName(ramp, shade), hex)}
+          />
+        ))}
       </SectionWithGrid>
     )
   }
@@ -214,6 +238,7 @@ const BrandingForm = ({
                   id="headingFontFamily"
                   name="headingFontFamily"
                   label={t("branding.headingFontFamily")}
+                  subNote={t("branding.headingFontFamilyNote")}
                   register={register}
                   error={!!errors?.headingFontFamily}
                   errorMessage={errors?.headingFontFamily?.message}
@@ -296,6 +321,8 @@ const BrandingForm = ({
           </SectionWithGrid>
         </Card.Section>
       </Card>
+
+      <BrandPreview values={watch(PREVIEW_FIELDS)} />
 
       <div className={styles["actions"]}>
         <Button type="submit" variant="primary" disabled={isSaving || uploading}>

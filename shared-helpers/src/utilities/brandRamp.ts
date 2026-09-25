@@ -14,15 +14,17 @@ export type BrandRamp = {
   lighter?: string
 }
 
+export const expandHex = (hex: string): string =>
+  /^#[0-9A-Fa-f]{3}$/.test(hex)
+    ? `#${hex
+        .slice(1)
+        .split("")
+        .map((digit) => digit + digit)
+        .join("")}`
+    : hex
+
 export const hexToHsl = (hex: string): Hsl => {
-  const value = hex.replace("#", "")
-  const expanded =
-    value.length === 3
-      ? value
-          .split("")
-          .map((c) => c + c)
-          .join("")
-      : value
+  const expanded = expandHex(hex.startsWith("#") ? hex : `#${hex}`).replace("#", "")
   const r = parseInt(expanded.slice(0, 2), 16) / 255
   const g = parseInt(expanded.slice(2, 4), 16) / 255
   const b = parseInt(expanded.slice(4, 6), 16) / 255
@@ -69,7 +71,7 @@ export const completeRamp = (ramp: BrandRamp): Required<BrandRamp> => {
   const base = hexToHsl(ramp.base)
   const { l } = base
 
-  // These proportions match the spacing of the existing ui-seeds jurisdiction ramps.
+  // Proportions fitted to the lakeview ramp in sites/public/styles/overrides.scss
   return {
     base: ramp.base.toUpperCase(),
     darker: ramp.darker?.toUpperCase() ?? shifted(base, l * 0.64),
