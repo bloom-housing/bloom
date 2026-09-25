@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { BadRequestException, Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
 import { of, throwError } from 'rxjs';
@@ -18,17 +18,21 @@ import { AmiChartService } from '../../../src/services/ami-chart.service';
 import { EmailService } from '../../../src/services/email.service';
 import { FeatureFlagService } from '../../../src/services/feature-flag.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
+import { S3Service } from '../../../src/services/s3.service';
+import { BrandRadiusEnum } from '../../../src/enums/jurisdictions/brand-radius-enum';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { ScriptRunnerService } from '../../../src/services/script-runner.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 
 describe('Testing script runner service', () => {
   let service: ScriptRunnerService;
+  let jurisdictionService: JurisdictionService;
   let prisma: PrismaService;
   let emailService: EmailService;
   let multiselectQuestionService: MultiselectQuestionService;
   let mockConsoleLog;
   const httpServiceMock = { get: jest.fn() };
+  const s3ServiceMock = { uploadToPublic: jest.fn() };
 
   beforeEach(() => {
     mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
@@ -52,6 +56,10 @@ describe('Testing script runner service', () => {
           useValue: httpServiceMock,
         },
         JurisdictionService,
+        {
+          provide: S3Service,
+          useValue: s3ServiceMock,
+        },
         Logger,
         {
           provide: MultiselectQuestionService,
@@ -65,6 +73,7 @@ describe('Testing script runner service', () => {
     }).compile();
 
     service = module.get<ScriptRunnerService>(ScriptRunnerService);
+    jurisdictionService = module.get<JurisdictionService>(JurisdictionService);
     emailService = module.get<EmailService>(EmailService);
     prisma = module.get<PrismaService>(PrismaService);
     multiselectQuestionService = module.get<MultiselectQuestionService>(
@@ -995,6 +1004,333 @@ describe('Testing script runner service', () => {
     });
   });
 
+  describe('migrateJurisdictionBranding', () => {
+    const jurisdictionId = randomUUID();
+    const userId = randomUUID();
+    let updateBrand: jest.SpyInstance;
+
+    const SCSS = `:root {
+      --seeds-font-sans: "Montserrat", "Helvetica", "sans-serif";
+      --seeds-color-primary: #297e73;
+      --seeds-color-primary-dark: #1f6058;
+      .seeds-button {
+        --button-border-radius-md: var(--seeds-rounded-3xl);
+      }
+      .lakeview {
+        --seeds-color-primary: #773e98;
+      }
+    }`;
+
+    const request = () =>
+      ({
+        user: { id: userId } as unknown as User,
+      } as unknown as ExpressRequest);
+
+    const body = (overrides = {}) => ({
+      jurisdictionName: 'Bloomington',
+      commit: false,
+      ...overrides,
+    });
+
+    const writtenBrand = () => updateBrand.mock.calls[0][1];
+
+    beforeEach(() => {
+      process.env.S3_PUBLIC_BUCKET = 'fake-public';
+      s3ServiceMock.uploadToPublic.mockClear();
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: jurisdictionId, brand: null });
+      prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+      jest.spyOn(service, 'getSourceText').mockResolvedValue(SCSS);
+      jest
+        .spyOn(service, 'getSourceImage')
+        .mockResolvedValue(Buffer.from('image bytes'));
+      updateBrand = jest
+        .spyOn(jurisdictionService, 'updateBrand')
+        .mockResolvedValue(null);
+    });
+
+    it('writes what the stylesheet declares', async () => {
+      await service.migrateJurisdictionBranding(
+        request(),
+        body({ commit: true }),
+      );
+
+      expect(writtenBrand().brand).toEqual(
+        expect.objectContaining({
+          primary: { base: '#297E73', dark: '#1F6058' },
+          buttonRadius: BrandRadiusEnum.xl3,
+        }),
+      );
+    });
+
+    it('takes the request body over the parse, field by field', async () => {
+      await service.migrateJurisdictionBranding(
+        request(),
+        body({ commit: true, brand: { buttonRadius: BrandRadiusEnum.full } }),
+      );
+
+      expect(writtenBrand().brand.buttonRadius).toEqual(BrandRadiusEnum.full);
+      expect(writtenBrand().brand.primary.base).toEqual('#297E73');
+    });
+
+    // Every slot, not just fontFamily: a fork declares all three and dropping one would leave the
+    // brand naming a font the stylesheet never loads.
+    it('drops every parsed family when no font url is supplied', async () => {
+      jest.spyOn(service, 'getSourceText').mockResolvedValue(`:root {
+        --seeds-font-sans: "Montserrat", sans-serif;
+        --seeds-font-alt-sans: "Playfair Display", sans-serif;
+        --seeds-font-serif: "Noto Serif", serif;
+      }`);
+
+      await service.migrateJurisdictionBranding(
+        request(),
+        body({ commit: true }),
+      );
+
+      expect(writtenBrand().brand.fontFamily).toBeUndefined();
+      expect(writtenBrand().brand.headingFontFamily).toBeUndefined();
+      expect(writtenBrand().brand.serifFontFamily).toBeUndefined();
+    });
+
+    // A fork serves its font from its own files, and a brand font has to be a google fonts url.
+    it('drops a parsed family when no font url is supplied', async () => {
+      await service.migrateJurisdictionBranding(
+        request(),
+        body({ commit: true }),
+      );
+
+      expect(writtenBrand().brand.fontFamily).toBeUndefined();
+    });
+
+    it('keeps the family when the body supplies a font url', async () => {
+      await service.migrateJurisdictionBranding(
+        request(),
+        body({
+          commit: true,
+          brand: {
+            fontUrl: 'https://fonts.googleapis.com/css2?family=Montserrat',
+          },
+        }),
+      );
+
+      expect(writtenBrand().brand.fontFamily).toEqual('Montserrat');
+    });
+
+    it('keeps a stored field the migration does not set', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: jurisdictionId,
+        brand: { fontUrl: 'https://fonts.googleapis.com/css2?family=Inter' },
+      });
+
+      await service.migrateJurisdictionBranding(
+        request(),
+        body({ commit: true }),
+      );
+
+      expect(writtenBrand().brand.fontUrl).toEqual(
+        'https://fonts.googleapis.com/css2?family=Inter',
+      );
+    });
+
+    describe('assets', () => {
+      it('uploads under a key derived from the jurisdiction, not a random one', async () => {
+        await service.migrateJurisdictionBranding(
+          request(),
+          body({
+            commit: true,
+            logoPath: 'sites/public/public/images/logo.png',
+          }),
+        );
+
+        expect(s3ServiceMock.uploadToPublic).toHaveBeenCalledWith(
+          `brand/${jurisdictionId}/logo.png`,
+          expect.any(Buffer),
+          'image/png',
+        );
+        expect(writtenBrand().logoFileId).toEqual(
+          `brand/${jurisdictionId}/logo.png`,
+        );
+      });
+
+      // The type is taken from the path rather than the response, so a fork repository cannot
+      // decide what the bucket serves.
+      it.each([
+        ['logo.png', 'image/png'],
+        ['logo.svg', 'image/svg+xml'],
+        ['logo.webp', 'image/webp'],
+      ])('stores %s as %s', async (file, contentType) => {
+        await service.migrateJurisdictionBranding(
+          request(),
+          body({ commit: true, logoPath: `images/${file}` }),
+        );
+
+        expect(s3ServiceMock.uploadToPublic).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.any(Buffer),
+          contentType,
+        );
+      });
+
+      it.each(['images/logo.gif', 'images/logo', 'images/logo.'])(
+        'refuses %s, which the branding page would not accept either',
+        async (logoPath) => {
+          await expect(
+            service.migrateJurisdictionBranding(
+              request(),
+              body({ commit: true, logoPath }),
+            ),
+          ).rejects.toThrow(BadRequestException);
+
+          expect(s3ServiceMock.uploadToPublic).not.toHaveBeenCalled();
+        },
+      );
+
+      // The key is the one the public site already serves, so a partial upload would swap a live
+      // image and leave it swapped, with the run reporting a 400 and writing nothing.
+      it('uploads nothing when a later image cannot be fetched', async () => {
+        jest
+          .spyOn(service, 'getSourceImage')
+          .mockResolvedValueOnce(Buffer.from('logo bytes'))
+          .mockRejectedValueOnce(new BadRequestException('not an image'));
+
+        await expect(
+          service.migrateJurisdictionBranding(
+            request(),
+            body({
+              commit: true,
+              logoPath: 'images/logo.png',
+              faviconPath: 'images/favicon.png',
+            }),
+          ),
+        ).rejects.toThrow(BadRequestException);
+
+        expect(s3ServiceMock.uploadToPublic).not.toHaveBeenCalled();
+        expect(updateBrand).not.toHaveBeenCalled();
+      });
+
+      it('uploads both images when both can be fetched', async () => {
+        await service.migrateJurisdictionBranding(
+          request(),
+          body({
+            commit: true,
+            logoPath: 'images/logo.png',
+            faviconPath: 'images/favicon.svg',
+          }),
+        );
+
+        expect(s3ServiceMock.uploadToPublic).toHaveBeenCalledTimes(2);
+        expect(writtenBrand().logoFileId).toEqual(
+          `brand/${jurisdictionId}/logo.png`,
+        );
+        expect(writtenBrand().faviconFileId).toEqual(
+          `brand/${jurisdictionId}/favicon.svg`,
+        );
+      });
+
+      // brandAssetWrite always creates an assets row, so re-linking the same key would orphan the
+      // previous one on every run.
+      it('does not re-link a key the jurisdiction already points at', async () => {
+        prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+          id: jurisdictionId,
+          brand: null,
+          brandLogo: { fileId: `brand/${jurisdictionId}/logo.png` },
+        });
+
+        await service.migrateJurisdictionBranding(
+          request(),
+          body({
+            commit: true,
+            logoPath: 'sites/public/public/images/logo.png',
+          }),
+        );
+
+        expect(s3ServiceMock.uploadToPublic).toHaveBeenCalled();
+        expect(writtenBrand().logoFileId).toBeUndefined();
+      });
+
+      it('leaves the stored assets alone when no paths are given', async () => {
+        await service.migrateJurisdictionBranding(
+          request(),
+          body({ commit: true }),
+        );
+
+        expect(s3ServiceMock.uploadToPublic).not.toHaveBeenCalled();
+        expect(writtenBrand().logoFileId).toBeUndefined();
+        expect(writtenBrand().faviconFileId).toBeUndefined();
+      });
+
+      // There is no server-side upload on a cloudinary install, so it refuses rather than writing
+      // half a brand.
+      it('refuses to migrate an asset with no bucket configured', async () => {
+        delete process.env.S3_PUBLIC_BUCKET;
+
+        await expect(
+          service.migrateJurisdictionBranding(
+            request(),
+            body({ commit: true, logoPath: 'images/logo.png' }),
+          ),
+        ).rejects.toThrow(BadRequestException);
+        expect(updateBrand).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('a dry run', () => {
+      it('writes nothing, uploads nothing and records nothing', async () => {
+        await service.migrateJurisdictionBranding(
+          request(),
+          body({ logoPath: 'sites/public/public/images/logo.png' }),
+        );
+
+        expect(updateBrand).not.toHaveBeenCalled();
+        expect(s3ServiceMock.uploadToPublic).not.toHaveBeenCalled();
+        expect(prisma.scriptRuns.create).not.toHaveBeenCalled();
+      });
+
+      it('reports what it would write', async () => {
+        const log = jest.spyOn(service['logger'], 'log').mockImplementation();
+
+        await service.migrateJurisdictionBranding(request(), body());
+
+        const report = log.mock.calls[0][0] as string;
+        expect(report).toContain('Dry run');
+        // The change lines, not the "Parsed from the stylesheet" line, which names the same fields.
+        expect(report).toContain('primary: base #297E73');
+        expect(report).toContain('buttonRadius: 3xl');
+        expect(report).not.toContain('Nothing to write.');
+      });
+    });
+
+    it('rejects an unknown jurisdiction without consuming a script name', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+
+      await expect(
+        service.migrateJurisdictionBranding(request(), body({ commit: true })),
+      ).rejects.toThrow(BadRequestException);
+      expect(prisma.scriptRuns.create).not.toHaveBeenCalled();
+    });
+
+    // Named per run, so migrating the same fork again is allowed rather than returning a 400.
+    it('records each run under its own name', async () => {
+      await service.migrateJurisdictionBranding(
+        request(),
+        body({ commit: true }),
+      );
+
+      expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+        data: {
+          scriptName: expect.stringContaining(
+            'migrate branding for Bloomington',
+          ),
+          triggeringUser: userId,
+        },
+      });
+      expect(prisma.scriptRuns.update).toHaveBeenCalled();
+    });
+  });
+
   describe('migrateTranslationOverridesToKeyRows', () => {
     const jurisdictionId = randomUUID();
     const userId = randomUUID();
@@ -1288,6 +1624,111 @@ describe('Testing script runner service', () => {
   });
 
   // | ---------- HELPER TESTS BELOW ---------- | //
+
+  describe('getSourceText', () => {
+    const respondWith = (data: unknown) =>
+      httpServiceMock.get.mockReturnValue(of({ data }));
+
+    it('returns the body as text', async () => {
+      respondWith(':root { --seeds-color-primary: #297e73; }');
+
+      await expect(service.getSourceText('https://x/a.scss')).resolves.toEqual(
+        ':root { --seeds-color-primary: #297e73; }',
+      );
+    });
+
+    // A redirect must not move the request off the allowlisted host the url was checked against.
+    it('follows no redirects and caps the response', async () => {
+      respondWith('');
+
+      await service.getSourceText('https://x/a.scss');
+
+      expect(httpServiceMock.get).toHaveBeenCalledWith('https://x/a.scss', {
+        signal: expect.any(AbortSignal),
+        maxRedirects: 0,
+        responseType: 'text',
+        maxContentLength: expect.any(Number),
+      });
+    });
+
+    it('reports a failed fetch against the url it asked for', async () => {
+      httpServiceMock.get.mockReturnValue(
+        throwError(() => ({ message: 'Request failed with status code 404' })),
+      );
+
+      await expect(service.getSourceText('https://x/a.scss')).rejects.toThrow(
+        /failed fetching https:\/\/x\/a\.scss.*404/,
+      );
+    });
+
+    it('names the timeout rather than reporting a cancelled request', async () => {
+      httpServiceMock.get.mockReturnValue(
+        throwError(() => ({ code: 'ERR_CANCELED', message: 'canceled' })),
+      );
+
+      await expect(service.getSourceText('https://x/a.scss')).rejects.toThrow(
+        /timed out after \d+ms/,
+      );
+    });
+  });
+
+  describe('getSourceImage', () => {
+    const serve = (contentType: string, data: unknown = Buffer.from('bytes')) =>
+      httpServiceMock.get.mockReturnValue(
+        of({ data, headers: { 'content-type': contentType } }),
+      );
+
+    it('returns the bytes', async () => {
+      serve('image/png', Buffer.from('png bytes'));
+
+      await expect(service.getSourceImage('https://x/a.png')).resolves.toEqual(
+        Buffer.from('png bytes'),
+      );
+    });
+
+    it('accepts a content type with a charset on it', async () => {
+      serve('image/svg+xml; charset=utf-8');
+
+      await expect(
+        service.getSourceImage('https://x/a.svg'),
+      ).resolves.toBeInstanceOf(Buffer);
+    });
+
+    // GitHub serves a missing path as an html page, which would otherwise be stored as an image.
+    it.each(['text/html', 'application/json', ''])(
+      'refuses a response served as %s',
+      async (contentType) => {
+        serve(contentType);
+
+        await expect(service.getSourceImage('https://x/a.png')).rejects.toThrow(
+          /rather than an image/,
+        );
+      },
+    );
+
+    it('follows no redirects and caps the response', async () => {
+      serve('image/png');
+
+      await service.getSourceImage('https://x/a.png');
+
+      expect(httpServiceMock.get).toHaveBeenCalledWith('https://x/a.png', {
+        signal: expect.any(AbortSignal),
+        maxRedirects: 0,
+        responseType: 'arraybuffer',
+        maxContentLength: expect.any(Number),
+      });
+    });
+
+    it('names the timeout rather than reporting a cancelled request', async () => {
+      httpServiceMock.get.mockReturnValue(
+        throwError(() => ({ code: 'ERR_CANCELED', message: 'canceled' })),
+      );
+
+      await expect(service.getSourceImage('https://x/a.png')).rejects.toThrow(
+        /timed out after \d+ms/,
+      );
+    });
+  });
 
   describe('getTranslationFile', () => {
     const respondWith = (data: unknown) => {

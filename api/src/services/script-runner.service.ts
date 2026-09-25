@@ -19,6 +19,7 @@ import { AxiosError } from 'axios';
 import { HttpService } from '@nestjs/axios';
 import { catchError, firstValueFrom } from 'rxjs';
 import dayjs from 'dayjs';
+import { extname } from 'path';
 import { Request as ExpressRequest } from 'express';
 import { AmiChartService } from './ami-chart.service';
 import { EmailService } from './email.service';
@@ -52,8 +53,29 @@ import {
   withSourceHashes,
 } from '../utilities/translation-override-migration';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
+import { JurisdictionBrandingMigrationDTO } from '../dtos/script-runner/jurisdiction-branding-migration.dto';
+import { BrandDTO } from '../dtos/jurisdictions/brand.dto';
+import { JurisdictionService } from './jurisdiction.service';
+import { S3Service } from './s3.service';
+import {
+  diffBrand,
+  formatBrandReport,
+  ParsedBrand,
+  parseBrandSources,
+  UnreadableStylesheetError,
+} from '../utilities/brand-migration';
 
 const TRANSLATION_FETCH_TIMEOUT_MS = 30_000;
+const SOURCE_FETCH_TIMEOUT_MS = 30_000;
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const MAX_STYLESHEET_BYTES = 2 * 1024 * 1024;
+
+const IMAGE_TYPES: Record<string, string> = {
+  '.png': 'image/png',
+  '.svg': 'image/svg+xml',
+  '.webp': 'image/webp',
+};
+const DEFAULT_OVERRIDES_PATH = 'sites/public/styles/overrides.scss';
 
 /**
   this is the service for running scripts
@@ -68,6 +90,8 @@ export class ScriptRunnerService {
     private multiselectQuestionService: MultiselectQuestionService,
     private prisma: PrismaService,
     private httpService: HttpService,
+    private jurisdictionService: JurisdictionService,
+    private s3Service: S3Service,
     @Inject(Logger)
     private logger = new Logger(ScriptRunnerService.name),
   ) {}
@@ -444,6 +468,260 @@ export class ScriptRunnerService {
     }
 
     return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @param dto which jurisdiction to write, and where to read the fork's sources from
+   * @returns successDTO
+   * @description moves a fork's static branding into its jurisdiction row
+   */
+  async migrateJurisdictionBranding(
+    req: ExpressRequest,
+    dto: JurisdictionBrandingMigrationDTO,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      select: {
+        id: true,
+        brand: true,
+        brandLogo: { select: { fileId: true } },
+        brandFavicon: { select: { fileId: true } },
+      },
+      where: { name: dto.jurisdictionName },
+    });
+    if (!jurisdiction) {
+      throw new BadRequestException(
+        `Jurisdiction ${dto.jurisdictionName} does not exist`,
+      );
+    }
+
+    const repositoryUrl = dto.repositoryUrl ?? DEFAULT_REPOSITORY_URL;
+    const gitRef = dto.gitRef ?? DEFAULT_GIT_REF;
+    const sourceUrl = (path: string) => `${repositoryUrl}/${gitRef}/${path}`;
+
+    const overridesUrl = sourceUrl(dto.overridesPath ?? DEFAULT_OVERRIDES_PATH);
+    let parsed: ParsedBrand;
+    try {
+      parsed = parseBrandSources(await this.getSourceText(overridesUrl));
+    } catch (error) {
+      if (error instanceof UnreadableStylesheetError) {
+        throw new BadRequestException(`${overridesUrl}: ${error.message}`);
+      }
+      throw error;
+    }
+
+    const notes: string[] = [];
+    const desired = this.brandToWrite(parsed, dto.brand, notes);
+
+    const assets = await this.brandAssetsToWrite(
+      dto,
+      jurisdiction.id,
+      sourceUrl,
+      {
+        logo: jurisdiction.brandLogo?.fileId,
+        favicon: jurisdiction.brandFavicon?.fileId,
+      },
+    );
+    const changes = diffBrand(
+      jurisdiction.brand as Record<string, unknown>,
+      desired as Record<string, unknown>,
+    );
+
+    this.logger.log(
+      formatBrandReport({
+        jurisdictionName: dto.jurisdictionName,
+        repositoryUrl,
+        gitRef,
+        commit: dto.commit,
+        parsed,
+        changes,
+        assets: assets.report,
+        notes,
+      }),
+    );
+
+    if (dto.commit) {
+      // Named per run rather than per jurisdiction, so a later migration of the same fork is
+      // allowed and each run is recorded with the admin who triggered it.
+      const scriptName = `migrate branding for ${
+        dto.jurisdictionName
+      } ${new Date().toISOString()}`;
+      await this.markScriptAsRunStart(scriptName, requestingUser);
+      await this.jurisdictionService.updateBrand(jurisdiction.id, {
+        brand: { ...(jurisdiction.brand as BrandDTO), ...desired },
+        logoFileId: assets.logoFileId,
+        faviconFileId: assets.faviconFileId,
+      });
+      await this.markScriptAsComplete(scriptName, requestingUser);
+    }
+
+    return { success: true };
+  }
+
+  // The stylesheet parse is the starting point and the request body wins field by field, so an
+  // operator can correct a parse without editing the fork.
+  private brandToWrite(
+    parsed: ParsedBrand,
+    overrides: BrandDTO | undefined,
+    notes: string[],
+  ): Partial<BrandDTO> {
+    const supplied = Object.fromEntries(
+      Object.entries(overrides ?? {}).filter(
+        ([, value]) => value !== undefined,
+      ),
+    );
+    const desired: Partial<BrandDTO> = { ...parsed, ...supplied };
+
+    const families = [
+      'fontFamily',
+      'headingFontFamily',
+      'serifFontFamily',
+    ] as const;
+    if (families.some((family) => desired[family]) && !desired.fontUrl) {
+      families.forEach((family) => delete desired[family]);
+      notes.push(
+        "A font family was found but no fontUrl. A fork's font is served from its own files, and a brand font has to be a google fonts url, so pass one in the request body to migrate the font.",
+      );
+    }
+
+    return desired;
+  }
+
+  private async brandAssetsToWrite(
+    dto: JurisdictionBrandingMigrationDTO,
+    jurisdictionId: string,
+    sourceUrl: (path: string) => string,
+    stored: { logo?: string; favicon?: string },
+  ): Promise<{
+    logoFileId?: string;
+    faviconFileId?: string;
+    report: string[];
+  }> {
+    const wanted = [
+      { kind: 'logo', path: dto.logoPath },
+      { kind: 'favicon', path: dto.faviconPath },
+    ].filter(({ path }) => !!path);
+
+    if (!wanted.length) return { report: [] };
+
+    if (!process.env.S3_PUBLIC_BUCKET) {
+      throw new BadRequestException(
+        'S3_PUBLIC_BUCKET is not set; this install has no storage the api can write to. Upload the images through the Partners branding page and re-run without logoPath and faviconPath.',
+      );
+    }
+
+    const fetched = [];
+    for (const { kind, path } of wanted) {
+      const extension = extname(path).toLowerCase();
+      const contentType = IMAGE_TYPES[extension];
+      if (!contentType) {
+        throw new BadRequestException(
+          `${path} is not one of ${Object.keys(IMAGE_TYPES).join(', ')}`,
+        );
+      }
+
+      const url = sourceUrl(path);
+      const body = await this.getSourceImage(url);
+      const key = `brand/${jurisdictionId}/${kind}${extension}`;
+      fetched.push({ kind, url, key, body, contentType });
+    }
+
+    const report: string[] = [];
+    const fileIds: Record<string, string> = {};
+
+    for (const { kind, url, key, body, contentType } of fetched) {
+      if (dto.commit) {
+        await this.s3Service.uploadToPublic(key, body, contentType);
+      }
+
+      if (stored[kind] === key) {
+        report.push(`${kind}: ${url} -> ${key}, already linked`);
+      } else {
+        fileIds[kind] = key;
+        report.push(`${kind}: ${url} -> ${key}`);
+      }
+    }
+
+    return {
+      logoFileId: fileIds.logo,
+      faviconFileId: fileIds.favicon,
+      report,
+    };
+  }
+
+  /**
+   *
+   * @param url the source file to read
+   * @returns the file as text
+   * @description fetches a text file from the fork repository.
+   */
+  async getSourceText(url: string): Promise<string> {
+    const { data } = await firstValueFrom(
+      this.httpService
+        .get(url, {
+          signal: AbortSignal.timeout(SOURCE_FETCH_TIMEOUT_MS),
+          maxRedirects: 0,
+          responseType: 'text',
+          maxContentLength: MAX_STYLESHEET_BYTES,
+        })
+        .pipe(
+          catchError((error: AxiosError) => {
+            throw new BadRequestException(
+              `failed fetching ${url}: ${
+                error.code === 'ERR_CANCELED'
+                  ? `timed out after ${SOURCE_FETCH_TIMEOUT_MS}ms`
+                  : error.message
+              }`,
+            );
+          }),
+        ),
+    );
+
+    return String(data);
+  }
+
+  /**
+   *
+   * @param url the image to read
+   * @returns the image bytes and the content type to store it under
+   * @description fetches an image from the fork repository and rejects anything that is not one,
+   * or is over the size cap
+   */
+  async getSourceImage(url: string): Promise<Buffer> {
+    const response = await firstValueFrom(
+      this.httpService
+        .get(url, {
+          signal: AbortSignal.timeout(SOURCE_FETCH_TIMEOUT_MS),
+          maxRedirects: 0,
+          responseType: 'arraybuffer',
+          maxContentLength: MAX_IMAGE_BYTES,
+        })
+        .pipe(
+          catchError((error: AxiosError) => {
+            throw new BadRequestException(
+              `failed fetching ${url}: ${
+                error.code === 'ERR_CANCELED'
+                  ? `timed out after ${SOURCE_FETCH_TIMEOUT_MS}ms`
+                  : error.message
+              }`,
+            );
+          }),
+        ),
+    );
+
+    const served = String(response.headers?.['content-type'] ?? '').split(
+      ';',
+    )[0];
+    if (!served.startsWith('image/')) {
+      throw new BadRequestException(
+        `${url} returned ${served || 'no content type'} rather than an image`,
+      );
+    }
+
+    return Buffer.from(response.data as ArrayBuffer);
   }
 
   /**
