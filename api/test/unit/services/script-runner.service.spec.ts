@@ -1135,6 +1135,49 @@ describe('Testing script runner service', () => {
         expect(writtenBrand().logoFileId).toEqual('brand/bloomington/logo.png');
       });
 
+      // The key is the one the public site already serves, so a partial upload would swap a live
+      // image and leave it swapped, with the run reporting a 400 and writing nothing.
+      it('uploads nothing when a later image cannot be fetched', async () => {
+        jest
+          .spyOn(service, 'getSourceImage')
+          .mockResolvedValueOnce({
+            body: Buffer.from('logo bytes'),
+            contentType: 'image/png',
+          })
+          .mockRejectedValueOnce(new BadRequestException('not an image'));
+
+        await expect(
+          service.migrateJurisdictionBranding(
+            request(),
+            body({
+              commit: true,
+              logoPath: 'images/logo.png',
+              faviconPath: 'images/favicon.png',
+            }),
+          ),
+        ).rejects.toThrow(BadRequestException);
+
+        expect(s3ServiceMock.uploadToPublic).not.toHaveBeenCalled();
+        expect(updateBrand).not.toHaveBeenCalled();
+      });
+
+      it('uploads both images when both can be fetched', async () => {
+        await service.migrateJurisdictionBranding(
+          request(),
+          body({
+            commit: true,
+            logoPath: 'images/logo.png',
+            faviconPath: 'images/favicon.svg',
+          }),
+        );
+
+        expect(s3ServiceMock.uploadToPublic).toHaveBeenCalledTimes(2);
+        expect(writtenBrand().logoFileId).toEqual('brand/bloomington/logo.png');
+        expect(writtenBrand().faviconFileId).toEqual(
+          'brand/bloomington/favicon.svg',
+        );
+      });
+
       // brandAssetWrite always creates an assets row, so re-linking the same key would orphan the
       // previous one on every run.
       it('does not re-link a key the jurisdiction already points at', async () => {

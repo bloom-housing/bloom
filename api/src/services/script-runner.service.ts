@@ -503,7 +503,7 @@ export class ScriptRunnerService {
     const notes: string[] = [];
     const desired = this.brandToWrite(parsed, dto.brand, notes);
 
-    const assets = await this.brandAssetsToWrite(dto, sourceUrl, notes, {
+    const assets = await this.brandAssetsToWrite(dto, sourceUrl, {
       logo: jurisdiction.brandLogo?.fileId,
       favicon: jurisdiction.brandFavicon?.fileId,
     });
@@ -575,7 +575,6 @@ export class ScriptRunnerService {
   private async brandAssetsToWrite(
     dto: JurisdictionBrandingMigrationDTO,
     sourceUrl: (path: string) => string,
-    notes: string[],
     stored: { logo?: string; favicon?: string },
   ): Promise<{
     logoFileId?: string;
@@ -595,16 +594,20 @@ export class ScriptRunnerService {
       );
     }
 
-    const report: string[] = [];
-    const fileIds: Record<string, string> = {};
-
+    const fetched = [];
     for (const { kind, path } of wanted) {
       const url = sourceUrl(path);
       const { body, contentType } = await this.getSourceImage(url);
       const key = `brand/${dto.jurisdictionName
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')}/${kind}${extname(path)}`;
+      fetched.push({ kind, url, key, body, contentType });
+    }
 
+    const report: string[] = [];
+    const fileIds: Record<string, string> = {};
+
+    for (const { kind, url, key, body, contentType } of fetched) {
       if (dto.commit) {
         await this.s3Service.uploadToPublic(key, body, contentType);
       }
@@ -615,10 +618,6 @@ export class ScriptRunnerService {
         fileIds[kind] = key;
         report.push(`${kind}: ${url} -> ${key}`);
       }
-    }
-
-    if (notes.length === 0 && report.length) {
-      report.unshift('');
     }
 
     return {
