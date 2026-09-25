@@ -1,6 +1,7 @@
 import { BrandRadiusEnum } from '../../../src/enums/jurisdictions/brand-radius-enum';
 import {
   declarationsByPath,
+  diffBrand,
   parseBrandSources,
   UnreadableStylesheetError,
 } from '../../../src/utilities/brand-migration';
@@ -247,6 +248,18 @@ describe('parseBrandSources', () => {
       expect(parsed.primary).toEqual({ base: '#297E73', light: '#C5ECE7' });
     });
 
+    // The dto holds a family to letters, digits, spaces and hyphens, and the migration writes
+    // without running the dto validators, so the parse has to apply the same rule.
+    it.each(['var(--jurisdiction-font)', 'Inter !important', 'Font/Name', '"'])(
+      'ignores %s, which the brand dto would reject',
+      (family) => {
+        expect(
+          parseBrandSources(`:root { --seeds-font-sans: ${family}; }`)
+            .fontFamily,
+        ).toBeUndefined();
+      },
+    );
+
     it('ignores a stack naming only a generic family', () => {
       expect(
         parseRoot('--seeds-font-sans: sans-serif;').fontFamily,
@@ -271,5 +284,40 @@ describe('parseBrandSources', () => {
 
       expect(parsed.buttonRadius).toEqual(BrandRadiusEnum.base);
     });
+  });
+});
+
+describe('diffBrand', () => {
+  it('reports a field the stored brand does not have', () => {
+    expect(diffBrand(null, { buttonRadius: '3xl' })).toEqual([
+      { field: 'buttonRadius', from: undefined, to: '3xl' },
+    ]);
+  });
+
+  it('reports a field whose value changed, with both values', () => {
+    expect(
+      diffBrand({ buttonRadius: 'full' }, { buttonRadius: '3xl' }),
+    ).toEqual([{ field: 'buttonRadius', from: 'full', to: '3xl' }]);
+  });
+
+  it('flattens a ramp so the report names each shade', () => {
+    expect(
+      diffBrand(null, { primary: { base: '#297E73', dark: '#1F6058' } })[0].to,
+    ).toEqual('base #297E73 dark #1F6058');
+  });
+
+  // The brand column is jsonb, which returns keys in its own order. Comparing the raw
+  // serialisations reported every field as changed on a re-run that changed nothing.
+  it('reports no change when only the key order differs', () => {
+    const stored = { primary: { base: '#297E73', dark: '#1F6058' } };
+    const desired = { primary: { dark: '#1F6058', base: '#297E73' } };
+
+    expect(diffBrand(stored, desired)).toEqual([]);
+  });
+
+  it('reports nothing when the desired brand matches the stored one', () => {
+    const brand = { primary: { base: '#297E73' }, buttonRadius: '3xl' };
+
+    expect(diffBrand(brand, brand)).toEqual([]);
   });
 });

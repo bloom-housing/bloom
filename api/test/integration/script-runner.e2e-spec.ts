@@ -82,13 +82,26 @@ describe('Script Runner Controller Tests', () => {
   });
 
   describe('migrateJurisdictionBranding endpoint', () => {
+    // All five shades, so the parse order (base, dark, darker, light, lighter) differs from the
+    // order jsonb returns (base, dark, light, darker, lighter) and a re-run diff has to cope.
     const SCSS = `:root {
       --seeds-color-primary: #297e73;
       --seeds-color-primary-dark: #1f6058;
+      --seeds-color-primary-darker: #133a35;
+      --seeds-color-primary-light: #c5ece7;
+      --seeds-color-primary-lighter: #ecf9f7;
       .seeds-button {
         --button-border-radius-md: var(--seeds-rounded-3xl);
       }
     }`;
+
+    const PARSED_PRIMARY = {
+      base: '#297E73',
+      dark: '#1F6058',
+      darker: '#133A35',
+      light: '#C5ECE7',
+      lighter: '#ECF9F7',
+    };
 
     const call = (body: Record<string, unknown>, sessionCookies = cookies) =>
       request(app.getHttpServer())
@@ -122,7 +135,7 @@ describe('Script Runner Controller Tests', () => {
       await call({ jurisdictionName, commit: true }).expect(200);
 
       expect(await storedBrand(jurisdictionId)).toEqual({
-        primary: { base: '#297E73', dark: '#1F6058' },
+        primary: PARSED_PRIMARY,
         buttonRadius: '3xl',
       });
     });
@@ -137,7 +150,7 @@ describe('Script Runner Controller Tests', () => {
       }).expect(200);
 
       expect(await storedBrand(jurisdictionId)).toEqual({
-        primary: { base: '#297E73', dark: '#1F6058' },
+        primary: PARSED_PRIMARY,
         secondary: { base: '#123456' },
         buttonRadius: '3xl',
       });
@@ -153,7 +166,7 @@ describe('Script Runner Controller Tests', () => {
 
       expect(await storedBrand(jurisdictionId)).toEqual(
         expect.objectContaining({
-          primary: { base: '#297E73', dark: '#1F6058' },
+          primary: PARSED_PRIMARY,
           buttonRadius: 'full',
         }),
       );
@@ -172,7 +185,7 @@ describe('Script Runner Controller Tests', () => {
       await call({ jurisdictionName, commit: true }).expect(200);
 
       expect(await storedBrand(jurisdictionId)).toEqual({
-        primary: { base: '#297E73', dark: '#1F6058' },
+        primary: PARSED_PRIMARY,
         buttonRadius: '3xl',
       });
       expect(
@@ -212,6 +225,27 @@ describe('Script Runner Controller Tests', () => {
 
       await call({ jurisdictionName, commit: true, logoPath }).expect(200);
       expect(await linkedAssets()).toEqual(1);
+    });
+
+    // The acceptance criterion: a second run reports accurately. The brand column is jsonb, which
+    // returns keys in its own order, so a raw comparison called every field changed.
+    it('reports nothing to write on a second run', async () => {
+      await call({ jurisdictionName, commit: true }).expect(200);
+      (logger.log as jest.Mock).mockClear();
+
+      await call({ jurisdictionName, commit: false }).expect(200);
+
+      expect(logger.log as jest.Mock).toHaveBeenCalledWith(
+        expect.stringContaining('Nothing to write.'),
+      );
+    });
+
+    it('rejects a stylesheet with no :root block', async () => {
+      httpServiceMock.get.mockImplementation(() =>
+        of({ data: '.some-class { color: red; }' }),
+      );
+
+      await call({ jurisdictionName, commit: false }).expect(400);
     });
 
     it('rejects an unknown jurisdiction', async () => {

@@ -1,5 +1,6 @@
 import { BrandRadiusEnum } from '../enums/jurisdictions/brand-radius-enum';
 import { BrandRamp, HEX_COLOR } from './brand-ramp';
+import { FONT_FAMILY } from '../dtos/jurisdictions/brand.dto';
 
 const ROOT = ':root';
 const BUTTON = ':root > .seeds-button';
@@ -170,7 +171,10 @@ const familyFrom = (
     .split(',')[0]
     .trim()
     .replace(/^["']|["']$/g, '');
-  return first && !GENERIC_FAMILIES.has(first.toLowerCase())
+
+  return first &&
+    !GENERIC_FAMILIES.has(first.toLowerCase()) &&
+    FONT_FAMILY.test(first)
     ? first
     : undefined;
 };
@@ -218,15 +222,23 @@ const describe = (value: unknown): string =>
         .join(' ')
     : String(value);
 
+const stable = (value: unknown): string =>
+  JSON.stringify(value, (_key, entry: unknown) =>
+    entry && typeof entry === 'object' && !Array.isArray(entry)
+      ? Object.fromEntries(
+          Object.entries(entry as Record<string, unknown>).sort(([a], [b]) =>
+            a.localeCompare(b),
+          ),
+        )
+      : entry,
+  );
+
 export const diffBrand = (
   stored: Record<string, unknown> | null | undefined,
   desired: Record<string, unknown>,
 ): BrandChange[] =>
   Object.entries(desired)
-    .filter(
-      ([field, value]) =>
-        JSON.stringify(stored?.[field]) !== JSON.stringify(value),
-    )
+    .filter(([field, value]) => stable(stored?.[field]) !== stable(value))
     .map(([field, value]) => ({
       field,
       from: stored?.[field] === undefined ? undefined : describe(stored[field]),
