@@ -163,3 +163,80 @@ export const parseBrandSources = (scss: string): ParsedBrand => {
 
   return parsed;
 };
+
+export type BrandChange = {
+  field: string;
+  from?: string;
+  to: string;
+};
+
+const describe = (value: unknown): string =>
+  value && typeof value === 'object'
+    ? Object.entries(value as Record<string, string>)
+        .map(([key, entry]) => `${key} ${entry}`)
+        .join(' ')
+    : String(value);
+
+export const diffBrand = (
+  stored: Record<string, unknown> | null | undefined,
+  desired: Record<string, unknown>,
+): BrandChange[] =>
+  Object.entries(desired)
+    .filter(
+      ([field, value]) =>
+        JSON.stringify(stored?.[field]) !== JSON.stringify(value),
+    )
+    .map(([field, value]) => ({
+      field,
+      from: stored?.[field] === undefined ? undefined : describe(stored[field]),
+      to: describe(value),
+    }));
+
+export const formatBrandReport = ({
+  jurisdictionName,
+  repositoryUrl,
+  gitRef,
+  commit,
+  parsed,
+  changes,
+  assets,
+  notes,
+}: {
+  jurisdictionName: string;
+  repositoryUrl: string;
+  gitRef: string;
+  commit: boolean;
+  parsed: ParsedBrand;
+  changes: BrandChange[];
+  assets: string[];
+  notes: string[];
+}): string => {
+  const lines = [
+    commit ? 'Writing changes.' : 'Dry run. Re-run with commit: true to write.',
+    `Source: ${repositoryUrl} at ${gitRef}`,
+    `Jurisdiction: ${jurisdictionName}`,
+    '',
+    `Parsed from the stylesheet: ${
+      Object.keys(parsed).length
+        ? Object.keys(parsed).sort().join(', ')
+        : 'nothing'
+    }`,
+    '',
+  ];
+
+  notes.forEach((note) => lines.push(note));
+  if (notes.length) lines.push('');
+
+  lines.push(
+    changes.length
+      ? `${changes.length} field(s) to write:`
+      : 'Nothing to write.',
+  );
+  changes.forEach(({ field, from, to }) =>
+    lines.push(`  ${field}: ${from === undefined ? to : `${from} -> ${to}`}`),
+  );
+
+  assets.forEach((asset) => lines.push(`  ${asset}`));
+
+  return lines.join('\n');
+};
