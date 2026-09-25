@@ -217,11 +217,22 @@ describe('Script Runner Controller Tests', () => {
           where: { fileId: { startsWith: keyPrefix } },
         });
 
-      await call({ jurisdictionName, commit: true, logoPath }).expect(200);
-      expect(await linkedAssets()).toEqual(1);
+      const linkedLogo = async () =>
+        (
+          await prisma.jurisdictions.findUnique({
+            where: { id: jurisdictionId },
+            select: { brandLogo: { select: { fileId: true } } },
+          })
+        ).brandLogo?.fileId;
 
       await call({ jurisdictionName, commit: true, logoPath }).expect(200);
       expect(await linkedAssets()).toEqual(1);
+      expect(await linkedLogo()).toEqual(`${keyPrefix}logo.png`);
+
+      await call({ jurisdictionName, commit: true, logoPath }).expect(200);
+      expect(await linkedAssets()).toEqual(1);
+      // Counting rows alone would pass if the second run disconnected the asset instead.
+      expect(await linkedLogo()).toEqual(`${keyPrefix}logo.png`);
     });
 
     // The acceptance criterion: a second run reports accurately. The brand column is jsonb, which

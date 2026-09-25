@@ -1076,6 +1076,25 @@ describe('Testing script runner service', () => {
       expect(writtenBrand().brand.primary.base).toEqual('#297E73');
     });
 
+    // Every slot, not just fontFamily: a fork declares all three and dropping one would leave the
+    // brand naming a font the stylesheet never loads.
+    it('drops every parsed family when no font url is supplied', async () => {
+      jest.spyOn(service, 'getSourceText').mockResolvedValue(`:root {
+        --seeds-font-sans: "Montserrat", sans-serif;
+        --seeds-font-alt-sans: "Playfair Display", sans-serif;
+        --seeds-font-serif: "Noto Serif", serif;
+      }`);
+
+      await service.migrateJurisdictionBranding(
+        request(),
+        body({ commit: true }),
+      );
+
+      expect(writtenBrand().brand.fontFamily).toBeUndefined();
+      expect(writtenBrand().brand.headingFontFamily).toBeUndefined();
+      expect(writtenBrand().brand.serifFontFamily).toBeUndefined();
+    });
+
     // A fork serves its font from its own files, and a brand font has to be a google fonts url.
     it('drops a parsed family when no font url is supplied', async () => {
       await service.migrateJurisdictionBranding(
@@ -1277,8 +1296,10 @@ describe('Testing script runner service', () => {
 
         const report = log.mock.calls[0][0] as string;
         expect(report).toContain('Dry run');
-        expect(report).toContain('primary');
-        expect(report).toContain('buttonRadius');
+        // The change lines, not the "Parsed from the stylesheet" line, which names the same fields.
+        expect(report).toContain('primary: base #297E73');
+        expect(report).toContain('buttonRadius: 3xl');
+        expect(report).not.toContain('Nothing to write.');
       });
     });
 
@@ -1603,6 +1624,111 @@ describe('Testing script runner service', () => {
   });
 
   // | ---------- HELPER TESTS BELOW ---------- | //
+
+  describe('getSourceText', () => {
+    const respondWith = (data: unknown) =>
+      httpServiceMock.get.mockReturnValue(of({ data }));
+
+    it('returns the body as text', async () => {
+      respondWith(':root { --seeds-color-primary: #297e73; }');
+
+      await expect(service.getSourceText('https://x/a.scss')).resolves.toEqual(
+        ':root { --seeds-color-primary: #297e73; }',
+      );
+    });
+
+    // A redirect must not move the request off the allowlisted host the url was checked against.
+    it('follows no redirects and caps the response', async () => {
+      respondWith('');
+
+      await service.getSourceText('https://x/a.scss');
+
+      expect(httpServiceMock.get).toHaveBeenCalledWith('https://x/a.scss', {
+        signal: expect.any(AbortSignal),
+        maxRedirects: 0,
+        responseType: 'text',
+        maxContentLength: expect.any(Number),
+      });
+    });
+
+    it('reports a failed fetch against the url it asked for', async () => {
+      httpServiceMock.get.mockReturnValue(
+        throwError(() => ({ message: 'Request failed with status code 404' })),
+      );
+
+      await expect(service.getSourceText('https://x/a.scss')).rejects.toThrow(
+        /failed fetching https:\/\/x\/a\.scss.*404/,
+      );
+    });
+
+    it('names the timeout rather than reporting a cancelled request', async () => {
+      httpServiceMock.get.mockReturnValue(
+        throwError(() => ({ code: 'ERR_CANCELED', message: 'canceled' })),
+      );
+
+      await expect(service.getSourceText('https://x/a.scss')).rejects.toThrow(
+        /timed out after \d+ms/,
+      );
+    });
+  });
+
+  describe('getSourceImage', () => {
+    const serve = (contentType: string, data: unknown = Buffer.from('bytes')) =>
+      httpServiceMock.get.mockReturnValue(
+        of({ data, headers: { 'content-type': contentType } }),
+      );
+
+    it('returns the bytes', async () => {
+      serve('image/png', Buffer.from('png bytes'));
+
+      await expect(service.getSourceImage('https://x/a.png')).resolves.toEqual(
+        Buffer.from('png bytes'),
+      );
+    });
+
+    it('accepts a content type with a charset on it', async () => {
+      serve('image/svg+xml; charset=utf-8');
+
+      await expect(
+        service.getSourceImage('https://x/a.svg'),
+      ).resolves.toBeInstanceOf(Buffer);
+    });
+
+    // GitHub serves a missing path as an html page, which would otherwise be stored as an image.
+    it.each(['text/html', 'application/json', ''])(
+      'refuses a response served as %s',
+      async (contentType) => {
+        serve(contentType);
+
+        await expect(service.getSourceImage('https://x/a.png')).rejects.toThrow(
+          /rather than an image/,
+        );
+      },
+    );
+
+    it('follows no redirects and caps the response', async () => {
+      serve('image/png');
+
+      await service.getSourceImage('https://x/a.png');
+
+      expect(httpServiceMock.get).toHaveBeenCalledWith('https://x/a.png', {
+        signal: expect.any(AbortSignal),
+        maxRedirects: 0,
+        responseType: 'arraybuffer',
+        maxContentLength: expect.any(Number),
+      });
+    });
+
+    it('names the timeout rather than reporting a cancelled request', async () => {
+      httpServiceMock.get.mockReturnValue(
+        throwError(() => ({ code: 'ERR_CANCELED', message: 'canceled' })),
+      );
+
+      await expect(service.getSourceImage('https://x/a.png')).rejects.toThrow(
+        /timed out after \d+ms/,
+      );
+    });
+  });
 
   describe('getTranslationFile', () => {
     const respondWith = (data: unknown) => {

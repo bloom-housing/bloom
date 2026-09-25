@@ -10,10 +10,11 @@ import {
 import { Expose, Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { IsTranslationSourceUrl } from '../../decorators/is-translation-source-url.decorator';
+import {
+  IsTranslationSourceUrl,
+  SAFE_SOURCE_PATH,
+} from '../../decorators/is-translation-source-url.decorator';
 import { BrandDTO } from '../jurisdictions/brand.dto';
-
-const SAFE_PATH = /^(?!.*\.\.)[\w][\w.\-/]*$/;
 
 export class JurisdictionBrandingMigrationDTO {
   @Expose()
@@ -46,7 +47,7 @@ export class JurisdictionBrandingMigrationDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Matches(SAFE_PATH, { groups: [ValidationsGroupsEnum.default] })
+  @Matches(SAFE_SOURCE_PATH, { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(255, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     type: String,
@@ -56,7 +57,7 @@ export class JurisdictionBrandingMigrationDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Matches(SAFE_PATH, { groups: [ValidationsGroupsEnum.default] })
+  @Matches(SAFE_SOURCE_PATH, { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(255, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     type: String,
@@ -68,7 +69,7 @@ export class JurisdictionBrandingMigrationDTO {
   // given.
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Matches(SAFE_PATH, { groups: [ValidationsGroupsEnum.default] })
+  @Matches(SAFE_SOURCE_PATH, { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(255, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     type: String,
@@ -78,7 +79,7 @@ export class JurisdictionBrandingMigrationDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Matches(SAFE_PATH, { groups: [ValidationsGroupsEnum.default] })
+  @Matches(SAFE_SOURCE_PATH, { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(255, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     type: String,

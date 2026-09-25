@@ -287,6 +287,45 @@ describe('parseBrandSources', () => {
   });
 });
 
+describe('a fork that declares a secondary ramp', () => {
+  // bloom-la declares a full secondary; the primary-only fixtures above would not catch its loss.
+  const parsed = parseBrandSources(`:root {
+    --seeds-color-primary: #2a70bc;
+    --seeds-color-secondary: #253a8e;
+    --seeds-color-secondary-dark: #1a2965;
+    --seeds-color-secondary-lighter: #ebeefa;
+  }`);
+
+  it('reads it alongside the primary', () => {
+    expect(parsed.secondary).toEqual({
+      base: '#253A8E',
+      dark: '#1A2965',
+      lighter: '#EBEEFA',
+    });
+    expect(parsed.primary.base).toEqual('#2A70BC');
+  });
+});
+
+describe('the radius fallback chain', () => {
+  const withButton = (body: string) =>
+    parseBrandSources(`:root { .seeds-button { ${body} } }`).buttonRadius;
+
+  it.each(['sm', 'md', 'lg'])('reads --button-border-radius-%s', (size) => {
+    expect(
+      withButton(`--button-border-radius-${size}: var(--seeds-rounded-xl);`),
+    ).toEqual(BrandRadiusEnum.xl);
+  });
+
+  // A fork setting different radii per size has no single answer, so md is the one taken.
+  it('prefers md when the sizes disagree', () => {
+    expect(
+      withButton(
+        '--button-border-radius-sm: var(--seeds-rounded-sm); --button-border-radius-md: var(--seeds-rounded-full);',
+      ),
+    ).toEqual(BrandRadiusEnum.full);
+  });
+});
+
 describe('diffBrand', () => {
   it('reports a field the stored brand does not have', () => {
     expect(diffBrand(null, { buttonRadius: '3xl' })).toEqual([
