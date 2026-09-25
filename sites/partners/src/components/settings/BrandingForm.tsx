@@ -238,6 +238,7 @@ const BrandingForm = ({
                   id="headingFontFamily"
                   name="headingFontFamily"
                   label={t("branding.headingFontFamily")}
+                  subNote={t("branding.headingFontFamilyNote")}
                   register={register}
                   error={!!errors?.headingFontFamily}
                   errorMessage={errors?.headingFontFamily?.message}

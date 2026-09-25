@@ -47,6 +47,10 @@ export const PREVIEW_FIELDS: (keyof BrandFormValues)[] = [
   ...rampFields("primary"),
   ...rampFields("secondary"),
   "buttonRadius",
+  "fontFamily",
+  "headingFontFamily",
+  "serifFontFamily",
+  "fontUrl",
 ]
 
 const FONT_FIELDS = ["fontFamily", "headingFontFamily", "serifFontFamily", "fontUrl"] as const
