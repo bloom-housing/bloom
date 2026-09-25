@@ -476,7 +476,12 @@ export class ScriptRunnerService {
     const requestingUser = mapTo(User, req['user']);
 
     const jurisdiction = await this.prisma.jurisdictions.findFirst({
-      select: { id: true, brand: true },
+      select: {
+        id: true,
+        brand: true,
+        brandLogo: { select: { fileId: true } },
+        brandFavicon: { select: { fileId: true } },
+      },
       where: { name: dto.jurisdictionName },
     });
     if (!jurisdiction) {
@@ -498,7 +503,10 @@ export class ScriptRunnerService {
     const notes: string[] = [];
     const desired = this.brandToWrite(parsed, dto.brand, notes);
 
-    const assets = await this.brandAssetsToWrite(dto, sourceUrl, notes);
+    const assets = await this.brandAssetsToWrite(dto, sourceUrl, notes, {
+      logo: jurisdiction.brandLogo?.fileId,
+      favicon: jurisdiction.brandFavicon?.fileId,
+    });
     const changes = diffBrand(
       jurisdiction.brand as Record<string, unknown>,
       desired as Record<string, unknown>,
@@ -563,6 +571,7 @@ export class ScriptRunnerService {
     dto: JurisdictionBrandingMigrationDTO,
     sourceUrl: (path: string) => string,
     notes: string[],
+    stored: { logo?: string; favicon?: string },
   ): Promise<{
     logoFileId?: string;
     faviconFileId?: string;
@@ -594,8 +603,13 @@ export class ScriptRunnerService {
       if (dto.commit) {
         await this.s3Service.uploadToPublic(key, body, contentType);
       }
-      fileIds[kind] = key;
-      report.push(`${kind}: ${url} -> ${key}`);
+
+      if (stored[kind] === key) {
+        report.push(`${kind}: ${url} -> ${key}, already linked`);
+      } else {
+        fileIds[kind] = key;
+        report.push(`${kind}: ${url} -> ${key}`);
+      }
     }
 
     if (notes.length === 0 && report.length) {

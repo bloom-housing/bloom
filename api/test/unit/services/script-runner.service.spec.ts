@@ -1135,6 +1135,27 @@ describe('Testing script runner service', () => {
         expect(writtenBrand().logoFileId).toEqual('brand/bloomington/logo.png');
       });
 
+      // brandAssetWrite always creates an assets row, so re-linking the same key would orphan the
+      // previous one on every run.
+      it('does not re-link a key the jurisdiction already points at', async () => {
+        prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+          id: jurisdictionId,
+          brand: null,
+          brandLogo: { fileId: 'brand/bloomington/logo.png' },
+        });
+
+        await service.migrateJurisdictionBranding(
+          request(),
+          body({
+            commit: true,
+            logoPath: 'sites/public/public/images/logo.png',
+          }),
+        );
+
+        expect(s3ServiceMock.uploadToPublic).toHaveBeenCalled();
+        expect(writtenBrand().logoFileId).toBeUndefined();
+      });
+
       it('leaves the stored assets alone when no paths are given', async () => {
         await service.migrateJurisdictionBranding(
           request(),

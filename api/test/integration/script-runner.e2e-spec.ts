@@ -9,6 +9,7 @@ import {
 import cookieParser from 'cookie-parser';
 import request from 'supertest';
 import { PrismaService } from '../../src/services/prisma.service';
+import { S3Service } from '../../src/services/s3.service';
 import { AppModule } from '../../src/modules/app.module';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
@@ -26,6 +27,7 @@ describe('Script Runner Controller Tests', () => {
   let adminUserId: string;
   let logger: Logger;
   const httpServiceMock = { get: jest.fn() };
+  const s3ServiceMock = { uploadToPublic: jest.fn() };
 
   beforeEach(() => {
     jest.resetAllMocks();
@@ -37,6 +39,8 @@ describe('Script Runner Controller Tests', () => {
     })
       .overrideProvider(HttpService)
       .useValue(httpServiceMock)
+      .overrideProvider(S3Service)
+      .useValue(s3ServiceMock)
       .overrideProvider(Logger)
       .useValue({
         log: jest.fn(),
@@ -105,6 +109,7 @@ describe('Script Runner Controller Tests', () => {
     let jurisdictionId: string;
 
     beforeEach(async () => {
+      process.env.S3_PUBLIC_BUCKET = 'fake-public';
       httpServiceMock.get.mockImplementation(() => of({ data: SCSS }));
       const jurisdiction = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
@@ -147,6 +152,34 @@ describe('Script Runner Controller Tests', () => {
           },
         }),
       ).toEqual(2);
+    });
+
+    // brandAssetWrite always creates an assets row, so a second run must not re-link the same key.
+    it('adds no second assets row when re-run with the same image', async () => {
+      httpServiceMock.get.mockImplementation((url: string) =>
+        url.endsWith('.png')
+          ? of({
+              data: Buffer.from('image bytes'),
+              headers: { 'content-type': 'image/png' },
+            })
+          : of({ data: SCSS }),
+      );
+      const logoPath = 'sites/public/public/images/logo.png';
+
+      // The service slugifies the name into the key, so the filter has to match that, not the name.
+      const keyPrefix = `brand/${jurisdictionName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')}/`;
+      const linkedAssets = async () =>
+        await prisma.assets.count({
+          where: { fileId: { startsWith: keyPrefix } },
+        });
+
+      await call({ jurisdictionName, commit: true, logoPath }).expect(200);
+      expect(await linkedAssets()).toEqual(1);
+
+      await call({ jurisdictionName, commit: true, logoPath }).expect(200);
+      expect(await linkedAssets()).toEqual(1);
     });
 
     it('rejects an unknown jurisdiction', async () => {

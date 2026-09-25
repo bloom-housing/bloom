@@ -106,6 +106,62 @@ recorded itself as complete may still be short some languages. The report says s
 The bundled override files stay in the repository. The sites keep rendering them when the api is
 unreachable.
 
+## Moving a fork's branding into the database
+
+This is for the forks that style themselves with static SCSS and image files. A new deployment sets
+its branding on the Partners branding page and does not run this.
+
+`PUT /scriptRunner/migrateJurisdictionBranding` reads a fork's `overrides.scss` from GitHub and
+writes the colors, fonts and button radius it declares into that jurisdiction's row, which the
+public site then renders. Only a full admin can run it.
+
+```bash
+curl -X PUT http://localhost:3100/scriptRunner/migrateJurisdictionBranding \
+  -H "Content-Type: application/json" \
+  -H "passkey: $API_PASS_KEY" \
+  -b "access-token=$YOUR_SESSION_COOKIE" \
+  -d '{
+    "jurisdictionName": "Bloomington",
+    "commit": false,
+    "repositoryUrl": "https://raw.githubusercontent.com/CityOfDetroit/bloom",
+    "gitRef": "a1b2c3d",
+    "logoPath": "sites/public/public/images/detroit-logo.png"
+  }'
+```
+
+Body fields:
+
+- `jurisdictionName` names the jurisdiction to write.
+- `commit` is required. With `false` nothing is written and nothing is uploaded, so a dry run can be
+  repeated.
+- `repositoryUrl` and `gitRef` say where to read from. The url must be on `raw.githubusercontent.com`,
+  with no port, credentials, query or fragment. Pin `gitRef` to a commit sha rather than a branch, so
+  the dry run and the run that writes read the same files.
+- `overridesPath` is the stylesheet to parse, defaulting to `sites/public/styles/overrides.scss`.
+- `logoPath` and `faviconPath` are the images to upload. Each fork names its logo differently and
+  references it from its own layout, so they cannot be discovered. Omit them to leave the stored
+  assets alone.
+- `brand` overrides what the stylesheet gave, field by field, and takes the same shape the branding
+  endpoint accepts. Use it for anything the parse got wrong or could not find.
+
+Only declarations directly under `:root` are read, and the button radius only from a `.seeds-button`
+block under it.
+
+A font family is only written when `brand.fontUrl` supplies a Google Fonts url. A fork serves its
+font from its own files, and a brand font has to be a Google Fonts url, so migrating the family
+alone would name a font the page doesn't loads. The report says when a family was found and dropped.
+
+Assets need `S3_PUBLIC_BUCKET` set. There is no server-side upload on a Cloudinary install, so one
+is refused rather than half migrated: upload the two images through the Partners branding page and
+re-run without `logoPath` and `faviconPath`.
+
+The report is written to the api log.
+
+Each committing run is recorded under its own name, so the same fork can be migrated again without
+deleting anything from `script_runs`. A re-run writes the same values and uploads to the same key,
+and leaves the asset link alone when the jurisdiction already points at it, so running it twice
+is safe.
+
 ## Modifying the Schema
 
 If you're using VSCode, you can install the [Prisma extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) to add syntax highlighting and formatting to Prisma schema files.
