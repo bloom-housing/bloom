@@ -2889,6 +2889,28 @@ export class ScriptRunnerService {
     })
   }
   /**
+   * A script that moves a fork's static branding into its jurisdiction row
+   */
+  migrateJurisdictionBranding(
+    params: {
+      /** requestBody */
+      body?: JurisdictionBrandingMigrationDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/migrateJurisdictionBranding"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * A script that adds existing feature flags into the feature flag table
    */
   addFeatureFlags(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -10826,6 +10848,33 @@ export interface TranslationOverrideMigrationDTO {
 
   /**  */
   partnersPath?: string
+}
+
+/** JurisdictionBrandingMigrationDTO */
+export interface JurisdictionBrandingMigrationDTO {
+  /**  */
+  jurisdictionName: string
+
+  /**  */
+  commit: boolean
+
+  /**  */
+  repositoryUrl?: string
+
+  /**  */
+  gitRef?: string
+
+  /**  */
+  overridesPath?: string
+
+  /**  */
+  logoPath?: string
+
+  /**  */
+  faviconPath?: string
+
+  /**  */
+  brand?: BrandDTO
 }
 
 /** PaginationDTO */
