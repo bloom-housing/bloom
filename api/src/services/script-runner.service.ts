@@ -550,7 +550,12 @@ export class ScriptRunnerService {
     overrides: BrandDTO | undefined,
     notes: string[],
   ): Partial<BrandDTO> {
-    const desired: Partial<BrandDTO> = { ...parsed, ...(overrides ?? {}) };
+    const supplied = Object.fromEntries(
+      Object.entries(overrides ?? {}).filter(
+        ([, value]) => value !== undefined,
+      ),
+    );
+    const desired: Partial<BrandDTO> = { ...parsed, ...supplied };
 
     const families = [
       'fontFamily',

@@ -127,6 +127,38 @@ describe('Script Runner Controller Tests', () => {
       });
     });
 
+    // Through the validation pipe, which builds the dto with excludeExtraneousValues so every
+    // BrandDTO property is present.
+    it('keeps the parsed fields when the body overrides only one of them', async () => {
+      await call({
+        jurisdictionName,
+        commit: true,
+        brand: { secondary: { base: '#123456' } },
+      }).expect(200);
+
+      expect(await storedBrand(jurisdictionId)).toEqual({
+        primary: { base: '#297E73', dark: '#1F6058' },
+        secondary: { base: '#123456' },
+        buttonRadius: '3xl',
+      });
+    });
+
+    it('keeps a stored field the body does not mention', async () => {
+      await call({ jurisdictionName, commit: true }).expect(200);
+      await call({
+        jurisdictionName,
+        commit: true,
+        brand: { buttonRadius: 'full' },
+      }).expect(200);
+
+      expect(await storedBrand(jurisdictionId)).toEqual(
+        expect.objectContaining({
+          primary: { base: '#297E73', dark: '#1F6058' },
+          buttonRadius: 'full',
+        }),
+      );
+    });
+
     it('writes nothing on a dry run', async () => {
       await call({ jurisdictionName, commit: false }).expect(200);
 
