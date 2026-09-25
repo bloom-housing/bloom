@@ -62,6 +62,7 @@ import {
   formatBrandReport,
   ParsedBrand,
   parseBrandSources,
+  UnreadableStylesheetError,
 } from '../utilities/brand-migration';
 
 const TRANSLATION_FETCH_TIMEOUT_MS = 30_000;
@@ -494,11 +495,16 @@ export class ScriptRunnerService {
     const gitRef = dto.gitRef ?? DEFAULT_GIT_REF;
     const sourceUrl = (path: string) => `${repositoryUrl}/${gitRef}/${path}`;
 
-    const parsed = parseBrandSources(
-      await this.getSourceText(
-        sourceUrl(dto.overridesPath ?? DEFAULT_OVERRIDES_PATH),
-      ),
-    );
+    const overridesUrl = sourceUrl(dto.overridesPath ?? DEFAULT_OVERRIDES_PATH);
+    let parsed: ParsedBrand;
+    try {
+      parsed = parseBrandSources(await this.getSourceText(overridesUrl));
+    } catch (error) {
+      if (error instanceof UnreadableStylesheetError) {
+        throw new BadRequestException(`${overridesUrl}: ${error.message}`);
+      }
+      throw error;
+    }
 
     const notes: string[] = [];
     const desired = this.brandToWrite(parsed, dto.brand, notes);

@@ -29,23 +29,27 @@ export type ParsedBrand = {
   serifFontFamily?: string;
 };
 
+const normalize = (selector: string): string =>
+  selector
+    .replace(/\s*([>+~])\s*/g, ' $1 ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
 export const declarationsByPath = (
   scss: string,
 ): Map<string, Map<string, string>> => {
   const byPath = new Map<string, Map<string, string>>();
-  // Strips /* ... */ and // ... so commented out declarations are skipped
-  const source = scss
-    .replace(/\/\*[\s\S]*?\*\//g, '')
-    .replace(/\/\/[^\n]*/g, '');
-
   const path: string[] = [];
   let buffer = '';
 
-  const record = (declaration: string) => {
+  const record = () => {
+    const declaration = buffer;
+    buffer = '';
+
     const separator = declaration.indexOf(':');
     if (separator <= 0 || !path.length) return;
 
-    const key = path.join(' > ');
+    const key = path.map(normalize).join(' > ');
     if (!byPath.has(key)) byPath.set(key, new Map());
     byPath
       .get(key)
@@ -55,19 +59,48 @@ export const declarationsByPath = (
       );
   };
 
-  for (const character of source) {
+  let index = 0;
+  while (index < scss.length) {
+    const character = scss[index];
+    const next = scss[index + 1];
+
+    if (character === '/' && next === '*') {
+      const close = scss.indexOf('*/', index + 2);
+      index = close === -1 ? scss.length : close + 2;
+      continue;
+    }
+
+    if (character === '/' && next === '/' && !buffer.trim()) {
+      const newline = scss.indexOf('\n', index);
+      index = newline === -1 ? scss.length : newline + 1;
+      continue;
+    }
+
+    if (character === '"' || character === "'") {
+      const close = scss.indexOf(character, index + 1);
+      const literal =
+        close === -1 ? scss.slice(index) : scss.slice(index, close + 1);
+      buffer += literal;
+      index += literal.length;
+      continue;
+    }
+
     if (character === '{') {
-      path.push(buffer.trim().replace(/\s+/g, ' '));
+      path.push(buffer.trim());
       buffer = '';
+      const key = path.map(normalize).join(' > ');
+      if (!byPath.has(key)) byPath.set(key, new Map());
     } else if (character === '}') {
+      record();
       path.pop();
       buffer = '';
     } else if (character === ';') {
-      record(buffer);
-      buffer = '';
+      record();
     } else {
       buffer += character;
     }
+
+    index += 1;
   }
 
   return byPath;
@@ -142,9 +175,17 @@ const familyFrom = (
     : undefined;
 };
 
+export class UnreadableStylesheetError extends Error {}
+
 export const parseBrandSources = (scss: string): ParsedBrand => {
   const byPath = declarationsByPath(scss);
-  const root = byPath.get(ROOT) ?? new Map<string, string>();
+  if (!byPath.has(ROOT)) {
+    throw new UnreadableStylesheetError(
+      'no :root block was found, so this is not a stylesheet the migration can read',
+    );
+  }
+
+  const root = byPath.get(ROOT);
 
   const parsed: ParsedBrand = {};
 

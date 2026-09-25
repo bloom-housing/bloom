@@ -2,6 +2,7 @@ import { BrandRadiusEnum } from '../../../src/enums/jurisdictions/brand-radius-e
 import {
   declarationsByPath,
   parseBrandSources,
+  UnreadableStylesheetError,
 } from '../../../src/utilities/brand-migration';
 
 /*
@@ -93,6 +94,85 @@ describe('declarationsByPath', () => {
   it('returns nothing for a stylesheet with no rules', () => {
     expect(declarationsByPath('// just a comment\n').size).toEqual(0);
   });
+});
+
+describe('a stylesheet the scanner cannot read', () => {
+  // Distinguishable from a fork that genuinely declares no branding, which is a real case.
+  it.each(['', '// only a comment', '.some-class { color: red; }'])(
+    'raises rather than reporting nothing for %s',
+    (scss) => {
+      expect(() => parseBrandSources(scss)).toThrow(UnreadableStylesheetError);
+    },
+  );
+
+  it('accepts a :root block whose declarations are all nested', () => {
+    expect(
+      parseBrandSources(':root { .seeds-button { color: red; } }'),
+    ).toEqual({});
+  });
+});
+
+describe('values the scanner reads that a strip-first parser would miss', () => {
+  const parseRoot = (body: string) => parseBrandSources(`:root {${body}}`);
+
+  // The // in a url is not a line comment, and stripping it would swallow the rest of the line.
+  it('keeps a declaration that follows a url', () => {
+    const parsed = parseRoot(`
+      --seeds-color-primary: #297e73;
+      background: url(https://example.test/hero.png);
+      --seeds-color-primary-dark: #1f6058;
+    `);
+
+    expect(parsed.primary).toEqual({ base: '#297E73', dark: '#1F6058' });
+  });
+
+  it('reads a stylesheet with an @import above the block', () => {
+    const parsed = parseBrandSources(
+      '@import url("https://fonts.googleapis.com/css2?family=X");\n' +
+        ':root { --seeds-color-primary: #297e73; }',
+    );
+
+    expect(parsed.primary.base).toEqual('#297E73');
+  });
+
+  it('records the last declaration when it has no semicolon', () => {
+    expect(parseRoot('--seeds-color-primary: #297e73').primary).toEqual({
+      base: '#297E73',
+    });
+  });
+
+  it.each(['{', '// not a comment', '}'])(
+    'is not confused by %s inside a quoted value',
+    (content) => {
+      const parsed = parseRoot(
+        `content: "${content}"; --seeds-color-primary: #297e73;`,
+      );
+
+      expect(parsed.primary.base).toEqual('#297E73');
+    },
+  );
+
+  it('still ignores a genuinely commented out declaration', () => {
+    const parsed = parseRoot(`
+      // --seeds-color-primary: #000000;
+      /* --seeds-color-secondary: #111111; */
+      --seeds-color-primary: #297e73;
+    `);
+
+    expect(parsed.primary.base).toEqual('#297E73');
+    expect(parsed.secondary).toBeUndefined();
+  });
+
+  it.each([':root>.seeds-button', ':root   >   .seeds-button'])(
+    'matches the button block written as %s',
+    (selector) => {
+      const parsed = parseBrandSources(
+        `:root { --seeds-color-primary: #297e73; } ${selector} { --button-border-radius-md: var(--seeds-rounded-full); }`,
+      );
+
+      expect(parsed.buttonRadius).toEqual(BrandRadiusEnum.full);
+    },
+  );
 });
 
 describe('parseBrandSources', () => {
