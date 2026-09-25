@@ -454,6 +454,7 @@
   "listings.listingTypeTitle": "What kind of listing is this?",
   "listings.listingWillAutomaticallyClose": "Listing will automatically close on this date and time",
   "listings.longitude": "Longitude",
+  "listings.lottery.autopublishNotice": "Results are published to applicants automatically %{smart_count} day after the lottery was run, unless published manually first. These results will be published automatically on %{publishDate}. |||| Results are published to applicants automatically %{smart_count} days after the lottery was run, unless published manually first. These results will be published automatically on %{publishDate}.",
   "listings.lottery.dataExpiryDescription": "Lottery data has expired for this listing and is no longer available for export.",
   "listings.lottery.dataExpiryMessage": "Lottery data for this listing will expire on %{date}. Please export data prior to this date.",
   "listings.lottery.dialogAlert": "This data will expire on %{date}.",

@@ -8,7 +8,7 @@ import {
   LotteryStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { fireEvent, screen } from "@testing-library/react"
+import { fireEvent, screen, within } from "@testing-library/react"
 import { mockNextRouter, render } from "../../testUtils"
 import Lottery from "../../../src/pages/listings/[id]/lottery"
 
@@ -1075,5 +1075,141 @@ describe("lottery", () => {
     expect(screen.getByText("Lottery results published to public")).toBeInTheDocument()
     expect(screen.getByText("by Partner One")).toBeInTheDocument()
     expect(screen.getByText("September 8th, 2025 at 9:00 am")).toBeInTheDocument()
+  })
+
+  describe("autopublish notice", () => {
+    type MockJurisdiction = {
+      id: string
+      name: string
+      featureFlags: { name: FeatureFlagEnum; active: boolean }[]
+      lotteryAutoPublishDays?: number
+    }
+
+    const bloomington = (overrides: Partial<MockJurisdiction> = {}): MockJurisdiction => ({
+      id: "id",
+      name: "Bloomington",
+      featureFlags: [],
+      ...overrides,
+    })
+
+    const nonAdminLotteriesOn = [{ name: FeatureFlagEnum.enableNonAdminLotteries, active: true }]
+
+    const setupHandlers = (jurisdictions: MockJurisdiction[]) => {
+      server.use(
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(ctx.json({ id: "user1", userRoles: { isAdmin: true }, jurisdictions }))
+        }),
+        rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+          return res(ctx.json(""))
+        }),
+        rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
+          return res(ctx.json({ totalCount: 0 }))
+        }),
+        rest.get(
+          "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+          (_req, res, ctx) => {
+            return res(ctx.json([]))
+          }
+        )
+      )
+    }
+
+    const freezeTime = () => {
+      jest.useFakeTimers("modern").setSystemTime(new Date("2026-09-23T12:00:00.000Z"))
+    }
+
+    const openRunDialog = async () => {
+      render(<Lottery listing={closedListing} />)
+      expect(await screen.findByText("Lottery")).toBeInTheDocument()
+
+      freezeTime()
+      fireEvent.click(screen.getByText("Run lottery"))
+      expect(screen.getByText("Confirmation needed")).toBeInTheDocument()
+    }
+
+    beforeEach(() => {
+      mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+      document.cookie = "access-token-available=True"
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
+    it("should show the notice with plural copy in the run lottery dialog", async () => {
+      setupHandlers([bloomington({ featureFlags: nonAdminLotteriesOn, lotteryAutoPublishDays: 7 })])
+
+      await openRunDialog()
+
+      const alertBox = screen.getByTestId("alert-box")
+      expect(alertBox).toHaveClass("alert-box", "primary")
+      expect(
+        within(alertBox).getByText(
+          "Results are published to applicants automatically 7 days after the lottery was run, unless published manually first. These results will be published automatically on 09/30/2026."
+        )
+      ).toBeInTheDocument()
+    })
+
+    it("should show the notice with singular copy when the jurisdiction publishes after one day", async () => {
+      setupHandlers([bloomington({ featureFlags: nonAdminLotteriesOn, lotteryAutoPublishDays: 1 })])
+
+      await openRunDialog()
+
+      expect(
+        within(screen.getByTestId("alert-box")).getByText(
+          "Results are published to applicants automatically 1 day after the lottery was run, unless published manually first. These results will be published automatically on 09/24/2026."
+        )
+      ).toBeInTheDocument()
+    })
+
+    it("should show the notice in the re-run lottery dialog", async () => {
+      setupHandlers([bloomington({ featureFlags: nonAdminLotteriesOn, lotteryAutoPublishDays: 7 })])
+
+      render(
+        <Lottery
+          listing={{
+            ...closedListing,
+            lotteryLastRunAt: new Date("September 6, 2025 8:15:00"),
+            lotteryStatus: LotteryStatusEnum.ran,
+          }}
+        />
+      )
+      expect(await screen.findByText("Lottery")).toBeInTheDocument()
+      expect(screen.queryByText("Release lottery")).not.toBeInTheDocument()
+
+      freezeTime()
+      fireEvent.click(screen.getByText("Re-run lottery"))
+      expect(screen.getByText("Are you sure?")).toBeInTheDocument()
+
+      expect(
+        within(screen.getByTestId("alert-box")).getByText(
+          "Results are published to applicants automatically 7 days after the lottery was run, unless published manually first. These results will be published automatically on 09/30/2026."
+        )
+      ).toBeInTheDocument()
+    })
+
+    it("should not show the notice when the non admin lotteries flag is off", async () => {
+      setupHandlers([bloomington({ lotteryAutoPublishDays: 7 })])
+
+      await openRunDialog()
+
+      expect(screen.queryByTestId("alert-box")).not.toBeInTheDocument()
+    })
+
+    it("should not show the notice when the jurisdiction has no autopublish period", async () => {
+      setupHandlers([bloomington({ featureFlags: nonAdminLotteriesOn })])
+
+      await openRunDialog()
+
+      expect(screen.queryByTestId("alert-box")).not.toBeInTheDocument()
+    })
+
+    it("should not show the notice when the autopublish period is zero days", async () => {
+      setupHandlers([bloomington({ featureFlags: nonAdminLotteriesOn, lotteryAutoPublishDays: 0 })])
+
+      await openRunDialog()
+
+      expect(screen.queryByTestId("alert-box")).not.toBeInTheDocument()
+    })
   })
 })

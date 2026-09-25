@@ -50,6 +50,7 @@ import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-util
 
 const LOTTERY_CRON_JOB_NAME = 'LOTTERY_CRON_JOB';
 const LOTTERY_PUBLISH_CRON_JOB_NAME = 'LOTTERY_PUBLISH_CRON_JOB';
+const MS_IN_DAY = 86400000;
 
 export type LotteryActivityLogStatus =
   | LotteryStatusEnum
@@ -705,19 +706,22 @@ export class LotteryService {
   }
 
   /**
-    runs the job to auto expire lotteries that are passed their due date
-    will call the the cache purge to purge all listings as long as updates had to be made
+    runs the job to automatically publish the lottery when:
+    - the jurisdiction does NOT have enableNonAdminLotteries: the lottery has been released to partners and its public lottery event date has arrived
+    - the jurisdiction DOES have enableNonAdminLotteries: the lottery has been run and lotteryAutoPublishDays have elapsed since lotteryLastRunAt
   */
   async autoPublishResults(): Promise<SuccessDTO> {
     this.logger.warn('autoPublishLotteryResults job running');
     await this.cronJobService.markCronJobAsStarted(
       LOTTERY_PUBLISH_CRON_JOB_NAME,
     );
-    const tomorrow = dayjs(
+
+    const today = dayjs(
       `${new Date().toISOString().split('T')[0]}T00:00:00.000Z`,
-    )
-      .add(1, 'days')
-      .toDate();
+    );
+    const tomorrow = today.add(1, 'days').toDate();
+
+    // Fetch all entries in the listings database table with the event to be autopublished the next day
     const releasedListings = await this.prisma.listings.findMany({
       select: {
         id: true,
@@ -735,11 +739,69 @@ export class LotteryService {
             startDate: { lt: tomorrow },
           },
         },
+        jurisdictions: {
+          featureFlags: {
+            none: {
+              name: FeatureFlagEnum.enableNonAdminLotteries,
+              active: true,
+            },
+          },
+        },
       },
     });
 
+    const autoJurisdictions = await this.prisma.jurisdictions.findMany({
+      select: {
+        id: true,
+        lotteryAutoPublishDays: true,
+      },
+      where: {
+        featureFlags: {
+          some: {
+            name: FeatureFlagEnum.enableNonAdminLotteries,
+            active: true,
+          },
+        },
+        lotteryAutoPublishDays: {
+          not: null,
+        },
+      },
+    });
+
+    const publishCutoffMap = new Map<number, string[]>();
+    autoJurisdictions.forEach((entry) => {
+      const cutoffTime =
+        today.valueOf() - (entry.lotteryAutoPublishDays - 1) * MS_IN_DAY;
+      const ids = publishCutoffMap.get(cutoffTime);
+      if (ids) {
+        ids.push(entry.id);
+      } else {
+        publishCutoffMap.set(cutoffTime, [entry.id]);
+      }
+    });
+
+    const autoListings = publishCutoffMap.size
+      ? await this.prisma.listings.findMany({
+          select: {
+            id: true,
+            name: true,
+            lotteryLastRunAt: true,
+            jurisdictions: true,
+          },
+          where: {
+            lotteryLastPublishedAt: null,
+            lotteryStatus: LotteryStatusEnum.ran,
+            OR: [...publishCutoffMap].map(([cutoffTime, ids]) => ({
+              jurisdictionId: { in: ids },
+              lotteryLastRunAt: { lt: new Date(cutoffTime) },
+            })),
+          },
+        })
+      : [];
+
+    const listingsToUpdate = [...releasedListings, ...autoListings];
     await Promise.all(
-      releasedListings.map(async (listingRaw) => {
+      listingsToUpdate.map(async (listingRaw) => {
         const listing = mapTo(Listing, listingRaw);
         try {
           await this.prisma.activityLog.create({
@@ -759,7 +821,7 @@ export class LotteryService {
     );
 
     this.logger.warn(
-      `Changed the status of ${releasedListings.length} lotteries`,
+      `Changed the status of ${listingsToUpdate.length} lotteries`,
     );
     return {
       success: true,
