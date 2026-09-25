@@ -211,10 +211,7 @@ describe('Script Runner Controller Tests', () => {
       );
       const logoPath = 'sites/public/public/images/logo.png';
 
-      // The service slugifies the name into the key, so the filter has to match that, not the name.
-      const keyPrefix = `brand/${jurisdictionName
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')}/`;
+      const keyPrefix = `brand/${jurisdictionId}/`;
       const linkedAssets = async () =>
         await prisma.assets.count({
           where: { fileId: { startsWith: keyPrefix } },

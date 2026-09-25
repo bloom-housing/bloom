@@ -1044,10 +1044,9 @@ describe('Testing script runner service', () => {
       prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
       prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
       jest.spyOn(service, 'getSourceText').mockResolvedValue(SCSS);
-      jest.spyOn(service, 'getSourceImage').mockResolvedValue({
-        body: Buffer.from('image bytes'),
-        contentType: 'image/png',
-      });
+      jest
+        .spyOn(service, 'getSourceImage')
+        .mockResolvedValue(Buffer.from('image bytes'));
       updateBrand = jest
         .spyOn(jurisdictionService, 'updateBrand')
         .mockResolvedValue(null);
@@ -1128,22 +1127,54 @@ describe('Testing script runner service', () => {
         );
 
         expect(s3ServiceMock.uploadToPublic).toHaveBeenCalledWith(
-          'brand/bloomington/logo.png',
+          `brand/${jurisdictionId}/logo.png`,
           expect.any(Buffer),
           'image/png',
         );
-        expect(writtenBrand().logoFileId).toEqual('brand/bloomington/logo.png');
+        expect(writtenBrand().logoFileId).toEqual(
+          `brand/${jurisdictionId}/logo.png`,
+        );
       });
+
+      // The type is taken from the path rather than the response, so a fork repository cannot
+      // decide what the bucket serves.
+      it.each([
+        ['logo.png', 'image/png'],
+        ['logo.svg', 'image/svg+xml'],
+        ['logo.webp', 'image/webp'],
+      ])('stores %s as %s', async (file, contentType) => {
+        await service.migrateJurisdictionBranding(
+          request(),
+          body({ commit: true, logoPath: `images/${file}` }),
+        );
+
+        expect(s3ServiceMock.uploadToPublic).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.any(Buffer),
+          contentType,
+        );
+      });
+
+      it.each(['images/logo.gif', 'images/logo', 'images/logo.'])(
+        'refuses %s, which the branding page would not accept either',
+        async (logoPath) => {
+          await expect(
+            service.migrateJurisdictionBranding(
+              request(),
+              body({ commit: true, logoPath }),
+            ),
+          ).rejects.toThrow(BadRequestException);
+
+          expect(s3ServiceMock.uploadToPublic).not.toHaveBeenCalled();
+        },
+      );
 
       // The key is the one the public site already serves, so a partial upload would swap a live
       // image and leave it swapped, with the run reporting a 400 and writing nothing.
       it('uploads nothing when a later image cannot be fetched', async () => {
         jest
           .spyOn(service, 'getSourceImage')
-          .mockResolvedValueOnce({
-            body: Buffer.from('logo bytes'),
-            contentType: 'image/png',
-          })
+          .mockResolvedValueOnce(Buffer.from('logo bytes'))
           .mockRejectedValueOnce(new BadRequestException('not an image'));
 
         await expect(
@@ -1172,9 +1203,11 @@ describe('Testing script runner service', () => {
         );
 
         expect(s3ServiceMock.uploadToPublic).toHaveBeenCalledTimes(2);
-        expect(writtenBrand().logoFileId).toEqual('brand/bloomington/logo.png');
+        expect(writtenBrand().logoFileId).toEqual(
+          `brand/${jurisdictionId}/logo.png`,
+        );
         expect(writtenBrand().faviconFileId).toEqual(
-          'brand/bloomington/favicon.svg',
+          `brand/${jurisdictionId}/favicon.svg`,
         );
       });
 
@@ -1184,7 +1217,7 @@ describe('Testing script runner service', () => {
         prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
           id: jurisdictionId,
           brand: null,
-          brandLogo: { fileId: 'brand/bloomington/logo.png' },
+          brandLogo: { fileId: `brand/${jurisdictionId}/logo.png` },
         });
 
         await service.migrateJurisdictionBranding(

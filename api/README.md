@@ -140,7 +140,7 @@ Body fields:
 - `overridesPath` is the stylesheet to parse, defaulting to `sites/public/styles/overrides.scss`.
 - `logoPath` and `faviconPath` are the images to upload. Each fork names its logo differently and
   references it from its own layout, so they cannot be discovered. Omit them to leave the stored
-  assets alone.
+  assets alone. The file must end in `.png`, `.svg` or `.webp`.
 - `brand` overrides what the stylesheet gave, field by field, and takes the same shape the branding
   endpoint accepts. Use it for anything the parse got wrong or could not find.
 
@@ -151,7 +151,8 @@ A font family is only written when `brand.fontUrl` supplies a Google Fonts url. 
 font from its own files, and a brand font has to be a Google Fonts url, so migrating the family
 alone would name a font the page doesn't loads. The report says when a family was found and dropped.
 
-Assets need `S3_PUBLIC_BUCKET` set. There is no server-side upload on a Cloudinary install, so one
+Assets are stored under `brand/<jurisdiction id>/`, so a re-run overwrites in place and two
+jurisdictions cannot collide. They need `S3_PUBLIC_BUCKET` set. There is no server-side upload on a Cloudinary install, so one
 is refused rather than half migrated: upload the two images through the Partners branding page and
 re-run without `logoPath` and `faviconPath`.
 

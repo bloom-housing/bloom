@@ -66,8 +66,15 @@ import {
 } from '../utilities/brand-migration';
 
 const TRANSLATION_FETCH_TIMEOUT_MS = 30_000;
-const IMAGE_FETCH_TIMEOUT_MS = 30_000;
+const SOURCE_FETCH_TIMEOUT_MS = 30_000;
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const MAX_STYLESHEET_BYTES = 2 * 1024 * 1024;
+
+const IMAGE_TYPES: Record<string, string> = {
+  '.png': 'image/png',
+  '.svg': 'image/svg+xml',
+  '.webp': 'image/webp',
+};
 const DEFAULT_OVERRIDES_PATH = 'sites/public/styles/overrides.scss';
 
 /**
@@ -509,10 +516,15 @@ export class ScriptRunnerService {
     const notes: string[] = [];
     const desired = this.brandToWrite(parsed, dto.brand, notes);
 
-    const assets = await this.brandAssetsToWrite(dto, sourceUrl, {
-      logo: jurisdiction.brandLogo?.fileId,
-      favicon: jurisdiction.brandFavicon?.fileId,
-    });
+    const assets = await this.brandAssetsToWrite(
+      dto,
+      jurisdiction.id,
+      sourceUrl,
+      {
+        logo: jurisdiction.brandLogo?.fileId,
+        favicon: jurisdiction.brandFavicon?.fileId,
+      },
+    );
     const changes = diffBrand(
       jurisdiction.brand as Record<string, unknown>,
       desired as Record<string, unknown>,
@@ -580,6 +592,7 @@ export class ScriptRunnerService {
 
   private async brandAssetsToWrite(
     dto: JurisdictionBrandingMigrationDTO,
+    jurisdictionId: string,
     sourceUrl: (path: string) => string,
     stored: { logo?: string; favicon?: string },
   ): Promise<{
@@ -602,11 +615,17 @@ export class ScriptRunnerService {
 
     const fetched = [];
     for (const { kind, path } of wanted) {
+      const extension = extname(path).toLowerCase();
+      const contentType = IMAGE_TYPES[extension];
+      if (!contentType) {
+        throw new BadRequestException(
+          `${path} is not one of ${Object.keys(IMAGE_TYPES).join(', ')}`,
+        );
+      }
+
       const url = sourceUrl(path);
-      const { body, contentType } = await this.getSourceImage(url);
-      const key = `brand/${dto.jurisdictionName
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')}/${kind}${extname(path)}`;
+      const body = await this.getSourceImage(url);
+      const key = `brand/${jurisdictionId}/${kind}${extension}`;
       fetched.push({ kind, url, key, body, contentType });
     }
 
@@ -643,16 +662,17 @@ export class ScriptRunnerService {
     const { data } = await firstValueFrom(
       this.httpService
         .get(url, {
-          signal: AbortSignal.timeout(TRANSLATION_FETCH_TIMEOUT_MS),
+          signal: AbortSignal.timeout(SOURCE_FETCH_TIMEOUT_MS),
           maxRedirects: 0,
           responseType: 'text',
+          maxContentLength: MAX_STYLESHEET_BYTES,
         })
         .pipe(
           catchError((error: AxiosError) => {
             throw new BadRequestException(
               `failed fetching ${url}: ${
                 error.code === 'ERR_CANCELED'
-                  ? `timed out after ${TRANSLATION_FETCH_TIMEOUT_MS}ms`
+                  ? `timed out after ${SOURCE_FETCH_TIMEOUT_MS}ms`
                   : error.message
               }`,
             );
@@ -670,13 +690,11 @@ export class ScriptRunnerService {
    * @description fetches an image from the fork repository and rejects anything that is not one,
    * or is over the size cap
    */
-  async getSourceImage(
-    url: string,
-  ): Promise<{ body: Buffer; contentType: string }> {
+  async getSourceImage(url: string): Promise<Buffer> {
     const response = await firstValueFrom(
       this.httpService
         .get(url, {
-          signal: AbortSignal.timeout(IMAGE_FETCH_TIMEOUT_MS),
+          signal: AbortSignal.timeout(SOURCE_FETCH_TIMEOUT_MS),
           maxRedirects: 0,
           responseType: 'arraybuffer',
           maxContentLength: MAX_IMAGE_BYTES,
@@ -686,7 +704,7 @@ export class ScriptRunnerService {
             throw new BadRequestException(
               `failed fetching ${url}: ${
                 error.code === 'ERR_CANCELED'
-                  ? `timed out after ${IMAGE_FETCH_TIMEOUT_MS}ms`
+                  ? `timed out after ${SOURCE_FETCH_TIMEOUT_MS}ms`
                   : error.message
               }`,
             );
@@ -694,25 +712,16 @@ export class ScriptRunnerService {
         ),
     );
 
-    const contentType = String(response.headers?.['content-type'] ?? '').split(
+    const served = String(response.headers?.['content-type'] ?? '').split(
       ';',
     )[0];
-    if (!contentType.startsWith('image/')) {
+    if (!served.startsWith('image/')) {
       throw new BadRequestException(
-        `${url} returned ${
-          contentType || 'no content type'
-        } rather than an image`,
+        `${url} returned ${served || 'no content type'} rather than an image`,
       );
     }
 
-    const body = Buffer.from(response.data as ArrayBuffer);
-    if (body.length > MAX_IMAGE_BYTES) {
-      throw new BadRequestException(
-        `${url} is larger than the ${MAX_IMAGE_BYTES} byte limit`,
-      );
-    }
-
-    return { body, contentType };
+    return Buffer.from(response.data as ArrayBuffer);
   }
 
   /**
