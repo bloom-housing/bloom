@@ -77,6 +77,122 @@ describe('Script Runner Controller Tests', () => {
     await app.close();
   });
 
+  describe('migrateJurisdictionBranding endpoint', () => {
+    const SCSS = `:root {
+      --seeds-color-primary: #297e73;
+      --seeds-color-primary-dark: #1f6058;
+      .seeds-button {
+        --button-border-radius-md: var(--seeds-rounded-3xl);
+      }
+    }`;
+
+    const call = (body: Record<string, unknown>, sessionCookies = cookies) =>
+      request(app.getHttpServer())
+        .put('/scriptRunner/migrateJurisdictionBranding')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', sessionCookies)
+        .send(body);
+
+    const storedBrand = async (id: string) =>
+      (
+        await prisma.jurisdictions.findUnique({
+          where: { id },
+          select: { brand: true },
+        })
+      ).brand;
+
+    let jurisdictionName: string;
+    let jurisdictionId: string;
+
+    beforeEach(async () => {
+      httpServiceMock.get.mockImplementation(() => of({ data: SCSS }));
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      jurisdictionId = jurisdiction.id;
+      jurisdictionName = jurisdiction.name;
+    });
+
+    it('writes the fork brand into the jurisdiction row', async () => {
+      await call({ jurisdictionName, commit: true }).expect(200);
+
+      expect(await storedBrand(jurisdictionId)).toEqual({
+        primary: { base: '#297E73', dark: '#1F6058' },
+        buttonRadius: '3xl',
+      });
+    });
+
+    it('writes nothing on a dry run', async () => {
+      await call({ jurisdictionName, commit: false }).expect(200);
+
+      expect(await storedBrand(jurisdictionId)).toBeNull();
+    });
+
+    // The acceptance criterion the run record would otherwise block: the translation script names
+    // its run per jurisdiction, so a second run of that one returns a 400.
+    it('allows a second run rather than refusing it', async () => {
+      await call({ jurisdictionName, commit: true }).expect(200);
+      await call({ jurisdictionName, commit: true }).expect(200);
+
+      expect(await storedBrand(jurisdictionId)).toEqual({
+        primary: { base: '#297E73', dark: '#1F6058' },
+        buttonRadius: '3xl',
+      });
+      expect(
+        await prisma.scriptRuns.count({
+          where: {
+            scriptName: {
+              startsWith: `migrate branding for ${jurisdictionName}`,
+            },
+          },
+        }),
+      ).toEqual(2);
+    });
+
+    it('rejects an unknown jurisdiction', async () => {
+      await call({
+        jurisdictionName: 'nonexistent jurisdiction for this spec',
+        commit: true,
+      }).expect(400);
+    });
+
+    it('rejects a repository url off the allowlist', async () => {
+      await call({
+        jurisdictionName,
+        commit: false,
+        repositoryUrl: 'https://example.test/bloom',
+      }).expect(400);
+    });
+
+    it('refuses an anonymous request', async () => {
+      await call({ jurisdictionName, commit: false }, '').expect(403);
+    });
+
+    it('refuses a jurisdictional admin, who has no write grant on jurisdictions', async () => {
+      const jurisAdmin = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: { isJurisdictionalAdmin: true },
+          jurisdictionIds: [jurisdictionId],
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+      const logIn = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: jurisAdmin.email,
+          password: 'Abcdef12345!',
+        } as Login)
+        .expect(201);
+
+      await call(
+        { jurisdictionName, commit: false },
+        logIn.headers['set-cookie'],
+      ).expect(403);
+    });
+  });
+
   describe('migrateTranslationOverridesToKeyRows endpoint', () => {
     const call = (body: Record<string, unknown>) =>
       request(app.getHttpServer())
