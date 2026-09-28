@@ -29,6 +29,7 @@ export enum FeatureFlagEnum {
   enableFaq = 'enableFaq',
   enableFilterByBathroom = 'enableFilterByBathroom',
   enableFilterByCounty = 'enableFilterByCounty',
+  enableFilterByStatus = 'enableFilterByStatus',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGenderQuestion = 'enableGenderQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
@@ -237,6 +238,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableFilterByCounty,
     description:
       'When true, the filter drawer on the public site includes the option to filter listings by county',
+  },
+  {
+    name: FeatureFlagEnum.enableFilterByStatus,
+    description:
+      'When tue, the filter drawer on the public site includes the option to filter listings by theit status',
   },
   {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
