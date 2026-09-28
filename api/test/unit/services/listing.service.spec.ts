@@ -8342,6 +8342,92 @@ describe('Testing listing service', () => {
         },
       });
     });
+
+    describe('status filtering', () => {
+      const getWhereAnd = () =>
+        (prisma.listings.findMany as jest.Mock).mock.calls[0][0].where.AND;
+
+      const getStatusClauses = () =>
+        getWhereAnd().filter((clause) =>
+          clause.OR?.some((condition) => condition.status !== undefined),
+        );
+
+      beforeEach(() => {
+        prisma.listings.findMany = jest.fn().mockResolvedValue([
+          {
+            id: 'random id',
+            listingsBuildingAddress: exampleAddress,
+          },
+        ]);
+      });
+
+      it('should find closed listings when the closed status is requested', async () => {
+        await service.mapMarkers({
+          filter: [
+            {
+              $comparison: Compare['='],
+              status: ListingsStatusEnum.closed,
+            },
+          ],
+        });
+
+        expect(getStatusClauses()).toEqual([
+          { OR: [{ status: { equals: ListingsStatusEnum.closed } }] },
+        ]);
+      });
+
+      it('should find active listings when the active status is requested', async () => {
+        await service.mapMarkers({
+          filter: [
+            {
+              $comparison: Compare['='],
+              status: ListingsStatusEnum.active,
+            },
+          ],
+        });
+
+        expect(getStatusClauses()).toEqual([
+          { OR: [{ status: { equals: ListingsStatusEnum.active } }] },
+        ]);
+      });
+
+      it('should coerce a non public status to active', async () => {
+        await service.mapMarkers({
+          filter: [
+            {
+              $comparison: Compare['='],
+              status: ListingsStatusEnum.pendingReview,
+            },
+          ],
+        });
+
+        expect(getStatusClauses()).toEqual([
+          { OR: [{ status: { equals: ListingsStatusEnum.active } }] },
+        ]);
+      });
+
+      it('should keep non status filters alongside the closed status', async () => {
+        await service.mapMarkers({
+          filter: [
+            {
+              $comparison: Compare['='],
+              status: ListingsStatusEnum.closed,
+            },
+            {
+              $comparison: Compare.IN,
+              jurisdiction: 'jurisdiction id',
+            },
+          ],
+        });
+
+        expect(getStatusClauses()).toEqual([
+          { OR: [{ status: { equals: ListingsStatusEnum.closed } }] },
+        ]);
+        expect(getWhereAnd()).toContainEqual({
+          OR: [{ jurisdictionId: { in: ['jurisdiction id'] } }],
+        });
+      });
+    });
   });
 
   describe('Test validateMultiselectQuestions helper', () => {

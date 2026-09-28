@@ -5,6 +5,11 @@ import ListingsSearchCombined from "../../../../src/components/browse/map/Listin
 import { ListingsSearchConfigContext } from "../../../../src/components/browse/map/ListingsSearchConfigContext"
 import { searchListings, searchMapMarkers } from "../../../../src/lib/hooks"
 import userEvent from "@testing-library/user-event"
+import {
+  FeatureFlagEnum,
+  ListingFilterKeys,
+  ListingFilterParams,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 window.scrollTo = jest.fn()
 Element.prototype.scrollTo = jest.fn()
@@ -359,6 +364,132 @@ describe("ListingsSearchCombined", () => {
       await waitFor(() => {
         expect(screen.getByTestId("google-map")).toBeInTheDocument()
         expect(screen.getByRole("button", { name: /list view/i })).toBeInTheDocument()
+      })
+    })
+  })
+
+  describe("listing status filter", () => {
+    const statusClosedFilter = { $comparison: "=", status: "closed" }
+
+    const markerFilterCalls = (): ListingFilterParams[][] =>
+      mockSearchMapMarkers.mock.calls.map((call) => call[3] as ListingFilterParams[])
+
+    const lastMarkerFilters = () => {
+      const calls = markerFilterCalls()
+      return calls[calls.length - 1]
+    }
+
+    const hasKey = (filters: ListingFilterParams[], key: ListingFilterKeys) =>
+      filters.some((filter) => filter[key] !== undefined)
+
+    it("passes the closed status filter to the marker search", async () => {
+      renderComponent({}, { status: "closed" })
+
+      await waitFor(() => {
+        expect(markerFilterCalls().some((filters) => filters.length > 0)).toBe(true)
+      })
+      expect(lastMarkerFilters()).toContainEqual(statusClosedFilter)
+    })
+
+    it("drops availabilities from a closed status URL and counts only the status filter", async () => {
+      renderComponent({}, { status: "closed", availabilities: "unitsAvailable" })
+
+      await waitFor(() => {
+        expect(markerFilterCalls().some((filters) => filters.length > 0)).toBe(true)
+      })
+      expect(lastMarkerFilters()).toStrictEqual([statusClosedFilter])
+      expect(hasKey(lastMarkerFilters(), ListingFilterKeys.availabilities)).toBe(false)
+      expect(screen.getAllByRole("button", { name: "Filters 1" }).length).toBeGreaterThan(0)
+    })
+
+    it("keeps availabilities and adds no status filter when status is not in the URL", async () => {
+      renderComponent({}, { availabilities: "unitsAvailable" })
+
+      await waitFor(() => {
+        expect(markerFilterCalls().some((filters) => filters.length > 0)).toBe(true)
+      })
+      expect(hasKey(lastMarkerFilters(), ListingFilterKeys.availabilities)).toBe(true)
+      expect(hasKey(lastMarkerFilters(), ListingFilterKeys.status)).toBe(false)
+    })
+
+    it("ignores an active status in the URL", async () => {
+      renderComponent({}, { status: "active" })
+
+      await waitFor(() => {
+        expect(mockSearchMapMarkers).toHaveBeenCalled()
+      })
+      markerFilterCalls().forEach((filters) => {
+        expect(hasKey(filters, ListingFilterKeys.status)).toBe(false)
+      })
+    })
+
+    it("ignores a non public status in the URL", async () => {
+      renderComponent({}, { status: "pendingReview" })
+
+      await waitFor(() => {
+        expect(mockSearchMapMarkers).toHaveBeenCalled()
+      })
+      markerFilterCalls().forEach((filters) => {
+        expect(hasKey(filters, ListingFilterKeys.status)).toBe(false)
+      })
+    })
+
+    it("passes the closed status filter to the mobile listings search", async () => {
+      Object.defineProperty(window, "innerWidth", { value: 600 })
+      renderComponent({}, { status: "closed" })
+
+      await waitFor(() => {
+        expect(
+          mockSearchListings.mock.calls.some((call) =>
+            (call[6] as ListingFilterParams[]).some((filter) => filter.status === "closed")
+          )
+        ).toBe(true)
+      })
+    })
+
+    // TODO: known gap - on mobile the listings search only receives the drawer filters, which have
+    // no status entry when "Open" is selected, and POST /listings/list applies no default status.
+    // Non public statuses (pending, pendingReview, changesRequested, scheduled) can therefore reach
+    // the mobile list. Un-skip once a default active status is applied for the mobile list search.
+    it.skip("restricts the mobile listings search to active listings when no status is selected", async () => {
+      Object.defineProperty(window, "innerWidth", { value: 600 })
+      renderComponent()
+
+      await waitFor(() => {
+        expect(mockSearchListings).toHaveBeenCalled()
+      })
+      const listingFilters = mockSearchListings.mock.calls[
+        mockSearchListings.mock.calls.length - 1
+      ][6] as ListingFilterParams[]
+      expect(listingFilters).toContainEqual(expect.objectContaining({ status: "active" }))
+    })
+
+    it("navigates to /listings?status=closed when submitting the drawer with 'Closed'", async () => {
+      const { pushMock } = mockNextRouter()
+
+      render(
+        <ListingsSearchConfigContext.Provider
+          value={{ ...defaultConfig, activeFeatureFlags: [FeatureFlagEnum.enableFilterByStatus] }}
+        >
+          <ListingsSearchCombined />
+        </ListingsSearchConfigContext.Provider>
+      )
+
+      await waitFor(() => {
+        expect(screen.getByText("Filters")).toBeInTheDocument()
+      })
+      act(() => {
+        screen.getAllByText("Filters")[0].closest("button").click()
+      })
+      await waitFor(() => {
+        expect(screen.getByRole("radio", { name: "Closed" })).toBeInTheDocument()
+      })
+
+      await userEvent.click(screen.getByRole("radio", { name: "Closed" }))
+      await userEvent.click(screen.getByRole("button", { name: "Show matching listings" }))
+
+      await waitFor(() => {
+        expect(pushMock).toHaveBeenCalledWith("/listings?status=closed")
       })
     })
   })
