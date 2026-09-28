@@ -149,7 +149,12 @@ const DOCUMENTS: DocumentConfig[] = [
             displayField: "title",
             fields: [
               { name: "title", labelKey: "content.cardTitle", type: "text" },
-              { name: "href", labelKey: "content.cardLink", type: "text" },
+              {
+                name: "href",
+                labelKey: "content.cardLink",
+                noteKey: "content.linkHrefNote",
+                type: "text",
+              },
               { name: "contentHtml", labelKey: "content.cardContent", type: "html" },
             ],
           },
@@ -179,7 +184,12 @@ const DOCUMENTS: DocumentConfig[] = [
           displayField: "text",
           fields: [
             { name: "text", labelKey: "content.linkText", type: "text" },
-            { name: "href", labelKey: "content.linkHref", type: "text" },
+            {
+              name: "href",
+              labelKey: "content.linkHref",
+              noteKey: "content.linkHrefNote",
+              type: "text",
+            },
           ],
         },
       },

@@ -33,6 +33,7 @@ const CONTENT_STRINGS = {
   "content.revertToEnglish": "test:revertToEnglish",
   "content.document": "test:document",
   "content.linkHref": "test:linkHref",
+  "content.linkHrefNote": "test:linkHrefNote",
   "content.linkText": "test:linkText",
   "content.contactPhone": "test:contactPhone",
   "content.contactHours": "test:contactHours",
@@ -301,6 +302,8 @@ describe("<SettingsContent>", () => {
 
       expect(await screen.findByText("test:footerLink")).toBeInTheDocument()
       expect(screen.getByLabelText("test:linkText")).toHaveValue("About")
+      // Without a scheme the link is routed internally, which is not obvious from the field alone.
+      expect(screen.getByText("test:linkHrefNote")).toBeInTheDocument()
     })
 
     it("marks footer text sections when the English ones changed", async () => {
