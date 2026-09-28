@@ -6,21 +6,62 @@ import { clearCachedApiReads } from "../../lib/hooks"
   window. The api calls this after writing a translation, a content document or a brand.
 */
 
-// Statically generated pages that read the shared jurisdiction content.
+// Every statically generated page that reads the shared jurisdiction content, which is any page
+// exporting sharedGetStaticProps or calling fetchSharedPageProps directly.
+//
+// /404 and /500 are left out: Next records them separately from the prerendered routes, so
+// revalidating them would report a failure on save.
 export const REVALIDATED_PATHS = [
   "/",
-  "/additional-resources",
-  "/faq",
-  "/finder",
-  "/get-assistance",
-  "/professional-partners",
-  "/sign-in",
-  "/account/dashboard",
-  "/account/favorites",
   "/account/applications",
-  "/account/applications/open",
   "/account/applications/closed",
   "/account/applications/lottery",
+  "/account/applications/open",
+  "/account/dashboard",
+  "/account/favorites",
+  "/additional-resources",
+  "/applications/community-types/community-types",
+  "/applications/contact/address",
+  "/applications/contact/alternate-contact-contact",
+  "/applications/contact/alternate-contact-name",
+  "/applications/contact/alternate-contact-type",
+  "/applications/contact/name",
+  "/applications/financial/income",
+  "/applications/financial/vouchers",
+  "/applications/household/ada",
+  "/applications/household/add-members",
+  "/applications/household/changes",
+  "/applications/household/live-alone",
+  "/applications/household/member",
+  "/applications/household/members-info",
+  "/applications/household/preferred-units",
+  "/applications/household/reasonable-accommodations",
+  "/applications/household/student",
+  "/applications/preferences/all",
+  "/applications/preferences/general",
+  "/applications/programs/programs",
+  "/applications/review/confirmation",
+  "/applications/review/demographics",
+  "/applications/review/summary",
+  "/applications/review/terms",
+  "/applications/start/autofill",
+  "/applications/start/choose-language",
+  "/applications/start/community-disclaimer",
+  "/applications/start/what-to-expect",
+  "/applications/view",
+  "/create-account",
+  "/create-advocate-account-confirmation",
+  "/disclaimer",
+  "/faq",
+  "/finder",
+  "/forgot-password",
+  "/get-assistance",
+  "/housing-basics",
+  "/privacy",
+  "/professional-partners",
+  "/reset-password",
+  "/sign-in",
+  "/verify",
 ]
 
 const DEFAULT_LOCALE = "en"
