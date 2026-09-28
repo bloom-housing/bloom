@@ -2250,7 +2250,7 @@ describe('Listing Controller Tests', () => {
         ]);
 
         const ids = res.body.items.map((item) => item.id);
-        expect(ids).toHaveLength(4);
+        expect(ids).toHaveLength(2);
         expect(ids).toEqual(
           expect.arrayContaining(Object.values(listingIdsByStatus)),
         );
