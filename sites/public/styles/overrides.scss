@@ -377,6 +377,9 @@
 
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }
+
+  .markdown {
+  }
 }
 
 // Until we are able to write our own InfoWindow component, we need to override the default Google Maps styles to get the result we want and maximize screen space in the dialog. These overrides are based on the styles that Google Maps applies by default.
