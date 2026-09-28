@@ -1,3 +1,4 @@
+import { of } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -12,6 +13,10 @@ import { PrismaService } from '../../../src/services/prisma.service';
 describe('Testing feature flag service', () => {
   let service: FeatureFlagService;
   let prisma: PrismaService;
+  const httpServiceMock = {
+    get: jest.fn(),
+    post: jest.fn().mockReturnValue(of({})),
+  };
 
   const mockFeatureFlag = (position: number, date: Date, active = true) => {
     return {
@@ -32,12 +37,24 @@ describe('Testing feature flag service', () => {
     return toReturn;
   };
 
+  beforeEach(() => {
+    httpServiceMock.post.mockClear();
+    httpServiceMock.post.mockReturnValue(of({}));
+    // revalidatePublicSites returns early without a passkey, and CI has no api/.env to supply one.
+    process.env.API_PASS_KEY = 'test-passkey';
+    delete process.env.PUBLIC_SITE_DISCOVERY_NAME;
+  });
+
+  afterEach(() => {
+    delete process.env.API_PASS_KEY;
+  });
+
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         FeatureFlagService,
         JurisdictionService,
-        { provide: HttpService, useValue: { get: jest.fn() } },
+        { provide: HttpService, useValue: httpServiceMock },
         PrismaService,
         Logger,
       ],
@@ -252,6 +269,77 @@ describe('Testing feature flag service', () => {
   });
 
   describe('Testing associateJurisdictions()', () => {
+    const givenAssociation = () => {
+      const mockedValue = mockFeatureFlag(1, new Date());
+      prisma.featureFlags.findFirst = jest
+        .fn()
+        .mockResolvedValue({ ...mockedValue, jurisdictions: [] });
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: 'id' });
+      prisma.featureFlags.update = jest
+        .fn()
+        .mockResolvedValue({ ...mockedValue, jurisdictions: [] });
+      return mockedValue;
+    };
+
+    // The public site reads its flags off the jurisdiction, which it caches for the whole
+    // revalidate window, so a toggle that is not followed by a rebuild takes an hour to show.
+    it('rebuilds the sites gaining the flag and the ones losing it', async () => {
+      const mockedValue = givenAssociation();
+      prisma.jurisdictions.findMany = jest
+        .fn()
+        .mockResolvedValue([
+          { publicUrl: 'http://gaining' },
+          { publicUrl: 'http://losing' },
+        ]);
+
+      await service.associateJurisdictions({
+        id: mockedValue.id,
+        associate: ['gaining-id'],
+        remove: ['losing-id'],
+      });
+
+      expect(prisma.jurisdictions.findMany).toHaveBeenCalledWith({
+        where: { id: { in: ['gaining-id', 'losing-id'] } },
+        select: { publicUrl: true },
+      });
+      expect(httpServiceMock.post).toHaveBeenCalledWith(
+        'http://gaining/api/revalidate',
+        {},
+        expect.anything(),
+      );
+      expect(httpServiceMock.post).toHaveBeenCalledWith(
+        'http://losing/api/revalidate',
+        {},
+        expect.anything(),
+      );
+    });
+
+    // Two jurisdictions on one deployment share a public site, so it must be rebuilt once.
+    it('posts once when two jurisdictions share a public site', async () => {
+      const mockedValue = givenAssociation();
+      prisma.jurisdictions.findMany = jest
+        .fn()
+        .mockResolvedValue([
+          { publicUrl: 'http://site' },
+          { publicUrl: 'http://site/' },
+        ]);
+
+      await service.associateJurisdictions({
+        id: mockedValue.id,
+        associate: ['gaining-id'],
+        remove: ['losing-id'],
+      });
+
+      expect(httpServiceMock.post).toHaveBeenCalledTimes(1);
+      expect(httpServiceMock.post).toHaveBeenCalledWith(
+        'http://site/api/revalidate',
+        {},
+        expect.anything(),
+      );
+    });
+
     it('should associate and remove jurisdictions from feature flag record', async () => {
       const date = new Date();
 
@@ -280,6 +368,7 @@ describe('Testing feature flag service', () => {
         ...mockedValue,
         jurisdictions: [unchangingJurisdiction, associateJurisdiction],
       });
+      prisma.jurisdictions.findMany = jest.fn().mockResolvedValue([]);
 
       const params: FeatureFlagAssociate = {
         id: mockedValue.id,

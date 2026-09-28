@@ -25,9 +25,12 @@ const instanceOrigins = async (
     return addresses.map((address) => `http://${address}:${DISCOVERY_PORT}`);
   }
 
-  const trimmed = publicUrl?.trim().replace(/\/+$/, '');
+  const trimmed = normalizeOrigin(publicUrl);
   return trimmed ? [trimmed] : [];
 };
+
+const normalizeOrigin = (publicUrl?: string | null): string | undefined =>
+  publicUrl?.trim().replace(/\/+$/, '') || undefined;
 
 export const revalidatePublicSite = async (
   http: HttpService,
@@ -70,5 +73,22 @@ export const revalidatePublicSite = async (
         logger.warn(`could not revalidate ${origin}: ${describe(error)}`);
       }
     }),
+  );
+};
+
+export const revalidatePublicSites = async (
+  http: HttpService,
+  publicUrls: (string | null | undefined)[],
+): Promise<void> => {
+  if (process.env.PUBLIC_SITE_DISCOVERY_NAME) {
+    await revalidatePublicSite(http);
+    return;
+  }
+
+  const distinct = [...new Set(publicUrls.map(normalizeOrigin))].filter(
+    (origin): origin is string => !!origin,
+  );
+  await Promise.all(
+    distinct.map((origin) => revalidatePublicSite(http, origin)),
   );
 };
