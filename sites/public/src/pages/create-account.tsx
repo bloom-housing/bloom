@@ -1,9 +1,13 @@
-import dayjs from "dayjs"
-import customParseFormat from "dayjs/plugin/customParseFormat"
-import Markdown from "markdown-to-jsx"
-import { useRouter } from "next/router"
 import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
+import Markdown from "markdown-to-jsx"
+import { t, AlertBox } from "@bloom-housing/ui-components"
+import { Button, Dialog, Heading } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
+import { useRouter } from "next/router"
 import {
   PageView,
   pushGtmEvent,
@@ -12,28 +16,20 @@ import {
   Form,
   tIfExists,
 } from "@bloom-housing/shared-helpers"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { t, AlertBox } from "@bloom-housing/ui-components"
-import { Button, Dialog, Heading } from "@bloom-housing/ui-seeds"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import accountCardStyles from "./account/account.module.scss"
+import { UserStatus } from "../lib/constants"
+import FormsLayout from "../layouts/forms"
 import {
   accountNameFields,
   createAccountPasswordFields,
   dobFields,
   emailFields,
 } from "../components/account/AccountFieldHelpers"
-import SignUpBenefits from "../components/account/SignUpBenefits"
-import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
-import { TermsModal } from "../components/shared/TermsModal"
-import FormsLayout from "../layouts/forms"
-import { UserStatus } from "../lib/constants"
-import { useJurisdictionFeatureFlags } from "../lib/JurisdictionFeatureFlagsContext"
-import { sharedGetStaticProps } from "../lib/sharedPageProps"
+import accountCardStyles from "./account/account.module.scss"
 import styles from "../../styles/create-account.module.scss"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
-
-dayjs.extend(customParseFormat)
+import SignUpBenefits from "../components/account/SignUpBenefits"
+import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
+import { sharedGetStaticProps } from "../lib/sharedPageProps"
 
 const CreateAccount = () => {
   const { createPublicUser, resendConfirmation } = useContext(AuthContext)
@@ -43,22 +39,13 @@ const CreateAccount = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch, clearErrors } = useForm()
   const [requestError, setRequestError] = useState<string>()
-  const [openEmailModal, setOpenEmailModal] = useState<boolean>(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const language = router.locale
   const listingId = router.query?.listingId as string
   const email = useRef({})
   email.current = watch("email", "")
-
-  const featureFlags = useJurisdictionFeatureFlags()
-  const enablePublicTermsOfUse = featureFlags?.some(
-    (flag) => flag.name === FeatureFlagEnum.enablePublicTermsOfUse
-  )
-
-  const [openTermsModal, setOpenTermsModal] = useState<boolean>(false)
-  const [isTermsLoading, setIsTermsLoading] = useState(false)
-  const [notChecked, setChecked] = useState(true)
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -68,18 +55,9 @@ const CreateAccount = () => {
     })
   }, [])
 
-  const onSubmit = async (data, isAcceptTerms) => {
-    if (!isAcceptTerms && enablePublicTermsOfUse) {
-      console.log(isAcceptTerms)
-      setOpenTermsModal(true)
-      return
-    }
-    setChecked(true)
+  const onSubmit = async (data) => {
     setLoading(true)
     try {
-      if (enablePublicTermsOfUse) {
-        setIsTermsLoading(true)
-      }
       const { dob, ...rest } = data
       const listingIdRedirect =
         process.env.showMandatedAccounts && listingId ? listingId : undefined
@@ -104,19 +82,11 @@ const CreateAccount = () => {
           query: queryParams,
         })
       } else {
-        setOpenEmailModal(true)
-      }
-      if (enablePublicTermsOfUse) {
-        setIsTermsLoading(false)
-        setOpenTermsModal(false)
+        setOpenModal(true)
       }
       setLoading(false)
     } catch (err) {
       setLoading(false)
-      if (enablePublicTermsOfUse) {
-        setIsTermsLoading(false)
-        setOpenTermsModal(false)
-      }
       const { status, data } = err.response || {}
       if (status === 400) {
         setRequestError(`${t(`authentication.createAccount.errors.${data.message}`)}`)
@@ -157,7 +127,7 @@ const CreateAccount = () => {
                   {requestError}
                 </AlertBox>
               )}
-              <Form id="create-account" onSubmit={handleSubmit((data) => onSubmit(data, false))}>
+              <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
                 {tIfExists("account.create.initialDisclaimer") && (
                   <CardSection
                     divider={"inset"}
@@ -221,17 +191,6 @@ const CreateAccount = () => {
                     {t("nav.signIn")}
                   </Button>
                 </CardSection>
-                {enablePublicTermsOfUse && (
-                  <TermsModal
-                    control={{ register, errors, handleSubmit }}
-                    isTermsLoading={isTermsLoading}
-                    notChecked={notChecked}
-                    onSubmit={(data) => onSubmit(data, true)}
-                    openTermsModal={openTermsModal}
-                    setChecked={setChecked}
-                    setOpenTermsModal={setOpenTermsModal}
-                  />
-                )}
               </Form>
             </>
           </BloomCard>
@@ -252,7 +211,7 @@ const CreateAccount = () => {
       </div>
 
       <Dialog
-        isOpen={openEmailModal}
+        isOpen={openModal}
         onClose={() => {
           void router.push("/sign-in")
           window.scrollTo(0, 0)

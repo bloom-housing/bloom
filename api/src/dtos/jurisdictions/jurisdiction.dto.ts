@@ -6,8 +6,6 @@ import {
   IsEnum,
   ArrayMaxSize,
   IsArray,
-  IsOptional,
-  IsUUID,
   ValidateNested,
   IsBoolean,
   IsNumber,
@@ -28,7 +26,6 @@ import { ApplicationAccessibilityFeatureEnum } from '../../enums/applications/ap
 import { HouseholdMemberRelationship } from '../../enums/applications/household-member-relationship-enum';
 import { ListingFeaturesConfiguration } from './listing-features-config.dto';
 import { RaceEthnicityConfiguration } from './race-ethnicity-configuration.dto';
-import { BrandDTO } from './brand.dto';
 
 export class Jurisdiction extends AbstractDTO {
   @Expose()
@@ -282,23 +279,4 @@ export class Jurisdiction extends AbstractDTO {
   @Type(() => IdDTO)
   @ApiPropertyOptional({ isArray: true, type: IdDTO })
   subJurisdictions?: IdDTO[];
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => BrandDTO)
-  @ApiPropertyOptional({ type: BrandDTO, nullable: true })
-  brand?: BrandDTO | null;
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional({ nullable: true })
-  brandLogoAssetId?: string | null;
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional({ nullable: true })
-  brandFaviconAssetId?: string | null;
 }

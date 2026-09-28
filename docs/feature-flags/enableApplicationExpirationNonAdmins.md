@@ -11,7 +11,3 @@ When true, application data in the partner site will expire for non-admin users 
 ## Additional Information
 
 ## Images
-
-![image.png](./images/image%2099.png)
-
-![image.png](./images/image%20100.png)

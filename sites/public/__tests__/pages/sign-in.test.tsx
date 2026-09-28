@@ -12,6 +12,9 @@ import {
 import { SignIn as SignInComponent } from "../../src/pages/sign-in"
 import { Verify } from "../../src/pages/verify"
 
+const initialStateLoaded = false
+let profile: User | undefined
+
 let originalShowPwdless
 
 const TOAST_MESSAGE = {
@@ -146,7 +149,6 @@ describe("Sign In Page", () => {
         undefined,
         undefined,
         undefined,
-        undefined,
         undefined
       )
       expect(mockAddToast).toHaveBeenCalledWith("Welcome back, User!", {
@@ -224,7 +226,6 @@ describe("Sign In Page", () => {
     expect(mockLogin).toHaveBeenCalledWith(
       "user@example.com",
       "password123",
-      undefined,
       undefined,
       undefined,
       undefined,
@@ -510,7 +511,6 @@ describe("Passwordless Sign In page", () => {
       expect(mockLogin).toHaveBeenCalledWith(
         "user@example.com",
         "password123",
-        undefined,
         undefined,
         undefined,
         undefined,

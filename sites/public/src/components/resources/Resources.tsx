@@ -18,7 +18,7 @@ export type ResourceCards = {
   }
   resourceSections: {
     sectionTitle: string
-    sectionSubtitle?: React.ReactNode | string
+    sectionSubtitle?: string
     cards?: React.ReactNode[]
     cardsWithTitles?: { cards: React.ReactNode[]; title: string }[]
   }[]

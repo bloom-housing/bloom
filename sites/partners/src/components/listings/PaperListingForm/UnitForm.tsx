@@ -202,7 +202,7 @@ const UnitForm = ({
       }
 
       values.amiPercentage = parseInt(defaultUnit["amiPercentage"])
-      values.rentType = getRentType(defaultUnit, listingType === EnumListingListingType.landUse)
+      values.rentType = getRentType(defaultUnit)
 
       reset(values)
     } else {
@@ -309,16 +309,6 @@ const UnitForm = ({
 
     if (!data.accessibilityPriorityType) {
       delete data.accessibilityPriorityType
-    }
-
-    if (!data.monthlyIncomeMin) {
-      delete data.monthlyIncomeMin
-    }
-    if (!data.monthlyRent) {
-      delete data.monthlyRent
-    }
-    if (!data.monthlyRentAsPercentOfIncome) {
-      delete data.monthlyRentAsPercentOfIncome
     }
 
     if (data.unitTypes?.id) {

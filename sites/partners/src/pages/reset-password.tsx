@@ -74,12 +74,11 @@ const ResetPassword = () => {
               <PasswordField
                 name="password"
                 label={t("authentication.createAccount.password")}
-                labelClassName={"text__caps-spaced"}
-                showPasswordLabel={t("authentication.createAccount.showPassword")}
                 validation={{ required: true }}
                 error={errors.password}
                 errorMessage={t("authentication.forgotPassword.enterNewLoginPassword")}
                 register={register}
+                labelClassName={"text__caps-spaced"}
               />
             </fieldset>
           </Card.Section>

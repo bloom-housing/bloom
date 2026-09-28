@@ -2,7 +2,6 @@ import ApplicationConductor from "./ApplicationConductor"
 
 export default class StepDefinition {
   conductor: ApplicationConductor
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   step: Record<string, any>
   url: string
 
@@ -20,7 +19,6 @@ export default class StepDefinition {
     return this.conductor.application
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   save(formData: Record<string, any>) {
     // Pull in all the form values that match application fields
     for (const [key, value] of Object.entries(formData)) {

@@ -20,15 +20,13 @@ import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagg
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type FormPrimaryApplicantProps = {
-  disableHowToContact?: boolean
-  disableWorkInRegion?: boolean
   enableFullTimeStudentQuestion?: boolean
+  disableWorkInRegion?: boolean
 }
 
 const FormPrimaryApplicant = ({
-  disableHowToContact,
-  disableWorkInRegion,
   enableFullTimeStudentQuestion,
+  disableWorkInRegion,
 }: FormPrimaryApplicantProps) => {
   const formMethods = useFormContext()
 
@@ -179,17 +177,15 @@ const FormPrimaryApplicant = ({
             />
           </Grid.Cell>
 
-          {!disableHowToContact && (
-            <Grid.Cell>
-              <FieldGroup
-                name="application.contactPreferences"
-                fields={contactPreferencesOptions}
-                type="checkbox"
-                register={register}
-                groupLabel={t("application.contact.preferredContactType")}
-              />
-            </Grid.Cell>
-          )}
+          <Grid.Cell>
+            <FieldGroup
+              name="application.contactPreferences"
+              fields={contactPreferencesOptions}
+              type="checkbox"
+              register={register}
+              groupLabel={t("application.contact.preferredContactType")}
+            />
+          </Grid.Cell>
 
           {!disableWorkInRegion && (
             <Grid.Cell>

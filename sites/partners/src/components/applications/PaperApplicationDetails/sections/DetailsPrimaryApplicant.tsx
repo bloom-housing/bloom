@@ -7,15 +7,13 @@ import { ApplicationContext } from "../../ApplicationContext"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 
 type DetailsPrimaryApplicantProps = {
-  disableHowToContact?: boolean
-  disableWorkInRegion?: boolean
   enableFullTimeStudentQuestion?: boolean
+  disableWorkInRegion?: boolean
 }
 
 const DetailsPrimaryApplicant = ({
-  disableHowToContact,
-  disableWorkInRegion,
   enableFullTimeStudentQuestion,
+  disableWorkInRegion,
 }: DetailsPrimaryApplicantProps) => {
   const application = useContext(ApplicationContext)
 
@@ -91,22 +89,20 @@ const DetailsPrimaryApplicant = ({
           </FieldValue>
         </Grid.Cell>
 
-        {!disableHowToContact && (
-          <Grid.Cell>
-            <FieldValue label={t("application.details.preferredContact")} testId="preferredContact">
-              {(() => {
-                if (!application.contactPreferences.length) return t("t.n/a")
+        <Grid.Cell>
+          <FieldValue label={t("application.details.preferredContact")} testId="preferredContact">
+            {(() => {
+              if (!application.contactPreferences.length) return t("t.n/a")
 
-                return application.contactPreferences.map((item) => (
-                  <span key={item}>
-                    {t(`t.${item}`)}
-                    <br />
-                  </span>
-                ))
-              })()}
-            </FieldValue>
-          </Grid.Cell>
-        )}
+              return application.contactPreferences.map((item) => (
+                <span key={item}>
+                  {t(`t.${item}`)}
+                  <br />
+                </span>
+              ))
+            })()}
+          </FieldValue>
+        </Grid.Cell>
 
         {!disableWorkInRegion && (
           <Grid.Cell>

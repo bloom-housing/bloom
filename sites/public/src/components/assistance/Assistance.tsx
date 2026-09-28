@@ -18,22 +18,18 @@ interface AssistanceProps {
 }
 
 const Assistance = (props: AssistanceProps) => {
-  const enableFaq = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableFaq)
+  const enableResources = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableResources)
   const enableHousingBasics = isFeatureFlagOn(
     props.jurisdiction,
     FeatureFlagEnum.enableHousingBasics
   )
-  const enableResources = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableResources)
+  const enableFaq = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableFaq)
 
   const jurisdictionContent = useJurisdictionContent()
   const contact = {
-    contactDescription: t("resources.contactDescription"),
-    contactInfo: t("resources.contactInfo"),
     email: t("resources.contactEmail"),
     ...getStoredContactContent(jurisdictionContent),
   }
-
-  const showContactCard = contact?.contactDescription || contact?.contactInfo || contact?.email
 
   return (
     <Layout
@@ -100,19 +96,17 @@ const Assistance = (props: AssistanceProps) => {
               </BloomCard>
             )}
           </div>
-          {showContactCard && (
-            <aside className={styles["aside-section"]}>
-              <ContactCard
-                address={contact.address}
-                contactDescription={contact.contactDescription}
-                contactInfo={contact.contactInfo}
-                email={contact.email}
-                heading={t("resources.contactTitle")}
-                hours={contact.hours}
-                phone={contact.phone}
-              />
-            </aside>
-          )}
+          <aside className={styles["aside-section"]}>
+            <ContactCard
+              address={contact.address}
+              contactDescription={t("resources.contactDescription")}
+              contactInfo={t("resources.contactInfo")}
+              email={contact.email}
+              heading={t("footer.contact")}
+              hours={contact.hours}
+              phone={contact.phone}
+            />
+          </aside>
         </article>
       </PageHeaderLayout>
     </Layout>

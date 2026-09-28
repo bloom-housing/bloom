@@ -17,7 +17,6 @@ describe("MapRecenter", () => {
   const mapMarkers = [
     { id: "marker-1", lat: 37.7749, lng: -122.4194 },
     { id: "marker-2", lat: 37.7849, lng: -122.4094 },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ] as any
 
   beforeEach(() => {

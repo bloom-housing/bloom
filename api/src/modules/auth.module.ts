@@ -1,4 +1,4 @@
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from '../controllers/auth.controller';
@@ -29,10 +29,9 @@ import { SnapshotCreateModule } from './snapshot-create.module';
   controllers: [AuthController],
   providers: [
     AuthService,
-    JwtStrategy,
-    Logger,
-    MfaStrategy,
     PermissionService,
+    MfaStrategy,
+    JwtStrategy,
     SingleUseCodeStrategy,
   ],
   exports: [AuthService, PermissionService],

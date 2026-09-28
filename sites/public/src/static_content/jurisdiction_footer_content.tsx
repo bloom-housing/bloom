@@ -1,6 +1,7 @@
 import { t } from "@bloom-housing/ui-components"
-import { FooterContent, FooterLinks, SocialLinkType } from "./generic_footer_content"
+import { FooterContent, FooterLinks } from "./generic_footer_content"
 import { Link } from "@bloom-housing/ui-seeds"
+import { SocialLinkType } from "./generic_footer_content"
 
 export const getJurisdictionFooterTextContent = (): FooterContent => {
   return {

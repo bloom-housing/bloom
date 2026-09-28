@@ -188,7 +188,7 @@ describe("users", () => {
       })
     )
 
-    render(
+    const result = render(
       <ConfigProvider apiUrl={"http://localhost:3100"}>
         <AuthProvider>
           <Users />

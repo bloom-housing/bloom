@@ -10,7 +10,6 @@ export enum SettingsIndexEnum {
   agencies,
   translations,
   content,
-  branding,
 }
 
 type SettingsTabsFeatureFlags = {
@@ -19,7 +18,6 @@ type SettingsTabsFeatureFlags = {
   enableAgencies?: boolean
   enableTranslations?: boolean
   enableContent?: boolean
-  enableBranding?: boolean
 }
 
 export const getVisibleSettingsTabs = (
@@ -29,7 +27,6 @@ export const getVisibleSettingsTabs = (
     enableAgencies,
     enableTranslations,
     enableContent,
-    enableBranding,
   }: SettingsTabsFeatureFlags,
   userRoles?: UserRole
 ) => {
@@ -43,7 +40,6 @@ export const getVisibleSettingsTabs = (
     // Editing translations spans every jurisdiction, so it is limited to the admin role.
     translations: !!enableTranslations && !!userRoles?.isAdmin,
     content: !!enableContent && !!userRoles?.isAdmin,
-    branding: !!enableBranding && !!userRoles?.isAdmin,
   }
 }
 
@@ -64,7 +60,6 @@ export const getSettingsTabs = (
     agencies: enableAgencies,
     translations: enableTranslations,
     content: enableContent,
-    branding: enableBranding,
   } = getVisibleSettingsTabs(featureFlags, userRoles)
 
   const baseUrl = "/settings"
@@ -74,7 +69,6 @@ export const getSettingsTabs = (
   if (enableAgencies) enabledTabs.push(SettingsIndexEnum.agencies)
   if (enableTranslations) enabledTabs.push(SettingsIndexEnum.translations)
   if (enableContent) enabledTabs.push(SettingsIndexEnum.content)
-  if (enableBranding) enabledTabs.push(SettingsIndexEnum.branding)
 
   return (
     <Tabs
@@ -131,15 +125,6 @@ export const getSettingsTabs = (
             <span>{t("settings.content")}</span>
           </Tabs.Tab>
         )}
-        {enableBranding && (
-          <Tabs.Tab
-            href={`${baseUrl}/branding`}
-            data-testid="branding-tab"
-            active={selectedIndex === SettingsIndexEnum.branding}
-          >
-            <span>{t("settings.branding")}</span>
-          </Tabs.Tab>
-        )}
       </Tabs.TabList>
     </Tabs>
   )
@@ -162,7 +147,6 @@ export const useSettingsTabs = (selectedIndex: SettingsIndexEnum) => {
     enableAgencies: doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate),
     enableTranslations: enableDbDrivenContent,
     enableContent: enableDbDrivenContent,
-    enableBranding: doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableDbDrivenBranding),
   }
 
   return {
