@@ -35,17 +35,17 @@ const buildRequest = (overrides: Partial<NextApiRequest> = {}): NextApiRequest =
   ({ method: "POST", headers: { passkey: PASSKEY }, ...overrides } as unknown as NextApiRequest)
 
 describe("/api/revalidate", () => {
-  let warn: jest.SpyInstance
+  let errorLog: jest.SpyInstance
 
   beforeEach(() => {
-    clearCachedApiReads.mockClear()
+    clearCachedApiReads.mockReset()
     process.env.API_PASS_KEY = PASSKEY
     process.env.LANGUAGES = "en"
-    warn = jest.spyOn(console, "error").mockImplementation(() => undefined)
+    errorLog = jest.spyOn(console, "error").mockImplementation(() => undefined)
   })
 
   afterEach(() => {
-    warn.mockRestore()
+    errorLog.mockRestore()
   })
 
   it("refuses anything but POST", async () => {
@@ -84,16 +84,19 @@ describe("/api/revalidate", () => {
     expect(stub.revalidate).not.toHaveBeenCalled()
   })
 
-  it("revalidates every path and reports the count", async () => {
+  // Answered before the rebuilds run, so the caller does not wait on work that outlasts its
+  // timeout and then record a failure for a save that succeeded.
+  it("accepts the call and then revalidates every path", async () => {
     const stub = buildResponse()
+    const answeredAfter: number[] = []
+    stub.json.mockImplementation(() => answeredAfter.push(stub.revalidate.mock.calls.length))
+
     await handler(buildRequest(), stub.res)
 
-    expect(stub.status).toHaveBeenCalledWith(200)
+    expect(stub.status).toHaveBeenCalledWith(202)
+    expect(stub.json).toHaveBeenCalledWith({ accepted: REVALIDATED_PATHS.length })
+    expect(answeredAfter).toEqual([0])
     expect(stub.revalidate).toHaveBeenCalledTimes(REVALIDATED_PATHS.length)
-    expect(stub.json).toHaveBeenCalledWith({
-      revalidated: REVALIDATED_PATHS.length,
-      failed: [],
-    })
   })
 
   it("revalidates each configured language", async () => {
@@ -132,11 +135,29 @@ describe("/api/revalidate", () => {
     await handler(buildRequest(), stub.res)
 
     expect(stub.revalidate).toHaveBeenCalledTimes(REVALIDATED_PATHS.length)
-    expect(stub.status).toHaveBeenCalledWith(200)
-    expect(stub.json).toHaveBeenCalledWith({
-      revalidated: REVALIDATED_PATHS.length - 1,
-      failed: ["/faq"],
-    })
+    expect(stub.status).toHaveBeenCalledWith(202)
+    expect(errorLog).toHaveBeenCalledWith(
+      `revalidate: 1 of ${REVALIDATED_PATHS.length} paths failed`
+    )
+  })
+
+  // The clear is the expensive half of this route, so it has to sit behind the passkey check.
+  it("does not touch the caches when the passkey is wrong", async () => {
+    const stub = buildResponse()
+
+    await handler(buildRequest({ headers: { passkey: "wrong" } }), stub.res)
+
+    expect(clearCachedApiReads).not.toHaveBeenCalled()
+  })
+
+  it("revalidates only the default locale when LANGUAGES is unset", async () => {
+    delete process.env.LANGUAGES
+    const stub = buildResponse()
+
+    await handler(buildRequest(), stub.res)
+
+    expect(stub.revalidate).toHaveBeenCalledTimes(REVALIDATED_PATHS.length)
+    expect(stub.revalidate).toHaveBeenCalledWith("/faq")
   })
 })
 

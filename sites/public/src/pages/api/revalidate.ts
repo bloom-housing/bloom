@@ -54,16 +54,36 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   clearCachedApiReads()
 
   const paths = localisedPaths(configuredLocales())
+
+  // Responds before the rebuilds run.
+  res.status(202).json({ accepted: paths.length })
+
+  await rebuild(res, paths)
+  return undefined
+}
+
+// Rendering is synchronous work on the process that also serves visitors, so a few at a time rather
+// than all of them.
+const CONCURRENCY = 4
+
+const rebuild = async (res: NextApiResponse, paths: string[]): Promise<void> => {
+  const queue = [...paths]
   const failed: string[] = []
 
-  for (const path of paths) {
-    try {
-      await res.revalidate(path)
-    } catch (error) {
-      failed.push(path)
-      console.error(`revalidate: ${path} failed:`, error)
+  const worker = async (): Promise<void> => {
+    for (let path = queue.shift(); path; path = queue.shift()) {
+      try {
+        await res.revalidate(path)
+      } catch (error) {
+        failed.push(path)
+        console.error(`revalidate: ${path} failed:`, error)
+      }
     }
   }
 
-  return res.status(200).json({ revalidated: paths.length - failed.length, failed })
+  await Promise.all(Array.from({ length: CONCURRENCY }, worker))
+
+  if (failed.length) {
+    console.error(`revalidate: ${failed.length} of ${paths.length} paths failed`)
+  }
 }
