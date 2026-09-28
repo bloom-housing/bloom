@@ -1,5 +1,8 @@
 import React from "react"
-import { Unit } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  EnumListingListingType,
+  Unit,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { getRentType } from "../../../lib/helpers"
@@ -11,6 +14,7 @@ export type UnitDrawer = Unit | null
 type UnitDrawerProps = {
   unit: UnitDrawer
   setUnitDrawer: (unit: UnitDrawer) => void
+  listingType?: EnumListingListingType
 }
 
 const AmiChartWrapper = (amiChartId) => {
@@ -19,8 +23,8 @@ const AmiChartWrapper = (amiChartId) => {
   return data ? data.name : t("t.n/a")
 }
 
-const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
-  const rentType = getRentType(unit)
+const DetailUnitDrawer = ({ unit, setUnitDrawer, listingType }: UnitDrawerProps) => {
+  const rentType = getRentType(unit, listingType === EnumListingListingType.landUse)
 
   return (
     <Drawer

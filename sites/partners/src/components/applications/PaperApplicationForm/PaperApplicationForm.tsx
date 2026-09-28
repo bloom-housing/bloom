@@ -65,76 +65,70 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     MultiselectQuestionsApplicationSectionEnum.programs
   )
 
-  const enableApplicationStatus =
-    doJurisdictionsHaveFeatureFlagOn(
-      FeatureFlagEnum.enableApplicationStatus,
-      listingDto?.jurisdictions.id
-    ) && !!listingDto?.jurisdictions.id
-
-  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableUnitGroups,
+  const disableEthnicityQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableEthnicityQuestion,
     listingDto?.jurisdictions.id
   )
-
-  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableFullTimeStudentQuestion,
+  const disableHowToContact = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableHowToContact,
     listingDto?.jurisdictions.id
   )
-
   const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableWorkInRegion,
     listingDto?.jurisdictions.id
   )
 
-  const enableLimitedHowDidYouHear = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableLimitedHowDidYouHear,
+  const enableApplicationStatus =
+    doJurisdictionsHaveFeatureFlagOn(
+      FeatureFlagEnum.enableApplicationStatus,
+      listingDto?.jurisdictions.id
+    ) && !!listingDto?.jurisdictions.id
+  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
     listingDto?.jurisdictions.id
   )
-
-  const disableEthnicityQuestion = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.disableEthnicityQuestion,
-    listingDto?.jurisdictions.id
-  )
-
-  const enableSpokenLanguage = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableSpokenLanguage,
-    listingDto?.jurisdictions.id
-  )
-
   const enableGenderQuestion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableGenderQuestion,
-    listingDto?.jurisdictions.id
-  )
-  const enableSexualOrientationQuestion = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableSexualOrientationQuestion,
-    listingDto?.jurisdictions.id
-  )
-
-  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
   )
   const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableHousingAdvocate,
     listingDto?.jurisdictions.id
   )
+  const enableLimitedHowDidYouHear = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLimitedHowDidYouHear,
+    listingDto?.jurisdictions.id
+  )
+  const enableMultiselectVoucherQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMultiselectVoucherQuestion,
+    listingDto?.jurisdictions.id
+  )
   const enableReasonableAccommodations = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableReasonableAccommodations,
     listingDto?.jurisdictions.id
   )
-
-  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableV2MSQ,
-    listingDto?.jurisdictions.id
-  )
-
   const enableReceivedAtAndByFields = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableReceivedAtAndByFields,
     listingDto?.jurisdictions.id
   )
-
-  const enableMultiselectVoucherQuestion = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMultiselectVoucherQuestion,
+  const enableSexualOrientationQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSexualOrientationQuestion,
+    listingDto?.jurisdictions.id
+  )
+  const enableSpokenLanguage = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSpokenLanguage,
+    listingDto?.jurisdictions.id
+  )
+  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUnitGroups,
+    listingDto?.jurisdictions.id
+  )
+  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableV2MSQ,
+    listingDto?.jurisdictions.id
+  )
+  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
   )
 
@@ -372,8 +366,9 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                     />
 
                     <FormPrimaryApplicant
-                      enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                      disableHowToContact={disableHowToContact}
                       disableWorkInRegion={disableWorkInRegion}
+                      enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                     />
 
                     <FormAlternateContact enableHousingAdvocate={enableHousingAdvocate} />

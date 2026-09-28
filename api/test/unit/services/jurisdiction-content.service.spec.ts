@@ -6,6 +6,8 @@ import { JurisdictionContentService } from '../../../src/services/jurisdiction-c
 import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { User } from '../../../src/dtos/users/user.dto';
+import { JurisdictionContentUpdate } from '../../../src/dtos/jurisdiction-content/jurisdiction-content-update.dto';
+import { sourceHash } from '../../../src/utilities/translation-source-hash';
 
 describe('Testing jurisdiction content service', () => {
   let service: JurisdictionContentService;
@@ -189,8 +191,13 @@ describe('Testing jurisdiction content service', () => {
       prisma.jurisdictionContent.findMany = jest.fn().mockResolvedValueOnce([
         {
           language: LanguagesEnum.en,
-          // answerHtml missing -> read-time shape guard warns
-          faq: { categories: [{ id: 'general', items: [{ id: 'a' }] }] },
+          // answerHtml missing -> read-time shape guard warns. The item needs a question so it
+          // is not dropped as empty before the guard sees it.
+          faq: {
+            categories: [
+              { id: 'general', items: [{ id: 'a', question: 'How?' }] },
+            ],
+          },
         },
       ]);
 
@@ -330,6 +337,10 @@ describe('Testing jurisdiction content service', () => {
         .mockResolvedValueOnce({ count: 1 });
       prisma.jurisdictionContent.findFirst = jest
         .fn()
+        // The English row a non-English write stamps against, the row as stored, then the row
+        // itself.
+        .mockResolvedValueOnce({ contact: { phone: '555-0100' } })
+        .mockResolvedValueOnce({ contact: { phone: '555-0199' } })
         .mockResolvedValueOnce({ id: 'row' });
       prisma.jurisdictionContent.create = jest.fn();
 
@@ -354,6 +365,8 @@ describe('Testing jurisdiction content service', () => {
         .mockResolvedValueOnce({ count: 0 });
       prisma.jurisdictionContent.findFirst = jest
         .fn()
+        .mockResolvedValueOnce({ contact: { phone: '555-0100' } })
+        .mockResolvedValueOnce({ contact: {} })
         .mockResolvedValueOnce({ id: 'row' });
       prisma.jurisdictionContent.create = jest.fn();
 
@@ -404,6 +417,170 @@ describe('Testing jurisdiction content service', () => {
           adminUser,
         ),
       ).rejects.toThrow(ConflictException);
+    });
+  });
+
+  describe('source hashes and staleness', () => {
+    it('stamps a non-English write with the English value it was translated from', async () => {
+      prisma.jurisdictionContent.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({
+          faq: {
+            categories: [
+              {
+                id: 'applying',
+                items: [{ id: 'how', answerHtml: '<p>Apply online.</p>' }],
+              },
+            ],
+          },
+        })
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce({ id: 'row' });
+      prisma.jurisdictionContent.create = jest.fn().mockResolvedValue({});
+
+      await service.updateContent(
+        randomUUID(),
+        LanguagesEnum.es,
+        {
+          faq: {
+            categories: [
+              {
+                id: 'applying',
+                items: [{ id: 'how', answerHtml: '<p>Solicite en linea.</p>' }],
+              },
+            ],
+          },
+        } as JurisdictionContentUpdate,
+        adminUser,
+      );
+
+      const written = (prisma.jurisdictionContent.create as jest.Mock).mock
+        .calls[0][0].data.faq;
+      expect(written.categories[0].items[0]._sourceHashes).toEqual({
+        answerHtml: sourceHash('<p>Apply online.</p>'),
+      });
+    });
+
+    it('keeps the baseline of a field the write leaves alone', async () => {
+      prisma.jurisdictionContent.findFirst = jest
+        .fn()
+        // English as it stands now: the phone changed since the Spanish row was translated.
+        .mockResolvedValueOnce({
+          contact: { phone: '(415) 555-0199', email: 'apply@example.gov' },
+        })
+        // The Spanish row as stored, translated from the earlier English.
+        .mockResolvedValueOnce({
+          contact: {
+            phone: 'Telefono antiguo',
+            email: 'solicitar@example.gov',
+            _sourceHashes: {
+              phone: sourceHash('(415) 555-0100'),
+              email: sourceHash('solicitudes@example.gov'),
+            },
+          },
+        })
+        .mockResolvedValueOnce({ id: 'row' });
+      prisma.jurisdictionContent.create = jest.fn().mockResolvedValue({});
+
+      await service.updateContent(
+        randomUUID(),
+        LanguagesEnum.es,
+        {
+          contact: {
+            phone: 'Telefono antiguo',
+            email: 'nueva@example.gov',
+          },
+        } as JurisdictionContentUpdate,
+        adminUser,
+      );
+
+      const written = (prisma.jurisdictionContent.create as jest.Mock).mock
+        .calls[0][0].data.contact;
+      expect(written._sourceHashes).toEqual({
+        phone: sourceHash('(415) 555-0100'),
+        email: sourceHash('apply@example.gov'),
+      });
+    });
+
+    it('writes no hashes for the English row, which is the source', async () => {
+      prisma.jurisdictionContent.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: 'row' });
+      prisma.jurisdictionContent.create = jest.fn().mockResolvedValue({});
+
+      await service.updateContent(
+        randomUUID(),
+        LanguagesEnum.en,
+        {
+          disclaimers: { privacyHtml: '<p>Privacy</p>' },
+        } as JurisdictionContentUpdate,
+        adminUser,
+      );
+
+      const written = (prisma.jurisdictionContent.create as jest.Mock).mock
+        .calls[0][0].data.disclaimers;
+      expect(written._sourceHashes).toBeUndefined();
+      // The English row is read only to be returned, never to stamp against.
+      expect(prisma.jurisdictionContent.findFirst).toHaveBeenCalledTimes(1);
+    });
+
+    it('reports a field whose English source changed after it was translated', async () => {
+      const english = {
+        language: LanguagesEnum.en,
+        disclaimers: { privacyHtml: '<p>Updated privacy</p>' },
+      };
+      const spanish = {
+        language: LanguagesEnum.es,
+        disclaimers: {
+          privacyHtml: '<p>Privacidad</p>',
+          _sourceHashes: { privacyHtml: sourceHash('<p>Privacy</p>') },
+        },
+      };
+      prisma.jurisdictionContent.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([english, spanish]);
+
+      const rows = await service.listContent(randomUUID(), adminUser);
+
+      expect(rows[0].staleFields).toEqual([]);
+      expect(rows[1].staleFields).toEqual(['disclaimers.privacyHtml']);
+    });
+
+    it('reports nothing stale while the English source is unchanged', async () => {
+      const privacyHtml = '<p>Privacy</p>';
+      prisma.jurisdictionContent.findMany = jest.fn().mockResolvedValueOnce([
+        { language: LanguagesEnum.en, disclaimers: { privacyHtml } },
+        {
+          language: LanguagesEnum.es,
+          disclaimers: {
+            privacyHtml: '<p>Privacidad</p>',
+            _sourceHashes: { privacyHtml: sourceHash(privacyHtml) },
+          },
+        },
+      ]);
+
+      const rows = await service.listContent(randomUUID(), adminUser);
+
+      expect(rows[1].staleFields).toEqual([]);
+    });
+
+    it('keeps the stored hashes out of the response', async () => {
+      prisma.jurisdictionContent.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          language: LanguagesEnum.es,
+          disclaimers: {
+            privacyHtml: '<p>Privacidad</p>',
+            _sourceHashes: { privacyHtml: 'abc' },
+          },
+        },
+      ]);
+
+      const rows = await service.listContent(randomUUID(), adminUser);
+
+      expect(rows[0].disclaimers).toEqual(
+        expect.objectContaining({ privacyHtml: '<p>Privacidad</p>' }),
+      );
+      expect(JSON.stringify(rows[0])).not.toContain('_sourceHashes');
     });
   });
 

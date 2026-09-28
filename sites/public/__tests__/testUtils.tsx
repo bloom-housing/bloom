@@ -76,17 +76,20 @@ export const mockNextRouter = (query?: any) => {
   const pushMock = jest.fn().mockResolvedValue(true)
   const backMock = jest.fn()
   const replaceMock = jest.fn()
+  const prefetchMock = jest.fn().mockResolvedValue(undefined)
   useRouter.mockImplementation(() => ({
     pathname: "/",
     query: query ?? "",
     push: pushMock,
     back: backMock,
     replace: replaceMock,
+    prefetch: prefetchMock,
   }))
   if (router.default) {
     router.default.push = pushMock
     router.default.replace = replaceMock
+    router.default.prefetch = prefetchMock
   }
 
-  return { useRouter, pushMock, backMock, replaceMock }
+  return { useRouter, pushMock, backMock, replaceMock, prefetchMock }
 }

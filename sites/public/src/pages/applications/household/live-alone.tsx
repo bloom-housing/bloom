@@ -12,6 +12,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
@@ -100,6 +101,7 @@ const ApplicationLiveAlone = () => {
 
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               onChange={(event: ChangeEvent<any>) => {
                 if (event.target.value === "liveAlone") {
                   application.householdSize = 1
@@ -135,3 +137,5 @@ const ApplicationLiveAlone = () => {
 }
 
 export default ApplicationLiveAlone
+
+export const getStaticProps = sharedGetStaticProps

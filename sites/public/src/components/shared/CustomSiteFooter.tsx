@@ -11,16 +11,34 @@ import {
   getJurisdictionFooterLinksContent,
   getJurisdictionFooterTextContent,
 } from "../../static_content/jurisdiction_footer_content"
+import {
+  getStoredFooterLinksContent,
+  getStoredFooterTextContent,
+} from "../../static_content/stored_content"
+import { useJurisdictionContent } from "../../lib/JurisdictionContentContext"
 import styles from "./CustomSiteFooter.module.scss"
+import { t } from "@bloom-housing/ui-components"
 
 const CustomSiteFooter = () => {
-  const textContent: FooterContent | null =
-    getJurisdictionFooterTextContent() || getGenericFooterTextContent()
-  const footerLinksContent: FooterLinks | null =
-    getJurisdictionFooterLinksContent() || getGenericFooterLinksContent()
+  const jurisdictionContent = useJurisdictionContent()
 
-  const showContentFooter = textContent.logo || textContent.textSections?.length > 0
-  const showLinksFooter = footerLinksContent.links?.length > 0 || footerLinksContent.cityString
+  const textContent: FooterContent = {
+    ...getGenericFooterTextContent(),
+    ...getJurisdictionFooterTextContent(),
+    ...getStoredFooterTextContent(jurisdictionContent),
+  }
+  const footerLinksContent: FooterLinks = {
+    ...getGenericFooterLinksContent(),
+    ...getJurisdictionFooterLinksContent(),
+    ...getStoredFooterLinksContent(jurisdictionContent),
+  }
+
+  const showContentFooter =
+    textContent.logo || textContent.textSections?.length > 0 || textContent.socialLinks?.length > 0
+  const showLinksFooter =
+    footerLinksContent.links?.length > 0 ||
+    footerLinksContent.cityString ||
+    footerLinksContent.equalHousingOpportunity
 
   if (!showContentFooter && !showLinksFooter) return <></>
 
@@ -45,6 +63,18 @@ const CustomSiteFooter = () => {
                   {section}
                 </div>
               ))}
+              {textContent.socialLinks?.length > 0 && (
+                <div className={styles["icon-container"]}>
+                  {textContent.socialLinks.map((social) => (
+                    <a href={social.href} target="_blank" key={social.icon}>
+                      <img
+                        src={`/images/logo-${social.icon}.svg`}
+                        alt={t(`footer.alt.${social.icon}`)}
+                      />
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </MaxWidthLayout>
@@ -61,6 +91,9 @@ const CustomSiteFooter = () => {
                   {link.text}
                 </Link>
               ))}
+              {footerLinksContent.equalHousingOpportunity && (
+                <img src={`/images/logo-eho.svg`} alt={t(`footer.alt.equalHousingOpportunity`)} />
+              )}
             </div>
           </div>
         </MaxWidthLayout>

@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
-import { IsDefined, IsEnum } from 'class-validator';
+import { IsDefined, IsEnum, IsIn } from 'class-validator';
 import { LanguagesEnum, SiteEnum } from '@prisma/client';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
@@ -22,9 +22,11 @@ export class TranslationsQueryParams {
     enumName: 'SiteEnum',
     example: 'public',
   })
-  // @IsDefined rejects a missing site (skipMissingProperties skips @IsEnum alone).
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(SiteEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsIn([SiteEnum.public, SiteEnum.partners], {
     groups: [ValidationsGroupsEnum.default],
   })
   site: SiteEnum;

@@ -19,7 +19,8 @@ import { GovDeliveryService } from '../../../src/services/gov-delivery.service';
 import { TranslationService } from '../../../src/services/translation.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
-import { translationFactory } from '../../../prisma/seed-helpers/translation-factory';
+import { baseTranslationRows } from '../../../src/locales/email-translations';
+import { flattenTranslationRows } from '../../../src/utilities/translation-merge';
 import { yellowstoneAddress } from '../../../prisma/seed-helpers/address-factory';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { User } from '../../../src/dtos/users/user.dto';
@@ -35,9 +36,11 @@ import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-
 
 let sendMock;
 let govDeliverySendMock;
+const baseEmailTranslations = () =>
+  flattenTranslationRows([baseTranslationRows(LanguagesEnum.en)]);
 const getMergedTranslationsMock = jest
   .fn()
-  .mockReturnValue(translationFactory().translations);
+  .mockReturnValue(baseEmailTranslations());
 const translationServiceMock = {
   getMergedTranslations: getMergedTranslationsMock,
 };
@@ -93,7 +96,7 @@ describe('Testing email service', () => {
     service = await module.resolve(EmailService);
     getMergedTranslationsMock
       .mockClear()
-      .mockReturnValue(translationFactory().translations);
+      .mockReturnValue(baseEmailTranslations());
   });
 
   const user = {
@@ -1201,7 +1204,7 @@ describe('Testing email service', () => {
     ) => service.buildListingDetails(listing, priorityTypes, summary, variant);
 
     beforeEach(() => {
-      service.polyglot.replace(translationFactory().translations);
+      service.polyglot.replace(baseEmailTranslations());
     });
 
     it('includes only address when all optional inputs are absent', () => {

@@ -18,15 +18,24 @@ import {
   AuthProvider,
   MessageProvider,
 } from "@bloom-housing/shared-helpers"
-import { pageChangeHandler, gaLoadScript, gaCaptureScript, uaScript } from "../lib/customScripts"
-import { AppSubmissionContext } from "../lib/applications/AppSubmissionContext"
+import {
+  FeatureFlag,
+  FeatureFlagEnum,
+  Jurisdiction,
+  JurisdictionContentFields,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import LinkComponent from "../components/core/LinkComponent"
 import ApplicationConductor, {
   loadApplicationFromAutosave,
   loadSavedListing,
 } from "../lib/applications/ApplicationConductor"
+import { AppSubmissionContext } from "../lib/applications/AppSubmissionContext"
+import { pageChangeHandler, gaLoadScript, gaCaptureScript, uaScript } from "../lib/customScripts"
+import { BrandContext } from "../lib/BrandContext"
+import { isFeatureFlagOn } from "../lib/helpers"
+import { JurisdictionContentContext } from "../lib/JurisdictionContentContext"
+import { JurisdictionFeatureFlagsContext } from "../lib/JurisdictionFeatureFlagsContext"
 import { applyTranslations } from "../lib/translations"
-import LinkComponent from "../components/core/LinkComponent"
-
 import "../../styles/overrides.scss"
 
 const rtlLocales = process.env.rtlLanguages.split(",")
@@ -49,6 +58,19 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     | Record<string, Record<string, string>>
     | null
     | undefined
+
+  const jurisdictionFeatureFlags = (pageProps?.jurisdiction?.featureFlags ?? null) as
+    | FeatureFlag[]
+    | null
+
+  const jurisdictionContent = (pageProps?.jurisdictionContent ??
+    null) as JurisdictionContentFields | null
+
+  const jurisdiction = pageProps?.jurisdiction as Jurisdiction | undefined
+  const brand =
+    jurisdiction && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableDbDrivenBranding)
+      ? jurisdiction.brand ?? null
+      : null
 
   useMemo(() => {
     applyTranslations(locale, publicOverrides)
@@ -93,10 +115,16 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     <ConfigProvider apiUrl={process.env.backendApiBase}>
       <AuthProvider>
         <MessageProvider>
-          <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-          <div className={jurisdictionClassname}>
-            <Component {...pageProps} />
-          </div>
+          <JurisdictionFeatureFlagsContext.Provider value={jurisdictionFeatureFlags}>
+            <JurisdictionContentContext.Provider value={jurisdictionContent}>
+              <BrandContext.Provider value={brand}>
+                <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+                <div className={jurisdictionClassname}>
+                  <Component {...pageProps} />
+                </div>
+              </BrandContext.Provider>
+            </JurisdictionContentContext.Provider>
+          </JurisdictionFeatureFlagsContext.Provider>
         </MessageProvider>
       </AuthProvider>
     </ConfigProvider>

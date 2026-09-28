@@ -1,3 +1,21 @@
+// Synthetic fixtures for the layers applyTranslations merges, so this suite verifies the merge
+// contract itself rather than incidental properties of today's real translation content (a key
+// being English-only, differing between locales, etc. can change during normal content edits).
+const TEST_GENERAL_EN = { "test.translated": "General English value" }
+const TEST_GENERAL_ES = { "test.translated": "General Spanish value" }
+const TEST_OVERRIDE_EN = {
+  "test.overrideOnly": "Bundled English-only override",
+  "test.bundledLocale": "Bundled English override, locale key",
+}
+const TEST_OVERRIDE_ES = {
+  "test.bundledLocale": "Bundled Spanish override, locale key",
+}
+
+jest.mock("@bloom-housing/shared-helpers/src/locales/general.json", () => TEST_GENERAL_EN)
+jest.mock("@bloom-housing/shared-helpers/src/locales/es.json", () => TEST_GENERAL_ES)
+jest.mock("../../page_content/locale_overrides/general.json", () => TEST_OVERRIDE_EN)
+jest.mock("../../page_content/locale_overrides/es.json", () => TEST_OVERRIDE_ES)
+
 import { t } from "@bloom-housing/ui-components"
 import { tIfExists } from "@bloom-housing/shared-helpers"
 import { applyTranslations, overrideTranslations, translations } from "../../src/lib/translations"
@@ -5,12 +23,12 @@ import { applyTranslations, overrideTranslations, translations } from "../../src
 describe("applyTranslations", () => {
   // Supplied by the bundled English override file and by neither shared locale file, so a
   // non-English reader has no translation of it to fall back to.
-  const OVERRIDE_ONLY_KEY = "listingResource.additionalCard1.title"
+  const OVERRIDE_ONLY_KEY = "test.overrideOnly"
   const BUNDLED_VALUE = overrideTranslations.en[OVERRIDE_ONLY_KEY]
   // Supplied by both shared locale files with different values, so precedence is visible.
-  const TRANSLATED_KEY = "t.accessibility"
+  const TRANSLATED_KEY = "test.translated"
   // Supplied by both bundled public override files, with a different value in each.
-  const BUNDLED_LOCALE_KEY = "account.create.initialDisclaimer"
+  const BUNDLED_LOCALE_KEY = "test.bundledLocale"
 
   beforeEach(() => applyTranslations("en"))
 
@@ -56,7 +74,7 @@ describe("applyTranslations", () => {
     expect(t(TRANSLATED_KEY)).toEqual("Desde la base de datos")
   })
 
-  // BUNDLED_LOCALE_KEY is supplied by locale_overrides/es.json, so this is the only assertion
+  // BUNDLED_LOCALE_KEY is supplied by the mocked es override layer, so this is the only assertion
   // that fails if that layer stops loading.
   it("applies the site's own bundled file for the locale", () => {
     applyTranslations("es")
@@ -92,9 +110,9 @@ describe("applyTranslations", () => {
 // than through addTranslation directly.
 describe("tIfExists against the layered overrides", () => {
   // Called with tIfExists in the public site and supplied by no bundled layer.
-  const UNSUPPLIED_KEY = "listingFilters.countyFilterNote"
-  // Called with tIfExists and supplied by the bundled public override file.
-  const BUNDLED_KEY = "account.create.initialDisclaimer"
+  const UNSUPPLIED_KEY = "test.unsupplied"
+  // Called with tIfExists and supplied by the mocked bundled override file.
+  const BUNDLED_KEY = "test.bundledLocale"
 
   beforeEach(() => applyTranslations("en"))
 

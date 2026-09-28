@@ -69,9 +69,21 @@ const RAW_PATHS = [
 ]
 
 const GLOBAL_RAW_PATHS = [
-  "http://localhost:3100/translations/partners/raw/:language",
-  "http://localhost/api/adapter/translations/partners/raw/:language",
+  "http://localhost:3100/translations/global/raw/:site/:language",
+  "http://localhost/api/adapter/translations/global/raw/:site/:language",
 ]
+
+const EMAIL_BASE_PATHS = [
+  "http://localhost:3100/translations/base/email/:language",
+  "http://localhost/api/adapter/translations/base/email/:language",
+]
+
+// Email keys ship with the api rather than the site, so the base is served rather than bundled.
+const EMAIL_ANCHOR_KEY = "aaa.emailAnchor"
+const EMAIL_BASE = {
+  en: { "t.hello": "Hello", [EMAIL_ANCHOR_KEY]: "Anchor" },
+  es: { "t.hello": "Hola" },
+}
 
 const respondWithOverrides = (overrides: ReturnType<typeof override>[]) =>
   server.use(
@@ -93,6 +105,11 @@ beforeEach(() => {
     rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => res(ctx.json(user))),
     ...[...RAW_PATHS, ...GLOBAL_RAW_PATHS].map((path) =>
       rest.get(path, (_req, res, ctx) => res(ctx.json([])))
+    ),
+    ...EMAIL_BASE_PATHS.map((path) =>
+      rest.get(path, (req, res, ctx) =>
+        res(ctx.json(EMAIL_BASE[req.params.language as string] ?? {}))
+      )
     )
   )
 })
@@ -134,22 +151,44 @@ const renderPage = (profileOverrides = {}, flagOn = true) =>
     </AuthContext.Provider>
   )
 
-const selectSite = async (site: "public" | "partners") =>
+const selectJurisdiction = async (id: string) =>
+  userEvent.selectOptions(await screen.findByLabelText("Jurisdiction"), id)
+
+const selectSite = async (site: "public" | "partners" | "email") =>
   userEvent.selectOptions(await screen.findByLabelText("Site"), site)
 
 const selectLanguage = async (label: string) =>
   userEvent.selectOptions(await screen.findByLabelText("Language"), label)
 
 // Types into the first editable cell and commits, which is what puts the page in the edited state.
+// AgTable redraws the grid shortly after first render, which cancels a cell edit in progress.
+// Under CI load the click can land inside that window, so the user actions retry; the assertion
+// that Save must enable is unchanged.
 const editFirstValue = async (value: string) => {
-  await waitFor(() => expect(document.querySelector(".editable-cell")).toBeInTheDocument())
-  await userEvent.click(document.querySelector<HTMLElement>(".editable-cell"))
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await waitFor(() => expect(document.querySelector(".editable-cell")).toBeInTheDocument(), {
+      timeout: 8000,
+    })
+    await userEvent.click(document.querySelector<HTMLElement>(".editable-cell"))
 
-  const input = document.querySelector<HTMLInputElement>(".editable-cell input")
-  await userEvent.clear(input)
-  await userEvent.type(input, `${value}{Enter}`)
+    const input = document.querySelector<HTMLInputElement>(".editable-cell input")
+    if (!input) continue
+    await userEvent.clear(input)
+    await userEvent.type(input, `${value}{Enter}`)
 
-  await waitFor(() => expect(screen.getByRole("button", { name: /Save/ })).toBeEnabled())
+    try {
+      await waitFor(() => expect(screen.getByRole("button", { name: /Save/ })).toBeEnabled(), {
+        timeout: 3000,
+      })
+      return
+    } catch {
+      // The edit was cancelled by a grid redraw; run the actions again.
+    }
+  }
+
+  await waitFor(() => expect(screen.getByRole("button", { name: /Save/ })).toBeEnabled(), {
+    timeout: 8000,
+  })
 }
 
 // Rows are filtered in the browser, behind a debounce, so this waits the current page out. The
@@ -172,6 +211,13 @@ describe("<SettingsTranslations>", () => {
       expect(await screen.findByRole("heading", { level: 1, name: "Settings" })).toBeInTheDocument()
       // The settings tabs render as navigation links rather than ARIA tabs.
       expect(screen.getByRole("link", { name: "Translations" })).toBeInTheDocument()
+    })
+
+    it("shows the content tab alongside it, since both ride the same flag", async () => {
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      expect(screen.getByRole("link", { name: "Content" })).toBeInTheDocument()
     })
 
     it("redirects when the db driven content flag is off for every jurisdiction", () => {
@@ -293,7 +339,9 @@ describe("<SettingsTranslations>", () => {
       await screen.findByText(FIRST_BASE_KEY)
       await selectPartnersScope()
 
-      await waitFor(() => expect(requested).toContain("/api/adapter/translations/partners/raw/en"))
+      await waitFor(() =>
+        expect(requested).toContain("/api/adapter/translations/global/raw/partners/en")
+      )
     })
 
     it("compares against the Partners base rather than the shared one", async () => {
@@ -316,7 +364,7 @@ describe("<SettingsTranslations>", () => {
       respondWithGlobalOverrides([override(FIRST_PARTNERS_BASE_KEY, "Bathrooms")])
       server.use(
         rest.delete(
-          "http://localhost/api/adapter/translations/partners/raw/:language/:key",
+          "http://localhost/api/adapter/translations/global/raw/partners/:language/:key",
           (req, res, ctx) => {
             deleted = req.params as Record<string, string>
             return res(ctx.json({ success: true }))
@@ -373,7 +421,7 @@ describe("<SettingsTranslations>", () => {
       let written: { path: string; body: unknown } = null
       server.use(
         rest.put(
-          "http://localhost/api/adapter/translations/partners/raw/:language",
+          "http://localhost/api/adapter/translations/global/raw/partners/:language",
           async (req, res, ctx) => {
             written = { path: req.url.pathname, body: await req.json() }
             return res(ctx.json({ success: true }))
@@ -387,7 +435,7 @@ describe("<SettingsTranslations>", () => {
       await userEvent.click(screen.getByRole("button", { name: /Save/ }))
 
       await waitFor(() => expect(written).not.toBeNull())
-      expect(written.path).toEqual("/api/adapter/translations/partners/raw/en")
+      expect(written.path).toEqual("/api/adapter/translations/global/raw/partners/en")
       expect(written.body).toEqual({
         edits: [{ key: FIRST_PARTNERS_BASE_KEY, value: "Partners edit" }],
       })
@@ -461,7 +509,7 @@ describe("<SettingsTranslations>", () => {
     it("opens the conflict dialog when someone else changed a global key first", async () => {
       server.use(
         rest.put(
-          "http://localhost/api/adapter/translations/partners/raw/:language",
+          "http://localhost/api/adapter/translations/global/raw/partners/:language",
           (_r, res, ctx) =>
             res(
               ctx.status(409),
@@ -479,7 +527,7 @@ describe("<SettingsTranslations>", () => {
     it("names the keys the API refused in the global scope", async () => {
       server.use(
         rest.put(
-          "http://localhost/api/adapter/translations/partners/raw/:language",
+          "http://localhost/api/adapter/translations/global/raw/partners/:language",
           (_r, res, ctx) =>
             res(ctx.status(400), ctx.json({ message: ["edits.0.value must be shorter"] }))
         )
@@ -493,6 +541,142 @@ describe("<SettingsTranslations>", () => {
 
   // The public site layers page_content/locale_overrides over the shared file, so the editor has to
   // compare against that rather than the shared file alone.
+  describe("email scope base", () => {
+    it("shows no rows when the served base fails to load", async () => {
+      server.use(
+        ...EMAIL_BASE_PATHS.map((path) => rest.get(path, (_req, res, ctx) => res(ctx.status(500))))
+      )
+      renderPage()
+
+      await selectSite("email")
+
+      expect(await screen.findByText(/could not be loaded/)).toBeInTheDocument()
+      // An empty base must not render as a catalog of keys with no base value.
+      await waitFor(() => expect(screen.queryByText("t.hello")).toBeNull())
+    }, 20000)
+
+    it("shows the default selected when the site changes to email", async () => {
+      renderPage()
+
+      await screen.findByLabelText("Site")
+      await selectSite("public")
+      expect(await screen.findByLabelText("Jurisdiction")).toHaveValue("jurisdiction1")
+
+      await selectSite("email")
+
+      expect(await screen.findByLabelText("Jurisdiction")).toHaveValue("none")
+    }, 20000)
+
+    it("reads the email rows for everyone when all jurisdictions is chosen", async () => {
+      const requested: string[] = []
+      server.use(
+        ...[...RAW_PATHS, ...GLOBAL_RAW_PATHS].map((path) =>
+          rest.get(path, (req, res, ctx) => {
+            requested.push(req.url.pathname)
+            return res(ctx.json([]))
+          })
+        )
+      )
+      renderPage()
+
+      await selectSite("email")
+      // Selecting by value rather than by label, so the option's wording is not what is under test.
+      await userEvent.selectOptions(screen.getByLabelText("Jurisdiction"), "none")
+
+      await waitFor(() =>
+        expect(requested).toContain("/api/adapter/translations/global/raw/email/en")
+      )
+    }, 20000)
+
+    it("saves an email override through the jurisdiction endpoint", async () => {
+      let written: string = null
+      server.use(
+        rest.put(
+          "http://localhost/api/adapter/translations/jurisdictions/:jurisdictionId/raw/:site/:language",
+          (req, res, ctx) => {
+            written = req.url.pathname
+            return res(ctx.json({ success: true }))
+          }
+        )
+      )
+      renderPage()
+
+      await selectSite("email")
+      await selectJurisdiction("jurisdiction1")
+      await editFirstValue("Email edit")
+      await userEvent.click(screen.getByRole("button", { name: /Save/ }))
+
+      await waitFor(() =>
+        expect(written).toEqual(
+          "/api/adapter/translations/jurisdictions/jurisdiction1/raw/email/en"
+        )
+      )
+    }, 20000)
+
+    it("shows a stored email override in place of the served base", async () => {
+      respondWithOverrides([override("t.hello", "Our greeting")])
+      renderPage()
+
+      await selectSite("email")
+      await selectJurisdiction("jurisdiction1")
+      await filterFor("t.hello", EMAIL_ANCHOR_KEY)
+
+      expect(await screen.findByText("Our greeting")).toBeInTheDocument()
+      // The served base stays visible in the base column alongside the override.
+      await expectBaseShown("Hello")
+      expect(await screen.findByRole("button", { name: "Revert" })).toBeInTheDocument()
+    }, 20000)
+
+    it("shows the strings served by the api, not the bundled site files", async () => {
+      renderPage()
+
+      await selectSite("email")
+      await filterFor("t.hello", EMAIL_ANCHOR_KEY)
+
+      await expectBaseShown("Hello")
+      // The bundled bases are not layered in, so a key only they define is absent.
+      expect(screen.queryByText(PUBLIC_ONLY_KEY)).toBeNull()
+    }, 20000)
+
+    it("layers the served translation over the served English", async () => {
+      renderPage({
+        jurisdictions: [
+          jurisdiction("jurisdiction1", "Bloomington", [LanguagesEnum.en, LanguagesEnum.es]),
+        ],
+      })
+
+      await selectSite("email")
+      await selectJurisdiction("jurisdiction1")
+      await selectLanguage("Español")
+      await filterFor("t.hello", EMAIL_ANCHOR_KEY)
+
+      await expectBaseShown("Hola")
+      expect(screen.queryByText("Hello")).toBeNull()
+    }, 20000)
+
+    it("reads and writes the email scope through the jurisdiction endpoints", async () => {
+      const requested: string[] = []
+      server.use(
+        ...RAW_PATHS.map((path) =>
+          rest.get(path, (req, res, ctx) => {
+            requested.push(req.url.pathname)
+            return res(ctx.json([]))
+          })
+        )
+      )
+      renderPage()
+
+      await selectSite("email")
+      await selectJurisdiction("jurisdiction1")
+
+      await waitFor(() =>
+        expect(requested).toContain(
+          "/api/adapter/translations/jurisdictions/jurisdiction1/raw/email/en"
+        )
+      )
+    }, 20000)
+  })
+
   describe("public scope base", () => {
     it("includes the keys the public site adds on top of the shared file", async () => {
       renderPage()

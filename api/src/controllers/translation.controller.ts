@@ -5,6 +5,7 @@ import {
   Get,
   Header,
   Param,
+  BadRequestException,
   ParseEnumPipe,
   ParseUUIDPipe,
   Put,
@@ -104,6 +105,21 @@ export class TranslationController {
     );
   }
 
+  @Get('base/email/:language')
+  @ApiOperation({
+    summary: 'Get the email strings shipped with the api',
+    operationId: 'emailBaseTranslations',
+  })
+  @ApiOkResponse({
+    schema: { type: 'object', additionalProperties: { type: 'string' } },
+  })
+  emailBaseTranslations(
+    @Param('language', new ParseEnumPipe(LanguagesEnum))
+    language: LanguagesEnum,
+  ): Record<string, string> {
+    return this.translationService.getBaseEmailTranslations(language);
+  }
+
   @Get('jurisdictions/:jurisdictionId/raw')
   @ApiOperation({
     summary: "List a jurisdiction's override keys",
@@ -192,65 +208,77 @@ export class TranslationController {
     );
   }
 
-  // The global Partners overrides apply to every jurisdiction.
+  // Global overrides apply to every jurisdiction. Only the Partners UI and email use a generic
+  // layer
+  private assertGlobalSite(site: SiteEnum): void {
+    if (site !== SiteEnum.partners && site !== SiteEnum.email) {
+      throw new BadRequestException(`${site} has no global scope`);
+    }
+  }
 
-  @Get('partners/raw/:language')
+  @Get('global/raw/:site/:language')
   @ApiOperation({
     summary:
-      'Get the global Partners override keys. stale = true, if its English source changed since it was translated',
-    operationId: 'getRawPartnersTranslations',
+      'Get the global override keys for a site. stale = true, if its English source changed since it was translated',
+    operationId: 'getRawGlobalTranslations',
   })
   @ApiOkResponse({ type: TranslationRawKey, isArray: true })
-  async getRawPartnersTranslations(
+  async getRawGlobalTranslations(
+    @Param('site', new ParseEnumPipe(SiteEnum)) site: SiteEnum,
     @Param('language', new ParseEnumPipe(LanguagesEnum))
     language: LanguagesEnum,
     @Request() req: ExpressRequest,
   ): Promise<TranslationRawKey[]> {
+    this.assertGlobalSite(site);
     return this.translationService.getRawOverrides(
       null,
-      SiteEnum.partners,
+      site,
       language,
       mapTo(User, req['user']),
     );
   }
 
-  @Put('partners/raw/:language')
+  @Put('global/raw/:site/:language')
   @ApiOperation({
     summary:
-      'Upsert the global Partners override keys with per-key optimistic locking',
-    operationId: 'updateRawPartnersTranslations',
+      'Upsert the global override keys for a site with per-key optimistic locking',
+    operationId: 'updateRawGlobalTranslations',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async updateRawPartnersTranslations(
+  async updateRawGlobalTranslations(
+    @Param('site', new ParseEnumPipe(SiteEnum)) site: SiteEnum,
     @Param('language', new ParseEnumPipe(LanguagesEnum))
     language: LanguagesEnum,
     @Body() dto: TranslationUpdate,
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
+    this.assertGlobalSite(site);
     return this.translationService.updateOverrides(
       null,
-      SiteEnum.partners,
+      site,
       language,
       dto,
       mapTo(User, req['user']),
     );
   }
 
-  @Delete('partners/raw/:language/:key')
+  @Delete('global/raw/:site/:language/:key')
   @ApiOperation({
-    summary: 'Delete one global Partners override key (revert to base)',
-    operationId: 'deleteRawPartnersTranslation',
+    summary: 'Delete one global override key for a site (revert to base)',
+    operationId: 'deleteRawGlobalTranslation',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async deleteRawPartnersTranslation(
+  async deleteRawGlobalTranslation(
+    @Param('site', new ParseEnumPipe(SiteEnum)) site: SiteEnum,
     @Param('language', new ParseEnumPipe(LanguagesEnum))
     language: LanguagesEnum,
     @Param('key') key: string,
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
+    this.assertGlobalSite(site);
     return this.translationService.deleteOverride(
       null,
-      SiteEnum.partners,
+      site,
       language,
       key,
       mapTo(User, req['user']),

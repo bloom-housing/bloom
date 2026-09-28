@@ -1,5 +1,7 @@
 .data-table-wrapper {
   --data-table-border-color: var(--seeds-color-gray-500);
+  --data-table-header-padding-block: var(--seeds-s5);
+  --data-table-cell-padding-block: var(--seeds-s4);
   scroll-margin: var(--seeds-s4);
 
   .search-input {
@@ -76,6 +78,7 @@
           th {
             text-transform: none;
             letter-spacing: normal;
+            padding-block: var(--data-table-header-padding-block);
             background-color: var(--seeds-bg-color-canvas);
             color: var(--seeds-text-color-dark);
             vertical-align: top;
@@ -93,12 +96,13 @@
           left: 0;
           top: 0;
           width: 100%;
-          height: 3.15rem;
+          // Tracks the header padding so the sort hit area never spills past the header row.
+          height: calc(var(--data-table-header-padding-block) * 2 + 0.65rem);
         }
       }
       tbody {
         td {
-          padding: var(--seeds-s4);
+          padding-block: var(--data-table-cell-padding-block);
           padding-inline: var(--seeds-s5);
           border-bottom: var(--seeds-border-1) solid var(--data-table-border-color);
         }
@@ -156,6 +160,12 @@
         }
       }
     }
+  }
+
+  .no-pagination {
+    border-bottom: var(--seeds-border-1) solid var(--data-table-border-color);
+    border-bottom-left-radius: var(--seeds-rounded-lg);
+    border-bottom-right-radius: var(--seeds-rounded-lg);
   }
 
   .pagination-loading-overlay {

@@ -1,6 +1,6 @@
 import { t } from "@bloom-housing/ui-components"
+import { Link } from "@bloom-housing/ui-seeds"
 import Markdown from "markdown-to-jsx"
-import Link from "next/link"
 import { FaqCategory, FaqContent } from "../patterns/FrequentlyAskedQuestions"
 
 export const getGenericHousingBasicsContent = (): FaqContent => {

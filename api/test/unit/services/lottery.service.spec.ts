@@ -36,7 +36,6 @@ import { SnapshotCreateService } from '../../../src/services/snapshot-create.ser
 import { TranslationService } from '../../../src/services/translation.service';
 import { mockApplicationSet } from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';
-import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 
 const canOrThrowMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
@@ -968,6 +967,7 @@ describe('Testing lottery service', () => {
         {
           id: 'example id',
         },
+        { isLotteryStatusUpdate: true },
       );
 
       expect(prisma.listings.update).not.toHaveBeenCalled();
@@ -1005,6 +1005,7 @@ describe('Testing lottery service', () => {
         {
           id: 'example id',
         },
+        { isLotteryStatusUpdate: true },
       );
 
       expect(prisma.listings.update).not.toHaveBeenCalled();
@@ -1055,6 +1056,7 @@ describe('Testing lottery service', () => {
           id: 'example id',
           jurisdictionId: 'jurisId',
         },
+        { isLotteryStatusUpdate: true },
       );
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
@@ -1112,6 +1114,7 @@ describe('Testing lottery service', () => {
         {
           id: 'example id',
         },
+        { isLotteryStatusUpdate: true },
       );
 
       expect(prisma.listings.update).not.toHaveBeenCalled();
@@ -1155,6 +1158,7 @@ describe('Testing lottery service', () => {
         {
           id: 'example id',
         },
+        { isLotteryStatusUpdate: true },
       );
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
@@ -1196,6 +1200,7 @@ describe('Testing lottery service', () => {
         {
           id: 'example id',
         },
+        { isLotteryStatusUpdate: true },
       );
 
       expect(prisma.listings.update).not.toHaveBeenCalled();
@@ -1228,6 +1233,7 @@ describe('Testing lottery service', () => {
         {
           id: 'example id',
         },
+        { isLotteryStatusUpdate: true },
       );
 
       expect(prisma.listings.update).not.toHaveBeenCalled();
@@ -1273,6 +1279,7 @@ describe('Testing lottery service', () => {
         {
           id: 'example id',
         },
+        { isLotteryStatusUpdate: true },
       );
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {

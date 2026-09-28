@@ -1,23 +1,16 @@
 import React, { useContext } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import {
-  SiteHeader,
-  SiteFooter,
-  FooterNav,
-  FooterSection,
-  t,
-  MenuLink,
-} from "@bloom-housing/ui-components"
-import { AuthContext, ExygyFooter, MessageContext } from "@bloom-housing/shared-helpers"
+import { SiteHeader, t, MenuLink } from "@bloom-housing/ui-components"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { Toast } from "@bloom-housing/ui-seeds"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import PartnersFooter from "../components/core/PartnerFooter"
 
 const Layout = (props) => {
   const { profile, signOut, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
-  const currentYear = new Date().getFullYear()
   const menuLinks: MenuLink[] = []
   if (profile) {
     menuLinks.push({
@@ -85,12 +78,7 @@ const Layout = (props) => {
           ))}
           {props.children}
         </main>
-        <SiteFooter>
-          <FooterNav copyright={`© ${currentYear} • All Rights Reserved`} />
-          <FooterSection className="bg-black" small>
-            <ExygyFooter />
-          </FooterSection>
-        </SiteFooter>
+        <PartnersFooter />
       </div>
     </div>
   )

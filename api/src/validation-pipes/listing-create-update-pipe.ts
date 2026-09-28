@@ -30,6 +30,15 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
     'units',
   ];
 
+  // Fields that are not applicable to land-use listings and should never be
+  // required for them, regardless of jurisdiction configuration.
+  private landUseExcludedRequiredFields = [
+    'developer',
+    'listingsLeasingAgentAddress',
+    'reservedCommunityTypes',
+    'reservedCommunityDescription',
+  ];
+
   constructor(private prisma: PrismaService) {
     super({
       ...defaultValidationPipeOptions,
@@ -94,9 +103,16 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
     });
 
     // Use jurisdiction's required fields, falling back to defaults if none specified
-    const requiredFields = jurisdiction?.requiredListingFields?.length
+    const baseRequiredFields = jurisdiction?.requiredListingFields?.length
       ? jurisdiction.requiredListingFields
       : this.defaultRequiredFields;
+
+    const requiredFields =
+      value.listingType === ListingTypeEnum.landUse
+        ? baseRequiredFields.filter(
+            (field) => !this.landUseExcludedRequiredFields.includes(field),
+          )
+        : baseRequiredFields;
 
     const minimumImagesRequired =
       jurisdiction?.minimumListingPublishImagesRequired || 0;

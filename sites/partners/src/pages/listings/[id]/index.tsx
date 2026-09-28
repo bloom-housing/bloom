@@ -164,7 +164,11 @@ export default function ListingDetail(props: ListingProps) {
             </section>
           </Layout>
 
-          <DetailUnitDrawer unit={unitDrawer} setUnitDrawer={setUnitDrawer} />
+          <DetailUnitDrawer
+            unit={unitDrawer}
+            setUnitDrawer={setUnitDrawer}
+            listingType={listing.listingType}
+          />
           <CopyListingDialog
             isOpen={copyListingDialog}
             setOpen={setCopyListingDialog}

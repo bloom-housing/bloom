@@ -32,6 +32,25 @@ const withoutTombstone = (item: Record<string, unknown>) => {
 
 const hasId = (item: IdItem): boolean => isPlainObject(item) && item.id != null;
 
+// Removes deleted items and the tombstone flag from a value no language row overrides, so a
+// deletion recorded on the English row takes effect for English readers too.
+function withoutDeleted(value: unknown): unknown {
+  if (isIdList(value)) {
+    return mergeListById(value, []);
+  }
+  if (Array.isArray(value)) {
+    return value;
+  }
+  if (isPlainObject(value)) {
+    const result: Record<string, unknown> = {};
+    for (const key of Object.keys(value)) {
+      result[key] = withoutDeleted(value[key]);
+    }
+    return result;
+  }
+  return value;
+}
+
 // Correlates two lists by item id: English items keep their order, a matching language item merges
 // over the English item, a tombstone (`_deleted`) drops the id, and language-only items append after
 // the English-derived items. A valid stored item always carries an id (the DTOs require it), so the
@@ -63,7 +82,9 @@ export function mergeListById(
       }
       emitted.add(item.id);
     }
-    merged.push(withoutTombstone(item));
+    merged.push(
+      withoutDeleted(withoutTombstone(item)) as Record<string, unknown>,
+    );
   };
 
   for (const englishItem of englishItems) {
@@ -102,7 +123,7 @@ function mergeValue(base: unknown, override: unknown): unknown {
   // An unset override (including the null the sanitizer writes for an absent optional field) falls
   // back to the base value.
   if (override === undefined || override === null) {
-    return base;
+    return withoutDeleted(base);
   }
 
   if (isIdList(override) || isIdList(base)) {
@@ -135,6 +156,43 @@ function mergeValue(base: unknown, override: unknown): unknown {
   return override;
 }
 
+const isEmptyForRender = (value: unknown): boolean => {
+  if (value === undefined || value === null) {
+    return true;
+  }
+  if (typeof value === 'string') {
+    return value.trim() === '';
+  }
+  if (Array.isArray(value)) {
+    return value.length === 0;
+  }
+  if (isPlainObject(value)) {
+    return Object.entries(value).every(
+      ([key, entry]) => key === 'id' || isEmptyForRender(entry),
+    );
+  }
+  return false;
+};
+
+// An item an admin left blank, or emptied to hide it for one language, is dropped from a list here
+// so the render path has nothing to draw for it. Fields keep their empty values.
+const withoutEmptyItems = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value
+      .map(withoutEmptyItems)
+      .filter((item) => !isEmptyForRender(item));
+  }
+  if (isPlainObject(value)) {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [
+        key,
+        withoutEmptyItems(entry),
+      ]),
+    );
+  }
+  return value;
+};
+
 export interface MergeableContent {
   footer?: Json;
   faq?: Json;
@@ -144,13 +202,12 @@ export interface MergeableContent {
 }
 
 // Merges a language content document over the English default, field by field. Passing an
-// undefined/empty language document returns the English content unchanged (the English-only case).
+// undefined/empty language document returns the English content with its deletions applied.
 export function mergeContent(
   englishContent: MergeableContent,
   languageContent?: MergeableContent,
 ): MergeableContent {
-  return mergeValue(
-    englishContent ?? {},
-    languageContent ?? {},
+  return withoutEmptyItems(
+    mergeValue(englishContent ?? {}, languageContent ?? {}),
   ) as MergeableContent;
 }

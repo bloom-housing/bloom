@@ -17,6 +17,9 @@ const SCHEME_PATTERN = /^([a-zA-Z][a-zA-Z0-9+.-]*):/;
 // Control characters and whitespace (U+0000 to U+0020) that browsers ignore inside a scheme, so
 // "java\tscript:" runs as javascript:. Stripped before reading the scheme.
 const CONTROL_AND_SPACE = /[\u0000-\u0020]/g;
+// A value starting with two slashes is protocol-relative: it has no scheme but still addresses
+// another host.
+const PROTOCOL_RELATIVE = /^\/\//;
 
 export function IsSafeUrl(validationOptions?: ValidationOptions) {
   return function (object: unknown, propertyName: string) {
@@ -37,9 +40,11 @@ export class IsSafeUrlConstraint implements ValidatorConstraintInterface {
     if (typeof value !== 'string') {
       return true;
     }
-    const schemeMatch = value
-      .replace(CONTROL_AND_SPACE, '')
-      .match(SCHEME_PATTERN);
+    const cleaned = value.replace(CONTROL_AND_SPACE, '');
+    if (PROTOCOL_RELATIVE.test(cleaned)) {
+      return false;
+    }
+    const schemeMatch = cleaned.match(SCHEME_PATTERN);
     if (!schemeMatch) {
       // No scheme: a relative path, fragment, or query. Safe.
       return true;
@@ -50,6 +55,8 @@ export class IsSafeUrlConstraint implements ValidatorConstraintInterface {
   defaultMessage(args: ValidationArguments) {
     return `${
       args.property
-    } must be a relative URL or use one of: ${ALLOWED_URL_SCHEMES.join(', ')}`;
+    } must be a relative URL that is not protocol-relative, or use one of: ${ALLOWED_URL_SCHEMES.join(
+      ', ',
+    )}`;
   }
 }

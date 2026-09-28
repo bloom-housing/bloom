@@ -8,11 +8,18 @@ import { Message, Toast, Icon } from "@bloom-housing/ui-seeds"
 import { MenuLink, t, SiteHeader as UICSiteHeader } from "@bloom-housing/ui-components"
 import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
-import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { useBrand } from "../lib/BrandContext"
+import {
+  BrandDTO,
+  FeatureFlag,
+  FeatureFlagEnum,
+  User,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
+import styles from "./application.module.scss"
 import CustomSiteFooter from "../components/shared/CustomSiteFooter"
 import { HeaderLink, SiteHeader } from "../patterns/SiteHeader"
-import styles from "./application.module.scss"
+import { useJurisdictionFeatureFlags } from "../lib/JurisdictionFeatureFlagsContext"
 
 const isMessageActive = (windowEnv: string) => {
   let isActive = false
@@ -134,7 +141,8 @@ const getHeaderLinks = (
   profile: User,
   signOut: () => Promise<void>,
   addToast: (message: string, props: ToastProps) => void,
-  linksBehindFlags: Record<string, boolean>
+  loggedInFlags: Record<string, boolean>,
+  featureFlags: FeatureFlag[]
 ) => {
   const headerLinks: HeaderLink[] = [
     {
@@ -148,6 +156,12 @@ const getHeaderLinks = (
       href: process.env.housingCounselorServiceUrl,
     })
   }
+  if (featureFlags?.some((flag) => flag.name === FeatureFlagEnum.enableProfessionalPartnersPage)) {
+    headerLinks.push({
+      label: t("pageTitle.professionalPartners"),
+      href: "/professional-partners",
+    })
+  }
   if (profile) {
     headerLinks.push({
       label: t("nav.myAccount"),
@@ -156,7 +170,7 @@ const getHeaderLinks = (
           label: t("nav.myDashboard"),
           href: "/account/dashboard",
         },
-        ...(linksBehindFlags["applications"]
+        ...(loggedInFlags["applications"]
           ? [
               {
                 label: t("account.myApplications"),
@@ -164,7 +178,7 @@ const getHeaderLinks = (
               },
             ]
           : []),
-        ...(linksBehindFlags["favorites"]
+        ...(loggedInFlags["favorites"]
           ? [
               {
                 label: t("account.myFavorites"),
@@ -206,10 +220,23 @@ interface LayoutProps {
   pageTitle?: string
 }
 
+export const headerLogo = (brand: BrandDTO | null) =>
+  brand?.logoUrl ? (
+    <img src={brand.logoUrl} alt="" data-testid="brand-header-logo" />
+  ) : (
+    <div data-testid="fallback-header-logo">
+      <Icon size={"lg"}>
+        <HomeIcon />
+      </Icon>
+    </div>
+  )
+
 const Layout = (props: LayoutProps) => {
   const { profile, signOut } = useContext(AuthContext)
+  const brand = useBrand()
   const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
+  const featureFlags = useJurisdictionFeatureFlags()
 
   const [showFavorites, setShowFavorites] = useState(false)
   const [showApplications, setShowApplications] = useState(true)
@@ -261,16 +288,19 @@ const Layout = (props: LayoutProps) => {
                   active: t("config.routePrefix") === lang.prefix,
                 }
               })}
-              links={getHeaderLinks(router, profile, signOut, addToast, {
-                applications: showApplications,
-                favorites: showFavorites,
-              })}
+              links={getHeaderLinks(
+                router,
+                profile,
+                signOut,
+                addToast,
+                {
+                  applications: showApplications,
+                  favorites: showFavorites,
+                },
+                featureFlags
+              )}
               titleLink={"/"}
-              logo={
-                <Icon size={"lg"}>
-                  <HomeIcon />
-                </Icon>
-              }
+              logo={headerLogo(brand)}
               mainContentId="main-content"
               showMessageBar={false}
               banners={[
