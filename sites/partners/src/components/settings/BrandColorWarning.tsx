@@ -56,9 +56,12 @@ const BrandColorWarning = ({
 }: BrandColorWarningProps) => {
   const [dismissed, setDismissed] = useState<string | null>(null)
   const settled = useSettled(value)
+  const settledDerived = useSettled(derived)
 
   const color = settled?.trim()
   if (!color || !HEX_COLOR.test(color) || dismissed === color) return null
+
+  if (shade !== "base" && !settledDerived) return null
 
   const dismiss = (
     <Button
@@ -76,7 +79,7 @@ const BrandColorWarning = ({
   const against = textOn[shade]
   if (!tooDark && meetsAA(color, against)) return null
 
-  const suggestion = tooDark ? null : applicable(shade, color, derived, against)
+  const suggestion = tooDark ? null : applicable(shade, color, settledDerived, against)
 
   return (
     <Message

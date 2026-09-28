@@ -198,6 +198,7 @@ const BrandingForm = ({
             </Grid.Cell>
           ))}
         </Grid.Row>
+        <p className={styles["shades-note"]}>{t("branding.shadesNote")}</p>
         {RAMP_SHADES.map((shade) => (
           <BrandColorWarning
             key={shade}

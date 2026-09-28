@@ -124,6 +124,47 @@ describe("BrandColorWarning", () => {
     })
   })
 
+  describe("a shade whose base is being edited or is empty", () => {
+    // derivedShades returns nothing until the base parses, so a base mid-edit used to remove the
+    // suggestion while the warning stayed, leaving the admin with only a dismiss button.
+    it("keeps the suggestion while the base is briefly unparseable", async () => {
+      const { rerender } = renderWarning({
+        value: "#333333",
+        shade: "lighter",
+        derived: "#F8F4FB",
+      })
+      await findContrast()
+      expect(document.getElementById("primaryBase-apply")).not.toBeNull()
+
+      rerender(
+        <BrandColorWarning
+          value="#333333"
+          shade="lighter"
+          fieldLabel="Base color"
+          derived={undefined}
+          onApply={jest.fn()}
+          testId="primaryBase"
+        />
+      )
+
+      expect(document.getElementById("primaryBase-apply")).not.toBeNull()
+    })
+
+    // rampFromValues drops a ramp with no base, so the shade would never be stored.
+    it("raises no warning for a shade once the base has gone", async () => {
+      renderWarning({ value: "#333333", shade: "lighter", derived: undefined })
+
+      await new Promise((resolve) => setTimeout(resolve, 600))
+      expect(screen.queryByTestId("primaryBase-contrast")).not.toBeInTheDocument()
+    })
+
+    it("still warns on the base itself, which has no derived value", async () => {
+      renderWarning({ value: "#EEDD00", shade: "base", derived: undefined })
+
+      expect(await findContrast()).toBeInTheDocument()
+    })
+  })
+
   describe("dismissal", () => {
     it("hides a contrast warning", async () => {
       renderWarning({ value: "#EEDD00" })
