@@ -366,6 +366,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
         ...value,
         listingFeaturesConfiguration: null,
         minimumImagesRequired: 0,
+        publishesToClosed: false,
         units: [],
         unitGroups: [],
         requiredFields: ['name', 'leasingAgentEmail'],
@@ -404,6 +405,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
         ...value,
         listingFeaturesConfiguration: null,
         minimumImagesRequired: 0,
+        publishesToClosed: false,
         units: [],
         unitGroups: [],
         requiredFields: [
