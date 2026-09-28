@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { of, throwError } from 'rxjs';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
 import { JurisdictionCreate } from '../../../src/dtos/jurisdictions/jurisdiction-create.dto';
@@ -34,6 +35,11 @@ describe('Testing jurisdiction service', () => {
     };
   };
 
+  const httpServiceMock = {
+    get: jest.fn(),
+    post: jest.fn().mockReturnValue(of({})),
+  };
+
   const mockJurisdictionSet = (numberToCreate: number, date: Date) => {
     const toReturn = [];
     for (let i = 0; i < numberToCreate; i++) {
@@ -47,7 +53,7 @@ describe('Testing jurisdiction service', () => {
       providers: [
         JurisdictionService,
         PrismaService,
-        { provide: HttpService, useValue: { get: jest.fn() } },
+        { provide: HttpService, useValue: httpServiceMock },
       ],
     }).compile();
 
@@ -563,6 +569,8 @@ describe('Testing jurisdiction service', () => {
       process.env.CLOUDINARY_CLOUD_NAME = 'exygy';
       delete process.env.S3_PUBLIC_BUCKET;
       delete process.env.S3_REGION;
+      httpServiceMock.post.mockClear();
+      httpServiceMock.post.mockReturnValue(of({}));
     });
 
     it('derives the missing ramp values at read time', async () => {
@@ -681,6 +689,43 @@ describe('Testing jurisdiction service', () => {
         expect(writtenData().brandFavicon).toEqual({
           create: { fileId: 'dev/bloom_favicon.png', label: 'brandFavicon' },
         });
+      });
+
+      it('asks the public site to rebuild after the brand is saved', async () => {
+        prisma.jurisdictions.update = jest
+          .fn()
+          .mockResolvedValue(row({ publicUrl: 'http://site' }));
+        prisma.jurisdictions.findFirst = jest
+          .fn()
+          .mockResolvedValue({ id: jurisdictionId });
+
+        await service.updateBrand(jurisdictionId, {
+          brand: { primary: { base: '#773E98' } },
+        });
+
+        expect(httpServiceMock.post).toHaveBeenCalledWith(
+          'http://site/api/revalidate',
+          {},
+          expect.anything(),
+        );
+      });
+
+      it('saves the brand even when the public site cannot be reached', async () => {
+        prisma.jurisdictions.update = jest
+          .fn()
+          .mockResolvedValue(row({ publicUrl: 'http://site' }));
+        prisma.jurisdictions.findFirst = jest
+          .fn()
+          .mockResolvedValue({ id: jurisdictionId });
+        httpServiceMock.post.mockReturnValue(
+          throwError(() => ({ message: 'ECONNREFUSED' })),
+        );
+
+        const result = await service.updateBrand(jurisdictionId, {
+          brand: { primary: { base: '#773E98' } },
+        });
+
+        expect(result.id).toEqual(jurisdictionId);
       });
 
       it('leaves an asset alone when its file id is absent', async () => {

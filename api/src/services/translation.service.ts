@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import {
   ConflictException,
   Injectable,
@@ -25,6 +26,7 @@ import { baseTranslationRows } from '../locales/email-translations';
 import { sourceHash } from '../utilities/translation-source-hash';
 import { mapTo } from '../utilities/mapTo';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { revalidatePublicSite } from '../utilities/revalidate-public-site';
 
 @Injectable()
 export class TranslationService {
@@ -32,6 +34,7 @@ export class TranslationService {
     private prisma: PrismaService,
     private readonly googleTranslateService: GoogleTranslateService,
     private readonly permissionService: PermissionService,
+    private readonly httpService: HttpService,
   ) {}
 
   public async getMergedTranslations(
@@ -268,7 +271,19 @@ export class TranslationService {
         conflicts,
       });
     }
+    if (site === SiteEnum.public) {
+      await this.revalidate(jurisdictionId);
+    }
     return { success: true };
+  }
+
+  private async revalidate(jurisdictionId: string | null): Promise<void> {
+    if (!jurisdictionId) return;
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      where: { id: jurisdictionId },
+      select: { publicUrl: true },
+    });
+    await revalidatePublicSite(this.httpService, jurisdiction?.publicUrl);
   }
 
   // Applies one edit under a per-key optimistic lock; returns the key if another writer

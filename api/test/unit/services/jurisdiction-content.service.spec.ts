@@ -1,4 +1,6 @@
+import { HttpService } from '@nestjs/axios';
 import { ConflictException, NotFoundException } from '@nestjs/common';
+import { of, throwError } from 'rxjs';
 import { Test, TestingModule } from '@nestjs/testing';
 import { LanguagesEnum, Prisma } from '@prisma/client';
 import { randomUUID } from 'crypto';
@@ -13,17 +15,20 @@ describe('Testing jurisdiction content service', () => {
   let service: JurisdictionContentService;
   let prisma: PrismaService;
   let permissionServiceMock;
+  let httpServiceMock;
   let mockConsoleWarn;
   const adminUser = { id: 'admin-user' } as User;
 
   beforeEach(async () => {
     permissionServiceMock = { canOrThrow: jest.fn() };
+    httpServiceMock = { post: jest.fn().mockReturnValue(of({ data: {} })) };
     mockConsoleWarn = jest.spyOn(console, 'warn').mockImplementation();
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         JurisdictionContentService,
         PrismaService,
         { provide: PermissionService, useValue: permissionServiceMock },
+        { provide: HttpService, useValue: httpServiceMock },
       ],
     }).compile();
 
@@ -328,6 +333,78 @@ describe('Testing jurisdiction content service', () => {
         'update',
         { jurisdictionId },
       );
+    });
+
+    it('asks the public site to rebuild after a save', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: jurisdictionId, publicUrl: 'http://site' });
+      prisma.jurisdictionContent.create = jest.fn().mockResolvedValueOnce({});
+      prisma.jurisdictionContent.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: 'row' });
+
+      await service.updateContent(
+        jurisdictionId,
+        LanguagesEnum.en,
+        { contact: { phone: '555-0100' } },
+        adminUser,
+      );
+
+      expect(httpServiceMock.post).toHaveBeenCalledWith(
+        'http://site/api/revalidate',
+        {},
+        expect.anything(),
+      );
+    });
+
+    it('saves the content even when the public site cannot be reached', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: jurisdictionId, publicUrl: 'http://site' });
+      prisma.jurisdictionContent.create = jest.fn().mockResolvedValueOnce({});
+      prisma.jurisdictionContent.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: 'row' });
+      httpServiceMock.post = jest
+        .fn()
+        .mockReturnValue(throwError(() => ({ message: 'ECONNREFUSED' })));
+
+      const row = await service.updateContent(
+        jurisdictionId,
+        LanguagesEnum.en,
+        { contact: { phone: '555-0100' } },
+        adminUser,
+      );
+
+      expect(row.id).toEqual('row');
+    });
+
+    it('does not rebuild when the save conflicted', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: jurisdictionId, publicUrl: 'http://site' });
+      prisma.jurisdictionContent.create = jest.fn().mockRejectedValueOnce(
+        new Prisma.PrismaClientKnownRequestError('exists', {
+          code: 'P2002',
+          clientVersion: '5',
+        }),
+      );
+      prisma.jurisdictionContent.findFirst = jest.fn();
+
+      await expect(
+        service.updateContent(
+          jurisdictionId,
+          LanguagesEnum.en,
+          { contact: { phone: '555-0100' } },
+          adminUser,
+        ),
+      ).rejects.toThrow(ConflictException);
+
+      expect(httpServiceMock.post).not.toHaveBeenCalled();
     });
 
     it('updates the row when the optimistic lock matches', async () => {
