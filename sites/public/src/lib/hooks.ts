@@ -229,7 +229,7 @@ export async function fetchBaseListingData(
     listings = response.data.items
     pagination = enablePagination ? response.data.meta : null
   } catch (e) {
-    console.log("fetchBaseListingData error: ", e)
+    console.log("fetchBaseListingData error: ", e.message)
   }
 
   return {
@@ -510,7 +510,7 @@ export async function fetchMultiselectProgramData(req: any, jurisdictionId: stri
     )
     return multiselectDataResponse?.data
   } catch (error) {
-    console.log("error = ", error)
+    console.log("error = ", error.message)
   }
 }
 
@@ -544,7 +544,7 @@ export async function fetchAgencies(req: any, jurisdictionId: string) {
     )
     return agencyDataResponse?.data
   } catch (error) {
-    console.log("error = ", error)
+    console.log("error = ", error.message)
   }
 }
 

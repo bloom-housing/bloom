@@ -1,14 +1,25 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const maskAxiosResponse = (response: any) => {
-  const configData = response?.config?.data ? JSON.parse(response.config.data) : undefined
-  const maskedResponse = !configData
-    ? response
-    : {
-        ...response,
-        config: { ...response.config, data: maskData(configData) },
-      }
+  const config = response?.config
+  if (!config) return response
 
-  return maskedResponse
+  const configData = config.data ? JSON.parse(config.data) : undefined
+
+  return {
+    ...response,
+    config: {
+      ...config,
+      ...(configData ? { data: maskData(configData) } : {}),
+      ...(config.headers ? { headers: maskHeaders(config.headers) } : {}),
+    },
+  }
+}
+
+// The api passkey authenticates every request the sites make, and it must not reach a log.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const maskHeaders = (headers: any) => {
+  if (!headers?.passkey) return headers
+  return { ...headers, passkey: "*******" }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
