@@ -571,6 +571,13 @@ describe('Testing jurisdiction service', () => {
       delete process.env.S3_REGION;
       httpServiceMock.post.mockClear();
       httpServiceMock.post.mockReturnValue(of({}));
+      // revalidatePublicSite returns early without a passkey. Local runs inherit one from
+      // api/.env, which @prisma/client loads on import, and CI has no such file.
+      process.env.API_PASS_KEY = 'test-passkey';
+    });
+
+    afterEach(() => {
+      delete process.env.API_PASS_KEY;
     });
 
     it('derives the missing ramp values at read time', async () => {

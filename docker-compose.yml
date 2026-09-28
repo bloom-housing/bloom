@@ -253,7 +253,7 @@ services:
       NEXTJS_PORT: 3001
       BACKEND_API_BASE: "http://lb:3100"
       LISTINGS_QUERY: "/listings"
-      API_PASS_KEY: "totally a passkey"
+      API_PASS_KEY: "some-key-here"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://127.0.0.1:3001/"]
       interval: "5s"
@@ -302,7 +302,7 @@ services:
       IDLE_TIMEMOUT: 5 # seconds
       CACHE_REVALIDATE: 3600 # seconds
 
-      API_PASS_KEY: "totally a passkey"
+      API_PASS_KEY: "some-key-here"
 
       SHOW_PUBLIC_LOTTERY: "TRUE"
       SHOW_MANDATED_ACCOUNTS: "FALSE"

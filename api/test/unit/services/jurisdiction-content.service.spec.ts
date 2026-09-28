@@ -40,10 +40,14 @@ describe('Testing jurisdiction content service', () => {
     prisma.jurisdictions.findFirst = jest
       .fn()
       .mockResolvedValue({ id: 'jurisdiction' });
+    // revalidatePublicSite returns early without a passkey. Local runs inherit one from api/.env,
+    // which @prisma/client loads on import, and CI has no such file.
+    process.env.API_PASS_KEY = 'test-passkey';
   });
 
   afterEach(() => {
     mockConsoleWarn.mockRestore();
+    delete process.env.API_PASS_KEY;
   });
 
   describe('getMergedContent', () => {
