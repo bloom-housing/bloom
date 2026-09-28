@@ -464,6 +464,41 @@ describe('Testing translations service', () => {
       expect(httpServiceMock.post).not.toHaveBeenCalled();
     });
 
+    // The edits are applied independently, so the rows that did not conflict are already written.
+    it('rebuilds when only some of the edits conflicted', async () => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: 'jurisdiction', publicUrl: 'http://site' });
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 })
+        .mockResolvedValueOnce({ count: 0 });
+      prisma.translationStrings.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: 'b-row' });
+
+      await expect(
+        service.updateOverrides(
+          randomUUID(),
+          SiteEnum.public,
+          LanguagesEnum.en,
+          {
+            edits: [
+              { key: 'a', value: 'A', lastUpdatedAt: new Date() },
+              { key: 'b', value: 'B', lastUpdatedAt: new Date() },
+            ],
+          },
+          adminUser,
+        ),
+      ).rejects.toThrow(ConflictException);
+
+      expect(httpServiceMock.post).toHaveBeenCalledWith(
+        'http://site/api/revalidate',
+        {},
+        expect.anything(),
+      );
+    });
+
     it('does not rebuild when every edit conflicted', async () => {
       prisma.jurisdictions.findFirst = jest
         .fn()
@@ -681,6 +716,49 @@ describe('Testing translations service', () => {
   });
 
   describe('deleteOverride', () => {
+    // Reverting to the shipped string changes the rendered page as much as setting an override.
+    it('asks the public site to rebuild after a public override is deleted', async () => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: 'jurisdiction', publicUrl: 'http://site' });
+      prisma.translationStrings.deleteMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+
+      await service.deleteOverride(
+        randomUUID(),
+        SiteEnum.public,
+        LanguagesEnum.en,
+        'test.translated',
+        adminUser,
+      );
+
+      expect(httpServiceMock.post).toHaveBeenCalledWith(
+        'http://site/api/revalidate',
+        {},
+        expect.anything(),
+      );
+    });
+
+    it('leaves the public site alone when another scope is deleted', async () => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: 'jurisdiction', publicUrl: 'http://site' });
+      prisma.translationStrings.deleteMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+
+      await service.deleteOverride(
+        randomUUID(),
+        SiteEnum.partners,
+        LanguagesEnum.en,
+        'test.translated',
+        adminUser,
+      );
+
+      expect(httpServiceMock.post).not.toHaveBeenCalled();
+    });
+
     it('deletes a key override after a permission check', async () => {
       const jurisdictionId = randomUUID();
       prisma.translationStrings.deleteMany = jest

@@ -345,6 +345,32 @@ describe('Testing jurisdiction service', () => {
     });
   });
 
+  // update() writes the same brand columns as updateBrand, so it has to rebuild too.
+  it('asks the public site to rebuild after a jurisdiction update', async () => {
+    process.env.API_PASS_KEY = 'test-passkey';
+    httpServiceMock.post.mockClear();
+    httpServiceMock.post.mockReturnValue(of({}));
+    const mockedJurisdiction = mockJurisdiction(3, new Date());
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue(mockedJurisdiction);
+    prisma.jurisdictions.update = jest
+      .fn()
+      .mockResolvedValue({ ...mockedJurisdiction, publicUrl: 'http://site' });
+
+    await service.update({
+      id: mockedJurisdiction.id,
+      name: 'updated jurisdiction 3',
+    } as JurisdictionUpdate);
+
+    expect(httpServiceMock.post).toHaveBeenCalledWith(
+      'http://site/api/revalidate',
+      {},
+      expect.anything(),
+    );
+    delete process.env.API_PASS_KEY;
+  });
+
   it('testing update() existing record found', async () => {
     const date = new Date();
 

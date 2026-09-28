@@ -265,14 +265,15 @@ export class TranslationService {
     );
     const conflicts = results.filter((key): key is string => key !== null);
 
+    if (site === SiteEnum.public && conflicts.length < results.length) {
+      await this.revalidate(jurisdictionId);
+    }
+
     if (conflicts.length) {
       throw new ConflictException({
         message: 'translationConflict',
         conflicts,
       });
-    }
-    if (site === SiteEnum.public) {
-      await this.revalidate(jurisdictionId);
     }
     return { success: true };
   }
@@ -342,6 +343,10 @@ export class TranslationService {
     await this.prisma.translationStrings.deleteMany({
       where: { jurisdictionId, language, site, key },
     });
+
+    if (site === SiteEnum.public) {
+      await this.revalidate(jurisdictionId);
+    }
     return { success: true };
   }
 

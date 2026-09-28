@@ -273,6 +273,9 @@ export class JurisdictionService {
       },
       include: view,
     });
+
+    await revalidatePublicSite(this.httpService, rawResults.publicUrl);
+
     return mapTo(Jurisdiction, withResponseBrand(rawResults));
   }
 
