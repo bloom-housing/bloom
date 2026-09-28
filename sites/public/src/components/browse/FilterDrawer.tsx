@@ -103,7 +103,10 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     (entry) => entry === FeatureFlagEnum.enableFilterByStatus
   )
 
-  const statusFilterOptions = watch(ListingFilterKeys.status)
+  const statusFilterOption = watch(
+    ListingFilterKeys.status,
+    props.filterState?.[ListingFilterKeys.status] ?? ListingsStatusEnum.active
+  )
 
   const onSubmit = (data: FilterData) => {
     if (data[ListingFilterKeys.status] === ListingsStatusEnum.closed) {
@@ -175,7 +178,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
                 availabilityKeys,
                 props.filterState
               )}
-              disabled={statusFilterOptions === ListingsStatusEnum.closed}
+              disabled={statusFilterOption === ListingsStatusEnum.closed}
               register={register}
             />
             {enableHomeType && (
