@@ -366,6 +366,18 @@ const jurisdictionContentByLanguage = new Map<string, Cached<JurisdictionContent
 
 const RENDERED_DOCUMENTS = ["footer", "faq", "resources", "disclaimers", "contact"] as const
 
+/*
+  Drops cached API reads, so the next one goes to the API. All three caches are cleared
+  together.
+*/
+export const clearCachedApiReads = (): void => {
+  jurisdiction = null
+  jurisdictionUntil = 0
+  jurisdictionPhase = undefined
+  publicOverridesByLanguage.clear()
+  jurisdictionContentByLanguage.clear()
+}
+
 const cacheWindowMs = (phase?: string) => {
   if (phase === "phase-production-build") return Number.POSITIVE_INFINITY
   const revalidate = Number(process.env.cacheRevalidate)
