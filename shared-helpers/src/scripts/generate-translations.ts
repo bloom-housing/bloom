@@ -46,6 +46,7 @@ function main() {
   })
 
   // Add new keys if not present
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const newTranslationsFile: any = fs.readFileSync(filePath, "utf-8")
   const newTranslations = newTranslationsFile.split("\n")
   newTranslations.forEach((translation: string) => {

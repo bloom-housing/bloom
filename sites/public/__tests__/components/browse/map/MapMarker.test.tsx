@@ -26,6 +26,7 @@ describe("MapMarker", () => {
     id: "listing-1",
     key: 7,
     coordinate: { lat: 37.7749, lng: -122.4194 },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any
 
   beforeEach(() => {

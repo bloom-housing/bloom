@@ -1,0 +1,15 @@
+.brand-color-field__control {
+  display: flex;
+  align-items: stretch;
+  gap: var(--seeds-s2);
+}
+
+.brand-color-field__swatch {
+  flex: none;
+  inline-size: var(--seeds-s12);
+  padding: var(--seeds-s1);
+  border: 1px solid var(--seeds-input-border-color, var(--seeds-color-gray-550));
+  border-radius: var(--seeds-rounded);
+  background-color: var(--seeds-color-white);
+  cursor: pointer;
+}
