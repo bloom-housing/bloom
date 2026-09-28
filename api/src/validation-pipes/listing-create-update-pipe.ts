@@ -39,7 +39,7 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
   /**
    * A land use listing with no scheduled publish date goes live as `closed` rather than `active`,
    */
-  private async publishesToClosed(
+  async publishesToClosed(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value: any,
     jurisdiction: unknown,
