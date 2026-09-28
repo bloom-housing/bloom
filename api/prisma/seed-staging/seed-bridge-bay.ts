@@ -2404,7 +2404,9 @@ export const realisticAddressesForOtherStatuses = [
 
 const featureFlags = [
   FeatureFlagEnum.disableEthnicityQuestion,
+  FeatureFlagEnum.disableHowToContact,
   FeatureFlagEnum.disableWorkInRegion,
+  FeatureFlagEnum.enableApplicationExpirationNonAdmins,
   FeatureFlagEnum.enableDuplicatesDetailsInEmail,
   FeatureFlagEnum.enableExportTerms,
   FeatureFlagEnum.enableFaq,
@@ -2428,12 +2430,14 @@ const featureFlags = [
   FeatureFlagEnum.enablePartnerDemographics,
   FeatureFlagEnum.enablePartnerSettings,
   FeatureFlagEnum.enableProfessionalPartnersPage,
+  FeatureFlagEnum.enablePublicTermsOfUse,
   FeatureFlagEnum.enableReceivedAtAndByFields,
   FeatureFlagEnum.enableResources,
   FeatureFlagEnum.enableSeeOurData,
   FeatureFlagEnum.enableSexualOrientationQuestion,
   FeatureFlagEnum.enableSupportAdmin,
   FeatureFlagEnum.enableWaitlistLottery,
+  FeatureFlagEnum.enableV2MSQ,
 ];
 
 const raceEthnicityConfiguration = {
@@ -2586,19 +2590,16 @@ export const createBridgeBayJurisdictions = async (
   prismaClient: PrismaClient,
   {
     publicSiteBaseURL,
-    msqV2,
   }: {
     publicSiteBaseURL: string;
-    msqV2: boolean;
   },
 ) => {
-  const optionalV2MSQ = msqV2 ? [FeatureFlagEnum.enableV2MSQ] : [];
-
   // Top level jurisdiction
   const bridgeBayJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Bridge Bay', {
       publicSiteBaseURL,
-      featureFlags: [...optionalV2MSQ, ...featureFlags],
+      allowSingleUseCodeLogin: true,
+      featureFlags: featureFlags,
       languages: languages,
       listingApprovalPermissions: [UserRoleEnum.admin],
       listingFeaturesConfiguration: defaultListingFeatureConfiguration,
@@ -2614,7 +2615,8 @@ export const createBridgeBayJurisdictions = async (
     const createdSubJurisdiction = await prismaClient.jurisdictions.create({
       data: jurisdictionFactory(subJurisdiction, {
         publicSiteBaseURL,
-        featureFlags: [...optionalV2MSQ, ...featureFlags],
+        allowSingleUseCodeLogin: true,
+        featureFlags: featureFlags,
         languages: languages,
         listingFeaturesConfiguration: defaultListingFeatureConfiguration,
         raceEthnicityConfiguration: raceEthnicityConfiguration,
@@ -2635,43 +2637,29 @@ export const createBridgeBayJurisdictions = async (
       ),
     });
 
-    const msqData = msqV2
-      ? {
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.preferences,
-          description: `${subJurisdiction} preference question`,
-          multiselectOptions: {
-            createMany: {
-              data: [
-                {
-                  name: `At least one member of my household lives in ${subJurisdiction}`,
-                  shouldCollectAddress: false,
-                  ordinal: 1,
-                },
-              ],
-            },
-          },
-          name: `${subJurisdiction} Preference`,
-          status: MultiselectQuestionsStatusEnum.active,
-        }
-      : {
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.preferences,
-          description: 'Employees of the local city.',
-          options: [
+    const msqData = {
+      applicationSection:
+        MultiselectQuestionsApplicationSectionEnum.preferences,
+      description: `${subJurisdiction} preference question`,
+      multiselectOptions: {
+        createMany: {
+          data: [
             {
-              text: `At least one member of my household lives in ${subJurisdiction}`,
-              collectAddress: false,
-              ordinal: 0,
+              name: `At least one member of my household lives in ${subJurisdiction}`,
+              shouldCollectAddress: false,
+              ordinal: 1,
             },
           ],
-          text: `${subJurisdiction} Preference`,
-        };
+        },
+      },
+      name: `${subJurisdiction} Preference`,
+      status: MultiselectQuestionsStatusEnum.active,
+    };
     const preferenceQuestion = await prismaClient.multiselectQuestions.create({
       data: multiselectQuestionFactory(
         createdSubJurisdiction.id,
         { multiselectQuestion: msqData },
-        msqV2,
+        true,
       ),
     });
 

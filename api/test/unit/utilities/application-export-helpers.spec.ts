@@ -34,7 +34,10 @@ describe('Testing application export helpers', () => {
     zipCode: '67890',
   };
 
-  const getCsvHeader = (disableWorkInRegion?: boolean): CsvHeader[] => [
+  const getCsvHeader = (
+    disableHowToContact?: boolean,
+    disableWorkInRegion?: boolean,
+  ): CsvHeader[] => [
     {
       path: 'id',
       label: 'Application Id',
@@ -91,10 +94,14 @@ describe('Testing application export helpers', () => {
       path: 'additionalPhoneNumber',
       label: 'Primary Applicant Additional Phone Number',
     },
-    {
-      path: 'contactPreferences',
-      label: 'Primary Applicant Preferred Contact Type',
-    },
+    ...(!disableHowToContact
+      ? [
+          {
+            path: 'contactPreferences',
+            label: 'Primary Applicant Preferred Contact Type',
+          },
+        ]
+      : []),
     ...(!disableWorkInRegion
       ? [
           {
@@ -143,26 +150,30 @@ describe('Testing application export helpers', () => {
       path: 'applicationsMailingAddress.zipCode',
       label: `Primary Applicant Mailing Zip Code`,
     },
-    {
-      path: 'applicant.applicantWorkAddress.street',
-      label: `Primary Applicant Work Street`,
-    },
-    {
-      path: 'applicant.applicantWorkAddress.street2',
-      label: `Primary Applicant Work Street 2`,
-    },
-    {
-      path: 'applicant.applicantWorkAddress.city',
-      label: `Primary Applicant Work City`,
-    },
-    {
-      path: 'applicant.applicantWorkAddress.state',
-      label: `Primary Applicant Work State`,
-    },
-    {
-      path: 'applicant.applicantWorkAddress.zipCode',
-      label: `Primary Applicant Work Zip Code`,
-    },
+    ...(!disableWorkInRegion
+      ? [
+          {
+            path: 'applicant.applicantWorkAddress.street',
+            label: `Primary Applicant Work Street`,
+          },
+          {
+            path: 'applicant.applicantWorkAddress.street2',
+            label: `Primary Applicant Work Street 2`,
+          },
+          {
+            path: 'applicant.applicantWorkAddress.city',
+            label: `Primary Applicant Work City`,
+          },
+          {
+            path: 'applicant.applicantWorkAddress.state',
+            label: `Primary Applicant Work State`,
+          },
+          {
+            path: 'applicant.applicantWorkAddress.zipCode',
+            label: `Primary Applicant Work Zip Code`,
+          },
+        ]
+      : []),
     {
       path: 'alternateContact.firstName',
       label: 'Alternate Contact First Name',
@@ -308,6 +319,30 @@ describe('Testing application export helpers', () => {
   };
 
   describe('Testing getExportHeaders', () => {
+    it('includes ethnicity when demographics includeDemographics is true and disableEthnicityQuestion is false', () => {
+      const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
+        disableEthnicityQuestion: false,
+        enableReasonableAccommodations: true,
+        includeDemographics: true,
+      });
+      const paths = headers.map((h) => h.path);
+      const ethnicityIdx = paths.indexOf('demographics.ethnicity');
+      expect(ethnicityIdx).toBeGreaterThanOrEqual(0);
+    });
+
+    it('omits ethnicity when demographics includeDemographics is true and disableEthnicityQuestion is true', () => {
+      const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
+        disableEthnicityQuestion: true,
+        enableReasonableAccommodations: true,
+        includeDemographics: true,
+      });
+      const paths = headers.map((h) => h.path);
+      expect(
+        headers.some((h) => h.path === 'demographics.ethnicity'),
+      ).toBeFalsy();
+      expect(paths.indexOf('demographics.race')).toBeGreaterThanOrEqual(0);
+    });
+
     it('includes gender after ethnicity when demographics and enableGenderQuestion are on', () => {
       const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
         enableReasonableAccommodations: true,
@@ -391,6 +426,34 @@ describe('Testing application export helpers', () => {
       expect(JSON.stringify(headers)).toEqual(JSON.stringify(testHeaders));
     });
 
+    it('tests getCsvHeaders with household members with no contact preferences', () => {
+      const headers = getExportHeaders(3, [], process.env.TIME_ZONE, {
+        disableHowToContact: true,
+        enableReasonableAccommodations: true,
+      });
+
+      const testHeaders = [
+        ...getCsvHeader(true, false),
+        {
+          path: 'householdSize',
+          label: 'Household Size',
+        },
+        ...constructHouseholdHeaders(3),
+        {
+          path: 'markedAsDuplicate',
+          label: 'Marked As Duplicate',
+        },
+        {
+          path: 'applicationFlaggedSet',
+          label: 'Flagged As Duplicate',
+          format: (val: ApplicationFlaggedSet[]): boolean => {
+            return val.length > 0;
+          },
+        },
+      ];
+      expect(JSON.stringify(headers)).toEqual(JSON.stringify(testHeaders));
+    });
+
     it('tests getCsvHeaders with household members with no work in region', () => {
       const headers = getExportHeaders(3, [], process.env.TIME_ZONE, {
         disableWorkInRegion: true,
@@ -398,7 +461,7 @@ describe('Testing application export helpers', () => {
       });
 
       const testHeaders = [
-        ...getCsvHeader(true),
+        ...getCsvHeader(false, true),
         {
           path: 'householdSize',
           label: 'Household Size',

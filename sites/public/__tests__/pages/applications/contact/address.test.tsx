@@ -55,7 +55,7 @@ describe("applications pages", () => {
         screen.getByRole("checkbox", { name: /i have an additional phone number/i })
       ).toBeInTheDocument()
 
-      // Adress
+      // Address
       expect(screen.getByRole("group", { name: /your address/i })).toBeInTheDocument()
       expect(
         screen.getByText(
@@ -121,6 +121,84 @@ describe("applications pages", () => {
       expect(phoneSelect).toBeDisabled()
     })
 
+    it("should hide contact preference question when flag enabled", () => {
+      const conductor = new ApplicationConductor({}, listing)
+      const applicationConfig = retrieveApplicationConfig(conductor.listing, [])
+      conductor.config = {
+        ...applicationConfig,
+        languages: [],
+        featureFlags: [
+          {
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            id: "test_id",
+            name: FeatureFlagEnum.disableHowToContact,
+            active: true,
+            description: "",
+            jurisdictions: [],
+          },
+        ],
+      }
+
+      render(
+        <AppSubmissionContext.Provider
+          value={{
+            conductor: conductor,
+            application: JSON.parse(JSON.stringify(blankApplication)),
+            listing: listing,
+            syncApplication: jest.fn(),
+            syncListing: jest.fn(),
+          }}
+        >
+          <ApplicationAddress />
+        </AppSubmissionContext.Provider>
+      )
+
+      expect(
+        screen.getByRole("heading", {
+          level: 2,
+          name: /now we need to know how to contact you about your application/i,
+        })
+      ).toBeInTheDocument()
+
+      // Phone Number
+      expect(screen.getByRole("group", { name: /your phone number/i })).toBeInTheDocument()
+      expect(screen.getByRole("textbox", { name: /^number$/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole("combobox", { name: /what type of number is this\?/i })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole("checkbox", { name: /i don't have a telephone number/i })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole("checkbox", { name: /i have an additional phone number/i })
+      ).toBeInTheDocument()
+
+      // Address
+      expect(screen.getByRole("group", { name: /your address/i })).toBeInTheDocument()
+      expect(
+        screen.getByText(
+          "We need the address where you currently live. If you are experiencing homelessness, please enter the shelter address or an address close to where you stay."
+        )
+      ).toBeInTheDocument()
+      expect(screen.getByRole("textbox", { name: /street address/i })).toBeInTheDocument()
+      expect(screen.getByRole("textbox", { name: /apt or unit #/i })).toBeInTheDocument()
+      expect(screen.getByRole("textbox", { name: /city name/i })).toBeInTheDocument()
+      expect(screen.getByRole("combobox", { name: /state/i })).toBeInTheDocument()
+      expect(screen.getByRole("textbox", { name: /zip code/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole("checkbox", { name: /send my mail to a different address/i })
+      ).toBeInTheDocument()
+
+      expect(
+        screen.queryByRole("group", { name: /how do you prefer to be contacted/i })
+      ).not.toBeInTheDocument()
+      expect(screen.queryByRole("checkbox", { name: /^email$/i })).not.toBeInTheDocument()
+      expect(screen.queryByRole("checkbox", { name: /^phone$/i })).not.toBeInTheDocument()
+      expect(screen.queryByRole("checkbox", { name: /^letter$/i })).not.toBeInTheDocument()
+      expect(screen.queryByRole("checkbox", { name: /^text$/i })).not.toBeInTheDocument()
+    })
+
     it("should hide work in region question when flag enabled", () => {
       const conductor = new ApplicationConductor({}, listing)
       const applicationConfig = retrieveApplicationConfig(conductor.listing, [])
@@ -174,7 +252,7 @@ describe("applications pages", () => {
         screen.getByRole("checkbox", { name: /i have an additional phone number/i })
       ).toBeInTheDocument()
 
-      // Adress
+      // Address
       expect(screen.getByRole("group", { name: /your address/i })).toBeInTheDocument()
       expect(
         screen.getByText(

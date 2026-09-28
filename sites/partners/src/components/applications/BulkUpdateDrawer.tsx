@@ -148,7 +148,7 @@ const BulkUpdateDrawer = ({
             {/* The toast lives behind the drawer overlay, so repeat the outcome in place */}
             {jobStatus === BackgroundJobStatusEnum.completed && (
               <AlertBox type="success" className="seeds-m-bs-content">
-                {t("applications.bulkUpdateModalProcessingSuccess")}
+                {t("applications.bulkUpdateModalProcessingEmail")}
               </AlertBox>
             )}
             {jobStatus === BackgroundJobStatusEnum.failed && (

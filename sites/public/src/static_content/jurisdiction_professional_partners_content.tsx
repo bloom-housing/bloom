@@ -1,6 +1,5 @@
 import { t } from "@bloom-housing/ui-components"
 import { Link } from "@bloom-housing/ui-seeds"
-import Markdown from "markdown-to-jsx"
 import { ContactCardProps } from "../components/shared/ContactCard"
 import { FaqCategory, FaqContent } from "../patterns/FrequentlyAskedQuestions"
 

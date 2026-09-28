@@ -924,6 +924,7 @@ export class UserService {
         middleName: dto.middleName,
         lastName: dto.lastName,
         dob: dto.dob,
+        agreedToTermsOfService: dto.agreedToTermsOfService,
         jurisdictions: jurisdictionsToConnect
           ? {
               connect: jurisdictionsToConnect.map((juris) => ({
