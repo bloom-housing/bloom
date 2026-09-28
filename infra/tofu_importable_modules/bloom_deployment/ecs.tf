@@ -19,6 +19,13 @@ resource "aws_service_discovery_http_namespace" "bloom" {
   description = "Service namespace the bloom services use."
 }
 
+resource "aws_service_discovery_private_dns_namespace" "bloom" {
+  region      = var.aws_region
+  name        = "bloom.internal"
+  description = "Private DNS namespace resolving each bloom task individually."
+  vpc         = aws_vpc.bloom.id
+}
+
 # Create logs groups.
 resource "aws_cloudwatch_log_group" "task_logs" {
   for_each = toset(
@@ -82,6 +89,52 @@ resource "aws_secretsmanager_secret" "api_jwt_signing_key" {
   }
 }
 
+resource "aws_secretsmanager_secret" "api_pass_key" {
+  region                  = var.aws_region
+  description             = "Key authenticating traffic to the Bloom API, and the API's rebuild requests to the public site"
+  name_prefix             = "bloom-api-pass-key"
+  recovery_window_in_days = 7                    # minimum
+
+  # TODO: use an ephemeral resource instead of local-exec:
+  # https://github.com/bloom-housing/bloom/issues/5637.
+  #
+  # The provisioner block runs after the resource has been created.
+  provisioner "local-exec" {
+    interpreter = ["/usr/bin/env", "bash", "-c"]
+    # We need to be very careful that any errors result in a non-zero exit code. Otherwise tofu will
+    # think this block succeeded and not error.
+    command = <<-EOT
+    if ! type -P aws &>/dev/null; then
+      echo 'ERROR: aws required'
+      exit 1
+    fi
+    if ! type -P openssl &>/dev/null; then
+      echo 'ERROR: openssl required'
+      exit 1
+    fi
+    if ! type -P tr &>/dev/null; then
+      echo 'ERROR: tr required'
+      exit 1
+    fi
+
+    if ! s=$(openssl rand -hex 32 | tr -d '\n'); then
+        echo 'ERROR: failed to generate random value'
+        exit 1
+    fi
+
+    if ! aws secretsmanager put-secret-value \
+         ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
+         --region ${var.aws_region} \
+         --secret-id ${self.id} \
+         --secret-string "$s"
+    then
+        echo 'ERROR: failed to put secret value'
+        exit 1
+    fi
+    EOT
+  }
+}
+
 locals {
   roles = merge({
     "dbinit" = {
@@ -112,6 +165,11 @@ locals {
           Action   = "secretsmanager:GetSecretValue"
           Effect   = "Allow"
           Resource = aws_secretsmanager_secret.google_translate_api_key.arn
+        },
+        {
+          Action   = "secretsmanager:GetSecretValue"
+          Effect   = "Allow"
+          Resource = aws_secretsmanager_secret.api_pass_key.arn
         }
       ]
       container_policy = jsonencode({
@@ -146,6 +204,11 @@ locals {
           Action   = "secretsmanager:GetSecretValue"
           Effect   = "Allow"
           Resource = aws_secretsmanager_secret.mapbox_api_key.arn
+        },
+        {
+          Action   = "secretsmanager:GetSecretValue"
+          Effect   = "Allow"
+          Resource = aws_secretsmanager_secret.api_pass_key.arn
         }
       ]
       container_policy = jsonencode({
@@ -163,6 +226,11 @@ locals {
           Action   = "secretsmanager:GetSecretValue"
           Effect   = "Allow"
           Resource = aws_secretsmanager_secret.mapbox_api_key.arn
+        },
+        {
+          Action   = "secretsmanager:GetSecretValue"
+          Effect   = "Allow"
+          Resource = aws_secretsmanager_secret.api_pass_key.arn
         }
       ]
       container_policy = jsonencode({

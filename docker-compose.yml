@@ -213,6 +213,9 @@ services:
       NODE_ENV: "production"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
       APP_SECRET: "totally a secret"
+      API_PASS_KEY: "some-key-here"
+      # dnsrr resolves this to every public replica, so a save reaches all of them.
+      PUBLIC_SITE_DISCOVERY_NAME: "public"
       DATABASE_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
       DB_NO_SSL: "TRUE"
     healthcheck:
@@ -250,6 +253,7 @@ services:
       NEXTJS_PORT: 3001
       BACKEND_API_BASE: "http://lb:3100"
       LISTINGS_QUERY: "/listings"
+      API_PASS_KEY: "totally a passkey"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://127.0.0.1:3001/"]
       interval: "5s"
@@ -296,7 +300,9 @@ services:
       LANGUAGES: "en,es,zh,vi,tl"
 
       IDLE_TIMEMOUT: 5 # seconds
-      CACHE_REVALIDATE: 30 # seconds
+      CACHE_REVALIDATE: 3600 # seconds
+
+      API_PASS_KEY: "totally a passkey"
 
       SHOW_PUBLIC_LOTTERY: "TRUE"
       SHOW_MANDATED_ACCOUNTS: "FALSE"

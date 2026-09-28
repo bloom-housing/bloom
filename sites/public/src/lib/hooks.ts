@@ -381,7 +381,7 @@ export const clearCachedApiReads = (): void => {
 const cacheWindowMs = (phase?: string) => {
   if (phase === "phase-production-build") return Number.POSITIVE_INFINITY
   const revalidate = Number(process.env.cacheRevalidate)
-  return Number.isFinite(revalidate) && revalidate > 0 ? revalidate * 1000 : 30000
+  return Number.isFinite(revalidate) && revalidate > 0 ? revalidate * 1000 : 3600000
 }
 
 const fetchJurisdictionScoped = async <T>(

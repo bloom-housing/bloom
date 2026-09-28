@@ -17,6 +17,7 @@ locals {
     SMS_PROVIDER                = var.bloom_api_sms_config == null ? "" : "aws"
     AWS_SMS_REGION              = var.bloom_api_sms_config == null ? "" : var.aws_region
     AWS_SMS_ORIGINATION_NUMBER  = var.bloom_api_sms_config == null ? "" : aws_pinpointsmsvoicev2_phone_number.api_sms[0].phone_number
+    PUBLIC_SITE_DISCOVERY_NAME  = "${aws_service_discovery_service.site_public.name}.${aws_service_discovery_private_dns_namespace.bloom.name}"
   }
 }
 resource "aws_ecs_task_definition" "bloom_api" {
@@ -56,6 +57,10 @@ resource "aws_ecs_task_definition" "bloom_api" {
         {
           name      = "GOOGLE_API_KEY",
           valueFrom = aws_secretsmanager_secret.google_translate_api_key.arn
+        },
+        {
+          name      = "API_PASS_KEY",
+          valueFrom = aws_secretsmanager_secret.api_pass_key.arn
         }
       ]
       portMappings = [

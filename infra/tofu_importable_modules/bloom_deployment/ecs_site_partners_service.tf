@@ -36,6 +36,10 @@ resource "aws_ecs_task_definition" "bloom_site_partners" {
         {
           name      = "MAPBOX_TOKEN",
           valueFrom = aws_secretsmanager_secret.mapbox_api_key.arn
+        },
+        {
+          name      = "API_PASS_KEY",
+          valueFrom = aws_secretsmanager_secret.api_pass_key.arn
         }
       ]
       portMappings = [
