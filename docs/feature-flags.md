@@ -48,6 +48,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableConfigurableRegions](./feature-flags/enableConfigurableRegions.md) | When true, allows for configurable regions per jurisdiction enabled on partners and public |
 | [enableCreditScreeningFee](./feature-flags/enableCreditScreeningFee.md) | When true, credit screening fee is enabled for listings |
 | [enableCustomListingNotifications](./feature-flags/enableCustomListingNotifications.md) | When true, users have access to custom notification settings |
+| [enableDbDrivenBranding](./feature-flags/enableDbDrivenBranding.md) | When true, the public site renders the jurisdiction's brand colors, logo, favicon, and font from the database instead of the bundled static assets |
 | [enableDbDrivenContent](./feature-flags/enableDbDrivenContent.md) | When true, the jurisdiction reads its translations and structured content from the database instead of the bundled override files |
 | [enableDuplicatesDetailsInEmail](./feature-flags/enableDuplicatesDetailsInEmail.md) | When true, lottery published applicant email contains duplicates details section |
 | [enableExportTerms](./feature-flags/enableExportTerms.md) | When true, display terms of use before exporting applications and lotteries from the partner site |
@@ -96,6 +97,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enablePetPolicyCheckbox](./feature-flags/enablePetPolicyCheckbox.md) | When true, the pet policy field in the listing form is displayed as checkboxes instead of a text area |
 | [enableProfessionalPartnersPage](./feature-flags/enableProfessionalPartnersPage.md) | When true, the professional partners page will appear in the nav header of the public site and page will be reachable |
 | [enableProperties](./feature-flags/enableProperties.md) | When true, the properties feature is enabled |
+| [enablePublicTermsOfUse](./feature-flags/enablePublicTermsOfUse.md) | When true, creating a user account on the public site will require the user to review and accept terms of use |
 | [enableReasonableAccommodations](./feature-flags/enableReasonableAccommodations.md) | When true, the reasonable accommodations question is shown in the public and partner application flow |
 | [enableReceivedAtAndByFields](./feature-flags/enableReceivedAtAndByFields.md) | When true, partners can view/edit paper application received at/by fields and include them in application exports |
 | [enableReferralQuestionUnits](./feature-flags/enableReferralQuestionUnits.md) | when true, updates the the referral details question labels |

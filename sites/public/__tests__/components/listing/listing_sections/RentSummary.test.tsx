@@ -5,8 +5,36 @@ import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   EnumListingListingType,
   ReviewOrderTypeEnum,
+  UnitSummary,
+  UnitsSummarized,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+
+const emptyUnitsSummarized: UnitsSummarized = {
+  unitTypes: [],
+  priorityTypes: [],
+  amiPercentages: [],
+  byUnitTypeAndRent: [],
+  byUnitType: [],
+  byAMI: [],
+  hmi: null,
+}
+
+const buildUnitSummary = (minIncomeRange: UnitSummary["minIncomeRange"]): UnitSummary => ({
+  unitTypes: {
+    id: "a",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    numBedrooms: 1,
+    name: UnitTypeEnum.oneBdrm,
+  },
+  minIncomeRange,
+  rentRange: { min: "1200", max: "1200" },
+  occupancyRange: { min: 1, max: 2 },
+  rentAsPercentIncomeRange: { min: null, max: null },
+  totalAvailable: 5,
+  areaRange: { min: 500, max: 600 },
+})
 
 afterEach(cleanup)
 
@@ -16,15 +44,7 @@ describe("<RentSummary>", () => {
       <RentSummary
         amiValues={[30]}
         reviewOrderType={ReviewOrderTypeEnum.firstComeFirstServe}
-        unitsSummarized={{
-          unitTypes: [],
-          priorityTypes: [],
-          amiPercentages: [],
-          byUnitTypeAndRent: [],
-          byUnitType: [],
-          byAMI: [],
-          hmi: null,
-        }}
+        unitsSummarized={emptyUnitsSummarized}
         listing={listing}
         section8Acceptance={false}
       />
@@ -46,16 +66,11 @@ describe("<RentSummary>", () => {
         amiValues={[30, 60]}
         reviewOrderType={ReviewOrderTypeEnum.firstComeFirstServe}
         unitsSummarized={{
-          unitTypes: [],
-          priorityTypes: [],
-          amiPercentages: [],
-          byUnitTypeAndRent: [],
-          byUnitType: [],
+          ...emptyUnitsSummarized,
           byAMI: [
             { percent: "30", byUnitType: [] },
             { percent: "60", byUnitType: [] },
           ],
-          hmi: null,
         }}
         listing={listing}
         section8Acceptance={true}
@@ -74,15 +89,7 @@ describe("<RentSummary>", () => {
       <RentSummary
         amiValues={[]}
         reviewOrderType={ReviewOrderTypeEnum.firstComeFirstServe}
-        unitsSummarized={{
-          unitTypes: [],
-          priorityTypes: [],
-          amiPercentages: [],
-          byUnitTypeAndRent: [],
-          byUnitType: [],
-          byAMI: [],
-          hmi: null,
-        }}
+        unitsSummarized={emptyUnitsSummarized}
         listing={{ ...listing, units: [] }}
         section8Acceptance={false}
       />
@@ -219,5 +226,65 @@ describe("<RentSummary>", () => {
     expect(secondUnitType).toHaveTextContent(/1 Bedroom, 2 Bedrooms/i)
     expect(secondRent).toHaveTextContent(/\$200.*\$700/i)
     expect(secondAvailability).toHaveTextContent("Not available")
+  })
+
+  it("hides minimum income on land use listings when every unit has no min income", () => {
+    render(
+      <RentSummary
+        amiValues={[30]}
+        reviewOrderType={ReviewOrderTypeEnum.firstComeFirstServe}
+        unitsSummarized={{
+          ...emptyUnitsSummarized,
+          byUnitTypeAndRent: [buildUnitSummary({ min: "t.n/a", max: "t.n/a" })],
+        }}
+        listing={{ ...listing, listingType: EnumListingListingType.landUse }}
+        section8Acceptance={false}
+      />
+    )
+
+    expect(screen.getByText("Unit type")).toBeDefined()
+    expect(screen.queryByText("Minimum income")).toBeNull()
+    expect(screen.getByText("Availability")).toBeDefined()
+  })
+
+  it("hides minimum income on land use listings when every AMI group has no min income", () => {
+    render(
+      <RentSummary
+        amiValues={[30, 60]}
+        reviewOrderType={ReviewOrderTypeEnum.firstComeFirstServe}
+        unitsSummarized={{
+          ...emptyUnitsSummarized,
+          byAMI: [
+            { percent: "30", byUnitType: [buildUnitSummary({ min: "t.n/a", max: "t.n/a" })] },
+            { percent: "60", byUnitType: [buildUnitSummary({ min: "t.n/a", max: "t.n/a" })] },
+          ],
+        }}
+        listing={{ ...listing, listingType: EnumListingListingType.landUse }}
+        section8Acceptance={false}
+      />
+    )
+
+    expect(screen.getAllByText("Unit type").length).toBe(2)
+    expect(screen.queryAllByText("Minimum income")).toHaveLength(0)
+  })
+
+  it("shows minimum income on land use listings when at least one unit has a value", () => {
+    render(
+      <RentSummary
+        amiValues={[30]}
+        reviewOrderType={ReviewOrderTypeEnum.firstComeFirstServe}
+        unitsSummarized={{
+          ...emptyUnitsSummarized,
+          byUnitTypeAndRent: [
+            buildUnitSummary({ min: "t.n/a", max: "t.n/a" }),
+            buildUnitSummary({ min: "150", max: "150" }),
+          ],
+        }}
+        listing={{ ...listing, listingType: EnumListingListingType.landUse }}
+        section8Acceptance={false}
+      />
+    )
+
+    expect(screen.getByText("Minimum income")).toBeDefined()
   })
 })

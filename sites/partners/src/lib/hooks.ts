@@ -522,11 +522,17 @@ export function useJurisdiction(jurisdictionId: string) {
       jurisdictionId,
     })
 
-  const { data, error } = useSWR(`/api/adapter/jurisdictions/${jurisdictionId}`, fetcher)
+  const cacheKey = jurisdictionId ? `/api/adapter/jurisdictions/${jurisdictionId}` : null
+
+  const { data, error } = useSWR(cacheKey, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
 
   return {
+    cacheKey,
     data,
-    loading: !error && !data,
+    loading: !!cacheKey && !error && !data,
     error,
   }
 }

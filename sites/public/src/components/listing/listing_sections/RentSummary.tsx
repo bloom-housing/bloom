@@ -2,8 +2,10 @@ import React, { useMemo } from "react"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { StackedTable, t } from "@bloom-housing/ui-components"
 import {
+  EnumListingListingType,
   Listing,
   ReviewOrderTypeEnum,
+  UnitSummary,
   UnitsSummarized,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
@@ -21,6 +23,11 @@ type RentSummaryProps = {
   listing: Listing
 }
 
+const unitSummariesHaveMinimumIncome = (summaries?: UnitSummary[]) =>
+  summaries?.some(
+    (summary) => summary.minIncomeRange?.min !== "t.n/a" || summary.minIncomeRange?.max !== "t.n/a"
+  ) ?? false
+
 export const RentSummary = ({
   amiValues,
   reviewOrderType,
@@ -33,9 +40,16 @@ export const RentSummary = ({
   const hasData = !!listing?.unitGroups?.length || !!listing?.units?.length
 
   const rentTable = useMemo(() => {
+    const hasMinimumIncome =
+      amiValues.length > 1
+        ? !!unitsSummarized?.byAMI?.some((item) => unitSummariesHaveMinimumIncome(item.byUnitType))
+        : unitSummariesHaveMinimumIncome(unitsSummarized?.byUnitTypeAndRent)
+    const hideMinimumIncome =
+      listing.listingType === EnumListingListingType.landUse && !hasMinimumIncome
+
     const unitSummariesHeaders = {
       unitType: "t.unitType",
-      minimumIncome: "t.minimumIncome",
+      ...(!hideMinimumIncome ? { minimumIncome: "t.minimumIncome" } : {}),
       rent: "t.rent",
       availability: "t.availability",
     }
@@ -83,6 +97,7 @@ export const RentSummary = ({
     headers,
     reviewOrderType,
     unitGroupSummariesData,
+    listing.listingType,
     unitsSummarized?.byAMI,
     unitsSummarized?.byUnitTypeAndRent,
   ])

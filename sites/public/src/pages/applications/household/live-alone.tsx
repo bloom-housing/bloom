@@ -101,6 +101,7 @@ const ApplicationLiveAlone = () => {
 
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               onChange={(event: ChangeEvent<any>) => {
                 if (event.target.value === "liveAlone") {
                   application.householdSize = 1

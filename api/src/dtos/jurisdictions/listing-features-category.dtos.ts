@@ -9,7 +9,7 @@ export class ListingFeatureCategory {
   @ApiProperty({
     example: 'mobility',
   })
-  @IsString()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   id: string;
 
   @Expose()
@@ -17,9 +17,9 @@ export class ListingFeatureCategory {
     type: ListingFeatureField,
     isArray: true,
   })
-  @ValidateNested({ each: true })
+  @ValidateNested({ each: true, groups: [ValidationsGroupsEnum.default] })
   @Type(() => ListingFeatureField)
-  @IsArray()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
   fields: ListingFeatureField[];
 
   @Expose()
