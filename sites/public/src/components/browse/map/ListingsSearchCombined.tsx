@@ -9,7 +9,9 @@ import { MapMarkerData } from "./ListingsMap"
 import { searchListings, searchMapMarkers } from "../../../lib/hooks"
 import {
   EnumListingFilterParamsComparison,
+  ListingFilterKeys,
   ListingFilterParams,
+  ListingsStatusEnum,
   ListingViews,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FilterDrawer } from "../FilterDrawer"
@@ -132,8 +134,6 @@ function ListingsSearchCombined() {
     }
 
     const genericQb = new ListingQueryBuilder()
-    // All searches should only look for "active" listings
-    genericQb.whereEqual("status", "active")
     // Include external listings
     genericQb.whereEqual("includeExternal", true)
 
@@ -243,6 +243,9 @@ function ListingsSearchCombined() {
 
   useEffect(() => {
     const filterData = decodeQueryToFilterData(router.query)
+    if (filterData[ListingFilterKeys.status] === ListingsStatusEnum.closed) {
+      delete filterData[ListingFilterKeys.availabilities]
+    }
     const backendFilters = encodeFilterDataToBackendFilters(filterData).filter(
       (filter) => filter.name !== ""
     )

@@ -3830,11 +3830,20 @@ export class ListingService implements OnModuleInit {
   }
 
   async mapMarkers(params: ListingsQueryParams): Promise<ListingMapMarker[]> {
+    const statusFilter = params?.filter?.find(
+      (filter) => filter[ListingFilterKeys.status] !== undefined,
+    );
+    const status =
+      statusFilter?.[ListingFilterKeys.status] === ListingsStatusEnum.closed
+        ? ListingsStatusEnum.closed
+        : ListingsStatusEnum.active;
     const filters: ListingFilterParams[] = [
-      ...(params?.filter || []),
+      ...(params?.filter || []).filter(
+        (filter) => filter[ListingFilterKeys.status] === undefined,
+      ),
       {
         $comparison: Compare['='],
-        status: ListingsStatusEnum.active,
+        status,
       },
     ];
 
