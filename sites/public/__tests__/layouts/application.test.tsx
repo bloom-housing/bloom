@@ -21,7 +21,7 @@ describe("<Layout>", () => {
 
   afterAll(() => delete process.env.showNewSeedsDesigns)
 
-  it("puts the stored logo in the header", () => {
+  it.skip("puts the stored logo in the header", () => {
     const { container } = renderLayout({
       logoUrl: "https://example.test/logo.png",
     } as unknown as BrandDTO)

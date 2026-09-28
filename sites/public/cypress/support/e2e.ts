@@ -22,3 +22,16 @@ import "@cypress/code-coverage/support"
 
 // Import commands.js using ES2015 syntax:
 import "./commands"
+
+Cypress.on("uncaught:exception", (err) => {
+  // Return false to prevent Cypress from failing the test on this specific error
+  if (
+    err.message.includes("ResizeObserver loop completed with undelivered notifications") ||
+    err.message.includes("ResizeObserver loop limit exceeded")
+  ) {
+    return false
+  }
+
+  // Let all other errors fail the test as normal
+  return true
+})
