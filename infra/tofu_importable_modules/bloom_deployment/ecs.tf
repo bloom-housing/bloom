@@ -93,7 +93,7 @@ resource "aws_secretsmanager_secret" "api_pass_key" {
   region                  = var.aws_region
   description             = "Key authenticating traffic to the Bloom API, and the API's rebuild requests to the public site"
   name_prefix             = "bloom-api-pass-key"
-  recovery_window_in_days = 7                    # minimum
+  recovery_window_in_days = 7 # minimum
 
   # TODO: use an ephemeral resource instead of local-exec:
   # https://github.com/bloom-housing/bloom/issues/5637.

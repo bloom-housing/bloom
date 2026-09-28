@@ -30,9 +30,7 @@ resource "aws_service_discovery_service" "site_public" {
       ttl  = 10
     }
   }
-  health_check_custom_config {
-    failure_threshold = 1
-  }
+  health_check_custom_config {}
 }
 resource "aws_ecs_task_definition" "bloom_site_public" {
   region                   = var.aws_region
