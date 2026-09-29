@@ -5,8 +5,7 @@
   overflow-wrap: anywhere;
 
   .read-more-button {
-    // TODO: Pull in new seeds link color token
-    color: var(--seeds-color-blue-500);
+    color: var(--seeds-color-primary);
     text-decoration: underline;
   }
 }
