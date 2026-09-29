@@ -16,6 +16,9 @@ describe("fetchJurisdictionByName", () => {
     mockedGet = jest.spyOn(axios, "get")
     mockedLog = jest.spyOn(console, "log").mockImplementation(() => undefined)
     const hooks = require("../../src/lib/hooks") as Hooks
+    // The caches live on globalThis so the revalidation route can clear them, which means
+    // jest.resetModules() no longer isolates them.
+    hooks.clearCachedApiReads()
     fetchJurisdictionByName = hooks.fetchJurisdictionByName
     API_TIMEOUT_MS = hooks.API_TIMEOUT_MS
     process.env.backendApiBase = "http://localhost:3100"

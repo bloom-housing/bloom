@@ -14,6 +14,9 @@ describe("fetchJurisdictionContent", () => {
     const axios = require("axios") as typeof axiosType
     mockedGet = jest.spyOn(axios, "get")
     const hooks = require("../../src/lib/hooks") as Hooks
+    // The caches live on globalThis so the revalidation route can clear them, which means
+    // jest.resetModules() no longer isolates them.
+    hooks.clearCachedApiReads()
     fetchJurisdictionContent = hooks.fetchJurisdictionContent
     API_TIMEOUT_MS = hooks.API_TIMEOUT_MS
     process.env.backendApiBase = "http://localhost:3100"
@@ -119,6 +122,9 @@ describe("fetchSharedPageProps", () => {
     const axios = require("axios") as typeof axiosType
     mockedGet = jest.spyOn(axios, "get")
     hooks = require("../../src/lib/hooks") as Hooks
+    // The caches live on globalThis so the revalidation route can clear them, which means
+    // jest.resetModules() no longer isolates them.
+    hooks.clearCachedApiReads()
     fetchSharedPageProps = hooks.fetchSharedPageProps
     process.env.backendApiBase = "http://localhost:3100"
     process.env.jurisdictionName = "Bloomington"

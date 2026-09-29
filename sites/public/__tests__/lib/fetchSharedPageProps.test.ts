@@ -17,6 +17,9 @@ describe("fetchSharedPageProps", () => {
     mockedGet = jest.spyOn(axios, "get")
     mockedLog = jest.spyOn(console, "log").mockImplementation(() => undefined)
     hooks = require("../../src/lib/hooks") as Hooks
+    // The caches live on globalThis so the revalidation route can clear them, which means
+    // jest.resetModules() no longer isolates them.
+    hooks.clearCachedApiReads()
     process.env.backendApiBase = "http://localhost:3100"
     process.env.jurisdictionName = "Bloomington"
     process.env.API_PASS_KEY = "test-passkey"

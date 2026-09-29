@@ -300,7 +300,7 @@ export async function fetchLimitedUnderConstructionListings(req?: any, limit?: n
   const count = limit ? limit.toString() : "3"
 
   return await cachedRead(
-    underConstructionListingsByLimit,
+    caches.underConstructionListingsByLimit,
     count,
     () =>
       fetchBaseListingData(
@@ -325,9 +325,34 @@ export async function fetchLimitedUnderConstructionListings(req?: any, limit?: n
 
 export const API_TIMEOUT_MS = 5000
 
-let jurisdiction: Jurisdiction | null = null
-let jurisdictionUntil = 0
-let jurisdictionPhase: string | undefined
+/*
+  Next gives each server entry its own instance of this module, so a cache in module scope cannot be
+  cleared from the revalidation route: the pages would keep reading their own copy and a rebuild
+  would regenerate the same content. globalThis is shared across every entry in the process.
+*/
+type ApiReadCaches = {
+  jurisdiction: Jurisdiction | null
+  jurisdictionUntil: number
+  jurisdictionPhase?: string
+  publicOverridesByLanguage: Map<string, Cached<Record<string, Record<string, string>>>>
+  jurisdictionContentByLanguage: Map<string, Cached<JurisdictionContentFields>>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  underConstructionListingsByLimit: Map<string, Cached<any>>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  multiselectProgramsByJurisdiction: Map<string, Cached<any>>
+}
+
+const CACHE_KEY = "__bloomPublicApiReadCaches"
+
+const caches: ApiReadCaches = ((globalThis as Record<string, unknown>)[CACHE_KEY] ??= {
+  jurisdiction: null,
+  jurisdictionUntil: 0,
+  jurisdictionPhase: undefined,
+  publicOverridesByLanguage: new Map(),
+  jurisdictionContentByLanguage: new Map(),
+  underConstructionListingsByLimit: new Map(),
+  multiselectProgramsByJurisdiction: new Map(),
+}) as ApiReadCaches
 
 // A failed read is held for this long so an unreachable API is not re-hit on every render.
 export const JURISDICTION_RETRY_MS = 5000
@@ -337,8 +362,8 @@ export async function fetchJurisdictionByName(req?: any) {
   const phase = process.env.NEXT_PHASE
 
   try {
-    if (jurisdictionPhase === phase && jurisdictionUntil > Date.now()) {
-      return jurisdiction
+    if (caches.jurisdictionPhase === phase && caches.jurisdictionUntil > Date.now()) {
+      return caches.jurisdiction
     }
 
     const jurisdictionName = process.env.jurisdictionName
@@ -356,43 +381,36 @@ export async function fetchJurisdictionByName(req?: any) {
         timeout: API_TIMEOUT_MS,
       }
     )
-    jurisdiction = jurisdictionRes?.data
-    jurisdictionUntil = Date.now() + cacheWindowMs(phase)
-    jurisdictionPhase = phase
+    caches.jurisdiction = jurisdictionRes?.data
+    caches.jurisdictionUntil = Date.now() + cacheWindowMs(phase)
+    caches.jurisdictionPhase = phase
   } catch (error) {
     console.log("error fetching jurisdiction = ", error.message)
-    jurisdictionUntil = Date.now() + JURISDICTION_RETRY_MS
-    jurisdictionPhase = phase
+    caches.jurisdictionUntil = Date.now() + JURISDICTION_RETRY_MS
+    caches.jurisdictionPhase = phase
   }
 
-  return jurisdiction
+  return caches.jurisdiction
 }
 
 type Cached<T> = { value: T; until: number; phase?: string }
-
-const publicOverridesByLanguage = new Map<string, Cached<Record<string, Record<string, string>>>>()
-const jurisdictionContentByLanguage = new Map<string, Cached<JurisdictionContentFields>>()
 
 const RENDERED_DOCUMENTS = ["footer", "faq", "resources", "disclaimers", "contact"] as const
 
 // Neither of these reads depends on the language, so one entry serves every locale a rebuild
 // regenerates. Without them a save costs two API reads per locale rather than two in total.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const underConstructionListingsByLimit = new Map<string, Cached<any>>()
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const multiselectProgramsByJurisdiction = new Map<string, Cached<any>>()
 
 /*
   Drops cached API reads, so the next one goes to the API. Every cache is cleared together.
 */
 export const clearCachedApiReads = (): void => {
-  jurisdiction = null
-  jurisdictionUntil = 0
-  jurisdictionPhase = undefined
-  publicOverridesByLanguage.clear()
-  jurisdictionContentByLanguage.clear()
-  underConstructionListingsByLimit.clear()
-  multiselectProgramsByJurisdiction.clear()
+  caches.jurisdiction = null
+  caches.jurisdictionUntil = 0
+  caches.jurisdictionPhase = undefined
+  caches.publicOverridesByLanguage.clear()
+  caches.jurisdictionContentByLanguage.clear()
+  caches.underConstructionListingsByLimit.clear()
+  caches.multiselectProgramsByJurisdiction.clear()
 }
 
 const cacheWindowMs = (phase?: string) => {
@@ -465,7 +483,7 @@ export async function fetchPublicOverrides(language?: string, req?: any) {
   return fetchJurisdictionScoped<Record<string, Record<string, string>>>(
     `/translations/byName/${process.env.jurisdictionName}`,
     { site: "public" },
-    publicOverridesByLanguage,
+    caches.publicOverridesByLanguage,
     "public translation overrides",
     language,
     req
@@ -477,7 +495,7 @@ export async function fetchJurisdictionContent(language?: string, req?: any) {
   const content = await fetchJurisdictionScoped<JurisdictionContentFields>(
     `/jurisdictionContent/byName/${process.env.jurisdictionName}`,
     {},
-    jurisdictionContentByLanguage,
+    caches.jurisdictionContentByLanguage,
     "jurisdiction content",
     language,
     req
@@ -544,7 +562,7 @@ export async function fetchMultiselectProgramData(req: any, jurisdictionId: stri
     const paramsString = qs.stringify(params)
 
     const multiselectDataResponse = await cachedRead(
-      multiselectProgramsByJurisdiction,
+      caches.multiselectProgramsByJurisdiction,
       jurisdictionId ?? "",
       () =>
         axios.get(`${process.env.backendApiBase}/multiselectQuestions?${paramsString}`, {

@@ -15,6 +15,9 @@ describe("clearCachedApiReads", () => {
     mockedGet = jest.spyOn(axios, "get")
     mockedPost = jest.spyOn(axios, "post")
     hooks = require("../../src/lib/hooks") as Hooks
+    // The caches live on globalThis so the revalidation route can clear them, which means
+    // jest.resetModules() no longer isolates them.
+    hooks.clearCachedApiReads()
     process.env.backendApiBase = "http://localhost:3100"
     process.env.jurisdictionName = "Bloomington"
     process.env.API_PASS_KEY = "test-passkey"
@@ -117,6 +120,30 @@ describe("clearCachedApiReads", () => {
 
     await hooks.fetchMultiselectProgramData(undefined, "a-jurisdiction")
     await hooks.fetchMultiselectProgramData(undefined, "a-jurisdiction")
+
+    expect(mockedGet).toHaveBeenCalledTimes(2)
+  })
+
+  /*
+    The revalidation route and the page bundles are separate server entries, each with its own
+    instance of the hooks module. The caches sit on globalThis so a clear from one reaches the
+    other; a fresh module registry stands in for a separate entry here.
+  */
+  it("shares one cache across module instances, and clears it across them too", async () => {
+    mockedGet.mockResolvedValue({ data: { en: { "a.key": "First" } } })
+    await hooks.fetchPublicOverrides("en")
+    expect(mockedGet).toHaveBeenCalledTimes(1)
+
+    jest.resetModules()
+    const other = require("../../src/lib/hooks") as Hooks
+
+    // A second entry reads through the same cache rather than going back to the api.
+    await other.fetchPublicOverrides("en")
+    expect(mockedGet).toHaveBeenCalledTimes(1)
+
+    // Clearing from that entry is what the route does, and the first one must see it.
+    other.clearCachedApiReads()
+    await hooks.fetchPublicOverrides("en")
 
     expect(mockedGet).toHaveBeenCalledTimes(2)
   })

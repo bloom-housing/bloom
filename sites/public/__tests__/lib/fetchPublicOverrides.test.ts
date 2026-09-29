@@ -14,6 +14,9 @@ describe("fetchPublicOverrides", () => {
     const axios = require("axios") as typeof axiosType
     mockedGet = jest.spyOn(axios, "get")
     const hooks = require("../../src/lib/hooks") as Hooks
+    // The caches live on globalThis so the revalidation route can clear them, which means
+    // jest.resetModules() no longer isolates them.
+    hooks.clearCachedApiReads()
     fetchPublicOverrides = hooks.fetchPublicOverrides
     API_TIMEOUT_MS = hooks.API_TIMEOUT_MS
     process.env.backendApiBase = "http://localhost:3100"
