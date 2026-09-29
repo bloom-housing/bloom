@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "crypto"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { clearCachedApiReads } from "../../lib/hooks"
 
@@ -76,6 +77,14 @@ export const localisedPaths = (locales: string[]): string[] =>
 const configuredLocales = (): string[] =>
   process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : [DEFAULT_LOCALE]
 
+const matches = (supplied: string | string[] | undefined, secret: string): boolean => {
+  if (typeof supplied !== "string") return false
+
+  const a = Buffer.from(supplied)
+  const b = Buffer.from(secret)
+  return a.length === b.length && timingSafeEqual(a, b)
+}
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST")
@@ -88,7 +97,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(503).json({ message: "Revalidation is not configured" })
   }
 
-  if (req.headers.passkey !== secret) {
+  if (!matches(req.headers.passkey, secret)) {
+    // Logged so a caller probing this route leaves a trace.
+    console.error("revalidate: rejected a call with no matching passkey")
     return res.status(401).json({ message: "Traffic not from a known source" })
   }
 

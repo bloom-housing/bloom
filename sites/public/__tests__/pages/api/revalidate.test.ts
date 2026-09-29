@@ -73,6 +73,21 @@ describe("/api/revalidate", () => {
     expect(stub.revalidate).not.toHaveBeenCalled()
   })
 
+  it("refuses a passkey of the right length but the wrong value", async () => {
+    const stub = buildResponse()
+    await handler(buildRequest({ headers: { passkey: "test-passkez" } }), stub.res)
+
+    expect(stub.status).toHaveBeenCalledWith(401)
+  })
+
+  // A caller probing the route should leave something behind in the log.
+  it("records a rejected call", async () => {
+    const stub = buildResponse()
+    await handler(buildRequest({ headers: {} }), stub.res)
+
+    expect(errorLog).toHaveBeenCalledWith("revalidate: rejected a call with no matching passkey")
+  })
+
   // ApiKeyGuard on the api treats a missing key as "allow"; this route must not, since an
   // unauthenticated caller could otherwise rebuild every page.
   it("refuses every call when no secret is configured", async () => {

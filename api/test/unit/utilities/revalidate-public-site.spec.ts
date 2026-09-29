@@ -98,6 +98,46 @@ describe('revalidatePublicSite', () => {
     expect(post).toHaveBeenCalledTimes(2);
   });
 
+  // The save awaits this call, so an instance that accepts the connection and never answers must
+  // not hold it open.
+  it('gives the post a timeout', async () => {
+    const http = httpSucceeding();
+
+    await revalidatePublicSite(http, 'http://localhost:3000');
+
+    expect(http.post).toHaveBeenCalledWith(
+      'http://localhost:3000/api/revalidate',
+      {},
+      expect.objectContaining({ timeout: 5000 }),
+    );
+  });
+
+  // A service that has just scaled, or whose tasks have not registered yet, resolves to nothing.
+  it('posts nothing when the discovery name resolves to no addresses', async () => {
+    process.env.PUBLIC_SITE_DISCOVERY_NAME = 'bloom-site-public.bloom.local';
+    resolve4.mockResolvedValue([]);
+    const http = httpSucceeding();
+
+    await revalidatePublicSite(http, 'https://housing.example.org');
+
+    expect(http.post).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['no scheme', 'housing.example.org'],
+    ['a scheme that is not http', 'file:///etc/passwd'],
+    ['credentials in the url', 'http://user:pass@housing.example.org'],
+  ])(
+    'refuses to send the passkey to a url with %s',
+    async (_label, publicUrl) => {
+      const http = httpSucceeding();
+
+      await revalidatePublicSite(http, publicUrl);
+
+      expect(http.post).not.toHaveBeenCalled();
+    },
+  );
+
   it('gives up quietly when the discovery name does not resolve', async () => {
     process.env.PUBLIC_SITE_DISCOVERY_NAME = 'bloom-site-public.bloom.local';
     resolve4.mockRejectedValue(new Error('queryA ENOTFOUND'));

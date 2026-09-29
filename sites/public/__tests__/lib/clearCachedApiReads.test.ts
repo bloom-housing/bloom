@@ -74,4 +74,25 @@ describe("clearCachedApiReads", () => {
   it("is safe to call when nothing has been read yet", () => {
     expect(() => hooks.clearCachedApiReads()).not.toThrow()
   })
+
+  // This number decides how long a revalidation that never arrived stays visible, and every other
+  // spec sets it explicitly, so the fallback is worth pinning.
+  it("serves a cached read for an hour when cacheRevalidate is unset", async () => {
+    delete process.env.cacheRevalidate
+    mockedGet.mockResolvedValue({ data: { en: { "a.key": "First" } } })
+    const readAt = Date.now()
+    const clock = jest.spyOn(Date, "now")
+
+    await hooks.fetchPublicOverrides("en")
+
+    clock.mockReturnValue(readAt + 59 * 60 * 1000)
+    await hooks.fetchPublicOverrides("en")
+    expect(mockedGet).toHaveBeenCalledTimes(1)
+
+    clock.mockReturnValue(readAt + 61 * 60 * 1000)
+    await hooks.fetchPublicOverrides("en")
+    expect(mockedGet).toHaveBeenCalledTimes(2)
+
+    clock.mockRestore()
+  })
 })

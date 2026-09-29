@@ -29,8 +29,29 @@ const instanceOrigins = async (
   return trimmed ? [trimmed] : [];
 };
 
-const normalizeOrigin = (publicUrl?: string | null): string | undefined =>
-  publicUrl?.trim().replace(/\/+$/, '') || undefined;
+const usablePublicUrl = (value: string): boolean => {
+  try {
+    const url = new URL(value);
+    return (
+      (url.protocol === 'http:' || url.protocol === 'https:') &&
+      !url.username &&
+      !url.password
+    );
+  } catch {
+    return false;
+  }
+};
+
+const normalizeOrigin = (publicUrl?: string | null): string | undefined => {
+  const trimmed = publicUrl?.trim().replace(/\/+$/, '');
+  if (!trimmed) return undefined;
+
+  if (!usablePublicUrl(trimmed)) {
+    logger.warn(`${trimmed} is not a usable public site url`);
+    return undefined;
+  }
+  return trimmed;
+};
 
 export const revalidatePublicSite = async (
   http: HttpService,
