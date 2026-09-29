@@ -500,6 +500,11 @@ export async function fetchJurisdictionContent(language?: string, req?: any) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchSharedPageProps(language?: string, req?: any) {
   const jurisdiction = await fetchJurisdictionByName(req)
+
+  if (!jurisdiction && !req && process.env.NEXT_PHASE !== "phase-production-build") {
+    throw new Error("could not read the jurisdiction, keeping the page already generated")
+  }
+
   const storedContentOn =
     !!jurisdiction && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableDbDrivenContent)
 
