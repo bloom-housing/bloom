@@ -760,6 +760,7 @@
   "faq.linkText": "자주 묻는 질문을 읽어보세요",
   "faq.stillHaveQuestions": "궁금한 점이 더 있으신가요?",
   "faq.stillHaveQuestionsContent": "원하시는 답변을 찾지 못하셨다면 <a className='lined' href='mailto:%{contactEmail}'>%{contactEmail}</a> 로 저희 지원팀에 문의하시거나 자료 페이지를 참조해 주세요.",
+  "faq.tableOfContents.header": "이 페이지에서",
   "faq.viewResourcePage": "리소스 페이지 보기",
   "faq.whatHappensNext": "그 다음에는 무슨 일이 일어날까요?",
   "finder.accessibility.question": "귀하 또는 귀하의 가족 구성원 중 다음과 같은 접근성 기능이 필요한 분이 계십니까?",
