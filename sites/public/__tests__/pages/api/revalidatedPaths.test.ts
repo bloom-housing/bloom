@@ -49,6 +49,12 @@ describe("REVALIDATED_PATHS", () => {
     expect(staticPagesReadingSharedContent().length).toBeGreaterThan(40)
   })
 
+  // Listing detail paths are generated on demand, so there is no list of them to rebuild. That page
+  // reads its own shorter window instead, which pageOverrideProps.test.ts pins.
+  it("includes no listing detail path", () => {
+    expect(REVALIDATED_PATHS.filter((route) => route.startsWith("/listing"))).toEqual([])
+  })
+
   it("lists no path twice", () => {
     expect(new Set(REVALIDATED_PATHS).size).toEqual(REVALIDATED_PATHS.length)
   })

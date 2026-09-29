@@ -10,6 +10,7 @@ locals {
     HOUSING_COUNSELOR_SERVICE_URL = "/get-assistance"
     IDLE_TIMEOUT                  = "5"    # seconds
     CACHE_REVALIDATE              = "3600" # seconds; a save asks for a rebuild rather than waiting this out.
+    LISTING_CACHE_REVALIDATE      = "30"   # seconds; listing paths cannot be named for a rebuild.
     SHOW_PUBLIC_LOTTERY           = "TRUE"
     SHOW_MANDATED_ACCOUNTS        = "FALSE"
     SHOW_PWDLESS                  = "FALSE"

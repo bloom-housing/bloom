@@ -51,6 +51,9 @@ module.exports = withBundleAnalyzer({
     jurisdictionName: process.env.JURISDICTION_NAME,
     timeZone: process.env.TIME_ZONE || "America/Los_Angeles",
     cacheRevalidate: process.env.CACHE_REVALIDATE ? process.env.CACHE_REVALIDATE : "3600",
+    listingCacheRevalidate: process.env.LISTING_CACHE_REVALIDATE
+      ? process.env.LISTING_CACHE_REVALIDATE
+      : "30",
     cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
     showPublicLottery: process.env.SHOW_PUBLIC_LOTTERY === "TRUE" ? "TRUE" : "",
     showNewSeedsDesigns: process.env.SHOW_NEW_SEEDS_DESIGNS === "TRUE" ? "TRUE" : "",
