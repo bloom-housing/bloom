@@ -297,20 +297,29 @@ export async function fetchClosedListings(
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchLimitedUnderConstructionListings(req?: any, limit?: number) {
-  return await fetchBaseListingData(
-    {
-      additionalFilters: [
+  const count = limit ? limit.toString() : "3"
+
+  return await cachedRead(
+    underConstructionListingsByLimit,
+    count,
+    () =>
+      fetchBaseListingData(
         {
-          $comparison: EnumListingFilterParamsComparison["="],
-          status: ListingsStatusEnum.active,
-          availability: FilterAvailabilityEnum.comingSoon,
+          additionalFilters: [
+            {
+              $comparison: EnumListingFilterParamsComparison["="],
+              status: ListingsStatusEnum.active,
+              availability: FilterAvailabilityEnum.comingSoon,
+            },
+          ],
+          orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+          orderDir: [OrderByEnum.desc],
+          limit: count,
         },
-      ],
-      orderBy: [ListingOrderByKeys.mostRecentlyPublished],
-      orderDir: [OrderByEnum.desc],
-      limit: limit ? limit.toString() : "3",
-    },
-    req
+        req
+      ),
+    // items is left undefined when the read failed, and is an array when it succeeded.
+    (value) => value?.items !== undefined
   )
 }
 
@@ -366,9 +375,15 @@ const jurisdictionContentByLanguage = new Map<string, Cached<JurisdictionContent
 
 const RENDERED_DOCUMENTS = ["footer", "faq", "resources", "disclaimers", "contact"] as const
 
+// Neither of these reads depends on the language, so one entry serves every locale a rebuild
+// regenerates. Without them a save costs two API reads per locale rather than two in total.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const underConstructionListingsByLimit = new Map<string, Cached<any>>()
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const multiselectProgramsByJurisdiction = new Map<string, Cached<any>>()
+
 /*
-  Drops cached API reads, so the next one goes to the API. All three caches are cleared
-  together.
+  Drops cached API reads, so the next one goes to the API. Every cache is cleared together.
 */
 export const clearCachedApiReads = (): void => {
   jurisdiction = null
@@ -376,12 +391,33 @@ export const clearCachedApiReads = (): void => {
   jurisdictionPhase = undefined
   publicOverridesByLanguage.clear()
   jurisdictionContentByLanguage.clear()
+  underConstructionListingsByLimit.clear()
+  multiselectProgramsByJurisdiction.clear()
 }
 
 const cacheWindowMs = (phase?: string) => {
   if (phase === "phase-production-build") return Number.POSITIVE_INFINITY
   const revalidate = Number(process.env.cacheRevalidate)
   return Number.isFinite(revalidate) && revalidate > 0 ? revalidate * 1000 : 3600000
+}
+
+const cachedRead = async <T>(
+  cache: Map<string, Cached<T>>,
+  key: string,
+  read: () => Promise<T>,
+  isUsable: (value: T) => boolean
+): Promise<T> => {
+  const phase = process.env.NEXT_PHASE
+  const cached = cache.get(key)
+  if (cached && cached.phase === phase && cached.until > Date.now()) {
+    return cached.value
+  }
+
+  const value = await read()
+  if (isUsable(value)) {
+    cache.set(key, { value, until: Date.now() + cacheWindowMs(phase), phase })
+  }
+  return value
 }
 
 const fetchJurisdictionScoped = async <T>(
@@ -502,11 +538,14 @@ export async function fetchMultiselectProgramData(req: any, jurisdictionId: stri
 
     const paramsString = qs.stringify(params)
 
-    const multiselectDataResponse = await axios.get(
-      `${process.env.backendApiBase}/multiselectQuestions?${paramsString}`,
-      {
-        headers,
-      }
+    const multiselectDataResponse = await cachedRead(
+      multiselectProgramsByJurisdiction,
+      jurisdictionId ?? "",
+      () =>
+        axios.get(`${process.env.backendApiBase}/multiselectQuestions?${paramsString}`, {
+          headers,
+        }),
+      (value) => !!value?.data
     )
     return multiselectDataResponse?.data
   } catch (error) {

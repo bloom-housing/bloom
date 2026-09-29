@@ -5,6 +5,7 @@ import type axiosType from "axios"
 type Hooks = typeof import("../../src/lib/hooks")
 
 let mockedGet: jest.SpyInstance
+let mockedPost: jest.SpyInstance
 let hooks: Hooks
 
 describe("clearCachedApiReads", () => {
@@ -12,6 +13,7 @@ describe("clearCachedApiReads", () => {
     jest.resetModules()
     const axios = require("axios") as typeof axiosType
     mockedGet = jest.spyOn(axios, "get")
+    mockedPost = jest.spyOn(axios, "post")
     hooks = require("../../src/lib/hooks") as Hooks
     process.env.backendApiBase = "http://localhost:3100"
     process.env.jurisdictionName = "Bloomington"
@@ -67,6 +69,54 @@ describe("clearCachedApiReads", () => {
 
     hooks.clearCachedApiReads()
     await hooks.fetchJurisdictionByName()
+
+    expect(mockedGet).toHaveBeenCalledTimes(2)
+  })
+
+  // These two reads do not depend on the language, so without a cache a rebuild pays for them once
+  // per locale rather than once in total.
+  it("clears the under construction listings cache", async () => {
+    mockedGet.mockResolvedValue({ data: { id: "a-jurisdiction", featureFlags: [] } })
+    mockedPost.mockResolvedValue({ data: { items: [], meta: null } })
+
+    await hooks.fetchLimitedUnderConstructionListings()
+    await hooks.fetchLimitedUnderConstructionListings()
+    expect(mockedPost).toHaveBeenCalledTimes(1)
+
+    hooks.clearCachedApiReads()
+    await hooks.fetchLimitedUnderConstructionListings()
+
+    expect(mockedPost).toHaveBeenCalledTimes(2)
+  })
+
+  it("does not cache a failed listing read", async () => {
+    mockedGet.mockResolvedValue({ data: { id: "a-jurisdiction", featureFlags: [] } })
+    mockedPost.mockRejectedValue(new Error("nope"))
+
+    await hooks.fetchLimitedUnderConstructionListings()
+    await hooks.fetchLimitedUnderConstructionListings()
+
+    expect(mockedPost).toHaveBeenCalledTimes(2)
+  })
+
+  it("clears the multiselect programs cache", async () => {
+    mockedGet.mockResolvedValue({ data: [{ id: "a-question" }] })
+
+    await hooks.fetchMultiselectProgramData(undefined, "a-jurisdiction")
+    await hooks.fetchMultiselectProgramData(undefined, "a-jurisdiction")
+    expect(mockedGet).toHaveBeenCalledTimes(1)
+
+    hooks.clearCachedApiReads()
+    await hooks.fetchMultiselectProgramData(undefined, "a-jurisdiction")
+
+    expect(mockedGet).toHaveBeenCalledTimes(2)
+  })
+
+  it("does not cache a failed multiselect read", async () => {
+    mockedGet.mockRejectedValue(new Error("nope"))
+
+    await hooks.fetchMultiselectProgramData(undefined, "a-jurisdiction")
+    await hooks.fetchMultiselectProgramData(undefined, "a-jurisdiction")
 
     expect(mockedGet).toHaveBeenCalledTimes(2)
   })
