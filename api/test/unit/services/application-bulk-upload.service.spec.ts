@@ -357,10 +357,16 @@ describe('Testing application bulk upload services', () => {
 
       await service.authorizeExport(user, listingId);
 
-      expect(canOrThrowMock).toHaveBeenCalledWith(user, 'listing', 'update', {
-        id: listingId,
-        jurisdictionId,
-      });
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        user,
+        'listing',
+        'update',
+        {
+          id: listingId,
+          jurisdictionId,
+        },
+        { allowedForExport: true },
+      );
     });
 
     it('should throw BadRequestException when the jurisdiction can not be retrieved', async () => {

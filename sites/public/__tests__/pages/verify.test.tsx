@@ -169,7 +169,7 @@ describe("Verify Page Tests", () => {
       fireEvent.click(screen.getByRole("button", { name: /continue/i }))
 
       await waitFor(() => {
-        expect(mockLoginViaSingleUseCode).toHaveBeenCalledWith(TEST_EMAIL, "wrong-code")
+        expect(mockLoginViaSingleUseCode).toHaveBeenCalledWith(TEST_EMAIL, "wrong-code", undefined)
       })
 
       expect(await screen.findByText("Please enter a valid email and password")).toBeInTheDocument()
@@ -185,7 +185,7 @@ describe("Verify Page Tests", () => {
       fireEvent.click(screen.getByRole("button", { name: /continue/i }))
 
       await waitFor(() => {
-        expect(mockLoginViaSingleUseCode).toHaveBeenCalledWith(TEST_EMAIL, "123456")
+        expect(mockLoginViaSingleUseCode).toHaveBeenCalledWith(TEST_EMAIL, "123456", undefined)
         expect(mockRouter.push).toHaveBeenCalledWith({
           pathname: "/account/dashboard",
           query: {},

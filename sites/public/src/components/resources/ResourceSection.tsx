@@ -4,7 +4,7 @@ import styles from "./ResourceSection.module.scss"
 
 export interface ResourceSectionProps {
   sectionTitle: string
-  sectionSubtitle?: string
+  sectionSubtitle?: React.ReactNode | string
   cards?: React.ReactNode[]
   cardsWithTitles?: { cards: React.ReactNode[]; title: string }[]
 }

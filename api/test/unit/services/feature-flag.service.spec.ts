@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
@@ -36,6 +37,7 @@ describe('Testing feature flag service', () => {
       providers: [
         FeatureFlagService,
         JurisdictionService,
+        { provide: HttpService, useValue: { get: jest.fn() } },
         PrismaService,
         Logger,
       ],
