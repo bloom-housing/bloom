@@ -3,7 +3,10 @@ import { screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
-import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  EnumListingListingType,
+  ListingsStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import PublishListingDialog from "../../../../src/components/listings/PaperListingForm/dialogs/PublishListingDialog"
 import { mockNextRouter, render } from "../../../testUtils"
 
@@ -153,5 +156,60 @@ describe("PublishListingDialog", () => {
 
     expect(setOpen).toHaveBeenCalledWith(false)
     expect(submitFormWithStatus).not.toHaveBeenCalled()
+  })
+
+  describe("land use listing with no scheduled publish date", () => {
+    const landUseCopy =
+      "This is a land use listing without a scheduled publish date. Without an entered scheduled publish date, land use listings are published straight to Closed status. No notifications will be sent to applicants or partners. To publish as Open status, first add a scheduled publish date."
+
+    it("renders the land use copy and submits closed when both flags are on and no scheduledPublishAt is entered", async () => {
+      const setOpen = jest.fn()
+      const submitFormWithStatus = jest.fn()
+
+      render(
+        <PublishListingDialog
+          isOpen={true}
+          setOpen={setOpen}
+          submitFormWithStatus={submitFormWithStatus}
+          enableAutopublish={true}
+          enableLandUse={true}
+          listingType={EnumListingListingType.landUse}
+          scheduledPublishAt={null}
+        />
+      )
+
+      expect(screen.getByText(landUseCopy)).toBeInTheDocument()
+
+      await userEvent.click(screen.getByRole("button", { name: "Publish" }))
+
+      expect(setOpen).toHaveBeenCalledWith(false)
+      expect(submitFormWithStatus).toHaveBeenCalledWith("redirect", ListingsStatusEnum.closed)
+    })
+
+    it("submits active when reopening a closed land use listing with no date entered", async () => {
+      const submitFormWithStatus = jest.fn()
+
+      render(
+        <PublishListingDialog
+          isOpen={true}
+          setOpen={jest.fn()}
+          submitFormWithStatus={submitFormWithStatus}
+          enableAutopublish={true}
+          enableLandUse={true}
+          listingType={EnumListingListingType.landUse}
+          scheduledPublishAt={null}
+          listingStatus={ListingsStatusEnum.closed}
+        />
+      )
+
+      expect(screen.queryByText(landUseCopy)).not.toBeInTheDocument()
+      expect(
+        screen.getByText("Publishing will push the listing live on the public site.")
+      ).toBeInTheDocument()
+
+      await userEvent.click(screen.getByRole("button", { name: "Publish" }))
+
+      expect(submitFormWithStatus).toHaveBeenCalledWith("redirect", ListingsStatusEnum.active)
+    })
   })
 })

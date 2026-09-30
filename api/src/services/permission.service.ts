@@ -20,6 +20,7 @@ export type permissionCheckingObj = {
 
 export type permissionCheckingContext = {
   isLotteryStatusUpdate?: boolean;
+  allowedForExport?: boolean;
 };
 
 @Injectable()
@@ -207,11 +208,20 @@ export class PermissionService {
             `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
           );
 
+          let preventUpdate = false;
+          if (context?.allowedForExport) {
+            // when this is true we are doing an export and that should be allowed
+            preventUpdate = false;
+          } else if (blockedFromEditListingIds.has(listing.id)) {
+            // if on the blocked list prevent from editing listings
+            preventUpdate = true;
+          }
+
           await enforcer.addPermissionForUser(
             user.id,
             'listing',
             `r.obj.id == '${listing.id}'`,
-            blockedFromEditListingIds.has(listing.id)
+            preventUpdate
               ? permissionActions.read
               : `(${permissionActions.read}|${permissionActions.update})`,
           );

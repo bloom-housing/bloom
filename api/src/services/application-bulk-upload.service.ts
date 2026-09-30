@@ -459,6 +459,9 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
         id: listingId,
         jurisdictionId: listingData.jurisdictionId,
       },
+      {
+        allowedForExport: true,
+      },
     );
 
     if (
@@ -535,6 +538,9 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
       {
         id: listingId,
         jurisdictionId,
+      },
+      {
+        allowedForExport: true,
       },
     );
   }

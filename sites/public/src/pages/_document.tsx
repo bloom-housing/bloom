@@ -5,6 +5,15 @@ import {
   BrandRampDTO,
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  radiusStepOnly,
+  radiusVariable,
+} from "@bloom-housing/shared-helpers/src/utilities/brandRadius"
+import {
+  fontFamilyOnly,
+  fontStack,
+  googleFontUrlOnly,
+} from "@bloom-housing/shared-helpers/src/utilities/brandFont"
 import { fetchJurisdictionByName } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
 
@@ -12,8 +21,6 @@ const HEX_COLOR = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/
 
 // The family is interpolated into the style block, so it is held to letters, digits, spaces and
 // hyphens.
-const FONT_FAMILY = /^[A-Za-z0-9](?:[A-Za-z0-9 -]{0,62}[A-Za-z0-9])?$/
-const FONT_HOSTS = ["fonts.googleapis.com"]
 
 type BrandRamp = Partial<BrandRampDTO>
 
@@ -25,7 +32,7 @@ interface BrandDocumentProps {
   headingFontFamily: string | null
   fontUrl: string | null
   serifFontFamily: string | null
-  buttonRadius: string | null
+  buttonRadius: BrandRadiusEnum | null
 }
 
 const rampShades: (keyof BrandRamp)[] = ["base", "dark", "darker", "light", "lighter"]
@@ -44,26 +51,6 @@ const hexOnly = (ramp?: BrandRamp): BrandRamp | null => {
   }, {})
 }
 
-const fontFamilyOnly = (value?: string): string | null =>
-  typeof value === "string" && FONT_FAMILY.test(value) ? value : null
-
-const googleFontUrlOnly = (value?: string): string | null => {
-  if (typeof value !== "string") return null
-
-  try {
-    const url = new URL(value)
-    const usable =
-      url.protocol === "https:" &&
-      FONT_HOSTS.includes(url.hostname) &&
-      !url.port &&
-      !url.username &&
-      !url.password
-    return usable ? value : null
-  } catch {
-    return null
-  }
-}
-
 const rampVariables = (namespace: string, name: string, ramp: BrandRamp) =>
   rampShades
     .filter((shade) => ramp[shade])
@@ -72,19 +59,6 @@ const rampVariables = (namespace: string, name: string, ramp: BrandRamp) =>
         `--${namespace}-color-${name}${shade === "base" ? "" : `-${shade}`}: ${ramp[shade]};`
     )
     .join("\n")
-
-// --brand-font-fallback-* is defined in overrides.scss. A missing custom property makes the whole
-// font-family declaration invalid, so sans-serif or serif is included as a last resort.
-const fontStack = (family: string, slot: "sans" | "alt-sans" | "serif") =>
-  `"${family}", var(--brand-font-fallback-${slot}, ${slot === "serif" ? "serif" : "sans-serif"})`
-
-const RADIUS_STEPS: string[] = Object.values(BrandRadiusEnum)
-
-const radiusStepOnly = (value?: string): string | null =>
-  typeof value === "string" && RADIUS_STEPS.includes(value) ? value : null
-
-const radiusVariable = (step: string) =>
-  step === BrandRadiusEnum.base ? "var(--seeds-rounded)" : `var(--seeds-rounded-${step})`
 
 export const brandStyleBlock = ({
   primary,
