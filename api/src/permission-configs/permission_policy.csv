@@ -67,6 +67,8 @@ p, partner, applicationFlaggedSet, true, .*
 
 p, admin, translation, true, .*
 
+p, admin, jurisdictionContent, true, .*
+
 p, admin, jurisdiction, true, .*
 p, supportAdmin, jurisdiction, true, read
 p, jurisdictionAdmin, jurisdiction, true, read

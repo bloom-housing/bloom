@@ -151,6 +151,7 @@ export default class ApplicationConductor {
     visibleSpokenLanguages: [],
     visibleApplicationAccessibilityFeatures: [],
     visibleHouseholdMemberRelationships: [],
+    enabledStopLightRuleKeys: [],
   }
   private _listing: Listing
 
@@ -262,6 +263,19 @@ export default class ApplicationConductor {
   skipCurrentStepIfNeeded() {
     if (this.currentStep?.skipStep()) {
       this.routeToNextOrReturnUrl()
+    }
+  }
+
+  // Steps are generated pages, so the router blocks each transition on the next step's page data.
+  prefetchNextUrl() {
+    try {
+      const url = this.nextOrReturnUrl()
+      if (url) {
+        void Router.prefetch(url).catch(() => undefined)
+      }
+    } catch (error) {
+      // Runs on mount, where a throw would take the step down, not just the navigation.
+      console.warn("could not prefetch the next step = ", String(error))
     }
   }
 

@@ -13,6 +13,7 @@ export interface StepRoute {
 
 export interface StepConfig {
   name: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   config?: Record<string, any>
 }
 
@@ -26,4 +27,5 @@ export interface ApplicationFormConfig {
   visibleSpokenLanguages?: string[]
   visibleApplicationAccessibilityFeatures?: ApplicationAccessibilityFeatureEnum[]
   visibleHouseholdMemberRelationships?: HouseholdMemberRelationship[]
+  enabledStopLightRuleKeys?: string[]
 }

@@ -17,15 +17,14 @@
         <tbody>
         <tr>
             <td align="center">
-            <a
-                class="btn btn-primary"
-                href="{{ signInUrl }}"
-                target="_blank"
-                style="color:white"
+                <a
+                    class="btn btn-primary"
+                    href="{{ signInUrl }}"
+                    target="_blank"
+                    style="color:white"
                 >
                   {{t "lotteryAvailable.signIn"}}
-                </a
-            >
+                </a>
             </td>
         </tr>
         </tbody>
@@ -39,6 +38,10 @@
                 <br/><br/>
                 {{t "lotteryAvailable.whatHappensContent" }}
                 <br/><br/>
+                {{#if termsUrl}}
+                    {{t "lotteryAvailable.duplicatesDetails"}} <a href="{{ termsUrl }}" target="_blank">{{t "lotteryAvailable.termsOfUse"}}</a>.
+                    <br/><br/>
+                {{/if}}
                 {{t "lotteryAvailable.otherOpportunities1" appOptions}} <a href="{{ notificationsUrl }}" target="_blank">{{t "lotteryAvailable.otherOpportunities2"}}</a>.
                 <br/><br/>
                  {{t "lotteryAvailable.otherOpportunities3"}} <a href="{{ helpCenterUrl }}"  target="_blank">{{t "lotteryAvailable.otherOpportunities4"}}</a>.

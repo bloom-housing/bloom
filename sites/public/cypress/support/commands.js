@@ -57,6 +57,20 @@ Cypress.Commands.add("getPhoneFieldByTestId", (testId) => {
   return cy.get(`[data-testid="${testId}"]`).find("input")
 })
 
+Cypress.Commands.add("typePhoneFieldByTestId", (testId, value, attempt = 0) => {
+  // The masked phone input can lose typed input when a hydration re-render lands mid-typing on a
+  // slow runner, which surfaces later as a missing summary field. Verify the value and retype.
+  cy.getPhoneFieldByTestId(testId).clear()
+  cy.getPhoneFieldByTestId(testId).type(value)
+  cy.getPhoneFieldByTestId(testId).then(($input) => {
+    if ($input.val() !== value && attempt < 2) {
+      cy.typePhoneFieldByTestId(testId, value, attempt + 1)
+    } else {
+      cy.wrap($input).should("have.value", value)
+    }
+  })
+})
+
 Cypress.Commands.add("checkErrorAlert", (command) => {
   cy.getByID("application-alert-box").should(command)
 })
@@ -144,7 +158,7 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application, autofill) =
     if (application.applicant.noPhone) {
       cy.getByTestId("app-primary-no-phone").check()
     } else {
-      cy.getPhoneFieldByTestId("app-primary-phone-number").type(application.applicant.phoneNumber)
+      cy.typePhoneFieldByTestId("app-primary-phone-number", application.applicant.phoneNumber)
       cy.getByTestId("app-primary-phone-number-type").select(
         application.applicant.phoneNumberType,
         { force: true }
@@ -153,7 +167,8 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application, autofill) =
 
     if (application.additionalPhoneNumber) {
       cy.getByTestId("app-primary-additional-phone").check()
-      cy.getPhoneFieldByTestId("app-primary-additional-phone-number").type(
+      cy.typePhoneFieldByTestId(
+        "app-primary-additional-phone-number",
         application.additionalPhoneNumber
       )
       cy.getByTestId("app-primary-additional-phone-number-type").select(
@@ -259,7 +274,8 @@ Cypress.Commands.add("step4AlternateContactName", (application, autofill) => {
 
 Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
   if (!autofill) {
-    cy.getPhoneFieldByTestId("app-alternate-phone-number").type(
+    cy.typePhoneFieldByTestId(
+      "app-alternate-phone-number",
       application.alternateContact.phoneNumber
     )
     cy.getByTestId("app-alternate-email").type(application.alternateContact.emailAddress)

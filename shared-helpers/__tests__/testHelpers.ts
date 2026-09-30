@@ -770,6 +770,7 @@ export const jurisdiction: Jurisdiction = {
   regions: [],
   visibleSpokenLanguages: [],
   visibleHouseholdMemberRelationships: [],
+  enabledStopLightRuleKeys: [],
 }
 
 export const listing: Listing = {
@@ -1312,6 +1313,7 @@ export const mockBaseJurisdiction: Jurisdiction = {
   regions: [],
   visibleSpokenLanguages: [],
   visibleHouseholdMemberRelationships: [],
+  enabledStopLightRuleKeys: [],
 }
 
 export const mockUser: User = {

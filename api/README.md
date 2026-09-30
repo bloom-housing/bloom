@@ -48,37 +48,63 @@ If you're using VSCode, you can install [the Postgres explorer extension](https:
 
 To start the application run: `yarn dev`.
 
-## Translation migration helper
+## Moving site overrides into the database
 
-Use `yarn translations:sql --input scripts/db-translation-input.example.json` to generate SQL for translation updates/inserts in the `translations` table.
+This is for the sites that predate database-managed content. A new deployment seeds its content
+into the database from the start and does not run this.
 
-By default, updates target generic translation rows where `jurisdiction_id IS NULL` for each language.
+`PUT /scriptRunner/migrateTranslationOverridesToKeyRows` reads the bundled override files from
+GitHub and writes them into `translation_strings`, which the editor and the sites read. Run it once
+per jurisdiction. Only a full admin can run it: a jurisdictional admin reaches the other scripts but
+is refused this one.
 
-If a target row does not exist, the generated SQL creates it with:
+```bash
+curl -X PUT http://localhost:3100/scriptRunner/migrateTranslationOverridesToKeyRows \
+  -H "Content-Type: application/json" \
+  -H "passkey: $API_PASS_KEY" \
+  -b "access-token=$YOUR_SESSION_COOKIE" \
+  -d '{
+    "jurisdictionName": "Bloomington",
+    "commit": false,
+    "skipExisting": false,
+    "gitRef": "a1b2c3d"
+  }'
+```
 
-- `language` set to the target language
-- `jurisdiction_id` set to `NULL` (default mode), or to the matching jurisdiction id when `--jurisdiction` is used
-- `translations` set to the generated translation object
+Body fields:
 
-The script accepts a JSON file with:
+- `jurisdictionName` names the jurisdiction the public overrides are written for. The partners rows
+  are stored with no jurisdiction, so they are shared by all of them. This means the last run sets
+  the partners rows for every jurisdiction. Pass `skipExisting: true` on the second and later runs
+  to leave them as the first run set them.
+- `commit` is required. With `false` nothing is written and nothing is recorded, so a dry run can be
+  repeated.
+- `skipExisting` is required. Pass `true` when re-running against an environment whose overrides an
+  admin has already edited, since a row edited in the editor differs from the file by definition and
+  would otherwise be overwritten.
+- `languages` limits which files are read. English is always read, because it is the source the
+  other languages are hashed against.
+- `repositoryUrl` and `gitRef` say where to read from. The url must be on
+  `raw.githubusercontent.com`, with no port, credentials, query or fragment. Pin `gitRef` to a
+  commit sha rather than a branch, so the dry run and the run that writes read the same files.
+- `publicPath` and `partnersPath` are the directories the files sit in under the ref. They default
+  to `sites/public/page_content/locale_overrides` and `sites/partners/page_content/overrides`. Forks
+  laid out differently set them: a fork with the older layout uses
+  `sites/public/src/page_content/locale_overrides` and
+  `sites/partners/src/page_content/locale_overrides`. A wrong path fails on the missing English
+  file, and the error names the url that was requested.
 
-- a nested translation object in the same shape as `translation-factory` output (for example keys like `t`, `footer`, `confirmation`, `applicationUpdate`, etc.)
+A value that the translation editor would refuse, on length or on markup, stops the run before
+anything is written. The message names the file and the key.
 
-Helpful flags:
+The report is written to the api log, not the response.
 
-- `--output <name-or-path>` writes SQL to a file instead of stdout
-- `--output 52_test` creates `prisma/migrations/52_test/migration.sql` (ensure you increment the prefixed number from the last migration)
-- `--output prisma/migrations/52_test/migration.sql` writes to that exact file (ensure you increment the prefixed number from the last migration)
-- `--languages en,es,tl` limits generated languages
-- `--jurisdiction "Bloomington"` targets jurisdiction-specific rows by jurisdiction name instead of generic (`jurisdiction_id IS NULL`)
-- `--no-machine-translate` disables Google Translate
+A committing run is recorded per jurisdiction, so a second one is refused. Delete that row from
+`script_runs` to run it again. A missing non-English file does not stop the run, so a run that
+recorded itself as complete may still be short some languages. The report says so when that happens.
 
-Examples:
-
-- Generic/default rows: `yarn translations:sql --input scripts/db-translation-input.example.json --output 54_generic_translation_update`
-- Jurisdiction-specific rows: `yarn translations:sql --input scripts/db-translation-input.example.json --jurisdiction "Bloomington" --output 55_bloomington_translation_update`
-
-By default the script generates for `en, es, tl, vi, zh, ar, bn, ko, hy, fa` and machine-translates missing non-English values using the same Google env vars used by other translation scripts.
+The bundled override files stay in the repository. The sites keep rendering them when the api is
+unreachable.
 
 ## Modifying the Schema
 

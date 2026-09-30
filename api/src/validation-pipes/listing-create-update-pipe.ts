@@ -1,8 +1,12 @@
 import { ArgumentMetadata, Injectable, ValidationPipe } from '@nestjs/common';
+import { ListingsStatusEnum, ListingTypeEnum } from '@prisma/client';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { PrismaService } from '../services/prisma.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 
 /**
  * Validation pipe for creating or editing a listing
@@ -26,10 +30,51 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
     'units',
   ];
 
+  // Fields that are not applicable to land-use listings and should never be
+  // required for them, regardless of jurisdiction configuration.
+  private landUseExcludedRequiredFields = [
+    'developer',
+    'listingsLeasingAgentAddress',
+    'reservedCommunityTypes',
+    'reservedCommunityDescription',
+  ];
+
   constructor(private prisma: PrismaService) {
     super({
       ...defaultValidationPipeOptions,
     });
+  }
+
+  /**
+   * A land use listing with no scheduled publish date goes live as `closed` rather than `active`,
+   */
+  async publishesToClosed(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any,
+    jurisdiction: unknown,
+  ): Promise<boolean> {
+    if (
+      value.status !== ListingsStatusEnum.closed ||
+      value.listingType !== ListingTypeEnum.landUse ||
+      !doJurisdictionHaveFeatureFlagSet(
+        jurisdiction as Jurisdiction,
+        FeatureFlagEnum.enableLandUse,
+      )
+    ) {
+      return false;
+    }
+
+    // A listing created directly as closed has no stored status to compare against
+    if (!value.id) {
+      return true;
+    }
+
+    const storedListing = await this.prisma.listings.findUnique({
+      where: { id: value.id },
+      select: { status: true },
+    });
+
+    return storedListing?.status !== ListingsStatusEnum.active;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,13 +98,21 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
         requiredListingFields: true,
         minimumListingPublishImagesRequired: true,
         listingFeaturesConfiguration: true,
+        featureFlags: true,
       },
     });
 
     // Use jurisdiction's required fields, falling back to defaults if none specified
-    const requiredFields = jurisdiction?.requiredListingFields?.length
+    const baseRequiredFields = jurisdiction?.requiredListingFields?.length
       ? jurisdiction.requiredListingFields
       : this.defaultRequiredFields;
+
+    const requiredFields =
+      value.listingType === ListingTypeEnum.landUse
+        ? baseRequiredFields.filter(
+            (field) => !this.landUseExcludedRequiredFields.includes(field),
+          )
+        : baseRequiredFields;
 
     const minimumImagesRequired =
       jurisdiction?.minimumListingPublishImagesRequired || 0;
@@ -75,6 +128,7 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
       requiredFields,
       minimumImagesRequired,
       listingFeaturesConfiguration,
+      publishesToClosed: await this.publishesToClosed(value, jurisdiction),
     };
 
     // Check for nested required fields

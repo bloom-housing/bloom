@@ -15,9 +15,9 @@ import { ListingBrowseDeprecated } from "../components/browse/ListingBrowseDepre
 import { isFeatureFlagOn } from "../lib/helpers"
 import {
   fetchClosedListings,
-  fetchJurisdictionByName,
   fetchMultiselectProgramData,
   fetchOpenListings,
+  fetchSharedPageProps,
 } from "../lib/hooks"
 import { ListingMap } from "../components/browse/map/ListingMap"
 
@@ -70,22 +70,22 @@ export default function ListingsPage(props: ListingsProps) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getServerSideProps(context: { req: any; query: any }) {
+export async function getServerSideProps(context: { req: any; query: any; locale?: string }) {
   let openListings
   let closedListings
   let areFiltersActive = false
   const isUsingNewSeedsDesign = Boolean(process.env.showNewSeedsDesigns)
 
-  const jurisdiction = await fetchJurisdictionByName(context.req)
-  const enableMap = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableListingMap)
+  const shared = await fetchSharedPageProps(context.locale, context.req)
+  const enableMap = isFeatureFlagOn(shared.jurisdiction, FeatureFlagEnum.enableListingMap)
 
   // Map mode fetches listings client-side, so we keep SSR props minimal to avoid large page-data payloads
   if (process.env.showNewSeedsDesigns && enableMap) {
     const multiselectData = isFeatureFlagOn(
-      jurisdiction,
+      shared.jurisdiction,
       FeatureFlagEnum.swapCommunityTypeWithPrograms
     )
-      ? await fetchMultiselectProgramData(context.req, jurisdiction?.id)
+      ? await fetchMultiselectProgramData(context.req, shared.jurisdiction?.id)
       : null
 
     return {
@@ -93,7 +93,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
         openListings: [],
         closedListings: [],
         paginationData: null,
-        jurisdiction: jurisdiction,
+        ...shared,
         multiselectData: multiselectData,
         areFiltersActive,
       },
@@ -112,10 +112,10 @@ export async function getServerSideProps(context: { req: any; query: any }) {
     }
   }
   const multiselectData = isFeatureFlagOn(
-    jurisdiction,
+    shared.jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
-    ? await fetchMultiselectProgramData(context.req, jurisdiction?.id)
+    ? await fetchMultiselectProgramData(context.req, shared.jurisdiction?.id)
     : null
 
   return {
@@ -123,7 +123,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
       openListings: openListings?.items || [],
       closedListings: closedListings?.items || [],
       paginationData: openListings?.items?.length ? openListings.meta : null,
-      jurisdiction: jurisdiction,
+      ...shared,
       multiselectData: multiselectData,
       areFiltersActive,
     },

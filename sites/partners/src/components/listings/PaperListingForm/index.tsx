@@ -76,6 +76,13 @@ import * as styles from "./ListingForm.module.scss"
 
 const CHARACTER_LIMIT = 1000
 
+const LAND_USE_EXCLUDED_REQUIRED_FIELDS = [
+  "developer",
+  "listingsLeasingAgentAddress",
+  "reservedCommunityTypes",
+  "reservedCommunityDescription",
+]
+
 type ListingFormProps = {
   jurisdictionId: string
   listing?: FormListing
@@ -145,6 +152,7 @@ const ListingForm = ({
   const marketingTypeChoice = watch("marketingType")
   const scheduledListingPublishDateField = watch("scheduledListingPublishDateField")
   const scheduledPublishAtFromForm = createDate(scheduledListingPublishDateField, true)
+  const listingTypeFromForm = watch("listingType")
 
   const { listingsService, profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
@@ -197,7 +205,15 @@ const ListingForm = ({
   const [submitForApprovalDialog, setSubmitForApprovalDialog] = useState(false)
   const [requestChangesDialog, setRequestChangesDialog] = useState(false)
   const [selectedJurisdictionData, setSelectedJurisdictionData] = useState<Jurisdiction>()
-  const requiredFields = selectedJurisdictionData?.requiredListingFields || []
+
+  const listingTypeField = watch("listingType")
+  const isLandUseListing =
+    (listing?.listingType || listingTypeField) === EnumListingListingType.landUse
+
+  const rawRequiredFields = selectedJurisdictionData?.requiredListingFields || []
+  const requiredFields = isLandUseListing
+    ? rawRequiredFields.filter((field) => !LAND_USE_EXCLUDED_REQUIRED_FIELDS.includes(field))
+    : rawRequiredFields
 
   const whatToExpectEditor = useEditor({
     extensions: [...EditorExtensions, CharacterCountExtension.configure()],
@@ -258,10 +274,9 @@ const ListingForm = ({
     whatToExpectAdditionalDetailsEditor,
   ])
 
-  const disableListingPreferences = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.disableListingPreferences,
-    jurisdictionId
-  )
+  const disableListingPreferences =
+    doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableListingPreferences, jurisdictionId) ||
+    isLandUseListing
 
   const enableAutoOpenDate = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableAutoOpenDate,
@@ -974,6 +989,9 @@ const ListingForm = ({
         setOpen={setPublishDialog}
         submitFormWithStatus={triggerSubmitWithStatus}
         enableAutopublish={enableAutopublish}
+        enableLandUse={enableLandUse}
+        listingType={listingTypeFromForm}
+        listingStatus={listing?.status}
         scheduledPublishAt={scheduledPublishAtFromForm}
       />
 

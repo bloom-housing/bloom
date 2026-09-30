@@ -114,6 +114,29 @@ export class BackgroundJobsService {
   }
 
   /**
+   * Finds an instance of a job by its ID without running any permission checks.
+   * @param jobId - Id of the job to return data on
+   * @returns Details on the requested job, or null when it does not exist
+   */
+  async findById(jobId: string): Promise<BackgroundJob | null> {
+    const jobData = await this.prismaService.backgroundJob.findUnique({
+      select: {
+        id: true,
+        status: true,
+        totalRecords: true,
+        errorMessage: true,
+        errorRow: true,
+        completedAt: true,
+      },
+      where: {
+        id: jobId,
+      },
+    });
+
+    return jobData ? mapTo(BackgroundJob, jobData) : null;
+  }
+
+  /**
    * Return latest job with a processing status else null
    * @param listingId - Id of the listing for which the job should be retrieved
    * @returns Details on the currently processed job for the desired listing

@@ -15,7 +15,7 @@ import Layout from "../../../layouts/application"
 import { ListingView } from "../../../components/listing/ListingView"
 import { ErrorPage } from "../../_error"
 import dayjs from "dayjs"
-import { fetchJurisdictionByName } from "../../../lib/hooks"
+import { fetchSharedPageProps } from "../../../lib/hooks"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingViewSeeds } from "../../../components/listing/ListingViewSeeds"
 
@@ -110,7 +110,7 @@ export const getStaticProps: GetStaticProps = async (context: {
   } catch (e) {
     return { notFound: true }
   }
-  const jurisdiction = fetchJurisdictionByName()
+  const shared = fetchSharedPageProps(context.locale)
 
   if (response.data.externalURL) {
     try {
@@ -127,7 +127,10 @@ export const getStaticProps: GetStaticProps = async (context: {
   }
 
   return {
-    props: { listing: response.data, jurisdiction: await jurisdiction },
+    props: {
+      listing: response.data,
+      ...(await shared),
+    },
     revalidate: Number(process.env.cacheRevalidate),
   }
 }

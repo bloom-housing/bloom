@@ -5,7 +5,6 @@ import React, { FunctionComponent, useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"
 import {
-  addTranslation,
   GenericRouter,
   NavigationContext as UICNavigationContext,
 } from "@bloom-housing/ui-components"
@@ -19,15 +18,24 @@ import {
   AuthProvider,
   MessageProvider,
 } from "@bloom-housing/shared-helpers"
-import { pageChangeHandler, gaLoadScript, gaCaptureScript, uaScript } from "../lib/customScripts"
-import { AppSubmissionContext } from "../lib/applications/AppSubmissionContext"
+import {
+  FeatureFlag,
+  FeatureFlagEnum,
+  Jurisdiction,
+  JurisdictionContentFields,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import LinkComponent from "../components/core/LinkComponent"
 import ApplicationConductor, {
   loadApplicationFromAutosave,
   loadSavedListing,
 } from "../lib/applications/ApplicationConductor"
-import { translations, overrideTranslations } from "../lib/translations"
-import LinkComponent from "../components/core/LinkComponent"
-
+import { AppSubmissionContext } from "../lib/applications/AppSubmissionContext"
+import { pageChangeHandler, gaLoadScript, gaCaptureScript, uaScript } from "../lib/customScripts"
+import { BrandContext } from "../lib/BrandContext"
+import { isFeatureFlagOn } from "../lib/helpers"
+import { JurisdictionContentContext } from "../lib/JurisdictionContentContext"
+import { JurisdictionFeatureFlagsContext } from "../lib/JurisdictionFeatureFlagsContext"
+import { applyTranslations } from "../lib/translations"
 import "../../styles/overrides.scss"
 
 const rtlLocales = process.env.rtlLanguages.split(",")
@@ -46,16 +54,27 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     return new ApplicationConductor(application, savedListing)
   }, [application, savedListing])
 
+  const publicOverrides = pageProps?.publicOverrides as
+    | Record<string, Record<string, string>>
+    | null
+    | undefined
+
+  const jurisdictionFeatureFlags = (pageProps?.jurisdiction?.featureFlags ?? null) as
+    | FeatureFlag[]
+    | null
+
+  const jurisdictionContent = (pageProps?.jurisdictionContent ??
+    null) as JurisdictionContentFields | null
+
+  const jurisdiction = pageProps?.jurisdiction as Jurisdiction | undefined
+  const brand =
+    jurisdiction && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableDbDrivenBranding)
+      ? jurisdiction.brand ?? null
+      : null
+
   useMemo(() => {
-    addTranslation(translations.general, true)
-    if (locale && locale !== "en" && translations[locale]) {
-      addTranslation(translations[locale])
-    }
-    addTranslation(overrideTranslations.en)
-    if (overrideTranslations[locale]) {
-      addTranslation(overrideTranslations[locale])
-    }
-  }, [locale])
+    applyTranslations(locale, publicOverrides)
+  }, [locale, publicOverrides])
 
   useEffect(() => {
     if (!document.body.dataset.customScriptsLoaded) {
@@ -96,10 +115,16 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     <ConfigProvider apiUrl={process.env.backendApiBase}>
       <AuthProvider>
         <MessageProvider>
-          <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-          <div className={jurisdictionClassname}>
-            <Component {...pageProps} />
-          </div>
+          <JurisdictionFeatureFlagsContext.Provider value={jurisdictionFeatureFlags}>
+            <JurisdictionContentContext.Provider value={jurisdictionContent}>
+              <BrandContext.Provider value={brand}>
+                <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+                <div className={jurisdictionClassname}>
+                  <Component {...pageProps} />
+                </div>
+              </BrandContext.Provider>
+            </JurisdictionContentContext.Provider>
+          </JurisdictionFeatureFlagsContext.Provider>
         </MessageProvider>
       </AuthProvider>
     </ConfigProvider>

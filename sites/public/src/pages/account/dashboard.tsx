@@ -17,7 +17,7 @@ import Layout from "../../layouts/application"
 import { UserStatus } from "../../lib/constants"
 import MaxWidthLayout from "../../layouts/max-width"
 import { isFeatureFlagOn, setFeatureFlagLocalStorage } from "../../lib/helpers"
-import { fetchJurisdictionByName } from "../../lib/hooks"
+import { fetchSharedPageProps } from "../../lib/hooks"
 
 import styles from "./account.module.scss"
 
@@ -169,10 +169,11 @@ function Dashboard(props: DashboardProps) {
 export default Dashboard
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getStaticProps() {
-  const jurisdiction = await fetchJurisdictionByName()
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const shared = await fetchSharedPageProps(locale)
 
   return {
-    props: { jurisdiction },
+    props: { ...shared },
+    revalidate: Number(process.env.cacheRevalidate),
   }
 }

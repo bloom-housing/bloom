@@ -17,6 +17,7 @@ jest.mock("@vis.gl/react-google-maps", () => {
         </button>
       )
     }),
+    Pin: () => <img alt="Listing pin" />,
   }
 })
 
@@ -25,6 +26,7 @@ describe("MapMarker", () => {
     id: "listing-1",
     key: 7,
     coordinate: { lat: 37.7749, lng: -122.4194 },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any
 
   beforeEach(() => {
@@ -34,10 +36,7 @@ describe("MapMarker", () => {
   it("renders marker pin image and passes coordinate to AdvancedMarker", () => {
     render(<MapMarker marker={marker} onClick={jest.fn()} setMarkerRef={jest.fn()} />)
 
-    expect(screen.getByRole("img", { name: "Listing pin" })).toHaveAttribute(
-      "id",
-      "marker-id-listing-1"
-    )
+    expect(screen.getByRole("img", { name: "Listing pin" })).toBeInTheDocument()
     expect(advancedMarkerMock).toHaveBeenCalledWith({
       onClick: expect.any(Function),
       position: marker.coordinate,

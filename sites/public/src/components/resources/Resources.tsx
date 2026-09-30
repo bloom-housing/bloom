@@ -1,13 +1,14 @@
 import { t } from "@bloom-housing/ui-components"
-import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
+import { Card, Heading, Link } from "@bloom-housing/ui-seeds"
 import Layout from "../../layouts/application"
-import styles from "./Resources.module.scss"
-import sectionStyles from "./ResourceSection.module.scss"
-import { getJurisdictionResourcesContent } from "../../static_content/jurisdiction_resources_content"
+import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
 import { getGenericResourcesContent } from "../../static_content/generic_resources_content"
-import { Card, Grid, Heading, Link } from "@bloom-housing/ui-seeds"
+import { getJurisdictionResourcesContent } from "../../static_content/jurisdiction_resources_content"
+import styles from "./Resources.module.scss"
 import ResourceSection from "./ResourceSection"
-import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
+import { getStoredResourcesContent } from "../../static_content/stored_content"
+import { useJurisdictionContent } from "../../lib/JurisdictionContentContext"
+import sectionStyles from "./ResourceSection.module.scss"
 
 export type ResourceCards = {
   contactCard?: {
@@ -17,18 +18,21 @@ export type ResourceCards = {
   }
   resourceSections: {
     sectionTitle: string
-    sectionSubtitle?: string
-    cards: React.ReactNode[]
+    sectionSubtitle?: React.ReactNode | string
+    cards?: React.ReactNode[]
+    cardsWithTitles?: { cards: React.ReactNode[]; title: string }[]
   }[]
 }
 
 const Resources = () => {
   const pageTitle = t("pageTitle.additionalResources")
 
-  const content: ResourceCards | null =
-    getJurisdictionResourcesContent() || getGenericResourcesContent()
-
-  if (!content) return <></>
+  const jurisdictionContent = useJurisdictionContent()
+  const content: ResourceCards = {
+    ...getGenericResourcesContent(),
+    ...getJurisdictionResourcesContent(),
+    ...getStoredResourcesContent(jurisdictionContent),
+  }
 
   const showContactCard =
     content.contactCard?.description ||
@@ -83,11 +87,9 @@ const Resources = () => {
               <ResourceSection
                 sectionTitle={section.sectionTitle}
                 sectionSubtitle={section.sectionSubtitle}
-              >
-                <Grid spacing="sm">
-                  <GridRow columns={3}>{section.cards}</GridRow>
-                </Grid>
-              </ResourceSection>
+                cards={section.cards}
+                cardsWithTitles={section.cardsWithTitles}
+              />
             </div>
           ))}
         </article>

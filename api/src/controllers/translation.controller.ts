@@ -1,30 +1,46 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
   Header,
   Param,
+  BadRequestException,
+  ParseEnumPipe,
   ParseUUIDPipe,
+  Put,
   Query,
+  Request,
   UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Request as ExpressRequest } from 'express';
 import { LanguagesEnum, SiteEnum } from '@prisma/client';
 import { TranslationService } from '../services/translation.service';
 import {
   PartnersTranslationsQueryParams,
   TranslationsQueryParams,
 } from '../dtos/translations/translations-query-params.dto';
+import { TranslationUpdate } from '../dtos/translations/translation-update.dto';
+import { TranslationRawKey } from '../dtos/translations/translation-raw-key.dto';
+import { TranslationOverrideRow } from '../dtos/translations/translation-override-row.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+import { User } from '../dtos/users/user.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { PUBLIC_CACHE_CONTROL } from '../utilities/cache-control';
+import { mapTo } from '../utilities/mapTo';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { OptionalAuthGuard } from '../guards/optional.guard';
 
 const OVERRIDES_OK_RESPONSE = {
   schema: {
     type: 'object',
-    additionalProperties: { type: 'string' },
+    additionalProperties: {
+      type: 'object',
+      additionalProperties: { type: 'string' },
+    },
   },
 } as const;
 
@@ -46,7 +62,7 @@ export class TranslationController {
     @Param('jurisdictionId', new ParseUUIDPipe({ version: '4' }))
     jurisdictionId: string,
     @Query() queryParams: TranslationsQueryParams,
-  ): Promise<Record<string, string>> {
+  ): Promise<Record<string, Record<string, string>>> {
     return this.translationService.getJurisdictionOverridesById(
       jurisdictionId,
       queryParams.language ?? LanguagesEnum.en,
@@ -64,7 +80,7 @@ export class TranslationController {
   async jurisdictionOverridesByName(
     @Param('jurisdictionName') jurisdictionName: string,
     @Query() queryParams: TranslationsQueryParams,
-  ): Promise<Record<string, string>> {
+  ): Promise<Record<string, Record<string, string>>> {
     return this.translationService.getJurisdictionOverridesByName(
       jurisdictionName,
       queryParams.language ?? LanguagesEnum.en,
@@ -81,11 +97,191 @@ export class TranslationController {
   @Header('Cache-Control', PUBLIC_CACHE_CONTROL)
   async partnersOverrides(
     @Query() queryParams: PartnersTranslationsQueryParams,
-  ): Promise<Record<string, string>> {
+  ): Promise<Record<string, Record<string, string>>> {
     return this.translationService.getJurisdictionOverrides(
       null,
       queryParams.language ?? LanguagesEnum.en,
       SiteEnum.partners,
+    );
+  }
+
+  @Get('base/email/:language')
+  @ApiOperation({
+    summary: 'Get the email strings shipped with the api',
+    operationId: 'emailBaseTranslations',
+  })
+  @ApiOkResponse({
+    schema: { type: 'object', additionalProperties: { type: 'string' } },
+  })
+  emailBaseTranslations(
+    @Param('language', new ParseEnumPipe(LanguagesEnum))
+    language: LanguagesEnum,
+  ): Record<string, string> {
+    return this.translationService.getBaseEmailTranslations(language);
+  }
+
+  @Get('jurisdictions/:jurisdictionId/raw')
+  @ApiOperation({
+    summary: "List a jurisdiction's override keys",
+    operationId: 'listRawTranslations',
+  })
+  @ApiOkResponse({ type: TranslationOverrideRow, isArray: true })
+  async listRawTranslations(
+    @Param('jurisdictionId', new ParseUUIDPipe({ version: '4' }))
+    jurisdictionId: string,
+    @Request() req: ExpressRequest,
+  ): Promise<TranslationOverrideRow[]> {
+    return this.translationService.listRawOverrides(
+      jurisdictionId,
+      mapTo(User, req['user']),
+    );
+  }
+
+  @Get('jurisdictions/:jurisdictionId/raw/:site/:language')
+  @ApiOperation({
+    summary:
+      "Get a scope's editable override keys. stale = true, if its English source changed since it was translated",
+    operationId: 'getRawTranslations',
+  })
+  @ApiOkResponse({ type: TranslationRawKey, isArray: true })
+  async getRawTranslations(
+    @Param('jurisdictionId', new ParseUUIDPipe({ version: '4' }))
+    jurisdictionId: string,
+    @Param('site', new ParseEnumPipe(SiteEnum)) site: SiteEnum,
+    @Param('language', new ParseEnumPipe(LanguagesEnum))
+    language: LanguagesEnum,
+    @Request() req: ExpressRequest,
+  ): Promise<TranslationRawKey[]> {
+    return this.translationService.getRawOverrides(
+      jurisdictionId,
+      site,
+      language,
+      mapTo(User, req['user']),
+    );
+  }
+
+  @Put('jurisdictions/:jurisdictionId/raw/:site/:language')
+  @ApiOperation({
+    summary: "Upsert a scope's override keys with per-key optimistic locking",
+    operationId: 'updateRawTranslations',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async updateRawTranslations(
+    @Param('jurisdictionId', new ParseUUIDPipe({ version: '4' }))
+    jurisdictionId: string,
+    @Param('site', new ParseEnumPipe(SiteEnum)) site: SiteEnum,
+    @Param('language', new ParseEnumPipe(LanguagesEnum))
+    language: LanguagesEnum,
+    @Body() dto: TranslationUpdate,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return this.translationService.updateOverrides(
+      jurisdictionId,
+      site,
+      language,
+      dto,
+      mapTo(User, req['user']),
+    );
+  }
+
+  @Delete('jurisdictions/:jurisdictionId/raw/:site/:language/:key')
+  @ApiOperation({
+    summary: 'Delete one override key (revert to base)',
+    operationId: 'deleteRawTranslation',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async deleteRawTranslation(
+    @Param('jurisdictionId', new ParseUUIDPipe({ version: '4' }))
+    jurisdictionId: string,
+    @Param('site', new ParseEnumPipe(SiteEnum)) site: SiteEnum,
+    @Param('language', new ParseEnumPipe(LanguagesEnum))
+    language: LanguagesEnum,
+    @Param('key') key: string,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return this.translationService.deleteOverride(
+      jurisdictionId,
+      site,
+      language,
+      key,
+      mapTo(User, req['user']),
+    );
+  }
+
+  // Global overrides apply to every jurisdiction. Only the Partners UI and email use a generic
+  // layer
+  private assertGlobalSite(site: SiteEnum): void {
+    if (site !== SiteEnum.partners && site !== SiteEnum.email) {
+      throw new BadRequestException(`${site} has no global scope`);
+    }
+  }
+
+  @Get('global/raw/:site/:language')
+  @ApiOperation({
+    summary:
+      'Get the global override keys for a site. stale = true, if its English source changed since it was translated',
+    operationId: 'getRawGlobalTranslations',
+  })
+  @ApiOkResponse({ type: TranslationRawKey, isArray: true })
+  async getRawGlobalTranslations(
+    @Param('site', new ParseEnumPipe(SiteEnum)) site: SiteEnum,
+    @Param('language', new ParseEnumPipe(LanguagesEnum))
+    language: LanguagesEnum,
+    @Request() req: ExpressRequest,
+  ): Promise<TranslationRawKey[]> {
+    this.assertGlobalSite(site);
+    return this.translationService.getRawOverrides(
+      null,
+      site,
+      language,
+      mapTo(User, req['user']),
+    );
+  }
+
+  @Put('global/raw/:site/:language')
+  @ApiOperation({
+    summary:
+      'Upsert the global override keys for a site with per-key optimistic locking',
+    operationId: 'updateRawGlobalTranslations',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async updateRawGlobalTranslations(
+    @Param('site', new ParseEnumPipe(SiteEnum)) site: SiteEnum,
+    @Param('language', new ParseEnumPipe(LanguagesEnum))
+    language: LanguagesEnum,
+    @Body() dto: TranslationUpdate,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    this.assertGlobalSite(site);
+    return this.translationService.updateOverrides(
+      null,
+      site,
+      language,
+      dto,
+      mapTo(User, req['user']),
+    );
+  }
+
+  @Delete('global/raw/:site/:language/:key')
+  @ApiOperation({
+    summary: 'Delete one global override key for a site (revert to base)',
+    operationId: 'deleteRawGlobalTranslation',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async deleteRawGlobalTranslation(
+    @Param('site', new ParseEnumPipe(SiteEnum)) site: SiteEnum,
+    @Param('language', new ParseEnumPipe(LanguagesEnum))
+    language: LanguagesEnum,
+    @Param('key') key: string,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    this.assertGlobalSite(site);
+    return this.translationService.deleteOverride(
+      null,
+      site,
+      language,
+      key,
+      mapTo(User, req['user']),
     );
   }
 }

@@ -19,7 +19,8 @@ import { GovDeliveryService } from '../../../src/services/gov-delivery.service';
 import { TranslationService } from '../../../src/services/translation.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
-import { translationFactory } from '../../../prisma/seed-helpers/translation-factory';
+import { baseTranslationRows } from '../../../src/locales/email-translations';
+import { flattenTranslationRows } from '../../../src/utilities/translation-merge';
 import { yellowstoneAddress } from '../../../prisma/seed-helpers/address-factory';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { User } from '../../../src/dtos/users/user.dto';
@@ -31,12 +32,15 @@ import {
   oneLineAddress,
 } from '../../../src/utilities/listing-data-formatters';
 import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/accessibility-priority-type-enum';
+import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 
 let sendMock;
 let govDeliverySendMock;
+const baseEmailTranslations = () =>
+  flattenTranslationRows([baseTranslationRows(LanguagesEnum.en)]);
 const getMergedTranslationsMock = jest
   .fn()
-  .mockReturnValue(translationFactory().translations);
+  .mockReturnValue(baseEmailTranslations());
 const translationServiceMock = {
   getMergedTranslations: getMergedTranslationsMock,
 };
@@ -92,7 +96,7 @@ describe('Testing email service', () => {
     service = await module.resolve(EmailService);
     getMergedTranslationsMock
       .mockClear()
-      .mockReturnValue(translationFactory().translations);
+      .mockReturnValue(baseEmailTranslations());
   });
 
   const user = {
@@ -177,18 +181,15 @@ describe('Testing email service', () => {
     );
     expect(sendMock).toHaveBeenCalled();
     expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
-    expect(sendMock.mock.calls[0][0].subject).toEqual('Forgot your password?');
+    expect(sendMock.mock.calls[0][0].subject).toEqual('Reset your password?');
     expect(sendMock.mock.calls[0][0].body).toContain(
-      'A request to reset your Bloom Housing Portal website password for http://localhost:3001 has recently been made.',
-    );
-    expect(sendMock.mock.calls[0][0].body).toContain(
-      'If you did make this request, please click on the link below to reset your password:',
+      ' We received a request to reset your password for your Bloom Housing Portal account. You must click the following link to complete the reset:',
     );
     expect(sendMock.mock.calls[0][0].body).toContain(
       '<a href="http://localhost:3001/reset-password?token&#x3D;resetToken">Change my password</a>',
     );
     expect(sendMock.mock.calls[0][0].body).toContain(
-      'Your password won&#x27;t change until you access the link above and create a new one.',
+      'This password reset is only valid for the next hour. If you didn’t make this request, please ignore this email.',
     );
   });
 
@@ -205,18 +206,15 @@ describe('Testing email service', () => {
     );
     expect(sendMock).toHaveBeenCalled();
     expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
-    expect(sendMock.mock.calls[0][0].subject).toEqual('Forgot your password?');
+    expect(sendMock.mock.calls[0][0].subject).toEqual('Reset your password?');
     expect(sendMock.mock.calls[0][0].body).toContain(
-      'A request to reset your Bloom Housing Portal website password for http://localhost:3001 has recently been made.',
-    );
-    expect(sendMock.mock.calls[0][0].body).toContain(
-      'If you did make this request, please click on the link below to reset your password:',
+      'We received a request to reset your password for your Bloom Housing Portal account. You must click the following link to complete the reset:',
     );
     expect(sendMock.mock.calls[0][0].body).toContain(
       '<a href="http://localhost:3001/reset-password?token&#x3D;resetToken&amp;redirectUrl&#x3D;redirect&amp;listingId&#x3D;123">Change my password</a>',
     );
     expect(sendMock.mock.calls[0][0].body).toContain(
-      'Your password won&#x27;t change until you access the link above and create a new one.',
+      'This password reset is only valid for the next hour. If you didn’t make this request, please ignore this email.',
     );
   });
 
@@ -281,6 +279,7 @@ describe('Testing email service', () => {
         emailAddress: 'advocate.email@example.com',
       },
     } as Application;
+
     it('Test first come first serve', async () => {
       await service.applicationConfirmation(
         listing,
@@ -311,7 +310,8 @@ describe('Testing email service', () => {
         'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents',
       );
     });
-    it('Test lottery', async () => {
+
+    it('Test lottery when enableDuplicatesDetailsInEmail is false', async () => {
       await service.applicationConfirmation(
         { ...listing, reviewOrderType: ReviewOrderTypeEnum.lottery },
         application,
@@ -344,6 +344,53 @@ describe('Testing email service', () => {
         'If you need to update information on your application, do not apply again. Instead, contact the agent for this listing',
       );
     });
+
+    it('Test lottery when enableDuplicatesDetailsInEmail is true', async () => {
+      jest.spyOn(jurisdictionServiceMock, 'findOne').mockReturnValue({
+        id: 'jurisdictionId',
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableDuplicatesDetailsInEmail,
+            active: true,
+          },
+        ],
+        name: 'Jurisdiction 1',
+        publicUrl: 'https://example.com',
+      } as unknown as ReturnType<typeof jurisdictionServiceMock.findOne>);
+
+      await service.applicationConfirmation(
+        { ...listing, reviewOrderType: ReviewOrderTypeEnum.lottery },
+        application,
+        'http://localhost:3001',
+      );
+      expect(sendMock).toHaveBeenCalled();
+      expect(sendMock.mock.calls[0][0].to).toEqual(
+        'applicant.email@example.com',
+      );
+      expect(sendMock.mock.calls[0][0].subject).toEqual(
+        'Your Application Confirmation',
+      );
+      expect(sendMock.mock.calls[0][0].body).toContain(
+        '<td class="step step-complete"><img src="https://res.cloudinary.com/exygy/image/upload/v1652459517/core/step-left-active_vo3fnq.png" alt="indication of step completed" /></td>',
+      );
+      expect(sendMock.mock.calls[0][0].body).toContain(
+        '<td class="step step-complete"><span class="step-label" aria-current="true">Application <br />received</span></td>',
+      );
+      expect(sendMock.mock.calls[0][0].body).toContain('What happens next?');
+      expect(sendMock.mock.calls[0][0].body).toContain(
+        'Once the application period closes, eligible applicants will be placed in order based on lottery rank order.',
+      );
+      expect(sendMock.mock.calls[0][0].body).toContain(
+        'Housing preferences, if applicable, will affect lottery rank order.',
+      );
+      expect(sendMock.mock.calls[0][0].body).toContain(
+        'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents',
+      );
+      expect(sendMock.mock.calls[0][0].body).toContain(
+        'If you need to update information on your application, do not apply again. Instead, contact the agent for this listing',
+      );
+    });
+
     it('Test waitlist', async () => {
       await service.applicationConfirmation(
         { ...listing, reviewOrderType: ReviewOrderTypeEnum.waitlist },
@@ -377,6 +424,7 @@ describe('Testing email service', () => {
         'You may be contacted while on the waitlist to confirm that you wish to remain on the waitlist',
       );
     });
+
     it('Test waitlistLottery', async () => {
       await service.applicationConfirmation(
         { ...listing, reviewOrderType: ReviewOrderTypeEnum.waitlistLottery },
@@ -543,7 +591,7 @@ describe('Testing email service', () => {
         'Listing approval requested - listing name',
       );
       expect(emailMock.body).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" />`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto"/>`,
       );
 
       expect(emailMock.body).toMatch('Hello,');
@@ -615,7 +663,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('Listing changes requested');
       expect(emailMock.body).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" />`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto"/>`,
       );
       expect(emailMock.body).toMatch('Listing changes requested');
       expect(emailMock.body).toMatch('Hello,');
@@ -660,7 +708,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('New published listing - listing name');
       expect(emailMock.body).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" />`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto"/>`,
       );
       expect(emailMock.body).toMatch('New published listing');
       expect(emailMock.body).toMatch('Hello,');
@@ -973,6 +1021,93 @@ describe('Testing email service', () => {
     });
   });
 
+  describe('bulk application email notifications', () => {
+    const jurisdictionId = { id: 'jurisdictionId' };
+    const applicationsUrl = 'http://localhost:3000/application-bulk-upload';
+
+    describe('applicationsBulkSuccess', () => {
+      it('should send a bulk success email with interpolated listing name and update count', async () => {
+        await service.applicationsBulkSuccess(
+          user,
+          jurisdictionId,
+          applicationsUrl,
+          { updateCount: 5 },
+          'Example Listing',
+        );
+
+        expect(sendMock).toHaveBeenCalledTimes(1);
+        const emailMock = sendMock.mock.calls[0][0];
+        expect(emailMock.to).toEqual(user.email);
+        expect(emailMock.subject).toEqual(
+          'Your bulk application update for Example Listing is complete',
+        );
+        expect(emailMock.body).toContain(
+          'Your bulk update has been processed successfully.',
+        );
+        expect(emailMock.body).toContain('5 application records were updated.');
+        expect(emailMock.body).toContain(`href="${applicationsUrl}"`);
+        expect(emailMock.body).toContain('View Applications');
+      });
+    });
+
+    describe('applicationsBulkSuccessWithErrors', () => {
+      it('should send a bulk success-with-errors email with interpolated counts', async () => {
+        await service.applicationsBulkSuccessWithErrors(
+          user,
+          jurisdictionId,
+          applicationsUrl,
+          { updateCount: 5, failedEmailsCount: 2 },
+          'Example Listing',
+        );
+
+        expect(sendMock).toHaveBeenCalledTimes(1);
+        const emailMock = sendMock.mock.calls[0][0];
+        expect(emailMock.to).toEqual(user.email);
+        expect(emailMock.subject).toEqual(
+          'Your bulk application update for Example Listing is complete',
+        );
+        expect(emailMock.body).toContain(
+          'Your bulk update has been processed successfully. However, 2 applicant notification email(s) could not be sent.',
+        );
+        expect(emailMock.body).toContain(
+          '5 application records were updated. Please contact your technical team for next steps on notifications resolution.',
+        );
+        expect(emailMock.body).toContain(`href="${applicationsUrl}"`);
+        expect(emailMock.body).toContain('View Applications');
+      });
+    });
+
+    describe('applicationsBulkFailure', () => {
+      it('should send a bulk failure email with the raw error message', async () => {
+        await service.applicationsBulkFailure(
+          user,
+          jurisdictionId,
+          applicationsUrl,
+          'Row 12 is missing a required field',
+          'Example Listing',
+        );
+
+        expect(sendMock).toHaveBeenCalledTimes(1);
+        const emailMock = sendMock.mock.calls[0][0];
+        expect(emailMock.to).toEqual(user.email);
+        expect(emailMock.subject).toEqual(
+          'Your bulk application update for Example Listing could not be completed',
+        );
+        expect(emailMock.body).toContain(
+          'Your bulk update encountered an error and could not be completed.',
+        );
+        expect(emailMock.body).toContain(
+          '[errorMessage] Row 12 is missing a required field',
+        );
+        expect(emailMock.body).toContain(
+          'Records before the failed row have been updated. If a re-upload of your file does not fix the issue, please reach out to the support team.',
+        );
+        expect(emailMock.body).toContain(`href="${applicationsUrl}"`);
+        expect(emailMock.body).toContain('View Applications');
+      });
+    });
+  });
+
   describe('lottery published for applicant', () => {
     it('should generate html body', async () => {
       const emailArr = ['testOne@xample.com', 'testTwo@example.com'];
@@ -1069,7 +1204,7 @@ describe('Testing email service', () => {
     ) => service.buildListingDetails(listing, priorityTypes, summary, variant);
 
     beforeEach(() => {
-      service.polyglot.replace(translationFactory().translations);
+      service.polyglot.replace(baseEmailTranslations());
     });
 
     it('includes only address when all optional inputs are absent', () => {

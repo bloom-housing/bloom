@@ -98,7 +98,12 @@ export const booleanToString = (bool: boolean): string => {
   return bool === true ? "true" : "false"
 }
 
-export const getRentType = (unit: TempUnit): string | null => {
+export const getRentType = (unit: TempUnit, isLandUse = false): string | null => {
+  if (isLandUse) {
+    if (unit?.monthlyRentAsPercentOfIncome) return "percentage"
+    return unit?.monthlyIncomeMin || unit?.monthlyRent ? "fixed" : null
+  }
+
   return unit?.monthlyIncomeMin && unit?.monthlyRent
     ? "fixed"
     : unit?.monthlyRentAsPercentOfIncome
@@ -168,9 +173,18 @@ export const createDate = (
   return parsed.toDate()
 }
 
+// fileId is the bare storage key. On s3 `id` is the full public url, which some consumers store
+// verbatim, so the key is reported separately rather than by changing `id`. Optional because the
+// listing callers predate it and set only id and url.
+export interface FileUploadData {
+  id: string
+  url: string
+  fileId?: string
+}
+
 interface FileUploaderParams {
   file: File
-  setFileUploadData: (data: SetStateAction<{ id: string; url: string }>) => void
+  setFileUploadData: (data: SetStateAction<FileUploadData>) => void
   setProgressValue: (value: SetStateAction<number>) => void
   contentType?: string
   contentDisposition?: string
@@ -202,7 +216,7 @@ export const fileUploader = async ({
         contentDisposition: contentDisposition || "",
       },
     })
-    const { uploadUrl, publicUrl } = resp
+    const { uploadUrl, publicUrl, fileId } = resp
     setProgressValue(3)
 
     void S3Upload({
@@ -211,13 +225,21 @@ export const fileUploader = async ({
       onUploadProgress,
       contentType,
       contentDisposition,
-    }).then((_) => {
-      setProgressValue(100)
-      setFileUploadData({
-        id: publicUrl,
-        url: publicUrl,
-      })
     })
+      .then((_) => {
+        setProgressValue(100)
+        setFileUploadData({
+          id: publicUrl,
+          url: publicUrl,
+          fileId,
+        })
+      })
+      .catch(() => {
+        alert(
+          "Unable to upload the file. Please verify the file format is correct before retrying."
+        )
+        setProgressValue(0)
+      })
   } else {
     const timestamp = Math.round(new Date().getTime() / 1000)
     const tag = "browser_upload"
@@ -247,6 +269,7 @@ export const fileUploader = async ({
         setFileUploadData({
           id: response.data.public_id,
           url: cloudinaryUrlFromId(response.data.public_id),
+          fileId: response.data.public_id,
         })
       })
       .catch(() => {

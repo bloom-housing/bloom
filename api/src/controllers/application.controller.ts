@@ -4,12 +4,14 @@ import {
   Delete,
   Get,
   Header,
+  MessageEvent,
   Param,
   Post,
   Put,
   Query,
   Request,
   Res,
+  Sse,
   StreamableFile,
   UseGuards,
   UseInterceptors,
@@ -23,6 +25,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Request as ExpressRequest, Response } from 'express';
+import { map, Observable } from 'rxjs';
 import { ApplicationService } from '../services/application.service';
 import { Application } from '../dtos/applications/application.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
@@ -54,6 +57,7 @@ import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
 import { ApplicationBulkUploadService } from '../services/application-bulk-upload.service';
+import { ApplicationBulkUpdate } from '../dtos/applications/application-bulk-update.dto';
 import { ApplicationBulkUrl } from '../dtos/applications/application-bulk-url.dto';
 import { ApplicationBulkPresignedUrl } from '../dtos/applications/application-bulk-presigned-url.dto';
 
@@ -208,7 +212,7 @@ export class ApplicationController {
     return this.applicationService.findOne(applicationId, req);
   }
 
-  @Get('bulk-update/template/:listingId')
+  @Get('bulk-update/template')
   @ApiOperation({
     summary:
       'Download a template CSV for bulk updating applications for a listing',
@@ -216,11 +220,11 @@ export class ApplicationController {
   })
   @Header('Content-Type', 'application/zip')
   @UseInterceptors(ExportLogInterceptor)
-  @ApiOkResponse({ type: StreamableFile })
+  @ApiOkResponse({ type: String })
   async downloadBulkUpdateTemplate(
     @Request() req: ExpressRequest,
-    @Param('listingId') listingId: string,
-  ): Promise<StreamableFile> {
+    @Query('listingId') listingId: string,
+  ): Promise<string> {
     return await this.applicationBulkUploadService.downloadBulkUpdateTemplate(
       listingId,
       mapTo(User, req['user']),
@@ -290,6 +294,21 @@ export class ApplicationController {
     };
   }
 
+  @Post('bulk-update')
+  @ApiOperation({
+    summary: 'allows user to update applications in bulk using a CSV file',
+    operationId: 'bulkUpdateApplications',
+  })
+  async bulkUpdateApplications(
+    @Body() dto: ApplicationBulkUpdate,
+    @Request() req: ExpressRequest,
+  ) {
+    return this.applicationBulkUploadService.processBulkUpload(
+      dto,
+      mapTo(User, req['user']),
+    );
+  }
+
   @Put('removePIICronJob')
   @ApiOperation({
     summary: 'trigger the remove PII cron job',
@@ -353,5 +372,19 @@ export class ApplicationController {
       dto.id,
       mapTo(User, req['user']),
     );
+  }
+
+  @Sse('bulk-update/notifications')
+  @ApiOperation({
+    summary:
+      'Subscribed for server side events notifications from the application processes',
+    operationId: 'uploadBulkNotifications',
+  })
+  applicationNotifications(
+    @Query('jobId') jobId: string,
+  ): Observable<MessageEvent> {
+    return this.applicationBulkUploadService
+      .getUploadJobNotification(jobId)
+      .pipe(map((notification) => ({ data: notification })));
   }
 }

@@ -30,6 +30,8 @@ export const getExportHeaders = (
   multiSelectQuestions: MultiselectQuestion[],
   timeZone: string,
   optionalParams?: {
+    disableEthnicityQuestion?: boolean;
+    disableHowToContact?: boolean;
     disableWorkInRegion?: boolean;
     enableApplicationStatus?: boolean;
     enableFullTimeStudentQuestion?: boolean;
@@ -48,6 +50,8 @@ export const getExportHeaders = (
 ): CsvHeader[] => {
   const dateFormat = 'MM-DD-YYYY hh:mm:ssA z';
   const {
+    disableEthnicityQuestion,
+    disableHowToContact,
     disableWorkInRegion,
     enableApplicationStatus,
     enableFullTimeStudentQuestion,
@@ -208,12 +212,15 @@ export const getExportHeaders = (
         path: 'additionalPhoneNumber',
         label: 'Primary Applicant Additional Phone Number',
       },
-      {
-        path: 'contactPreferences',
-        label: 'Primary Applicant Preferred Contact Type',
-      },
     ],
   );
+
+  if (!disableHowToContact) {
+    headers.push({
+      path: 'contactPreferences',
+      label: 'Primary Applicant Preferred Contact Type',
+    });
+  }
 
   if (!disableWorkInRegion) {
     headers.push({
@@ -271,26 +278,38 @@ export const getExportHeaders = (
         path: 'applicationsMailingAddress.zipCode',
         label: `Primary Applicant Mailing Zip Code`,
       },
-      {
-        path: 'applicant.applicantWorkAddress.street',
-        label: `Primary Applicant Work Street`,
-      },
-      {
-        path: 'applicant.applicantWorkAddress.street2',
-        label: `Primary Applicant Work Street 2`,
-      },
-      {
-        path: 'applicant.applicantWorkAddress.city',
-        label: `Primary Applicant Work City`,
-      },
-      {
-        path: 'applicant.applicantWorkAddress.state',
-        label: `Primary Applicant Work State`,
-      },
-      {
-        path: 'applicant.applicantWorkAddress.zipCode',
-        label: `Primary Applicant Work Zip Code`,
-      },
+    ],
+  );
+
+  if (!disableWorkInRegion) {
+    headers.push(
+      ...[
+        {
+          path: 'applicant.applicantWorkAddress.street',
+          label: `Primary Applicant Work Street`,
+        },
+        {
+          path: 'applicant.applicantWorkAddress.street2',
+          label: `Primary Applicant Work Street 2`,
+        },
+        {
+          path: 'applicant.applicantWorkAddress.city',
+          label: `Primary Applicant Work City`,
+        },
+        {
+          path: 'applicant.applicantWorkAddress.state',
+          label: `Primary Applicant Work State`,
+        },
+        {
+          path: 'applicant.applicantWorkAddress.zipCode',
+          label: `Primary Applicant Work Zip Code`,
+        },
+      ],
+    );
+  }
+
+  headers.push(
+    ...[
       {
         path: 'alternateContact.firstName',
         label: 'Alternate Contact First Name',
@@ -499,10 +518,12 @@ export const getExportHeaders = (
   );
 
   if (includeDemographics) {
-    headers.push({
-      path: 'demographics.ethnicity',
-      label: 'Ethnicity',
-    });
+    if (!disableEthnicityQuestion) {
+      headers.push({
+        path: 'demographics.ethnicity',
+        label: 'Ethnicity',
+      });
+    }
     if (enableGenderQuestion) {
       headers.push({
         path: 'demographics.gender',
@@ -1027,30 +1048,38 @@ export const convertDemographicLanguageToReadable = (type: string): string => {
   return typeMap[rootKey] ?? rootKey;
 };
 
+export const APPLICATION_DECLINE_REASON_MAP: Record<string, string> = {
+  householdIncomeTooHigh: 'Household income too high',
+  householdIncomeTooLow: 'Household income too low',
+  householdSizeTooLarge: 'Household size too large',
+  householdSizeTooSmall: 'Household size too small',
+  attemptedToContactNoResponse: 'Attempted to contact; no response',
+  applicantDeclinedUnit: 'Applicant declined unit',
+  doesNotMeetSeniorBuildingRequirement:
+    'Does not meet senior building requirement',
+  householdDoesNotNeedAccessibleUnit:
+    'Household does not need accessible unit features',
+  other: 'Other',
+};
+
 /**
- *
  * @param type takes in the decline reason enum key
  * @returns outputs the readable version of the string
  */
 export const convertApplicationDeclineReasonToReadable = (
   type: string,
-): string => {
-  const typeMap = {
-    householdIncomeTooHigh: 'Household income too high',
-    householdIncomeTooLow: 'Household income too low',
-    householdSizeTooLarge: 'Household size too large',
-    householdSizeTooSmall: 'Household size too small',
-    attemptedToContactNoResponse: 'Attempted to contact; no response',
-    applicantDeclinedUnit: 'Applicant declined unit',
-    doesNotMeetSeniorBuildingRequirement:
-      'Does not meet senior building requirement',
-    householdDoesNotNeedAccessibleUnit:
-      'Household does not need accessible unit features',
-    other: 'Other',
-  };
+): string => APPLICATION_DECLINE_REASON_MAP[type] ?? type;
 
-  return typeMap[type] ?? type;
-};
+/**
+ * @param readable takes in the decline reason as human readable string
+ * @returns outputs the enum key version of the matching readable string
+ */
+export const convertReadableToApplicationDeclineReason = (
+  readable: string,
+): string | undefined =>
+  Object.keys(APPLICATION_DECLINE_REASON_MAP).find(
+    (key) => APPLICATION_DECLINE_REASON_MAP[key] === readable,
+  );
 
 /**
  *

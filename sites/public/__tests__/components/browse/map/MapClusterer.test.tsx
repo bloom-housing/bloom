@@ -177,12 +177,12 @@ describe("MapClusterer", () => {
     await waitFor(() => {
       expect(listingsService.retrieve).toHaveBeenNthCalledWith(
         1,
-        { id: "listing-1", view: ListingViews.base },
+        { id: "listing-1", view: ListingViews.map },
         { headers: { language: "es" } }
       )
       expect(listingsService.retrieve).toHaveBeenNthCalledWith(
         2,
-        { id: "listing-1", view: ListingViews.base },
+        { id: "listing-1", view: ListingViews.map },
         { headers: { language: "en" } }
       )
       expect(setInfoWindowIndex).toHaveBeenCalledWith(0)

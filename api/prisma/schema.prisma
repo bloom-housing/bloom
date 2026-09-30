@@ -606,6 +606,8 @@ model Assets {
   label  String
 
   accessibleMarketingFlyerFile  Listings[]          @relation("accessible_marketing_flyer_file")
+  brandFaviconJurisdictions     Jurisdictions[]     @relation("brandFavicon")
+  brandLogoJurisdictions        Jurisdictions[]     @relation("brandLogo")
   buildingSelectionCriteriaFile Listings[]          @relation("building_selection_criteria_file")
   listingEvents                 ListingEvents[]
   listingImages                 ListingImages[]
@@ -806,9 +808,13 @@ model Jurisdictions {
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 
   allowSingleUseCodeLogin                 Boolean                               @default(false) @map("allow_single_use_code_login")
+  brand                                   Json?
+  brandLogoAssetId                        String?                               @map("brand_logo_asset_id") @db.Uuid
+  brandFaviconAssetId                     String?                               @map("brand_favicon_asset_id") @db.Uuid
   raceEthnicityConfiguration              Json?                                 @map("race_ethnicity_configuration")
   duplicateListingPermissions             UserRoleEnum[]                        @map("duplicate_listing_permissions")
   emailFromAddress                        String?                               @map("email_from_address")
+  enabledStopLightRuleKeys                String[]                              @default([]) @map("enabled_stop_light_rule_keys")
   enableGeocodingPreferences              Boolean                               @default(false) @map("enable_geocoding_preferences")
   enableGeocodingRadiusMethod             Boolean                               @default(false) @map("enable_geocoding_radius_method")
   enablePartnerDemographics               Boolean                               @default(false) @map("enable_partner_demographics")
@@ -838,6 +844,8 @@ model Jurisdictions {
 
   agency                 Agency[]
   amiCharts              AmiChart[]
+  brandFavicon           Assets?                  @relation("brandFavicon", fields: [brandFaviconAssetId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  brandLogo              Assets?                  @relation("brandLogo", fields: [brandLogoAssetId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   featureFlags           FeatureFlags[]
   jurisdictionContent    JurisdictionContent[]
   listings               Listings[]
@@ -1947,7 +1955,7 @@ model Units {
   maxOccupancy                 Int?                               @map("max_occupancy")
   minOccupancy                 Int?                               @map("min_occupancy")
   monthlyIncomeMin             String?                            @map("monthly_income_min")
-  monthlyRent                  String?                            @map("monthly_rent")
+  monthlyRent                  Decimal?                            @map("monthly_rent") @db.Decimal(8, 2)
   monthlyRentAsPercentOfIncome Decimal?                           @map("monthly_rent_as_percent_of_income") @db.Decimal(8, 2)
   numBathrooms                 Int?                               @map("num_bathrooms")
   numBedrooms                  Int?                               @map("num_bedrooms")
@@ -1986,7 +1994,7 @@ model UnitSnapshot {
   maxOccupancy                 Int?                               @map("max_occupancy")
   minOccupancy                 Int?                               @map("min_occupancy")
   monthlyIncomeMin             String?                            @map("monthly_income_min")
-  monthlyRent                  String?                            @map("monthly_rent")
+  monthlyRent                  Decimal?                           @map("monthly_rent") @db.Decimal(8, 2)
   monthlyRentAsPercentOfIncome Decimal?                           @map("monthly_rent_as_percent_of_income") @db.Decimal(8, 2)
   numBathrooms                 Int?                               @map("num_bathrooms")
   numBedrooms                  Int?                               @map("num_bedrooms")
@@ -2421,6 +2429,7 @@ enum LanguagesEnum {
 enum SiteEnum {
   public
   partners
+  email
 
   @@map("site_enum")
 }

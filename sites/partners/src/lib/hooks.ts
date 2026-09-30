@@ -1,10 +1,12 @@
-import { useCallback, useContext, useState, useEffect } from "react"
+import { useCallback, useContext, useState, useEffect, useRef, useMemo } from "react"
+import { useRouter } from "next/router"
 import useSWR from "swr"
+import axios, { AxiosError, AxiosProgressEvent } from "axios"
 import qs from "qs"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, CatchNetworkError, MessageContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import {
   AgencyFilterParams,
@@ -13,16 +15,22 @@ import {
   EnumListingFilterParamsComparison,
   EnumMultiselectQuestionFilterParamsComparison,
   EnumPropertyFilterParamsComparison,
+  Listing,
+  ListingFilterParams,
+  ListingOrderByKeys,
   ListingViews,
   MultiselectQuestionFilterParams,
   MultiselectQuestionOrderByKeys,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   OrderByEnum,
+  SiteEnum,
   UserFilterParams,
   UserOrderByKeys,
+  PaginationMeta,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { S3Upload } from "./helpers"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -59,13 +67,54 @@ type UseListingsDataProps = PaginationProps & {
   search?: string
   sort?: ColumnOrder[]
   roles?: UserRole
-  userJurisidctionIds?: string[]
+  userJurisdictionIds?: string[]
   view?: ListingViews
 }
 
 type UsePropertiesListProps = PaginationProps & {
   search?: string
   jurisdictions?: string
+}
+
+type UseAgenciesListProps = PaginationProps & {
+  search?: string
+  jurisdictions?: string
+}
+
+interface MSQTableSettings {
+  sort?: ColumnOrder[]
+  search?: string
+  page?: number
+  limit?: number
+}
+
+export type UseSSEOptions = {
+  path: string
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  params?: Record<string, any>
+  withCredentials?: boolean
+  enabled?: boolean
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onMessage?: (data: any) => void
+  onError?: (error: Event) => void
+  onOpen?: () => void
+  eventTypes?: string[]
+  parseJson?: boolean
+  /**
+   * EventSource reconnects indefinitely on its own. Once this many consecutive connection attempts
+   * have failed the connection is closed for good, so a backend that is down does not get polled
+   * forever.
+   */
+  maxRetries?: number
+  onRetriesExhausted?: () => void
+}
+
+export type UseSSEReturn<T> = {
+  data: T | null
+  error: Event | null
+  isConnected: boolean
+  reconnect: () => void
+  close: () => void
 }
 
 export function useSingleListingData(listingId: string) {
@@ -81,6 +130,85 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
+interface BaseListingData {
+  filter?: ListingFilterParams[]
+  limit?: number | "all"
+  orderBy?: ListingOrderByKeys[]
+  orderDir?: OrderByEnum[]
+  page?: number
+  roles?: UserRole
+  search?: string
+  userId?: string
+  userJurisdictionIds?: string[]
+  view?: ListingViews
+}
+
+export async function fetchBaseListingData({
+  filter = [],
+  limit,
+  orderBy,
+  orderDir,
+  page,
+  roles,
+  search = "",
+  userId,
+  userJurisdictionIds,
+  view,
+}: BaseListingData): Promise<{
+  items: Listing[] | null
+  meta: PaginationMeta | null
+  error: AxiosError<CatchNetworkError> | null
+}> {
+  let listings: Listing[] = []
+  let pagination: PaginationMeta | null = null
+  try {
+    const params: BaseListingData = {
+      filter,
+      limit: limit || "all",
+      orderBy: orderBy || [ListingOrderByKeys.status],
+      orderDir: orderDir || [OrderByEnum.asc],
+      search: search || null,
+      roles: roles || null,
+      page: page || 1,
+      userId: userId || null,
+      userJurisdictionIds: userJurisdictionIds || null,
+      view: view || ListingViews.fundamentals,
+    }
+
+    // filter if logged user is an agent
+    if (roles?.isPartner) {
+      params.filter.push({
+        $comparison: EnumListingFilterParamsComparison["="],
+        leasingAgent: userId,
+      })
+    } else if (roles?.isJurisdictionalAdmin || roles?.isLimitedJurisdictionalAdmin) {
+      params.filter.push({
+        $comparison: EnumListingFilterParamsComparison.IN,
+        jurisdiction: userJurisdictionIds[0],
+      })
+    }
+
+    const response = await axios.post(`/api/adapter/listings/list`, params)
+
+    listings = response.data.items
+    pagination = response.data.meta || null
+  } catch (e) {
+    console.log("fetchBaseListingData error: ", e)
+
+    return {
+      items: null,
+      meta: null,
+      error: e,
+    }
+  }
+
+  return {
+    items: listings,
+    meta: pagination,
+    error: null,
+  }
+}
+
 export function useListingsData({
   page,
   limit,
@@ -88,7 +216,7 @@ export function useListingsData({
   search = "",
   sort,
   roles,
-  userJurisidctionIds,
+  userJurisdictionIds,
   view,
 }: UseListingsDataProps) {
   const params = {
@@ -116,7 +244,7 @@ export function useListingsData({
   } else if (roles?.isJurisdictionalAdmin || roles?.isLimitedJurisdictionalAdmin) {
     params.filter.push({
       $comparison: EnumListingFilterParamsComparison.IN,
-      jurisdiction: userJurisidctionIds[0],
+      jurisdiction: userJurisdictionIds[0],
     })
   }
 
@@ -186,6 +314,7 @@ export const useListingExport = (useSecurePathway = false) => {
     }
 
     setCsvExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {
@@ -393,11 +522,17 @@ export function useJurisdiction(jurisdictionId: string) {
       jurisdictionId,
     })
 
-  const { data, error } = useSWR(`/api/adapter/jurisdictions/${jurisdictionId}`, fetcher)
+  const cacheKey = jurisdictionId ? `/api/adapter/jurisdictions/${jurisdictionId}` : null
+
+  const { data, error } = useSWR(cacheKey, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
 
   return {
+    cacheKey,
     data,
-    loading: !error && !data,
+    loading: !!cacheKey && !error && !data,
     error,
   }
 }
@@ -413,13 +548,6 @@ export function useMultiselectQuestionList() {
     loading: !error && !data,
     error,
   }
-}
-
-interface MSQTableSettings {
-  sort?: ColumnOrder[]
-  search?: string
-  page?: number
-  limit?: number
 }
 
 export function useJurisdictionalMultiselectQuestionList(
@@ -667,11 +795,108 @@ export const useZipExport = (
       )
     }
     setExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {
     onExport,
     exportLoading,
+  }
+}
+
+export const useBulkApplicationTemplateExport = (listingId: string) => {
+  const { applicationsService } = useContext(AuthContext)
+  const [exportLoading, setExportLoading] = useState(false)
+  const { addToast } = useContext(MessageContext)
+
+  const onExport = useCallback(async () => {
+    setExportLoading(true)
+    try {
+      // Returns a short lived presigned S3 url rather than the zip itself
+      const url = await applicationsService.downloadBulkUpdateTemplate({
+        listingId: listingId,
+      })
+
+      const link = document.createElement("a")
+      link.href = url
+      link.setAttribute("download", `listing-${listingId}-applications-bulk-templates.zip`)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode.removeChild(link)
+      addToast(t("t.exportSuccess"), { variant: "success" })
+    } catch (err) {
+      console.log(err)
+      addToast(
+        t("account.settings.alerts.genericError", { contactEmail: t("resources.contactEmail") }),
+        {
+          variant: "alert",
+        }
+      )
+    }
+    setExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  return {
+    onExport,
+    exportLoading,
+  }
+}
+
+export const useBulkApplicationCsvUpload = () => {
+  const { applicationsService } = useContext(AuthContext)
+  const [progressValue, setProgressValue] = useState<number>()
+  const [fileUploadData, setFileUploadData] = useState<{
+    id: string
+    url: string
+    s3Key: string
+  } | null>(null)
+  const contentType = "text/csv"
+  const contentDisposition = "inline"
+
+  const onUploadProgress = useCallback((p: AxiosProgressEvent) => {
+    setProgressValue(parseInt(((p.loaded / p.total) * 100).toFixed(0), 10))
+  }, [])
+
+  const uploadToS3 = useCallback(
+    async (file: File, listingId: string) => {
+      const { presignedUrl, key } = await applicationsService.uploadBulkUpdate({
+        body: {
+          listingId,
+          contentType,
+          contentDisposition,
+        },
+      })
+      setProgressValue(3)
+
+      void S3Upload({
+        file,
+        uploadUrl: presignedUrl,
+        onUploadProgress,
+        contentType: "",
+        contentDisposition,
+      }).then((_) => {
+        setProgressValue(100)
+        setFileUploadData({
+          id: file.name,
+          url: presignedUrl,
+          s3Key: key,
+        })
+      })
+    },
+    [applicationsService, onUploadProgress]
+  )
+
+  const resetUpload = useCallback(() => {
+    setProgressValue(0)
+    setFileUploadData(null)
+  }, [])
+
+  return {
+    progressValue,
+    fileUploadData,
+    uploadToS3,
+    resetUpload,
   }
 }
 
@@ -723,6 +948,7 @@ const useCsvExport = (
     }
 
     setCsvExportLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endpoint, fileName, addToast])
 
   return {
@@ -784,11 +1010,6 @@ export function useWatchOnFormNumberFieldsChange(
     return () => clearTimeout(timeoutId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldToTriggerWatch.join(","), fieldValuesToWatch.join(","), trigger])
-}
-
-type UseAgenciesListProps = PaginationProps & {
-  search?: string
-  jurisdictions?: string
 }
 
 export function useAgenciesList({ page, limit, search, jurisdictions }: UseAgenciesListProps) {
@@ -863,5 +1084,248 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
     data,
     loading: !error && !data,
     error,
+  }
+}
+
+/** Which rows the editor is reading. The global scope has no jurisdiction to name. */
+export type TranslationScope =
+  | { type: "global"; site: SiteEnum }
+  | { type: "jurisdiction"; jurisdictionId: string; site: string }
+
+/** Reads one editable translation scope. A null scope skips the request. */
+export function useRawTranslations(scope: TranslationScope | null, language: string) {
+  const { translationsService } = useContext(AuthContext)
+
+  const fetcher = () =>
+    scope &&
+    (scope.type === "global"
+      ? translationsService.getRawGlobalTranslations({ site: scope.site, language })
+      : translationsService.getRawTranslations({
+          jurisdictionId: scope.jurisdictionId,
+          site: scope.site,
+          language,
+        }))
+
+  const cacheKey = !scope
+    ? null
+    : scope.type === "global"
+    ? `/api/adapter/translations/global/raw/${scope.site}/${language}`
+    : `/api/adapter/translations/jurisdictions/${scope.jurisdictionId}/raw/${scope.site}/${language}`
+
+  // Writes call `mutate` on this key; refreshing on focus would move data under an in-progress edit.
+  const { data, error } = useSWR(cacheKey, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
+
+  return {
+    cacheKey,
+    data,
+    loading: !!cacheKey && !error && !data,
+    error,
+  }
+}
+
+export function useJurisdictionContent(jurisdictionId: string) {
+  const { jurisdictionContentService } = useContext(AuthContext)
+
+  const fetcher = () => jurisdictionContentService.listJurisdictionContent({ jurisdictionId })
+
+  const cacheKey = jurisdictionId
+    ? `/api/adapter/jurisdictionContent/jurisdictions/${jurisdictionId}/admin`
+    : null
+
+  const { data, error } = useSWR(cacheKey, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
+
+  return {
+    cacheKey,
+    data,
+    loading: !!cacheKey && !error && !data,
+    error,
+  }
+}
+
+/**
+ * Reads the email base strings. Public and Partners bundle their base into the site, but the email
+ * strings ship with the api, so they are fetched. A null language skips the request.
+ */
+export function useEmailBaseTranslations(language: string | null) {
+  const { translationsService } = useContext(AuthContext)
+
+  const cacheKey = language ? `/api/adapter/translations/base/email/${language}` : null
+
+  const { data, error } = useSWR(
+    cacheKey,
+    () =>
+      translationsService.emailBaseTranslations({ language }) as Promise<Record<string, string>>,
+    { revalidateOnFocus: false, revalidateOnReconnect: false }
+  )
+
+  return {
+    data,
+    loading: !!cacheKey && !error && !data,
+    error,
+  }
+}
+
+/**
+ * Warns before unsaved work is lost, on an in-app route change and on the browser closing or
+ * reloading.
+ *
+ * Going back is only partly covered: `beforeunload` does not fire for it, and the history entry is
+ * already popped by the time this runs, so cancelling keeps the edits but leaves the address bar
+ * on the previous URL.
+ */
+export function useUnsavedChangesWarning(hasUnsavedChanges: boolean, message: string) {
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!hasUnsavedChanges) return
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault()
+      event.returnValue = ""
+    }
+
+    const handleRouteChange = () => {
+      if (window.confirm(message)) return
+      router.events.emit("routeChangeError")
+      throw "Route change cancelled: the page has unsaved changes"
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload)
+    router.events.on("routeChangeStart", handleRouteChange)
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload)
+      router.events.off("routeChangeStart", handleRouteChange)
+    }
+  }, [hasUnsavedChanges, message, router.events])
+}
+
+const EMPTY_EVENT_TYPES: string[] = []
+
+export function useSSE<T>(options: UseSSEOptions): UseSSEReturn<T> {
+  const {
+    path,
+    params,
+    withCredentials = true,
+    enabled = true,
+    onMessage,
+    onError,
+    onOpen,
+    eventTypes = EMPTY_EVENT_TYPES,
+    parseJson = true,
+    maxRetries = 3,
+    onRetriesExhausted,
+  } = options
+
+  // Callers pass `params` as an inline object, so key the url off the serialized query rather than
+  // the object identity - otherwise this memo recomputes on every render.
+  const query = params ? qs.stringify(params) : ""
+  const url = useMemo(() => `/api/adapter-sse/${path}${query ? `?${query}` : ""}`, [path, query])
+
+  const [data, setData] = useState<T | null>(null)
+  const [error, setError] = useState<Event | null>(null)
+  const [isConnected, setIsConnected] = useState(false)
+
+  const eventSourceRef = useRef<EventSource | null>(null)
+  const failedAttemptsRef = useRef(0)
+  const onMessageRef = useRef(onMessage)
+  const onErrorRef = useRef(onError)
+  const onOpenRef = useRef(onOpen)
+  const onRetriesExhaustedRef = useRef(onRetriesExhausted)
+
+  useEffect(() => {
+    onMessageRef.current = onMessage
+    onErrorRef.current = onError
+    onOpenRef.current = onOpen
+    onRetriesExhaustedRef.current = onRetriesExhausted
+  }, [onMessage, onError, onOpen, onRetriesExhausted])
+
+  const connect = useCallback(() => {
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close()
+    }
+
+    failedAttemptsRef.current = 0
+    const eventSource = new EventSource(url, { withCredentials })
+    eventSourceRef.current = eventSource
+
+    eventSource.onopen = () => {
+      failedAttemptsRef.current = 0
+      setIsConnected(true)
+      setError(null)
+      onOpenRef.current?.()
+    }
+
+    eventSource.onerror = (event) => {
+      setIsConnected(false)
+      setError(event)
+      onErrorRef.current?.(event)
+
+      // EventSource retries on its own every few seconds and never gives up, so stop it explicitly
+      // once the backend has failed to answer enough times in a row.
+      failedAttemptsRef.current += 1
+      if (failedAttemptsRef.current > maxRetries) {
+        eventSource.close()
+        if (eventSourceRef.current === eventSource) {
+          eventSourceRef.current = null
+        }
+        onRetriesExhaustedRef.current?.()
+      }
+    }
+
+    const handleData = (event: MessageEvent) => {
+      try {
+        const parsedData = parseJson ? JSON.parse(event.data) : event.data
+        setData(parsedData)
+        onMessageRef.current?.(parsedData)
+      } catch (err) {
+        console.error("Failed to parse SSE data:", err)
+      }
+    }
+
+    eventSource.onmessage = handleData
+
+    eventTypes.forEach((eventType) => {
+      eventSource.addEventListener(eventType, handleData as EventListener)
+    })
+
+    return eventSource
+  }, [url, withCredentials, parseJson, eventTypes, maxRetries])
+
+  const close = useCallback(() => {
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close()
+      eventSourceRef.current = null
+    }
+    setIsConnected(false)
+  }, [])
+
+  const reconnect = useCallback(() => {
+    close()
+    connect()
+  }, [close, connect])
+
+  useEffect(() => {
+    if (!enabled) return
+
+    connect()
+
+    // Closing through `close` (rather than the EventSource directly) also clears the ref, so an
+    // unmount or a disabled hook does not leave a stale connection behind it.
+    return close
+  }, [connect, close, enabled])
+
+  return {
+    data,
+    error,
+    isConnected,
+    reconnect,
+    close,
   }
 }

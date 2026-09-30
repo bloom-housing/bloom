@@ -1,0 +1,176 @@
+import fs from "fs"
+import path from "path"
+import axios from "axios"
+import * as hooks from "../../src/lib/hooks"
+
+// The two listing pages fetch their listing directly rather than through lib/hooks.
+jest.mock("axios")
+
+// Every page with a data function has to pass the overrides through, or its strings silently stay
+// on the bundled values. Listing them here rather than testing a sample keeps that honest.
+const GENERATED = [
+  "404",
+  "500",
+  "applications/community-types/community-types",
+  "applications/contact/address",
+  "applications/contact/alternate-contact-contact",
+  "applications/contact/alternate-contact-name",
+  "applications/contact/alternate-contact-type",
+  "applications/contact/name",
+  "applications/financial/income",
+  "applications/financial/vouchers",
+  "applications/household/ada",
+  "applications/household/add-members",
+  "applications/household/changes",
+  "applications/household/live-alone",
+  "applications/household/member",
+  "applications/household/members-info",
+  "applications/household/preferred-units",
+  "applications/household/reasonable-accommodations",
+  "applications/household/student",
+  "applications/preferences/all",
+  "applications/preferences/general",
+  "applications/programs/programs",
+  "applications/review/confirmation",
+  "applications/review/demographics",
+  "applications/review/summary",
+  "applications/review/terms",
+  "applications/start/autofill",
+  "applications/start/choose-language",
+  "applications/start/community-disclaimer",
+  "applications/start/what-to-expect",
+  "applications/view",
+  "account/applications/closed/index",
+  "account/applications/index",
+  "account/applications/lottery/index",
+  "account/applications/open/index",
+  "account/dashboard",
+  "account/favorites/index",
+  "additional-resources",
+  "faq",
+  "finder",
+  "get-assistance",
+  "housing-basics",
+  "index",
+  "create-account",
+  "create-advocate-account-confirmation",
+  "disclaimer",
+  "forgot-password",
+  "listing/[id]/[slug]",
+  "privacy",
+  "professional-partners",
+  "reset-password",
+  "sign-in",
+  "verify",
+]
+
+const PER_REQUEST = [
+  "account/application/[id]/index",
+  "account/application/[id]/lottery-results",
+  "account/edit",
+  "account/notifications",
+  "complete-advocate-account",
+  "create-advocate-account",
+  "listings",
+  "listings-closed",
+  "preview/listings/[id]",
+]
+
+// These render a meta refresh and nothing else, so they have no strings to override.
+const NO_SHARED_PROPS = ["listing/[id]", "redirect"]
+
+const pagesDir = path.join(__dirname, "../../src/pages")
+
+// Next's defaults, which next.config.js does not narrow. A page added as .js is still a route.
+const PAGE_EXTENSION = /\.(tsx|ts|jsx|js)$/
+
+// _app and _error cannot take a data function. The Sentry route's copy is hardcoded English.
+const NOT_OVERRIDABLE = ["_app", "_document", "_error", "sentry-example-page"]
+
+const pagesOnDisk = (dir: string = pagesDir): string[] =>
+  fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const full = path.join(dir, entry.name)
+    if (entry.isDirectory()) return entry.name === "api" ? [] : pagesOnDisk(full)
+    if (!PAGE_EXTENSION.test(entry.name)) return []
+    const name = path.relative(pagesDir, full).replace(PAGE_EXTENSION, "")
+    return NOT_OVERRIDABLE.includes(name) ? [] : [name]
+  })
+
+const overrides = { en: { "a.key": "Override" } }
+const content = { faq: { categories: [] } }
+// Identifiable rather than empty, so a page returning its own bare object fails the assertions.
+const jurisdiction = { id: "jurisdiction-id", name: "Bloomington" }
+const shared = { jurisdiction, publicOverrides: overrides, jurisdictionContent: content }
+
+const context = {
+  req: { headers: {}, socket: {} },
+  query: {},
+  params: { id: "listing-id", slug: "a-slug" },
+  locale: "es",
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const load = (page: string): any => require(`../../src/pages/${page}`)
+
+describe("pages pass the stored overrides through", () => {
+  beforeEach(() => {
+    jest.restoreAllMocks()
+    // Not the 30 second default, so a page that hardcoded the default would fail below.
+    process.env.cacheRevalidate = "45"
+    jest.spyOn(hooks, "fetchSharedPageProps").mockResolvedValue(shared as never)
+    jest.spyOn(hooks, "fetchLimitedUnderConstructionListings").mockResolvedValue({} as never)
+    jest.spyOn(hooks, "fetchOpenListings").mockResolvedValue({} as never)
+    jest.spyOn(hooks, "fetchClosedListings").mockResolvedValue({} as never)
+    jest.spyOn(hooks, "fetchMultiselectProgramData").mockResolvedValue([] as never)
+    ;(axios.get as unknown as jest.Mock).mockResolvedValue({ data: {} })
+  })
+
+  // Listing the pages here only keeps the suite honest if the list matches what is on disk.
+  it("lists every page", () => {
+    expect(pagesOnDisk().sort()).toEqual([...GENERATED, ...PER_REQUEST, ...NO_SHARED_PROPS].sort())
+  })
+
+  it.each(GENERATED)("%s is generated with the overrides and a revalidate", async (page) => {
+    const result = await load(page).getStaticProps(context)
+
+    expect(result.props.jurisdiction).toEqual(shared.jurisdiction)
+    expect(result.props.publicOverrides).toEqual(overrides)
+    expect(result.props.jurisdictionContent).toEqual(content)
+    expect(result.revalidate).toEqual(45)
+  })
+
+  it.each(PER_REQUEST)("%s is rendered per request with the overrides", async (page) => {
+    const result = await load(page).getServerSideProps(context)
+
+    expect(result.props.jurisdiction).toEqual(shared.jurisdiction)
+    expect(result.props.publicOverrides).toEqual(overrides)
+    expect(result.props.jurisdictionContent).toEqual(content)
+    // Generated pages regenerate on a timer; these do not and must not claim to.
+    expect(result).not.toHaveProperty("revalidate")
+  })
+
+  it.each(GENERATED)("%s asks for the rendered locale", async (page) => {
+    await load(page).getStaticProps(context)
+
+    // A generated page has no visitor request to forward, so it passes the locale alone.
+    expect(hooks.fetchSharedPageProps).toHaveBeenCalledWith("es")
+  })
+
+  // The API rate-limits on the forwarded address, so a per-request page has to pass its request.
+  it.each(PER_REQUEST)("%s forwards its request", async (page) => {
+    await load(page).getServerSideProps(context)
+
+    expect(hooks.fetchSharedPageProps).toHaveBeenCalledWith("es", context.req)
+  })
+
+  it("still returns props when neither can be fetched", async () => {
+    jest
+      .spyOn(hooks, "fetchSharedPageProps")
+      .mockResolvedValue({ jurisdiction: null, publicOverrides: null, jurisdictionContent: null })
+
+    const result = await load("faq").getStaticProps(context)
+
+    expect(result.props.publicOverrides).toBeNull()
+    expect(result.props.jurisdictionContent).toBeNull()
+  })
+})

@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState, useContext, useMemo } from "react"
 import { t, Field, Select, FieldGroup, numberOptions } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, LoadingState } from "@bloom-housing/ui-seeds"
-import { AuthContext, Form } from "@bloom-housing/shared-helpers"
+import { AuthContext, Form, MAX_BATHROOMS } from "@bloom-housing/shared-helpers"
+import { getLandUseMinOccupancy } from "@bloom-housing/shared-helpers/src/utilities/unitTypes"
 import { useWatch, useForm } from "react-hook-form"
 import { TempUnit } from "../../../lib/listings/formTypes"
 import {
   AmiChart,
   AmiChartItem,
+  EnumListingListingType,
   UnitType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useWatchOnFormNumberFieldsChange } from "../../../lib/hooks"
@@ -20,6 +22,7 @@ type UnitFormProps = {
   defaultUnit: TempUnit | undefined
   draft: boolean
   jurisdictionId: string
+  listingType?: EnumListingListingType
   nextId: number
   onClose: (openNextUnit: boolean, openCurrentUnit: boolean, defaultUnit: TempUnit) => void
   onSubmit: (unit: TempUnit) => void
@@ -33,6 +36,7 @@ const UnitForm = ({
   defaultUnit,
   draft,
   jurisdictionId,
+  listingType,
   nextId,
   onClose,
   onSubmit,
@@ -105,6 +109,11 @@ const UnitForm = ({
     name: "minOccupancy",
   })
 
+  const unitTypeId: string = useWatch({
+    control,
+    name: "unitTypes.id",
+  })
+
   const maxOccupancy: number = useWatch({
     control,
     name: "maxOccupancy",
@@ -115,6 +124,20 @@ const UnitForm = ({
   const fieldsToTriggerWatch = ["minOccupancy", "maxOccupancy"]
 
   useWatchOnFormNumberFieldsChange(fieldsValuesToWatch, fieldsToTriggerWatch, trigger)
+
+  // Land use listings derive minimum occupancy from the unit type instead of letting partners pick
+  const derivedMinOccupancy = useMemo(
+    () => getLandUseMinOccupancy(unitTypes?.find((type) => type.id === unitTypeId)?.name),
+    [unitTypes, unitTypeId]
+  )
+  const minOccupancyLocked =
+    listingType === EnumListingListingType.landUse && derivedMinOccupancy !== undefined
+
+  useEffect(() => {
+    if (minOccupancyLocked) {
+      setValue("minOccupancy", derivedMinOccupancy.toString())
+    }
+  }, [minOccupancyLocked, derivedMinOccupancy, setValue])
 
   const maxAmiHouseholdSize = 8
 
@@ -179,7 +202,7 @@ const UnitForm = ({
       }
 
       values.amiPercentage = parseInt(defaultUnit["amiPercentage"])
-      values.rentType = getRentType(defaultUnit)
+      values.rentType = getRentType(defaultUnit, listingType === EnumListingListingType.landUse)
 
       reset(values)
     } else {
@@ -288,11 +311,25 @@ const UnitForm = ({
       delete data.accessibilityPriorityType
     }
 
+    if (!data.monthlyIncomeMin) {
+      delete data.monthlyIncomeMin
+    }
+    if (!data.monthlyRent) {
+      delete data.monthlyRent
+    }
+    if (!data.monthlyRentAsPercentOfIncome) {
+      delete data.monthlyRentAsPercentOfIncome
+    }
+
     if (data.unitTypes?.id) {
       const type = unitTypes?.find((type) => type.id === data.unitTypes.id)
       data.unitTypes = type
     } else {
       delete data.unitTypes
+    }
+
+    if (minOccupancyLocked) {
+      data.minOccupancy = derivedMinOccupancy.toString()
     }
 
     if (currentAmiChart) {
@@ -466,7 +503,7 @@ const UnitForm = ({
                       options={[
                         { value: "", label: t("t.selectOne") },
                         { label: t("listings.unit.sharedBathroom"), value: "0" },
-                        ...numberOptions(5),
+                        ...numberOptions(MAX_BATHROOMS),
                       ]}
                     />
                   </Grid.Cell>
@@ -504,6 +541,7 @@ const UnitForm = ({
                       error={fieldHasError(errors?.minOccupancy)}
                       errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
                       validation={{ max: maxOccupancy || numberOccupancyOptions }}
+                      disabled={minOccupancyLocked}
                     />
                   </Grid.Cell>
                   <Grid.Cell>

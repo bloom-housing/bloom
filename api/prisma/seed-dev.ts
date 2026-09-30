@@ -9,18 +9,24 @@ import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
 import { listingFactory } from './seed-helpers/listing-factory';
+import { unitRentTypeFactoryAll } from './seed-helpers/unit-rent-type-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { randomName } from './seed-helpers/word-generator';
 import { randomInt } from 'node:crypto';
 import { applicationFactoryMany } from './seed-helpers/application-factory';
+import { upsertEmailTranslations } from './seed-helpers/translation-factory';
 import {
-  translationFactory,
-  upsertTranslation,
-} from './seed-helpers/translation-factory';
+  jurisdictionContentFactory,
+  upsertJurisdictionContent,
+} from './seed-helpers/jurisdiction-content-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
 import { APPLICATIONS_PER_LISTINGS, LISTINGS_TO_SEED } from './constants';
 import { featureFlagFactory } from './seed-helpers/feature-flag-factory';
+import {
+  FeatureFlagEnum,
+  featureFlagMap,
+} from '../src/enums/feature-flags/feature-flags-enum';
 
 const listingStatusEnumArray = Object.values(ListingsStatusEnum);
 
@@ -100,25 +106,44 @@ export const devSeeding = async (
       acceptedTerms: true,
     }),
   });
-  // add jurisdiction specific translations and default ones
-  await upsertTranslation(
+  // add jurisdiction specific translations
+  await upsertEmailTranslations(prismaClient, {
+    id: jurisdiction.id,
+    name: jurisdiction.name,
+  });
+
+  // add structured content, English plus a partial Spanish row
+  const contentJurisdiction = { id: jurisdiction.id, name: jurisdiction.name };
+  await upsertJurisdictionContent(
     prismaClient,
-    translationFactory({
-      jurisdiction: { id: jurisdiction.id, name: jurisdiction.name },
+    jurisdictionContentFactory({ jurisdiction: contentJurisdiction }),
+  );
+  await upsertJurisdictionContent(
+    prismaClient,
+    jurisdictionContentFactory({
+      jurisdiction: contentJurisdiction,
+      language: LanguagesEnum.es,
     }),
   );
-  await upsertTranslation(
-    prismaClient,
-    translationFactory({ language: LanguagesEnum.es }),
-  );
-  await upsertTranslation(prismaClient, translationFactory());
   const unitTypes = await unitTypeFactoryAll(prismaClient);
+  await unitRentTypeFactoryAll(prismaClient);
   const amiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(10, jurisdiction.id, null, jurisdiction.name),
   });
   const multiselectQuestions = await Promise.all(
     await createMultiselect(jurisdiction.id, prismaClient),
   );
+  await prismaClient.featureFlags.create({
+    data: {
+      name: FeatureFlagEnum.enableDbDrivenContent,
+      description: featureFlagMap.find(
+        (flag) => flag.name === FeatureFlagEnum.enableDbDrivenContent,
+      ).description,
+      active: true,
+      jurisdictions: { connect: { id: jurisdiction.id } },
+    },
+  });
+
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
       'enableRegions',
