@@ -278,8 +278,7 @@ describe("_document", () => {
     )
   })
 
-  // The older components read the bloom namespace, and its defaults match the seeds ones, so text
-  // reading them renders in the default family rather than visibly breaking.
+  // ui-components reads the bloom font tokens.
   it("sets the font in both namespaces", async () => {
     const style = await styleFor(
       jurisdictionWith({
