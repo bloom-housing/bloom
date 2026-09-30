@@ -1,8 +1,11 @@
 import {
+  Body,
   Controller,
   Get,
+  HttpCode,
   Param,
   ParseUUIDPipe,
+  Post,
   Request,
   UseGuards,
   UsePipes,
@@ -11,7 +14,12 @@ import {
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Request as ExpressRequest } from 'express';
 import { ContentTransferService } from '../services/content-transfer.service';
-import { ContentTransferFile } from '../dtos/content-transfer/content-transfer-file.dto';
+import {
+  ContentTransferFile,
+  ContentTransferImport,
+  ContentTransferPreview,
+} from '../dtos/content-transfer/content-transfer-file.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { mapTo } from '../utilities/mapTo';
@@ -54,5 +62,39 @@ export class ContentTransferController {
     @Request() req: ExpressRequest,
   ): Promise<ContentTransferFile> {
     return this.contentTransferService.exportGlobal(mapTo(User, req['user']));
+  }
+
+  @Post('import/preview')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Show what importing a file would change, without writing',
+    operationId: 'previewImport',
+  })
+  @ApiOkResponse({ type: ContentTransferPreview })
+  async previewImport(
+    @Body() dto: ContentTransferImport,
+    @Request() req: ExpressRequest,
+  ): Promise<ContentTransferPreview> {
+    return this.contentTransferService.previewImport(
+      dto,
+      mapTo(User, req['user']),
+    );
+  }
+
+  @Post('import')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Replace everything a file covers with its contents',
+    operationId: 'applyImport',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async applyImport(
+    @Body() dto: ContentTransferImport,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return this.contentTransferService.applyImport(
+      dto,
+      mapTo(User, req['user']),
+    );
   }
 }

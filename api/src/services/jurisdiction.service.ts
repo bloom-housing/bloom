@@ -82,7 +82,7 @@ selectViews[JurisdictionViews.full] = {
   whatToExpectUnderConstruction: true,
 };
 
-const storableBrand = (
+export const storableBrand = (
   brand?: BrandDTO | null,
 ): Prisma.InputJsonObject | typeof Prisma.DbNull | undefined => {
   if (brand === null) return Prisma.DbNull;
@@ -137,7 +137,10 @@ const brandAssetConnect = (assetId?: string) =>
     ? { connect: { id: assetId } }
     : { disconnect: true };
 
-const brandAssetWrite = (fileId: string | null | undefined, label: string) => {
+export const brandAssetWrite = (
+  fileId: string | null | undefined,
+  label: string,
+) => {
   if (fileId === undefined) return undefined;
 
   const key = fileId?.trim();

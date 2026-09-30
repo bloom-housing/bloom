@@ -1,5 +1,9 @@
 import { HttpService } from '@nestjs/axios';
-import { BadGatewayException, NotFoundException } from '@nestjs/common';
+import {
+  BadGatewayException,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { LanguagesEnum, SiteEnum, TranslationOrigin } from '@prisma/client';
 import { randomUUID } from 'crypto';
@@ -8,6 +12,8 @@ import { ContentTransferService } from '../../../src/services/content-transfer.s
 import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { User } from '../../../src/dtos/users/user.dto';
+import { ContentTransferImport } from '../../../src/dtos/content-transfer/content-transfer-file.dto';
+import { sourceHash } from '../../../src/utilities/translation-source-hash';
 
 describe('Testing content transfer service', () => {
   let service: ContentTransferService;
@@ -22,7 +28,7 @@ describe('Testing content transfer service', () => {
     key: 'nav.listings',
     value: 'Listados',
     origin: TranslationOrigin.machine,
-    sourceHash: 'abc123',
+    sourceHash: sourceHash('Listings'),
   };
 
   const englishContent = {
@@ -197,6 +203,313 @@ describe('Testing content transfer service', () => {
           },
         }),
       );
+    });
+  });
+
+  describe('import', () => {
+    const hash = sourceHash('Privacy');
+
+    const importFile = (extra = {}) =>
+      ({
+        format: 'bloom-content-transfer',
+        version: 1,
+        jurisdictionName: 'Bloomington',
+        translations: [
+          translationRow,
+          { ...translationRow, key: 'nav.new', value: 'Nuevo' },
+        ],
+        content: [
+          {
+            language: LanguagesEnum.en,
+            footer: {
+              logo: { logoFileId: 'footer-logo', logoAltText: 'Seal' },
+            },
+            disclaimers: { privacyHtml: '<p>Privacy</p>' },
+          },
+          {
+            language: LanguagesEnum.es,
+            disclaimers: {
+              privacyHtml: '<p>Privacidad</p>',
+              _sourceHashes: { privacyHtml: hash },
+            },
+          },
+        ],
+        brand: {
+          brand: { primary: { base: '#773E98' } },
+          logoFileId: 'brand-logo',
+          faviconFileId: null,
+        },
+        ...extra,
+      } as ContentTransferImport);
+
+    const mockTarget = () => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockImplementation(({ where }) =>
+          Promise.resolve(
+            where.name === 'Bloomington'
+              ? { id: 'target-id' }
+              : where.name
+              ? null
+              : {
+                  brand: { primary: { base: '#000000' }, fontFamily: 'Inter' },
+                  brandLogo: { fileId: 'old-logo' },
+                  brandFavicon: { fileId: 'old-favicon' },
+                },
+          ),
+        );
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValue([
+        { ...translationRow, value: 'Listas' },
+        { ...translationRow, key: 'nav.old', value: 'Viejo' },
+      ]);
+      prisma.jurisdictionContent.findMany = jest.fn().mockResolvedValue([
+        {
+          language: LanguagesEnum.en,
+          disclaimers: { privacyHtml: '<p>Old</p>' },
+        },
+        { language: LanguagesEnum.vi, disclaimers: null },
+      ]);
+    };
+
+    const mockWrites = () => {
+      prisma.$transaction = jest.fn().mockResolvedValue([]);
+      prisma.translationStrings.deleteMany = jest.fn().mockReturnValue('op');
+      prisma.translationStrings.createMany = jest.fn().mockReturnValue('op');
+      prisma.jurisdictionContent.deleteMany = jest.fn().mockReturnValue('op');
+      prisma.jurisdictionContent.createMany = jest.fn().mockReturnValue('op');
+      prisma.jurisdictions.update = jest.fn().mockReturnValue('op');
+    };
+
+    it('previews what the import adds, changes and removes', async () => {
+      mockTarget();
+
+      const preview = await service.previewImport(importFile(), adminUser);
+
+      expect(preview).toEqual({
+        jurisdictionName: 'Bloomington',
+        translations: [
+          {
+            site: SiteEnum.public,
+            language: LanguagesEnum.es,
+            added: 1,
+            changed: 1,
+            removed: 1,
+          },
+        ],
+        content: [
+          { language: LanguagesEnum.en, change: 'changed' },
+          { language: LanguagesEnum.es, change: 'added' },
+          { language: LanguagesEnum.vi, change: 'removed' },
+        ],
+        brand: {
+          fields: ['fontFamily', 'primary'],
+          logo: 'changed',
+          favicon: 'removed',
+        },
+      });
+    });
+
+    it('checks update access to translations, content and the jurisdiction', async () => {
+      mockTarget();
+
+      await service.previewImport(importFile(), adminUser);
+
+      for (const type of [
+        'translation',
+        'jurisdictionContent',
+        'jurisdiction',
+      ]) {
+        expect(permissionServiceMock.canOrThrow).toHaveBeenCalledWith(
+          adminUser,
+          type,
+          'update',
+          { jurisdictionId: 'target-id' },
+        );
+      }
+    });
+
+    it('refuses a file of another format or version', async () => {
+      mockTarget();
+
+      await expect(
+        service.previewImport(importFile({ version: 2 }), adminUser),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('refuses a jurisdiction this environment does not have', async () => {
+      mockTarget();
+
+      await expect(
+        service.previewImport(
+          importFile({ jurisdictionName: 'Lakeview' }),
+          adminUser,
+        ),
+      ).rejects.toThrow('jurisdiction Lakeview does not exist');
+    });
+
+    it('refuses a global file with a string for the public site', async () => {
+      mockTarget();
+
+      await expect(
+        service.previewImport(
+          importFile({ jurisdictionName: null }),
+          adminUser,
+        ),
+      ).rejects.toThrow('is not for the partners or email site');
+    });
+
+    it('refuses a translation with executable markup', async () => {
+      mockTarget();
+
+      await expect(
+        service.previewImport(
+          importFile({
+            translations: [
+              { ...translationRow, value: '<script>alert(1)</script>' },
+            ],
+          }),
+          adminUser,
+        ),
+      ).rejects.toThrow('contains executable markup');
+    });
+
+    it('refuses content the editor would store differently', async () => {
+      mockTarget();
+
+      await expect(
+        service.previewImport(
+          importFile({
+            content: [
+              {
+                language: LanguagesEnum.en,
+                disclaimers: { privacyHtml: '<p onclick="x()">Privacy</p>' },
+              },
+            ],
+          }),
+          adminUser,
+        ),
+      ).rejects.toThrow('content en.disclaimers does not match');
+    });
+
+    it('refuses malformed source hashes', async () => {
+      mockTarget();
+
+      await expect(
+        service.previewImport(
+          importFile({
+            content: [
+              {
+                language: LanguagesEnum.es,
+                disclaimers: {
+                  privacyHtml: '<p>Privacidad</p>',
+                  _sourceHashes: { privacyHtml: 'not-a-hash' },
+                },
+              },
+            ],
+          }),
+          adminUser,
+        ),
+      ).rejects.toThrow('has malformed source hashes');
+    });
+
+    it('refuses to apply before every referenced file is uploaded', async () => {
+      mockTarget();
+      mockWrites();
+
+      await expect(
+        service.applyImport(
+          importFile({ fileIds: { 'brand-logo': 'new-brand-logo' } }),
+          adminUser,
+        ),
+      ).rejects.toThrow('file footer-logo was not uploaded');
+      expect(prisma.$transaction).not.toHaveBeenCalled();
+    });
+
+    it('replaces everything the file covers in one transaction', async () => {
+      mockTarget();
+      mockWrites();
+
+      await service.applyImport(
+        importFile({
+          fileIds: {
+            'brand-logo': 'new-brand-logo',
+            'footer-logo': 'new-footer-logo',
+          },
+        }),
+        adminUser,
+      );
+
+      expect(prisma.$transaction).toHaveBeenCalledWith([
+        'op',
+        'op',
+        'op',
+        'op',
+        'op',
+      ]);
+      expect(prisma.translationStrings.deleteMany).toHaveBeenCalledWith({
+        where: { jurisdictionId: 'target-id' },
+      });
+      expect(prisma.translationStrings.createMany).toHaveBeenCalledWith({
+        data: [
+          { ...translationRow, jurisdictionId: 'target-id' },
+          {
+            ...translationRow,
+            key: 'nav.new',
+            value: 'Nuevo',
+            jurisdictionId: 'target-id',
+          },
+        ],
+      });
+      expect(prisma.jurisdictionContent.createMany).toHaveBeenCalledWith({
+        data: [
+          expect.objectContaining({
+            jurisdictionId: 'target-id',
+            language: LanguagesEnum.en,
+            footer: {
+              logo: { logoFileId: 'new-footer-logo', logoAltText: 'Seal' },
+            },
+          }),
+          expect.objectContaining({
+            language: LanguagesEnum.es,
+            disclaimers: {
+              privacyHtml: '<p>Privacidad</p>',
+              _sourceHashes: { privacyHtml: hash },
+            },
+          }),
+        ],
+      });
+      expect(prisma.jurisdictions.update).toHaveBeenCalledWith({
+        where: { id: 'target-id' },
+        data: {
+          brand: { primary: { base: '#773E98' } },
+          brandLogo: {
+            create: { fileId: 'new-brand-logo', label: 'brandLogo' },
+          },
+          brandFavicon: { disconnect: true },
+        },
+      });
+    });
+
+    it('replaces only the global partners and email strings for a global file', async () => {
+      mockTarget();
+      mockWrites();
+
+      await service.applyImport(
+        importFile({
+          jurisdictionName: null,
+          translations: [{ ...translationRow, site: SiteEnum.partners }],
+        }),
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.deleteMany).toHaveBeenCalledWith({
+        where: {
+          jurisdictionId: null,
+          site: { in: [SiteEnum.partners, SiteEnum.email] },
+        },
+      });
+      expect(prisma.jurisdictionContent.deleteMany).not.toHaveBeenCalled();
+      expect(prisma.jurisdictions.update).not.toHaveBeenCalled();
     });
   });
 });

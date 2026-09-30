@@ -4011,6 +4011,50 @@ export class ContentTransferService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Show what importing a file would change, without writing
+   */
+  previewImport(
+    params: {
+      /** requestBody */
+      body?: ContentTransferImport
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ContentTransferPreview> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/contentTransfer/import/preview"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Replace everything a file covers with its contents
+   */
+  applyImport(
+    params: {
+      /** requestBody */
+      body?: ContentTransferImport
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/contentTransfer/import"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 /** SuccessDTO */
@@ -11543,6 +11587,84 @@ export interface ContentTransferFile {
   assets: ContentTransferAsset[]
 }
 
+/** ContentTransferImport */
+export interface ContentTransferImport {
+  /**  */
+  format: string
+
+  /**  */
+  version: number
+
+  /**  */
+  jurisdictionName: string
+
+  /**  */
+  translations: ContentTransferTranslation[]
+
+  /**  */
+  content?: ContentTransferContent[]
+
+  /**  */
+  brand?: ContentTransferBrand
+
+  /**  */
+  fileIds?: object
+}
+
+/** ContentTransferTranslationChanges */
+export interface ContentTransferTranslationChanges {
+  /**  */
+  site: SiteEnum
+
+  /**  */
+  language: LanguagesEnum
+
+  /**  */
+  added: number
+
+  /**  */
+  changed: number
+
+  /**  */
+  removed: number
+}
+
+/** ContentTransferContentChange */
+export interface ContentTransferContentChange {
+  /**  */
+  language: LanguagesEnum
+
+  /**  */
+  change: ContentTransferChange
+}
+
+/** ContentTransferBrandChanges */
+export interface ContentTransferBrandChanges {
+  /**  */
+  fields: string[]
+
+  /**  */
+  logo: ContentTransferChange
+
+  /**  */
+  favicon: ContentTransferChange
+}
+
+/** ContentTransferPreview */
+export interface ContentTransferPreview {
+  /**  */
+  jurisdictionName: string
+
+  /**  */
+  translations: ContentTransferTranslationChanges[]
+
+  /**  */
+  content: ContentTransferContentChange[]
+
+  /**  */
+  brand?: ContentTransferBrandChanges
+}
+
 export enum FilterAvailabilityEnum {
   "closedWaitlist" = "closedWaitlist",
   "comingSoon" = "comingSoon",
@@ -12158,4 +12280,10 @@ export enum SiteEnum {
 export enum TranslationOrigin {
   "machine" = "machine",
   "human" = "human",
+}
+
+export enum ContentTransferChange {
+  "added" = "added",
+  "changed" = "changed",
+  "removed" = "removed",
 }
