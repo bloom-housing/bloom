@@ -143,7 +143,7 @@ const BrandingForm = ({
               size="sm"
               onClick={() => {
                 setChange({ fileId: null })
-                setProgress(0)
+                if (progress === 100) setProgress(0)
               }}
               id={`${id}-delete`}
             >
