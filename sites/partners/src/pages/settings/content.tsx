@@ -264,7 +264,7 @@ const SettingsContent = () => {
   const [conflict, setConflict] = useState(false)
   const [resetCount, setResetCount] = useState(0)
   const [hidingPaths, setHidingPaths] = useState<string[]>([])
-  const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({})
 
   const selectedJurisdiction = jurisdictions.find(
     (jurisdiction) => jurisdiction.id === (jurisdictionId || jurisdictions[0]?.id)
@@ -464,7 +464,11 @@ const SettingsContent = () => {
             </Button>
             <Button
               variant="primary"
-              disabled={!hasUnsavedChanges || loading || uploading}
+              disabled={
+                !hasUnsavedChanges ||
+                loading ||
+                Object.values(uploadProgress).some((progress) => progress > 0)
+              }
               loadingMessage={isSaving && t("t.loading")}
               onClick={handleSave}
             >
@@ -498,8 +502,11 @@ const SettingsContent = () => {
                   isStale(languageRow?.staleFields, field.path) ||
                   isStale(languageRow?.staleFields, field.fileIdPath)
                 }
+                progress={uploadProgress[field.fileIdPath] ?? 0}
                 onUpdate={setDraft}
-                onUploadingChange={setUploading}
+                onProgress={(progress) =>
+                  setUploadProgress((current) => ({ ...current, [field.fileIdPath]: progress }))
+                }
               />
             ) : (
               <ContentFieldCard

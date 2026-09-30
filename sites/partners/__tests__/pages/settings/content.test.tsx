@@ -1068,11 +1068,74 @@ describe("<SettingsContent>", () => {
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
 
-      expect(await screen.findByRole("img", { name: "test:logoSrc" })).toHaveAttribute(
-        "src",
-        logoSrc
+      const englishLogo = await screen.findByRole("img", { name: "test:logoSrc" })
+      expect(englishLogo).toHaveAttribute("src", logoSrc)
+      expect(
+        within(englishLogo.closest<HTMLElement>(".field-card")).getByText("test:usingEnglish")
+      ).toBeInTheDocument()
+    })
+
+    it("keeps save disabled when the admin changes document during an upload", async () => {
+      const uploader = helpers.fileUploader as jest.MockedFunction<typeof helpers.fileUploader>
+      uploader.mockImplementation(({ setProgressValue }) => {
+        setProgressValue(3)
+        return Promise.resolve()
+      })
+      respondWithRows([row(LanguagesEnum.en, { contact: { phone: "555-0100" } })])
+      renderPage()
+
+      await openFooter()
+      await userEvent.upload(
+        document.getElementById("footer.logo.logoFileId") as HTMLInputElement,
+        new File(["x"], "logo.png", { type: "image/png" })
       )
-      expect(screen.getAllByText("test:usingEnglish").length).toBeGreaterThan(0)
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
+      await userEvent.type(await screen.findByLabelText("test:contactPhone"), "9")
+
+      expect(screen.getByRole("button", { name: "Save" })).toBeDisabled()
+    })
+
+    it("uploads a logo for one language only", async () => {
+      const spanishLogoSrc = "https://example.test/footer-logo-es.png"
+      const uploader = helpers.fileUploader as jest.MockedFunction<typeof helpers.fileUploader>
+      uploader.mockImplementation(({ setFileUploadData, setProgressValue }) => {
+        setProgressValue(100)
+        setFileUploadData({ id: "footer-logo-es", url: spanishLogoSrc, fileId: "footer-logo-es" })
+        return Promise.resolve()
+      })
+      const saves: { language: string; body: Record<string, unknown> }[] = []
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, async (req, res, ctx) => {
+            saves.push({ language: req.params.language as string, body: await req.json() })
+            return res(ctx.json({}))
+          })
+        )
+      )
+      respondWithRows([
+        row(LanguagesEnum.en, { footer: { logo: { logoFileId: "footer-logo", logoSrc } } }),
+        row(LanguagesEnum.es),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
+      await userEvent.upload(
+        document.getElementById("footer.logo.logoFileId") as HTMLInputElement,
+        new File(["x"], "logo-es.png", { type: "image/png" })
+      )
+      await waitFor(() =>
+        expect(screen.getAllByRole("img", { name: "test:logoSrc" })).toHaveLength(2)
+      )
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await waitFor(() => expect(saves).toHaveLength(1))
+      expect(saves[0].language).toEqual(LanguagesEnum.es)
+      expect((saves[0].body.footer as { logo: unknown }).logo).toEqual({
+        logoFileId: "footer-logo-es",
+        logoSrc: spanishLogoSrc,
+      })
     })
   })
 })

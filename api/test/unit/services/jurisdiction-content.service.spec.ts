@@ -643,6 +643,7 @@ describe('Testing jurisdiction content service', () => {
       expect(merged.footer.logo.logoAltText).toEqual('Sello');
     });
 
+    // Resolving the logo after the merge instead of per row would let the English upload win here.
     it("uses a language row's own logo over the English upload", async () => {
       prisma.jurisdictionContent.findMany = jest.fn().mockResolvedValueOnce([
         {
@@ -663,6 +664,20 @@ describe('Testing jurisdiction content service', () => {
       expect(merged.footer.logo.logoSrc).toEqual(
         'https://example.test/logo-es.png',
       );
+    });
+
+    it('derives the logo image for every row the editor lists', async () => {
+      prisma.jurisdictionContent.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          id: 'row-en',
+          language: 'en',
+          footer: { logo: { logoFileId: 'footer-logo' } },
+        },
+      ]);
+
+      const rows = await service.listContent(randomUUID(), adminUser);
+
+      expect(rows[0].footer.logo.logoSrc).toEqual(uploadedLogoSrc);
     });
 
     it('returns the file id and the derived image to the editor', async () => {

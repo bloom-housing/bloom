@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { Dropzone, Field, t } from "@bloom-housing/ui-components"
 import { Button, Card, FieldValue, Tag } from "@bloom-housing/ui-seeds"
 import { useEditor } from "@tiptap/react"
@@ -169,8 +169,9 @@ type ContentImageCardProps = {
   isEnglish: boolean
   stale: boolean
   className?: string
+  progress: number
   onUpdate: (apply: (current: ContentDraft) => ContentDraft) => void
-  onUploadingChange: (uploading: boolean) => void
+  onProgress: (progress: number) => void
 }
 
 export const ContentImageCard = ({
@@ -182,16 +183,13 @@ export const ContentImageCard = ({
   isEnglish,
   stale,
   className,
+  progress,
   onUpdate,
-  onUploadingChange,
+  onProgress,
 }: ContentImageCardProps) => {
-  const [progress, setProgress] = useState(0)
   const value = valueAt(draft, path)
   const englishValue = valueAt(englishDraft, path)
   const src = typeof value === "string" && value ? value : undefined
-
-  useEffect(() => onUploadingChange(progress > 0), [progress, onUploadingChange])
-  useEffect(() => () => onUploadingChange(false), [onUploadingChange])
 
   const upload = async (file: File) => {
     await fileUploader({
@@ -202,7 +200,7 @@ export const ContentImageCard = ({
           setValueAt(setValueAt(current, fileIdPath, data.fileId), path, data.url)
         )
       }) as never,
-      setProgressValue: ((next: number) => setProgress(next === 100 ? 0 : next)) as never,
+      setProgressValue: ((next: number) => onProgress(next === 100 ? 0 : next)) as never,
       contentType: file.type,
       contentDisposition: "inline",
     })
