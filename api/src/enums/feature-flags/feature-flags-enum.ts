@@ -249,7 +249,7 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableFilterByStatus,
     description:
-      'When tue, the filter drawer on the public site includes the option to filter listings by theit status',
+      'When true, the filter drawer on the public site includes the option to filter listings by their status',
   },
   {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
