@@ -546,6 +546,34 @@ describe("settings/branding", () => {
     expect(savedBody.logoFileId).toEqual("9f1c2e3a")
   })
 
+  // Dropzone hides itself once progress reaches 100, so deleting a pending upload has to reset the
+  // progress or the field can never take another file.
+  it("takes another file after a pending upload is deleted", async () => {
+    const uploader = helpers.fileUploader as jest.MockedFunction<typeof helpers.fileUploader>
+    uploader.mockImplementation(({ setFileUploadData, setProgressValue }) => {
+      setProgressValue(100)
+      setFileUploadData({
+        id: "9f1c2e3a",
+        url: "https://example.test/9f1c2e3a",
+        fileId: "9f1c2e3a",
+      })
+      return Promise.resolve()
+    })
+    respondWithBrand({ primary: { base: "#773E98" } })
+    renderPage()
+
+    await waitFor(() => expect(document.getElementById("brand-logo-upload")).not.toBeNull())
+    await userEvent.upload(
+      document.getElementById("brand-logo-upload") as HTMLInputElement,
+      new File(["x"], "logo.png", { type: "image/png" })
+    )
+    await waitFor(() => expect(document.getElementById("brand-logo-upload-delete")).not.toBeNull())
+
+    await userEvent.click(document.getElementById("brand-logo-upload-delete"))
+
+    await waitFor(() => expect(document.getElementById("brand-logo-upload")).not.toBeNull())
+  })
+
   it("refuses to save while an upload is still in flight", async () => {
     // fileUploader resolves after the presign, before the file lands, so progress is mid-flight.
     const uploader = helpers.fileUploader as jest.MockedFunction<typeof helpers.fileUploader>
