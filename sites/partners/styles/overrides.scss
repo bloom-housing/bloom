@@ -20,6 +20,10 @@
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }
 
+  .seeds-common-message.is-fullwidth {
+    --message-max-width: var(--seeds-width-4xl);
+  }
+
   .card-icon {
     color: var(--seeds-color-primary);
     background-color: var(--seeds-bg-color-surface-primary);

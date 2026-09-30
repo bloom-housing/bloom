@@ -9,6 +9,7 @@ const allFlagsOn = {
   enableProperties: true,
   enableAgencies: true,
   enableTranslations: true,
+  enableBranding: true,
 }
 
 const visibleFor = (userRoles: UserRole) =>
@@ -24,6 +25,7 @@ describe("getVisibleSettingsTabs", () => {
       "properties",
       "agencies",
       "translations",
+      "branding",
     ])
   })
 
@@ -57,11 +59,27 @@ describe("getVisibleSettingsTabs", () => {
   it("hides translations when the roles are not loaded yet", () => {
     expect(getVisibleSettingsTabs(allFlagsOn, undefined).translations).toBe(false)
   })
+
+  // Writing a brand is admin only, so every other role would land on /unauthorized.
+  it.each([
+    ["a jurisdictional admin", { isJurisdictionalAdmin: true }],
+    ["a limited jurisdictional admin", { isLimitedJurisdictionalAdmin: true }],
+    ["a partner", { isPartner: true }],
+    ["a support admin", { isSupportAdmin: true }],
+  ])("hides branding from %s", (_label, userRoles) => {
+    expect(visibleFor(userRoles)).not.toContain("branding")
+  })
+
+  it("hides branding when its feature flag is off", () => {
+    expect(
+      getVisibleSettingsTabs({ ...allFlagsOn, enableBranding: false }, { isAdmin: true }).branding
+    ).toBe(false)
+  })
 })
 
 describe("getEnabledSettingsTabCount", () => {
   it("counts only the tabs the role can open", () => {
-    expect(getEnabledSettingsTabCount(allFlagsOn, { isAdmin: true })).toBe(4)
+    expect(getEnabledSettingsTabCount(allFlagsOn, { isAdmin: true })).toBe(5)
     expect(getEnabledSettingsTabCount(allFlagsOn, { isLimitedJurisdictionalAdmin: true })).toBe(1)
   })
 

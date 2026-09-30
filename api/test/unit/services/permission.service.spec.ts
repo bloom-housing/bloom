@@ -678,4 +678,39 @@ describe('Testing permission service', () => {
         ),
     ).rejects.toThrowError();
   });
+
+  it('should allow partner to "export" listing application data when restriction flag is disabled', async () => {
+    const user = {
+      id: 'example id',
+      userRoles: {
+        isPartner: true,
+      },
+      jurisdictions: [],
+      listings: [
+        {
+          id: 'listing id 1',
+        },
+      ],
+    } as User;
+
+    prisma.listings.findMany = jest.fn().mockResolvedValue([
+      {
+        id: 'listing id 1',
+      },
+    ]);
+
+    expect(
+      await service.can(
+        user,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'listing id 1',
+        },
+        {
+          allowedForExport: true,
+        },
+      ),
+    ).toEqual(true);
+  });
 });

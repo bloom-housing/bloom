@@ -23,6 +23,7 @@ export enum FeatureFlagEnum {
   enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableCustomListingNotifications = 'enableCustomListingNotifications',
+  enableDbDrivenBranding = 'enableDbDrivenBranding',
   enableDbDrivenContent = 'enableDbDrivenContent',
   enableDuplicatesDetailsInEmail = 'enableDuplicatesDetailsInEmail',
   enableExportTerms = 'enableExportTerms',
@@ -71,6 +72,7 @@ export enum FeatureFlagEnum {
   enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
   enableProfessionalPartnersPage = 'enableProfessionalPartnersPage',
   enableProperties = 'enableProperties',
+  enablePublicTermsOfUse = 'enablePublicTermsOfUse',
   enableReasonableAccommodations = 'enableReasonableAccommodations',
   enableReceivedAtAndByFields = 'enableReceivedAtAndByFields',
   enableReferralQuestionUnits = 'enableReferralQuestionUnits',
@@ -207,6 +209,11 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableCreditScreeningFee,
     description: 'When true, credit screening fee is enabled for listings',
+  },
+  {
+    name: FeatureFlagEnum.enableDbDrivenBranding,
+    description:
+      "When true, the public site renders the jurisdiction's brand colors, logo, favicon, and font from the database instead of the bundled static assets",
   },
   {
     name: FeatureFlagEnum.enableDbDrivenContent,
@@ -432,6 +439,11 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableProperties,
     description: 'When true, the properties feature is enabled',
+  },
+  {
+    name: FeatureFlagEnum.enablePublicTermsOfUse,
+    description:
+      'When true, creating a user account on the public site will require the user to review and accept terms of use',
   },
   {
     name: FeatureFlagEnum.enableReasonableAccommodations,

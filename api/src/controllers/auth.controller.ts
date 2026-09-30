@@ -58,6 +58,7 @@ export class AuthController {
       !!process.env.RECAPTCHA_KEY,
       !!dto.mfaCode,
       process.env.ENABLE_RECAPTCHA === 'TRUE',
+      dto.agreedToTermsOfService,
     );
   }
 
@@ -72,10 +73,12 @@ export class AuthController {
   async loginViaSingleUseCode(
     @Request() req: ExpressRequest,
     @Response({ passthrough: true }) res: ExpressResponse,
+    @Body() dto: LoginViaSingleUseCode,
   ): Promise<SuccessDTO> {
     return await this.authService.confirmAndSetCredentials(
       mapTo(User, req['user']),
       res,
+      dto.agreedToTermsOfService,
     );
   }
 
