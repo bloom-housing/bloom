@@ -1242,6 +1242,10 @@ class Listing extends AbstractDTO {
 
   @Expose()
   listingFeaturesConfiguration?: ListingFeaturesConfiguration;
+
+  // Set by the pipe when a `closed` status is a publish
+  @Expose()
+  publishesToClosed?: boolean;
 }
 
 export { Listing as default, Listing };

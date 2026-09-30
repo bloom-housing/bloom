@@ -11,6 +11,7 @@ type SaveScheduledListingDialogProps = {
   onClose: () => void
   onConfirm: () => void | Promise<void>
   currentScheduledPublishAt?: Date | string | null
+  publishesToClosed?: boolean
 }
 
 const SaveScheduledListingDialog = ({
@@ -18,6 +19,7 @@ const SaveScheduledListingDialog = ({
   onClose,
   onConfirm,
   currentScheduledPublishAt,
+  publishesToClosed,
 }: SaveScheduledListingDialogProps) => {
   const scheduledDate = getValidFutureScheduledDate(currentScheduledPublishAt)
   const hasPastDate =
@@ -29,6 +31,8 @@ const SaveScheduledListingDialog = ({
     ? t("listings.approval.saveScheduledWithDate", { date: scheduledDate })
     : hasPastDate
     ? t("listings.approval.saveScheduledWithPastDate")
+    : publishesToClosed
+    ? t("listings.approval.landUseNoScheduledDate")
     : t("listings.approval.saveScheduledNoDate")
 
   return (
