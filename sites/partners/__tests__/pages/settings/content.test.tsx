@@ -1,6 +1,6 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { fireEvent, screen, waitFor, within } from "@testing-library/react"
+import { act, fireEvent, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { rest } from "msw"
 import { addTranslation } from "@bloom-housing/ui-components"
@@ -13,6 +13,12 @@ import {
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, mockTipTapEditor, render } from "../../testUtils"
 import SettingsContent from "../../../src/pages/settings/content"
+import * as helpers from "../../../src/lib/helpers"
+
+jest.mock("../../../src/lib/helpers", () => ({
+  ...jest.requireActual("../../../src/lib/helpers"),
+  fileUploader: jest.fn(),
+}))
 
 // The suite supplies the strings it asserts on, so editing the shipped copy cannot break it.
 const CONTENT_STRINGS = {
@@ -35,6 +41,9 @@ const CONTENT_STRINGS = {
   "content.linkHref": "test:linkHref",
   "content.linkHrefNote": "test:linkHrefNote",
   "content.logoUrl": "test:logoUrl",
+  "content.logoSrc": "test:logoSrc",
+  "content.logoAlt": "test:logoAlt",
+  "content.clear": "test:clear",
   "content.cardLink": "test:cardLink",
   "content.cardTitle": "test:cardTitle",
   "content.resourceCard": "test:resourceCard",
@@ -966,6 +975,104 @@ describe("<SettingsContent>", () => {
       await userEvent.click(within(dialog).getByRole("button", { name: "Save" }))
 
       await waitFor(() => expect(bodies).toHaveLength(1))
+    })
+  })
+
+  describe("footer logo", () => {
+    const logoSrc = "https://example.test/footer-logo.png"
+
+    const captureSaves = (bodies: Record<string, unknown>[]) =>
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, async (req, res, ctx) => {
+            bodies.push(await req.json())
+            return res(ctx.json({}))
+          })
+        )
+      )
+
+    const openFooter = async () => {
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
+    }
+
+    it("keeps save disabled during an upload, then saves the file with edits made meanwhile", async () => {
+      let finishUpload: (() => void) | undefined
+      const uploader = helpers.fileUploader as jest.MockedFunction<typeof helpers.fileUploader>
+      uploader.mockImplementation(({ setFileUploadData, setProgressValue }) => {
+        setProgressValue(3)
+        finishUpload = () => {
+          setProgressValue(100)
+          setFileUploadData({ id: "footer-logo", url: logoSrc, fileId: "footer-logo" })
+        }
+        return Promise.resolve()
+      })
+      const bodies: Record<string, unknown>[] = []
+      respondWithRows([row(LanguagesEnum.en, { footer: { logo: { logoAltText: "Seal" } } })])
+      captureSaves(bodies)
+      renderPage()
+
+      await openFooter()
+      await userEvent.upload(
+        document.getElementById("footer.logo.logoFileId") as HTMLInputElement,
+        new File(["x"], "logo.png", { type: "image/png" })
+      )
+      await userEvent.type(await screen.findByLabelText("test:logoAlt"), "!")
+
+      expect(screen.getByRole("button", { name: "Save" })).toBeDisabled()
+
+      act(() => finishUpload?.())
+      expect(await screen.findByRole("img", { name: "test:logoSrc" })).toHaveAttribute(
+        "src",
+        logoSrc
+      )
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await waitFor(() => expect(bodies).toHaveLength(1))
+      expect((bodies[0].footer as { logo: unknown }).logo).toEqual({
+        logoAltText: "Seal!",
+        logoFileId: "footer-logo",
+        logoSrc,
+      })
+    })
+
+    it("clears an uploaded logo", async () => {
+      const bodies: Record<string, unknown>[] = []
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          footer: { logo: { logoFileId: "footer-logo", logoSrc, logoAltText: "Seal" } },
+        }),
+      ])
+      captureSaves(bodies)
+      renderPage()
+
+      await openFooter()
+      const preview = await screen.findByRole("img", { name: "test:logoSrc" })
+      await userEvent.click(
+        within(preview.parentElement).getByRole("button", { name: "test:clear" })
+      )
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await waitFor(() => expect(bodies).toHaveLength(1))
+      expect((bodies[0].footer as { logo: unknown }).logo).toEqual({ logoAltText: "Seal" })
+    })
+
+    it("shows the English logo on a language row that has none", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, { footer: { logo: { logoFileId: "footer-logo", logoSrc } } }),
+        row(LanguagesEnum.es),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
+
+      expect(await screen.findByRole("img", { name: "test:logoSrc" })).toHaveAttribute(
+        "src",
+        logoSrc
+      )
+      expect(screen.getAllByText("test:usingEnglish").length).toBeGreaterThan(0)
     })
   })
 })
