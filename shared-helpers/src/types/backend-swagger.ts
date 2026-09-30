@@ -3979,6 +3979,40 @@ export class JurisdictionContentService {
   }
 }
 
+export class ContentTransferService {
+  /**
+   * Export a jurisdiction's translations, content and branding
+   */
+  exportJurisdiction(
+    params: {
+      /**  */
+      jurisdictionId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ContentTransferFile> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/contentTransfer/jurisdictions/{jurisdictionId}/export"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Export the global translation strings
+   */
+  exportGlobal(options: IRequestOptions = {}): Promise<ContentTransferFile> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/contentTransfer/global/export"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 /** SuccessDTO */
 export interface SuccessDTO {
   /**  */
@@ -11414,6 +11448,99 @@ export interface JurisdictionContentUpdate {
 
   /**  */
   lastUpdatedAt?: Date
+}
+
+/** ContentTransferTranslation */
+export interface ContentTransferTranslation {
+  /**  */
+  site: SiteEnum
+
+  /**  */
+  language: LanguagesEnum
+
+  /**  */
+  key: string
+
+  /**  */
+  value: string
+
+  /**  */
+  origin: TranslationOrigin
+
+  /**  */
+  sourceHash: string
+}
+
+/** ContentTransferContent */
+export interface ContentTransferContent {
+  /**  */
+  language: LanguagesEnum
+
+  /**  */
+  footer?: object
+
+  /**  */
+  faq?: object
+
+  /**  */
+  resources?: object
+
+  /**  */
+  disclaimers?: object
+
+  /**  */
+  contact?: object
+}
+
+/** ContentTransferBrand */
+export interface ContentTransferBrand {
+  /**  */
+  brand: object
+
+  /**  */
+  logoFileId: string
+
+  /**  */
+  faviconFileId: string
+}
+
+/** ContentTransferAsset */
+export interface ContentTransferAsset {
+  /**  */
+  fileId: string
+
+  /**  */
+  contentType: string
+
+  /** The file, base64 encoded */
+  data: string
+}
+
+/** ContentTransferFile */
+export interface ContentTransferFile {
+  /**  */
+  format: string
+
+  /**  */
+  version: number
+
+  /**  */
+  exportedAt: Date
+
+  /**  */
+  jurisdictionName: string
+
+  /**  */
+  translations: ContentTransferTranslation[]
+
+  /**  */
+  content?: ContentTransferContent[]
+
+  /**  */
+  brand?: ContentTransferBrand
+
+  /**  */
+  assets: ContentTransferAsset[]
 }
 
 export enum FilterAvailabilityEnum {
